@@ -16,9 +16,13 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Graphics;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicLabelUI;
+import sun.swing.SwingUtilities2;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JLabel}.
@@ -34,5 +38,12 @@ public class FlatLabelUI
 		if( instance == null )
 			instance = new FlatLabelUI();
 		return instance;
+	}
+
+	@Override
+	protected void paintDisabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
+		int mnemIndex = l.getDisplayedMnemonicIndex();
+		g.setColor( UIManager.getColor( "Label.disabledForeground" ) );
+		SwingUtilities2.drawStringUnderlineCharAt( l, g, s, mnemIndex, textX, textY );
 	}
 }
