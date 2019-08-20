@@ -37,6 +37,9 @@ public class FlatButtonBorder
 {
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		if( !FlatButtonUI.isContentAreaFilled( c ) )
+			return;
+
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			FlatUIUtils.setRenderingHints( g2 );

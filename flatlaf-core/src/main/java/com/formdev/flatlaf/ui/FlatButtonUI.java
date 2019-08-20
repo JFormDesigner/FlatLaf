@@ -47,13 +47,17 @@ public class FlatButtonUI
 		return instance;
 	}
 
+	static boolean isContentAreaFilled( Component c ) {
+		return c instanceof AbstractButton && ((AbstractButton)c).isContentAreaFilled();
+	}
+
 	static boolean isDefaultButton( Component c ) {
 		return c instanceof JButton && ((JButton)c).isDefaultButton();
 	}
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		if( c.isOpaque() ) {
+		if( c.isOpaque() && FlatButtonUI.isContentAreaFilled( c ) ) {
 			FlatUIUtils.paintParentBackground( g, c );
 
 			if( c.isEnabled() ) {
