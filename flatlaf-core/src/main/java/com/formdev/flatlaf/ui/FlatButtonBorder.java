@@ -25,7 +25,7 @@ import java.awt.Insets;
 import java.awt.Paint;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
-import com.formdev.flatlaf.util.UIScale;
+import static com.formdev.flatlaf.util.UIScale.*;
 
 /**
  * Border for {@link javax.swing.JButton}.
@@ -43,7 +43,7 @@ public class FlatButtonBorder
 
 			float focusWidth = getFocusWidth();
 			float lineWidth = getLineWidth();
-			float arc = UIScale.scale( 6f ); //TODO
+			float arc = scale( 6f ); //TODO
 
 			if( c.hasFocus() ) {
 				g2.setColor( UIManager.getColor( FlatButtonUI.isDefaultButton( c )
@@ -76,23 +76,23 @@ public class FlatButtonBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		int w = UIScale.round( getFocusWidth() + getLineWidth() );
+		float ow = getFocusWidth() + getLineWidth();
 
 		insets = super.getBorderInsets( c, insets );
-		insets.top += w;
-		insets.left += w;
-		insets.bottom += w;
-		insets.right += w;
+		insets.top = round( scale( (float) insets.top ) + ow );
+		insets.left = round( scale( (float) insets.left ) + ow );
+		insets.bottom = round( scale( (float) insets.bottom ) + ow );
+		insets.right = round( scale( (float) insets.right ) + ow );
 		return insets;
 	}
 
 	protected float getFocusWidth() {
 		//TODO
-		return UIScale.scale( 2f );
+		return scale( 2f );
 	}
 
 	protected float getLineWidth() {
 		//TODO
-		return UIScale.scale( 1f );
+		return scale( 1f );
 	}
 }
