@@ -25,6 +25,7 @@ import java.awt.Insets;
 import java.awt.Paint;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Border for {@link javax.swing.JButton}.
@@ -42,7 +43,7 @@ public class FlatButtonBorder
 
 			float focusWidth = getFocusWidth();
 			float lineWidth = getLineWidth();
-			float arc = 6; //TODO
+			float arc = UIScale.scale( 6f ); //TODO
 
 			g2.setPaint( getBorderColor( c ) );
 			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, lineWidth, arc );
@@ -66,7 +67,7 @@ public class FlatButtonBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		int w = Math.round( getFocusWidth() + getLineWidth() );
+		int w = UIScale.round( getFocusWidth() + getLineWidth() );
 
 		insets = super.getBorderInsets( c, insets );
 		insets.top += w;
@@ -78,11 +79,11 @@ public class FlatButtonBorder
 
 	protected float getFocusWidth() {
 		//TODO
-		return 2;
+		return UIScale.scale( 2f );
 	}
 
 	protected float getLineWidth() {
 		//TODO
-		return 1;
+		return UIScale.scale( 1f );
 	}
 }

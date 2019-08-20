@@ -28,6 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonUI;
+import com.formdev.flatlaf.util.UIScale;
 import sun.swing.SwingUtilities2;
 
 /**
@@ -61,8 +62,8 @@ public class FlatButtonUI
 					FlatUIUtils.setRenderingHints( g2 );
 
 					//TODO
-					float focusWidth = 2;
-					float arc = 6;
+					float focusWidth = UIScale.scale( 2f );
+					float arc = UIScale.scale( 6f );
 
 					g2.setColor( getBackground( c ) );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );

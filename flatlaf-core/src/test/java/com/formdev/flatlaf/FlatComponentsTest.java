@@ -37,7 +37,7 @@ public class FlatComponentsTest
 
 		JOptionPane.showMessageDialog( null,
 			new FlatComponentsTest(),
-			"FlatComponentsTest",
+			"FlatComponentsTest (Java " + System.getProperty( "java.version" ) + ")",
 			JOptionPane.PLAIN_MESSAGE );
 	}
 
