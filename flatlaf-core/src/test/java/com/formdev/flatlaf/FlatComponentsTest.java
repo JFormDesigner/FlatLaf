@@ -55,12 +55,13 @@ public class FlatComponentsTest
 		JButton button2 = new JButton();
 		JButton button3 = new JButton();
 		JButton button4 = new JButton();
+		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
 
 		//======== this ========
 		setLayout(new GridBagLayout());
-		((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0, 0};
+		((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0, 0, 0};
 		((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0};
-		((GridBagLayout)getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
+		((GridBagLayout)getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
 		((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
 
 		//---- labelLabel ----
@@ -118,10 +119,28 @@ public class FlatComponentsTest
 		button4.setEnabled(false);
 		add(button4, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
 			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+			new Insets(0, 0, 0, 5), 0, 0));
+
+		//---- button5 ----
+		button5.setText("default");
+		button5.setDisplayedMnemonicIndex(0);
+		add(button5, new GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
+			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 			new Insets(0, 0, 0, 0), 0, 0));
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class TestDefaultButton --------------------------------------------
+
+	private static class TestDefaultButton
+		extends JButton
+	{
+		@Override
+		public boolean isDefaultButton() {
+			return true;
+		}
+	}
 }

@@ -7,7 +7,7 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-			"$columnSpecs": "0, 0, 0, 0, 0"
+			"$columnSpecs": "0, 0, 0, 0, 0, 0"
 			"$rowSpecs": "0, 0"
 			"$hGap": 5
 			"$vGap": 5
@@ -72,6 +72,14 @@ new FormModel {
 				"enabled": false
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 				"gridx": 4
+				"gridy": 1
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.FlatComponentsTest$TestDefaultButton" ) {
+				name: "button5"
+				"text": "default"
+				"displayedMnemonicIndex": 0
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridx": 5
 				"gridy": 1
 			} )
 		}, new FormLayoutConstraints( null ) {

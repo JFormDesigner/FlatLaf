@@ -16,11 +16,14 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -43,6 +46,10 @@ public class FlatButtonUI
 		return instance;
 	}
 
+	static boolean isDefaultButton( Component c ) {
+		return c instanceof JButton && ((JButton)c).isDefaultButton();
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		if( c.isOpaque() ) {
@@ -57,7 +64,7 @@ public class FlatButtonUI
 					float focusWidth = 2;
 					float arc = 6;
 
-					g2.setColor( c.getBackground() );
+					g2.setColor( getBackground( c ) );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 				} finally {
 					g2.dispose();
@@ -71,16 +78,22 @@ public class FlatButtonUI
 	@Override
 	protected void paintText( Graphics g, JComponent c, Rectangle textRect, String text ) {
 		AbstractButton b = (AbstractButton) c;
-		if( b.getModel().isEnabled() )
-			super.paintText( g, c, textRect, text );
-		else {
-			// paint disabled text
-			FontMetrics fm = SwingUtilities2.getFontMetrics( c, g );
-			int mnemonicIndex = b.getDisplayedMnemonicIndex();
-			g.setColor( UIManager.getColor( "Button.disabledText" ) );
-			SwingUtilities2.drawStringUnderlineCharAt( c, g, text, mnemonicIndex,
-				textRect.x + getTextShiftOffset(),
-				textRect.y + fm.getAscent() + getTextShiftOffset() );
-		}
+		FontMetrics fm = SwingUtilities2.getFontMetrics( c, g );
+		int mnemonicIndex = b.getDisplayedMnemonicIndex();
+
+		g.setColor( b.getModel().isEnabled() ? getForeground( c ) : UIManager.getColor( "Button.disabledText" ) );
+		SwingUtilities2.drawStringUnderlineCharAt( c, g, text, mnemonicIndex,
+			textRect.x + getTextShiftOffset(),
+			textRect.y + fm.getAscent() + getTextShiftOffset() );
+	}
+
+	private Color getBackground( Component c ) {
+		boolean def = FlatButtonUI.isDefaultButton( c );
+		return def ? UIManager.getColor( "Button.default.background" ) : c.getBackground();
+	}
+
+	private Color getForeground( Component c ) {
+		boolean def = FlatButtonUI.isDefaultButton( c );
+		return def ? UIManager.getColor( "Button.default.foreground" ) : c.getForeground();
 	}
 }

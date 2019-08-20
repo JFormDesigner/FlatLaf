@@ -51,10 +51,11 @@ public class FlatButtonBorder
 		}
 	}
 
-	public Paint getBorderColor( Component c ) {
+	private Paint getBorderColor( Component c ) {
 		if( c.isEnabled() ) {
-			Color startColor = UIManager.getColor( "Button.startBorderColor" );
-			Color endColor = UIManager.getColor( "Button.endBorderColor" );
+			boolean def = FlatButtonUI.isDefaultButton( c );
+			Color startColor = UIManager.getColor( def ? "Button.default.startBorderColor" : "Button.startBorderColor" );
+			Color endColor = UIManager.getColor( def ? "Button.default.endBorderColor" : "Button.endBorderColor" );
 			return (startColor.equals( endColor ) )
 				? startColor
 				: new GradientPaint( 0, getFocusWidth(), startColor,
