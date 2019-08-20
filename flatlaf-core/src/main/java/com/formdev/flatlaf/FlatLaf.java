@@ -212,6 +212,11 @@ public abstract class FlatLaf
 		if( color != null )
 			return color;
 
+		// integer
+		Integer integer = parseInteger( value, false );
+		if( integer != null )
+			return integer;
+
 		// string
 		return value;
 	}
@@ -239,6 +244,18 @@ public abstract class FlatLaf
 			}
 		} catch( NumberFormatException ex ) {
 			// not a color --> ignore
+		}
+		return null;
+	}
+
+	private Integer parseInteger( String value, boolean reportError ) {
+		try {
+			return Integer.parseInt( value );
+		} catch( NumberFormatException ex ) {
+			if( reportError ) {
+				System.err.println( "invalid integer '" + value + "'" );
+				throw ex;
+			}
 		}
 		return null;
 	}

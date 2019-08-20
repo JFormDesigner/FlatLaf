@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.util.UIScale.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
@@ -25,7 +26,6 @@ import java.awt.Insets;
 import java.awt.Paint;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
-import static com.formdev.flatlaf.util.UIScale.*;
 
 /**
  * Border for {@link javax.swing.JButton}.
@@ -46,7 +46,7 @@ public class FlatButtonBorder
 
 			float focusWidth = getFocusWidth();
 			float lineWidth = getLineWidth();
-			float arc = scale( 6f ); //TODO
+			float arc = FlatUIUtils.getButtonArc();
 
 			if( c.hasFocus() ) {
 				g2.setColor( UIManager.getColor( FlatButtonUI.isDefaultButton( c )
@@ -90,12 +90,10 @@ public class FlatButtonBorder
 	}
 
 	protected float getFocusWidth() {
-		//TODO
-		return scale( 2f );
+		return FlatUIUtils.getFocusWidth();
 	}
 
 	protected float getLineWidth() {
-		//TODO
-		return scale( 1f );
+		return FlatUIUtils.getLineWidth();
 	}
 }
