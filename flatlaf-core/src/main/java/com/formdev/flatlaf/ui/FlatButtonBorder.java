@@ -45,6 +45,12 @@ public class FlatButtonBorder
 			float lineWidth = getLineWidth();
 			float arc = UIScale.scale( 6f ); //TODO
 
+			if( c.hasFocus() ) {
+				g2.setColor( UIManager.getColor( FlatButtonUI.isDefaultButton( c )
+					? "Button.default.focusColor" : "Component.focusColor" ) );
+				FlatUIUtils.paintOutlineBorder( g2, x, y, width, height, focusWidth, lineWidth, arc );
+			}
+
 			g2.setPaint( getBorderColor( c ) );
 			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, lineWidth, arc );
 		} finally {
@@ -55,6 +61,9 @@ public class FlatButtonBorder
 	private Paint getBorderColor( Component c ) {
 		if( c.isEnabled() ) {
 			boolean def = FlatButtonUI.isDefaultButton( c );
+			if( c.hasFocus() )
+				return UIManager.getColor( def ? "Button.default.focusedBorderColor" : "Button.focusedBorderColor" );
+
 			Color startColor = UIManager.getColor( def ? "Button.default.startBorderColor" : "Button.startBorderColor" );
 			Color endColor = UIManager.getColor( def ? "Button.default.endBorderColor" : "Button.endBorderColor" );
 			return (startColor.equals( endColor ) )
