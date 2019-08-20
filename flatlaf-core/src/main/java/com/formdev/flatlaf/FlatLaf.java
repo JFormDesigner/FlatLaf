@@ -40,6 +40,9 @@ import com.formdev.flatlaf.util.SystemInfo;
 public abstract class FlatLaf
 	extends BasicLookAndFeel
 {
+	private static final String VARIABLE_PREFIX = "@";
+	private static final String GLOBAL_PREFIX = "*.";
+
 	private BasicLookAndFeel base;
 
 	@Override
@@ -143,14 +146,14 @@ public abstract class FlatLaf
 			}
 
 			// get globals, which override all other defaults that end with same suffix
-			String globalPrefix = "*.";
 			HashMap<String, Object> globals = new HashMap<>();
-			for( Object okey : properties.keySet() ) {
-				String key = (String) okey;
-				if( key.startsWith( globalPrefix ) ) {
-					Object value = parseValue( key, properties.getProperty( key ) );
-					globals.put( key.substring( globalPrefix.length() ), value );
-				}
+			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
+				String key = (String) e.getKey();
+				if( !key.startsWith( GLOBAL_PREFIX ) )
+					continue;
+
+				String value = resolveVariable( properties, (String) e.getValue() );
+				globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value ) );
 			}
 
 			// override UI defaults with globals
@@ -167,12 +170,26 @@ public abstract class FlatLaf
 			// add non-global properties to UI defaults
 			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
 				String key = (String) e.getKey();
-				String value = (String) e.getValue();
+				if( key.startsWith( VARIABLE_PREFIX ) || key.startsWith( GLOBAL_PREFIX ) )
+					continue;
+
+				String value = resolveVariable( properties, (String) e.getValue() );
 				defaults.put( key, parseValue( key, value ) );
 			}
 		} catch( IOException ex ) {
 			ex.printStackTrace();
 		}
+	}
+
+	private String resolveVariable( Properties properties, String value ) {
+		if( !value.startsWith( VARIABLE_PREFIX ) )
+			return value;
+
+		String newValue = properties.getProperty( value );
+		if( newValue == null )
+			System.err.println( "variable '" + value + "' not found" );
+
+		return newValue;
 	}
 
 	private Object parseValue( String key, String value ) {
