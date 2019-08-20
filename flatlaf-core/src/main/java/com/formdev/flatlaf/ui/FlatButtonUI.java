@@ -16,11 +16,16 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonUI;
+import sun.swing.SwingUtilities2;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JButton}.
@@ -61,5 +66,21 @@ public class FlatButtonUI
 		}
 
 		paint( g, c );
+	}
+
+	@Override
+	protected void paintText( Graphics g, JComponent c, Rectangle textRect, String text ) {
+		AbstractButton b = (AbstractButton) c;
+		if( b.getModel().isEnabled() )
+			super.paintText( g, c, textRect, text );
+		else {
+			// paint disabled text
+			FontMetrics fm = SwingUtilities2.getFontMetrics( c, g );
+			int mnemonicIndex = b.getDisplayedMnemonicIndex();
+			g.setColor( UIManager.getColor( "Button.disabledText" ) );
+			SwingUtilities2.drawStringUnderlineCharAt( c, g, text, mnemonicIndex,
+				textRect.x + getTextShiftOffset(),
+				textRect.y + fm.getAscent() + getTextShiftOffset() );
+		}
 	}
 }
