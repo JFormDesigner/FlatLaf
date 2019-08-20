@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
@@ -202,6 +203,10 @@ public abstract class FlatLaf
 			case "true":		return true;
 		}
 
+		// borders
+		if( key.endsWith( ".border" ) )
+			return parseBorder( value );
+
 		// colors
 		ColorUIResource color = parseColor( value );
 		if( color != null )
@@ -209,6 +214,17 @@ public abstract class FlatLaf
 
 		// string
 		return value;
+	}
+
+	private Object parseBorder( String value ) {
+		return (LazyValue) t -> {
+			try {
+				return Class.forName( value ).newInstance();
+			} catch( InstantiationException | IllegalAccessException | ClassNotFoundException ex ) {
+				ex.printStackTrace();
+				return null;
+			}
+		};
 	}
 
 	private ColorUIResource parseColor( String value ) {
