@@ -20,6 +20,14 @@ plugins {
 	`java-library`
 }
 
+repositories {
+	jcenter()
+}
+
+dependencies {
+	testCompile( "com.miglayout:miglayout-swing:5.2" )
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

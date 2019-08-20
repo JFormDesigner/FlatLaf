@@ -16,8 +16,8 @@
 
 package com.formdev.flatlaf;
 
-import java.awt.*;
 import javax.swing.*;
+import net.miginfocom.swing.*;
 
 /**
  * @author Karl Tauber
@@ -58,75 +58,64 @@ public class FlatComponentsTest
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
 
 		//======== this ========
-		setLayout(new GridBagLayout());
-		((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0, 0, 0};
-		((GridBagLayout)getLayout()).rowHeights = new int[] {0, 0, 0};
-		((GridBagLayout)getLayout()).columnWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
-		((GridBagLayout)getLayout()).rowWeights = new double[] {0.0, 0.0, 1.0E-4};
+		setLayout(new MigLayout(
+			"insets 0,hidemode 3,gap 5 5",
+			// columns
+			"[]" +
+			"[]" +
+			"[]" +
+			"[]" +
+			"[]" +
+			"[]",
+			// rows
+			"[]" +
+			"[]"));
 
 		//---- labelLabel ----
 		labelLabel.setText("JLabel:");
-		add(labelLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 5, 5), 0, 0));
+		add(labelLabel, "cell 0 0");
 
 		//---- label1 ----
 		label1.setText("enabled");
 		label1.setDisplayedMnemonic('E');
-		add(label1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 5, 5), 0, 0));
+		add(label1, "cell 1 0");
 
 		//---- label2 ----
 		label2.setText("disabled");
 		label2.setDisplayedMnemonic('D');
 		label2.setEnabled(false);
-		add(label2, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 5, 5), 0, 0));
+		add(label2, "cell 2 0");
 
 		//---- buttonLabel ----
 		buttonLabel.setText("JButton:");
-		add(buttonLabel, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 0, 5), 0, 0));
+		add(buttonLabel, "cell 0 1");
 
 		//---- button1 ----
 		button1.setText("enabled");
 		button1.setDisplayedMnemonicIndex(0);
-		add(button1, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 0, 5), 0, 0));
+		add(button1, "cell 1 1");
 
 		//---- button2 ----
 		button2.setText("disabled");
 		button2.setDisplayedMnemonicIndex(0);
 		button2.setEnabled(false);
-		add(button2, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 0, 5), 0, 0));
+		add(button2, "cell 2 1");
 
 		//---- button3 ----
 		button3.setText("selected");
 		button3.setSelected(true);
-		add(button3, new GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 0, 5), 0, 0));
+		add(button3, "cell 3 1");
 
 		//---- button4 ----
 		button4.setText("selected disabled");
 		button4.setSelected(true);
 		button4.setEnabled(false);
-		add(button4, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 0, 5), 0, 0));
+		add(button4, "cell 4 1");
 
 		//---- button5 ----
 		button5.setText("default");
 		button5.setDisplayedMnemonicIndex(0);
-		add(button5, new GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
-			GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			new Insets(0, 0, 0, 0), 0, 0));
+		add(button5, "cell 5 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
