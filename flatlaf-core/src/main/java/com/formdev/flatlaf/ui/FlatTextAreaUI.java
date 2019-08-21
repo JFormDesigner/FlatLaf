@@ -16,9 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Graphics;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextAreaUI;
+import javax.swing.text.JTextComponent;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextArea}.
@@ -30,5 +33,17 @@ public class FlatTextAreaUI
 {
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextAreaUI();
+	}
+
+	@Override
+	protected void paintBackground( Graphics g ) {
+		JTextComponent c = getComponent();
+
+		g.setColor( !c.isEnabled()
+			? UIManager.getColor( "TextArea.disabledBackground" )
+			: (!c.isEditable()
+				? UIManager.getColor( "TextArea.inactiveBackground" )
+				: c.getBackground() ) );
+		g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 	}
 }
