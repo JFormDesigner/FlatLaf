@@ -56,6 +56,16 @@ public class FlatComponentsTest
 		JButton button3 = new JButton();
 		JButton button4 = new JButton();
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
+		JLabel checkBoxLabel = new JLabel();
+		JCheckBox checkBox1 = new JCheckBox();
+		JCheckBox checkBox2 = new JCheckBox();
+		JCheckBox checkBox3 = new JCheckBox();
+		JCheckBox checkBox4 = new JCheckBox();
+		JLabel radioButtonLabel = new JLabel();
+		JRadioButton radioButton1 = new JRadioButton();
+		JRadioButton radioButton2 = new JRadioButton();
+		JRadioButton radioButton3 = new JRadioButton();
+		JRadioButton radioButton4 = new JRadioButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -68,6 +78,9 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]"));
 
@@ -116,6 +129,54 @@ public class FlatComponentsTest
 		button5.setText("default");
 		button5.setDisplayedMnemonicIndex(0);
 		add(button5, "cell 5 1");
+
+		//---- checkBoxLabel ----
+		checkBoxLabel.setText("JCheckBox");
+		add(checkBoxLabel, "cell 0 2");
+
+		//---- checkBox1 ----
+		checkBox1.setText("enabled");
+		add(checkBox1, "cell 1 2");
+
+		//---- checkBox2 ----
+		checkBox2.setText("disabled");
+		checkBox2.setEnabled(false);
+		add(checkBox2, "cell 2 2");
+
+		//---- checkBox3 ----
+		checkBox3.setText("selected");
+		checkBox3.setSelected(true);
+		add(checkBox3, "cell 3 2");
+
+		//---- checkBox4 ----
+		checkBox4.setText("selected disabled");
+		checkBox4.setSelected(true);
+		checkBox4.setEnabled(false);
+		add(checkBox4, "cell 4 2");
+
+		//---- radioButtonLabel ----
+		radioButtonLabel.setText("JRadioButton:");
+		add(radioButtonLabel, "cell 0 3");
+
+		//---- radioButton1 ----
+		radioButton1.setText("enabled");
+		add(radioButton1, "cell 1 3");
+
+		//---- radioButton2 ----
+		radioButton2.setText("disabled");
+		radioButton2.setEnabled(false);
+		add(radioButton2, "cell 2 3");
+
+		//---- radioButton3 ----
+		radioButton3.setText("selected");
+		radioButton3.setSelected(true);
+		add(radioButton3, "cell 3 3");
+
+		//---- radioButton4 ----
+		radioButton4.setText("selected disabled");
+		radioButton4.setSelected(true);
+		radioButton4.setEnabled(false);
+		add(radioButton4, "cell 4 3");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.util;
 
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -184,5 +185,10 @@ public class UIScale
 		//   e.g. 2px * 125% = 2px instead of 3px
 		//     or 1px * 150% = 1px instead of 2px
 		return Math.round( value - 0.01f );
+	}
+
+	public static void scaleGraphics( Graphics2D g ) {
+		if( scaleFactor != 1f )
+			g.scale( scaleFactor, scaleFactor );
 	}
 }

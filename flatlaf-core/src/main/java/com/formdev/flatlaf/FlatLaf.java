@@ -207,6 +207,10 @@ public abstract class FlatLaf
 		if( key.endsWith( ".border" ) )
 			return parseBorder( value );
 
+		// icons
+		if( key.endsWith( ".icon" ) )
+			return parseInstance( value );
+
 		// colors
 		ColorUIResource color = parseColor( value );
 		if( color != null )
@@ -222,6 +226,10 @@ public abstract class FlatLaf
 	}
 
 	private Object parseBorder( String value ) {
+		return parseInstance( value );
+	}
+
+	private Object parseInstance( String value ) {
 		return (LazyValue) t -> {
 			try {
 				return Class.forName( value ).newInstance();
