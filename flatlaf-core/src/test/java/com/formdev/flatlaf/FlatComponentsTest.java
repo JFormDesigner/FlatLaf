@@ -71,6 +71,11 @@ public class FlatComponentsTest
 		JTextField textField2 = new JTextField();
 		JTextField textField3 = new JTextField();
 		JTextField textField4 = new JTextField();
+		JLabel formattedTextFieldLabel = new JLabel();
+		JFormattedTextField formattedTextField1 = new JFormattedTextField();
+		JFormattedTextField formattedTextField2 = new JFormattedTextField();
+		JFormattedTextField formattedTextField3 = new JFormattedTextField();
+		JFormattedTextField formattedTextField4 = new JFormattedTextField();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -83,6 +88,8 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -206,6 +213,30 @@ public class FlatComponentsTest
 		textField4.setEnabled(false);
 		textField4.setEditable(false);
 		add(textField4, "cell 4 4,growx");
+
+		//---- formattedTextFieldLabel ----
+		formattedTextFieldLabel.setText("JFormattedTextField:");
+		add(formattedTextFieldLabel, "cell 0 5");
+
+		//---- formattedTextField1 ----
+		formattedTextField1.setText("editable");
+		add(formattedTextField1, "cell 1 5,growx");
+
+		//---- formattedTextField2 ----
+		formattedTextField2.setText("disabled");
+		formattedTextField2.setEnabled(false);
+		add(formattedTextField2, "cell 2 5,growx");
+
+		//---- formattedTextField3 ----
+		formattedTextField3.setText("not editable");
+		formattedTextField3.setEditable(false);
+		add(formattedTextField3, "cell 3 5,growx");
+
+		//---- formattedTextField4 ----
+		formattedTextField4.setText("not editable disabled");
+		formattedTextField4.setEnabled(false);
+		formattedTextField4.setEditable(false);
+		add(formattedTextField4, "cell 4 5,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
