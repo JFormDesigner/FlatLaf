@@ -16,16 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Paint;
 import javax.swing.UIManager;
-import javax.swing.plaf.basic.BasicBorders;
 
 /**
  * Border for {@link javax.swing.JButton}.
@@ -33,35 +29,23 @@ import javax.swing.plaf.basic.BasicBorders;
  * @author Karl Tauber
  */
 public class FlatButtonBorder
-	extends BasicBorders.MarginBorder
+	extends FlatBorder
 {
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-		if( !FlatButtonUI.isContentAreaFilled( c ) )
-			return;
-
-		Graphics2D g2 = (Graphics2D) g.create();
-		try {
-			FlatUIUtils.setRenderingHints( g2 );
-
-			float focusWidth = getFocusWidth();
-			float lineWidth = getLineWidth();
-			float arc = FlatUIUtils.getButtonArc();
-
-			if( c.hasFocus() ) {
-				g2.setColor( UIManager.getColor( FlatButtonUI.isDefaultButton( c )
-					? "Button.default.focusColor" : "Component.focusColor" ) );
-				FlatUIUtils.paintOutlineBorder( g2, x, y, width, height, focusWidth, lineWidth, arc );
-			}
-
-			g2.setPaint( getBorderColor( c ) );
-			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, lineWidth, arc );
-		} finally {
-			g2.dispose();
-		}
+		if( FlatButtonUI.isContentAreaFilled( c ) )
+			super.paintBorder( c, g, x, y, width, height );
 	}
 
-	private Paint getBorderColor( Component c ) {
+	@Override
+	protected Color getFocusColor( Component c ) {
+		return UIManager.getColor( FlatButtonUI.isDefaultButton( c )
+			? "Button.default.focusColor"
+			: "Component.focusColor" );
+	}
+
+	@Override
+	protected Paint getBorderColor( Component c ) {
 		if( c.isEnabled() ) {
 			boolean def = FlatButtonUI.isDefaultButton( c );
 			if( c.hasFocus() )
@@ -78,22 +62,7 @@ public class FlatButtonBorder
 	}
 
 	@Override
-	public Insets getBorderInsets( Component c, Insets insets ) {
-		float ow = getFocusWidth() + getLineWidth();
-
-		insets = super.getBorderInsets( c, insets );
-		insets.top = Math.round( scale( (float) insets.top ) + ow );
-		insets.left = Math.round( scale( (float) insets.left ) + ow );
-		insets.bottom = Math.round( scale( (float) insets.bottom ) + ow );
-		insets.right = Math.round( scale( (float) insets.right ) + ow );
-		return insets;
-	}
-
-	protected float getFocusWidth() {
-		return FlatUIUtils.getFocusWidth();
-	}
-
-	protected float getLineWidth() {
-		return FlatUIUtils.getLineWidth();
+	protected float getArc() {
+		return FlatUIUtils.getButtonArc();
 	}
 }

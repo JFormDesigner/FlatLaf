@@ -47,7 +47,7 @@ public class FlatButtonUI
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
-		return c instanceof AbstractButton && ((AbstractButton)c).isContentAreaFilled();
+		return !(c instanceof AbstractButton) || ((AbstractButton)c).isContentAreaFilled();
 	}
 
 	static boolean isDefaultButton( Component c ) {

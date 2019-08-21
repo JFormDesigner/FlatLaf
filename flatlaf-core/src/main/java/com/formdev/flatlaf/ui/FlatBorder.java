@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.*;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -44,20 +45,25 @@ public class FlatBorder
 
 			float focusWidth = getFocusWidth();
 			float lineWidth = getLineWidth();
+			float arc = getArc();
 
 			if( isFocused( c ) ) {
-				g2.setColor( UIManager.getColor( "Component.focusColor" ) );
-				FlatUIUtils.paintOutlineBorder( g2, x, y, width, height, focusWidth, lineWidth, 0 );
+				g2.setColor( getFocusColor( c ) );
+				FlatUIUtils.paintOutlineBorder( g2, x, y, width, height, focusWidth, lineWidth, arc );
 			}
 
 			g2.setPaint( getBorderColor( c ) );
-			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, lineWidth, 0 );
+			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, lineWidth, arc );
 		} finally {
 			g2.dispose();
 		}
 	}
 
-	private Paint getBorderColor( Component c ) {
+	protected Color getFocusColor( Component c ) {
+		return UIManager.getColor( "Component.focusColor" );
+	}
+
+	protected Paint getBorderColor( Component c ) {
 		boolean editable = !(c instanceof JTextComponent) || ((JTextComponent)c).isEditable();
 		return UIManager.getColor( c.isEnabled() && editable
 			? (isFocused( c )
@@ -66,7 +72,7 @@ public class FlatBorder
 			: "Component.disabledBorderColor" );
 	}
 
-	private boolean isFocused( Component c ) {
+	protected boolean isFocused( Component c ) {
 		if( c instanceof JScrollPane ) {
 			JViewport viewport = ((JScrollPane)c).getViewport();
 			Component view = (viewport != null) ? viewport.getView() : null;
@@ -93,5 +99,9 @@ public class FlatBorder
 
 	protected float getLineWidth() {
 		return FlatUIUtils.getLineWidth();
+	}
+
+	protected float getArc() {
+		return 0;
 	}
 }
