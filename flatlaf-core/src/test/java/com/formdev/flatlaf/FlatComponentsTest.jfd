@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5"
 			"$columnConstraints": "[][][][][][]"
-			"$rowConstraints": "[][][][][][][]"
+			"$rowConstraints": "[][][][][][][][][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -85,6 +85,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "checkBox1"
 				"text": "enabled"
+				"displayedMnemonicIndex": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
@@ -92,6 +93,7 @@ new FormModel {
 				name: "checkBox2"
 				"text": "disabled"
 				"enabled": false
+				"displayedMnemonicIndex": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
 			} )
@@ -119,6 +121,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton1"
 				"text": "enabled"
+				"displayedMnemonicIndex": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 3"
 			} )
@@ -126,6 +129,7 @@ new FormModel {
 				name: "radioButton2"
 				"text": "disabled"
 				"enabled": false
+				"displayedMnemonicIndex": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 3"
 			} )
@@ -246,9 +250,194 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 6,growx"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "textAreaLabel"
+				"text": "JTextArea:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 7"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "textArea1"
+					"text": "editable"
+					"rows": 2
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 7,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane2"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "textArea2"
+					"text": "disabled"
+					"rows": 2
+					"enabled": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 7,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane3"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "textArea3"
+					"text": "not editable"
+					"rows": 2
+					"editable": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 7,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane4"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "textArea4"
+					"text": "not editable disabled"
+					"rows": 2
+					"editable": false
+					"enabled": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 7,growx"
+			} )
+			add( new FormComponent( "javax.swing.JTextArea" ) {
+				name: "textArea5"
+				"rows": 2
+				"text": "no scroll pane"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 7,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "editorPaneLabel"
+				"text": "JEditorPane"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 8"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane5"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JEditorPane" ) {
+					name: "editorPane1"
+					"text": "editable"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 8,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane6"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JEditorPane" ) {
+					name: "editorPane2"
+					"text": "disabled"
+					"enabled": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 8,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane7"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JEditorPane" ) {
+					name: "editorPane3"
+					"text": "not editable"
+					"editable": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 8,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane8"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JEditorPane" ) {
+					name: "editorPane4"
+					"text": "not editable disabled"
+					"editable": false
+					"enabled": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 8,growx"
+			} )
+			add( new FormComponent( "javax.swing.JEditorPane" ) {
+				name: "editorPane5"
+				"text": "no scroll pane"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 8,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "textPaneLabel"
+				"text": "JTextPane:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 9"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane9"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JTextPane" ) {
+					name: "textPane1"
+					"text": "editable"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 9,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane10"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JTextPane" ) {
+					name: "textPane2"
+					"text": "disabled"
+					"enabled": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 9,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane11"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JTextPane" ) {
+					name: "textPane3"
+					"text": "not editable"
+					"editable": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 9,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane12"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JTextPane" ) {
+					name: "textPane4"
+					"text": "not editable disabled"
+					"editable": false
+					"enabled": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 9,growx"
+			} )
+			add( new FormComponent( "javax.swing.JTextPane" ) {
+				name: "textPane5"
+				"text": "no scroll pane"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 9,growx"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 580, 300 )
+			"size": new java.awt.Dimension( 650, 410 )
 		} )
 	}
 }

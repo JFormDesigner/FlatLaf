@@ -97,11 +97,14 @@ public abstract class FlatLaf
 		// but are not set in MetalLookAndFeel or BasicLookAndFeel
 		Color control = defaults.getColor( "control" );
 		defaults.put( "EditorPane.disabledBackground", control );
+		defaults.put( "EditorPane.inactiveBackground", control );
 		defaults.put( "FormattedTextField.disabledBackground", control );
 		defaults.put( "PasswordField.disabledBackground", control );
 		defaults.put( "TextArea.disabledBackground", control );
+		defaults.put( "TextArea.inactiveBackground", control );
 		defaults.put( "TextField.disabledBackground", control );
 		defaults.put( "TextPane.disabledBackground", control );
+		defaults.put( "TextPane.inactiveBackground", control );
 
 		initFonts( defaults );
 		loadDefaultsFromProperties( defaults );
