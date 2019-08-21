@@ -22,6 +22,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Paint;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.text.JTextComponent;
@@ -43,7 +45,7 @@ public class FlatBorder
 			float focusWidth = getFocusWidth();
 			float lineWidth = getLineWidth();
 
-			if( c.hasFocus() ) {
+			if( isFocused( c ) ) {
 				g2.setColor( UIManager.getColor( "Component.focusColor" ) );
 				FlatUIUtils.paintOutlineBorder( g2, x, y, width, height, focusWidth, lineWidth, 0 );
 			}
@@ -58,10 +60,19 @@ public class FlatBorder
 	private Paint getBorderColor( Component c ) {
 		boolean editable = !(c instanceof JTextComponent) || ((JTextComponent)c).isEditable();
 		return UIManager.getColor( c.isEnabled() && editable
-			? (c.hasFocus()
+			? (isFocused( c )
 				? "Component.focusedBorderColor"
 				: "Component.borderColor")
 			: "Component.disabledBorderColor" );
+	}
+
+	private boolean isFocused( Component c ) {
+		if( c instanceof JScrollPane ) {
+			JViewport viewport = ((JScrollPane)c).getViewport();
+			Component view = (viewport != null) ? viewport.getView() : null;
+			return (view != null) ? view.hasFocus() : false;
+		} else
+			return c.hasFocus();
 	}
 
 	@Override
@@ -69,10 +80,10 @@ public class FlatBorder
 		float ow = getFocusWidth() + getLineWidth();
 
 		insets = super.getBorderInsets( c, insets );
-		insets.top = round( scale( (float) insets.top ) + ow );
-		insets.left = round( scale( (float) insets.left ) + ow );
-		insets.bottom = round( scale( (float) insets.bottom ) + ow );
-		insets.right = round( scale( (float) insets.right ) + ow );
+		insets.top = Math.round( scale( (float) insets.top ) + ow );
+		insets.left = Math.round( scale( (float) insets.left ) + ow );
+		insets.bottom = Math.round( scale( (float) insets.bottom ) + ow );
+		insets.right = Math.round( scale( (float) insets.right ) + ow );
 		return insets;
 	}
 

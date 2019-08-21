@@ -169,7 +169,7 @@ public class UIScale
 	}
 
 	public static int scale( int value ) {
-		return (scaleFactor == 1) ? value : round( value * scaleFactor );
+		return (scaleFactor == 1) ? value : Math.round( value * scaleFactor );
 	}
 
 	public static float unscale( float value ) {
@@ -177,14 +177,7 @@ public class UIScale
 	}
 
 	public static int unscale( int value ) {
-		return (scaleFactor == 1f) ? value : round( value / scaleFactor );
-	}
-
-	public static int round( float value ) {
-		// subtracting 0.01 gives "better" results in some cases
-		//   e.g. 2px * 125% = 2px instead of 3px
-		//     or 1px * 150% = 1px instead of 2px
-		return Math.round( value - 0.01f );
+		return (scaleFactor == 1f) ? value : Math.round( value / scaleFactor );
 	}
 
 	public static void scaleGraphics( Graphics2D g ) {

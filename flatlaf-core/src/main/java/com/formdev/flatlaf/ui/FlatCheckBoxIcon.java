@@ -104,13 +104,11 @@ public class FlatCheckBoxIcon
 
 	@Override
 	public int getIconWidth() {
-		// use Math.round(), instead of UIScale.round(), because this gives same
-		// icon size as scaled graphics used in paintIcon()
-		return Math.round( scale( 19f ) );
+		return scale( 19 );
 	}
 
 	@Override
 	public int getIconHeight() {
-		return Math.round( scale( 19f ) );
+		return scale( 19 );
 	}
 }

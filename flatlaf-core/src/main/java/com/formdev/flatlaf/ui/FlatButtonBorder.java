@@ -82,10 +82,10 @@ public class FlatButtonBorder
 		float ow = getFocusWidth() + getLineWidth();
 
 		insets = super.getBorderInsets( c, insets );
-		insets.top = round( scale( (float) insets.top ) + ow );
-		insets.left = round( scale( (float) insets.left ) + ow );
-		insets.bottom = round( scale( (float) insets.bottom ) + ow );
-		insets.right = round( scale( (float) insets.right ) + ow );
+		insets.top = Math.round( scale( (float) insets.top ) + ow );
+		insets.left = Math.round( scale( (float) insets.left ) + ow );
+		insets.bottom = Math.round( scale( (float) insets.bottom ) + ow );
+		insets.right = Math.round( scale( (float) insets.right ) + ow );
 		return insets;
 	}
 
