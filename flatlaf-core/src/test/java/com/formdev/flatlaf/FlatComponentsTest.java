@@ -76,6 +76,11 @@ public class FlatComponentsTest
 		JFormattedTextField formattedTextField2 = new JFormattedTextField();
 		JFormattedTextField formattedTextField3 = new JFormattedTextField();
 		JFormattedTextField formattedTextField4 = new JFormattedTextField();
+		JLabel passwordFieldLabel = new JLabel();
+		JPasswordField passwordField1 = new JPasswordField();
+		JPasswordField passwordField2 = new JPasswordField();
+		JPasswordField passwordField3 = new JPasswordField();
+		JPasswordField passwordField4 = new JPasswordField();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -237,6 +242,30 @@ public class FlatComponentsTest
 		formattedTextField4.setEnabled(false);
 		formattedTextField4.setEditable(false);
 		add(formattedTextField4, "cell 4 5,growx");
+
+		//---- passwordFieldLabel ----
+		passwordFieldLabel.setText("JPasswordField:");
+		add(passwordFieldLabel, "cell 0 6");
+
+		//---- passwordField1 ----
+		passwordField1.setText("editable");
+		add(passwordField1, "cell 1 6,growx");
+
+		//---- passwordField2 ----
+		passwordField2.setText("disabled");
+		passwordField2.setEnabled(false);
+		add(passwordField2, "cell 2 6,growx");
+
+		//---- passwordField3 ----
+		passwordField3.setText("not editable");
+		passwordField3.setEditable(false);
+		add(passwordField3, "cell 3 6,growx");
+
+		//---- passwordField4 ----
+		passwordField4.setText("not editable disabled");
+		passwordField4.setEnabled(false);
+		passwordField4.setEditable(false);
+		add(passwordField4, "cell 4 6,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
