@@ -16,13 +16,11 @@
 
 package com.formdev.flatlaf.ui;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JComponent;
-import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
@@ -67,17 +65,11 @@ public class FlatTextFieldUI
 
 			float focusWidth = FlatUIUtils.getFocusWidth();
 
-			g2.setColor( getBackground( c ) );
+			g2.setColor( c.getBackground() );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, 0 );
 		} finally {
 			g2.dispose();
 		}
-	}
-
-	private Color getBackground( JTextComponent c ) {
-		return c.isEditable() && c.isEnabled()
-			? c.getBackground()
-			: UIManager.getColor( "TextField.disabledBackground" );
 	}
 
 	//---- class Handler ------------------------------------------------------

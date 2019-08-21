@@ -93,6 +93,16 @@ public abstract class FlatLaf
 	public UIDefaults getDefaults() {
 		UIDefaults defaults = getBase().getDefaults();
 
+		// initialize some defaults (for overriding) that are used in basic UI delegates,
+		// but are not set in MetalLookAndFeel or BasicLookAndFeel
+		Color control = defaults.getColor( "control" );
+		defaults.put( "EditorPane.disabledBackground", control );
+		defaults.put( "FormattedTextField.disabledBackground", control );
+		defaults.put( "PasswordField.disabledBackground", control );
+		defaults.put( "TextArea.disabledBackground", control );
+		defaults.put( "TextField.disabledBackground", control );
+		defaults.put( "TextPane.disabledBackground", control );
+
 		initFonts( defaults );
 		loadDefaultsFromProperties( defaults );
 
