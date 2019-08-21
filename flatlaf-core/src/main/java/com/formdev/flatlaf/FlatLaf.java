@@ -18,17 +18,20 @@ package com.formdev.flatlaf;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.InsetsUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -211,6 +214,10 @@ public abstract class FlatLaf
 		if( key.endsWith( ".icon" ) )
 			return parseInstance( value );
 
+		// insets
+		if( key.endsWith( ".margin" ) )
+			return parseInsets( value );
+
 		// colors
 		ColorUIResource color = parseColor( value );
 		if( color != null )
@@ -240,6 +247,20 @@ public abstract class FlatLaf
 		};
 	}
 
+	private Insets parseInsets( String value ) {
+		List<String> numbers = split( value, ',' );
+		try {
+			return new InsetsUIResource(
+				Integer.parseInt( numbers.get( 0 ) ),
+				Integer.parseInt( numbers.get( 1 ) ),
+				Integer.parseInt( numbers.get( 2 ) ),
+				Integer.parseInt( numbers.get( 3 ) ) );
+		} catch( NumberFormatException ex ) {
+			System.err.println( "invalid insets '" + value + "'" );
+			throw ex;
+		}
+	}
+
 	private ColorUIResource parseColor( String value ) {
 		try {
 			if( value.length() == 6 ) {
@@ -266,5 +287,19 @@ public abstract class FlatLaf
 			}
 		}
 		return null;
+	}
+
+	private static List<String> split( String str, char delim ) {
+		ArrayList<String> strs = new ArrayList<>();
+		int delimIndex = str.indexOf( delim );
+		int index = 0;
+		while( delimIndex >= 0 ) {
+			strs.add( str.substring( index, delimIndex ) );
+			index = delimIndex + 1;
+			delimIndex = str.indexOf( delim, index );
+		}
+		strs.add( str.substring( index ) );
+
+		return strs;
 	}
 }

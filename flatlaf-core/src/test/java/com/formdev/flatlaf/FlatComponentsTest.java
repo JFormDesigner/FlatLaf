@@ -66,6 +66,11 @@ public class FlatComponentsTest
 		JRadioButton radioButton2 = new JRadioButton();
 		JRadioButton radioButton3 = new JRadioButton();
 		JRadioButton radioButton4 = new JRadioButton();
+		JLabel textFieldLabel = new JLabel();
+		JTextField textField1 = new JTextField();
+		JTextField textField2 = new JTextField();
+		JTextField textField3 = new JTextField();
+		JTextField textField4 = new JTextField();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -177,6 +182,30 @@ public class FlatComponentsTest
 		radioButton4.setSelected(true);
 		radioButton4.setEnabled(false);
 		add(radioButton4, "cell 4 3");
+
+		//---- textFieldLabel ----
+		textFieldLabel.setText("JTextField:");
+		add(textFieldLabel, "cell 0 4");
+
+		//---- textField1 ----
+		textField1.setText("editable");
+		add(textField1, "cell 1 4,growx");
+
+		//---- textField2 ----
+		textField2.setText("disabled");
+		textField2.setEnabled(false);
+		add(textField2, "cell 2 4,growx");
+
+		//---- textField3 ----
+		textField3.setText("not editable");
+		textField3.setEditable(false);
+		add(textField3, "cell 3 4,growx");
+
+		//---- textField4 ----
+		textField4.setText("not editable disabled");
+		textField4.setEnabled(false);
+		textField4.setEditable(false);
+		add(textField4, "cell 4 4,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

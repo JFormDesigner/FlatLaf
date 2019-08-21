@@ -144,6 +144,40 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 3"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "textFieldLabel"
+				"text": "JTextField:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField1"
+				"text": "editable"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4,growx"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField2"
+				"text": "disabled"
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 4,growx"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField3"
+				"text": "not editable"
+				"editable": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 4,growx"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField4"
+				"text": "not editable disabled"
+				"enabled": false
+				"editable": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 4,growx"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 580, 300 )
