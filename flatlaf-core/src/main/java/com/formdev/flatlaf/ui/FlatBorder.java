@@ -64,12 +64,8 @@ public class FlatBorder
 	}
 
 	protected Paint getBorderColor( Component c ) {
-		boolean editable = !(c instanceof JTextComponent) || ((JTextComponent)c).isEditable();
-		return UIManager.getColor( c.isEnabled() && editable
-			? (isFocused( c )
-				? "Component.focusedBorderColor"
-				: "Component.borderColor")
-			: "Component.disabledBorderColor" );
+		boolean enabled = c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
+		return FlatUIUtils.getBorderColor( enabled, isFocused( c ) );
 	}
 
 	protected boolean isFocused( Component c ) {

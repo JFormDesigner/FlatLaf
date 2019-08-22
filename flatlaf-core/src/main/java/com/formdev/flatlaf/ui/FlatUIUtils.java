@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -55,6 +56,12 @@ public class FlatUIUtils
 
 	public static float getButtonArc() {
 		return scale( (float) getUIInt( "Button.arc", 6 ) );
+	}
+
+	public static Color getBorderColor( boolean enabled, boolean focused ) {
+		return UIManager.getColor( enabled
+			? (focused ? "Component.focusedBorderColor" : "Component.borderColor")
+			: "Component.disabledBorderColor" );
 	}
 
 	/**
@@ -132,7 +139,7 @@ public class FlatUIUtils
 		float x2 = x1 + width;
 		float y2 = y1 + height;
 
-		float outerArc = arc > 0 ? arc + focusWidth - UIScale.scale( 2f ) : focusWidth;
+		float outerArc = (arc > 0) ? arc + focusWidth - UIScale.scale( 2f ) : focusWidth;
 		Path2D outerRect = createOutlinePath( x1, y1, x2, y2, outerArc );
 
 		float ow = focusWidth + lineWidth;
