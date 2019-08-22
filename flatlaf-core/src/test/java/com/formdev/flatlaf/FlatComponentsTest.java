@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf;
 
+import java.awt.*;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 
@@ -111,6 +112,15 @@ public class FlatComponentsTest
 		JScrollPane scrollPane12 = new JScrollPane();
 		JTextPane textPane4 = new JTextPane();
 		JTextPane textPane5 = new JTextPane();
+		JLabel scrollPaneLabel = new JLabel();
+		JScrollPane scrollPane13 = new JScrollPane();
+		JPanel panel1 = new JPanel();
+		JScrollBar scrollBar2 = new JScrollBar();
+		JScrollBar scrollBar3 = new JScrollBar();
+		JScrollPane scrollPane14 = new JScrollPane();
+		JLabel scrollBarLabel = new JLabel();
+		JScrollBar scrollBar1 = new JScrollBar();
+		JScrollBar scrollBar4 = new JScrollBar();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -123,6 +133,9 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -476,6 +489,43 @@ public class FlatComponentsTest
 		//---- textPane5 ----
 		textPane5.setText("no scroll pane");
 		add(textPane5, "cell 5 9,growx");
+
+		//---- scrollPaneLabel ----
+		scrollPaneLabel.setText("JScrollPane:");
+		add(scrollPaneLabel, "cell 0 10");
+
+		//======== scrollPane13 ========
+		{
+			scrollPane13.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+			scrollPane13.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+			//======== panel1 ========
+			{
+				panel1.setPreferredSize(new Dimension(200, 200));
+				panel1.setLayout(new BorderLayout());
+			}
+			scrollPane13.setViewportView(panel1);
+		}
+		add(scrollPane13, "cell 1 10,grow,width 70,height 70");
+		add(scrollBar2, "cell 2 10,growy");
+
+		//---- scrollBar3 ----
+		scrollBar3.setEnabled(false);
+		add(scrollBar3, "cell 2 10,growy");
+		add(scrollPane14, "cell 3 10,grow");
+
+		//---- scrollBarLabel ----
+		scrollBarLabel.setText("JScrollBar:");
+		add(scrollBarLabel, "cell 0 11");
+
+		//---- scrollBar1 ----
+		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
+		add(scrollBar1, "cell 1 11,growx");
+
+		//---- scrollBar4 ----
+		scrollBar4.setOrientation(Adjustable.HORIZONTAL);
+		scrollBar4.setEnabled(false);
+		add(scrollBar4, "cell 1 12,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

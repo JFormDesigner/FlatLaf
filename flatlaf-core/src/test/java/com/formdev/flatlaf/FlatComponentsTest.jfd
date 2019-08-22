@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5"
 			"$columnConstraints": "[][][][][][]"
-			"$rowConstraints": "[][][][][][][][][][]"
+			"$rowConstraints": "[][][][][][][][][][][][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -435,9 +435,61 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 9,growx"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "scrollPaneLabel"
+				"text": "JScrollPane:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 10"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane13"
+				"horizontalScrollBarPolicy": 32
+				"verticalScrollBarPolicy": 22
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel1"
+					"preferredSize": new java.awt.Dimension( 200, 200 )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 10,grow,width 70,height 70"
+			} )
+			add( new FormComponent( "javax.swing.JScrollBar" ) {
+				name: "scrollBar2"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 10,growy"
+			} )
+			add( new FormComponent( "javax.swing.JScrollBar" ) {
+				name: "scrollBar3"
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 10,growy"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane14"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 10,grow"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "scrollBarLabel"
+				"text": "JScrollBar:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 11"
+			} )
+			add( new FormComponent( "javax.swing.JScrollBar" ) {
+				name: "scrollBar1"
+				"orientation": 0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 11,growx"
+			} )
+			add( new FormComponent( "javax.swing.JScrollBar" ) {
+				name: "scrollBar4"
+				"orientation": 0
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 12,growx"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 650, 410 )
+			"size": new java.awt.Dimension( 720, 535 )
 		} )
 	}
 }

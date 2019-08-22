@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.util;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
@@ -24,6 +25,8 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.plaf.DimensionUIResource;
+import javax.swing.plaf.UIResource;
 
 /**
  * Two scaling modes are supported for HiDPI displays:
@@ -183,5 +186,13 @@ public class UIScale
 	public static void scaleGraphics( Graphics2D g ) {
 		if( scaleFactor != 1f )
 			g.scale( scaleFactor, scaleFactor );
+	}
+
+	public static Dimension scale( Dimension dimension ) {
+		return (dimension == null || scaleFactor == 1f)
+			? dimension
+			: (dimension instanceof UIResource
+				? new DimensionUIResource( scale( dimension.width ), scale( dimension.height ) )
+				: new Dimension          ( scale( dimension.width ), scale( dimension.height ) ));
 	}
 }
