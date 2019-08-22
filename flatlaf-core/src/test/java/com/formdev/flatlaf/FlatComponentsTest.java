@@ -46,6 +46,14 @@ public class FlatComponentsTest
 		initComponents();
 	}
 
+	private void indeterminateCheckBoxActionPerformed() {
+		boolean indeterminate = indeterminateCheckBox.isSelected();
+		progressBar1.setIndeterminate( indeterminate );
+		progressBar2.setIndeterminate( indeterminate );
+		progressBar3.setIndeterminate( indeterminate );
+		progressBar4.setIndeterminate( indeterminate );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel labelLabel = new JLabel();
@@ -118,9 +126,15 @@ public class FlatComponentsTest
 		JScrollBar scrollBar2 = new JScrollBar();
 		JScrollBar scrollBar3 = new JScrollBar();
 		JScrollPane scrollPane14 = new JScrollPane();
+		progressBar3 = new JProgressBar();
+		progressBar4 = new JProgressBar();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
+		JLabel progressBarLabel = new JLabel();
+		progressBar1 = new JProgressBar();
+		progressBar2 = new JProgressBar();
+		indeterminateCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -133,6 +147,7 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -514,6 +529,17 @@ public class FlatComponentsTest
 		add(scrollBar3, "cell 2 10,growy");
 		add(scrollPane14, "cell 3 10,grow");
 
+		//---- progressBar3 ----
+		progressBar3.setOrientation(SwingConstants.VERTICAL);
+		progressBar3.setValue(50);
+		add(progressBar3, "cell 4 10");
+
+		//---- progressBar4 ----
+		progressBar4.setOrientation(SwingConstants.VERTICAL);
+		progressBar4.setValue(55);
+		progressBar4.setStringPainted(true);
+		add(progressBar4, "cell 4 10");
+
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
 		add(scrollBarLabel, "cell 0 11");
@@ -526,10 +552,33 @@ public class FlatComponentsTest
 		scrollBar4.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar4.setEnabled(false);
 		add(scrollBar4, "cell 1 12,growx");
+
+		//---- progressBarLabel ----
+		progressBarLabel.setText("JProgressBar:");
+		add(progressBarLabel, "cell 0 13");
+
+		//---- progressBar1 ----
+		progressBar1.setValue(50);
+		add(progressBar1, "cell 1 13");
+
+		//---- progressBar2 ----
+		progressBar2.setStringPainted(true);
+		progressBar2.setValue(55);
+		add(progressBar2, "cell 3 13");
+
+		//---- indeterminateCheckBox ----
+		indeterminateCheckBox.setText("indeterminate");
+		indeterminateCheckBox.addActionListener(e -> indeterminateCheckBoxActionPerformed());
+		add(indeterminateCheckBox, "cell 4 13");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JProgressBar progressBar3;
+	private JProgressBar progressBar4;
+	private JProgressBar progressBar1;
+	private JProgressBar progressBar2;
+	private JCheckBox indeterminateCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class TestDefaultButton --------------------------------------------

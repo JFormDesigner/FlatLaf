@@ -17,6 +17,7 @@
 package com.formdev.flatlaf;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Toolkit;
@@ -30,6 +31,7 @@ import java.util.Properties;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
@@ -232,8 +234,16 @@ public abstract class FlatLaf
 			return parseInstance( value );
 
 		// insets
-		if( key.endsWith( ".margin" ) )
+		if( key.endsWith( ".margin" ) || key.endsWith( ".padding" ) )
 			return parseInsets( value );
+
+		// insets
+		if( key.endsWith( "Size" ) )
+			return parseSize( value );
+
+		// insets
+		if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
+			return parseInteger( value, true );
 
 		// colors
 		ColorUIResource color = parseColor( value );
@@ -274,6 +284,18 @@ public abstract class FlatLaf
 				Integer.parseInt( numbers.get( 3 ) ) );
 		} catch( NumberFormatException ex ) {
 			System.err.println( "invalid insets '" + value + "'" );
+			throw ex;
+		}
+	}
+
+	private Dimension parseSize( String value ) {
+		List<String> numbers = split( value, ',' );
+		try {
+			return new DimensionUIResource(
+				Integer.parseInt( numbers.get( 0 ) ),
+				Integer.parseInt( numbers.get( 1 ) ) );
+		} catch( NumberFormatException ex ) {
+			System.err.println( "invalid size '" + value + "'" );
 			throw ex;
 		}
 	}
