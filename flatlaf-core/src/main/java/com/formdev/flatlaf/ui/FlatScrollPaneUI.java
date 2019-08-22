@@ -17,6 +17,8 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.FocusEvent;
@@ -81,6 +83,22 @@ public class FlatScrollPaneUI
 			if( newView != null )
 				newView.addFocusListener( handler );
 		}
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		if( c.isOpaque() ) {
+			FlatUIUtils.paintParentBackground( g, c );
+
+			// paint background so that corners have same color as scroll bars
+			Insets insets = c.getInsets();
+			g.setColor( c.getBackground() );
+			g.fillRect( insets.left, insets.top,
+				c.getWidth() - insets.left - insets.right,
+				c.getHeight() - insets.top - insets.bottom );
+		}
+
+		paint( g, c );
 	}
 
 	//---- class Handler ------------------------------------------------------

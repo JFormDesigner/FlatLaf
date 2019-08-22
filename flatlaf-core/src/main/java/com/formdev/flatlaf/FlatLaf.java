@@ -45,6 +45,7 @@ public abstract class FlatLaf
 	extends BasicLookAndFeel
 {
 	private static final String VARIABLE_PREFIX = "@";
+	private static final String REF_PREFIX = VARIABLE_PREFIX + "@";
 	private static final String GLOBAL_PREFIX = "*.";
 
 	private BasicLookAndFeel base;
@@ -169,7 +170,7 @@ public abstract class FlatLaf
 				if( !key.startsWith( GLOBAL_PREFIX ) )
 					continue;
 
-				String value = resolveVariable( properties, (String) e.getValue() );
+				String value = resolveValue( properties, (String) e.getValue() );
 				globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value ) );
 			}
 
@@ -190,7 +191,7 @@ public abstract class FlatLaf
 				if( key.startsWith( VARIABLE_PREFIX ) || key.startsWith( GLOBAL_PREFIX ) )
 					continue;
 
-				String value = resolveVariable( properties, (String) e.getValue() );
+				String value = resolveValue( properties, (String) e.getValue() );
 				defaults.put( key, parseValue( key, value ) );
 			}
 		} catch( IOException ex ) {
@@ -198,13 +199,16 @@ public abstract class FlatLaf
 		}
 	}
 
-	private String resolveVariable( Properties properties, String value ) {
+	private String resolveValue( Properties properties, String value ) {
 		if( !value.startsWith( VARIABLE_PREFIX ) )
 			return value;
 
+		if( value.startsWith( REF_PREFIX ) )
+			value = value.substring( REF_PREFIX.length() );
+
 		String newValue = properties.getProperty( value );
 		if( newValue == null )
-			System.err.println( "variable '" + value + "' not found" );
+			System.err.println( "variable or reference '" + value + "' not found" );
 
 		return newValue;
 	}
