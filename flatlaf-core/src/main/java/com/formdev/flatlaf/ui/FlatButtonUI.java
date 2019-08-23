@@ -64,8 +64,8 @@ public class FlatButtonUI
 				try {
 					FlatUIUtils.setRenderingHints( g2 );
 
-					float focusWidth = FlatUIUtils.getFocusWidth();
-					float arc = FlatUIUtils.getButtonArc();
+					float focusWidth = FlatUIUtils.getFocusWidth( c );
+					float arc = FlatUIUtils.getButtonArc( c );
 
 					g2.setColor( getBackground( c ) );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );

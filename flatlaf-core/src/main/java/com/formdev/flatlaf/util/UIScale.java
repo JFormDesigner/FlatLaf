@@ -20,12 +20,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.DimensionUIResource;
+import javax.swing.plaf.InsetsUIResource;
 import javax.swing.plaf.UIResource;
 
 /**
@@ -194,5 +196,13 @@ public class UIScale
 			: (dimension instanceof UIResource
 				? new DimensionUIResource( scale( dimension.width ), scale( dimension.height ) )
 				: new Dimension          ( scale( dimension.width ), scale( dimension.height ) ));
+	}
+
+	public static Insets scale( Insets insets ) {
+		return (insets == null || scaleFactor == 1f)
+			? insets
+			: (insets instanceof UIResource
+				? new InsetsUIResource( scale( insets.top ), scale( insets.left ), scale( insets.bottom ), scale( insets.right ) )
+				: new Insets          ( scale( insets.top ), scale( insets.left ), scale( insets.bottom ), scale( insets.right ) ));
 	}
 }

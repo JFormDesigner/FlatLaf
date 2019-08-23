@@ -63,7 +63,7 @@ public class FlatTextFieldUI
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			float focusWidth = FlatUIUtils.getFocusWidth();
+			float focusWidth = FlatUIUtils.getFocusWidth( c );
 
 			g2.setColor( c.getBackground() );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, 0 );

@@ -21,6 +21,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
@@ -36,6 +38,19 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatUIUtils
 {
 	public static final boolean MAC_USE_QUARTZ = Boolean.getBoolean( "apple.awt.graphics.UseQuartz" );
+
+	public static Rectangle subtract( Rectangle r, Insets insets ) {
+		return new Rectangle(
+			r.x + insets.left,
+			r.y + insets.top,
+			r.width - insets.left - insets.right,
+			r.height - insets.top - insets.bottom );
+	}
+
+	public static Color getUIColor( String key, int defaultColorRGB ) {
+		Color color = UIManager.getColor( key );
+		return (color != null) ? color : new Color( defaultColorRGB );
+	}
 
 	public static int getUIInt( String key, int defaultValue ) {
 		Object value = UIManager.get( key );
@@ -56,6 +71,18 @@ public class FlatUIUtils
 
 	public static float getButtonArc() {
 		return scale( (float) getUIInt( "Button.arc", 6 ) );
+	}
+
+	public static float getFocusWidth( JComponent c ) {
+		return (c.getBorder() instanceof FlatBorder) ? getFocusWidth() : 0;
+	}
+
+	public static float getComponentArc( JComponent c ) {
+		return (c.getBorder() instanceof FlatBorder) ? getComponentArc() : 0;
+	}
+
+	public static float getButtonArc( JComponent c ) {
+		return (c.getBorder() instanceof FlatBorder) ? getButtonArc() : 0;
 	}
 
 	public static Color getBorderColor( boolean enabled, boolean focused ) {
