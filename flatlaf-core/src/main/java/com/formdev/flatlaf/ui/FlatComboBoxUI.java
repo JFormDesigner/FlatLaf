@@ -22,6 +22,7 @@ import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
@@ -33,6 +34,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -80,11 +82,11 @@ public class FlatComboBoxUI
 				String propertyName = e.getPropertyName();
 
 				if( editor != null &&
-					((source == comboBox && propertyName == "background") ||
+					((source == comboBox && (propertyName == "background" || propertyName == "foreground")) ||
 					 (source == editor && propertyName == "enabled")) )
 				{
-					// fix editor component background color
-					updateEditorBackground();
+					// fix editor component colors
+					updateEditorColors();
 				}
 			}
 		};
@@ -94,13 +96,19 @@ public class FlatComboBoxUI
 	protected void configureEditor() {
 		super.configureEditor();
 
-		updateEditorBackground();
+		updateEditorColors();
 	}
 
-	private void updateEditorBackground() {
-		editor.setBackground( editor.isEnabled()
+	private void updateEditorColors() {
+		boolean enabled = editor.isEnabled();
+		editor.setBackground( enabled
 			? comboBox.getBackground()
 			: UIManager.getColor( "ComboBox.disabledBackground" ) );
+		editor.setForeground( (enabled || editor instanceof JTextComponent)
+			? comboBox.getForeground()
+			: UIManager.getColor( "ComboBox.disabledForeground" ) );
+		if( editor instanceof JTextComponent )
+			((JTextComponent)editor).setDisabledTextColor( UIManager.getColor( "ComboBox.disabledForeground" ) );
 	}
 
 	@Override
@@ -147,6 +155,12 @@ public class FlatComboBoxUI
 		}
 
 		paint( g, c );
+	}
+
+	@Override
+	public void paintCurrentValue( Graphics g, Rectangle bounds, boolean hasFocus ) {
+		// always pass "hasFocus = false" to avoid painting in selection colors when focused
+		super.paintCurrentValue( g, bounds, false );
 	}
 
 	//---- class FlatArrowButton ----------------------------------------------
