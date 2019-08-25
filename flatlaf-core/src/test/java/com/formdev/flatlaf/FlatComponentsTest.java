@@ -54,11 +54,39 @@ public class FlatComponentsTest
 		progressBar4.setIndeterminate( indeterminate );
 	}
 
+	private void customColorsChanged() {
+		boolean test = customColorsCheckBox.isSelected();
+
+		for( Component c : getComponents() ) {
+			c.setForeground( testColor( test, c, "foreground", Color.blue ) );
+			c.setBackground( testColor( test, c, "background", Color.red ) );
+
+			if( c instanceof JScrollPane ) {
+				Component view = ((JScrollPane)c).getViewport().getView();
+				if( view != null ) {
+					view.setForeground( testColor( test, view, "foreground", Color.magenta ) );
+					view.setBackground( testColor( test, view, "background", Color.orange ) );
+				}
+			}
+		}
+	}
+
+	private Color testColor( boolean test, Component c, String propertyName, Color testColor ) {
+		if( test )
+			return testColor;
+		else {
+			String uiClassID = ((JComponent)c).getUIClassID();
+			String key = uiClassID.substring( 0, uiClassID.length() - 2 ) + "." + propertyName;
+			return UIManager.getColor( key );
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel labelLabel = new JLabel();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
+		customColorsCheckBox = new JCheckBox();
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
@@ -187,6 +215,12 @@ public class FlatComponentsTest
 		label2.setEnabled(false);
 		add(label2, "cell 2 0");
 
+		//---- customColorsCheckBox ----
+		customColorsCheckBox.setText("Custom colors");
+		customColorsCheckBox.setMnemonic('C');
+		customColorsCheckBox.addActionListener(e -> customColorsChanged());
+		add(customColorsCheckBox, "cell 5 0");
+
 		//---- buttonLabel ----
 		buttonLabel.setText("JButton:");
 		add(buttonLabel, "cell 0 1");
@@ -224,13 +258,13 @@ public class FlatComponentsTest
 
 		//---- checkBox1 ----
 		checkBox1.setText("enabled");
-		checkBox1.setDisplayedMnemonicIndex(0);
+		checkBox1.setMnemonic('E');
 		add(checkBox1, "cell 1 2");
 
 		//---- checkBox2 ----
 		checkBox2.setText("disabled");
 		checkBox2.setEnabled(false);
-		checkBox2.setDisplayedMnemonicIndex(0);
+		checkBox2.setMnemonic('D');
 		add(checkBox2, "cell 2 2");
 
 		//---- checkBox3 ----
@@ -250,13 +284,13 @@ public class FlatComponentsTest
 
 		//---- radioButton1 ----
 		radioButton1.setText("enabled");
-		radioButton1.setDisplayedMnemonicIndex(0);
+		radioButton1.setMnemonic('N');
 		add(radioButton1, "cell 1 3");
 
 		//---- radioButton2 ----
 		radioButton2.setText("disabled");
 		radioButton2.setEnabled(false);
-		radioButton2.setDisplayedMnemonicIndex(0);
+		radioButton2.setMnemonic('S');
 		add(radioButton2, "cell 2 3");
 
 		//---- radioButton3 ----
@@ -637,6 +671,7 @@ public class FlatComponentsTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JCheckBox customColorsCheckBox;
 	private JProgressBar progressBar3;
 	private JProgressBar progressBar4;
 	private JProgressBar progressBar1;
