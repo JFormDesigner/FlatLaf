@@ -130,12 +130,15 @@ public class FlatComponentsTest
 		JPanel panel1 = new JPanel();
 		JScrollBar scrollBar2 = new JScrollBar();
 		JScrollBar scrollBar3 = new JScrollBar();
+		JSeparator separator2 = new JSeparator();
 		JScrollPane scrollPane14 = new JScrollPane();
 		progressBar3 = new JProgressBar();
 		progressBar4 = new JProgressBar();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
+		JLabel separatorLabel = new JLabel();
+		JSeparator separator1 = new JSeparator();
 		JLabel progressBarLabel = new JLabel();
 		progressBar1 = new JProgressBar();
 		progressBar2 = new JProgressBar();
@@ -152,6 +155,7 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -577,6 +581,10 @@ public class FlatComponentsTest
 		//---- scrollBar3 ----
 		scrollBar3.setEnabled(false);
 		add(scrollBar3, "cell 2 11,growy");
+
+		//---- separator2 ----
+		separator2.setOrientation(SwingConstants.VERTICAL);
+		add(separator2, "cell 2 11,growy");
 		add(scrollPane14, "cell 3 11,grow");
 
 		//---- progressBar3 ----
@@ -603,23 +611,28 @@ public class FlatComponentsTest
 		scrollBar4.setEnabled(false);
 		add(scrollBar4, "cell 1 13,growx");
 
+		//---- separatorLabel ----
+		separatorLabel.setText("JSeparator:");
+		add(separatorLabel, "cell 0 14");
+		add(separator1, "cell 1 14,growx");
+
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
-		add(progressBarLabel, "cell 0 14");
+		add(progressBarLabel, "cell 0 15");
 
 		//---- progressBar1 ----
 		progressBar1.setValue(50);
-		add(progressBar1, "cell 1 14");
+		add(progressBar1, "cell 1 15");
 
 		//---- progressBar2 ----
 		progressBar2.setStringPainted(true);
 		progressBar2.setValue(55);
-		add(progressBar2, "cell 3 14");
+		add(progressBar2, "cell 3 15");
 
 		//---- indeterminateCheckBox ----
 		indeterminateCheckBox.setText("indeterminate");
 		indeterminateCheckBox.addActionListener(e -> indeterminateCheckBoxActionPerformed());
-		add(indeterminateCheckBox, "cell 4 14");
+		add(indeterminateCheckBox, "cell 4 15");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
