@@ -45,6 +45,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Slider.verticalSize			Dimension	preferred vertical size; width is ignored; computed slider width is used
  * @uiDefault Slider.minimumHorizontalSize	Dimension	height is ignored; computed slider height is used
  * @uiDefault Slider.minimumVerticalSize	Dimension	width is ignored; computed slider width is used
+ * @uiDefault Component.focusColor			Color
  *
  * @author Karl Tauber
  */
@@ -57,6 +58,7 @@ public class FlatSliderUI
 	private Color trackColor;
 	private Color thumbColor;
 	private Color disabledForeground;
+	private Color focusColor;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSliderUI();
@@ -76,6 +78,7 @@ public class FlatSliderUI
 		trackColor = UIManager.getColor( "Slider.trackColor" );
 		thumbColor = UIManager.getColor( "Slider.thumbColor" );
 		disabledForeground = UIManager.getColor( "Slider.disabledForeground" );
+		focusColor = UIManager.getColor( "Component.focusColor" );
 	}
 
 	@Override
@@ -122,25 +125,44 @@ public class FlatSliderUI
 
 	@Override
 	public void paintTrack( Graphics g ) {
-		g.setColor( slider.isEnabled() ? trackColor : disabledForeground );
-
+		boolean enabled = slider.isEnabled();
 		float tw = UIScale.scale( (float) trackWidth );
 		float arc = tw;
 
+		RoundRectangle2D coloredTrack = null;
+		RoundRectangle2D track;
 		if( slider.getOrientation() == JSlider.HORIZONTAL ) {
 			float y = trackRect.y + (trackRect.height - tw) / 2f;
-			((Graphics2D)g).fill( new RoundRectangle2D.Float( trackRect.x, y, trackRect.width, tw, arc, arc ) );
+			if( enabled && isRoundThumb() ) {
+				int cw = thumbRect.x + (thumbRect.width / 2) - trackRect.x;
+				coloredTrack = new RoundRectangle2D.Float( trackRect.x, y, cw, tw, arc, arc );
+				track = new RoundRectangle2D.Float( trackRect.x + cw, y, trackRect.width - cw, tw, arc, arc );
+			} else
+				track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width, tw, arc, arc );
 		} else {
 			float x = trackRect.x + (trackRect.width - tw) / 2f;
-			((Graphics2D)g).fill( new RoundRectangle2D.Float( x, trackRect.y, tw, trackRect.height, arc, arc ) );
+			if( enabled && isRoundThumb() ) {
+				int ch = thumbRect.y + (thumbRect.height / 2) - trackRect.y;
+				track = new RoundRectangle2D.Float( x, trackRect.y, tw, ch, arc, arc );
+				coloredTrack = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, trackRect.height - ch, arc, arc );
+			} else
+				track = new RoundRectangle2D.Float( x, trackRect.y, tw, trackRect.height, arc, arc );
 		}
+
+		if( coloredTrack != null ) {
+			g.setColor( slider.hasFocus() ? focusColor : thumbColor );
+			((Graphics2D)g).fill( coloredTrack );
+		}
+
+		g.setColor( enabled ? trackColor : disabledForeground );
+		((Graphics2D)g).fill( track );
 	}
 
 	@Override
 	public void paintThumb( Graphics g ) {
-		g.setColor( slider.isEnabled() ? thumbColor : disabledForeground );
+		g.setColor( slider.hasFocus() ? focusColor : (slider.isEnabled() ? thumbColor : disabledForeground) );
 
-		if( !slider.getPaintTicks() )
+		if( isRoundThumb() )
 			g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
 		else {
 			double w = thumbRect.width;
@@ -172,5 +194,9 @@ public class FlatSliderUI
 				g2.dispose();
 			}
 		}
+	}
+
+	private boolean isRoundThumb() {
+		return !slider.getPaintTicks() && !slider.getPaintLabels();
 	}
 }
