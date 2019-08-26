@@ -93,7 +93,8 @@ public class FlatProgressBarUI
 
 			g.setColor( progressBar.getForeground() );
 			((Graphics2D)g).fill( horizontal
-				? new RoundRectangle2D.Float( x, y, amountFull, height, arc, arc )
+				? new RoundRectangle2D.Float( c.getComponentOrientation().isLeftToRight() ? x : x + (width - amountFull),
+					y, amountFull, height, arc, arc )
 				: new RoundRectangle2D.Float( x, y + (height - amountFull), width, amountFull, arc, arc ) );
 
 			if( progressBar.isStringPainted() )
