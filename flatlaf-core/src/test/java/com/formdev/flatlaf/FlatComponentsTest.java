@@ -27,22 +27,11 @@ public class FlatComponentsTest
 	extends JPanel
 {
 	public static void main( String[] args ) {
-		try {
-			if( args.length > 0 )
-				UIManager.setLookAndFeel( args[0] );
-			else
-				UIManager.setLookAndFeel( new FlatTestLaf() );
-		} catch( Exception ex ) {
-			ex.printStackTrace();
-		}
-
-		JOptionPane.showMessageDialog( null,
-			new FlatComponentsTest(),
-			"FlatComponentsTest (Java " + System.getProperty( "java.version" ) + ")",
-			JOptionPane.PLAIN_MESSAGE );
+		FlatTestFrame frame = FlatTestFrame.create( args, "FlatComponentsTest" );
+		frame.showFrame( new FlatComponentsTest() );
 	}
 
-	public FlatComponentsTest() {
+	FlatComponentsTest() {
 		initComponents();
 	}
 
@@ -54,39 +43,11 @@ public class FlatComponentsTest
 		progressBar4.setIndeterminate( indeterminate );
 	}
 
-	private void customColorsChanged() {
-		boolean test = customColorsCheckBox.isSelected();
-
-		for( Component c : getComponents() ) {
-			c.setForeground( testColor( test, c, "foreground", Color.blue ) );
-			c.setBackground( testColor( test, c, "background", Color.red ) );
-
-			if( c instanceof JScrollPane ) {
-				Component view = ((JScrollPane)c).getViewport().getView();
-				if( view != null ) {
-					view.setForeground( testColor( test, view, "foreground", Color.magenta ) );
-					view.setBackground( testColor( test, view, "background", Color.orange ) );
-				}
-			}
-		}
-	}
-
-	private Color testColor( boolean test, Component c, String propertyName, Color testColor ) {
-		if( test )
-			return testColor;
-		else {
-			String uiClassID = ((JComponent)c).getUIClassID();
-			String key = uiClassID.substring( 0, uiClassID.length() - 2 ) + "." + propertyName;
-			return UIManager.getColor( key );
-		}
-	}
-
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel labelLabel = new JLabel();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
-		customColorsCheckBox = new JCheckBox();
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
@@ -174,7 +135,7 @@ public class FlatComponentsTest
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"insets 0,hidemode 3,gap 5 5",
+			"insets 0,hidemode 3,gap 5 5,ltr",
 			// columns
 			"[]" +
 			"[]" +
@@ -214,12 +175,6 @@ public class FlatComponentsTest
 		label2.setDisplayedMnemonic('D');
 		label2.setEnabled(false);
 		add(label2, "cell 2 0");
-
-		//---- customColorsCheckBox ----
-		customColorsCheckBox.setText("Custom colors");
-		customColorsCheckBox.setMnemonic('C');
-		customColorsCheckBox.addActionListener(e -> customColorsChanged());
-		add(customColorsCheckBox, "cell 5 0");
 
 		//---- buttonLabel ----
 		buttonLabel.setText("JButton:");
@@ -624,13 +579,13 @@ public class FlatComponentsTest
 		//---- progressBar3 ----
 		progressBar3.setOrientation(SwingConstants.VERTICAL);
 		progressBar3.setValue(50);
-		add(progressBar3, "cell 4 11");
+		add(progressBar3, "cell 4 11 1 4");
 
 		//---- progressBar4 ----
 		progressBar4.setOrientation(SwingConstants.VERTICAL);
 		progressBar4.setValue(55);
 		progressBar4.setStringPainted(true);
-		add(progressBar4, "cell 4 11");
+		add(progressBar4, "cell 4 11 1 4");
 
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
@@ -671,7 +626,6 @@ public class FlatComponentsTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JCheckBox customColorsCheckBox;
 	private JProgressBar progressBar3;
 	private JProgressBar progressBar4;
 	private JProgressBar progressBar1;

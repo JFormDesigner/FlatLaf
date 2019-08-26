@@ -7,7 +7,7 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5"
+			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			"$columnConstraints": "[][][][][][]"
 			"$rowConstraints": "[][][][][][][][][][][][][][][][]"
 		} ) {
@@ -32,17 +32,6 @@ new FormModel {
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 0"
-			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
-				name: "customColorsCheckBox"
-				"text": "Custom colors"
-				"mnemonic": 67
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customColorsChanged", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "buttonLabel"
@@ -551,7 +540,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 11"
+				"value": "cell 4 11 1 4"
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar4"
@@ -562,7 +551,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 11"
+				"value": "cell 4 11 1 4"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "scrollBarLabel"
