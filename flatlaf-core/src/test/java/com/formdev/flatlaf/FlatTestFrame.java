@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.prefs.Preferences;
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import net.miginfocom.swing.*;
 
 /**
@@ -165,30 +166,28 @@ public class FlatTestFrame
 	}
 
 	private void explicitColorsChanged() {
-		boolean explicit = explicitColorsCheckBox.isSelected();
+		EventQueue.invokeLater( () -> {
+			boolean explicit = explicitColorsCheckBox.isSelected();
+			ColorUIResource restoreColor = new ColorUIResource( Color.white );
 
-		for( Component c : content.getComponents() ) {
-			c.setForeground( explicitColor( explicit, c, "foreground", Color.blue ) );
-			c.setBackground( explicitColor( explicit, c, "background", Color.red ) );
+			for( Component c : content.getComponents() ) {
+				c.setForeground( explicit ? Color.blue : restoreColor );
+				c.setBackground( explicit ? Color.red : restoreColor );
 
-			if( c instanceof JScrollPane ) {
-				Component view = ((JScrollPane)c).getViewport().getView();
-				if( view != null ) {
-					view.setForeground( explicitColor( explicit, view, "foreground", Color.magenta ) );
-					view.setBackground( explicitColor( explicit, view, "background", Color.orange ) );
+				if( c instanceof JScrollPane ) {
+					Component view = ((JScrollPane)c).getViewport().getView();
+					if( view != null ) {
+						view.setForeground( explicit ? Color.magenta : restoreColor );
+						view.setBackground( explicit ? Color.orange : restoreColor );
+					}
 				}
 			}
-		}
-	}
 
-	private Color explicitColor( boolean explicit, Component c, String propertyName, Color explicitColor ) {
-		if( explicit )
-			return explicitColor;
-		else {
-			String uiClassID = ((JComponent)c).getUIClassID();
-			String key = uiClassID.substring( 0, uiClassID.length() - 2 ) + "." + propertyName;
-			return UIManager.getColor( key );
-		}
+			// because colors may depend on state (e.g. disabled JTextField)
+			// it is best to update all UI delegates to get correct result
+			if( !explicit )
+				SwingUtilities.updateComponentTreeUI( content );
+		} );
 	}
 
 	private void rightToLeftChanged() {
