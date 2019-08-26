@@ -248,7 +248,7 @@ public class FlatTestFrame
 
 				//---- explicitColorsCheckBox ----
 				explicitColorsCheckBox.setText("explicit colors");
-				explicitColorsCheckBox.setMnemonic('E');
+				explicitColorsCheckBox.setMnemonic('X');
 				explicitColorsCheckBox.addActionListener(e -> explicitColorsChanged());
 				buttonBar.add(explicitColorsCheckBox, "cell 1 0");
 
