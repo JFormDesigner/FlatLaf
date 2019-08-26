@@ -24,6 +24,8 @@ import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
@@ -67,6 +69,26 @@ public class FlatComboBoxUI
 					// fix editor bounds by subtracting padding
 					editor.setBounds( FlatUIUtils.subtract( editor.getBounds(), padding ) );
 				}
+			}
+		};
+	}
+
+	@Override
+	protected FocusListener createFocusListener() {
+		// repaint combobox to update focus border
+		return new BasicComboBoxUI.FocusHandler() {
+			@Override
+			public void focusGained( FocusEvent e ) {
+				super.focusGained( e );
+				if( comboBox != null && comboBox.isEditable() )
+					comboBox.repaint();
+			}
+
+			@Override
+			public void focusLost( FocusEvent e ) {
+				super.focusLost( e );
+				if( comboBox != null && comboBox.isEditable() )
+					comboBox.repaint();
 			}
 		};
 	}
