@@ -129,6 +129,8 @@ public class FlatComboBoxUI
 			float focusWidth = FlatUIUtils.getFocusWidth( c );
 			float arc = FlatUIUtils.getComponentArc( c );
 			int arrowX = arrowButton.getX();
+			int arrowWidth = arrowButton.getWidth();
+			boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
 			// paint background
 			g2.setColor( comboBox.isEnabled()
@@ -143,14 +145,19 @@ public class FlatComboBoxUI
 					: "ComboBox.buttonBackground" )
 				: "ComboBox.disabledBackground" ) );
 			Shape oldClip = g2.getClip();
-			g2.clipRect( arrowX, 0, width - arrowX, height );
+			if( isLeftToRight )
+				g2.clipRect( arrowX, 0, width - arrowX, height );
+			else
+				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
 			g2.setClip( oldClip );
 
 			if( comboBox.isEditable() ) {
 				// paint vertical line between value and arrow button
 				g2.setColor( FlatUIUtils.getBorderColor( comboBox.isEnabled(), false ) );
-				g2.fill( new Rectangle2D.Float( arrowX, focusWidth, scale( 1f ), height - (focusWidth * 2) ) );
+				float lw = scale( 1f );
+				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
 			}
 		}
 
