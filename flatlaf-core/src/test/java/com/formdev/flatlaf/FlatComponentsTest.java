@@ -120,6 +120,8 @@ public class FlatComponentsTest
 		JScrollBar scrollBar2 = new JScrollBar();
 		JScrollBar scrollBar3 = new JScrollBar();
 		JSeparator separator2 = new JSeparator();
+		JSlider slider2 = new JSlider();
+		JSlider slider4 = new JSlider();
 		JScrollPane scrollPane14 = new JScrollPane();
 		progressBar3 = new JProgressBar();
 		progressBar4 = new JProgressBar();
@@ -128,6 +130,11 @@ public class FlatComponentsTest
 		JScrollBar scrollBar4 = new JScrollBar();
 		JLabel separatorLabel = new JLabel();
 		JSeparator separator1 = new JSeparator();
+		JLabel sliderLabel = new JLabel();
+		JSlider slider1 = new JSlider();
+		JSlider slider6 = new JSlider();
+		JSlider slider3 = new JSlider();
+		JSlider slider5 = new JSlider();
 		JLabel progressBarLabel = new JLabel();
 		progressBar1 = new JProgressBar();
 		progressBar2 = new JProgressBar();
@@ -144,6 +151,8 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -565,15 +574,29 @@ public class FlatComponentsTest
 			scrollPane13.setViewportView(panel1);
 		}
 		add(scrollPane13, "cell 1 11,grow,width 70,height 70");
-		add(scrollBar2, "cell 2 11,growy");
+		add(scrollBar2, "cell 2 11 1 4,growy");
 
 		//---- scrollBar3 ----
 		scrollBar3.setEnabled(false);
-		add(scrollBar3, "cell 2 11,growy");
+		add(scrollBar3, "cell 2 11 1 4,growy");
 
 		//---- separator2 ----
 		separator2.setOrientation(SwingConstants.VERTICAL);
-		add(separator2, "cell 2 11,growy");
+		add(separator2, "cell 2 11 1 4,growy");
+
+		//---- slider2 ----
+		slider2.setOrientation(SwingConstants.VERTICAL);
+		slider2.setValue(30);
+		add(slider2, "cell 2 11 1 4,growy");
+
+		//---- slider4 ----
+		slider4.setMinorTickSpacing(10);
+		slider4.setPaintTicks(true);
+		slider4.setMajorTickSpacing(50);
+		slider4.setPaintLabels(true);
+		slider4.setOrientation(SwingConstants.VERTICAL);
+		slider4.setValue(30);
+		add(slider4, "cell 2 11 1 4,growy");
 		add(scrollPane14, "cell 3 11,grow");
 
 		//---- progressBar3 ----
@@ -605,23 +628,53 @@ public class FlatComponentsTest
 		add(separatorLabel, "cell 0 14");
 		add(separator1, "cell 1 14,growx");
 
+		//---- sliderLabel ----
+		sliderLabel.setText("JSlider:");
+		add(sliderLabel, "cell 0 15");
+
+		//---- slider1 ----
+		slider1.setValue(30);
+		add(slider1, "cell 1 15,aligny top,grow 100 0");
+
+		//---- slider6 ----
+		slider6.setEnabled(false);
+		slider6.setValue(30);
+		add(slider6, "cell 2 15,aligny top,grow 100 0");
+
+		//---- slider3 ----
+		slider3.setMinorTickSpacing(10);
+		slider3.setPaintTicks(true);
+		slider3.setMajorTickSpacing(50);
+		slider3.setPaintLabels(true);
+		slider3.setValue(30);
+		add(slider3, "cell 1 16,aligny top,grow 100 0");
+
+		//---- slider5 ----
+		slider5.setMinorTickSpacing(10);
+		slider5.setPaintTicks(true);
+		slider5.setMajorTickSpacing(50);
+		slider5.setPaintLabels(true);
+		slider5.setEnabled(false);
+		slider5.setValue(30);
+		add(slider5, "cell 2 16,aligny top,grow 100 0");
+
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
-		add(progressBarLabel, "cell 0 15");
+		add(progressBarLabel, "cell 0 17");
 
 		//---- progressBar1 ----
 		progressBar1.setValue(50);
-		add(progressBar1, "cell 1 15");
+		add(progressBar1, "cell 1 17");
 
 		//---- progressBar2 ----
 		progressBar2.setStringPainted(true);
 		progressBar2.setValue(55);
-		add(progressBar2, "cell 3 15");
+		add(progressBar2, "cell 3 17");
 
 		//---- indeterminateCheckBox ----
 		indeterminateCheckBox.setText("indeterminate");
 		indeterminateCheckBox.addActionListener(e -> indeterminateCheckBoxActionPerformed());
-		add(indeterminateCheckBox, "cell 4 15");
+		add(indeterminateCheckBox, "cell 4 17");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

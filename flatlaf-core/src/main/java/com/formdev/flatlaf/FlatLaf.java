@@ -234,7 +234,7 @@ public abstract class FlatLaf
 			return parseInstance( value );
 
 		// insets
-		if( key.endsWith( ".margin" ) || key.endsWith( ".padding" ) )
+		if( key.endsWith( ".margin" ) || key.endsWith( ".padding" ) || key.endsWith( "Insets" ) )
 			return parseInsets( value );
 
 		// insets
