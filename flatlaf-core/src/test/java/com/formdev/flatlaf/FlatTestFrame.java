@@ -91,6 +91,11 @@ public class FlatTestFrame
 
 		lookAndFeelComboBox.setModel( lafModel );
 
+		// register F1, F2 and F3 keys to switch to Light, Dark or Test LaF
+		registerSwitchToLookAndFeel( KeyEvent.VK_F1, FlatLightLaf.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F2, FlatDarkLaf.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F3, FlatTestLaf.class.getName() );
+
 		// register ESC key to close frame
 		((JComponent)getContentPane()).registerKeyboardAction(
 			e -> {
@@ -103,6 +108,15 @@ public class FlatTestFrame
 		closeButton.addActionListener(e -> dispose());
 	}
 
+	private void registerSwitchToLookAndFeel( int keyCode, String lafClassName ) {
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> {
+				selectLookAndFeel( lafClassName );
+			},
+			KeyStroke.getKeyStroke( keyCode, 0, false ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
 	protected void showFrame( JComponent content ) {
 		this.content = content;
 
@@ -110,6 +124,13 @@ public class FlatTestFrame
 		pack();
 		setLocationRelativeTo( null );
 		setVisible( true );
+	}
+
+	private void selectLookAndFeel( String lafClassName ) {
+		DefaultComboBoxModel<LafInfo> lafModel = (DefaultComboBoxModel<LafInfo>) lookAndFeelComboBox.getModel();
+		int sel = lafModel.getIndexOf( new LafInfo( null, lafClassName ) );
+		if( sel >= 0 )
+			lookAndFeelComboBox.setSelectedIndex( sel );
 	}
 
 	private void lookAndFeelChanged() {
