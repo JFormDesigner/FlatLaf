@@ -59,6 +59,6 @@ public class FlatSeparatorUI
 		if( ((JSeparator) c).getOrientation() == JSeparator.VERTICAL )
 			return new Dimension( scale( WIDTH ), 0 );
 		else
-			return new Dimension( 0, WIDTH );
+			return new Dimension( 0, scale( WIDTH ) );
 	}
 }
