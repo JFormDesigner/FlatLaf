@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,6 +34,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicArrowButton;
@@ -229,9 +232,21 @@ public class FlatComboBoxUI
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	public void paintCurrentValue( Graphics g, Rectangle bounds, boolean hasFocus ) {
-		// always pass "hasFocus = false" to avoid painting in selection colors when focused
-		super.paintCurrentValue( g, bounds, false );
+		ListCellRenderer<Object> renderer = comboBox.getRenderer();
+		Component c = renderer.getListCellRendererComponent( listBox, comboBox.getSelectedItem(), -1, false, false );
+		c.setFont( comboBox.getFont() );
+
+		boolean enabled = comboBox.isEnabled();
+		c.setForeground( enabled ? comboBox.getForeground() : disabledForeground );
+		c.setBackground( enabled ? comboBox.getBackground() : disabledBackground );
+
+		boolean shouldValidate = (c instanceof JPanel);
+		if( padding != null )
+			bounds = FlatUIUtils.subtract( bounds, padding );
+
+		currentValuePane.paintComponent( g, c, comboBox, bounds.x, bounds.y, bounds.width, bounds.height, shouldValidate );
 	}
 
 	@Override
