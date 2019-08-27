@@ -238,7 +238,7 @@ public abstract class FlatLaf
 			return parseInsets( value );
 
 		// insets
-		if( key.endsWith( "Size" ) )
+		if( key.endsWith( "Size" ) && !key.equals( "SplitPane.dividerSize" ))
 			return parseSize( value );
 
 		// insets
