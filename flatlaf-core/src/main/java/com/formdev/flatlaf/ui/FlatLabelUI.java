@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -27,11 +28,18 @@ import sun.swing.SwingUtilities2;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JLabel}.
  *
+ * @uiDefault Label.background			Color	only used if opaque
+ * @uiDefault Label.foreground			Color
+ * @uiDefault Label.disabledForeground	Color
+ * @uiDefault Label.font				Font
+ *
  * @author Karl Tauber
  */
 public class FlatLabelUI
 	extends BasicLabelUI
 {
+	private Color disabledForeground;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -41,9 +49,16 @@ public class FlatLabelUI
 	}
 
 	@Override
+	protected void installDefaults( JLabel c ) {
+		super.installDefaults( c );
+
+		disabledForeground = UIManager.getColor( "Label.disabledForeground" );
+	}
+
+	@Override
 	protected void paintDisabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
 		int mnemIndex = l.getDisplayedMnemonicIndex();
-		g.setColor( UIManager.getColor( "Label.disabledForeground" ) );
+		g.setColor( disabledForeground );
 		SwingUtilities2.drawStringUnderlineCharAt( l, g, s, mnemIndex, textX, textY );
 	}
 }

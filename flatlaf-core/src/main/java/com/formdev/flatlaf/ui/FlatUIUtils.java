@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
@@ -55,36 +54,6 @@ public class FlatUIUtils
 	public static int getUIInt( String key, int defaultValue ) {
 		Object value = UIManager.get( key );
 		return (value instanceof Integer) ? (Integer) value : defaultValue;
-	}
-
-	public static float getFocusWidth() {
-		return scale( (float) getUIInt( "Component.focusWidth", 2 ) );
-	}
-
-	public static float getComponentArc() {
-		return scale( (float) getUIInt( "Component.arc", 5 ) );
-	}
-
-	public static float getButtonArc() {
-		return scale( (float) getUIInt( "Button.arc", 6 ) );
-	}
-
-	public static float getFocusWidth( JComponent c ) {
-		return (c.getBorder() instanceof FlatBorder) ? getFocusWidth() : 0;
-	}
-
-	public static float getComponentArc( JComponent c ) {
-		return (c.getBorder() instanceof FlatBorder) ? getComponentArc() : 0;
-	}
-
-	public static float getButtonArc( JComponent c ) {
-		return (c.getBorder() instanceof FlatBorder) ? getButtonArc() : 0;
-	}
-
-	public static Color getBorderColor( boolean enabled, boolean focused ) {
-		return UIManager.getColor( enabled
-			? (focused ? "Component.focusedBorderColor" : "Component.borderColor")
-			: "Component.disabledBorderColor" );
 	}
 
 	/**

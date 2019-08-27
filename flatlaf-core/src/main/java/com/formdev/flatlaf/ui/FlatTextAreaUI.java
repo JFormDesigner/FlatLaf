@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -26,13 +27,29 @@ import javax.swing.text.JTextComponent;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextArea}.
  *
+ * TODO document used UI defaults of superclass
+ *
+ * @uiDefault ComboBox.disabledBackground		Color
+ * @uiDefault ComboBox.inactiveBackground		Color
+ *
  * @author Karl Tauber
  */
 public class FlatTextAreaUI
 	extends BasicTextAreaUI
 {
+	protected Color disabledBackground;
+	protected Color inactiveBackground;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextAreaUI();
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		disabledBackground = UIManager.getColor( "TextArea.disabledBackground" );
+		inactiveBackground = UIManager.getColor( "TextArea.inactiveBackground" );
 	}
 
 	@Override
@@ -40,10 +57,8 @@ public class FlatTextAreaUI
 		JTextComponent c = getComponent();
 
 		g.setColor( !c.isEnabled()
-			? UIManager.getColor( "TextArea.disabledBackground" )
-			: (!c.isEditable()
-				? UIManager.getColor( "TextArea.inactiveBackground" )
-				: c.getBackground() ) );
+			? disabledBackground
+			: (!c.isEditable() ? inactiveBackground : c.getBackground()) );
 		g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 	}
 }

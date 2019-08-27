@@ -43,11 +43,37 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JComboBox}.
  *
+ * TODO document used UI defaults of superclass
+ *
+ * @uiDefault Component.focusWidth				int
+ * @uiDefault Component.arc						int
+ * @uiDefault Component.borderColor				Color
+ * @uiDefault Component.disabledBorderColor		Color
+ * @uiDefault ComboBox.disabledBackground		Color
+ * @uiDefault ComboBox.disabledForeground		Color
+ * @uiDefault ComboBox.buttonBackground			Color
+ * @uiDefault ComboBox.buttonEditableBackground	Color
+ * @uiDefault ComboBox.buttonArrowColor			Color
+ * @uiDefault ComboBox.buttonDisabledArrowColor	Color
+ *
  * @author Karl Tauber
  */
 public class FlatComboBoxUI
 	extends BasicComboBoxUI
 {
+	protected int focusWidth;
+	protected int arc;
+	protected Color borderColor;
+	protected Color disabledBorderColor;
+
+	protected Color disabledBackground;
+	protected Color disabledForeground;
+
+	protected Color buttonBackground;
+	protected Color buttonEditableBackground;
+	protected Color buttonArrowColor;
+	protected Color buttonDisabledArrowColor;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatComboBoxUI();
 	}
@@ -57,6 +83,19 @@ public class FlatComboBoxUI
 		super.installDefaults();
 
 		padding = UIScale.scale( padding );
+
+		focusWidth = UIManager.getInt( "Component.focusWidth" );
+		arc = UIManager.getInt( "Component.arc" );
+		borderColor = UIManager.getColor( "Component.borderColor" );
+		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
+
+		disabledBackground = UIManager.getColor( "ComboBox.disabledBackground" );
+		disabledForeground = UIManager.getColor( "ComboBox.disabledForeground" );
+
+		buttonBackground = UIManager.getColor( "ComboBox.buttonBackground" );
+		buttonEditableBackground = UIManager.getColor( "ComboBox.buttonEditableBackground" );
+		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
+		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
 	}
 
 	@Override
@@ -132,14 +171,12 @@ public class FlatComboBoxUI
 
 	private void updateEditorColors() {
 		boolean enabled = editor.isEnabled();
-		editor.setBackground( enabled
-			? comboBox.getBackground()
-			: UIManager.getColor( "ComboBox.disabledBackground" ) );
+		editor.setBackground( enabled ? comboBox.getBackground() : disabledBackground );
 		editor.setForeground( (enabled || editor instanceof JTextComponent)
 			? comboBox.getForeground()
-			: UIManager.getColor( "ComboBox.disabledForeground" ) );
+			: disabledForeground );
 		if( editor instanceof JTextComponent )
-			((JTextComponent)editor).setDisabledTextColor( UIManager.getColor( "ComboBox.disabledForeground" ) );
+			((JTextComponent)editor).setDisabledTextColor( disabledForeground );
 	}
 
 	@Override
@@ -157,24 +194,20 @@ public class FlatComboBoxUI
 
 			int width = c.getWidth();
 			int height = c.getHeight();
-			float focusWidth = FlatUIUtils.getFocusWidth( c );
-			float arc = FlatUIUtils.getComponentArc( c );
+			float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+			float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
 			int arrowX = arrowButton.getX();
 			int arrowWidth = arrowButton.getWidth();
 			boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
 			// paint background
-			g2.setColor( comboBox.isEnabled()
-				? c.getBackground()
-				: UIManager.getColor( "ComboBox.disabledBackground" ) );
+			g2.setColor( comboBox.isEnabled() ? c.getBackground() : disabledBackground );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
 
 			// paint arrow button background
-			g2.setColor( UIManager.getColor( comboBox.isEnabled()
-				? (comboBox.isEditable()
-					? "ComboBox.buttonEditableBackground"
-					: "ComboBox.buttonBackground" )
-				: "ComboBox.disabledBackground" ) );
+			g2.setColor( comboBox.isEnabled()
+				? (comboBox.isEditable() ? buttonEditableBackground : buttonBackground)
+				: disabledBackground );
 			Shape oldClip = g2.getClip();
 			if( isLeftToRight )
 				g2.clipRect( arrowX, 0, width - arrowX, height );
@@ -185,7 +218,7 @@ public class FlatComboBoxUI
 
 			if( comboBox.isEditable() ) {
 				// paint vertical line between value and arrow button
-				g2.setColor( FlatUIUtils.getBorderColor( comboBox.isEnabled(), false ) );
+				g2.setColor( comboBox.isEnabled() ? borderColor : disabledBorderColor );
 				float lw = scale( 1f );
 				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
 				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
@@ -203,7 +236,7 @@ public class FlatComboBoxUI
 
 	//---- class FlatArrowButton ----------------------------------------------
 
-	private static class FlatArrowButton
+	private class FlatArrowButton
 		extends BasicArrowButton
 	{
 		FlatArrowButton() {
@@ -228,9 +261,7 @@ public class FlatComboBoxUI
 			arrow.lineTo( x + (w / 2f), y + h );
 			arrow.closePath();
 
-			g.setColor( UIManager.getColor( isEnabled()
-				? "ComboBox.buttonArrowColor"
-				: "ComboBox.buttonDisabledArrowColor" ) );
+			g.setColor( isEnabled() ? buttonArrowColor : buttonDisabledArrowColor );
 			((Graphics2D)g).fill( arrow );
 		}
 	}

@@ -16,11 +16,13 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
@@ -28,15 +30,28 @@ import javax.swing.text.JTextComponent;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
  *
+ * TODO document used UI defaults of superclass
+ *
+ * @uiDefault Component.focusWidth				int
+ *
  * @author Karl Tauber
  */
 public class FlatTextFieldUI
 	extends BasicTextFieldUI
 {
+	protected int focusWidth;
+
 	private final Handler handler = new Handler();
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextFieldUI();
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		focusWidth = UIManager.getInt( "Component.focusWidth" );
 	}
 
 	@Override
@@ -63,7 +78,7 @@ public class FlatTextFieldUI
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			float focusWidth = FlatUIUtils.getFocusWidth( c );
+			float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
 
 			g2.setColor( c.getBackground() );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, 0 );

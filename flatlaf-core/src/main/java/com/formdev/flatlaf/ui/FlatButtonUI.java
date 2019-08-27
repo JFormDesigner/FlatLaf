@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FontMetrics;
@@ -33,17 +34,44 @@ import sun.swing.SwingUtilities2;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JButton}.
  *
+ * TODO document used UI defaults of superclass
+ *
+ * @uiDefault Component.focusWidth				int
+ * @uiDefault Button.arc						int
+ * @uiDefault Button.disabledText				Color
+ * @uiDefault Button.default.background			Color
+ * @uiDefault Button.default.foreground			Color
+ *
  * @author Karl Tauber
  */
 public class FlatButtonUI
 	extends BasicButtonUI
 {
+	protected int focusWidth;
+	protected int arc;
+
+	protected Color disabledText;
+	protected Color defaultBackground;
+	protected Color defaultForeground;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
 		if( instance == null )
 			instance = new FlatButtonUI();
 		return instance;
+	}
+
+	@Override
+	protected void installDefaults( AbstractButton b ) {
+		super.installDefaults( b );
+
+		focusWidth = UIManager.getInt( "Component.focusWidth" );
+		arc = UIManager.getInt( "Button.arc" );
+
+		disabledText = UIManager.getColor( "Button.disabledText" );
+		defaultBackground = UIManager.getColor( "Button.default.background" );
+		defaultForeground = UIManager.getColor( "Button.default.foreground" );
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
@@ -64,8 +92,8 @@ public class FlatButtonUI
 				try {
 					FlatUIUtils.setRenderingHints( g2 );
 
-					float focusWidth = FlatUIUtils.getFocusWidth( c );
-					float arc = FlatUIUtils.getButtonArc( c );
+					float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+					float arc = (c.getBorder() instanceof FlatButtonBorder) ? scale( (float) this.arc ) : 0;
 
 					g2.setColor( getBackground( c ) );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
@@ -84,7 +112,7 @@ public class FlatButtonUI
 		FontMetrics fm = SwingUtilities2.getFontMetrics( c, g );
 		int mnemonicIndex = b.getDisplayedMnemonicIndex();
 
-		g.setColor( b.getModel().isEnabled() ? getForeground( c ) : UIManager.getColor( "Button.disabledText" ) );
+		g.setColor( b.getModel().isEnabled() ? getForeground( c ) : disabledText );
 		SwingUtilities2.drawStringUnderlineCharAt( c, g, text, mnemonicIndex,
 			textRect.x + getTextShiftOffset(),
 			textRect.y + fm.getAscent() + getTextShiftOffset() );
@@ -92,11 +120,11 @@ public class FlatButtonUI
 
 	private Color getBackground( Component c ) {
 		boolean def = FlatButtonUI.isDefaultButton( c );
-		return def ? UIManager.getColor( "Button.default.background" ) : c.getBackground();
+		return def ? defaultBackground : c.getBackground();
 	}
 
 	private Color getForeground( Component c ) {
 		boolean def = FlatButtonUI.isDefaultButton( c );
-		return def ? UIManager.getColor( "Button.default.foreground" ) : c.getForeground();
+		return def ? defaultForeground : c.getForeground();
 	}
 }
