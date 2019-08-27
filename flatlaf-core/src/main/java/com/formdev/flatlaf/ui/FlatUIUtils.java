@@ -61,10 +61,6 @@ public class FlatUIUtils
 		return scale( (float) getUIInt( "Component.focusWidth", 2 ) );
 	}
 
-	public static float getLineWidth() {
-		return scale( 1f );
-	}
-
 	public static float getComponentArc() {
 		return scale( (float) getUIInt( "Component.arc", 5 ) );
 	}

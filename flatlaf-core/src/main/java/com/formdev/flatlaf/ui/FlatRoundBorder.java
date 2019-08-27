@@ -16,16 +16,23 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.util.UIScale.scale;
+import javax.swing.UIManager;
+
 /**
  * Border for various components (e.g. {@link javax.swing.JComboBox}).
+ *
+ * @uiDefault Component.arc					int
  *
  * @author Karl Tauber
  */
 public class FlatRoundBorder
 	extends FlatBorder
 {
+	protected final int arc = UIManager.getInt( "Component.arc" );
+
 	@Override
 	protected float getArc() {
-		return FlatUIUtils.getComponentArc();
+		return scale( (float) arc );
 	}
 }

@@ -33,11 +33,30 @@ import javax.swing.text.JTextComponent;
 /**
  * Border for various components (e.g. {@link javax.swing.JTextField}).
  *
+ * There is empty space around the component border, if Component.focusWidth > 0,
+ * which is used to paint focus border.
+ *
+ * Because there is empty space (if focus border is not painted),
+ * UI delegates that use this border (or subclasses) must invoke
+ * {@link FlatUIUtils#paintParentBackground} to paint the empty space correctly.
+ *
+ * @uiDefault Component.focusWidth			int
+ * @uiDefault Component.focusColor			Color
+ * @uiDefault Component.borderColor			Color
+ * @uiDefault Component.disabledBorderColor	Color
+ * @uiDefault Component.focusedBorderColor	Color
+ *
  * @author Karl Tauber
  */
 public class FlatBorder
 	extends BasicBorders.MarginBorder
 {
+	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
+	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
+	protected final Color borderColor = UIManager.getColor( "Component.borderColor" );
+	protected final Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
+	protected final Color focusedBorderColor = UIManager.getColor( "Component.focusedBorderColor" );
+
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 		Graphics2D g2 = (Graphics2D) g.create();
@@ -61,12 +80,14 @@ public class FlatBorder
 	}
 
 	protected Color getFocusColor( Component c ) {
-		return UIManager.getColor( "Component.focusColor" );
+		return focusColor;
 	}
 
 	protected Paint getBorderColor( Component c ) {
 		boolean enabled = c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
-		return FlatUIUtils.getBorderColor( enabled, isFocused( c ) );
+		return enabled
+			? (isFocused( c ) ? focusedBorderColor : borderColor)
+			: disabledBorderColor;
 	}
 
 	protected boolean isFocused( Component c ) {
@@ -94,11 +115,11 @@ public class FlatBorder
 	}
 
 	protected float getFocusWidth() {
-		return FlatUIUtils.getFocusWidth();
+		return scale( (float) focusWidth );
 	}
 
 	protected float getLineWidth() {
-		return FlatUIUtils.getLineWidth();
+		return scale( 1f );
 	}
 
 	protected float getArc() {
