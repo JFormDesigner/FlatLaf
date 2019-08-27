@@ -80,4 +80,14 @@ public class FlatScrollBarUI
 		g.setColor( thumbColor );
 		g.fillRect( thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height );
 	}
+
+	@Override
+	protected Dimension getMinimumThumbSize() {
+		return UIScale.scale( super.getMinimumThumbSize() );
+	}
+
+	@Override
+	protected Dimension getMaximumThumbSize() {
+		return UIScale.scale( super.getMaximumThumbSize() );
+	}
 }
