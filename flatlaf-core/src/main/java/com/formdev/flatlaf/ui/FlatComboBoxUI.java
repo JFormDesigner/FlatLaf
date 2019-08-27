@@ -30,6 +30,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -117,6 +118,14 @@ public class FlatComboBoxUI
 	@Override
 	protected void configureEditor() {
 		super.configureEditor();
+
+		// assign a non-javax.swing.plaf.UIResource border to the text field,
+		// otherwise it is replaced with default text field border when switching LaF
+		// because javax.swing.plaf.basic.BasicComboBoxEditor.BorderlessTextField.setBorder()
+		// uses "border instanceof javax.swing.plaf.basic.BasicComboBoxEditor.UIResource"
+		// instead of "border instanceof javax.swing.plaf.UIResource"
+		if( editor instanceof JTextComponent )
+			((JTextComponent)editor).setBorder( BorderFactory.createEmptyBorder() );
 
 		updateEditorColors();
 	}
