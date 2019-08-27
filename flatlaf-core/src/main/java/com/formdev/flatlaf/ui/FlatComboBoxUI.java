@@ -234,6 +234,12 @@ public class FlatComboBoxUI
 		super.paintCurrentValue( g, bounds, false );
 	}
 
+	@Override
+	public void paintCurrentValueBackground( Graphics g, Rectangle bounds, boolean hasFocus ) {
+		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : disabledBackground );
+		g.fillRect( bounds.x, bounds.y, bounds.width, bounds.height );
+	}
+
 	//---- class FlatArrowButton ----------------------------------------------
 
 	private class FlatArrowButton
