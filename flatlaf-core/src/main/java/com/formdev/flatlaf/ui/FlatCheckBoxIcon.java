@@ -36,6 +36,9 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatCheckBoxIcon
 	implements Icon, UIResource
 {
+	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
+	protected final int iconSize = 15 + (focusWidth * 2);
+
 	@Override
 	public void paintIcon( Component c, Graphics g, int x, int y ) {
 		Graphics2D g2 = (Graphics2D) g.create();
@@ -82,33 +85,36 @@ public class FlatCheckBoxIcon
 	}
 
 	protected void paintFocusBorder( Graphics2D g2 ) {
-		g2.fillRoundRect( 1, 0, 18, 18, 8, 8 );
+		g2.fillRoundRect( 1, 0, iconSize - 1, iconSize - 1, 8, 8 );
 	}
 
 	protected void paintBorder( Graphics2D g2 ) {
-		g2.fillRoundRect( 3, 2, 14, 14, 4, 4 );
+		g2.fillRoundRect( focusWidth + 1, focusWidth, 14, 14, 4, 4 );
 	}
 
 	protected void paintBackground( Graphics2D g2 ) {
-		g2.fillRoundRect( 4, 3, 12, 12, 4, 4 );
+		g2.fillRoundRect( focusWidth + 2, focusWidth + 1, 12, 12, 4, 4 );
 	}
 
 	protected void paintCheckmark( Graphics2D g2 ) {
-		g2.setStroke( new BasicStroke( 1.9f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
 		Path2D.Float path = new Path2D.Float();
-		path.moveTo( 6.5f, 9.5f );
-		path.lineTo( 8.6f, 12f );
-		path.lineTo( 13.25f, 5.5f );
+		path.moveTo( 4.5f, 7.5f );
+		path.lineTo( 6.6f, 10f );
+		path.lineTo( 11.25f, 3.5f );
+
+		g2.translate( focusWidth, focusWidth );
+		g2.setStroke( new BasicStroke( 1.9f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
 		g2.draw( path );
+		g2.translate( -focusWidth, -focusWidth );
 	}
 
 	@Override
 	public int getIconWidth() {
-		return scale( 19 );
+		return scale( iconSize );
 	}
 
 	@Override
 	public int getIconHeight() {
-		return scale( 19 );
+		return scale( iconSize );
 	}
 }

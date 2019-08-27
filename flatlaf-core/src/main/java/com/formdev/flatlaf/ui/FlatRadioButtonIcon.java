@@ -28,21 +28,21 @@ public class FlatRadioButtonIcon
 {
 	@Override
 	protected void paintFocusBorder( Graphics2D g2 ) {
-		g2.fillOval( 0, 0, 19, 19 );
+		g2.fillOval( 0, 0, iconSize, iconSize );
 	}
 
 	@Override
 	protected void paintBorder( Graphics2D g2 ) {
-		g2.fillOval( 2, 2, 15, 15 );
+		g2.fillOval( focusWidth, focusWidth, 15, 15 );
 	}
 
 	@Override
 	protected void paintBackground( Graphics2D g2 ) {
-		g2.fillOval( 3, 3, 13, 13 );
+		g2.fillOval( focusWidth + 1, focusWidth + 1, 13, 13 );
 	}
 
 	@Override
 	protected void paintCheckmark( Graphics2D g2 ) {
-		g2.fillOval( 7, 7, 5, 5 );
+		g2.fillOval( focusWidth + 5, focusWidth + 5, 5, 5 );
 	}
 }
