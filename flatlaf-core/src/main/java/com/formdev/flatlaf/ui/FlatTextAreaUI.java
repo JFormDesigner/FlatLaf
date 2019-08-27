@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextAreaUI;
 import javax.swing.text.JTextComponent;
 
@@ -56,9 +57,12 @@ public class FlatTextAreaUI
 	protected void paintBackground( Graphics g ) {
 		JTextComponent c = getComponent();
 
-		g.setColor( !c.isEnabled()
-			? disabledBackground
-			: (!c.isEditable() ? inactiveBackground : c.getBackground()) );
+		Color background = c.getBackground();
+		g.setColor( !(background instanceof UIResource)
+			? background
+			: (!c.isEnabled()
+				? disabledBackground
+				: (!c.isEditable() ? inactiveBackground : background)) );
 		g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 	}
 }
