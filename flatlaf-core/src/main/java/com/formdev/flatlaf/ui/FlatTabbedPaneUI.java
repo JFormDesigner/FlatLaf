@@ -62,7 +62,8 @@ import sun.swing.SwingUtilities2;
  * @uiDefault TabbedPane.tabAreaInsets					Insets
  * @uiDefault TabbedPane.tabHeight						int
  * @uiDefault TabbedPane.tabSelectionHeight				int
- * @uiDefault TabbedPane.contentSeparatorWidth			int
+ * @uiDefault TabbedPane.contentSeparatorHeight			int
+ * @uiDefault TabbedPane.hasFullBorder					boolean
  *
  * @author Karl Tauber
  */
@@ -80,6 +81,7 @@ public class FlatTabbedPaneUI
 	protected int tabHeight;
 	protected int tabSelectionHeight;
 	protected int contentSeparatorHeight;
+	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -101,6 +103,7 @@ public class FlatTabbedPaneUI
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
+		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOverlapBorder = UIManager.getBoolean( "TabbedPane.tabsOverlapBorder" );
 
 		// scale
@@ -175,7 +178,7 @@ public class FlatTabbedPaneUI
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
-		boolean hasFullBorder = (tabPane.getClientProperty( "JTabbedPane.hasFullBorder" ) == Boolean.TRUE);
+		boolean hasFullBorder = this.hasFullBorder || (tabPane.getClientProperty( "JTabbedPane.hasFullBorder" ) == Boolean.TRUE);
 		int sh = contentSeparatorHeight;
 		Insets insets = hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 );
 
