@@ -26,6 +26,7 @@ repositories {
 
 dependencies {
 	testCompile( "com.miglayout:miglayout-swing:5.2" )
+	testCompile( "com.jgoodies:jgoodies-forms:1.9.0" )
 }
 
 java {

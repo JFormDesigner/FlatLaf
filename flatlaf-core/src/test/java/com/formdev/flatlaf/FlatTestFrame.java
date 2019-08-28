@@ -170,24 +170,41 @@ public class FlatTestFrame
 			boolean explicit = explicitColorsCheckBox.isSelected();
 			ColorUIResource restoreColor = new ColorUIResource( Color.white );
 
-			for( Component c : content.getComponents() ) {
-				c.setForeground( explicit ? Color.blue : restoreColor );
-				c.setBackground( explicit ? Color.red : restoreColor );
-
-				if( c instanceof JScrollPane ) {
-					Component view = ((JScrollPane)c).getViewport().getView();
-					if( view != null ) {
-						view.setForeground( explicit ? Color.magenta : restoreColor );
-						view.setBackground( explicit ? Color.orange : restoreColor );
-					}
-				}
-			}
+			explicitColors( content, explicit, restoreColor );
 
 			// because colors may depend on state (e.g. disabled JTextField)
 			// it is best to update all UI delegates to get correct result
 			if( !explicit )
 				SwingUtilities.updateComponentTreeUI( content );
 		} );
+	}
+
+	private void explicitColors( Container container, boolean explicit, ColorUIResource restoreColor ) {
+		for( Component c : container.getComponents() ) {
+			c.setForeground( explicit ? Color.blue : restoreColor );
+			c.setBackground( explicit ? Color.red : restoreColor );
+
+			if( c instanceof JPanel )
+				explicitColors( (JPanel) c, explicit, restoreColor );
+			else if( c instanceof JScrollPane ) {
+				Component view = ((JScrollPane)c).getViewport().getView();
+				if( view != null ) {
+					view.setForeground( explicit ? Color.magenta : restoreColor );
+					view.setBackground( explicit ? Color.orange : restoreColor );
+				}
+			} else if( c instanceof JTabbedPane ) {
+				JTabbedPane tabPane = (JTabbedPane)c;
+				int tabCount = tabPane.getTabCount();
+				for( int i = 0; i < tabCount; i++ ) {
+					Component tab = tabPane.getComponentAt( i );
+					if( tab != null ) {
+						tab.setForeground( explicit ? Color.magenta : restoreColor );
+						tab.setBackground( explicit ? Color.orange : restoreColor );
+					}
+				}
+			}
+		}
+
 	}
 
 	private void rightToLeftChanged() {
