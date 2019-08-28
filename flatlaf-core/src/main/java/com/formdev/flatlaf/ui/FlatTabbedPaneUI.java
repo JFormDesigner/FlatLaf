@@ -80,6 +80,7 @@ public class FlatTabbedPaneUI
 	protected int tabHeight;
 	protected int tabSelectionHeight;
 	protected int contentSeparatorHeight;
+	protected boolean tabsOverlapBorder;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
@@ -100,6 +101,7 @@ public class FlatTabbedPaneUI
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
+		tabsOverlapBorder = UIManager.getBoolean( "TabbedPane.tabsOverlapBorder" );
 
 		// scale
 		textIconGap = scale( textIconGap );
@@ -311,20 +313,54 @@ public class FlatTabbedPaneUI
 		}
 	}
 
+	/**
+	 * Actually does the nearly the same as super.paintContentBorder() but
+	 *   - content pane is always opaque
+	 *   - not using UIManager.getColor("TabbedPane.contentAreaColor") to be GUI builder friendly
+	 *   - not invoking paintContentBorder*Edge() methods
+	 */
 	@Override
-	protected void paintContentBorderTopEdge( Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h ) {
-	}
+	protected void paintContentBorder( Graphics g, int tabPlacement, int selectedIndex ) {
+		if( tabPane.getTabCount() <= 0 )
+			return;
 
-	@Override
-	protected void paintContentBorderLeftEdge( Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h ) {
-	}
+		Insets insets = tabPane.getInsets();
+		Insets tabAreaInsets = getTabAreaInsets( tabPlacement );
 
-	@Override
-	protected void paintContentBorderBottomEdge( Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h ) {
-	}
+		int x = insets.left;
+		int y = insets.top;
+		int w = tabPane.getWidth() - insets.right - insets.left;
+		int h = tabPane.getHeight() - insets.top - insets.bottom;
 
-	@Override
-	protected void paintContentBorderRightEdge( Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h ) {
+		// remove tabs from bounds
+		switch( tabPlacement ) {
+			case LEFT:
+				x += calculateTabAreaWidth( tabPlacement, runCount, maxTabWidth );
+				if( tabsOverlapBorder )
+					x -= tabAreaInsets.right;
+				w -= (x - insets.left);
+				break;
+			case RIGHT:
+				w -= calculateTabAreaWidth( tabPlacement, runCount, maxTabWidth );
+				if( tabsOverlapBorder )
+					w += tabAreaInsets.left;
+				break;
+			case BOTTOM:
+				h -= calculateTabAreaHeight( tabPlacement, runCount, maxTabHeight );
+				if( tabsOverlapBorder )
+					h += tabAreaInsets.top;
+				break;
+			case TOP:
+			default:
+				y += calculateTabAreaHeight( tabPlacement, runCount, maxTabHeight );
+				if( tabsOverlapBorder )
+					y -= tabAreaInsets.bottom;
+				h -= (y - insets.top);
+		}
+
+		// paint content area
+		g.setColor( contentAreaColor );
+		g.fillRect( x, y, w, h );
 	}
 
 	@Override
