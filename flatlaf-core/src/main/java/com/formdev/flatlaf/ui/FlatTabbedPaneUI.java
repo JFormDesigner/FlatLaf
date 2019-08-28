@@ -26,6 +26,7 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
+import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
@@ -47,6 +48,7 @@ import sun.swing.SwingUtilities2;
  * @uiDefault TabbedPane.disabledUnderlineColor			Color
  * @uiDefault TabbedPane.hoverColor						Color
  * @uiDefault TabbedPane.focusColor						Color
+ * @uiDefault TabbedPane.contentAreaColor				Color
  * @uiDefault TabbedPane.textIconGap					int
  * @uiDefault TabbedPane.tabInsets						Insets
  * @uiDefault TabbedPane.tabAreaInsets					Insets
@@ -65,6 +67,7 @@ public class FlatTabbedPaneUI
 	protected Color disabledUnderlineColor;
 	protected Color hoverColor;
 	protected Color focusColor;
+	protected Color contentAreaColor;
 
 	protected int tabHeight;
 	protected int tabSelectionHeight;
@@ -84,6 +87,7 @@ public class FlatTabbedPaneUI
 		disabledUnderlineColor = UIManager.getColor( "TabbedPane.disabledUnderlineColor" );
 		hoverColor = UIManager.getColor( "TabbedPane.hoverColor" );
 		focusColor = UIManager.getColor( "TabbedPane.focusColor" );
+		contentAreaColor = UIManager.getColor( "TabbedPane.contentAreaColor" );
 
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
@@ -138,35 +142,70 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int calculateTabWidth( int tabPlacement, int tabIndex, FontMetrics metrics ) {
-		return super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3;
+		return super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 // was added by superclass
+			+ (!isTopOrBottom( tabPlacement ) && isScrollTabLayout() ? contentSeparatorHeight : 0);
 	}
 
 	@Override
 	protected int calculateTabHeight( int tabPlacement, int tabIndex, int fontHeight ) {
-		return Math.max( super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2, tabHeight );
+		return Math.max( tabHeight, super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2 /* was added by superclass */ )
+			+ (isTopOrBottom( tabPlacement ) && isScrollTabLayout() ? contentSeparatorHeight : 0);
 	}
 
 	/**
-	 * The content border insets are used to create a separator line between tabs and content.
+	 * The content border insets are used to create a separator between tabs and content.
+	 * Except in scroll tab policy, where the separator is painted in paintTabArea().
+	 * If client property JTabbedPane.hasFullBorder is true, then the content border insets
+	 * are also used for the border.
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
 		boolean hasFullBorder = (tabPane.getClientProperty( "JTabbedPane.hasFullBorder" ) == Boolean.TRUE);
-		Insets insets = hasFullBorder
-			? new Insets( contentSeparatorHeight, contentSeparatorHeight, contentSeparatorHeight, contentSeparatorHeight )
-			: new Insets( contentSeparatorHeight, 0, 0, 0 );
+		int sh = contentSeparatorHeight;
+		Insets insets = hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 );
+
+		if( isScrollTabLayout() )
+			insets.top = 0;
+
 		rotateInsets( insets, contentBorderInsets, tabPlacement );
 		return contentBorderInsets;
 	}
 
 	@Override
 	protected int getTabLabelShiftX( int tabPlacement, int tabIndex, boolean isSelected ) {
-		return 0;
+		if( isScrollTabLayout() && !isTopOrBottom( tabPlacement ) ) {
+			float shift = contentSeparatorHeight / 2f;
+			return Math.round( tabPlacement == LEFT ? -shift : shift );
+		} else
+			return 0;
 	}
 
 	@Override
 	protected int getTabLabelShiftY( int tabPlacement, int tabIndex, boolean isSelected ) {
-		return 0;
+		if( isScrollTabLayout() && isTopOrBottom( tabPlacement ) ) {
+			float shift = contentSeparatorHeight / 2f;
+			return Math.round( tabPlacement == TOP ? -shift : shift );
+		} else
+			return 0;
+	}
+
+	@Override
+	protected void paintTabArea( Graphics g, int tabPlacement, int selectedIndex ) {
+		if( isScrollTabLayout() ) {
+			// paint separator between tabs and content
+			Rectangle bounds = g.getClipBounds();
+			g.setColor( contentAreaColor );
+
+			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				int y = (tabPlacement == TOP) ? bounds.y + bounds.height - contentSeparatorHeight : bounds.y;
+				g.fillRect( bounds.x, y, bounds.x + bounds.width, contentSeparatorHeight );
+			} else {
+				int x = (tabPlacement == LEFT) ? bounds.x + bounds.width - contentSeparatorHeight : bounds.x;
+				g.fillRect( x, bounds.y, contentSeparatorHeight, bounds.y + bounds.height );
+			}
+		}
+
+		super.paintTabArea( g, tabPlacement, selectedIndex );
 	}
 
 	@Override
@@ -202,6 +241,20 @@ public class FlatTabbedPaneUI
 	protected void paintTabBackground( Graphics g, int tabPlacement, int tabIndex,
 		int x, int y, int w, int h, boolean isSelected )
 	{
+		if( isScrollTabLayout() ) {
+			// make tab bounds smaller for separator between tabs and content
+			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				if( tabPlacement == BOTTOM )
+					y += contentSeparatorHeight;
+				h -= contentSeparatorHeight;
+			} else {
+				if( tabPlacement == RIGHT )
+					x += contentSeparatorHeight;
+				w -= contentSeparatorHeight;
+			}
+		}
+
+		// paint tab background
 		boolean enabled = tabPane.isEnabled();
 		g.setColor( enabled && getRolloverTab() == tabIndex
 			? hoverColor
@@ -265,5 +318,13 @@ public class FlatTabbedPaneUI
 	protected void paintFocusIndicator( Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex,
 		Rectangle iconRect, Rectangle textRect, boolean isSelected )
 	{
+	}
+
+	private boolean isScrollTabLayout() {
+		return tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT;
+	}
+
+	private boolean isTopOrBottom( int tabPlacement ) {
+		return tabPlacement == TOP || tabPlacement == BOTTOM;
 	}
 }

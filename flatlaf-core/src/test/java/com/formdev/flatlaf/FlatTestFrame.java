@@ -181,12 +181,15 @@ public class FlatTestFrame
 
 	private void explicitColors( Container container, boolean explicit, ColorUIResource restoreColor ) {
 		for( Component c : container.getComponents() ) {
+			if( c instanceof JPanel ) {
+				explicitColors( (JPanel) c, explicit, restoreColor );
+				continue;
+			}
+
 			c.setForeground( explicit ? Color.blue : restoreColor );
 			c.setBackground( explicit ? Color.red : restoreColor );
 
-			if( c instanceof JPanel )
-				explicitColors( (JPanel) c, explicit, restoreColor );
-			else if( c instanceof JScrollPane ) {
+			if( c instanceof JScrollPane ) {
 				Component view = ((JScrollPane)c).getViewport().getView();
 				if( view != null ) {
 					view.setForeground( explicit ? Color.magenta : restoreColor );
