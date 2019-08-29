@@ -27,7 +27,6 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -36,9 +35,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.util.UIScale;
@@ -85,8 +84,6 @@ public class FlatComboBoxUI
 	protected void installDefaults() {
 		super.installDefaults();
 
-		padding = UIScale.scale( padding );
-
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( "Component.arc" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
@@ -99,6 +96,25 @@ public class FlatComboBoxUI
 		buttonEditableBackground = UIManager.getColor( "ComboBox.buttonEditableBackground" );
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
+
+		// scale
+		padding = UIScale.scale( padding );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		borderColor = null;
+		disabledBorderColor = null;
+
+		disabledBackground = null;
+		disabledForeground = null;
+
+		buttonBackground = null;
+		buttonEditableBackground = null;
+		buttonArrowColor = null;
+		buttonDisabledArrowColor = null;
 	}
 
 	@Override
@@ -184,7 +200,7 @@ public class FlatComboBoxUI
 
 	@Override
 	protected JButton createArrowButton() {
-		return new FlatArrowButton();
+		return new FlatArrowButton( SwingConstants.SOUTH, buttonArrowColor, buttonDisabledArrowColor, null, null );
 	}
 
 	@Override
@@ -253,37 +269,5 @@ public class FlatComboBoxUI
 	public void paintCurrentValueBackground( Graphics g, Rectangle bounds, boolean hasFocus ) {
 		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : disabledBackground );
 		g.fillRect( bounds.x, bounds.y, bounds.width, bounds.height );
-	}
-
-	//---- class FlatArrowButton ----------------------------------------------
-
-	private class FlatArrowButton
-		extends BasicArrowButton
-	{
-		FlatArrowButton() {
-			super( SOUTH, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
-
-			setOpaque( false );
-			setBorder( null );
-		}
-
-		@Override
-		public void paint( Graphics g ) {
-			FlatUIUtils.setRenderingHints( (Graphics2D) g );
-
-			int w = scale( 9 );
-			int h = scale( 5 );
-			int x = Math.round( (getWidth() - w) / 2f );
-			int y = Math.round( (getHeight() - h) / 2f );
-
-			Path2D arrow = new Path2D.Float();
-			arrow.moveTo( x, y );
-			arrow.lineTo( x + w, y );
-			arrow.lineTo( x + (w / 2f), y + h );
-			arrow.closePath();
-
-			g.setColor( isEnabled() ? buttonArrowColor : buttonDisabledArrowColor );
-			((Graphics2D)g).fill( arrow );
-		}
 	}
 }

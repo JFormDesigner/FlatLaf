@@ -18,16 +18,11 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Path2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
@@ -36,7 +31,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
-import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.View;
 import sun.swing.SwingUtilities2;
@@ -117,6 +111,19 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		disabledForeground = null;
+		selectedForeground = null;
+		underlineColor = null;
+		disabledUnderlineColor = null;
+		hoverColor = null;
+		focusColor = null;
+		contentAreaColor = null;
+	}
+
+	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
 		return new BasicTabbedPaneUI.PropertyChangeHandler() {
 			@Override
@@ -133,7 +140,10 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected JButton createScrollButton( int direction ) {
-		return new ScrollableTabButton( direction );
+		// this method is invoked before installDefaults(), so we can not use color fields here
+		return new FlatArrowButton( direction, UIManager.getColor("TabbedPane.shadow"),
+			UIManager.getColor( "TabbedPane.disabledForeground" ), null,
+			UIManager.getColor( "TabbedPane.hoverColor" ) );
 	}
 
 	@Override
@@ -378,89 +388,5 @@ public class FlatTabbedPaneUI
 
 	private boolean isTopOrBottom( int tabPlacement ) {
 		return tabPlacement == TOP || tabPlacement == BOTTOM;
-	}
-
-	//---- class ScrollableTabButton ------------------------------------------
-
-	private class ScrollableTabButton
-		extends BasicArrowButton
-		implements UIResource
-	{
-		private boolean hover;
-
-		public ScrollableTabButton( int direction ) {
-			super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
-
-			setOpaque( false );
-			setBorder( null );
-
-			addMouseListener( new MouseAdapter() {
-				@Override
-				public void mouseEntered( MouseEvent e ) {
-					hover = true;
-					repaint();
-				}
-
-				@Override
-				public void mouseExited( MouseEvent e ) {
-					hover = false;
-					repaint();
-				}
-			} );
-		}
-
-		@Override
-		public Dimension getPreferredSize() {
-			return scale( super.getPreferredSize() );
-		}
-
-		@Override
-		public Dimension getMinimumSize() {
-			return scale( super.getMinimumSize() );
-		}
-
-		@Override
-		public void paint( Graphics g ) {
-			Graphics2D g2 = (Graphics2D)g;
-			FlatUIUtils.setRenderingHints( g2 );
-
-			int width = getWidth();
-			int height = getHeight();
-			boolean enabled = isEnabled();
-
-			// paint hover background
-			if( enabled && hover ) {
-				g.setColor( hoverColor );
-				g.fillRect( 0, 0, width, height );
-			}
-
-			int w = scale( 9 );
-			int h = scale( 5 );
-			int x = Math.round( (width - w) / 2f );
-			int y = Math.round( (height - h) / 2f );
-
-			// arrow for SOUTH direction
-			Path2D arrow = new Path2D.Float();
-			arrow.moveTo( x, y );
-			arrow.lineTo( x + w, y );
-			arrow.lineTo( x + (w / 2f), y + h );
-			arrow.closePath();
-
-			// rotate arrow if necessary
-			if( direction == WEST ) {
-				g2.translate( width, 0 );
-				g2.rotate( Math.toRadians( 90 ) );
-			} else if( direction == EAST ) {
-				g2.translate( 0, height );
-				g2.rotate( Math.toRadians( 270 ) );
-			} else if( direction == NORTH ) {
-				g2.translate( width, height );
-				g2.rotate( Math.toRadians( 180 ) );
-			}
-
-			// paint arrow
-			g.setColor( enabled ? shadow : disabledForeground );
-			g2.fill( arrow );
-		}
 	}
 }
