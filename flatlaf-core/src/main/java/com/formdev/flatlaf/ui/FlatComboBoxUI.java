@@ -217,27 +217,28 @@ public class FlatComboBoxUI
 			float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
 			int arrowX = arrowButton.getX();
 			int arrowWidth = arrowButton.getWidth();
+			boolean enabled = comboBox.isEnabled();
 			boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
 			// paint background
-			g2.setColor( comboBox.isEnabled() ? c.getBackground() : disabledBackground );
+			g2.setColor( enabled ? c.getBackground() : disabledBackground );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
 
 			// paint arrow button background
-			g2.setColor( comboBox.isEnabled()
-				? (comboBox.isEditable() ? buttonEditableBackground : buttonBackground)
-				: disabledBackground );
-			Shape oldClip = g2.getClip();
-			if( isLeftToRight )
-				g2.clipRect( arrowX, 0, width - arrowX, height );
-			else
-				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
-			g2.setClip( oldClip );
+			if( enabled ) {
+				g2.setColor( comboBox.isEditable() ? buttonEditableBackground : buttonBackground );
+				Shape oldClip = g2.getClip();
+				if( isLeftToRight )
+					g2.clipRect( arrowX, 0, width - arrowX, height );
+				else
+					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
+				FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+				g2.setClip( oldClip );
+			}
 
 			if( comboBox.isEditable() ) {
 				// paint vertical line between value and arrow button
-				g2.setColor( comboBox.isEnabled() ? borderColor : disabledBorderColor );
+				g2.setColor( enabled ? borderColor : disabledBorderColor );
 				float lw = scale( 1f );
 				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
 				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
