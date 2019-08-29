@@ -30,11 +30,14 @@ import java.awt.Shape;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
@@ -48,6 +51,7 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault Spinner.disabledBackground		Color
+ * @uiDefault Spinner.disabledForeground		Color
  * @uiDefault Spinner.buttonBackground			Color
  * @uiDefault Spinner.buttonArrowColor			Color
  * @uiDefault Spinner.buttonDisabledArrowColor	Color
@@ -65,6 +69,7 @@ public class FlatSpinnerUI
 	protected Color borderColor;
 	protected Color disabledBorderColor;
 	protected Color disabledBackground;
+	protected Color disabledForeground;
 	protected Color buttonBackground;
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
@@ -83,6 +88,7 @@ public class FlatSpinnerUI
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 		disabledBackground = UIManager.getColor( "Spinner.disabledBackground" );
+		disabledForeground = UIManager.getColor( "Spinner.disabledForeground" );
 		buttonBackground = UIManager.getColor( "Spinner.buttonBackground" );
 		buttonArrowColor = UIManager.getColor( "Spinner.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "Spinner.buttonDisabledArrowColor" );
@@ -99,6 +105,7 @@ public class FlatSpinnerUI
 		borderColor = null;
 		disabledBorderColor = null;
 		disabledBackground = null;
+		disabledForeground = null;
 		buttonBackground = null;
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
@@ -110,6 +117,7 @@ public class FlatSpinnerUI
 		super.installListeners();
 
 		addEditorFocusListener( spinner.getEditor() );
+		spinner.addPropertyChangeListener( getHandler() );
 	}
 
 	@Override
@@ -117,6 +125,7 @@ public class FlatSpinnerUI
 		super.uninstallListeners();
 
 		removeEditorFocusListener( spinner.getEditor() );
+		spinner.removePropertyChangeListener( getHandler() );
 
 		handler = null;
 	}
@@ -128,27 +137,54 @@ public class FlatSpinnerUI
 	}
 
 	@Override
+	protected JComponent createEditor() {
+		JComponent editor = super.createEditor();
+		updateEditorColors();
+		return editor;
+	}
+
+	@Override
 	protected void replaceEditor( JComponent oldEditor, JComponent newEditor ) {
 		super.replaceEditor( oldEditor, newEditor );
 
 		removeEditorFocusListener( oldEditor );
 		addEditorFocusListener( newEditor );
+		updateEditorColors();
 	}
 
 	private void addEditorFocusListener( JComponent editor ) {
-		if( editor instanceof JSpinner.DefaultEditor ) {
-			JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
-			if( textField != null )
-				textField.addFocusListener( getHandler() );
-		}
+		JTextField textField = getEditorTextField( editor );
+		if( textField != null )
+			textField.addFocusListener( getHandler() );
 	}
 
 	private void removeEditorFocusListener( JComponent editor ) {
-		if( editor instanceof JSpinner.DefaultEditor ) {
-			JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
-			if( textField != null )
-				textField.removeFocusListener( getHandler() );
+		JTextField textField = getEditorTextField( editor );
+		if( textField != null )
+			textField.removeFocusListener( getHandler() );
+	}
+
+	private void updateEditorColors() {
+		JTextField textField = getEditorTextField( spinner.getEditor() );
+		if( textField != null ) {
+			// use non-UIResource colors because when SwingUtilities.updateComponentTreeUI()
+			// is used, then the text field is updated after the spinner and the
+			// colors are again replaced with default colors
+			textField.setBackground( nonUIResource( spinner.isEnabled()
+				? spinner.getBackground() : disabledBackground ) );
+			textField.setForeground( nonUIResource( spinner.getForeground() ) );
+			textField.setDisabledTextColor( nonUIResource( disabledForeground ) );
 		}
+	}
+
+	private Color nonUIResource( Color c ) {
+		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
+	}
+
+	private JTextField getEditorTextField( JComponent editor ) {
+		return editor instanceof JSpinner.DefaultEditor
+			? ((JSpinner.DefaultEditor)editor).getTextField()
+			: null;
 	}
 
 	@Override
@@ -224,7 +260,7 @@ public class FlatSpinnerUI
 	//---- class Handler ------------------------------------------------------
 
 	private class Handler
-		implements LayoutManager, FocusListener
+		implements LayoutManager, FocusListener, PropertyChangeListener
 	{
 		//---- interface LayoutManager ----
 
@@ -317,6 +353,19 @@ public class FlatSpinnerUI
 		@Override
 		public void focusLost( FocusEvent e ) {
 			spinner.repaint();
+		}
+
+		//---- interface PropertyChangeListener ----
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			switch( e.getPropertyName() ) {
+				case "background":
+				case "foreground":
+				case "enabled":
+					updateEditorColors();
+					break;
+			}
 		}
 	}
 }

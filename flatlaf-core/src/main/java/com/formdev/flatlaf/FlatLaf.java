@@ -111,6 +111,7 @@ public abstract class FlatLaf
 
 		// initialize some own defaults (for overriding)
 		defaults.put( "Spinner.disabledBackground", control );
+		defaults.put( "Spinner.disabledForeground", control );
 
 		initFonts( defaults );
 		loadDefaultsFromProperties( defaults );
