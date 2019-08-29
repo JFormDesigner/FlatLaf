@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
@@ -40,6 +41,9 @@ public class FlatArrowButton
 	private final Color disabledForeground;
 	private final Color hoverForeground;
 	private final Color hoverBackground;
+
+	private int xOffset = 0;
+	private int yOffset = 0;
 
 	private boolean hover;
 
@@ -73,6 +77,22 @@ public class FlatArrowButton
 		}
 	}
 
+	public int getXOffset() {
+		return xOffset;
+	}
+
+	public void setXOffset( int xOffset ) {
+		this.xOffset = xOffset;
+	}
+
+	public int getYOffset() {
+		return yOffset;
+	}
+
+	public void setYOffset( int yOffset ) {
+		this.yOffset = yOffset;
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return scale( super.getPreferredSize() );
@@ -98,34 +118,55 @@ public class FlatArrowButton
 			g.fillRect( 0, 0, width, height );
 		}
 
+		boolean vert = (direction == NORTH || direction == SOUTH);
+
 		int w = scale( 9 );
 		int h = scale( 5 );
-		int x = Math.round( (width - w) / 2f );
-		int y = Math.round( (height - h) / 2f );
-
-		// arrow for SOUTH direction
-		Path2D arrow = new Path2D.Float();
-		arrow.moveTo( x, y );
-		arrow.lineTo( x + w, y );
-		arrow.lineTo( x + (w / 2f), y + h );
-		arrow.closePath();
-
-		// rotate arrow if necessary
-		if( direction == WEST ) {
-			g2.translate( width, 0 );
-			g2.rotate( Math.toRadians( 90 ) );
-		} else if( direction == EAST ) {
-			g2.translate( 0, height );
-			g2.rotate( Math.toRadians( 270 ) );
-		} else if( direction == NORTH ) {
-			g2.translate( width, height );
-			g2.rotate( Math.toRadians( 180 ) );
-		}
+		int x = Math.round( (width - (vert ? w : h)) / 2f + scale( (float) xOffset ) );
+		int y = Math.round( (height - (vert ? h : w)) / 2f + scale( (float) yOffset ) );
 
 		// paint arrow
 		g.setColor( enabled
 			? (hover && hoverForeground != null ? hoverForeground : foreground)
 			: disabledForeground );
-		g2.fill( arrow );
+		g.translate( x, y );
+		g2.fill( createArrowShape( direction, w, h ) );
+		g.translate( -x, -y );
+	}
+
+	public static Shape createArrowShape( int direction, int w, int h ) {
+		Path2D arrow = new Path2D.Float();
+
+		switch( direction ) {
+			case NORTH:
+				arrow.moveTo( 0, h );
+				arrow.lineTo( w, h );
+				arrow.lineTo( (w / 2f), 0 );
+				arrow.closePath();
+				break;
+
+			case SOUTH:
+				arrow.moveTo( 0, 0 );
+				arrow.lineTo( w, 0 );
+				arrow.lineTo( (w / 2f), h );
+				arrow.closePath();
+				break;
+
+			case WEST:
+				arrow.moveTo( h, 0 );
+				arrow.lineTo( h, w );
+				arrow.lineTo( 0, (w / 2f) );
+				arrow.closePath();
+				break;
+
+			case EAST:
+				arrow.moveTo( 0, 0 );
+				arrow.lineTo( 0, w );
+				arrow.lineTo( h, (w / 2f) );
+				arrow.closePath();
+				break;
+		}
+
+		return arrow;
 	}
 }

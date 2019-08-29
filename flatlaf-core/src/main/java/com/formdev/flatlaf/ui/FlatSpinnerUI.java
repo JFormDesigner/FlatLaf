@@ -167,8 +167,9 @@ public class FlatSpinnerUI
 	}
 
 	private Component createArrowButton( int direction, String name ) {
-		Component button = new FlatArrowButton( direction, buttonArrowColor, buttonDisabledArrowColor, null, null );
+		FlatArrowButton button = new FlatArrowButton( direction, buttonArrowColor, buttonDisabledArrowColor, null, null );
 		button.setName( name );
+		button.setYOffset( (direction == SwingConstants.NORTH) ? 1 : -1 );
 		if( direction == SwingConstants.NORTH )
 			installNextButtonListeners( button );
 		else
