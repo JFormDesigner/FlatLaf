@@ -41,7 +41,7 @@ public class FlatPasswordFieldUI
 {
 	protected int focusWidth;
 
-	private final Handler handler = new Handler();
+	private Handler handler;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatPasswordFieldUI();
@@ -58,14 +58,22 @@ public class FlatPasswordFieldUI
 	protected void installListeners() {
 		super.installListeners();
 
-		getComponent().addFocusListener( handler );
+		getComponent().addFocusListener( getHandler() );
 	}
 
 	@Override
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		getComponent().removeFocusListener( handler );
+		getComponent().removeFocusListener( getHandler() );
+
+		handler = null;
+	}
+
+	public Handler getHandler() {
+		if( handler == null )
+			handler = new Handler();
+		return handler;
 	}
 
 	@Override

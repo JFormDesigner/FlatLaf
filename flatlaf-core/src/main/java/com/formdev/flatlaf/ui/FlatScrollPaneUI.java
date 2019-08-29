@@ -38,7 +38,7 @@ import javax.swing.plaf.basic.BasicScrollPaneUI;
 public class FlatScrollPaneUI
 	extends BasicScrollPaneUI
 {
-	private final Handler handler = new Handler();
+	private Handler handler;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatScrollPaneUI();
@@ -50,7 +50,7 @@ public class FlatScrollPaneUI
 
 		JViewport viewport = scrollpane.getViewport();
 		if( viewport != null )
-			viewport.addContainerListener( handler );
+			viewport.addContainerListener( getHandler() );
 	}
 
 	@Override
@@ -59,7 +59,15 @@ public class FlatScrollPaneUI
 
 		JViewport viewport = scrollpane.getViewport();
 		if( viewport != null )
-			viewport.removeContainerListener( handler );
+			viewport.removeContainerListener( getHandler() );
+
+		handler = null;
+	}
+
+	public Handler getHandler() {
+		if( handler == null )
+			handler = new Handler();
+		return handler;
 	}
 
 	@Override
@@ -70,18 +78,18 @@ public class FlatScrollPaneUI
 		JViewport newViewport = (JViewport) (e.getNewValue());
 
 		if( oldViewport != null ) {
-			oldViewport.removeContainerListener( handler );
+			oldViewport.removeContainerListener( getHandler() );
 
 			Component oldView = oldViewport.getView();
 			if( oldView != null )
-				oldView.removeFocusListener( handler );
+				oldView.removeFocusListener( getHandler() );
 		}
 		if( newViewport != null ) {
-			newViewport.addContainerListener( handler );
+			newViewport.addContainerListener( getHandler() );
 
 			Component newView = newViewport.getView();
 			if( newView != null )
-				newView.addFocusListener( handler );
+				newView.addFocusListener( getHandler() );
 		}
 	}
 
