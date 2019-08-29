@@ -1,0 +1,321 @@
+/*
+ * Copyright 2019 FormDev Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.formdev.flatlaf.ui;
+
+import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.geom.Rectangle2D;
+import javax.swing.JComponent;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicSpinnerUI;
+
+/**
+ * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
+ *
+ * TODO document used UI defaults of superclass
+ *
+ * @uiDefault Component.focusWidth				int
+ * @uiDefault Component.arc						int
+ * @uiDefault Component.borderColor				Color
+ * @uiDefault Component.disabledBorderColor		Color
+ * @uiDefault Spinner.disabledBackground		Color
+ * @uiDefault Spinner.buttonBackground			Color
+ * @uiDefault Spinner.buttonArrowColor			Color
+ * @uiDefault Spinner.buttonDisabledArrowColor	Color
+ * @uiDefault Spinner.padding					Insets
+ *
+ * @author Karl Tauber
+ */
+public class FlatSpinnerUI
+	extends BasicSpinnerUI
+{
+	private Handler handler;
+
+	protected int focusWidth;
+	protected int arc;
+	protected Color borderColor;
+	protected Color disabledBorderColor;
+	protected Color disabledBackground;
+	protected Color buttonBackground;
+	protected Color buttonArrowColor;
+	protected Color buttonDisabledArrowColor;
+	protected Insets padding;
+
+	public static ComponentUI createUI( JComponent c ) {
+		return new FlatSpinnerUI();
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		focusWidth = UIManager.getInt( "Component.focusWidth" );
+		arc = UIManager.getInt( "Component.arc" );
+		borderColor = UIManager.getColor( "Component.borderColor" );
+		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
+		disabledBackground = UIManager.getColor( "Spinner.disabledBackground" );
+		buttonBackground = UIManager.getColor( "Spinner.buttonBackground" );
+		buttonArrowColor = UIManager.getColor( "Spinner.buttonArrowColor" );
+		buttonDisabledArrowColor = UIManager.getColor( "Spinner.buttonDisabledArrowColor" );
+		padding = UIManager.getInsets( "Spinner.padding" );
+
+		// scale
+		padding = scale( padding );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		borderColor = null;
+		disabledBorderColor = null;
+		disabledBackground = null;
+		buttonBackground = null;
+		buttonArrowColor = null;
+		buttonDisabledArrowColor = null;
+		padding = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		addEditorFocusListener( spinner.getEditor() );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		removeEditorFocusListener( spinner.getEditor() );
+
+		handler = null;
+	}
+
+	public Handler getHandler() {
+		if( handler == null )
+			handler = new Handler();
+		return handler;
+	}
+
+	@Override
+	protected void replaceEditor( JComponent oldEditor, JComponent newEditor ) {
+		super.replaceEditor( oldEditor, newEditor );
+
+		removeEditorFocusListener( oldEditor );
+		addEditorFocusListener( newEditor );
+	}
+
+	private void addEditorFocusListener( JComponent editor ) {
+		if( editor instanceof JSpinner.DefaultEditor ) {
+			JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
+			if( textField != null )
+				textField.addFocusListener( getHandler() );
+		}
+	}
+
+	private void removeEditorFocusListener( JComponent editor ) {
+		if( editor instanceof JSpinner.DefaultEditor ) {
+			JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
+			if( textField != null )
+				textField.removeFocusListener( getHandler() );
+		}
+	}
+
+	@Override
+	protected LayoutManager createLayout() {
+		return getHandler();
+	}
+
+	@Override
+	protected Component createNextButton() {
+		return createArrowButton( SwingConstants.NORTH, "Spinner.nextButton" );
+	}
+
+	@Override
+	protected Component createPreviousButton() {
+		return createArrowButton( SwingConstants.SOUTH, "Spinner.previousButton" );
+	}
+
+	private Component createArrowButton( int direction, String name ) {
+		Component button = new FlatArrowButton( direction, buttonArrowColor, buttonDisabledArrowColor, null, null );
+		button.setName( name );
+		if( direction == SwingConstants.NORTH )
+			installNextButtonListeners( button );
+		else
+			installPreviousButtonListeners( button );
+		return button;
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		if( c.isOpaque() ) {
+			FlatUIUtils.paintParentBackground( g, c );
+
+			Graphics2D g2 = (Graphics2D) g;
+			FlatUIUtils.setRenderingHints( g2 );
+
+			int width = c.getWidth();
+			int height = c.getHeight();
+			float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+			float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
+			Component nextButton = getHandler().nextButton;
+			int arrowX = nextButton.getX();
+			int arrowWidth = nextButton.getWidth();
+			boolean enabled = spinner.isEnabled();
+			boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
+
+			// paint background
+			g2.setColor( enabled ? c.getBackground() : disabledBackground );
+			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+
+			// paint arrow buttons background
+			if( enabled ) {
+				g2.setColor( buttonBackground );
+				Shape oldClip = g2.getClip();
+				if( isLeftToRight )
+					g2.clipRect( arrowX, 0, width - arrowX, height );
+				else
+					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
+				FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+				g2.setClip( oldClip );
+			}
+
+			// paint vertical line between value and arrow buttons
+			g2.setColor( enabled ? borderColor : disabledBorderColor );
+			float lw = scale( 1f );
+			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
+		}
+
+		paint( g, c );
+	}
+
+	//---- class Handler ------------------------------------------------------
+
+	private class Handler
+		implements LayoutManager, FocusListener
+	{
+		//---- interface LayoutManager ----
+
+		private Component editor = null;
+		private Component nextButton;
+		private Component previousButton;
+
+		@Override
+		public void addLayoutComponent( String name, Component c ) {
+			switch( name ) {
+				case "Editor":	editor = c; break;
+				case "Next":		nextButton = c; break;
+				case "Previous":	previousButton = c; break;
+			}
+		}
+
+		@Override
+		public void removeLayoutComponent( Component c ) {
+			if( c == editor )
+				editor = null;
+			else if( c == nextButton )
+				nextButton = null;
+			else if( c == previousButton )
+				previousButton = null;
+		}
+
+		@Override
+		public Dimension preferredLayoutSize( Container parent ) {
+			Insets insets = parent.getInsets();
+			Dimension editorSize = (editor != null) ? editor.getPreferredSize() : new Dimension( 0, 0 );
+
+			// the arrows width is the same as the inner height so that the arrows area is square
+			int innerHeight = editorSize.height + padding.top + padding.bottom;
+			return new Dimension(
+				insets.left + insets.right + editorSize.width + padding.left + padding.right + innerHeight,
+				insets.top + insets.bottom + innerHeight );
+		}
+
+		@Override
+		public Dimension minimumLayoutSize( Container parent ) {
+			return preferredLayoutSize( parent );
+		}
+
+		@Override
+		public void layoutContainer( Container parent ) {
+			Dimension size = parent.getSize();
+			Insets insets = parent.getInsets();
+			Rectangle r = FlatUIUtils.subtract( new Rectangle( size ), insets );
+
+			if( nextButton == null && previousButton == null ) {
+				if( editor != null )
+					editor.setBounds( r );
+				return;
+			}
+
+			Rectangle editorRect = new Rectangle( r );
+			Rectangle buttonsRect = new Rectangle( r );
+
+			// make button area square
+			int buttonsWidth = r.height;
+			buttonsRect.width = buttonsWidth;
+
+			if( parent.getComponentOrientation().isLeftToRight() ) {
+				editorRect.width -= buttonsWidth;
+				buttonsRect.x += editorRect.width;
+			} else {
+				editorRect.x += buttonsWidth;
+				editorRect.width -= buttonsWidth;
+			}
+
+			if( editor != null )
+				editor.setBounds( FlatUIUtils.subtract( editorRect, padding ) );
+
+			int nextHeight = Math.round( buttonsRect.height / 2f );
+			if( nextButton != null )
+				nextButton.setBounds( buttonsRect.x, buttonsRect.y, buttonsRect.width, nextHeight );
+			if( previousButton != null ) {
+				previousButton.setBounds( buttonsRect.x, buttonsRect.y + nextHeight,
+					buttonsRect.width, buttonsRect.height - nextHeight );
+			}
+		}
+
+		//---- interface FocusListener ----
+
+		@Override
+		public void focusGained( FocusEvent e ) {
+			spinner.repaint();
+		}
+
+		@Override
+		public void focusLost( FocusEvent e ) {
+			spinner.repaint();
+		}
+	}
+}

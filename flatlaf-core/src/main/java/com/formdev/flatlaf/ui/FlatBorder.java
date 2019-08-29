@@ -24,7 +24,10 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Paint;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
@@ -98,6 +101,14 @@ public class FlatBorder
 		} else if( c instanceof JComboBox && ((JComboBox<?>)c).isEditable() ) {
 			Component editorComponent = ((JComboBox<?>)c).getEditor().getEditorComponent();
 			return (editorComponent != null) ? editorComponent.hasFocus() : false;
+		} else if( c instanceof JSpinner ) {
+			JComponent editor = ((JSpinner)c).getEditor();
+			if( editor instanceof JSpinner.DefaultEditor ) {
+				JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
+				if( textField != null )
+					return textField.hasFocus();
+			}
+			return false;
 		} else
 			return c.hasFocus();
 	}

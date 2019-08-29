@@ -109,6 +109,9 @@ public abstract class FlatLaf
 		defaults.put( "TextPane.disabledBackground", control );
 		defaults.put( "TextPane.inactiveBackground", control );
 
+		// initialize some own defaults (for overriding)
+		defaults.put( "Spinner.disabledBackground", control );
+
 		initFonts( defaults );
 		loadDefaultsFromProperties( defaults );
 
