@@ -234,7 +234,7 @@ public abstract class FlatLaf
 			return parseBorder( value );
 
 		// icons
-		if( key.endsWith( ".icon" ) )
+		if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
 			return parseInstance( value );
 
 		// insets
