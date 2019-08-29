@@ -63,13 +63,13 @@ public abstract class FlatAbstractIcon
 			if( color != null )
 				g2.setColor( color );
 
-			paintIcon( g2 );
+			paintIcon( c, g2 );
 		} finally {
 			g2.dispose();
 		}
 	}
 
-	protected abstract void paintIcon( Graphics2D g2 );
+	protected abstract void paintIcon( Component c, Graphics2D g2 );
 
 	@Override
 	public int getIconWidth() {

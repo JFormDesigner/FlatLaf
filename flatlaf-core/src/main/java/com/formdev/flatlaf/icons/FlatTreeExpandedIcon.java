@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
@@ -35,7 +36,7 @@ public class FlatTreeExpandedIcon
 	}
 
 	@Override
-	protected void paintIcon( Graphics2D g ) {
+	protected void paintIcon( Component c, Graphics2D g ) {
 		Path2D arrow = new Path2D.Float();
 		arrow.moveTo( 1, 2 );
 		arrow.lineTo( 10, 2 );

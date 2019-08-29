@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.ui;
+package com.formdev.flatlaf.icons;
 
 import static com.formdev.flatlaf.util.UIScale.*;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import javax.swing.AbstractButton;
-import javax.swing.Icon;
 import javax.swing.UIManager;
-import javax.swing.plaf.UIResource;
-import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Icon for {@link javax.swing.JCheckBox}.
@@ -48,7 +44,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @author Karl Tauber
  */
 public class FlatCheckBoxIcon
-	implements Icon, UIResource
+	extends FlatAbstractIcon
 {
 	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
@@ -66,46 +62,40 @@ public class FlatCheckBoxIcon
 
 	protected final int iconSize = 15 + (focusWidth * 2);
 
+	public FlatCheckBoxIcon() {
+		super( 0, 0, null );
+	}
+
 	@Override
-	public void paintIcon( Component c, Graphics g, int x, int y ) {
-		Graphics2D g2 = (Graphics2D) g.create();
-		try {
-			FlatUIUtils.setRenderingHints( g2 );
+	protected void paintIcon( Component c, Graphics2D g2 ) {
+		boolean enabled = c.isEnabled();
+		boolean focused = c.hasFocus();
+		boolean selected = (c instanceof AbstractButton) && ((AbstractButton)c).isSelected();
 
-			g2.translate( x, y );
-			UIScale.scaleGraphics( g2 );
+		// paint focused border
+		if( focused ) {
+			g2.setColor( focusColor );
+			paintFocusBorder( g2 );
+		}
 
-			boolean enabled = c.isEnabled();
-			boolean focused = c.hasFocus();
-			boolean selected = (c instanceof AbstractButton) && ((AbstractButton)c).isSelected();
+		// paint border
+		g2.setColor( enabled
+			? (selected
+				? (focused ? selectedFocusedBorderColor : selectedBorderColor)
+				: (focused ? focusedBorderColor : borderColor))
+			: disabledBorderColor );
+		paintBorder( g2 );
 
-			// paint focused border
-			if( focused ) {
-				g2.setColor( focusColor );
-				paintFocusBorder( g2 );
-			}
+		// paint background
+		g2.setColor( enabled
+			? (selected ? selectedBackground : background)
+			: disabledBackground );
+		paintBackground( g2 );
 
-			// paint border
-			g2.setColor( enabled
-				? (selected
-					? (focused ? selectedFocusedBorderColor : selectedBorderColor)
-					: (focused ? focusedBorderColor : borderColor))
-				: disabledBorderColor );
-			paintBorder( g2 );
-
-			// paint background
-			g2.setColor( enabled
-				? (selected ? selectedBackground : background)
-				: disabledBackground );
-			paintBackground( g2 );
-
-			// paint checkmark
-			if( selected ) {
-				g2.setColor( enabled ? checkmarkColor : disabledCheckmarkColor );
-				paintCheckmark( g2 );
-			}
-		} finally {
-			g2.dispose();
+		// paint checkmark
+		if( selected ) {
+			g2.setColor( enabled ? checkmarkColor : disabledCheckmarkColor );
+			paintCheckmark( g2 );
 		}
 	}
 

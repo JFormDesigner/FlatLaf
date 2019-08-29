@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.ui;
+package com.formdev.flatlaf.icons;
 
 import java.awt.Graphics2D;
 
