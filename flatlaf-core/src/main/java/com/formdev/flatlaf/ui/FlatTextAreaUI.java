@@ -54,6 +54,14 @@ public class FlatTextAreaUI
 	}
 
 	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		disabledBackground = null;
+		inactiveBackground = null;
+	}
+
+	@Override
 	protected void paintBackground( Graphics g ) {
 		JTextComponent c = getComponent();
 

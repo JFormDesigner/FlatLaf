@@ -82,6 +82,16 @@ public class FlatSliderUI
 	}
 
 	@Override
+	protected void uninstallDefaults( JSlider slider ) {
+		super.uninstallDefaults( slider );
+
+		trackColor = null;
+		thumbColor = null;
+		disabledForeground = null;
+		focusColor = null;
+	}
+
+	@Override
 	public Dimension getPreferredHorizontalSize() {
 		return UIScale.scale( super.getPreferredHorizontalSize() );
 	}
