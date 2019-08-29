@@ -21,6 +21,8 @@ import java.awt.event.KeyEvent;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.swing.*;
 
 /**
@@ -69,6 +71,8 @@ public class FlatTestFrame
 		lafModel.addElement( new LafInfo( "Flat Light", FlatLightLaf.class.getName() ) );
 		lafModel.addElement( new LafInfo( "Flat Dark", FlatDarkLaf.class.getName() ) );
 		lafModel.addElement( new LafInfo( "Flat Test", FlatTestLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat IntelliJ", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat Darcula", FlatDarculaLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -96,6 +100,12 @@ public class FlatTestFrame
 		registerSwitchToLookAndFeel( KeyEvent.VK_F1, FlatLightLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F2, FlatDarkLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F3, FlatTestLaf.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatIntelliJLaf.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F5, FlatDarculaLaf.class.getName() );
+
+		registerSwitchToLookAndFeel( KeyEvent.VK_F7, MetalLookAndFeel.class.getName() );
+		if( SystemInfo.IS_WINDOWS )
+			registerSwitchToLookAndFeel( KeyEvent.VK_F8, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
 
 		// register ESC key to close frame
 		((JComponent)getContentPane()).registerKeyboardAction(
@@ -218,6 +228,35 @@ public class FlatTestFrame
 		contentPanel.repaint();
 	}
 
+	private void enabledChanged() {
+		enabledDisable( content, enabledCheckBox.isSelected() );
+	}
+
+	private void enabledDisable( Container container, boolean enabled ) {
+		for( Component c : container.getComponents() ) {
+			if( c instanceof JPanel ) {
+				enabledDisable( (JPanel) c, enabled );
+				continue;
+			}
+
+			c.setEnabled( enabled );
+
+			if( c instanceof JScrollPane ) {
+				Component view = ((JScrollPane)c).getViewport().getView();
+				if( view != null )
+					view.setEnabled( enabled );
+			} else if( c instanceof JTabbedPane ) {
+				JTabbedPane tabPane = (JTabbedPane)c;
+				int tabCount = tabPane.getTabCount();
+				for( int i = 0; i < tabCount; i++ ) {
+					Component tab = tabPane.getComponentAt( i );
+					if( tab != null )
+						tab.setEnabled( enabled );
+				}
+			}
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		dialogPane = new JPanel();
@@ -226,6 +265,7 @@ public class FlatTestFrame
 		lookAndFeelComboBox = new JComboBox<>();
 		explicitColorsCheckBox = new JCheckBox();
 		rightToLeftCheckBox = new JCheckBox();
+		enabledCheckBox = new JCheckBox();
 		closeButton = new JButton();
 
 		//======== this ========
@@ -256,6 +296,7 @@ public class FlatTestFrame
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
+					"[fill]" +
 					"[grow,fill]" +
 					"[button,fill]",
 					// rows
@@ -277,9 +318,16 @@ public class FlatTestFrame
 				rightToLeftCheckBox.addActionListener(e -> rightToLeftChanged());
 				buttonBar.add(rightToLeftCheckBox, "cell 2 0");
 
+				//---- enabledCheckBox ----
+				enabledCheckBox.setText("enabled");
+				enabledCheckBox.setMnemonic('E');
+				enabledCheckBox.setSelected(true);
+				enabledCheckBox.addActionListener(e -> enabledChanged());
+				buttonBar.add(enabledCheckBox, "cell 3 0");
+
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 4 0");
+				buttonBar.add(closeButton, "cell 5 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 		}
@@ -294,6 +342,7 @@ public class FlatTestFrame
 	private JComboBox<LafInfo> lookAndFeelComboBox;
 	private JCheckBox explicitColorsCheckBox;
 	private JCheckBox rightToLeftCheckBox;
+	private JCheckBox enabledCheckBox;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 

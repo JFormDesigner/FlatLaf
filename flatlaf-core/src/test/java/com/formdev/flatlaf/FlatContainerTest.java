@@ -62,14 +62,6 @@ public class FlatContainerTest
 		}
 	}
 
-	private void enabledChanged() {
-		boolean enabled = enabledCheckBox.isSelected();
-		tabbedPane1.setEnabled( enabled );
-		tabbedPane2.setEnabled( enabled );
-		tabbedPane3.setEnabled( enabled );
-		tabbedPane4.setEnabled( enabled );
-	}
-
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -97,7 +89,6 @@ public class FlatContainerTest
 		tabScrollCheckBox = new JCheckBox();
 		hasFullBorderCheckBox = new JCheckBox();
 		moreTabsCheckBox = new JCheckBox();
-		enabledCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -245,13 +236,6 @@ public class FlatContainerTest
 			moreTabsCheckBox.setMnemonic('M');
 			moreTabsCheckBox.addActionListener(e -> moreTabsChanged());
 			panel9.add(moreTabsCheckBox, cc.xy(1, 9, CellConstraints.LEFT, CellConstraints.DEFAULT));
-
-			//---- enabledCheckBox ----
-			enabledCheckBox.setText("enabled");
-			enabledCheckBox.setSelected(true);
-			enabledCheckBox.setMnemonic('E');
-			enabledCheckBox.addActionListener(e -> enabledChanged());
-			panel9.add(enabledCheckBox, cc.xy(3, 9, CellConstraints.LEFT, CellConstraints.DEFAULT));
 		}
 		add(panel9, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -265,6 +249,5 @@ public class FlatContainerTest
 	private JCheckBox tabScrollCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
 	private JCheckBox moreTabsCheckBox;
-	private JCheckBox enabledCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

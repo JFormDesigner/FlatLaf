@@ -186,26 +186,12 @@ new FormModel {
 					"gridY": 9
 					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints LEFT
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "enabledCheckBox"
-					"text": "enabled"
-					"selected": true
-					"mnemonic": 69
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "enabledChanged", false ) )
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 3
-					"gridY": 9
-					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints LEFT
-				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 400, 300 )
+			"size": new java.awt.Dimension( 400, 400 )
 		} )
 	}
 }
