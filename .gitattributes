@@ -18,4 +18,5 @@
 *.gif binary
 *.jar binary
 *.png binary
+*.sketch binary
 *.zip binary
