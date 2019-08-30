@@ -43,6 +43,9 @@ public class FlatTreeCollapsedIcon
 		arrow.lineTo( 10, 5.5 );
 		arrow.closePath();
 
+		if( !c.getComponentOrientation().isLeftToRight() )
+			g.rotate( Math.toRadians( 180 ), width / 2., height / 2. );
+
 		g.fill( arrow );
 	}
 }
