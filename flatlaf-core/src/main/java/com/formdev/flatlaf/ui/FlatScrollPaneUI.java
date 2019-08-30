@@ -48,18 +48,14 @@ public class FlatScrollPaneUI
 	protected void installListeners( JScrollPane c ) {
 		super.installListeners( c );
 
-		JViewport viewport = scrollpane.getViewport();
-		if( viewport != null )
-			viewport.addContainerListener( getHandler() );
+		addViewportListeners( scrollpane.getViewport() );
 	}
 
 	@Override
 	protected void uninstallListeners( JComponent c ) {
 		super.uninstallListeners( c );
 
-		JViewport viewport = scrollpane.getViewport();
-		if( viewport != null )
-			viewport.removeContainerListener( getHandler() );
+		removeViewportListeners( scrollpane.getViewport() );
 
 		handler = null;
 	}
@@ -77,20 +73,30 @@ public class FlatScrollPaneUI
 		JViewport oldViewport = (JViewport) (e.getOldValue());
 		JViewport newViewport = (JViewport) (e.getNewValue());
 
-		if( oldViewport != null ) {
-			oldViewport.removeContainerListener( getHandler() );
+		removeViewportListeners( oldViewport );
+		addViewportListeners( newViewport );
+	}
 
-			Component oldView = oldViewport.getView();
-			if( oldView != null )
-				oldView.removeFocusListener( getHandler() );
-		}
-		if( newViewport != null ) {
-			newViewport.addContainerListener( getHandler() );
+	private void addViewportListeners( JViewport viewport ) {
+		if( viewport == null )
+			return;
 
-			Component newView = newViewport.getView();
-			if( newView != null )
-				newView.addFocusListener( getHandler() );
-		}
+		viewport.addContainerListener( getHandler() );
+
+		Component view = viewport.getView();
+		if( view != null )
+			view.addFocusListener( getHandler() );
+	}
+
+	private void removeViewportListeners( JViewport viewport ) {
+		if( viewport == null )
+			return;
+
+		viewport.removeContainerListener( getHandler() );
+
+		Component view = viewport.getView();
+		if( view != null )
+			view.removeFocusListener( getHandler() );
 	}
 
 	@Override
