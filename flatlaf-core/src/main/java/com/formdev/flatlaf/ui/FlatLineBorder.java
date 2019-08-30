@@ -17,43 +17,40 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
-import javax.swing.plaf.BorderUIResource;
 
 /**
- * Empty border for various components.
+ * Line border for various components.
  *
- * The insets are scaled.
+ * Paints a scaled 1px thick line around the component.
+ * The line thickness is not included in the border insets.
+ * The insets should be at least 1,1,1,1.
  *
  * @author Karl Tauber
  */
-public class FlatEmptyBorder
-	extends BorderUIResource.EmptyBorderUIResource
+public class FlatLineBorder
+	extends FlatEmptyBorder
 {
-	public FlatEmptyBorder() {
-		super( 0, 0, 0, 0 );
-	}
+	private final Color lineColor;
 
-	public FlatEmptyBorder( int top, int left, int bottom, int right ) {
-		super( top, left, bottom, right );
-	}
-
-	public FlatEmptyBorder( Insets insets ) {
+	public FlatLineBorder( Insets insets, Color lineColor ) {
 		super( insets );
+		this.lineColor = lineColor;
 	}
 
 	@Override
-	public Insets getBorderInsets() {
-		return new Insets( scale( top ), scale( left ), scale( bottom ), scale( right ) );
-	}
-
-	@Override
-	public Insets getBorderInsets( Component c, Insets insets ) {
-		insets.left = scale( left );
-		insets.top = scale( top );
-		insets.right = scale( right );
-		insets.bottom = scale( bottom );
-		return insets;
+	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		Graphics2D g2 = (Graphics2D) g.create();
+		try {
+			FlatUIUtils.setRenderingHints( g2 );
+			g2.setColor( lineColor );
+			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, 0f, scale( 1f ), 0f );
+		} finally {
+			g2.dispose();
+		}
 	}
 }

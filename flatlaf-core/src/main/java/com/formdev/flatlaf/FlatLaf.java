@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Function;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
@@ -36,6 +37,8 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import com.formdev.flatlaf.ui.FlatEmptyBorder;
+import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -169,6 +172,10 @@ public abstract class FlatLaf
 				}
 			}
 
+			Function<String, String> resolver = value -> {
+				return resolveValue( properties, value );
+			};
+
 			// get globals, which override all other defaults that end with same suffix
 			HashMap<String, Object> globals = new HashMap<>();
 			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
@@ -177,7 +184,7 @@ public abstract class FlatLaf
 					continue;
 
 				String value = resolveValue( properties, (String) e.getValue() );
-				globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value ) );
+				globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver ) );
 			}
 
 			// override UI defaults with globals
@@ -198,7 +205,7 @@ public abstract class FlatLaf
 					continue;
 
 				String value = resolveValue( properties, (String) e.getValue() );
-				defaults.put( key, parseValue( key, value ) );
+				defaults.put( key, parseValue( key, value, resolver ) );
 			}
 		} catch( IOException ex ) {
 			ex.printStackTrace();
@@ -219,7 +226,7 @@ public abstract class FlatLaf
 		return newValue;
 	}
 
-	private Object parseValue( String key, String value ) {
+	private Object parseValue( String key, String value, Function<String, String> resolver ) {
 		value = value.trim();
 
 		// null, false, true
@@ -230,8 +237,8 @@ public abstract class FlatLaf
 		}
 
 		// borders
-		if( key.endsWith( ".border" ) )
-			return parseBorder( value );
+		if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
+			return parseBorder( value, resolver );
 
 		// icons
 		if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
@@ -241,16 +248,16 @@ public abstract class FlatLaf
 		if( key.endsWith( ".margin" ) || key.endsWith( ".padding" ) || key.endsWith( "Insets" ) )
 			return parseInsets( value );
 
-		// insets
+		// size
 		if( key.endsWith( "Size" ) && !key.equals( "SplitPane.dividerSize" ))
 			return parseSize( value );
 
-		// insets
+		// width, height
 		if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
 			return parseInteger( value, true );
 
 		// colors
-		ColorUIResource color = parseColor( value );
+		ColorUIResource color = parseColor( value, false );
 		if( color != null )
 			return color;
 
@@ -263,8 +270,22 @@ public abstract class FlatLaf
 		return value;
 	}
 
-	private Object parseBorder( String value ) {
-		return parseInstance( value );
+	private Object parseBorder( String value, Function<String, String> resolver ) {
+		if( value.indexOf( ',' ) >= 0 ) {
+			// top,left,bottom,right[,lineColor]
+			List<String> parts = split( value, ',' );
+			Insets insets = parseInsets( value );
+			ColorUIResource lineColor = (parts.size() == 5)
+				? parseColor( resolver.apply( parts.get( 4 ) ), true )
+				: null;
+
+			return (LazyValue) t -> {
+				return (lineColor != null)
+					? new FlatLineBorder( insets, lineColor )
+					: new FlatEmptyBorder( insets );
+			};
+		} else
+			return parseInstance( value );
 	}
 
 	private Object parseInstance( String value ) {
@@ -304,17 +325,21 @@ public abstract class FlatLaf
 		}
 	}
 
-	private ColorUIResource parseColor( String value ) {
+	private ColorUIResource parseColor( String value, boolean reportError ) {
 		try {
-			if( value.length() == 6 ) {
-				int rgb = Integer.parseInt( value, 16 );
+			int rgb = Integer.parseInt( value, 16 );
+			if( value.length() == 6 )
 				return new ColorUIResource( rgb );
-			}
-			if( value.length() == 8 ) {
-				int rgba = Integer.parseInt( value, 16 );
-				return new ColorUIResource( new Color( rgba, true ) );
-			}
+			if( value.length() == 8 )
+				return new ColorUIResource( new Color( rgb, true ) );
+
+			if( reportError )
+				throw new NumberFormatException( value );
 		} catch( NumberFormatException ex ) {
+			if( reportError ) {
+				System.err.println( "invalid color '" + value + "'" );
+				throw ex;
+			}
 			// not a color --> ignore
 		}
 		return null;
