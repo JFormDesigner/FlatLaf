@@ -8,12 +8,47 @@ new FormModel {
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
-			"$columnConstraints": "[][][][]"
-			"$rowConstraints": "[top][]"
+			"$columnConstraints": "[125][][][][]"
+			"$rowConstraints": "[][top][][]"
 		} ) {
 			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "menuBarLabel"
+				"text": "JMenuBar:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "menuBar1"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu5"
+					"text": "text"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem7"
+						"text": "text"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem8"
+						"text": "text"
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu6"
+					"text": "text"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem5"
+						"text": "text"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem6"
+						"text": "text"
+					} )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0 4 1,growx"
+			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$columnConstraints": "[left][fill]"
+				"$columnConstraints": "[125,left][fill]"
 				"$rowConstraints": "[][][][]"
 				"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			} ) {
@@ -70,12 +105,12 @@ new FormModel {
 					"value": "cell 1 3"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0"
+				"value": "cell 0 1 2 1"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[fill]"
 				"$rowConstraints": "[][][][]"
-				"$layoutConstraints": "insets 0,hidemode 3,gap 5 5"
+				"$layoutConstraints": "insets 0,gap 5 5"
 			} ) {
 				name: "panel2"
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
@@ -110,7 +145,7 @@ new FormModel {
 					"value": "cell 0 3"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0"
+				"value": "cell 2 1"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[fill]"
@@ -150,7 +185,7 @@ new FormModel {
 					"value": "cell 0 3"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0"
+				"value": "cell 3 1"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[fill]"
@@ -193,7 +228,7 @@ new FormModel {
 					"value": "cell 0 3"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 0"
+				"value": "cell 4 1"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "armedCheckBox"
@@ -204,7 +239,7 @@ new FormModel {
 				}
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "armedChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1"
+				"value": "cell 0 2 2 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

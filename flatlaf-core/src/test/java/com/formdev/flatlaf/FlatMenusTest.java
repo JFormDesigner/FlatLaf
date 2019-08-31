@@ -54,6 +54,14 @@ public class FlatMenusTest
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		JLabel menuBarLabel = new JLabel();
+		JMenuBar menuBar1 = new JMenuBar();
+		JMenu menu5 = new JMenu();
+		JMenuItem menuItem7 = new JMenuItem();
+		JMenuItem menuItem8 = new JMenuItem();
+		JMenu menu6 = new JMenu();
+		JMenuItem menuItem5 = new JMenuItem();
+		JMenuItem menuItem6 = new JMenuItem();
 		JPanel panel1 = new JPanel();
 		JLabel menuLabel = new JLabel();
 		JMenu menu1 = new JMenu();
@@ -84,20 +92,60 @@ public class FlatMenusTest
 		setLayout(new MigLayout(
 			"insets 0,hidemode 3,gap 5 5,ltr",
 			// columns
+			"[125]" +
 			"[]" +
 			"[]" +
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
 			"[top]" +
+			"[]" +
 			"[]"));
+
+		//---- menuBarLabel ----
+		menuBarLabel.setText("JMenuBar:");
+		add(menuBarLabel, "cell 0 0");
+
+		//======== menuBar1 ========
+		{
+
+			//======== menu5 ========
+			{
+				menu5.setText("text");
+
+				//---- menuItem7 ----
+				menuItem7.setText("text");
+				menu5.add(menuItem7);
+
+				//---- menuItem8 ----
+				menuItem8.setText("text");
+				menu5.add(menuItem8);
+			}
+			menuBar1.add(menu5);
+
+			//======== menu6 ========
+			{
+				menu6.setText("text");
+
+				//---- menuItem5 ----
+				menuItem5.setText("text");
+				menu6.add(menuItem5);
+
+				//---- menuItem6 ----
+				menuItem6.setText("text");
+				menu6.add(menuItem6);
+			}
+			menuBar1.add(menu6);
+		}
+		add(menuBar1, "cell 1 0 4 1,growx");
 
 		//======== panel1 ========
 		{
 			panel1.setLayout(new MigLayout(
 				"insets 0,hidemode 3,gap 5 5,ltr",
 				// columns
-				"[left]" +
+				"[125,left]" +
 				"[fill]",
 				// rows
 				"[]" +
@@ -142,12 +190,12 @@ public class FlatMenusTest
 			radioButtonMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			panel1.add(radioButtonMenuItem1, "cell 1 3");
 		}
-		add(panel1, "cell 0 0");
+		add(panel1, "cell 0 1 2 1");
 
 		//======== panel2 ========
 		{
 			panel2.setLayout(new MigLayout(
-				"insets 0,hidemode 3,gap 5 5",
+				"insets 0,gap 5 5",
 				// columns
 				"[fill]",
 				// rows
@@ -181,7 +229,7 @@ public class FlatMenusTest
 			radioButtonMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			panel2.add(radioButtonMenuItem2, "cell 0 3");
 		}
-		add(panel2, "cell 1 0");
+		add(panel2, "cell 2 1");
 
 		//======== panel3 ========
 		{
@@ -220,7 +268,7 @@ public class FlatMenusTest
 			radioButtonMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			panel3.add(radioButtonMenuItem3, "cell 0 3");
 		}
-		add(panel3, "cell 2 0");
+		add(panel3, "cell 3 1");
 
 		//======== panel4 ========
 		{
@@ -262,13 +310,13 @@ public class FlatMenusTest
 			radioButtonMenuItem4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			panel4.add(radioButtonMenuItem4, "cell 0 3");
 		}
-		add(panel4, "cell 3 0");
+		add(panel4, "cell 4 1");
 
 		//---- armedCheckBox ----
 		armedCheckBox.setText("armed");
 		armedCheckBox.setMnemonic('A');
 		armedCheckBox.addActionListener(e -> armedChanged());
-		add(armedCheckBox, "cell 0 1");
+		add(armedCheckBox, "cell 0 2 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
