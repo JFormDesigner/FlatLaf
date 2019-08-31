@@ -1,0 +1,214 @@
+JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
+			"$columnConstraints": "[][][][]"
+			"$rowConstraints": "[top][]"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[left][fill]"
+				"$rowConstraints": "[][][][]"
+				"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "menuLabel"
+					"text": "JMenu:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu1"
+					"text": "enabled"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "menuItemLabel"
+					"text": "JMenuItem:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem1"
+					"text": "enabled"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 65, 130, false )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "checkBoxMenuItemLabel"
+					"text": "JCheckBoxMenuItem:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+					name: "checkBoxMenuItem1"
+					"text": "enabled"
+					"accelerator": &KeyStroke0 static javax.swing.KeyStroke getKeyStroke( 112, 0, false )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 2"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "radioButtonMenuItemLabel"
+					"text": "JRadioButtonMenuItem:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+					name: "radioButtonMenuItem1"
+					"text": "enabled"
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 3"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[fill]"
+				"$rowConstraints": "[][][][]"
+				"$layoutConstraints": "insets 0,hidemode 3,gap 5 5"
+			} ) {
+				name: "panel2"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu2"
+					"text": "disabled"
+					"enabled": false
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem2"
+					"text": "disabled"
+					"enabled": false
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 68, 585, false )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+					name: "checkBoxMenuItem2"
+					"text": "disabled"
+					"enabled": false
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+					name: "radioButtonMenuItem2"
+					"text": "disabled"
+					"enabled": false
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[fill]"
+				"$rowConstraints": "[][][][]"
+				"$layoutConstraints": "insets 0,gap 5 5"
+			} ) {
+				name: "panel3"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu3"
+					"text": "text"
+					"visible": false
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem3"
+					"text": "selected"
+					"selected": true
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+					name: "checkBoxMenuItem3"
+					"text": "selected"
+					"selected": true
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+					name: "radioButtonMenuItem3"
+					"text": "selected"
+					"selected": true
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[fill]"
+				"$rowConstraints": "[][][][]"
+				"$layoutConstraints": "insets 0,gap 5 5"
+			} ) {
+				name: "panel4"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu4"
+					"text": "text"
+					"visible": false
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem4"
+					"text": "selected disabled"
+					"selected": true
+					"enabled": false
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+					name: "checkBoxMenuItem4"
+					"text": "selected disabled"
+					"enabled": false
+					"selected": true
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+					name: "radioButtonMenuItem4"
+					"text": "selected disabled"
+					"enabled": false
+					"selected": true
+					"accelerator": #KeyStroke0
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "armedCheckBox"
+				"text": "armed"
+				"mnemonic": 65
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "armedChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 790, 715 )
+		} )
+	}
+}
