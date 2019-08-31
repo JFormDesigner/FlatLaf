@@ -140,6 +140,7 @@ public abstract class FlatLaf
 			if( key instanceof String && ((String)key).endsWith( ".font" ) )
 				defaults.put( key, uiFont );
 		}
+		defaults.put( "MenuItem.acceleratorFont", uiFont );
 	}
 
 	/**
