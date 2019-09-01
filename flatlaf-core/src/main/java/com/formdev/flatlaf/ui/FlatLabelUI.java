@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicLabelUI;
-import sun.swing.SwingUtilities2;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JLabel}.
@@ -59,6 +58,6 @@ public class FlatLabelUI
 	protected void paintDisabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
 		int mnemIndex = l.getDisplayedMnemonicIndex();
 		g.setColor( disabledForeground );
-		SwingUtilities2.drawStringUnderlineCharAt( l, g, s, mnemIndex, textX, textY );
+		FlatUIUtils.drawStringUnderlineCharAt( l, g, s, mnemIndex, textX, textY );
 	}
 }

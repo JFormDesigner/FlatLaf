@@ -27,6 +27,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -155,5 +156,14 @@ public class FlatUIUtils
 		rect.quadTo( x1, y1, x1 + arc, y1 );
 		rect.closePath();
 		return rect;
+	}
+
+	/**
+	 * Replacement for SwingUtilities2.drawStringUnderlineCharAt()
+	 */
+	public static void drawStringUnderlineCharAt( JComponent c, Graphics g,
+		String text, int underlinedIndex, int x, int y )
+	{
+		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, underlinedIndex, x, y );
 	}
 }

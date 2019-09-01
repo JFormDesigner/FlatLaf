@@ -29,7 +29,6 @@ import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonUI;
-import sun.swing.SwingUtilities2;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JButton}.
@@ -109,11 +108,11 @@ public class FlatButtonUI
 	@Override
 	protected void paintText( Graphics g, JComponent c, Rectangle textRect, String text ) {
 		AbstractButton b = (AbstractButton) c;
-		FontMetrics fm = SwingUtilities2.getFontMetrics( c, g );
+		FontMetrics fm = c.getFontMetrics( c.getFont() );
 		int mnemonicIndex = b.getDisplayedMnemonicIndex();
 
 		g.setColor( b.getModel().isEnabled() ? getForeground( c ) : disabledText );
-		SwingUtilities2.drawStringUnderlineCharAt( c, g, text, mnemonicIndex,
+		FlatUIUtils.drawStringUnderlineCharAt( c, g, text, mnemonicIndex,
 			textRect.x + getTextShiftOffset(),
 			textRect.y + fm.getAscent() + getTextShiftOffset() );
 	}
