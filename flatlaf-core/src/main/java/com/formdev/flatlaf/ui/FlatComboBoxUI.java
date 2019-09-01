@@ -32,14 +32,18 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -175,6 +179,11 @@ public class FlatComboBoxUI
 	}
 
 	@Override
+	protected ComboPopup createPopup() {
+		return new FlatComboPopup( comboBox );
+	}
+
+	@Override
 	protected void configureEditor() {
 		super.configureEditor();
 
@@ -278,5 +287,25 @@ public class FlatComboBoxUI
 	public void paintCurrentValueBackground( Graphics g, Rectangle bounds, boolean hasFocus ) {
 		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : disabledBackground );
 		g.fillRect( bounds.x, bounds.y, bounds.width, bounds.height );
+	}
+
+	//---- class FlatComboPopup -----------------------------------------------
+
+	private class FlatComboPopup
+		extends BasicComboPopup
+	{
+		@SuppressWarnings( "rawtypes" )
+		FlatComboPopup( JComboBox combo ) {
+			super( combo );
+		}
+
+		@Override
+		protected void configurePopup() {
+			super.configurePopup();
+
+			Border border = UIManager.getBorder( "PopupMenu.border" );
+			if( border != null )
+				setBorder( border );
+		}
 	}
 }
