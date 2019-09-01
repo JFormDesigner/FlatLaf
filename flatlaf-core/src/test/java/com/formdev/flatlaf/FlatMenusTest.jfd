@@ -49,7 +49,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[125,left][fill]"
-				"$rowConstraints": "[][][][]"
+				"$rowConstraints": "[][][][][]"
 				"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			} ) {
 				name: "panel1"
@@ -104,12 +104,23 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 3"
 				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "popupMenuSeparatorLabel"
+					"text": "JPopupMenu.Separator:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator1"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 4"
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1 2 1"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][][][]"
+				"$rowConstraints": "[][][][][]"
 				"$layoutConstraints": "insets 0,gap 5 5"
 			} ) {
 				name: "panel2"
@@ -230,6 +241,19 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "popupMenuLabel"
+				"text": "JPopupMenu:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showPopupMenuButton"
+				"text": "show JPopupMenu"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showPopupMenuButtonActionPerformed", true ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "armedCheckBox"
 				"text": "armed"
@@ -239,11 +263,48 @@ new FormModel {
 				}
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "armedChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2 2 1"
+				"value": "cell 0 3"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 790, 715 )
+			"size": new java.awt.Dimension( 790, 380 )
+		} )
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "popupMenu1"
+			auxiliary() {
+				"JavaCodeGenerator.variableLocal": false
+				"JavaCodeGenerator.className": "PopupMenu"
+			}
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem9"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem10"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+				name: "separator2"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+				name: "checkBoxMenuItem5"
+				"text": "text"
+				"selected": true
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "menu7"
+				"text": "text"
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem11"
+					"text": "text"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem12"
+					"text": "text"
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 430 )
 		} )
 	}
 }

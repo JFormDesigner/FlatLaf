@@ -23,18 +23,27 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 import javax.swing.JSeparator;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSeparatorUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSeparator}.
  *
+ * @uiDefault Separator.background		Color	unused
+ * @uiDefault Separator.foreground		Color
+ * @uiDefault Separator.height			int		height (or width) of the component; may be larger than stripe
+ * @uiDefault Separator.stripeWidth		int		width of the stripe
+ * @uiDefault Separator.stripeIndent	int		indent of stripe from top (or left); allows positioning of stripe within component
+ *
  * @author Karl Tauber
  */
 public class FlatSeparatorUI
 	extends BasicSeparatorUI
 {
-	private static final int WIDTH = 2;
+	protected int height;
+	protected int stripeWidth;
+	protected int stripeIndent;
 
 	private static ComponentUI instance;
 
@@ -45,20 +54,43 @@ public class FlatSeparatorUI
 	}
 
 	@Override
-	public void paint( Graphics g, JComponent c ) {
-		g.setColor( c.getForeground() );
+	protected void installDefaults( JSeparator s ) {
+		super.installDefaults( s );
 
-		if( ((JSeparator)c).getOrientation() == JSeparator.VERTICAL )
-			((Graphics2D)g).fill( new Rectangle2D.Float( 0, 0, scale( (float) WIDTH ), c.getHeight() ) );
-		else
-			((Graphics2D)g).fill( new Rectangle2D.Float( 0, 0, c.getWidth(), scale( (float) WIDTH ) ) );
+		String prefix = getPropertyPrefix();
+		height = UIManager.getInt( prefix + ".height" );
+		stripeWidth = UIManager.getInt( prefix + ".stripeWidth" );
+		stripeIndent = UIManager.getInt( prefix + ".stripeIndent" );
+	}
+
+	protected String getPropertyPrefix() {
+		return "Separator";
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		Graphics2D g2 = (Graphics2D) g.create();
+		try {
+			FlatUIUtils.setRenderingHints( g2 );
+			g2.setColor( c.getForeground() );
+
+			float width = scale( (float) stripeWidth );
+			float indent = scale( (float) stripeIndent );
+
+			if( ((JSeparator)c).getOrientation() == JSeparator.VERTICAL )
+				g2.fill( new Rectangle2D.Float( indent, 0, width, c.getHeight() ) );
+			else
+				g2.fill( new Rectangle2D.Float( 0, indent, c.getWidth(), width ) );
+		} finally {
+			g2.dispose();
+		}
 	}
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
 		if( ((JSeparator) c).getOrientation() == JSeparator.VERTICAL )
-			return new Dimension( scale( WIDTH ), 0 );
+			return new Dimension( scale( height ), 0 );
 		else
-			return new Dimension( 0, scale( WIDTH ) );
+			return new Dimension( 0, scale( height ) );
 	}
 }

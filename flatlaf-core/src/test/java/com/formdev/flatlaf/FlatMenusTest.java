@@ -52,6 +52,13 @@ public class FlatMenusTest
 		}
 	}
 
+	private void showPopupMenuButtonActionPerformed(ActionEvent e) {
+		Component invoker = (Component) e.getSource();
+		PopupMenu popupMenu = new PopupMenu();
+		popupMenu.applyComponentOrientation( getComponentOrientation() );
+		popupMenu.show( invoker, 0, invoker.getHeight() );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel menuBarLabel = new JLabel();
@@ -71,6 +78,8 @@ public class FlatMenusTest
 		JCheckBoxMenuItem checkBoxMenuItem1 = new JCheckBoxMenuItem();
 		JLabel radioButtonMenuItemLabel = new JLabel();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
+		JLabel popupMenuSeparatorLabel = new JLabel();
+		JPopupMenu.Separator separator1 = new JPopupMenu.Separator();
 		JPanel panel2 = new JPanel();
 		JMenu menu2 = new JMenu();
 		JMenuItem menuItem2 = new JMenuItem();
@@ -86,6 +95,8 @@ public class FlatMenusTest
 		JMenuItem menuItem4 = new JMenuItem();
 		JCheckBoxMenuItem checkBoxMenuItem4 = new JCheckBoxMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem4 = new JRadioButtonMenuItem();
+		JLabel popupMenuLabel = new JLabel();
+		JButton showPopupMenuButton = new JButton();
 		armedCheckBox = new JCheckBox();
 
 		//======== this ========
@@ -151,6 +162,7 @@ public class FlatMenusTest
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- menuLabel ----
@@ -189,6 +201,11 @@ public class FlatMenusTest
 			radioButtonMenuItem1.setText("enabled");
 			radioButtonMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			panel1.add(radioButtonMenuItem1, "cell 1 3");
+
+			//---- popupMenuSeparatorLabel ----
+			popupMenuSeparatorLabel.setText("JPopupMenu.Separator:");
+			panel1.add(popupMenuSeparatorLabel, "cell 0 4");
+			panel1.add(separator1, "cell 1 4");
 		}
 		add(panel1, "cell 0 1 2 1");
 
@@ -199,6 +216,7 @@ public class FlatMenusTest
 				// columns
 				"[fill]",
 				// rows
+				"[]" +
 				"[]" +
 				"[]" +
 				"[]" +
@@ -312,15 +330,74 @@ public class FlatMenusTest
 		}
 		add(panel4, "cell 4 1");
 
+		//---- popupMenuLabel ----
+		popupMenuLabel.setText("JPopupMenu:");
+		add(popupMenuLabel, "cell 0 2");
+
+		//---- showPopupMenuButton ----
+		showPopupMenuButton.setText("show JPopupMenu");
+		showPopupMenuButton.addActionListener(e -> showPopupMenuButtonActionPerformed(e));
+		add(showPopupMenuButton, "cell 1 2");
+
 		//---- armedCheckBox ----
 		armedCheckBox.setText("armed");
 		armedCheckBox.setMnemonic('A');
 		armedCheckBox.addActionListener(e -> armedChanged());
-		add(armedCheckBox, "cell 0 2 2 1");
+		add(armedCheckBox, "cell 0 3");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox armedCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	private class PopupMenu extends JPopupMenu {
+		private PopupMenu() {
+			initComponents();
+		}
+
+		private void initComponents() {
+			// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+			JMenuItem menuItem9 = new JMenuItem();
+			JMenuItem menuItem10 = new JMenuItem();
+			JCheckBoxMenuItem checkBoxMenuItem5 = new JCheckBoxMenuItem();
+			JMenu menu7 = new JMenu();
+			JMenuItem menuItem11 = new JMenuItem();
+			JMenuItem menuItem12 = new JMenuItem();
+
+			//======== this ========
+
+			//---- menuItem9 ----
+			menuItem9.setText("text");
+			add(menuItem9);
+
+			//---- menuItem10 ----
+			menuItem10.setText("text");
+			add(menuItem10);
+			addSeparator();
+
+			//---- checkBoxMenuItem5 ----
+			checkBoxMenuItem5.setText("text");
+			checkBoxMenuItem5.setSelected(true);
+			add(checkBoxMenuItem5);
+
+			//======== menu7 ========
+			{
+				menu7.setText("text");
+
+				//---- menuItem11 ----
+				menuItem11.setText("text");
+				menu7.add(menuItem11);
+
+				//---- menuItem12 ----
+				menuItem12.setText("text");
+				menu7.add(menuItem12);
+			}
+			add(menu7);
+			// JFormDesigner - End of component initialization  //GEN-END:initComponents
+		}
+
+		// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+		// JFormDesigner - End of variables declaration  //GEN-END:variables
+	}
 }
