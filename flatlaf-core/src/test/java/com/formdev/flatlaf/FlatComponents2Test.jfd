@@ -165,6 +165,7 @@ new FormModel {
 						add( new com.jformdesigner.model.SwingTableColumn( new java.lang.Object[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], 0, 0, 0, true ) )
 						add( null )
 					} )
+					"autoCreateRowSorter": true
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 4 2 1,growx,width 300"

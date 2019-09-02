@@ -233,6 +233,7 @@ public class FlatComponents2Test
 						"December"
 					}))));
 			}
+			table1.setAutoCreateRowSorter(true);
 			scrollPane5.setViewportView(table1);
 		}
 		add(scrollPane5, "cell 1 4 2 1,growx,width 300");
