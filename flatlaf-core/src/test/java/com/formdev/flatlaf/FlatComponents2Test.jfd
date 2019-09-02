@@ -131,6 +131,7 @@ new FormModel {
 							add( "Item 2a" )
 							add( "January" )
 							add( "July" )
+							add( 123 )
 							add( null )
 						} )
 						add( new java.util.Vector {
@@ -138,6 +139,7 @@ new FormModel {
 							add( "Item 2b" )
 							add( "February" )
 							add( "August" )
+							add( 456 )
 							add( true )
 						} )
 					}, new java.util.Vector {
@@ -145,12 +147,14 @@ new FormModel {
 						add( "Text" )
 						add( "Combo" )
 						add( "Combo Editable" )
+						add( "Integer" )
 						add( "Boolean" )
 					}, new java.util.Vector {
 						add( null )
 						add( null )
 						add( class java.lang.String )
 						add( class java.lang.String )
+						add( class java.lang.Integer )
 						add( class java.lang.Boolean )
 					}, new java.util.Vector {
 						add( false )
@@ -158,11 +162,13 @@ new FormModel {
 						add( null )
 						add( null )
 						add( null )
+						add( null )
 					}, new java.util.Vector {
 						add( null )
 						add( null )
 						add( new com.jformdesigner.model.SwingTableColumn( new java.lang.Object[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], 0, 0, 0, true ) )
 						add( new com.jformdesigner.model.SwingTableColumn( new java.lang.Object[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], 0, 0, 0, true ) )
+						add( null )
 						add( null )
 					} )
 					"autoCreateRowSorter": true

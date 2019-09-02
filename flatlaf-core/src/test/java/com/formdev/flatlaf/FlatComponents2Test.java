@@ -178,18 +178,18 @@ public class FlatComponents2Test
 			//---- table1 ----
 			table1.setModel(new DefaultTableModel(
 				new Object[][] {
-					{"Item 1a", "Item 2a", "January", "July", null},
-					{"Item 1b", "Item 2b", "February", "August", true},
+					{"Item 1a", "Item 2a", "January", "July", 123, null},
+					{"Item 1b", "Item 2b", "February", "August", 456, true},
 				},
 				new String[] {
-					"Not editable", "Text", "Combo", "Combo Editable", "Boolean"
+					"Not editable", "Text", "Combo", "Combo Editable", "Integer", "Boolean"
 				}
 			) {
 				Class<?>[] columnTypes = new Class<?>[] {
-					Object.class, Object.class, String.class, String.class, Boolean.class
+					Object.class, Object.class, String.class, String.class, Integer.class, Boolean.class
 				};
 				boolean[] columnEditable = new boolean[] {
-					false, true, true, true, true
+					false, true, true, true, true, true
 				};
 				@Override
 				public Class<?> getColumnClass(int columnIndex) {
