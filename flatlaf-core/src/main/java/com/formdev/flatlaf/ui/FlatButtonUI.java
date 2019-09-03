@@ -83,7 +83,7 @@ public class FlatButtonUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		if( c.isOpaque() && FlatButtonUI.isContentAreaFilled( c ) ) {
+		if( c.isOpaque() && isContentAreaFilled( c ) ) {
 			FlatUIUtils.paintParentBackground( g, c );
 
 			if( c.isEnabled() ) {
@@ -118,12 +118,12 @@ public class FlatButtonUI
 	}
 
 	private Color getBackground( Component c ) {
-		boolean def = FlatButtonUI.isDefaultButton( c );
+		boolean def = isDefaultButton( c );
 		return def ? defaultBackground : c.getBackground();
 	}
 
 	private Color getForeground( Component c ) {
-		boolean def = FlatButtonUI.isDefaultButton( c );
+		boolean def = isDefaultButton( c );
 		return def ? defaultForeground : c.getForeground();
 	}
 }
