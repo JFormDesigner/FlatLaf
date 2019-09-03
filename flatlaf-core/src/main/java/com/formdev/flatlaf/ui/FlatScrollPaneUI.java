@@ -17,8 +17,10 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.FocusEvent;
@@ -27,7 +29,9 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 
 /**
@@ -42,6 +46,22 @@ public class FlatScrollPaneUI
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatScrollPaneUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		if( scrollpane.getLayout() instanceof UIResource )
+			scrollpane.setLayout( new FlatScrollPaneLayout() );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		if( scrollpane.getLayout() instanceof FlatScrollPaneLayout )
+			scrollpane.setLayout( new ScrollPaneLayout.UIResource() );
+
+		super.uninstallUI( c );
 	}
 
 	@Override
@@ -142,6 +162,29 @@ public class FlatScrollPaneUI
 		@Override
 		public void focusLost( FocusEvent e ) {
 			scrollpane.repaint();
+		}
+	}
+
+	//---- class FlatScrollPaneLayout -----------------------------------------
+
+	private static class FlatScrollPaneLayout
+		extends ScrollPaneLayout
+	{
+		@Override
+		public void layoutContainer( Container parent ) {
+			super.layoutContainer( parent );
+
+			// increase height of vertical scroll bar so that it also fills the upper right corner
+			if( colHead != null && vsb != null && colHead.isVisible() && vsb.isVisible() ) {
+				Rectangle colHeadBounds = colHead.getBounds();
+				Rectangle vsbBounds = vsb.getBounds();
+
+				if( vsbBounds.y > colHeadBounds.y ) {
+					vsbBounds.height += (vsbBounds.y - colHeadBounds.y);
+					vsbBounds.y = colHeadBounds.y;
+					vsb.setBounds( vsbBounds );
+				}
+			}
 		}
 	}
 }
