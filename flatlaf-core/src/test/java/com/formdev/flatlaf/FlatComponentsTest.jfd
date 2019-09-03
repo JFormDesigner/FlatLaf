@@ -54,27 +54,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "button3"
-				"text": "selected"
-				"selected": true
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 1"
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "button4"
-				"text": "selected disabled"
-				"selected": true
-				"enabled": false
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 1"
-			} )
 			add( new FormComponent( "com.formdev.flatlaf.FlatComponentsTest$TestDefaultButton" ) {
 				name: "button5"
 				"text": "default"
 				"displayedMnemonicIndex": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "checkBoxLabel"
@@ -85,7 +70,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "checkBox1"
 				"text": "enabled"
-				"mnemonic": 69
+				"mnemonic": 65
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
@@ -575,7 +560,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 12 1 4"
+				"value": "cell 4 12 1 4,growy"
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar4"
@@ -586,7 +571,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 12 1 4"
+				"value": "cell 4 12 1 4,growy"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "scrollBarLabel"
@@ -628,14 +613,14 @@ new FormModel {
 				name: "slider1"
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 16,aligny top,grow 100 0"
+				"value": "cell 1 16 3 1,aligny top,grow 100 0"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider6"
 				"enabled": false
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 16,aligny top,grow 100 0"
+				"value": "cell 1 16 3 1,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider3"
@@ -645,7 +630,7 @@ new FormModel {
 				"paintLabels": true
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 17,aligny top,grow 100 0"
+				"value": "cell 1 17 3 1,aligny top,grow 100 0"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider5"
@@ -656,7 +641,7 @@ new FormModel {
 				"enabled": false
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 17,aligny top,grow 100 0"
+				"value": "cell 1 17 3 1,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "progressBarLabel"
@@ -671,7 +656,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 18"
+				"value": "cell 1 18 3 1,growx"
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar2"
@@ -681,7 +666,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 18"
+				"value": "cell 1 18 3 1,growx"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "indeterminateCheckBox"

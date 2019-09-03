@@ -51,8 +51,6 @@ public class FlatComponentsTest
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
-		JButton button3 = new JButton();
-		JButton button4 = new JButton();
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
@@ -204,21 +202,10 @@ public class FlatComponentsTest
 		button2.setEnabled(false);
 		add(button2, "cell 2 1");
 
-		//---- button3 ----
-		button3.setText("selected");
-		button3.setSelected(true);
-		add(button3, "cell 3 1");
-
-		//---- button4 ----
-		button4.setText("selected disabled");
-		button4.setSelected(true);
-		button4.setEnabled(false);
-		add(button4, "cell 4 1");
-
 		//---- button5 ----
 		button5.setText("default");
 		button5.setDisplayedMnemonicIndex(0);
-		add(button5, "cell 5 1");
+		add(button5, "cell 3 1");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
@@ -226,7 +213,7 @@ public class FlatComponentsTest
 
 		//---- checkBox1 ----
 		checkBox1.setText("enabled");
-		checkBox1.setMnemonic('E');
+		checkBox1.setMnemonic('A');
 		add(checkBox1, "cell 1 2");
 
 		//---- checkBox2 ----
@@ -615,13 +602,13 @@ public class FlatComponentsTest
 		//---- progressBar3 ----
 		progressBar3.setOrientation(SwingConstants.VERTICAL);
 		progressBar3.setValue(50);
-		add(progressBar3, "cell 4 12 1 4");
+		add(progressBar3, "cell 4 12 1 4,growy");
 
 		//---- progressBar4 ----
 		progressBar4.setOrientation(SwingConstants.VERTICAL);
 		progressBar4.setValue(55);
 		progressBar4.setStringPainted(true);
-		add(progressBar4, "cell 4 12 1 4");
+		add(progressBar4, "cell 4 12 1 4,growy");
 
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
@@ -647,12 +634,12 @@ public class FlatComponentsTest
 
 		//---- slider1 ----
 		slider1.setValue(30);
-		add(slider1, "cell 1 16,aligny top,grow 100 0");
+		add(slider1, "cell 1 16 3 1,aligny top,grow 100 0");
 
 		//---- slider6 ----
 		slider6.setEnabled(false);
 		slider6.setValue(30);
-		add(slider6, "cell 2 16,aligny top,grow 100 0");
+		add(slider6, "cell 1 16 3 1,aligny top,growy 0");
 
 		//---- slider3 ----
 		slider3.setMinorTickSpacing(10);
@@ -660,7 +647,7 @@ public class FlatComponentsTest
 		slider3.setMajorTickSpacing(50);
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
-		add(slider3, "cell 1 17,aligny top,grow 100 0");
+		add(slider3, "cell 1 17 3 1,aligny top,grow 100 0");
 
 		//---- slider5 ----
 		slider5.setMinorTickSpacing(10);
@@ -669,7 +656,7 @@ public class FlatComponentsTest
 		slider5.setPaintLabels(true);
 		slider5.setEnabled(false);
 		slider5.setValue(30);
-		add(slider5, "cell 2 17,aligny top,grow 100 0");
+		add(slider5, "cell 1 17 3 1,aligny top,growy 0");
 
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
@@ -677,12 +664,12 @@ public class FlatComponentsTest
 
 		//---- progressBar1 ----
 		progressBar1.setValue(50);
-		add(progressBar1, "cell 1 18");
+		add(progressBar1, "cell 1 18 3 1,growx");
 
 		//---- progressBar2 ----
 		progressBar2.setStringPainted(true);
 		progressBar2.setValue(55);
-		add(progressBar2, "cell 3 18");
+		add(progressBar2, "cell 1 18 3 1,growx");
 
 		//---- indeterminateCheckBox ----
 		indeterminateCheckBox.setText("indeterminate");
