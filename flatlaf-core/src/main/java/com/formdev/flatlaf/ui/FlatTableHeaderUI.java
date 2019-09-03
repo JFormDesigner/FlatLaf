@@ -121,7 +121,8 @@ public class FlatTableHeaderUI
 				int x = width;
 				for( int i = 0; i < sepCount; i++ ) {
 					x -= columnModel.getColumn( i ).getWidth();
-					g2.fill( new Rectangle2D.Float( x - lineWidth, topLineIndent, lineWidth, height - bottomLineIndent ) );
+					g2.fill( new Rectangle2D.Float( x - (i < sepCount - 1 ? lineWidth : 0),
+						topLineIndent, lineWidth, height - bottomLineIndent ) );
 				}
 			}
 		} finally {
