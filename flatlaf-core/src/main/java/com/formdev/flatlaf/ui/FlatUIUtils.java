@@ -27,6 +27,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -55,6 +56,10 @@ public class FlatUIUtils
 	public static int getUIInt( String key, int defaultValue ) {
 		Object value = UIManager.get( key );
 		return (value instanceof Integer) ? (Integer) value : defaultValue;
+	}
+
+	public static Color nonUIResource( Color c ) {
+		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
 	}
 
 	/**

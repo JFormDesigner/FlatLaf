@@ -170,15 +170,11 @@ public class FlatSpinnerUI
 			// use non-UIResource colors because when SwingUtilities.updateComponentTreeUI()
 			// is used, then the text field is updated after the spinner and the
 			// colors are again replaced with default colors
-			textField.setBackground( nonUIResource( spinner.isEnabled()
+			textField.setBackground( FlatUIUtils.nonUIResource( spinner.isEnabled()
 				? spinner.getBackground() : disabledBackground ) );
-			textField.setForeground( nonUIResource( spinner.getForeground() ) );
-			textField.setDisabledTextColor( nonUIResource( disabledForeground ) );
+			textField.setForeground( FlatUIUtils.nonUIResource( spinner.getForeground() ) );
+			textField.setDisabledTextColor( FlatUIUtils.nonUIResource( disabledForeground ) );
 		}
-	}
-
-	private Color nonUIResource( Color c ) {
-		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
 	}
 
 	private JTextField getEditorTextField( JComponent editor ) {

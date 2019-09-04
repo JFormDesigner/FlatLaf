@@ -126,6 +126,11 @@ public class FlatComponentsTest
 		JScrollPane scrollPane14 = new JScrollPane();
 		progressBar3 = new JProgressBar();
 		progressBar4 = new JProgressBar();
+		JToolBar toolBar2 = new JToolBar();
+		JButton button9 = new JButton();
+		JButton button10 = new JButton();
+		JButton button11 = new JButton();
+		JToggleButton toggleButton7 = new JToggleButton();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
@@ -142,6 +147,13 @@ public class FlatComponentsTest
 		indeterminateCheckBox = new JCheckBox();
 		JLabel toolTipLabel = new JLabel();
 		JToolTip toolTip1 = new JToolTip();
+		JLabel toolBarLabel = new JLabel();
+		JToolBar toolBar1 = new JToolBar();
+		JButton button4 = new JButton();
+		JButton button6 = new JButton();
+		JButton button7 = new JButton();
+		JButton button8 = new JButton();
+		JToggleButton toggleButton6 = new JToggleButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -154,6 +166,7 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -613,6 +626,29 @@ public class FlatComponentsTest
 		progressBar4.setStringPainted(true);
 		add(progressBar4, "cell 4 12 1 4,growy");
 
+		//======== toolBar2 ========
+		{
+			toolBar2.setOrientation(SwingConstants.VERTICAL);
+
+			//---- button9 ----
+			button9.setIcon(UIManager.getIcon("Tree.closedIcon"));
+			toolBar2.add(button9);
+
+			//---- button10 ----
+			button10.setIcon(UIManager.getIcon("Tree.openIcon"));
+			toolBar2.add(button10);
+			toolBar2.addSeparator();
+
+			//---- button11 ----
+			button11.setIcon(UIManager.getIcon("Tree.leafIcon"));
+			toolBar2.add(button11);
+
+			//---- toggleButton7 ----
+			toggleButton7.setIcon(UIManager.getIcon("Tree.closedIcon"));
+			toolBar2.add(toggleButton7);
+		}
+		add(toolBar2, "cell 4 12 1 4,growy");
+
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
 		add(scrollBarLabel, "cell 0 13");
@@ -686,6 +722,39 @@ public class FlatComponentsTest
 		//---- toolTip1 ----
 		toolTip1.setTipText("Some text in tool tip.");
 		add(toolTip1, "cell 1 19 3 1");
+
+		//---- toolBarLabel ----
+		toolBarLabel.setText("JToolBar:");
+		add(toolBarLabel, "cell 0 20");
+
+		//======== toolBar1 ========
+		{
+
+			//---- button4 ----
+			button4.setIcon(UIManager.getIcon("Tree.closedIcon"));
+			toolBar1.add(button4);
+
+			//---- button6 ----
+			button6.setIcon(UIManager.getIcon("Tree.openIcon"));
+			toolBar1.add(button6);
+			toolBar1.addSeparator();
+
+			//---- button7 ----
+			button7.setIcon(UIManager.getIcon("Tree.leafIcon"));
+			toolBar1.add(button7);
+			toolBar1.addSeparator();
+
+			//---- button8 ----
+			button8.setText("Text");
+			button8.setIcon(UIManager.getIcon("Tree.expandedIcon"));
+			toolBar1.add(button8);
+
+			//---- toggleButton6 ----
+			toggleButton6.setText("Toggle");
+			toggleButton6.setIcon(UIManager.getIcon("Tree.leafIcon"));
+			toolBar1.add(toggleButton6);
+		}
+		add(toolBar1, "cell 1 20 3 1,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

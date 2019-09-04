@@ -39,7 +39,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
@@ -203,16 +202,12 @@ public class FlatComboBoxUI
 		// is used, then the editor is updated after the combobox and the
 		// colors are again replaced with default colors
 		boolean enabled = editor.isEnabled();
-		editor.setBackground( nonUIResource( enabled ? comboBox.getBackground() : disabledBackground ) );
-		editor.setForeground( nonUIResource( (enabled || editor instanceof JTextComponent)
+		editor.setBackground( FlatUIUtils.nonUIResource( enabled ? comboBox.getBackground() : disabledBackground ) );
+		editor.setForeground( FlatUIUtils.nonUIResource( (enabled || editor instanceof JTextComponent)
 			? comboBox.getForeground()
 			: disabledForeground ) );
 		if( editor instanceof JTextComponent )
-			((JTextComponent)editor).setDisabledTextColor( nonUIResource( disabledForeground ) );
-	}
-
-	private Color nonUIResource( Color c ) {
-		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
+			((JTextComponent)editor).setDisabledTextColor( FlatUIUtils.nonUIResource( disabledForeground ) );
 	}
 
 	@Override
