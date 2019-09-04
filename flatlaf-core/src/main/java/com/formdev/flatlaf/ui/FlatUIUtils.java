@@ -26,6 +26,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
+import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.util.JavaCompatibility;
@@ -60,6 +61,10 @@ public class FlatUIUtils
 
 	public static Color nonUIResource( Color c ) {
 		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
+	}
+
+	public static boolean isToolBarButton( JComponent c ) {
+		return c.getParent() instanceof JToolBar;
 	}
 
 	/**

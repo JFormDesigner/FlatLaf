@@ -24,9 +24,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
@@ -40,6 +42,8 @@ import javax.swing.plaf.basic.BasicButtonUI;
  * @uiDefault Button.disabledText				Color
  * @uiDefault Button.default.background			Color
  * @uiDefault Button.default.foreground			Color
+ * @uiDefault Button.toolbar.hoverBackground	Color
+ * @uiDefault Button.toolbar.pressedBackground	Color
  *
  * @author Karl Tauber
  */
@@ -52,6 +56,8 @@ public class FlatButtonUI
 	protected Color disabledText;
 	protected Color defaultBackground;
 	protected Color defaultForeground;
+	protected Color toolbarHoverBackground;
+	protected Color toolbarPressedBackground;
 
 	private static ComponentUI instance;
 
@@ -71,6 +77,8 @@ public class FlatButtonUI
 		disabledText = UIManager.getColor( "Button.disabledText" );
 		defaultBackground = UIManager.getColor( "Button.default.background" );
 		defaultForeground = UIManager.getColor( "Button.default.foreground" );
+		toolbarHoverBackground = UIManager.getColor( "Button.toolbar.hoverBackground" );
+		toolbarPressedBackground = UIManager.getColor( "Button.toolbar.pressedBackground" );
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
@@ -91,8 +99,9 @@ public class FlatButtonUI
 				try {
 					FlatUIUtils.setRenderingHints( g2 );
 
-					float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-					float arc = (c.getBorder() instanceof FlatButtonBorder) ? scale( (float) this.arc ) : 0;
+					Border border = c.getBorder();
+					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+					float arc = (border instanceof FlatButtonBorder || FlatUIUtils.isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
 
 					g2.setColor( getBackground( c ) );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
@@ -117,7 +126,20 @@ public class FlatButtonUI
 			textRect.y + fm.getAscent() + getTextShiftOffset() );
 	}
 
-	private Color getBackground( Component c ) {
+	private Color getBackground( JComponent c ) {
+		ButtonModel model = ((AbstractButton)c).getModel();
+
+		// toolbar button
+		if( FlatUIUtils.isToolBarButton( c ) ) {
+			if( model.isPressed() )
+				return toolbarPressedBackground;
+			if( model.isRollover() )
+				return toolbarHoverBackground;
+
+			// use background of toolbar
+			return c.getParent().getBackground();
+		}
+
 		boolean def = isDefaultButton( c );
 		return def ? defaultBackground : c.getBackground();
 	}

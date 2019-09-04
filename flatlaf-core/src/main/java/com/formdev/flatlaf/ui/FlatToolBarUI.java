@@ -17,11 +17,8 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
-import java.util.HashMap;
-import java.util.Objects;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -44,10 +41,6 @@ public class FlatToolBarUI
 	extends BasicToolBarUI
 {
 	private Border rolloverBorder;
-	private final HashMap<AbstractButton, Color> backgroundTable = new HashMap<>();
-
-	/** Cache non-UIResource button color. */
-	private Color buttonBackground;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatToolBarUI();
@@ -58,7 +51,6 @@ public class FlatToolBarUI
 		super.uninstallUI( c );
 
 		rolloverBorder = null;
-		buttonBackground = null;
 	}
 
 	@Override
@@ -80,55 +72,6 @@ public class FlatToolBarUI
 		if( rolloverBorder == null )
 			rolloverBorder = new FlatRolloverMarginBorder();
 		return rolloverBorder;
-	}
-
-	@Override
-	protected void setBorderToRollover( Component c ) {
-		super.setBorderToRollover( c );
-		setToRollover( c );
-	}
-
-	@Override
-	protected void setBorderToNonRollover( Component c ) {
-		super.setBorderToNonRollover( c );
-		setToRollover( c );
-	}
-
-	@Override
-	protected void setBorderToNormal( Component c ) {
-		super.setBorderToNormal( c );
-		setToNormal( c );
-	}
-
-	private void setToRollover( Component c ) {
-		if( c instanceof AbstractButton ) {
-			AbstractButton b = (AbstractButton) c;
-
-			Color background = backgroundTable.get( b );
-			if( background == null || background instanceof UIResource )
-				backgroundTable.put( b, b.getBackground() );
-
-			if( b.getBackground() instanceof UIResource )
-				b.setBackground( getButtonBackground() );
-		}
-	}
-
-	private void setToNormal( Component c ) {
-		if( c instanceof AbstractButton ) {
-			AbstractButton b = (AbstractButton) c;
-
-			Color background = backgroundTable.remove( b );
-			b.setBackground( background );
-		}
-	}
-
-	private Color getButtonBackground() {
-		// use toolbar background as button background
-		// must be not an instance of UIResource
-		Color toolBarBackground = toolBar.getBackground();
-		if( !Objects.equals( buttonBackground, toolBarBackground ) )
-			buttonBackground = FlatUIUtils.nonUIResource( toolBarBackground );
-		return buttonBackground;
 	}
 
 	//---- class FlatRolloverMarginBorder -------------------------------------
