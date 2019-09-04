@@ -140,6 +140,8 @@ public class FlatComponentsTest
 		progressBar1 = new JProgressBar();
 		progressBar2 = new JProgressBar();
 		indeterminateCheckBox = new JCheckBox();
+		JLabel toolTipLabel = new JLabel();
+		JToolTip toolTip1 = new JToolTip();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -152,6 +154,7 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -675,6 +678,14 @@ public class FlatComponentsTest
 		indeterminateCheckBox.setText("indeterminate");
 		indeterminateCheckBox.addActionListener(e -> indeterminateCheckBoxActionPerformed());
 		add(indeterminateCheckBox, "cell 4 18");
+
+		//---- toolTipLabel ----
+		toolTipLabel.setText("JToolTip:");
+		add(toolTipLabel, "cell 0 19");
+
+		//---- toolTip1 ----
+		toolTip1.setTipText("Some text in tool tip.");
+		add(toolTip1, "cell 1 19 3 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

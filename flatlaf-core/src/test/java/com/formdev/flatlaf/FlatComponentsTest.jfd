@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			"$columnConstraints": "[][][][][][]"
-			"$rowConstraints": "[][][][][][][][][][][][][][][][][][][]"
+			"$rowConstraints": "[][][][][][][][][][][][][][][][][][][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -677,6 +677,18 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "indeterminateCheckBoxActionPerformed", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 18"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "toolTipLabel"
+				"text": "JToolTip:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 19"
+			} )
+			add( new FormComponent( "javax.swing.JToolTip" ) {
+				name: "toolTip1"
+				"tipText": "Some text in tool tip."
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 19 3 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
