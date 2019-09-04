@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import javax.swing.JMenu;
 import javax.swing.UIManager;
 
 /**
@@ -27,6 +28,7 @@ import javax.swing.UIManager;
  *
  * @uiDefault Menu.icon.arrowColor				Color
  * @uiDefault Menu.icon.disabledArrowColor		Color
+ * @uiDefault Menu.selectionForeground			Color
  *
  * @author Karl Tauber
  */
@@ -35,6 +37,7 @@ public class FlatMenuArrowIcon
 {
 	protected final Color checkmarkColor = UIManager.getColor( "Menu.icon.arrowColor" );
 	protected final Color disabledCheckmarkColor = UIManager.getColor( "Menu.icon.disabledArrowColor" );
+	protected final Color selectionForeground = UIManager.getColor( "Menu.selectionForeground" );
 
 	public FlatMenuArrowIcon() {
 		super( 5, 10, null );
@@ -51,7 +54,14 @@ public class FlatMenuArrowIcon
 		if( !c.getComponentOrientation().isLeftToRight() )
 			g.rotate( Math.toRadians( 180 ), width / 2., height / 2. );
 
-		g.setColor( c.isEnabled() ? checkmarkColor : disabledCheckmarkColor );
+		g.setColor( getArrowColor( c ) );
 		g.fill( arrow );
+	}
+
+	private Color getArrowColor( Component c ) {
+		if( c instanceof JMenu && ((JMenu)c).isSelected() )
+			return selectionForeground;
+
+		return c.isEnabled() ? checkmarkColor : disabledCheckmarkColor;
 	}
 }
