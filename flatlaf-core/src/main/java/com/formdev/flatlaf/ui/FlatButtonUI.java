@@ -71,14 +71,16 @@ public class FlatButtonUI
 	protected void installDefaults( AbstractButton b ) {
 		super.installDefaults( b );
 
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
-		arc = UIManager.getInt( "Button.arc" );
+		String prefix = getPropertyPrefix();
 
-		disabledText = UIManager.getColor( "Button.disabledText" );
-		defaultBackground = UIManager.getColor( "Button.default.background" );
-		defaultForeground = UIManager.getColor( "Button.default.foreground" );
-		toolbarHoverBackground = UIManager.getColor( "Button.toolbar.hoverBackground" );
-		toolbarPressedBackground = UIManager.getColor( "Button.toolbar.pressedBackground" );
+		focusWidth = UIManager.getInt( "Component.focusWidth" );
+		arc = UIManager.getInt( prefix + "arc" );
+
+		disabledText = UIManager.getColor( prefix + "disabledText" );
+		defaultBackground = UIManager.getColor( prefix + "default.background" );
+		defaultForeground = UIManager.getColor( prefix + "default.foreground" );
+		toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
+		toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
@@ -94,7 +96,8 @@ public class FlatButtonUI
 		if( c.isOpaque() && isContentAreaFilled( c ) ) {
 			FlatUIUtils.paintParentBackground( g, c );
 
-			if( c.isEnabled() ) {
+			Color background = getBackground( c );
+			if( background != null ) {
 				Graphics2D g2 = (Graphics2D) g.create();
 				try {
 					FlatUIUtils.setRenderingHints( g2 );
@@ -103,7 +106,7 @@ public class FlatButtonUI
 					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
 					float arc = (border instanceof FlatButtonBorder || FlatUIUtils.isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
 
-					g2.setColor( getBackground( c ) );
+					g2.setColor( background );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 				} finally {
 					g2.dispose();
@@ -126,7 +129,10 @@ public class FlatButtonUI
 			textRect.y + fm.getAscent() + getTextShiftOffset() );
 	}
 
-	private Color getBackground( JComponent c ) {
+	protected Color getBackground( JComponent c ) {
+		if( !c.isEnabled() )
+			return null;
+
 		ButtonModel model = ((AbstractButton)c).getModel();
 
 		// toolbar button
@@ -144,7 +150,7 @@ public class FlatButtonUI
 		return def ? defaultBackground : c.getBackground();
 	}
 
-	private Color getForeground( Component c ) {
+	protected Color getForeground( JComponent c ) {
 		boolean def = isDefaultButton( c );
 		return def ? defaultForeground : c.getForeground();
 	}
