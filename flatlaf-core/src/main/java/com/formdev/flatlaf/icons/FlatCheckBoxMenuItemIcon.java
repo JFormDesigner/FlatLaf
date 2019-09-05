@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import javax.swing.AbstractButton;
+import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 
 /**
@@ -29,6 +30,7 @@ import javax.swing.UIManager;
  *
  * @uiDefault MenuItemCheckBox.icon.checkmarkColor				Color
  * @uiDefault MenuItemCheckBox.icon.disabledCheckmarkColor		Color
+ * @uiDefault Menu.selectionForeground							Color
  *
  * @author Karl Tauber
  */
@@ -37,6 +39,7 @@ public class FlatCheckBoxMenuItemIcon
 {
 	protected final Color checkmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.checkmarkColor" );
 	protected final Color disabledCheckmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.disabledCheckmarkColor" );
+	protected final Color selectionForeground = UIManager.getColor( "Menu.selectionForeground" );
 
 	public FlatCheckBoxMenuItemIcon() {
 		super( 15, 15, null );
@@ -48,7 +51,7 @@ public class FlatCheckBoxMenuItemIcon
 
 		// paint checkmark
 		if( selected ) {
-			g2.setColor( c.isEnabled() ? checkmarkColor : disabledCheckmarkColor );
+			g2.setColor( getCheckmarkColor( c ) );
 			paintCheckmark( g2 );
 		}
 	}
@@ -61,5 +64,12 @@ public class FlatCheckBoxMenuItemIcon
 
 		g2.setStroke( new BasicStroke( 1.9f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
 		g2.draw( path );
+	}
+
+	private Color getCheckmarkColor( Component c ) {
+		if( c instanceof JMenuItem && ((JMenuItem)c).isArmed() )
+			return selectionForeground;
+
+		return c.isEnabled() ? checkmarkColor : disabledCheckmarkColor;
 	}
 }
