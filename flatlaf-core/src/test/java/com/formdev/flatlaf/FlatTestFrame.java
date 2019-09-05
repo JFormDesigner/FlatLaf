@@ -22,6 +22,7 @@ import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.swing.*;
 
@@ -68,11 +69,11 @@ public class FlatTestFrame
 
 		// initialize look and feels combo box
 		DefaultComboBoxModel<LafInfo> lafModel = new DefaultComboBoxModel<>();
-		lafModel.addElement( new LafInfo( "Flat Light", FlatLightLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Dark", FlatDarkLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Test", FlatTestLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat IntelliJ", FlatIntelliJLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Darcula", FlatDarculaLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat Test (F3)", FlatTestLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat IntelliJ (F4)", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat Darcula (F5)", FlatDarculaLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -81,6 +82,13 @@ public class FlatTestFrame
 			if( className.equals( "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel" ) ||
 				className.equals( "com.sun.java.swing.plaf.motif.MotifLookAndFeel" ) )
 			  continue;
+
+			if( className.equals( NimbusLookAndFeel.class.getName() ) )
+				name += " (F10)";
+			else if( className.equals( MetalLookAndFeel.class.getName() ) )
+				name += " (F11)";
+			else if( className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" ) )
+				name += " (F12)";
 
 			lafModel.addElement( new LafInfo( name, className ) );
 		}
@@ -103,9 +111,10 @@ public class FlatTestFrame
 		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatIntelliJLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F5, FlatDarculaLaf.class.getName() );
 
-		registerSwitchToLookAndFeel( KeyEvent.VK_F7, MetalLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F10, NimbusLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F11, MetalLookAndFeel.class.getName() );
 		if( SystemInfo.IS_WINDOWS )
-			registerSwitchToLookAndFeel( KeyEvent.VK_F8, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
+			registerSwitchToLookAndFeel( KeyEvent.VK_F12, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
 
 		// register ESC key to close frame
 		((JComponent)getContentPane()).registerKeyboardAction(
@@ -216,6 +225,9 @@ public class FlatTestFrame
 					}
 				}
 			}
+
+			if( c instanceof JToolBar )
+				explicitColors( (JToolBar) c, explicit, restoreColor );
 		}
 
 	}
@@ -254,6 +266,9 @@ public class FlatTestFrame
 						tab.setEnabled( enabled );
 				}
 			}
+
+			if( c instanceof JToolBar )
+				enabledDisable( (JToolBar) c, enabled );
 		}
 	}
 
