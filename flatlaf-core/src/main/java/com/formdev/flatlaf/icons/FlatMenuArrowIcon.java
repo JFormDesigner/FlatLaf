@@ -35,8 +35,8 @@ import javax.swing.UIManager;
 public class FlatMenuArrowIcon
 	extends FlatAbstractIcon
 {
-	protected final Color checkmarkColor = UIManager.getColor( "Menu.icon.arrowColor" );
-	protected final Color disabledCheckmarkColor = UIManager.getColor( "Menu.icon.disabledArrowColor" );
+	protected final Color arrowColor = UIManager.getColor( "Menu.icon.arrowColor" );
+	protected final Color disabledArrowColor = UIManager.getColor( "Menu.icon.disabledArrowColor" );
 	protected final Color selectionForeground = UIManager.getColor( "Menu.selectionForeground" );
 
 	public FlatMenuArrowIcon() {
@@ -62,6 +62,6 @@ public class FlatMenuArrowIcon
 		if( c instanceof JMenu && ((JMenu)c).isSelected() )
 			return selectionForeground;
 
-		return c.isEnabled() ? checkmarkColor : disabledCheckmarkColor;
+		return c.isEnabled() ? arrowColor : disabledArrowColor;
 	}
 }
