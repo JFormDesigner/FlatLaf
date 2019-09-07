@@ -1,0 +1,144 @@
+JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,hidemode 3"
+			"$columnConstraints": "[][200][200]"
+			"$rowConstraints": "[][::200][::150]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "listLabel"
+				"text": "JList:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JList" ) {
+					name: "list1"
+					"model": &DefaultListModel0 new javax.swing.DefaultListModel {
+						addElement( "abc" )
+						addElement( "de" )
+						addElement( "f" )
+					}
+					auxiliary() {
+						"JavaCodeGenerator.typeParameters": "String"
+					}
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane2"
+				"verticalScrollBarPolicy": 21
+				"horizontalScrollBarPolicy": 31
+				add( new FormComponent( "javax.swing.JList" ) {
+					name: "list2"
+					"model": #DefaultListModel0
+					"enabled": false
+					auxiliary() {
+						"JavaCodeGenerator.typeParameters": "String"
+					}
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "treeLabel"
+				"text": "JTree:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane3"
+				add( new FormComponent( "javax.swing.JTree" ) {
+					name: "tree1"
+					"showsRootHandles": true
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1,growx"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane4"
+				add( new FormComponent( "javax.swing.JTree" ) {
+					name: "tree2"
+					"enabled": false
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "tableLabel"
+				"text": "JTable:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane5"
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "table1"
+					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+						add( new java.util.Vector {
+							add( "Item 1a" )
+							add( "Item 2a" )
+							add( "January" )
+							add( "July" )
+							add( 123 )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "Item 1b" )
+							add( "Item 2b" )
+							add( "February" )
+							add( "August" )
+							add( 456 )
+							add( true )
+						} )
+					}, new java.util.Vector {
+						add( "Not editable" )
+						add( "Text" )
+						add( "Combo" )
+						add( "Combo Editable" )
+						add( "Integer" )
+						add( "Boolean" )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( class java.lang.String )
+						add( class java.lang.String )
+						add( class java.lang.Integer )
+						add( class java.lang.Boolean )
+					}, new java.util.Vector {
+						add( false )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( new com.jformdesigner.model.SwingTableColumn( new java.lang.Object[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], 0, 0, 0, true ) )
+						add( new com.jformdesigner.model.SwingTableColumn( new java.lang.Object[ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], 0, 0, 0, true ) )
+						add( null )
+						add( null )
+					} )
+					"autoCreateRowSorter": true
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2 2 1,growx,width 300"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 790, 715 )
+		} )
+	}
+}

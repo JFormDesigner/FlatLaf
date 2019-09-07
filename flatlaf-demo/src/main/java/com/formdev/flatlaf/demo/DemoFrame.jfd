@@ -33,6 +33,11 @@ new FormModel {
 					}, new FormLayoutConstraints( null ) {
 						"title": "More Components"
 					} )
+					add( new FormComponent( "com.formdev.flatlaf.demo.DataComponentsPanel" ) {
+						name: "dataComponentsPanel"
+					}, new FormLayoutConstraints( null ) {
+						"title": "Data Components"
+					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
 				} )

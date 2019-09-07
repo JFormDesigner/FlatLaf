@@ -37,6 +37,7 @@ class DemoFrame
 		tabbedPane = new JTabbedPane();
 		BasicComponentsPanel basicComponentsPanel = new BasicComponentsPanel();
 		MoreComponentsPanel moreComponentsPanel = new MoreComponentsPanel();
+		DataComponentsPanel dataComponentsPanel = new DataComponentsPanel();
 		controlBar = new ControlBar();
 
 		//======== this ========
@@ -59,6 +60,7 @@ class DemoFrame
 			{
 				tabbedPane.addTab("Basic Components", basicComponentsPanel);
 				tabbedPane.addTab("More Components", moreComponentsPanel);
+				tabbedPane.addTab("Data Components", dataComponentsPanel);
 			}
 			contentPanel.add(tabbedPane, "cell 0 0");
 			contentPanel.add(controlBar, "cell 0 1");
