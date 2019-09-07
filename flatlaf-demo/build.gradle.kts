@@ -28,6 +28,7 @@ dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( "com.miglayout:miglayout-swing:5.2" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
+	implementation( "guru.nidi.com.kitfox:svgSalamander:1.1.2" )
 }
 
 java {

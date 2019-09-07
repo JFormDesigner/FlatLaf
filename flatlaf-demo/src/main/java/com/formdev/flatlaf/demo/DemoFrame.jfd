@@ -12,6 +12,42 @@ new FormModel {
 			"defaultCloseOperation": 2
 			"$locationPolicy": 2
 			"$sizePolicy": 2
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar1"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "backButton"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "forwardButton"
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator5"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "cutButton"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "copyButton"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "pasteButton"
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator6"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "refreshButton"
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator7"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "showToggleButton"
+					"selected": true
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "North"
+			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets dialog,hidemode 3"
 				"$columnConstraints": "[grow,fill]"
@@ -63,9 +99,125 @@ new FormModel {
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )
+			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "menuBar1"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "fileMenu"
+					"text": "File"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "newMenuItem"
+						"text": "New"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 78, 4226, false )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "openMenuItem"
+						"text": "Open"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 79, 4226, false )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator2"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "closeMenuItem"
+						"text": "Close"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 87, 4226, false )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator1"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "exitMenuItem"
+						"text": "Exit"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 81, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitActionPerformed", false ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "editMenu"
+					"text": "Edit"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "undoMenuItem"
+						"text": "Undo"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 90, 4226, false )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "redoMenuItem"
+						"text": "Redo"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 89, 4226, false )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator4"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "cutMenuItem"
+						"text": "Cut"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 88, 4226, false )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "copyMenuItem"
+						"text": "Copy"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 67, 4226, false )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "pasteMenuItem"
+						"text": "Paste"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 86, 4226, false )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator3"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "deleteMenuItem"
+						"text": "Delete"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 127, 0, false )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "viewMenu"
+					"text": "View"
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "checkBoxMenuItem1"
+						"text": "Show Toolbar"
+						"selected": true
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator8"
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem1"
+						"text": "Details"
+						"selected": true
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem2"
+						"text": "Small Icons"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem3"
+						"text": "Large Icons"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "helpMenu"
+					"text": "Help"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "aboutMenuItem"
+						"text": "About"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "aboutActionPerformed", false ) )
+					} )
+				} )
+			}
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 800, 710 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 720 )
 		} )
 	}
 }
