@@ -307,9 +307,11 @@ class OptionPanePanel
 		}
 
 		private void showDialog() {
+			Window window = SwingUtilities.windowForComponent( this );
+
 			if( optionPane.getWantsInput() ) {
 				JOptionPane.showInputDialog(
-					getParent(),
+					window,
 					optionPane.getMessage(),
 					titleLabel.getText() + " Title",
 					optionPane.getMessageType(),
@@ -318,7 +320,7 @@ class OptionPanePanel
 					null );
 			} else {
 				JOptionPane.showOptionDialog(
-					getParent(),
+					window,
 					optionPane.getMessage(),
 					titleLabel.getText() + " Title",
 					optionPane.getOptionType(),
