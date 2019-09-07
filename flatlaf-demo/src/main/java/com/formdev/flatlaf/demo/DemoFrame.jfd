@@ -1,0 +1,55 @@
+JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"title": "FlatLaf Demo"
+			"defaultCloseOperation": 2
+			"$locationPolicy": 2
+			"$sizePolicy": 2
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets dialog,hidemode 3"
+				"$columnConstraints": "[grow,fill]"
+				"$rowConstraints": "[grow,fill][]"
+			} ) {
+				name: "contentPanel"
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "tabbedPane"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					add( new FormComponent( "com.formdev.flatlaf.demo.BasicComponentsPanel" ) {
+						name: "basicComponentsPanel"
+					}, new FormLayoutConstraints( null ) {
+						"title": "Basic Components"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.demo.MoreComponentsPanel" ) {
+						name: "moreComponentsPanel"
+					}, new FormLayoutConstraints( null ) {
+						"title": "More Components"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.demo.ControlBar" ) {
+					name: "controlBar"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 800, 710 )
+		} )
+	}
+}

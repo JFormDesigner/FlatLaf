@@ -14,7 +14,22 @@
  * limitations under the License.
  */
 
-rootProject.name = "FlatLaf"
+version = rootProject.version
 
-include( "flatlaf-core" )
-include( "flatlaf-demo" )
+plugins {
+	`java-library`
+}
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	implementation( project( ":flatlaf-core" ) )
+	implementation( "com.miglayout:miglayout-swing:5.2" )
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
