@@ -55,7 +55,6 @@ public class FlatLafDemo
 
 		// create frame
 		DemoFrame frame = new DemoFrame();
-		frame.setTitle( frame.getTitle() + " (Java " + System.getProperty( "java.version" ) + ")" );
 
 		// show frame
 		frame.pack();

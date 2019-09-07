@@ -19,6 +19,7 @@ package com.formdev.flatlaf.util;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
@@ -42,6 +43,7 @@ import javax.swing.plaf.UIResource;
  * So the JRE does the scaling itself.
  * E.g. when you draw a 10px line, a 15px line is drawn on screen.
  * The scale factor may be different for each connected display.
+ * The scale factor may change for a window when moving the window from one display to another one.
  *
  * 2) user scaling mode
  *
@@ -51,6 +53,7 @@ import javax.swing.plaf.UIResource;
  * The JRE does not scale anything.
  * So we have to invoke {@link #scale(float)} where necessary.
  * There is only one user scale factor for all displays.
+ * The user scale factor may change if the active LaF or "Label.font" has changed.
  *
  * @author Karl Tauber
  */
@@ -87,6 +90,14 @@ public class UIScale
 		}
 
 		return jreHiDPI;
+	}
+
+	public static double getSystemScaleFactor( Graphics2D g ) {
+		return isJreHiDPIEnabled() ? g.getDeviceConfiguration().getDefaultTransform().getScaleX() : 1;
+	}
+
+	public static double getSystemScaleFactor( GraphicsConfiguration gc ) {
+		return isJreHiDPIEnabled() ? gc.getDefaultTransform().getScaleX() : 1;
 	}
 
 	//---- user scaling (Java 8) ----------------------------------------------

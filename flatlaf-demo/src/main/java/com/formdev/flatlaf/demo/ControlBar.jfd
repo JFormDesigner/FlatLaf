@@ -41,6 +41,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "infoLabel"
+				"text": "text"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 1,alignx center,growx 0"
+			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "closeButton"
 				"text": "Close"

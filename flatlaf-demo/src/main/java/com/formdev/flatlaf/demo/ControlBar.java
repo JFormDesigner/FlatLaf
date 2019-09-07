@@ -25,6 +25,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
 /**
@@ -102,9 +103,24 @@ class ControlBar
 		frame.addWindowListener( new WindowAdapter() {
 			@Override
 			public void windowOpened( WindowEvent e ) {
+				updateInfoLabel();
 				closeButton.requestFocusInWindow();
 			}
+			@Override
+			public void windowActivated( WindowEvent e ) {
+				updateInfoLabel();
+			}
 		} );
+	}
+
+	private void updateInfoLabel() {
+		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
+		float userScaleFactor = UIScale.getUserScaleFactor();
+		infoLabel.setText( "(Java " + System.getProperty( "java.version" )
+			+ (systemScaleFactor != 1 ? (";  system scale factor " + systemScaleFactor) : "")
+			+ (userScaleFactor != 1 ? (";  user scale factor " + userScaleFactor) : "")
+			+ (systemScaleFactor == 1 && userScaleFactor == 1 ? "; no scaling" : "")
+			+ ")" );
 	}
 
 	private void registerSwitchToLookAndFeel( int keyCode, String lafClassName ) {
@@ -137,6 +153,9 @@ class ControlBar
 			try {
 				// change look and feel
 				UIManager.setLookAndFeel( newLaf.className );
+
+				// update info label because user scale factor may change
+				updateInfoLabel();
 
 				// update all components
 				SwingUtilities.updateComponentTreeUI( frame );
@@ -209,6 +228,7 @@ class ControlBar
 		lookAndFeelComboBox = new JComboBox<>();
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
+		infoLabel = new JLabel();
 		closeButton = new JButton();
 
 		//======== this ========
@@ -242,6 +262,10 @@ class ControlBar
 		enabledCheckBox.addActionListener(e -> enabledChanged());
 		add(enabledCheckBox, "cell 2 1");
 
+		//---- infoLabel ----
+		infoLabel.setText("text");
+		add(infoLabel, "cell 3 1,alignx center,growx 0");
+
 		//---- closeButton ----
 		closeButton.setText("Close");
 		closeButton.addActionListener(e -> closePerformed());
@@ -254,6 +278,7 @@ class ControlBar
 	private JComboBox<LafInfo> lookAndFeelComboBox;
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
+	private JLabel infoLabel;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
