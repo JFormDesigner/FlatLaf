@@ -35,3 +35,16 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+
+tasks {
+	jar {
+		manifest {
+			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )
+		}
+
+		// include all dependencies in jar
+		from( {
+			configurations.runtimeClasspath.get().filter { it.name.endsWith( "jar" ) }.map { zipTree( it ) }
+		} )
+	}
+}
