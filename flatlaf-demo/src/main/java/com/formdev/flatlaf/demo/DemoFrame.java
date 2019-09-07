@@ -39,6 +39,7 @@ class DemoFrame
 		MoreComponentsPanel moreComponentsPanel = new MoreComponentsPanel();
 		DataComponentsPanel dataComponentsPanel = new DataComponentsPanel();
 		TabsPanel tabsPanel = new TabsPanel();
+		OptionPanePanel optionPanePanel = new OptionPanePanel();
 		controlBar = new ControlBar();
 
 		//======== this ========
@@ -63,6 +64,7 @@ class DemoFrame
 				tabbedPane.addTab("More Components", moreComponentsPanel);
 				tabbedPane.addTab("Data Components", dataComponentsPanel);
 				tabbedPane.addTab("Tabs", tabsPanel);
+				tabbedPane.addTab("Option Pane", optionPanePanel);
 			}
 			contentPanel.add(tabbedPane, "cell 0 0");
 			contentPanel.add(controlBar, "cell 0 1");

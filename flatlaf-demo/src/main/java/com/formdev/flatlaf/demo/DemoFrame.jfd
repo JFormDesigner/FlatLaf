@@ -43,6 +43,11 @@ new FormModel {
 					}, new FormLayoutConstraints( null ) {
 						"title": "Tabs"
 					} )
+					add( new FormComponent( "com.formdev.flatlaf.demo.OptionPanePanel" ) {
+						name: "optionPanePanel"
+					}, new FormLayoutConstraints( null ) {
+						"title": "Option Pane"
+					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
 				} )
