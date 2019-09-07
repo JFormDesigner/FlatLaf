@@ -7,7 +7,7 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "ltr,hidemode 3"
+			"$layoutConstraints": "hidemode 3"
 			"$columnConstraints": "[][200][200]"
 			"$rowConstraints": "[][::200][::150]"
 		} ) {

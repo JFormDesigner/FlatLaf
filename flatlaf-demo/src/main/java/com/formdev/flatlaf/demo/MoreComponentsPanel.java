@@ -82,7 +82,7 @@ class MoreComponentsPanel
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"ltr,hidemode 3",
+			"hidemode 3",
 			// columns
 			"[]" +
 			"[]" +

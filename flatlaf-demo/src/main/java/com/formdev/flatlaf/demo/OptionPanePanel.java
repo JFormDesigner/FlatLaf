@@ -88,7 +88,7 @@ class OptionPanePanel
 		//======== panel9 ========
 		{
 			panel9.setLayout(new MigLayout(
-				"flowy,ltr,hidemode 3",
+				"flowy,hidemode 3",
 				// columns
 				"[]" +
 				"[]" +

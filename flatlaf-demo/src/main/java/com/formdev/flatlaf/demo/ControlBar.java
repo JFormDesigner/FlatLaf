@@ -157,9 +157,7 @@ class ControlBar
 
 	private void rightToLeftChanged() {
 		boolean rightToLeft = rightToLeftCheckBox.isSelected();
-		int tabCount = tabbedPane.getTabCount();
-		for( int i = 0; i < tabCount; i++ )
-			rightToLeftChanged( (Container) tabbedPane.getComponentAt( i ), rightToLeft );
+		rightToLeftChanged( frame, rightToLeft );
 	}
 
 	private void rightToLeftChanged( Container c, boolean rightToLeft ) {

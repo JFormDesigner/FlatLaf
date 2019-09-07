@@ -10,7 +10,7 @@ new FormModel {
 			name: "this"
 			"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
 			add( new FormContainer( "com.formdev.flatlaf.demo.ScrollablePanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$layoutConstraints": "flowy,ltr,hidemode 3"
+				"$layoutConstraints": "flowy,hidemode 3"
 				"$columnConstraints": "[][][fill]"
 				"$rowConstraints": "[top][top][top][top][top][top][top][top]"
 			} ) {
