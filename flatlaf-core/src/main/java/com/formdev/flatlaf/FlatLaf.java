@@ -39,6 +39,7 @@ import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.util.ScaledNumber;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -254,6 +255,11 @@ public abstract class FlatLaf
 		if( key.endsWith( "Size" ) && !key.equals( "SplitPane.dividerSize" ))
 			return parseSize( value );
 
+		// scaled number
+		ScaledNumber scaledNumber = parseScaledNumber( key, value );
+		if( scaledNumber != null )
+			return scaledNumber;
+
 		// width, height
 		if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
 			return parseInteger( value, true );
@@ -357,6 +363,18 @@ public abstract class FlatLaf
 			}
 		}
 		return null;
+	}
+
+	private ScaledNumber parseScaledNumber( String key, String value ) {
+		if( !key.equals( "OptionPane.buttonMinimumWidth" ) )
+			return null; // not supported
+
+		try {
+			return new ScaledNumber( Integer.parseInt( value ) );
+		} catch( NumberFormatException ex ) {
+			System.err.println( "invalid integer '" + value + "'" );
+			throw ex;
+		}
 	}
 
 	private static List<String> split( String str, char delim ) {

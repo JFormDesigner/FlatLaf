@@ -144,6 +144,10 @@ public class FlatTestFrame
 		pack();
 		setLocationRelativeTo( null );
 		setVisible( true );
+
+		EventQueue.invokeLater( () -> {
+			closeButton.requestFocusInWindow();
+		} );
 	}
 
 	private void selectLookAndFeel( String lafClassName ) {

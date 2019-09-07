@@ -1,0 +1,141 @@
+/*
+ * Copyright 2019 FormDev Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.formdev.flatlaf.ui;
+
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import javax.swing.JComponent;
+import javax.swing.UIManager;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicOptionPaneUI;
+import com.formdev.flatlaf.util.UIScale;
+
+/**
+ * Provides the Flat LaF UI delegate for {@link javax.swing.JOptionPane}.
+ *
+ * @uiDefault OptionPane.border						Border
+ * @uiDefault OptionPane.messageAreaBorder			Border
+ * @uiDefault OptionPane.buttonAreaBorder			Border
+ * @uiDefault OptionPane.messageForeground			Color
+ * @uiDefault OptionPane.messageFont				Font
+ * @uiDefault OptionPane.buttonFont					Font
+ *
+ * @uiDefault OptionPane.minimumSize				Dimension
+ * @uiDefault OptionPane.maxCharactersPerLine		int
+ * @uiDefault OptionPane.iconMessageGap				int
+ * @uiDefault OptionPane.messagePadding				int
+ * @uiDefault OptionPane.buttonPadding				int
+ * @uiDefault OptionPane.buttonMinimumWidth			int		-1=disabled
+ * @uiDefault OptionPane.sameSizeButtons			boolean	if true, gives all buttons same size
+ * @uiDefault OptionPane.setButtonMargin			boolean	if true, invokes button.setMargin(2,4,2,4)
+ * @uiDefault OptionPane.buttonOrientation			int		0=center, 2=left, 4=right
+ * @uiDefault OptionPane.isYesLast					boolean	reverse button order if true
+ *
+ * @uiDefault OptionPane.errorIcon					Icon
+ * @uiDefault OptionPane.informationIcon			Icon
+ * @uiDefault OptionPane.questionIcon				Icon
+ * @uiDefault OptionPane.warningIcon				Icon
+ *
+ * @author Karl Tauber
+ */
+public class FlatOptionPaneUI
+	extends BasicOptionPaneUI
+{
+	protected int iconMessageGap;
+	protected int messagePadding;
+	protected int maxCharactersPerLine;
+	private int focusWidth;
+
+	public static ComponentUI createUI( JComponent c ) {
+		return new FlatOptionPaneUI();
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		iconMessageGap = UIManager.getInt( "OptionPane.iconMessageGap" );
+		messagePadding = UIManager.getInt( "OptionPane.messagePadding" );
+		maxCharactersPerLine = UIManager.getInt( "OptionPane.maxCharactersPerLine" );
+		focusWidth = UIManager.getInt( "Component.focusWidth" );
+	}
+
+	@Override
+	public Dimension getMinimumOptionPaneSize() {
+		return UIScale.scale( super.getMinimumOptionPaneSize() );
+	}
+
+	@Override
+	protected int getMaxCharactersPerLineCount() {
+		int max = super.getMaxCharactersPerLineCount();
+		return (maxCharactersPerLine > 0 && max == Integer.MAX_VALUE) ? maxCharactersPerLine : max;
+	}
+
+	@Override
+	protected Container createMessageArea() {
+		Container messageArea = super.createMessageArea();
+
+		// set icon-message gap
+		if( iconMessageGap > 0 ) {
+			Component iconMessageSeparator = findByName( messageArea, "OptionPane.separator" );
+			if( iconMessageSeparator != null )
+				iconMessageSeparator.setPreferredSize( new Dimension( UIScale.scale( iconMessageGap ), 1 ) );
+		}
+
+		return messageArea;
+	}
+
+	@Override
+	protected Container createButtonArea() {
+		Container buttonArea = super.createButtonArea();
+
+		// scale button padding and subtract focusWidth
+		if( buttonArea.getLayout() instanceof ButtonAreaLayout ) {
+			ButtonAreaLayout layout = (ButtonAreaLayout) buttonArea.getLayout();
+			layout.setPadding( UIScale.scale( layout.getPadding() - (focusWidth * 2) ) );
+		}
+
+		return buttonArea;
+	}
+
+	@Override
+	protected void addMessageComponents( Container container, GridBagConstraints cons, Object msg, int maxll,
+		boolean internallyCreated )
+	{
+		// set message padding
+		if( messagePadding > 0 )
+			cons.insets.bottom = UIScale.scale( messagePadding );
+
+		super.addMessageComponents( container, cons, msg, maxll, internallyCreated );
+	}
+
+	private Component findByName( Container c, String name ) {
+		for( Component child : c.getComponents() ) {
+			if( name.equals( child.getName() ) )
+				return child;
+
+			if( child instanceof Container ) {
+				Component c2 = findByName( (Container) child, name );
+				if( c2 != null )
+					return c2;
+			}
+		}
+		return null;
+	}
+}
