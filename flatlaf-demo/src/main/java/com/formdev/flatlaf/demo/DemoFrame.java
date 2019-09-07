@@ -27,8 +27,17 @@ class DemoFrame
 	extends JFrame
 {
 	DemoFrame() {
+		int tabIndex = FlatLafDemo.prefs.getInt( FlatLafDemo.KEY_TAB, 0 );
+
 		initComponents();
 		controlBar.initialize( this, tabbedPane );
+
+		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
+			tabbedPane.setSelectedIndex( tabIndex );
+	}
+
+	private void selectedTabChanged() {
+		FlatLafDemo.prefs.putInt( FlatLafDemo.KEY_TAB, tabbedPane.getSelectedIndex() );
 	}
 
 	private void initComponents() {
@@ -60,6 +69,7 @@ class DemoFrame
 
 			//======== tabbedPane ========
 			{
+				tabbedPane.addChangeListener(e -> selectedTabChanged());
 				tabbedPane.addTab("Basic Components", basicComponentsPanel);
 				tabbedPane.addTab("More Components", moreComponentsPanel);
 				tabbedPane.addTab("Data Components", dataComponentsPanel);

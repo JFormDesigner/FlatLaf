@@ -23,6 +23,7 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "selectedTabChanged", false ) )
 					add( new FormComponent( "com.formdev.flatlaf.demo.BasicComponentsPanel" ) {
 						name: "basicComponentsPanel"
 					}, new FormLayoutConstraints( null ) {

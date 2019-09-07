@@ -20,7 +20,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -132,7 +131,7 @@ class ControlBar
 		if( newLaf.className.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 			return;
 
-		Preferences.userRoot().node( FlatLafDemo.PREFS_ROOT_PATH ).put( FlatLafDemo.KEY_LAF, newLaf.className );
+		FlatLafDemo.prefs.put( FlatLafDemo.KEY_LAF, newLaf.className );
 
 		EventQueue.invokeLater( () -> {
 			try {

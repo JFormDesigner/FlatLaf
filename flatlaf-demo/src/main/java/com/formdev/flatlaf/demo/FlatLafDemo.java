@@ -27,15 +27,19 @@ public class FlatLafDemo
 {
 	static final String PREFS_ROOT_PATH = "/flatlaf-demo";
 	static final String KEY_LAF = "laf";
+	static final String KEY_TAB = "tab";
+
+	static Preferences prefs;
 
 	public static void main( String[] args ) {
+		prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
+
 		// set look and feel
 		try {
 			if( args.length > 0 )
 				UIManager.setLookAndFeel( args[0] );
 			else {
-				String lafClassName = Preferences.userRoot().node( PREFS_ROOT_PATH )
-					.get( KEY_LAF, FlatLightLaf.class.getName() );
+				String lafClassName = prefs.get( KEY_LAF, FlatLightLaf.class.getName() );
 				UIManager.setLookAndFeel( lafClassName );
 			}
 		} catch( Exception ex ) {
