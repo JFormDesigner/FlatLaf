@@ -35,6 +35,7 @@ public class FlatComponents2Test
 		initComponents();
 	}
 
+	@SuppressWarnings( { "unchecked", "rawtypes" } )
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel labelLabel = new JLabel();
