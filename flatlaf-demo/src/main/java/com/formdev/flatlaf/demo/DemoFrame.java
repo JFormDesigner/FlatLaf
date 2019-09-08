@@ -204,6 +204,7 @@ class DemoFrame
 
 		//======== toolBar1 ========
 		{
+			toolBar1.setMargin(new Insets(3, 3, 3, 3));
 			toolBar1.add(backButton);
 			toolBar1.add(forwardButton);
 			toolBar1.addSeparator();

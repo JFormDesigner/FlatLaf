@@ -63,12 +63,24 @@ public class FlatToolBarBorder
 		int gapSize = dotSize;
 		int gripSize = (dotSize * DOT_COUNT) + ((gapSize * (DOT_COUNT - 1)));
 
-		boolean horizontal = ((JToolBar)c).getOrientation() == SwingConstants.HORIZONTAL;
-		if( horizontal && !c.getComponentOrientation().isLeftToRight() )
-			x += width - scale( GRIP_WIDTH );
-		x += horizontal ? dotSize : Math.round( (width - gripSize) / 2f );
-		y += horizontal ? Math.round( (height - gripSize) / 2f ) : dotSize;
+		// include toolbar margin in grip position calculation
+		Insets insets = getBorderInsets( c );
 
+		// calculate grip position
+		boolean horizontal = ((JToolBar)c).getOrientation() == SwingConstants.HORIZONTAL;
+		if( horizontal ) {
+			if( c.getComponentOrientation().isLeftToRight() )
+				x += insets.left - (dotSize * 2);
+			else
+				x += width - insets.right + dotSize;
+			y += Math.round( (height - gripSize) / 2f );
+		} else {
+			// vertical
+			x += Math.round( (width - gripSize) / 2f );
+			y += insets.top - (dotSize * 2);
+		}
+
+		// paint dots
 		for( int i = 0; i < DOT_COUNT; i++ ) {
 			g.fillOval( x, y, dotSize, dotSize );
 			if( horizontal )

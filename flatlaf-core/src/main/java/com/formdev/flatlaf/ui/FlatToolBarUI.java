@@ -74,6 +74,19 @@ public class FlatToolBarUI
 		return rolloverBorder;
 	}
 
+	@Override
+	public void setOrientation( int orientation ) {
+		if( orientation != toolBar.getOrientation() ) {
+			// swap margins if orientation changes when floating
+			Insets margin = toolBar.getMargin();
+			Insets newMargin = new Insets( margin.left, margin.top, margin.right, margin.bottom );
+			if( !newMargin.equals( margin ) )
+				toolBar.setMargin( newMargin );
+		}
+
+		super.setOrientation( orientation );
+	}
+
 	//---- class FlatRolloverMarginBorder -------------------------------------
 
 	/**

@@ -14,6 +14,7 @@ new FormModel {
 			"$sizePolicy": 2
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar1"
+				"margin": new java.awt.Insets( 3, 3, 3, 3 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "backButton"
 				} )
