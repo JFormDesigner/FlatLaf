@@ -294,7 +294,7 @@ public class FlatOptionPaneTest
 		private JOptionPane optionPane;
 
 		ShowDialogLinkLabel() {
-			setText( "<html><a href=\"#\">Show dialog</a></html>" );
+			setText( "<html><a href=\"#\" color=\"#589df6\">Show dialog</a></html>" );
 
 			addMouseListener( new MouseAdapter() {
 				@Override
