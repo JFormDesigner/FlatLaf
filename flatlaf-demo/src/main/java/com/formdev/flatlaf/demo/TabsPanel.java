@@ -63,6 +63,14 @@ class TabsPanel
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
+		JLabel splitPaneLabel = new JLabel();
+		JSplitPane splitPane3 = new JSplitPane();
+		JSplitPane splitPane1 = new JSplitPane();
+		JPanel panel10 = new JPanel();
+		JPanel panel11 = new JPanel();
+		JSplitPane splitPane2 = new JSplitPane();
+		JPanel panel12 = new JPanel();
+		JPanel panel13 = new JPanel();
 		JLabel tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new JTabbedPane();
 		JPanel panel1 = new JPanel();
@@ -101,11 +109,64 @@ class TabsPanel
 		{
 			panel9.setLayout(new FormLayout(
 				"70dlu:grow, $lcgap, 70dlu:grow",
-				"pref, 2*($lgap, fill:70dlu:grow), 2*($lgap, pref)"));
+				"default, $lgap, fill:70dlu, $lgap, pref, 2*($lgap, fill:70dlu:grow), 2*($lgap, pref)"));
+
+			//---- splitPaneLabel ----
+			splitPaneLabel.setText("JSplitPane:");
+			panel9.add(splitPaneLabel, cc.xy(1, 1));
+
+			//======== splitPane3 ========
+			{
+				splitPane3.setResizeWeight(0.5);
+
+				//======== splitPane1 ========
+				{
+					splitPane1.setResizeWeight(0.5);
+					splitPane1.setOneTouchExpandable(true);
+
+					//======== panel10 ========
+					{
+						panel10.setBackground(Color.orange);
+						panel10.setLayout(new FlowLayout());
+					}
+					splitPane1.setLeftComponent(panel10);
+
+					//======== panel11 ========
+					{
+						panel11.setBackground(Color.magenta);
+						panel11.setLayout(new FlowLayout());
+					}
+					splitPane1.setRightComponent(panel11);
+				}
+				splitPane3.setLeftComponent(splitPane1);
+
+				//======== splitPane2 ========
+				{
+					splitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
+					splitPane2.setResizeWeight(0.5);
+					splitPane2.setOneTouchExpandable(true);
+
+					//======== panel12 ========
+					{
+						panel12.setBackground(Color.orange);
+						panel12.setLayout(new FlowLayout());
+					}
+					splitPane2.setTopComponent(panel12);
+
+					//======== panel13 ========
+					{
+						panel13.setBackground(Color.magenta);
+						panel13.setLayout(new FlowLayout());
+					}
+					splitPane2.setBottomComponent(panel13);
+				}
+				splitPane3.setRightComponent(splitPane2);
+			}
+			panel9.add(splitPane3, cc.xywh(1, 3, 3, 1));
 
 			//---- tabbedPaneLabel ----
 			tabbedPaneLabel.setText("JTabbedPane:");
-			panel9.add(tabbedPaneLabel, cc.xy(1, 1));
+			panel9.add(tabbedPaneLabel, cc.xy(1, 5));
 
 			//======== tabbedPane1 ========
 			{
@@ -131,7 +192,7 @@ class TabsPanel
 				label2.setText("text");
 				tabbedPane1.addTab("Tab 3", label2);
 			}
-			panel9.add(tabbedPane1, cc.xy(1, 3));
+			panel9.add(tabbedPane1, cc.xy(1, 7));
 
 			//======== tabbedPane3 ========
 			{
@@ -158,7 +219,7 @@ class TabsPanel
 				label6.setText("text");
 				tabbedPane3.addTab("Tab 3", label6);
 			}
-			panel9.add(tabbedPane3, cc.xy(3, 3));
+			panel9.add(tabbedPane3, cc.xy(3, 7));
 
 			//======== tabbedPane2 ========
 			{
@@ -186,7 +247,7 @@ class TabsPanel
 				label4.setText("text");
 				tabbedPane2.addTab("Tab 3", label4);
 			}
-			panel9.add(tabbedPane2, cc.xy(1, 5));
+			panel9.add(tabbedPane2, cc.xy(1, 9));
 
 			//======== tabbedPane4 ========
 			{
@@ -213,25 +274,25 @@ class TabsPanel
 				label8.setText("text");
 				tabbedPane4.addTab("Tab 3", label8);
 			}
-			panel9.add(tabbedPane4, cc.xy(3, 5));
+			panel9.add(tabbedPane4, cc.xy(3, 9));
 
 			//---- tabScrollCheckBox ----
 			tabScrollCheckBox.setText("tabLayoutPolicy = SCROLL");
 			tabScrollCheckBox.setMnemonic('S');
 			tabScrollCheckBox.addActionListener(e -> tabScrollChanged());
-			panel9.add(tabScrollCheckBox, cc.xy(1, 7, CellConstraints.LEFT, CellConstraints.DEFAULT));
+			panel9.add(tabScrollCheckBox, cc.xy(1, 11, CellConstraints.LEFT, CellConstraints.DEFAULT));
 
 			//---- hasFullBorderCheckBox ----
 			hasFullBorderCheckBox.setText("JTabbedPane.hasFullBorder");
 			hasFullBorderCheckBox.setMnemonic('F');
 			hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
-			panel9.add(hasFullBorderCheckBox, cc.xy(3, 7, CellConstraints.LEFT, CellConstraints.DEFAULT));
+			panel9.add(hasFullBorderCheckBox, cc.xy(3, 11, CellConstraints.LEFT, CellConstraints.DEFAULT));
 
 			//---- moreTabsCheckBox ----
 			moreTabsCheckBox.setText("more tabs");
 			moreTabsCheckBox.setMnemonic('M');
 			moreTabsCheckBox.addActionListener(e -> moreTabsChanged());
-			panel9.add(moreTabsCheckBox, cc.xy(1, 9, CellConstraints.LEFT, CellConstraints.DEFAULT));
+			panel9.add(moreTabsCheckBox, cc.xy(1, 13, CellConstraints.LEFT, CellConstraints.DEFAULT));
 		}
 		add(panel9, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents

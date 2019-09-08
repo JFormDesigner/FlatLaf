@@ -79,7 +79,7 @@ new FormModel {
 					add( new FormComponent( "com.formdev.flatlaf.demo.TabsPanel" ) {
 						name: "tabsPanel"
 					}, new FormLayoutConstraints( null ) {
-						"title": "Tabs"
+						"title": "SplitPane & Tabs"
 					} )
 					add( new FormComponent( "com.formdev.flatlaf.demo.OptionPanePanel" ) {
 						name: "optionPanePanel"

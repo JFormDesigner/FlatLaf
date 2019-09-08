@@ -237,7 +237,7 @@ class DemoFrame
 				tabbedPane.addTab("Basic Components", basicComponentsPanel);
 				tabbedPane.addTab("More Components", moreComponentsPanel);
 				tabbedPane.addTab("Data Components", dataComponentsPanel);
-				tabbedPane.addTab("Tabs", tabsPanel);
+				tabbedPane.addTab("SplitPane & Tabs", tabsPanel);
 				tabbedPane.addTab("Option Pane", optionPanePanel);
 			}
 			contentPanel.add(tabbedPane, "cell 0 0");
