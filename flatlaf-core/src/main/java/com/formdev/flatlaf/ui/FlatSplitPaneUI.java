@@ -16,7 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JSplitPane;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
@@ -33,6 +38,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault SplitPane.border							Border
  * @uiDefault SplitPaneDivider.border					Border
  * @uiDefault SplitPaneDivider.draggingColor			Color	only used if continuousLayout is false
+ * @uiDefault SplitPaneDivider.oneTouchArrowColor		Color
+ * @uiDefault SplitPaneDivider.oneTouchHoverArrowColor	Color
  *
  * @author Karl Tauber
  */
@@ -40,6 +47,8 @@ public class FlatSplitPaneUI
 	extends BasicSplitPaneUI
 {
 	private Boolean continuousLayout;
+	private Color oneTouchArrowColor;
+	private Color oneTouchHoverArrowColor;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSplitPaneUI();
@@ -47,6 +56,11 @@ public class FlatSplitPaneUI
 
 	@Override
 	protected void installDefaults() {
+		// get one-touch colors before invoking super.installDefaults() because they are
+		// used in there on LaF switching
+		oneTouchArrowColor = UIManager.getColor( "SplitPaneDivider.oneTouchArrowColor" );
+		oneTouchHoverArrowColor = UIManager.getColor( "SplitPaneDivider.oneTouchHoverArrowColor" );
+
 		super.installDefaults();
 
 		continuousLayout = (Boolean) UIManager.get( "SplitPane.continuousLayout" );
@@ -64,7 +78,7 @@ public class FlatSplitPaneUI
 
 	//---- class FlatSplitPaneDivider -----------------------------------------
 
-	private static class FlatSplitPaneDivider
+	private class FlatSplitPaneDivider
 		extends BasicSplitPaneDivider
 	{
 		public FlatSplitPaneDivider( BasicSplitPaneUI ui ) {
@@ -75,5 +89,38 @@ public class FlatSplitPaneUI
 		public void setDividerSize( int newSize ) {
 			super.setDividerSize( UIScale.scale( newSize ) );
 		}
+
+		@Override
+		protected JButton createLeftOneTouchButton() {
+			return new FlatOneTouchButton( true );
+		}
+
+		@Override
+		protected JButton createRightOneTouchButton() {
+			return new FlatOneTouchButton( false );
+		}
+
+		//---- class FlatOneTouchButton ---------------------------------------
+
+		private class FlatOneTouchButton
+			extends FlatArrowButton
+		{
+			private final boolean left;
+
+			public FlatOneTouchButton( boolean left ) {
+				super( SwingConstants.NORTH, oneTouchArrowColor, null, oneTouchHoverArrowColor, null );
+				setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
+
+				this.left = left;
+			}
+
+			@Override
+			public int getDirection() {
+				return (orientation == JSplitPane.VERTICAL_SPLIT)
+					? (left ? SwingConstants.NORTH : SwingConstants.SOUTH)
+					: (left ? SwingConstants.WEST : SwingConstants.EAST);
+			}
+		}
 	}
+
 }

@@ -118,6 +118,7 @@ public class FlatArrowButton
 			g.fillRect( 0, 0, width, height );
 		}
 
+		int direction = getDirection();
 		boolean vert = (direction == NORTH || direction == SOUTH);
 
 		int w = scale( 9 );

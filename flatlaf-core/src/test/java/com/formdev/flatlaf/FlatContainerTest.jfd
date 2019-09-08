@@ -14,15 +14,65 @@ new FormModel {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
 				"$columnSpecs": "70dlu:grow, labelcompgap, 70dlu:grow"
-				"$rowSpecs": "pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref, linegap, pref"
+				"$rowSpecs": "default, linegap, fill:70dlu, linegap, pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref, linegap, pref"
 			} ) {
 				name: "panel9"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "splitPaneLabel"
+					"text": "JSplitPane:"
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) )
+				add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
+					name: "splitPane3"
+					"resizeWeight": 0.5
+					add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
+						name: "splitPane1"
+						"resizeWeight": 0.5
+						"oneTouchExpandable": true
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+							name: "panel10"
+							"background": sfield java.awt.Color orange
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "left"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+							name: "panel11"
+							"background": sfield java.awt.Color magenta
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "right"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "left"
+					} )
+					add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
+						name: "splitPane2"
+						"orientation": 0
+						"resizeWeight": 0.5
+						"oneTouchExpandable": true
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+							name: "panel12"
+							"background": sfield java.awt.Color orange
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "left"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+							name: "panel13"
+							"background": sfield java.awt.Color magenta
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "right"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "right"
+					} )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridY": 3
+					"gridWidth": 3
+				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabbedPaneLabel"
 					"text": "JTabbedPane:"
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
-					"gridY": 1
+					"gridY": 5
 				} )
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane1"
@@ -52,7 +102,7 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
-					"gridY": 3
+					"gridY": 7
 				} )
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane3"
@@ -83,7 +133,7 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 3
-					"gridY": 3
+					"gridY": 7
 				} )
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane2"
@@ -114,7 +164,7 @@ new FormModel {
 						"title": "Tab 3"
 					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridY": 5
+					"gridY": 9
 				} )
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane4"
@@ -145,7 +195,7 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 3
-					"gridY": 5
+					"gridY": 9
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "tabScrollCheckBox"
@@ -157,7 +207,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabScrollChanged", false ) )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
-					"gridY": 7
+					"gridY": 11
 					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints LEFT
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
@@ -170,7 +220,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hasFullBorderChanged", false ) )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 3
-					"gridY": 7
+					"gridY": 11
 					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints LEFT
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
@@ -183,7 +233,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "moreTabsChanged", false ) )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
-					"gridY": 9
+					"gridY": 13
 					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints LEFT
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -191,7 +241,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 400, 400 )
+			"size": new java.awt.Dimension( 405, 515 )
 		} )
 	}
 }
