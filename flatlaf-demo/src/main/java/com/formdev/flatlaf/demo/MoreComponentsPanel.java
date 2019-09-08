@@ -18,6 +18,7 @@ package com.formdev.flatlaf.demo;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import net.miginfocom.swing.*;
 
 /**
@@ -61,6 +62,7 @@ class MoreComponentsPanel
 		JScrollBar scrollBar4 = new JScrollBar();
 		JLabel separatorLabel = new JLabel();
 		JSeparator separator1 = new JSeparator();
+		JPanel panel2 = new JPanel();
 		JLabel sliderLabel = new JLabel();
 		JSlider slider1 = new JSlider();
 		JSlider slider6 = new JSlider();
@@ -194,6 +196,13 @@ class MoreComponentsPanel
 		separatorLabel.setText("JSeparator:");
 		add(separatorLabel, "cell 0 3");
 		add(separator1, "cell 1 3,growx");
+
+		//======== panel2 ========
+		{
+			panel2.setBorder(new TitledBorder("TitledBorder"));
+			panel2.setLayout(new FlowLayout());
+		}
+		add(panel2, "cell 3 3,grow");
 
 		//---- sliderLabel ----
 		sliderLabel.setText("JSlider:");

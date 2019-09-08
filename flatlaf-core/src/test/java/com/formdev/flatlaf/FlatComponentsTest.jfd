@@ -662,6 +662,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 16,growx"
 			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+				name: "panel2"
+				"border": new javax.swing.border.TitledBorder( "TitledBorder" )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 16,grow"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "sliderLabel"
 				"text": "JSlider:"
