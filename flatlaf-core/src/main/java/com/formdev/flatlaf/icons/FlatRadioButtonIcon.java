@@ -17,15 +17,21 @@
 package com.formdev.flatlaf.icons;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * Icon for {@link javax.swing.JRadioButton}.
+ *
+ * @uiDefault RadioButton.icon.centerDiameter			int
  *
  * @author Karl Tauber
  */
 public class FlatRadioButtonIcon
 	extends FlatCheckBoxIcon
 {
+	protected final int centerDiameter = FlatUIUtils.getUIInt( "RadioButton.icon.centerDiameter", 8 );
+
 	@Override
 	protected void paintFocusBorder( Graphics2D g2 ) {
 		g2.fillOval( 0, 0, iconSize, iconSize );
@@ -43,6 +49,7 @@ public class FlatRadioButtonIcon
 
 	@Override
 	protected void paintCheckmark( Graphics2D g2 ) {
-		g2.fillOval( focusWidth + 5, focusWidth + 5, 5, 5 );
+		float xy = (iconSize - centerDiameter) / 2f;
+		g2.fill( new Ellipse2D.Float( xy, xy, centerDiameter, centerDiameter ) );
 	}
 }

@@ -44,6 +44,8 @@ class ControlBar
 		DefaultComboBoxModel<LafInfo> lafModel = new DefaultComboBoxModel<>();
 		lafModel.addElement( new LafInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
 		lafModel.addElement( new LafInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -82,6 +84,8 @@ class ControlBar
 		// register F1, F2, ... keys to switch to Light, Dark or other LaFs
 		registerSwitchToLookAndFeel( KeyEvent.VK_F1, FlatLightLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F2, FlatDarkLaf.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F3, FlatIntelliJLaf.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatDarculaLaf.class.getName() );
 
 		registerSwitchToLookAndFeel( KeyEvent.VK_F10, NimbusLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F11, MetalLookAndFeel.class.getName() );
