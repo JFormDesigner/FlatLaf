@@ -52,7 +52,7 @@ public class FlatOptionPaneQuestionIcon
 
 	@Override
 	protected Shape createInside() {
-		Path2D q = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		Path2D q = new Path2D.Float();
 		q.moveTo( 14, 20 );
 		q.lineTo( 18, 20 );
 		q.curveTo( 18, 16, 23, 16, 23, 12 );

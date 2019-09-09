@@ -155,7 +155,7 @@ public class FlatUIUtils
 	}
 
 	private static Path2D createOutlinePath( float x1, float y1, float x2, float y2, float arc ) {
-		Path2D rect = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		Path2D rect = new Path2D.Float();
 		rect.moveTo( x2 - arc, y1 );
 		rect.quadTo( x2, y1, x2, y1 + arc );
 		rect.lineTo( x2, y2 - arc );

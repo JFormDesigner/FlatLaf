@@ -179,7 +179,7 @@ public class FlatSliderUI
 			double h = thumbRect.height;
 			double wh = w / 2;
 
-			Path2D thumb = new Path2D.Float( Path2D.WIND_NON_ZERO );
+			Path2D thumb = new Path2D.Float();
 			thumb.moveTo( 0, 0 );
 			thumb.lineTo( w, 0 );
 			thumb.lineTo( w, h - wh );

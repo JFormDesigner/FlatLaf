@@ -46,7 +46,7 @@ public class FlatOptionPaneWarningIcon
 
 	@Override
 	protected Shape createOutside() {
-		Path2D outside = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		Path2D outside = new Path2D.Float();
 		outside.moveTo( 16, 2 );
 		outside.lineTo( 31, 28 );
 		outside.lineTo( 1, 28 );
