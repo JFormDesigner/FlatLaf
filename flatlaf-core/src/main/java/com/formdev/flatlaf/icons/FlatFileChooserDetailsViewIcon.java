@@ -39,17 +39,21 @@ public class FlatFileChooserDetailsViewIcon
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
 			  <g fill="none" fill-rule="evenodd">
-			    <rect width="4" height="4" x="3" y="3" fill="#6E6E6E"/>
-			    <rect width="4" height="4" x="3" y="9" fill="#6E6E6E"/>
-			    <rect width="4" height="4" x="9" y="9" fill="#6E6E6E"/>
-			    <rect width="4" height="4" x="9" y="3" fill="#6E6E6E"/>
+			    <rect width="2" height="2" x="2" y="3" fill="#6E6E6E"/>
+			    <rect width="2" height="2" x="2" y="7" fill="#6E6E6E"/>
+			    <rect width="2" height="2" x="2" y="11" fill="#6E6E6E"/>
+			    <rect width="8" height="2" x="6" y="3" fill="#6E6E6E"/>
+			    <rect width="8" height="2" x="6" y="7" fill="#6E6E6E"/>
+			    <rect width="8" height="2" x="6" y="11" fill="#6E6E6E"/>
 			  </g>
 			</svg>
 		*/
 
-		g.fillRect( 3, 3, 4, 4 );
-		g.fillRect( 3, 9, 4, 4 );
-		g.fillRect( 9, 9, 4, 4 );
-		g.fillRect( 9, 3, 4, 4 );
+		g.fillRect( 2, 3, 2, 2 );
+		g.fillRect( 2, 7, 2, 2 );
+		g.fillRect( 2, 11, 2, 2 );
+		g.fillRect( 6, 3, 8, 2 );
+		g.fillRect( 6, 7, 8, 2 );
+		g.fillRect( 6, 11, 8, 2 );
 	}
 }

@@ -40,6 +40,17 @@ public class FlatChooserTest
 		JColorChooser colorChooser1 = new JColorChooser();
 		JLabel fileChooserLabel = new JLabel();
 		JFileChooser fileChooser1 = new JFileChooser();
+		JLabel label1 = new JLabel();
+		JLabel label2 = new JLabel();
+		JLabel label3 = new JLabel();
+		JLabel label4 = new JLabel();
+		JLabel label5 = new JLabel();
+		JLabel label6 = new JLabel();
+		JLabel label7 = new JLabel();
+		JLabel label8 = new JLabel();
+		JLabel label9 = new JLabel();
+		JLabel label10 = new JLabel();
+		JLabel label11 = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -49,7 +60,8 @@ public class FlatChooserTest
 			"[]",
 			// rows
 			"[top]" +
-			"[top]"));
+			"[top]" +
+			"[]"));
 
 		//---- colorChooserLabel ----
 		colorChooserLabel.setText("JColorChooser:");
@@ -60,6 +72,50 @@ public class FlatChooserTest
 		fileChooserLabel.setText("JFileChooser:");
 		add(fileChooserLabel, "cell 0 1");
 		add(fileChooser1, "cell 1 1");
+
+		//---- label1 ----
+		label1.setText("icons:");
+		add(label1, "cell 0 2");
+
+		//---- label2 ----
+		label2.setIcon(UIManager.getIcon("FileView.directoryIcon"));
+		add(label2, "cell 1 2");
+
+		//---- label3 ----
+		label3.setIcon(UIManager.getIcon("FileView.fileIcon"));
+		add(label3, "cell 1 2");
+
+		//---- label4 ----
+		label4.setIcon(UIManager.getIcon("FileView.computerIcon"));
+		add(label4, "cell 1 2");
+
+		//---- label5 ----
+		label5.setIcon(UIManager.getIcon("FileView.hardDriveIcon"));
+		add(label5, "cell 1 2");
+
+		//---- label6 ----
+		label6.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
+		add(label6, "cell 1 2");
+
+		//---- label7 ----
+		label7.setIcon(UIManager.getIcon("FileChooser.newFolderIcon"));
+		add(label7, "cell 1 2");
+
+		//---- label8 ----
+		label8.setIcon(UIManager.getIcon("FileChooser.upFolderIcon"));
+		add(label8, "cell 1 2");
+
+		//---- label9 ----
+		label9.setIcon(UIManager.getIcon("FileChooser.homeFolderIcon"));
+		add(label9, "cell 1 2");
+
+		//---- label10 ----
+		label10.setIcon(UIManager.getIcon("FileChooser.detailsViewIcon"));
+		add(label10, "cell 1 2");
+
+		//---- label11 ----
+		label11.setIcon(UIManager.getIcon("FileChooser.listViewIcon"));
+		add(label11, "cell 1 2");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
