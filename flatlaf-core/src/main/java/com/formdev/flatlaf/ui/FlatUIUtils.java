@@ -168,6 +168,15 @@ public class FlatUIUtils
 		return rect;
 	}
 
+	public static Path2D createPath( double... points ) {
+		Path2D path = new Path2D.Float();
+		path.moveTo( points[0], points[1] );
+		for( int i = 2; i < points.length; i += 2 )
+			path.lineTo( points[i], points[i + 1] );
+		path.closePath();
+		return path;
+	}
+
 	/**
 	 * Replacement for SwingUtilities2.drawStringUnderlineCharAt()
 	 */

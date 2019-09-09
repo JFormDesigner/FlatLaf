@@ -38,6 +38,8 @@ public class FlatChooserTest
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel colorChooserLabel = new JLabel();
 		JColorChooser colorChooser1 = new JColorChooser();
+		JLabel fileChooserLabel = new JLabel();
+		JFileChooser fileChooser1 = new JFileChooser();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -46,12 +48,18 @@ public class FlatChooserTest
 			"[]" +
 			"[]",
 			// rows
+			"[top]" +
 			"[top]"));
 
 		//---- colorChooserLabel ----
 		colorChooserLabel.setText("JColorChooser:");
 		add(colorChooserLabel, "cell 0 0");
 		add(colorChooser1, "cell 1 0");
+
+		//---- fileChooserLabel ----
+		fileChooserLabel.setText("JFileChooser:");
+		add(fileChooserLabel, "cell 0 1");
+		add(fileChooser1, "cell 1 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
