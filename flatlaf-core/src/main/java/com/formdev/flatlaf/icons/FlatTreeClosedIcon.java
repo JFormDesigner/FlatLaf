@@ -18,8 +18,8 @@ package com.formdev.flatlaf.icons;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "closed" icon for {@link javax.swing.JTree} used by {@link javax.swing.tree.DefaultTreeCellRenderer}.
@@ -43,14 +43,6 @@ public class FlatTreeClosedIcon
 			</svg>
 		*/
 
-		Path2D arrow = new Path2D.Float();
-		arrow.moveTo( 1, 2 );
-		arrow.lineTo( 6, 2 );
-		arrow.lineTo( 8, 4 );
-		arrow.lineTo( 15, 4 );
-		arrow.lineTo( 15, 13 );
-		arrow.lineTo( 1, 13 );
-		arrow.closePath();
-		g.fill( arrow );
+		g.fill( FlatUIUtils.createPath( 1,2, 6,2, 8,4, 15,4, 15,13, 1,13 ) );
 	}
 }

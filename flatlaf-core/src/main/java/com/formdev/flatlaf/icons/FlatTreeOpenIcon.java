@@ -18,8 +18,8 @@ package com.formdev.flatlaf.icons;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "open" icon for {@link javax.swing.JTree} used by {@link javax.swing.tree.DefaultTreeCellRenderer}.
@@ -46,23 +46,7 @@ public class FlatTreeOpenIcon
 			</svg>
 		*/
 
-		Path2D arrow = new Path2D.Float();
-		arrow.moveTo( 1, 2 );
-		arrow.lineTo( 6, 2 );
-		arrow.lineTo( 8, 4 );
-		arrow.lineTo( 14, 4 );
-		arrow.lineTo( 14, 6 );
-		arrow.lineTo( 3.5, 6 );
-		arrow.lineTo( 1, 11 );
-		arrow.closePath();
-		g.fill( arrow );
-
-		arrow = new Path2D.Float();
-		arrow.moveTo( 4, 7 );
-		arrow.lineTo( 16, 7 );
-		arrow.lineTo( 13, 13 );
-		arrow.lineTo( 1, 13 );
-		arrow.closePath();
-		g.fill( arrow );
+		g.fill( FlatUIUtils.createPath( 1,2, 6,2, 8,4, 14,4, 14,6, 3.5,6, 1,11 ) );
+		g.fill( FlatUIUtils.createPath( 4,7, 16,7, 13,13, 1,13 ) );
 	}
 }

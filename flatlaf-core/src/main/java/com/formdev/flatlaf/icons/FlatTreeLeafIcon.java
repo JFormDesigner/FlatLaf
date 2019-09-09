@@ -18,8 +18,8 @@ package com.formdev.flatlaf.icons;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "leaf" icon for {@link javax.swing.JTree} used by {@link javax.swing.tree.DefaultTreeCellRenderer}.
@@ -46,21 +46,7 @@ public class FlatTreeLeafIcon
 			</svg>
 		*/
 
-		Path2D arrow = new Path2D.Float();
-		arrow.moveTo( 8, 6 );
-		arrow.lineTo( 8, 1 );
-		arrow.lineTo( 13, 1 );
-		arrow.lineTo( 13, 15 );
-		arrow.lineTo( 3, 15 );
-		arrow.lineTo( 3, 6 );
-		arrow.closePath();
-		g.fill( arrow );
-
-		arrow = new Path2D.Float();
-		arrow.moveTo( 3, 5 );
-		arrow.lineTo( 7, 5 );
-		arrow.lineTo( 7, 1 );
-		arrow.closePath();
-		g.fill( arrow );
+		g.fill( FlatUIUtils.createPath( 8,6, 8,1, 13,1, 13,15, 3,15, 3,6 ) );
+		g.fill( FlatUIUtils.createPath( 3,5, 7,5, 7,1 ) );
 	}
 }
