@@ -40,8 +40,8 @@ public class FlatTreeLeafIcon
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
 			  <g fill="none" fill-rule="evenodd">
-			    <path fill="#D8D8D8" d="M8 6L8 1 13 1 13 15 3 15 3 6z"/>
-			    <path fill="#D8D8D8" d="M3 5L7 5 7 1z"/>
+			    <polygon fill="#6E6E6E" points="8 6 8 1 13 1 13 15 3 15 3 6"/>
+			    <polygon fill="#6E6E6E" points="3 5 7 5 7 1"/>
 			  </g>
 			</svg>
 		*/

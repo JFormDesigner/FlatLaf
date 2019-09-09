@@ -40,8 +40,8 @@ public class FlatTreeOpenIcon
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
 			  <g fill="none" fill-rule="evenodd">
-			    <path fill="#D8D8D8" d="M1 2L6 2 8 4 14 4 14 6 3.5 6 1 11z"/>
-			    <path fill="#D8D8D8" d="M4 7L16 7 13 13 1 13z"/>
+			    <polygon fill="#6E6E6E" points="1 2 6 2 8 4 14 4 14 6 3.5 6 1 11"/>
+			    <polygon fill="#6E6E6E" points="4 7 16 7 13 13 1 13"/>
 			  </g>
 			</svg>
 		*/
