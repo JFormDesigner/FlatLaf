@@ -19,6 +19,7 @@ package com.formdev.flatlaf.icons;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "Warning" icon for {@link javax.swing.JOptionPane}.
@@ -46,11 +47,7 @@ public class FlatOptionPaneWarningIcon
 
 	@Override
 	protected Shape createOutside() {
-		Path2D outside = new Path2D.Float();
-		outside.moveTo( 16, 2 );
-		outside.lineTo( 31, 28 );
-		outside.lineTo( 1, 28 );
-		return outside;
+		return FlatUIUtils.createPath( 16,2, 31,28, 1,28 );
 	}
 
 	@Override

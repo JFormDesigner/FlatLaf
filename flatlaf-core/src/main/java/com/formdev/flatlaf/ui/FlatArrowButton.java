@@ -136,38 +136,12 @@ public class FlatArrowButton
 	}
 
 	public static Shape createArrowShape( int direction, int w, int h ) {
-		Path2D arrow = new Path2D.Float();
-
 		switch( direction ) {
-			case NORTH:
-				arrow.moveTo( 0, h );
-				arrow.lineTo( w, h );
-				arrow.lineTo( (w / 2f), 0 );
-				arrow.closePath();
-				break;
-
-			case SOUTH:
-				arrow.moveTo( 0, 0 );
-				arrow.lineTo( w, 0 );
-				arrow.lineTo( (w / 2f), h );
-				arrow.closePath();
-				break;
-
-			case WEST:
-				arrow.moveTo( h, 0 );
-				arrow.lineTo( h, w );
-				arrow.lineTo( 0, (w / 2f) );
-				arrow.closePath();
-				break;
-
-			case EAST:
-				arrow.moveTo( 0, 0 );
-				arrow.lineTo( 0, w );
-				arrow.lineTo( h, (w / 2f) );
-				arrow.closePath();
-				break;
+			case NORTH:	return FlatUIUtils.createPath( 0,h, w,h, (w / 2f),0 );
+			case SOUTH:	return FlatUIUtils.createPath( 0,0, w,0, (w / 2f),h );
+			case WEST:	return FlatUIUtils.createPath( h,0, h,w, 0,(w / 2f) );
+			case EAST:	return FlatUIUtils.createPath( 0,0, 0,w, h,(w / 2f) );
+			default:	return new Path2D.Float();
 		}
-
-		return arrow;
 	}
 }

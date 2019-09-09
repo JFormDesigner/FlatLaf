@@ -18,8 +18,8 @@ package com.formdev.flatlaf.icons;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "collapsed" icon for {@link javax.swing.JTree}.
@@ -37,15 +37,9 @@ public class FlatTreeCollapsedIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		Path2D arrow = new Path2D.Float();
-		arrow.moveTo( 2, 1 );
-		arrow.lineTo( 2, 10 );
-		arrow.lineTo( 10, 5.5 );
-		arrow.closePath();
-
 		if( !c.getComponentOrientation().isLeftToRight() )
 			g.rotate( Math.toRadians( 180 ), width / 2., height / 2. );
 
-		g.fill( arrow );
+		g.fill( FlatUIUtils.createPath( 2,1, 2,10, 10,5.5 ) );
 	}
 }

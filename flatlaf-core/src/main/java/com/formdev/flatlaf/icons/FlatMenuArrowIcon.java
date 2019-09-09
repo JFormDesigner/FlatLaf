@@ -19,9 +19,9 @@ package com.formdev.flatlaf.icons;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "arrow" icon for {@link javax.swing.JMenu}.
@@ -45,17 +45,11 @@ public class FlatMenuArrowIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		Path2D arrow = new Path2D.Float();
-		arrow.moveTo( 0, 0.5 );
-		arrow.lineTo( 0, 9.5 );
-		arrow.lineTo( 5, 5 );
-		arrow.closePath();
-
 		if( !c.getComponentOrientation().isLeftToRight() )
 			g.rotate( Math.toRadians( 180 ), width / 2., height / 2. );
 
 		g.setColor( getArrowColor( c ) );
-		g.fill( arrow );
+		g.fill( FlatUIUtils.createPath( 0,0.5, 0,9.5, 5,5 ) );
 	}
 
 	private Color getArrowColor( Component c ) {

@@ -19,8 +19,8 @@ package com.formdev.flatlaf.icons;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "descendingSort" icon for {@link javax.swing.table.JTableHeader}.
@@ -40,13 +40,7 @@ public class FlatDescendingSortIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		Path2D arrow = new Path2D.Float();
-		arrow.moveTo( 0.5, 0 );
-		arrow.lineTo( 9.5, 0 );
-		arrow.lineTo( 5, 5 );
-		arrow.closePath();
-
 		g.setColor( sortIconColor );
-		g.fill( arrow );
+		g.fill( FlatUIUtils.createPath( 0.5,0, 9.5,0, 5,5 ) );
 	}
 }
