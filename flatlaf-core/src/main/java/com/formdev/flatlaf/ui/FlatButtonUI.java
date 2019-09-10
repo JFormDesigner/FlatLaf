@@ -16,15 +16,18 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -59,6 +62,8 @@ public class FlatButtonUI
 	protected Color toolbarHoverBackground;
 	protected Color toolbarPressedBackground;
 
+	private Icon helpButtonIcon;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -81,6 +86,8 @@ public class FlatButtonUI
 		defaultForeground = UIManager.getColor( prefix + "default.foreground" );
 		toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
 		toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
+
+		helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
@@ -91,8 +98,18 @@ public class FlatButtonUI
 		return c instanceof JButton && ((JButton)c).isDefaultButton();
 	}
 
+	static boolean isHelpButton( Component c ) {
+		return c instanceof JButton && clientPropertyEquals( (JButton) c, BUTTON_TYPE, BUTTON_TYPE_HELP );
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
+		if( isHelpButton( c ) ) {
+			FlatUIUtils.paintParentBackground( g, c );
+			helpButtonIcon.paintIcon( c, g, 0, 0 );
+			return;
+		}
+
 		if( c.isOpaque() && isContentAreaFilled( c ) ) {
 			FlatUIUtils.paintParentBackground( g, c );
 
@@ -119,6 +136,9 @@ public class FlatButtonUI
 
 	@Override
 	protected void paintText( Graphics g, JComponent c, Rectangle textRect, String text ) {
+		if( isHelpButton( c ) )
+			return;
+
 		AbstractButton b = (AbstractButton) c;
 		FontMetrics fm = c.getFontMetrics( c.getFont() );
 		int mnemonicIndex = b.getDisplayedMnemonicIndex();
@@ -153,5 +173,13 @@ public class FlatButtonUI
 	protected Color getForeground( JComponent c ) {
 		boolean def = isDefaultButton( c );
 		return def ? defaultForeground : c.getForeground();
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		if( isHelpButton( c ) )
+			return new Dimension( helpButtonIcon.getIconWidth(), helpButtonIcon.getIconHeight() );
+
+		return super.getPreferredSize( c );
 	}
 }

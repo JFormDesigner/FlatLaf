@@ -54,7 +54,7 @@ public class FlatButtonBorder
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-		if( FlatButtonUI.isContentAreaFilled( c ) )
+		if( FlatButtonUI.isContentAreaFilled( c ) && !FlatButtonUI.isHelpButton( c ) )
 			super.paintBorder( c, g, x, y, width, height );
 	}
 

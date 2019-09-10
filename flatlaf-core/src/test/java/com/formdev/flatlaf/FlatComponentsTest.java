@@ -53,6 +53,8 @@ public class FlatComponentsTest
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
+		JButton button3 = new JButton();
+		JButton button12 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
@@ -230,6 +232,17 @@ public class FlatComponentsTest
 		button5.setText("default");
 		button5.setDisplayedMnemonicIndex(0);
 		add(button5, "cell 3 1");
+
+		//---- button3 ----
+		button3.setText("Help");
+		button3.putClientProperty("JButton.buttonType", "help");
+		add(button3, "cell 4 1");
+
+		//---- button12 ----
+		button12.setText("Help");
+		button12.putClientProperty("JButton.buttonType", "help");
+		button12.setEnabled(false);
+		add(button12, "cell 4 1");
 
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");

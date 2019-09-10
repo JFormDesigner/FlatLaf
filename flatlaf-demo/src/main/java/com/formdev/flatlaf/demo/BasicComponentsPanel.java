@@ -37,6 +37,8 @@ class BasicComponentsPanel
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
+		JButton button3 = new JButton();
+		JButton button4 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
@@ -160,6 +162,17 @@ class BasicComponentsPanel
 		button2.setDisplayedMnemonicIndex(0);
 		button2.setEnabled(false);
 		add(button2, "cell 2 1");
+
+		//---- button3 ----
+		button3.setText("Help");
+		button3.putClientProperty("JButton.buttonType", "help");
+		add(button3, "cell 3 1");
+
+		//---- button4 ----
+		button4.setText("Help");
+		button4.putClientProperty("JButton.buttonType", "help");
+		button4.setEnabled(false);
+		add(button4, "cell 4 1");
 
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");
