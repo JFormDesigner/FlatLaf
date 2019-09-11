@@ -19,7 +19,6 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Paint;
 import javax.swing.UIManager;
@@ -27,12 +26,10 @@ import javax.swing.UIManager;
 /**
  * Border for {@link javax.swing.JButton}.
  *
- * @uiDefault Button.startBorderColor			Color
- * @uiDefault Button.endBorderColor				Color
+ * @uiDefault Button.borderColor				Color
  * @uiDefault Button.disabledBorderColor		Color
  * @uiDefault Button.focusedBorderColor			Color
- * @uiDefault Button.default.startBorderColor	Color
- * @uiDefault Button.default.endBorderColor		Color
+ * @uiDefault Button.default.borderColor		Color
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
  * @uiDefault Button.arc						int
@@ -42,12 +39,10 @@ import javax.swing.UIManager;
 public class FlatButtonBorder
 	extends FlatBorder
 {
-	protected final Color startBorderColor = UIManager.getColor( "Button.startBorderColor" );
-	protected final Color endBorderColor = UIManager.getColor( "Button.endBorderColor" );
+	protected final Color borderColor = UIManager.getColor( "Button.borderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "Button.disabledBorderColor" );
 	protected final Color focusedBorderColor = UIManager.getColor( "Button.focusedBorderColor" );
-	protected final Color defaultStartBorderColor = UIManager.getColor( "Button.default.startBorderColor" );
-	protected final Color defaultEndBorderColor = UIManager.getColor( "Button.default.endBorderColor" );
+	protected final Color defaultBorderColor = UIManager.getColor( "Button.default.borderColor" );
 	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
 	protected final int arc = UIManager.getInt( "Button.arc" );
@@ -70,12 +65,7 @@ public class FlatButtonBorder
 			if( c.hasFocus() )
 				return def ? defaultFocusedBorderColor : focusedBorderColor;
 
-			Color startColor = def ? defaultStartBorderColor : startBorderColor;
-			Color endColor = def ? defaultEndBorderColor : endBorderColor;
-			return (startColor.equals( endColor ) )
-				? startColor
-				: new GradientPaint( 0, getFocusWidth(), startColor,
-					0, c.getHeight() - getFocusWidth() - 1f, endColor );
+			return def ? defaultBorderColor : borderColor;
 		} else
 			return disabledBorderColor;
 	}
