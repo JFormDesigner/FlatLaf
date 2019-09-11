@@ -222,8 +222,10 @@ public abstract class FlatLaf
 			value = value.substring( REF_PREFIX.length() );
 
 		String newValue = properties.getProperty( value );
-		if( newValue == null )
+		if( newValue == null ) {
 			System.err.println( "variable or reference '" + value + "' not found" );
+			throw new IllegalArgumentException( value );
+		}
 
 		return resolveValue( properties, newValue );
 	}
