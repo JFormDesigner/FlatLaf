@@ -23,8 +23,11 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
@@ -51,6 +54,11 @@ public class FlatUIUtils
 	public static Color getUIColor( String key, int defaultColorRGB ) {
 		Color color = UIManager.getColor( key );
 		return (color != null) ? color : new Color( defaultColorRGB );
+	}
+
+	public static Color getUIColor( String key, Color defaultColor ) {
+		Color color = UIManager.getColor( key );
+		return (color != null) ? color : defaultColor;
 	}
 
 	public static int getUIInt( String key, int defaultValue ) {
@@ -179,5 +187,36 @@ public class FlatUIUtils
 		String text, int underlinedIndex, int x, int y )
 	{
 		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, underlinedIndex, x, y );
+	}
+
+	//---- class HoverListener ------------------------------------------------
+
+	public static class HoverListener
+		extends MouseAdapter
+	{
+		private final JComponent repaintComponent;
+		private final Consumer<Boolean> hoverChanged;
+
+		public HoverListener( JComponent repaintComponent, Consumer<Boolean> hoverChanged ) {
+			this.repaintComponent = repaintComponent;
+			this.hoverChanged = hoverChanged;
+		}
+
+		@Override
+		public void mouseEntered( MouseEvent e ) {
+			hoverChanged.accept( true );
+			repaint();
+		}
+
+		@Override
+		public void mouseExited( MouseEvent e ) {
+			hoverChanged.accept( false );
+			repaint();
+		}
+
+		private void repaint() {
+			if( repaintComponent != null && repaintComponent.isEnabled() )
+				repaintComponent.repaint();
+		}
 	}
 }

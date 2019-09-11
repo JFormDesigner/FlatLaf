@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseListener;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
@@ -39,13 +40,14 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Slider.trackColor				Color
  * @uiDefault Slider.thumbColor				Color
  * @uiDefault Slider.tickColor				Color
+ * @uiDefault Slider.focusedColor			Color
+ * @uiDefault Slider.hoverColor				Color	optional; defaults to Slider.focusedColor
  * @uiDefault Slider.trackWidth				int
  * @uiDefault Slider.thumbWidth				int
  * @uiDefault Slider.horizontalSize			Dimension	preferred horizontal size; height is ignored; computed slider height is used
  * @uiDefault Slider.verticalSize			Dimension	preferred vertical size; width is ignored; computed slider width is used
  * @uiDefault Slider.minimumHorizontalSize	Dimension	height is ignored; computed slider height is used
  * @uiDefault Slider.minimumVerticalSize	Dimension	width is ignored; computed slider width is used
- * @uiDefault Component.focusColor			Color
  *
  * @author Karl Tauber
  */
@@ -57,8 +59,12 @@ public class FlatSliderUI
 
 	private Color trackColor;
 	private Color thumbColor;
-	private Color disabledForeground;
 	private Color focusColor;
+	private Color hoverColor;
+	private Color disabledForeground;
+
+	private MouseListener hoverListener;
+	private boolean hover;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSliderUI();
@@ -66,6 +72,24 @@ public class FlatSliderUI
 
 	public FlatSliderUI() {
 		super( null );
+	}
+
+	@Override
+	protected void installListeners( JSlider slider ) {
+		super.installListeners( slider );
+
+		hoverListener = new FlatUIUtils.HoverListener( slider, h -> {
+			hover = h;
+		} );
+		slider.addMouseListener( hoverListener );
+	}
+
+	@Override
+	protected void uninstallListeners( JSlider slider ) {
+		super.uninstallListeners( slider );
+
+		slider.removeMouseListener( hoverListener );
+		hoverListener = null;
 	}
 
 	@Override
@@ -77,8 +101,9 @@ public class FlatSliderUI
 
 		trackColor = UIManager.getColor( "Slider.trackColor" );
 		thumbColor = UIManager.getColor( "Slider.thumbColor" );
+		focusColor = UIManager.getColor( "Slider.focusedColor" );
+		hoverColor = FlatUIUtils.getUIColor( "Slider.hoverColor", focusColor );
 		disabledForeground = UIManager.getColor( "Slider.disabledForeground" );
-		focusColor = UIManager.getColor( "Component.focusColor" );
 	}
 
 	@Override
@@ -87,8 +112,9 @@ public class FlatSliderUI
 
 		trackColor = null;
 		thumbColor = null;
-		disabledForeground = null;
 		focusColor = null;
+		hoverColor = null;
+		disabledForeground = null;
 	}
 
 	@Override
@@ -160,7 +186,7 @@ public class FlatSliderUI
 		}
 
 		if( coloredTrack != null ) {
-			g.setColor( slider.hasFocus() ? focusColor : thumbColor );
+			g.setColor( hover ? hoverColor : (slider.hasFocus() ? focusColor : thumbColor) );
 			((Graphics2D)g).fill( coloredTrack );
 		}
 
@@ -170,7 +196,9 @@ public class FlatSliderUI
 
 	@Override
 	public void paintThumb( Graphics g ) {
-		g.setColor( slider.hasFocus() ? focusColor : (slider.isEnabled() ? thumbColor : disabledForeground) );
+		g.setColor( slider.isEnabled()
+			? (hover ? hoverColor : (slider.hasFocus() ? focusColor : thumbColor))
+			: disabledForeground );
 
 		if( isRoundThumb() )
 			g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
