@@ -155,29 +155,42 @@ public class FlatScrollBarUI
 
 	//---- class ScrollBarHoverListener ---------------------------------------
 
+	// using static field to disabling hover for other scroll bars
+	private static boolean isPressed;
+
 	private class ScrollBarHoverListener
 		extends MouseAdapter
 	{
 		@Override
-		public void mouseEntered( MouseEvent e ) {
-			hoverTrack = true;
-			repaint();
-		}
-
-		@Override
 		public void mouseExited( MouseEvent e ) {
-			hoverTrack = hoverThumb = false;
-			repaint();
+			if( !isPressed ) {
+				hoverTrack = hoverThumb = false;
+				repaint();
+			}
 		}
 
 		@Override
 		public void mouseMoved( MouseEvent e ) {
+			if( !isPressed )
+				update( e.getX(), e.getY() );
+		}
+
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			isPressed = true;
+		}
+
+		@Override
+		public void mouseReleased( MouseEvent e ) {
+			isPressed = false;
 			update( e.getX(), e.getY() );
 		}
 
 		private void update( int x, int y ) {
-			boolean inThumb = thumbRect.contains( x, y );
-			if( inThumb != hoverThumb ) {
+			boolean inTrack = getTrackBounds().contains( x, y );
+			boolean inThumb = getThumbBounds().contains( x, y );
+			if( inTrack != hoverTrack || inThumb != hoverThumb ) {
+				hoverTrack = inTrack;
 				hoverThumb = inThumb;
 				repaint();
 			}
