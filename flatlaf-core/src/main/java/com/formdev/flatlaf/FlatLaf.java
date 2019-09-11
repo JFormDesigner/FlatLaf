@@ -225,7 +225,7 @@ public abstract class FlatLaf
 		if( newValue == null )
 			System.err.println( "variable or reference '" + value + "' not found" );
 
-		return newValue;
+		return resolveValue( properties, newValue );
 	}
 
 	private Object parseValue( String key, String value, Function<String, String> resolver ) {
