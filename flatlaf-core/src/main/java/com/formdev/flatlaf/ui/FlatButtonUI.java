@@ -30,6 +30,7 @@ import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
@@ -42,6 +43,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Button.arc						int
+ * @uiDefault Button.minimumWidth				int
  * @uiDefault Button.disabledText				Color
  * @uiDefault Button.default.background			Color
  * @uiDefault Button.default.foreground			Color
@@ -55,6 +57,7 @@ public class FlatButtonUI
 {
 	protected int focusWidth;
 	protected int arc;
+	protected int minimumWidth;
 
 	protected Color disabledText;
 	protected Color defaultBackground;
@@ -80,6 +83,7 @@ public class FlatButtonUI
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( prefix + "arc" );
+		minimumWidth = UIManager.getInt( prefix + "minimumWidth" );
 
 		disabledText = UIManager.getColor( prefix + "disabledText" );
 		defaultBackground = UIManager.getColor( prefix + "default.background" );
@@ -102,6 +106,10 @@ public class FlatButtonUI
 		return c instanceof JButton && clientPropertyEquals( (JButton) c, BUTTON_TYPE, BUTTON_TYPE_HELP );
 	}
 
+	static boolean isToolBarButton( JComponent c ) {
+		return c.getParent() instanceof JToolBar;
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		if( isHelpButton( c ) ) {
@@ -121,7 +129,7 @@ public class FlatButtonUI
 
 					Border border = c.getBorder();
 					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-					float arc = (border instanceof FlatButtonBorder || FlatUIUtils.isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
+					float arc = (border instanceof FlatButtonBorder || isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
 
 					g2.setColor( background );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
@@ -156,7 +164,7 @@ public class FlatButtonUI
 		ButtonModel model = ((AbstractButton)c).getModel();
 
 		// toolbar button
-		if( FlatUIUtils.isToolBarButton( c ) ) {
+		if( isToolBarButton( c ) ) {
 			if( model.isPressed() )
 				return toolbarPressedBackground;
 			if( model.isRollover() )
@@ -180,6 +188,9 @@ public class FlatButtonUI
 		if( isHelpButton( c ) )
 			return new Dimension( helpButtonIcon.getIconWidth(), helpButtonIcon.getIconHeight() );
 
-		return super.getPreferredSize( c );
+		Dimension prefSize = super.getPreferredSize( c );
+		if( !isToolBarButton( c ) )
+			prefSize.width = Math.max( prefSize.width, scale( minimumWidth + (focusWidth * 2) ) );
+		return prefSize;
 	}
 }
