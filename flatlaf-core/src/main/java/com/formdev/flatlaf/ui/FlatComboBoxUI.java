@@ -61,6 +61,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ComboBox.buttonEditableBackground	Color
  * @uiDefault ComboBox.buttonArrowColor			Color
  * @uiDefault ComboBox.buttonDisabledArrowColor	Color
+ * @uiDefault ComboBox.buttonHoverArrowColor	Color
  *
  * @author Karl Tauber
  */
@@ -79,6 +80,7 @@ public class FlatComboBoxUI
 	protected Color buttonEditableBackground;
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
+	protected Color buttonHoverArrowColor;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatComboBoxUI();
@@ -100,6 +102,7 @@ public class FlatComboBoxUI
 		buttonEditableBackground = UIManager.getColor( "ComboBox.buttonEditableBackground" );
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
+		buttonHoverArrowColor = UIManager.getColor( "ComboBox.buttonHoverArrowColor" );
 
 		// scale
 		padding = UIScale.scale( padding );
@@ -119,6 +122,7 @@ public class FlatComboBoxUI
 		buttonEditableBackground = null;
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
+		buttonHoverArrowColor = null;
 	}
 
 	@Override
@@ -212,7 +216,8 @@ public class FlatComboBoxUI
 
 	@Override
 	protected JButton createArrowButton() {
-		return new FlatArrowButton( SwingConstants.SOUTH, buttonArrowColor, buttonDisabledArrowColor, null, null );
+		return new FlatArrowButton( SwingConstants.SOUTH, buttonArrowColor,
+			buttonDisabledArrowColor, buttonHoverArrowColor, null );
 	}
 
 	@Override

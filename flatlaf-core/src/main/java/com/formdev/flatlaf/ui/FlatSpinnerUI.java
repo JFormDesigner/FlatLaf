@@ -55,6 +55,7 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
  * @uiDefault Spinner.buttonBackground			Color
  * @uiDefault Spinner.buttonArrowColor			Color
  * @uiDefault Spinner.buttonDisabledArrowColor	Color
+ * @uiDefault Spinner.buttonHoverArrowColor		Color
  * @uiDefault Spinner.padding					Insets
  *
  * @author Karl Tauber
@@ -74,6 +75,7 @@ public class FlatSpinnerUI
 	protected Color buttonBackground;
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
+	protected Color buttonHoverArrowColor;
 	protected Insets padding;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -94,6 +96,7 @@ public class FlatSpinnerUI
 		buttonBackground = UIManager.getColor( "Spinner.buttonBackground" );
 		buttonArrowColor = UIManager.getColor( "Spinner.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "Spinner.buttonDisabledArrowColor" );
+		buttonHoverArrowColor = UIManager.getColor( "Spinner.buttonHoverArrowColor" );
 		padding = UIManager.getInsets( "Spinner.padding" );
 
 		// scale
@@ -111,6 +114,7 @@ public class FlatSpinnerUI
 		buttonBackground = null;
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
+		buttonHoverArrowColor = null;
 		padding = null;
 	}
 
@@ -201,7 +205,8 @@ public class FlatSpinnerUI
 	}
 
 	private Component createArrowButton( int direction, String name ) {
-		FlatArrowButton button = new FlatArrowButton( direction, buttonArrowColor, buttonDisabledArrowColor, null, null );
+		FlatArrowButton button = new FlatArrowButton( direction, buttonArrowColor,
+			buttonDisabledArrowColor, buttonHoverArrowColor, null );
 		button.setName( name );
 		button.setYOffset( (direction == SwingConstants.NORTH) ? 1 : -1 );
 		if( direction == SwingConstants.NORTH )
