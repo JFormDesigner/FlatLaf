@@ -16,11 +16,15 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.util.UIScale;
@@ -28,13 +32,65 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollBar}.
  *
+ * @uiDefault ScrollBar.background			Color
+ * @uiDefault ScrollBar.foreground			Color
+ * @uiDefault ScrollBar.track				Color
+ * @uiDefault ScrollBar.thumb				Color
+ * @uiDefault ScrollBar.hoverTrackColor		Color
+ * @uiDefault ScrollBar.hoverThumbColor		Color
+ * @uiDefault ScrollBar.width				int
+ * @uiDefault ScrollBar.minimumThumbSize	Insets
+ * @uiDefault ScrollBar.maximumThumbSize	Insets
+ * @uiDefault ScrollBar.allowsAbsolutePositioning	boolean
+ *
  * @author Karl Tauber
  */
 public class FlatScrollBarUI
 	extends BasicScrollBarUI
 {
+	protected Color hoverTrackColor;
+	protected Color hoverThumbColor;
+
+	private MouseAdapter hoverListener;
+	private boolean hoverTrack;
+	private boolean hoverThumb;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatScrollBarUI();
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		hoverListener = new ScrollBarHoverListener();
+		scrollbar.addMouseListener( hoverListener );
+		scrollbar.addMouseMotionListener( hoverListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		scrollbar.removeMouseListener( hoverListener );
+		scrollbar.removeMouseMotionListener( hoverListener );
+		hoverListener = null;
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		hoverTrackColor = UIManager.getColor( "ScrollBar.hoverTrackColor" );
+		hoverThumbColor = UIManager.getColor( "ScrollBar.hoverThumbColor" );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		hoverTrackColor = null;
+		hoverThumbColor = null;
 	}
 
 	@Override
@@ -73,11 +129,17 @@ public class FlatScrollBarUI
 	}
 
 	@Override
+	protected void paintTrack( Graphics g, JComponent c, Rectangle trackBounds ) {
+		g.setColor( hoverTrack ? hoverTrackColor : trackColor );
+		g.fillRect( trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height );
+	}
+
+	@Override
 	protected void paintThumb( Graphics g, JComponent c, Rectangle thumbBounds ) {
 		if( thumbBounds.isEmpty() || !scrollbar.isEnabled() )
 			return;
 
-		g.setColor( thumbColor );
+		g.setColor( hoverThumb ? hoverThumbColor : thumbColor );
 		g.fillRect( thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height );
 	}
 
@@ -89,5 +151,41 @@ public class FlatScrollBarUI
 	@Override
 	protected Dimension getMaximumThumbSize() {
 		return UIScale.scale( super.getMaximumThumbSize() );
+	}
+
+	//---- class ScrollBarHoverListener ---------------------------------------
+
+	private class ScrollBarHoverListener
+		extends MouseAdapter
+	{
+		@Override
+		public void mouseEntered( MouseEvent e ) {
+			hoverTrack = true;
+			repaint();
+		}
+
+		@Override
+		public void mouseExited( MouseEvent e ) {
+			hoverTrack = hoverThumb = false;
+			repaint();
+		}
+
+		@Override
+		public void mouseMoved( MouseEvent e ) {
+			update( e.getX(), e.getY() );
+		}
+
+		private void update( int x, int y ) {
+			boolean inThumb = thumbRect.contains( x, y );
+			if( inThumb != hoverThumb ) {
+				hoverThumb = inThumb;
+				repaint();
+			}
+		}
+
+		private void repaint() {
+			if( scrollbar.isEnabled() )
+				scrollbar.repaint();
+		}
 	}
 }
