@@ -47,6 +47,7 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.arc						int
+ * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault Spinner.disabledBackground		Color
@@ -65,6 +66,7 @@ public class FlatSpinnerUI
 
 	protected int focusWidth;
 	protected int arc;
+	protected int minimumWidth;
 	protected Color borderColor;
 	protected Color disabledBorderColor;
 	protected Color disabledBackground;
@@ -84,6 +86,7 @@ public class FlatSpinnerUI
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( "Component.arc" );
+		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 		disabledBackground = UIManager.getColor( "Spinner.disabledBackground" );
@@ -290,7 +293,7 @@ public class FlatSpinnerUI
 			// the arrows width is the same as the inner height so that the arrows area is square
 			int innerHeight = editorSize.height + padding.top + padding.bottom;
 			return new Dimension(
-				insets.left + insets.right + editorSize.width + padding.left + padding.right + innerHeight,
+				Math.max( insets.left + insets.right + editorSize.width + padding.left + padding.right + innerHeight, scale( minimumWidth + (focusWidth * 2) ) ),
 				insets.top + insets.bottom + innerHeight );
 		}
 
