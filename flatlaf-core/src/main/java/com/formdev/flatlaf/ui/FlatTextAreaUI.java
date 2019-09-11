@@ -16,7 +16,9 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -30,14 +32,16 @@ import javax.swing.text.JTextComponent;
  *
  * TODO document used UI defaults of superclass
  *
- * @uiDefault ComboBox.disabledBackground		Color
- * @uiDefault ComboBox.inactiveBackground		Color
+ * @uiDefault Component.minimumWidth			int
+ * @uiDefault TextArea.disabledBackground		Color
+ * @uiDefault TextArea.inactiveBackground		Color
  *
  * @author Karl Tauber
  */
 public class FlatTextAreaUI
 	extends BasicTextAreaUI
 {
+	protected int minimumWidth;
 	protected Color disabledBackground;
 	protected Color inactiveBackground;
 
@@ -49,6 +53,7 @@ public class FlatTextAreaUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		disabledBackground = UIManager.getColor( "TextArea.disabledBackground" );
 		inactiveBackground = UIManager.getColor( "TextArea.inactiveBackground" );
 	}
@@ -72,5 +77,24 @@ public class FlatTextAreaUI
 				? disabledBackground
 				: (!c.isEditable() ? inactiveBackground : background)) );
 		g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		return applyMinimumWidth( super.getPreferredSize( c ) );
+	}
+
+	@Override
+	public Dimension getMinimumSize( JComponent c ) {
+		return applyMinimumWidth( super.getMinimumSize( c ) );
+	}
+
+	private Dimension applyMinimumWidth( Dimension size ) {
+		// Assume that text area is in a scroll pane (that displays the border)
+		// and subtract 1px border line width.
+		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding
+		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
+		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
+		return size;
 	}
 }

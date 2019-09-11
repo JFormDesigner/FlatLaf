@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
@@ -33,6 +34,7 @@ import javax.swing.text.JTextComponent;
  * TODO document used UI defaults of superclass
  *
  * @uiDefault Component.focusWidth				int
+ * @uiDefault Component.minimumWidth			int
  *
  * @author Karl Tauber
  */
@@ -40,6 +42,7 @@ public class FlatPasswordFieldUI
 	extends BasicPasswordFieldUI
 {
 	protected int focusWidth;
+	protected int minimumWidth;
 
 	private Handler handler;
 
@@ -52,6 +55,7 @@ public class FlatPasswordFieldUI
 		super.installDefaults();
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
+		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 	}
 
 	@Override
@@ -93,6 +97,21 @@ public class FlatPasswordFieldUI
 		} finally {
 			g2.dispose();
 		}
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		return applyMinimumWidth( super.getPreferredSize( c ) );
+	}
+
+	@Override
+	public Dimension getMinimumSize( JComponent c ) {
+		return applyMinimumWidth( super.getMinimumSize( c ) );
+	}
+
+	private Dimension applyMinimumWidth( Dimension size ) {
+		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
+		return size;
 	}
 
 	//---- class Handler ------------------------------------------------------

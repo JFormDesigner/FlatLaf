@@ -17,11 +17,15 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JSpinner;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextFieldUI;
@@ -33,6 +37,7 @@ import javax.swing.text.JTextComponent;
  * TODO document used UI defaults of superclass
  *
  * @uiDefault Component.focusWidth				int
+ * @uiDefault Component.minimumWidth			int
  *
  * @author Karl Tauber
  */
@@ -40,6 +45,7 @@ public class FlatTextFieldUI
 	extends BasicTextFieldUI
 {
 	protected int focusWidth;
+	protected int minimumWidth;
 
 	private Handler handler;
 
@@ -52,6 +58,7 @@ public class FlatTextFieldUI
 		super.installDefaults();
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
+		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 	}
 
 	@Override
@@ -93,6 +100,27 @@ public class FlatTextFieldUI
 		} finally {
 			g2.dispose();
 		}
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		return applyMinimumWidth( super.getPreferredSize( c ), c );
+	}
+
+	@Override
+	public Dimension getMinimumSize( JComponent c ) {
+		return applyMinimumWidth( super.getMinimumSize( c ), c );
+	}
+
+	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
+		Container parent = c.getParent();
+		if( parent instanceof JComboBox ||
+			parent instanceof JSpinner ||
+			(parent != null && parent.getParent() instanceof JSpinner) )
+		  return size;
+
+		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
+		return size;
 	}
 
 	//---- class Handler ------------------------------------------------------

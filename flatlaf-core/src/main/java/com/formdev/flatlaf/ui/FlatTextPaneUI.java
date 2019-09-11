@@ -16,19 +16,54 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Dimension;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextPaneUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextPane}.
  *
+ * TODO document used UI defaults of superclass
+ *
+ * @uiDefault Component.minimumWidth			int
+ *
  * @author Karl Tauber
  */
 public class FlatTextPaneUI
 	extends BasicTextPaneUI
 {
+	protected int minimumWidth;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextPaneUI();
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		return applyMinimumWidth( super.getPreferredSize( c ) );
+	}
+
+	@Override
+	public Dimension getMinimumSize( JComponent c ) {
+		return applyMinimumWidth( super.getMinimumSize( c ) );
+	}
+
+	private Dimension applyMinimumWidth( Dimension size ) {
+		// Assume that text area is in a scroll pane (that displays the border)
+		// and subtract 1px border line width.
+		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding
+		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
+		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
+		return size;
 	}
 }
