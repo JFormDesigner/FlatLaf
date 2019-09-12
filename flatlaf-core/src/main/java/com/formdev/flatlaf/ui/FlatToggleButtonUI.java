@@ -30,11 +30,15 @@ import javax.swing.plaf.ComponentUI;
  *
  * @uiDefault Component.focusWidth						int
  * @uiDefault ToggleButton.arc							int
+ * @uiDefault ToggleButton.pressedBackground			Color
  * @uiDefault ToggleButton.disabledText					Color
- * @uiDefault ToggleButton.toolbar.hoverBackground		Color
- * @uiDefault ToggleButton.toolbar.pressedBackground	Color
  * @uiDefault ToggleButton.selectedBackground			Color
  * @uiDefault ToggleButton.selectedForeground			Color
+ * @uiDefault ToggleButton.disabledSelectedBackground	Color
+ * @uiDefault ToggleButton.toolbar.hoverBackground		Color
+ * @uiDefault ToggleButton.toolbar.pressedBackground	Color
+ * @uiDefault ToggleButton.toolbar.selectedBackground	Color
+ *
  *
  * @author Karl Tauber
  */
@@ -44,6 +48,8 @@ public class FlatToggleButtonUI
 	protected Color selectedBackground;
 	protected Color selectedForeground;
 	protected Color disabledSelectedBackground;
+
+	protected Color toolbarSelectedBackground;
 
 	private static ComponentUI instance;
 
@@ -65,6 +71,8 @@ public class FlatToggleButtonUI
 		selectedBackground = UIManager.getColor( "ToggleButton.selectedBackground" );
 		selectedForeground = UIManager.getColor( "ToggleButton.selectedForeground" );
 		disabledSelectedBackground = UIManager.getColor( "ToggleButton.disabledSelectedBackground" );
+
+		toolbarSelectedBackground = UIManager.getColor( "ToggleButton.toolbar.selectedBackground" );
 	}
 
 	@Override
@@ -72,9 +80,14 @@ public class FlatToggleButtonUI
 		ButtonModel model = ((AbstractButton)c).getModel();
 
 		if( model.isSelected() ) {
-			return isToolBarButton( c )
-				? toolbarPressedBackground
-				: (c.isEnabled() ? selectedBackground : disabledSelectedBackground);
+			// in toolbar use same colors for disabled and enabled because
+			// we assume that toolbar icon is shown disabled
+			boolean toolBarButton = isToolBarButton( c );
+			return buttonStateColor( c,
+				toolBarButton ? toolbarSelectedBackground : selectedBackground,
+				toolBarButton ? toolbarSelectedBackground : disabledSelectedBackground,
+				null, null,
+				toolBarButton ? toolbarPressedBackground : pressedBackground );
 		}
 
 		return super.getBackground( c );

@@ -183,10 +183,9 @@ public class FlatButtonUI
 		if( !c.isEnabled() )
 			return null;
 
-		ButtonModel model = ((AbstractButton)c).getModel();
-
 		// toolbar button
 		if( isToolBarButton( c ) ) {
+			ButtonModel model = ((AbstractButton)c).getModel();
 			if( model.isPressed() )
 				return toolbarPressedBackground;
 			if( model.isRollover() )
@@ -197,26 +196,32 @@ public class FlatButtonUI
 		}
 
 		boolean def = isDefaultButton( c );
+		return buttonStateColor( c,
+			def ? defaultBackground : c.getBackground(),
+			null,
+			def ? defaultFocusedBackground : focusedBackground,
+			def ? defaultHoverBackground : hoverBackground,
+			def ? defaultPressedBackground : pressedBackground );
+	}
 
-		if( model.isPressed() ) {
-			Color color = def ? defaultPressedBackground : pressedBackground;
-			if( color != null )
-				return color;
-		}
+	public static Color buttonStateColor( Component c, Color enabledColor, Color disabledColor,
+		Color focusedColor, Color hoverColor, Color pressedColor )
+	{
+		AbstractButton b = (c instanceof AbstractButton) ? (AbstractButton) c : null;
 
-		if( model.isRollover() ) {
-			Color color = def ? defaultHoverBackground : hoverBackground;
-			if( color != null )
-				return color;
-		}
+		if( !c.isEnabled() )
+			return disabledColor;
 
-		if( c.hasFocus() ) {
-			Color color = def ? defaultFocusedBackground : focusedBackground;
-			if( color != null )
-				return color;
-		}
+		if( pressedColor != null && b != null && b.getModel().isPressed() )
+			return pressedColor;
 
-		return def ? defaultBackground : c.getBackground();
+		if( hoverColor != null && b != null && b.getModel().isRollover() )
+			return hoverColor;
+
+		if( focusedColor != null && c.hasFocus() )
+			return focusedColor;
+
+		return enabledColor;
 	}
 
 	protected Color getForeground( JComponent c ) {
