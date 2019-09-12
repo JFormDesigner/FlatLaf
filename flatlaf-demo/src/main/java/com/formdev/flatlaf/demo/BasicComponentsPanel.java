@@ -39,11 +39,6 @@ class BasicComponentsPanel
 		JButton button2 = new JButton();
 		JButton button3 = new JButton();
 		JButton button4 = new JButton();
-		JLabel toggleButtonLabel = new JLabel();
-		JToggleButton toggleButton1 = new JToggleButton();
-		JToggleButton toggleButton2 = new JToggleButton();
-		JToggleButton toggleButton3 = new JToggleButton();
-		JToggleButton toggleButton4 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
@@ -130,7 +125,6 @@ class BasicComponentsPanel
 			"[]" +
 			"[]" +
 			"[]" +
-			"[]" +
 			"[]"));
 
 		//---- labelLabel ----
@@ -174,85 +168,61 @@ class BasicComponentsPanel
 		button4.setEnabled(false);
 		add(button4, "cell 4 1");
 
-		//---- toggleButtonLabel ----
-		toggleButtonLabel.setText("JToggleButton:");
-		add(toggleButtonLabel, "cell 0 2");
-
-		//---- toggleButton1 ----
-		toggleButton1.setText("enabled");
-		add(toggleButton1, "cell 1 2");
-
-		//---- toggleButton2 ----
-		toggleButton2.setText("disabled");
-		toggleButton2.setEnabled(false);
-		add(toggleButton2, "cell 2 2");
-
-		//---- toggleButton3 ----
-		toggleButton3.setText("selected");
-		toggleButton3.setSelected(true);
-		add(toggleButton3, "cell 3 2");
-
-		//---- toggleButton4 ----
-		toggleButton4.setText("selected disabled");
-		toggleButton4.setEnabled(false);
-		toggleButton4.setSelected(true);
-		add(toggleButton4, "cell 4 2");
-
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
-		add(checkBoxLabel, "cell 0 3");
+		add(checkBoxLabel, "cell 0 2");
 
 		//---- checkBox1 ----
 		checkBox1.setText("enabled");
 		checkBox1.setMnemonic('A');
-		add(checkBox1, "cell 1 3");
+		add(checkBox1, "cell 1 2");
 
 		//---- checkBox2 ----
 		checkBox2.setText("disabled");
 		checkBox2.setEnabled(false);
 		checkBox2.setMnemonic('D');
-		add(checkBox2, "cell 2 3");
+		add(checkBox2, "cell 2 2");
 
 		//---- checkBox3 ----
 		checkBox3.setText("selected");
 		checkBox3.setSelected(true);
-		add(checkBox3, "cell 3 3");
+		add(checkBox3, "cell 3 2");
 
 		//---- checkBox4 ----
 		checkBox4.setText("selected disabled");
 		checkBox4.setSelected(true);
 		checkBox4.setEnabled(false);
-		add(checkBox4, "cell 4 3");
+		add(checkBox4, "cell 4 2");
 
 		//---- radioButtonLabel ----
 		radioButtonLabel.setText("JRadioButton:");
-		add(radioButtonLabel, "cell 0 4");
+		add(radioButtonLabel, "cell 0 3");
 
 		//---- radioButton1 ----
 		radioButton1.setText("enabled");
 		radioButton1.setMnemonic('N');
-		add(radioButton1, "cell 1 4");
+		add(radioButton1, "cell 1 3");
 
 		//---- radioButton2 ----
 		radioButton2.setText("disabled");
 		radioButton2.setEnabled(false);
 		radioButton2.setMnemonic('S');
-		add(radioButton2, "cell 2 4");
+		add(radioButton2, "cell 2 3");
 
 		//---- radioButton3 ----
 		radioButton3.setText("selected");
 		radioButton3.setSelected(true);
-		add(radioButton3, "cell 3 4");
+		add(radioButton3, "cell 3 3");
 
 		//---- radioButton4 ----
 		radioButton4.setText("selected disabled");
 		radioButton4.setSelected(true);
 		radioButton4.setEnabled(false);
-		add(radioButton4, "cell 4 4");
+		add(radioButton4, "cell 4 3");
 
 		//---- comboBoxLabel ----
 		comboBoxLabel.setText("JComboBox:");
-		add(comboBoxLabel, "cell 0 5");
+		add(comboBoxLabel, "cell 0 4");
 
 		//---- comboBox1 ----
 		comboBox1.setEditable(true);
@@ -262,7 +232,7 @@ class BasicComponentsPanel
 			"bb",
 			"ccc"
 		}));
-		add(comboBox1, "cell 1 5,growx");
+		add(comboBox1, "cell 1 4,growx");
 
 		//---- comboBox2 ----
 		comboBox2.setEditable(true);
@@ -273,7 +243,7 @@ class BasicComponentsPanel
 			"bb",
 			"ccc"
 		}));
-		add(comboBox2, "cell 2 5,growx");
+		add(comboBox2, "cell 2 4,growx");
 
 		//---- comboBox3 ----
 		comboBox3.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -282,7 +252,7 @@ class BasicComponentsPanel
 			"bb",
 			"ccc"
 		}));
-		add(comboBox3, "cell 3 5,growx");
+		add(comboBox3, "cell 3 4,growx");
 
 		//---- comboBox4 ----
 		comboBox4.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -292,92 +262,92 @@ class BasicComponentsPanel
 			"ccc"
 		}));
 		comboBox4.setEnabled(false);
-		add(comboBox4, "cell 4 5,growx");
+		add(comboBox4, "cell 4 4,growx");
 
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");
-		add(spinnerLabel, "cell 0 6");
-		add(spinner1, "cell 1 6,growx");
+		add(spinnerLabel, "cell 0 5");
+		add(spinner1, "cell 1 5,growx");
 
 		//---- spinner2 ----
 		spinner2.setEnabled(false);
-		add(spinner2, "cell 2 6,growx");
+		add(spinner2, "cell 2 5,growx");
 
 		//---- textFieldLabel ----
 		textFieldLabel.setText("JTextField:");
-		add(textFieldLabel, "cell 0 7");
+		add(textFieldLabel, "cell 0 6");
 
 		//---- textField1 ----
 		textField1.setText("editable");
-		add(textField1, "cell 1 7,growx");
+		add(textField1, "cell 1 6,growx");
 
 		//---- textField2 ----
 		textField2.setText("disabled");
 		textField2.setEnabled(false);
-		add(textField2, "cell 2 7,growx");
+		add(textField2, "cell 2 6,growx");
 
 		//---- textField3 ----
 		textField3.setText("not editable");
 		textField3.setEditable(false);
-		add(textField3, "cell 3 7,growx");
+		add(textField3, "cell 3 6,growx");
 
 		//---- textField4 ----
 		textField4.setText("not editable disabled");
 		textField4.setEnabled(false);
 		textField4.setEditable(false);
-		add(textField4, "cell 4 7,growx");
+		add(textField4, "cell 4 6,growx");
 
 		//---- formattedTextFieldLabel ----
 		formattedTextFieldLabel.setText("JFormattedTextField:");
-		add(formattedTextFieldLabel, "cell 0 8");
+		add(formattedTextFieldLabel, "cell 0 7");
 
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("editable");
-		add(formattedTextField1, "cell 1 8,growx");
+		add(formattedTextField1, "cell 1 7,growx");
 
 		//---- formattedTextField2 ----
 		formattedTextField2.setText("disabled");
 		formattedTextField2.setEnabled(false);
-		add(formattedTextField2, "cell 2 8,growx");
+		add(formattedTextField2, "cell 2 7,growx");
 
 		//---- formattedTextField3 ----
 		formattedTextField3.setText("not editable");
 		formattedTextField3.setEditable(false);
-		add(formattedTextField3, "cell 3 8,growx");
+		add(formattedTextField3, "cell 3 7,growx");
 
 		//---- formattedTextField4 ----
 		formattedTextField4.setText("not editable disabled");
 		formattedTextField4.setEnabled(false);
 		formattedTextField4.setEditable(false);
-		add(formattedTextField4, "cell 4 8,growx");
+		add(formattedTextField4, "cell 4 7,growx");
 
 		//---- passwordFieldLabel ----
 		passwordFieldLabel.setText("JPasswordField:");
-		add(passwordFieldLabel, "cell 0 9");
+		add(passwordFieldLabel, "cell 0 8");
 
 		//---- passwordField1 ----
 		passwordField1.setText("editable");
-		add(passwordField1, "cell 1 9,growx");
+		add(passwordField1, "cell 1 8,growx");
 
 		//---- passwordField2 ----
 		passwordField2.setText("disabled");
 		passwordField2.setEnabled(false);
-		add(passwordField2, "cell 2 9,growx");
+		add(passwordField2, "cell 2 8,growx");
 
 		//---- passwordField3 ----
 		passwordField3.setText("not editable");
 		passwordField3.setEditable(false);
-		add(passwordField3, "cell 3 9,growx");
+		add(passwordField3, "cell 3 8,growx");
 
 		//---- passwordField4 ----
 		passwordField4.setText("not editable disabled");
 		passwordField4.setEnabled(false);
 		passwordField4.setEditable(false);
-		add(passwordField4, "cell 4 9,growx");
+		add(passwordField4, "cell 4 8,growx");
 
 		//---- textAreaLabel ----
 		textAreaLabel.setText("JTextArea:");
-		add(textAreaLabel, "cell 0 10");
+		add(textAreaLabel, "cell 0 9");
 
 		//======== scrollPane1 ========
 		{
@@ -389,7 +359,7 @@ class BasicComponentsPanel
 			textArea1.setRows(2);
 			scrollPane1.setViewportView(textArea1);
 		}
-		add(scrollPane1, "cell 1 10,growx");
+		add(scrollPane1, "cell 1 9,growx");
 
 		//======== scrollPane2 ========
 		{
@@ -402,7 +372,7 @@ class BasicComponentsPanel
 			textArea2.setEnabled(false);
 			scrollPane2.setViewportView(textArea2);
 		}
-		add(scrollPane2, "cell 2 10,growx");
+		add(scrollPane2, "cell 2 9,growx");
 
 		//======== scrollPane3 ========
 		{
@@ -415,7 +385,7 @@ class BasicComponentsPanel
 			textArea3.setEditable(false);
 			scrollPane3.setViewportView(textArea3);
 		}
-		add(scrollPane3, "cell 3 10,growx");
+		add(scrollPane3, "cell 3 9,growx");
 
 		//======== scrollPane4 ========
 		{
@@ -429,16 +399,16 @@ class BasicComponentsPanel
 			textArea4.setEnabled(false);
 			scrollPane4.setViewportView(textArea4);
 		}
-		add(scrollPane4, "cell 4 10,growx");
+		add(scrollPane4, "cell 4 9,growx");
 
 		//---- textArea5 ----
 		textArea5.setRows(2);
 		textArea5.setText("no scroll pane");
-		add(textArea5, "cell 5 10,growx");
+		add(textArea5, "cell 5 9,growx");
 
 		//---- editorPaneLabel ----
 		editorPaneLabel.setText("JEditorPane");
-		add(editorPaneLabel, "cell 0 11");
+		add(editorPaneLabel, "cell 0 10");
 
 		//======== scrollPane5 ========
 		{
@@ -449,7 +419,7 @@ class BasicComponentsPanel
 			editorPane1.setText("editable");
 			scrollPane5.setViewportView(editorPane1);
 		}
-		add(scrollPane5, "cell 1 11,growx");
+		add(scrollPane5, "cell 1 10,growx");
 
 		//======== scrollPane6 ========
 		{
@@ -461,7 +431,7 @@ class BasicComponentsPanel
 			editorPane2.setEnabled(false);
 			scrollPane6.setViewportView(editorPane2);
 		}
-		add(scrollPane6, "cell 2 11,growx");
+		add(scrollPane6, "cell 2 10,growx");
 
 		//======== scrollPane7 ========
 		{
@@ -473,7 +443,7 @@ class BasicComponentsPanel
 			editorPane3.setEditable(false);
 			scrollPane7.setViewportView(editorPane3);
 		}
-		add(scrollPane7, "cell 3 11,growx");
+		add(scrollPane7, "cell 3 10,growx");
 
 		//======== scrollPane8 ========
 		{
@@ -486,15 +456,15 @@ class BasicComponentsPanel
 			editorPane4.setEnabled(false);
 			scrollPane8.setViewportView(editorPane4);
 		}
-		add(scrollPane8, "cell 4 11,growx");
+		add(scrollPane8, "cell 4 10,growx");
 
 		//---- editorPane5 ----
 		editorPane5.setText("no scroll pane");
-		add(editorPane5, "cell 5 11,growx");
+		add(editorPane5, "cell 5 10,growx");
 
 		//---- textPaneLabel ----
 		textPaneLabel.setText("JTextPane:");
-		add(textPaneLabel, "cell 0 12");
+		add(textPaneLabel, "cell 0 11");
 
 		//======== scrollPane9 ========
 		{
@@ -505,7 +475,7 @@ class BasicComponentsPanel
 			textPane1.setText("editable");
 			scrollPane9.setViewportView(textPane1);
 		}
-		add(scrollPane9, "cell 1 12,growx");
+		add(scrollPane9, "cell 1 11,growx");
 
 		//======== scrollPane10 ========
 		{
@@ -517,7 +487,7 @@ class BasicComponentsPanel
 			textPane2.setEnabled(false);
 			scrollPane10.setViewportView(textPane2);
 		}
-		add(scrollPane10, "cell 2 12,growx");
+		add(scrollPane10, "cell 2 11,growx");
 
 		//======== scrollPane11 ========
 		{
@@ -529,7 +499,7 @@ class BasicComponentsPanel
 			textPane3.setEditable(false);
 			scrollPane11.setViewportView(textPane3);
 		}
-		add(scrollPane11, "cell 3 12,growx");
+		add(scrollPane11, "cell 3 11,growx");
 
 		//======== scrollPane12 ========
 		{
@@ -542,11 +512,11 @@ class BasicComponentsPanel
 			textPane4.setEnabled(false);
 			scrollPane12.setViewportView(textPane4);
 		}
-		add(scrollPane12, "cell 4 12,growx");
+		add(scrollPane12, "cell 4 11,growx");
 
 		//---- textPane5 ----
 		textPane5.setText("no scroll pane");
-		add(textPane5, "cell 5 12,growx");
+		add(textPane5, "cell 5 11,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
