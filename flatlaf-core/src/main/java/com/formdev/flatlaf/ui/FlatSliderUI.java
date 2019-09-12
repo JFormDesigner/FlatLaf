@@ -186,7 +186,7 @@ public class FlatSliderUI
 		}
 
 		if( coloredTrack != null ) {
-			g.setColor( hover ? hoverColor : (slider.hasFocus() ? focusColor : thumbColor) );
+			g.setColor( slider.hasFocus() ? focusColor : (hover ? hoverColor : thumbColor) );
 			((Graphics2D)g).fill( coloredTrack );
 		}
 
@@ -197,7 +197,7 @@ public class FlatSliderUI
 	@Override
 	public void paintThumb( Graphics g ) {
 		g.setColor( slider.isEnabled()
-			? (hover ? hoverColor : (slider.hasFocus() ? focusColor : thumbColor))
+			? (slider.hasFocus() ? focusColor : (hover ? hoverColor : thumbColor))
 			: disabledForeground );
 
 		if( isRoundThumb() )
