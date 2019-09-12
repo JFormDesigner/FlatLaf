@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Paint;
-import javax.swing.AbstractButton;
 import javax.swing.UIManager;
 
 /**
@@ -65,21 +64,13 @@ public class FlatButtonBorder
 
 	@Override
 	protected Paint getBorderColor( Component c ) {
-		if( c.isEnabled() ) {
-			boolean def = FlatButtonUI.isDefaultButton( c );
-
-			if( c instanceof AbstractButton && ((AbstractButton)c).getModel().isRollover() ) {
-				Color color = def ? defaultHoverBorderColor : hoverBorderColor;
-				if( color != null )
-					return color;
-			}
-
-			if( c.hasFocus() )
-				return def ? defaultFocusedBorderColor : focusedBorderColor;
-
-			return def ? defaultBorderColor : borderColor;
-		} else
-			return disabledBorderColor;
+		boolean def = FlatButtonUI.isDefaultButton( c );
+		return FlatButtonUI.buttonStateColor( c,
+			def ? defaultBorderColor : borderColor,
+			disabledBorderColor,
+			def ? defaultFocusedBorderColor : focusedBorderColor,
+			def ? defaultHoverBorderColor : hoverBorderColor,
+			null );
 	}
 
 	@Override
