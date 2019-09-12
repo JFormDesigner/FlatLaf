@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import javax.swing.AbstractButton;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatButtonUI;
 
 /**
  * Icon for {@link javax.swing.JCheckBox}.
@@ -34,10 +35,16 @@ import javax.swing.UIManager;
  * @uiDefault CheckBox.icon.disabledBorderColor			Color
  * @uiDefault CheckBox.icon.selectedBorderColor			Color
  * @uiDefault CheckBox.icon.focusedBorderColor			Color
- * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color
+ * @uiDefault CheckBox.icon.hoverBorderColor			Color	optional
+ * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional
  * @uiDefault CheckBox.icon.background					Color
  * @uiDefault CheckBox.icon.disabledBackground			Color
+ * @uiDefault CheckBox.icon.focusedBackground			Color	optional
+ * @uiDefault CheckBox.icon.hoverBackground				Color	optional
+ * @uiDefault CheckBox.icon.pressedBackground			Color	optional
  * @uiDefault CheckBox.icon.selectedBackground			Color
+ * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional
+ * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional
  * @uiDefault CheckBox.icon.checkmarkColor				Color
  * @uiDefault CheckBox.icon.disabledCheckmarkColor		Color
  *
@@ -53,10 +60,16 @@ public class FlatCheckBoxIcon
 	protected final Color disabledBorderColor = UIManager.getColor( "CheckBox.icon.disabledBorderColor" );
 	protected final Color selectedBorderColor = UIManager.getColor( "CheckBox.icon.selectedBorderColor" );
 	protected final Color focusedBorderColor = UIManager.getColor( "CheckBox.icon.focusedBorderColor" );
+	protected final Color hoverBorderColor = UIManager.getColor( "CheckBox.icon.hoverBorderColor" );
 	protected final Color selectedFocusedBorderColor = UIManager.getColor( "CheckBox.icon.selectedFocusedBorderColor" );
 	protected final Color background = UIManager.getColor( "CheckBox.icon.background" );
 	protected final Color disabledBackground = UIManager.getColor( "CheckBox.icon.disabledBackground" );
+	protected final Color focusedBackground = UIManager.getColor( "CheckBox.icon.focusedBackground" );
+	protected final Color hoverBackground = UIManager.getColor( "CheckBox.icon.hoverBackground" );
+	protected final Color pressedBackground = UIManager.getColor( "CheckBox.icon.pressedBackground" );
 	protected final Color selectedBackground = UIManager.getColor( "CheckBox.icon.selectedBackground" );
+	protected final Color selectedHoverBackground = UIManager.getColor( "CheckBox.icon.selectedHoverBackground" );
+	protected final Color selectedPressedBackground = UIManager.getColor( "CheckBox.icon.selectedPressedBackground" );
 	protected final Color checkmarkColor = UIManager.getColor( "CheckBox.icon.checkmarkColor" );
 	protected final Color disabledCheckmarkColor = UIManager.getColor( "CheckBox.icon.disabledCheckmarkColor" );
 
@@ -68,33 +81,35 @@ public class FlatCheckBoxIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g2 ) {
-		boolean enabled = c.isEnabled();
-		boolean focused = c.hasFocus();
-		boolean selected = (c instanceof AbstractButton) && ((AbstractButton)c).isSelected();
+		boolean selected = (c instanceof AbstractButton) ? ((AbstractButton)c).isSelected() : false;
 
 		// paint focused border
-		if( focused ) {
+		if( c.hasFocus() ) {
 			g2.setColor( focusColor );
 			paintFocusBorder( g2 );
 		}
 
 		// paint border
-		g2.setColor( enabled
-			? (selected
-				? (focused ? selectedFocusedBorderColor : selectedBorderColor)
-				: (focused ? focusedBorderColor : borderColor))
-			: disabledBorderColor );
+		g2.setColor( FlatButtonUI.buttonStateColor( c,
+			selected ? selectedBorderColor : borderColor,
+			disabledBorderColor,
+			selected && selectedFocusedBorderColor != null ? selectedFocusedBorderColor : focusedBorderColor,
+			hoverBorderColor,
+			null ) );
 		paintBorder( g2 );
 
 		// paint background
-		g2.setColor( enabled
-			? (selected ? selectedBackground : background)
-			: disabledBackground );
+		g2.setColor( FlatButtonUI.buttonStateColor( c,
+			selected ? selectedBackground : background,
+			disabledBackground,
+			focusedBackground,
+			selected && selectedHoverBackground != null ? selectedHoverBackground : hoverBackground,
+			selected && selectedPressedBackground != null ? selectedPressedBackground : pressedBackground ) );
 		paintBackground( g2 );
 
 		// paint checkmark
 		if( selected ) {
-			g2.setColor( enabled ? checkmarkColor : disabledCheckmarkColor );
+			g2.setColor( c.isEnabled() ? checkmarkColor : disabledCheckmarkColor );
 			paintCheckmark( g2 );
 		}
 	}
