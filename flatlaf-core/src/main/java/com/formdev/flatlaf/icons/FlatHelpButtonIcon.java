@@ -23,6 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatButtonUI;
 
 /**
  * Help button icon for {@link javax.swing.JButton}.
@@ -32,8 +33,12 @@ import javax.swing.UIManager;
  * @uiDefault HelpButton.borderColor					Color
  * @uiDefault HelpButton.disabledBorderColor			Color
  * @uiDefault HelpButton.focusedBorderColor				Color
+ * @uiDefault HelpButton.hoverBorderColor				Color	optional
  * @uiDefault HelpButton.background						Color
  * @uiDefault HelpButton.disabledBackground				Color
+ * @uiDefault HelpButton.focusedBackground				Color	optional
+ * @uiDefault HelpButton.hoverBackground				Color	optional
+ * @uiDefault HelpButton.pressedBackground				Color	optional
  * @uiDefault HelpButton.questionMarkColor				Color
  * @uiDefault HelpButton.disabledQuestionMarkColor		Color
  *
@@ -48,8 +53,12 @@ public class FlatHelpButtonIcon
 	protected final Color borderColor = UIManager.getColor( "HelpButton.borderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "HelpButton.disabledBorderColor" );
 	protected final Color focusedBorderColor = UIManager.getColor( "HelpButton.focusedBorderColor" );
+	protected final Color hoverBorderColor = UIManager.getColor( "HelpButton.hoverBorderColor" );
 	protected final Color background = UIManager.getColor( "HelpButton.background" );
 	protected final Color disabledBackground = UIManager.getColor( "HelpButton.disabledBackground" );
+	protected final Color focusedBackground = UIManager.getColor( "HelpButton.focusedBackground" );
+	protected final Color hoverBackground = UIManager.getColor( "HelpButton.hoverBackground" );
+	protected final Color pressedBackground = UIManager.getColor( "HelpButton.pressedBackground" );
 	protected final Color questionMarkColor = UIManager.getColor( "HelpButton.questionMarkColor" );
 	protected final Color disabledQuestionMarkColor = UIManager.getColor( "HelpButton.disabledQuestionMarkColor" );
 
@@ -81,15 +90,21 @@ public class FlatHelpButtonIcon
 		}
 
 		// paint border
-		g2.setColor( enabled
-			? (focused ? focusedBorderColor : borderColor)
-			: disabledBorderColor );
+		g2.setColor( FlatButtonUI.buttonStateColor( c,
+			borderColor,
+			disabledBorderColor,
+			focusedBorderColor,
+			hoverBorderColor,
+			null ) );
 		g2.fill( new Ellipse2D.Float( focusWidth + 0.5f, focusWidth + 0.5f, 21, 21 ) );
 
 		// paint background
-		g2.setColor( enabled
-			? background
-			: disabledBackground );
+		g2.setColor( FlatButtonUI.buttonStateColor( c,
+			background,
+			disabledBackground,
+			focusedBackground,
+			hoverBackground,
+			pressedBackground ) );
 		g2.fill( new Ellipse2D.Float( focusWidth + 1.5f, focusWidth + 1.5f, 19, 19 ) );
 
 		// paint question mark

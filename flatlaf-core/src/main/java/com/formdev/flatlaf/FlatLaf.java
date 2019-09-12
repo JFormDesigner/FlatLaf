@@ -221,8 +221,17 @@ public abstract class FlatLaf
 		if( value.startsWith( REF_PREFIX ) )
 			value = value.substring( REF_PREFIX.length() );
 
+		boolean optional = false;
+		if( value.startsWith( "?" ) ) {
+			value = value.substring( 1 );
+			optional = true;
+		}
+
 		String newValue = properties.getProperty( value );
 		if( newValue == null ) {
+			if( optional )
+				return "null";
+
 			System.err.println( "variable or reference '" + value + "' not found" );
 			throw new IllegalArgumentException( value );
 		}
