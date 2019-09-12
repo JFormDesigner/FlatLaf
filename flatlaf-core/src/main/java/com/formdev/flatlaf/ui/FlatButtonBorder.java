@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Paint;
+import javax.swing.AbstractButton;
 import javax.swing.UIManager;
 
 /**
@@ -29,7 +30,9 @@ import javax.swing.UIManager;
  * @uiDefault Button.borderColor				Color
  * @uiDefault Button.disabledBorderColor		Color
  * @uiDefault Button.focusedBorderColor			Color
+ * @uiDefault Button.hoverBorderColor			Color	optional
  * @uiDefault Button.default.borderColor		Color
+ * @uiDefault Button.default.hoverBorderColor	Color	optional
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
  * @uiDefault Button.arc						int
@@ -42,7 +45,9 @@ public class FlatButtonBorder
 	protected final Color borderColor = UIManager.getColor( "Button.borderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "Button.disabledBorderColor" );
 	protected final Color focusedBorderColor = UIManager.getColor( "Button.focusedBorderColor" );
+	protected final Color hoverBorderColor = UIManager.getColor( "Button.hoverBorderColor" );
 	protected final Color defaultBorderColor = UIManager.getColor( "Button.default.borderColor" );
+	protected final Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
 	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
 	protected final int arc = UIManager.getInt( "Button.arc" );
@@ -62,6 +67,13 @@ public class FlatButtonBorder
 	protected Paint getBorderColor( Component c ) {
 		if( c.isEnabled() ) {
 			boolean def = FlatButtonUI.isDefaultButton( c );
+
+			if( c instanceof AbstractButton && ((AbstractButton)c).getModel().isRollover() ) {
+				Color color = def ? defaultHoverBorderColor : hoverBorderColor;
+				if( color != null )
+					return color;
+			}
+
 			if( c.hasFocus() )
 				return def ? defaultFocusedBorderColor : focusedBorderColor;
 

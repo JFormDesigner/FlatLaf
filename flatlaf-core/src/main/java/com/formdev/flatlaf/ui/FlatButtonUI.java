@@ -44,9 +44,15 @@ import javax.swing.plaf.basic.BasicButtonUI;
  * @uiDefault Component.focusWidth				int
  * @uiDefault Button.arc						int
  * @uiDefault Button.minimumWidth				int
+ * @uiDefault Button.focusedBackground			Color	optional
+ * @uiDefault Button.hoverBackground			Color	optional
+ * @uiDefault Button.pressedBackground			Color	optional
  * @uiDefault Button.disabledText				Color
  * @uiDefault Button.default.background			Color
  * @uiDefault Button.default.foreground			Color
+ * @uiDefault Button.default.focusedBackground	Color	optional
+ * @uiDefault Button.default.hoverBackground	Color	optional
+ * @uiDefault Button.default.pressedBackground	Color	optional
  * @uiDefault Button.toolbar.hoverBackground	Color
  * @uiDefault Button.toolbar.pressedBackground	Color
  *
@@ -59,9 +65,17 @@ public class FlatButtonUI
 	protected int arc;
 	protected int minimumWidth;
 
+	protected Color focusedBackground;
+	protected Color hoverBackground;
+	protected Color pressedBackground;
 	protected Color disabledText;
+
 	protected Color defaultBackground;
 	protected Color defaultForeground;
+	protected Color defaultFocusedBackground;
+	protected Color defaultHoverBackground;
+	protected Color defaultPressedBackground;
+
 	protected Color toolbarHoverBackground;
 	protected Color toolbarPressedBackground;
 
@@ -85,9 +99,17 @@ public class FlatButtonUI
 		arc = UIManager.getInt( prefix + "arc" );
 		minimumWidth = UIManager.getInt( prefix + "minimumWidth" );
 
+		focusedBackground = UIManager.getColor( prefix + "focusedBackground" );
+		hoverBackground = UIManager.getColor( prefix + "hoverBackground" );
+		pressedBackground = UIManager.getColor( prefix + "pressedBackground" );
 		disabledText = UIManager.getColor( prefix + "disabledText" );
-		defaultBackground = UIManager.getColor( prefix + "default.background" );
-		defaultForeground = UIManager.getColor( prefix + "default.foreground" );
+
+		defaultBackground = UIManager.getColor( "Button.default.background" );
+		defaultForeground = UIManager.getColor( "Button.default.foreground" );
+		defaultFocusedBackground = UIManager.getColor( "Button.default.focusedBackground" );
+		defaultHoverBackground = UIManager.getColor( "Button.default.hoverBackground" );
+		defaultPressedBackground = UIManager.getColor( "Button.default.pressedBackground" );
+
 		toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
 		toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
 
@@ -175,6 +197,25 @@ public class FlatButtonUI
 		}
 
 		boolean def = isDefaultButton( c );
+
+		if( model.isPressed() ) {
+			Color color = def ? defaultPressedBackground : pressedBackground;
+			if( color != null )
+				return color;
+		}
+
+		if( model.isRollover() ) {
+			Color color = def ? defaultHoverBackground : hoverBackground;
+			if( color != null )
+				return color;
+		}
+
+		if( c.hasFocus() ) {
+			Color color = def ? defaultFocusedBackground : focusedBackground;
+			if( color != null )
+				return color;
+		}
+
 		return def ? defaultBackground : c.getBackground();
 	}
 
