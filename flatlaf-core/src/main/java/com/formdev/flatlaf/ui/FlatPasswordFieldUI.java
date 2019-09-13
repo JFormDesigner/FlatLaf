@@ -23,10 +23,12 @@ import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
@@ -53,6 +55,10 @@ public class FlatPasswordFieldUI
 	@Override
 	protected void installDefaults() {
 		super.installDefaults();
+
+		// use other echoChar on Mac because the default is too large in SF font
+		if( SystemInfo.IS_MAC )
+			LookAndFeel.installProperty( getComponent(), "echoChar", '\u2022' );
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
