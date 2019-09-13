@@ -16,8 +16,11 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import com.formdev.flatlaf.util.UIScale;
@@ -27,13 +30,18 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * TODO document used UI defaults of superclass
  *
- * @uiDefault Table.rowHeight					int
+ * @uiDefault Table.rowHeight						int
+ * @uiDefault Table.selectionInactiveBackground		Color
+ * @uiDefault Table.selectionInactiveForeground		Color
  *
  * @author Karl Tauber
  */
 public class FlatTableUI
 	extends BasicTableUI
 {
+	protected Color selectionInactiveBackground;
+	protected Color selectionInactiveForeground;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableUI();
 	}
@@ -42,8 +50,36 @@ public class FlatTableUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		selectionInactiveBackground = UIManager.getColor( "Tree.selectionInactiveBackground" );
+		selectionInactiveForeground = UIManager.getColor( "Tree.selectionInactiveForeground" );
+
 		int rowHeight = FlatUIUtils.getUIInt( "Table.rowHeight", 16 );
 		if( rowHeight > 0 )
 			LookAndFeel.installProperty( table, "rowHeight", UIScale.scale( rowHeight ) );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		selectionInactiveBackground = null;
+		selectionInactiveForeground = null;
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		if( !table.hasFocus() ) {
+			// apply inactive selection background/foreground if table is not focused
+			Color oldSelectionBackground = table.getSelectionBackground();
+			Color oldSelectionForeground = table.getSelectionForeground();
+			table.setSelectionBackground( selectionInactiveBackground );
+			table.setSelectionForeground( selectionInactiveForeground );
+
+			super.paint( g, c );
+
+			table.setSelectionBackground( oldSelectionBackground );
+			table.setSelectionForeground( oldSelectionForeground );
+		} else
+			super.paint( g, c );
 	}
 }
