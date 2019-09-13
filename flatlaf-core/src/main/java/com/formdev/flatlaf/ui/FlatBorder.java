@@ -22,13 +22,17 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.Paint;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.text.JTextComponent;
@@ -97,7 +101,19 @@ public class FlatBorder
 		if( c instanceof JScrollPane ) {
 			JViewport viewport = ((JScrollPane)c).getViewport();
 			Component view = (viewport != null) ? viewport.getView() : null;
-			return (view != null) ? view.hasFocus() : false;
+			if( view != null ) {
+				if( view.hasFocus() )
+					return true;
+
+				if( (view instanceof JTable && ((JTable)view).isEditing()) ||
+					(view instanceof JTree && ((JTree)view).isEditing()) )
+				{
+					Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+					if( focusOwner != null )
+						return SwingUtilities.isDescendingFrom( focusOwner, view );
+				}
+			}
+			return false;
 		} else if( c instanceof JComboBox && ((JComboBox<?>)c).isEditable() ) {
 			Component editorComponent = ((JComboBox<?>)c).getEditor().getEditorComponent();
 			return (editorComponent != null) ? editorComponent.hasFocus() : false;

@@ -156,6 +156,7 @@ public class FlatComponents2Test
 
 			//---- tree1 ----
 			tree1.setShowsRootHandles(true);
+			tree1.setEditable(true);
 			scrollPane3.setViewportView(tree1);
 		}
 		add(scrollPane3, "cell 1 3,growx");
