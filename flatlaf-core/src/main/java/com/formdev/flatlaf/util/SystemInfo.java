@@ -26,24 +26,36 @@ import java.util.StringTokenizer;
  */
 public class SystemInfo
 {
+	// platforms
 	public static final boolean IS_WINDOWS;
 	public static final boolean IS_MAC;
 	public static final boolean IS_LINUX;
 
+	// OS versions
+	public static final boolean IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER;
+
+	// Java versions
 	public static final boolean IS_JAVA_9_OR_LATER;
 
+	// Java VMs
 	public static final boolean IS_JETBRAINS_JVM;
 
 	static {
+		// platforms
 		String osName = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
-
 		IS_WINDOWS = osName.startsWith( "windows" );
 		IS_MAC = osName.startsWith( "mac" );
 		IS_LINUX = osName.startsWith( "linux" );
 
+		// OS versions
+		int osVersion = scanVersion( System.getProperty( "os.version" ) );
+		IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER = (IS_MAC && osVersion >= toVersion( 10, 11, 0, 0 ));
+
+		// Java versions
 		int javaVersion = scanVersion( System.getProperty( "java.version" ) );
 		IS_JAVA_9_OR_LATER = (javaVersion >= toVersion( 9, 0, 0, 0 ));
 
+		// Java VMs
 		IS_JETBRAINS_JVM = System.getProperty( "java.vm.vendor", "Unknown" )
 			.toLowerCase( Locale.ENGLISH ).contains( "jetbrains" );
 	}

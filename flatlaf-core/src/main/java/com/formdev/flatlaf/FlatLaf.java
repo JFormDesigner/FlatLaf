@@ -91,8 +91,18 @@ public abstract class FlatLaf
 	 * E.g. on Mac from system dependent LaF, otherwise from Metal LaF.
 	 */
 	private BasicLookAndFeel getBase() {
-		if( base == null )
-			base = new MetalLookAndFeel();
+		if( base == null ) {
+			if( SystemInfo.IS_MAC ) {
+				// use Mac Aqua LaF as base
+				try {
+					base = (BasicLookAndFeel) Class.forName( "com.apple.laf.AquaLookAndFeel" ).newInstance();
+				} catch( Exception ex ) {
+					ex.printStackTrace();
+					throw new IllegalStateException();
+				}
+			} else
+				base = new MetalLookAndFeel();
+		}
 		return base;
 	}
 
@@ -126,11 +136,23 @@ public abstract class FlatLaf
 	private void initFonts( UIDefaults defaults ) {
 		FontUIResource uiFont = null;
 
-		//TODO
 		if( SystemInfo.IS_WINDOWS ) {
 			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
 			if( winFont != null )
 				uiFont = new FontUIResource( winFont );
+
+		} else if( SystemInfo.IS_MAC ) {
+			Font font = defaults.getFont( "Label.font" );
+
+			if( SystemInfo.IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER ) {
+				// use San Francisco Text font
+				font = new FontUIResource( ".SF NS Text", font.getStyle(), font.getSize() );
+			}
+
+			uiFont = (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
+
+		} else if( SystemInfo.IS_LINUX ) {
+			System.err.println( "WARNING: FlatLaf is not yet tested on Linux!" );
 		}
 
 		if( uiFont == null )
