@@ -23,9 +23,11 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.function.Consumer;
 import javax.swing.JComponent;
@@ -140,34 +142,33 @@ public class FlatUIUtils
 	public static void paintOutlineBorder( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
-		float x1 = x;
-		float y1 = y;
-		float x2 = x1 + width;
-		float y2 = y1 + height;
-
 		float outerArc = (arc > 0) ? arc + focusWidth - UIScale.scale( 2f ) : focusWidth;
-		Path2D outerRect = createOutlinePath( x1, y1, x2, y2, outerArc );
-
 		float ow = focusWidth + lineWidth;
-		Path2D innerRect = createOutlinePath( x1 + ow, y1 + ow, x2 - ow, y2 - ow, outerArc - ow );
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( outerRect, false );
-		path.append( innerRect, false );
+		path.append( createOutlinePath( x, y, width, height, outerArc ), false );
+		path.append( createOutlinePath( x + ow, y + ow, width - (ow * 2), height - (ow * 2), outerArc - ow ), false );
 		g.fill( path );
 	}
 
-	private static Path2D createOutlinePath( float x1, float y1, float x2, float y2, float arc ) {
+	private static Shape createOutlinePath( float x, float y, float width, float height, float arc ) {
+		if( arc <= 0 )
+			return new Rectangle2D.Float( x, y, width, height );
+
+		float x2 = x + width;
+		float y2 = y + height;
+
 		Path2D rect = new Path2D.Float();
-		rect.moveTo( x2 - arc, y1 );
-		rect.quadTo( x2, y1, x2, y1 + arc );
+		rect.moveTo( x2 - arc, y );
+		rect.quadTo( x2, y, x2, y + arc );
 		rect.lineTo( x2, y2 - arc );
 		rect.quadTo( x2, y2, x2 - arc, y2 );
-		rect.lineTo( x1 + arc, y2 );
-		rect.quadTo( x1, y2, x1, y2 - arc );
-		rect.lineTo( x1, y1 + arc );
-		rect.quadTo( x1, y1, x1 + arc, y1 );
+		rect.lineTo( x + arc, y2 );
+		rect.quadTo( x, y2, x, y2 - arc );
+		rect.lineTo( x, y + arc );
+		rect.quadTo( x, y, x + arc, y );
 		rect.closePath();
+
 		return rect;
 	}
 
