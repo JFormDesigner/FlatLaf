@@ -89,8 +89,19 @@ public class FlatListUI
 				rendererComponent.setForeground( selectionInactiveForeground );
 		}
 
+		int x = rowBounds.x;
+		int width = rowBounds.width;
+
+		// reduce width to preferred width in JFileChooser
+		if( Boolean.TRUE.equals( list.getClientProperty( "List.isFileList" ) ) ) {
+			int w = Math.min( width, rendererComponent.getPreferredSize().width + 4 );
+			if( !list.getComponentOrientation().isLeftToRight() )
+				x += (width - w);
+			width = w;
+		}
+
 		// paint renderer
 		rendererPane.paintComponent( g, rendererComponent, list,
-			rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height, true );
+			x, rowBounds.y, width, rowBounds.height, true );
 	}
 }
