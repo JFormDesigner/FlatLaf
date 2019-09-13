@@ -17,13 +17,8 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import javax.swing.JComponent;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicListUI;
@@ -64,44 +59,20 @@ public class FlatListUI
 		selectionInactiveForeground = null;
 	}
 
-	/**
-	 * Same as super.paintCell(), but uses inactive selection background/foreground if list is not focused.
-	 */
 	@Override
-	@SuppressWarnings( { "rawtypes", "unchecked" } )
-	protected void paintCell( Graphics g, int row, Rectangle rowBounds, ListCellRenderer cellRenderer,
-		ListModel dataModel, ListSelectionModel selModel, int leadIndex )
-	{
-		Object value = dataModel.getElementAt( row );
-		boolean hasFocus = list.hasFocus();
-		boolean cellHasFocus = hasFocus && (row == leadIndex);
-		boolean isSelected = selModel.isSelectedIndex( row );
+	public void paint( Graphics g, JComponent c ) {
+		if( !list.hasFocus() ) {
+			// apply inactive selection background/foreground if list is not focused
+			Color oldSelectionBackground = list.getSelectionBackground();
+			Color oldSelectionForeground = list.getSelectionForeground();
+			list.setSelectionBackground( selectionInactiveBackground );
+			list.setSelectionForeground( selectionInactiveForeground );
 
-		// get renderer component
-		Component rendererComponent = cellRenderer.getListCellRendererComponent(
-			list, value, row, isSelected, cellHasFocus );
+			super.paint( g, c );
 
-		// apply inactive selection background/foreground if list is not focused
-		if( isSelected && !hasFocus ) {
-			if( rendererComponent.getBackground() == list.getSelectionBackground() )
-				rendererComponent.setBackground( selectionInactiveBackground );
-			if( rendererComponent.getForeground() == list.getSelectionForeground() )
-				rendererComponent.setForeground( selectionInactiveForeground );
-		}
-
-		int x = rowBounds.x;
-		int width = rowBounds.width;
-
-		// reduce width to preferred width in JFileChooser
-		if( Boolean.TRUE.equals( list.getClientProperty( "List.isFileList" ) ) ) {
-			int w = Math.min( width, rendererComponent.getPreferredSize().width + 4 );
-			if( !list.getComponentOrientation().isLeftToRight() )
-				x += (width - w);
-			width = w;
-		}
-
-		// paint renderer
-		rendererPane.paintComponent( g, rendererComponent, list,
-			x, rowBounds.y, width, rowBounds.height, true );
+			list.setSelectionBackground( oldSelectionBackground );
+			list.setSelectionForeground( oldSelectionForeground );
+		} else
+			super.paint( g, c );
 	}
 }
