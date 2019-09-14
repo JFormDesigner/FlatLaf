@@ -50,8 +50,8 @@ public class FlatTableUI
 	protected void installDefaults() {
 		super.installDefaults();
 
-		selectionInactiveBackground = UIManager.getColor( "Tree.selectionInactiveBackground" );
-		selectionInactiveForeground = UIManager.getColor( "Tree.selectionInactiveForeground" );
+		selectionInactiveBackground = UIManager.getColor( "Table.selectionInactiveBackground" );
+		selectionInactiveForeground = UIManager.getColor( "Table.selectionInactiveForeground" );
 
 		int rowHeight = FlatUIUtils.getUIInt( "Table.rowHeight", 16 );
 		if( rowHeight > 0 )
