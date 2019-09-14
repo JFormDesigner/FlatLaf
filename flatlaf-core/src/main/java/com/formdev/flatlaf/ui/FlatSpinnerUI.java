@@ -101,6 +101,8 @@ public class FlatSpinnerUI
 
 		// scale
 		padding = scale( padding );
+
+		MigLayoutVisualPadding.install( spinner, focusWidth );
 	}
 
 	@Override
@@ -116,6 +118,8 @@ public class FlatSpinnerUI
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
 		padding = null;
+
+		MigLayoutVisualPadding.uninstall( spinner );
 	}
 
 	@Override

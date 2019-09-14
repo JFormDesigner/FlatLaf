@@ -188,6 +188,13 @@ public class UIScale
 		return (scaleFactor == 1) ? value : Math.round( value * scaleFactor );
 	}
 
+	/**
+	 * Similar as scale(int) but always "rounds down".
+	 */
+	public static int scale2( int value ) {
+		return (scaleFactor == 1) ? value : (int) (value * scaleFactor);
+	}
+
 	public static float unscale( float value ) {
 		return (scaleFactor == 1f) ? value : (value / scaleFactor);
 	}

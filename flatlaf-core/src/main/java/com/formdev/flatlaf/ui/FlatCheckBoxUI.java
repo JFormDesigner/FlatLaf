@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.metal.MetalCheckBoxUI;
@@ -37,6 +38,20 @@ public class FlatCheckBoxUI
 		if( instance == null )
 			instance = new FlatCheckBoxUI();
 		return instance;
+	}
+
+	@Override
+	public void installDefaults( AbstractButton b ) {
+		super.installDefaults( b );
+
+		MigLayoutVisualPadding.install( b, null );
+	}
+
+	@Override
+	protected void uninstallDefaults( AbstractButton b ) {
+		super.uninstallDefaults( b );
+
+		MigLayoutVisualPadding.uninstall( b );
 	}
 
 	@Override

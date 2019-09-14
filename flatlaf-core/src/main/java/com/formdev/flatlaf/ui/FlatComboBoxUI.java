@@ -106,6 +106,8 @@ public class FlatComboBoxUI
 
 		// scale
 		padding = UIScale.scale( padding );
+
+		MigLayoutVisualPadding.install( comboBox, focusWidth );
 	}
 
 	@Override
@@ -123,6 +125,8 @@ public class FlatComboBoxUI
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
+
+		MigLayoutVisualPadding.uninstall( comboBox );
 	}
 
 	@Override

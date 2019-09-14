@@ -62,6 +62,15 @@ public class FlatPasswordFieldUI
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+
+		MigLayoutVisualPadding.install( getComponent(), focusWidth );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
 
 	@Override

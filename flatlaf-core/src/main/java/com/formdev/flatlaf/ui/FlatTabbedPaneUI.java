@@ -107,6 +107,8 @@ public class FlatTabbedPaneUI
 		tabHeight = scale( tabHeight );
 		tabSelectionHeight = scale( tabSelectionHeight );
 		contentSeparatorHeight = scale( contentSeparatorHeight );
+
+		MigLayoutVisualPadding.install( tabPane, null );
 	}
 
 	@Override
@@ -120,6 +122,8 @@ public class FlatTabbedPaneUI
 		hoverColor = null;
 		focusColor = null;
 		contentAreaColor = null;
+
+		MigLayoutVisualPadding.uninstall( tabPane );
 	}
 
 	@Override

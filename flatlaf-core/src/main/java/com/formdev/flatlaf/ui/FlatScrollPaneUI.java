@@ -30,6 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
@@ -54,12 +55,16 @@ public class FlatScrollPaneUI
 
 		if( scrollpane.getLayout() instanceof UIResource )
 			scrollpane.setLayout( new FlatScrollPaneLayout() );
+
+		MigLayoutVisualPadding.install( scrollpane, UIManager.getInt( "Component.focusWidth" ) );
 	}
 
 	@Override
 	public void uninstallUI( JComponent c ) {
 		if( scrollpane.getLayout() instanceof FlatScrollPaneLayout )
 			scrollpane.setLayout( new ScrollPaneLayout.UIResource() );
+
+		MigLayoutVisualPadding.uninstall( scrollpane );
 
 		super.uninstallUI( c );
 	}

@@ -114,6 +114,15 @@ public class FlatButtonUI
 		toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
 
 		helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
+
+		MigLayoutVisualPadding.install( b, focusWidth );
+	}
+
+	@Override
+	protected void uninstallDefaults( AbstractButton b ) {
+		super.uninstallDefaults( b );
+
+		MigLayoutVisualPadding.uninstall( b );
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
