@@ -51,6 +51,8 @@ public class FlatToggleButtonUI
 
 	protected Color toolbarSelectedBackground;
 
+	private boolean defaults_initialized = false;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -68,11 +70,21 @@ public class FlatToggleButtonUI
 	protected void installDefaults( AbstractButton b ) {
 		super.installDefaults( b );
 
-		selectedBackground = UIManager.getColor( "ToggleButton.selectedBackground" );
-		selectedForeground = UIManager.getColor( "ToggleButton.selectedForeground" );
-		disabledSelectedBackground = UIManager.getColor( "ToggleButton.disabledSelectedBackground" );
+		if( !defaults_initialized ) {
+			selectedBackground = UIManager.getColor( "ToggleButton.selectedBackground" );
+			selectedForeground = UIManager.getColor( "ToggleButton.selectedForeground" );
+			disabledSelectedBackground = UIManager.getColor( "ToggleButton.disabledSelectedBackground" );
 
-		toolbarSelectedBackground = UIManager.getColor( "ToggleButton.toolbar.selectedBackground" );
+			toolbarSelectedBackground = UIManager.getColor( "ToggleButton.toolbar.selectedBackground" );
+
+			defaults_initialized = true;
+		}
+	}
+
+	@Override
+	protected void uninstallDefaults( AbstractButton b ) {
+		super.uninstallDefaults( b );
+		defaults_initialized = false;
 	}
 
 	@Override

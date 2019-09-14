@@ -45,6 +45,8 @@ public class FlatSeparatorUI
 	protected int stripeWidth;
 	protected int stripeIndent;
 
+	private boolean defaults_initialized = false;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -57,10 +59,20 @@ public class FlatSeparatorUI
 	protected void installDefaults( JSeparator s ) {
 		super.installDefaults( s );
 
-		String prefix = getPropertyPrefix();
-		height = UIManager.getInt( prefix + ".height" );
-		stripeWidth = UIManager.getInt( prefix + ".stripeWidth" );
-		stripeIndent = UIManager.getInt( prefix + ".stripeIndent" );
+		if( !defaults_initialized ) {
+			String prefix = getPropertyPrefix();
+			height = UIManager.getInt( prefix + ".height" );
+			stripeWidth = UIManager.getInt( prefix + ".stripeWidth" );
+			stripeIndent = UIManager.getInt( prefix + ".stripeIndent" );
+
+			defaults_initialized = true;
+		}
+	}
+
+	@Override
+	protected void uninstallDefaults( JSeparator s ) {
+		super.uninstallDefaults( s );
+		defaults_initialized = false;
 	}
 
 	protected String getPropertyPrefix() {

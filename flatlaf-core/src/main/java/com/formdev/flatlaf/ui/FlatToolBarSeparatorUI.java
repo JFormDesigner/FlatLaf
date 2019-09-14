@@ -46,6 +46,8 @@ public class FlatToolBarSeparatorUI
 	protected int separatorWidth;
 	protected Color separatorColor;
 
+	private boolean defaults_initialized = false;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -58,12 +60,22 @@ public class FlatToolBarSeparatorUI
 	protected void installDefaults( JSeparator c ) {
 		super.installDefaults( c );
 
-		separatorWidth = UIManager.getInt( "ToolBar.separatorWidth" );
-		separatorColor = UIManager.getColor( "ToolBar.separatorColor" );
+		if( !defaults_initialized ) {
+			separatorWidth = UIManager.getInt( "ToolBar.separatorWidth" );
+			separatorColor = UIManager.getColor( "ToolBar.separatorColor" );
+
+			defaults_initialized = true;
+		}
 
 		// necessary for vertical toolbars if separator size was set using setSeparatorSize()
 		// (otherwise there will be a gap on the left side of the vertical toolbar)
 		c.setAlignmentX( 0 );
+	}
+
+	@Override
+	protected void uninstallDefaults( JSeparator s ) {
+		super.uninstallDefaults( s );
+		defaults_initialized = false;
 	}
 
 	@Override

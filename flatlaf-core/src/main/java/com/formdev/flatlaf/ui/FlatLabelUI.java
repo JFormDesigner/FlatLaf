@@ -39,6 +39,8 @@ public class FlatLabelUI
 {
 	private Color disabledForeground;
 
+	private boolean defaults_initialized = false;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -51,7 +53,17 @@ public class FlatLabelUI
 	protected void installDefaults( JLabel c ) {
 		super.installDefaults( c );
 
-		disabledForeground = UIManager.getColor( "Label.disabledForeground" );
+		if( !defaults_initialized ) {
+			disabledForeground = UIManager.getColor( "Label.disabledForeground" );
+
+			defaults_initialized = true;
+		}
+	}
+
+	@Override
+	protected void uninstallDefaults( JLabel c ) {
+		super.uninstallDefaults( c );
+		defaults_initialized = false;
 	}
 
 	@Override

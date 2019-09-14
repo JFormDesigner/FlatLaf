@@ -81,6 +81,8 @@ public class FlatButtonUI
 
 	private Icon helpButtonIcon;
 
+	private boolean defaults_initialized = false;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -93,27 +95,31 @@ public class FlatButtonUI
 	protected void installDefaults( AbstractButton b ) {
 		super.installDefaults( b );
 
-		String prefix = getPropertyPrefix();
+		if( !defaults_initialized ) {
+			String prefix = getPropertyPrefix();
 
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
-		arc = UIManager.getInt( prefix + "arc" );
-		minimumWidth = UIManager.getInt( prefix + "minimumWidth" );
+			focusWidth = UIManager.getInt( "Component.focusWidth" );
+			arc = UIManager.getInt( prefix + "arc" );
+			minimumWidth = UIManager.getInt( prefix + "minimumWidth" );
 
-		focusedBackground = UIManager.getColor( prefix + "focusedBackground" );
-		hoverBackground = UIManager.getColor( prefix + "hoverBackground" );
-		pressedBackground = UIManager.getColor( prefix + "pressedBackground" );
-		disabledText = UIManager.getColor( prefix + "disabledText" );
+			focusedBackground = UIManager.getColor( prefix + "focusedBackground" );
+			hoverBackground = UIManager.getColor( prefix + "hoverBackground" );
+			pressedBackground = UIManager.getColor( prefix + "pressedBackground" );
+			disabledText = UIManager.getColor( prefix + "disabledText" );
 
-		defaultBackground = UIManager.getColor( "Button.default.background" );
-		defaultForeground = UIManager.getColor( "Button.default.foreground" );
-		defaultFocusedBackground = UIManager.getColor( "Button.default.focusedBackground" );
-		defaultHoverBackground = UIManager.getColor( "Button.default.hoverBackground" );
-		defaultPressedBackground = UIManager.getColor( "Button.default.pressedBackground" );
+			defaultBackground = UIManager.getColor( "Button.default.background" );
+			defaultForeground = UIManager.getColor( "Button.default.foreground" );
+			defaultFocusedBackground = UIManager.getColor( "Button.default.focusedBackground" );
+			defaultHoverBackground = UIManager.getColor( "Button.default.hoverBackground" );
+			defaultPressedBackground = UIManager.getColor( "Button.default.pressedBackground" );
 
-		toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
-		toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
+			toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
+			toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
 
-		helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
+			helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
+
+			defaults_initialized = true;
+		}
 
 		MigLayoutVisualPadding.install( b, focusWidth );
 	}
@@ -123,6 +129,7 @@ public class FlatButtonUI
 		super.uninstallDefaults( b );
 
 		MigLayoutVisualPadding.uninstall( b );
+		defaults_initialized = false;
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
