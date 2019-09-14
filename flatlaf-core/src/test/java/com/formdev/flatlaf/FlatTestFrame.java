@@ -83,12 +83,13 @@ public class FlatTestFrame
 				className.equals( "com.sun.java.swing.plaf.motif.MotifLookAndFeel" ) )
 			  continue;
 
-			if( className.equals( NimbusLookAndFeel.class.getName() ) )
-				name += " (F10)";
+			if( (SystemInfo.IS_WINDOWS && className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" )) ||
+				(SystemInfo.IS_MAC && className.equals( "com.apple.laf.AquaLookAndFeel") ) )
+				name += " (F9)";
 			else if( className.equals( MetalLookAndFeel.class.getName() ) )
+				name += " (F10)";
+			else if( className.equals( NimbusLookAndFeel.class.getName() ) )
 				name += " (F11)";
-			else if( className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" ) )
-				name += " (F12)";
 
 			lafModel.addElement( new LafInfo( name, className ) );
 		}
@@ -111,10 +112,12 @@ public class FlatTestFrame
 		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatIntelliJLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F5, FlatDarculaLaf.class.getName() );
 
-		registerSwitchToLookAndFeel( KeyEvent.VK_F10, NimbusLookAndFeel.class.getName() );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F11, MetalLookAndFeel.class.getName() );
 		if( SystemInfo.IS_WINDOWS )
-			registerSwitchToLookAndFeel( KeyEvent.VK_F12, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
+			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
+		else if( SystemInfo.IS_MAC )
+			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.apple.laf.AquaLookAndFeel" );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F10, MetalLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F11, NimbusLookAndFeel.class.getName() );
 
 		// register ESC key to close frame
 		((JComponent)getContentPane()).registerKeyboardAction(
