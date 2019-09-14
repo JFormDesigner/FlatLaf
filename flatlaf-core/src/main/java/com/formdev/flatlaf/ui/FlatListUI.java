@@ -17,7 +17,8 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -36,6 +37,8 @@ import javax.swing.plaf.basic.BasicListUI;
 public class FlatListUI
 	extends BasicListUI
 {
+	protected Color selectionBackground;
+	protected Color selectionForeground;
 	protected Color selectionInactiveBackground;
 	protected Color selectionInactiveForeground;
 
@@ -47,32 +50,61 @@ public class FlatListUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		selectionBackground = UIManager.getColor( "List.selectionBackground" );
+		selectionForeground = UIManager.getColor( "List.selectionForeground" );
 		selectionInactiveBackground = UIManager.getColor( "List.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "List.selectionInactiveForeground" );
+
+		toggleSelectionColors( list.hasFocus() );
 	}
 
 	@Override
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		selectionBackground = null;
+		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
 	}
 
 	@Override
-	public void paint( Graphics g, JComponent c ) {
-		if( !list.hasFocus() ) {
-			// apply inactive selection background/foreground if list is not focused
-			Color oldSelectionBackground = list.getSelectionBackground();
-			Color oldSelectionForeground = list.getSelectionForeground();
-			list.setSelectionBackground( selectionInactiveBackground );
-			list.setSelectionForeground( selectionInactiveForeground );
+	protected FocusListener createFocusListener() {
+		return new BasicListUI.FocusHandler() {
+			@Override
+			public void focusGained( FocusEvent e ) {
+				super.focusGained( e );
+				toggleSelectionColors( true );
+			}
 
-			super.paint( g, c );
+			@Override
+			public void focusLost( FocusEvent e ) {
+				super.focusLost( e );
+				toggleSelectionColors( false );
+			}
+		};
+	}
 
-			list.setSelectionBackground( oldSelectionBackground );
-			list.setSelectionForeground( oldSelectionForeground );
-		} else
-			super.paint( g, c );
+	/**
+	 * Toggle selection colors from focused to inactive and vice versa.
+	 *
+	 * This is not a optimal solution but much easier than rewriting the whole paint methods.
+	 *
+	 * Using a LaF specific renderer was avoided because often a custom renderer is
+	 * already used in applications. Then either the inactive colors are not used,
+	 * or the application has to be changed to extend a FlatLaf renderer.
+	 */
+	private void toggleSelectionColors( boolean focused ) {
+		if( focused ) {
+			if( list.getSelectionBackground() == selectionInactiveBackground )
+				list.setSelectionBackground( selectionBackground );
+			if( list.getSelectionForeground() == selectionInactiveForeground )
+				list.setSelectionForeground( selectionForeground );
+		} else {
+			if( list.getSelectionBackground() == selectionBackground )
+				list.setSelectionBackground( selectionInactiveBackground );
+			if( list.getSelectionForeground() == selectionForeground )
+				list.setSelectionForeground( selectionInactiveForeground );
+		}
 	}
 }
