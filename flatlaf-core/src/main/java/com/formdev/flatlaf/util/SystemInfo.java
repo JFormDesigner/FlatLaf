@@ -48,11 +48,11 @@ public class SystemInfo
 		IS_LINUX = osName.startsWith( "linux" );
 
 		// OS versions
-		int osVersion = scanVersion( System.getProperty( "os.version" ) );
+		long osVersion = scanVersion( System.getProperty( "os.version" ) );
 		IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER = (IS_MAC && osVersion >= toVersion( 10, 11, 0, 0 ));
 
 		// Java versions
-		int javaVersion = scanVersion( System.getProperty( "java.version" ) );
+		long javaVersion = scanVersion( System.getProperty( "java.version" ) );
 		IS_JAVA_9_OR_LATER = (javaVersion >= toVersion( 9, 0, 0, 0 ));
 
 		// Java VMs
@@ -60,7 +60,7 @@ public class SystemInfo
 			.toLowerCase( Locale.ENGLISH ).contains( "jetbrains" );
 	}
 
-	private static int scanVersion( String version ) {
+	private static long scanVersion( String version ) {
 		int major = 1;
 		int minor = 0;
 		int micro = 0;
@@ -78,7 +78,7 @@ public class SystemInfo
 		return toVersion( major, minor, micro, patch );
 	}
 
-	private static int toVersion( int major, int minor, int micro, int patch ) {
-		return (major << 24) + (minor << 16) + (micro << 8) + patch;
+	private static long toVersion( int major, int minor, int micro, int patch ) {
+		return ((long) major << 48) + ((long) minor << 32) + ((long) micro << 16) + patch;
 	}
 }
