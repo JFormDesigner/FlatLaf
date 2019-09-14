@@ -17,7 +17,8 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -39,6 +40,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTableUI
 	extends BasicTableUI
 {
+	protected Color selectionBackground;
+	protected Color selectionForeground;
 	protected Color selectionInactiveBackground;
 	protected Color selectionInactiveForeground;
 
@@ -50,8 +53,12 @@ public class FlatTableUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		selectionBackground = UIManager.getColor( "Table.selectionBackground" );
+		selectionForeground = UIManager.getColor( "Table.selectionForeground" );
 		selectionInactiveBackground = UIManager.getColor( "Table.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Table.selectionInactiveForeground" );
+
+		toggleSelectionColors( table.hasFocus() );
 
 		int rowHeight = FlatUIUtils.getUIInt( "Table.rowHeight", 16 );
 		if( rowHeight > 0 )
@@ -62,24 +69,49 @@ public class FlatTableUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		selectionBackground = null;
+		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
 	}
 
 	@Override
-	public void paint( Graphics g, JComponent c ) {
-		if( !table.hasFocus() ) {
-			// apply inactive selection background/foreground if table is not focused
-			Color oldSelectionBackground = table.getSelectionBackground();
-			Color oldSelectionForeground = table.getSelectionForeground();
-			table.setSelectionBackground( selectionInactiveBackground );
-			table.setSelectionForeground( selectionInactiveForeground );
+	protected FocusListener createFocusListener() {
+		return new BasicTableUI.FocusHandler() {
+			@Override
+			public void focusGained( FocusEvent e ) {
+				super.focusGained( e );
+				toggleSelectionColors( true );
+			}
 
-			super.paint( g, c );
+			@Override
+			public void focusLost( FocusEvent e ) {
+				super.focusLost( e );
+				toggleSelectionColors( false );
+			}
+		};
+	}
 
-			table.setSelectionBackground( oldSelectionBackground );
-			table.setSelectionForeground( oldSelectionForeground );
-		} else
-			super.paint( g, c );
+	/**
+	 * Toggle selection colors from focused to inactive and vice versa.
+	 *
+	 * This is not a optimal solution but much easier than rewriting the whole paint methods.
+	 *
+	 * Using a LaF specific renderer was avoided because often a custom renderer is
+	 * already used in applications. Then either the inactive colors are not used,
+	 * or the application has to be changed to extend a FlatLaf renderer.
+	 */
+	private void toggleSelectionColors( boolean focused ) {
+		if( focused ) {
+			if( table.getSelectionBackground() == selectionInactiveBackground )
+				table.setSelectionBackground( selectionBackground );
+			if( table.getSelectionForeground() == selectionInactiveForeground )
+				table.setSelectionForeground( selectionForeground );
+		} else {
+			if( table.getSelectionBackground() == selectionBackground )
+				table.setSelectionBackground( selectionInactiveBackground );
+			if( table.getSelectionForeground() == selectionForeground )
+				table.setSelectionForeground( selectionInactiveForeground );
+		}
 	}
 }
