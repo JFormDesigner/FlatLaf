@@ -16,22 +16,31 @@
 
 package com.formdev.flatlaf.ui;
 
-import java.awt.Dimension;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.metal.MetalRadioButtonUI;
+import javax.swing.plaf.basic.BasicRadioButtonUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JRadioButton}.
  *
+ * TODO document used UI defaults of superclass
+ *
+ * @uiDefault Button.disabledText				Color
+ *
  * @author Karl Tauber
  */
 public class FlatRadioButtonUI
-	extends MetalRadioButtonUI
+	extends BasicRadioButtonUI
 {
+	protected Color disabledText;
+
+	private boolean defaults_initialized = false;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -44,6 +53,14 @@ public class FlatRadioButtonUI
 	public void installDefaults( AbstractButton b ) {
 		super.installDefaults( b );
 
+		if( !defaults_initialized ) {
+			String prefix = getPropertyPrefix();
+
+			disabledText = UIManager.getColor( prefix + "disabledText" );
+
+			defaults_initialized = true;
+		}
+
 		MigLayoutVisualPadding.install( b, null );
 	}
 
@@ -52,10 +69,11 @@ public class FlatRadioButtonUI
 		super.uninstallDefaults( b );
 
 		MigLayoutVisualPadding.uninstall( b );
+		defaults_initialized = false;
 	}
 
 	@Override
-	protected void paintFocus( Graphics g, Rectangle t, Dimension d ) {
-		// focus border painted in icon
+	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
+		FlatButtonUI.paintText( g, b, textRect, text, b.isEnabled() ? b.getForeground() : disabledText );
 	}
 }

@@ -16,13 +16,8 @@
 
 package com.formdev.flatlaf.ui;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.metal.MetalCheckBoxUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JCheckBox}.
@@ -30,7 +25,7 @@ import javax.swing.plaf.metal.MetalCheckBoxUI;
  * @author Karl Tauber
  */
 public class FlatCheckBoxUI
-	extends MetalCheckBoxUI
+	extends FlatRadioButtonUI
 {
 	private static ComponentUI instance;
 
@@ -41,21 +36,7 @@ public class FlatCheckBoxUI
 	}
 
 	@Override
-	public void installDefaults( AbstractButton b ) {
-		super.installDefaults( b );
-
-		MigLayoutVisualPadding.install( b, null );
-	}
-
-	@Override
-	protected void uninstallDefaults( AbstractButton b ) {
-		super.uninstallDefaults( b );
-
-		MigLayoutVisualPadding.uninstall( b );
-	}
-
-	@Override
-	protected void paintFocus( Graphics g, Rectangle t, Dimension d ) {
-		// focus border painted in icon
+	public String getPropertyPrefix() {
+		return "CheckBox.";
 	}
 }

@@ -181,18 +181,20 @@ public class FlatButtonUI
 	}
 
 	@Override
-	protected void paintText( Graphics g, JComponent c, Rectangle textRect, String text ) {
-		if( isHelpButton( c ) )
+	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
+		if( isHelpButton( b ) )
 			return;
 
-		AbstractButton b = (AbstractButton) c;
-		FontMetrics fm = c.getFontMetrics( c.getFont() );
+		paintText( g, b, textRect, text, b.isEnabled() ? getForeground( b ) : disabledText );
+	}
+
+	static void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text, Color foreground ) {
+		FontMetrics fm = b.getFontMetrics( b.getFont() );
 		int mnemonicIndex = b.getDisplayedMnemonicIndex();
 
-		g.setColor( b.getModel().isEnabled() ? getForeground( c ) : disabledText );
-		FlatUIUtils.drawStringUnderlineCharAt( c, g, text, mnemonicIndex,
-			textRect.x + getTextShiftOffset(),
-			textRect.y + fm.getAscent() + getTextShiftOffset() );
+		g.setColor( foreground );
+		FlatUIUtils.drawStringUnderlineCharAt( b, g, text, mnemonicIndex,
+			textRect.x, textRect.y + fm.getAscent() );
 	}
 
 	protected Color getBackground( JComponent c ) {
