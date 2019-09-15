@@ -52,6 +52,7 @@ public abstract class FlatLaf
 {
 	private static final String VARIABLE_PREFIX = "@";
 	private static final String REF_PREFIX = VARIABLE_PREFIX + "@";
+	private static final String OPTIONAL_PREFIX = "?";
 	private static final String GLOBAL_PREFIX = "*.";
 
 	private BasicLookAndFeel base;
@@ -244,8 +245,8 @@ public abstract class FlatLaf
 			value = value.substring( REF_PREFIX.length() );
 
 		boolean optional = false;
-		if( value.startsWith( "?" ) ) {
-			value = value.substring( 1 );
+		if( value.startsWith( OPTIONAL_PREFIX ) ) {
+			value = value.substring( OPTIONAL_PREFIX.length() );
 			optional = true;
 		}
 
