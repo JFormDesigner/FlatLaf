@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.icons;
 
-import static com.formdev.flatlaf.util.UIScale.*;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -28,6 +27,10 @@ import com.formdev.flatlaf.ui.FlatButtonUI;
 
 /**
  * Icon for {@link javax.swing.JCheckBox}.
+ *
+ * Note: If Component.focusWidth is greater than zero, then the outline focus border
+ *       is painted outside of the icon bounds. Make sure that the checkbox
+ *       has margins, which are equal or greater than focusWidth.
  *
  * @uiDefault Component.focusWidth						int
  * @uiDefault Component.focusColor						Color
@@ -73,10 +76,10 @@ public class FlatCheckBoxIcon
 	protected final Color checkmarkColor = UIManager.getColor( "CheckBox.icon.checkmarkColor" );
 	protected final Color disabledCheckmarkColor = UIManager.getColor( "CheckBox.icon.disabledCheckmarkColor" );
 
-	protected final int iconSize = 15 + (focusWidth * 2);
+	static final int ICON_SIZE = 15;
 
 	public FlatCheckBoxIcon() {
-		super( 0, 0, null );
+		super( ICON_SIZE, ICON_SIZE, null );
 	}
 
 	@Override
@@ -84,7 +87,7 @@ public class FlatCheckBoxIcon
 		boolean selected = (c instanceof AbstractButton) ? ((AbstractButton)c).isSelected() : false;
 
 		// paint focused border
-		if( c.hasFocus() ) {
+		if( c.hasFocus() && focusWidth > 0 ) {
 			g2.setColor( focusColor );
 			paintFocusBorder( g2 );
 		}
@@ -115,15 +118,17 @@ public class FlatCheckBoxIcon
 	}
 
 	protected void paintFocusBorder( Graphics2D g2 ) {
-		g2.fillRoundRect( 1, 0, iconSize - 1, iconSize - 1, 8, 8 );
+		// the outline focus border is painted outside of the icon
+		int wh = ICON_SIZE - 1 + (focusWidth * 2);
+		g2.fillRoundRect( -focusWidth + 1, -focusWidth, wh, wh, 8, 8 );
 	}
 
 	protected void paintBorder( Graphics2D g2 ) {
-		g2.fillRoundRect( focusWidth + 1, focusWidth, 14, 14, 4, 4 );
+		g2.fillRoundRect( 1, 0, 14, 14, 4, 4 );
 	}
 
 	protected void paintBackground( Graphics2D g2 ) {
-		g2.fillRoundRect( focusWidth + 2, focusWidth + 1, 12, 12, 4, 4 );
+		g2.fillRoundRect( 2, 1, 12, 12, 4, 4 );
 	}
 
 	protected void paintCheckmark( Graphics2D g2 ) {
@@ -132,19 +137,7 @@ public class FlatCheckBoxIcon
 		path.lineTo( 6.6f, 10f );
 		path.lineTo( 11.25f, 3.5f );
 
-		g2.translate( focusWidth, focusWidth );
 		g2.setStroke( new BasicStroke( 1.9f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
 		g2.draw( path );
-		g2.translate( -focusWidth, -focusWidth );
-	}
-
-	@Override
-	public int getIconWidth() {
-		return scale( iconSize );
-	}
-
-	@Override
-	public int getIconHeight() {
-		return scale( iconSize );
 	}
 }

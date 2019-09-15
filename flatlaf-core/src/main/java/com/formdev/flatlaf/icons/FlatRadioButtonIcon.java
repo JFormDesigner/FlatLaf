@@ -23,6 +23,10 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * Icon for {@link javax.swing.JRadioButton}.
  *
+ * Note: If Component.focusWidth is greater than zero, then the outline focus border
+ *       is painted outside of the icon bounds. Make sure that the radiobutton
+ *       has margins, which are equal or greater than focusWidth.
+ *
  * @uiDefault RadioButton.icon.centerDiameter			int
  *
  * @author Karl Tauber
@@ -34,22 +38,24 @@ public class FlatRadioButtonIcon
 
 	@Override
 	protected void paintFocusBorder( Graphics2D g2 ) {
-		g2.fillOval( 0, 0, iconSize, iconSize );
+		// the outline focus border is painted outside of the icon
+		int wh = ICON_SIZE + (focusWidth * 2);
+		g2.fillOval( -focusWidth, -focusWidth, wh, wh );
 	}
 
 	@Override
 	protected void paintBorder( Graphics2D g2 ) {
-		g2.fillOval( focusWidth, focusWidth, 15, 15 );
+		g2.fillOval( 0, 0, 15, 15 );
 	}
 
 	@Override
 	protected void paintBackground( Graphics2D g2 ) {
-		g2.fillOval( focusWidth + 1, focusWidth + 1, 13, 13 );
+		g2.fillOval( 1, 1, 13, 13 );
 	}
 
 	@Override
 	protected void paintCheckmark( Graphics2D g2 ) {
-		float xy = (iconSize - centerDiameter) / 2f;
+		float xy = (ICON_SIZE - centerDiameter) / 2f;
 		g2.fill( new Ellipse2D.Float( xy, xy, centerDiameter, centerDiameter ) );
 	}
 }
