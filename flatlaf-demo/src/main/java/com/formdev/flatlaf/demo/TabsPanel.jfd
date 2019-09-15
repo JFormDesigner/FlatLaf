@@ -14,7 +14,7 @@ new FormModel {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
 				"$columnSpecs": "70dlu:grow, labelcompgap, 70dlu:grow"
-				"$rowSpecs": "default, linegap, fill:70dlu, linegap, pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref, linegap, pref"
+				"$rowSpecs": "default, linegap, fill:70dlu, linegap, pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref"
 			} ) {
 				name: "panel9"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -197,51 +197,55 @@ new FormModel {
 					"gridX": 3
 					"gridY": 9
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "tabScrollCheckBox"
-					"text": "tabLayoutPolicy = SCROLL"
-					"mnemonic": 83
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabScrollChanged", false ) )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "insets 0,hidemode 3"
+					"$columnConstraints": "[][][]"
+					"$rowConstraints": "[center]"
+				} ) {
+					name: "panel14"
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "moreTabsCheckBox"
+						"text": "more tabs"
+						"mnemonic": 77
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "moreTabsChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "tabScrollCheckBox"
+						"text": "tabLayoutPolicy = SCROLL"
+						"mnemonic": 83
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabScrollChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0,alignx left,growx 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "hasFullBorderCheckBox"
+						"text": "JTabbedPane.hasFullBorder"
+						"mnemonic": 70
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hasFullBorderChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 0,alignx left,growx 0"
+					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 1
 					"gridY": 11
-					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints LEFT
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "hasFullBorderCheckBox"
-					"text": "JTabbedPane.hasFullBorder"
-					"mnemonic": 70
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hasFullBorderChanged", false ) )
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 3
-					"gridY": 11
-					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints LEFT
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "moreTabsCheckBox"
-					"text": "more tabs"
-					"mnemonic": 77
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "moreTabsChanged", false ) )
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 1
-					"gridY": 13
-					"hAlign": sfield com.jgoodies.forms.layout.CellConstraints LEFT
+					"gridWidth": 3
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 400, 585 )
+			"size": new java.awt.Dimension( 500, 515 )
 		} )
 	}
 }

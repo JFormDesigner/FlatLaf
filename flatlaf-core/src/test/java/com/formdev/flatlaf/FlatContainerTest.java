@@ -94,26 +94,25 @@ public class FlatContainerTest
 		JLabel label7 = new JLabel();
 		JPanel panel8 = new JPanel();
 		JLabel label8 = new JLabel();
+		JPanel panel14 = new JPanel();
+		moreTabsCheckBox = new JCheckBox();
 		tabScrollCheckBox = new JCheckBox();
 		hasFullBorderCheckBox = new JCheckBox();
-		moreTabsCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
 		setLayout(new MigLayout(
 			"insets 0,hidemode 3",
 			// columns
-			"[grow,fill]" +
-			"[fill]",
+			"[grow,fill]",
 			// rows
-			"[grow,fill]" +
-			"[]"));
+			"[grow,fill]"));
 
 		//======== panel9 ========
 		{
 			panel9.setLayout(new FormLayout(
 				"70dlu:grow, $lcgap, 70dlu:grow",
-				"default, $lgap, fill:70dlu, $lgap, pref, 2*($lgap, fill:70dlu:grow), 2*($lgap, pref)"));
+				"default, $lgap, fill:70dlu, $lgap, pref, 2*($lgap, fill:70dlu:grow), $lgap, pref"));
 
 			//---- splitPaneLabel ----
 			splitPaneLabel.setText("JSplitPane:");
@@ -280,23 +279,36 @@ public class FlatContainerTest
 			}
 			panel9.add(tabbedPane4, cc.xy(3, 9));
 
-			//---- tabScrollCheckBox ----
-			tabScrollCheckBox.setText("tabLayoutPolicy = SCROLL");
-			tabScrollCheckBox.setMnemonic('S');
-			tabScrollCheckBox.addActionListener(e -> tabScrollChanged());
-			panel9.add(tabScrollCheckBox, cc.xy(1, 11, CellConstraints.LEFT, CellConstraints.DEFAULT));
+			//======== panel14 ========
+			{
+				panel14.setLayout(new MigLayout(
+					"insets 0,hidemode 3",
+					// columns
+					"[]" +
+					"[]" +
+					"[]",
+					// rows
+					"[center]"));
 
-			//---- hasFullBorderCheckBox ----
-			hasFullBorderCheckBox.setText("JTabbedPane.hasFullBorder");
-			hasFullBorderCheckBox.setMnemonic('F');
-			hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
-			panel9.add(hasFullBorderCheckBox, cc.xy(3, 11, CellConstraints.LEFT, CellConstraints.DEFAULT));
+				//---- moreTabsCheckBox ----
+				moreTabsCheckBox.setText("more tabs");
+				moreTabsCheckBox.setMnemonic('M');
+				moreTabsCheckBox.addActionListener(e -> moreTabsChanged());
+				panel14.add(moreTabsCheckBox, "cell 0 0");
 
-			//---- moreTabsCheckBox ----
-			moreTabsCheckBox.setText("more tabs");
-			moreTabsCheckBox.setMnemonic('M');
-			moreTabsCheckBox.addActionListener(e -> moreTabsChanged());
-			panel9.add(moreTabsCheckBox, cc.xy(1, 13, CellConstraints.LEFT, CellConstraints.DEFAULT));
+				//---- tabScrollCheckBox ----
+				tabScrollCheckBox.setText("tabLayoutPolicy = SCROLL");
+				tabScrollCheckBox.setMnemonic('S');
+				tabScrollCheckBox.addActionListener(e -> tabScrollChanged());
+				panel14.add(tabScrollCheckBox, "cell 1 0,alignx left,growx 0");
+
+				//---- hasFullBorderCheckBox ----
+				hasFullBorderCheckBox.setText("JTabbedPane.hasFullBorder");
+				hasFullBorderCheckBox.setMnemonic('F');
+				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
+				panel14.add(hasFullBorderCheckBox, "cell 2 0,alignx left,growx 0");
+			}
+			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
 		add(panel9, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -307,8 +319,8 @@ public class FlatContainerTest
 	private JTabbedPane tabbedPane3;
 	private JTabbedPane tabbedPane2;
 	private JTabbedPane tabbedPane4;
+	private JCheckBox moreTabsCheckBox;
 	private JCheckBox tabScrollCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
-	private JCheckBox moreTabsCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
