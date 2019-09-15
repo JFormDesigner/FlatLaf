@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicRadioButtonMenuItemUI;
@@ -39,5 +40,18 @@ public class FlatRadioButtonMenuItemUI
 
 		// scale
 		defaultTextIconGap = scale( defaultTextIconGap );
+	}
+
+	/**
+	 * Scale defaultTextIconGap again if iconTextGap property has changed.
+	 */
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
+		PropertyChangeListener superListener = super.createPropertyChangeListener( c );
+		return e -> {
+			superListener.propertyChange( e );
+			if( e.getPropertyName() == "iconTextGap" )
+				defaultTextIconGap = scale( defaultTextIconGap );
+		};
 	}
 }
