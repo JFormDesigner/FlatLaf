@@ -83,7 +83,7 @@ class OptionPanePanel
 		OptionPanePanel.ShowDialogLinkLabel customShowDialogLabel = new OptionPanePanel.ShowDialogLinkLabel();
 
 		//======== this ========
-		setBorder(null);
+		setBorder(BorderFactory.createEmptyBorder());
 
 		//======== panel9 ========
 		{

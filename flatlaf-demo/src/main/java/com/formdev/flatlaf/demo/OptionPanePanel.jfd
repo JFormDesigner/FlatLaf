@@ -8,7 +8,7 @@ new FormModel {
 		}
 		add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 			name: "this"
-			"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+			"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 			add( new FormContainer( "com.formdev.flatlaf.demo.ScrollablePanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "flowy,hidemode 3"
 				"$columnConstraints": "[][][fill]"
