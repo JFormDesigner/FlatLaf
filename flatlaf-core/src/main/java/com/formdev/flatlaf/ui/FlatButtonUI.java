@@ -31,6 +31,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JToolBar;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
@@ -44,6 +45,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
  * @uiDefault Component.focusWidth				int
  * @uiDefault Button.arc						int
  * @uiDefault Button.minimumWidth				int
+ * @uiDefault Button.iconTextGap				int
  * @uiDefault Button.focusedBackground			Color	optional
  * @uiDefault Button.hoverBackground			Color	optional
  * @uiDefault Button.pressedBackground			Color	optional
@@ -64,6 +66,7 @@ public class FlatButtonUI
 	protected int focusWidth;
 	protected int arc;
 	protected int minimumWidth;
+	protected int iconTextGap;
 
 	protected Color focusedBackground;
 	protected Color hoverBackground;
@@ -101,6 +104,7 @@ public class FlatButtonUI
 			focusWidth = UIManager.getInt( "Component.focusWidth" );
 			arc = UIManager.getInt( prefix + "arc" );
 			minimumWidth = UIManager.getInt( prefix + "minimumWidth" );
+			iconTextGap = FlatUIUtils.getUIInt( prefix + "iconTextGap", 4 );
 
 			focusedBackground = UIManager.getColor( prefix + "focusedBackground" );
 			hoverBackground = UIManager.getColor( prefix + "hoverBackground" );
@@ -120,6 +124,8 @@ public class FlatButtonUI
 
 			defaults_initialized = true;
 		}
+
+		LookAndFeel.installProperty( b, "iconTextGap", scale( iconTextGap ) );
 
 		MigLayoutVisualPadding.install( b, focusWidth );
 	}

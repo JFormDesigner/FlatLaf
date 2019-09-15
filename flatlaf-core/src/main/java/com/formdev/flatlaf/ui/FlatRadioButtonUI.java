@@ -16,11 +16,13 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
@@ -30,6 +32,7 @@ import javax.swing.plaf.basic.BasicRadioButtonUI;
  *
  * TODO document used UI defaults of superclass
  *
+ * @uiDefault Button.iconTextGap				int
  * @uiDefault Button.disabledText				Color
  *
  * @author Karl Tauber
@@ -37,6 +40,7 @@ import javax.swing.plaf.basic.BasicRadioButtonUI;
 public class FlatRadioButtonUI
 	extends BasicRadioButtonUI
 {
+	protected int iconTextGap;
 	protected Color disabledText;
 
 	private boolean defaults_initialized = false;
@@ -56,10 +60,13 @@ public class FlatRadioButtonUI
 		if( !defaults_initialized ) {
 			String prefix = getPropertyPrefix();
 
+			iconTextGap = FlatUIUtils.getUIInt( prefix + "iconTextGap", 4 );
 			disabledText = UIManager.getColor( prefix + "disabledText" );
 
 			defaults_initialized = true;
 		}
+
+		LookAndFeel.installProperty( b, "iconTextGap", scale( iconTextGap ) );
 
 		MigLayoutVisualPadding.install( b, null );
 	}
