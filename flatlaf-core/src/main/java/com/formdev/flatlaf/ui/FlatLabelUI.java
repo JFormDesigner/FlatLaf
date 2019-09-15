@@ -17,12 +17,17 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicLabelUI;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JLabel}.
@@ -71,5 +76,19 @@ public class FlatLabelUI
 		int mnemIndex = l.getDisplayedMnemonicIndex();
 		g.setColor( disabledForeground );
 		FlatUIUtils.drawStringUnderlineCharAt( l, g, s, mnemIndex, textX, textY );
+	}
+
+	/**
+	 * Overridden to scale iconTextGap.
+	 */
+	@Override
+	protected String layoutCL( JLabel label, FontMetrics fontMetrics, String text, Icon icon, Rectangle viewR,
+		Rectangle iconR, Rectangle textR )
+	{
+		return SwingUtilities.layoutCompoundLabel( label, fontMetrics, text, icon,
+			label.getVerticalAlignment(), label.getHorizontalAlignment(),
+			label.getVerticalTextPosition(), label.getHorizontalTextPosition(),
+			viewR, iconR, textR,
+			UIScale.scale( label.getIconTextGap() ) );
 	}
 }
