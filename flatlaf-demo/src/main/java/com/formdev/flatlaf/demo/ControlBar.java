@@ -240,7 +240,7 @@ class ControlBar
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"insets 0",
+			"insets dialog",
 			// columns
 			"[fill]" +
 			"[fill]" +
@@ -248,7 +248,7 @@ class ControlBar
 			"[grow,fill]" +
 			"[button,fill]",
 			// rows
-			"[20,bottom]" +
+			"[bottom]" +
 			"[]"));
 		add(separator1, "cell 0 0 5 1");
 

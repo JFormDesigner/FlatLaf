@@ -228,8 +228,7 @@ class DemoFrame
 				// columns
 				"[grow,fill]",
 				// rows
-				"[grow,fill]" +
-				"[]"));
+				"[grow,fill]"));
 
 			//======== tabbedPane ========
 			{
@@ -241,9 +240,9 @@ class DemoFrame
 				tabbedPane.addTab("Option Pane", optionPanePanel);
 			}
 			contentPanel.add(tabbedPane, "cell 0 0");
-			contentPanel.add(controlBar, "cell 0 1");
 		}
 		contentPane.add(contentPanel, BorderLayout.CENTER);
+		contentPane.add(controlBar, BorderLayout.SOUTH);
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();

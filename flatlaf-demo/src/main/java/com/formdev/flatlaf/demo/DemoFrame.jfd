@@ -52,7 +52,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets dialog,hidemode 3"
 				"$columnConstraints": "[grow,fill]"
-				"$rowConstraints": "[grow,fill][]"
+				"$rowConstraints": "[grow,fill]"
 			} ) {
 				name: "contentPanel"
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
@@ -89,16 +89,16 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
 				} )
-				add( new FormComponent( "com.formdev.flatlaf.demo.ControlBar" ) {
-					name: "controlBar"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1"
-				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.demo.ControlBar" ) {
+				name: "controlBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "South"
 			} )
 			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 				name: "menuBar1"
