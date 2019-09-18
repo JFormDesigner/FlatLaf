@@ -128,7 +128,7 @@ public class FlatCheckBoxIcon
 	}
 
 	protected void paintBackground( Graphics2D g2 ) {
-		g2.fillRoundRect( 2, 1, 12, 12, 4, 4 );
+		g2.fillRoundRect( 2, 1, 12, 12, 3, 3 );
 	}
 
 	protected void paintCheckmark( Graphics2D g2 ) {
