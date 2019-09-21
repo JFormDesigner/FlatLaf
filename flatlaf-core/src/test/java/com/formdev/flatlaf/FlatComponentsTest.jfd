@@ -770,6 +770,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 20 3 1"
 			} )
+			add( new FormComponent( "javax.swing.JToolTip" ) {
+				name: "toolTip2"
+				"tipText": "Tool tip with\nmultiple\nlines."
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 20 3 1"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toolBarLabel"
 				"text": "JToolBar:"

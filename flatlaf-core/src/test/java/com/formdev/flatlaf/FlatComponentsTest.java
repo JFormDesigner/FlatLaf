@@ -156,6 +156,7 @@ public class FlatComponentsTest
 		indeterminateCheckBox = new JCheckBox();
 		JLabel toolTipLabel = new JLabel();
 		JToolTip toolTip1 = new JToolTip();
+		JToolTip toolTip2 = new JToolTip();
 		JLabel toolBarLabel = new JLabel();
 		JToolBar toolBar1 = new JToolBar();
 		JButton button4 = new JButton();
@@ -774,6 +775,10 @@ public class FlatComponentsTest
 		//---- toolTip1 ----
 		toolTip1.setTipText("Some text in tool tip.");
 		add(toolTip1, "cell 1 20 3 1");
+
+		//---- toolTip2 ----
+		toolTip2.setTipText("Tool tip with\nmultiple\nlines.");
+		add(toolTip2, "cell 1 20 3 1");
 
 		//---- toolBarLabel ----
 		toolBarLabel.setText("JToolBar:");

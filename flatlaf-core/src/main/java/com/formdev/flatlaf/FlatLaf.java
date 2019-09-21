@@ -411,7 +411,7 @@ public abstract class FlatLaf
 		}
 	}
 
-	private static List<String> split( String str, char delim ) {
+	public static List<String> split( String str, char delim ) {
 		ArrayList<String> strs = new ArrayList<>();
 		int delimIndex = str.indexOf( delim );
 		int index = 0;

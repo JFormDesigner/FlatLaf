@@ -1,0 +1,91 @@
+/*
+ * Copyright 2019 FormDev Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.formdev.flatlaf.ui;
+
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JToolTip;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicToolTipUI;
+import com.formdev.flatlaf.FlatLaf;
+
+/**
+ * Provides the Flat LaF UI delegate for {@link javax.swing.JToolTip}.
+ *
+ * @author Karl Tauber
+ */
+public class FlatToolTipUI
+	extends BasicToolTipUI
+{
+	private static ComponentUI instance;
+
+	public static ComponentUI createUI( JComponent c ) {
+		if( instance == null )
+			instance = new FlatToolTipUI();
+		return instance;
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		if( isMultiLine( c ) ) {
+			FontMetrics fm = c.getFontMetrics( c.getFont() );
+			Insets insets = c.getInsets();
+
+			List<String> lines = FlatLaf.split( ((JToolTip)c).getTipText(), '\n' );
+			int width = 0;
+			int height = fm.getHeight() * Math.max( lines.size(), 1 );
+			for( String line : lines )
+				width = Math.max( width, SwingUtilities.computeStringWidth( fm, line ) );
+
+			return new Dimension( insets.left + width + insets.right, insets.top + height + insets.bottom );
+		} else
+			return super.getPreferredSize( c );
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		if( isMultiLine( c ) ) {
+			FontMetrics fm = c.getFontMetrics( c.getFont() );
+			Insets insets = c.getInsets();
+
+			FlatUIUtils.setRenderingHints( (Graphics2D) g );
+			g.setColor( c.getForeground() );
+
+			List<String> lines = FlatLaf.split( ((JToolTip)c).getTipText(), '\n' );
+
+			int x = insets.left;
+			int y = insets.top - fm.getDescent();
+			int lineHeight = fm.getHeight();
+			for( String line : lines ) {
+				y += lineHeight;
+				g.drawString( line, x, y );
+			}
+		} else
+			super.paint( g, c );
+	}
+
+	private boolean isMultiLine( JComponent c ) {
+		String text = ((JToolTip)c).getTipText();
+		return c.getClientProperty( "html" ) == null && text != null && text.indexOf( '\n' ) >= 0;
+	}
+}
