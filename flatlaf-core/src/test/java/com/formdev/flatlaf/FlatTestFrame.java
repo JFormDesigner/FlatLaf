@@ -36,6 +36,7 @@ public class FlatTestFrame
 	private static final String KEY_LAF = "laf";
 
 	private JComponent content;
+	private FlatInspector inspector;
 
 	public static FlatTestFrame create( String[] args, String title ) {
 		// set look and feel
@@ -143,7 +144,7 @@ public class FlatTestFrame
 	protected void showFrame( JComponent content ) {
 		this.content = content;
 
-		contentPanel.add( content );
+		contentPanel.getContentPane().add( content );
 		pack();
 		setLocationRelativeTo( null );
 		setVisible( true );
@@ -184,6 +185,9 @@ public class FlatTestFrame
 				Dimension prefSize = getPreferredSize();
 				if( prefSize.width > width || prefSize.height > height )
 					setSize( Math.max( prefSize.width, width ), Math.max( prefSize.height, height ) );
+
+				if( inspector != null )
+					inspector.update();
 
 			} catch( Exception ex ) {
 				ex.printStackTrace();
@@ -279,15 +283,22 @@ public class FlatTestFrame
 		}
 	}
 
+	private void inspectChanged() {
+		if( inspector == null )
+			inspector = new FlatInspector( contentPanel );
+		inspector.setEnabled( inspectCheckBox.isSelected() );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		dialogPane = new JPanel();
-		contentPanel = new JPanel();
+		contentPanel = new JRootPane();
 		buttonBar = new JPanel();
 		lookAndFeelComboBox = new JComboBox<>();
 		explicitColorsCheckBox = new JCheckBox();
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
+		inspectCheckBox = new JCheckBox();
 		closeButton = new JButton();
 
 		//======== this ========
@@ -301,7 +312,8 @@ public class FlatTestFrame
 
 			//======== contentPanel ========
 			{
-				contentPanel.setLayout(new MigLayout(
+				Container contentPanelContentPane = contentPanel.getContentPane();
+				contentPanelContentPane.setLayout(new MigLayout(
 					"insets dialog,hidemode 3",
 					// columns
 					"[grow,fill]",
@@ -315,6 +327,7 @@ public class FlatTestFrame
 				buttonBar.setLayout(new MigLayout(
 					"insets dialog",
 					// columns
+					"[fill]" +
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
@@ -347,9 +360,15 @@ public class FlatTestFrame
 				enabledCheckBox.addActionListener(e -> enabledChanged());
 				buttonBar.add(enabledCheckBox, "cell 3 0");
 
+				//---- inspectCheckBox ----
+				inspectCheckBox.setText("inspect");
+				inspectCheckBox.setMnemonic('I');
+				inspectCheckBox.addActionListener(e -> inspectChanged());
+				buttonBar.add(inspectCheckBox, "cell 4 0");
+
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 5 0");
+				buttonBar.add(closeButton, "cell 6 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 		}
@@ -359,12 +378,13 @@ public class FlatTestFrame
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JPanel dialogPane;
-	private JPanel contentPanel;
+	private JRootPane contentPanel;
 	private JPanel buttonBar;
 	private JComboBox<LafInfo> lookAndFeelComboBox;
 	private JCheckBox explicitColorsCheckBox;
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
+	private JCheckBox inspectCheckBox;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
