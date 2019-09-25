@@ -45,7 +45,15 @@ public class FlatUIUtils
 {
 	public static final boolean MAC_USE_QUARTZ = Boolean.getBoolean( "apple.awt.graphics.UseQuartz" );
 
-	public static Rectangle subtract( Rectangle r, Insets insets ) {
+	public static Rectangle addInsets( Rectangle r, Insets insets ) {
+		return new Rectangle(
+			r.x - insets.left,
+			r.y - insets.top,
+			r.width + insets.left + insets.right,
+			r.height + insets.top + insets.bottom );
+	}
+
+	public static Rectangle subtractInsets( Rectangle r, Insets insets ) {
 		return new Rectangle(
 			r.x + insets.left,
 			r.y + insets.top,

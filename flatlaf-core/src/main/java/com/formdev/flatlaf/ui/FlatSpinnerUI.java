@@ -315,7 +315,7 @@ public class FlatSpinnerUI
 		public void layoutContainer( Container parent ) {
 			Dimension size = parent.getSize();
 			Insets insets = parent.getInsets();
-			Rectangle r = FlatUIUtils.subtract( new Rectangle( size ), insets );
+			Rectangle r = FlatUIUtils.subtractInsets( new Rectangle( size ), insets );
 
 			if( nextButton == null && previousButton == null ) {
 				if( editor != null )
@@ -339,7 +339,7 @@ public class FlatSpinnerUI
 			}
 
 			if( editor != null )
-				editor.setBounds( FlatUIUtils.subtract( editorRect, padding ) );
+				editor.setBounds( FlatUIUtils.subtractInsets( editorRect, padding ) );
 
 			int nextHeight = Math.round( buttonsRect.height / 2f );
 			if( nextButton != null )

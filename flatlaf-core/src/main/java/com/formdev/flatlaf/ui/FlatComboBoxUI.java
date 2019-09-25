@@ -20,8 +20,10 @@ import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -138,7 +140,7 @@ public class FlatComboBoxUI
 
 				if ( editor != null && padding != null ) {
 					// fix editor bounds by subtracting padding
-					editor.setBounds( FlatUIUtils.subtract( editor.getBounds(), padding ) );
+					editor.setBounds( FlatUIUtils.subtractInsets( editor.getBounds(), padding ) );
 				}
 			}
 		};
@@ -282,7 +284,13 @@ public class FlatComboBoxUI
 
 		boolean shouldValidate = (c instanceof JPanel);
 		if( padding != null )
-			bounds = FlatUIUtils.subtract( bounds, padding );
+			bounds = FlatUIUtils.subtractInsets( bounds, padding );
+
+		// increase the size of the rendering area to make sure that the text
+		// is vertically aligned with other component types (e.g. JTextField)
+		Insets rendererInsets = getRendererComponentInsets( c );
+		if( rendererInsets != null )
+			bounds = FlatUIUtils.addInsets( bounds, rendererInsets );
 
 		currentValuePane.paintComponent( g, c, comboBox, bounds.x, bounds.y, bounds.width, bounds.height, shouldValidate );
 	}
@@ -291,6 +299,29 @@ public class FlatComboBoxUI
 	public void paintCurrentValueBackground( Graphics g, Rectangle bounds, boolean hasFocus ) {
 		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : disabledBackground );
 		g.fillRect( bounds.x, bounds.y, bounds.width, bounds.height );
+	}
+
+	@Override
+	protected Dimension getSizeForComponent( Component comp ) {
+		Dimension size = super.getSizeForComponent( comp );
+
+		// remove the renderer border top/bottom insets from the size to make sure that
+		// the combobox gets the same height as other component types (e.g. JTextField)
+		Insets rendererInsets = getRendererComponentInsets( comp );
+		if( rendererInsets != null )
+			size = new Dimension( size.width, size.height - rendererInsets.top - rendererInsets.bottom );
+
+		return size;
+	}
+
+	private Insets getRendererComponentInsets( Component rendererComponent ) {
+		if( rendererComponent instanceof JComponent ) {
+			Border rendererBorder = ((JComponent)rendererComponent).getBorder();
+			if( rendererBorder != null )
+				return rendererBorder.getBorderInsets( rendererComponent );
+		}
+
+		return null;
 	}
 
 	//---- class FlatComboPopup -----------------------------------------------
