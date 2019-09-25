@@ -36,11 +36,14 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
@@ -275,8 +278,10 @@ public class FlatComboBoxUI
 	@SuppressWarnings( "unchecked" )
 	public void paintCurrentValue( Graphics g, Rectangle bounds, boolean hasFocus ) {
 		ListCellRenderer<Object> renderer = comboBox.getRenderer();
+		CellPaddingBorder.uninstall( renderer );
 		Component c = renderer.getListCellRendererComponent( listBox, comboBox.getSelectedItem(), -1, false, false );
 		c.setFont( comboBox.getFont() );
+		CellPaddingBorder.uninstall( c );
 
 		boolean enabled = comboBox.isEnabled();
 		c.setForeground( enabled ? comboBox.getForeground() : disabledForeground );
@@ -326,10 +331,13 @@ public class FlatComboBoxUI
 
 	//---- class FlatComboPopup -----------------------------------------------
 
+	@SuppressWarnings( { "rawtypes", "unchecked" } )
 	private class FlatComboPopup
 		extends BasicComboPopup
+		implements ListCellRenderer
 	{
-		@SuppressWarnings( "rawtypes" )
+		private CellPaddingBorder paddingBorder;
+
 		FlatComboPopup( JComboBox combo ) {
 			super( combo );
 		}
@@ -341,6 +349,80 @@ public class FlatComboBoxUI
 			Border border = UIManager.getBorder( "PopupMenu.border" );
 			if( border != null )
 				setBorder( border );
+		}
+
+		@Override
+		protected void configureList() {
+			super.configureList();
+
+			list.setCellRenderer( this );
+		}
+
+		@Override
+		protected PropertyChangeListener createPropertyChangeListener() {
+			return new BasicComboPopup.PropertyChangeHandler() {
+				@Override
+				public void propertyChange( PropertyChangeEvent e ) {
+					super.propertyChange( e );
+
+					if( e.getPropertyName() == "renderer" )
+						list.setCellRenderer( FlatComboPopup.this );
+				}
+			};
+		}
+
+		@Override
+		public Component getListCellRendererComponent( JList list, Object value,
+			int index, boolean isSelected, boolean cellHasFocus )
+		{
+			ListCellRenderer renderer = comboBox.getRenderer();
+			CellPaddingBorder.uninstall( renderer );
+
+			Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+
+			if( c instanceof JComponent ) {
+				if( paddingBorder == null )
+					paddingBorder = new CellPaddingBorder( padding );
+				paddingBorder.install( (JComponent) c );
+			}
+
+			return c;
+		}
+	}
+
+	//---- class CellPaddingBorder --------------------------------------------
+
+	/**
+	 * Cell padding border used only in popup list.
+	 * Uses EmptyBorder on the outside for the padding,
+	 * and the original renderer border on the inside.
+	 */
+	private static class CellPaddingBorder
+		extends CompoundBorder
+	{
+		CellPaddingBorder( Insets padding ) {
+			super( new EmptyBorder( padding ), null );
+		}
+
+		void install( JComponent c ) {
+			Border oldBorder = c.getBorder();
+			if( !(oldBorder instanceof CellPaddingBorder) ) {
+				insideBorder = oldBorder;
+				c.setBorder( this );
+			}
+		}
+
+		static void uninstall( Object o ) {
+			if( !(o instanceof JComponent) )
+				return;
+
+			JComponent c = (JComponent) o;
+			Border border = c.getBorder();
+			if( border instanceof CellPaddingBorder ) {
+				CellPaddingBorder paddingBorder = (CellPaddingBorder) border;
+				c.setBorder( paddingBorder.insideBorder );
+				paddingBorder.insideBorder = null;
+			}
 		}
 	}
 }
