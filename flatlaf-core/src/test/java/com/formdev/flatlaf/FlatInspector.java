@@ -36,6 +36,7 @@ import javax.swing.JToolBar;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.UIResource;
 import javax.swing.text.JTextComponent;
@@ -186,10 +187,8 @@ public class FlatInspector
 			"Class: " + c.getClass().getSimpleName() + " (" + c.getClass().getPackage().getName() + ")\n" +
 			"Size: " + c.getWidth() + ',' + c.getHeight() + "  @ " + c.getX() + ',' + c.getY() + '\n';
 
-		if( c instanceof Container ) {
-			Insets i = ((Container)c).getInsets();
-			text += "Insets: " + i.top + ',' + i.left + ',' + i.bottom + ',' + i.right + '\n';
-		}
+		if( c instanceof Container )
+			text += "Insets: " + toString( ((Container)c).getInsets() ) + '\n';
 
 		Insets margin = null;
 		if( c instanceof AbstractButton )
@@ -202,7 +201,7 @@ public class FlatInspector
 			margin = ((JToolBar) c).getMargin();
 
 		if( margin != null )
-			text += "Margin: " + margin.top + ',' + margin.left + ',' + margin.bottom + ',' + margin.right + '\n';
+			text += "Margin: " + toString( margin ) + '\n';
 
 		Dimension prefSize = c.getPreferredSize();
 		Dimension minSize = c.getMinimumSize();
@@ -211,10 +210,8 @@ public class FlatInspector
 			"Min size: " + minSize.width + ',' + minSize.height + '\n' +
 			"Max size: " + maxSize.width + ',' + maxSize.height + '\n';
 
-		if( c instanceof JComponent ) {
-			Border border = ((JComponent)c).getBorder();
-			text += "Border: " + (border != null ? border.getClass().getName() : "null") + '\n';
-		}
+		if( c instanceof JComponent )
+			text += "Border: " + toString( ((JComponent)c).getBorder() ) + '\n';
 
 		text += "Background: " + toString( c.getBackground() ) + '\n' +
 			"Foreground: " + toString( c.getForeground() ) + '\n' +
@@ -236,6 +233,13 @@ public class FlatInspector
 		return text;
 	}
 
+	private static String toString( Insets insets ) {
+		if( insets == null )
+			return "null";
+
+		return insets.top + "," + insets.left + ',' + insets.bottom + ',' + insets.right;
+	}
+
 	private static String toString( Color c ) {
 		if( c == null )
 			return "null";
@@ -252,5 +256,20 @@ public class FlatInspector
 
 		return f.getFamily() + " " + f.getSize() + " " + f.getStyle()
 			+ (f instanceof UIResource ? " UI" : "");
+	}
+
+	private static String toString( Border b ) {
+		if( b == null )
+			return "null";
+
+		String s = b.getClass().getName();
+
+		if( b instanceof EmptyBorder )
+			s += '(' + toString( ((EmptyBorder)b).getBorderInsets() ) + ')';
+
+		if( b instanceof UIResource )
+			s += " UI";
+
+		return s;
 	}
 }
