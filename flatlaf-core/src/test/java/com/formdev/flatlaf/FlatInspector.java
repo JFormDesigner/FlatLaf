@@ -30,6 +30,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.lang.reflect.Field;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.JToolBar;
 import javax.swing.JToolTip;
@@ -193,10 +194,12 @@ public class FlatInspector
 		Insets margin = null;
 		if( c instanceof AbstractButton )
 			margin = ((AbstractButton) c).getMargin();
-		else if( c instanceof JToolBar )
-			margin = ((JToolBar) c).getMargin();
 		else if( c instanceof JTextComponent )
 			margin = ((JTextComponent) c).getMargin();
+		else if( c instanceof JMenuBar )
+			margin = ((JMenuBar) c).getMargin();
+		else if( c instanceof JToolBar )
+			margin = ((JToolBar) c).getMargin();
 
 		if( margin != null )
 			text += "Margin: " + margin.top + ',' + margin.left + ',' + margin.bottom + ',' + margin.right + '\n';
