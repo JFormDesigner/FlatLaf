@@ -342,6 +342,22 @@ public class FlatComboBoxUI
 		}
 
 		@Override
+		protected Rectangle computePopupBounds( int px, int py, int pw, int ph ) {
+			// get maximum display size of all items, ignoring prototype value
+			Object prototype = comboBox.getPrototypeDisplayValue();
+			if( prototype != null )
+				comboBox.setPrototypeDisplayValue( null );
+			Dimension displaySize = getDisplaySize();
+			if( prototype != null )
+				comboBox.setPrototypeDisplayValue( prototype );
+
+			// make popup wider if necessary
+			pw = Math.max( pw, displaySize.width );
+
+			return super.computePopupBounds( px, py, pw, ph );
+		}
+
+		@Override
 		protected void configurePopup() {
 			super.configurePopup();
 

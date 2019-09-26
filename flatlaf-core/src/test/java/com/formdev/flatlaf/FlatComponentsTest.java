@@ -75,6 +75,7 @@ public class FlatComponentsTest
 		JComboBox<String> comboBox2 = new JComboBox<>();
 		JComboBox<String> comboBox3 = new JComboBox<>();
 		JComboBox<String> comboBox4 = new JComboBox<>();
+		JComboBox<String> comboBox5 = new JComboBox<>();
 		JLabel spinnerLabel = new JLabel();
 		JSpinner spinner1 = new JSpinner();
 		JSpinner spinner2 = new JSpinner();
@@ -364,6 +365,16 @@ public class FlatComponentsTest
 		}));
 		comboBox4.setEnabled(false);
 		add(comboBox4, "cell 4 5,growx");
+
+		//---- comboBox5 ----
+		comboBox5.setPrototypeDisplayValue("12345");
+		comboBox5.setModel(new DefaultComboBoxModel<>(new String[] {
+			"wide popup if text is longer",
+			"aa",
+			"bbb",
+			"cccc"
+		}));
+		add(comboBox5, "cell 5 5,growx");
 
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");

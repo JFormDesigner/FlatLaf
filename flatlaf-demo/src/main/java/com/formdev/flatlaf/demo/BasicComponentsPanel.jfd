@@ -199,6 +199,19 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 4,growx"
 			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox5"
+				"prototypeDisplayValue": "12345"
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "wide popup if text is longer"
+					addElement( "wide popup if text is longer" )
+					addElement( "aa" )
+					addElement( "bbb" )
+					addElement( "cccc" )
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 4,growx"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "spinnerLabel"
 				"text": "JSpinner:"
