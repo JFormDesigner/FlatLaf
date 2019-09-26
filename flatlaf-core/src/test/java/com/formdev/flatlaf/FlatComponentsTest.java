@@ -814,6 +814,11 @@ public class FlatComponentsTest
 		}
 		add(toolBar1, "cell 1 21 3 1,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+//		BasicComboBoxRenderer customaRenderer = new BasicComboBoxRenderer();
+//		customaRenderer.setBorder( new LineBorder( Color.red ) );
+//		comboBox1.setRenderer( customaRenderer );
+//		comboBox3.setRenderer( customaRenderer );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

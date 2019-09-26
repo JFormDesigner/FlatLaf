@@ -41,9 +41,8 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
@@ -394,21 +393,27 @@ public class FlatComboBoxUI
 
 	/**
 	 * Cell padding border used only in popup list.
-	 * Uses EmptyBorder on the outside for the padding,
-	 * and the original renderer border on the inside.
+	 *
+	 * The insets are the union of the cell padding and the renderer border insets,
+	 * which vertically aligns text in popup list with text in combobox.
+	 *
+	 * The renderer border is painted on the outside of this border.
 	 */
 	private static class CellPaddingBorder
-		extends CompoundBorder
+		extends AbstractBorder
 	{
+		private final Insets padding;
+		private Border rendererBorder;
+
 		CellPaddingBorder( Insets padding ) {
-			super( new EmptyBorder( padding ), null );
+			this.padding = padding;
 		}
 
-		void install( JComponent c ) {
-			Border oldBorder = c.getBorder();
+		void install( JComponent rendererComponent ) {
+			Border oldBorder = rendererComponent.getBorder();
 			if( !(oldBorder instanceof CellPaddingBorder) ) {
-				insideBorder = oldBorder;
-				c.setBorder( this );
+				rendererBorder = oldBorder;
+				rendererComponent.setBorder( this );
 			}
 		}
 
@@ -416,13 +421,36 @@ public class FlatComboBoxUI
 			if( !(o instanceof JComponent) )
 				return;
 
-			JComponent c = (JComponent) o;
-			Border border = c.getBorder();
+			JComponent rendererComponent = (JComponent) o;
+			Border border = rendererComponent.getBorder();
 			if( border instanceof CellPaddingBorder ) {
 				CellPaddingBorder paddingBorder = (CellPaddingBorder) border;
-				c.setBorder( paddingBorder.insideBorder );
-				paddingBorder.insideBorder = null;
+				rendererComponent.setBorder( paddingBorder.rendererBorder );
+				paddingBorder.rendererBorder = null;
 			}
+		}
+
+		@Override
+		public Insets getBorderInsets( Component c, Insets insets ) {
+			if( rendererBorder != null ) {
+				Insets insideInsets = rendererBorder.getBorderInsets( c );
+				insets.top = Math.max( padding.top, insideInsets.top );
+				insets.left = Math.max( padding.left, insideInsets.left );
+				insets.bottom = Math.max( padding.bottom, insideInsets.bottom );
+				insets.right = Math.max( padding.right, insideInsets.right );
+			} else {
+				insets.top = padding.top;
+				insets.left = padding.left;
+				insets.bottom = padding.bottom;
+				insets.right = padding.right;
+			}
+			return insets;
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			if( rendererBorder != null )
+				rendererBorder.paintBorder( c, g, x, y, width, height );
 		}
 	}
 }
