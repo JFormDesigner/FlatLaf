@@ -40,7 +40,7 @@ import javax.swing.text.JTextComponent;
 /**
  * Border for various components (e.g. {@link javax.swing.JTextField}).
  *
- * There is empty space around the component border, if Component.focusWidth > 0,
+ * There is empty space around the component border, if Component.focusWidth is greater than zero,
  * which is used to paint focus border.
  *
  * Because there is empty space (if focus border is not painted),
