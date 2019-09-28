@@ -17,3 +17,12 @@ cache:
 before_install:
   - ./gradlew --version
   - java -version
+
+deploy:
+  provider: script
+  script: ./gradlew bintrayUpload
+  skip_cleanup: true # to upload artifacts created during the build
+  on:
+    branch: master
+    jdk: openjdk8
+    tags: true
