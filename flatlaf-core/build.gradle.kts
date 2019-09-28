@@ -18,6 +18,8 @@ version = rootProject.version
 
 plugins {
 	`java-library`
+	`maven-publish`
+	id( "com.jfrog.bintray" ) version "1.8.4"
 }
 
 repositories {
@@ -37,5 +39,78 @@ java {
 tasks {
 	jar {
 		archiveBaseName.set( "flatlaf" )
+	}
+
+	javadoc {
+		options {
+			this as StandardJavadocDocletOptions
+			tags = listOf( "uiDefault", "clientProperty" )
+		}
+		isFailOnError = false
+	}
+
+	register( "sourcesJar", Jar::class ) {
+		archiveBaseName.set( "flatlaf" )
+		archiveClassifier.set( "sources" )
+
+		from( sourceSets.main.get().allJava )
+	}
+
+	register( "javadocJar", Jar::class ) {
+		archiveBaseName.set( "flatlaf" )
+		archiveClassifier.set( "javadoc" )
+
+		from( javadoc )
+	}
+}
+
+publishing {
+	publications {
+		create<MavenPublication>( "maven" ) {
+			artifactId = "flatlaf-core"
+			groupId = "com.formdev.flatlaf"
+
+			from( components["java"] )
+
+			artifact( tasks["sourcesJar"] )
+			artifact( tasks["javadocJar"] )
+
+			pom {
+				name.set( "FlatLaf" )
+				description.set( "Flat Look and Feel" )
+				url.set( "https://github.com/JFormDesigner/FlatLaf" )
+
+				licenses {
+					license {
+						name.set( "The Apache License, Version 2.0" )
+						url.set( "http://www.apache.org/licenses/LICENSE-2.0.txt" )
+					}
+				}
+
+				scm {
+					url.set( "https://github.com/JFormDesigner/FlatLaf" )
+				}
+			}
+		}
+	}
+}
+
+bintray {
+	user = System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" )
+	key = System.getenv( "BINTRAY_KEY" ) ?: System.getProperty( "bintray.key" )
+
+	setPublications( "maven" )
+
+	with( pkg ) {
+		repo = "flatlaf"
+		name = "flatlaf-core"
+		setLicenses( "Apache-2.0" )
+		vcsUrl = "https://github.com/JFormDesigner/FlatLaf"
+
+		with( version ) {
+			name = project.version.toString()
+		}
+
+		publish = true
 	}
 }
