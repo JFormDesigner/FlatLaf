@@ -19,15 +19,22 @@ Demo
 ----
 
 Download
-[flatlaf-demo-0.1.jar](https://download.formdev.com/flatlaf/flatlaf-demo-0.1.jar)
-and run it with `java -jar flatlaf-demo-0.1.jar` (or double-click it). Requires
+[flatlaf-demo-0.9.jar](https://download.formdev.com/flatlaf/flatlaf-demo-0.9.jar)
+and run it with `java -jar flatlaf-demo-0.9.jar` (or double-click it). Requires
 Java 8 or newer.
 
 
 Download
 --------
 
-Coming soon
+[ ![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-core/images/download.svg) ](https://bintray.com/jformdesigner/flatlaf/flatlaf-core/_latestVersion)
+
+For Maven or Gradle use:
+
+    Repository:   jcenter (https://jcenter.bintray.com/) 
+    Group Id:     com.formdev.flatlaf
+    Artifact Id:  flatlaf-core
+    Version:      0.9
 
 
 License
