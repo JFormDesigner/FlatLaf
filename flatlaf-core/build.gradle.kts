@@ -28,18 +28,17 @@ repositories {
 
 if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	sourceSets {
-		create( "main9" ) {
+		create( "module-info" ) {
 			java {
-				setSrcDirs( listOf( "src/main9/java" ) )
+				// include "src/main/java" here to get compile errors if classes are
+				// used from other modules that are not specified in module dependencies
+				setSrcDirs( listOf( "src/main/module-info", "src/main/java" ) )
 			}
 		}
 	}
 }
 
 dependencies {
-	if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
-		"main9Implementation"( files( sourceSets["main"].output.classesDirs ).builtBy( "compileJava" ) )
-
 	testImplementation( "com.miglayout:miglayout-swing:5.2" )
 	testImplementation( "com.jgoodies:jgoodies-forms:1.9.0" )
 }
@@ -51,14 +50,9 @@ java {
 
 tasks {
 	if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
-		named<JavaCompile>( "compileMain9Java" ) {
-			doFirst {
-				options.compilerArgs = listOf(
-					"-source", "9", "-target", "9",
-					"--patch-module", "com.formdev.flatlaf=" + classpath.asPath
-				)
-				classpath = files()
-			}
+		named<JavaCompile>( "compileModuleInfoJava" ) {
+			sourceCompatibility = "9"
+			targetCompatibility = "9"
 		}
 	}
 	
@@ -71,7 +65,8 @@ tasks {
 			)
 
 			into( "META-INF/versions/9" ) {
-				from( sourceSets["main9"].output )
+				from( sourceSets["module-info"].output )
+				include( "module-info.class" )
 			}
 		}
 	}
