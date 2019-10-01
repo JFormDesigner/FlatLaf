@@ -54,7 +54,7 @@ tasks {
 		named<JavaCompile>( "compileMain9Java" ) {
 			doFirst {
 				options.compilerArgs = listOf(
-					"--release", "9",
+					"-source", "9", "-target", "9",
 					"--patch-module", "com.formdev.flatlaf=" + classpath.asPath
 				)
 				classpath = files()
