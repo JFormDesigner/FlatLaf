@@ -42,6 +42,8 @@ tasks {
 			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )
 		}
 
+		exclude( "META-INF/versions/**" )
+
 		// include all dependencies in jar
 		from( {
 			configurations.runtimeClasspath.get().filter { it.name.endsWith( "jar" ) }.map { zipTree( it ) }

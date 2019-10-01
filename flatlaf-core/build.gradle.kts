@@ -26,7 +26,20 @@ repositories {
 	jcenter()
 }
 
+if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
+	sourceSets {
+		create( "main9" ) {
+			java {
+				setSrcDirs( listOf( "src/main9/java" ) )
+			}
+		}
+	}
+}
+
 dependencies {
+	if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
+		"main9Implementation"( files( sourceSets["main"].output.classesDirs ).builtBy( "compileJava" ) )
+
 	testImplementation( "com.miglayout:miglayout-swing:5.2" )
 	testImplementation( "com.jgoodies:jgoodies-forms:1.9.0" )
 }
@@ -37,8 +50,30 @@ java {
 }
 
 tasks {
+	if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
+		named<JavaCompile>( "compileMain9Java" ) {
+			doFirst {
+				options.compilerArgs = listOf(
+					"--release", "9",
+					"--patch-module", "com.formdev.flatlaf=" + classpath.asPath
+				)
+				classpath = files()
+			}
+		}
+	}
+	
 	jar {
 		archiveBaseName.set( "flatlaf" )
+
+		if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
+			manifest.attributes(
+				"Multi-Release" to "true"
+			)
+
+			into( "META-INF/versions/9" ) {
+				from( sourceSets["main9"].output )
+			}
+		}
 	}
 
 	javadoc {
