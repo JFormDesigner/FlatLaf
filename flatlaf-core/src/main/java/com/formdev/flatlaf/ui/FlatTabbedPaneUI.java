@@ -39,6 +39,7 @@ import javax.swing.text.View;
  *
  * @clientProperty JTabbedPane.hasFullBorder			boolean
  *
+ * @uiDefault Component.arrowType						String	triangle (default) or chevron
  * @uiDefault TabbedPane.font							Font
  * @uiDefault TabbedPane.background						Color
  * @uiDefault TabbedPane.foreground						Color
@@ -144,7 +145,8 @@ public class FlatTabbedPaneUI
 	@Override
 	protected JButton createScrollButton( int direction ) {
 		// this method is invoked before installDefaults(), so we can not use color fields here
-		return new FlatArrowButton( direction, UIManager.getColor("TabbedPane.shadow"),
+		return new FlatArrowButton( direction, UIManager.getString( "Component.arrowType" ),
+			UIManager.getColor( "TabbedPane.shadow" ),
 			UIManager.getColor( "TabbedPane.disabledForeground" ), null,
 			UIManager.getColor( "TabbedPane.hoverColor" ) );
 	}

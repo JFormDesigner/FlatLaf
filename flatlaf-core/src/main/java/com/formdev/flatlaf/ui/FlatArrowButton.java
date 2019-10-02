@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -37,6 +38,7 @@ public class FlatArrowButton
 	extends BasicArrowButton
 	implements UIResource
 {
+	private final boolean chevron;
 	private final Color foreground;
 	private final Color disabledForeground;
 	private final Color hoverForeground;
@@ -47,11 +49,12 @@ public class FlatArrowButton
 
 	private boolean hover;
 
-	public FlatArrowButton( int direction, Color foreground, Color disabledForeground,
+	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
 		Color hoverForeground, Color hoverBackground )
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
 
+		this.chevron = "chevron".equals( type );
 		this.foreground = foreground;
 		this.disabledForeground = disabledForeground;
 		this.hoverForeground = hoverForeground;
@@ -121,8 +124,8 @@ public class FlatArrowButton
 		int direction = getDirection();
 		boolean vert = (direction == NORTH || direction == SOUTH);
 
-		int w = scale( 9 );
-		int h = scale( 5 );
+		int w = scale( chevron ? 8 : 9 );
+		int h = scale( chevron ? 4 : 5 );
 		int x = Math.round( (width - (vert ? w : h)) / 2f + scale( (float) xOffset ) );
 		int y = Math.round( (height - (vert ? h : w)) / 2f + scale( (float) yOffset ) );
 
@@ -131,16 +134,23 @@ public class FlatArrowButton
 			? (hover && hoverForeground != null ? hoverForeground : foreground)
 			: disabledForeground );
 		g.translate( x, y );
-		g2.fill( createArrowShape( direction, w, h ) );
+		Shape arrowShape = createArrowShape( direction, chevron, w, h );
+		if( chevron ) {
+			g2.setStroke( new BasicStroke( scale( 1f ) ) );
+			g2.draw( arrowShape );
+		} else {
+			// triangle
+			g2.fill( arrowShape );
+		}
 		g.translate( -x, -y );
 	}
 
-	public static Shape createArrowShape( int direction, int w, int h ) {
+	public static Shape createArrowShape( int direction, boolean chevron, int w, int h ) {
 		switch( direction ) {
-			case NORTH:	return FlatUIUtils.createPath( 0,h, w,h, (w / 2f),0 );
-			case SOUTH:	return FlatUIUtils.createPath( 0,0, w,0, (w / 2f),h );
-			case WEST:	return FlatUIUtils.createPath( h,0, h,w, 0,(w / 2f) );
-			case EAST:	return FlatUIUtils.createPath( 0,0, 0,w, h,(w / 2f) );
+			case NORTH:	return FlatUIUtils.createPath( !chevron, 0,h, (w / 2f),0, w,h );
+			case SOUTH:	return FlatUIUtils.createPath( !chevron, 0,0, (w / 2f),h, w,0 );
+			case WEST:	return FlatUIUtils.createPath( !chevron, h,0, 0,(w / 2f), h,w );
+			case EAST:	return FlatUIUtils.createPath( !chevron, 0,0, h,(w / 2f), 0,w );
 			default:	return new Path2D.Float();
 		}
 	}

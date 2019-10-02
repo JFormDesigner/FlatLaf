@@ -181,11 +181,16 @@ public class FlatUIUtils
 	}
 
 	public static Path2D createPath( double... points ) {
+		return createPath( true, points );
+	}
+
+	public static Path2D createPath( boolean close, double... points ) {
 		Path2D path = new Path2D.Float();
 		path.moveTo( points[0], points[1] );
 		for( int i = 2; i < points.length; i += 2 )
 			path.lineTo( points[i], points[i + 1] );
-		path.closePath();
+		if( close )
+			path.closePath();
 		return path;
 	}
 

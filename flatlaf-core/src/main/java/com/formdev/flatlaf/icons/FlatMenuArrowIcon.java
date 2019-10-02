@@ -16,9 +16,11 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -26,6 +28,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "arrow" icon for {@link javax.swing.JMenu}.
  *
+ * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Menu.icon.arrowColor				Color
  * @uiDefault Menu.icon.disabledArrowColor		Color
  * @uiDefault Menu.selectionForeground			Color
@@ -35,12 +38,13 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatMenuArrowIcon
 	extends FlatAbstractIcon
 {
+	protected final boolean chevron = "chevron".equals( UIManager.getString( "Component.arrowType" ) );
 	protected final Color arrowColor = UIManager.getColor( "Menu.icon.arrowColor" );
 	protected final Color disabledArrowColor = UIManager.getColor( "Menu.icon.disabledArrowColor" );
 	protected final Color selectionForeground = UIManager.getColor( "Menu.selectionForeground" );
 
 	public FlatMenuArrowIcon() {
-		super( 5, 10, null );
+		super( 6, 10, null );
 	}
 
 	@Override
@@ -49,7 +53,15 @@ public class FlatMenuArrowIcon
 			g.rotate( Math.toRadians( 180 ), width / 2., height / 2. );
 
 		g.setColor( getArrowColor( c ) );
-		g.fill( FlatUIUtils.createPath( 0,0.5, 0,9.5, 5,5 ) );
+		if( chevron ) {
+			// chevron arrow
+			Path2D path = FlatUIUtils.createPath( false, 1,1, 5,5, 1,9 );
+			g.setStroke( new BasicStroke( 1f ) );
+			g.draw( path );
+		} else {
+			// triangle arrow
+			g.fill( FlatUIUtils.createPath( 0,0.5, 0,9.5, 5,5 ) );
+		}
 	}
 
 	private Color getArrowColor( Component c ) {

@@ -31,6 +31,7 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSplitPane}.
  *
+ * @uiDefault Component.arrowType						String	triangle (default) or chevron
  * @uiDefault SplitPane.background						Color
  * @uiDefault SplitPane.foreground						Color unused
  * @uiDefault SplitPane.dividerSize						int
@@ -46,6 +47,7 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatSplitPaneUI
 	extends BasicSplitPaneUI
 {
+	protected String arrowType;
 	private Boolean continuousLayout;
 	private Color oneTouchArrowColor;
 	private Color oneTouchHoverArrowColor;
@@ -56,6 +58,8 @@ public class FlatSplitPaneUI
 
 	@Override
 	protected void installDefaults() {
+		arrowType = UIManager.getString( "Component.arrowType" );
+
 		// get one-touch colors before invoking super.installDefaults() because they are
 		// used in there on LaF switching
 		oneTouchArrowColor = UIManager.getColor( "SplitPaneDivider.oneTouchArrowColor" );
@@ -108,7 +112,7 @@ public class FlatSplitPaneUI
 			private final boolean left;
 
 			public FlatOneTouchButton( boolean left ) {
-				super( SwingConstants.NORTH, oneTouchArrowColor, null, oneTouchHoverArrowColor, null );
+				super( SwingConstants.NORTH, arrowType, oneTouchArrowColor, null, oneTouchHoverArrowColor, null );
 				setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
 
 				this.left = left;

@@ -19,7 +19,6 @@ package com.formdev.flatlaf.icons;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "expanded" icon for {@link javax.swing.JTree}.
@@ -29,14 +28,14 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @author Karl Tauber
  */
 public class FlatTreeExpandedIcon
-	extends FlatAbstractIcon
+	extends FlatTreeCollapsedIcon
 {
 	public FlatTreeExpandedIcon() {
-		super( 11, 11, UIManager.getColor( "Tree.icon.expandedColor" ) );
+		super( UIManager.getColor( "Tree.icon.expandedColor" ) );
 	}
 
 	@Override
-	protected void paintIcon( Component c, Graphics2D g ) {
-		g.fill( FlatUIUtils.createPath( 1,2, 10,2, 5.5,10 ) );
+	void rotate( Component c, Graphics2D g ) {
+		g.rotate( Math.toRadians( 90 ), width / 2., height / 2. );
 	}
 }

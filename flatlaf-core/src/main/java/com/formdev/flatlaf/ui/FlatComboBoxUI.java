@@ -57,6 +57,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.arc						int
+ * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault ComboBox.disabledBackground		Color
@@ -74,6 +75,7 @@ public class FlatComboBoxUI
 {
 	protected int focusWidth;
 	protected int arc;
+	protected String arrowType;
 	protected Color borderColor;
 	protected Color disabledBorderColor;
 
@@ -96,6 +98,7 @@ public class FlatComboBoxUI
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( "Component.arc" );
+		arrowType = UIManager.getString( "Component.arrowType" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 
@@ -224,7 +227,7 @@ public class FlatComboBoxUI
 
 	@Override
 	protected JButton createArrowButton() {
-		return new FlatArrowButton( SwingConstants.SOUTH, buttonArrowColor,
+		return new FlatArrowButton( SwingConstants.SOUTH, arrowType, buttonArrowColor,
 			buttonDisabledArrowColor, buttonHoverArrowColor, null );
 	}
 

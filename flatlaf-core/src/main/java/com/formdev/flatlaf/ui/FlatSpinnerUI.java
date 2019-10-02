@@ -48,6 +48,7 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.arc						int
  * @uiDefault Component.minimumWidth			int
+ * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault Spinner.disabledBackground		Color
@@ -68,6 +69,7 @@ public class FlatSpinnerUI
 	protected int focusWidth;
 	protected int arc;
 	protected int minimumWidth;
+	protected String arrowType;
 	protected Color borderColor;
 	protected Color disabledBorderColor;
 	protected Color disabledBackground;
@@ -89,6 +91,7 @@ public class FlatSpinnerUI
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( "Component.arc" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+		arrowType = UIManager.getString( "Component.arrowType" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 		disabledBackground = UIManager.getColor( "Spinner.disabledBackground" );
@@ -209,7 +212,7 @@ public class FlatSpinnerUI
 	}
 
 	private Component createArrowButton( int direction, String name ) {
-		FlatArrowButton button = new FlatArrowButton( direction, buttonArrowColor,
+		FlatArrowButton button = new FlatArrowButton( direction, arrowType, buttonArrowColor,
 			buttonDisabledArrowColor, buttonHoverArrowColor, null );
 		button.setName( name );
 		button.setYOffset( (direction == SwingConstants.NORTH) ? 1 : -1 );
