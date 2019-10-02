@@ -285,14 +285,14 @@ public abstract class FlatLaf
 			key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
 			return parseInsets( value );
 
-		// size
-		if( key.endsWith( "Size" ) && !key.equals( "SplitPane.dividerSize" ))
-			return parseSize( value );
-
 		// scaled number
 		ScaledNumber scaledNumber = parseScaledNumber( key, value );
 		if( scaledNumber != null )
 			return scaledNumber;
+
+		// size
+		if( key.endsWith( "Size" ) && !key.equals( "SplitPane.dividerSize" ))
+			return parseSize( value );
 
 		// width, height
 		if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
@@ -400,8 +400,10 @@ public abstract class FlatLaf
 	}
 
 	private ScaledNumber parseScaledNumber( String key, String value ) {
-		if( !key.equals( "OptionPane.buttonMinimumWidth" ) )
-			return null; // not supported
+		if( !key.equals( "OptionPane.buttonMinimumWidth" ) &&
+			!key.equals( "SplitPane.oneTouchButtonSize" ) &&
+			!key.equals( "SplitPane.oneTouchButtonOffset" ) )
+		  return null; // not supported
 
 		try {
 			return new ScaledNumber( Integer.parseInt( value ) );

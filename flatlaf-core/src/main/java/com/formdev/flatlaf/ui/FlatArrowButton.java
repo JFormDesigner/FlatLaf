@@ -126,8 +126,16 @@ public class FlatArrowButton
 
 		int w = scale( chevron ? 8 : 9 );
 		int h = scale( chevron ? 4 : 5 );
-		int x = Math.round( (width - (vert ? w : h)) / 2f + scale( (float) xOffset ) );
-		int y = Math.round( (height - (vert ? h : w)) / 2f + scale( (float) yOffset ) );
+		int rw = vert ? w : h;
+		int rh = vert ? h : w;
+		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) );
+		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) );
+
+		// optimization for small chevron arrows (e.g. OneTouchButtons in SplitPane)
+		if( x + rw >= width && x > 0 )
+			x--;
+		if( y + rh >= height && y > 0 )
+			y--;
 
 		// paint arrow
 		g.setColor( enabled
