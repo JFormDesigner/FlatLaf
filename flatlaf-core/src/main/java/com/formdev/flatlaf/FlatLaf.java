@@ -41,6 +41,7 @@ import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ScaledNumber;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * The base class for all Flat LaFs.
@@ -158,6 +159,8 @@ public abstract class FlatLaf
 
 		if( uiFont == null )
 			return;
+
+		uiFont = UIScale.applyCustomScaleFactor( uiFont );
 
 		// override fonts
 		for( Object key : defaults.keySet() ) {

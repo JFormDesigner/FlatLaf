@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.DimensionUIResource;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import javax.swing.plaf.UIResource;
 
@@ -103,8 +104,13 @@ public class UIScale
 	//---- user scaling (Java 8) ----------------------------------------------
 
 	private static float scaleFactor = 1;
+	private static boolean initialized;
 
-	static {
+	private static void initialize() {
+		if( initialized )
+			return;
+		initialized = true;
+
 		if( isEnabled() ) {
 			// listener to update scale factor if LaF changed or if Label.font changed
 			// (e.g. option "Override default fonts" in IntelliJ IDEA)
@@ -138,6 +144,10 @@ public class UIScale
 		// (e.g. can avoid large icons with small text)
 		Font font = UIManager.getFont( "Label.font" );
 
+		setUserScaleFactor( computeScaleFactor( font ) );
+	}
+
+	private static float computeScaleFactor( Font font ) {
 		// default font size
 		float fontSizeDivider = 12f;
 
@@ -152,7 +162,7 @@ public class UIScale
 			fontSizeDivider = 15f;
 		}
 
-		setUserScaleFactor( font.getSize() / fontSizeDivider );
+		return font.getSize() / fontSizeDivider;
 	}
 
 	private static boolean isEnabled() {
@@ -164,7 +174,58 @@ public class UIScale
 		return (hidpi != null) ? Boolean.parseBoolean( hidpi ) : true;
 	}
 
+	/**
+	 * Applies a custom scale factor given in system properties "flatlaf.uiScale"
+	 * or "sun.java2d.uiScale" to the given font.
+	 */
+	public static FontUIResource applyCustomScaleFactor( FontUIResource font ) {
+		if( UIScale.isJreHiDPIEnabled() )
+			return font;
+
+		String uiScale = System.getProperty( "flatlaf.uiScale" );
+		if( uiScale == null )
+			uiScale = System.getProperty( "sun.java2d.uiScale" );
+
+		float scaleFactor = parseScaleFactor( uiScale );
+		if( scaleFactor <= 0 )
+			return font;
+
+		float fontScaleFactor = computeScaleFactor( font );
+		if( scaleFactor == fontScaleFactor )
+			return font;
+
+		int newFontSize = Math.round( (font.getSize() / fontScaleFactor) * scaleFactor );
+		return new FontUIResource( font.getFamily(), font.getStyle(), newFontSize );
+	}
+
+	/**
+	 * Similar to sun.java2d.SunGraphicsEnvironment.getScaleFactor(String)
+	 */
+	private static float parseScaleFactor( String s ) {
+		if( s == null )
+			return -1;
+
+		float units = 1;
+		if( s.endsWith( "x" ) )
+			s = s.substring( 0, s.length() - 1 );
+		else if( s.endsWith( "dpi" ) ) {
+			units = 96;
+			s = s.substring( 0, s.length() - 3 );
+		} else if( s.endsWith( "%" ) ) {
+			units = 100;
+			s = s.substring( 0, s.length() - 1 );
+		}
+
+		try {
+			float scale = Float.parseFloat( s );
+			return scale > 0 ? scale / units : -1;
+		} catch( NumberFormatException ex ) {
+			return -1;
+		}
+	}
+
 	public static float getUserScaleFactor() {
+		initialize();
 		return scaleFactor;
 	}
 
@@ -181,10 +242,12 @@ public class UIScale
 	}
 
 	public static float scale( float value ) {
+		initialize();
 		return (scaleFactor == 1) ? value : (value * scaleFactor);
 	}
 
 	public static int scale( int value ) {
+		initialize();
 		return (scaleFactor == 1) ? value : Math.round( value * scaleFactor );
 	}
 
@@ -192,23 +255,28 @@ public class UIScale
 	 * Similar as scale(int) but always "rounds down".
 	 */
 	public static int scale2( int value ) {
+		initialize();
 		return (scaleFactor == 1) ? value : (int) (value * scaleFactor);
 	}
 
 	public static float unscale( float value ) {
+		initialize();
 		return (scaleFactor == 1f) ? value : (value / scaleFactor);
 	}
 
 	public static int unscale( int value ) {
+		initialize();
 		return (scaleFactor == 1f) ? value : Math.round( value / scaleFactor );
 	}
 
 	public static void scaleGraphics( Graphics2D g ) {
+		initialize();
 		if( scaleFactor != 1f )
 			g.scale( scaleFactor, scaleFactor );
 	}
 
 	public static Dimension scale( Dimension dimension ) {
+		initialize();
 		return (dimension == null || scaleFactor == 1f)
 			? dimension
 			: (dimension instanceof UIResource
@@ -217,6 +285,7 @@ public class UIScale
 	}
 
 	public static Insets scale( Insets insets ) {
+		initialize();
 		return (insets == null || scaleFactor == 1f)
 			? insets
 			: (insets instanceof UIResource
