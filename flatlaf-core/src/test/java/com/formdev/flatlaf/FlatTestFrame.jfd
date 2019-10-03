@@ -21,7 +21,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets dialog"
-					"$columnConstraints": "[fill][fill][fill][fill][fill][grow,fill][button,fill]"
+					"$columnConstraints": "[fill][fill][fill][fill][fill][fill][grow,fill][button,fill]"
 					"$rowSpecs": "[fill]"
 				} ) {
 					name: "buttonBar"
@@ -67,11 +67,35 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 4 0"
 					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "scaleFactorComboBox"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "default"
+							addElement( "default" )
+							addElement( "1" )
+							addElement( "1.25" )
+							addElement( "1.5" )
+							addElement( "1.75" )
+							addElement( "2.0" )
+							addElement( "2.25" )
+							addElement( "2.5" )
+							addElement( "3" )
+							addElement( "3.5" )
+							addElement( "4" )
+						}
+						"maximumRowCount": 20
+						auxiliary() {
+							"JavaCodeGenerator.typeParameters": "String"
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scaleFactorChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 5 0"
+					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "closeButton"
 						"text": "Close"
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 6 0"
+						"value": "cell 7 0"
 					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "South"
@@ -81,7 +105,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 510, 300 )
+			"size": new java.awt.Dimension( 640, 300 )
 		} )
 	}
 }

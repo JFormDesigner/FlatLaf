@@ -25,6 +25,7 @@ import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -37,19 +38,28 @@ public class FlatTestFrame
 {
 	private static final String PREFS_ROOT_PATH = "/flatlaf-test";
 	private static final String KEY_LAF = "laf";
+	private static final String KEY_SCALE_FACTOR = "scaleFactor";
 
 	private final String title;
 	private JComponent content;
 	private FlatInspector inspector;
 
 	public static FlatTestFrame create( String[] args, String title ) {
+		Preferences prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
+
+		// set scale factor
+		if( System.getProperty( "flatlaf.uiScale", System.getProperty( "sun.java2d.uiScale" ) ) == null ) {
+			String scaleFactor = prefs.get( KEY_SCALE_FACTOR, null );
+			if( scaleFactor != null )
+				System.setProperty( "flatlaf.uiScale", scaleFactor );
+		}
+
 		// set look and feel
 		try {
 			if( args.length > 0 )
 				UIManager.setLookAndFeel( args[0] );
 			else {
-				String lafClassName = Preferences.userRoot().node( PREFS_ROOT_PATH )
-					.get( KEY_LAF, FlatLightLaf.class.getName() );
+				String lafClassName = prefs.get( KEY_LAF, FlatLightLaf.class.getName() );
 				UIManager.setLookAndFeel( lafClassName );
 			}
 		} catch( Exception ex ) {
@@ -109,6 +119,11 @@ public class FlatTestFrame
 		lafModel.setSelectedItem( lafModel.getElementAt( sel ) );
 
 		lookAndFeelComboBox.setModel( lafModel );
+
+		updateScaleFactorComboBox();
+		String scaleFactor = System.getProperty( "flatlaf.uiScale", System.getProperty( "sun.java2d.uiScale" ) );
+		if( scaleFactor != null )
+			scaleFactorComboBox.setSelectedItem( scaleFactor );
 
 		// register F1, F2 and F3 keys to switch to Light, Dark or Test LaF
 		registerSwitchToLookAndFeel( KeyEvent.VK_F1, FlatLightLaf.class.getName() );
@@ -195,25 +210,54 @@ public class FlatTestFrame
 		if( newLaf.className.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 			return;
 
+		// hide popup to avoid occasional StackOverflowError when updating UI
+		lookAndFeelComboBox.setPopupVisible( false );
+
 		Preferences.userRoot().node( PREFS_ROOT_PATH ).put( KEY_LAF, newLaf.className );
 
+		applyLookAndFeel( newLaf.className, false );
+	}
+
+	private void applyLookAndFeel( String lafClassName, boolean pack ) {
 		EventQueue.invokeLater( () -> {
 			try {
 				// change look and feel
-				UIManager.setLookAndFeel( newLaf.className );
+				UIManager.setLookAndFeel( lafClassName );
 
 				// update title because user scale factor may change
 				updateTitle();
+
+				// enable/disable scale factor combobox
+				updateScaleFactorComboBox();
 
 				// update all components
 				SwingUtilities.updateComponentTreeUI( this );
 
 				// increase size of frame if necessary
-				int width = getWidth();
-				int height = getHeight();
-				Dimension prefSize = getPreferredSize();
-				if( prefSize.width > width || prefSize.height > height )
-					setSize( Math.max( prefSize.width, width ), Math.max( prefSize.height, height ) );
+				if( pack )
+					pack();
+				else {
+					int width = getWidth();
+					int height = getHeight();
+					Dimension prefSize = getPreferredSize();
+					if( prefSize.width > width || prefSize.height > height )
+						setSize( Math.max( prefSize.width, width ), Math.max( prefSize.height, height ) );
+				}
+
+				// limit frame size to screen size
+				Rectangle screenBounds = getGraphicsConfiguration().getBounds();
+				screenBounds = FlatUIUtils.subtractInsets( screenBounds, getToolkit().getScreenInsets( getGraphicsConfiguration() ) );
+				Dimension frameSize = getSize();
+				if( frameSize.width > screenBounds.width || frameSize.height > screenBounds.height )
+					setSize( Math.min( frameSize.width, screenBounds.width ), Math.min( frameSize.height, screenBounds.height ) );
+
+				// move frame to left/top if necessary
+				if( getX() + getWidth() > screenBounds.x + screenBounds.width ||
+					getY() + getHeight() > screenBounds.y + screenBounds.height )
+				{
+					setLocation( Math.min( getX(), screenBounds.x + screenBounds.width - getWidth() ),
+								 Math.min( getY(), screenBounds.y + screenBounds.height - getHeight() ) );
+				}
 
 				if( inspector != null )
 					inspector.update();
@@ -318,6 +362,31 @@ public class FlatTestFrame
 		inspector.setEnabled( inspectCheckBox.isSelected() );
 	}
 
+	private void scaleFactorChanged() {
+		String scaleFactor = (String) scaleFactorComboBox.getSelectedItem();
+		if( "default".equals( scaleFactor ) )
+			scaleFactor = null;
+
+		// hide popup to avoid occasional StackOverflowError when updating UI
+		scaleFactorComboBox.setPopupVisible( false );
+
+		Preferences prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
+
+		if( scaleFactor != null ) {
+			System.setProperty( "flatlaf.uiScale", scaleFactor );
+			prefs.put( KEY_SCALE_FACTOR, scaleFactor );
+		} else {
+			System.clearProperty( "flatlaf.uiScale" );
+			prefs.remove( KEY_SCALE_FACTOR );
+		}
+
+		applyLookAndFeel( UIManager.getLookAndFeel().getClass().getName(), true );
+	}
+
+	private void updateScaleFactorComboBox() {
+		scaleFactorComboBox.setEnabled( !UIScale.isJreHiDPIEnabled() && UIManager.getLookAndFeel() instanceof FlatLaf );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		dialogPane = new JPanel();
@@ -328,6 +397,7 @@ public class FlatTestFrame
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
 		inspectCheckBox = new JCheckBox();
+		scaleFactorComboBox = new JComboBox<>();
 		closeButton = new JButton();
 
 		//======== this ========
@@ -356,6 +426,7 @@ public class FlatTestFrame
 				buttonBar.setLayout(new MigLayout(
 					"insets dialog",
 					// columns
+					"[fill]" +
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
@@ -395,9 +466,27 @@ public class FlatTestFrame
 				inspectCheckBox.addActionListener(e -> inspectChanged());
 				buttonBar.add(inspectCheckBox, "cell 4 0");
 
+				//---- scaleFactorComboBox ----
+				scaleFactorComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+					"default",
+					"1",
+					"1.25",
+					"1.5",
+					"1.75",
+					"2.0",
+					"2.25",
+					"2.5",
+					"3",
+					"3.5",
+					"4"
+				}));
+				scaleFactorComboBox.setMaximumRowCount(20);
+				scaleFactorComboBox.addActionListener(e -> scaleFactorChanged());
+				buttonBar.add(scaleFactorComboBox, "cell 5 0");
+
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 6 0");
+				buttonBar.add(closeButton, "cell 7 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 		}
@@ -414,6 +503,7 @@ public class FlatTestFrame
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
 	private JCheckBox inspectCheckBox;
+	private JComboBox<String> scaleFactorComboBox;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 

@@ -66,7 +66,7 @@ public class UIScale
 
 	private static Boolean jreHiDPI;
 
-	private static boolean isJreHiDPIEnabled() {
+	public static boolean isJreHiDPIEnabled() {
 		if( jreHiDPI != null )
 			return jreHiDPI;
 
