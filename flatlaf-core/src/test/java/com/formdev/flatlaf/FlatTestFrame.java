@@ -88,9 +88,9 @@ public class FlatTestFrame
 		DefaultComboBoxModel<LafInfo> lafModel = new DefaultComboBoxModel<>();
 		lafModel.addElement( new LafInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
 		lafModel.addElement( new LafInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Test (F3)", FlatTestLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat IntelliJ (F4)", FlatIntelliJLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Darcula (F5)", FlatDarculaLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
+		lafModel.addElement( new LafInfo( "Flat Test (F8)", FlatTestLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -127,12 +127,13 @@ public class FlatTestFrame
 		if( scaleFactor != null )
 			scaleFactorComboBox.setSelectedItem( scaleFactor );
 
-		// register F1, F2 and F3 keys to switch to Light, Dark or Test LaF
+		// register F1, F2, ... keys to switch to Light, Dark or other LaFs
 		registerSwitchToLookAndFeel( KeyEvent.VK_F1, FlatLightLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F2, FlatDarkLaf.class.getName() );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F3, FlatTestLaf.class.getName() );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatIntelliJLaf.class.getName() );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F5, FlatDarculaLaf.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F3, FlatIntelliJLaf.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatDarculaLaf.class.getName() );
+
+		registerSwitchToLookAndFeel( KeyEvent.VK_F8, FlatTestLaf.class.getName() );
 
 		if( SystemInfo.IS_WINDOWS )
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
