@@ -17,6 +17,8 @@
 package com.formdev.flatlaf.demo;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -106,15 +108,19 @@ class ControlBar
 		// make the "close" button the default button
 		frame.getRootPane().setDefaultButton( closeButton );
 
-		// move focus to "close" button
+		// update info label and move focus to "close" button
 		frame.addWindowListener( new WindowAdapter() {
 			@Override
 			public void windowOpened( WindowEvent e ) {
 				updateInfoLabel();
 				closeButton.requestFocusInWindow();
 			}
+		} );
+
+		// update info label when moved to another screen
+		frame.addComponentListener( new ComponentAdapter() {
 			@Override
-			public void windowActivated( WindowEvent e ) {
+			public void componentMoved( ComponentEvent e ) {
 				updateInfoLabel();
 			}
 		} );
@@ -123,11 +129,14 @@ class ControlBar
 	private void updateInfoLabel() {
 		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
 		float userScaleFactor = UIScale.getUserScaleFactor();
-		infoLabel.setText( "(Java " + System.getProperty( "java.version" )
+		String newInfo = "(Java " + System.getProperty( "java.version" )
 			+ (systemScaleFactor != 1 ? (";  system scale factor " + systemScaleFactor) : "")
 			+ (userScaleFactor != 1 ? (";  user scale factor " + userScaleFactor) : "")
 			+ (systemScaleFactor == 1 && userScaleFactor == 1 ? "; no scaling" : "")
-			+ ")" );
+			+ ")";
+
+		if( !newInfo.equals( infoLabel.getText() ) )
+			infoLabel.setText( newInfo );
 	}
 
 	private void registerSwitchToLookAndFeel( int keyCode, String lafClassName ) {

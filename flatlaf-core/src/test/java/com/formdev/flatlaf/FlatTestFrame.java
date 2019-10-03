@@ -17,6 +17,8 @@
 package com.formdev.flatlaf;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -156,8 +158,12 @@ public class FlatTestFrame
 			public void windowOpened( WindowEvent e ) {
 				updateTitle();
 			}
+		} );
+
+		// update title when moved to another screen
+		addComponentListener( new ComponentAdapter() {
 			@Override
-			public void windowActivated( WindowEvent e ) {
+			public void componentMoved( ComponentEvent e ) {
 				updateTitle();
 			}
 		} );
@@ -166,11 +172,14 @@ public class FlatTestFrame
 	private void updateTitle() {
 		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
 		float userScaleFactor = UIScale.getUserScaleFactor();
-		setTitle( title + " (Java " + System.getProperty( "java.version" )
+		String newTitle = title + " (Java " + System.getProperty( "java.version" )
 			+ (systemScaleFactor != 1 ? (";  system scale factor " + systemScaleFactor) : "")
 			+ (userScaleFactor != 1 ? (";  user scale factor " + userScaleFactor) : "")
 			+ (systemScaleFactor == 1 && userScaleFactor == 1 ? "; no scaling" : "")
-			+ ")" );
+			+ ")";
+
+		if( !newTitle.equals( getTitle() ) )
+			setTitle( newTitle );
 	}
 
 	private void registerSwitchToLookAndFeel( int keyCode, String lafClassName ) {
