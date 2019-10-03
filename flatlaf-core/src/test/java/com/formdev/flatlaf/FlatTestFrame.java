@@ -18,12 +18,15 @@ package com.formdev.flatlaf;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
 /**
@@ -35,6 +38,7 @@ public class FlatTestFrame
 	private static final String PREFS_ROOT_PATH = "/flatlaf-test";
 	private static final String KEY_LAF = "laf";
 
+	private final String title;
 	private JComponent content;
 	private FlatInspector inspector;
 
@@ -60,12 +64,12 @@ public class FlatTestFrame
 		}
 
 		// create frame
-		FlatTestFrame frame = new FlatTestFrame();
-		frame.setTitle( title + " (Java " + System.getProperty( "java.version" ) + ")" );
-		return frame;
+		return new FlatTestFrame( title );
 	}
 
-	private FlatTestFrame() {
+	private FlatTestFrame( String title ) {
+		this.title = title;
+
 		initComponents();
 
 		// initialize look and feels combo box
@@ -130,6 +134,28 @@ public class FlatTestFrame
 
 		// close frame
 		closeButton.addActionListener(e -> dispose());
+
+		// update title
+		addWindowListener( new WindowAdapter() {
+			@Override
+			public void windowOpened( WindowEvent e ) {
+				updateTitle();
+			}
+			@Override
+			public void windowActivated( WindowEvent e ) {
+				updateTitle();
+			}
+		} );
+	}
+
+	private void updateTitle() {
+		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
+		float userScaleFactor = UIScale.getUserScaleFactor();
+		setTitle( title + " (Java " + System.getProperty( "java.version" )
+			+ (systemScaleFactor != 1 ? (";  system scale factor " + systemScaleFactor) : "")
+			+ (userScaleFactor != 1 ? (";  user scale factor " + userScaleFactor) : "")
+			+ (systemScaleFactor == 1 && userScaleFactor == 1 ? "; no scaling" : "")
+			+ ")" );
 	}
 
 	private void registerSwitchToLookAndFeel( int keyCode, String lafClassName ) {
@@ -175,6 +201,9 @@ public class FlatTestFrame
 			try {
 				// change look and feel
 				UIManager.setLookAndFeel( newLaf.className );
+
+				// update title because user scale factor may change
+				updateTitle();
 
 				// update all components
 				SwingUtilities.updateComponentTreeUI( this );
