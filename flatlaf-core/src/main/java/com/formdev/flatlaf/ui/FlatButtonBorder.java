@@ -20,8 +20,11 @@ import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Paint;
+import javax.swing.JButton;
 import javax.swing.UIManager;
+import javax.swing.plaf.UIResource;
 
 /**
  * Border for {@link javax.swing.JButton}.
@@ -71,6 +74,17 @@ public class FlatButtonBorder
 			def ? defaultFocusedBorderColor : focusedBorderColor,
 			def ? defaultHoverBorderColor : hoverBorderColor,
 			null );
+	}
+
+	@Override
+	public Insets getBorderInsets( Component c, Insets insets ) {
+		insets = super.getBorderInsets( c, insets );
+
+		// use smaller left and right insets for icon-only buttons (so that they are square)
+		if( FlatButtonUI.isIconOnlyButton( c ) && ((JButton)c).getMargin() instanceof UIResource )
+			insets.left = insets.right = Math.min( insets.top, insets.bottom );
+
+		return insets;
 	}
 
 	@Override

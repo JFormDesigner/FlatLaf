@@ -146,6 +146,13 @@ public class FlatButtonUI
 		return c instanceof JButton && ((JButton)c).isDefaultButton();
 	}
 
+	static boolean isIconOnlyButton( Component c ) {
+		String text;
+		return c instanceof JButton &&
+			((JButton)c).getIcon() != null &&
+			((text = ((JButton)c).getText()) == null || text.isEmpty());
+	}
+
 	static boolean isHelpButton( Component c ) {
 		return c instanceof JButton && clientPropertyEquals( (JButton) c, BUTTON_TYPE, BUTTON_TYPE_HELP );
 	}
@@ -259,8 +266,11 @@ public class FlatButtonUI
 			return new Dimension( helpButtonIcon.getIconWidth(), helpButtonIcon.getIconHeight() );
 
 		Dimension prefSize = super.getPreferredSize( c );
-		if( !isToolBarButton( c ) )
+
+		// apply minimum width, if not in toolbar and not a icon-only button
+		if( !isToolBarButton( c ) && !isIconOnlyButton( c ) )
 			prefSize.width = Math.max( prefSize.width, scale( minimumWidth + (focusWidth * 2) ) );
+
 		return prefSize;
 	}
 }

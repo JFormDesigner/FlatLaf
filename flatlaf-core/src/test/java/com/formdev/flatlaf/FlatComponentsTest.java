@@ -55,6 +55,7 @@ public class FlatComponentsTest
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
 		JButton button3 = new JButton();
 		JButton button12 = new JButton();
+		JButton button13 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
@@ -245,6 +246,10 @@ public class FlatComponentsTest
 		button12.putClientProperty("JButton.buttonType", "help");
 		button12.setEnabled(false);
 		add(button12, "cell 4 1");
+
+		//---- button13 ----
+		button13.setIcon(UIManager.getIcon("Tree.closedIcon"));
+		add(button13, "cell 5 1");
 
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");

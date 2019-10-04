@@ -39,6 +39,7 @@ class BasicComponentsPanel
 		JButton button2 = new JButton();
 		JButton button3 = new JButton();
 		JButton button4 = new JButton();
+		JButton button13 = new JButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
@@ -168,6 +169,10 @@ class BasicComponentsPanel
 		button4.putClientProperty("JButton.buttonType", "help");
 		button4.setEnabled(false);
 		add(button4, "cell 4 1");
+
+		//---- button13 ----
+		button13.setIcon(UIManager.getIcon("Tree.closedIcon"));
+		add(button13, "cell 5 1");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
