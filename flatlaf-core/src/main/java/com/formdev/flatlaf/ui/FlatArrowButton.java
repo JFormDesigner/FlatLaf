@@ -80,6 +80,10 @@ public class FlatArrowButton
 		}
 	}
 
+	protected boolean isHover() {
+		return hover;
+	}
+
 	public int getXOffset() {
 		return xOffset;
 	}
@@ -116,7 +120,7 @@ public class FlatArrowButton
 		boolean enabled = isEnabled();
 
 		// paint hover background
-		if( enabled && hover && hoverBackground != null ) {
+		if( enabled && isHover() && hoverBackground != null ) {
 			g.setColor( hoverBackground );
 			g.fillRect( 0, 0, width, height );
 		}
@@ -139,7 +143,7 @@ public class FlatArrowButton
 
 		// paint arrow
 		g.setColor( enabled
-			? (hover && hoverForeground != null ? hoverForeground : foreground)
+			? (isHover() && hoverForeground != null ? hoverForeground : foreground)
 			: disabledForeground );
 		g.translate( x, y );
 		Shape arrowShape = createArrowShape( direction, chevron, w, h );

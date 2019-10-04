@@ -29,6 +29,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -88,8 +89,33 @@ public class FlatComboBoxUI
 	protected Color buttonDisabledArrowColor;
 	protected Color buttonHoverArrowColor;
 
+	private MouseListener hoverListener;
+	private boolean hover;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatComboBoxUI();
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		hoverListener = new FlatUIUtils.HoverListener( null, h -> {
+			if( !comboBox.isEditable() ) {
+				hover = h;
+				if( arrowButton != null )
+					arrowButton.repaint();
+			}
+		} );
+		comboBox.addMouseListener( hoverListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		comboBox.removeMouseListener( hoverListener );
+		hoverListener = null;
 	}
 
 	@Override
@@ -228,7 +254,13 @@ public class FlatComboBoxUI
 	@Override
 	protected JButton createArrowButton() {
 		return new FlatArrowButton( SwingConstants.SOUTH, arrowType, buttonArrowColor,
-			buttonDisabledArrowColor, buttonHoverArrowColor, null );
+			buttonDisabledArrowColor, buttonHoverArrowColor, null )
+		{
+			@Override
+			protected boolean isHover() {
+				return super.isHover() || (!comboBox.isEditable() ? hover : false);
+			}
+		};
 	}
 
 	@Override
