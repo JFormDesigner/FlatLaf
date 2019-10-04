@@ -27,6 +27,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicLabelUI;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -72,8 +73,15 @@ public class FlatLabelUI
 	}
 
 	@Override
+	protected void paintEnabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
+		int mnemIndex = FlatLaf.isShowMnemonics() ? l.getDisplayedMnemonicIndex() : -1;
+		g.setColor( l.getForeground() );
+		FlatUIUtils.drawStringUnderlineCharAt( l, g, s, mnemIndex, textX, textY );
+	}
+
+	@Override
 	protected void paintDisabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
-		int mnemIndex = l.getDisplayedMnemonicIndex();
+		int mnemIndex = FlatLaf.isShowMnemonics() ? l.getDisplayedMnemonicIndex() : -1;
 		g.setColor( disabledForeground );
 		FlatUIUtils.drawStringUnderlineCharAt( l, g, s, mnemIndex, textX, textY );
 	}

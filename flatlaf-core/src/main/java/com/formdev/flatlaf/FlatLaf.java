@@ -429,4 +429,8 @@ public abstract class FlatLaf
 
 		return strs;
 	}
+
+	public static boolean isShowMnemonics() {
+		return !SystemInfo.IS_MAC;
+	}
 }

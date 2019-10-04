@@ -33,6 +33,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.View;
+import com.formdev.flatlaf.FlatLaf;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTabbedPane}.
@@ -263,7 +264,7 @@ public class FlatTabbedPaneUI
 		} else
 			color = disabledForeground;
 
-		int mnemIndex = tabPane.getDisplayedMnemonicIndexAt( tabIndex );
+		int mnemIndex = FlatLaf.isShowMnemonics() ? tabPane.getDisplayedMnemonicIndexAt( tabIndex ) : -1;
 
 		g.setColor( color );
 		FlatUIUtils.drawStringUnderlineCharAt( tabPane, g, title, mnemIndex,
