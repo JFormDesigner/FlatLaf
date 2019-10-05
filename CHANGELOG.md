@@ -7,7 +7,8 @@ FlatLaf Change Log
   triangle arrows in "Flat IntelliJ" and "Flat Darcula" themes. (issue #7)
 - Use bold font for default buttons in "Flat IntelliJ" and "Flat Darcula"
   themes.
-- Hide label and button mnemonics on Mac. (issue #4)
+- Hide label, button and tab mnemonics by default and show them only when
+  <kbd>Alt</kbd> is pressed. (issue #4)
 - If a JButton has an icon and no text, then it does not get a minimum width
   (usually 72 pixel) and the left and right insets are same as top/bottom insets
   so that it becomes square (if the icon is square).

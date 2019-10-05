@@ -16,11 +16,18 @@
 
 package com.formdev.flatlaf;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.AWTEventListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,7 +36,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
+import javax.swing.AbstractButton;
+import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.DimensionUIResource;
@@ -58,6 +70,9 @@ public abstract class FlatLaf
 
 	private BasicLookAndFeel base;
 
+	private AWTEventListener mnemonicListener;
+	private static boolean altKeyPressed;
+
 	@Override
 	public String getID() {
 		return getName();
@@ -78,10 +93,23 @@ public abstract class FlatLaf
 		getBase().initialize();
 
 		super.initialize();
+
+		// add mnemonic listener
+		mnemonicListener = e -> {
+			if( e instanceof KeyEvent && ((KeyEvent)e).getKeyCode() == KeyEvent.VK_ALT )
+				altKeyChanged( e.getID() == KeyEvent.KEY_PRESSED );
+		};
+		Toolkit.getDefaultToolkit().addAWTEventListener( mnemonicListener, AWTEvent.KEY_EVENT_MASK );
 	}
 
 	@Override
 	public void uninitialize() {
+		// remove mnemonic listener
+		if( mnemonicListener != null ) {
+			Toolkit.getDefaultToolkit().removeAWTEventListener( mnemonicListener );
+			mnemonicListener = null;
+		}
+
 		if( base != null )
 			base.uninitialize();
 
@@ -431,6 +459,59 @@ public abstract class FlatLaf
 	}
 
 	public static boolean isShowMnemonics() {
-		return !SystemInfo.IS_MAC;
+		return altKeyPressed || !UIManager.getBoolean( "Component.hideMnemonics" );
+	}
+
+	private static void altKeyChanged( boolean pressed ) {
+		if( pressed == altKeyPressed )
+			return;
+
+		altKeyPressed = pressed;
+
+		// check whether it is necessary to repaint
+		if( !UIManager.getBoolean( "Component.hideMnemonics" ) )
+			return;
+
+		// get focus owner
+		Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+		if( focusOwner == null )
+			return;
+
+		// get focused window
+		Window window = SwingUtilities.windowForComponent( focusOwner );
+		if( window == null )
+			return;
+
+		// repaint components with mnemonics in focused window
+		repaintMnemonics( window );
+	}
+
+	private static void repaintMnemonics( Container container ) {
+		for( Component c : container.getComponents() ) {
+			if( hasMnemonic( c ) )
+				c.repaint();
+
+			if( c instanceof Container )
+				repaintMnemonics( (Container) c );
+		}
+	}
+
+	private static boolean hasMnemonic( Component c ) {
+		if( c instanceof JLabel && ((JLabel)c).getDisplayedMnemonicIndex() >= 0 )
+			return true;
+
+		if( c instanceof AbstractButton && ((AbstractButton)c).getDisplayedMnemonicIndex() >= 0 )
+			return true;
+
+		if( c instanceof JTabbedPane ) {
+			JTabbedPane tabPane = (JTabbedPane) c;
+			int tabCount = tabPane.getTabCount();
+			for( int i = 0; i < tabCount; i++ ) {
+				if( tabPane.getDisplayedMnemonicIndexAt( i ) >= 0 )
+					return true;
+			}
+		}
+
+		return false;
 	}
 }
