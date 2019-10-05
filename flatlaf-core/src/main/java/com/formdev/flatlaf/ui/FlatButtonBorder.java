@@ -37,6 +37,7 @@ import javax.swing.plaf.UIResource;
  * @uiDefault Button.default.hoverBorderColor	Color	optional
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
+ * @uiDefault Button.default.borderWidth		int
  * @uiDefault Button.arc						int
  *
  * @author Karl Tauber
@@ -52,6 +53,7 @@ public class FlatButtonBorder
 	protected final Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
 	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
+	protected final int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
 	protected final int arc = UIManager.getInt( "Button.arc" );
 
 	@Override
@@ -85,6 +87,11 @@ public class FlatButtonBorder
 			insets.left = insets.right = Math.min( insets.top, insets.bottom );
 
 		return insets;
+	}
+
+	@Override
+	protected float getBorderWidth( Component c ) {
+		return FlatButtonUI.isDefaultButton( c ) ? scale( (float) defaultBorderWidth ) : super.getBorderWidth( c );
 	}
 
 	@Override

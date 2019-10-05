@@ -73,17 +73,17 @@ public class FlatBorder
 			FlatUIUtils.setRenderingHints( g2 );
 
 			float focusWidth = getFocusWidth();
-			float lineWidth = getLineWidth();
+			float borderWidth = getBorderWidth( c );
 			float arc = getArc();
 
 			if( isFocused( c ) ) {
 				g2.setColor( getFocusColor( c ) );
 				FlatUIUtils.paintOutlineBorder( g2, x, y, width, height, focusWidth,
-					lineWidth + scale( (float) innerFocusWidth ), arc );
+					getLineWidth() + scale( (float) innerFocusWidth ), arc );
 			}
 
 			g2.setPaint( getBorderColor( c ) );
-			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, lineWidth, arc );
+			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, borderWidth, arc );
 		} finally {
 			g2.dispose();
 		}
@@ -150,6 +150,10 @@ public class FlatBorder
 
 	protected float getLineWidth() {
 		return scale( 1f );
+	}
+
+	protected float getBorderWidth( Component c ) {
+		return getLineWidth();
 	}
 
 	protected float getArc() {
