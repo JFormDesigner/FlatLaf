@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 - Use new chevron arrows in "Flat Light" and "Flat Dark" themes, but keep
   triangle arrows in "Flat IntelliJ" and "Flat Darcula" themes. (issue #7)
+- Use bold font for default buttons in "Flat IntelliJ" and "Flat Darcula"
+  themes.
 - Hide label and button mnemonics on Mac. (issue #4)
 - If a JButton has an icon and no text, then it does not get a minimum width
   (usually 72 pixel) and the left and right insets are same as top/bottom insets

@@ -21,6 +21,7 @@ import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -35,6 +36,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonUI;
 import com.formdev.flatlaf.FlatLaf;
 
@@ -56,6 +58,7 @@ import com.formdev.flatlaf.FlatLaf;
  * @uiDefault Button.default.focusedBackground	Color	optional
  * @uiDefault Button.default.hoverBackground	Color	optional
  * @uiDefault Button.default.pressedBackground	Color	optional
+ * @uiDefault Button.default.boldText			boolean
  * @uiDefault Button.toolbar.hoverBackground	Color
  * @uiDefault Button.toolbar.pressedBackground	Color
  *
@@ -79,6 +82,7 @@ public class FlatButtonUI
 	protected Color defaultFocusedBackground;
 	protected Color defaultHoverBackground;
 	protected Color defaultPressedBackground;
+	protected boolean defaultBoldText;
 
 	protected Color toolbarHoverBackground;
 	protected Color toolbarPressedBackground;
@@ -117,6 +121,7 @@ public class FlatButtonUI
 			defaultFocusedBackground = UIManager.getColor( "Button.default.focusedBackground" );
 			defaultHoverBackground = UIManager.getColor( "Button.default.hoverBackground" );
 			defaultPressedBackground = UIManager.getColor( "Button.default.pressedBackground" );
+			defaultBoldText = UIManager.getBoolean( "Button.default.boldText" );
 
 			toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
 			toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
@@ -198,6 +203,17 @@ public class FlatButtonUI
 	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
 		if( isHelpButton( b ) )
 			return;
+
+		if( defaultBoldText && isDefaultButton( b ) && b.getFont() instanceof UIResource ) {
+			Font boldFont = g.getFont().deriveFont( Font.BOLD );
+			g.setFont( boldFont );
+
+			int boldWidth = b.getFontMetrics( boldFont ).stringWidth( text );
+			if( boldWidth > textRect.width ) {
+				textRect.x -= (boldWidth - textRect.width) / 2;
+				textRect.width = boldWidth;
+			}
+		}
 
 		paintText( g, b, textRect, text, b.isEnabled() ? getForeground( b ) : disabledText );
 	}
