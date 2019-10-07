@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.10
 
 - Use new chevron arrows in "Flat Light" and "Flat Dark" themes, but keep
   triangle arrows in "Flat IntelliJ" and "Flat Darcula" themes. (issue #7)
