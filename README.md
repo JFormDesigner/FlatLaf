@@ -20,8 +20,8 @@ Demo
 ----
 
 Download
-[flatlaf-demo-0.10.jar](https://download.formdev.com/flatlaf/flatlaf-demo-0.10.jar)
-and run it with `java -jar flatlaf-demo-0.10.jar` (or double-click it). Requires
+[flatlaf-demo-0.11.jar](https://download.formdev.com/flatlaf/flatlaf-demo-0.11.jar)
+and run it with `java -jar flatlaf-demo-0.11.jar` (or double-click it). Requires
 Java 8 or newer.
 
 
@@ -35,7 +35,7 @@ For Maven or Gradle use:
     Repository:   jcenter (https://jcenter.bintray.com/) 
     Group Id:     com.formdev
     Artifact Id:  flatlaf
-    Version:      0.10
+    Version:      0.11
 
 
 License
