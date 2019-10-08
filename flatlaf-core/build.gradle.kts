@@ -97,8 +97,8 @@ tasks {
 publishing {
 	publications {
 		create<MavenPublication>( "maven" ) {
-			artifactId = "flatlaf-core"
-			groupId = "com.formdev.flatlaf"
+			artifactId = "flatlaf"
+			groupId = "com.formdev"
 
 			from( components["java"] )
 
@@ -133,7 +133,7 @@ bintray {
 
 	with( pkg ) {
 		repo = "flatlaf"
-		name = "flatlaf-core"
+		name = "flatlaf"
 		setLicenses( "Apache-2.0" )
 		vcsUrl = "https://github.com/JFormDesigner/FlatLaf"
 

@@ -28,13 +28,13 @@ Java 8 or newer.
 Download
 --------
 
-[ ![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-core/images/download.svg) ](https://bintray.com/jformdesigner/flatlaf/flatlaf-core/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg) ](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
 
 For Maven or Gradle use:
 
     Repository:   jcenter (https://jcenter.bintray.com/) 
-    Group Id:     com.formdev.flatlaf
-    Artifact Id:  flatlaf-core
+    Group Id:     com.formdev
+    Artifact Id:  flatlaf
     Version:      0.10
 
 

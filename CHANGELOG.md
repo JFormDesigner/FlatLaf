@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## 0.11
+
+- Changed Maven groupId to `com.formdev` and artifactId to `flatlaf`.
+
+
 ## 0.10
 
 - Use new chevron arrows in "Flat Light" and "Flat Dark" themes, but keep
