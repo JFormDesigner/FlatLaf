@@ -157,8 +157,16 @@ public abstract class FlatLaf
 		defaults.put( "Spinner.disabledBackground", control );
 		defaults.put( "Spinner.disabledForeground", control );
 
+		// remember MenuBarUI from Mac Aqua LaF if Mac screen menubar is enabled
+		boolean useScreenMenuBar = SystemInfo.IS_MAC && "true".equals( System.getProperty( "apple.laf.useScreenMenuBar" ) );
+		Object aquaMenuBarUI = useScreenMenuBar ? defaults.get( "MenuBarUI" ) : null;
+
 		initFonts( defaults );
 		loadDefaultsFromProperties( defaults );
+
+		// use Aqua MenuBarUI if Mac screen menubar is enabled
+		if( useScreenMenuBar )
+			defaults.put( "MenuBarUI", aquaMenuBarUI );
 
 		return defaults;
 	}

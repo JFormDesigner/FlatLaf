@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- macOS: Use native screen menu bar if system property
+  `apple.laf.useScreenMenuBar` is `true`.
+
+
 ## 0.11
 
 - Changed Maven groupId to `com.formdev` and artifactId to `flatlaf`.
