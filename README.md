@@ -30,12 +30,7 @@ Download
 
 [ ![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg) ](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
 
-For Maven or Gradle use:
-
-    Repository:   jcenter (https://jcenter.bintray.com/) 
-    Group Id:     com.formdev
-    Artifact Id:  flatlaf
-    Version:      0.11
+Download from JCenter and Maven Central is coming soon.
 
 
 License
