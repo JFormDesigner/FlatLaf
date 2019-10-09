@@ -39,6 +39,7 @@ import java.util.function.Function;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -72,6 +73,16 @@ public abstract class FlatLaf
 
 	private AWTEventListener mnemonicListener;
 	private static boolean altKeyPressed;
+
+	public static boolean install( LookAndFeel newLookAndFeel ) {
+		try {
+		    UIManager.setLookAndFeel( newLookAndFeel );
+		    return true;
+		} catch( Exception ex ) {
+		    System.err.println( "Failed to initialize look and feel " + newLookAndFeel.getClass().getName() );
+		    return false;
+		}
+	}
 
 	@Override
 	public String getID() {

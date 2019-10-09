@@ -24,6 +24,10 @@ package com.formdev.flatlaf;
 public class FlatLightLaf
 	extends FlatLaf
 {
+	public static boolean install( ) {
+		return install( new FlatLightLaf() );
+	}
+
 	@Override
 	public String getName() {
 		return "Flat Light";

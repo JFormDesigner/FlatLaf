@@ -24,6 +24,10 @@ package com.formdev.flatlaf;
 public class FlatDarkLaf
 	extends FlatLaf
 {
+	public static boolean install( ) {
+		return install( new FlatDarkLaf() );
+	}
+
 	@Override
 	public String getName() {
 		return "Flat Dark";

@@ -3,6 +3,7 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Added `Flat*Laf.install()` methods.
 - macOS: Use native screen menu bar if system property
   `apple.laf.useScreenMenuBar` is `true`.
 

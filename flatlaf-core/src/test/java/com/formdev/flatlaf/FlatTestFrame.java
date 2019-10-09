@@ -68,11 +68,7 @@ public class FlatTestFrame
 			ex.printStackTrace();
 
 			// fallback
-			try {
-				UIManager.setLookAndFeel( new FlatLightLaf() );
-			} catch( Exception ex2 ) {
-				ex2.printStackTrace();
-			}
+			FlatLightLaf.install();
 		}
 
 		// create frame
