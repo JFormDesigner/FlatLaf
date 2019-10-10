@@ -19,21 +19,22 @@ IntelliJ IDEA 2019.2+ and uses mostly the same colors and icons.
 Demo
 ----
 
-Download
-[flatlaf-demo-0.11.jar](https://download.formdev.com/flatlaf/flatlaf-demo-0.11.jar)
-and run it with `java -jar flatlaf-demo-0.11.jar` (or double-click it). Requires
-Java 8 or newer.
+[![Download Demo](https://download.formdev.com/flatlaf/images/download-demo.svg)](https://download.formdev.com/flatlaf/flatlaf-demo-latest.jar)
+
+Run demo with `java -jar flatlaf-demo-<version>.jar` (or double-click it).
+Requires Java 8 or newer.
 
 
 Download
 --------
 
-[ ![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg) ](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
+[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
 
 Download from JCenter and Maven Central is coming soon.
 
 
-License
--------
+Documentation
+-------------
 
-FlatLaf is open source licensed under the [Apache 2.0 License](LICENSE)
+For more information and documentation visit
+[FlatLaf Home](https://www.formdev.com/flatlaf/)
