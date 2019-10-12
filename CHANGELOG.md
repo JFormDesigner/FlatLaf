@@ -7,6 +7,8 @@ FlatLaf Change Log
 - Added `Flat*Laf.install()` methods.
 - macOS: Use native screen menu bar if system property
   `apple.laf.useScreenMenuBar` is `true`.
+- Windows: Update fonts (and scaling) when user changes Windows text size
+  (Settings > Ease of Access > Display > Make text bigger).
 
 
 ## 0.11

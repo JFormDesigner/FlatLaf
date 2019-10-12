@@ -22,6 +22,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
@@ -167,6 +169,18 @@ public class FlatTestFrame
 				updateTitle();
 			}
 		} );
+
+		UIManager.addPropertyChangeListener( e -> {
+			if( "lookAndFeel".equals( e.getPropertyName() ) ) {
+				EventQueue.invokeLater( () -> {
+					// update title because user scale factor may change
+					updateTitle();
+
+					// enable/disable scale factor combobox
+					updateScaleFactorComboBox();
+				} );
+			}
+		} );
 	}
 
 	private void updateTitle() {
@@ -233,14 +247,8 @@ public class FlatTestFrame
 				// change look and feel
 				UIManager.setLookAndFeel( lafClassName );
 
-				// update title because user scale factor may change
-				updateTitle();
-
-				// enable/disable scale factor combobox
-				updateScaleFactorComboBox();
-
 				// update all components
-				SwingUtilities.updateComponentTreeUI( this );
+				FlatLaf.updateUI();
 
 				// increase size of frame if necessary
 				if( pack )

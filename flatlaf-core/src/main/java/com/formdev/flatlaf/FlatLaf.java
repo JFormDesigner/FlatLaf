@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
@@ -28,6 +29,8 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -43,6 +46,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.DimensionUIResource;
@@ -70,6 +74,9 @@ public abstract class FlatLaf
 	private static final String GLOBAL_PREFIX = "*.";
 
 	private BasicLookAndFeel base;
+
+	private String desktopPropertyName;
+	private PropertyChangeListener desktopPropertyListener;
 
 	private AWTEventListener mnemonicListener;
 	private static boolean altKeyPressed;
@@ -111,10 +118,30 @@ public abstract class FlatLaf
 				altKeyChanged( e.getID() == KeyEvent.KEY_PRESSED );
 		};
 		Toolkit.getDefaultToolkit().addAWTEventListener( mnemonicListener, AWTEvent.KEY_EVENT_MASK );
+
+		// listen to desktop property changes to update UI if system font or scaling changes
+		if( SystemInfo.IS_WINDOWS ) {
+			// Windows 10 allows increasing font size independent of scaling:
+			//   Settings > Ease of Access > Display > Make text bigger (100% - 225%)
+			desktopPropertyName = "win.messagebox.font";
+		}
+		if( desktopPropertyName != null ) {
+			desktopPropertyListener = e -> {
+				reSetLookAndFeel();
+			};
+			Toolkit.getDefaultToolkit().addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+		}
 	}
 
 	@Override
 	public void uninitialize() {
+		// remove desktop property listener
+		if( desktopPropertyListener != null ) {
+			Toolkit.getDefaultToolkit().removePropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			desktopPropertyName = null;
+			desktopPropertyListener = null;
+		}
+
 		// remove mnemonic listener
 		if( mnemonicListener != null ) {
 			Toolkit.getDefaultToolkit().removeAWTEventListener( mnemonicListener );
@@ -476,6 +503,35 @@ public abstract class FlatLaf
 		strs.add( str.substring( index ) );
 
 		return strs;
+	}
+
+	private static void reSetLookAndFeel() {
+		EventQueue.invokeLater( () -> {
+			try {
+				// re-set current LaF
+				LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+				UIManager.setLookAndFeel( lookAndFeel );
+
+				// must fire property change events ourself because old and new LaF are the same
+				PropertyChangeEvent e = new PropertyChangeEvent( UIManager.class, "lookAndFeel", lookAndFeel, lookAndFeel );
+				for( PropertyChangeListener l : UIManager.getPropertyChangeListeners() )
+					l.propertyChange( e );
+
+				// update UI
+				updateUI();
+			} catch( UnsupportedLookAndFeelException ex ) {
+				ex.printStackTrace();
+			}
+		} );
+	}
+
+	/**
+	 * Update UI of all application windows.
+	 * Invoke after changing LaF.
+	 */
+	public static void updateUI() {
+		for( Window w : Window.getWindows() )
+			SwingUtilities.updateComponentTreeUI( w );
 	}
 
 	public static boolean isShowMnemonics() {

@@ -79,6 +79,15 @@ class ControlBar
 		lafModel.setSelectedItem( lafModel.getElementAt( sel ) );
 
 		lookAndFeelComboBox.setModel( lafModel );
+
+		UIManager.addPropertyChangeListener( e -> {
+			if( "lookAndFeel".equals( e.getPropertyName() ) ) {
+				EventQueue.invokeLater( () -> {
+					// update info label because user scale factor may change
+					updateInfoLabel();
+				} );
+			}
+		} );
 	}
 
 	void initialize( JFrame frame, JTabbedPane tabbedPane ) {
@@ -173,11 +182,8 @@ class ControlBar
 				// change look and feel
 				UIManager.setLookAndFeel( newLaf.className );
 
-				// update info label because user scale factor may change
-				updateInfoLabel();
-
 				// update all components
-				SwingUtilities.updateComponentTreeUI( frame );
+				FlatLaf.updateUI();
 
 				// increase size of frame if necessary
 				int width = frame.getWidth();
