@@ -393,7 +393,7 @@ public class FlatTestFrame
 	}
 
 	private void updateScaleFactorComboBox() {
-		scaleFactorComboBox.setEnabled( !UIScale.isJreHiDPIEnabled() && UIManager.getLookAndFeel() instanceof FlatLaf );
+		scaleFactorComboBox.setEnabled( !UIScale.isSystemScalingEnabled() && UIManager.getLookAndFeel() instanceof FlatLaf );
 	}
 
 	private void initComponents() {

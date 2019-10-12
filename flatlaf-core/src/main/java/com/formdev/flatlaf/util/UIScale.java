@@ -66,7 +66,7 @@ public class UIScale
 
 	private static Boolean jreHiDPI;
 
-	public static boolean isJreHiDPIEnabled() {
+	public static boolean isSystemScalingEnabled() {
 		if( jreHiDPI != null )
 			return jreHiDPI;
 
@@ -94,11 +94,11 @@ public class UIScale
 	}
 
 	public static double getSystemScaleFactor( Graphics2D g ) {
-		return isJreHiDPIEnabled() ? g.getDeviceConfiguration().getDefaultTransform().getScaleX() : 1;
+		return isSystemScalingEnabled() ? g.getDeviceConfiguration().getDefaultTransform().getScaleX() : 1;
 	}
 
 	public static double getSystemScaleFactor( GraphicsConfiguration gc ) {
-		return isJreHiDPIEnabled() ? gc.getDefaultTransform().getScaleX() : 1;
+		return isSystemScalingEnabled() ? gc.getDefaultTransform().getScaleX() : 1;
 	}
 
 	//---- user scaling (Java 8) ----------------------------------------------
@@ -111,7 +111,7 @@ public class UIScale
 			return;
 		initialized = true;
 
-		if( isEnabled() ) {
+		if( isUserScalingEnabled() ) {
 			// listener to update scale factor if LaF changed or if Label.font changed
 			// (e.g. option "Override default fonts" in IntelliJ IDEA)
 			PropertyChangeListener listener = new PropertyChangeListener() {
@@ -135,7 +135,7 @@ public class UIScale
 	}
 
 	private static void updateScaleFactor() {
-		if( !isEnabled() )
+		if( !isUserScalingEnabled() )
 			return;
 
 		// use font size to calculate scale factor (instead of DPI)
@@ -165,8 +165,8 @@ public class UIScale
 		return font.getSize() / fontSizeDivider;
 	}
 
-	private static boolean isEnabled() {
-		if( isJreHiDPIEnabled() )
+	private static boolean isUserScalingEnabled() {
+		if( isSystemScalingEnabled() )
 			return false; // disable user scaling if JRE scales
 
 		// same as in IntelliJ IDEA
@@ -179,7 +179,7 @@ public class UIScale
 	 * or "sun.java2d.uiScale" to the given font.
 	 */
 	public static FontUIResource applyCustomScaleFactor( FontUIResource font ) {
-		if( UIScale.isJreHiDPIEnabled() )
+		if( UIScale.isSystemScalingEnabled() )
 			return font;
 
 		String uiScale = System.getProperty( "flatlaf.uiScale" );
