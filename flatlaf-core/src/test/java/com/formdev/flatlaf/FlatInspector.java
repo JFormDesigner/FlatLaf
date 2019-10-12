@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -41,6 +42,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.UIResource;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.ui.FlatToolTipUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -103,7 +105,7 @@ public class FlatInspector
 	private void inspect( int x, int y ) {
 		Container contentPane = rootPane.getContentPane();
 		Component c = SwingUtilities.getDeepestComponentAt( contentPane, x, y );
-		if( c == contentPane || c.getParent() == contentPane )
+		if( c == contentPane || (c != null && c.getParent() == contentPane) )
 			c = null;
 
 		if( c == lastComponent )
@@ -136,6 +138,12 @@ public class FlatInspector
 			protected void paintComponent( Graphics g ) {
 				g.setColor( getBackground() );
 				g.fillRect( 0, 0, getWidth(), getHeight() );
+			}
+
+			@Override
+			protected void paintBorder( Graphics g ) {
+				FlatUIUtils.setRenderingHints( (Graphics2D) g );
+				super.paintBorder( g );
 			}
 		};
 		c.setBackground( new Color( 255, 0, 0, 32 ) );
