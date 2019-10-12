@@ -201,7 +201,8 @@ public abstract class FlatLaf
 			uiFont = (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 
 		} else if( SystemInfo.IS_LINUX ) {
-			System.err.println( "WARNING: FlatLaf is not yet tested on Linux!" );
+			Font font = LinuxFontPolicy.getFont();
+			uiFont = (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 		}
 
 		if( uiFont == null )
