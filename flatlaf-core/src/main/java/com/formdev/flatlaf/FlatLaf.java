@@ -124,6 +124,11 @@ public abstract class FlatLaf
 			// Windows 10 allows increasing font size independent of scaling:
 			//   Settings > Ease of Access > Display > Make text bigger (100% - 225%)
 			desktopPropertyName = "win.messagebox.font";
+		} else if( SystemInfo.IS_LINUX ) {
+			// Linux/Gnome allows extra scaling and larger text:
+			//   Settings > Devices > Displays > Scale (100% or 200%)
+			//   Settings > Universal access > Large Text (off or on, 125%)
+			desktopPropertyName = "gnome.Xft/DPI";
 		}
 		if( desktopPropertyName != null ) {
 			desktopPropertyListener = e -> {

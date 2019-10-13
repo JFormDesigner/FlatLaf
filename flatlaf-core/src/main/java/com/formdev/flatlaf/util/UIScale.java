@@ -48,8 +48,7 @@ import javax.swing.plaf.UIResource;
  *
  * 2) user scaling mode
  *
- * This mode is for Java 8 compatibility and can be removed when changing minimum
- * required Java version to 9.
+ * This mode is mainly for Java 8 compatibility, but is also used on Linux.
  * The user scale factor is computed based on the used font.
  * The JRE does not scale anything.
  * So we have to invoke {@link #scale(float)} where necessary.
@@ -166,7 +165,7 @@ public class UIScale
 	}
 
 	private static boolean isUserScalingEnabled() {
-		if( isSystemScalingEnabled() )
+		if( isSystemScalingEnabled() && !SystemInfo.IS_LINUX )
 			return false; // disable user scaling if JRE scales
 
 		// same as in IntelliJ IDEA
