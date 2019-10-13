@@ -28,9 +28,18 @@ Requires Java 8 or newer.
 Download
 --------
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
+FlatLaf binaries are available on **JCenter** and **Maven Central**.
 
-Download from JCenter and Maven Central is coming soon.
+If you use Maven or Gradle, add a dependency with following coordinates to your
+build script:
+
+    groupId:     com.formdev
+    artifactId:  flatlaf
+    version:     0.13
+
+Otherwise download `flatlaf-<version>.jar` here:
+
+[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
 
 
 Documentation
