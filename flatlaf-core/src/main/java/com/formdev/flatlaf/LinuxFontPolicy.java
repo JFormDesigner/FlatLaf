@@ -19,8 +19,16 @@ package com.formdev.flatlaf;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 import javax.swing.text.StyleContext;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * @author Karl Tauber
@@ -28,15 +36,22 @@ import javax.swing.text.StyleContext;
 class LinuxFontPolicy
 {
 	static Font getFont() {
+		return SystemInfo.IS_KDE ? getKDEFont() : getGnomeFont();
+	}
+
+	/**
+	 * Gets the default font for Gnome.
+	 */
+	private static Font getGnomeFont() {
 		// see class com.sun.java.swing.plaf.gtk.PangoFonts background information
 
 		Object fontName = Toolkit.getDefaultToolkit().getDesktopProperty( "gnome.Gtk/FontName" );
 		if( !(fontName instanceof String) )
 			fontName = "sans 10";
 
-        String family = "";
-        int style = Font.PLAIN;
-        int size = 10;
+		String family = "";
+		int style = Font.PLAIN;
+		int size = 10;
 
 		StringTokenizer st = new StringTokenizer( (String) fontName );
 		while( st.hasMoreTokens() ) {
@@ -57,7 +72,7 @@ class LinuxFontPolicy
 		}
 
 		// scale font size
-		double dsize = size * getSystemFontScale();
+		double dsize = size * getGnomeFontScale();
 		size = (int) (dsize + 0.5);
 		if( size < 1 )
 			size = 1;
@@ -67,6 +82,10 @@ class LinuxFontPolicy
 		if( logicalFamily != null )
 			family = logicalFamily;
 
+		return createFont( family, style, size, dsize );
+	}
+
+	private static Font createFont( String family, int style, int size, double dsize ) {
 		// using StyleContext.getFont() here because it uses
 		// sun.font.FontUtilities.getCompositeFontUIResource()
 		Font font = new StyleContext().getFont( family, style, size );
@@ -77,7 +96,7 @@ class LinuxFontPolicy
 		return font;
 	}
 
-	private static double getSystemFontScale() {
+	private static double getGnomeFontScale() {
 		// see class com.sun.java.swing.plaf.gtk.PangoFonts background information
 
 		Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "gnome.Xft/DPI" );
@@ -104,6 +123,125 @@ class LinuxFontPolicy
 			case "sans-serif":	return "sansserif";
 			case "serif":		return "serif";
 			case "monospace":	return "monospaced";
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the default font for KDE for KDE configuration files.
+	 *
+	 * The Swing fonts are not updated when the user changes system font size
+	 * (System Settings > Fonts > Force Font DPI). A application restart is necessary.
+	 * This is the same behavior as in native KDE applications.
+	 *
+	 * The "display scale factor" (kdeglobals: [KScreen] > ScaleFactor) is not used
+	 * KDE also does not use it to calculate font size. Only forceFontDPI is used by KDE.
+	 * If user changes "display scale factor" (System Settings > Display and Monitors >
+	 * Displays > Scale Display), the forceFontDPI is also changed to reflect the scale factor.
+	 */
+	private static Font getKDEFont() {
+		List<String> kdeglobals = readConfig( "kdeglobals" );
+		List<String> kcmfonts = readConfig( "kcmfonts" );
+
+		String generalFont = getConfigEntry( kdeglobals, "General", "font" );
+		String forceFontDPI = getConfigEntry( kcmfonts, "General", "forceFontDPI" );
+
+		String family = "sansserif";
+		int style = Font.PLAIN;
+		int size = 10;
+
+		if( generalFont != null ) {
+			List<String> strs = FlatLaf.split( generalFont, ',' );
+			try {
+				family = strs.get( 0 );
+				size = Integer.parseInt( strs.get( 1 ) );
+				if( "75".equals( strs.get( 4 ) ) )
+					style |= Font.BOLD;
+				if( "1".equals( strs.get( 5 ) ) )
+					style |= Font.ITALIC;
+			} catch( RuntimeException ex ) {
+				ex.printStackTrace();
+			}
+		}
+
+		// font dpi
+		int dpi = 96;
+		if( forceFontDPI != null ) {
+			try {
+				dpi = Integer.parseInt( forceFontDPI );
+				if( dpi <= 0 )
+					dpi = 96;
+				if( dpi < 50 )
+					dpi = 50;
+			} catch( NumberFormatException ex ) {
+				ex.printStackTrace();
+			}
+		}
+
+		// scale font size
+		double fontScale = dpi / 72.0;
+		double dsize = size * fontScale;
+		size = (int) (dsize + 0.5);
+		if( size < 1 )
+			size = 1;
+
+		return createFont( family, style, size, dsize );
+	}
+
+	private static List<String> readConfig( String filename ) {
+		File userHome = new File( System.getProperty( "user.home" ) );
+
+		// search for config file
+		String[] configDirs = {
+			".config", // KDE 5
+			".kde4/share/config", // KDE 4
+			".kde/share/config"// KDE 3
+		};
+		File file = null;
+		for( String configDir : configDirs ) {
+			file = new File( userHome, configDir + "/" + filename );
+			if( file.isFile() )
+				break;
+		}
+		if( !file.isFile() )
+			return Collections.emptyList();
+
+		// read config file
+		ArrayList<String> lines = new ArrayList<>( 200 );
+		try( BufferedReader reader = new BufferedReader( new FileReader( file ) ) ) {
+			String line = null;
+			while( (line = reader.readLine()) != null )
+				lines.add( line );
+		} catch( IOException ex ) {
+			ex.printStackTrace();
+		}
+		return lines;
+	}
+
+	private static String getConfigEntry( List<String> config, String group, String key ) {
+		int groupLength = group.length();
+		int keyLength = key.length();
+		boolean inGroup = false;
+		for( String line : config ) {
+			if( !inGroup ) {
+				if( line.length() >= groupLength + 2 &&
+					line.charAt( 0 ) == '[' &&
+					line.charAt( groupLength + 1 ) == ']' &&
+					line.indexOf( group ) == 1 )
+				{
+					inGroup = true;
+				}
+			} else {
+				if( line.startsWith( "[" ) )
+					return null;
+
+				if( line.length() >= keyLength + 2 &&
+					line.charAt( keyLength ) == '=' &&
+					line.startsWith( key ) )
+				{
+					return line.substring( keyLength + 1 );
+				}
+			}
 		}
 		return null;
 	}

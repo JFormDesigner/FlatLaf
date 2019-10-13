@@ -40,6 +40,9 @@ public class SystemInfo
 	// Java VMs
 	public static final boolean IS_JETBRAINS_JVM;
 
+	// UI toolkits
+	public static final boolean IS_KDE;
+
 	static {
 		// platforms
 		String osName = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
@@ -58,6 +61,9 @@ public class SystemInfo
 		// Java VMs
 		IS_JETBRAINS_JVM = System.getProperty( "java.vm.vendor", "Unknown" )
 			.toLowerCase( Locale.ENGLISH ).contains( "jetbrains" );
+
+		// UI toolkits
+		IS_KDE = (IS_LINUX && System.getenv( "KDE_FULL_SESSION" ) != null);
 	}
 
 	private static long scanVersion( String version ) {

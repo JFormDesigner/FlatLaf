@@ -157,8 +157,8 @@ public class UIScale
 			if( "Tahoma".equals( font.getFamily() ) )
 				fontSizeDivider = 11f;
 		} else if( SystemInfo.IS_LINUX ) {
-			// default font size for Unity and Gnome is 15
-			fontSizeDivider = 15f;
+			// default font size for Unity and Gnome is 15 and for KDE it is 13
+			fontSizeDivider = SystemInfo.IS_KDE ? 13f : 15f;
 		}
 
 		return font.getSize() / fontSizeDivider;
