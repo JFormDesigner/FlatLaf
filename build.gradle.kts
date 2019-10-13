@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-version = "0.12"
+version = "0.13"
 
 // check required Java version
 if( JavaVersion.current() < JavaVersion.VERSION_1_8 )

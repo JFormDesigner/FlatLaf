@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## 0.13
+
+- Added developer information to Maven POM for Maven Central publishing.
+
+
 ## 0.12
 
 - Support Linux. (issue #2)

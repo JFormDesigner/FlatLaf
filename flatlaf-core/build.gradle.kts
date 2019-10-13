@@ -117,6 +117,14 @@ publishing {
 					}
 				}
 
+				developers {
+					developer {
+						name.set( "Karl Tauber" )
+						organization.set( "FormDev Software GmbH" )
+						organizationUrl.set( "https://www.formdev.com/" )
+					}
+				}
+
 				scm {
 					url.set( "https://github.com/JFormDesigner/FlatLaf" )
 				}
