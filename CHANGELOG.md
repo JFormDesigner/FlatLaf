@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.12
 
 - Support Linux. (issue #2)
 - Added `Flat*Laf.install()` methods.
