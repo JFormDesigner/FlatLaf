@@ -22,8 +22,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.util.function.BiConsumer;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
@@ -290,47 +289,21 @@ public class FlatTestFrame
 			boolean explicit = explicitColorsCheckBox.isSelected();
 			ColorUIResource restoreColor = new ColorUIResource( Color.white );
 
-			explicitColors( content, explicit, restoreColor );
+			updateComponentsRecur( content, (c, type) -> {
+				if( type == "view" || type == "tab" ) {
+					c.setForeground( explicit ? Color.magenta : restoreColor );
+					c.setBackground( explicit ? Color.orange : restoreColor );
+				} else {
+					c.setForeground( explicit ? Color.blue : restoreColor );
+					c.setBackground( explicit ? Color.red : restoreColor );
+				}
+			} );
 
 			// because colors may depend on state (e.g. disabled JTextField)
 			// it is best to update all UI delegates to get correct result
 			if( !explicit )
 				SwingUtilities.updateComponentTreeUI( content );
 		} );
-	}
-
-	private void explicitColors( Container container, boolean explicit, ColorUIResource restoreColor ) {
-		for( Component c : container.getComponents() ) {
-			if( c instanceof JPanel ) {
-				explicitColors( (JPanel) c, explicit, restoreColor );
-				continue;
-			}
-
-			c.setForeground( explicit ? Color.blue : restoreColor );
-			c.setBackground( explicit ? Color.red : restoreColor );
-
-			if( c instanceof JScrollPane ) {
-				Component view = ((JScrollPane)c).getViewport().getView();
-				if( view != null ) {
-					view.setForeground( explicit ? Color.magenta : restoreColor );
-					view.setBackground( explicit ? Color.orange : restoreColor );
-				}
-			} else if( c instanceof JTabbedPane ) {
-				JTabbedPane tabPane = (JTabbedPane)c;
-				int tabCount = tabPane.getTabCount();
-				for( int i = 0; i < tabCount; i++ ) {
-					Component tab = tabPane.getComponentAt( i );
-					if( tab != null ) {
-						tab.setForeground( explicit ? Color.magenta : restoreColor );
-						tab.setBackground( explicit ? Color.orange : restoreColor );
-					}
-				}
-			}
-
-			if( c instanceof JToolBar )
-				explicitColors( (JToolBar) c, explicit, restoreColor );
-		}
-
 	}
 
 	private void rightToLeftChanged() {
@@ -342,35 +315,10 @@ public class FlatTestFrame
 	}
 
 	private void enabledChanged() {
-		enabledDisable( content, enabledCheckBox.isSelected() );
-	}
-
-	private void enabledDisable( Container container, boolean enabled ) {
-		for( Component c : container.getComponents() ) {
-			if( c instanceof JPanel ) {
-				enabledDisable( (JPanel) c, enabled );
-				continue;
-			}
-
+		boolean enabled = enabledCheckBox.isSelected();
+		updateComponentsRecur( content, (c, type) -> {
 			c.setEnabled( enabled );
-
-			if( c instanceof JScrollPane ) {
-				Component view = ((JScrollPane)c).getViewport().getView();
-				if( view != null )
-					view.setEnabled( enabled );
-			} else if( c instanceof JTabbedPane ) {
-				JTabbedPane tabPane = (JTabbedPane)c;
-				int tabCount = tabPane.getTabCount();
-				for( int i = 0; i < tabCount; i++ ) {
-					Component tab = tabPane.getComponentAt( i );
-					if( tab != null )
-						tab.setEnabled( enabled );
-				}
-			}
-
-			if( c instanceof JToolBar )
-				enabledDisable( (JToolBar) c, enabled );
-		}
+		} );
 	}
 
 	private void inspectChanged() {
@@ -402,6 +350,34 @@ public class FlatTestFrame
 
 	private void updateScaleFactorComboBox() {
 		scaleFactorComboBox.setEnabled( !UIScale.isSystemScalingEnabled() && UIManager.getLookAndFeel() instanceof FlatLaf );
+	}
+
+	private void updateComponentsRecur( Container container, BiConsumer<Component, String> action ) {
+		for( Component c : container.getComponents() ) {
+			if( c instanceof JPanel ) {
+				updateComponentsRecur( (JPanel) c, action );
+				continue;
+			}
+
+			action.accept( c, null );
+
+			if( c instanceof JScrollPane ) {
+				Component view = ((JScrollPane)c).getViewport().getView();
+				if( view != null )
+					action.accept( view, "view" );
+			} else if( c instanceof JTabbedPane ) {
+				JTabbedPane tabPane = (JTabbedPane)c;
+				int tabCount = tabPane.getTabCount();
+				for( int i = 0; i < tabCount; i++ ) {
+					Component tab = tabPane.getComponentAt( i );
+					if( tab != null )
+						action.accept( tab, "tab" );
+				}
+			}
+
+			if( c instanceof JToolBar )
+				updateComponentsRecur( (JToolBar) c, action );
+		}
 	}
 
 	private void initComponents() {
