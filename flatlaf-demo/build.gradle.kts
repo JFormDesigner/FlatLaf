@@ -18,6 +18,7 @@ version = rootProject.version
 
 plugins {
 	`java-library`
+	id( "com.jfrog.bintray" ) version "1.8.4"
 }
 
 repositories {
@@ -38,6 +39,8 @@ java {
 
 tasks {
 	jar {
+		dependsOn( ":flatlaf-core:jar" )
+
 		manifest {
 			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )
 		}
@@ -48,5 +51,25 @@ tasks {
 		from( {
 			configurations.runtimeClasspath.get().filter { it.name.endsWith( "jar" ) }.map { zipTree( it ) }
 		} )
+	}
+}
+
+bintray {
+	user = System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" )
+	key = System.getenv( "BINTRAY_KEY" ) ?: System.getProperty( "bintray.key" )
+
+	setConfigurations( "archives" )
+
+	with( pkg ) {
+		repo = "flatlaf"
+		name = "flatlaf-demo"
+		setLicenses( "Apache-2.0" )
+		vcsUrl = "https://github.com/JFormDesigner/FlatLaf"
+
+		with( version ) {
+			name = project.version.toString()
+		}
+
+		publish = true
 	}
 }
