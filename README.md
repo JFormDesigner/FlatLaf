@@ -1,15 +1,15 @@
 FlatLaf - Flat Look and Feel
 ============================
 
-**FlatLaf** is a modern open-source cross-platform Look and Feel for Java
-desktop applications.
+**FlatLaf** is a modern **open-source** cross-platform Look and Feel for Java
+Swing desktop applications.
 
-It looks mostly "flat" (no shadows or gradients), clean, simple and elegant.
+It looks almost flat (no shadows or gradients), clean, simple and elegant.
 FlatLaf comes with **Light**, **Dark**, **IntelliJ** and **Darcula** themes,
 scales on **HiDPI** displays and runs on Java 8 or newer.
 
 The look is heavily inspired by **Darcula** and **IntelliJ** themes from
-IntelliJ IDEA 2019.2+ and uses mostly the same colors and icons.
+IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
 
 ![Flat Light Demo](images/FlatLightDemo.png)
 
