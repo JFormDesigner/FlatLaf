@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -78,6 +79,10 @@ public class FlatUIUtils
 
 	public static Color nonUIResource( Color c ) {
 		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
+	}
+
+	public static boolean isTableCellEditor( Component c ) {
+		return c instanceof JComponent && Boolean.TRUE.equals( ((JComponent)c).getClientProperty( "JComboBox.isTableCellEditor" ) );
 	}
 
 	/**

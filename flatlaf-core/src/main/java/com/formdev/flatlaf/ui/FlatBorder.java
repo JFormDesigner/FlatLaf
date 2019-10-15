@@ -72,9 +72,10 @@ public class FlatBorder
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			float focusWidth = getFocusWidth();
+			boolean isCellEditor = FlatUIUtils.isTableCellEditor( c );
+			float focusWidth = isCellEditor ? 0 : getFocusWidth();
 			float borderWidth = getBorderWidth( c );
-			float arc = getArc();
+			float arc = isCellEditor ? 0 : getArc();
 
 			if( isFocused( c ) ) {
 				g2.setColor( getFocusColor( c ) );
@@ -134,7 +135,8 @@ public class FlatBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		float ow = getFocusWidth() + getLineWidth();
+		boolean isCellEditor = FlatUIUtils.isTableCellEditor( c );
+		float ow = (isCellEditor ? 0 : getFocusWidth()) + getLineWidth();
 
 		insets = super.getBorderInsets( c, insets );
 		insets.top = Math.round( scale( (float) insets.top ) + ow );

@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- ComboBox: Use small border if used as table editor.
+
+
 ## 0.13
 
 - Added developer information to Maven POM for Maven Central publishing.
