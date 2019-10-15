@@ -4,6 +4,7 @@ FlatLaf Change Log
 ## Unreleased
 
 - ComboBox: Use small border if used as table editor.
+- ToolBar: Disable focusability of buttons in toolbar.
 
 
 ## 0.13

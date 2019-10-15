@@ -236,6 +236,7 @@ public class FlatInspector
 			}
 		}
 
+		text += "Focusable: " + c.isFocusable() + '\n';
 		text += "Parent: " + c.getParent().getClass().getName();
 
 		return text;

@@ -19,6 +19,8 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Component;
 import java.awt.Insets;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -51,6 +53,29 @@ public class FlatToolBarUI
 		super.uninstallUI( c );
 
 		rolloverBorder = null;
+	}
+
+	@Override
+	protected ContainerListener createToolBarContListener() {
+		return new ToolBarContListener() {
+			@Override
+			public void componentAdded( ContainerEvent e ) {
+				super.componentAdded( e );
+
+				Component c = e.getChild();
+				if( c instanceof AbstractButton )
+					c.setFocusable( false );
+			}
+
+			@Override
+			public void componentRemoved( ContainerEvent e ) {
+				super.componentRemoved( e );
+
+				Component c = e.getChild();
+				if( c instanceof AbstractButton )
+					c.setFocusable( true );
+			}
+		};
 	}
 
 	@Override
