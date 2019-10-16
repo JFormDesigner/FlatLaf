@@ -21,10 +21,6 @@ plugins {
 	id( "com.jfrog.bintray" ) version "1.8.4"
 }
 
-repositories {
-	jcenter()
-}
-
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( "com.miglayout:miglayout-swing:5.2" )

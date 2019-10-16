@@ -16,6 +16,12 @@
 
 version = "0.13"
 
+allprojects {
+	repositories {
+		jcenter()
+	}
+}
+
 // check required Java version
 if( JavaVersion.current() < JavaVersion.VERSION_1_8 )
 	throw RuntimeException( "Java 8 or later required (running ${System.getProperty( "java.version" )})" )

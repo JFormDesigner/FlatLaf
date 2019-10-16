@@ -22,10 +22,6 @@ plugins {
 	id( "com.jfrog.bintray" ) version "1.8.4"
 }
 
-repositories {
-	jcenter()
-}
-
 if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	sourceSets {
 		create( "module-info" ) {
