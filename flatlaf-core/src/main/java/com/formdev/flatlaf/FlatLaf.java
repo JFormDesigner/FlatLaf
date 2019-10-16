@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf;
 
-import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -24,10 +23,10 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -78,7 +77,7 @@ public abstract class FlatLaf
 	private String desktopPropertyName;
 	private PropertyChangeListener desktopPropertyListener;
 
-	private AWTEventListener mnemonicListener;
+	private KeyEventPostProcessor mnemonicListener;
 	private static boolean altKeyPressed;
 
 	public static boolean install( LookAndFeel newLookAndFeel ) {
@@ -114,10 +113,11 @@ public abstract class FlatLaf
 
 		// add mnemonic listener
 		mnemonicListener = e -> {
-			if( e instanceof KeyEvent && ((KeyEvent)e).getKeyCode() == KeyEvent.VK_ALT )
+			if( e.getKeyCode() == KeyEvent.VK_ALT )
 				altKeyChanged( e.getID() == KeyEvent.KEY_PRESSED );
+			return false;
 		};
-		Toolkit.getDefaultToolkit().addAWTEventListener( mnemonicListener, AWTEvent.KEY_EVENT_MASK );
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor( mnemonicListener );
 
 		// listen to desktop property changes to update UI if system font or scaling changes
 		if( SystemInfo.IS_WINDOWS ) {
@@ -149,7 +149,7 @@ public abstract class FlatLaf
 
 		// remove mnemonic listener
 		if( mnemonicListener != null ) {
-			Toolkit.getDefaultToolkit().removeAWTEventListener( mnemonicListener );
+			KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor( mnemonicListener );
 			mnemonicListener = null;
 		}
 
