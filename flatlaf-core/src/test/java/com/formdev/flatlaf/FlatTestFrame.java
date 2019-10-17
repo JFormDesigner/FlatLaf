@@ -204,7 +204,7 @@ public class FlatTestFrame
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 	}
 
-	protected void showFrame( JComponent content ) {
+	public void showFrame( JComponent content ) {
 		this.content = content;
 
 		contentPanel.getContentPane().add( content );

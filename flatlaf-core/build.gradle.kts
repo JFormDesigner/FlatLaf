@@ -88,6 +88,19 @@ tasks {
 
 		from( javadoc )
 	}
+
+	register( "testJar", Jar::class ) {
+		archiveBaseName.set( "flatlaf-test" )
+		from( sourceSets.test.get().output )
+	}
+}
+
+configurations {
+	create( "testArtifacts" )
+}
+
+artifacts {
+	add( "testArtifacts", tasks.getByPath( "testJar" ) )
 }
 
 publishing {
