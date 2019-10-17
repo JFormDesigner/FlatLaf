@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ServiceLoader;
 import java.util.function.Function;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
@@ -272,11 +273,21 @@ public abstract class FlatLaf
 		try {
 			// load properties files
 			Properties properties = new Properties();
+			ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
 			for( Class<?> lafClass : lafClasses ) {
+				// load core properties
 				String propertiesName = "/" + lafClass.getName().replace( '.', '/' ) + ".properties";
 				try( InputStream in = lafClass.getResourceAsStream( propertiesName ) ) {
 					if( in != null )
 						properties.load( in );
+				}
+
+				// load properties from addons
+				for( FlatDefaultsAddon addon : addonLoader ) {
+					try( InputStream in = addon.getDefaults( lafClass ) ) {
+						if( in != null )
+							properties.load( in );
+					}
 				}
 			}
 

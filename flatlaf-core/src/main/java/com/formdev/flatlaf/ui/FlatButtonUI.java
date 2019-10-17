@@ -218,7 +218,7 @@ public class FlatButtonUI
 		paintText( g, b, textRect, text, b.isEnabled() ? getForeground( b ) : disabledText );
 	}
 
-	static void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text, Color foreground ) {
+	public static void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text, Color foreground ) {
 		FontMetrics fm = b.getFontMetrics( b.getFont() );
 		int mnemonicIndex = FlatLaf.isShowMnemonics() ? b.getDisplayedMnemonicIndex() : -1;
 

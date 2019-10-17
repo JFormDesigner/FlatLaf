@@ -14,8 +14,21 @@
  * limitations under the License.
  */
 
-rootProject.name = "FlatLaf"
+version = rootProject.version
 
-include( "flatlaf-core" )
-include( "flatlaf-swingx" )
-include( "flatlaf-demo" )
+plugins {
+	`java-library`
+}
+
+dependencies {
+	implementation( project( ":flatlaf-core" ) )
+	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
+
+	testImplementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
+	testImplementation( "com.miglayout:miglayout-swing:5.2" )
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
