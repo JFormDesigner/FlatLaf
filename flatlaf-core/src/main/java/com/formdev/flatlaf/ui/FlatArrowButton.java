@@ -157,7 +157,7 @@ public class FlatArrowButton
 		g.translate( -x, -y );
 	}
 
-	public static Shape createArrowShape( int direction, boolean chevron, int w, int h ) {
+	public static Shape createArrowShape( int direction, boolean chevron, float w, float h ) {
 		switch( direction ) {
 			case NORTH:	return FlatUIUtils.createPath( !chevron, 0,h, (w / 2f),0, w,h );
 			case SOUTH:	return FlatUIUtils.createPath( !chevron, 0,0, (w / 2f),h, w,0 );

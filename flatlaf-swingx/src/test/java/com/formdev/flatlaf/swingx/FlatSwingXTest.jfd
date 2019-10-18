@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3,ltr"
 			"$columnConstraints": "[left][][]"
-			"$rowConstraints": "[]"
+			"$rowConstraints": "[][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -30,6 +30,86 @@ new FormModel {
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[left]"
+				"$rowConstraints": "[][]"
+				"$layoutConstraints": "ltr,insets 0,hidemode 3"
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "taskPaneContainerLabel"
+					"text": "JXTaskPaneContainer:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "taskPaneLabel"
+					"text": "JXTaskPane:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1,aligny top,growy 0"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormContainer( "org.jdesktop.swingx.JXTaskPaneContainer", new FormLayoutManager( class com.jformdesigner.runtime.GenericIndexLayout ) ) {
+					name: "xTaskPaneContainer1"
+					add( new FormContainer( "org.jdesktop.swingx.JXTaskPane", new FormLayoutManager( class com.jformdesigner.runtime.GenericIndexLayout ) ) {
+						name: "xTaskPane3"
+						"title": "Basic Tasks"
+						add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+							name: "xHyperlink3"
+							"text": "New"
+						} )
+						add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+							name: "xHyperlink4"
+							"text": "Open"
+						} )
+						add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+							name: "xHyperlink5"
+							"text": "Save"
+						} )
+					} )
+					add( new FormContainer( "org.jdesktop.swingx.JXTaskPane", new FormLayoutManager( class com.jformdesigner.runtime.GenericIndexLayout ) ) {
+						name: "xTaskPane4"
+						"title": "Other Tasks"
+						"icon": new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
+						add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+							name: "xHyperlink6"
+							"text": "Duplicate"
+						} )
+						add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+							name: "xHyperlink7"
+							"text": "Delete"
+						} )
+					} )
+					add( new FormContainer( "org.jdesktop.swingx.JXTaskPane", new FormLayoutManager( class com.jformdesigner.runtime.GenericIndexLayout ) ) {
+						name: "xTaskPane5"
+						"title": "Special Tasks"
+						"special": true
+						add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+							name: "xHyperlink8"
+							"text": "Go to space"
+						} )
+					} )
+					add( new FormContainer( "org.jdesktop.swingx.JXTaskPane", new FormLayoutManager( class com.jformdesigner.runtime.GenericIndexLayout ) ) {
+						name: "xTaskPane6"
+						"title": "Collapsed"
+						"collapsed": true
+						add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+							name: "xHyperlink9"
+							"text": "text"
+						} )
+						add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
+							name: "xHyperlink10"
+							"text": "text"
+						} )
+					} )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1,width 150,height 350"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

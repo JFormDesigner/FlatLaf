@@ -165,21 +165,52 @@ public class FlatUIUtils
 	}
 
 	private static Shape createOutlinePath( float x, float y, float width, float height, float arc ) {
-		if( arc <= 0 )
+		return createRoundRectanglePath( x, y, width, height, arc, arc, arc, arc );
+	}
+
+	/**
+	 * Creates a not-filled rounded rectangle shape and allows specifying the line width and the radius or each corner.
+	 */
+	public static Path2D createRoundRectangle( float x, float y, float width, float height,
+		float lineWidth, float arcTopLeft, float arcTopRight, float arcBottomLeft, float arcBottomRight )
+	{
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		path.append( createRoundRectanglePath( x, y, width, height, arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight ), false );
+		path.append( createRoundRectanglePath( x + lineWidth, y + lineWidth, width - (lineWidth * 2), height - (lineWidth * 2),
+			arcTopLeft - lineWidth, arcTopRight - lineWidth, arcBottomLeft - lineWidth, arcBottomRight - lineWidth ), false );
+		return path;
+	}
+
+	/**
+	 * Creates a filled rounded rectangle shape and allows specifying the radius or each corner.
+	 */
+	public static Shape createRoundRectanglePath( float x, float y, float width, float height,
+		float arcTopLeft, float arcTopRight, float arcBottomLeft, float arcBottomRight )
+	{
+		if( arcTopLeft <= 0 && arcTopRight <= 0 && arcBottomLeft <= 0 && arcBottomRight <= 0 )
 			return new Rectangle2D.Float( x, y, width, height );
+
+		if( arcTopLeft < 0 )
+			arcTopLeft = 0;
+		if( arcTopRight < 0 )
+			arcTopRight = 0;
+		if( arcBottomLeft < 0 )
+			arcBottomLeft = 0;
+		if( arcBottomRight < 0 )
+			arcBottomRight = 0;
 
 		float x2 = x + width;
 		float y2 = y + height;
 
 		Path2D rect = new Path2D.Float();
-		rect.moveTo( x2 - arc, y );
-		rect.quadTo( x2, y, x2, y + arc );
-		rect.lineTo( x2, y2 - arc );
-		rect.quadTo( x2, y2, x2 - arc, y2 );
-		rect.lineTo( x + arc, y2 );
-		rect.quadTo( x, y2, x, y2 - arc );
-		rect.lineTo( x, y + arc );
-		rect.quadTo( x, y, x + arc, y );
+		rect.moveTo( x2 - arcTopRight, y );
+		rect.quadTo( x2, y, x2, y + arcTopRight );
+		rect.lineTo( x2, y2 - arcBottomRight );
+		rect.quadTo( x2, y2, x2 - arcBottomRight, y2 );
+		rect.lineTo( x + arcBottomLeft, y2 );
+		rect.quadTo( x, y2, x, y2 - arcBottomLeft );
+		rect.lineTo( x, y + arcTopLeft );
+		rect.quadTo( x, y, x + arcTopLeft, y );
 		rect.closePath();
 
 		return rect;

@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.swingx;
 
+import java.awt.*;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 import org.jdesktop.swingx.*;
@@ -41,6 +42,23 @@ public class FlatSwingXTest
 		JLabel hyperlinkLabel = new JLabel();
 		JXHyperlink xHyperlink1 = new JXHyperlink();
 		JXHyperlink xHyperlink2 = new JXHyperlink();
+		JPanel panel1 = new JPanel();
+		JLabel taskPaneContainerLabel = new JLabel();
+		JLabel taskPaneLabel = new JLabel();
+		JScrollPane scrollPane1 = new JScrollPane();
+		JXTaskPaneContainer xTaskPaneContainer1 = new JXTaskPaneContainer();
+		JXTaskPane xTaskPane3 = new JXTaskPane();
+		JXHyperlink xHyperlink3 = new JXHyperlink();
+		JXHyperlink xHyperlink4 = new JXHyperlink();
+		JXHyperlink xHyperlink5 = new JXHyperlink();
+		JXTaskPane xTaskPane4 = new JXTaskPane();
+		JXHyperlink xHyperlink6 = new JXHyperlink();
+		JXHyperlink xHyperlink7 = new JXHyperlink();
+		JXTaskPane xTaskPane5 = new JXTaskPane();
+		JXHyperlink xHyperlink8 = new JXHyperlink();
+		JXTaskPane xTaskPane6 = new JXTaskPane();
+		JXHyperlink xHyperlink9 = new JXHyperlink();
+		JXHyperlink xHyperlink10 = new JXHyperlink();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -50,6 +68,7 @@ public class FlatSwingXTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
 			"[]"));
 
 		//---- hyperlinkLabel ----
@@ -64,6 +83,99 @@ public class FlatSwingXTest
 		xHyperlink2.setText("disabled");
 		xHyperlink2.setEnabled(false);
 		add(xHyperlink2, "cell 2 0");
+
+		//======== panel1 ========
+		{
+			panel1.setLayout(new MigLayout(
+				"ltr,insets 0,hidemode 3",
+				// columns
+				"[left]",
+				// rows
+				"[]" +
+				"[]"));
+
+			//---- taskPaneContainerLabel ----
+			taskPaneContainerLabel.setText("JXTaskPaneContainer:");
+			panel1.add(taskPaneContainerLabel, "cell 0 0");
+
+			//---- taskPaneLabel ----
+			taskPaneLabel.setText("JXTaskPane:");
+			panel1.add(taskPaneLabel, "cell 0 1");
+		}
+		add(panel1, "cell 0 1,aligny top,growy 0");
+
+		//======== scrollPane1 ========
+		{
+
+			//======== xTaskPaneContainer1 ========
+			{
+
+				//======== xTaskPane3 ========
+				{
+					xTaskPane3.setTitle("Basic Tasks");
+					Container xTaskPane3ContentPane = xTaskPane3.getContentPane();
+
+					//---- xHyperlink3 ----
+					xHyperlink3.setText("New");
+					xTaskPane3ContentPane.add(xHyperlink3);
+
+					//---- xHyperlink4 ----
+					xHyperlink4.setText("Open");
+					xTaskPane3ContentPane.add(xHyperlink4);
+
+					//---- xHyperlink5 ----
+					xHyperlink5.setText("Save");
+					xTaskPane3ContentPane.add(xHyperlink5);
+				}
+				xTaskPaneContainer1.add(xTaskPane3);
+
+				//======== xTaskPane4 ========
+				{
+					xTaskPane4.setTitle("Other Tasks");
+					xTaskPane4.setIcon(UIManager.getIcon("Tree.closedIcon"));
+					Container xTaskPane4ContentPane = xTaskPane4.getContentPane();
+
+					//---- xHyperlink6 ----
+					xHyperlink6.setText("Duplicate");
+					xTaskPane4ContentPane.add(xHyperlink6);
+
+					//---- xHyperlink7 ----
+					xHyperlink7.setText("Delete");
+					xTaskPane4ContentPane.add(xHyperlink7);
+				}
+				xTaskPaneContainer1.add(xTaskPane4);
+
+				//======== xTaskPane5 ========
+				{
+					xTaskPane5.setTitle("Special Tasks");
+					xTaskPane5.setSpecial(true);
+					Container xTaskPane5ContentPane = xTaskPane5.getContentPane();
+
+					//---- xHyperlink8 ----
+					xHyperlink8.setText("Go to space");
+					xTaskPane5ContentPane.add(xHyperlink8);
+				}
+				xTaskPaneContainer1.add(xTaskPane5);
+
+				//======== xTaskPane6 ========
+				{
+					xTaskPane6.setTitle("Collapsed");
+					xTaskPane6.setCollapsed(true);
+					Container xTaskPane6ContentPane = xTaskPane6.getContentPane();
+
+					//---- xHyperlink9 ----
+					xHyperlink9.setText("text");
+					xTaskPane6ContentPane.add(xHyperlink9);
+
+					//---- xHyperlink10 ----
+					xHyperlink10.setText("text");
+					xTaskPane6ContentPane.add(xHyperlink10);
+				}
+				xTaskPaneContainer1.add(xTaskPane6);
+			}
+			scrollPane1.setViewportView(xTaskPaneContainer1);
+		}
+		add(scrollPane1, "cell 1 1,width 150,height 350");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
