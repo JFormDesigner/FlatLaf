@@ -140,7 +140,7 @@ new FormModel {
 					name: "warningOptionPane"
 					"messageType": 2
 					"optionType": 2
-					"message": "Beware of the dog!"
+					"message": "<html>I like <b>bold</b>,<br> and I like <i>italic</i>,<br> and I like to have<br> many lines.<br> Lots of lines."
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "Center"
 				} )

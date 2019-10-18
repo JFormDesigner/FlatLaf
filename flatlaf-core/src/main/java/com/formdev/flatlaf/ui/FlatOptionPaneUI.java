@@ -23,6 +23,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -121,6 +122,10 @@ public class FlatOptionPaneUI
 		// set message padding
 		if( messagePadding > 0 )
 			cons.insets.bottom = UIScale.scale( messagePadding );
+
+		// disable line wrapping for HTML
+		if( msg instanceof String && BasicHTML.isHTMLString( (String) msg ) )
+			maxll = Integer.MAX_VALUE;
 
 		super.addMessageComponents( container, cons, msg, maxll, internallyCreated );
 	}

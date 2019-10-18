@@ -201,7 +201,7 @@ class OptionPanePanel
 				//---- warningOptionPane ----
 				warningOptionPane.setMessageType(JOptionPane.WARNING_MESSAGE);
 				warningOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-				warningOptionPane.setMessage("Beware of the dog!");
+				warningOptionPane.setMessage("<html>I like <b>bold</b>,<br> and I like <i>italic</i>,<br> and I like to have<br> many lines.<br> Lots of lines.");
 				panel5.add(warningOptionPane, BorderLayout.CENTER);
 			}
 			panel9.add(panel5, "cell 1 4");
