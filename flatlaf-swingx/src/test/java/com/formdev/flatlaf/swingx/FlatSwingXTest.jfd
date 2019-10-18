@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3,ltr"
 			"$columnConstraints": "[left][][]"
-			"$rowConstraints": "[][]"
+			"$rowConstraints": "[][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -110,6 +110,20 @@ new FormModel {
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1,width 150,height 350"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "headerLabel"
+				"text": "JXHeader:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormComponent( "org.jdesktop.swingx.JXHeader" ) {
+				name: "xHeader1"
+				"title": "Title"
+				"description": "Description\nMore description"
+				"icon": new com.jformdesigner.model.SwingIcon( 0, "/org/jdesktop/swingx/plaf/windows/resources/tipoftheday.png" )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2 2 1,width 200"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

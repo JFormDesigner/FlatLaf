@@ -59,6 +59,8 @@ public class FlatSwingXTest
 		JXTaskPane xTaskPane6 = new JXTaskPane();
 		JXHyperlink xHyperlink9 = new JXHyperlink();
 		JXHyperlink xHyperlink10 = new JXHyperlink();
+		JLabel headerLabel = new JLabel();
+		JXHeader xHeader1 = new JXHeader();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -68,6 +70,7 @@ public class FlatSwingXTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
 			"[]" +
 			"[]"));
 
@@ -176,6 +179,16 @@ public class FlatSwingXTest
 			scrollPane1.setViewportView(xTaskPaneContainer1);
 		}
 		add(scrollPane1, "cell 1 1,width 150,height 350");
+
+		//---- headerLabel ----
+		headerLabel.setText("JXHeader:");
+		add(headerLabel, "cell 0 2");
+
+		//---- xHeader1 ----
+		xHeader1.setTitle("Title");
+		xHeader1.setDescription("Description\nMore description");
+		xHeader1.setIcon(new ImageIcon(getClass().getResource("/org/jdesktop/swingx/plaf/windows/resources/tipoftheday.png")));
+		add(xHeader1, "cell 1 2 2 1,width 200");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
