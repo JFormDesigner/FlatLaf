@@ -37,11 +37,21 @@ public class FlatSwingXTest
 		initComponents();
 	}
 
+	private void busyChanged() {
+		boolean busy = busyCheckBox.isSelected();
+		xBusyLabel1.setBusy( busy );
+		xBusyLabel2.setBusy( busy );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel hyperlinkLabel = new JLabel();
 		JXHyperlink xHyperlink1 = new JXHyperlink();
 		JXHyperlink xHyperlink2 = new JXHyperlink();
+		JLabel label2 = new JLabel();
+		xBusyLabel1 = new JXBusyLabel();
+		xBusyLabel2 = new JXBusyLabel();
+		busyCheckBox = new JCheckBox();
 		JPanel panel1 = new JPanel();
 		JLabel taskPaneContainerLabel = new JLabel();
 		JLabel taskPaneLabel = new JLabel();
@@ -68,8 +78,10 @@ public class FlatSwingXTest
 			// columns
 			"[left]" +
 			"[]" +
+			"[]" +
 			"[]",
 			// rows
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]"));
@@ -86,6 +98,25 @@ public class FlatSwingXTest
 		xHyperlink2.setText("disabled");
 		xHyperlink2.setEnabled(false);
 		add(xHyperlink2, "cell 2 0");
+
+		//---- label2 ----
+		label2.setText("JXBusyLabel:");
+		add(label2, "cell 0 1");
+
+		//---- xBusyLabel1 ----
+		xBusyLabel1.setText("enabled");
+		add(xBusyLabel1, "cell 1 1");
+
+		//---- xBusyLabel2 ----
+		xBusyLabel2.setText("disabled");
+		xBusyLabel2.setEnabled(false);
+		add(xBusyLabel2, "cell 2 1");
+
+		//---- busyCheckBox ----
+		busyCheckBox.setText("busy");
+		busyCheckBox.setMnemonic('B');
+		busyCheckBox.addActionListener(e -> busyChanged());
+		add(busyCheckBox, "cell 3 1");
 
 		//======== panel1 ========
 		{
@@ -105,7 +136,7 @@ public class FlatSwingXTest
 			taskPaneLabel.setText("JXTaskPane:");
 			panel1.add(taskPaneLabel, "cell 0 1");
 		}
-		add(panel1, "cell 0 1,aligny top,growy 0");
+		add(panel1, "cell 0 2,aligny top,growy 0");
 
 		//======== scrollPane1 ========
 		{
@@ -178,20 +209,23 @@ public class FlatSwingXTest
 			}
 			scrollPane1.setViewportView(xTaskPaneContainer1);
 		}
-		add(scrollPane1, "cell 1 1,width 150,height 350");
+		add(scrollPane1, "cell 1 2,width 150,height 350");
 
 		//---- headerLabel ----
 		headerLabel.setText("JXHeader:");
-		add(headerLabel, "cell 0 2");
+		add(headerLabel, "cell 0 3");
 
 		//---- xHeader1 ----
 		xHeader1.setTitle("Title");
 		xHeader1.setDescription("Description\nMore description");
 		xHeader1.setIcon(new ImageIcon(getClass().getResource("/org/jdesktop/swingx/plaf/windows/resources/tipoftheday.png")));
-		add(xHeader1, "cell 1 2 2 1,width 200");
+		add(xHeader1, "cell 1 3 2 1,width 200");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JXBusyLabel xBusyLabel1;
+	private JXBusyLabel xBusyLabel2;
+	private JCheckBox busyCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

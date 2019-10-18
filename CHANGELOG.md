@@ -5,8 +5,8 @@ FlatLaf Change Log
 
 - ComboBox: Use small border if used as table editor.
 - ToolBar: Disable focusability of buttons in toolbar.
-- SwingX: Support `JXHeader`, `JXHyperlink`, `JXTaskPaneContainer` and
-  `JXTaskPane`. (issue #8)
+- SwingX: Support `JXBusyLabel`, `JXHeader`, `JXHyperlink`,
+  `JXTaskPaneContainer` and `JXTaskPane`. (issue #8)
 
 
 ## 0.13
