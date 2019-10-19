@@ -236,6 +236,8 @@ public class FlatInspector
 			}
 		}
 
+		text += "Enabled: " + c.isEnabled() + '\n';
+		text += "Opaque: " + c.isOpaque() + '\n';
 		text += "Focusable: " + c.isFocusable() + '\n';
 		text += "Parent: " + c.getParent().getClass().getName();
 

@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -60,6 +61,12 @@ public class FlatUIUtils
 			r.y + insets.top,
 			r.width - insets.left - insets.right,
 			r.height - insets.top - insets.bottom );
+	}
+
+	public static Dimension addInsets( Dimension dim, Insets insets ) {
+		return new Dimension(
+			dim.width + insets.left + insets.right,
+			dim.height + insets.top + insets.bottom );
 	}
 
 	public static Color getUIColor( String key, int defaultColorRGB ) {

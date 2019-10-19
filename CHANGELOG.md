@@ -6,7 +6,7 @@ FlatLaf Change Log
 - ComboBox: Use small border if used as table editor.
 - ToolBar: Disable focusability of buttons in toolbar.
 - OptionPane: Fixed rendering of longer HTML text. (issue #12)
-- SwingX: Support `JXBusyLabel`, `JXHeader`, `JXHyperlink`,
+- SwingX: Support `JXBusyLabel`, `JXDatePicker`, `JXHeader`, `JXHyperlink`,
   `JXTaskPaneContainer` and `JXTaskPane`. (issue #8)
 
 

@@ -8,34 +8,88 @@ new FormModel {
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3,ltr"
-			"$columnConstraints": "[left][][][]"
-			"$rowConstraints": "[][][][]"
+			"$columnConstraints": "[left][][][][fill]"
+			"$rowConstraints": "[][][][][][]"
 		} ) {
 			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "enabled"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "disabled"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "not editable"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label5"
+				"text": "not editable disabled"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "datePickerLabel"
+				"text": "JXDatePicker:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "org.jdesktop.swingx.JXDatePicker" ) {
+				name: "xDatePicker1"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1,growx"
+			} )
+			add( new FormComponent( "org.jdesktop.swingx.JXDatePicker" ) {
+				name: "xDatePicker2"
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+			add( new FormComponent( "org.jdesktop.swingx.JXDatePicker" ) {
+				name: "xDatePicker3"
+				"editable": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 1"
+			} )
+			add( new FormComponent( "org.jdesktop.swingx.JXDatePicker" ) {
+				name: "xDatePicker4"
+				"enabled": false
+				"editable": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 1"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "hyperlinkLabel"
 				"text": "JXHyperlink:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0"
+				"value": "cell 0 2"
 			} )
 			add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
 				name: "xHyperlink1"
 				"text": "enabled"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0"
+				"value": "cell 1 2"
 			} )
 			add( new FormComponent( "org.jdesktop.swingx.JXHyperlink" ) {
 				name: "xHyperlink2"
 				"text": "disabled"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0"
+				"value": "cell 2 2"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
 				"text": "JXBusyLabel:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1"
+				"value": "cell 0 3"
 			} )
 			add( new FormComponent( "org.jdesktop.swingx.JXBusyLabel" ) {
 				name: "xBusyLabel1"
@@ -44,7 +98,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1"
+				"value": "cell 1 3"
 			} )
 			add( new FormComponent( "org.jdesktop.swingx.JXBusyLabel" ) {
 				name: "xBusyLabel2"
@@ -54,7 +108,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1"
+				"value": "cell 2 3"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "busyCheckBox"
@@ -65,7 +119,7 @@ new FormModel {
 				}
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "busyChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 1"
+				"value": "cell 3 3"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[left]"
@@ -86,7 +140,7 @@ new FormModel {
 					"value": "cell 0 1"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2,aligny top,growy 0"
+				"value": "cell 0 4,aligny top,growy 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
@@ -145,13 +199,13 @@ new FormModel {
 					} )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2,width 150,height 350"
+				"value": "cell 1 4,width 150,height 350"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "headerLabel"
 				"text": "JXHeader:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 3"
+				"value": "cell 0 5"
 			} )
 			add( new FormComponent( "org.jdesktop.swingx.JXHeader" ) {
 				name: "xHeader1"
@@ -159,7 +213,7 @@ new FormModel {
 				"description": "Description\nMore description"
 				"icon": new com.jformdesigner.model.SwingIcon( 0, "/org/jdesktop/swingx/plaf/windows/resources/tipoftheday.png" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3 2 1,width 200"
+				"value": "cell 1 5 2 1,width 200"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

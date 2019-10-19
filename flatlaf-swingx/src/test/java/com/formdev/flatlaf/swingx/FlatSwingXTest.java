@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.swingx;
 
 import java.awt.*;
+import java.util.Date;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 import org.jdesktop.swingx.*;
@@ -45,6 +46,15 @@ public class FlatSwingXTest
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		JLabel label1 = new JLabel();
+		JLabel label3 = new JLabel();
+		JLabel label4 = new JLabel();
+		JLabel label5 = new JLabel();
+		JLabel datePickerLabel = new JLabel();
+		JXDatePicker xDatePicker1 = new JXDatePicker();
+		JXDatePicker xDatePicker2 = new JXDatePicker();
+		JXDatePicker xDatePicker3 = new JXDatePicker();
+		JXDatePicker xDatePicker4 = new JXDatePicker();
 		JLabel hyperlinkLabel = new JLabel();
 		JXHyperlink xHyperlink1 = new JXHyperlink();
 		JXHyperlink xHyperlink2 = new JXHyperlink();
@@ -79,44 +89,81 @@ public class FlatSwingXTest
 			"[left]" +
 			"[]" +
 			"[]" +
-			"[]",
+			"[]" +
+			"[fill]",
 			// rows
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
 			"[]"));
 
+		//---- label1 ----
+		label1.setText("enabled");
+		add(label1, "cell 1 0");
+
+		//---- label3 ----
+		label3.setText("disabled");
+		add(label3, "cell 2 0");
+
+		//---- label4 ----
+		label4.setText("not editable");
+		add(label4, "cell 3 0");
+
+		//---- label5 ----
+		label5.setText("not editable disabled");
+		add(label5, "cell 4 0");
+
+		//---- datePickerLabel ----
+		datePickerLabel.setText("JXDatePicker:");
+		add(datePickerLabel, "cell 0 1");
+		add(xDatePicker1, "cell 1 1,growx");
+
+		//---- xDatePicker2 ----
+		xDatePicker2.setEnabled(false);
+		add(xDatePicker2, "cell 2 1");
+
+		//---- xDatePicker3 ----
+		xDatePicker3.setEditable(false);
+		add(xDatePicker3, "cell 3 1");
+
+		//---- xDatePicker4 ----
+		xDatePicker4.setEnabled(false);
+		xDatePicker4.setEditable(false);
+		add(xDatePicker4, "cell 4 1");
+
 		//---- hyperlinkLabel ----
 		hyperlinkLabel.setText("JXHyperlink:");
-		add(hyperlinkLabel, "cell 0 0");
+		add(hyperlinkLabel, "cell 0 2");
 
 		//---- xHyperlink1 ----
 		xHyperlink1.setText("enabled");
-		add(xHyperlink1, "cell 1 0");
+		add(xHyperlink1, "cell 1 2");
 
 		//---- xHyperlink2 ----
 		xHyperlink2.setText("disabled");
 		xHyperlink2.setEnabled(false);
-		add(xHyperlink2, "cell 2 0");
+		add(xHyperlink2, "cell 2 2");
 
 		//---- label2 ----
 		label2.setText("JXBusyLabel:");
-		add(label2, "cell 0 1");
+		add(label2, "cell 0 3");
 
 		//---- xBusyLabel1 ----
 		xBusyLabel1.setText("enabled");
-		add(xBusyLabel1, "cell 1 1");
+		add(xBusyLabel1, "cell 1 3");
 
 		//---- xBusyLabel2 ----
 		xBusyLabel2.setText("disabled");
 		xBusyLabel2.setEnabled(false);
-		add(xBusyLabel2, "cell 2 1");
+		add(xBusyLabel2, "cell 2 3");
 
 		//---- busyCheckBox ----
 		busyCheckBox.setText("busy");
 		busyCheckBox.setMnemonic('B');
 		busyCheckBox.addActionListener(e -> busyChanged());
-		add(busyCheckBox, "cell 3 1");
+		add(busyCheckBox, "cell 3 3");
 
 		//======== panel1 ========
 		{
@@ -136,7 +183,7 @@ public class FlatSwingXTest
 			taskPaneLabel.setText("JXTaskPane:");
 			panel1.add(taskPaneLabel, "cell 0 1");
 		}
-		add(panel1, "cell 0 2,aligny top,growy 0");
+		add(panel1, "cell 0 4,aligny top,growy 0");
 
 		//======== scrollPane1 ========
 		{
@@ -209,18 +256,23 @@ public class FlatSwingXTest
 			}
 			scrollPane1.setViewportView(xTaskPaneContainer1);
 		}
-		add(scrollPane1, "cell 1 2,width 150,height 350");
+		add(scrollPane1, "cell 1 4,width 150,height 350");
 
 		//---- headerLabel ----
 		headerLabel.setText("JXHeader:");
-		add(headerLabel, "cell 0 3");
+		add(headerLabel, "cell 0 5");
 
 		//---- xHeader1 ----
 		xHeader1.setTitle("Title");
 		xHeader1.setDescription("Description\nMore description");
 		xHeader1.setIcon(new ImageIcon(getClass().getResource("/org/jdesktop/swingx/plaf/windows/resources/tipoftheday.png")));
-		add(xHeader1, "cell 1 3 2 1,width 200");
+		add(xHeader1, "cell 1 5 2 1,width 200");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		xDatePicker1.setDate( new Date() );
+		xDatePicker2.setDate( new Date() );
+		xDatePicker3.setDate( new Date() );
+		xDatePicker4.setDate( new Date() );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
