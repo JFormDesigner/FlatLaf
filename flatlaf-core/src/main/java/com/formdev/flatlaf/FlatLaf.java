@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ServiceLoader;
@@ -68,6 +69,8 @@ import com.formdev.flatlaf.util.UIScale;
 public abstract class FlatLaf
 	extends BasicLookAndFeel
 {
+	private static final String TYPE_PREFIX = "{";
+	private static final String TYPE_PREFIX_END = "}";
 	private static final String VARIABLE_PREFIX = "@";
 	private static final String REF_PREFIX = VARIABLE_PREFIX + "@";
 	private static final String OPTIONAL_PREFIX = "?";
@@ -356,54 +359,76 @@ public abstract class FlatLaf
 		return resolveValue( properties, newValue );
 	}
 
+	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDNUMBER }
+
 	private Object parseValue( String key, String value, Function<String, String> resolver ) {
 		value = value.trim();
 
 		// null, false, true
 		switch( value ) {
-			case "null":		return null;
+			case "null":	return null;
 			case "false":	return false;
-			case "true":		return true;
+			case "true":	return true;
 		}
 
-		// borders
-		if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
-			return parseBorder( value, resolver );
+		ValueType valueType = ValueType.UNKNOWN;
 
-		// icons
-		if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
-			return parseInstance( value );
+		// check whether value type is specified in the value
+		if( value.startsWith( TYPE_PREFIX ) ) {
+			int end = value.indexOf( TYPE_PREFIX_END );
+			if( end != -1 ) {
+				try {
+					String typeStr = value.substring( TYPE_PREFIX.length(), end );
+					valueType = ValueType.valueOf( typeStr.toUpperCase( Locale.ENGLISH ) );
 
-		// insets
-		if( key.endsWith( ".margin" ) || key.endsWith( ".padding" ) ||
-			key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
-			return parseInsets( value );
+					// remove type from value
+					value = value.substring( end + TYPE_PREFIX_END.length() );
+				} catch( IllegalArgumentException ex ) {
+					// ignore
+				}
+			}
+		}
 
-		// scaled number
-		ScaledNumber scaledNumber = parseScaledNumber( key, value );
-		if( scaledNumber != null )
-			return scaledNumber;
+		// determine value type from key
+		if( valueType == ValueType.UNKNOWN ) {
+			if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
+				valueType = ValueType.BORDER;
+			else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
+				valueType = ValueType.ICON;
+			else if( key.endsWith( ".margin" ) || key.endsWith( ".padding" ) ||
+					 key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
+				valueType = ValueType.INSETS;
+			else if( key.endsWith( "Size" ) )
+				valueType = ValueType.SIZE;
+			else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
+				valueType = ValueType.INTEGER;
+		}
 
-		// size
-		if( key.endsWith( "Size" ) && !key.equals( "SplitPane.dividerSize" ))
-			return parseSize( value );
+		// parse value
+		switch( valueType ) {
+			case STRING:		return value;
+			case INTEGER:		return parseInteger( value, true );
+			case BORDER:		return parseBorder( value, resolver );
+			case ICON:			return parseInstance( value );
+			case INSETS:		return parseInsets( value );
+			case SIZE:			return parseSize( value );
+			case COLOR:			return parseColor( value, true );
+			case SCALEDNUMBER:	return parseScaledNumber( value );
+			case UNKNOWN:
+			default:
+				// colors
+				ColorUIResource color = parseColor( value, false );
+				if( color != null )
+					return color;
 
-		// width, height
-		if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
-			return parseInteger( value, true );
+				// integer
+				Integer integer = parseInteger( value, false );
+				if( integer != null )
+					return integer;
 
-		// colors
-		ColorUIResource color = parseColor( value, false );
-		if( color != null )
-			return color;
-
-		// integer
-		Integer integer = parseInteger( value, false );
-		if( integer != null )
-			return integer;
-
-		// string
-		return value;
+				// string
+				return value;
+		}
 	}
 
 	private Object parseBorder( String value, Function<String, String> resolver ) {
@@ -493,12 +518,7 @@ public abstract class FlatLaf
 		return null;
 	}
 
-	private ScaledNumber parseScaledNumber( String key, String value ) {
-		if( !key.equals( "OptionPane.buttonMinimumWidth" ) &&
-			!key.equals( "SplitPane.oneTouchButtonSize" ) &&
-			!key.equals( "SplitPane.oneTouchButtonOffset" ) )
-		  return null; // not supported
-
+	private ScaledNumber parseScaledNumber( String value ) {
 		try {
 			return new ScaledNumber( Integer.parseInt( value ) );
 		} catch( NumberFormatException ex ) {
