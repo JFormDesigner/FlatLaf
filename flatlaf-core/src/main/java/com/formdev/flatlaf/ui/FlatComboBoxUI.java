@@ -368,9 +368,9 @@ public class FlatComboBoxUI
 	@SuppressWarnings( { "rawtypes", "unchecked" } )
 	private class FlatComboPopup
 		extends BasicComboPopup
-		implements ListCellRenderer
 	{
 		private CellPaddingBorder paddingBorder;
+		private final ListCellRenderer renderer = new PopupListCellRenderer();
 
 		FlatComboPopup( JComboBox combo ) {
 			super( combo );
@@ -405,7 +405,7 @@ public class FlatComboBoxUI
 		protected void configureList() {
 			super.configureList();
 
-			list.setCellRenderer( this );
+			list.setCellRenderer( renderer );
 		}
 
 		@Override
@@ -416,27 +416,33 @@ public class FlatComboBoxUI
 					super.propertyChange( e );
 
 					if( e.getPropertyName() == "renderer" )
-						list.setCellRenderer( FlatComboPopup.this );
+						list.setCellRenderer( renderer );
 				}
 			};
 		}
 
-		@Override
-		public Component getListCellRendererComponent( JList list, Object value,
-			int index, boolean isSelected, boolean cellHasFocus )
+		//---- class PopupListCellRenderer -----
+
+		private class PopupListCellRenderer
+			implements ListCellRenderer
 		{
-			ListCellRenderer renderer = comboBox.getRenderer();
-			CellPaddingBorder.uninstall( renderer );
+			@Override
+			public Component getListCellRendererComponent( JList list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus )
+			{
+				ListCellRenderer renderer = comboBox.getRenderer();
+				CellPaddingBorder.uninstall( renderer );
 
-			Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
-			if( c instanceof JComponent ) {
-				if( paddingBorder == null )
-					paddingBorder = new CellPaddingBorder( padding );
-				paddingBorder.install( (JComponent) c );
+				if( c instanceof JComponent ) {
+					if( paddingBorder == null )
+						paddingBorder = new CellPaddingBorder( padding );
+					paddingBorder.install( (JComponent) c );
+				}
+
+				return c;
 			}
-
-			return c;
 		}
 	}
 
