@@ -7,7 +7,7 @@ FlatLaf Change Log
 - ToolBar: Disable focusability of buttons in toolbar.
 - OptionPane: Fixed rendering of longer HTML text. (issue #12)
 - SwingX: Support `JXBusyLabel`, `JXDatePicker`, `JXHeader`, `JXHyperlink`,
-  `JXTaskPaneContainer` and `JXTaskPane`. (issue #8)
+  `JXMonthView`, `JXTaskPaneContainer` and `JXTaskPane`. (issue #8)
 
 
 ## 0.13
