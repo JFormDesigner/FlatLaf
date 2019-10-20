@@ -34,11 +34,14 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JPanel;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
+import org.jdesktop.swingx.JXHyperlink;
+import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.plaf.basic.BasicDatePickerUI;
 import com.formdev.flatlaf.ui.FlatArrowButton;
 import com.formdev.flatlaf.ui.FlatBorder;
@@ -97,6 +100,21 @@ public class FlatDatePickerUI
 		buttonHoverArrowColor = UIManager.getColor( "ComboBox.buttonHoverArrowColor" );
 
 		super.installUI( c );
+
+		// hack JXDatePicker.TodayPanel colors
+		// (there is no need to uninstall these changes because only UIResources are used,
+		// which are automatically replaced when switching LaF)
+		JPanel linkPanel = datePicker.getLinkPanel();
+		if( linkPanel instanceof JXPanel && linkPanel.getClass().getName().equals( "org.jdesktop.swingx.JXDatePicker$TodayPanel" ) ) {
+			((JXPanel)linkPanel).setBackgroundPainter( null );
+			linkPanel.setBackground( UIManager.getColor( "JXMonthView.background" ) );
+
+			if( linkPanel.getComponentCount() >= 1 && linkPanel.getComponent( 0 ) instanceof JXHyperlink ) {
+				JXHyperlink todayLink = (JXHyperlink) linkPanel.getComponent( 0 );
+				todayLink.setUnclickedColor( UIManager.getColor( "Hyperlink.linkColor" ) );
+				todayLink.setClickedColor( UIManager.getColor( "Hyperlink.visitedColor" ) );
+			}
+		}
 	}
 
 	@Override
