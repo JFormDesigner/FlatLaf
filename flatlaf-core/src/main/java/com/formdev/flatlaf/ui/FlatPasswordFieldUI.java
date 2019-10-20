@@ -116,15 +116,16 @@ public class FlatPasswordFieldUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ) );
+		return applyMinimumWidth( super.getPreferredSize( c ), c );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ) );
+		return applyMinimumWidth( super.getMinimumSize( c ), c );
 	}
 
-	private Dimension applyMinimumWidth( Dimension size ) {
+	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
+		int focusWidth = (c.getBorder() instanceof FlatBorder) ? this.focusWidth : 0;
 		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
 		return size;
 	}
