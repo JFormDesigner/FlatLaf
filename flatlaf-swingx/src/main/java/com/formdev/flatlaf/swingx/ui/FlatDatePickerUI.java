@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -30,6 +31,8 @@ import java.awt.Shape;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
+import java.text.ParseException;
+import java.util.Calendar;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -42,6 +45,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.calendar.DatePickerFormatter.DatePickerFormatterUIResource;
 import org.jdesktop.swingx.plaf.basic.BasicDatePickerUI;
 import com.formdev.flatlaf.ui.FlatArrowButton;
 import com.formdev.flatlaf.ui.FlatBorder;
@@ -151,7 +155,8 @@ public class FlatDatePickerUI
 
 	@Override
 	protected JFormattedTextField createEditor() {
-		JFormattedTextField editor = super.createEditor();
+		JFormattedTextField editor = new DefaultEditor( new DatePickerFormatterUIResource( datePicker.getLocale() ) );
+		editor.setName( "dateField" );
 		editor.setBorder( BorderFactory.createEmptyBorder() );
 		editor.setOpaque( false );
 		editor.addFocusListener( new FocusListener() {
@@ -264,5 +269,46 @@ public class FlatDatePickerUI
 		}
 
 		paint( g, c );
+	}
+
+	//---- class DefaultEditor ------------------------------------------------
+
+	private class DefaultEditor
+		extends JFormattedTextField
+		implements UIResource
+	{
+		DefaultEditor( AbstractFormatter formatter ) {
+			super( formatter );
+
+			// disable Component.minimumWidth
+			setColumns( 1 );
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			Dimension prefSize = super.getPreferredSize();
+
+			// create date 2000-11-30 that is used for minimum width calculation
+			Calendar calendar = Calendar.getInstance( datePicker.getLocale() );
+			calendar.set( 2000, 11, 30 );
+
+			try {
+				AbstractFormatter formatter = getFormatter();
+				String str = formatter.valueToString( calendar.getTime() );
+
+				Insets insets = getInsets();
+				FontMetrics metrics = getFontMetrics( getFont() );
+				int minWidth = metrics.stringWidth( str ) + insets.left + insets.right + 2;
+				return new Dimension( Math.max( minWidth, prefSize.width ), prefSize.height );
+			} catch( ParseException ex ) {
+				// ignore
+				return prefSize;
+			}
+		}
+
+		@Override
+		public Dimension getMinimumSize() {
+			return getPreferredSize();
+		}
 	}
 }
