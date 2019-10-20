@@ -6,6 +6,8 @@ FlatLaf Change Log
 - ComboBox: Use small border if used as table editor.
 - ToolBar: Disable focusability of buttons in toolbar.
 - OptionPane: Fixed rendering of longer HTML text. (issue #12)
+- EditorPane and TextPane: Fixed font and text color when using HTML content.
+  (issue #9)
 - SwingX: Support `JXBusyLabel`, `JXDatePicker`, `JXHeader`, `JXHyperlink`,
   `JXMonthView`, `JXTaskPaneContainer` and `JXTaskPane`. (issue #8)
 

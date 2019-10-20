@@ -143,7 +143,14 @@ public class FlatComponentsTest
 		JToggleButton toggleButton7 = new JToggleButton();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
+		JLabel label4 = new JLabel();
 		JScrollBar scrollBar4 = new JScrollBar();
+		JPanel panel3 = new JPanel();
+		JLabel label3 = new JLabel();
+		JScrollPane scrollPane15 = new JScrollPane();
+		JEditorPane editorPane6 = new JEditorPane();
+		JScrollPane scrollPane16 = new JScrollPane();
+		JTextPane textPane6 = new JTextPane();
 		JLabel separatorLabel = new JLabel();
 		JSeparator separator1 = new JSeparator();
 		JPanel panel2 = new JPanel();
@@ -719,10 +726,51 @@ public class FlatComponentsTest
 		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
 		add(scrollBar1, "cell 1 14,growx");
 
+		//---- label4 ----
+		label4.setText("HTML:");
+		add(label4, "cell 5 14");
+
 		//---- scrollBar4 ----
 		scrollBar4.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar4.setEnabled(false);
 		add(scrollBar4, "cell 1 15,growx");
+
+		//======== panel3 ========
+		{
+			panel3.setLayout(new MigLayout(
+				"insets 0,hidemode 3,gap 5 5,ltr",
+				// columns
+				"[]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]"));
+
+			//---- label3 ----
+			label3.setText("<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u></html>");
+			panel3.add(label3, "cell 0 0");
+
+			//======== scrollPane15 ========
+			{
+
+				//---- editorPane6 ----
+				editorPane6.setContentType("text/html");
+				editorPane6.setText("JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u>");
+				scrollPane15.setViewportView(editorPane6);
+			}
+			panel3.add(scrollPane15, "cell 0 1,grow");
+
+			//======== scrollPane16 ========
+			{
+
+				//---- textPane6 ----
+				textPane6.setContentType("text/html");
+				textPane6.setText("JTextPane HTML<br>Sample <b>content</b><br> <u>text</u>");
+				scrollPane16.setViewportView(textPane6);
+			}
+			panel3.add(scrollPane16, "cell 0 2,grow");
+		}
+		add(panel3, "cell 5 15 1 7,aligny top,grow 100 0");
 
 		//---- separatorLabel ----
 		separatorLabel.setText("JSeparator:");

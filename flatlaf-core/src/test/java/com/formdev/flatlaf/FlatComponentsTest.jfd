@@ -678,12 +678,53 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 14,growx"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "HTML:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 14"
+			} )
 			add( new FormComponent( "javax.swing.JScrollBar" ) {
 				name: "scrollBar4"
 				"orientation": 0
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 15,growx"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[]"
+				"$rowConstraints": "[][][]"
+				"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
+			} ) {
+				name: "panel3"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label3"
+					"text": "<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u></html>"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane15"
+					add( new FormComponent( "javax.swing.JEditorPane" ) {
+						name: "editorPane6"
+						"contentType": "text/html"
+						"text": "JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u>"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1,grow"
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane16"
+					add( new FormComponent( "javax.swing.JTextPane" ) {
+						name: "textPane6"
+						"contentType": "text/html"
+						"text": "JTextPane HTML<br>Sample <b>content</b><br> <u>text</u>"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2,grow"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 15 1 7,aligny top,grow 100 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "separatorLabel"
@@ -837,7 +878,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 790, 715 )
+			"size": new java.awt.Dimension( 790, 750 )
 		} )
 	}
 }

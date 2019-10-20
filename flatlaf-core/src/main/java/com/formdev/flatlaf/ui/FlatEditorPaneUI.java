@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Dimension;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
@@ -37,6 +38,8 @@ public class FlatEditorPaneUI
 {
 	protected int minimumWidth;
 
+	private Object oldHonorDisplayProperties;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatEditorPaneUI();
 	}
@@ -46,6 +49,17 @@ public class FlatEditorPaneUI
 		super.installDefaults();
 
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+
+		// use component font and foreground for HTML text
+		oldHonorDisplayProperties = getComponent().getClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES );
+		getComponent().putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, true );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		getComponent().putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, oldHonorDisplayProperties );
 	}
 
 	@Override
