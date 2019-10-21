@@ -74,11 +74,14 @@ public class FlatToolTipUI
 			List<String> lines = FlatLaf.split( ((JToolTip)c).getTipText(), '\n' );
 
 			int x = insets.left;
+			int x2 = c.getWidth() - insets.right;
 			int y = insets.top - fm.getDescent();
 			int lineHeight = fm.getHeight();
+			JComponent comp = ((JToolTip)c).getComponent();
+			boolean leftToRight = (comp != null ? comp : c).getComponentOrientation().isLeftToRight();
 			for( String line : lines ) {
 				y += lineHeight;
-				g.drawString( line, x, y );
+				g.drawString( line, leftToRight ? x : x2 - SwingUtilities.computeStringWidth( fm, line ), y );
 			}
 		} else
 			super.paint( g, c );

@@ -170,9 +170,15 @@ public class FlatSliderUI
 		if( slider.getOrientation() == JSlider.HORIZONTAL ) {
 			float y = trackRect.y + (trackRect.height - tw) / 2f;
 			if( enabled && isRoundThumb() ) {
-				int cw = thumbRect.x + (thumbRect.width / 2) - trackRect.x;
-				coloredTrack = new RoundRectangle2D.Float( trackRect.x, y, cw, tw, arc, arc );
-				track = new RoundRectangle2D.Float( trackRect.x + cw, y, trackRect.width - cw, tw, arc, arc );
+				if( slider.getComponentOrientation().isLeftToRight() ) {
+					int cw = thumbRect.x + (thumbRect.width / 2) - trackRect.x;
+					coloredTrack = new RoundRectangle2D.Float( trackRect.x, y, cw, tw, arc, arc );
+					track = new RoundRectangle2D.Float( trackRect.x + cw, y, trackRect.width - cw, tw, arc, arc );
+				} else {
+					int cw = trackRect.x + trackRect.width - thumbRect.x - (thumbRect.width / 2);
+					coloredTrack = new RoundRectangle2D.Float( trackRect.x + trackRect.width - cw, y, cw, tw, arc, arc );
+					track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width - cw, tw, arc, arc );
+				}
 			} else
 				track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width, tw, arc, arc );
 		} else {
