@@ -370,7 +370,6 @@ public class FlatComboBoxUI
 		extends BasicComboPopup
 	{
 		private CellPaddingBorder paddingBorder;
-		private final ListCellRenderer renderer = new PopupListCellRenderer();
 
 		FlatComboPopup( JComboBox combo ) {
 			super( combo );
@@ -405,7 +404,7 @@ public class FlatComboBoxUI
 		protected void configureList() {
 			super.configureList();
 
-			list.setCellRenderer( renderer );
+			list.setCellRenderer( new PopupListCellRenderer() );
 		}
 
 		@Override
@@ -416,7 +415,7 @@ public class FlatComboBoxUI
 					super.propertyChange( e );
 
 					if( e.getPropertyName() == "renderer" )
-						list.setCellRenderer( renderer );
+						list.setCellRenderer( new PopupListCellRenderer() );
 				}
 			};
 		}

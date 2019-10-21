@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- ComboBox: Fixed NPE in combobox with custom renderer after switching to
+  FlatLaf. (issue #16; regression in 0.14)
+
+
 ## 0.14
 
 - ComboBox: Use small border if used as table editor.
