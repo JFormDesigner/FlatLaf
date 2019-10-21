@@ -35,11 +35,17 @@ build script:
 
     groupId:     com.formdev
     artifactId:  flatlaf
-    version:     0.13
+    version:     0.14
 
 Otherwise download `flatlaf-<version>.jar` here:
 
 [![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
+
+
+Addons
+------
+
+- [SwingX](flatlaf-swingx)
 
 
 Documentation
