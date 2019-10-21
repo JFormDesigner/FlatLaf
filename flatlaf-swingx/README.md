@@ -17,6 +17,10 @@ addon:
 - `JXTaskPaneContainer`
 - `JXTaskPane`
 
+![Flat Light SwingX Demo](../images/FlatLightSwingXTest.png)
+
+![Flat Dark SwingX Demo](../images/FlatDarkSwingXTest.png)
+
 
 Download
 --------
