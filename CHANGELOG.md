@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.15
 
 - ToolTip: Improved styling of dark tooltips (darker background, no border).
 - ToolTip: Fixed colors in tooltips of disabled components. (issue #15)
