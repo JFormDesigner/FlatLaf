@@ -43,6 +43,7 @@ new FormModel {
 				name: "button1"
 				"text": "enabled"
 				"displayedMnemonicIndex": 0
+				"toolTipText": "This button is enabled."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
@@ -51,6 +52,7 @@ new FormModel {
 				"text": "disabled"
 				"displayedMnemonicIndex": 0
 				"enabled": false
+				"toolTipText": "This button is disabled."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )

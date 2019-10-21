@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- ToolTip: Improved styling of dark tooltips (darker background, no border).
+- ToolTip: Fixed colors in tooltips of disabled components. (issue #15)
 - ComboBox: Fixed NPE in combobox with custom renderer after switching to
   FlatLaf. (issue #16; regression in 0.14)
 
