@@ -205,18 +205,37 @@ class DemoFrame
 		//======== toolBar1 ========
 		{
 			toolBar1.setMargin(new Insets(3, 3, 3, 3));
+
+			//---- backButton ----
+			backButton.setToolTipText("Back");
 			toolBar1.add(backButton);
+
+			//---- forwardButton ----
+			forwardButton.setToolTipText("Forward");
 			toolBar1.add(forwardButton);
 			toolBar1.addSeparator();
+
+			//---- cutButton ----
+			cutButton.setToolTipText("Cut");
 			toolBar1.add(cutButton);
+
+			//---- copyButton ----
+			copyButton.setToolTipText("Copy");
 			toolBar1.add(copyButton);
+
+			//---- pasteButton ----
+			pasteButton.setToolTipText("Paste");
 			toolBar1.add(pasteButton);
 			toolBar1.addSeparator();
+
+			//---- refreshButton ----
+			refreshButton.setToolTipText("Refresh");
 			toolBar1.add(refreshButton);
 			toolBar1.addSeparator();
 
 			//---- showToggleButton ----
 			showToggleButton.setSelected(true);
+			showToggleButton.setToolTipText("Show Details");
 			toolBar1.add(showToggleButton);
 		}
 		contentPane.add(toolBar1, BorderLayout.NORTH);

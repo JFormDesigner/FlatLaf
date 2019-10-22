@@ -17,27 +17,33 @@ new FormModel {
 				"margin": new java.awt.Insets( 3, 3, 3, 3 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "backButton"
+					"toolTipText": "Back"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "forwardButton"
+					"toolTipText": "Forward"
 				} )
 				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
 					name: "separator5"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "cutButton"
+					"toolTipText": "Cut"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "copyButton"
+					"toolTipText": "Copy"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "pasteButton"
+					"toolTipText": "Paste"
 				} )
 				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
 					name: "separator6"
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "refreshButton"
+					"toolTipText": "Refresh"
 				} )
 				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
 					name: "separator7"
@@ -45,6 +51,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "showToggleButton"
 					"selected": true
+					"toolTipText": "Show Details"
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "North"
