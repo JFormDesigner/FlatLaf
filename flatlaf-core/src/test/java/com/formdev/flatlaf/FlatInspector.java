@@ -239,6 +239,7 @@ public class FlatInspector
 		text += "Enabled: " + c.isEnabled() + '\n';
 		text += "Opaque: " + c.isOpaque() + '\n';
 		text += "Focusable: " + c.isFocusable() + '\n';
+		text += "Left-to-right: " + c.getComponentOrientation().isLeftToRight() + '\n';
 		text += "Parent: " + c.getParent().getClass().getName();
 
 		return text;

@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -213,6 +214,9 @@ public class FlatComboBoxUI
 				{
 					// fix editor component colors
 					updateEditorColors();
+				} else if( editor != null && source == comboBox && propertyName == "componentOrientation" ) {
+					ComponentOrientation o = (ComponentOrientation) e.getNewValue();
+					editor.applyComponentOrientation( o );
 				}
 			}
 		};
@@ -234,6 +238,8 @@ public class FlatComboBoxUI
 		// instead of "border instanceof javax.swing.plaf.UIResource"
 		if( editor instanceof JTextComponent )
 			((JTextComponent)editor).setBorder( BorderFactory.createEmptyBorder() );
+
+		editor.applyComponentOrientation( comboBox.getComponentOrientation() );
 
 		updateEditorColors();
 	}
@@ -315,6 +321,7 @@ public class FlatComboBoxUI
 		CellPaddingBorder.uninstall( renderer );
 		Component c = renderer.getListCellRendererComponent( listBox, comboBox.getSelectedItem(), -1, false, false );
 		c.setFont( comboBox.getFont() );
+		c.applyComponentOrientation( comboBox.getComponentOrientation() );
 		CellPaddingBorder.uninstall( c );
 
 		boolean enabled = comboBox.isEnabled();
@@ -373,6 +380,15 @@ public class FlatComboBoxUI
 
 		FlatComboPopup( JComboBox combo ) {
 			super( combo );
+
+			// BasicComboPopup listens to JComboBox.componentOrientation and updates
+			// the component orientation of the list, scroller and popup, but when
+			// switching the LaF and a new combo popup is created, the component
+			// orientation is not applied.
+			ComponentOrientation o = comboBox.getComponentOrientation();
+			list.setComponentOrientation( o );
+			scroller.setComponentOrientation( o );
+			setComponentOrientation( o );
 		}
 
 		@Override
@@ -386,7 +402,13 @@ public class FlatComboBoxUI
 				comboBox.setPrototypeDisplayValue( prototype );
 
 			// make popup wider if necessary
-			pw = Math.max( pw, displaySize.width );
+			if( displaySize.width > pw ) {
+				int diff = displaySize.width - pw;
+				pw = displaySize.width;
+
+				if( !comboBox.getComponentOrientation().isLeftToRight() )
+					px -= diff;
+			}
 
 			return super.computePopupBounds( px, py, pw, ph );
 		}
@@ -433,6 +455,7 @@ public class FlatComboBoxUI
 				CellPaddingBorder.uninstall( renderer );
 
 				Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				c.applyComponentOrientation( comboBox.getComponentOrientation() );
 
 				if( c instanceof JComponent ) {
 					if( paddingBorder == null )

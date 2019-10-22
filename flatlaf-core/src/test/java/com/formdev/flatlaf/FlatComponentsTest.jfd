@@ -60,6 +60,7 @@ new FormModel {
 				name: "button5"
 				"text": "default"
 				"displayedMnemonicIndex": 0
+				"toolTipText": "Tool tip with\nmultiple\nlines."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 1"
 			} )
@@ -205,6 +206,14 @@ new FormModel {
 					addElement( "a" )
 					addElement( "bb" )
 					addElement( "ccc" )
+					addElement( "dd" )
+					addElement( "e" )
+					addElement( "ff" )
+					addElement( "ggg" )
+					addElement( "hh" )
+					addElement( "i" )
+					addElement( "jj" )
+					addElement( "kkk" )
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 5,growx"
@@ -231,6 +240,14 @@ new FormModel {
 					addElement( "a" )
 					addElement( "bb" )
 					addElement( "ccc" )
+					addElement( "dd" )
+					addElement( "e" )
+					addElement( "ff" )
+					addElement( "ggg" )
+					addElement( "hh" )
+					addElement( "i" )
+					addElement( "jj" )
+					addElement( "kkk" )
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 5,growx"

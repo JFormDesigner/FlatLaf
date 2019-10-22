@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Made some fixes for right-to-left support in ComboBox, Slider and ToolTip.
+  (issue #18)
+
+
 ## 0.15
 
 - ToolTip: Improved styling of dark tooltips (darker background, no border).

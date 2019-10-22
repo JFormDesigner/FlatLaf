@@ -32,6 +32,7 @@ public class FlatSwingXTest
 {
 	public static void main( String[] args ) {
 		FlatTestFrame frame = FlatTestFrame.create( args, "FlatSwingXTest" );
+		frame.useApplyComponentOrientation = true;
 		frame.showFrame( new FlatSwingXTest() );
 	}
 

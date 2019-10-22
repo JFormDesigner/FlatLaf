@@ -243,6 +243,7 @@ public class FlatComponentsTest
 		//---- button5 ----
 		button5.setText("default");
 		button5.setDisplayedMnemonicIndex(0);
+		button5.setToolTipText("Tool tip with\nmultiple\nlines.");
 		add(button5, "cell 3 1");
 
 		//---- button3 ----
@@ -346,7 +347,15 @@ public class FlatComponentsTest
 			"editable",
 			"a",
 			"bb",
-			"ccc"
+			"ccc",
+			"dd",
+			"e",
+			"ff",
+			"ggg",
+			"hh",
+			"i",
+			"jj",
+			"kkk"
 		}));
 		add(comboBox1, "cell 1 5,growx");
 
@@ -366,7 +375,15 @@ public class FlatComponentsTest
 			"not editable",
 			"a",
 			"bb",
-			"ccc"
+			"ccc",
+			"dd",
+			"e",
+			"ff",
+			"ggg",
+			"hh",
+			"i",
+			"jj",
+			"kkk"
 		}));
 		add(comboBox3, "cell 3 5,growx");
 

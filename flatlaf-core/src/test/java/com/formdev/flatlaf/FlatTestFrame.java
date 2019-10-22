@@ -47,6 +47,8 @@ public class FlatTestFrame
 	private JComponent content;
 	private FlatInspector inspector;
 
+	public boolean useApplyComponentOrientation;
+
 	public static FlatTestFrame create( String[] args, String title ) {
 		Preferences prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
 
@@ -307,9 +309,17 @@ public class FlatTestFrame
 	}
 
 	private void rightToLeftChanged() {
-		contentPanel.applyComponentOrientation( rightToLeftCheckBox.isSelected()
+		ComponentOrientation orientation = rightToLeftCheckBox.isSelected()
 			? ComponentOrientation.RIGHT_TO_LEFT
-			: ComponentOrientation.LEFT_TO_RIGHT );
+			: ComponentOrientation.LEFT_TO_RIGHT;
+
+		if( useApplyComponentOrientation )
+			content.applyComponentOrientation( orientation );
+		else {
+			updateComponentsRecur( content, (c, type) -> {
+				c.setComponentOrientation( orientation );
+			} );
+		}
 		contentPanel.revalidate();
 		contentPanel.repaint();
 	}
