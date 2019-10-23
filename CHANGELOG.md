@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.16
 
 - Made some fixes for right-to-left support in ComboBox, Slider and ToolTip.
   (issue #18)
