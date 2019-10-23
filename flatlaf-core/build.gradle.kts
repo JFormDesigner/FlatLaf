@@ -40,6 +40,13 @@ java {
 }
 
 tasks {
+	assemble {
+		dependsOn(
+			"sourcesJar",
+			"javadocJar"
+		)
+	}
+
 	if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 		named<JavaCompile>( "compileModuleInfoJava" ) {
 			sourceCompatibility = "9"

@@ -33,6 +33,13 @@ java {
 }
 
 tasks {
+	assemble {
+		dependsOn(
+			"sourcesJar",
+			"javadocJar"
+		)
+	}
+
 	javadoc {
 		options {
 			this as StandardJavadocDocletOptions
