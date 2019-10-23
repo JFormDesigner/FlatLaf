@@ -131,6 +131,7 @@ public class FlatButtonUI
 			defaults_initialized = true;
 		}
 
+		LookAndFeel.installProperty( b, "opaque", false );
 		LookAndFeel.installProperty( b, "iconTextGap", scale( iconTextGap ) );
 
 		MigLayoutVisualPadding.install( b, focusWidth );
@@ -169,15 +170,16 @@ public class FlatButtonUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		if( isHelpButton( c ) ) {
+		// fill background if opaque to avoid garbage if user sets opaque to true
+		if( c.isOpaque() )
 			FlatUIUtils.paintParentBackground( g, c );
+
+		if( isHelpButton( c ) ) {
 			helpButtonIcon.paintIcon( c, g, 0, 0 );
 			return;
 		}
 
-		if( c.isOpaque() && isContentAreaFilled( c ) ) {
-			FlatUIUtils.paintParentBackground( g, c );
-
+		if( isContentAreaFilled( c ) ) {
 			Color background = getBackground( c );
 			if( background != null ) {
 				Graphics2D g2 = (Graphics2D) g.create();

@@ -66,6 +66,7 @@ public class FlatRadioButtonUI
 			defaults_initialized = true;
 		}
 
+		LookAndFeel.installProperty( b, "opaque", false );
 		LookAndFeel.installProperty( b, "iconTextGap", scale( iconTextGap ) );
 
 		MigLayoutVisualPadding.install( b, null );

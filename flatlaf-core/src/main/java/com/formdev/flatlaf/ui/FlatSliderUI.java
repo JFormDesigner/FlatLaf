@@ -25,6 +25,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
@@ -95,6 +96,8 @@ public class FlatSliderUI
 	@Override
 	protected void installDefaults( JSlider slider ) {
 		super.installDefaults( slider );
+
+		LookAndFeel.installProperty( slider, "opaque", false );
 
 		trackWidth = UIManager.getInt( "Slider.trackWidth" );
 		thumbWidth = UIManager.getInt( "Slider.thumbWidth" );
