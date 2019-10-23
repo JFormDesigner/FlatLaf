@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 - Made some fixes for right-to-left support in ComboBox, Slider and ToolTip.
   (issue #18)
+- Fixed Java 9 module descriptor (broken since 0.14).
 
 
 ## 0.15
