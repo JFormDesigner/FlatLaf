@@ -27,8 +27,10 @@ public class FlatComponents2Test
 	extends JPanel
 {
 	public static void main( String[] args ) {
-		FlatTestFrame frame = FlatTestFrame.create( args, "FlatComponents2Test" );
-		frame.showFrame( new FlatComponents2Test() );
+		SwingUtilities.invokeLater( () -> {
+			FlatTestFrame frame = FlatTestFrame.create( args, "FlatComponents2Test" );
+			frame.showFrame( new FlatComponents2Test() );
+		} );
 	}
 
 	FlatComponents2Test() {

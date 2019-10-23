@@ -31,9 +31,11 @@ public class FlatSwingXTest
 	extends JPanel
 {
 	public static void main( String[] args ) {
-		FlatTestFrame frame = FlatTestFrame.create( args, "FlatSwingXTest" );
-		frame.useApplyComponentOrientation = true;
-		frame.showFrame( new FlatSwingXTest() );
+		SwingUtilities.invokeLater( () -> {
+			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSwingXTest" );
+			frame.useApplyComponentOrientation = true;
+			frame.showFrame( new FlatSwingXTest() );
+		} );
 	}
 
 	FlatSwingXTest() {

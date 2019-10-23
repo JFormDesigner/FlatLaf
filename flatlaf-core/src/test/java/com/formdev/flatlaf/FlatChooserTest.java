@@ -26,8 +26,10 @@ public class FlatChooserTest
 	extends JPanel
 {
 	public static void main( String[] args ) {
-		FlatTestFrame frame = FlatTestFrame.create( args, "FlatChooserTest" );
-		frame.showFrame( new FlatChooserTest() );
+		SwingUtilities.invokeLater( () -> {
+			FlatTestFrame frame = FlatTestFrame.create( args, "FlatChooserTest" );
+			frame.showFrame( new FlatChooserTest() );
+		} );
 	}
 
 	FlatChooserTest() {

@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.demo;
 
 import java.util.prefs.Preferences;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -32,29 +33,31 @@ public class FlatLafDemo
 	static Preferences prefs;
 
 	public static void main( String[] args ) {
-		prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
+		SwingUtilities.invokeLater( () -> {
+			prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
 
-		// set look and feel
-		try {
-			if( args.length > 0 )
-				UIManager.setLookAndFeel( args[0] );
-			else {
-				String lafClassName = prefs.get( KEY_LAF, FlatLightLaf.class.getName() );
-				UIManager.setLookAndFeel( lafClassName );
+			// set look and feel
+			try {
+				if( args.length > 0 )
+					UIManager.setLookAndFeel( args[0] );
+				else {
+					String lafClassName = prefs.get( KEY_LAF, FlatLightLaf.class.getName() );
+					UIManager.setLookAndFeel( lafClassName );
+				}
+			} catch( Exception ex ) {
+				ex.printStackTrace();
+
+				// fallback
+				FlatLightLaf.install();
 			}
-		} catch( Exception ex ) {
-			ex.printStackTrace();
 
-			// fallback
-			FlatLightLaf.install();
-		}
+			// create frame
+			DemoFrame frame = new DemoFrame();
 
-		// create frame
-		DemoFrame frame = new DemoFrame();
-
-		// show frame
-		frame.pack();
-		frame.setLocationRelativeTo( null );
-		frame.setVisible( true );
+			// show frame
+			frame.pack();
+			frame.setLocationRelativeTo( null );
+			frame.setVisible( true );
+		} );
 	}
 }

@@ -29,8 +29,10 @@ public class FlatMenusTest
 	extends JPanel
 {
 	public static void main( String[] args ) {
-		FlatTestFrame frame = FlatTestFrame.create( args, "FlatMenusTest" );
-		frame.showFrame( new FlatMenusTest() );
+		SwingUtilities.invokeLater( () -> {
+			FlatTestFrame frame = FlatTestFrame.create( args, "FlatMenusTest" );
+			frame.showFrame( new FlatMenusTest() );
+		} );
 	}
 
 	FlatMenusTest() {

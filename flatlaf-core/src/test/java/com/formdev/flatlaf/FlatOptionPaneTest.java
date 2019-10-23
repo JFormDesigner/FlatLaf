@@ -30,8 +30,10 @@ public class FlatOptionPaneTest
 	extends JPanel
 {
 	public static void main( String[] args ) {
-		FlatTestFrame frame = FlatTestFrame.create( args, "FlatOptionPaneTest" );
-		frame.showFrame( new FlatOptionPaneTest() );
+		SwingUtilities.invokeLater( () -> {
+			FlatTestFrame frame = FlatTestFrame.create( args, "FlatOptionPaneTest" );
+			frame.showFrame( new FlatOptionPaneTest() );
+		} );
 	}
 
 	FlatOptionPaneTest() {
