@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.testing;
+version = rootProject.version
 
-import com.formdev.flatlaf.FlatLaf;
+plugins {
+	`java-library`
+}
 
-/**
- * A Flat LaF that has a test color scheme.
- *
- * Used to develop Flat LaF.
- *
- * @author Karl Tauber
- */
-public class FlatTestLaf
-	extends FlatLaf
-{
-	@Override
-	public String getName() {
-		return "Flat Test";
-	}
+dependencies {
+	implementation( project( ":flatlaf-core" ) )
+	implementation( project( ":flatlaf-swingx" ) )
 
-	@Override
-	public String getDescription() {
-		return "Flat Test Look and Feel";
-	}
+	implementation( "com.miglayout:miglayout-swing:5.2" )
+	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
+	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
+	implementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 }

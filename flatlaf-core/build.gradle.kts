@@ -34,11 +34,6 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	}
 }
 
-dependencies {
-	testImplementation( "com.miglayout:miglayout-swing:5.2" )
-	testImplementation( "com.jgoodies:jgoodies-forms:1.9.0" )
-}
-
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -88,19 +83,6 @@ tasks {
 
 		from( javadoc )
 	}
-
-	register( "testJar", Jar::class ) {
-		archiveBaseName.set( "flatlaf-test" )
-		from( sourceSets.test.get().output )
-	}
-}
-
-configurations {
-	create( "testArtifacts" )
-}
-
-artifacts {
-	add( "testArtifacts", tasks.getByPath( "testJar" ) )
 }
 
 publishing {

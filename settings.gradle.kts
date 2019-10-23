@@ -19,3 +19,4 @@ rootProject.name = "FlatLaf"
 include( "flatlaf-core" )
 include( "flatlaf-swingx" )
 include( "flatlaf-demo" )
+include( "flatlaf-testing" )

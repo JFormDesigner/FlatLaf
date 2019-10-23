@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.testing;
+package com.formdev.flatlaf.testing.swingx;
 
-import com.formdev.flatlaf.FlatLaf;
+import java.io.InputStream;
+import com.formdev.flatlaf.FlatDefaultsAddon;
 
 /**
- * A Flat LaF that has a test color scheme.
- *
- * Used to develop Flat LaF.
+ * SwingX addon for FlatLaf for testing.
  *
  * @author Karl Tauber
  */
-public class FlatTestLaf
-	extends FlatLaf
+public class FlatSwingXDefaultsTestAddon
+	extends FlatDefaultsAddon
 {
+	/**
+	 * Finds SwingX addon .properties file for the given LaF class
+	 * in the same package as this class.
+	 */
 	@Override
-	public String getName() {
-		return "Flat Test";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Flat Test Look and Feel";
+	public InputStream getDefaults( Class<?> lafClass ) {
+		Class<?> addonClass = this.getClass();
+		String propertiesName = "/" + addonClass.getPackage().getName().replace( '.', '/' )
+			+ '/' + lafClass.getSimpleName() + ".properties";
+		return addonClass.getResourceAsStream( propertiesName );
 	}
 }

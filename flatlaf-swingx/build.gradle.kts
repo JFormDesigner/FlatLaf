@@ -25,10 +25,6 @@ plugins {
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
-
-	testImplementation( project( ":flatlaf-core", "testArtifacts" ) )
-	testImplementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
-	testImplementation( "com.miglayout:miglayout-swing:5.2" )
 }
 
 java {
@@ -37,7 +33,6 @@ java {
 }
 
 tasks {
-
 	javadoc {
 		options {
 			this as StandardJavadocDocletOptions

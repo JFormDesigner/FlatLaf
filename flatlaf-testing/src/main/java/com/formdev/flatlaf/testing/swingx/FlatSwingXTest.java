@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.swingx;
+package com.formdev.flatlaf.testing.swingx;
 
 import java.awt.*;
 import java.util.Calendar;
@@ -22,7 +22,7 @@ import java.util.Date;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 import org.jdesktop.swingx.*;
-import com.formdev.flatlaf.FlatTestFrame;
+import com.formdev.flatlaf.testing.FlatTestFrame;
 
 /**
  * @author Karl Tauber

@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Tue Aug 27 21:47:02 CEST 2019
  */
 
-package com.formdev.flatlaf;
+package com.formdev.flatlaf.testing;
 
 import java.awt.*;
 import javax.swing.*;

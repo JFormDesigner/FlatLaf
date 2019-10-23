@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf;
+package com.formdev.flatlaf.testing;
 
 import javax.swing.*;
 import javax.swing.table.*;
