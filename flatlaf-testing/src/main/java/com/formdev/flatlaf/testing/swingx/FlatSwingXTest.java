@@ -23,12 +23,13 @@ import javax.swing.*;
 import net.miginfocom.swing.*;
 import org.jdesktop.swingx.*;
 import com.formdev.flatlaf.testing.FlatTestFrame;
+import com.formdev.flatlaf.testing.FlatTestPanel;
 
 /**
  * @author Karl Tauber
  */
 public class FlatSwingXTest
-	extends JPanel
+	extends FlatTestPanel
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
@@ -199,7 +200,7 @@ public class FlatSwingXTest
 
 		//---- busyCheckBox ----
 		busyCheckBox.setText("busy");
-		busyCheckBox.setMnemonic('B');
+		busyCheckBox.setMnemonic('Y');
 		busyCheckBox.addActionListener(e -> busyChanged());
 		add(busyCheckBox, "cell 2 6");
 

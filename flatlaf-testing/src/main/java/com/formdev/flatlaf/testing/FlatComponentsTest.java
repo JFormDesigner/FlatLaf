@@ -25,7 +25,7 @@ import net.miginfocom.swing.*;
  * @author Karl Tauber
  */
 public class FlatComponentsTest
-	extends JPanel
+	extends FlatTestPanel
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
@@ -758,6 +758,7 @@ public class FlatComponentsTest
 
 		//======== panel3 ========
 		{
+			panel3.setOpaque(false);
 			panel3.setLayout(new MigLayout(
 				"insets 0,hidemode 3,gap 5 5,ltr",
 				// columns
@@ -801,6 +802,7 @@ public class FlatComponentsTest
 		//======== panel2 ========
 		{
 			panel2.setBorder(new TitledBorder("TitledBorder"));
+			panel2.setOpaque(false);
 			panel2.setLayout(new FlowLayout());
 		}
 		add(panel2, "cell 3 16,grow");

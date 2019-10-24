@@ -14,7 +14,7 @@ import net.miginfocom.swing.*;
  * @author Karl Tauber
  */
 public class FlatContainerTest
-	extends JPanel
+	extends FlatTestPanel
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
@@ -112,6 +112,7 @@ public class FlatContainerTest
 
 		//======== panel9 ========
 		{
+			panel9.setOpaque(false);
 			panel9.setLayout(new FormLayout(
 				"70dlu:grow, $lcgap, 70dlu:grow",
 				"default, $lgap, fill:70dlu, $lgap, pref, 2*($lgap, fill:70dlu:grow), $lgap, pref"));
@@ -283,6 +284,7 @@ public class FlatContainerTest
 
 			//======== panel14 ========
 			{
+				panel14.setOpaque(false);
 				panel14.setLayout(new MigLayout(
 					"insets 0,hidemode 3",
 					// columns

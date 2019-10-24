@@ -27,7 +27,7 @@ import net.miginfocom.swing.*;
  * @author Karl Tauber
  */
 public class FlatOptionPaneTest
-	extends JPanel
+	extends FlatTestPanel
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {

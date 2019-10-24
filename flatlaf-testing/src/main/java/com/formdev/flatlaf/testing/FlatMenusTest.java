@@ -26,7 +26,7 @@ import net.miginfocom.swing.*;
  * @author Karl Tauber
  */
 public class FlatMenusTest
-	extends JPanel
+	extends FlatTestPanel
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
@@ -155,6 +155,7 @@ public class FlatMenusTest
 
 		//======== panel1 ========
 		{
+			panel1.setOpaque(false);
 			panel1.setLayout(new MigLayout(
 				"insets 0,hidemode 3,gap 5 5,ltr",
 				// columns
@@ -213,6 +214,7 @@ public class FlatMenusTest
 
 		//======== panel2 ========
 		{
+			panel2.setOpaque(false);
 			panel2.setLayout(new MigLayout(
 				"insets 0,gap 5 5",
 				// columns
@@ -253,6 +255,7 @@ public class FlatMenusTest
 
 		//======== panel3 ========
 		{
+			panel3.setOpaque(false);
 			panel3.setLayout(new MigLayout(
 				"insets 0,gap 5 5",
 				// columns
@@ -292,6 +295,7 @@ public class FlatMenusTest
 
 		//======== panel4 ========
 		{
+			panel4.setOpaque(false);
 			panel4.setLayout(new MigLayout(
 				"insets 0,gap 5 5",
 				// columns

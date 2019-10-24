@@ -6,7 +6,7 @@ new FormModel {
 		auxiliary() {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3"
 			"$columnConstraints": "[grow,fill]"
 			"$rowConstraints": "[grow,fill]"
@@ -17,6 +17,7 @@ new FormModel {
 				"$rowSpecs": "default, linegap, fill:70dlu, linegap, pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref"
 			} ) {
 				name: "panel9"
+				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "splitPaneLabel"
 					"text": "JSplitPane:"
@@ -203,6 +204,7 @@ new FormModel {
 					"$rowConstraints": "[center]"
 				} ) {
 					name: "panel14"
+					"opaque": false
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "moreTabsCheckBox"
 						"text": "more tabs"

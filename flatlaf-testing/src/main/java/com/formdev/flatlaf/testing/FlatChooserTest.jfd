@@ -6,7 +6,7 @@ new FormModel {
 		auxiliary() {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			"$columnConstraints": "[][]"
 			"$rowConstraints": "[top][top][]"

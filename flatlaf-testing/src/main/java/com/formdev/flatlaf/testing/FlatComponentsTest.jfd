@@ -6,7 +6,7 @@ new FormModel {
 		auxiliary() {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			"$columnConstraints": "[][][][][][]"
 			"$rowConstraints": "[][][][][][][][][][][][][][][][][][][][][][]"
@@ -56,7 +56,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
-			add( new FormComponent( "com.formdev.flatlaf.FlatComponentsTest$TestDefaultButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentsTest$TestDefaultButton" ) {
 				name: "button5"
 				"text": "default"
 				"displayedMnemonicIndex": 0
@@ -716,6 +716,7 @@ new FormModel {
 				"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			} ) {
 				name: "panel3"
+				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
 					"text": "<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u></html>"
@@ -759,6 +760,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
 				name: "panel2"
 				"border": new javax.swing.border.TitledBorder( "TitledBorder" )
+				"opaque": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 16,grow"
 			} )

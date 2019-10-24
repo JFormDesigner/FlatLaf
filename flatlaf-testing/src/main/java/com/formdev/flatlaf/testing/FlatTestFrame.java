@@ -313,6 +313,14 @@ public class FlatTestFrame
 		} );
 	}
 
+	private void backgroundChanged() {
+		contentPanel.repaint();
+	}
+
+	boolean isPaintBackgroundPattern() {
+		return backgroundCheckBox.isSelected();
+	}
+
 	private void rightToLeftChanged() {
 		ComponentOrientation orientation = rightToLeftCheckBox.isSelected()
 			? ComponentOrientation.RIGHT_TO_LEFT
@@ -401,11 +409,12 @@ public class FlatTestFrame
 		contentPanel = new JRootPane();
 		buttonBar = new JPanel();
 		lookAndFeelComboBox = new JComboBox<>();
-		explicitColorsCheckBox = new JCheckBox();
+		scaleFactorComboBox = new JComboBox<>();
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
 		inspectCheckBox = new JCheckBox();
-		scaleFactorComboBox = new JComboBox<>();
+		explicitColorsCheckBox = new JCheckBox();
+		backgroundCheckBox = new JCheckBox();
 		closeButton = new JButton();
 
 		//======== this ========
@@ -440,6 +449,7 @@ public class FlatTestFrame
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
+					"[fill]" +
 					"[grow,fill]" +
 					"[button,fill]",
 					// rows
@@ -449,11 +459,23 @@ public class FlatTestFrame
 				lookAndFeelComboBox.addActionListener(e -> lookAndFeelChanged());
 				buttonBar.add(lookAndFeelComboBox, "cell 0 0");
 
-				//---- explicitColorsCheckBox ----
-				explicitColorsCheckBox.setText("explicit colors");
-				explicitColorsCheckBox.setMnemonic('X');
-				explicitColorsCheckBox.addActionListener(e -> explicitColorsChanged());
-				buttonBar.add(explicitColorsCheckBox, "cell 1 0");
+				//---- scaleFactorComboBox ----
+				scaleFactorComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+					"default",
+					"1",
+					"1.25",
+					"1.5",
+					"1.75",
+					"2.0",
+					"2.25",
+					"2.5",
+					"3",
+					"3.5",
+					"4"
+				}));
+				scaleFactorComboBox.setMaximumRowCount(20);
+				scaleFactorComboBox.addActionListener(e -> scaleFactorChanged());
+				buttonBar.add(scaleFactorComboBox, "cell 1 0");
 
 				//---- rightToLeftCheckBox ----
 				rightToLeftCheckBox.setText("right-to-left");
@@ -474,27 +496,21 @@ public class FlatTestFrame
 				inspectCheckBox.addActionListener(e -> inspectChanged());
 				buttonBar.add(inspectCheckBox, "cell 4 0");
 
-				//---- scaleFactorComboBox ----
-				scaleFactorComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
-					"default",
-					"1",
-					"1.25",
-					"1.5",
-					"1.75",
-					"2.0",
-					"2.25",
-					"2.5",
-					"3",
-					"3.5",
-					"4"
-				}));
-				scaleFactorComboBox.setMaximumRowCount(20);
-				scaleFactorComboBox.addActionListener(e -> scaleFactorChanged());
-				buttonBar.add(scaleFactorComboBox, "cell 5 0");
+				//---- explicitColorsCheckBox ----
+				explicitColorsCheckBox.setText("explicit colors");
+				explicitColorsCheckBox.setMnemonic('X');
+				explicitColorsCheckBox.addActionListener(e -> explicitColorsChanged());
+				buttonBar.add(explicitColorsCheckBox, "cell 5 0");
+
+				//---- backgroundCheckBox ----
+				backgroundCheckBox.setText("background");
+				backgroundCheckBox.setMnemonic('B');
+				backgroundCheckBox.addActionListener(e -> backgroundChanged());
+				buttonBar.add(backgroundCheckBox, "cell 6 0");
 
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 7 0");
+				buttonBar.add(closeButton, "cell 8 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 		}
@@ -507,11 +523,12 @@ public class FlatTestFrame
 	private JRootPane contentPanel;
 	private JPanel buttonBar;
 	private JComboBox<LafInfo> lookAndFeelComboBox;
-	private JCheckBox explicitColorsCheckBox;
+	private JComboBox<String> scaleFactorComboBox;
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
 	private JCheckBox inspectCheckBox;
-	private JComboBox<String> scaleFactorComboBox;
+	private JCheckBox explicitColorsCheckBox;
+	private JCheckBox backgroundCheckBox;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 

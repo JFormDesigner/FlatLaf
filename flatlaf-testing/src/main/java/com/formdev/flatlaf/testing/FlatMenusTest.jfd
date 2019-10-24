@@ -6,7 +6,7 @@ new FormModel {
 		auxiliary() {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			"$columnConstraints": "[125][][][][]"
 			"$rowConstraints": "[][top][][]"
@@ -53,6 +53,7 @@ new FormModel {
 				"$layoutConstraints": "insets 0,hidemode 3,gap 5 5,ltr"
 			} ) {
 				name: "panel1"
+				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "menuLabel"
 					"text": "JMenu:"
@@ -124,6 +125,7 @@ new FormModel {
 				"$layoutConstraints": "insets 0,gap 5 5"
 			} ) {
 				name: "panel2"
+				"opaque": false
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "menu2"
 					"text": "disabled"
@@ -164,6 +166,7 @@ new FormModel {
 				"$layoutConstraints": "insets 0,gap 5 5"
 			} ) {
 				name: "panel3"
+				"opaque": false
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "menu3"
 					"text": "text"
@@ -204,6 +207,7 @@ new FormModel {
 				"$layoutConstraints": "insets 0,gap 5 5"
 			} ) {
 				name: "panel4"
+				"opaque": false
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "menu4"
 					"text": "text"
