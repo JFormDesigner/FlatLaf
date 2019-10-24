@@ -27,6 +27,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * Icon for {@link javax.swing.JCheckBox}.
@@ -53,6 +54,7 @@ import com.formdev.flatlaf.ui.FlatButtonUI;
  * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional
  * @uiDefault CheckBox.icon.checkmarkColor				Color
  * @uiDefault CheckBox.icon.disabledCheckmarkColor		Color
+ * @uiDefault CheckBox.arc								int
  *
  * @author Karl Tauber
  */
@@ -61,6 +63,7 @@ public class FlatCheckBoxIcon
 {
 	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
+	protected final int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
 
 	protected final Color borderColor = UIManager.getColor( "CheckBox.icon.borderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "CheckBox.icon.disabledBorderColor" );
@@ -128,15 +131,18 @@ public class FlatCheckBoxIcon
 	protected void paintFocusBorder( Graphics2D g2 ) {
 		// the outline focus border is painted outside of the icon
 		int wh = ICON_SIZE - 1 + (focusWidth * 2);
-		g2.fillRoundRect( -focusWidth + 1, -focusWidth, wh, wh, 8, 8 );
+		int arcwh = (arc + focusWidth) * 2;
+		g2.fillRoundRect( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh );
 	}
 
 	protected void paintBorder( Graphics2D g2 ) {
-		g2.fillRoundRect( 1, 0, 14, 14, 4, 4 );
+		int arcwh = arc * 2;
+		g2.fillRoundRect( 1, 0, 14, 14, arcwh, arcwh );
 	}
 
 	protected void paintBackground( Graphics2D g2 ) {
-		g2.fillRoundRect( 2, 1, 12, 12, 3, 3 );
+		int arcwh = (arc * 2) - 1;
+		g2.fillRoundRect( 2, 1, 12, 12, arcwh, arcwh );
 	}
 
 	protected void paintCheckmark( Graphics2D g2 ) {
