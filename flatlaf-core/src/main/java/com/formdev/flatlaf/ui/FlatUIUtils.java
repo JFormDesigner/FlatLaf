@@ -26,6 +26,8 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
@@ -251,10 +253,10 @@ public class FlatUIUtils
 	public static class HoverListener
 		extends MouseAdapter
 	{
-		private final JComponent repaintComponent;
+		private final Component repaintComponent;
 		private final Consumer<Boolean> hoverChanged;
 
-		public HoverListener( JComponent repaintComponent, Consumer<Boolean> hoverChanged ) {
+		public HoverListener( Component repaintComponent, Consumer<Boolean> hoverChanged ) {
 			this.repaintComponent = repaintComponent;
 			this.hoverChanged = hoverChanged;
 		}
@@ -274,6 +276,28 @@ public class FlatUIUtils
 		private void repaint() {
 			if( repaintComponent != null && repaintComponent.isEnabled() )
 				repaintComponent.repaint();
+		}
+	}
+
+	//---- class RepaintFocusListener -----------------------------------------
+
+	public static class RepaintFocusListener
+		implements FocusListener
+	{
+		private final Component repaintComponent;
+
+		public RepaintFocusListener( Component repaintComponent ) {
+			this.repaintComponent = repaintComponent;
+		}
+
+		@Override
+		public void focusGained( FocusEvent e ) {
+			repaintComponent.repaint();
+		}
+
+		@Override
+		public void focusLost( FocusEvent e ) {
+			repaintComponent.repaint();
 		}
 	}
 }

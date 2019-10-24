@@ -28,8 +28,6 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -159,18 +157,7 @@ public class FlatDatePickerUI
 		editor.setName( "dateField" );
 		editor.setBorder( BorderFactory.createEmptyBorder() );
 		editor.setOpaque( false );
-		editor.addFocusListener( new FocusListener() {
-			@Override
-			public void focusLost( FocusEvent e ) {
-				if( datePicker != null )
-					datePicker.repaint();
-			}
-			@Override
-			public void focusGained( FocusEvent e ) {
-				if( datePicker != null )
-					datePicker.repaint();
-			}
-		} );
+		editor.addFocusListener( new FlatUIUtils.RepaintFocusListener( datePicker ) );
 		return editor;
 	}
 
