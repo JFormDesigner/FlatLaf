@@ -92,7 +92,6 @@ public class FlatCheckBoxIcon
 	protected void paintIcon( Component c, Graphics2D g2 ) {
 		boolean indeterminate = c instanceof JComponent && clientPropertyEquals( (JComponent) c, SELECTED_STATE, SELECTED_STATE_INDETERMINATE );
 		boolean selected = indeterminate || (c instanceof AbstractButton && ((AbstractButton)c).isSelected());
-		System.out.println( "icon "+indeterminate+" "+selected );
 
 		// paint focused border
 		if( c.hasFocus() && focusWidth > 0 ) {
