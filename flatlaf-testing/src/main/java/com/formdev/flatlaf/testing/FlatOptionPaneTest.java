@@ -32,7 +32,7 @@ public class FlatOptionPaneTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatOptionPaneTest" );
-			frame.showFrame( new FlatOptionPaneTest() );
+			frame.showFrame( FlatOptionPaneTest::new );
 		} );
 	}
 

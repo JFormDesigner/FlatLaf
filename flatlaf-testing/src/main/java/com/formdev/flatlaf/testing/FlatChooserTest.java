@@ -28,7 +28,7 @@ public class FlatChooserTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatChooserTest" );
-			frame.showFrame( new FlatChooserTest() );
+			frame.showFrame( FlatChooserTest::new );
 		} );
 	}
 

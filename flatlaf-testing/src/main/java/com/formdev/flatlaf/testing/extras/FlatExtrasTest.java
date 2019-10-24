@@ -30,7 +30,7 @@ public class FlatExtrasTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatExtrasTest" );
-			frame.showFrame( new FlatExtrasTest() );
+			frame.showFrame( FlatExtrasTest::new );
 		} );
 	}
 

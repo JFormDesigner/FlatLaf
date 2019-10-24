@@ -19,7 +19,7 @@ public class FlatContainerTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatContainerTest" );
-			frame.showFrame( new FlatContainerTest() );
+			frame.showFrame( FlatContainerTest::new );
 		} );
 	}
 

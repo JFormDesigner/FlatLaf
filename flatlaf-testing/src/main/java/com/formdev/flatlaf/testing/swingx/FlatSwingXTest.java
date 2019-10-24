@@ -35,7 +35,7 @@ public class FlatSwingXTest
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSwingXTest" );
 			frame.useApplyComponentOrientation = true;
-			frame.showFrame( new FlatSwingXTest() );
+			frame.showFrame( FlatSwingXTest::new );
 		} );
 	}
 

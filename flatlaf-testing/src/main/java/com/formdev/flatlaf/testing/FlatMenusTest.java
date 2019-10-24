@@ -31,7 +31,7 @@ public class FlatMenusTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatMenusTest" );
-			frame.showFrame( new FlatMenusTest() );
+			frame.showFrame( FlatMenusTest::new );
 		} );
 	}
 

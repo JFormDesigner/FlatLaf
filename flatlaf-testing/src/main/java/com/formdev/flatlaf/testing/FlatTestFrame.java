@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
@@ -33,6 +34,8 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.extras.*;
+import com.formdev.flatlaf.extras.TriStateCheckBox.State;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -49,6 +52,7 @@ public class FlatTestFrame
 	private static final String KEY_SCALE_FACTOR = "scaleFactor";
 
 	private final String title;
+	private Supplier<JComponent> contentFactory;
 	private JComponent content;
 	private FlatInspector inspector;
 
@@ -211,8 +215,9 @@ public class FlatTestFrame
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 	}
 
-	public void showFrame( JComponent content ) {
-		this.content = content;
+	public void showFrame( Supplier<JComponent> contentFactory ) {
+		this.contentFactory = contentFactory;
+		this.content = contentFactory.get();
 
 		contentPanel.getContentPane().add( content );
 		pack();
@@ -403,6 +408,27 @@ public class FlatTestFrame
 		}
 	}
 
+	private void opaqueChanged() {
+		State opaque = opaqueTriStateCheckBox.getState();
+		if( opaque == State.INDETERMINATE )
+			recreateContent();
+		else {
+			updateComponentsRecur( content, (c, type) -> {
+				if( c instanceof JComponent )
+					((JComponent)c).setOpaque( opaque == State.SELECTED );
+			} );
+			contentPanel.repaint();
+		}
+	}
+
+	private void recreateContent() {
+		contentPanel.getContentPane().remove( content );
+		content = contentFactory.get();
+		contentPanel.getContentPane().add( content );
+		contentPanel.revalidate();
+		contentPanel.repaint();
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		dialogPane = new JPanel();
@@ -415,6 +441,7 @@ public class FlatTestFrame
 		inspectCheckBox = new JCheckBox();
 		explicitColorsCheckBox = new JCheckBox();
 		backgroundCheckBox = new JCheckBox();
+		opaqueTriStateCheckBox = new TriStateCheckBox();
 		closeButton = new JButton();
 
 		//======== this ========
@@ -443,6 +470,7 @@ public class FlatTestFrame
 				buttonBar.setLayout(new MigLayout(
 					"insets dialog",
 					// columns
+					"[fill]" +
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
@@ -508,9 +536,15 @@ public class FlatTestFrame
 				backgroundCheckBox.addActionListener(e -> backgroundChanged());
 				buttonBar.add(backgroundCheckBox, "cell 6 0");
 
+				//---- opaqueTriStateCheckBox ----
+				opaqueTriStateCheckBox.setText("opaque");
+				opaqueTriStateCheckBox.setMnemonic('O');
+				opaqueTriStateCheckBox.addActionListener(e -> opaqueChanged());
+				buttonBar.add(opaqueTriStateCheckBox, "cell 7 0");
+
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 8 0");
+				buttonBar.add(closeButton, "cell 9 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 		}
@@ -529,6 +563,7 @@ public class FlatTestFrame
 	private JCheckBox inspectCheckBox;
 	private JCheckBox explicitColorsCheckBox;
 	private JCheckBox backgroundCheckBox;
+	private TriStateCheckBox opaqueTriStateCheckBox;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
