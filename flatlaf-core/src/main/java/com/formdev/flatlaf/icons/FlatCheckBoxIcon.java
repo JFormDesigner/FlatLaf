@@ -16,12 +16,15 @@
 
 package com.formdev.flatlaf.icons;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.RoundRectangle2D;
 import javax.swing.AbstractButton;
+import javax.swing.JComponent;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
 
@@ -84,7 +87,9 @@ public class FlatCheckBoxIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g2 ) {
-		boolean selected = (c instanceof AbstractButton) ? ((AbstractButton)c).isSelected() : false;
+		boolean indeterminate = c instanceof JComponent && clientPropertyEquals( (JComponent) c, SELECTED_STATE, SELECTED_STATE_INDETERMINATE );
+		boolean selected = indeterminate || (c instanceof AbstractButton && ((AbstractButton)c).isSelected());
+		System.out.println( "icon "+indeterminate+" "+selected );
 
 		// paint focused border
 		if( c.hasFocus() && focusWidth > 0 ) {
@@ -111,9 +116,12 @@ public class FlatCheckBoxIcon
 		paintBackground( g2 );
 
 		// paint checkmark
-		if( selected ) {
+		if( selected || indeterminate ) {
 			g2.setColor( c.isEnabled() ? checkmarkColor : disabledCheckmarkColor );
-			paintCheckmark( g2 );
+			if( indeterminate )
+				paintIndeterminate( g2 );
+			else
+				paintCheckmark( g2 );
 		}
 	}
 
@@ -139,5 +147,9 @@ public class FlatCheckBoxIcon
 
 		g2.setStroke( new BasicStroke( 1.9f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
 		g2.draw( path );
+	}
+
+	protected void paintIndeterminate( Graphics2D g2 ) {
+		g2.fill( new RoundRectangle2D.Float( 3.75f, 5.75f, 8.5f, 2.5f, 2f, 2f ) );
 	}
 }

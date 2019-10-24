@@ -27,6 +27,9 @@ public interface FlatClientProperties
 	String BUTTON_TYPE = "JButton.buttonType";
 	String BUTTON_TYPE_HELP = "help";
 
+	String SELECTED_STATE = "JButton.selectedState";
+	String SELECTED_STATE_INDETERMINATE = "indeterminate";
+
 	/**
 	 * Checks whether a client property of a component has the given value.
 	 */

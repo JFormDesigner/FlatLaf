@@ -22,16 +22,9 @@ plugins {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( project( ":flatlaf-extras" ) )
-	implementation( project( ":flatlaf-swingx" ) )
-
-	implementation( "com.miglayout:miglayout-swing:5.2" )
-	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
-	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
-	implementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

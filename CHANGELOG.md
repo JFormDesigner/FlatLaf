@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- CheckBox: Support painting a third state (set client property
+  "JButton.selectedState" to "indeterminate").
+- `TriStateCheckBox` component added (see [FlatLaf Extras](flatlaf-extras)).
+
+
 ## 0.16
 
 - Made some fixes for right-to-left support in ComboBox, Slider and ToolTip.
