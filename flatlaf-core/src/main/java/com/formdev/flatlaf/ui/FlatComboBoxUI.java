@@ -212,7 +212,7 @@ public class FlatComboBoxUI
 				String propertyName = e.getPropertyName();
 
 				if( editor != null &&
-					((source == comboBox && (propertyName == "background" || propertyName == "foreground")) ||
+					((source == comboBox && propertyName == "foreground") ||
 					 (source == editor && propertyName == "enabled")) )
 				{
 					// fix editor component colors
@@ -242,6 +242,10 @@ public class FlatComboBoxUI
 		if( editor instanceof JTextComponent )
 			((JTextComponent)editor).setBorder( BorderFactory.createEmptyBorder() );
 
+		// explicitly make non-opaque
+		if( editor instanceof JComponent )
+			((JComponent)editor).setOpaque( false );
+
 		editor.applyComponentOrientation( comboBox.getComponentOrientation() );
 
 		updateEditorColors();
@@ -252,7 +256,6 @@ public class FlatComboBoxUI
 		// is used, then the editor is updated after the combobox and the
 		// colors are again replaced with default colors
 		boolean enabled = editor.isEnabled();
-		editor.setBackground( FlatUIUtils.nonUIResource( enabled ? comboBox.getBackground() : disabledBackground ) );
 		editor.setForeground( FlatUIUtils.nonUIResource( (enabled || editor instanceof JTextComponent)
 			? comboBox.getForeground()
 			: disabledForeground ) );
@@ -275,7 +278,7 @@ public class FlatComboBoxUI
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// fill background if opaque to avoid garbage if user sets opaque to true
-		if( c.isOpaque() )
+		if( c.isOpaque() && (focusWidth > 0 || arc != 0) )
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;

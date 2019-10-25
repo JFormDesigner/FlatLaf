@@ -155,6 +155,13 @@ public class FlatSpinnerUI
 	@Override
 	protected JComponent createEditor() {
 		JComponent editor = super.createEditor();
+
+		// explicitly make non-opaque
+		editor.setOpaque( false );
+		JTextField textField = getEditorTextField( editor );
+		if( textField != null )
+			textField.setOpaque( false );
+
 		updateEditorColors();
 		return editor;
 	}
@@ -186,8 +193,6 @@ public class FlatSpinnerUI
 			// use non-UIResource colors because when SwingUtilities.updateComponentTreeUI()
 			// is used, then the text field is updated after the spinner and the
 			// colors are again replaced with default colors
-			textField.setBackground( FlatUIUtils.nonUIResource( spinner.isEnabled()
-				? spinner.getBackground() : disabledBackground ) );
 			textField.setForeground( FlatUIUtils.nonUIResource( spinner.getForeground() ) );
 			textField.setDisabledTextColor( FlatUIUtils.nonUIResource( disabledForeground ) );
 		}
@@ -229,7 +234,7 @@ public class FlatSpinnerUI
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// fill background if opaque to avoid garbage if user sets opaque to true
-		if( c.isOpaque() )
+		if( c.isOpaque() && (focusWidth > 0 || arc != 0) )
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -373,7 +378,6 @@ public class FlatSpinnerUI
 		@Override
 		public void propertyChange( PropertyChangeEvent e ) {
 			switch( e.getPropertyName() ) {
-				case "background":
 				case "foreground":
 				case "enabled":
 					updateEditorColors();
