@@ -25,6 +25,7 @@ import java.awt.event.FocusListener;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextFieldUI;
@@ -59,6 +60,8 @@ public class FlatTextFieldUI
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 
+		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
+
 		MigLayoutVisualPadding.install( getComponent(), focusWidth );
 	}
 
@@ -86,13 +89,30 @@ public class FlatTextFieldUI
 	}
 
 	@Override
-	protected void paintBackground( Graphics g ) {
+	protected void paintSafely( Graphics g ) {
 		paintBackground( g, getComponent(), focusWidth );
+		super.paintSafely( g );
+	}
+
+	@Override
+	protected void paintBackground( Graphics g ) {
+		// background is painted elsewhere
 	}
 
 	static void paintBackground( Graphics g, JTextComponent c, int focusWidth ) {
-		FlatUIUtils.paintParentBackground( g, c );
+		// do not paint background if:
+		//   - not opaque and
+		//   - border is not a flat border and
+		//   - opaque was explicitly set (to false)
+		// (same behaviour as in AquaTextFieldUI)
+		if( !c.isOpaque() && !(c.getBorder() instanceof FlatBorder) && FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) )
+			return;
 
+		// fill background if opaque to avoid garbage if user sets opaque to true
+		if( c.isOpaque() && focusWidth > 0 )
+			FlatUIUtils.paintParentBackground( g, c );
+
+		// paint background
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			FlatUIUtils.setRenderingHints( g2 );

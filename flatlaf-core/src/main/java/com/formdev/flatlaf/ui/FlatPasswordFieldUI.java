@@ -60,6 +60,8 @@ public class FlatPasswordFieldUI
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 
+		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
+
 		MigLayoutVisualPadding.install( getComponent(), focusWidth );
 	}
 
@@ -87,8 +89,14 @@ public class FlatPasswordFieldUI
 	}
 
 	@Override
-	protected void paintBackground( Graphics g ) {
+	protected void paintSafely( Graphics g ) {
 		FlatTextFieldUI.paintBackground( g, getComponent(), focusWidth );
+		super.paintSafely( g );
+	}
+
+	@Override
+	protected void paintBackground( Graphics g ) {
+		// background is painted elsewhere
 	}
 
 	@Override

@@ -58,6 +58,7 @@ public class FlatInspector
 	private Component lastComponent;
 	private int lastX;
 	private int lastY;
+	private boolean inspectParent;
 
 	private JComponent highlightFigure;
 	private JToolTip tip;
@@ -70,6 +71,7 @@ public class FlatInspector
 			public void mouseMoved( MouseEvent e ) {
 				lastX = e.getX();
 				lastY = e.getY();
+				inspectParent = e.isShiftDown();
 				inspect( lastX, lastY );
 			}
 		} );
@@ -105,6 +107,8 @@ public class FlatInspector
 	private void inspect( int x, int y ) {
 		Container contentPane = rootPane.getContentPane();
 		Component c = SwingUtilities.getDeepestComponentAt( contentPane, x, y );
+		if( inspectParent && c != null && c != contentPane )
+			c = c.getParent();
 		if( c == contentPane || (c != null && c.getParent() == contentPane) )
 			c = null;
 
@@ -237,7 +241,8 @@ public class FlatInspector
 		}
 
 		text += "Enabled: " + c.isEnabled() + '\n';
-		text += "Opaque: " + c.isOpaque() + '\n';
+		text += "Opaque: " + c.isOpaque() + (c instanceof JComponent &&
+			FlatUIUtils.hasOpaqueBeenExplicitlySet( (JComponent) c ) ? " EXPLICIT" : "") + '\n';
 		text += "Focusable: " + c.isFocusable() + '\n';
 		text += "Left-to-right: " + c.getComponentOrientation().isLeftToRight() + '\n';
 		text += "Parent: " + c.getParent().getClass().getName();

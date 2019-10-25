@@ -23,6 +23,7 @@ import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
+import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import com.formdev.flatlaf.util.UIScale;
@@ -37,6 +38,13 @@ public class FlatProgressBarUI
 {
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatProgressBarUI();
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		LookAndFeel.installProperty( progressBar, "opaque", false );
 	}
 
 	@Override

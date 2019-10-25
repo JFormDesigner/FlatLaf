@@ -41,6 +41,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
@@ -122,6 +123,8 @@ public class FlatComboBoxUI
 	@Override
 	protected void installDefaults() {
 		super.installDefaults();
+
+		LookAndFeel.installProperty( comboBox, "opaque", false );
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( "Component.arc" );
@@ -271,44 +274,44 @@ public class FlatComboBoxUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		if( c.isOpaque() ) {
+		// fill background if opaque to avoid garbage if user sets opaque to true
+		if( c.isOpaque() )
 			FlatUIUtils.paintParentBackground( g, c );
 
-			Graphics2D g2 = (Graphics2D) g;
-			FlatUIUtils.setRenderingHints( g2 );
+		Graphics2D g2 = (Graphics2D) g;
+		FlatUIUtils.setRenderingHints( g2 );
 
-			int width = c.getWidth();
-			int height = c.getHeight();
-			float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-			float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
-			int arrowX = arrowButton.getX();
-			int arrowWidth = arrowButton.getWidth();
-			boolean enabled = comboBox.isEnabled();
-			boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
+		int width = c.getWidth();
+		int height = c.getHeight();
+		float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+		float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
+		int arrowX = arrowButton.getX();
+		int arrowWidth = arrowButton.getWidth();
+		boolean enabled = comboBox.isEnabled();
+		boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
-			// paint background
-			g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		// paint background
+		g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+
+		// paint arrow button background
+		if( enabled ) {
+			g2.setColor( comboBox.isEditable() ? buttonEditableBackground : buttonBackground );
+			Shape oldClip = g2.getClip();
+			if( isLeftToRight )
+				g2.clipRect( arrowX, 0, width - arrowX, height );
+			else
+				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+			g2.setClip( oldClip );
+		}
 
-			// paint arrow button background
-			if( enabled ) {
-				g2.setColor( comboBox.isEditable() ? buttonEditableBackground : buttonBackground );
-				Shape oldClip = g2.getClip();
-				if( isLeftToRight )
-					g2.clipRect( arrowX, 0, width - arrowX, height );
-				else
-					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-				FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
-				g2.setClip( oldClip );
-			}
-
-			if( comboBox.isEditable() ) {
-				// paint vertical line between value and arrow button
-				g2.setColor( enabled ? borderColor : disabledBorderColor );
-				float lw = scale( 1f );
-				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
-			}
+		// paint vertical line between value and arrow button
+		if( comboBox.isEditable() ) {
+			g2.setColor( enabled ? borderColor : disabledBorderColor );
+			float lw = scale( 1f );
+			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
 		}
 
 		paint( g, c );

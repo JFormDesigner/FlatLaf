@@ -307,7 +307,7 @@ public class FlatTestFrame
 					c.setBackground( explicit ? Color.orange : restoreColor );
 				} else {
 					c.setForeground( explicit ? Color.blue : restoreColor );
-					c.setBackground( explicit ? Color.red : restoreColor );
+					c.setBackground( explicit ? Color.green : restoreColor );
 				}
 			} );
 
@@ -425,6 +425,14 @@ public class FlatTestFrame
 		contentPanel.getContentPane().remove( content );
 		content = contentFactory.get();
 		contentPanel.getContentPane().add( content );
+
+		if( rightToLeftCheckBox.isSelected() )
+			rightToLeftChanged();
+		if( !enabledCheckBox.isSelected() )
+			enabledChanged();
+		if( explicitColorsCheckBox.isSelected() )
+			explicitColorsChanged();
+
 		contentPanel.revalidate();
 		contentPanel.repaint();
 	}

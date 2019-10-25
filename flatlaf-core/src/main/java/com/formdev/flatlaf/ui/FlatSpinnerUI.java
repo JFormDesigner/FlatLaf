@@ -35,6 +35,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -87,6 +88,8 @@ public class FlatSpinnerUI
 	@Override
 	protected void installDefaults() {
 		super.installDefaults();
+
+		LookAndFeel.installProperty( spinner, "opaque", false );
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( "Component.arc" );
@@ -225,44 +228,44 @@ public class FlatSpinnerUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		if( c.isOpaque() ) {
+		// fill background if opaque to avoid garbage if user sets opaque to true
+		if( c.isOpaque() )
 			FlatUIUtils.paintParentBackground( g, c );
 
-			Graphics2D g2 = (Graphics2D) g;
-			FlatUIUtils.setRenderingHints( g2 );
+		Graphics2D g2 = (Graphics2D) g;
+		FlatUIUtils.setRenderingHints( g2 );
 
-			int width = c.getWidth();
-			int height = c.getHeight();
-			float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-			float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
-			Component nextButton = getHandler().nextButton;
-			int arrowX = nextButton.getX();
-			int arrowWidth = nextButton.getWidth();
-			boolean enabled = spinner.isEnabled();
-			boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
+		int width = c.getWidth();
+		int height = c.getHeight();
+		float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+		float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
+		Component nextButton = getHandler().nextButton;
+		int arrowX = nextButton.getX();
+		int arrowWidth = nextButton.getWidth();
+		boolean enabled = spinner.isEnabled();
+		boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
 
-			// paint background
-			g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		// paint background
+		g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+
+		// paint arrow buttons background
+		if( enabled ) {
+			g2.setColor( buttonBackground );
+			Shape oldClip = g2.getClip();
+			if( isLeftToRight )
+				g2.clipRect( arrowX, 0, width - arrowX, height );
+			else
+				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
-
-			// paint arrow buttons background
-			if( enabled ) {
-				g2.setColor( buttonBackground );
-				Shape oldClip = g2.getClip();
-				if( isLeftToRight )
-					g2.clipRect( arrowX, 0, width - arrowX, height );
-				else
-					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-				FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
-				g2.setClip( oldClip );
-			}
-
-			// paint vertical line between value and arrow buttons
-			g2.setColor( enabled ? borderColor : disabledBorderColor );
-			float lw = scale( 1f );
-			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
+			g2.setClip( oldClip );
 		}
+
+		// paint vertical line between value and arrow buttons
+		g2.setColor( enabled ? borderColor : disabledBorderColor );
+		float lw = scale( 1f );
+		float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+		g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
 
 		paint( g, c );
 	}

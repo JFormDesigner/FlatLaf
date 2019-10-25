@@ -6,6 +6,10 @@ FlatLaf Change Log
 - CheckBox: Support painting a third state (set client property
   "JButton.selectedState" to "indeterminate").
 - `TriStateCheckBox` component added (see [FlatLaf Extras](flatlaf-extras)).
+- Made `JComboBox`, `JProgressBar`, `JSpinner` and `JXDatePicker` non-opaque.
+  `JPasswordField`, `JScrollPane` and `JTextField` are non-opaque if they have
+  an outside focus border (e.g. IntelliJ and Darcula themes). (issues #20 and
+  #17)
 
 
 ## 0.16

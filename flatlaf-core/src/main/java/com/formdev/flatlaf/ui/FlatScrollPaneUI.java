@@ -29,6 +29,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
+import javax.swing.LookAndFeel;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -56,7 +57,10 @@ public class FlatScrollPaneUI
 		if( scrollpane.getLayout() instanceof UIResource )
 			scrollpane.setLayout( new FlatScrollPaneLayout() );
 
-		MigLayoutVisualPadding.install( scrollpane, UIManager.getInt( "Component.focusWidth" ) );
+		int focusWidth = UIManager.getInt( "Component.focusWidth" );
+		LookAndFeel.installProperty( c, "opaque", focusWidth == 0 );
+
+		MigLayoutVisualPadding.install( scrollpane, focusWidth );
 	}
 
 	@Override

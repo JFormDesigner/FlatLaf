@@ -35,6 +35,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.function.Consumer;
 import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.util.JavaCompatibility;
@@ -246,6 +247,14 @@ public class FlatUIUtils
 		String text, int underlinedIndex, int x, int y )
 	{
 		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, underlinedIndex, x, y );
+	}
+
+	public static boolean hasOpaqueBeenExplicitlySet( JComponent c ) {
+		boolean oldOpaque = c.isOpaque();
+		LookAndFeel.installProperty( c, "opaque", !oldOpaque );
+		boolean explicitlySet = c.isOpaque() == oldOpaque;
+		LookAndFeel.installProperty( c, "opaque", oldOpaque );
+		return explicitlySet;
 	}
 
 	//---- class HoverListener ------------------------------------------------

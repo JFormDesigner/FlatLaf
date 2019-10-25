@@ -29,15 +29,29 @@ public class FlatTestPanel
 {
 	@Override
 	protected void paintComponent( Graphics g ) {
-		super.paintComponent( g );
+		int width = getWidth();
+		int height = getHeight();
 
-		FlatTestFrame frame = (FlatTestFrame) SwingUtilities.getAncestorOfClass( FlatTestFrame.class, this );
-		if( frame != null && frame.isPaintBackgroundPattern() ) {
+		g.setColor( super.getBackground() );
+		g.fillRect( 0, 0, width, height );
+
+		if( isPaintBackgroundPattern() ) {
 			g.setColor( Color.magenta );
-			int width = getWidth();
-			int height = getHeight();
 			for( int y = 0; y < height; y += 2 )
 				g.drawLine( 0, y, width - 1, y );
 		}
+	}
+
+	/**
+	 * Overridden to see which components paint background with color from parent.
+	 */
+	@Override
+	public Color getBackground() {
+		return isPaintBackgroundPattern() ? Color.red : super.getBackground();
+	}
+
+	private boolean isPaintBackgroundPattern() {
+		FlatTestFrame frame = (FlatTestFrame) SwingUtilities.getAncestorOfClass( FlatTestFrame.class, this );
+		return frame != null && frame.isPaintBackgroundPattern();
 	}
 }

@@ -103,6 +103,8 @@ public class FlatDatePickerUI
 
 		super.installUI( c );
 
+		LookAndFeel.installProperty( datePicker, "opaque", false );
+
 		// hack JXDatePicker.TodayPanel colors
 		// (there is no need to uninstall these changes because only UIResources are used,
 		// which are automatically replaced when switching LaF)
@@ -217,43 +219,43 @@ public class FlatDatePickerUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		if( c.isOpaque() ) {
+		// fill background if opaque to avoid garbage if user sets opaque to true
+		if( c.isOpaque() )
 			FlatUIUtils.paintParentBackground( g, c );
 
-			Graphics2D g2 = (Graphics2D) g;
-			FlatUIUtils.setRenderingHints( g2 );
+		Graphics2D g2 = (Graphics2D) g;
+		FlatUIUtils.setRenderingHints( g2 );
 
-			int width = c.getWidth();
-			int height = c.getHeight();
-			float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-			float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
-			int arrowX = popupButton.getX();
-			int arrowWidth = popupButton.getWidth();
-			boolean enabled = c.isEnabled();
-			boolean isLeftToRight = c.getComponentOrientation().isLeftToRight();
+		int width = c.getWidth();
+		int height = c.getHeight();
+		float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+		float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
+		int arrowX = popupButton.getX();
+		int arrowWidth = popupButton.getWidth();
+		boolean enabled = c.isEnabled();
+		boolean isLeftToRight = c.getComponentOrientation().isLeftToRight();
 
-			// paint background
-			g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		// paint background
+		g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+
+		// paint arrow button background
+		if( enabled ) {
+			g2.setColor( buttonBackground );
+			Shape oldClip = g2.getClip();
+			if( isLeftToRight )
+				g2.clipRect( arrowX, 0, width - arrowX, height );
+			else
+				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
-
-			// paint arrow button background
-			if( enabled ) {
-				g2.setColor( buttonBackground );
-				Shape oldClip = g2.getClip();
-				if( isLeftToRight )
-					g2.clipRect( arrowX, 0, width - arrowX, height );
-				else
-					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-				FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
-				g2.setClip( oldClip );
-			}
-
-			// paint vertical line between value and arrow button
-			g2.setColor( enabled ? borderColor : disabledBorderColor );
-			float lw = scale( 1f );
-			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
+			g2.setClip( oldClip );
 		}
+
+		// paint vertical line between value and arrow button
+		g2.setColor( enabled ? borderColor : disabledBorderColor );
+		float lw = scale( 1f );
+		float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+		g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
 
 		paint( g, c );
 	}
