@@ -7,7 +7,7 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "flowy,ltr,insets 0,hidemode 3,gap 5 5"
+			"$layoutConstraints": "flowy,ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[][][fill]"
 			"$rowConstraints": "[top][top][top][top][top][top][top][top]"
 		} ) {
@@ -239,7 +239,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 790, 840 )
+			"size": new java.awt.Dimension( 790, 920 )
 		} )
 	}
 }

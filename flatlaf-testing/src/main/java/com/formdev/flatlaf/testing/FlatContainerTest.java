@@ -104,7 +104,7 @@ public class FlatContainerTest
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"insets 0,hidemode 3",
+			"insets dialog,hidemode 3",
 			// columns
 			"[grow,fill]",
 			// rows

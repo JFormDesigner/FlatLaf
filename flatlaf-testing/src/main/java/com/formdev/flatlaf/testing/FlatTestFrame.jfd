@@ -11,7 +11,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane"
 				add( new FormContainer( "javax.swing.JRootPane", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-					"$layoutConstraints": "insets dialog,hidemode 3"
+					"$layoutConstraints": "insets 0,hidemode 3"
 					"$columnConstraints": "[grow,fill]"
 					"$rowConstraints": "[grow,fill]"
 				} ) {

@@ -7,7 +7,7 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "insets 0,hidemode 3"
+			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[grow,fill]"
 			"$rowConstraints": "[grow,fill]"
 		} ) {

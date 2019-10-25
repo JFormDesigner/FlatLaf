@@ -90,7 +90,7 @@ public class FlatOptionPaneTest
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"flowy,ltr,insets 0,hidemode 3,gap 5 5",
+			"flowy,ltr,insets dialog,hidemode 3",
 			// columns
 			"[]" +
 			"[]" +

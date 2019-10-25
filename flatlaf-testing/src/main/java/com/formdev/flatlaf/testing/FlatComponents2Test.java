@@ -62,7 +62,7 @@ public class FlatComponents2Test
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"insets 0,hidemode 3,gap 5 5,ltr",
+			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[]" +
 			"[200]" +

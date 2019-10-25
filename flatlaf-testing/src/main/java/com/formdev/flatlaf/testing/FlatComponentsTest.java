@@ -178,7 +178,7 @@ public class FlatComponentsTest
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"insets 0,hidemode 3,gap 5 5,ltr",
+			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[]" +
 			"[]" +
@@ -760,7 +760,7 @@ public class FlatComponentsTest
 		{
 			panel3.setOpaque(false);
 			panel3.setLayout(new MigLayout(
-				"insets 0,hidemode 3,gap 5 5,ltr",
+				"ltr,insets 0,hidemode 3",
 				// columns
 				"[]",
 				// rows

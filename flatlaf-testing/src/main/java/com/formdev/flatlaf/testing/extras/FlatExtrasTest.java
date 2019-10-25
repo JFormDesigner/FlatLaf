@@ -59,7 +59,7 @@ public class FlatExtrasTest
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"hidemode 3,ltr",
+			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[]" +
 			"[]" +

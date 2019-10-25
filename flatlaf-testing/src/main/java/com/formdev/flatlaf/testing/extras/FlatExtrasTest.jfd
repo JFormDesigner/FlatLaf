@@ -4,7 +4,7 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "hidemode 3,ltr"
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[][][left]"
 			"$rowConstraints": "[][]"
 		} ) {

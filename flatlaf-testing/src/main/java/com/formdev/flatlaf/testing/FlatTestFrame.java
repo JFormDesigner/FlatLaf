@@ -465,7 +465,7 @@ public class FlatTestFrame
 			{
 				Container contentPanelContentPane = contentPanel.getContentPane();
 				contentPanelContentPane.setLayout(new MigLayout(
-					"insets dialog,hidemode 3",
+					"insets 0,hidemode 3",
 					// columns
 					"[grow,fill]",
 					// rows

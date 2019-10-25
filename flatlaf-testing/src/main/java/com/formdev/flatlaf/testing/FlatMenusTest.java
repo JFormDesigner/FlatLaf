@@ -103,7 +103,7 @@ public class FlatMenusTest
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"insets 0,hidemode 3,gap 5 5,ltr",
+			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[125]" +
 			"[]" +
@@ -157,7 +157,7 @@ public class FlatMenusTest
 		{
 			panel1.setOpaque(false);
 			panel1.setLayout(new MigLayout(
-				"insets 0,hidemode 3,gap 5 5,ltr",
+				"ltr,insets 0,hidemode 3",
 				// columns
 				"[125,left]" +
 				"[fill]",
@@ -216,7 +216,7 @@ public class FlatMenusTest
 		{
 			panel2.setOpaque(false);
 			panel2.setLayout(new MigLayout(
-				"insets 0,gap 5 5",
+				"insets 0",
 				// columns
 				"[fill]",
 				// rows
@@ -257,7 +257,7 @@ public class FlatMenusTest
 		{
 			panel3.setOpaque(false);
 			panel3.setLayout(new MigLayout(
-				"insets 0,gap 5 5",
+				"insets 0",
 				// columns
 				"[fill]",
 				// rows
@@ -297,7 +297,7 @@ public class FlatMenusTest
 		{
 			panel4.setOpaque(false);
 			panel4.setLayout(new MigLayout(
-				"insets 0,gap 5 5",
+				"insets 0",
 				// columns
 				"[fill]",
 				// rows
