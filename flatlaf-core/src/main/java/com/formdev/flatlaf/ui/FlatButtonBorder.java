@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
-import java.awt.Paint;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
@@ -68,7 +67,7 @@ public class FlatButtonBorder
 	}
 
 	@Override
-	protected Paint getBorderColor( Component c ) {
+	protected Color getBorderColor( Component c ) {
 		boolean def = FlatButtonUI.isDefaultButton( c );
 		return FlatButtonUI.buttonStateColor( c,
 			def ? defaultBorderColor : borderColor,
