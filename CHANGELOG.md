@@ -12,6 +12,8 @@ FlatLaf Change Log
   #17)
 - Button: Hover and pressed background colors are now derived from actual button
   background color. (issue #21)
+- Table: Fixed missing upper right corner (e.g. in SwingX JXTable with column
+  control visible).
 
 
 ## 0.16
