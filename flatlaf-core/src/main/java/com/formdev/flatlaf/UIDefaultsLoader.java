@@ -36,6 +36,8 @@ import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.util.ColorFunctions;
+import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.ScaledNumber;
 
 /**
@@ -101,7 +103,11 @@ class UIDefaultsLoader
 					continue;
 
 				String value = resolveValue( properties, (String) e.getValue() );
-				globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver ) );
+				try {
+					globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver ) );
+				} catch( RuntimeException ex ) {
+					logParseError( key, value, ex );
+				}
 			}
 
 			// override UI defaults with globals
@@ -122,11 +128,20 @@ class UIDefaultsLoader
 					continue;
 
 				String value = resolveValue( properties, (String) e.getValue() );
-				defaults.put( key, parseValue( key, value, resolver ) );
+				try {
+					defaults.put( key, parseValue( key, value, resolver ) );
+				} catch( RuntimeException ex ) {
+					logParseError( key, value, ex );
+				}
 			}
 		} catch( IOException ex ) {
 			ex.printStackTrace();
 		}
+	}
+
+	private static void logParseError( String key, String value, RuntimeException ex ) {
+		System.err.println( "Failed to parse: '" + key + '=' + value + '\'' );
+		System.err.println( "    " + ex.getMessage() );
 	}
 
 	private static String resolveValue( Properties properties, String value ) {
@@ -147,8 +162,7 @@ class UIDefaultsLoader
 			if( optional )
 				return "null";
 
-			System.err.println( "variable or reference '" + value + "' not found" );
-			throw new IllegalArgumentException( value );
+			throw new IllegalArgumentException( "variable or reference '" + value + "' not found" );
 		}
 
 		return resolveValue( properties, newValue );
@@ -264,8 +278,7 @@ class UIDefaultsLoader
 				Integer.parseInt( numbers.get( 2 ) ),
 				Integer.parseInt( numbers.get( 3 ) ) );
 		} catch( NumberFormatException ex ) {
-			System.err.println( "invalid insets '" + value + "'" );
-			throw ex;
+			throw new IllegalArgumentException( "invalid insets '" + value + "'" );
 		}
 	}
 
@@ -276,12 +289,14 @@ class UIDefaultsLoader
 				Integer.parseInt( numbers.get( 0 ) ),
 				Integer.parseInt( numbers.get( 1 ) ) );
 		} catch( NumberFormatException ex ) {
-			System.err.println( "invalid size '" + value + "'" );
-			throw ex;
+			throw new IllegalArgumentException( "invalid size '" + value + "'" );
 		}
 	}
 
 	private static ColorUIResource parseColor( String value, boolean reportError ) {
+		if( value.endsWith( ")" ) )
+			return parseColorFunctions( value, reportError );
+
 		try {
 			int rgb = Integer.parseInt( value, 16 );
 			if( value.length() == 6 )
@@ -292,23 +307,78 @@ class UIDefaultsLoader
 			if( reportError )
 				throw new NumberFormatException( value );
 		} catch( NumberFormatException ex ) {
-			if( reportError ) {
-				System.err.println( "invalid color '" + value + "'" );
-				throw ex;
-			}
+			if( reportError )
+				throw new IllegalArgumentException( "invalid color '" + value + "'" );
+
 			// not a color --> ignore
 		}
 		return null;
+	}
+
+	private static ColorUIResource parseColorFunctions( String value, boolean reportError ) {
+		int paramsStart = value.indexOf( '(' );
+		if( paramsStart < 0 ) {
+			if( reportError )
+				throw new IllegalArgumentException( "missing opening parenthesis in function '" + value + "'" );
+			return null;
+		}
+
+		String function = value.substring( 0, paramsStart ).trim();
+		List<String> params = split( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
+		if( params.isEmpty() )
+			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
+
+		switch( function ) {
+			case "lighten":		return parseColorLightenOrDarken( true, params, reportError );
+			case "darken":		return parseColorLightenOrDarken( false, params, reportError );
+		}
+
+		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
+	}
+
+	/**
+	 * Syntax: lighten(amount[,options]) or darken(amount[,options])
+	 *   - amount: percentage 0-100%
+	 *   - options: [relative] [autoInverse]
+	 */
+	private static ColorUIResource parseColorLightenOrDarken( boolean lighten, List<String> params, boolean reportError ) {
+		int amount = parsePercentage( params.get( 0 ) );
+		boolean relative = false;
+		boolean autoInverse = false;
+
+		if( params.size() >= 2 ) {
+			String options = params.get( 1 );
+			relative = options.contains( "relative" );
+			autoInverse = options.contains( "autoInverse" );
+		}
+
+		return new DerivedColor( lighten
+			? new ColorFunctions.Lighten( amount, relative, autoInverse )
+			: new ColorFunctions.Darken( amount, relative, autoInverse ) );
+	}
+
+	private static int parsePercentage( String value ) {
+		if( !value.endsWith( "%" ) )
+			throw new NumberFormatException( "invalid percentage '" + value + "'" );
+
+		int val;
+		try {
+			val = Integer.parseInt( value.substring( 0, value.length() - 1 ) );
+		} catch( NumberFormatException ex ) {
+			throw new NumberFormatException( "invalid percentage '" + value + "'" );
+		}
+
+		if( val < 0 || val > 100 )
+			throw new IllegalArgumentException( "percentage out of range (0-100%) '" + value + "'" );
+		return val;
 	}
 
 	private static Integer parseInteger( String value, boolean reportError ) {
 		try {
 			return Integer.parseInt( value );
 		} catch( NumberFormatException ex ) {
-			if( reportError ) {
-				System.err.println( "invalid integer '" + value + "'" );
-				throw ex;
-			}
+			if( reportError )
+				throw new NumberFormatException( "invalid integer '" + value + "'" );
 		}
 		return null;
 	}
@@ -317,8 +387,7 @@ class UIDefaultsLoader
 		try {
 			return new ScaledNumber( Integer.parseInt( value ) );
 		} catch( NumberFormatException ex ) {
-			System.err.println( "invalid integer '" + value + "'" );
-			throw ex;
+			throw new NumberFormatException( "invalid integer '" + value + "'" );
 		}
 	}
 

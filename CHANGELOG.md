@@ -10,6 +10,8 @@ FlatLaf Change Log
   `JPasswordField`, `JScrollPane` and `JTextField` are non-opaque if they have
   an outside focus border (e.g. IntelliJ and Darcula themes). (issues #20 and
   #17)
+- Button: Hover and pressed background colors are now derived from actual button
+  background color. (issue #21)
 
 
 ## 0.16

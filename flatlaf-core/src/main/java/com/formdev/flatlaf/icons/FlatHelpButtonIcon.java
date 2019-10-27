@@ -24,6 +24,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * Help button icon for {@link javax.swing.JButton}.
@@ -99,12 +100,12 @@ public class FlatHelpButtonIcon
 		g2.fill( new Ellipse2D.Float( focusWidth + 0.5f, focusWidth + 0.5f, 21, 21 ) );
 
 		// paint background
-		g2.setColor( FlatButtonUI.buttonStateColor( c,
+		FlatUIUtils.setColor( g2, FlatButtonUI.buttonStateColor( c,
 			background,
 			disabledBackground,
 			focusedBackground,
 			hoverBackground,
-			pressedBackground ) );
+			pressedBackground ), background );
 		g2.fill( new Ellipse2D.Float( focusWidth + 1.5f, focusWidth + 1.5f, 19, 19 ) );
 
 		// paint question mark

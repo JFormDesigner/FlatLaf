@@ -109,12 +109,13 @@ public class FlatCheckBoxIcon
 		paintBorder( g2 );
 
 		// paint background
-		g2.setColor( FlatButtonUI.buttonStateColor( c,
+		FlatUIUtils.setColor( g2, FlatButtonUI.buttonStateColor( c,
 			selected ? selectedBackground : background,
 			disabledBackground,
 			focusedBackground,
 			selected && selectedHoverBackground != null ? selectedHoverBackground : hoverBackground,
-			selected && selectedPressedBackground != null ? selectedPressedBackground : pressedBackground ) );
+			selected && selectedPressedBackground != null ? selectedPressedBackground : pressedBackground ),
+			background );
 		paintBackground( g2 );
 
 		// paint checkmark

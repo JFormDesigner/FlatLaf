@@ -190,7 +190,7 @@ public class FlatButtonUI
 					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
 					float arc = (border instanceof FlatButtonBorder || isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
 
-					g2.setColor( background );
+					FlatUIUtils.setColor( g2, background, isDefaultButton(c) ? defaultBackground : c.getBackground() );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 				} finally {
 					g2.dispose();
