@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.17
 
 - CheckBox: Support painting a third state (set client property
   "JButton.selectedState" to "indeterminate").
