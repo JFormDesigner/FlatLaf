@@ -19,6 +19,8 @@ package com.formdev.flatlaf;
 /**
  * A Flat LaF that has a dark color scheme.
  *
+ * The UI defaults are loaded from FlatDarkLaf.properties and FlatLaf.properties
+ *
  * @author Karl Tauber
  */
 public class FlatDarkLaf
@@ -36,5 +38,10 @@ public class FlatDarkLaf
 	@Override
 	public String getDescription() {
 		return "Flat Dark Look and Feel";
+	}
+
+	@Override
+	public boolean isDark() {
+		return true;
 	}
 }

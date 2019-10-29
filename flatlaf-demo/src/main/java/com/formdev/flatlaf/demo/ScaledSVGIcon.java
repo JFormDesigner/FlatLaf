@@ -24,8 +24,9 @@ import java.awt.image.BufferedImage;
 import java.net.URISyntaxException;
 import java.net.URL;
 import javax.swing.ImageIcon;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import com.kitfox.svg.app.beans.SVGIcon;
@@ -129,6 +130,7 @@ public class ScaledSVGIcon
 	}
 
 	private static void lafChanged() {
-		darkLaf = (UIManager.getLookAndFeel() instanceof FlatDarkLaf);
+		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+		darkLaf = (lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark());
 	}
 }

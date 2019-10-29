@@ -19,6 +19,8 @@ package com.formdev.flatlaf;
 /**
  * A Flat LaF that has a light color scheme.
  *
+ * The UI defaults are loaded from FlatLightLaf.properties and FlatLaf.properties
+ *
  * @author Karl Tauber
  */
 public class FlatLightLaf
@@ -36,5 +38,10 @@ public class FlatLightLaf
 	@Override
 	public String getDescription() {
 		return "Flat Light Look and Feel";
+	}
+
+	@Override
+	public boolean isDark() {
+		return false;
 	}
 }

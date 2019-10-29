@@ -21,6 +21,8 @@ import com.formdev.flatlaf.FlatLaf;
 /**
  * A Flat LaF that has a test color scheme.
  *
+ * The UI defaults are loaded from FlatTestLaf.properties and FlatLaf.properties
+ *
  * Used to develop Flat LaF.
  *
  * @author Karl Tauber
@@ -36,5 +38,10 @@ public class FlatTestLaf
 	@Override
 	public String getDescription() {
 		return "Flat Test Look and Feel";
+	}
+
+	@Override
+	public boolean isDark() {
+		return false;
 	}
 }

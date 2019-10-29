@@ -19,6 +19,8 @@ package com.formdev.flatlaf;
 /**
  * A Flat LaF that has a light color scheme and looks like IntelliJ LaF.
  *
+ * The UI defaults are loaded from FlatIntelliJLaf.properties, FlatLightLaf.properties and FlatLaf.properties
+ *
  * @author Karl Tauber
  */
 public class FlatIntelliJLaf

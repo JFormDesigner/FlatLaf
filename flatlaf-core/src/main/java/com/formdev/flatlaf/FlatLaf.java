@@ -74,6 +74,8 @@ public abstract class FlatLaf
 		return getName();
 	}
 
+	public abstract boolean isDark();
+
 	@Override
 	public boolean isNativeLookAndFeel() {
 		return true;
