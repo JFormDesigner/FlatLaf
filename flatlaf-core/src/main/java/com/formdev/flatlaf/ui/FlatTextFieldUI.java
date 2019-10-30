@@ -25,6 +25,7 @@ import java.awt.event.FocusListener;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -137,6 +138,10 @@ public class FlatTextFieldUI
 	}
 
 	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
+		// do not apply minimum width if JTextField.columns is set
+		if( c instanceof JTextField && ((JTextField)c).getColumns() > 0 )
+			return size;
+
 		Container parent = c.getParent();
 		if( parent instanceof JComboBox ||
 			parent instanceof JSpinner ||

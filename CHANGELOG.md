@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- TextField and TextArea: Do not apply minimum width if `columns` property is
+  greater than zero.
+
+
 ## 0.17
 
 - CheckBox: Support painting a third state (set client property

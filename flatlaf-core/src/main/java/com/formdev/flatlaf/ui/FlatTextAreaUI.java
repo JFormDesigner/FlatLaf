@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JComponent;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
@@ -81,15 +82,19 @@ public class FlatTextAreaUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ) );
+		return applyMinimumWidth( super.getPreferredSize( c ), c );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ) );
+		return applyMinimumWidth( super.getMinimumSize( c ), c );
 	}
 
-	private Dimension applyMinimumWidth( Dimension size ) {
+	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
+		// do not apply minimum width if JTextArea.columns is set
+		if( c instanceof JTextArea && ((JTextArea)c).getColumns() > 0 )
+			return size;
+
 		// Assume that text area is in a scroll pane (that displays the border)
 		// and subtract 1px border line width.
 		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding
