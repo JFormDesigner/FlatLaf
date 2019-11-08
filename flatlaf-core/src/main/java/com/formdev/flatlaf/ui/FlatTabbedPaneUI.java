@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -135,7 +136,7 @@ public class FlatTabbedPaneUI
 			public void propertyChange( PropertyChangeEvent e ) {
 				super.propertyChange( e );
 
-				if( "JTabbedPane.hasFullBorder".equals( e.getPropertyName() ) ) {
+				if( TABBED_PANE_HAS_FULL_BORDER.equals( e.getPropertyName() ) ) {
 					tabPane.revalidate();
 					tabPane.repaint();
 				}
@@ -194,7 +195,7 @@ public class FlatTabbedPaneUI
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
-		boolean hasFullBorder = this.hasFullBorder || (tabPane.getClientProperty( "JTabbedPane.hasFullBorder" ) == Boolean.TRUE);
+		boolean hasFullBorder = this.hasFullBorder || clientPropertyEquals( tabPane, TABBED_PANE_HAS_FULL_BORDER, true );
 		int sh = contentSeparatorHeight;
 		Insets insets = hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 );
 

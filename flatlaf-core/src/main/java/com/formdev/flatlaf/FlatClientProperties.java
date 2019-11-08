@@ -30,6 +30,8 @@ public interface FlatClientProperties
 	String SELECTED_STATE = "JButton.selectedState";
 	String SELECTED_STATE_INDETERMINATE = "indeterminate";
 
+	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
+
 	/**
 	 * Checks whether a client property of a component has the given value.
 	 */

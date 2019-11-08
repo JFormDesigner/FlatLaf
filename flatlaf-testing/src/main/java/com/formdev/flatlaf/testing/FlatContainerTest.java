@@ -4,6 +4,7 @@
 
 package com.formdev.flatlaf.testing;
 
+import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -37,10 +38,10 @@ public class FlatContainerTest
 
 	private void hasFullBorderChanged() {
 		Boolean hasFullBorder = hasFullBorderCheckBox.isSelected() ? true : null;
-		tabbedPane1.putClientProperty( "JTabbedPane.hasFullBorder", hasFullBorder );
-		tabbedPane2.putClientProperty( "JTabbedPane.hasFullBorder", hasFullBorder );
-		tabbedPane3.putClientProperty( "JTabbedPane.hasFullBorder", hasFullBorder );
-		tabbedPane4.putClientProperty( "JTabbedPane.hasFullBorder", hasFullBorder );
+		tabbedPane1.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
+		tabbedPane2.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
+		tabbedPane3.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
+		tabbedPane4.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
 	}
 
 	private void moreTabsChanged() {
