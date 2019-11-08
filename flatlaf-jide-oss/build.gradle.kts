@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-rootProject.name = "FlatLaf"
+version = rootProject.version
 
-include( "flatlaf-core" )
-include( "flatlaf-extras" )
-include( "flatlaf-swingx" )
-include( "flatlaf-jide-oss" )
-include( "flatlaf-demo" )
-include( "flatlaf-testing" )
+plugins {
+	`java-library`
+}
+
+dependencies {
+	implementation( project( ":flatlaf-core" ) )
+	implementation( "com.jidesoft:jide-oss:3.6.18" )
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
