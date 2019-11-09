@@ -199,6 +199,7 @@ public class FlatTabbedPaneUI
 		int sh = contentSeparatorHeight;
 		Insets insets = hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 );
 
+		Insets contentBorderInsets = new Insets( 0, 0, 0, 0 );
 		rotateInsets( insets, contentBorderInsets, tabPlacement );
 		return contentBorderInsets;
 	}
