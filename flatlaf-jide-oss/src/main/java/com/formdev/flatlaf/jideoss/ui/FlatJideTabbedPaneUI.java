@@ -213,7 +213,8 @@ public class FlatJideTabbedPaneUI
 	{
 		// paint tab background
 		boolean enabled = _tabPane.isEnabled();
-		g.setColor( enabled && _tabPane.isEnabledAt( tabIndex ) && _indexMouseOver == tabIndex
+		g.setColor( enabled && _tabPane.isEnabledAt( tabIndex ) &&
+				(_indexMouseOver == tabIndex || (_closeButtons != null && ((JideTabbedPane.NoFocusButton)_closeButtons[tabIndex]).isMouseOver()))
 			? hoverColor
 			: (enabled && isSelected && _tabPane.hasFocus()
 				? focusColor
