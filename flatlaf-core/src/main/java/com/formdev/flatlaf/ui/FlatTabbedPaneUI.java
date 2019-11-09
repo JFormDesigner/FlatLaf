@@ -24,9 +24,12 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
@@ -112,7 +115,6 @@ public class FlatTabbedPaneUI
 		tabAreaInsets = scale( tabAreaInsets );
 		tabHeight = scale( tabHeight );
 		tabSelectionHeight = scale( tabSelectionHeight );
-		contentSeparatorHeight = scale( contentSeparatorHeight );
 
 		MigLayoutVisualPadding.install( tabPane, null );
 	}
@@ -196,7 +198,7 @@ public class FlatTabbedPaneUI
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
 		boolean hasFullBorder = this.hasFullBorder || clientPropertyEquals( tabPane, TABBED_PANE_HAS_FULL_BORDER, true );
-		int sh = contentSeparatorHeight;
+		int sh = scale( contentSeparatorHeight );
 		Insets insets = hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 );
 
 		Insets contentBorderInsets = new Insets( 0, 0, 0, 0 );
@@ -212,6 +214,13 @@ public class FlatTabbedPaneUI
 	@Override
 	protected int getTabLabelShiftY( int tabPlacement, int tabIndex, boolean isSelected ) {
 		return 0;
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+
+		super.update( g, c );
 	}
 
 	@Override
@@ -270,6 +279,7 @@ public class FlatTabbedPaneUI
 		Rectangle clipBounds = isScrollTabLayout() ? g.getClipBounds() : null;
 		if( clipBounds != null ) {
 			Rectangle newClipBounds = new Rectangle( clipBounds );
+			int contentSeparatorHeight = scale( this.contentSeparatorHeight );
 			switch( tabPlacement ) {
 				case TOP:
 				default:
@@ -325,7 +335,6 @@ public class FlatTabbedPaneUI
 
 	/**
 	 * Actually does the nearly the same as super.paintContentBorder() but
-	 *   - content pane is always opaque
 	 *   - not using UIManager.getColor("TabbedPane.contentAreaColor") to be GUI builder friendly
 	 *   - not invoking paintContentBorder*Edge() methods
 	 *   - repaint selection
@@ -369,9 +378,19 @@ public class FlatTabbedPaneUI
 				h -= (y - insets.top);
 		}
 
+		// compute insets for separator or full border
+		boolean hasFullBorder = this.hasFullBorder || clientPropertyEquals( tabPane, TABBED_PANE_HAS_FULL_BORDER, true );
+		int sh = scale( contentSeparatorHeight * 100 ); // multiply by 100 because rotateInsets() does not use floats
+		Insets ci = new Insets( 0, 0, 0, 0 );
+		rotateInsets( hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 ), ci, tabPlacement );
+
 		// paint content area
 		g.setColor( contentAreaColor );
-		g.fillRect( x, y, w, h );
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		path.append( new Rectangle2D.Float( x, y, w, h ), false );
+		path.append( new Rectangle2D.Float( x + (ci.left / 100f), y + (ci.top / 100f),
+			w - (ci.left / 100f) - (ci.right / 100f), h - (ci.top / 100f) - (ci.bottom / 100f) ), false );
+		((Graphics2D)g).fill( path );
 
 		// repaint selection in scroll-tab-layout because it may be painted before
 		// the content border was painted (from BasicTabbedPaneUI$ScrollableTabPanel)

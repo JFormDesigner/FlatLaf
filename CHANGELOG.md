@@ -7,6 +7,8 @@ FlatLaf Change Log
   greater than zero.
 - TabbedPane: In scroll-tab-layout, the separator line now spans the whole width
   and is no longer interrupted by the scroll buttons.
+- TabbedPane: Content pane is no longer opaque. Use antialiasing for painting
+  separator and content border.
 
 
 ## 0.17
