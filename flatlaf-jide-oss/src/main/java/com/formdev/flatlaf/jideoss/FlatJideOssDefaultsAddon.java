@@ -17,7 +17,14 @@
 package com.formdev.flatlaf.jideoss;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.UIDefaults;
 import com.formdev.flatlaf.FlatDefaultsAddon;
+import com.formdev.flatlaf.FlatLaf;
+import com.jidesoft.plaf.LookAndFeelFactory;
+import com.jidesoft.plaf.LookAndFeelFactory.UIDefaultsCustomizer;
+import com.jidesoft.plaf.LookAndFeelFactory.UIDefaultsInitializer;
 
 /**
  * JIDE Common Layer addon for FlatLaf.
@@ -33,9 +40,44 @@ public class FlatJideOssDefaultsAddon
 	 */
 	@Override
 	public InputStream getDefaults( Class<?> lafClass ) {
+		LookAndFeelFactory.registerDefaultInitializer( FlatLaf.class.getName(), FlatJideUIDefaultsCustomizer.class.getName() );
+		LookAndFeelFactory.registerDefaultCustomizer( FlatLaf.class.getName(), FlatJideUIDefaultsCustomizer.class.getName() );
+
 		Class<?> addonClass = this.getClass();
 		String propertiesName = "/" + addonClass.getPackage().getName().replace( '.', '/' )
 			+ '/' + lafClass.getSimpleName() + ".properties";
 		return addonClass.getResourceAsStream( propertiesName );
+	}
+
+	//---- class FlatJideUIDefaultsCustomizer ---------------------------------
+
+	/**
+	 * Because JIDE overwrites our UI defaults (from properties files) with its
+	 * own UI defaults, we have to first remember our UI defaults in the initializer
+	 * (invoked before JIDE overwrites UI defaults) and then restore them in the customizer.
+	 */
+	public static class FlatJideUIDefaultsCustomizer
+		implements UIDefaultsInitializer, UIDefaultsCustomizer
+	{
+		private static HashMap<Object, Object> jideDefaults;
+
+		@Override
+		public void initialize( UIDefaults defaults ) {
+			jideDefaults = new HashMap<>();
+
+			for( Map.Entry<Object, Object> e : defaults.entrySet() ) {
+				Object key = e.getKey();
+				if( key instanceof String && ((String)key).startsWith( "Jide" ) )
+					jideDefaults.put( key, e.getValue() );
+			}
+		}
+
+		@Override
+		public void customize( UIDefaults defaults ) {
+			if( jideDefaults != null ) {
+				defaults.putAll( jideDefaults );
+				jideDefaults = null;
+			}
+		}
 	}
 }

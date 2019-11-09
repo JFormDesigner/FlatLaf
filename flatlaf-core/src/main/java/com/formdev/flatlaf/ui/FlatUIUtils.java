@@ -73,6 +73,14 @@ public class FlatUIUtils
 			dim.height + insets.top + insets.bottom );
 	}
 
+	public static Insets addInsets( Insets insets1, Insets insets2 ) {
+		return new Insets(
+			insets1.top + insets2.top,
+			insets1.left + insets2.left,
+			insets1.bottom + insets2.bottom,
+			insets1.right + insets2.right );
+	}
+
 	public static Color getUIColor( String key, int defaultColorRGB ) {
 		Color color = UIManager.getColor( key );
 		return (color != null) ? color : new Color( defaultColorRGB );

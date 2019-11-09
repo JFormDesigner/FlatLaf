@@ -24,6 +24,7 @@ dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
 	implementation( project( ":flatlaf-swingx" ) )
+	implementation( project( ":flatlaf-jide-oss" ) )
 
 	implementation( "com.miglayout:miglayout-swing:5.2" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
