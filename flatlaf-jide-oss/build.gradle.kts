@@ -18,6 +18,8 @@ version = rootProject.version
 
 plugins {
 	`java-library`
+	`maven-publish`
+	id( "com.jfrog.bintray" ) version "1.8.4"
 }
 
 dependencies {
@@ -28,4 +30,92 @@ dependencies {
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks {
+	assemble {
+		dependsOn(
+			"sourcesJar",
+			"javadocJar"
+		)
+	}
+
+	javadoc {
+		options {
+			this as StandardJavadocDocletOptions
+			tags = listOf( "uiDefault", "clientProperty" )
+		}
+		isFailOnError = false
+	}
+
+	register( "sourcesJar", Jar::class ) {
+		archiveClassifier.set( "sources" )
+
+		from( sourceSets.main.get().allJava )
+	}
+
+	register( "javadocJar", Jar::class ) {
+		archiveClassifier.set( "javadoc" )
+
+		from( javadoc )
+	}
+}
+
+publishing {
+	publications {
+		create<MavenPublication>( "maven" ) {
+			artifactId = "flatlaf-jide-oss"
+			groupId = "com.formdev"
+
+			from( components["java"] )
+
+			artifact( tasks["sourcesJar"] )
+			artifact( tasks["javadocJar"] )
+
+			pom {
+				name.set( "FlatLaf addon for JIDE Common Layer" )
+				description.set( "Flat Look and Feel addon for JIDE Common Layer" )
+				url.set( "https://github.com/JFormDesigner/FlatLaf" )
+
+				licenses {
+					license {
+						name.set( "The Apache License, Version 2.0" )
+						url.set( "http://www.apache.org/licenses/LICENSE-2.0.txt" )
+					}
+				}
+
+				developers {
+					developer {
+						name.set( "Karl Tauber" )
+						organization.set( "FormDev Software GmbH" )
+						organizationUrl.set( "https://www.formdev.com/" )
+					}
+				}
+
+				scm {
+					url.set( "https://github.com/JFormDesigner/FlatLaf" )
+				}
+			}
+		}
+	}
+}
+
+bintray {
+	user = System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" )
+	key = System.getenv( "BINTRAY_KEY" ) ?: System.getProperty( "bintray.key" )
+
+	setPublications( "maven" )
+
+	with( pkg ) {
+		repo = "flatlaf"
+		name = "flatlaf-jide-oss"
+		setLicenses( "Apache-2.0" )
+		vcsUrl = "https://github.com/JFormDesigner/FlatLaf"
+
+		with( version ) {
+			name = project.version.toString()
+		}
+
+		publish = true
+	}
 }
