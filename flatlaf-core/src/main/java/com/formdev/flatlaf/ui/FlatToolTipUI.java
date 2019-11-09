@@ -81,7 +81,7 @@ public class FlatToolTipUI
 			boolean leftToRight = (comp != null ? comp : c).getComponentOrientation().isLeftToRight();
 			for( String line : lines ) {
 				y += lineHeight;
-				g.drawString( line, leftToRight ? x : x2 - SwingUtilities.computeStringWidth( fm, line ), y );
+				FlatUIUtils.drawString( c, g, line, leftToRight ? x : x2 - SwingUtilities.computeStringWidth( fm, line ), y );
 			}
 		} else
 			super.paint( g, c );

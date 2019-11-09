@@ -256,6 +256,22 @@ public class FlatUIUtils
 	}
 
 	/**
+	 * Draws the given string at the specified location using text properties
+	 * and anti-aliasing hints from the provided component.
+	 *
+	 * Use this method instead of Graphics.drawString() for correct anti-aliasing.
+	 *
+	 * Replacement for SwingUtilities2.drawString()
+	 */
+	public static void drawString( JComponent c, Graphics g, String text, int x, int y ) {
+		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, -1, x, y );
+	}
+
+	/**
+	 * Draws the given string at the specified location underlining the specified
+	 * character. The provided component is used to query text properties and
+	 * anti-aliasing hints.
+	 *
 	 * Replacement for SwingUtilities2.drawStringUnderlineCharAt()
 	 */
 	public static void drawStringUnderlineCharAt( JComponent c, Graphics g,

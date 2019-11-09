@@ -9,6 +9,7 @@ FlatLaf Change Log
   and is no longer interrupted by the scroll buttons.
 - TabbedPane: Content pane is no longer opaque. Use antialiasing for painting
   separator and content border.
+- ToolTip: Use anti-aliasing to render multi-line tooltips.
 - JIDE Common Layer: Support `JideTabbedPane`.
 
 
