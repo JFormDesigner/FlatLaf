@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 - TextField and TextArea: Do not apply minimum width if `columns` property is
   greater than zero.
+- TabbedPane: In scroll-tab-layout, the separator line now spans the whole width
+  and is no longer interrupted by the scroll buttons.
 
 
 ## 0.17
