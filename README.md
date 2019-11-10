@@ -46,7 +46,7 @@ Addons
 ------
 
 - [SwingX](flatlaf-swingx)
-- [JIDE Common Layer](https://github.com/jidesoft/jide-oss)
+- [JIDE Common Layer](flatlaf-jide-oss)
 
 
 Documentation
