@@ -18,4 +18,20 @@ and create a pull request.
 Download
 --------
 
-Not yet available.
+FlatLaf for JIDE Common Layer binaries are available on **JCenter** and **Maven
+Central**.
+
+If you use Maven or Gradle, add a dependency with following coordinates to your
+build script:
+
+    groupId:     com.formdev
+    artifactId:  flatlaf-jide-oss
+    version:     0.18
+
+Otherwise download `flatlaf-jide-oss-<version>.jar` here:
+
+[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-jide-oss/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-jide-oss/_latestVersion)
+
+You also need `flatlaf-<version>.jar`, which you can download here:
+
+[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)

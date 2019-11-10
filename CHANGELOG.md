@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.18
 
 - TextField and TextArea: Do not apply minimum width if `columns` property is
   greater than zero.

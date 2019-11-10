@@ -35,7 +35,7 @@ build script:
 
     groupId:     com.formdev
     artifactId:  flatlaf
-    version:     0.17
+    version:     0.18
 
 Otherwise download `flatlaf-<version>.jar` here:
 
@@ -46,6 +46,7 @@ Addons
 ------
 
 - [SwingX](flatlaf-swingx)
+- [JIDE Common Layer](https://github.com/jidesoft/jide-oss)
 
 
 Documentation
