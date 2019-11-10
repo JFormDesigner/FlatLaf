@@ -30,10 +30,26 @@ import com.formdev.flatlaf.util.SystemInfo;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicPasswordFieldUI -->
  *
- * @uiDefault Component.focusWidth				int
- * @uiDefault Component.minimumWidth			int
+ * @uiDefault PasswordField.font					Font
+ * @uiDefault PasswordField.background				Color
+ * @uiDefault PasswordField.foreground				Color	also used if not editable
+ * @uiDefault PasswordField.caretForeground			Color
+ * @uiDefault PasswordField.selectionBackground		Color
+ * @uiDefault PasswordField.selectionForeground		Color
+ * @uiDefault PasswordField.disabledBackground		Color	used if not enabled
+ * @uiDefault PasswordField.inactiveBackground		Color	used if not editable
+ * @uiDefault PasswordField.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault PasswordField.border					Border
+ * @uiDefault PasswordField.margin					Insets
+ * @uiDefault PasswordField.echoChar				character
+ * @uiDefault PasswordField.caretBlinkRate			int		default is 500 milliseconds
+ *
+ * <!-- FlatPasswordFieldUI -->
+ *
+ * @uiDefault Component.focusWidth					int
+ * @uiDefault Component.minimumWidth				int
  *
  * @author Karl Tauber
  */

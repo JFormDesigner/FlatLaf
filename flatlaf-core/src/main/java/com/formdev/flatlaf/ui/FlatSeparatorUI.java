@@ -30,8 +30,13 @@ import javax.swing.plaf.basic.BasicSeparatorUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSeparator}.
  *
+ * <!-- BasicSeparatorUI -->
+ *
  * @uiDefault Separator.background		Color	unused
  * @uiDefault Separator.foreground		Color
+ *
+ * <!-- FlatSeparatorUI -->
+ *
  * @uiDefault Separator.height			int		height (or width) of the component; may be larger than stripe
  * @uiDefault Separator.stripeWidth		int		width of the stripe
  * @uiDefault Separator.stripeIndent	int		indent of stripe from top (or left); allows positioning of stripe within component

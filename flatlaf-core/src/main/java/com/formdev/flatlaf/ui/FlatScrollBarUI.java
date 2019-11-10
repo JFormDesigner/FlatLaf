@@ -32,6 +32,8 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollBar}.
  *
+ * <!-- BasicScrollBarUI -->
+ *
  * @uiDefault ScrollBar.background			Color
  * @uiDefault ScrollBar.foreground			Color
  * @uiDefault ScrollBar.track				Color
@@ -39,8 +41,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ScrollBar.hoverTrackColor		Color
  * @uiDefault ScrollBar.hoverThumbColor		Color
  * @uiDefault ScrollBar.width				int
- * @uiDefault ScrollBar.minimumThumbSize	Insets
- * @uiDefault ScrollBar.maximumThumbSize	Insets
+ * @uiDefault ScrollBar.minimumThumbSize	Dimension
+ * @uiDefault ScrollBar.maximumThumbSize	Dimension
  * @uiDefault ScrollBar.allowsAbsolutePositioning	boolean
  *
  * @author Karl Tauber

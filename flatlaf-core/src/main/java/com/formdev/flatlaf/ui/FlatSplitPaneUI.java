@@ -31,14 +31,19 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSplitPane}.
  *
- * @uiDefault Component.arrowType						String	triangle (default) or chevron
+ * <!-- BasicSplitPaneUI -->
+ *
  * @uiDefault SplitPane.background						Color
  * @uiDefault SplitPane.foreground						Color unused
  * @uiDefault SplitPane.dividerSize						int
- * @uiDefault SplitPane.continuousLayout				boolean
  * @uiDefault SplitPane.border							Border
  * @uiDefault SplitPaneDivider.border					Border
  * @uiDefault SplitPaneDivider.draggingColor			Color	only used if continuousLayout is false
+ *
+ * <!-- FlatSplitPaneUI -->
+ *
+ * @uiDefault Component.arrowType						String	triangle (default) or chevron
+ * @uiDefault SplitPane.continuousLayout				boolean
  * @uiDefault SplitPaneDivider.oneTouchArrowColor		Color
  * @uiDefault SplitPaneDivider.oneTouchHoverArrowColor	Color
  *

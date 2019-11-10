@@ -35,7 +35,22 @@ import javax.swing.text.JTextComponent;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicTextFieldUI -->
+ *
+ * @uiDefault TextField.font					Font
+ * @uiDefault TextField.background				Color
+ * @uiDefault TextField.foreground				Color	also used if not editable
+ * @uiDefault TextField.caretForeground			Color
+ * @uiDefault TextField.selectionBackground		Color
+ * @uiDefault TextField.selectionForeground		Color
+ * @uiDefault TextField.disabledBackground		Color	used if not enabled
+ * @uiDefault TextField.inactiveBackground		Color	used if not editable
+ * @uiDefault TextField.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault TextField.border					Border
+ * @uiDefault TextField.margin					Insets
+ * @uiDefault TextField.caretBlinkRate			int		default is 500 milliseconds
+ *
+ * <!-- FlatTextFieldUI -->
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.minimumWidth			int

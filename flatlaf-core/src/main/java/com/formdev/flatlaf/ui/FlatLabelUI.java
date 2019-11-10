@@ -33,10 +33,15 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JLabel}.
  *
+ * <!-- BasicLabelUI -->
+ *
+ * @uiDefault Label.font				Font
  * @uiDefault Label.background			Color	only used if opaque
  * @uiDefault Label.foreground			Color
+ *
+ * <!-- FlatLabelUI -->
+ *
  * @uiDefault Label.disabledForeground	Color
- * @uiDefault Label.font				Font
  *
  * @author Karl Tauber
  */

@@ -26,17 +26,31 @@ import javax.swing.plaf.ComponentUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToggleButton}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicButtonUI -->
+ *
+ * @uiDefault ToggleButton.font							Font
+ * @uiDefault ToggleButton.background					Color
+ * @uiDefault ToggleButton.foreground					Color
+ * @uiDefault ToggleButton.border						Border
+ * @uiDefault ToggleButton.margin						Insets
+ * @uiDefault ToggleButton.rollover						boolean
+ *
+ * <!-- FlatButtonUI -->
  *
  * @uiDefault Component.focusWidth						int
  * @uiDefault ToggleButton.arc							int
+ * @uiDefault ToggleButton.minimumWidth					int
+ * @uiDefault ToggleButton.iconTextGap					int
  * @uiDefault ToggleButton.pressedBackground			Color
  * @uiDefault ToggleButton.disabledText					Color
+ * @uiDefault ToggleButton.toolbar.hoverBackground		Color
+ * @uiDefault ToggleButton.toolbar.pressedBackground	Color
+ *
+ * <!-- FlatToggleButtonUI -->
+ *
  * @uiDefault ToggleButton.selectedBackground			Color
  * @uiDefault ToggleButton.selectedForeground			Color
  * @uiDefault ToggleButton.disabledSelectedBackground	Color
- * @uiDefault ToggleButton.toolbar.hoverBackground		Color
- * @uiDefault ToggleButton.toolbar.pressedBackground	Color
  * @uiDefault ToggleButton.toolbar.selectedBackground	Color
  *
  *

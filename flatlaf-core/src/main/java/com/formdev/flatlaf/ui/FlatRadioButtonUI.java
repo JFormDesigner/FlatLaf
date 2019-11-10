@@ -30,10 +30,20 @@ import javax.swing.plaf.basic.BasicRadioButtonUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JRadioButton}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicRadioButtonUI -->
  *
- * @uiDefault Button.iconTextGap				int
- * @uiDefault Button.disabledText				Color
+ * @uiDefault RadioButton.font						Font
+ * @uiDefault RadioButton.background				Color
+ * @uiDefault RadioButton.foreground				Color
+ * @uiDefault RadioButton.border					Border
+ * @uiDefault RadioButton.margin					Insets
+ * @uiDefault RadioButton.rollover					boolean
+ * @uiDefault RadioButton.icon						Icon
+ *
+ * <!-- FlatRadioButtonUI -->
+ *
+ * @uiDefault RadioButton.iconTextGap				int
+ * @uiDefault RadioButton.disabledText				Color
  *
  * @author Karl Tauber
  */

@@ -36,7 +36,13 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.table.JTableHeader}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicTableHeaderUI -->
+ *
+ * @uiDefault TableHeader.font					Font
+ * @uiDefault TableHeader.background			Color
+ * @uiDefault TableHeader.foreground			Color
+ *
+ * <!-- FlatTableHeaderUI -->
  *
  * @uiDefault TableHeader.separatorColor		Color
  * @uiDefault TableHeader.bottomSeparatorColor	Color

@@ -35,6 +35,14 @@ import javax.swing.plaf.basic.BasicScrollPaneUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollPane}.
  *
+ * <!-- BasicScrollPaneUI -->
+ *
+ * @uiDefault ScrollPane.font				Font	unused
+ * @uiDefault ScrollPane.background			Color
+ * @uiDefault ScrollPane.foreground			Color	unused
+ * @uiDefault ScrollPane.border				Border
+ * @uiDefault ScrollPane.viewportBorder		Border
+ *
  * @author Karl Tauber
  */
 public class FlatScrollPaneUI

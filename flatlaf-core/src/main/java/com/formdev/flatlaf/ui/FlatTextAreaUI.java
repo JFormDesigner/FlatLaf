@@ -31,11 +31,24 @@ import javax.swing.text.JTextComponent;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextArea}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicTextAreaUI -->
+ *
+ * @uiDefault TextArea.font						Font
+ * @uiDefault TextArea.background				Color
+ * @uiDefault TextArea.foreground				Color	also used if not editable
+ * @uiDefault TextArea.caretForeground			Color
+ * @uiDefault TextArea.selectionBackground		Color
+ * @uiDefault TextArea.selectionForeground		Color
+ * @uiDefault TextArea.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault TextArea.border					Border
+ * @uiDefault TextArea.margin					Insets
+ * @uiDefault TextArea.caretBlinkRate			int		default is 500 milliseconds
+ *
+ * <!-- FlatTextAreaUI -->
  *
  * @uiDefault Component.minimumWidth			int
- * @uiDefault TextArea.disabledBackground		Color
- * @uiDefault TextArea.inactiveBackground		Color
+ * @uiDefault TextArea.disabledBackground		Color	used if not enabled
+ * @uiDefault TextArea.inactiveBackground		Color	used if not editable
  *
  * @author Karl Tauber
  */

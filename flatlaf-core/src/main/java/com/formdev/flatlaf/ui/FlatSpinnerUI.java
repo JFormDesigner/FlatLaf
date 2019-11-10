@@ -44,7 +44,17 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicSpinnerUI -->
+ *
+ * @uiDefault Spinner.font						Font
+ * @uiDefault Spinner.background				Color
+ * @uiDefault Spinner.foreground				Color
+ * @uiDefault Spinner.border					Border
+ * @uiDefault Spinner.disableOnBoundaryValues	boolean	default is false
+ * @uiDefault Spinner.editorAlignment			int		0=center, 2=left, 4=right, 10=leading, 11=trailing
+ * @uiDefault Spinner.editorBorderPainted		boolean	paint inner editor border; defaults to false
+ *
+ * <!-- FlatSpinnerUI -->
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.arc						int

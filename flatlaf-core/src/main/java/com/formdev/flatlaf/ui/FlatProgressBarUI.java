@@ -31,6 +31,19 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JProgressBar}.
  *
+ * <!-- BasicProgressBarUI -->
+ *
+ * @uiDefault ProgressBar.font						Font
+ * @uiDefault ProgressBar.background				Color
+ * @uiDefault ProgressBar.foreground				Color
+ * @uiDefault ProgressBar.selectionBackground		Color
+ * @uiDefault ProgressBar.selectionForeground		Color
+ * @uiDefault ProgressBar.border					Border
+ * @uiDefault ProgressBar.horizontalSize			Dimension	default is 146,12
+ * @uiDefault ProgressBar.verticalSize				Dimension	default is 12,146
+ * @uiDefault ProgressBar.repaintInterval			int		default is 50 milliseconds
+ * @uiDefault ProgressBar.cycleTime					int		default is 3000 milliseconds
+ *
  * @author Karl Tauber
  */
 public class FlatProgressBarUI

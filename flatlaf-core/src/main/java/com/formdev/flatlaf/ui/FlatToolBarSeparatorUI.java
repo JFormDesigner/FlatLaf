@@ -33,6 +33,8 @@ import javax.swing.plaf.basic.BasicToolBarSeparatorUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar.Separator}.
  *
+ * <!-- FlatToolBarSeparatorUI -->
+ *
  * @uiDefault ToolBar.separatorWidth				int
  * @uiDefault ToolBar.separatorColor				Color
  *

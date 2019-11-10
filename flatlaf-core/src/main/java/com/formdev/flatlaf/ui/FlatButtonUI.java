@@ -43,7 +43,16 @@ import com.formdev.flatlaf.FlatLaf;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JButton}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicButtonUI -->
+ *
+ * @uiDefault Button.font						Font
+ * @uiDefault Button.background					Color
+ * @uiDefault Button.foreground					Color
+ * @uiDefault Button.border						Border
+ * @uiDefault Button.margin						Insets
+ * @uiDefault Button.rollover					boolean
+ *
+ * <!-- FlatButtonUI -->
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Button.arc						int

@@ -56,7 +56,16 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JComboBox}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicComboBoxUI -->
+ *
+ * @uiDefault ComboBox.font						Font
+ * @uiDefault ComboBox.background				Color
+ * @uiDefault ComboBox.foreground				Color
+ * @uiDefault ComboBox.border					Border
+ * @uiDefault ComboBox.padding					Insets
+ * @uiDefault ComboBox.squareButton				boolean	default is true
+ *
+ * <!-- FlatComboBoxUI -->
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.arc						int

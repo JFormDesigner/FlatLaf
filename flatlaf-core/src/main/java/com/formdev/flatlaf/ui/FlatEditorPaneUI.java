@@ -27,7 +27,22 @@ import javax.swing.plaf.basic.BasicEditorPaneUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JEditorPane}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicEditorPaneUI -->
+ *
+ * @uiDefault EditorPane.font					Font
+ * @uiDefault EditorPane.background				Color	also used if not editable
+ * @uiDefault EditorPane.foreground				Color
+ * @uiDefault EditorPane.caretForeground		Color
+ * @uiDefault EditorPane.selectionBackground	Color
+ * @uiDefault EditorPane.selectionForeground	Color
+ * @uiDefault EditorPane.disabledBackground		Color	used if not enabled
+ * @uiDefault EditorPane.inactiveBackground		Color	used if not editable
+ * @uiDefault EditorPane.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault EditorPane.border					Border
+ * @uiDefault EditorPane.margin					Insets
+ * @uiDefault EditorPane.caretBlinkRate			int		default is 500 milliseconds
+ *
+ * <!-- FlatEditorPaneUI -->
  *
  * @uiDefault Component.minimumWidth			int
  *

@@ -26,6 +26,11 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JColorChooser}.
  *
+ * <!-- BasicColorChooserUI -->
+ *
+ * @uiDefault ColorChooser.font							Font
+ * @uiDefault ColorChooser.background					Color
+ * @uiDefault ColorChooser.foreground					Color
  * @uiDefault ColorChooser.showPreviewPanelText			boolean
  * @uiDefault ColorChooser.swatchesSwatchSize			Dimension
  * @uiDefault ColorChooser.swatchesRecentSwatchSize		Dimension

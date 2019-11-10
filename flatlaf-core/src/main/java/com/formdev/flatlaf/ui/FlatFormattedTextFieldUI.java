@@ -22,6 +22,26 @@ import javax.swing.plaf.ComponentUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JFormattedTextField}.
  *
+ * <!-- BasicTextFieldUI -->
+ *
+ * @uiDefault FormattedTextField.font					Font
+ * @uiDefault FormattedTextField.background				Color
+ * @uiDefault FormattedTextField.foreground				Color	also used if not editable
+ * @uiDefault FormattedTextField.caretForeground		Color
+ * @uiDefault FormattedTextField.selectionBackground	Color
+ * @uiDefault FormattedTextField.selectionForeground	Color
+ * @uiDefault FormattedTextField.disabledBackground		Color	used if not enabled
+ * @uiDefault FormattedTextField.inactiveBackground		Color	used if not editable
+ * @uiDefault FormattedTextField.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault FormattedTextField.border					Border
+ * @uiDefault FormattedTextField.margin					Insets
+ * @uiDefault FormattedTextField.caretBlinkRate			int		default is 500 milliseconds
+ *
+ * <!-- FlatTextFieldUI -->
+ *
+ * @uiDefault Component.focusWidth				int
+ * @uiDefault Component.minimumWidth			int
+ *
  * @author Karl Tauber
  */
 public class FlatFormattedTextFieldUI

@@ -27,6 +27,12 @@ import javax.swing.plaf.basic.BasicViewportUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JViewport}.
  *
+ * <!-- BasicViewportUI -->
+ *
+ * @uiDefault Viewport.font					Font	unused
+ * @uiDefault Viewport.background			Color
+ * @uiDefault Viewport.foreground			Color	unused
+ *
  * @author Karl Tauber
  */
 public class FlatViewportUI

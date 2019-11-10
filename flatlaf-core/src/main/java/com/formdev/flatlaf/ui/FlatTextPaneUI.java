@@ -27,7 +27,22 @@ import javax.swing.plaf.basic.BasicTextPaneUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextPane}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicTextPaneUI -->
+ *
+ * @uiDefault TextPane.font						Font
+ * @uiDefault TextPane.background				Color
+ * @uiDefault TextPane.foreground				Color	also used if not editable
+ * @uiDefault TextPane.caretForeground			Color
+ * @uiDefault TextPane.selectionBackground		Color
+ * @uiDefault TextPane.selectionForeground		Color
+ * @uiDefault TextPane.disabledBackground		Color	used if not enabled
+ * @uiDefault TextPane.inactiveBackground		Color	used if not editable
+ * @uiDefault TextPane.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault TextPane.border					Border
+ * @uiDefault TextPane.margin					Insets
+ * @uiDefault TextPane.caretBlinkRate			int		default is 500 milliseconds
+ *
+ * <!-- FlatTextPaneUI -->
  *
  * @uiDefault Component.minimumWidth			int
  *

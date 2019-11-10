@@ -32,6 +32,16 @@ import com.formdev.flatlaf.FlatLaf;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolTip}.
  *
+ * <!-- BasicToolTipUI -->
+ *
+ * @uiDefault ToolTip.font						Font
+ * @uiDefault ToolTip.background				Color
+ * @uiDefault ToolTip.foreground				Color
+ * @uiDefault ToolTip.backgroundInactive		Color
+ * @uiDefault ToolTip.foregroundInactive		Color
+ * @uiDefault ToolTip.border					Border
+ * @uiDefault ToolTip.borderInactive			Border
+ *
  * @author Karl Tauber
  */
 public class FlatToolTipUI

@@ -25,6 +25,26 @@ import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JCheckBoxMenuItem}.
  *
+ * <!-- BasicCheckBoxMenuItemUI -->
+ *
+ * @uiDefault CheckBoxMenuItem.font								Font
+ * @uiDefault CheckBoxMenuItem.background						Color
+ * @uiDefault CheckBoxMenuItem.foreground						Color
+ * @uiDefault CheckBoxMenuItem.disabledForeground				Color
+ * @uiDefault CheckBoxMenuItem.selectionBackground				Color
+ * @uiDefault CheckBoxMenuItem.selectionForeground				Color
+ * @uiDefault CheckBoxMenuItem.acceleratorForeground			Color
+ * @uiDefault CheckBoxMenuItem.acceleratorSelectionForeground	Color
+ * @uiDefault MenuItem.acceleratorFont							Font		defaults to MenuItem.font
+ * @uiDefault MenuItem.acceleratorDelimiter						String
+ * @uiDefault CheckBoxMenuItem.border							Border
+ * @uiDefault CheckBoxMenuItem.borderPainted					boolean
+ * @uiDefault CheckBoxMenuItem.margin							Insets
+ * @uiDefault CheckBoxMenuItem.arrowIcon						Icon
+ * @uiDefault CheckBoxMenuItem.checkIcon						Icon
+ * @uiDefault CheckBoxMenuItem.opaque							boolean
+ * @uiDefault CheckBoxMenuItem.evenHeight						boolean
+ *
  * @author Karl Tauber
  */
 public class FlatCheckBoxMenuItemUI
