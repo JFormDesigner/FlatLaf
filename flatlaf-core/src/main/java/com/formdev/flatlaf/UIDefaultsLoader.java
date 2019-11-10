@@ -200,7 +200,9 @@ class UIDefaultsLoader
 
 		// determine value type from key
 		if( valueType == ValueType.UNKNOWN ) {
-			if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
+			if( key.endsWith( "ground" ) || key.endsWith( "Color" ) )
+				valueType = ValueType.COLOR;
+			else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
 				valueType = ValueType.BORDER;
 			else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
 				valueType = ValueType.ICON;
@@ -211,6 +213,8 @@ class UIDefaultsLoader
 				valueType = ValueType.SIZE;
 			else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
 				valueType = ValueType.INTEGER;
+			else if( key.endsWith( "UI" ) )
+				valueType = ValueType.STRING;
 		}
 
 		// parse value
@@ -297,12 +301,19 @@ class UIDefaultsLoader
 		if( value.endsWith( ")" ) )
 			return parseColorFunctions( value, reportError );
 
+		if( value.startsWith( "#" ) )
+			value = value.substring( 1 );
+
+		int valueLength = value.length();
+		if( valueLength != 6 && valueLength != 8 )
+			return null;
+
 		try {
-			int rgb = Integer.parseInt( value, 16 );
-			if( value.length() == 6 )
-				return new ColorUIResource( rgb );
-			if( value.length() == 8 )
-				return new ColorUIResource( new Color( rgb, true ) );
+			long rgb = Long.parseLong( value, 16 );
+			if( valueLength == 6 )
+				return new ColorUIResource( (int) rgb );
+			if( valueLength == 8 )
+				return new ColorUIResource( new Color( (int) (((rgb >> 8) & 0xffffff) | ((rgb & 0xff) << 24)), true ) );
 
 			if( reportError )
 				throw new NumberFormatException( value );
