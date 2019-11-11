@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,9 +24,11 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.UIDefaults;
+import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.json.Json;
 import com.formdev.flatlaf.json.ParseException;
 
@@ -41,6 +44,8 @@ public class IntelliJTheme
 	private final Map<String, String> colors;
 	private final Map<String, Object> ui;
 	private final Map<String, Object> icons;
+
+	private Map<String, Color> namedColors = Collections.emptyMap();
 
 	public static boolean install( InputStream in )
 		throws IOException, ParseException
@@ -86,62 +91,69 @@ public class IntelliJTheme
 	}
 
 	private void applyProperties( UIDefaults defaults ) {
-		Map<String, String> properties = convertToProperties();
-		applyProperties( properties, defaults );
+		if( ui == null )
+			return;
+
+		loadColorPalette( defaults );
+
+		// convert Json "ui" structure to UI defaults
+		ArrayList<Object> defaultsKeysCache = new ArrayList<>();
+		for( Map.Entry<String, Object> e : ui.entrySet() )
+			apply( e.getKey(), e.getValue(), defaults, defaultsKeysCache );
 	}
 
-	private static void applyProperties( Map<String, String> properties, UIDefaults defaults ) {
-		// globals
-		ArrayList<Object> keys = Collections.list( defaults.keys() );
-		for( Map.Entry<String, String> e : properties.entrySet() ) {
-			String key = e.getKey();
-			if( !key.startsWith( "*." ) )
-				continue;
+	private void loadColorPalette( UIDefaults defaults ) {
+		if( colors == null )
+			return;
 
-			String tail = key.substring( 1 );
-			Object uiValue = UIDefaultsLoader.parseValue( key, e.getValue() );
-			for( Object k : keys ) {
-				if( k instanceof String && ((String)k).endsWith( tail ) )
-					defaults.put( k, uiValue );
+		namedColors = new HashMap<>();
+
+		for( Map.Entry<String, String> e : colors.entrySet() ) {
+			String value = e.getValue();
+			ColorUIResource color = UIDefaultsLoader.parseColor( value );
+			if( color != null ) {
+				String key = e.getKey();
+				namedColors.put( key, color );
+				defaults.put( "ColorPalette." + e.getKey(), color );
 			}
 		}
-
-		// non-globals
-		for( Map.Entry<String, String> e : properties.entrySet() ) {
-			String key = e.getKey();
-			if( key.startsWith( "*." ) )
-				continue;
-
-			Object uiValue = UIDefaultsLoader.parseValue( key, e.getValue() );
-			defaults.put( key, uiValue );
-		}
-	}
-
-	private Map<String, String> convertToProperties() {
-		Map<String, String> properties = new LinkedHashMap<>();
-		if( ui == null )
-			return properties;
-
-		// convert json structure to properties map
-		for( Map.Entry<String, Object> e : ui.entrySet() )
-			addToProperties( e.getKey(), e.getValue(), properties );
-
-		return properties;
 	}
 
 	@SuppressWarnings( "unchecked" )
-	private void addToProperties( String key, Object value, Map<String, String> properties ) {
+	private void apply( String key, Object value, UIDefaults defaults, ArrayList<Object> defaultsKeysCache ) {
 		if( value instanceof Map ) {
 			for( Map.Entry<String, Object> e : ((Map<String, Object>)value).entrySet() )
-				addToProperties( key + '.' + e.getKey(), e.getValue(), properties );
+				apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache );
 		} else {
 			String valueStr = value.toString();
 
-			// map colors
-			if( colors != null )
-				valueStr = colors.getOrDefault( valueStr, valueStr );
+			// map named colors
+			Object uiValue = namedColors.get( valueStr );
 
-			properties.put( key, valueStr );
+			// parse value
+			if( uiValue == null )
+				uiValue = UIDefaultsLoader.parseValue( key, valueStr );
+
+			if( key.startsWith( "*." ) ) {
+				// wildcard
+				String tail = key.substring( 1 );
+
+				// because we can not iterate over the UI defaults keys while
+				// modifying UI defaults in the same loop, we have to copy the keys
+				if( defaultsKeysCache.size() != defaults.size() ) {
+					defaultsKeysCache.clear();
+					Enumeration<Object> e = defaults.keys();
+					while( e.hasMoreElements() )
+						defaultsKeysCache.add( e.nextElement() );
+				}
+
+				// replace all values in UI defaults that match the wildcard key
+				for( Object k : defaultsKeysCache ) {
+					if( k instanceof String && ((String)k).endsWith( tail ) )
+						defaults.put( k, uiValue );
+				}
+			} else
+				defaults.put( key, uiValue );
 		}
 	}
 

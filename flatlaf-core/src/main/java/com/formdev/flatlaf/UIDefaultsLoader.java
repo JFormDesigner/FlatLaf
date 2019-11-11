@@ -229,12 +229,12 @@ class UIDefaultsLoader
 			case ICON:			return parseInstance( value );
 			case INSETS:		return parseInsets( value );
 			case SIZE:			return parseSize( value );
-			case COLOR:			return parseColor( value, true );
+			case COLOR:			return parseColorOrFunction( value, true );
 			case SCALEDNUMBER:	return parseScaledNumber( value );
 			case UNKNOWN:
 			default:
 				// colors
-				ColorUIResource color = parseColor( value, false );
+				ColorUIResource color = parseColorOrFunction( value, false );
 				if( color != null )
 					return color;
 
@@ -254,7 +254,7 @@ class UIDefaultsLoader
 			List<String> parts = split( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() == 5)
-				? parseColor( resolver.apply( parts.get( 4 ) ), true )
+				? parseColorOrFunction( resolver.apply( parts.get( 4 ) ), true )
 				: null;
 
 			return (LazyValue) t -> {
@@ -301,10 +301,18 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static ColorUIResource parseColor( String value, boolean reportError ) {
+	private static ColorUIResource parseColorOrFunction( String value, boolean reportError ) {
 		if( value.endsWith( ")" ) )
 			return parseColorFunctions( value, reportError );
 
+		return parseColor( value, reportError );
+	}
+
+	static ColorUIResource parseColor( String value ) {
+		return parseColor( value, false );
+	}
+
+	private static ColorUIResource parseColor( String value, boolean reportError ) {
 		if( value.startsWith( "#" ) )
 			value = value.substring( 1 );
 
