@@ -94,15 +94,20 @@ public class IntelliJTheme
 		if( ui == null )
 			return;
 
-		loadColorPalette( defaults );
+		loadNamedColors( defaults );
 
 		// convert Json "ui" structure to UI defaults
 		ArrayList<Object> defaultsKeysCache = new ArrayList<>();
 		for( Map.Entry<String, Object> e : ui.entrySet() )
 			apply( e.getKey(), e.getValue(), defaults, defaultsKeysCache );
+
+		applyCheckBoxColors( defaults );
 	}
 
-	private void loadColorPalette( UIDefaults defaults ) {
+	/**
+	 * http://www.jetbrains.org/intellij/sdk/docs/reference_guide/ui_themes/themes_customize.html#defining-named-colors
+	 */
+	private void loadNamedColors( UIDefaults defaults ) {
 		if( colors == null )
 			return;
 
@@ -119,12 +124,21 @@ public class IntelliJTheme
 		}
 	}
 
+	/**
+	 * http://www.jetbrains.org/intellij/sdk/docs/reference_guide/ui_themes/themes_customize.html#custom-ui-control-colors
+	 */
 	@SuppressWarnings( "unchecked" )
 	private void apply( String key, Object value, UIDefaults defaults, ArrayList<Object> defaultsKeysCache ) {
 		if( value instanceof Map ) {
 			for( Map.Entry<String, Object> e : ((Map<String, Object>)value).entrySet() )
 				apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache );
 		} else {
+			// Darcula buttons support gradient for background and border, but FlatLaf does not
+			if( key.endsWith( ".startBackground" ) || key.endsWith( ".startBorderColor" ) )
+				key = key.replace( ".startB", ".b" );
+			else if( key.endsWith( ".endBackground" ) || key.endsWith( ".endBorderColor" ) )
+				return; // ignore
+
 			String valueStr = value.toString();
 
 			// map named colors
@@ -155,6 +169,68 @@ public class IntelliJTheme
 			} else
 				defaults.put( key, uiValue );
 		}
+	}
+
+	/**
+	 * Because Darcula uses SVGs for check boxes and radio buttons the colors for
+	 * this two components are specified in "icons > ColorPalette".
+	 * FlatLaf uses vector icons and expects colors for the two components in UI defaults.
+	 */
+	private void applyCheckBoxColors( UIDefaults defaults ) {
+		if( icons == null )
+			return;
+
+		Object palette = icons.get( "ColorPalette" );
+		if( !(palette instanceof Map) )
+			return;
+
+		boolean checkboxModified = false;
+		@SuppressWarnings( "unchecked" )
+		Map<String, Object> map = (Map<String, Object>) palette;
+		for( Map.Entry<String, Object> e : map.entrySet() ) {
+			String key = e.getKey();
+			Object value = e.getValue();
+			if( !key.startsWith( "Checkbox." ) || !(value instanceof String) )
+				continue;
+
+			if( key.endsWith( ".Dark" ) )
+				key = key.substring( 0, key.length() - 5 );
+
+			String newKey = checkboxKeyMapping.get( key );
+			if( newKey != null ) {
+				ColorUIResource color = UIDefaultsLoader.parseColor( (String) value );
+				if( color != null )
+					defaults.put( newKey, color );
+
+				checkboxModified = true;
+			}
+		}
+
+		// removed colors that Darcula does not provide
+		if( checkboxModified ) {
+			defaults.remove( "CheckBox.icon.hoverBorderColor" );
+			defaults.remove( "CheckBox.icon.focusedBackground" );
+			defaults.remove( "CheckBox.icon.hoverBackground" );
+			defaults.remove( "CheckBox.icon.pressedBackground" );
+			defaults.remove( "CheckBox.icon.selectedHoverBackground" );
+			defaults.remove( "CheckBox.icon.selectedPressedBackground" );
+		}
+	}
+
+	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
+
+	static {
+		checkboxKeyMapping.put( "Checkbox.Background.Default", "CheckBox.icon.background" );
+		checkboxKeyMapping.put( "Checkbox.Background.Disabled", "CheckBox.icon.disabledBackground" );
+		checkboxKeyMapping.put( "Checkbox.Border.Default", "CheckBox.icon.borderColor" );
+		checkboxKeyMapping.put( "Checkbox.Border.Disabled", "CheckBox.icon.disabledBorderColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Default", "CheckBox.icon.focusedBorderColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Wide", "Button.default.focusColor" );
+		checkboxKeyMapping.put( "Checkbox.Foreground.Disabled", "CheckBox.icon.disabledCheckmarkColor" );
+		checkboxKeyMapping.put( "Checkbox.Background.Selected", "CheckBox.icon.selectedBackground" );
+		checkboxKeyMapping.put( "Checkbox.Border.Selected", "CheckBox.icon.selectedBorderColor" );
+		checkboxKeyMapping.put( "Checkbox.Foreground.Selected", "CheckBox.icon.checkmarkColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.selectedFocusedBorderColor" );
 	}
 
 	//---- class LightLaf -----------------------------------------------------
