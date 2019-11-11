@@ -170,6 +170,10 @@ class UIDefaultsLoader
 
 	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDNUMBER }
 
+	static Object parseValue( String key, String value ) {
+		return parseValue( key, value, v -> v );
+	}
+
 	private static Object parseValue( String key, String value, Function<String, String> resolver ) {
 		value = value.trim();
 
