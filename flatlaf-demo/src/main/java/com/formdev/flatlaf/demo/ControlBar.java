@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.*;
@@ -43,11 +44,11 @@ class ControlBar
 		initComponents();
 
 		// initialize look and feels combo box
-		DefaultComboBoxModel<LafInfo> lafModel = new DefaultComboBoxModel<>();
-		lafModel.addElement( new LafInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
+		DefaultComboBoxModel<LookAndFeelInfo> lafModel = new DefaultComboBoxModel<>();
+		lafModel.addElement( new LookAndFeelInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -66,19 +67,11 @@ class ControlBar
 			else if( className.equals( NimbusLookAndFeel.class.getName() ) )
 				name += " (F11)";
 
-			lafModel.addElement( new LafInfo( name, className ) );
+			lafModel.addElement( new LookAndFeelInfo( name, className ) );
 		}
-
-		LookAndFeel activeLaf = UIManager.getLookAndFeel();
-		String activeLafClassName = activeLaf.getClass().getName();
-		int sel = lafModel.getIndexOf( new LafInfo( null, activeLafClassName ) );
-		if( sel < 0 ) {
-			lafModel.addElement( new LafInfo( activeLaf.getName(), activeLafClassName ) );
-			sel = lafModel.getSize() - 1;
-		}
-		lafModel.setSelectedItem( lafModel.getElementAt( sel ) );
 
 		lookAndFeelComboBox.setModel( lafModel );
+		lookAndFeelComboBox.selectedLookAndFeel( UIManager.getLookAndFeel() );
 
 		UIManager.addPropertyChangeListener( e -> {
 			if( "lookAndFeel".equals( e.getPropertyName() ) ) {
@@ -161,26 +154,23 @@ class ControlBar
 	}
 
 	private void selectLookAndFeel( String lafClassName ) {
-		DefaultComboBoxModel<LafInfo> lafModel = (DefaultComboBoxModel<LafInfo>) lookAndFeelComboBox.getModel();
-		int sel = lafModel.getIndexOf( new LafInfo( null, lafClassName ) );
-		if( sel >= 0 )
-			lookAndFeelComboBox.setSelectedIndex( sel );
+		lookAndFeelComboBox.setSelectedLookAndFeel( lafClassName );
 	}
 
 	private void lookAndFeelChanged() {
-		LafInfo newLaf = (LafInfo) lookAndFeelComboBox.getSelectedItem();
-		if( newLaf == null )
+		String lafClassName = lookAndFeelComboBox.getSelectedLookAndFeel();
+		if( lafClassName == null )
 			return;
 
-		if( newLaf.className.equals( UIManager.getLookAndFeel().getClass().getName() ) )
+		if( lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 			return;
 
-		FlatLafDemo.prefs.put( FlatLafDemo.KEY_LAF, newLaf.className );
+		FlatLafDemo.prefs.put( FlatLafDemo.KEY_LAF, lafClassName );
 
 		EventQueue.invokeLater( () -> {
 			try {
 				// change look and feel
-				UIManager.setLookAndFeel( newLaf.className );
+				UIManager.setLookAndFeel( lafClassName );
 
 				// update all components
 				FlatLaf.updateUI();
@@ -250,7 +240,7 @@ class ControlBar
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		separator1 = new JSeparator();
-		lookAndFeelComboBox = new JComboBox<>();
+		lookAndFeelComboBox = new LookAndFeelsComboBox();
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
 		infoLabel = new JLabel();
@@ -300,33 +290,10 @@ class ControlBar
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JSeparator separator1;
-	private JComboBox<LafInfo> lookAndFeelComboBox;
+	private LookAndFeelsComboBox lookAndFeelComboBox;
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
 	private JLabel infoLabel;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
-
-	//---- class LafInfo ------------------------------------------------------
-
-	static class LafInfo
-	{
-		final String name;
-		final String className;
-
-		LafInfo( String name, String className ) {
-			this.name = name;
-			this.className = className;
-		}
-
-		@Override
-		public boolean equals( Object obj ) {
-			return obj instanceof LafInfo && className.equals( ((LafInfo)obj).className );
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
 }

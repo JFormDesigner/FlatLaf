@@ -26,6 +26,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -34,6 +35,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.TriStateCheckBox.State;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -93,12 +95,12 @@ public class FlatTestFrame
 		initComponents();
 
 		// initialize look and feels combo box
-		DefaultComboBoxModel<LafInfo> lafModel = new DefaultComboBoxModel<>();
-		lafModel.addElement( new LafInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Test (F8)", FlatTestLaf.class.getName() ) );
+		DefaultComboBoxModel<LookAndFeelInfo> lafModel = new DefaultComboBoxModel<>();
+		lafModel.addElement( new LookAndFeelInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat Test (F8)", FlatTestLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -117,19 +119,11 @@ public class FlatTestFrame
 			else if( className.equals( NimbusLookAndFeel.class.getName() ) )
 				name += " (F11)";
 
-			lafModel.addElement( new LafInfo( name, className ) );
+			lafModel.addElement( new LookAndFeelInfo( name, className ) );
 		}
-
-		LookAndFeel activeLaf = UIManager.getLookAndFeel();
-		String activeLafClassName = activeLaf.getClass().getName();
-		int sel = lafModel.getIndexOf( new LafInfo( null, activeLafClassName ) );
-		if( sel < 0 ) {
-			lafModel.addElement( new LafInfo( activeLaf.getName(), activeLafClassName ) );
-			sel = lafModel.getSize() - 1;
-		}
-		lafModel.setSelectedItem( lafModel.getElementAt( sel ) );
 
 		lookAndFeelComboBox.setModel( lafModel );
+		lookAndFeelComboBox.selectedLookAndFeel( UIManager.getLookAndFeel() );
 
 		updateScaleFactorComboBox();
 		String scaleFactor = System.getProperty( "flatlaf.uiScale", System.getProperty( "sun.java2d.uiScale" ) );
@@ -230,26 +224,23 @@ public class FlatTestFrame
 	}
 
 	private void selectLookAndFeel( String lafClassName ) {
-		DefaultComboBoxModel<LafInfo> lafModel = (DefaultComboBoxModel<LafInfo>) lookAndFeelComboBox.getModel();
-		int sel = lafModel.getIndexOf( new LafInfo( null, lafClassName ) );
-		if( sel >= 0 )
-			lookAndFeelComboBox.setSelectedIndex( sel );
+		lookAndFeelComboBox.setSelectedLookAndFeel( lafClassName );
 	}
 
 	private void lookAndFeelChanged() {
-		LafInfo newLaf = (LafInfo) lookAndFeelComboBox.getSelectedItem();
-		if( newLaf == null )
+		String lafClassName = lookAndFeelComboBox.getSelectedLookAndFeel();
+		if( lafClassName == null )
 			return;
 
-		if( newLaf.className.equals( UIManager.getLookAndFeel().getClass().getName() ) )
+		if( lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 			return;
 
 		// hide popup to avoid occasional StackOverflowError when updating UI
 		lookAndFeelComboBox.setPopupVisible( false );
 
-		Preferences.userRoot().node( PREFS_ROOT_PATH ).put( KEY_LAF, newLaf.className );
+		Preferences.userRoot().node( PREFS_ROOT_PATH ).put( KEY_LAF, lafClassName );
 
-		applyLookAndFeel( newLaf.className, false );
+		applyLookAndFeel( lafClassName, false );
 	}
 
 	private void applyLookAndFeel( String lafClassName, boolean pack ) {
@@ -442,7 +433,7 @@ public class FlatTestFrame
 		dialogPane = new JPanel();
 		contentPanel = new JRootPane();
 		buttonBar = new JPanel();
-		lookAndFeelComboBox = new JComboBox<>();
+		lookAndFeelComboBox = new LookAndFeelsComboBox();
 		scaleFactorComboBox = new JComboBox<>();
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
@@ -564,7 +555,7 @@ public class FlatTestFrame
 	private JPanel dialogPane;
 	private JRootPane contentPanel;
 	private JPanel buttonBar;
-	private JComboBox<LafInfo> lookAndFeelComboBox;
+	private LookAndFeelsComboBox lookAndFeelComboBox;
 	private JComboBox<String> scaleFactorComboBox;
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
@@ -574,27 +565,4 @@ public class FlatTestFrame
 	private TriStateCheckBox opaqueTriStateCheckBox;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
-
-	//---- class LafInfo ------------------------------------------------------
-
-	static class LafInfo
-	{
-		final String name;
-		final String className;
-
-		LafInfo( String name, String className ) {
-			this.name = name;
-			this.className = className;
-		}
-
-		@Override
-		public boolean equals( Object obj ) {
-			return obj instanceof LafInfo && className.equals( ((LafInfo)obj).className );
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
 }
