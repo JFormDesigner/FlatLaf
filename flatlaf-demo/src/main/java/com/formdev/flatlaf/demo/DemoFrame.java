@@ -19,6 +19,7 @@ package com.formdev.flatlaf.demo;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import com.formdev.flatlaf.demo.intellijthemes.*;
 import net.miginfocom.swing.*;
 
 /**
@@ -87,6 +88,7 @@ class DemoFrame
 		TabsPanel tabsPanel = new TabsPanel();
 		OptionPanePanel optionPanePanel = new OptionPanePanel();
 		controlBar = new ControlBar();
+		IJThemesPanel themesPanel = new IJThemesPanel();
 
 		//======== this ========
 		setTitle("FlatLaf Demo");
@@ -262,6 +264,7 @@ class DemoFrame
 		}
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPane.add(controlBar, BorderLayout.SOUTH);
+		contentPane.add(themesPanel, BorderLayout.EAST);
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();

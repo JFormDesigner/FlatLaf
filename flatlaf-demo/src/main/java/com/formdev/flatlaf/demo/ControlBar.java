@@ -71,7 +71,6 @@ class ControlBar
 		}
 
 		lookAndFeelComboBox.setModel( lafModel );
-		lookAndFeelComboBox.selectedLookAndFeel( UIManager.getLookAndFeel() );
 
 		UIManager.addPropertyChangeListener( e -> {
 			if( "lookAndFeel".equals( e.getPropertyName() ) ) {

@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Support using IntelliJ platform themes (.theme.json files).
+
+
 ## 0.18
 
 - TextField and TextArea: Do not apply minimum width if `columns` property is

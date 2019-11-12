@@ -1,0 +1,127 @@
+{
+  "name": "gruvbox-theme",
+  "dark": true,
+  "author": "Vincent Parizet",
+  "editorScheme": "/gruvbox_theme.xml",
+  "ui": {
+    "*": {
+      "background": "#282828",
+      "foreground": "#fbf1c7",
+
+      "infoForeground": "#ebdbb2",
+
+      "lightSelectionBackground": "#3c3836",
+      "selectionBackground": "#4F4945",
+      "selectionForeground": "#fbf1c7",
+
+      "selectionBackgroundInactive": "#3c3836",
+
+      "selectedBackground": "#1d2021",
+      "selectedForeground": "#fbf1c7",
+      "selectedInactiveBackground": "#3c3836",
+      "selectedBackgroundInactive": "#3c3836",
+
+      "hoverBackground": "#28282866",
+
+      "borderColor": "#3c3836",
+      "disabledBorderColor": "#1d2021",
+
+      "separatorColor": "#3c3836"
+    },
+    "ActionButton": {
+      "hoverBackground": "#504945"
+    },
+    "Button": {
+      "startBackground": "#282828",
+      "endBackground": "#282828",
+      "startBorderColor": "#504945",
+      "endBorderColor": "#504945",
+
+      "default": {
+        "foreground": "#fbf1c7",
+        "startBackground": "#32302F",
+        "endBackground": "#32302F",
+        "startBorderColor": "#4F4945",
+        "endBorderColor": "#4F4945",
+        "focusedBorderColor": "#282828"
+      }
+    },
+    "ComboBox": {
+      "nonEditableBackground": "#282828",
+      "ArrowButton": {
+        "iconColor": "#fbf1c7",
+        "disabledIconColor": "#fbf1c7",
+        "nonEditableBackground": "#282828"
+      }
+    },
+    "EditorTabs": {
+      "selectedBackground": "#3c3836",
+      "underlineColor": "#83a598",
+      "inactiveMaskColor": "#28282866"
+    },
+    "ToolWindow": {
+      "Header": {
+        "background": "#3c3836",
+        "inactiveBackground": "#282828"
+      },
+
+      "HeaderTab": {
+        "selectedInactiveBackground": "#1d2021",
+        "hoverInactiveBackground": "#1d2021"
+      }
+    },
+    "Table": {
+      "stripeColor": "#3c3836",
+      "lightSelectionForeground": "#fbf1c7",
+      "lightSelectionInactiveForeground":"#a89984",
+      "lightSelectionBackground": "#504945",
+      "lightSelectionInactiveBackground":"#282828"
+    },
+    "FileColor": {
+      "Yellow": "#fabd2f22",
+      "Green": "#b8bb2622",
+      "Blue": "#83a59822",
+      "Violet": "#d3869b22",
+      "Orange": "#fe801922",
+      "Rose": "#cc241d22"
+    },
+    "Link": {
+      "activeForeground": "#83a598",
+      "hoverForeground": "#83a598",
+      "pressedForeground": "#83a598",
+      "visitedForeground": "#83a598"
+    }
+  },
+  "icons": {
+    "ColorPalette": {
+      "Actions.Grey": "#928374",
+      "Actions.Red": "#fb4934",
+      "Actions.Yellow": "#fabd2f",
+      "Actions.Green": "#98971a",
+      "Actions.Blue": "#458588",
+      "Actions.GreyInline.Dark": "#fbf1c7",
+
+      "Objects.Grey": "#928374FF",
+      "Objects.RedStatus": "#fb4934FF",
+      "Objects.Red": "#fb4934FF",
+      "Objects.Pink": "#d3869bFF",
+      "Objects.Yellow": "#fabd2fFF",
+      "Objects.Green": "#98971aFF",
+      "Objects.Blue": "#458588FF",
+      "Objects.Purple": "#b16286FF",
+      "Objects.BlackText": "#000000FF",
+      "Objects.YellowDark": "#d79921FF",
+      "Objects.GreenAndroid": "#b8bb26FF",
+
+      "Checkbox.Background.Default.Dark": "#282828",
+      "Checkbox.Border.Default.Dark": "#fbf1c7",
+      "Checkbox.Foreground.Selected.Dark": "#fbf1c7",
+      "Checkbox.Focus.Wide.Dark": "#458588",
+      "Checkbox.Focus.Thin.Default.Dark": "#458588",
+      "Checkbox.Focus.Thin.Selected.Dark": "#458588",
+      "Checkbox.Background.Disabled.Dark": "#282828",
+      "Checkbox.Border.Disabled.Dark": "#a89984",
+      "Checkbox.Foreground.Disabled.Dark": "#a89984"
+    }
+  }
+}

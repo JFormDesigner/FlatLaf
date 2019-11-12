@@ -17,10 +17,11 @@
 package com.formdev.flatlaf.demo;
 
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
-import javax.swing.LookAndFeel;
 import javax.swing.MutableComboBoxModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -32,6 +33,8 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 public class LookAndFeelsComboBox
 	extends JComboBox<UIManager.LookAndFeelInfo>
 {
+	private final PropertyChangeListener lafListener = this::lafChanged;
+
 	@SuppressWarnings( "unchecked" )
 	public LookAndFeelsComboBox() {
 		setRenderer( new BasicComboBoxRenderer() {
@@ -40,7 +43,9 @@ public class LookAndFeelsComboBox
 			public Component getListCellRendererComponent( JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus )
 			{
-				value = ((LookAndFeelInfo)value).getName();
+				value = (value != null)
+					? ((LookAndFeelInfo)value).getName()
+					: UIManager.getLookAndFeel().getName();
 				return super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 			}
 		} );
@@ -56,19 +61,11 @@ public class LookAndFeelsComboBox
 	}
 
 	public void setSelectedLookAndFeel( String className ) {
-		int index = getIndexOfLookAndFeel( className );
-		if( index >= 0 )
-			setSelectedIndex( index );
+		setSelectedIndex( getIndexOfLookAndFeel( className ) );
 	}
 
-	public void selectedLookAndFeel( LookAndFeel lookAndFeel ) {
-		String className = lookAndFeel.getClass().getName();
-		int index = getIndexOfLookAndFeel( className );
-		if( index < 0 ) {
-			addLookAndFeel( lookAndFeel.getName(), className );
-			index = getItemCount() - 1;
-		}
-		setSelectedIndex( index );
+	public void selectedCurrentLookAndFeel() {
+		setSelectedLookAndFeel( UIManager.getLookAndFeel().getClass().getName() );
 	}
 
 	public void removeLookAndFeel( String className ) {
@@ -89,5 +86,25 @@ public class LookAndFeelsComboBox
 
 	private MutableComboBoxModel<LookAndFeelInfo> getMutableModel() {
 		return (MutableComboBoxModel<LookAndFeelInfo>) getModel();
+	}
+
+	@Override
+	public void addNotify() {
+		super.addNotify();
+
+		selectedCurrentLookAndFeel();
+		UIManager.addPropertyChangeListener( lafListener );
+	}
+
+	@Override
+	public void removeNotify() {
+		super.removeNotify();
+
+		UIManager.removePropertyChangeListener( lafListener );
+	}
+
+	void lafChanged( PropertyChangeEvent e ) {
+		if( "lookAndFeel".equals( e.getPropertyName() ) )
+			selectedCurrentLookAndFeel();
 	}
 }

@@ -113,12 +113,17 @@ new FormModel {
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "South"
 				} )
+				add( new FormComponent( "com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel" ) {
+					name: "themesPanel"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "East"
+				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 640, 300 )
+			"size": new java.awt.Dimension( 760, 300 )
 		} )
 	}
 }

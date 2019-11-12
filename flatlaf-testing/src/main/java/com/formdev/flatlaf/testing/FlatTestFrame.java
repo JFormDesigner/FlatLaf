@@ -36,6 +36,7 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
+import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.TriStateCheckBox.State;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -123,7 +124,6 @@ public class FlatTestFrame
 		}
 
 		lookAndFeelComboBox.setModel( lafModel );
-		lookAndFeelComboBox.selectedLookAndFeel( UIManager.getLookAndFeel() );
 
 		updateScaleFactorComboBox();
 		String scaleFactor = System.getProperty( "flatlaf.uiScale", System.getProperty( "sun.java2d.uiScale" ) );
@@ -442,6 +442,7 @@ public class FlatTestFrame
 		backgroundCheckBox = new JCheckBox();
 		opaqueTriStateCheckBox = new TriStateCheckBox();
 		closeButton = new JButton();
+		themesPanel = new IJThemesPanel();
 
 		//======== this ========
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -546,6 +547,7 @@ public class FlatTestFrame
 				buttonBar.add(closeButton, "cell 9 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
+			dialogPane.add(themesPanel, BorderLayout.EAST);
 		}
 		contentPane.add(dialogPane, BorderLayout.CENTER);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -564,5 +566,6 @@ public class FlatTestFrame
 	private JCheckBox backgroundCheckBox;
 	private TriStateCheckBox opaqueTriStateCheckBox;
 	private JButton closeButton;
+	private IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
