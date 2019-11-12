@@ -241,10 +241,6 @@ public abstract class FlatLaf
 		defaults.put( "MenuItem.acceleratorFont", uiFont );
 	}
 
-	public static List<String> split( String str, char delim ) {
-		return UIDefaultsLoader.split( str, delim );
-	}
-
 	private static void reSetLookAndFeel() {
 		EventQueue.invokeLater( () -> {
 			try {

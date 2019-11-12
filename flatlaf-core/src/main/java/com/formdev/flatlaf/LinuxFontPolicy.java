@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import javax.swing.text.StyleContext;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -151,7 +152,7 @@ class LinuxFontPolicy
 		int size = 10;
 
 		if( generalFont != null ) {
-			List<String> strs = FlatLaf.split( generalFont, ',' );
+			List<String> strs = StringUtils.split( generalFont, ',' );
 			try {
 				family = strs.get( 0 );
 				size = Integer.parseInt( strs.get( 1 ) );

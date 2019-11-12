@@ -31,6 +31,7 @@ import javax.swing.UIDefaults;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.json.Json;
 import com.formdev.flatlaf.json.ParseException;
+import com.formdev.flatlaf.util.StringUtils;
 
 /**
  * @author Karl Tauber
@@ -183,15 +184,14 @@ public class IntelliJTheme
 
 		boolean checkboxModified = false;
 		@SuppressWarnings( "unchecked" )
-		Map<String, Object> map = (Map<String, Object>) palette;
-		for( Map.Entry<String, Object> e : map.entrySet() ) {
+		Map<String, Object> colorPalette = (Map<String, Object>) palette;
+		for( Map.Entry<String, Object> e : colorPalette.entrySet() ) {
 			String key = e.getKey();
 			Object value = e.getValue();
 			if( !key.startsWith( "Checkbox." ) || !(value instanceof String) )
 				continue;
 
-			if( key.endsWith( ".Dark" ) )
-				key = key.substring( 0, key.length() - 5 );
+			key = StringUtils.removeTrailing( key, ".Dark" );
 
 			String newKey = checkboxKeyMapping.get( key );
 			if( newKey != null ) {

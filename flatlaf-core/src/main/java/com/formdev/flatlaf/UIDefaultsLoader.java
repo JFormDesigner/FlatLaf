@@ -39,6 +39,7 @@ import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.ScaledNumber;
+import com.formdev.flatlaf.util.StringUtils;
 
 /**
  * Load UI defaults from properties files associated to Flat LaF classes and add to UI defaults.
@@ -255,7 +256,7 @@ class UIDefaultsLoader
 	private static Object parseBorder( String value, Function<String, String> resolver ) {
 		if( value.indexOf( ',' ) >= 0 ) {
 			// top,left,bottom,right[,lineColor]
-			List<String> parts = split( value, ',' );
+			List<String> parts = StringUtils.split( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() == 5)
 				? parseColorOrFunction( resolver.apply( parts.get( 4 ) ), true )
@@ -282,7 +283,7 @@ class UIDefaultsLoader
 	}
 
 	private static Insets parseInsets( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',' );
 		try {
 			return new InsetsUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -295,7 +296,7 @@ class UIDefaultsLoader
 	}
 
 	private static Dimension parseSize( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',' );
 		try {
 			return new DimensionUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -317,8 +318,7 @@ class UIDefaultsLoader
 	}
 
 	private static ColorUIResource parseColor( String value, boolean reportError ) {
-		if( value.startsWith( "#" ) )
-			value = value.substring( 1 );
+		value = StringUtils.removeLeading( value, "#" );
 
 		int valueLength = value.length();
 		if( valueLength != 6 && valueLength != 8 )
@@ -351,7 +351,7 @@ class UIDefaultsLoader
 		}
 
 		String function = value.substring( 0, paramsStart ).trim();
-		List<String> params = split( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
+		List<String> params = StringUtils.split( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
 		if( params.isEmpty() )
 			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 
@@ -416,19 +416,5 @@ class UIDefaultsLoader
 		} catch( NumberFormatException ex ) {
 			throw new NumberFormatException( "invalid integer '" + value + "'" );
 		}
-	}
-
-	static List<String> split( String str, char delim ) {
-		ArrayList<String> strs = new ArrayList<>();
-		int delimIndex = str.indexOf( delim );
-		int index = 0;
-		while( delimIndex >= 0 ) {
-			strs.add( str.substring( index, delimIndex ) );
-			index = delimIndex + 1;
-			delimIndex = str.indexOf( delim, index );
-		}
-		strs.add( str.substring( index ) );
-
-		return strs;
 	}
 }
