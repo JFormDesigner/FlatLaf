@@ -38,6 +38,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  *
  * @uiDefault Component.focusWidth						int
  * @uiDefault Component.focusColor						Color
+ * @uiDefault CheckBox.icon.focusedColor				Color	optional; defaults to Component.focusColor
  * @uiDefault CheckBox.icon.borderColor					Color
  * @uiDefault CheckBox.icon.disabledBorderColor			Color
  * @uiDefault CheckBox.icon.selectedBorderColor			Color
@@ -62,7 +63,8 @@ public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
 {
 	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
-	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
+	protected final Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusedColor",
+		UIManager.getColor( "Component.focusColor" ) );
 	protected final int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
 
 	protected final Color borderColor = UIManager.getColor( "CheckBox.icon.borderColor" );

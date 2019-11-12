@@ -34,6 +34,17 @@ import com.formdev.flatlaf.json.ParseException;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
+ * This class supports loading IntelliJ .theme.json files and using them as a Laf.
+ *
+ * .theme.json files are used by Theme plugins for IntelliJ IDEA and other
+ * JetBrains IDEs that are based on IntelliJ platform.
+ *
+ * Here you can find IntelliJ Theme plugins:
+ *   https://plugins.jetbrains.com/search?tags=Theme
+ *
+ * The IntelliJ .theme.json file are documented here:
+ *   http://www.jetbrains.org/intellij/sdk/docs/reference_guide/ui_themes/themes_customize.html
+ *
  * @author Karl Tauber
  */
 public class IntelliJTheme
@@ -48,28 +59,49 @@ public class IntelliJTheme
 
 	private Map<String, Color> namedColors = Collections.emptyMap();
 
-	public static boolean install( InputStream in )
-		throws IOException, ParseException
-	{
+	/**
+	 * Loads a IntelliJ .theme.json file from the given input stream,
+	 * creates a Laf instance for it and installs it.
+	 *
+	 * The input stream is automatically closed.
+	 * Using a buffered input stream is not necessary.
+	 */
+	public static boolean install( InputStream in ) {
 		try {
 		    return FlatLaf.install( createLaf( in ) );
 		} catch( Exception ex ) {
-		    System.err.println( "Failed to initialize look and feel" );
+		    System.err.println( "Failed to load IntelliJ theme" );
 		    ex.printStackTrace();
 		    return false;
 		}
 	}
 
+	/**
+	 * Loads a IntelliJ .theme.json file from the given input stream and
+	 * creates a Laf instance for it.
+	 *
+	 * The input stream is automatically closed.
+	 * Using a buffered input stream is not necessary.
+	 */
 	public static FlatLaf createLaf( InputStream in )
 		throws IOException, ParseException
 	{
 		return createLaf( new IntelliJTheme( in ) );
 	}
 
+	/**
+	 * Creates a Laf instance for the given IntelliJ theme.
+	 */
 	public static FlatLaf createLaf( IntelliJTheme theme ) {
 		return new ThemeLaf( theme );
 	}
 
+	/**
+	 * Loads a IntelliJ .theme.json file from the given input stream.
+	 *
+	 * The input stream is automatically closed.
+	 * Using a buffered input stream is not necessary.
+	 */
 	@SuppressWarnings( "unchecked" )
 	public IntelliJTheme( InputStream in )
 		throws IOException, ParseException
@@ -100,6 +132,11 @@ public class IntelliJTheme
 			apply( e.getKey(), e.getValue(), defaults, defaultsKeysCache );
 
 		applyCheckBoxColors( defaults );
+
+		// Spinner arrow button always has same colors as ComboBox arrow button
+		defaults.put( "Spinner.buttonBackground", defaults.get( "ComboBox.buttonBackground" ) );
+		defaults.put( "Spinner.buttonArrowColor", defaults.get( "ComboBox.buttonArrowColor" ) );
+		defaults.put( "Spinner.buttonDisabledArrowColor", defaults.get( "ComboBox.buttonDisabledArrowColor" ) );
 	}
 
 	/**
@@ -136,6 +173,9 @@ public class IntelliJTheme
 				key = key.replace( ".startB", ".b" );
 			else if( key.endsWith( ".endBackground" ) || key.endsWith( ".endBorderColor" ) )
 				return; // ignore
+
+			// map keys
+			key = uiKeyMapping.getOrDefault( key, key );
 
 			String valueStr = value.toString();
 
@@ -203,7 +243,21 @@ public class IntelliJTheme
 			}
 		}
 
-		// removed colors that Darcula does not provide
+		// When Darcula replaces colors in SVGs it uses color values and not the keys
+		// from com.intellij.ide.ui.UITheme.colorPalette, but there are some keys that
+		// have same color value:
+		//   - Checkbox.Background.Default.Dark  has same color as  Checkbox.Background.Selected.Dark
+		//   - Checkbox.Border.Default.Dark      has same color as  Checkbox.Border.Selected.Dark
+		//   - Checkbox.Focus.Thin.Default.Dark  has same color as  Checkbox.Focus.Thin.Selected.Dark
+		//
+		// So if only e.g. Checkbox.Background.Default.Dark is specified in .theme.json,
+		// then this color is also used for Checkbox.Background.Selected.Dark.
+		// Occurs e.g. in "Dark purple" theme.
+		fixCheckBoxColor( defaults, colorPalette, "Checkbox.Background.Default.Dark", "Checkbox.Background.Selected.Dark" );
+		fixCheckBoxColor( defaults, colorPalette, "Checkbox.Border.Default.Dark",     "Checkbox.Border.Selected.Dark" );
+		fixCheckBoxColor( defaults, colorPalette, "Checkbox.Focus.Thin.Default.Dark", "Checkbox.Focus.Thin.Selected.Dark" );
+
+		// remove hover and pressed colors
 		if( checkboxModified ) {
 			defaults.remove( "CheckBox.icon.hoverBorderColor" );
 			defaults.remove( "CheckBox.icon.focusedBackground" );
@@ -214,18 +268,37 @@ public class IntelliJTheme
 		}
 	}
 
+	private void fixCheckBoxColor( UIDefaults defaults, Map<String, Object> colorPalette, String key1, String key2 ) {
+		if( colorPalette.containsKey( key1 ) == colorPalette.containsKey( key2 ) )
+			return;
+
+		String newKey1 = checkboxKeyMapping.get( StringUtils.removeTrailing( key1, ".Dark" ) );
+		String newKey2 = checkboxKeyMapping.get( StringUtils.removeTrailing( key2, ".Dark" ) );
+		if( colorPalette.containsKey( key1 ) )
+			defaults.put( newKey2, defaults.get( newKey1 ) );
+		else
+			defaults.put( newKey1, defaults.get( newKey2 ) );
+	}
+
+	private static Map<String, String> uiKeyMapping = new HashMap<>();
 	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
 
 	static {
-		checkboxKeyMapping.put( "Checkbox.Background.Default", "CheckBox.icon.background" );
+		// ComboBox
+		uiKeyMapping.put( "ComboBox.ArrowButton.background",            "ComboBox.buttonEditableBackground" );
+		uiKeyMapping.put( "ComboBox.ArrowButton.disabledIconColor",     "ComboBox.buttonDisabledArrowColor" );
+		uiKeyMapping.put( "ComboBox.ArrowButton.iconColor",             "ComboBox.buttonArrowColor" );
+		uiKeyMapping.put( "ComboBox.ArrowButton.nonEditableBackground", "ComboBox.buttonBackground" );
+
+		checkboxKeyMapping.put( "Checkbox.Background.Default",  "CheckBox.icon.background" );
 		checkboxKeyMapping.put( "Checkbox.Background.Disabled", "CheckBox.icon.disabledBackground" );
-		checkboxKeyMapping.put( "Checkbox.Border.Default", "CheckBox.icon.borderColor" );
-		checkboxKeyMapping.put( "Checkbox.Border.Disabled", "CheckBox.icon.disabledBorderColor" );
-		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Default", "CheckBox.icon.focusedBorderColor" );
-		checkboxKeyMapping.put( "Checkbox.Focus.Wide", "Button.default.focusColor" );
+		checkboxKeyMapping.put( "Checkbox.Border.Default",      "CheckBox.icon.borderColor" );
+		checkboxKeyMapping.put( "Checkbox.Border.Disabled",     "CheckBox.icon.disabledBorderColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Default",  "CheckBox.icon.focusedBorderColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Wide",          "CheckBox.icon.focusedColor" );
 		checkboxKeyMapping.put( "Checkbox.Foreground.Disabled", "CheckBox.icon.disabledCheckmarkColor" );
 		checkboxKeyMapping.put( "Checkbox.Background.Selected", "CheckBox.icon.selectedBackground" );
-		checkboxKeyMapping.put( "Checkbox.Border.Selected", "CheckBox.icon.selectedBorderColor" );
+		checkboxKeyMapping.put( "Checkbox.Border.Selected",     "CheckBox.icon.selectedBorderColor" );
 		checkboxKeyMapping.put( "Checkbox.Foreground.Selected", "CheckBox.icon.checkmarkColor" );
 		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.selectedFocusedBorderColor" );
 	}
