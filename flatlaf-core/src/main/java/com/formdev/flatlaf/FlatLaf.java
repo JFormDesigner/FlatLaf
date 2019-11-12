@@ -186,13 +186,23 @@ public abstract class FlatLaf
 		Object aquaMenuBarUI = useScreenMenuBar ? defaults.get( "MenuBarUI" ) : null;
 
 		initFonts( defaults );
-		UIDefaultsLoader.loadDefaultsFromProperties( getClass(), defaults );
+
+		// load defaults from properties
+		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
+		if( lafClassesForDefaultsLoading != null )
+			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, defaults );
+		else
+			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
 		if( useScreenMenuBar )
 			defaults.put( "MenuBarUI", aquaMenuBarUI );
 
 		return defaults;
+	}
+
+	List<Class<?>> getLafClassesForDefaultsLoading() {
+		return null;
 	}
 
 	private void initFonts( UIDefaults defaults ) {

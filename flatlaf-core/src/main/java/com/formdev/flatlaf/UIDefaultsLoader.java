@@ -70,6 +70,10 @@ class UIDefaultsLoader
 			lafClasses.add( 0, lafClass );
 		}
 
+		loadDefaultsFromProperties( lafClasses, defaults );
+	}
+
+	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, UIDefaults defaults ) {
 		try {
 			// load properties files
 			Properties properties = new Properties();

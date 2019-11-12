@@ -66,10 +66,7 @@ public class IntelliJTheme
 	}
 
 	public static FlatLaf createLaf( IntelliJTheme theme ) {
-		FlatLaf laf = theme.dark
-			? new DarkLaf( theme )
-			: new LightLaf( theme );
-		return laf;
+		return new ThemeLaf( theme );
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -233,14 +230,14 @@ public class IntelliJTheme
 		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.selectedFocusedBorderColor" );
 	}
 
-	//---- class LightLaf -----------------------------------------------------
+	//---- class ThemeLaf -----------------------------------------------------
 
-	public static class LightLaf
-		extends FlatIntelliJLaf
+	public static class ThemeLaf
+		extends FlatLaf
 	{
 		private final IntelliJTheme theme;
 
-		public LightLaf( IntelliJTheme theme ) {
+		public ThemeLaf( IntelliJTheme theme ) {
 			this.theme = theme;
 		}
 
@@ -255,32 +252,8 @@ public class IntelliJTheme
 		}
 
 		@Override
-		public UIDefaults getDefaults() {
-			UIDefaults defaults = super.getDefaults();
-			theme.applyProperties( defaults );
-			return defaults;
-		}
-	}
-
-	//---- class DarkLaf ------------------------------------------------------
-
-	public static class DarkLaf
-		extends FlatDarculaLaf
-	{
-		private final IntelliJTheme theme;
-
-		public DarkLaf( IntelliJTheme theme ) {
-			this.theme = theme;
-		}
-
-		@Override
-		public String getName() {
-			return theme.name;
-		}
-
-		@Override
-		public String getDescription() {
-			return theme.name;
+		public boolean isDark() {
+			return theme.dark;
 		}
 
 		@Override
@@ -288,6 +261,16 @@ public class IntelliJTheme
 			UIDefaults defaults = super.getDefaults();
 			theme.applyProperties( defaults );
 			return defaults;
+		}
+
+		@Override
+		ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
+			ArrayList<Class<?>> lafClasses = new ArrayList<>();
+			lafClasses.add( FlatLaf.class );
+			lafClasses.add( theme.dark ? FlatDarkLaf.class : FlatLightLaf.class );
+			lafClasses.add( theme.dark ? FlatDarculaLaf.class : FlatIntelliJLaf.class );
+			lafClasses.add( ThemeLaf.class );
+			return lafClasses;
 		}
 	}
 }
