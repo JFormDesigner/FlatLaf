@@ -18,6 +18,10 @@ package com.formdev.flatlaf.demo.intellijthemes;
 
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
@@ -25,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.*;
@@ -44,11 +49,37 @@ public class IJThemesPanel
 {
 	private final IJThemesManager themesManager = new IJThemesManager();
 	private final List<IJThemeInfo> themes = new ArrayList<>();
+	private final HashMap<Integer, String> categories = new HashMap<>();
 	private final PropertyChangeListener lafListener = this::lafChanged;
+	private final WindowListener windowListener = new WindowAdapter() {
+		@Override
+		public void windowActivated( WindowEvent e ) {
+			IJThemesPanel.this.windowActivated();
+		}
+	};
+	private Window window;
 
 	public IJThemesPanel() {
 		initComponents();
 
+		// create renderer
+		themesList.setCellRenderer( new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent( JList<?> list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus )
+			{
+				String title = categories.get( index );
+				JComponent c = (JComponent) super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				if( title != null )
+					c.setBorder( new CompoundBorder( new ListCellTitledBorder( themesList, title ), c.getBorder() ) );
+				return c;
+			}
+		} );
+
+		updateThemesList();
+	}
+
+	private void updateThemesList() {
 		// load theme infos
 		themesManager.loadBundledThemes();
 		themesManager.loadThemesFromDirectory();
@@ -58,7 +89,8 @@ public class IJThemesPanel
 		themesManager.bundledThemes.sort( comparator );
 		themesManager.moreThemes.sort( comparator );
 
-		HashMap<Integer, String> categories = new HashMap<>();
+		themes.clear();
+		categories.clear();
 
 		// add core themes at beginning
 		categories.put( themes.size(), "Core Themes" );
@@ -75,19 +107,8 @@ public class IJThemesPanel
 		categories.put( themes.size(), "Current Directory" );
 		themes.addAll( themesManager.moreThemes );
 
-		// create renderer
-		themesList.setCellRenderer( new DefaultListCellRenderer() {
-			@Override
-			public Component getListCellRendererComponent( JList<?> list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus )
-			{
-				String title = categories.get( index );
-				JComponent c = (JComponent) super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-				if( title != null )
-					c.setBorder( new CompoundBorder( new ListCellTitledBorder( themesList, title ), c.getBorder() ) );
-				return c;
-			}
-		} );
+		// remember selection
+		IJThemeInfo oldSel = themesList.getSelectedValue();
 
 		// fill themes list
 		themesList.setModel( new AbstractListModel<IJThemeInfo>() {
@@ -100,6 +121,21 @@ public class IJThemesPanel
 				return themes.get( index );
 			}
 		} );
+
+		// restore selection
+		if( oldSel != null ) {
+			for( int i = 0; i < themes.size(); i++ ) {
+				IJThemeInfo theme = themes.get( i );
+				if( oldSel.name.equals( theme.name ) &&
+					Objects.equals( oldSel.resourceName, theme.resourceName ) &&
+					Objects.equals( oldSel.themeFile, theme.themeFile ) &&
+					Objects.equals( oldSel.lafClassName, theme.lafClassName ) )
+				{
+					themesList.setSelectedIndex( i );
+					break;
+				}
+			}
+		}
 	}
 
 	private void themesListValueChanged( ListSelectionEvent e ) {
@@ -148,6 +184,10 @@ public class IJThemesPanel
 
 		selectedCurrentLookAndFeel();
 		UIManager.addPropertyChangeListener( lafListener );
+
+		window = SwingUtilities.windowForComponent( this );
+		if( window != null )
+			window.addWindowListener( windowListener );
 	}
 
 	@Override
@@ -155,11 +195,22 @@ public class IJThemesPanel
 		super.removeNotify();
 
 		UIManager.removePropertyChangeListener( lafListener );
+
+		if( window != null ) {
+			window.removeWindowListener( windowListener );
+			window = null;
+		}
 	}
 
-	void lafChanged( PropertyChangeEvent e ) {
+	private void lafChanged( PropertyChangeEvent e ) {
 		if( "lookAndFeel".equals( e.getPropertyName() ) )
 			selectedCurrentLookAndFeel();
+	}
+
+	private void windowActivated() {
+		// refresh themes list on window activation
+		if( themesManager.hasThemesFromDirectoryChanged() )
+			updateThemesList();
 	}
 
 	private void selectedCurrentLookAndFeel() {

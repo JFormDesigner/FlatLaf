@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -32,6 +33,7 @@ class IJThemesManager
 {
 	final List<IJThemeInfo> bundledThemes = new ArrayList<>();
 	final List<IJThemeInfo> moreThemes = new ArrayList<>();
+	private final Map<File,Long> lastModifiedMap = new HashMap<>();
 
 	void loadBundledThemes() {
 		// load themes.properties
@@ -44,6 +46,7 @@ class IJThemesManager
 		}
 
 		// add info about bundled themes
+		bundledThemes.clear();
 		for( Map.Entry<Object, Object> e : properties.entrySet() ) {
 			String resourceName = (String) e.getKey();
 			List<String> strs = StringUtils.split( (String) e.getValue(), ',' );
@@ -60,10 +63,22 @@ class IJThemesManager
 		if( themeFiles == null )
 			return;
 
+		lastModifiedMap.clear();
+		lastModifiedMap.put( directory, directory.lastModified() );
+
 		moreThemes.clear();
 		for( File f : themeFiles ) {
 			String name = StringUtils.removeTrailing( f.getName(), ".theme.json" );
 			moreThemes.add( new IJThemeInfo( name, null, null, f, null ) );
+			lastModifiedMap.put( f, f.lastModified() );
 		}
+	}
+
+	boolean hasThemesFromDirectoryChanged() {
+		for( Map.Entry<File, Long> e : lastModifiedMap.entrySet() ) {
+			if( e.getKey().lastModified() != e.getValue().longValue() )
+				return true;
+		}
+		return false;
 	}
 }
