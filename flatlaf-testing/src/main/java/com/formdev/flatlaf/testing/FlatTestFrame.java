@@ -35,6 +35,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.*;
@@ -240,14 +241,17 @@ public class FlatTestFrame
 
 		Preferences.userRoot().node( PREFS_ROOT_PATH ).put( KEY_LAF, lafClassName );
 
-		applyLookAndFeel( lafClassName, false );
+		applyLookAndFeel( lafClassName, null, false );
 	}
 
-	private void applyLookAndFeel( String lafClassName, boolean pack ) {
+	private void applyLookAndFeel( String lafClassName, IntelliJTheme theme, boolean pack ) {
 		EventQueue.invokeLater( () -> {
 			try {
 				// change look and feel
-				UIManager.setLookAndFeel( lafClassName );
+				if( theme != null )
+					UIManager.setLookAndFeel( IntelliJTheme.createLaf( theme ) );
+				else
+					UIManager.setLookAndFeel( lafClassName );
 
 				// update all components
 				FlatLaf.updateUI();
@@ -364,7 +368,11 @@ public class FlatTestFrame
 			prefs.remove( KEY_SCALE_FACTOR );
 		}
 
-		applyLookAndFeel( UIManager.getLookAndFeel().getClass().getName(), true );
+		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+		IntelliJTheme theme = (lookAndFeel instanceof IntelliJTheme.ThemeLaf)
+			? ((IntelliJTheme.ThemeLaf)lookAndFeel).getTheme()
+			: null;
+		applyLookAndFeel( lookAndFeel.getClass().getName(), theme, true );
 	}
 
 	private void updateScaleFactorComboBox() {

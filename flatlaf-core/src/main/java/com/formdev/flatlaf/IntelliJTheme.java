@@ -329,6 +329,10 @@ public class IntelliJTheme
 			return theme.dark;
 		}
 
+		public IntelliJTheme getTheme() {
+			return theme;
+		}
+
 		@Override
 		public UIDefaults getDefaults() {
 			UIDefaults defaults = super.getDefaults();
