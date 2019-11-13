@@ -72,6 +72,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
+ * @uiDefault ComboBox.editableBackground		Color	optional; defaults to ComboBox.background
  * @uiDefault ComboBox.disabledBackground		Color
  * @uiDefault ComboBox.disabledForeground		Color
  * @uiDefault ComboBox.buttonBackground			Color
@@ -91,6 +92,7 @@ public class FlatComboBoxUI
 	protected Color borderColor;
 	protected Color disabledBorderColor;
 
+	protected Color editableBackground;
 	protected Color disabledBackground;
 	protected Color disabledForeground;
 
@@ -141,6 +143,7 @@ public class FlatComboBoxUI
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 
+		editableBackground = UIManager.getColor( "ComboBox.editableBackground" );
 		disabledBackground = UIManager.getColor( "ComboBox.disabledBackground" );
 		disabledForeground = UIManager.getColor( "ComboBox.disabledForeground" );
 
@@ -163,6 +166,7 @@ public class FlatComboBoxUI
 		borderColor = null;
 		disabledBorderColor = null;
 
+		editableBackground = null;
 		disabledBackground = null;
 		disabledForeground = null;
 
@@ -303,7 +307,9 @@ public class FlatComboBoxUI
 		boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
 		// paint background
-		g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		g2.setColor( enabled
+			? (editableBackground != null && comboBox.isEditable() ? editableBackground : c.getBackground())
+			: disabledBackground );
 		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow button background

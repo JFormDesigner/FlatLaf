@@ -26,7 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.json.Json;
@@ -128,15 +130,34 @@ public class IntelliJTheme
 
 		// convert Json "ui" structure to UI defaults
 		ArrayList<Object> defaultsKeysCache = new ArrayList<>();
+		Set<String> uiKeys = new HashSet<>();
 		for( Map.Entry<String, Object> e : ui.entrySet() )
-			apply( e.getKey(), e.getValue(), defaults, defaultsKeysCache );
+			apply( e.getKey(), e.getValue(), defaults, defaultsKeysCache, uiKeys );
 
 		applyCheckBoxColors( defaults );
 
 		// Spinner arrow button always has same colors as ComboBox arrow button
-		defaults.put( "Spinner.buttonBackground", defaults.get( "ComboBox.buttonBackground" ) );
+		defaults.put( "Spinner.buttonBackground", defaults.get( "ComboBox.buttonEditableBackground" ) );
 		defaults.put( "Spinner.buttonArrowColor", defaults.get( "ComboBox.buttonArrowColor" ) );
 		defaults.put( "Spinner.buttonDisabledArrowColor", defaults.get( "ComboBox.buttonDisabledArrowColor" ) );
+
+		// some themes specify colors for TextField.background, but forget to specify it for other components
+		// (probably because those components are not used in IntelliJ)
+		if( uiKeys.contains( "TextField.background" ) ) {
+			Object textFieldBackground = defaults.get( "TextField.background" );
+			if( !uiKeys.contains( "FormattedTextField.background" ) )
+				defaults.put( "FormattedTextField.background", textFieldBackground );
+			if( !uiKeys.contains( "PasswordField.background" ) )
+				defaults.put( "PasswordField.background", textFieldBackground );
+			if( !uiKeys.contains( "EditorPane.background" ) )
+				defaults.put( "EditorPane.background", textFieldBackground );
+			if( !uiKeys.contains( "TextArea.background" ) )
+				defaults.put( "TextArea.background", textFieldBackground );
+			if( !uiKeys.contains( "TextPane.background" ) )
+				defaults.put( "TextPane.background", textFieldBackground );
+			if( !uiKeys.contains( "Spinner.background" ) )
+				defaults.put( "Spinner.background", textFieldBackground );
+		}
 	}
 
 	/**
@@ -163,11 +184,13 @@ public class IntelliJTheme
 	 * http://www.jetbrains.org/intellij/sdk/docs/reference_guide/ui_themes/themes_customize.html#custom-ui-control-colors
 	 */
 	@SuppressWarnings( "unchecked" )
-	private void apply( String key, Object value, UIDefaults defaults, ArrayList<Object> defaultsKeysCache ) {
+	private void apply( String key, Object value, UIDefaults defaults, ArrayList<Object> defaultsKeysCache, Set<String> uiKeys ) {
 		if( value instanceof Map ) {
 			for( Map.Entry<String, Object> e : ((Map<String, Object>)value).entrySet() )
-				apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache );
+				apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache, uiKeys );
 		} else {
+			uiKeys.add( key );
+
 			// Darcula buttons support gradient for background and border, but FlatLaf does not
 			if( key.endsWith( ".startBackground" ) || key.endsWith( ".startBorderColor" ) )
 				key = key.replace( ".startB", ".b" );
@@ -201,8 +224,14 @@ public class IntelliJTheme
 
 				// replace all values in UI defaults that match the wildcard key
 				for( Object k : defaultsKeysCache ) {
-					if( k instanceof String && ((String)k).endsWith( tail ) )
-						defaults.put( k, uiValue );
+					if( k instanceof String ) {
+						// support replacing of mapped keys
+						// (e.g. set ComboBox.buttonEditableBackground to *.background
+						// because it is mapped from ComboBox.ArrowButton.background)
+						String km = uiKeyInverseMapping.getOrDefault( k, (String) k );
+						if( km.endsWith( tail ) )
+							defaults.put( k, uiValue );
+					}
 				}
 			} else
 				defaults.put( key, uiValue );
@@ -281,14 +310,20 @@ public class IntelliJTheme
 	}
 
 	private static Map<String, String> uiKeyMapping = new HashMap<>();
+	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
 	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
 
 	static {
 		// ComboBox
+		uiKeyMapping.put( "ComboBox.background",                        "ComboBox.editableBackground" );
+		uiKeyMapping.put( "ComboBox.nonEditableBackground",             "ComboBox.background" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.background",            "ComboBox.buttonEditableBackground" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.disabledIconColor",     "ComboBox.buttonDisabledArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.iconColor",             "ComboBox.buttonArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.nonEditableBackground", "ComboBox.buttonBackground" );
+
+		for( Map.Entry<String, String> e : uiKeyMapping.entrySet() )
+			uiKeyInverseMapping.put( e.getValue(), e.getKey() );
 
 		checkboxKeyMapping.put( "Checkbox.Background.Default",  "CheckBox.icon.background" );
 		checkboxKeyMapping.put( "Checkbox.Background.Disabled", "CheckBox.icon.disabledBackground" );
