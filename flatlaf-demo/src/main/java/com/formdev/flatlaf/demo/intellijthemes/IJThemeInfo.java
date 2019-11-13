@@ -21,9 +21,17 @@ package com.formdev.flatlaf.demo.intellijthemes;
  */
 class IJThemeInfo
 {
-	String name;
-	String resourceName;
-	String sourceCodeUrl;
+	final String name;
+	final String resourceName;
+	final String sourceCodeUrl;
+	final String lafClassName;
+
+	IJThemeInfo( String name, String resourceName, String sourceCodeUrl, String lafClassName ) {
+		this.name = name;
+		this.resourceName = resourceName;
+		this.sourceCodeUrl = sourceCodeUrl;
+		this.lafClassName = lafClassName;
+	}
 
 	@Override
 	public String toString() {

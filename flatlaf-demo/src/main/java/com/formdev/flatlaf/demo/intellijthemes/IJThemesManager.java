@@ -46,11 +46,7 @@ class IJThemesManager
 			String resourceName = (String) e.getKey();
 			List<String> strs = StringUtils.split( (String) e.getValue(), ',' );
 
-			IJThemeInfo themeInfo = new IJThemeInfo();
-			themeInfo.name = strs.get( 0 );
-			themeInfo.resourceName = resourceName;
-			themeInfo.sourceCodeUrl = strs.get( 1 );
-			bundledThemes.add( themeInfo );
+			bundledThemes.add( new IJThemeInfo( strs.get( 0 ), resourceName, strs.get( 1 ), null ) );
 		}
 	}
 }

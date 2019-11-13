@@ -16,14 +16,20 @@
 
 package com.formdev.flatlaf.demo.intellijthemes;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 import javax.swing.event.*;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import net.miginfocom.swing.*;
 
@@ -34,6 +40,7 @@ public class IJThemesPanel
 	extends JPanel
 {
 	private final IJThemesManager themesManager = new IJThemesManager();
+	private final List<IJThemeInfo> themes = new ArrayList<>();
 	private final PropertyChangeListener lafListener = this::lafChanged;
 
 	public IJThemesPanel() {
@@ -43,9 +50,16 @@ public class IJThemesPanel
 		themesManager.loadBundledThemes();
 
 		// sort themes by name
-		List<IJThemeInfo> themes = new ArrayList<>();
 		themes.addAll( themesManager.bundledThemes );
 		themes.sort( (t1, t2) -> t1.name.compareToIgnoreCase( t2.name ) );
+		int intellijThemesCount = themes.size();
+
+		// insert core themes at beginning
+		themes.add( 0, new IJThemeInfo( "Flat Light", null, null, FlatLightLaf.class.getName() ) );
+		themes.add( 1, new IJThemeInfo( "Flat Dark", null, null, FlatDarkLaf.class.getName() ) );
+		themes.add( 2, new IJThemeInfo( "Flat IntelliJ", null, null, FlatIntelliJLaf.class.getName() ) );
+		themes.add( 3, new IJThemeInfo( "Flat Darcula", null, null, FlatDarculaLaf.class.getName() ) );
+		int coreThemesCount = themes.size() - intellijThemesCount;
 
 		// fill themes list
 		themesList.setModel( new AbstractListModel<IJThemeInfo>() {
@@ -56,6 +70,19 @@ public class IJThemesPanel
 			@Override
 			public IJThemeInfo getElementAt( int index ) {
 				return themes.get( index );
+			}
+		} );
+
+		themesList.setCellRenderer( new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent( JList<?> list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus )
+			{
+				String title = (index == 0) ? "Core Themes" : (index == coreThemesCount ? "IntelliJ Themes" : null);
+				JComponent c = (JComponent) super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				if( title != null )
+					c.setBorder( new CompoundBorder( new ListCellTitledBorder( themesList, title ), c.getBorder() ) );
+				return c;
 			}
 		} );
 	}
@@ -74,7 +101,14 @@ public class IJThemesPanel
 			return;
 
 		// change look and feel
-		IntelliJTheme.install( getClass().getResourceAsStream( themeInfo.resourceName ) );
+		if( themeInfo.lafClassName != null ) {
+			try {
+				UIManager.setLookAndFeel( themeInfo.lafClassName );
+			} catch( Exception ex ) {
+				ex.printStackTrace();
+			}
+		} else
+			IntelliJTheme.install( getClass().getResourceAsStream( themeInfo.resourceName ) );
 
 		// update all components
 		FlatLaf.updateUI();
@@ -103,8 +137,21 @@ public class IJThemesPanel
 	private void selectedCurrentLookAndFeel() {
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 
-		if( !(lookAndFeel instanceof IntelliJTheme.ThemeLaf) )
-			themesList.clearSelection();
+		int newSel = -1;
+		if( !(lookAndFeel instanceof IntelliJTheme.ThemeLaf) ) {
+			String lafClassName = lookAndFeel.getClass().getName();
+			for( int i = 0; i < themes.size(); i++ ) {
+				if( lafClassName.equals( themes.get( i ).lafClassName ) ) {
+					newSel = i;
+					break;
+				}
+			}
+
+			if( newSel >= 0 )
+				themesList.setSelectedIndex( newSel );
+			else
+				themesList.clearSelection();
+		}
 	}
 
 	private void initComponents() {
