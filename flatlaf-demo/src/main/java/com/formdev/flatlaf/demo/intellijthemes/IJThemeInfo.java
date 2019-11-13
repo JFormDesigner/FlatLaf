@@ -16,6 +16,8 @@
 
 package com.formdev.flatlaf.demo.intellijthemes;
 
+import java.io.File;
+
 /**
  * @author Karl Tauber
  */
@@ -24,12 +26,14 @@ class IJThemeInfo
 	final String name;
 	final String resourceName;
 	final String sourceCodeUrl;
+	final File themeFile;
 	final String lafClassName;
 
-	IJThemeInfo( String name, String resourceName, String sourceCodeUrl, String lafClassName ) {
+	IJThemeInfo( String name, String resourceName, String sourceCodeUrl, File themeFile, String lafClassName ) {
 		this.name = name;
 		this.resourceName = resourceName;
 		this.sourceCodeUrl = sourceCodeUrl;
+		this.themeFile = themeFile;
 		this.lafClassName = lafClassName;
 	}
 

@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.demo.intellijthemes;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import com.formdev.flatlaf.util.StringUtils;
 class IJThemesManager
 {
 	final List<IJThemeInfo> bundledThemes = new ArrayList<>();
+	final List<IJThemeInfo> moreThemes = new ArrayList<>();
 
 	void loadBundledThemes() {
 		// load themes.properties
@@ -46,7 +48,22 @@ class IJThemesManager
 			String resourceName = (String) e.getKey();
 			List<String> strs = StringUtils.split( (String) e.getValue(), ',' );
 
-			bundledThemes.add( new IJThemeInfo( strs.get( 0 ), resourceName, strs.get( 1 ), null ) );
+			bundledThemes.add( new IJThemeInfo( strs.get( 0 ), resourceName, strs.get( 1 ), null, null ) );
+		}
+	}
+
+	void loadThemesFromDirectory() {
+		// get current working directory
+		File directory = new File( "" ).getAbsoluteFile();
+
+		File[] themeFiles = directory.listFiles( (dir, name) -> name.endsWith( ".theme.json" ) );
+		if( themeFiles == null )
+			return;
+
+		moreThemes.clear();
+		for( File f : themeFiles ) {
+			String name = StringUtils.removeTrailing( f.getName(), ".theme.json" );
+			moreThemes.add( new IJThemeInfo( name, null, null, f, null ) );
 		}
 	}
 }

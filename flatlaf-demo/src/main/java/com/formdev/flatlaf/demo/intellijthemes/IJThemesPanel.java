@@ -20,7 +20,10 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -48,18 +51,43 @@ public class IJThemesPanel
 
 		// load theme infos
 		themesManager.loadBundledThemes();
+		themesManager.loadThemesFromDirectory();
 
 		// sort themes by name
-		themes.addAll( themesManager.bundledThemes );
-		themes.sort( (t1, t2) -> t1.name.compareToIgnoreCase( t2.name ) );
-		int intellijThemesCount = themes.size();
+		Comparator<? super IJThemeInfo> comparator = (t1, t2) -> t1.name.compareToIgnoreCase( t2.name );
+		themesManager.bundledThemes.sort( comparator );
+		themesManager.moreThemes.sort( comparator );
 
-		// insert core themes at beginning
-		themes.add( 0, new IJThemeInfo( "Flat Light", null, null, FlatLightLaf.class.getName() ) );
-		themes.add( 1, new IJThemeInfo( "Flat Dark", null, null, FlatDarkLaf.class.getName() ) );
-		themes.add( 2, new IJThemeInfo( "Flat IntelliJ", null, null, FlatIntelliJLaf.class.getName() ) );
-		themes.add( 3, new IJThemeInfo( "Flat Darcula", null, null, FlatDarculaLaf.class.getName() ) );
-		int coreThemesCount = themes.size() - intellijThemesCount;
+		HashMap<Integer, String> categories = new HashMap<>();
+
+		// add core themes at beginning
+		categories.put( themes.size(), "Core Themes" );
+		themes.add( new IJThemeInfo( "Flat Light", null, null, null, FlatLightLaf.class.getName() ) );
+		themes.add( new IJThemeInfo( "Flat Dark", null, null, null, FlatDarkLaf.class.getName() ) );
+		themes.add( new IJThemeInfo( "Flat IntelliJ", null, null, null, FlatIntelliJLaf.class.getName() ) );
+		themes.add( new IJThemeInfo( "Flat Darcula", null, null, null, FlatDarculaLaf.class.getName() ) );
+
+		// add bundles themes
+		categories.put( themes.size(), "IntelliJ Themes" );
+		themes.addAll( themesManager.bundledThemes );
+
+		// add themes from directory
+		categories.put( themes.size(), "Current Directory" );
+		themes.addAll( themesManager.moreThemes );
+
+		// create renderer
+		themesList.setCellRenderer( new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent( JList<?> list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus )
+			{
+				String title = categories.get( index );
+				JComponent c = (JComponent) super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				if( title != null )
+					c.setBorder( new CompoundBorder( new ListCellTitledBorder( themesList, title ), c.getBorder() ) );
+				return c;
+			}
+		} );
 
 		// fill themes list
 		themesList.setModel( new AbstractListModel<IJThemeInfo>() {
@@ -70,19 +98,6 @@ public class IJThemesPanel
 			@Override
 			public IJThemeInfo getElementAt( int index ) {
 				return themes.get( index );
-			}
-		} );
-
-		themesList.setCellRenderer( new DefaultListCellRenderer() {
-			@Override
-			public Component getListCellRendererComponent( JList<?> list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus )
-			{
-				String title = (index == 0) ? "Core Themes" : (index == coreThemesCount ? "IntelliJ Themes" : null);
-				JComponent c = (JComponent) super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-				if( title != null )
-					c.setBorder( new CompoundBorder( new ListCellTitledBorder( themesList, title ), c.getBorder() ) );
-				return c;
 			}
 		} );
 	}
@@ -106,12 +121,25 @@ public class IJThemesPanel
 				UIManager.setLookAndFeel( themeInfo.lafClassName );
 			} catch( Exception ex ) {
 				ex.printStackTrace();
+				showInformationDialog( "Failed to create '" + themeInfo.lafClassName + "'.", ex );
+			}
+		} else if( themeInfo.themeFile != null ) {
+			try {
+			    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
+			} catch( Exception ex ) {
+				ex.printStackTrace();
+				showInformationDialog( "Failed to load '" + themeInfo.themeFile + "'.", ex );
 			}
 		} else
 			IntelliJTheme.install( getClass().getResourceAsStream( themeInfo.resourceName ) );
 
 		// update all components
 		FlatLaf.updateUI();
+	}
+
+	private void showInformationDialog( String message, Exception ex ) {
+		JOptionPane.showMessageDialog( null, message + "\n\n" + ex.getMessage(),
+			"FlatLaf", JOptionPane.INFORMATION_MESSAGE );
 	}
 
 	@Override
