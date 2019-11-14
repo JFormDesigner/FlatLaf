@@ -164,6 +164,16 @@ public class FlatUIUtils
 	}
 
 	/**
+	 * Gets the background color of the first opaque parent.
+	 */
+	public static Color getParentBackground( JComponent c ) {
+		Container parent = findOpaqueParent( c );
+		return (parent != null)
+			? parent.getBackground()
+			: UIManager.getColor( "Panel.background" ); // fallback, probably never used
+	}
+
+	/**
 	 * Find the first parent that is opaque.
 	 */
 	private static Container findOpaqueParent( Container c ) {

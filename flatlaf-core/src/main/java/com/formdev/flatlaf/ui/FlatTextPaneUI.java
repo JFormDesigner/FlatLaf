@@ -18,11 +18,14 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextPaneUI;
+import javax.swing.text.JTextComponent;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextPane}.
@@ -45,6 +48,7 @@ import javax.swing.plaf.basic.BasicTextPaneUI;
  * <!-- FlatTextPaneUI -->
  *
  * @uiDefault Component.minimumWidth			int
+ * @uiDefault Component.isIntelliJTheme			boolean
  *
  * @author Karl Tauber
  */
@@ -52,6 +56,7 @@ public class FlatTextPaneUI
 	extends BasicTextPaneUI
 {
 	protected int minimumWidth;
+	protected boolean isIntelliJTheme;
 
 	private Object oldHonorDisplayProperties;
 
@@ -64,6 +69,7 @@ public class FlatTextPaneUI
 		super.installDefaults();
 
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 
 		// use component font and foreground for HTML text
 		oldHonorDisplayProperties = getComponent().getClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES );
@@ -94,5 +100,18 @@ public class FlatTextPaneUI
 		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
 		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
 		return size;
+	}
+
+	@Override
+	protected void paintBackground( Graphics g ) {
+		JTextComponent c = getComponent();
+
+		// for compatibility with IntelliJ themes
+		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) && (c.getBackground() instanceof UIResource) ) {
+			FlatUIUtils.paintParentBackground( g, c );
+			return;
+		}
+
+		super.paintBackground( g );
 	}
 }

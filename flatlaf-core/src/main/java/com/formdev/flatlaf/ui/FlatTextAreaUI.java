@@ -47,6 +47,7 @@ import javax.swing.text.JTextComponent;
  * <!-- FlatTextAreaUI -->
  *
  * @uiDefault Component.minimumWidth			int
+ * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextArea.disabledBackground		Color	used if not enabled
  * @uiDefault TextArea.inactiveBackground		Color	used if not editable
  *
@@ -56,6 +57,7 @@ public class FlatTextAreaUI
 	extends BasicTextAreaUI
 {
 	protected int minimumWidth;
+	protected boolean isIntelliJTheme;
 	protected Color disabledBackground;
 	protected Color inactiveBackground;
 
@@ -68,6 +70,7 @@ public class FlatTextAreaUI
 		super.installDefaults();
 
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		disabledBackground = UIManager.getColor( "TextArea.disabledBackground" );
 		inactiveBackground = UIManager.getColor( "TextArea.inactiveBackground" );
 	}
@@ -87,9 +90,11 @@ public class FlatTextAreaUI
 		Color background = c.getBackground();
 		g.setColor( !(background instanceof UIResource)
 			? background
-			: (!c.isEnabled()
-				? disabledBackground
-				: (!c.isEditable() ? inactiveBackground : background)) );
+			: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
+				? FlatUIUtils.getParentBackground( c )
+				: (!c.isEnabled()
+					? disabledBackground
+					: (!c.isEditable() ? inactiveBackground : background))) );
 		g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 	}
 

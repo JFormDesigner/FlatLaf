@@ -50,6 +50,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  *
  * @uiDefault Component.focusWidth					int
  * @uiDefault Component.minimumWidth				int
+ * @uiDefault Component.isIntelliJTheme				boolean
  *
  * @author Karl Tauber
  */
@@ -58,6 +59,7 @@ public class FlatPasswordFieldUI
 {
 	protected int focusWidth;
 	protected int minimumWidth;
+	protected boolean isIntelliJTheme;
 
 	private FocusListener focusListener;
 
@@ -75,6 +77,7 @@ public class FlatPasswordFieldUI
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
 
@@ -106,7 +109,7 @@ public class FlatPasswordFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		FlatTextFieldUI.paintBackground( g, getComponent(), focusWidth );
+		FlatTextFieldUI.paintBackground( g, getComponent(), focusWidth, isIntelliJTheme );
 		super.paintSafely( g );
 	}
 

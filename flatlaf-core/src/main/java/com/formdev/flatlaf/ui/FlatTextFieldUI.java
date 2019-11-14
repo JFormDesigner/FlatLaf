@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -29,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
@@ -54,6 +56,7 @@ import javax.swing.text.JTextComponent;
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.minimumWidth			int
+ * @uiDefault Component.isIntelliJTheme			boolean
  *
  * @author Karl Tauber
  */
@@ -62,6 +65,7 @@ public class FlatTextFieldUI
 {
 	protected int focusWidth;
 	protected int minimumWidth;
+	protected boolean isIntelliJTheme;
 
 	private FocusListener focusListener;
 
@@ -75,6 +79,7 @@ public class FlatTextFieldUI
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
 
@@ -106,7 +111,7 @@ public class FlatTextFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		paintBackground( g, getComponent(), focusWidth );
+		paintBackground( g, getComponent(), focusWidth, isIntelliJTheme );
 		super.paintSafely( g );
 	}
 
@@ -115,7 +120,7 @@ public class FlatTextFieldUI
 		// background is painted elsewhere
 	}
 
-	static void paintBackground( Graphics g, JTextComponent c, int focusWidth ) {
+	static void paintBackground( Graphics g, JTextComponent c, int focusWidth, boolean isIntelliJTheme ) {
 		// do not paint background if:
 		//   - not opaque and
 		//   - border is not a flat border and
@@ -135,7 +140,12 @@ public class FlatTextFieldUI
 
 			float fFocusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) focusWidth ) : 0;
 
-			g2.setColor( c.getBackground() );
+			Color background = c.getBackground();
+			g2.setColor( !(background instanceof UIResource)
+				? background
+				: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
+					? FlatUIUtils.getParentBackground( c )
+					: background) );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), fFocusWidth, 0 );
 		} finally {
 			g2.dispose();

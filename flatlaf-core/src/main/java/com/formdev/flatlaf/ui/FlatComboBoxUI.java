@@ -70,6 +70,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.arc						int
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
+ * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault ComboBox.editableBackground		Color	optional; defaults to ComboBox.background
@@ -89,6 +90,7 @@ public class FlatComboBoxUI
 	protected int focusWidth;
 	protected int arc;
 	protected String arrowType;
+	protected boolean isIntelliJTheme;
 	protected Color borderColor;
 	protected Color disabledBorderColor;
 
@@ -140,6 +142,7 @@ public class FlatComboBoxUI
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( "Component.arc" );
 		arrowType = UIManager.getString( "Component.arrowType" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 
@@ -309,7 +312,7 @@ public class FlatComboBoxUI
 		// paint background
 		g2.setColor( enabled
 			? (editableBackground != null && comboBox.isEditable() ? editableBackground : c.getBackground())
-			: disabledBackground );
+			: getDisabledBackground( comboBox ) );
 		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow button background
@@ -347,7 +350,7 @@ public class FlatComboBoxUI
 
 		boolean enabled = comboBox.isEnabled();
 		c.setForeground( enabled ? comboBox.getForeground() : disabledForeground );
-		c.setBackground( enabled ? comboBox.getBackground() : disabledBackground );
+		c.setBackground( enabled ? comboBox.getBackground() : getDisabledBackground( comboBox ) );
 
 		boolean shouldValidate = (c instanceof JPanel);
 		if( padding != null )
@@ -364,8 +367,12 @@ public class FlatComboBoxUI
 
 	@Override
 	public void paintCurrentValueBackground( Graphics g, Rectangle bounds, boolean hasFocus ) {
-		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : disabledBackground );
+		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : getDisabledBackground( comboBox ) );
 		g.fillRect( bounds.x, bounds.y, bounds.width, bounds.height );
+	}
+
+	private Color getDisabledBackground( JComponent c ) {
+		return isIntelliJTheme ? FlatUIUtils.getParentBackground( c ) : disabledBackground;
 	}
 
 	@Override
