@@ -21,10 +21,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
+import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 
 /**
@@ -88,6 +90,21 @@ public class FlatRadioButtonUI
 
 		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		// fill background even if opaque if
+		// - used as cell renderer (because of selection background)
+		// - if background was explicitly set to a non-UIResource color
+		if( !c.isOpaque() &&
+			(c.getParent() instanceof CellRendererPane || !(c.getBackground() instanceof UIResource)) )
+		{
+			g.setColor( c.getBackground() );
+			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+		}
+
+		super.paint( g, c );
 	}
 
 	@Override

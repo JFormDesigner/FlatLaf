@@ -4,6 +4,7 @@ FlatLaf Change Log
 ## Unreleased
 
 - Support using IntelliJ platform themes (.theme.json files).
+- Fixed selection background of checkbox in table cell.
 
 
 ## 0.18
