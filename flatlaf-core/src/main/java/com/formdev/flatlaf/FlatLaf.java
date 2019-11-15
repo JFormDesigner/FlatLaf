@@ -33,6 +33,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.LookAndFeel;
+import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -91,6 +92,11 @@ public abstract class FlatLaf
 		getBase().initialize();
 
 		super.initialize();
+
+		// make sure that a plain popup factory is used (otherwise sub-menu rendering
+		// is "jittery" on Mac, where AquaLookAndFeel installs its own popup factory)
+		if( PopupFactory.getSharedInstance().getClass() != PopupFactory.class )
+			PopupFactory.setSharedInstance( new PopupFactory() );
 
 		// add mnemonic listener
 		mnemonicListener = e -> {
