@@ -25,7 +25,7 @@ import javax.swing.UIManager;
 /**
  * "hard drive" icon for {@link javax.swing.JFileChooser}.
  *
- * @uiDefault FileView.icon.hardDriveColor		Color
+ * @uiDefault Objects.Grey						Color
  *
  * @author Karl Tauber
  */
@@ -33,7 +33,7 @@ public class FlatFileViewHardDriveIcon
 	extends FlatAbstractIcon
 {
 	public FlatFileViewHardDriveIcon() {
-		super( 16, 16, UIManager.getColor( "FileView.icon.hardDriveColor" ) );
+		super( 16, 16, UIManager.getColor( "Objects.Grey" ) );
 	}
 
 	@Override

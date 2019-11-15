@@ -38,6 +38,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -192,6 +193,7 @@ public abstract class FlatLaf
 		Object aquaMenuBarUI = useScreenMenuBar ? defaults.get( "MenuBarUI" ) : null;
 
 		initFonts( defaults );
+		initColorPalette( defaults, isDark() );
 
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
@@ -245,6 +247,45 @@ public abstract class FlatLaf
 				defaults.put( key, uiFont );
 		}
 		defaults.put( "MenuItem.acceleratorFont", uiFont );
+	}
+
+	/**
+	 * Adds the default color palette for action icons and object icons to the given UIDefaults.
+	 * <p>
+	 * This method is public and static to allow using the color palette with
+	 * other LaFs (e.g. Windows LaF). To do so invoke:
+	 *   {@code FlatLaf.initColorPalette( UIManager.getLookAndFeelDefaults(), false );}
+	 * after
+	 *   {@code UIManager.setLookAndFeel( ... );}.
+	 * <p>
+	 * The colors are based on IntelliJ Platform
+	 *   <a href="https://jetbrains.design/intellij/principles/icons/#action-icons">Action icons</a>
+	 * and
+	 *   <a href="https://jetbrains.design/intellij/principles/icons/#noun-icons">Noun icons</a>
+	 */
+	public static void initColorPalette( UIDefaults defaults, boolean dark ) {
+		// colors for actions
+		// see https://jetbrains.design/intellij/principles/icons/#action-icons
+		defaults.put( "Actions.Red",            new ColorUIResource( !dark ? 0xDB5860 : 0xC75450 ) );
+		defaults.put( "Actions.Yellow",         new ColorUIResource( !dark ? 0xEDA200 : 0xF0A732 ) );
+		defaults.put( "Actions.Green",          new ColorUIResource( !dark ? 0x59A869 : 0x499C54 ) );
+		defaults.put( "Actions.Blue",           new ColorUIResource( !dark ? 0x389FD6 : 0x3592C4 ) );
+		defaults.put( "Actions.Grey",           new ColorUIResource( !dark ? 0x6E6E6E : 0xAFB1B3 ) );
+		defaults.put( "Actions.GreyInline",     new ColorUIResource( !dark ? 0x7F8B91 : 0x7F8B91 ) );
+
+		// colors for objects
+		// see https://jetbrains.design/intellij/principles/icons/#noun-icons
+		defaults.put( "Objects.Grey",           new ColorUIResource( 0x9AA7B0 ) );
+		defaults.put( "Objects.Blue",           new ColorUIResource( 0x40B6E0 ) );
+		defaults.put( "Objects.Green",          new ColorUIResource( 0x62B543 ) );
+		defaults.put( "Objects.Yellow",         new ColorUIResource( 0xF4AF3D ) );
+		defaults.put( "Objects.YellowDark",     new ColorUIResource( 0xD9A343 ) );
+		defaults.put( "Objects.Purple",         new ColorUIResource( 0xB99BF8 ) );
+		defaults.put( "Objects.Pink",           new ColorUIResource( 0xF98B9E ) );
+		defaults.put( "Objects.Red",            new ColorUIResource( 0xF26522 ) );
+		defaults.put( "Objects.RedStatus",      new ColorUIResource( 0xE05555 ) );
+		defaults.put( "Objects.GreenAndroid",   new ColorUIResource( 0xA4C639 ) );
+		defaults.put( "Objects.BlackText",      new ColorUIResource( 0x231F20 ) );
 	}
 
 	private static void reSetLookAndFeel() {

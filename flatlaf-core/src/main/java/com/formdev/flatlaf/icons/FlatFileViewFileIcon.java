@@ -24,7 +24,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "file" icon for {@link javax.swing.JFileChooser}.
  *
- * @uiDefault FileView.icon.fileColor			Color
+ * @uiDefault Objects.Grey						Color
  *
  * @author Karl Tauber
  */
@@ -32,7 +32,7 @@ public class FlatFileViewFileIcon
 	extends FlatAbstractIcon
 {
 	public FlatFileViewFileIcon() {
-		super( 16, 16, UIManager.getColor( "FileView.icon.fileColor" ) );
+		super( 16, 16, UIManager.getColor( "Objects.Grey" ) );
 	}
 
 	@Override

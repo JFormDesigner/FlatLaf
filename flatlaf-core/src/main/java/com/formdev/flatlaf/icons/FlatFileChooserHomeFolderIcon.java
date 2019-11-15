@@ -24,7 +24,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "home folder" icon for {@link javax.swing.JFileChooser}.
  *
- * @uiDefault FileChooser.icon.homeFolderColor		Color
+ * @uiDefault Actions.Grey							Color
  *
  * @author Karl Tauber
  */
@@ -32,7 +32,7 @@ public class FlatFileChooserHomeFolderIcon
 	extends FlatAbstractIcon
 {
 	public FlatFileChooserHomeFolderIcon() {
-		super( 16, 16, UIManager.getColor( "FileChooser.icon.homeFolderColor" ) );
+		super( 16, 16, UIManager.getColor( "Actions.Grey" ) );
 	}
 
 	@Override

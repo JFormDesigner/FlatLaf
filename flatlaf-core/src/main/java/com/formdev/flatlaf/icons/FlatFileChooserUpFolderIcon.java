@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import javax.swing.UIManager;
@@ -24,15 +25,18 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "up folder" icon for {@link javax.swing.JFileChooser}.
  *
- * @uiDefault FileChooser.icon.upFolderColor		Color
+ * @uiDefault Actions.Grey							Color
+ * @uiDefault Actions.Blue							Color
  *
  * @author Karl Tauber
  */
 public class FlatFileChooserUpFolderIcon
 	extends FlatAbstractIcon
 {
+	private final Color blueColor = UIManager.getColor( "Actions.Blue" );
+
 	public FlatFileChooserUpFolderIcon() {
-		super( 16, 16, UIManager.getColor( "FileChooser.icon.upFolderColor" ) );
+		super( 16, 16, UIManager.getColor( "Actions.Grey" ) );
 	}
 
 	@Override
@@ -47,6 +51,8 @@ public class FlatFileChooserUpFolderIcon
 		*/
 
 		g.fill( FlatUIUtils.createPath( 2,3, 5.5,3, 7,5, 9,5, 9,9, 13,9, 13,5, 14,5, 14,13, 2,13 ) );
+
+		g.setColor( blueColor );
 		g.fill( FlatUIUtils.createPath( 12,4, 12,8, 10,8, 10,4, 8,4, 11,1, 14,4, 12,4 ) );
 	}
 }

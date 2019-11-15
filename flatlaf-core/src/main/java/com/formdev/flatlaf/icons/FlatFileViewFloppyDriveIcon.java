@@ -25,7 +25,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "floppy drive" icon for {@link javax.swing.JFileChooser}.
  *
- * @uiDefault FileView.icon.floppyDriveColor		Color
+ * @uiDefault Objects.Grey							Color
  *
  * @author Karl Tauber
  */
@@ -33,7 +33,7 @@ public class FlatFileViewFloppyDriveIcon
 	extends FlatAbstractIcon
 {
 	public FlatFileViewFloppyDriveIcon() {
-		super( 16, 16, UIManager.getColor( "FileView.icon.floppyDriveColor" ) );
+		super( 16, 16, UIManager.getColor( "Objects.Grey" ) );
 	}
 
 	@Override

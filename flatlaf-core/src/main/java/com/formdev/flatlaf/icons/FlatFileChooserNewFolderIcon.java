@@ -24,7 +24,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "new folder" icon for {@link javax.swing.JFileChooser}.
  *
- * @uiDefault FileChooser.icon.newFolderColor		Color
+ * @uiDefault Actions.Grey							Color
  *
  * @author Karl Tauber
  */
@@ -32,7 +32,7 @@ public class FlatFileChooserNewFolderIcon
 	extends FlatAbstractIcon
 {
 	public FlatFileChooserNewFolderIcon() {
-		super( 16, 16, UIManager.getColor( "FileChooser.icon.newFolderColor" ) );
+		super( 16, 16, UIManager.getColor( "Actions.Grey" ) );
 	}
 
 	@Override

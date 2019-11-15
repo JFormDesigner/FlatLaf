@@ -23,7 +23,7 @@ import javax.swing.UIManager;
 /**
  * "details view" icon for {@link javax.swing.JFileChooser}.
  *
- * @uiDefault FileChooser.icon.detailsViewColor		Color
+ * @uiDefault Actions.Grey							Color
  *
  * @author Karl Tauber
  */
@@ -31,7 +31,7 @@ public class FlatFileChooserDetailsViewIcon
 	extends FlatAbstractIcon
 {
 	public FlatFileChooserDetailsViewIcon() {
-		super( 16, 16, UIManager.getColor( "FileChooser.icon.detailsViewColor" ) );
+		super( 16, 16, UIManager.getColor( "Actions.Grey" ) );
 	}
 
 	@Override
