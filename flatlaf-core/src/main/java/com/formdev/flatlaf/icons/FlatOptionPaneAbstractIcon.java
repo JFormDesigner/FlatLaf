@@ -22,11 +22,12 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * Base class for icons for {@link javax.swing.JOptionPane}.
  *
- * @uiDefault OptionPane.icon.foreground			Color
+ * @uiDefault OptionPane.icon.foreground			Color	default is transparent
  *
  * @author Karl Tauber
  */
@@ -35,8 +36,8 @@ public abstract class FlatOptionPaneAbstractIcon
 {
 	protected final Color foreground = UIManager.getColor( "OptionPane.icon.foreground" );
 
-	protected FlatOptionPaneAbstractIcon( String colorKey ) {
-		super( 32, 32, UIManager.getColor( colorKey ) );
+	protected FlatOptionPaneAbstractIcon( String colorKey, String defaultColorKey ) {
+		super( 32, 32, FlatUIUtils.getUIColor( colorKey, defaultColorKey ) );
 	}
 
 	@Override

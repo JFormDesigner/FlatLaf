@@ -24,7 +24,8 @@ import java.awt.geom.Rectangle2D;
 /**
  * "Question" icon for {@link javax.swing.JOptionPane}.
  *
- * @uiDefault OptionPane.icon.questionColor			Color
+ * @uiDefault OptionPane.icon.questionColor			Color	optional; defaults to Actions.Blue
+ * @uiDefault Actions.Blue							Color
  *
  * @author Karl Tauber
  */
@@ -32,7 +33,7 @@ public class FlatOptionPaneQuestionIcon
 	extends FlatOptionPaneAbstractIcon
 {
 	public FlatOptionPaneQuestionIcon() {
-		super( "OptionPane.icon.questionColor" );
+		super( "OptionPane.icon.questionColor", "Actions.Blue" );
 	}
 
 	/*

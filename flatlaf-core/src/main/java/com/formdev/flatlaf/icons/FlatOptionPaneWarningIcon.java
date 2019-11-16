@@ -24,7 +24,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "Warning" icon for {@link javax.swing.JOptionPane}.
  *
- * @uiDefault OptionPane.icon.warningColor			Color
+ * @uiDefault OptionPane.icon.warningColor			Color	optional; defaults to Actions.Yellow
+ * @uiDefault Actions.Yellow						Color
  *
  * @author Karl Tauber
  */
@@ -32,7 +33,7 @@ public class FlatOptionPaneWarningIcon
 	extends FlatOptionPaneAbstractIcon
 {
 	public FlatOptionPaneWarningIcon() {
-		super( "OptionPane.icon.warningColor" );
+		super( "OptionPane.icon.warningColor", "Actions.Yellow" );
 	}
 
 	/*
