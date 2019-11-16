@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -59,7 +58,7 @@ public class IntelliJTheme
 	private final Map<String, Object> ui;
 	private final Map<String, Object> icons;
 
-	private Map<String, Color> namedColors = Collections.emptyMap();
+	private Map<String, ColorUIResource> namedColors = Collections.emptyMap();
 
 	/**
 	 * Loads a IntelliJ .theme.json file from the given input stream,
@@ -136,6 +135,7 @@ public class IntelliJTheme
 		for( Map.Entry<String, Object> e : ui.entrySet() )
 			apply( e.getKey(), e.getValue(), defaults, defaultsKeysCache, uiKeys );
 
+		applyColorPalette( defaults );
 		applyCheckBoxColors( defaults );
 
 		// Spinner arrow button always has same colors as ComboBox arrow button
@@ -240,6 +240,39 @@ public class IntelliJTheme
 		}
 	}
 
+	private void applyColorPalette( UIDefaults defaults ) {
+		if( icons == null )
+			return;
+
+		Object palette = icons.get( "ColorPalette" );
+		if( !(palette instanceof Map) )
+			return;
+
+		@SuppressWarnings( "unchecked" )
+		Map<String, Object> colorPalette = (Map<String, Object>) palette;
+		for( Map.Entry<String, Object> e : colorPalette.entrySet() ) {
+			String key = e.getKey();
+			Object value = e.getValue();
+			if( key.startsWith( "Checkbox." ) || !(value instanceof String) )
+				continue;
+
+			if( dark )
+				key = StringUtils.removeTrailing( key, ".Dark" );
+
+			ColorUIResource color = toColor( (String) value );
+			if( color != null )
+				defaults.put( key, color );
+		}
+	}
+
+	private ColorUIResource toColor( String value ) {
+		// map named colors
+		ColorUIResource color = namedColors.get( value );
+
+		// parse color
+		return (color != null) ? color : UIDefaultsLoader.parseColor( value );
+	}
+
 	/**
 	 * Because Darcula uses SVGs for check boxes and radio buttons the colors for
 	 * this two components are specified in "icons > ColorPalette".
@@ -266,7 +299,7 @@ public class IntelliJTheme
 
 			String newKey = checkboxKeyMapping.get( key );
 			if( newKey != null ) {
-				ColorUIResource color = UIDefaultsLoader.parseColor( (String) value );
+				ColorUIResource color = toColor( (String) value );
 				if( color != null )
 					defaults.put( newKey, color );
 
