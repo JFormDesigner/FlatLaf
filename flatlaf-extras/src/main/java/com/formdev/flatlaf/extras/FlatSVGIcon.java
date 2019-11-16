@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.demo;
+package com.formdev.flatlaf.extras;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -34,14 +34,14 @@ import com.kitfox.svg.app.beans.SVGIcon;
 /**
  * @author Karl Tauber
  */
-public class ScaledSVGIcon
+public class FlatSVGIcon
 	extends ImageIcon
 {
 	private final String name;
 	private final SVGIcon svgIcon;
 	private boolean dark;
 
-	public ScaledSVGIcon( String name ) {
+	public FlatSVGIcon( String name ) {
 		this.name = name;
 
 		svgIcon = new SVGIcon();
@@ -69,7 +69,7 @@ public class ScaledSVGIcon
 			int dotIndex = name.lastIndexOf( '.' );
 			name = name.substring( 0, dotIndex ) + "_dark" + name.substring( dotIndex );
 		}
-		return getClass().getResource( name );
+		return FlatSVGIcon.class.getClassLoader().getResource( name );
 	}
 
 	@Override

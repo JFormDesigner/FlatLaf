@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import net.miginfocom.swing.*;
 
 /**
@@ -273,20 +274,20 @@ class DemoFrame
 		buttonGroup1.add(radioButtonMenuItem3);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
-		undoMenuItem.setIcon( new ScaledSVGIcon( "icons/undo.svg" ) );
-		redoMenuItem.setIcon( new ScaledSVGIcon( "icons/redo.svg" ) );
+		undoMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/undo.svg" ) );
+		redoMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/redo.svg" ) );
 
-		cutMenuItem.setIcon( new ScaledSVGIcon( "icons/menu-cut.svg" ) );
-		copyMenuItem.setIcon( new ScaledSVGIcon( "icons/copy.svg" ) );
-		pasteMenuItem.setIcon( new ScaledSVGIcon( "icons/menu-paste.svg" ) );
+		cutMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-cut.svg" ) );
+		copyMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/copy.svg" ) );
+		pasteMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-paste.svg" ) );
 
-		backButton.setIcon( new ScaledSVGIcon( "icons/back.svg" ) );
-		forwardButton.setIcon( new ScaledSVGIcon( "icons/forward.svg" ) );
-		cutButton.setIcon( new ScaledSVGIcon( "icons/menu-cut.svg" ) );
-		copyButton.setIcon( new ScaledSVGIcon( "icons/copy.svg" ) );
-		pasteButton.setIcon( new ScaledSVGIcon( "icons/menu-paste.svg" ) );
-		refreshButton.setIcon( new ScaledSVGIcon( "icons/refresh.svg" ) );
-		showToggleButton.setIcon( new ScaledSVGIcon( "icons/show.svg" ) );
+		backButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/back.svg" ) );
+		forwardButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/forward.svg" ) );
+		cutButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-cut.svg" ) );
+		copyButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/copy.svg" ) );
+		pasteButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-paste.svg" ) );
+		refreshButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/refresh.svg" ) );
+		showToggleButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/show.svg" ) );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

@@ -22,9 +22,10 @@ plugins {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
+	implementation( "com.formdev:svgSalamander:1.1.2.1" )
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 }
