@@ -4,6 +4,7 @@ FlatLaf Change Log
 ## Unreleased
 
 - Support using IntelliJ platform themes (.theme.json files).
+- Support `JFileChooser`. (issue #5)
 - Fixed selection background of checkbox in table cell.
 - Fixed jittery submenu rendering on Mac. (issue #10)
 
