@@ -19,10 +19,15 @@ package com.formdev.flatlaf.ui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
 import com.formdev.flatlaf.util.UIScale;
@@ -30,6 +35,9 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JOptionPane}.
  *
+ * @uiDefault OptionPane.font						Font	unused
+ * @uiDefault OptionPane.background					Color
+ * @uiDefault OptionPane.foreground					Color	unused
  * @uiDefault OptionPane.border						Border
  * @uiDefault OptionPane.messageAreaBorder			Border
  * @uiDefault OptionPane.buttonAreaBorder			Border
@@ -75,6 +83,13 @@ public class FlatOptionPaneUI
 		messagePadding = UIManager.getInt( "OptionPane.messagePadding" );
 		maxCharactersPerLine = UIManager.getInt( "OptionPane.maxCharactersPerLine" );
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
+	}
+
+	@Override
+	protected void installComponents() {
+		super.installComponents();
+
+		updateChildPanels( optionPane );
 	}
 
 	@Override
@@ -130,6 +145,26 @@ public class FlatOptionPaneUI
 		super.addMessageComponents( container, cons, msg, maxll, internallyCreated );
 	}
 
+	private void updateChildPanels( Container c ) {
+		for( Component child : c.getComponents() ) {
+			if( child instanceof JPanel ) {
+				JPanel panel = (JPanel)child;
+
+				// make sub-panel non-opaque for OptionPane.background
+				panel.setOpaque( false );
+
+				// use non-UIResource borders to avoid that they are replaced when switching LaF
+				Border border = panel.getBorder();
+				if( border instanceof UIResource )
+					panel.setBorder( new NonUIResourceBorder( border ) );
+			}
+
+			if( child instanceof Container ) {
+				updateChildPanels( (Container) child );
+			}
+		}
+	}
+
 	private Component findByName( Container c, String name ) {
 		for( Component child : c.getComponents() ) {
 			if( name.equals( child.getName() ) )
@@ -142,5 +177,32 @@ public class FlatOptionPaneUI
 			}
 		}
 		return null;
+	}
+
+	//---- class NonUIResourceBorder ------------------------------------------
+
+	private static class NonUIResourceBorder
+		implements Border
+	{
+		private final Border delegate;
+
+		NonUIResourceBorder( Border delegate ) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			delegate.paintBorder( c, g, x, y, width, height );
+		}
+
+		@Override
+		public Insets getBorderInsets( Component c ) {
+			return delegate.getBorderInsets( c );
+		}
+
+		@Override
+		public boolean isBorderOpaque() {
+			return delegate.isBorderOpaque();
+		}
 	}
 }
