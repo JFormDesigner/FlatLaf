@@ -40,6 +40,7 @@ import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.ScaledNumber;
 import com.formdev.flatlaf.util.StringUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Load UI defaults from properties files associated to Flat LaF classes and add to UI defaults.
@@ -93,6 +94,27 @@ class UIDefaultsLoader
 						if( in != null )
 							properties.load( in );
 					}
+				}
+			}
+
+			// collect all platform specific keys (but do not modify properties)
+			ArrayList<String> platformSpecificKeys = new ArrayList<>();
+			for( Object key : properties.keySet() ) {
+				if( ((String)key).startsWith( "[" ) )
+					platformSpecificKeys.add( (String) key );
+			}
+
+			// remove platform specific properties and re-add only properties
+			// for current platform, but with platform prefix removed
+			if( !platformSpecificKeys.isEmpty() ) {
+				String platformPrefix =
+					SystemInfo.IS_WINDOWS ? "[win]" :
+					SystemInfo.IS_MAC ? "[mac]" :
+					SystemInfo.IS_LINUX ? "[linux]" : "[unknown]";
+				for( String key : platformSpecificKeys ) {
+					Object value = properties.remove( key );
+					if( key.startsWith( platformPrefix ) )
+						properties.put( key.substring( platformPrefix.length() ), value );
 				}
 			}
 
