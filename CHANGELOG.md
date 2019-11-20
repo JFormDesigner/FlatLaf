@@ -7,6 +7,7 @@ FlatLaf Change Log
 - Support `JFileChooser`. (issue #5)
 - Fixed selection background of checkbox in table cell.
 - Fixed jittery submenu rendering on Mac. (issue #10)
+- JIDE Common Layer: Fixed `JidePopup` border.
 
 
 ## 0.18

@@ -14,7 +14,7 @@ new FormModel {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
 				"$columnSpecs": "70dlu:grow, labelcompgap, 70dlu:grow"
-				"$rowSpecs": "pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref"
+				"$rowSpecs": "pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref, linegap, default"
 			} ) {
 				name: "panel9"
 				"opaque": false
@@ -191,6 +191,28 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridY": 7
 					"gridWidth": 3
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "insets 3 0 3 3,hidemode 3"
+					"$columnConstraints": "[fill][fill]"
+					"$rowConstraints": "[]"
+				} ) {
+					name: "panel10"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "jidePopupLabel"
+						"text": "JidePopup:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "showJidePopupButton"
+						"text": "show JidePopup"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showJidePopupButtonActionPerformed", true ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridY": 9
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
