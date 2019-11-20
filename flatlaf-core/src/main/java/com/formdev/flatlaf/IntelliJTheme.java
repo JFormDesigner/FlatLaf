@@ -193,14 +193,10 @@ public class IntelliJTheme
 		} else {
 			uiKeys.add( key );
 
-			// Darcula buttons support gradient for background and border, but FlatLaf does not
-			if( key.endsWith( ".startBackground" ) || key.endsWith( ".startBorderColor" ) )
-				key = key.replace( ".startB", ".b" );
-			else if( key.endsWith( ".endBackground" ) || key.endsWith( ".endBorderColor" ) )
-				return; // ignore
-
 			// map keys
 			key = uiKeyMapping.getOrDefault( key, key );
+			if( key.isEmpty() )
+				return; // ignore key
 
 			String valueStr = value.toString();
 
@@ -350,6 +346,17 @@ public class IntelliJTheme
 	private static Set<String> noWildcardReplace = new HashSet<>();
 
 	static {
+		// Button
+		// Darcula buttons support gradient for background and border, but FlatLaf does not
+		uiKeyMapping.put( "Button.startBackground",          "Button.background" );
+		uiKeyMapping.put( "Button.startBorderColor",         "Button.borderColor" );
+		uiKeyMapping.put( "Button.default.startBackground",  "Button.default.background" );
+		uiKeyMapping.put( "Button.default.startBorderColor", "Button.default.borderColor" );
+		uiKeyMapping.put( "Button.endBackground",            "" ); // ignore
+		uiKeyMapping.put( "Button.endBorderColor",           "" ); // ignore
+		uiKeyMapping.put( "Button.default.endBackground",    "" ); // ignore
+		uiKeyMapping.put( "Button.default.endBorderColor",   "" ); // ignore
+
 		// ComboBox
 		uiKeyMapping.put( "ComboBox.background",                        "ComboBox.editableBackground" );
 		uiKeyMapping.put( "ComboBox.nonEditableBackground",             "ComboBox.background" );
@@ -357,6 +364,12 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ComboBox.ArrowButton.disabledIconColor",     "ComboBox.buttonDisabledArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.iconColor",             "ComboBox.buttonArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.nonEditableBackground", "ComboBox.buttonBackground" );
+
+		// ProgressBar
+		uiKeyMapping.put( "ProgressBar.background",    "" ); // ignore
+		uiKeyMapping.put( "ProgressBar.foreground",    "" ); // ignore
+		uiKeyMapping.put( "ProgressBar.trackColor",    "ProgressBar.background" );
+		uiKeyMapping.put( "ProgressBar.progressColor", "ProgressBar.foreground" );
 
 		for( Map.Entry<String, String> e : uiKeyMapping.entrySet() )
 			uiKeyInverseMapping.put( e.getValue(), e.getKey() );
