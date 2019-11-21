@@ -36,9 +36,4 @@ class IJThemeInfo
 		this.themeFile = themeFile;
 		this.lafClassName = lafClassName;
 	}
-
-	@Override
-	public String toString() {
-		return name;
-	}
 }

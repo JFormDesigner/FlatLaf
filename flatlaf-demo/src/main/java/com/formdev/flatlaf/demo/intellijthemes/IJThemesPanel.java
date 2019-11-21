@@ -69,7 +69,12 @@ public class IJThemesPanel
 				int index, boolean isSelected, boolean cellHasFocus )
 			{
 				String title = categories.get( index );
-				JComponent c = (JComponent) super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+				String name = ((IJThemeInfo)value).name;
+				int sep = name.indexOf( '/' );
+				if( sep >= 0 )
+					name = name.substring( sep + 1 ).trim();
+
+				JComponent c = (JComponent) super.getListCellRendererComponent( list, name, index, isSelected, cellHasFocus );
 				if( title != null )
 					c.setBorder( new CompoundBorder( new ListCellTitledBorder( themesList, title ), c.getBorder() ) );
 				return c;
@@ -99,9 +104,28 @@ public class IJThemesPanel
 		themes.add( new IJThemeInfo( "Flat IntelliJ", null, null, null, FlatIntelliJLaf.class.getName() ) );
 		themes.add( new IJThemeInfo( "Flat Darcula", null, null, null, FlatDarculaLaf.class.getName() ) );
 
-		// add bundles themes
+		// add uncategorized bundled themes
 		categories.put( themes.size(), "IntelliJ Themes" );
-		themes.addAll( themesManager.bundledThemes );
+		for( IJThemeInfo ti : themesManager.bundledThemes ) {
+			if( !ti.name.contains( "/" ) )
+				themes.add( ti );
+		}
+
+		// add categorized bundled themes
+		String lastCategory = null;
+		for( IJThemeInfo ti : themesManager.bundledThemes ) {
+			int sep = ti.name.indexOf( '/' );
+			if( sep < 0 )
+				continue;
+
+			String category = ti.name.substring( 0, sep ).trim();
+			if( !Objects.equals( lastCategory, category ) ) {
+				lastCategory = category;
+				categories.put( themes.size(), category );
+			}
+
+			themes.add( ti );
+		}
 
 		// add themes from directory
 		categories.put( themes.size(), "Current Directory" );
