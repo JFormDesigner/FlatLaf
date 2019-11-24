@@ -371,6 +371,9 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ProgressBar.trackColor",    "ProgressBar.background" );
 		uiKeyMapping.put( "ProgressBar.progressColor", "ProgressBar.foreground" );
 
+		// Slider
+		uiKeyMapping.put( "Slider.trackWidth", "" ); // ignore (used in Material Theme UI Lite)
+
 		for( Map.Entry<String, String> e : uiKeyMapping.entrySet() )
 			uiKeyInverseMapping.put( e.getValue(), e.getKey() );
 
