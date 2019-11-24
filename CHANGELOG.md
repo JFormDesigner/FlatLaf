@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 - Support using IntelliJ platform themes (.theme.json files).
 - Support `JFileChooser`. (issue #5)
+- Look and feel identifier returned by `FlatLaf.getID()` now always starts with
+  "FlatLaf". Use `UIManager.getLookAndFeel().getID().startsWith( "FlatLaf" )` to
+  check whether the current look and feel is FlatLaf.
 - Fixed selection background of checkbox in table cell.
 - Fixed jittery submenu rendering on Mac. (issue #10)
 - JIDE Common Layer: Fixed `JidePopup` border.

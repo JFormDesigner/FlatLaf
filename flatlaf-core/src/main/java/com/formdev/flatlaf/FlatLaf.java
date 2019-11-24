@@ -71,9 +71,17 @@ public abstract class FlatLaf
 		}
 	}
 
+	/**
+	 * Returns the look and feel identifier.
+	 * <p>
+	 * Syntax: "FlatLaf - ${theme-name}"
+	 * <p>
+	 * Use {@code UIManager.getLookAndFeel().getID().startsWith( "FlatLaf" )}
+	 * to check whether the current look and feel is FlatLaf.
+	 */
 	@Override
 	public String getID() {
-		return getName();
+		return "FlatLaf - " + getName();
 	}
 
 	public abstract boolean isDark();
