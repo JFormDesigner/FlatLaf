@@ -10,6 +10,7 @@ FlatLaf Change Log
   check whether the current look and feel is FlatLaf.
 - Fixed selection background of checkbox in table cell.
 - Fixed jittery submenu rendering on Mac. (issue #10)
+- Hex color values in `.properties` files now must start with a `#` character.
 - JIDE Common Layer: Fixed `JidePopup` border.
 
 

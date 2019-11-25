@@ -166,7 +166,7 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static void logParseError( String key, String value, RuntimeException ex ) {
+	static void logParseError( String key, String value, RuntimeException ex ) {
 		System.err.println( "Failed to parse: '" + key + '=' + value + '\'' );
 		System.err.println( "    " + ex.getMessage() );
 	}
@@ -214,7 +214,9 @@ class UIDefaultsLoader
 		ValueType valueType = ValueType.UNKNOWN;
 
 		// check whether value type is specified in the value
-		if( value.startsWith( TYPE_PREFIX ) ) {
+		if( value.startsWith( "#" ) )
+			valueType = ValueType.COLOR;
+		else if( value.startsWith( TYPE_PREFIX ) ) {
 			int end = value.indexOf( TYPE_PREFIX_END );
 			if( end != -1 ) {
 				try {
@@ -340,28 +342,62 @@ class UIDefaultsLoader
 	}
 
 	private static ColorUIResource parseColor( String value, boolean reportError ) {
-		value = StringUtils.removeLeading( value, "#" );
-
-		int valueLength = value.length();
-		if( valueLength != 6 && valueLength != 8 )
-			return null;
-
 		try {
-			long rgb = Long.parseLong( value, 16 );
-			if( valueLength == 6 )
-				return new ColorUIResource( (int) rgb );
-			if( valueLength == 8 )
-				return new ColorUIResource( new Color( (int) (((rgb >> 8) & 0xffffff) | ((rgb & 0xff) << 24)), true ) );
-
-			if( reportError )
-				throw new NumberFormatException( value );
-		} catch( NumberFormatException ex ) {
+			int rgba = parseColorRGBA( value );
+			return ((rgba & 0xff000000) == 0xff000000)
+				? new ColorUIResource( rgba )
+				: new ColorUIResource( new Color( rgba, true ) );
+		} catch( IllegalArgumentException ex ) {
 			if( reportError )
 				throw new IllegalArgumentException( "invalid color '" + value + "'" );
 
 			// not a color --> ignore
 		}
 		return null;
+	}
+
+	/**
+	 * Parses a hex color in  {@code #RGB}, {@code #RGBA}, {@code #RRGGBB} or {@code #RRGGBBAA}
+	 * format and returns it as {@code rgba} integer suitable for {@link java.awt.Color},
+	 * which includes alpha component in bits 24-31.
+	 *
+	 * @throws IllegalArgumentException
+	 */
+	static int parseColorRGBA( String value ) {
+		int len = value.length();
+		if( (len != 4 && len != 5 && len != 7 && len != 9) || value.charAt( 0 ) != '#' )
+			throw new IllegalArgumentException();
+
+		// parse hex
+		int n = 0;
+		for( int i = 1; i < len; i++ ) {
+			char ch = value.charAt( i );
+
+			int digit;
+			if( ch >= '0' && ch <= '9' )
+				digit = ch - '0';
+			else if( ch >= 'a' && ch <= 'f' )
+				digit = ch - 'a' + 10;
+			else if( ch >= 'A' && ch <= 'F' )
+				digit = ch - 'A' + 10;
+			else
+				throw new IllegalArgumentException();
+
+			n = (n << 4) | digit;
+		}
+
+		if( len <= 5 ) {
+			// double nibbles
+			int n1 = n & 0xf000;
+			int n2 = n & 0xf00;
+			int n3 = n & 0xf0;
+			int n4 = n & 0xf;
+			n = (n1 << 16) | (n1 << 12) | (n2 << 12) | (n2 << 8) | (n3 << 8) | (n3 << 4) | (n4 << 4) | n4;
+		}
+
+		return (len == 4 || len == 7)
+			? (0xff000000 | n) // set alpha to 255
+			: (((n >> 8) & 0xffffff) | ((n & 0xff) << 24)); // move alpha from lowest to highest byte
 	}
 
 	private static ColorUIResource parseColorFunctions( String value, boolean reportError ) {

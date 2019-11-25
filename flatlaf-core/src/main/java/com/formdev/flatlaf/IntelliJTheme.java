@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.UIDefaults;
@@ -204,8 +205,26 @@ public class IntelliJTheme
 			Object uiValue = namedColors.get( valueStr );
 
 			// parse value
-			if( uiValue == null )
-				uiValue = UIDefaultsLoader.parseValue( key, valueStr );
+			if( uiValue == null ) {
+				// fix errors (missing '#' for colors)
+				if( !valueStr.startsWith( "#" ) && (key.endsWith( "ground" ) || key.endsWith( "Color" )) )
+					valueStr = "#" + valueStr;
+				else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) ) {
+					List<String> parts = StringUtils.split( valueStr, ',' );
+					if( parts.size() == 5 && !parts.get( 4 ).startsWith( "#" ) ) {
+						parts.set( 4, "#" + parts.get( 4 ) );
+						valueStr = String.join( ",", parts );
+					}
+				}
+
+				// parse value
+				try {
+					uiValue = UIDefaultsLoader.parseValue( key, valueStr );
+				} catch( RuntimeException ex ) {
+					UIDefaultsLoader.logParseError( key, valueStr, ex );
+					return; // ignore invalid value
+				}
+			}
 
 			if( key.startsWith( "*." ) ) {
 				// wildcard
