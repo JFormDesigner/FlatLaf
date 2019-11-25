@@ -177,6 +177,9 @@ public class IJThemesPanel
 
 		// change look and feel
 		if( themeInfo.lafClassName != null ) {
+			if( themeInfo.lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
+				return;
+
 			try {
 				UIManager.setLookAndFeel( themeInfo.lafClassName );
 			} catch( Exception ex ) {
