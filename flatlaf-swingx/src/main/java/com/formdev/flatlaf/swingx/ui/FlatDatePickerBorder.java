@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.swingx.ui;
 
 import java.awt.Component;
+import javax.swing.JTable;
 import org.jdesktop.swingx.JXDatePicker;
 import com.formdev.flatlaf.ui.FlatRoundBorder;
 
@@ -34,5 +35,10 @@ public class FlatDatePickerBorder
 			return ((JXDatePicker)c).getEditor().hasFocus();
 
 		return super.isFocused( c );
+	}
+
+	@Override
+	protected boolean isTableCellEditor( Component c ) {
+		return c.getParent() instanceof JTable;
 	}
 }

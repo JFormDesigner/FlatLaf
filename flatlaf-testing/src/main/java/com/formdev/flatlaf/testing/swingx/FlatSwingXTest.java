@@ -20,8 +20,10 @@ import java.awt.*;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.*;
+import javax.swing.table.*;
 import net.miginfocom.swing.*;
 import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.table.DatePickerCellEditor;
 import com.formdev.flatlaf.testing.FlatTestFrame;
 import com.formdev.flatlaf.testing.FlatTestPanel;
 
@@ -52,6 +54,8 @@ public class FlatSwingXTest
 
 		calendar.set( Calendar.DAY_OF_MONTH, 16 );
 		monthView1.setUnselectableDates( calendar.getTime() );
+
+		table.setDefaultEditor( Date.class, new DatePickerCellEditor() );
 	}
 
 	private void busyChanged() {
@@ -64,13 +68,11 @@ public class FlatSwingXTest
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel label1 = new JLabel();
 		JLabel label3 = new JLabel();
+		JLabel label6 = new JLabel();
 		JLabel datePickerLabel = new JLabel();
 		JXDatePicker xDatePicker1 = new JXDatePicker();
-		JXDatePicker xDatePicker2 = new JXDatePicker();
 		JLabel label4 = new JLabel();
-		JLabel label5 = new JLabel();
 		JXDatePicker xDatePicker3 = new JXDatePicker();
-		JXDatePicker xDatePicker4 = new JXDatePicker();
 		JLabel monthViewLabel = new JLabel();
 		monthView1 = new JXMonthView();
 		monthView2 = new JXMonthView();
@@ -98,6 +100,11 @@ public class FlatSwingXTest
 		JXTaskPane xTaskPane6 = new JXTaskPane();
 		JXHyperlink xHyperlink9 = new JXHyperlink();
 		JXHyperlink xHyperlink10 = new JXHyperlink();
+		JXDatePicker xDatePicker2 = new JXDatePicker();
+		JLabel label5 = new JLabel();
+		JXDatePicker xDatePicker4 = new JXDatePicker();
+		JScrollPane scrollPane2 = new JScrollPane();
+		table = new JTable();
 		JLabel headerLabel = new JLabel();
 		JXHeader xHeader1 = new JXHeader();
 
@@ -108,12 +115,13 @@ public class FlatSwingXTest
 			"[left]" +
 			"[]" +
 			"[]" +
+			"[]" +
 			"[fill]",
 			// rows
 			"[]0" +
 			"[]" +
 			"[]0" +
-			"[]" +
+			"[top]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -127,31 +135,22 @@ public class FlatSwingXTest
 		label3.setText("disabled");
 		add(label3, "cell 2 0");
 
+		//---- label6 ----
+		label6.setText("DatePickerCellEditor:");
+		add(label6, "cell 3 0");
+
 		//---- datePickerLabel ----
 		datePickerLabel.setText("JXDatePicker:");
 		add(datePickerLabel, "cell 0 1");
 		add(xDatePicker1, "cell 1 1");
 
-		//---- xDatePicker2 ----
-		xDatePicker2.setEnabled(false);
-		add(xDatePicker2, "cell 2 1");
-
 		//---- label4 ----
 		label4.setText("not editable");
 		add(label4, "cell 1 2");
 
-		//---- label5 ----
-		label5.setText("not editable disabled");
-		add(label5, "cell 2 2");
-
 		//---- xDatePicker3 ----
 		xDatePicker3.setEditable(false);
 		add(xDatePicker3, "cell 1 3");
-
-		//---- xDatePicker4 ----
-		xDatePicker4.setEnabled(false);
-		xDatePicker4.setEditable(false);
-		add(xDatePicker4, "cell 2 3");
 
 		//---- monthViewLabel ----
 		monthViewLabel.setText("JXMonthView:");
@@ -162,7 +161,7 @@ public class FlatSwingXTest
 		monthView1.setShowingLeadingDays(true);
 		monthView1.setShowingTrailingDays(true);
 		monthView1.setShowingWeekNumber(true);
-		add(monthView1, "cell 1 4");
+		add(monthView1, "cell 1 4 2 1");
 
 		//---- monthView2 ----
 		monthView2.setTraversable(true);
@@ -170,7 +169,7 @@ public class FlatSwingXTest
 		monthView2.setShowingTrailingDays(true);
 		monthView2.setShowingWeekNumber(true);
 		monthView2.setEnabled(false);
-		add(monthView2, "cell 2 4");
+		add(monthView2, "cell 3 4");
 
 		//---- hyperlinkLabel ----
 		hyperlinkLabel.setText("JXHyperlink:");
@@ -178,12 +177,12 @@ public class FlatSwingXTest
 
 		//---- xHyperlink1 ----
 		xHyperlink1.setText("enabled");
-		add(xHyperlink1, "cell 1 5");
+		add(xHyperlink1, "cell 1 5 2 1");
 
 		//---- xHyperlink2 ----
 		xHyperlink2.setText("disabled");
 		xHyperlink2.setEnabled(false);
-		add(xHyperlink2, "cell 2 5");
+		add(xHyperlink2, "cell 3 5");
 
 		//---- label2 ----
 		label2.setText("JXBusyLabel:");
@@ -191,18 +190,18 @@ public class FlatSwingXTest
 
 		//---- xBusyLabel1 ----
 		xBusyLabel1.setText("enabled");
-		add(xBusyLabel1, "cell 1 6");
+		add(xBusyLabel1, "cell 1 6 2 1");
 
 		//---- xBusyLabel2 ----
 		xBusyLabel2.setText("disabled");
 		xBusyLabel2.setEnabled(false);
-		add(xBusyLabel2, "cell 2 6,growx");
+		add(xBusyLabel2, "cell 3 6,growx");
 
 		//---- busyCheckBox ----
 		busyCheckBox.setText("busy");
 		busyCheckBox.setMnemonic('Y');
 		busyCheckBox.addActionListener(e -> busyChanged());
-		add(busyCheckBox, "cell 2 6");
+		add(busyCheckBox, "cell 3 6");
 
 		//======== panel2 ========
 		{
@@ -296,7 +295,46 @@ public class FlatSwingXTest
 			}
 			panel2.add(scrollPane1, "cell 0 2,width 150,height 350");
 		}
-		add(panel2, "cell 3 0 1 8,aligny top,growy 0");
+		add(panel2, "cell 4 0 1 8,aligny top,growy 0");
+
+		//---- xDatePicker2 ----
+		xDatePicker2.setEnabled(false);
+		add(xDatePicker2, "cell 2 1");
+
+		//---- label5 ----
+		label5.setText("not editable disabled");
+		add(label5, "cell 2 2");
+
+		//---- xDatePicker4 ----
+		xDatePicker4.setEnabled(false);
+		xDatePicker4.setEditable(false);
+		add(xDatePicker4, "cell 2 3");
+
+		//======== scrollPane2 ========
+		{
+
+			//---- table ----
+			table.setModel(new DefaultTableModel(
+				new Object[][] {
+					{new Date(1574636400000L) /* 25.11.2019, 00:00:00 */},
+					{new Date(1517439600000L) /* 01.02.2018, 00:00:00 */},
+				},
+				new String[] {
+					"Date"
+				}
+			) {
+				Class<?>[] columnTypes = new Class<?>[] {
+					Date.class
+				};
+				@Override
+				public Class<?> getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+			table.setPreferredScrollableViewportSize(new Dimension(150, 50));
+			scrollPane2.setViewportView(table);
+		}
+		add(scrollPane2, "cell 3 1 1 3,growy");
 
 		//---- headerLabel ----
 		headerLabel.setText("JXHeader:");
@@ -306,7 +344,7 @@ public class FlatSwingXTest
 		xHeader1.setTitle("Title");
 		xHeader1.setDescription("Description\nMore description");
 		xHeader1.setIcon(new ImageIcon(getClass().getResource("/org/jdesktop/swingx/plaf/windows/resources/tipoftheday.png")));
-		add(xHeader1, "cell 1 7 2 1,width 200");
+		add(xHeader1, "cell 1 7 3 1,width 200");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		xDatePicker1.setDate( new Date() );
@@ -321,5 +359,6 @@ public class FlatSwingXTest
 	private JXBusyLabel xBusyLabel1;
 	private JXBusyLabel xBusyLabel2;
 	private JCheckBox busyCheckBox;
+	private JTable table;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

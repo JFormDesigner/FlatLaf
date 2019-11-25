@@ -71,7 +71,7 @@ public class FlatBorder
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			boolean isCellEditor = FlatUIUtils.isTableCellEditor( c );
+			boolean isCellEditor = isTableCellEditor( c );
 			float focusWidth = isCellEditor ? 0 : getFocusWidth();
 			float borderWidth = getBorderWidth( c );
 			float arc = isCellEditor ? 0 : getArc();
@@ -132,9 +132,13 @@ public class FlatBorder
 			return c.hasFocus();
 	}
 
+	protected boolean isTableCellEditor( Component c ) {
+		return FlatUIUtils.isTableCellEditor( c );
+	}
+
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		boolean isCellEditor = FlatUIUtils.isTableCellEditor( c );
+		boolean isCellEditor = isTableCellEditor( c );
 		float ow = (isCellEditor ? 0 : getFocusWidth()) + getLineWidth();
 
 		insets = super.getBorderInsets( c, insets );
