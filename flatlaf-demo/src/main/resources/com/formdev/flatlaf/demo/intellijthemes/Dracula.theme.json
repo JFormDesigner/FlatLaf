@@ -40,6 +40,10 @@
         "focusedBorderColor": "#bd93f9"
       }
     },
+    "Counter": {
+      "foreground": "#414450",
+      "background": "#2fc864"
+    },
     "CheckBoxMenuItem": {
       "acceleratorSelectionForeground": "#ff79c6"
     },
@@ -78,7 +82,7 @@
       "background": "#44475a",
       "underlinedTabBackground": "#313341",
       "underlineColor": "#bd93f9",
-      "underlineHeight": 0
+      "underlineHeight": 2
     },
     "FileColor": {
       "Blue": "#8be9fd",
@@ -130,12 +134,12 @@
         "installBorderColor": "#bd93f9",
         "installForeground": "#bd93f9",
         "installBackground": "#414450",
-        "updateBorderColor": "#ff79c6",
-        "updateForeground": "#ff79c6",
-        "updateBackground": "#414450",
         "installFillForeground": "#414450",
         "installFillBackground": "#bd93f9",
-        "installFocusedBackground": "#414450"
+        "installFocusedBackground": "#414450",
+        "updateBorderColor": "#5da3f4",
+        "updateForeground": "#f8f8f2",
+        "updateBackground": "#5da3f4"
       },
       "Tab": {
         "selectedBackground": "#282a35",
@@ -190,7 +194,7 @@
     },
     "Separator.separatorColor": "#282a35",
     "TabbedPane": {
-      "tabSelectionHeight": 1,
+      "tabSelectionHeight": 2,
       "focusColor": "#282a35",
       "hoverColor": "#282a35",
       "underlineColor": "#bd93f9",
@@ -213,7 +217,7 @@
       },
       "HeaderTab": {
         "underlineColor": "#bd93f9",
-        "underlineHeight": 1,
+        "underlineHeight": 2,
         "underlinedTabBackground": "#313341",
         "underlinedTabInactiveBackground": "#313341"
       }

@@ -67,6 +67,7 @@
     "ComboBox": {
       "nonEditableBackground": "#333841",
       "background": "#333841",
+      "selectionBackground": "#4d78cc",
       "ArrowButton": {
         "iconColor": "#abb2bf",
         "disabledIconColor": "#2c313a",
@@ -324,6 +325,7 @@
     },
 
     "Tree": {
+      "selectionBackground": "#4d78cc",
       "modifiedItemForeground": "#568AF2",
       "rowHeight": 20
     },
