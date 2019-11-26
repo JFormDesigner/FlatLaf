@@ -139,6 +139,10 @@ public class IntelliJTheme
 		applyColorPalette( defaults );
 		applyCheckBoxColors( defaults );
 
+		// IDEA uses TextField.background for editable ComboBox and Spinner
+		defaults.put( "ComboBox.editableBackground", defaults.get( "TextField.background" ) );
+		defaults.put( "Spinner.background", defaults.get( "TextField.background" ) );
+
 		// Spinner arrow button always has same colors as ComboBox arrow button
 		defaults.put( "Spinner.buttonBackground", defaults.get( "ComboBox.buttonEditableBackground" ) );
 		defaults.put( "Spinner.buttonArrowColor", defaults.get( "ComboBox.buttonArrowColor" ) );
@@ -246,7 +250,7 @@ public class IntelliJTheme
 						// (e.g. set ComboBox.buttonEditableBackground to *.background
 						// because it is mapped from ComboBox.ArrowButton.background)
 						String km = uiKeyInverseMapping.getOrDefault( k, (String) k );
-						if( km.endsWith( tail ) && !noWildcardReplace.contains( k ) )
+						if( km.endsWith( tail ) && !noWildcardReplace.contains( k ) && !((String)k).startsWith( "CheckBox.icon." ) )
 							defaults.put( k, uiValue );
 					}
 				}
@@ -289,7 +293,7 @@ public class IntelliJTheme
 	}
 
 	/**
-	 * Because Darcula uses SVGs for check boxes and radio buttons the colors for
+	 * Because IDEA uses SVGs for check boxes and radio buttons the colors for
 	 * this two components are specified in "icons > ColorPalette".
 	 * FlatLaf uses vector icons and expects colors for the two components in UI defaults.
 	 */
@@ -310,7 +314,18 @@ public class IntelliJTheme
 			if( !key.startsWith( "Checkbox." ) || !(value instanceof String) )
 				continue;
 
-			key = StringUtils.removeTrailing( key, ".Dark" );
+			if( key.equals( "Checkbox.Background.Default" ) ||
+				key.equals( "Checkbox.Foreground.Selected" ) )
+			{
+				// This two keys do not work correctly in IDEA because they
+				// map SVG color "#ffffff" to another color, but checkBox.svg and
+				// radio.svg (in package com.intellij.ide.ui.laf.icons.intellij)
+				// use "#fff". So use white to get same appearance as in IDEA.
+				value = "#ffffff";
+			}
+
+			if( dark )
+				key = StringUtils.removeTrailing( key, ".Dark" );
 
 			String newKey = checkboxKeyMapping.get( key );
 			if( newKey != null ) {
@@ -322,7 +337,7 @@ public class IntelliJTheme
 			}
 		}
 
-		// When Darcula replaces colors in SVGs it uses color values and not the keys
+		// When IDEA replaces colors in SVGs it uses color values and not the keys
 		// from com.intellij.ide.ui.UITheme.colorPalette, but there are some keys that
 		// have same color value:
 		//   - Checkbox.Background.Default.Dark  has same color as  Checkbox.Background.Selected.Dark
@@ -366,7 +381,7 @@ public class IntelliJTheme
 
 	static {
 		// Button
-		// Darcula buttons support gradient for background and border, but FlatLaf does not
+		// IDEA buttons support gradient for background and border, but FlatLaf does not
 		uiKeyMapping.put( "Button.startBackground",          "Button.background" );
 		uiKeyMapping.put( "Button.startBorderColor",         "Button.borderColor" );
 		uiKeyMapping.put( "Button.default.startBackground",  "Button.default.background" );
@@ -377,7 +392,7 @@ public class IntelliJTheme
 		uiKeyMapping.put( "Button.default.endBorderColor",   "" ); // ignore
 
 		// ComboBox
-		uiKeyMapping.put( "ComboBox.background",                        "ComboBox.editableBackground" );
+		uiKeyMapping.put( "ComboBox.background",                        "" ); // ignore
 		uiKeyMapping.put( "ComboBox.nonEditableBackground",             "ComboBox.background" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.background",            "ComboBox.buttonEditableBackground" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.disabledIconColor",     "ComboBox.buttonDisabledArrowColor" );
@@ -409,7 +424,7 @@ public class IntelliJTheme
 		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.selectedFocusedBorderColor" );
 
 		// because FlatLaf uses Button.background and Button.borderColor,
-		// but Darcula uses Button.startBackground and Button.startBorderColor,
+		// but IDEA uses Button.startBackground and Button.startBorderColor,
 		// our default button background and border colors may be replaced by
 		// wildcard *.background and *.borderColor colors
 		noWildcardReplace.add( "Button.background" );
