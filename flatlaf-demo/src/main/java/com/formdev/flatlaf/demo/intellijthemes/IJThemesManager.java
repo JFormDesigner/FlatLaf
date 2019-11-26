@@ -18,12 +18,14 @@ package com.formdev.flatlaf.demo.intellijthemes;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
+import com.formdev.flatlaf.json.Json;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
@@ -35,23 +37,27 @@ class IJThemesManager
 	final List<IJThemeInfo> moreThemes = new ArrayList<>();
 	private final Map<File,Long> lastModifiedMap = new HashMap<>();
 
+	@SuppressWarnings( "unchecked" )
 	void loadBundledThemes() {
-		// load themes.properties
-		Properties properties = new Properties();
-		try( InputStream in = getClass().getResourceAsStream( "themes.properties" ) ) {
-			if( in != null )
-				properties.load( in );
+		bundledThemes.clear();
+
+		// load themes.json
+		Map<String, Object> json;
+	    try( Reader reader = new InputStreamReader( getClass().getResourceAsStream( "themes.json" ), StandardCharsets.UTF_8 ) ) {
+	    		json = (Map<String, Object>) Json.parse( reader );
 		} catch( IOException ex ) {
 			ex.printStackTrace();
+			return;
 		}
 
 		// add info about bundled themes
-		bundledThemes.clear();
-		for( Map.Entry<Object, Object> e : properties.entrySet() ) {
-			String resourceName = (String) e.getKey();
-			List<String> strs = StringUtils.split( (String) e.getValue(), ',' );
+		for( Map.Entry<String, Object> e : json.entrySet() ) {
+			String resourceName = e.getKey();
+			Map<String, String> value = (Map<String, String>) e.getValue();
+			String name = value.get( "name" );
+			String sourceCodeUrl = value.get( "sourceCodeUrl" );
 
-			bundledThemes.add( new IJThemeInfo( strs.get( 0 ), resourceName, strs.get( 1 ), null, null ) );
+			bundledThemes.add( new IJThemeInfo( name, resourceName, sourceCodeUrl, null, null ) );
 		}
 	}
 

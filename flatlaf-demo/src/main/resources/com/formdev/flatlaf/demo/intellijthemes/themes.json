@@ -1,0 +1,203 @@
+{
+	"arc-theme.theme.json": {
+		"name": "Arc",
+		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea"
+	},
+	"arc-theme-orange.theme.json": {
+		"name": "Arc - Orange",
+		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea"
+	},
+	"Cyan.theme.json": {
+		"name": "Cyan light",
+		"sourceCodeUrl": "https://github.com/OlyaB/CyanTheme"
+	},
+	"DarkFlatTheme.theme.json": {
+		"name": "Dark Flat",
+		"sourceCodeUrl": "https://github.com/nerzhulart/DarkFlatTheme"
+	},
+	"DarkPurple.theme.json": {
+		"name": "Dark purple",
+		"sourceCodeUrl": "https://github.com/OlyaB/DarkPurpleTheme"
+	},
+	"Dracula.theme.json": {
+		"name": "Dracula",
+		"sourceCodeUrl": "https://github.com/dracula/jetbrains"
+	},
+	"Gray.theme.json": {
+		"name": "Gray",
+		"sourceCodeUrl": "https://github.com/OlyaB/GreyTheme"
+	},
+	"gruvbox_theme.theme.json": {
+		"name": "Gruvbox",
+		"sourceCodeUrl": "https://github.com/Vincent-P/gruvbox-intellij-theme"
+	},
+	"Hiberbee.theme.json": {
+		"name": "Hiberbee",
+		"sourceCodeUrl": "https://github.com/Hiberbee/code-highlight-themes"
+	},
+	"HighContrast.theme.json": {
+		"name": "High contrast",
+		"sourceCodeUrl": "https://github.com/OlyaB/HighContrastTheme"
+	},
+	"Light.theme.json": {
+		"name": "IntelliJ Light Preview",
+		"sourceCodeUrl": "https://github.com/OlyaB/IntelliJLightTheme"
+	},
+	"LightFlatTheme.theme.json": {
+		"name": "Light Flat",
+		"sourceCodeUrl": "https://github.com/nerzhulart/LightFlatTheme"
+	},
+	"MaterialTheme.theme.json": {
+		"name": "Material Design Dark",
+		"sourceCodeUrl": "https://github.com/xinkunZ/NotReallyMDTheme"
+	},
+	"Monocai.theme.json": {
+		"name": "Monocai",
+		"sourceCodeUrl": "https://github.com/bmikaili/intellij-monocai-theme"
+	},
+	"nord.theme.json": {
+		"name": "Nord",
+		"sourceCodeUrl": "https://github.com/arcticicestudio/nord-jetbrains"
+	},
+	"one_dark.theme.json": {
+		"name": "One Dark",
+		"sourceCodeUrl": "https://github.com/one-dark/jetbrains-one-dark-theme"
+	},
+	"solarized_dark_theme.theme.json": {
+		"name": "Solarized Dark",
+		"sourceCodeUrl": "https://github.com/snowe2010/solarized-jetbrains"
+	},
+	"solarized_light_theme.theme.json": {
+		"name": "Solarized Light",
+		"sourceCodeUrl": "https://github.com/snowe2010/solarized-jetbrains"
+	},
+	"Spacegray.theme.json": {
+		"name": "Spacegray",
+		"sourceCodeUrl": "https://github.com/mturlo/intellij-spacegray"
+	},
+	"vuesion_theme.theme.json": {
+		"name": "Vuesion",
+		"sourceCodeUrl": "https://github.com/vuesion/intellij-theme"
+	},
+
+	"material-theme-ui-lite/Arc Dark.theme.json": {
+		"name": "Material Theme UI Lite / Arc Dark",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Arc Dark Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Arc Dark Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Atom One Dark.theme.json": {
+		"name": "Material Theme UI Lite / Atom One Dark",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Atom One Dark Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Atom One Dark Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Atom One Light.theme.json": {
+		"name": "Material Theme UI Lite / Atom One Light",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Atom One Light Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Atom One Light Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Dracula.theme.json": {
+		"name": "Material Theme UI Lite / Dracula",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Dracula Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Dracula Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/GitHub.theme.json": {
+		"name": "Material Theme UI Lite / GitHub",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/GitHub Contrast.theme.json": {
+		"name": "Material Theme UI Lite / GitHub Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Light Owl.theme.json": {
+		"name": "Material Theme UI Lite / Light Owl",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Light Owl Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Light Owl Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Darker.theme.json": {
+		"name": "Material Theme UI Lite / Material Darker",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Darker Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Material Darker Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Deep Ocean.theme.json": {
+		"name": "Material Theme UI Lite / Material Deep Ocean",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Deep Ocean Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Material Deep Ocean Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Lighter.theme.json": {
+		"name": "Material Theme UI Lite / Material Lighter",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Lighter Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Material Lighter Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Oceanic.theme.json": {
+		"name": "Material Theme UI Lite / Material Oceanic",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Oceanic Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Material Oceanic Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Palenight.theme.json": {
+		"name": "Material Theme UI Lite / Material Palenight",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Material Palenight Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Material Palenight Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Monokai Pro.theme.json": {
+		"name": "Material Theme UI Lite / Monokai Pro",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Monokai Pro Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Monokai Pro Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Night Owl.theme.json": {
+		"name": "Material Theme UI Lite / Night Owl",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Night Owl Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Night Owl Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Solarized Dark.theme.json": {
+		"name": "Material Theme UI Lite / Solarized Dark",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Solarized Dark Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Solarized Dark Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Solarized Light.theme.json": {
+		"name": "Material Theme UI Lite / Solarized Light",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	},
+	"material-theme-ui-lite/Solarized Light Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Solarized Light Contrast",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite"
+	}
+}
