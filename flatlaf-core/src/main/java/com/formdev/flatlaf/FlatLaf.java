@@ -204,7 +204,7 @@ public abstract class FlatLaf
 		Object aquaMenuBarUI = useScreenMenuBar ? defaults.get( "MenuBarUI" ) : null;
 
 		initFonts( defaults );
-		initColorPalette( defaults, isDark() );
+		initIconColors( defaults, isDark() );
 
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
@@ -265,7 +265,7 @@ public abstract class FlatLaf
 	 * <p>
 	 * This method is public and static to allow using the color palette with
 	 * other LaFs (e.g. Windows LaF). To do so invoke:
-	 *   {@code FlatLaf.initColorPalette( UIManager.getLookAndFeelDefaults(), false );}
+	 *   {@code FlatLaf.initIconColors( UIManager.getLookAndFeelDefaults(), false );}
 	 * after
 	 *   {@code UIManager.setLookAndFeel( ... );}.
 	 * <p>
@@ -274,8 +274,8 @@ public abstract class FlatLaf
 	 * and
 	 *   <a href="https://jetbrains.design/intellij/principles/icons/#noun-icons">Noun icons</a>
 	 */
-	public static void initColorPalette( UIDefaults defaults, boolean dark ) {
-		// colors for actions
+	public static void initIconColors( UIDefaults defaults, boolean dark ) {
+		// colors for action icons
 		// see https://jetbrains.design/intellij/principles/icons/#action-icons
 		defaults.put( "Actions.Red",            new ColorUIResource( !dark ? 0xDB5860 : 0xC75450 ) );
 		defaults.put( "Actions.Yellow",         new ColorUIResource( !dark ? 0xEDA200 : 0xF0A732 ) );
@@ -284,7 +284,7 @@ public abstract class FlatLaf
 		defaults.put( "Actions.Grey",           new ColorUIResource( !dark ? 0x6E6E6E : 0xAFB1B3 ) );
 		defaults.put( "Actions.GreyInline",     new ColorUIResource( !dark ? 0x7F8B91 : 0x7F8B91 ) );
 
-		// colors for objects
+		// colors for object icons
 		// see https://jetbrains.design/intellij/principles/icons/#noun-icons
 		defaults.put( "Objects.Grey",           new ColorUIResource( 0x9AA7B0 ) );
 		defaults.put( "Objects.Blue",           new ColorUIResource( 0x40B6E0 ) );
