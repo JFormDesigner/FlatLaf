@@ -26,13 +26,17 @@ class IJThemeInfo
 	final String name;
 	final String resourceName;
 	final String sourceCodeUrl;
+	final String sourceCodePath;
 	final File themeFile;
 	final String lafClassName;
 
-	IJThemeInfo( String name, String resourceName, String sourceCodeUrl, File themeFile, String lafClassName ) {
+	IJThemeInfo( String name, String resourceName, String sourceCodeUrl, String sourceCodePath,
+		File themeFile, String lafClassName )
+	{
 		this.name = name;
 		this.resourceName = resourceName;
 		this.sourceCodeUrl = sourceCodeUrl;
+		this.sourceCodePath = sourceCodePath;
 		this.themeFile = themeFile;
 		this.lafClassName = lafClassName;
 	}

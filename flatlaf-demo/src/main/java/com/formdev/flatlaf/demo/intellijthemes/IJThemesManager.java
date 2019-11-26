@@ -56,8 +56,9 @@ class IJThemesManager
 			Map<String, String> value = (Map<String, String>) e.getValue();
 			String name = value.get( "name" );
 			String sourceCodeUrl = value.get( "sourceCodeUrl" );
+			String sourceCodePath = value.get( "sourceCodePath" );
 
-			bundledThemes.add( new IJThemeInfo( name, resourceName, sourceCodeUrl, null, null ) );
+			bundledThemes.add( new IJThemeInfo( name, resourceName, sourceCodeUrl, sourceCodePath, null, null ) );
 		}
 	}
 
@@ -75,7 +76,7 @@ class IJThemesManager
 		moreThemes.clear();
 		for( File f : themeFiles ) {
 			String name = StringUtils.removeTrailing( f.getName(), ".theme.json" );
-			moreThemes.add( new IJThemeInfo( name, null, null, f, null ) );
+			moreThemes.add( new IJThemeInfo( name, null, null, null, f, null ) );
 			lastModifiedMap.put( f, f.lastModified() );
 		}
 	}

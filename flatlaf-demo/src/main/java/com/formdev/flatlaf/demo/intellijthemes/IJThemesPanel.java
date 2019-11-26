@@ -99,10 +99,10 @@ public class IJThemesPanel
 
 		// add core themes at beginning
 		categories.put( themes.size(), "Core Themes" );
-		themes.add( new IJThemeInfo( "Flat Light", null, null, null, FlatLightLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat Dark", null, null, null, FlatDarkLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat IntelliJ", null, null, null, FlatIntelliJLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat Darcula", null, null, null, FlatDarculaLaf.class.getName() ) );
+		themes.add( new IJThemeInfo( "Flat Light", null, null, null, null, FlatLightLaf.class.getName() ) );
+		themes.add( new IJThemeInfo( "Flat Dark", null, null, null, null, FlatDarkLaf.class.getName() ) );
+		themes.add( new IJThemeInfo( "Flat IntelliJ", null, null, null, null, FlatIntelliJLaf.class.getName() ) );
+		themes.add( new IJThemeInfo( "Flat Darcula", null, null, null, null, FlatDarculaLaf.class.getName() ) );
 
 		// add uncategorized bundled themes
 		categories.put( themes.size(), "IntelliJ Themes" );
