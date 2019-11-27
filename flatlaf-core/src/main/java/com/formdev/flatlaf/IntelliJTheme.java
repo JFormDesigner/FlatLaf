@@ -405,6 +405,10 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ProgressBar.trackColor",    "ProgressBar.background" );
 		uiKeyMapping.put( "ProgressBar.progressColor", "ProgressBar.foreground" );
 
+		// ScrollBar
+		uiKeyMapping.put( "ScrollBar.trackColor", "ScrollBar.track" );
+		uiKeyMapping.put( "ScrollBar.thumbColor", "ScrollBar.thumb" );
+
 		// Slider
 		uiKeyMapping.put( "Slider.trackWidth", "" ); // ignore (used in Material Theme UI Lite)
 
