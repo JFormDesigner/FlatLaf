@@ -42,6 +42,7 @@ import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -149,6 +150,9 @@ public abstract class FlatLaf
 			mnemonicListener = null;
 		}
 
+		// restore default link color
+		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
+
 		if( base != null )
 			base.uninitialize();
 
@@ -216,6 +220,13 @@ public abstract class FlatLaf
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
 		if( useScreenMenuBar )
 			defaults.put( "MenuBarUI", aquaMenuBarUI );
+
+		// update link color in HTML text
+		Color linkColor = defaults.getColor( "Component.linkColor" );
+		if( linkColor != null ) {
+			new HTMLEditorKit().getStyleSheet().addRule(
+				String.format( "a { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
+		}
 
 		return defaults;
 	}

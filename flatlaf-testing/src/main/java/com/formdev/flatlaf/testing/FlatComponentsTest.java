@@ -784,7 +784,7 @@ public class FlatComponentsTest
 				"[]"));
 
 			//---- label3 ----
-			label3.setText("<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u></html>");
+			label3.setText("<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a></html>");
 			panel3.add(label3, "cell 0 0");
 
 			//======== scrollPane15 ========
@@ -792,7 +792,7 @@ public class FlatComponentsTest
 
 				//---- editorPane6 ----
 				editorPane6.setContentType("text/html");
-				editorPane6.setText("JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u>");
+				editorPane6.setText("JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>");
 				scrollPane15.setViewportView(editorPane6);
 			}
 			panel3.add(scrollPane15, "cell 0 1,grow");
@@ -802,7 +802,7 @@ public class FlatComponentsTest
 
 				//---- textPane6 ----
 				textPane6.setContentType("text/html");
-				textPane6.setText("JTextPane HTML<br>Sample <b>content</b><br> <u>text</u>");
+				textPane6.setText("JTextPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>");
 				scrollPane16.setViewportView(textPane6);
 			}
 			panel3.add(scrollPane16, "cell 0 2,grow");

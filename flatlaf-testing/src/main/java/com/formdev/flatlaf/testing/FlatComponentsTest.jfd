@@ -737,7 +737,7 @@ new FormModel {
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
-					"text": "<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u></html>"
+					"text": "<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a></html>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 0"
 				} )
@@ -746,7 +746,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JEditorPane" ) {
 						name: "editorPane6"
 						"contentType": "text/html"
-						"text": "JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u>"
+						"text": "JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>"
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1,grow"
@@ -756,7 +756,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JTextPane" ) {
 						name: "textPane6"
 						"contentType": "text/html"
-						"text": "JTextPane HTML<br>Sample <b>content</b><br> <u>text</u>"
+						"text": "JTextPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>"
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 2,grow"

@@ -9,6 +9,7 @@ FlatLaf Change Log
   "FlatLaf". Use `UIManager.getLookAndFeel().getID().startsWith( "FlatLaf" )` to
   check whether the current look and feel is FlatLaf.
 - Fixed selection background of checkbox in table cell.
+- Fixed color of links in HTML text.
 - Fixed jittery submenu rendering on Mac. (issue #10)
 - Button: Make button square if button text is "..." or a single character.
 - ComboBox: Fixed issues with NetBeans `org.openide.awt.ColorComboBox`
