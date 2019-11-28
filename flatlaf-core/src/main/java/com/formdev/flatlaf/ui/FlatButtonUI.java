@@ -163,10 +163,13 @@ public class FlatButtonUI
 	}
 
 	static boolean isIconOnlyButton( Component c ) {
-		String text;
-		return c instanceof JButton &&
-			((JButton)c).getIcon() != null &&
-			((text = ((JButton)c).getText()) == null || text.isEmpty());
+		if( !(c instanceof JButton) )
+			return false;
+
+		Icon icon = ((JButton)c).getIcon();
+		String text = ((JButton)c).getText();
+		return (icon != null && (text == null || text.isEmpty())) ||
+			(icon == null && text != null && ("...".equals( text ) || text.length() == 1));
 	}
 
 	static boolean isHelpButton( Component c ) {
@@ -295,8 +298,11 @@ public class FlatButtonUI
 
 		Dimension prefSize = super.getPreferredSize( c );
 
-		// apply minimum width, if not in toolbar and not a icon-only button
-		if( !isToolBarButton( c ) && !isIconOnlyButton( c ) )
+		// make button square if it is a icon-only button
+		// or apply minimum width, if not in toolbar and not a icon-only button
+		if( isIconOnlyButton( c ) )
+			prefSize.width = Math.max( prefSize.width, prefSize.height );
+		else if( !isToolBarButton( c ) )
 			prefSize.width = Math.max( prefSize.width, scale( minimumWidth + (focusWidth * 2) ) );
 
 		return prefSize;

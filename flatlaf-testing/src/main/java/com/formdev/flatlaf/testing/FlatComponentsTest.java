@@ -58,6 +58,9 @@ public class FlatComponentsTest
 		JButton button3 = new JButton();
 		JButton button12 = new JButton();
 		JButton button13 = new JButton();
+		JButton button14 = new JButton();
+		JButton button15 = new JButton();
+		JButton button16 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
@@ -262,6 +265,18 @@ public class FlatComponentsTest
 		//---- button13 ----
 		button13.setIcon(UIManager.getIcon("Tree.closedIcon"));
 		add(button13, "cell 5 1");
+
+		//---- button14 ----
+		button14.setText("...");
+		add(button14, "cell 5 1");
+
+		//---- button15 ----
+		button15.setText("\u2026");
+		add(button15, "cell 5 1");
+
+		//---- button16 ----
+		button16.setText("#");
+		add(button16, "cell 5 1");
 
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");
