@@ -11,6 +11,8 @@ FlatLaf Change Log
 - Fixed selection background of checkbox in table cell.
 - Fixed color of links in HTML text.
 - Fixed jittery submenu rendering on Mac. (issue #10)
+- Fixed "cannot find symbol" error in NetBeans editor, when source/binary format
+  is set to JDK 9 (or later) in NetBeans project. (issue #13)
 - Button: Make button square if button text is "..." or a single character.
 - ComboBox: Fixed issues with NetBeans `org.openide.awt.ColorComboBox`
   component.
