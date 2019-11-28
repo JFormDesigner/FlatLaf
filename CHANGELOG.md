@@ -10,6 +10,8 @@ FlatLaf Change Log
   check whether the current look and feel is FlatLaf.
 - Fixed selection background of checkbox in table cell.
 - Fixed jittery submenu rendering on Mac. (issue #10)
+- ComboBox: Fixed issues with NetBeans `org.openide.awt.ColorComboBox`
+  component.
 - Hex color values in `.properties` files now must start with a `#` character.
 - SwingX: Fixed too wide border when using date picker as table cell editor.
   (issue #24)

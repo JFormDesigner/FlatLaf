@@ -34,6 +34,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -106,6 +107,8 @@ public class FlatComboBoxUI
 
 	private MouseListener hoverListener;
 	private boolean hover;
+
+	private WeakReference<Component> lastRendererComponent;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatComboBoxUI();
@@ -342,11 +345,11 @@ public class FlatComboBoxUI
 	@SuppressWarnings( "unchecked" )
 	public void paintCurrentValue( Graphics g, Rectangle bounds, boolean hasFocus ) {
 		ListCellRenderer<Object> renderer = comboBox.getRenderer();
-		CellPaddingBorder.uninstall( renderer );
+		uninstallCellPaddingBorder( renderer );
 		Component c = renderer.getListCellRendererComponent( listBox, comboBox.getSelectedItem(), -1, false, false );
 		c.setFont( comboBox.getFont() );
 		c.applyComponentOrientation( comboBox.getComponentOrientation() );
-		CellPaddingBorder.uninstall( c );
+		uninstallCellPaddingBorder( c );
 
 		boolean enabled = comboBox.isEnabled();
 		c.setForeground( enabled ? comboBox.getForeground() : disabledForeground );
@@ -376,6 +379,30 @@ public class FlatComboBoxUI
 	}
 
 	@Override
+	protected Dimension getDefaultSize() {
+		@SuppressWarnings( "unchecked" )
+		ListCellRenderer<Object> renderer = comboBox.getRenderer();
+		uninstallCellPaddingBorder( renderer );
+
+		Dimension size = super.getDefaultSize();
+
+		uninstallCellPaddingBorder( renderer );
+		return size;
+	}
+
+	@Override
+	protected Dimension getDisplaySize() {
+		@SuppressWarnings( "unchecked" )
+		ListCellRenderer<Object> renderer = comboBox.getRenderer();
+		uninstallCellPaddingBorder( renderer );
+
+		Dimension displaySize = super.getDisplaySize();
+
+		uninstallCellPaddingBorder( renderer );
+		return displaySize;
+	}
+
+	@Override
 	protected Dimension getSizeForComponent( Component comp ) {
 		Dimension size = super.getSizeForComponent( comp );
 
@@ -396,6 +423,14 @@ public class FlatComboBoxUI
 		}
 
 		return null;
+	}
+
+	private void uninstallCellPaddingBorder( Object o ) {
+		CellPaddingBorder.uninstall( o );
+		if( lastRendererComponent != null ) {
+			CellPaddingBorder.uninstall( lastRendererComponent );
+			lastRendererComponent = null;
+		}
 	}
 
 	//---- class FlatComboPopup -----------------------------------------------
@@ -481,6 +516,7 @@ public class FlatComboBoxUI
 			{
 				ListCellRenderer renderer = comboBox.getRenderer();
 				CellPaddingBorder.uninstall( renderer );
+				CellPaddingBorder.uninstall( lastRendererComponent );
 
 				Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 				c.applyComponentOrientation( comboBox.getComponentOrientation() );
@@ -490,6 +526,8 @@ public class FlatComboBoxUI
 						paddingBorder = new CellPaddingBorder( padding );
 					paddingBorder.install( (JComponent) c );
 				}
+
+				lastRendererComponent = (c != renderer) ? new WeakReference<>( c ) : null;
 
 				return c;
 			}
@@ -525,6 +563,9 @@ public class FlatComboBoxUI
 		}
 
 		static void uninstall( Object o ) {
+			if( o instanceof WeakReference )
+				o = ((WeakReference<?>)o).get();
+
 			if( !(o instanceof JComponent) )
 				return;
 
