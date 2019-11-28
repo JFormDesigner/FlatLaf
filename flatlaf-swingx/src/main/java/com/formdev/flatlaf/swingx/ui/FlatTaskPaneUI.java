@@ -84,7 +84,7 @@ public class FlatTaskPaneUI
 	public void uninstallUI( JComponent c ) {
 		if( group.getContentPane() instanceof JComponent ) {
 			// uninstall our content border, because it does not implement UIResource,
-			// to alloy other LaF to install its own border
+			// to allow other LaF to install its own border
 			JComponent content = (JComponent) group.getContentPane();
 			if( content.getBorder() instanceof FlatContentPaneBorder )
 				content.setBorder( null );

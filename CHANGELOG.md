@@ -15,6 +15,7 @@ FlatLaf Change Log
 - ComboBox: Fixed issues with NetBeans `org.openide.awt.ColorComboBox`
   component.
 - Hex color values in `.properties` files now must start with a `#` character.
+- SwingX: Support `JXTitledPanel`. (issue #22)
 - SwingX: Fixed too wide border when using date picker as table cell editor.
   (issue #24)
 - JIDE Common Layer: Fixed `JidePopup` border.

@@ -36,6 +36,12 @@ public class FlatSwingXTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatSwingXTest" );
+
+			// without this, painting becomes very slow as soon as JXTitledPanel
+			// is used, because JXTitledPanel sets opaque to false and JXPanel
+			// then installs its own repaint manager
+			UIManager.put( "JXPanel.patch", true );
+
 			frame.useApplyComponentOrientation = true;
 			frame.showFrame( FlatSwingXTest::new );
 		} );
@@ -107,6 +113,19 @@ public class FlatSwingXTest
 		table = new JTable();
 		JLabel headerLabel = new JLabel();
 		JXHeader xHeader1 = new JXHeader();
+		JXTitledPanel xTitledPanel1 = new JXTitledPanel();
+		JLabel label7 = new JLabel();
+		JTextField textField1 = new JTextField();
+		JLabel label8 = new JLabel();
+		JTextField textField2 = new JTextField();
+		JLabel titledPanelLabel = new JLabel();
+		JXTitledPanel xTitledPanel2 = new JXTitledPanel();
+		JLabel label9 = new JLabel();
+		JTextField textField3 = new JTextField();
+		JLabel label10 = new JLabel();
+		JTextField textField4 = new JTextField();
+		JButton button1 = new JButton();
+		JButton button2 = new JButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -125,7 +144,9 @@ public class FlatSwingXTest
 			"[]" +
 			"[]" +
 			"[]" +
-			"[]"));
+			"[]" +
+			"[]" +
+			"[37]"));
 
 		//---- label1 ----
 		label1.setText("enabled");
@@ -345,6 +366,70 @@ public class FlatSwingXTest
 		xHeader1.setDescription("Description\nMore description");
 		xHeader1.setIcon(new ImageIcon(getClass().getResource("/org/jdesktop/swingx/plaf/windows/resources/tipoftheday.png")));
 		add(xHeader1, "cell 1 7 3 1,width 200");
+
+		//======== xTitledPanel1 ========
+		{
+			xTitledPanel1.setTitle("Title");
+			xTitledPanel1.setOpaque(true);
+			Container xTitledPanel1ContentContainer = xTitledPanel1.getContentContainer();
+			xTitledPanel1ContentContainer.setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]" +
+				"[100,fill]",
+				// rows
+				"[]" +
+				"[]"));
+
+			//---- label7 ----
+			label7.setText("text");
+			xTitledPanel1ContentContainer.add(label7, "cell 0 0");
+			xTitledPanel1ContentContainer.add(textField1, "cell 1 0");
+
+			//---- label8 ----
+			label8.setText("text");
+			xTitledPanel1ContentContainer.add(label8, "cell 0 1");
+			xTitledPanel1ContentContainer.add(textField2, "cell 1 1");
+		}
+		add(xTitledPanel1, "cell 1 8 2 1,grow");
+
+		//---- titledPanelLabel ----
+		titledPanelLabel.setText("JXTitledPanel:");
+		add(titledPanelLabel, "cell 0 8,aligny top,growy 0");
+
+		//======== xTitledPanel2 ========
+		{
+			xTitledPanel2.setTitle("Title");
+			xTitledPanel2.setOpaque(true);
+			xTitledPanel2.setLeftDecoration(button1);
+			xTitledPanel2.setRightDecoration(button2);
+			Container xTitledPanel2ContentContainer = xTitledPanel2.getContentContainer();
+			xTitledPanel2ContentContainer.setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]" +
+				"[100,fill]",
+				// rows
+				"[]" +
+				"[]"));
+
+			//---- label9 ----
+			label9.setText("text");
+			xTitledPanel2ContentContainer.add(label9, "cell 0 0");
+			xTitledPanel2ContentContainer.add(textField3, "cell 1 0");
+
+			//---- label10 ----
+			label10.setText("text");
+			xTitledPanel2ContentContainer.add(label10, "cell 0 1");
+			xTitledPanel2ContentContainer.add(textField4, "cell 1 1");
+		}
+		add(xTitledPanel2, "cell 3 8,grow");
+
+		//---- button1 ----
+		button1.setText("<");
+
+		//---- button2 ----
+		button2.setText(">");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		xDatePicker1.setDate( new Date() );

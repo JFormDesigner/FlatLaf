@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[left][][][][fill]"
-			"$rowConstraints": "[]0[][]0[top][][][][]"
+			"$rowConstraints": "[]0[][]0[top][][][][][][37]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -280,9 +280,95 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7 3 1,width 200"
 			} )
+			add( new FormContainer( "org.jdesktop.swingx.JXTitledPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][100,fill]"
+				"$rowConstraints": "[][]"
+			} ) {
+				name: "xTitledPanel1"
+				"title": "Title"
+				"opaque": true
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label7"
+					"text": "text"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "textField1"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label8"
+					"text": "text"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "textField2"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 8 2 1,grow"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "titledPanelLabel"
+				"text": "JXTitledPanel:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 8,aligny top,growy 0"
+			} )
+			add( new FormContainer( "org.jdesktop.swingx.JXTitledPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][100,fill]"
+				"$rowConstraints": "[][]"
+			} ) {
+				name: "xTitledPanel2"
+				"title": "Title"
+				"opaque": true
+				"leftDecoration": new FormReference( "button1" )
+				"rightDecoration": new FormReference( "button2" )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label9"
+					"text": "text"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "textField3"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label10"
+					"text": "text"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "textField4"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 8,grow"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 700, 600 )
+		} )
+		add( new FormComponent( "javax.swing.JButton" ) {
+			name: "button1"
+			"text": "<"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 5, 650 )
+		} )
+		add( new FormComponent( "javax.swing.JButton" ) {
+			name: "button2"
+			"text": ">"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 75, 650 )
 		} )
 	}
 }
