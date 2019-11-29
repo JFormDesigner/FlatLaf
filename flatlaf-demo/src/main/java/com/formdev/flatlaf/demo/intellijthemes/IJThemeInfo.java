@@ -25,16 +25,22 @@ class IJThemeInfo
 {
 	final String name;
 	final String resourceName;
+	final String license;
+	final String licenseFile;
 	final String sourceCodeUrl;
 	final String sourceCodePath;
 	final File themeFile;
 	final String lafClassName;
 
-	IJThemeInfo( String name, String resourceName, String sourceCodeUrl, String sourceCodePath,
+	IJThemeInfo( String name, String resourceName,
+		String license, String licenseFile,
+		String sourceCodeUrl, String sourceCodePath,
 		File themeFile, String lafClassName )
 	{
 		this.name = name;
 		this.resourceName = resourceName;
+		this.license = license;
+		this.licenseFile = licenseFile;
 		this.sourceCodeUrl = sourceCodeUrl;
 		this.sourceCodePath = sourceCodePath;
 		this.themeFile = themeFile;
