@@ -16,10 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.metal.MetalFileChooserUI;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JFileChooser}.
@@ -37,5 +39,15 @@ public class FlatFileChooserUI
 
 	public FlatFileChooserUI( JFileChooser filechooser ) {
 		super( filechooser );
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		return UIScale.scale( super.getPreferredSize( c ) );
+	}
+
+	@Override
+	public Dimension getMinimumSize( JComponent c ) {
+		return UIScale.scale( super.getMinimumSize( c ) );
 	}
 }
