@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.20
 
 - Support using IntelliJ platform themes (.theme.json files).
 - Support `JFileChooser`. (issue #5)

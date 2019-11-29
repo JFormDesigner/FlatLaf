@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-version = "0.18"
+version = "0.20"
 
 allprojects {
 	repositories {
