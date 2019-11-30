@@ -4,6 +4,9 @@ FlatLaf Change Log
 ## Unreleased
 
 - `FlatLaf.isNativeLookAndFeel()` now returns `false`.
+- Button: Optionally support gradient border and gradient background for
+  improved compatibility with IntelliJ platform themes (e.g. Vuesion and
+  Spacegray themes).
 
 
 ## 0.20

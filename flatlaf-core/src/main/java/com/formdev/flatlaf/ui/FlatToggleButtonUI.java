@@ -41,6 +41,8 @@ import javax.swing.plaf.ComponentUI;
  * @uiDefault ToggleButton.arc							int
  * @uiDefault ToggleButton.minimumWidth					int
  * @uiDefault ToggleButton.iconTextGap					int
+ * @uiDefault ToggleButton.startBackground				Color	optional; if set, a gradient paint is used and ToggleButton.background is ignored
+ * @uiDefault ToggleButton.endBackground				Color	optional; if set, a gradient paint is used
  * @uiDefault ToggleButton.pressedBackground			Color
  * @uiDefault ToggleButton.disabledText					Color
  * @uiDefault ToggleButton.toolbar.hoverBackground		Color

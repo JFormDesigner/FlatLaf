@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
+import java.awt.Paint;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -82,7 +83,7 @@ public class FlatBorder
 					getLineWidth() + scale( (float) innerFocusWidth ), arc );
 			}
 
-			g2.setColor( getBorderColor( c ) );
+			g2.setPaint( getBorderColor( c ) );
 			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, borderWidth, arc );
 		} finally {
 			g2.dispose();
@@ -93,7 +94,7 @@ public class FlatBorder
 		return focusColor;
 	}
 
-	protected Color getBorderColor( Component c ) {
+	protected Paint getBorderColor( Component c ) {
 		boolean enabled = c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
 		return enabled
 			? (isFocused( c ) ? focusedBorderColor : borderColor)

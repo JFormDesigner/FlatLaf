@@ -380,17 +380,6 @@ public class IntelliJTheme
 	private static Set<String> noWildcardReplace = new HashSet<>();
 
 	static {
-		// Button
-		// IDEA buttons support gradient for background and border, but FlatLaf does not
-		uiKeyMapping.put( "Button.startBackground",          "Button.background" );
-		uiKeyMapping.put( "Button.startBorderColor",         "Button.borderColor" );
-		uiKeyMapping.put( "Button.default.startBackground",  "Button.default.background" );
-		uiKeyMapping.put( "Button.default.startBorderColor", "Button.default.borderColor" );
-		uiKeyMapping.put( "Button.endBackground",            "" ); // ignore
-		uiKeyMapping.put( "Button.endBorderColor",           "" ); // ignore
-		uiKeyMapping.put( "Button.default.endBackground",    "" ); // ignore
-		uiKeyMapping.put( "Button.default.endBorderColor",   "" ); // ignore
-
 		// ComboBox
 		uiKeyMapping.put( "ComboBox.background",                        "" ); // ignore
 		uiKeyMapping.put( "ComboBox.nonEditableBackground",             "ComboBox.background" );

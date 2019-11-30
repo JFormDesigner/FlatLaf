@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -58,11 +59,15 @@ import com.formdev.flatlaf.FlatLaf;
  * @uiDefault Button.arc						int
  * @uiDefault Button.minimumWidth				int
  * @uiDefault Button.iconTextGap				int
+ * @uiDefault Button.startBackground			Color	optional; if set, a gradient paint is used and Button.background is ignored
+ * @uiDefault Button.endBackground				Color	optional; if set, a gradient paint is used
  * @uiDefault Button.focusedBackground			Color	optional
  * @uiDefault Button.hoverBackground			Color	optional
  * @uiDefault Button.pressedBackground			Color	optional
  * @uiDefault Button.disabledText				Color
  * @uiDefault Button.default.background			Color
+ * @uiDefault Button.default.startBackground	Color	optional; if set, a gradient paint is used and Button.default.background is ignored
+ * @uiDefault Button.default.endBackground		Color	optional; if set, a gradient paint is used
  * @uiDefault Button.default.foreground			Color
  * @uiDefault Button.default.focusedBackground	Color	optional
  * @uiDefault Button.default.hoverBackground	Color	optional
@@ -81,12 +86,15 @@ public class FlatButtonUI
 	protected int minimumWidth;
 	protected int iconTextGap;
 
+	protected Color startBackground;
+	protected Color endBackground;
 	protected Color focusedBackground;
 	protected Color hoverBackground;
 	protected Color pressedBackground;
 	protected Color disabledText;
 
 	protected Color defaultBackground;
+	protected Color defaultEndBackground;
 	protected Color defaultForeground;
 	protected Color defaultFocusedBackground;
 	protected Color defaultHoverBackground;
@@ -120,12 +128,15 @@ public class FlatButtonUI
 			minimumWidth = UIManager.getInt( prefix + "minimumWidth" );
 			iconTextGap = FlatUIUtils.getUIInt( prefix + "iconTextGap", 4 );
 
+			startBackground = UIManager.getColor( prefix + "startBackground" );
+			endBackground = UIManager.getColor( prefix + "endBackground" );
 			focusedBackground = UIManager.getColor( prefix + "focusedBackground" );
 			hoverBackground = UIManager.getColor( prefix + "hoverBackground" );
 			pressedBackground = UIManager.getColor( prefix + "pressedBackground" );
 			disabledText = UIManager.getColor( prefix + "disabledText" );
 
-			defaultBackground = UIManager.getColor( "Button.default.background" );
+			defaultBackground = FlatUIUtils.getUIColor( "Button.default.startBackground", "Button.default.background" );
+			defaultEndBackground = UIManager.getColor( "Button.default.endBackground" );
 			defaultForeground = UIManager.getColor( "Button.default.foreground" );
 			defaultFocusedBackground = UIManager.getColor( "Button.default.focusedBackground" );
 			defaultHoverBackground = UIManager.getColor( "Button.default.hoverBackground" );
@@ -138,6 +149,12 @@ public class FlatButtonUI
 			helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
 
 			defaults_initialized = true;
+		}
+
+		if( startBackground != null ) {
+			Color bg = b.getBackground();
+			if( bg == null || bg instanceof UIResource )
+				b.setBackground( startBackground );
 		}
 
 		LookAndFeel.installProperty( b, "opaque", false );
@@ -201,8 +218,14 @@ public class FlatButtonUI
 					Border border = c.getBorder();
 					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
 					float arc = (border instanceof FlatButtonBorder || isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
+					boolean def = isDefaultButton( c );
+					Color startBg = def ? defaultBackground : startBackground;
+					Color endBg = def ? defaultEndBackground : endBackground;
 
-					FlatUIUtils.setColor( g2, background, isDefaultButton(c) ? defaultBackground : c.getBackground() );
+					if( background == startBg && endBg != null && !startBg.equals( endBg ) )
+						g2.setPaint( new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg ) );
+					else
+						FlatUIUtils.setColor( g2, background, def ? defaultBackground : c.getBackground() );
 					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 				} finally {
 					g2.dispose();
