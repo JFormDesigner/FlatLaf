@@ -29,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
@@ -61,6 +62,8 @@ public abstract class FlatLaf
 
 	private KeyEventPostProcessor mnemonicListener;
 	private static boolean altKeyPressed;
+
+	private Consumer<UIDefaults> postInitialization;
 
 	public static boolean install( LookAndFeel newLookAndFeel ) {
 		try {
@@ -133,6 +136,18 @@ public abstract class FlatLaf
 			};
 			Toolkit.getDefaultToolkit().addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
 		}
+
+		// Following code should be ideally in initialize(), but needs color from UI defaults.
+		// Do not move this code to getDefaults() to avoid side effects in the case that
+		// getDefaults() is directly invoked from 3rd party code. E.g. `new FlatLightLaf().getDefaults()`.
+		postInitialization = defaults -> {
+			// update link color in HTML text
+			Color linkColor = defaults.getColor( "Component.linkColor" );
+			if( linkColor != null ) {
+				new HTMLEditorKit().getStyleSheet().addRule(
+					String.format( "a { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
+			}
+		};
 	}
 
 	@Override
@@ -152,6 +167,7 @@ public abstract class FlatLaf
 
 		// restore default link color
 		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
+		postInitialization = null;
 
 		if( base != null )
 			base.uninitialize();
@@ -221,11 +237,9 @@ public abstract class FlatLaf
 		if( useScreenMenuBar )
 			defaults.put( "MenuBarUI", aquaMenuBarUI );
 
-		// update link color in HTML text
-		Color linkColor = defaults.getColor( "Component.linkColor" );
-		if( linkColor != null ) {
-			new HTMLEditorKit().getStyleSheet().addRule(
-				String.format( "a { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
+		if( postInitialization != null ) {
+			postInitialization.accept( defaults );
+			postInitialization = null;
 		}
 
 		return defaults;
