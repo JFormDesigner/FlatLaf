@@ -27,6 +27,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.RoundRectangle2D;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
@@ -40,6 +41,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonUI;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JButton}.
@@ -73,6 +75,10 @@ import com.formdev.flatlaf.FlatLaf;
  * @uiDefault Button.default.hoverBackground	Color	optional
  * @uiDefault Button.default.pressedBackground	Color	optional
  * @uiDefault Button.default.boldText			boolean
+ * @uiDefault Button.paintShadow				boolean	default is false
+ * @uiDefault Button.shadowWidth				int		default is 2
+ * @uiDefault Button.shadowColor				Color	optional
+ * @uiDefault Button.default.shadowColor		Color	optional
  * @uiDefault Button.toolbar.hoverBackground	Color
  * @uiDefault Button.toolbar.pressedBackground	Color
  *
@@ -100,6 +106,10 @@ public class FlatButtonUI
 	protected Color defaultHoverBackground;
 	protected Color defaultPressedBackground;
 	protected boolean defaultBoldText;
+
+	protected int shadowWidth;
+	protected Color shadowColor;
+	protected Color defaultShadowColor;
 
 	protected Color toolbarHoverBackground;
 	protected Color toolbarPressedBackground;
@@ -134,6 +144,12 @@ public class FlatButtonUI
 			hoverBackground = UIManager.getColor( prefix + "hoverBackground" );
 			pressedBackground = UIManager.getColor( prefix + "pressedBackground" );
 			disabledText = UIManager.getColor( prefix + "disabledText" );
+
+			if( UIManager.getBoolean( "Button.paintShadow" ) ) {
+				shadowWidth = FlatUIUtils.getUIInt( "Button.shadowWidth", 2 );
+				shadowColor = UIManager.getColor( "Button.shadowColor" );
+				defaultShadowColor = UIManager.getColor( "Button.default.shadowColor" );
+			}
 
 			defaultBackground = FlatUIUtils.getUIColor( "Button.default.startBackground", "Button.default.background" );
 			defaultEndBackground = UIManager.getColor( "Button.default.endBackground" );
@@ -219,9 +235,18 @@ public class FlatButtonUI
 					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
 					float arc = (border instanceof FlatButtonBorder || isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
 					boolean def = isDefaultButton( c );
+
+					// paint shadow
+					Color shadowColor = def ? defaultShadowColor : this.shadowColor;
+					if( shadowColor != null && shadowWidth > 0 && focusWidth > 0 && !c.hasFocus() && c.isEnabled() ) {
+						g2.setColor( shadowColor );
+						g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
+							c.getWidth() - focusWidth * 2, c.getHeight() - focusWidth * 2, arc, arc ) );
+					}
+
+					// paint background
 					Color startBg = def ? defaultBackground : startBackground;
 					Color endBg = def ? defaultEndBackground : endBackground;
-
 					if( background == startBg && endBg != null && !startBg.equals( endBg ) )
 						g2.setPaint( new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg ) );
 					else

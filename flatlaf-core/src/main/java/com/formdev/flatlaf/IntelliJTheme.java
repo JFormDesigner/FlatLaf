@@ -128,6 +128,10 @@ public class IntelliJTheme
 
 		defaults.put( "Component.isIntelliJTheme", true );
 
+		// enable button shadows
+		defaults.put( "Button.paintShadow", true );
+		defaults.put( "Button.shadowWidth", dark ? 2 : 1 );
+
 		loadNamedColors( defaults );
 
 		// convert Json "ui" structure to UI defaults
