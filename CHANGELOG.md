@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- `FlatLaf.isNativeLookAndFeel()` now returns `false`.
+
+
 ## 0.20
 
 - Support using IntelliJ platform themes (.theme.json files).

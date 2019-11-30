@@ -89,7 +89,7 @@ public abstract class FlatLaf
 
 	@Override
 	public boolean isNativeLookAndFeel() {
-		return true;
+		return false;
 	}
 
 	@Override
