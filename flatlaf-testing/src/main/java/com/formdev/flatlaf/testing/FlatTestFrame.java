@@ -24,7 +24,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.ColorUIResource;
@@ -37,6 +36,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
+import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.TriStateCheckBox.State;
@@ -52,7 +52,6 @@ public class FlatTestFrame
 	extends JFrame
 {
 	private static final String PREFS_ROOT_PATH = "/flatlaf-test";
-	private static final String KEY_LAF = "laf";
 	private static final String KEY_SCALE_FACTOR = "scaleFactor";
 
 	private final String title;
@@ -63,29 +62,17 @@ public class FlatTestFrame
 	public boolean useApplyComponentOrientation;
 
 	public static FlatTestFrame create( String[] args, String title ) {
-		Preferences prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
+		DemoPrefs.init( PREFS_ROOT_PATH );
 
 		// set scale factor
 		if( System.getProperty( "flatlaf.uiScale", System.getProperty( "sun.java2d.uiScale" ) ) == null ) {
-			String scaleFactor = prefs.get( KEY_SCALE_FACTOR, null );
+			String scaleFactor = DemoPrefs.getState().get( KEY_SCALE_FACTOR, null );
 			if( scaleFactor != null )
 				System.setProperty( "flatlaf.uiScale", scaleFactor );
 		}
 
 		// set look and feel
-		try {
-			if( args.length > 0 )
-				UIManager.setLookAndFeel( args[0] );
-			else {
-				String lafClassName = prefs.get( KEY_LAF, FlatLightLaf.class.getName() );
-				UIManager.setLookAndFeel( lafClassName );
-			}
-		} catch( Exception ex ) {
-			ex.printStackTrace();
-
-			// fallback
-			FlatLightLaf.install();
-		}
+		DemoPrefs.initLaf( args );
 
 		// create frame
 		return new FlatTestFrame( title );
@@ -239,8 +226,6 @@ public class FlatTestFrame
 		// hide popup to avoid occasional StackOverflowError when updating UI
 		lookAndFeelComboBox.setPopupVisible( false );
 
-		Preferences.userRoot().node( PREFS_ROOT_PATH ).put( KEY_LAF, lafClassName );
-
 		applyLookAndFeel( lafClassName, null, false );
 	}
 
@@ -358,14 +343,12 @@ public class FlatTestFrame
 		// hide popup to avoid occasional StackOverflowError when updating UI
 		scaleFactorComboBox.setPopupVisible( false );
 
-		Preferences prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
-
 		if( scaleFactor != null ) {
 			System.setProperty( "flatlaf.uiScale", scaleFactor );
-			prefs.put( KEY_SCALE_FACTOR, scaleFactor );
+			DemoPrefs.getState().put( KEY_SCALE_FACTOR, scaleFactor );
 		} else {
 			System.clearProperty( "flatlaf.uiScale" );
-			prefs.remove( KEY_SCALE_FACTOR );
+			DemoPrefs.getState().remove( KEY_SCALE_FACTOR );
 		}
 
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();

@@ -30,7 +30,7 @@ class DemoFrame
 	extends JFrame
 {
 	DemoFrame() {
-		int tabIndex = FlatLafDemo.prefs.getInt( FlatLafDemo.KEY_TAB, 0 );
+		int tabIndex = DemoPrefs.getState().getInt( FlatLafDemo.KEY_TAB, 0 );
 
 		initComponents();
 		controlBar.initialize( this, tabbedPane );
@@ -48,7 +48,7 @@ class DemoFrame
 	}
 
 	private void selectedTabChanged() {
-		FlatLafDemo.prefs.putInt( FlatLafDemo.KEY_TAB, tabbedPane.getSelectedIndex() );
+		DemoPrefs.getState().putInt( FlatLafDemo.KEY_TAB, tabbedPane.getSelectedIndex() );
 	}
 
 	private void initComponents() {

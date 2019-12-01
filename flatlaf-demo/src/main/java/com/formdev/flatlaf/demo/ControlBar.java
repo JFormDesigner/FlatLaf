@@ -164,8 +164,6 @@ class ControlBar
 		if( lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 			return;
 
-		FlatLafDemo.prefs.put( FlatLafDemo.KEY_LAF, lafClassName );
-
 		EventQueue.invokeLater( () -> {
 			try {
 				// change look and feel

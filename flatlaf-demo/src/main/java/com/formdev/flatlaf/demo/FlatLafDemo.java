@@ -16,10 +16,7 @@
 
 package com.formdev.flatlaf.demo;
 
-import java.util.prefs.Preferences;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import com.formdev.flatlaf.FlatLightLaf;
 
 /**
  * @author Karl Tauber
@@ -27,29 +24,14 @@ import com.formdev.flatlaf.FlatLightLaf;
 public class FlatLafDemo
 {
 	static final String PREFS_ROOT_PATH = "/flatlaf-demo";
-	static final String KEY_LAF = "laf";
 	static final String KEY_TAB = "tab";
-
-	static Preferences prefs;
 
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
-			prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
+			DemoPrefs.init( PREFS_ROOT_PATH );
 
 			// set look and feel
-			try {
-				if( args.length > 0 )
-					UIManager.setLookAndFeel( args[0] );
-				else {
-					String lafClassName = prefs.get( KEY_LAF, FlatLightLaf.class.getName() );
-					UIManager.setLookAndFeel( lafClassName );
-				}
-			} catch( Exception ex ) {
-				ex.printStackTrace();
-
-				// fallback
-				FlatLightLaf.install();
-			}
+			DemoPrefs.initLaf( args );
 
 			// create frame
 			DemoFrame frame = new DemoFrame();

@@ -37,6 +37,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.*;
@@ -46,6 +47,7 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
+import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.StringUtils;
 import net.miginfocom.swing.*;
@@ -222,12 +224,15 @@ public class IJThemesPanel
 		} else if( themeInfo.themeFile != null ) {
 			try {
 			    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
+			    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_INTELLIJ_THEME, DemoPrefs.FILE_PREFIX + themeInfo.themeFile );
 			} catch( Exception ex ) {
 				ex.printStackTrace();
 				showInformationDialog( "Failed to load '" + themeInfo.themeFile + "'.", ex );
 			}
-		} else
+		} else {
 			IntelliJTheme.install( getClass().getResourceAsStream( themeInfo.resourceName ) );
+		    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_INTELLIJ_THEME, DemoPrefs.RESOURCE_PREFIX + themeInfo.resourceName );
+		}
 
 		// update all components
 		FlatLaf.updateUI();
@@ -326,22 +331,36 @@ public class IJThemesPanel
 
 	private void selectedCurrentLookAndFeel() {
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+		String intelliJTheme = UIManager.getLookAndFeelDefaults().getString( DemoPrefs.INTELLIJ_THEME_UI_KEY );
+
+		if( intelliJTheme == null && lookAndFeel instanceof IntelliJTheme.ThemeLaf )
+			return;
+
+		Predicate<IJThemeInfo> test;
+		if( intelliJTheme != null && intelliJTheme.startsWith( DemoPrefs.RESOURCE_PREFIX ) ) {
+			String resourceName = intelliJTheme.substring( DemoPrefs.RESOURCE_PREFIX.length() );
+			test = ti -> Objects.equals( ti.resourceName, resourceName );
+		} else if( intelliJTheme != null && intelliJTheme.startsWith( DemoPrefs.FILE_PREFIX ) ) {
+			File themeFile = new File( intelliJTheme.substring( DemoPrefs.FILE_PREFIX.length() ) );
+			test = ti -> Objects.equals( ti.themeFile, themeFile );
+		} else {
+			String lafClassName = lookAndFeel.getClass().getName();
+			test = ti -> Objects.equals( ti.lafClassName, lafClassName );
+		}
 
 		int newSel = -1;
-		if( !(lookAndFeel instanceof IntelliJTheme.ThemeLaf) ) {
-			String lafClassName = lookAndFeel.getClass().getName();
-			for( int i = 0; i < themes.size(); i++ ) {
-				if( lafClassName.equals( themes.get( i ).lafClassName ) ) {
-					newSel = i;
-					break;
-				}
+		for( int i = 0; i < themes.size(); i++ ) {
+			if( test.test( themes.get( i ) ) ) {
+				newSel = i;
+				break;
 			}
-
-			if( newSel >= 0 )
-				themesList.setSelectedIndex( newSel );
-			else
-				themesList.clearSelection();
 		}
+
+		if( newSel >= 0 ) {
+			if( newSel != themesList.getSelectedIndex() )
+				themesList.setSelectedIndex( newSel );
+		} else
+			themesList.clearSelection();
 	}
 
 	private void initComponents() {
