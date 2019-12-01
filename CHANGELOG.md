@@ -8,6 +8,8 @@ FlatLaf Change Log
   for improved compatibility with IntelliJ platform themes (e.g. for Vuesion,
   Spacegray and Material Design Dark themes).
 - Button: Fixed help button styling in IntelliJ platform themes.
+- ScrollPane: Paint disabled border if view component (e.g. JTextPane) is
+  disabled.
 
 
 ## 0.20

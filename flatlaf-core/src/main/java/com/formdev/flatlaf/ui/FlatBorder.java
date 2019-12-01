@@ -95,10 +95,21 @@ public class FlatBorder
 	}
 
 	protected Paint getBorderColor( Component c ) {
-		boolean enabled = c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
-		return enabled
+		return isEnabled( c )
 			? (isFocused( c ) ? focusedBorderColor : borderColor)
 			: disabledBorderColor;
+	}
+
+	protected boolean isEnabled( Component c ) {
+		if( c instanceof JScrollPane ) {
+			// check whether view component is disabled
+			JViewport viewport = ((JScrollPane)c).getViewport();
+			Component view = (viewport != null) ? viewport.getView() : null;
+			if( view != null && !isEnabled( view ) )
+				return false;
+		}
+
+		return c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
 	}
 
 	protected boolean isFocused( Component c ) {
