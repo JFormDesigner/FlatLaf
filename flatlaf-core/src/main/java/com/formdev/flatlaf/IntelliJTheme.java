@@ -143,6 +143,20 @@ public class IntelliJTheme
 		applyColorPalette( defaults );
 		applyCheckBoxColors( defaults );
 
+		// IDEA uses a SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
+		Object helpButtonBackground = defaults.get( "Button.startBackground" );
+		Object helpButtonBorderColor = defaults.get( "Button.startBorderColor" );
+		if( helpButtonBackground == null )
+			helpButtonBackground = defaults.get( "Button.background" );
+		if( helpButtonBorderColor == null )
+			helpButtonBorderColor = defaults.get( "Button.borderColor" );
+		defaults.put( "HelpButton.background", helpButtonBackground );
+		defaults.put( "HelpButton.borderColor", helpButtonBorderColor );
+		defaults.put( "HelpButton.disabledBackground", defaults.get( "Panel.background" ) );
+		defaults.put( "HelpButton.disabledBorderColor", defaults.get( "Button.disabledBorderColor" ) );
+		defaults.put( "HelpButton.focusedBorderColor", defaults.get( "Button.focusedBorderColor" ) );
+		defaults.put( "HelpButton.focusedBackground", defaults.get( "Button.focusedBackground" ) );
+
 		// IDEA uses TextField.background for editable ComboBox and Spinner
 		defaults.put( "ComboBox.editableBackground", defaults.get( "TextField.background" ) );
 		defaults.put( "Spinner.background", defaults.get( "TextField.background" ) );

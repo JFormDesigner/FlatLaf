@@ -7,6 +7,7 @@ FlatLaf Change Log
 - Button: Optionally support gradient borders, gradient backgrounds and shadows
   for improved compatibility with IntelliJ platform themes (e.g. for Vuesion,
   Spacegray and Material Design Dark themes).
+- Button: Fixed help button styling in IntelliJ platform themes.
 
 
 ## 0.20
