@@ -135,6 +135,8 @@ public class FlatComponentsTest
 		JPanel panel1 = new JPanel();
 		JScrollBar scrollBar2 = new JScrollBar();
 		JScrollBar scrollBar3 = new JScrollBar();
+		JScrollBar scrollBar7 = new JScrollBar();
+		JScrollBar scrollBar8 = new JScrollBar();
 		JSeparator separator2 = new JSeparator();
 		JSlider slider2 = new JSlider();
 		JSlider slider4 = new JSlider();
@@ -156,6 +158,8 @@ public class FlatComponentsTest
 		JEditorPane editorPane6 = new JEditorPane();
 		JScrollPane scrollPane16 = new JScrollPane();
 		JTextPane textPane6 = new JTextPane();
+		JScrollBar scrollBar5 = new JScrollBar();
+		JScrollBar scrollBar6 = new JScrollBar();
 		JLabel separatorLabel = new JLabel();
 		JSeparator separator1 = new JSeparator();
 		JPanel panel2 = new JPanel();
@@ -190,6 +194,8 @@ public class FlatComponentsTest
 			"[]" +
 			"[]",
 			// rows
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -695,20 +701,29 @@ public class FlatComponentsTest
 			scrollPane13.setViewportView(panel1);
 		}
 		add(scrollPane13, "cell 1 13,grow,width 70,height 70");
-		add(scrollBar2, "cell 2 13 1 4,growy");
+		add(scrollBar2, "cell 2 13 1 6,growy");
 
 		//---- scrollBar3 ----
 		scrollBar3.setEnabled(false);
-		add(scrollBar3, "cell 2 13 1 4,growy");
+		add(scrollBar3, "cell 2 13 1 6,growy");
+
+		//---- scrollBar7 ----
+		scrollBar7.putClientProperty("JScrollBar.showButtons", true);
+		add(scrollBar7, "cell 2 13 1 6,growy");
+
+		//---- scrollBar8 ----
+		scrollBar8.setEnabled(false);
+		scrollBar8.putClientProperty("JScrollBar.showButtons", true);
+		add(scrollBar8, "cell 2 13 1 6,growy");
 
 		//---- separator2 ----
 		separator2.setOrientation(SwingConstants.VERTICAL);
-		add(separator2, "cell 2 13 1 4,growy");
+		add(separator2, "cell 2 13 1 6,growy");
 
 		//---- slider2 ----
 		slider2.setOrientation(SwingConstants.VERTICAL);
 		slider2.setValue(30);
-		add(slider2, "cell 2 13 1 4,growy");
+		add(slider2, "cell 2 13 1 6,growy");
 
 		//---- slider4 ----
 		slider4.setMinorTickSpacing(10);
@@ -717,19 +732,19 @@ public class FlatComponentsTest
 		slider4.setPaintLabels(true);
 		slider4.setOrientation(SwingConstants.VERTICAL);
 		slider4.setValue(30);
-		add(slider4, "cell 2 13 1 4,growy");
+		add(slider4, "cell 2 13 1 6,growy");
 		add(scrollPane14, "cell 3 13,grow");
 
 		//---- progressBar3 ----
 		progressBar3.setOrientation(SwingConstants.VERTICAL);
 		progressBar3.setValue(50);
-		add(progressBar3, "cell 4 13 1 4,growy");
+		add(progressBar3, "cell 4 13 1 6,growy");
 
 		//---- progressBar4 ----
 		progressBar4.setOrientation(SwingConstants.VERTICAL);
 		progressBar4.setValue(55);
 		progressBar4.setStringPainted(true);
-		add(progressBar4, "cell 4 13 1 4,growy");
+		add(progressBar4, "cell 4 13 1 6,growy");
 
 		//======== toolBar2 ========
 		{
@@ -752,7 +767,7 @@ public class FlatComponentsTest
 			toggleButton7.setIcon(UIManager.getIcon("Tree.closedIcon"));
 			toolBar2.add(toggleButton7);
 		}
-		add(toolBar2, "cell 4 13 1 4,growy");
+		add(toolBar2, "cell 4 13 1 6,growy");
 
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
@@ -807,12 +822,23 @@ public class FlatComponentsTest
 			}
 			panel3.add(scrollPane16, "cell 0 2,grow");
 		}
-		add(panel3, "cell 5 15 1 7,aligny top,grow 100 0");
+		add(panel3, "cell 5 15 1 9,aligny top,grow 100 0");
+
+		//---- scrollBar5 ----
+		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
+		scrollBar5.putClientProperty("JScrollBar.showButtons", true);
+		add(scrollBar5, "cell 1 16,growx");
+
+		//---- scrollBar6 ----
+		scrollBar6.setOrientation(Adjustable.HORIZONTAL);
+		scrollBar6.setEnabled(false);
+		scrollBar6.putClientProperty("JScrollBar.showButtons", true);
+		add(scrollBar6, "cell 1 17,growx");
 
 		//---- separatorLabel ----
 		separatorLabel.setText("JSeparator:");
-		add(separatorLabel, "cell 0 16");
-		add(separator1, "cell 1 16,growx");
+		add(separatorLabel, "cell 0 18");
+		add(separator1, "cell 1 18,growx");
 
 		//======== panel2 ========
 		{
@@ -820,20 +846,20 @@ public class FlatComponentsTest
 			panel2.setOpaque(false);
 			panel2.setLayout(new FlowLayout());
 		}
-		add(panel2, "cell 3 16,grow");
+		add(panel2, "cell 3 18,grow");
 
 		//---- sliderLabel ----
 		sliderLabel.setText("JSlider:");
-		add(sliderLabel, "cell 0 17");
+		add(sliderLabel, "cell 0 19");
 
 		//---- slider1 ----
 		slider1.setValue(30);
-		add(slider1, "cell 1 17 3 1,aligny top,grow 100 0");
+		add(slider1, "cell 1 19 3 1,aligny top,grow 100 0");
 
 		//---- slider6 ----
 		slider6.setEnabled(false);
 		slider6.setValue(30);
-		add(slider6, "cell 1 17 3 1,aligny top,growy 0");
+		add(slider6, "cell 1 19 3 1,aligny top,growy 0");
 
 		//---- slider3 ----
 		slider3.setMinorTickSpacing(10);
@@ -841,7 +867,7 @@ public class FlatComponentsTest
 		slider3.setMajorTickSpacing(50);
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
-		add(slider3, "cell 1 18 3 1,aligny top,grow 100 0");
+		add(slider3, "cell 1 20 3 1,aligny top,grow 100 0");
 
 		//---- slider5 ----
 		slider5.setMinorTickSpacing(10);
@@ -850,41 +876,41 @@ public class FlatComponentsTest
 		slider5.setPaintLabels(true);
 		slider5.setEnabled(false);
 		slider5.setValue(30);
-		add(slider5, "cell 1 18 3 1,aligny top,growy 0");
+		add(slider5, "cell 1 20 3 1,aligny top,growy 0");
 
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
-		add(progressBarLabel, "cell 0 19");
+		add(progressBarLabel, "cell 0 21");
 
 		//---- progressBar1 ----
 		progressBar1.setValue(50);
-		add(progressBar1, "cell 1 19 3 1,growx");
+		add(progressBar1, "cell 1 21 3 1,growx");
 
 		//---- progressBar2 ----
 		progressBar2.setStringPainted(true);
 		progressBar2.setValue(55);
-		add(progressBar2, "cell 1 19 3 1,growx");
+		add(progressBar2, "cell 1 21 3 1,growx");
 
 		//---- indeterminateCheckBox ----
 		indeterminateCheckBox.setText("indeterminate");
 		indeterminateCheckBox.addActionListener(e -> indeterminateCheckBoxActionPerformed());
-		add(indeterminateCheckBox, "cell 4 19");
+		add(indeterminateCheckBox, "cell 4 21");
 
 		//---- toolTipLabel ----
 		toolTipLabel.setText("JToolTip:");
-		add(toolTipLabel, "cell 0 20");
+		add(toolTipLabel, "cell 0 22");
 
 		//---- toolTip1 ----
 		toolTip1.setTipText("Some text in tool tip.");
-		add(toolTip1, "cell 1 20 3 1");
+		add(toolTip1, "cell 1 22 3 1");
 
 		//---- toolTip2 ----
 		toolTip2.setTipText("Tool tip with\nmultiple\nlines.");
-		add(toolTip2, "cell 1 20 3 1");
+		add(toolTip2, "cell 1 22 3 1");
 
 		//---- toolBarLabel ----
 		toolBarLabel.setText("JToolBar:");
-		add(toolBarLabel, "cell 0 21");
+		add(toolBarLabel, "cell 0 23");
 
 		//======== toolBar1 ========
 		{
@@ -914,7 +940,7 @@ public class FlatComponentsTest
 			toggleButton6.setSelected(true);
 			toolBar1.add(toggleButton6);
 		}
-		add(toolBar1, "cell 1 21 3 1,growx");
+		add(toolBar1, "cell 1 23 3 1,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 //		BasicComboBoxRenderer customaRenderer = new BasicComboBoxRenderer();

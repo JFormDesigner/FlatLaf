@@ -3,6 +3,9 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- ScrollBar: Show decrease/increase arrow buttons if client property
+  "JScrollBar.showButtons" is set to `true` on `JScrollPane` or `JScrollBar`.
+  (issue #25)
 - `FlatLaf.isNativeLookAndFeel()` now returns `false`.
 - Button: Optionally support gradient borders, gradient backgrounds and shadows
   for improved compatibility with IntelliJ platform themes (e.g. for Vuesion,

@@ -24,13 +24,16 @@ import java.awt.event.ContainerListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
+import com.formdev.flatlaf.FlatClientProperties;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollPane}.
@@ -85,6 +88,29 @@ public class FlatScrollPaneUI
 		removeViewportListeners( scrollpane.getViewport() );
 
 		handler = null;
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener() {
+		return new BasicScrollPaneUI.PropertyChangeHandler() {
+			@Override
+			public void propertyChange( PropertyChangeEvent e ) {
+				super.propertyChange( e );
+
+				if( FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS.equals( e.getPropertyName() ) ) {
+					JScrollBar vsb = scrollpane.getVerticalScrollBar();
+					JScrollBar hsb = scrollpane.getHorizontalScrollBar();
+					if( vsb != null ) {
+						vsb.revalidate();
+						vsb.repaint();
+					}
+					if( hsb != null ) {
+						hsb.revalidate();
+						hsb.repaint();
+					}
+				}
+			}
+		};
 	}
 
 	public Handler getHandler() {

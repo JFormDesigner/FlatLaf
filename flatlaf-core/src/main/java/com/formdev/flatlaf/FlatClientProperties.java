@@ -30,6 +30,14 @@ public interface FlatClientProperties
 	String SELECTED_STATE = "JButton.selectedState";
 	String SELECTED_STATE_INDETERMINATE = "indeterminate";
 
+	/**
+	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JScrollBar} or {@link javax.swing.JScrollPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String SCROLL_BAR_SHOW_BUTTONS = "JScrollBar.showButtons";
+
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
