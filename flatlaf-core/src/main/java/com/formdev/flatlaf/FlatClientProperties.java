@@ -24,10 +24,36 @@ import javax.swing.JComponent;
  */
 public interface FlatClientProperties
 {
+	/**
+	 * Specifies type of a button.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JButton}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong> {@link BUTTON_TYPE_HELP}
+	 */
 	String BUTTON_TYPE = "JButton.buttonType";
+
+	/**
+	 * Paint a help button (circle with question mark).
+	 *
+	 * @see #BUTTON_TYPE
+	 */
 	String BUTTON_TYPE_HELP = "help";
 
+	/**
+	 * Specifies selected state of a checkbox.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JCheckBox}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong> {@link SELECTED_STATE_INDETERMINATE}
+	 */
 	String SELECTED_STATE = "JButton.selectedState";
+
+	/**
+	 * Paint an indeterminate state on a checkbox.
+	 *
+	 * @see #SELECTED_STATE
+	 */
 	String SELECTED_STATE_INDETERMINATE = "indeterminate";
 
 	/**
@@ -38,6 +64,12 @@ public interface FlatClientProperties
 	 */
 	String SCROLL_BAR_SHOW_BUTTONS = "JScrollBar.showButtons";
 
+	/**
+	 * Specifies whether a full border is painted around a tabbed pane.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
