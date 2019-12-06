@@ -230,7 +230,9 @@ public class IntelliJTheme
 			if( uiValue == null ) {
 				// fix errors (missing '#' for colors)
 				if( !valueStr.startsWith( "#" ) && (key.endsWith( "ground" ) || key.endsWith( "Color" )) )
-					valueStr = "#" + valueStr;
+					valueStr = fixColorIfValid( "#" + valueStr, valueStr );
+				else if( valueStr.startsWith( "##" ) )
+					valueStr = fixColorIfValid( valueStr.substring( 1 ), valueStr );
 				else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) ) {
 					List<String> parts = StringUtils.split( valueStr, ',' );
 					if( parts.size() == 5 && !parts.get( 4 ).startsWith( "#" ) ) {
@@ -274,6 +276,17 @@ public class IntelliJTheme
 				}
 			} else
 				defaults.put( key, uiValue );
+		}
+	}
+
+	private String fixColorIfValid( String newColorStr, String colorStr ) {
+		try {
+			// check whether it is valid
+			UIDefaultsLoader.parseColorRGBA( newColorStr );
+
+			return newColorStr;
+		} catch( IllegalArgumentException ex ) {
+			return colorStr;
 		}
 	}
 
