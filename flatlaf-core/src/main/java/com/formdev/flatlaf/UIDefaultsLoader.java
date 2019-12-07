@@ -22,6 +22,7 @@ import java.awt.Insets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -77,6 +78,8 @@ class UIDefaultsLoader
 
 	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, UIDefaults defaults ) {
 		try {
+			List<ClassLoader> addonClassLoaders = new ArrayList<>();
+
 			// load properties files
 			Properties properties = new Properties();
 			ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
@@ -94,6 +97,10 @@ class UIDefaultsLoader
 						if( in != null )
 							properties.load( in );
 					}
+
+					ClassLoader addonClassLoader = addon.getClass().getClassLoader();
+					if( !addonClassLoaders.contains( addonClassLoader ) )
+						addonClassLoaders.add( addonClassLoader );
 				}
 			}
 
@@ -131,7 +138,7 @@ class UIDefaultsLoader
 
 				String value = resolveValue( properties, (String) e.getValue() );
 				try {
-					globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver ) );
+					globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( key, value, ex );
 				}
@@ -156,7 +163,7 @@ class UIDefaultsLoader
 
 				String value = resolveValue( properties, (String) e.getValue() );
 				try {
-					defaults.put( key, parseValue( key, value, resolver ) );
+					defaults.put( key, parseValue( key, value, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( key, value, ex );
 				}
@@ -195,13 +202,13 @@ class UIDefaultsLoader
 		return resolveValue( properties, newValue );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDNUMBER }
+	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDNUMBER, INSTANCE, CLASS }
 
 	static Object parseValue( String key, String value ) {
-		return parseValue( key, value, v -> v );
+		return parseValue( key, value, v -> v, Collections.emptyList() );
 	}
 
-	private static Object parseValue( String key, String value, Function<String, String> resolver ) {
+	private static Object parseValue( String key, String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		value = value.trim();
 
 		// null, false, true
@@ -254,12 +261,14 @@ class UIDefaultsLoader
 		switch( valueType ) {
 			case STRING:		return value;
 			case INTEGER:		return parseInteger( value, true );
-			case BORDER:		return parseBorder( value, resolver );
-			case ICON:			return parseInstance( value );
+			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
+			case ICON:			return parseInstance( value, addonClassLoaders );
 			case INSETS:		return parseInsets( value );
 			case SIZE:			return parseSize( value );
 			case COLOR:			return parseColorOrFunction( value, true );
 			case SCALEDNUMBER:	return parseScaledNumber( value );
+			case INSTANCE:		return parseInstance( value, addonClassLoaders );
+			case CLASS:			return parseClass( value, addonClassLoaders );
 			case UNKNOWN:
 			default:
 				// colors
@@ -277,7 +286,7 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static Object parseBorder( String value, Function<String, String> resolver ) {
+	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		if( value.indexOf( ',' ) >= 0 ) {
 			// top,left,bottom,right[,lineColor]
 			List<String> parts = StringUtils.split( value, ',' );
@@ -292,18 +301,47 @@ class UIDefaultsLoader
 					: new FlatEmptyBorder( insets );
 			};
 		} else
-			return parseInstance( value );
+			return parseInstance( value, addonClassLoaders );
 	}
 
-	private static Object parseInstance( String value ) {
+	private static Object parseInstance( String value, List<ClassLoader> addonClassLoaders ) {
 		return (LazyValue) t -> {
 			try {
-				return Class.forName( value ).newInstance();
+				return findClass( value, addonClassLoaders ).newInstance();
 			} catch( InstantiationException | IllegalAccessException | ClassNotFoundException ex ) {
 				ex.printStackTrace();
 				return null;
 			}
 		};
+	}
+
+	private static Object parseClass( String value, List<ClassLoader> addonClassLoaders ) {
+		return (LazyValue) t -> {
+			try {
+				return findClass( value, addonClassLoaders );
+			} catch( ClassNotFoundException ex ) {
+				ex.printStackTrace();
+				return null;
+			}
+		};
+	}
+
+	private static Class<?> findClass( String className, List<ClassLoader> addonClassLoaders )
+		throws ClassNotFoundException
+	{
+		try {
+			return Class.forName( className );
+		} catch( ClassNotFoundException ex ) {
+			// search in addons class loaders
+			for( ClassLoader addonClassLoader : addonClassLoaders ) {
+				try {
+					return addonClassLoader.loadClass( className );
+				} catch( ClassNotFoundException ex2 ) {
+					// ignore
+				}
+			}
+			throw ex;
+		}
 	}
 
 	private static Insets parseInsets( String value ) {
