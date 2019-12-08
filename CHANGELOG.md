@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.21
 
 - ScrollBar: Show decrease/increase arrow buttons if client property
   "JScrollBar.showButtons" is set to `true` on `JScrollPane` or `JScrollBar`.
