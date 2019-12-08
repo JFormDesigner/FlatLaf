@@ -13,6 +13,7 @@ FlatLaf Change Log
 - Button: Fixed help button styling in IntelliJ platform themes.
 - ScrollPane: Paint disabled border if view component (e.g. JTextPane) is
   disabled.
+- Fixed Swing system colors in dark themes.
 
 
 ## 0.20
