@@ -22,6 +22,7 @@ import java.awt.Insets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,8 @@ import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.ScaledNumber;
+import com.formdev.flatlaf.util.StringUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Load UI defaults from properties files associated to Flat LaF classes and add to UI defaults.
@@ -70,7 +73,13 @@ class UIDefaultsLoader
 			lafClasses.add( 0, lafClass );
 		}
 
+		loadDefaultsFromProperties( lafClasses, defaults );
+	}
+
+	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, UIDefaults defaults ) {
 		try {
+			List<ClassLoader> addonClassLoaders = new ArrayList<>();
+
 			// load properties files
 			Properties properties = new Properties();
 			ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
@@ -88,6 +97,31 @@ class UIDefaultsLoader
 						if( in != null )
 							properties.load( in );
 					}
+
+					ClassLoader addonClassLoader = addon.getClass().getClassLoader();
+					if( !addonClassLoaders.contains( addonClassLoader ) )
+						addonClassLoaders.add( addonClassLoader );
+				}
+			}
+
+			// collect all platform specific keys (but do not modify properties)
+			ArrayList<String> platformSpecificKeys = new ArrayList<>();
+			for( Object key : properties.keySet() ) {
+				if( ((String)key).startsWith( "[" ) )
+					platformSpecificKeys.add( (String) key );
+			}
+
+			// remove platform specific properties and re-add only properties
+			// for current platform, but with platform prefix removed
+			if( !platformSpecificKeys.isEmpty() ) {
+				String platformPrefix =
+					SystemInfo.IS_WINDOWS ? "[win]" :
+					SystemInfo.IS_MAC ? "[mac]" :
+					SystemInfo.IS_LINUX ? "[linux]" : "[unknown]";
+				for( String key : platformSpecificKeys ) {
+					Object value = properties.remove( key );
+					if( key.startsWith( platformPrefix ) )
+						properties.put( key.substring( platformPrefix.length() ), value );
 				}
 			}
 
@@ -104,7 +138,7 @@ class UIDefaultsLoader
 
 				String value = resolveValue( properties, (String) e.getValue() );
 				try {
-					globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver ) );
+					globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( key, value, ex );
 				}
@@ -129,7 +163,7 @@ class UIDefaultsLoader
 
 				String value = resolveValue( properties, (String) e.getValue() );
 				try {
-					defaults.put( key, parseValue( key, value, resolver ) );
+					defaults.put( key, parseValue( key, value, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( key, value, ex );
 				}
@@ -139,7 +173,7 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static void logParseError( String key, String value, RuntimeException ex ) {
+	static void logParseError( String key, String value, RuntimeException ex ) {
 		System.err.println( "Failed to parse: '" + key + '=' + value + '\'' );
 		System.err.println( "    " + ex.getMessage() );
 	}
@@ -168,9 +202,13 @@ class UIDefaultsLoader
 		return resolveValue( properties, newValue );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDNUMBER }
+	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDNUMBER, INSTANCE, CLASS }
 
-	private static Object parseValue( String key, String value, Function<String, String> resolver ) {
+	static Object parseValue( String key, String value ) {
+		return parseValue( key, value, v -> v, Collections.emptyList() );
+	}
+
+	private static Object parseValue( String key, String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		value = value.trim();
 
 		// null, false, true
@@ -183,7 +221,9 @@ class UIDefaultsLoader
 		ValueType valueType = ValueType.UNKNOWN;
 
 		// check whether value type is specified in the value
-		if( value.startsWith( TYPE_PREFIX ) ) {
+		if( value.startsWith( "#" ) )
+			valueType = ValueType.COLOR;
+		else if( value.startsWith( TYPE_PREFIX ) ) {
 			int end = value.indexOf( TYPE_PREFIX_END );
 			if( end != -1 ) {
 				try {
@@ -200,7 +240,9 @@ class UIDefaultsLoader
 
 		// determine value type from key
 		if( valueType == ValueType.UNKNOWN ) {
-			if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
+			if( key.endsWith( "ground" ) || key.endsWith( "Color" ) )
+				valueType = ValueType.COLOR;
+			else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
 				valueType = ValueType.BORDER;
 			else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
 				valueType = ValueType.ICON;
@@ -211,22 +253,26 @@ class UIDefaultsLoader
 				valueType = ValueType.SIZE;
 			else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
 				valueType = ValueType.INTEGER;
+			else if( key.endsWith( "UI" ) )
+				valueType = ValueType.STRING;
 		}
 
 		// parse value
 		switch( valueType ) {
 			case STRING:		return value;
 			case INTEGER:		return parseInteger( value, true );
-			case BORDER:		return parseBorder( value, resolver );
-			case ICON:			return parseInstance( value );
+			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
+			case ICON:			return parseInstance( value, addonClassLoaders );
 			case INSETS:		return parseInsets( value );
 			case SIZE:			return parseSize( value );
-			case COLOR:			return parseColor( value, true );
+			case COLOR:			return parseColorOrFunction( value, true );
 			case SCALEDNUMBER:	return parseScaledNumber( value );
+			case INSTANCE:		return parseInstance( value, addonClassLoaders );
+			case CLASS:			return parseClass( value, addonClassLoaders );
 			case UNKNOWN:
 			default:
 				// colors
-				ColorUIResource color = parseColor( value, false );
+				ColorUIResource color = parseColorOrFunction( value, false );
 				if( color != null )
 					return color;
 
@@ -240,13 +286,13 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static Object parseBorder( String value, Function<String, String> resolver ) {
+	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		if( value.indexOf( ',' ) >= 0 ) {
 			// top,left,bottom,right[,lineColor]
-			List<String> parts = split( value, ',' );
+			List<String> parts = StringUtils.split( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() == 5)
-				? parseColor( resolver.apply( parts.get( 4 ) ), true )
+				? parseColorOrFunction( resolver.apply( parts.get( 4 ) ), true )
 				: null;
 
 			return (LazyValue) t -> {
@@ -255,13 +301,13 @@ class UIDefaultsLoader
 					: new FlatEmptyBorder( insets );
 			};
 		} else
-			return parseInstance( value );
+			return parseInstance( value, addonClassLoaders );
 	}
 
-	private static Object parseInstance( String value ) {
+	private static Object parseInstance( String value, List<ClassLoader> addonClassLoaders ) {
 		return (LazyValue) t -> {
 			try {
-				return Class.forName( value ).newInstance();
+				return findClass( value, addonClassLoaders ).newInstance();
 			} catch( InstantiationException | IllegalAccessException | ClassNotFoundException ex ) {
 				ex.printStackTrace();
 				return null;
@@ -269,8 +315,37 @@ class UIDefaultsLoader
 		};
 	}
 
+	private static Object parseClass( String value, List<ClassLoader> addonClassLoaders ) {
+		return (LazyValue) t -> {
+			try {
+				return findClass( value, addonClassLoaders );
+			} catch( ClassNotFoundException ex ) {
+				ex.printStackTrace();
+				return null;
+			}
+		};
+	}
+
+	private static Class<?> findClass( String className, List<ClassLoader> addonClassLoaders )
+		throws ClassNotFoundException
+	{
+		try {
+			return Class.forName( className );
+		} catch( ClassNotFoundException ex ) {
+			// search in addons class loaders
+			for( ClassLoader addonClassLoader : addonClassLoaders ) {
+				try {
+					return addonClassLoader.loadClass( className );
+				} catch( ClassNotFoundException ex2 ) {
+					// ignore
+				}
+			}
+			throw ex;
+		}
+	}
+
 	private static Insets parseInsets( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',' );
 		try {
 			return new InsetsUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -283,7 +358,7 @@ class UIDefaultsLoader
 	}
 
 	private static Dimension parseSize( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',' );
 		try {
 			return new DimensionUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -293,26 +368,74 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static ColorUIResource parseColor( String value, boolean reportError ) {
+	private static ColorUIResource parseColorOrFunction( String value, boolean reportError ) {
 		if( value.endsWith( ")" ) )
 			return parseColorFunctions( value, reportError );
 
-		try {
-			int rgb = Integer.parseInt( value, 16 );
-			if( value.length() == 6 )
-				return new ColorUIResource( rgb );
-			if( value.length() == 8 )
-				return new ColorUIResource( new Color( rgb, true ) );
+		return parseColor( value, reportError );
+	}
 
-			if( reportError )
-				throw new NumberFormatException( value );
-		} catch( NumberFormatException ex ) {
+	static ColorUIResource parseColor( String value ) {
+		return parseColor( value, false );
+	}
+
+	private static ColorUIResource parseColor( String value, boolean reportError ) {
+		try {
+			int rgba = parseColorRGBA( value );
+			return ((rgba & 0xff000000) == 0xff000000)
+				? new ColorUIResource( rgba )
+				: new ColorUIResource( new Color( rgba, true ) );
+		} catch( IllegalArgumentException ex ) {
 			if( reportError )
 				throw new IllegalArgumentException( "invalid color '" + value + "'" );
 
 			// not a color --> ignore
 		}
 		return null;
+	}
+
+	/**
+	 * Parses a hex color in  {@code #RGB}, {@code #RGBA}, {@code #RRGGBB} or {@code #RRGGBBAA}
+	 * format and returns it as {@code rgba} integer suitable for {@link java.awt.Color},
+	 * which includes alpha component in bits 24-31.
+	 *
+	 * @throws IllegalArgumentException
+	 */
+	static int parseColorRGBA( String value ) {
+		int len = value.length();
+		if( (len != 4 && len != 5 && len != 7 && len != 9) || value.charAt( 0 ) != '#' )
+			throw new IllegalArgumentException();
+
+		// parse hex
+		int n = 0;
+		for( int i = 1; i < len; i++ ) {
+			char ch = value.charAt( i );
+
+			int digit;
+			if( ch >= '0' && ch <= '9' )
+				digit = ch - '0';
+			else if( ch >= 'a' && ch <= 'f' )
+				digit = ch - 'a' + 10;
+			else if( ch >= 'A' && ch <= 'F' )
+				digit = ch - 'A' + 10;
+			else
+				throw new IllegalArgumentException();
+
+			n = (n << 4) | digit;
+		}
+
+		if( len <= 5 ) {
+			// double nibbles
+			int n1 = n & 0xf000;
+			int n2 = n & 0xf00;
+			int n3 = n & 0xf0;
+			int n4 = n & 0xf;
+			n = (n1 << 16) | (n1 << 12) | (n2 << 12) | (n2 << 8) | (n3 << 8) | (n3 << 4) | (n4 << 4) | n4;
+		}
+
+		return (len == 4 || len == 7)
+			? (0xff000000 | n) // set alpha to 255
+			: (((n >> 8) & 0xffffff) | ((n & 0xff) << 24)); // move alpha from lowest to highest byte
 	}
 
 	private static ColorUIResource parseColorFunctions( String value, boolean reportError ) {
@@ -324,7 +447,7 @@ class UIDefaultsLoader
 		}
 
 		String function = value.substring( 0, paramsStart ).trim();
-		List<String> params = split( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
+		List<String> params = StringUtils.split( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
 		if( params.isEmpty() )
 			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 
@@ -389,19 +512,5 @@ class UIDefaultsLoader
 		} catch( NumberFormatException ex ) {
 			throw new NumberFormatException( "invalid integer '" + value + "'" );
 		}
-	}
-
-	static List<String> split( String str, char delim ) {
-		ArrayList<String> strs = new ArrayList<>();
-		int delimIndex = str.indexOf( delim );
-		int index = 0;
-		while( delimIndex >= 0 ) {
-			strs.add( str.substring( index, delimIndex ) );
-			index = delimIndex + 1;
-			delimIndex = str.indexOf( delim, index );
-		}
-		strs.add( str.substring( index ) );
-
-		return strs;
 	}
 }

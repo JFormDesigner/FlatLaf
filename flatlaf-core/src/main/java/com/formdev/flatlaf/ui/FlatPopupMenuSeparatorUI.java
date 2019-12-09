@@ -22,6 +22,17 @@ import javax.swing.plaf.ComponentUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPopupMenu.Separator}.
  *
+ * <!-- BasicSeparatorUI -->
+ *
+ * @uiDefault PopupMenuSeparator.background		Color	unused
+ * @uiDefault PopupMenuSeparator.foreground		Color
+ *
+ * <!-- FlatSeparatorUI -->
+ *
+ * @uiDefault PopupMenuSeparator.height			int		height (or width) of the component; may be larger than stripe
+ * @uiDefault PopupMenuSeparator.stripeWidth	int		width of the stripe
+ * @uiDefault PopupMenuSeparator.stripeIndent	int		indent of stripe from top (or left); allows positioning of stripe within component
+ *
  * @author Karl Tauber
  */
 public class FlatPopupMenuSeparatorUI

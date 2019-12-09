@@ -25,7 +25,7 @@ import javax.swing.UIManager;
 /**
  * "computer" icon for {@link javax.swing.JFileChooser}.
  *
- * @uiDefault FileView.icon.computerColor		Color
+ * @uiDefault Objects.Grey						Color
  *
  * @author Karl Tauber
  */
@@ -33,7 +33,7 @@ public class FlatFileViewComputerIcon
 	extends FlatAbstractIcon
 {
 	public FlatFileViewComputerIcon() {
-		super( 16, 16, UIManager.getColor( "FileView.icon.computerColor" ) );
+		super( 16, 16, UIManager.getColor( "Objects.Grey" ) );
 	}
 
 	@Override

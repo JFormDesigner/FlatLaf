@@ -16,15 +16,18 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "descendingSort" icon for {@link javax.swing.table.JTableHeader}.
  *
+ * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Table.sortIconColor				Color
  *
  * @author Karl Tauber
@@ -32,6 +35,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatDescendingSortIcon
 	extends FlatAbstractIcon
 {
+	protected final boolean chevron = "chevron".equals( UIManager.getString( "Component.arrowType" ) );
 	protected final Color sortIconColor = UIManager.getColor( "Table.sortIconColor" );
 
 	public FlatDescendingSortIcon() {
@@ -41,6 +45,14 @@ public class FlatDescendingSortIcon
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
 		g.setColor( sortIconColor );
-		g.fill( FlatUIUtils.createPath( 0.5,0, 9.5,0, 5,5 ) );
+		if( chevron ) {
+			// chevron arrow
+			Path2D path = FlatUIUtils.createPath( false, 1,1, 5,5, 9,1 );
+			g.setStroke( new BasicStroke( 1f ) );
+			g.draw( path );
+		} else {
+			// triangle arrow
+			g.fill( FlatUIUtils.createPath( 0.5,0, 5,5, 9.5,0 ) );
+		}
 	}
 }

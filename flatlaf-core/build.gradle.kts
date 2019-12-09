@@ -35,8 +35,8 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks {
@@ -58,12 +58,7 @@ tasks {
 		archiveBaseName.set( "flatlaf" )
 
 		if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
-			manifest.attributes(
-				"Multi-Release" to "true"
-			)
-
-			into( "META-INF/versions/9" ) {
-				from( sourceSets["module-info"].output )
+			from( sourceSets["module-info"].output ) {
 				include( "module-info.class" )
 			}
 		}

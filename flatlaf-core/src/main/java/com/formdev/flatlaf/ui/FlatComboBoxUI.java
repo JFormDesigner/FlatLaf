@@ -34,6 +34,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -56,13 +57,24 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JComboBox}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicComboBoxUI -->
+ *
+ * @uiDefault ComboBox.font						Font
+ * @uiDefault ComboBox.background				Color
+ * @uiDefault ComboBox.foreground				Color
+ * @uiDefault ComboBox.border					Border
+ * @uiDefault ComboBox.padding					Insets
+ * @uiDefault ComboBox.squareButton				boolean	default is true
+ *
+ * <!-- FlatComboBoxUI -->
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.arc						int
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
+ * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
+ * @uiDefault ComboBox.editableBackground		Color	optional; defaults to ComboBox.background
  * @uiDefault ComboBox.disabledBackground		Color
  * @uiDefault ComboBox.disabledForeground		Color
  * @uiDefault ComboBox.buttonBackground			Color
@@ -79,9 +91,11 @@ public class FlatComboBoxUI
 	protected int focusWidth;
 	protected int arc;
 	protected String arrowType;
+	protected boolean isIntelliJTheme;
 	protected Color borderColor;
 	protected Color disabledBorderColor;
 
+	protected Color editableBackground;
 	protected Color disabledBackground;
 	protected Color disabledForeground;
 
@@ -93,6 +107,8 @@ public class FlatComboBoxUI
 
 	private MouseListener hoverListener;
 	private boolean hover;
+
+	private WeakReference<Component> lastRendererComponent;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatComboBoxUI();
@@ -129,9 +145,11 @@ public class FlatComboBoxUI
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		arc = UIManager.getInt( "Component.arc" );
 		arrowType = UIManager.getString( "Component.arrowType" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 
+		editableBackground = UIManager.getColor( "ComboBox.editableBackground" );
 		disabledBackground = UIManager.getColor( "ComboBox.disabledBackground" );
 		disabledForeground = UIManager.getColor( "ComboBox.disabledForeground" );
 
@@ -154,6 +172,7 @@ public class FlatComboBoxUI
 		borderColor = null;
 		disabledBorderColor = null;
 
+		editableBackground = null;
 		disabledBackground = null;
 		disabledForeground = null;
 
@@ -294,7 +313,9 @@ public class FlatComboBoxUI
 		boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
 		// paint background
-		g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		g2.setColor( enabled
+			? (editableBackground != null && comboBox.isEditable() ? editableBackground : c.getBackground())
+			: getDisabledBackground( comboBox ) );
 		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow button background
@@ -324,15 +345,15 @@ public class FlatComboBoxUI
 	@SuppressWarnings( "unchecked" )
 	public void paintCurrentValue( Graphics g, Rectangle bounds, boolean hasFocus ) {
 		ListCellRenderer<Object> renderer = comboBox.getRenderer();
-		CellPaddingBorder.uninstall( renderer );
+		uninstallCellPaddingBorder( renderer );
 		Component c = renderer.getListCellRendererComponent( listBox, comboBox.getSelectedItem(), -1, false, false );
 		c.setFont( comboBox.getFont() );
 		c.applyComponentOrientation( comboBox.getComponentOrientation() );
-		CellPaddingBorder.uninstall( c );
+		uninstallCellPaddingBorder( c );
 
 		boolean enabled = comboBox.isEnabled();
 		c.setForeground( enabled ? comboBox.getForeground() : disabledForeground );
-		c.setBackground( enabled ? comboBox.getBackground() : disabledBackground );
+		c.setBackground( enabled ? comboBox.getBackground() : getDisabledBackground( comboBox ) );
 
 		boolean shouldValidate = (c instanceof JPanel);
 		if( padding != null )
@@ -349,8 +370,36 @@ public class FlatComboBoxUI
 
 	@Override
 	public void paintCurrentValueBackground( Graphics g, Rectangle bounds, boolean hasFocus ) {
-		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : disabledBackground );
+		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : getDisabledBackground( comboBox ) );
 		g.fillRect( bounds.x, bounds.y, bounds.width, bounds.height );
+	}
+
+	private Color getDisabledBackground( JComponent c ) {
+		return isIntelliJTheme ? FlatUIUtils.getParentBackground( c ) : disabledBackground;
+	}
+
+	@Override
+	protected Dimension getDefaultSize() {
+		@SuppressWarnings( "unchecked" )
+		ListCellRenderer<Object> renderer = comboBox.getRenderer();
+		uninstallCellPaddingBorder( renderer );
+
+		Dimension size = super.getDefaultSize();
+
+		uninstallCellPaddingBorder( renderer );
+		return size;
+	}
+
+	@Override
+	protected Dimension getDisplaySize() {
+		@SuppressWarnings( "unchecked" )
+		ListCellRenderer<Object> renderer = comboBox.getRenderer();
+		uninstallCellPaddingBorder( renderer );
+
+		Dimension displaySize = super.getDisplaySize();
+
+		uninstallCellPaddingBorder( renderer );
+		return displaySize;
 	}
 
 	@Override
@@ -374,6 +423,14 @@ public class FlatComboBoxUI
 		}
 
 		return null;
+	}
+
+	private void uninstallCellPaddingBorder( Object o ) {
+		CellPaddingBorder.uninstall( o );
+		if( lastRendererComponent != null ) {
+			CellPaddingBorder.uninstall( lastRendererComponent );
+			lastRendererComponent = null;
+		}
 	}
 
 	//---- class FlatComboPopup -----------------------------------------------
@@ -459,6 +516,7 @@ public class FlatComboBoxUI
 			{
 				ListCellRenderer renderer = comboBox.getRenderer();
 				CellPaddingBorder.uninstall( renderer );
+				CellPaddingBorder.uninstall( lastRendererComponent );
 
 				Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 				c.applyComponentOrientation( comboBox.getComponentOrientation() );
@@ -468,6 +526,8 @@ public class FlatComboBoxUI
 						paddingBorder = new CellPaddingBorder( padding );
 					paddingBorder.install( (JComponent) c );
 				}
+
+				lastRendererComponent = (c != renderer) ? new WeakReference<>( c ) : null;
 
 				return c;
 			}
@@ -503,6 +563,9 @@ public class FlatComboBoxUI
 		}
 
 		static void uninstall( Object o ) {
+			if( o instanceof WeakReference )
+				o = ((WeakReference<?>)o).get();
+
 			if( !(o instanceof JComponent) )
 				return;
 

@@ -24,7 +24,8 @@ import java.awt.geom.Rectangle2D;
 /**
  * "Error" icon for {@link javax.swing.JOptionPane}.
  *
- * @uiDefault OptionPane.icon.errorColor			Color
+ * @uiDefault OptionPane.icon.errorColor			Color	optional; defaults to Actions.Red
+ * @uiDefault Actions.Red							Color
  *
  * @author Karl Tauber
  */
@@ -32,7 +33,7 @@ public class FlatOptionPaneErrorIcon
 	extends FlatOptionPaneAbstractIcon
 {
 	public FlatOptionPaneErrorIcon() {
-		super( "OptionPane.icon.errorColor" );
+		super( "OptionPane.icon.errorColor", "Actions.Red" );
 	}
 
 	/*

@@ -18,18 +18,37 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
+import javax.swing.text.JTextComponent;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JEditorPane}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicEditorPaneUI -->
+ *
+ * @uiDefault EditorPane.font					Font
+ * @uiDefault EditorPane.background				Color	also used if not editable
+ * @uiDefault EditorPane.foreground				Color
+ * @uiDefault EditorPane.caretForeground		Color
+ * @uiDefault EditorPane.selectionBackground	Color
+ * @uiDefault EditorPane.selectionForeground	Color
+ * @uiDefault EditorPane.disabledBackground		Color	used if not enabled
+ * @uiDefault EditorPane.inactiveBackground		Color	used if not editable
+ * @uiDefault EditorPane.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault EditorPane.border					Border
+ * @uiDefault EditorPane.margin					Insets
+ * @uiDefault EditorPane.caretBlinkRate			int		default is 500 milliseconds
+ *
+ * <!-- FlatEditorPaneUI -->
  *
  * @uiDefault Component.minimumWidth			int
+ * @uiDefault Component.isIntelliJTheme			boolean
  *
  * @author Karl Tauber
  */
@@ -37,6 +56,7 @@ public class FlatEditorPaneUI
 	extends BasicEditorPaneUI
 {
 	protected int minimumWidth;
+	protected boolean isIntelliJTheme;
 
 	private Object oldHonorDisplayProperties;
 
@@ -49,6 +69,7 @@ public class FlatEditorPaneUI
 		super.installDefaults();
 
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 
 		// use component font and foreground for HTML text
 		oldHonorDisplayProperties = getComponent().getClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES );
@@ -79,5 +100,18 @@ public class FlatEditorPaneUI
 		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
 		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
 		return size;
+	}
+
+	@Override
+	protected void paintBackground( Graphics g ) {
+		JTextComponent c = getComponent();
+
+		// for compatibility with IntelliJ themes
+		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) && (c.getBackground() instanceof UIResource) ) {
+			FlatUIUtils.paintParentBackground( g, c );
+			return;
+		}
+
+		super.paintBackground( g );
 	}
 }

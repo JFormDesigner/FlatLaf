@@ -33,7 +33,19 @@ import javax.swing.plaf.basic.BasicToolBarUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicToolBarUI -->
+ *
+ * @uiDefault ToolBar.font								Font
+ * @uiDefault ToolBar.background						Color
+ * @uiDefault ToolBar.foreground						Color
+ * @uiDefault ToolBar.border							Border
+ * @uiDefault ToolBar.dockingBackground					Color
+ * @uiDefault ToolBar.dockingForeground					Color
+ * @uiDefault ToolBar.floatingBackground				Color
+ * @uiDefault ToolBar.floatingForeground				Color
+ * @uiDefault ToolBar.isRollover						boolean
+ *
+ * <!-- FlatToolBarUI -->
  *
  * @uiDefault ToolBar.buttonMargins						Insets
  *

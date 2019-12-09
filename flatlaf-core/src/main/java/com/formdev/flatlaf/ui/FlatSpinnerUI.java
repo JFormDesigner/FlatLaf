@@ -44,12 +44,23 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicSpinnerUI -->
+ *
+ * @uiDefault Spinner.font						Font
+ * @uiDefault Spinner.background				Color
+ * @uiDefault Spinner.foreground				Color
+ * @uiDefault Spinner.border					Border
+ * @uiDefault Spinner.disableOnBoundaryValues	boolean	default is false
+ * @uiDefault Spinner.editorAlignment			int		0=center, 2=left, 4=right, 10=leading, 11=trailing
+ * @uiDefault Spinner.editorBorderPainted		boolean	paint inner editor border; defaults to false
+ *
+ * <!-- FlatSpinnerUI -->
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.arc						int
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
+ * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault Spinner.disabledBackground		Color
@@ -71,6 +82,7 @@ public class FlatSpinnerUI
 	protected int arc;
 	protected int minimumWidth;
 	protected String arrowType;
+	protected boolean isIntelliJTheme;
 	protected Color borderColor;
 	protected Color disabledBorderColor;
 	protected Color disabledBackground;
@@ -95,6 +107,7 @@ public class FlatSpinnerUI
 		arc = UIManager.getInt( "Component.arc" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		arrowType = UIManager.getString( "Component.arrowType" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 		disabledBackground = UIManager.getColor( "Spinner.disabledBackground" );
@@ -251,7 +264,9 @@ public class FlatSpinnerUI
 		boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
 
 		// paint background
-		g2.setColor( enabled ? c.getBackground() : disabledBackground );
+		g2.setColor( enabled
+			? c.getBackground()
+			: (isIntelliJTheme ? FlatUIUtils.getParentBackground( c ) : disabledBackground) );
 		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow buttons background

@@ -21,19 +21,31 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
+import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JRadioButton}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicRadioButtonUI -->
  *
- * @uiDefault Button.iconTextGap				int
- * @uiDefault Button.disabledText				Color
+ * @uiDefault RadioButton.font						Font
+ * @uiDefault RadioButton.background				Color
+ * @uiDefault RadioButton.foreground				Color
+ * @uiDefault RadioButton.border					Border
+ * @uiDefault RadioButton.margin					Insets
+ * @uiDefault RadioButton.rollover					boolean
+ * @uiDefault RadioButton.icon						Icon
+ *
+ * <!-- FlatRadioButtonUI -->
+ *
+ * @uiDefault RadioButton.iconTextGap				int
+ * @uiDefault RadioButton.disabledText				Color
  *
  * @author Karl Tauber
  */
@@ -78,6 +90,21 @@ public class FlatRadioButtonUI
 
 		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		// fill background even if opaque if
+		// - used as cell renderer (because of selection background)
+		// - if background was explicitly set to a non-UIResource color
+		if( !c.isOpaque() &&
+			(c.getParent() instanceof CellRendererPane || !(c.getBackground() instanceof UIResource)) )
+		{
+			g.setColor( c.getBackground() );
+			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+		}
+
+		super.paint( g, c );
 	}
 
 	@Override

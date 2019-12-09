@@ -23,6 +23,13 @@ import javax.swing.plaf.basic.BasicPopupMenuUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPopupMenu}.
  *
+ * <!-- BasicPopupMenuUI -->
+ *
+ * @uiDefault PopupMenu.font							Font
+ * @uiDefault PopupMenu.background						Color
+ * @uiDefault PopupMenu.foreground						Color
+ * @uiDefault PopupMenu.border							Border
+ *
  * @author Karl Tauber
  */
 public class FlatPopupMenuUI

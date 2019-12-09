@@ -34,21 +34,27 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSlider}.
  *
+ * <!-- BasicSliderUI -->
+ *
  * @uiDefault Slider.font					Font
  * @uiDefault Slider.background				Color
  * @uiDefault Slider.foreground				Color	unused
- * @uiDefault Slider.disabledForeground		Color	used for track and thumb if disabled
- * @uiDefault Slider.trackColor				Color
- * @uiDefault Slider.thumbColor				Color
  * @uiDefault Slider.tickColor				Color
- * @uiDefault Slider.focusedColor			Color
- * @uiDefault Slider.hoverColor				Color	optional; defaults to Slider.focusedColor
- * @uiDefault Slider.trackWidth				int
- * @uiDefault Slider.thumbWidth				int
  * @uiDefault Slider.horizontalSize			Dimension	preferred horizontal size; height is ignored; computed slider height is used
  * @uiDefault Slider.verticalSize			Dimension	preferred vertical size; width is ignored; computed slider width is used
  * @uiDefault Slider.minimumHorizontalSize	Dimension	height is ignored; computed slider height is used
  * @uiDefault Slider.minimumVerticalSize	Dimension	width is ignored; computed slider width is used
+ * @uiDefault Slider.border					Border
+ *
+ * <!-- FlatSliderUI -->
+ *
+ * @uiDefault Slider.trackWidth				int
+ * @uiDefault Slider.thumbWidth				int
+ * @uiDefault Slider.trackColor				Color
+ * @uiDefault Slider.thumbColor				Color
+ * @uiDefault Slider.focusedColor			Color	optional; defaults to Component.focusColor
+ * @uiDefault Slider.hoverColor				Color	optional; defaults to Slider.focusedColor
+ * @uiDefault Slider.disabledForeground		Color	used for track and thumb is disabled
  *
  * @author Karl Tauber
  */
@@ -104,7 +110,7 @@ public class FlatSliderUI
 
 		trackColor = UIManager.getColor( "Slider.trackColor" );
 		thumbColor = UIManager.getColor( "Slider.thumbColor" );
-		focusColor = UIManager.getColor( "Slider.focusedColor" );
+		focusColor = FlatUIUtils.getUIColor( "Slider.focusedColor", "Component.focusColor" );
 		hoverColor = FlatUIUtils.getUIColor( "Slider.hoverColor", focusColor );
 		disabledForeground = UIManager.getColor( "Slider.disabledForeground" );
 	}
@@ -195,7 +201,7 @@ public class FlatSliderUI
 		}
 
 		if( coloredTrack != null ) {
-			g.setColor( slider.hasFocus() ? focusColor : (hover ? hoverColor : thumbColor) );
+			FlatUIUtils.setColor( g, slider.hasFocus() ? focusColor : (hover ? hoverColor : thumbColor), thumbColor );
 			((Graphics2D)g).fill( coloredTrack );
 		}
 
@@ -205,9 +211,10 @@ public class FlatSliderUI
 
 	@Override
 	public void paintThumb( Graphics g ) {
-		g.setColor( slider.isEnabled()
+		FlatUIUtils.setColor( g, slider.isEnabled()
 			? (slider.hasFocus() ? focusColor : (hover ? hoverColor : thumbColor))
-			: disabledForeground );
+			: disabledForeground,
+			thumbColor );
 
 		if( isRoundThumb() )
 			g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );

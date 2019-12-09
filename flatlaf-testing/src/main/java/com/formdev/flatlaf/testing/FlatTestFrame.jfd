@@ -25,11 +25,8 @@ new FormModel {
 					"$rowSpecs": "[fill]"
 				} ) {
 					name: "buttonBar"
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.demo.LookAndFeelsComboBox" ) {
 						name: "lookAndFeelComboBox"
-						auxiliary() {
-							"JavaCodeGenerator.typeParameters": "LafInfo"
-						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "lookAndFeelChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 0"
@@ -116,12 +113,17 @@ new FormModel {
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "South"
 				} )
+				add( new FormComponent( "com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel" ) {
+					name: "themesPanel"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "East"
+				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 640, 300 )
+			"size": new java.awt.Dimension( 760, 300 )
 		} )
 	}
 }

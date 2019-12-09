@@ -38,12 +38,15 @@ public class FlatArrowButton
 	extends BasicArrowButton
 	implements UIResource
 {
+	public static final int DEFAULT_ARROW_WIDTH = 8;
+
 	private final boolean chevron;
 	private final Color foreground;
 	private final Color disabledForeground;
 	private final Color hoverForeground;
 	private final Color hoverBackground;
 
+	private int arrowWidth = DEFAULT_ARROW_WIDTH;
 	private int xOffset = 0;
 	private int yOffset = 0;
 
@@ -78,6 +81,14 @@ public class FlatArrowButton
 				}
 			} );
 		}
+	}
+
+	public int getArrowWidth() {
+		return arrowWidth;
+	}
+
+	public void setArrowWidth( int arrowWidth ) {
+		this.arrowWidth = arrowWidth;
 	}
 
 	protected boolean isHover() {
@@ -128,8 +139,8 @@ public class FlatArrowButton
 		int direction = getDirection();
 		boolean vert = (direction == NORTH || direction == SOUTH);
 
-		int w = scale( chevron ? 8 : 9 );
-		int h = scale( chevron ? 4 : 5 );
+		int w = scale( arrowWidth + (chevron ? 0 : 1) );
+		int h = scale( (arrowWidth / 2) + (chevron ? 0 : 1) );
 		int rw = vert ? w : h;
 		int rh = vert ? h : w;
 		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) );

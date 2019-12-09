@@ -1,10 +1,53 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.21
+
+- ScrollBar: Show decrease/increase arrow buttons if client property
+  "JScrollBar.showButtons" is set to `true` on `JScrollPane` or `JScrollBar`.
+  (issue #25)
+- `FlatLaf.isNativeLookAndFeel()` now returns `false`.
+- Button: Optionally support gradient borders, gradient backgrounds and shadows
+  for improved compatibility with IntelliJ platform themes (e.g. for Vuesion,
+  Spacegray and Material Design Dark themes).
+- Button: Fixed help button styling in IntelliJ platform themes.
+- ScrollPane: Paint disabled border if view component (e.g. JTextPane) is
+  disabled.
+- Fixed Swing system colors in dark themes.
+
+
+## 0.20
+
+- Support using IntelliJ platform themes (.theme.json files).
+- Support `JFileChooser`. (issue #5)
+- Look and feel identifier returned by `FlatLaf.getID()` now always starts with
+  "FlatLaf". Use `UIManager.getLookAndFeel().getID().startsWith( "FlatLaf" )` to
+  check whether the current look and feel is FlatLaf.
+- Fixed selection background of checkbox in table cell.
+- Fixed color of links in HTML text.
+- Fixed jittery submenu rendering on Mac. (issue #10)
+- Fixed "cannot find symbol" error in NetBeans editor, when source/binary format
+  is set to JDK 9 (or later) in NetBeans project. (issue #13)
+- Button: Make button square if button text is "..." or a single character.
+- ComboBox: Fixed issues with NetBeans `org.openide.awt.ColorComboBox`
+  component.
+- Hex color values in `.properties` files now must start with a `#` character.
+- SwingX: Support `JXTitledPanel`. (issue #22)
+- SwingX: Fixed too wide border when using date picker as table cell editor.
+  (issue #24)
+- JIDE Common Layer: Fixed `JidePopup` border.
+
+
+## 0.18
 
 - TextField and TextArea: Do not apply minimum width if `columns` property is
   greater than zero.
+- TabbedPane: In scroll-tab-layout, the separator line now spans the whole width
+  and is no longer interrupted by the scroll buttons.
+- TabbedPane: Content pane is no longer opaque. Use antialiasing for painting
+  separator and content border.
+- ToolTip: Use anti-aliasing to render multi-line tooltips.
+- JIDE Common Layer: Support `JideTabbedPane`.
 
 
 ## 0.17

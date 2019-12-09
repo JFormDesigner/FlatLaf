@@ -25,6 +25,29 @@ import javax.swing.plaf.basic.BasicMenuUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenu}.
  *
+ * <!-- BasicMenuUI -->
+ *
+ * @uiDefault Menu.font								Font
+ * @uiDefault Menu.background						Color
+ * @uiDefault Menu.foreground						Color
+ * @uiDefault Menu.disabledForeground				Color
+ * @uiDefault Menu.selectionBackground				Color
+ * @uiDefault Menu.selectionForeground				Color
+ * @uiDefault Menu.acceleratorForeground			Color
+ * @uiDefault Menu.acceleratorSelectionForeground	Color
+ * @uiDefault MenuItem.acceleratorFont				Font		defaults to MenuItem.font
+ * @uiDefault MenuItem.acceleratorDelimiter			String
+ * @uiDefault Menu.border							Border
+ * @uiDefault Menu.borderPainted					boolean
+ * @uiDefault Menu.margin							Insets
+ * @uiDefault Menu.arrowIcon						Icon
+ * @uiDefault Menu.checkIcon						Icon
+ * @uiDefault Menu.opaque							boolean
+ * @uiDefault Menu.evenHeight						boolean
+ * @uiDefault Menu.crossMenuMnemonic				boolean	default is false
+ * @uiDefault Menu.useMenuBarBackgroundForTopLevel	boolean	default is false
+ * @uiDefault MenuBar.background					Color	used if Menu.useMenuBarBackgroundForTopLevel is true
+ *
  * @author Karl Tauber
  */
 public class FlatMenuUI

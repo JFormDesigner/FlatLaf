@@ -24,11 +24,15 @@ dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
 	implementation( project( ":flatlaf-swingx" ) )
+	implementation( project( ":flatlaf-jide-oss" ) )
+	implementation( project( ":flatlaf-demo" ) )
 
 	implementation( "com.miglayout:miglayout-swing:5.2" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
 	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
 	implementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
+	implementation( "com.jidesoft:jide-oss:3.6.18" )
+	implementation( "org.netbeans.api:org-openide-awt:RELEASE112" )
 }
 
 java {

@@ -24,7 +24,8 @@ import java.awt.geom.Rectangle2D;
 /**
  * "Information" icon for {@link javax.swing.JOptionPane}.
  *
- * @uiDefault OptionPane.icon.informationColor		Color
+ * @uiDefault OptionPane.icon.informationColor		Color	optional; defaults to Actions.Blue
+ * @uiDefault Actions.Blue							Color
  *
  * @author Karl Tauber
  */
@@ -32,7 +33,7 @@ public class FlatOptionPaneInformationIcon
 	extends FlatOptionPaneAbstractIcon
 {
 	public FlatOptionPaneInformationIcon() {
-		super( "OptionPane.icon.informationColor" );
+		super( "OptionPane.icon.informationColor", "Actions.Blue" );
 	}
 
 	/*

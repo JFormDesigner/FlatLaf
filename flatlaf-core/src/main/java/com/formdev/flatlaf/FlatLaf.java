@@ -29,17 +29,21 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.LookAndFeel;
+import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -59,6 +63,8 @@ public abstract class FlatLaf
 	private KeyEventPostProcessor mnemonicListener;
 	private static boolean altKeyPressed;
 
+	private Consumer<UIDefaults> postInitialization;
+
 	public static boolean install( LookAndFeel newLookAndFeel ) {
 		try {
 		    UIManager.setLookAndFeel( newLookAndFeel );
@@ -69,16 +75,24 @@ public abstract class FlatLaf
 		}
 	}
 
+	/**
+	 * Returns the look and feel identifier.
+	 * <p>
+	 * Syntax: "FlatLaf - ${theme-name}"
+	 * <p>
+	 * Use {@code UIManager.getLookAndFeel().getID().startsWith( "FlatLaf" )}
+	 * to check whether the current look and feel is FlatLaf.
+	 */
 	@Override
 	public String getID() {
-		return getName();
+		return "FlatLaf - " + getName();
 	}
 
 	public abstract boolean isDark();
 
 	@Override
 	public boolean isNativeLookAndFeel() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -91,6 +105,11 @@ public abstract class FlatLaf
 		getBase().initialize();
 
 		super.initialize();
+
+		// make sure that a plain popup factory is used (otherwise sub-menu rendering
+		// is "jittery" on Mac, where AquaLookAndFeel installs its own popup factory)
+		if( PopupFactory.getSharedInstance().getClass() != PopupFactory.class )
+			PopupFactory.setSharedInstance( new PopupFactory() );
 
 		// add mnemonic listener
 		mnemonicListener = e -> {
@@ -117,6 +136,18 @@ public abstract class FlatLaf
 			};
 			Toolkit.getDefaultToolkit().addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
 		}
+
+		// Following code should be ideally in initialize(), but needs color from UI defaults.
+		// Do not move this code to getDefaults() to avoid side effects in the case that
+		// getDefaults() is directly invoked from 3rd party code. E.g. `new FlatLightLaf().getDefaults()`.
+		postInitialization = defaults -> {
+			// update link color in HTML text
+			Color linkColor = defaults.getColor( "Component.linkColor" );
+			if( linkColor != null ) {
+				new HTMLEditorKit().getStyleSheet().addRule(
+					String.format( "a { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
+			}
+		};
 	}
 
 	@Override
@@ -133,6 +164,10 @@ public abstract class FlatLaf
 			KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor( mnemonicListener );
 			mnemonicListener = null;
 		}
+
+		// restore default link color
+		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
+		postInitialization = null;
 
 		if( base != null )
 			base.uninitialize();
@@ -164,6 +199,9 @@ public abstract class FlatLaf
 	public UIDefaults getDefaults() {
 		UIDefaults defaults = getBase().getDefaults();
 
+		// add Metal resource bundle, which is required for FlatFileChooserUI
+		defaults.addResourceBundle( "com.sun.swing.internal.plaf.metal.resources.metal" );
+
 		// initialize some defaults (for overriding) that are used in basic UI delegates,
 		// but are not set in MetalLookAndFeel or BasicLookAndFeel
 		Color control = defaults.getColor( "control" );
@@ -186,13 +224,29 @@ public abstract class FlatLaf
 		Object aquaMenuBarUI = useScreenMenuBar ? defaults.get( "MenuBarUI" ) : null;
 
 		initFonts( defaults );
-		UIDefaultsLoader.loadDefaultsFromProperties( getClass(), defaults );
+		initIconColors( defaults, isDark() );
+
+		// load defaults from properties
+		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
+		if( lafClassesForDefaultsLoading != null )
+			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, defaults );
+		else
+			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
 		if( useScreenMenuBar )
 			defaults.put( "MenuBarUI", aquaMenuBarUI );
 
+		if( postInitialization != null ) {
+			postInitialization.accept( defaults );
+			postInitialization = null;
+		}
+
 		return defaults;
+	}
+
+	List<Class<?>> getLafClassesForDefaultsLoading() {
+		return null;
 	}
 
 	private void initFonts( UIDefaults defaults ) {
@@ -231,8 +285,43 @@ public abstract class FlatLaf
 		defaults.put( "MenuItem.acceleratorFont", uiFont );
 	}
 
-	public static List<String> split( String str, char delim ) {
-		return UIDefaultsLoader.split( str, delim );
+	/**
+	 * Adds the default color palette for action icons and object icons to the given UIDefaults.
+	 * <p>
+	 * This method is public and static to allow using the color palette with
+	 * other LaFs (e.g. Windows LaF). To do so invoke:
+	 *   {@code FlatLaf.initIconColors( UIManager.getLookAndFeelDefaults(), false );}
+	 * after
+	 *   {@code UIManager.setLookAndFeel( ... );}.
+	 * <p>
+	 * The colors are based on IntelliJ Platform
+	 *   <a href="https://jetbrains.design/intellij/principles/icons/#action-icons">Action icons</a>
+	 * and
+	 *   <a href="https://jetbrains.design/intellij/principles/icons/#noun-icons">Noun icons</a>
+	 */
+	public static void initIconColors( UIDefaults defaults, boolean dark ) {
+		// colors for action icons
+		// see https://jetbrains.design/intellij/principles/icons/#action-icons
+		defaults.put( "Actions.Red",            new ColorUIResource( !dark ? 0xDB5860 : 0xC75450 ) );
+		defaults.put( "Actions.Yellow",         new ColorUIResource( !dark ? 0xEDA200 : 0xF0A732 ) );
+		defaults.put( "Actions.Green",          new ColorUIResource( !dark ? 0x59A869 : 0x499C54 ) );
+		defaults.put( "Actions.Blue",           new ColorUIResource( !dark ? 0x389FD6 : 0x3592C4 ) );
+		defaults.put( "Actions.Grey",           new ColorUIResource( !dark ? 0x6E6E6E : 0xAFB1B3 ) );
+		defaults.put( "Actions.GreyInline",     new ColorUIResource( !dark ? 0x7F8B91 : 0x7F8B91 ) );
+
+		// colors for object icons
+		// see https://jetbrains.design/intellij/principles/icons/#noun-icons
+		defaults.put( "Objects.Grey",           new ColorUIResource( 0x9AA7B0 ) );
+		defaults.put( "Objects.Blue",           new ColorUIResource( 0x40B6E0 ) );
+		defaults.put( "Objects.Green",          new ColorUIResource( 0x62B543 ) );
+		defaults.put( "Objects.Yellow",         new ColorUIResource( 0xF4AF3D ) );
+		defaults.put( "Objects.YellowDark",     new ColorUIResource( 0xD9A343 ) );
+		defaults.put( "Objects.Purple",         new ColorUIResource( 0xB99BF8 ) );
+		defaults.put( "Objects.Pink",           new ColorUIResource( 0xF98B9E ) );
+		defaults.put( "Objects.Red",            new ColorUIResource( 0xF26522 ) );
+		defaults.put( "Objects.RedStatus",      new ColorUIResource( 0xE05555 ) );
+		defaults.put( "Objects.GreenAndroid",   new ColorUIResource( 0xA4C639 ) );
+		defaults.put( "Objects.BlackText",      new ColorUIResource( 0x231F20 ) );
 	}
 
 	private static void reSetLookAndFeel() {

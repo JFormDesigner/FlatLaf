@@ -36,7 +36,13 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.table.JTableHeader}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicTableHeaderUI -->
+ *
+ * @uiDefault TableHeader.font					Font
+ * @uiDefault TableHeader.background			Color
+ * @uiDefault TableHeader.foreground			Color
+ *
+ * <!-- FlatTableHeaderUI -->
  *
  * @uiDefault TableHeader.separatorColor		Color
  * @uiDefault TableHeader.bottomSeparatorColor	Color
@@ -75,8 +81,10 @@ public class FlatTableHeaderUI
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		// do not paint borders if JTableHeader.setDefaultRenderer() was used
-		boolean paintBorders = header.getDefaultRenderer().getClass().getName().equals(
-			"sun.swing.table.DefaultTableCellHeaderRenderer" );
+		String rendererClassName = header.getDefaultRenderer().getClass().getName();
+		boolean paintBorders =
+			rendererClassName.equals( "sun.swing.table.DefaultTableCellHeaderRenderer" ) ||
+			rendererClassName.equals( "sun.swing.FilePane$AlignableTableHeaderRenderer" );
 
 		if( paintBorders )
 			paintColumnBorders( g, c );

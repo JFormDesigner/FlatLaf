@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
+import java.awt.Paint;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -71,7 +72,7 @@ public class FlatBorder
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			boolean isCellEditor = FlatUIUtils.isTableCellEditor( c );
+			boolean isCellEditor = isTableCellEditor( c );
 			float focusWidth = isCellEditor ? 0 : getFocusWidth();
 			float borderWidth = getBorderWidth( c );
 			float arc = isCellEditor ? 0 : getArc();
@@ -82,7 +83,7 @@ public class FlatBorder
 					getLineWidth() + scale( (float) innerFocusWidth ), arc );
 			}
 
-			g2.setColor( getBorderColor( c ) );
+			g2.setPaint( getBorderColor( c ) );
 			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, borderWidth, arc );
 		} finally {
 			g2.dispose();
@@ -93,11 +94,22 @@ public class FlatBorder
 		return focusColor;
 	}
 
-	protected Color getBorderColor( Component c ) {
-		boolean enabled = c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
-		return enabled
+	protected Paint getBorderColor( Component c ) {
+		return isEnabled( c )
 			? (isFocused( c ) ? focusedBorderColor : borderColor)
 			: disabledBorderColor;
+	}
+
+	protected boolean isEnabled( Component c ) {
+		if( c instanceof JScrollPane ) {
+			// check whether view component is disabled
+			JViewport viewport = ((JScrollPane)c).getViewport();
+			Component view = (viewport != null) ? viewport.getView() : null;
+			if( view != null && !isEnabled( view ) )
+				return false;
+		}
+
+		return c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
 	}
 
 	protected boolean isFocused( Component c ) {
@@ -132,9 +144,13 @@ public class FlatBorder
 			return c.hasFocus();
 	}
 
+	protected boolean isTableCellEditor( Component c ) {
+		return FlatUIUtils.isTableCellEditor( c );
+	}
+
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		boolean isCellEditor = FlatUIUtils.isTableCellEditor( c );
+		boolean isCellEditor = isTableCellEditor( c );
 		float ow = (isCellEditor ? 0 : getFocusWidth()) + getLineWidth();
 
 		insets = super.getBorderInsets( c, insets );

@@ -27,7 +27,27 @@ import javax.swing.plaf.basic.BasicListUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JList}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicListUI -->
+ *
+ * @uiDefault List.font								Font
+ * @uiDefault List.background						Color
+ * @uiDefault List.foreground						Color
+ * @uiDefault List.selectionBackground				Color
+ * @uiDefault List.selectionForeground				Color
+ * @uiDefault List.dropLineColor					Color
+ * @uiDefault List.border							Border
+ * @uiDefault List.cellRenderer						ListCellRenderer
+ * @uiDefault FileChooser.listFont					Font		used if client property List.isFileList is true
+ *
+ * <!-- DefaultListCellRenderer -->
+ *
+ * @uiDefault List.cellNoFocusBorder				Border
+ * @uiDefault List.focusCellHighlightBorder			Border
+ * @uiDefault List.focusSelectedCellHighlightBorder	Border
+ * @uiDefault List.dropCellBackground				Color
+ * @uiDefault List.dropCellForeground				Color
+ *
+ * <!-- FlatListUI -->
  *
  * @uiDefault List.selectionInactiveBackground		Color
  * @uiDefault List.selectionInactiveForeground		Color

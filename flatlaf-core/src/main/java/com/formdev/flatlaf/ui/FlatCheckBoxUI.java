@@ -22,6 +22,21 @@ import javax.swing.plaf.ComponentUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JCheckBox}.
  *
+ * <!-- BasicRadioButtonUI -->
+ *
+ * @uiDefault CheckBox.font						Font
+ * @uiDefault CheckBox.background				Color
+ * @uiDefault CheckBox.foreground				Color
+ * @uiDefault CheckBox.border					Border
+ * @uiDefault CheckBox.margin					Insets
+ * @uiDefault CheckBox.rollover					boolean
+ * @uiDefault CheckBox.icon						Icon
+ *
+ * <!-- FlatRadioButtonUI -->
+ *
+ * @uiDefault CheckBox.iconTextGap				int
+ * @uiDefault CheckBox.disabledText				Color
+ *
  * @author Karl Tauber
  */
 public class FlatCheckBoxUI

@@ -60,7 +60,7 @@ public class FlatMenuArrowIcon
 			g.draw( path );
 		} else {
 			// triangle arrow
-			g.fill( FlatUIUtils.createPath( 0,0.5, 0,9.5, 5,5 ) );
+			g.fill( FlatUIUtils.createPath( 0,0.5, 5,5, 0,9.5 ) );
 		}
 	}
 

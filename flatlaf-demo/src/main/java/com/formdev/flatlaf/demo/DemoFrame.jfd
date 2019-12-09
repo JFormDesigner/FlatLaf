@@ -107,6 +107,11 @@ new FormModel {
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "South"
 			} )
+			add( new FormComponent( "com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel" ) {
+				name: "themesPanel"
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "East"
+			} )
 			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 				name: "menuBar1"
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
@@ -220,7 +225,7 @@ new FormModel {
 			}
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 800, 710 )
+			"size": new java.awt.Dimension( 935, 710 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "buttonGroup1"

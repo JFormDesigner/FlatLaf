@@ -23,6 +23,13 @@ import javax.swing.plaf.basic.BasicMenuBarUI;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenuBar}.
  *
+ * <!-- BasicMenuBarUI -->
+ *
+ * @uiDefault MenuBar.font								Font
+ * @uiDefault MenuBar.background						Color
+ * @uiDefault MenuBar.foreground						Color
+ * @uiDefault MenuBar.border							Border
+ *
  * @author Karl Tauber
  */
 public class FlatMenuBarUI

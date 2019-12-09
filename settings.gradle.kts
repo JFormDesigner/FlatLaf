@@ -19,5 +19,6 @@ rootProject.name = "FlatLaf"
 include( "flatlaf-core" )
 include( "flatlaf-extras" )
 include( "flatlaf-swingx" )
+include( "flatlaf-jide-oss" )
 include( "flatlaf-demo" )
 include( "flatlaf-testing" )

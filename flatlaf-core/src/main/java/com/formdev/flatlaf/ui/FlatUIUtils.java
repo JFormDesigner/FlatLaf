@@ -73,6 +73,14 @@ public class FlatUIUtils
 			dim.height + insets.top + insets.bottom );
 	}
 
+	public static Insets addInsets( Insets insets1, Insets insets2 ) {
+		return new Insets(
+			insets1.top + insets2.top,
+			insets1.left + insets2.left,
+			insets1.bottom + insets2.bottom,
+			insets1.right + insets2.right );
+	}
+
 	public static Color getUIColor( String key, int defaultColorRGB ) {
 		Color color = UIManager.getColor( key );
 		return (color != null) ? color : new Color( defaultColorRGB );
@@ -81,6 +89,11 @@ public class FlatUIUtils
 	public static Color getUIColor( String key, Color defaultColor ) {
 		Color color = UIManager.getColor( key );
 		return (color != null) ? color : defaultColor;
+	}
+
+	public static Color getUIColor( String key, String defaultKey ) {
+		Color color = UIManager.getColor( key );
+		return (color != null) ? color : UIManager.getColor( defaultKey );
 	}
 
 	public static int getUIInt( String key, int defaultValue ) {
@@ -153,6 +166,16 @@ public class FlatUIUtils
 			g.setColor( parent.getBackground() );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 		}
+	}
+
+	/**
+	 * Gets the background color of the first opaque parent.
+	 */
+	public static Color getParentBackground( JComponent c ) {
+		Container parent = findOpaqueParent( c );
+		return (parent != null)
+			? parent.getBackground()
+			: UIManager.getColor( "Panel.background" ); // fallback, probably never used
 	}
 
 	/**
@@ -248,6 +271,22 @@ public class FlatUIUtils
 	}
 
 	/**
+	 * Draws the given string at the specified location using text properties
+	 * and anti-aliasing hints from the provided component.
+	 *
+	 * Use this method instead of Graphics.drawString() for correct anti-aliasing.
+	 *
+	 * Replacement for SwingUtilities2.drawString()
+	 */
+	public static void drawString( JComponent c, Graphics g, String text, int x, int y ) {
+		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, -1, x, y );
+	}
+
+	/**
+	 * Draws the given string at the specified location underlining the specified
+	 * character. The provided component is used to query text properties and
+	 * anti-aliasing hints.
+	 *
 	 * Replacement for SwingUtilities2.drawStringUnderlineCharAt()
 	 */
 	public static void drawStringUnderlineCharAt( JComponent c, Graphics g,

@@ -1,0 +1,55 @@
+JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[grow,fill]"
+			"$rowConstraints": "[]3[grow,fill]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "themesLabel"
+				"text": "Themes:"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar"
+				"floatable": false
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "saveButton"
+					"toolTipText": "Save .theme.json of selected IntelliJ theme to file."
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveTheme", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "sourceCodeButton"
+					"toolTipText": "Opens the source code repository of selected IntelliJ theme in the browser."
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browseSourceCode", false ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0,alignx right,growx 0"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "themesScrollPane"
+				add( new FormComponent( "javax.swing.JList" ) {
+					name: "themesList"
+					"selectionMode": 0
+					auxiliary() {
+						"JavaCodeGenerator.typeParameters": "IJThemeInfo"
+					}
+					addEvent( new FormEvent( "javax.swing.event.ListSelectionListener", "valueChanged", "themesListValueChanged", true ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+	}
+}

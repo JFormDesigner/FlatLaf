@@ -23,19 +23,20 @@ plugins {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
+	implementation( project( ":flatlaf-extras" ) )
 	implementation( "com.miglayout:miglayout-swing:5.2" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
-	implementation( "com.formdev:svgSalamander:1.1.2.1" )
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks {
 	jar {
 		dependsOn( ":flatlaf-core:jar" )
+		dependsOn( ":flatlaf-extras:jar" )
 
 		manifest {
 			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )

@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -29,16 +30,33 @@ import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicTextFieldUI -->
+ *
+ * @uiDefault TextField.font					Font
+ * @uiDefault TextField.background				Color
+ * @uiDefault TextField.foreground				Color	also used if not editable
+ * @uiDefault TextField.caretForeground			Color
+ * @uiDefault TextField.selectionBackground		Color
+ * @uiDefault TextField.selectionForeground		Color
+ * @uiDefault TextField.disabledBackground		Color	used if not enabled
+ * @uiDefault TextField.inactiveBackground		Color	used if not editable
+ * @uiDefault TextField.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault TextField.border					Border
+ * @uiDefault TextField.margin					Insets
+ * @uiDefault TextField.caretBlinkRate			int		default is 500 milliseconds
+ *
+ * <!-- FlatTextFieldUI -->
  *
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.minimumWidth			int
+ * @uiDefault Component.isIntelliJTheme			boolean
  *
  * @author Karl Tauber
  */
@@ -47,6 +65,7 @@ public class FlatTextFieldUI
 {
 	protected int focusWidth;
 	protected int minimumWidth;
+	protected boolean isIntelliJTheme;
 
 	private FocusListener focusListener;
 
@@ -60,6 +79,7 @@ public class FlatTextFieldUI
 
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
 
@@ -91,7 +111,7 @@ public class FlatTextFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		paintBackground( g, getComponent(), focusWidth );
+		paintBackground( g, getComponent(), focusWidth, isIntelliJTheme );
 		super.paintSafely( g );
 	}
 
@@ -100,7 +120,7 @@ public class FlatTextFieldUI
 		// background is painted elsewhere
 	}
 
-	static void paintBackground( Graphics g, JTextComponent c, int focusWidth ) {
+	static void paintBackground( Graphics g, JTextComponent c, int focusWidth, boolean isIntelliJTheme ) {
 		// do not paint background if:
 		//   - not opaque and
 		//   - border is not a flat border and
@@ -120,7 +140,12 @@ public class FlatTextFieldUI
 
 			float fFocusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) focusWidth ) : 0;
 
-			g2.setColor( c.getBackground() );
+			Color background = c.getBackground();
+			g2.setColor( !(background instanceof UIResource)
+				? background
+				: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
+					? FlatUIUtils.getParentBackground( c )
+					: background) );
 			FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), fFocusWidth, 0 );
 		} finally {
 			g2.dispose();

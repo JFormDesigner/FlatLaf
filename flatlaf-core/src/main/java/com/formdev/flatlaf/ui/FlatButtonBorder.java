@@ -19,8 +19,10 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.Paint;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
@@ -29,10 +31,14 @@ import javax.swing.plaf.UIResource;
  * Border for {@link javax.swing.JButton}.
  *
  * @uiDefault Button.borderColor				Color
+ * @uiDefault Button.startBorderColor			Color	optional; if set, a gradient paint is used and Button.borderColor is ignored
+ * @uiDefault Button.endBorderColor				Color	optional; if set, a gradient paint is used
  * @uiDefault Button.disabledBorderColor		Color
  * @uiDefault Button.focusedBorderColor			Color
  * @uiDefault Button.hoverBorderColor			Color	optional
  * @uiDefault Button.default.borderColor		Color
+ * @uiDefault Button.default.startBorderColor	Color	optional; if set, a gradient paint is used and Button.default.borderColor is ignored
+ * @uiDefault Button.default.endBorderColor		Color	optional; if set, a gradient paint is used
  * @uiDefault Button.default.hoverBorderColor	Color	optional
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
@@ -44,11 +50,13 @@ import javax.swing.plaf.UIResource;
 public class FlatButtonBorder
 	extends FlatBorder
 {
-	protected final Color borderColor = UIManager.getColor( "Button.borderColor" );
+	protected final Color borderColor = FlatUIUtils.getUIColor( "Button.startBorderColor", "Button.borderColor" );
+	protected final Color endBorderColor = UIManager.getColor( "Button.endBorderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "Button.disabledBorderColor" );
 	protected final Color focusedBorderColor = UIManager.getColor( "Button.focusedBorderColor" );
 	protected final Color hoverBorderColor = UIManager.getColor( "Button.hoverBorderColor" );
-	protected final Color defaultBorderColor = UIManager.getColor( "Button.default.borderColor" );
+	protected final Color defaultBorderColor = FlatUIUtils.getUIColor( "Button.default.startBorderColor", "Button.default.borderColor" );
+	protected final Color defaultEndBorderColor = UIManager.getColor( "Button.default.endBorderColor" );
 	protected final Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
 	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
@@ -67,14 +75,22 @@ public class FlatButtonBorder
 	}
 
 	@Override
-	protected Color getBorderColor( Component c ) {
+	protected Paint getBorderColor( Component c ) {
 		boolean def = FlatButtonUI.isDefaultButton( c );
-		return FlatButtonUI.buttonStateColor( c,
+		Paint color = FlatButtonUI.buttonStateColor( c,
 			def ? defaultBorderColor : borderColor,
 			disabledBorderColor,
 			def ? defaultFocusedBorderColor : focusedBorderColor,
 			def ? defaultHoverBorderColor : hoverBorderColor,
 			null );
+
+		// change to gradient paint if start/end colors are specified
+		Color startBg = def ? defaultBorderColor : borderColor;
+		Color endBg = def ? defaultEndBorderColor : endBorderColor;
+		if( color == startBg && endBg != null && !startBg.equals( endBg ) )
+			color = new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg );
+
+		return color;
 	}
 
 	@Override

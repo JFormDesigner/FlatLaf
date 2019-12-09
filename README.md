@@ -16,6 +16,16 @@ IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
 ![Flat Dark Demo](images/FlatDarkDemo.png)
 
 
+IntelliJ Platform Themes
+------------------------
+
+FlatLaf can use 3rd party themes created for IntelliJ Platform:
+
+![Cyan Light Demo](images/CyanLightDemo.png)
+
+![Dark Purple Demo](images/DarkPurpleDemo.png)
+
+
 Demo
 ----
 
@@ -35,7 +45,7 @@ build script:
 
     groupId:     com.formdev
     artifactId:  flatlaf
-    version:     0.17
+    version:     0.21
 
 Otherwise download `flatlaf-<version>.jar` here:
 
@@ -46,6 +56,7 @@ Addons
 ------
 
 - [SwingX](flatlaf-swingx)
+- [JIDE Common Layer](flatlaf-jide-oss)
 
 
 Documentation

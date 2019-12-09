@@ -27,10 +27,20 @@ import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolTipUI;
-import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.StringUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolTip}.
+ *
+ * <!-- BasicToolTipUI -->
+ *
+ * @uiDefault ToolTip.font						Font
+ * @uiDefault ToolTip.background				Color
+ * @uiDefault ToolTip.foreground				Color
+ * @uiDefault ToolTip.backgroundInactive		Color
+ * @uiDefault ToolTip.foregroundInactive		Color
+ * @uiDefault ToolTip.border					Border
+ * @uiDefault ToolTip.borderInactive			Border
  *
  * @author Karl Tauber
  */
@@ -51,7 +61,7 @@ public class FlatToolTipUI
 			FontMetrics fm = c.getFontMetrics( c.getFont() );
 			Insets insets = c.getInsets();
 
-			List<String> lines = FlatLaf.split( ((JToolTip)c).getTipText(), '\n' );
+			List<String> lines = StringUtils.split( ((JToolTip)c).getTipText(), '\n' );
 			int width = 0;
 			int height = fm.getHeight() * Math.max( lines.size(), 1 );
 			for( String line : lines )
@@ -71,7 +81,7 @@ public class FlatToolTipUI
 			FlatUIUtils.setRenderingHints( (Graphics2D) g );
 			g.setColor( c.getForeground() );
 
-			List<String> lines = FlatLaf.split( ((JToolTip)c).getTipText(), '\n' );
+			List<String> lines = StringUtils.split( ((JToolTip)c).getTipText(), '\n' );
 
 			int x = insets.left;
 			int x2 = c.getWidth() - insets.right;
@@ -81,7 +91,7 @@ public class FlatToolTipUI
 			boolean leftToRight = (comp != null ? comp : c).getComponentOrientation().isLeftToRight();
 			for( String line : lines ) {
 				y += lineHeight;
-				g.drawString( line, leftToRight ? x : x2 - SwingUtilities.computeStringWidth( fm, line ), y );
+				FlatUIUtils.drawString( c, g, line, leftToRight ? x : x2 - SwingUtilities.computeStringWidth( fm, line ), y );
 			}
 		} else
 			super.paint( g, c );

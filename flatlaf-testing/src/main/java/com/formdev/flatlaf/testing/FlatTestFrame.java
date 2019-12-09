@@ -24,8 +24,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.prefs.Preferences;
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -34,6 +34,10 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.IntelliJTheme;
+import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
+import com.formdev.flatlaf.demo.DemoPrefs;
+import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.TriStateCheckBox.State;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -48,7 +52,6 @@ public class FlatTestFrame
 	extends JFrame
 {
 	private static final String PREFS_ROOT_PATH = "/flatlaf-test";
-	private static final String KEY_LAF = "laf";
 	private static final String KEY_SCALE_FACTOR = "scaleFactor";
 
 	private final String title;
@@ -59,29 +62,17 @@ public class FlatTestFrame
 	public boolean useApplyComponentOrientation;
 
 	public static FlatTestFrame create( String[] args, String title ) {
-		Preferences prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
+		DemoPrefs.init( PREFS_ROOT_PATH );
 
 		// set scale factor
 		if( System.getProperty( "flatlaf.uiScale", System.getProperty( "sun.java2d.uiScale" ) ) == null ) {
-			String scaleFactor = prefs.get( KEY_SCALE_FACTOR, null );
+			String scaleFactor = DemoPrefs.getState().get( KEY_SCALE_FACTOR, null );
 			if( scaleFactor != null )
 				System.setProperty( "flatlaf.uiScale", scaleFactor );
 		}
 
 		// set look and feel
-		try {
-			if( args.length > 0 )
-				UIManager.setLookAndFeel( args[0] );
-			else {
-				String lafClassName = prefs.get( KEY_LAF, FlatLightLaf.class.getName() );
-				UIManager.setLookAndFeel( lafClassName );
-			}
-		} catch( Exception ex ) {
-			ex.printStackTrace();
-
-			// fallback
-			FlatLightLaf.install();
-		}
+		DemoPrefs.initLaf( args );
 
 		// create frame
 		return new FlatTestFrame( title );
@@ -93,12 +84,12 @@ public class FlatTestFrame
 		initComponents();
 
 		// initialize look and feels combo box
-		DefaultComboBoxModel<LafInfo> lafModel = new DefaultComboBoxModel<>();
-		lafModel.addElement( new LafInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
-		lafModel.addElement( new LafInfo( "Flat Test (F8)", FlatTestLaf.class.getName() ) );
+		DefaultComboBoxModel<LookAndFeelInfo> lafModel = new DefaultComboBoxModel<>();
+		lafModel.addElement( new LookAndFeelInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "Flat Test (F8)", FlatTestLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -117,17 +108,8 @@ public class FlatTestFrame
 			else if( className.equals( NimbusLookAndFeel.class.getName() ) )
 				name += " (F11)";
 
-			lafModel.addElement( new LafInfo( name, className ) );
+			lafModel.addElement( new LookAndFeelInfo( name, className ) );
 		}
-
-		LookAndFeel activeLaf = UIManager.getLookAndFeel();
-		String activeLafClassName = activeLaf.getClass().getName();
-		int sel = lafModel.getIndexOf( new LafInfo( null, activeLafClassName ) );
-		if( sel < 0 ) {
-			lafModel.addElement( new LafInfo( activeLaf.getName(), activeLafClassName ) );
-			sel = lafModel.getSize() - 1;
-		}
-		lafModel.setSelectedItem( lafModel.getElementAt( sel ) );
 
 		lookAndFeelComboBox.setModel( lafModel );
 
@@ -230,33 +212,31 @@ public class FlatTestFrame
 	}
 
 	private void selectLookAndFeel( String lafClassName ) {
-		DefaultComboBoxModel<LafInfo> lafModel = (DefaultComboBoxModel<LafInfo>) lookAndFeelComboBox.getModel();
-		int sel = lafModel.getIndexOf( new LafInfo( null, lafClassName ) );
-		if( sel >= 0 )
-			lookAndFeelComboBox.setSelectedIndex( sel );
+		lookAndFeelComboBox.setSelectedLookAndFeel( lafClassName );
 	}
 
 	private void lookAndFeelChanged() {
-		LafInfo newLaf = (LafInfo) lookAndFeelComboBox.getSelectedItem();
-		if( newLaf == null )
+		String lafClassName = lookAndFeelComboBox.getSelectedLookAndFeel();
+		if( lafClassName == null )
 			return;
 
-		if( newLaf.className.equals( UIManager.getLookAndFeel().getClass().getName() ) )
+		if( lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 			return;
 
 		// hide popup to avoid occasional StackOverflowError when updating UI
 		lookAndFeelComboBox.setPopupVisible( false );
 
-		Preferences.userRoot().node( PREFS_ROOT_PATH ).put( KEY_LAF, newLaf.className );
-
-		applyLookAndFeel( newLaf.className, false );
+		applyLookAndFeel( lafClassName, null, false );
 	}
 
-	private void applyLookAndFeel( String lafClassName, boolean pack ) {
+	private void applyLookAndFeel( String lafClassName, IntelliJTheme theme, boolean pack ) {
 		EventQueue.invokeLater( () -> {
 			try {
 				// change look and feel
-				UIManager.setLookAndFeel( lafClassName );
+				if( theme != null )
+					UIManager.setLookAndFeel( IntelliJTheme.createLaf( theme ) );
+				else
+					UIManager.setLookAndFeel( lafClassName );
 
 				// update all components
 				FlatLaf.updateUI();
@@ -363,17 +343,19 @@ public class FlatTestFrame
 		// hide popup to avoid occasional StackOverflowError when updating UI
 		scaleFactorComboBox.setPopupVisible( false );
 
-		Preferences prefs = Preferences.userRoot().node( PREFS_ROOT_PATH );
-
 		if( scaleFactor != null ) {
 			System.setProperty( "flatlaf.uiScale", scaleFactor );
-			prefs.put( KEY_SCALE_FACTOR, scaleFactor );
+			DemoPrefs.getState().put( KEY_SCALE_FACTOR, scaleFactor );
 		} else {
 			System.clearProperty( "flatlaf.uiScale" );
-			prefs.remove( KEY_SCALE_FACTOR );
+			DemoPrefs.getState().remove( KEY_SCALE_FACTOR );
 		}
 
-		applyLookAndFeel( UIManager.getLookAndFeel().getClass().getName(), true );
+		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+		IntelliJTheme theme = (lookAndFeel instanceof IntelliJTheme.ThemeLaf)
+			? ((IntelliJTheme.ThemeLaf)lookAndFeel).getTheme()
+			: null;
+		applyLookAndFeel( lookAndFeel.getClass().getName(), theme, true );
 	}
 
 	private void updateScaleFactorComboBox() {
@@ -442,7 +424,7 @@ public class FlatTestFrame
 		dialogPane = new JPanel();
 		contentPanel = new JRootPane();
 		buttonBar = new JPanel();
-		lookAndFeelComboBox = new JComboBox<>();
+		lookAndFeelComboBox = new LookAndFeelsComboBox();
 		scaleFactorComboBox = new JComboBox<>();
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
@@ -451,6 +433,7 @@ public class FlatTestFrame
 		backgroundCheckBox = new JCheckBox();
 		opaqueTriStateCheckBox = new TriStateCheckBox();
 		closeButton = new JButton();
+		themesPanel = new IJThemesPanel();
 
 		//======== this ========
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -555,6 +538,7 @@ public class FlatTestFrame
 				buttonBar.add(closeButton, "cell 9 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
+			dialogPane.add(themesPanel, BorderLayout.EAST);
 		}
 		contentPane.add(dialogPane, BorderLayout.CENTER);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -564,7 +548,7 @@ public class FlatTestFrame
 	private JPanel dialogPane;
 	private JRootPane contentPanel;
 	private JPanel buttonBar;
-	private JComboBox<LafInfo> lookAndFeelComboBox;
+	private LookAndFeelsComboBox lookAndFeelComboBox;
 	private JComboBox<String> scaleFactorComboBox;
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
@@ -573,28 +557,6 @@ public class FlatTestFrame
 	private JCheckBox backgroundCheckBox;
 	private TriStateCheckBox opaqueTriStateCheckBox;
 	private JButton closeButton;
+	private IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
-
-	//---- class LafInfo ------------------------------------------------------
-
-	static class LafInfo
-	{
-		final String name;
-		final String className;
-
-		LafInfo( String name, String className ) {
-			this.name = name;
-			this.className = className;
-		}
-
-		@Override
-		public boolean equals( Object obj ) {
-			return obj instanceof LafInfo && className.equals( ((LafInfo)obj).className );
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
 }

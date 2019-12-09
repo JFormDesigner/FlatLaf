@@ -29,7 +29,30 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTable}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicTableUI -->
+ *
+ * @uiDefault Table.font								Font
+ * @uiDefault Table.background							Color
+ * @uiDefault Table.foreground							Color
+ * @uiDefault Table.selectionBackground					Color
+ * @uiDefault Table.selectionForeground					Color
+ * @uiDefault Table.gridColor							Color
+ * @uiDefault Table.scrollPaneBorder					Border
+ * @uiDefault Table.dropLineColor						Color
+ * @uiDefault Table.dropLineShortColor					Color
+ *
+ * <!-- DefaultTableCellRenderer -->
+ *
+ * @uiDefault Table.cellNoFocusBorder					Border
+ * @uiDefault Table.focusCellHighlightBorder			Border
+ * @uiDefault Table.focusSelectedCellHighlightBorder	Border
+ * @uiDefault Table.dropCellBackground					Color
+ * @uiDefault Table.dropCellForeground					Color
+ * @uiDefault Table.alternateRowColor					Color
+ * @uiDefault Table.focusCellBackground					Color
+ * @uiDefault Table.focusCellForeground					Color
+ *
+ * <!-- FlatTableUI -->
  *
  * @uiDefault Table.rowHeight						int
  * @uiDefault Table.selectionInactiveBackground		Color

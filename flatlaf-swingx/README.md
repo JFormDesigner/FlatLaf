@@ -6,8 +6,8 @@ This addon for FlatLaf adds support for **some** widely used SwingX components.
 Many SwingX components that do not use UI delegates (e.g. `JXButton`, `JXLabel`,
 `JXList`, etc) work with FlatLaf without adaptation.
 
-Following SwingX components, which use UI delegates, are supported by this
-addon:
+Following SwingX components, which use UI delegates, are currently supported by
+this addon:
 
 - `JXBusyLabel`
 - `JXDatePicker`
@@ -16,6 +16,7 @@ addon:
 - `JXMonthView`
 - `JXTaskPaneContainer`
 - `JXTaskPane`
+- `JXTitledPanel`
 
 ![Flat Light SwingX Demo](../images/FlatLightSwingXTest.png)
 
@@ -32,7 +33,7 @@ build script:
 
     groupId:     com.formdev
     artifactId:  flatlaf-swingx
-    version:     0.17
+    version:     0.21
 
 Otherwise download `flatlaf-swingx-<version>.jar` here:
 
