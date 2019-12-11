@@ -113,7 +113,7 @@ public class FlatScrollPaneUI
 		};
 	}
 
-	public Handler getHandler() {
+	private Handler getHandler() {
 		if( handler == null )
 			handler = new Handler();
 		return handler;
