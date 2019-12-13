@@ -53,6 +53,7 @@ import com.formdev.flatlaf.FlatLaf;
  * @uiDefault TabbedPane.foreground						Color
  * @uiDefault TabbedPane.shadow							Color	used for scroll arrows and cropped line
  * @uiDefault TabbedPane.disabledForeground				Color
+ * @uiDefault TabbedPane.selectedBackground				Color	optional
  * @uiDefault TabbedPane.selectedForeground				Color
  * @uiDefault TabbedPane.underlineColor					Color
  * @uiDefault TabbedPane.disabledUnderlineColor			Color
@@ -73,6 +74,7 @@ public class FlatTabbedPaneUI
 	extends BasicTabbedPaneUI
 {
 	protected Color disabledForeground;
+	protected Color selectedBackground;
 	protected Color selectedForeground;
 	protected Color underlineColor;
 	protected Color disabledUnderlineColor;
@@ -95,6 +97,7 @@ public class FlatTabbedPaneUI
 		super.installDefaults();
 
 		disabledForeground = UIManager.getColor( "TabbedPane.disabledForeground" );
+		selectedBackground = UIManager.getColor( "TabbedPane.selectedBackground" );
 		selectedForeground = UIManager.getColor( "TabbedPane.selectedForeground" );
 		underlineColor = UIManager.getColor( "TabbedPane.underlineColor" );
 		disabledUnderlineColor = UIManager.getColor( "TabbedPane.disabledUnderlineColor" );
@@ -124,6 +127,7 @@ public class FlatTabbedPaneUI
 		super.uninstallDefaults();
 
 		disabledForeground = null;
+		selectedBackground = null;
 		selectedForeground = null;
 		underlineColor = null;
 		disabledUnderlineColor = null;
@@ -262,7 +266,9 @@ public class FlatTabbedPaneUI
 			? hoverColor
 			: (enabled && isSelected && tabPane.hasFocus()
 				? focusColor
-				: tabPane.getBackgroundAt( tabIndex )) );
+				: (selectedBackground != null && enabled && isSelected
+					? selectedBackground
+					: tabPane.getBackgroundAt( tabIndex ))) );
 		g.fillRect( x, y, w, h );
 	}
 
@@ -334,7 +340,7 @@ public class FlatTabbedPaneUI
 	}
 
 	/**
-	 * Actually does the nearly the same as super.paintContentBorder() but
+	 * Actually does nearly the same as super.paintContentBorder() but
 	 *   - not using UIManager.getColor("TabbedPane.contentAreaColor") to be GUI builder friendly
 	 *   - not invoking paintContentBorder*Edge() methods
 	 *   - repaint selection

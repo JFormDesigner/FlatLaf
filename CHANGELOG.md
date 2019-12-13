@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- TabbedPane: Support background color for selected tabs.
+
+
 ## 0.21
 
 - ScrollBar: Show decrease/increase arrow buttons if client property
