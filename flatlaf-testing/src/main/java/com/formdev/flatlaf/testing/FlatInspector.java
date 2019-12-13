@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -25,9 +26,15 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Field;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
@@ -35,6 +42,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.JToolBar;
 import javax.swing.JToolTip;
+import javax.swing.KeyStroke;
+import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -53,7 +62,10 @@ public class FlatInspector
 	private static final Integer HIGHLIGHT_LAYER = 401;
 	private static final Integer TOOLTIP_LAYER = 402;
 
+	private static final int KEY_MODIFIERS_MASK = InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.META_DOWN_MASK;
+
 	private final JRootPane rootPane;
+	private final MouseMotionListener mouseMotionListener;
 
 	private Component lastComponent;
 	private int lastX;
@@ -63,10 +75,38 @@ public class FlatInspector
 	private JComponent highlightFigure;
 	private JToolTip tip;
 
+	/**
+	 * Installs a key listener into the application that allows enabling and disabling
+	 * the UI inspector with the given keystroke (e.g. "ctrl shift alt X").
+	 */
+	public static void install( String activationKeys ) {
+		KeyStroke keyStroke = KeyStroke.getKeyStroke( activationKeys );
+		Toolkit.getDefaultToolkit().addAWTEventListener( e -> {
+			if( e.getID() == KeyEvent.KEY_RELEASED &&
+				((KeyEvent)e).getKeyCode() == keyStroke.getKeyCode() &&
+				(((KeyEvent)e).getModifiersEx() & KEY_MODIFIERS_MASK) == (keyStroke.getModifiers() & KEY_MODIFIERS_MASK)  )
+			{
+				Window activeWindow = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+				if( activeWindow instanceof RootPaneContainer ) {
+					JRootPane rootPane = ((RootPaneContainer)activeWindow).getRootPane();
+					FlatInspector inspector = (FlatInspector) rootPane.getClientProperty( FlatInspector.class );
+					if( inspector == null ) {
+						inspector = new FlatInspector( rootPane );
+						rootPane.putClientProperty( FlatInspector.class, inspector );
+						inspector.setEnabled( true );
+					} else {
+						inspector.uninstall();
+						rootPane.putClientProperty( FlatInspector.class, null );
+					}
+				}
+			}
+		}, AWTEvent.KEY_EVENT_MASK );
+	}
+
 	public FlatInspector( JRootPane rootPane ) {
 		this.rootPane = rootPane;
 
-		rootPane.getGlassPane().addMouseMotionListener( new MouseMotionAdapter() {
+		mouseMotionListener = new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved( MouseEvent e ) {
 				lastX = e.getX();
@@ -74,7 +114,15 @@ public class FlatInspector
 				inspectParent = e.isShiftDown();
 				inspect( lastX, lastY );
 			}
-		} );
+		};
+
+		rootPane.getGlassPane().addMouseMotionListener( mouseMotionListener );
+	}
+
+	private void uninstall() {
+		setEnabled( false );
+		rootPane.getGlassPane().setVisible( false );
+		rootPane.getGlassPane().removeMouseMotionListener( mouseMotionListener );
 	}
 
 	public void setEnabled( boolean enabled ) {
