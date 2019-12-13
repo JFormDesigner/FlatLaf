@@ -27,6 +27,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -154,7 +155,8 @@ public class FlatInspector
 
 	private void inspect( int x, int y ) {
 		Container contentPane = rootPane.getContentPane();
-		Component c = SwingUtilities.getDeepestComponentAt( contentPane, x, y );
+		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, contentPane );
+		Component c = SwingUtilities.getDeepestComponentAt( contentPane, pt.x, pt.y );
 		if( inspectParent && c != null && c != contentPane )
 			c = c.getParent();
 		if( c == contentPane || (c != null && c.getParent() == contentPane) )
@@ -230,9 +232,9 @@ public class FlatInspector
 		// position the tip in the visible area
 		Rectangle visibleRect = rootPane.getVisibleRect();
 		if( tx + size.width > visibleRect.x + visibleRect.width )
-			tx = visibleRect.x + visibleRect.width - size.width;
+			tx -= size.width + UIScale.scale( 16 );
 		if( ty + size.height > visibleRect.y + visibleRect.height )
-			ty = visibleRect.y + visibleRect.height - size.height;
+			ty -= size.height + UIScale.scale( 32 );
 		if( tx < visibleRect.x )
 			tx = visibleRect.x;
 		if( ty < visibleRect.y )
