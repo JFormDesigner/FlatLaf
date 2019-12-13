@@ -38,7 +38,7 @@ import javax.swing.plaf.ComponentUI;
  * <!-- FlatButtonUI -->
  *
  * @uiDefault Component.focusWidth						int
- * @uiDefault ToggleButton.arc							int
+ * @uiDefault Button.arc								int
  * @uiDefault ToggleButton.minimumWidth					int
  * @uiDefault ToggleButton.iconTextGap					int
  * @uiDefault ToggleButton.startBackground				Color	optional; if set, a gradient paint is used and ToggleButton.background is ignored

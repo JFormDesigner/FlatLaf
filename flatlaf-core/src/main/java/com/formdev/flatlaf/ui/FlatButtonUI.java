@@ -134,7 +134,7 @@ public class FlatButtonUI
 			String prefix = getPropertyPrefix();
 
 			focusWidth = UIManager.getInt( "Component.focusWidth" );
-			arc = UIManager.getInt( prefix + "arc" );
+			arc = UIManager.getInt( "Button.arc" );
 			minimumWidth = UIManager.getInt( prefix + "minimumWidth" );
 			iconTextGap = FlatUIUtils.getUIInt( prefix + "iconTextGap", 4 );
 
