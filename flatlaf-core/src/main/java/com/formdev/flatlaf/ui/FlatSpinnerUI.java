@@ -267,7 +267,7 @@ public class FlatSpinnerUI
 		g2.setColor( enabled
 			? c.getBackground()
 			: (isIntelliJTheme ? FlatUIUtils.getParentBackground( c ) : disabledBackground) );
-		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+		FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow buttons background
 		if( enabled ) {
@@ -277,7 +277,7 @@ public class FlatSpinnerUI
 				g2.clipRect( arrowX, 0, width - arrowX, height );
 			else
 				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+			FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 			g2.setClip( oldClip );
 		}
 

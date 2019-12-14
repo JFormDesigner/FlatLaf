@@ -146,7 +146,7 @@ public class FlatTextFieldUI
 				: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
 					? FlatUIUtils.getParentBackground( c )
 					: background) );
-			FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), fFocusWidth, 0 );
+			FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), fFocusWidth, 0 );
 		} finally {
 			g2.dispose();
 		}

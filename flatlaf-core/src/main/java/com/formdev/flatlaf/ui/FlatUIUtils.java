@@ -125,9 +125,39 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Draws a round rectangle.
+	 * Paints an outer border, which is usually a focus border.
+	 * <p>
+	 * The outside bounds of the painted border are {@code x,y,width,height}.
+	 * The line width of the painted border is {@code focusWidth + lineWidth}.
+	 * The given arc diameter refers to the inner rectangle ({@code x,y,width,height} minus {@code focusWidth}).
+	 *
+	 * @see #paintComponentBorder
+	 * @see #paintComponentBackground
 	 */
-	public static void drawRoundRectangle( Graphics2D g, int x, int y, int width, int height,
+	public static void paintComponentOuterBorder( Graphics2D g, int x, int y, int width, int height,
+		float focusWidth, float lineWidth, float arc )
+	{
+		float outerRadius = (arc > 0) ? arc + focusWidth - UIScale.scale( 2f ) : focusWidth;
+		float ow = focusWidth + lineWidth;
+		float innerRadius = outerRadius - ow;
+
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		path.append( createRoundRectanglePath( x, y, width, height, outerRadius, outerRadius, outerRadius, outerRadius ), false );
+		path.append( createRoundRectanglePath( x + ow, y + ow, width - (ow * 2), height - (ow * 2), innerRadius, innerRadius, innerRadius, innerRadius ), false );
+		g.fill( path );
+	}
+
+	/**
+	 * Draws the border of a component as round rectangle.
+	 * <p>
+	 * The outside bounds of the painted border are
+	 * {@code x + focusWidth, y + focusWidth, width - (focusWidth * 2), height - (focusWidth * 2)}.
+	 * The given arc diameter refers to the painted rectangle (and not to {@code x,y,width,height}).
+	 *
+	 * @see #paintComponentOuterBorder
+	 * @see #paintComponentBackground
+	 */
+	public static void paintComponentBorder( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
 		float arc2 = arc > lineWidth ? arc - lineWidth : 0f;
@@ -146,9 +176,16 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Fills a round rectangle.
+	 * Fills the background of a component with a round rectangle.
+	 * <p>
+	 * The bounds of the painted round rectangle are
+	 * {@code x + focusWidth, y + focusWidth, width - (focusWidth * 2), height - (focusWidth * 2)}.
+	 * The given arc diameter refers to the painted rectangle (and not to {@code x,y,width,height}).
+	 *
+	 * @see #paintComponentOuterBorder
+	 * @see #paintComponentBorder
 	 */
-	public static void fillRoundRectangle( Graphics2D g, int x, int y, int width, int height,
+	public static void paintComponentBackground( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float arc )
 	{
 		g.fill( new RoundRectangle2D.Float(
@@ -190,25 +227,6 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Paints an outline border.
-	 */
-	public static void paintOutlineBorder( Graphics2D g, int x, int y, int width, int height,
-		float focusWidth, float lineWidth, float arc )
-	{
-		float outerArc = (arc > 0) ? arc + focusWidth - UIScale.scale( 2f ) : focusWidth;
-		float ow = focusWidth + lineWidth;
-
-		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( createOutlinePath( x, y, width, height, outerArc ), false );
-		path.append( createOutlinePath( x + ow, y + ow, width - (ow * 2), height - (ow * 2), outerArc - ow ), false );
-		g.fill( path );
-	}
-
-	private static Shape createOutlinePath( float x, float y, float width, float height, float arc ) {
-		return createRoundRectanglePath( x, y, width, height, arc, arc, arc, arc );
-	}
-
-	/**
 	 * Creates a not-filled rounded rectangle shape and allows specifying the line width and the radius or each corner.
 	 */
 	public static Path2D createRoundRectangle( float x, float y, float width, float height,
@@ -222,7 +240,7 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Creates a filled rounded rectangle shape and allows specifying the radius or each corner.
+	 * Creates a filled rounded rectangle shape and allows specifying the radius of each corner.
 	 */
 	public static Shape createRoundRectanglePath( float x, float y, float width, float height,
 		float arcTopLeft, float arcTopRight, float arcBottomLeft, float arcBottomRight )
@@ -256,10 +274,16 @@ public class FlatUIUtils
 		return rect;
 	}
 
+	/**
+	 * Creates a closed path for the given points.
+	 */
 	public static Path2D createPath( double... points ) {
 		return createPath( true, points );
 	}
 
+	/**
+	 * Creates a open or closed path for the given points.
+	 */
 	public static Path2D createPath( boolean close, double... points ) {
 		Path2D path = new Path2D.Float();
 		path.moveTo( points[0], points[1] );

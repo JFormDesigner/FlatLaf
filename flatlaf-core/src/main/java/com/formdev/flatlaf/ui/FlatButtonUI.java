@@ -251,7 +251,7 @@ public class FlatButtonUI
 						g2.setPaint( new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg ) );
 					else
 						FlatUIUtils.setColor( g2, background, def ? defaultBackground : c.getBackground() );
-					FlatUIUtils.fillRoundRectangle( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
+					FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 				} finally {
 					g2.dispose();
 				}

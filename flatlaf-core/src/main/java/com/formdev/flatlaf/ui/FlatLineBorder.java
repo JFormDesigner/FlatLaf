@@ -48,7 +48,7 @@ public class FlatLineBorder
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 			g2.setColor( lineColor );
-			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, 0f, scale( 1f ), 0f );
+			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, 0f, scale( 1f ), 0f );
 		} finally {
 			g2.dispose();
 		}

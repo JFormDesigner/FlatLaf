@@ -79,12 +79,12 @@ public class FlatBorder
 
 			if( isFocused( c ) ) {
 				g2.setColor( getFocusColor( c ) );
-				FlatUIUtils.paintOutlineBorder( g2, x, y, width, height, focusWidth,
+				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,
 					getLineWidth() + scale( (float) innerFocusWidth ), arc );
 			}
 
 			g2.setPaint( getBorderColor( c ) );
-			FlatUIUtils.drawRoundRectangle( g2, x, y, width, height, focusWidth, borderWidth, arc );
+			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, focusWidth, borderWidth, arc );
 		} finally {
 			g2.dispose();
 		}

@@ -316,7 +316,7 @@ public class FlatComboBoxUI
 		g2.setColor( enabled
 			? (editableBackground != null && comboBox.isEditable() ? editableBackground : c.getBackground())
 			: getDisabledBackground( comboBox ) );
-		FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+		FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow button background
 		if( enabled ) {
@@ -326,7 +326,7 @@ public class FlatComboBoxUI
 				g2.clipRect( arrowX, 0, width - arrowX, height );
 			else
 				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-			FlatUIUtils.fillRoundRectangle( g2, 0, 0, width, height, focusWidth, arc );
+			FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 			g2.setClip( oldClip );
 		}
 
