@@ -133,17 +133,17 @@ public class FlatCheckBoxIcon
 	protected void paintFocusBorder( Graphics2D g2 ) {
 		// the outline focus border is painted outside of the icon
 		int wh = ICON_SIZE - 1 + (focusWidth * 2);
-		int arcwh = (arc + focusWidth) * 2;
+		int arcwh = arc + (focusWidth * 2);
 		g2.fillRoundRect( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh );
 	}
 
 	protected void paintBorder( Graphics2D g2 ) {
-		int arcwh = arc * 2;
+		int arcwh = arc;
 		g2.fillRoundRect( 1, 0, 14, 14, arcwh, arcwh );
 	}
 
 	protected void paintBackground( Graphics2D g2 ) {
-		int arcwh = (arc * 2) - 1;
+		int arcwh = arc - 1;
 		g2.fillRoundRect( 2, 1, 12, 12, arcwh, arcwh );
 	}
 

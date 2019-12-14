@@ -4,6 +4,8 @@ FlatLaf Change Log
 ## Unreleased
 
 - TabbedPane: Support background color for selected tabs.
+- CheckBox: changed `CheckBox.arc` from radius to diameter to be consistent with
+  `Button.arc` and `Component.arc`
 
 
 ## 0.21
