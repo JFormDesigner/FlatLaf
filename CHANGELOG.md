@@ -6,6 +6,8 @@ FlatLaf Change Log
 - TabbedPane: Support background color for selected tabs.
 - CheckBox: changed `CheckBox.arc` from radius to diameter to be consistent with
   `Button.arc` and `Component.arc`
+- Fixed clipped borders at 125%, 150% and 175% scaling when outer focus width is
+  zero (default in "Flat Light" and "Flat Dark" themes).
 
 
 ## 0.21

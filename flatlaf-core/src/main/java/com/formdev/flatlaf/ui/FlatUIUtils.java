@@ -39,6 +39,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.util.DerivedColor;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -137,6 +138,23 @@ public class FlatUIUtils
 	public static void paintComponentOuterBorder( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
+		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
+		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
+			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
+			HiDPIUtils.paintAtScale1x( g, x, y, width, height, systemScaleFactor,
+				(g2d, x2, y2, width2, height2, scaleFactor) -> {
+					paintComponentOuterBorderImpl( g2d, x2, y2, width2, height2,
+						(float) (focusWidth * scaleFactor), (float) (lineWidth * scaleFactor), (float) (arc * scaleFactor) );
+				} );
+			return;
+		}
+
+		paintComponentOuterBorderImpl( g, x, y, width, height, focusWidth, lineWidth, arc );
+	}
+
+	private static void paintComponentOuterBorderImpl( Graphics2D g, int x, int y, int width, int height,
+		float focusWidth, float lineWidth, float arc )
+	{
 		float outerRadius = (arc > 0) ? arc + focusWidth - UIScale.scale( 2f ) : focusWidth;
 		float ow = focusWidth + lineWidth;
 		float innerRadius = outerRadius - ow;
@@ -158,6 +176,23 @@ public class FlatUIUtils
 	 * @see #paintComponentBackground
 	 */
 	public static void paintComponentBorder( Graphics2D g, int x, int y, int width, int height,
+		float focusWidth, float lineWidth, float arc )
+	{
+		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
+		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
+			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
+			HiDPIUtils.paintAtScale1x( g, x, y, width, height, systemScaleFactor,
+				(g2d, x2, y2, width2, height2, scaleFactor) -> {
+					paintComponentBorderImpl( g2d, x2, y2, width2, height2,
+						(float) (focusWidth * scaleFactor), (float) (lineWidth * scaleFactor), (float) (arc * scaleFactor) );
+				} );
+			return;
+		}
+
+		paintComponentBorderImpl( g, x, y, width, height, focusWidth, lineWidth, arc );
+	}
+
+	private static void paintComponentBorderImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
 		float arc2 = arc > lineWidth ? arc - lineWidth : 0f;
@@ -186,6 +221,23 @@ public class FlatUIUtils
 	 * @see #paintComponentBorder
 	 */
 	public static void paintComponentBackground( Graphics2D g, int x, int y, int width, int height,
+		float focusWidth, float arc )
+	{
+		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
+		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
+			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
+			HiDPIUtils.paintAtScale1x( g, x, y, width, height, systemScaleFactor,
+				(g2d, x2, y2, width2, height2, scaleFactor) -> {
+					paintComponentBackgroundImpl( g2d, x2, y2, width2, height2,
+						(float) (focusWidth * scaleFactor), (float) (arc * scaleFactor) );
+				} );
+			return;
+		}
+
+		paintComponentBackgroundImpl( g, x, y, width, height, focusWidth, arc );
+	}
+
+	private static void paintComponentBackgroundImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float arc )
 	{
 		g.fill( new RoundRectangle2D.Float(

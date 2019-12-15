@@ -255,7 +255,7 @@ public class FlatDatePickerUI
 		g2.setColor( enabled ? borderColor : disabledBorderColor );
 		float lw = scale( 1f );
 		float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-		g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - (focusWidth * 2) ) );
+		g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
 
 		paint( g, c );
 	}
