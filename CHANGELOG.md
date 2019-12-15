@@ -3,6 +3,12 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- ProgressBar: If progress text is visible:
+  - use smaller font
+  - reduced height
+  - changed style to rounded rectangle
+  - fixed painting issues on low values
+- ProgressBar: Support configure of arc with `ProgressBar.arc`.
 - TabbedPane: Support background color for selected tabs.
 - CheckBox: changed `CheckBox.arc` from radius to diameter to be consistent with
   `Button.arc` and `Component.arc`

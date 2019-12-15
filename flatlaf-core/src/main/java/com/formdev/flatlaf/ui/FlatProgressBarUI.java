@@ -17,13 +17,16 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import com.formdev.flatlaf.util.UIScale;
@@ -44,11 +47,19 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ProgressBar.repaintInterval			int		default is 50 milliseconds
  * @uiDefault ProgressBar.cycleTime					int		default is 3000 milliseconds
  *
+ * <!-- FlatProgressBarUI -->
+ *
+ * @uiDefault ProgressBar.arc						int
+ *
  * @author Karl Tauber
  */
 public class FlatProgressBarUI
 	extends BasicProgressBarUI
 {
+	protected int arc;
+	protected Dimension horizontalSize;
+	protected Dimension verticalSize;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatProgressBarUI();
 	}
@@ -58,16 +69,37 @@ public class FlatProgressBarUI
 		super.installDefaults();
 
 		LookAndFeel.installProperty( progressBar, "opaque", false );
+
+		arc = UIManager.getInt( "ProgressBar.arc" );
+		horizontalSize = UIManager.getDimension( "ProgressBar.horizontalSize" );
+		verticalSize = UIManager.getDimension( "ProgressBar.verticalSize" );
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		Dimension size = super.getPreferredSize( c );
+
+		if( progressBar.isStringPainted() ) {
+			// recalculate progress height/width to make it smaller
+			Insets insets = progressBar.getInsets();
+			FontMetrics fm = progressBar.getFontMetrics( progressBar.getFont() );
+			if( progressBar.getOrientation() == JProgressBar.HORIZONTAL )
+				size.height = Math.max( fm.getHeight() + insets.top + insets.bottom, getPreferredInnerHorizontal().height );
+			else
+				size.width = Math.max( fm.getHeight() + insets.left + insets.right, getPreferredInnerVertical().width );
+		}
+
+		return size;
 	}
 
 	@Override
 	protected Dimension getPreferredInnerHorizontal() {
-		return UIScale.scale( super.getPreferredInnerHorizontal() );
+		return UIScale.scale( horizontalSize );
 	}
 
 	@Override
 	protected Dimension getPreferredInnerVertical() {
-		return UIScale.scale( super.getPreferredInnerVertical() );
+		return UIScale.scale( verticalSize );
 	}
 
 	@Override
@@ -90,13 +122,14 @@ public class FlatProgressBarUI
 			return;
 
 		boolean horizontal = (progressBar.getOrientation() == JProgressBar.HORIZONTAL);
-		int arc = horizontal ? height : width;
+		int arc = Math.min( UIScale.scale( this.arc ), horizontal ? height : width );
 
 		FlatUIUtils.setRenderingHints( (Graphics2D) g );
 
 		// paint track
+		RoundRectangle2D.Float trackShape = new RoundRectangle2D.Float( x, y, width, height, arc, arc );
 		g.setColor( progressBar.getBackground() );
-		((Graphics2D)g).fill( new RoundRectangle2D.Float( x, y, width, height, arc, arc ) );
+		((Graphics2D)g).fill( trackShape );
 
 		// paint progress
 		if( progressBar.isIndeterminate() ) {
@@ -112,11 +145,19 @@ public class FlatProgressBarUI
 		} else {
 			int amountFull = getAmountFull( insets, width, height );
 
-			g.setColor( progressBar.getForeground() );
-			((Graphics2D)g).fill( horizontal
+			RoundRectangle2D.Float progressShape = horizontal
 				? new RoundRectangle2D.Float( c.getComponentOrientation().isLeftToRight() ? x : x + (width - amountFull),
 					y, amountFull, height, arc, arc )
-				: new RoundRectangle2D.Float( x, y + (height - amountFull), width, amountFull, arc, arc ) );
+				: new RoundRectangle2D.Float( x, y + (height - amountFull), width, amountFull, arc, arc );
+
+			g.setColor( progressBar.getForeground() );
+			if( amountFull < (horizontal ? height : width) ) {
+				// special painting for low amounts to avoid painting outside of track
+				Area area = new Area( trackShape );
+				area.intersect( new Area( progressShape ) );
+				((Graphics2D)g).fill( area );
+			} else
+				((Graphics2D)g).fill( progressShape );
 
 			if( progressBar.isStringPainted() )
 				paintString( g, x, y, width, height, amountFull, insets );

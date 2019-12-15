@@ -283,6 +283,9 @@ public abstract class FlatLaf
 				defaults.put( key, uiFont );
 		}
 		defaults.put( "MenuItem.acceleratorFont", uiFont );
+
+		// use smaller font for progress bar
+		defaults.put( "ProgressBar.font", UIScale.scaleFont( uiFont, 0.85f ) );
 	}
 
 	/**

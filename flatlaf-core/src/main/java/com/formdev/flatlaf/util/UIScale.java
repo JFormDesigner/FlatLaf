@@ -198,6 +198,14 @@ public class UIScale
 	}
 
 	/**
+	 * Scales the given font.
+	 */
+	public static FontUIResource scaleFont( FontUIResource font, float scaleFactor ) {
+		int newFontSize = Math.round( font.getSize() * scaleFactor );
+		return new FontUIResource( font.getFamily(), font.getStyle(), newFontSize );
+	}
+
+	/**
 	 * Similar to sun.java2d.SunGraphicsEnvironment.getScaleFactor(String)
 	 */
 	private static float parseScaleFactor( String s ) {

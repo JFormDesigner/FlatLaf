@@ -38,7 +38,15 @@ public class FlatComponentsTest
 		initComponents();
 	}
 
-	private void indeterminateCheckBoxActionPerformed() {
+	private void changeProgress() {
+		int value = slider3.getValue();
+		progressBar1.setValue( value );
+		progressBar2.setValue( value );
+		progressBar3.setValue( value );
+		progressBar4.setValue( value );
+	}
+
+	private void indeterminateProgress() {
 		boolean indeterminate = indeterminateCheckBox.isSelected();
 		progressBar1.setIndeterminate( indeterminate );
 		progressBar2.setIndeterminate( indeterminate );
@@ -166,7 +174,7 @@ public class FlatComponentsTest
 		JLabel sliderLabel = new JLabel();
 		JSlider slider1 = new JSlider();
 		JSlider slider6 = new JSlider();
-		JSlider slider3 = new JSlider();
+		slider3 = new JSlider();
 		JSlider slider5 = new JSlider();
 		JLabel progressBarLabel = new JLabel();
 		progressBar1 = new JProgressBar();
@@ -737,12 +745,12 @@ public class FlatComponentsTest
 
 		//---- progressBar3 ----
 		progressBar3.setOrientation(SwingConstants.VERTICAL);
-		progressBar3.setValue(50);
+		progressBar3.setValue(60);
 		add(progressBar3, "cell 4 13 1 6,growy");
 
 		//---- progressBar4 ----
 		progressBar4.setOrientation(SwingConstants.VERTICAL);
-		progressBar4.setValue(55);
+		progressBar4.setValue(60);
 		progressBar4.setStringPainted(true);
 		add(progressBar4, "cell 4 13 1 6,growy");
 
@@ -867,6 +875,7 @@ public class FlatComponentsTest
 		slider3.setMajorTickSpacing(50);
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
+		slider3.addChangeListener(e -> changeProgress());
 		add(slider3, "cell 1 20 3 1,aligny top,grow 100 0");
 
 		//---- slider5 ----
@@ -883,17 +892,17 @@ public class FlatComponentsTest
 		add(progressBarLabel, "cell 0 21");
 
 		//---- progressBar1 ----
-		progressBar1.setValue(50);
+		progressBar1.setValue(60);
 		add(progressBar1, "cell 1 21 3 1,growx");
 
 		//---- progressBar2 ----
 		progressBar2.setStringPainted(true);
-		progressBar2.setValue(55);
+		progressBar2.setValue(60);
 		add(progressBar2, "cell 1 21 3 1,growx");
 
 		//---- indeterminateCheckBox ----
 		indeterminateCheckBox.setText("indeterminate");
-		indeterminateCheckBox.addActionListener(e -> indeterminateCheckBoxActionPerformed());
+		indeterminateCheckBox.addActionListener(e -> indeterminateProgress());
 		add(indeterminateCheckBox, "cell 4 21");
 
 		//---- toolTipLabel ----
@@ -952,6 +961,7 @@ public class FlatComponentsTest
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JProgressBar progressBar3;
 	private JProgressBar progressBar4;
+	private JSlider slider3;
 	private JProgressBar progressBar1;
 	private JProgressBar progressBar2;
 	private JCheckBox indeterminateCheckBox;
