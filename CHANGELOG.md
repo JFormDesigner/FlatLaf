@@ -9,7 +9,9 @@ FlatLaf Change Log
   - changed style to rounded rectangle
   - fixed painting issues on low values
 - ProgressBar: Support configure of arc with `ProgressBar.arc`.
-- TabbedPane: Support background color for selected tabs.
+- TabbedPane: Support background color for selected tabs
+  (`TabbedPane.selectedBackground`) and separators between tabs
+  (`TabbedPane.showTabSeparators`).
 - CheckBox: changed `CheckBox.arc` from radius to diameter to be consistent with
   `Button.arc` and `Component.arc`
 - Button: Enabled `Button.defaultButtonFollowsFocus` on Windows, which allows

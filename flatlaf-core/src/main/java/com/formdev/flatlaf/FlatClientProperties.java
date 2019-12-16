@@ -65,6 +65,14 @@ public interface FlatClientProperties
 	String SCROLL_BAR_SHOW_BUTTONS = "JScrollBar.showButtons";
 
 	/**
+	 * Specifies whether separators are shown between tabs.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TABBED_PANE_SHOW_TAB_SEPARATORS = "JTabbedPane.showTabSeparators";
+
+	/**
 	 * Specifies whether a full border is painted around a tabbed pane.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
@@ -77,5 +85,14 @@ public interface FlatClientProperties
 	 */
 	static boolean clientPropertyEquals( JComponent c, String key, Object value ) {
 		return Objects.equals( c.getClientProperty( key ), value );
+	}
+
+	/**
+	 * Checks whether a client property of a component is a boolean and returns its value.
+	 * If the client property is not set, or not a boolean, defaultValue is returned.
+	 */
+	static boolean clientPropertyBoolean( JComponent c, String key, boolean defaultValue ) {
+		Object value = c.getClientProperty( key );
+		return (value instanceof Boolean) ? (boolean) value : defaultValue;
 	}
 }

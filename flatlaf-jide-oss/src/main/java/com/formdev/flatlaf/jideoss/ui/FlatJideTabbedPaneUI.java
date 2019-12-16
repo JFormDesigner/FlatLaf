@@ -17,7 +17,7 @@
 package com.formdev.flatlaf.jideoss.ui;
 
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
-import static com.formdev.flatlaf.FlatClientProperties.clientPropertyEquals;
+import static com.formdev.flatlaf.FlatClientProperties.clientPropertyBoolean;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -181,7 +181,7 @@ public class FlatJideTabbedPaneUI
 	}
 
 	private Insets getContentBorderInsets0( int tabPlacement ) {
-		boolean hasFullBorder = this.hasFullBorder || clientPropertyEquals( _tabPane, TABBED_PANE_HAS_FULL_BORDER, true );
+		boolean hasFullBorder = clientPropertyBoolean( _tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
 		int sh = scale( contentSeparatorHeight );
 		Insets insets = hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 );
 
@@ -339,7 +339,7 @@ public class FlatJideTabbedPaneUI
 		}
 
 		// compute insets for separator or full border
-		boolean hasFullBorder = this.hasFullBorder || clientPropertyEquals( _tabPane, TABBED_PANE_HAS_FULL_BORDER, true );
+		boolean hasFullBorder = clientPropertyBoolean( _tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
 		int sh = scale( contentSeparatorHeight * 100 ); // multiply by 100 because rotateInsets() does not use floats
 		Insets ci = new Insets( 0, 0, 0, 0 );
 		rotateInsets( hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 ), ci, tabPlacement );

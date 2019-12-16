@@ -5,6 +5,7 @@
 package com.formdev.flatlaf.testing;
 
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
+import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_TAB_SEPARATORS;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -34,6 +35,14 @@ public class FlatContainerTest
 		tabbedPane2.setTabLayoutPolicy( tabLayoutPolicy );
 		tabbedPane3.setTabLayoutPolicy( tabLayoutPolicy );
 		tabbedPane4.setTabLayoutPolicy( tabLayoutPolicy );
+	}
+
+	private void showTabSeparatorsChanged() {
+		Boolean showTabSeparators = showTabSeparatorsCheckBox.isSelected() ? true : null;
+		tabbedPane1.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
+		tabbedPane2.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
+		tabbedPane3.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
+		tabbedPane4.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
 	}
 
 	private void hasFullBorderChanged() {
@@ -100,6 +109,7 @@ public class FlatContainerTest
 		JPanel panel14 = new JPanel();
 		moreTabsCheckBox = new JCheckBox();
 		tabScrollCheckBox = new JCheckBox();
+		showTabSeparatorsCheckBox = new JCheckBox();
 		hasFullBorderCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
@@ -291,6 +301,7 @@ public class FlatContainerTest
 					// columns
 					"[]" +
 					"[]" +
+					"[]" +
 					"[]",
 					// rows
 					"[center]"));
@@ -307,11 +318,16 @@ public class FlatContainerTest
 				tabScrollCheckBox.addActionListener(e -> tabScrollChanged());
 				panel14.add(tabScrollCheckBox, "cell 1 0,alignx left,growx 0");
 
+				//---- showTabSeparatorsCheckBox ----
+				showTabSeparatorsCheckBox.setText("JTabbedPane.showTabSeparators");
+				showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
+				panel14.add(showTabSeparatorsCheckBox, "cell 2 0");
+
 				//---- hasFullBorderCheckBox ----
 				hasFullBorderCheckBox.setText("JTabbedPane.hasFullBorder");
 				hasFullBorderCheckBox.setMnemonic('F');
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
-				panel14.add(hasFullBorderCheckBox, "cell 2 0,alignx left,growx 0");
+				panel14.add(hasFullBorderCheckBox, "cell 3 0,alignx left,growx 0");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -326,6 +342,7 @@ public class FlatContainerTest
 	private JTabbedPane tabbedPane4;
 	private JCheckBox moreTabsCheckBox;
 	private JCheckBox tabScrollCheckBox;
+	private JCheckBox showTabSeparatorsCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -41,6 +41,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTabbedPane}.
@@ -59,6 +60,7 @@ import com.formdev.flatlaf.FlatLaf;
  * @uiDefault TabbedPane.disabledUnderlineColor			Color
  * @uiDefault TabbedPane.hoverColor						Color
  * @uiDefault TabbedPane.focusColor						Color
+ * @uiDefault TabbedPane.tabSeparatorColor				Color	optional; defaults to TabbedPane.contentAreaColor
  * @uiDefault TabbedPane.contentAreaColor				Color
  * @uiDefault TabbedPane.textIconGap					int
  * @uiDefault TabbedPane.tabInsets						Insets
@@ -66,6 +68,7 @@ import com.formdev.flatlaf.FlatLaf;
  * @uiDefault TabbedPane.tabHeight						int
  * @uiDefault TabbedPane.tabSelectionHeight				int
  * @uiDefault TabbedPane.contentSeparatorHeight			int
+ * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
  *
  * @author Karl Tauber
@@ -80,11 +83,13 @@ public class FlatTabbedPaneUI
 	protected Color disabledUnderlineColor;
 	protected Color hoverColor;
 	protected Color focusColor;
+	protected Color tabSeparatorColor;
 	protected Color contentAreaColor;
 
 	protected int tabHeight;
 	protected int tabSelectionHeight;
 	protected int contentSeparatorHeight;
+	protected boolean showTabSeparators;
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
 
@@ -103,11 +108,13 @@ public class FlatTabbedPaneUI
 		disabledUnderlineColor = UIManager.getColor( "TabbedPane.disabledUnderlineColor" );
 		hoverColor = UIManager.getColor( "TabbedPane.hoverColor" );
 		focusColor = UIManager.getColor( "TabbedPane.focusColor" );
+		tabSeparatorColor = UIManager.getColor( "TabbedPane.tabSeparatorColor" );
 		contentAreaColor = UIManager.getColor( "TabbedPane.contentAreaColor" );
 
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
+		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOverlapBorder = UIManager.getBoolean( "TabbedPane.tabsOverlapBorder" );
 
@@ -133,6 +140,7 @@ public class FlatTabbedPaneUI
 		disabledUnderlineColor = null;
 		hoverColor = null;
 		focusColor = null;
+		tabSeparatorColor = null;
 		contentAreaColor = null;
 
 		MigLayoutVisualPadding.uninstall( tabPane );
@@ -145,9 +153,12 @@ public class FlatTabbedPaneUI
 			public void propertyChange( PropertyChangeEvent e ) {
 				super.propertyChange( e );
 
-				if( TABBED_PANE_HAS_FULL_BORDER.equals( e.getPropertyName() ) ) {
-					tabPane.revalidate();
-					tabPane.repaint();
+				switch( e.getPropertyName() ) {
+					case TABBED_PANE_SHOW_TAB_SEPARATORS:
+					case TABBED_PANE_HAS_FULL_BORDER:
+						tabPane.revalidate();
+						tabPane.repaint();
+						break;
 				}
 			}
 		};
@@ -201,7 +212,7 @@ public class FlatTabbedPaneUI
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
-		boolean hasFullBorder = this.hasFullBorder || clientPropertyEquals( tabPane, TABBED_PANE_HAS_FULL_BORDER, true );
+		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
 		int sh = scale( contentSeparatorHeight );
 		Insets insets = hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 );
 
@@ -276,6 +287,26 @@ public class FlatTabbedPaneUI
 	protected void paintTabBorder( Graphics g, int tabPlacement, int tabIndex,
 		int x, int y, int w, int h, boolean isSelected )
 	{
+		// paint tab separators
+		if( clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
+			!isLastInRun( tabIndex ) )
+		{
+			float sepWidth = UIScale.scale( 1f );
+			float offset = UIScale.scale( 5f );
+
+			g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
+			if( tabPlacement == LEFT || tabPlacement == RIGHT ) {
+				// paint tab separator at bottom side
+				((Graphics2D)g).fill( new Rectangle2D.Float( x + offset, y + h - sepWidth, w - (offset * 2), sepWidth ) );
+			} else if( tabPane.getComponentOrientation().isLeftToRight() ) {
+				// paint tab separator at right side
+				((Graphics2D)g).fill( new Rectangle2D.Float( x + w - sepWidth, y + offset, sepWidth, h - (offset * 2) ) );
+			} else {
+				// paint tab separator at left side
+				((Graphics2D)g).fill( new Rectangle2D.Float( x, y + offset, sepWidth, h - (offset * 2) ) );
+			}
+		}
+
 		if( isSelected )
 			paintTabSelection( g, tabPlacement, x, y, w, h );
 	}
@@ -385,7 +416,7 @@ public class FlatTabbedPaneUI
 		}
 
 		// compute insets for separator or full border
-		boolean hasFullBorder = this.hasFullBorder || clientPropertyEquals( tabPane, TABBED_PANE_HAS_FULL_BORDER, true );
+		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
 		int sh = scale( contentSeparatorHeight * 100 ); // multiply by 100 because rotateInsets() does not use floats
 		Insets ci = new Insets( 0, 0, 0, 0 );
 		rotateInsets( hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 ), ci, tabPlacement );
@@ -418,6 +449,11 @@ public class FlatTabbedPaneUI
 	protected void paintFocusIndicator( Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex,
 		Rectangle iconRect, Rectangle textRect, boolean isSelected )
 	{
+	}
+
+	private boolean isLastInRun( int tabIndex ) {
+		int run = getRunForTab( tabPane.getTabCount(), tabIndex );
+		return lastTabInRun( tabPane.getTabCount(), run ) == tabIndex;
 	}
 
 	private boolean isScrollTabLayout() {
