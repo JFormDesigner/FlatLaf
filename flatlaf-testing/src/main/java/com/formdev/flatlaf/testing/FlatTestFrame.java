@@ -143,6 +143,9 @@ public class FlatTestFrame
 			KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
+		// make the "close" button the default button
+		getRootPane().setDefaultButton( closeButton );
+
 		// close frame
 		closeButton.addActionListener(e -> dispose());
 
@@ -170,6 +173,9 @@ public class FlatTestFrame
 
 					// enable/disable scale factor combobox
 					updateScaleFactorComboBox();
+
+					// this is necessary because embedded JOptionPane's "steal" the default button
+					getRootPane().setDefaultButton( closeButton );
 				} );
 			}
 		} );

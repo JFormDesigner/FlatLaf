@@ -77,6 +77,9 @@ class ControlBar
 				EventQueue.invokeLater( () -> {
 					// update info label because user scale factor may change
 					updateInfoLabel();
+
+					// this is necessary because embedded JOptionPane's "steal" the default button
+					frame.getRootPane().setDefaultButton( closeButton );
 				} );
 			}
 		} );
