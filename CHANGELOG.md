@@ -18,6 +18,8 @@ FlatLaf Change Log
   pressing focused button with <kbd>Enter</kbd> key (as in Windows LaF).
 - Fixed clipped borders at 125%, 150% and 175% scaling when outer focus width is
   zero (default in "Flat Light" and "Flat Dark" themes).
+- On Mac show mnemonics only when <kbd>Ctrl</kbd> and <kbd>Alt</kbd> keys are
+  pressed. (issue #4)
 
 
 ## 0.21

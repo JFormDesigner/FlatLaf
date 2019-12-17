@@ -61,7 +61,7 @@ public abstract class FlatLaf
 	private PropertyChangeListener desktopPropertyListener;
 
 	private KeyEventPostProcessor mnemonicListener;
-	private static boolean altKeyPressed;
+	private static boolean showMnemonics;
 
 	private Consumer<UIDefaults> postInitialization;
 
@@ -113,8 +113,7 @@ public abstract class FlatLaf
 
 		// add mnemonic listener
 		mnemonicListener = e -> {
-			if( e.getKeyCode() == KeyEvent.VK_ALT )
-				altKeyChanged( e.getID() == KeyEvent.KEY_PRESSED );
+			checkShowMnemonics( e );
 			return false;
 		};
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor( mnemonicListener );
@@ -357,14 +356,27 @@ public abstract class FlatLaf
 	}
 
 	public static boolean isShowMnemonics() {
-		return altKeyPressed || !UIManager.getBoolean( "Component.hideMnemonics" );
+		return showMnemonics || !UIManager.getBoolean( "Component.hideMnemonics" );
 	}
 
-	private static void altKeyChanged( boolean pressed ) {
-		if( pressed == altKeyPressed )
+	private static void checkShowMnemonics( KeyEvent e ) {
+		int keyCode = e.getKeyCode();
+		if( SystemInfo.IS_MAC ) {
+			// Ctrl+Alt keys must be pressed on Mac
+			if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT )
+				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown() && e.isAltDown() );
+		} else {
+			// Alt key must be pressed on Windows and Linux
+			if( keyCode == KeyEvent.VK_ALT )
+				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED );
+		}
+	}
+
+	private static void showMnemonics( boolean show ) {
+		if( show == showMnemonics )
 			return;
 
-		altKeyPressed = pressed;
+		showMnemonics = show;
 
 		// check whether it is necessary to repaint
 		if( !UIManager.getBoolean( "Component.hideMnemonics" ) )
