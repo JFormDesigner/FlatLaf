@@ -18,7 +18,9 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
 import javax.swing.CellRendererPane;
@@ -28,6 +30,8 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
+import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JRadioButton}.
@@ -92,6 +96,26 @@ public class FlatRadioButtonUI
 		defaults_initialized = false;
 	}
 
+	private static Insets tempInsets = new Insets( 0, 0, 0, 0 );
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		Dimension size = super.getPreferredSize( c );
+
+		// small insets fix
+		int focusWidth = getIconFocusWidth( c );
+		if( focusWidth > 0 ) {
+			// Increase preferred width and height if insets were explicitly reduced (e.g. with
+			// an EmptyBorder) and icon has a focus width, which is not included in icon size.
+			// Otherwise the component may be too small and outer focus border may be cut off.
+			Insets insets = c.getInsets( tempInsets );
+			size.width += Math.max( focusWidth - insets.left, 0 ) + Math.max( focusWidth - insets.right, 0 );
+			size.height += Math.max( focusWidth - insets.top, 0 ) + Math.max( focusWidth - insets.bottom, 0 );
+		}
+
+		return size;
+	}
+
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		// fill background even if opaque if
@@ -104,11 +128,41 @@ public class FlatRadioButtonUI
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 		}
 
+		// small insets fix
+		int focusWidth = getIconFocusWidth( c );
+		if( focusWidth > 0 ) {
+			boolean ltr = c.getComponentOrientation().isLeftToRight();
+			Insets insets = c.getInsets( tempInsets );
+			int leftOrRightInset = ltr ? insets.left : insets.right;
+			if( focusWidth > leftOrRightInset ) {
+				// The left (or right) inset is smaller than the focus width, which may be
+				// the case if insets were explicitly reduced (e.g. with an EmptyBorder).
+				// In this case the width has been increased in getPreferredSize() and
+				// here it is necessary to fix icon and text painting location.
+				int offset = focusWidth - leftOrRightInset;
+				if( !ltr )
+					offset = -offset;
+
+				// move the graphics origin to the left (or right)
+				g.translate( offset, 0 );
+				super.paint( g, c );
+				g.translate( -offset, 0 );
+				return;
+			}
+		}
+
 		super.paint( g, c );
 	}
 
 	@Override
 	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
 		FlatButtonUI.paintText( g, b, textRect, text, b.isEnabled() ? b.getForeground() : disabledText );
+	}
+
+	private int getIconFocusWidth( JComponent c ) {
+		AbstractButton b = (AbstractButton) c;
+		return (b.getIcon() == null && getDefaultIcon() instanceof FlatCheckBoxIcon)
+			? UIScale.scale( ((FlatCheckBoxIcon)getDefaultIcon()).focusWidth )
+			: 0;
 	}
 }

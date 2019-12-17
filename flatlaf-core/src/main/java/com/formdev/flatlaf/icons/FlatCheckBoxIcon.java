@@ -62,7 +62,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
 {
-	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
+	public final int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	protected final Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusedColor",
 		UIManager.getColor( "Component.focusColor" ) );
 	protected final int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
