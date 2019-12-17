@@ -31,6 +31,7 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.function.Function;
 import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.DimensionUIResource;
@@ -39,9 +40,9 @@ import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.DerivedColor;
-import com.formdev.flatlaf.util.ScaledNumber;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Load UI defaults from properties files associated to Flat LaF classes and add to UI defaults.
@@ -202,7 +203,7 @@ class UIDefaultsLoader
 		return resolveValue( properties, newValue );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDNUMBER, INSTANCE, CLASS }
+	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDINTEGER, INSTANCE, CLASS }
 
 	static Object parseValue( String key, String value ) {
 		return parseValue( key, value, v -> v, Collections.emptyList() );
@@ -266,7 +267,7 @@ class UIDefaultsLoader
 			case INSETS:		return parseInsets( value );
 			case SIZE:			return parseSize( value );
 			case COLOR:			return parseColorOrFunction( value, true );
-			case SCALEDNUMBER:	return parseScaledNumber( value );
+			case SCALEDINTEGER:	return parseScaledInteger( value );
 			case INSTANCE:		return parseInstance( value, addonClassLoaders );
 			case CLASS:			return parseClass( value, addonClassLoaders );
 			case UNKNOWN:
@@ -506,11 +507,10 @@ class UIDefaultsLoader
 		return null;
 	}
 
-	private static ScaledNumber parseScaledNumber( String value ) {
-		try {
-			return new ScaledNumber( Integer.parseInt( value ) );
-		} catch( NumberFormatException ex ) {
-			throw new NumberFormatException( "invalid integer '" + value + "'" );
-		}
+	private static ActiveValue parseScaledInteger( String value ) {
+		int val = parseInteger( value, true );
+		return (ActiveValue) t -> {
+			return UIScale.scale( val );
+		};
 	}
 }

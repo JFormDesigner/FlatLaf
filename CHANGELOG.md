@@ -3,6 +3,7 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- TextComponent: Scale caret width on HiDPI screens when running on Java 8.
 - ProgressBar: If progress text is visible:
   - use smaller font
   - reduced height
