@@ -17,14 +17,17 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -51,6 +54,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault Component.focusWidth					int
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
+ * @uiDefault PasswordField.placeholderForeground	Color
  *
  * @author Karl Tauber
  */
@@ -60,6 +64,7 @@ public class FlatPasswordFieldUI
 	protected int focusWidth;
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
+	protected Color placeholderForeground;
 
 	private FocusListener focusListener;
 
@@ -75,9 +80,11 @@ public class FlatPasswordFieldUI
 		if( SystemInfo.IS_MAC )
 			LookAndFeel.installProperty( getComponent(), "echoChar", '\u2022' );
 
+		String prefix = getPropertyPrefix();
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
+		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
 
@@ -87,6 +94,8 @@ public class FlatPasswordFieldUI
 	@Override
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
+
+		placeholderForeground = null;
 
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
@@ -108,8 +117,17 @@ public class FlatPasswordFieldUI
 	}
 
 	@Override
+	protected void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+
+		if( FlatClientProperties.PLACEHOLDER_TEXT.equals( e.getPropertyName() ) )
+			getComponent().repaint();
+	}
+
+	@Override
 	protected void paintSafely( Graphics g ) {
 		FlatTextFieldUI.paintBackground( g, getComponent(), focusWidth, isIntelliJTheme );
+		FlatTextFieldUI.paintPlaceholder( g, getComponent(), placeholderForeground );
 		super.paintSafely( g );
 	}
 

@@ -52,6 +52,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -239,7 +240,8 @@ public class FlatComboBoxUI
 				} else if( editor != null && source == comboBox && propertyName == "componentOrientation" ) {
 					ComponentOrientation o = (ComponentOrientation) e.getNewValue();
 					editor.applyComponentOrientation( o );
-				}
+				} else if( editor != null && FlatClientProperties.PLACEHOLDER_TEXT.equals( propertyName ) )
+					editor.repaint();
 			}
 		};
 	}

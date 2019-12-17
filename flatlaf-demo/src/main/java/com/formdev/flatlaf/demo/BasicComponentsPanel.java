@@ -62,21 +62,25 @@ class BasicComponentsPanel
 		JLabel spinnerLabel = new JLabel();
 		JSpinner spinner1 = new JSpinner();
 		JSpinner spinner2 = new JSpinner();
+		JComboBox<String> comboBox6 = new JComboBox<>();
 		JLabel textFieldLabel = new JLabel();
 		JTextField textField1 = new JTextField();
 		JTextField textField2 = new JTextField();
 		JTextField textField3 = new JTextField();
 		JTextField textField4 = new JTextField();
+		JTextField textField6 = new JTextField();
 		JLabel formattedTextFieldLabel = new JLabel();
 		JFormattedTextField formattedTextField1 = new JFormattedTextField();
 		JFormattedTextField formattedTextField2 = new JFormattedTextField();
 		JFormattedTextField formattedTextField3 = new JFormattedTextField();
 		JFormattedTextField formattedTextField4 = new JFormattedTextField();
+		JFormattedTextField formattedTextField5 = new JFormattedTextField();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField2 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
 		JPasswordField passwordField4 = new JPasswordField();
+		JPasswordField passwordField5 = new JPasswordField();
 		JLabel textAreaLabel = new JLabel();
 		JScrollPane scrollPane1 = new JScrollPane();
 		JTextArea textArea1 = new JTextArea();
@@ -304,6 +308,11 @@ class BasicComponentsPanel
 		spinner2.setEnabled(false);
 		add(spinner2, "cell 2 5,growx");
 
+		//---- comboBox6 ----
+		comboBox6.setEditable(true);
+		comboBox6.putClientProperty("JTextField.placeholderText", "placeholder");
+		add(comboBox6, "cell 5 5,growx");
+
 		//---- textFieldLabel ----
 		textFieldLabel.setText("JTextField:");
 		add(textFieldLabel, "cell 0 6");
@@ -327,6 +336,10 @@ class BasicComponentsPanel
 		textField4.setEnabled(false);
 		textField4.setEditable(false);
 		add(textField4, "cell 4 6,growx");
+
+		//---- textField6 ----
+		textField6.putClientProperty("JTextField.placeholderText", "placeholder");
+		add(textField6, "cell 5 6,growx");
 
 		//---- formattedTextFieldLabel ----
 		formattedTextFieldLabel.setText("JFormattedTextField:");
@@ -352,6 +365,10 @@ class BasicComponentsPanel
 		formattedTextField4.setEditable(false);
 		add(formattedTextField4, "cell 4 7,growx");
 
+		//---- formattedTextField5 ----
+		formattedTextField5.putClientProperty("JTextField.placeholderText", "placeholder");
+		add(formattedTextField5, "cell 5 7,growx");
+
 		//---- passwordFieldLabel ----
 		passwordFieldLabel.setText("JPasswordField:");
 		add(passwordFieldLabel, "cell 0 8");
@@ -375,6 +392,10 @@ class BasicComponentsPanel
 		passwordField4.setEnabled(false);
 		passwordField4.setEditable(false);
 		add(passwordField4, "cell 4 8,growx");
+
+		//---- passwordField5 ----
+		passwordField5.putClientProperty("JTextField.placeholderText", "placeholder");
+		add(passwordField5, "cell 5 8,growx");
 
 		//---- textAreaLabel ----
 		textAreaLabel.setText("JTextArea:");

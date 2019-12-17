@@ -20,9 +20,12 @@ import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
@@ -33,6 +36,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.FlatClientProperties;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
@@ -57,6 +61,7 @@ import javax.swing.text.JTextComponent;
  * @uiDefault Component.focusWidth				int
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.isIntelliJTheme			boolean
+ * @uiDefault TextField.placeholderForeground	Color
  *
  * @author Karl Tauber
  */
@@ -66,6 +71,7 @@ public class FlatTextFieldUI
 	protected int focusWidth;
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
+	protected Color placeholderForeground;
 
 	private FocusListener focusListener;
 
@@ -77,9 +83,11 @@ public class FlatTextFieldUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		String prefix = getPropertyPrefix();
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
+		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
 
@@ -89,6 +97,8 @@ public class FlatTextFieldUI
 	@Override
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
+
+		placeholderForeground = null;
 
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
@@ -110,8 +120,17 @@ public class FlatTextFieldUI
 	}
 
 	@Override
+	protected void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+
+		if( FlatClientProperties.PLACEHOLDER_TEXT.equals( e.getPropertyName() ) )
+			getComponent().repaint();
+	}
+
+	@Override
 	protected void paintSafely( Graphics g ) {
 		paintBackground( g, getComponent(), focusWidth, isIntelliJTheme );
+		paintPlaceholder( g, getComponent(), placeholderForeground );
 		super.paintSafely( g );
 	}
 
@@ -150,6 +169,31 @@ public class FlatTextFieldUI
 		} finally {
 			g2.dispose();
 		}
+	}
+
+	static void paintPlaceholder( Graphics g, JTextComponent c, Color placeholderForeground ) {
+		// check whether text component is empty
+		if( c.getDocument().getLength() > 0 )
+			return;
+
+		// check for JComboBox
+		Container parent = c.getParent();
+		JComponent jc = (parent instanceof JComboBox) ? (JComboBox<?>) parent : c;
+
+		// get placeholder text
+		Object placeholder = jc.getClientProperty( FlatClientProperties.PLACEHOLDER_TEXT );
+		if( !(placeholder instanceof String) )
+			return;
+
+		// compute placeholder location
+		Insets insets = c.getInsets();
+		FontMetrics fm = c.getFontMetrics( c.getFont() );
+		int x = insets.left;
+		int y = insets.top + fm.getAscent() + ((c.getHeight() - insets.top - insets.bottom - fm.getHeight()) / 2);
+
+		// paint placeholder
+		g.setColor( placeholderForeground );
+		FlatUIUtils.drawString( c, g, (String) placeholder, x, y );
 	}
 
 	@Override

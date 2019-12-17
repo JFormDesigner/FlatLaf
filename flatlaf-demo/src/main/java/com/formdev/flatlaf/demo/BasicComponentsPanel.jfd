@@ -253,6 +253,16 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 5,growx"
 			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox6"
+				"editable": true
+				"$client.JTextField.placeholderText": "placeholder"
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 5,growx"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "textFieldLabel"
 				"text": "JTextField:"
@@ -286,6 +296,12 @@ new FormModel {
 				"editable": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 6,growx"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField6"
+				"$client.JTextField.placeholderText": "placeholder"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 6,growx"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "formattedTextFieldLabel"
@@ -321,6 +337,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 7,growx"
 			} )
+			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
+				name: "formattedTextField5"
+				"$client.JTextField.placeholderText": "placeholder"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 7,growx"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "passwordFieldLabel"
 				"text": "JPasswordField:"
@@ -354,6 +376,12 @@ new FormModel {
 				"editable": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 8,growx"
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "passwordField5"
+				"$client.JTextField.placeholderText": "placeholder"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 8,growx"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "textAreaLabel"

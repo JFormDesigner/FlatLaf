@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- TextComponent: Support placeholder text that is displayed if text field is
+  empty (set client property "JTextField.placeholderText" to a string).
 - TextComponent: Scale caret width on HiDPI screens when running on Java 8.
 - ProgressBar: If progress text is visible:
   - use smaller font

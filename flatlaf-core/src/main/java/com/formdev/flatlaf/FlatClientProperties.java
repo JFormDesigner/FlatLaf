@@ -81,6 +81,14 @@ public interface FlatClientProperties
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
+	 * Placeholder text that is only painted if the text field is empty.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} or {@link javax.swing.JComboBox}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}
+	 */
+	String PLACEHOLDER_TEXT = "JTextField.placeholderText";
+
+	/**
 	 * Checks whether a client property of a component has the given value.
 	 */
 	static boolean clientPropertyEquals( JComponent c, String key, Object value ) {

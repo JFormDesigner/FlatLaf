@@ -39,8 +39,10 @@ import javax.swing.plaf.ComponentUI;
  *
  * <!-- FlatTextFieldUI -->
  *
- * @uiDefault Component.focusWidth				int
- * @uiDefault Component.minimumWidth			int
+ * @uiDefault Component.focusWidth						int
+ * @uiDefault Component.minimumWidth					int
+ * @uiDefault Component.isIntelliJTheme					boolean
+ * @uiDefault FormattedTextField.placeholderForeground	Color
  *
  * @author Karl Tauber
  */
