@@ -12,6 +12,7 @@ FlatLaf Change Log
   - changed style to rounded rectangle
   - fixed painting issues on low values
 - ProgressBar: Support configure of arc with `ProgressBar.arc`.
+- ProgressBar: Reduced thickness from 6 to 4.
 - TabbedPane: Support background color for selected tabs
   (`TabbedPane.selectedBackground`) and separators between tabs
   (`TabbedPane.showTabSeparators`).
