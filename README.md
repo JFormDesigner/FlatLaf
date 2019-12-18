@@ -45,7 +45,7 @@ build script:
 
     groupId:     com.formdev
     artifactId:  flatlaf
-    version:     0.21
+    version:     0.22
 
 Otherwise download `flatlaf-<version>.jar` here:
 

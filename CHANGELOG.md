@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.22
 
 - TextComponent: Support placeholder text that is displayed if text field is
   empty (set client property "JTextField.placeholderText" to a string).
