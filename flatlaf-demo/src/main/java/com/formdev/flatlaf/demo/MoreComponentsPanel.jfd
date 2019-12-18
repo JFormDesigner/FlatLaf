@@ -85,7 +85,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar3"
 				"orientation": 1
-				"value": 50
+				"value": 60
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}
@@ -95,7 +95,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar4"
 				"orientation": 1
-				"value": 55
+				"value": 60
 				"stringPainted": true
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
@@ -205,6 +205,10 @@ new FormModel {
 				"majorTickSpacing": 50
 				"paintLabels": true
 				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "changeProgress", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7 3 1,aligny top,grow 100 0"
 			} )
@@ -227,7 +231,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar1"
-				"value": 50
+				"value": 60
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}
@@ -237,7 +241,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar2"
 				"stringPainted": true
-				"value": 55
+				"value": 60
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}

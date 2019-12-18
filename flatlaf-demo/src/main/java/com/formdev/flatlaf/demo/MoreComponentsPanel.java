@@ -31,6 +31,14 @@ class MoreComponentsPanel
 		initComponents();
 	}
 
+	private void changeProgress() {
+		int value = slider3.getValue();
+		progressBar1.setValue( value );
+		progressBar2.setValue( value );
+		progressBar3.setValue( value );
+		progressBar4.setValue( value );
+	}
+
 	private void indeterminateCheckBoxActionPerformed() {
 		boolean indeterminate = indeterminateCheckBox.isSelected();
 		progressBar1.setIndeterminate( indeterminate );
@@ -70,7 +78,7 @@ class MoreComponentsPanel
 		JLabel sliderLabel = new JLabel();
 		JSlider slider1 = new JSlider();
 		JSlider slider6 = new JSlider();
-		JSlider slider3 = new JSlider();
+		slider3 = new JSlider();
 		JSlider slider5 = new JSlider();
 		JLabel progressBarLabel = new JLabel();
 		progressBar1 = new JProgressBar();
@@ -163,12 +171,12 @@ class MoreComponentsPanel
 
 		//---- progressBar3 ----
 		progressBar3.setOrientation(SwingConstants.VERTICAL);
-		progressBar3.setValue(50);
+		progressBar3.setValue(60);
 		add(progressBar3, "cell 4 0 1 6,growy");
 
 		//---- progressBar4 ----
 		progressBar4.setOrientation(SwingConstants.VERTICAL);
-		progressBar4.setValue(55);
+		progressBar4.setValue(60);
 		progressBar4.setStringPainted(true);
 		add(progressBar4, "cell 4 0 1 6,growy");
 
@@ -250,6 +258,7 @@ class MoreComponentsPanel
 		slider3.setMajorTickSpacing(50);
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
+		slider3.addChangeListener(e -> changeProgress());
 		add(slider3, "cell 1 7 3 1,aligny top,grow 100 0");
 
 		//---- slider5 ----
@@ -266,12 +275,12 @@ class MoreComponentsPanel
 		add(progressBarLabel, "cell 0 8");
 
 		//---- progressBar1 ----
-		progressBar1.setValue(50);
+		progressBar1.setValue(60);
 		add(progressBar1, "cell 1 8 3 1,growx");
 
 		//---- progressBar2 ----
 		progressBar2.setStringPainted(true);
-		progressBar2.setValue(55);
+		progressBar2.setValue(60);
 		add(progressBar2, "cell 1 8 3 1,growx");
 
 		//---- indeterminateCheckBox ----
@@ -330,6 +339,7 @@ class MoreComponentsPanel
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JProgressBar progressBar3;
 	private JProgressBar progressBar4;
+	private JSlider slider3;
 	private JProgressBar progressBar1;
 	private JProgressBar progressBar2;
 	private JCheckBox indeterminateCheckBox;
