@@ -279,6 +279,17 @@ public class FlatUIUtils
 	}
 
 	/**
+	 * Creates a not-filled rectangle shape with the given line width.
+	 */
+	public static Path2D createRectangle( float x, float y, float width, float height, float lineWidth ) {
+		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+		path.append( new Rectangle2D.Float( x, y, width, height ), false );
+		path.append( new Rectangle2D.Float( x + lineWidth, y + lineWidth,
+			width - (lineWidth * 2), height - (lineWidth * 2) ), false );
+		return path;
+	}
+
+	/**
 	 * Creates a not-filled rounded rectangle shape and allows specifying the line width and the radius or each corner.
 	 */
 	public static Path2D createRoundRectangle( float x, float y, float width, float height,
