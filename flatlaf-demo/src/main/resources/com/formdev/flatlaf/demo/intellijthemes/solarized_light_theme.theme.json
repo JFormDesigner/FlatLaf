@@ -212,7 +212,7 @@
         "informativeBorderColor": "#17254d",
 
         "warningForeground": "primaryText",
-        "warningBackground": "#735822",
+        "warningBackground": "backgroundHighlights",
         "warningBorderColor": "#403013",
 
         "errorForeground": "primaryText",
@@ -229,7 +229,7 @@
       "background": "backgroundHighlightsShade1",
       "foreground": "primaryText",
       "infoForeground": "ababb3",
-      "currentOverloadBackground": "#6A6173",
+      "currentOverloadBackground": "backgroundHighlights",
       "currentParameterForeground": "primaryText"
     },
 

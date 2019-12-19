@@ -92,9 +92,6 @@
       "Rose": "#ff79c6",
       "Violet": "#bd93f9"
     },
-    "HelpTooltip": {
-      "shortcutForeground": "#ff79c6"
-    },
     "Label": {
       "foreground": "#f8f8f2",
       "errorForeground": "#ff5554"
