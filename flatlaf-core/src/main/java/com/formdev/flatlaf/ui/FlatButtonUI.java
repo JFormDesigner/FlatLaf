@@ -149,6 +149,10 @@ public class FlatButtonUI
 				shadowWidth = FlatUIUtils.getUIInt( "Button.shadowWidth", 2 );
 				shadowColor = UIManager.getColor( "Button.shadowColor" );
 				defaultShadowColor = UIManager.getColor( "Button.default.shadowColor" );
+			} else {
+				shadowWidth = 0;
+				shadowColor = null;
+				defaultShadowColor = null;
 			}
 
 			defaultBackground = FlatUIUtils.getUIColor( "Button.default.startBackground", "Button.default.background" );
