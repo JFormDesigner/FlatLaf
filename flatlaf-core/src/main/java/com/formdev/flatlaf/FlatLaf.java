@@ -236,12 +236,16 @@ public abstract class FlatLaf
 		if( useScreenMenuBar )
 			defaults.put( "MenuBarUI", aquaMenuBarUI );
 
+		invokePostInitialization( defaults );
+
+		return defaults;
+	}
+
+	void invokePostInitialization( UIDefaults defaults ) {
 		if( postInitialization != null ) {
 			postInitialization.accept( defaults );
 			postInitialization = null;
 		}
-
-		return defaults;
 	}
 
 	List<Class<?>> getLafClassesForDefaultsLoading() {

@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Fixed link color (in HTML text) in IntelliJ platform themes.
+
+
 ## 0.22
 
 - TextComponent: Support placeholder text that is displayed if text field is

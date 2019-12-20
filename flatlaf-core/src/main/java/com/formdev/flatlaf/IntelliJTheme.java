@@ -419,6 +419,9 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ComboBox.ArrowButton.iconColor",             "ComboBox.buttonArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.nonEditableBackground", "ComboBox.buttonBackground" );
 
+		// Link
+		uiKeyMapping.put( "Link.activeForeground", "Component.linkColor" );
+
 		// ProgressBar
 		uiKeyMapping.put( "ProgressBar.background",    "" ); // ignore
 		uiKeyMapping.put( "ProgressBar.foreground",    "" ); // ignore
@@ -492,7 +495,12 @@ public class IntelliJTheme
 		public UIDefaults getDefaults() {
 			UIDefaults defaults = super.getDefaults();
 			theme.applyProperties( defaults );
+			super.invokePostInitialization( defaults );
 			return defaults;
+		}
+
+		@Override
+		void invokePostInitialization( UIDefaults defaults ) {
 		}
 
 		@Override

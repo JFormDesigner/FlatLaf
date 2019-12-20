@@ -140,12 +140,54 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1,growx"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "HTML:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 1"
+			} )
 			add( new FormComponent( "javax.swing.JScrollBar" ) {
 				name: "scrollBar4"
 				"orientation": 0
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2,growx"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[]"
+				"$rowConstraints": "[][][]"
+				"$layoutConstraints": "ltr,insets 0,hidemode 3"
+			} ) {
+				name: "panel3"
+				"opaque": false
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label3"
+					"text": "<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a></html>"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane15"
+					add( new FormComponent( "javax.swing.JEditorPane" ) {
+						name: "editorPane6"
+						"contentType": "text/html"
+						"text": "JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1,grow"
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane16"
+					add( new FormComponent( "javax.swing.JTextPane" ) {
+						name: "textPane6"
+						"contentType": "text/html"
+						"text": "JTextPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2,grow"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 2 1 9,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JScrollBar" ) {
 				name: "scrollBar5"
