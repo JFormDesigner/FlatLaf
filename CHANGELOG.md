@@ -3,6 +3,9 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Updated colors in "Flat Light" and "Flat IntelliJ" themes with colors from
+  "IntelliJ Light Theme", which provides blue coloring that better match
+  platform colors.
 - Fixed link color (in HTML text) and separator color in IntelliJ platform
   themes.
 
