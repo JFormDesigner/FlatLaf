@@ -21,8 +21,11 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTreeUI;
@@ -75,6 +78,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.selectionForeground				Color
  * @uiDefault Tree.selectionInactiveBackground		Color
  * @uiDefault Tree.selectionInactiveForeground		Color
+ * @uiDefault Tree.wideSelection					boolean
  *
  * @author Karl Tauber
  */
@@ -86,6 +90,7 @@ public class FlatTreeUI
 	protected Color selectionInactiveBackground;
 	protected Color selectionInactiveForeground;
 	protected Color selectionBorderColor;
+	protected boolean wideSelection;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTreeUI();
@@ -102,6 +107,7 @@ public class FlatTreeUI
 		selectionInactiveBackground = UIManager.getColor( "Tree.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Tree.selectionInactiveForeground" );
 		selectionBorderColor = UIManager.getColor( "Tree.selectionBorderColor" );
+		wideSelection = UIManager.getBoolean( "Tree.wideSelection" );
 
 		// scale
 		int rowHeight = FlatUIUtils.getUIInt( "Tree.rowHeight", 16 );
@@ -124,6 +130,53 @@ public class FlatTreeUI
 		selectionBorderColor = null;
 	}
 
+	@Override
+	protected MouseListener createMouseListener() {
+		if( !wideSelection )
+			return super.createMouseListener();
+
+		return new BasicTreeUI.MouseHandler() {
+			@Override
+			public void mousePressed( MouseEvent e ) {
+				super.mousePressed( handleWideMouseEvent( e ) );
+			}
+
+			@Override
+			public void mouseReleased( MouseEvent e ) {
+				super.mouseReleased( handleWideMouseEvent( e ) );
+			}
+
+			@Override
+			public void mouseDragged( MouseEvent e ) {
+				super.mouseDragged( handleWideMouseEvent( e ) );
+			}
+
+			private MouseEvent handleWideMouseEvent( MouseEvent e ) {
+				if( !tree.isEnabled() || !SwingUtilities.isLeftMouseButton( e ) || e.isConsumed() )
+					return e;
+
+				int x = e.getX();
+				int y = e.getY();
+				TreePath path = getClosestPathForLocation( tree, x, y );
+				if( path == null || isLocationInExpandControl( path, x, y ) )
+					return e;
+
+				Rectangle bounds = getPathBounds( tree, path );
+				if( bounds == null || y < bounds.y || y >= (bounds.y + bounds.height) )
+					return e;
+
+				int newX = Math.max( bounds.x, Math.min( x, bounds.x + bounds.width - 1 ) );
+				if( newX == x )
+					return e;
+
+				// clone mouse event, but with new X coordinate
+				return new MouseEvent( e.getComponent(), e.getID(), e.getWhen(),
+					e.getModifiers() | e.getModifiersEx(), newX, e.getY(),
+					e.getClickCount(), e.isPopupTrigger(), e.getButton() );
+			}
+		};
+	}
+
 	/**
 	 * Same as super.paintRow(), but uses inactive selection background/foreground if tree is not focused.
 	 */
@@ -137,6 +190,19 @@ public class FlatTreeUI
 		boolean hasFocus = tree.hasFocus();
 		boolean cellHasFocus = hasFocus && (row == getLeadSelectionRow());
 		boolean isSelected = tree.isRowSelected( row );
+
+		// wide selection background
+		if( wideSelection && isSelected ) {
+			// fill background
+			g.setColor( hasFocus ? selectionBackground : selectionInactiveBackground );
+			g.fillRect( 0, bounds.y, clipBounds.width, bounds.height );
+
+			// paint expand/collapse icon
+			if( shouldPaintExpandControl( path, row, isExpanded, hasBeenExpanded, isLeaf ) ) {
+				paintExpandControl( g, clipBounds, insets, bounds,
+					path, row, isExpanded, hasBeenExpanded, isLeaf );
+			}
+		}
 
 		// get renderer component
 		Component rendererComponent = currentCellRenderer.getTreeCellRendererComponent( tree,
