@@ -33,7 +33,42 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTree}.
  *
- * TODO document used UI defaults of superclass
+ * <!-- BasicTreeUI -->
+ *
+ * @uiDefault Tree.font								Font
+ * @uiDefault Tree.background						Color
+ * @uiDefault Tree.hash								Color
+ * @uiDefault Tree.dropLineColor					Color
+ * @uiDefault Tree.expandedIcon						Icon
+ * @uiDefault Tree.collapsedIcon					Icon
+ * @uiDefault Tree.leftChildIndent					int
+ * @uiDefault Tree.rightChildIndent					int
+ * @uiDefault Tree.rowHeight						int
+ * @uiDefault Tree.scrollsOnExpand					boolean
+ * @uiDefault Tree.scrollsHorizontallyAndVertically	boolean
+ * @uiDefault Tree.paintLines						boolean
+ * @uiDefault Tree.lineTypeDashed					boolean
+ * @uiDefault Tree.showsRootHandles					boolean
+ * @uiDefault Tree.repaintWholeRow					boolean
+ *
+ * <!-- DefaultTreeCellRenderer -->
+ *
+ * @uiDefault Tree.leafIcon							Icon
+ * @uiDefault Tree.closedIcon						Icon
+ * @uiDefault Tree.openIcon							Icon
+ * @uiDefault Tree.textBackground					Color
+ * @uiDefault Tree.textForeground					Color
+ * @uiDefault Tree.selectionBackground				Color
+ * @uiDefault Tree.selectionForeground				Color
+ * @uiDefault Tree.selectionBorderColor				Color	focus indicator border color
+ * @uiDefault Tree.drawsFocusBorderAroundIcon		boolean
+ * @uiDefault Tree.drawDashedFocusIndicator			boolean
+ * @uiDefault Tree.rendererFillBackground			boolean	default is true
+ * @uiDefault Tree.rendererMargins					Insets
+ * @uiDefault Tree.dropCellBackground				Color
+ * @uiDefault Tree.dropCellForeground				Color
+ *
+ * <!-- FlatTreeUI -->
  *
  * @uiDefault Tree.border							Border
  * @uiDefault Tree.selectionBackground				Color

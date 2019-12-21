@@ -35,20 +35,19 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JOptionPane}.
  *
+ * <!-- BasicOptionPaneUI -->
+ *
  * @uiDefault OptionPane.font						Font	unused
  * @uiDefault OptionPane.background					Color
  * @uiDefault OptionPane.foreground					Color	unused
  * @uiDefault OptionPane.border						Border
  * @uiDefault OptionPane.messageAreaBorder			Border
  * @uiDefault OptionPane.buttonAreaBorder			Border
- * @uiDefault OptionPane.messageForeground			Color
- * @uiDefault OptionPane.messageFont				Font
- * @uiDefault OptionPane.buttonFont					Font
+ * @uiDefault OptionPane.messageForeground			Color	optional; defaults to Label.foreground
+ * @uiDefault OptionPane.messageFont				Font	optional; defaults to Label.font
+ * @uiDefault OptionPane.buttonFont					Font	optional; defaults to Button.font
  *
  * @uiDefault OptionPane.minimumSize				Dimension
- * @uiDefault OptionPane.maxCharactersPerLine		int
- * @uiDefault OptionPane.iconMessageGap				int
- * @uiDefault OptionPane.messagePadding				int
  * @uiDefault OptionPane.buttonPadding				int
  * @uiDefault OptionPane.buttonMinimumWidth			int		-1=disabled
  * @uiDefault OptionPane.sameSizeButtons			boolean	if true, gives all buttons same size
@@ -60,6 +59,25 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault OptionPane.informationIcon			Icon
  * @uiDefault OptionPane.questionIcon				Icon
  * @uiDefault OptionPane.warningIcon				Icon
+ *
+ * @uiDefault OptionPane.okButtonText				String
+ * @uiDefault OptionPane.okButtonMnemonic			String
+ * @uiDefault OptionPane.okIcon						Icon
+ * @uiDefault OptionPane.cancelButtonText			String
+ * @uiDefault OptionPane.cancelButtonMnemonic		String
+ * @uiDefault OptionPane.cancelIcon					Icon
+ * @uiDefault OptionPane.yesButtonText				String
+ * @uiDefault OptionPane.yesButtonMnemonic			String
+ * @uiDefault OptionPane.yesIcon					Icon
+ * @uiDefault OptionPane.noButtonText				String
+ * @uiDefault OptionPane.noButtonMnemonic			String
+ * @uiDefault OptionPane.noIcon						Icon
+ *
+ * <!-- FlatOptionPaneUI -->
+ *
+ * @uiDefault OptionPane.iconMessageGap				int
+ * @uiDefault OptionPane.messagePadding				int
+ * @uiDefault OptionPane.maxCharactersPerLine		int
  *
  * @author Karl Tauber
  */

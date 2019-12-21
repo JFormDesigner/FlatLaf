@@ -46,13 +46,29 @@ import com.formdev.flatlaf.util.UIScale;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTabbedPane}.
  *
+ * @clientProperty JTabbedPane.showTabSeparators		boolean
  * @clientProperty JTabbedPane.hasFullBorder			boolean
  *
- * @uiDefault Component.arrowType						String	triangle (default) or chevron
+ * <!-- BasicTabbedPaneUI -->
+ *
  * @uiDefault TabbedPane.font							Font
  * @uiDefault TabbedPane.background						Color
  * @uiDefault TabbedPane.foreground						Color
  * @uiDefault TabbedPane.shadow							Color	used for scroll arrows and cropped line
+ * @uiDefault TabbedPane.textIconGap					int
+ * @uiDefault TabbedPane.tabInsets						Insets
+ * @uiDefault TabbedPane.selectedTabPadInsets			Insets
+ * @uiDefault TabbedPane.tabAreaInsets					Insets
+ * @uiDefault TabbedPane.tabsOverlapBorder				boolean
+ * @uiDefault TabbedPane.tabRunOverlay					int
+ * @uiDefault TabbedPane.tabsOpaque						boolean
+ * @uiDefault TabbedPane.contentOpaque					boolean	unused
+ * @uiDefault TabbedPane.opaque							boolean
+ * @uiDefault TabbedPane.selectionFollowsFocus			boolean	default is true
+ *
+ * <!-- FlatTabbedPaneUI -->
+ *
+ * @uiDefault Component.arrowType						String	triangle (default) or chevron
  * @uiDefault TabbedPane.disabledForeground				Color
  * @uiDefault TabbedPane.selectedBackground				Color	optional
  * @uiDefault TabbedPane.selectedForeground				Color
@@ -62,9 +78,6 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.focusColor						Color
  * @uiDefault TabbedPane.tabSeparatorColor				Color	optional; defaults to TabbedPane.contentAreaColor
  * @uiDefault TabbedPane.contentAreaColor				Color
- * @uiDefault TabbedPane.textIconGap					int
- * @uiDefault TabbedPane.tabInsets						Insets
- * @uiDefault TabbedPane.tabAreaInsets					Insets
  * @uiDefault TabbedPane.tabHeight						int
  * @uiDefault TabbedPane.tabSelectionHeight				int
  * @uiDefault TabbedPane.contentSeparatorHeight			int
