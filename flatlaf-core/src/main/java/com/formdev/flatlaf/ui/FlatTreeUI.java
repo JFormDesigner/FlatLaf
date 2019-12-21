@@ -85,6 +85,7 @@ public class FlatTreeUI
 	protected Color selectionForeground;
 	protected Color selectionInactiveBackground;
 	protected Color selectionInactiveForeground;
+	protected Color selectionBorderColor;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTreeUI();
@@ -100,6 +101,7 @@ public class FlatTreeUI
 		selectionForeground = UIManager.getColor( "Tree.selectionForeground" );
 		selectionInactiveBackground = UIManager.getColor( "Tree.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Tree.selectionInactiveForeground" );
+		selectionBorderColor = UIManager.getColor( "Tree.selectionBorderColor" );
 
 		// scale
 		int rowHeight = FlatUIUtils.getUIInt( "Tree.rowHeight", 16 );
@@ -119,6 +121,7 @@ public class FlatTreeUI
 		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
+		selectionBorderColor = null;
 	}
 
 	/**
@@ -157,11 +160,26 @@ public class FlatTreeUI
 				rendererComponent.setForeground( selectionInactiveForeground );
 		}
 
+		// remove selection border if exactly one item is selected
+		Color oldBorderSelectionColor = null;
+		if( isSelected && hasFocus &&
+			tree.getMinSelectionRow() == tree.getMaxSelectionRow() &&
+			rendererComponent instanceof DefaultTreeCellRenderer )
+		{
+			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) rendererComponent;
+			if( renderer.getBorderSelectionColor() == selectionBorderColor ) {
+				oldBorderSelectionColor = renderer.getBorderSelectionColor();
+				renderer.setBorderSelectionColor( null );
+			}
+		}
+
 		// paint renderer
 		rendererPane.paintComponent( g, rendererComponent, tree, bounds.x, bounds.y, bounds.width, bounds.height, true );
 
-		// restore background selection color
+		// restore background selection color and border selection color
 		if( oldBackgroundSelectionColor != null )
 			((DefaultTreeCellRenderer)rendererComponent).setBackgroundSelectionColor( oldBackgroundSelectionColor );
+		if( oldBorderSelectionColor != null )
+			((DefaultTreeCellRenderer)rendererComponent).setBorderSelectionColor( oldBorderSelectionColor );
 	}
 }

@@ -52,6 +52,11 @@ import javax.swing.plaf.basic.BasicListUI;
  * @uiDefault List.selectionInactiveBackground		Color
  * @uiDefault List.selectionInactiveForeground		Color
  *
+ * <!-- FlatListCellBorder -->
+ *
+ * @uiDefault List.cellMargins						Insets
+ * @uiDefault List.cellFocusColor					Color
+ *
  * @author Karl Tauber
  */
 public class FlatListUI

@@ -6,6 +6,8 @@ FlatLaf Change Log
 - Updated colors in "Flat Light" and "Flat IntelliJ" themes with colors from
   "IntelliJ Light Theme", which provides blue coloring that better match
   platform colors.
+- List and Tree: Paint cell focus indicator (black rectangle) only if more than
+  one item is selected.
 - Fixed link color (in HTML text) and separator color in IntelliJ platform
   themes.
 
