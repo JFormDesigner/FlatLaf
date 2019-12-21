@@ -432,6 +432,9 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ScrollBar.trackColor", "ScrollBar.track" );
 		uiKeyMapping.put( "ScrollBar.thumbColor", "ScrollBar.thumb" );
 
+		// Separator
+		uiKeyMapping.put( "Separator.separatorColor", "Separator.foreground" );
+
 		// Slider
 		uiKeyMapping.put( "Slider.trackWidth", "" ); // ignore (used in Material Theme UI Lite)
 

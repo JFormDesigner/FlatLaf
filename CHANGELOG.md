@@ -3,7 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
-- Fixed link color (in HTML text) in IntelliJ platform themes.
+- Fixed link color (in HTML text) and separator color in IntelliJ platform
+  themes.
 
 
 ## 0.22
