@@ -14,6 +14,7 @@ FlatLaf Change Log
   `rgba(red,green,blue,alpha)`, `hsl(hue,saturation,lightness)`,
   `hsla(hue,saturation,lightness,alpha)`, `lighten(color,amount[,options])` and
   `darken(color,amount[,options])`.
+- Replaced prefix `@@` with `$` in `.properties` files.
 - Fixed link color (in HTML text) and separator color in IntelliJ platform
   themes.
 

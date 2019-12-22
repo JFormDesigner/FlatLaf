@@ -61,7 +61,9 @@ class UIDefaultsLoader
 	private static final String TYPE_PREFIX = "{";
 	private static final String TYPE_PREFIX_END = "}";
 	private static final String VARIABLE_PREFIX = "@";
+	@Deprecated
 	private static final String REF_PREFIX = VARIABLE_PREFIX + "@";
+	private static final String PROPERTY_PREFIX = "$";
 	private static final String OPTIONAL_PREFIX = "?";
 	private static final String GLOBAL_PREFIX = "*.";
 
@@ -176,16 +178,21 @@ class UIDefaultsLoader
 	}
 
 	static void logParseError( String key, String value, RuntimeException ex ) {
-		System.err.println( "Failed to parse: '" + key + '=' + value + '\'' );
+		System.err.println( "FlatLaf: Failed to parse: '" + key + '=' + value + '\'' );
 		System.err.println( "    " + ex.getMessage() );
 	}
 
 	private static String resolveValue( Properties properties, String value ) {
-		if( !value.startsWith( VARIABLE_PREFIX ) )
+		if( value.startsWith( PROPERTY_PREFIX ) )
+			value = value.substring( PROPERTY_PREFIX.length() );
+		else if( !value.startsWith( VARIABLE_PREFIX ) )
 			return value;
 
-		if( value.startsWith( REF_PREFIX ) )
+		// for compatibility
+		if( value.startsWith( REF_PREFIX ) ) {
+			System.err.println( "FlatLaf: Usage of '@@' in .properties files is deprecated. Use '$' instead." );
 			value = value.substring( REF_PREFIX.length() );
+		}
 
 		boolean optional = false;
 		if( value.startsWith( OPTIONAL_PREFIX ) ) {
@@ -198,7 +205,7 @@ class UIDefaultsLoader
 			if( optional )
 				return "null";
 
-			throw new IllegalArgumentException( "variable or reference '" + value + "' not found" );
+			throw new IllegalArgumentException( "variable or property '" + value + "' not found" );
 		}
 
 		return resolveValue( properties, newValue );
