@@ -25,7 +25,7 @@ import java.awt.Color;
  */
 public class ColorFunctions
 {
-	public static Color applyFunctions( Color color, ColorFunction[] functions ) {
+	public static Color applyFunctions( Color color, ColorFunction... functions ) {
 		float[] hsl = HSLColor.fromRGB( color );
 		float alpha = color.getAlpha() / 255f;
 

@@ -10,6 +10,10 @@ FlatLaf Change Log
 - Table: Hide grid and changed intercell spacing to zero.
 - List and Tree: Paint cell focus indicator (black rectangle) only if more than
   one item is selected.
+- Support basic color functions in `.properties` files: `rgb(red,green,blue)`,
+  `rgba(red,green,blue,alpha)`, `hsl(hue,saturation,lightness)`,
+  `hsla(hue,saturation,lightness,alpha)`, `lighten(color,amount[,options])` and
+  `darken(color,amount[,options])`.
 - Fixed link color (in HTML text) and separator color in IntelliJ platform
   themes.
 

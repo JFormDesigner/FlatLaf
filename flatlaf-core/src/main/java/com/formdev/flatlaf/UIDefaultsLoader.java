@@ -40,6 +40,7 @@ import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.DerivedColor;
+import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -266,14 +267,14 @@ class UIDefaultsLoader
 			case ICON:			return parseInstance( value, addonClassLoaders );
 			case INSETS:		return parseInsets( value );
 			case DIMENSION:		return parseDimension( value );
-			case COLOR:			return parseColorOrFunction( value, true );
+			case COLOR:			return parseColorOrFunction( value, resolver, true );
 			case SCALEDINTEGER:	return parseScaledInteger( value );
 			case INSTANCE:		return parseInstance( value, addonClassLoaders );
 			case CLASS:			return parseClass( value, addonClassLoaders );
 			case UNKNOWN:
 			default:
 				// colors
-				ColorUIResource color = parseColorOrFunction( value, false );
+				ColorUIResource color = parseColorOrFunction( value, resolver, false );
 				if( color != null )
 					return color;
 
@@ -290,10 +291,10 @@ class UIDefaultsLoader
 	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		if( value.indexOf( ',' ) >= 0 ) {
 			// top,left,bottom,right[,lineColor]
-			List<String> parts = StringUtils.split( value, ',' );
+			List<String> parts = split( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() == 5)
-				? parseColorOrFunction( resolver.apply( parts.get( 4 ) ), true )
+				? parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
 				: null;
 
 			return (LazyValue) t -> {
@@ -346,7 +347,7 @@ class UIDefaultsLoader
 	}
 
 	private static Insets parseInsets( String value ) {
-		List<String> numbers = StringUtils.split( value, ',' );
+		List<String> numbers = split( value, ',' );
 		try {
 			return new InsetsUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -359,7 +360,7 @@ class UIDefaultsLoader
 	}
 
 	private static Dimension parseDimension( String value ) {
-		List<String> numbers = StringUtils.split( value, ',' );
+		List<String> numbers = split( value, ',' );
 		try {
 			return new DimensionUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -369,9 +370,9 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static ColorUIResource parseColorOrFunction( String value, boolean reportError ) {
+	private static ColorUIResource parseColorOrFunction( String value, Function<String, String> resolver, boolean reportError ) {
 		if( value.endsWith( ")" ) )
-			return parseColorFunctions( value, reportError );
+			return parseColorFunctions( value, resolver, reportError );
 
 		return parseColor( value, reportError );
 	}
@@ -439,7 +440,7 @@ class UIDefaultsLoader
 			: (((n >> 8) & 0xffffff) | ((n & 0xff) << 24)); // move alpha from lowest to highest byte
 	}
 
-	private static ColorUIResource parseColorFunctions( String value, boolean reportError ) {
+	private static ColorUIResource parseColorFunctions( String value, Function<String, String> resolver, boolean reportError ) {
 		int paramsStart = value.indexOf( '(' );
 		if( paramsStart < 0 ) {
 			if( reportError )
@@ -448,37 +449,88 @@ class UIDefaultsLoader
 		}
 
 		String function = value.substring( 0, paramsStart ).trim();
-		List<String> params = StringUtils.split( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
+		List<String> params = splitFunctionParams( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
 		if( params.isEmpty() )
 			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 
 		switch( function ) {
-			case "lighten":		return parseColorLightenOrDarken( true, params, reportError );
-			case "darken":		return parseColorLightenOrDarken( false, params, reportError );
+			case "rgb":			return parseColorRgbOrRgba( false, params );
+			case "rgba":		return parseColorRgbOrRgba( true, params );
+			case "hsl":			return parseColorHslOrHsla( false, params );
+			case "hsla":		return parseColorHslOrHsla( true, params );
+			case "lighten":		return parseColorLightenOrDarken( true, params, resolver, reportError );
+			case "darken":		return parseColorLightenOrDarken( false, params, resolver, reportError );
 		}
 
 		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
 	}
 
 	/**
-	 * Syntax: lighten(amount[,options]) or darken(amount[,options])
+	 * Syntax: rgb(red,green,blue) or rgba(red,green,blue,alpha)
+	 *   - red: an integer 0-255
+	 *   - green: an integer 0-255
+	 *   - blue: an integer 0-255
+	 *   - alpha: an integer 0-255
+	 */
+	private static ColorUIResource parseColorRgbOrRgba( boolean hasAlpha, List<String> params ) {
+		int red = parseInteger( params.get( 0 ), 0, 255 );
+		int green = parseInteger( params.get( 1 ), 0, 255 );
+		int blue = parseInteger( params.get( 2 ), 0, 255 );
+		int alpha = hasAlpha ? parseInteger( params.get( 3 ), 0, 255 ) : 255;
+
+		return hasAlpha
+			? new ColorUIResource( new Color( red, green, blue, alpha ) )
+			: new ColorUIResource( red, green, blue );
+	}
+
+	/**
+	 * Syntax: hsl(hue,saturation,lightness) or hsla(hue,saturation,lightness,alpha)
+	 *   - hue: an integer 0-360 representing degrees
+	 *   - saturation: a percentage 0-100%
+	 *   - lightness: a percentage 0-100%
+	 *   - alpha: a percentage 0-100%
+	 */
+	private static ColorUIResource parseColorHslOrHsla( boolean hasAlpha, List<String> params ) {
+		int hue = parseInteger( params.get( 0 ), 0, 360 );
+		int saturation = parsePercentage( params.get( 1 ) );
+		int lightness = parsePercentage( params.get( 2 ) );
+		int alpha = hasAlpha ? parsePercentage( params.get( 3 ) ) : 100;
+
+		float[] hsl = new float[] { hue, saturation, lightness };
+		return new ColorUIResource( HSLColor.toRGB( hsl, alpha / 100f ) );
+	}
+
+	/**
+	 * Syntax: lighten([color,]amount[,options]) or darken([color,]amount[,options])
+	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
 	 *   - options: [relative] [autoInverse]
 	 */
-	private static ColorUIResource parseColorLightenOrDarken( boolean lighten, List<String> params, boolean reportError ) {
-		int amount = parsePercentage( params.get( 0 ) );
+	private static ColorUIResource parseColorLightenOrDarken( boolean lighten, List<String> params,
+		Function<String, String> resolver, boolean reportError )
+	{
+		boolean isDerived = params.get( 0 ).endsWith( "%" );
+		String colorStr = isDerived ? null : params.get( 0 );
+		int nextParam = isDerived ? 0 : 1;
+		int amount = parsePercentage( params.get( nextParam++ ) );
 		boolean relative = false;
 		boolean autoInverse = false;
 
-		if( params.size() >= 2 ) {
-			String options = params.get( 1 );
+		if( params.size() > nextParam ) {
+			String options = params.get( nextParam++ );
 			relative = options.contains( "relative" );
 			autoInverse = options.contains( "autoInverse" );
 		}
 
-		return new DerivedColor( lighten
+		ColorFunctions.ColorFunction function = lighten
 			? new ColorFunctions.Lighten( amount, relative, autoInverse )
-			: new ColorFunctions.Darken( amount, relative, autoInverse ) );
+			: new ColorFunctions.Darken( amount, relative, autoInverse );
+
+		if( isDerived )
+			return new DerivedColor( function );
+
+		ColorUIResource color = parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+		return new ColorUIResource( ColorFunctions.applyFunctions( color, function ) );
 	}
 
 	private static int parsePercentage( String value ) {
@@ -497,6 +549,13 @@ class UIDefaultsLoader
 		return val;
 	}
 
+	private static Integer parseInteger( String value, int min, int max ) {
+		Integer integer = parseInteger( value, true );
+		if( integer.intValue() < min || integer.intValue() > max )
+			throw new NumberFormatException( "integer '" + value + "' out of range (" + min + '-' + max + ')' );
+		return integer;
+	}
+
 	private static Integer parseInteger( String value, boolean reportError ) {
 		try {
 			return Integer.parseInt( value );
@@ -512,5 +571,44 @@ class UIDefaultsLoader
 		return (ActiveValue) t -> {
 			return UIScale.scale( val );
 		};
+	}
+
+	/**
+	 * Split string and trim parts.
+	 */
+	private static List<String> split( String str, char delim ) {
+		List<String> result = StringUtils.split( str, delim );
+
+		// trim strings
+		int size = result.size();
+		for( int i = 0; i < size; i++ )
+			result.set( i, result.get( i ).trim() );
+
+		return result;
+	}
+
+	/**
+	 * Splits function parameters and allows using functions as parameters.
+	 * In other words: Delimiters surrounded by '(' and ')' are ignored.
+	 */
+	private static List<String> splitFunctionParams( String str, char delim ) {
+		ArrayList<String> strs = new ArrayList<>();
+		int nestLevel = 0;
+		int start = 0;
+		int strlen = str.length();
+		for( int i = 0; i < strlen; i++ ) {
+			char ch = str.charAt( i );
+			if( ch == '(' )
+				nestLevel++;
+			else if( ch == ')' )
+				nestLevel--;
+			else if( nestLevel == 0 && ch == delim ) {
+				strs.add( str.substring( start, i ).trim() );
+				start = i + 1;
+			}
+		}
+		strs.add( str.substring( start ).trim() );
+
+		return strs;
 	}
 }
