@@ -203,7 +203,7 @@ class UIDefaultsLoader
 		return resolveValue( properties, newValue );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, SIZE, COLOR, SCALEDINTEGER, INSTANCE, CLASS }
+	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, DIMENSION, COLOR, SCALEDINTEGER, INSTANCE, CLASS }
 
 	static Object parseValue( String key, String value ) {
 		return parseValue( key, value, v -> v, Collections.emptyList() );
@@ -251,7 +251,7 @@ class UIDefaultsLoader
 					 key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
 				valueType = ValueType.INSETS;
 			else if( key.endsWith( "Size" ) )
-				valueType = ValueType.SIZE;
+				valueType = ValueType.DIMENSION;
 			else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
 				valueType = ValueType.INTEGER;
 			else if( key.endsWith( "UI" ) )
@@ -265,7 +265,7 @@ class UIDefaultsLoader
 			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
 			case ICON:			return parseInstance( value, addonClassLoaders );
 			case INSETS:		return parseInsets( value );
-			case SIZE:			return parseSize( value );
+			case DIMENSION:		return parseDimension( value );
 			case COLOR:			return parseColorOrFunction( value, true );
 			case SCALEDINTEGER:	return parseScaledInteger( value );
 			case INSTANCE:		return parseInstance( value, addonClassLoaders );
@@ -358,7 +358,7 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static Dimension parseSize( String value ) {
+	private static Dimension parseDimension( String value ) {
 		List<String> numbers = StringUtils.split( value, ',' );
 		try {
 			return new DimensionUIResource(

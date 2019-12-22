@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JComponent;
@@ -55,6 +56,8 @@ import com.formdev.flatlaf.util.UIScale;
  * <!-- FlatTableUI -->
  *
  * @uiDefault Table.rowHeight						int
+ * @uiDefault Table.showGrid						boolean
+ * @uiDefault Table.intercellSpacing				Dimension
  * @uiDefault Table.selectionInactiveBackground		Color
  * @uiDefault Table.selectionInactiveForeground		Color
  *
@@ -63,18 +66,38 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTableUI
 	extends BasicTableUI
 {
+	protected boolean showGrid;
+	protected Dimension intercellSpacing;
+
 	protected Color selectionBackground;
 	protected Color selectionForeground;
 	protected Color selectionInactiveBackground;
 	protected Color selectionInactiveForeground;
+
+	private boolean oldShowHorizontalLines;
+	private boolean oldShowVerticalLines;
+	private Dimension oldIntercellSpacing;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableUI();
 	}
 
 	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+	}
+
+	@Override
 	protected void installDefaults() {
 		super.installDefaults();
+
+		showGrid = UIManager.getBoolean( "Table.showGrid" );
+		intercellSpacing = UIManager.getDimension( "Table.intercellSpacing" );
 
 		selectionBackground = UIManager.getColor( "Table.selectionBackground" );
 		selectionForeground = UIManager.getColor( "Table.selectionForeground" );
@@ -86,6 +109,17 @@ public class FlatTableUI
 		int rowHeight = FlatUIUtils.getUIInt( "Table.rowHeight", 16 );
 		if( rowHeight > 0 )
 			LookAndFeel.installProperty( table, "rowHeight", UIScale.scale( rowHeight ) );
+
+		if( !showGrid ) {
+			oldShowHorizontalLines = table.getShowHorizontalLines();
+			oldShowVerticalLines = table.getShowVerticalLines();
+			table.setShowGrid( false );
+		}
+
+		if( intercellSpacing != null ) {
+			oldIntercellSpacing = table.getIntercellSpacing();
+			table.setIntercellSpacing( intercellSpacing );
+		}
 	}
 
 	@Override
@@ -96,6 +130,20 @@ public class FlatTableUI
 		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
+
+		// restore old show grid
+		if( !showGrid ) {
+			if( !table.getShowHorizontalLines() )
+				table.setShowHorizontalLines( oldShowHorizontalLines );
+			if( !table.getShowVerticalLines() )
+				table.setShowVerticalLines( oldShowVerticalLines );
+		}
+
+		// restore old intercell spacing
+		if( intercellSpacing != null ) {
+			if( table.getIntercellSpacing().equals( intercellSpacing ) )
+				table.setIntercellSpacing( oldIntercellSpacing );
+		}
 	}
 
 	@Override

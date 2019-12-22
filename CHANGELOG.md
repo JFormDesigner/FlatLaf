@@ -7,6 +7,7 @@ FlatLaf Change Log
   "IntelliJ Light Theme", which provides blue coloring that better match
   platform colors.
 - Tree: Support wide selection (enabled by default).
+- Table: Hide grid and changed intercell spacing to zero.
 - List and Tree: Paint cell focus indicator (black rectangle) only if more than
   one item is selected.
 - Fixed link color (in HTML text) and separator color in IntelliJ platform
