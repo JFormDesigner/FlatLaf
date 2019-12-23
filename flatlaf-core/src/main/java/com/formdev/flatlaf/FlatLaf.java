@@ -30,6 +30,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
@@ -55,6 +57,8 @@ import com.formdev.flatlaf.util.UIScale;
 public abstract class FlatLaf
 	extends BasicLookAndFeel
 {
+	static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
+
 	private BasicLookAndFeel base;
 
 	private String desktopPropertyName;
@@ -67,11 +71,11 @@ public abstract class FlatLaf
 
 	public static boolean install( LookAndFeel newLookAndFeel ) {
 		try {
-		    UIManager.setLookAndFeel( newLookAndFeel );
-		    return true;
+			UIManager.setLookAndFeel( newLookAndFeel );
+			return true;
 		} catch( Exception ex ) {
-		    System.err.println( "Failed to initialize look and feel " + newLookAndFeel.getClass().getName() );
-		    return false;
+			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
+			return false;
 		}
 	}
 
@@ -182,10 +186,11 @@ public abstract class FlatLaf
 		if( base == null ) {
 			if( SystemInfo.IS_MAC ) {
 				// use Mac Aqua LaF as base
+				String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
 				try {
-					base = (BasicLookAndFeel) Class.forName( "com.apple.laf.AquaLookAndFeel" ).newInstance();
+					base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
 				} catch( Exception ex ) {
-					ex.printStackTrace();
+					LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
 					throw new IllegalStateException();
 				}
 			} else
@@ -332,9 +337,9 @@ public abstract class FlatLaf
 
 	private static void reSetLookAndFeel() {
 		EventQueue.invokeLater( () -> {
+			LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 			try {
 				// re-set current LaF
-				LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 				UIManager.setLookAndFeel( lookAndFeel );
 
 				// must fire property change events ourself because old and new LaF are the same
@@ -345,7 +350,7 @@ public abstract class FlatLaf
 				// update UI
 				updateUI();
 			} catch( UnsupportedLookAndFeelException ex ) {
-				ex.printStackTrace();
+				LOG.log( Level.SEVERE, "FlatLaf: Failed to reinitialize look and feel '" + lookAndFeel.getClass().getName() + "'.", ex );
 			}
 		} );
 	}

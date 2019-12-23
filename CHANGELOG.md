@@ -17,6 +17,7 @@ FlatLaf Change Log
 - Replaced prefix `@@` with `$` in `.properties` files.
 - Fixed link color (in HTML text) and separator color in IntelliJ platform
   themes.
+- Use logging instead of printing errors to `System.err`.
 
 
 ## 0.22

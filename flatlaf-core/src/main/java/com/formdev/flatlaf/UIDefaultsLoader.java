@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.function.Function;
+import java.util.logging.Level;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
@@ -173,13 +174,12 @@ class UIDefaultsLoader
 				}
 			}
 		} catch( IOException ex ) {
-			ex.printStackTrace();
+			FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to load properties files.", ex );
 		}
 	}
 
 	static void logParseError( String key, String value, RuntimeException ex ) {
-		System.err.println( "FlatLaf: Failed to parse: '" + key + '=' + value + '\'' );
-		System.err.println( "    " + ex.getMessage() );
+		FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to parse: '" + key + '=' + value + '\'', ex );
 	}
 
 	private static String resolveValue( Properties properties, String value ) {
@@ -190,7 +190,7 @@ class UIDefaultsLoader
 
 		// for compatibility
 		if( value.startsWith( REF_PREFIX ) ) {
-			System.err.println( "FlatLaf: Usage of '@@' in .properties files is deprecated. Use '$' instead." );
+			FlatLaf.LOG.log( Level.WARNING, "FlatLaf: Usage of '@@' in .properties files is deprecated. Use '$' instead." );
 			value = value.substring( REF_PREFIX.length() );
 		}
 
@@ -318,7 +318,7 @@ class UIDefaultsLoader
 			try {
 				return findClass( value, addonClassLoaders ).newInstance();
 			} catch( InstantiationException | IllegalAccessException | ClassNotFoundException ex ) {
-				ex.printStackTrace();
+				FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to instantiate '" + value + "'.", ex );
 				return null;
 			}
 		};
@@ -329,7 +329,7 @@ class UIDefaultsLoader
 			try {
 				return findClass( value, addonClassLoaders );
 			} catch( ClassNotFoundException ex ) {
-				ex.printStackTrace();
+				FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to find class '" + value + "'.", ex );
 				return null;
 			}
 		};

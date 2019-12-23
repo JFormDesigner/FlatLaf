@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.json.Json;
@@ -72,8 +73,7 @@ public class IntelliJTheme
 		try {
 		    return FlatLaf.install( createLaf( in ) );
 		} catch( Exception ex ) {
-		    System.err.println( "Failed to load IntelliJ theme" );
-		    ex.printStackTrace();
+			FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to load IntelliJ theme", ex );
 		    return false;
 		}
 	}
