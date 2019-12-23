@@ -23,10 +23,14 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
+import javax.swing.JTree;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.JTree.DropLocation;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -177,12 +181,41 @@ public class FlatTreeUI
 		};
 	}
 
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener() {
+		if( !wideSelection )
+			return super.createPropertyChangeListener();
+
+		return new BasicTreeUI.PropertyChangeHandler() {
+			@Override
+			public void propertyChange( PropertyChangeEvent e ) {
+				super.propertyChange( e );
+
+				if( e.getSource() == tree && e.getPropertyName() == "dropLocation" ) {
+					JTree.DropLocation oldValue = (JTree.DropLocation) e.getOldValue();
+					repaintWideDropLocation( oldValue );
+					repaintWideDropLocation( tree.getDropLocation() );
+				}
+			}
+
+			private void repaintWideDropLocation(JTree.DropLocation loc) {
+				if( loc == null || isDropLine( loc ) )
+					return;
+
+				Rectangle r = tree.getPathBounds( loc.getPath() );
+				if( r != null )
+					tree.repaint( 0, r.y, tree.getWidth(), r.height );
+			}
+		};
+	}
+
 	/**
-	 * Same as super.paintRow(), but uses inactive selection background/foreground if tree is not focused.
+	 * Same as super.paintRow(), but supports wide selection and uses
+	 * inactive selection background/foreground if tree is not focused.
 	 */
 	@Override
-	protected void paintRow( Graphics g, Rectangle clipBounds, Insets insets, Rectangle bounds, TreePath path, int row,
-		boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
+	protected void paintRow( Graphics g, Rectangle clipBounds, Insets insets, Rectangle bounds,
+		TreePath path, int row, boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
 	{
 		if( editingComponent != null && editingRow == row )
 			return;
@@ -190,11 +223,14 @@ public class FlatTreeUI
 		boolean hasFocus = tree.hasFocus();
 		boolean cellHasFocus = hasFocus && (row == getLeadSelectionRow());
 		boolean isSelected = tree.isRowSelected( row );
+		boolean isDropRow = isDropRow( row );
 
 		// wide selection background
-		if( wideSelection && isSelected ) {
+		if( wideSelection && (isSelected || isDropRow) ) {
 			// fill background
-			g.setColor( hasFocus ? selectionBackground : selectionInactiveBackground );
+			g.setColor( isDropRow
+				? UIManager.getColor( "Tree.dropCellBackground" )
+				: (hasFocus ? selectionBackground : selectionInactiveBackground) );
 			g.fillRect( 0, bounds.y, clipBounds.width, bounds.height );
 
 			// paint expand/collapse icon
@@ -210,7 +246,7 @@ public class FlatTreeUI
 
 		// apply inactive selection background/foreground if tree is not focused
 		Color oldBackgroundSelectionColor = null;
-		if( isSelected && !hasFocus ) {
+		if( isSelected && !hasFocus && !isDropRow ) {
 			if( rendererComponent instanceof DefaultTreeCellRenderer ) {
 				DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) rendererComponent;
 				if( renderer.getBackgroundSelectionColor() == selectionBackground ) {
@@ -247,5 +283,22 @@ public class FlatTreeUI
 			((DefaultTreeCellRenderer)rendererComponent).setBackgroundSelectionColor( oldBackgroundSelectionColor );
 		if( oldBorderSelectionColor != null )
 			((DefaultTreeCellRenderer)rendererComponent).setBorderSelectionColor( oldBorderSelectionColor );
+	}
+
+	/**
+	 * Checks whether dropping on a row.
+	 * See DefaultTreeCellRenderer.getTreeCellRendererComponent().
+	 */
+	private boolean isDropRow( int row ) {
+		JTree.DropLocation dropLocation = tree.getDropLocation();
+		return dropLocation != null &&
+			dropLocation.getChildIndex() == -1 &&
+			tree.getRowForPath( dropLocation.getPath() ) == row;
+	}
+
+	@Override
+	protected Rectangle getDropLineRect( DropLocation loc ) {
+		Rectangle r = super.getDropLineRect( loc );
+		return wideSelection ? new Rectangle( 0, r.y, tree.getWidth(), r.height ) : r;
 	}
 }
