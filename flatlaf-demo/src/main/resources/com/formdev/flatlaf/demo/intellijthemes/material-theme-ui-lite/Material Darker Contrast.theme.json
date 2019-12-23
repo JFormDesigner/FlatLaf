@@ -17,7 +17,7 @@
       "inactiveBackground": "#323232",
       "inactiveForeground": "#727272",
       "infoForeground": "#727272",
-      "selectionBackground": "#353535",
+      "selectionBackground": "#404040",
       "selectionBackgroundInactive": "#292929",
       "selectionForeground": "#FFFFFF",
       "selectionInactiveBackground": "#292929",
@@ -31,7 +31,7 @@
       "pressedBorderColor": "#FF980050"
     },
     "Autocomplete": {
-      "selectionBackground": "#353535"
+      "selectionBackground": "#404040"
     },
     "Borders.ContrastBorderColor": "#212121",
     "Borders.color": "#292929",
@@ -79,7 +79,7 @@
       "disabledBackground": "#212121",
       "disabledForeground": "#474747",
       "foreground": "#B0BEC5",
-      "selectionBackground": "#353535",
+      "selectionBackground": "#404040",
       "selectionForeground": "#FFFFFF"
     },
     "ColorChooser": {
@@ -113,12 +113,11 @@
       "matchForeground": "#FF98002",
       "matchSelectionForeground": "#FF9800",
       "nonFocusedState": "false",
-      "nonFocusedMask": "#32323270",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#727272",
-      "selectionInactiveBackground": "#3F3F3F",
-      "selectionBackground": "#35353580",
+      "selectionInactiveBackground": "#40404050",
+      "selectionBackground": "#40404080",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"
     },
@@ -165,7 +164,7 @@
       "inactiveUnderlineColor": "#474747",
       "inactiveMaskColor": "#1A1A1A",
       "underlineColor": "#FF9800",
-      "underlinedTabBackground":"#323232"
+      "underlinedTabBackground": "#323232"
     },
     "Desktop.background": "#212121",
     "DialogWrapper.southPanelBackground": "#212121",
@@ -186,7 +185,7 @@
       "foreground": "#B0BEC5",
       "inactiveBackground": "#212121",
       "inactiveForeground": "#474747",
-      "selectionBackground": "#353535",
+      "selectionBackground": "#404040",
       "selectionForeground": "#FFFFFF"
     },
     "EditorTabs": {
@@ -194,12 +193,21 @@
       "hoverColor": "#3F3F3F",
       "hoverMaskColor": "#3F3F3F",
       "inactiveMaskColor": "#212121",
-      "inactiveColoredFileBackground": "#212121",
       "inactiveUnderlineColor": "#474747",
       "selectedForeground": "#B0BEC5",
       "selectedBackground": "#323232",
       "underlineColor": "#FF9800",
       "underlinedTabBackground": "#323232"
+    },
+    "EditorGroupsTabs": {
+      "background": "#212121",
+      "borderColor": "#292929",
+      "hoverBackground": "#3F3F3F",
+      "hoverColor": "#3F3F3F",
+      "inactiveUnderlineColor": "#FF9800",
+      "underlineColor": "#FF9800",
+      "underlinedTabBackground": "#323232",
+      "underlinedTabForeground": "#B0BEC5"
     },
     "FileColor": {
       "Green": "#387002",
@@ -283,7 +291,7 @@
     "List": {
       "background": "#292929",
       "foreground": "#B0BEC5",
-      "selectionBackground": "#353535",
+      "selectionBackground": "#40404050",
       "selectionForeground": "#FFFFFF",
       "selectionInactiveForeground": "#FFFFFF",
       "selectionInactiveBackground": "#3232327025"
@@ -314,7 +322,7 @@
       "disabledBackground": "#292929",
       "disabledForeground": "#474747",
       "foreground": "#B0BEC5",
-      "selectionBackground": "#353535",
+      "selectionBackground": "#404040",
       "selectionForeground": "#FFFFFF",
       "separatorColor": "#292929"
     },
@@ -325,7 +333,7 @@
       "disabledForeground": "#474747",
       "foreground": "#B0BEC5",
       "highlight": "#212121",
-      "selectionBackground": "#353535",
+      "selectionBackground": "#404040",
       "selectionForeground": "#FFFFFF",
       "shadow": "#1A1A1A"
     },
@@ -337,7 +345,7 @@
       "disabledBackground": "#212121",
       "disabledForeground": "#474747",
       "foreground": "#B0BEC5",
-      "selectionBackground": "#353535",
+      "selectionBackground": "#404040",
       "selectionForeground": "#FFFFFF"
     },
     "NavBar": {
@@ -408,8 +416,8 @@
       "background": "#212121",
       "disabledForeground": "#474747",
       "eapTagBackground": "#3F3F3F",
-      "lightSelectionBackground": "#353535",
-      "selectionBackground": "#353535",
+      "lightSelectionBackground": "#404040",
+      "selectionBackground": "#404040",
       "tagForeground": "#FF9800",
       "tagBackground": "#3F3F3F",
       "Button": {
@@ -487,7 +495,7 @@
       "disabledBackground": "#212121",
       "disabledForeground": "#474747",
       "foreground": "#B0BEC5",
-      "selectionBackground": "#353535",
+      "selectionBackground": "#404040",
       "selectionForeground": "#FFFFFF"
     },
     "ScrollBar": {
@@ -533,7 +541,7 @@
         "background": "#212121"
       },
       "List": {
-        "separatorForeground": "#B0BEC5",
+        "separatorForeground": "#727272",
         "separatorColor": "#292929"
       },
       "SearchField": {
@@ -561,9 +569,12 @@
     },
     "Slider": {
       "background": "#212121",
+      "buttonBorderColor": "#FF9800",
+      "buttonColor": "#FF9800",
       "foreground": "#B0BEC5",
       "majorTickLength": 6,
       "tickColor": "#292929",
+      "trackColor": "#323232",
       "trackWidth": 7,
       "thumb": "#FF9800"
     },
@@ -607,7 +618,8 @@
       "tabsOverlapBorder": true,
       "tabHeight": 32,
       "tabInsets": "5,10,5,10",
-      "tabSelectionHeight": 2
+      "tabSelectionHeight": 2,
+      "underlineColor": "#FF9800"
     },
     "TabbedPane.mt.tab.background": "#1A1A1A",
     "Table": {
@@ -626,7 +638,7 @@
       "lightSelectionInactiveBackground": "#292929",
       "selectionBackground": "#323232",
       "selectionForeground": "#FFFFFF",
-      "selectionInactiveBackground": "#3232327025",
+      "selectionInactiveBackground": "#323232",
       "selectionInactiveForeground": "#FFFFFF",
       "sortIconColor": "#B0BEC5",
       "stripeColor": "#1A1A1A"
@@ -672,7 +684,7 @@
     "TitlePane": {
       "background": "#1A1A1A",
       "Button.hoverBackground": "#3F3F3F",
-      "inactiveBackground": "#292929",
+      "inactiveBackground": "#212121",
       "infoForeground": "#727272",
       "inactiveInfoForeground": "#727272"
     },
@@ -734,7 +746,7 @@
       "hash": "#292929",
       "modifiedItemForeground": "#FF9800",
       "rowHeight": 28,
-      "selectionBackground": "#32323270",
+      "selectionBackground": "#3232327070",
       "selectionForeground": "#FFFFFF",
       "selectionInactiveForeground": "#FFFFFF",
       "selectionInactiveBackground": "#3232327025",
@@ -773,7 +785,7 @@
       },
       "Log": {
         "Commit.unmatchedForeground": "#727272",
-        "Commit.currentBranchBackground": "#32323270"
+        "Commit.currentBranchBackground": "#292929"
       },
       "RefLabel": {
         "foreground": "#FFFFFF",
@@ -782,7 +794,7 @@
     },
     "Viewport": {
       "background": "#1A1A1A",
-      "foreground": "%fc"
+      "foreground": "#B0BEC5"
     },
     "WelcomeScreen": {
       "background": "#212121",
@@ -796,7 +808,7 @@
       "separatorColor": "#292929",
       "Projects": {
         "background": "#292929",
-        "selectionBackground": "#353535",
+        "selectionBackground": "#404040",
         "selectionInactiveBackground": "#292929"
       }
     },
@@ -838,12 +850,12 @@
       "Checkbox.Focus.Wide.Dark": "#FF9800",
       "Checkbox.Foreground.Disabled": "#474747",
       "Checkbox.Foreground.Disabled.Dark": "#474747",
-      "Checkbox.Background.Selected": "#FF9800",
-      "Checkbox.Background.Selected.Dark": "#FF9800",
+      "Checkbox.Background.Selected": "#212121",
+      "Checkbox.Background.Selected.Dark": "#212121",
       "Checkbox.Border.Selected": "#FF9800",
       "Checkbox.Border.Selected.Dark": "#FF9800",
-      "Checkbox.Foreground.Selected": "#B0BEC5",
-      "Checkbox.Foreground.Selected.Dark": "#B0BEC5",
+      "Checkbox.Foreground.Selected": "#FF9800",
+      "Checkbox.Foreground.Selected.Dark": "#FF9800",
       "Checkbox.Focus.Thin.Selected": "#B0BEC5",
       "Checkbox.Focus.Thin.Selected.Dark": "#B0BEC5",
       "Objects.Grey": "#616161",
@@ -857,7 +869,6 @@
       "Objects.BlackText": "#B0BEC5",
       "Objects.YellowDark": "#f78c6c",
       "Objects.GreenAndroid": "#c3e88d"
-
     }
   }
 }
