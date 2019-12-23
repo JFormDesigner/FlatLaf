@@ -146,7 +146,7 @@ class UIDefaultsLoader
 				try {
 					globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
-					logParseError( key, value, ex );
+					logParseError( Level.SEVERE, key, value, ex );
 				}
 			}
 
@@ -171,7 +171,7 @@ class UIDefaultsLoader
 				try {
 					defaults.put( key, parseValue( key, value, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
-					logParseError( key, value, ex );
+					logParseError( Level.SEVERE, key, value, ex );
 				}
 			}
 		} catch( IOException ex ) {
@@ -179,8 +179,8 @@ class UIDefaultsLoader
 		}
 	}
 
-	static void logParseError( String key, String value, RuntimeException ex ) {
-		FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to parse: '" + key + '=' + value + '\'', ex );
+	static void logParseError( Level level, String key, String value, RuntimeException ex ) {
+		FlatLaf.LOG.log( level, "FlatLaf: Failed to parse: '" + key + '=' + value + '\'', ex );
 	}
 
 	private static String resolveValue( Properties properties, String value ) {

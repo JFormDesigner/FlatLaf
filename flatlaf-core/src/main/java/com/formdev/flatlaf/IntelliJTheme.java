@@ -245,7 +245,7 @@ public class IntelliJTheme
 				try {
 					uiValue = UIDefaultsLoader.parseValue( key, valueStr );
 				} catch( RuntimeException ex ) {
-					UIDefaultsLoader.logParseError( key, valueStr, ex );
+					UIDefaultsLoader.logParseError( Level.CONFIG, key, valueStr, ex );
 					return; // ignore invalid value
 				}
 			}
