@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3"
 			"$columnConstraints": "[][200][200]"
-			"$rowConstraints": "[][::200][::150]"
+			"$rowConstraints": "[][::200][::150][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -20,17 +20,28 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
-				"verticalScrollBarPolicy": 21
-				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JList" ) {
 					name: "list1"
-					"model": &DefaultListModel0 new javax.swing.DefaultListModel {
-						addElement( "abc" )
-						addElement( "de" )
-						addElement( "f" )
+					"model": new javax.swing.DefaultListModel {
+						addElement( "item 1" )
+						addElement( "item 2" )
+						addElement( "item 3" )
+						addElement( "item 4" )
+						addElement( "item 5" )
+						addElement( "item 6" )
+						addElement( "item 7" )
+						addElement( "item 8" )
+						addElement( "item 9" )
+						addElement( "item 10" )
+						addElement( "item 11" )
+						addElement( "item 12" )
+						addElement( "item 13" )
+						addElement( "item 14" )
+						addElement( "item 15" )
 					}
 					auxiliary() {
 						"JavaCodeGenerator.typeParameters": "String"
+						"JavaCodeGenerator.variableLocal": false
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -38,14 +49,29 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane2"
-				"verticalScrollBarPolicy": 21
-				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JList" ) {
 					name: "list2"
-					"model": #DefaultListModel0
+					"model": new javax.swing.DefaultListModel {
+						addElement( "item 1" )
+						addElement( "item 2" )
+						addElement( "item 3" )
+						addElement( "item 4" )
+						addElement( "item 5" )
+						addElement( "item 6" )
+						addElement( "item 7" )
+						addElement( "item 8" )
+						addElement( "item 9" )
+						addElement( "item 10" )
+						addElement( "item 11" )
+						addElement( "item 12" )
+						addElement( "item 13" )
+						addElement( "item 14" )
+						addElement( "item 15" )
+					}
 					"enabled": false
 					auxiliary() {
 						"JavaCodeGenerator.typeParameters": "String"
+						"JavaCodeGenerator.variableLocal": false
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -62,6 +88,10 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JTree" ) {
 					name: "tree1"
 					"showsRootHandles": true
+					"editable": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1,growx"
@@ -71,6 +101,9 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JTree" ) {
 					name: "tree2"
 					"enabled": false
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1,growx"
@@ -87,20 +120,100 @@ new FormModel {
 					name: "table1"
 					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 						add( new java.util.Vector {
-							add( "Item 1a" )
-							add( "Item 2a" )
+							add( "item 1" )
+							add( "item 1b" )
 							add( "January" )
 							add( "July" )
 							add( 123 )
 							add( null )
 						} )
 						add( new java.util.Vector {
-							add( "Item 1b" )
-							add( "Item 2b" )
+							add( "item 2" )
+							add( "item 2b" )
 							add( "February" )
 							add( "August" )
 							add( 456 )
 							add( true )
+						} )
+						add( new java.util.Vector {
+							add( "item 3" )
+							add( null )
+							add( "March" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 4" )
+							add( null )
+							add( "April" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 5" )
+							add( null )
+							add( "May" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 6" )
+							add( null )
+							add( "June" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 7" )
+							add( null )
+							add( "July" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 8" )
+							add( null )
+							add( "August" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 9" )
+							add( null )
+							add( "September" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 10" )
+							add( null )
+							add( "October" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 11" )
+							add( null )
+							add( "November" )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( "item 12" )
+							add( null )
+							add( "December" )
+							add( null )
+							add( null )
+							add( null )
 						} )
 					}, new java.util.Vector {
 						add( "Not editable" )
@@ -132,9 +245,23 @@ new FormModel {
 						add( null )
 					} )
 					"autoCreateRowSorter": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2 2 1,growx,width 300"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "dndCheckBox"
+				"text": "enable drag and drop"
+				"mnemonic": 68
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dndChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3 3 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

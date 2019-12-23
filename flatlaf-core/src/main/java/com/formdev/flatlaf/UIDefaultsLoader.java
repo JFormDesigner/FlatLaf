@@ -32,6 +32,7 @@ import java.util.ServiceLoader;
 import java.util.function.Function;
 import java.util.logging.Level;
 import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
@@ -227,6 +228,15 @@ class UIDefaultsLoader
 			case "true":	return true;
 		}
 
+		// check for function "lazy"
+		//     Syntax: lazy(uiKey)
+		if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
+			String uiKey = value.substring( 5, value.length() - 1 ).trim();
+			return (LazyValue) t -> {
+				return lazyUIManagerGet( uiKey );
+			};
+		}
+
 		ValueType valueType = ValueType.UNKNOWN;
 
 		// check whether value type is specified in the value
@@ -281,7 +291,7 @@ class UIDefaultsLoader
 			case UNKNOWN:
 			default:
 				// colors
-				ColorUIResource color = parseColorOrFunction( value, resolver, false );
+				Object color = parseColorOrFunction( value, resolver, false );
 				if( color != null )
 					return color;
 
@@ -301,7 +311,7 @@ class UIDefaultsLoader
 			List<String> parts = split( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() == 5)
-				? parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
+				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
 				: null;
 
 			return (LazyValue) t -> {
@@ -377,7 +387,7 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static ColorUIResource parseColorOrFunction( String value, Function<String, String> resolver, boolean reportError ) {
+	private static Object parseColorOrFunction( String value, Function<String, String> resolver, boolean reportError ) {
 		if( value.endsWith( ")" ) )
 			return parseColorFunctions( value, resolver, reportError );
 
@@ -447,7 +457,7 @@ class UIDefaultsLoader
 			: (((n >> 8) & 0xffffff) | ((n & 0xff) << 24)); // move alpha from lowest to highest byte
 	}
 
-	private static ColorUIResource parseColorFunctions( String value, Function<String, String> resolver, boolean reportError ) {
+	private static Object parseColorFunctions( String value, Function<String, String> resolver, boolean reportError ) {
 		int paramsStart = value.indexOf( '(' );
 		if( paramsStart < 0 ) {
 			if( reportError )
@@ -511,9 +521,9 @@ class UIDefaultsLoader
 	 * Syntax: lighten([color,]amount[,options]) or darken([color,]amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
-	 *   - options: [relative] [autoInverse]
+	 *   - options: [relative] [autoInverse] [lazy]
 	 */
-	private static ColorUIResource parseColorLightenOrDarken( boolean lighten, List<String> params,
+	private static Object parseColorLightenOrDarken( boolean lighten, List<String> params,
 		Function<String, String> resolver, boolean reportError )
 	{
 		boolean isDerived = params.get( 0 ).endsWith( "%" );
@@ -522,11 +532,13 @@ class UIDefaultsLoader
 		int amount = parsePercentage( params.get( nextParam++ ) );
 		boolean relative = false;
 		boolean autoInverse = false;
+		boolean lazy = false;
 
 		if( params.size() > nextParam ) {
 			String options = params.get( nextParam++ );
 			relative = options.contains( "relative" );
 			autoInverse = options.contains( "autoInverse" );
+			lazy = options.contains( "lazy" );
 		}
 
 		ColorFunctions.ColorFunction function = lighten
@@ -536,7 +548,16 @@ class UIDefaultsLoader
 		if( isDerived )
 			return new DerivedColor( function );
 
-		ColorUIResource color = parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+		if( lazy ) {
+			return (LazyValue) t -> {
+				Object color = lazyUIManagerGet( colorStr );
+				return (color instanceof Color)
+					? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
+					: null;
+			};
+		}
+
+		ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
 		return new ColorUIResource( ColorFunctions.applyFunctions( color, function ) );
 	}
 
@@ -617,5 +638,22 @@ class UIDefaultsLoader
 		strs.add( str.substring( start ).trim() );
 
 		return strs;
+	}
+
+	/**
+	 * For use in LazyValue to get value for given key from UIManager and report error
+	 * if not found. If key is prefixed by '?', then no error is reported.
+	 */
+	private static Object lazyUIManagerGet( String uiKey ) {
+		boolean optional = false;
+		if( uiKey.startsWith( OPTIONAL_PREFIX ) ) {
+			uiKey = uiKey.substring( OPTIONAL_PREFIX.length() );
+			optional = true;
+		}
+
+		Object value = UIManager.get( uiKey );
+		if( value == null && !optional )
+			FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: '" + uiKey + "' not found in UI defaults." );
+		return value;
 	}
 }
