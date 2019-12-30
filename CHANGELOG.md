@@ -4,12 +4,17 @@ FlatLaf Change Log
 ## Unreleased
 
 - Updated colors in "Flat Light" and "Flat IntelliJ" themes with colors from
-  "IntelliJ Light Theme", which provides blue coloring that better match
+  "IntelliJ Light Theme", which provides blue coloring that better matches
   platform colors.
 - Tree: Support wide selection (enabled by default).
 - Table: Hide grid and changed intercell spacing to zero.
-- List and Tree: Paint cell focus indicator (black rectangle) only if more than
-  one item is selected.
+- List and Tree: Hide cell focus indicator (black rectangle) by default. Can be
+  enabled with `List.showCellFocusIndicator=true` /
+  `Tree.showCellFocusIndicator=true`, but then the cell focus indicator is shown
+  only if more than one item is selected.
+- Table: Hide cell focus indicator (black rectangle) by default if none of the
+  selected cells is editable. Can be show always with
+  `Table.showCellFocusIndicator=true`.
 - Support basic color functions in `.properties` files: `rgb(red,green,blue)`,
   `rgba(red,green,blue,alpha)`, `hsl(hue,saturation,lightness)`,
   `hsla(hue,saturation,lightness,alpha)`, `lighten(color,amount[,options])` and

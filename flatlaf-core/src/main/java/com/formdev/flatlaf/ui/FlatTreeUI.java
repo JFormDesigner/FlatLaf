@@ -83,6 +83,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.selectionInactiveBackground		Color
  * @uiDefault Tree.selectionInactiveForeground		Color
  * @uiDefault Tree.wideSelection					boolean
+ * @uiDefault Tree.showCellFocusIndicator			boolean
  *
  * @author Karl Tauber
  */
@@ -95,6 +96,7 @@ public class FlatTreeUI
 	protected Color selectionInactiveForeground;
 	protected Color selectionBorderColor;
 	protected boolean wideSelection;
+	protected boolean showCellFocusIndicator;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTreeUI();
@@ -112,6 +114,7 @@ public class FlatTreeUI
 		selectionInactiveForeground = UIManager.getColor( "Tree.selectionInactiveForeground" );
 		selectionBorderColor = UIManager.getColor( "Tree.selectionBorderColor" );
 		wideSelection = UIManager.getBoolean( "Tree.wideSelection" );
+		showCellFocusIndicator = UIManager.getBoolean( "Tree.showCellFocusIndicator" );
 
 		// scale
 		int rowHeight = FlatUIUtils.getUIInt( "Tree.rowHeight", 16 );
@@ -217,9 +220,7 @@ public class FlatTreeUI
 	protected void paintRow( Graphics g, Rectangle clipBounds, Insets insets, Rectangle bounds,
 		TreePath path, int row, boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
 	{
-		if( editingComponent != null && editingRow == row )
-			return;
-
+		boolean isEditing = (editingComponent != null && editingRow == row);
 		boolean hasFocus = tree.hasFocus();
 		boolean cellHasFocus = hasFocus && (row == getLeadSelectionRow());
 		boolean isSelected = tree.isRowSelected( row );
@@ -239,6 +240,9 @@ public class FlatTreeUI
 					path, row, isExpanded, hasBeenExpanded, isLeaf );
 			}
 		}
+
+		if( isEditing )
+			return;
 
 		// get renderer component
 		Component rendererComponent = currentCellRenderer.getTreeCellRendererComponent( tree,
@@ -262,10 +266,10 @@ public class FlatTreeUI
 				rendererComponent.setForeground( selectionInactiveForeground );
 		}
 
-		// remove selection border if exactly one item is selected
+		// remove focus selection border if exactly one item is selected
 		Color oldBorderSelectionColor = null;
 		if( isSelected && hasFocus &&
-			tree.getMinSelectionRow() == tree.getMaxSelectionRow() &&
+			(!showCellFocusIndicator || tree.getMinSelectionRow() == tree.getMaxSelectionRow()) &&
 			rendererComponent instanceof DefaultTreeCellRenderer )
 		{
 			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) rendererComponent;

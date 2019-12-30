@@ -55,11 +55,17 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatTableUI -->
  *
- * @uiDefault Table.rowHeight						int
- * @uiDefault Table.showGrid						boolean
- * @uiDefault Table.intercellSpacing				Dimension
- * @uiDefault Table.selectionInactiveBackground		Color
- * @uiDefault Table.selectionInactiveForeground		Color
+ * @uiDefault Table.rowHeight							int
+ * @uiDefault Table.showGrid							boolean
+ * @uiDefault Table.intercellSpacing					Dimension
+ * @uiDefault Table.selectionInactiveBackground			Color
+ * @uiDefault Table.selectionInactiveForeground			Color
+ *
+ * <!-- FlatTableCellBorder -->
+ *
+ * @uiDefault Table.cellMargins							Insets
+ * @uiDefault Table.cellFocusColor						Color
+ * @uiDefault Table.showCellFocusIndicator				boolean
  *
  * @author Karl Tauber
  */

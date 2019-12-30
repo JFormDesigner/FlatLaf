@@ -56,6 +56,7 @@ import javax.swing.plaf.basic.BasicListUI;
  *
  * @uiDefault List.cellMargins						Insets
  * @uiDefault List.cellFocusColor					Color
+ * @uiDefault List.showCellFocusIndicator			boolean
  *
  * @author Karl Tauber
  */

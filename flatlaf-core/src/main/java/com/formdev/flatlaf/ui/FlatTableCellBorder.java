@@ -18,25 +18,25 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
 import java.awt.Graphics;
-import javax.swing.JList;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
- * Cell border for {@link javax.swing.DefaultListCellRenderer}
- * (used by {@link javax.swing.JList}).
+ * Cell border for {@link javax.swing.table.DefaultTableCellRenderer}
+ * (used by {@link javax.swing.JTable}).
  * <p>
  * Uses separate cell margins from UI defaults to allow easy customizing.
  *
  * @author Karl Tauber
  */
-public class FlatListCellBorder
+public class FlatTableCellBorder
 	extends FlatLineBorder
 {
-	final boolean showCellFocusIndicator = UIManager.getBoolean( "List.showCellFocusIndicator" );
+	final boolean showCellFocusIndicator = UIManager.getBoolean( "Table.showCellFocusIndicator" );
 
-	protected FlatListCellBorder() {
-		super( UIManager.getInsets( "List.cellMargins" ), UIManager.getColor( "List.cellFocusColor" ) );
+	protected FlatTableCellBorder() {
+		super( UIManager.getInsets( "Table.cellMargins" ), UIManager.getColor( "Table.cellFocusColor" ) );
 	}
 
 	//---- class Default ------------------------------------------------------
@@ -45,7 +45,7 @@ public class FlatListCellBorder
 	 * Border for unselected cell that uses margins, but does not paint focus indicator border.
 	 */
 	public static class Default
-		extends FlatListCellBorder
+		extends FlatTableCellBorder
 	{
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
@@ -59,7 +59,7 @@ public class FlatListCellBorder
 	 * Border for focused unselected cell that uses margins and paints focus indicator border.
 	 */
 	public static class Focused
-		extends FlatListCellBorder
+		extends FlatTableCellBorder
 	{
 	}
 
@@ -67,22 +67,49 @@ public class FlatListCellBorder
 
 	/**
 	 * Border for selected cell that uses margins and paints focus indicator border
-	 * if enabled (List.showCellFocusIndicator=true) and exactly one item is selected.
+	 * if enabled (Table.showCellFocusIndicator=true) or at least one selected cell is editable.
 	 */
 	public static class Selected
-		extends FlatListCellBorder
+		extends FlatTableCellBorder
 	{
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			if( !showCellFocusIndicator )
-				return;
-
-			// paint focus indicator border only if exactly one item is selected
-			JList<?> list = (JList<?>) SwingUtilities.getAncestorOfClass( JList.class, c );
-			if( list != null && list.getMinSelectionIndex() == list.getMaxSelectionIndex() )
-				return;
+			if( !showCellFocusIndicator ) {
+				JTable table = (JTable) SwingUtilities.getAncestorOfClass( JTable.class, c );
+				if( table != null && !isSelectionEditable( table ) )
+					return;
+			}
 
 			super.paintBorder( c, g, x, y, width, height );
+		}
+
+		/**
+		 * Checks whether at least one selected cell is editable.
+		 */
+		private boolean isSelectionEditable( JTable table ) {
+			if( table.getRowSelectionAllowed() ) {
+				int columnCount = table.getColumnCount();
+				int[] selectedRows = table.getSelectedRows();
+				for( int selectedRow : selectedRows ) {
+					for( int column = 0; column < columnCount; column++ ) {
+						if( table.isCellEditable( selectedRow, column ) )
+							return true;
+					}
+				}
+			}
+
+			if( table.getColumnSelectionAllowed() ) {
+				int rowCount = table.getRowCount();
+				int[] selectedColumns = table.getSelectedColumns();
+				for( int selectedColumn : selectedColumns ) {
+					for( int row = 0; row < rowCount; row++ ) {
+						if( table.isCellEditable( row, selectedColumn ) )
+							return true;
+					}
+				}
+			}
+
+			return false;
 		}
 	}
 }
