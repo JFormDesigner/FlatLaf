@@ -8,6 +8,8 @@ FlatLaf Change Log
   platform colors.
 - Tree: Support wide selection (enabled by default).
 - Table: Hide grid and changed intercell spacing to zero.
+- List, Table and Tree: Added colors for drag-and-drop. Added "enable drag and
+  drop" checkbox to Demo on "Data Components" tab.
 - List and Tree: Hide cell focus indicator (black rectangle) by default. Can be
   enabled with `List.showCellFocusIndicator=true` /
   `Tree.showCellFocusIndicator=true`, but then the cell focus indicator is shown
@@ -23,6 +25,8 @@ FlatLaf Change Log
 - Fixed link color (in HTML text) and separator color in IntelliJ platform
   themes.
 - Use logging instead of printing errors to `System.err`.
+- Updated IntelliJ Themes in demo to the latest versions.
+- IntelliJ Themes: Fixed link and separator colors.
 
 
 ## 0.22
