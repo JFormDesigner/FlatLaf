@@ -48,7 +48,7 @@ import javax.swing.text.JTextComponent;
  * {@link FlatUIUtils#paintParentBackground} to paint the empty space correctly.
  *
  * @uiDefault Component.focusWidth			int
- * @uiDefault Component.innerFocusWidth		int
+ * @uiDefault Component.innerFocusWidth		int or float
  * @uiDefault Component.focusColor			Color
  * @uiDefault Component.borderColor			Color
  * @uiDefault Component.disabledBorderColor	Color
@@ -60,7 +60,7 @@ public class FlatBorder
 	extends BasicBorders.MarginBorder
 {
 	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
-	protected final int innerFocusWidth = UIManager.getInt( "Component.innerFocusWidth" );
+	protected final float innerFocusWidth = FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 );
 	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
 	protected final Color borderColor = UIManager.getColor( "Component.borderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
@@ -80,7 +80,7 @@ public class FlatBorder
 			if( isFocused( c ) ) {
 				g2.setColor( getFocusColor( c ) );
 				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,
-					getLineWidth() + scale( (float) innerFocusWidth ), arc );
+					getLineWidth() + scale( innerFocusWidth ), arc );
 			}
 
 			g2.setPaint( getBorderColor( c ) );

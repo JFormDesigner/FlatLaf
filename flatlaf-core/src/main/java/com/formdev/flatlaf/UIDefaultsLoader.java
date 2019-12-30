@@ -212,7 +212,7 @@ class UIDefaultsLoader
 		return resolveValue( properties, newValue );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, INTEGER, BORDER, ICON, INSETS, DIMENSION, COLOR, SCALEDINTEGER, INSTANCE, CLASS }
+	private enum ValueType { UNKNOWN, STRING, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR, SCALEDINTEGER, INSTANCE, CLASS }
 
 	static Object parseValue( String key, String value ) {
 		return parseValue( key, value, v -> v, Collections.emptyList() );
@@ -242,7 +242,10 @@ class UIDefaultsLoader
 		// check whether value type is specified in the value
 		if( value.startsWith( "#" ) )
 			valueType = ValueType.COLOR;
-		else if( value.startsWith( TYPE_PREFIX ) ) {
+		else if( value.startsWith( "\"" ) && value.endsWith( "\"" ) ) {
+			valueType = ValueType.STRING;
+			value = value.substring( 1, value.length() - 1 );
+		} else if( value.startsWith( TYPE_PREFIX ) ) {
 			int end = value.indexOf( TYPE_PREFIX_END );
 			if( end != -1 ) {
 				try {
@@ -280,6 +283,7 @@ class UIDefaultsLoader
 		switch( valueType ) {
 			case STRING:		return value;
 			case INTEGER:		return parseInteger( value, true );
+			case FLOAT:			return parseFloat( value, true );
 			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
 			case ICON:			return parseInstance( value, addonClassLoaders );
 			case INSETS:		return parseInsets( value );
@@ -299,6 +303,11 @@ class UIDefaultsLoader
 				Integer integer = parseInteger( value, false );
 				if( integer != null )
 					return integer;
+
+				// float
+				Float f = parseFloat( value, false );
+				if( f != null )
+					return f;
 
 				// string
 				return value;
@@ -590,6 +599,16 @@ class UIDefaultsLoader
 		} catch( NumberFormatException ex ) {
 			if( reportError )
 				throw new NumberFormatException( "invalid integer '" + value + "'" );
+		}
+		return null;
+	}
+
+	private static Float parseFloat( String value, boolean reportError ) {
+		try {
+			return Float.parseFloat( value );
+		} catch( NumberFormatException ex ) {
+			if( reportError )
+				throw new NumberFormatException( "invalid float '" + value + "'" );
 		}
 		return null;
 	}

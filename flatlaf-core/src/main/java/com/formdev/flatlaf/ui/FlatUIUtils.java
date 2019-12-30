@@ -102,6 +102,11 @@ public class FlatUIUtils
 		return (value instanceof Integer) ? (Integer) value : defaultValue;
 	}
 
+	public static float getUIFloat( String key, float defaultValue ) {
+		Object value = UIManager.get( key );
+		return (value instanceof Number) ? ((Number)value).floatValue() : defaultValue;
+	}
+
 	public static Color nonUIResource( Color c ) {
 		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
 	}
