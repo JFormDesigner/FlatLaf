@@ -23,11 +23,11 @@ import java.io.InputStream;
  *
  * Allows loading of additional .properties files from addon JARs.
  * {@link java.util.ServiceLoader} is used to load extensions of this class from addon JARs.
- *
+ * <p>
  * If you extend this class in a addon JAR, you also have to add a text file named
  * {@code META-INF/services/com.formdev.flatlaf.FlatDefaultsAddon}
  * to the addon JAR. The file must contain a single line with the class name.
- *
+ * <p>
  * See 'flatlaf-swingx' addon for an example
  *
  * @author Karl Tauber
@@ -37,6 +37,16 @@ public abstract class FlatDefaultsAddon
 	/**
 	 * Finds an addon .properties file for the given LaF class and returns
 	 * it as input stream. Or {@code null} if not found.
+	 * <p>
+	 * This default implementation finds addon .properties file for the given LaF class
+	 * in the same package as the subclass.
+	 * <p>
+	 * Override this method to load addon .properties files from other locations.
 	 */
-	public abstract InputStream getDefaults( Class<?> lafClass );
+	public InputStream getDefaults( Class<?> lafClass ) {
+		Class<?> addonClass = this.getClass();
+		String propertiesName = "/" + addonClass.getPackage().getName().replace( '.', '/' )
+			+ '/' + lafClass.getSimpleName() + ".properties";
+		return addonClass.getResourceAsStream( propertiesName );
+	}
 }

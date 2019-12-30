@@ -16,26 +16,17 @@
 
 package com.formdev.flatlaf.swingx;
 
-import java.io.InputStream;
 import com.formdev.flatlaf.FlatDefaultsAddon;
 
 /**
  * SwingX addon for FlatLaf.
+ * <p>
+ * Finds SwingX addon .properties file for the given LaF class
+ * in the same package as this class.
  *
  * @author Karl Tauber
  */
 public class FlatSwingXDefaultsAddon
 	extends FlatDefaultsAddon
 {
-	/**
-	 * Finds SwingX addon .properties file for the given LaF class
-	 * in the same package as this class.
-	 */
-	@Override
-	public InputStream getDefaults( Class<?> lafClass ) {
-		Class<?> addonClass = this.getClass();
-		String propertiesName = "/" + addonClass.getPackage().getName().replace( '.', '/' )
-			+ '/' + lafClass.getSimpleName() + ".properties";
-		return addonClass.getResourceAsStream( propertiesName );
-	}
 }

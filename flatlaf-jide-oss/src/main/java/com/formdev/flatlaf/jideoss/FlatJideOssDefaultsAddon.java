@@ -43,10 +43,7 @@ public class FlatJideOssDefaultsAddon
 		LookAndFeelFactory.registerDefaultInitializer( FlatLaf.class.getName(), FlatJideUIDefaultsCustomizer.class.getName() );
 		LookAndFeelFactory.registerDefaultCustomizer( FlatLaf.class.getName(), FlatJideUIDefaultsCustomizer.class.getName() );
 
-		Class<?> addonClass = this.getClass();
-		String propertiesName = "/" + addonClass.getPackage().getName().replace( '.', '/' )
-			+ '/' + lafClass.getSimpleName() + ".properties";
-		return addonClass.getResourceAsStream( propertiesName );
+		return super.getDefaults( lafClass );
 	}
 
 	//---- class FlatJideUIDefaultsCustomizer ---------------------------------
