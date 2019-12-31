@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.0.0.194" Java: "13.0.1" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -89,6 +89,60 @@ new FormModel {
 					name: "tree1"
 					"showsRootHandles": true
 					"editable": true
+					"model": new javax.swing.tree.DefaultTreeModel( new javax.swing.tree.DefaultMutableTreeNode {
+						userObject: "JTree"
+						add( new javax.swing.tree.DefaultMutableTreeNode {
+							userObject: "colors"
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "blue"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "violet"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "red"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "yellow"
+							} )
+						} )
+						add( new javax.swing.tree.DefaultMutableTreeNode {
+							userObject: "sports"
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "basketball"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "soccer"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "football"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "hockey"
+							} )
+						} )
+						add( new javax.swing.tree.DefaultMutableTreeNode {
+							userObject: "food"
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "hot dogs"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "pizza"
+								add( new javax.swing.tree.DefaultMutableTreeNode {
+									userObject: "pizza aglio e olio"
+								} )
+								add( new javax.swing.tree.DefaultMutableTreeNode {
+									userObject: "pizza margherita bianca"
+								} )
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "ravioli"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "bananas"
+							} )
+						} )
+					} )
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}

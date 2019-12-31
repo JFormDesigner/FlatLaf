@@ -232,7 +232,7 @@ public class FlatTreeUI
 			g.setColor( isDropRow
 				? UIManager.getColor( "Tree.dropCellBackground" )
 				: (hasFocus ? selectionBackground : selectionInactiveBackground) );
-			g.fillRect( 0, bounds.y, clipBounds.width, bounds.height );
+			g.fillRect( 0, bounds.y, tree.getWidth(), bounds.height );
 
 			// paint expand/collapse icon
 			if( shouldPaintExpandControl( path, row, isExpanded, hasBeenExpanded, isLeaf ) ) {

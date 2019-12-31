@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Tree: Fixed wide selection if scrolled horizontally.
+
+
 ## 0.23
 
 - Updated colors in "Flat Light" and "Flat IntelliJ" themes with colors from
