@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 - Tree: Fixed wide selection if scrolled horizontally.
 - ComboBox: Fixed NPE in Oracle SQL Developer settings.
+- IntelliJ Themes: Fixed checkbox colors in Material UI Lite dark themes.
 
 
 ## 0.23

@@ -355,32 +355,42 @@ public class IntelliJTheme
 				value = "#ffffff";
 			}
 
+			String key2 = checkboxDuplicateColors.get( key );
+
 			if( dark )
 				key = StringUtils.removeTrailing( key, ".Dark" );
 
 			String newKey = checkboxKeyMapping.get( key );
 			if( newKey != null ) {
 				ColorUIResource color = toColor( (String) value );
-				if( color != null )
+				if( color != null ) {
 					defaults.put( newKey, color );
+
+					if( key2 != null ) {
+						// When IDEA replaces colors in SVGs it uses color values and not the keys
+						// from com.intellij.ide.ui.UITheme.colorPalette, but there are some keys that
+						// have same color value:
+						//   - Checkbox.Background.Default.Dark  has same color as  Checkbox.Background.Selected.Dark
+						//   - Checkbox.Border.Default.Dark      has same color as  Checkbox.Border.Selected.Dark
+						//   - Checkbox.Focus.Thin.Default.Dark  has same color as  Checkbox.Focus.Thin.Selected.Dark
+						//
+						// So if only e.g. Checkbox.Background.Default.Dark is specified in .theme.json,
+						// then this color is also used for Checkbox.Background.Selected.Dark.
+						//
+						// If Checkbox.Background.Default.Dark and Checkbox.Background.Selected.Dark
+						// are specified in .theme.json, then the later specified is used for both.
+						if( dark )
+							key2 = StringUtils.removeTrailing( key2, ".Dark" );
+
+						String newKey2 = checkboxKeyMapping.get( key2 );
+						if( newKey2 != null )
+							defaults.put( newKey2, color );
+					}
+				}
 
 				checkboxModified = true;
 			}
 		}
-
-		// When IDEA replaces colors in SVGs it uses color values and not the keys
-		// from com.intellij.ide.ui.UITheme.colorPalette, but there are some keys that
-		// have same color value:
-		//   - Checkbox.Background.Default.Dark  has same color as  Checkbox.Background.Selected.Dark
-		//   - Checkbox.Border.Default.Dark      has same color as  Checkbox.Border.Selected.Dark
-		//   - Checkbox.Focus.Thin.Default.Dark  has same color as  Checkbox.Focus.Thin.Selected.Dark
-		//
-		// So if only e.g. Checkbox.Background.Default.Dark is specified in .theme.json,
-		// then this color is also used for Checkbox.Background.Selected.Dark.
-		// Occurs e.g. in "Dark purple" theme.
-		fixCheckBoxColor( defaults, colorPalette, "Checkbox.Background.Default.Dark", "Checkbox.Background.Selected.Dark" );
-		fixCheckBoxColor( defaults, colorPalette, "Checkbox.Border.Default.Dark",     "Checkbox.Border.Selected.Dark" );
-		fixCheckBoxColor( defaults, colorPalette, "Checkbox.Focus.Thin.Default.Dark", "Checkbox.Focus.Thin.Selected.Dark" );
 
 		// remove hover and pressed colors
 		if( checkboxModified ) {
@@ -393,21 +403,10 @@ public class IntelliJTheme
 		}
 	}
 
-	private void fixCheckBoxColor( UIDefaults defaults, Map<String, Object> colorPalette, String key1, String key2 ) {
-		if( colorPalette.containsKey( key1 ) == colorPalette.containsKey( key2 ) )
-			return;
-
-		String newKey1 = checkboxKeyMapping.get( StringUtils.removeTrailing( key1, ".Dark" ) );
-		String newKey2 = checkboxKeyMapping.get( StringUtils.removeTrailing( key2, ".Dark" ) );
-		if( colorPalette.containsKey( key1 ) )
-			defaults.put( newKey2, defaults.get( newKey1 ) );
-		else
-			defaults.put( newKey1, defaults.get( newKey2 ) );
-	}
-
 	private static Map<String, String> uiKeyMapping = new HashMap<>();
 	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
 	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
+	private static Map<String, String> checkboxDuplicateColors = new HashMap<>();
 	private static Set<String> noWildcardReplace = new HashSet<>();
 
 	static {
@@ -452,6 +451,14 @@ public class IntelliJTheme
 		checkboxKeyMapping.put( "Checkbox.Border.Selected",     "CheckBox.icon.selectedBorderColor" );
 		checkboxKeyMapping.put( "Checkbox.Foreground.Selected", "CheckBox.icon.checkmarkColor" );
 		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.selectedFocusedBorderColor" );
+
+		checkboxDuplicateColors.put( "Checkbox.Background.Default.Dark", "Checkbox.Background.Selected.Dark" );
+		checkboxDuplicateColors.put( "Checkbox.Border.Default.Dark",     "Checkbox.Border.Selected.Dark" );
+		checkboxDuplicateColors.put( "Checkbox.Focus.Thin.Default.Dark", "Checkbox.Focus.Thin.Selected.Dark" );
+		@SuppressWarnings( "unchecked" )
+		Map.Entry<String, String>[] entries = checkboxDuplicateColors.entrySet().toArray( new Map.Entry[checkboxDuplicateColors.size()] );
+		for( Map.Entry<String, String> e : entries )
+			checkboxDuplicateColors.put( e.getValue(), e.getKey() );
 
 		// because FlatLaf uses Button.background and Button.borderColor,
 		// but IDEA uses Button.startBackground and Button.startBorderColor,
