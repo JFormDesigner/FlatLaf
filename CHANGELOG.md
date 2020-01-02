@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.23.1
 
 - Tree: Fixed wide selection if scrolled horizontally.
 - ComboBox: Fixed NPE in Oracle SQL Developer settings.
