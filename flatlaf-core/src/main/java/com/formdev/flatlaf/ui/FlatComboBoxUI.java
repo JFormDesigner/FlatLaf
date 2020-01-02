@@ -36,6 +36,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -348,6 +349,8 @@ public class FlatComboBoxUI
 	public void paintCurrentValue( Graphics g, Rectangle bounds, boolean hasFocus ) {
 		ListCellRenderer<Object> renderer = comboBox.getRenderer();
 		uninstallCellPaddingBorder( renderer );
+		if( renderer == null )
+			renderer = new DefaultListCellRenderer();
 		Component c = renderer.getListCellRendererComponent( listBox, comboBox.getSelectedItem(), -1, false, false );
 		c.setFont( comboBox.getFont() );
 		c.applyComponentOrientation( comboBox.getComponentOrientation() );
@@ -520,6 +523,8 @@ public class FlatComboBoxUI
 				CellPaddingBorder.uninstall( renderer );
 				CellPaddingBorder.uninstall( lastRendererComponent );
 
+				if( renderer == null )
+					renderer = new DefaultListCellRenderer();
 				Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 				c.applyComponentOrientation( comboBox.getComponentOrientation() );
 
