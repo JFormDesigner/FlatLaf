@@ -3,6 +3,9 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Changed `.properties` file loading order: Now all core `.properties` files are
+  loaded before loading addon `.properties` files. This makes it easier to
+  overwrite core values in addons. Also, addon loading order can be specified.
 - TableHeader: Paint column borders if renderer has changed, but delegates to
   the system default renderer (e.g. done in NetBeans).
 

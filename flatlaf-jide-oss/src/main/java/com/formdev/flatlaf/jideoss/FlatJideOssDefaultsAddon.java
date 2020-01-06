@@ -46,6 +46,11 @@ public class FlatJideOssDefaultsAddon
 		return super.getDefaults( lafClass );
 	}
 
+	@Override
+	public int getPriority() {
+		return 11;
+	}
+
 	//---- class FlatJideUIDefaultsCustomizer ---------------------------------
 
 	/**

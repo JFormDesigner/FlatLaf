@@ -45,8 +45,18 @@ public abstract class FlatDefaultsAddon
 	 */
 	public InputStream getDefaults( Class<?> lafClass ) {
 		Class<?> addonClass = this.getClass();
-		String propertiesName = "/" + addonClass.getPackage().getName().replace( '.', '/' )
+		String propertiesName = '/' + addonClass.getPackage().getName().replace( '.', '/' )
 			+ '/' + lafClass.getSimpleName() + ".properties";
 		return addonClass.getResourceAsStream( propertiesName );
+	}
+
+	/**
+	 * Returns the priority used to sort addon loading.
+	 * The order is only important if you want overwrite UI defaults of other addons.
+	 * Lower numbers mean higher priority.
+	 * Returns 10000 by default.
+	 */
+	public int getPriority() {
+		return 10000;
 	}
 }

@@ -29,4 +29,8 @@ import com.formdev.flatlaf.FlatDefaultsAddon;
 public class FlatSwingXDefaultsAddon
 	extends FlatDefaultsAddon
 {
+	@Override
+	public int getPriority() {
+		return 10;
+	}
 }

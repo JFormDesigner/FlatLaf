@@ -84,30 +84,39 @@ class UIDefaultsLoader
 
 	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, UIDefaults defaults ) {
 		try {
-			List<ClassLoader> addonClassLoaders = new ArrayList<>();
-
-			// load properties files
+			// load core properties files
 			Properties properties = new Properties();
-			ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
 			for( Class<?> lafClass : lafClasses ) {
-				// load core properties
-				String propertiesName = "/" + lafClass.getName().replace( '.', '/' ) + ".properties";
+				String propertiesName = '/' + lafClass.getName().replace( '.', '/' ) + ".properties";
 				try( InputStream in = lafClass.getResourceAsStream( propertiesName ) ) {
 					if( in != null )
 						properties.load( in );
 				}
+			}
 
-				// load properties from addons
-				for( FlatDefaultsAddon addon : addonLoader ) {
+			// get addons and sort them by priority
+			ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
+			List<FlatDefaultsAddon> addonList = new ArrayList<>();
+			for( FlatDefaultsAddon addon : addonLoader )
+				addonList.add( addon );
+			addonList.sort( (addon1, addon2) -> addon1.getPriority() - addon2.getPriority() );
+
+			// load properties from addons
+			for( FlatDefaultsAddon addon : addonList ) {
+				for( Class<?> lafClass : lafClasses ) {
 					try( InputStream in = addon.getDefaults( lafClass ) ) {
 						if( in != null )
 							properties.load( in );
 					}
-
-					ClassLoader addonClassLoader = addon.getClass().getClassLoader();
-					if( !addonClassLoaders.contains( addonClassLoader ) )
-						addonClassLoaders.add( addonClassLoader );
 				}
+			}
+
+			// collect addon class loaders
+			List<ClassLoader> addonClassLoaders = new ArrayList<>();
+			for( FlatDefaultsAddon addon : addonList ) {
+				ClassLoader addonClassLoader = addon.getClass().getClassLoader();
+				if( !addonClassLoaders.contains( addonClassLoader ) )
+					addonClassLoaders.add( addonClassLoader );
 			}
 
 			// collect all platform specific keys (but do not modify properties)
