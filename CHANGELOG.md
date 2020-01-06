@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- TableHeader: Paint column borders if renderer has changed, but delegates to
+  the system default renderer (e.g. done in NetBeans).
+
+
+
 ## 0.23.1
 
 - Tree: Fixed wide selection if scrolled horizontally.
