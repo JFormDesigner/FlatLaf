@@ -212,7 +212,7 @@
     "ProgressBar.passedColor": "green",
     "ProgressBar.passedEndColor": "greyDot65",
     "ProgressBar.progressColor": "accent",
-    "ProgressBar.trackColor": "greyDot65",
+    "ProgressBar.trackColor": "greyDot75",
     "RadioButton.background": "greyDot75",
     "ScrollBar.Mac.hoverTrackColor": "greyDot75",
     "ScrollBar.Mac.trackColor": "greyDot75",
