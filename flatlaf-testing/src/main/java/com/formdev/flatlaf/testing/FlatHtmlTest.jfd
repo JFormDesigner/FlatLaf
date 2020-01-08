@@ -1,0 +1,105 @@
+JFDML JFormDesigner: "7.0.0.0.194" Java: "13.0.1" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[fill][fill][fill][fill]"
+			"$rowConstraints": "[][top][top]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelLabel"
+				"text": "JLabel:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "editorPaneLabel"
+				"text": "JEditorPane:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "textPaneLabel"
+				"text": "JTextPane:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "toolTipLabel"
+				"text": "JToolTip:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p></html>"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane15"
+				add( new FormComponent( "javax.swing.JEditorPane" ) {
+					name: "editorPane1"
+					"contentType": "text/html"
+					"text": "HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p>"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1,grow"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane16"
+				add( new FormComponent( "javax.swing.JTextPane" ) {
+					name: "textPane1"
+					"contentType": "text/html"
+					"text": "HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p>"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JToolTip" ) {
+				name: "toolTip1"
+				"tipText": "<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p></html>"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p></html>"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane17"
+				add( new FormComponent( "javax.swing.JEditorPane" ) {
+					name: "editorPane2"
+					"contentType": "text/html"
+					"text": "HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p>"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2,grow"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane18"
+				add( new FormComponent( "javax.swing.JTextPane" ) {
+					name: "textPane2"
+					"contentType": "text/html"
+					"text": "HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p>"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
+			} )
+			add( new FormComponent( "javax.swing.JToolTip" ) {
+				name: "toolTip2"
+				"tipText": "<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p></html>"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 2"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 695, 755 )
+		} )
+	}
+}

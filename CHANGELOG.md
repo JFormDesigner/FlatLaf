@@ -8,7 +8,7 @@ FlatLaf Change Log
   overwrite core values in addons. Also, addon loading order can be specified.
 - TableHeader: Paint column borders if renderer has changed, but delegates to
   the system default renderer (e.g. done in NetBeans).
-
+- Label and ToolTip: Fixed font sizes for HTML headings.
 
 
 ## 0.23.1
