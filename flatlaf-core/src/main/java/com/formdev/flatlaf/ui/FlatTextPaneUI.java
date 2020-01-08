@@ -98,6 +98,7 @@ public class FlatTextPaneUI
 		// and subtract 1px border line width.
 		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding
 		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
+		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
 		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
 		return size;
 	}

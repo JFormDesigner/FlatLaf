@@ -13,6 +13,8 @@ FlatLaf Change Log
   `JButton.buttonType` to `square`).
 - ToggleButton: Support underline toggle button style (set client property
   `JButton.buttonType` to `underline`).
+- Button and TextComponent: Support per component minimum width (set client
+  property `JComponent.minimumWidth` to an integer).
 
 
 ## 0.23.1

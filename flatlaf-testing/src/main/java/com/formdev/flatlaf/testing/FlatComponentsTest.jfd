@@ -51,6 +51,7 @@ new FormModel {
 				name: "button17"
 				"text": "square"
 				"$client.JButton.buttonType": "square"
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
@@ -68,6 +69,7 @@ new FormModel {
 				"text": "square"
 				"$client.JButton.buttonType": "square"
 				"enabled": false
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )

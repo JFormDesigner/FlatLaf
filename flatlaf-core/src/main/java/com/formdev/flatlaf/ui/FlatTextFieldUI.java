@@ -217,6 +217,7 @@ public class FlatTextFieldUI
 			(parent != null && parent.getParent() instanceof JSpinner) )
 		  return size;
 
+		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
 		int focusWidth = (c.getBorder() instanceof FlatBorder) ? this.focusWidth : 0;
 		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
 		return size;

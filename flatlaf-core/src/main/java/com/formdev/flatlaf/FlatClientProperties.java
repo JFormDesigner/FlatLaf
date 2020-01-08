@@ -77,6 +77,14 @@ public interface FlatClientProperties
 	String SELECTED_STATE_INDETERMINATE = "indeterminate";
 
 	/**
+	 * Specifies minimum width of a component.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JButton} and  {@link javax.swing.text.JTextComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
+	 */
+	String MINIMUM_WIDTH = "JComponent.minimumWidth";
+
+	/**
 	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JScrollBar} or {@link javax.swing.JScrollPane}<br>

@@ -258,6 +258,7 @@ public class FlatComponentsTest
 		//---- button17 ----
 		button17.setText("square");
 		button17.putClientProperty("JButton.buttonType", "square");
+		button17.putClientProperty("JComponent.minimumWidth", 0);
 		add(button17, "cell 1 1");
 
 		//---- button2 ----
@@ -271,6 +272,7 @@ public class FlatComponentsTest
 		button18.setText("square");
 		button18.putClientProperty("JButton.buttonType", "square");
 		button18.setEnabled(false);
+		button18.putClientProperty("JComponent.minimumWidth", 0);
 		add(button18, "cell 2 1");
 
 		//---- button5 ----

@@ -363,7 +363,7 @@ public class FlatButtonUI
 		if( isIconOnlyButton( c ) )
 			prefSize.width = Math.max( prefSize.width, prefSize.height );
 		else if( !isToolBarButton( c ) )
-			prefSize.width = Math.max( prefSize.width, scale( minimumWidth + (focusWidth * 2) ) );
+			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) + (focusWidth * 2) ) );
 
 		return prefSize;
 	}
