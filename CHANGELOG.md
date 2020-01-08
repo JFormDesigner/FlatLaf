@@ -15,6 +15,9 @@ FlatLaf Change Log
   `JButton.buttonType` to `underline`).
 - Button and TextComponent: Support per component minimum width (set client
   property `JComponent.minimumWidth` to an integer).
+- ScrollPane with Table: The border of buttons that are added to one of the four
+  scroll pane corners are now removed if the center component is a table. Also,
+  these corner buttons are made not focusable.
 
 
 ## 0.23.1

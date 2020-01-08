@@ -25,11 +25,15 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
@@ -97,17 +101,35 @@ public class FlatScrollPaneUI
 			public void propertyChange( PropertyChangeEvent e ) {
 				super.propertyChange( e );
 
-				if( FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS.equals( e.getPropertyName() ) ) {
-					JScrollBar vsb = scrollpane.getVerticalScrollBar();
-					JScrollBar hsb = scrollpane.getHorizontalScrollBar();
-					if( vsb != null ) {
-						vsb.revalidate();
-						vsb.repaint();
-					}
-					if( hsb != null ) {
-						hsb.revalidate();
-						hsb.repaint();
-					}
+				switch( e.getPropertyName() ) {
+					case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
+						JScrollBar vsb = scrollpane.getVerticalScrollBar();
+						JScrollBar hsb = scrollpane.getHorizontalScrollBar();
+						if( vsb != null ) {
+							vsb.revalidate();
+							vsb.repaint();
+						}
+						if( hsb != null ) {
+							hsb.revalidate();
+							hsb.repaint();
+						}
+						break;
+
+					case ScrollPaneConstants.LOWER_LEFT_CORNER:
+					case ScrollPaneConstants.LOWER_RIGHT_CORNER:
+					case ScrollPaneConstants.UPPER_LEFT_CORNER:
+					case ScrollPaneConstants.UPPER_RIGHT_CORNER:
+						// remove border from buttons added to corners
+						Object corner = e.getNewValue();
+						if( corner instanceof JButton &&
+							((JButton)corner).getBorder() instanceof FlatButtonBorder &&
+							scrollpane.getViewport() != null &&
+							scrollpane.getViewport().getView() instanceof JTable )
+						{
+							((JButton)corner).setBorder( BorderFactory.createEmptyBorder() );
+							((JButton)corner).setFocusable( false );
+						}
+					break;
 				}
 			}
 		};
