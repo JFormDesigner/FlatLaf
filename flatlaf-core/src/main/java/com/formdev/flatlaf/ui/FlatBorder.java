@@ -75,7 +75,7 @@ public class FlatBorder
 			boolean isCellEditor = isTableCellEditor( c );
 			float focusWidth = isCellEditor ? 0 : getFocusWidth();
 			float borderWidth = getBorderWidth( c );
-			float arc = isCellEditor ? 0 : getArc();
+			float arc = isCellEditor ? 0 : getArc( c );
 
 			if( isFocused( c ) ) {
 				g2.setColor( getFocusColor( c ) );
@@ -173,7 +173,7 @@ public class FlatBorder
 		return getLineWidth();
 	}
 
-	protected float getArc() {
+	protected float getArc( Component c ) {
 		return 0;
 	}
 }

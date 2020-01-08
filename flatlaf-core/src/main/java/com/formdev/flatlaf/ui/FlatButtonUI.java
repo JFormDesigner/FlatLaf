@@ -209,6 +209,10 @@ public class FlatButtonUI
 			(icon == null && text != null && ("...".equals( text ) || text.length() == 1));
 	}
 
+	static boolean isSquareButton( Component c ) {
+		return c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_SQUARE );
+	}
+
 	static boolean isHelpButton( Component c ) {
 		return c instanceof JButton && clientPropertyEquals( (JButton) c, BUTTON_TYPE, BUTTON_TYPE_HELP );
 	}
@@ -237,7 +241,8 @@ public class FlatButtonUI
 
 					Border border = c.getBorder();
 					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-					float arc = (border instanceof FlatButtonBorder || isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
+					float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton( c ))
+						? scale( (float) this.arc ) : 0;
 					boolean def = isDefaultButton( c );
 
 					// paint shadow

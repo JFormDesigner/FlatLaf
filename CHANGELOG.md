@@ -9,6 +9,8 @@ FlatLaf Change Log
 - TableHeader: Paint column borders if renderer has changed, but delegates to
   the system default renderer (e.g. done in NetBeans).
 - Label and ToolTip: Fixed font sizes for HTML headings.
+- Button and ToggleButton: Support square button style (set client property
+  `JButton.buttonType` to `square`).
 
 
 ## 0.23.1

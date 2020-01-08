@@ -110,7 +110,7 @@ public class FlatButtonBorder
 	}
 
 	@Override
-	protected float getArc() {
-		return scale( (float) arc );
+	protected float getArc( Component c ) {
+		return FlatButtonUI.isSquareButton( c ) ? 0 : scale( (float) arc );
 	}
 }

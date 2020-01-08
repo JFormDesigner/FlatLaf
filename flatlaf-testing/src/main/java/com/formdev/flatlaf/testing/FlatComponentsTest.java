@@ -61,7 +61,9 @@ public class FlatComponentsTest
 		JLabel label2 = new JLabel();
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
+		JButton button17 = new JButton();
 		JButton button2 = new JButton();
+		JButton button18 = new JButton();
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
 		JButton button3 = new JButton();
 		JButton button12 = new JButton();
@@ -71,7 +73,9 @@ public class FlatComponentsTest
 		JButton button16 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
+		JToggleButton toggleButton9 = new JToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
+		JToggleButton toggleButton10 = new JToggleButton();
 		JToggleButton toggleButton3 = new JToggleButton();
 		JToggleButton toggleButton4 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
@@ -249,12 +253,23 @@ public class FlatComponentsTest
 		button1.setToolTipText("This button is enabled.");
 		add(button1, "cell 1 1");
 
+		//---- button17 ----
+		button17.setText("square");
+		button17.putClientProperty("JButton.buttonType", "square");
+		add(button17, "cell 1 1");
+
 		//---- button2 ----
 		button2.setText("disabled");
 		button2.setDisplayedMnemonicIndex(0);
 		button2.setEnabled(false);
 		button2.setToolTipText("This button is disabled.");
 		add(button2, "cell 2 1");
+
+		//---- button18 ----
+		button18.setText("square");
+		button18.putClientProperty("JButton.buttonType", "square");
+		button18.setEnabled(false);
+		add(button18, "cell 2 1");
 
 		//---- button5 ----
 		button5.setText("default");
@@ -297,10 +312,21 @@ public class FlatComponentsTest
 		toggleButton1.setText("enabled");
 		add(toggleButton1, "cell 1 2");
 
+		//---- toggleButton9 ----
+		toggleButton9.setText("square");
+		toggleButton9.putClientProperty("JButton.buttonType", "square");
+		add(toggleButton9, "cell 1 2");
+
 		//---- toggleButton2 ----
 		toggleButton2.setText("disabled");
 		toggleButton2.setEnabled(false);
 		add(toggleButton2, "cell 2 2");
+
+		//---- toggleButton10 ----
+		toggleButton10.setText("square");
+		toggleButton10.putClientProperty("JButton.buttonType", "square");
+		toggleButton10.setEnabled(false);
+		add(toggleButton10, "cell 2 2");
 
 		//---- toggleButton3 ----
 		toggleButton3.setText("selected");

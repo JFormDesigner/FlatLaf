@@ -27,14 +27,25 @@ public interface FlatClientProperties
 	/**
 	 * Specifies type of a button.
 	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JButton}<br>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link BUTTON_TYPE_HELP}
+	 * <strong>Allowed Values</strong> {@link #BUTTON_TYPE_SQUARE} and {@link #BUTTON_TYPE_HELP}
 	 */
 	String BUTTON_TYPE = "JButton.buttonType";
 
 	/**
+	 * Paint the button with square edges.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
+	 *
+	 * @see #BUTTON_TYPE
+	 */
+	String BUTTON_TYPE_SQUARE = "square";
+
+	/**
 	 * Paint a help button (circle with question mark).
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton}
 	 *
 	 * @see #BUTTON_TYPE
 	 */
@@ -45,7 +56,7 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JCheckBox}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link SELECTED_STATE_INDETERMINATE}
+	 * <strong>Allowed Values</strong> {@link #SELECTED_STATE_INDETERMINATE}
 	 */
 	String SELECTED_STATE = "JButton.selectedState";
 

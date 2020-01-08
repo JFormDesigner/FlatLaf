@@ -48,11 +48,26 @@ new FormModel {
 				"value": "cell 1 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button17"
+				"text": "square"
+				"$client.JButton.buttonType": "square"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button2"
 				"text": "disabled"
 				"displayedMnemonicIndex": 0
 				"enabled": false
 				"toolTipText": "This button is disabled."
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button18"
+				"text": "square"
+				"$client.JButton.buttonType": "square"
+				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
@@ -116,8 +131,23 @@ new FormModel {
 				"value": "cell 1 2"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton9"
+				"text": "square"
+				"$client.JButton.buttonType": "square"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton2"
 				"text": "disabled"
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton10"
+				"text": "square"
+				"$client.JButton.buttonType": "square"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
@@ -935,7 +965,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 865, 800 )
+			"size": new java.awt.Dimension( 1005, 800 )
 		} )
 	}
 }
