@@ -11,6 +11,8 @@ FlatLaf Change Log
 - Label and ToolTip: Fixed font sizes for HTML headings.
 - Button and ToggleButton: Support square button style (set client property
   `JButton.buttonType` to `square`).
+- ToggleButton: Support underline toggle button style (set client property
+  `JButton.buttonType` to `underline`).
 
 
 ## 0.23.1

@@ -16,12 +16,17 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.JComponent;
+import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToggleButton}.
@@ -55,6 +60,13 @@ import javax.swing.plaf.ComponentUI;
  * @uiDefault ToggleButton.disabledSelectedBackground	Color
  * @uiDefault ToggleButton.toolbar.selectedBackground	Color
  *
+ * @uiDefault ToggleButton.underline.underlineHeight		int
+ * @uiDefault ToggleButton.underline.underlineColor			Color
+ * @uiDefault ToggleButton.underline.disabledUnderlineColor	Color
+ * @uiDefault ToggleButton.underline.selectedBackground		Color	optional
+ * @uiDefault ToggleButton.underline.hoverBackground		Color
+ * @uiDefault ToggleButton.underline.focusBackground		Color
+ *
  *
  * @author Karl Tauber
  */
@@ -66,6 +78,13 @@ public class FlatToggleButtonUI
 	protected Color disabledSelectedBackground;
 
 	protected Color toolbarSelectedBackground;
+
+	protected int underlineHeight;
+	protected Color underlineColor;
+	protected Color disabledUnderlineColor;
+	protected Color underlineSelectedBackground;
+	protected Color underlineHoverBackground;
+	protected Color underlineFocusBackground;
 
 	private boolean defaults_initialized = false;
 
@@ -93,6 +112,13 @@ public class FlatToggleButtonUI
 
 			toolbarSelectedBackground = UIManager.getColor( "ToggleButton.toolbar.selectedBackground" );
 
+			underlineHeight = UIManager.getInt( "ToggleButton.underline.underlineHeight" );
+			underlineColor = UIManager.getColor( "ToggleButton.underline.underlineColor" );
+			disabledUnderlineColor = UIManager.getColor( "ToggleButton.underline.disabledUnderlineColor" );
+			underlineSelectedBackground = UIManager.getColor( "ToggleButton.underline.selectedBackground" );
+			underlineHoverBackground = UIManager.getColor( "ToggleButton.underline.hoverBackground" );
+			underlineFocusBackground = UIManager.getColor( "ToggleButton.underline.focusBackground" );
+
 			defaults_initialized = true;
 		}
 	}
@@ -101,6 +127,36 @@ public class FlatToggleButtonUI
 	protected void uninstallDefaults( AbstractButton b ) {
 		super.uninstallDefaults( b );
 		defaults_initialized = false;
+	}
+
+	static boolean isUnderlineButton( Component c ) {
+		return c instanceof JToggleButton && clientPropertyEquals( (JToggleButton) c, BUTTON_TYPE, BUTTON_TYPE_UNDERLINE );
+	}
+
+	@Override
+	protected void paintBackground( Graphics g, JComponent c ) {
+		if( isUnderlineButton( c ) ) {
+			int height = c.getHeight();
+			int width = c.getWidth();
+			boolean selected = ((AbstractButton)c).isSelected();
+
+			// paint background
+			Color background = buttonStateColor( c,
+				selected ? underlineSelectedBackground : null,
+				null, underlineFocusBackground, underlineHoverBackground, null );
+			if( background != null ) {
+				g.setColor( background );
+				g.fillRect( 0, 0, width, height );
+			}
+
+			// paint underline if selected
+			if( selected ) {
+				int underlineHeight = UIScale.scale( this.underlineHeight );
+				g.setColor( c.isEnabled() ? underlineColor : disabledUnderlineColor );
+				g.fillRect( 0, height - underlineHeight, width, underlineHeight );
+			}
+		} else
+			super.paintBackground( g, c );
 	}
 
 	@Override

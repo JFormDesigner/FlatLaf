@@ -232,42 +232,45 @@ public class FlatButtonUI
 			return;
 		}
 
-		if( isContentAreaFilled( c ) ) {
-			Color background = getBackground( c );
-			if( background != null ) {
-				Graphics2D g2 = (Graphics2D) g.create();
-				try {
-					FlatUIUtils.setRenderingHints( g2 );
-
-					Border border = c.getBorder();
-					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-					float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton( c ))
-						? scale( (float) this.arc ) : 0;
-					boolean def = isDefaultButton( c );
-
-					// paint shadow
-					Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-					if( shadowColor != null && shadowWidth > 0 && focusWidth > 0 && !c.hasFocus() && c.isEnabled() ) {
-						g2.setColor( shadowColor );
-						g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
-							c.getWidth() - focusWidth * 2, c.getHeight() - focusWidth * 2, arc, arc ) );
-					}
-
-					// paint background
-					Color startBg = def ? defaultBackground : startBackground;
-					Color endBg = def ? defaultEndBackground : endBackground;
-					if( background == startBg && endBg != null && !startBg.equals( endBg ) )
-						g2.setPaint( new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg ) );
-					else
-						FlatUIUtils.setColor( g2, background, def ? defaultBackground : c.getBackground() );
-					FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
-				} finally {
-					g2.dispose();
-				}
-			}
-		}
+		if( isContentAreaFilled( c ) )
+			paintBackground( g, c );
 
 		paint( g, c );
+	}
+
+	protected void paintBackground( Graphics g, JComponent c ) {
+		Color background = getBackground( c );
+		if( background != null ) {
+			Graphics2D g2 = (Graphics2D) g.create();
+			try {
+				FlatUIUtils.setRenderingHints( g2 );
+
+				Border border = c.getBorder();
+				float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+				float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton( c ))
+					? scale( (float) this.arc ) : 0;
+				boolean def = isDefaultButton( c );
+
+				// paint shadow
+				Color shadowColor = def ? defaultShadowColor : this.shadowColor;
+				if( shadowColor != null && shadowWidth > 0 && focusWidth > 0 && !c.hasFocus() && c.isEnabled() ) {
+					g2.setColor( shadowColor );
+					g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
+						c.getWidth() - focusWidth * 2, c.getHeight() - focusWidth * 2, arc, arc ) );
+				}
+
+				// paint background
+				Color startBg = def ? defaultBackground : startBackground;
+				Color endBg = def ? defaultEndBackground : endBackground;
+				if( background == startBg && endBg != null && !startBg.equals( endBg ) )
+					g2.setPaint( new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg ) );
+				else
+					FlatUIUtils.setColor( g2, background, def ? defaultBackground : c.getBackground() );
+				FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
+			} finally {
+				g2.dispose();
+			}
+		}
 	}
 
 	@Override

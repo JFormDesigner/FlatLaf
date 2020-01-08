@@ -78,6 +78,8 @@ public class FlatComponentsTest
 		JToggleButton toggleButton10 = new JToggleButton();
 		JToggleButton toggleButton3 = new JToggleButton();
 		JToggleButton toggleButton4 = new JToggleButton();
+		JToggleButton toggleButton5 = new JToggleButton();
+		JToggleButton toggleButton8 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
@@ -338,6 +340,19 @@ public class FlatComponentsTest
 		toggleButton4.setEnabled(false);
 		toggleButton4.setSelected(true);
 		add(toggleButton4, "cell 4 2");
+
+		//---- toggleButton5 ----
+		toggleButton5.setText("underline");
+		toggleButton5.putClientProperty("JButton.buttonType", "underline");
+		toggleButton5.setSelected(true);
+		add(toggleButton5, "cell 5 2");
+
+		//---- toggleButton8 ----
+		toggleButton8.setText("underline");
+		toggleButton8.putClientProperty("JButton.buttonType", "underline");
+		toggleButton8.setEnabled(false);
+		toggleButton8.setSelected(true);
+		add(toggleButton8, "cell 5 2");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");

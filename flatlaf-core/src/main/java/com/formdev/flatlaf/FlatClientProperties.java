@@ -43,6 +43,15 @@ public interface FlatClientProperties
 	String BUTTON_TYPE_SQUARE = "square";
 
 	/**
+	 * Paint the toggle button in underline style.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JToggleButton}
+	 *
+	 * @see #TOGGLE_BUTTON_TYPE
+	 */
+	String BUTTON_TYPE_UNDERLINE = "underline";
+
+	/**
 	 * Paint a help button (circle with question mark).
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JButton}

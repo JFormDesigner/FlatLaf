@@ -167,6 +167,23 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 2"
 			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton5"
+				"text": "underline"
+				"$client.JButton.buttonType": "underline"
+				"selected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 2"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton8"
+				"text": "underline"
+				"$client.JButton.buttonType": "underline"
+				"enabled": false
+				"selected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 2"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "checkBoxLabel"
 				"text": "JCheckBox"
