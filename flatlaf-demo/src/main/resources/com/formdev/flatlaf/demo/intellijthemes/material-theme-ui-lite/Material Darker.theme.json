@@ -294,7 +294,7 @@
       "selectionBackground": "#40404050",
       "selectionForeground": "#FFFFFF",
       "selectionInactiveForeground": "#FFFFFF",
-      "selectionInactiveBackground": "#3232327025"
+      "selectionInactiveBackground": "#32323225"
     },
     "material": {
       "background": "#212121",
@@ -746,10 +746,10 @@
       "hash": "#292929",
       "modifiedItemForeground": "#FF9800",
       "rowHeight": 28,
-      "selectionBackground": "#3232327070",
+      "selectionBackground": "#32323270",
       "selectionForeground": "#FFFFFF",
       "selectionInactiveForeground": "#FFFFFF",
-      "selectionInactiveBackground": "#3232327025",
+      "selectionInactiveBackground": "#32323225",
       "textBackground": "#212121"
     },
     "Tree.leftChildIndent": 10,
