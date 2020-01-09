@@ -245,12 +245,8 @@ public class FlatInspector
 	}
 
 	private String buildToolTipText( Component c ) {
-		String name = c.getClass().getSimpleName();
-		if( name.isEmpty() ) {
-			// anonymous class
-			name = c.getClass().getName();
-			name = name.substring( name.lastIndexOf( '.' ) + 1 );
-		}
+		String name = c.getClass().getName();
+		name = name.substring( name.lastIndexOf( '.' ) + 1 );
 
 		String text =
 			"Class: " + name + " (" + c.getClass().getPackage().getName() + ")\n" +
