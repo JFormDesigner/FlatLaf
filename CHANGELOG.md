@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Support smooth scrolling with touchpads and high precision mouse wheels.
+  (issue #27)
 - Changed `.properties` file loading order: Now all core `.properties` files are
   loaded before loading addon `.properties` files. This makes it easier to
   overwrite core values in addons. Also, addon loading order can be specified.
