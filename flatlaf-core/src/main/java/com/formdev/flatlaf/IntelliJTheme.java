@@ -401,9 +401,14 @@ public class IntelliJTheme
 			defaults.remove( "CheckBox.icon.selectedHoverBackground" );
 			defaults.remove( "CheckBox.icon.selectedPressedBackground" );
 		}
+
+		// copy values
+		for( Map.Entry<String, String> e : uiKeyCopying.entrySet() )
+			defaults.put( e.getKey(), defaults.get( e.getValue() ) );
 	}
 
 	private static Map<String, String> uiKeyMapping = new HashMap<>();
+	private static Map<String, String> uiKeyCopying = new HashMap<>();
 	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
 	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
 	private static Map<String, String> checkboxDuplicateColors = new HashMap<>();
@@ -439,6 +444,12 @@ public class IntelliJTheme
 
 		for( Map.Entry<String, String> e : uiKeyMapping.entrySet() )
 			uiKeyInverseMapping.put( e.getValue(), e.getKey() );
+
+		uiKeyCopying.put( "ToggleButton.underline.underlineColor",         "TabbedPane.underlineColor" );
+		uiKeyCopying.put( "ToggleButton.underline.disabledUnderlineColor", "TabbedPane.disabledUnderlineColor" );
+		uiKeyCopying.put( "ToggleButton.underline.selectedBackground",     "TabbedPane.selectedBackground" );
+		uiKeyCopying.put( "ToggleButton.underline.hoverBackground",        "TabbedPane.hoverColor" );
+		uiKeyCopying.put( "ToggleButton.underline.focusBackground",        "TabbedPane.focusColor" );
 
 		checkboxKeyMapping.put( "Checkbox.Background.Default",  "CheckBox.icon.background" );
 		checkboxKeyMapping.put( "Checkbox.Background.Disabled", "CheckBox.icon.disabledBackground" );
