@@ -22,6 +22,8 @@ FlatLaf Change Log
   these corner buttons are made not focusable.
 - Table: Replaced `Table.showGrid` with `Table.showHorizontalLines` and
   `Table.showVerticalLines`. (issue #38)
+- ProgressBar: Now uses blueish color for the progress part in "Flat Dark"
+  theme. In the "Flat Darcula" theme, it remains light gray.
 
 
 ## 0.23.1
