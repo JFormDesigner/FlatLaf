@@ -18,6 +18,8 @@ FlatLaf Change Log
 - ScrollPane with Table: The border of buttons that are added to one of the four
   scroll pane corners are now removed if the center component is a table. Also,
   these corner buttons are made not focusable.
+- Table: Replaced `Table.showGrid` with `Table.showHorizontalLines` and
+  `Table.showVerticalLines`. (issue #38)
 
 
 ## 0.23.1
