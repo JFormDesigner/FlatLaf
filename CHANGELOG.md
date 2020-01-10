@@ -24,6 +24,8 @@ FlatLaf Change Log
   `Table.showVerticalLines`. (issue #38)
 - ProgressBar: Now uses blueish color for the progress part in "Flat Dark"
   theme. In the "Flat Darcula" theme, it remains light gray.
+- Improved Swing system colors `controlHighlight`, `controlLtHighlight`,
+  `controlShadow` and `controlDkShadow`.
 
 
 ## 0.23.1
