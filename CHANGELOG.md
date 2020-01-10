@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.24
 
 - Support smooth scrolling with touchpads and high precision mouse wheels.
   (issue #27)

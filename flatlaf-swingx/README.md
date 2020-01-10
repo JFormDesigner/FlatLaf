@@ -33,7 +33,7 @@ build script:
 
     groupId:     com.formdev
     artifactId:  flatlaf-swingx
-    version:     0.23.1
+    version:     0.24
 
 Otherwise download `flatlaf-swingx-<version>.jar` here:
 

@@ -26,7 +26,7 @@ build script:
 
     groupId:     com.formdev
     artifactId:  flatlaf-jide-oss
-    version:     0.23.1
+    version:     0.24
 
 Otherwise download `flatlaf-jide-oss-<version>.jar` here:
 
