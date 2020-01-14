@@ -344,14 +344,14 @@ public class FlatComponentsTest
 		add(toggleButton4, "cell 4 2");
 
 		//---- toggleButton5 ----
-		toggleButton5.setText("underline");
-		toggleButton5.putClientProperty("JButton.buttonType", "underline");
+		toggleButton5.setText("tab");
+		toggleButton5.putClientProperty("JButton.buttonType", "tab");
 		toggleButton5.setSelected(true);
 		add(toggleButton5, "cell 5 2");
 
 		//---- toggleButton8 ----
-		toggleButton8.setText("underline");
-		toggleButton8.putClientProperty("JButton.buttonType", "underline");
+		toggleButton8.setText("tab");
+		toggleButton8.putClientProperty("JButton.buttonType", "tab");
 		toggleButton8.setEnabled(false);
 		toggleButton8.setSelected(true);
 		add(toggleButton8, "cell 5 2");

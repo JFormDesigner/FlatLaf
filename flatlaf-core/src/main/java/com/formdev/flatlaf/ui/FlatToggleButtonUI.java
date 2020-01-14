@@ -61,12 +61,12 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ToggleButton.disabledSelectedBackground	Color
  * @uiDefault ToggleButton.toolbar.selectedBackground	Color
  *
- * @uiDefault ToggleButton.underline.underlineHeight		int
- * @uiDefault ToggleButton.underline.underlineColor			Color
- * @uiDefault ToggleButton.underline.disabledUnderlineColor	Color
- * @uiDefault ToggleButton.underline.selectedBackground		Color	optional
- * @uiDefault ToggleButton.underline.hoverBackground		Color
- * @uiDefault ToggleButton.underline.focusBackground		Color
+ * @uiDefault ToggleButton.tab.underlineHeight			int
+ * @uiDefault ToggleButton.tab.underlineColor			Color
+ * @uiDefault ToggleButton.tab.disabledUnderlineColor	Color
+ * @uiDefault ToggleButton.tab.selectedBackground		Color	optional
+ * @uiDefault ToggleButton.tab.hoverBackground			Color
+ * @uiDefault ToggleButton.tab.focusBackground			Color
  *
  *
  * @author Karl Tauber
@@ -80,12 +80,12 @@ public class FlatToggleButtonUI
 
 	protected Color toolbarSelectedBackground;
 
-	protected int underlineHeight;
-	protected Color underlineColor;
-	protected Color disabledUnderlineColor;
-	protected Color underlineSelectedBackground;
-	protected Color underlineHoverBackground;
-	protected Color underlineFocusBackground;
+	protected int tabUnderlineHeight;
+	protected Color tabUnderlineColor;
+	protected Color tabDisabledUnderlineColor;
+	protected Color tabSelectedBackground;
+	protected Color tabHoverBackground;
+	protected Color tabFocusBackground;
 
 	private boolean defaults_initialized = false;
 
@@ -113,12 +113,12 @@ public class FlatToggleButtonUI
 
 			toolbarSelectedBackground = UIManager.getColor( "ToggleButton.toolbar.selectedBackground" );
 
-			underlineHeight = UIManager.getInt( "ToggleButton.underline.underlineHeight" );
-			underlineColor = UIManager.getColor( "ToggleButton.underline.underlineColor" );
-			disabledUnderlineColor = UIManager.getColor( "ToggleButton.underline.disabledUnderlineColor" );
-			underlineSelectedBackground = UIManager.getColor( "ToggleButton.underline.selectedBackground" );
-			underlineHoverBackground = UIManager.getColor( "ToggleButton.underline.hoverBackground" );
-			underlineFocusBackground = UIManager.getColor( "ToggleButton.underline.focusBackground" );
+			tabUnderlineHeight = UIManager.getInt( "ToggleButton.tab.underlineHeight" );
+			tabUnderlineColor = UIManager.getColor( "ToggleButton.tab.underlineColor" );
+			tabDisabledUnderlineColor = UIManager.getColor( "ToggleButton.tab.disabledUnderlineColor" );
+			tabSelectedBackground = UIManager.getColor( "ToggleButton.tab.selectedBackground" );
+			tabHoverBackground = UIManager.getColor( "ToggleButton.tab.hoverBackground" );
+			tabFocusBackground = UIManager.getColor( "ToggleButton.tab.focusBackground" );
 
 			defaults_initialized = true;
 		}
@@ -136,7 +136,7 @@ public class FlatToggleButtonUI
 
 		switch( e.getPropertyName() ) {
 			case BUTTON_TYPE:
-				if( BUTTON_TYPE_UNDERLINE.equals( e.getOldValue() ) || BUTTON_TYPE_UNDERLINE.equals( e.getNewValue() ) ) {
+				if( BUTTON_TYPE_TAB.equals( e.getOldValue() ) || BUTTON_TYPE_TAB.equals( e.getNewValue() ) ) {
 					MigLayoutVisualPadding.uninstall( b );
 					MigLayoutVisualPadding.install( b, getFocusWidth( b ) );
 					b.revalidate();
@@ -147,21 +147,21 @@ public class FlatToggleButtonUI
 		}
 	}
 
-	static boolean isUnderlineButton( Component c ) {
-		return c instanceof JToggleButton && clientPropertyEquals( (JToggleButton) c, BUTTON_TYPE, BUTTON_TYPE_UNDERLINE );
+	static boolean isTabButton( Component c ) {
+		return c instanceof JToggleButton && clientPropertyEquals( (JToggleButton) c, BUTTON_TYPE, BUTTON_TYPE_TAB );
 	}
 
 	@Override
 	protected void paintBackground( Graphics g, JComponent c ) {
-		if( isUnderlineButton( c ) ) {
+		if( isTabButton( c ) ) {
 			int height = c.getHeight();
 			int width = c.getWidth();
 			boolean selected = ((AbstractButton)c).isSelected();
 
 			// paint background
 			Color background = buttonStateColor( c,
-				selected ? underlineSelectedBackground : null,
-				null, underlineFocusBackground, underlineHoverBackground, null );
+				selected ? tabSelectedBackground : null,
+				null, tabFocusBackground, tabHoverBackground, null );
 			if( background != null ) {
 				g.setColor( background );
 				g.fillRect( 0, 0, width, height );
@@ -169,8 +169,8 @@ public class FlatToggleButtonUI
 
 			// paint underline if selected
 			if( selected ) {
-				int underlineHeight = UIScale.scale( this.underlineHeight );
-				g.setColor( c.isEnabled() ? underlineColor : disabledUnderlineColor );
+				int underlineHeight = UIScale.scale( tabUnderlineHeight );
+				g.setColor( c.isEnabled() ? tabUnderlineColor : tabDisabledUnderlineColor );
 				g.fillRect( 0, height - underlineHeight, width, underlineHeight );
 			}
 		} else
@@ -207,6 +207,6 @@ public class FlatToggleButtonUI
 
 	@Override
 	protected int getFocusWidth( JComponent c ) {
-		return isUnderlineButton( c ) ? 0 : super.getFocusWidth( c );
+		return isTabButton( c ) ? 0 : super.getFocusWidth( c );
 	}
 }

@@ -65,7 +65,7 @@ public class FlatButtonBorder
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-		if( FlatButtonUI.isContentAreaFilled( c ) && !FlatButtonUI.isHelpButton( c ) && !FlatToggleButtonUI.isUnderlineButton( c ) )
+		if( FlatButtonUI.isContentAreaFilled( c ) && !FlatButtonUI.isHelpButton( c ) && !FlatToggleButtonUI.isTabButton( c ) )
 			super.paintBorder( c, g, x, y, width, height );
 	}
 
@@ -106,7 +106,7 @@ public class FlatButtonBorder
 
 	@Override
 	protected float getFocusWidth( Component c ) {
-		return FlatToggleButtonUI.isUnderlineButton( c ) ? 0 : super.getFocusWidth(c );
+		return FlatToggleButtonUI.isTabButton( c ) ? 0 : super.getFocusWidth(c );
 	}
 
 	@Override

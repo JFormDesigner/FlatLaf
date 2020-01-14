@@ -445,11 +445,11 @@ public class IntelliJTheme
 		for( Map.Entry<String, String> e : uiKeyMapping.entrySet() )
 			uiKeyInverseMapping.put( e.getValue(), e.getKey() );
 
-		uiKeyCopying.put( "ToggleButton.underline.underlineColor",         "TabbedPane.underlineColor" );
-		uiKeyCopying.put( "ToggleButton.underline.disabledUnderlineColor", "TabbedPane.disabledUnderlineColor" );
-		uiKeyCopying.put( "ToggleButton.underline.selectedBackground",     "TabbedPane.selectedBackground" );
-		uiKeyCopying.put( "ToggleButton.underline.hoverBackground",        "TabbedPane.hoverColor" );
-		uiKeyCopying.put( "ToggleButton.underline.focusBackground",        "TabbedPane.focusColor" );
+		uiKeyCopying.put( "ToggleButton.tab.underlineColor",         "TabbedPane.underlineColor" );
+		uiKeyCopying.put( "ToggleButton.tab.disabledUnderlineColor", "TabbedPane.disabledUnderlineColor" );
+		uiKeyCopying.put( "ToggleButton.tab.selectedBackground",     "TabbedPane.selectedBackground" );
+		uiKeyCopying.put( "ToggleButton.tab.hoverBackground",        "TabbedPane.hoverColor" );
+		uiKeyCopying.put( "ToggleButton.tab.focusBackground",        "TabbedPane.focusColor" );
 
 		checkboxKeyMapping.put( "Checkbox.Background.Default",  "CheckBox.icon.background" );
 		checkboxKeyMapping.put( "Checkbox.Background.Disabled", "CheckBox.icon.disabledBackground" );

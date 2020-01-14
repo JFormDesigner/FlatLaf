@@ -12,7 +12,9 @@ FlatLaf Change Log
   property `JComponent.minimumHeight` to an integer). (issue #44)
 - Button and ToggleButton: Do not apply minimum width if button border was
   changed (is no longer an instance of `FlatButtonBorder`).
-- ToggleButton: No longer use focus width for underline style toggle buttons to
+- ToggleButton: Renamed toggle button type "underline" to "tab" (value of client
+  property `JButton.buttonType` is now `tab`).
+- ToggleButton: No longer use focus width for tab-style toggle buttons to
   compute component size, which reduces/fixes component size in "Flat IntelliJ"
   and "Flat Darcula" themes.
 
