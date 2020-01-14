@@ -78,6 +78,8 @@ public class FlatBorder
 			float arc = isCellEditor ? 0 : getArc( c );
 
 			if( isFocused( c ) ) {
+				float innerFocusWidth = !(c instanceof JScrollPane) ? this.innerFocusWidth : 0;
+
 				g2.setColor( getFocusColor( c ) );
 				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,
 					getLineWidth() + scale( innerFocusWidth ), arc );
