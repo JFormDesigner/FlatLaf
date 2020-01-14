@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Tree: UI default value `Tree.textBackground` now has a valid color and is no
+  longer `null`.
+
+
 ## 0.24
 
 - Support smooth scrolling with touchpads and high precision mouse wheels.
