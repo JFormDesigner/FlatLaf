@@ -181,7 +181,7 @@ public class FlatTabbedPaneUI
 	protected JButton createScrollButton( int direction ) {
 		// this method is invoked before installDefaults(), so we can not use color fields here
 		return new FlatArrowButton( direction, UIManager.getString( "Component.arrowType" ),
-			UIManager.getColor( "TabbedPane.shadow" ),
+			UIManager.getColor( "TabbedPane.foreground" ),
 			UIManager.getColor( "TabbedPane.disabledForeground" ), null,
 			UIManager.getColor( "TabbedPane.hoverColor" ) );
 	}

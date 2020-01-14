@@ -3,6 +3,7 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- TabbedPane: In scroll-tab-layout, the cropped line is now hidden. (issue #40)
 - Tree: UI default value `Tree.textBackground` now has a valid color and is no
   longer `null`.
 
