@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.0.0.194" Java: "13.0.1" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -117,15 +117,20 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "fileMenu"
 					"text": "File"
+					"mnemonic": 70
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "newMenuItem"
 						"text": "New"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 78, 4226, false )
+						"mnemonic": 78
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "openMenuItem"
 						"text": "Open"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 79, 4226, false )
+						"mnemonic": 79
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator2"
@@ -134,6 +139,8 @@ new FormModel {
 						name: "closeMenuItem"
 						"text": "Close"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 87, 4226, false )
+						"mnemonic": 67
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator1"
@@ -142,21 +149,27 @@ new FormModel {
 						name: "exitMenuItem"
 						"text": "Exit"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 81, 4226, false )
+						"mnemonic": 88
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitActionPerformed", false ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "editMenu"
 					"text": "Edit"
+					"mnemonic": 69
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "undoMenuItem"
 						"text": "Undo"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 90, 4226, false )
+						"mnemonic": 85
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "redoMenuItem"
 						"text": "Redo"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 89, 4226, false )
+						"mnemonic": 82
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator4"
@@ -165,16 +178,22 @@ new FormModel {
 						name: "cutMenuItem"
 						"text": "Cut"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 88, 4226, false )
+						"mnemonic": 67
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "copyMenuItem"
 						"text": "Copy"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 67, 4226, false )
+						"mnemonic": 79
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "pasteMenuItem"
 						"text": "Paste"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 86, 4226, false )
+						"mnemonic": 80
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator3"
@@ -183,15 +202,65 @@ new FormModel {
 						name: "deleteMenuItem"
 						"text": "Delete"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 127, 0, false )
+						"mnemonic": 68
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "viewMenu"
 					"text": "View"
+					"mnemonic": 86
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "checkBoxMenuItem1"
 						"text": "Show Toolbar"
 						"selected": true
+						"mnemonic": 84
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+					} )
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "menu1"
+						"text": "Show View"
+						"mnemonic": 86
+						add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+							name: "subViewsMenu"
+							"text": "Sub Views"
+							"mnemonic": 83
+							add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+								name: "subSubViewsMenu"
+								"text": "Sub sub Views"
+								"mnemonic": 85
+								add( new FormComponent( "javax.swing.JMenuItem" ) {
+									name: "errorLogViewMenuItem"
+									"text": "Error Log"
+									"mnemonic": 69
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+								} )
+							} )
+							add( new FormComponent( "javax.swing.JMenuItem" ) {
+								name: "searchViewMenuItem"
+								"text": "Search"
+								"mnemonic": 83
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+							} )
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "projectViewMenuItem"
+							"text": "Project"
+							"mnemonic": 80
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "structureViewMenuItem"
+							"text": "Structure"
+							"mnemonic": 84
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "propertiesViewMenuItem"
+							"text": "Properties"
+							"mnemonic": 79
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+						} )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator8"
@@ -201,24 +270,32 @@ new FormModel {
 						"text": "Details"
 						"selected": true
 						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"mnemonic": 68
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
 						name: "radioButtonMenuItem2"
 						"text": "Small Icons"
 						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"mnemonic": 83
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
 						name: "radioButtonMenuItem3"
 						"text": "Large Icons"
 						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"mnemonic": 76
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "helpMenu"
 					"text": "Help"
+					"mnemonic": 72
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "aboutMenuItem"
 						"text": "About"
+						"mnemonic": 65
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "aboutActionPerformed", false ) )
 					} )
 				} )

@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Hide menu mnemonics by default and show them only when <kbd>Alt</kbd> key is
+  pressed. (issue #43)
 - TabbedPane: In scroll-tab-layout, the cropped line is now hidden. (issue #40)
 - Tree: UI default value `Tree.textBackground` now has a valid color and is no
   longer `null`.

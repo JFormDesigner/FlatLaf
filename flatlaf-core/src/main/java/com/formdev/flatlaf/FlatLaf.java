@@ -28,6 +28,7 @@ import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -66,6 +67,7 @@ public abstract class FlatLaf
 
 	private KeyEventPostProcessor mnemonicListener;
 	private static boolean showMnemonics;
+	private static WeakReference<Window> lastShowMnemonicWindow;
 
 	private Consumer<UIDefaults> postInitialization;
 
@@ -391,18 +393,28 @@ public abstract class FlatLaf
 		if( !UIManager.getBoolean( "Component.hideMnemonics" ) )
 			return;
 
-		// get focus owner
-		Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-		if( focusOwner == null )
-			return;
+		if( show ) {
+			// get focus owner
+			Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+			if( focusOwner == null )
+				return;
 
-		// get focused window
-		Window window = SwingUtilities.windowForComponent( focusOwner );
-		if( window == null )
-			return;
+			// get focused window
+			Window window = SwingUtilities.windowForComponent( focusOwner );
+			if( window == null )
+				return;
 
-		// repaint components with mnemonics in focused window
-		repaintMnemonics( window );
+			// repaint components with mnemonics in focused window
+			repaintMnemonics( window );
+
+			lastShowMnemonicWindow = new WeakReference<>( window );
+		} else if( lastShowMnemonicWindow != null ) {
+			Window window = lastShowMnemonicWindow.get();
+			if( window != null )
+				repaintMnemonics( window );
+
+			lastShowMnemonicWindow = null;
+		}
 	}
 
 	private static void repaintMnemonics( Container container ) {
