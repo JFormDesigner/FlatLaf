@@ -105,6 +105,11 @@ public class FlatButtonBorder
 	}
 
 	@Override
+	protected float getFocusWidth( Component c ) {
+		return FlatToggleButtonUI.isUnderlineButton( c ) ? 0 : super.getFocusWidth(c );
+	}
+
+	@Override
 	protected float getBorderWidth( Component c ) {
 		return FlatButtonUI.isDefaultButton( c ) ? scale( (float) defaultBorderWidth ) : super.getBorderWidth( c );
 	}

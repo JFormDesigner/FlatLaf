@@ -113,8 +113,11 @@ public class FlatUIUtils
 	}
 
 	public static int minimumWidth( JComponent c, int minimumWidth ) {
-		Object p = c.getClientProperty( FlatClientProperties.MINIMUM_WIDTH );
-		return (p instanceof Integer) ? ((Integer)p).intValue() : minimumWidth;
+		return FlatClientProperties.clientPropertyInt( c, FlatClientProperties.MINIMUM_WIDTH, minimumWidth );
+	}
+
+	public static int minimumHeight( JComponent c, int minimumHeight ) {
+		return FlatClientProperties.clientPropertyInt( c, FlatClientProperties.MINIMUM_HEIGHT, minimumHeight );
 	}
 
 	public static boolean isTableCellEditor( Component c ) {

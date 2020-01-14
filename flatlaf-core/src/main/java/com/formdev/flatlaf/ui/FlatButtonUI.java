@@ -28,6 +28,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeEvent;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
@@ -39,6 +40,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.UIScale;
@@ -180,7 +182,7 @@ public class FlatButtonUI
 		LookAndFeel.installProperty( b, "opaque", false );
 		LookAndFeel.installProperty( b, "iconTextGap", scale( iconTextGap ) );
 
-		MigLayoutVisualPadding.install( b, focusWidth );
+		MigLayoutVisualPadding.install( b, getFocusWidth( b ) );
 	}
 
 	@Override
@@ -189,6 +191,26 @@ public class FlatButtonUI
 
 		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
+	}
+
+	@Override
+	protected BasicButtonListener createButtonListener( AbstractButton b ) {
+		return new BasicButtonListener( b ) {
+			@Override
+			public void propertyChange( PropertyChangeEvent e ) {
+				super.propertyChange( e );
+				FlatButtonUI.this.propertyChange( b, e );
+			}
+		};
+	}
+
+	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case MINIMUM_WIDTH:
+			case MINIMUM_HEIGHT:
+				b.revalidate();
+				break;
+		}
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
@@ -246,7 +268,7 @@ public class FlatButtonUI
 				FlatUIUtils.setRenderingHints( g2 );
 
 				Border border = c.getBorder();
-				float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
+				float focusWidth = (border instanceof FlatBorder) ? scale( (float) getFocusWidth( c ) ) : 0;
 				float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton( c ))
 					? scale( (float) this.arc ) : 0;
 				boolean def = isDefaultButton( c );
@@ -362,9 +384,16 @@ public class FlatButtonUI
 		// or apply minimum width, if not in toolbar and not a icon-only button
 		if( isIconOnlyButton( c ) )
 			prefSize.width = Math.max( prefSize.width, prefSize.height );
-		else if( !isToolBarButton( c ) )
+		else if( !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
+			int focusWidth = getFocusWidth( c );
 			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) + (focusWidth * 2) ) );
+			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) + (focusWidth * 2) ) );
+		}
 
 		return prefSize;
+	}
+
+	protected int getFocusWidth( JComponent c ) {
+		return focusWidth;
 	}
 }

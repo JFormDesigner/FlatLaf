@@ -73,7 +73,7 @@ public class FlatBorder
 			FlatUIUtils.setRenderingHints( g2 );
 
 			boolean isCellEditor = isTableCellEditor( c );
-			float focusWidth = isCellEditor ? 0 : getFocusWidth();
+			float focusWidth = isCellEditor ? 0 : getFocusWidth( c );
 			float borderWidth = getBorderWidth( c );
 			float arc = isCellEditor ? 0 : getArc( c );
 
@@ -82,7 +82,7 @@ public class FlatBorder
 
 				g2.setColor( getFocusColor( c ) );
 				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,
-					getLineWidth() + scale( innerFocusWidth ), arc );
+					getLineWidth( c ) + scale( innerFocusWidth ), arc );
 			}
 
 			g2.setPaint( getBorderColor( c ) );
@@ -153,7 +153,7 @@ public class FlatBorder
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
 		boolean isCellEditor = isTableCellEditor( c );
-		float ow = (isCellEditor ? 0 : getFocusWidth()) + getLineWidth();
+		float ow = (isCellEditor ? 0 : getFocusWidth( c )) + getLineWidth( c );
 
 		insets = super.getBorderInsets( c, insets );
 		insets.top = Math.round( scale( (float) insets.top ) + ow );
@@ -163,16 +163,16 @@ public class FlatBorder
 		return insets;
 	}
 
-	protected float getFocusWidth() {
+	protected float getFocusWidth( Component c ) {
 		return scale( (float) focusWidth );
 	}
 
-	protected float getLineWidth() {
+	protected float getLineWidth( Component c ) {
 		return scale( 1f );
 	}
 
 	protected float getBorderWidth( Component c ) {
-		return getLineWidth();
+		return getLineWidth( c );
 	}
 
 	protected float getArc( Component c ) {

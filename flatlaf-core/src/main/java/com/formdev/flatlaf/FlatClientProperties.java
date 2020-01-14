@@ -79,10 +79,18 @@ public interface FlatClientProperties
 	/**
 	 * Specifies minimum width of a component.
 	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JButton} and  {@link javax.swing.text.JTextComponent}<br>
+	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton} and {@link javax.swing.text.JTextComponent}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
 	 */
 	String MINIMUM_WIDTH = "JComponent.minimumWidth";
+
+	/**
+	 * Specifies minimum height of a component.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
+	 */
+	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
 	/**
 	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
@@ -130,5 +138,14 @@ public interface FlatClientProperties
 	static boolean clientPropertyBoolean( JComponent c, String key, boolean defaultValue ) {
 		Object value = c.getClientProperty( key );
 		return (value instanceof Boolean) ? (boolean) value : defaultValue;
+	}
+
+	/**
+	 * Checks whether a client property of a component is an integer and returns its value.
+	 * If the client property is not set, or not an integer, defaultValue is returned.
+	 */
+	static int clientPropertyInt( JComponent c, String key, int defaultValue ) {
+		Object value = c.getClientProperty( key );
+		return (value instanceof Integer) ? (int) value : defaultValue;
 	}
 }

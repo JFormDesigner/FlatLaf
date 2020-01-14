@@ -20,6 +20,7 @@ import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.JComponent;
@@ -129,6 +130,23 @@ public class FlatToggleButtonUI
 		defaults_initialized = false;
 	}
 
+	@Override
+	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
+		super.propertyChange( b, e );
+
+		switch( e.getPropertyName() ) {
+			case BUTTON_TYPE:
+				if( BUTTON_TYPE_UNDERLINE.equals( e.getOldValue() ) || BUTTON_TYPE_UNDERLINE.equals( e.getNewValue() ) ) {
+					MigLayoutVisualPadding.uninstall( b );
+					MigLayoutVisualPadding.install( b, getFocusWidth( b ) );
+					b.revalidate();
+				}
+
+				b.repaint();
+				break;
+		}
+	}
+
 	static boolean isUnderlineButton( Component c ) {
 		return c instanceof JToggleButton && clientPropertyEquals( (JToggleButton) c, BUTTON_TYPE, BUTTON_TYPE_UNDERLINE );
 	}
@@ -185,5 +203,10 @@ public class FlatToggleButtonUI
 			return selectedForeground;
 
 		return super.getForeground( c );
+	}
+
+	@Override
+	protected int getFocusWidth( JComponent c ) {
+		return isUnderlineButton( c ) ? 0 : super.getFocusWidth( c );
 	}
 }
