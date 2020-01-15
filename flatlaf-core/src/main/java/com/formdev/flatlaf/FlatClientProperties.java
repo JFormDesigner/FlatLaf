@@ -118,6 +118,14 @@ public interface FlatClientProperties
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
+	 * Specifies the height of a tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 */
+	String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight";
+
+	/**
 	 * Placeholder text that is only painted if the text field is empty.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} or {@link javax.swing.JComboBox}<br>

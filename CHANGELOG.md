@@ -21,6 +21,8 @@ FlatLaf Change Log
 - ToggleButton: No longer use focus width for tab-style toggle buttons to
   compute component size, which reduces/fixes component size in "Flat IntelliJ"
   and "Flat Darcula" themes.
+- TabbedPane: Support per component tab height (set client property
+  `JTabbedPane.tabHeight` to an integer).
 
 
 ## 0.24

@@ -169,6 +169,7 @@ public class FlatTabbedPaneUI
 				switch( e.getPropertyName() ) {
 					case TABBED_PANE_SHOW_TAB_SEPARATORS:
 					case TABBED_PANE_HAS_FULL_BORDER:
+					case TABBED_PANE_TAB_HEIGHT:
 						tabPane.revalidate();
 						tabPane.repaint();
 						break;
@@ -215,6 +216,7 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int calculateTabHeight( int tabPlacement, int tabIndex, int fontHeight ) {
+		int tabHeight = clientPropertyInt( tabPane, TABBED_PANE_TAB_HEIGHT, this.tabHeight );
 		return Math.max( tabHeight, super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2 /* was added by superclass */ );
 	}
 
