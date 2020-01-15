@@ -111,6 +111,30 @@ public class FlatTestFrame
 			lafModel.addElement( new LookAndFeelInfo( name, className ) );
 		}
 
+		String substanceClassName = "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel";
+		if( SystemInfo.IS_JAVA_9_OR_LATER && isClassAvailable( substanceClassName ) ) {
+			lafModel.addElement( new LookAndFeelInfo( "Substance (F5)", substanceClassName ) );
+			registerSwitchToLookAndFeel( KeyEvent.VK_F5, substanceClassName );
+		}
+
+		String webLafClassName = "com.alee.laf.WebLookAndFeel";
+		if( isClassAvailable( webLafClassName ) ) {
+			lafModel.addElement( new LookAndFeelInfo( "WebLaf (F12)", webLafClassName ) );
+			registerSwitchToLookAndFeel( KeyEvent.VK_F12, webLafClassName );
+		}
+
+		String looksPlasticClassName = "com.jgoodies.looks.plastic.PlasticLookAndFeel";
+		if( isClassAvailable( looksPlasticClassName ) ) {
+			lafModel.addElement( new LookAndFeelInfo( "JGoodies Looks Plastic (F6)", looksPlasticClassName ) );
+			registerSwitchToLookAndFeel( KeyEvent.VK_F6, looksPlasticClassName );
+		}
+
+		String looksWindowsClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
+		if( isClassAvailable( looksWindowsClassName ) ) {
+			lafModel.addElement( new LookAndFeelInfo( "JGoodies Looks Windows (F7)", looksWindowsClassName ) );
+			registerSwitchToLookAndFeel( KeyEvent.VK_F7, looksWindowsClassName );
+		}
+
 		lookAndFeelComboBox.setModel( lafModel );
 
 		updateScaleFactorComboBox();
@@ -201,6 +225,15 @@ public class FlatTestFrame
 			},
 			KeyStroke.getKeyStroke( keyCode, 0, false ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	private boolean isClassAvailable( String className ) {
+		try {
+			Class.forName( className );
+			return true;
+		} catch( ClassNotFoundException ex ) {
+			return false;
+		}
 	}
 
 	public void showFrame( Supplier<JComponent> contentFactory ) {
@@ -481,6 +514,7 @@ public class FlatTestFrame
 					null));
 
 				//---- lookAndFeelComboBox ----
+				lookAndFeelComboBox.setMaximumRowCount(20);
 				lookAndFeelComboBox.addActionListener(e -> lookAndFeelChanged());
 				buttonBar.add(lookAndFeelComboBox, "cell 0 0");
 
