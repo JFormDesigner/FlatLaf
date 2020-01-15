@@ -94,6 +94,22 @@ public interface FlatClientProperties
 	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
 	/**
+	 * Specifies whether the progress bar has always the larger height even if no string is painted.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JProgressBar}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String PROGRESS_BAR_LARGE_HEIGHT = "JProgressBar.largeHeight";
+
+	/**
+	 * Specifies whether the progress bar is paint with square edges.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JProgressBar}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String PROGRESS_BAR_SQUARE = "JProgressBar.square";
+
+	/**
 	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JScrollBar} or {@link javax.swing.JScrollPane}<br>

@@ -23,6 +23,9 @@ FlatLaf Change Log
   and "Flat Darcula" themes.
 - TabbedPane: Support per component tab height (set client property
   `JTabbedPane.tabHeight` to an integer).
+- ProgressBar: Support square painting (set client property
+  `JProgressBar.square` to `true`) and larger height even if no string is
+  painted (set client property `JProgressBar.largeHeight` to `true`).
 
 
 ## 0.24

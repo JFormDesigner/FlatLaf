@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -23,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.LookAndFeel;
@@ -60,6 +62,8 @@ public class FlatProgressBarUI
 	protected Dimension horizontalSize;
 	protected Dimension verticalSize;
 
+	private PropertyChangeListener propertyChangeListener;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatProgressBarUI();
 	}
@@ -76,10 +80,34 @@ public class FlatProgressBarUI
 	}
 
 	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = e -> {
+			switch( e.getPropertyName() ) {
+				case PROGRESS_BAR_LARGE_HEIGHT:
+				case PROGRESS_BAR_SQUARE:
+					progressBar.revalidate();
+					progressBar.repaint();
+					break;
+			}
+		};
+		progressBar.addPropertyChangeListener( propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		progressBar.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
+	}
+
+	@Override
 	public Dimension getPreferredSize( JComponent c ) {
 		Dimension size = super.getPreferredSize( c );
 
-		if( progressBar.isStringPainted() ) {
+		if( progressBar.isStringPainted() || clientPropertyBoolean( c, PROGRESS_BAR_LARGE_HEIGHT, false ) ) {
 			// recalculate progress height/width to make it smaller
 			Insets insets = progressBar.getInsets();
 			FontMetrics fm = progressBar.getFontMetrics( progressBar.getFont() );
@@ -122,7 +150,9 @@ public class FlatProgressBarUI
 			return;
 
 		boolean horizontal = (progressBar.getOrientation() == JProgressBar.HORIZONTAL);
-		int arc = Math.min( UIScale.scale( this.arc ), horizontal ? height : width );
+		int arc = clientPropertyBoolean( c, PROGRESS_BAR_SQUARE, false )
+			? 0
+			: Math.min( UIScale.scale( this.arc ), horizontal ? height : width );
 
 		FlatUIUtils.setRenderingHints( (Graphics2D) g );
 
