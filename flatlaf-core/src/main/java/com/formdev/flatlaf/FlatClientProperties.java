@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf;
 
+import java.awt.Color;
 import java.util.Objects;
 import javax.swing.JComponent;
 
@@ -125,6 +126,30 @@ public interface FlatClientProperties
 	String PLACEHOLDER_TEXT = "JTextField.placeholderText";
 
 	/**
+	 * Height of underline if toggle button type is {@link #BUTTON_TYPE_TAB}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 */
+	String TAB_BUTTON_UNDERLINE_HEIGHT = "JToggleButton.tab.underlineHeight";
+
+	/**
+	 * Color of underline if toggle button type is {@link #BUTTON_TYPE_TAB}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.awt.Color}
+	 */
+	String TAB_BUTTON_UNDERLINE_COLOR = "JToggleButton.tab.underlineColor";
+
+	/**
+	 * Background color if selected and toggle button type is {@link #BUTTON_TYPE_TAB}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.awt.Color}
+	 */
+	String TAB_BUTTON_SELECTED_BACKGROUND = "JToggleButton.tab.selectedBackground";
+
+	/**
 	 * Checks whether a client property of a component has the given value.
 	 */
 	static boolean clientPropertyEquals( JComponent c, String key, Object value ) {
@@ -147,5 +172,14 @@ public interface FlatClientProperties
 	static int clientPropertyInt( JComponent c, String key, int defaultValue ) {
 		Object value = c.getClientProperty( key );
 		return (value instanceof Integer) ? (int) value : defaultValue;
+	}
+
+	/**
+	 * Checks whether a client property of a component is a color and returns its value.
+	 * If the client property is not set, or not a color, defaultValue is returned.
+	 */
+	static Color clientPropertyColor( JComponent c, String key, Color defaultValue ) {
+		Object value = c.getClientProperty( key );
+		return (value instanceof Color) ? (Color) value : defaultValue;
 	}
 }

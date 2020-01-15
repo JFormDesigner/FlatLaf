@@ -144,6 +144,12 @@ public class FlatToggleButtonUI
 
 				b.repaint();
 				break;
+
+			case TAB_BUTTON_UNDERLINE_HEIGHT:
+			case TAB_BUTTON_UNDERLINE_COLOR:
+			case TAB_BUTTON_SELECTED_BACKGROUND:
+				b.repaint();
+				break;
 		}
 	}
 
@@ -160,7 +166,7 @@ public class FlatToggleButtonUI
 
 			// paint background
 			Color background = buttonStateColor( c,
-				selected ? tabSelectedBackground : null,
+				selected ? clientPropertyColor( c, TAB_BUTTON_SELECTED_BACKGROUND, tabSelectedBackground ) : null,
 				null, tabFocusBackground, tabHoverBackground, null );
 			if( background != null ) {
 				g.setColor( background );
@@ -169,8 +175,10 @@ public class FlatToggleButtonUI
 
 			// paint underline if selected
 			if( selected ) {
-				int underlineHeight = UIScale.scale( tabUnderlineHeight );
-				g.setColor( c.isEnabled() ? tabUnderlineColor : tabDisabledUnderlineColor );
+				int underlineHeight = UIScale.scale( clientPropertyInt( c, TAB_BUTTON_UNDERLINE_HEIGHT, tabUnderlineHeight ) );
+				g.setColor( c.isEnabled()
+					? clientPropertyColor( c, TAB_BUTTON_UNDERLINE_COLOR, tabUnderlineColor )
+					: tabDisabledUnderlineColor );
 				g.fillRect( 0, height - underlineHeight, width, underlineHeight );
 			}
 		} else

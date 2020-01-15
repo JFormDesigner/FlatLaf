@@ -14,6 +14,10 @@ FlatLaf Change Log
   changed (is no longer an instance of `FlatButtonBorder`).
 - ToggleButton: Renamed toggle button type "underline" to "tab" (value of client
   property `JButton.buttonType` is now `tab`).
+- ToggleButton: Support per component styling for tab-style toggle buttons with
+  client properties `JToggleButton.tab.underlineHeight` (integer),
+  `JToggleButton.tab.underlineColor` (Color) and
+  `JToggleButton.tab.selectedBackground` (Color). (issue #45)
 - ToggleButton: No longer use focus width for tab-style toggle buttons to
   compute component size, which reduces/fixes component size in "Flat IntelliJ"
   and "Flat Darcula" themes.
