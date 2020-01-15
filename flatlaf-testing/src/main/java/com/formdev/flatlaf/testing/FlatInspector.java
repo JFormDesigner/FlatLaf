@@ -71,7 +71,7 @@ public class FlatInspector
 	private Component lastComponent;
 	private int lastX;
 	private int lastY;
-	private boolean inspectParent;
+	private int inspectParentLevel;
 
 	private JComponent highlightFigure;
 	private JToolTip tip;
@@ -112,7 +112,9 @@ public class FlatInspector
 			public void mouseMoved( MouseEvent e ) {
 				lastX = e.getX();
 				lastY = e.getY();
-				inspectParent = e.isShiftDown();
+				inspectParentLevel = (e.isControlDown() ? 1 : 0)
+					+ (e.isShiftDown() ? 2 : 0)
+					+ (e.isAltDown() ? 4 : 0);
 				inspect( lastX, lastY );
 			}
 		};
@@ -157,10 +159,9 @@ public class FlatInspector
 		Container contentPane = rootPane.getContentPane();
 		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, contentPane );
 		Component c = SwingUtilities.getDeepestComponentAt( contentPane, pt.x, pt.y );
-		if( inspectParent && c != null && c != contentPane )
+		for( int i = 0; i < inspectParentLevel && c != null; i++ ) {
 			c = c.getParent();
-		if( c == contentPane || (c != null && c.getParent() == contentPane) )
-			c = null;
+		}
 
 		if( c == lastComponent )
 			return;
@@ -299,6 +300,9 @@ public class FlatInspector
 		text += "Focusable: " + c.isFocusable() + '\n';
 		text += "Left-to-right: " + c.getComponentOrientation().isLeftToRight() + '\n';
 		text += "Parent: " + c.getParent().getClass().getName();
+
+		if( inspectParentLevel > 0 )
+			text += "\n\nParent level: " + inspectParentLevel;
 
 		return text;
 	}
