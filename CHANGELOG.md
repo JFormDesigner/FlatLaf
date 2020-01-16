@@ -8,6 +8,8 @@ FlatLaf Change Log
 - TabbedPane: In scroll-tab-layout, the cropped line is now hidden. (issue #40)
 - Tree: UI default value `Tree.textBackground` now has a valid color and is no
   longer `null`.
+- Tree on macOS: Fixed <kbd>Left</kbd> and <kbd>Right</kbd> keys to collapse or
+  expand nodes.
 - Button and ToggleButton: Support per component minimum height (set client
   property `JComponent.minimumHeight` to an integer). (issue #44)
 - Button and ToggleButton: Do not apply minimum width if button border was
