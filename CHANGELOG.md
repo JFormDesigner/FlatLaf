@@ -10,6 +10,7 @@ FlatLaf Change Log
   longer `null`.
 - Tree on macOS: Fixed <kbd>Left</kbd> and <kbd>Right</kbd> keys to collapse or
   expand nodes.
+- ComboBox on macOS: Fixed keyboard navigation and show/hide popup.
 - Button and ToggleButton: Support per component minimum height (set client
   property `JComponent.minimumHeight` to an integer). (issue #44)
 - Button and ToggleButton: Do not apply minimum width if button border was

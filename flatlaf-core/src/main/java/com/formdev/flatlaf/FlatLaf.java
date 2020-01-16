@@ -344,9 +344,26 @@ public abstract class FlatLaf
 	private void initInputMaps( UIDefaults defaults ) {
 		if( SystemInfo.IS_MAC ) {
 			// AquaLookAndFeel (the base for UI defaults on macOS) uses special
-			// action keys (e.g. "aquaExpandNode") for its macOS typical tree node
-			// expanding/collapsing, which are not available in FlatLaf.
-			// --> map the keys back to default Java actions
+			// action keys (e.g. "aquaExpandNode") for some macOS specific behaviour.
+			// Those action keys are not available in FlatLaf, which makes it
+			// necessary to make some modifications.
+
+			// combobox
+			defaults.put( "ComboBox.ancestorInputMap", new UIDefaults.LazyInputMap( new Object[] {
+				     "ESCAPE", "hidePopup",
+				    "PAGE_UP", "pageUpPassThrough",
+				  "PAGE_DOWN", "pageDownPassThrough",
+				       "HOME", "homePassThrough",
+				        "END", "endPassThrough",
+				       "DOWN", "selectNext",
+				    "KP_DOWN", "selectNext",
+				      "SPACE", "spacePopup",
+				      "ENTER", "enterPressed",
+				         "UP", "selectPrevious",
+				      "KP_UP", "selectPrevious"
+			} ) );
+
+			// tree node expanding/collapsing
 			modifyInputMap( defaults, "Tree.focusInputMap",
 				         "RIGHT", "selectChild",
 				      "KP_RIGHT", "selectChild",
@@ -486,6 +503,9 @@ public abstract class FlatLaf
 
 	//---- class LazyModifyInputMap -------------------------------------------
 
+	/**
+	 * Takes a (lazy) base input map and lazily applies modifications to it specified in bindings.
+	 */
 	private static class LazyModifyInputMap
 		implements LazyValue
 	{
@@ -515,6 +535,5 @@ public abstract class FlatLaf
 
 			return inputMap;
 		}
-
 	}
 }
