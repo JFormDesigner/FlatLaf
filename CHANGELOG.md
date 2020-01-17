@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 - Hide menu mnemonics by default and show them only when <kbd>Alt</kbd> key is
   pressed. (issue #43)
+- Menu: Fixed vertical alignment of sub-menus. (issue #42)
 - TabbedPane: In scroll-tab-layout, the cropped line is now hidden. (issue #40)
 - Tree: UI default value `Tree.textBackground` now has a valid color and is no
   longer `null`.
