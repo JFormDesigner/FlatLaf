@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.25
 
 - Hide menu mnemonics by default and show them only when <kbd>Alt</kbd> key is
   pressed. (issue #43)
