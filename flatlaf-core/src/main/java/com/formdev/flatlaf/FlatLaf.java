@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.InputMap;
 import javax.swing.JLabel;
+import javax.swing.JRootPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
@@ -430,15 +431,15 @@ public abstract class FlatLaf
 		if( SystemInfo.IS_MAC ) {
 			// Ctrl+Alt keys must be pressed on Mac
 			if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown() && e.isAltDown() );
+				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown() && e.isAltDown(), e.getComponent() );
 		} else {
 			// Alt key must be pressed on Windows and Linux
 			if( keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED );
+				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED, e.getComponent() );
 		}
 	}
 
-	private static void showMnemonics( boolean show ) {
+	private static void showMnemonics( boolean show, Component c ) {
 		if( show == showMnemonics )
 			return;
 
@@ -449,13 +450,13 @@ public abstract class FlatLaf
 			return;
 
 		if( show ) {
-			// get focus owner
-			Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-			if( focusOwner == null )
+			// get root pane
+			JRootPane rootPane = SwingUtilities.getRootPane( c );
+			if( rootPane == null )
 				return;
 
-			// get focused window
-			Window window = SwingUtilities.windowForComponent( focusOwner );
+			// get window
+			Window window = SwingUtilities.getWindowAncestor( rootPane );
 			if( window == null )
 				return;
 
@@ -474,6 +475,9 @@ public abstract class FlatLaf
 
 	private static void repaintMnemonics( Container container ) {
 		for( Component c : container.getComponents() ) {
+			if( !c.isVisible() )
+				continue;
+
 			if( hasMnemonic( c ) )
 				c.repaint();
 
