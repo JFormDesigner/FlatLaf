@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## 0.25.1
+
+Re-release of 0.25 because of problems with Maven Central.
+
+
 ## 0.25
 
 - Hide menu mnemonics by default and show them only when <kbd>Alt</kbd> key is
