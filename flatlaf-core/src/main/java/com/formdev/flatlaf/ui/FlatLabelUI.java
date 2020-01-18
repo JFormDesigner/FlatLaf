@@ -20,12 +20,14 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicLabelUI;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.UIScale;
@@ -75,6 +77,51 @@ public class FlatLabelUI
 	protected void uninstallDefaults( JLabel c ) {
 		super.uninstallDefaults( c );
 		defaults_initialized = false;
+	}
+
+	@Override
+	protected void installComponents( JLabel c ) {
+		super.installComponents( c );
+
+		// update HTML renderer if necessary
+		updateHTMLRenderer( c, c.getText(), false );
+	}
+
+	@Override
+	public void propertyChange( PropertyChangeEvent e ) {
+		String name = e.getPropertyName();
+		if( name == "text" || name == "font" || name == "foreground" ) {
+			JLabel label = (JLabel) e.getSource();
+			updateHTMLRenderer( label, label.getText(), true );
+		} else
+			super.propertyChange( e );
+	}
+
+	/**
+	 * Checks whether text contains HTML headings and adds a special CSS rule to
+	 * re-calculate heading font sizes based on current component font size.
+	 */
+	static void updateHTMLRenderer( JComponent c, String text, boolean always ) {
+		if( BasicHTML.isHTMLString( text ) &&
+			c.getClientProperty( "html.disable" ) != Boolean.TRUE &&
+			text.contains( "<h" ) &&
+			(text.contains( "<h1" ) || text.contains( "<h2" ) || text.contains( "<h3" ) ||
+			 text.contains( "<h4" ) || text.contains( "<h5" ) || text.contains( "<h6" )) )
+		{
+			int headIndex = text.indexOf( "<head>" );
+
+			String style = "<style>BASE_SIZE " + c.getFont().getSize() + "</style>";
+			if( headIndex < 0 )
+				style = "<head>" + style + "</head>";
+
+			int insertIndex = headIndex >= 0 ? (headIndex + "<head>".length()) : "<html>".length();
+			text = text.substring( 0, insertIndex )
+				+ style
+				+ text.substring( insertIndex );
+		} else if( !always )
+			return; // not necessary to invoke BasicHTML.updateRenderer()
+
+		BasicHTML.updateRenderer( c, text );
 	}
 
 	@Override

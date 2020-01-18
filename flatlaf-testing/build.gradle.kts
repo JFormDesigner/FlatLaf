@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,6 +33,10 @@ dependencies {
 	implementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
 	implementation( "com.jidesoft:jide-oss:3.6.18" )
 	implementation( "org.netbeans.api:org-openide-awt:RELEASE112" )
+
+//	implementation( "org.pushing-pixels:radiance-substance:2.5.1" )
+//	implementation( "com.weblookandfeel:weblaf-ui:1.2.12" )
+//	implementation( "com.jgoodies:jgoodies-looks:2.7.0" )
 }
 
 java {

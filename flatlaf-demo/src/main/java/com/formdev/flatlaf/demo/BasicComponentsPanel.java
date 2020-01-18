@@ -37,6 +37,8 @@ class BasicComponentsPanel
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
+		JButton button5 = new JButton();
+		JButton button6 = new JButton();
 		JButton button3 = new JButton();
 		JButton button4 = new JButton();
 		JButton button13 = new JButton();
@@ -166,10 +168,21 @@ class BasicComponentsPanel
 		button2.setEnabled(false);
 		add(button2, "cell 2 1");
 
+		//---- button5 ----
+		button5.setText("square");
+		button5.putClientProperty("JButton.buttonType", "square");
+		add(button5, "cell 3 1");
+
+		//---- button6 ----
+		button6.setText("square");
+		button6.setEnabled(false);
+		button6.putClientProperty("JButton.buttonType", "square");
+		add(button6, "cell 4 1");
+
 		//---- button3 ----
 		button3.setText("Help");
 		button3.putClientProperty("JButton.buttonType", "help");
-		add(button3, "cell 3 1");
+		add(button3, "cell 4 1");
 
 		//---- button4 ----
 		button4.setText("Help");

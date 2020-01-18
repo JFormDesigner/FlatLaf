@@ -147,6 +147,7 @@ public class FlatPasswordFieldUI
 	}
 
 	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
+		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
 		int focusWidth = (c.getBorder() instanceof FlatBorder) ? this.focusWidth : 0;
 		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
 		return size;

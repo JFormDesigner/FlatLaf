@@ -48,7 +48,7 @@ import javax.swing.text.JTextComponent;
  * {@link FlatUIUtils#paintParentBackground} to paint the empty space correctly.
  *
  * @uiDefault Component.focusWidth			int
- * @uiDefault Component.innerFocusWidth		int
+ * @uiDefault Component.innerFocusWidth		int or float
  * @uiDefault Component.focusColor			Color
  * @uiDefault Component.borderColor			Color
  * @uiDefault Component.disabledBorderColor	Color
@@ -60,7 +60,7 @@ public class FlatBorder
 	extends BasicBorders.MarginBorder
 {
 	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
-	protected final int innerFocusWidth = UIManager.getInt( "Component.innerFocusWidth" );
+	protected final float innerFocusWidth = FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 );
 	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
 	protected final Color borderColor = UIManager.getColor( "Component.borderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
@@ -73,14 +73,16 @@ public class FlatBorder
 			FlatUIUtils.setRenderingHints( g2 );
 
 			boolean isCellEditor = isTableCellEditor( c );
-			float focusWidth = isCellEditor ? 0 : getFocusWidth();
+			float focusWidth = isCellEditor ? 0 : getFocusWidth( c );
 			float borderWidth = getBorderWidth( c );
-			float arc = isCellEditor ? 0 : getArc();
+			float arc = isCellEditor ? 0 : getArc( c );
 
 			if( isFocused( c ) ) {
+				float innerFocusWidth = !(c instanceof JScrollPane) ? this.innerFocusWidth : 0;
+
 				g2.setColor( getFocusColor( c ) );
 				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,
-					getLineWidth() + scale( (float) innerFocusWidth ), arc );
+					getLineWidth( c ) + scale( innerFocusWidth ), arc );
 			}
 
 			g2.setPaint( getBorderColor( c ) );
@@ -151,7 +153,7 @@ public class FlatBorder
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
 		boolean isCellEditor = isTableCellEditor( c );
-		float ow = (isCellEditor ? 0 : getFocusWidth()) + getLineWidth();
+		float ow = (isCellEditor ? 0 : getFocusWidth( c )) + getLineWidth( c );
 
 		insets = super.getBorderInsets( c, insets );
 		insets.top = Math.round( scale( (float) insets.top ) + ow );
@@ -161,19 +163,19 @@ public class FlatBorder
 		return insets;
 	}
 
-	protected float getFocusWidth() {
+	protected float getFocusWidth( Component c ) {
 		return scale( (float) focusWidth );
 	}
 
-	protected float getLineWidth() {
+	protected float getLineWidth( Component c ) {
 		return scale( 1f );
 	}
 
 	protected float getBorderWidth( Component c ) {
-		return getLineWidth();
+		return getLineWidth( c );
 	}
 
-	protected float getArc() {
+	protected float getArc( Component c ) {
 		return 0;
 	}
 }

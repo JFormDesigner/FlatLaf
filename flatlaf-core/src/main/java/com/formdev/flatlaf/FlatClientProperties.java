@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf;
 
+import java.awt.Color;
 import java.util.Objects;
 import javax.swing.JComponent;
 
@@ -27,14 +28,34 @@ public interface FlatClientProperties
 	/**
 	 * Specifies type of a button.
 	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JButton}<br>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link BUTTON_TYPE_HELP}
+	 * <strong>Allowed Values</strong> {@link #BUTTON_TYPE_SQUARE} and {@link #BUTTON_TYPE_HELP}
 	 */
 	String BUTTON_TYPE = "JButton.buttonType";
 
 	/**
+	 * Paint the button with square edges.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
+	 *
+	 * @see #BUTTON_TYPE
+	 */
+	String BUTTON_TYPE_SQUARE = "square";
+
+	/**
+	 * Paint the toggle button in tab style.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JToggleButton}
+	 *
+	 * @see #TOGGLE_BUTTON_TYPE
+	 */
+	String BUTTON_TYPE_TAB = "tab";
+
+	/**
 	 * Paint a help button (circle with question mark).
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton}
 	 *
 	 * @see #BUTTON_TYPE
 	 */
@@ -45,7 +66,7 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JCheckBox}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link SELECTED_STATE_INDETERMINATE}
+	 * <strong>Allowed Values</strong> {@link #SELECTED_STATE_INDETERMINATE}
 	 */
 	String SELECTED_STATE = "JButton.selectedState";
 
@@ -55,6 +76,38 @@ public interface FlatClientProperties
 	 * @see #SELECTED_STATE
 	 */
 	String SELECTED_STATE_INDETERMINATE = "indeterminate";
+
+	/**
+	 * Specifies minimum width of a component.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton} and {@link javax.swing.text.JTextComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
+	 */
+	String MINIMUM_WIDTH = "JComponent.minimumWidth";
+
+	/**
+	 * Specifies minimum height of a component.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
+	 */
+	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
+
+	/**
+	 * Specifies whether the progress bar has always the larger height even if no string is painted.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JProgressBar}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String PROGRESS_BAR_LARGE_HEIGHT = "JProgressBar.largeHeight";
+
+	/**
+	 * Specifies whether the progress bar is paint with square edges.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JProgressBar}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String PROGRESS_BAR_SQUARE = "JProgressBar.square";
 
 	/**
 	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
@@ -81,12 +134,44 @@ public interface FlatClientProperties
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
+	 * Specifies the height of a tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 */
+	String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight";
+
+	/**
 	 * Placeholder text that is only painted if the text field is empty.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} or {@link javax.swing.JComboBox}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}
 	 */
 	String PLACEHOLDER_TEXT = "JTextField.placeholderText";
+
+	/**
+	 * Height of underline if toggle button type is {@link #BUTTON_TYPE_TAB}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 */
+	String TAB_BUTTON_UNDERLINE_HEIGHT = "JToggleButton.tab.underlineHeight";
+
+	/**
+	 * Color of underline if toggle button type is {@link #BUTTON_TYPE_TAB}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.awt.Color}
+	 */
+	String TAB_BUTTON_UNDERLINE_COLOR = "JToggleButton.tab.underlineColor";
+
+	/**
+	 * Background color if selected and toggle button type is {@link #BUTTON_TYPE_TAB}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.awt.Color}
+	 */
+	String TAB_BUTTON_SELECTED_BACKGROUND = "JToggleButton.tab.selectedBackground";
 
 	/**
 	 * Checks whether a client property of a component has the given value.
@@ -102,5 +187,23 @@ public interface FlatClientProperties
 	static boolean clientPropertyBoolean( JComponent c, String key, boolean defaultValue ) {
 		Object value = c.getClientProperty( key );
 		return (value instanceof Boolean) ? (boolean) value : defaultValue;
+	}
+
+	/**
+	 * Checks whether a client property of a component is an integer and returns its value.
+	 * If the client property is not set, or not an integer, defaultValue is returned.
+	 */
+	static int clientPropertyInt( JComponent c, String key, int defaultValue ) {
+		Object value = c.getClientProperty( key );
+		return (value instanceof Integer) ? (int) value : defaultValue;
+	}
+
+	/**
+	 * Checks whether a client property of a component is a color and returns its value.
+	 * If the client property is not set, or not a color, defaultValue is returned.
+	 */
+	static Color clientPropertyColor( JComponent c, String key, Color defaultValue ) {
+		Object value = c.getClientProperty( key );
+		return (value instanceof Color) ? (Color) value : defaultValue;
 	}
 }

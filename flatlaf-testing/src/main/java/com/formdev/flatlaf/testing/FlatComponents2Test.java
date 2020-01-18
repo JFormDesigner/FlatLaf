@@ -21,6 +21,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import javax.swing.*;
 import javax.swing.table.*;
+import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
 import net.miginfocom.swing.*;
 
 /**
@@ -70,6 +71,18 @@ public class FlatComponents2Test
 		}
 	}
 
+	private void tableHeaderButtonChanged() {
+		boolean show = tableHeaderButtonCheckBox.isSelected();
+		JButton button = null;
+		if( show ) {
+			button = new JButton( new FlatMenuArrowIcon() );
+			button.addActionListener( e -> {
+				JOptionPane.showMessageDialog( this, "hello" );
+			} );
+		}
+		scrollPane5.setCorner( JScrollPane.UPPER_TRAILING_CORNER, button );
+	}
+
 	@SuppressWarnings( { "unchecked", "rawtypes" } )
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -87,9 +100,10 @@ public class FlatComponents2Test
 		JScrollPane scrollPane4 = new JScrollPane();
 		tree2 = new JTree();
 		JLabel tableLabel = new JLabel();
-		JScrollPane scrollPane5 = new JScrollPane();
+		scrollPane5 = new JScrollPane();
 		table1 = new JTable();
 		dndCheckBox = new JCheckBox();
+		tableHeaderButtonCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -102,7 +116,7 @@ public class FlatComponents2Test
 			"[]" +
 			"[]" +
 			"[::200]" +
-			"[::150]" +
+			"[150,grow]" +
 			"[]"));
 
 		//---- textFieldLabel ----
@@ -293,6 +307,11 @@ public class FlatComponents2Test
 		dndCheckBox.setMnemonic('D');
 		dndCheckBox.addActionListener(e -> dndChanged());
 		add(dndCheckBox, "cell 0 4 3 1");
+
+		//---- tableHeaderButtonCheckBox ----
+		tableHeaderButtonCheckBox.setText("show button in table header");
+		tableHeaderButtonCheckBox.addActionListener(e -> tableHeaderButtonChanged());
+		add(tableHeaderButtonCheckBox, "cell 0 4 3 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		((JComboBox)((DefaultCellEditor)table1.getColumnModel().getColumn( 3 ).getCellEditor()).getComponent()).setEditable( true );
@@ -303,8 +322,10 @@ public class FlatComponents2Test
 	private JList<String> list2;
 	private JTree tree1;
 	private JTree tree2;
+	private JScrollPane scrollPane5;
 	private JTable table1;
 	private JCheckBox dndCheckBox;
+	private JCheckBox tableHeaderButtonCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class DummyTransferHandler -----------------------------------------

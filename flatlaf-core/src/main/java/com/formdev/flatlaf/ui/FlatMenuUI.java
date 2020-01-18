@@ -17,8 +17,11 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuUI;
 
@@ -76,5 +79,10 @@ public class FlatMenuUI
 			if( e.getPropertyName() == "iconTextGap" )
 				defaultTextIconGap = scale( defaultTextIconGap );
 		};
+	}
+
+	@Override
+	protected void paintText( Graphics g, JMenuItem menuItem, Rectangle textRect, String text ) {
+		FlatMenuItemUI.paintText( g, menuItem, textRect, text, disabledForeground, selectionForeground );
 	}
 }

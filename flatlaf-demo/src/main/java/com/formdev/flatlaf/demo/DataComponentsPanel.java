@@ -21,6 +21,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import javax.swing.*;
 import javax.swing.table.*;
+import javax.swing.tree.*;
 import net.miginfocom.swing.*;
 
 /**
@@ -171,6 +172,32 @@ class DataComponentsPanel
 			//---- tree1 ----
 			tree1.setShowsRootHandles(true);
 			tree1.setEditable(true);
+			tree1.setModel(new DefaultTreeModel(
+				new DefaultMutableTreeNode("JTree") {
+					{
+						DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("colors");
+							node1.add(new DefaultMutableTreeNode("blue"));
+							node1.add(new DefaultMutableTreeNode("violet"));
+							node1.add(new DefaultMutableTreeNode("red"));
+							node1.add(new DefaultMutableTreeNode("yellow"));
+						add(node1);
+						node1 = new DefaultMutableTreeNode("sports");
+							node1.add(new DefaultMutableTreeNode("basketball"));
+							node1.add(new DefaultMutableTreeNode("soccer"));
+							node1.add(new DefaultMutableTreeNode("football"));
+							node1.add(new DefaultMutableTreeNode("hockey"));
+						add(node1);
+						node1 = new DefaultMutableTreeNode("food");
+							node1.add(new DefaultMutableTreeNode("hot dogs"));
+							DefaultMutableTreeNode node2 = new DefaultMutableTreeNode("pizza");
+								node2.add(new DefaultMutableTreeNode("pizza aglio e olio"));
+								node2.add(new DefaultMutableTreeNode("pizza margherita bianca"));
+							node1.add(node2);
+							node1.add(new DefaultMutableTreeNode("ravioli"));
+							node1.add(new DefaultMutableTreeNode("bananas"));
+						add(node1);
+					}
+				}));
 			scrollPane3.setViewportView(tree1);
 		}
 		add(scrollPane3, "cell 1 1,growx");

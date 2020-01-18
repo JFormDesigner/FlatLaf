@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -29,6 +30,7 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.util.UIScale;
@@ -81,10 +83,14 @@ public class FlatTableHeaderUI
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		// do not paint borders if JTableHeader.setDefaultRenderer() was used
-		String rendererClassName = header.getDefaultRenderer().getClass().getName();
-		boolean paintBorders =
-			rendererClassName.equals( "sun.swing.table.DefaultTableCellHeaderRenderer" ) ||
-			rendererClassName.equals( "sun.swing.FilePane$AlignableTableHeaderRenderer" );
+		TableCellRenderer defaultRenderer = header.getDefaultRenderer();
+		boolean paintBorders = isSystemDefaultRenderer( defaultRenderer );
+		if( !paintBorders && header.getColumnModel().getColumnCount() > 0 ) {
+			// check whether the renderer delegates to the system default renderer
+			Component rendererComponent = defaultRenderer.getTableCellRendererComponent(
+				header.getTable(), "", false, false, -1, 0 );
+			paintBorders = isSystemDefaultRenderer( rendererComponent );
+		}
 
 		if( paintBorders )
 			paintColumnBorders( g, c );
@@ -93,6 +99,12 @@ public class FlatTableHeaderUI
 
 		if( paintBorders )
 			paintDraggedColumnBorders( g, c );
+	}
+
+	private boolean isSystemDefaultRenderer( Object headerRenderer ) {
+		String rendererClassName = headerRenderer.getClass().getName();
+		return rendererClassName.equals( "sun.swing.table.DefaultTableCellHeaderRenderer" ) ||
+			   rendererClassName.equals( "sun.swing.FilePane$AlignableTableHeaderRenderer" );
 	}
 
 	private void paintColumnBorders( Graphics g, JComponent c ) {

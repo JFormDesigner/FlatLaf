@@ -28,6 +28,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeEvent;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
@@ -39,6 +40,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.UIScale;
@@ -180,7 +182,7 @@ public class FlatButtonUI
 		LookAndFeel.installProperty( b, "opaque", false );
 		LookAndFeel.installProperty( b, "iconTextGap", scale( iconTextGap ) );
 
-		MigLayoutVisualPadding.install( b, focusWidth );
+		MigLayoutVisualPadding.install( b, getFocusWidth( b ) );
 	}
 
 	@Override
@@ -189,6 +191,26 @@ public class FlatButtonUI
 
 		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
+	}
+
+	@Override
+	protected BasicButtonListener createButtonListener( AbstractButton b ) {
+		return new BasicButtonListener( b ) {
+			@Override
+			public void propertyChange( PropertyChangeEvent e ) {
+				super.propertyChange( e );
+				FlatButtonUI.this.propertyChange( b, e );
+			}
+		};
+	}
+
+	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case MINIMUM_WIDTH:
+			case MINIMUM_HEIGHT:
+				b.revalidate();
+				break;
+		}
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
@@ -207,6 +229,10 @@ public class FlatButtonUI
 		String text = ((JButton)c).getText();
 		return (icon != null && (text == null || text.isEmpty())) ||
 			(icon == null && text != null && ("...".equals( text ) || text.length() == 1));
+	}
+
+	static boolean isSquareButton( Component c ) {
+		return c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_SQUARE );
 	}
 
 	static boolean isHelpButton( Component c ) {
@@ -228,41 +254,45 @@ public class FlatButtonUI
 			return;
 		}
 
-		if( isContentAreaFilled( c ) ) {
-			Color background = getBackground( c );
-			if( background != null ) {
-				Graphics2D g2 = (Graphics2D) g.create();
-				try {
-					FlatUIUtils.setRenderingHints( g2 );
-
-					Border border = c.getBorder();
-					float focusWidth = (border instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-					float arc = (border instanceof FlatButtonBorder || isToolBarButton( c )) ? scale( (float) this.arc ) : 0;
-					boolean def = isDefaultButton( c );
-
-					// paint shadow
-					Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-					if( shadowColor != null && shadowWidth > 0 && focusWidth > 0 && !c.hasFocus() && c.isEnabled() ) {
-						g2.setColor( shadowColor );
-						g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
-							c.getWidth() - focusWidth * 2, c.getHeight() - focusWidth * 2, arc, arc ) );
-					}
-
-					// paint background
-					Color startBg = def ? defaultBackground : startBackground;
-					Color endBg = def ? defaultEndBackground : endBackground;
-					if( background == startBg && endBg != null && !startBg.equals( endBg ) )
-						g2.setPaint( new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg ) );
-					else
-						FlatUIUtils.setColor( g2, background, def ? defaultBackground : c.getBackground() );
-					FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
-				} finally {
-					g2.dispose();
-				}
-			}
-		}
+		if( isContentAreaFilled( c ) )
+			paintBackground( g, c );
 
 		paint( g, c );
+	}
+
+	protected void paintBackground( Graphics g, JComponent c ) {
+		Color background = getBackground( c );
+		if( background != null ) {
+			Graphics2D g2 = (Graphics2D) g.create();
+			try {
+				FlatUIUtils.setRenderingHints( g2 );
+
+				Border border = c.getBorder();
+				float focusWidth = (border instanceof FlatBorder) ? scale( (float) getFocusWidth( c ) ) : 0;
+				float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton( c ))
+					? scale( (float) this.arc ) : 0;
+				boolean def = isDefaultButton( c );
+
+				// paint shadow
+				Color shadowColor = def ? defaultShadowColor : this.shadowColor;
+				if( shadowColor != null && shadowWidth > 0 && focusWidth > 0 && !c.hasFocus() && c.isEnabled() ) {
+					g2.setColor( shadowColor );
+					g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
+						c.getWidth() - focusWidth * 2, c.getHeight() - focusWidth * 2, arc, arc ) );
+				}
+
+				// paint background
+				Color startBg = def ? defaultBackground : startBackground;
+				Color endBg = def ? defaultEndBackground : endBackground;
+				if( background == startBg && endBg != null && !startBg.equals( endBg ) )
+					g2.setPaint( new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg ) );
+				else
+					FlatUIUtils.setColor( g2, background, def ? defaultBackground : c.getBackground() );
+				FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
+			} finally {
+				g2.dispose();
+			}
+		}
 	}
 
 	@Override
@@ -354,9 +384,16 @@ public class FlatButtonUI
 		// or apply minimum width, if not in toolbar and not a icon-only button
 		if( isIconOnlyButton( c ) )
 			prefSize.width = Math.max( prefSize.width, prefSize.height );
-		else if( !isToolBarButton( c ) )
-			prefSize.width = Math.max( prefSize.width, scale( minimumWidth + (focusWidth * 2) ) );
+		else if( !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
+			int focusWidth = getFocusWidth( c );
+			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) + (focusWidth * 2) ) );
+			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) + (focusWidth * 2) ) );
+		}
 
 		return prefSize;
+	}
+
+	protected int getFocusWidth( JComponent c ) {
+		return focusWidth;
 	}
 }

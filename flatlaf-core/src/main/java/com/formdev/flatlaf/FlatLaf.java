@@ -28,17 +28,22 @@ import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
+import javax.swing.InputMap;
 import javax.swing.JLabel;
+import javax.swing.JRootPane;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.LazyValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
@@ -66,6 +71,7 @@ public abstract class FlatLaf
 
 	private KeyEventPostProcessor mnemonicListener;
 	private static boolean showMnemonics;
+	private static WeakReference<Window> lastShowMnemonicWindow;
 
 	private Consumer<UIDefaults> postInitialization;
 
@@ -229,6 +235,7 @@ public abstract class FlatLaf
 
 		initFonts( defaults );
 		initIconColors( defaults, isDark() );
+		initInputMaps( defaults );
 
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
@@ -335,6 +342,57 @@ public abstract class FlatLaf
 		defaults.put( "Objects.BlackText",      new ColorUIResource( 0x231F20 ) );
 	}
 
+	private void initInputMaps( UIDefaults defaults ) {
+		if( SystemInfo.IS_MAC ) {
+			// AquaLookAndFeel (the base for UI defaults on macOS) uses special
+			// action keys (e.g. "aquaExpandNode") for some macOS specific behaviour.
+			// Those action keys are not available in FlatLaf, which makes it
+			// necessary to make some modifications.
+
+			// combobox
+			defaults.put( "ComboBox.ancestorInputMap", new UIDefaults.LazyInputMap( new Object[] {
+				     "ESCAPE", "hidePopup",
+				    "PAGE_UP", "pageUpPassThrough",
+				  "PAGE_DOWN", "pageDownPassThrough",
+				       "HOME", "homePassThrough",
+				        "END", "endPassThrough",
+				       "DOWN", "selectNext",
+				    "KP_DOWN", "selectNext",
+				      "SPACE", "spacePopup",
+				      "ENTER", "enterPressed",
+				         "UP", "selectPrevious",
+				      "KP_UP", "selectPrevious"
+			} ) );
+
+			// tree node expanding/collapsing
+			modifyInputMap( defaults, "Tree.focusInputMap",
+				         "RIGHT", "selectChild",
+				      "KP_RIGHT", "selectChild",
+				          "LEFT", "selectParent",
+				       "KP_LEFT", "selectParent",
+				   "shift RIGHT", null,
+				"shift KP_RIGHT", null,
+				    "shift LEFT", null,
+				 "shift KP_LEFT", null,
+				     "ctrl LEFT", null,
+				  "ctrl KP_LEFT", null,
+				    "ctrl RIGHT", null,
+				 "ctrl KP_RIGHT", null
+			);
+			defaults.put( "Tree.focusInputMap.RightToLeft", new UIDefaults.LazyInputMap( new Object[] {
+	                     "RIGHT", "selectParent",
+	                  "KP_RIGHT", "selectParent",
+	                      "LEFT", "selectChild",
+	                   "KP_LEFT", "selectChild"
+			} ) );
+		}
+	}
+
+	private void modifyInputMap( UIDefaults defaults, String key, Object... bindings ) {
+		// Note: not using `defaults.get(key)` here because this would resolve the lazy value
+		defaults.put( key, new LazyModifyInputMap( defaults.remove( key ), bindings ) );
+	}
+
 	private static void reSetLookAndFeel() {
 		EventQueue.invokeLater( () -> {
 			LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
@@ -373,15 +431,15 @@ public abstract class FlatLaf
 		if( SystemInfo.IS_MAC ) {
 			// Ctrl+Alt keys must be pressed on Mac
 			if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown() && e.isAltDown() );
+				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown() && e.isAltDown(), e.getComponent() );
 		} else {
 			// Alt key must be pressed on Windows and Linux
 			if( keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED );
+				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED, e.getComponent() );
 		}
 	}
 
-	private static void showMnemonics( boolean show ) {
+	private static void showMnemonics( boolean show, Component c ) {
 		if( show == showMnemonics )
 			return;
 
@@ -391,22 +449,35 @@ public abstract class FlatLaf
 		if( !UIManager.getBoolean( "Component.hideMnemonics" ) )
 			return;
 
-		// get focus owner
-		Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-		if( focusOwner == null )
-			return;
+		if( show ) {
+			// get root pane
+			JRootPane rootPane = SwingUtilities.getRootPane( c );
+			if( rootPane == null )
+				return;
 
-		// get focused window
-		Window window = SwingUtilities.windowForComponent( focusOwner );
-		if( window == null )
-			return;
+			// get window
+			Window window = SwingUtilities.getWindowAncestor( rootPane );
+			if( window == null )
+				return;
 
-		// repaint components with mnemonics in focused window
-		repaintMnemonics( window );
+			// repaint components with mnemonics in focused window
+			repaintMnemonics( window );
+
+			lastShowMnemonicWindow = new WeakReference<>( window );
+		} else if( lastShowMnemonicWindow != null ) {
+			Window window = lastShowMnemonicWindow.get();
+			if( window != null )
+				repaintMnemonics( window );
+
+			lastShowMnemonicWindow = null;
+		}
 	}
 
 	private static void repaintMnemonics( Container container ) {
 		for( Component c : container.getComponents() ) {
+			if( !c.isVisible() )
+				continue;
+
 			if( hasMnemonic( c ) )
 				c.repaint();
 
@@ -432,5 +503,41 @@ public abstract class FlatLaf
 		}
 
 		return false;
+	}
+
+	//---- class LazyModifyInputMap -------------------------------------------
+
+	/**
+	 * Takes a (lazy) base input map and lazily applies modifications to it specified in bindings.
+	 */
+	private static class LazyModifyInputMap
+		implements LazyValue
+	{
+		private final Object baseInputMap;
+		private final Object[] bindings;
+
+		public LazyModifyInputMap( Object baseInputMap, Object[] bindings ) {
+			this.baseInputMap = baseInputMap;
+			this.bindings = bindings;
+		}
+
+		@Override
+		public Object createValue( UIDefaults table ) {
+			// get base input map
+			InputMap inputMap = (baseInputMap instanceof LazyValue)
+				? (InputMap) ((LazyValue)baseInputMap).createValue( table )
+				: (InputMap) baseInputMap;
+
+			// modify input map (replace or remove)
+			for( int i = 0; i < bindings.length; i += 2 ) {
+				KeyStroke keyStroke = KeyStroke.getKeyStroke( (String) bindings[i] );
+				if( bindings[i + 1] != null )
+					inputMap.put( keyStroke, bindings[i + 1] );
+				else
+					inputMap.remove( keyStroke );
+			}
+
+			return inputMap;
+		}
 	}
 }

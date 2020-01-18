@@ -1,15 +1,92 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.25.1
+
+Re-release of 0.25 because of problems with Maven Central.
+
+
+## 0.25
+
+- Hide menu mnemonics by default and show them only when <kbd>Alt</kbd> key is
+  pressed. (issue #43)
+- Menu: Fixed vertical alignment of sub-menus. (issue #42)
+- TabbedPane: In scroll-tab-layout, the cropped line is now hidden. (issue #40)
+- Tree: UI default value `Tree.textBackground` now has a valid color and is no
+  longer `null`.
+- Tree on macOS: Fixed <kbd>Left</kbd> and <kbd>Right</kbd> keys to collapse or
+  expand nodes.
+- ComboBox on macOS: Fixed keyboard navigation and show/hide popup.
+- Button and ToggleButton: Support per component minimum height (set client
+  property `JComponent.minimumHeight` to an integer). (issue #44)
+- Button and ToggleButton: Do not apply minimum width if button border was
+  changed (is no longer an instance of `FlatButtonBorder`).
+- ToggleButton: Renamed toggle button type "underline" to "tab" (value of client
+  property `JButton.buttonType` is now `tab`).
+- ToggleButton: Support per component styling for tab-style toggle buttons with
+  client properties `JToggleButton.tab.underlineHeight` (integer),
+  `JToggleButton.tab.underlineColor` (Color) and
+  `JToggleButton.tab.selectedBackground` (Color). (issue #45)
+- ToggleButton: No longer use focus width for tab-style toggle buttons to
+  compute component size, which reduces/fixes component size in "Flat IntelliJ"
+  and "Flat Darcula" themes.
+- TabbedPane: Support per component tab height (set client property
+  `JTabbedPane.tabHeight` to an integer).
+- ProgressBar: Support square painting (set client property
+  `JProgressBar.square` to `true`) and larger height even if no string is
+  painted (set client property `JProgressBar.largeHeight` to `true`).
+
+
+## 0.24
+
+- Support smooth scrolling with touchpads and high precision mouse wheels.
+  (issue #27)
+- Changed `.properties` file loading order: Now all core `.properties` files are
+  loaded before loading addon `.properties` files. This makes it easier to
+  overwrite core values in addons. Also, addon loading order can be specified.
+- TableHeader: Paint column borders if renderer has changed, but delegates to
+  the system default renderer (e.g. done in NetBeans).
+- Label and ToolTip: Fixed font sizes for HTML headings.
+- Button and ToggleButton: Support square button style (set client property
+  `JButton.buttonType` to `square`).
+- ToggleButton: Support underline toggle button style (set client property
+  `JButton.buttonType` to `underline`).
+- Button and TextComponent: Support per component minimum width (set client
+  property `JComponent.minimumWidth` to an integer).
+- ScrollPane with Table: The border of buttons that are added to one of the four
+  scroll pane corners are now removed if the center component is a table. Also,
+  these corner buttons are made not focusable.
+- Table: Replaced `Table.showGrid` with `Table.showHorizontalLines` and
+  `Table.showVerticalLines`. (issue #38)
+- ProgressBar: Now uses blueish color for the progress part in "Flat Dark"
+  theme. In the "Flat Darcula" theme, it remains light gray.
+- Improved Swing system colors `controlHighlight`, `controlLtHighlight`,
+  `controlShadow` and `controlDkShadow`.
+
+
+## 0.23.1
+
+- Tree: Fixed wide selection if scrolled horizontally.
+- ComboBox: Fixed NPE in Oracle SQL Developer settings.
+- IntelliJ Themes: Fixed checkbox colors in Material UI Lite dark themes.
+
+
+## 0.23
 
 - Updated colors in "Flat Light" and "Flat IntelliJ" themes with colors from
-  "IntelliJ Light Theme", which provides blue coloring that better match
+  "IntelliJ Light Theme", which provides blue coloring that better matches
   platform colors.
 - Tree: Support wide selection (enabled by default).
 - Table: Hide grid and changed intercell spacing to zero.
-- List and Tree: Paint cell focus indicator (black rectangle) only if more than
-  one item is selected.
+- List, Table and Tree: Added colors for drag-and-drop. Added "enable drag and
+  drop" checkbox to Demo on "Data Components" tab.
+- List and Tree: Hide cell focus indicator (black rectangle) by default. Can be
+  enabled with `List.showCellFocusIndicator=true` /
+  `Tree.showCellFocusIndicator=true`, but then the cell focus indicator is shown
+  only if more than one item is selected.
+- Table: Hide cell focus indicator (black rectangle) by default if none of the
+  selected cells is editable. Can be show always with
+  `Table.showCellFocusIndicator=true`.
 - Support basic color functions in `.properties` files: `rgb(red,green,blue)`,
   `rgba(red,green,blue,alpha)`, `hsl(hue,saturation,lightness)`,
   `hsla(hue,saturation,lightness,alpha)`, `lighten(color,amount[,options])` and
@@ -18,6 +95,8 @@ FlatLaf Change Log
 - Fixed link color (in HTML text) and separator color in IntelliJ platform
   themes.
 - Use logging instead of printing errors to `System.err`.
+- Updated IntelliJ Themes in demo to the latest versions.
+- IntelliJ Themes: Fixed link and separator colors.
 
 
 ## 0.22

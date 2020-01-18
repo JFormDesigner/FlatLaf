@@ -61,7 +61,9 @@ public class FlatComponentsTest
 		JLabel label2 = new JLabel();
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
+		JButton button17 = new JButton();
 		JButton button2 = new JButton();
+		JButton button18 = new JButton();
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
 		JButton button3 = new JButton();
 		JButton button12 = new JButton();
@@ -71,9 +73,13 @@ public class FlatComponentsTest
 		JButton button16 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
+		JToggleButton toggleButton9 = new JToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
+		JToggleButton toggleButton10 = new JToggleButton();
 		JToggleButton toggleButton3 = new JToggleButton();
 		JToggleButton toggleButton4 = new JToggleButton();
+		JToggleButton toggleButton5 = new JToggleButton();
+		JToggleButton toggleButton8 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
@@ -162,14 +168,7 @@ public class FlatComponentsTest
 		JToggleButton toggleButton7 = new JToggleButton();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
-		JLabel label4 = new JLabel();
 		JScrollBar scrollBar4 = new JScrollBar();
-		JPanel panel3 = new JPanel();
-		JLabel label3 = new JLabel();
-		JScrollPane scrollPane15 = new JScrollPane();
-		JEditorPane editorPane6 = new JEditorPane();
-		JScrollPane scrollPane16 = new JScrollPane();
-		JTextPane textPane6 = new JTextPane();
 		JScrollBar scrollBar5 = new JScrollBar();
 		JScrollBar scrollBar6 = new JScrollBar();
 		JLabel separatorLabel = new JLabel();
@@ -256,12 +255,25 @@ public class FlatComponentsTest
 		button1.setToolTipText("This button is enabled.");
 		add(button1, "cell 1 1");
 
+		//---- button17 ----
+		button17.setText("square");
+		button17.putClientProperty("JButton.buttonType", "square");
+		button17.putClientProperty("JComponent.minimumWidth", 0);
+		add(button17, "cell 1 1");
+
 		//---- button2 ----
 		button2.setText("disabled");
 		button2.setDisplayedMnemonicIndex(0);
 		button2.setEnabled(false);
 		button2.setToolTipText("This button is disabled.");
 		add(button2, "cell 2 1");
+
+		//---- button18 ----
+		button18.setText("square");
+		button18.putClientProperty("JButton.buttonType", "square");
+		button18.setEnabled(false);
+		button18.putClientProperty("JComponent.minimumWidth", 0);
+		add(button18, "cell 2 1");
 
 		//---- button5 ----
 		button5.setText("default");
@@ -304,10 +316,21 @@ public class FlatComponentsTest
 		toggleButton1.setText("enabled");
 		add(toggleButton1, "cell 1 2");
 
+		//---- toggleButton9 ----
+		toggleButton9.setText("square");
+		toggleButton9.putClientProperty("JButton.buttonType", "square");
+		add(toggleButton9, "cell 1 2");
+
 		//---- toggleButton2 ----
 		toggleButton2.setText("disabled");
 		toggleButton2.setEnabled(false);
 		add(toggleButton2, "cell 2 2");
+
+		//---- toggleButton10 ----
+		toggleButton10.setText("square");
+		toggleButton10.putClientProperty("JButton.buttonType", "square");
+		toggleButton10.setEnabled(false);
+		add(toggleButton10, "cell 2 2");
 
 		//---- toggleButton3 ----
 		toggleButton3.setText("selected");
@@ -319,6 +342,19 @@ public class FlatComponentsTest
 		toggleButton4.setEnabled(false);
 		toggleButton4.setSelected(true);
 		add(toggleButton4, "cell 4 2");
+
+		//---- toggleButton5 ----
+		toggleButton5.setText("tab");
+		toggleButton5.putClientProperty("JButton.buttonType", "tab");
+		toggleButton5.setSelected(true);
+		add(toggleButton5, "cell 5 2");
+
+		//---- toggleButton8 ----
+		toggleButton8.setText("tab");
+		toggleButton8.putClientProperty("JButton.buttonType", "tab");
+		toggleButton8.setEnabled(false);
+		toggleButton8.setSelected(true);
+		add(toggleButton8, "cell 5 2");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
@@ -806,52 +842,10 @@ public class FlatComponentsTest
 		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
 		add(scrollBar1, "cell 1 14,growx");
 
-		//---- label4 ----
-		label4.setText("HTML:");
-		add(label4, "cell 5 14");
-
 		//---- scrollBar4 ----
 		scrollBar4.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar4.setEnabled(false);
 		add(scrollBar4, "cell 1 15,growx");
-
-		//======== panel3 ========
-		{
-			panel3.setOpaque(false);
-			panel3.setLayout(new MigLayout(
-				"ltr,insets 0,hidemode 3",
-				// columns
-				"[]",
-				// rows
-				"[]" +
-				"[]" +
-				"[]"));
-
-			//---- label3 ----
-			label3.setText("<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a></html>");
-			panel3.add(label3, "cell 0 0");
-
-			//======== scrollPane15 ========
-			{
-
-				//---- editorPane6 ----
-				editorPane6.setContentType("text/html");
-				editorPane6.setText("JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>");
-				scrollPane15.setViewportView(editorPane6);
-			}
-			panel3.add(scrollPane15, "cell 0 1,grow");
-
-			//======== scrollPane16 ========
-			{
-
-				//---- textPane6 ----
-				textPane6.setContentType("text/html");
-				textPane6.setText("JTextPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>");
-				scrollPane16.setViewportView(textPane6);
-			}
-			panel3.add(scrollPane16, "cell 0 2,grow");
-		}
-		add(panel3, "cell 5 15 1 9,aligny top,grow 100 0");
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);

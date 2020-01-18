@@ -21,6 +21,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
@@ -47,12 +48,46 @@ import com.formdev.flatlaf.util.StringUtils;
 public class FlatToolTipUI
 	extends BasicToolTipUI
 {
+	private static PropertyChangeListener sharedPropertyChangedListener;
+
 	private static ComponentUI instance;
 
 	public static ComponentUI createUI( JComponent c ) {
 		if( instance == null )
 			instance = new FlatToolTipUI();
 		return instance;
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		// update HTML renderer if necessary
+		FlatLabelUI.updateHTMLRenderer( c, ((JToolTip)c).getTipText(), false );
+	}
+
+	@Override
+	protected void installListeners( JComponent c ) {
+		super.installListeners( c );
+
+		if( sharedPropertyChangedListener == null ) {
+			sharedPropertyChangedListener = e -> {
+				String name = e.getPropertyName();
+				if( name == "text" || name == "font" || name == "foreground" ) {
+					JToolTip toolTip = (JToolTip) e.getSource();
+					FlatLabelUI.updateHTMLRenderer( toolTip, toolTip.getTipText(), false );
+				}
+			};
+		}
+
+		c.addPropertyChangeListener( sharedPropertyChangedListener );
+	}
+
+	@Override
+	protected void uninstallListeners( JComponent c ) {
+		super.uninstallListeners( c );
+
+		c.removePropertyChangeListener( sharedPropertyChangedListener );
 	}
 
 	@Override

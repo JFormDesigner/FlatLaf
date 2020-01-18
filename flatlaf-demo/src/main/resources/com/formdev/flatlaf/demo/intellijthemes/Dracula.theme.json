@@ -160,22 +160,6 @@
         "inactiveBackground": "#44475a"
       }
     },
-    "ScrollBar": {
-      "thumbColor": "#bd93f9",
-      "hoverThumbColor": "#bd93f9",
-      "Transparent": {
-        "thumbColor": "#bd93f9",
-        "hoverThumbColor": "#bd93f9"
-      },
-      "Mac": {
-        "thumbColor": "#bd93f9",
-        "hoverThumbColor": "#bd93f9",
-        "Transparent": {
-          "thumbColor": "#bd93f9",
-          "hoverThumbColor": "#bd93f9"
-        }
-      }
-    },
     "SearchEverywhere": {
       "SearchField": {
         "background": "#44475a"

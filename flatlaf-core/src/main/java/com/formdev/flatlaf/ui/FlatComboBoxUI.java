@@ -28,6 +28,8 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
@@ -35,12 +37,16 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
@@ -53,6 +59,7 @@ import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -270,6 +277,18 @@ public class FlatComboBoxUI
 		editor.applyComponentOrientation( comboBox.getComponentOrientation() );
 
 		updateEditorColors();
+
+		// macOS
+		if( SystemInfo.IS_MAC && editor instanceof JTextComponent ) {
+			// delegate actions from editor text field to combobox, which is necessary
+			// because text field on macOS (based on Aqua LaF UI defaults)
+			// already handle those keys
+			InputMap inputMap = ((JTextComponent)editor).getInputMap();
+			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "UP" ) );
+			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "KP_UP" ) );
+			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "DOWN" ) );
+			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "KP_DOWN" ) );
+		}
 	}
 
 	private void updateEditorColors() {
@@ -348,6 +367,8 @@ public class FlatComboBoxUI
 	public void paintCurrentValue( Graphics g, Rectangle bounds, boolean hasFocus ) {
 		ListCellRenderer<Object> renderer = comboBox.getRenderer();
 		uninstallCellPaddingBorder( renderer );
+		if( renderer == null )
+			renderer = new DefaultListCellRenderer();
 		Component c = renderer.getListCellRendererComponent( listBox, comboBox.getSelectedItem(), -1, false, false );
 		c.setFont( comboBox.getFont() );
 		c.applyComponentOrientation( comboBox.getComponentOrientation() );
@@ -520,6 +541,8 @@ public class FlatComboBoxUI
 				CellPaddingBorder.uninstall( renderer );
 				CellPaddingBorder.uninstall( lastRendererComponent );
 
+				if( renderer == null )
+					renderer = new DefaultListCellRenderer();
 				Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 				c.applyComponentOrientation( comboBox.getComponentOrientation() );
 
@@ -601,6 +624,33 @@ public class FlatComboBoxUI
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 			if( rendererBorder != null )
 				rendererBorder.paintBorder( c, g, x, y, width, height );
+		}
+	}
+
+	//---- class EditorDelegateAction -----------------------------------------
+
+	/**
+	 * Delegates actions from editor text field to combobox.
+	 */
+	private class EditorDelegateAction
+		extends AbstractAction
+	{
+		private final KeyStroke keyStroke;
+
+		EditorDelegateAction( InputMap inputMap, KeyStroke keyStroke ) {
+			this.keyStroke = keyStroke;
+
+			// add to input map
+			inputMap.put( keyStroke, this );
+		}
+
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			ActionListener action = comboBox.getActionForKeyStroke( keyStroke );
+			if( action != null ) {
+				action.actionPerformed( new ActionEvent( comboBox, e.getID(),
+					e.getActionCommand(), e.getWhen(), e.getModifiers() ) );
+			}
 		}
 	}
 }

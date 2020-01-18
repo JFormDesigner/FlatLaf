@@ -51,6 +51,12 @@ class DemoFrame
 		DemoPrefs.getState().putInt( FlatLafDemo.KEY_TAB, tabbedPane.getSelectedIndex() );
 	}
 
+	private void menuItemActionPerformed(ActionEvent e) {
+		SwingUtilities.invokeLater( () -> {
+			JOptionPane.showMessageDialog( this, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE );
+		} );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JMenuBar menuBar1 = new JMenuBar();
@@ -68,6 +74,14 @@ class DemoFrame
 		JMenuItem deleteMenuItem = new JMenuItem();
 		JMenu viewMenu = new JMenu();
 		JCheckBoxMenuItem checkBoxMenuItem1 = new JCheckBoxMenuItem();
+		JMenu menu1 = new JMenu();
+		JMenu subViewsMenu = new JMenu();
+		JMenu subSubViewsMenu = new JMenu();
+		JMenuItem errorLogViewMenuItem = new JMenuItem();
+		JMenuItem searchViewMenuItem = new JMenuItem();
+		JMenuItem projectViewMenuItem = new JMenuItem();
+		JMenuItem structureViewMenuItem = new JMenuItem();
+		JMenuItem propertiesViewMenuItem = new JMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
@@ -103,27 +117,35 @@ class DemoFrame
 			//======== fileMenu ========
 			{
 				fileMenu.setText("File");
+				fileMenu.setMnemonic('F');
 
 				//---- newMenuItem ----
 				newMenuItem.setText("New");
 				newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				newMenuItem.setMnemonic('N');
+				newMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				fileMenu.add(newMenuItem);
 
 				//---- openMenuItem ----
 				openMenuItem.setText("Open");
 				openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				openMenuItem.setMnemonic('O');
+				openMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				fileMenu.add(openMenuItem);
 				fileMenu.addSeparator();
 
 				//---- closeMenuItem ----
 				closeMenuItem.setText("Close");
 				closeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				closeMenuItem.setMnemonic('C');
+				closeMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				fileMenu.add(closeMenuItem);
 				fileMenu.addSeparator();
 
 				//---- exitMenuItem ----
 				exitMenuItem.setText("Exit");
 				exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				exitMenuItem.setMnemonic('X');
 				exitMenuItem.addActionListener(e -> exitActionPerformed());
 				fileMenu.add(exitMenuItem);
 			}
@@ -132,37 +154,50 @@ class DemoFrame
 			//======== editMenu ========
 			{
 				editMenu.setText("Edit");
+				editMenu.setMnemonic('E');
 
 				//---- undoMenuItem ----
 				undoMenuItem.setText("Undo");
 				undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				undoMenuItem.setMnemonic('U');
+				undoMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(undoMenuItem);
 
 				//---- redoMenuItem ----
 				redoMenuItem.setText("Redo");
 				redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				redoMenuItem.setMnemonic('R');
+				redoMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(redoMenuItem);
 				editMenu.addSeparator();
 
 				//---- cutMenuItem ----
 				cutMenuItem.setText("Cut");
 				cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				cutMenuItem.setMnemonic('C');
+				cutMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(cutMenuItem);
 
 				//---- copyMenuItem ----
 				copyMenuItem.setText("Copy");
 				copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				copyMenuItem.setMnemonic('O');
+				copyMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(copyMenuItem);
 
 				//---- pasteMenuItem ----
 				pasteMenuItem.setText("Paste");
 				pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				pasteMenuItem.setMnemonic('P');
+				pasteMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(pasteMenuItem);
 				editMenu.addSeparator();
 
 				//---- deleteMenuItem ----
 				deleteMenuItem.setText("Delete");
 				deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+				deleteMenuItem.setMnemonic('D');
+				deleteMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(deleteMenuItem);
 			}
 			menuBar1.add(editMenu);
@@ -170,24 +205,84 @@ class DemoFrame
 			//======== viewMenu ========
 			{
 				viewMenu.setText("View");
+				viewMenu.setMnemonic('V');
 
 				//---- checkBoxMenuItem1 ----
 				checkBoxMenuItem1.setText("Show Toolbar");
 				checkBoxMenuItem1.setSelected(true);
+				checkBoxMenuItem1.setMnemonic('T');
+				checkBoxMenuItem1.addActionListener(e -> menuItemActionPerformed(e));
 				viewMenu.add(checkBoxMenuItem1);
+
+				//======== menu1 ========
+				{
+					menu1.setText("Show View");
+					menu1.setMnemonic('V');
+
+					//======== subViewsMenu ========
+					{
+						subViewsMenu.setText("Sub Views");
+						subViewsMenu.setMnemonic('S');
+
+						//======== subSubViewsMenu ========
+						{
+							subSubViewsMenu.setText("Sub sub Views");
+							subSubViewsMenu.setMnemonic('U');
+
+							//---- errorLogViewMenuItem ----
+							errorLogViewMenuItem.setText("Error Log");
+							errorLogViewMenuItem.setMnemonic('E');
+							errorLogViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+							subSubViewsMenu.add(errorLogViewMenuItem);
+						}
+						subViewsMenu.add(subSubViewsMenu);
+
+						//---- searchViewMenuItem ----
+						searchViewMenuItem.setText("Search");
+						searchViewMenuItem.setMnemonic('S');
+						searchViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+						subViewsMenu.add(searchViewMenuItem);
+					}
+					menu1.add(subViewsMenu);
+
+					//---- projectViewMenuItem ----
+					projectViewMenuItem.setText("Project");
+					projectViewMenuItem.setMnemonic('P');
+					projectViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+					menu1.add(projectViewMenuItem);
+
+					//---- structureViewMenuItem ----
+					structureViewMenuItem.setText("Structure");
+					structureViewMenuItem.setMnemonic('T');
+					structureViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+					menu1.add(structureViewMenuItem);
+
+					//---- propertiesViewMenuItem ----
+					propertiesViewMenuItem.setText("Properties");
+					propertiesViewMenuItem.setMnemonic('O');
+					propertiesViewMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+					menu1.add(propertiesViewMenuItem);
+				}
+				viewMenu.add(menu1);
 				viewMenu.addSeparator();
 
 				//---- radioButtonMenuItem1 ----
 				radioButtonMenuItem1.setText("Details");
 				radioButtonMenuItem1.setSelected(true);
+				radioButtonMenuItem1.setMnemonic('D');
+				radioButtonMenuItem1.addActionListener(e -> menuItemActionPerformed(e));
 				viewMenu.add(radioButtonMenuItem1);
 
 				//---- radioButtonMenuItem2 ----
 				radioButtonMenuItem2.setText("Small Icons");
+				radioButtonMenuItem2.setMnemonic('S');
+				radioButtonMenuItem2.addActionListener(e -> menuItemActionPerformed(e));
 				viewMenu.add(radioButtonMenuItem2);
 
 				//---- radioButtonMenuItem3 ----
 				radioButtonMenuItem3.setText("Large Icons");
+				radioButtonMenuItem3.setMnemonic('L');
+				radioButtonMenuItem3.addActionListener(e -> menuItemActionPerformed(e));
 				viewMenu.add(radioButtonMenuItem3);
 			}
 			menuBar1.add(viewMenu);
@@ -195,9 +290,11 @@ class DemoFrame
 			//======== helpMenu ========
 			{
 				helpMenu.setText("Help");
+				helpMenu.setMnemonic('H');
 
 				//---- aboutMenuItem ----
 				aboutMenuItem.setText("About");
+				aboutMenuItem.setMnemonic('A');
 				aboutMenuItem.addActionListener(e -> aboutActionPerformed());
 				helpMenu.add(aboutMenuItem);
 			}

@@ -110,7 +110,7 @@
       "background": "#EAEAEB",
       "foreground": "#232324",
       "infoForeground": "#7f7f7f",
-      "matchForeground": "#2979ff2",
+      "matchForeground": "#2979ff",
       "matchSelectionForeground": "#2979ff",
       "nonFocusedState": "false",
       "selectedGrayedForeground": "#232324",

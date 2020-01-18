@@ -55,18 +55,26 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatTableUI -->
  *
- * @uiDefault Table.rowHeight						int
- * @uiDefault Table.showGrid						boolean
- * @uiDefault Table.intercellSpacing				Dimension
- * @uiDefault Table.selectionInactiveBackground		Color
- * @uiDefault Table.selectionInactiveForeground		Color
+ * @uiDefault Table.rowHeight							int
+ * @uiDefault Table.showHorizontalLines					boolean
+ * @uiDefault Table.showVerticalLines					boolean
+ * @uiDefault Table.intercellSpacing					Dimension
+ * @uiDefault Table.selectionInactiveBackground			Color
+ * @uiDefault Table.selectionInactiveForeground			Color
+ *
+ * <!-- FlatTableCellBorder -->
+ *
+ * @uiDefault Table.cellMargins							Insets
+ * @uiDefault Table.cellFocusColor						Color
+ * @uiDefault Table.showCellFocusIndicator				boolean
  *
  * @author Karl Tauber
  */
 public class FlatTableUI
 	extends BasicTableUI
 {
-	protected boolean showGrid;
+	protected boolean showHorizontalLines;
+	protected boolean showVerticalLines;
 	protected Dimension intercellSpacing;
 
 	protected Color selectionBackground;
@@ -96,7 +104,8 @@ public class FlatTableUI
 	protected void installDefaults() {
 		super.installDefaults();
 
-		showGrid = UIManager.getBoolean( "Table.showGrid" );
+		showHorizontalLines = UIManager.getBoolean( "Table.showHorizontalLines" );
+		showVerticalLines = UIManager.getBoolean( "Table.showVerticalLines" );
 		intercellSpacing = UIManager.getDimension( "Table.intercellSpacing" );
 
 		selectionBackground = UIManager.getColor( "Table.selectionBackground" );
@@ -110,10 +119,13 @@ public class FlatTableUI
 		if( rowHeight > 0 )
 			LookAndFeel.installProperty( table, "rowHeight", UIScale.scale( rowHeight ) );
 
-		if( !showGrid ) {
+		if( !showHorizontalLines ) {
 			oldShowHorizontalLines = table.getShowHorizontalLines();
+			table.setShowHorizontalLines( false );
+		}
+		if( !showVerticalLines ) {
 			oldShowVerticalLines = table.getShowVerticalLines();
-			table.setShowGrid( false );
+			table.setShowVerticalLines( false );
 		}
 
 		if( intercellSpacing != null ) {
@@ -131,19 +143,15 @@ public class FlatTableUI
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
 
-		// restore old show grid
-		if( !showGrid ) {
-			if( !table.getShowHorizontalLines() )
-				table.setShowHorizontalLines( oldShowHorizontalLines );
-			if( !table.getShowVerticalLines() )
-				table.setShowVerticalLines( oldShowVerticalLines );
-		}
+		// restore old show horizontal/vertical lines (if not modified)
+		if( !showHorizontalLines && oldShowHorizontalLines && !table.getShowHorizontalLines() )
+			table.setShowHorizontalLines( true );
+		if( !showVerticalLines && oldShowVerticalLines && !table.getShowVerticalLines() )
+			table.setShowVerticalLines( true );
 
-		// restore old intercell spacing
-		if( intercellSpacing != null ) {
-			if( table.getIntercellSpacing().equals( intercellSpacing ) )
-				table.setIntercellSpacing( oldIntercellSpacing );
-		}
+		// restore old intercell spacing (if not modified)
+		if( intercellSpacing != null && table.getIntercellSpacing().equals( intercellSpacing ) )
+			table.setIntercellSpacing( oldIntercellSpacing );
 	}
 
 	@Override

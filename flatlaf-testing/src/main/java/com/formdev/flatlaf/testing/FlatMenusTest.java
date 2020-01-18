@@ -126,13 +126,16 @@ public class FlatMenusTest
 			//======== menu5 ========
 			{
 				menu5.setText("text");
+				menu5.setMnemonic('T');
 
 				//---- menuItem7 ----
 				menuItem7.setText("text");
+				menuItem7.setMnemonic('X');
 				menu5.add(menuItem7);
 
 				//---- menuItem8 ----
 				menuItem8.setText("text");
+				menuItem8.setMnemonic('E');
 				menu5.add(menuItem8);
 			}
 			menuBar1.add(menu5);
@@ -175,6 +178,7 @@ public class FlatMenusTest
 			//======== menu1 ========
 			{
 				menu1.setText("enabled");
+				menu1.setMnemonic('E');
 			}
 			panel1.add(menu1, "cell 1 0");
 
@@ -185,6 +189,7 @@ public class FlatMenusTest
 			//---- menuItem1 ----
 			menuItem1.setText("enabled");
 			menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
+			menuItem1.setMnemonic('N');
 			panel1.add(menuItem1, "cell 1 1");
 
 			//---- checkBoxMenuItemLabel ----
@@ -194,6 +199,7 @@ public class FlatMenusTest
 			//---- checkBoxMenuItem1 ----
 			checkBoxMenuItem1.setText("enabled");
 			checkBoxMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			checkBoxMenuItem1.setMnemonic('A');
 			panel1.add(checkBoxMenuItem1, "cell 1 2");
 
 			//---- radioButtonMenuItemLabel ----
@@ -203,6 +209,7 @@ public class FlatMenusTest
 			//---- radioButtonMenuItem1 ----
 			radioButtonMenuItem1.setText("enabled");
 			radioButtonMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			radioButtonMenuItem1.setMnemonic('B');
 			panel1.add(radioButtonMenuItem1, "cell 1 3");
 
 			//---- popupMenuSeparatorLabel ----
@@ -230,6 +237,7 @@ public class FlatMenusTest
 			{
 				menu2.setText("disabled");
 				menu2.setEnabled(false);
+				menu2.setMnemonic('D');
 			}
 			panel2.add(menu2, "cell 0 0");
 
@@ -237,18 +245,21 @@ public class FlatMenusTest
 			menuItem2.setText("disabled");
 			menuItem2.setEnabled(false);
 			menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.ALT_MASK|KeyEvent.SHIFT_MASK));
+			menuItem2.setMnemonic('I');
 			panel2.add(menuItem2, "cell 0 1");
 
 			//---- checkBoxMenuItem2 ----
 			checkBoxMenuItem2.setText("disabled");
 			checkBoxMenuItem2.setEnabled(false);
 			checkBoxMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			checkBoxMenuItem2.setMnemonic('S');
 			panel2.add(checkBoxMenuItem2, "cell 0 2");
 
 			//---- radioButtonMenuItem2 ----
 			radioButtonMenuItem2.setText("disabled");
 			radioButtonMenuItem2.setEnabled(false);
 			radioButtonMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			radioButtonMenuItem2.setMnemonic('L');
 			panel2.add(radioButtonMenuItem2, "cell 0 3");
 		}
 		add(panel2, "cell 2 1");

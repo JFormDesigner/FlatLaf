@@ -38,6 +38,7 @@ import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
@@ -102,8 +103,21 @@ public class FlatUIUtils
 		return (value instanceof Integer) ? (Integer) value : defaultValue;
 	}
 
+	public static float getUIFloat( String key, float defaultValue ) {
+		Object value = UIManager.get( key );
+		return (value instanceof Number) ? ((Number)value).floatValue() : defaultValue;
+	}
+
 	public static Color nonUIResource( Color c ) {
 		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
+	}
+
+	public static int minimumWidth( JComponent c, int minimumWidth ) {
+		return FlatClientProperties.clientPropertyInt( c, FlatClientProperties.MINIMUM_WIDTH, minimumWidth );
+	}
+
+	public static int minimumHeight( JComponent c, int minimumHeight ) {
+		return FlatClientProperties.clientPropertyInt( c, FlatClientProperties.MINIMUM_HEIGHT, minimumHeight );
 	}
 
 	public static boolean isTableCellEditor( Component c ) {
