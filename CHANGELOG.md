@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- TextField, FormattedTextField and PasswordField: Select all text when a text
+  field gains focus for the first time and selection was not set explicitly.
+  This can be configured to newer or always select all text on focus gain (see
+  UI default value `TextComponent.selectAllOnFocusPolicy`).
+
+
 ## 0.25.1
 
 Re-release of 0.25 because of problems with Maven Central.

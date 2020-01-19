@@ -43,6 +43,7 @@ import javax.swing.plaf.ComponentUI;
  * @uiDefault Component.minimumWidth					int
  * @uiDefault Component.isIntelliJTheme					boolean
  * @uiDefault FormattedTextField.placeholderForeground	Color
+ * @uiDefault TextComponent.selectAllOnFocusPolicy		String	never, once (default) or always
  *
  * @author Karl Tauber
  */

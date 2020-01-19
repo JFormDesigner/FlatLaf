@@ -35,6 +35,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
+import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -62,6 +63,7 @@ import com.formdev.flatlaf.FlatClientProperties;
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextField.placeholderForeground	Color
+ * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  *
  * @author Karl Tauber
  */
@@ -117,6 +119,11 @@ public class FlatTextFieldUI
 
 		getComponent().removeFocusListener( focusListener );
 		focusListener = null;
+	}
+
+	@Override
+	protected Caret createCaret() {
+		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy" ) );
 	}
 
 	@Override

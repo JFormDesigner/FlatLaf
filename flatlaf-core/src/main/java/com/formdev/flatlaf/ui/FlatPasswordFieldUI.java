@@ -27,6 +27,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
+import javax.swing.text.Caret;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -55,6 +56,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
+ * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  *
  * @author Karl Tauber
  */
@@ -114,6 +116,11 @@ public class FlatPasswordFieldUI
 
 		getComponent().removeFocusListener( focusListener );
 		focusListener = null;
+	}
+
+	@Override
+	protected Caret createCaret() {
+		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy" ) );
 	}
 
 	@Override

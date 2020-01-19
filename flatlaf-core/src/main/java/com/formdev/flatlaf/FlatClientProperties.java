@@ -142,9 +142,43 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight";
 
 	/**
+	 * Specifies whether all text is selected when the text component gains focus.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong> {@link #SELECT_ALL_ON_FOCUS_POLICY_NEVER},
+	 * {@link #SELECT_ALL_ON_FOCUS_POLICY_ONCE} (default) or
+	 * {@link #SELECT_ALL_ON_FOCUS_POLICY_ALWAYS}
+	 */
+	String SELECT_ALL_ON_FOCUS_POLICY = "JTextField.selectAllOnFocusPolicy";
+
+	/**
+	 * Never select all text when the text component gains focus.
+	 *
+	 * @see #SELECT_ALL_ON_FOCUS_POLICY
+	 */
+	String SELECT_ALL_ON_FOCUS_POLICY_NEVER = "never";
+
+	/**
+	 * Select all text when the text component gains focus for the first time
+	 * and selection was not modified (is at end of text).
+	 * This is the default.
+	 *
+	 * @see #SELECT_ALL_ON_FOCUS_POLICY
+	 */
+	String SELECT_ALL_ON_FOCUS_POLICY_ONCE = "once";
+
+	/**
+	 * Always select all text when the text component gains focus.
+	 *
+	 * @see #SELECT_ALL_ON_FOCUS_POLICY
+	 */
+	String SELECT_ALL_ON_FOCUS_POLICY_ALWAYS = "always";
+
+	/**
 	 * Placeholder text that is only painted if the text field is empty.
 	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JTextField} or {@link javax.swing.JComboBox}<br>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses) or {@link javax.swing.JComboBox}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}
 	 */
 	String PLACEHOLDER_TEXT = "JTextField.placeholderText";
