@@ -48,7 +48,7 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JToggleButton}
 	 *
-	 * @see #TOGGLE_BUTTON_TYPE
+	 * @see #BUTTON_TYPE
 	 */
 	String BUTTON_TYPE_TAB = "tab";
 
