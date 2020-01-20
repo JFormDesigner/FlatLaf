@@ -16,7 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Insets;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Border for {@link javax.swing.JPopupMenu}.
@@ -32,5 +37,19 @@ public class FlatPopupMenuBorder
 	public FlatPopupMenuBorder() {
 		super( UIManager.getInsets( "PopupMenu.borderInsets" ),
 			UIManager.getColor( "PopupMenu.borderColor" ) );
+	}
+
+	@Override
+	public Insets getBorderInsets( Component c, Insets insets ) {
+		if( c instanceof Container &&
+			((Container)c).getComponentCount() > 0 &&
+			((Container)c).getComponent( 0 ) instanceof JScrollPane )
+		{
+			// e.g. for combobox popups
+			insets.left = insets.top = insets.right = insets.bottom = UIScale.scale( 1 );
+			return insets;
+		}
+
+		return super.getBorderInsets( c, insets );
 	}
 }

@@ -3,6 +3,12 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Menus:
+  - Changed menu bar and popup menu background colors (made brighter in light
+    themes and darker in dark themes).
+  - Popup menus now have empty space at the top and bottom.
+  - Made `JMenu`, `JMenuItem`, `JCheckBoxMenuItem` and `JRadioButtonMenuItem`
+    non-opaque.
 - TextField, FormattedTextField and PasswordField: Select all text when a text
   field gains focus for the first time and selection was not set explicitly.
   This can be configured to newer or always select all text on focus gain (see
