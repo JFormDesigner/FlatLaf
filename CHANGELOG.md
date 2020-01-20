@@ -6,6 +6,7 @@ FlatLaf Change Log
 - Menus:
   - Changed menu bar and popup menu background colors (made brighter in light
     themes and darker in dark themes).
+  - Highlight items in menu bar on mouse hover. (issue #49)
   - Popup menus now have empty space at the top and bottom.
   - Menu items now have larger left and right margins.
   - Made `JMenu`, `JMenuItem`, `JCheckBoxMenuItem` and `JRadioButtonMenuItem`

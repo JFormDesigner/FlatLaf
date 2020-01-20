@@ -17,11 +17,17 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.ButtonModel;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.UIManager;
+import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuUI;
 
@@ -51,11 +57,17 @@ import javax.swing.plaf.basic.BasicMenuUI;
  * @uiDefault Menu.useMenuBarBackgroundForTopLevel	boolean	default is false
  * @uiDefault MenuBar.background					Color	used if Menu.useMenuBarBackgroundForTopLevel is true
  *
+ * <!-- FlatMenuUI -->
+ *
+ * @uiDefault MenuBar.hoverBackground				Color
+ *
  * @author Karl Tauber
  */
 public class FlatMenuUI
 	extends BasicMenuUI
 {
+	private Color hoverBackground;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuUI();
 	}
@@ -64,8 +76,19 @@ public class FlatMenuUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		menuItem.setRolloverEnabled( true );
+
+		hoverBackground = UIManager.getColor( "MenuBar.hoverBackground" );
+
 		// scale
 		defaultTextIconGap = scale( defaultTextIconGap );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		hoverBackground = null;
 	}
 
 	/**
@@ -79,6 +102,43 @@ public class FlatMenuUI
 			if( e.getPropertyName() == "iconTextGap" )
 				defaultTextIconGap = scale( defaultTextIconGap );
 		};
+	}
+
+	@Override
+	protected MouseInputListener createMouseInputListener( JComponent c ) {
+		return new BasicMenuUI.MouseInputHandler() {
+			@Override
+			public void mouseEntered( MouseEvent e ) {
+				super.mouseEntered( e );
+				rollover( e, true );
+			}
+
+			@Override
+			public void mouseExited( MouseEvent e ) {
+				super.mouseExited( e );
+				rollover( e, false );
+			}
+
+			private void rollover( MouseEvent e, boolean rollover ) {
+				JMenu menu = (JMenu) e.getSource();
+				if( menu.isTopLevelMenu() && menu.isRolloverEnabled() ) {
+					menu.getModel().setRollover( rollover );
+					menu.repaint();
+				}
+			}
+		};
+	}
+
+	@Override
+	protected void paintBackground( Graphics g, JMenuItem menuItem, Color bgColor ) {
+		ButtonModel model = menuItem.getModel();
+		if( model.isArmed() || model.isSelected() ) {
+			super.paintBackground( g, menuItem, bgColor );
+		} else if( model.isRollover() && model.isEnabled() && ((JMenu)menuItem).isTopLevelMenu() ) {
+			FlatUIUtils.setColor( g, hoverBackground, menuItem.getBackground() );
+			g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
+		} else
+			super.paintBackground( g, menuItem, bgColor );
 	}
 
 	@Override
