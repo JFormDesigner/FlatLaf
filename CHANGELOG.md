@@ -15,6 +15,7 @@ FlatLaf Change Log
   field gains focus for the first time and selection was not set explicitly.
   This can be configured to newer or always select all text on focus gain (see
   UI default value `TextComponent.selectAllOnFocusPolicy`).
+- ProgressBar: Made progress bar paint smooth in indeterminate mode.
 
 
 ## 0.25.1
