@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.26
 
 - Menus:
   - Changed menu bar and popup menu background colors (made brighter in light
