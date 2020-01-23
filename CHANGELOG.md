@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- ProgressBar: Fixed visual artifacts in indeterminate mode, on HiDPI screens at
+  125%, 150% and 175% scaling, when the progress moves around.
+
+
 ## 0.26
 
 - Menus:
