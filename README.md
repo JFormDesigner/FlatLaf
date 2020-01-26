@@ -59,6 +59,18 @@ Addons
 - [JIDE Common Layer](flatlaf-jide-oss)
 
 
+Projects using FlatLaf
+----------------------
+
+- [NetBeans](https://netbeans.apache.org/) 11.3
+- [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
+- [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org)
+- [Rest Suite](https://github.com/supanadit/restsuite)
+- [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy)
+- [SpringRemote](https://github.com/HaleyWang/SpringRemote)
+- and more...
+
+
 Documentation
 -------------
 
