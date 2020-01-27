@@ -294,10 +294,9 @@ public abstract class FlatLaf
 
 		// override fonts
 		for( Object key : defaults.keySet() ) {
-			if( key instanceof String && ((String)key).endsWith( ".font" ) )
+			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
 				defaults.put( key, uiFont );
 		}
-		defaults.put( "MenuItem.acceleratorFont", uiFont );
 
 		// use smaller font for progress bar
 		defaults.put( "ProgressBar.font", UIScale.scaleFont( uiFont, 0.85f ) );

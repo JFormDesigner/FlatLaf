@@ -18,25 +18,24 @@ package com.formdev.flatlaf.icons;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
-import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "maximize" icon for {@link javax.swing.JInternalFrame}.
  *
- * @uiDefault InternalFrame.iconColor			Color
- *
  * @author Karl Tauber
  */
 public class FlatInternalFrameMaximizeIcon
-	extends FlatAbstractIcon
+	extends FlatInternalFrameAbstractIcon
 {
 	public FlatInternalFrameMaximizeIcon() {
-		super( 16, 16, UIManager.getColor( "InternalFrame.iconColor" ) );
 	}
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		g.fill( FlatUIUtils.createRectangle( 3, 3, 10, 10, 1 ) );
+		paintBackground( c, g );
+
+		g.setColor( c.getForeground() );
+		g.fill( FlatUIUtils.createRectangle( 4, 4, 8, 8, 1 ) );
 	}
 }

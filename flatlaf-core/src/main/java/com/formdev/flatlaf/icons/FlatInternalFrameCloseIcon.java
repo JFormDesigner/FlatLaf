@@ -17,28 +17,39 @@
 package com.formdev.flatlaf.icons;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatButtonUI;
 
 /**
  * "close" icon for {@link javax.swing.JInternalFrame}.
  *
- * @uiDefault InternalFrame.iconColor			Color
+ * @uiDefault InternalFrame.buttonHoverBackground		Color
+ * @uiDefault InternalFrame.buttonPressedBackground		Color
  *
  * @author Karl Tauber
  */
 public class FlatInternalFrameCloseIcon
-	extends FlatAbstractIcon
+	extends FlatInternalFrameAbstractIcon
 {
+	private final Color hoverForeground = UIManager.getColor( "InternalFrame.closeHoverForeground" );
+	private final Color pressedForeground = UIManager.getColor( "InternalFrame.closePressedForeground" );
+
 	public FlatInternalFrameCloseIcon() {
-		super( 16, 16, UIManager.getColor( "InternalFrame.iconColor" ) );
+		super( UIManager.getColor( "InternalFrame.closeHoverBackground" ),
+			UIManager.getColor( "InternalFrame.closePressedBackground" ) );
 	}
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
+		paintBackground( c, g );
+
+		g.setColor( FlatButtonUI.buttonStateColor( c, null, null, null, hoverForeground, pressedForeground ) );
+
 		float mx = 8;
 		float my = 8;
 		float r = 3.25f;

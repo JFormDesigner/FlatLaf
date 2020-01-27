@@ -403,8 +403,8 @@ public class FlatTestFrame
 
 	private void updateComponentsRecur( Container container, BiConsumer<Component, String> action ) {
 		for( Component c : container.getComponents() ) {
-			if( c instanceof JPanel ) {
-				updateComponentsRecur( (JPanel) c, action );
+			if( c instanceof JPanel || c instanceof JDesktopPane ) {
+				updateComponentsRecur( (Container) c, action );
 				continue;
 			}
 

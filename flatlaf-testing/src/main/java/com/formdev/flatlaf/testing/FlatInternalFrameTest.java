@@ -7,6 +7,7 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import java.beans.PropertyVetoException;
 import javax.swing.*;
+import com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -49,9 +50,24 @@ public class FlatInternalFrameTest
 			maximizableCheckBox.isSelected(),
 			iconifiableCheckBox.isSelected() );
 
-		JPanel panel = new JPanel();
-		panel.setBackground( new Color( (int) (Math.random() * 0xffffff) ) );
+		if( iconCheckBox.isSelected() )
+			internalFrame.setFrameIcon( new FlatFileViewFloppyDriveIcon() );
+
+		JPanel panel = new JPanel() {
+			private final Color color = new Color( (int) (Math.random() * 0xffffff) | 0x20000000, true );
+
+			@Override
+			protected void paintComponent( Graphics g ) {
+				super.paintComponent( g );
+
+				g.setColor( color );
+				g.fillRect( 20, 20, getWidth() - 40, getHeight() - 40 );
+			}
+		};
 		internalFrame.setContentPane( panel );
+
+		if( !palette.getComponentOrientation().isLeftToRight() )
+			internalFrame.setComponentOrientation( ComponentOrientation.RIGHT_TO_LEFT );
 
 		internalFrame.setBounds( frameX + UIScale.scale( GAP ) * (frameCount % 10),
 			frameY + UIScale.scale( GAP ) * (frameCount % 10), UIScale.scale( 200 ), UIScale.scale( 200 ) );
@@ -76,6 +92,7 @@ public class FlatInternalFrameTest
 		closableCheckBox = new JCheckBox();
 		iconifiableCheckBox = new JCheckBox();
 		maximizableCheckBox = new JCheckBox();
+		iconCheckBox = new JCheckBox();
 		titleLabel = new JLabel();
 		titleField = new JTextField();
 		createFrameButton = new JButton();
@@ -107,6 +124,7 @@ public class FlatInternalFrameTest
 					// rows
 					"[fill]0" +
 					"[]0" +
+					"[]0" +
 					"[]unrel" +
 					"[]unrel"));
 
@@ -130,18 +148,22 @@ public class FlatInternalFrameTest
 				maximizableCheckBox.setSelected(true);
 				paletteContentPane.add(maximizableCheckBox, "cell 1 1,alignx left,growx 0");
 
+				//---- iconCheckBox ----
+				iconCheckBox.setText("Frame icon");
+				paletteContentPane.add(iconCheckBox, "cell 0 2");
+
 				//---- titleLabel ----
 				titleLabel.setText("Frame title:");
-				paletteContentPane.add(titleLabel, "cell 0 2");
-				paletteContentPane.add(titleField, "cell 1 2");
+				paletteContentPane.add(titleLabel, "cell 0 3");
+				paletteContentPane.add(titleField, "cell 1 3");
 
 				//---- createFrameButton ----
 				createFrameButton.setText("Create Frame");
 				createFrameButton.addActionListener(e -> createInternalFrame());
-				paletteContentPane.add(createFrameButton, "cell 1 3,alignx right,growx 0");
+				paletteContentPane.add(createFrameButton, "cell 1 4,alignx right,growx 0");
 			}
 			desktopPane.add(palette, JLayeredPane.PALETTE_LAYER);
-			palette.setBounds(15, 25, 220, 160);
+			palette.setBounds(15, 25, 220, 185);
 		}
 		add(desktopPane, "cell 0 0,width 600,height 600");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -157,6 +179,7 @@ public class FlatInternalFrameTest
 	private JCheckBox closableCheckBox;
 	private JCheckBox iconifiableCheckBox;
 	private JCheckBox maximizableCheckBox;
+	private JCheckBox iconCheckBox;
 	private JLabel titleLabel;
 	private JTextField titleField;
 	private JButton createFrameButton;

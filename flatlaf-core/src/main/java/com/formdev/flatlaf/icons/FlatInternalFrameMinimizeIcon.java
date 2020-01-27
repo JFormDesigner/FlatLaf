@@ -21,25 +21,25 @@ import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "minimize" (actually "restore") icon for {@link javax.swing.JInternalFrame}.
  *
- * @uiDefault InternalFrame.iconColor			Color
- *
  * @author Karl Tauber
  */
 public class FlatInternalFrameMinimizeIcon
-	extends FlatAbstractIcon
+	extends FlatInternalFrameAbstractIcon
 {
 	public FlatInternalFrameMinimizeIcon() {
-		super( 16, 16, UIManager.getColor( "InternalFrame.iconColor" ) );
 	}
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
+		paintBackground( c, g );
+
+		g.setColor( c.getForeground() );
+
 		Path2D r1 = FlatUIUtils.createRectangle( 5, 3, 8, 8, 1 );
 		Path2D r2 = FlatUIUtils.createRectangle( 3, 5, 8, 8, 1 );
 
