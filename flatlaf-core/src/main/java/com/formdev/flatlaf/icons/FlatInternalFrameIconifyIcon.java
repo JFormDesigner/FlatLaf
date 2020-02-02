@@ -35,6 +35,6 @@ public class FlatInternalFrameIconifyIcon
 		paintBackground( c, g );
 
 		g.setColor( c.getForeground() );
-		g.fillRect( 4, 8, 8, 1 );
+		g.fillRect( (width / 2) - 4, height / 2, 8, 1 );
 	}
 }

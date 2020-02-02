@@ -18,6 +18,7 @@ package com.formdev.flatlaf.icons;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
@@ -28,7 +29,6 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  *
  * @uiDefault InternalFrame.buttonHoverBackground		Color
  * @uiDefault InternalFrame.buttonPressedBackground		Color
- * @uiDefault Button.arc								int
  *
  * @author Karl Tauber
  */
@@ -37,15 +37,15 @@ public abstract class FlatInternalFrameAbstractIcon
 {
 	private final Color hoverBackground;
 	private final Color pressedBackground;
-	private final int arc = UIManager.getInt( "Button.arc" );
 
 	public FlatInternalFrameAbstractIcon() {
-		this( UIManager.getColor( "InternalFrame.buttonHoverBackground" ),
+		this( UIManager.getDimension( "InternalFrame.buttonSize" ),
+			UIManager.getColor( "InternalFrame.buttonHoverBackground" ),
 			UIManager.getColor( "InternalFrame.buttonPressedBackground" ) );
 	}
 
-	public FlatInternalFrameAbstractIcon( Color hoverBackground, Color pressedBackground ) {
-		super( 16, 16, null );
+	public FlatInternalFrameAbstractIcon( Dimension size, Color hoverBackground, Color pressedBackground ) {
+		super( size.width, size.height, null );
 		this.hoverBackground = hoverBackground;
 		this.pressedBackground = pressedBackground;
 	}
@@ -54,7 +54,7 @@ public abstract class FlatInternalFrameAbstractIcon
 		Color background = FlatButtonUI.buttonStateColor( c, null, null, null, hoverBackground, pressedBackground );
 		if( background != null ) {
 			FlatUIUtils.setColor( g, background, c.getBackground() );
-			g.fillRoundRect( 0, 0, width, height, arc, arc );
+			g.fillRect( 0, 0, width, height );
 		}
 	}
 }

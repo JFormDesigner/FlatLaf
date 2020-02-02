@@ -36,6 +36,6 @@ public class FlatInternalFrameMaximizeIcon
 		paintBackground( c, g );
 
 		g.setColor( c.getForeground() );
-		g.fill( FlatUIUtils.createRectangle( 4, 4, 8, 8, 1 ) );
+		g.fill( FlatUIUtils.createRectangle( (width / 2) - 4, (height / 2) - 4, 8, 8, 1 ) );
 	}
 }

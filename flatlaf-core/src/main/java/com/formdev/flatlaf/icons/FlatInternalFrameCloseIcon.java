@@ -40,7 +40,8 @@ public class FlatInternalFrameCloseIcon
 	private final Color pressedForeground = UIManager.getColor( "InternalFrame.closePressedForeground" );
 
 	public FlatInternalFrameCloseIcon() {
-		super( UIManager.getColor( "InternalFrame.closeHoverBackground" ),
+		super( UIManager.getDimension( "InternalFrame.buttonSize" ),
+			UIManager.getColor( "InternalFrame.closeHoverBackground" ),
 			UIManager.getColor( "InternalFrame.closePressedBackground" ) );
 	}
 
@@ -50,8 +51,8 @@ public class FlatInternalFrameCloseIcon
 
 		g.setColor( FlatButtonUI.buttonStateColor( c, null, null, null, hoverForeground, pressedForeground ) );
 
-		float mx = 8;
-		float my = 8;
+		float mx = width / 2;
+		float my = height / 2;
 		float r = 3.25f;
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
