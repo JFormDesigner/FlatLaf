@@ -4,6 +4,8 @@ FlatLaf Change Log
 ## Unreleased
 
 - Support `JInternalFrame`. (issues #39 and #11)
+- Table: Support positioning the column sort arrow in header right, left, top or
+  bottom. (issue #34)
 - ProgressBar: Fixed visual artifacts in indeterminate mode, on HiDPI screens at
   125%, 150% and 175% scaling, when the progress moves around.
 
