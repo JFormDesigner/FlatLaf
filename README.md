@@ -52,6 +52,19 @@ Otherwise download `flatlaf-<version>.jar` here:
 [![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
 
 
+### Snapshots
+
+FlatLaf snapshot binaries are available in
+[JFrog Artifactory](https://oss.jfrog.org/artifactory/oss-snapshot-local/com/formdev/).
+To access the latest snapshot, change the FlatLaf version(s) in the dependencies
+to `<version>-SNAPSHOT` (e.g. `0.27-SNAPSHOT`) and add the repository
+`https://oss.jfrog.org/artifactory/oss-snapshot-local` to your build (see
+[Maven](https://maven.apache.org/guides/mini/guide-multiple-repositories.html)
+and
+[Gradle](https://docs.gradle.org/current/userguide/declaring_repositories.html#sec:declaring_custom_repository)
+docs).
+
+
 Addons
 ------
 
