@@ -20,6 +20,7 @@ plugins {
 	`java-library`
 	`maven-publish`
 	id( "com.jfrog.bintray" ) version "1.8.4"
+	id( "com.jfrog.artifactory" ) version "4.13.0"
 }
 
 if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
@@ -53,7 +54,7 @@ tasks {
 			targetCompatibility = "9"
 		}
 	}
-	
+
 	jar {
 		archiveBaseName.set( "flatlaf" )
 
@@ -145,4 +146,26 @@ bintray {
 
 		publish = true
 	}
+}
+
+artifactory {
+	setContextUrl( "https://oss.jfrog.org" )
+
+	publish( closureOf<org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig> {
+		repository( delegateClosureOf<groovy.lang.GroovyObject> {
+			setProperty( "repoKey", "oss-snapshot-local" )
+			setProperty( "username", System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" ) )
+			setProperty( "password", System.getenv( "BINTRAY_KEY" ) ?: System.getProperty( "bintray.key" ) )
+		} )
+
+		defaults( delegateClosureOf<groovy.lang.GroovyObject> {
+			invokeMethod( "publications", "maven" )
+			setProperty( "publishArtifacts", true )
+			setProperty( "publishPom", true )
+		} )
+	} )
+
+	resolve( delegateClosureOf<org.jfrog.gradle.plugin.artifactory.dsl.ResolverConfig> {
+		setProperty( "repoKey", "jcenter" )
+	} )
 }

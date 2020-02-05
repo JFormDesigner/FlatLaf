@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-version = "0.26"
+version = "0.26.1-SNAPSHOT"
 
 allprojects {
 	repositories {
