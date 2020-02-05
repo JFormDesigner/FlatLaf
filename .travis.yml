@@ -1,6 +1,12 @@
 language: java
 sudo: false
 
+jdk:
+  - openjdk8
+  - openjdk9
+  - openjdk11
+  - openjdk13
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -14,7 +20,7 @@ before_install:
   - java -version
 
 stages:
-  - name: build
+  - name: test
   - name: snapshot
     if: branch = master AND type IN (push) AND tag IS blank
   - name: release
@@ -22,15 +28,6 @@ stages:
 
 jobs:
   include:
-    # run gradle build
-    - stage: build
-      jdk:
-        - openjdk8
-        - openjdk9
-        - openjdk11
-        - openjdk13
-      script: ./gradlew build
-
     # publish snapshot to oss.jfrog.org
     - stage: snapshot
       jdk: openjdk11
