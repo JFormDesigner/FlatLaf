@@ -19,11 +19,25 @@ before_install:
   - ./gradlew --version
   - java -version
 
-deploy:
-  provider: script
-  script: ./gradlew bintrayUpload
-  skip_cleanup: true # to upload artifacts created during the build
-  on:
-    branch: master
-    jdk: openjdk11
-    tags: true
+stages:
+  - name: build
+  - name: snapshot
+    if: branch = master AND type IN (push) AND tag IS blank
+  - name: release
+    if: branch = master AND type IN (push) AND tag IS present
+
+jobs:
+  include:
+    # run gradle build
+    - stage: build
+      script: ./gradlew build
+
+    # publish snapshot to oss.jfrog.org
+    - stage: snapshot
+      jdk: openjdk11
+      script: ./gradlew artifactoryPublish
+
+    # release a new stable version to bintray
+    - stage: release
+      jdk: openjdk11
+      script: ./gradlew bintrayUpload -Drelease=true
