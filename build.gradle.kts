@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-version = "0.26.1-SNAPSHOT"
+val releaseVersion = "0.26"
+val developmentVersion = "0.27-SNAPSHOT"
+
+version = if( java.lang.Boolean.getBoolean( "release" ) ) releaseVersion else developmentVersion
 
 allprojects {
+	version = rootProject.version
+
 	repositories {
 		jcenter()
 	}
