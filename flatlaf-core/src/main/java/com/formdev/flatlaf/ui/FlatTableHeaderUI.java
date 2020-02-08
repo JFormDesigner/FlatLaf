@@ -307,7 +307,9 @@ public class FlatTableHeaderUI
 				int xi = x + ((width - sortIcon.getIconWidth()) / 2);
 				int yi = (sortIconPosition == SwingConstants.TOP)
 					? y + UIScale.scale( 1 )
-					: y + height - sortIcon.getIconHeight() - UIScale.scale( 1 );
+					: y + height - sortIcon.getIconHeight()
+						- 1 // for gap
+						- (int) (1 * UIScale.getUserScaleFactor()); // for bottom border
 				sortIcon.paintIcon( c, g, xi, yi );
 			}
 		}

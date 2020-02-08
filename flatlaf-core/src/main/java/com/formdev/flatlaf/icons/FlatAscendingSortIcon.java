@@ -47,7 +47,7 @@ public class FlatAscendingSortIcon
 		g.setColor( sortIconColor );
 		if( chevron ) {
 			// chevron arrow
-			Path2D path = FlatUIUtils.createPath( false, 1,5, 5,1, 9,5 );
+			Path2D path = FlatUIUtils.createPath( false, 1,4, 5,0, 9,4 );
 			g.setStroke( new BasicStroke( 1f ) );
 			g.draw( path );
 		} else {
