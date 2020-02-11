@@ -16,8 +16,11 @@
 
 package com.formdev.flatlaf.ui;
 
+import javax.swing.DefaultDesktopManager;
 import javax.swing.JComponent;
+import javax.swing.JInternalFrame;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicDesktopPaneUI;
 
 /**
@@ -35,5 +38,28 @@ public class FlatDesktopPaneUI
 {
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatDesktopPaneUI();
+	}
+
+	@Override
+	protected void installDesktopManager() {
+		desktopManager = desktop.getDesktopManager();
+		if( desktopManager == null ) {
+			desktopManager = new FlatDesktopManager();
+			desktop.setDesktopManager( desktopManager );
+		}
+	}
+
+	//---- class FlatDesktopManager -------------------------------------------
+
+	private class FlatDesktopManager
+		extends DefaultDesktopManager
+		implements UIResource
+	{
+		@Override
+		public void iconifyFrame( JInternalFrame f ) {
+			super.iconifyFrame( f );
+
+			((FlatDesktopIconUI)f.getDesktopIcon().getUI()).updateDockIcon();
+		}
 	}
 }

@@ -49,7 +49,7 @@ public class FlatInternalFrameCloseIcon
 	protected void paintIcon( Component c, Graphics2D g ) {
 		paintBackground( c, g );
 
-		g.setColor( FlatButtonUI.buttonStateColor( c, null, null, null, hoverForeground, pressedForeground ) );
+		g.setColor( FlatButtonUI.buttonStateColor( c, c.getForeground(), null, null, hoverForeground, pressedForeground ) );
 
 		float mx = width / 2;
 		float my = height / 2;
