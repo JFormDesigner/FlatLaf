@@ -11,6 +11,8 @@ FlatLaf Change Log
 - TabbedPane: New option to allow tab separators to take full height (to enable
   use `UIManager.put( "TabbedPane.tabSeparatorsFullHeight", true );`). (issue
   #59, PR #62)
+- CheckBox and RadioButton: Do not fill background if `contentAreaFilled` is
+  `false`. (issue #58, PR #63)
 
 
 ## 0.26

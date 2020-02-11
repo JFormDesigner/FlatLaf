@@ -118,11 +118,13 @@ public class FlatRadioButtonUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		// fill background even if opaque if
-		// - used as cell renderer (because of selection background)
-		// - if background was explicitly set to a non-UIResource color
+		// fill background even if not opaque if
+		// - contentAreaFilled is true and
+		//   - used as cell renderer (because of selection background)
+		//   - or if background was explicitly set to a non-UIResource color
 		if( !c.isOpaque() &&
-			(c.getParent() instanceof CellRendererPane || !(c.getBackground() instanceof UIResource)) )
+			((AbstractButton)c).isContentAreaFilled() &&
+			(c.getParent() instanceof CellRendererPane || !(c.getBackground() instanceof UIResource)))
 		{
 			g.setColor( c.getBackground() );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
