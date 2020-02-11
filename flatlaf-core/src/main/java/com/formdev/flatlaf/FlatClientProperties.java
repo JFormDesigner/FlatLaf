@@ -134,6 +134,14 @@ public interface FlatClientProperties
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
+	 * Specifies whether tab separators (if enabled) extend to tab height.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TABBED_PANE_TAB_SEPARATORS_FULL_HEIGHT = "JTabbedPane.tabSeparatorsFullHeight";
+
+	/**
 	 * Specifies the height of a tab.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>

@@ -48,6 +48,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @clientProperty JTabbedPane.showTabSeparators		boolean
  * @clientProperty JTabbedPane.hasFullBorder			boolean
+ * @clientProperty JTabbedPane.tabSeparatorsFullHeight  boolean
  *
  * <!-- BasicTabbedPaneUI -->
  *
@@ -83,6 +84,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.contentSeparatorHeight			int
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
+ * @uiDefault TabbedPane.tabSeparatorsFullHeight	    boolean
  *
  * @author Karl Tauber
  */
@@ -105,6 +107,7 @@ public class FlatTabbedPaneUI
 	protected boolean showTabSeparators;
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
+	protected boolean tabSeparatorsFullHeight;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
@@ -130,6 +133,7 @@ public class FlatTabbedPaneUI
 		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOverlapBorder = UIManager.getBoolean( "TabbedPane.tabsOverlapBorder" );
+		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 
 		// scale
 		textIconGap = scale( textIconGap );
@@ -307,7 +311,7 @@ public class FlatTabbedPaneUI
 			!isLastInRun( tabIndex ) )
 		{
 			float sepWidth = UIScale.scale( 1f );
-			float offset = UIScale.scale( 5f );
+			float offset = tabSeparatorsFullHeight ? 0.0f : UIScale.scale( 5f );
 
 			g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
 			if( tabPlacement == LEFT || tabPlacement == RIGHT ) {
