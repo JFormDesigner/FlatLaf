@@ -199,7 +199,7 @@ public abstract class FlatLaf
 					LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
 					throw new IllegalStateException();
 				}
-			} else
+			} else {
 				base = new MetalLookAndFeel();
 			}
 		}
