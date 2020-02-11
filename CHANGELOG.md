@@ -8,6 +8,9 @@ FlatLaf Change Log
   bottom. (issue #34)
 - ProgressBar: Fixed visual artifacts in indeterminate mode, on HiDPI screens at
   125%, 150% and 175% scaling, when the progress moves around.
+- TabbedPane: New option to allow tab separators to take full height (to enable
+  use `UIManager.put( "TabbedPane.tabSeparatorsFullHeight", true );`). (issue
+  #59, PR #62)
 
 
 ## 0.26
