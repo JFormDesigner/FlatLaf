@@ -194,7 +194,7 @@ public abstract class FlatLaf
 				// use Mac Aqua LaF as base
 				String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
 				try {
-					base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).getDeclaredConstructors()[0].newInstance();
+					base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).getDeclaredConstructor().newInstance();
 				} catch( Exception ex ) {
 					LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
 					throw new IllegalStateException();
