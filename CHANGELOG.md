@@ -1,6 +1,37 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Support `JInternalFrame` and `JDesktopPane`. (issues #39 and #11)
+- Table: Support positioning the column sort arrow in header right, left, top or
+  bottom. (issue #34)
+- ProgressBar: Fixed visual artifacts in indeterminate mode, on HiDPI screens at
+  125%, 150% and 175% scaling, when the progress moves around.
+- TabbedPane: New option to allow tab separators to take full height (to enable
+  use `UIManager.put( "TabbedPane.tabSeparatorsFullHeight", true );`). (issue
+  #59, PR #62)
+- CheckBox and RadioButton: Do not fill background if `contentAreaFilled` is
+  `false`. (issue #58, PR #63)
+
+
+## 0.26
+
+- Menus:
+  - Changed menu bar and popup menu background colors (made brighter in light
+    themes and darker in dark themes).
+  - Highlight items in menu bar on mouse hover. (issue #49)
+  - Popup menus now have empty space at the top and bottom.
+  - Menu items now have larger left and right margins.
+  - Made `JMenu`, `JMenuItem`, `JCheckBoxMenuItem` and `JRadioButtonMenuItem`
+    non-opaque.
+- TextField, FormattedTextField and PasswordField: Select all text when a text
+  field gains focus for the first time and selection was not set explicitly.
+  This can be configured to newer or always select all text on focus gain (see
+  UI default value `TextComponent.selectAllOnFocusPolicy`).
+- ProgressBar: Made progress bar paint smooth in indeterminate mode.
+
+
 ## 0.25.1
 
 Re-release of 0.25 because of problems with Maven Central.

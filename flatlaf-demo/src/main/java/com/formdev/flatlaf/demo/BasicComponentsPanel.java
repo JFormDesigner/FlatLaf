@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.demo;
 
 import javax.swing.*;
+import javax.swing.text.DefaultEditorKit;
 import net.miginfocom.swing.*;
 
 /**
@@ -113,6 +114,10 @@ class BasicComponentsPanel
 		JScrollPane scrollPane12 = new JScrollPane();
 		JTextPane textPane4 = new JTextPane();
 		JTextPane textPane5 = new JTextPane();
+		JPopupMenu popupMenu1 = new JPopupMenu();
+		JMenuItem cutMenuItem = new JMenuItem();
+		JMenuItem copyMenuItem = new JMenuItem();
+		JMenuItem pasteMenuItem = new JMenuItem();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -260,6 +265,8 @@ class BasicComponentsPanel
 
 		//---- comboBoxLabel ----
 		comboBoxLabel.setText("JComboBox:");
+		comboBoxLabel.setDisplayedMnemonic('C');
+		comboBoxLabel.setLabelFor(comboBox1);
 		add(comboBoxLabel, "cell 0 4");
 
 		//---- comboBox1 ----
@@ -314,6 +321,8 @@ class BasicComponentsPanel
 
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");
+		spinnerLabel.setLabelFor(spinner1);
+		spinnerLabel.setDisplayedMnemonic('S');
 		add(spinnerLabel, "cell 0 5");
 		add(spinner1, "cell 1 5,growx");
 
@@ -328,10 +337,13 @@ class BasicComponentsPanel
 
 		//---- textFieldLabel ----
 		textFieldLabel.setText("JTextField:");
+		textFieldLabel.setDisplayedMnemonic('T');
+		textFieldLabel.setLabelFor(textField1);
 		add(textFieldLabel, "cell 0 6");
 
 		//---- textField1 ----
 		textField1.setText("editable");
+		textField1.setComponentPopupMenu(popupMenu1);
 		add(textField1, "cell 1 6,growx");
 
 		//---- textField2 ----
@@ -356,10 +368,13 @@ class BasicComponentsPanel
 
 		//---- formattedTextFieldLabel ----
 		formattedTextFieldLabel.setText("JFormattedTextField:");
+		formattedTextFieldLabel.setLabelFor(formattedTextField1);
+		formattedTextFieldLabel.setDisplayedMnemonic('O');
 		add(formattedTextFieldLabel, "cell 0 7");
 
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("editable");
+		formattedTextField1.setComponentPopupMenu(popupMenu1);
 		add(formattedTextField1, "cell 1 7,growx");
 
 		//---- formattedTextField2 ----
@@ -582,7 +597,27 @@ class BasicComponentsPanel
 		//---- textPane5 ----
 		textPane5.setText("no scroll pane");
 		add(textPane5, "cell 5 11,growx");
+
+		//======== popupMenu1 ========
+		{
+
+			//---- cutMenuItem ----
+			cutMenuItem.setText("Cut");
+			popupMenu1.add(cutMenuItem);
+
+			//---- copyMenuItem ----
+			copyMenuItem.setText("Copy");
+			popupMenu1.add(copyMenuItem);
+
+			//---- pasteMenuItem ----
+			pasteMenuItem.setText("Paste");
+			popupMenu1.add(pasteMenuItem);
+		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
+		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
+		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

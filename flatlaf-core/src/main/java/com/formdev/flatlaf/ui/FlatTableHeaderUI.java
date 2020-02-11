@@ -22,13 +22,20 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.util.Objects;
+import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -49,6 +56,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TableHeader.separatorColor		Color
  * @uiDefault TableHeader.bottomSeparatorColor	Color
  * @uiDefault TableHeader.height				int
+ * @uiDefault TableHeader.sortIconPosition		String	right (default), left, top or bottom
  *
  * @author Karl Tauber
  */
@@ -58,6 +66,7 @@ public class FlatTableHeaderUI
 	protected Color separatorColor;
 	protected Color bottomSeparatorColor;
 	protected int height;
+	protected int sortIconPosition;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableHeaderUI();
@@ -70,11 +79,32 @@ public class FlatTableHeaderUI
 		separatorColor = UIManager.getColor( "TableHeader.separatorColor" );
 		bottomSeparatorColor = UIManager.getColor( "TableHeader.bottomSeparatorColor" );
 		height = UIManager.getInt( "TableHeader.height" );
+		switch( Objects.toString( UIManager.getString( "TableHeader.sortIconPosition" ), "right" ) ) {
+			default:
+			case "right":	sortIconPosition = SwingConstants.RIGHT; break;
+			case "left":	sortIconPosition = SwingConstants.LEFT; break;
+			case "top":		sortIconPosition = SwingConstants.TOP; break;
+			case "bottom":	sortIconPosition = SwingConstants.BOTTOM; break;
+		}
+
+		// use own renderer if necessary
+		if( sortIconPosition != SwingConstants.RIGHT ) {
+			TableCellRenderer defaultRenderer = header.getDefaultRenderer();
+			if( defaultRenderer instanceof UIResource )
+				header.setDefaultRenderer( new FlatTableCellHeaderRenderer( defaultRenderer ) );
+		}
 	}
 
 	@Override
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
+
+		// restore default renderer
+		TableCellRenderer defaultRenderer = header.getDefaultRenderer();
+		if( defaultRenderer instanceof FlatTableCellHeaderRenderer ) {
+			((FlatTableCellHeaderRenderer)defaultRenderer).reset();
+			header.setDefaultRenderer( ((FlatTableCellHeaderRenderer)defaultRenderer).delegate );
+		}
 
 		separatorColor = null;
 		bottomSeparatorColor = null;
@@ -214,5 +244,84 @@ public class FlatTableHeaderUI
 
 		parent = parent.getParent();
 		return (parent instanceof JScrollPane) ? (JScrollPane) parent : null;
+	}
+
+	//---- class FlatTableCellHeaderRenderer ----------------------------------
+
+	/**
+	 * A delegating header renderer that is only used to paint sort arrows at
+	 * top, bottom or left position.
+	 */
+	private class FlatTableCellHeaderRenderer
+		implements TableCellRenderer, Border, UIResource
+	{
+		private final TableCellRenderer delegate;
+
+		private int oldHorizontalTextPosition = -1;
+		private Border origBorder;
+		private Icon sortIcon;
+
+		FlatTableCellHeaderRenderer( TableCellRenderer delegate ) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected,
+			boolean hasFocus, int row, int column )
+		{
+			Component c = delegate.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
+			if( !(c instanceof JLabel) )
+				return c;
+
+			JLabel l = (JLabel) c;
+
+			if( sortIconPosition == SwingConstants.LEFT ) {
+				if( oldHorizontalTextPosition < 0 )
+					oldHorizontalTextPosition = l.getHorizontalTextPosition();
+				l.setHorizontalTextPosition( SwingConstants.RIGHT );
+			} else {
+				// top or bottom
+				sortIcon = l.getIcon();
+				origBorder = l.getBorder();
+				l.setIcon( null );
+				l.setBorder( this );
+			}
+
+			return l;
+		}
+
+		void reset() {
+			if( sortIconPosition == SwingConstants.LEFT && oldHorizontalTextPosition >= 0 ) {
+				Component c = getTableCellRendererComponent( header.getTable(), "", false, false, -1, 0 );
+				if( c instanceof JLabel && ((JLabel)c).getHorizontalTextPosition() == SwingConstants.RIGHT )
+					((JLabel)c).setHorizontalTextPosition( oldHorizontalTextPosition );
+			}
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			if( origBorder != null )
+				origBorder.paintBorder( c, g, x, y, width, height );
+
+			if( sortIcon != null ) {
+				int xi = x + ((width - sortIcon.getIconWidth()) / 2);
+				int yi = (sortIconPosition == SwingConstants.TOP)
+					? y + UIScale.scale( 1 )
+					: y + height - sortIcon.getIconHeight()
+						- 1 // for gap
+						- (int) (1 * UIScale.getUserScaleFactor()); // for bottom border
+				sortIcon.paintIcon( c, g, xi, yi );
+			}
+		}
+
+		@Override
+		public Insets getBorderInsets( Component c ) {
+			return (origBorder != null) ? origBorder.getBorderInsets( c ) : new Insets( 0, 0, 0, 0 );
+		}
+
+		@Override
+		public boolean isBorderOpaque() {
+			return (origBorder != null) ? origBorder.isBorderOpaque() : false;
+		}
 	}
 }

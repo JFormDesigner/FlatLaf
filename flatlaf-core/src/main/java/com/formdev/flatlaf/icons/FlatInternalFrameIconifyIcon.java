@@ -18,24 +18,23 @@ package com.formdev.flatlaf.icons;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
-import javax.swing.UIManager;
 
 /**
  * "iconify" icon for {@link javax.swing.JInternalFrame}.
  *
- * @uiDefault InternalFrame.iconColor			Color
- *
  * @author Karl Tauber
  */
 public class FlatInternalFrameIconifyIcon
-	extends FlatAbstractIcon
+	extends FlatInternalFrameAbstractIcon
 {
 	public FlatInternalFrameIconifyIcon() {
-		super( 16, 16, UIManager.getColor( "InternalFrame.iconColor" ) );
 	}
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		g.fillRect( 3, 8, 10, 1 );
+		paintBackground( c, g );
+
+		g.setColor( c.getForeground() );
+		g.fillRect( (width / 2) - 4, height / 2, 8, 1 );
 	}
 }

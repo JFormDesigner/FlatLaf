@@ -50,9 +50,10 @@ public class FlatEmptyBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		insets.left = scale( left );
+		boolean leftToRight = left == right || c.getComponentOrientation().isLeftToRight();
+		insets.left = scale( leftToRight ? left : right );
 		insets.top = scale( top );
-		insets.right = scale( right );
+		insets.right = scale( leftToRight ? right : left );
 		insets.bottom = scale( bottom );
 		return insets;
 	}

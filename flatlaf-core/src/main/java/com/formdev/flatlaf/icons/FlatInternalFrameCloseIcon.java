@@ -17,30 +17,42 @@
 package com.formdev.flatlaf.icons;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatButtonUI;
 
 /**
  * "close" icon for {@link javax.swing.JInternalFrame}.
  *
- * @uiDefault InternalFrame.iconColor			Color
+ * @uiDefault InternalFrame.buttonHoverBackground		Color
+ * @uiDefault InternalFrame.buttonPressedBackground		Color
  *
  * @author Karl Tauber
  */
 public class FlatInternalFrameCloseIcon
-	extends FlatAbstractIcon
+	extends FlatInternalFrameAbstractIcon
 {
+	private final Color hoverForeground = UIManager.getColor( "InternalFrame.closeHoverForeground" );
+	private final Color pressedForeground = UIManager.getColor( "InternalFrame.closePressedForeground" );
+
 	public FlatInternalFrameCloseIcon() {
-		super( 16, 16, UIManager.getColor( "InternalFrame.iconColor" ) );
+		super( UIManager.getDimension( "InternalFrame.buttonSize" ),
+			UIManager.getColor( "InternalFrame.closeHoverBackground" ),
+			UIManager.getColor( "InternalFrame.closePressedBackground" ) );
 	}
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		float mx = 8;
-		float my = 8;
+		paintBackground( c, g );
+
+		g.setColor( FlatButtonUI.buttonStateColor( c, c.getForeground(), null, null, hoverForeground, pressedForeground ) );
+
+		float mx = width / 2;
+		float my = height / 2;
 		float r = 3.25f;
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );

@@ -183,6 +183,8 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "comboBoxLabel"
 				"text": "JComboBox:"
+				"displayedMnemonic": 67
+				"labelFor": new FormReference( "comboBox1" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 4"
 			} )
@@ -254,6 +256,8 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "spinnerLabel"
 				"text": "JSpinner:"
+				"labelFor": new FormReference( "spinner1" )
+				"displayedMnemonic": 83
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 5"
 			} )
@@ -281,12 +285,15 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "textFieldLabel"
 				"text": "JTextField:"
+				"displayedMnemonic": 84
+				"labelFor": new FormReference( "textField1" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 6"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField1"
 				"text": "editable"
+				"componentPopupMenu": &FormReference0 new FormReference( "popupMenu1" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 6,growx"
 			} )
@@ -321,12 +328,15 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "formattedTextFieldLabel"
 				"text": "JFormattedTextField:"
+				"labelFor": new FormReference( "formattedTextField1" )
+				"displayedMnemonic": 79
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 7"
 			} )
 			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
 				name: "formattedTextField1"
 				"text": "editable"
+				"componentPopupMenu": #FormReference0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7,growx"
 			} )
@@ -585,7 +595,25 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 790, 715 )
+			"size": new java.awt.Dimension( 790, 440 )
+		} )
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "popupMenu1"
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "cutMenuItem"
+				"text": "Cut"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "copyMenuItem"
+				"text": "Copy"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "pasteMenuItem"
+				"text": "Paste"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 500 )
+			"size": new java.awt.Dimension( 91, 87 )
 		} )
 	}
 }

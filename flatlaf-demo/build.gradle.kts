@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-version = rootProject.version
-
 plugins {
 	`java-library`
 	id( "com.jfrog.bintray" ) version "1.8.4"

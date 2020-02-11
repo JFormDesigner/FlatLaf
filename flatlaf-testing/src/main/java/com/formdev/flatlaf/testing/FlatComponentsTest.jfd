@@ -258,6 +258,17 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 4"
 			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "contentAreaFilledCheckBox"
+				"text": "contentAreaFilled"
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "contentAreaFilledChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 4"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "comboBoxLabel"
 				"text": "JComboBox:"

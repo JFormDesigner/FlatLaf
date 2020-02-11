@@ -19,6 +19,7 @@ package com.formdev.flatlaf.demo;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.text.DefaultEditorKit;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import net.miginfocom.swing.*;
@@ -175,21 +176,18 @@ class DemoFrame
 				cutMenuItem.setText("Cut");
 				cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				cutMenuItem.setMnemonic('C');
-				cutMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(cutMenuItem);
 
 				//---- copyMenuItem ----
 				copyMenuItem.setText("Copy");
 				copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				copyMenuItem.setMnemonic('O');
-				copyMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(copyMenuItem);
 
 				//---- pasteMenuItem ----
 				pasteMenuItem.setText("Paste");
 				pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				pasteMenuItem.setMnemonic('P');
-				pasteMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				editMenu.add(pasteMenuItem);
 				editMenu.addSeparator();
 
@@ -385,6 +383,10 @@ class DemoFrame
 		pasteButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/menu-paste.svg" ) );
 		refreshButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/refresh.svg" ) );
 		showToggleButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/show.svg" ) );
+
+		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
+		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
+		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

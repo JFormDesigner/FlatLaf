@@ -21,30 +21,32 @@ import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "minimize" (actually "restore") icon for {@link javax.swing.JInternalFrame}.
  *
- * @uiDefault InternalFrame.iconColor			Color
- *
  * @author Karl Tauber
  */
 public class FlatInternalFrameMinimizeIcon
-	extends FlatAbstractIcon
+	extends FlatInternalFrameAbstractIcon
 {
 	public FlatInternalFrameMinimizeIcon() {
-		super( 16, 16, UIManager.getColor( "InternalFrame.iconColor" ) );
 	}
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		Path2D r1 = FlatUIUtils.createRectangle( 5, 3, 8, 8, 1 );
-		Path2D r2 = FlatUIUtils.createRectangle( 3, 5, 8, 8, 1 );
+		paintBackground( c, g );
+
+		g.setColor( c.getForeground() );
+
+		int x = (width / 2) - 4;
+		int y = (height / 2) - 4;
+		Path2D r1 = FlatUIUtils.createRectangle( x + 1, y - 1, 8, 8, 1 );
+		Path2D r2 = FlatUIUtils.createRectangle( x - 1, y + 1, 8, 8, 1 );
 
 		Area area = new Area( r1 );
-		area.subtract( new Area( new Rectangle2D.Float( 3, 5, 8, 8 ) ) );
+		area.subtract( new Area( new Rectangle2D.Float( x - 1, y + 1, 8, 8 ) ) );
 		g.fill( area );
 
 		g.fill( r2 );

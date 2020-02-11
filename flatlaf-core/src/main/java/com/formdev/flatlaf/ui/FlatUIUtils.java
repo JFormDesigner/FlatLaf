@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -37,7 +38,7 @@ import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -109,7 +110,11 @@ public class FlatUIUtils
 	}
 
 	public static Color nonUIResource( Color c ) {
-		return (c instanceof ColorUIResource) ? new Color( c.getRGB(), true ) : c;
+		return (c instanceof UIResource) ? new Color( c.getRGB(), true ) : c;
+	}
+
+	public static Font nonUIResource( Font font ) {
+		return (font instanceof UIResource) ? new Font( font.getName(), font.getStyle(), font.getSize() ) : font;
 	}
 
 	public static int minimumWidth( JComponent c, int minimumWidth ) {

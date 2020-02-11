@@ -221,7 +221,8 @@ class UIDefaultsLoader
 		return resolveValue( properties, newValue );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR, SCALEDINTEGER, INSTANCE, CLASS }
+	private enum ValueType { UNKNOWN, STRING, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
+		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS }
 
 	static Object parseValue( String key, String value ) {
 		return parseValue( key, value, v -> v, Collections.emptyList() );
@@ -299,6 +300,9 @@ class UIDefaultsLoader
 			case DIMENSION:		return parseDimension( value );
 			case COLOR:			return parseColorOrFunction( value, resolver, true );
 			case SCALEDINTEGER:	return parseScaledInteger( value );
+			case SCALEDFLOAT:	return parseScaledFloat( value );
+			case SCALEDINSETS:	return parseScaledInsets( value );
+			case SCALEDDIMENSION:return parseScaledDimension( value );
 			case INSTANCE:		return parseInstance( value, addonClassLoaders );
 			case CLASS:			return parseClass( value, addonClassLoaders );
 			case UNKNOWN:
@@ -626,6 +630,27 @@ class UIDefaultsLoader
 		int val = parseInteger( value, true );
 		return (ActiveValue) t -> {
 			return UIScale.scale( val );
+		};
+	}
+
+	private static ActiveValue parseScaledFloat( String value ) {
+		float val = parseFloat( value, true );
+		return (ActiveValue) t -> {
+			return UIScale.scale( val );
+		};
+	}
+
+	private static ActiveValue parseScaledInsets( String value ) {
+		Insets insets = parseInsets( value );
+		return (ActiveValue) t -> {
+			return UIScale.scale( insets );
+		};
+	}
+
+	private static ActiveValue parseScaledDimension( String value ) {
+		Dimension dimension = parseDimension( value );
+		return (ActiveValue) t -> {
+			return UIScale.scale( dimension );
 		};
 	}
 

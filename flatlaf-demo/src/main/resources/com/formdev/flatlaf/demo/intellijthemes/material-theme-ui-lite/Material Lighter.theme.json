@@ -850,7 +850,7 @@
       "Checkbox.Focus.Wide.Dark": "#00BCD4",
       "Checkbox.Foreground.Disabled": "#D2D4D5",
       "Checkbox.Foreground.Disabled.Dark": "#D2D4D5",
-      "Checkbox.Background.Selected": "#FAFAFA",
+      "Checkbox.Background.Selected": "#00BCD4",
       "Checkbox.Background.Selected.Dark": "#FAFAFA",
       "Checkbox.Border.Selected": "#00BCD4",
       "Checkbox.Border.Selected.Dark": "#00BCD4",

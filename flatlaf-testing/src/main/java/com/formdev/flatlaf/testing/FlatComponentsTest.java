@@ -54,6 +54,15 @@ public class FlatComponentsTest
 		progressBar4.setIndeterminate( indeterminate );
 	}
 
+	private void contentAreaFilledChanged() {
+		boolean contentAreaFilled = contentAreaFilledCheckBox.isSelected();
+
+		for( Component c : getComponents() ) {
+			if( c instanceof AbstractButton )
+				((AbstractButton)c).setContentAreaFilled( contentAreaFilled );
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel labelLabel = new JLabel();
@@ -90,6 +99,7 @@ public class FlatComponentsTest
 		JRadioButton radioButton2 = new JRadioButton();
 		JRadioButton radioButton3 = new JRadioButton();
 		JRadioButton radioButton4 = new JRadioButton();
+		contentAreaFilledCheckBox = new JCheckBox();
 		JLabel comboBoxLabel = new JLabel();
 		JComboBox<String> comboBox1 = new JComboBox<>();
 		JComboBox<String> comboBox2 = new JComboBox<>();
@@ -407,6 +417,12 @@ public class FlatComponentsTest
 		radioButton4.setSelected(true);
 		radioButton4.setEnabled(false);
 		add(radioButton4, "cell 4 4");
+
+		//---- contentAreaFilledCheckBox ----
+		contentAreaFilledCheckBox.setText("contentAreaFilled");
+		contentAreaFilledCheckBox.setSelected(true);
+		contentAreaFilledCheckBox.addActionListener(e -> contentAreaFilledChanged());
+		add(contentAreaFilledCheckBox, "cell 5 4");
 
 		//---- comboBoxLabel ----
 		comboBoxLabel.setText("JComboBox:");
@@ -974,6 +990,7 @@ public class FlatComponentsTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JCheckBox contentAreaFilledCheckBox;
 	private JProgressBar progressBar3;
 	private JProgressBar progressBar4;
 	private JSlider slider3;

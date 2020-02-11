@@ -193,4 +193,19 @@ public class FlatProgressBarUI
 				paintString( g, x, y, width, height, amountFull, insets );
 		}
 	}
+
+	@Override
+	protected void setAnimationIndex( int newValue ) {
+		super.setAnimationIndex( newValue );
+
+		// On HiDPI screens at 125%, 150% and 175% scaling, it occurs that antialiased painting
+		// may paint one pixel outside of the clipping area. This results in visual artifacts
+		// in indeterminate mode when the progress moves around.
+		// Unfortunately it is not safe to invoke getBox() from here (may throw NPE),
+		// which makes it impractical to get progress box and repaint increased box.
+		// Only solution is to repaint whole progress bar.
+		double systemScaleFactor = UIScale.getSystemScaleFactor( progressBar.getGraphicsConfiguration() );
+		if( (int) systemScaleFactor != systemScaleFactor )
+			progressBar.repaint();
+	}
 }

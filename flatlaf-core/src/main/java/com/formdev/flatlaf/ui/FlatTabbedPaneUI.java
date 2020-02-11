@@ -82,6 +82,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.tabSelectionHeight				int
  * @uiDefault TabbedPane.contentSeparatorHeight			int
  * @uiDefault TabbedPane.showTabSeparators				boolean
+ * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
  *
  * @author Karl Tauber
@@ -103,6 +104,7 @@ public class FlatTabbedPaneUI
 	protected int tabSelectionHeight;
 	protected int contentSeparatorHeight;
 	protected boolean showTabSeparators;
+	protected boolean tabSeparatorsFullHeight;
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
 
@@ -128,6 +130,7 @@ public class FlatTabbedPaneUI
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
 		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
+		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOverlapBorder = UIManager.getBoolean( "TabbedPane.tabsOverlapBorder" );
 
@@ -307,7 +310,7 @@ public class FlatTabbedPaneUI
 			!isLastInRun( tabIndex ) )
 		{
 			float sepWidth = UIScale.scale( 1f );
-			float offset = UIScale.scale( 5f );
+			float offset = tabSeparatorsFullHeight ? 0 : UIScale.scale( 5f );
 
 			g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
 			if( tabPlacement == LEFT || tabPlacement == RIGHT ) {
