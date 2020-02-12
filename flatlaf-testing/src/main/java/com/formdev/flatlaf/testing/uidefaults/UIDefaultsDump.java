@@ -155,10 +155,15 @@ public class UIDefaultsDump
 		if( value == null ||
 			value instanceof String ||
 			value instanceof Number ||
-			value instanceof Character ||
 			value instanceof Boolean )
 		{
 			out.print( value );
+		} else if( value instanceof Character ) {
+			char ch = ((Character)value).charValue();
+			if( ch >= ' ' && ch <= '~' )
+				out.printf( "'%c'", value );
+			else
+				out.printf( "'\\u%h'", (int) ch );
 		} else if( value.getClass().isArray() )
 			dumpArray( out, value );
 		else if( value instanceof List )

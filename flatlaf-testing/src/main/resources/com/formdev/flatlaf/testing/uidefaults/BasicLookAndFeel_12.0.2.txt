@@ -538,7 +538,7 @@ PasswordField.background       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.border           [lazy] 2,2,2,2  false    javax.swing.plaf.basic.BasicBorders$FieldBorder [UI]
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
-PasswordField.echoChar         *
+PasswordField.echoChar         '*'
 PasswordField.font             [lazy] Monospaced plain 12    javax.swing.plaf.FontUIResource [UI]
 PasswordField.foreground       #000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.inactiveBackground #c0c0c0    javax.swing.plaf.ColorUIResource [UI]

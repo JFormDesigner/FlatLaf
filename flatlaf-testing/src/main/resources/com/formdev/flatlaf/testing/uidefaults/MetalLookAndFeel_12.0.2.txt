@@ -692,7 +692,7 @@ PasswordField.border           [lazy] javax.swing.plaf.BorderUIResource$Compound
     0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #333333    sun.swing.PrintColorUIResource [UI]
-PasswordField.echoChar         •
+PasswordField.echoChar         '\u2022'
 PasswordField.focusInputMap    [lazy] 37    javax.swing.plaf.InputMapUIResource [UI]
     ctrl pressed A                  select-all
     ctrl pressed BACK_SLASH         unselect

@@ -674,7 +674,7 @@ PasswordField.border           [active] line: #abadb3    javax.swing.plaf.ColorU
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  [active] #000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
-PasswordField.echoChar         [active] ?
+PasswordField.echoChar         [active] '\u25cf'
 PasswordField.focusInputMap    [lazy] 31    javax.swing.plaf.InputMapUIResource [UI]
     ctrl pressed A                  select-all
     ctrl pressed BACK_SLASH         unselect

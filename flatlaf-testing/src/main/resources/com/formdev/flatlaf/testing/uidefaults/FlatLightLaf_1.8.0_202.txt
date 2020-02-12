@@ -925,7 +925,7 @@ PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
-PasswordField.echoChar         •
+PasswordField.echoChar         '\u2022'
 PasswordField.focusInputMap    [lazy] 37    javax.swing.plaf.InputMapUIResource [UI]
     ctrl pressed A                  select-all
     ctrl pressed BACK_SLASH         unselect
