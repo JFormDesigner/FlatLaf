@@ -1034,7 +1034,7 @@ PasswordField.capsLockIconColor #64000000    javax.swing.plaf.ColorUIResource [U
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-PasswordField.echoChar         ●
+PasswordField.echoChar         '\u25cf'
 PasswordField.focusInputMap    [lazy] 66    javax.swing.plaf.InputMapUIResource [UI]
     alt pressed BACK_SPACE          delete-previous-word
     alt pressed DELETE              delete-next-word

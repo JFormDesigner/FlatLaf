@@ -790,7 +790,7 @@ PasswordField.border           [lazy] 3,7,3,7  false    com.apple.laf.AquaTextFi
 PasswordField.capsLockIconColor #64000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
-PasswordField.echoChar         ●
+PasswordField.echoChar         '\u25cf'
 PasswordField.focusInputMap    [lazy] 66    javax.swing.plaf.InputMapUIResource [UI]
     alt pressed BACK_SPACE          delete-previous-word
     alt pressed DELETE              delete-next-word
