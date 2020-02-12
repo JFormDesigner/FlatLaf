@@ -1,0 +1,1871 @@
+Class  com.apple.laf.AquaLookAndFeel
+ID     Aqua
+Name   Mac OS X
+Java   11.0.2
+OS     Mac OS X
+
+
+#---- AbstractButton ----
+
+AbstractButton.click.textAndMnemonic click
+
+
+#---- AbstractDocument ----
+
+AbstractDocument.addition.textAndMnemonic addition
+AbstractDocument.deletion.textAndMnemonic deletion
+AbstractDocument.redo.textAndMnemonic Redo
+AbstractDocument.styleChange.textAndMnemonic style change
+AbstractDocument.undo.textAndMnemonic Undo
+
+
+#---- AbstractUndoableEdit ----
+
+AbstractUndoableEdit.redo.textAndMnemonic Redo
+AbstractUndoableEdit.undo.textAndMnemonic Undo
+
+
+#---- AuditoryCues ----
+
+AuditoryCues.allAuditoryCues   length=13    [Ljava.lang.Object;
+    [0] CheckBoxMenuItem.commandSound
+    [1] InternalFrame.closeSound
+    [2] InternalFrame.maximizeSound
+    [3] InternalFrame.minimizeSound
+    [4] InternalFrame.restoreDownSound
+    [5] InternalFrame.restoreUpSound
+    [6] MenuItem.commandSound
+    [7] OptionPane.errorSound
+    [8] OptionPane.informationSound
+    [9] OptionPane.questionSound
+    [10] OptionPane.warningSound
+    [11] PopupMenu.popupSound
+    [12] RadioButtonMenuItem.commandSound
+AuditoryCues.cueList           length=13    [Ljava.lang.Object;
+    [0] CheckBoxMenuItem.commandSound
+    [1] InternalFrame.closeSound
+    [2] InternalFrame.maximizeSound
+    [3] InternalFrame.minimizeSound
+    [4] InternalFrame.restoreDownSound
+    [5] InternalFrame.restoreUpSound
+    [6] MenuItem.commandSound
+    [7] OptionPane.errorSound
+    [8] OptionPane.informationSound
+    [9] OptionPane.questionSound
+    [10] OptionPane.warningSound
+    [11] PopupMenu.popupSound
+    [12] RadioButtonMenuItem.commandSound
+AuditoryCues.noAuditoryCues    length=1    [Ljava.lang.Object;
+    [0] mute
+
+
+#---- Button ----
+
+Button.background              #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Button.border                  [lazy] 0,0,0,0  false    com.apple.laf.AquaButtonBorder$Dynamic [UI]
+Button.darkShadow              #000000    javax.swing.plaf.ColorUIResource [UI]
+Button.defaultButtonFollowsFocus true
+Button.disabledText            #808080    javax.swing.plaf.ColorUIResource [UI]
+Button.focusInputMap           [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed SPACE                   pressed
+    released SPACE                  released
+Button.font                    [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Button.foreground              #000000    javax.swing.plaf.ColorUIResource [UI]
+Button.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Button.light                   #0749d9    javax.swing.plaf.ColorUIResource [UI]
+Button.margin                  0,2,0,2    javax.swing.plaf.InsetsUIResource [UI]
+Button.opaque                  false
+Button.select                  #ff6666    javax.swing.plaf.ColorUIResource [UI]
+Button.shadow                  #44000000    javax.swing.plaf.ColorUIResource [UI]
+Button.textIconGap             4
+Button.textShiftOffset         0
+ButtonUI                       com.apple.laf.AquaButtonUI
+
+
+#---- CheckBox ----
+
+CheckBox.background            #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+CheckBox.border                0,0,0,0  false    com.apple.laf.AquaButtonBorder$Named [UI]
+CheckBox.disabledText          #808080    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.focusInputMap         [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed SPACE                   pressed
+    released SPACE                  released
+CheckBox.font                  [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+CheckBox.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon                  [lazy] 20,20    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
+CheckBox.margin                1,1,0,1    javax.swing.plaf.InsetsUIResource [UI]
+CheckBox.select                #ff6666    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.textIconGap           4
+CheckBox.textShiftOffset       0
+
+
+#---- CheckBoxMenuItem ----
+
+CheckBoxMenuItem.acceleratorDelimiter 
+CheckBoxMenuItem.acceleratorFont [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+CheckBoxMenuItem.acceleratorForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.acceleratorSelectionForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.arrowIcon     [lazy] 4,8    javax.swing.plaf.basic.BasicIconFactory$MenuItemArrowIcon [UI]
+CheckBoxMenuItem.background    #ffffff    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.border        1,5,1,5  false    com.apple.laf.AquaMenuBorder [UI]
+CheckBoxMenuItem.borderPainted true
+CheckBoxMenuItem.checkIcon     [lazy] 12,12    com.apple.laf.AquaImageFactory$InvertableImageIcon [UI]  (sun.awt.image.MultiResolutionCachedImage)
+CheckBoxMenuItem.dashIcon      [lazy] 10,2    com.apple.laf.AquaImageFactory$InvertableImageIcon [UI]  (sun.awt.image.MultiResolutionCachedImage)
+CheckBoxMenuItem.disabledBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.disabledForeground #808080    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.font          [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+CheckBoxMenuItem.foreground    #000000    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.margin        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+CheckBoxMenuItem.selectionBackground #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+CheckBoxMenuItem.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItemUI             com.apple.laf.AquaMenuItemUI
+
+
+#---- CheckBox ----
+
+CheckBoxUI                     com.apple.laf.AquaButtonCheckBoxUI
+
+
+#---- ColorChooser ----
+
+ColorChooser.background        #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ColorChooser.cancel.textAndMnemonic Cancel
+ColorChooser.font              [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
+ColorChooser.foreground        #d8000000    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.hsb.textAndMnemonic &HSB
+ColorChooser.hsbBlue.textAndMnemonic B
+ColorChooser.hsbBrightness.textAndMnemonic B
+ColorChooser.hsbGreen.textAndMnemonic G
+ColorChooser.hsbHue.textAndMnemonic H
+ColorChooser.hsbRed.textAndMnemonic R
+ColorChooser.hsbSaturation.textAndMnemonic S
+ColorChooser.ok.textAndMnemonic OK
+ColorChooser.preview.textAndMnemonic Preview
+ColorChooser.reset.textAndMnemonic &Reset
+ColorChooser.rgb.textAndMnemonic R&GB
+ColorChooser.rgbBlue.textAndMnemonic &Blue
+ColorChooser.rgbGreen.textAndMnemonic Gree&n
+ColorChooser.rgbRed.textAndMnemonic Re&d
+ColorChooser.sample.textAndMnemonic Sample Text  Sample Text
+ColorChooser.swatches.textAndMnemonic &Swatches
+ColorChooser.swatchesDefaultRecentColor #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.swatchesRecent.textAndMnemonic Recent:
+ColorChooser.swatchesRecentSwatchSize 10,10    java.awt.Dimension
+ColorChooser.swatchesSwatchSize 10,10    java.awt.Dimension
+ColorChooserUI                 javax.swing.plaf.basic.BasicColorChooserUI
+
+
+#---- ComboBox ----
+
+ComboBox.ancestorInputMap      [lazy] 11    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    aquaSelectNext
+    pressed END                     aquaSelectEnd
+    pressed ENTER                   enterPressed
+    pressed ESCAPE                  aquaHidePopup
+    pressed HOME                    aquaSelectHome
+    pressed KP_DOWN                 aquaSelectNext
+    pressed KP_UP                   aquaSelectPrevious
+    pressed PAGE_DOWN               aquaSelectPageDown
+    pressed PAGE_UP                 aquaSelectPageUp
+    pressed SPACE                   aquaSpacePressed
+    pressed UP                      aquaSelectPrevious
+ComboBox.background            #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ComboBox.buttonBackground      #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonDarkShadow      #000000    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonShadow          #44000000    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.disabledBackground    #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.disabledForeground    #808080    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.font                  [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+ComboBox.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.isEnterSelectablePopup false
+ComboBox.noActionOnKeyNavigation false
+ComboBox.selectionBackground   #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ComboBox.selectionForeground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.timeFactor            1000
+ComboBox.togglePopup.textAndMnemonic togglePopup
+ComboBoxUI                     com.apple.laf.AquaComboBoxUI
+
+
+#---- Desktop ----
+
+Desktop.ancestorInputMap       [lazy] 29    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl alt pressed F6             selectNextFrame
+    ctrl pressed F10                maximize
+    ctrl pressed F12                navigateNext
+    ctrl pressed F4                 close
+    ctrl pressed F5                 restore
+    ctrl pressed F6                 selectNextFrame
+    ctrl pressed F7                 move
+    ctrl pressed F8                 resize
+    ctrl pressed F9                 minimize
+    ctrl pressed TAB                selectNextFrame
+    pressed DOWN                    down
+    pressed ESCAPE                  escape
+    pressed KP_DOWN                 down
+    pressed KP_LEFT                 left
+    pressed KP_RIGHT                right
+    pressed KP_UP                   up
+    pressed LEFT                    left
+    pressed RIGHT                   right
+    pressed UP                      up
+    shift ctrl alt pressed F6       selectPreviousFrame
+    shift ctrl pressed F12          navigatePrevious
+    shift pressed DOWN              shrinkDown
+    shift pressed KP_DOWN           shrinkDown
+    shift pressed KP_LEFT           shrinkLeft
+    shift pressed KP_RIGHT          shrinkRight
+    shift pressed KP_UP             shrinkUp
+    shift pressed LEFT              shrinkLeft
+    shift pressed RIGHT             shrinkRight
+    shift pressed UP                shrinkUp
+Desktop.background             #4169aa    javax.swing.plaf.ColorUIResource [UI]
+Desktop.minOnScreenInsets      3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- DesktopIcon ----
+
+DesktopIcon.border             [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
+    2,2,2,2  true    javax.swing.border.BevelBorder
+    line: #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI] 1 false    1,1,1,1  true    javax.swing.border.LineBorder
+DesktopIcon.borderColor        #98000000    javax.swing.plaf.ColorUIResource [UI]
+DesktopIcon.borderRimColor     #c0c0c0c0    javax.swing.plaf.ColorUIResource [UI]
+DesktopIcon.labelBackground    #64000000    javax.swing.plaf.ColorUIResource [UI]
+DesktopIconUI                  com.apple.laf.AquaInternalFrameDockIconUI
+
+
+#---- DesktopPane ----
+
+DesktopPaneUI                  com.apple.laf.AquaInternalFramePaneUI
+
+
+#---- EditorPane ----
+
+EditorPane.background          #ffffff    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.border              [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
+EditorPane.caretBlinkRate      500
+EditorPane.caretForeground     #000000    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.focusInputMap       [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed BACK_SPACE          delete-previous-word
+    alt pressed DELETE              delete-next-word
+    alt pressed KP_LEFT             caret-previous-word
+    alt pressed KP_RIGHT            caret-next-word
+    alt pressed LEFT                caret-previous-word
+    alt pressed RIGHT               caret-next-word
+    ctrl pressed A                  caret-begin-line
+    ctrl pressed B                  caret-backward
+    ctrl pressed D                  delete-next
+    ctrl pressed E                  caret-end-line
+    ctrl pressed F                  caret-forward
+    ctrl pressed H                  delete-previous
+    ctrl pressed N                  caret-down
+    ctrl pressed P                  caret-up
+    ctrl pressed V                  aqua-page-down
+    ctrl pressed W                  delete-previous-word
+    meta pressed A                  select-all
+    meta pressed BACK_SLASH         unselect
+    meta pressed C                  copy-to-clipboard
+    meta pressed DOWN               caret-end
+    meta pressed KP_DOWN            caret-end
+    meta pressed KP_LEFT            caret-begin-line
+    meta pressed KP_RIGHT           caret-end-line
+    meta pressed KP_UP              caret-begin
+    meta pressed LEFT               caret-begin-line
+    meta pressed RIGHT              caret-end-line
+    meta pressed SPACE              activate-link-action
+    meta pressed T                  next-link-action
+    meta pressed UP                 caret-begin
+    meta pressed V                  paste-from-clipboard
+    meta pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    aqua-move-down
+    pressed END                     caret-end
+    pressed ENTER                   insert-break
+    pressed HOME                    caret-begin
+    pressed KP_DOWN                 aqua-move-down
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   aqua-move-up
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               aqua-page-down
+    pressed PAGE_UP                 aqua-page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed TAB                     insert-tab
+    pressed UP                      aqua-move-up
+    shift alt pressed DOWN          selection-end-paragraph
+    shift alt pressed KP_DOWN       selection-end-paragraph
+    shift alt pressed KP_LEFT       selection-previous-word
+    shift alt pressed KP_RIGHT      selection-next-word
+    shift alt pressed KP_UP         selection-begin-paragraph
+    shift alt pressed LEFT          selection-previous-word
+    shift alt pressed RIGHT         selection-next-word
+    shift alt pressed UP            selection-begin-paragraph
+    shift ctrl pressed O            toggle-componentOrientation
+    shift meta pressed DOWN         selection-end
+    shift meta pressed KP_DOWN      selection-end
+    shift meta pressed KP_LEFT      selection-begin-line
+    shift meta pressed KP_RIGHT     selection-end-line
+    shift meta pressed KP_UP        selection-begin
+    shift meta pressed LEFT         selection-begin-line
+    shift meta pressed PAGE_DOWN    selection-page-right
+    shift meta pressed PAGE_UP      selection-page-left
+    shift meta pressed RIGHT        selection-end-line
+    shift meta pressed T            previous-link-action
+    shift meta pressed UP           selection-begin
+    shift pressed DOWN              selection-down
+    shift pressed END               selection-end
+    shift pressed HOME              selection-begin
+    shift pressed KP_DOWN           selection-down
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-up
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-up
+EditorPane.font                [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+EditorPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.inactiveBackground  #ffffff    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.inactiveForeground  #808080    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.margin              0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+EditorPane.selectionBackground #a5cdff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+EditorPane.selectionForeground #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+EditorPaneUI                   com.apple.laf.AquaEditorPaneUI
+
+
+#---- FileChooser ----
+
+FileChooser.acceptAllFileFilter.textAndMnemonic All Files
+FileChooser.ancestorInputMap   [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed ESCAPE                  cancelSelection
+    pressed F5                      refresh
+FileChooser.by.textAndMnemonic Name
+FileChooser.byDate.textAndMnemonic Date Modified
+FileChooser.cancelButton.textAndMnemonic Cancel
+FileChooser.cancelButtonMnemonic 0
+FileChooser.chooseButton.textAndMnemonic Choose
+FileChooser.createButton.textAndMnemonic Create
+FileChooser.desktopName        Desktop
+FileChooser.detailsViewIcon    16,16    javax.swing.plaf.IconUIResource [UI]
+FileChooser.directoryDescription.textAndMnemonic Directory
+FileChooser.directoryOpenButton.textAndMnemonic Open
+FileChooser.directoryOpenButtonMnemonic 0
+FileChooser.fileDescription.textAndMnemonic Generic File
+FileChooser.fileNameLabel.textAndMnemonic File:
+FileChooser.fileNameLabelMnemonic 0
+FileChooser.fileSizeGigaBytes  {0} GB
+FileChooser.fileSizeKiloBytes  {0} KB
+FileChooser.fileSizeMegaBytes  {0} MB
+FileChooser.filesOfTypeLabel.textAndMnemonic File Format:
+FileChooser.filesOfTypeLabelMnemonic 0
+FileChooser.helpButton.textAndMnemonic Help
+FileChooser.helpButtonMnemonic 0
+FileChooser.homeFolderIcon     16,16    javax.swing.plaf.IconUIResource [UI]
+FileChooser.listViewIcon       16,16    javax.swing.plaf.IconUIResource [UI]
+FileChooser.lookInLabelMnemonic 0
+FileChooser.mac.newFolder.subsequent untitled folder {0}
+FileChooser.mac.newFolder      untitled folder
+FileChooser.newFolderAccessibleName New Folder
+FileChooser.newFolderButton.textAndMnemonic New Folder
+FileChooser.newFolderError.textAndMnemonic Error occurred during folder creation
+FileChooser.newFolderErrorSeparator :
+FileChooser.newFolderExistsError.textAndMnemonic That name is already taken
+FileChooser.newFolderIcon      16,16    javax.swing.plaf.IconUIResource [UI]
+FileChooser.newFolderPrompt.textAndMnemonic Name of new folder:
+FileChooser.newFolderTitle.textAndMnemonic New Folder
+FileChooser.openButton.textAndMnemonic Open
+FileChooser.openButtonMnemonic 0
+FileChooser.openDialogTitle.textAndMnemonic Open
+FileChooser.openTitle.textAndMnemonic Open
+FileChooser.readOnly           false
+FileChooser.saveButton.textAndMnemonic Save
+FileChooser.saveButtonMnemonic 0
+FileChooser.saveDialogFileNameLabel.textAndMnemonic Save As:
+FileChooser.saveDialogTitle.textAndMnemonic Save
+FileChooser.saveTitle.textAndMnemonic Save
+FileChooser.untitledFileName   untitled
+FileChooser.untitledFolderName untitled folder
+FileChooser.upFolderIcon       16,16    javax.swing.plaf.IconUIResource [UI]
+FileChooser.updateButton.textAndMnemonic Update
+FileChooser.updateButtonMnemonic 0
+FileChooser.useSystemExtensionHiding false
+FileChooser.usesSingleFilePane false
+FileChooserUI                  com.apple.laf.AquaFileChooserUI
+
+
+#---- FileView ----
+
+FileView.computerIcon          16,16    javax.swing.plaf.IconUIResource [UI]
+FileView.directoryIcon         16,16    javax.swing.plaf.IconUIResource [UI]
+FileView.fileIcon              16,16    javax.swing.plaf.IconUIResource [UI]
+FileView.floppyDriveIcon       16,16    javax.swing.plaf.IconUIResource [UI]
+FileView.hardDriveIcon         16,16    javax.swing.plaf.IconUIResource [UI]
+
+
+#---- Focus ----
+
+Focus.color                    #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+
+
+#---- FormView ----
+
+FormView.browseFileButton.textAndMnemonic Browse...
+FormView.resetButton.textAndMnemonic Reset
+FormView.submitButton.textAndMnemonic Submit Query
+
+
+#---- FormattedTextField ----
+
+FormattedTextField.background  #ffffff    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.border      [lazy] 3,7,3,7  false    com.apple.laf.AquaTextFieldBorder [UI]
+FormattedTextField.caretBlinkRate 500
+FormattedTextField.caretForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.focusInputMap [lazy] 75    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed BACK_SPACE          delete-previous-word
+    alt pressed DELETE              delete-next-word
+    alt pressed KP_LEFT             caret-previous-word
+    alt pressed KP_RIGHT            caret-next-word
+    alt pressed LEFT                caret-previous-word
+    alt pressed RIGHT               caret-next-word
+    ctrl pressed A                  caret-begin-line
+    ctrl pressed B                  caret-backward
+    ctrl pressed D                  delete-next
+    ctrl pressed E                  caret-end-line
+    ctrl pressed F                  caret-forward
+    ctrl pressed H                  delete-previous
+    ctrl pressed N                  caret-end
+    ctrl pressed P                  caret-begin
+    ctrl pressed V                  caret-end
+    ctrl pressed W                  delete-previous-word
+    meta pressed A                  select-all
+    meta pressed BACK_SLASH         unselect
+    meta pressed C                  copy-to-clipboard
+    meta pressed DOWN               caret-end
+    meta pressed KP_DOWN            caret-end
+    meta pressed KP_LEFT            caret-begin-line
+    meta pressed KP_RIGHT           caret-end-line
+    meta pressed KP_UP              caret-begin
+    meta pressed LEFT               caret-begin-line
+    meta pressed RIGHT              caret-end-line
+    meta pressed UP                 caret-begin
+    meta pressed V                  paste-from-clipboard
+    meta pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    decrement
+    pressed END                     caret-end
+    pressed ENTER                   notify-field-accept
+    pressed ESCAPE                  reset-field-edit
+    pressed HOME                    caret-begin
+    pressed KP_DOWN                 decrement
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   increment
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               aqua-page-down
+    pressed PAGE_UP                 aqua-page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed UP                      increment
+    shift alt pressed KP_LEFT       selection-previous-word
+    shift alt pressed KP_RIGHT      selection-next-word
+    shift alt pressed LEFT          selection-previous-word
+    shift alt pressed RIGHT         selection-next-word
+    shift ctrl pressed O            toggle-componentOrientation
+    shift meta pressed DOWN         selection-end
+    shift meta pressed KP_DOWN      selection-end
+    shift meta pressed KP_LEFT      selection-begin-line
+    shift meta pressed KP_RIGHT     selection-end-line
+    shift meta pressed KP_UP        selection-begin
+    shift meta pressed LEFT         selection-begin-line
+    shift meta pressed PAGE_DOWN    selection-page-right
+    shift meta pressed PAGE_UP      selection-page-left
+    shift meta pressed RIGHT        selection-end-line
+    shift meta pressed UP           selection-begin
+    shift pressed DOWN              selection-end-line
+    shift pressed END               selection-end
+    shift pressed HOME              selection-begin
+    shift pressed KP_DOWN           selection-end-line
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-begin-line
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-begin-line
+FormattedTextField.font        [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+FormattedTextField.foreground  #000000    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.inactiveBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.inactiveForeground #808080    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.margin      0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+FormattedTextField.selectionBackground #a5cdff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+FormattedTextField.selectionForeground #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+FormattedTextFieldUI           com.apple.laf.AquaTextFieldFormattedUI
+
+
+#---- IconButton ----
+
+IconButton.font                [lazy] Lucida Grande plain 11    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+
+
+#---- InsetBorder ----
+
+InsetBorder.aquaVariant        [lazy] 8,12,8,12  false    com.apple.laf.AquaGroupBorder$Titleless [UI]
+
+
+#---- InternalFrame ----
+
+InternalFrame.activeTitleBackground #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+InternalFrame.activeTitleForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.background       #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+InternalFrame.borderColor      #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+InternalFrame.borderDarkShadow #00ff00    java.awt.Color
+InternalFrame.borderHighlight  #0000ff    java.awt.Color
+InternalFrame.borderLight      #ffff00    java.awt.Color
+InternalFrame.borderShadow     #ff0000    java.awt.Color
+InternalFrame.closeButtonToolTip Close
+InternalFrame.closeIcon        [lazy] 19,19    com.apple.laf.AquaInternalFrameUI$AquaInternalFrameButtonIcon [UI]
+InternalFrame.iconButtonToolTip Minimize
+InternalFrame.iconifyIcon      [lazy] 19,19    com.apple.laf.AquaInternalFrameUI$AquaInternalFrameButtonIcon [UI]
+InternalFrame.inactiveTitleBackground #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+InternalFrame.inactiveTitleForeground #808080    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.maxButtonToolTip Maximize
+InternalFrame.maximizeIcon     [lazy] 19,19    com.apple.laf.AquaInternalFrameUI$AquaInternalFrameButtonIcon [UI]
+InternalFrame.minimizeIcon     [lazy] 19,19    com.apple.laf.AquaInternalFrameUI$AquaInternalFrameButtonIcon [UI]
+InternalFrame.opaque           false
+InternalFrame.optionDialogBackground #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+InternalFrame.optionDialogTitleFont [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+InternalFrame.paletteBackground #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+InternalFrame.paletteTitleFont [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+InternalFrame.restoreButtonToolTip Restore
+InternalFrame.titleFont        [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+InternalFrame.windowBindings   length=6    [Ljava.lang.Object;
+    [0] shift ESCAPE
+    [1] showSystemMenu
+    [2] ctrl SPACE
+    [3] showSystemMenu
+    [4] ESCAPE
+    [5] hideSystemMenu
+
+
+#---- InternalFrameTitlePane ----
+
+InternalFrameTitlePane.closeButton.textAndMnemonic Close
+InternalFrameTitlePane.closeButtonAccessibleName Close
+InternalFrameTitlePane.closeButtonOpacity true
+InternalFrameTitlePane.iconifyButtonAccessibleName Iconify
+InternalFrameTitlePane.iconifyButtonOpacity true
+InternalFrameTitlePane.maximizeButton.textAndMnemonic Maximize
+InternalFrameTitlePane.maximizeButtonAccessibleName Maximize
+InternalFrameTitlePane.maximizeButtonOpacity true
+InternalFrameTitlePane.minimizeButton.textAndMnemonic Minimize
+InternalFrameTitlePane.moveButton.textAndMnemonic Move
+InternalFrameTitlePane.restoreButton.textAndMnemonic Restore
+InternalFrameTitlePane.sizeButton.textAndMnemonic Size
+
+
+#---- InternalFrame ----
+
+InternalFrameUI                com.apple.laf.AquaInternalFrameUI
+
+
+#---- IsindexView ----
+
+IsindexView.prompt             This is a searchable index.  Enter search keywords:
+
+
+#---- Label ----
+
+Label.background               #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Label.disabledForeground       #808080    javax.swing.plaf.ColorUIResource [UI]
+Label.disabledShadow           #404040    javax.swing.plaf.ColorUIResource [UI]
+Label.font                     [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Label.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
+Label.opaque                   true
+LabelUI                        com.apple.laf.AquaLabelUI
+
+
+#---- List ----
+
+List.background                #ffffff    javax.swing.plaf.ColorUIResource [UI]
+List.cellRenderer              [active] javax.swing.DefaultListCellRenderer$UIResource [UI]
+List.dropLineColor             #44000000    javax.swing.plaf.ColorUIResource [UI]
+List.evenRowBackgroundPainter  [lazy] 0,0,0,0  false    com.apple.laf.AquaListUI$ComponentPainter [UI]
+List.focusCellHighlightBorder  line: #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI] 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
+List.focusInputMap.RightToLeft [lazy] 16    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed KP_LEFT            selectNextColumnChangeLead
+    ctrl pressed KP_RIGHT           selectPreviousColumnChangeLead
+    ctrl pressed LEFT               selectNextColumnChangeLead
+    ctrl pressed RIGHT              selectPreviousColumnChangeLead
+    pressed KP_LEFT                 selectNextColumn
+    pressed KP_RIGHT                selectPreviousColumn
+    pressed LEFT                    selectNextColumn
+    pressed RIGHT                   selectPreviousColumn
+    shift ctrl pressed KP_LEFT      selectNextColumnExtendSelection
+    shift ctrl pressed KP_RIGHT     selectPreviousColumnExtendSelection
+    shift ctrl pressed LEFT         selectNextColumnExtendSelection
+    shift ctrl pressed RIGHT        selectPreviousColumnExtendSelection
+    shift pressed KP_LEFT           selectNextColumnExtendSelection
+    shift pressed KP_RIGHT          selectPreviousColumnExtendSelection
+    shift pressed LEFT              selectNextColumnExtendSelection
+    shift pressed RIGHT             selectPreviousColumnExtendSelection
+List.focusInputMap             [lazy] 29    javax.swing.plaf.InputMapUIResource [UI]
+    meta pressed A                  selectAll
+    meta pressed C                  copy
+    meta pressed V                  paste
+    meta pressed X                  cut
+    pressed COPY                    copy
+    pressed CUT                     cut
+    pressed DOWN                    selectNextRow
+    pressed END                     aquaEnd
+    pressed HOME                    aquaHome
+    pressed KP_DOWN                 selectNextRow
+    pressed KP_LEFT                 selectPreviousColumn
+    pressed KP_RIGHT                selectNextColumn
+    pressed KP_UP                   selectPreviousRow
+    pressed LEFT                    selectPreviousColumn
+    pressed PASTE                   paste
+    pressed RIGHT                   selectNextColumn
+    pressed UP                      selectPreviousRow
+    shift pressed DOWN              selectNextRowExtendSelection
+    shift pressed END               selectLastRowExtendSelection
+    shift pressed HOME              selectFirstRowExtendSelection
+    shift pressed KP_DOWN           selectNextRowExtendSelection
+    shift pressed KP_LEFT           selectPreviousColumnExtendSelection
+    shift pressed KP_RIGHT          selectNextColumnExtendSelection
+    shift pressed KP_UP             selectPreviousRowExtendSelection
+    shift pressed LEFT              selectPreviousColumnExtendSelection
+    shift pressed PAGE_DOWN         scrollDownExtendSelection
+    shift pressed PAGE_UP           scrollUpExtendSelection
+    shift pressed RIGHT             selectNextColumnExtendSelection
+    shift pressed UP                selectPreviousRowExtendSelection
+List.font                      [lazy] Lucida Grande plain 12    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+List.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
+List.noFocusBorder             1,1,1,1  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
+List.oddRowBackgroundPainter   [lazy] 0,0,0,0  false    com.apple.laf.AquaListUI$ComponentPainter [UI]
+List.selectionBackground       #0749d9    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+List.selectionForeground       #ffffff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+List.selectionInactiveBackground #d4d4d4    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+List.selectionInactiveForeground #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+List.sourceListBackgroundPainter [lazy] 0,0,0,0  false    com.apple.laf.AquaListUI$ComponentPainter [UI]
+List.sourceListFocusedSelectionBackgroundPainter [lazy] 0,0,0,0  false    com.apple.laf.AquaListUI$ComponentPainter [UI]
+List.sourceListSelectionBackgroundPainter [lazy] 0,0,0,0  false    com.apple.laf.AquaListUI$ComponentPainter [UI]
+List.timeFactor                1000
+ListUI                         com.apple.laf.AquaListUI
+
+
+#---- Menu ----
+
+Menu.acceleratorFont           [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Menu.acceleratorForeground     #000000    javax.swing.plaf.ColorUIResource [UI]
+Menu.acceleratorSelectionForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+Menu.arrowIcon                 [lazy] 9,10    com.apple.laf.AquaImageFactory$InvertableImageIcon [UI]  (sun.awt.image.MultiResolutionCachedImage)
+Menu.background                #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Menu.border                    1,5,1,5  false    com.apple.laf.AquaMenuBorder [UI]
+Menu.borderPainted             false
+Menu.cancelMode                hideLastSubmenu
+Menu.checkIcon                 [lazy] 9,9    javax.swing.plaf.basic.BasicIconFactory$MenuItemCheckIcon [UI]
+Menu.consumesTabs              true
+Menu.crossMenuMnemonic         true
+Menu.disabledBackground        #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Menu.disabledForeground        #808080    javax.swing.plaf.ColorUIResource [UI]
+Menu.font                      [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Menu.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
+Menu.margin                    0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Menu.menuPopupOffsetX          0
+Menu.menuPopupOffsetY          1
+Menu.preserveTopLevelSelection false
+Menu.selectionBackground       #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Menu.selectionForeground       #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Menu.shortcutKeys              length=2    [I
+    [0] 10
+    [1] 8202
+Menu.submenuPopupOffsetX       0
+Menu.submenuPopupOffsetY       -4
+
+
+#---- MenuBar ----
+
+MenuBar.background             #ffffff    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.backgroundPainter      [lazy] 0,0,0,0  false    com.apple.laf.AquaBorder$Default [UI]
+MenuBar.border                 0,0,1,0  false    com.apple.laf.AquaMenuBarBorder [UI]
+MenuBar.disabledBackground     #ffffff    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.disabledForeground     #808080    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.font                   [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+MenuBar.foreground             #000000    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.highlight              #ffffff    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.margin                 0,8,0,8    javax.swing.plaf.InsetsUIResource [UI]
+MenuBar.selectedBackgroundPainter [lazy] 0,0,0,0  false    com.apple.laf.AquaBorder$Default [UI]
+MenuBar.selectionBackground    #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+MenuBar.selectionForeground    #ffffff    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.shadow                 #44000000    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.windowBindings         length=2    [Ljava.lang.Object;
+    [0] F10
+    [1] takeFocus
+MenuBarUI                      com.apple.laf.AquaMenuBarUI
+
+
+#---- MenuItem ----
+
+MenuItem.acceleratorDelimiter  
+MenuItem.acceleratorFont       [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+MenuItem.acceleratorForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.acceleratorSelectionForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.arrowIcon             [lazy] 4,8    javax.swing.plaf.basic.BasicIconFactory$MenuItemArrowIcon [UI]
+MenuItem.background            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.border                1,5,1,5  false    com.apple.laf.AquaMenuBorder [UI]
+MenuItem.borderPainted         true
+MenuItem.checkIcon             [lazy] 9,9    javax.swing.plaf.basic.BasicIconFactory$MenuItemCheckIcon [UI]
+MenuItem.disabledBackground    #ffffff    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.disabledForeground    #808080    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.font                  [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+MenuItem.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.margin                0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+MenuItem.selectedBackgroundPainter [lazy] 0,0,0,0  false    com.apple.laf.AquaBorder$Default [UI]
+MenuItem.selectionBackground   #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+MenuItem.selectionForeground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
+MenuItemUI                     com.apple.laf.AquaMenuItemUI
+
+
+#---- Menu ----
+
+MenuUI                         com.apple.laf.AquaMenuUI
+
+
+#---- OptionPane ----
+
+OptionPane.background          #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+OptionPane.border              12,21,17,21  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
+OptionPane.buttonAreaBorder    13,0,0,0  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
+OptionPane.buttonClickThreshhold 500
+OptionPane.buttonFont          [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+OptionPane.cancelButton.textAndMnemonic Cancel
+OptionPane.cancelButtonMnemonic 
+OptionPane.errorIcon           [lazy] 64,64    javax.swing.plaf.IconUIResource [UI]
+OptionPane.font                [lazy] Lucida Grande bold 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+OptionPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.informationIcon     [lazy] 64,64    javax.swing.plaf.IconUIResource [UI]
+OptionPane.inputDialog.titleAndMnemonic Input
+OptionPane.messageAreaBorder   0,0,0,0  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
+OptionPane.messageDialog.titleAndMnemonic Message
+OptionPane.messageFont         [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+OptionPane.messageForeground   #000000    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.minimumSize         262,90    javax.swing.plaf.DimensionUIResource [UI]
+OptionPane.noButton.textAndMnemonic &No
+OptionPane.noButtonMnemonic    
+OptionPane.okButton.textAndMnemonic OK
+OptionPane.okButtonMnemonic    
+OptionPane.questionIcon        [lazy] 64,64    javax.swing.plaf.IconUIResource [UI]
+OptionPane.title.textAndMnemonic Select an Option
+OptionPane.warningIcon         [lazy] 64,64    javax.swing.plaf.IconUIResource [UI]
+OptionPane.windowBindings      length=2    [Ljava.lang.Object;
+    [0] ESCAPE
+    [1] close
+OptionPane.yesButton.textAndMnemonic &Yes
+OptionPane.yesButtonMnemonic   
+OptionPaneUI                   com.apple.laf.AquaOptionPaneUI
+
+
+#---- Panel ----
+
+Panel.background               #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Panel.font                     [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Panel.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
+Panel.opaque                   true
+PanelUI                        com.apple.laf.AquaPanelUI
+
+
+#---- PasswordField ----
+
+PasswordField.background       #ffffff    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.border           [lazy] 3,7,3,7  false    com.apple.laf.AquaTextFieldBorder [UI]
+PasswordField.capsLockIconColor #64000000    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.caretBlinkRate   500
+PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.echoChar         ●
+PasswordField.focusInputMap    [lazy] 66    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed BACK_SPACE          delete-previous-word
+    alt pressed DELETE              delete-next-word
+    ctrl pressed A                  caret-begin-line
+    ctrl pressed B                  caret-backward
+    ctrl pressed D                  delete-next
+    ctrl pressed E                  caret-end-line
+    ctrl pressed F                  caret-forward
+    ctrl pressed H                  delete-previous
+    ctrl pressed N                  caret-end
+    ctrl pressed P                  caret-begin
+    ctrl pressed V                  caret-end
+    ctrl pressed W                  delete-previous-word
+    meta pressed A                  select-all
+    meta pressed BACK_SLASH         unselect
+    meta pressed C                  copy-to-clipboard
+    meta pressed DOWN               caret-end
+    meta pressed KP_DOWN            caret-end
+    meta pressed KP_LEFT            caret-begin-line
+    meta pressed KP_RIGHT           caret-end-line
+    meta pressed KP_UP              caret-begin
+    meta pressed LEFT               caret-begin-line
+    meta pressed RIGHT              caret-end-line
+    meta pressed UP                 caret-begin
+    meta pressed V                  paste-from-clipboard
+    meta pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    caret-end-line
+    pressed END                     caret-end
+    pressed ENTER                   notify-field-accept
+    pressed HOME                    caret-begin
+    pressed KP_DOWN                 caret-end-line
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   caret-begin-line
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               aqua-page-down
+    pressed PAGE_UP                 aqua-page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed UP                      caret-begin-line
+    shift ctrl pressed O            toggle-componentOrientation
+    shift meta pressed DOWN         selection-end
+    shift meta pressed KP_DOWN      selection-end
+    shift meta pressed KP_LEFT      selection-begin-line
+    shift meta pressed KP_RIGHT     selection-end-line
+    shift meta pressed KP_UP        selection-begin
+    shift meta pressed LEFT         selection-begin-line
+    shift meta pressed PAGE_DOWN    selection-page-right
+    shift meta pressed PAGE_UP      selection-page-left
+    shift meta pressed RIGHT        selection-end-line
+    shift meta pressed UP           selection-begin
+    shift pressed DOWN              selection-end-line
+    shift pressed END               selection-end
+    shift pressed HOME              selection-begin
+    shift pressed KP_DOWN           selection-end-line
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-begin-line
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-begin-line
+PasswordField.font             [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+PasswordField.foreground       #000000    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.inactiveBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.inactiveForeground #808080    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.margin           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+PasswordField.selectionBackground #a5cdff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+PasswordField.selectionForeground #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+PasswordFieldUI                com.apple.laf.AquaTextPasswordFieldUI
+
+
+#---- PopupMenu ----
+
+PopupMenu.background           #ffffff    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.border               1,5,1,5  false    com.apple.laf.AquaMenuBorder [UI]
+PopupMenu.consumeEventOnClose  false
+PopupMenu.font                 [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+PopupMenu.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.selectedWindowInputMapBindings.RightToLeft length=8    [Ljava.lang.Object;
+    [0] LEFT
+    [1] selectChild
+    [2] KP_LEFT
+    [3] selectChild
+    [4] RIGHT
+    [5] selectParent
+    [6] KP_RIGHT
+    [7] selectParent
+PopupMenu.selectedWindowInputMapBindings length=24    [Ljava.lang.Object;
+    [0] ESCAPE
+    [1] cancel
+    [2] DOWN
+    [3] selectNext
+    [4] KP_DOWN
+    [5] selectNext
+    [6] UP
+    [7] selectPrevious
+    [8] KP_UP
+    [9] selectPrevious
+    [10] LEFT
+    [11] selectParent
+    [12] KP_LEFT
+    [13] selectParent
+    [14] RIGHT
+    [15] selectChild
+    [16] KP_RIGHT
+    [17] selectChild
+    [18] ENTER
+    [19] return
+    [20] ctrl ENTER
+    [21] return
+    [22] SPACE
+    [23] return
+PopupMenu.selectionBackground  #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+PopupMenu.selectionForeground  #ffffff    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.translucentBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- PopupMenuSeparator ----
+
+PopupMenuSeparatorUI           com.apple.laf.AquaPopupMenuSeparatorUI
+
+
+#---- PopupMenu ----
+
+PopupMenuUI                    com.apple.laf.AquaPopupMenuUI
+
+
+#---- PrintingDialog ----
+
+PrintingDialog.abortButton.textAndMnemonic &Abort
+PrintingDialog.abortButtonToolTip.textAndMnemonic Abort Printing
+PrintingDialog.contentAborting.textAndMnemonic Printing aborting...
+PrintingDialog.contentInitial.textAndMnemonic Printing in progress...
+PrintingDialog.contentProgress.textAndMnemonic Printed page {0}...
+PrintingDialog.titleAborting.textAndMnemonic Printing (Aborting)
+PrintingDialog.titleProgress.textAndMnemonic Printing
+
+
+#---- ProgressBar ----
+
+ProgressBar.background         #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ProgressBar.border             0,0,0,0  false    javax.swing.plaf.BorderUIResource [UI]
+ProgressBar.cellLength         1
+ProgressBar.cellSpacing        0
+ProgressBar.cycleTime          3000
+ProgressBar.font               [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+ProgressBar.foreground         #000000    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.horizontalSize     146,12    javax.swing.plaf.DimensionUIResource [UI]
+ProgressBar.repaintInterval    20
+ProgressBar.selectionBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.selectionForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.verticalSize       12,146    javax.swing.plaf.DimensionUIResource [UI]
+ProgressBarUI                  com.apple.laf.AquaProgressBarUI
+
+
+#---- ProgressMonitor ----
+
+ProgressMonitor.progress.textAndMnemonic Progress...
+
+
+#---- RadioButton ----
+
+RadioButton.background         #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+RadioButton.border             0,0,0,0  false    com.apple.laf.AquaButtonBorder$Named [UI]
+RadioButton.darkShadow         #000000    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.disabledText       #808080    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.focusInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed SPACE                   pressed
+    released SPACE                  released
+RadioButton.font               [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+RadioButton.foreground         #000000    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.highlight          #ffffff    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.icon               [lazy] 20,20    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
+RadioButton.light              #0749d9    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.margin             1,1,0,1    javax.swing.plaf.InsetsUIResource [UI]
+RadioButton.select             #ff6666    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.shadow             #44000000    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.textIconGap        4
+RadioButton.textShiftOffset    0
+
+
+#---- RadioButtonMenuItem ----
+
+RadioButtonMenuItem.acceleratorDelimiter 
+RadioButtonMenuItem.acceleratorFont [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+RadioButtonMenuItem.acceleratorForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.acceleratorSelectionForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.arrowIcon  [lazy] 4,8    javax.swing.plaf.basic.BasicIconFactory$MenuItemArrowIcon [UI]
+RadioButtonMenuItem.background #ffffff    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.border     1,5,1,5  false    com.apple.laf.AquaMenuBorder [UI]
+RadioButtonMenuItem.borderPainted true
+RadioButtonMenuItem.checkIcon  [lazy] 12,12    com.apple.laf.AquaImageFactory$InvertableImageIcon [UI]  (sun.awt.image.MultiResolutionCachedImage)
+RadioButtonMenuItem.dashIcon   [lazy] 10,2    com.apple.laf.AquaImageFactory$InvertableImageIcon [UI]  (sun.awt.image.MultiResolutionCachedImage)
+RadioButtonMenuItem.disabledBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.disabledForeground #808080    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.font       [lazy] Lucida Grande plain 14    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+RadioButtonMenuItem.foreground #000000    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.margin     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+RadioButtonMenuItem.selectionBackground #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+RadioButtonMenuItem.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItemUI          com.apple.laf.AquaMenuItemUI
+
+
+#---- RadioButton ----
+
+RadioButtonUI                  com.apple.laf.AquaButtonRadioUI
+
+
+#---- RootPane ----
+
+RootPane.ancestorInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed CONTEXT_MENU            postPopup
+    shift pressed F10               postPopup
+RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
+    [0] ENTER
+    [1] press
+    [2] released ENTER
+    [3] release
+    [4] ctrl ENTER
+    [5] press
+    [6] ctrl released ENTER
+    [7] release
+RootPaneUI                     com.apple.laf.AquaRootPaneUI
+
+
+#---- ScrollBar ----
+
+ScrollBar.ancestorInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed KP_LEFT                 positiveUnitIncrement
+    pressed KP_RIGHT                negativeUnitIncrement
+    pressed LEFT                    positiveUnitIncrement
+    pressed RIGHT                   negativeUnitIncrement
+ScrollBar.ancestorInputMap     [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    positiveUnitIncrement
+    pressed END                     maxScroll
+    pressed HOME                    minScroll
+    pressed KP_DOWN                 positiveUnitIncrement
+    pressed KP_LEFT                 negativeUnitIncrement
+    pressed KP_RIGHT                positiveUnitIncrement
+    pressed KP_UP                   negativeUnitIncrement
+    pressed LEFT                    negativeUnitIncrement
+    pressed PAGE_DOWN               positiveBlockIncrement
+    pressed PAGE_UP                 negativeBlockIncrement
+    pressed RIGHT                   positiveUnitIncrement
+    pressed UP                      negativeUnitIncrement
+ScrollBar.background           #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed KP_LEFT                 positiveUnitIncrement
+    pressed KP_RIGHT                negativeUnitIncrement
+    pressed LEFT                    positiveUnitIncrement
+    pressed RIGHT                   negativeUnitIncrement
+ScrollBar.focusInputMap        [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    positiveUnitIncrement
+    pressed END                     maxScroll
+    pressed HOME                    minScroll
+    pressed KP_DOWN                 positiveUnitIncrement
+    pressed KP_LEFT                 negativeUnitIncrement
+    pressed KP_RIGHT                positiveUnitIncrement
+    pressed KP_UP                   negativeUnitIncrement
+    pressed LEFT                    negativeUnitIncrement
+    pressed PAGE_DOWN               positiveBlockIncrement
+    pressed PAGE_UP                 negativeBlockIncrement
+    pressed RIGHT                   positiveUnitIncrement
+    pressed UP                      negativeUnitIncrement
+ScrollBar.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.maximumThumbSize     4096,4096    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.minimumThumbSize     8,8    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.thumb                #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbDarkShadow      #000000    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbShadow          #44000000    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.track                #9a9a9a    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.trackHighlight       #000000    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.width                16
+ScrollBarUI                    com.apple.laf.AquaScrollBarUI
+
+
+#---- ScrollPane ----
+
+ScrollPane.ancestorInputMap.RightToLeft [lazy] 0    javax.swing.plaf.InputMapUIResource [UI]
+ScrollPane.ancestorInputMap    [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    unitScrollDown
+    pressed END                     scrollEnd
+    pressed HOME                    scrollHome
+    pressed KP_DOWN                 unitScrollDown
+    pressed KP_LEFT                 unitScrollLeft
+    pressed KP_RIGHT                unitScrollRight
+    pressed KP_UP                   unitScrollUp
+    pressed LEFT                    unitScrollLeft
+    pressed PAGE_DOWN               scrollDown
+    pressed PAGE_UP                 scrollUp
+    pressed RIGHT                   unitScrollRight
+    pressed UP                      unitScrollUp
+ScrollPane.background          #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ScrollPane.border              [lazy] 2,2,2,2  false    com.apple.laf.AquaScrollRegionBorder [UI]
+ScrollPane.font                [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+ScrollPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
+ScrollPaneUI                   com.apple.laf.AquaScrollPaneUI
+
+
+#---- Separator ----
+
+Separator.foreground           #d4d4d4    javax.swing.plaf.ColorUIResource [UI]
+Separator.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Separator.shadow               #44000000    javax.swing.plaf.ColorUIResource [UI]
+SeparatorUI                    com.apple.laf.AquaPopupMenuSeparatorUI
+
+
+#---- Slider ----
+
+Slider.background              #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Slider.focus                   #000000    javax.swing.plaf.ColorUIResource [UI]
+Slider.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed KP_LEFT                 positiveUnitIncrement
+    pressed KP_RIGHT                negativeUnitIncrement
+    pressed LEFT                    positiveUnitIncrement
+    pressed RIGHT                   negativeUnitIncrement
+Slider.focusInputMap           [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    negativeUnitIncrement
+    pressed END                     maxScroll
+    pressed HOME                    minScroll
+    pressed KP_DOWN                 negativeUnitIncrement
+    pressed KP_LEFT                 negativeUnitIncrement
+    pressed KP_RIGHT                positiveUnitIncrement
+    pressed KP_UP                   positiveUnitIncrement
+    pressed LEFT                    negativeUnitIncrement
+    pressed PAGE_DOWN               negativeBlockIncrement
+    pressed PAGE_UP                 positiveBlockIncrement
+    pressed RIGHT                   positiveUnitIncrement
+    pressed UP                      positiveUnitIncrement
+Slider.focusInsets             2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
+Slider.font                    [lazy] Lucida Grande plain 11    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Slider.foreground              #000000    javax.swing.plaf.ColorUIResource [UI]
+Slider.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Slider.horizontalSize          200,21    java.awt.Dimension
+Slider.minimumHorizontalSize   36,21    java.awt.Dimension
+Slider.minimumVerticalSize     21,36    java.awt.Dimension
+Slider.onlyLeftMouseButtonDrag true
+Slider.shadow                  #44000000    javax.swing.plaf.ColorUIResource [UI]
+Slider.tickColor               #808080    javax.swing.plaf.ColorUIResource [UI]
+Slider.verticalSize            21,200    java.awt.Dimension
+SliderUI                       com.apple.laf.AquaSliderUI
+
+
+#---- Spinner ----
+
+Spinner.ancestorInputMap       [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    decrement
+    pressed KP_DOWN                 decrement
+    pressed KP_UP                   increment
+    pressed UP                      increment
+Spinner.arrowButtonSize        16,5    java.awt.Dimension
+Spinner.background             #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Spinner.editorAlignment        11
+Spinner.editorBorderPainted    true
+Spinner.font                   [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Spinner.foreground             #000000    javax.swing.plaf.ColorUIResource [UI]
+SpinnerUI                      com.apple.laf.AquaSpinnerUI
+
+
+#---- SplitPane ----
+
+SplitPane.ancestorInputMap     [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed TAB                focusOutForward
+    pressed DOWN                    positiveIncrement
+    pressed END                     selectMax
+    pressed F6                      toggleFocus
+    pressed F8                      startResize
+    pressed HOME                    selectMin
+    pressed KP_DOWN                 positiveIncrement
+    pressed KP_LEFT                 negativeIncrement
+    pressed KP_RIGHT                positiveIncrement
+    pressed KP_UP                   negativeIncrement
+    pressed LEFT                    negativeIncrement
+    pressed RIGHT                   positiveIncrement
+    pressed UP                      negativeIncrement
+    shift ctrl pressed TAB          focusOutBackward
+SplitPane.background           #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+SplitPane.border               [lazy] 2,2,2,2  false    com.apple.laf.AquaScrollRegionBorder [UI]
+SplitPane.darkShadow           #000000    javax.swing.plaf.ColorUIResource [UI]
+SplitPane.dividerSize          9
+SplitPane.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+SplitPane.leftButton.textAndMnemonic left button
+SplitPane.rightButton.textAndMnemonic right button
+SplitPane.shadow               #44000000    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- SplitPaneDivider ----
+
+SplitPaneDivider.draggingColor #404040    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.horizontalGradientVariant [lazy] 0,0,0,0  true    com.apple.laf.AquaSplitPaneDividerUI$HorizontalSplitDividerGradientPainter
+
+
+#---- SplitPane ----
+
+SplitPaneUI                    com.apple.laf.AquaSplitPaneUI
+
+
+#---- TabbedPane ----
+
+TabbedPane.ancestorInputMap    [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed KP_UP              requestFocus
+    ctrl pressed PAGE_DOWN          navigatePageDown
+    ctrl pressed PAGE_UP            navigatePageUp
+    ctrl pressed UP                 requestFocus
+TabbedPane.background          #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+TabbedPane.contentBorderInsets 8,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.contentOpaque       true
+TabbedPane.darkShadow          #000000    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.focus               #d8000000    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.focusInputMap       [lazy] 10    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed DOWN               requestFocusForVisibleComponent
+    ctrl pressed KP_DOWN            requestFocusForVisibleComponent
+    pressed DOWN                    navigateDown
+    pressed KP_DOWN                 navigateDown
+    pressed KP_LEFT                 navigateLeft
+    pressed KP_RIGHT                navigateRight
+    pressed KP_UP                   navigateUp
+    pressed LEFT                    navigateLeft
+    pressed RIGHT                   navigateRight
+    pressed UP                      navigateUp
+TabbedPane.font                [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+TabbedPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.highlight           #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.labelShift          1
+TabbedPane.leftTabInsets       0,10,3,10    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.light               #0749d9    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.nonSelectedTabTitleNormalColor #000000    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.opaque              true
+TabbedPane.rightTabInsets      0,10,3,10    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.selectedLabelShift  -1
+TabbedPane.selectedTabPadInsets 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.selectedTabTitleDisabledColor #8cffffff    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.selectedTabTitleNormalColor #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.selectedTabTitlePressedColor #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.selectedTabTitleShadowDisabledColor #40000000    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.selectedTabTitleShadowNormalColor #64000000    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.selectionFollowsFocus true
+TabbedPane.shadow              #44000000    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.smallFont           [lazy] Lucida Grande plain 11    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+TabbedPane.tabAreaInsets       3,9,-1,9    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.tabInsets           0,10,3,10    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.tabRunOverlay       2
+TabbedPane.tabsOpaque          true
+TabbedPane.tabsOverlapBorder   true
+TabbedPane.textIconGap         4
+TabbedPane.useSmallLayout      false
+TabbedPaneUI                   com.apple.laf.AquaTabbedPaneContrastUI
+
+
+#---- Table ----
+
+Table.ancestorInputMap.RightToLeft [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed PAGE_DOWN          scrollLeftChangeSelection
+    ctrl pressed PAGE_UP            scrollRightChangeSelection
+    pressed KP_LEFT                 selectNextColumn
+    pressed KP_RIGHT                selectPreviousColumn
+    pressed LEFT                    selectNextColumn
+    pressed RIGHT                   selectPreviousColumn
+    shift ctrl pressed PAGE_DOWN    scrollLeftExtendSelection
+    shift ctrl pressed PAGE_UP      scrollRightExtendSelection
+    shift pressed KP_LEFT           selectNextColumnExtendSelection
+    shift pressed KP_RIGHT          selectPreviousColumnExtendSelection
+    shift pressed LEFT              selectNextColumnExtendSelection
+    shift pressed RIGHT             selectPreviousColumnExtendSelection
+Table.ancestorInputMap         [lazy] 38    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed TAB                 focusHeader
+    meta pressed A                  selectAll
+    meta pressed C                  copy
+    meta pressed V                  paste
+    meta pressed X                  cut
+    pressed COPY                    copy
+    pressed CUT                     cut
+    pressed DOWN                    selectNextRow
+    pressed END                     selectLastColumn
+    pressed ENTER                   selectNextRowCell
+    pressed ESCAPE                  cancel
+    pressed HOME                    selectFirstColumn
+    pressed KP_DOWN                 selectNextRow
+    pressed KP_LEFT                 selectPreviousColumn
+    pressed KP_RIGHT                selectNextColumn
+    pressed KP_UP                   selectPreviousRow
+    pressed LEFT                    selectPreviousColumn
+    pressed PAGE_DOWN               scrollDownChangeSelection
+    pressed PAGE_UP                 scrollUpChangeSelection
+    pressed PASTE                   paste
+    pressed RIGHT                   selectNextColumn
+    pressed TAB                     selectNextColumnCell
+    pressed UP                      selectPreviousRow
+    shift alt pressed TAB           focusHeader
+    shift pressed DOWN              selectNextRowExtendSelection
+    shift pressed END               selectLastColumnExtendSelection
+    shift pressed ENTER             selectPreviousRowCell
+    shift pressed HOME              selectFirstColumnExtendSelection
+    shift pressed KP_DOWN           selectNextRowExtendSelection
+    shift pressed KP_LEFT           selectPreviousColumnExtendSelection
+    shift pressed KP_RIGHT          selectNextColumnExtendSelection
+    shift pressed KP_UP             selectPreviousRowExtendSelection
+    shift pressed LEFT              selectPreviousColumnExtendSelection
+    shift pressed PAGE_DOWN         scrollDownExtendSelection
+    shift pressed PAGE_UP           scrollUpExtendSelection
+    shift pressed RIGHT             selectNextColumnExtendSelection
+    shift pressed TAB               selectPreviousColumnCell
+    shift pressed UP                selectPreviousRowExtendSelection
+Table.ascendingSortIcon        [lazy] 17,7    sun.swing.icon.SortArrowIcon [UI]
+Table.background               #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Table.descendingSortIcon       [lazy] 17,7    sun.swing.icon.SortArrowIcon [UI]
+Table.dropLineColor            #44000000    javax.swing.plaf.ColorUIResource [UI]
+Table.dropLineShortColor       #000000    javax.swing.plaf.ColorUIResource [UI]
+Table.focusCellBackground      #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Table.focusCellForeground      #a5cdff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Table.focusCellHighlightBorder line: #3f074cf1    com.apple.laf.AquaImageFactory$SystemColorProxy [UI] 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
+Table.font                     [lazy] Lucida Grande plain 12    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Table.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
+Table.gridColor                #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Table.scrollPaneBorder         [lazy] 2,2,2,2  false    com.apple.laf.AquaScrollRegionBorder [UI]
+Table.selectionBackground      #0749d9    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Table.selectionForeground      #ffffff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Table.selectionInactiveBackground #d4d4d4    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Table.selectionInactiveForeground #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Table.sortIconColor            #44000000    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- TableHeader ----
+
+TableHeader.ancestorInputMap   [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed KP_LEFT             moveColumnLeft
+    alt pressed KP_RIGHT            moveColumnRight
+    alt pressed LEFT                moveColumnLeft
+    alt pressed RIGHT               moveColumnRight
+    pressed ESCAPE                  focusTable
+    pressed KP_LEFT                 selectColumnToLeft
+    pressed KP_RIGHT                selectColumnToRight
+    pressed LEFT                    selectColumnToLeft
+    pressed RIGHT                   selectColumnToRight
+    pressed SPACE                   toggleSortOrder
+    shift alt pressed KP_LEFT       resizeLeft
+    shift alt pressed KP_RIGHT      resizeRight
+    shift alt pressed LEFT          resizeLeft
+    shift alt pressed RIGHT         resizeRight
+TableHeader.background         #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.cellBorder         1,3,1,3  false    com.apple.laf.AquaTableHeaderBorder
+TableHeader.focusCellBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.font               [lazy] Lucida Grande plain 11    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+TableHeader.foreground         #000000    javax.swing.plaf.ColorUIResource [UI]
+TableHeaderUI                  com.apple.laf.AquaTableHeaderUI
+
+
+#---- Table ----
+
+TableUI                        com.apple.laf.AquaTableUI
+
+
+#----  ----
+
+Text-specific antialiasing enable key [unknown type] sun.awt.SunHints$Value
+
+
+#---- TextArea ----
+
+TextArea.background            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextArea.border                [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
+TextArea.caretBlinkRate        500
+TextArea.caretForeground       #000000    javax.swing.plaf.ColorUIResource [UI]
+TextArea.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed BACK_SPACE          delete-previous-word
+    alt pressed DELETE              delete-next-word
+    alt pressed KP_LEFT             caret-previous-word
+    alt pressed KP_RIGHT            caret-next-word
+    alt pressed LEFT                caret-previous-word
+    alt pressed RIGHT               caret-next-word
+    ctrl pressed A                  caret-begin-line
+    ctrl pressed B                  caret-backward
+    ctrl pressed D                  delete-next
+    ctrl pressed E                  caret-end-line
+    ctrl pressed F                  caret-forward
+    ctrl pressed H                  delete-previous
+    ctrl pressed N                  caret-down
+    ctrl pressed P                  caret-up
+    ctrl pressed V                  aqua-page-down
+    ctrl pressed W                  delete-previous-word
+    meta pressed A                  select-all
+    meta pressed BACK_SLASH         unselect
+    meta pressed C                  copy-to-clipboard
+    meta pressed DOWN               caret-end
+    meta pressed KP_DOWN            caret-end
+    meta pressed KP_LEFT            caret-begin-line
+    meta pressed KP_RIGHT           caret-end-line
+    meta pressed KP_UP              caret-begin
+    meta pressed LEFT               caret-begin-line
+    meta pressed RIGHT              caret-end-line
+    meta pressed SPACE              activate-link-action
+    meta pressed T                  next-link-action
+    meta pressed UP                 caret-begin
+    meta pressed V                  paste-from-clipboard
+    meta pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    aqua-move-down
+    pressed END                     caret-end
+    pressed ENTER                   insert-break
+    pressed HOME                    caret-begin
+    pressed KP_DOWN                 aqua-move-down
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   aqua-move-up
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               aqua-page-down
+    pressed PAGE_UP                 aqua-page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed TAB                     insert-tab
+    pressed UP                      aqua-move-up
+    shift alt pressed DOWN          selection-end-paragraph
+    shift alt pressed KP_DOWN       selection-end-paragraph
+    shift alt pressed KP_LEFT       selection-previous-word
+    shift alt pressed KP_RIGHT      selection-next-word
+    shift alt pressed KP_UP         selection-begin-paragraph
+    shift alt pressed LEFT          selection-previous-word
+    shift alt pressed RIGHT         selection-next-word
+    shift alt pressed UP            selection-begin-paragraph
+    shift ctrl pressed O            toggle-componentOrientation
+    shift meta pressed DOWN         selection-end
+    shift meta pressed KP_DOWN      selection-end
+    shift meta pressed KP_LEFT      selection-begin-line
+    shift meta pressed KP_RIGHT     selection-end-line
+    shift meta pressed KP_UP        selection-begin
+    shift meta pressed LEFT         selection-begin-line
+    shift meta pressed PAGE_DOWN    selection-page-right
+    shift meta pressed PAGE_UP      selection-page-left
+    shift meta pressed RIGHT        selection-end-line
+    shift meta pressed T            previous-link-action
+    shift meta pressed UP           selection-begin
+    shift pressed DOWN              selection-down
+    shift pressed END               selection-end
+    shift pressed HOME              selection-begin
+    shift pressed KP_DOWN           selection-down
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-up
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-up
+TextArea.font                  [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+TextArea.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+TextArea.inactiveBackground    #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextArea.inactiveForeground    #808080    javax.swing.plaf.ColorUIResource [UI]
+TextArea.margin                0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TextArea.selectionBackground   #a5cdff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+TextArea.selectionForeground   #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+TextAreaUI                     com.apple.laf.AquaTextAreaUI
+
+
+#---- TextComponent ----
+
+TextComponent.selectionBackgroundInactive #d4d4d4    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- TextField ----
+
+TextField.background           #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextField.border               [lazy] 3,7,3,7  false    com.apple.laf.AquaTextFieldBorder [UI]
+TextField.caretBlinkRate       500
+TextField.caretForeground      #000000    javax.swing.plaf.ColorUIResource [UI]
+TextField.darkShadow           #000000    javax.swing.plaf.ColorUIResource [UI]
+TextField.focusInputMap        [lazy] 74    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed BACK_SPACE          delete-previous-word
+    alt pressed DELETE              delete-next-word
+    alt pressed KP_LEFT             caret-previous-word
+    alt pressed KP_RIGHT            caret-next-word
+    alt pressed LEFT                caret-previous-word
+    alt pressed RIGHT               caret-next-word
+    ctrl pressed A                  caret-begin-line
+    ctrl pressed B                  caret-backward
+    ctrl pressed D                  delete-next
+    ctrl pressed E                  caret-end-line
+    ctrl pressed F                  caret-forward
+    ctrl pressed H                  delete-previous
+    ctrl pressed N                  caret-end
+    ctrl pressed P                  caret-begin
+    ctrl pressed V                  caret-end
+    ctrl pressed W                  delete-previous-word
+    meta pressed A                  select-all
+    meta pressed BACK_SLASH         unselect
+    meta pressed C                  copy-to-clipboard
+    meta pressed DOWN               caret-end
+    meta pressed KP_DOWN            caret-end
+    meta pressed KP_LEFT            caret-begin-line
+    meta pressed KP_RIGHT           caret-end-line
+    meta pressed KP_UP              caret-begin
+    meta pressed LEFT               caret-begin-line
+    meta pressed RIGHT              caret-end-line
+    meta pressed UP                 caret-begin
+    meta pressed V                  paste-from-clipboard
+    meta pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    caret-end-line
+    pressed END                     caret-end
+    pressed ENTER                   notify-field-accept
+    pressed HOME                    caret-begin
+    pressed KP_DOWN                 caret-end-line
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   caret-begin-line
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               aqua-page-down
+    pressed PAGE_UP                 aqua-page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed UP                      caret-begin-line
+    shift alt pressed KP_LEFT       selection-previous-word
+    shift alt pressed KP_RIGHT      selection-next-word
+    shift alt pressed LEFT          selection-previous-word
+    shift alt pressed RIGHT         selection-next-word
+    shift ctrl pressed O            toggle-componentOrientation
+    shift meta pressed DOWN         selection-end
+    shift meta pressed KP_DOWN      selection-end
+    shift meta pressed KP_LEFT      selection-begin-line
+    shift meta pressed KP_RIGHT     selection-end-line
+    shift meta pressed KP_UP        selection-begin
+    shift meta pressed LEFT         selection-begin-line
+    shift meta pressed PAGE_DOWN    selection-page-right
+    shift meta pressed PAGE_UP      selection-page-left
+    shift meta pressed RIGHT        selection-end-line
+    shift meta pressed UP           selection-begin
+    shift pressed DOWN              selection-end-line
+    shift pressed END               selection-end
+    shift pressed HOME              selection-begin
+    shift pressed KP_DOWN           selection-end-line
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-begin-line
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-begin-line
+TextField.font                 [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+TextField.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
+TextField.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextField.inactiveBackground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextField.inactiveForeground   #808080    javax.swing.plaf.ColorUIResource [UI]
+TextField.light                #0749d9    javax.swing.plaf.ColorUIResource [UI]
+TextField.margin               0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TextField.selectionBackground  #a5cdff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+TextField.selectionForeground  #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+TextField.shadow               #44000000    javax.swing.plaf.ColorUIResource [UI]
+TextFieldUI                    com.apple.laf.AquaTextFieldUI
+
+
+#---- TextPane ----
+
+TextPane.background            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextPane.border                [lazy] 0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
+TextPane.caretBlinkRate        500
+TextPane.caretForeground       #000000    javax.swing.plaf.ColorUIResource [UI]
+TextPane.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed BACK_SPACE          delete-previous-word
+    alt pressed DELETE              delete-next-word
+    alt pressed KP_LEFT             caret-previous-word
+    alt pressed KP_RIGHT            caret-next-word
+    alt pressed LEFT                caret-previous-word
+    alt pressed RIGHT               caret-next-word
+    ctrl pressed A                  caret-begin-line
+    ctrl pressed B                  caret-backward
+    ctrl pressed D                  delete-next
+    ctrl pressed E                  caret-end-line
+    ctrl pressed F                  caret-forward
+    ctrl pressed H                  delete-previous
+    ctrl pressed N                  caret-down
+    ctrl pressed P                  caret-up
+    ctrl pressed V                  aqua-page-down
+    ctrl pressed W                  delete-previous-word
+    meta pressed A                  select-all
+    meta pressed BACK_SLASH         unselect
+    meta pressed C                  copy-to-clipboard
+    meta pressed DOWN               caret-end
+    meta pressed KP_DOWN            caret-end
+    meta pressed KP_LEFT            caret-begin-line
+    meta pressed KP_RIGHT           caret-end-line
+    meta pressed KP_UP              caret-begin
+    meta pressed LEFT               caret-begin-line
+    meta pressed RIGHT              caret-end-line
+    meta pressed SPACE              activate-link-action
+    meta pressed T                  next-link-action
+    meta pressed UP                 caret-begin
+    meta pressed V                  paste-from-clipboard
+    meta pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    aqua-move-down
+    pressed END                     caret-end
+    pressed ENTER                   insert-break
+    pressed HOME                    caret-begin
+    pressed KP_DOWN                 aqua-move-down
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   aqua-move-up
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               aqua-page-down
+    pressed PAGE_UP                 aqua-page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed TAB                     insert-tab
+    pressed UP                      aqua-move-up
+    shift alt pressed DOWN          selection-end-paragraph
+    shift alt pressed KP_DOWN       selection-end-paragraph
+    shift alt pressed KP_LEFT       selection-previous-word
+    shift alt pressed KP_RIGHT      selection-next-word
+    shift alt pressed KP_UP         selection-begin-paragraph
+    shift alt pressed LEFT          selection-previous-word
+    shift alt pressed RIGHT         selection-next-word
+    shift alt pressed UP            selection-begin-paragraph
+    shift ctrl pressed O            toggle-componentOrientation
+    shift meta pressed DOWN         selection-end
+    shift meta pressed KP_DOWN      selection-end
+    shift meta pressed KP_LEFT      selection-begin-line
+    shift meta pressed KP_RIGHT     selection-end-line
+    shift meta pressed KP_UP        selection-begin
+    shift meta pressed LEFT         selection-begin-line
+    shift meta pressed PAGE_DOWN    selection-page-right
+    shift meta pressed PAGE_UP      selection-page-left
+    shift meta pressed RIGHT        selection-end-line
+    shift meta pressed T            previous-link-action
+    shift meta pressed UP           selection-begin
+    shift pressed DOWN              selection-down
+    shift pressed END               selection-end
+    shift pressed HOME              selection-begin
+    shift pressed KP_DOWN           selection-down
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-up
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-up
+TextPane.font                  [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+TextPane.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+TextPane.inactiveBackground    #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextPane.inactiveForeground    #808080    javax.swing.plaf.ColorUIResource [UI]
+TextPane.margin                0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TextPane.selectionBackground   #a5cdff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+TextPane.selectionForeground   #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+TextPaneUI                     com.apple.laf.AquaTextPaneUI
+
+
+#---- TitledBorder ----
+
+TitledBorder.aquaVariant       [lazy] 16,20,16,20  false    com.apple.laf.AquaGroupBorder$Titled [UI]
+TitledBorder.border            [lazy] 2,2,2,2  true    javax.swing.plaf.BorderUIResource$EtchedBorderUIResource [UI]
+TitledBorder.font              [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+TitledBorder.titleColor        #000000    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- ToggleButton ----
+
+ToggleButton.background        #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ToggleButton.border            [lazy] 0,0,0,0  false    com.apple.laf.AquaButtonBorder$Dynamic [UI]
+ToggleButton.darkShadow        #000000    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.disabledText      #808080    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.focusInputMap     [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed SPACE                   pressed
+    released SPACE                  released
+ToggleButton.font              [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+ToggleButton.foreground        #000000    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.highlight         #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.light             #0749d9    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.margin            2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
+ToggleButton.shadow            #44000000    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.textIconGap       4
+ToggleButton.textShiftOffset   0
+ToggleButtonUI                 com.apple.laf.AquaButtonToggleUI
+
+
+#---- ToolBar ----
+
+ToolBar.ancestorInputMap       [lazy] 8    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    navigateDown
+    pressed KP_DOWN                 navigateDown
+    pressed KP_LEFT                 navigateLeft
+    pressed KP_RIGHT                navigateRight
+    pressed KP_UP                   navigateUp
+    pressed LEFT                    navigateLeft
+    pressed RIGHT                   navigateRight
+    pressed UP                      navigateUp
+ToolBar.background             #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ToolBar.border                 [lazy] 2,12,2,4  true    com.apple.laf.AquaToolBarUI$ToolBarBorder [UI]
+ToolBar.borderHandleColor      #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.darkShadow             #000000    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.dockingBackground      #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ToolBar.dockingForeground      #0749d9    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ToolBar.floatingBackground     #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+ToolBar.floatingForeground     #404040    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.font                   [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+ToolBar.foreground             #808080    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.highlight              #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.light                  #0749d9    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.shadow                 #44000000    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- ToolBarButton ----
+
+ToolBarButton.insets           1,1,1,1    javax.swing.plaf.InsetsUIResource [UI]
+ToolBarButton.margin           3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- ToolBarSeparator ----
+
+ToolBarSeparatorUI             com.apple.laf.AquaToolBarSeparatorUI
+
+
+#---- ToolBar ----
+
+ToolBarUI                      com.apple.laf.AquaToolBarUI
+
+
+#---- ToolTip ----
+
+ToolTip.background             #ffffcc    javax.swing.plaf.ColorUIResource [UI]
+ToolTip.border                 2,0,2,0  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
+ToolTip.font                   [lazy] Lucida Grande plain 11    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+ToolTip.foreground             #000000    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- ToolTipManager ----
+
+ToolTipManager.enableToolTipMode allWindows
+
+
+#---- ToolTip ----
+
+ToolTipUI                      com.apple.laf.AquaToolTipUI
+
+
+#---- Tree ----
+
+Tree.ancestorInputMap          [lazy] 1    javax.swing.plaf.InputMapUIResource [UI]
+    pressed ESCAPE                  cancel
+Tree.background                #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Tree.changeSelectionWithFocus  true
+Tree.closedIcon                [lazy] 16,16    javax.swing.plaf.IconUIResource [UI]
+Tree.collapsedIcon             [lazy] 20,20    com.apple.laf.AquaIcon$1 [UI]
+Tree.drawsFocusBorderAroundIcon false
+Tree.dropLineColor             #44000000    javax.swing.plaf.ColorUIResource [UI]
+Tree.editorBorder              [lazy] line: #000000    java.awt.Color 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
+Tree.expandedIcon              [lazy] 20,20    com.apple.laf.AquaIcon$1 [UI]
+Tree.focusInputMap.RightToLeft [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed KP_LEFT            aquaExpandNode
+    ctrl pressed KP_RIGHT           aquaCollapseNode
+    ctrl pressed LEFT               aquaExpandNode
+    ctrl pressed RIGHT              aquaCollapseNode
+    pressed KP_LEFT                 aquaExpandNode
+    pressed KP_RIGHT                aquaCollapseNode
+    pressed LEFT                    aquaExpandNode
+    pressed RIGHT                   aquaCollapseNode
+    shift pressed KP_LEFT           aquaExpandNode
+    shift pressed KP_RIGHT          aquaCollapseNode
+    shift pressed LEFT              aquaExpandNode
+    shift pressed RIGHT             aquaCollapseNode
+Tree.focusInputMap             [lazy] 31    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed KP_LEFT             aquaFullyCollapseNode
+    alt pressed KP_RIGHT            aquaFullyExpandNode
+    alt pressed LEFT                aquaFullyCollapseNode
+    alt pressed RIGHT               aquaFullyExpandNode
+    ctrl pressed KP_LEFT            aquaCollapseNode
+    ctrl pressed KP_RIGHT           aquaExpandNode
+    ctrl pressed LEFT               aquaCollapseNode
+    ctrl pressed RIGHT              aquaExpandNode
+    meta pressed A                  selectAll
+    meta pressed C                  copy
+    meta pressed V                  paste
+    meta pressed X                  cut
+    pressed COPY                    copy
+    pressed CUT                     cut
+    pressed DOWN                    selectNext
+    pressed KP_DOWN                 selectNext
+    pressed KP_LEFT                 aquaCollapseNode
+    pressed KP_RIGHT                aquaExpandNode
+    pressed KP_UP                   selectPrevious
+    pressed LEFT                    aquaCollapseNode
+    pressed PASTE                   paste
+    pressed RIGHT                   aquaExpandNode
+    pressed UP                      selectPrevious
+    shift pressed DOWN              selectNextExtendSelection
+    shift pressed KP_DOWN           selectNextExtendSelection
+    shift pressed KP_LEFT           aquaCollapseNode
+    shift pressed KP_RIGHT          aquaExpandNode
+    shift pressed KP_UP             selectPreviousExtendSelection
+    shift pressed LEFT              aquaCollapseNode
+    shift pressed RIGHT             aquaExpandNode
+    shift pressed UP                selectPreviousExtendSelection
+Tree.font                      [lazy] Lucida Grande plain 12    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Tree.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
+Tree.hash                      #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Tree.leafIcon                  [lazy] 16,16    javax.swing.plaf.IconUIResource [UI]
+Tree.leftChildIndent           7
+Tree.line                      #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Tree.lineTypeDashed            false
+Tree.openIcon                  [lazy] 16,16    javax.swing.plaf.IconUIResource [UI]
+Tree.paintLines                true
+Tree.rightChildIndent          13
+Tree.rightToLeftCollapsedIcon  [lazy] 20,20    com.apple.laf.AquaIcon$1 [UI]
+Tree.rowHeight                 19
+Tree.scrollsOnExpand           false
+Tree.selectionBackground       #0749d9    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Tree.selectionBorderColor      #0749d9    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Tree.selectionForeground       #ffffff    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Tree.selectionInactiveBackground #d4d4d4    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Tree.selectionInactiveForeground #000000    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+Tree.textBackground            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Tree.textForeground            #000000    javax.swing.plaf.ColorUIResource [UI]
+Tree.timeFactor                1000
+TreeUI                         com.apple.laf.AquaTreeUI
+
+
+#---- Viewport ----
+
+Viewport.background            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Viewport.font                  [lazy] Lucida Grande plain 13    com.apple.laf.AquaFonts$DerivedUIResourceFont [UI]
+Viewport.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
+ViewportUI                     javax.swing.plaf.basic.BasicViewportUI
+
+
+#----  ----
+
+_SecurityDecisionIcon          [lazy] 128,128    javax.swing.plaf.IconUIResource [UI]
+activeCaption                  #ffffff    javax.swing.plaf.ColorUIResource [UI]
+activeCaptionBorder            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+activeCaptionText              #000000    javax.swing.plaf.ColorUIResource [UI]
+control                        #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
+controlDkShadow                #000000    javax.swing.plaf.ColorUIResource [UI]
+controlHighlight               #0749d9    javax.swing.plaf.ColorUIResource [UI]
+controlLtHighlight             #ffffff    javax.swing.plaf.ColorUIResource [UI]
+controlShadow                  #44000000    javax.swing.plaf.ColorUIResource [UI]
+controlText                    #d8000000    javax.swing.plaf.ColorUIResource [UI]
+desktop                        #23ff06    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- html ----
+
+html.missingImage              [lazy] 38,38    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
+html.pendingImage              [lazy] 38,38    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
+
+
+#----  ----
+
+inactiveCaption                #6c6c6c    javax.swing.plaf.ColorUIResource [UI]
+inactiveCaptionBorder          #6c6c6c    javax.swing.plaf.ColorUIResource [UI]
+inactiveCaptionText            #6c6c6c    javax.swing.plaf.ColorUIResource [UI]
+info                           #ffffff    javax.swing.plaf.ColorUIResource [UI]
+infoText                       #000000    javax.swing.plaf.ColorUIResource [UI]
+menu                           #ffffff    javax.swing.plaf.ColorUIResource [UI]
+menuText                       #d8000000    javax.swing.plaf.ColorUIResource [UI]
+scrollbar                      #9a9a9a    javax.swing.plaf.ColorUIResource [UI]
+text                           #ffffff    javax.swing.plaf.ColorUIResource [UI]
+textHighlight                  #a5cdff    javax.swing.plaf.ColorUIResource [UI]
+textHighlightText              #000000    javax.swing.plaf.ColorUIResource [UI]
+textInactiveText               #3f000000    javax.swing.plaf.ColorUIResource [UI]
+textText                       #000000    javax.swing.plaf.ColorUIResource [UI]
+window                         #eeeeee    javax.swing.plaf.ColorUIResource [UI]
+windowBorder                   #9a9a9a    javax.swing.plaf.ColorUIResource [UI]
+windowText                     #d8000000    javax.swing.plaf.ColorUIResource [UI]

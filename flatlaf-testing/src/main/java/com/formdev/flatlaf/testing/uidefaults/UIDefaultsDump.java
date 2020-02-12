@@ -32,6 +32,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.LookAndFeel;
@@ -45,7 +46,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Dumps look and feel UI defaults to files.
@@ -95,8 +98,9 @@ public class UIDefaultsDump
 		Class<?> lookAndFeelClass = lookAndFeel instanceof MyBasicLookAndFeel
 			? BasicLookAndFeel.class
 			: lookAndFeel.getClass();
+		String suffix = (SystemInfo.IS_MAC && lookAndFeel instanceof FlatLaf) ? "-mac" : "";
 		File file = new File( dir, lookAndFeelClass.getSimpleName() + "_"
-			+ System.getProperty( "java.version" ) + ".txt" );
+			+ System.getProperty( "java.version" ) + suffix + ".txt" );
 
 		// write to file
 		try( FileWriter fileWriter = new FileWriter( file ) ) {
@@ -255,7 +259,11 @@ public class UIDefaultsDump
 			if( dummyComponent == null )
 				dummyComponent = new JComponent() {};
 
-			Insets insets = border.getBorderInsets( dummyComponent );
+			JComponent c = dummyComponent;
+			if( border.getClass().getName().equals( "com.apple.laf.AquaToolBarUI$ToolBarBorder" ) )
+				c = new JToolBar();
+
+			Insets insets = border.getBorderInsets( c );
 			out.printf( "%d,%d,%d,%d  %b    %s",
 				insets.top, insets.left, insets.bottom, insets.right,
 				border.isBorderOpaque(),
