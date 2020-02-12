@@ -1,0 +1,2112 @@
+Class  com.formdev.flatlaf.FlatDarkLaf
+ID     FlatLaf - Flat Dark
+Name   Flat Dark
+Java   1.8.0_202
+OS     Windows 10
+
+
+#----  ----
+
+AATextInfoPropertyKey          [unknown type] sun.swing.SwingUtilities2$AATextInfo
+
+
+#---- Actions ----
+
+Actions.Blue                   #3592c4    javax.swing.plaf.ColorUIResource [UI]
+Actions.Green                  #499c54    javax.swing.plaf.ColorUIResource [UI]
+Actions.Grey                   #afb1b3    javax.swing.plaf.ColorUIResource [UI]
+Actions.GreyInline             #7f8b91    javax.swing.plaf.ColorUIResource [UI]
+Actions.Red                    #c75450    javax.swing.plaf.ColorUIResource [UI]
+Actions.Yellow                 #f0a732    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- AuditoryCues ----
+
+AuditoryCues.allAuditoryCues   length=13    [Ljava.lang.Object;
+    [0] CheckBoxMenuItem.commandSound
+    [1] InternalFrame.closeSound
+    [2] InternalFrame.maximizeSound
+    [3] InternalFrame.minimizeSound
+    [4] InternalFrame.restoreDownSound
+    [5] InternalFrame.restoreUpSound
+    [6] MenuItem.commandSound
+    [7] OptionPane.errorSound
+    [8] OptionPane.informationSound
+    [9] OptionPane.questionSound
+    [10] OptionPane.warningSound
+    [11] PopupMenu.popupSound
+    [12] RadioButtonMenuItem.commandSound
+AuditoryCues.cueList           length=13    [Ljava.lang.Object;
+    [0] CheckBoxMenuItem.commandSound
+    [1] InternalFrame.closeSound
+    [2] InternalFrame.maximizeSound
+    [3] InternalFrame.minimizeSound
+    [4] InternalFrame.restoreDownSound
+    [5] InternalFrame.restoreUpSound
+    [6] MenuItem.commandSound
+    [7] OptionPane.errorSound
+    [8] OptionPane.informationSound
+    [9] OptionPane.questionSound
+    [10] OptionPane.warningSound
+    [11] PopupMenu.popupSound
+    [12] RadioButtonMenuItem.commandSound
+AuditoryCues.defaultCueList    length=4    [Ljava.lang.Object;
+    [0] OptionPane.errorSound
+    [1] OptionPane.informationSound
+    [2] OptionPane.questionSound
+    [3] OptionPane.warningSound
+AuditoryCues.noAuditoryCues    length=1    [Ljava.lang.Object;
+    [0] mute
+
+
+#---- BusyLabel ----
+
+BusyLabelUI                    com.formdev.flatlaf.swingx.ui.FlatBusyLabelUI
+
+
+#---- Button ----
+
+Button.arc                     6
+Button.background              #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
+Button.borderColor             #5e6060    javax.swing.plaf.ColorUIResource [UI]
+Button.darkShadow              #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+Button.default.background      #365880    javax.swing.plaf.ColorUIResource [UI]
+Button.default.boldText        true
+Button.default.borderColor     #4c708c    javax.swing.plaf.ColorUIResource [UI]
+Button.default.borderWidth     1
+Button.default.focusColor      #43688c    javax.swing.plaf.ColorUIResource [UI]
+Button.default.focusedBorderColor #537699    javax.swing.plaf.ColorUIResource [UI]
+Button.default.foreground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Button.default.hoverBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Button.default.hoverBorderColor #537699    javax.swing.plaf.ColorUIResource [UI]
+Button.default.pressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Button.defaultButtonFollowsFocus true
+Button.disabledBorderColor     #5e6060    javax.swing.plaf.ColorUIResource [UI]
+Button.disabledText            #777777    javax.swing.plaf.ColorUIResource [UI]
+Button.disabledToolBarBorderBackground #cccccc    javax.swing.plaf.ColorUIResource [UI]
+Button.focus                   #a3b8cc    javax.swing.plaf.ColorUIResource [UI]
+Button.focusInputMap           [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed SPACE                   pressed
+    released SPACE                  released
+Button.focusedBorderColor      #466d94    javax.swing.plaf.ColorUIResource [UI]
+Button.font                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Button.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Button.gradient                size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.0
+    [2] #dde8f3    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Button.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Button.hoverBackground         #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Button.hoverBorderColor        #466d94    javax.swing.plaf.ColorUIResource [UI]
+Button.iconTextGap             4
+Button.light                   #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Button.margin                  2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
+Button.minimumWidth            72
+Button.pressedBackground       #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Button.rollover                true
+Button.rolloverIconType        ocean
+Button.select                  #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Button.shadow                  #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Button.textIconGap             4
+Button.textShiftOffset         0
+Button.toolBarBorderBackground #999999    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.hoverBackground #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.pressedBackground #555a5d    javax.swing.plaf.ColorUIResource [UI]
+ButtonUI                       com.formdev.flatlaf.ui.FlatButtonUI
+
+
+#---- Caret ----
+
+Caret.width                    [active] 1
+
+
+#---- CheckBox ----
+
+CheckBox.arc                   4
+CheckBox.background            #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+CheckBox.disabledText          #777777    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.focus                 #a3b8cc    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.focusInputMap         [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed SPACE                   pressed
+    released SPACE                  released
+CheckBox.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBox.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.gradient              size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.0
+    [2] #dde8f3    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.background       #43494a    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.borderColor      #6b6b6b    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.checkmarkColor   #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.disabledBorderColor #545556    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.disabledCheckmarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.focusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.hoverBackground  #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+CheckBox.icon.hoverBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.pressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+CheckBox.icon.selectedBackground #43494a    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.selectedBorderColor #6b6b6b    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.selectedFocusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
+CheckBox.iconTextGap           4
+CheckBox.margin                2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
+CheckBox.rollover              true
+CheckBox.textIconGap           4
+CheckBox.textShiftOffset       0
+CheckBox.totalInsets           4,4,4,4    java.awt.Insets
+
+
+#---- CheckBoxMenuItem ----
+
+CheckBoxMenuItem.acceleratorFont Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBoxMenuItem.acceleratorForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.acceleratorSelectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.arrowIcon     [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuItemArrowIcon [UI]
+CheckBoxMenuItem.background    #303234    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.border        [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
+CheckBoxMenuItem.borderPainted true
+CheckBoxMenuItem.checkIcon     [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxMenuItemIcon [UI]
+CheckBoxMenuItem.commandSound  sounds/MenuItemCommand.wav
+CheckBoxMenuItem.disabledForeground #777777    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.font          Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBoxMenuItem.foreground    #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.gradient      size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.0
+    [2] #dde8f3    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.margin        2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
+CheckBoxMenuItem.opaque        false
+CheckBoxMenuItem.selectionBackground #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.selectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItemUI             com.formdev.flatlaf.ui.FlatCheckBoxMenuItemUI
+
+
+#---- CheckBox ----
+
+CheckBoxUI                     com.formdev.flatlaf.ui.FlatCheckBoxUI
+
+
+#---- Checkbox ----
+
+Checkbox.select                #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- ColorChooser ----
+
+ColorChooser.background        #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.font              Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+ColorChooser.foreground        #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.swatchesDefaultRecentColor #eeeeee    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.swatchesRecentSwatchSize 16,16    javax.swing.plaf.DimensionUIResource [UI]
+ColorChooser.swatchesSwatchSize 16,16    javax.swing.plaf.DimensionUIResource [UI]
+ColorChooserUI                 com.formdev.flatlaf.ui.FlatColorChooserUI
+
+
+#---- ComboBox ----
+
+ComboBox.ancestorInputMap      [lazy] 15    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed DOWN                togglePopup
+    alt pressed KP_DOWN             togglePopup
+    alt pressed KP_UP               togglePopup
+    alt pressed UP                  togglePopup
+    pressed DOWN                    selectNext
+    pressed END                     endPassThrough
+    pressed ENTER                   enterPressed
+    pressed ESCAPE                  hidePopup
+    pressed HOME                    homePassThrough
+    pressed KP_DOWN                 selectNext
+    pressed KP_UP                   selectPrevious
+    pressed PAGE_DOWN               pageDownPassThrough
+    pressed PAGE_UP                 pageUpPassThrough
+    pressed SPACE                   spacePopup
+    pressed UP                      selectPrevious
+ComboBox.background            #45494a    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
+ComboBox.buttonArrowColor      #9a9da1    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonBackground      #45494a    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonDarkShadow      #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonEditableBackground #404445    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonHoverArrowColor #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonShadow          #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.disabledForeground    #777777    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+ComboBox.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.isEnterSelectablePopup false
+ComboBox.noActionOnKeyNavigation false
+ComboBox.padding               2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox.selectionBackground   #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.timeFactor            1000
+ComboBoxUI                     com.formdev.flatlaf.ui.FlatComboBoxUI
+
+
+#---- Component ----
+
+Component.arc                  5
+Component.arrowType            chevron
+Component.borderColor          #646464    javax.swing.plaf.ColorUIResource [UI]
+Component.disabledBorderColor  #646464    javax.swing.plaf.ColorUIResource [UI]
+Component.focusColor           #3d6185    javax.swing.plaf.ColorUIResource [UI]
+Component.focusWidth           0
+Component.focusedBorderColor   #466d94    javax.swing.plaf.ColorUIResource [UI]
+Component.hideMnemonics        true
+Component.innerFocusWidth      0.5
+Component.linkColor            #589df6    javax.swing.plaf.ColorUIResource [UI]
+Component.minimumWidth         64
+
+
+#---- DatePicker ----
+
+DatePickerUI                   com.formdev.flatlaf.swingx.ui.FlatDatePickerUI
+
+
+#---- Desktop ----
+
+Desktop.ancestorInputMap       [lazy] 29    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl alt pressed F6             selectNextFrame
+    ctrl pressed F10                maximize
+    ctrl pressed F12                navigateNext
+    ctrl pressed F4                 close
+    ctrl pressed F5                 restore
+    ctrl pressed F6                 selectNextFrame
+    ctrl pressed F7                 move
+    ctrl pressed F8                 resize
+    ctrl pressed F9                 minimize
+    ctrl pressed TAB                selectNextFrame
+    pressed DOWN                    down
+    pressed ESCAPE                  escape
+    pressed KP_DOWN                 down
+    pressed KP_LEFT                 left
+    pressed KP_RIGHT                right
+    pressed KP_UP                   up
+    pressed LEFT                    left
+    pressed RIGHT                   right
+    pressed UP                      up
+    shift ctrl alt pressed F6       selectPreviousFrame
+    shift ctrl pressed F12          navigatePrevious
+    shift pressed DOWN              shrinkDown
+    shift pressed KP_DOWN           shrinkDown
+    shift pressed KP_LEFT           shrinkLeft
+    shift pressed KP_RIGHT          shrinkRight
+    shift pressed KP_UP             shrinkUp
+    shift pressed LEFT              shrinkLeft
+    shift pressed RIGHT             shrinkRight
+    shift pressed UP                shrinkUp
+Desktop.background             #3e434c    javax.swing.plaf.ColorUIResource [UI]
+Desktop.minOnScreenInsets      3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- DesktopIcon ----
+
+DesktopIcon.background         #555c68    javax.swing.plaf.ColorUIResource [UI]
+DesktopIcon.border             [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+DesktopIcon.closeIcon          [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon [UI]
+DesktopIcon.closeSize          20,20    javax.swing.plaf.DimensionUIResource [UI]
+DesktopIcon.font               Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+DesktopIcon.foreground         #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+DesktopIcon.iconSize           64,64    javax.swing.plaf.DimensionUIResource [UI]
+DesktopIcon.width              160
+DesktopIconUI                  com.formdev.flatlaf.ui.FlatDesktopIconUI
+
+
+#---- DesktopPane ----
+
+DesktopPaneUI                  com.formdev.flatlaf.ui.FlatDesktopPaneUI
+
+
+#---- EditorPane ----
+
+EditorPane.background          #45494a    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.border              [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+EditorPane.caretBlinkRate      500
+EditorPane.caretForeground     #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.disabledBackground  #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.focusInputMap       [lazy] 61    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  select-all
+    ctrl pressed BACK_SLASH         unselect
+    ctrl pressed BACK_SPACE         delete-previous-word
+    ctrl pressed C                  copy-to-clipboard
+    ctrl pressed DELETE             delete-next-word
+    ctrl pressed END                caret-end
+    ctrl pressed H                  delete-previous
+    ctrl pressed HOME               caret-begin
+    ctrl pressed INSERT             copy-to-clipboard
+    ctrl pressed KP_LEFT            caret-previous-word
+    ctrl pressed KP_RIGHT           caret-next-word
+    ctrl pressed LEFT               caret-previous-word
+    ctrl pressed RIGHT              caret-next-word
+    ctrl pressed SPACE              activate-link-action
+    ctrl pressed T                  next-link-action
+    ctrl pressed V                  paste-from-clipboard
+    ctrl pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    caret-down
+    pressed END                     caret-end-line
+    pressed ENTER                   insert-break
+    pressed HOME                    caret-begin-line
+    pressed KP_DOWN                 caret-down
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   caret-up
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               page-down
+    pressed PAGE_UP                 page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed TAB                     insert-tab
+    pressed UP                      caret-up
+    shift ctrl pressed END          selection-end
+    shift ctrl pressed HOME         selection-begin
+    shift ctrl pressed KP_LEFT      selection-previous-word
+    shift ctrl pressed KP_RIGHT     selection-next-word
+    shift ctrl pressed LEFT         selection-previous-word
+    shift ctrl pressed O            toggle-componentOrientation
+    shift ctrl pressed PAGE_DOWN    selection-page-right
+    shift ctrl pressed PAGE_UP      selection-page-left
+    shift ctrl pressed RIGHT        selection-next-word
+    shift ctrl pressed T            previous-link-action
+    shift pressed BACK_SPACE        delete-previous
+    shift pressed DELETE            cut-to-clipboard
+    shift pressed DOWN              selection-down
+    shift pressed END               selection-end-line
+    shift pressed HOME              selection-begin-line
+    shift pressed INSERT            paste-from-clipboard
+    shift pressed KP_DOWN           selection-down
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-up
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-up
+EditorPane.font                Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+EditorPane.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.inactiveBackground  #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.inactiveForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.margin              2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+EditorPane.selectionBackground #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.selectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+EditorPaneUI                   com.formdev.flatlaf.ui.FlatEditorPaneUI
+
+
+#---- FileChooser ----
+
+FileChooser.ancestorInputMap   [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed BACK_SPACE              Go Up
+    pressed ESCAPE                  cancelSelection
+    pressed F2                      editFileName
+    pressed F5                      refresh
+FileChooser.detailsViewIcon    [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserDetailsViewIcon [UI]
+FileChooser.homeFolderIcon     [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserHomeFolderIcon [UI]
+FileChooser.listViewIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserListViewIcon [UI]
+FileChooser.newFolderIcon      [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserNewFolderIcon [UI]
+FileChooser.readOnly           false
+FileChooser.upFolderIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserUpFolderIcon [UI]
+FileChooser.useSystemExtensionHiding false
+FileChooser.usesSingleFilePane true
+FileChooserUI                  com.formdev.flatlaf.ui.FlatFileChooserUI
+
+
+#---- FileView ----
+
+FileView.computerIcon          [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewComputerIcon [UI]
+FileView.directoryIcon         [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewDirectoryIcon [UI]
+FileView.fileIcon              [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewFileIcon [UI]
+FileView.floppyDriveIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon [UI]
+FileView.hardDriveIcon         [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewHardDriveIcon [UI]
+
+
+#---- FormattedTextField ----
+
+FormattedTextField.background  #45494a    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+FormattedTextField.caretBlinkRate 500
+FormattedTextField.caretForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.focusInputMap [lazy] 44    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  select-all
+    ctrl pressed BACK_SLASH         unselect
+    ctrl pressed BACK_SPACE         delete-previous-word
+    ctrl pressed C                  copy-to-clipboard
+    ctrl pressed DELETE             delete-next-word
+    ctrl pressed H                  delete-previous
+    ctrl pressed INSERT             copy-to-clipboard
+    ctrl pressed KP_LEFT            caret-previous-word
+    ctrl pressed KP_RIGHT           caret-next-word
+    ctrl pressed LEFT               caret-previous-word
+    ctrl pressed RIGHT              caret-next-word
+    ctrl pressed V                  paste-from-clipboard
+    ctrl pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    decrement
+    pressed END                     caret-end-line
+    pressed ENTER                   notify-field-accept
+    pressed ESCAPE                  reset-field-edit
+    pressed HOME                    caret-begin-line
+    pressed KP_DOWN                 decrement
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   increment
+    pressed LEFT                    caret-backward
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed UP                      increment
+    shift ctrl pressed KP_LEFT      selection-previous-word
+    shift ctrl pressed KP_RIGHT     selection-next-word
+    shift ctrl pressed LEFT         selection-previous-word
+    shift ctrl pressed O            toggle-componentOrientation
+    shift ctrl pressed RIGHT        selection-next-word
+    shift pressed BACK_SPACE        delete-previous
+    shift pressed DELETE            cut-to-clipboard
+    shift pressed END               selection-end-line
+    shift pressed HOME              selection-begin-line
+    shift pressed INSERT            paste-from-clipboard
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed LEFT              selection-backward
+    shift pressed RIGHT             selection-forward
+FormattedTextField.font        Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+FormattedTextField.foreground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.inactiveBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.inactiveForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.margin      2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+FormattedTextField.placeholderForeground #777777    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.selectionBackground #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.selectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextFieldUI           com.formdev.flatlaf.ui.FlatFormattedTextFieldUI
+
+
+#---- Header ----
+
+HeaderUI                       com.formdev.flatlaf.swingx.ui.FlatHeaderUI
+
+
+#---- HelpButton ----
+
+HelpButton.background          #43494a    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.borderColor         #6b6b6b    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.disabledBackground  #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.disabledBorderColor #545556    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.disabledQuestionMarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.focusedBorderColor  #466d94    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.hoverBackground     #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+HelpButton.hoverBorderColor    #466d94    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
+HelpButton.pressedBackground   #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+HelpButton.questionMarkColor   #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- Hyperlink ----
+
+Hyperlink.disabledText         #777777    javax.swing.plaf.ColorUIResource [UI]
+Hyperlink.linkColor            #589df6    javax.swing.plaf.ColorUIResource [UI]
+Hyperlink.visitedColor         #589df6    javax.swing.plaf.ColorUIResource [UI]
+HyperlinkUI                    com.formdev.flatlaf.swingx.ui.FlatHyperlinkUI
+
+
+#---- InternalFrame ----
+
+InternalFrame.activeBorderColor #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.activeTitleBackground #242526    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.activeTitleForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.activeTitleGradient size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.0
+    [2] #dde8f3    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.border           [lazy] 6,6,6,6  false    com.formdev.flatlaf.ui.FlatInternalFrameUI$FlatInternalFrameBorder [UI]
+InternalFrame.borderColor      #eeeeee    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.borderDarkShadow #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.borderHighlight  #ffffff    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.borderLight      #ffffff    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.borderLineWidth  1
+InternalFrame.borderMargins    6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame.borderShadow     #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.buttonHoverBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+InternalFrame.buttonPressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+InternalFrame.buttonSize       24,24    javax.swing.plaf.DimensionUIResource [UI]
+InternalFrame.closeHoverBackground [lazy] #c75450    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.closeHoverForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.closeIcon        [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon [UI]
+InternalFrame.closePressedBackground [lazy] #ad3b37    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.closePressedForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.closeSound       sounds/FrameClose.wav
+InternalFrame.icon             [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
+InternalFrame.iconifyIcon      [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameIconifyIcon [UI]
+InternalFrame.inactiveBorderColor #646464    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.inactiveTitleBackground #303234    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.inactiveTitleForeground #777777    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.maximizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameMaximizeIcon [UI]
+InternalFrame.maximizeSound    sounds/FrameMaximize.wav
+InternalFrame.minimizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameMinimizeIcon [UI]
+InternalFrame.minimizeSound    sounds/FrameMinimize.wav
+InternalFrame.optionDialogBorder [lazy] 3,3,3,3  false    javax.swing.plaf.metal.MetalBorders$OptionDialogBorder [UI]
+InternalFrame.paletteBorder    [lazy] 1,1,1,1  false    javax.swing.plaf.metal.MetalBorders$PaletteBorder [UI]
+InternalFrame.paletteCloseIcon [lazy] 7,7    javax.swing.plaf.metal.OceanTheme$IFIcon [UI]
+InternalFrame.paletteTitleHeight 11
+InternalFrame.restoreDownSound sounds/FrameRestoreDown.wav
+InternalFrame.restoreUpSound   sounds/FrameRestoreUp.wav
+InternalFrame.titleFont        Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- InternalFrameTitlePane ----
+
+InternalFrameTitlePane.border  [lazy] 0,8,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+InternalFrameTitlePane.closeButtonOpacity true
+InternalFrameTitlePane.iconifyButtonOpacity true
+InternalFrameTitlePane.maximizeButtonOpacity true
+
+
+#---- InternalFrame ----
+
+InternalFrameUI                com.formdev.flatlaf.ui.FlatInternalFrameUI
+
+
+#---- JXBusyLabel ----
+
+JXBusyLabel.baseColor          #777777    javax.swing.plaf.ColorUIResource [UI]
+JXBusyLabel.highlightColor     #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- JXDatePicker ----
+
+JXDatePicker.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
+
+
+#---- JXHeader ----
+
+JXHeader.background            #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+JXHeader.startBackground       #4c5052    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- JXMonthView ----
+
+JXMonthView.arrowColor         #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.background         #45494a    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.daysOfTheWeekForeground #aaaaaa    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.disabledArrowColor #777777    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.flaggedDayForeground #e05555    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.leadingDayForeground #777777    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.monthDownFileName  [lazy] 20,20    com.formdev.flatlaf.swingx.ui.FlatMonthDownIcon [UI]
+JXMonthView.monthStringBackground #4c5052    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.monthStringForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.monthUpFileName    [lazy] 20,20    com.formdev.flatlaf.swingx.ui.FlatMonthUpIcon [UI]
+JXMonthView.selectedBackground #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.trailingDayForeground #777777    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.unselectableDayForeground #e05555    javax.swing.plaf.ColorUIResource [UI]
+JXMonthView.weekOfTheYearForeground #888888    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- JXTitledPanel ----
+
+JXTitledPanel.borderColor      #5e6060    javax.swing.plaf.ColorUIResource [UI]
+JXTitledPanel.captionInsets    4,10,4,10    javax.swing.plaf.InsetsUIResource [UI]
+JXTitledPanel.titleBackground  #4c5052    javax.swing.plaf.ColorUIResource [UI]
+JXTitledPanel.titleForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- JideTabbedPane ----
+
+JideTabbedPane.background      #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+JideTabbedPane.contentBorderInsets 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+JideTabbedPane.foreground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+JideTabbedPane.shadow          #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+JideTabbedPane.tabAreaBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+JideTabbedPane.tabAreaInsets   0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+JideTabbedPane.tabInsets       0,12,0,12    javax.swing.plaf.InsetsUIResource [UI]
+JideTabbedPane.tabRunOverlay   0
+JideTabbedPaneUI               com.formdev.flatlaf.jideoss.ui.FlatJideTabbedPaneUI
+
+
+#---- Label ----
+
+Label.background               #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+Label.disabledForeground       #777777    javax.swing.plaf.ColorUIResource [UI]
+Label.disabledShadow           #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Label.font                     Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Label.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+LabelUI                        com.formdev.flatlaf.ui.FlatLabelUI
+
+
+#---- List ----
+
+List.background                #45494a    javax.swing.plaf.ColorUIResource [UI]
+List.border                    [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+List.cellFocusColor            #000000    javax.swing.plaf.ColorUIResource [UI]
+List.cellMargins               1,6,1,6    javax.swing.plaf.InsetsUIResource [UI]
+List.cellNoFocusBorder         [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Default [UI]
+List.cellRenderer              [active] javax.swing.DefaultListCellRenderer$UIResource [UI]
+List.dropCellBackground        [lazy] #3c588b    javax.swing.plaf.ColorUIResource [UI]
+List.dropCellForeground        [lazy] #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+List.dropLineColor             [lazy] #6d8ac0    javax.swing.plaf.ColorUIResource [UI]
+List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]
+List.focusInputMap.RightToLeft [lazy] 16    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed KP_LEFT            selectNextColumnChangeLead
+    ctrl pressed KP_RIGHT           selectPreviousColumnChangeLead
+    ctrl pressed LEFT               selectNextColumnChangeLead
+    ctrl pressed RIGHT              selectPreviousColumnChangeLead
+    pressed KP_LEFT                 selectNextColumn
+    pressed KP_RIGHT                selectPreviousColumn
+    pressed LEFT                    selectNextColumn
+    pressed RIGHT                   selectPreviousColumn
+    shift ctrl pressed KP_LEFT      selectNextColumnExtendSelection
+    shift ctrl pressed KP_RIGHT     selectPreviousColumnExtendSelection
+    shift ctrl pressed LEFT         selectNextColumnExtendSelection
+    shift ctrl pressed RIGHT        selectPreviousColumnExtendSelection
+    shift pressed KP_LEFT           selectNextColumnExtendSelection
+    shift pressed KP_RIGHT          selectPreviousColumnExtendSelection
+    shift pressed LEFT              selectNextColumnExtendSelection
+    shift pressed RIGHT             selectPreviousColumnExtendSelection
+List.focusInputMap             [lazy] 64    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  selectAll
+    ctrl pressed BACK_SLASH         clearSelection
+    ctrl pressed C                  copy
+    ctrl pressed DOWN               selectNextRowChangeLead
+    ctrl pressed END                selectLastRowChangeLead
+    ctrl pressed HOME               selectFirstRowChangeLead
+    ctrl pressed INSERT             copy
+    ctrl pressed KP_DOWN            selectNextRowChangeLead
+    ctrl pressed KP_LEFT            selectPreviousColumnChangeLead
+    ctrl pressed KP_RIGHT           selectNextColumnChangeLead
+    ctrl pressed KP_UP              selectPreviousRowChangeLead
+    ctrl pressed LEFT               selectPreviousColumnChangeLead
+    ctrl pressed PAGE_DOWN          scrollDownChangeLead
+    ctrl pressed PAGE_UP            scrollUpChangeLead
+    ctrl pressed RIGHT              selectNextColumnChangeLead
+    ctrl pressed SLASH              selectAll
+    ctrl pressed SPACE              toggleAndAnchor
+    ctrl pressed UP                 selectPreviousRowChangeLead
+    ctrl pressed V                  paste
+    ctrl pressed X                  cut
+    pressed COPY                    copy
+    pressed CUT                     cut
+    pressed DOWN                    selectNextRow
+    pressed END                     selectLastRow
+    pressed HOME                    selectFirstRow
+    pressed KP_DOWN                 selectNextRow
+    pressed KP_LEFT                 selectPreviousColumn
+    pressed KP_RIGHT                selectNextColumn
+    pressed KP_UP                   selectPreviousRow
+    pressed LEFT                    selectPreviousColumn
+    pressed PAGE_DOWN               scrollDown
+    pressed PAGE_UP                 scrollUp
+    pressed PASTE                   paste
+    pressed RIGHT                   selectNextColumn
+    pressed SPACE                   addToSelection
+    pressed UP                      selectPreviousRow
+    shift ctrl pressed DOWN         selectNextRowExtendSelection
+    shift ctrl pressed END          selectLastRowExtendSelection
+    shift ctrl pressed HOME         selectFirstRowExtendSelection
+    shift ctrl pressed KP_DOWN      selectNextRowExtendSelection
+    shift ctrl pressed KP_LEFT      selectPreviousColumnExtendSelection
+    shift ctrl pressed KP_RIGHT     selectNextColumnExtendSelection
+    shift ctrl pressed KP_UP        selectPreviousRowExtendSelection
+    shift ctrl pressed LEFT         selectPreviousColumnExtendSelection
+    shift ctrl pressed PAGE_DOWN    scrollDownExtendSelection
+    shift ctrl pressed PAGE_UP      scrollUpExtendSelection
+    shift ctrl pressed RIGHT        selectNextColumnExtendSelection
+    shift ctrl pressed SPACE        moveSelectionTo
+    shift ctrl pressed UP           selectPreviousRowExtendSelection
+    shift pressed DELETE            cut
+    shift pressed DOWN              selectNextRowExtendSelection
+    shift pressed END               selectLastRowExtendSelection
+    shift pressed HOME              selectFirstRowExtendSelection
+    shift pressed INSERT            paste
+    shift pressed KP_DOWN           selectNextRowExtendSelection
+    shift pressed KP_LEFT           selectPreviousColumnExtendSelection
+    shift pressed KP_RIGHT          selectNextColumnExtendSelection
+    shift pressed KP_UP             selectPreviousRowExtendSelection
+    shift pressed LEFT              selectPreviousColumnExtendSelection
+    shift pressed PAGE_DOWN         scrollDownExtendSelection
+    shift pressed PAGE_UP           scrollUpExtendSelection
+    shift pressed RIGHT             selectNextColumnExtendSelection
+    shift pressed SPACE             extendTo
+    shift pressed UP                selectPreviousRowExtendSelection
+List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]
+List.font                      Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+List.foreground                #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+List.noFocusBorder             1,1,1,1  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
+List.selectionBackground       #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+List.selectionForeground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+List.selectionInactiveBackground #0d293e    javax.swing.plaf.ColorUIResource [UI]
+List.selectionInactiveForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+List.timeFactor                1000
+ListUI                         com.formdev.flatlaf.ui.FlatListUI
+
+
+#---- Menu ----
+
+Menu.acceleratorFont           Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Menu.acceleratorForeground     #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Menu.acceleratorSelectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Menu.arrowIcon                 [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuArrowIcon [UI]
+Menu.background                #303234    javax.swing.plaf.ColorUIResource [UI]
+Menu.border                    [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
+Menu.borderPainted             true
+Menu.cancelMode                hideLastSubmenu
+Menu.checkIcon                 [lazy] null
+Menu.crossMenuMnemonic         true
+Menu.disabledForeground        #777777    javax.swing.plaf.ColorUIResource [UI]
+Menu.font                      Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Menu.foreground                #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Menu.icon.arrowColor           #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
+Menu.icon.disabledArrowColor   #606060    javax.swing.plaf.ColorUIResource [UI]
+Menu.margin                    2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
+Menu.menuPopupOffsetX          0
+Menu.menuPopupOffsetY          0
+Menu.opaque                    false
+Menu.preserveTopLevelSelection false
+Menu.selectionBackground       #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+Menu.selectionForeground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Menu.shortcutKeys              length=1    [I
+    [0] 8
+Menu.submenuPopupOffsetX       [active] -4
+Menu.submenuPopupOffsetY       [active] -4
+
+
+#---- MenuBar ----
+
+MenuBar.background             #303234    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.border                 [lazy] 0,0,1,0  false    com.formdev.flatlaf.ui.FlatMenuBarBorder [UI]
+MenuBar.borderColor            #515151    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.font                   Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuBar.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.gradient               size=5    java.util.Arrays$ArrayList
+    [0] 1.0
+    [1] 0.0
+    [2] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [3] #dadada    javax.swing.plaf.ColorUIResource [UI]
+    [4] #dadada    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.highlight              #ffffff    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.hoverBackground        #484c4f    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.itemMargins            3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+MenuBar.shadow                 #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.windowBindings         length=2    [Ljava.lang.Object;
+    [0] F10
+    [1] takeFocus
+MenuBarUI                      com.formdev.flatlaf.ui.FlatMenuBarUI
+
+
+#---- MenuItem ----
+
+MenuItem.acceleratorDelimiter  -
+MenuItem.acceleratorFont       Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuItem.acceleratorForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.acceleratorSelectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.arrowIcon             [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuItemArrowIcon [UI]
+MenuItem.background            #303234    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
+MenuItem.borderPainted         true
+MenuItem.checkIcon             [lazy] null
+MenuItem.commandSound          sounds/MenuItemCommand.wav
+MenuItem.disabledForeground    #777777    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuItem.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.margin                2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
+MenuItem.opaque                false
+MenuItem.selectionBackground   #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- MenuItemCheckBox ----
+
+MenuItemCheckBox.icon.checkmarkColor #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
+MenuItemCheckBox.icon.disabledCheckmarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- MenuItem ----
+
+MenuItemUI                     com.formdev.flatlaf.ui.FlatMenuItemUI
+
+
+#---- Menu ----
+
+MenuUI                         com.formdev.flatlaf.ui.FlatMenuUI
+
+
+#---- MonthView ----
+
+MonthViewUI                    com.formdev.flatlaf.swingx.ui.FlatMonthViewUI
+
+
+#---- Objects ----
+
+Objects.BlackText              #231f20    javax.swing.plaf.ColorUIResource [UI]
+Objects.Blue                   #40b6e0    javax.swing.plaf.ColorUIResource [UI]
+Objects.Green                  #62b543    javax.swing.plaf.ColorUIResource [UI]
+Objects.GreenAndroid           #a4c639    javax.swing.plaf.ColorUIResource [UI]
+Objects.Grey                   #9aa7b0    javax.swing.plaf.ColorUIResource [UI]
+Objects.Pink                   #f98b9e    javax.swing.plaf.ColorUIResource [UI]
+Objects.Purple                 #b99bf8    javax.swing.plaf.ColorUIResource [UI]
+Objects.Red                    #f26522    javax.swing.plaf.ColorUIResource [UI]
+Objects.RedStatus              #e05555    javax.swing.plaf.ColorUIResource [UI]
+Objects.Yellow                 #f4af3d    javax.swing.plaf.ColorUIResource [UI]
+Objects.YellowDark             #d9a343    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- OptionPane ----
+
+OptionPane.background          #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.border              [lazy] 12,12,12,12  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+OptionPane.buttonAreaBorder    [lazy] 12,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+OptionPane.buttonClickThreshhold 500
+OptionPane.buttonMinimumWidth  [active] 72
+OptionPane.buttonOrientation   4
+OptionPane.buttonPadding       8
+OptionPane.errorDialog.border.background #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.errorDialog.titlePane.background #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.errorDialog.titlePane.foreground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.errorDialog.titlePane.shadow #cc6666    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.errorIcon           [lazy] 32,32    com.formdev.flatlaf.icons.FlatOptionPaneErrorIcon [UI]
+OptionPane.errorSound          sounds/OptionPaneError.wav
+OptionPane.font                Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+OptionPane.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.iconMessageGap      16
+OptionPane.informationIcon     [lazy] 32,32    com.formdev.flatlaf.icons.FlatOptionPaneInformationIcon [UI]
+OptionPane.informationSound    sounds/OptionPaneInformation.wav
+OptionPane.maxCharactersPerLine 80
+OptionPane.messageAreaBorder   [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+OptionPane.messagePadding      3
+OptionPane.minimumSize         262,90    javax.swing.plaf.DimensionUIResource [UI]
+OptionPane.questionDialog.border.background #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.questionDialog.titlePane.background #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.questionDialog.titlePane.foreground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.questionDialog.titlePane.shadow #669966    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.questionIcon        [lazy] 32,32    com.formdev.flatlaf.icons.FlatOptionPaneQuestionIcon [UI]
+OptionPane.questionSound       sounds/OptionPaneQuestion.wav
+OptionPane.sameSizeButtons     true
+OptionPane.setButtonMargin     false
+OptionPane.warningDialog.border.background #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.warningDialog.titlePane.background #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.warningDialog.titlePane.foreground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.warningDialog.titlePane.shadow #cc9966    javax.swing.plaf.ColorUIResource [UI]
+OptionPane.warningIcon         [lazy] 32,32    com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon [UI]
+OptionPane.warningSound        sounds/OptionPaneWarning.wav
+OptionPane.windowBindings      length=2    [Ljava.lang.Object;
+    [0] ESCAPE
+    [1] close
+OptionPaneUI                   com.formdev.flatlaf.ui.FlatOptionPaneUI
+
+
+#---- Panel ----
+
+Panel.background               #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+Panel.font                     Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Panel.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+PanelUI                        javax.swing.plaf.basic.BasicPanelUI
+
+
+#---- PasswordField ----
+
+PasswordField.background       #45494a    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+PasswordField.caretBlinkRate   500
+PasswordField.caretForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.echoChar         •
+PasswordField.focusInputMap    [lazy] 37    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  select-all
+    ctrl pressed BACK_SLASH         unselect
+    ctrl pressed C                  copy-to-clipboard
+    ctrl pressed H                  delete-previous
+    ctrl pressed INSERT             copy-to-clipboard
+    ctrl pressed KP_LEFT            caret-begin-line
+    ctrl pressed KP_RIGHT           caret-end-line
+    ctrl pressed LEFT               caret-begin-line
+    ctrl pressed RIGHT              caret-end-line
+    ctrl pressed V                  paste-from-clipboard
+    ctrl pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed END                     caret-end-line
+    pressed ENTER                   notify-field-accept
+    pressed HOME                    caret-begin-line
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed LEFT                    caret-backward
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    shift ctrl pressed KP_LEFT      selection-begin-line
+    shift ctrl pressed KP_RIGHT     selection-end-line
+    shift ctrl pressed LEFT         selection-begin-line
+    shift ctrl pressed O            toggle-componentOrientation
+    shift ctrl pressed RIGHT        selection-end-line
+    shift pressed BACK_SPACE        delete-previous
+    shift pressed DELETE            cut-to-clipboard
+    shift pressed END               selection-end-line
+    shift pressed HOME              selection-begin-line
+    shift pressed INSERT            paste-from-clipboard
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed LEFT              selection-backward
+    shift pressed RIGHT             selection-forward
+PasswordField.font             Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+PasswordField.foreground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.inactiveBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.inactiveForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.margin           2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+PasswordField.placeholderForeground #777777    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.selectionBackground #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.selectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+PasswordFieldUI                com.formdev.flatlaf.ui.FlatPasswordFieldUI
+
+
+#---- PopupMenu ----
+
+PopupMenu.background           #303234    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.border               [lazy] 4,1,4,1  false    com.formdev.flatlaf.ui.FlatPopupMenuBorder [UI]
+PopupMenu.borderColor          #5e5e5e    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.borderInsets         4,1,4,1    javax.swing.plaf.InsetsUIResource [UI]
+PopupMenu.consumeEventOnClose  false
+PopupMenu.font                 Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+PopupMenu.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.popupSound           sounds/PopupMenuPopup.wav
+PopupMenu.selectedWindowInputMapBindings.RightToLeft length=8    [Ljava.lang.Object;
+    [0] LEFT
+    [1] selectChild
+    [2] KP_LEFT
+    [3] selectChild
+    [4] RIGHT
+    [5] selectParent
+    [6] KP_RIGHT
+    [7] selectParent
+PopupMenu.selectedWindowInputMapBindings length=24    [Ljava.lang.Object;
+    [0] ESCAPE
+    [1] cancel
+    [2] DOWN
+    [3] selectNext
+    [4] KP_DOWN
+    [5] selectNext
+    [6] UP
+    [7] selectPrevious
+    [8] KP_UP
+    [9] selectPrevious
+    [10] LEFT
+    [11] selectParent
+    [12] KP_LEFT
+    [13] selectParent
+    [14] RIGHT
+    [15] selectChild
+    [16] KP_RIGHT
+    [17] selectChild
+    [18] ENTER
+    [19] return
+    [20] ctrl ENTER
+    [21] return
+    [22] SPACE
+    [23] return
+
+
+#---- PopupMenuSeparator ----
+
+PopupMenuSeparator.height      9
+PopupMenuSeparator.stripeIndent 4
+PopupMenuSeparator.stripeWidth 1
+PopupMenuSeparatorUI           com.formdev.flatlaf.ui.FlatPopupMenuSeparatorUI
+
+
+#---- PopupMenu ----
+
+PopupMenuUI                    com.formdev.flatlaf.ui.FlatPopupMenuUI
+
+
+#---- ProgressBar ----
+
+ProgressBar.arc                4
+ProgressBar.background         #555555    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.border             [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+ProgressBar.cellLength         1
+ProgressBar.cellSpacing        0
+ProgressBar.cycleTime          4000
+ProgressBar.font               Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
+ProgressBar.foreground         #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.horizontalSize     146,4    javax.swing.plaf.DimensionUIResource [UI]
+ProgressBar.repaintInterval    15
+ProgressBar.selectionBackground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.selectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.verticalSize       4,146    javax.swing.plaf.DimensionUIResource [UI]
+ProgressBarUI                  com.formdev.flatlaf.ui.FlatProgressBarUI
+
+
+#---- RadioButton ----
+
+RadioButton.background         #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.border             [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+RadioButton.darkShadow         #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.disabledText       #777777    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.focus              #a3b8cc    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.focusInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed SPACE                   pressed
+    released SPACE                  released
+RadioButton.font               Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButton.foreground         #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.gradient           size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.0
+    [2] #dde8f3    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.highlight          #ffffff    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.icon.centerDiameter 8
+RadioButton.icon               [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonIcon [UI]
+RadioButton.iconTextGap        4
+RadioButton.light              #ffffff    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.margin             2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
+RadioButton.rollover           true
+RadioButton.select             #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.shadow             #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+RadioButton.textIconGap        4
+RadioButton.textShiftOffset    0
+RadioButton.totalInsets        4,4,4,4    java.awt.Insets
+
+
+#---- RadioButtonMenuItem ----
+
+RadioButtonMenuItem.acceleratorFont Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButtonMenuItem.acceleratorForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.acceleratorSelectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.arrowIcon  [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuItemArrowIcon [UI]
+RadioButtonMenuItem.background #303234    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.border     [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
+RadioButtonMenuItem.borderPainted true
+RadioButtonMenuItem.checkIcon  [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonMenuItemIcon [UI]
+RadioButtonMenuItem.commandSound sounds/MenuItemCommand.wav
+RadioButtonMenuItem.disabledForeground #777777    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.font       Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButtonMenuItem.foreground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.gradient   size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.0
+    [2] #dde8f3    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.margin     2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
+RadioButtonMenuItem.opaque     false
+RadioButtonMenuItem.selectionBackground #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.selectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItemUI          com.formdev.flatlaf.ui.FlatRadioButtonMenuItemUI
+
+
+#---- RadioButton ----
+
+RadioButtonUI                  com.formdev.flatlaf.ui.FlatRadioButtonUI
+
+
+#---- Resizable ----
+
+Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]
+
+
+#---- RootPane ----
+
+RootPane.ancestorInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed CONTEXT_MENU            postPopup
+    shift pressed F10               postPopup
+RootPane.colorChooserDialogBorder [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$QuestionDialogBorder [UI]
+RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
+    [0] ENTER
+    [1] press
+    [2] released ENTER
+    [3] release
+    [4] ctrl ENTER
+    [5] press
+    [6] ctrl released ENTER
+    [7] release
+RootPane.errorDialogBorder     [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$ErrorDialogBorder [UI]
+RootPane.fileChooserDialogBorder [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$QuestionDialogBorder [UI]
+RootPane.frameBorder           [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$FrameBorder [UI]
+RootPane.informationDialogBorder [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$DialogBorder [UI]
+RootPane.plainDialogBorder     [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$DialogBorder [UI]
+RootPane.questionDialogBorder  [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$QuestionDialogBorder [UI]
+RootPane.warningDialogBorder   [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$WarningDialogBorder [UI]
+RootPaneUI                     javax.swing.plaf.metal.MetalRootPaneUI
+
+
+#---- ScrollBar ----
+
+ScrollBar.allowsAbsolutePositioning true
+ScrollBar.ancestorInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed KP_LEFT                 positiveUnitIncrement
+    pressed KP_RIGHT                negativeUnitIncrement
+    pressed LEFT                    positiveUnitIncrement
+    pressed RIGHT                   negativeUnitIncrement
+ScrollBar.ancestorInputMap     [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    positiveUnitIncrement
+    pressed END                     maxScroll
+    pressed HOME                    minScroll
+    pressed KP_DOWN                 positiveUnitIncrement
+    pressed KP_LEFT                 negativeUnitIncrement
+    pressed KP_RIGHT                positiveUnitIncrement
+    pressed KP_UP                   negativeUnitIncrement
+    pressed LEFT                    negativeUnitIncrement
+    pressed PAGE_DOWN               positiveBlockIncrement
+    pressed PAGE_UP                 negativeBlockIncrement
+    pressed RIGHT                   positiveUnitIncrement
+    pressed UP                      negativeUnitIncrement
+ScrollBar.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.buttonArrowColor     #9a9da1    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.darkShadow           #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.gradient             size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.0
+    [2] #dde8f3    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverThumbColor      #666868    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverTrackColor      #434647    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.maximumThumbSize     4096,4096    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.minimumThumbSize     8,8    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.shadow               #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.showButtons          false
+ScrollBar.squareButtons        false
+ScrollBar.thumb                #5b5e5f    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbDarkShadow      #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbHighlight       #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbShadow          #6382bf    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.track                #3f4244    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.trackHighlight       #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.width                10
+ScrollBarUI                    com.formdev.flatlaf.ui.FlatScrollBarUI
+
+
+#---- ScrollPane ----
+
+ScrollPane.ancestorInputMap.RightToLeft [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed PAGE_DOWN          scrollLeft
+    ctrl pressed PAGE_UP            scrollRight
+ScrollPane.ancestorInputMap    [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed END                scrollEnd
+    ctrl pressed HOME               scrollHome
+    ctrl pressed PAGE_DOWN          scrollRight
+    ctrl pressed PAGE_UP            scrollLeft
+    pressed DOWN                    unitScrollDown
+    pressed KP_DOWN                 unitScrollDown
+    pressed KP_LEFT                 unitScrollLeft
+    pressed KP_RIGHT                unitScrollRight
+    pressed KP_UP                   unitScrollUp
+    pressed LEFT                    unitScrollLeft
+    pressed PAGE_DOWN               scrollDown
+    pressed PAGE_UP                 scrollUp
+    pressed RIGHT                   unitScrollRight
+    pressed UP                      unitScrollUp
+ScrollPane.background          #3f4244    javax.swing.plaf.ColorUIResource [UI]
+ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+ScrollPane.fillUpperCorner     true
+ScrollPane.font                Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollPane.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ScrollPane.smoothScrolling     true
+ScrollPaneUI                   com.formdev.flatlaf.ui.FlatScrollPaneUI
+
+
+#---- Separator ----
+
+Separator.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+Separator.foreground           #515151    javax.swing.plaf.ColorUIResource [UI]
+Separator.height               3
+Separator.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Separator.shadow               #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Separator.stripeIndent         1
+Separator.stripeWidth          1
+SeparatorUI                    com.formdev.flatlaf.ui.FlatSeparatorUI
+
+
+#---- Slider ----
+
+Slider.altTrackColor           #d2e2ef    javax.swing.plaf.ColorUIResource [UI]
+Slider.background              #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+Slider.disabledForeground      #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Slider.focus                   #a3b8cc    javax.swing.plaf.ColorUIResource [UI]
+Slider.focusGradient           size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.2
+    [2] #c8ddf2    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Slider.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed KP_LEFT                 positiveUnitIncrement
+    pressed KP_RIGHT                negativeUnitIncrement
+    pressed LEFT                    positiveUnitIncrement
+    pressed RIGHT                   negativeUnitIncrement
+Slider.focusInputMap           [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed PAGE_DOWN          negativeBlockIncrement
+    ctrl pressed PAGE_UP            positiveBlockIncrement
+    pressed DOWN                    negativeUnitIncrement
+    pressed END                     maxScroll
+    pressed HOME                    minScroll
+    pressed KP_DOWN                 negativeUnitIncrement
+    pressed KP_LEFT                 negativeUnitIncrement
+    pressed KP_RIGHT                positiveUnitIncrement
+    pressed KP_UP                   positiveUnitIncrement
+    pressed LEFT                    negativeUnitIncrement
+    pressed PAGE_DOWN               negativeBlockIncrement
+    pressed PAGE_UP                 positiveBlockIncrement
+    pressed RIGHT                   positiveUnitIncrement
+    pressed UP                      positiveUnitIncrement
+Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Slider.font                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Slider.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Slider.gradient                size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.2
+    [2] #c8ddf2    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Slider.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Slider.horizontalSize          200,21    java.awt.Dimension
+Slider.horizontalThumbIcon     [lazy] 15,16    javax.swing.plaf.metal.MetalIconFactory$OceanHorizontalSliderThumbIcon [UI]
+Slider.hoverColor              #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Slider.majorTickLength         6
+Slider.minimumHorizontalSize   36,21    java.awt.Dimension
+Slider.minimumVerticalSize     21,36    java.awt.Dimension
+Slider.onlyLeftMouseButtonDrag true
+Slider.shadow                  #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Slider.thumbColor              #a6a6a6    javax.swing.plaf.ColorUIResource [UI]
+Slider.thumbWidth              11
+Slider.tickColor               #888888    javax.swing.plaf.ColorUIResource [UI]
+Slider.trackColor              #646464    javax.swing.plaf.ColorUIResource [UI]
+Slider.trackWidth              3
+Slider.verticalSize            21,200    java.awt.Dimension
+Slider.verticalThumbIcon       [lazy] 16,15    javax.swing.plaf.metal.MetalIconFactory$OceanVerticalSliderThumbIcon [UI]
+SliderUI                       com.formdev.flatlaf.ui.FlatSliderUI
+
+
+#---- Spinner ----
+
+Spinner.ancestorInputMap       [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    decrement
+    pressed KP_DOWN                 decrement
+    pressed KP_UP                   increment
+    pressed UP                      increment
+Spinner.arrowButtonBorder      [lazy] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
+    3,3,3,3  false    javax.swing.plaf.metal.MetalBorders$ButtonBorder [UI]
+    0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
+Spinner.arrowButtonInsets      0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Spinner.arrowButtonSize        16,5    java.awt.Dimension
+Spinner.background             #45494a    javax.swing.plaf.ColorUIResource [UI]
+Spinner.border                 [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
+Spinner.buttonArrowColor       #9a9da1    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonBackground       #404445    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonHoverArrowColor  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Spinner.disabledBackground     #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+Spinner.disabledForeground     #777777    javax.swing.plaf.ColorUIResource [UI]
+Spinner.editorAlignment        11
+Spinner.editorBorderPainted    false
+Spinner.font                   Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Spinner.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Spinner.padding                2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+SpinnerUI                      com.formdev.flatlaf.ui.FlatSpinnerUI
+
+
+#---- SplitPane ----
+
+SplitPane.ancestorInputMap     [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed TAB                focusOutForward
+    pressed DOWN                    positiveIncrement
+    pressed END                     selectMax
+    pressed F6                      toggleFocus
+    pressed F8                      startResize
+    pressed HOME                    selectMin
+    pressed KP_DOWN                 positiveIncrement
+    pressed KP_LEFT                 negativeIncrement
+    pressed KP_RIGHT                positiveIncrement
+    pressed KP_UP                   negativeIncrement
+    pressed LEFT                    negativeIncrement
+    pressed RIGHT                   positiveIncrement
+    pressed UP                      negativeIncrement
+    shift ctrl pressed TAB          focusOutBackward
+SplitPane.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+SplitPane.centerOneTouchButtons true
+SplitPane.continuousLayout     true
+SplitPane.darkShadow           #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+SplitPane.dividerFocusColor    #c8ddf2    javax.swing.plaf.ColorUIResource [UI]
+SplitPane.dividerSize          5
+SplitPane.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+SplitPane.oneTouchButtonOffset [active] 2
+SplitPane.oneTouchButtonSize   [active] 6
+SplitPane.oneTouchButtonsOpaque false
+SplitPane.shadow               #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- SplitPaneDivider ----
+
+SplitPaneDivider.draggingColor #646464    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.oneTouchArrowColor #9a9da1    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.oneTouchHoverArrowColor #7a7d81    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- SplitPane ----
+
+SplitPaneUI                    com.formdev.flatlaf.ui.FlatSplitPaneUI
+
+
+#---- TabbedPane ----
+
+TabbedPane.ancestorInputMap    [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed KP_UP              requestFocus
+    ctrl pressed PAGE_DOWN          navigatePageDown
+    ctrl pressed PAGE_UP            navigatePageUp
+    ctrl pressed UP                 requestFocus
+TabbedPane.background          #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.borderHightlightColor #6382bf    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.contentAreaColor    #323232    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.contentBorderInsets 4,2,3,3    java.awt.Insets
+TabbedPane.contentOpaque       true
+TabbedPane.contentSeparatorHeight 1
+TabbedPane.darkShadow          #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.disabledForeground  #777777    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.disabledUnderlineColor #7a7a7a    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.focus               #6382bf    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.focusColor          #3d4b5c    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.focusInputMap       [lazy] 10    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed DOWN               requestFocusForVisibleComponent
+    ctrl pressed KP_DOWN            requestFocusForVisibleComponent
+    pressed DOWN                    navigateDown
+    pressed KP_DOWN                 navigateDown
+    pressed KP_LEFT                 navigateLeft
+    pressed KP_RIGHT                navigateRight
+    pressed KP_UP                   navigateUp
+    pressed LEFT                    navigateLeft
+    pressed RIGHT                   navigateRight
+    pressed UP                      navigateUp
+TabbedPane.font                Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+TabbedPane.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.hasFullBorder       false
+TabbedPane.highlight           #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.hoverColor          #2e3133    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.labelShift          1
+TabbedPane.light               #eeeeee    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.selectHighlight     #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.selected            #c8ddf2    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.selectedLabelShift  -1
+TabbedPane.selectedTabPadInsets 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.selectionFollowsFocus true
+TabbedPane.shadow              #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.tabAreaBackground   #dadada    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.tabAreaInsets       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.tabHeight           32
+TabbedPane.tabInsets           0,12,0,12    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.tabRunOverlay       0
+TabbedPane.tabSelectionHeight  3
+TabbedPane.tabsOpaque          true
+TabbedPane.tabsOverlapBorder   true
+TabbedPane.textIconGap         4
+TabbedPane.underlineColor      #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.unselectedBackground #eeeeee    javax.swing.plaf.ColorUIResource [UI]
+TabbedPaneUI                   com.formdev.flatlaf.ui.FlatTabbedPaneUI
+
+
+#---- Table ----
+
+Table.ancestorInputMap.RightToLeft [lazy] 20    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed KP_LEFT            selectNextColumnChangeLead
+    ctrl pressed KP_RIGHT           selectPreviousColumnChangeLead
+    ctrl pressed LEFT               selectNextColumnChangeLead
+    ctrl pressed PAGE_DOWN          scrollLeftChangeSelection
+    ctrl pressed PAGE_UP            scrollRightChangeSelection
+    ctrl pressed RIGHT              selectPreviousColumnChangeLead
+    pressed KP_LEFT                 selectNextColumn
+    pressed KP_RIGHT                selectPreviousColumn
+    pressed LEFT                    selectNextColumn
+    pressed RIGHT                   selectPreviousColumn
+    shift ctrl pressed KP_LEFT      selectNextColumnExtendSelection
+    shift ctrl pressed KP_RIGHT     selectPreviousColumnExtendSelection
+    shift ctrl pressed LEFT         selectNextColumnExtendSelection
+    shift ctrl pressed PAGE_DOWN    scrollLeftExtendSelection
+    shift ctrl pressed PAGE_UP      scrollRightExtendSelection
+    shift ctrl pressed RIGHT        selectPreviousColumnExtendSelection
+    shift pressed KP_LEFT           selectNextColumnExtendSelection
+    shift pressed KP_RIGHT          selectPreviousColumnExtendSelection
+    shift pressed LEFT              selectNextColumnExtendSelection
+    shift pressed RIGHT             selectPreviousColumnExtendSelection
+Table.ancestorInputMap         [lazy] 71    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  selectAll
+    ctrl pressed BACK_SLASH         clearSelection
+    ctrl pressed C                  copy
+    ctrl pressed DOWN               selectNextRowChangeLead
+    ctrl pressed END                selectLastRow
+    ctrl pressed HOME               selectFirstRow
+    ctrl pressed INSERT             copy
+    ctrl pressed KP_DOWN            selectNextRowChangeLead
+    ctrl pressed KP_LEFT            selectPreviousColumnChangeLead
+    ctrl pressed KP_RIGHT           selectNextColumnChangeLead
+    ctrl pressed KP_UP              selectPreviousRowChangeLead
+    ctrl pressed LEFT               selectPreviousColumnChangeLead
+    ctrl pressed PAGE_DOWN          scrollRightChangeSelection
+    ctrl pressed PAGE_UP            scrollLeftChangeSelection
+    ctrl pressed RIGHT              selectNextColumnChangeLead
+    ctrl pressed SLASH              selectAll
+    ctrl pressed SPACE              toggleAndAnchor
+    ctrl pressed UP                 selectPreviousRowChangeLead
+    ctrl pressed V                  paste
+    ctrl pressed X                  cut
+    pressed COPY                    copy
+    pressed CUT                     cut
+    pressed DOWN                    selectNextRow
+    pressed END                     selectLastColumn
+    pressed ENTER                   selectNextRowCell
+    pressed ESCAPE                  cancel
+    pressed F2                      startEditing
+    pressed F8                      focusHeader
+    pressed HOME                    selectFirstColumn
+    pressed KP_DOWN                 selectNextRow
+    pressed KP_LEFT                 selectPreviousColumn
+    pressed KP_RIGHT                selectNextColumn
+    pressed KP_UP                   selectPreviousRow
+    pressed LEFT                    selectPreviousColumn
+    pressed PAGE_DOWN               scrollDownChangeSelection
+    pressed PAGE_UP                 scrollUpChangeSelection
+    pressed PASTE                   paste
+    pressed RIGHT                   selectNextColumn
+    pressed SPACE                   addToSelection
+    pressed TAB                     selectNextColumnCell
+    pressed UP                      selectPreviousRow
+    shift ctrl pressed DOWN         selectNextRowExtendSelection
+    shift ctrl pressed END          selectLastRowExtendSelection
+    shift ctrl pressed HOME         selectFirstRowExtendSelection
+    shift ctrl pressed KP_DOWN      selectNextRowExtendSelection
+    shift ctrl pressed KP_LEFT      selectPreviousColumnExtendSelection
+    shift ctrl pressed KP_RIGHT     selectNextColumnExtendSelection
+    shift ctrl pressed KP_UP        selectPreviousRowExtendSelection
+    shift ctrl pressed LEFT         selectPreviousColumnExtendSelection
+    shift ctrl pressed PAGE_DOWN    scrollRightExtendSelection
+    shift ctrl pressed PAGE_UP      scrollLeftExtendSelection
+    shift ctrl pressed RIGHT        selectNextColumnExtendSelection
+    shift ctrl pressed SPACE        moveSelectionTo
+    shift ctrl pressed UP           selectPreviousRowExtendSelection
+    shift pressed DELETE            cut
+    shift pressed DOWN              selectNextRowExtendSelection
+    shift pressed END               selectLastColumnExtendSelection
+    shift pressed ENTER             selectPreviousRowCell
+    shift pressed HOME              selectFirstColumnExtendSelection
+    shift pressed INSERT            paste
+    shift pressed KP_DOWN           selectNextRowExtendSelection
+    shift pressed KP_LEFT           selectPreviousColumnExtendSelection
+    shift pressed KP_RIGHT          selectNextColumnExtendSelection
+    shift pressed KP_UP             selectPreviousRowExtendSelection
+    shift pressed LEFT              selectPreviousColumnExtendSelection
+    shift pressed PAGE_DOWN         scrollDownExtendSelection
+    shift pressed PAGE_UP           scrollUpExtendSelection
+    shift pressed RIGHT             selectNextColumnExtendSelection
+    shift pressed SPACE             extendTo
+    shift pressed TAB               selectPreviousColumnCell
+    shift pressed UP                selectPreviousRowExtendSelection
+Table.ascendingSortIcon        [lazy] 10,5    com.formdev.flatlaf.icons.FlatAscendingSortIcon [UI]
+Table.background               #45494a    javax.swing.plaf.ColorUIResource [UI]
+Table.cellFocusColor           #000000    javax.swing.plaf.ColorUIResource [UI]
+Table.cellMargins              2,3,2,3    javax.swing.plaf.InsetsUIResource [UI]
+Table.cellNoFocusBorder        [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Default [UI]
+Table.descendingSortIcon       [lazy] 10,5    com.formdev.flatlaf.icons.FlatDescendingSortIcon [UI]
+Table.dropCellBackground       [lazy] #3c588b    javax.swing.plaf.ColorUIResource [UI]
+Table.dropCellForeground       [lazy] #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Table.dropLineColor            [lazy] #6d8ac0    javax.swing.plaf.ColorUIResource [UI]
+Table.dropLineShortColor       [lazy] #b4c3df    javax.swing.plaf.ColorUIResource [UI]
+Table.focusCellBackground      #ffffff    javax.swing.plaf.ColorUIResource [UI]
+Table.focusCellForeground      #333333    sun.swing.PrintColorUIResource [UI]
+Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]
+Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]
+Table.font                     Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Table.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Table.gridColor                #4f5152    javax.swing.plaf.ColorUIResource [UI]
+Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
+Table.rowHeight                20
+Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+Table.selectionBackground      #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+Table.selectionForeground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Table.selectionInactiveBackground #0d293e    javax.swing.plaf.ColorUIResource [UI]
+Table.selectionInactiveForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Table.showHorizontalLines      false
+Table.showVerticalLines        false
+Table.sortIconColor            #adadad    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- TableHeader ----
+
+TableHeader.ancestorInputMap   [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
+    alt pressed KP_LEFT             moveColumnLeft
+    alt pressed KP_RIGHT            moveColumnRight
+    alt pressed LEFT                moveColumnLeft
+    alt pressed RIGHT               moveColumnRight
+    pressed ESCAPE                  focusTable
+    pressed KP_LEFT                 selectColumnToLeft
+    pressed KP_RIGHT                selectColumnToRight
+    pressed LEFT                    selectColumnToLeft
+    pressed RIGHT                   selectColumnToRight
+    pressed SPACE                   toggleSortOrder
+    shift alt pressed KP_LEFT       resizeLeft
+    shift alt pressed KP_RIGHT      resizeRight
+    shift alt pressed LEFT          resizeLeft
+    shift alt pressed RIGHT         resizeRight
+TableHeader.background         #45494a    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.bottomSeparatorColor #585858    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.cellBorder         [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+TableHeader.focusCellBackground #c8ddf2    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.font               Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+TableHeader.foreground         #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.height             25
+TableHeader.separatorColor     #585858    javax.swing.plaf.ColorUIResource [UI]
+TableHeaderUI                  com.formdev.flatlaf.ui.FlatTableHeaderUI
+
+
+#---- Table ----
+
+TableUI                        com.formdev.flatlaf.ui.FlatTableUI
+
+
+#---- TaskPane ----
+
+TaskPane.background            #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TaskPane.borderColor           #5e6060    javax.swing.plaf.ColorUIResource [UI]
+TaskPane.contentInsets         10,10,10,10    javax.swing.plaf.InsetsUIResource [UI]
+TaskPane.specialTitleBackground #afafaf    javax.swing.plaf.ColorUIResource [UI]
+TaskPane.specialTitleForeground #222222    javax.swing.plaf.ColorUIResource [UI]
+TaskPane.specialTitleOver      #666666    javax.swing.plaf.ColorUIResource [UI]
+TaskPane.titleBackgroundGradientStart #4c5052    javax.swing.plaf.ColorUIResource [UI]
+TaskPane.titleForeground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TaskPane.titleOver             #888888    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- TaskPaneContainer ----
+
+TaskPaneContainer.background   #3e434c    javax.swing.plaf.ColorUIResource [UI]
+TaskPaneContainer.border       [lazy] 10,10,10,10  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+
+
+#---- TextArea ----
+
+TextArea.background            #45494a    javax.swing.plaf.ColorUIResource [UI]
+TextArea.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+TextArea.caretBlinkRate        500
+TextArea.caretForeground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextArea.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TextArea.focusInputMap         [lazy] 61    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  select-all
+    ctrl pressed BACK_SLASH         unselect
+    ctrl pressed BACK_SPACE         delete-previous-word
+    ctrl pressed C                  copy-to-clipboard
+    ctrl pressed DELETE             delete-next-word
+    ctrl pressed END                caret-end
+    ctrl pressed H                  delete-previous
+    ctrl pressed HOME               caret-begin
+    ctrl pressed INSERT             copy-to-clipboard
+    ctrl pressed KP_LEFT            caret-previous-word
+    ctrl pressed KP_RIGHT           caret-next-word
+    ctrl pressed LEFT               caret-previous-word
+    ctrl pressed RIGHT              caret-next-word
+    ctrl pressed SPACE              activate-link-action
+    ctrl pressed T                  next-link-action
+    ctrl pressed V                  paste-from-clipboard
+    ctrl pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    caret-down
+    pressed END                     caret-end-line
+    pressed ENTER                   insert-break
+    pressed HOME                    caret-begin-line
+    pressed KP_DOWN                 caret-down
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   caret-up
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               page-down
+    pressed PAGE_UP                 page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed TAB                     insert-tab
+    pressed UP                      caret-up
+    shift ctrl pressed END          selection-end
+    shift ctrl pressed HOME         selection-begin
+    shift ctrl pressed KP_LEFT      selection-previous-word
+    shift ctrl pressed KP_RIGHT     selection-next-word
+    shift ctrl pressed LEFT         selection-previous-word
+    shift ctrl pressed O            toggle-componentOrientation
+    shift ctrl pressed PAGE_DOWN    selection-page-right
+    shift ctrl pressed PAGE_UP      selection-page-left
+    shift ctrl pressed RIGHT        selection-next-word
+    shift ctrl pressed T            previous-link-action
+    shift pressed BACK_SPACE        delete-previous
+    shift pressed DELETE            cut-to-clipboard
+    shift pressed DOWN              selection-down
+    shift pressed END               selection-end-line
+    shift pressed HOME              selection-begin-line
+    shift pressed INSERT            paste-from-clipboard
+    shift pressed KP_DOWN           selection-down
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-up
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-up
+TextArea.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+TextArea.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextArea.inactiveBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TextArea.inactiveForeground    #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextArea.margin                2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+TextArea.selectionBackground   #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+TextArea.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextAreaUI                     com.formdev.flatlaf.ui.FlatTextAreaUI
+
+
+#---- TextComponent ----
+
+TextComponent.selectAllOnFocusPolicy once
+
+
+#---- TextField ----
+
+TextField.background           #45494a    javax.swing.plaf.ColorUIResource [UI]
+TextField.border               [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+TextField.caretBlinkRate       500
+TextField.caretForeground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextField.darkShadow           #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+TextField.disabledBackground   #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TextField.focusInputMap        [lazy] 39    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  select-all
+    ctrl pressed BACK_SLASH         unselect
+    ctrl pressed BACK_SPACE         delete-previous-word
+    ctrl pressed C                  copy-to-clipboard
+    ctrl pressed DELETE             delete-next-word
+    ctrl pressed H                  delete-previous
+    ctrl pressed INSERT             copy-to-clipboard
+    ctrl pressed KP_LEFT            caret-previous-word
+    ctrl pressed KP_RIGHT           caret-next-word
+    ctrl pressed LEFT               caret-previous-word
+    ctrl pressed RIGHT              caret-next-word
+    ctrl pressed V                  paste-from-clipboard
+    ctrl pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed END                     caret-end-line
+    pressed ENTER                   notify-field-accept
+    pressed HOME                    caret-begin-line
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed LEFT                    caret-backward
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    shift ctrl pressed KP_LEFT      selection-previous-word
+    shift ctrl pressed KP_RIGHT     selection-next-word
+    shift ctrl pressed LEFT         selection-previous-word
+    shift ctrl pressed O            toggle-componentOrientation
+    shift ctrl pressed RIGHT        selection-next-word
+    shift pressed BACK_SPACE        delete-previous
+    shift pressed DELETE            cut-to-clipboard
+    shift pressed END               selection-end-line
+    shift pressed HOME              selection-begin-line
+    shift pressed INSERT            paste-from-clipboard
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed LEFT              selection-backward
+    shift pressed RIGHT             selection-forward
+TextField.font                 Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+TextField.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextField.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextField.inactiveBackground   #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TextField.inactiveForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextField.light                #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TextField.margin               2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+TextField.placeholderForeground #777777    javax.swing.plaf.ColorUIResource [UI]
+TextField.selectionBackground  #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+TextField.selectionForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextField.shadow               #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+TextFieldUI                    com.formdev.flatlaf.ui.FlatTextFieldUI
+
+
+#---- TextPane ----
+
+TextPane.background            #45494a    javax.swing.plaf.ColorUIResource [UI]
+TextPane.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+TextPane.caretBlinkRate        500
+TextPane.caretForeground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextPane.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TextPane.focusInputMap         [lazy] 61    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  select-all
+    ctrl pressed BACK_SLASH         unselect
+    ctrl pressed BACK_SPACE         delete-previous-word
+    ctrl pressed C                  copy-to-clipboard
+    ctrl pressed DELETE             delete-next-word
+    ctrl pressed END                caret-end
+    ctrl pressed H                  delete-previous
+    ctrl pressed HOME               caret-begin
+    ctrl pressed INSERT             copy-to-clipboard
+    ctrl pressed KP_LEFT            caret-previous-word
+    ctrl pressed KP_RIGHT           caret-next-word
+    ctrl pressed LEFT               caret-previous-word
+    ctrl pressed RIGHT              caret-next-word
+    ctrl pressed SPACE              activate-link-action
+    ctrl pressed T                  next-link-action
+    ctrl pressed V                  paste-from-clipboard
+    ctrl pressed X                  cut-to-clipboard
+    pressed BACK_SPACE              delete-previous
+    pressed COPY                    copy-to-clipboard
+    pressed CUT                     cut-to-clipboard
+    pressed DELETE                  delete-next
+    pressed DOWN                    caret-down
+    pressed END                     caret-end-line
+    pressed ENTER                   insert-break
+    pressed HOME                    caret-begin-line
+    pressed KP_DOWN                 caret-down
+    pressed KP_LEFT                 caret-backward
+    pressed KP_RIGHT                caret-forward
+    pressed KP_UP                   caret-up
+    pressed LEFT                    caret-backward
+    pressed PAGE_DOWN               page-down
+    pressed PAGE_UP                 page-up
+    pressed PASTE                   paste-from-clipboard
+    pressed RIGHT                   caret-forward
+    pressed TAB                     insert-tab
+    pressed UP                      caret-up
+    shift ctrl pressed END          selection-end
+    shift ctrl pressed HOME         selection-begin
+    shift ctrl pressed KP_LEFT      selection-previous-word
+    shift ctrl pressed KP_RIGHT     selection-next-word
+    shift ctrl pressed LEFT         selection-previous-word
+    shift ctrl pressed O            toggle-componentOrientation
+    shift ctrl pressed PAGE_DOWN    selection-page-right
+    shift ctrl pressed PAGE_UP      selection-page-left
+    shift ctrl pressed RIGHT        selection-next-word
+    shift ctrl pressed T            previous-link-action
+    shift pressed BACK_SPACE        delete-previous
+    shift pressed DELETE            cut-to-clipboard
+    shift pressed DOWN              selection-down
+    shift pressed END               selection-end-line
+    shift pressed HOME              selection-begin-line
+    shift pressed INSERT            paste-from-clipboard
+    shift pressed KP_DOWN           selection-down
+    shift pressed KP_LEFT           selection-backward
+    shift pressed KP_RIGHT          selection-forward
+    shift pressed KP_UP             selection-up
+    shift pressed LEFT              selection-backward
+    shift pressed PAGE_DOWN         selection-page-down
+    shift pressed PAGE_UP           selection-page-up
+    shift pressed RIGHT             selection-forward
+    shift pressed UP                selection-up
+TextPane.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+TextPane.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextPane.inactiveBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+TextPane.inactiveForeground    #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextPane.margin                2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+TextPane.selectionBackground   #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+TextPane.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
+
+
+#---- TitledBorder ----
+
+TitledBorder.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]
+TitledBorder.font              Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+TitledBorder.titleColor        #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- TitledPanel ----
+
+TitledPanelUI                  com.formdev.flatlaf.swingx.ui.FlatTitledPanelUI
+
+
+#---- ToggleButton ----
+
+ToggleButton.background        #4c5052    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
+ToggleButton.darkShadow        #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.disabledSelectedBackground #525658    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.disabledText      #777777    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.focus             #a3b8cc    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.focusInputMap     [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    pressed SPACE                   pressed
+    released SPACE                  released
+ToggleButton.font              Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+ToggleButton.foreground        #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.gradient          size=5    java.util.Arrays$ArrayList
+    [0] 0.3
+    [1] 0.0
+    [2] #dde8f3    javax.swing.plaf.ColorUIResource [UI]
+    [3] #ffffff    javax.swing.plaf.ColorUIResource [UI]
+    [4] #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.highlight         #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.iconTextGap       4
+ToggleButton.light             #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.margin            2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
+ToggleButton.pressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+ToggleButton.rollover          true
+ToggleButton.select            #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.selectedBackground #64696c    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.selectedForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.shadow            #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.disabledUnderlineColor #7a7a7a    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.focusBackground #3d4b5c    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.hoverBackground #2e3133    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.underlineColor #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.underlineHeight 2
+ToggleButton.textIconGap       4
+ToggleButton.textShiftOffset   0
+ToggleButton.toolbar.hoverBackground #4c5052    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.toolbar.pressedBackground #555a5d    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.toolbar.selectedBackground #5c6164    javax.swing.plaf.ColorUIResource [UI]
+ToggleButtonUI                 com.formdev.flatlaf.ui.FlatToggleButtonUI
+
+
+#---- ToolBar ----
+
+ToolBar.ancestorInputMap       [lazy] 8    javax.swing.plaf.InputMapUIResource [UI]
+    pressed DOWN                    navigateDown
+    pressed KP_DOWN                 navigateDown
+    pressed KP_LEFT                 navigateLeft
+    pressed KP_RIGHT                navigateRight
+    pressed KP_UP                   navigateUp
+    pressed LEFT                    navigateLeft
+    pressed RIGHT                   navigateRight
+    pressed UP                      navigateUp
+ToolBar.background             #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.border                 [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
+ToolBar.borderColor            #cccccc    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.buttonMargins          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+ToolBar.darkShadow             #7a8a99    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.dockingBackground      #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.dockingForeground      #6382bf    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.floatingBackground     #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.floatingForeground     #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.font                   Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+ToolBar.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.gripColor              #adadad    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.highlight              #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.isRollover             true
+ToolBar.light                  #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.nonrolloverBorder      [lazy] javax.swing.border.CompoundBorder
+    3,3,3,3  false    javax.swing.plaf.metal.MetalBorders$ButtonBorder [UI]
+    3,3,3,3  false    javax.swing.plaf.metal.MetalBorders$RolloverMarginBorder
+ToolBar.rolloverBorder         [lazy] javax.swing.border.CompoundBorder
+    3,3,3,3  false    javax.swing.plaf.metal.MetalBorders$ButtonBorder [UI]
+    3,3,3,3  false    javax.swing.plaf.metal.MetalBorders$RolloverMarginBorder
+ToolBar.separatorColor         #515151    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.separatorWidth         7
+ToolBar.shadow                 #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- ToolBarSeparator ----
+
+ToolBarSeparatorUI             com.formdev.flatlaf.ui.FlatToolBarSeparatorUI
+
+
+#---- ToolBar ----
+
+ToolBarUI                      com.formdev.flatlaf.ui.FlatToolBarUI
+
+
+#---- ToolTip ----
+
+ToolTip.background             #1e2123    javax.swing.plaf.ColorUIResource [UI]
+ToolTip.backgroundInactive     #1e2123    javax.swing.plaf.ColorUIResource [UI]
+ToolTip.border                 [lazy] 4,6,4,6  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+ToolTip.font                   Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+ToolTip.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ToolTip.foregroundInactive     #777777    javax.swing.plaf.ColorUIResource [UI]
+ToolTip.hideAccelerator        false
+
+
+#---- ToolTipManager ----
+
+ToolTipManager.enableToolTipMode activeApplication
+
+
+#---- ToolTip ----
+
+ToolTipUI                      com.formdev.flatlaf.ui.FlatToolTipUI
+
+
+#---- Tree ----
+
+Tree.ancestorInputMap          [lazy] 1    javax.swing.plaf.InputMapUIResource [UI]
+    pressed ESCAPE                  cancel
+Tree.background                #45494a    javax.swing.plaf.ColorUIResource [UI]
+Tree.border                    [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
+Tree.changeSelectionWithFocus  true
+Tree.closedIcon                [lazy] 16,16    com.formdev.flatlaf.icons.FlatTreeClosedIcon [UI]
+Tree.collapsedIcon             [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeCollapsedIcon [UI]
+Tree.drawsFocusBorderAroundIcon false
+Tree.dropCellBackground        [lazy] #3c588b    javax.swing.plaf.ColorUIResource [UI]
+Tree.dropCellForeground        [lazy] #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Tree.dropLineColor             [lazy] #6d8ac0    javax.swing.plaf.ColorUIResource [UI]
+Tree.editorBorder              [lazy] line: #000000    java.awt.Color 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
+Tree.expandedIcon              [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeExpandedIcon [UI]
+Tree.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    pressed KP_LEFT                 selectChild
+    pressed KP_RIGHT                selectParent
+    pressed LEFT                    selectChild
+    pressed RIGHT                   selectParent
+Tree.focusInputMap             [lazy] 59    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl pressed A                  selectAll
+    ctrl pressed BACK_SLASH         clearSelection
+    ctrl pressed C                  copy
+    ctrl pressed DOWN               selectNextChangeLead
+    ctrl pressed END                selectLastChangeLead
+    ctrl pressed HOME               selectFirstChangeLead
+    ctrl pressed INSERT             copy
+    ctrl pressed KP_DOWN            selectNextChangeLead
+    ctrl pressed KP_LEFT            scrollLeft
+    ctrl pressed KP_RIGHT           scrollRight
+    ctrl pressed KP_UP              selectPreviousChangeLead
+    ctrl pressed LEFT               scrollLeft
+    ctrl pressed PAGE_DOWN          scrollDownChangeLead
+    ctrl pressed PAGE_UP            scrollUpChangeLead
+    ctrl pressed RIGHT              scrollRight
+    ctrl pressed SLASH              selectAll
+    ctrl pressed SPACE              toggleAndAnchor
+    ctrl pressed UP                 selectPreviousChangeLead
+    ctrl pressed V                  paste
+    ctrl pressed X                  cut
+    pressed ADD                     expand
+    pressed COPY                    copy
+    pressed CUT                     cut
+    pressed DOWN                    selectNext
+    pressed END                     selectLast
+    pressed F2                      startEditing
+    pressed HOME                    selectFirst
+    pressed KP_DOWN                 selectNext
+    pressed KP_LEFT                 selectParent
+    pressed KP_RIGHT                selectChild
+    pressed KP_UP                   selectPrevious
+    pressed LEFT                    selectParent
+    pressed PAGE_DOWN               scrollDownChangeSelection
+    pressed PAGE_UP                 scrollUpChangeSelection
+    pressed PASTE                   paste
+    pressed RIGHT                   selectChild
+    pressed SPACE                   addToSelection
+    pressed SUBTRACT                collapse
+    pressed UP                      selectPrevious
+    shift ctrl pressed DOWN         selectNextExtendSelection
+    shift ctrl pressed END          selectLastExtendSelection
+    shift ctrl pressed HOME         selectFirstExtendSelection
+    shift ctrl pressed KP_DOWN      selectNextExtendSelection
+    shift ctrl pressed KP_UP        selectPreviousExtendSelection
+    shift ctrl pressed PAGE_DOWN    scrollDownExtendSelection
+    shift ctrl pressed PAGE_UP      scrollUpExtendSelection
+    shift ctrl pressed SPACE        moveSelectionTo
+    shift ctrl pressed UP           selectPreviousExtendSelection
+    shift pressed DELETE            cut
+    shift pressed DOWN              selectNextExtendSelection
+    shift pressed END               selectLastExtendSelection
+    shift pressed HOME              selectFirstExtendSelection
+    shift pressed INSERT            paste
+    shift pressed KP_DOWN           selectNextExtendSelection
+    shift pressed KP_UP             selectPreviousExtendSelection
+    shift pressed PAGE_DOWN         scrollDownExtendSelection
+    shift pressed PAGE_UP           scrollUpExtendSelection
+    shift pressed SPACE             extendTo
+    shift pressed UP                selectPreviousExtendSelection
+Tree.font                      Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Tree.foreground                #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Tree.hash                      #505355    javax.swing.plaf.ColorUIResource [UI]
+Tree.icon.closedColor          #adadad    javax.swing.plaf.ColorUIResource [UI]
+Tree.icon.collapsedColor       #adadad    javax.swing.plaf.ColorUIResource [UI]
+Tree.icon.expandedColor        #adadad    javax.swing.plaf.ColorUIResource [UI]
+Tree.icon.leafColor            #adadad    javax.swing.plaf.ColorUIResource [UI]
+Tree.icon.openColor            #adadad    javax.swing.plaf.ColorUIResource [UI]
+Tree.leafIcon                  [lazy] 16,16    com.formdev.flatlaf.icons.FlatTreeLeafIcon [UI]
+Tree.leftChildIndent           7
+Tree.line                      #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+Tree.lineTypeDashed            false
+Tree.openIcon                  [lazy] 16,16    com.formdev.flatlaf.icons.FlatTreeOpenIcon [UI]
+Tree.paintLines                false
+Tree.rendererFillBackground    false
+Tree.rendererMargins           1,2,1,2    javax.swing.plaf.InsetsUIResource [UI]
+Tree.rightChildIndent          11
+Tree.rowHeight                 0
+Tree.scrollsOnExpand           true
+Tree.selectionBackground       #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionBorderColor      #000000    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionForeground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionInactiveBackground #0d293e    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionInactiveForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Tree.textBackground            #45494a    javax.swing.plaf.ColorUIResource [UI]
+Tree.textForeground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Tree.timeFactor                1000
+Tree.wideSelection             true
+TreeUI                         com.formdev.flatlaf.ui.FlatTreeUI
+
+
+#---- Viewport ----
+
+Viewport.background            #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+Viewport.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+Viewport.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
+
+
+#----  ----
+
+activeCaption                  #434e60    javax.swing.plaf.ColorUIResource [UI]
+activeCaptionBorder            #434e60    javax.swing.plaf.ColorUIResource [UI]
+activeCaptionText              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+control                        #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+controlDkShadow                #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
+controlHighlight               #313131    javax.swing.plaf.ColorUIResource [UI]
+controlLtHighlight             #242424    javax.swing.plaf.ColorUIResource [UI]
+controlShadow                  #646464    javax.swing.plaf.ColorUIResource [UI]
+controlText                    #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+desktop                        #45494a    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- html ----
+
+html.missingImage              [lazy] 38,38    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
+html.pendingImage              [lazy] 38,38    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
+
+
+#----  ----
+
+inactiveCaption                #393c3d    javax.swing.plaf.ColorUIResource [UI]
+inactiveCaptionBorder          #393c3d    javax.swing.plaf.ColorUIResource [UI]
+inactiveCaptionText            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+info                           #1e2123    javax.swing.plaf.ColorUIResource [UI]
+infoText                       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+menu                           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+menuText                       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+scrollbar                      #3f4244    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- swingx/TaskPane ----
+
+swingx/TaskPaneUI              com.formdev.flatlaf.swingx.ui.FlatTaskPaneUI
+
+
+#----  ----
+
+text                           #45494a    javax.swing.plaf.ColorUIResource [UI]
+textHighlight                  #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
+textHighlightText              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+textInactiveText               #777777    javax.swing.plaf.ColorUIResource [UI]
+textText                       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+window                         #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+windowBorder                   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+windowText                     #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
