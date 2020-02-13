@@ -29,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -194,7 +195,8 @@ public abstract class FlatLaf
 				String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
 				try {
 					if (SystemInfo.IS_JAVA_9_OR_LATER) {
-						base = (BasicLookAndFeel) UIManager.createLookAndFeel("Mac OS X");
+						Method m = UIManager.class.getDeclaredMethod("createLookAndFeel", String.class);
+						base = (BasicLookAndFeel) m.invoke(UIManager.class, "Mac OS X");
 					} else {
 						base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).getDeclaredConstructor().newInstance();
 					}
