@@ -208,6 +208,7 @@ public abstract class FlatLaf
 	@Override
 	public UIDefaults getDefaults() {
 		UIDefaults defaults = getBase().getDefaults();
+		UIDefaultsRemover.removeDefaults( defaults );
 
 		// add Metal resource bundle, which is required for FlatFileChooserUI
 		defaults.addResourceBundle( "com.sun.swing.internal.plaf.metal.resources.metal" );

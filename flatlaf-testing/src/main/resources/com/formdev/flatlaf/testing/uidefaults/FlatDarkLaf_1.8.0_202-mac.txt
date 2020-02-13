@@ -115,7 +115,6 @@ Button.minimumWidth            72
 Button.opaque                  false
 Button.pressedBackground       #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
 Button.rollover                true
-Button.select                  #ff6666    javax.swing.plaf.ColorUIResource [UI]
 Button.shadow                  #44000000    javax.swing.plaf.ColorUIResource [UI]
 Button.textIconGap             4
 Button.textShiftOffset         0
@@ -157,7 +156,6 @@ CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatChe
 CheckBox.iconTextGap           4
 CheckBox.margin                2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 CheckBox.rollover              true
-CheckBox.select                #ff6666    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.textIconGap           4
 CheckBox.textShiftOffset       0
 
@@ -871,7 +869,6 @@ Menu.background                #303234    javax.swing.plaf.ColorUIResource [UI]
 Menu.border                    [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
 Menu.borderPainted             false
 Menu.cancelMode                hideLastSubmenu
-Menu.checkIcon                 [lazy] 9,9    javax.swing.plaf.basic.BasicIconFactory$MenuItemCheckIcon [UI]
 Menu.consumesTabs              true
 Menu.crossMenuMnemonic         true
 Menu.disabledBackground        #3c3f41    javax.swing.plaf.ColorUIResource [UI]
@@ -927,7 +924,6 @@ MenuItem.arrowIcon             [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenu
 MenuItem.background            #303234    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
 MenuItem.borderPainted         true
-MenuItem.checkIcon             [lazy] 9,9    javax.swing.plaf.basic.BasicIconFactory$MenuItemCheckIcon [UI]
 MenuItem.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.disabledForeground    #777777    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.font                  .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
@@ -1226,7 +1222,6 @@ RadioButton.iconTextGap        4
 RadioButton.light              #0749d9    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.margin             2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 RadioButton.rollover           true
-RadioButton.select             #ff6666    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.shadow             #44000000    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.textIconGap        4
 RadioButton.textShiftOffset    0
@@ -2153,7 +2148,6 @@ Tree.icon.leafColor            #adadad    javax.swing.plaf.ColorUIResource [UI]
 Tree.icon.openColor            #adadad    javax.swing.plaf.ColorUIResource [UI]
 Tree.leafIcon                  [lazy] 16,16    com.formdev.flatlaf.icons.FlatTreeLeafIcon [UI]
 Tree.leftChildIndent           7
-Tree.line                      #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Tree.lineTypeDashed            false
 Tree.openIcon                  [lazy] 16,16    com.formdev.flatlaf.icons.FlatTreeOpenIcon [UI]
 Tree.paintLines                false
