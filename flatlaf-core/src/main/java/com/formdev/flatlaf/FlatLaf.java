@@ -190,11 +190,14 @@ public abstract class FlatLaf
 	 */
 	private BasicLookAndFeel getBase() {
 		if( base == null ) {
-			if( SystemInfo.IS_MAC ) {
-				// use Mac Aqua LaF as base
+			if( SystemInfo.IS_MAC) {
 				String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
 				try {
-					base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).getDeclaredConstructor().newInstance();
+					if (SystemInfo.IS_JAVA_9_OR_LATER) {
+						base = (BasicLookAndFeel) UIManager.createLookAndFeel("Mac OS X");
+					} else {
+						base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).getDeclaredConstructor().newInstance();
+					}
 				} catch( Exception ex ) {
 					LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
 					throw new IllegalStateException();
