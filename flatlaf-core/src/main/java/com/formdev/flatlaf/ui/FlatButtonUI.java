@@ -240,7 +240,7 @@ public class FlatButtonUI
 		return c instanceof JButton && clientPropertyEquals( (JButton) c, BUTTON_TYPE, BUTTON_TYPE_HELP );
 	}
 
-	static boolean isToolBarButton( JComponent c ) {
+	static boolean isToolBarButton( Component c ) {
 		return c.getParent() instanceof JToolBar;
 	}
 
@@ -269,7 +269,7 @@ public class FlatButtonUI
 				FlatUIUtils.setRenderingHints( g2 );
 
 				Border border = c.getBorder();
-				float focusWidth = (border instanceof FlatBorder) ? scale( (float) getFocusWidth( c ) ) : 0;
+				float focusWidth = (border instanceof FlatBorder && !isToolBarButton( c )) ? scale( (float) getFocusWidth( c ) ) : 0;
 				float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton( c ))
 					? scale( (float) this.arc ) : 0;
 				boolean def = isDefaultButton( c );

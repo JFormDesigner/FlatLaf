@@ -84,6 +84,13 @@ public class FlatUIUtils
 			insets1.right + insets2.right );
 	}
 
+	public static void setInsets( Insets dest, Insets src ) {
+		dest.top = src.top;
+		dest.left = src.left;
+		dest.bottom = src.bottom;
+		dest.right = src.right;
+	}
+
 	public static Color getUIColor( String key, int defaultColorRGB ) {
 		Color color = UIManager.getColor( key );
 		return (color != null) ? color : new Color( defaultColorRGB );

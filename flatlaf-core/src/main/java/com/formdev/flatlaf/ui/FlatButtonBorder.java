@@ -26,6 +26,7 @@ import java.awt.Paint;
 import javax.swing.AbstractButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Border for {@link javax.swing.JButton}.
@@ -61,12 +62,16 @@ public class FlatButtonBorder
 	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
 	protected final int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
+	protected final Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
 	protected final int arc = UIManager.getInt( "Button.arc" );
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-		if( FlatButtonUI.isContentAreaFilled( c ) && !FlatButtonUI.isHelpButton( c ) && !FlatToggleButtonUI.isTabButton( c ) )
-			super.paintBorder( c, g, x, y, width, height );
+		if( FlatButtonUI.isContentAreaFilled( c ) &&
+			!FlatButtonUI.isToolBarButton( c ) &&
+			!FlatButtonUI.isHelpButton( c ) &&
+			!FlatToggleButtonUI.isTabButton( c ) )
+		  super.paintBorder( c, g, x, y, width, height );
 	}
 
 	@Override
@@ -95,11 +100,22 @@ public class FlatButtonBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		insets = super.getBorderInsets( c, insets );
+		if( FlatButtonUI.isToolBarButton( c ) ) {
+			// In toolbars, use button margin only if explicitly set.
+			// Otherwise use toolbar margin specified in UI defaults.
+			Insets margin = (c instanceof AbstractButton)
+				? ((AbstractButton)c).getMargin()
+				: null;
 
-		// use smaller left and right insets for icon-only buttons (so that they are square)
-		if( FlatButtonUI.isIconOnlyButton( c ) && ((AbstractButton)c).getMargin() instanceof UIResource )
-			insets.left = insets.right = Math.min( insets.top, insets.bottom );
+			FlatUIUtils.setInsets( insets, UIScale.scale(
+				(margin != null && !(margin instanceof UIResource)) ? margin : toolbarMargin ) );
+		} else {
+			insets = super.getBorderInsets( c, insets );
+
+			// use smaller left and right insets for icon-only buttons (so that they are square)
+			if( FlatButtonUI.isIconOnlyButton( c ) && ((AbstractButton)c).getMargin() instanceof UIResource )
+				insets.left = insets.right = Math.min( insets.top, insets.bottom );
+		}
 
 		return insets;
 	}

@@ -15,6 +15,8 @@ FlatLaf Change Log
   `false`. (issue #58, PR #63)
 - ToggleButton: Make toggle button square if it has an icon but no text or text
   is "..." or a single character.
+- ToolBar: No longer use special rollover border for buttons in toolbar. (issue
+  #36)
 
 
 ## 0.26

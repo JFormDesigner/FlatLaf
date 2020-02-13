@@ -16,18 +16,14 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicToolBarUI;
 
 /**
@@ -45,26 +41,13 @@ import javax.swing.plaf.basic.BasicToolBarUI;
  * @uiDefault ToolBar.floatingForeground				Color
  * @uiDefault ToolBar.isRollover						boolean
  *
- * <!-- FlatToolBarUI -->
- *
- * @uiDefault ToolBar.buttonMargins						Insets
- *
  * @author Karl Tauber
  */
 public class FlatToolBarUI
 	extends BasicToolBarUI
 {
-	private Border rolloverBorder;
-
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatToolBarUI();
-	}
-
-	@Override
-	public void uninstallUI( JComponent c ) {
-		super.uninstallUI( c );
-
-		rolloverBorder = null;
 	}
 
 	@Override
@@ -90,26 +73,15 @@ public class FlatToolBarUI
 		};
 	}
 
-	@Override
-	protected Border createRolloverBorder() {
-		return getRolloverBorder();
-	}
-
-	@Override
-	protected Border createNonRolloverBorder() {
-		return getRolloverBorder();
-	}
-
-	@Override
-	protected Border getNonRolloverBorder( AbstractButton b ) {
-		return getRolloverBorder();
-	}
-
-	private Border getRolloverBorder() {
-		if( rolloverBorder == null )
-			rolloverBorder = new FlatRolloverMarginBorder();
-		return rolloverBorder;
-	}
+	// disable rollover border
+	@Override protected void setBorderToRollover( Component c ) {}
+	@Override protected void setBorderToNonRollover( Component c ) {}
+	@Override protected void setBorderToNormal( Component c ) {}
+	@Override protected void installRolloverBorders( JComponent c ) {}
+	@Override protected void installNonRolloverBorders( JComponent c ) {}
+	@Override protected void installNormalBorders( JComponent c ) {}
+	@Override protected Border createRolloverBorder() { return null; }
+	@Override protected Border createNonRolloverBorder() { return null; }
 
 	@Override
 	public void setOrientation( int orientation ) {
@@ -122,47 +94,5 @@ public class FlatToolBarUI
 		}
 
 		super.setOrientation( orientation );
-	}
-
-	//---- class FlatRolloverMarginBorder -------------------------------------
-
-	/**
-	 * Uses button margin only if explicitly set.
-	 * Otherwise uses insets specified in constructor.
-	 */
-	private static class FlatRolloverMarginBorder
-		extends EmptyBorder
-	{
-		public FlatRolloverMarginBorder() {
-			super( UIManager.getInsets( "ToolBar.buttonMargins" ) );
-		}
-
-		@Override
-		public Insets getBorderInsets( Component c, Insets insets ) {
-			Insets margin = (c instanceof AbstractButton)
-				? ((AbstractButton) c).getMargin()
-				: null;
-
-			if( margin == null || margin instanceof UIResource ) {
-				insets.top = top;
-				insets.left = left;
-				insets.bottom = bottom;
-				insets.right = right;
-			} else {
-				// margin explicitly set
-				insets.top = margin.top;
-				insets.left = margin.left;
-				insets.bottom = margin.bottom;
-				insets.right = margin.right;
-			}
-
-			// scale
-			insets.top = scale( insets.top );
-			insets.left = scale( insets.left );
-			insets.bottom = scale( insets.bottom );
-			insets.right = scale( insets.right );
-
-			return insets;
-		}
 	}
 }
