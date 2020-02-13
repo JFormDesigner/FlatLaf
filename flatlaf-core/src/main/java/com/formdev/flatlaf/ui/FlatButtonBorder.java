@@ -23,7 +23,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Paint;
-import javax.swing.JButton;
+import javax.swing.AbstractButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
 
@@ -98,7 +98,7 @@ public class FlatButtonBorder
 		insets = super.getBorderInsets( c, insets );
 
 		// use smaller left and right insets for icon-only buttons (so that they are square)
-		if( FlatButtonUI.isIconOnlyButton( c ) && ((JButton)c).getMargin() instanceof UIResource )
+		if( FlatButtonUI.isIconOnlyButton( c ) && ((AbstractButton)c).getMargin() instanceof UIResource )
 			insets.left = insets.right = Math.min( insets.top, insets.bottom );
 
 		return insets;

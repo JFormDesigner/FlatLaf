@@ -34,6 +34,7 @@ import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -222,11 +223,11 @@ public class FlatButtonUI
 	}
 
 	static boolean isIconOnlyButton( Component c ) {
-		if( !(c instanceof JButton) )
+		if( !(c instanceof JButton) && !(c instanceof JToggleButton) )
 			return false;
 
-		Icon icon = ((JButton)c).getIcon();
-		String text = ((JButton)c).getText();
+		Icon icon = ((AbstractButton)c).getIcon();
+		String text = ((AbstractButton)c).getText();
 		return (icon != null && (text == null || text.isEmpty())) ||
 			(icon == null && text != null && ("...".equals( text ) || text.length() == 1));
 	}

@@ -87,13 +87,17 @@ public class FlatComponentsTest
 		JToggleButton toggleButton10 = new JToggleButton();
 		JToggleButton toggleButton3 = new JToggleButton();
 		JToggleButton toggleButton4 = new JToggleButton();
-		JToggleButton toggleButton5 = new JToggleButton();
-		JToggleButton toggleButton8 = new JToggleButton();
+		JToggleButton toggleButton11 = new JToggleButton();
+		JToggleButton toggleButton12 = new JToggleButton();
+		JToggleButton toggleButton13 = new JToggleButton();
+		JToggleButton toggleButton14 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
 		JCheckBox checkBox3 = new JCheckBox();
 		JCheckBox checkBox4 = new JCheckBox();
+		JToggleButton toggleButton5 = new JToggleButton();
+		JToggleButton toggleButton8 = new JToggleButton();
 		JLabel radioButtonLabel = new JLabel();
 		JRadioButton radioButton1 = new JRadioButton();
 		JRadioButton radioButton2 = new JRadioButton();
@@ -203,6 +207,9 @@ public class FlatComponentsTest
 		JButton button7 = new JButton();
 		JButton button8 = new JButton();
 		JToggleButton toggleButton6 = new JToggleButton();
+		JToggleButton toggleButton15 = new JToggleButton();
+		JToggleButton toggleButton16 = new JToggleButton();
+		JToggleButton toggleButton17 = new JToggleButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -353,18 +360,25 @@ public class FlatComponentsTest
 		toggleButton4.setSelected(true);
 		add(toggleButton4, "cell 4 2");
 
-		//---- toggleButton5 ----
-		toggleButton5.setText("tab");
-		toggleButton5.putClientProperty("JButton.buttonType", "tab");
-		toggleButton5.setSelected(true);
-		add(toggleButton5, "cell 5 2");
+		//---- toggleButton11 ----
+		toggleButton11.setIcon(UIManager.getIcon("Tree.closedIcon"));
+		toggleButton11.setSelected(true);
+		add(toggleButton11, "cell 5 2");
 
-		//---- toggleButton8 ----
-		toggleButton8.setText("tab");
-		toggleButton8.putClientProperty("JButton.buttonType", "tab");
-		toggleButton8.setEnabled(false);
-		toggleButton8.setSelected(true);
-		add(toggleButton8, "cell 5 2");
+		//---- toggleButton12 ----
+		toggleButton12.setText("...");
+		toggleButton12.setSelected(true);
+		add(toggleButton12, "cell 5 2");
+
+		//---- toggleButton13 ----
+		toggleButton13.setText("\u2026");
+		toggleButton13.setSelected(true);
+		add(toggleButton13, "cell 5 2");
+
+		//---- toggleButton14 ----
+		toggleButton14.setText("#");
+		toggleButton14.setSelected(true);
+		add(toggleButton14, "cell 5 2");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
@@ -391,6 +405,19 @@ public class FlatComponentsTest
 		checkBox4.setSelected(true);
 		checkBox4.setEnabled(false);
 		add(checkBox4, "cell 4 3");
+
+		//---- toggleButton5 ----
+		toggleButton5.setText("tab");
+		toggleButton5.putClientProperty("JButton.buttonType", "tab");
+		toggleButton5.setSelected(true);
+		add(toggleButton5, "cell 5 3");
+
+		//---- toggleButton8 ----
+		toggleButton8.setText("tab");
+		toggleButton8.putClientProperty("JButton.buttonType", "tab");
+		toggleButton8.setEnabled(false);
+		toggleButton8.setSelected(true);
+		add(toggleButton8, "cell 5 3");
 
 		//---- radioButtonLabel ----
 		radioButtonLabel.setText("JRadioButton:");
@@ -979,6 +1006,21 @@ public class FlatComponentsTest
 			toggleButton6.setIcon(UIManager.getIcon("Tree.leafIcon"));
 			toggleButton6.setSelected(true);
 			toolBar1.add(toggleButton6);
+
+			//---- toggleButton15 ----
+			toggleButton15.setIcon(UIManager.getIcon("FileView.computerIcon"));
+			toggleButton15.setSelected(true);
+			toolBar1.add(toggleButton15);
+
+			//---- toggleButton16 ----
+			toggleButton16.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
+			toggleButton16.setSelected(true);
+			toolBar1.add(toggleButton16);
+
+			//---- toggleButton17 ----
+			toggleButton17.setIcon(UIManager.getIcon("FileView.hardDriveIcon"));
+			toggleButton17.setSelected(true);
+			toolBar1.add(toggleButton17);
 		}
 		add(toolBar1, "cell 1 23 3 1,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents

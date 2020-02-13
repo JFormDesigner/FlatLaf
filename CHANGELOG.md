@@ -13,6 +13,8 @@ FlatLaf Change Log
   #59, PR #62)
 - CheckBox and RadioButton: Do not fill background if `contentAreaFilled` is
   `false`. (issue #58, PR #63)
+- ToggleButton: Make toggle button square if it has an icon but no text or text
+  is "..." or a single character.
 
 
 ## 0.26
