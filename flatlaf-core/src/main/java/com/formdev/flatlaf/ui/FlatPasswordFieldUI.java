@@ -29,7 +29,6 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.text.Caret;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
@@ -77,10 +76,6 @@ public class FlatPasswordFieldUI
 	@Override
 	protected void installDefaults() {
 		super.installDefaults();
-
-		// use other echoChar on Mac because the default is too large in SF font
-		if( SystemInfo.IS_MAC )
-			LookAndFeel.installProperty( getComponent(), "echoChar", '\u2022' );
 
 		String prefix = getPropertyPrefix();
 		focusWidth = UIManager.getInt( "Component.focusWidth" );

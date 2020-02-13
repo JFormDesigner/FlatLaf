@@ -221,7 +221,7 @@ class UIDefaultsLoader
 		return resolveValue( properties, newValue );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
+	private enum ValueType { UNKNOWN, STRING, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
 		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS }
 
 	static Object parseValue( String key, String value ) {
@@ -285,6 +285,8 @@ class UIDefaultsLoader
 				valueType = ValueType.DIMENSION;
 			else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
 				valueType = ValueType.INTEGER;
+			else if( key.endsWith( "Char" ) )
+				valueType = ValueType.CHARACTER;
 			else if( key.endsWith( "UI" ) )
 				valueType = ValueType.STRING;
 		}
@@ -292,6 +294,7 @@ class UIDefaultsLoader
 		// parse value
 		switch( valueType ) {
 			case STRING:		return value;
+			case CHARACTER:		return parseCharacter( value );
 			case INTEGER:		return parseInteger( value, true );
 			case FLOAT:			return parseFloat( value, true );
 			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
@@ -597,6 +600,12 @@ class UIDefaultsLoader
 		if( val < 0 || val > 100 )
 			throw new IllegalArgumentException( "percentage out of range (0-100%) '" + value + "'" );
 		return val;
+	}
+
+	private static Character parseCharacter( String value ) {
+		if( value.length() != 1 )
+			throw new IllegalArgumentException( "invalid character '" + value + "'" );
+		return value.charAt( 0 );
 	}
 
 	private static Integer parseInteger( String value, int min, int max ) {
