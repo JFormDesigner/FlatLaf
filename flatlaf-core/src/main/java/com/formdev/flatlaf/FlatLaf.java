@@ -29,6 +29,7 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -194,7 +195,11 @@ public abstract class FlatLaf
 				// use Mac Aqua LaF as base
 				String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
 				try {
-					base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
+					if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+						Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
+						base = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
+					} else
+						base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
 				} catch( Exception ex ) {
 					LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
 					throw new IllegalStateException();

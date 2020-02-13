@@ -17,6 +17,8 @@ FlatLaf Change Log
   is "..." or a single character.
 - ToolBar: No longer use special rollover border for buttons in toolbar. (issue
   #36)
+- Fixed "illegal reflective access operation" warning on macOS when using Java
+  12 or later. (issue #60, PR #61)
 
 
 ## 0.26
