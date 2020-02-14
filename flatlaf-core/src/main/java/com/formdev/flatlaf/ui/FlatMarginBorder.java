@@ -29,13 +29,26 @@ import javax.swing.plaf.basic.BasicBorders;
 public class FlatMarginBorder
 	extends BasicBorders.MarginBorder
 {
+	private final int left, right, top, bottom;
+
+	public FlatMarginBorder() {
+		left = right = top = bottom = 0;
+	}
+
+	public FlatMarginBorder( Insets insets ) {
+		left = insets.left;
+		top = insets.top;
+		right = insets.right;
+		bottom = insets.bottom;
+	}
+
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
 		insets = super.getBorderInsets( c, insets );
-		insets.top = scale( insets.top );
-		insets.left = scale( insets.left );
-		insets.bottom = scale( insets.bottom );
-		insets.right = scale( insets.right );
+		insets.top = scale( insets.top + top );
+		insets.left = scale( insets.left + left );
+		insets.bottom = scale( insets.bottom + bottom );
+		insets.right = scale( insets.right + right );
 		return insets;
 	}
 }

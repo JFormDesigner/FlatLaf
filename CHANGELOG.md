@@ -17,8 +17,9 @@ FlatLaf Change Log
   is "..." or a single character.
 - ToolBar: No longer use special rollover border for buttons in toolbar. (issue
   #36)
-- ToolBar: Added empty space around buttons in toolbar (see UI default value
-  `Button.toolbar.spacingInsets`). (issue #56)
+- ToolBar: Added empty space around buttons in toolbar and toolbar itself (see
+  UI default values `Button.toolbar.spacingInsets` and `ToolBar.borderMargins`).
+  (issue #56)
 - Fixed "illegal reflective access operation" warning on macOS when using Java
   12 or later. (issue #60, PR #61)
 

@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 /**
  * Border for {@link javax.swing.JToolBar}.
  *
+ * @uiDefault ToolBar.borderMargins				Insets
  * @uiDefault ToolBar.gripColor					Color
  *
  * @author Karl Tauber
@@ -41,6 +42,10 @@ public class FlatToolBarBorder
 	private static final int GRIP_WIDTH = DOT_SIZE * 3;
 
 	protected final Color gripColor = UIManager.getColor( "ToolBar.gripColor" );
+
+	public FlatToolBarBorder() {
+		super( UIManager.getInsets( "ToolBar.borderMargins" ) );
+	}
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {

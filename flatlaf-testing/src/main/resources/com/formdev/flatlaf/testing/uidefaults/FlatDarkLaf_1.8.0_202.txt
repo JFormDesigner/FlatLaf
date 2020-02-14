@@ -1890,8 +1890,9 @@ ToolBar.ancestorInputMap       [lazy] 8    javax.swing.plaf.InputMapUIResource [
     pressed RIGHT                   navigateRight
     pressed UP                      navigateUp
 ToolBar.background             #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.border                 [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
+ToolBar.border                 [lazy] 2,2,2,2  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
 ToolBar.borderColor            #cccccc    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.borderMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 ToolBar.darkShadow             #7a8a99    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingBackground      #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingForeground      #6382bf    javax.swing.plaf.ColorUIResource [UI]
