@@ -44,6 +44,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
  * @uiDefault Button.default.borderWidth		int
+ * @uiDefault Button.toolbar.margin				Insets
+ * @uiDefault Button.toolbar.spacingInsets		Insets
  * @uiDefault Button.arc						int
  *
  * @author Karl Tauber
@@ -63,6 +65,7 @@ public class FlatButtonBorder
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
 	protected final int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
 	protected final Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
+	protected final Insets toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
 	protected final int arc = UIManager.getInt( "Button.arc" );
 
 	@Override
@@ -107,8 +110,8 @@ public class FlatButtonBorder
 				? ((AbstractButton)c).getMargin()
 				: null;
 
-			FlatUIUtils.setInsets( insets, UIScale.scale(
-				(margin != null && !(margin instanceof UIResource)) ? margin : toolbarMargin ) );
+			FlatUIUtils.setInsets( insets, UIScale.scale( FlatUIUtils.addInsets( toolbarSpacingInsets,
+				(margin != null && !(margin instanceof UIResource)) ? margin : toolbarMargin ) ) );
 		} else {
 			insets = super.getBorderInsets( c, insets );
 

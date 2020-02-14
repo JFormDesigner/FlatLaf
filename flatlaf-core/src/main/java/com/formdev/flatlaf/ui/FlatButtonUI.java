@@ -26,6 +26,7 @@ import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
@@ -82,6 +83,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.shadowWidth				int		default is 2
  * @uiDefault Button.shadowColor				Color	optional
  * @uiDefault Button.default.shadowColor		Color	optional
+ * @uiDefault Button.toolbar.spacingInsets		Insets
  * @uiDefault Button.toolbar.hoverBackground	Color
  * @uiDefault Button.toolbar.pressedBackground	Color
  *
@@ -114,6 +116,7 @@ public class FlatButtonUI
 	protected Color shadowColor;
 	protected Color defaultShadowColor;
 
+	protected Insets toolbarSpacingInsets;
 	protected Color toolbarHoverBackground;
 	protected Color toolbarPressedBackground;
 
@@ -166,6 +169,7 @@ public class FlatButtonUI
 			defaultPressedBackground = UIManager.getColor( "Button.default.pressedBackground" );
 			defaultBoldText = UIManager.getBoolean( "Button.default.boldText" );
 
+			toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
 			toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
 			toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
 
@@ -269,27 +273,42 @@ public class FlatButtonUI
 				FlatUIUtils.setRenderingHints( g2 );
 
 				Border border = c.getBorder();
-				float focusWidth = (border instanceof FlatBorder && !isToolBarButton( c )) ? scale( (float) getFocusWidth( c ) ) : 0;
-				float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton( c ))
+				boolean isToolBarButton = isToolBarButton( c );
+				float focusWidth = (border instanceof FlatBorder && !isToolBarButton) ? scale( (float) getFocusWidth( c ) ) : 0;
+				float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton)
 					? scale( (float) this.arc ) : 0;
 				boolean def = isDefaultButton( c );
 
+				int x = 0;
+				int y = 0;
+				int width = c.getWidth();
+				int height = c.getHeight();
+
+				if( isToolBarButton ) {
+					Insets spacing = UIScale.scale( toolbarSpacingInsets );
+					x += spacing.left;
+					y += spacing.top;
+					width -= spacing.left + spacing.right;
+					height -= spacing.top + spacing.bottom;
+				}
+
 				// paint shadow
 				Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-				if( shadowColor != null && shadowWidth > 0 && focusWidth > 0 && !c.hasFocus() && c.isEnabled() ) {
+				if( !isToolBarButton && shadowColor != null && shadowWidth > 0 && focusWidth > 0 && !c.hasFocus() && c.isEnabled() ) {
 					g2.setColor( shadowColor );
 					g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
-						c.getWidth() - focusWidth * 2, c.getHeight() - focusWidth * 2, arc, arc ) );
+						width - focusWidth * 2, height - focusWidth * 2, arc, arc ) );
 				}
 
 				// paint background
 				Color startBg = def ? defaultBackground : startBackground;
 				Color endBg = def ? defaultEndBackground : endBackground;
 				if( background == startBg && endBg != null && !startBg.equals( endBg ) )
-					g2.setPaint( new GradientPaint( 0, 0, startBg, 0, c.getHeight(), endBg ) );
+					g2.setPaint( new GradientPaint( 0, 0, startBg, 0, height, endBg ) );
 				else
 					FlatUIUtils.setColor( g2, background, def ? defaultBackground : c.getBackground() );
-				FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
+
+				FlatUIUtils.paintComponentBackground( g2, x, y, width, height, focusWidth, arc );
 			} finally {
 				g2.dispose();
 			}

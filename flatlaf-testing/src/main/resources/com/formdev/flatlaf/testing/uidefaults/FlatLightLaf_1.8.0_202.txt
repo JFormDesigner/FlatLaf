@@ -115,7 +115,9 @@ Button.textIconGap             4
 Button.textShiftOffset         0
 Button.toolBarBorderBackground #999999    javax.swing.plaf.ColorUIResource [UI]
 Button.toolbar.hoverBackground #dfdfdf    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.margin          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 Button.toolbar.pressedBackground #d8d8d8    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.spacingInsets   1,2,1,2    javax.swing.plaf.InsetsUIResource [UI]
 ButtonUI                       com.formdev.flatlaf.ui.FlatButtonUI
 
 
@@ -1892,7 +1894,6 @@ ToolBar.ancestorInputMap       [lazy] 8    javax.swing.plaf.InputMapUIResource [
 ToolBar.background             #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.border                 [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
 ToolBar.borderColor            #cccccc    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.buttonMargins          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 ToolBar.darkShadow             #7a8a99    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingBackground      #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingForeground      #6382bf    javax.swing.plaf.ColorUIResource [UI]
@@ -1913,6 +1914,7 @@ ToolBar.rolloverBorder         [lazy] javax.swing.border.CompoundBorder
 ToolBar.separatorColor         #d1d1d1    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.separatorWidth         7
 ToolBar.shadow                 #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.spacingBorder          [lazy] 1,2,1,2  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 
 
 #---- ToolBarSeparator ----
