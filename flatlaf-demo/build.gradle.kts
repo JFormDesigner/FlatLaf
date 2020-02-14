@@ -17,6 +17,14 @@
 plugins {
 	`java-library`
 	id( "com.jfrog.bintray" ) version "1.8.4"
+
+	// Although artifactory plugin is not used in this subproject, the plugin is required
+	// because otherwise gradle fails with following error:
+	//     Caused by: org.codehaus.groovy.runtime.typehandling.GroovyCastException:
+	//     Cannot cast object 'task ':bintrayUpload''
+	//     with class 'com.jfrog.bintray.gradle.tasks.BintrayUploadTask_Decorated'
+	//     to class 'com.jfrog.bintray.gradle.tasks.BintrayUploadTask'
+	id( "com.jfrog.artifactory" ) version "4.13.0"
 }
 
 dependencies {
