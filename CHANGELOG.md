@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.27
 
 - Support `JInternalFrame` and `JDesktopPane`. (issues #39 and #11)
 - Table: Support positioning the column sort arrow in header right, left, top or
