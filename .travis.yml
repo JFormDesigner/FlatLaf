@@ -24,7 +24,7 @@ stages:
   - name: snapshot
     if: branch = master AND type IN (push) AND tag IS blank
   - name: release
-    if: branch = master AND type IN (push) AND tag IS present
+    if: branch = master AND tag IS present
 
 jobs:
   include:
