@@ -17,8 +17,8 @@
 plugins {
 	`java-library`
 	`maven-publish`
-	id( "com.jfrog.bintray" ) version "1.8.4"
-	id( "com.jfrog.artifactory" ) version "4.13.0"
+	id( "com.jfrog.bintray" )
+	id( "com.jfrog.artifactory" )
 }
 
 if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
@@ -127,8 +127,8 @@ publishing {
 }
 
 bintray {
-	user = System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" )
-	key = System.getenv( "BINTRAY_KEY" ) ?: System.getProperty( "bintray.key" )
+	user = rootProject.extra["bintray.user"] as String?
+	key = rootProject.extra["bintray.key"] as String?
 
 	setPublications( "maven" )
 
@@ -142,7 +142,8 @@ bintray {
 			name = project.version.toString()
 		}
 
-		publish = true
+		publish = rootProject.extra["bintray.publish"] as Boolean
+		dryRun = rootProject.extra["bintray.dryRun"] as Boolean
 	}
 }
 
@@ -152,8 +153,8 @@ artifactory {
 	publish( closureOf<org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig> {
 		repository( delegateClosureOf<groovy.lang.GroovyObject> {
 			setProperty( "repoKey", "oss-snapshot-local" )
-			setProperty( "username", System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" ) )
-			setProperty( "password", System.getenv( "BINTRAY_KEY" ) ?: System.getProperty( "bintray.key" ) )
+			setProperty( "username", rootProject.extra["bintray.user"] as String? )
+			setProperty( "password", rootProject.extra["bintray.key"] as String? )
 		} )
 
 		defaults( delegateClosureOf<groovy.lang.GroovyObject> {

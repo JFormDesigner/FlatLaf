@@ -16,7 +16,7 @@
 
 plugins {
 	`java-library`
-	id( "com.jfrog.bintray" ) version "1.8.4"
+	id( "com.jfrog.bintray" )
 
 	// Although artifactory plugin is not used in this subproject, the plugin is required
 	// because otherwise gradle fails with following error:
@@ -24,7 +24,7 @@ plugins {
 	//     Cannot cast object 'task ':bintrayUpload''
 	//     with class 'com.jfrog.bintray.gradle.tasks.BintrayUploadTask_Decorated'
 	//     to class 'com.jfrog.bintray.gradle.tasks.BintrayUploadTask'
-	id( "com.jfrog.artifactory" ) version "4.13.0"
+	id( "com.jfrog.artifactory" )
 }
 
 dependencies {
@@ -58,8 +58,8 @@ tasks {
 }
 
 bintray {
-	user = System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" )
-	key = System.getenv( "BINTRAY_KEY" ) ?: System.getProperty( "bintray.key" )
+	user = rootProject.extra["bintray.user"] as String?
+	key = rootProject.extra["bintray.key"] as String?
 
 	setConfigurations( "archives" )
 
@@ -73,6 +73,7 @@ bintray {
 			name = project.version.toString()
 		}
 
-		publish = true
+		publish = rootProject.extra["bintray.publish"] as Boolean
+		dryRun = rootProject.extra["bintray.dryRun"] as Boolean
 	}
 }

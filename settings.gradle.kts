@@ -22,3 +22,10 @@ include( "flatlaf-swingx" )
 include( "flatlaf-jide-oss" )
 include( "flatlaf-demo" )
 include( "flatlaf-testing" )
+
+pluginManagement {
+	plugins {
+		id( "com.jfrog.bintray" ) version "1.8.4"
+		id( "com.jfrog.artifactory" ) version "4.13.0"
+	}
+}
