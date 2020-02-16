@@ -49,3 +49,28 @@ extra["bintray.dryRun"] = false
 // if true, uploaded artifacts are visible to all
 // if false, only visible to owner when logged into bintray
 extra["bintray.publish"] = true
+
+
+allprojects {
+	tasks {
+		withType<JavaCompile>().configureEach {
+			sourceCompatibility = "1.8"
+			targetCompatibility = "1.8"
+
+			options.encoding = "ISO-8859-1"
+		}
+
+		withType<Jar>().configureEach {
+			// manifest for all created JARs
+			manifest.attributes(mapOf(
+				"Implementation-Vendor" to "FormDev Software GmbH",
+				"Implementation-Copyright" to "Copyright (C) ${java.time.LocalDate.now().year} FormDev Software GmbH. All rights reserved.",
+				"Implementation-Version" to project.version))
+
+			// add META-INF/LICENSE to all created JARs
+			from("${rootDir}/LICENSE") {
+				into("META-INF")
+			}
+		}
+	}
+}

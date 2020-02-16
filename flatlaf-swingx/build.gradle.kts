@@ -26,11 +26,6 @@ dependencies {
 	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
 }
 
-java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 tasks {
 	assemble {
 		dependsOn(

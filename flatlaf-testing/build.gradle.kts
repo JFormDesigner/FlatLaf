@@ -36,8 +36,3 @@ dependencies {
 //	implementation( "com.weblookandfeel:weblaf-ui:1.2.12" )
 //	implementation( "com.jgoodies:jgoodies-looks:2.7.0" )
 }
-
-java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-}

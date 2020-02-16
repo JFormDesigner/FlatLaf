@@ -33,11 +33,6 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	}
 }
 
-java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 tasks {
 	assemble {
 		dependsOn(

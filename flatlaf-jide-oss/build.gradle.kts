@@ -26,11 +26,6 @@ dependencies {
 	implementation( "com.jidesoft:jide-oss:3.6.18" )
 }
 
-java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 tasks {
 	assemble {
 		dependsOn(

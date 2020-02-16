@@ -34,11 +34,6 @@ dependencies {
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
 }
 
-java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 tasks {
 	jar {
 		dependsOn( ":flatlaf-core:jar" )
@@ -52,7 +47,11 @@ tasks {
 
 		// include all dependencies in jar
 		from( {
-			configurations.runtimeClasspath.get().filter { it.name.endsWith( "jar" ) }.map { zipTree( it ) }
+			configurations.runtimeClasspath.get()
+				.filter { it.name.endsWith( "jar" ) }
+				.map { zipTree( it ).matching {
+					exclude( "META-INF/LICENSE" )
+				} }
 		} )
 	}
 }
