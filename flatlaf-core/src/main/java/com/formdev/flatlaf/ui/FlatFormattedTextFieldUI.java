@@ -39,6 +39,7 @@ import javax.swing.plaf.ComponentUI;
  *
  * <!-- FlatTextFieldUI -->
  *
+ * @uiDefault TextComponent.arc							int
  * @uiDefault Component.focusWidth						int
  * @uiDefault Component.minimumWidth					int
  * @uiDefault Component.isIntelliJTheme					boolean

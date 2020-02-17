@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- TextField, FormattedTextField and PasswordField: Support round borders (see UI
+  default value `TextComponent.arc`). (issue #65)
+
+
 ## 0.27
 
 - Support `JInternalFrame` and `JDesktopPane`. (issues #39 and #11)

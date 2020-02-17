@@ -51,6 +51,7 @@ import com.formdev.flatlaf.FlatClientProperties;
  *
  * <!-- FlatPasswordFieldUI -->
  *
+ * @uiDefault TextComponent.arc						int
  * @uiDefault Component.focusWidth					int
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
@@ -62,6 +63,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 public class FlatPasswordFieldUI
 	extends BasicPasswordFieldUI
 {
+	protected int arc;
 	protected int focusWidth;
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
@@ -78,6 +80,7 @@ public class FlatPasswordFieldUI
 		super.installDefaults();
 
 		String prefix = getPropertyPrefix();
+		arc = UIManager.getInt( "TextComponent.arc" );
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
@@ -128,7 +131,7 @@ public class FlatPasswordFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		FlatTextFieldUI.paintBackground( g, getComponent(), focusWidth, isIntelliJTheme );
+		FlatTextFieldUI.paintBackground( g, getComponent(), focusWidth, arc, isIntelliJTheme );
 		FlatTextFieldUI.paintPlaceholder( g, getComponent(), placeholderForeground );
 		super.paintSafely( g );
 	}
