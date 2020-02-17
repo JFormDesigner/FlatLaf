@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 - TextField, FormattedTextField and PasswordField: Support round borders (see UI
   default value `TextComponent.arc`). (issue #65)
+- IntelliJ Themes: Added Gradianto themes to demo.
 
 
 ## 0.27
