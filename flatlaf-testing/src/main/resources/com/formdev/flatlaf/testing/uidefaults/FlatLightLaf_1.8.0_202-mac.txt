@@ -121,7 +121,9 @@ Button.shadow                  #44000000    javax.swing.plaf.ColorUIResource [UI
 Button.textIconGap             4
 Button.textShiftOffset         0
 Button.toolbar.hoverBackground #dfdfdf    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.margin          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 Button.toolbar.pressedBackground #d8d8d8    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.spacingInsets   1,2,1,2    javax.swing.plaf.InsetsUIResource [UI]
 ButtonUI                       com.formdev.flatlaf.ui.FlatButtonUI
 
 
@@ -516,7 +518,7 @@ FormView.submitButton.textAndMnemonic Submit Query
 #---- FormattedTextField ----
 
 FormattedTextField.background  #ffffff    javax.swing.plaf.ColorUIResource [UI]
-FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 FormattedTextField.caretBlinkRate 500
 FormattedTextField.caretForeground #000000    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.disabledBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -1031,7 +1033,7 @@ PanelUI                        com.apple.laf.AquaPanelUI
 #---- PasswordField ----
 
 PasswordField.background       #ffffff    javax.swing.plaf.ColorUIResource [UI]
-PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 PasswordField.capsLockIconColor #64000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
@@ -1786,6 +1788,7 @@ TextAreaUI                     com.formdev.flatlaf.ui.FlatTextAreaUI
 
 #---- TextComponent ----
 
+TextComponent.arc              0
 TextComponent.selectAllOnFocusPolicy once
 TextComponent.selectionBackgroundInactive #d4d4d4    javax.swing.plaf.ColorUIResource [UI]
 
@@ -1793,7 +1796,7 @@ TextComponent.selectionBackgroundInactive #d4d4d4    javax.swing.plaf.ColorUIRes
 #---- TextField ----
 
 TextField.background           #ffffff    javax.swing.plaf.ColorUIResource [UI]
-TextField.border               [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+TextField.border               [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 TextField.caretBlinkRate       500
 TextField.caretForeground      #000000    javax.swing.plaf.ColorUIResource [UI]
 TextField.darkShadow           #000000    javax.swing.plaf.ColorUIResource [UI]
@@ -2046,9 +2049,9 @@ ToolBar.ancestorInputMap       [lazy] 8    javax.swing.plaf.InputMapUIResource [
     pressed RIGHT                   navigateRight
     pressed UP                      navigateUp
 ToolBar.background             #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.border                 [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
+ToolBar.border                 [lazy] 2,2,2,2  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
 ToolBar.borderHandleColor      #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.buttonMargins          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+ToolBar.borderMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 ToolBar.darkShadow             #000000    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingBackground      #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingForeground      #0749d9    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
@@ -2063,6 +2066,7 @@ ToolBar.light                  #0749d9    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.separatorColor         #d1d1d1    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.separatorWidth         7
 ToolBar.shadow                 #44000000    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.spacingBorder          [lazy] 1,2,1,2  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 
 
 #---- ToolBarButton ----

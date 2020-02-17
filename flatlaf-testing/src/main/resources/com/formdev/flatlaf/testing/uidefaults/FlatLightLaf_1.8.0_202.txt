@@ -438,7 +438,7 @@ FileView.hardDriveIcon         [lazy] 16,16    com.formdev.flatlaf.icons.FlatFil
 #---- FormattedTextField ----
 
 FormattedTextField.background  #ffffff    javax.swing.plaf.ColorUIResource [UI]
-FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 FormattedTextField.caretBlinkRate 500
 FormattedTextField.caretForeground #000000    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.disabledBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -923,7 +923,7 @@ PanelUI                        javax.swing.plaf.basic.BasicPanelUI
 #---- PasswordField ----
 
 PasswordField.background       #ffffff    javax.swing.plaf.ColorUIResource [UI]
-PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -1682,13 +1682,14 @@ TextAreaUI                     com.formdev.flatlaf.ui.FlatTextAreaUI
 
 #---- TextComponent ----
 
+TextComponent.arc              0
 TextComponent.selectAllOnFocusPolicy once
 
 
 #---- TextField ----
 
 TextField.background           #ffffff    javax.swing.plaf.ColorUIResource [UI]
-TextField.border               [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+TextField.border               [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 TextField.caretBlinkRate       500
 TextField.caretForeground      #000000    javax.swing.plaf.ColorUIResource [UI]
 TextField.darkShadow           #7a8a99    javax.swing.plaf.ColorUIResource [UI]
