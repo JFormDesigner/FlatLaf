@@ -229,7 +229,7 @@ public class FlatTestFrame
 
 	private boolean isClassAvailable( String className ) {
 		try {
-			Class.forName( className );
+			Class.forName( className, false, getClass().getClassLoader() );
 			return true;
 		} catch( ClassNotFoundException ex ) {
 			return false;
