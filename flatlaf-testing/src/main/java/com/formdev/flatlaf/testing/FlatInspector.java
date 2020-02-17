@@ -27,6 +27,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
+import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -294,6 +295,12 @@ public class FlatInspector
 			}
 		}
 
+		if( c instanceof Container ) {
+			LayoutManager layout = ((Container)c).getLayout();
+			if( layout != null )
+				text += "Layout: " + layout.getClass().getName() + '\n';
+		}
+
 		text += "Enabled: " + c.isEnabled() + '\n';
 		text += "Opaque: " + c.isOpaque() + (c instanceof JComponent &&
 			FlatUIUtils.hasOpaqueBeenExplicitlySet( (JComponent) c ) ? " EXPLICIT" : "") + '\n';
@@ -311,7 +318,8 @@ public class FlatInspector
 		if( insets == null )
 			return "null";
 
-		return insets.top + "," + insets.left + ',' + insets.bottom + ',' + insets.right;
+		return insets.top + "," + insets.left + ',' + insets.bottom + ',' + insets.right
+			+ (insets instanceof UIResource ? " UI" : "");
 	}
 
 	private static String toString( Color c ) {
