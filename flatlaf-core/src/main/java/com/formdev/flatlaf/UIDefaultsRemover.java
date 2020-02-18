@@ -72,6 +72,15 @@ class UIDefaultsRemover
 		"RadioButton.select",
 		"RadioButton.totalInsets",
 
+		"RootPane.colorChooserDialogBorder",
+		"RootPane.errorDialogBorder",
+		"RootPane.fileChooserDialogBorder",
+		"RootPane.frameBorder",
+		"RootPane.informationDialogBorder",
+		"RootPane.plainDialogBorder",
+		"RootPane.questionDialogBorder",
+		"RootPane.warningDialogBorder",
+
 		"ScrollBar.darkShadow",
 		"ScrollBar.highlight",
 		"ScrollBar.shadow",

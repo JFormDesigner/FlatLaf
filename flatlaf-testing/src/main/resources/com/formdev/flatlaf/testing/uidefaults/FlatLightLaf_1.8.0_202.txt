@@ -1033,7 +1033,6 @@ Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.F
 RootPane.ancestorInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
     pressed CONTEXT_MENU            postPopup
     shift pressed F10               postPopup
-RootPane.colorChooserDialogBorder [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$QuestionDialogBorder [UI]
 RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [0] ENTER
     [1] press
@@ -1043,14 +1042,7 @@ RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [5] press
     [6] ctrl released ENTER
     [7] release
-RootPane.errorDialogBorder     [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$ErrorDialogBorder [UI]
-RootPane.fileChooserDialogBorder [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$QuestionDialogBorder [UI]
-RootPane.frameBorder           [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$FrameBorder [UI]
-RootPane.informationDialogBorder [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$DialogBorder [UI]
-RootPane.plainDialogBorder     [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$DialogBorder [UI]
-RootPane.questionDialogBorder  [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$QuestionDialogBorder [UI]
-RootPane.warningDialogBorder   [lazy] 5,5,5,5  false    javax.swing.plaf.metal.MetalBorders$WarningDialogBorder [UI]
-RootPaneUI                     javax.swing.plaf.metal.MetalRootPaneUI
+RootPaneUI                     com.formdev.flatlaf.ui.FlatRootPaneUI
 
 
 #---- ScrollBar ----
