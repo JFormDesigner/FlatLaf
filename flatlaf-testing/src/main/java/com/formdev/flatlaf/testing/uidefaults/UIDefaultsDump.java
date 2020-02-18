@@ -94,6 +94,9 @@ public class UIDefaultsDump
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 
 		dump( dir, "", lookAndFeel, key -> !key.contains( "InputMap" ) );
+		if( lookAndFeel instanceof FlatDarkLaf )
+			return;
+
 		dump( dir, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
 	}
 
