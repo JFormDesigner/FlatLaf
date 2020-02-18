@@ -218,22 +218,21 @@ public abstract class FlatLaf
 		// add Metal resource bundle, which is required for FlatFileChooserUI
 		defaults.addResourceBundle( "com.sun.swing.internal.plaf.metal.resources.metal" );
 
-		// initialize some defaults (for overriding) that are used in basic UI delegates,
-		// but are not set in MetalLookAndFeel or BasicLookAndFeel
-		Color control = defaults.getColor( "control" );
-		defaults.put( "EditorPane.disabledBackground", control );
-		defaults.put( "EditorPane.inactiveBackground", control );
-		defaults.put( "FormattedTextField.disabledBackground", control );
-		defaults.put( "PasswordField.disabledBackground", control );
-		defaults.put( "TextArea.disabledBackground", control );
-		defaults.put( "TextArea.inactiveBackground", control );
-		defaults.put( "TextField.disabledBackground", control );
-		defaults.put( "TextPane.disabledBackground", control );
-		defaults.put( "TextPane.inactiveBackground", control );
-
-		// initialize some own defaults (for overriding)
-		defaults.put( "Spinner.disabledBackground", control );
-		defaults.put( "Spinner.disabledForeground", control );
+		// initialize some defaults (for overriding) that are used in UI delegates,
+		// but are not set in BasicLookAndFeel
+		putDefaults( defaults, defaults.getColor( "control" ),
+			"EditorPane.disabledBackground",
+			"EditorPane.inactiveBackground",
+			"FormattedTextField.disabledBackground",
+			"PasswordField.disabledBackground",
+			"Spinner.disabledBackground",
+			"TextArea.disabledBackground",
+			"TextArea.inactiveBackground",
+			"TextField.disabledBackground",
+			"TextPane.disabledBackground",
+			"TextPane.inactiveBackground" );
+		putDefaults( defaults, defaults.getColor( "textInactiveText" ),
+			"Spinner.disabledForeground" );
 
 		// remember MenuBarUI from Mac Aqua LaF if Mac screen menubar is enabled
 		boolean useScreenMenuBar = SystemInfo.IS_MAC && "true".equals( System.getProperty( "apple.laf.useScreenMenuBar" ) );
@@ -396,6 +395,11 @@ public abstract class FlatLaf
 	private void modifyInputMap( UIDefaults defaults, String key, Object... bindings ) {
 		// Note: not using `defaults.get(key)` here because this would resolve the lazy value
 		defaults.put( key, new LazyModifyInputMap( defaults.remove( key ), bindings ) );
+	}
+
+	private void putDefaults( UIDefaults defaults, Object value, String... keys ) {
+		for( String key : keys )
+			defaults.put( key, value );
 	}
 
 	private static void reSetLookAndFeel() {
