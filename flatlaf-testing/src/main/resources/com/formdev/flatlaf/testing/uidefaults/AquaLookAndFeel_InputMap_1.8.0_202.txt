@@ -8,361 +8,361 @@ OS     Mac OS X
 #---- Button ----
 
 Button.focusInputMap           [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed SPACE                   pressed
-    released SPACE                  released
+    SPACE                 pressed
+    released SPACE        released
 
 
 #---- CheckBox ----
 
 CheckBox.focusInputMap         [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed SPACE                   pressed
-    released SPACE                  released
+    SPACE                 pressed
+    released SPACE        released
 
 
 #---- ComboBox ----
 
 ComboBox.ancestorInputMap      [lazy] 11    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    aquaSelectNext
-    pressed END                     aquaSelectEnd
-    pressed ENTER                   enterPressed
-    pressed ESCAPE                  aquaHidePopup
-    pressed HOME                    aquaSelectHome
-    pressed KP_DOWN                 aquaSelectNext
-    pressed KP_UP                   aquaSelectPrevious
-    pressed PAGE_DOWN               aquaSelectPageDown
-    pressed PAGE_UP                 aquaSelectPageUp
-    pressed SPACE                   aquaSpacePressed
-    pressed UP                      aquaSelectPrevious
+    DOWN                  aquaSelectNext
+    END                   aquaSelectEnd
+    ENTER                 enterPressed
+    ESCAPE                aquaHidePopup
+    HOME                  aquaSelectHome
+    KP_DOWN               aquaSelectNext
+    KP_UP                 aquaSelectPrevious
+    PAGE_DOWN             aquaSelectPageDown
+    PAGE_UP               aquaSelectPageUp
+    SPACE                 aquaSpacePressed
+    UP                    aquaSelectPrevious
 
 
 #---- Desktop ----
 
 Desktop.ancestorInputMap       [lazy] 29    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl alt pressed F6             selectNextFrame
-    ctrl pressed F10                maximize
-    ctrl pressed F12                navigateNext
-    ctrl pressed F4                 close
-    ctrl pressed F5                 restore
-    ctrl pressed F6                 selectNextFrame
-    ctrl pressed F7                 move
-    ctrl pressed F8                 resize
-    ctrl pressed F9                 minimize
-    ctrl pressed TAB                selectNextFrame
-    pressed DOWN                    down
-    pressed ESCAPE                  escape
-    pressed KP_DOWN                 down
-    pressed KP_LEFT                 left
-    pressed KP_RIGHT                right
-    pressed KP_UP                   up
-    pressed LEFT                    left
-    pressed RIGHT                   right
-    pressed UP                      up
-    shift ctrl alt pressed F6       selectPreviousFrame
-    shift ctrl pressed F12          navigatePrevious
-    shift pressed DOWN              shrinkDown
-    shift pressed KP_DOWN           shrinkDown
-    shift pressed KP_LEFT           shrinkLeft
-    shift pressed KP_RIGHT          shrinkRight
-    shift pressed KP_UP             shrinkUp
-    shift pressed LEFT              shrinkLeft
-    shift pressed RIGHT             shrinkRight
-    shift pressed UP                shrinkUp
+    ctrl alt F6           selectNextFrame
+    ctrl F10              maximize
+    ctrl F12              navigateNext
+    ctrl F4               close
+    ctrl F5               restore
+    ctrl F6               selectNextFrame
+    ctrl F7               move
+    ctrl F8               resize
+    ctrl F9               minimize
+    ctrl TAB              selectNextFrame
+    DOWN                  down
+    ESCAPE                escape
+    KP_DOWN               down
+    KP_LEFT               left
+    KP_RIGHT              right
+    KP_UP                 up
+    LEFT                  left
+    RIGHT                 right
+    UP                    up
+    shift ctrl alt F6     selectPreviousFrame
+    shift ctrl F12        navigatePrevious
+    shift DOWN            shrinkDown
+    shift KP_DOWN         shrinkDown
+    shift KP_LEFT         shrinkLeft
+    shift KP_RIGHT        shrinkRight
+    shift KP_UP           shrinkUp
+    shift LEFT            shrinkLeft
+    shift RIGHT           shrinkRight
+    shift UP              shrinkUp
 
 
 #---- EditorPane ----
 
 EditorPane.focusInputMap       [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed BACK_SPACE          delete-previous-word
-    alt pressed DELETE              delete-next-word
-    alt pressed KP_LEFT             caret-previous-word
-    alt pressed KP_RIGHT            caret-next-word
-    alt pressed LEFT                caret-previous-word
-    alt pressed RIGHT               caret-next-word
-    ctrl pressed A                  caret-begin-line
-    ctrl pressed B                  caret-backward
-    ctrl pressed D                  delete-next
-    ctrl pressed E                  caret-end-line
-    ctrl pressed F                  caret-forward
-    ctrl pressed H                  delete-previous
-    ctrl pressed N                  caret-down
-    ctrl pressed P                  caret-up
-    ctrl pressed V                  aqua-page-down
-    ctrl pressed W                  delete-previous-word
-    meta pressed A                  select-all
-    meta pressed BACK_SLASH         unselect
-    meta pressed C                  copy-to-clipboard
-    meta pressed DOWN               caret-end
-    meta pressed KP_DOWN            caret-end
-    meta pressed KP_LEFT            caret-begin-line
-    meta pressed KP_RIGHT           caret-end-line
-    meta pressed KP_UP              caret-begin
-    meta pressed LEFT               caret-begin-line
-    meta pressed RIGHT              caret-end-line
-    meta pressed SPACE              activate-link-action
-    meta pressed T                  next-link-action
-    meta pressed UP                 caret-begin
-    meta pressed V                  paste-from-clipboard
-    meta pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    aqua-move-down
-    pressed END                     caret-end
-    pressed ENTER                   insert-break
-    pressed HOME                    caret-begin
-    pressed KP_DOWN                 aqua-move-down
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   aqua-move-up
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               aqua-page-down
-    pressed PAGE_UP                 aqua-page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed TAB                     insert-tab
-    pressed UP                      aqua-move-up
-    shift alt pressed DOWN          selection-end-paragraph
-    shift alt pressed KP_DOWN       selection-end-paragraph
-    shift alt pressed KP_LEFT       selection-previous-word
-    shift alt pressed KP_RIGHT      selection-next-word
-    shift alt pressed KP_UP         selection-begin-paragraph
-    shift alt pressed LEFT          selection-previous-word
-    shift alt pressed RIGHT         selection-next-word
-    shift alt pressed UP            selection-begin-paragraph
-    shift ctrl pressed O            toggle-componentOrientation
-    shift meta pressed DOWN         selection-end
-    shift meta pressed KP_DOWN      selection-end
-    shift meta pressed KP_LEFT      selection-begin-line
-    shift meta pressed KP_RIGHT     selection-end-line
-    shift meta pressed KP_UP        selection-begin
-    shift meta pressed LEFT         selection-begin-line
-    shift meta pressed PAGE_DOWN    selection-page-right
-    shift meta pressed PAGE_UP      selection-page-left
-    shift meta pressed RIGHT        selection-end-line
-    shift meta pressed T            previous-link-action
-    shift meta pressed UP           selection-begin
-    shift pressed DOWN              selection-down
-    shift pressed END               selection-end
-    shift pressed HOME              selection-begin
-    shift pressed KP_DOWN           selection-down
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-up
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-up
+    alt BACK_SPACE        delete-previous-word
+    alt DELETE            delete-next-word
+    alt KP_LEFT           caret-previous-word
+    alt KP_RIGHT          caret-next-word
+    alt LEFT              caret-previous-word
+    alt RIGHT             caret-next-word
+    ctrl A                caret-begin-line
+    ctrl B                caret-backward
+    ctrl D                delete-next
+    ctrl E                caret-end-line
+    ctrl F                caret-forward
+    ctrl H                delete-previous
+    ctrl N                caret-down
+    ctrl P                caret-up
+    ctrl V                aqua-page-down
+    ctrl W                delete-previous-word
+    meta A                select-all
+    meta BACK_SLASH       unselect
+    meta C                copy-to-clipboard
+    meta DOWN             caret-end
+    meta KP_DOWN          caret-end
+    meta KP_LEFT          caret-begin-line
+    meta KP_RIGHT         caret-end-line
+    meta KP_UP            caret-begin
+    meta LEFT             caret-begin-line
+    meta RIGHT            caret-end-line
+    meta SPACE            activate-link-action
+    meta T                next-link-action
+    meta UP               caret-begin
+    meta V                paste-from-clipboard
+    meta X                cut-to-clipboard
+    BACK_SPACE            delete-previous
+    COPY                  copy-to-clipboard
+    CUT                   cut-to-clipboard
+    DELETE                delete-next
+    DOWN                  aqua-move-down
+    END                   caret-end
+    ENTER                 insert-break
+    HOME                  caret-begin
+    KP_DOWN               aqua-move-down
+    KP_LEFT               caret-backward
+    KP_RIGHT              caret-forward
+    KP_UP                 aqua-move-up
+    LEFT                  caret-backward
+    PAGE_DOWN             aqua-page-down
+    PAGE_UP               aqua-page-up
+    PASTE                 paste-from-clipboard
+    RIGHT                 caret-forward
+    TAB                   insert-tab
+    UP                    aqua-move-up
+    shift alt DOWN        selection-end-paragraph
+    shift alt KP_DOWN     selection-end-paragraph
+    shift alt KP_LEFT     selection-previous-word
+    shift alt KP_RIGHT    selection-next-word
+    shift alt KP_UP       selection-begin-paragraph
+    shift alt LEFT        selection-previous-word
+    shift alt RIGHT       selection-next-word
+    shift alt UP          selection-begin-paragraph
+    shift ctrl O          toggle-componentOrientation
+    shift meta DOWN       selection-end
+    shift meta KP_DOWN    selection-end
+    shift meta KP_LEFT    selection-begin-line
+    shift meta KP_RIGHT   selection-end-line
+    shift meta KP_UP      selection-begin
+    shift meta LEFT       selection-begin-line
+    shift meta PAGE_DOWN  selection-page-right
+    shift meta PAGE_UP    selection-page-left
+    shift meta RIGHT      selection-end-line
+    shift meta T          previous-link-action
+    shift meta UP         selection-begin
+    shift DOWN            selection-down
+    shift END             selection-end
+    shift HOME            selection-begin
+    shift KP_DOWN         selection-down
+    shift KP_LEFT         selection-backward
+    shift KP_RIGHT        selection-forward
+    shift KP_UP           selection-up
+    shift LEFT            selection-backward
+    shift PAGE_DOWN       selection-page-down
+    shift PAGE_UP         selection-page-up
+    shift RIGHT           selection-forward
+    shift UP              selection-up
 
 
 #---- FileChooser ----
 
 FileChooser.ancestorInputMap   [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed ESCAPE                  cancelSelection
-    pressed F5                      refresh
+    ESCAPE                cancelSelection
+    F5                    refresh
 
 
 #---- FormattedTextField ----
 
 FormattedTextField.focusInputMap [lazy] 75    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed BACK_SPACE          delete-previous-word
-    alt pressed DELETE              delete-next-word
-    alt pressed KP_LEFT             caret-previous-word
-    alt pressed KP_RIGHT            caret-next-word
-    alt pressed LEFT                caret-previous-word
-    alt pressed RIGHT               caret-next-word
-    ctrl pressed A                  caret-begin-line
-    ctrl pressed B                  caret-backward
-    ctrl pressed D                  delete-next
-    ctrl pressed E                  caret-end-line
-    ctrl pressed F                  caret-forward
-    ctrl pressed H                  delete-previous
-    ctrl pressed N                  caret-end
-    ctrl pressed P                  caret-begin
-    ctrl pressed V                  caret-end
-    ctrl pressed W                  delete-previous-word
-    meta pressed A                  select-all
-    meta pressed BACK_SLASH         unselect
-    meta pressed C                  copy-to-clipboard
-    meta pressed DOWN               caret-end
-    meta pressed KP_DOWN            caret-end
-    meta pressed KP_LEFT            caret-begin-line
-    meta pressed KP_RIGHT           caret-end-line
-    meta pressed KP_UP              caret-begin
-    meta pressed LEFT               caret-begin-line
-    meta pressed RIGHT              caret-end-line
-    meta pressed UP                 caret-begin
-    meta pressed V                  paste-from-clipboard
-    meta pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    decrement
-    pressed END                     caret-end
-    pressed ENTER                   notify-field-accept
-    pressed ESCAPE                  reset-field-edit
-    pressed HOME                    caret-begin
-    pressed KP_DOWN                 decrement
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   increment
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               aqua-page-down
-    pressed PAGE_UP                 aqua-page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed UP                      increment
-    shift alt pressed KP_LEFT       selection-previous-word
-    shift alt pressed KP_RIGHT      selection-next-word
-    shift alt pressed LEFT          selection-previous-word
-    shift alt pressed RIGHT         selection-next-word
-    shift ctrl pressed O            toggle-componentOrientation
-    shift meta pressed DOWN         selection-end
-    shift meta pressed KP_DOWN      selection-end
-    shift meta pressed KP_LEFT      selection-begin-line
-    shift meta pressed KP_RIGHT     selection-end-line
-    shift meta pressed KP_UP        selection-begin
-    shift meta pressed LEFT         selection-begin-line
-    shift meta pressed PAGE_DOWN    selection-page-right
-    shift meta pressed PAGE_UP      selection-page-left
-    shift meta pressed RIGHT        selection-end-line
-    shift meta pressed UP           selection-begin
-    shift pressed DOWN              selection-end-line
-    shift pressed END               selection-end
-    shift pressed HOME              selection-begin
-    shift pressed KP_DOWN           selection-end-line
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-begin-line
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-begin-line
+    alt BACK_SPACE        delete-previous-word
+    alt DELETE            delete-next-word
+    alt KP_LEFT           caret-previous-word
+    alt KP_RIGHT          caret-next-word
+    alt LEFT              caret-previous-word
+    alt RIGHT             caret-next-word
+    ctrl A                caret-begin-line
+    ctrl B                caret-backward
+    ctrl D                delete-next
+    ctrl E                caret-end-line
+    ctrl F                caret-forward
+    ctrl H                delete-previous
+    ctrl N                caret-end
+    ctrl P                caret-begin
+    ctrl V                caret-end
+    ctrl W                delete-previous-word
+    meta A                select-all
+    meta BACK_SLASH       unselect
+    meta C                copy-to-clipboard
+    meta DOWN             caret-end
+    meta KP_DOWN          caret-end
+    meta KP_LEFT          caret-begin-line
+    meta KP_RIGHT         caret-end-line
+    meta KP_UP            caret-begin
+    meta LEFT             caret-begin-line
+    meta RIGHT            caret-end-line
+    meta UP               caret-begin
+    meta V                paste-from-clipboard
+    meta X                cut-to-clipboard
+    BACK_SPACE            delete-previous
+    COPY                  copy-to-clipboard
+    CUT                   cut-to-clipboard
+    DELETE                delete-next
+    DOWN                  decrement
+    END                   caret-end
+    ENTER                 notify-field-accept
+    ESCAPE                reset-field-edit
+    HOME                  caret-begin
+    KP_DOWN               decrement
+    KP_LEFT               caret-backward
+    KP_RIGHT              caret-forward
+    KP_UP                 increment
+    LEFT                  caret-backward
+    PAGE_DOWN             aqua-page-down
+    PAGE_UP               aqua-page-up
+    PASTE                 paste-from-clipboard
+    RIGHT                 caret-forward
+    UP                    increment
+    shift alt KP_LEFT     selection-previous-word
+    shift alt KP_RIGHT    selection-next-word
+    shift alt LEFT        selection-previous-word
+    shift alt RIGHT       selection-next-word
+    shift ctrl O          toggle-componentOrientation
+    shift meta DOWN       selection-end
+    shift meta KP_DOWN    selection-end
+    shift meta KP_LEFT    selection-begin-line
+    shift meta KP_RIGHT   selection-end-line
+    shift meta KP_UP      selection-begin
+    shift meta LEFT       selection-begin-line
+    shift meta PAGE_DOWN  selection-page-right
+    shift meta PAGE_UP    selection-page-left
+    shift meta RIGHT      selection-end-line
+    shift meta UP         selection-begin
+    shift DOWN            selection-end-line
+    shift END             selection-end
+    shift HOME            selection-begin
+    shift KP_DOWN         selection-end-line
+    shift KP_LEFT         selection-backward
+    shift KP_RIGHT        selection-forward
+    shift KP_UP           selection-begin-line
+    shift LEFT            selection-backward
+    shift PAGE_DOWN       selection-page-down
+    shift PAGE_UP         selection-page-up
+    shift RIGHT           selection-forward
+    shift UP              selection-begin-line
 
 
 #---- List ----
 
 List.focusInputMap.RightToLeft [lazy] 16    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed KP_LEFT            selectNextColumnChangeLead
-    ctrl pressed KP_RIGHT           selectPreviousColumnChangeLead
-    ctrl pressed LEFT               selectNextColumnChangeLead
-    ctrl pressed RIGHT              selectPreviousColumnChangeLead
-    pressed KP_LEFT                 selectNextColumn
-    pressed KP_RIGHT                selectPreviousColumn
-    pressed LEFT                    selectNextColumn
-    pressed RIGHT                   selectPreviousColumn
-    shift ctrl pressed KP_LEFT      selectNextColumnExtendSelection
-    shift ctrl pressed KP_RIGHT     selectPreviousColumnExtendSelection
-    shift ctrl pressed LEFT         selectNextColumnExtendSelection
-    shift ctrl pressed RIGHT        selectPreviousColumnExtendSelection
-    shift pressed KP_LEFT           selectNextColumnExtendSelection
-    shift pressed KP_RIGHT          selectPreviousColumnExtendSelection
-    shift pressed LEFT              selectNextColumnExtendSelection
-    shift pressed RIGHT             selectPreviousColumnExtendSelection
+    ctrl KP_LEFT          selectNextColumnChangeLead
+    ctrl KP_RIGHT         selectPreviousColumnChangeLead
+    ctrl LEFT             selectNextColumnChangeLead
+    ctrl RIGHT            selectPreviousColumnChangeLead
+    KP_LEFT               selectNextColumn
+    KP_RIGHT              selectPreviousColumn
+    LEFT                  selectNextColumn
+    RIGHT                 selectPreviousColumn
+    shift ctrl KP_LEFT    selectNextColumnExtendSelection
+    shift ctrl KP_RIGHT   selectPreviousColumnExtendSelection
+    shift ctrl LEFT       selectNextColumnExtendSelection
+    shift ctrl RIGHT      selectPreviousColumnExtendSelection
+    shift KP_LEFT         selectNextColumnExtendSelection
+    shift KP_RIGHT        selectPreviousColumnExtendSelection
+    shift LEFT            selectNextColumnExtendSelection
+    shift RIGHT           selectPreviousColumnExtendSelection
 List.focusInputMap             [lazy] 29    javax.swing.plaf.InputMapUIResource [UI]
-    meta pressed A                  selectAll
-    meta pressed C                  copy
-    meta pressed V                  paste
-    meta pressed X                  cut
-    pressed COPY                    copy
-    pressed CUT                     cut
-    pressed DOWN                    selectNextRow
-    pressed END                     aquaEnd
-    pressed HOME                    aquaHome
-    pressed KP_DOWN                 selectNextRow
-    pressed KP_LEFT                 selectPreviousColumn
-    pressed KP_RIGHT                selectNextColumn
-    pressed KP_UP                   selectPreviousRow
-    pressed LEFT                    selectPreviousColumn
-    pressed PASTE                   paste
-    pressed RIGHT                   selectNextColumn
-    pressed UP                      selectPreviousRow
-    shift pressed DOWN              selectNextRowExtendSelection
-    shift pressed END               selectLastRowExtendSelection
-    shift pressed HOME              selectFirstRowExtendSelection
-    shift pressed KP_DOWN           selectNextRowExtendSelection
-    shift pressed KP_LEFT           selectPreviousColumnExtendSelection
-    shift pressed KP_RIGHT          selectNextColumnExtendSelection
-    shift pressed KP_UP             selectPreviousRowExtendSelection
-    shift pressed LEFT              selectPreviousColumnExtendSelection
-    shift pressed PAGE_DOWN         scrollDownExtendSelection
-    shift pressed PAGE_UP           scrollUpExtendSelection
-    shift pressed RIGHT             selectNextColumnExtendSelection
-    shift pressed UP                selectPreviousRowExtendSelection
+    meta A                selectAll
+    meta C                copy
+    meta V                paste
+    meta X                cut
+    COPY                  copy
+    CUT                   cut
+    DOWN                  selectNextRow
+    END                   aquaEnd
+    HOME                  aquaHome
+    KP_DOWN               selectNextRow
+    KP_LEFT               selectPreviousColumn
+    KP_RIGHT              selectNextColumn
+    KP_UP                 selectPreviousRow
+    LEFT                  selectPreviousColumn
+    PASTE                 paste
+    RIGHT                 selectNextColumn
+    UP                    selectPreviousRow
+    shift DOWN            selectNextRowExtendSelection
+    shift END             selectLastRowExtendSelection
+    shift HOME            selectFirstRowExtendSelection
+    shift KP_DOWN         selectNextRowExtendSelection
+    shift KP_LEFT         selectPreviousColumnExtendSelection
+    shift KP_RIGHT        selectNextColumnExtendSelection
+    shift KP_UP           selectPreviousRowExtendSelection
+    shift LEFT            selectPreviousColumnExtendSelection
+    shift PAGE_DOWN       scrollDownExtendSelection
+    shift PAGE_UP         scrollUpExtendSelection
+    shift RIGHT           selectNextColumnExtendSelection
+    shift UP              selectPreviousRowExtendSelection
 
 
 #---- PasswordField ----
 
 PasswordField.focusInputMap    [lazy] 66    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed BACK_SPACE          delete-previous-word
-    alt pressed DELETE              delete-next-word
-    ctrl pressed A                  caret-begin-line
-    ctrl pressed B                  caret-backward
-    ctrl pressed D                  delete-next
-    ctrl pressed E                  caret-end-line
-    ctrl pressed F                  caret-forward
-    ctrl pressed H                  delete-previous
-    ctrl pressed N                  caret-end
-    ctrl pressed P                  caret-begin
-    ctrl pressed V                  caret-end
-    ctrl pressed W                  delete-previous-word
-    meta pressed A                  select-all
-    meta pressed BACK_SLASH         unselect
-    meta pressed C                  copy-to-clipboard
-    meta pressed DOWN               caret-end
-    meta pressed KP_DOWN            caret-end
-    meta pressed KP_LEFT            caret-begin-line
-    meta pressed KP_RIGHT           caret-end-line
-    meta pressed KP_UP              caret-begin
-    meta pressed LEFT               caret-begin-line
-    meta pressed RIGHT              caret-end-line
-    meta pressed UP                 caret-begin
-    meta pressed V                  paste-from-clipboard
-    meta pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    caret-end-line
-    pressed END                     caret-end
-    pressed ENTER                   notify-field-accept
-    pressed HOME                    caret-begin
-    pressed KP_DOWN                 caret-end-line
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   caret-begin-line
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               aqua-page-down
-    pressed PAGE_UP                 aqua-page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed UP                      caret-begin-line
-    shift ctrl pressed O            toggle-componentOrientation
-    shift meta pressed DOWN         selection-end
-    shift meta pressed KP_DOWN      selection-end
-    shift meta pressed KP_LEFT      selection-begin-line
-    shift meta pressed KP_RIGHT     selection-end-line
-    shift meta pressed KP_UP        selection-begin
-    shift meta pressed LEFT         selection-begin-line
-    shift meta pressed PAGE_DOWN    selection-page-right
-    shift meta pressed PAGE_UP      selection-page-left
-    shift meta pressed RIGHT        selection-end-line
-    shift meta pressed UP           selection-begin
-    shift pressed DOWN              selection-end-line
-    shift pressed END               selection-end
-    shift pressed HOME              selection-begin
-    shift pressed KP_DOWN           selection-end-line
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-begin-line
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-begin-line
+    alt BACK_SPACE        delete-previous-word
+    alt DELETE            delete-next-word
+    ctrl A                caret-begin-line
+    ctrl B                caret-backward
+    ctrl D                delete-next
+    ctrl E                caret-end-line
+    ctrl F                caret-forward
+    ctrl H                delete-previous
+    ctrl N                caret-end
+    ctrl P                caret-begin
+    ctrl V                caret-end
+    ctrl W                delete-previous-word
+    meta A                select-all
+    meta BACK_SLASH       unselect
+    meta C                copy-to-clipboard
+    meta DOWN             caret-end
+    meta KP_DOWN          caret-end
+    meta KP_LEFT          caret-begin-line
+    meta KP_RIGHT         caret-end-line
+    meta KP_UP            caret-begin
+    meta LEFT             caret-begin-line
+    meta RIGHT            caret-end-line
+    meta UP               caret-begin
+    meta V                paste-from-clipboard
+    meta X                cut-to-clipboard
+    BACK_SPACE            delete-previous
+    COPY                  copy-to-clipboard
+    CUT                   cut-to-clipboard
+    DELETE                delete-next
+    DOWN                  caret-end-line
+    END                   caret-end
+    ENTER                 notify-field-accept
+    HOME                  caret-begin
+    KP_DOWN               caret-end-line
+    KP_LEFT               caret-backward
+    KP_RIGHT              caret-forward
+    KP_UP                 caret-begin-line
+    LEFT                  caret-backward
+    PAGE_DOWN             aqua-page-down
+    PAGE_UP               aqua-page-up
+    PASTE                 paste-from-clipboard
+    RIGHT                 caret-forward
+    UP                    caret-begin-line
+    shift ctrl O          toggle-componentOrientation
+    shift meta DOWN       selection-end
+    shift meta KP_DOWN    selection-end
+    shift meta KP_LEFT    selection-begin-line
+    shift meta KP_RIGHT   selection-end-line
+    shift meta KP_UP      selection-begin
+    shift meta LEFT       selection-begin-line
+    shift meta PAGE_DOWN  selection-page-right
+    shift meta PAGE_UP    selection-page-left
+    shift meta RIGHT      selection-end-line
+    shift meta UP         selection-begin
+    shift DOWN            selection-end-line
+    shift END             selection-end
+    shift HOME            selection-begin
+    shift KP_DOWN         selection-end-line
+    shift KP_LEFT         selection-backward
+    shift KP_RIGHT        selection-forward
+    shift KP_UP           selection-begin-line
+    shift LEFT            selection-backward
+    shift PAGE_DOWN       selection-page-down
+    shift PAGE_UP         selection-page-up
+    shift RIGHT           selection-forward
+    shift UP              selection-begin-line
 
 
 #---- PopupMenu ----
@@ -406,539 +406,539 @@ PopupMenu.selectedWindowInputMapBindings length=24    [Ljava.lang.Object;
 #---- RadioButton ----
 
 RadioButton.focusInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed SPACE                   pressed
-    released SPACE                  released
+    SPACE                 pressed
+    released SPACE        released
 
 
 #---- RootPane ----
 
 RootPane.ancestorInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed CONTEXT_MENU            postPopup
-    shift pressed F10               postPopup
+    CONTEXT_MENU          postPopup
+    shift F10             postPopup
 
 
 #---- ScrollBar ----
 
 ScrollBar.ancestorInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed KP_LEFT                 positiveUnitIncrement
-    pressed KP_RIGHT                negativeUnitIncrement
-    pressed LEFT                    positiveUnitIncrement
-    pressed RIGHT                   negativeUnitIncrement
+    KP_LEFT               positiveUnitIncrement
+    KP_RIGHT              negativeUnitIncrement
+    LEFT                  positiveUnitIncrement
+    RIGHT                 negativeUnitIncrement
 ScrollBar.ancestorInputMap     [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    positiveUnitIncrement
-    pressed END                     maxScroll
-    pressed HOME                    minScroll
-    pressed KP_DOWN                 positiveUnitIncrement
-    pressed KP_LEFT                 negativeUnitIncrement
-    pressed KP_RIGHT                positiveUnitIncrement
-    pressed KP_UP                   negativeUnitIncrement
-    pressed LEFT                    negativeUnitIncrement
-    pressed PAGE_DOWN               positiveBlockIncrement
-    pressed PAGE_UP                 negativeBlockIncrement
-    pressed RIGHT                   positiveUnitIncrement
-    pressed UP                      negativeUnitIncrement
+    DOWN                  positiveUnitIncrement
+    END                   maxScroll
+    HOME                  minScroll
+    KP_DOWN               positiveUnitIncrement
+    KP_LEFT               negativeUnitIncrement
+    KP_RIGHT              positiveUnitIncrement
+    KP_UP                 negativeUnitIncrement
+    LEFT                  negativeUnitIncrement
+    PAGE_DOWN             positiveBlockIncrement
+    PAGE_UP               negativeBlockIncrement
+    RIGHT                 positiveUnitIncrement
+    UP                    negativeUnitIncrement
 ScrollBar.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed KP_LEFT                 positiveUnitIncrement
-    pressed KP_RIGHT                negativeUnitIncrement
-    pressed LEFT                    positiveUnitIncrement
-    pressed RIGHT                   negativeUnitIncrement
+    KP_LEFT               positiveUnitIncrement
+    KP_RIGHT              negativeUnitIncrement
+    LEFT                  positiveUnitIncrement
+    RIGHT                 negativeUnitIncrement
 ScrollBar.focusInputMap        [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    positiveUnitIncrement
-    pressed END                     maxScroll
-    pressed HOME                    minScroll
-    pressed KP_DOWN                 positiveUnitIncrement
-    pressed KP_LEFT                 negativeUnitIncrement
-    pressed KP_RIGHT                positiveUnitIncrement
-    pressed KP_UP                   negativeUnitIncrement
-    pressed LEFT                    negativeUnitIncrement
-    pressed PAGE_DOWN               positiveBlockIncrement
-    pressed PAGE_UP                 negativeBlockIncrement
-    pressed RIGHT                   positiveUnitIncrement
-    pressed UP                      negativeUnitIncrement
+    DOWN                  positiveUnitIncrement
+    END                   maxScroll
+    HOME                  minScroll
+    KP_DOWN               positiveUnitIncrement
+    KP_LEFT               negativeUnitIncrement
+    KP_RIGHT              positiveUnitIncrement
+    KP_UP                 negativeUnitIncrement
+    LEFT                  negativeUnitIncrement
+    PAGE_DOWN             positiveBlockIncrement
+    PAGE_UP               negativeBlockIncrement
+    RIGHT                 positiveUnitIncrement
+    UP                    negativeUnitIncrement
 
 
 #---- ScrollPane ----
 
 ScrollPane.ancestorInputMap.RightToLeft [lazy] 0    javax.swing.plaf.InputMapUIResource [UI]
 ScrollPane.ancestorInputMap    [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    unitScrollDown
-    pressed END                     scrollEnd
-    pressed HOME                    scrollHome
-    pressed KP_DOWN                 unitScrollDown
-    pressed KP_LEFT                 unitScrollLeft
-    pressed KP_RIGHT                unitScrollRight
-    pressed KP_UP                   unitScrollUp
-    pressed LEFT                    unitScrollLeft
-    pressed PAGE_DOWN               scrollDown
-    pressed PAGE_UP                 scrollUp
-    pressed RIGHT                   unitScrollRight
-    pressed UP                      unitScrollUp
+    DOWN                  unitScrollDown
+    END                   scrollEnd
+    HOME                  scrollHome
+    KP_DOWN               unitScrollDown
+    KP_LEFT               unitScrollLeft
+    KP_RIGHT              unitScrollRight
+    KP_UP                 unitScrollUp
+    LEFT                  unitScrollLeft
+    PAGE_DOWN             scrollDown
+    PAGE_UP               scrollUp
+    RIGHT                 unitScrollRight
+    UP                    unitScrollUp
 
 
 #---- Slider ----
 
 Slider.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed KP_LEFT                 positiveUnitIncrement
-    pressed KP_RIGHT                negativeUnitIncrement
-    pressed LEFT                    positiveUnitIncrement
-    pressed RIGHT                   negativeUnitIncrement
+    KP_LEFT               positiveUnitIncrement
+    KP_RIGHT              negativeUnitIncrement
+    LEFT                  positiveUnitIncrement
+    RIGHT                 negativeUnitIncrement
 Slider.focusInputMap           [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    negativeUnitIncrement
-    pressed END                     maxScroll
-    pressed HOME                    minScroll
-    pressed KP_DOWN                 negativeUnitIncrement
-    pressed KP_LEFT                 negativeUnitIncrement
-    pressed KP_RIGHT                positiveUnitIncrement
-    pressed KP_UP                   positiveUnitIncrement
-    pressed LEFT                    negativeUnitIncrement
-    pressed PAGE_DOWN               negativeBlockIncrement
-    pressed PAGE_UP                 positiveBlockIncrement
-    pressed RIGHT                   positiveUnitIncrement
-    pressed UP                      positiveUnitIncrement
+    DOWN                  negativeUnitIncrement
+    END                   maxScroll
+    HOME                  minScroll
+    KP_DOWN               negativeUnitIncrement
+    KP_LEFT               negativeUnitIncrement
+    KP_RIGHT              positiveUnitIncrement
+    KP_UP                 positiveUnitIncrement
+    LEFT                  negativeUnitIncrement
+    PAGE_DOWN             negativeBlockIncrement
+    PAGE_UP               positiveBlockIncrement
+    RIGHT                 positiveUnitIncrement
+    UP                    positiveUnitIncrement
 
 
 #---- Spinner ----
 
 Spinner.ancestorInputMap       [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    decrement
-    pressed KP_DOWN                 decrement
-    pressed KP_UP                   increment
-    pressed UP                      increment
+    DOWN                  decrement
+    KP_DOWN               decrement
+    KP_UP                 increment
+    UP                    increment
 
 
 #---- SplitPane ----
 
 SplitPane.ancestorInputMap     [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed TAB                focusOutForward
-    pressed DOWN                    positiveIncrement
-    pressed END                     selectMax
-    pressed F6                      toggleFocus
-    pressed F8                      startResize
-    pressed HOME                    selectMin
-    pressed KP_DOWN                 positiveIncrement
-    pressed KP_LEFT                 negativeIncrement
-    pressed KP_RIGHT                positiveIncrement
-    pressed KP_UP                   negativeIncrement
-    pressed LEFT                    negativeIncrement
-    pressed RIGHT                   positiveIncrement
-    pressed UP                      negativeIncrement
-    shift ctrl pressed TAB          focusOutBackward
+    ctrl TAB              focusOutForward
+    DOWN                  positiveIncrement
+    END                   selectMax
+    F6                    toggleFocus
+    F8                    startResize
+    HOME                  selectMin
+    KP_DOWN               positiveIncrement
+    KP_LEFT               negativeIncrement
+    KP_RIGHT              positiveIncrement
+    KP_UP                 negativeIncrement
+    LEFT                  negativeIncrement
+    RIGHT                 positiveIncrement
+    UP                    negativeIncrement
+    shift ctrl TAB        focusOutBackward
 
 
 #---- TabbedPane ----
 
 TabbedPane.ancestorInputMap    [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed KP_UP              requestFocus
-    ctrl pressed PAGE_DOWN          navigatePageDown
-    ctrl pressed PAGE_UP            navigatePageUp
-    ctrl pressed UP                 requestFocus
+    ctrl KP_UP            requestFocus
+    ctrl PAGE_DOWN        navigatePageDown
+    ctrl PAGE_UP          navigatePageUp
+    ctrl UP               requestFocus
 TabbedPane.focusInputMap       [lazy] 10    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed DOWN               requestFocusForVisibleComponent
-    ctrl pressed KP_DOWN            requestFocusForVisibleComponent
-    pressed DOWN                    navigateDown
-    pressed KP_DOWN                 navigateDown
-    pressed KP_LEFT                 navigateLeft
-    pressed KP_RIGHT                navigateRight
-    pressed KP_UP                   navigateUp
-    pressed LEFT                    navigateLeft
-    pressed RIGHT                   navigateRight
-    pressed UP                      navigateUp
+    ctrl DOWN             requestFocusForVisibleComponent
+    ctrl KP_DOWN          requestFocusForVisibleComponent
+    DOWN                  navigateDown
+    KP_DOWN               navigateDown
+    KP_LEFT               navigateLeft
+    KP_RIGHT              navigateRight
+    KP_UP                 navigateUp
+    LEFT                  navigateLeft
+    RIGHT                 navigateRight
+    UP                    navigateUp
 
 
 #---- Table ----
 
 Table.ancestorInputMap.RightToLeft [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed PAGE_DOWN          scrollLeftChangeSelection
-    ctrl pressed PAGE_UP            scrollRightChangeSelection
-    pressed KP_LEFT                 selectNextColumn
-    pressed KP_RIGHT                selectPreviousColumn
-    pressed LEFT                    selectNextColumn
-    pressed RIGHT                   selectPreviousColumn
-    shift ctrl pressed PAGE_DOWN    scrollLeftExtendSelection
-    shift ctrl pressed PAGE_UP      scrollRightExtendSelection
-    shift pressed KP_LEFT           selectNextColumnExtendSelection
-    shift pressed KP_RIGHT          selectPreviousColumnExtendSelection
-    shift pressed LEFT              selectNextColumnExtendSelection
-    shift pressed RIGHT             selectPreviousColumnExtendSelection
+    ctrl PAGE_DOWN        scrollLeftChangeSelection
+    ctrl PAGE_UP          scrollRightChangeSelection
+    KP_LEFT               selectNextColumn
+    KP_RIGHT              selectPreviousColumn
+    LEFT                  selectNextColumn
+    RIGHT                 selectPreviousColumn
+    shift ctrl PAGE_DOWN  scrollLeftExtendSelection
+    shift ctrl PAGE_UP    scrollRightExtendSelection
+    shift KP_LEFT         selectNextColumnExtendSelection
+    shift KP_RIGHT        selectPreviousColumnExtendSelection
+    shift LEFT            selectNextColumnExtendSelection
+    shift RIGHT           selectPreviousColumnExtendSelection
 Table.ancestorInputMap         [lazy] 38    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed TAB                 focusHeader
-    meta pressed A                  selectAll
-    meta pressed C                  copy
-    meta pressed V                  paste
-    meta pressed X                  cut
-    pressed COPY                    copy
-    pressed CUT                     cut
-    pressed DOWN                    selectNextRow
-    pressed END                     selectLastColumn
-    pressed ENTER                   selectNextRowCell
-    pressed ESCAPE                  cancel
-    pressed HOME                    selectFirstColumn
-    pressed KP_DOWN                 selectNextRow
-    pressed KP_LEFT                 selectPreviousColumn
-    pressed KP_RIGHT                selectNextColumn
-    pressed KP_UP                   selectPreviousRow
-    pressed LEFT                    selectPreviousColumn
-    pressed PAGE_DOWN               scrollDownChangeSelection
-    pressed PAGE_UP                 scrollUpChangeSelection
-    pressed PASTE                   paste
-    pressed RIGHT                   selectNextColumn
-    pressed TAB                     selectNextColumnCell
-    pressed UP                      selectPreviousRow
-    shift alt pressed TAB           focusHeader
-    shift pressed DOWN              selectNextRowExtendSelection
-    shift pressed END               selectLastColumnExtendSelection
-    shift pressed ENTER             selectPreviousRowCell
-    shift pressed HOME              selectFirstColumnExtendSelection
-    shift pressed KP_DOWN           selectNextRowExtendSelection
-    shift pressed KP_LEFT           selectPreviousColumnExtendSelection
-    shift pressed KP_RIGHT          selectNextColumnExtendSelection
-    shift pressed KP_UP             selectPreviousRowExtendSelection
-    shift pressed LEFT              selectPreviousColumnExtendSelection
-    shift pressed PAGE_DOWN         scrollDownExtendSelection
-    shift pressed PAGE_UP           scrollUpExtendSelection
-    shift pressed RIGHT             selectNextColumnExtendSelection
-    shift pressed TAB               selectPreviousColumnCell
-    shift pressed UP                selectPreviousRowExtendSelection
+    alt TAB               focusHeader
+    meta A                selectAll
+    meta C                copy
+    meta V                paste
+    meta X                cut
+    COPY                  copy
+    CUT                   cut
+    DOWN                  selectNextRow
+    END                   selectLastColumn
+    ENTER                 selectNextRowCell
+    ESCAPE                cancel
+    HOME                  selectFirstColumn
+    KP_DOWN               selectNextRow
+    KP_LEFT               selectPreviousColumn
+    KP_RIGHT              selectNextColumn
+    KP_UP                 selectPreviousRow
+    LEFT                  selectPreviousColumn
+    PAGE_DOWN             scrollDownChangeSelection
+    PAGE_UP               scrollUpChangeSelection
+    PASTE                 paste
+    RIGHT                 selectNextColumn
+    TAB                   selectNextColumnCell
+    UP                    selectPreviousRow
+    shift alt TAB         focusHeader
+    shift DOWN            selectNextRowExtendSelection
+    shift END             selectLastColumnExtendSelection
+    shift ENTER           selectPreviousRowCell
+    shift HOME            selectFirstColumnExtendSelection
+    shift KP_DOWN         selectNextRowExtendSelection
+    shift KP_LEFT         selectPreviousColumnExtendSelection
+    shift KP_RIGHT        selectNextColumnExtendSelection
+    shift KP_UP           selectPreviousRowExtendSelection
+    shift LEFT            selectPreviousColumnExtendSelection
+    shift PAGE_DOWN       scrollDownExtendSelection
+    shift PAGE_UP         scrollUpExtendSelection
+    shift RIGHT           selectNextColumnExtendSelection
+    shift TAB             selectPreviousColumnCell
+    shift UP              selectPreviousRowExtendSelection
 
 
 #---- TableHeader ----
 
 TableHeader.ancestorInputMap   [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed KP_LEFT             moveColumnLeft
-    alt pressed KP_RIGHT            moveColumnRight
-    alt pressed LEFT                moveColumnLeft
-    alt pressed RIGHT               moveColumnRight
-    pressed ESCAPE                  focusTable
-    pressed KP_LEFT                 selectColumnToLeft
-    pressed KP_RIGHT                selectColumnToRight
-    pressed LEFT                    selectColumnToLeft
-    pressed RIGHT                   selectColumnToRight
-    pressed SPACE                   toggleSortOrder
-    shift alt pressed KP_LEFT       resizeLeft
-    shift alt pressed KP_RIGHT      resizeRight
-    shift alt pressed LEFT          resizeLeft
-    shift alt pressed RIGHT         resizeRight
+    alt KP_LEFT           moveColumnLeft
+    alt KP_RIGHT          moveColumnRight
+    alt LEFT              moveColumnLeft
+    alt RIGHT             moveColumnRight
+    ESCAPE                focusTable
+    KP_LEFT               selectColumnToLeft
+    KP_RIGHT              selectColumnToRight
+    LEFT                  selectColumnToLeft
+    RIGHT                 selectColumnToRight
+    SPACE                 toggleSortOrder
+    shift alt KP_LEFT     resizeLeft
+    shift alt KP_RIGHT    resizeRight
+    shift alt LEFT        resizeLeft
+    shift alt RIGHT       resizeRight
 
 
 #---- TextArea ----
 
 TextArea.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed BACK_SPACE          delete-previous-word
-    alt pressed DELETE              delete-next-word
-    alt pressed KP_LEFT             caret-previous-word
-    alt pressed KP_RIGHT            caret-next-word
-    alt pressed LEFT                caret-previous-word
-    alt pressed RIGHT               caret-next-word
-    ctrl pressed A                  caret-begin-line
-    ctrl pressed B                  caret-backward
-    ctrl pressed D                  delete-next
-    ctrl pressed E                  caret-end-line
-    ctrl pressed F                  caret-forward
-    ctrl pressed H                  delete-previous
-    ctrl pressed N                  caret-down
-    ctrl pressed P                  caret-up
-    ctrl pressed V                  aqua-page-down
-    ctrl pressed W                  delete-previous-word
-    meta pressed A                  select-all
-    meta pressed BACK_SLASH         unselect
-    meta pressed C                  copy-to-clipboard
-    meta pressed DOWN               caret-end
-    meta pressed KP_DOWN            caret-end
-    meta pressed KP_LEFT            caret-begin-line
-    meta pressed KP_RIGHT           caret-end-line
-    meta pressed KP_UP              caret-begin
-    meta pressed LEFT               caret-begin-line
-    meta pressed RIGHT              caret-end-line
-    meta pressed SPACE              activate-link-action
-    meta pressed T                  next-link-action
-    meta pressed UP                 caret-begin
-    meta pressed V                  paste-from-clipboard
-    meta pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    aqua-move-down
-    pressed END                     caret-end
-    pressed ENTER                   insert-break
-    pressed HOME                    caret-begin
-    pressed KP_DOWN                 aqua-move-down
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   aqua-move-up
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               aqua-page-down
-    pressed PAGE_UP                 aqua-page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed TAB                     insert-tab
-    pressed UP                      aqua-move-up
-    shift alt pressed DOWN          selection-end-paragraph
-    shift alt pressed KP_DOWN       selection-end-paragraph
-    shift alt pressed KP_LEFT       selection-previous-word
-    shift alt pressed KP_RIGHT      selection-next-word
-    shift alt pressed KP_UP         selection-begin-paragraph
-    shift alt pressed LEFT          selection-previous-word
-    shift alt pressed RIGHT         selection-next-word
-    shift alt pressed UP            selection-begin-paragraph
-    shift ctrl pressed O            toggle-componentOrientation
-    shift meta pressed DOWN         selection-end
-    shift meta pressed KP_DOWN      selection-end
-    shift meta pressed KP_LEFT      selection-begin-line
-    shift meta pressed KP_RIGHT     selection-end-line
-    shift meta pressed KP_UP        selection-begin
-    shift meta pressed LEFT         selection-begin-line
-    shift meta pressed PAGE_DOWN    selection-page-right
-    shift meta pressed PAGE_UP      selection-page-left
-    shift meta pressed RIGHT        selection-end-line
-    shift meta pressed T            previous-link-action
-    shift meta pressed UP           selection-begin
-    shift pressed DOWN              selection-down
-    shift pressed END               selection-end
-    shift pressed HOME              selection-begin
-    shift pressed KP_DOWN           selection-down
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-up
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-up
+    alt BACK_SPACE        delete-previous-word
+    alt DELETE            delete-next-word
+    alt KP_LEFT           caret-previous-word
+    alt KP_RIGHT          caret-next-word
+    alt LEFT              caret-previous-word
+    alt RIGHT             caret-next-word
+    ctrl A                caret-begin-line
+    ctrl B                caret-backward
+    ctrl D                delete-next
+    ctrl E                caret-end-line
+    ctrl F                caret-forward
+    ctrl H                delete-previous
+    ctrl N                caret-down
+    ctrl P                caret-up
+    ctrl V                aqua-page-down
+    ctrl W                delete-previous-word
+    meta A                select-all
+    meta BACK_SLASH       unselect
+    meta C                copy-to-clipboard
+    meta DOWN             caret-end
+    meta KP_DOWN          caret-end
+    meta KP_LEFT          caret-begin-line
+    meta KP_RIGHT         caret-end-line
+    meta KP_UP            caret-begin
+    meta LEFT             caret-begin-line
+    meta RIGHT            caret-end-line
+    meta SPACE            activate-link-action
+    meta T                next-link-action
+    meta UP               caret-begin
+    meta V                paste-from-clipboard
+    meta X                cut-to-clipboard
+    BACK_SPACE            delete-previous
+    COPY                  copy-to-clipboard
+    CUT                   cut-to-clipboard
+    DELETE                delete-next
+    DOWN                  aqua-move-down
+    END                   caret-end
+    ENTER                 insert-break
+    HOME                  caret-begin
+    KP_DOWN               aqua-move-down
+    KP_LEFT               caret-backward
+    KP_RIGHT              caret-forward
+    KP_UP                 aqua-move-up
+    LEFT                  caret-backward
+    PAGE_DOWN             aqua-page-down
+    PAGE_UP               aqua-page-up
+    PASTE                 paste-from-clipboard
+    RIGHT                 caret-forward
+    TAB                   insert-tab
+    UP                    aqua-move-up
+    shift alt DOWN        selection-end-paragraph
+    shift alt KP_DOWN     selection-end-paragraph
+    shift alt KP_LEFT     selection-previous-word
+    shift alt KP_RIGHT    selection-next-word
+    shift alt KP_UP       selection-begin-paragraph
+    shift alt LEFT        selection-previous-word
+    shift alt RIGHT       selection-next-word
+    shift alt UP          selection-begin-paragraph
+    shift ctrl O          toggle-componentOrientation
+    shift meta DOWN       selection-end
+    shift meta KP_DOWN    selection-end
+    shift meta KP_LEFT    selection-begin-line
+    shift meta KP_RIGHT   selection-end-line
+    shift meta KP_UP      selection-begin
+    shift meta LEFT       selection-begin-line
+    shift meta PAGE_DOWN  selection-page-right
+    shift meta PAGE_UP    selection-page-left
+    shift meta RIGHT      selection-end-line
+    shift meta T          previous-link-action
+    shift meta UP         selection-begin
+    shift DOWN            selection-down
+    shift END             selection-end
+    shift HOME            selection-begin
+    shift KP_DOWN         selection-down
+    shift KP_LEFT         selection-backward
+    shift KP_RIGHT        selection-forward
+    shift KP_UP           selection-up
+    shift LEFT            selection-backward
+    shift PAGE_DOWN       selection-page-down
+    shift PAGE_UP         selection-page-up
+    shift RIGHT           selection-forward
+    shift UP              selection-up
 
 
 #---- TextField ----
 
 TextField.focusInputMap        [lazy] 74    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed BACK_SPACE          delete-previous-word
-    alt pressed DELETE              delete-next-word
-    alt pressed KP_LEFT             caret-previous-word
-    alt pressed KP_RIGHT            caret-next-word
-    alt pressed LEFT                caret-previous-word
-    alt pressed RIGHT               caret-next-word
-    ctrl pressed A                  caret-begin-line
-    ctrl pressed B                  caret-backward
-    ctrl pressed D                  delete-next
-    ctrl pressed E                  caret-end-line
-    ctrl pressed F                  caret-forward
-    ctrl pressed H                  delete-previous
-    ctrl pressed N                  caret-end
-    ctrl pressed P                  caret-begin
-    ctrl pressed V                  caret-end
-    ctrl pressed W                  delete-previous-word
-    meta pressed A                  select-all
-    meta pressed BACK_SLASH         unselect
-    meta pressed C                  copy-to-clipboard
-    meta pressed DOWN               caret-end
-    meta pressed KP_DOWN            caret-end
-    meta pressed KP_LEFT            caret-begin-line
-    meta pressed KP_RIGHT           caret-end-line
-    meta pressed KP_UP              caret-begin
-    meta pressed LEFT               caret-begin-line
-    meta pressed RIGHT              caret-end-line
-    meta pressed UP                 caret-begin
-    meta pressed V                  paste-from-clipboard
-    meta pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    caret-end-line
-    pressed END                     caret-end
-    pressed ENTER                   notify-field-accept
-    pressed HOME                    caret-begin
-    pressed KP_DOWN                 caret-end-line
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   caret-begin-line
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               aqua-page-down
-    pressed PAGE_UP                 aqua-page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed UP                      caret-begin-line
-    shift alt pressed KP_LEFT       selection-previous-word
-    shift alt pressed KP_RIGHT      selection-next-word
-    shift alt pressed LEFT          selection-previous-word
-    shift alt pressed RIGHT         selection-next-word
-    shift ctrl pressed O            toggle-componentOrientation
-    shift meta pressed DOWN         selection-end
-    shift meta pressed KP_DOWN      selection-end
-    shift meta pressed KP_LEFT      selection-begin-line
-    shift meta pressed KP_RIGHT     selection-end-line
-    shift meta pressed KP_UP        selection-begin
-    shift meta pressed LEFT         selection-begin-line
-    shift meta pressed PAGE_DOWN    selection-page-right
-    shift meta pressed PAGE_UP      selection-page-left
-    shift meta pressed RIGHT        selection-end-line
-    shift meta pressed UP           selection-begin
-    shift pressed DOWN              selection-end-line
-    shift pressed END               selection-end
-    shift pressed HOME              selection-begin
-    shift pressed KP_DOWN           selection-end-line
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-begin-line
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-begin-line
+    alt BACK_SPACE        delete-previous-word
+    alt DELETE            delete-next-word
+    alt KP_LEFT           caret-previous-word
+    alt KP_RIGHT          caret-next-word
+    alt LEFT              caret-previous-word
+    alt RIGHT             caret-next-word
+    ctrl A                caret-begin-line
+    ctrl B                caret-backward
+    ctrl D                delete-next
+    ctrl E                caret-end-line
+    ctrl F                caret-forward
+    ctrl H                delete-previous
+    ctrl N                caret-end
+    ctrl P                caret-begin
+    ctrl V                caret-end
+    ctrl W                delete-previous-word
+    meta A                select-all
+    meta BACK_SLASH       unselect
+    meta C                copy-to-clipboard
+    meta DOWN             caret-end
+    meta KP_DOWN          caret-end
+    meta KP_LEFT          caret-begin-line
+    meta KP_RIGHT         caret-end-line
+    meta KP_UP            caret-begin
+    meta LEFT             caret-begin-line
+    meta RIGHT            caret-end-line
+    meta UP               caret-begin
+    meta V                paste-from-clipboard
+    meta X                cut-to-clipboard
+    BACK_SPACE            delete-previous
+    COPY                  copy-to-clipboard
+    CUT                   cut-to-clipboard
+    DELETE                delete-next
+    DOWN                  caret-end-line
+    END                   caret-end
+    ENTER                 notify-field-accept
+    HOME                  caret-begin
+    KP_DOWN               caret-end-line
+    KP_LEFT               caret-backward
+    KP_RIGHT              caret-forward
+    KP_UP                 caret-begin-line
+    LEFT                  caret-backward
+    PAGE_DOWN             aqua-page-down
+    PAGE_UP               aqua-page-up
+    PASTE                 paste-from-clipboard
+    RIGHT                 caret-forward
+    UP                    caret-begin-line
+    shift alt KP_LEFT     selection-previous-word
+    shift alt KP_RIGHT    selection-next-word
+    shift alt LEFT        selection-previous-word
+    shift alt RIGHT       selection-next-word
+    shift ctrl O          toggle-componentOrientation
+    shift meta DOWN       selection-end
+    shift meta KP_DOWN    selection-end
+    shift meta KP_LEFT    selection-begin-line
+    shift meta KP_RIGHT   selection-end-line
+    shift meta KP_UP      selection-begin
+    shift meta LEFT       selection-begin-line
+    shift meta PAGE_DOWN  selection-page-right
+    shift meta PAGE_UP    selection-page-left
+    shift meta RIGHT      selection-end-line
+    shift meta UP         selection-begin
+    shift DOWN            selection-end-line
+    shift END             selection-end
+    shift HOME            selection-begin
+    shift KP_DOWN         selection-end-line
+    shift KP_LEFT         selection-backward
+    shift KP_RIGHT        selection-forward
+    shift KP_UP           selection-begin-line
+    shift LEFT            selection-backward
+    shift PAGE_DOWN       selection-page-down
+    shift PAGE_UP         selection-page-up
+    shift RIGHT           selection-forward
+    shift UP              selection-begin-line
 
 
 #---- TextPane ----
 
 TextPane.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed BACK_SPACE          delete-previous-word
-    alt pressed DELETE              delete-next-word
-    alt pressed KP_LEFT             caret-previous-word
-    alt pressed KP_RIGHT            caret-next-word
-    alt pressed LEFT                caret-previous-word
-    alt pressed RIGHT               caret-next-word
-    ctrl pressed A                  caret-begin-line
-    ctrl pressed B                  caret-backward
-    ctrl pressed D                  delete-next
-    ctrl pressed E                  caret-end-line
-    ctrl pressed F                  caret-forward
-    ctrl pressed H                  delete-previous
-    ctrl pressed N                  caret-down
-    ctrl pressed P                  caret-up
-    ctrl pressed V                  aqua-page-down
-    ctrl pressed W                  delete-previous-word
-    meta pressed A                  select-all
-    meta pressed BACK_SLASH         unselect
-    meta pressed C                  copy-to-clipboard
-    meta pressed DOWN               caret-end
-    meta pressed KP_DOWN            caret-end
-    meta pressed KP_LEFT            caret-begin-line
-    meta pressed KP_RIGHT           caret-end-line
-    meta pressed KP_UP              caret-begin
-    meta pressed LEFT               caret-begin-line
-    meta pressed RIGHT              caret-end-line
-    meta pressed SPACE              activate-link-action
-    meta pressed T                  next-link-action
-    meta pressed UP                 caret-begin
-    meta pressed V                  paste-from-clipboard
-    meta pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    aqua-move-down
-    pressed END                     caret-end
-    pressed ENTER                   insert-break
-    pressed HOME                    caret-begin
-    pressed KP_DOWN                 aqua-move-down
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   aqua-move-up
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               aqua-page-down
-    pressed PAGE_UP                 aqua-page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed TAB                     insert-tab
-    pressed UP                      aqua-move-up
-    shift alt pressed DOWN          selection-end-paragraph
-    shift alt pressed KP_DOWN       selection-end-paragraph
-    shift alt pressed KP_LEFT       selection-previous-word
-    shift alt pressed KP_RIGHT      selection-next-word
-    shift alt pressed KP_UP         selection-begin-paragraph
-    shift alt pressed LEFT          selection-previous-word
-    shift alt pressed RIGHT         selection-next-word
-    shift alt pressed UP            selection-begin-paragraph
-    shift ctrl pressed O            toggle-componentOrientation
-    shift meta pressed DOWN         selection-end
-    shift meta pressed KP_DOWN      selection-end
-    shift meta pressed KP_LEFT      selection-begin-line
-    shift meta pressed KP_RIGHT     selection-end-line
-    shift meta pressed KP_UP        selection-begin
-    shift meta pressed LEFT         selection-begin-line
-    shift meta pressed PAGE_DOWN    selection-page-right
-    shift meta pressed PAGE_UP      selection-page-left
-    shift meta pressed RIGHT        selection-end-line
-    shift meta pressed T            previous-link-action
-    shift meta pressed UP           selection-begin
-    shift pressed DOWN              selection-down
-    shift pressed END               selection-end
-    shift pressed HOME              selection-begin
-    shift pressed KP_DOWN           selection-down
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-up
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-up
+    alt BACK_SPACE        delete-previous-word
+    alt DELETE            delete-next-word
+    alt KP_LEFT           caret-previous-word
+    alt KP_RIGHT          caret-next-word
+    alt LEFT              caret-previous-word
+    alt RIGHT             caret-next-word
+    ctrl A                caret-begin-line
+    ctrl B                caret-backward
+    ctrl D                delete-next
+    ctrl E                caret-end-line
+    ctrl F                caret-forward
+    ctrl H                delete-previous
+    ctrl N                caret-down
+    ctrl P                caret-up
+    ctrl V                aqua-page-down
+    ctrl W                delete-previous-word
+    meta A                select-all
+    meta BACK_SLASH       unselect
+    meta C                copy-to-clipboard
+    meta DOWN             caret-end
+    meta KP_DOWN          caret-end
+    meta KP_LEFT          caret-begin-line
+    meta KP_RIGHT         caret-end-line
+    meta KP_UP            caret-begin
+    meta LEFT             caret-begin-line
+    meta RIGHT            caret-end-line
+    meta SPACE            activate-link-action
+    meta T                next-link-action
+    meta UP               caret-begin
+    meta V                paste-from-clipboard
+    meta X                cut-to-clipboard
+    BACK_SPACE            delete-previous
+    COPY                  copy-to-clipboard
+    CUT                   cut-to-clipboard
+    DELETE                delete-next
+    DOWN                  aqua-move-down
+    END                   caret-end
+    ENTER                 insert-break
+    HOME                  caret-begin
+    KP_DOWN               aqua-move-down
+    KP_LEFT               caret-backward
+    KP_RIGHT              caret-forward
+    KP_UP                 aqua-move-up
+    LEFT                  caret-backward
+    PAGE_DOWN             aqua-page-down
+    PAGE_UP               aqua-page-up
+    PASTE                 paste-from-clipboard
+    RIGHT                 caret-forward
+    TAB                   insert-tab
+    UP                    aqua-move-up
+    shift alt DOWN        selection-end-paragraph
+    shift alt KP_DOWN     selection-end-paragraph
+    shift alt KP_LEFT     selection-previous-word
+    shift alt KP_RIGHT    selection-next-word
+    shift alt KP_UP       selection-begin-paragraph
+    shift alt LEFT        selection-previous-word
+    shift alt RIGHT       selection-next-word
+    shift alt UP          selection-begin-paragraph
+    shift ctrl O          toggle-componentOrientation
+    shift meta DOWN       selection-end
+    shift meta KP_DOWN    selection-end
+    shift meta KP_LEFT    selection-begin-line
+    shift meta KP_RIGHT   selection-end-line
+    shift meta KP_UP      selection-begin
+    shift meta LEFT       selection-begin-line
+    shift meta PAGE_DOWN  selection-page-right
+    shift meta PAGE_UP    selection-page-left
+    shift meta RIGHT      selection-end-line
+    shift meta T          previous-link-action
+    shift meta UP         selection-begin
+    shift DOWN            selection-down
+    shift END             selection-end
+    shift HOME            selection-begin
+    shift KP_DOWN         selection-down
+    shift KP_LEFT         selection-backward
+    shift KP_RIGHT        selection-forward
+    shift KP_UP           selection-up
+    shift LEFT            selection-backward
+    shift PAGE_DOWN       selection-page-down
+    shift PAGE_UP         selection-page-up
+    shift RIGHT           selection-forward
+    shift UP              selection-up
 
 
 #---- ToggleButton ----
 
 ToggleButton.focusInputMap     [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed SPACE                   pressed
-    released SPACE                  released
+    SPACE                 pressed
+    released SPACE        released
 
 
 #---- ToolBar ----
 
 ToolBar.ancestorInputMap       [lazy] 8    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    navigateDown
-    pressed KP_DOWN                 navigateDown
-    pressed KP_LEFT                 navigateLeft
-    pressed KP_RIGHT                navigateRight
-    pressed KP_UP                   navigateUp
-    pressed LEFT                    navigateLeft
-    pressed RIGHT                   navigateRight
-    pressed UP                      navigateUp
+    DOWN                  navigateDown
+    KP_DOWN               navigateDown
+    KP_LEFT               navigateLeft
+    KP_RIGHT              navigateRight
+    KP_UP                 navigateUp
+    LEFT                  navigateLeft
+    RIGHT                 navigateRight
+    UP                    navigateUp
 
 
 #---- Tree ----
 
 Tree.ancestorInputMap          [lazy] 1    javax.swing.plaf.InputMapUIResource [UI]
-    pressed ESCAPE                  cancel
+    ESCAPE                cancel
 Tree.focusInputMap.RightToLeft [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed KP_LEFT            aquaExpandNode
-    ctrl pressed KP_RIGHT           aquaCollapseNode
-    ctrl pressed LEFT               aquaExpandNode
-    ctrl pressed RIGHT              aquaCollapseNode
-    pressed KP_LEFT                 aquaExpandNode
-    pressed KP_RIGHT                aquaCollapseNode
-    pressed LEFT                    aquaExpandNode
-    pressed RIGHT                   aquaCollapseNode
-    shift pressed KP_LEFT           aquaExpandNode
-    shift pressed KP_RIGHT          aquaCollapseNode
-    shift pressed LEFT              aquaExpandNode
-    shift pressed RIGHT             aquaCollapseNode
+    ctrl KP_LEFT          aquaExpandNode
+    ctrl KP_RIGHT         aquaCollapseNode
+    ctrl LEFT             aquaExpandNode
+    ctrl RIGHT            aquaCollapseNode
+    KP_LEFT               aquaExpandNode
+    KP_RIGHT              aquaCollapseNode
+    LEFT                  aquaExpandNode
+    RIGHT                 aquaCollapseNode
+    shift KP_LEFT         aquaExpandNode
+    shift KP_RIGHT        aquaCollapseNode
+    shift LEFT            aquaExpandNode
+    shift RIGHT           aquaCollapseNode
 Tree.focusInputMap             [lazy] 31    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed KP_LEFT             aquaFullyCollapseNode
-    alt pressed KP_RIGHT            aquaFullyExpandNode
-    alt pressed LEFT                aquaFullyCollapseNode
-    alt pressed RIGHT               aquaFullyExpandNode
-    ctrl pressed KP_LEFT            aquaCollapseNode
-    ctrl pressed KP_RIGHT           aquaExpandNode
-    ctrl pressed LEFT               aquaCollapseNode
-    ctrl pressed RIGHT              aquaExpandNode
-    meta pressed A                  selectAll
-    meta pressed C                  copy
-    meta pressed V                  paste
-    meta pressed X                  cut
-    pressed COPY                    copy
-    pressed CUT                     cut
-    pressed DOWN                    selectNext
-    pressed KP_DOWN                 selectNext
-    pressed KP_LEFT                 aquaCollapseNode
-    pressed KP_RIGHT                aquaExpandNode
-    pressed KP_UP                   selectPrevious
-    pressed LEFT                    aquaCollapseNode
-    pressed PASTE                   paste
-    pressed RIGHT                   aquaExpandNode
-    pressed UP                      selectPrevious
-    shift pressed DOWN              selectNextExtendSelection
-    shift pressed KP_DOWN           selectNextExtendSelection
-    shift pressed KP_LEFT           aquaCollapseNode
-    shift pressed KP_RIGHT          aquaExpandNode
-    shift pressed KP_UP             selectPreviousExtendSelection
-    shift pressed LEFT              aquaCollapseNode
-    shift pressed RIGHT             aquaExpandNode
-    shift pressed UP                selectPreviousExtendSelection
+    alt KP_LEFT           aquaFullyCollapseNode
+    alt KP_RIGHT          aquaFullyExpandNode
+    alt LEFT              aquaFullyCollapseNode
+    alt RIGHT             aquaFullyExpandNode
+    ctrl KP_LEFT          aquaCollapseNode
+    ctrl KP_RIGHT         aquaExpandNode
+    ctrl LEFT             aquaCollapseNode
+    ctrl RIGHT            aquaExpandNode
+    meta A                selectAll
+    meta C                copy
+    meta V                paste
+    meta X                cut
+    COPY                  copy
+    CUT                   cut
+    DOWN                  selectNext
+    KP_DOWN               selectNext
+    KP_LEFT               aquaCollapseNode
+    KP_RIGHT              aquaExpandNode
+    KP_UP                 selectPrevious
+    LEFT                  aquaCollapseNode
+    PASTE                 paste
+    RIGHT                 aquaExpandNode
+    UP                    selectPrevious
+    shift DOWN            selectNextExtendSelection
+    shift KP_DOWN         selectNextExtendSelection
+    shift KP_LEFT         aquaCollapseNode
+    shift KP_RIGHT        aquaExpandNode
+    shift KP_UP           selectPreviousExtendSelection
+    shift LEFT            aquaCollapseNode
+    shift RIGHT           aquaExpandNode
+    shift UP              selectPreviousExtendSelection

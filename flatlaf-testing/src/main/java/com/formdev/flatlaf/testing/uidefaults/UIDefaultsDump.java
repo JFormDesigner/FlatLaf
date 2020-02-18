@@ -314,7 +314,8 @@ public class UIDefaultsDump
 			} );
 			for( KeyStroke keyStroke : keys ) {
 				Object value = inputMap.get( keyStroke );
-				out.printf( "%n%s%-30s  %s", indent, keyStroke, value );
+				String strKeyStroke = keyStroke.toString().replace( "pressed ", "" );
+				out.printf( "%n%s%-20s  %s", indent, strKeyStroke, value );
 			}
 		}
 
