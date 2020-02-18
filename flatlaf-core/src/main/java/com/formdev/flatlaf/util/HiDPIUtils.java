@@ -34,10 +34,6 @@ public class HiDPIUtils
 		paintAtScale1x( g, 0, 0, c.getWidth(), c.getHeight(), painter );
 	}
 
-	public static void paintAtScale1x( Graphics2D g, int x, int y, int width, int height, Painter painter ) {
-		paintAtScale1x( g, x, y, width, height, UIScale.getSystemScaleFactor( g ), painter );
-	}
-
 	/**
 	 * Paint at system scale factor 1x to avoid rounding issues at 125%, 150% and 175% scaling.
 	 * <p>
@@ -46,38 +42,29 @@ public class HiDPIUtils
 	 * <p>
 	 * Uses the same scaling calculation as the JRE uses.
 	 */
-	public static void paintAtScale1x( Graphics2D g, int x, int y, int width, int height,
-		double scaleFactor, Painter painter )
-	{
-		if( scaleFactor == 1 ) {
+	public static void paintAtScale1x( Graphics2D g, int x, int y, int width, int height, Painter painter ) {
+		// save original transform
+		AffineTransform transform = g.getTransform();
+
+		// check whether scaled
+		if( transform.getScaleX() == 1 && transform.getScaleY() == 1 ) {
 			painter.paint( g, x, y, width, height, 1 );
 			return;
 		}
-
-		// save original transform
-		AffineTransform transform = g.getTransform();
 
 		// scale rectangle
 		Rectangle2D.Double scaledRect = scale( transform, x, y, width, height );
 
 		try {
-			// unscale to factor 1.0
-			double scale = 1.0 / scaleFactor;
-			g.scale( scale, scale );
-
-			// compute origin delta x/y
-			double dx = Math.floor( scaledRect.x ) - transform.getTranslateX();
-			double dy = Math.floor( scaledRect.y ) - transform.getTranslateY();
-
-			// move origin to make sure that origin x/y are at whole numbers
-			if( dx != 0 || dy != 0 )
-				g.translate( dx, dy );
+			// unscale to factor 1.0 and move origin (to whole numbers)
+			g.setTransform( new AffineTransform( 1, 0, 0, 1,
+				Math.floor( scaledRect.x ), Math.floor( scaledRect.y ) ) );
 
 			int swidth = (int) scaledRect.width;
 			int sheight = (int) scaledRect.height;
 
 			// paint
-			painter.paint( g, 0, 0, swidth, sheight, scaleFactor );
+			painter.paint( g, 0, 0, swidth, sheight, transform.getScaleX() );
 		} finally {
 			// restore original transform
 			g.setTransform( transform );

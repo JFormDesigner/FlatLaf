@@ -41,6 +41,27 @@
 		"sourceCodeUrl": "https://github.com/dracula/jetbrains",
 		"sourceCodePath": "blob/master/src/main/resources/themes/Dracula.theme.json"
 	},
+	"Gradianto_dark_fuchsia.theme.json": {
+		"name": "Gradianto Dark Fuchsia",
+		"license": "MIT",
+		"licenseFile": "Gradianto.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
+		"sourceCodePath": "blob/master/resources/Gradianto_dark_fuchsia.theme.json"
+	},
+	"Gradianto_deep_ocean.theme.json": {
+		"name": "Gradianto Deep Ocean",
+		"license": "MIT",
+		"licenseFile": "Gradianto.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
+		"sourceCodePath": "blob/master/resources/Gradianto_deep_ocean.theme.json"
+	},
+	"Gradianto_midnight_blue.theme.json": {
+		"name": "Gradianto Midnight Blue",
+		"license": "MIT",
+		"licenseFile": "Gradianto.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
+		"sourceCodePath": "blob/master/resources/Gradianto_midnight_blue.theme.json"
+	},
 	"Gray.theme.json": {
 		"name": "Gray",
 		"license": "MIT",

@@ -48,8 +48,9 @@
     "Menu.foreground" : "#5c616c",
     "MenuItem.foreground" : "#5c616c",
     "MenuItem.background" : "#ffffff",
-    "PopupMenuSeparator.height" : "1",
+    "PopupMenuSeparator.height" : "2",
     "Separator.separatorColor" : "#9ba2ab",
+    "Group.separatorColor" : "#9ba2ab",
 
     "Tree.background" : "#ffffff",
     "Tree.rowHeight": "23",
@@ -84,6 +85,8 @@
     "Table.lightSelectionForeground" : "#ffffff",
     "Table.focusCellBackground" : "#2679db",
     "Table.focusCellForeground" : "#ffffff",
+    "Table.dropLineColor": "#2679db",
+    "Table.dropLineShortColor": "#2679db",
 
     "TabbedPane.underlineColor" : "#2679db",
     "TabbedPane.tabSelectionHeight" : 2,
@@ -154,7 +157,9 @@
     "EditorTabs.underlineColor" : "#2679db",
     "EditorTabs.background" : "#F5F5F5",
 
-    "Notification.background" : "#F5F5F5"
+    "Notification.background" : "#F5F5F5",
+    "Notification.MoreButton.background" : "#dddee1",
+    "ScrollBar.background" : "#F5F5F5"
 
   },
 

@@ -167,7 +167,7 @@ public class FlatUIUtils
 		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
-			HiDPIUtils.paintAtScale1x( g, x, y, width, height, systemScaleFactor,
+			HiDPIUtils.paintAtScale1x( g, x, y, width, height,
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {
 					paintComponentOuterBorderImpl( g2d, x2, y2, width2, height2,
 						(float) (focusWidth * scaleFactor), (float) (lineWidth * scaleFactor), (float) (arc * scaleFactor) );
@@ -181,13 +181,22 @@ public class FlatUIUtils
 	private static void paintComponentOuterBorderImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
-		float outerRadius = (arc > 0) ? arc + focusWidth - UIScale.scale( 2f ) : focusWidth;
 		float ow = focusWidth + lineWidth;
-		float innerRadius = outerRadius - ow;
+		float outerArc = arc + (focusWidth * 2);
+		float innerArc = arc - (lineWidth * 2);
+
+		// reduce outer arc slightly for small arcs to make the curve slightly wider
+		if( arc > 0 && arc < UIScale.scale( 10 ) )
+			outerArc -= UIScale.scale( 2f );
+
+		if( outerArc < 0 )
+			outerArc = 0;
+		if( innerArc < 0 )
+			innerArc = 0;
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( createRoundRectanglePath( x, y, width, height, outerRadius, outerRadius, outerRadius, outerRadius ), false );
-		path.append( createRoundRectanglePath( x + ow, y + ow, width - (ow * 2), height - (ow * 2), innerRadius, innerRadius, innerRadius, innerRadius ), false );
+		path.append( new RoundRectangle2D.Float( x, y, width, height, outerArc, outerArc ), false );
+		path.append( new RoundRectangle2D.Float( x + ow, y + ow, width - (ow * 2), height - (ow * 2), innerArc, innerArc ), false );
 		g.fill( path );
 	}
 
@@ -207,7 +216,7 @@ public class FlatUIUtils
 		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
-			HiDPIUtils.paintAtScale1x( g, x, y, width, height, systemScaleFactor,
+			HiDPIUtils.paintAtScale1x( g, x, y, width, height,
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {
 					paintComponentBorderImpl( g2d, x2, y2, width2, height2,
 						(float) (focusWidth * scaleFactor), (float) (lineWidth * scaleFactor), (float) (arc * scaleFactor) );
@@ -221,7 +230,12 @@ public class FlatUIUtils
 	private static void paintComponentBorderImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
-		float arc2 = arc > lineWidth ? arc - lineWidth : 0f;
+		float arc2 = arc - (lineWidth * 2);
+
+		if( arc < 0 )
+			arc = 0;
+		if( arc2 < 0 )
+			arc2 = 0;
 
 		RoundRectangle2D.Float r1 = new RoundRectangle2D.Float(
 			x + focusWidth, y + focusWidth,
@@ -252,7 +266,7 @@ public class FlatUIUtils
 		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
-			HiDPIUtils.paintAtScale1x( g, x, y, width, height, systemScaleFactor,
+			HiDPIUtils.paintAtScale1x( g, x, y, width, height,
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {
 					paintComponentBackgroundImpl( g2d, x2, y2, width2, height2,
 						(float) (focusWidth * scaleFactor), (float) (arc * scaleFactor) );
@@ -266,6 +280,9 @@ public class FlatUIUtils
 	private static void paintComponentBackgroundImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float arc )
 	{
+		if( arc < 0 )
+			arc = 0;
+
 		g.fill( new RoundRectangle2D.Float(
 			x + focusWidth, y + focusWidth,
 			width - focusWidth * 2, height - focusWidth * 2, arc, arc ) );
