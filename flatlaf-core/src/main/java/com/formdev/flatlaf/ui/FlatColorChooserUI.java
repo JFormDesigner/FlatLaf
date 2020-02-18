@@ -16,12 +16,9 @@
 
 package com.formdev.flatlaf.ui;
 
-import java.awt.Dimension;
 import javax.swing.JComponent;
-import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicColorChooserUI;
-import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JColorChooser}.
@@ -42,22 +39,5 @@ public class FlatColorChooserUI
 {
 	public static ComponentUI createUI( JComponent c ) {
 		return  new FlatColorChooserUI();
-	}
-
-	@Override
-	public void installUI( JComponent c ) {
-		if( UIScale.getUserScaleFactor() != 1f ) {
-			// temporary scale swatch sizes
-			Dimension swatchSize = UIManager.getDimension( "ColorChooser.swatchesSwatchSize" );
-			Dimension swatchSize2 = UIManager.getDimension( "ColorChooser.swatchesRecentSwatchSize" );
-			UIManager.put( "ColorChooser.swatchesSwatchSize", UIScale.scale( swatchSize ) );
-			UIManager.put( "ColorChooser.swatchesRecentSwatchSize", UIScale.scale( swatchSize2 ) );
-
-			super.installUI( c );
-
-			UIManager.put( "ColorChooser.swatchesSwatchSize", null );
-			UIManager.put( "ColorChooser.swatchesRecentSwatchSize", null );
-		} else
-			super.installUI( c );
 	}
 }

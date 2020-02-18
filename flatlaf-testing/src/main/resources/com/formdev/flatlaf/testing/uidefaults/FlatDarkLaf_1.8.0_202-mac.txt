@@ -214,8 +214,8 @@ ColorChooser.sample.textAndMnemonic Sample Text  Sample Text
 ColorChooser.swatches.textAndMnemonic &Swatches
 ColorChooser.swatchesDefaultRecentColor #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ColorChooser.swatchesRecent.textAndMnemonic Recent:
-ColorChooser.swatchesRecentSwatchSize 16,16    javax.swing.plaf.DimensionUIResource [UI]
-ColorChooser.swatchesSwatchSize 16,16    javax.swing.plaf.DimensionUIResource [UI]
+ColorChooser.swatchesRecentSwatchSize [active] 16,16    javax.swing.plaf.DimensionUIResource [UI]
+ColorChooser.swatchesSwatchSize [active] 16,16    javax.swing.plaf.DimensionUIResource [UI]
 ColorChooserUI                 com.formdev.flatlaf.ui.FlatColorChooserUI
 
 

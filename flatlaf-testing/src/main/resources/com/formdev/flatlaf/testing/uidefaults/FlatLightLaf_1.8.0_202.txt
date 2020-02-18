@@ -173,8 +173,8 @@ ColorChooser.background        #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ColorChooser.font              Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 ColorChooser.foreground        #000000    javax.swing.plaf.ColorUIResource [UI]
 ColorChooser.swatchesDefaultRecentColor #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
-ColorChooser.swatchesRecentSwatchSize 16,16    javax.swing.plaf.DimensionUIResource [UI]
-ColorChooser.swatchesSwatchSize 16,16    javax.swing.plaf.DimensionUIResource [UI]
+ColorChooser.swatchesRecentSwatchSize [active] 16,16    javax.swing.plaf.DimensionUIResource [UI]
+ColorChooser.swatchesSwatchSize [active] 16,16    javax.swing.plaf.DimensionUIResource [UI]
 ColorChooserUI                 com.formdev.flatlaf.ui.FlatColorChooserUI
 
 
