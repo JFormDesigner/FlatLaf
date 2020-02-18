@@ -232,7 +232,17 @@ public abstract class FlatLaf
 			"TextPane.disabledBackground",
 			"TextPane.inactiveBackground" );
 		putDefaults( defaults, defaults.getColor( "textInactiveText" ),
-			"Spinner.disabledForeground" );
+			"Button.disabledText",
+			"CheckBox.disabledText",
+			"CheckBoxMenuItem.disabledForeground",
+			"Menu.disabledForeground",
+			"MenuItem.disabledForeground",
+			"RadioButton.disabledText",
+			"RadioButtonMenuItem.disabledForeground",
+			"Spinner.disabledForeground",
+			"ToggleButton.disabledText" );
+		putDefaults( defaults, defaults.getColor( "textText" ),
+			"DesktopIcon.foreground" );
 
 		// remember MenuBarUI from Mac Aqua LaF if Mac screen menubar is enabled
 		boolean useScreenMenuBar = SystemInfo.IS_MAC && "true".equals( System.getProperty( "apple.laf.useScreenMenuBar" ) );
