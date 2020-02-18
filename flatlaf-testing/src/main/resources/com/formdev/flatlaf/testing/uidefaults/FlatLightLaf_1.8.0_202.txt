@@ -79,9 +79,6 @@ Button.default.pressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColo
 Button.defaultButtonFollowsFocus true
 Button.disabledBorderColor     #cfcfcf    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledText            #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
-Button.focusInputMap           [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed SPACE                   pressed
-    released SPACE                  released
 Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedBorderColor      #87afda    javax.swing.plaf.ColorUIResource [UI]
 Button.font                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
@@ -116,9 +113,6 @@ CheckBox.arc                   4
 CheckBox.background            #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
 CheckBox.disabledText          #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.focusInputMap         [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed SPACE                   pressed
-    released SPACE                  released
 CheckBox.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 CheckBox.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.background       #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -180,22 +174,6 @@ ColorChooserUI                 com.formdev.flatlaf.ui.FlatColorChooserUI
 
 #---- ComboBox ----
 
-ComboBox.ancestorInputMap      [lazy] 15    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed DOWN                togglePopup
-    alt pressed KP_DOWN             togglePopup
-    alt pressed KP_UP               togglePopup
-    alt pressed UP                  togglePopup
-    pressed DOWN                    selectNext
-    pressed END                     endPassThrough
-    pressed ENTER                   enterPressed
-    pressed ESCAPE                  hidePopup
-    pressed HOME                    homePassThrough
-    pressed KP_DOWN                 selectNext
-    pressed KP_UP                   selectPrevious
-    pressed PAGE_DOWN               pageDownPassThrough
-    pressed PAGE_UP                 pageUpPassThrough
-    pressed SPACE                   spacePopup
-    pressed UP                      selectPrevious
 ComboBox.background            #ffffff    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 ComboBox.buttonArrowColor      #666666    javax.swing.plaf.ColorUIResource [UI]
@@ -241,36 +219,6 @@ DatePickerUI                   com.formdev.flatlaf.swingx.ui.FlatDatePickerUI
 
 #---- Desktop ----
 
-Desktop.ancestorInputMap       [lazy] 29    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl alt pressed F6             selectNextFrame
-    ctrl pressed F10                maximize
-    ctrl pressed F12                navigateNext
-    ctrl pressed F4                 close
-    ctrl pressed F5                 restore
-    ctrl pressed F6                 selectNextFrame
-    ctrl pressed F7                 move
-    ctrl pressed F8                 resize
-    ctrl pressed F9                 minimize
-    ctrl pressed TAB                selectNextFrame
-    pressed DOWN                    down
-    pressed ESCAPE                  escape
-    pressed KP_DOWN                 down
-    pressed KP_LEFT                 left
-    pressed KP_RIGHT                right
-    pressed KP_UP                   up
-    pressed LEFT                    left
-    pressed RIGHT                   right
-    pressed UP                      up
-    shift ctrl alt pressed F6       selectPreviousFrame
-    shift ctrl pressed F12          navigatePrevious
-    shift pressed DOWN              shrinkDown
-    shift pressed KP_DOWN           shrinkDown
-    shift pressed KP_LEFT           shrinkLeft
-    shift pressed KP_RIGHT          shrinkRight
-    shift pressed KP_UP             shrinkUp
-    shift pressed LEFT              shrinkLeft
-    shift pressed RIGHT             shrinkRight
-    shift pressed UP                shrinkUp
 Desktop.background             #e6ebf0    javax.swing.plaf.ColorUIResource [UI]
 Desktop.minOnScreenInsets      3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 
@@ -298,68 +246,6 @@ EditorPane.border              [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 EditorPane.caretBlinkRate      500
 EditorPane.caretForeground     #000000    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.disabledBackground  #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
-EditorPane.focusInputMap       [lazy] 61    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  select-all
-    ctrl pressed BACK_SLASH         unselect
-    ctrl pressed BACK_SPACE         delete-previous-word
-    ctrl pressed C                  copy-to-clipboard
-    ctrl pressed DELETE             delete-next-word
-    ctrl pressed END                caret-end
-    ctrl pressed H                  delete-previous
-    ctrl pressed HOME               caret-begin
-    ctrl pressed INSERT             copy-to-clipboard
-    ctrl pressed KP_LEFT            caret-previous-word
-    ctrl pressed KP_RIGHT           caret-next-word
-    ctrl pressed LEFT               caret-previous-word
-    ctrl pressed RIGHT              caret-next-word
-    ctrl pressed SPACE              activate-link-action
-    ctrl pressed T                  next-link-action
-    ctrl pressed V                  paste-from-clipboard
-    ctrl pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    caret-down
-    pressed END                     caret-end-line
-    pressed ENTER                   insert-break
-    pressed HOME                    caret-begin-line
-    pressed KP_DOWN                 caret-down
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   caret-up
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               page-down
-    pressed PAGE_UP                 page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed TAB                     insert-tab
-    pressed UP                      caret-up
-    shift ctrl pressed END          selection-end
-    shift ctrl pressed HOME         selection-begin
-    shift ctrl pressed KP_LEFT      selection-previous-word
-    shift ctrl pressed KP_RIGHT     selection-next-word
-    shift ctrl pressed LEFT         selection-previous-word
-    shift ctrl pressed O            toggle-componentOrientation
-    shift ctrl pressed PAGE_DOWN    selection-page-right
-    shift ctrl pressed PAGE_UP      selection-page-left
-    shift ctrl pressed RIGHT        selection-next-word
-    shift ctrl pressed T            previous-link-action
-    shift pressed BACK_SPACE        delete-previous
-    shift pressed DELETE            cut-to-clipboard
-    shift pressed DOWN              selection-down
-    shift pressed END               selection-end-line
-    shift pressed HOME              selection-begin-line
-    shift pressed INSERT            paste-from-clipboard
-    shift pressed KP_DOWN           selection-down
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-up
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-up
 EditorPane.font                Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 EditorPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.inactiveBackground  #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -372,11 +258,6 @@ EditorPaneUI                   com.formdev.flatlaf.ui.FlatEditorPaneUI
 
 #---- FileChooser ----
 
-FileChooser.ancestorInputMap   [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed BACK_SPACE              Go Up
-    pressed ESCAPE                  cancelSelection
-    pressed F2                      editFileName
-    pressed F5                      refresh
 FileChooser.detailsViewIcon    [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserDetailsViewIcon [UI]
 FileChooser.homeFolderIcon     [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserHomeFolderIcon [UI]
 FileChooser.listViewIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserListViewIcon [UI]
@@ -404,51 +285,6 @@ FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 FormattedTextField.caretBlinkRate 500
 FormattedTextField.caretForeground #000000    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.disabledBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
-FormattedTextField.focusInputMap [lazy] 44    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  select-all
-    ctrl pressed BACK_SLASH         unselect
-    ctrl pressed BACK_SPACE         delete-previous-word
-    ctrl pressed C                  copy-to-clipboard
-    ctrl pressed DELETE             delete-next-word
-    ctrl pressed H                  delete-previous
-    ctrl pressed INSERT             copy-to-clipboard
-    ctrl pressed KP_LEFT            caret-previous-word
-    ctrl pressed KP_RIGHT           caret-next-word
-    ctrl pressed LEFT               caret-previous-word
-    ctrl pressed RIGHT              caret-next-word
-    ctrl pressed V                  paste-from-clipboard
-    ctrl pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    decrement
-    pressed END                     caret-end-line
-    pressed ENTER                   notify-field-accept
-    pressed ESCAPE                  reset-field-edit
-    pressed HOME                    caret-begin-line
-    pressed KP_DOWN                 decrement
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   increment
-    pressed LEFT                    caret-backward
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed UP                      increment
-    shift ctrl pressed KP_LEFT      selection-previous-word
-    shift ctrl pressed KP_RIGHT     selection-next-word
-    shift ctrl pressed LEFT         selection-previous-word
-    shift ctrl pressed O            toggle-componentOrientation
-    shift ctrl pressed RIGHT        selection-next-word
-    shift pressed BACK_SPACE        delete-previous
-    shift pressed DELETE            cut-to-clipboard
-    shift pressed END               selection-end-line
-    shift pressed HOME              selection-begin-line
-    shift pressed INSERT            paste-from-clipboard
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed LEFT              selection-backward
-    shift pressed RIGHT             selection-forward
 FormattedTextField.font        Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 FormattedTextField.foreground  #000000    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.inactiveBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -611,88 +447,6 @@ List.dropCellBackground        [lazy] #3f8fd9    javax.swing.plaf.ColorUIResourc
 List.dropCellForeground        [lazy] #ffffff    javax.swing.plaf.ColorUIResource [UI]
 List.dropLineColor             [lazy] #6aa7e1    javax.swing.plaf.ColorUIResource [UI]
 List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]
-List.focusInputMap.RightToLeft [lazy] 16    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed KP_LEFT            selectNextColumnChangeLead
-    ctrl pressed KP_RIGHT           selectPreviousColumnChangeLead
-    ctrl pressed LEFT               selectNextColumnChangeLead
-    ctrl pressed RIGHT              selectPreviousColumnChangeLead
-    pressed KP_LEFT                 selectNextColumn
-    pressed KP_RIGHT                selectPreviousColumn
-    pressed LEFT                    selectNextColumn
-    pressed RIGHT                   selectPreviousColumn
-    shift ctrl pressed KP_LEFT      selectNextColumnExtendSelection
-    shift ctrl pressed KP_RIGHT     selectPreviousColumnExtendSelection
-    shift ctrl pressed LEFT         selectNextColumnExtendSelection
-    shift ctrl pressed RIGHT        selectPreviousColumnExtendSelection
-    shift pressed KP_LEFT           selectNextColumnExtendSelection
-    shift pressed KP_RIGHT          selectPreviousColumnExtendSelection
-    shift pressed LEFT              selectNextColumnExtendSelection
-    shift pressed RIGHT             selectPreviousColumnExtendSelection
-List.focusInputMap             [lazy] 64    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  selectAll
-    ctrl pressed BACK_SLASH         clearSelection
-    ctrl pressed C                  copy
-    ctrl pressed DOWN               selectNextRowChangeLead
-    ctrl pressed END                selectLastRowChangeLead
-    ctrl pressed HOME               selectFirstRowChangeLead
-    ctrl pressed INSERT             copy
-    ctrl pressed KP_DOWN            selectNextRowChangeLead
-    ctrl pressed KP_LEFT            selectPreviousColumnChangeLead
-    ctrl pressed KP_RIGHT           selectNextColumnChangeLead
-    ctrl pressed KP_UP              selectPreviousRowChangeLead
-    ctrl pressed LEFT               selectPreviousColumnChangeLead
-    ctrl pressed PAGE_DOWN          scrollDownChangeLead
-    ctrl pressed PAGE_UP            scrollUpChangeLead
-    ctrl pressed RIGHT              selectNextColumnChangeLead
-    ctrl pressed SLASH              selectAll
-    ctrl pressed SPACE              toggleAndAnchor
-    ctrl pressed UP                 selectPreviousRowChangeLead
-    ctrl pressed V                  paste
-    ctrl pressed X                  cut
-    pressed COPY                    copy
-    pressed CUT                     cut
-    pressed DOWN                    selectNextRow
-    pressed END                     selectLastRow
-    pressed HOME                    selectFirstRow
-    pressed KP_DOWN                 selectNextRow
-    pressed KP_LEFT                 selectPreviousColumn
-    pressed KP_RIGHT                selectNextColumn
-    pressed KP_UP                   selectPreviousRow
-    pressed LEFT                    selectPreviousColumn
-    pressed PAGE_DOWN               scrollDown
-    pressed PAGE_UP                 scrollUp
-    pressed PASTE                   paste
-    pressed RIGHT                   selectNextColumn
-    pressed SPACE                   addToSelection
-    pressed UP                      selectPreviousRow
-    shift ctrl pressed DOWN         selectNextRowExtendSelection
-    shift ctrl pressed END          selectLastRowExtendSelection
-    shift ctrl pressed HOME         selectFirstRowExtendSelection
-    shift ctrl pressed KP_DOWN      selectNextRowExtendSelection
-    shift ctrl pressed KP_LEFT      selectPreviousColumnExtendSelection
-    shift ctrl pressed KP_RIGHT     selectNextColumnExtendSelection
-    shift ctrl pressed KP_UP        selectPreviousRowExtendSelection
-    shift ctrl pressed LEFT         selectPreviousColumnExtendSelection
-    shift ctrl pressed PAGE_DOWN    scrollDownExtendSelection
-    shift ctrl pressed PAGE_UP      scrollUpExtendSelection
-    shift ctrl pressed RIGHT        selectNextColumnExtendSelection
-    shift ctrl pressed SPACE        moveSelectionTo
-    shift ctrl pressed UP           selectPreviousRowExtendSelection
-    shift pressed DELETE            cut
-    shift pressed DOWN              selectNextRowExtendSelection
-    shift pressed END               selectLastRowExtendSelection
-    shift pressed HOME              selectFirstRowExtendSelection
-    shift pressed INSERT            paste
-    shift pressed KP_DOWN           selectNextRowExtendSelection
-    shift pressed KP_LEFT           selectPreviousColumnExtendSelection
-    shift pressed KP_RIGHT          selectNextColumnExtendSelection
-    shift pressed KP_UP             selectPreviousRowExtendSelection
-    shift pressed LEFT              selectPreviousColumnExtendSelection
-    shift pressed PAGE_DOWN         scrollDownExtendSelection
-    shift pressed PAGE_UP           scrollUpExtendSelection
-    shift pressed RIGHT             selectNextColumnExtendSelection
-    shift pressed SPACE             extendTo
-    shift pressed UP                selectPreviousRowExtendSelection
 List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]
 List.font                      Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 List.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
@@ -850,44 +604,6 @@ PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.echoChar         '\u2022'
-PasswordField.focusInputMap    [lazy] 37    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  select-all
-    ctrl pressed BACK_SLASH         unselect
-    ctrl pressed C                  copy-to-clipboard
-    ctrl pressed H                  delete-previous
-    ctrl pressed INSERT             copy-to-clipboard
-    ctrl pressed KP_LEFT            caret-begin-line
-    ctrl pressed KP_RIGHT           caret-end-line
-    ctrl pressed LEFT               caret-begin-line
-    ctrl pressed RIGHT              caret-end-line
-    ctrl pressed V                  paste-from-clipboard
-    ctrl pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed END                     caret-end-line
-    pressed ENTER                   notify-field-accept
-    pressed HOME                    caret-begin-line
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed LEFT                    caret-backward
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    shift ctrl pressed KP_LEFT      selection-begin-line
-    shift ctrl pressed KP_RIGHT     selection-end-line
-    shift ctrl pressed LEFT         selection-begin-line
-    shift ctrl pressed O            toggle-componentOrientation
-    shift ctrl pressed RIGHT        selection-end-line
-    shift pressed BACK_SPACE        delete-previous
-    shift pressed DELETE            cut-to-clipboard
-    shift pressed END               selection-end-line
-    shift pressed HOME              selection-begin-line
-    shift pressed INSERT            paste-from-clipboard
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed LEFT              selection-backward
-    shift pressed RIGHT             selection-forward
 PasswordField.font             Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 PasswordField.foreground       #000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.inactiveBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -908,40 +624,6 @@ PopupMenu.borderInsets         4,1,4,1    javax.swing.plaf.InsetsUIResource [UI]
 PopupMenu.consumeEventOnClose  false
 PopupMenu.font                 Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 PopupMenu.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
-PopupMenu.selectedWindowInputMapBindings.RightToLeft length=8    [Ljava.lang.Object;
-    [0] LEFT
-    [1] selectChild
-    [2] KP_LEFT
-    [3] selectChild
-    [4] RIGHT
-    [5] selectParent
-    [6] KP_RIGHT
-    [7] selectParent
-PopupMenu.selectedWindowInputMapBindings length=24    [Ljava.lang.Object;
-    [0] ESCAPE
-    [1] cancel
-    [2] DOWN
-    [3] selectNext
-    [4] KP_DOWN
-    [5] selectNext
-    [6] UP
-    [7] selectPrevious
-    [8] KP_UP
-    [9] selectPrevious
-    [10] LEFT
-    [11] selectParent
-    [12] KP_LEFT
-    [13] selectParent
-    [14] RIGHT
-    [15] selectChild
-    [16] KP_RIGHT
-    [17] selectChild
-    [18] ENTER
-    [19] return
-    [20] ctrl ENTER
-    [21] return
-    [22] SPACE
-    [23] return
 
 
 #---- PopupMenuSeparator ----
@@ -981,9 +663,6 @@ RadioButton.background         #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.border             [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
 RadioButton.darkShadow         #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.disabledText       #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
-RadioButton.focusInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed SPACE                   pressed
-    released SPACE                  released
 RadioButton.font               Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 RadioButton.foreground         #000000    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.highlight          #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -1030,9 +709,6 @@ Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.F
 
 #---- RootPane ----
 
-RootPane.ancestorInputMap      [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed CONTEXT_MENU            postPopup
-    shift pressed F10               postPopup
 RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [0] ENTER
     [1] press
@@ -1048,24 +724,6 @@ RootPaneUI                     com.formdev.flatlaf.ui.FlatRootPaneUI
 #---- ScrollBar ----
 
 ScrollBar.allowsAbsolutePositioning true
-ScrollBar.ancestorInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed KP_LEFT                 positiveUnitIncrement
-    pressed KP_RIGHT                negativeUnitIncrement
-    pressed LEFT                    positiveUnitIncrement
-    pressed RIGHT                   negativeUnitIncrement
-ScrollBar.ancestorInputMap     [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    positiveUnitIncrement
-    pressed END                     maxScroll
-    pressed HOME                    minScroll
-    pressed KP_DOWN                 positiveUnitIncrement
-    pressed KP_LEFT                 negativeUnitIncrement
-    pressed KP_RIGHT                positiveUnitIncrement
-    pressed KP_UP                   negativeUnitIncrement
-    pressed LEFT                    negativeUnitIncrement
-    pressed PAGE_DOWN               positiveBlockIncrement
-    pressed PAGE_UP                 negativeBlockIncrement
-    pressed RIGHT                   positiveUnitIncrement
-    pressed UP                      negativeUnitIncrement
 ScrollBar.background           #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonArrowColor     #666666    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
@@ -1088,24 +746,6 @@ ScrollBarUI                    com.formdev.flatlaf.ui.FlatScrollBarUI
 
 #---- ScrollPane ----
 
-ScrollPane.ancestorInputMap.RightToLeft [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed PAGE_DOWN          scrollLeft
-    ctrl pressed PAGE_UP            scrollRight
-ScrollPane.ancestorInputMap    [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed END                scrollEnd
-    ctrl pressed HOME               scrollHome
-    ctrl pressed PAGE_DOWN          scrollRight
-    ctrl pressed PAGE_UP            scrollLeft
-    pressed DOWN                    unitScrollDown
-    pressed KP_DOWN                 unitScrollDown
-    pressed KP_LEFT                 unitScrollLeft
-    pressed KP_RIGHT                unitScrollRight
-    pressed KP_UP                   unitScrollUp
-    pressed LEFT                    unitScrollLeft
-    pressed PAGE_DOWN               scrollDown
-    pressed PAGE_UP                 scrollUp
-    pressed RIGHT                   unitScrollRight
-    pressed UP                      unitScrollUp
 ScrollPane.background          #f5f5f5    javax.swing.plaf.ColorUIResource [UI]
 ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
 ScrollPane.fillUpperCorner     true
@@ -1132,26 +772,6 @@ SeparatorUI                    com.formdev.flatlaf.ui.FlatSeparatorUI
 Slider.background              #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 Slider.disabledForeground      #c0c0c0    javax.swing.plaf.ColorUIResource [UI]
 Slider.focus                   #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
-Slider.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed KP_LEFT                 positiveUnitIncrement
-    pressed KP_RIGHT                negativeUnitIncrement
-    pressed LEFT                    positiveUnitIncrement
-    pressed RIGHT                   negativeUnitIncrement
-Slider.focusInputMap           [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed PAGE_DOWN          negativeBlockIncrement
-    ctrl pressed PAGE_UP            positiveBlockIncrement
-    pressed DOWN                    negativeUnitIncrement
-    pressed END                     maxScroll
-    pressed HOME                    minScroll
-    pressed KP_DOWN                 negativeUnitIncrement
-    pressed KP_LEFT                 negativeUnitIncrement
-    pressed KP_RIGHT                positiveUnitIncrement
-    pressed KP_UP                   positiveUnitIncrement
-    pressed LEFT                    negativeUnitIncrement
-    pressed PAGE_DOWN               negativeBlockIncrement
-    pressed PAGE_UP                 positiveBlockIncrement
-    pressed RIGHT                   positiveUnitIncrement
-    pressed UP                      positiveUnitIncrement
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Slider.font                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 Slider.foreground              #000000    javax.swing.plaf.ColorUIResource [UI]
@@ -1173,11 +793,6 @@ SliderUI                       com.formdev.flatlaf.ui.FlatSliderUI
 
 #---- Spinner ----
 
-Spinner.ancestorInputMap       [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    decrement
-    pressed KP_DOWN                 decrement
-    pressed KP_UP                   increment
-    pressed UP                      increment
 Spinner.arrowButtonSize        16,5    java.awt.Dimension
 Spinner.background             #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Spinner.border                 [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
@@ -1197,21 +812,6 @@ SpinnerUI                      com.formdev.flatlaf.ui.FlatSpinnerUI
 
 #---- SplitPane ----
 
-SplitPane.ancestorInputMap     [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed TAB                focusOutForward
-    pressed DOWN                    positiveIncrement
-    pressed END                     selectMax
-    pressed F6                      toggleFocus
-    pressed F8                      startResize
-    pressed HOME                    selectMin
-    pressed KP_DOWN                 positiveIncrement
-    pressed KP_LEFT                 negativeIncrement
-    pressed KP_RIGHT                positiveIncrement
-    pressed KP_UP                   negativeIncrement
-    pressed LEFT                    negativeIncrement
-    pressed RIGHT                   positiveIncrement
-    pressed UP                      negativeIncrement
-    shift ctrl pressed TAB          focusOutBackward
 SplitPane.background           #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 SplitPane.centerOneTouchButtons true
 SplitPane.continuousLayout     true
@@ -1237,11 +837,6 @@ SplitPaneUI                    com.formdev.flatlaf.ui.FlatSplitPaneUI
 
 #---- TabbedPane ----
 
-TabbedPane.ancestorInputMap    [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed KP_UP              requestFocus
-    ctrl pressed PAGE_DOWN          navigatePageDown
-    ctrl pressed PAGE_UP            navigatePageUp
-    ctrl pressed UP                 requestFocus
 TabbedPane.background          #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.contentAreaColor    #bfbfbf    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.contentOpaque       true
@@ -1251,17 +846,6 @@ TabbedPane.disabledForeground  #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.disabledUnderlineColor #ababab    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.focus               #000000    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.focusColor          #dae4ed    javax.swing.plaf.ColorUIResource [UI]
-TabbedPane.focusInputMap       [lazy] 10    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed DOWN               requestFocusForVisibleComponent
-    ctrl pressed KP_DOWN            requestFocusForVisibleComponent
-    pressed DOWN                    navigateDown
-    pressed KP_DOWN                 navigateDown
-    pressed KP_LEFT                 navigateLeft
-    pressed KP_RIGHT                navigateRight
-    pressed KP_UP                   navigateUp
-    pressed LEFT                    navigateLeft
-    pressed RIGHT                   navigateRight
-    pressed UP                      navigateUp
 TabbedPane.font                Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 TabbedPane.foreground          #000000    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.hasFullBorder       false
@@ -1287,99 +871,6 @@ TabbedPaneUI                   com.formdev.flatlaf.ui.FlatTabbedPaneUI
 
 #---- Table ----
 
-Table.ancestorInputMap.RightToLeft [lazy] 20    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed KP_LEFT            selectNextColumnChangeLead
-    ctrl pressed KP_RIGHT           selectPreviousColumnChangeLead
-    ctrl pressed LEFT               selectNextColumnChangeLead
-    ctrl pressed PAGE_DOWN          scrollLeftChangeSelection
-    ctrl pressed PAGE_UP            scrollRightChangeSelection
-    ctrl pressed RIGHT              selectPreviousColumnChangeLead
-    pressed KP_LEFT                 selectNextColumn
-    pressed KP_RIGHT                selectPreviousColumn
-    pressed LEFT                    selectNextColumn
-    pressed RIGHT                   selectPreviousColumn
-    shift ctrl pressed KP_LEFT      selectNextColumnExtendSelection
-    shift ctrl pressed KP_RIGHT     selectPreviousColumnExtendSelection
-    shift ctrl pressed LEFT         selectNextColumnExtendSelection
-    shift ctrl pressed PAGE_DOWN    scrollLeftExtendSelection
-    shift ctrl pressed PAGE_UP      scrollRightExtendSelection
-    shift ctrl pressed RIGHT        selectPreviousColumnExtendSelection
-    shift pressed KP_LEFT           selectNextColumnExtendSelection
-    shift pressed KP_RIGHT          selectPreviousColumnExtendSelection
-    shift pressed LEFT              selectNextColumnExtendSelection
-    shift pressed RIGHT             selectPreviousColumnExtendSelection
-Table.ancestorInputMap         [lazy] 71    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  selectAll
-    ctrl pressed BACK_SLASH         clearSelection
-    ctrl pressed C                  copy
-    ctrl pressed DOWN               selectNextRowChangeLead
-    ctrl pressed END                selectLastRow
-    ctrl pressed HOME               selectFirstRow
-    ctrl pressed INSERT             copy
-    ctrl pressed KP_DOWN            selectNextRowChangeLead
-    ctrl pressed KP_LEFT            selectPreviousColumnChangeLead
-    ctrl pressed KP_RIGHT           selectNextColumnChangeLead
-    ctrl pressed KP_UP              selectPreviousRowChangeLead
-    ctrl pressed LEFT               selectPreviousColumnChangeLead
-    ctrl pressed PAGE_DOWN          scrollRightChangeSelection
-    ctrl pressed PAGE_UP            scrollLeftChangeSelection
-    ctrl pressed RIGHT              selectNextColumnChangeLead
-    ctrl pressed SLASH              selectAll
-    ctrl pressed SPACE              toggleAndAnchor
-    ctrl pressed UP                 selectPreviousRowChangeLead
-    ctrl pressed V                  paste
-    ctrl pressed X                  cut
-    pressed COPY                    copy
-    pressed CUT                     cut
-    pressed DOWN                    selectNextRow
-    pressed END                     selectLastColumn
-    pressed ENTER                   selectNextRowCell
-    pressed ESCAPE                  cancel
-    pressed F2                      startEditing
-    pressed F8                      focusHeader
-    pressed HOME                    selectFirstColumn
-    pressed KP_DOWN                 selectNextRow
-    pressed KP_LEFT                 selectPreviousColumn
-    pressed KP_RIGHT                selectNextColumn
-    pressed KP_UP                   selectPreviousRow
-    pressed LEFT                    selectPreviousColumn
-    pressed PAGE_DOWN               scrollDownChangeSelection
-    pressed PAGE_UP                 scrollUpChangeSelection
-    pressed PASTE                   paste
-    pressed RIGHT                   selectNextColumn
-    pressed SPACE                   addToSelection
-    pressed TAB                     selectNextColumnCell
-    pressed UP                      selectPreviousRow
-    shift ctrl pressed DOWN         selectNextRowExtendSelection
-    shift ctrl pressed END          selectLastRowExtendSelection
-    shift ctrl pressed HOME         selectFirstRowExtendSelection
-    shift ctrl pressed KP_DOWN      selectNextRowExtendSelection
-    shift ctrl pressed KP_LEFT      selectPreviousColumnExtendSelection
-    shift ctrl pressed KP_RIGHT     selectNextColumnExtendSelection
-    shift ctrl pressed KP_UP        selectPreviousRowExtendSelection
-    shift ctrl pressed LEFT         selectPreviousColumnExtendSelection
-    shift ctrl pressed PAGE_DOWN    scrollRightExtendSelection
-    shift ctrl pressed PAGE_UP      scrollLeftExtendSelection
-    shift ctrl pressed RIGHT        selectNextColumnExtendSelection
-    shift ctrl pressed SPACE        moveSelectionTo
-    shift ctrl pressed UP           selectPreviousRowExtendSelection
-    shift pressed DELETE            cut
-    shift pressed DOWN              selectNextRowExtendSelection
-    shift pressed END               selectLastColumnExtendSelection
-    shift pressed ENTER             selectPreviousRowCell
-    shift pressed HOME              selectFirstColumnExtendSelection
-    shift pressed INSERT            paste
-    shift pressed KP_DOWN           selectNextRowExtendSelection
-    shift pressed KP_LEFT           selectPreviousColumnExtendSelection
-    shift pressed KP_RIGHT          selectNextColumnExtendSelection
-    shift pressed KP_UP             selectPreviousRowExtendSelection
-    shift pressed LEFT              selectPreviousColumnExtendSelection
-    shift pressed PAGE_DOWN         scrollDownExtendSelection
-    shift pressed PAGE_UP           scrollUpExtendSelection
-    shift pressed RIGHT             selectNextColumnExtendSelection
-    shift pressed SPACE             extendTo
-    shift pressed TAB               selectPreviousColumnCell
-    shift pressed UP                selectPreviousRowExtendSelection
 Table.ascendingSortIcon        [lazy] 10,5    com.formdev.flatlaf.icons.FlatAscendingSortIcon [UI]
 Table.background               #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Table.cellFocusColor           #000000    javax.swing.plaf.ColorUIResource [UI]
@@ -1411,21 +902,6 @@ Table.sortIconColor            #afafaf    javax.swing.plaf.ColorUIResource [UI]
 
 #---- TableHeader ----
 
-TableHeader.ancestorInputMap   [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
-    alt pressed KP_LEFT             moveColumnLeft
-    alt pressed KP_RIGHT            moveColumnRight
-    alt pressed LEFT                moveColumnLeft
-    alt pressed RIGHT               moveColumnRight
-    pressed ESCAPE                  focusTable
-    pressed KP_LEFT                 selectColumnToLeft
-    pressed KP_RIGHT                selectColumnToRight
-    pressed LEFT                    selectColumnToLeft
-    pressed RIGHT                   selectColumnToRight
-    pressed SPACE                   toggleSortOrder
-    shift alt pressed KP_LEFT       resizeLeft
-    shift alt pressed KP_RIGHT      resizeRight
-    shift alt pressed LEFT          resizeLeft
-    shift alt pressed RIGHT         resizeRight
 TableHeader.background         #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.bottomSeparatorColor #e5e5e5    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.cellBorder         [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
@@ -1468,68 +944,6 @@ TextArea.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 TextArea.caretBlinkRate        500
 TextArea.caretForeground       #000000    javax.swing.plaf.ColorUIResource [UI]
 TextArea.disabledBackground    #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
-TextArea.focusInputMap         [lazy] 61    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  select-all
-    ctrl pressed BACK_SLASH         unselect
-    ctrl pressed BACK_SPACE         delete-previous-word
-    ctrl pressed C                  copy-to-clipboard
-    ctrl pressed DELETE             delete-next-word
-    ctrl pressed END                caret-end
-    ctrl pressed H                  delete-previous
-    ctrl pressed HOME               caret-begin
-    ctrl pressed INSERT             copy-to-clipboard
-    ctrl pressed KP_LEFT            caret-previous-word
-    ctrl pressed KP_RIGHT           caret-next-word
-    ctrl pressed LEFT               caret-previous-word
-    ctrl pressed RIGHT              caret-next-word
-    ctrl pressed SPACE              activate-link-action
-    ctrl pressed T                  next-link-action
-    ctrl pressed V                  paste-from-clipboard
-    ctrl pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    caret-down
-    pressed END                     caret-end-line
-    pressed ENTER                   insert-break
-    pressed HOME                    caret-begin-line
-    pressed KP_DOWN                 caret-down
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   caret-up
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               page-down
-    pressed PAGE_UP                 page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed TAB                     insert-tab
-    pressed UP                      caret-up
-    shift ctrl pressed END          selection-end
-    shift ctrl pressed HOME         selection-begin
-    shift ctrl pressed KP_LEFT      selection-previous-word
-    shift ctrl pressed KP_RIGHT     selection-next-word
-    shift ctrl pressed LEFT         selection-previous-word
-    shift ctrl pressed O            toggle-componentOrientation
-    shift ctrl pressed PAGE_DOWN    selection-page-right
-    shift ctrl pressed PAGE_UP      selection-page-left
-    shift ctrl pressed RIGHT        selection-next-word
-    shift ctrl pressed T            previous-link-action
-    shift pressed BACK_SPACE        delete-previous
-    shift pressed DELETE            cut-to-clipboard
-    shift pressed DOWN              selection-down
-    shift pressed END               selection-end-line
-    shift pressed HOME              selection-begin-line
-    shift pressed INSERT            paste-from-clipboard
-    shift pressed KP_DOWN           selection-down
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-up
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-up
 TextArea.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 TextArea.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
 TextArea.inactiveBackground    #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -1554,46 +968,6 @@ TextField.caretBlinkRate       500
 TextField.caretForeground      #000000    javax.swing.plaf.ColorUIResource [UI]
 TextField.darkShadow           #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
 TextField.disabledBackground   #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
-TextField.focusInputMap        [lazy] 39    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  select-all
-    ctrl pressed BACK_SLASH         unselect
-    ctrl pressed BACK_SPACE         delete-previous-word
-    ctrl pressed C                  copy-to-clipboard
-    ctrl pressed DELETE             delete-next-word
-    ctrl pressed H                  delete-previous
-    ctrl pressed INSERT             copy-to-clipboard
-    ctrl pressed KP_LEFT            caret-previous-word
-    ctrl pressed KP_RIGHT           caret-next-word
-    ctrl pressed LEFT               caret-previous-word
-    ctrl pressed RIGHT              caret-next-word
-    ctrl pressed V                  paste-from-clipboard
-    ctrl pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed END                     caret-end-line
-    pressed ENTER                   notify-field-accept
-    pressed HOME                    caret-begin-line
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed LEFT                    caret-backward
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    shift ctrl pressed KP_LEFT      selection-previous-word
-    shift ctrl pressed KP_RIGHT     selection-next-word
-    shift ctrl pressed LEFT         selection-previous-word
-    shift ctrl pressed O            toggle-componentOrientation
-    shift ctrl pressed RIGHT        selection-next-word
-    shift pressed BACK_SPACE        delete-previous
-    shift pressed DELETE            cut-to-clipboard
-    shift pressed END               selection-end-line
-    shift pressed HOME              selection-begin-line
-    shift pressed INSERT            paste-from-clipboard
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed LEFT              selection-backward
-    shift pressed RIGHT             selection-forward
 TextField.font                 Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 TextField.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
 TextField.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -1615,68 +989,6 @@ TextPane.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 TextPane.caretBlinkRate        500
 TextPane.caretForeground       #000000    javax.swing.plaf.ColorUIResource [UI]
 TextPane.disabledBackground    #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
-TextPane.focusInputMap         [lazy] 61    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  select-all
-    ctrl pressed BACK_SLASH         unselect
-    ctrl pressed BACK_SPACE         delete-previous-word
-    ctrl pressed C                  copy-to-clipboard
-    ctrl pressed DELETE             delete-next-word
-    ctrl pressed END                caret-end
-    ctrl pressed H                  delete-previous
-    ctrl pressed HOME               caret-begin
-    ctrl pressed INSERT             copy-to-clipboard
-    ctrl pressed KP_LEFT            caret-previous-word
-    ctrl pressed KP_RIGHT           caret-next-word
-    ctrl pressed LEFT               caret-previous-word
-    ctrl pressed RIGHT              caret-next-word
-    ctrl pressed SPACE              activate-link-action
-    ctrl pressed T                  next-link-action
-    ctrl pressed V                  paste-from-clipboard
-    ctrl pressed X                  cut-to-clipboard
-    pressed BACK_SPACE              delete-previous
-    pressed COPY                    copy-to-clipboard
-    pressed CUT                     cut-to-clipboard
-    pressed DELETE                  delete-next
-    pressed DOWN                    caret-down
-    pressed END                     caret-end-line
-    pressed ENTER                   insert-break
-    pressed HOME                    caret-begin-line
-    pressed KP_DOWN                 caret-down
-    pressed KP_LEFT                 caret-backward
-    pressed KP_RIGHT                caret-forward
-    pressed KP_UP                   caret-up
-    pressed LEFT                    caret-backward
-    pressed PAGE_DOWN               page-down
-    pressed PAGE_UP                 page-up
-    pressed PASTE                   paste-from-clipboard
-    pressed RIGHT                   caret-forward
-    pressed TAB                     insert-tab
-    pressed UP                      caret-up
-    shift ctrl pressed END          selection-end
-    shift ctrl pressed HOME         selection-begin
-    shift ctrl pressed KP_LEFT      selection-previous-word
-    shift ctrl pressed KP_RIGHT     selection-next-word
-    shift ctrl pressed LEFT         selection-previous-word
-    shift ctrl pressed O            toggle-componentOrientation
-    shift ctrl pressed PAGE_DOWN    selection-page-right
-    shift ctrl pressed PAGE_UP      selection-page-left
-    shift ctrl pressed RIGHT        selection-next-word
-    shift ctrl pressed T            previous-link-action
-    shift pressed BACK_SPACE        delete-previous
-    shift pressed DELETE            cut-to-clipboard
-    shift pressed DOWN              selection-down
-    shift pressed END               selection-end-line
-    shift pressed HOME              selection-begin-line
-    shift pressed INSERT            paste-from-clipboard
-    shift pressed KP_DOWN           selection-down
-    shift pressed KP_LEFT           selection-backward
-    shift pressed KP_RIGHT          selection-forward
-    shift pressed KP_UP             selection-up
-    shift pressed LEFT              selection-backward
-    shift pressed PAGE_DOWN         selection-page-down
-    shift pressed PAGE_UP           selection-page-up
-    shift pressed RIGHT             selection-forward
-    shift pressed UP                selection-up
 TextPane.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 TextPane.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
 TextPane.inactiveBackground    #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -1706,9 +1018,6 @@ ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 ToggleButton.darkShadow        #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.disabledSelectedBackground #dfdfdf    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.disabledText      #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.focusInputMap     [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
-    pressed SPACE                   pressed
-    released SPACE                  released
 ToggleButton.font              Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 ToggleButton.foreground        #000000    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.highlight         #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -1735,15 +1044,6 @@ ToggleButtonUI                 com.formdev.flatlaf.ui.FlatToggleButtonUI
 
 #---- ToolBar ----
 
-ToolBar.ancestorInputMap       [lazy] 8    javax.swing.plaf.InputMapUIResource [UI]
-    pressed DOWN                    navigateDown
-    pressed KP_DOWN                 navigateDown
-    pressed KP_LEFT                 navigateLeft
-    pressed KP_RIGHT                navigateRight
-    pressed KP_UP                   navigateUp
-    pressed LEFT                    navigateLeft
-    pressed RIGHT                   navigateRight
-    pressed UP                      navigateUp
 ToolBar.background             #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.border                 [lazy] 2,2,2,2  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
 ToolBar.borderMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
@@ -1796,8 +1096,6 @@ ToolTipUI                      com.formdev.flatlaf.ui.FlatToolTipUI
 
 #---- Tree ----
 
-Tree.ancestorInputMap          [lazy] 1    javax.swing.plaf.InputMapUIResource [UI]
-    pressed ESCAPE                  cancel
 Tree.background                #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Tree.border                    [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 Tree.changeSelectionWithFocus  true
@@ -1809,71 +1107,6 @@ Tree.dropCellForeground        [lazy] #ffffff    javax.swing.plaf.ColorUIResourc
 Tree.dropLineColor             [lazy] #6aa7e1    javax.swing.plaf.ColorUIResource [UI]
 Tree.editorBorder              [lazy] line: #000000    java.awt.Color 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
 Tree.expandedIcon              [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeExpandedIcon [UI]
-Tree.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
-    pressed KP_LEFT                 selectChild
-    pressed KP_RIGHT                selectParent
-    pressed LEFT                    selectChild
-    pressed RIGHT                   selectParent
-Tree.focusInputMap             [lazy] 59    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl pressed A                  selectAll
-    ctrl pressed BACK_SLASH         clearSelection
-    ctrl pressed C                  copy
-    ctrl pressed DOWN               selectNextChangeLead
-    ctrl pressed END                selectLastChangeLead
-    ctrl pressed HOME               selectFirstChangeLead
-    ctrl pressed INSERT             copy
-    ctrl pressed KP_DOWN            selectNextChangeLead
-    ctrl pressed KP_LEFT            scrollLeft
-    ctrl pressed KP_RIGHT           scrollRight
-    ctrl pressed KP_UP              selectPreviousChangeLead
-    ctrl pressed LEFT               scrollLeft
-    ctrl pressed PAGE_DOWN          scrollDownChangeLead
-    ctrl pressed PAGE_UP            scrollUpChangeLead
-    ctrl pressed RIGHT              scrollRight
-    ctrl pressed SLASH              selectAll
-    ctrl pressed SPACE              toggleAndAnchor
-    ctrl pressed UP                 selectPreviousChangeLead
-    ctrl pressed V                  paste
-    ctrl pressed X                  cut
-    pressed ADD                     expand
-    pressed COPY                    copy
-    pressed CUT                     cut
-    pressed DOWN                    selectNext
-    pressed END                     selectLast
-    pressed F2                      startEditing
-    pressed HOME                    selectFirst
-    pressed KP_DOWN                 selectNext
-    pressed KP_LEFT                 selectParent
-    pressed KP_RIGHT                selectChild
-    pressed KP_UP                   selectPrevious
-    pressed LEFT                    selectParent
-    pressed PAGE_DOWN               scrollDownChangeSelection
-    pressed PAGE_UP                 scrollUpChangeSelection
-    pressed PASTE                   paste
-    pressed RIGHT                   selectChild
-    pressed SPACE                   addToSelection
-    pressed SUBTRACT                collapse
-    pressed UP                      selectPrevious
-    shift ctrl pressed DOWN         selectNextExtendSelection
-    shift ctrl pressed END          selectLastExtendSelection
-    shift ctrl pressed HOME         selectFirstExtendSelection
-    shift ctrl pressed KP_DOWN      selectNextExtendSelection
-    shift ctrl pressed KP_UP        selectPreviousExtendSelection
-    shift ctrl pressed PAGE_DOWN    scrollDownExtendSelection
-    shift ctrl pressed PAGE_UP      scrollUpExtendSelection
-    shift ctrl pressed SPACE        moveSelectionTo
-    shift ctrl pressed UP           selectPreviousExtendSelection
-    shift pressed DELETE            cut
-    shift pressed DOWN              selectNextExtendSelection
-    shift pressed END               selectLastExtendSelection
-    shift pressed HOME              selectFirstExtendSelection
-    shift pressed INSERT            paste
-    shift pressed KP_DOWN           selectNextExtendSelection
-    shift pressed KP_UP             selectPreviousExtendSelection
-    shift pressed PAGE_DOWN         scrollDownExtendSelection
-    shift pressed PAGE_UP           scrollUpExtendSelection
-    shift pressed SPACE             extendTo
-    shift pressed UP                selectPreviousExtendSelection
 Tree.font                      Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 Tree.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
 Tree.hash                      #e6e6e6    javax.swing.plaf.ColorUIResource [UI]

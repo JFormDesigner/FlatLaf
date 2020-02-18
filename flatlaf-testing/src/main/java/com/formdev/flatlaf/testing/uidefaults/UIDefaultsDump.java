@@ -28,6 +28,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
@@ -91,16 +92,21 @@ public class UIDefaultsDump
 
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 
+		dump( dir, "", lookAndFeel, key -> !key.contains( "InputMap" ) );
+		dump( dir, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
+	}
+
+	private static void dump( File dir, String nameSuffix, LookAndFeel lookAndFeel, Predicate<String> keyFilter ) {
 		// dump to string
 		StringWriter stringWriter = new StringWriter( 100000 );
-		new UIDefaultsDump( lookAndFeel ).dump( new PrintWriter( stringWriter ) );
+		new UIDefaultsDump( lookAndFeel ).dump( new PrintWriter( stringWriter ), keyFilter );
 
 		Class<?> lookAndFeelClass = lookAndFeel instanceof MyBasicLookAndFeel
 			? BasicLookAndFeel.class
 			: lookAndFeel.getClass();
-		String suffix = (SystemInfo.IS_MAC && lookAndFeel instanceof FlatLaf) ? "-mac" : "";
-		File file = new File( dir, lookAndFeelClass.getSimpleName() + "_"
-			+ System.getProperty( "java.version" ) + suffix + ".txt" );
+		String osSuffix = (SystemInfo.IS_MAC && lookAndFeel instanceof FlatLaf) ? "-mac" : "";
+		File file = new File( dir, lookAndFeelClass.getSimpleName() + nameSuffix + "_"
+			+ System.getProperty( "java.version" ) + osSuffix + ".txt" );
 
 		// write to file
 		try( FileWriter fileWriter = new FileWriter( file ) ) {
@@ -115,7 +121,7 @@ public class UIDefaultsDump
 		this.defaults = lookAndFeel.getDefaults();
 	}
 
-	private void dump( PrintWriter out ) {
+	private void dump( PrintWriter out, Predicate<String> keyFilter ) {
 		Class<?> lookAndFeelClass = lookAndFeel instanceof MyBasicLookAndFeel
 			? BasicLookAndFeel.class
 			: lookAndFeel.getClass();
@@ -134,6 +140,9 @@ public class UIDefaultsDump
 				Object value = entry.getValue();
 
 				String strKey = String.valueOf( key );
+				if( !keyFilter.test( strKey ) )
+					return;
+
 				int dotIndex = strKey.indexOf( '.' );
 				String prefix = (dotIndex > 0)
 					? strKey.substring( 0, dotIndex )
