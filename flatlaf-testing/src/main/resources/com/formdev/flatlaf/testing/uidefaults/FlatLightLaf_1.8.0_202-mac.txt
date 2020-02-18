@@ -322,6 +322,7 @@ DesktopIcon.borderColor        #98000000    javax.swing.plaf.ColorUIResource [UI
 DesktopIcon.borderRimColor     #c0c0c0c0    javax.swing.plaf.ColorUIResource [UI]
 DesktopIcon.closeIcon          [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon [UI]
 DesktopIcon.closeSize          20,20    javax.swing.plaf.DimensionUIResource [UI]
+DesktopIcon.foreground         #000000    javax.swing.plaf.ColorUIResource [UI]
 DesktopIcon.iconSize           64,64    javax.swing.plaf.DimensionUIResource [UI]
 DesktopIcon.labelBackground    #64000000    javax.swing.plaf.ColorUIResource [UI]
 DesktopIconUI                  com.formdev.flatlaf.ui.FlatDesktopIconUI
@@ -488,7 +489,7 @@ FileChooser.upFolderIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatFil
 FileChooser.updateButton.textAndMnemonic Update
 FileChooser.updateButtonMnemonic 0
 FileChooser.useSystemExtensionHiding false
-FileChooser.usesSingleFilePane false
+FileChooser.usesSingleFilePane true
 FileChooserUI                  com.formdev.flatlaf.ui.FlatFileChooserUI
 
 
@@ -864,7 +865,7 @@ Menu.acceleratorSelectionForeground #ffffff    javax.swing.plaf.ColorUIResource 
 Menu.arrowIcon                 [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuArrowIcon [UI]
 Menu.background                #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Menu.border                    [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
-Menu.borderPainted             false
+Menu.borderPainted             true
 Menu.cancelMode                hideLastSubmenu
 Menu.consumesTabs              true
 Menu.crossMenuMnemonic         true
@@ -1276,6 +1277,7 @@ RootPaneUI                     com.apple.laf.AquaRootPaneUI
 
 #---- ScrollBar ----
 
+ScrollBar.allowsAbsolutePositioning true
 ScrollBar.ancestorInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
     pressed KP_LEFT                 positiveUnitIncrement
     pressed KP_RIGHT                negativeUnitIncrement
@@ -2084,7 +2086,7 @@ ToolTip.foregroundInactive     #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 
 #---- ToolTipManager ----
 
-ToolTipManager.enableToolTipMode allWindows
+ToolTipManager.enableToolTipMode activeApplication
 
 
 #---- ToolTip ----
