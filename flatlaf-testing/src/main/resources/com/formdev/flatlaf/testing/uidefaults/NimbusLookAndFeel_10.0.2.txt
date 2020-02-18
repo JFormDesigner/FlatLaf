@@ -1,0 +1,2359 @@
+Class  javax.swing.plaf.nimbus.NimbusLookAndFeel
+ID     Nimbus
+Name   Nimbus
+Java   10.0.2
+OS     Windows 10
+
+
+#---- "ComboBox ----
+
+"ComboBox.scrollPane".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- "Table ----
+
+"Table.editor".background      #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+"Table.editor".contentMargins  3,5,3,5    javax.swing.plaf.InsetsUIResource [UI]
+"Table.editor".opaque          true
+"Table.editor"[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+"Table.editor"[Enabled+Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableEditorPainter
+"Table.editor"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableEditorPainter
+"Table.editor"[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- "Tree ----
+
+"Tree.cellEditor".background   #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+"Tree.cellEditor".contentMargins 2,5,2,5    javax.swing.plaf.InsetsUIResource [UI]
+"Tree.cellEditor".opaque       true
+"Tree.cellEditor"[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+"Tree.cellEditor"[Enabled+Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreeCellEditorPainter
+"Tree.cellEditor"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreeCellEditorPainter
+"Tree.cellEditor"[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- ArrowButton ----
+
+ArrowButton.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ArrowButton.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ArrowButton.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ArrowButton.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ArrowButton.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ArrowButton.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ArrowButton.size               16
+ArrowButtonUI                  javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ArrowButton[Disabled] ----
+
+ArrowButton[Disabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ArrowButtonPainter
+
+
+#---- ArrowButton[Enabled] ----
+
+ArrowButton[Enabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ArrowButtonPainter
+
+
+#---- Button ----
+
+Button.background              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Button.contentMargins          6,14,6,14    javax.swing.plaf.InsetsUIResource [UI]
+Button.defaultButtonFollowsFocus false
+Button.disabled                [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Button.disabledText            [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Button.font                    [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Button.foreground              [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ButtonUI                       javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- Button[Default+Focused+MouseOver] ----
+
+Button[Default+Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Default+Focused+Pressed] ----
+
+Button[Default+Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Default+Focused] ----
+
+Button[Default+Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Default+MouseOver] ----
+
+Button[Default+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Default+Pressed] ----
+
+Button[Default+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+Button[Default+Pressed].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Button[Default] ----
+
+Button[Default].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Disabled] ----
+
+Button[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+Button[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Button[Enabled] ----
+
+Button[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Focused+MouseOver] ----
+
+Button[Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Focused+Pressed] ----
+
+Button[Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Focused] ----
+
+Button[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[MouseOver] ----
+
+Button[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- Button[Pressed] ----
+
+Button[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ButtonPainter
+
+
+#---- CheckBox ----
+
+CheckBox.background            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+CheckBox.contentMargins        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+CheckBox.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+CheckBox.disabledText          [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+CheckBox.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBox.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+CheckBox.icon                  18,18    javax.swing.plaf.nimbus.NimbusIcon
+
+
+#---- CheckBoxMenuItem ----
+
+CheckBoxMenuItem.background    [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+CheckBoxMenuItem.checkIcon     9,10    javax.swing.plaf.nimbus.NimbusIcon
+CheckBoxMenuItem.contentMargins 1,12,2,13    javax.swing.plaf.InsetsUIResource [UI]
+CheckBoxMenuItem.disabled      [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+CheckBoxMenuItem.disabledText  [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+CheckBoxMenuItem.font          [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBoxMenuItem.foreground    [active] #232324    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.textIconGap   5
+
+
+#---- CheckBoxMenuItem:MenuItemAccelerator ----
+
+CheckBoxMenuItem:MenuItemAccelerator.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- CheckBoxMenuItem:MenuItemAccelerator[MouseOver] ----
+
+CheckBoxMenuItem:MenuItemAccelerator[MouseOver].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- CheckBoxMenuItem ----
+
+CheckBoxMenuItemUI             javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- CheckBoxMenuItem[Disabled+Selected] ----
+
+CheckBoxMenuItem[Disabled+Selected].checkIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxMenuItemPainter
+
+
+#---- CheckBoxMenuItem[Disabled] ----
+
+CheckBoxMenuItem[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- CheckBoxMenuItem[Enabled+Selected] ----
+
+CheckBoxMenuItem[Enabled+Selected].checkIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxMenuItemPainter
+
+
+#---- CheckBoxMenuItem[Enabled] ----
+
+CheckBoxMenuItem[Enabled].textForeground #232324    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- CheckBoxMenuItem[MouseOver+Selected] ----
+
+CheckBoxMenuItem[MouseOver+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxMenuItemPainter
+CheckBoxMenuItem[MouseOver+Selected].checkIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxMenuItemPainter
+CheckBoxMenuItem[MouseOver+Selected].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- CheckBoxMenuItem[MouseOver] ----
+
+CheckBoxMenuItem[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxMenuItemPainter
+CheckBoxMenuItem[MouseOver].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- CheckBox ----
+
+CheckBoxUI                     javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- CheckBox[Disabled+Selected] ----
+
+CheckBox[Disabled+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Disabled] ----
+
+CheckBox[Disabled].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+CheckBox[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- CheckBox[Enabled] ----
+
+CheckBox[Enabled].iconPainter  [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Focused+MouseOver+Selected] ----
+
+CheckBox[Focused+MouseOver+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Focused+MouseOver] ----
+
+CheckBox[Focused+MouseOver].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Focused+Pressed+Selected] ----
+
+CheckBox[Focused+Pressed+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Focused+Pressed] ----
+
+CheckBox[Focused+Pressed].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Focused+Selected] ----
+
+CheckBox[Focused+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Focused] ----
+
+CheckBox[Focused].iconPainter  [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[MouseOver+Selected] ----
+
+CheckBox[MouseOver+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[MouseOver] ----
+
+CheckBox[MouseOver].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Pressed+Selected] ----
+
+CheckBox[Pressed+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Pressed] ----
+
+CheckBox[Pressed].iconPainter  [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- CheckBox[Selected] ----
+
+CheckBox[Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.CheckBoxPainter
+
+
+#---- ColorChooser ----
+
+ColorChooser.background        [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ColorChooser.contentMargins    5,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ColorChooser.disabled          [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ColorChooser.disabledText      [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ColorChooser.font              [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ColorChooser.foreground        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ColorChooser.swatchesDefaultRecentColor #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ColorChooser.swatchesRecentSwatchSize 10,10    java.awt.Dimension
+ColorChooser.swatchesSwatchSize 10,10    java.awt.Dimension
+
+
+#---- ColorChooser:"ColorChooser ----
+
+ColorChooser:"ColorChooser.previewPanelHolder".contentMargins 0,5,10,5    javax.swing.plaf.InsetsUIResource [UI]
+ColorChooser:"ColorChooser.previewPanelHolder":"OptionPane.label".contentMargins 0,10,10,10    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- ColorChooser ----
+
+ColorChooserUI                 javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ComboBox ----
+
+ComboBox.Editable              [unknown type] javax.swing.plaf.nimbus.ComboBoxEditableState
+ComboBox.States                Enabled,MouseOver,Pressed,Selected,Disabled,Focused,Editable
+ComboBox.background            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox.buttonWhenNotEditable true
+ComboBox.contentMargins        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox.disabledText          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ComboBox.forceOpaque           true
+ComboBox.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox.padding               3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox.popupInsets           -2,2,0,2    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox.pressedWhenPopupVisible true
+ComboBox.rendererUseListColors false
+ComboBox.squareButton          false
+
+
+#---- ComboBox:"ComboBox ----
+
+ComboBox:"ComboBox.arrowButton".Editable [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonEditableState
+ComboBox:"ComboBox.arrowButton".States Enabled,MouseOver,Pressed,Disabled,Editable
+ComboBox:"ComboBox.arrowButton".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox:"ComboBox.arrowButton".size 19
+ComboBox:"ComboBox.arrowButton"[Disabled+Editable].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[Disabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[Editable+Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[Editable+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[Editable+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[Editable+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[Enabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[MouseOver].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[Pressed].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.arrowButton"[Selected].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxArrowButtonPainter
+ComboBox:"ComboBox.listRenderer".background #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox:"ComboBox.listRenderer".contentMargins 2,4,2,4    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox:"ComboBox.listRenderer".opaque true
+ComboBox:"ComboBox.listRenderer"[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox:"ComboBox.listRenderer"[Selected].background #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox:"ComboBox.listRenderer"[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox:"ComboBox.renderer".contentMargins 2,4,2,4    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox:"ComboBox.renderer"[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox:"ComboBox.renderer"[Selected].background #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox:"ComboBox.renderer"[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox:"ComboBox.textField".contentMargins 0,6,0,3    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox:"ComboBox.textField"[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxTextFieldPainter
+ComboBox:"ComboBox.textField"[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ComboBox:"ComboBox.textField"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxTextFieldPainter
+ComboBox:"ComboBox.textField"[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxTextFieldPainter
+ComboBox:"ComboBox.textField"[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- ComboBox ----
+
+ComboBoxUI                     javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ComboBox[Disabled+Editable] ----
+
+ComboBox[Disabled+Editable].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Disabled+Pressed] ----
+
+ComboBox[Disabled+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Disabled] ----
+
+ComboBox[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Editable+Enabled] ----
+
+ComboBox[Editable+Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Editable+Focused] ----
+
+ComboBox[Editable+Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Editable+MouseOver] ----
+
+ComboBox[Editable+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Editable+Pressed] ----
+
+ComboBox[Editable+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Enabled+Selected] ----
+
+ComboBox[Enabled+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Enabled] ----
+
+ComboBox[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Focused+MouseOver] ----
+
+ComboBox[Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Focused+Pressed] ----
+
+ComboBox[Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Focused] ----
+
+ComboBox[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[MouseOver] ----
+
+ComboBox[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- ComboBox[Pressed] ----
+
+ComboBox[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ComboBoxPainter
+
+
+#---- DesktopIcon ----
+
+DesktopIcon.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+DesktopIcon.contentMargins     4,6,5,4    javax.swing.plaf.InsetsUIResource [UI]
+DesktopIcon.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+DesktopIcon.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+DesktopIcon.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+DesktopIcon.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+DesktopIconUI                  javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- DesktopIcon[Enabled] ----
+
+DesktopIcon[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.DesktopIconPainter
+
+
+#---- DesktopPane ----
+
+DesktopPane.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+DesktopPane.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+DesktopPane.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+DesktopPane.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+DesktopPane.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+DesktopPane.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+DesktopPane.opaque             true
+DesktopPaneUI                  javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- DesktopPane[Enabled] ----
+
+DesktopPane[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.DesktopPanePainter
+
+
+#---- EditorPane ----
+
+EditorPane.background          [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+EditorPane.contentMargins      4,6,4,6    javax.swing.plaf.InsetsUIResource [UI]
+EditorPane.disabled            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+EditorPane.disabledText        [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+EditorPane.font                [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+EditorPane.foreground          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+EditorPane.opaque              true
+EditorPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- EditorPane[Disabled] ----
+
+EditorPane[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.EditorPanePainter
+EditorPane[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- EditorPane[Enabled] ----
+
+EditorPane[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.EditorPanePainter
+
+
+#---- EditorPane[Selected] ----
+
+EditorPane[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.EditorPanePainter
+EditorPane[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- FileChooser ----
+
+FileChooser.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+FileChooser.contentMargins     10,10,10,10    javax.swing.plaf.InsetsUIResource [UI]
+FileChooser.detailsViewIcon    16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.directoryIcon      16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+FileChooser.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+FileChooser.fileIcon           16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.floppyDriveIcon    16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+FileChooser.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+FileChooser.hardDriveIcon      16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.homeFolderIcon     16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.listViewIcon       16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.newFolderIcon      16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.opaque             true
+FileChooser.upFolderIcon       16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileChooser.usesSingleFilePane true
+FileChooserUI                  javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- FileChooser[Enabled] ----
+
+FileChooser[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].detailsViewIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].directoryIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].fileIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].floppyDriveIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].hardDriveIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].homeFolderIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].listViewIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].newFolderIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+FileChooser[Enabled].upFolderIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FileChooserPainter
+
+
+#---- FileView ----
+
+FileView.computerIcon          [active] 16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileView.directoryIcon         [active] 16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileView.fileIcon              [active] 16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileView.floppyDriveIcon       [active] 16,16    javax.swing.plaf.nimbus.NimbusIcon
+FileView.fullRowSelection      true
+FileView.hardDriveIcon         [active] 16,16    javax.swing.plaf.nimbus.NimbusIcon
+
+
+#---- FormattedTextField ----
+
+FormattedTextField.background  [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+FormattedTextField.contentMargins 6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
+FormattedTextField.disabled    [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+FormattedTextField.disabledText [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+FormattedTextField.font        [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+FormattedTextField.foreground  [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+FormattedTextFieldUI           javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- FormattedTextField[Disabled] ----
+
+FormattedTextField[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FormattedTextFieldPainter
+FormattedTextField[Disabled].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FormattedTextFieldPainter
+FormattedTextField[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- FormattedTextField[Enabled] ----
+
+FormattedTextField[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FormattedTextFieldPainter
+FormattedTextField[Enabled].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FormattedTextFieldPainter
+
+
+#---- FormattedTextField[Focused] ----
+
+FormattedTextField[Focused].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FormattedTextFieldPainter
+
+
+#---- FormattedTextField[Selected] ----
+
+FormattedTextField[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.FormattedTextFieldPainter
+FormattedTextField[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- InternalFrame ----
+
+InternalFrame.States           Enabled,WindowFocused
+InternalFrame.WindowFocused    [unknown type] javax.swing.plaf.nimbus.InternalFrameWindowFocusedState
+InternalFrame.background       [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+InternalFrame.contentMargins   1,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame.disabled         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+InternalFrame.disabledText     [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+InternalFrame.font             [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+InternalFrame.foreground       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+InternalFrame.titleFont        [active] sansserif bold 12    java.awt.Font
+InternalFrame.windowBindings   length=6    [Ljava.lang.Object;
+    [0] shift ESCAPE
+    [1] showSystemMenu
+    [2] ctrl SPACE
+    [3] showSystemMenu
+    [4] ESCAPE
+    [5] hideSystemMenu
+
+
+#---- InternalFrame:InternalFrameTitlePane ----
+
+InternalFrame:InternalFrameTitlePane.States Enabled,WindowFocused
+InternalFrame:InternalFrameTitlePane.WindowFocused [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneWindowFocusedState
+InternalFrame:InternalFrameTitlePane.contentMargins 3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame:InternalFrameTitlePane.titleAlignment CENTER
+
+
+#---- InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane ----
+
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton".States Enabled,MouseOver,Pressed,Disabled,Focused,Selected,WindowNotFocused
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton".WindowNotFocused [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneCloseButtonWindowNotFocusedState
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton".contentMargins 9,9,9,9    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton"[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneCloseButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton"[Enabled+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneCloseButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneCloseButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton"[MouseOver+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneCloseButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton"[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneCloseButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton"[Pressed+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneCloseButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.closeButton"[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneCloseButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton".States Enabled,MouseOver,Pressed,Disabled,Focused,Selected,WindowNotFocused
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton".WindowNotFocused [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneIconifyButtonWindowNotFocusedState
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton".contentMargins 9,9,9,9    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton"[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneIconifyButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton"[Enabled+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneIconifyButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneIconifyButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton"[MouseOver+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneIconifyButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton"[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneIconifyButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton"[Pressed+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneIconifyButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.iconifyButton"[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneIconifyButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton".States Enabled,MouseOver,Pressed,Disabled,Focused,Selected,WindowNotFocused,WindowMaximized
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton".WindowMaximized [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonWindowMaximizedState
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton".WindowNotFocused [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonWindowNotFocusedState
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton".contentMargins 9,9,9,9    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Disabled+WindowMaximized].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Enabled+WindowMaximized+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Enabled+WindowMaximized].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Enabled+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[MouseOver+WindowMaximized+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[MouseOver+WindowMaximized].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[MouseOver+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Pressed+WindowMaximized+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Pressed+WindowMaximized].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Pressed+WindowNotFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.maximizeButton"[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMaximizeButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton".States Enabled,MouseOver,Pressed,Disabled,Focused,Selected,WindowNotFocused
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton".WindowNotFocused [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMenuButtonWindowNotFocusedState
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton".icon 19,18    javax.swing.plaf.nimbus.NimbusIcon
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton".test am InternalFrameTitlePane.menuButton
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton"[Disabled].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMenuButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton"[Enabled+WindowNotFocused].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMenuButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton"[Enabled].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMenuButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton"[MouseOver+WindowNotFocused].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMenuButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton"[MouseOver].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMenuButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton"[Pressed+WindowNotFocused].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMenuButtonPainter
+InternalFrame:InternalFrameTitlePane:"InternalFrameTitlePane.menuButton"[Pressed].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFrameTitlePaneMenuButtonPainter
+
+
+#---- InternalFrame:InternalFrameTitlePane[Enabled] ----
+
+InternalFrame:InternalFrameTitlePane[Enabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- InternalFrameTitlePane ----
+
+InternalFrameTitlePane.background [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+InternalFrameTitlePane.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrameTitlePane.disabled [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+InternalFrameTitlePane.disabledText [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+InternalFrameTitlePane.font    [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+InternalFrameTitlePane.foreground [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+InternalFrameTitlePane.maxFrameIconSize 18,18    javax.swing.plaf.DimensionUIResource [UI]
+InternalFrameTitlePaneUI       javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- InternalFrame ----
+
+InternalFrameUI                javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- InternalFrame[Enabled+WindowFocused] ----
+
+InternalFrame[Enabled+WindowFocused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFramePainter
+
+
+#---- InternalFrame[Enabled] ----
+
+InternalFrame[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.InternalFramePainter
+
+
+#---- Label ----
+
+Label.background               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Label.contentMargins           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Label.disabled                 [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Label.disabledText             [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Label.font                     [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Label.foreground               [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+LabelUI                        javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- Label[Disabled] ----
+
+Label[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- List ----
+
+List.background                #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List.cellNoFocusBorder         2,5,2,5  false    javax.swing.plaf.BorderUIResource [UI]
+List.contentMargins            0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+List.disabled                  [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List.disabledText              [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List.dropLineColor             #73a4d1    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List.focusCellHighlightBorder  2,5,2,5  false    javax.swing.plaf.BorderUIResource [UI]
+List.font                      [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+List.foreground                [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List.opaque                    true
+List.rendererUseListColors     false
+List.rendererUseUIBorder       true
+
+
+#---- List:"List ----
+
+List:"List.cellRenderer".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+List:"List.cellRenderer".opaque true
+List:"List.cellRenderer"[Disabled+Selected].background #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List:"List.cellRenderer"[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List:"List.cellRenderer"[Selected].background #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List:"List.cellRenderer"[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- List ----
+
+ListUI                         javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- List[Disabled+Selected] ----
+
+List[Disabled+Selected].textBackground #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- List[Disabled] ----
+
+List[Disabled].textForeground  #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- List[Selected] ----
+
+List[Selected].textBackground  #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+List[Selected].textForeground  #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Menu ----
+
+Menu.arrowIcon                 9,10    javax.swing.plaf.nimbus.NimbusIcon
+Menu.background                [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Menu.contentMargins            1,12,2,5    javax.swing.plaf.InsetsUIResource [UI]
+Menu.disabled                  [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Menu.disabledText              [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Menu.font                      [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Menu.foreground                [active] #232324    javax.swing.plaf.ColorUIResource [UI]
+Menu.textIconGap               5
+
+
+#---- Menu:MenuItemAccelerator ----
+
+Menu:MenuItemAccelerator.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- Menu:MenuItemAccelerator[MouseOver] ----
+
+Menu:MenuItemAccelerator[MouseOver].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- MenuBar ----
+
+MenuBar.background             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+MenuBar.contentMargins         2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+MenuBar.disabled               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+MenuBar.disabledText           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+MenuBar.font                   [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuBar.foreground             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+MenuBar.windowBindings         length=2    [Ljava.lang.Object;
+    [0] F10
+    [1] takeFocus
+
+
+#---- MenuBar:Menu ----
+
+MenuBar:Menu.contentMargins    1,4,2,4    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- MenuBar:Menu:MenuItemAccelerator ----
+
+MenuBar:Menu:MenuItemAccelerator.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- MenuBar:Menu[Disabled] ----
+
+MenuBar:Menu[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- MenuBar:Menu[Enabled] ----
+
+MenuBar:Menu[Enabled].textForeground #232324    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- MenuBar:Menu[Selected] ----
+
+MenuBar:Menu[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.MenuBarMenuPainter
+MenuBar:Menu[Selected].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- MenuBar ----
+
+MenuBarUI                      javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- MenuBar[Enabled] ----
+
+MenuBar[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.MenuBarPainter
+MenuBar[Enabled].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.MenuBarPainter
+
+
+#---- MenuItem ----
+
+MenuItem.background            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+MenuItem.contentMargins        1,12,2,13    javax.swing.plaf.InsetsUIResource [UI]
+MenuItem.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+MenuItem.disabledText          [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+MenuItem.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuItem.foreground            [active] #232324    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.textIconGap           5
+
+
+#---- MenuItem:MenuItemAccelerator ----
+
+MenuItem:MenuItemAccelerator.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- MenuItem:MenuItemAccelerator[Disabled] ----
+
+MenuItem:MenuItemAccelerator[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- MenuItem:MenuItemAccelerator[MouseOver] ----
+
+MenuItem:MenuItemAccelerator[MouseOver].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- MenuItem ----
+
+MenuItemUI                     javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- MenuItem[Disabled] ----
+
+MenuItem[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- MenuItem[Enabled] ----
+
+MenuItem[Enabled].textForeground #232324    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- MenuItem[MouseOver] ----
+
+MenuItem[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.MenuItemPainter
+MenuItem[MouseOver].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- Menu ----
+
+MenuUI                         javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- Menu[Disabled] ----
+
+Menu[Disabled].arrowIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.MenuPainter
+Menu[Disabled].textForeground  #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Menu[Enabled+Selected] ----
+
+Menu[Enabled+Selected].arrowIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.MenuPainter
+Menu[Enabled+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.MenuPainter
+Menu[Enabled+Selected].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- Menu[Enabled] ----
+
+Menu[Enabled].arrowIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.MenuPainter
+Menu[Enabled].textForeground   #232324    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- OptionPane ----
+
+OptionPane.background          [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+OptionPane.buttonOrientation   4
+OptionPane.contentMargins      15,15,15,15    javax.swing.plaf.InsetsUIResource [UI]
+OptionPane.disabled            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+OptionPane.disabledText        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+OptionPane.errorIcon           48,48    javax.swing.plaf.nimbus.NimbusIcon
+OptionPane.font                [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+OptionPane.foreground          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+OptionPane.informationIcon     48,48    javax.swing.plaf.nimbus.NimbusIcon
+OptionPane.isYesLast           false
+OptionPane.messageAnchor       17
+OptionPane.opaque              true
+OptionPane.questionIcon        48,48    javax.swing.plaf.nimbus.NimbusIcon
+OptionPane.sameSizeButtons     false
+OptionPane.separatorPadding    0
+OptionPane.warningIcon         48,48    javax.swing.plaf.nimbus.NimbusIcon
+OptionPane.windowBindings      length=2    [Ljava.lang.Object;
+    [0] ESCAPE
+    [1] close
+
+
+#---- OptionPane:"OptionPane ----
+
+OptionPane:"OptionPane.messageArea".contentMargins 0,0,10,0    javax.swing.plaf.InsetsUIResource [UI]
+OptionPane:"OptionPane.messageArea":"OptionPane.label".contentMargins 0,10,10,10    javax.swing.plaf.InsetsUIResource [UI]
+OptionPane:"OptionPane.messageArea":"OptionPane.label"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.OptionPaneMessageAreaOptionPaneLabelPainter
+OptionPane:"OptionPane.separator".contentMargins 1,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- OptionPane ----
+
+OptionPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- OptionPane[Enabled] ----
+
+OptionPane[Enabled].errorIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.OptionPanePainter
+OptionPane[Enabled].informationIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.OptionPanePainter
+OptionPane[Enabled].questionIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.OptionPanePainter
+OptionPane[Enabled].warningIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.OptionPanePainter
+
+
+#---- Panel ----
+
+Panel.background               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Panel.contentMargins           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Panel.disabled                 [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Panel.disabledText             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Panel.font                     [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Panel.foreground               [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Panel.opaque                   true
+PanelUI                        javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- PasswordField ----
+
+PasswordField.background       [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PasswordField.contentMargins   6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
+PasswordField.disabled         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PasswordField.disabledText     [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PasswordField.font             [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+PasswordField.foreground       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PasswordFieldUI                javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- PasswordField[Disabled] ----
+
+PasswordField[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PasswordFieldPainter
+PasswordField[Disabled].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PasswordFieldPainter
+PasswordField[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- PasswordField[Enabled] ----
+
+PasswordField[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PasswordFieldPainter
+PasswordField[Enabled].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PasswordFieldPainter
+
+
+#---- PasswordField[Focused] ----
+
+PasswordField[Focused].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PasswordFieldPainter
+
+
+#---- PasswordField[Selected] ----
+
+PasswordField[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PasswordFieldPainter
+PasswordField[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- PopupMenu ----
+
+PopupMenu.background           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PopupMenu.consumeEventOnClose  true
+PopupMenu.contentMargins       6,1,6,1    javax.swing.plaf.InsetsUIResource [UI]
+PopupMenu.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PopupMenu.disabledText         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PopupMenu.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+PopupMenu.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PopupMenu.opaque               true
+
+
+#---- PopupMenuSeparator ----
+
+PopupMenuSeparator.background  [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PopupMenuSeparator.contentMargins 1,0,2,0    javax.swing.plaf.InsetsUIResource [UI]
+PopupMenuSeparator.disabled    [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PopupMenuSeparator.disabledText [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PopupMenuSeparator.font        [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+PopupMenuSeparator.foreground  [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+PopupMenuSeparatorUI           javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- PopupMenuSeparator[Enabled] ----
+
+PopupMenuSeparator[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PopupMenuSeparatorPainter
+
+
+#---- PopupMenu ----
+
+PopupMenuUI                    javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- PopupMenu[Disabled] ----
+
+PopupMenu[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PopupMenuPainter
+
+
+#---- PopupMenu[Enabled] ----
+
+PopupMenu[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.PopupMenuPainter
+
+
+#---- ProgressBar ----
+
+ProgressBar.Finished           [unknown type] javax.swing.plaf.nimbus.ProgressBarFinishedState
+ProgressBar.Indeterminate      [unknown type] javax.swing.plaf.nimbus.ProgressBarIndeterminateState
+ProgressBar.States             Enabled,Disabled,Indeterminate,Finished
+ProgressBar.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ProgressBar.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ProgressBar.cycleTime          250
+ProgressBar.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ProgressBar.disabledText       [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ProgressBar.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ProgressBar.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ProgressBar.glowWidth          2
+ProgressBar.horizontalSize     150,19    javax.swing.plaf.DimensionUIResource [UI]
+ProgressBar.minBarSize         6,6    javax.swing.plaf.DimensionUIResource [UI]
+ProgressBar.paintOutsideClip   true
+ProgressBar.rotateText         true
+ProgressBar.tileWhenIndeterminate true
+ProgressBar.tileWidth          27
+ProgressBar.vertictalSize      19,150    javax.swing.plaf.DimensionUIResource [UI]
+ProgressBarUI                  javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ProgressBar[Disabled+Finished] ----
+
+ProgressBar[Disabled+Finished].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ProgressBarPainter
+
+
+#---- ProgressBar[Disabled+Indeterminate] ----
+
+ProgressBar[Disabled+Indeterminate].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ProgressBarPainter
+ProgressBar[Disabled+Indeterminate].progressPadding 3
+
+
+#---- ProgressBar[Disabled] ----
+
+ProgressBar[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ProgressBarPainter
+ProgressBar[Disabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ProgressBarPainter
+ProgressBar[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- ProgressBar[Enabled+Finished] ----
+
+ProgressBar[Enabled+Finished].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ProgressBarPainter
+
+
+#---- ProgressBar[Enabled+Indeterminate] ----
+
+ProgressBar[Enabled+Indeterminate].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ProgressBarPainter
+ProgressBar[Enabled+Indeterminate].progressPadding 3
+
+
+#---- ProgressBar[Enabled] ----
+
+ProgressBar[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ProgressBarPainter
+ProgressBar[Enabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ProgressBarPainter
+
+
+#---- RadioButton ----
+
+RadioButton.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RadioButton.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+RadioButton.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RadioButton.disabledText       [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RadioButton.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButton.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RadioButton.icon               18,18    javax.swing.plaf.nimbus.NimbusIcon
+
+
+#---- RadioButtonMenuItem ----
+
+RadioButtonMenuItem.background [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RadioButtonMenuItem.checkIcon  9,10    javax.swing.plaf.nimbus.NimbusIcon
+RadioButtonMenuItem.contentMargins 1,12,2,13    javax.swing.plaf.InsetsUIResource [UI]
+RadioButtonMenuItem.disabled   [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RadioButtonMenuItem.disabledText [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RadioButtonMenuItem.font       [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButtonMenuItem.foreground [active] #232324    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.textIconGap 5
+
+
+#---- RadioButtonMenuItem:MenuItemAccelerator ----
+
+RadioButtonMenuItem:MenuItemAccelerator.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- RadioButtonMenuItem:MenuItemAccelerator[MouseOver] ----
+
+RadioButtonMenuItem:MenuItemAccelerator[MouseOver].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- RadioButtonMenuItem ----
+
+RadioButtonMenuItemUI          javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- RadioButtonMenuItem[Disabled+Selected] ----
+
+RadioButtonMenuItem[Disabled+Selected].checkIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonMenuItemPainter
+
+
+#---- RadioButtonMenuItem[Disabled] ----
+
+RadioButtonMenuItem[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- RadioButtonMenuItem[Enabled+Selected] ----
+
+RadioButtonMenuItem[Enabled+Selected].checkIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonMenuItemPainter
+
+
+#---- RadioButtonMenuItem[Enabled] ----
+
+RadioButtonMenuItem[Enabled].textForeground #232324    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- RadioButtonMenuItem[MouseOver+Selected] ----
+
+RadioButtonMenuItem[MouseOver+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonMenuItemPainter
+RadioButtonMenuItem[MouseOver+Selected].checkIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonMenuItemPainter
+RadioButtonMenuItem[MouseOver+Selected].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- RadioButtonMenuItem[MouseOver] ----
+
+RadioButtonMenuItem[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonMenuItemPainter
+RadioButtonMenuItem[MouseOver].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- RadioButton ----
+
+RadioButtonUI                  javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- RadioButton[Disabled+Selected] ----
+
+RadioButton[Disabled+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Disabled] ----
+
+RadioButton[Disabled].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+RadioButton[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- RadioButton[Enabled] ----
+
+RadioButton[Enabled].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Focused+MouseOver+Selected] ----
+
+RadioButton[Focused+MouseOver+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Focused+MouseOver] ----
+
+RadioButton[Focused+MouseOver].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Focused+Pressed+Selected] ----
+
+RadioButton[Focused+Pressed+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Focused+Pressed] ----
+
+RadioButton[Focused+Pressed].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Focused+Selected] ----
+
+RadioButton[Focused+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Focused] ----
+
+RadioButton[Focused].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[MouseOver+Selected] ----
+
+RadioButton[MouseOver+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[MouseOver] ----
+
+RadioButton[MouseOver].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Pressed+Selected] ----
+
+RadioButton[Pressed+Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Pressed] ----
+
+RadioButton[Pressed].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RadioButton[Selected] ----
+
+RadioButton[Selected].iconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.RadioButtonPainter
+
+
+#---- RootPane ----
+
+RootPane.background            #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RootPane.contentMargins        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
+    [0] ENTER
+    [1] press
+    [2] released ENTER
+    [3] release
+    [4] ctrl ENTER
+    [5] press
+    [6] ctrl released ENTER
+    [7] release
+RootPane.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RootPane.disabledText          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RootPane.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+RootPane.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+RootPane.opaque                true
+RootPaneUI                     javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ScrollBar ----
+
+ScrollBar.background           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBar.contentMargins       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ScrollBar.decrementButtonGap   -8
+ScrollBar.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBar.disabledText         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBar.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollBar.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBar.incrementButtonGap   -8
+ScrollBar.maximumThumbSize     1000,1000    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.minimumThumbSize     29,29    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.opaque               true
+ScrollBar.thumbHeight          15
+
+
+#---- ScrollBar:"ScrollBar ----
+
+ScrollBar:"ScrollBar.button".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ScrollBar:"ScrollBar.button".size 25
+ScrollBar:"ScrollBar.button"[Disabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarButtonPainter
+ScrollBar:"ScrollBar.button"[Enabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarButtonPainter
+ScrollBar:"ScrollBar.button"[MouseOver].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarButtonPainter
+ScrollBar:"ScrollBar.button"[Pressed].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarButtonPainter
+
+
+#---- ScrollBar:ScrollBarThumb ----
+
+ScrollBar:ScrollBarThumb.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- ScrollBar:ScrollBarThumb[Enabled] ----
+
+ScrollBar:ScrollBarThumb[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarThumbPainter
+
+
+#---- ScrollBar:ScrollBarThumb[MouseOver] ----
+
+ScrollBar:ScrollBarThumb[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarThumbPainter
+
+
+#---- ScrollBar:ScrollBarThumb[Pressed] ----
+
+ScrollBar:ScrollBarThumb[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarThumbPainter
+
+
+#---- ScrollBar:ScrollBarTrack ----
+
+ScrollBar:ScrollBarTrack.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- ScrollBar:ScrollBarTrack[Disabled] ----
+
+ScrollBar:ScrollBarTrack[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarTrackPainter
+
+
+#---- ScrollBar:ScrollBarTrack[Enabled] ----
+
+ScrollBar:ScrollBarTrack[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollBarTrackPainter
+
+
+#---- ScrollBarThumb ----
+
+ScrollBarThumb.background      [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBarThumb.disabled        [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBarThumb.disabledText    [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBarThumb.font            [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollBarThumb.foreground      [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- ScrollBarTrack ----
+
+ScrollBarTrack.background      [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBarTrack.disabled        [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBarTrack.disabledText    [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollBarTrack.font            [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollBarTrack.foreground      [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- ScrollBar ----
+
+ScrollBarUI                    javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ScrollPane ----
+
+ScrollPane.background          [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollPane.contentMargins      3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+ScrollPane.disabled            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollPane.disabledText        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollPane.font                [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollPane.foreground          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ScrollPane.useChildTextComponentFocus true
+ScrollPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ScrollPane[Enabled+Focused] ----
+
+ScrollPane[Enabled+Focused].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollPanePainter
+
+
+#---- ScrollPane[Enabled] ----
+
+ScrollPane[Enabled].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ScrollPanePainter
+
+
+#---- Separator ----
+
+Separator.background           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Separator.contentMargins       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Separator.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Separator.disabledText         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Separator.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Separator.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SeparatorUI                    javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- Separator[Enabled] ----
+
+Separator[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SeparatorPainter
+
+
+#---- Slider ----
+
+Slider.ArrowShape              [unknown type] javax.swing.plaf.nimbus.SliderArrowShapeState
+Slider.States                  Enabled,MouseOver,Pressed,Disabled,Focused,Selected,ArrowShape
+Slider.background              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Slider.contentMargins          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Slider.disabled                [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Slider.disabledText            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Slider.font                    [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Slider.foreground              [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Slider.paintValue              false
+Slider.thumbHeight             17
+Slider.thumbWidth              17
+Slider.tickColor               #232830    javax.swing.plaf.ColorUIResource [UI]
+Slider.trackBorder             0
+
+
+#---- Slider:SliderThumb ----
+
+Slider:SliderThumb.ArrowShape  [unknown type] javax.swing.plaf.nimbus.SliderThumbArrowShapeState
+Slider:SliderThumb.States      Enabled,MouseOver,Pressed,Disabled,Focused,Selected,ArrowShape
+Slider:SliderThumb.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- Slider:SliderThumb[ArrowShape+Disabled] ----
+
+Slider:SliderThumb[ArrowShape+Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[ArrowShape+Enabled] ----
+
+Slider:SliderThumb[ArrowShape+Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[ArrowShape+Focused+MouseOver] ----
+
+Slider:SliderThumb[ArrowShape+Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[ArrowShape+Focused+Pressed] ----
+
+Slider:SliderThumb[ArrowShape+Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[ArrowShape+Focused] ----
+
+Slider:SliderThumb[ArrowShape+Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[ArrowShape+MouseOver] ----
+
+Slider:SliderThumb[ArrowShape+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[ArrowShape+Pressed] ----
+
+Slider:SliderThumb[ArrowShape+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[Disabled] ----
+
+Slider:SliderThumb[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[Enabled] ----
+
+Slider:SliderThumb[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[Focused+MouseOver] ----
+
+Slider:SliderThumb[Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[Focused+Pressed] ----
+
+Slider:SliderThumb[Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[Focused] ----
+
+Slider:SliderThumb[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[MouseOver] ----
+
+Slider:SliderThumb[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderThumb[Pressed] ----
+
+Slider:SliderThumb[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderThumbPainter
+
+
+#---- Slider:SliderTrack ----
+
+Slider:SliderTrack.ArrowShape  [unknown type] javax.swing.plaf.nimbus.SliderTrackArrowShapeState
+Slider:SliderTrack.States      Enabled,MouseOver,Pressed,Disabled,Focused,Selected,ArrowShape
+Slider:SliderTrack.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- Slider:SliderTrack[Disabled] ----
+
+Slider:SliderTrack[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderTrackPainter
+
+
+#---- Slider:SliderTrack[Enabled] ----
+
+Slider:SliderTrack[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SliderTrackPainter
+
+
+#---- SliderThumb ----
+
+SliderThumb.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SliderThumb.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SliderThumb.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SliderThumb.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+SliderThumb.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- SliderTrack ----
+
+SliderTrack.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SliderTrack.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SliderTrack.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SliderTrack.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+SliderTrack.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Slider ----
+
+SliderUI                       javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- Spinner ----
+
+Spinner.background             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Spinner.contentMargins         0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Spinner.disabled               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Spinner.disabledText           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Spinner.font                   [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Spinner.foreground             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Spinner:"Spinner ----
+
+Spinner:"Spinner.editor".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Spinner:"Spinner.nextButton".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Spinner:"Spinner.nextButton".size 20
+Spinner:"Spinner.nextButton"[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Disabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Enabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Focused+MouseOver].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Focused+Pressed].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Focused].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[MouseOver].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.nextButton"[Pressed].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerNextButtonPainter
+Spinner:"Spinner.previousButton".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Spinner:"Spinner.previousButton".size 20
+Spinner:"Spinner.previousButton"[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Disabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Enabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Focused+MouseOver].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Focused+Pressed].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Focused].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[MouseOver].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+Spinner:"Spinner.previousButton"[Pressed].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPreviousButtonPainter
+
+
+#---- Spinner:Panel:"Spinner ----
+
+Spinner:Panel:"Spinner.formattedTextField".contentMargins 6,6,5,6    javax.swing.plaf.InsetsUIResource [UI]
+Spinner:Panel:"Spinner.formattedTextField"[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPanelSpinnerFormattedTextFieldPainter
+Spinner:Panel:"Spinner.formattedTextField"[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Spinner:Panel:"Spinner.formattedTextField"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPanelSpinnerFormattedTextFieldPainter
+Spinner:Panel:"Spinner.formattedTextField"[Focused+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPanelSpinnerFormattedTextFieldPainter
+Spinner:Panel:"Spinner.formattedTextField"[Focused+Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Spinner:Panel:"Spinner.formattedTextField"[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPanelSpinnerFormattedTextFieldPainter
+Spinner:Panel:"Spinner.formattedTextField"[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SpinnerPanelSpinnerFormattedTextFieldPainter
+Spinner:Panel:"Spinner.formattedTextField"[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Spinner ----
+
+SpinnerUI                      javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- SplitPane ----
+
+SplitPane.States               Enabled,MouseOver,Pressed,Disabled,Focused,Selected,Vertical
+SplitPane.Vertical             [unknown type] javax.swing.plaf.nimbus.SplitPaneVerticalState
+SplitPane.background           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SplitPane.centerOneTouchButtons true
+SplitPane.contentMargins       1,1,1,1    javax.swing.plaf.InsetsUIResource [UI]
+SplitPane.continuousLayout     true
+SplitPane.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SplitPane.disabledText         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SplitPane.dividerSize          10
+SplitPane.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+SplitPane.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+SplitPane.oneTouchButtonOffset 30
+SplitPane.oneTouchExpandable   false
+SplitPane.size                 10
+
+
+#---- SplitPane:SplitPaneDivider ----
+
+SplitPane:SplitPaneDivider.States Enabled,MouseOver,Pressed,Disabled,Focused,Selected,Vertical
+SplitPane:SplitPaneDivider.Vertical [unknown type] javax.swing.plaf.nimbus.SplitPaneDividerVerticalState
+SplitPane:SplitPaneDivider.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- SplitPane:SplitPaneDivider[Enabled+Vertical] ----
+
+SplitPane:SplitPaneDivider[Enabled+Vertical].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SplitPaneDividerPainter
+
+
+#---- SplitPane:SplitPaneDivider[Enabled] ----
+
+SplitPane:SplitPaneDivider[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SplitPaneDividerPainter
+SplitPane:SplitPaneDivider[Enabled].foregroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SplitPaneDividerPainter
+
+
+#---- SplitPane:SplitPaneDivider[Focused] ----
+
+SplitPane:SplitPaneDivider[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.SplitPaneDividerPainter
+
+
+#---- SplitPane ----
+
+SplitPaneUI                    javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- TabbedPane ----
+
+TabbedPane.background          [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TabbedPane.contentMargins      0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.darkShadow          #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TabbedPane.disabled            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TabbedPane.disabledText        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TabbedPane.extendTabsToBase    true
+TabbedPane.font                [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TabbedPane.foreground          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TabbedPane.highlight           #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TabbedPane.isTabRollover       true
+TabbedPane.nudgeSelectedLabel  false
+TabbedPane.shadow              #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TabbedPane.tabAreaStatesMatchSelectedTab true
+TabbedPane.tabOverlap          -1
+TabbedPane.tabRunOverlay       2
+TabbedPane.useBasicArrows      true
+
+
+#---- TabbedPane:TabbedPaneContent ----
+
+TabbedPane:TabbedPaneContent.contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- TabbedPane:TabbedPaneTab ----
+
+TabbedPane:TabbedPaneTab.contentMargins 2,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- TabbedPane:TabbedPaneTabArea ----
+
+TabbedPane:TabbedPaneTabArea.contentMargins 3,10,4,10    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- TabbedPane:TabbedPaneTabArea[Disabled] ----
+
+TabbedPane:TabbedPaneTabArea[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabAreaPainter
+
+
+#---- TabbedPane:TabbedPaneTabArea[Enabled+MouseOver] ----
+
+TabbedPane:TabbedPaneTabArea[Enabled+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabAreaPainter
+
+
+#---- TabbedPane:TabbedPaneTabArea[Enabled+Pressed] ----
+
+TabbedPane:TabbedPaneTabArea[Enabled+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabAreaPainter
+
+
+#---- TabbedPane:TabbedPaneTabArea[Enabled] ----
+
+TabbedPane:TabbedPaneTabArea[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabAreaPainter
+
+
+#---- TabbedPane:TabbedPaneTab[Disabled+Selected] ----
+
+TabbedPane:TabbedPaneTab[Disabled+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+
+
+#---- TabbedPane:TabbedPaneTab[Disabled] ----
+
+TabbedPane:TabbedPaneTab[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+TabbedPane:TabbedPaneTab[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- TabbedPane:TabbedPaneTab[Enabled+MouseOver] ----
+
+TabbedPane:TabbedPaneTab[Enabled+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+
+
+#---- TabbedPane:TabbedPaneTab[Enabled+Pressed] ----
+
+TabbedPane:TabbedPaneTab[Enabled+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+
+
+#---- TabbedPane:TabbedPaneTab[Enabled] ----
+
+TabbedPane:TabbedPaneTab[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+
+
+#---- TabbedPane:TabbedPaneTab[Focused+MouseOver+Selected] ----
+
+TabbedPane:TabbedPaneTab[Focused+MouseOver+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+
+
+#---- TabbedPane:TabbedPaneTab[Focused+Pressed+Selected] ----
+
+TabbedPane:TabbedPaneTab[Focused+Pressed+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+TabbedPane:TabbedPaneTab[Focused+Pressed+Selected].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- TabbedPane:TabbedPaneTab[Focused+Selected] ----
+
+TabbedPane:TabbedPaneTab[Focused+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+
+
+#---- TabbedPane:TabbedPaneTab[MouseOver+Selected] ----
+
+TabbedPane:TabbedPaneTab[MouseOver+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+
+
+#---- TabbedPane:TabbedPaneTab[Pressed+Selected] ----
+
+TabbedPane:TabbedPaneTab[Pressed+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+TabbedPane:TabbedPaneTab[Pressed+Selected].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- TabbedPane:TabbedPaneTab[Selected] ----
+
+TabbedPane:TabbedPaneTab[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TabbedPaneTabPainter
+
+
+#---- TabbedPane ----
+
+TabbedPaneUI                   javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- Table ----
+
+Table.alternateRowColor        #f2f2f2    javax.swing.plaf.nimbus.DerivedColor
+Table.ascendingSortIcon        7,7    javax.swing.plaf.nimbus.NimbusIcon
+Table.background               #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Table.cellNoFocusBorder        2,5,2,5  false    javax.swing.plaf.BorderUIResource [UI]
+Table.contentMargins           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Table.descendingSortIcon       7,7    javax.swing.plaf.nimbus.NimbusIcon
+Table.disabled                 [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Table.disabledText             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Table.dropLineColor            #73a4d1    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Table.dropLineShortColor       #bf6204    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Table.focusCellHighlightBorder 2,5,2,5  false    javax.swing.plaf.BorderUIResource [UI]
+Table.font                     [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Table.foreground               [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
+Table.opaque                   true
+Table.rendererUseTableColors   true
+Table.rendererUseUIBorder      true
+Table.scrollPaneCornerComponent [active] [unknown type] javax.swing.plaf.nimbus.TableScrollPaneCorner [UI]
+Table.showGrid                 false
+Table.textForeground           #232324    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- Table:"Table ----
+
+Table:"Table.cellRenderer".background #ffffff    javax.swing.plaf.nimbus.DerivedColor
+Table:"Table.cellRenderer".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Table:"Table.cellRenderer".opaque true
+
+
+#---- TableHeader ----
+
+TableHeader.background         [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TableHeader.contentMargins     0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+TableHeader.disabled           [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TableHeader.disabledText       [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TableHeader.font               [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TableHeader.foreground         [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TableHeader.opaque             true
+TableHeader.rightAlignSortArrow true
+
+
+#---- TableHeader:"TableHeader ----
+
+TableHeader:"TableHeader.renderer".Sorted [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererSortedState
+TableHeader:"TableHeader.renderer".States Enabled,MouseOver,Pressed,Disabled,Focused,Selected,Sorted
+TableHeader:"TableHeader.renderer".contentMargins 2,5,4,5    javax.swing.plaf.InsetsUIResource [UI]
+TableHeader:"TableHeader.renderer".opaque true
+TableHeader:"TableHeader.renderer"[Disabled+Sorted].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererPainter
+TableHeader:"TableHeader.renderer"[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererPainter
+TableHeader:"TableHeader.renderer"[Enabled+Focused+Sorted].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererPainter
+TableHeader:"TableHeader.renderer"[Enabled+Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererPainter
+TableHeader:"TableHeader.renderer"[Enabled+Sorted].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererPainter
+TableHeader:"TableHeader.renderer"[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererPainter
+TableHeader:"TableHeader.renderer"[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererPainter
+TableHeader:"TableHeader.renderer"[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderRendererPainter
+
+
+#---- TableHeader ----
+
+TableHeaderUI                  javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- TableHeader[Enabled] ----
+
+TableHeader[Enabled].ascendingSortIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderPainter
+TableHeader[Enabled].descendingSortIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TableHeaderPainter
+
+
+#---- Table ----
+
+TableUI                        javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- Table[Disabled+Selected] ----
+
+Table[Disabled+Selected].textBackground #39698a    javax.swing.plaf.nimbus.DerivedColor
+
+
+#---- Table[Enabled+Selected] ----
+
+Table[Enabled+Selected].textBackground #39698a    javax.swing.plaf.nimbus.DerivedColor
+Table[Enabled+Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor
+
+
+#----  ----
+
+Text-specific LCD contrast key 120
+Text-specific antialiasing enable key [unknown type] sun.awt.SunHints$Value
+
+
+#---- TextArea ----
+
+TextArea.NotInScrollPane       [unknown type] javax.swing.plaf.nimbus.TextAreaNotInScrollPaneState
+TextArea.States                Enabled,MouseOver,Pressed,Selected,Disabled,Focused,NotInScrollPane
+TextArea.background            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextArea.contentMargins        6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
+TextArea.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextArea.disabledText          [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextArea.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TextArea.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextAreaUI                     javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- TextArea[Disabled+NotInScrollPane] ----
+
+TextArea[Disabled+NotInScrollPane].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextAreaPainter
+TextArea[Disabled+NotInScrollPane].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextAreaPainter
+TextArea[Disabled+NotInScrollPane].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- TextArea[Disabled] ----
+
+TextArea[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextAreaPainter
+TextArea[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- TextArea[Enabled+NotInScrollPane] ----
+
+TextArea[Enabled+NotInScrollPane].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextAreaPainter
+TextArea[Enabled+NotInScrollPane].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextAreaPainter
+
+
+#---- TextArea[Enabled] ----
+
+TextArea[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextAreaPainter
+
+
+#---- TextArea[Focused+NotInScrollPane] ----
+
+TextArea[Focused+NotInScrollPane].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextAreaPainter
+
+
+#---- TextArea[Selected] ----
+
+TextArea[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextAreaPainter
+TextArea[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- TextField ----
+
+TextField.background           #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextField.contentMargins       6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
+TextField.disabled             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextField.disabledText         [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextField.font                 [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TextField.foreground           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextFieldUI                    javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- TextField[Disabled] ----
+
+TextField[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextFieldPainter
+TextField[Disabled].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextFieldPainter
+TextField[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- TextField[Enabled] ----
+
+TextField[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextFieldPainter
+TextField[Enabled].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextFieldPainter
+
+
+#---- TextField[Focused] ----
+
+TextField[Focused].borderPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextFieldPainter
+
+
+#---- TextField[Selected] ----
+
+TextField[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextFieldPainter
+TextField[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- TextPane ----
+
+TextPane.background            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextPane.contentMargins        4,6,4,6    javax.swing.plaf.InsetsUIResource [UI]
+TextPane.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextPane.disabledText          [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextPane.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+TextPane.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TextPane.opaque                true
+TextPaneUI                     javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- TextPane[Disabled] ----
+
+TextPane[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextPanePainter
+TextPane[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- TextPane[Enabled] ----
+
+TextPane[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextPanePainter
+
+
+#---- TextPane[Selected] ----
+
+TextPane[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TextPanePainter
+TextPane[Selected].textForeground #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- TitledBorder ----
+
+TitledBorder.border            10,10,10,10  false    javax.swing.plaf.BorderUIResource [UI]
+TitledBorder.font              [active] sansserif bold 12    java.awt.Font
+TitledBorder.position          ABOVE_TOP
+TitledBorder.titleColor        #3b3b3b    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+TitledBorder.titlePosition     1
+
+
+#---- ToggleButton ----
+
+ToggleButton.background        [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToggleButton.contentMargins    6,14,6,14    javax.swing.plaf.InsetsUIResource [UI]
+ToggleButton.disabled          [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToggleButton.disabledText      [active] #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToggleButton.font              [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ToggleButton.foreground        [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToggleButtonUI                 javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ToggleButton[Disabled+Selected] ----
+
+ToggleButton[Disabled+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+ToggleButton[Disabled+Selected].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- ToggleButton[Disabled] ----
+
+ToggleButton[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+ToggleButton[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- ToggleButton[Enabled] ----
+
+ToggleButton[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Focused+MouseOver+Selected] ----
+
+ToggleButton[Focused+MouseOver+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Focused+MouseOver] ----
+
+ToggleButton[Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Focused+Pressed+Selected] ----
+
+ToggleButton[Focused+Pressed+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Focused+Pressed] ----
+
+ToggleButton[Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Focused+Selected] ----
+
+ToggleButton[Focused+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Focused] ----
+
+ToggleButton[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[MouseOver+Selected] ----
+
+ToggleButton[MouseOver+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[MouseOver] ----
+
+ToggleButton[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Pressed+Selected] ----
+
+ToggleButton[Pressed+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Pressed] ----
+
+ToggleButton[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToggleButton[Selected] ----
+
+ToggleButton[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToggleButtonPainter
+
+
+#---- ToolBar ----
+
+ToolBar.East                   [unknown type] javax.swing.plaf.nimbus.ToolBarEastState
+ToolBar.North                  [unknown type] javax.swing.plaf.nimbus.ToolBarNorthState
+ToolBar.South                  [unknown type] javax.swing.plaf.nimbus.ToolBarSouthState
+ToolBar.States                 North,East,West,South
+ToolBar.West                   [unknown type] javax.swing.plaf.nimbus.ToolBarWestState
+ToolBar.background             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolBar.contentMargins         2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
+ToolBar.disabled               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolBar.disabledText           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolBar.font                   [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ToolBar.foreground             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolBar.handleIcon             11,38    javax.swing.plaf.nimbus.NimbusIcon
+ToolBar.opaque                 true
+
+
+#---- ToolBar:Button ----
+
+ToolBar:Button.contentMargins  4,4,4,4    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- ToolBar:Button[Focused+MouseOver] ----
+
+ToolBar:Button[Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarButtonPainter
+
+
+#---- ToolBar:Button[Focused+Pressed] ----
+
+ToolBar:Button[Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarButtonPainter
+
+
+#---- ToolBar:Button[Focused] ----
+
+ToolBar:Button[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarButtonPainter
+
+
+#---- ToolBar:Button[MouseOver] ----
+
+ToolBar:Button[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarButtonPainter
+
+
+#---- ToolBar:Button[Pressed] ----
+
+ToolBar:Button[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarButtonPainter
+
+
+#---- ToolBar:ToggleButton ----
+
+ToolBar:ToggleButton.contentMargins 4,4,4,4    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- ToolBar:ToggleButton[Disabled+Selected] ----
+
+ToolBar:ToggleButton[Disabled+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+ToolBar:ToggleButton[Disabled+Selected].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- ToolBar:ToggleButton[Focused+MouseOver+Selected] ----
+
+ToolBar:ToggleButton[Focused+MouseOver+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[Focused+MouseOver] ----
+
+ToolBar:ToggleButton[Focused+MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[Focused+Pressed+Selected] ----
+
+ToolBar:ToggleButton[Focused+Pressed+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[Focused+Pressed] ----
+
+ToolBar:ToggleButton[Focused+Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[Focused+Selected] ----
+
+ToolBar:ToggleButton[Focused+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[Focused] ----
+
+ToolBar:ToggleButton[Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[MouseOver+Selected] ----
+
+ToolBar:ToggleButton[MouseOver+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[MouseOver] ----
+
+ToolBar:ToggleButton[MouseOver].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[Pressed+Selected] ----
+
+ToolBar:ToggleButton[Pressed+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[Pressed] ----
+
+ToolBar:ToggleButton[Pressed].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBar:ToggleButton[Selected] ----
+
+ToolBar:ToggleButton[Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarToggleButtonPainter
+
+
+#---- ToolBarSeparator ----
+
+ToolBarSeparator.contentMargins 2,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
+ToolBarSeparator.textForeground #9297a1    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolBarSeparatorUI             javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ToolBarSeparator[Enabled] ----
+
+ToolBarSeparator[Enabled].backgroundPainter [unknown type] javax.swing.plaf.nimbus.ToolBarSeparatorPainter
+
+
+#---- ToolBar ----
+
+ToolBarUI                      javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ToolBar[East] ----
+
+ToolBar[East].borderPainter    [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarPainter
+
+
+#---- ToolBar[Enabled] ----
+
+ToolBar[Enabled].handleIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarPainter
+
+
+#---- ToolBar[North] ----
+
+ToolBar[North].borderPainter   [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarPainter
+
+
+#---- ToolBar[South] ----
+
+ToolBar[South].borderPainter   [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarPainter
+
+
+#---- ToolBar[West] ----
+
+ToolBar[West].borderPainter    [lazy] [unknown type] javax.swing.plaf.nimbus.ToolBarPainter
+
+
+#---- ToolTip ----
+
+ToolTip.background             [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolTip.contentMargins         4,4,4,4    javax.swing.plaf.InsetsUIResource [UI]
+ToolTip.disabled               [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolTip.disabledText           [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolTip.font                   [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+ToolTip.foreground             [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+ToolTipUI                      javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- ToolTip[Disabled] ----
+
+ToolTip[Disabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolTipPainter
+
+
+#---- ToolTip[Enabled] ----
+
+ToolTip[Enabled].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.ToolTipPainter
+
+
+#---- Tree ----
+
+Tree.background                #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Tree.closedIcon                16,16    javax.swing.plaf.nimbus.NimbusIcon
+Tree.collapsedIcon             18,7    javax.swing.plaf.nimbus.NimbusIcon
+Tree.contentMargins            0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Tree.disabled                  [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Tree.disabledText              [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Tree.drawHorizontalLines       false
+Tree.drawVerticalLines         false
+Tree.dropLineColor             #73a4d1    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Tree.expandedIcon              18,7    javax.swing.plaf.nimbus.NimbusIcon
+Tree.font                      [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Tree.foreground                [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Tree.leafIcon                  16,16    javax.swing.plaf.nimbus.NimbusIcon
+Tree.leftChildIndent           12
+Tree.opaque                    true
+Tree.openIcon                  16,16    javax.swing.plaf.nimbus.NimbusIcon
+Tree.rendererFillBackground    false
+Tree.rendererMargins           2,0,1,5    javax.swing.plaf.InsetsUIResource [UI]
+Tree.rendererUseTreeColors     true
+Tree.repaintWholeRow           true
+Tree.rightChildIndent          4
+Tree.rowHeight                 0
+Tree.selectionBackground       #39698a    javax.swing.plaf.nimbus.DerivedColor
+Tree.selectionForeground       #ffffff    javax.swing.plaf.nimbus.DerivedColor
+Tree.showRootHandles           false
+Tree.textBackground            #ffffff    javax.swing.plaf.nimbus.DerivedColor
+Tree.textForeground            #000000    javax.swing.plaf.nimbus.DerivedColor
+
+
+#---- Tree:"Tree ----
+
+Tree:"Tree.cellRenderer".contentMargins 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Tree:"Tree.cellRenderer"[Disabled].textForeground #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Tree:TreeCell ----
+
+Tree:TreeCell.contentMargins   0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+
+
+#---- Tree:TreeCell[Enabled+Focused] ----
+
+Tree:TreeCell[Enabled+Focused].background #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Tree:TreeCell[Enabled+Focused].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreeCellPainter
+
+
+#---- Tree:TreeCell[Enabled+Selected] ----
+
+Tree:TreeCell[Enabled+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreeCellPainter
+Tree:TreeCell[Enabled+Selected].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- Tree:TreeCell[Enabled] ----
+
+Tree:TreeCell[Enabled].background #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- Tree:TreeCell[Focused+Selected] ----
+
+Tree:TreeCell[Focused+Selected].backgroundPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreeCellPainter
+Tree:TreeCell[Focused+Selected].textForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- Tree ----
+
+TreeUI                         javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#---- Tree[Enabled+Selected] ----
+
+Tree[Enabled+Selected].collapsedIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreePainter
+Tree[Enabled+Selected].expandedIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreePainter
+
+
+#---- Tree[Enabled] ----
+
+Tree[Enabled].closedIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreePainter
+Tree[Enabled].collapsedIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreePainter
+Tree[Enabled].expandedIconPainter [lazy] [unknown type] javax.swing.plaf.nimbus.TreePainter
+Tree[Enabled].leafIconPainter  [lazy] [unknown type] javax.swing.plaf.nimbus.TreePainter
+Tree[Enabled].openIconPainter  [lazy] [unknown type] javax.swing.plaf.nimbus.TreePainter
+
+
+#---- Viewport ----
+
+Viewport.background            [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Viewport.contentMargins        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Viewport.disabled              [active] #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Viewport.disabledText          [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Viewport.font                  [active] sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+Viewport.foreground            [active] #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+Viewport.opaque                true
+ViewportUI                     javax.swing.plaf.synth.SynthLookAndFeel
+
+
+#----  ----
+
+activeCaption                  #babec6    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+background                     #d6d9df    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+control                        #d6d9df    javax.swing.plaf.ColorUIResource [UI]
+controlDkShadow                #a4abb8    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+controlHighlight               #e9ecf2    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+controlLHighlight              #f7f8fa    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+controlShadow                  #ccd3e0    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+controlText                    #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+defaultFont                    sansserif plain 12    javax.swing.plaf.FontUIResource [UI]
+desktop                        #3d6079    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+
+
+#---- html ----
+
+html.missingImage              [lazy] 38,38    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
+html.pendingImage              [lazy] 38,38    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
+
+
+#----  ----
+
+inactiveCaption                #bdc1c8    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+info                           #f2f2bd    javax.swing.plaf.ColorUIResource [UI]
+infoText                       #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+menu                           #edeff2    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+menuText                       #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+nimbusAlertYellow              #ffdc23    javax.swing.plaf.ColorUIResource [UI]
+nimbusBase                     #33628c    javax.swing.plaf.ColorUIResource [UI]
+nimbusBlueGrey                 #a9b0be    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+nimbusBorder                   #9297a1    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+nimbusDisabledText             #8e8f91    javax.swing.plaf.ColorUIResource [UI]
+nimbusFocus                    #73a4d1    javax.swing.plaf.ColorUIResource [UI]
+nimbusGreen                    #b0b332    javax.swing.plaf.ColorUIResource [UI]
+nimbusInfoBlue                 #2f5cb4    javax.swing.plaf.ColorUIResource [UI]
+nimbusLightBackground          #ffffff    javax.swing.plaf.ColorUIResource [UI]
+nimbusOrange                   #bf6204    javax.swing.plaf.ColorUIResource [UI]
+nimbusRed                      #a92e22    javax.swing.plaf.ColorUIResource [UI]
+nimbusSelectedText             #ffffff    javax.swing.plaf.ColorUIResource [UI]
+nimbusSelection                #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+nimbusSelectionBackground      #39698a    javax.swing.plaf.ColorUIResource [UI]
+scrollbar                      #cdd0d5    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+text                           #000000    javax.swing.plaf.ColorUIResource [UI]
+textBackground                 #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+textForeground                 #000000    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+textHighlight                  #39698a    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+textHighlightText              #ffffff    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]
+textInactiveText               #8e8f91    javax.swing.plaf.nimbus.DerivedColor$UIResource [UI]

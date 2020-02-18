@@ -75,6 +75,7 @@ public class UIDefaultsDump
 
 //		dump( MyBasicLookAndFeel.class.getName(), dir );
 //		dump( MetalLookAndFeel.class.getName(), dir );
+//		dump( NimbusLookAndFeel.class.getName(), dir );
 //
 //		if( SystemInfo.IS_WINDOWS )
 //			dump( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel", dir );
