@@ -36,6 +36,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
@@ -182,6 +184,35 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected ChangeListener createChangeListener() {
+		ChangeListener changeListener = super.createChangeListener();
+		return new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				changeListener.stateChanged(e);
+				int newSelectedTabIndex = ((JTabbedPane)e.getSource()).getSelectedIndex();
+				if(animationState != null && animationState.tabIndex != newSelectedTabIndex) {
+					repaintTab(animationState.tabIndex);
+				}
+				animationState = new AnimationState(newSelectedTabIndex);
+				repaintTab(newSelectedTabIndex);
+			}
+		};
+	}
+	
+	private class AnimationState {
+		public int tabIndex;
+		public long startTime;
+		public AnimationState(int tabIndex) {
+			this.tabIndex = tabIndex;
+			startTime = System.currentTimeMillis();
+		}
+	}
+	
+	private AnimationState animationState;
+	
+	
+	@Override
 	protected JButton createScrollButton( int direction ) {
 		// this method is invoked before installDefaults(), so we can not use color fields here
 		return new FlatArrowButton( direction, UIManager.getString( "Component.arrowType" ),
@@ -208,8 +239,29 @@ public class FlatTabbedPaneUI
 			return;
 
 		Rectangle r = getTabBounds( tabPane, tabIndex );
-		if( r != null )
+		if( r != null ) {
+  		// Add border, or else repaint misses them (and they do change, so they need repainting).
+			int tabPlacement = tabPane.getTabPlacement();
+			Insets contentInsets = getContentBorderInsets( tabPlacement );
+			switch( tabPlacement ) {
+				case TOP:
+				default:
+					r.height += contentInsets.top;
+					break;
+				case BOTTOM:
+					r.height += contentInsets.bottom;
+					r.y -= contentInsets.bottom;
+					break;
+				case LEFT:
+					r.width += contentInsets.left;
+					break;
+				case RIGHT:
+					r.height += contentInsets.right;
+					r.x -= contentInsets.right;
+					break;
+			}
 			tabPane.repaint( r );
+		}
 	}
 
 	@Override
@@ -324,8 +376,52 @@ public class FlatTabbedPaneUI
 				((Graphics2D)g).fill( new Rectangle2D.Float( x, y + offset, sepWidth, h - (offset * 2) ) );
 			}
 		}
+		
+		paintTabSelectionWithAnimation( g, tabPlacement, x, y, w, h, tabIndex, isSelected );
+	}
 
-		if( isSelected )
+	private void paintTabSelectionWithAnimation( Graphics g, int tabPlacement,  int x, int y, int w, int h, int tabIndex, boolean isSelected ) {
+		if(animationState != null && animationState.tabIndex == tabIndex) {
+			long startTime = animationState.startTime;
+			long now = System.currentTimeMillis();
+			long pixelCount = Math.round((now - startTime) / 1.4); // Smaller factor is faster
+			switch( tabPlacement ) {
+				case BOTTOM:
+				case TOP:
+				default:
+					if(pixelCount > w) {
+						animationState = null;
+					}
+					break;
+				case LEFT:
+				case RIGHT:
+					if(pixelCount > h) {
+						animationState = null;
+					}
+					break;
+			}
+			if(animationState != null) {
+				int newX = x;
+				int newY = y;
+				int newWidth = w;
+				int newHeight = h;
+				switch( tabPlacement ) {
+					case BOTTOM:
+					case TOP:
+					default:
+						newWidth = (int)pixelCount;
+						newX += (w - newWidth) / 2;
+						break;
+					case LEFT:
+					case RIGHT:
+						newHeight = (int)pixelCount;
+						newY += (h - newHeight) / 2;
+						break;
+				}
+				paintTabSelection( g, tabPlacement, newX, newY, newWidth, newHeight );
+			}
+			repaintTab(tabIndex);
+		} else if( isSelected )
 			paintTabSelection( g, tabPlacement, x, y, w, h );
 	}
 
@@ -457,7 +553,7 @@ public class FlatTabbedPaneUI
 
 				Shape oldClip = g.getClip();
 				g.setClip( scrollableTabViewport.getBounds() );
-				paintTabSelection( g, tabPlacement, tabRect.x, tabRect.y, tabRect.width, tabRect.height );
+				paintTabSelectionWithAnimation( g, tabPlacement, tabRect.x, tabRect.y, tabRect.width, tabRect.height, selectedIndex, true );
 				g.setClip( oldClip );
 			}
 		}
