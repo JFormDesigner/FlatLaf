@@ -35,16 +35,13 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
-import javax.swing.InputMap;
 import javax.swing.JLabel;
 import javax.swing.JRootPane;
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
-import javax.swing.UIDefaults.LazyValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
@@ -250,7 +247,7 @@ public abstract class FlatLaf
 
 		initFonts( defaults );
 		initIconColors( defaults, isDark() );
-		initInputMaps( defaults );
+		FlatInputMaps.initInputMaps( defaults );
 
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
@@ -354,57 +351,6 @@ public abstract class FlatLaf
 		defaults.put( "Objects.RedStatus",      new ColorUIResource( 0xE05555 ) );
 		defaults.put( "Objects.GreenAndroid",   new ColorUIResource( 0xA4C639 ) );
 		defaults.put( "Objects.BlackText",      new ColorUIResource( 0x231F20 ) );
-	}
-
-	private void initInputMaps( UIDefaults defaults ) {
-		if( SystemInfo.IS_MAC ) {
-			// AquaLookAndFeel (the base for UI defaults on macOS) uses special
-			// action keys (e.g. "aquaExpandNode") for some macOS specific behaviour.
-			// Those action keys are not available in FlatLaf, which makes it
-			// necessary to make some modifications.
-
-			// combobox
-			defaults.put( "ComboBox.ancestorInputMap", new UIDefaults.LazyInputMap( new Object[] {
-				     "ESCAPE", "hidePopup",
-				    "PAGE_UP", "pageUpPassThrough",
-				  "PAGE_DOWN", "pageDownPassThrough",
-				       "HOME", "homePassThrough",
-				        "END", "endPassThrough",
-				       "DOWN", "selectNext",
-				    "KP_DOWN", "selectNext",
-				      "SPACE", "spacePopup",
-				      "ENTER", "enterPressed",
-				         "UP", "selectPrevious",
-				      "KP_UP", "selectPrevious"
-			} ) );
-
-			// tree node expanding/collapsing
-			modifyInputMap( defaults, "Tree.focusInputMap",
-				         "RIGHT", "selectChild",
-				      "KP_RIGHT", "selectChild",
-				          "LEFT", "selectParent",
-				       "KP_LEFT", "selectParent",
-				   "shift RIGHT", null,
-				"shift KP_RIGHT", null,
-				    "shift LEFT", null,
-				 "shift KP_LEFT", null,
-				     "ctrl LEFT", null,
-				  "ctrl KP_LEFT", null,
-				    "ctrl RIGHT", null,
-				 "ctrl KP_RIGHT", null
-			);
-			defaults.put( "Tree.focusInputMap.RightToLeft", new UIDefaults.LazyInputMap( new Object[] {
-	                     "RIGHT", "selectParent",
-	                  "KP_RIGHT", "selectParent",
-	                      "LEFT", "selectChild",
-	                   "KP_LEFT", "selectChild"
-			} ) );
-		}
-	}
-
-	private void modifyInputMap( UIDefaults defaults, String key, Object... bindings ) {
-		// Note: not using `defaults.get(key)` here because this would resolve the lazy value
-		defaults.put( key, new LazyModifyInputMap( defaults.remove( key ), bindings ) );
 	}
 
 	private void putDefaults( UIDefaults defaults, Object value, String... keys ) {
@@ -522,41 +468,5 @@ public abstract class FlatLaf
 		}
 
 		return false;
-	}
-
-	//---- class LazyModifyInputMap -------------------------------------------
-
-	/**
-	 * Takes a (lazy) base input map and lazily applies modifications to it specified in bindings.
-	 */
-	private static class LazyModifyInputMap
-		implements LazyValue
-	{
-		private final Object baseInputMap;
-		private final Object[] bindings;
-
-		public LazyModifyInputMap( Object baseInputMap, Object[] bindings ) {
-			this.baseInputMap = baseInputMap;
-			this.bindings = bindings;
-		}
-
-		@Override
-		public Object createValue( UIDefaults table ) {
-			// get base input map
-			InputMap inputMap = (baseInputMap instanceof LazyValue)
-				? (InputMap) ((LazyValue)baseInputMap).createValue( table )
-				: (InputMap) baseInputMap;
-
-			// modify input map (replace or remove)
-			for( int i = 0; i < bindings.length; i += 2 ) {
-				KeyStroke keyStroke = KeyStroke.getKeyStroke( (String) bindings[i] );
-				if( bindings[i + 1] != null )
-					inputMap.put( keyStroke, bindings[i + 1] );
-				else
-					inputMap.remove( keyStroke );
-			}
-
-			return inputMap;
-		}
 	}
 }
