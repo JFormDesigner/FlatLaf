@@ -49,7 +49,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -115,7 +114,10 @@ public abstract class FlatLaf
 
 	@Override
 	public void initialize() {
-		getBase().initialize();
+		initBase();
+
+		if( base != null )
+			base.initialize();
 
 		super.initialize();
 
@@ -200,34 +202,33 @@ public abstract class FlatLaf
 	}
 
 	/**
-	 * Get/create base LaF. This is used to grab base UI defaults from different LaFs.
-	 * E.g. on Mac from system dependent LaF, otherwise from Metal LaF.
+	 * Create base LaF. This is used to grab base UI defaults from different LaFs.
+	 * On Mac from Aqua LaF, otherwise from Basic LaF.
 	 */
-	private BasicLookAndFeel getBase() {
-		if( base == null ) {
-			if( SystemInfo.IS_MAC ) {
-				// use Mac Aqua LaF as base
-				String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
-				try {
-					if( SystemInfo.IS_JAVA_9_OR_LATER ) {
-						Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
-						base = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
-					} else
-						base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
-				} catch( Exception ex ) {
-					LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
-					throw new IllegalStateException();
-				}
-			} else
-				base = new MetalLookAndFeel();
+	private void initBase() {
+		if( SystemInfo.IS_MAC && base == null ) {
+			// use Mac Aqua LaF as base
+			String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
+			try {
+				if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+					Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
+					base = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
+				} else
+					base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
+			} catch( Exception ex ) {
+				LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
+				throw new IllegalStateException();
+			}
 		}
-		return base;
 	}
 
 	@Override
 	public UIDefaults getDefaults() {
-		UIDefaults defaults = getBase().getDefaults();
-		UIDefaultsRemover.removeDefaults( defaults );
+		initBase();
+
+		UIDefaults defaults = (base != null) ? base.getDefaults() : super.getDefaults();
+		if( base != null )
+			UIDefaultsRemover.removeDefaults( defaults );
 
 		// add Metal resource bundle, which is required for FlatFileChooserUI
 		defaults.addResourceBundle( "com.sun.swing.internal.plaf.metal.resources.metal" );
