@@ -23,6 +23,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
@@ -31,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,11 +63,14 @@ public abstract class FlatLaf
 	extends BasicLookAndFeel
 {
 	static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
+	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
 	private BasicLookAndFeel base;
 
 	private String desktopPropertyName;
 	private PropertyChangeListener desktopPropertyListener;
+
+	private static boolean updateUIPending;
 
 	private KeyEventPostProcessor mnemonicListener;
 	private static boolean showMnemonics;
@@ -139,9 +144,19 @@ public abstract class FlatLaf
 		}
 		if( desktopPropertyName != null ) {
 			desktopPropertyListener = e -> {
-				reSetLookAndFeel();
+				String propertyName = e.getPropertyName();
+				if( desktopPropertyName.equals( propertyName ) )
+					reSetLookAndFeel();
+				else if( DESKTOPFONTHINTS.equals( propertyName ) ) {
+					if( UIManager.getLookAndFeel() instanceof FlatLaf ) {
+						putAATextInfo( UIManager.getLookAndFeelDefaults() );
+						updateUILater();
+					}
+				}
 			};
-			Toolkit.getDefaultToolkit().addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			Toolkit toolkit = Toolkit.getDefaultToolkit();
+			toolkit.addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			toolkit.addPropertyChangeListener( DESKTOPFONTHINTS, desktopPropertyListener );
 		}
 
 		// Following code should be ideally in initialize(), but needs color from UI defaults.
@@ -161,7 +176,9 @@ public abstract class FlatLaf
 	public void uninitialize() {
 		// remove desktop property listener
 		if( desktopPropertyListener != null ) {
-			Toolkit.getDefaultToolkit().removePropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			Toolkit toolkit = Toolkit.getDefaultToolkit();
+			toolkit.removePropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			toolkit.removePropertyChangeListener( DESKTOPFONTHINTS, desktopPropertyListener );
 			desktopPropertyName = null;
 			desktopPropertyListener = null;
 		}
@@ -260,6 +277,10 @@ public abstract class FlatLaf
 		if( useScreenMenuBar )
 			defaults.put( "MenuBarUI", aquaMenuBarUI );
 
+		// initialize text antialiasing
+		if( !SystemInfo.IS_MAC )
+			putAATextInfo( defaults );
+
 		invokePostInitialization( defaults );
 
 		return defaults;
@@ -353,6 +374,39 @@ public abstract class FlatLaf
 		defaults.put( "Objects.BlackText",      new ColorUIResource( 0x231F20 ) );
 	}
 
+	private void putAATextInfo( UIDefaults defaults ) {
+		if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+			Object desktopHints = Toolkit.getDefaultToolkit().getDesktopProperty( DESKTOPFONTHINTS );
+			if( desktopHints instanceof Map ) {
+				@SuppressWarnings( "unchecked" )
+				Map<Object, Object> hints = (Map<Object, Object>) desktopHints;
+				Object aaHint = hints.get( RenderingHints.KEY_TEXT_ANTIALIASING );
+				if( aaHint != null &&
+					aaHint != RenderingHints.VALUE_TEXT_ANTIALIAS_OFF &&
+					aaHint != RenderingHints.VALUE_TEXT_ANTIALIAS_DEFAULT )
+				{
+					defaults.put( RenderingHints.KEY_TEXT_ANTIALIASING, aaHint );
+					defaults.put( RenderingHints.KEY_TEXT_LCD_CONTRAST,
+						hints.get( RenderingHints.KEY_TEXT_LCD_CONTRAST ) );
+				}
+			}
+		} else {
+			// Java 8
+			try {
+				Object key = Class.forName( "sun.swing.SwingUtilities2" )
+					.getField( "AA_TEXT_PROPERTY_KEY" )
+					.get( null );
+				Object value = Class.forName( "sun.swing.SwingUtilities2$AATextInfo" )
+					.getMethod( "getAATextInfo", boolean.class )
+					.invoke( null, true );
+				defaults.put( key, value );
+			} catch( Exception ex ) {
+				Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+				throw new RuntimeException( ex );
+			}
+		}
+	}
+
 	private void putDefaults( UIDefaults defaults, Object value, String... keys ) {
 		for( String key : keys )
 			defaults.put( key, value );
@@ -379,12 +433,31 @@ public abstract class FlatLaf
 	}
 
 	/**
-	 * Update UI of all application windows.
+	 * Update UI of all application windows immediately.
 	 * Invoke after changing LaF.
 	 */
 	public static void updateUI() {
 		for( Window w : Window.getWindows() )
 			SwingUtilities.updateComponentTreeUI( w );
+	}
+
+	/**
+	 * Update UI of all application windows later.
+	 */
+	public static void updateUILater() {
+		synchronized( FlatLaf.class ) {
+			if( updateUIPending )
+				return;
+
+			updateUIPending = true;
+		}
+
+		EventQueue.invokeLater( () -> {
+			updateUI();
+			synchronized( FlatLaf.class ) {
+				updateUIPending = false;
+			}
+		} );
 	}
 
 	public static boolean isShowMnemonics() {
