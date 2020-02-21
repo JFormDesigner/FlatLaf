@@ -398,7 +398,9 @@ public class FlatButtonUI
 		if( isHelpButton( c ) )
 			return new Dimension( helpButtonIcon.getIconWidth(), helpButtonIcon.getIconHeight() );
 
-		Dimension prefSize = super.getPreferredSize( c );
+		Dimension prefSize = super.getPreferredSize(c);
+		if ( prefSize == null )
+			return null;
 
 		// make button square if it is a icon-only button
 		// or apply minimum width, if not in toolbar and not a icon-only button
