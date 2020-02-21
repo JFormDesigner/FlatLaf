@@ -81,6 +81,12 @@ Projects using FlatLaf
 - [Rest Suite](https://github.com/supanadit/restsuite)
 - [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy)
 - [SpringRemote](https://github.com/HaleyWang/SpringRemote)
+- [mendelson AS2](https://sourceforge.net/projects/mec-as2/),
+  [AS4](https://sourceforge.net/projects/mendelson-as4/) and
+  [OFTP2](https://sourceforge.net/projects/mendelson-oftp2/) (open-source) and
+  [mendelson AS2](https://mendelson-e-c.com/as2/),
+  [AS4](https://mendelson-e-c.com/as4/) and
+  [OFTP2](https://mendelson-e-c.com/oftp2) (commercial)
 - and more...
 
 
