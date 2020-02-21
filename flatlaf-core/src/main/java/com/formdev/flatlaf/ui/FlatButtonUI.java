@@ -398,7 +398,7 @@ public class FlatButtonUI
 		if( isHelpButton( c ) )
 			return new Dimension( helpButtonIcon.getIconWidth(), helpButtonIcon.getIconHeight() );
 
-		Dimension prefSize = super.getPreferredSize(c);
+		Dimension prefSize = super.getPreferredSize( c );
 		if ( prefSize == null )
 			return null;
 
