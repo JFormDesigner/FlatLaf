@@ -760,7 +760,7 @@ Panel.background               #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 Panel.font                     .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
 Panel.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
 Panel.opaque                   true
-PanelUI                        com.apple.laf.AquaPanelUI
+PanelUI                        com.formdev.flatlaf.ui.FlatPanelUI
 
 
 #---- PasswordField ----

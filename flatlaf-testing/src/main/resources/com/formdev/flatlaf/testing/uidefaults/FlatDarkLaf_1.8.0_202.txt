@@ -591,7 +591,7 @@ OptionPaneUI                   com.formdev.flatlaf.ui.FlatOptionPaneUI
 Panel.background               #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Panel.font                     Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 Panel.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-PanelUI                        javax.swing.plaf.basic.BasicPanelUI
+PanelUI                        com.formdev.flatlaf.ui.FlatPanelUI
 
 
 #---- PasswordField ----
