@@ -6,6 +6,7 @@ FlatLaf Change Log
 - TextField, FormattedTextField and PasswordField: Support round borders (see UI
   default value `TextComponent.arc`). (issue #65)
 - IntelliJ Themes: Added Gradianto themes to demo.
+- Button, CheckBox and RadioButton: Fixed NPE when button has children. (PR #68)
 
 
 ## 0.27

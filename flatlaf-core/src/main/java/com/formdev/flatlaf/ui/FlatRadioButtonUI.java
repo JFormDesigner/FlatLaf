@@ -101,6 +101,8 @@ public class FlatRadioButtonUI
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
 		Dimension size = super.getPreferredSize( c );
+		if( size == null )
+			return null;
 
 		// small insets fix
 		int focusWidth = getIconFocusWidth( c );
