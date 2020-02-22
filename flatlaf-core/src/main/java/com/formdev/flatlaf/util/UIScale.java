@@ -156,6 +156,9 @@ public class UIScale
 			// Tahoma 11 is used at 100%
 			if( "Tahoma".equals( font.getFamily() ) )
 				fontSizeDivider = 11f;
+		} else if( SystemInfo.IS_MAC ) {
+			// default font size on macOS is 13
+			fontSizeDivider = 13f;
 		} else if( SystemInfo.IS_LINUX ) {
 			// default font size for Unity and Gnome is 15 and for KDE it is 13
 			fontSizeDivider = SystemInfo.IS_KDE ? 13f : 15f;

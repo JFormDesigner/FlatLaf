@@ -100,7 +100,7 @@ Button.defaultButtonFollowsFocus false
 Button.disabledBorderColor     #5e6060    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledText            #777777    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedBorderColor      #466d94    javax.swing.plaf.ColorUIResource [UI]
-Button.font                    .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Button.font                    .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Button.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Button.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBackground         #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
@@ -133,7 +133,7 @@ CheckBox.arc                   4
 CheckBox.background            #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
 CheckBox.disabledText          #777777    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.font                  .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBox.font                  .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 CheckBox.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.background       #43494a    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.borderColor      #6b6b6b    javax.swing.plaf.ColorUIResource [UI]
@@ -159,7 +159,7 @@ CheckBox.textShiftOffset       0
 #---- CheckBoxMenuItem ----
 
 CheckBoxMenuItem.acceleratorDelimiter 
-CheckBoxMenuItem.acceleratorFont .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBoxMenuItem.acceleratorFont .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 CheckBoxMenuItem.acceleratorForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.acceleratorSelectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.arrowIcon     [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuItemArrowIcon [UI]
@@ -170,7 +170,7 @@ CheckBoxMenuItem.checkIcon     [lazy] 15,15    com.formdev.flatlaf.icons.FlatChe
 CheckBoxMenuItem.dashIcon      [lazy] 10,2    com.apple.laf.AquaImageFactory$InvertableImageIcon [UI]  (sun.awt.image.MultiResolutionCachedImage)
 CheckBoxMenuItem.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.disabledForeground #777777    javax.swing.plaf.ColorUIResource [UI]
-CheckBoxMenuItem.font          .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+CheckBoxMenuItem.font          .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 CheckBoxMenuItem.foreground    #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.margin        2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
 CheckBoxMenuItem.opaque        false
@@ -188,7 +188,7 @@ CheckBoxUI                     com.formdev.flatlaf.ui.FlatCheckBoxUI
 
 ColorChooser.background        #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ColorChooser.cancel.textAndMnemonic Cancel
-ColorChooser.font              .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+ColorChooser.font              .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 ColorChooser.foreground        #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ColorChooser.hsb.textAndMnemonic &HSB
 ColorChooser.hsbBlue.textAndMnemonic B
@@ -227,7 +227,7 @@ ComboBox.buttonHoverArrowColor #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonShadow          #646464    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.disabledForeground    #777777    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.font                  .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+ComboBox.font                  .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 ComboBox.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.isEnterSelectablePopup false
 ComboBox.noActionOnKeyNavigation false
@@ -291,7 +291,7 @@ EditorPane.border              [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 EditorPane.caretBlinkRate      500
 EditorPane.caretForeground     #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.disabledBackground  #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-EditorPane.font                .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+EditorPane.font                .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 EditorPane.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.inactiveBackground  #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.inactiveForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
@@ -386,7 +386,7 @@ FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 FormattedTextField.caretBlinkRate 500
 FormattedTextField.caretForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-FormattedTextField.font        .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+FormattedTextField.font        .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 FormattedTextField.foreground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.inactiveBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.inactiveForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
@@ -427,7 +427,7 @@ HyperlinkUI                    com.formdev.flatlaf.swingx.ui.FlatHyperlinkUI
 
 #---- IconButton ----
 
-IconButton.font                .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+IconButton.font                .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- InsetBorder ----
@@ -468,11 +468,11 @@ InternalFrame.maximizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInt
 InternalFrame.minimizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameMinimizeIcon [UI]
 InternalFrame.opaque           false
 InternalFrame.optionDialogBackground #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
-InternalFrame.optionDialogTitleFont .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+InternalFrame.optionDialogTitleFont .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 InternalFrame.paletteBackground #eeeeee    com.apple.laf.AquaImageFactory$SystemColorProxy [UI]
-InternalFrame.paletteTitleFont .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+InternalFrame.paletteTitleFont .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 InternalFrame.restoreButtonToolTip Restore
-InternalFrame.titleFont        .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+InternalFrame.titleFont        .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- InternalFrameTitlePane ----
@@ -563,7 +563,7 @@ JideTabbedPaneUI               com.formdev.flatlaf.jideoss.ui.FlatJideTabbedPane
 Label.background               #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Label.disabledForeground       #777777    javax.swing.plaf.ColorUIResource [UI]
 Label.disabledShadow           #646464    javax.swing.plaf.ColorUIResource [UI]
-Label.font                     .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Label.font                     .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Label.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Label.opaque                   true
 LabelUI                        com.formdev.flatlaf.ui.FlatLabelUI
@@ -583,7 +583,7 @@ List.dropLineColor             [lazy] #6d8ac0    javax.swing.plaf.ColorUIResourc
 List.evenRowBackgroundPainter  [lazy] 0,0,0,0  false    com.apple.laf.AquaListUI$ComponentPainter [UI]
 List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]
 List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]
-List.font                      .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+List.font                      .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 List.foreground                #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 List.noFocusBorder             1,1,1,1  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
 List.oddRowBackgroundPainter   [lazy] 0,0,0,0  false    com.apple.laf.AquaListUI$ComponentPainter [UI]
@@ -600,7 +600,7 @@ ListUI                         com.formdev.flatlaf.ui.FlatListUI
 
 #---- Menu ----
 
-Menu.acceleratorFont           .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Menu.acceleratorFont           .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Menu.acceleratorForeground     #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Menu.acceleratorSelectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Menu.arrowIcon                 [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuArrowIcon [UI]
@@ -612,7 +612,7 @@ Menu.consumesTabs              true
 Menu.crossMenuMnemonic         true
 Menu.disabledBackground        #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Menu.disabledForeground        #777777    javax.swing.plaf.ColorUIResource [UI]
-Menu.font                      .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Menu.font                      .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Menu.foreground                #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Menu.icon.arrowColor           #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
 Menu.icon.disabledArrowColor   #606060    javax.swing.plaf.ColorUIResource [UI]
@@ -637,7 +637,7 @@ MenuBar.border                 [lazy] 0,0,1,0  false    com.formdev.flatlaf.ui.F
 MenuBar.borderColor            #515151    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.disabledBackground     #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.disabledForeground     #777777    javax.swing.plaf.ColorUIResource [UI]
-MenuBar.font                   .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuBar.font                   .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 MenuBar.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.highlight              #242424    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.hoverBackground        #484c4f    javax.swing.plaf.ColorUIResource [UI]
@@ -656,7 +656,7 @@ MenuBarUI                      com.formdev.flatlaf.ui.FlatMenuBarUI
 #---- MenuItem ----
 
 MenuItem.acceleratorDelimiter  
-MenuItem.acceleratorFont       .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuItem.acceleratorFont       .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 MenuItem.acceleratorForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.acceleratorSelectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.arrowIcon             [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuItemArrowIcon [UI]
@@ -665,7 +665,7 @@ MenuItem.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 MenuItem.borderPainted         true
 MenuItem.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.disabledForeground    #777777    javax.swing.plaf.ColorUIResource [UI]
-MenuItem.font                  .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+MenuItem.font                  .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 MenuItem.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.margin                2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.opaque                false
@@ -716,14 +716,14 @@ OptionPane.background          #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 OptionPane.border              [lazy] 12,12,12,12  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 OptionPane.buttonAreaBorder    [lazy] 12,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 OptionPane.buttonClickThreshhold 500
-OptionPane.buttonFont          .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+OptionPane.buttonFont          .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 OptionPane.buttonMinimumWidth  [active] 72
 OptionPane.buttonOrientation   4
 OptionPane.buttonPadding       8
 OptionPane.cancelButton.textAndMnemonic Cancel
 OptionPane.cancelButtonMnemonic 
 OptionPane.errorIcon           [lazy] 32,32    com.formdev.flatlaf.icons.FlatOptionPaneErrorIcon [UI]
-OptionPane.font                .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+OptionPane.font                .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 OptionPane.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 OptionPane.iconMessageGap      16
 OptionPane.informationIcon     [lazy] 32,32    com.formdev.flatlaf.icons.FlatOptionPaneInformationIcon [UI]
@@ -732,7 +732,7 @@ OptionPane.isYesLast           true
 OptionPane.maxCharactersPerLine 80
 OptionPane.messageAreaBorder   [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 OptionPane.messageDialog.titleAndMnemonic Message
-OptionPane.messageFont         .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+OptionPane.messageFont         .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 OptionPane.messagePadding      3
 OptionPane.minimumSize         262,90    javax.swing.plaf.DimensionUIResource [UI]
 OptionPane.noButton.textAndMnemonic &No
@@ -755,7 +755,7 @@ OptionPaneUI                   com.formdev.flatlaf.ui.FlatOptionPaneUI
 #---- Panel ----
 
 Panel.background               #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-Panel.font                     .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Panel.font                     .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Panel.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Panel.opaque                   true
 PanelUI                        com.formdev.flatlaf.ui.FlatPanelUI
@@ -770,7 +770,7 @@ PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.echoChar         '\u2022'
-PasswordField.font             .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+PasswordField.font             .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 PasswordField.foreground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.inactiveBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.inactiveForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
@@ -788,7 +788,7 @@ PopupMenu.border               [lazy] 4,1,4,1  false    com.formdev.flatlaf.ui.F
 PopupMenu.borderColor          #5e5e5e    javax.swing.plaf.ColorUIResource [UI]
 PopupMenu.borderInsets         4,1,4,1    javax.swing.plaf.InsetsUIResource [UI]
 PopupMenu.consumeEventOnClose  false
-PopupMenu.font                 .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+PopupMenu.font                 .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 PopupMenu.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 PopupMenu.selectionBackground  #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
 PopupMenu.selectionForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
@@ -827,7 +827,7 @@ ProgressBar.border             [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 ProgressBar.cellLength         1
 ProgressBar.cellSpacing        0
 ProgressBar.cycleTime          4000
-ProgressBar.font               .SF NS Text plain 10    javax.swing.plaf.FontUIResource [UI]
+ProgressBar.font               .SF NS Text plain 11    javax.swing.plaf.FontUIResource [UI]
 ProgressBar.foreground         #4a88c7    javax.swing.plaf.ColorUIResource [UI]
 ProgressBar.horizontalSize     146,4    javax.swing.plaf.DimensionUIResource [UI]
 ProgressBar.repaintInterval    15
@@ -848,7 +848,7 @@ RadioButton.background         #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.border             [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
 RadioButton.darkShadow         #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.disabledText       #777777    javax.swing.plaf.ColorUIResource [UI]
-RadioButton.font               .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButton.font               .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 RadioButton.foreground         #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.highlight          #242424    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.icon.centerDiameter 8
@@ -865,7 +865,7 @@ RadioButton.textShiftOffset    0
 #---- RadioButtonMenuItem ----
 
 RadioButtonMenuItem.acceleratorDelimiter 
-RadioButtonMenuItem.acceleratorFont .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButtonMenuItem.acceleratorFont .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 RadioButtonMenuItem.acceleratorForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.acceleratorSelectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.arrowIcon  [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenuItemArrowIcon [UI]
@@ -876,7 +876,7 @@ RadioButtonMenuItem.checkIcon  [lazy] 15,15    com.formdev.flatlaf.icons.FlatRad
 RadioButtonMenuItem.dashIcon   [lazy] 10,2    com.apple.laf.AquaImageFactory$InvertableImageIcon [UI]  (sun.awt.image.MultiResolutionCachedImage)
 RadioButtonMenuItem.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.disabledForeground #777777    javax.swing.plaf.ColorUIResource [UI]
-RadioButtonMenuItem.font       .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+RadioButtonMenuItem.font       .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 RadioButtonMenuItem.foreground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.margin     2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
 RadioButtonMenuItem.opaque     false
@@ -937,7 +937,7 @@ ScrollBarUI                    com.formdev.flatlaf.ui.FlatScrollBarUI
 ScrollPane.background          #3f4244    javax.swing.plaf.ColorUIResource [UI]
 ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
 ScrollPane.fillUpperCorner     true
-ScrollPane.font                .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+ScrollPane.font                .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 ScrollPane.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ScrollPane.smoothScrolling     true
 ScrollPaneUI                   com.formdev.flatlaf.ui.FlatScrollPaneUI
@@ -960,7 +960,7 @@ Slider.background              #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Slider.disabledForeground      #4c5052    javax.swing.plaf.ColorUIResource [UI]
 Slider.focus                   #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
-Slider.font                    .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Slider.font                    .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Slider.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
 Slider.horizontalSize          200,21    java.awt.Dimension
@@ -991,7 +991,7 @@ Spinner.disabledBackground     #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Spinner.disabledForeground     #777777    javax.swing.plaf.ColorUIResource [UI]
 Spinner.editorAlignment        11
 Spinner.editorBorderPainted    false
-Spinner.font                   .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Spinner.font                   .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Spinner.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Spinner.padding                2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 SpinnerUI                      com.formdev.flatlaf.ui.FlatSpinnerUI
@@ -1036,7 +1036,7 @@ TabbedPane.disabledForeground  #777777    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.disabledUnderlineColor #7a7a7a    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.focus               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.focusColor          #3d4b5c    javax.swing.plaf.ColorUIResource [UI]
-TabbedPane.font                .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+TabbedPane.font                .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TabbedPane.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.hasFullBorder       false
 TabbedPane.highlight           #242424    javax.swing.plaf.ColorUIResource [UI]
@@ -1056,7 +1056,7 @@ TabbedPane.selectedTabTitleShadowDisabledColor #40000000    javax.swing.plaf.Col
 TabbedPane.selectedTabTitleShadowNormalColor #64000000    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.selectionFollowsFocus true
 TabbedPane.shadow              #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-TabbedPane.smallFont           .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+TabbedPane.smallFont           .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TabbedPane.tabAreaInsets       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.tabHeight           32
 TabbedPane.tabInsets           0,12,0,12    javax.swing.plaf.InsetsUIResource [UI]
@@ -1086,7 +1086,7 @@ Table.focusCellBackground      #45494a    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellForeground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]
 Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]
-Table.font                     .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Table.font                     .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Table.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Table.gridColor                #4f5152    javax.swing.plaf.ColorUIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
@@ -1107,7 +1107,7 @@ TableHeader.background         #45494a    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.bottomSeparatorColor #585858    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.cellBorder         [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 TableHeader.focusCellBackground #45494a    javax.swing.plaf.ColorUIResource [UI]
-TableHeader.font               .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+TableHeader.font               .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TableHeader.foreground         #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.height             25
 TableHeader.separatorColor     #585858    javax.swing.plaf.ColorUIResource [UI]
@@ -1145,7 +1145,7 @@ TextArea.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 TextArea.caretBlinkRate        500
 TextArea.caretForeground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TextArea.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-TextArea.font                  .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+TextArea.font                  .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TextArea.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TextArea.inactiveBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 TextArea.inactiveForeground    #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
@@ -1170,7 +1170,7 @@ TextField.caretBlinkRate       500
 TextField.caretForeground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TextField.darkShadow           #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 TextField.disabledBackground   #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-TextField.font                 .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+TextField.font                 .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TextField.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TextField.highlight            #242424    javax.swing.plaf.ColorUIResource [UI]
 TextField.inactiveBackground   #3c3f41    javax.swing.plaf.ColorUIResource [UI]
@@ -1191,7 +1191,7 @@ TextPane.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 TextPane.caretBlinkRate        500
 TextPane.caretForeground       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TextPane.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-TextPane.font                  .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+TextPane.font                  .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TextPane.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TextPane.inactiveBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 TextPane.inactiveForeground    #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
@@ -1205,7 +1205,7 @@ TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
 
 TitledBorder.aquaVariant       [lazy] 16,20,16,20  false    com.apple.laf.AquaGroupBorder$Titled [UI]
 TitledBorder.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]
-TitledBorder.font              .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+TitledBorder.font              .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TitledBorder.titleColor        #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 
 
@@ -1221,7 +1221,7 @@ ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 ToggleButton.darkShadow        #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.disabledSelectedBackground #525658    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.disabledText      #777777    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.font              .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+ToggleButton.font              .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 ToggleButton.foreground        #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.highlight         #242424    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.iconTextGap       4
@@ -1256,7 +1256,7 @@ ToolBar.dockingBackground      #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingForeground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.floatingBackground     #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.floatingForeground     #777777    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.font                   .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+ToolBar.font                   .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 ToolBar.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.gripColor              #adadad    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.highlight              #242424    javax.swing.plaf.ColorUIResource [UI]
@@ -1289,7 +1289,7 @@ ToolBarUI                      com.formdev.flatlaf.ui.FlatToolBarUI
 ToolTip.background             #1e2123    javax.swing.plaf.ColorUIResource [UI]
 ToolTip.backgroundInactive     #1e2123    javax.swing.plaf.ColorUIResource [UI]
 ToolTip.border                 [lazy] 4,6,4,6  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
-ToolTip.font                   .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+ToolTip.font                   .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 ToolTip.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ToolTip.foregroundInactive     #777777    javax.swing.plaf.ColorUIResource [UI]
 
@@ -1317,7 +1317,7 @@ Tree.dropCellForeground        [lazy] #bbbbbb    javax.swing.plaf.ColorUIResourc
 Tree.dropLineColor             [lazy] #6d8ac0    javax.swing.plaf.ColorUIResource [UI]
 Tree.editorBorder              [lazy] line: #000000    java.awt.Color 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
 Tree.expandedIcon              [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeExpandedIcon [UI]
-Tree.font                      .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Tree.font                      .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Tree.foreground                #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Tree.hash                      #505355    javax.swing.plaf.ColorUIResource [UI]
 Tree.icon.closedColor          #adadad    javax.swing.plaf.ColorUIResource [UI]
@@ -1351,7 +1351,7 @@ TreeUI                         com.formdev.flatlaf.ui.FlatTreeUI
 #---- Viewport ----
 
 Viewport.background            #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-Viewport.font                  .SF NS Text plain 12    javax.swing.plaf.FontUIResource [UI]
+Viewport.font                  .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Viewport.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 
