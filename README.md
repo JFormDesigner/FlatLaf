@@ -93,7 +93,7 @@ Projects using FlatLaf
 Buzz
 ----
 
-- [What others say about FlatLaf on Twitter](https://twitter.com/search?f=tweets&q=flatlaf)
+- [What others say about FlatLaf on Twitter](https://twitter.com/search?f=live&q=flatlaf)
 - [FlatLaf announcement on Reddit](https://www.reddit.com/r/java/comments/dl0hu3/flatlaf_flat_look_and_feel/)
 
 
