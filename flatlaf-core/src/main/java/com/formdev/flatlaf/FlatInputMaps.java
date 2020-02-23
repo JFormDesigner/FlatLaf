@@ -23,8 +23,8 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.InputMapUIResource;
-import javax.swing.text.DefaultEditorKit;
 import com.formdev.flatlaf.util.SystemInfo;
+import static javax.swing.text.DefaultEditorKit.*;
 
 /**
  * @author Karl Tauber
@@ -40,96 +40,96 @@ class FlatInputMaps
 
 	private static void initBasicInputMaps( UIDefaults defaults ) {
 		defaults.put( "Button.focusInputMap", new UIDefaults.LazyInputMap( new Object[] {
-			         "SPACE", "pressed",
+			"SPACE", "pressed",
 			"released SPACE", "released"
 		} ) );
 
 		modifyInputMap( defaults, "ComboBox.ancestorInputMap",
+			"SPACE", "spacePopup",
+
 			"UP", "selectPrevious",
-			"KP_UP", "selectPrevious",
 			"DOWN", "selectNext",
+			"KP_UP", "selectPrevious",
 			"KP_DOWN", "selectNext",
 
 			"alt UP", "togglePopup",
-			"alt KP_UP", "togglePopup",
 			"alt DOWN", "togglePopup",
-			"alt KP_DOWN", "togglePopup",
-
-			"SPACE", "spacePopup"
+			"alt KP_UP", "togglePopup",
+			"alt KP_DOWN", "togglePopup"
 		);
 
 		modifyInputMap( defaults, "FileChooser.ancestorInputMap",
-			        "F2", "editFileName",
+			"F2", "editFileName",
 			"BACK_SPACE", "Go Up"
 		);
 
 		modifyInputMap( defaults, "Slider.focusInputMap",
 			"ctrl PAGE_DOWN", "negativeBlockIncrement",
-			  "ctrl PAGE_UP", "positiveBlockIncrement"
+			"ctrl PAGE_UP", "positiveBlockIncrement"
 		);
 
 		modifyInputMap( defaults, "Tree.focusInputMap",
-			     "ADD", "expand",
+			"ADD", "expand",
 			"SUBTRACT", "collapse"
 		);
 
 		Object[] commonTextComponentBindings = {
 			// move caret one character (without selecting text)
-			"LEFT", DefaultEditorKit.backwardAction,
-			"KP_LEFT", DefaultEditorKit.backwardAction,
-			"RIGHT", DefaultEditorKit.forwardAction,
-			"KP_RIGHT", DefaultEditorKit.forwardAction,
+			"LEFT", backwardAction,
+			"RIGHT", forwardAction,
+			"KP_LEFT", backwardAction,
+			"KP_RIGHT", forwardAction,
 
 			// move caret one character and select text
-			"shift LEFT", DefaultEditorKit.selectionBackwardAction,
-			"shift KP_LEFT", DefaultEditorKit.selectionBackwardAction,
-			"shift RIGHT", DefaultEditorKit.selectionForwardAction,
-			"shift KP_RIGHT", DefaultEditorKit.selectionForwardAction,
+			"shift LEFT", selectionBackwardAction,
+			"shift RIGHT", selectionForwardAction,
+			"shift KP_LEFT", selectionBackwardAction,
+			"shift KP_RIGHT", selectionForwardAction,
 
 			// move caret to word (without selecting text)
-			"ctrl LEFT", DefaultEditorKit.previousWordAction,
-			"ctrl KP_LEFT", DefaultEditorKit.previousWordAction,
-			"ctrl RIGHT", DefaultEditorKit.nextWordAction,
-			"ctrl KP_RIGHT", DefaultEditorKit.nextWordAction,
+			"ctrl LEFT", previousWordAction,
+			"ctrl RIGHT", nextWordAction,
+			"ctrl KP_LEFT", previousWordAction,
+			"ctrl KP_RIGHT", nextWordAction,
 
 			// move caret to word and select text
-			"ctrl shift LEFT", DefaultEditorKit.selectionPreviousWordAction,
-			"ctrl shift KP_LEFT", DefaultEditorKit.selectionPreviousWordAction,
-			"ctrl shift RIGHT", DefaultEditorKit.selectionNextWordAction,
-			"ctrl shift KP_RIGHT", DefaultEditorKit.selectionNextWordAction,
+			"ctrl shift LEFT", selectionPreviousWordAction,
+			"ctrl shift RIGHT", selectionNextWordAction,
+			"ctrl shift KP_LEFT", selectionPreviousWordAction,
+			"ctrl shift KP_RIGHT", selectionNextWordAction,
 
 			// move caret to line begin/end (without selecting text)
-			"HOME", DefaultEditorKit.beginLineAction,
-			"END", DefaultEditorKit.endLineAction,
+			"HOME", beginLineAction,
+			"END", endLineAction,
 
 			// move caret to line begin/end and select text
-			"shift HOME", DefaultEditorKit.selectionBeginLineAction,
-			"shift END", DefaultEditorKit.selectionEndLineAction,
+			"shift HOME", selectionBeginLineAction,
+			"shift END", selectionEndLineAction,
 
 			// select all/none
-			"ctrl A", DefaultEditorKit.selectAllAction,
+			"ctrl A", selectAllAction,
 			"ctrl BACK_SLASH", "unselect", // DefaultEditorKit.unselectAction
 
 			// delete previous/next character
-			"BACK_SPACE", DefaultEditorKit.deletePrevCharAction,
-			"shift BACK_SPACE", DefaultEditorKit.deletePrevCharAction,
-			"ctrl H", DefaultEditorKit.deletePrevCharAction,
-			"DELETE", DefaultEditorKit.deleteNextCharAction,
+			"BACK_SPACE", deletePrevCharAction,
+			"shift BACK_SPACE", deletePrevCharAction,
+			"ctrl H", deletePrevCharAction,
+			"DELETE", deleteNextCharAction,
 
 			// delete previous/next word
-			"ctrl BACK_SPACE", DefaultEditorKit.deletePrevWordAction,
-			"ctrl DELETE", DefaultEditorKit.deleteNextWordAction,
+			"ctrl BACK_SPACE", deletePrevWordAction,
+			"ctrl DELETE", deleteNextWordAction,
 
 			// clipboard
-			"ctrl X", DefaultEditorKit.cutAction,
-			"ctrl C", DefaultEditorKit.copyAction,
-			"ctrl V", DefaultEditorKit.pasteAction,
-			"CUT", DefaultEditorKit.cutAction,
-			"COPY", DefaultEditorKit.copyAction,
-			"PASTE", DefaultEditorKit.pasteAction,
-			"shift DELETE", DefaultEditorKit.cutAction,
-			"control INSERT", DefaultEditorKit.copyAction,
-			"shift INSERT", DefaultEditorKit.pasteAction,
+			"ctrl X", cutAction,
+			"ctrl C", copyAction,
+			"ctrl V", pasteAction,
+			"CUT", cutAction,
+			"COPY", copyAction,
+			"PASTE", pasteAction,
+			"shift DELETE", cutAction,
+			"control INSERT", copyAction,
+			"shift INSERT", pasteAction,
 
 			// misc
 			"control shift O", "toggle-componentOrientation", // DefaultEditorKit.toggleComponentOrientation
@@ -145,23 +145,23 @@ class FlatInputMaps
 
 			// increment/decrement
 			"UP", "increment",
-			"KP_UP", "increment",
 			"DOWN", "decrement",
+			"KP_UP", "increment",
 			"KP_DOWN", "decrement",
 		};
 
 		Object[] passwordTextComponentBindings = {
 			// move caret to line begin/end (without selecting text)
-			"ctrl LEFT", DefaultEditorKit.beginLineAction,
-			"ctrl KP_LEFT", DefaultEditorKit.beginLineAction,
-			"ctrl RIGHT", DefaultEditorKit.endLineAction,
-			"ctrl KP_RIGHT", DefaultEditorKit.endLineAction,
+			"ctrl LEFT", beginLineAction,
+			"ctrl RIGHT", endLineAction,
+			"ctrl KP_LEFT", beginLineAction,
+			"ctrl KP_RIGHT", endLineAction,
 
 			// move caret to line begin/end and select text
-			"ctrl shift LEFT", DefaultEditorKit.selectionBeginLineAction,
-			"ctrl shift KP_LEFT", DefaultEditorKit.selectionBeginLineAction,
-			"ctrl shift RIGHT", DefaultEditorKit.selectionEndLineAction,
-			"ctrl shift KP_RIGHT", DefaultEditorKit.selectionEndLineAction,
+			"ctrl shift LEFT", selectionBeginLineAction,
+			"ctrl shift RIGHT", selectionEndLineAction,
+			"ctrl shift KP_LEFT", selectionBeginLineAction,
+			"ctrl shift KP_RIGHT", selectionEndLineAction,
 
 			// delete previous/next word
 			"ctrl BACK_SPACE", null,
@@ -170,38 +170,38 @@ class FlatInputMaps
 
 		Object[] multiLineTextComponentBindings = {
 			// move caret one line (without selecting text)
-			"UP", DefaultEditorKit.upAction,
-			"KP_UP", DefaultEditorKit.upAction,
-			"DOWN", DefaultEditorKit.downAction,
-			"KP_DOWN", DefaultEditorKit.downAction,
+			"UP", upAction,
+			"DOWN", downAction,
+			"KP_UP", upAction,
+			"KP_DOWN", downAction,
 
 			// move caret one line and select text
-			"shift UP", DefaultEditorKit.selectionUpAction,
-			"shift KP_UP", DefaultEditorKit.selectionUpAction,
-			"shift DOWN", DefaultEditorKit.selectionDownAction,
-			"shift KP_DOWN", DefaultEditorKit.selectionDownAction,
+			"shift UP", selectionUpAction,
+			"shift DOWN", selectionDownAction,
+			"shift KP_UP", selectionUpAction,
+			"shift KP_DOWN", selectionDownAction,
 
 			// move caret one page (without selecting text)
-			"PAGE_UP", DefaultEditorKit.pageUpAction,
-			"PAGE_DOWN", DefaultEditorKit.pageDownAction,
+			"PAGE_UP", pageUpAction,
+			"PAGE_DOWN", pageDownAction,
 
 			// move caret one page and select text
-			"shift PAGE_UP", "selection-page-up",
-			"shift PAGE_DOWN", "selection-page-down",
-			"ctrl shift PAGE_UP", "selection-page-left",
-			"ctrl shift PAGE_DOWN", "selection-page-right",
+			"shift PAGE_UP", "selection-page-up", // DefaultEditorKit.selectionPageUpAction
+			"shift PAGE_DOWN", "selection-page-down", // DefaultEditorKit.selectionPageDownAction
+			"ctrl shift PAGE_UP", "selection-page-left", // DefaultEditorKit.selectionPageLeftAction
+			"ctrl shift PAGE_DOWN", "selection-page-right", // DefaultEditorKit.selectionPageRightAction
 
 			// move caret to document begin/end (without selecting text)
-			"ctrl HOME", DefaultEditorKit.beginAction,
-			"ctrl END", DefaultEditorKit.endAction,
+			"ctrl HOME", beginAction,
+			"ctrl END", endAction,
 
 			// move caret to document begin/end and select text
-			"ctrl shift HOME", DefaultEditorKit.selectionBeginAction,
-			"ctrl shift END", DefaultEditorKit.selectionEndAction,
+			"ctrl shift HOME", selectionBeginAction,
+			"ctrl shift END", selectionEndAction,
 
 			// misc
-			"ENTER", DefaultEditorKit.insertBreakAction,
-			"TAB", DefaultEditorKit.insertTabAction,
+			"ENTER", insertBreakAction,
+			"TAB", insertTabAction,
 
 			// links
 			"ctrl T", "next-link-action",
@@ -260,39 +260,43 @@ class FlatInputMaps
 
 		// combobox
 		defaults.put( "ComboBox.ancestorInputMap", new UIDefaults.LazyInputMap( new Object[] {
-			     "ESCAPE", "hidePopup",
-			    "PAGE_UP", "pageUpPassThrough",
-			  "PAGE_DOWN", "pageDownPassThrough",
-			       "HOME", "homePassThrough",
-			        "END", "endPassThrough",
-			       "DOWN", "selectNext",
-			    "KP_DOWN", "selectNext",
-			      "SPACE", "spacePopup",
-			      "ENTER", "enterPressed",
-			         "UP", "selectPrevious",
-			      "KP_UP", "selectPrevious"
+			"SPACE", "spacePopup",
+			"ENTER", "enterPressed",
+			"ESCAPE", "hidePopup",
+
+			"HOME", "homePassThrough",
+			"END", "endPassThrough",
+			"PAGE_UP", "pageUpPassThrough",
+			"PAGE_DOWN", "pageDownPassThrough",
+
+			"UP", "selectPrevious",
+			"DOWN", "selectNext",
+			"KP_UP", "selectPrevious",
+			"KP_DOWN", "selectNext",
 		} ) );
 
 		// tree node expanding/collapsing
 		modifyInputMap( defaults, "Tree.focusInputMap",
-			         "RIGHT", "selectChild",
-			      "KP_RIGHT", "selectChild",
-			          "LEFT", "selectParent",
-			       "KP_LEFT", "selectParent",
-			   "shift RIGHT", null,
-			"shift KP_RIGHT", null,
-			    "shift LEFT", null,
-			 "shift KP_LEFT", null,
-			     "ctrl LEFT", null,
-			  "ctrl KP_LEFT", null,
-			    "ctrl RIGHT", null,
-			 "ctrl KP_RIGHT", null
+			"LEFT", "selectParent",
+			"RIGHT", "selectChild",
+			"KP_LEFT", "selectParent",
+			"KP_RIGHT", "selectChild",
+
+			"ctrl LEFT", null,
+			"ctrl RIGHT", null,
+			"ctrl KP_LEFT", null,
+			"ctrl KP_RIGHT", null,
+
+			"shift LEFT", null,
+			"shift RIGHT", null,
+			"shift KP_LEFT", null,
+			"shift KP_RIGHT", null
 		);
 		defaults.put( "Tree.focusInputMap.RightToLeft", new UIDefaults.LazyInputMap( new Object[] {
-                     "RIGHT", "selectParent",
-                  "KP_RIGHT", "selectParent",
-                      "LEFT", "selectChild",
-                   "KP_LEFT", "selectChild"
+			"LEFT", "selectChild",
+			"RIGHT", "selectParent",
+			"KP_LEFT", "selectChild",
+			"KP_RIGHT", "selectParent"
 		} ) );
 	}
 
