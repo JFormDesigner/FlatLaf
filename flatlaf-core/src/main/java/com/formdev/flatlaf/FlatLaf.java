@@ -64,7 +64,7 @@ public abstract class FlatLaf
 	static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
-	private BasicLookAndFeel base;
+	private BasicLookAndFeel aquaLaf;
 
 	private String desktopPropertyName;
 	private PropertyChangeListener desktopPropertyListener;
@@ -114,10 +114,11 @@ public abstract class FlatLaf
 
 	@Override
 	public void initialize() {
-		initBase();
+		createAquaLaf();
 
-		if( base != null )
-			base.initialize();
+		// this is required for using Mac screen menubar
+		if( aquaLaf != null )
+			aquaLaf.initialize();
 
 		super.initialize();
 
@@ -195,40 +196,39 @@ public abstract class FlatLaf
 		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
 		postInitialization = null;
 
-		if( base != null )
-			base.uninitialize();
+		if( aquaLaf != null )
+			aquaLaf.uninitialize();
 
 		super.uninitialize();
 	}
 
 	/**
-	 * Create base LaF. This is used to grab base UI defaults from different LaFs.
-	 * On Mac from Aqua LaF, otherwise from Basic LaF.
+	 * Create Aqua LaF on macOS.
+	 * Initializing Aqua LaF is required for using Mac screen menubar.
 	 */
-	private void initBase() {
-		if( SystemInfo.IS_MAC && base == null ) {
-			// use Mac Aqua LaF as base
-			String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
-			try {
-				if( SystemInfo.IS_JAVA_9_OR_LATER ) {
-					Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
-					base = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
-				} else
-					base = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
-			} catch( Exception ex ) {
-				LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
-				throw new IllegalStateException();
-			}
+	private void createAquaLaf() {
+		if( !SystemInfo.IS_MAC || aquaLaf != null )
+			return;
+
+		// create macOS Aqua LaF
+		String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
+		try {
+			if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+				Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
+				aquaLaf = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
+			} else
+				aquaLaf = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
+		} catch( Exception ex ) {
+			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
+			throw new IllegalStateException();
 		}
 	}
 
 	@Override
 	public UIDefaults getDefaults() {
-		initBase();
+		createAquaLaf();
 
-		UIDefaults defaults = (base != null) ? base.getDefaults() : super.getDefaults();
-		if( base != null )
-			UIDefaultsRemover.removeDefaults( defaults );
+		UIDefaults defaults = super.getDefaults();
 
 		// add Metal resource bundle, which is required for FlatFileChooserUI
 		defaults.addResourceBundle( "com.sun.swing.internal.plaf.metal.resources.metal" );
@@ -259,13 +259,9 @@ public abstract class FlatLaf
 		putDefaults( defaults, defaults.getColor( "textText" ),
 			"DesktopIcon.foreground" );
 
-		// remember MenuBarUI from Mac Aqua LaF if Mac screen menubar is enabled
-		boolean useScreenMenuBar = SystemInfo.IS_MAC && "true".equals( System.getProperty( "apple.laf.useScreenMenuBar" ) );
-		Object aquaMenuBarUI = useScreenMenuBar ? defaults.get( "MenuBarUI" ) : null;
-
 		initFonts( defaults );
 		initIconColors( defaults, isDark() );
-		FlatInputMaps.initInputMaps( defaults );
+		FlatInputMaps.initInputMaps( defaults, (aquaLaf != null) ? aquaLaf.getDefaults() : null );
 
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
@@ -275,12 +271,11 @@ public abstract class FlatLaf
 			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
-		if( useScreenMenuBar )
-			defaults.put( "MenuBarUI", aquaMenuBarUI );
+		if( SystemInfo.IS_MAC && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) )
+			defaults.put( "MenuBarUI", "com.apple.laf.AquaMenuBarUI" );
 
 		// initialize text antialiasing
-		if( !SystemInfo.IS_MAC )
-			putAATextInfo( defaults );
+		putAATextInfo( defaults );
 
 		invokePostInitialization( defaults );
 
@@ -307,14 +302,15 @@ public abstract class FlatLaf
 				uiFont = new FontUIResource( winFont );
 
 		} else if( SystemInfo.IS_MAC ) {
-			Font font = defaults.getFont( "Label.font" );
-
+			String fontName;
 			if( SystemInfo.IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER ) {
 				// use San Francisco Text font
-				font = new FontUIResource( ".SF NS Text", font.getStyle(), font.getSize() );
+				fontName = ".SF NS Text";
+			} else {
+				// default font on older systems (see com.apple.laf.AquaFonts)
+				fontName = "Lucida Grande";
 			}
-
-			uiFont = (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
+			uiFont = new FontUIResource( fontName, Font.PLAIN, 13 );
 
 		} else if( SystemInfo.IS_LINUX ) {
 			Font font = LinuxFontPolicy.getFont();

@@ -31,11 +31,11 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 class FlatInputMaps
 {
-	static void initInputMaps( UIDefaults defaults ) {
+	static void initInputMaps( UIDefaults defaults, UIDefaults baseDefaults ) {
 		if( !SystemInfo.IS_MAC )
 			initBasicInputMaps( defaults );
 		else
-			initMacInputMaps( defaults );
+			initMacInputMaps( defaults, baseDefaults );
 	}
 
 	private static void initBasicInputMaps( UIDefaults defaults ) {
@@ -233,7 +233,26 @@ class FlatInputMaps
 		defaults.put( "EditorPane.focusInputMap", multiLineInputMap );
 	}
 
-	private static void initMacInputMaps( UIDefaults defaults ) {
+	private static void initMacInputMaps( UIDefaults defaults, UIDefaults baseDefaults ) {
+		// copy Aqua LaF input maps
+		copyInputMaps( baseDefaults, defaults,
+			"Button.focusInputMap",
+			"EditorPane.focusInputMap",
+			"FormattedTextField.focusInputMap",
+			"List.focusInputMap",
+			"PasswordField.focusInputMap",
+			"ScrollBar.focusInputMap.RightToLeft",
+			"ScrollBar.focusInputMap",
+			"ScrollPane.ancestorInputMap.RightToLeft",
+			"ScrollPane.ancestorInputMap",
+			"Table.ancestorInputMap.RightToLeft",
+			"Table.ancestorInputMap",
+			"TextArea.focusInputMap",
+			"TextField.focusInputMap",
+			"TextPane.focusInputMap",
+			"Tree.focusInputMap" );
+
+
 		// AquaLookAndFeel (the base for UI defaults on macOS) uses special
 		// action keys (e.g. "aquaExpandNode") for some macOS specific behaviour.
 		// Those action keys are not available in FlatLaf, which makes it
@@ -275,6 +294,12 @@ class FlatInputMaps
                       "LEFT", "selectChild",
                    "KP_LEFT", "selectChild"
 		} ) );
+	}
+
+	private static void copyInputMaps( UIDefaults src, UIDefaults dest, String... keys ) {
+		// Note: not using `src.get(key)` here because this would resolve the lazy value
+		for( String key : keys )
+			dest.put( key, src.remove( key ) );
 	}
 
 	private static void modifyInputMap( UIDefaults defaults, String key, Object... bindings ) {
