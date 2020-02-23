@@ -600,6 +600,8 @@ PanelUI                        com.formdev.flatlaf.ui.FlatPanelUI
 
 PasswordField.background       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+PasswordField.capsLockIcon     [lazy] 16,16    com.formdev.flatlaf.icons.FlatCapsLockIcon [UI]
+PasswordField.capsLockIconColor #64000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #000000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
