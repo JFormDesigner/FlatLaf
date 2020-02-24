@@ -71,7 +71,7 @@ Desktop.ancestorInputMap       [lazy] 29    javax.swing.plaf.InputMapUIResource 
 
 #---- EditorPane ----
 
-EditorPane.focusInputMap       [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
+EditorPane.focusInputMap       [lazy] 83    javax.swing.plaf.InputMapUIResource [UI]
     alt BACK_SPACE        delete-previous-word
     alt DELETE            delete-next-word
     alt KP_LEFT           caret-previous-word
@@ -86,7 +86,7 @@ EditorPane.focusInputMap       [lazy] 82    javax.swing.plaf.InputMapUIResource 
     ctrl H                delete-previous
     ctrl N                caret-down
     ctrl P                caret-up
-    ctrl V                aqua-page-down
+    ctrl V                page-down
     ctrl W                delete-previous-word
     meta A                select-all
     meta BACK_SLASH       unselect
@@ -107,21 +107,21 @@ EditorPane.focusInputMap       [lazy] 82    javax.swing.plaf.InputMapUIResource 
     COPY                  copy-to-clipboard
     CUT                   cut-to-clipboard
     DELETE                delete-next
-    DOWN                  aqua-move-down
+    DOWN                  caret-down
     END                   caret-end
     ENTER                 insert-break
     HOME                  caret-begin
-    KP_DOWN               aqua-move-down
+    KP_DOWN               caret-down
     KP_LEFT               caret-backward
     KP_RIGHT              caret-forward
-    KP_UP                 aqua-move-up
+    KP_UP                 caret-up
     LEFT                  caret-backward
-    PAGE_DOWN             aqua-page-down
-    PAGE_UP               aqua-page-up
+    PAGE_DOWN             page-down
+    PAGE_UP               page-up
     PASTE                 paste-from-clipboard
     RIGHT                 caret-forward
     TAB                   insert-tab
-    UP                    aqua-move-up
+    UP                    caret-up
     shift alt DOWN        selection-end-paragraph
     shift alt KP_DOWN     selection-end-paragraph
     shift alt KP_LEFT     selection-previous-word
@@ -142,6 +142,7 @@ EditorPane.focusInputMap       [lazy] 82    javax.swing.plaf.InputMapUIResource 
     shift meta RIGHT      selection-end-line
     shift meta T          previous-link-action
     shift meta UP         selection-begin
+    shift BACK_SPACE      delete-previous
     shift DOWN            selection-down
     shift END             selection-end
     shift HOME            selection-begin
@@ -165,7 +166,7 @@ FileChooser.ancestorInputMap   [lazy] 2    javax.swing.plaf.InputMapUIResource [
 
 #---- FormattedTextField ----
 
-FormattedTextField.focusInputMap [lazy] 75    javax.swing.plaf.InputMapUIResource [UI]
+FormattedTextField.focusInputMap [lazy] 76    javax.swing.plaf.InputMapUIResource [UI]
     alt BACK_SPACE        delete-previous-word
     alt DELETE            delete-next-word
     alt KP_LEFT           caret-previous-word
@@ -209,8 +210,8 @@ FormattedTextField.focusInputMap [lazy] 75    javax.swing.plaf.InputMapUIResourc
     KP_RIGHT              caret-forward
     KP_UP                 increment
     LEFT                  caret-backward
-    PAGE_DOWN             aqua-page-down
-    PAGE_UP               aqua-page-up
+    PAGE_DOWN             page-down
+    PAGE_UP               page-up
     PASTE                 paste-from-clipboard
     RIGHT                 caret-forward
     UP                    increment
@@ -229,6 +230,7 @@ FormattedTextField.focusInputMap [lazy] 75    javax.swing.plaf.InputMapUIResourc
     shift meta PAGE_UP    selection-page-left
     shift meta RIGHT      selection-end-line
     shift meta UP         selection-begin
+    shift BACK_SPACE      delete-previous
     shift DOWN            selection-end-line
     shift END             selection-end
     shift HOME            selection-begin
@@ -270,8 +272,8 @@ List.focusInputMap             [lazy] 29    javax.swing.plaf.InputMapUIResource 
     COPY                  copy
     CUT                   cut
     DOWN                  selectNextRow
-    END                   aquaEnd
-    HOME                  aquaHome
+    END                   selectLastRow
+    HOME                  selectFirstRow
     KP_DOWN               selectNextRow
     KP_LEFT               selectPreviousColumn
     KP_RIGHT              selectNextColumn
@@ -296,9 +298,11 @@ List.focusInputMap             [lazy] 29    javax.swing.plaf.InputMapUIResource 
 
 #---- PasswordField ----
 
-PasswordField.focusInputMap    [lazy] 66    javax.swing.plaf.InputMapUIResource [UI]
-    alt BACK_SPACE        delete-previous-word
-    alt DELETE            delete-next-word
+PasswordField.focusInputMap    [lazy] 73    javax.swing.plaf.InputMapUIResource [UI]
+    alt KP_LEFT           caret-begin-line
+    alt KP_RIGHT          caret-end-line
+    alt LEFT              caret-begin-line
+    alt RIGHT             caret-end-line
     ctrl A                caret-begin-line
     ctrl B                caret-backward
     ctrl D                delete-next
@@ -335,11 +339,15 @@ PasswordField.focusInputMap    [lazy] 66    javax.swing.plaf.InputMapUIResource 
     KP_RIGHT              caret-forward
     KP_UP                 caret-begin-line
     LEFT                  caret-backward
-    PAGE_DOWN             aqua-page-down
-    PAGE_UP               aqua-page-up
+    PAGE_DOWN             page-down
+    PAGE_UP               page-up
     PASTE                 paste-from-clipboard
     RIGHT                 caret-forward
     UP                    caret-begin-line
+    shift alt KP_LEFT     selection-begin-line
+    shift alt KP_RIGHT    selection-end-line
+    shift alt LEFT        selection-begin-line
+    shift alt RIGHT       selection-end-line
     shift ctrl O          toggle-componentOrientation
     shift meta DOWN       selection-end
     shift meta KP_DOWN    selection-end
@@ -351,6 +359,7 @@ PasswordField.focusInputMap    [lazy] 66    javax.swing.plaf.InputMapUIResource 
     shift meta PAGE_UP    selection-page-left
     shift meta RIGHT      selection-end-line
     shift meta UP         selection-begin
+    shift BACK_SPACE      delete-previous
     shift DOWN            selection-end-line
     shift END             selection-end
     shift HOME            selection-begin
@@ -622,7 +631,7 @@ TableHeader.ancestorInputMap   [lazy] 14    javax.swing.plaf.InputMapUIResource 
 
 #---- TextArea ----
 
-TextArea.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
+TextArea.focusInputMap         [lazy] 83    javax.swing.plaf.InputMapUIResource [UI]
     alt BACK_SPACE        delete-previous-word
     alt DELETE            delete-next-word
     alt KP_LEFT           caret-previous-word
@@ -637,7 +646,7 @@ TextArea.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource 
     ctrl H                delete-previous
     ctrl N                caret-down
     ctrl P                caret-up
-    ctrl V                aqua-page-down
+    ctrl V                page-down
     ctrl W                delete-previous-word
     meta A                select-all
     meta BACK_SLASH       unselect
@@ -658,21 +667,21 @@ TextArea.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource 
     COPY                  copy-to-clipboard
     CUT                   cut-to-clipboard
     DELETE                delete-next
-    DOWN                  aqua-move-down
+    DOWN                  caret-down
     END                   caret-end
     ENTER                 insert-break
     HOME                  caret-begin
-    KP_DOWN               aqua-move-down
+    KP_DOWN               caret-down
     KP_LEFT               caret-backward
     KP_RIGHT              caret-forward
-    KP_UP                 aqua-move-up
+    KP_UP                 caret-up
     LEFT                  caret-backward
-    PAGE_DOWN             aqua-page-down
-    PAGE_UP               aqua-page-up
+    PAGE_DOWN             page-down
+    PAGE_UP               page-up
     PASTE                 paste-from-clipboard
     RIGHT                 caret-forward
     TAB                   insert-tab
-    UP                    aqua-move-up
+    UP                    caret-up
     shift alt DOWN        selection-end-paragraph
     shift alt KP_DOWN     selection-end-paragraph
     shift alt KP_LEFT     selection-previous-word
@@ -693,6 +702,7 @@ TextArea.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource 
     shift meta RIGHT      selection-end-line
     shift meta T          previous-link-action
     shift meta UP         selection-begin
+    shift BACK_SPACE      delete-previous
     shift DOWN            selection-down
     shift END             selection-end
     shift HOME            selection-begin
@@ -709,7 +719,7 @@ TextArea.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource 
 
 #---- TextField ----
 
-TextField.focusInputMap        [lazy] 74    javax.swing.plaf.InputMapUIResource [UI]
+TextField.focusInputMap        [lazy] 75    javax.swing.plaf.InputMapUIResource [UI]
     alt BACK_SPACE        delete-previous-word
     alt DELETE            delete-next-word
     alt KP_LEFT           caret-previous-word
@@ -752,8 +762,8 @@ TextField.focusInputMap        [lazy] 74    javax.swing.plaf.InputMapUIResource 
     KP_RIGHT              caret-forward
     KP_UP                 caret-begin-line
     LEFT                  caret-backward
-    PAGE_DOWN             aqua-page-down
-    PAGE_UP               aqua-page-up
+    PAGE_DOWN             page-down
+    PAGE_UP               page-up
     PASTE                 paste-from-clipboard
     RIGHT                 caret-forward
     UP                    caret-begin-line
@@ -772,6 +782,7 @@ TextField.focusInputMap        [lazy] 74    javax.swing.plaf.InputMapUIResource 
     shift meta PAGE_UP    selection-page-left
     shift meta RIGHT      selection-end-line
     shift meta UP         selection-begin
+    shift BACK_SPACE      delete-previous
     shift DOWN            selection-end-line
     shift END             selection-end
     shift HOME            selection-begin
@@ -788,7 +799,7 @@ TextField.focusInputMap        [lazy] 74    javax.swing.plaf.InputMapUIResource 
 
 #---- TextPane ----
 
-TextPane.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource [UI]
+TextPane.focusInputMap         [lazy] 83    javax.swing.plaf.InputMapUIResource [UI]
     alt BACK_SPACE        delete-previous-word
     alt DELETE            delete-next-word
     alt KP_LEFT           caret-previous-word
@@ -803,7 +814,7 @@ TextPane.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource 
     ctrl H                delete-previous
     ctrl N                caret-down
     ctrl P                caret-up
-    ctrl V                aqua-page-down
+    ctrl V                page-down
     ctrl W                delete-previous-word
     meta A                select-all
     meta BACK_SLASH       unselect
@@ -824,21 +835,21 @@ TextPane.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource 
     COPY                  copy-to-clipboard
     CUT                   cut-to-clipboard
     DELETE                delete-next
-    DOWN                  aqua-move-down
+    DOWN                  caret-down
     END                   caret-end
     ENTER                 insert-break
     HOME                  caret-begin
-    KP_DOWN               aqua-move-down
+    KP_DOWN               caret-down
     KP_LEFT               caret-backward
     KP_RIGHT              caret-forward
-    KP_UP                 aqua-move-up
+    KP_UP                 caret-up
     LEFT                  caret-backward
-    PAGE_DOWN             aqua-page-down
-    PAGE_UP               aqua-page-up
+    PAGE_DOWN             page-down
+    PAGE_UP               page-up
     PASTE                 paste-from-clipboard
     RIGHT                 caret-forward
     TAB                   insert-tab
-    UP                    aqua-move-up
+    UP                    caret-up
     shift alt DOWN        selection-end-paragraph
     shift alt KP_DOWN     selection-end-paragraph
     shift alt KP_LEFT     selection-previous-word
@@ -859,6 +870,7 @@ TextPane.focusInputMap         [lazy] 82    javax.swing.plaf.InputMapUIResource 
     shift meta RIGHT      selection-end-line
     shift meta T          previous-link-action
     shift meta UP         selection-begin
+    shift BACK_SPACE      delete-previous
     shift DOWN            selection-down
     shift END             selection-end
     shift HOME            selection-begin
@@ -902,11 +914,7 @@ Tree.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource [
     KP_RIGHT              selectParent
     LEFT                  selectChild
     RIGHT                 selectParent
-Tree.focusInputMap             [lazy] 23    javax.swing.plaf.InputMapUIResource [UI]
-    alt KP_LEFT           aquaFullyCollapseNode
-    alt KP_RIGHT          aquaFullyExpandNode
-    alt LEFT              aquaFullyCollapseNode
-    alt RIGHT             aquaFullyExpandNode
+Tree.focusInputMap             [lazy] 19    javax.swing.plaf.InputMapUIResource [UI]
     meta A                selectAll
     meta C                copy
     meta V                paste

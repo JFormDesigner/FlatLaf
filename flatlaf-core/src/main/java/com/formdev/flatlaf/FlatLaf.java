@@ -226,8 +226,6 @@ public abstract class FlatLaf
 
 	@Override
 	public UIDefaults getDefaults() {
-		createAquaLaf();
-
 		UIDefaults defaults = super.getDefaults();
 
 		// add Metal resource bundle, which is required for FlatFileChooserUI
@@ -261,7 +259,7 @@ public abstract class FlatLaf
 
 		initFonts( defaults );
 		initIconColors( defaults, isDark() );
-		FlatInputMaps.initInputMaps( defaults, (aquaLaf != null) ? aquaLaf.getDefaults() : null );
+		FlatInputMaps.initInputMaps( defaults );
 
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();

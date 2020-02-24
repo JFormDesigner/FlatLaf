@@ -31,11 +31,12 @@ import static javax.swing.text.DefaultEditorKit.*;
  */
 class FlatInputMaps
 {
-	static void initInputMaps( UIDefaults defaults, UIDefaults baseDefaults ) {
-		if( !SystemInfo.IS_MAC )
-			initBasicInputMaps( defaults );
-		else
-			initMacInputMaps( defaults, baseDefaults );
+	static void initInputMaps( UIDefaults defaults ) {
+		initBasicInputMaps( defaults );
+		initTextComponentInputMaps( defaults );
+
+		if( SystemInfo.IS_MAC )
+			initMacInputMaps( defaults );
 	}
 
 	private static void initBasicInputMaps( UIDefaults defaults ) {
@@ -52,27 +53,31 @@ class FlatInputMaps
 			"KP_UP", "selectPrevious",
 			"KP_DOWN", "selectNext",
 
-			"alt UP", "togglePopup",
-			"alt DOWN", "togglePopup",
-			"alt KP_UP", "togglePopup",
-			"alt KP_DOWN", "togglePopup"
+			mac( "alt UP", null ), "togglePopup",
+			mac( "alt DOWN", null ), "togglePopup",
+			mac( "alt KP_UP", null ), "togglePopup",
+			mac( "alt KP_DOWN", null ), "togglePopup"
 		);
 
-		modifyInputMap( defaults, "FileChooser.ancestorInputMap",
-			"F2", "editFileName",
-			"BACK_SPACE", "Go Up"
-		);
+		if( !SystemInfo.IS_MAC ) {
+			modifyInputMap( defaults, "FileChooser.ancestorInputMap",
+				"F2", "editFileName",
+				"BACK_SPACE", "Go Up"
+			);
 
-		modifyInputMap( defaults, "Slider.focusInputMap",
-			"ctrl PAGE_DOWN", "negativeBlockIncrement",
-			"ctrl PAGE_UP", "positiveBlockIncrement"
-		);
+			modifyInputMap( defaults, "Slider.focusInputMap",
+				"ctrl PAGE_DOWN", "negativeBlockIncrement",
+				"ctrl PAGE_UP", "positiveBlockIncrement"
+			);
 
-		modifyInputMap( defaults, "Tree.focusInputMap",
-			"ADD", "expand",
-			"SUBTRACT", "collapse"
-		);
+			modifyInputMap( defaults, "Tree.focusInputMap",
+				"ADD", "expand",
+				"SUBTRACT", "collapse"
+			);
+		}
+	}
 
+	private static void initTextComponentInputMaps( UIDefaults defaults ) {
 		Object[] commonTextComponentBindings = {
 			// move caret one character (without selecting text)
 			"LEFT", backwardAction,
@@ -87,28 +92,28 @@ class FlatInputMaps
 			"shift KP_RIGHT", selectionForwardAction,
 
 			// move caret to word (without selecting text)
-			"ctrl LEFT", previousWordAction,
-			"ctrl RIGHT", nextWordAction,
-			"ctrl KP_LEFT", previousWordAction,
-			"ctrl KP_RIGHT", nextWordAction,
+			mac( "ctrl LEFT", "alt LEFT" ), previousWordAction,
+			mac( "ctrl RIGHT", "alt RIGHT" ), nextWordAction,
+			mac( "ctrl KP_LEFT", "alt KP_LEFT" ), previousWordAction,
+			mac( "ctrl KP_RIGHT", "alt KP_RIGHT" ), nextWordAction,
 
 			// move caret to word and select text
-			"ctrl shift LEFT", selectionPreviousWordAction,
-			"ctrl shift RIGHT", selectionNextWordAction,
-			"ctrl shift KP_LEFT", selectionPreviousWordAction,
-			"ctrl shift KP_RIGHT", selectionNextWordAction,
+			mac( "ctrl shift LEFT", "shift alt LEFT" ), selectionPreviousWordAction,
+			mac( "ctrl shift RIGHT", "shift alt RIGHT" ), selectionNextWordAction,
+			mac( "ctrl shift KP_LEFT", "shift alt KP_LEFT" ), selectionPreviousWordAction,
+			mac( "ctrl shift KP_RIGHT", "shift alt KP_RIGHT" ), selectionNextWordAction,
 
 			// move caret to line begin/end (without selecting text)
-			"HOME", beginLineAction,
-			"END", endLineAction,
+			mac( "HOME", "meta LEFT" ), beginLineAction,
+			mac( "END", "meta RIGHT" ), endLineAction,
 
 			// move caret to line begin/end and select text
-			"shift HOME", selectionBeginLineAction,
-			"shift END", selectionEndLineAction,
+			mac( "shift HOME", "shift meta LEFT" ), selectionBeginLineAction,
+			mac( "shift END", "shift meta RIGHT" ), selectionEndLineAction,
 
 			// select all/none
-			"ctrl A", selectAllAction,
-			"ctrl BACK_SLASH", "unselect", // DefaultEditorKit.unselectAction
+			mac( "ctrl A", "meta A" ), selectAllAction,
+			mac( "ctrl BACK_SLASH", "meta BACK_SLASH" ), "unselect", // DefaultEditorKit.unselectAction
 
 			// delete previous/next character
 			"BACK_SPACE", deletePrevCharAction,
@@ -117,27 +122,88 @@ class FlatInputMaps
 			"DELETE", deleteNextCharAction,
 
 			// delete previous/next word
-			"ctrl BACK_SPACE", deletePrevWordAction,
-			"ctrl DELETE", deleteNextWordAction,
+			mac( "ctrl BACK_SPACE", "alt BACK_SPACE" ), deletePrevWordAction,
+			mac( "ctrl DELETE", "alt DELETE" ), deleteNextWordAction,
 
 			// clipboard
-			"ctrl X", cutAction,
-			"ctrl C", copyAction,
-			"ctrl V", pasteAction,
+			mac( "ctrl X", "meta X" ), cutAction,
+			mac( "ctrl C", "meta C" ), copyAction,
+			mac( "ctrl V", "meta V" ), pasteAction,
 			"CUT", cutAction,
 			"COPY", copyAction,
 			"PASTE", pasteAction,
-			"shift DELETE", cutAction,
-			"control INSERT", copyAction,
-			"shift INSERT", pasteAction,
+			mac( "shift DELETE", null ), cutAction,
+			mac( "control INSERT", null ), copyAction,
+			mac( "shift INSERT", null ), pasteAction,
 
 			// misc
 			"control shift O", "toggle-componentOrientation", // DefaultEditorKit.toggleComponentOrientation
 		};
 
+		Object[] macCommonTextComponentBindings = SystemInfo.IS_MAC ? new Object[] {
+			// move caret one character (without selecting text)
+			"ctrl B", backwardAction,
+			"ctrl F", forwardAction,
+
+			// move caret to document begin/end (without selecting text)
+			"HOME", beginAction,
+			"END", endAction,
+			"meta UP", beginAction,
+			"meta DOWN", endAction,
+			"meta KP_UP", beginAction,
+			"meta KP_DOWN", endAction,
+			"ctrl P", beginAction,
+			"ctrl N", endAction,
+			"ctrl V", endAction,
+
+			// move caret to line begin/end (without selecting text)
+			"meta KP_LEFT", beginLineAction,
+			"meta KP_RIGHT", endLineAction,
+			"ctrl A", beginLineAction,
+			"ctrl E", endLineAction,
+
+			// move caret to document begin/end (without selecting text)
+			"shift meta UP", selectionBeginAction,
+			"shift meta DOWN", selectionEndAction,
+			"shift meta KP_UP", selectionBeginAction,
+			"shift meta KP_DOWN", selectionEndAction,
+			"shift HOME", selectionBeginAction,
+			"shift END", selectionEndAction,
+
+			// move caret to line begin/end and select text
+			"shift meta KP_LEFT", selectionBeginLineAction,
+			"shift meta KP_RIGHT", selectionEndLineAction,
+			"shift UP", selectionBeginLineAction,
+			"shift DOWN", selectionEndLineAction,
+			"shift KP_UP", selectionBeginLineAction,
+			"shift KP_DOWN", selectionEndLineAction,
+
+			// move caret one page (without selecting text)
+			"PAGE_UP", pageUpAction,
+			"PAGE_DOWN", pageDownAction,
+
+			// move caret one page and select text
+			"shift PAGE_UP", "selection-page-up", // DefaultEditorKit.selectionPageUpAction
+			"shift PAGE_DOWN", "selection-page-down", // DefaultEditorKit.selectionPageDownAction
+			"shift meta PAGE_UP", "selection-page-left", // DefaultEditorKit.selectionPageLeftAction
+			"shift meta PAGE_DOWN", "selection-page-right", // DefaultEditorKit.selectionPageRightAction
+
+			// delete previous/next word
+			"ctrl W", deletePrevWordAction,
+			"ctrl D", deleteNextCharAction,
+		} : null;
+
 		Object[] singleLineTextComponentBindings = {
 			"ENTER", JTextField.notifyAction,
 		};
+
+		Object[] macSingleLineTextComponentBindings = SystemInfo.IS_MAC ? new Object[] {
+			// move caret to line begin/end (without selecting text)
+			"UP", beginLineAction,
+			"DOWN", endLineAction,
+			"KP_UP", beginLineAction,
+			"KP_DOWN", endLineAction,
+		} : null;
 
 		Object[] formattedTextComponentBindings = {
 			// reset
@@ -152,20 +218,20 @@ class FlatInputMaps
 
 		Object[] passwordTextComponentBindings = {
 			// move caret to line begin/end (without selecting text)
-			"ctrl LEFT", beginLineAction,
-			"ctrl RIGHT", endLineAction,
-			"ctrl KP_LEFT", beginLineAction,
-			"ctrl KP_RIGHT", endLineAction,
+			mac( "ctrl LEFT", "alt LEFT" ), beginLineAction,
+			mac( "ctrl RIGHT", "alt RIGHT" ), endLineAction,
+			mac( "ctrl KP_LEFT", "alt KP_LEFT" ), beginLineAction,
+			mac( "ctrl KP_RIGHT", "alt KP_RIGHT" ), endLineAction,
 
 			// move caret to line begin/end and select text
-			"ctrl shift LEFT", selectionBeginLineAction,
-			"ctrl shift RIGHT", selectionEndLineAction,
-			"ctrl shift KP_LEFT", selectionBeginLineAction,
-			"ctrl shift KP_RIGHT", selectionEndLineAction,
+			mac( "ctrl shift LEFT", "shift alt LEFT" ), selectionBeginLineAction,
+			mac( "ctrl shift RIGHT", "shift alt RIGHT" ), selectionEndLineAction,
+			mac( "ctrl shift KP_LEFT", "shift alt KP_LEFT" ), selectionBeginLineAction,
+			mac( "ctrl shift KP_RIGHT", "shift alt KP_RIGHT" ), selectionEndLineAction,
 
 			// delete previous/next word
-			"ctrl BACK_SPACE", null,
-			"ctrl DELETE", null,
+			mac( "ctrl BACK_SPACE", "alt BACK_SPACE" ), null,
+			mac( "ctrl DELETE", "alt DELETE" ), null,
 		};
 
 		Object[] multiLineTextComponentBindings = {
@@ -188,92 +254,201 @@ class FlatInputMaps
 			// move caret one page and select text
 			"shift PAGE_UP", "selection-page-up", // DefaultEditorKit.selectionPageUpAction
 			"shift PAGE_DOWN", "selection-page-down", // DefaultEditorKit.selectionPageDownAction
-			"ctrl shift PAGE_UP", "selection-page-left", // DefaultEditorKit.selectionPageLeftAction
-			"ctrl shift PAGE_DOWN", "selection-page-right", // DefaultEditorKit.selectionPageRightAction
+			mac( "ctrl shift PAGE_UP", "shift meta PAGE_UP" ), "selection-page-left", // DefaultEditorKit.selectionPageLeftAction
+			mac( "ctrl shift PAGE_DOWN", "shift meta PAGE_DOWN" ), "selection-page-right", // DefaultEditorKit.selectionPageRightAction
 
 			// move caret to document begin/end (without selecting text)
-			"ctrl HOME", beginAction,
-			"ctrl END", endAction,
+			mac( "ctrl HOME", "meta UP" ), beginAction,
+			mac( "ctrl END", "meta DOWN" ), endAction,
 
 			// move caret to document begin/end and select text
-			"ctrl shift HOME", selectionBeginAction,
-			"ctrl shift END", selectionEndAction,
+			mac( "ctrl shift HOME", "shift meta UP" ), selectionBeginAction,
+			mac( "ctrl shift END", "shift meta DOWN" ), selectionEndAction,
 
 			// misc
 			"ENTER", insertBreakAction,
 			"TAB", insertTabAction,
 
 			// links
-			"ctrl T", "next-link-action",
-			"ctrl shift T", "previous-link-action",
-			"ctrl SPACE", "activate-link-action",
+			mac( "ctrl T", "meta T" ), "next-link-action",
+			mac( "ctrl shift T", "shift meta T" ), "previous-link-action",
+			mac( "ctrl SPACE", "meta SPACE" ), "activate-link-action",
 		};
+
+		Object[] macMultiLineTextComponentBindings = SystemInfo.IS_MAC ? new Object[] {
+			// move caret one line (without selecting text)
+			"ctrl N", downAction,
+			"ctrl P", upAction,
+
+			// move caret to beginning/end of paragraph and select text
+			"shift alt UP", selectionBeginParagraphAction,
+			"shift alt DOWN", selectionEndParagraphAction,
+			"shift alt KP_UP", selectionBeginParagraphAction,
+			"shift alt KP_DOWN", selectionEndParagraphAction,
+
+			// move caret one page (without selecting text)
+			"ctrl V", pageDownAction,
+		} : null;
 
 		defaults.put( "TextField.focusInputMap", new LazyInputMapEx(
 			commonTextComponentBindings,
-			singleLineTextComponentBindings
+			macCommonTextComponentBindings,
+			singleLineTextComponentBindings,
+			macSingleLineTextComponentBindings
 		) );
 		defaults.put( "FormattedTextField.focusInputMap", new LazyInputMapEx(
 			commonTextComponentBindings,
+			macCommonTextComponentBindings,
 			singleLineTextComponentBindings,
+			macSingleLineTextComponentBindings,
 			formattedTextComponentBindings
 		) );
 		defaults.put( "PasswordField.focusInputMap", new LazyInputMapEx(
 			commonTextComponentBindings,
+			macCommonTextComponentBindings,
 			singleLineTextComponentBindings,
+			macSingleLineTextComponentBindings,
 			passwordTextComponentBindings
 		) );
 
 		Object multiLineInputMap = new LazyInputMapEx(
 			commonTextComponentBindings,
-			multiLineTextComponentBindings
+			macCommonTextComponentBindings,
+			multiLineTextComponentBindings,
+			macMultiLineTextComponentBindings
 		);
 		defaults.put( "TextArea.focusInputMap", multiLineInputMap );
 		defaults.put( "TextPane.focusInputMap", multiLineInputMap );
 		defaults.put( "EditorPane.focusInputMap", multiLineInputMap );
 	}
 
-	private static void initMacInputMaps( UIDefaults defaults, UIDefaults baseDefaults ) {
-		// copy Aqua LaF input maps
-		copyInputMaps( baseDefaults, defaults,
-			"Button.focusInputMap",
-			"EditorPane.focusInputMap",
-			"FormattedTextField.focusInputMap",
-			"List.focusInputMap",
-			"PasswordField.focusInputMap",
-			"ScrollBar.focusInputMap.RightToLeft",
-			"ScrollBar.focusInputMap",
-			"ScrollPane.ancestorInputMap.RightToLeft",
-			"ScrollPane.ancestorInputMap",
-			"Table.ancestorInputMap.RightToLeft",
-			"Table.ancestorInputMap",
-			"TextArea.focusInputMap",
-			"TextField.focusInputMap",
-			"TextPane.focusInputMap",
-			"Tree.focusInputMap" );
+	private static void initMacInputMaps( UIDefaults defaults ) {
+		// list
+		modifyInputMap( defaults, "List.focusInputMap",
+			"meta A", "selectAll",
+			"meta C", "copy",
+			"meta V", "paste",
+			"meta X", "cut",
 
+			"ctrl A", null,
+			"ctrl BACK_SLASH", null,
+			"ctrl C", null,
+			"ctrl DOWN", null,
+			"ctrl END", null,
+			"ctrl HOME", null,
+			"ctrl INSERT", null,
+			"ctrl KP_DOWN", null,
+			"ctrl KP_LEFT", null,
+			"ctrl KP_RIGHT", null,
+			"ctrl KP_UP", null,
+			"ctrl LEFT", null,
+			"ctrl PAGE_DOWN", null,
+			"ctrl PAGE_UP", null,
+			"ctrl RIGHT", null,
+			"ctrl SLASH", null,
+			"ctrl SPACE", null,
+			"ctrl UP", null,
+			"ctrl V", null,
+			"ctrl X", null,
+			"PAGE_DOWN", null,
+			"PAGE_UP", null,
+			"SPACE", null,
+			"shift ctrl DOWN", null,
+			"shift ctrl END", null,
+			"shift ctrl HOME", null,
+			"shift ctrl KP_DOWN", null,
+			"shift ctrl KP_LEFT", null,
+			"shift ctrl KP_RIGHT", null,
+			"shift ctrl KP_UP", null,
+			"shift ctrl LEFT", null,
+			"shift ctrl PAGE_DOWN", null,
+			"shift ctrl PAGE_UP", null,
+			"shift ctrl RIGHT", null,
+			"shift ctrl SPACE", null,
+			"shift ctrl UP", null,
+			"shift DELETE", null,
+			"shift INSERT", null,
+			"shift SPACE", null
+		);
 
-		// AquaLookAndFeel (the base for UI defaults on macOS) uses special
-		// action keys (e.g. "aquaExpandNode") for some macOS specific behaviour.
-		// Those action keys are not available in FlatLaf, which makes it
-		// necessary to make some modifications.
+		// scrollbar
+		copyInputMap( defaults, "ScrollBar.ancestorInputMap", "ScrollBar.focusInputMap" );
+		copyInputMap( defaults, "ScrollBar.ancestorInputMap.RightToLeft", "ScrollBar.focusInputMap.RightToLeft" );
 
-		// combobox
-		defaults.put( "ComboBox.ancestorInputMap", new UIDefaults.LazyInputMap( new Object[] {
-			"SPACE", "spacePopup",
-			"ENTER", "enterPressed",
-			"ESCAPE", "hidePopup",
+		// scrollpane
+		modifyInputMap( defaults, "ScrollPane.ancestorInputMap",
+			"END", "scrollEnd",
+			"HOME", "scrollHome",
 
-			"HOME", "homePassThrough",
-			"END", "endPassThrough",
-			"PAGE_UP", "pageUpPassThrough",
-			"PAGE_DOWN", "pageDownPassThrough",
+			"ctrl END", null,
+			"ctrl HOME", null,
+			"ctrl PAGE_DOWN", null,
+			"ctrl PAGE_UP", null
+		);
+		modifyInputMap( defaults, "ScrollPane.ancestorInputMap.RightToLeft",
+			"ctrl PAGE_DOWN", null,
+			"ctrl PAGE_UP", null
+		);
 
-			"UP", "selectPrevious",
-			"DOWN", "selectNext",
-			"KP_UP", "selectPrevious",
-			"KP_DOWN", "selectNext",
-		} ) );
+		// table
+		modifyInputMap( defaults, "Table.ancestorInputMap",
+			"alt TAB", "focusHeader",
+			"shift alt TAB", "focusHeader",
+			"meta A", "selectAll",
+			"meta C", "copy",
+			"meta V", "paste",
+			"meta X", "cut",
+
+			"ctrl A", null,
+			"ctrl BACK_SLASH", null,
+			"ctrl C", null,
+			"ctrl DOWN", null,
+			"ctrl END", null,
+			"ctrl HOME", null,
+			"ctrl INSERT", null,
+			"ctrl KP_DOWN", null,
+			"ctrl KP_LEFT", null,
+			"ctrl KP_RIGHT", null,
+			"ctrl KP_UP", null,
+			"ctrl LEFT", null,
+			"ctrl PAGE_DOWN", null,
+			"ctrl PAGE_UP", null,
+			"ctrl RIGHT", null,
+			"ctrl SLASH", null,
+			"ctrl SPACE", null,
+			"ctrl UP", null,
+			"ctrl V", null,
+			"ctrl X", null,
+			"F2", null,
+			"F8", null,
+			"SPACE", null,
+			"shift ctrl DOWN", null,
+			"shift ctrl END", null,
+			"shift ctrl HOME", null,
+			"shift ctrl KP_DOWN", null,
+			"shift ctrl KP_LEFT", null,
+			"shift ctrl KP_RIGHT", null,
+			"shift ctrl KP_UP", null,
+			"shift ctrl LEFT", null,
+			"shift ctrl PAGE_DOWN", null,
+			"shift ctrl PAGE_UP", null,
+			"shift ctrl RIGHT", null,
+			"shift ctrl SPACE", null,
+			"shift ctrl UP", null,
+			"shift DELETE", null,
+			"shift INSERT", null,
+			"shift SPACE", null
+		);
+		modifyInputMap( defaults, "Table.ancestorInputMap.RightToLeft",
+			"ctrl KP_LEFT", null,
+			"ctrl KP_RIGHT", null,
+			"ctrl LEFT", null,
+			"ctrl RIGHT", null,
+			"shift ctrl KP_LEFT", null,
+			"shift ctrl KP_RIGHT", null,
+			"shift ctrl LEFT", null,
+			"shift ctrl RIGHT", null
+		);
 
 		// tree node expanding/collapsing
 		modifyInputMap( defaults, "Tree.focusInputMap",
@@ -282,7 +457,12 @@ class FlatInputMaps
 			"KP_LEFT", "selectParent",
 			"KP_RIGHT", "selectChild",
 
-			"ctrl LEFT", null,
+		    "meta A", "selectAll",
+		    "meta C", "copy",
+		    "meta V", "paste",
+		    "meta X", "cut",
+
+		    "ctrl LEFT", null,
 			"ctrl RIGHT", null,
 			"ctrl KP_LEFT", null,
 			"ctrl KP_RIGHT", null,
@@ -290,7 +470,51 @@ class FlatInputMaps
 			"shift LEFT", null,
 			"shift RIGHT", null,
 			"shift KP_LEFT", null,
-			"shift KP_RIGHT", null
+			"shift KP_RIGHT", null,
+
+		    "alt LEFT", null,
+		    "alt RIGHT", null,
+		    "alt KP_LEFT", null,
+		    "alt KP_RIGHT", null,
+
+			"ctrl A", null,
+			"ctrl BACK_SLASH", null,
+			"ctrl C", null,
+			"ctrl DOWN", null,
+			"ctrl END", null,
+			"ctrl HOME", null,
+			"ctrl INSERT", null,
+			"ctrl KP_DOWN", null,
+			"ctrl KP_UP", null,
+			"ctrl PAGE_DOWN", null,
+			"ctrl PAGE_UP", null,
+			"ctrl SLASH", null,
+			"ctrl SPACE", null,
+			"ctrl UP", null,
+			"ctrl V", null,
+			"ctrl X", null,
+			"END", null,
+			"F2", null,
+			"HOME", null,
+			"PAGE_DOWN", null,
+			"PAGE_UP", null,
+			"SPACE", null,
+			"shift ctrl DOWN", null,
+			"shift ctrl END", null,
+			"shift ctrl HOME", null,
+			"shift ctrl KP_DOWN", null,
+			"shift ctrl KP_UP", null,
+			"shift ctrl PAGE_DOWN", null,
+			"shift ctrl PAGE_UP", null,
+			"shift ctrl SPACE", null,
+			"shift ctrl UP", null,
+			"shift DELETE", null,
+			"shift END", null,
+			"shift HOME", null,
+			"shift INSERT", null,
+			"shift PAGE_DOWN", null,
+			"shift PAGE_UP", null,
+			"shift SPACE", null
 		);
 		defaults.put( "Tree.focusInputMap.RightToLeft", new UIDefaults.LazyInputMap( new Object[] {
 			"LEFT", "selectChild",
@@ -300,15 +524,20 @@ class FlatInputMaps
 		} ) );
 	}
 
-	private static void copyInputMaps( UIDefaults src, UIDefaults dest, String... keys ) {
-		// Note: not using `src.get(key)` here because this would resolve the lazy value
-		for( String key : keys )
-			dest.put( key, src.remove( key ) );
+	private static void copyInputMap( UIDefaults defaults, String srcKey, String destKey ) {
+		// Note: not using `defaults.get(key)` here because this would resolve the lazy value
+		Object inputMap = defaults.remove( srcKey );
+		defaults.put( srcKey, inputMap );
+		defaults.put( destKey, inputMap );
 	}
 
 	private static void modifyInputMap( UIDefaults defaults, String key, Object... bindings ) {
 		// Note: not using `defaults.get(key)` here because this would resolve the lazy value
 		defaults.put( key, new LazyModifyInputMap( defaults.remove( key ), bindings ) );
+	}
+
+	private static <T> T mac( T value, T macValue ) {
+		return SystemInfo.IS_MAC ? macValue : value;
 	}
 
 	//---- class LazyInputMapEx -----------------------------------------------
