@@ -64,11 +64,10 @@ public abstract class FlatLaf
 	static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
-	private BasicLookAndFeel aquaLaf;
-
 	private String desktopPropertyName;
 	private PropertyChangeListener desktopPropertyListener;
 
+	private static boolean aquaLoaded;
 	private static boolean updateUIPending;
 
 	private KeyEventPostProcessor mnemonicListener;
@@ -114,18 +113,10 @@ public abstract class FlatLaf
 
 	@Override
 	public void initialize() {
-		createAquaLaf();
-
-		// this is required for using Mac screen menubar
-		if( aquaLaf != null )
-			aquaLaf.initialize();
+		if( SystemInfo.IS_MAC )
+			initializeAqua();
 
 		super.initialize();
-
-		// make sure that a plain popup factory is used (otherwise sub-menu rendering
-		// is "jittery" on Mac, where AquaLookAndFeel installs its own popup factory)
-		if( PopupFactory.getSharedInstance().getClass() != PopupFactory.class )
-			PopupFactory.setSharedInstance( new PopupFactory() );
 
 		// add mnemonic listener
 		mnemonicListener = e -> {
@@ -196,22 +187,25 @@ public abstract class FlatLaf
 		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
 		postInitialization = null;
 
-		if( aquaLaf != null )
-			aquaLaf.uninitialize();
-
 		super.uninitialize();
 	}
 
 	/**
-	 * Create Aqua LaF on macOS.
-	 * Initializing Aqua LaF is required for using Mac screen menubar.
+	 * Initialize Aqua LaF on macOS, which is required for using Mac screen menubar.
+	 * (at least on Java 8, since 9 it seems to work without it)
+	 * <p>
+	 * This loads the native library "osxui" and initializes JRSUI.
+	 * Because both are not unloaded/uninitialized, Aqua LaF is initialized only once.
 	 */
-	private void createAquaLaf() {
-		if( !SystemInfo.IS_MAC || aquaLaf != null )
+	private void initializeAqua() {
+		if( aquaLoaded )
 			return;
+
+		aquaLoaded = true;
 
 		// create macOS Aqua LaF
 		String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
+		BasicLookAndFeel aquaLaf;
 		try {
 			if( SystemInfo.IS_JAVA_9_OR_LATER ) {
 				Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
@@ -219,9 +213,20 @@ public abstract class FlatLaf
 			} else
 				aquaLaf = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
 		} catch( Exception ex ) {
-			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize base look and feel '" + aquaLafClassName + "'.", ex );
+			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
 			throw new IllegalStateException();
 		}
+
+		// remember popup factory because aquaLaf.initialize() installs its own
+		// factory, which makes sub-menu rendering "jittery"
+		PopupFactory oldPopupFactory = PopupFactory.getSharedInstance();
+
+		// initialize Aqua LaF
+		aquaLaf.initialize();
+		aquaLaf.uninitialize();
+
+		// restore popup factory
+		PopupFactory.setSharedInstance( oldPopupFactory );
 	}
 
 	@Override
