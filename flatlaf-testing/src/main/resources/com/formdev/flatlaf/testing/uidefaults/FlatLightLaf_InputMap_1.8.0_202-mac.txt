@@ -536,11 +536,13 @@ SplitPane.ancestorInputMap     [lazy] 14    javax.swing.plaf.InputMapUIResource 
 
 #---- TabbedPane ----
 
-TabbedPane.ancestorInputMap    [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+TabbedPane.ancestorInputMap    [lazy] 6    javax.swing.plaf.InputMapUIResource [UI]
     ctrl KP_UP            requestFocus
     ctrl PAGE_DOWN        navigatePageDown
     ctrl PAGE_UP          navigatePageUp
+    ctrl TAB              navigateNext
     ctrl UP               requestFocus
+    shift ctrl TAB        navigatePrevious
 TabbedPane.focusInputMap       [lazy] 10    javax.swing.plaf.InputMapUIResource [UI]
     ctrl DOWN             requestFocusForVisibleComponent
     ctrl KP_DOWN          requestFocusForVisibleComponent

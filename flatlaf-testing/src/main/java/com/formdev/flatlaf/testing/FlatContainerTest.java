@@ -81,7 +81,11 @@ public class FlatContainerTest
 		JSplitPane splitPane3 = new JSplitPane();
 		JSplitPane splitPane1 = new JSplitPane();
 		JPanel panel10 = new JPanel();
+		JTextField textField2 = new JTextField();
+		JButton button1 = new JButton();
 		JPanel panel11 = new JPanel();
+		JTextField textField3 = new JTextField();
+		JButton button2 = new JButton();
 		JSplitPane splitPane2 = new JSplitPane();
 		JPanel panel12 = new JPanel();
 		JPanel panel13 = new JPanel();
@@ -89,7 +93,11 @@ public class FlatContainerTest
 		tabbedPane1 = new JTabbedPane();
 		JPanel panel1 = new JPanel();
 		JLabel label1 = new JLabel();
+		JTextField textField4 = new JTextField();
+		JButton button3 = new JButton();
 		JPanel panel2 = new JPanel();
+		JTextField textField5 = new JTextField();
+		JButton button4 = new JButton();
 		JLabel label2 = new JLabel();
 		tabbedPane3 = new JTabbedPane();
 		JPanel panel5 = new JPanel();
@@ -145,6 +153,14 @@ public class FlatContainerTest
 					{
 						panel10.setBackground(Color.orange);
 						panel10.setLayout(new FlowLayout());
+
+						//---- textField2 ----
+						textField2.setText("some text");
+						panel10.add(textField2);
+
+						//---- button1 ----
+						button1.setText("...");
+						panel10.add(button1);
 					}
 					splitPane1.setLeftComponent(panel10);
 
@@ -152,6 +168,14 @@ public class FlatContainerTest
 					{
 						panel11.setBackground(Color.magenta);
 						panel11.setLayout(new FlowLayout());
+
+						//---- textField3 ----
+						textField3.setText("some text");
+						panel11.add(textField3);
+
+						//---- button2 ----
+						button2.setText("...");
+						panel11.add(button2);
 					}
 					splitPane1.setRightComponent(panel11);
 				}
@@ -195,6 +219,14 @@ public class FlatContainerTest
 					//---- label1 ----
 					label1.setText("TOP");
 					panel1.add(label1);
+
+					//---- textField4 ----
+					textField4.setText("some text");
+					panel1.add(textField4);
+
+					//---- button3 ----
+					button3.setText("...");
+					panel1.add(button3);
 				}
 				tabbedPane1.addTab("Tab 1", panel1);
 
@@ -202,6 +234,14 @@ public class FlatContainerTest
 				{
 					panel2.setBorder(new LineBorder(Color.magenta));
 					panel2.setLayout(new FlowLayout());
+
+					//---- textField5 ----
+					textField5.setText("some text");
+					panel2.add(textField5);
+
+					//---- button4 ----
+					button4.setText("...");
+					panel2.add(button4);
 				}
 				tabbedPane1.addTab("Tab 2", panel2);
 

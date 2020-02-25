@@ -69,7 +69,14 @@ class FlatInputMaps
 				"ctrl PAGE_DOWN", "negativeBlockIncrement",
 				"ctrl PAGE_UP", "positiveBlockIncrement"
 			);
+		}
 
+		modifyInputMap( defaults, "TabbedPane.ancestorInputMap",
+			"ctrl TAB", "navigateNext",
+			"shift ctrl TAB", "navigatePrevious"
+		);
+
+		if( !SystemInfo.IS_MAC ) {
 			modifyInputMap( defaults, "Tree.focusInputMap",
 				"ADD", "expand",
 				"SUBTRACT", "collapse"

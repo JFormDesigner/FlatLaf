@@ -26,15 +26,21 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collections;
+import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
@@ -90,6 +96,9 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTabbedPaneUI
 	extends BasicTabbedPaneUI
 {
+	private static Set<KeyStroke> focusForwardTraversalKeys;
+	private static Set<KeyStroke> focusBackwardTraversalKeys;
+
 	protected Color disabledForeground;
 	protected Color selectedBackground;
 	protected Color selectedForeground;
@@ -142,11 +151,27 @@ public class FlatTabbedPaneUI
 		tabHeight = scale( tabHeight );
 		tabSelectionHeight = scale( tabSelectionHeight );
 
+		// replace focus forward/backward traversal keys with TAB/Shift+TAB because
+		// the default also includes Ctrl+TAB/Ctrl+Shift+TAB, which we need to switch tabs
+		if( focusForwardTraversalKeys == null ) {
+			focusForwardTraversalKeys = Collections.singleton( KeyStroke.getKeyStroke( KeyEvent.VK_TAB, 0 ) );
+			focusBackwardTraversalKeys = Collections.singleton( KeyStroke.getKeyStroke( KeyEvent.VK_TAB, InputEvent.SHIFT_MASK ) );
+		}
+		// Ideally we should use `LookAndFeel.installProperty( tabPane, "focusTraversalKeysForward", keys )` here
+		// instead of `tabPane.setFocusTraversalKeys()`, but WindowsTabbedPaneUI also uses later method
+		// and switching from Windows LaF to FlatLaf would not replace the keys and Ctrl+TAB would not work.
+		tabPane.setFocusTraversalKeys( KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, focusForwardTraversalKeys );
+		tabPane.setFocusTraversalKeys( KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, focusBackwardTraversalKeys );
+
 		MigLayoutVisualPadding.install( tabPane, null );
 	}
 
 	@Override
 	protected void uninstallDefaults() {
+		// restore focus forward/backward traversal keys
+		tabPane.setFocusTraversalKeys( KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, null );
+		tabPane.setFocusTraversalKeys( KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, null );
+
 		super.uninstallDefaults();
 
 		disabledForeground = null;

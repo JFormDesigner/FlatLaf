@@ -4,6 +4,8 @@ FlatLaf Change Log
 ## Unreleased
 
 - PasswordField: Warn about enabled Caps Lock.
+- TabbedPane: Support <kbd>Ctrl+TAB</kbd> / <kbd>Ctrl+Shift+TAB</kbd> to switch
+  to next / previous tab.
 - TextField, FormattedTextField and PasswordField: Support round borders (see UI
   default value `TextComponent.arc`). (issue #65)
 - IntelliJ Themes: Added Gradianto themes to demo.
