@@ -25,9 +25,11 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -127,9 +129,24 @@ public class FlatScrollBarUI
 			public void propertyChange( PropertyChangeEvent e ) {
 				super.propertyChange( e );
 
-				if( FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS.equals( e.getPropertyName() ) ) {
-					scrollbar.revalidate();
-					scrollbar.repaint();
+				switch( e.getPropertyName() ) {
+					case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
+						scrollbar.revalidate();
+						scrollbar.repaint();
+						break;
+
+					case "componentOrientation":
+						// this is missing in BasicScrollBarUI.Handler.propertyChange()
+						InputMap inputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap" );
+						if( !scrollbar.getComponentOrientation().isLeftToRight() ) {
+							InputMap rtlInputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap.RightToLeft" );
+							if( rtlInputMap != null ) {
+								rtlInputMap.setParent( inputMap );
+								inputMap = rtlInputMap;
+							}
+						}
+						SwingUtilities.replaceUIInputMap( scrollbar, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap );
+						break;
 				}
 			}
 		};
