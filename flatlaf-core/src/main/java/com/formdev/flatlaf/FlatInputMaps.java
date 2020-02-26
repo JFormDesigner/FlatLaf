@@ -48,10 +48,10 @@ class FlatInputMaps
 		modifyInputMap( defaults, "ComboBox.ancestorInputMap",
 			"SPACE", "spacePopup",
 
-			"UP", "selectPrevious",
-			"DOWN", "selectNext",
-			"KP_UP", "selectPrevious",
-			"KP_DOWN", "selectNext",
+			"UP", "selectPrevious2",
+			"DOWN", "selectNext2",
+			"KP_UP", "selectPrevious2",
+			"KP_DOWN", "selectNext2",
 
 			mac( "alt UP", null ), "togglePopup",
 			mac( "alt DOWN", null ), "togglePopup",
@@ -64,16 +64,29 @@ class FlatInputMaps
 				"F2", "editFileName",
 				"BACK_SPACE", "Go Up"
 			);
+		}
 
-			modifyInputMap( defaults, "Slider.focusInputMap",
-				"ctrl PAGE_DOWN", "negativeBlockIncrement",
-				"ctrl PAGE_UP", "positiveBlockIncrement"
-			);
+		// join ltr and rtl bindings to fix up/down/etc keys in right-to-left component orientation
+		Object[] bindings = (Object[]) defaults.get( "PopupMenu.selectedWindowInputMapBindings" );
+		Object[] rtlBindings = (Object[]) defaults.get( "PopupMenu.selectedWindowInputMapBindings.RightToLeft" );
+		if( bindings != null && rtlBindings != null ) {
+			Object[] newBindings = new Object[bindings.length + rtlBindings.length];
+			System.arraycopy( bindings, 0, newBindings, 0, bindings.length );
+			System.arraycopy( rtlBindings, 0, newBindings, bindings.length, rtlBindings.length );
+			defaults.put( "PopupMenu.selectedWindowInputMapBindings.RightToLeft", newBindings );
 		}
 
 		modifyInputMap( defaults, "TabbedPane.ancestorInputMap",
 			"ctrl TAB", "navigateNext",
 			"shift ctrl TAB", "navigatePrevious"
+		);
+
+		modifyInputMap( defaults, "Table.ancestorInputMap",
+			// swap to make it consistent with List and Tree
+			"HOME", "selectFirstRow",
+			"END", "selectLastRow",
+			mac( "ctrl HOME", null ), "selectFirstColumn",
+			mac( "ctrl END", null ), "selectLastColumn"
 		);
 
 		if( !SystemInfo.IS_MAC ) {

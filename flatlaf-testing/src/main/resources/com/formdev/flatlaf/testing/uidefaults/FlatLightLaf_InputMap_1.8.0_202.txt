@@ -26,17 +26,17 @@ ComboBox.ancestorInputMap      [lazy] 15    javax.swing.plaf.InputMapUIResource 
     alt KP_DOWN           togglePopup
     alt KP_UP             togglePopup
     alt UP                togglePopup
-    DOWN                  selectNext
+    DOWN                  selectNext2
     END                   endPassThrough
     ENTER                 enterPressed
     ESCAPE                hidePopup
     HOME                  homePassThrough
-    KP_DOWN               selectNext
-    KP_UP                 selectPrevious
+    KP_DOWN               selectNext2
+    KP_UP                 selectPrevious2
     PAGE_DOWN             pageDownPassThrough
     PAGE_UP               pageUpPassThrough
     SPACE                 spacePopup
-    UP                    selectPrevious
+    UP                    selectPrevious2
 
 
 #---- Desktop ----
@@ -327,15 +327,39 @@ PasswordField.focusInputMap    [lazy] 37    javax.swing.plaf.InputMapUIResource 
 
 #---- PopupMenu ----
 
-PopupMenu.selectedWindowInputMapBindings.RightToLeft length=8    [Ljava.lang.Object;
-    [0] LEFT
-    [1] selectChild
-    [2] KP_LEFT
-    [3] selectChild
-    [4] RIGHT
-    [5] selectParent
-    [6] KP_RIGHT
-    [7] selectParent
+PopupMenu.selectedWindowInputMapBindings.RightToLeft length=32    [Ljava.lang.Object;
+    [0] ESCAPE
+    [1] cancel
+    [2] DOWN
+    [3] selectNext
+    [4] KP_DOWN
+    [5] selectNext
+    [6] UP
+    [7] selectPrevious
+    [8] KP_UP
+    [9] selectPrevious
+    [10] LEFT
+    [11] selectParent
+    [12] KP_LEFT
+    [13] selectParent
+    [14] RIGHT
+    [15] selectChild
+    [16] KP_RIGHT
+    [17] selectChild
+    [18] ENTER
+    [19] return
+    [20] ctrl ENTER
+    [21] return
+    [22] SPACE
+    [23] return
+    [24] LEFT
+    [25] selectChild
+    [26] KP_LEFT
+    [27] selectChild
+    [28] RIGHT
+    [29] selectParent
+    [30] KP_RIGHT
+    [31] selectParent
 PopupMenu.selectedWindowInputMapBindings length=24    [Ljava.lang.Object;
     [0] ESCAPE
     [1] cancel
@@ -428,9 +452,7 @@ Slider.focusInputMap.RightToLeft [lazy] 4    javax.swing.plaf.InputMapUIResource
     KP_RIGHT              negativeUnitIncrement
     LEFT                  positiveUnitIncrement
     RIGHT                 negativeUnitIncrement
-Slider.focusInputMap           [lazy] 14    javax.swing.plaf.InputMapUIResource [UI]
-    ctrl PAGE_DOWN        negativeBlockIncrement
-    ctrl PAGE_UP          positiveBlockIncrement
+Slider.focusInputMap           [lazy] 12    javax.swing.plaf.InputMapUIResource [UI]
     DOWN                  negativeUnitIncrement
     END                   maxScroll
     HOME                  minScroll
@@ -523,8 +545,8 @@ Table.ancestorInputMap         [lazy] 71    javax.swing.plaf.InputMapUIResource 
     ctrl BACK_SLASH       clearSelection
     ctrl C                copy
     ctrl DOWN             selectNextRowChangeLead
-    ctrl END              selectLastRow
-    ctrl HOME             selectFirstRow
+    ctrl END              selectLastColumn
+    ctrl HOME             selectFirstColumn
     ctrl INSERT           copy
     ctrl KP_DOWN          selectNextRowChangeLead
     ctrl KP_LEFT          selectPreviousColumnChangeLead
@@ -542,12 +564,12 @@ Table.ancestorInputMap         [lazy] 71    javax.swing.plaf.InputMapUIResource 
     COPY                  copy
     CUT                   cut
     DOWN                  selectNextRow
-    END                   selectLastColumn
+    END                   selectLastRow
     ENTER                 selectNextRowCell
     ESCAPE                cancel
     F2                    startEditing
     F8                    focusHeader
-    HOME                  selectFirstColumn
+    HOME                  selectFirstRow
     KP_DOWN               selectNextRow
     KP_LEFT               selectPreviousColumn
     KP_RIGHT              selectNextColumn

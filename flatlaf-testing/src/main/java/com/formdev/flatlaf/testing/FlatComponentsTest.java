@@ -165,6 +165,7 @@ public class FlatComponentsTest
 		JLabel scrollPaneLabel = new JLabel();
 		JScrollPane scrollPane13 = new JScrollPane();
 		JPanel panel1 = new JPanel();
+		JButton button19 = new JButton();
 		JScrollBar scrollBar2 = new JScrollBar();
 		JScrollBar scrollBar3 = new JScrollBar();
 		JScrollBar scrollBar7 = new JScrollBar();
@@ -803,8 +804,14 @@ public class FlatComponentsTest
 
 			//======== panel1 ========
 			{
-				panel1.setPreferredSize(new Dimension(200, 200));
+				panel1.setPreferredSize(new Dimension(800, 400));
 				panel1.setLayout(new BorderLayout());
+
+				//---- button19 ----
+				button19.setText("I'm a large button");
+				button19.setVerticalAlignment(SwingConstants.TOP);
+				button19.setHorizontalAlignment(SwingConstants.LEFT);
+				panel1.add(button19, BorderLayout.CENTER);
 			}
 			scrollPane13.setViewportView(panel1);
 		}
