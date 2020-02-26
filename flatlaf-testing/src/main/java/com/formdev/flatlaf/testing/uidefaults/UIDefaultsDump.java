@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -33,6 +34,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JInternalFrame;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
@@ -44,6 +46,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -81,6 +84,18 @@ public class UIDefaultsDump
 //			dump( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel", dir );
 //		else if( SystemInfo.IS_MAC )
 //			dump( "com.apple.laf.AquaLookAndFeel", dir );
+//
+//		dump( "com.jgoodies.looks.plastic.PlasticLookAndFeel", dir );
+//		dump( "com.jgoodies.looks.windows.WindowsLookAndFeel", dir );
+//		dump( "com.alee.laf.WebLookAndFeel", dir );
+//		try {
+//			EventQueue.invokeAndWait( () -> {
+//				dump( "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel", dir );
+//			} );
+//		} catch( Exception ex ) {
+//			// TODO Auto-generated catch block
+//			ex.printStackTrace();
+//		}
 	}
 
 	private static void dump( String lookAndFeelClassName, File dir ) {
@@ -278,8 +293,29 @@ public class UIDefaultsDump
 				dummyComponent = new JComponent() {};
 
 			JComponent c = dummyComponent;
-			if( border.getClass().getName().equals( "com.apple.laf.AquaToolBarUI$ToolBarBorder" ) )
-				c = new JToolBar();
+
+			String borderClassName = border.getClass().getName();
+			if( border instanceof BorderUIResource ) {
+				try {
+					Field f = BorderUIResource.class.getDeclaredField( "delegate" );
+					f.setAccessible( true );
+					Object delegate = f.get( border );
+					borderClassName = delegate.getClass().getName();
+				} catch( Exception ex ) {
+					ex.printStackTrace();
+				}
+			}
+
+			switch( borderClassName ) {
+				case "com.apple.laf.AquaToolBarUI$ToolBarBorder":
+				case "org.pushingpixels.substance.internal.utils.border.SubstanceToolBarBorder":
+					c = new JToolBar();
+					break;
+
+				case "com.jgoodies.looks.plastic.PlasticBorders$InternalFrameBorder":
+					c = new JInternalFrame();
+					break;
+			}
 
 			Insets insets = border.getBorderInsets( c );
 			out.printf( "%d,%d,%d,%d  %b    %s",
