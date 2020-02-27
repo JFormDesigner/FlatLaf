@@ -49,9 +49,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -76,6 +74,9 @@ public class UIDefaultsDump
 		dump( FlatLightLaf.class.getName(), dir );
 		dump( FlatDarkLaf.class.getName(), dir );
 
+//		dump( FlatIntelliJLaf.class.getName(), dir );
+//		dump( FlatDarculaLaf.class.getName(), dir );
+//
 //		dump( MyBasicLookAndFeel.class.getName(), dir );
 //		dump( MetalLookAndFeel.class.getName(), dir );
 //		dump( NimbusLookAndFeel.class.getName(), dir );
@@ -109,7 +110,7 @@ public class UIDefaultsDump
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 
 		dump( dir, "", lookAndFeel, key -> !key.contains( "InputMap" ) );
-		if( lookAndFeel instanceof FlatDarkLaf )
+		if( lookAndFeel.getClass() != FlatLightLaf.class )
 			return;
 
 		dump( dir, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
