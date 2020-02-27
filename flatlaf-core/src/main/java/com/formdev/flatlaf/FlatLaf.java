@@ -106,7 +106,7 @@ public abstract class FlatLaf
 
 	@Override
 	public Icon getDisabledIcon(JComponent component, Icon icon) {
-		return new IconUIResource(FlatUIUtils.getDisabledIcon(icon));
+		return ( icon == null ) ? null : new IconUIResource( FlatUIUtils.getDisabledIcon( icon ) );
 	}
 
 	@Override
