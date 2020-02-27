@@ -86,6 +86,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.toolbar.spacingInsets		Insets
  * @uiDefault Button.toolbar.hoverBackground	Color
  * @uiDefault Button.toolbar.pressedBackground	Color
+ * @uiDefault Button.disabledGrayMinValue		int	optional
+ * @uiDefault Button.disabledGrayMinValue		int	optional
  *
  * @author Karl Tauber
  */

@@ -36,20 +36,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractButton;
-import javax.swing.JLabel;
-import javax.swing.JRootPane;
-import javax.swing.JTabbedPane;
-import javax.swing.LookAndFeel;
-import javax.swing.PopupFactory;
-import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.IconUIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.html.HTMLEditorKit;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -109,6 +102,11 @@ public abstract class FlatLaf
 	@Override
 	public boolean isSupportedLookAndFeel() {
 		return true;
+	}
+
+	@Override
+	public Icon getDisabledIcon(JComponent component, Icon icon) {
+		return new IconUIResource(FlatUIUtils.getDisabledIcon(icon));
 	}
 
 	@Override

@@ -16,17 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -34,10 +24,11 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageProducer;
 import java.util.function.Consumer;
-import javax.swing.JComponent;
-import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
@@ -431,6 +422,32 @@ public class FlatUIUtils
 		boolean explicitlySet = c.isOpaque() == oldOpaque;
 		LookAndFeel.installProperty( c, "opaque", oldOpaque );
 		return explicitlySet;
+	}
+
+	public static Icon getDisabledIcon( Icon icon ) {
+		Image image = safeGetImage(icon);
+		int grayMinValue = FlatUIUtils.getUIInt( "Button.disabledGrayMinValue", 180 );
+		int grayMaxValue = FlatUIUtils.getUIInt( "Button.disabledGrayMaxValue", 215 );
+		FlatDisabledButtonImageFilter imageFilter = new FlatDisabledButtonImageFilter(grayMinValue, grayMaxValue);
+		ImageProducer producer = new FilteredImageSource(image.getSource(), imageFilter);
+		return new ImageIcon(Toolkit.getDefaultToolkit().createImage(producer));
+	}
+
+	private static Image safeGetImage(Icon icon) {
+		if ( icon instanceof ImageIcon ) {
+			return  ( ( ImageIcon ) icon ).getImage();
+		} else {
+			int width = icon.getIconWidth();
+			int height = icon.getIconHeight();
+			GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			GraphicsDevice device = environment.getDefaultScreenDevice();
+			GraphicsConfiguration configuration = device.getDefaultConfiguration();
+			BufferedImage image = configuration.createCompatibleImage( width, height );
+			Graphics2D g = image.createGraphics();
+			icon.paintIcon( null, g, 0, 0 );
+			g.dispose();
+			return image;
+		}
 	}
 
 	//---- class HoverListener ------------------------------------------------
