@@ -10,6 +10,7 @@ FlatLaf Change Log
   default value `TextComponent.arc`). (issue #65)
 - IntelliJ Themes: Added Gradianto themes to demo.
 - Button, CheckBox and RadioButton: Fixed NPE when button has children. (PR #68)
+- ScrollBar: Improved colors.
 
 
 ## 0.27

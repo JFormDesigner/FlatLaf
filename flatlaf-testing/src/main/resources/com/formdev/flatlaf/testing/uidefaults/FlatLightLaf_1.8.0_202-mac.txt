@@ -731,13 +731,13 @@ ScrollBar.background           #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonArrowColor     #666666    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.hoverThumbColor      #c6c6c6    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.hoverTrackColor      #e6e6e6    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverThumbColor      #c3c3c3    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverTrackColor      #ededed    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.maximumThumbSize     4096,4096    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumThumbSize     8,8    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
-ScrollBar.thumb                #dbdbdb    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumb                #dcdcdc    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbDarkShadow      #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbShadow          #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
@@ -906,13 +906,13 @@ Table.sortIconColor            #afafaf    javax.swing.plaf.ColorUIResource [UI]
 #---- TableHeader ----
 
 TableHeader.background         #ffffff    javax.swing.plaf.ColorUIResource [UI]
-TableHeader.bottomSeparatorColor #e5e5e5    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.bottomSeparatorColor #e6e6e6    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.cellBorder         [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 TableHeader.focusCellBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.font               .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TableHeader.foreground         #000000    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.height             25
-TableHeader.separatorColor     #e5e5e5    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.separatorColor     #e6e6e6    javax.swing.plaf.ColorUIResource [UI]
 TableHeaderUI                  com.formdev.flatlaf.ui.FlatTableHeaderUI
 
 

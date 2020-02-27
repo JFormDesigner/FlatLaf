@@ -729,13 +729,13 @@ ScrollBar.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonArrowColor     #9a9da1    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.hoverThumbColor      #666868    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.hoverTrackColor      #434647    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverThumbColor      #717678    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverTrackColor      #494c4f    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.maximumThumbSize     4096,4096    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumThumbSize     8,8    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
-ScrollBar.thumb                #5b5e5f    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumb                #585c5e    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbDarkShadow      #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbHighlight       #242424    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbShadow          #646464    javax.swing.plaf.ColorUIResource [UI]
@@ -888,7 +888,7 @@ Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.F
 Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]
 Table.font                     .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 Table.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-Table.gridColor                #4f5152    javax.swing.plaf.ColorUIResource [UI]
+Table.gridColor                #4c5152    javax.swing.plaf.ColorUIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
 Table.rowHeight                20
 Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
@@ -904,13 +904,13 @@ Table.sortIconColor            #adadad    javax.swing.plaf.ColorUIResource [UI]
 #---- TableHeader ----
 
 TableHeader.background         #45494a    javax.swing.plaf.ColorUIResource [UI]
-TableHeader.bottomSeparatorColor #585858    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.bottomSeparatorColor #5e6364    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.cellBorder         [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 TableHeader.focusCellBackground #45494a    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.font               .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
 TableHeader.foreground         #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.height             25
-TableHeader.separatorColor     #585858    javax.swing.plaf.ColorUIResource [UI]
+TableHeader.separatorColor     #5e6364    javax.swing.plaf.ColorUIResource [UI]
 TableHeaderUI                  com.formdev.flatlaf.ui.FlatTableHeaderUI
 
 
