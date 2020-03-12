@@ -197,7 +197,7 @@ public class UIScale
 			return font;
 
 		int newFontSize = Math.round( (font.getSize() / fontScaleFactor) * scaleFactor );
-		return new FontUIResource( font.getFamily(), font.getStyle(), newFontSize );
+		return new FontUIResource( font.deriveFont( (float) newFontSize ) );
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class UIScale
 	 */
 	public static FontUIResource scaleFont( FontUIResource font, float scaleFactor ) {
 		int newFontSize = Math.round( font.getSize() * scaleFactor );
-		return new FontUIResource( font.getFamily(), font.getStyle(), newFontSize );
+		return new FontUIResource( font.deriveFont( (float) newFontSize ) );
 	}
 
 	/**
