@@ -130,7 +130,7 @@ public class FlatTestFrame
 		}
 
 		String looksWindowsClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
-		if( isClassAvailable( looksWindowsClassName ) ) {
+		if( SystemInfo.IS_WINDOWS && isClassAvailable( looksWindowsClassName ) ) {
 			lafModel.addElement( new LookAndFeelInfo( "JGoodies Looks Windows (F7)", looksWindowsClassName ) );
 			registerSwitchToLookAndFeel( KeyEvent.VK_F7, looksWindowsClassName );
 		}
@@ -231,7 +231,7 @@ public class FlatTestFrame
 		try {
 			Class.forName( className, false, getClass().getClassLoader() );
 			return true;
-		} catch( ClassNotFoundException ex ) {
+		} catch( Throwable ex ) {
 			return false;
 		}
 	}
