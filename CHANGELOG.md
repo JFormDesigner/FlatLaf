@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.28
 
 - PasswordField: Warn about enabled Caps Lock.
 - TabbedPane: Support <kbd>Ctrl+TAB</kbd> / <kbd>Ctrl+Shift+TAB</kbd> to switch
@@ -11,6 +11,10 @@ FlatLaf Change Log
 - IntelliJ Themes: Added Gradianto themes to demo.
 - Button, CheckBox and RadioButton: Fixed NPE when button has children. (PR #68)
 - ScrollBar: Improved colors.
+- Reviewed (and tested) all key bindings on Windows and macOS. Linux key
+  bindings are equal to Windows key bindings. macOS key bindings are slightly
+  different for platform specific behavior.
+- UI default values are no longer based on Metal/Aqua UI defaults.
 
 
 ## 0.27
