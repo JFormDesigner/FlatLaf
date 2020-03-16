@@ -97,7 +97,7 @@ public class UIScale
 	}
 
 	public static double getSystemScaleFactor( GraphicsConfiguration gc ) {
-		return isSystemScalingEnabled() ? gc.getDefaultTransform().getScaleX() : 1;
+		return (isSystemScalingEnabled() && gc != null) ? gc.getDefaultTransform().getScaleX() : 1;
 	}
 
 	//---- user scaling (Java 8) ----------------------------------------------
