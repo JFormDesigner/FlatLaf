@@ -192,6 +192,7 @@ ComboBox.noActionOnKeyNavigation false
 ComboBox.padding               2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 ComboBox.selectionBackground   #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.showPopupOnNavigation true
 ComboBox.timeFactor            1000
 ComboBoxUI                     com.formdev.flatlaf.ui.FlatComboBoxUI
 

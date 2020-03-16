@@ -281,13 +281,14 @@ public class FlatComboBoxUI
 		// macOS
 		if( SystemInfo.IS_MAC && editor instanceof JTextComponent ) {
 			// delegate actions from editor text field to combobox, which is necessary
-			// because text field on macOS (based on Aqua LaF UI defaults)
-			// already handle those keys
+			// because text field on macOS already handle those keys
 			InputMap inputMap = ((JTextComponent)editor).getInputMap();
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "UP" ) );
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "KP_UP" ) );
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "DOWN" ) );
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "KP_DOWN" ) );
+			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "HOME" ) );
+			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "END" ) );
 		}
 	}
 
