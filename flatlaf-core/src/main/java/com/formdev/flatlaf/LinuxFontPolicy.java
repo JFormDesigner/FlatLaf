@@ -103,7 +103,7 @@ class LinuxFontPolicy
 	private static double getGnomeFontScale() {
 		// do not scale font here if JRE scales
 		if( isSystemScaling() )
-			return 1;
+			return 96. / 72.;
 
 		// see class com.sun.java.swing.plaf.gtk.PangoFonts background information
 
