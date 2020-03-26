@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Linux: Fixed scaling if `GDK_SCALE` environment variable is set or if running
+  on JetBrains Runtime. (issue #69)
+
+
 ## 0.28
 
 - PasswordField: Warn about enabled Caps Lock.
