@@ -31,8 +31,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -266,12 +268,19 @@ public abstract class FlatLaf
 		initIconColors( defaults, isDark() );
 		FlatInputMaps.initInputMaps( defaults );
 
+		// get addons and sort them by priority
+		ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
+		List<FlatDefaultsAddon> addons = new ArrayList<>();
+		for( FlatDefaultsAddon addon : addonLoader )
+			addons.add( addon );
+		addons.sort( (addon1, addon2) -> addon1.getPriority() - addon2.getPriority() );
+
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
 		if( lafClassesForDefaultsLoading != null )
-			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, defaults );
+			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons, defaults );
 		else
-			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), defaults );
+			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
 		if( SystemInfo.IS_MAC && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) )
@@ -282,6 +291,10 @@ public abstract class FlatLaf
 
 		// apply additional defaults (e.g. from IntelliJ themes)
 		applyAdditionalDefaults( defaults );
+
+		// allow addons modifying UI defaults
+		for( FlatDefaultsAddon addon : addons )
+			addon.afterDefaultsLoading( this, defaults );
 
 		if( postInitialization != null ) {
 			postInitialization.accept( defaults );

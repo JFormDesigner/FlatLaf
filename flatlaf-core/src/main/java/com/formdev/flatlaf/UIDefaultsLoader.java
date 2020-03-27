@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ServiceLoader;
 import java.util.function.Function;
 import java.util.logging.Level;
 import javax.swing.UIDefaults;
@@ -69,7 +68,9 @@ class UIDefaultsLoader
 	private static final String OPTIONAL_PREFIX = "?";
 	private static final String GLOBAL_PREFIX = "*.";
 
-	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, UIDefaults defaults ) {
+	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
+		UIDefaults defaults )
+	{
 		// determine classes in class hierarchy in reverse order
 		ArrayList<Class<?>> lafClasses = new ArrayList<>();
 		for( Class<?> lafClass = lookAndFeelClass;
@@ -79,10 +80,12 @@ class UIDefaultsLoader
 			lafClasses.add( 0, lafClass );
 		}
 
-		loadDefaultsFromProperties( lafClasses, defaults );
+		loadDefaultsFromProperties( lafClasses, addons, defaults );
 	}
 
-	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, UIDefaults defaults ) {
+	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, List<FlatDefaultsAddon> addons,
+		UIDefaults defaults )
+	{
 		try {
 			// load core properties files
 			Properties properties = new Properties();
@@ -94,15 +97,8 @@ class UIDefaultsLoader
 				}
 			}
 
-			// get addons and sort them by priority
-			ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
-			List<FlatDefaultsAddon> addonList = new ArrayList<>();
-			for( FlatDefaultsAddon addon : addonLoader )
-				addonList.add( addon );
-			addonList.sort( (addon1, addon2) -> addon1.getPriority() - addon2.getPriority() );
-
 			// load properties from addons
-			for( FlatDefaultsAddon addon : addonList ) {
+			for( FlatDefaultsAddon addon : addons ) {
 				for( Class<?> lafClass : lafClasses ) {
 					try( InputStream in = addon.getDefaults( lafClass ) ) {
 						if( in != null )
@@ -113,7 +109,7 @@ class UIDefaultsLoader
 
 			// collect addon class loaders
 			List<ClassLoader> addonClassLoaders = new ArrayList<>();
-			for( FlatDefaultsAddon addon : addonList ) {
+			for( FlatDefaultsAddon addon : addons ) {
 				ClassLoader addonClassLoader = addon.getClass().getClassLoader();
 				if( !addonClassLoaders.contains( addonClassLoader ) )
 					addonClassLoaders.add( addonClassLoader );
