@@ -280,16 +280,18 @@ public abstract class FlatLaf
 		// initialize text antialiasing
 		putAATextInfo( defaults );
 
-		invokePostInitialization( defaults );
+		// apply additional defaults (e.g. from IntelliJ themes)
+		applyAdditionalDefaults( defaults );
 
-		return defaults;
-	}
-
-	void invokePostInitialization( UIDefaults defaults ) {
 		if( postInitialization != null ) {
 			postInitialization.accept( defaults );
 			postInitialization = null;
 		}
+
+		return defaults;
+	}
+
+	void applyAdditionalDefaults( UIDefaults defaults ) {
 	}
 
 	List<Class<?>> getLafClassesForDefaultsLoading() {
