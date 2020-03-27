@@ -177,17 +177,14 @@ public class UIScale
 	}
 
 	/**
-	 * Applies a custom scale factor given in system properties "flatlaf.uiScale"
-	 * or "sun.java2d.uiScale" to the given font.
+	 * Applies a custom scale factor given in system property "flatlaf.uiScale"
+	 * to the given font.
 	 */
 	public static FontUIResource applyCustomScaleFactor( FontUIResource font ) {
 		if( UIScale.isSystemScalingEnabled() )
 			return font;
 
 		String uiScale = System.getProperty( "flatlaf.uiScale" );
-		if( uiScale == null )
-			uiScale = System.getProperty( "sun.java2d.uiScale" );
-
 		float scaleFactor = parseScaleFactor( uiScale );
 		if( scaleFactor <= 0 )
 			return font;
