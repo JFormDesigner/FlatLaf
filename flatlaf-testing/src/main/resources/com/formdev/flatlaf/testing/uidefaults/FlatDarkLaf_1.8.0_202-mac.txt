@@ -1124,6 +1124,7 @@ Tree.openIcon                  [lazy] 16,16    com.formdev.flatlaf.icons.FlatTre
 Tree.paintLines                false
 Tree.rendererFillBackground    false
 Tree.rendererMargins           1,2,1,2    javax.swing.plaf.InsetsUIResource [UI]
+Tree.repaintWholeRow           true
 Tree.rightChildIndent          11
 Tree.rowHeight                 0
 Tree.scrollsOnExpand           true

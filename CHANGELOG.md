@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 - Linux: Fixed scaling if `GDK_SCALE` environment variable is set or if running
   on JetBrains Runtime. (issue #69)
+- Tree: Fixed repainting wide selection on focus gained/lost.
 - No longer use system property `sun.java2d.uiScale`. (Java 8 only)
 
 
