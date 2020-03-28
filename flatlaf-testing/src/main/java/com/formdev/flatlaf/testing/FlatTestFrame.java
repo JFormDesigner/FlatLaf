@@ -142,6 +142,8 @@ public class FlatTestFrame
 		if( scaleFactor != null )
 			scaleFactorComboBox.setSelectedItem( scaleFactor );
 
+		updateSizeVariantComboBox();
+
 		// register F1, F2, ... keys to switch to Light, Dark or other LaFs
 		registerSwitchToLookAndFeel( KeyEvent.VK_F1, FlatLightLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F2, FlatDarkLaf.class.getName() );
@@ -197,6 +199,9 @@ public class FlatTestFrame
 
 					// enable/disable scale factor combobox
 					updateScaleFactorComboBox();
+
+					// show/hide size variant combobox
+					updateSizeVariantComboBox();
 
 					// this is necessary because embedded JOptionPane's "steal" the default button
 					getRootPane().setDefaultButton( closeButton );
@@ -401,6 +406,23 @@ public class FlatTestFrame
 		scaleFactorComboBox.setEnabled( !UIScale.isSystemScalingEnabled() && UIManager.getLookAndFeel() instanceof FlatLaf );
 	}
 
+	private void sizeVariantChanged() {
+		String sel = (String) sizeVariantComboBox.getSelectedItem();
+		String sizeVariant = "default".equals( sel ) ? null : sel;
+
+		updateComponentsRecur( content, (c, type) -> {
+			if( c instanceof JComponent )
+				((JComponent)c).putClientProperty( "JComponent.sizeVariant", sizeVariant );
+		} );
+	}
+
+	private void updateSizeVariantComboBox() {
+		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+		boolean visible = lookAndFeel instanceof NimbusLookAndFeel ||
+			"com.apple.laf.AquaLookAndFeel".equals( lookAndFeel.getClass().getName() );
+		sizeVariantComboBox.setVisible( visible );
+	}
+
 	private void updateComponentsRecur( Container container, BiConsumer<Component, String> action ) {
 		for( Component c : container.getComponents() ) {
 			if( c instanceof JPanel || c instanceof JDesktopPane ) {
@@ -471,6 +493,7 @@ public class FlatTestFrame
 		explicitColorsCheckBox = new JCheckBox();
 		backgroundCheckBox = new JCheckBox();
 		opaqueTriStateCheckBox = new TriStateCheckBox();
+		sizeVariantComboBox = new JComboBox<>();
 		closeButton = new JButton();
 		themesPanel = new IJThemesPanel();
 
@@ -500,6 +523,7 @@ public class FlatTestFrame
 				buttonBar.setLayout(new MigLayout(
 					"insets dialog",
 					// columns
+					"[fill]" +
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
@@ -573,9 +597,20 @@ public class FlatTestFrame
 				opaqueTriStateCheckBox.addActionListener(e -> opaqueChanged());
 				buttonBar.add(opaqueTriStateCheckBox, "cell 7 0");
 
+				//---- sizeVariantComboBox ----
+				sizeVariantComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+					"mini",
+					"small",
+					"default",
+					"large"
+				}));
+				sizeVariantComboBox.setSelectedIndex(2);
+				sizeVariantComboBox.addActionListener(e -> sizeVariantChanged());
+				buttonBar.add(sizeVariantComboBox, "cell 8 0");
+
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 9 0");
+				buttonBar.add(closeButton, "cell 10 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 			dialogPane.add(themesPanel, BorderLayout.EAST);
@@ -596,6 +631,7 @@ public class FlatTestFrame
 	private JCheckBox explicitColorsCheckBox;
 	private JCheckBox backgroundCheckBox;
 	private TriStateCheckBox opaqueTriStateCheckBox;
+	private JComboBox<String> sizeVariantComboBox;
 	private JButton closeButton;
 	private IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
