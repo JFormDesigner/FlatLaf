@@ -332,16 +332,17 @@ class UIDefaultsLoader
 
 	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		if( value.indexOf( ',' ) >= 0 ) {
-			// top,left,bottom,right[,lineColor]
+			// top,left,bottom,right[,lineColor[,lineThickness]]
 			List<String> parts = split( value, ',' );
 			Insets insets = parseInsets( value );
-			ColorUIResource lineColor = (parts.size() == 5)
+			ColorUIResource lineColor = (parts.size() >= 5)
 				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
 				: null;
+			float lineThickness = (parts.size() >= 6) ? parseFloat( parts.get( 5 ), true ) : 1f;
 
 			return (LazyValue) t -> {
 				return (lineColor != null)
-					? new FlatLineBorder( insets, lineColor )
+					? new FlatLineBorder( insets, lineColor, lineThickness )
 					: new FlatEmptyBorder( insets );
 			};
 		} else
