@@ -34,6 +34,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -278,9 +279,9 @@ public abstract class FlatLaf
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
 		if( lafClassesForDefaultsLoading != null )
-			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons, defaults );
+			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons, getAdditionalDefaults(), defaults );
 		else
-			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, defaults );
+			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
 		if( SystemInfo.IS_MAC && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) )
@@ -307,7 +308,11 @@ public abstract class FlatLaf
 	void applyAdditionalDefaults( UIDefaults defaults ) {
 	}
 
-	List<Class<?>> getLafClassesForDefaultsLoading() {
+	protected List<Class<?>> getLafClassesForDefaultsLoading() {
+		return null;
+	}
+
+	protected Properties getAdditionalDefaults() {
 		return null;
 	}
 

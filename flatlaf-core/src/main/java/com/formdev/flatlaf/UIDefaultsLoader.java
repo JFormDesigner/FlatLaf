@@ -69,7 +69,7 @@ class UIDefaultsLoader
 	private static final String GLOBAL_PREFIX = "*.";
 
 	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
-		UIDefaults defaults )
+		Properties additionalDefaults, UIDefaults defaults )
 	{
 		// determine classes in class hierarchy in reverse order
 		ArrayList<Class<?>> lafClasses = new ArrayList<>();
@@ -80,11 +80,11 @@ class UIDefaultsLoader
 			lafClasses.add( 0, lafClass );
 		}
 
-		loadDefaultsFromProperties( lafClasses, addons, defaults );
+		loadDefaultsFromProperties( lafClasses, addons, additionalDefaults, defaults );
 	}
 
 	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, List<FlatDefaultsAddon> addons,
-		UIDefaults defaults )
+		Properties additionalDefaults, UIDefaults defaults )
 	{
 		try {
 			// load core properties files
@@ -114,6 +114,10 @@ class UIDefaultsLoader
 				if( !addonClassLoaders.contains( addonClassLoader ) )
 					addonClassLoaders.add( addonClassLoader );
 			}
+
+			// add additional defaults
+			if( additionalDefaults != null )
+				properties.putAll( additionalDefaults );
 
 			// collect all platform specific keys (but do not modify properties)
 			ArrayList<String> platformSpecificKeys = new ArrayList<>();

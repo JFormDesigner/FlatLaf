@@ -518,7 +518,7 @@ public class IntelliJTheme
 		}
 
 		@Override
-		ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
+		protected ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
 			ArrayList<Class<?>> lafClasses = new ArrayList<>();
 			lafClasses.add( FlatLaf.class );
 			lafClasses.add( theme.dark ? FlatDarkLaf.class : FlatLightLaf.class );

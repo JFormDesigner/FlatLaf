@@ -7,6 +7,9 @@ FlatLaf Change Log
   on JetBrains Runtime. (issue #69)
 - Tree: Fixed repainting wide selection on focus gained/lost.
 - No longer use system property `sun.java2d.uiScale`. (Java 8 only)
+- Demo: Support using own FlatLaf themes (`.properties` files) that are located
+  in working directory of Demo application. Shown in the "Themes" list under
+  category "Current Directory".
 
 
 ## 0.28
