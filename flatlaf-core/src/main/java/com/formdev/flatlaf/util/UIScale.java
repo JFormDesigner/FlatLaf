@@ -204,9 +204,6 @@ public class UIScale
 	 * to the given font.
 	 */
 	public static FontUIResource applyCustomScaleFactor( FontUIResource font ) {
-		if( UIScale.isSystemScalingEnabled() )
-			return font;
-
 		String uiScale = System.getProperty( "flatlaf.uiScale" );
 		float scaleFactor = parseScaleFactor( uiScale );
 		if( scaleFactor <= 0 )

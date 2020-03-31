@@ -9,6 +9,8 @@ FlatLaf Change Log
 - Support changing default font used for all components with automatic scaling
   UI if using larger font. Use `UIManager.put( "defaultFont", myFont );`
 - No longer use system property `sun.java2d.uiScale`. (Java 8 only)
+- Support specifying custom scale factor in system property `flatlaf.uiScale`
+  also for Java 9 and later.
 - Demo: Support using own FlatLaf themes (`.properties` files) that are located
   in working directory of Demo application. Shown in the "Themes" list under
   category "Current Directory".
