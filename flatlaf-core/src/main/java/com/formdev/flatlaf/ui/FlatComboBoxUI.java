@@ -460,12 +460,12 @@ public class FlatComboBoxUI
 	//---- class FlatComboPopup -----------------------------------------------
 
 	@SuppressWarnings( { "rawtypes", "unchecked" } )
-	private class FlatComboPopup
+	protected class FlatComboPopup
 		extends BasicComboPopup
 	{
 		private CellPaddingBorder paddingBorder;
 
-		FlatComboPopup( JComboBox combo ) {
+		protected FlatComboPopup( JComboBox combo ) {
 			super( combo );
 
 			// BasicComboPopup listens to JComboBox.componentOrientation and updates
