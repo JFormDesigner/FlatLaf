@@ -513,14 +513,13 @@ public class FlatComponentsTest
 		add(comboBox4, "cell 4 5,growx");
 
 		//---- comboBox5 ----
-		comboBox5.setPrototypeDisplayValue("12345");
 		comboBox5.setModel(new DefaultComboBoxModel<>(new String[] {
 			"wide popup if text is longer",
 			"aa",
 			"bbb",
 			"cccc"
 		}));
-		add(comboBox5, "cell 5 5,growx");
+		add(comboBox5, "cell 5 5,growx,wmax 100");
 
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");
