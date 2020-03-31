@@ -20,6 +20,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import net.miginfocom.swing.*;
@@ -52,10 +53,51 @@ class DemoFrame
 		DemoPrefs.getState().putInt( FlatLafDemo.KEY_TAB, tabbedPane.getSelectedIndex() );
 	}
 
-	private void menuItemActionPerformed(ActionEvent e) {
+	private void menuItemActionPerformed( ActionEvent e ) {
 		SwingUtilities.invokeLater( () -> {
 			JOptionPane.showMessageDialog( this, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE );
 		} );
+	}
+
+	private void fontFamilyChanged( ActionEvent e ) {
+		String fontFamily = e.getActionCommand();
+
+		Font font = UIManager.getFont( "defaultFont" );
+		Font newFont = new Font( fontFamily, font.getStyle(), font.getSize() );
+		UIManager.put( "defaultFont", newFont );
+
+		FlatLaf.updateUI();
+	}
+
+	private void fontSizeChanged( ActionEvent e ) {
+		String fontSizeStr = e.getActionCommand();
+
+		Font font = UIManager.getFont( "defaultFont" );
+		Font newFont = font.deriveFont( (float) Integer.parseInt( fontSizeStr ) );
+		UIManager.put( "defaultFont", newFont );
+
+		FlatLaf.updateUI();
+	}
+
+	private void restoreFont() {
+		UIManager.put( "defaultFont", null );
+		FlatLaf.updateUI();
+	}
+
+	private void incrFont() {
+		Font font = UIManager.getFont( "defaultFont" );
+		Font newFont = font.deriveFont( (float) (font.getSize() + 1) );
+		UIManager.put( "defaultFont", newFont );
+
+		FlatLaf.updateUI();
+	}
+
+	private void decrFont() {
+		Font font = UIManager.getFont( "defaultFont" );
+		Font newFont = font.deriveFont( (float) Math.max( font.getSize() - 1, 8 ) );
+		UIManager.put( "defaultFont", newFont );
+
+		FlatLaf.updateUI();
 	}
 
 	private void initComponents() {
@@ -86,6 +128,10 @@ class DemoFrame
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
+		fontMenu = new JMenu();
+		JMenuItem restoreFontMenuItem = new JMenuItem();
+		JMenuItem incrFontMenuItem = new JMenuItem();
+		JMenuItem decrFontMenuItem = new JMenuItem();
 		JMenu helpMenu = new JMenu();
 		JMenuItem aboutMenuItem = new JMenuItem();
 		JToolBar toolBar1 = new JToolBar();
@@ -285,6 +331,30 @@ class DemoFrame
 			}
 			menuBar1.add(viewMenu);
 
+			//======== fontMenu ========
+			{
+				fontMenu.setText("Font");
+
+				//---- restoreFontMenuItem ----
+				restoreFontMenuItem.setText("Restore Font");
+				restoreFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_MASK));
+				restoreFontMenuItem.addActionListener(e -> restoreFont());
+				fontMenu.add(restoreFontMenuItem);
+
+				//---- incrFontMenuItem ----
+				incrFontMenuItem.setText("Increase Font Size");
+				incrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, KeyEvent.CTRL_MASK));
+				incrFontMenuItem.addActionListener(e -> incrFont());
+				fontMenu.add(incrFontMenuItem);
+
+				//---- decrFontMenuItem ----
+				decrFontMenuItem.setText("Decrease Font Size");
+				decrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_MASK));
+				decrFontMenuItem.addActionListener(e -> decrFont());
+				fontMenu.add(decrFontMenuItem);
+			}
+			menuBar1.add(fontMenu);
+
 			//======== helpMenu ========
 			{
 				helpMenu.setText("Help");
@@ -387,9 +457,30 @@ class DemoFrame
 		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
+
+		// add font families
+		fontMenu.addSeparator();
+		String[] fontFamilies = { "Arial", "Comic Sans MS", "Courier New", "Dialog",
+			"Monospaced", "SansSerif", "Serif", "Tahoma", "Verdana" };
+		for( String fontFamily : fontFamilies ) {
+			JMenuItem fontItem = new JMenuItem( fontFamily );
+			fontItem.addActionListener( this::fontFamilyChanged );
+			fontMenu.add( fontItem );
+		}
+
+		// add font sizes
+		fontMenu.addSeparator();
+		int[] fontSizes = { 8, 10, 12, 14, 16, 18, 20, 24, 28 };
+		for( int fontSize : fontSizes ) {
+			String fontSizeStr = Integer.toString( fontSize );
+			JMenuItem fontItem = new JMenuItem( fontSizeStr );
+			fontItem.addActionListener( this::fontSizeChanged );
+			fontMenu.add( fontItem );
+		}
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JMenu fontMenu;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

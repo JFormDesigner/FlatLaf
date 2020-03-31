@@ -24,6 +24,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Method;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -48,18 +49,35 @@ import javax.swing.plaf.UIResource;
  *
  * 2) user scaling mode
  *
- * This mode is mainly for Java 8 compatibility, but is also used on Linux.
+ * This mode is mainly for Java 8 compatibility, but is also used on Linux
+ * or if the default font is changed.
  * The user scale factor is computed based on the used font.
  * The JRE does not scale anything.
  * So we have to invoke {@link #scale(float)} where necessary.
  * There is only one user scale factor for all displays.
- * The user scale factor may change if the active LaF or "Label.font" has changed.
+ * The user scale factor may change if the active LaF, "defaultFont" or "Label.font" has changed.
+ * If system scaling mode is available the user scale factor is usually 1,
+ * but may be larger on Linux or if the default font is changed.
  *
  * @author Karl Tauber
  */
 public class UIScale
 {
 	private static final boolean DEBUG = false;
+
+	private static PropertyChangeSupport changeSupport;
+
+	public static void addPropertyChangeListener( PropertyChangeListener listener ) {
+		if( changeSupport == null )
+			changeSupport = new PropertyChangeSupport( UIScale.class );
+		changeSupport.addPropertyChangeListener( listener );
+	}
+
+	public static void removePropertyChangeListener( PropertyChangeListener listener ) {
+		if( changeSupport == null )
+			return;
+		changeSupport.removePropertyChangeListener( listener );
+	}
 
 	//---- system scaling (Java 9) --------------------------------------------
 
@@ -110,27 +128,33 @@ public class UIScale
 			return;
 		initialized = true;
 
-		if( isUserScalingEnabled() ) {
-			// listener to update scale factor if LaF changed or if Label.font changed
-			// (e.g. option "Override default fonts" in IntelliJ IDEA)
-			PropertyChangeListener listener = new PropertyChangeListener() {
-				@Override
-				public void propertyChange( PropertyChangeEvent e ) {
-					String propName = e.getPropertyName();
-					if( "lookAndFeel".equals( propName ) ) {
+		if( !isUserScalingEnabled() )
+			return;
+
+		// listener to update scale factor if LaF changed, "defaultFont" or "Label.font" changed
+		PropertyChangeListener listener = new PropertyChangeListener() {
+			@Override
+			public void propertyChange( PropertyChangeEvent e ) {
+				switch( e.getPropertyName() ) {
+					case "lookAndFeel":
 						// it is not necessary (and possible) to remove listener of old LaF defaults
 						if( e.getNewValue() instanceof LookAndFeel )
 							UIManager.getLookAndFeelDefaults().addPropertyChangeListener( this );
 						updateScaleFactor();
-					} else if( "Label.font".equals( propName ) )
-						updateScaleFactor();
-				}
-			};
-			UIManager.addPropertyChangeListener( listener );
-			UIManager.getLookAndFeelDefaults().addPropertyChangeListener( listener );
+						break;
 
-			updateScaleFactor();
-		}
+					case "defaultFont":
+					case "Label.font":
+						updateScaleFactor();
+						break;
+				}
+			}
+		};
+		UIManager.addPropertyChangeListener( listener );
+		UIManager.getDefaults().addPropertyChangeListener( listener );
+		UIManager.getLookAndFeelDefaults().addPropertyChangeListener( listener );
+
+		updateScaleFactor();
 	}
 
 	private static void updateScaleFactor() {
@@ -141,7 +165,9 @@ public class UIScale
 		// because even if we are on a HiDPI display it is not sure
 		// that a larger font size is set by the current LaF
 		// (e.g. can avoid large icons with small text)
-		Font font = UIManager.getFont( "Label.font" );
+		Font font = UIManager.getFont( "defaultFont" );
+		if( font == null )
+			font = UIManager.getFont( "Label.font" );
 
 		setUserScaleFactor( computeScaleFactor( font ) );
 	}
@@ -168,9 +194,6 @@ public class UIScale
 	}
 
 	private static boolean isUserScalingEnabled() {
-		if( isSystemScalingEnabled() && !SystemInfo.IS_LINUX )
-			return false; // disable user scaling if JRE scales
-
 		// same as in IntelliJ IDEA
 		String hidpi = System.getProperty( "hidpi" );
 		return (hidpi != null) ? Boolean.parseBoolean( hidpi ) : true;
@@ -194,14 +217,6 @@ public class UIScale
 			return font;
 
 		int newFontSize = Math.round( (font.getSize() / fontScaleFactor) * scaleFactor );
-		return new FontUIResource( font.deriveFont( (float) newFontSize ) );
-	}
-
-	/**
-	 * Scales the given font.
-	 */
-	public static FontUIResource scaleFont( FontUIResource font, float scaleFactor ) {
-		int newFontSize = Math.round( font.getSize() * scaleFactor );
 		return new FontUIResource( font.deriveFont( (float) newFontSize ) );
 	}
 
@@ -242,10 +257,14 @@ public class UIScale
 		else // round scale factor to 1/4
 			scaleFactor = Math.round( scaleFactor * 4f ) / 4f;
 
+		float oldScaleFactor = UIScale.scaleFactor;
 		UIScale.scaleFactor = scaleFactor;
 
 		if( DEBUG )
 			System.out.println( "HiDPI scale factor " + scaleFactor );
+
+		if( changeSupport != null )
+			changeSupport.firePropertyChange( "userScaleFactor", oldScaleFactor, scaleFactor );
 	}
 
 	public static float scale( float value ) {

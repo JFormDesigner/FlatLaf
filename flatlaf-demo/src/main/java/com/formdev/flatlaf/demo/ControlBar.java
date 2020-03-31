@@ -83,6 +83,11 @@ class ControlBar
 				} );
 			}
 		} );
+
+		UIScale.addPropertyChangeListener( e -> {
+			// update info label because user scale factor may change
+			updateInfoLabel();
+		} );
 	}
 
 	void initialize( JFrame frame, JTabbedPane tabbedPane ) {

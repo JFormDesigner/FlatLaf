@@ -208,6 +208,11 @@ public class FlatTestFrame
 				} );
 			}
 		} );
+
+		UIScale.addPropertyChangeListener( e -> {
+			// update title because user scale factor may change
+			updateTitle();
+		} );
 	}
 
 	private void updateTitle() {
@@ -403,7 +408,7 @@ public class FlatTestFrame
 	}
 
 	private void updateScaleFactorComboBox() {
-		scaleFactorComboBox.setEnabled( !UIScale.isSystemScalingEnabled() && UIManager.getLookAndFeel() instanceof FlatLaf );
+		scaleFactorComboBox.setEnabled( UIManager.getLookAndFeel() instanceof FlatLaf );
 	}
 
 	private void sizeVariantChanged() {

@@ -6,6 +6,8 @@ FlatLaf Change Log
 - Linux: Fixed scaling if `GDK_SCALE` environment variable is set or if running
   on JetBrains Runtime. (issue #69)
 - Tree: Fixed repainting wide selection on focus gained/lost.
+- Support changing default font used for all components with automatic scaling
+  UI if using larger font. Use `UIManager.put( "defaultFont", myFont );`
 - No longer use system property `sun.java2d.uiScale`. (Java 8 only)
 - Demo: Support using own FlatLaf themes (`.properties` files) that are located
   in working directory of Demo application. Shown in the "Themes" list under

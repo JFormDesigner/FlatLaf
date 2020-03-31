@@ -49,8 +49,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -345,14 +347,22 @@ public abstract class FlatLaf
 
 		uiFont = UIScale.applyCustomScaleFactor( uiFont );
 
+		// use active value for all fonts to allow changing fonts in all components
+		// (similar as in Nimbus L&F) with:
+		//     UIManager.put( "defaultFont", myFont );
+		Object activeFont =  new ActiveFont( 1 );
+
 		// override fonts
 		for( Object key : defaults.keySet() ) {
 			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
-				defaults.put( key, uiFont );
+				defaults.put( key, activeFont );
 		}
 
 		// use smaller font for progress bar
-		defaults.put( "ProgressBar.font", UIScale.scaleFont( uiFont, 0.85f ) );
+		defaults.put( "ProgressBar.font", new ActiveFont( 0.85f ) );
+
+		// set default font
+		defaults.put( "defaultFont", uiFont );
 	}
 
 	/**
@@ -561,5 +571,43 @@ public abstract class FlatLaf
 		}
 
 		return false;
+	}
+
+	//---- class ActiveFont ---------------------------------------------------
+
+	private static class ActiveFont
+		implements ActiveValue
+	{
+		private final float scaleFactor;
+
+		// cache (scaled) font
+		private Font font;
+		private Font lastDefaultFont;
+
+		ActiveFont( float scaleFactor ) {
+			this.scaleFactor = scaleFactor;
+		}
+
+		@Override
+		public Object createValue( UIDefaults table ) {
+			Font defaultFont = UIManager.getFont( "defaultFont" );
+
+			if( lastDefaultFont != defaultFont ) {
+				lastDefaultFont = defaultFont;
+
+				if( scaleFactor != 1 ) {
+					// scale font
+					int newFontSize = Math.round( defaultFont.getSize() * scaleFactor );
+					font = new FontUIResource( defaultFont.deriveFont( (float) newFontSize ) );
+				} else {
+					// make sure that font is a UIResource for LaF switching
+					font = (defaultFont instanceof UIResource)
+						? defaultFont
+						: new FontUIResource( defaultFont );
+				}
+			}
+
+			return font;
+		}
 	}
 }
