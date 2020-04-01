@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.29
 
 - Linux: Fixed scaling if `GDK_SCALE` environment variable is set or if running
   on JetBrains Runtime. (issue #69)
