@@ -31,8 +31,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,6 +51,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.IconUIResource;
@@ -275,12 +279,19 @@ public abstract class FlatLaf
 		initIconColors( defaults, isDark() );
 		FlatInputMaps.initInputMaps( defaults );
 
+		// get addons and sort them by priority
+		ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
+		List<FlatDefaultsAddon> addons = new ArrayList<>();
+		for( FlatDefaultsAddon addon : addonLoader )
+			addons.add( addon );
+		addons.sort( (addon1, addon2) -> addon1.getPriority() - addon2.getPriority() );
+
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
 		if( lafClassesForDefaultsLoading != null )
-			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, defaults );
+			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons, getAdditionalDefaults(), defaults );
 		else
-			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), defaults );
+			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
 		if( SystemInfo.IS_MAC && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) )
@@ -289,19 +300,29 @@ public abstract class FlatLaf
 		// initialize text antialiasing
 		putAATextInfo( defaults );
 
-		invokePostInitialization( defaults );
+		// apply additional defaults (e.g. from IntelliJ themes)
+		applyAdditionalDefaults( defaults );
 
-		return defaults;
-	}
+		// allow addons modifying UI defaults
+		for( FlatDefaultsAddon addon : addons )
+			addon.afterDefaultsLoading( this, defaults );
 
-	void invokePostInitialization( UIDefaults defaults ) {
 		if( postInitialization != null ) {
 			postInitialization.accept( defaults );
 			postInitialization = null;
 		}
+
+		return defaults;
 	}
 
-	List<Class<?>> getLafClassesForDefaultsLoading() {
+	void applyAdditionalDefaults( UIDefaults defaults ) {
+	}
+
+	protected List<Class<?>> getLafClassesForDefaultsLoading() {
+		return null;
+	}
+
+	protected Properties getAdditionalDefaults() {
 		return null;
 	}
 
@@ -334,14 +355,22 @@ public abstract class FlatLaf
 
 		uiFont = UIScale.applyCustomScaleFactor( uiFont );
 
+		// use active value for all fonts to allow changing fonts in all components
+		// (similar as in Nimbus L&F) with:
+		//     UIManager.put( "defaultFont", myFont );
+		Object activeFont =  new ActiveFont( 1 );
+
 		// override fonts
 		for( Object key : defaults.keySet() ) {
 			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
-				defaults.put( key, uiFont );
+				defaults.put( key, activeFont );
 		}
 
 		// use smaller font for progress bar
-		defaults.put( "ProgressBar.font", UIScale.scaleFont( uiFont, 0.85f ) );
+		defaults.put( "ProgressBar.font", new ActiveFont( 0.85f ) );
+
+		// set default font
+		defaults.put( "defaultFont", uiFont );
 	}
 
 	/**
@@ -550,5 +579,43 @@ public abstract class FlatLaf
 		}
 
 		return false;
+	}
+
+	//---- class ActiveFont ---------------------------------------------------
+
+	private static class ActiveFont
+		implements ActiveValue
+	{
+		private final float scaleFactor;
+
+		// cache (scaled) font
+		private Font font;
+		private Font lastDefaultFont;
+
+		ActiveFont( float scaleFactor ) {
+			this.scaleFactor = scaleFactor;
+		}
+
+		@Override
+		public Object createValue( UIDefaults table ) {
+			Font defaultFont = UIManager.getFont( "defaultFont" );
+
+			if( lastDefaultFont != defaultFont ) {
+				lastDefaultFont = defaultFont;
+
+				if( scaleFactor != 1 ) {
+					// scale font
+					int newFontSize = Math.round( defaultFont.getSize() * scaleFactor );
+					font = new FontUIResource( defaultFont.deriveFont( (float) newFontSize ) );
+				} else {
+					// make sure that font is a UIResource for LaF switching
+					font = (defaultFont instanceof UIResource)
+						? defaultFont
+						: new FontUIResource( defaultFont );
+				}
+			}
+
+			return font;
+		}
 	}
 }

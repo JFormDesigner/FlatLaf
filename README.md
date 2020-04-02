@@ -77,6 +77,8 @@ Projects using FlatLaf
 
 - [NetBeans](https://netbeans.apache.org/) 11.3
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
+- [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
+- [OWASP Zed Attack Proxy (ZAP)](https://www.zaproxy.org/) (in weekly releases)
 - [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org)
 - [Rest Suite](https://github.com/supanadit/restsuite)
 - [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy)

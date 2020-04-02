@@ -28,6 +28,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -37,6 +38,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.function.Predicate;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -71,6 +73,7 @@ public class IJThemesPanel
 	private Window window;
 
 	private File lastDirectory;
+	private boolean isAdjustingThemesList;
 
 	public IJThemesPanel() {
 		initComponents();
@@ -134,6 +137,10 @@ public class IJThemesPanel
 		themes.add( new IJThemeInfo( "Flat IntelliJ", null, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
 		themes.add( new IJThemeInfo( "Flat Darcula", null, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
 
+		// add themes from directory
+		categories.put( themes.size(), "Current Directory" );
+		themes.addAll( themesManager.moreThemes );
+
 		// add uncategorized bundled themes
 		categories.put( themes.size(), "IntelliJ Themes" );
 		for( IJThemeInfo ti : themesManager.bundledThemes ) {
@@ -156,10 +163,6 @@ public class IJThemesPanel
 
 			themes.add( ti );
 		}
-
-		// add themes from directory
-		categories.put( themes.size(), "Current Directory" );
-		themes.addAll( themesManager.moreThemes );
 
 		// remember selection
 		IJThemeInfo oldSel = themesList.getSelectedValue();
@@ -193,7 +196,7 @@ public class IJThemesPanel
 	}
 
 	private void themesListValueChanged( ListSelectionEvent e ) {
-		if( e.getValueIsAdjusting() )
+		if( e.getValueIsAdjusting() || isAdjustingThemesList )
 			return;
 
 		IJThemeInfo themeInfo = themesList.getSelectedValue();
@@ -223,15 +226,19 @@ public class IJThemesPanel
 			}
 		} else if( themeInfo.themeFile != null ) {
 			try {
-			    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
-			    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_INTELLIJ_THEME, DemoPrefs.FILE_PREFIX + themeInfo.themeFile );
+				if( themeInfo.themeFile.getName().endsWith( ".properties" ) ) {
+				    FlatLaf.install( new PropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
+				} else
+				    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
+
+				DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.FILE_PREFIX + themeInfo.themeFile );
 			} catch( Exception ex ) {
 				ex.printStackTrace();
 				showInformationDialog( "Failed to load '" + themeInfo.themeFile + "'.", ex );
 			}
 		} else {
 			IntelliJTheme.install( getClass().getResourceAsStream( themeInfo.resourceName ) );
-		    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_INTELLIJ_THEME, DemoPrefs.RESOURCE_PREFIX + themeInfo.resourceName );
+		    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.RESOURCE_PREFIX + themeInfo.resourceName );
 		}
 
 		// update all components
@@ -331,17 +338,17 @@ public class IJThemesPanel
 
 	private void selectedCurrentLookAndFeel() {
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
-		String intelliJTheme = UIManager.getLookAndFeelDefaults().getString( DemoPrefs.INTELLIJ_THEME_UI_KEY );
+		String theme = UIManager.getLookAndFeelDefaults().getString( DemoPrefs.THEME_UI_KEY );
 
-		if( intelliJTheme == null && lookAndFeel instanceof IntelliJTheme.ThemeLaf )
+		if( theme == null && (lookAndFeel instanceof IntelliJTheme.ThemeLaf || lookAndFeel instanceof PropertiesLaf) )
 			return;
 
 		Predicate<IJThemeInfo> test;
-		if( intelliJTheme != null && intelliJTheme.startsWith( DemoPrefs.RESOURCE_PREFIX ) ) {
-			String resourceName = intelliJTheme.substring( DemoPrefs.RESOURCE_PREFIX.length() );
+		if( theme != null && theme.startsWith( DemoPrefs.RESOURCE_PREFIX ) ) {
+			String resourceName = theme.substring( DemoPrefs.RESOURCE_PREFIX.length() );
 			test = ti -> Objects.equals( ti.resourceName, resourceName );
-		} else if( intelliJTheme != null && intelliJTheme.startsWith( DemoPrefs.FILE_PREFIX ) ) {
-			File themeFile = new File( intelliJTheme.substring( DemoPrefs.FILE_PREFIX.length() ) );
+		} else if( theme != null && theme.startsWith( DemoPrefs.FILE_PREFIX ) ) {
+			File themeFile = new File( theme.substring( DemoPrefs.FILE_PREFIX.length() ) );
 			test = ti -> Objects.equals( ti.themeFile, themeFile );
 		} else {
 			String lafClassName = lookAndFeel.getClass().getName();
@@ -356,11 +363,13 @@ public class IJThemesPanel
 			}
 		}
 
+		isAdjustingThemesList = true;
 		if( newSel >= 0 ) {
 			if( newSel != themesList.getSelectedIndex() )
 				themesList.setSelectedIndex( newSel );
 		} else
 			themesList.clearSelection();
+		isAdjustingThemesList = false;
 	}
 
 	private void initComponents() {
@@ -420,4 +429,78 @@ public class IJThemesPanel
 	private JScrollPane themesScrollPane;
 	private JList<IJThemeInfo> themesList;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class PropertiesLaf ------------------------------------------------
+
+	public static class PropertiesLaf
+		extends FlatLaf
+	{
+		private final String name;
+		private final String baseTheme;
+		private final boolean dark;
+		private final Properties properties;
+
+		public PropertiesLaf( String name, File propertiesFile )
+			throws IOException
+		{
+			this.name = name;
+
+			properties = new Properties();
+			try( InputStream in = new FileInputStream( propertiesFile ) ) {
+				if( in != null )
+					properties.load( in );
+			}
+
+			baseTheme = properties.getProperty( "@baseTheme", "light" );
+			dark = "dark".equalsIgnoreCase( baseTheme ) || "darcula".equalsIgnoreCase( baseTheme );
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String getDescription() {
+			return name;
+		}
+
+		@Override
+		public boolean isDark() {
+			return dark;
+		}
+
+		@Override
+		protected ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
+			ArrayList<Class<?>> lafClasses = new ArrayList<>();
+			lafClasses.add( FlatLaf.class );
+			switch( baseTheme.toLowerCase() ) {
+				default:
+				case "light":
+					lafClasses.add( FlatLightLaf.class );
+					break;
+
+				case "dark":
+					lafClasses.add( FlatDarkLaf.class );
+					break;
+
+				case "intellij":
+					lafClasses.add( FlatLightLaf.class );
+					lafClasses.add( FlatIntelliJLaf.class );
+					break;
+
+				case "darcula":
+					lafClasses.add( FlatDarkLaf.class );
+					lafClasses.add( FlatDarculaLaf.class );
+					break;
+			}
+			lafClasses.add( PropertiesLaf.class );
+			return lafClasses;
+		}
+
+		@Override
+		protected Properties getAdditionalDefaults() {
+			return properties;
+		}
+	}
 }

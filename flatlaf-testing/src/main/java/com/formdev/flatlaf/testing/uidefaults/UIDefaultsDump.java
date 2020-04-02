@@ -368,7 +368,16 @@ public class UIDefaultsDump
 
 	private void dumpActiveValue( PrintWriter out, ActiveValue value ) {
 		out.print( "[active] " );
-		dumpValue( out, value.createValue( defaults ) );
+		Object realValue = value.createValue( defaults );
+
+		if( realValue instanceof Font && realValue == UIManager.getFont( "defaultFont" ) ) {
+			// dump "$defaultFont" for the default font to make it easier to
+			// compare Windows/Linux dumps with macOS dumps
+			out.print( "$defaultFont" );
+			if( realValue instanceof UIResource )
+				out.print( " [UI]" );
+		} else
+			dumpValue( out, realValue );
 	}
 
 	private String dumpClass( Object value ) {

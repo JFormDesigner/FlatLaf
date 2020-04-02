@@ -26,9 +26,9 @@ import java.awt.Insets;
 /**
  * Line border for various components.
  *
- * Paints a scaled 1px thick line around the component.
- * The line thickness is not included in the border insets.
- * The insets should be at least 1,1,1,1.
+ * Paints a scaled (usually 1px thick) line around the component.
+ * The line thickness is not added to the border insets.
+ * The insets should be at least have line thickness (usually 1,1,1,1).
  *
  * @author Karl Tauber
  */
@@ -36,10 +36,16 @@ public class FlatLineBorder
 	extends FlatEmptyBorder
 {
 	private final Color lineColor;
+	private final float lineThickness;
 
 	public FlatLineBorder( Insets insets, Color lineColor ) {
+		this( insets, lineColor, 1f );
+	}
+
+	public FlatLineBorder( Insets insets, Color lineColor, float lineThickness ) {
 		super( insets );
 		this.lineColor = lineColor;
+		this.lineThickness = lineThickness;
 	}
 
 	@Override
@@ -48,7 +54,7 @@ public class FlatLineBorder
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 			g2.setColor( lineColor );
-			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, 0f, scale( 1f ), 0f );
+			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, 0f, scale( lineThickness ), 0f );
 		} finally {
 			g2.dispose();
 		}

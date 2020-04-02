@@ -281,13 +281,14 @@ public class FlatComboBoxUI
 		// macOS
 		if( SystemInfo.IS_MAC && editor instanceof JTextComponent ) {
 			// delegate actions from editor text field to combobox, which is necessary
-			// because text field on macOS (based on Aqua LaF UI defaults)
-			// already handle those keys
+			// because text field on macOS already handle those keys
 			InputMap inputMap = ((JTextComponent)editor).getInputMap();
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "UP" ) );
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "KP_UP" ) );
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "DOWN" ) );
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "KP_DOWN" ) );
+			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "HOME" ) );
+			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "END" ) );
 		}
 	}
 
@@ -459,12 +460,12 @@ public class FlatComboBoxUI
 	//---- class FlatComboPopup -----------------------------------------------
 
 	@SuppressWarnings( { "rawtypes", "unchecked" } )
-	private class FlatComboPopup
+	protected class FlatComboPopup
 		extends BasicComboPopup
 	{
 		private CellPaddingBorder paddingBorder;
 
-		FlatComboPopup( JComboBox combo ) {
+		protected FlatComboPopup( JComboBox combo ) {
 			super( combo );
 
 			// BasicComboPopup listens to JComboBox.componentOrientation and updates
@@ -479,13 +480,8 @@ public class FlatComboBoxUI
 
 		@Override
 		protected Rectangle computePopupBounds( int px, int py, int pw, int ph ) {
-			// get maximum display size of all items, ignoring prototype value
-			Object prototype = comboBox.getPrototypeDisplayValue();
-			if( prototype != null )
-				comboBox.setPrototypeDisplayValue( null );
+			// get maximum display size of all items
 			Dimension displaySize = getDisplaySize();
-			if( prototype != null )
-				comboBox.setPrototypeDisplayValue( prototype );
 
 			// make popup wider if necessary
 			if( displaySize.width > pw ) {

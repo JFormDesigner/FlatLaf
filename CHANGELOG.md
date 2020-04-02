@@ -1,7 +1,24 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.29
+
+- Linux: Fixed scaling if `GDK_SCALE` environment variable is set or if running
+  on JetBrains Runtime. (issue #69)
+- Tree: Fixed repainting wide selection on focus gained/lost.
+- ComboBox: No longer ignore `JComboBox.prototypeDisplayValue` when computing
+  popup width. (issue #80)
+- Support changing default font used for all components with automatic scaling
+  UI if using larger font. Use `UIManager.put( "defaultFont", myFont );`
+- No longer use system property `sun.java2d.uiScale`. (Java 8 only)
+- Support specifying custom scale factor in system property `flatlaf.uiScale`
+  also for Java 9 and later.
+- Demo: Support using own FlatLaf themes (`.properties` files) that are located
+  in working directory of Demo application. Shown in the "Themes" list under
+  category "Current Directory".
+
+
+## 0.28
 
 - PasswordField: Warn about enabled Caps Lock.
 - TabbedPane: Support <kbd>Ctrl+TAB</kbd> / <kbd>Ctrl+Shift+TAB</kbd> to switch
@@ -11,6 +28,10 @@ FlatLaf Change Log
 - IntelliJ Themes: Added Gradianto themes to demo.
 - Button, CheckBox and RadioButton: Fixed NPE when button has children. (PR #68)
 - ScrollBar: Improved colors.
+- Reviewed (and tested) all key bindings on Windows and macOS. Linux key
+  bindings are equal to Windows key bindings. macOS key bindings are slightly
+  different for platform specific behavior.
+- UI default values are no longer based on Metal/Aqua UI defaults.
 
 
 ## 0.27

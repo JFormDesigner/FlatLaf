@@ -131,7 +131,7 @@ public class FlatUIUtils
 	}
 
 	public static Font nonUIResource( Font font ) {
-		return (font instanceof UIResource) ? new Font( font.getName(), font.getStyle(), font.getSize() ) : font;
+		return (font instanceof UIResource) ? font.deriveFont( font.getStyle() ) : font;
 	}
 
 	public static int minimumWidth( JComponent c, int minimumWidth ) {

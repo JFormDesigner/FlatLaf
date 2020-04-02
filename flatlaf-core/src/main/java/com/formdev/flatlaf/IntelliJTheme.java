@@ -513,19 +513,12 @@ public class IntelliJTheme
 		}
 
 		@Override
-		public UIDefaults getDefaults() {
-			UIDefaults defaults = super.getDefaults();
+		void applyAdditionalDefaults( UIDefaults defaults ) {
 			theme.applyProperties( defaults );
-			super.invokePostInitialization( defaults );
-			return defaults;
 		}
 
 		@Override
-		void invokePostInitialization( UIDefaults defaults ) {
-		}
-
-		@Override
-		ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
+		protected ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
 			ArrayList<Class<?>> lafClasses = new ArrayList<>();
 			lafClasses.add( FlatLaf.class );
 			lafClasses.add( theme.dark ? FlatDarkLaf.class : FlatLightLaf.class );

@@ -373,7 +373,6 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox5"
-				"prototypeDisplayValue": "12345"
 				"model": new javax.swing.DefaultComboBoxModel {
 					selectedItem: "wide popup if text is longer"
 					addElement( "wide popup if text is longer" )
@@ -382,7 +381,7 @@ new FormModel {
 					addElement( "cccc" )
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 5,growx"
+				"value": "cell 5 5,growx,wmax 100"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "spinnerLabel"

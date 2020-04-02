@@ -68,7 +68,9 @@ class IJThemesManager
 		// get current working directory
 		File directory = new File( "" ).getAbsoluteFile();
 
-		File[] themeFiles = directory.listFiles( (dir, name) -> name.endsWith( ".theme.json" ) );
+		File[] themeFiles = directory.listFiles( (dir, name) -> {
+			return name.endsWith( ".theme.json" ) || name.endsWith( ".properties" );
+		} );
 		if( themeFiles == null )
 			return;
 
@@ -77,7 +79,10 @@ class IJThemesManager
 
 		moreThemes.clear();
 		for( File f : themeFiles ) {
-			String name = StringUtils.removeTrailing( f.getName(), ".theme.json" );
+			String fname = f.getName();
+			String name = fname.endsWith( ".properties" )
+				? StringUtils.removeTrailing( fname, ".properties" )
+				: StringUtils.removeTrailing( fname, ".theme.json" );
 			moreThemes.add( new IJThemeInfo( name, null, null, null, null, null, f, null ) );
 			lastModifiedMap.put( f, f.lastModified() );
 		}

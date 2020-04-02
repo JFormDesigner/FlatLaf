@@ -48,10 +48,10 @@ class FlatInputMaps
 		modifyInputMap( defaults, "ComboBox.ancestorInputMap",
 			"SPACE", "spacePopup",
 
-			"UP", "selectPrevious2",
-			"DOWN", "selectNext2",
-			"KP_UP", "selectPrevious2",
-			"KP_DOWN", "selectNext2",
+			"UP", mac( "selectPrevious2", "selectPrevious" ),
+			"DOWN", mac( "selectNext2", "selectNext" ),
+			"KP_UP", mac( "selectPrevious2", "selectPrevious" ),
+			"KP_DOWN", mac( "selectNext2", "selectNext" ),
 
 			mac( "alt UP", null ), "togglePopup",
 			mac( "alt DOWN", null ), "togglePopup",
@@ -182,7 +182,7 @@ class FlatInputMaps
 			"ctrl A", beginLineAction,
 			"ctrl E", endLineAction,
 
-			// move caret to document begin/end (without selecting text)
+			// move caret to document begin/end and select text
 			"shift meta UP", selectionBeginAction,
 			"shift meta DOWN", selectionEndAction,
 			"shift meta KP_UP", selectionBeginAction,
@@ -197,16 +197,6 @@ class FlatInputMaps
 			"shift DOWN", selectionEndLineAction,
 			"shift KP_UP", selectionBeginLineAction,
 			"shift KP_DOWN", selectionEndLineAction,
-
-			// move caret one page (without selecting text)
-			"PAGE_UP", pageUpAction,
-			"PAGE_DOWN", pageDownAction,
-
-			// move caret one page and select text
-			"shift PAGE_UP", "selection-page-up", // DefaultEditorKit.selectionPageUpAction
-			"shift PAGE_DOWN", "selection-page-down", // DefaultEditorKit.selectionPageDownAction
-			"shift meta PAGE_UP", "selection-page-left", // DefaultEditorKit.selectionPageLeftAction
-			"shift meta PAGE_DOWN", "selection-page-right", // DefaultEditorKit.selectionPageRightAction
 
 			// delete previous/next word
 			"ctrl W", deletePrevWordAction,
@@ -350,6 +340,12 @@ class FlatInputMaps
 			"meta V", "paste",
 			"meta X", "cut",
 
+			// let parent scroll pane do the macOS typical scrolling without changing selection
+			"HOME", null,
+			"END", null,
+			"PAGE_UP", null,
+			"PAGE_DOWN", null,
+
 			"ctrl A", null,
 			"ctrl BACK_SLASH", null,
 			"ctrl C", null,
@@ -370,8 +366,6 @@ class FlatInputMaps
 			"ctrl UP", null,
 			"ctrl V", null,
 			"ctrl X", null,
-			"PAGE_DOWN", null,
-			"PAGE_UP", null,
 			"SPACE", null,
 			"shift ctrl DOWN", null,
 			"shift ctrl END", null,
@@ -390,10 +384,16 @@ class FlatInputMaps
 			"shift INSERT", null,
 			"shift SPACE", null
 		);
-
-		// scrollbar
-		copyInputMap( defaults, "ScrollBar.ancestorInputMap", "ScrollBar.focusInputMap" );
-		copyInputMap( defaults, "ScrollBar.ancestorInputMap.RightToLeft", "ScrollBar.focusInputMap.RightToLeft" );
+		modifyInputMap( defaults, "List.focusInputMap.RightToLeft",
+			"ctrl KP_LEFT", null,
+			"ctrl KP_RIGHT", null,
+			"ctrl LEFT", null,
+			"ctrl RIGHT", null,
+			"shift ctrl KP_LEFT", null,
+			"shift ctrl KP_RIGHT", null,
+			"shift ctrl LEFT", null,
+			"shift ctrl RIGHT", null
+		);
 
 		// scrollpane
 		modifyInputMap( defaults, "ScrollPane.ancestorInputMap",
@@ -410,6 +410,16 @@ class FlatInputMaps
 			"ctrl PAGE_UP", null
 		);
 
+		// tabbedpane
+		modifyInputMap( defaults, "TabbedPane.ancestorInputMap",
+			"ctrl UP", null,
+			"ctrl KP_UP", null
+		);
+		modifyInputMap( defaults, "TabbedPane.focusInputMap",
+			"ctrl DOWN", null,
+			"ctrl KP_DOWN", null
+		);
+
 		// table
 		modifyInputMap( defaults, "Table.ancestorInputMap",
 			"alt TAB", "focusHeader",
@@ -418,6 +428,12 @@ class FlatInputMaps
 			"meta C", "copy",
 			"meta V", "paste",
 			"meta X", "cut",
+
+			// let parent scroll pane do the macOS typical scrolling without changing selection
+			"HOME", null,
+			"END", null,
+			"PAGE_UP", null,
+			"PAGE_DOWN", null,
 
 			"ctrl A", null,
 			"ctrl BACK_SLASH", null,
@@ -476,26 +492,30 @@ class FlatInputMaps
 			"RIGHT", "selectChild",
 			"KP_LEFT", "selectParent",
 			"KP_RIGHT", "selectChild",
+			"shift LEFT", "selectParent",
+			"shift RIGHT", "selectChild",
+			"shift KP_LEFT", "selectParent",
+			"shift KP_RIGHT", "selectChild",
+			"alt LEFT", "selectParent",
+			"alt RIGHT", "selectChild",
+			"alt KP_LEFT", "selectParent",
+			"alt KP_RIGHT", "selectChild",
 
 		    "meta A", "selectAll",
 		    "meta C", "copy",
 		    "meta V", "paste",
 		    "meta X", "cut",
 
+			// let parent scroll pane do the macOS typical scrolling without changing selection
+			"HOME", null,
+			"END", null,
+			"PAGE_UP", null,
+			"PAGE_DOWN", null,
+
 		    "ctrl LEFT", null,
 			"ctrl RIGHT", null,
 			"ctrl KP_LEFT", null,
 			"ctrl KP_RIGHT", null,
-
-			"shift LEFT", null,
-			"shift RIGHT", null,
-			"shift KP_LEFT", null,
-			"shift KP_RIGHT", null,
-
-		    "alt LEFT", null,
-		    "alt RIGHT", null,
-		    "alt KP_LEFT", null,
-		    "alt KP_RIGHT", null,
 
 			"ctrl A", null,
 			"ctrl BACK_SLASH", null,
@@ -513,11 +533,7 @@ class FlatInputMaps
 			"ctrl UP", null,
 			"ctrl V", null,
 			"ctrl X", null,
-			"END", null,
 			"F2", null,
-			"HOME", null,
-			"PAGE_DOWN", null,
-			"PAGE_UP", null,
 			"SPACE", null,
 			"shift ctrl DOWN", null,
 			"shift ctrl END", null,
@@ -540,15 +556,16 @@ class FlatInputMaps
 			"LEFT", "selectChild",
 			"RIGHT", "selectParent",
 			"KP_LEFT", "selectChild",
-			"KP_RIGHT", "selectParent"
+			"KP_RIGHT", "selectParent",
+			"shift LEFT", "selectChild",
+			"shift RIGHT", "selectParent",
+			"shift KP_LEFT", "selectChild",
+			"shift KP_RIGHT", "selectParent",
+			"alt LEFT", "selectChild",
+			"alt RIGHT", "selectParent",
+			"alt KP_LEFT", "selectChild",
+			"alt KP_RIGHT", "selectParent"
 		} ) );
-	}
-
-	private static void copyInputMap( UIDefaults defaults, String srcKey, String destKey ) {
-		// Note: not using `defaults.get(key)` here because this would resolve the lazy value
-		Object inputMap = defaults.remove( srcKey );
-		defaults.put( srcKey, inputMap );
-		defaults.put( destKey, inputMap );
 	}
 
 	private static void modifyInputMap( UIDefaults defaults, String key, Object... bindings ) {

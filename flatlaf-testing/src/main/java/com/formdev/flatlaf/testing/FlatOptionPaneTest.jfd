@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -6,240 +6,244 @@ new FormModel {
 		auxiliary() {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
-		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "flowy,ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[][][fill]"
-			"$rowConstraints": "[top][top][top][top][top][top][top][top]"
-		} ) {
+		add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 			name: "this"
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "plainLabel"
-				"text": "Plain"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "panel1"
-				"border": &LineBorder0 new javax.swing.border.LineBorder( sfield java.awt.Color gray, 1, false )
-				add( new FormComponent( "javax.swing.JOptionPane" ) {
-					name: "plainOptionPane"
-					"message": "Hello world."
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
+			"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+			add( new FormContainer( "com.formdev.flatlaf.demo.ScrollablePanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "flowy,ltr,insets dialog,hidemode 3"
+				"$columnConstraints": "[][][fill]"
+				"$rowConstraints": "[top][top][top][top][top][top][top][top]"
+			} ) {
+				name: "panel9"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "plainLabel"
+					"text": "Plain"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
 				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
-				name: "plainShowDialogLabel"
-				"optionPane": new FormReference( "plainOptionPane" )
-				"titleLabel": new FormReference( "plainLabel" )
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "errorLabel"
-				"text": "Error"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "panel2"
-				"border": #LineBorder0
-				add( new FormComponent( "javax.swing.JOptionPane" ) {
-					name: "errorOptionPane"
-					"messageType": 0
-					"optionType": 2
-					"message": "Your PC ran into a problem. Buy a new one."
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel1"
+					"border": &LineBorder0 new javax.swing.border.LineBorder( sfield java.awt.Color gray, 1, false )
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "plainOptionPane"
+						"message": "Hello world."
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
 				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
-				name: "errorShowDialogLabel"
-				"titleLabel": new FormReference( "errorLabel" )
-				"optionPane": new FormReference( "errorOptionPane" )
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "informationLabel"
-				"text": "Information"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "panel3"
-				"border": #LineBorder0
-				add( new FormComponent( "javax.swing.JOptionPane" ) {
-					name: "informationOptionPane"
-					"messageType": 1
-					"optionType": 0
-					"message": "Text with\nmultiple lines\n(use \\n to separate lines)"
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
-				name: "informationShowDialogLabel"
-				"optionPane": new FormReference( "informationOptionPane" )
-				"titleLabel": new FormReference( "informationLabel" )
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 2"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "questionLabel"
-				"text": "Question"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 3"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "panel4"
-				"border": #LineBorder0
-				add( new FormComponent( "javax.swing.JOptionPane" ) {
-					name: "questionOptionPane"
-					"messageType": 3
-					"optionType": 1
-					"message": "Answer the question. What question? Don't know. Just writing useless text to make this longer than 80 characters."
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
-				name: "questionShowDialogLabel"
-				"optionPane": new FormReference( "questionOptionPane" )
-				"titleLabel": new FormReference( "questionLabel" )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 3"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "warningLabel"
-				"text": "Warning"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 4"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "panel5"
-				"border": #LineBorder0
-				add( new FormComponent( "javax.swing.JOptionPane" ) {
-					name: "warningOptionPane"
-					"messageType": 2
-					"optionType": 2
-					"message": "<html>I like <b>bold</b>,<br> and I like <i>italic</i>,<br> and I like to have<br> many lines.<br> Lots of lines."
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
-				name: "warningShowDialogLabel"
-				"optionPane": new FormReference( "warningOptionPane" )
-				"titleLabel": new FormReference( "warningLabel" )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 4"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "inputLabel"
-				"text": "Input"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 5"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "panel7"
-				"border": #LineBorder0
-				add( new FormComponent( "javax.swing.JOptionPane" ) {
-					name: "inputOptionPane"
-					"wantsInput": true
-					"optionType": 2
-					"message": "Enter whatever you want:"
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
-				name: "inputShowDialogLabel"
-				"optionPane": new FormReference( "inputOptionPane" )
-				"titleLabel": new FormReference( "inputLabel" )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 5"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "inputIconLabel"
-				"text": "Input + icon"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 6"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "panel8"
-				"border": #LineBorder0
-				add( new FormComponent( "javax.swing.JOptionPane" ) {
-					name: "inputIconOptionPane"
-					"messageType": 1
-					"wantsInput": true
-					"optionType": 2
-					"message": "Enter something:"
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 6"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
-				name: "inputIconShowDialogLabel"
-				"titleLabel": new FormReference( "inputIconLabel" )
-				"optionPane": new FormReference( "inputIconOptionPane" )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 6"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "customLabel"
-				"text": "Custom"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 7"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "panel6"
-				"border": #LineBorder0
-				add( new FormComponent( "javax.swing.JOptionPane" ) {
-					name: "customOptionPane"
-					"icon": new com.jformdesigner.model.SwingIcon( 2, "Tree.leafIcon" )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "plainShowDialogLabel"
+					"optionPane": new FormReference( "plainOptionPane" )
+					"titleLabel": new FormReference( "plainLabel" )
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 0"
 				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 7"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
-				name: "customShowDialogLabel"
-				"optionPane": new FormReference( "customOptionPane" )
-				"titleLabel": new FormReference( "customLabel" )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 7"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "errorLabel"
+					"text": "Error"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel2"
+					"border": #LineBorder0
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "errorOptionPane"
+						"messageType": 0
+						"optionType": 2
+						"message": "Your PC ran into a problem. Buy a new one."
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "errorShowDialogLabel"
+					"titleLabel": new FormReference( "errorLabel" )
+					"optionPane": new FormReference( "errorOptionPane" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "informationLabel"
+					"text": "Information"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel3"
+					"border": #LineBorder0
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "informationOptionPane"
+						"messageType": 1
+						"optionType": 0
+						"message": "Text with\nmultiple lines\n(use \\n to separate lines)"
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 2"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "informationShowDialogLabel"
+					"optionPane": new FormReference( "informationOptionPane" )
+					"titleLabel": new FormReference( "informationLabel" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 2"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "questionLabel"
+					"text": "Question"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel4"
+					"border": #LineBorder0
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "questionOptionPane"
+						"messageType": 3
+						"optionType": 1
+						"message": "Answer the question. What question? Don't know. Just writing useless text to make this longer than 80 characters."
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 3"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "questionShowDialogLabel"
+					"optionPane": new FormReference( "questionOptionPane" )
+					"titleLabel": new FormReference( "questionLabel" )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 3"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "warningLabel"
+					"text": "Warning"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel5"
+					"border": #LineBorder0
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "warningOptionPane"
+						"messageType": 2
+						"optionType": 2
+						"message": "<html>I like <b>bold</b>,<br> and I like <i>italic</i>,<br> and I like to have<br> many lines.<br> Lots of lines."
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 4"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "warningShowDialogLabel"
+					"optionPane": new FormReference( "warningOptionPane" )
+					"titleLabel": new FormReference( "warningLabel" )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 4"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "inputLabel"
+					"text": "Input"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel7"
+					"border": #LineBorder0
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "inputOptionPane"
+						"wantsInput": true
+						"optionType": 2
+						"message": "Enter whatever you want:"
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 5"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "inputShowDialogLabel"
+					"optionPane": new FormReference( "inputOptionPane" )
+					"titleLabel": new FormReference( "inputLabel" )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 5"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "inputIconLabel"
+					"text": "Input + icon"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 6"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel8"
+					"border": #LineBorder0
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "inputIconOptionPane"
+						"messageType": 1
+						"wantsInput": true
+						"optionType": 2
+						"message": "Enter something:"
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 6"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "inputIconShowDialogLabel"
+					"titleLabel": new FormReference( "inputIconLabel" )
+					"optionPane": new FormReference( "inputIconOptionPane" )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 6"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "customLabel"
+					"text": "Custom"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 7"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel6"
+					"border": #LineBorder0
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "customOptionPane"
+						"icon": new com.jformdesigner.model.SwingIcon( 2, "Tree.leafIcon" )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 7"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "customShowDialogLabel"
+					"optionPane": new FormReference( "customOptionPane" )
+					"titleLabel": new FormReference( "customLabel" )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 7"
+				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 790, 920 )
+			"size": new java.awt.Dimension( 840, 900 )
 		} )
 	}
 }

@@ -36,6 +36,8 @@
 	  }
 	},
 
+	"ToolBar.background" : "#F5F5F5",
+	"Popup.Toolbar.background" : "#F5F5F5",
 	"Panel.background": "#F5F5F5",
 	"Panel.foreground" : "#5c616c",
 	"Window.border" : "1,1,1,1,#5c616c",
@@ -53,7 +55,6 @@
 	"Group.separatorColor" : "#9ba2ab",
 
 	"Tree.background" : "#ffffff",
-	"Tree.rowHeight": "23",
 
 	"ProgressBar.background" : "#f57900",
 	"ProgressBar.foreground" : "#f57900",
