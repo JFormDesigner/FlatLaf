@@ -1,0 +1,191 @@
+/*
+ * Copyright 2020 FormDev Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.formdev.flatlaf.themeeditor;
+
+import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
+import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rsyntaxtextarea.TokenMap;
+import org.fife.ui.rsyntaxtextarea.TokenTypes;
+import org.fife.ui.rsyntaxtextarea.modes.PropertiesFileTokenMaker;
+
+/**
+ * Token maker for FlatLaf properties files.
+ * <p>
+ * Lets the super class parse the properties file and modify the added tokens.
+ * The super class uses {@link TokenTypes#RESERVED_WORD} for property keys and
+ * {@link TokenTypes#LITERAL_STRING_DOUBLE_QUOTE} for property values.
+ *
+ * @author Karl Tauber
+ */
+public class FlatThemeTokenMaker
+	extends PropertiesFileTokenMaker
+{
+	private static final int TOKEN_PROPERTY = Token.IDENTIFIER;
+	private static final int TOKEN_VARIABLE = Token.VARIABLE;
+	private static final int TOKEN_NUMBER = Token.LITERAL_NUMBER_DECIMAL_INT;
+	private static final int TOKEN_COLOR = Token.LITERAL_NUMBER_HEXADECIMAL;
+	private static final int TOKEN_STRING = Token.LITERAL_STRING_DOUBLE_QUOTE;
+	private static final int TOKEN_FUNCTION = Token.FUNCTION;
+	private static final int TOKEN_TYPE = Token.DATA_TYPE;
+
+	private final TokenMap tokenMap = new TokenMap();
+
+	public FlatThemeTokenMaker() {
+		// null, false, true
+		tokenMap.put( "null", Token.RESERVED_WORD );
+		tokenMap.put( "false", Token.LITERAL_BOOLEAN );
+		tokenMap.put( "true", Token.LITERAL_BOOLEAN );
+
+		// functions
+		tokenMap.put( "rgb", TOKEN_FUNCTION );
+		tokenMap.put( "rgba", TOKEN_FUNCTION );
+		tokenMap.put( "hsl", TOKEN_FUNCTION );
+		tokenMap.put( "hsla", TOKEN_FUNCTION );
+		tokenMap.put( "lighten", TOKEN_FUNCTION );
+		tokenMap.put( "darken", TOKEN_FUNCTION );
+		tokenMap.put( "lazy", TOKEN_FUNCTION );
+
+		// function options
+		tokenMap.put( "relative", Token.RESERVED_WORD );
+		tokenMap.put( "autoInverse", Token.RESERVED_WORD );
+	}
+
+	/**
+	 * This method is only invoked from the super class.
+	 */
+	@Override
+	public void addToken( char[] array, int start, int end, int tokenType, int startOffset, boolean hyperlink ) {
+//		debugInputToken( array, start, end, tokenType, startOffset, hyperlink );
+
+		// ignore invalid token
+		if( end < start )
+			return;
+
+		if( tokenType == Token.RESERVED_WORD ) {
+			// key
+			int newTokenType = (array[start] == '@') ? TOKEN_VARIABLE : TOKEN_PROPERTY;
+			super.addToken( array, start, end, newTokenType, startOffset, hyperlink );
+		} else if( tokenType == Token.LITERAL_STRING_DOUBLE_QUOTE ) {
+			// value
+			tokenizeValue( array, start, end, startOffset );
+		} else if( tokenType == Token.VARIABLE ) {
+			// '{variable}'
+			super.addToken( array, start, end, TOKEN_TYPE, startOffset, hyperlink );
+		} else {
+			// comments or operators
+			super.addToken( array, start, end, tokenType, startOffset, hyperlink );
+		}
+	}
+
+	private void tokenizeValue( char[] array, int start, int end, int startOffset ) {
+		int newStartOffset = startOffset - start;
+
+		int currentTokenStart = start;
+		int currentTokenType = Token.NULL;
+
+		for( int i = start; i <= end; i++ ) {
+			int newTokenType;
+			char ch = array[i];
+			if( ch <= ' ' )
+				newTokenType = Token.WHITESPACE;
+			else if( ch == '#' || (currentTokenType == TOKEN_COLOR && RSyntaxUtilities.isHexCharacter( ch )) )
+				newTokenType = TOKEN_COLOR;
+			else if( ch == '$' || (currentTokenType == TOKEN_PROPERTY && isPropertyChar( ch )) )
+				newTokenType = TOKEN_PROPERTY;
+			else if( ch == '@' || (currentTokenType == TOKEN_VARIABLE && isPropertyChar( ch )) )
+				newTokenType = TOKEN_VARIABLE;
+			else if( currentTokenType != TOKEN_STRING && (RSyntaxUtilities.isDigit( ch ) || (currentTokenType == TOKEN_NUMBER && ch == '.')) )
+				newTokenType = TOKEN_NUMBER;
+			else if( ch == ',' || ch == '(' || ch == ')' || ch == '"' || ch == '%' )
+				newTokenType = TokenTypes.OPERATOR;
+			else
+				newTokenType = TOKEN_STRING;
+
+			if( currentTokenType == Token.NULL )
+				currentTokenType = newTokenType;
+			else if( newTokenType != currentTokenType ) {
+				addTokenImpl( array, currentTokenStart, i - 1, currentTokenType, newStartOffset + currentTokenStart );
+				currentTokenType = newTokenType;
+				currentTokenStart = i;
+			}
+		}
+
+		if( currentTokenType != Token.NULL )
+			addTokenImpl( array, currentTokenStart, end, currentTokenType, newStartOffset + currentTokenStart );
+	}
+
+	private void addTokenImpl( char[] array, int start, int end, int tokenType, int startOffset ) {
+		if( tokenType == TOKEN_STRING ) {
+			int type = tokenMap.get( array, start, end );
+			if( type != -1 )
+				tokenType = type;
+		}
+
+//		debugOutputToken( array, start, end, tokenType );
+		super.addToken( array, start, end, tokenType, startOffset, false );
+	}
+
+	private boolean isPropertyChar( char ch ) {
+		return RSyntaxUtilities.isLetterOrDigit( ch ) || ch == '.' || ch == '_' || ch == '-';
+	}
+
+/*debug
+	private java.util.HashMap<Integer, String> tokenTypeStrMap;
+
+	private void debugInputToken( char[] array, int start, int end, int tokenType, int startOffset, boolean hyperlink ) {
+		if( tokenTypeStrMap == null ) {
+			tokenTypeStrMap = new java.util.HashMap<>();
+			for( java.lang.reflect.Field f : TokenTypes.class.getFields() ) {
+				try {
+					tokenTypeStrMap.put( (Integer) f.get( null ), f.getName() );
+				} catch( IllegalArgumentException | IllegalAccessException ex ) {
+					ex.printStackTrace();
+				}
+			}
+		}
+
+		String tokenTypeStr = tokenTypeStrMap.computeIfAbsent( tokenType, t -> {
+			return "(unknown " + t + ")";
+		} );
+
+		System.out.printf( "%d-%d (%d)  %-30s '%s'\n",
+			start, end, end - start, tokenTypeStr, new String( array, start, end - start + 1 ) );
+	}
+
+	private void debugOutputToken( char[] array, int start, int end, int tokenType ) {
+		String tokenTypeStr = null;
+		switch( tokenType ) {
+			case TOKEN_PROPERTY: tokenTypeStr = "PROPERTY"; break;
+			case TOKEN_VARIABLE: tokenTypeStr = "VARIABLE"; break;
+			case TOKEN_NUMBER: tokenTypeStr = "NUMBER"; break;
+			case TOKEN_COLOR: tokenTypeStr = "COLOR"; break;
+			case TOKEN_STRING: tokenTypeStr = "STRING"; break;
+			case TOKEN_FUNCTION: tokenTypeStr = "FUNCTION"; break;
+			case TOKEN_TYPE: tokenTypeStr = "TYPE"; break;
+			case TokenTypes.OPERATOR: tokenTypeStr = "OPERATOR"; break;
+			case TokenTypes.WHITESPACE: tokenTypeStr = "WHITESPACE"; break;
+			case TokenTypes.LITERAL_BOOLEAN: tokenTypeStr = "BOOLEAN"; break;
+			case TokenTypes.RESERVED_WORD: tokenTypeStr = "RESERVED_WORD"; break;
+			default:
+				throw new IllegalArgumentException( String.valueOf( tokenType ) );
+		}
+
+		System.out.printf( "    %d-%d (%d)  %-15s '%s'\n",
+			start, end, end - start, tokenTypeStr, new String( array, start, end - start + 1 ) );
+	}
+debug*/
+}

@@ -35,7 +35,7 @@ public class FlatThemeFileEditor
 	public static void main( String[] args ) {
 		File file = new File( args.length > 0
 			? args[0]
-			: "../flatlaf-core/src/main/resources/com/formdev/flatlaf/FlatLightLaf.properties" ); // TODO
+			: "theme-editor-test.properties" ); // TODO
 
 		SwingUtilities.invokeLater( () -> {
 			FlatLightLaf.install();

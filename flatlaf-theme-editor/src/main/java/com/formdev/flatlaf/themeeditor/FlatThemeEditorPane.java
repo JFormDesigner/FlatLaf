@@ -21,7 +21,9 @@ import java.awt.Font;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import javax.swing.JPanel;
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -33,14 +35,21 @@ import com.formdev.flatlaf.util.UIScale;
 class FlatThemeEditorPane
 	extends JPanel
 {
+	private static final String FLATLAF_STYLE = "text/flatlaf";
+
 	private final RTextScrollPane scrollPane;
 	private final FlatSyntaxTextArea textArea;
 
 	FlatThemeEditorPane() {
 		super( new BorderLayout() );
 
+		// register FlatLaf token maker
+		AbstractTokenMakerFactory tmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
+		tmf.putMapping( FLATLAF_STYLE, FlatThemeTokenMaker.class.getName() );
+
 		// create text area
 		textArea = new FlatSyntaxTextArea();
+		textArea.setSyntaxEditingStyle( FLATLAF_STYLE );
 
 		// create scroll pane
 		scrollPane = new RTextScrollPane( textArea );
