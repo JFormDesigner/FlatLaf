@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 FormDev Software GmbH
+ * Copyright 2020 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-rootProject.name = "FlatLaf"
+package com.formdev.flatlaf.themeeditor;
 
-include( "flatlaf-core" )
-include( "flatlaf-extras" )
-include( "flatlaf-swingx" )
-include( "flatlaf-jide-oss" )
-include( "flatlaf-demo" )
-include( "flatlaf-testing" )
-include( "flatlaf-theme-editor" )
+import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 
-pluginManagement {
-	plugins {
-		id( "com.jfrog.bintray" ) version "1.8.4"
-		id( "com.jfrog.artifactory" ) version "4.13.0"
+/**
+ * A text area that supports editing FlatLaf themes.
+ *
+ * @author Karl Tauber
+ */
+class FlatSyntaxTextArea
+	extends TextEditorPane
+{
+	FlatSyntaxTextArea() {
 	}
 }

@@ -1,0 +1,27 @@
+JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.1" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"$locationPolicy": 2
+			"$sizePolicy": 2
+			"defaultCloseOperation": 2
+			"title": "FlatLaf Theme Editor"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemeEditorPane" ) {
+					name: "themeEditorArea"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 535, 300 )
+		} )
+	}
+}
