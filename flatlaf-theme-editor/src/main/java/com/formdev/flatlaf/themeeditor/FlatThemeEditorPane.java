@@ -55,6 +55,7 @@ class FlatThemeEditorPane
 		textArea.setSyntaxEditingStyle( FLATLAF_STYLE );
 		textArea.setMarkOccurrences( true );
 		textArea.addParser( new FlatThemeParser() );
+		textArea.setUseColorOfColorTokens( true );
 
 		// theme
 		try {
