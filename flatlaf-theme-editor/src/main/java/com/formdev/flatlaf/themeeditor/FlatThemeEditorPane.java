@@ -17,12 +17,14 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import javax.swing.JPanel;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -51,6 +53,7 @@ class FlatThemeEditorPane
 		// create text area
 		textArea = new FlatSyntaxTextArea();
 		textArea.setSyntaxEditingStyle( FLATLAF_STYLE );
+		textArea.setMarkOccurrences( true );
 
 		// theme
 		try {
@@ -59,6 +62,12 @@ class FlatThemeEditorPane
 		} catch( IOException ex ) {
 			ex.printStackTrace();
 		}
+
+		// use semitransparent token background because token background
+		// is painted over mark occurrences background
+		SyntaxScheme scheme = textArea.getSyntaxScheme();
+		scheme.getStyle( FlatThemeTokenMaker.TOKEN_COLOR ).background = new Color( 0x0a000000, true );
+		scheme.getStyle( FlatThemeTokenMaker.TOKEN_VARIABLE ).background = new Color( 0x1800cc00, true );
 
 		// create scroll pane
 		scrollPane = new RTextScrollPane( textArea );

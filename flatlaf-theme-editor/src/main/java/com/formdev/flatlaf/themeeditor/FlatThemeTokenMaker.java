@@ -34,13 +34,13 @@ import org.fife.ui.rsyntaxtextarea.modes.PropertiesFileTokenMaker;
 public class FlatThemeTokenMaker
 	extends PropertiesFileTokenMaker
 {
-	private static final int TOKEN_PROPERTY = Token.IDENTIFIER;
-	private static final int TOKEN_VARIABLE = Token.VARIABLE;
-	private static final int TOKEN_NUMBER = Token.LITERAL_NUMBER_DECIMAL_INT;
-	private static final int TOKEN_COLOR = Token.LITERAL_NUMBER_HEXADECIMAL;
-	private static final int TOKEN_STRING = Token.LITERAL_STRING_DOUBLE_QUOTE;
-	private static final int TOKEN_FUNCTION = Token.FUNCTION;
-	private static final int TOKEN_TYPE = Token.DATA_TYPE;
+	static final int TOKEN_PROPERTY = Token.IDENTIFIER;
+	static final int TOKEN_VARIABLE = Token.VARIABLE;
+	static final int TOKEN_NUMBER = Token.LITERAL_NUMBER_DECIMAL_INT;
+	static final int TOKEN_COLOR = Token.LITERAL_NUMBER_HEXADECIMAL;
+	static final int TOKEN_STRING = Token.LITERAL_STRING_DOUBLE_QUOTE;
+	static final int TOKEN_FUNCTION = Token.FUNCTION;
+	static final int TOKEN_TYPE = Token.DATA_TYPE;
 
 	private final TokenMap tokenMap = new TokenMap();
 
@@ -141,6 +141,21 @@ public class FlatThemeTokenMaker
 
 	private boolean isPropertyChar( char ch ) {
 		return RSyntaxUtilities.isLetterOrDigit( ch ) || ch == '.' || ch == '_' || ch == '-';
+	}
+
+	@Override
+	public boolean getMarkOccurrencesOfTokenType( int type ) {
+		switch( type ) {
+			case TOKEN_PROPERTY:
+			case TOKEN_VARIABLE:
+			case TOKEN_COLOR:
+			case TOKEN_FUNCTION:
+			case TOKEN_TYPE:
+				return true;
+
+			default:
+				return false;
+		}
 	}
 
 /*debug
