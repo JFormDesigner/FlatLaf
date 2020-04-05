@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import javax.swing.JPanel;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
+import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import com.formdev.flatlaf.util.UIScale;
@@ -50,6 +51,14 @@ class FlatThemeEditorPane
 		// create text area
 		textArea = new FlatSyntaxTextArea();
 		textArea.setSyntaxEditingStyle( FLATLAF_STYLE );
+
+		// theme
+		try {
+			Theme theme = Theme.load( getClass().getResourceAsStream( "light.xml" ) );
+			theme.apply( textArea );
+		} catch( IOException ex ) {
+			ex.printStackTrace();
+		}
 
 		// create scroll pane
 		scrollPane = new RTextScrollPane( textArea );
