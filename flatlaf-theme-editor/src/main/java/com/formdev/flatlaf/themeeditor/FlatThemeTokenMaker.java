@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.themeeditor;
 
+import org.fife.ui.rsyntaxtextarea.OccurrenceMarker;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenMap;
@@ -141,6 +142,11 @@ public class FlatThemeTokenMaker
 
 	private boolean isPropertyChar( char ch ) {
 		return RSyntaxUtilities.isLetterOrDigit( ch ) || ch == '.' || ch == '_' || ch == '-';
+	}
+
+	@Override
+	protected OccurrenceMarker createOccurrenceMarker() {
+		return new FlatOccurrenceMarker( super.createOccurrenceMarker() );
 	}
 
 	@Override
