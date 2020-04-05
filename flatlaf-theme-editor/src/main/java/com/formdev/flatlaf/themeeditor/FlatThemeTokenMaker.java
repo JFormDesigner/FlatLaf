@@ -97,6 +97,7 @@ public class FlatThemeTokenMaker
 
 		int currentTokenStart = start;
 		int currentTokenType = Token.NULL;
+		int parenthesisLevel = 0;
 
 		for( int i = start; i <= end; i++ ) {
 			int newTokenType;
@@ -119,21 +120,36 @@ public class FlatThemeTokenMaker
 			if( currentTokenType == Token.NULL )
 				currentTokenType = newTokenType;
 			else if( newTokenType != currentTokenType ) {
-				addTokenImpl( array, currentTokenStart, i - 1, currentTokenType, newStartOffset + currentTokenStart );
+				addTokenImpl( array, currentTokenStart, i - 1, currentTokenType, newStartOffset + currentTokenStart, parenthesisLevel );
 				currentTokenType = newTokenType;
 				currentTokenStart = i;
 			}
+
+			if( ch == '(' )
+				parenthesisLevel++;
+			else if( ch == ')' )
+				parenthesisLevel--;
 		}
 
 		if( currentTokenType != Token.NULL )
-			addTokenImpl( array, currentTokenStart, end, currentTokenType, newStartOffset + currentTokenStart );
+			addTokenImpl( array, currentTokenStart, end, currentTokenType, newStartOffset + currentTokenStart, parenthesisLevel );
 	}
 
-	private void addTokenImpl( char[] array, int start, int end, int tokenType, int startOffset ) {
-		if( tokenType == TOKEN_STRING ) {
+	private void addTokenImpl( char[] array, int start, int end, int tokenType, int startOffset, int parenthesisLevel ) {
+		if( tokenType == TOKEN_PROPERTY && array[start] == '$' ) {
+			// separate '$' from property token for mark occurrences to work
+			super.addToken( array, start, start, TokenTypes.OPERATOR, startOffset, false );
+			start++;
+			startOffset++;
+		} else if( tokenType == TOKEN_STRING ) {
+			// check for reserved words, functions, etc
 			int type = tokenMap.get( array, start, end );
 			if( type != -1 )
 				tokenType = type;
+			else if( parenthesisLevel > 0 ) {
+				// assume property reference if in function parameters
+				tokenType = TOKEN_PROPERTY;
+			}
 		}
 
 //		debugOutputToken( array, start, end, tokenType );
