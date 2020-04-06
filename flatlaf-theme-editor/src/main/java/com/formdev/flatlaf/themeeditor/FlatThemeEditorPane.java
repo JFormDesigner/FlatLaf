@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import javax.swing.JLayer;
 import javax.swing.JPanel;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
@@ -55,7 +56,7 @@ class FlatThemeEditorPane
 		textArea.setSyntaxEditingStyle( FLATLAF_STYLE );
 		textArea.setMarkOccurrences( true );
 		textArea.addParser( new FlatThemeParser() );
-		textArea.setUseColorOfColorTokens( true );
+//		textArea.setUseColorOfColorTokens( true );
 
 		// theme
 		try {
@@ -71,15 +72,19 @@ class FlatThemeEditorPane
 		scheme.getStyle( FlatThemeTokenMaker.TOKEN_COLOR ).background = new Color( 0x0a000000, true );
 		scheme.getStyle( FlatThemeTokenMaker.TOKEN_VARIABLE ).background = new Color( 0x1800cc00, true );
 
+		// create overlay layer
+		JLayer<FlatSyntaxTextArea> overlay = new JLayer<>( textArea, new FlatThemeEditorOverlay() );
+
 		// create scroll pane
-		scrollPane = new RTextScrollPane( textArea );
+		scrollPane = new RTextScrollPane( overlay );
 		scrollPane.setLineNumbersEnabled( true );
 
 		// scale fonts
-		if( UIScale.getUserScaleFactor() != 1 ) {
+		if( UIScale.getUserScaleFactor() != 1 )
 			textArea.setFont( scaleFont( textArea.getFont() ) );
-			scrollPane.getGutter().setLineNumberFont( scaleFont( scrollPane.getGutter().getLineNumberFont() ) );
-		}
+
+		// use same font for line numbers as in editor
+		scrollPane.getGutter().setLineNumberFont( textArea.getFont() );
 
 		add( scrollPane, BorderLayout.CENTER );
 	}
