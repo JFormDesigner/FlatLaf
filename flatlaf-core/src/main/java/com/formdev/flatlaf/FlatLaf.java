@@ -54,6 +54,7 @@ import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
+import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -324,7 +325,7 @@ public abstract class FlatLaf
 		if( SystemInfo.IS_WINDOWS ) {
 			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
 			if( winFont != null )
-				uiFont = new FontUIResource( winFont );
+				uiFont = createCompositeFont( winFont.getFamily(), winFont.getStyle(), winFont.getSize() );
 
 		} else if( SystemInfo.IS_MAC ) {
 			String fontName;
@@ -335,7 +336,8 @@ public abstract class FlatLaf
 				// default font on older systems (see com.apple.laf.AquaFonts)
 				fontName = "Lucida Grande";
 			}
-			uiFont = new FontUIResource( fontName, Font.PLAIN, 13 );
+
+			uiFont = createCompositeFont( fontName, Font.PLAIN, 13 );
 
 		} else if( SystemInfo.IS_LINUX ) {
 			Font font = LinuxFontPolicy.getFont();
@@ -343,7 +345,7 @@ public abstract class FlatLaf
 		}
 
 		if( uiFont == null )
-			return;
+			uiFont = createCompositeFont( Font.SANS_SERIF, Font.PLAIN, 12 );
 
 		uiFont = UIScale.applyCustomScaleFactor( uiFont );
 
@@ -363,6 +365,14 @@ public abstract class FlatLaf
 
 		// set default font
 		defaults.put( "defaultFont", uiFont );
+	}
+
+	static FontUIResource createCompositeFont( String family, int style, int size ) {
+		// using StyleContext.getFont() here because it uses
+		// sun.font.FontUtilities.getCompositeFontUIResource()
+		// and creates a composite font that is able to display all Unicode characters
+		Font font = new StyleContext().getFont( family, style, size );
+		return (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 	}
 
 	/**

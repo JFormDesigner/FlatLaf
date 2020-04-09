@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
-import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -90,9 +89,7 @@ class LinuxFontPolicy
 	}
 
 	private static Font createFont( String family, int style, int size, double dsize ) {
-		// using StyleContext.getFont() here because it uses
-		// sun.font.FontUtilities.getCompositeFontUIResource()
-		Font font = new StyleContext().getFont( family, style, size );
+		Font font = FlatLaf.createCompositeFont( family, style, size );
 
 		// set font size in floating points
 		font = font.deriveFont( style, (float) dsize );

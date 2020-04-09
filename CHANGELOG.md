@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## 0.30
+
+- Windows: Fixed rendering of Unicode characters. Previously not all Unicode
+  characters were rendered on Windows. (issue #81)
+
+
 ## 0.29
 
 - Linux: Fixed scaling if `GDK_SCALE` environment variable is set or if running
