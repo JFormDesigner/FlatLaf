@@ -79,6 +79,7 @@ Projects using FlatLaf
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
 - [OWASP Zed Attack Proxy (ZAP)](https://www.zaproxy.org/) (in weekly releases)
+- [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (commercial)
 - [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org)
 - [Rest Suite](https://github.com/supanadit/restsuite)
 - [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy)
@@ -89,6 +90,8 @@ Projects using FlatLaf
   [mendelson AS2](https://mendelson-e-c.com/as2/),
   [AS4](https://mendelson-e-c.com/as4/) and
   [OFTP2](https://mendelson-e-c.com/oftp2) (commercial)
+- [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.1.6
+- [lsfusion platform](https://github.com/lsfusion/platform)
 - and more...
 
 
