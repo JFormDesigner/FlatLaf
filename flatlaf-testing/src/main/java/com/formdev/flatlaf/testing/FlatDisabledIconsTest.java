@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.FilteredImageSource;
@@ -24,6 +25,7 @@ import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
 import java.beans.*;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatLaf;
 import net.miginfocom.swing.*;
 
 /**
@@ -266,53 +268,17 @@ public class FlatDisabledIconsTest
 			//---- button6 ----
 			button6.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/netbeans-find24.gif")));
 			enabledToolBar.add(button6);
-
-			//---- button7 ----
-			button7.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png")));
 			enabledToolBar.add(button7);
-
-			//---- button8 ----
-			button8.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste.png")));
 			enabledToolBar.add(button8);
-
-			//---- button9 ----
-			button9.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show.png")));
 			enabledToolBar.add(button9);
-
-			//---- button10 ----
-			button10.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
 			enabledToolBar.add(button10);
-
-			//---- button11 ----
-			button11.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png")));
 			enabledToolBar.add(button11);
-
-			//---- button12 ----
-			button12.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search.png")));
 			enabledToolBar.add(button12);
-
-			//---- button13 ----
-			button13.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut@2x.png")));
 			enabledToolBar.add(button13);
-
-			//---- button14 ----
-			button14.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x.png")));
 			enabledToolBar.add(button14);
-
-			//---- button15 ----
-			button15.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show@2x.png")));
 			enabledToolBar.add(button15);
-
-			//---- button16 ----
-			button16.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess@2x.png")));
 			enabledToolBar.add(button16);
-
-			//---- button17 ----
-			button17.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess@2x.png")));
 			enabledToolBar.add(button17);
-
-			//---- button18 ----
-			button18.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search@2x.png")));
 			enabledToolBar.add(button18);
 		}
 		add(enabledToolBar, "cell 1 0");
@@ -468,6 +434,44 @@ public class FlatDisabledIconsTest
 		selectedCheckBox.addActionListener(e -> selectedChanged());
 		add(selectedCheckBox, "cell 0 10");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		button7.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut_dark.png" ) );
+		button8.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste_dark.png" ) );
+		button9.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show_dark.png" ) );
+		button10.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess_dark.png" ) );
+		button11.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess_dark.png" ) );
+		button12.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search_dark.png" ) );
+
+		button13.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut@2x.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut@2x_dark.png" ) );
+		button14.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x_dark.png" ) );
+		button15.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show@2x.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show@2x_dark.png" ) );
+		button16.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess@2x.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess@2x_dark.png" ) );
+		button17.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess@2x.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess@2x_dark.png" ) );
+		button18.setIcon( new LightOrDarkIcon(
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search@2x.png",
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search@2x_dark.png" ) );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
@@ -494,6 +498,49 @@ public class FlatDisabledIconsTest
 	private JToggleButton zipButton;
 	private JCheckBox selectedCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class LightOrDarkIcon ----------------------------------------------
+
+	private static class LightOrDarkIcon
+		extends ImageIcon
+	{
+		private final ImageIcon lightIcon;
+		private final ImageIcon darkIcon;
+
+		LightOrDarkIcon( String lightIconName, String darkIconName ) {
+			this.lightIcon = new ImageIcon( getClass().getResource( lightIconName ) );
+			this.darkIcon = new ImageIcon( getClass().getResource( darkIconName ) );
+		}
+
+		private ImageIcon getCurrentIcon() {
+			return isDark() ? darkIcon : lightIcon;
+		}
+
+		private boolean isDark() {
+			LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+			return lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark();
+		}
+
+		@Override
+		public int getIconWidth() {
+			return getCurrentIcon().getIconWidth();
+		}
+
+		@Override
+		public int getIconHeight() {
+			return getCurrentIcon().getIconHeight();
+		}
+
+		@Override
+		public synchronized void paintIcon( Component c, Graphics g, int x, int y ) {
+			getCurrentIcon().paintIcon( c, g, x, y );
+		}
+
+		@Override
+		public Image getImage() {
+			return getCurrentIcon().getImage();
+		}
+	}
 
 	//---- class IntelliJFilterController  ------------------------------------
 

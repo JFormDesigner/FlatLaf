@@ -49,51 +49,39 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button7"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button8"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button9"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button10"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button11"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button12"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button13"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut@2x.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button14"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button15"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show@2x.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button16"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess@2x.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button17"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess@2x.png" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button18"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search@2x.png" )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0"
