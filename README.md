@@ -80,9 +80,12 @@ Projects using FlatLaf
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
 - [OWASP Zed Attack Proxy (ZAP)](https://www.zaproxy.org/) (in weekly releases)
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (commercial)
+- [Total Validator](https://www.totalvalidator.com/) 15 (commercial)
 - [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org)
 - [MegaMek](https://github.com/MegaMek/megamek) v0.47.4 and
   [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5
+- [GUIslice Builder](https://github.com/ImpulseAdventure/GUIslice-Builder)
+  0.13.b024
 - [Rest Suite](https://github.com/supanadit/restsuite)
 - [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy)
 - [SpringRemote](https://github.com/HaleyWang/SpringRemote)
