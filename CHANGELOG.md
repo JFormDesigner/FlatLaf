@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- List, Table and Tree: Item selection color of focused components no longer
+  change from blue to gray when temporary loosing focus (e.g. showing a popup
+  menu).
+
+
 ## 0.30
 
 - Windows: Fixed rendering of Unicode characters. Previously not all Unicode

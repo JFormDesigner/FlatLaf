@@ -166,7 +166,7 @@ public class FlatTableUI
 			@Override
 			public void focusLost( FocusEvent e ) {
 				super.focusLost( e );
-				toggleSelectionColors( false );
+				toggleSelectionColors( e.isTemporary() );
 			}
 		};
 	}

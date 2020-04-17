@@ -81,6 +81,11 @@ class DataComponentsPanel
 		JScrollPane scrollPane5 = new JScrollPane();
 		table1 = new JTable();
 		dndCheckBox = new JCheckBox();
+		JPopupMenu popupMenu2 = new JPopupMenu();
+		JMenuItem menuItem3 = new JMenuItem();
+		JMenuItem menuItem4 = new JMenuItem();
+		JMenuItem menuItem5 = new JMenuItem();
+		JMenuItem menuItem6 = new JMenuItem();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -126,6 +131,7 @@ class DataComponentsPanel
 				@Override
 				public String getElementAt(int i) { return values[i]; }
 			});
+			list1.setComponentPopupMenu(popupMenu2);
 			scrollPane1.setViewportView(list1);
 		}
 		add(scrollPane1, "cell 1 0,growx");
@@ -198,6 +204,7 @@ class DataComponentsPanel
 						add(node1);
 					}
 				}));
+			tree1.setComponentPopupMenu(popupMenu2);
 			scrollPane3.setViewportView(tree1);
 		}
 		add(scrollPane3, "cell 1 1,growx");
@@ -287,6 +294,7 @@ class DataComponentsPanel
 					}))));
 			}
 			table1.setAutoCreateRowSorter(true);
+			table1.setComponentPopupMenu(popupMenu2);
 			scrollPane5.setViewportView(table1);
 		}
 		add(scrollPane5, "cell 1 2 2 1,growx,width 300");
@@ -296,6 +304,27 @@ class DataComponentsPanel
 		dndCheckBox.setMnemonic('D');
 		dndCheckBox.addActionListener(e -> dndChanged());
 		add(dndCheckBox, "cell 0 3 3 1");
+
+		//======== popupMenu2 ========
+		{
+
+			//---- menuItem3 ----
+			menuItem3.setText("Some Action");
+			popupMenu2.add(menuItem3);
+
+			//---- menuItem4 ----
+			menuItem4.setText("More Action");
+			popupMenu2.add(menuItem4);
+			popupMenu2.addSeparator();
+
+			//---- menuItem5 ----
+			menuItem5.setText("No Action");
+			popupMenu2.add(menuItem5);
+
+			//---- menuItem6 ----
+			menuItem6.setText("Noop Action");
+			popupMenu2.add(menuItem6);
+		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		((JComboBox)((DefaultCellEditor)table1.getColumnModel().getColumn( 3 ).getCellEditor()).getComponent()).setEditable( true );
