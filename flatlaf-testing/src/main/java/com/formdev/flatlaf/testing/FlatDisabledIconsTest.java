@@ -456,22 +456,22 @@ public class FlatDisabledIconsTest
 
 		button13.setIcon( new LightOrDarkIcon(
 			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut@2x.png",
-			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut@2x_dark.png" ) );
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut_dark@2x.png" ) );
 		button14.setIcon( new LightOrDarkIcon(
 			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x.png",
-			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x_dark.png" ) );
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste_dark@2x.png" ) );
 		button15.setIcon( new LightOrDarkIcon(
 			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show@2x.png",
-			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show@2x_dark.png" ) );
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show_dark@2x.png" ) );
 		button16.setIcon( new LightOrDarkIcon(
 			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess@2x.png",
-			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess@2x_dark.png" ) );
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess_dark@2x.png" ) );
 		button17.setIcon( new LightOrDarkIcon(
 			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess@2x.png",
-			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess@2x_dark.png" ) );
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess_dark@2x.png" ) );
 		button18.setIcon( new LightOrDarkIcon(
 			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search@2x.png",
-			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search@2x_dark.png" ) );
+			"/com/formdev/flatlaf/testing/disabled_icons_test/intellij-search_dark@2x.png" ) );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
