@@ -10,8 +10,7 @@
       "selectionBackground": "#6272a4",
       "selectionInactiveBackground": "#4E5A82",
       "inactiveBackground": "#414450",
-      "borderColor": "#282a36",
-      "underlineColor": "#bd93f9"
+      "borderColor": "#282a36"
     },
     "Borders": {
       "color": "#282a36",
@@ -82,7 +81,7 @@
       "background": "#44475a",
       "underlinedTabBackground": "#313341",
       "underlineColor": "#bd93f9",
-      "underlineHeight": 2
+      "underlineHeight": 1
     },
     "FileColor": {
       "Blue": "#8be9fd",
@@ -175,7 +174,7 @@
     },
     "Separator.separatorColor": "#282a35",
     "TabbedPane": {
-      "tabSelectionHeight": 2,
+      "tabSelectionHeight": 1,
       "focusColor": "#282a35",
       "hoverColor": "#282a35",
       "underlineColor": "#bd93f9",
@@ -198,7 +197,7 @@
       },
       "HeaderTab": {
         "underlineColor": "#bd93f9",
-        "underlineHeight": 2,
+        "underlineHeight": 1,
         "underlinedTabBackground": "#313341",
         "underlinedTabInactiveBackground": "#313341"
       }

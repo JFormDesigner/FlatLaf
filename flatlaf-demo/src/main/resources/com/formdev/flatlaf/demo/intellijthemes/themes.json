@@ -69,19 +69,33 @@
 		"sourceCodeUrl": "https://github.com/OlyaB/GreyTheme",
 		"sourceCodePath": "blob/master/src/Gray.theme.json"
 	},
-	"gruvbox_theme.theme.json": {
-		"name": "Gruvbox",
+	"gruvbox_dark_hard.theme.json": {
+		"name": "Gruvbox Dark Hard",
 		"license": "MIT",
 		"licenseFile": "gruvbox_theme.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/Vincent-P/gruvbox-intellij-theme",
-		"sourceCodePath": "blob/master/src/main/resources/gruvbox_theme.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/gruvbox_dark_hard.theme.json"
 	},
-	"Hiberbee.theme.json": {
-		"name": "Hiberbee",
+	"gruvbox_dark_medium.theme.json": {
+		"name": "Gruvbox Dark Medium",
+		"license": "MIT",
+		"licenseFile": "gruvbox_theme.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/Vincent-P/gruvbox-intellij-theme",
+		"sourceCodePath": "blob/master/src/main/resources/gruvbox_dark_medium.theme.json"
+	},
+	"gruvbox_dark_soft.theme.json": {
+		"name": "Gruvbox Dark Soft",
+		"license": "MIT",
+		"licenseFile": "gruvbox_theme.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/Vincent-P/gruvbox-intellij-theme",
+		"sourceCodePath": "blob/master/src/main/resources/gruvbox_dark_soft.theme.json"
+	},
+	"HiberbeeDark.theme.json": {
+		"name": "Hiberbee Dark",
 		"license": "MIT",
 		"licenseFile": "Hiberbee.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/Hiberbee/code-highlight-themes",
-		"sourceCodePath": "blob/master/src/main/resources/Hiberbee.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/HiberbeeDark.theme.json"
 	},
 	"HighContrast.theme.json": {
 		"name": "High contrast",
