@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.31
 
 - Focus indication border (or background) no longer hidden when temporary
   loosing focus (e.g. showing a popup menu).
