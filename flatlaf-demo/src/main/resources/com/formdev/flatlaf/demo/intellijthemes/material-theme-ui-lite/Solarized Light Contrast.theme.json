@@ -27,6 +27,8 @@
     "ActionButton": {
       "hoverBackground": "#d3368250",
       "hoverBorderColor": "#d3368250",
+      "hoverSeparatorColor": "#d8d4c4",
+      "focusedBorderColor": "#d3368250",
       "pressedBackground": "#d3368250",
       "pressedBorderColor": "#d3368250"
     },
@@ -66,6 +68,11 @@
       "shadowColor": "#d8d4c4",
       "shadowWidth": 0
     },
+    "Canvas": {
+      "Tooltip.borderColor": "#edead9",
+      "Tooltip.background": "#EDE8D4"
+    },
+    "Content.background": "#eee8d5",
     "CheckBox": {
       "background": "#fdf6e3",
       "disabledText": "#C9CCC3",
@@ -161,6 +168,7 @@
       "hoverBackground": "#d1cbb8",
       "hoverColor": "#eee8d5",
       "hoverMaskColor": "#d1cbb8",
+      "inactiveColoredFileBackground": "#d8d4c4",
       "inactiveUnderlineColor": "#C9CCC3",
       "inactiveMaskColor": "#eee8d5",
       "underlineColor": "#d33682",
@@ -193,6 +201,7 @@
       "hoverColor": "#d1cbb8",
       "hoverMaskColor": "#d1cbb8",
       "inactiveMaskColor": "#fdf6e3",
+      "inactiveColoredFileBackground": "#fdf6e32",
       "inactiveUnderlineColor": "#C9CCC3",
       "selectedForeground": "#586e75",
       "selectedBackground": "#d1cbb8",
@@ -288,13 +297,14 @@
       "secondaryForeground": "#93a1a1",
       "visitedForeground": "#d33682"
     },
+    "link.foreground": "#d33682",
     "List": {
       "background": "#F6F0DE",
       "foreground": "#586e75",
       "selectionBackground": "#e8dcb650",
       "selectionForeground": "#002b36",
       "selectionInactiveForeground": "#002b36",
-      "selectionInactiveBackground": "#e8dcb625"
+      "selectionInactiveBackground": "#e8dcb6b0"
     },
     "material": {
       "background": "#fdf6e3",
@@ -360,6 +370,7 @@
         "background": "#eee8d5"
       }
     },
+    "NewPSD.warning": "#d33682",
     "Notification": {
       "background": "#EDE8D4",
       "borderColor": "#EDE8D4",
@@ -387,7 +398,9 @@
       "messageForeground": "#586e75"
     },
     "Outline": {
-      "color": "#d8d4c4"
+      "color": "#d8d4c4",
+      "focusedColor": "#d33682",
+      "disabledColor": "#C9CCC3"
     },
     "Panel": {
       "background": "#fdf6e3",
@@ -417,15 +430,17 @@
       "disabledForeground": "#C9CCC3",
       "eapTagBackground": "#d1cbb8",
       "lightSelectionBackground": "#e8dcb6",
+      "paidTagBackground": "#d1cbb8",
       "selectionBackground": "#e8dcb6",
       "tagForeground": "#d33682",
       "tagBackground": "#d1cbb8",
+      "trialTagBackground": "#d1cbb8",
       "Button": {
         "installBackground": "#d8d4c4",
         "installBorderColor": "#d8d4c4",
         "installForeground": "#586e75",
         "installFocusedBackground": "#d1cbb8",
-        "installFillForeground": "#93a1a1",
+        "installFillForeground": "#C9CCC3",
         "installFillBackground": "#d8d4c4",
         "updateBackground": "#d8d4c4",
         "updateBorderColor": "#d8d4c4",
@@ -462,6 +477,7 @@
       "separatorForeground": "#586e75",
       "separatorColor": "#F6F0DE",
       "Toolbar": {
+        "Floating.background": "#eee8d5",
         "background": "#eee8d5",
         "borderColor": "#eee8d5"
       }
@@ -482,6 +498,9 @@
       "progressColor": "#d33682",
       "selectionBackground": "#d1cbb8",
       "trackColor": "#d1cbb8"
+    },
+    "PsiViewer": {
+      "referenceHighlightColor": "#d33682"
     },
     "RadioButton": {
       "background": "#fdf6e3",
@@ -559,6 +578,7 @@
       "endBackground": "#d33682",
       "startBackground": "#d33682"
     },
+    "SearchField.errorBackground": "#EDE8D4",
     "Separator": {
       "background": "#F6F0DE",
       "foreground": "#F6F0DE",
@@ -648,6 +668,7 @@
       "borderColor": "#fdf6e3",
       "bottomSeparatorColor": "#F6F0DE",
       "cellBorder": "4,0,4,0",
+      "disabledForeground": "#C9CCC3",
       "foreground": "#586e75",
       "focusCellBackground": "#d1cbb8",
       "focusCellForeground": "#002b36",
@@ -746,17 +767,36 @@
       "hash": "#edead9",
       "modifiedItemForeground": "#d33682",
       "rowHeight": 28,
-      "selectionBackground": "#e8dcb670",
+      "selectionBackground": "#e8dcb6b0",
       "selectionForeground": "#002b36",
       "selectionInactiveForeground": "#002b36",
-      "selectionInactiveBackground": "#e8dcb625",
+      "selectionInactiveBackground": "#e8dcb6b0",
       "textBackground": "#eee8d5"
     },
     "Tree.leftChildIndent": 10,
     "Tree.rightChildIndent": 5,
     "UiDesigner": {
+      "Activity.borderColor": "#edead9",
+      "ColorPicker.background": "#fdf6e3",
+      "ColorPicker.foreground": "#586e75",
+      "Component.borderColor": "#edead9",
+      "Component.background": "#fdf6e3",
+      "Component.foreground": "#586e75",
+      "Connector.borderColor": "#edead9",
+      "Connector.hoverBorderColor": "#d1cbb8",
+      "Canvas.background": "#eee8d5",
+      "highStroke.foreground": "#586e75",
+      "Label.foreground": "#93a1a1",
+      "List.selectionBackground": "#e8dcb6b0",
+      "Panel.borderColor": "#edead9",
       "Panel.background": "#fdf6e3",
-      "Preview.background": "#fdf6e3"
+      "percent.foreground": "#586e75",
+      "Placeholder.background": "#fdf6e3",
+      "Placeholder.borderColor": "#edead9",
+      "Placeholder.foreground": "#586e75",
+      "Placeholder.selectedForeground": "#002b36",
+      "Preview.background": "#fdf6e3",
+      "stroke.acceleratorForeground": "#93a1a1"
     },
     "ValidationTooltip": {
       "errorBackground": "#EDE8D4",
@@ -767,6 +807,9 @@
     "VersionControl": {
       "FileHistory.Commit": {
         "selectedBranchBackground": "#fdf6e3"
+      },
+      "GitCommits": {
+        "graphColor": "#d1cbb8"
       },
       "GitLog": {
         "localBranchIconColor": "#d33682",
