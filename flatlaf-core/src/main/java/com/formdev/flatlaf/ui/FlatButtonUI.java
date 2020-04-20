@@ -294,7 +294,9 @@ public class FlatButtonUI
 
 				// paint shadow
 				Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-				if( !isToolBarButton && shadowColor != null && shadowWidth > 0 && focusWidth > 0 && !c.hasFocus() && c.isEnabled() ) {
+				if( !isToolBarButton && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
+					!FlatUIUtils.isPermanentFocusOwner( c ) && c.isEnabled() )
+				{
 					g2.setColor( shadowColor );
 					g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
 						width - focusWidth * 2, height - focusWidth * 2, arc, arc ) );
@@ -382,7 +384,7 @@ public class FlatButtonUI
 		if( hoverColor != null && b != null && b.getModel().isRollover() )
 			return hoverColor;
 
-		if( focusedColor != null && c.hasFocus() )
+		if( focusedColor != null && FlatUIUtils.isPermanentFocusOwner( c ) )
 			return focusedColor;
 
 		return enabledColor;

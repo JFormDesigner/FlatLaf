@@ -318,7 +318,7 @@ public class FlatTabbedPaneUI
 		boolean enabled = tabPane.isEnabled();
 		g.setColor( enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
 			? hoverColor
-			: (enabled && isSelected && tabPane.hasFocus()
+			: (enabled && isSelected && FlatUIUtils.isPermanentFocusOwner( tabPane )
 				? focusColor
 				: (selectedBackground != null && enabled && isSelected
 					? selectedBackground

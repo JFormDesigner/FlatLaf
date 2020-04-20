@@ -119,7 +119,7 @@ public class FlatBorder
 			JViewport viewport = ((JScrollPane)c).getViewport();
 			Component view = (viewport != null) ? viewport.getView() : null;
 			if( view != null ) {
-				if( view.hasFocus() )
+				if( FlatUIUtils.isPermanentFocusOwner( view ) )
 					return true;
 
 				if( (view instanceof JTable && ((JTable)view).isEditing()) ||
@@ -133,17 +133,17 @@ public class FlatBorder
 			return false;
 		} else if( c instanceof JComboBox && ((JComboBox<?>)c).isEditable() ) {
 			Component editorComponent = ((JComboBox<?>)c).getEditor().getEditorComponent();
-			return (editorComponent != null) ? editorComponent.hasFocus() : false;
+			return (editorComponent != null) ? FlatUIUtils.isPermanentFocusOwner( editorComponent ) : false;
 		} else if( c instanceof JSpinner ) {
 			JComponent editor = ((JSpinner)c).getEditor();
 			if( editor instanceof JSpinner.DefaultEditor ) {
 				JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
 				if( textField != null )
-					return textField.hasFocus();
+					return FlatUIUtils.isPermanentFocusOwner( textField );
 			}
 			return false;
 		} else
-			return c.hasFocus();
+			return FlatUIUtils.isPermanentFocusOwner( c );
 	}
 
 	protected boolean isTableCellEditor( Component c ) {

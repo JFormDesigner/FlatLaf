@@ -82,7 +82,7 @@ public class FlatHelpButtonIcon
 		*/
 
 		boolean enabled = c.isEnabled();
-		boolean focused = c.hasFocus();
+		boolean focused = FlatUIUtils.isPermanentFocusOwner( c );
 
 		// paint focused border
 		if( focused ) {

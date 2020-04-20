@@ -113,7 +113,7 @@ public class FlatTableUI
 		selectionInactiveBackground = UIManager.getColor( "Table.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Table.selectionInactiveForeground" );
 
-		toggleSelectionColors( table.hasFocus() );
+		toggleSelectionColors();
 
 		int rowHeight = FlatUIUtils.getUIInt( "Table.rowHeight", 16 );
 		if( rowHeight > 0 )
@@ -160,13 +160,13 @@ public class FlatTableUI
 			@Override
 			public void focusGained( FocusEvent e ) {
 				super.focusGained( e );
-				toggleSelectionColors( true );
+				toggleSelectionColors();
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
 				super.focusLost( e );
-				toggleSelectionColors( e.isTemporary() );
+				toggleSelectionColors();
 			}
 		};
 	}
@@ -180,8 +180,8 @@ public class FlatTableUI
 	 * already used in applications. Then either the inactive colors are not used,
 	 * or the application has to be changed to extend a FlatLaf renderer.
 	 */
-	private void toggleSelectionColors( boolean focused ) {
-		if( focused ) {
+	private void toggleSelectionColors() {
+		if( FlatUIUtils.isPermanentFocusOwner( table ) ) {
 			if( table.getSelectionBackground() == selectionInactiveBackground )
 				table.setSelectionBackground( selectionBackground );
 			if( table.getSelectionForeground() == selectionInactiveForeground )

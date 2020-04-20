@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
-import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -222,7 +221,7 @@ public class FlatTreeUI
 		TreePath path, int row, boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
 	{
 		boolean isEditing = (editingComponent != null && editingRow == row);
-		boolean hasFocus = (KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner() == tree);
+		boolean hasFocus = FlatUIUtils.isPermanentFocusOwner( tree );
 		boolean cellHasFocus = hasFocus && (row == getLeadSelectionRow());
 		boolean isSelected = tree.isRowSelected( row );
 		boolean isDropRow = isDropRow( row );

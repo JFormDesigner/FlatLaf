@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -134,6 +135,10 @@ public class FlatUIUtils
 
 	public static boolean isTableCellEditor( Component c ) {
 		return c instanceof JComponent && Boolean.TRUE.equals( ((JComponent)c).getClientProperty( "JComboBox.isTableCellEditor" ) );
+	}
+
+	public static boolean isPermanentFocusOwner( Component c ) {
+		return (KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner() == c);
 	}
 
 	/**

@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Focus indication border (or background) no longer hidden when temporary
+  loosing focus (e.g. showing a popup menu).
 - List, Table and Tree: Item selection color of focused components no longer
   change from blue to gray when temporary loosing focus (e.g. showing a popup
   menu).

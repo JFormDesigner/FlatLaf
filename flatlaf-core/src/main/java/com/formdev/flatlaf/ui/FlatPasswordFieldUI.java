@@ -168,7 +168,7 @@ public class FlatPasswordFieldUI
 
 	protected void paintCapsLock( Graphics g ) {
 		JTextComponent c = getComponent();
-		if( !c.isFocusOwner() ||
+		if( !FlatUIUtils.isPermanentFocusOwner( c ) ||
 			!Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK ) )
 		  return;
 

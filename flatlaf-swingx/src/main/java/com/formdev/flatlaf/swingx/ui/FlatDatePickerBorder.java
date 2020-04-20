@@ -20,6 +20,7 @@ import java.awt.Component;
 import javax.swing.JTable;
 import org.jdesktop.swingx.JXDatePicker;
 import com.formdev.flatlaf.ui.FlatRoundBorder;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * Border for {@link org.jdesktop.swingx.JXDatePicker}.
@@ -32,7 +33,7 @@ public class FlatDatePickerBorder
 	@Override
 	protected boolean isFocused( Component c ) {
 		if( c instanceof JXDatePicker )
-			return ((JXDatePicker)c).getEditor().hasFocus();
+			return FlatUIUtils.isPermanentFocusOwner( ((JXDatePicker)c).getEditor() );
 
 		return super.isFocused( c );
 	}

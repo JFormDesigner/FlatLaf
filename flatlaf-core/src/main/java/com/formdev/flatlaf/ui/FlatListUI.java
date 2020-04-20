@@ -81,7 +81,7 @@ public class FlatListUI
 		selectionInactiveBackground = UIManager.getColor( "List.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "List.selectionInactiveForeground" );
 
-		toggleSelectionColors( list.hasFocus() );
+		toggleSelectionColors();
 	}
 
 	@Override
@@ -100,13 +100,13 @@ public class FlatListUI
 			@Override
 			public void focusGained( FocusEvent e ) {
 				super.focusGained( e );
-				toggleSelectionColors( true );
+				toggleSelectionColors();
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
 				super.focusLost( e );
-				toggleSelectionColors( e.isTemporary() );
+				toggleSelectionColors();
 			}
 		};
 	}
@@ -120,8 +120,8 @@ public class FlatListUI
 	 * already used in applications. Then either the inactive colors are not used,
 	 * or the application has to be changed to extend a FlatLaf renderer.
 	 */
-	private void toggleSelectionColors( boolean focused ) {
-		if( focused ) {
+	private void toggleSelectionColors() {
+		if( FlatUIUtils.isPermanentFocusOwner( list ) ) {
 			if( list.getSelectionBackground() == selectionInactiveBackground )
 				list.setSelectionBackground( selectionBackground );
 			if( list.getSelectionForeground() == selectionInactiveForeground )
