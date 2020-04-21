@@ -50,6 +50,8 @@ import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.demo.intellijthemes.IJThemesManager;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -97,6 +99,23 @@ public class UIDefaultsDump
 //			// TODO Auto-generated catch block
 //			ex.printStackTrace();
 //		}
+
+//		dumpIntelliJThemes( dir );
+	}
+
+	@SuppressWarnings( "unused" )
+	private static void dumpIntelliJThemes( File dir ) {
+		dir = new File( dir, "intellijthemes" );
+
+		IJThemesManager themesManager = new IJThemesManager();
+		themesManager.loadBundledThemes();
+
+		for( String resourceName : themesManager.getBundledResourceNames() ) {
+			IntelliJTheme.install( UIDefaultsDump.class.getResourceAsStream(
+				"/com/formdev/flatlaf/demo/intellijthemes/" + resourceName ) );
+			dump( dir, StringUtils.removeTrailing( resourceName, ".theme.json" ) );
+		}
+
 	}
 
 	private static void dump( String lookAndFeelClassName, File dir ) {
@@ -107,28 +126,37 @@ public class UIDefaultsDump
 			return;
 		}
 
+		dump( dir, null );
+	}
+
+	private static void dump( File dir, String name ) {
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 
-		dump( dir, "", lookAndFeel, key -> !key.contains( "InputMap" ) );
+		dump( dir, name, "", lookAndFeel, key -> !key.contains( "InputMap" ) );
 		if( lookAndFeel.getClass() != FlatLightLaf.class )
 			return;
 
-		dump( dir, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
+		dump( dir, name, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
 	}
 
-	private static void dump( File dir, String nameSuffix, LookAndFeel lookAndFeel, Predicate<String> keyFilter ) {
+	private static void dump( File dir, String name, String nameSuffix,
+		LookAndFeel lookAndFeel, Predicate<String> keyFilter )
+	{
 		// dump to string
 		StringWriter stringWriter = new StringWriter( 100000 );
 		new UIDefaultsDump( lookAndFeel ).dump( new PrintWriter( stringWriter ), keyFilter );
 
-		Class<?> lookAndFeelClass = lookAndFeel instanceof MyBasicLookAndFeel
-			? BasicLookAndFeel.class
-			: lookAndFeel.getClass();
+		if( name == null ) {
+			name = lookAndFeel instanceof MyBasicLookAndFeel
+				? BasicLookAndFeel.class.getSimpleName()
+				: lookAndFeel.getClass().getSimpleName();
+		}
 		String osSuffix = (SystemInfo.IS_MAC && lookAndFeel instanceof FlatLaf) ? "-mac" : "";
-		File file = new File( dir, lookAndFeelClass.getSimpleName() + nameSuffix + "_"
+		File file = new File( dir, name + nameSuffix + "_"
 			+ System.getProperty( "java.version" ) + osSuffix + ".txt" );
 
 		// write to file
+		file.getParentFile().mkdirs();
 		try( FileWriter fileWriter = new FileWriter( file ) ) {
 			fileWriter.write( stringWriter.toString().replace( "\r", "" ) );
 		} catch( IOException ex ) {

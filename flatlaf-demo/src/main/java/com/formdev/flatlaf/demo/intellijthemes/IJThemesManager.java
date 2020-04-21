@@ -25,20 +25,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import com.formdev.flatlaf.json.Json;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
  * @author Karl Tauber
  */
-class IJThemesManager
+public class IJThemesManager
 {
 	final List<IJThemeInfo> bundledThemes = new ArrayList<>();
 	final List<IJThemeInfo> moreThemes = new ArrayList<>();
 	private final Map<File,Long> lastModifiedMap = new HashMap<>();
 
 	@SuppressWarnings( "unchecked" )
-	void loadBundledThemes() {
+	public void loadBundledThemes() {
 		bundledThemes.clear();
 
 		// load themes.json
@@ -94,5 +95,11 @@ class IJThemesManager
 				return true;
 		}
 		return false;
+	}
+
+	public List<String> getBundledResourceNames() {
+		return bundledThemes.stream()
+			.map( themeInfo -> themeInfo.resourceName )
+			.collect( Collectors.toList() );
 	}
 }
