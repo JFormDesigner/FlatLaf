@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- IntelliJ Themes: Fixed button and toggle button colors. (issue #86)
+- Updated IntelliJ Themes in demo to the latest versions.
+
+
 ## 0.31
 
 - Focus indication border (or background) no longer hidden when temporary

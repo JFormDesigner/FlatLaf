@@ -183,6 +183,14 @@ public class IntelliJTheme
 			if( !uiKeys.contains( "Spinner.background" ) )
 				defaults.put( "Spinner.background", textFieldBackground );
 		}
+
+		// fix ToggleButton
+		if( !uiKeys.contains( "ToggleButton.startBackground" ) && !uiKeys.contains( "*.startBackground" ) )
+			defaults.put( "ToggleButton.startBackground", defaults.get( "Button.startBackground" ) );
+		if( !uiKeys.contains( "ToggleButton.endBackground" ) && !uiKeys.contains( "*.endBackground" ) )
+			defaults.put( "ToggleButton.endBackground", defaults.get( "Button.endBackground" ) );
+		if( !uiKeys.contains( "ToggleButton.foreground" ) && uiKeys.contains( "Button.foreground" ) )
+			defaults.put( "ToggleButton.foreground", defaults.get( "Button.foreground" ) );
 	}
 
 	/**
