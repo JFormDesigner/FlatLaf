@@ -104,13 +104,6 @@
 		"sourceCodeUrl": "https://github.com/OlyaB/HighContrastTheme",
 		"sourceCodePath": "blob/master/src/HighContrast.theme.json"
 	},
-	"Light.theme.json": {
-		"name": "IntelliJ Light Preview",
-		"license": "MIT",
-		"licenseFile": "Light.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/OlyaB/IntelliJLightTheme",
-		"sourceCodePath": "blob/master/src/Light.theme.json"
-	},
 	"LightFlatTheme.theme.json": {
 		"name": "Light Flat",
 		"license": "MIT",
