@@ -270,7 +270,7 @@ public class IntelliJTheme
 						// (e.g. set ComboBox.buttonEditableBackground to *.background
 						// because it is mapped from ComboBox.ArrowButton.background)
 						String km = uiKeyInverseMapping.getOrDefault( k, (String) k );
-						if( km.endsWith( tail ) && !noWildcardReplace.contains( k ) && !((String)k).startsWith( "CheckBox.icon." ) )
+						if( km.endsWith( tail ) && !((String)k).startsWith( "CheckBox.icon." ) )
 							defaults.put( k, uiValue );
 					}
 				}
@@ -412,7 +412,6 @@ public class IntelliJTheme
 	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
 	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
 	private static Map<String, String> checkboxDuplicateColors = new HashMap<>();
-	private static Set<String> noWildcardReplace = new HashSet<>();
 
 	static {
 		// ComboBox
@@ -470,16 +469,6 @@ public class IntelliJTheme
 		Map.Entry<String, String>[] entries = checkboxDuplicateColors.entrySet().toArray( new Map.Entry[checkboxDuplicateColors.size()] );
 		for( Map.Entry<String, String> e : entries )
 			checkboxDuplicateColors.put( e.getValue(), e.getKey() );
-
-		// because FlatLaf uses Button.background and Button.borderColor,
-		// but IDEA uses Button.startBackground and Button.startBorderColor,
-		// our default button background and border colors may be replaced by
-		// wildcard *.background and *.borderColor colors
-		noWildcardReplace.add( "Button.background" );
-		noWildcardReplace.add( "Button.borderColor" );
-		noWildcardReplace.add( "Button.default.background" );
-		noWildcardReplace.add( "Button.default.borderColor" );
-		noWildcardReplace.add( "ToggleButton.background" );
 	}
 
 	//---- class ThemeLaf -----------------------------------------------------
