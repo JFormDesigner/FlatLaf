@@ -558,7 +558,7 @@ class UIDefaultsLoader
 	}
 
 	/**
-	 * Syntax: lighten([color,]amount[,options]) or darken([color,]amount[,options])
+	 * Syntax: lighten(color,amount[,options]) or darken(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
 	 *   - options: [relative] [autoInverse] [lazy] [derived]
@@ -566,17 +566,15 @@ class UIDefaultsLoader
 	private static Object parseColorLightenOrDarken( boolean lighten, List<String> params,
 		Function<String, String> resolver, boolean reportError )
 	{
-		boolean isDerived = params.get( 0 ).endsWith( "%" );
-		String colorStr = isDerived ? null : params.get( 0 );
-		int nextParam = isDerived ? 0 : 1;
-		int amount = parsePercentage( params.get( nextParam++ ) );
+		String colorStr = params.get( 0 );
+		int amount = parsePercentage( params.get( 1 ) );
 		boolean relative = false;
 		boolean autoInverse = false;
 		boolean lazy = false;
 		boolean derived = false;
 
-		if( params.size() > nextParam ) {
-			String options = params.get( nextParam++ );
+		if( params.size() > 2 ) {
+			String options = params.get( 2 );
 			relative = options.contains( "relative" );
 			autoInverse = options.contains( "autoInverse" );
 			lazy = options.contains( "lazy" );
@@ -586,9 +584,6 @@ class UIDefaultsLoader
 		ColorFunctions.ColorFunction function = lighten
 			? new ColorFunctions.Lighten( amount, relative, autoInverse )
 			: new ColorFunctions.Darken( amount, relative, autoInverse );
-
-		if( isDerived )
-			return new DerivedColor( null, function );
 
 		if( derived ) {
 			ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );

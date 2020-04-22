@@ -73,9 +73,9 @@ Button.default.borderWidth     1
 Button.default.focusColor      #43688c    javax.swing.plaf.ColorUIResource [UI]
 Button.default.focusedBorderColor #537699    javax.swing.plaf.ColorUIResource [UI]
 Button.default.foreground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-Button.default.hoverBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Button.default.hoverBackground #3b5f8b    com.formdev.flatlaf.util.DerivedColor [UI]
 Button.default.hoverBorderColor #537699    javax.swing.plaf.ColorUIResource [UI]
-Button.default.pressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Button.default.pressedBackground #3f6796    com.formdev.flatlaf.util.DerivedColor [UI]
 Button.defaultButtonFollowsFocus false
 Button.disabledBorderColor     #5e6060    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledText            #777777    javax.swing.plaf.ColorUIResource [UI]
@@ -83,13 +83,13 @@ Button.focusedBorderColor      #466d94    javax.swing.plaf.ColorUIResource [UI]
 Button.font                    [active] $defaultFont [UI]
 Button.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Button.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
-Button.hoverBackground         #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Button.hoverBackground         #53585a    com.formdev.flatlaf.util.DerivedColor [UI]
 Button.hoverBorderColor        #466d94    javax.swing.plaf.ColorUIResource [UI]
 Button.iconTextGap             4
 Button.light                   #313131    javax.swing.plaf.ColorUIResource [UI]
 Button.margin                  2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
 Button.minimumWidth            72
-Button.pressedBackground       #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Button.pressedBackground       #5b5f62    com.formdev.flatlaf.util.DerivedColor [UI]
 Button.rollover                true
 Button.shadow                  #646464    javax.swing.plaf.ColorUIResource [UI]
 Button.textIconGap             4
@@ -121,9 +121,9 @@ CheckBox.icon.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI
 CheckBox.icon.disabledBorderColor #545556    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledCheckmarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.focusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon.hoverBackground  #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+CheckBox.icon.hoverBackground  #4a5152    com.formdev.flatlaf.util.DerivedColor [UI]
 CheckBox.icon.hoverBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon.pressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+CheckBox.icon.pressedBackground #52595a    com.formdev.flatlaf.util.DerivedColor [UI]
 CheckBox.icon.selectedBackground #43494a    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.selectedBorderColor #6b6b6b    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.selectedFocusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
@@ -309,10 +309,10 @@ HelpButton.disabledBackground  #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledBorderColor #545556    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledQuestionMarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.focusedBorderColor  #466d94    javax.swing.plaf.ColorUIResource [UI]
-HelpButton.hoverBackground     #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+HelpButton.hoverBackground     #4a5152    com.formdev.flatlaf.util.DerivedColor [UI]
 HelpButton.hoverBorderColor    #466d94    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
-HelpButton.pressedBackground   #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+HelpButton.pressedBackground   #52595a    com.formdev.flatlaf.util.DerivedColor [UI]
 HelpButton.questionMarkColor   #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
 
 
@@ -337,8 +337,8 @@ InternalFrame.borderLight      #313131    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.borderLineWidth  1
 InternalFrame.borderMargins    6,6,6,6    javax.swing.plaf.InsetsUIResource [UI]
 InternalFrame.borderShadow     #646464    javax.swing.plaf.ColorUIResource [UI]
-InternalFrame.buttonHoverBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
-InternalFrame.buttonPressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+InternalFrame.buttonHoverBackground #3d3f40    com.formdev.flatlaf.util.DerivedColor [UI]
+InternalFrame.buttonPressedBackground #56585a    com.formdev.flatlaf.util.DerivedColor [UI]
 InternalFrame.buttonSize       24,24    javax.swing.plaf.DimensionUIResource [UI]
 InternalFrame.closeHoverBackground [lazy] #c75450    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.closeHoverForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -779,7 +779,7 @@ Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
 Slider.horizontalSize          200,21    java.awt.Dimension
-Slider.hoverColor              #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+Slider.hoverColor              #808080    com.formdev.flatlaf.util.DerivedColor [UI]
 Slider.minimumHorizontalSize   36,21    java.awt.Dimension
 Slider.minimumVerticalSize     21,36    java.awt.Dimension
 Slider.onlyLeftMouseButtonDrag true
@@ -1026,7 +1026,7 @@ ToggleButton.highlight         #242424    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.iconTextGap       4
 ToggleButton.light             #313131    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.margin            2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
-ToggleButton.pressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
+ToggleButton.pressedBackground #5b5f62    com.formdev.flatlaf.util.DerivedColor [UI]
 ToggleButton.rollover          true
 ToggleButton.selectedBackground #656a6c    com.formdev.flatlaf.util.DerivedColor [UI]
 ToggleButton.selectedForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
