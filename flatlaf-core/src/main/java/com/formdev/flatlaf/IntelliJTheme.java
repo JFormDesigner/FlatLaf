@@ -132,6 +132,8 @@ public class IntelliJTheme
 		defaults.put( "Button.paintShadow", true );
 		defaults.put( "Button.shadowWidth", dark ? 2 : 1 );
 
+		Map<Object, Object> themeSpecificDefaults = removeThemeSpecificDefaults( defaults );
+
 		loadNamedColors( defaults );
 
 		// convert Json "ui" structure to UI defaults
@@ -191,6 +193,29 @@ public class IntelliJTheme
 			defaults.put( "ToggleButton.endBackground", defaults.get( "Button.endBackground" ) );
 		if( !uiKeys.contains( "ToggleButton.foreground" ) && uiKeys.contains( "Button.foreground" ) )
 			defaults.put( "ToggleButton.foreground", defaults.get( "Button.foreground" ) );
+
+		// apply theme specific UI defaults at the end to allow overwriting
+		defaults.putAll( themeSpecificDefaults );
+	}
+
+	private Map<Object, Object> removeThemeSpecificDefaults( UIDefaults defaults ) {
+		// search for theme specific UI defaults keys
+		ArrayList<String> themeSpecificKeys = new ArrayList<>();
+		for( Object key : defaults.keySet() ) {
+			if( key instanceof String && ((String)key).startsWith( "[" ) )
+				themeSpecificKeys.add( (String) key );
+		}
+
+		// remove theme specific UI defaults and remember only those for current theme
+		Map<Object, Object> themeSpecificDefaults = new HashMap<>();
+		String currentThemePrefix = '[' + name.replace( ' ', '_' ) + ']';
+		for( String key : themeSpecificKeys ) {
+			Object value = defaults.remove( key );
+			if( key.startsWith( currentThemePrefix ) )
+				themeSpecificDefaults.put( key.substring( currentThemePrefix.length() ), value );
+		}
+
+		return themeSpecificDefaults;
 	}
 
 	/**

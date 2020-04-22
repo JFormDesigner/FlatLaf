@@ -69,7 +69,7 @@ class UIDefaultsLoader
 	private static final String GLOBAL_PREFIX = "*.";
 
 	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
-		Properties additionalDefaults, UIDefaults defaults )
+		Properties additionalDefaults, boolean dark, UIDefaults defaults )
 	{
 		// determine classes in class hierarchy in reverse order
 		ArrayList<Class<?>> lafClasses = new ArrayList<>();
@@ -80,11 +80,11 @@ class UIDefaultsLoader
 			lafClasses.add( 0, lafClass );
 		}
 
-		loadDefaultsFromProperties( lafClasses, addons, additionalDefaults, defaults );
+		loadDefaultsFromProperties( lafClasses, addons, additionalDefaults, dark, defaults );
 	}
 
 	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, List<FlatDefaultsAddon> addons,
-		Properties additionalDefaults, UIDefaults defaults )
+		Properties additionalDefaults, boolean dark, UIDefaults defaults )
 	{
 		try {
 			// load core properties files
@@ -121,14 +121,28 @@ class UIDefaultsLoader
 
 			// collect all platform specific keys (but do not modify properties)
 			ArrayList<String> platformSpecificKeys = new ArrayList<>();
-			for( Object key : properties.keySet() ) {
-				if( ((String)key).startsWith( "[" ) )
-					platformSpecificKeys.add( (String) key );
+			for( Object okey : properties.keySet() ) {
+				String key = (String) okey;
+				if( key.startsWith( "[" ) &&
+					(key.startsWith( "[win]" ) ||
+					 key.startsWith( "[mac]" ) ||
+					 key.startsWith( "[linux]" ) ||
+					 key.startsWith( "[light]" ) ||
+					 key.startsWith( "[dark]" )) )
+				  platformSpecificKeys.add( key );
 			}
 
 			// remove platform specific properties and re-add only properties
 			// for current platform, but with platform prefix removed
 			if( !platformSpecificKeys.isEmpty() ) {
+				// handle light/dark specific properties
+				String lightOrDarkPrefix = dark ? "[dark]" : "[light]";
+				for( String key : platformSpecificKeys ) {
+					if( key.startsWith( lightOrDarkPrefix ) )
+						properties.put( key.substring( lightOrDarkPrefix.length() ), properties.remove( key ) );
+				}
+
+				// handle platform specific properties
 				String platformPrefix =
 					SystemInfo.IS_WINDOWS ? "[win]" :
 					SystemInfo.IS_MAC ? "[mac]" :
