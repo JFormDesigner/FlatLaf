@@ -94,9 +94,9 @@ Button.rollover                true
 Button.shadow                  #646464    javax.swing.plaf.ColorUIResource [UI]
 Button.textIconGap             4
 Button.textShiftOffset         0
-Button.toolbar.hoverBackground #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.hoverBackground #4e5355    com.formdev.flatlaf.util.DerivedColor [UI]
 Button.toolbar.margin          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
-Button.toolbar.pressedBackground #555a5d    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.pressedBackground #565a5d    com.formdev.flatlaf.util.DerivedColor [UI]
 Button.toolbar.spacingInsets   1,2,1,2    javax.swing.plaf.InsetsUIResource [UI]
 ButtonUI                       com.formdev.flatlaf.ui.FlatButtonUI
 
@@ -1018,7 +1018,7 @@ TitledPanelUI                  com.formdev.flatlaf.swingx.ui.FlatTitledPanelUI
 ToggleButton.background        #4c5052    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 ToggleButton.darkShadow        #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.disabledSelectedBackground #525658    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.disabledSelectedBackground #53585a    com.formdev.flatlaf.util.DerivedColor [UI]
 ToggleButton.disabledText      #777777    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.font              [active] $defaultFont [UI]
 ToggleButton.foreground        #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
@@ -1028,7 +1028,7 @@ ToggleButton.light             #313131    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.margin            2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
 ToggleButton.pressedBackground #ff0000    com.formdev.flatlaf.util.DerivedColor [UI]
 ToggleButton.rollover          true
-ToggleButton.selectedBackground #64696c    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.selectedBackground #656a6c    com.formdev.flatlaf.util.DerivedColor [UI]
 ToggleButton.selectedForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.shadow            #646464    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.disabledUnderlineColor #7a7a7a    javax.swing.plaf.ColorUIResource [UI]
@@ -1038,9 +1038,9 @@ ToggleButton.tab.underlineColor #4a88c7    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.underlineHeight 2
 ToggleButton.textIconGap       4
 ToggleButton.textShiftOffset   0
-ToggleButton.toolbar.hoverBackground #4c5052    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.toolbar.pressedBackground #555a5d    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.toolbar.selectedBackground #5c6164    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.toolbar.hoverBackground #4e5355    com.formdev.flatlaf.util.DerivedColor [UI]
+ToggleButton.toolbar.pressedBackground #565a5d    com.formdev.flatlaf.util.DerivedColor [UI]
+ToggleButton.toolbar.selectedBackground #5d6265    com.formdev.flatlaf.util.DerivedColor [UI]
 ToggleButtonUI                 com.formdev.flatlaf.ui.FlatToggleButtonUI
 
 

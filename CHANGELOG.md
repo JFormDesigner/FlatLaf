@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- ToggleButton: Compute selected background color based on current component
+  background. (issue #32)
 - IntelliJ Themes: Fixed button and toggle button colors. (issue #86)
 - Updated IntelliJ Themes in demo to the latest versions.
 

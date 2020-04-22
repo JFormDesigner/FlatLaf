@@ -32,8 +32,8 @@ public class DerivedColor
 {
 	private final ColorFunction[] functions;
 
-	public DerivedColor( ColorFunction... functions ) {
-		super( Color.red );
+	public DerivedColor( Color defaultColor, ColorFunction... functions ) {
+		super( (defaultColor != null) ? defaultColor : Color.red );
 		this.functions = functions;
 	}
 
