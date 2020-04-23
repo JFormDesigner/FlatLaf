@@ -37,20 +37,25 @@ public class IJThemesClassGenerator
 		String toPath = "../flatlaf-intellij-themes/src/main/java" + IJThemesPanel.THEMES_PACKAGE + "..";
 
 		StringBuilder allInfos = new StringBuilder();
+		StringBuilder markdownTable = new StringBuilder();
+		markdownTable.append( "Name | Class\n" );
+		markdownTable.append( "-----|------\n" );
 
 		for( IJThemeInfo ti : themesManager.bundledThemes ) {
 			if( ti.sourceCodeUrl == null || ti.sourceCodePath == null )
 				continue;
 
-			generateClass( ti, toPath, allInfos );
+			generateClass( ti, toPath, allInfos, markdownTable );
 		}
 
 		Path out = new File( toPath, "FlatAllIJThemes.java" ).toPath();
 		String allThemes = CLASS_HEADER + ALL_THEMES_TEMPLATE.replace( "${allInfos}", allInfos );
 		writeFile( out, allThemes );
+
+		System.out.println( markdownTable );
 	}
 
-	private static void generateClass( IJThemeInfo ti, String toPath, StringBuilder allInfos ) {
+	private static void generateClass( IJThemeInfo ti, String toPath, StringBuilder allInfos, StringBuilder markdownTable ) {
 		String resourceName = ti.resourceName;
 		String resourcePath = null;
 		int resSep = resourceName.indexOf( '/' );
@@ -97,6 +102,9 @@ public class IJThemesClassGenerator
 			.replace( "${subPackage}", subPackage )
 			.replace( "${themeClass}", themeClass )
 			.replace( "${themeName}", name ) );
+
+		markdownTable.append( String.format( "[%s](%s) | `com.formdev.flatlaf.intellijthemes%s.%s`\n",
+			name, ti.sourceCodeUrl, subPackage, themeClass ) );
 	}
 
 	private static void writeFile( Path out, String content ) {

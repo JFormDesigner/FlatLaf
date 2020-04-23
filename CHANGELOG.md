@@ -3,10 +3,13 @@ FlatLaf Change Log
 
 ## 0.32
 
-- ToggleButton: Compute selected background color based on current component
-  background. (issue #32)
+- New [IntelliJ Themes Pack](flatlaf-intellij-themes) addon bundles many popular
+  open-source 3rd party themes from JetBrains Plugins Repository into a JAR and
+  provides Java classes to use them.
 - IntelliJ Themes: Fixed button and toggle button colors. (issue #86)
 - Updated IntelliJ Themes in demo to the latest versions.
+- ToggleButton: Compute selected background color based on current component
+  background. (issue #32)
 
 
 ## 0.31

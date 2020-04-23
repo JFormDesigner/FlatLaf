@@ -19,7 +19,8 @@ IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
 IntelliJ Platform Themes
 ------------------------
 
-FlatLaf can use 3rd party themes created for IntelliJ Platform:
+FlatLaf can use 3rd party themes created for IntelliJ Platform (see
+[IntelliJ Themes Pack](flatlaf-intellij-themes)):
 
 ![Cyan Light Demo](images/CyanLightDemo.png)
 
@@ -70,6 +71,7 @@ Addons
 
 - [SwingX](flatlaf-swingx)
 - [JIDE Common Layer](flatlaf-jide-oss)
+- [IntelliJ Themes Pack](flatlaf-intellij-themes)
 
 
 Projects using FlatLaf
