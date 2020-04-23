@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Improved creation of disabled grayscale icons used in disabled buttons, labels
+  and tabs. They now have more contrast and are lighter in light themes and
+  darker in dark themes. (issue #70)
+
+
 ## 0.32
 
 - New [IntelliJ Themes Pack](flatlaf-intellij-themes) addon bundles many popular

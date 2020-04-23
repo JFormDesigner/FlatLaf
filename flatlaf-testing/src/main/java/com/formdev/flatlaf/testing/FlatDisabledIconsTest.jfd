@@ -1,0 +1,456 @@
+JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[fill][fill][left][fill]"
+			"$rowConstraints": "[][][center][center][center][center][center][center][center]para[center][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "enabledLabel"
+				"text": "enabled"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "enabledToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button1"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/netbeans-cut24.gif" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button2"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/netbeans-copy24.gif" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button3"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/netbeans-paste24.gif" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button4"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/netbeans-undo24.gif" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button5"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/netbeans-redo24.gif" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button6"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/netbeans-find24.gif" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button7"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button8"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button9"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button10"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button11"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button12"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button13"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button14"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button15"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button16"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button17"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button18"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "currentLabel"
+				"text": "current LaF"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "currentLafToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "basicLafLabel"
+				"text": "Basic LaF"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "basicLafToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3,gap 0 0"
+				"$columnConstraints": "[60,fill][fill][25,right]rel[fill]"
+				"$rowConstraints": "[center][center]"
+			} ) {
+				name: "panel2"
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "basicLafBrighterCheckBox"
+					"text": "brighter"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "basicLafChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0 2 1,alignx left,growx 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "basicLafPercentLabel"
+					"text": "Percent"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JSlider" ) {
+					name: "basicLafPercentSlider"
+					"toolTipText": "Percent"
+					"value": 0
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "basicLafChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "basicLafPercentValue"
+					"text": "000"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 1"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "basicLafResetButton"
+					"text": "Reset"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "basicLafReset", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 0 1 2"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "metalLafLabel"
+				"text": "Metal LaF"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "metalLafToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3,gap 0 0"
+				"$columnConstraints": "[60,fill][fill][25,right]rel[fill]"
+				"$rowConstraints": "[center][center]"
+			} ) {
+				name: "panel4"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "metalLafMinLabel"
+					"text": "Min"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JSlider" ) {
+					name: "metalLafMinSlider"
+					"maximum": 255
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "metalLafChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "metalLafMinValue"
+					"text": "000"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 0"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "metalLafResetButton"
+					"text": "Reset"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "metalLafReset", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 0 1 2"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "metalLafMaxLabel"
+					"text": "Max"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JSlider" ) {
+					name: "metalLafMaxSlider"
+					"maximum": 255
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "metalLafChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "metalLafMaxValue"
+					"text": "000"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 1"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 3"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "plasticLabel"
+				"text": "Plastic LaF"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "plasticToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "intellijTextLabel"
+				"text": "IntelliJ text"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "intellijTextToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 5"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatDisabledIconsTest$IntelliJFilterController" ) {
+				name: "intelliJTextFilterController"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.beans.PropertyChangeListener", "propertyChange", "intelliJTextFilterChanged", true, "filter" ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 5"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "intellijLightLabel"
+				"text": "IntelliJ light"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "intellijLightToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 6"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatDisabledIconsTest$IntelliJFilterController" ) {
+				name: "intelliJLightFilterController"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.beans.PropertyChangeListener", "propertyChange", "intelliJLightFilterChanged", true, "filter" ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 6"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "intellijDarkLabel"
+				"text": "IntelliJ dark"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 7"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "intellijDarkToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 7"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatDisabledIconsTest$IntelliJFilterController" ) {
+				name: "intelliJDarkFilterController"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.beans.PropertyChangeListener", "propertyChange", "intelliJDarkFilterChanged", true, "filter" ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 7"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "netbeansLabel"
+				"text": "NetBeans"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 8"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "netbeansToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 8"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "zipToolBar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "zipButton"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/zip128.png" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 9 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "selectedCheckBox"
+				"text": "selected"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "selectedChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 10"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "paletteIconsCheckBox"
+				"text": "palette icons"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "paletteIconsChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 10,alignx left,growx 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 1095, 625 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets 0,hidemode 3,gap 0 0"
+			"$columnConstraints": "[60,fill][fill][25,right]rel[fill]"
+			"$rowConstraints": "[center][center]"
+		} ) {
+			name: "panel1"
+			auxiliary() {
+				"JavaCodeGenerator.className": "IntelliJFilterController"
+			}
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "intellijBrightnessLabel"
+				"text": "Brightness"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JSlider" ) {
+				name: "intellijBrightnessSlider"
+				"minimum": -100
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "changed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "intellijBrightnessValue"
+				"text": "000"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "intellijContrastLabel"
+				"text": "Contrast"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JSlider" ) {
+				name: "intellijContrastSlider"
+				"minimum": -100
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "changed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "intellijContrastValue"
+				"text": "-000"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "intellijLightResetButton"
+				"text": "Reset"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reset", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0 1 2"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 660 )
+			"size": new java.awt.Dimension( 286, 39 )
+		} )
+	}
+}
