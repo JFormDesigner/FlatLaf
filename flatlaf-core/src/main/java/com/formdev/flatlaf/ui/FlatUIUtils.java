@@ -23,15 +23,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -39,13 +34,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageProducer;
-import java.awt.image.RGBImageFilter;
 import java.util.function.Consumer;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -442,59 +431,6 @@ public class FlatUIUtils
 		boolean explicitlySet = c.isOpaque() == oldOpaque;
 		LookAndFeel.installProperty( c, "opaque", oldOpaque );
 		return explicitlySet;
-	}
-
-	public static Icon getDisabledIcon( Icon icon ) {
-		Image image = safeGetImage( icon );
-		int grayMinValue = FlatUIUtils.getUIInt( "Button.disabledGrayMinValue", 180 );
-		int grayMaxValue = FlatUIUtils.getUIInt( "Button.disabledGrayMaxValue", 215 );
-		DisabledImageFilter imageFilter = new DisabledImageFilter( grayMinValue, grayMaxValue );
-		ImageProducer producer = new FilteredImageSource( image.getSource(), imageFilter );
-		return new ImageIcon( Toolkit.getDefaultToolkit().createImage( producer ) );
-	}
-
-	private static Image safeGetImage( Icon icon ) {
-		if( icon instanceof ImageIcon ) {
-			return ((ImageIcon)icon).getImage();
-		} else {
-			int width = icon.getIconWidth();
-			int height = icon.getIconHeight();
-			GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			GraphicsDevice device = environment.getDefaultScreenDevice();
-			GraphicsConfiguration configuration = device.getDefaultConfiguration();
-			BufferedImage image = configuration.createCompatibleImage( width, height );
-			Graphics2D g = image.createGraphics();
-			icon.paintIcon( null, g, 0, 0 );
-			g.dispose();
-			return image;
-		}
-	}
-
-	//---- class DisabledImageFilter ------------------------------------------
-
-	private static class DisabledImageFilter
-		extends RGBImageFilter
-	{
-		private final float min;
-		private final float factor;
-
-		DisabledImageFilter( int min, int max ) {
-			this.min = min;
-			this.factor = (max - min) / 255f;
-
-			canFilterIndexColorModel = true;
-		}
-
-		@Override
-		public int filterRGB( int x, int y, int rgb ) {
-			// https://en.wikipedia.org/wiki/Grayscale
-			float linearLuminance =
-				(0.2126f * ((rgb >> 16) & 0xff)) +
-				(0.7152f * ((rgb >> 8) & 0xff)) +
-				(0.0722f * (rgb & 0xff));
-			int gray = Math.min( (int) ((linearLuminance + .5f) * factor + min), 255 );
-			return (rgb & 0xff000000) | (gray << 16) | (gray << 8) | gray;
-		}
 	}
 
 	//---- class HoverListener ------------------------------------------------

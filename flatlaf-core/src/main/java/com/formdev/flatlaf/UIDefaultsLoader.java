@@ -41,6 +41,7 @@ import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.DerivedColor;
+import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -222,7 +223,7 @@ class UIDefaultsLoader
 	}
 
 	private enum ValueType { UNKNOWN, STRING, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
-		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS }
+		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER }
 
 	static Object parseValue( String key, String value ) {
 		return parseValue( key, value, v -> v, Collections.emptyList() );
@@ -289,6 +290,8 @@ class UIDefaultsLoader
 				valueType = ValueType.CHARACTER;
 			else if( key.endsWith( "UI" ) )
 				valueType = ValueType.STRING;
+			else if( key.endsWith( "grayFilter" ) )
+				valueType = ValueType.GRAYFILTER;
 		}
 
 		// parse value
@@ -308,6 +311,7 @@ class UIDefaultsLoader
 			case SCALEDDIMENSION:return parseScaledDimension( value );
 			case INSTANCE:		return parseInstance( value, addonClassLoaders );
 			case CLASS:			return parseClass( value, addonClassLoaders );
+			case GRAYFILTER:	return parseGrayFilter( value );
 			case UNKNOWN:
 			default:
 				// colors
@@ -662,6 +666,21 @@ class UIDefaultsLoader
 		return (ActiveValue) t -> {
 			return UIScale.scale( dimension );
 		};
+	}
+
+	private static Object parseGrayFilter( String value ) {
+		List<String> numbers = split( value, ',' );
+		try {
+			int brightness = Integer.parseInt( numbers.get( 0 ) );
+			int contrast = Integer.parseInt( numbers.get( 1 ) );
+			int alpha = Integer.parseInt( numbers.get( 2 ) );
+
+			return (LazyValue) t -> {
+				return new GrayFilter( brightness, contrast, alpha );
+			};
+		} catch( NumberFormatException ex ) {
+			throw new IllegalArgumentException( "invalid gray filter '" + value + "'" );
+		}
 	}
 
 	/**

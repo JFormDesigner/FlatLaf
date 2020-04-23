@@ -21,12 +21,16 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
@@ -41,6 +45,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JRootPane;
@@ -54,12 +59,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
-import javax.swing.plaf.IconUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
-import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -123,7 +127,21 @@ public abstract class FlatLaf
 
 	@Override
 	public Icon getDisabledIcon( JComponent component, Icon icon ) {
-		return (icon == null) ? null : new IconUIResource( FlatUIUtils.getDisabledIcon( icon ) );
+		if( icon instanceof ImageIcon ) {
+			Object grayFilter = UIManager.get( "Component.grayFilter" );
+			if( !(grayFilter instanceof ImageFilter) ) {
+				// fallback
+				grayFilter = isDark()
+					? new GrayFilter( -20, -70, 100 )
+					: new GrayFilter(  25, -25, 100 );
+			}
+
+			Image image = ((ImageIcon)icon).getImage();
+			ImageProducer producer = new FilteredImageSource( image.getSource(), (ImageFilter) grayFilter );
+			return new ImageIconUIResource( Toolkit.getDefaultToolkit().createImage( producer ) );
+		}
+
+		return null;
 	}
 
 	@Override
@@ -627,6 +645,17 @@ public abstract class FlatLaf
 			}
 
 			return font;
+		}
+	}
+
+	//---- class ImageIconUIResource ------------------------------------------
+
+	private static class ImageIconUIResource
+		extends ImageIcon
+		implements UIResource
+	{
+		ImageIconUIResource( Image image ) {
+			super( image );
 		}
 	}
 }
