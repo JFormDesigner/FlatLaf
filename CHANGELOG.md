@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.32
 
 - ToggleButton: Compute selected background color based on current component
   background. (issue #32)
