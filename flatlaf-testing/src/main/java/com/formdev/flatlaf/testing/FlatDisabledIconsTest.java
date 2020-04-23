@@ -16,16 +16,20 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
 import java.beans.*;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
 /**
@@ -92,6 +96,18 @@ public class FlatDisabledIconsTest
 		intelliJDarkFilterController.defaultBrightness = -70;
 		intelliJDarkFilterController.defaultContrast = -70;
 		intelliJDarkFilterController.reset();
+
+		toolBars = new JToolBar[] {
+			enabledToolBar,
+			currentLafToolBar,
+			basicLafToolBar,
+			metalLafToolBar,
+			plasticToolBar,
+			intellijTextToolBar,
+			intellijLightToolBar,
+			intellijDarkToolBar,
+			netbeansToolBar
+		};
 	}
 
 	private void selectedChanged() {
@@ -102,6 +118,50 @@ public class FlatDisabledIconsTest
 					if( c2 instanceof JToggleButton )
 						((JToggleButton)c2).getModel().setSelected( armed );
 				}
+			}
+		}
+	}
+
+	private final JToolBar[] toolBars;
+	private Icon[] oldIcons;
+	private static final String[] COLOR_NAMES = {
+		"Actions.Red",
+		"Actions.Yellow",
+		"Actions.Green",
+		"Actions.Blue",
+		"Actions.Grey",
+		"Actions.GreyInline",
+
+		"Objects.Grey",
+		"Objects.Blue",
+		"Objects.Green",
+		"Objects.Yellow",
+		"Objects.YellowDark",
+		"Objects.Purple",
+		"Objects.Pink",
+		"Objects.Red",
+		"Objects.RedStatus",
+		"Objects.GreenAndroid",
+		"Objects.BlackText",
+
+		"", // black
+	};
+
+	private void paletteIconsChanged() {
+		if( paletteIconsCheckBox.isSelected() ) {
+			oldIcons = new Icon[COLOR_NAMES.length];
+			for( int i = 0; i < COLOR_NAMES.length; i++ )
+				oldIcons[i] = ((JToggleButton)enabledToolBar.getComponent( i )).getIcon();
+
+			for( int i = 0; i < COLOR_NAMES.length; i++ ) {
+				ColorIcon icon = new ColorIcon( UIManager.getColor( COLOR_NAMES[i] ) );
+				for( JToolBar toolBar : toolBars )
+					((JToggleButton)toolBar.getComponent( i )).setIcon( icon );
+			}
+		} else if( oldIcons != null ){
+			for( int i = 0; i < COLOR_NAMES.length; i++ ) {
+				for( JToolBar toolBar : toolBars )
+					((JToggleButton)toolBar.getComponent( i )).setIcon( oldIcons[i] );
 			}
 		}
 	}
@@ -216,6 +276,7 @@ public class FlatDisabledIconsTest
 		zipToolBar = new JToolBar();
 		zipButton = new JToggleButton();
 		selectedCheckBox = new JCheckBox();
+		paletteIconsCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -433,6 +494,11 @@ public class FlatDisabledIconsTest
 		selectedCheckBox.setText("selected");
 		selectedCheckBox.addActionListener(e -> selectedChanged());
 		add(selectedCheckBox, "cell 0 10");
+
+		//---- paletteIconsCheckBox ----
+		paletteIconsCheckBox.setText("palette icons");
+		paletteIconsCheckBox.addActionListener(e -> paletteIconsChanged());
+		add(paletteIconsCheckBox, "cell 1 10,alignx left,growx 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		button7.setIcon( new LightOrDarkIcon(
@@ -497,6 +563,7 @@ public class FlatDisabledIconsTest
 	private JToolBar zipToolBar;
 	private JToggleButton zipButton;
 	private JCheckBox selectedCheckBox;
+	private JCheckBox paletteIconsCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class LightOrDarkIcon ----------------------------------------------
@@ -539,6 +606,31 @@ public class FlatDisabledIconsTest
 		@Override
 		public Image getImage() {
 			return getCurrentIcon().getImage();
+		}
+	}
+
+	//---- class ColorIcon ----------------------------------------------------
+
+	private static class ColorIcon
+		extends ImageIcon
+	{
+		ColorIcon( Color color ) {
+			super( createColorImage( color ) );
+		}
+
+		private static Image createColorImage( Color color ) {
+			if( color == null )
+				color = Color.black;
+
+			BufferedImage image = new BufferedImage( UIScale.scale( 16 ), UIScale.scale( 16 ), BufferedImage.TYPE_INT_ARGB );
+			Graphics2D g = image.createGraphics();
+			try {
+				g.setColor( color );
+				g.fillRect( UIScale.scale( 1 ), UIScale.scale( 2 ), UIScale.scale( 14 ), UIScale.scale( 12 ) );
+			} finally {
+				g.dispose();
+			}
+			return image;
 		}
 	}
 
@@ -646,6 +738,11 @@ public class FlatDisabledIconsTest
 
 			setEnabled( false );
 			setIcon( icon );
+		}
+
+		@Override
+		public void setIcon( Icon defaultIcon ) {
+			super.setIcon( defaultIcon );
 
 			if( filter != null )
 				updateDisabledIcon();
