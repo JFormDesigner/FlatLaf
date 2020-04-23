@@ -194,6 +194,11 @@ public class IntelliJTheme
 		if( !uiKeys.contains( "ToggleButton.foreground" ) && uiKeys.contains( "Button.foreground" ) )
 			defaults.put( "ToggleButton.foreground", defaults.get( "Button.foreground" ) );
 
+		// limit tree row height
+		int rowHeight = defaults.getInt( "Tree.rowHeight" );
+		if( rowHeight > 22 )
+			defaults.put( "Tree.rowHeight", 22 );
+
 		// apply theme specific UI defaults at the end to allow overwriting
 		defaults.putAll( themeSpecificDefaults );
 	}
@@ -248,6 +253,11 @@ public class IntelliJTheme
 				apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache, uiKeys );
 		} else {
 			uiKeys.add( key );
+
+			// fix ComboBox size and Spinner border in all Material UI Lite themes
+			boolean isMaterialUILite = author.equals( "Mallowigi" );
+			if( isMaterialUILite && (key.equals( "ComboBox.padding" ) || key.equals( "Spinner.border" )) )
+				return; // ignore
 
 			// map keys
 			key = uiKeyMapping.getOrDefault( key, key );
