@@ -45,7 +45,7 @@ tasks {
 			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )
 		}
 
-		exclude( "META-INF/versions/**" )
+		exclude( "module-info.class" )
 
 		// include all dependencies in jar
 		from( {
