@@ -6,6 +6,9 @@ FlatLaf Change Log
 - Improved creation of disabled grayscale icons used in disabled buttons, labels
   and tabs. They now have more contrast and are lighter in light themes and
   darker in dark themes. (issue #70)
+- IntelliJ Themes: Fixed ComboBox size and Spinner border in all Material UI
+  Lite themes and limit tree row height in all Material UI Lite themes and some
+  other themes.
 
 
 ## 0.32
