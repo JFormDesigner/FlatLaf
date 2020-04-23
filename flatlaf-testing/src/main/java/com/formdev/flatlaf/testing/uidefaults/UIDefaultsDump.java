@@ -43,6 +43,7 @@ import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
@@ -50,8 +51,7 @@ import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.*;
-import com.formdev.flatlaf.demo.intellijthemes.IJThemesManager;
-import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel;
+import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -108,15 +108,15 @@ public class UIDefaultsDump
 	private static void dumpIntelliJThemes( File dir ) {
 		dir = new File( dir, "intellijthemes" );
 
-		IJThemesManager themesManager = new IJThemesManager();
-		themesManager.loadBundledThemes();
+		for( LookAndFeelInfo info : FlatAllIJThemes.INFOS ) {
+			String lafClassName = info.getClassName();
+			String relativeLafClassName = StringUtils.removeLeading( lafClassName, "com.formdev.flatlaf.intellijthemes." );
+			File dir2 = relativeLafClassName.lastIndexOf( '.' ) >= 0
+				? new File( dir, relativeLafClassName.substring( 0, relativeLafClassName.lastIndexOf( '.' ) ).replace( '.', '/' ) )
+				: dir;
 
-		for( String resourceName : themesManager.getBundledResourceNames() ) {
-			IntelliJTheme.install( UIDefaultsDump.class.getResourceAsStream(
-				IJThemesPanel.THEMES_PACKAGE + resourceName ) );
-			dump( dir, StringUtils.removeTrailing( resourceName, ".theme.json" ) );
+			dump( lafClassName, dir2 );
 		}
-
 	}
 
 	private static void dump( String lookAndFeelClassName, File dir ) {
