@@ -51,6 +51,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.demo.intellijthemes.IJThemesManager;
+import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -112,7 +113,7 @@ public class UIDefaultsDump
 
 		for( String resourceName : themesManager.getBundledResourceNames() ) {
 			IntelliJTheme.install( UIDefaultsDump.class.getResourceAsStream(
-				"/com/formdev/flatlaf/demo/intellijthemes/" + resourceName ) );
+				IJThemesPanel.THEMES_PACKAGE + resourceName ) );
 			dump( dir, StringUtils.removeTrailing( resourceName, ".theme.json" ) );
 		}
 

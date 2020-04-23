@@ -60,6 +60,8 @@ import net.miginfocom.swing.*;
 public class IJThemesPanel
 	extends JPanel
 {
+	public static final String THEMES_PACKAGE = "/com/formdev/flatlaf/intellijthemes/themes/";
+
 	private final IJThemesManager themesManager = new IJThemesManager();
 	private final List<IJThemeInfo> themes = new ArrayList<>();
 	private final HashMap<Integer, String> categories = new HashMap<>();
@@ -237,7 +239,7 @@ public class IJThemesPanel
 				showInformationDialog( "Failed to load '" + themeInfo.themeFile + "'.", ex );
 			}
 		} else {
-			IntelliJTheme.install( getClass().getResourceAsStream( themeInfo.resourceName ) );
+			IntelliJTheme.install( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.resourceName ) );
 		    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.RESOURCE_PREFIX + themeInfo.resourceName );
 		}
 
@@ -260,7 +262,7 @@ public class IJThemesPanel
 
 		// save theme
 		try {
-			Files.copy( getClass().getResourceAsStream( themeInfo.resourceName ),
+			Files.copy( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.resourceName ),
 				file.toPath(), StandardCopyOption.REPLACE_EXISTING );
 		} catch( IOException ex ) {
 			showInformationDialog( "Failed to save theme to '" + file + "'.", ex );
@@ -273,7 +275,7 @@ public class IJThemesPanel
 				File licenseFile = new File( file.getParentFile(),
 					StringUtils.removeTrailing( file.getName(), ".theme.json" ) +
 					themeInfo.licenseFile.substring( themeInfo.licenseFile.indexOf( '.' ) ) );
-				Files.copy( getClass().getResourceAsStream( themeInfo.licenseFile ),
+				Files.copy( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.licenseFile ),
 					licenseFile.toPath(), StandardCopyOption.REPLACE_EXISTING );
 			} catch( IOException ex ) {
 				showInformationDialog( "Failed to save theme license to '" + file + "'.", ex );

@@ -60,7 +60,7 @@ public class DemoPrefs
 				if( IntelliJTheme.ThemeLaf.class.getName().equals( lafClassName ) ) {
 					String theme = state.get( KEY_LAF_THEME, "" );
 					if( theme.startsWith( RESOURCE_PREFIX ) )
-						IntelliJTheme.install( IJThemesPanel.class.getResourceAsStream( theme.substring( RESOURCE_PREFIX.length() ) ) );
+						IntelliJTheme.install( IJThemesPanel.class.getResourceAsStream( IJThemesPanel.THEMES_PACKAGE + theme.substring( RESOURCE_PREFIX.length() ) ) );
 					else if( theme.startsWith( FILE_PREFIX ) )
 					    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( theme.substring( FILE_PREFIX.length() ) ) ) );
 					else

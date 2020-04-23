@@ -30,6 +30,7 @@ plugins {
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
+	implementation( project( ":flatlaf-intellij-themes" ) )
 	implementation( "com.miglayout:miglayout-swing:5.2" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
 }
@@ -38,6 +39,7 @@ tasks {
 	jar {
 		dependsOn( ":flatlaf-core:jar" )
 		dependsOn( ":flatlaf-extras:jar" )
+		dependsOn( ":flatlaf-intellij-themes:jar" )
 
 		manifest {
 			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )
