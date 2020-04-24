@@ -23,6 +23,11 @@ plugins {
 
 if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	sourceSets {
+		create( "java9" ) {
+			java {
+				setSrcDirs( listOf( "src/main/java9" ) )
+			}
+		}
 		create( "module-info" ) {
 			java {
 				// include "src/main/java" here to get compile errors if classes are
@@ -52,6 +57,12 @@ tasks {
 		archiveBaseName.set( "flatlaf" )
 
 		if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
+			manifest.attributes( "Multi-Release" to "true" )
+
+			into( "META-INF/versions/9" ) {
+				from( sourceSets["java9"].output )
+			}
+
 			from( sourceSets["module-info"].output ) {
 				include( "module-info.class" )
 			}

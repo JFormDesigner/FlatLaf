@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
@@ -64,6 +65,7 @@ import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.util.GrayFilter;
+import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -136,9 +138,14 @@ public abstract class FlatLaf
 					: new GrayFilter(  25, -25, 100 );
 			}
 
+			ImageFilter filter = (ImageFilter) grayFilter;
+			Function<Image, Image> mapper = img -> {
+				ImageProducer producer = new FilteredImageSource( img.getSource(), filter );
+				return Toolkit.getDefaultToolkit().createImage( producer );
+			};
+
 			Image image = ((ImageIcon)icon).getImage();
-			ImageProducer producer = new FilteredImageSource( image.getSource(), (ImageFilter) grayFilter );
-			return new ImageIconUIResource( Toolkit.getDefaultToolkit().createImage( producer ) );
+			return new ImageIconUIResource( MultiResolutionImageSupport.map( image, mapper ) );
 		}
 
 		return null;

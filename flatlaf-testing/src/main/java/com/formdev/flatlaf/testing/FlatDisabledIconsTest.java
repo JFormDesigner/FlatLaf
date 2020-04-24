@@ -27,8 +27,11 @@ import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
 import java.beans.*;
+import java.net.URL;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.MultiResolutionImageSupport;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -575,8 +578,23 @@ public class FlatDisabledIconsTest
 		private final ImageIcon darkIcon;
 
 		LightOrDarkIcon( String lightIconName, String darkIconName ) {
-			this.lightIcon = new ImageIcon( getClass().getResource( lightIconName ) );
-			this.darkIcon = new ImageIcon( getClass().getResource( darkIconName ) );
+			this.lightIcon = loadIcon( lightIconName );
+			this.darkIcon = loadIcon( darkIconName );
+		}
+
+		private static ImageIcon loadIcon( String iconName ) {
+			ImageIcon icon = new ImageIcon( LightOrDarkIcon.class.getResource( iconName ) );
+
+			if( SystemInfo.IS_MAC || !MultiResolutionImageSupport.isAvailable() || !iconName.endsWith( ".png" ) )
+				return icon;
+
+			String iconName2x = iconName.replace( ".png", "@2x.png" );
+			URL url2x = LightOrDarkIcon.class.getResource( iconName2x );
+			if( url2x == null )
+				return icon;
+
+			ImageIcon icon2x = new ImageIcon( url2x );
+			return new ImageIcon( MultiResolutionImageSupport.create( 0, icon.getImage(), icon2x.getImage() ) );
 		}
 
 		private ImageIcon getCurrentIcon() {

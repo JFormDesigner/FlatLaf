@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -354,6 +354,11 @@ new FormModel {
 					"text": "Toggle"
 					"icon": new com.jformdesigner.model.SwingIcon( 2, "Tree.leafIcon" )
 					"selected": true
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button1"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/demo/icons/intellij-showWriteAccess.png" )
+					"enabled": false
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10 3 1,growx"

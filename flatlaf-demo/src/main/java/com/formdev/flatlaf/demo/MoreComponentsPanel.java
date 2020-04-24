@@ -101,6 +101,7 @@ class MoreComponentsPanel
 		JButton button7 = new JButton();
 		JButton button8 = new JButton();
 		JToggleButton toggleButton6 = new JToggleButton();
+		JButton button1 = new JButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -380,6 +381,11 @@ class MoreComponentsPanel
 			toggleButton6.setIcon(UIManager.getIcon("Tree.leafIcon"));
 			toggleButton6.setSelected(true);
 			toolBar1.add(toggleButton6);
+
+			//---- button1 ----
+			button1.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/demo/icons/intellij-showWriteAccess.png")));
+			button1.setEnabled(false);
+			toolBar1.add(button1);
 		}
 		add(toolBar1, "cell 1 10 3 1,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
