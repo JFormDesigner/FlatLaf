@@ -92,7 +92,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 					name: "checkBoxMenuItem1"
-					"text": "enabled"
+					"text": "<html>en<b>abl</b>ed</html>"
 					"accelerator": &KeyStroke0 static javax.swing.KeyStroke getKeyStroke( 112, 0, false )
 					"mnemonic": 65
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

@@ -32,6 +32,8 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicHTML;
+import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 
 /**
@@ -85,10 +87,16 @@ public class FlatMenuItemRenderer
 		}
 
 		// text size
-		String text = menuItem.getText();
-		FontMetrics fm = menuItem.getFontMetrics( menuItem.getFont() );
-		width += SwingUtilities.computeStringWidth( fm, text );
-		height = Math.max( fm.getHeight(), height );
+		View htmlView = (View) menuItem.getClientProperty( BasicHTML.propertyKey );
+		if( htmlView != null ) {
+			width += htmlView.getPreferredSpan( View.X_AXIS );
+			height = Math.max( (int) htmlView.getPreferredSpan( View.Y_AXIS ), height );
+		} else {
+			String text = menuItem.getText();
+			FontMetrics fm = menuItem.getFontMetrics( menuItem.getFont() );
+			width += SwingUtilities.computeStringWidth( fm, text );
+			height = Math.max( fm.getHeight(), height );
+		}
 
 		// accelerator size
 		String accelText = getAcceleratorText();
@@ -226,6 +234,12 @@ debug*/
 	}
 
 	protected void paintText( Graphics g, Rectangle textRect, String text, Color selectionForeground, Color disabledForeground ) {
+		View htmlView = (View) menuItem.getClientProperty( BasicHTML.propertyKey );
+		if( htmlView != null ) {
+			htmlView.paint( g, textRect );
+			return;
+		}
+
 		int mnemonicIndex = FlatLaf.isShowMnemonics() ? menuItem.getDisplayedMnemonicIndex() : -1;
 
 		paintText( g, menuItem, textRect, text, mnemonicIndex, menuItem.getFont(),

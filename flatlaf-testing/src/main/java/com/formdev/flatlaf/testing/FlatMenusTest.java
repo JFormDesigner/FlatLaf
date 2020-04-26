@@ -197,7 +197,7 @@ public class FlatMenusTest
 			panel1.add(checkBoxMenuItemLabel, "cell 0 2");
 
 			//---- checkBoxMenuItem1 ----
-			checkBoxMenuItem1.setText("enabled");
+			checkBoxMenuItem1.setText("<html>en<b>abl</b>ed</html>");
 			checkBoxMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			checkBoxMenuItem1.setMnemonic('A');
 			panel1.add(checkBoxMenuItem1, "cell 1 2");
