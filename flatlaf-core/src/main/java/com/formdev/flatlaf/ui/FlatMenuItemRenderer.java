@@ -214,7 +214,7 @@ debug*/
 
 		paintBackground( g, selectionBackground );
 		if( !isTopLevelMenu )
-			paintIcon( g, iconRect, getIcon() );
+			paintIcon( g, iconRect, getIconForPainting() );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
 		if( !isTopLevelMenu )
@@ -302,6 +302,26 @@ debug*/
 
 	private Icon getIcon() {
 		return (checkIcon != null) ? checkIcon : menuItem.getIcon();
+	}
+
+	private Icon getIconForPainting() {
+		if( checkIcon != null )
+			return checkIcon;
+
+		Icon icon = menuItem.getIcon();
+		if( icon == null )
+			return null;
+
+		if( !menuItem.isEnabled() )
+			return menuItem.getDisabledIcon();
+
+		if( menuItem.getModel().isPressed() && menuItem.isArmed() ) {
+			Icon pressedIcon = menuItem.getPressedIcon();
+			if( pressedIcon != null )
+				return pressedIcon;
+		}
+
+		return icon;
 	}
 
 	private Dimension getIconSize() {
