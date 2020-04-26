@@ -31,6 +31,7 @@ public class FlatMenusTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatMenusTest" );
+			frame.useApplyComponentOrientation = true;
 			frame.showFrame( FlatMenusTest::new );
 		} );
 	}
@@ -68,6 +69,10 @@ public class FlatMenusTest
 		JMenu menu5 = new JMenu();
 		JMenuItem menuItem7 = new JMenuItem();
 		JMenuItem menuItem8 = new JMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem6 = new JCheckBoxMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem5 = new JRadioButtonMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem6 = new JRadioButtonMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem7 = new JRadioButtonMenuItem();
 		JMenu menu6 = new JMenu();
 		JMenuItem menuItem5 = new JMenuItem();
 		JMenuItem menuItem6 = new JMenuItem();
@@ -127,16 +132,37 @@ public class FlatMenusTest
 			{
 				menu5.setText("text");
 				menu5.setMnemonic('T');
+				menu5.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
 
 				//---- menuItem7 ----
 				menuItem7.setText("text");
 				menuItem7.setMnemonic('X');
+				menuItem7.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png")));
 				menu5.add(menuItem7);
 
 				//---- menuItem8 ----
 				menuItem8.setText("text");
 				menuItem8.setMnemonic('E');
+				menuItem8.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess@2x.png")));
 				menu5.add(menuItem8);
+
+				//---- checkBoxMenuItem6 ----
+				checkBoxMenuItem6.setText("check");
+				checkBoxMenuItem6.setSelected(true);
+				menu5.add(checkBoxMenuItem6);
+
+				//---- radioButtonMenuItem5 ----
+				radioButtonMenuItem5.setText("radio 1");
+				radioButtonMenuItem5.setSelected(true);
+				menu5.add(radioButtonMenuItem5);
+
+				//---- radioButtonMenuItem6 ----
+				radioButtonMenuItem6.setText("radio 2");
+				menu5.add(radioButtonMenuItem6);
+
+				//---- radioButtonMenuItem7 ----
+				radioButtonMenuItem7.setText("radio 3");
+				menu5.add(radioButtonMenuItem7);
 			}
 			menuBar1.add(menu5);
 
@@ -361,6 +387,12 @@ public class FlatMenusTest
 		armedCheckBox.setMnemonic('A');
 		armedCheckBox.addActionListener(e -> armedChanged());
 		add(armedCheckBox, "cell 0 3");
+
+		//---- buttonGroup1 ----
+		ButtonGroup buttonGroup1 = new ButtonGroup();
+		buttonGroup1.add(radioButtonMenuItem5);
+		buttonGroup1.add(radioButtonMenuItem6);
+		buttonGroup1.add(radioButtonMenuItem7);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

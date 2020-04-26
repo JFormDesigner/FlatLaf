@@ -76,15 +76,13 @@ public class FlatMenuItemRenderer
 		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
 
 		// icon size
-		if( !isTopLevelMenu ) {
-			Dimension iconSize = getIconSize();
-			width += iconSize.width;
-			height = Math.max( iconSize.height, height );
+		Dimension iconSize = getIconSize();
+		width += iconSize.width;
+		height = Math.max( iconSize.height, height );
 
-			// gap between icon and text
-			if( iconSize.width > 0 )
-				width += scale( menuItem.getIconTextGap() );
-		}
+		// gap between icon and text
+		if( iconSize.width > 0 )
+			width += scale( menuItem.getIconTextGap() );
 
 		// text size
 		View htmlView = (View) menuItem.getClientProperty( BasicHTML.propertyKey );
@@ -135,10 +133,8 @@ public class FlatMenuItemRenderer
 	private void layout( Rectangle viewRect, Rectangle iconRect, Rectangle textRect,
 		Rectangle accelRect, Rectangle arrowRect )
 	{
-		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
-
 		// layout icon
-		iconRect.setSize( !isTopLevelMenu ? getIconSize() : new Dimension() );
+		iconRect.setSize( getIconSize() );
 		iconRect.y = viewRect.y + ((viewRect.height - iconRect.height) / 2);
 
 		// layout text
@@ -148,7 +144,7 @@ public class FlatMenuItemRenderer
 		textRect.y = viewRect.y + ((viewRect.height - textRect.height) / 2);
 
 		// layout arrow
-		Icon arrowIcon = !isTopLevelMenu ? this.arrowIcon : null;
+		Icon arrowIcon = !isTopLevelMenu( menuItem ) ? this.arrowIcon : null;
 		arrowRect.width = (arrowIcon != null) ? arrowIcon.getIconWidth() : 0;
 		arrowRect.height = (arrowIcon != null) ? arrowIcon.getIconHeight() : 0;
 		arrowRect.y = viewRect.y + ((viewRect.height - arrowRect.height) / 2);
@@ -168,7 +164,7 @@ public class FlatMenuItemRenderer
 			// left-to-right
 			iconRect.x = viewRect.x;
 			textRect.x = iconRect.x + iconRect.width
-				+ (!isTopLevelMenu && iconRect.width > 0 ? scale( menuItem.getIconTextGap() ) : 0);
+				+ (iconRect.width > 0 ? scale( menuItem.getIconTextGap() ) : 0);
 			arrowRect.x = viewRect.x + viewRect.width - arrowRect.width;
 			if( accelText != null )
 				accelRect.x = arrowRect.x - accelRect.width;
@@ -176,7 +172,7 @@ public class FlatMenuItemRenderer
 			// right-to-left
 			iconRect.x = viewRect.x + viewRect.width - iconRect.width;
 			textRect.x = iconRect.x - textRect.width
-				- (!isTopLevelMenu && iconRect.width > 0 ? scale( menuItem.getIconTextGap() ) : 0);
+				- (iconRect.width > 0 ? scale( menuItem.getIconTextGap() ) : 0);
 			arrowRect.x = viewRect.x;
 			if( accelText != null )
 				accelRect.x = arrowRect.x + arrowRect.width;
@@ -213,8 +209,7 @@ debug*/
 		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
 
 		paintBackground( g, selectionBackground );
-		if( !isTopLevelMenu )
-			paintIcon( g, iconRect, getIconForPainting() );
+		paintIcon( g, iconRect, getIconForPainting() );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
 		if( !isTopLevelMenu )
@@ -300,12 +295,8 @@ debug*/
 		return menuItem instanceof JMenu && ((JMenu)menuItem).isTopLevelMenu();
 	}
 
-	private Icon getIcon() {
-		return (checkIcon != null) ? checkIcon : menuItem.getIcon();
-	}
-
 	private Icon getIconForPainting() {
-		if( checkIcon != null )
+		if( checkIcon != null && !isTopLevelMenu( menuItem ) )
 			return checkIcon;
 
 		Icon icon = menuItem.getIcon();
@@ -325,7 +316,14 @@ debug*/
 	}
 
 	private Dimension getIconSize() {
-		Icon icon = getIcon();
+		if( isTopLevelMenu( menuItem ) ) {
+			Icon icon = menuItem.getIcon();
+			return (icon != null)
+				? new Dimension( icon.getIconWidth(), icon.getIconHeight() )
+				: new Dimension();
+		}
+
+		Icon icon = (checkIcon != null) ? checkIcon : menuItem.getIcon();
 		int iconWidth = (icon != null) ? icon.getIconWidth() : 0;
 		int iconHeight = (icon != null) ? icon.getIconHeight() : 0;
 		return new Dimension(
