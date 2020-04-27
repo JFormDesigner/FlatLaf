@@ -184,7 +184,7 @@ public class FlatMenuItemRenderer
 	}
 
 	private static int centerOffset( int wh1, int wh2 ) {
-		return (wh1 != wh2) ? Math.round( (wh1 - wh2) / 2f ) : 0;
+		return (wh1 / 2) - (wh2 / 2);
 	}
 
 	protected void paintMenuItem( Graphics g, Color selectionBackground, Color selectionForeground,
