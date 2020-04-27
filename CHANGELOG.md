@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.33
 
 - Improved creation of disabled grayscale icons used in disabled buttons, labels
   and tabs. They now have more contrast and are lighter in light themes and
