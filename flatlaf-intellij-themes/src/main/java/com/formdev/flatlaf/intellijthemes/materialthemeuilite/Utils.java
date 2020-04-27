@@ -32,7 +32,8 @@ class Utils
 
 	static IntelliJTheme loadTheme( String name ) {
 		try {
-			return new IntelliJTheme( Utils.class.getResourceAsStream( "themes/material-theme-ui-lite/" + name ) );
+			return new IntelliJTheme( Utils.class.getResourceAsStream(
+				"/com/formdev/flatlaf/intellijthemes/themes/material-theme-ui-lite/" + name ) );
 		} catch( ParseException | IOException ex ) {
 			String msg = "FlatLaf: Failed to load IntelliJ theme '" + name + "'";
 			LOG.log( Level.SEVERE, msg, ex );

@@ -9,6 +9,8 @@ FlatLaf Change Log
 - IntelliJ Themes: Fixed ComboBox size and Spinner border in all Material UI
   Lite themes and limit tree row height in all Material UI Lite themes and some
   other themes.
+- IntelliJ Themes: Material UI Lite themes did not work when using
+  [IntelliJ Themes Pack](flatlaf-intellij-themes) addon. (PR #88, issue #89)
 
 
 ## 0.32
