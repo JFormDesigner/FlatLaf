@@ -11,6 +11,8 @@ FlatLaf Change Log
   other themes.
 - IntelliJ Themes: Material UI Lite themes did not work when using
   [IntelliJ Themes Pack](flatlaf-intellij-themes) addon. (PR #88, issue #89)
+- IntelliJ Themes: Added Java 9 module descriptor to
+  `flatlaf-intellij-themes-<version>.jar`.
 
 
 ## 0.32

@@ -21,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.IntelliJTheme;
-import com.formdev.flatlaf.json.ParseException;
 
 /**
  * @author Karl Tauber
@@ -34,7 +33,7 @@ class Utils
 		try {
 			return new IntelliJTheme( Utils.class.getResourceAsStream(
 				"/com/formdev/flatlaf/intellijthemes/themes/material-theme-ui-lite/" + name ) );
-		} catch( ParseException | IOException ex ) {
+		} catch( IOException ex ) {
 			String msg = "FlatLaf: Failed to load IntelliJ theme '" + name + "'";
 			LOG.log( Level.SEVERE, msg, ex );
 			throw new RuntimeException( msg, ex );

@@ -86,7 +86,7 @@ public class IntelliJTheme
 	 * Using a buffered input stream is not necessary.
 	 */
 	public static FlatLaf createLaf( InputStream in )
-		throws IOException, ParseException
+		throws IOException
 	{
 		return createLaf( new IntelliJTheme( in ) );
 	}
@@ -106,11 +106,13 @@ public class IntelliJTheme
 	 */
 	@SuppressWarnings( "unchecked" )
 	public IntelliJTheme( InputStream in )
-		throws IOException, ParseException
+		throws IOException
 	{
 		Map<String, Object> json;
 	    try( Reader reader = new InputStreamReader( in, StandardCharsets.UTF_8 ) ) {
 	    		json = (Map<String, Object>) Json.parse( reader );
+		} catch( ParseException ex ) {
+			throw new IOException( ex.getMessage(), ex );
 		}
 
 	    name = (String) json.get( "name" );
