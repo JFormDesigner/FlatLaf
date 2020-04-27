@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -75,26 +76,21 @@ public class FlatMenuItemRenderer
 		int height = 0;
 		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
 
-		// icon size
-		Dimension iconSize = getIconSize();
-		width += iconSize.width;
-		height = Math.max( iconSize.height, height );
+		Rectangle viewRect = new Rectangle( 0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE );
+		Rectangle iconRect = new Rectangle();
+		Rectangle textRect = new Rectangle();
 
-		// gap between icon and text
-		if( iconSize.width > 0 )
-			width += scale( menuItem.getIconTextGap() );
+		// layout icon and text
+		SwingUtilities.layoutCompoundLabel( menuItem,
+			menuItem.getFontMetrics( menuItem.getFont() ), menuItem.getText(), getIconForLayout(),
+			menuItem.getVerticalAlignment(), menuItem.getHorizontalAlignment(),
+			menuItem.getVerticalTextPosition(), menuItem.getHorizontalTextPosition(),
+			viewRect, iconRect, textRect, scale( menuItem.getIconTextGap() ) );
 
-		// text size
-		View htmlView = (View) menuItem.getClientProperty( BasicHTML.propertyKey );
-		if( htmlView != null ) {
-			width += htmlView.getPreferredSpan( View.X_AXIS );
-			height = Math.max( (int) htmlView.getPreferredSpan( View.Y_AXIS ), height );
-		} else {
-			String text = menuItem.getText();
-			FontMetrics fm = menuItem.getFontMetrics( menuItem.getFont() );
-			width += SwingUtilities.computeStringWidth( fm, text );
-			height = Math.max( fm.getHeight(), height );
-		}
+		// union icon and text rectangles
+		Rectangle labelRect = iconRect.union( textRect );
+		width += labelRect.width;
+		height = Math.max( labelRect.height, height );
 
 		// accelerator size
 		String accelText = getAcceleratorText();
@@ -110,7 +106,8 @@ public class FlatMenuItemRenderer
 		// arrow size
 		if( !isTopLevelMenu && arrowIcon != null ) {
 			// gap between text and arrow
-			width += scale( textArrowGap );
+			if( accelText == null )
+				width += scale( textArrowGap );
 
 			width += arrowIcon.getIconWidth();
 			height = Math.max( arrowIcon.getIconHeight(), height );
@@ -133,21 +130,15 @@ public class FlatMenuItemRenderer
 	private void layout( Rectangle viewRect, Rectangle iconRect, Rectangle textRect,
 		Rectangle accelRect, Rectangle arrowRect )
 	{
-		// layout icon
-		iconRect.setSize( getIconSize() );
-		iconRect.y = viewRect.y + ((viewRect.height - iconRect.height) / 2);
-
-		// layout text
-		FontMetrics fm = menuItem.getFontMetrics( menuItem.getFont() );
-		textRect.width = SwingUtilities.computeStringWidth( fm, menuItem.getText() );
-		textRect.height = fm.getHeight();
-		textRect.y = viewRect.y + ((viewRect.height - textRect.height) / 2);
+		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
 
 		// layout arrow
-		Icon arrowIcon = !isTopLevelMenu( menuItem ) ? this.arrowIcon : null;
-		arrowRect.width = (arrowIcon != null) ? arrowIcon.getIconWidth() : 0;
-		arrowRect.height = (arrowIcon != null) ? arrowIcon.getIconHeight() : 0;
-		arrowRect.y = viewRect.y + ((viewRect.height - arrowRect.height) / 2);
+		if( !isTopLevelMenu && arrowIcon != null ) {
+			arrowRect.width = arrowIcon.getIconWidth();
+			arrowRect.height = arrowIcon.getIconHeight();
+		} else
+			arrowRect.setSize( 0, 0 );
+		arrowRect.y = viewRect.y + centerOffset( viewRect.height, arrowRect.height );
 
 		// layout accelerator
 		String accelText = getAcceleratorText();
@@ -156,27 +147,44 @@ public class FlatMenuItemRenderer
 			accelRect.width = SwingUtilities.computeStringWidth( accelFm, accelText );
 			accelRect.height = accelFm.getHeight();
 
-			accelRect.y = viewRect.y + ((viewRect.height - accelRect.height) / 2);
+			accelRect.y = viewRect.y + centerOffset( viewRect.height, accelRect.height );
 		} else
 			accelRect.setBounds( 0, 0, 0, 0 );
 
+		// compute horizontal positions of accelerator and arrow
 		if( menuItem.getComponentOrientation().isLeftToRight() ) {
 			// left-to-right
-			iconRect.x = viewRect.x;
-			textRect.x = iconRect.x + iconRect.width
-				+ (iconRect.width > 0 ? scale( menuItem.getIconTextGap() ) : 0);
 			arrowRect.x = viewRect.x + viewRect.width - arrowRect.width;
-			if( accelText != null )
-				accelRect.x = arrowRect.x - accelRect.width;
+			accelRect.x = arrowRect.x - accelRect.width;
 		} else {
 			// right-to-left
-			iconRect.x = viewRect.x + viewRect.width - iconRect.width;
-			textRect.x = iconRect.x - textRect.width
-				- (iconRect.width > 0 ? scale( menuItem.getIconTextGap() ) : 0);
 			arrowRect.x = viewRect.x;
-			if( accelText != null )
-				accelRect.x = arrowRect.x + arrowRect.width;
+			accelRect.x = arrowRect.x + arrowRect.width;
 		}
+
+		// width of accelerator, arrow and gap
+		int accelArrowWidth = accelRect.width + arrowRect.width;
+		if( accelText != null )
+			accelArrowWidth += scale( textAcceleratorGap );
+		else if( !isTopLevelMenu && arrowIcon != null )
+			accelArrowWidth += scale( textArrowGap );
+
+		// label rectangle is view rectangle subtracted by accelerator, arrow and gap
+		Rectangle labelRect = new Rectangle( viewRect );
+		labelRect.width -= accelArrowWidth;
+		if( !menuItem.getComponentOrientation().isLeftToRight() )
+			labelRect.x += accelArrowWidth;
+
+		// layout icon and text
+		SwingUtilities.layoutCompoundLabel( menuItem,
+			menuItem.getFontMetrics( menuItem.getFont() ), menuItem.getText(), getIconForLayout(),
+			menuItem.getVerticalAlignment(), menuItem.getHorizontalAlignment(),
+			menuItem.getVerticalTextPosition(), menuItem.getHorizontalTextPosition(),
+			labelRect, iconRect, textRect, scale( menuItem.getIconTextGap() ) );
+	}
+
+	private static int centerOffset( int wh1, int wh2 ) {
+		return (wh1 != wh2) ? Math.round( (wh1 - wh2) / 2f ) : 0;
 	}
 
 	protected void paintMenuItem( Graphics g, Color selectionBackground, Color selectionForeground,
@@ -206,13 +214,11 @@ public class FlatMenuItemRenderer
 		g.setColor( Color.orange ); g.drawRect( arrowRect.x, arrowRect.y, arrowRect.width - 1, arrowRect.height - 1 );
 debug*/
 
-		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
-
 		paintBackground( g, selectionBackground );
 		paintIcon( g, iconRect, getIconForPainting() );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
-		if( !isTopLevelMenu )
+		if( !isTopLevelMenu( menuItem ) )
 			paintArrowIcon( g, arrowRect, arrowIcon );
 	}
 
@@ -256,9 +262,9 @@ debug*/
 		if( icon == null )
 			return;
 
-		// center
-		int x = iconRect.x + ((iconRect.width - icon.getIconWidth()) / 2);
-		int y = iconRect.y + ((iconRect.height - icon.getIconHeight()) / 2);
+		// center because the real icon may be smaller than dimension in iconRect
+		int x = iconRect.x + centerOffset( iconRect.width, icon.getIconWidth() );
+		int y = iconRect.y + centerOffset( iconRect.height, icon.getIconHeight() );
 
 		// paint
 		icon.paintIcon( menuItem, g, x, y );
@@ -315,20 +321,13 @@ debug*/
 		return icon;
 	}
 
-	private Dimension getIconSize() {
+	private Icon getIconForLayout() {
 		if( isTopLevelMenu( menuItem ) ) {
 			Icon icon = menuItem.getIcon();
-			return (icon != null)
-				? new Dimension( icon.getIconWidth(), icon.getIconHeight() )
-				: new Dimension();
+			return (icon != null) ? new MinSizeIcon( icon ) : null;
 		}
 
-		Icon icon = (checkIcon != null) ? checkIcon : menuItem.getIcon();
-		int iconWidth = (icon != null) ? icon.getIconWidth() : 0;
-		int iconHeight = (icon != null) ? icon.getIconHeight() : 0;
-		return new Dimension(
-			Math.max( iconWidth, scale( minimumIconSize.width ) ),
-			Math.max( iconHeight, scale( minimumIconSize.height ) ) );
+		return new MinSizeIcon( (checkIcon != null) ? checkIcon : menuItem.getIcon() );
 	}
 
 	private KeyStroke cachedAccelerator;
@@ -357,5 +356,33 @@ debug*/
 		cachedAcceleratorText = buf.toString();
 
 		return cachedAcceleratorText;
+	}
+
+	//---- class MinSizeIcon --------------------------------------------------
+
+	private class MinSizeIcon
+		implements Icon
+	{
+		private final Icon delegate;
+
+		MinSizeIcon( Icon delegate ) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public int getIconWidth() {
+			int iconWidth = (delegate != null) ? delegate.getIconWidth() : 0;
+			return Math.max( iconWidth, scale( minimumIconSize.width ) );
+		}
+
+		@Override
+		public int getIconHeight() {
+			int iconHeight = (delegate != null) ? delegate.getIconHeight() : 0;
+			return Math.max( iconHeight, scale( minimumIconSize.height ) );
+		}
+
+		@Override
+		public void paintIcon( Component c, Graphics g, int x, int y ) {
+		}
 	}
 }
