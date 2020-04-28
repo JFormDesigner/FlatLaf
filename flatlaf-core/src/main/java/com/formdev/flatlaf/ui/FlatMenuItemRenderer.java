@@ -188,7 +188,8 @@ public class FlatMenuItemRenderer
 	}
 
 	protected void paintMenuItem( Graphics g, Color selectionBackground, Color selectionForeground,
-		Color disabledForeground, Color acceleratorForeground, Color acceleratorSelectionForeground )
+		Color disabledForeground, Color checkBackground,
+		Color acceleratorForeground, Color acceleratorSelectionForeground )
 	{
 		Rectangle viewRect = new Rectangle( menuItem.getWidth(), menuItem.getHeight() );
 
@@ -215,7 +216,7 @@ public class FlatMenuItemRenderer
 debug*/
 
 		paintBackground( g, selectionBackground );
-		paintIcon( g, iconRect, getIconForPainting() );
+		paintIcon( g, iconRect, getIconForPainting(), checkBackground );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
 		if( !isTopLevelMenu( menuItem ) )
@@ -230,7 +231,16 @@ debug*/
 		}
 	}
 
-	protected void paintIcon( Graphics g, Rectangle iconRect, Icon icon ) {
+	protected void paintIcon( Graphics g, Rectangle iconRect, Icon icon, Color checkBackground ) {
+		// if checkbox/radiobutton menu item is selected and also has a custom icon,
+		// then use filled icon background to indicate selection (instead of using checkIcon)
+		if( menuItem.isSelected() && checkIcon != null && icon != checkIcon ) {
+			int outset = scale( Math.max( menuItem.getIconTextGap() / 2, 2 ) );
+			g.setColor( checkBackground );
+			g.fillRect( iconRect.x - outset, iconRect.y - outset,
+				iconRect.width + (outset * 2), iconRect.height + (outset * 2) );
+		}
+
 		paintIcon( g, menuItem, icon, iconRect );
 	}
 
@@ -302,10 +312,11 @@ debug*/
 	}
 
 	private Icon getIconForPainting() {
-		if( checkIcon != null && !isTopLevelMenu( menuItem ) )
+		Icon icon = menuItem.getIcon();
+
+		if( icon == null && checkIcon != null && !isTopLevelMenu( menuItem ) )
 			return checkIcon;
 
-		Icon icon = menuItem.getIcon();
 		if( icon == null )
 			return null;
 
@@ -322,12 +333,12 @@ debug*/
 	}
 
 	private Icon getIconForLayout() {
-		if( isTopLevelMenu( menuItem ) ) {
-			Icon icon = menuItem.getIcon();
-			return (icon != null) ? new MinSizeIcon( icon ) : null;
-		}
+		Icon icon = menuItem.getIcon();
 
-		return new MinSizeIcon( (checkIcon != null) ? checkIcon : menuItem.getIcon() );
+		if( isTopLevelMenu( menuItem ) )
+			return (icon != null) ? new MinSizeIcon( icon ) : null;
+
+		return new MinSizeIcon( (icon != null) ? icon : checkIcon );
 	}
 
 	private KeyStroke cachedAccelerator;

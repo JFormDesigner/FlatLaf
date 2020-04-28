@@ -16,10 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
 
@@ -28,36 +30,41 @@ import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
  *
  * <!-- BasicCheckBoxMenuItemUI -->
  *
- * @uiDefault CheckBoxMenuItem.font								Font
- * @uiDefault CheckBoxMenuItem.background						Color
- * @uiDefault CheckBoxMenuItem.foreground						Color
- * @uiDefault CheckBoxMenuItem.disabledForeground				Color
- * @uiDefault CheckBoxMenuItem.selectionBackground				Color
- * @uiDefault CheckBoxMenuItem.selectionForeground				Color
- * @uiDefault CheckBoxMenuItem.acceleratorForeground			Color
- * @uiDefault CheckBoxMenuItem.acceleratorSelectionForeground	Color
- * @uiDefault MenuItem.acceleratorFont							Font		defaults to MenuItem.font
- * @uiDefault MenuItem.acceleratorDelimiter						String
- * @uiDefault CheckBoxMenuItem.border							Border
- * @uiDefault CheckBoxMenuItem.borderPainted					boolean
- * @uiDefault CheckBoxMenuItem.margin							Insets
- * @uiDefault CheckBoxMenuItem.arrowIcon						Icon
- * @uiDefault CheckBoxMenuItem.checkIcon						Icon
- * @uiDefault CheckBoxMenuItem.opaque							boolean
- * @uiDefault CheckBoxMenuItem.evenHeight						boolean
+ * @uiDefault CheckBoxMenuItem.font									Font
+ * @uiDefault CheckBoxMenuItem.background							Color
+ * @uiDefault CheckBoxMenuItem.foreground							Color
+ * @uiDefault CheckBoxMenuItem.disabledForeground					Color
+ * @uiDefault CheckBoxMenuItem.selectionBackground					Color
+ * @uiDefault CheckBoxMenuItem.selectionForeground					Color
+ * @uiDefault CheckBoxMenuItem.acceleratorForeground				Color
+ * @uiDefault CheckBoxMenuItem.acceleratorSelectionForeground		Color
+ * @uiDefault MenuItem.acceleratorFont								Font		defaults to MenuItem.font
+ * @uiDefault MenuItem.acceleratorDelimiter							String
+ * @uiDefault CheckBoxMenuItem.border								Border
+ * @uiDefault CheckBoxMenuItem.borderPainted						boolean
+ * @uiDefault CheckBoxMenuItem.margin								Insets
+ * @uiDefault CheckBoxMenuItem.arrowIcon							Icon
+ * @uiDefault CheckBoxMenuItem.checkIcon							Icon
+ * @uiDefault CheckBoxMenuItem.opaque								boolean
+ * @uiDefault CheckBoxMenuItem.evenHeight							boolean
+ *
+ * <!-- FlatCheckBoxMenuItemUI -->
+ *
+ * @uiDefault CheckBoxMenuItem.checkBackground						Color
  *
  * <!-- FlatMenuItemRenderer -->
  *
- * @uiDefault MenuItem.minimumIconSize							Dimension
- * @uiDefault MenuItem.textAcceleratorGap						int
- * @uiDefault MenuItem.acceleratorArrowGap						int
- * @uiDefault MenuItem.textArrowGap								int
+ * @uiDefault MenuItem.minimumIconSize								Dimension
+ * @uiDefault MenuItem.textAcceleratorGap							int
+ * @uiDefault MenuItem.acceleratorArrowGap							int
+ * @uiDefault MenuItem.textArrowGap									int
  *
  * @author Karl Tauber
  */
 public class FlatCheckBoxMenuItemUI
 	extends BasicCheckBoxMenuItemUI
 {
+	private Color checkBackground;
 	private FlatMenuItemRenderer renderer;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -68,6 +75,7 @@ public class FlatCheckBoxMenuItemUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		checkBackground = UIManager.getColor( "CheckBoxMenuItem.checkBackground" );
 		renderer = createRenderer();
 	}
 
@@ -75,6 +83,7 @@ public class FlatCheckBoxMenuItemUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		checkBackground = null;
 		renderer = null;
 	}
 
@@ -90,6 +99,6 @@ public class FlatCheckBoxMenuItemUI
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
-			acceleratorForeground, acceleratorSelectionForeground );
+			checkBackground, acceleratorForeground, acceleratorSelectionForeground );
 	}
 }

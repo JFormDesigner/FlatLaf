@@ -36,37 +36,37 @@ import javax.swing.plaf.basic.BasicMenuUI;
  *
  * <!-- BasicMenuUI -->
  *
- * @uiDefault Menu.font								Font
- * @uiDefault Menu.background						Color
- * @uiDefault Menu.foreground						Color
- * @uiDefault Menu.disabledForeground				Color
- * @uiDefault Menu.selectionBackground				Color
- * @uiDefault Menu.selectionForeground				Color
- * @uiDefault Menu.acceleratorForeground			Color
- * @uiDefault Menu.acceleratorSelectionForeground	Color
- * @uiDefault MenuItem.acceleratorFont				Font		defaults to MenuItem.font
- * @uiDefault MenuItem.acceleratorDelimiter			String
- * @uiDefault Menu.border							Border
- * @uiDefault Menu.borderPainted					boolean
- * @uiDefault Menu.margin							Insets
- * @uiDefault Menu.arrowIcon						Icon
- * @uiDefault Menu.checkIcon						Icon
- * @uiDefault Menu.opaque							boolean
- * @uiDefault Menu.evenHeight						boolean
- * @uiDefault Menu.crossMenuMnemonic				boolean	default is false
- * @uiDefault Menu.useMenuBarBackgroundForTopLevel	boolean	default is false
- * @uiDefault MenuBar.background					Color	used if Menu.useMenuBarBackgroundForTopLevel is true
+ * @uiDefault Menu.font												Font
+ * @uiDefault Menu.background										Color
+ * @uiDefault Menu.foreground										Color
+ * @uiDefault Menu.disabledForeground								Color
+ * @uiDefault Menu.selectionBackground								Color
+ * @uiDefault Menu.selectionForeground								Color
+ * @uiDefault Menu.acceleratorForeground							Color
+ * @uiDefault Menu.acceleratorSelectionForeground					Color
+ * @uiDefault MenuItem.acceleratorFont								Font		defaults to MenuItem.font
+ * @uiDefault MenuItem.acceleratorDelimiter							String
+ * @uiDefault Menu.border											Border
+ * @uiDefault Menu.borderPainted									boolean
+ * @uiDefault Menu.margin											Insets
+ * @uiDefault Menu.arrowIcon										Icon
+ * @uiDefault Menu.checkIcon										Icon
+ * @uiDefault Menu.opaque											boolean
+ * @uiDefault Menu.evenHeight										boolean
+ * @uiDefault Menu.crossMenuMnemonic								boolean	default is false
+ * @uiDefault Menu.useMenuBarBackgroundForTopLevel					boolean	default is false
+ * @uiDefault MenuBar.background									Color	used if Menu.useMenuBarBackgroundForTopLevel is true
  *
  * <!-- FlatMenuUI -->
  *
- * @uiDefault MenuBar.hoverBackground				Color
+ * @uiDefault MenuBar.hoverBackground								Color
  *
  * <!-- FlatMenuItemRenderer -->
  *
- * @uiDefault MenuItem.minimumIconSize				Dimension
- * @uiDefault MenuItem.textAcceleratorGap			int
- * @uiDefault MenuItem.acceleratorArrowGap			int
- * @uiDefault MenuItem.textArrowGap					int
+ * @uiDefault MenuItem.minimumIconSize								Dimension
+ * @uiDefault MenuItem.textAcceleratorGap							int
+ * @uiDefault MenuItem.acceleratorArrowGap							int
+ * @uiDefault MenuItem.textArrowGap									int
  *
  * @author Karl Tauber
  */
@@ -135,7 +135,7 @@ public class FlatMenuUI
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
-			acceleratorForeground, acceleratorSelectionForeground );
+			null, acceleratorForeground, acceleratorSelectionForeground );
 	}
 
 	//---- class FlatMenuRenderer ---------------------------------------------

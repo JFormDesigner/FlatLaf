@@ -16,10 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicRadioButtonMenuItemUI;
 
@@ -46,6 +48,10 @@ import javax.swing.plaf.basic.BasicRadioButtonMenuItemUI;
  * @uiDefault RadioButtonMenuItem.opaque							boolean
  * @uiDefault RadioButtonMenuItem.evenHeight						boolean
  *
+ * <!-- FlatRadioButtonMenuItemUI -->
+ *
+ * @uiDefault RadioButtonMenuItem.checkBackground					Color
+ *
  * <!-- FlatMenuItemRenderer -->
  *
  * @uiDefault MenuItem.minimumIconSize								Dimension
@@ -58,6 +64,7 @@ import javax.swing.plaf.basic.BasicRadioButtonMenuItemUI;
 public class FlatRadioButtonMenuItemUI
 	extends BasicRadioButtonMenuItemUI
 {
+	private Color checkBackground;
 	private FlatMenuItemRenderer renderer;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -68,6 +75,7 @@ public class FlatRadioButtonMenuItemUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		checkBackground = UIManager.getColor( "RadioButtonMenuItem.checkBackground" );
 		renderer = createRenderer();
 	}
 
@@ -75,6 +83,7 @@ public class FlatRadioButtonMenuItemUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		checkBackground = null;
 		renderer = null;
 	}
 
@@ -90,6 +99,6 @@ public class FlatRadioButtonMenuItemUI
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
-			acceleratorForeground, acceleratorSelectionForeground );
+			checkBackground, acceleratorForeground, acceleratorSelectionForeground );
 	}
 }

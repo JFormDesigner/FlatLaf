@@ -28,30 +28,30 @@ import javax.swing.plaf.basic.BasicMenuItemUI;
  *
  * <!-- BasicMenuItemUI -->
  *
- * @uiDefault MenuItem.font								Font
- * @uiDefault MenuItem.background						Color
- * @uiDefault MenuItem.foreground						Color
- * @uiDefault MenuItem.disabledForeground				Color
- * @uiDefault MenuItem.selectionBackground				Color
- * @uiDefault MenuItem.selectionForeground				Color
- * @uiDefault MenuItem.acceleratorForeground			Color
- * @uiDefault MenuItem.acceleratorSelectionForeground	Color
- * @uiDefault MenuItem.acceleratorFont					Font		defaults to MenuItem.font
- * @uiDefault MenuItem.acceleratorDelimiter				String
- * @uiDefault MenuItem.border							Border
- * @uiDefault MenuItem.borderPainted					boolean
- * @uiDefault MenuItem.margin							Insets
- * @uiDefault MenuItem.arrowIcon						Icon
- * @uiDefault MenuItem.checkIcon						Icon
- * @uiDefault MenuItem.opaque							boolean
- * @uiDefault MenuItem.evenHeight						boolean
+ * @uiDefault MenuItem.font											Font
+ * @uiDefault MenuItem.background									Color
+ * @uiDefault MenuItem.foreground									Color
+ * @uiDefault MenuItem.disabledForeground							Color
+ * @uiDefault MenuItem.selectionBackground							Color
+ * @uiDefault MenuItem.selectionForeground							Color
+ * @uiDefault MenuItem.acceleratorForeground						Color
+ * @uiDefault MenuItem.acceleratorSelectionForeground				Color
+ * @uiDefault MenuItem.acceleratorFont								Font		defaults to MenuItem.font
+ * @uiDefault MenuItem.acceleratorDelimiter							String
+ * @uiDefault MenuItem.border										Border
+ * @uiDefault MenuItem.borderPainted								boolean
+ * @uiDefault MenuItem.margin										Insets
+ * @uiDefault MenuItem.arrowIcon									Icon
+ * @uiDefault MenuItem.checkIcon									Icon
+ * @uiDefault MenuItem.opaque										boolean
+ * @uiDefault MenuItem.evenHeight									boolean
  *
  * <!-- FlatMenuItemRenderer -->
  *
- * @uiDefault MenuItem.minimumIconSize					Dimension
- * @uiDefault MenuItem.textAcceleratorGap				int
- * @uiDefault MenuItem.acceleratorArrowGap				int
- * @uiDefault MenuItem.textArrowGap						int
+ * @uiDefault MenuItem.minimumIconSize								Dimension
+ * @uiDefault MenuItem.textAcceleratorGap							int
+ * @uiDefault MenuItem.acceleratorArrowGap							int
+ * @uiDefault MenuItem.textArrowGap									int
  *
  * @author Karl Tauber
  */
@@ -90,6 +90,6 @@ public class FlatMenuItemUI
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
-			acceleratorForeground, acceleratorSelectionForeground );
+			null, acceleratorForeground, acceleratorSelectionForeground );
 	}
 }

@@ -128,9 +128,11 @@ public class FlatMenusTest
 		JMenuItem menuItem36 = new JMenuItem();
 		JMenuItem menuItem37 = new JMenuItem();
 		JCheckBoxMenuItem checkBoxMenuItem6 = new JCheckBoxMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem7 = new JCheckBoxMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem5 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem6 = new JRadioButtonMenuItem();
-		JRadioButtonMenuItem radioButtonMenuItem7 = new JRadioButtonMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem8 = new JRadioButtonMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem9 = new JRadioButtonMenuItem();
 		JMenu menu6 = new JMenu();
 		JMenuItem menuItem5 = new JMenuItem();
 		JMenuItem menuItem6 = new JMenuItem();
@@ -262,6 +264,13 @@ public class FlatMenusTest
 				checkBoxMenuItem6.setSelected(true);
 				menu5.add(checkBoxMenuItem6);
 
+				//---- checkBoxMenuItem7 ----
+				checkBoxMenuItem7.setText("check with icon");
+				checkBoxMenuItem7.setSelected(true);
+				checkBoxMenuItem7.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
+				menu5.add(checkBoxMenuItem7);
+				menu5.addSeparator();
+
 				//---- radioButtonMenuItem5 ----
 				radioButtonMenuItem5.setText("radio 1");
 				radioButtonMenuItem5.setSelected(true);
@@ -270,10 +279,18 @@ public class FlatMenusTest
 				//---- radioButtonMenuItem6 ----
 				radioButtonMenuItem6.setText("radio 2");
 				menu5.add(radioButtonMenuItem6);
+				menu5.addSeparator();
 
-				//---- radioButtonMenuItem7 ----
-				radioButtonMenuItem7.setText("radio 3");
-				menu5.add(radioButtonMenuItem7);
+				//---- radioButtonMenuItem8 ----
+				radioButtonMenuItem8.setText("radio with icon 1");
+				radioButtonMenuItem8.setSelected(true);
+				radioButtonMenuItem8.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
+				menu5.add(radioButtonMenuItem8);
+
+				//---- radioButtonMenuItem9 ----
+				radioButtonMenuItem9.setText("radio with icon 2");
+				radioButtonMenuItem9.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png")));
+				menu5.add(radioButtonMenuItem9);
 			}
 			menuBar1.add(menu5);
 
@@ -678,7 +695,11 @@ public class FlatMenusTest
 		ButtonGroup buttonGroup1 = new ButtonGroup();
 		buttonGroup1.add(radioButtonMenuItem5);
 		buttonGroup1.add(radioButtonMenuItem6);
-		buttonGroup1.add(radioButtonMenuItem7);
+
+		//---- buttonGroup2 ----
+		ButtonGroup buttonGroup2 = new ButtonGroup();
+		buttonGroup2.add(radioButtonMenuItem8);
+		buttonGroup2.add(radioButtonMenuItem9);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
