@@ -17,23 +17,17 @@
 package com.formdev.flatlaf;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.KeyEventPostProcessor;
-import java.awt.KeyboardFocusManager;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.KeyEvent;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +38,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractButton;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JRootPane;
-import javax.swing.JTabbedPane;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
@@ -86,9 +76,7 @@ public abstract class FlatLaf
 	private static boolean aquaLoaded;
 	private static boolean updateUIPending;
 
-	private KeyEventPostProcessor mnemonicListener;
-	private static boolean showMnemonics;
-	private static WeakReference<Window> lastShowMnemonicWindow;
+	private MnemonicHandler mnemonicHandler;
 
 	private Consumer<UIDefaults> postInitialization;
 
@@ -158,12 +146,9 @@ public abstract class FlatLaf
 
 		super.initialize();
 
-		// add mnemonic listener
-		mnemonicListener = e -> {
-			checkShowMnemonics( e );
-			return false;
-		};
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor( mnemonicListener );
+		// install mnemonic handler
+		mnemonicHandler = new MnemonicHandler();
+		mnemonicHandler.install();
 
 		// listen to desktop property changes to update UI if system font or scaling changes
 		if( SystemInfo.IS_WINDOWS ) {
@@ -217,10 +202,10 @@ public abstract class FlatLaf
 			desktopPropertyListener = null;
 		}
 
-		// remove mnemonic listener
-		if( mnemonicListener != null ) {
-			KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor( mnemonicListener );
-			mnemonicListener = null;
+		// uninstall mnemonic handler
+		if( mnemonicHandler != null ) {
+			mnemonicHandler.uninstall();
+			mnemonicHandler = null;
 		}
 
 		// restore default link color
@@ -535,86 +520,7 @@ public abstract class FlatLaf
 	}
 
 	public static boolean isShowMnemonics() {
-		return showMnemonics || !UIManager.getBoolean( "Component.hideMnemonics" );
-	}
-
-	private static void checkShowMnemonics( KeyEvent e ) {
-		int keyCode = e.getKeyCode();
-		if( SystemInfo.IS_MAC ) {
-			// Ctrl+Alt keys must be pressed on Mac
-			if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown() && e.isAltDown(), e.getComponent() );
-		} else {
-			// Alt key must be pressed on Windows and Linux
-			if( keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED, e.getComponent() );
-		}
-	}
-
-	private static void showMnemonics( boolean show, Component c ) {
-		if( show == showMnemonics )
-			return;
-
-		showMnemonics = show;
-
-		// check whether it is necessary to repaint
-		if( !UIManager.getBoolean( "Component.hideMnemonics" ) )
-			return;
-
-		if( show ) {
-			// get root pane
-			JRootPane rootPane = SwingUtilities.getRootPane( c );
-			if( rootPane == null )
-				return;
-
-			// get window
-			Window window = SwingUtilities.getWindowAncestor( rootPane );
-			if( window == null )
-				return;
-
-			// repaint components with mnemonics in focused window
-			repaintMnemonics( window );
-
-			lastShowMnemonicWindow = new WeakReference<>( window );
-		} else if( lastShowMnemonicWindow != null ) {
-			Window window = lastShowMnemonicWindow.get();
-			if( window != null )
-				repaintMnemonics( window );
-
-			lastShowMnemonicWindow = null;
-		}
-	}
-
-	private static void repaintMnemonics( Container container ) {
-		for( Component c : container.getComponents() ) {
-			if( !c.isVisible() )
-				continue;
-
-			if( hasMnemonic( c ) )
-				c.repaint();
-
-			if( c instanceof Container )
-				repaintMnemonics( (Container) c );
-		}
-	}
-
-	private static boolean hasMnemonic( Component c ) {
-		if( c instanceof JLabel && ((JLabel)c).getDisplayedMnemonicIndex() >= 0 )
-			return true;
-
-		if( c instanceof AbstractButton && ((AbstractButton)c).getDisplayedMnemonicIndex() >= 0 )
-			return true;
-
-		if( c instanceof JTabbedPane ) {
-			JTabbedPane tabPane = (JTabbedPane) c;
-			int tabCount = tabPane.getTabCount();
-			for( int i = 0; i < tabCount; i++ ) {
-				if( tabPane.getDisplayedMnemonicIndexAt( i ) >= 0 )
-					return true;
-			}
-		}
-
-		return false;
+		return MnemonicHandler.isShowMnemonics();
 	}
 
 	//---- class ActiveFont ---------------------------------------------------
