@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.event.*;
 import java.util.function.Supplier;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -59,6 +60,11 @@ public class FlatMenusTest
 			if( c instanceof Container )
 				arm( (Container) c, armed );
 		}
+	}
+
+	private void underlineChanged() {
+		UIManager.put( "MenuItem.selectionType", underlineCheckBox.isSelected() ? "underline" : null );
+		FlatLaf.updateUI();
 	}
 
 	private void showPopupMenuButtonActionPerformed(ActionEvent e) {
@@ -193,6 +199,7 @@ public class FlatMenusTest
 		JLabel popupMenuLabel = new JLabel();
 		JButton showPopupMenuButton = new JButton();
 		armedCheckBox = new JCheckBox();
+		underlineCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -206,6 +213,7 @@ public class FlatMenusTest
 			// rows
 			"[]" +
 			"[top]" +
+			"[]" +
 			"[]" +
 			"[]"));
 
@@ -691,6 +699,11 @@ public class FlatMenusTest
 		armedCheckBox.addActionListener(e -> armedChanged());
 		add(armedCheckBox, "cell 0 3");
 
+		//---- underlineCheckBox ----
+		underlineCheckBox.setText("underline menu selection");
+		underlineCheckBox.addActionListener(e -> underlineChanged());
+		add(underlineCheckBox, "cell 0 4 2 1");
+
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
 		buttonGroup1.add(radioButtonMenuItem5);
@@ -708,6 +721,7 @@ public class FlatMenusTest
 	private JCheckBox largerCheckBox;
 	private JCheckBox accelCheckBox;
 	private JCheckBox armedCheckBox;
+	private JCheckBox underlineCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class PopupMenu ----------------------------------------------------

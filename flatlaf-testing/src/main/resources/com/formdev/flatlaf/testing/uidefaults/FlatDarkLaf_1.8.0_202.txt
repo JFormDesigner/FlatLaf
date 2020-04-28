@@ -526,6 +526,9 @@ MenuItem.selectionBackground   #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.textAcceleratorGap    24
 MenuItem.textArrowGap          8
+MenuItem.underlineSelectionBackground #484c4f    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.underlineSelectionColor #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.underlineSelectionHeight 3
 
 
 #---- MenuItemCheckBox ----

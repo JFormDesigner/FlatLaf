@@ -55,6 +55,11 @@ public class FlatMenuItemRenderer
 	protected final int textAcceleratorGap;
 	protected final int textArrowGap;
 
+	protected final String selectionType = UIManager.getString( "MenuItem.selectionType" );
+	protected final Color underlineSelectionBackground = UIManager.getColor( "MenuItem.underlineSelectionBackground" );
+	protected final Color underlineSelectionColor = UIManager.getColor( "MenuItem.underlineSelectionColor" );
+	protected final int underlineSelectionHeight = UIManager.getInt( "MenuItem.underlineSelectionHeight" );
+
 	protected FlatMenuItemRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
 		Font acceleratorFont, String acceleratorDelimiter )
 	{
@@ -226,8 +231,30 @@ debug*/
 	protected void paintBackground( Graphics g, Color selectionBackground ) {
 		boolean armedOrSelected = isArmedOrSelected( menuItem );
 		if( menuItem.isOpaque() || armedOrSelected ) {
-			g.setColor( armedOrSelected ? selectionBackground : menuItem.getBackground() );
-			g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
+			int width = menuItem.getWidth();
+			int height = menuItem.getHeight();
+
+			// paint background
+			g.setColor( armedOrSelected
+				? (isUnderlineSelection() ? underlineSelectionBackground : selectionBackground)
+				: menuItem.getBackground() );
+			g.fillRect( 0, 0, width, height );
+
+			// paint underline
+			if( armedOrSelected && isUnderlineSelection() ) {
+				int underlineHeight = scale( underlineSelectionHeight );
+				g.setColor( underlineSelectionColor );
+				if( isTopLevelMenu( menuItem ) ) {
+					// paint underline at bottom
+					g.fillRect( 0, height - underlineHeight, width, underlineHeight );
+				} else if( menuItem.getComponentOrientation().isLeftToRight() ) {
+					// paint underline at left side
+					g.fillRect( 0, 0, underlineHeight, height );
+				} else {
+					// paint underline at right side
+					g.fillRect( width - underlineHeight, 0, underlineHeight, height );
+				}
+			}
 		}
 	}
 
@@ -252,16 +279,17 @@ debug*/
 		}
 
 		int mnemonicIndex = FlatLaf.isShowMnemonics() ? menuItem.getDisplayedMnemonicIndex() : -1;
+		Color foreground = menuItem.getForeground();
 
 		paintText( g, menuItem, textRect, text, mnemonicIndex, menuItem.getFont(),
-			menuItem.getForeground(), selectionForeground, disabledForeground );
+			foreground, isUnderlineSelection() ? foreground : selectionForeground, disabledForeground );
 	}
 
 	protected void paintAccelerator( Graphics g, Rectangle accelRect, String accelText,
 		Color foreground, Color selectionForeground, Color disabledForeground )
 	{
 		paintText( g, menuItem, accelRect, accelText, -1, acceleratorFont,
-			foreground, selectionForeground, disabledForeground );
+			foreground, isUnderlineSelection() ? foreground : selectionForeground, disabledForeground );
 	}
 
 	protected void paintArrowIcon( Graphics g, Rectangle arrowRect, Icon arrowIcon ) {
@@ -309,6 +337,10 @@ debug*/
 
 	protected static boolean isTopLevelMenu( JMenuItem menuItem ) {
 		return menuItem instanceof JMenu && ((JMenu)menuItem).isTopLevelMenu();
+	}
+
+	private boolean isUnderlineSelection() {
+		return "underline".equals( selectionType );
 	}
 
 	private Icon getIconForPainting() {
