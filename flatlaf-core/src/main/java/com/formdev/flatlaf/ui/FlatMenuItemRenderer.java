@@ -23,10 +23,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.text.AttributedCharacterIterator;
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -36,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 
 /**
  * Renderer for menu items.
@@ -273,7 +277,7 @@ debug*/
 	protected void paintText( Graphics g, Rectangle textRect, String text, Color selectionForeground, Color disabledForeground ) {
 		View htmlView = (View) menuItem.getClientProperty( BasicHTML.propertyKey );
 		if( htmlView != null ) {
-			htmlView.paint( g, textRect );
+			paintHTMLText( g, menuItem, textRect, htmlView, isUnderlineSelection() ? null : selectionForeground );
 			return;
 		}
 
@@ -328,6 +332,15 @@ debug*/
 			textRect.x, textRect.y + fm.getAscent() );
 
 		g.setFont( oldFont );
+	}
+
+	protected static void paintHTMLText( Graphics g, JMenuItem menuItem,
+		Rectangle textRect, View htmlView, Color selectionForeground )
+	{
+		if( isArmedOrSelected( menuItem ) && selectionForeground != null )
+			g = new GraphicsProxyWithTextColor( (Graphics2D) g, selectionForeground );
+
+		htmlView.paint( g, textRect );
 	}
 
 	protected static boolean isArmedOrSelected( JMenuItem menuItem ) {
@@ -425,6 +438,59 @@ debug*/
 
 		@Override
 		public void paintIcon( Component c, Graphics g, int x, int y ) {
+		}
+	}
+
+	//---- class GraphicsProxyWithTextColor -----------------------------------
+
+	private static class GraphicsProxyWithTextColor
+		extends Graphics2DProxy
+	{
+		private final Color textColor;
+
+		GraphicsProxyWithTextColor( Graphics2D delegate, Color textColor ) {
+			super( delegate );
+			this.textColor = textColor;
+		}
+
+		@Override
+		public void drawString( String str, int x, int y ) {
+			Paint oldPaint = getPaint();
+			setPaint( textColor );
+			super.drawString( str, x, y );
+			setPaint( oldPaint );
+		}
+
+		@Override
+		public void drawString( String str, float x, float y ) {
+			Paint oldPaint = getPaint();
+			setPaint( textColor );
+			super.drawString( str, x, y );
+			setPaint( oldPaint );
+		}
+
+		@Override
+		public void drawString( AttributedCharacterIterator iterator, int x, int y ) {
+			Paint oldPaint = getPaint();
+			setPaint( textColor );
+			super.drawString( iterator, x, y );
+			setPaint( oldPaint );
+		}
+
+		@Override
+		public void drawString( AttributedCharacterIterator iterator, float x, float y ) {
+			Paint oldPaint = getPaint();
+			setPaint( textColor );
+			super.drawString( iterator, x, y );
+			setPaint( oldPaint );
+		}
+
+		@Override
+		public void drawChars( char[] data, int offset, int length, int x, int y ) {
+			Paint oldPaint = getPaint();
+			setPaint( textColor );
+			super.drawChars( data, offset, length, x, y );
+			setPaint( oldPaint );
 		}
 	}
 }

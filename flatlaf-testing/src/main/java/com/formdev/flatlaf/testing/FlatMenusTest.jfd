@@ -47,6 +47,10 @@ new FormModel {
 						"text": "longer text longer text longer"
 						"mnemonic": 69
 					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem38"
+						"text": "<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>"
+					} )
 					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 						name: "menu11"
 						"text": "sub menu"
@@ -354,7 +358,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
 					name: "radioButtonMenuItem1"
-					"text": "enabled"
+					"text": "<html>en<b color=\"red\">abl</b><i color=\"blue\">ed</i></html>"
 					"accelerator": #KeyStroke0
 					"mnemonic": 66
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

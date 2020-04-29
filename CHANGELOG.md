@@ -3,6 +3,7 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Menus: Fixed text color of selected menu items that use HTML. (issue #87)
 - Hide mnemonics if window is deactivated (e.g. <kbd>Alt+Tab</kbd> to another
   window). (issue #43)
 

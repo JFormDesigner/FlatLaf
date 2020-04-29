@@ -129,6 +129,7 @@ class DemoFrame
 		JMenuItem projectViewMenuItem = new JMenuItem();
 		JMenuItem structureViewMenuItem = new JMenuItem();
 		JMenuItem propertiesViewMenuItem = new JMenuItem();
+		JMenuItem menuItem1 = new JMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
@@ -314,6 +315,10 @@ class DemoFrame
 					menu1.add(propertiesViewMenuItem);
 				}
 				viewMenu.add(menu1);
+
+				//---- menuItem1 ----
+				menuItem1.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
+				viewMenu.add(menuItem1);
 				viewMenu.addSeparator();
 
 				//---- radioButtonMenuItem1 ----

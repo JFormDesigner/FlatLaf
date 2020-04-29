@@ -132,6 +132,7 @@ public class FlatMenusTest
 		JMenuItem menuItem7 = new JMenuItem();
 		JMenuItem menuItem34 = new JMenuItem();
 		JMenuItem menuItem8 = new JMenuItem();
+		JMenuItem menuItem38 = new JMenuItem();
 		JMenu menu11 = new JMenu();
 		JMenuItem menuItem36 = new JMenuItem();
 		JMenuItem menuItem37 = new JMenuItem();
@@ -253,6 +254,10 @@ public class FlatMenusTest
 				menuItem8.setText("longer text longer text longer");
 				menuItem8.setMnemonic('E');
 				menu5.add(menuItem8);
+
+				//---- menuItem38 ----
+				menuItem38.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
+				menu5.add(menuItem38);
 
 				//======== menu11 ========
 				{
@@ -546,7 +551,7 @@ public class FlatMenusTest
 			panel1.add(radioButtonMenuItemLabel, "cell 0 3");
 
 			//---- radioButtonMenuItem1 ----
-			radioButtonMenuItem1.setText("enabled");
+			radioButtonMenuItem1.setText("<html>en<b color=\"red\">abl</b><i color=\"blue\">ed</i></html>");
 			radioButtonMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			radioButtonMenuItem1.setMnemonic('B');
 			panel1.add(radioButtonMenuItem1, "cell 1 3");
