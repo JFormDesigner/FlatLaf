@@ -59,6 +59,11 @@ class DemoFrame
 		} );
 	}
 
+	private void underlineMenuSelection() {
+		UIManager.put( "MenuItem.selectionType", underlineMenuSelectionMenuItem.isSelected() ? "underline" : null );
+		FlatLaf.updateUI();
+	}
+
 	private void fontFamilyChanged( ActionEvent e ) {
 		String fontFamily = e.getActionCommand();
 
@@ -132,6 +137,8 @@ class DemoFrame
 		JMenuItem restoreFontMenuItem = new JMenuItem();
 		JMenuItem incrFontMenuItem = new JMenuItem();
 		JMenuItem decrFontMenuItem = new JMenuItem();
+		JMenu optionsMenu = new JMenu();
+		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		JMenu helpMenu = new JMenu();
 		JMenuItem aboutMenuItem = new JMenuItem();
 		JToolBar toolBar1 = new JToolBar();
@@ -355,6 +362,17 @@ class DemoFrame
 			}
 			menuBar1.add(fontMenu);
 
+			//======== optionsMenu ========
+			{
+				optionsMenu.setText("Options");
+
+				//---- underlineMenuSelectionMenuItem ----
+				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
+				underlineMenuSelectionMenuItem.addActionListener(e -> underlineMenuSelection());
+				optionsMenu.add(underlineMenuSelectionMenuItem);
+			}
+			menuBar1.add(optionsMenu);
+
 			//======== helpMenu ========
 			{
 				helpMenu.setText("Help");
@@ -481,6 +499,7 @@ class DemoFrame
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JMenu fontMenu;
+	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

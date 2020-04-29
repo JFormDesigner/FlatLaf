@@ -30,7 +30,8 @@ import javax.swing.UIManager;
  *
  * @uiDefault MenuItemCheckBox.icon.checkmarkColor				Color
  * @uiDefault MenuItemCheckBox.icon.disabledCheckmarkColor		Color
- * @uiDefault Menu.selectionForeground							Color
+ * @uiDefault MenuItem.selectionForeground						Color
+ * @uiDefault MenuItem.selectionType							String
  *
  * @author Karl Tauber
  */
@@ -39,7 +40,7 @@ public class FlatCheckBoxMenuItemIcon
 {
 	protected final Color checkmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.checkmarkColor" );
 	protected final Color disabledCheckmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.disabledCheckmarkColor" );
-	protected final Color selectionForeground = UIManager.getColor( "Menu.selectionForeground" );
+	protected final Color selectionForeground = UIManager.getColor( "MenuItem.selectionForeground" );
 
 	public FlatCheckBoxMenuItemIcon() {
 		super( 15, 15, null );
@@ -67,9 +68,14 @@ public class FlatCheckBoxMenuItemIcon
 	}
 
 	private Color getCheckmarkColor( Component c ) {
-		if( c instanceof JMenuItem && ((JMenuItem)c).isArmed() )
+		if( c instanceof JMenuItem && ((JMenuItem)c).isArmed() && !isUnderlineSelection() )
 			return selectionForeground;
 
 		return c.isEnabled() ? checkmarkColor : disabledCheckmarkColor;
+	}
+
+	private boolean isUnderlineSelection() {
+		// not storing value of "MenuItem.selectionType" in class to allow changing at runtime
+		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
 	}
 }

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.0.0.194" Java: "13.0.1" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[125][][][][]"
-			"$rowConstraints": "[][top][][]"
+			"$rowConstraints": "[][top][][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -24,15 +24,84 @@ new FormModel {
 					name: "menu5"
 					"text": "text"
 					"mnemonic": 84
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png" )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem35"
+						"text": "text"
+					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "menuItem7"
 						"text": "text"
 						"mnemonic": 88
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png" )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 74, 195, false )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem34"
+						"text": "longer text longer text"
+						"mnemonic": 69
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 115, 0, false )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "menuItem8"
-						"text": "text"
+						"text": "longer text longer text longer"
 						"mnemonic": 69
+					} )
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "menu11"
+						"text": "sub menu"
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem36"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem37"
+							"text": "text"
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator3"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "checkBoxMenuItem6"
+						"text": "check"
+						"selected": true
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "checkBoxMenuItem7"
+						"text": "check with icon"
+						"selected": true
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png" )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator5"
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem5"
+						"text": "radio 1"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"selected": true
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem6"
+						"text": "radio 2"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator4"
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem8"
+						"text": "radio with icon 1"
+						"selected": true
+						"$buttonGroup": new FormReference( "buttonGroup2" )
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png" )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem9"
+						"text": "radio with icon 2"
+						"$buttonGroup": new FormReference( "buttonGroup2" )
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png" )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
@@ -48,7 +117,186 @@ new FormModel {
 					} )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0 4 1,growx"
+				"value": "cell 1 0 2 1,growx"
+			} )
+			add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "menuBar2"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu8"
+					"text": "text position"
+					"icon": &SwingIcon0 new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste.png" )
+					"horizontalTextPosition": 0
+					"verticalTextPosition": 3
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem13"
+						"text": "vert top"
+						"icon": &SwingIcon1 new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x.png" )
+						"verticalTextPosition": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem14"
+						"text": "vert bottom"
+						"icon": #SwingIcon1
+						"verticalTextPosition": 3
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem27"
+						"text": "horz leading"
+						"icon": &SwingIcon2 new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x.png" )
+						"horizontalTextPosition": 10
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem15"
+						"text": "horz left"
+						"icon": #SwingIcon2
+						"horizontalTextPosition": 2
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem16"
+						"text": "horz right"
+						"icon": #SwingIcon2
+						"horizontalTextPosition": 4
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem28"
+						"text": "horz trailing"
+						"icon": #SwingIcon2
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem18"
+						"text": "horz center / vert top"
+						"icon": #SwingIcon2
+						"horizontalTextPosition": 0
+						"verticalTextPosition": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem17"
+						"text": "horz center / vert bottom"
+						"icon": #SwingIcon2
+						"horizontalTextPosition": 0
+						"verticalTextPosition": 3
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem19"
+						"text": "horz center / vert center"
+						"icon": #SwingIcon2
+						"horizontalTextPosition": 0
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem31"
+						"text": "1234567890123456789012345678901234567890"
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu9"
+					"text": "alignment"
+					"icon": #SwingIcon0
+					"horizontalTextPosition": 0
+					"verticalTextPosition": 1
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem20"
+						"text": "vert top"
+						"icon": #SwingIcon1
+						"verticalAlignment": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem21"
+						"text": "vert bottom"
+						"icon": #SwingIcon1
+						"verticalAlignment": 3
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem29"
+						"text": "horz leading"
+						"icon": #SwingIcon2
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem22"
+						"text": "horz left"
+						"icon": #SwingIcon2
+						"horizontalAlignment": 2
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem23"
+						"text": "horz right"
+						"icon": #SwingIcon2
+						"horizontalAlignment": 4
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem30"
+						"text": "horz trailing"
+						"icon": #SwingIcon2
+						"horizontalAlignment": 11
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem25"
+						"text": "horz center / vert top"
+						"icon": #SwingIcon2
+						"horizontalAlignment": 0
+						"verticalAlignment": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem24"
+						"text": "horz center / vert bottom"
+						"icon": #SwingIcon2
+						"horizontalAlignment": 0
+						"verticalAlignment": 3
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem26"
+						"text": "horz center / vert center"
+						"icon": #SwingIcon2
+						"horizontalAlignment": 0
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem32"
+						"text": "1234567890123456789012345678901234567890"
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu10"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste@2x.png" )
+					"horizontalTextPosition": 0
+					"verticalTextPosition": 1
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatMenusTest$LargerMenuItem" ) {
+						name: "menuItem33"
+						"icon": #SwingIcon1
+					} )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0 2 1,growx"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[]"
+				"$rowConstraints": "[]0[]"
+				"$layoutConstraints": "ltr,insets 0,hidemode 3"
+			} ) {
+				name: "panel5"
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "largerCheckBox"
+					"text": "larger"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "largerChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "accelCheckBox"
+					"text": "accel"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "accelChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0 2 1"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[125,left][fill]"
@@ -92,7 +340,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 					name: "checkBoxMenuItem1"
-					"text": "enabled"
+					"text": "<html>en<b>abl</b>ed</html>"
 					"accelerator": &KeyStroke0 static javax.swing.KeyStroke getKeyStroke( 112, 0, false )
 					"mnemonic": 65
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -280,6 +528,16 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 3"
 			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "underlineCheckBox"
+				"text": "underline menu selection"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "underlineChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4 2 1"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 790, 380 )
@@ -320,6 +578,16 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 430 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 564 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup2"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 616 )
 		} )
 	}
 }

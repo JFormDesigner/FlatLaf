@@ -311,6 +311,18 @@ new FormModel {
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "optionsMenu"
+					"text": "Options"
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "underlineMenuSelectionMenuItem"
+						"text": "Use underline menu selection"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "underlineMenuSelection", false ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "helpMenu"
 					"text": "Help"
 					"mnemonic": 72

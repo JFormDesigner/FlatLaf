@@ -16,13 +16,13 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.ButtonModel;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -36,30 +36,37 @@ import javax.swing.plaf.basic.BasicMenuUI;
  *
  * <!-- BasicMenuUI -->
  *
- * @uiDefault Menu.font								Font
- * @uiDefault Menu.background						Color
- * @uiDefault Menu.foreground						Color
- * @uiDefault Menu.disabledForeground				Color
- * @uiDefault Menu.selectionBackground				Color
- * @uiDefault Menu.selectionForeground				Color
- * @uiDefault Menu.acceleratorForeground			Color
- * @uiDefault Menu.acceleratorSelectionForeground	Color
- * @uiDefault MenuItem.acceleratorFont				Font		defaults to MenuItem.font
- * @uiDefault MenuItem.acceleratorDelimiter			String
- * @uiDefault Menu.border							Border
- * @uiDefault Menu.borderPainted					boolean
- * @uiDefault Menu.margin							Insets
- * @uiDefault Menu.arrowIcon						Icon
- * @uiDefault Menu.checkIcon						Icon
- * @uiDefault Menu.opaque							boolean
- * @uiDefault Menu.evenHeight						boolean
- * @uiDefault Menu.crossMenuMnemonic				boolean	default is false
- * @uiDefault Menu.useMenuBarBackgroundForTopLevel	boolean	default is false
- * @uiDefault MenuBar.background					Color	used if Menu.useMenuBarBackgroundForTopLevel is true
+ * @uiDefault Menu.font												Font
+ * @uiDefault Menu.background										Color
+ * @uiDefault Menu.foreground										Color
+ * @uiDefault Menu.disabledForeground								Color
+ * @uiDefault Menu.selectionBackground								Color
+ * @uiDefault Menu.selectionForeground								Color
+ * @uiDefault Menu.acceleratorForeground							Color
+ * @uiDefault Menu.acceleratorSelectionForeground					Color
+ * @uiDefault MenuItem.acceleratorFont								Font		defaults to MenuItem.font
+ * @uiDefault MenuItem.acceleratorDelimiter							String
+ * @uiDefault Menu.border											Border
+ * @uiDefault Menu.borderPainted									boolean
+ * @uiDefault Menu.margin											Insets
+ * @uiDefault Menu.arrowIcon										Icon
+ * @uiDefault Menu.checkIcon										Icon
+ * @uiDefault Menu.opaque											boolean
+ * @uiDefault Menu.evenHeight										boolean
+ * @uiDefault Menu.crossMenuMnemonic								boolean	default is false
+ * @uiDefault Menu.useMenuBarBackgroundForTopLevel					boolean	default is false
+ * @uiDefault MenuBar.background									Color	used if Menu.useMenuBarBackgroundForTopLevel is true
  *
  * <!-- FlatMenuUI -->
  *
- * @uiDefault MenuBar.hoverBackground				Color
+ * @uiDefault MenuBar.hoverBackground								Color
+ *
+ * <!-- FlatMenuItemRenderer -->
+ *
+ * @uiDefault MenuItem.minimumIconSize								Dimension
+ * @uiDefault MenuItem.textAcceleratorGap							int
+ * @uiDefault MenuItem.acceleratorArrowGap							int
+ * @uiDefault MenuItem.textArrowGap									int
  *
  * @author Karl Tauber
  */
@@ -67,6 +74,7 @@ public class FlatMenuUI
 	extends BasicMenuUI
 {
 	private Color hoverBackground;
+	private FlatMenuItemRenderer renderer;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuUI();
@@ -79,9 +87,7 @@ public class FlatMenuUI
 		menuItem.setRolloverEnabled( true );
 
 		hoverBackground = UIManager.getColor( "MenuBar.hoverBackground" );
-
-		// scale
-		defaultTextIconGap = scale( defaultTextIconGap );
+		renderer = createRenderer();
 	}
 
 	@Override
@@ -89,19 +95,11 @@ public class FlatMenuUI
 		super.uninstallDefaults();
 
 		hoverBackground = null;
+		renderer = null;
 	}
 
-	/**
-	 * Scale defaultTextIconGap again if iconTextGap property has changed.
-	 */
-	@Override
-	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
-		PropertyChangeListener superListener = super.createPropertyChangeListener( c );
-		return e -> {
-			superListener.propertyChange( e );
-			if( e.getPropertyName() == "iconTextGap" )
-				defaultTextIconGap = scale( defaultTextIconGap );
-		};
+	protected FlatMenuItemRenderer createRenderer() {
+		return new FlatMenuRenderer( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
 	}
 
 	@Override
@@ -130,19 +128,37 @@ public class FlatMenuUI
 	}
 
 	@Override
-	protected void paintBackground( Graphics g, JMenuItem menuItem, Color bgColor ) {
-		ButtonModel model = menuItem.getModel();
-		if( model.isArmed() || model.isSelected() ) {
-			super.paintBackground( g, menuItem, bgColor );
-		} else if( model.isRollover() && model.isEnabled() && ((JMenu)menuItem).isTopLevelMenu() ) {
-			FlatUIUtils.setColor( g, hoverBackground, menuItem.getBackground() );
-			g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
-		} else
-			super.paintBackground( g, menuItem, bgColor );
+	protected Dimension getPreferredMenuItemSize( JComponent c, Icon checkIcon, Icon arrowIcon, int defaultTextIconGap ) {
+		return renderer.getPreferredMenuItemSize();
 	}
 
 	@Override
-	protected void paintText( Graphics g, JMenuItem menuItem, Rectangle textRect, String text ) {
-		FlatMenuItemUI.paintText( g, menuItem, textRect, text, disabledForeground, selectionForeground );
+	public void paint( Graphics g, JComponent c ) {
+		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
+			null, acceleratorForeground, acceleratorSelectionForeground );
+	}
+
+	//---- class FlatMenuRenderer ---------------------------------------------
+
+	protected class FlatMenuRenderer
+		extends FlatMenuItemRenderer
+	{
+		protected FlatMenuRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
+			Font acceleratorFont, String acceleratorDelimiter )
+		{
+			super( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
+		}
+
+		@Override
+		protected void paintBackground( Graphics g, Color selectionBackground ) {
+			ButtonModel model = menuItem.getModel();
+			if( model.isRollover() && !model.isArmed() && !model.isSelected() &&
+				model.isEnabled() && ((JMenu)menuItem).isTopLevelMenu() )
+			{
+				FlatUIUtils.setColor( g, hoverBackground, menuItem.getBackground() );
+				g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
+			} else
+				super.paintBackground( g, selectionBackground );
+		}
 	}
 }

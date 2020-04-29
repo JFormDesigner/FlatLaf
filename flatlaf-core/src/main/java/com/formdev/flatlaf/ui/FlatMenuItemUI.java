@@ -16,48 +16,50 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
-import java.awt.Color;
-import java.awt.FontMetrics;
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.beans.PropertyChangeListener;
-import javax.swing.ButtonModel;
+import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
-import com.formdev.flatlaf.FlatLaf;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenuItem}.
  *
  * <!-- BasicMenuItemUI -->
  *
- * @uiDefault MenuItem.font								Font
- * @uiDefault MenuItem.background						Color
- * @uiDefault MenuItem.foreground						Color
- * @uiDefault MenuItem.disabledForeground				Color
- * @uiDefault MenuItem.selectionBackground				Color
- * @uiDefault MenuItem.selectionForeground				Color
- * @uiDefault MenuItem.acceleratorForeground			Color
- * @uiDefault MenuItem.acceleratorSelectionForeground	Color
- * @uiDefault MenuItem.acceleratorFont					Font		defaults to MenuItem.font
- * @uiDefault MenuItem.acceleratorDelimiter				String
- * @uiDefault MenuItem.border							Border
- * @uiDefault MenuItem.borderPainted					boolean
- * @uiDefault MenuItem.margin							Insets
- * @uiDefault MenuItem.arrowIcon						Icon
- * @uiDefault MenuItem.checkIcon						Icon
- * @uiDefault MenuItem.opaque							boolean
- * @uiDefault MenuItem.evenHeight						boolean
+ * @uiDefault MenuItem.font											Font
+ * @uiDefault MenuItem.background									Color
+ * @uiDefault MenuItem.foreground									Color
+ * @uiDefault MenuItem.disabledForeground							Color
+ * @uiDefault MenuItem.selectionBackground							Color
+ * @uiDefault MenuItem.selectionForeground							Color
+ * @uiDefault MenuItem.acceleratorForeground						Color
+ * @uiDefault MenuItem.acceleratorSelectionForeground				Color
+ * @uiDefault MenuItem.acceleratorFont								Font		defaults to MenuItem.font
+ * @uiDefault MenuItem.acceleratorDelimiter							String
+ * @uiDefault MenuItem.border										Border
+ * @uiDefault MenuItem.borderPainted								boolean
+ * @uiDefault MenuItem.margin										Insets
+ * @uiDefault MenuItem.arrowIcon									Icon
+ * @uiDefault MenuItem.checkIcon									Icon
+ * @uiDefault MenuItem.opaque										boolean
+ * @uiDefault MenuItem.evenHeight									boolean
+ *
+ * <!-- FlatMenuItemRenderer -->
+ *
+ * @uiDefault MenuItem.minimumIconSize								Dimension
+ * @uiDefault MenuItem.textAcceleratorGap							int
+ * @uiDefault MenuItem.acceleratorArrowGap							int
+ * @uiDefault MenuItem.textArrowGap									int
  *
  * @author Karl Tauber
  */
 public class FlatMenuItemUI
 	extends BasicMenuItemUI
 {
+	private FlatMenuItemRenderer renderer;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuItemUI();
 	}
@@ -66,42 +68,28 @@ public class FlatMenuItemUI
 	protected void installDefaults() {
 		super.installDefaults();
 
-		// scale
-		defaultTextIconGap = scale( defaultTextIconGap );
-	}
-
-	/**
-	 * Scale defaultTextIconGap again if iconTextGap property has changed.
-	 */
-	@Override
-	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
-		PropertyChangeListener superListener = super.createPropertyChangeListener( c );
-		return e -> {
-			superListener.propertyChange( e );
-			if( e.getPropertyName() == "iconTextGap" )
-				defaultTextIconGap = scale( defaultTextIconGap );
-		};
+		renderer = createRenderer();
 	}
 
 	@Override
-	protected void paintText( Graphics g, JMenuItem menuItem, Rectangle textRect, String text ) {
-		paintText( g, menuItem, textRect, text, disabledForeground, selectionForeground );
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		renderer = null;
 	}
 
-	public static void paintText( Graphics g, JMenuItem menuItem, Rectangle textRect,
-		String text, Color disabledForeground, Color selectionForeground )
-	{
-		FontMetrics fm = menuItem.getFontMetrics( menuItem.getFont() );
-		int mnemonicIndex = FlatLaf.isShowMnemonics() ? menuItem.getDisplayedMnemonicIndex() : -1;
+	protected FlatMenuItemRenderer createRenderer() {
+		return new FlatMenuItemRenderer( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
+	}
 
-		ButtonModel model = menuItem.getModel();
-		g.setColor( !model.isEnabled()
-			? disabledForeground
-			: (model.isArmed() || (menuItem instanceof JMenu && model.isSelected())
-				? selectionForeground
-				: menuItem.getForeground()) );
+	@Override
+	protected Dimension getPreferredMenuItemSize( JComponent c, Icon checkIcon, Icon arrowIcon, int defaultTextIconGap ) {
+		return renderer.getPreferredMenuItemSize();
+	}
 
-		FlatUIUtils.drawStringUnderlineCharAt( menuItem, g, text, mnemonicIndex,
-			textRect.x, textRect.y + fm.getAscent() );
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
+			null, acceleratorForeground, acceleratorSelectionForeground );
 	}
 }
