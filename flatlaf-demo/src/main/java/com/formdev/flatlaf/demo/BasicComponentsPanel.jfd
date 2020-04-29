@@ -601,14 +601,17 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "cutMenuItem"
 				"text": "Cut"
+				"mnemonic": 67
 			} )
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "copyMenuItem"
 				"text": "Copy"
+				"mnemonic": 79
 			} )
 			add( new FormComponent( "javax.swing.JMenuItem" ) {
 				name: "pasteMenuItem"
 				"text": "Paste"
+				"mnemonic": 80
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 500 )

@@ -602,14 +602,17 @@ class BasicComponentsPanel
 
 			//---- cutMenuItem ----
 			cutMenuItem.setText("Cut");
+			cutMenuItem.setMnemonic('C');
 			popupMenu1.add(cutMenuItem);
 
 			//---- copyMenuItem ----
 			copyMenuItem.setText("Copy");
+			copyMenuItem.setMnemonic('O');
 			popupMenu1.add(copyMenuItem);
 
 			//---- pasteMenuItem ----
 			pasteMenuItem.setText("Paste");
+			pasteMenuItem.setMnemonic('P');
 			popupMenu1.add(pasteMenuItem);
 		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents

@@ -31,8 +31,12 @@ import javax.swing.AbstractButton;
 import javax.swing.JLabel;
 import javax.swing.JRootPane;
 import javax.swing.JTabbedPane;
+import javax.swing.MenuElement;
+import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -41,7 +45,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @author Karl Tauber
  */
 class MnemonicHandler
-	implements KeyEventPostProcessor
+	implements KeyEventPostProcessor, ChangeListener
 {
 	private static boolean showMnemonics;
 	private static WeakReference<Window> lastShowMnemonicWindow;
@@ -53,10 +57,12 @@ class MnemonicHandler
 
 	void install() {
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor( this );
+		MenuSelectionManager.defaultManager().addChangeListener( this );
 	}
 
 	void uninstall() {
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor( this );
+		MenuSelectionManager.defaultManager().removeChangeListener( this );
 	}
 
 	@Override
@@ -65,14 +71,31 @@ class MnemonicHandler
 		if( SystemInfo.IS_MAC ) {
 			// Ctrl+Alt keys must be pressed on Mac
 			if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown() && e.isAltDown(), e.getComponent() );
+				showMnemonics( shouldShowMnemonics( e ) && e.isControlDown() && e.isAltDown(), e.getComponent() );
 		} else {
 			// Alt key must be pressed on Windows and Linux
 			if( keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED, e.getComponent() );
+				showMnemonics( shouldShowMnemonics( e ), e.getComponent() );
 		}
 
 		return false;
+	}
+
+	private boolean shouldShowMnemonics( KeyEvent e ) {
+		return e.getID() == KeyEvent.KEY_PRESSED ||
+			MenuSelectionManager.defaultManager().getSelectedPath().length > 0;
+	}
+
+	@Override
+	public void stateChanged( ChangeEvent e ) {
+		MenuElement[] selectedPath = MenuSelectionManager.defaultManager().getSelectedPath();
+		if( selectedPath.length > 0 ) {
+			// show mnemonics when a menu item is selected
+			showMnemonics( true, (Component) selectedPath[0] );
+		} else {
+			// hide mnemonics when menu selection was canceled
+			showMnemonics( false, null );
+		}
 	}
 
 	private void showMnemonics( boolean show, Component c ) {

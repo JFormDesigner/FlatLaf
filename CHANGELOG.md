@@ -7,6 +7,7 @@ FlatLaf Change Log
 - Menus: On Windows, pressing <kbd>F10</kbd> now activates the menu bar without
   showing a menu popup (as usual on Windows platform). On other platforms the
   first menu popup is shown.
+- Show mnemonics always when a menu bar is active or a popup menu is visible.
 - Hide mnemonics if window is deactivated (e.g. <kbd>Alt+Tab</kbd> to another
   window). (issue #43)
 
