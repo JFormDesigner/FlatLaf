@@ -18,10 +18,14 @@ package com.formdev.flatlaf;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.lang.ref.WeakReference;
 import javax.swing.AbstractButton;
 import javax.swing.JLabel;
@@ -41,6 +45,7 @@ class MnemonicHandler
 {
 	private static boolean showMnemonics;
 	private static WeakReference<Window> lastShowMnemonicWindow;
+	private static WindowListener windowListener;
 
 	static boolean isShowMnemonics() {
 		return showMnemonics || !UIManager.getBoolean( "Component.hideMnemonics" );
@@ -94,11 +99,30 @@ class MnemonicHandler
 			// repaint components with mnemonics in focused window
 			repaintMnemonics( window );
 
+			// hide mnemonics if window is deactivated (e.g. Alt+Tab to another window)
+			windowListener = new WindowAdapter() {
+				@Override
+				public void windowDeactivated( WindowEvent e ) {
+					// use invokeLater() to avoid that the listener is removed
+					// while the listener queue is iterated to fire this event
+					EventQueue.invokeLater( () -> {
+						showMnemonics( false, c );
+					} );
+				}
+			};
+			window.addWindowListener( windowListener );
+
 			lastShowMnemonicWindow = new WeakReference<>( window );
 		} else if( lastShowMnemonicWindow != null ) {
 			Window window = lastShowMnemonicWindow.get();
-			if( window != null )
+			if( window != null ) {
 				repaintMnemonics( window );
+
+				if( windowListener != null ) {
+					window.removeWindowListener( windowListener );
+					windowListener = null;
+				}
+			}
 
 			lastShowMnemonicWindow = null;
 		}

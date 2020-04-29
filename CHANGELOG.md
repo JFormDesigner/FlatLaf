@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Hide mnemonics if window is deactivated (e.g. <kbd>Alt+Tab</kbd> to another
+  window). (issue #43)
+
+
 ## 0.33
 
 - Improved creation of disabled grayscale icons used in disabled buttons, labels
