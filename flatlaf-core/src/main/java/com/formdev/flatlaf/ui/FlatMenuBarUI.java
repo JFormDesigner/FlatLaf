@@ -16,9 +16,19 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.MenuElement;
+import javax.swing.MenuSelectionManager;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuBarUI;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenuBar}.
@@ -37,5 +47,37 @@ public class FlatMenuBarUI
 {
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuBarUI();
+	}
+
+	@Override
+	protected void installKeyboardActions() {
+		super.installKeyboardActions();
+
+		if( SystemInfo.IS_WINDOWS ) {
+			ActionMap map = SwingUtilities.getUIActionMap( menuBar );
+			if( map == null ) {
+				map = new ActionMapUIResource();
+				SwingUtilities.replaceUIActionMap( menuBar, map );
+			}
+			map.put( "takeFocus", new TakeFocus() );
+		}
+	}
+
+	//---- class TakeFocus ----------------------------------------------------
+
+	/**
+	 * On Windows, activates the menu bar, but does not show the menu popup as
+	 * BasicMenuBarUI.TakeFocus does.
+	 */
+	private static class TakeFocus
+		extends AbstractAction
+	{
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			JMenuBar menuBar = (JMenuBar) e.getSource();
+			JMenu menu = menuBar.getMenu( 0 );
+			if( menu != null )
+				MenuSelectionManager.defaultManager().setSelectedPath( new MenuElement[] { menuBar, menu } );
+		}
 	}
 }

@@ -4,6 +4,9 @@ FlatLaf Change Log
 ## Unreleased
 
 - Menus: Fixed text color of selected menu items that use HTML. (issue #87)
+- Menus: On Windows, pressing <kbd>F10</kbd> now activates the menu bar without
+  showing a menu popup (as usual on Windows platform). On other platforms the
+  first menu popup is shown.
 - Hide mnemonics if window is deactivated (e.g. <kbd>Alt+Tab</kbd> to another
   window). (issue #43)
 
