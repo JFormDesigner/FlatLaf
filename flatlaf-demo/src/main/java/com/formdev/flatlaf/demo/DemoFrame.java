@@ -61,7 +61,6 @@ class DemoFrame
 
 	private void underlineMenuSelection() {
 		UIManager.put( "MenuItem.selectionType", underlineMenuSelectionMenuItem.isSelected() ? "underline" : null );
-		FlatLaf.updateUI();
 	}
 
 	private void fontFamilyChanged( ActionEvent e ) {

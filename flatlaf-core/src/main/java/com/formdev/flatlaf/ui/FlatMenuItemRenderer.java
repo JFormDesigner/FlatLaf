@@ -55,7 +55,6 @@ public class FlatMenuItemRenderer
 	protected final int textAcceleratorGap;
 	protected final int textArrowGap;
 
-	protected final String selectionType = UIManager.getString( "MenuItem.selectionType" );
 	protected final Color underlineSelectionBackground = UIManager.getColor( "MenuItem.underlineSelectionBackground" );
 	protected final Color underlineSelectionColor = UIManager.getColor( "MenuItem.underlineSelectionColor" );
 	protected final int underlineSelectionHeight = UIManager.getInt( "MenuItem.underlineSelectionHeight" );
@@ -340,7 +339,7 @@ debug*/
 	}
 
 	private boolean isUnderlineSelection() {
-		return "underline".equals( selectionType );
+		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
 	}
 
 	private Icon getIconForPainting() {

@@ -64,7 +64,9 @@ public class FlatMenusTest
 
 	private void underlineChanged() {
 		UIManager.put( "MenuItem.selectionType", underlineCheckBox.isSelected() ? "underline" : null );
-		FlatLaf.updateUI();
+
+		if( armedCheckBox.isSelected() )
+			FlatLaf.updateUI();
 	}
 
 	private void showPopupMenuButtonActionPerformed(ActionEvent e) {
