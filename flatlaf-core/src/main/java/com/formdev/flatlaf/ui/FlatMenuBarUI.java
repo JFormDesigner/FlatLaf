@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuBarUI;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -50,7 +51,7 @@ public class FlatMenuBarUI
 	}
 
 	/*
-	 * WARNING: This class is not used on macOS.
+	 * WARNING: This class is not used on macOS if screen menu bar is enabled.
 	 *          Do not add any functionality here.
 	 */
 
@@ -58,21 +59,20 @@ public class FlatMenuBarUI
 	protected void installKeyboardActions() {
 		super.installKeyboardActions();
 
-		if( SystemInfo.IS_WINDOWS ) {
-			ActionMap map = SwingUtilities.getUIActionMap( menuBar );
-			if( map == null ) {
-				map = new ActionMapUIResource();
-				SwingUtilities.replaceUIActionMap( menuBar, map );
-			}
-			map.put( "takeFocus", new TakeFocus() );
+		ActionMap map = SwingUtilities.getUIActionMap( menuBar );
+		if( map == null ) {
+			map = new ActionMapUIResource();
+			SwingUtilities.replaceUIActionMap( menuBar, map );
 		}
+		map.put( "takeFocus", new TakeFocus() );
 	}
 
 	//---- class TakeFocus ----------------------------------------------------
 
 	/**
-	 * On Windows, activates the menu bar, but does not show the menu popup as
-	 * BasicMenuBarUI.TakeFocus does.
+	 * Activates the menu bar and shows mnemonics.
+	 * On Windows, the popup of the first menu is not shown.
+	 * On other platforms, the popup of the first menu is shown.
 	 */
 	private static class TakeFocus
 		extends AbstractAction
@@ -81,8 +81,13 @@ public class FlatMenuBarUI
 		public void actionPerformed( ActionEvent e ) {
 			JMenuBar menuBar = (JMenuBar) e.getSource();
 			JMenu menu = menuBar.getMenu( 0 );
-			if( menu != null )
-				MenuSelectionManager.defaultManager().setSelectedPath( new MenuElement[] { menuBar, menu } );
+			if( menu != null ) {
+				MenuSelectionManager.defaultManager().setSelectedPath( SystemInfo.IS_WINDOWS
+					? new MenuElement[] { menuBar, menu }
+					: new MenuElement[] { menuBar, menu, menu.getPopupMenu() } );
+
+				FlatLaf.showMnemonics( menuBar );
+			}
 		}
 	}
 }

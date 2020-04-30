@@ -89,16 +89,13 @@ class MnemonicHandler
 	@Override
 	public void stateChanged( ChangeEvent e ) {
 		MenuElement[] selectedPath = MenuSelectionManager.defaultManager().getSelectedPath();
-		if( selectedPath.length > 0 ) {
-			// show mnemonics when a menu item is selected
-			showMnemonics( true, (Component) selectedPath[0] );
-		} else {
+		if( selectedPath.length == 0 ) {
 			// hide mnemonics when menu selection was canceled
 			showMnemonics( false, null );
 		}
 	}
 
-	private void showMnemonics( boolean show, Component c ) {
+	static void showMnemonics( boolean show, Component c ) {
 		if( show == showMnemonics )
 			return;
 
@@ -151,7 +148,7 @@ class MnemonicHandler
 		}
 	}
 
-	private void repaintMnemonics( Container container ) {
+	private static void repaintMnemonics( Container container ) {
 		for( Component c : container.getComponents() ) {
 			if( !c.isVisible() )
 				continue;
@@ -164,7 +161,7 @@ class MnemonicHandler
 		}
 	}
 
-	private boolean hasMnemonic( Component c ) {
+	private static boolean hasMnemonic( Component c ) {
 		if( c instanceof JLabel && ((JLabel)c).getDisplayedMnemonicIndex() >= 0 )
 			return true;
 

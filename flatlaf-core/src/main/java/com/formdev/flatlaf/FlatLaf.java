@@ -17,6 +17,7 @@
 package com.formdev.flatlaf;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
@@ -526,6 +527,14 @@ public abstract class FlatLaf
 
 	public static boolean isShowMnemonics() {
 		return MnemonicHandler.isShowMnemonics();
+	}
+
+	public static void showMnemonics( Component c ) {
+		MnemonicHandler.showMnemonics( true, c );
+	}
+
+	public static void hideMnemonics() {
+		MnemonicHandler.showMnemonics( false, null );
 	}
 
 	//---- class ActiveFont ---------------------------------------------------

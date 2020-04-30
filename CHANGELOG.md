@@ -16,7 +16,6 @@ FlatLaf Change Log
 - Menus: Fixed inconsistent left padding in menu items. (issue #3)
 - Menus: Fixed: Setting `iconTextGap` property on a menu item did increase left
   and right margins. (issue #54)
-- Show mnemonics always when a menu bar is active or a popup menu is visible.
 - Hide mnemonics if window is deactivated (e.g. <kbd>Alt+Tab</kbd> to another
   window). (issue #43)
 - macOS: Fixed NPE if using `JMenuBar` in `JInternalFrame` and macOS screen menu
