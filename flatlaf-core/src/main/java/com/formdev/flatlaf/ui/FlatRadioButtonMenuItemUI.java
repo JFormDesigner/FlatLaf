@@ -46,7 +46,6 @@ import javax.swing.plaf.basic.BasicRadioButtonMenuItemUI;
  * @uiDefault RadioButtonMenuItem.arrowIcon							Icon
  * @uiDefault RadioButtonMenuItem.checkIcon							Icon
  * @uiDefault RadioButtonMenuItem.opaque							boolean
- * @uiDefault RadioButtonMenuItem.evenHeight						boolean
  *
  * <!-- FlatRadioButtonMenuItemUI -->
  *

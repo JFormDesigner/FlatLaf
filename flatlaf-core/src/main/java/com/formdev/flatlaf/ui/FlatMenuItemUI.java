@@ -44,7 +44,6 @@ import javax.swing.plaf.basic.BasicMenuItemUI;
  * @uiDefault MenuItem.arrowIcon									Icon
  * @uiDefault MenuItem.checkIcon									Icon
  * @uiDefault MenuItem.opaque										boolean
- * @uiDefault MenuItem.evenHeight									boolean
  *
  * <!-- FlatMenuItemRenderer -->
  *

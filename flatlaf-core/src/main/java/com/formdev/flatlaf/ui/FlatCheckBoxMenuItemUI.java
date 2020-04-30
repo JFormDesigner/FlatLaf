@@ -46,7 +46,6 @@ import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
  * @uiDefault CheckBoxMenuItem.arrowIcon							Icon
  * @uiDefault CheckBoxMenuItem.checkIcon							Icon
  * @uiDefault CheckBoxMenuItem.opaque								boolean
- * @uiDefault CheckBoxMenuItem.evenHeight							boolean
  *
  * <!-- FlatCheckBoxMenuItemUI -->
  *

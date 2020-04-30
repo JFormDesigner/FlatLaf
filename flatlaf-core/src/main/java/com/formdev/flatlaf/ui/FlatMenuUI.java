@@ -52,7 +52,6 @@ import javax.swing.plaf.basic.BasicMenuUI;
  * @uiDefault Menu.arrowIcon										Icon
  * @uiDefault Menu.checkIcon										Icon
  * @uiDefault Menu.opaque											boolean
- * @uiDefault Menu.evenHeight										boolean
  * @uiDefault Menu.crossMenuMnemonic								boolean	default is false
  * @uiDefault Menu.useMenuBarBackgroundForTopLevel					boolean	default is false
  * @uiDefault MenuBar.background									Color	used if Menu.useMenuBarBackgroundForTopLevel is true
