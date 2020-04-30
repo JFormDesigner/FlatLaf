@@ -38,6 +38,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -306,8 +307,12 @@ public abstract class FlatLaf
 			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), isDark(), defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
-		if( SystemInfo.IS_MAC && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) )
+		if( SystemInfo.IS_MAC && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) ) {
 			defaults.put( "MenuBarUI", "com.apple.laf.AquaMenuBarUI" );
+
+			// add defaults necessary for AquaMenuBarUI
+			defaults.put( "MenuBar.backgroundPainter", BorderFactory.createEmptyBorder() );
+		}
 
 		// initialize text antialiasing
 		putAATextInfo( defaults );

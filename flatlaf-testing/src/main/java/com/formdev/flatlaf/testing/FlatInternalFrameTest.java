@@ -53,6 +53,14 @@ public class FlatInternalFrameTest
 		if( iconCheckBox.isSelected() )
 			internalFrame.setFrameIcon( new FlatFileViewFloppyDriveIcon() );
 
+		if( menuBarCheckBox.isSelected() ) {
+			JMenuBar menuBar = new JMenuBar();
+			JMenu menu = new JMenu( "I'm a Menu Bar" );
+			menu.add( new JMenuItem( "Menu Item" ) );
+			menuBar.add( menu );
+			internalFrame.setJMenuBar( menuBar );
+		}
+
 		JPanel panel = new JPanel() {
 			private final Color color = new Color( (int) (Math.random() * 0xffffff) | 0x20000000, true );
 
@@ -93,6 +101,7 @@ public class FlatInternalFrameTest
 		iconifiableCheckBox = new JCheckBox();
 		maximizableCheckBox = new JCheckBox();
 		iconCheckBox = new JCheckBox();
+		menuBarCheckBox = new JCheckBox();
 		titleLabel = new JLabel();
 		titleField = new JTextField();
 		createFrameButton = new JButton();
@@ -152,6 +161,10 @@ public class FlatInternalFrameTest
 				iconCheckBox.setText("Frame icon");
 				paletteContentPane.add(iconCheckBox, "cell 0 2");
 
+				//---- menuBarCheckBox ----
+				menuBarCheckBox.setText("Menu Bar");
+				paletteContentPane.add(menuBarCheckBox, "cell 1 2");
+
 				//---- titleLabel ----
 				titleLabel.setText("Frame title:");
 				paletteContentPane.add(titleLabel, "cell 0 3");
@@ -163,7 +176,7 @@ public class FlatInternalFrameTest
 				paletteContentPane.add(createFrameButton, "cell 1 4,alignx right,growx 0");
 			}
 			desktopPane.add(palette, JLayeredPane.PALETTE_LAYER);
-			palette.setBounds(15, 25, 220, 185);
+			palette.setBounds(15, 25, 275, 185);
 		}
 		add(desktopPane, "cell 0 0,width 600,height 600");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -180,6 +193,7 @@ public class FlatInternalFrameTest
 	private JCheckBox iconifiableCheckBox;
 	private JCheckBox maximizableCheckBox;
 	private JCheckBox iconCheckBox;
+	private JCheckBox menuBarCheckBox;
 	private JLabel titleLabel;
 	private JTextField titleField;
 	private JButton createFrameButton;

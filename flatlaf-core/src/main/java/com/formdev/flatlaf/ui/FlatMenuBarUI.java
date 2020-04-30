@@ -49,6 +49,11 @@ public class FlatMenuBarUI
 		return new FlatMenuBarUI();
 	}
 
+	/*
+	 * WARNING: This class is not used on macOS.
+	 *          Do not add any functionality here.
+	 */
+
 	@Override
 	protected void installKeyboardActions() {
 		super.installKeyboardActions();
