@@ -27,6 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicToolTipUI;
 import com.formdev.flatlaf.util.StringUtils;
 
@@ -134,6 +135,6 @@ public class FlatToolTipUI
 
 	private boolean isMultiLine( JComponent c ) {
 		String text = ((JToolTip)c).getTipText();
-		return c.getClientProperty( "html" ) == null && text != null && text.indexOf( '\n' ) >= 0;
+		return c.getClientProperty( BasicHTML.propertyKey ) == null && text != null && text.indexOf( '\n' ) >= 0;
 	}
 }
