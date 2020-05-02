@@ -19,6 +19,12 @@ public class GrayFilter
 	private final int origContrast;
 	private final int origBrightness;
 
+	public static GrayFilter createDisabledIconFilter( boolean dark ) {
+		return dark
+			? new GrayFilter( -20, -70, 100 )
+			: new GrayFilter(  25, -25, 100 );
+	}
+
 	/**
 	 * @param brightness in range [-100..100] where 0 has no effect
 	 * @param contrast in range [-100..100] where 0 has no effect

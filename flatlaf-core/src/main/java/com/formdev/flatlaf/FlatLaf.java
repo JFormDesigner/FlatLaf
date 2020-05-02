@@ -121,14 +121,10 @@ public abstract class FlatLaf
 	public Icon getDisabledIcon( JComponent component, Icon icon ) {
 		if( icon instanceof ImageIcon ) {
 			Object grayFilter = UIManager.get( "Component.grayFilter" );
-			if( !(grayFilter instanceof ImageFilter) ) {
-				// fallback
-				grayFilter = isDark()
-					? new GrayFilter( -20, -70, 100 )
-					: new GrayFilter(  25, -25, 100 );
-			}
+			ImageFilter filter = (grayFilter instanceof ImageFilter)
+				? (ImageFilter) grayFilter
+				: GrayFilter.createDisabledIconFilter( isDark() ); // fallback
 
-			ImageFilter filter = (ImageFilter) grayFilter;
 			Function<Image, Image> mapper = img -> {
 				ImageProducer producer = new FilteredImageSource( img.getSource(), filter );
 				return Toolkit.getDefaultToolkit().createImage( producer );

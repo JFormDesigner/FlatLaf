@@ -20,17 +20,19 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
+import java.awt.image.RGBImageFilter;
 import java.net.URISyntaxException;
 import java.net.URL;
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.Graphics2DProxy;
+import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.UIScale;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGException;
@@ -40,7 +42,7 @@ import com.kitfox.svg.SVGUniverse;
  * @author Karl Tauber
  */
 public class FlatSVGIcon
-	extends ImageIcon
+	implements Icon
 {
 	// use own SVG universe so that it can not be cleared from anywhere
 	private static final SVGUniverse svgUniverse = new SVGUniverse();
@@ -99,6 +101,16 @@ public class FlatSVGIcon
 			return;
 
 		Graphics2D g2 = (Graphics2D) g.create();
+
+		if( c != null && !c.isEnabled() ) {
+			Object grayFilter = UIManager.get( "Component.grayFilter" );
+			RGBImageFilter filter = (grayFilter instanceof RGBImageFilter)
+				? (RGBImageFilter) grayFilter
+				: GrayFilter.createDisabledIconFilter( dark );
+
+			g2 = new GraphicsFilter( g2, filter );
+		}
+
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 			g2.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
@@ -134,20 +146,6 @@ public class FlatSVGIcon
 		g.fillRect( x, y, getIconWidth(), getIconHeight() );
 	}
 
-	@Override
-	public Image getImage() {
-		update();
-
-		BufferedImage image = new BufferedImage( getIconWidth(), getIconHeight(), BufferedImage.TYPE_INT_ARGB );
-		Graphics2D g = image.createGraphics();
-		try {
-			paintIcon( null, g, 0, 0 );
-		} finally {
-			g.dispose();
-		}
-		return image;
-	}
-
 	private static Boolean darkLaf;
 
 	private static boolean isDarkLaf() {
@@ -165,5 +163,36 @@ public class FlatSVGIcon
 	private static void lafChanged() {
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 		darkLaf = (lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark());
+	}
+
+	//---- class GraphicsFilter -----------------------------------------------
+
+	private static class GraphicsFilter
+		extends Graphics2DProxy
+	{
+		private final RGBImageFilter filter;
+
+		public GraphicsFilter( Graphics2D delegate, RGBImageFilter filter ) {
+			super( delegate );
+			this.filter = filter;
+		}
+
+		@Override
+		public void setColor( Color c ) {
+			super.setColor( filterColor( c ) );
+		}
+
+		@Override
+		public void setPaint( Paint paint ) {
+			if( paint instanceof Color )
+				paint = filterColor( (Color) paint );
+			super.setPaint( paint );
+		}
+
+		private Color filterColor( Color color ) {
+			int oldRGB = color.getRGB();
+			int newRGB = filter.filterRGB( 0, 0, oldRGB );
+			return (newRGB != oldRGB) ? new Color( newRGB, true ) : color;
+		}
 	}
 }
