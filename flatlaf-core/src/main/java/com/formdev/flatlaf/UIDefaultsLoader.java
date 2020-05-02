@@ -63,8 +63,6 @@ class UIDefaultsLoader
 	private static final String TYPE_PREFIX = "{";
 	private static final String TYPE_PREFIX_END = "}";
 	private static final String VARIABLE_PREFIX = "@";
-	@Deprecated
-	private static final String REF_PREFIX = VARIABLE_PREFIX + "@";
 	private static final String PROPERTY_PREFIX = "$";
 	private static final String OPTIONAL_PREFIX = "?";
 	private static final String GLOBAL_PREFIX = "*.";
@@ -212,12 +210,6 @@ class UIDefaultsLoader
 			value = value.substring( PROPERTY_PREFIX.length() );
 		else if( !value.startsWith( VARIABLE_PREFIX ) )
 			return value;
-
-		// for compatibility
-		if( value.startsWith( REF_PREFIX ) ) {
-			FlatLaf.LOG.log( Level.WARNING, "FlatLaf: Usage of '@@' in .properties files is deprecated. Use '$' instead." );
-			value = value.substring( REF_PREFIX.length() );
-		}
 
 		boolean optional = false;
 		if( value.startsWith( OPTIONAL_PREFIX ) ) {
