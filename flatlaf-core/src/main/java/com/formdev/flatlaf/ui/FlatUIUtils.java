@@ -42,6 +42,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.UIScale;
@@ -427,6 +428,23 @@ public class FlatUIUtils
 	public static void drawStringUnderlineCharAt( JComponent c, Graphics g,
 		String text, int underlinedIndex, int x, int y )
 	{
+		// scale underline height if necessary
+		if( underlinedIndex >= 0 && UIScale.getUserScaleFactor() > 1 ) {
+			g = new Graphics2DProxy( (Graphics2D) g ) {
+				@Override
+				public void fillRect( int x, int y, int width, int height ) {
+					if( height == 1 ) {
+						// scale height and correct y position
+						// (using 0.9f so that underline height is 1 at scale factor 1.5x)
+						height = Math.round( UIScale.scale( 0.9f ) );
+						y += height - 1;
+					}
+
+					super.fillRect( x, y, width, height );
+				}
+			};
+		}
+
 		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, underlinedIndex, x, y );
 	}
 

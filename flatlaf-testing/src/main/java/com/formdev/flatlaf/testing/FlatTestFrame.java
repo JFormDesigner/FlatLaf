@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -104,7 +105,7 @@ public class FlatTestFrame
 				(SystemInfo.IS_LINUX && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel") ) )
 				name += " (F9)";
 			else if( className.equals( MetalLookAndFeel.class.getName() ) )
-				name += " (F10)";
+				name += " (F12)";
 			else if( className.equals( NimbusLookAndFeel.class.getName() ) )
 				name += " (F11)";
 
@@ -114,25 +115,25 @@ public class FlatTestFrame
 		String substanceClassName = "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel";
 		if( SystemInfo.IS_JAVA_9_OR_LATER && isClassAvailable( substanceClassName ) ) {
 			lafModel.addElement( new LookAndFeelInfo( "Substance (F5)", substanceClassName ) );
-			registerSwitchToLookAndFeel( KeyEvent.VK_F5, substanceClassName );
+			registerSwitchToLookAndFeel( "F5", substanceClassName );
 		}
 
 		String webLafClassName = "com.alee.laf.WebLookAndFeel";
 		if( isClassAvailable( webLafClassName ) ) {
-			lafModel.addElement( new LookAndFeelInfo( "WebLaf (F12)", webLafClassName ) );
-			registerSwitchToLookAndFeel( KeyEvent.VK_F12, webLafClassName );
+			lafModel.addElement( new LookAndFeelInfo( "WebLaf (Ctrl+F12)", webLafClassName ) );
+			registerSwitchToLookAndFeel( "ctrl F12", webLafClassName );
 		}
 
 		String looksPlasticClassName = "com.jgoodies.looks.plastic.PlasticLookAndFeel";
 		if( isClassAvailable( looksPlasticClassName ) ) {
 			lafModel.addElement( new LookAndFeelInfo( "JGoodies Looks Plastic (F6)", looksPlasticClassName ) );
-			registerSwitchToLookAndFeel( KeyEvent.VK_F6, looksPlasticClassName );
+			registerSwitchToLookAndFeel( "F6", looksPlasticClassName );
 		}
 
 		String looksWindowsClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
 		if( SystemInfo.IS_WINDOWS && isClassAvailable( looksWindowsClassName ) ) {
 			lafModel.addElement( new LookAndFeelInfo( "JGoodies Looks Windows (F7)", looksWindowsClassName ) );
-			registerSwitchToLookAndFeel( KeyEvent.VK_F7, looksWindowsClassName );
+			registerSwitchToLookAndFeel( "F7", looksWindowsClassName );
 		}
 
 		lookAndFeelComboBox.setModel( lafModel );
@@ -145,21 +146,21 @@ public class FlatTestFrame
 		updateSizeVariantComboBox();
 
 		// register F1, F2, ... keys to switch to Light, Dark or other LaFs
-		registerSwitchToLookAndFeel( KeyEvent.VK_F1, FlatLightLaf.class.getName() );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F2, FlatDarkLaf.class.getName() );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F3, FlatIntelliJLaf.class.getName() );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatDarculaLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F1", FlatLightLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F2", FlatDarkLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F3", FlatIntelliJLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F4", FlatDarculaLaf.class.getName() );
 
-		registerSwitchToLookAndFeel( KeyEvent.VK_F8, FlatTestLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F8", FlatTestLaf.class.getName() );
 
 		if( SystemInfo.IS_WINDOWS )
-			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
+			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
 		else if( SystemInfo.IS_MAC )
-			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.apple.laf.AquaLookAndFeel" );
+			registerSwitchToLookAndFeel( "F9", "com.apple.laf.AquaLookAndFeel" );
 		else if( SystemInfo.IS_LINUX )
-			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F10, MetalLookAndFeel.class.getName() );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F11, NimbusLookAndFeel.class.getName() );
+			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
+		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( "F11", NimbusLookAndFeel.class.getName() );
 
 		// register ESC key to close frame
 		((JComponent)getContentPane()).registerKeyboardAction(
@@ -228,12 +229,16 @@ public class FlatTestFrame
 			setTitle( newTitle );
 	}
 
-	private void registerSwitchToLookAndFeel( int keyCode, String lafClassName ) {
+	private void registerSwitchToLookAndFeel( String keyStrokeStr, String lafClassName ) {
+		KeyStroke keyStroke = KeyStroke.getKeyStroke( keyStrokeStr );
+		if( keyStroke == null )
+			throw new IllegalArgumentException( "Invalid key stroke '" + keyStrokeStr + "'" );
+
 		((JComponent)getContentPane()).registerKeyboardAction(
 			e -> {
 				selectLookAndFeel( lafClassName );
 			},
-			KeyStroke.getKeyStroke( keyCode, 0, false ),
+			keyStroke,
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 	}
 
@@ -247,8 +252,15 @@ public class FlatTestFrame
 	}
 
 	public void showFrame( Supplier<JComponent> contentFactory ) {
+		showFrame( contentFactory, null );
+	}
+
+	public void showFrame( Supplier<JComponent> contentFactory, Function<JComponent, JMenuBar> menuBarFactory ) {
 		this.contentFactory = contentFactory;
 		this.content = contentFactory.get();
+
+		if( menuBarFactory != null )
+			setJMenuBar( menuBarFactory.apply( content ) );
 
 		contentPanel.getContentPane().add( content );
 		pack();
