@@ -49,8 +49,8 @@ import javax.swing.plaf.basic.BasicMenuItemUI;
  *
  * @uiDefault MenuItem.minimumIconSize								Dimension
  * @uiDefault MenuItem.textAcceleratorGap							int
+ * @uiDefault MenuItem.textNoAcceleratorGap							int
  * @uiDefault MenuItem.acceleratorArrowGap							int
- * @uiDefault MenuItem.textArrowGap									int
  *
  * @author Karl Tauber
  */

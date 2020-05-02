@@ -54,10 +54,11 @@ public class FlatMenuItemRenderer
 	protected final Font acceleratorFont;
 	protected final String acceleratorDelimiter;
 
-	protected final int minimumWidth;
+	protected final int minimumWidth = UIManager.getInt( "MenuItem.minimumWidth" );
 	protected final Dimension minimumIconSize;
-	protected final int textAcceleratorGap;
-	protected final int textArrowGap;
+	protected final int textAcceleratorGap = FlatUIUtils.getUIInt( "MenuItem.textAcceleratorGap", 28 );
+	protected final int textNoAcceleratorGap = FlatUIUtils.getUIInt( "MenuItem.textNoAcceleratorGap", 6 );
+	protected final int acceleratorArrowGap = FlatUIUtils.getUIInt( "MenuItem.acceleratorArrowGap", 2 );
 
 	protected final Color underlineSelectionBackground = UIManager.getColor( "MenuItem.underlineSelectionBackground" );
 	protected final Color underlineSelectionColor = UIManager.getColor( "MenuItem.underlineSelectionColor" );
@@ -72,11 +73,8 @@ public class FlatMenuItemRenderer
 		this.acceleratorFont = acceleratorFont;
 		this.acceleratorDelimiter = acceleratorDelimiter;
 
-		minimumWidth = UIManager.getInt( "MenuItem.minimumWidth" );
 		Dimension minimumIconSize = UIManager.getDimension( "MenuItem.minimumIconSize" );
 		this.minimumIconSize = (minimumIconSize != null) ? minimumIconSize : new Dimension( 16, 16 );
-		this.textAcceleratorGap = FlatUIUtils.getUIInt( "MenuItem.textAcceleratorGap", 28 );
-		this.textArrowGap = FlatUIUtils.getUIInt( "MenuItem.textArrowGap", 8 );
 	}
 
 	protected Dimension getPreferredMenuItemSize() {
@@ -104,7 +102,7 @@ public class FlatMenuItemRenderer
 		String accelText = getAcceleratorText();
 		if( accelText != null ) {
 			// gap between text and accelerator
-			width += scale( textAcceleratorGap );
+			width += scale( !isTopLevelMenu ? textAcceleratorGap : menuItem.getIconTextGap() );
 
 			FontMetrics accelFm = menuItem.getFontMetrics( acceleratorFont );
 			width += SwingUtilities.computeStringWidth( accelFm, accelText );
@@ -115,7 +113,10 @@ public class FlatMenuItemRenderer
 		if( !isTopLevelMenu && arrowIcon != null ) {
 			// gap between text and arrow
 			if( accelText == null )
-				width += scale( textArrowGap );
+				width += scale( textNoAcceleratorGap );
+
+			// gap between accelerator and arrow
+			width += scale( acceleratorArrowGap );
 
 			width += arrowIcon.getIconWidth();
 			height = Math.max( arrowIcon.getIconHeight(), height );
@@ -136,7 +137,7 @@ public class FlatMenuItemRenderer
 	}
 
 	private void layout( Rectangle viewRect, Rectangle iconRect, Rectangle textRect,
-		Rectangle accelRect, Rectangle arrowRect )
+		Rectangle accelRect, Rectangle arrowRect, Rectangle labelRect )
 	{
 		boolean isTopLevelMenu = isTopLevelMenu( menuItem );
 
@@ -160,25 +161,29 @@ public class FlatMenuItemRenderer
 			accelRect.setBounds( 0, 0, 0, 0 );
 
 		// compute horizontal positions of accelerator and arrow
+		int accelArrowGap = !isTopLevelMenu ? scale( acceleratorArrowGap ) : 0;
 		if( menuItem.getComponentOrientation().isLeftToRight() ) {
 			// left-to-right
 			arrowRect.x = viewRect.x + viewRect.width - arrowRect.width;
-			accelRect.x = arrowRect.x - accelRect.width;
+			accelRect.x = arrowRect.x - accelArrowGap - accelRect.width;
 		} else {
 			// right-to-left
 			arrowRect.x = viewRect.x;
-			accelRect.x = arrowRect.x + arrowRect.width;
+			accelRect.x = arrowRect.x + accelArrowGap + arrowRect.width;
 		}
 
 		// width of accelerator, arrow and gap
 		int accelArrowWidth = accelRect.width + arrowRect.width;
 		if( accelText != null )
-			accelArrowWidth += scale( textAcceleratorGap );
-		else if( !isTopLevelMenu && arrowIcon != null )
-			accelArrowWidth += scale( textArrowGap );
+			accelArrowWidth += scale( !isTopLevelMenu ? textAcceleratorGap : menuItem.getIconTextGap() );
+		if( !isTopLevelMenu && arrowIcon != null ) {
+			if( accelText == null )
+				accelArrowWidth += scale( textNoAcceleratorGap );
+			accelArrowWidth += scale( acceleratorArrowGap );
+		}
 
 		// label rectangle is view rectangle subtracted by accelerator, arrow and gap
-		Rectangle labelRect = new Rectangle( viewRect );
+		labelRect.setBounds( viewRect );
 		labelRect.width -= accelArrowWidth;
 		if( !menuItem.getComponentOrientation().isLeftToRight() )
 			labelRect.x += accelArrowWidth;
@@ -212,11 +217,13 @@ public class FlatMenuItemRenderer
 		Rectangle textRect = new Rectangle();
 		Rectangle accelRect = new Rectangle();
 		Rectangle arrowRect = new Rectangle();
+		Rectangle labelRect = new Rectangle();
 
-		layout( viewRect, iconRect, textRect, accelRect, arrowRect );
+		layout( viewRect, iconRect, textRect, accelRect, arrowRect, labelRect );
 
 /*debug
-		g.setColor( Color.red ); g.drawRect( viewRect.x, viewRect.y, viewRect.width - 1, viewRect.height - 1 );
+		g.setColor( Color.green ); g.drawRect( viewRect.x, viewRect.y, viewRect.width - 1, viewRect.height - 1 );
+		g.setColor( Color.red ); g.drawRect( labelRect.x, labelRect.y, labelRect.width - 1, labelRect.height - 1 );
 		g.setColor( Color.blue ); g.drawRect( iconRect.x, iconRect.y, iconRect.width - 1, iconRect.height - 1 );
 		g.setColor( Color.cyan ); g.drawRect( textRect.x, textRect.y, textRect.width - 1, textRect.height - 1 );
 		g.setColor( Color.magenta ); g.drawRect( accelRect.x, accelRect.y, accelRect.width - 1, accelRect.height - 1 );

@@ -150,7 +150,7 @@ CheckBoxMenuItem.checkIcon     [lazy] 15,15    com.formdev.flatlaf.icons.FlatChe
 CheckBoxMenuItem.disabledForeground #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.font          [active] $defaultFont [UI]
 CheckBoxMenuItem.foreground    #000000    javax.swing.plaf.ColorUIResource [UI]
-CheckBoxMenuItem.margin        2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
+CheckBoxMenuItem.margin        2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 CheckBoxMenuItem.opaque        false
 CheckBoxMenuItem.selectionBackground #2675bf    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -477,7 +477,7 @@ Menu.font                      [active] $defaultFont [UI]
 Menu.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
 Menu.icon.arrowColor           #666666    javax.swing.plaf.ColorUIResource [UI]
 Menu.icon.disabledArrowColor   #ababab    javax.swing.plaf.ColorUIResource [UI]
-Menu.margin                    2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
+Menu.margin                    2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 Menu.menuPopupOffsetX          0
 Menu.menuPopupOffsetY          0
 Menu.opaque                    false
@@ -509,6 +509,7 @@ MenuBarUI                      com.formdev.flatlaf.ui.FlatMenuBarUI
 
 #---- MenuItem ----
 
+MenuItem.acceleratorArrowGap   2
 MenuItem.acceleratorDelimiter  -
 MenuItem.acceleratorFont       [active] $defaultFont [UI]
 MenuItem.acceleratorForeground #4d4d4d    javax.swing.plaf.ColorUIResource [UI]
@@ -520,14 +521,14 @@ MenuItem.borderPainted         true
 MenuItem.disabledForeground    #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.font                  [active] $defaultFont [UI]
 MenuItem.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
-MenuItem.margin                2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
+MenuItem.margin                2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.minimumIconSize       16,16    javax.swing.plaf.DimensionUIResource [UI]
 MenuItem.minimumWidth          72
 MenuItem.opaque                false
 MenuItem.selectionBackground   #2675bf    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.selectionForeground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.textAcceleratorGap    24
-MenuItem.textArrowGap          8
+MenuItem.textNoAcceleratorGap  6
 MenuItem.underlineSelectionBackground #e6e6e6    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionColor #4083c9    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
@@ -702,7 +703,7 @@ RadioButtonMenuItem.checkIcon  [lazy] 15,15    com.formdev.flatlaf.icons.FlatRad
 RadioButtonMenuItem.disabledForeground #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.font       [active] $defaultFont [UI]
 RadioButtonMenuItem.foreground #000000    javax.swing.plaf.ColorUIResource [UI]
-RadioButtonMenuItem.margin     2,8,2,8    javax.swing.plaf.InsetsUIResource [UI]
+RadioButtonMenuItem.margin     2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 RadioButtonMenuItem.opaque     false
 RadioButtonMenuItem.selectionBackground #2675bf    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]

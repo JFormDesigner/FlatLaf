@@ -120,6 +120,25 @@ new FormModel {
 						"text": "text"
 					} )
 				} )
+				add( new FormContainer( "com.formdev.flatlaf.testing.FlatMenusTest$MenuWithAccelerator", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menuWithAccelerator1"
+					"text": "text"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 122, 0, false )
+					add( new FormContainer( "com.formdev.flatlaf.testing.FlatMenusTest$MenuWithAccelerator", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "menuWithAccelerator2"
+						"text": "text"
+						"accelerator": &KeyStroke0 static javax.swing.KeyStroke getKeyStroke( 72, 130, false )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem40"
+							"text": "text"
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem39"
+						"text": "text"
+						"accelerator": #KeyStroke0
+					} )
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0 2 1,growx"
 			} )
@@ -345,7 +364,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 					name: "checkBoxMenuItem1"
 					"text": "<html>en<b>abl</b>ed</html>"
-					"accelerator": &KeyStroke0 static javax.swing.KeyStroke getKeyStroke( 112, 0, false )
+					"accelerator": &KeyStroke1 static javax.swing.KeyStroke getKeyStroke( 112, 0, false )
 					"mnemonic": 65
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 2"
@@ -359,7 +378,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
 					name: "radioButtonMenuItem1"
 					"text": "<html>en<b color=\"red\">abl</b><i color=\"blue\">ed</i></html>"
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 					"mnemonic": 66
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 3"
@@ -406,7 +425,7 @@ new FormModel {
 					name: "checkBoxMenuItem2"
 					"text": "disabled"
 					"enabled": false
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 					"mnemonic": 83
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 2"
@@ -415,7 +434,7 @@ new FormModel {
 					name: "radioButtonMenuItem2"
 					"text": "disabled"
 					"enabled": false
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 					"mnemonic": 76
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
@@ -441,7 +460,7 @@ new FormModel {
 					name: "menuItem3"
 					"text": "selected"
 					"selected": true
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
 				} )
@@ -449,7 +468,7 @@ new FormModel {
 					name: "checkBoxMenuItem3"
 					"text": "selected"
 					"selected": true
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 2"
 				} )
@@ -457,7 +476,7 @@ new FormModel {
 					name: "radioButtonMenuItem3"
 					"text": "selected"
 					"selected": true
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
 				} )
@@ -483,7 +502,7 @@ new FormModel {
 					"text": "selected disabled"
 					"selected": true
 					"enabled": false
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
 				} )
@@ -492,7 +511,7 @@ new FormModel {
 					"text": "selected disabled"
 					"enabled": false
 					"selected": true
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 2"
 				} )
@@ -501,7 +520,7 @@ new FormModel {
 					"text": "selected disabled"
 					"enabled": false
 					"selected": true
-					"accelerator": #KeyStroke0
+					"accelerator": #KeyStroke1
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
 				} )

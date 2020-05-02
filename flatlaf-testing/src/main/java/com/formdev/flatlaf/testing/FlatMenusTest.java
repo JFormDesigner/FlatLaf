@@ -145,6 +145,10 @@ public class FlatMenusTest
 		JMenu menu6 = new JMenu();
 		JMenuItem menuItem5 = new JMenuItem();
 		JMenuItem menuItem6 = new JMenuItem();
+		FlatMenusTest.MenuWithAccelerator menuWithAccelerator1 = new FlatMenusTest.MenuWithAccelerator();
+		FlatMenusTest.MenuWithAccelerator menuWithAccelerator2 = new FlatMenusTest.MenuWithAccelerator();
+		JMenuItem menuItem40 = new JMenuItem();
+		JMenuItem menuItem39 = new JMenuItem();
 		menuBar2 = new JMenuBar();
 		JMenu menu8 = new JMenu();
 		FlatMenusTest.LargerMenuItem menuItem13 = new FlatMenusTest.LargerMenuItem();
@@ -322,6 +326,29 @@ public class FlatMenusTest
 				menu6.add(menuItem6);
 			}
 			menuBar1.add(menu6);
+
+			//======== menuWithAccelerator1 ========
+			{
+				menuWithAccelerator1.setText("text");
+				menuWithAccelerator1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
+
+				//======== menuWithAccelerator2 ========
+				{
+					menuWithAccelerator2.setText("text");
+					menuWithAccelerator2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
+
+					//---- menuItem40 ----
+					menuItem40.setText("text");
+					menuWithAccelerator2.add(menuItem40);
+				}
+				menuWithAccelerator1.add(menuWithAccelerator2);
+
+				//---- menuItem39 ----
+				menuItem39.setText("text");
+				menuItem39.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
+				menuWithAccelerator1.add(menuItem39);
+			}
+			menuBar1.add(menuWithAccelerator1);
 		}
 		add(menuBar1, "cell 1 0 2 1,growx");
 
@@ -806,6 +833,30 @@ public class FlatMenusTest
 			g.setColor( UIManager.getColor( "Separator.foreground" ) );
 			g.drawLine( 0, 0, getWidth(), 0 );
 			g.drawLine( 0, getHeight(), getWidth(), getHeight() );
+		}
+	}
+
+	//---- class MenuWithAccelerator ------------------------------------------
+
+	public static class MenuWithAccelerator
+		extends JMenu
+	{
+		private KeyStroke accelerator;
+
+		@Override
+		public KeyStroke getAccelerator() {
+			return accelerator;
+		}
+
+		@Override
+		public void setAccelerator( KeyStroke keyStroke ) {
+			KeyStroke oldAccelerator = accelerator;
+			this.accelerator = keyStroke;
+
+			revalidate();
+			repaint();
+
+			firePropertyChange( "accelerator", oldAccelerator, accelerator );
 		}
 	}
 }
