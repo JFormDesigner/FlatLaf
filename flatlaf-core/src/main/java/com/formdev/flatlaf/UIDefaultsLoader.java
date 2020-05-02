@@ -515,8 +515,8 @@ class UIDefaultsLoader
 			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 
 		switch( function ) {
-			case "rgb":			return parseColorRgbOrRgba( false, params );
-			case "rgba":		return parseColorRgbOrRgba( true, params );
+			case "rgb":			return parseColorRgbOrRgba( false, params, resolver, reportError );
+			case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
 			case "hsl":			return parseColorHslOrHsla( false, params );
 			case "hsla":		return parseColorHslOrHsla( true, params );
 			case "lighten":		return parseColorLightenOrDarken( true, params, resolver, reportError );
@@ -527,17 +527,28 @@ class UIDefaultsLoader
 	}
 
 	/**
-	 * Syntax: rgb(red,green,blue) or rgba(red,green,blue,alpha)
-	 *   - red: an integer 0-255
-	 *   - green: an integer 0-255
-	 *   - blue: an integer 0-255
-	 *   - alpha: an integer 0-255
+	 * Syntax: rgb(red,green,blue) or rgba(red,green,blue,alpha) or rgba(color,alpha)
+	 *   - red:   an integer 0-255 or a percentage 0-100%
+	 *   - green: an integer 0-255 or a percentage 0-100%
+	 *   - blue:  an integer 0-255 or a percentage 0-100%
+	 *   - alpha: an integer 0-255 or a percentage 0-100%
 	 */
-	private static ColorUIResource parseColorRgbOrRgba( boolean hasAlpha, List<String> params ) {
-		int red = parseInteger( params.get( 0 ), 0, 255 );
-		int green = parseInteger( params.get( 1 ), 0, 255 );
-		int blue = parseInteger( params.get( 2 ), 0, 255 );
-		int alpha = hasAlpha ? parseInteger( params.get( 3 ), 0, 255 ) : 255;
+	private static ColorUIResource parseColorRgbOrRgba( boolean hasAlpha, List<String> params,
+		Function<String, String> resolver, boolean reportError )
+	{
+		if( hasAlpha && params.size() == 2 ) {
+			// syntax rgba(color,alpha), which allows adding alpha to any color
+			String colorStr = params.get( 0 );
+			int alpha = parseInteger( params.get( 1 ), 0, 255, true );
+
+			ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+			return new ColorUIResource( new Color( ((alpha & 0xff) << 24) | (color.getRGB() & 0xffffff), true ) );
+		}
+
+		int red = parseInteger( params.get( 0 ), 0, 255, true );
+		int green = parseInteger( params.get( 1 ), 0, 255, true );
+		int blue = parseInteger( params.get( 2 ), 0, 255, true );
+		int alpha = hasAlpha ? parseInteger( params.get( 3 ), 0, 255, true ) : 255;
 
 		return hasAlpha
 			? new ColorUIResource( new Color( red, green, blue, alpha ) )
@@ -552,7 +563,7 @@ class UIDefaultsLoader
 	 *   - alpha: a percentage 0-100%
 	 */
 	private static ColorUIResource parseColorHslOrHsla( boolean hasAlpha, List<String> params ) {
-		int hue = parseInteger( params.get( 0 ), 0, 360 );
+		int hue = parseInteger( params.get( 0 ), 0, 360, false );
 		int saturation = parsePercentage( params.get( 1 ) );
 		int lightness = parsePercentage( params.get( 2 ) );
 		int alpha = hasAlpha ? parsePercentage( params.get( 3 ) ) : 100;
@@ -629,7 +640,12 @@ class UIDefaultsLoader
 		return value.charAt( 0 );
 	}
 
-	private static Integer parseInteger( String value, int min, int max ) {
+	private static Integer parseInteger( String value, int min, int max, boolean allowPercentage ) {
+		if( allowPercentage && value.endsWith( "%" ) ) {
+			int percent = parsePercentage( value );
+			return (max * percent) / 100;
+		}
+
 		Integer integer = parseInteger( value, true );
 		if( integer.intValue() < min || integer.intValue() > max )
 			throw new NumberFormatException( "integer '" + value + "' out of range (" + min + '-' + max + ')' );
