@@ -198,13 +198,13 @@ public class IJThemesPanel
 	}
 
 	private void themesListValueChanged( ListSelectionEvent e ) {
-		if( e.getValueIsAdjusting() || isAdjustingThemesList )
-			return;
-
 		IJThemeInfo themeInfo = themesList.getSelectedValue();
 		boolean bundledTheme = (themeInfo != null && themeInfo.resourceName != null);
 		saveButton.setEnabled( bundledTheme );
 		sourceCodeButton.setEnabled( bundledTheme );
+
+		if( e.getValueIsAdjusting() || isAdjustingThemesList )
+			return;
 
 		EventQueue.invokeLater( () -> {
 			setTheme( themeInfo );
