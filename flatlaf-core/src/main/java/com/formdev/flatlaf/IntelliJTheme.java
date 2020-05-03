@@ -240,7 +240,7 @@ public class IntelliJTheme
 			if( color != null ) {
 				String key = e.getKey();
 				namedColors.put( key, color );
-				defaults.put( "ColorPalette." + e.getKey(), color );
+				defaults.put( "ColorPalette." + key, color );
 			}
 		}
 	}

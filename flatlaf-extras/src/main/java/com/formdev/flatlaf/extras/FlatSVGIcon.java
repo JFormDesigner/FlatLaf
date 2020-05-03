@@ -26,9 +26,12 @@ import java.awt.RenderingHints;
 import java.awt.image.RGBImageFilter;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.FlatIconColors;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
@@ -100,16 +103,16 @@ public class FlatSVGIcon
 		if( clipBounds != null && !clipBounds.intersects( new Rectangle( x, y, getIconWidth(), getIconHeight() ) ) )
 			return;
 
-		Graphics2D g2 = (Graphics2D) g.create();
-
+		// get gray filter
+		RGBImageFilter grayFilter = null;
 		if( c != null && !c.isEnabled() ) {
-			Object grayFilter = UIManager.get( "Component.grayFilter" );
-			RGBImageFilter filter = (grayFilter instanceof RGBImageFilter)
-				? (RGBImageFilter) grayFilter
+			Object grayFilterObj = UIManager.get( "Component.grayFilter" );
+			grayFilter = (grayFilterObj instanceof RGBImageFilter)
+				? (RGBImageFilter) grayFilterObj
 				: GrayFilter.createDisabledIconFilter( dark );
-
-			g2 = new GraphicsFilter( g2, filter );
 		}
+
+		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), ColorFilter.getInstance(), grayFilter );
 
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
@@ -165,16 +168,52 @@ public class FlatSVGIcon
 		darkLaf = (lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark());
 	}
 
+	//---- class ColorFilter --------------------------------------------------
+
+	public static class ColorFilter
+	{
+		private static ColorFilter instance;
+
+		private final Map<Integer, String> rgb2keyMap = new HashMap<>();
+
+		public static ColorFilter getInstance() {
+			if( instance == null )
+				instance = new ColorFilter();
+			return instance;
+		}
+
+		public ColorFilter() {
+			for( FlatIconColors c : FlatIconColors.values() )
+				rgb2keyMap.put( c.rgb, c.key );
+		}
+
+		public Color filter( Color color ) {
+			String colorKey = rgb2keyMap.get( color.getRGB() & 0xffffff );
+			if( colorKey == null )
+				return color;
+
+			Color newColor = UIManager.getColor( colorKey );
+			if( newColor == null )
+				return color;
+
+			return (newColor.getAlpha() != color.getAlpha())
+				? new Color( (newColor.getRGB() & 0x00ffffff) | (color.getRGB() & 0xff000000) )
+				: newColor;
+		};
+	}
+
 	//---- class GraphicsFilter -----------------------------------------------
 
 	private static class GraphicsFilter
 		extends Graphics2DProxy
 	{
-		private final RGBImageFilter filter;
+		private final ColorFilter colorFilter;
+		private final RGBImageFilter grayFilter;
 
-		public GraphicsFilter( Graphics2D delegate, RGBImageFilter filter ) {
+		public GraphicsFilter( Graphics2D delegate, ColorFilter colorFilter, RGBImageFilter grayFilter ) {
 			super( delegate );
-			this.filter = filter;
+			this.colorFilter = colorFilter;
+			this.grayFilter = grayFilter;
 		}
 
 		@Override
@@ -190,9 +229,14 @@ public class FlatSVGIcon
 		}
 
 		private Color filterColor( Color color ) {
-			int oldRGB = color.getRGB();
-			int newRGB = filter.filterRGB( 0, 0, oldRGB );
-			return (newRGB != oldRGB) ? new Color( newRGB, true ) : color;
+			if( colorFilter != null )
+				color = colorFilter.filter( color );
+			if( grayFilter != null ) {
+				int oldRGB = color.getRGB();
+				int newRGB = grayFilter.filterRGB( 0, 0, oldRGB );
+				color = (newRGB != oldRGB) ? new Color( newRGB, true ) : color;
+			}
+			return color;
 		}
 	}
 }
