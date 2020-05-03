@@ -21,6 +21,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import net.miginfocom.swing.*;
@@ -156,6 +157,7 @@ class DemoFrame
 		DataComponentsPanel dataComponentsPanel = new DataComponentsPanel();
 		TabsPanel tabsPanel = new TabsPanel();
 		OptionPanePanel optionPanePanel = new OptionPanePanel();
+		ExtrasPanel extrasPanel1 = new ExtrasPanel();
 		controlBar = new ControlBar();
 		IJThemesPanel themesPanel = new IJThemesPanel();
 
@@ -447,6 +449,7 @@ class DemoFrame
 				tabbedPane.addTab("Data Components", dataComponentsPanel);
 				tabbedPane.addTab("SplitPane & Tabs", tabsPanel);
 				tabbedPane.addTab("Option Pane", optionPanePanel);
+				tabbedPane.addTab("Extras", extrasPanel1);
 			}
 			contentPanel.add(tabbedPane, "cell 0 0");
 		}

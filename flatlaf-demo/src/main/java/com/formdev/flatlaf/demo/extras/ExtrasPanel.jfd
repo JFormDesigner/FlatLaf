@@ -3,41 +3,33 @@ JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
-		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
 			"$columnConstraints": "[][][left]"
-			"$rowConstraints": "[][][][]"
+			"$rowConstraints": "[]para[][][]"
 		} ) {
 			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "Note: Components on this page require the flatlaf-extras library."
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 3 1"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
 				"text": "TriStateCheckBox:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0"
+				"value": "cell 0 1"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.extras.TriStateCheckBox" ) {
 				name: "triStateCheckBox1"
 				"text": "three states"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "triStateCheckBox1Changed", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "triStateLabel1"
-				"text": "text"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.extras.TriStateCheckBox" ) {
-				name: "triStateCheckBox2"
-				"text": "third state disabled"
-				"thirdStateEnabled": false
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "triStateCheckBox2Changed", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "triStateLabel2"
+				name: "triStateLabel1"
 				"text": "text"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
