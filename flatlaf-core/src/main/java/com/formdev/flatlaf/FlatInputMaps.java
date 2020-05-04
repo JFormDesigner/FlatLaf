@@ -85,8 +85,12 @@ class FlatInputMaps
 			// swap to make it consistent with List and Tree
 			"HOME", "selectFirstRow",
 			"END", "selectLastRow",
+			"shift HOME", "selectFirstRowExtendSelection",
+			"shift END", "selectLastRowExtendSelection",
 			mac( "ctrl HOME", null ), "selectFirstColumn",
-			mac( "ctrl END", null ), "selectLastColumn"
+			mac( "ctrl END", null ), "selectLastColumn",
+			mac( "shift ctrl HOME", null ), "selectFirstColumnExtendSelection",
+			mac( "shift ctrl END", null ), "selectLastColumnExtendSelection"
 		);
 
 		if( !SystemInfo.IS_MAC ) {
@@ -501,6 +505,9 @@ class FlatInputMaps
 			"alt KP_LEFT", "selectParent",
 			"alt KP_RIGHT", "selectChild",
 
+			"shift HOME", "selectFirstExtendSelection",
+			"shift END", "selectLastExtendSelection",
+
 		    "meta A", "selectAll",
 		    "meta C", "copy",
 		    "meta V", "paste",
@@ -545,8 +552,6 @@ class FlatInputMaps
 			"shift ctrl SPACE", null,
 			"shift ctrl UP", null,
 			"shift DELETE", null,
-			"shift END", null,
-			"shift HOME", null,
 			"shift INSERT", null,
 			"shift PAGE_DOWN", null,
 			"shift PAGE_UP", null,

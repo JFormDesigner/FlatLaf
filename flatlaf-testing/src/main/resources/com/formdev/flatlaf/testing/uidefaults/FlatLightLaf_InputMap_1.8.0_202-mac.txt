@@ -573,9 +573,9 @@ Table.ancestorInputMap         [lazy] 34    javax.swing.plaf.InputMapUIResource 
     UP                    selectPreviousRow
     shift alt TAB         focusHeader
     shift DOWN            selectNextRowExtendSelection
-    shift END             selectLastColumnExtendSelection
+    shift END             selectLastRowExtendSelection
     shift ENTER           selectPreviousRowCell
-    shift HOME            selectFirstColumnExtendSelection
+    shift HOME            selectFirstRowExtendSelection
     shift KP_DOWN         selectNextRowExtendSelection
     shift KP_LEFT         selectPreviousColumnExtendSelection
     shift KP_RIGHT        selectNextColumnExtendSelection
@@ -894,7 +894,7 @@ Tree.focusInputMap.RightToLeft [lazy] 12    javax.swing.plaf.InputMapUIResource 
     shift KP_RIGHT        selectParent
     shift LEFT            selectChild
     shift RIGHT           selectParent
-Tree.focusInputMap             [lazy] 27    javax.swing.plaf.InputMapUIResource [UI]
+Tree.focusInputMap             [lazy] 29    javax.swing.plaf.InputMapUIResource [UI]
     alt KP_LEFT           selectParent
     alt KP_RIGHT          selectChild
     alt LEFT              selectParent
@@ -915,6 +915,8 @@ Tree.focusInputMap             [lazy] 27    javax.swing.plaf.InputMapUIResource 
     RIGHT                 selectChild
     UP                    selectPrevious
     shift DOWN            selectNextExtendSelection
+    shift END             selectLastExtendSelection
+    shift HOME            selectFirstExtendSelection
     shift KP_DOWN         selectNextExtendSelection
     shift KP_LEFT         selectParent
     shift KP_RIGHT        selectChild

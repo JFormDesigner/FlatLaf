@@ -83,6 +83,14 @@ public class FlatComponents2Test
 		scrollPane5.setCorner( JScrollPane.UPPER_TRAILING_CORNER, button );
 	}
 
+	private void rowSelectionChanged() {
+		table1.setRowSelectionAllowed( rowSelectionCheckBox.isSelected() );
+	}
+
+	private void columnSelectionChanged() {
+		table1.setColumnSelectionAllowed( columnSelectionCheckBox.isSelected() );
+	}
+
 	@SuppressWarnings( { "unchecked", "rawtypes" } )
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -104,6 +112,8 @@ public class FlatComponents2Test
 		table1 = new JTable();
 		dndCheckBox = new JCheckBox();
 		tableHeaderButtonCheckBox = new JCheckBox();
+		rowSelectionCheckBox = new JCheckBox();
+		columnSelectionCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -312,6 +322,17 @@ public class FlatComponents2Test
 		tableHeaderButtonCheckBox.setText("show button in table header");
 		tableHeaderButtonCheckBox.addActionListener(e -> tableHeaderButtonChanged());
 		add(tableHeaderButtonCheckBox, "cell 0 4 3 1");
+
+		//---- rowSelectionCheckBox ----
+		rowSelectionCheckBox.setText("row selection");
+		rowSelectionCheckBox.setSelected(true);
+		rowSelectionCheckBox.addActionListener(e -> rowSelectionChanged());
+		add(rowSelectionCheckBox, "cell 0 4 3 1");
+
+		//---- columnSelectionCheckBox ----
+		columnSelectionCheckBox.setText("column selection");
+		columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
+		add(columnSelectionCheckBox, "cell 0 4 3 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		((JComboBox)((DefaultCellEditor)table1.getColumnModel().getColumn( 3 ).getCellEditor()).getComponent()).setEditable( true );
@@ -326,6 +347,8 @@ public class FlatComponents2Test
 	private JTable table1;
 	private JCheckBox dndCheckBox;
 	private JCheckBox tableHeaderButtonCheckBox;
+	private JCheckBox rowSelectionCheckBox;
+	private JCheckBox columnSelectionCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class DummyTransferHandler -----------------------------------------

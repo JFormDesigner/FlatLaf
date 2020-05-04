@@ -583,8 +583,8 @@ Table.ancestorInputMap         [lazy] 71    javax.swing.plaf.InputMapUIResource 
     TAB                   selectNextColumnCell
     UP                    selectPreviousRow
     shift ctrl DOWN       selectNextRowExtendSelection
-    shift ctrl END        selectLastRowExtendSelection
-    shift ctrl HOME       selectFirstRowExtendSelection
+    shift ctrl END        selectLastColumnExtendSelection
+    shift ctrl HOME       selectFirstColumnExtendSelection
     shift ctrl KP_DOWN    selectNextRowExtendSelection
     shift ctrl KP_LEFT    selectPreviousColumnExtendSelection
     shift ctrl KP_RIGHT   selectNextColumnExtendSelection
@@ -597,9 +597,9 @@ Table.ancestorInputMap         [lazy] 71    javax.swing.plaf.InputMapUIResource 
     shift ctrl UP         selectPreviousRowExtendSelection
     shift DELETE          cut
     shift DOWN            selectNextRowExtendSelection
-    shift END             selectLastColumnExtendSelection
+    shift END             selectLastRowExtendSelection
     shift ENTER           selectPreviousRowCell
-    shift HOME            selectFirstColumnExtendSelection
+    shift HOME            selectFirstRowExtendSelection
     shift INSERT          paste
     shift KP_DOWN         selectNextRowExtendSelection
     shift KP_LEFT         selectPreviousColumnExtendSelection
