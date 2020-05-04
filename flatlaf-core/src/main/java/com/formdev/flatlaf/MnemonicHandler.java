@@ -92,8 +92,8 @@ class MnemonicHandler
 			MenuSelectionManager.defaultManager().getSelectedPath().length > 0;
 	}
 
-	private int altPressedEventCount;
-	private boolean selectMenuOnAltReleased;
+	private static int altPressedEventCount;
+	private static boolean selectMenuOnAltReleased;
 
 	/**
 	 * Special Alt key behavior on Windows.
@@ -151,6 +151,7 @@ class MnemonicHandler
 					}
 				}
 			}
+			selectMenuOnAltReleased = false;
 
 			// hide mnemonics
 			if( !mnemonicsShown )
@@ -196,6 +197,9 @@ class MnemonicHandler
 			windowListener = new WindowAdapter() {
 				@Override
 				public void windowDeactivated( WindowEvent e ) {
+					altPressedEventCount = 0;
+					selectMenuOnAltReleased = false;
+
 					// use invokeLater() to avoid that the listener is removed
 					// while the listener queue is iterated to fire this event
 					EventQueue.invokeLater( () -> {
