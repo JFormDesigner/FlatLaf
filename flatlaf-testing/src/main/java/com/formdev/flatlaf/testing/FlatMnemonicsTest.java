@@ -56,6 +56,10 @@ public class FlatMnemonicsTest
 		SwingUtilities.windowForComponent( this ).repaint();
 	}
 
+	private void openDialog() {
+		JOptionPane.showMessageDialog( this, new FlatMnemonicsTest() );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel label1 = new JLabel();
@@ -77,6 +81,7 @@ public class FlatMnemonicsTest
 		JPanel panel3 = new JPanel();
 		JLabel label5 = new JLabel();
 		alwaysShowMnemonicsCheckBox = new JCheckBox();
+		JButton button2 = new JButton();
 		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
@@ -114,7 +119,7 @@ public class FlatMnemonicsTest
 			// columns
 			"[fill]" +
 			"[150,fill]para" +
-			"[grow,fill]",
+			"[300,grow,fill]",
 			// rows
 			"[]" +
 			"[]" +
@@ -237,6 +242,11 @@ public class FlatMnemonicsTest
 		alwaysShowMnemonicsCheckBox.setMnemonic('M');
 		alwaysShowMnemonicsCheckBox.addActionListener(e -> alwaysShowMnemonicsChanged());
 		add(alwaysShowMnemonicsCheckBox, "cell 0 7 2 1,alignx left,growx 0");
+
+		//---- button2 ----
+		button2.setText("Open Dialog");
+		button2.addActionListener(e -> openDialog());
+		add(button2, "cell 2 7,alignx left,growx 0");
 
 		//======== menuBar ========
 		{

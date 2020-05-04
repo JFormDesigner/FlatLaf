@@ -28,7 +28,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.lang.ref.WeakReference;
 import javax.swing.AbstractButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.JTabbedPane;
 import javax.swing.MenuElement;
@@ -74,6 +77,9 @@ class MnemonicHandler
 				showMnemonics( shouldShowMnemonics( e ) && e.isControlDown() && e.isAltDown(), e.getComponent() );
 		} else {
 			// Alt key must be pressed on Windows and Linux
+			if( SystemInfo.IS_WINDOWS )
+				return processKeyEventOnWindows( e );
+
 			if( keyCode == KeyEvent.VK_ALT )
 				showMnemonics( shouldShowMnemonics( e ), e.getComponent() );
 		}
@@ -86,10 +92,77 @@ class MnemonicHandler
 			MenuSelectionManager.defaultManager().getSelectedPath().length > 0;
 	}
 
+	private int altPressedEventCount;
+	private boolean selectMenuOnAltReleased;
+
+	/**
+	 * Special Alt key behavior on Windows.
+	 *
+	 * Press-and-release Alt key selects first menu (if available) and moves focus
+	 * temporary to menu bar. If menu bar has focus (some menu is selected),
+	 * pressing Alt key unselects menu and moves focus back to permanent focus owner.
+	 */
+	private boolean processKeyEventOnWindows( KeyEvent e ) {
+		if( e.getKeyCode() != KeyEvent.VK_ALT ) {
+			selectMenuOnAltReleased = false;
+			return false;
+		}
+
+		if( e.getID() == KeyEvent.KEY_PRESSED ) {
+			altPressedEventCount++;
+
+			if( altPressedEventCount == 1 && !e.isConsumed() ) {
+				MenuSelectionManager menuSelectionManager = MenuSelectionManager.defaultManager();
+				selectMenuOnAltReleased = (menuSelectionManager.getSelectedPath().length == 0);
+
+				// if menu is selected when Alt key is pressed then clear menu selection
+				if( !selectMenuOnAltReleased )
+					menuSelectionManager.clearSelectedPath();
+			}
+
+			// show mnemonics
+			showMnemonics( shouldShowMnemonics( e ), e.getComponent() );
+
+			// avoid that the system menu of the window gets focus
+			e.consume();
+			return true;
+
+		} else if( e.getID() == KeyEvent.KEY_RELEASED ) {
+			altPressedEventCount = 0;
+
+			boolean mnemonicsShown = false;
+			if( selectMenuOnAltReleased && !e.isConsumed() ) {
+				MenuSelectionManager menuSelectionManager = MenuSelectionManager.defaultManager();
+				if( menuSelectionManager.getSelectedPath().length == 0 ) {
+					// get menu bar and first menu
+					Component c = e.getComponent();
+					JRootPane rootPane = SwingUtilities.getRootPane( c );
+					Window window = (rootPane != null) ? SwingUtilities.getWindowAncestor( rootPane ) : null;
+					JMenuBar menuBar = (rootPane != null) ? rootPane.getJMenuBar() : null;
+					if( menuBar == null && window instanceof JFrame )
+						menuBar = ((JFrame)window).getJMenuBar();
+					JMenu firstMenu = (menuBar != null) ? menuBar.getMenu( 0 ) : null;
+
+					// select first menu and show mnemonics
+					if( firstMenu != null ) {
+						menuSelectionManager.setSelectedPath( new MenuElement[] { menuBar, firstMenu } );
+						showMnemonics( true, c );
+						mnemonicsShown = true;
+					}
+				}
+			}
+
+			// hide mnemonics
+			if( !mnemonicsShown )
+				showMnemonics( shouldShowMnemonics( e ), e.getComponent() );
+		}
+		return false;
+	}
+
 	@Override
 	public void stateChanged( ChangeEvent e ) {
 		MenuElement[] selectedPath = MenuSelectionManager.defaultManager().getSelectedPath();
-		if( selectedPath.length == 0 ) {
+		if( selectedPath.length == 0 && altPressedEventCount == 0 ) {
 			// hide mnemonics when menu selection was canceled
 			showMnemonics( false, null );
 		}
@@ -126,7 +199,7 @@ class MnemonicHandler
 					// use invokeLater() to avoid that the listener is removed
 					// while the listener queue is iterated to fire this event
 					EventQueue.invokeLater( () -> {
-						showMnemonics( false, c );
+						showMnemonics( false, null );
 					} );
 				}
 			};

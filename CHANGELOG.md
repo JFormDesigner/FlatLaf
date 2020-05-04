@@ -13,6 +13,8 @@ FlatLaf Change Log
 - Menus: On Windows, pressing <kbd>F10</kbd> now activates the menu bar without
   showing a menu popup (as usual on Windows platform). On other platforms the
   first menu popup is shown.
+- Menus: On Windows, releasing <kbd>Alt</kbd> key now activates the menu bar (as
+  usual on Windows platform). (issue #43)
 - Menus: Fixed inconsistent left padding in menu items. (issue #3)
 - Menus: Fixed: Setting `iconTextGap` property on a menu item did increase left
   and right margins. (issue #54)

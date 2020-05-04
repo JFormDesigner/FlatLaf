@@ -8,7 +8,7 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[fill][150,fill]para[grow,fill]"
+			"$columnConstraints": "[fill][150,fill]para[300,grow,fill]"
 			"$rowConstraints": "[][][][][]para[][]para[]"
 		} ) {
 			name: "this"
@@ -140,6 +140,13 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "alwaysShowMnemonicsChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 7 2 1,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button2"
+				"text": "Open Dialog"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDialog", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 7,alignx left,growx 0"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
