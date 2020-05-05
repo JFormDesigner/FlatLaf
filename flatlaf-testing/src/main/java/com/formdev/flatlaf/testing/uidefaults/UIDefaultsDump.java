@@ -29,6 +29,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Predicate;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -70,6 +71,7 @@ public class UIDefaultsDump
 	private JComponent dummyComponent;
 
 	public static void main( String[] args ) {
+		Locale.setDefault( Locale.ENGLISH );
 		System.setProperty( "sun.java2d.uiScale", "1x" );
 		System.setProperty( "flatlaf.uiScale", "1x" );
 
