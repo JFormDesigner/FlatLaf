@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPopupMenuUI;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPopupMenu}.
@@ -35,7 +36,28 @@ import javax.swing.plaf.basic.BasicPopupMenuUI;
 public class FlatPopupMenuUI
 	extends BasicPopupMenuUI
 {
+	private boolean oldLightWeightPopupEnabled;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatPopupMenuUI();
+	}
+
+	@Override
+	public void installDefaults() {
+		super.installDefaults();
+
+		// use heavy-weight popups on macOS to get nice drop shadow from OS
+		if( SystemInfo.IS_MAC ) {
+			oldLightWeightPopupEnabled = popupMenu.isLightWeightPopupEnabled();
+			popupMenu.setLightWeightPopupEnabled( false );
+		}
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		if( SystemInfo.IS_MAC )
+			popupMenu.setLightWeightPopupEnabled( oldLightWeightPopupEnabled );
 	}
 }

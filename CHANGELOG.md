@@ -20,6 +20,7 @@ FlatLaf Change Log
   and right margins. (issue #54)
 - Hide mnemonics if window is deactivated (e.g. <kbd>Alt+Tab</kbd> to another
   window). (issue #43)
+- macOS: Enabled drop shadows for popup menus and combobox popups. (issue #94)
 - macOS: Fixed NPE if using `JMenuBar` in `JInternalFrame` and macOS screen menu
   bar is enabled (with `-Dapple.laf.useScreenMenuBar=true`). (issue #90)
 
