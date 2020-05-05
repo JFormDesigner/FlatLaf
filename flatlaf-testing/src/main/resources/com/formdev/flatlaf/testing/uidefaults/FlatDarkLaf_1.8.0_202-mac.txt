@@ -517,7 +517,7 @@ MenuItem.background            #303234    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
 MenuItem.borderPainted         true
 MenuItem.checkBackground       #484c4f    javax.swing.plaf.ColorUIResource [UI]
-MenuItem.checkMargins          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+MenuItem.checkMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.disabledForeground    #777777    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.font                  [active] $defaultFont [UI]
 MenuItem.foreground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
