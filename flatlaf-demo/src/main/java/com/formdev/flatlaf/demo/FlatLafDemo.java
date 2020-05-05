@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.demo;
 
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * @author Karl Tauber
@@ -27,6 +28,9 @@ public class FlatLafDemo
 	static final String KEY_TAB = "tab";
 
 	public static void main( String[] args ) {
+		if( SystemInfo.IS_MAC )
+			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
+
 		SwingUtilities.invokeLater( () -> {
 			DemoPrefs.init( PREFS_ROOT_PATH );
 
