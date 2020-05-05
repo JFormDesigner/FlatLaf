@@ -1092,11 +1092,9 @@ ToolBarUI                      com.formdev.flatlaf.ui.FlatToolBarUI
 #---- ToolTip ----
 
 ToolTip.background             #1e2123    javax.swing.plaf.ColorUIResource [UI]
-ToolTip.backgroundInactive     #1e2123    javax.swing.plaf.ColorUIResource [UI]
 ToolTip.border                 [lazy] 4,6,4,6  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 ToolTip.font                   [active] $defaultFont [UI]
 ToolTip.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-ToolTip.foregroundInactive     #777777    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- ToolTipManager ----
