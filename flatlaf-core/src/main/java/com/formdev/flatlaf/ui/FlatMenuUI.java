@@ -26,6 +26,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
@@ -58,14 +59,8 @@ import javax.swing.plaf.basic.BasicMenuUI;
  *
  * <!-- FlatMenuUI -->
  *
+ * @uiDefault MenuItem.iconTextGap									int
  * @uiDefault MenuBar.hoverBackground								Color
- *
- * <!-- FlatMenuItemRenderer -->
- *
- * @uiDefault MenuItem.minimumIconSize								Dimension
- * @uiDefault MenuItem.textAcceleratorGap							int
- * @uiDefault MenuItem.textNoAcceleratorGap							int
- * @uiDefault MenuItem.acceleratorArrowGap							int
  *
  * @author Karl Tauber
  */
@@ -82,6 +77,8 @@ public class FlatMenuUI
 	@Override
 	protected void installDefaults() {
 		super.installDefaults();
+
+		LookAndFeel.installProperty( menuItem, "iconTextGap", FlatUIUtils.getUIInt( "MenuItem.iconTextGap", 4 ) );
 
 		menuItem.setRolloverEnabled( true );
 
@@ -134,7 +131,7 @@ public class FlatMenuUI
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
-			null, acceleratorForeground, acceleratorSelectionForeground );
+			acceleratorForeground, acceleratorSelectionForeground );
 	}
 
 	//---- class FlatMenuRenderer ---------------------------------------------

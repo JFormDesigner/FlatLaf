@@ -44,6 +44,17 @@ import com.formdev.flatlaf.util.Graphics2DProxy;
 /**
  * Renderer for menu items.
  *
+ * @uiDefault MenuItem.minimumWidth									int
+ * @uiDefault MenuItem.minimumIconSize								Dimension
+ * @uiDefault MenuItem.textAcceleratorGap							int
+ * @uiDefault MenuItem.textNoAcceleratorGap							int
+ * @uiDefault MenuItem.acceleratorArrowGap							int
+ * @uiDefault MenuItem.checkBackground								Color
+ * @uiDefault MenuItem.underlineSelectionBackground					Color
+ * @uiDefault MenuItem.underlineSelectionCheckBackground			Color
+ * @uiDefault MenuItem.underlineSelectionColor						Color
+ * @uiDefault MenuItem.underlineSelectionHeight						Color
+ *
  * @author Karl Tauber
  */
 public class FlatMenuItemRenderer
@@ -60,7 +71,11 @@ public class FlatMenuItemRenderer
 	protected final int textNoAcceleratorGap = FlatUIUtils.getUIInt( "MenuItem.textNoAcceleratorGap", 6 );
 	protected final int acceleratorArrowGap = FlatUIUtils.getUIInt( "MenuItem.acceleratorArrowGap", 2 );
 
+	protected final Color checkBackground = UIManager.getColor( "MenuItem.checkBackground" );
+	protected final Insets checkMargins = UIManager.getInsets( "MenuItem.checkMargins" );
+
 	protected final Color underlineSelectionBackground = UIManager.getColor( "MenuItem.underlineSelectionBackground" );
+	protected final Color underlineSelectionCheckBackground = UIManager.getColor( "MenuItem.underlineSelectionCheckBackground" );
 	protected final Color underlineSelectionColor = UIManager.getColor( "MenuItem.underlineSelectionColor" );
 	protected final int underlineSelectionHeight = UIManager.getInt( "MenuItem.underlineSelectionHeight" );
 
@@ -201,8 +216,7 @@ public class FlatMenuItemRenderer
 	}
 
 	protected void paintMenuItem( Graphics g, Color selectionBackground, Color selectionForeground,
-		Color disabledForeground, Color checkBackground,
-		Color acceleratorForeground, Color acceleratorSelectionForeground )
+		Color disabledForeground, Color acceleratorForeground, Color acceleratorSelectionForeground )
 	{
 		Rectangle viewRect = new Rectangle( menuItem.getWidth(), menuItem.getHeight() );
 
@@ -231,7 +245,7 @@ public class FlatMenuItemRenderer
 debug*/
 
 		paintBackground( g, selectionBackground );
-		paintIcon( g, iconRect, getIconForPainting(), checkBackground );
+		paintIcon( g, iconRect, getIconForPainting() );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
 		if( !isTopLevelMenu( menuItem ) )
@@ -268,14 +282,13 @@ debug*/
 		}
 	}
 
-	protected void paintIcon( Graphics g, Rectangle iconRect, Icon icon, Color checkBackground ) {
+	protected void paintIcon( Graphics g, Rectangle iconRect, Icon icon ) {
 		// if checkbox/radiobutton menu item is selected and also has a custom icon,
 		// then use filled icon background to indicate selection (instead of using checkIcon)
 		if( menuItem.isSelected() && checkIcon != null && icon != checkIcon ) {
-			int outset = scale( Math.max( menuItem.getIconTextGap() / 2, 2 ) );
-			g.setColor( checkBackground );
-			g.fillRect( iconRect.x - outset, iconRect.y - outset,
-				iconRect.width + (outset * 2), iconRect.height + (outset * 2) );
+			Rectangle r = FlatUIUtils.addInsets( iconRect, scale( checkMargins ) );
+			g.setColor( isUnderlineSelection() ? underlineSelectionCheckBackground : checkBackground );
+			g.fillRect( r.x, r.y, r.width, r.height );
 		}
 
 		paintIcon( g, menuItem, icon, iconRect );

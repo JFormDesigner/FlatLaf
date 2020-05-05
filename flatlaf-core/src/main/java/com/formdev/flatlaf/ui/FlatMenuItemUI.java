@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
 
@@ -45,12 +46,9 @@ import javax.swing.plaf.basic.BasicMenuItemUI;
  * @uiDefault MenuItem.checkIcon									Icon
  * @uiDefault MenuItem.opaque										boolean
  *
- * <!-- FlatMenuItemRenderer -->
+ * <!-- FlatMenuItemUI -->
  *
- * @uiDefault MenuItem.minimumIconSize								Dimension
- * @uiDefault MenuItem.textAcceleratorGap							int
- * @uiDefault MenuItem.textNoAcceleratorGap							int
- * @uiDefault MenuItem.acceleratorArrowGap							int
+ * @uiDefault MenuItem.iconTextGap									int
  *
  * @author Karl Tauber
  */
@@ -66,6 +64,8 @@ public class FlatMenuItemUI
 	@Override
 	protected void installDefaults() {
 		super.installDefaults();
+
+		LookAndFeel.installProperty( menuItem, "iconTextGap", FlatUIUtils.getUIInt( "MenuItem.iconTextGap", 4 ) );
 
 		renderer = createRenderer();
 	}
@@ -89,6 +89,6 @@ public class FlatMenuItemUI
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
-			null, acceleratorForeground, acceleratorSelectionForeground );
+			acceleratorForeground, acceleratorSelectionForeground );
 	}
 }
