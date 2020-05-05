@@ -48,6 +48,14 @@ public class FlatLineBorder
 		this.lineThickness = lineThickness;
 	}
 
+	public Color getLineColor() {
+		return lineColor;
+	}
+
+	public float getLineThickness() {
+		return lineThickness;
+	}
+
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 		Graphics2D g2 = (Graphics2D) g.create();

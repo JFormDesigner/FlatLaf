@@ -443,13 +443,13 @@ List.background                #ffffff    javax.swing.plaf.ColorUIResource [UI]
 List.border                    [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 List.cellFocusColor            #000000    javax.swing.plaf.ColorUIResource [UI]
 List.cellMargins               1,6,1,6    javax.swing.plaf.InsetsUIResource [UI]
-List.cellNoFocusBorder         [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Default [UI]
+List.cellNoFocusBorder         [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Default [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 List.cellRenderer              [active] javax.swing.DefaultListCellRenderer$UIResource [UI]
 List.dropCellBackground        [lazy] #3f8fd9    javax.swing.plaf.ColorUIResource [UI]
 List.dropCellForeground        [lazy] #ffffff    javax.swing.plaf.ColorUIResource [UI]
 List.dropLineColor             [lazy] #6aa7e1    javax.swing.plaf.ColorUIResource [UI]
-List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]
-List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]
+List.focusCellHighlightBorder  [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Focused [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatlaf.ui.FlatListCellBorder$Selected [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 List.font                      [active] $defaultFont [UI]
 List.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
 List.noFocusBorder             1,1,1,1  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
@@ -635,7 +635,7 @@ PasswordFieldUI                com.formdev.flatlaf.ui.FlatPasswordFieldUI
 #---- PopupMenu ----
 
 PopupMenu.background           #ffffff    javax.swing.plaf.ColorUIResource [UI]
-PopupMenu.border               [lazy] 4,1,4,1  false    com.formdev.flatlaf.ui.FlatPopupMenuBorder [UI]
+PopupMenu.border               [lazy] 4,1,4,1  false    com.formdev.flatlaf.ui.FlatPopupMenuBorder [UI]    lineColor=#adadad    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 PopupMenu.borderColor          #adadad    javax.swing.plaf.ColorUIResource [UI]
 PopupMenu.borderInsets         4,1,4,1    javax.swing.plaf.InsetsUIResource [UI]
 PopupMenu.consumeEventOnClose  false
@@ -721,7 +721,7 @@ RadioButtonUI                  com.formdev.flatlaf.ui.FlatRadioButtonUI
 
 #---- Resizable ----
 
-Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]
+Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#adadad    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 
 
 #---- RootPane ----
@@ -892,7 +892,7 @@ Table.ascendingSortIcon        [lazy] 10,5    com.formdev.flatlaf.icons.FlatAsce
 Table.background               #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Table.cellFocusColor           #000000    javax.swing.plaf.ColorUIResource [UI]
 Table.cellMargins              2,3,2,3    javax.swing.plaf.InsetsUIResource [UI]
-Table.cellNoFocusBorder        [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Default [UI]
+Table.cellNoFocusBorder        [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Default [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.descendingSortIcon       [lazy] 10,5    com.formdev.flatlaf.icons.FlatDescendingSortIcon [UI]
 Table.dropCellBackground       [lazy] #3f8fd9    javax.swing.plaf.ColorUIResource [UI]
 Table.dropCellForeground       [lazy] #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -900,8 +900,8 @@ Table.dropLineColor            [lazy] #6aa7e1    javax.swing.plaf.ColorUIResourc
 Table.dropLineShortColor       [lazy] #15416a    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellBackground      #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellForeground      #000000    javax.swing.plaf.ColorUIResource [UI]
-Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]
-Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]
+Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.font                     [active] $defaultFont [UI]
 Table.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
 Table.gridColor                #f7f7f7    javax.swing.plaf.ColorUIResource [UI]
@@ -1018,7 +1018,7 @@ TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
 
 #---- TitledBorder ----
 
-TitledBorder.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]
+TitledBorder.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#d1d1d1    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 TitledBorder.font              [active] $defaultFont [UI]
 TitledBorder.titleColor        #000000    javax.swing.plaf.ColorUIResource [UI]
 
@@ -1095,7 +1095,7 @@ ToolBarUI                      com.formdev.flatlaf.ui.FlatToolBarUI
 
 ToolTip.background             #fafafa    javax.swing.plaf.ColorUIResource [UI]
 ToolTip.backgroundInactive     #fafafa    javax.swing.plaf.ColorUIResource [UI]
-ToolTip.border                 [lazy] 4,6,4,6  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]
+ToolTip.border                 [lazy] 4,6,4,6  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#c4c4c4    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 ToolTip.font                   [active] $defaultFont [UI]
 ToolTip.foreground             #000000    javax.swing.plaf.ColorUIResource [UI]
 ToolTip.foregroundInactive     #8c8c8c    javax.swing.plaf.ColorUIResource [UI]

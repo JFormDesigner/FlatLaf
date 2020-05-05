@@ -52,6 +52,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
+import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -352,6 +353,13 @@ public class UIDefaultsDump
 				insets.top, insets.left, insets.bottom, insets.right,
 				border.isBorderOpaque(),
 				dumpClass( border ) );
+
+			if( border instanceof FlatLineBorder ) {
+				FlatLineBorder lineBorder = (FlatLineBorder) border;
+				out.print( "    lineColor=" );
+				dumpColor( out, lineBorder.getLineColor() );
+				out.printf( "    lineThickness=%f", lineBorder.getLineThickness() );
+			}
 		}
 	}
 
