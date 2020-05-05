@@ -28,7 +28,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -38,7 +37,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.function.Predicate;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -48,6 +46,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -229,7 +228,7 @@ public class IJThemesPanel
 		} else if( themeInfo.themeFile != null ) {
 			try {
 				if( themeInfo.themeFile.getName().endsWith( ".properties" ) ) {
-				    FlatLaf.install( new PropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
+				    FlatLaf.install( new FlatPropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
 				} else
 				    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
 
@@ -342,7 +341,7 @@ public class IJThemesPanel
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 		String theme = UIManager.getLookAndFeelDefaults().getString( DemoPrefs.THEME_UI_KEY );
 
-		if( theme == null && (lookAndFeel instanceof IntelliJTheme.ThemeLaf || lookAndFeel instanceof PropertiesLaf) )
+		if( theme == null && (lookAndFeel instanceof IntelliJTheme.ThemeLaf || lookAndFeel instanceof FlatPropertiesLaf) )
 			return;
 
 		Predicate<IJThemeInfo> test;
@@ -431,78 +430,4 @@ public class IJThemesPanel
 	private JScrollPane themesScrollPane;
 	private JList<IJThemeInfo> themesList;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
-
-	//---- class PropertiesLaf ------------------------------------------------
-
-	public static class PropertiesLaf
-		extends FlatLaf
-	{
-		private final String name;
-		private final String baseTheme;
-		private final boolean dark;
-		private final Properties properties;
-
-		public PropertiesLaf( String name, File propertiesFile )
-			throws IOException
-		{
-			this.name = name;
-
-			properties = new Properties();
-			try( InputStream in = new FileInputStream( propertiesFile ) ) {
-				if( in != null )
-					properties.load( in );
-			}
-
-			baseTheme = properties.getProperty( "@baseTheme", "light" );
-			dark = "dark".equalsIgnoreCase( baseTheme ) || "darcula".equalsIgnoreCase( baseTheme );
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public String getDescription() {
-			return name;
-		}
-
-		@Override
-		public boolean isDark() {
-			return dark;
-		}
-
-		@Override
-		protected ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
-			ArrayList<Class<?>> lafClasses = new ArrayList<>();
-			lafClasses.add( FlatLaf.class );
-			switch( baseTheme.toLowerCase() ) {
-				default:
-				case "light":
-					lafClasses.add( FlatLightLaf.class );
-					break;
-
-				case "dark":
-					lafClasses.add( FlatDarkLaf.class );
-					break;
-
-				case "intellij":
-					lafClasses.add( FlatLightLaf.class );
-					lafClasses.add( FlatIntelliJLaf.class );
-					break;
-
-				case "darcula":
-					lafClasses.add( FlatDarkLaf.class );
-					lafClasses.add( FlatDarculaLaf.class );
-					break;
-			}
-			lafClasses.add( PropertiesLaf.class );
-			return lafClasses;
-		}
-
-		@Override
-		protected Properties getAdditionalDefaults() {
-			return properties;
-		}
-	}
 }

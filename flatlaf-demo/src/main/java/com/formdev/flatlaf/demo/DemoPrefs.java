@@ -22,9 +22,9 @@ import java.util.prefs.Preferences;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel;
-import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel.PropertiesLaf;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
@@ -68,12 +68,12 @@ public class DemoPrefs
 
 					if( !theme.isEmpty() )
 						UIManager.getLookAndFeelDefaults().put( THEME_UI_KEY, theme );
-				} else if( IJThemesPanel.PropertiesLaf.class.getName().equals( lafClassName ) ) {
+				} else if( FlatPropertiesLaf.class.getName().equals( lafClassName ) ) {
 					String theme = state.get( KEY_LAF_THEME, "" );
 					if( theme.startsWith( FILE_PREFIX ) ) {
 						File themeFile = new File( theme.substring( FILE_PREFIX.length() ) );
 						String themeName = StringUtils.removeTrailing( themeFile.getName(), ".properties" );
-						FlatLaf.install( new PropertiesLaf( themeName, themeFile ) );
+						FlatLaf.install( new FlatPropertiesLaf( themeName, themeFile ) );
 					} else
 						FlatLightLaf.install();
 
