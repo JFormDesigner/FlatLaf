@@ -326,7 +326,7 @@ HyperlinkUI                    com.formdev.flatlaf.swingx.ui.FlatHyperlinkUI
 
 #---- InternalFrame ----
 
-InternalFrame.activeBorderColor #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.activeBorderColor #2b2d2e    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.activeTitleBackground #242526    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.activeTitleForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.border           [lazy] 6,6,6,6  false    com.formdev.flatlaf.ui.FlatInternalFrameUI$FlatInternalFrameBorder [UI]
@@ -347,7 +347,7 @@ InternalFrame.closePressedBackground [lazy] #ad3b37    javax.swing.plaf.ColorUIR
 InternalFrame.closePressedForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.icon             [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
 InternalFrame.iconifyIcon      [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameIconifyIcon [UI]
-InternalFrame.inactiveBorderColor #646464    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.inactiveBorderColor #353739    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.inactiveTitleBackground #303234    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.inactiveTitleForeground #777777    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.maximizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameMaximizeIcon [UI]
