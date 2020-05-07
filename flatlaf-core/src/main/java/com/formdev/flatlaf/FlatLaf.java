@@ -321,6 +321,11 @@ public abstract class FlatLaf
 		for( FlatDefaultsAddon addon : addons )
 			addon.afterDefaultsLoading( this, defaults );
 
+		// add user scale factor to allow layout managers (e.g. MigLayout) to use it
+		defaults.put( "laf.scaleFactor", (ActiveValue) t -> {
+			return UIScale.getUserScaleFactor();
+		} );
+
 		if( postInitialization != null ) {
 			postInitialization.accept( defaults );
 			postInitialization = null;
