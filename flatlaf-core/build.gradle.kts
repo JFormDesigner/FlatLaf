@@ -67,6 +67,10 @@ tasks {
 				include( "module-info.class" )
 			}
 		}
+
+		doLast {
+			ReorderJarEntries.reorderJarEntries( outputs.files.singleFile );
+		}
 	}
 
 	javadoc {
