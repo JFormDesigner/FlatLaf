@@ -5,7 +5,7 @@ jdk:
   - openjdk8
   - openjdk9
   - openjdk11
-  - openjdk13
+  - openjdk14
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
