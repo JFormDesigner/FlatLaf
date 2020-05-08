@@ -330,6 +330,14 @@ new FormModel {
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "underlineMenuSelection", false ) )
 					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "alwaysShowMnemonicsMenuItem"
+						"text": "Always show mnemonics"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "alwaysShowMnemonics", false ) )
+					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "helpMenu"

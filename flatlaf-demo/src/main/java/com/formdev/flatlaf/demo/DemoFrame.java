@@ -64,6 +64,11 @@ class DemoFrame
 		UIManager.put( "MenuItem.selectionType", underlineMenuSelectionMenuItem.isSelected() ? "underline" : null );
 	}
 
+	private void alwaysShowMnemonics() {
+		UIManager.put( "Component.hideMnemonics", !alwaysShowMnemonicsMenuItem.isSelected() );
+		repaint();
+	}
+
 	private void fontFamilyChanged( ActionEvent e ) {
 		String fontFamily = e.getActionCommand();
 
@@ -140,6 +145,7 @@ class DemoFrame
 		JMenuItem decrFontMenuItem = new JMenuItem();
 		JMenu optionsMenu = new JMenu();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
+		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		JMenu helpMenu = new JMenu();
 		JMenuItem aboutMenuItem = new JMenuItem();
 		JToolBar toolBar1 = new JToolBar();
@@ -376,6 +382,11 @@ class DemoFrame
 				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
 				underlineMenuSelectionMenuItem.addActionListener(e -> underlineMenuSelection());
 				optionsMenu.add(underlineMenuSelectionMenuItem);
+
+				//---- alwaysShowMnemonicsMenuItem ----
+				alwaysShowMnemonicsMenuItem.setText("Always show mnemonics");
+				alwaysShowMnemonicsMenuItem.addActionListener(e -> alwaysShowMnemonics());
+				optionsMenu.add(alwaysShowMnemonicsMenuItem);
 			}
 			menuBar1.add(optionsMenu);
 
@@ -507,6 +518,7 @@ class DemoFrame
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JMenu fontMenu;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
+	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
