@@ -69,9 +69,10 @@ docs).
 Addons
 ------
 
+- [IntelliJ Themes Pack](flatlaf-intellij-themes)
+- [Extras](flatlaf-extras)
 - [SwingX](flatlaf-swingx)
 - [JIDE Common Layer](flatlaf-jide-oss)
-- [IntelliJ Themes Pack](flatlaf-intellij-themes)
 
 
 Projects using FlatLaf
