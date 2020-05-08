@@ -38,14 +38,12 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	}
 }
 
-tasks {
-	assemble {
-		dependsOn(
-			"sourcesJar",
-			"javadocJar"
-		)
-	}
+java {
+	withSourcesJar()
+	withJavadocJar()
+}
 
+tasks {
 	if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 		named<JavaCompile>( "compileModuleInfoJava" ) {
 			sourceCompatibility = "9"
@@ -82,18 +80,12 @@ tasks {
 		isFailOnError = false
 	}
 
-	register( "sourcesJar", Jar::class ) {
+	named<Jar>("sourcesJar" ) {
 		archiveBaseName.set( "flatlaf" )
-		archiveClassifier.set( "sources" )
-
-		from( sourceSets.main.get().allJava )
 	}
 
-	register( "javadocJar", Jar::class ) {
+	named<Jar>("javadocJar" ) {
 		archiveBaseName.set( "flatlaf" )
-		archiveClassifier.set( "javadoc" )
-
-		from( javadoc )
 	}
 }
 
@@ -104,9 +96,6 @@ publishing {
 			groupId = "com.formdev"
 
 			from( components["java"] )
-
-			artifact( tasks["sourcesJar"] )
-			artifact( tasks["javadocJar"] )
 
 			pom {
 				name.set( "FlatLaf" )

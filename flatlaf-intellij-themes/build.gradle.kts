@@ -37,14 +37,12 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	}
 }
 
-tasks {
-	assemble {
-		dependsOn(
-			"sourcesJar",
-			"javadocJar"
-		)
-	}
+java {
+	withSourcesJar()
+	withJavadocJar()
+}
 
+tasks {
 	if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 		named<JavaCompile>( "compileModuleInfoJava" ) {
 			sourceCompatibility = "9"
@@ -72,18 +70,6 @@ tasks {
 		}
 		isFailOnError = false
 	}
-
-	register( "sourcesJar", Jar::class ) {
-		archiveClassifier.set( "sources" )
-
-		from( sourceSets.main.get().allJava )
-	}
-
-	register( "javadocJar", Jar::class ) {
-		archiveClassifier.set( "javadoc" )
-
-		from( javadoc )
-	}
 }
 
 publishing {
@@ -93,9 +79,6 @@ publishing {
 			groupId = "com.formdev"
 
 			from( components["java"] )
-
-			artifact( tasks["sourcesJar"] )
-			artifact( tasks["javadocJar"] )
 
 			pom {
 				name.set( "FlatLaf IntelliJ Themes Pack" )

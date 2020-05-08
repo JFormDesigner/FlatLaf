@@ -26,32 +26,18 @@ dependencies {
 	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
 }
 
-tasks {
-	assemble {
-		dependsOn(
-			"sourcesJar",
-			"javadocJar"
-		)
-	}
+java {
+	withSourcesJar()
+	withJavadocJar()
+}
 
+tasks {
 	javadoc {
 		options {
 			this as StandardJavadocDocletOptions
 			tags = listOf( "uiDefault", "clientProperty" )
 		}
 		isFailOnError = false
-	}
-
-	register( "sourcesJar", Jar::class ) {
-		archiveClassifier.set( "sources" )
-
-		from( sourceSets.main.get().allJava )
-	}
-
-	register( "javadocJar", Jar::class ) {
-		archiveClassifier.set( "javadoc" )
-
-		from( javadoc )
 	}
 }
 
@@ -62,9 +48,6 @@ publishing {
 			groupId = "com.formdev"
 
 			from( components["java"] )
-
-			artifact( tasks["sourcesJar"] )
-			artifact( tasks["javadocJar"] )
 
 			pom {
 				name.set( "FlatLaf addon for SwingX" )
