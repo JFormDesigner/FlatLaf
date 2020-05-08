@@ -56,6 +56,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
+import com.formdev.flatlaf.ui.FlatPopupFactory;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -78,6 +79,7 @@ public abstract class FlatLaf
 	private static boolean aquaLoaded;
 	private static boolean updateUIPending;
 
+	private PopupFactory oldPopupFactory;
 	private MnemonicHandler mnemonicHandler;
 
 	private Consumer<UIDefaults> postInitialization;
@@ -144,6 +146,10 @@ public abstract class FlatLaf
 
 		super.initialize();
 
+		// install popup factory
+		oldPopupFactory = PopupFactory.getSharedInstance();
+		PopupFactory.setSharedInstance( new FlatPopupFactory() );
+
 		// install mnemonic handler
 		mnemonicHandler = new MnemonicHandler();
 		mnemonicHandler.install();
@@ -198,6 +204,12 @@ public abstract class FlatLaf
 			toolkit.removePropertyChangeListener( DESKTOPFONTHINTS, desktopPropertyListener );
 			desktopPropertyName = null;
 			desktopPropertyListener = null;
+		}
+
+		// uninstall popup factory
+		if( oldPopupFactory != null ) {
+			PopupFactory.setSharedInstance( oldPopupFactory );
+			oldPopupFactory = null;
 		}
 
 		// uninstall mnemonic handler
