@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.34
 
 - Menus: New menu item renderer brings stable left margins, right aligned
   accelerators and larger gap between text and accelerator. This makes menus
