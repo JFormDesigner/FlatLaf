@@ -16,6 +16,7 @@
 
 plugins {
 	`java-library`
+	`flatlaf-module-info`
 	`maven-publish`
 	id( "com.jfrog.bintray" )
 	id( "com.jfrog.artifactory" )
@@ -25,16 +26,8 @@ dependencies {
 	implementation( project( ":flatlaf-core" ) )
 }
 
-if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
-	sourceSets {
-		create( "module-info" ) {
-			java {
-				// include "src/main/java" here to get compile errors if classes are
-				// used from other modules that are not specified in module dependencies
-				setSrcDirs( listOf( "src/main/module-info", "src/main/java" ) )
-			}
-		}
-	}
+flatlafModuleInfo {
+	dependsOn( ":flatlaf-core:jar" )
 }
 
 java {
@@ -43,26 +36,6 @@ java {
 }
 
 tasks {
-	if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
-		named<JavaCompile>( "compileModuleInfoJava" ) {
-			sourceCompatibility = "9"
-			targetCompatibility = "9"
-
-			dependsOn( ":flatlaf-core:jar" )
-
-			options.compilerArgs.add( "--module-path" )
-			options.compilerArgs.add( project( ":flatlaf-core" ).tasks["jar"].outputs.files.asPath )
-		}
-	}
-
-	jar {
-		if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
-			from( sourceSets["module-info"].output ) {
-				include( "module-info.class" )
-			}
-		}
-	}
-
 	javadoc {
 		options {
 			this as StandardJavadocDocletOptions
