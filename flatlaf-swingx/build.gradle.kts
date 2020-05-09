@@ -16,12 +16,17 @@
 
 plugins {
 	`java-library`
+	`flatlaf-module-info`
 	`flatlaf-publish`
 }
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
+}
+
+flatlafModuleInfo {
+	dependsOn( ":flatlaf-core:jar" )
 }
 
 java {

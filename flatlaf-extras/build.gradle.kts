@@ -16,12 +16,17 @@
 
 plugins {
 	`java-library`
+	`flatlaf-module-info`
 	`flatlaf-publish`
 }
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( "com.formdev:svgSalamander:1.1.2.1" )
+}
+
+flatlafModuleInfo {
+	dependsOn( ":flatlaf-core:jar" )
 }
 
 java {
