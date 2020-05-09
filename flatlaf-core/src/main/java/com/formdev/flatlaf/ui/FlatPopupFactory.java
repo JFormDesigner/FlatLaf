@@ -20,6 +20,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Window;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -133,6 +135,7 @@ public class FlatPopupFactory
 			window = SwingUtilities.windowForComponent( contents );
 			if( window != null ) {
 				oldBackground = window.getBackground();
+				parent.setBorder( new FillBackgroundBorder( parent.getBorder(), oldBackground ) );
 				window.setBackground( new Color( 0, true ) );
 				window.setSize( window.getPreferredSize() );
 			} else
@@ -163,6 +166,49 @@ public class FlatPopupFactory
 			}
 
 			delegate = null;
+		}
+	}
+
+	//---- class FillBackgroundBorder -----------------------------------------
+
+	/**
+	 * Fills the component background with the given color (and delegates border painting).
+	 * This avoids that underlying windows may shine thru which may happen because
+	 * the heavy weight popup window is transparent and the contained panel is not opaque.
+	 */
+	private static class FillBackgroundBorder
+		implements Border
+	{
+		private final Border delegate;
+		private final Color background;
+
+		FillBackgroundBorder( Border delegate, Color background ) {
+			this.delegate = delegate;
+			this.background = background;
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			Insets insets = getBorderInsets( c );
+			Color oldColor = g.getColor();
+			g.setColor( background );
+			g.fillRect( x + insets.left, y + insets.top,
+				width - insets.left - insets.right, height - insets.top - insets.bottom );
+
+			// restore color because delegate border may use it
+			g.setColor( oldColor );
+
+			delegate.paintBorder( c, g, x, y, width, height );
+		}
+
+		@Override
+		public Insets getBorderInsets( Component c ) {
+			return delegate.getBorderInsets( c );
+		}
+
+		@Override
+		public boolean isBorderOpaque() {
+			return delegate.isBorderOpaque();
 		}
 	}
 }
