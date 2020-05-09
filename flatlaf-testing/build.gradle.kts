@@ -18,6 +18,13 @@ plugins {
 	`java-library`
 }
 
+repositories {
+	maven {
+		// for using MigLayout snapshot
+		url = uri( "https://oss.sonatype.org/content/repositories/snapshots/" )
+	}
+}
+
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
@@ -26,7 +33,7 @@ dependencies {
 	implementation( project( ":flatlaf-intellij-themes" ) )
 	implementation( project( ":flatlaf-demo" ) )
 
-	implementation( "com.miglayout:miglayout-swing:5.2" )
+	implementation( "com.miglayout:miglayout-swing:5.3-SNAPSHOT" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
 	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
 	implementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
