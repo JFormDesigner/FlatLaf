@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Added Java 9 module descriptor to `flatlaf-extras-<version>.jar` and
+  `flatlaf-swingx-<version>.jar`.
+
+
 ## 0.34
 
 - Menus: New menu item renderer brings stable left margins, right aligned
