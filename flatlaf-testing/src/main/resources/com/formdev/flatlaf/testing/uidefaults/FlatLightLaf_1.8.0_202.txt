@@ -329,6 +329,8 @@ HyperlinkUI                    com.formdev.flatlaf.swingx.ui.FlatHyperlinkUI
 #---- InternalFrame ----
 
 InternalFrame.activeBorderColor #919191    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.activeDropShadowInsets 5,5,6,6    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame.activeDropShadowOpacity 0.25
 InternalFrame.activeTitleBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.activeTitleForeground #000000    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.border           [lazy] 6,6,6,6  false    com.formdev.flatlaf.ui.FlatInternalFrameUI$FlatInternalFrameBorder [UI]
@@ -347,9 +349,12 @@ InternalFrame.closeHoverForeground #ffffff    javax.swing.plaf.ColorUIResource [
 InternalFrame.closeIcon        [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon [UI]
 InternalFrame.closePressedBackground [lazy] #d22e38    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.closePressedForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.dropShadowPainted true
 InternalFrame.icon             [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
 InternalFrame.iconifyIcon      [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameIconifyIcon [UI]
 InternalFrame.inactiveBorderColor #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
+InternalFrame.inactiveDropShadowInsets 3,3,4,4    javax.swing.plaf.InsetsUIResource [UI]
+InternalFrame.inactiveDropShadowOpacity 0.5
 InternalFrame.inactiveTitleBackground #fafafa    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.inactiveTitleForeground #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.maximizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameMaximizeIcon [UI]
@@ -628,6 +633,14 @@ PasswordField.placeholderForeground #8c8c8c    javax.swing.plaf.ColorUIResource 
 PasswordField.selectionBackground #2675bf    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 PasswordFieldUI                com.formdev.flatlaf.ui.FlatPasswordFieldUI
+
+
+#---- Popup ----
+
+Popup.dropShadowColor          #000000    javax.swing.plaf.ColorUIResource [UI]
+Popup.dropShadowInsets         -4,-4,4,4    javax.swing.plaf.InsetsUIResource [UI]
+Popup.dropShadowOpacity        0.15
+Popup.dropShadowPainted        true
 
 
 #---- PopupMenu ----
@@ -1187,6 +1200,15 @@ inactiveCaptionBorder          #bfcddb    javax.swing.plaf.ColorUIResource [UI]
 inactiveCaptionText            #000000    javax.swing.plaf.ColorUIResource [UI]
 info                           #fafafa    javax.swing.plaf.ColorUIResource [UI]
 infoText                       #000000    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- laf ----
+
+laf.scaleFactor                [active] 1.0
+
+
+#----  ----
+
 menu                           #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 menuText                       #000000    javax.swing.plaf.ColorUIResource [UI]
 scrollbar                      #f5f5f5    javax.swing.plaf.ColorUIResource [UI]

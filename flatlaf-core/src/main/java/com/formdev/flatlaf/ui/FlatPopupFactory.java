@@ -29,6 +29,7 @@ import javax.swing.JComponent;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -49,6 +50,9 @@ public class FlatPopupFactory
 	public Popup getPopup( Component owner, Component contents, int x, int y )
 		throws IllegalArgumentException
 	{
+		if( !UIManager.getBoolean( "Popup.dropShadowPainted" ) && !SystemInfo.IS_MAC )
+			return super.getPopup( owner, contents, x, y );
+
 		// always use heavy weight popup because the drop shadow increases
 		// the popup size and may overlap the window bounds
 		Popup popup = getHeavyWeightPopup( owner, contents, x, y );
@@ -129,7 +133,10 @@ public class FlatPopupFactory
 			parent = (JComponent) p;
 			oldBorder = parent.getBorder();
 			oldOpaque = parent.isOpaque();
-			parent.setBorder( new FlatDropShadowBorder( null, 4, 4, 32 ) ); //TODO
+			parent.setBorder( new FlatDropShadowBorder(
+				UIManager.getColor( "Popup.dropShadowColor" ),
+				UIManager.getInsets( "Popup.dropShadowInsets" ),
+				FlatUIUtils.getUIFloat( "Popup.dropShadowOpacity", 0.5f ) ) );
 			parent.setOpaque( false );
 
 			window = SwingUtilities.windowForComponent( contents );

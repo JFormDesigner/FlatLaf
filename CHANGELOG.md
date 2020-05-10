@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Added drop shadows to popup menus, combobox popups, tooltips and internal
+  frames. (issue #94)
 - Added Java 9 module descriptor to `flatlaf-extras-<version>.jar` and
   `flatlaf-swingx-<version>.jar`.
 

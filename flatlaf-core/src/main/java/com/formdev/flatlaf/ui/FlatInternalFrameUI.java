@@ -112,8 +112,16 @@ public class FlatInternalFrameUI
 		private final Color activeBorderColor = UIManager.getColor( "InternalFrame.activeBorderColor" );
 		private final Color inactiveBorderColor = UIManager.getColor( "InternalFrame.inactiveBorderColor" );
 		private final int borderLineWidth = FlatUIUtils.getUIInt( "InternalFrame.borderLineWidth", 1 );
+		private final boolean dropShadowPainted = UIManager.getBoolean( "InternalFrame.dropShadowPainted" );
 
-		private final FlatDropShadowBorder dropShadowBorder = new FlatDropShadowBorder();
+		private final FlatDropShadowBorder activeDropShadowBorder = new FlatDropShadowBorder(
+			UIManager.getColor( "InternalFrame.activeDropShadowColor" ),
+			UIManager.getInsets( "InternalFrame.activeDropShadowInsets" ),
+			FlatUIUtils.getUIFloat( "InternalFrame.activeDropShadowOpacity", 0.5f ) );
+		private final FlatDropShadowBorder inactiveDropShadowBorder = new FlatDropShadowBorder(
+			UIManager.getColor( "InternalFrame.inactiveDropShadowColor" ),
+			UIManager.getInsets( "InternalFrame.inactiveDropShadowInsets" ),
+			FlatUIUtils.getUIFloat( "InternalFrame.inactiveDropShadowOpacity", 0.5f ) );
 
 		public FlatInternalFrameBorder() {
 			super( UIManager.getInsets( "InternalFrame.borderMargins" ) );
@@ -150,10 +158,17 @@ public class FlatInternalFrameUI
 				g2.setColor( f.isSelected() ? activeBorderColor : inactiveBorderColor );
 
 				// paint drop shadow
-				Insets dropShadowInsets = dropShadowBorder.getBorderInsets();
-				dropShadowBorder.paintBorder( c, g2, (int) rx, (int) ry,
-					(int) rwidth + dropShadowInsets.right,
-					(int) rheight + dropShadowInsets.bottom );
+				if( dropShadowPainted ) {
+					FlatDropShadowBorder dropShadowBorder = f.isSelected()
+						? activeDropShadowBorder : inactiveDropShadowBorder;
+
+					Insets dropShadowInsets = dropShadowBorder.getBorderInsets();
+					dropShadowBorder.paintBorder( c, g2,
+						(int) rx - dropShadowInsets.left,
+						(int) ry - dropShadowInsets.top,
+						(int) rwidth + dropShadowInsets.left + dropShadowInsets.right,
+						(int) rheight + dropShadowInsets.top + dropShadowInsets.bottom );
+				}
 
 				// paint border
 				g2.fill( FlatUIUtils.createRectangle( rx, ry, rwidth, rheight, lineWidth ) );
