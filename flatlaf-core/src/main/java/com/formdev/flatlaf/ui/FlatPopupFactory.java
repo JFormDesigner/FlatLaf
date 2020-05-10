@@ -61,8 +61,8 @@ public class FlatPopupFactory
 		if( popup == null )
 			return super.getPopup( owner, contents, x, y );
 
-		// macOS adds drop shadow to heavy weight popups
-		if( SystemInfo.IS_MAC )
+		// macOS and Linux adds drop shadow to heavy weight popups
+		if( SystemInfo.IS_MAC || SystemInfo.IS_LINUX )
 			return popup;
 
 		// create drop shadow popup
