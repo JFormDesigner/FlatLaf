@@ -32,12 +32,12 @@ public class FlatLightLaf
 
 	@Override
 	public String getName() {
-		return "Flat Light";
+		return "FlatLaf Light";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Flat Light Look and Feel";
+		return "FlatLaf Light Look and Feel";
 	}
 
 	@Override

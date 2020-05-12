@@ -32,11 +32,11 @@ public class FlatIntelliJLaf
 
 	@Override
 	public String getName() {
-		return "Flat IntelliJ";
+		return "FlatLaf IntelliJ";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Flat IntelliJ Look and Feel";
+		return "FlatLaf IntelliJ Look and Feel";
 	}
 }

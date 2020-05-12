@@ -32,11 +32,11 @@ public class FlatDarculaLaf
 
 	@Override
 	public String getName() {
-		return "Flat Darcula";
+		return "FlatLaf Darcula";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Flat Darcula Look and Feel";
+		return "FlatLaf Darcula Look and Feel";
 	}
 }
