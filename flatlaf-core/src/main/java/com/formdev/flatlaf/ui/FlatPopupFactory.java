@@ -50,7 +50,7 @@ public class FlatPopupFactory
 	public Popup getPopup( Component owner, Component contents, int x, int y )
 		throws IllegalArgumentException
 	{
-		if( !UIManager.getBoolean( "Popup.dropShadowPainted" ) && !SystemInfo.IS_MAC )
+		if( !UIManager.getBoolean( "Popup.dropShadowPainted" ) )
 			return super.getPopup( owner, contents, x, y );
 
 		// always use heavy weight popup because the drop shadow increases
