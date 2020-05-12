@@ -10,6 +10,8 @@ FlatLaf Change Log
   (e.g. 1000).
 - Added Java 9 module descriptor to `flatlaf-extras-<version>.jar` and
   `flatlaf-swingx-<version>.jar`.
+- CheckBox and RadioButton: Flag `opaque` is no longer ignored when checkbox or
+  radio button is used as table cell renderer. (issue #77)
 
 
 ## 0.34

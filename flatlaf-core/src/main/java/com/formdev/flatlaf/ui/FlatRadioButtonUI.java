@@ -23,7 +23,6 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
-import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -122,11 +121,10 @@ public class FlatRadioButtonUI
 	public void paint( Graphics g, JComponent c ) {
 		// fill background even if not opaque if
 		// - contentAreaFilled is true and
-		//   - used as cell renderer (because of selection background)
-		//   - or if background was explicitly set to a non-UIResource color
+		// - if background was explicitly set to a non-UIResource color
 		if( !c.isOpaque() &&
 			((AbstractButton)c).isContentAreaFilled() &&
-			(c.getParent() instanceof CellRendererPane || !(c.getBackground() instanceof UIResource)))
+			!(c.getBackground() instanceof UIResource) )
 		{
 			g.setColor( c.getBackground() );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );

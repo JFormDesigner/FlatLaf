@@ -304,6 +304,8 @@ public class FlatInspector
 		text += "Enabled: " + c.isEnabled() + '\n';
 		text += "Opaque: " + c.isOpaque() + (c instanceof JComponent &&
 			FlatUIUtils.hasOpaqueBeenExplicitlySet( (JComponent) c ) ? " EXPLICIT" : "") + '\n';
+		if( c instanceof AbstractButton )
+			text += "ContentAreaFilled: " + ((AbstractButton)c).isContentAreaFilled() + '\n';
 		text += "Focusable: " + c.isFocusable() + '\n';
 		text += "Left-to-right: " + c.getComponentOrientation().isLeftToRight() + '\n';
 		text += "Parent: " + c.getParent().getClass().getName();
