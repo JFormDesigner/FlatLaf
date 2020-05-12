@@ -319,7 +319,7 @@ public class FlatComboBoxUI
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// fill background if opaque to avoid garbage if user sets opaque to true
-		if( c.isOpaque() && (focusWidth > 0 || arc != 0) )
+		if( c.isOpaque() && (focusWidth > 0 || arc > 0) )
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -394,8 +394,7 @@ public class FlatComboBoxUI
 
 	@Override
 	public void paintCurrentValueBackground( Graphics g, Rectangle bounds, boolean hasFocus ) {
-		g.setColor( comboBox.isEnabled() ? comboBox.getBackground() : getDisabledBackground( comboBox ) );
-		g.fillRect( bounds.x, bounds.y, bounds.width, bounds.height );
+		// not necessary because already painted in update()
 	}
 
 	private Color getDisabledBackground( JComponent c ) {

@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 - Added drop shadows to popup menus, combobox popups, tooltips and internal
   frames. (issue #94)
+- Paint nicely rounded buttons, comboboxes, spinners and text fields when
+  setting `Button.arc`, `Component.arc` or `TextComponent.arc` to a large value
+  (e.g. 1000).
 - Added Java 9 module descriptor to `flatlaf-extras-<version>.jar` and
   `flatlaf-swingx-<version>.jar`.
 
