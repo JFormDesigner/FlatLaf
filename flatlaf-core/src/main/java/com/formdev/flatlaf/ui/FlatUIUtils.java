@@ -195,14 +195,9 @@ public class FlatUIUtils
 		if( arc > 0 && arc < UIScale.scale( 10 ) )
 			outerArc -= UIScale.scale( 2f );
 
-		if( outerArc < 0 )
-			outerArc = 0;
-		if( innerArc < 0 )
-			innerArc = 0;
-
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new RoundRectangle2D.Float( x, y, width, height, outerArc, outerArc ), false );
-		path.append( new RoundRectangle2D.Float( x + ow, y + ow, width - (ow * 2), height - (ow * 2), innerArc, innerArc ), false );
+		path.append( createComponentRectangle( x, y, width, height, outerArc ), false );
+		path.append( createComponentRectangle( x + ow, y + ow, width - (ow * 2), height - (ow * 2), innerArc ), false );
 		g.fill( path );
 	}
 
@@ -236,19 +231,16 @@ public class FlatUIUtils
 	private static void paintComponentBorderImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
+		float x1 = x + focusWidth;
+		float y1 = y + focusWidth;
+		float width1 = width - focusWidth * 2;
+		float height1 = height - focusWidth * 2;
 		float arc2 = arc - (lineWidth * 2);
 
-		if( arc < 0 )
-			arc = 0;
-		if( arc2 < 0 )
-			arc2 = 0;
-
-		RoundRectangle2D.Float r1 = new RoundRectangle2D.Float(
-			x + focusWidth, y + focusWidth,
-			width - focusWidth * 2, height - focusWidth * 2, arc, arc );
-		RoundRectangle2D.Float r2 = new RoundRectangle2D.Float(
-			r1.x + lineWidth, r1.y + lineWidth,
-			r1.width - lineWidth * 2, r1.height - lineWidth * 2, arc2, arc2 );
+		Shape r1 = createComponentRectangle( x1, y1, width1, height1, arc );
+		Shape r2 = createComponentRectangle(
+			x1 + lineWidth, y1 + lineWidth,
+			width1 - lineWidth * 2, height1 - lineWidth * 2, arc2 );
 
 		Path2D border = new Path2D.Float( Path2D.WIND_EVEN_ODD );
 		border.append( r1, false );
@@ -286,12 +278,21 @@ public class FlatUIUtils
 	private static void paintComponentBackgroundImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float arc )
 	{
-		if( arc < 0 )
-			arc = 0;
-
-		g.fill( new RoundRectangle2D.Float(
+		g.fill( createComponentRectangle(
 			x + focusWidth, y + focusWidth,
-			width - focusWidth * 2, height - focusWidth * 2, arc, arc ) );
+			width - focusWidth * 2, height - focusWidth * 2, arc ) );
+	}
+
+	/**
+	 * Creates a (rounded) rectangle used to paint components (border, background, etc).
+	 * The given arc diameter is limited to min(width,height).
+	 */
+	public static Shape createComponentRectangle( float x, float y, float w, float h, float arc ) {
+		if( arc <= 0 )
+			return new Rectangle2D.Float( x, y, w, h );
+
+		arc = Math.min( arc, Math.min( w, h ) );
+		return new RoundRectangle2D.Float( x, y, w, h, arc, arc );
 	}
 
 	/**
@@ -360,14 +361,12 @@ public class FlatUIUtils
 		if( arcTopLeft <= 0 && arcTopRight <= 0 && arcBottomLeft <= 0 && arcBottomRight <= 0 )
 			return new Rectangle2D.Float( x, y, width, height );
 
-		if( arcTopLeft < 0 )
-			arcTopLeft = 0;
-		if( arcTopRight < 0 )
-			arcTopRight = 0;
-		if( arcBottomLeft < 0 )
-			arcBottomLeft = 0;
-		if( arcBottomRight < 0 )
-			arcBottomRight = 0;
+		// limit arcs to min(width,height)
+		float maxArc = Math.min( width, height ) / 2;
+		arcTopLeft = (arcTopLeft > 0) ? Math.min( arcTopLeft, maxArc ) : 0;
+		arcTopRight = (arcTopRight > 0) ? Math.min( arcTopRight, maxArc ) : 0;
+		arcBottomLeft = (arcBottomLeft > 0) ? Math.min( arcBottomLeft, maxArc ) : 0;
+		arcBottomRight = (arcBottomRight > 0) ? Math.min( arcBottomRight, maxArc ) : 0;
 
 		float x2 = x + width;
 		float y2 = y + height;
