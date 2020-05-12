@@ -95,7 +95,7 @@ public class FlatTextFieldUI
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 
-		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
+		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
 		MigLayoutVisualPadding.install( getComponent(), focusWidth );
 	}
@@ -162,7 +162,7 @@ public class FlatTextFieldUI
 			return;
 
 		// fill background if opaque to avoid garbage if user sets opaque to true
-		if( c.isOpaque() && focusWidth > 0 )
+		if( c.isOpaque() && (focusWidth > 0 || arc > 0) )
 			FlatUIUtils.paintParentBackground( g, c );
 
 		// paint background

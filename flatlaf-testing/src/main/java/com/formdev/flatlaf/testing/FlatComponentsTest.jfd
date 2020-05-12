@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.1" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -8,7 +8,7 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[][][][][][]"
+			"$columnConstraints": "[][][][][][][left]"
 			"$rowConstraints": "[][][][][][][][][][][][][][][][][][][][][][][][]"
 		} ) {
 			name: "this"
@@ -120,6 +120,13 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 1"
 			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button20"
+				"text": "empty border"
+				"border": &EmptyBorder0 new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 1"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toggleButtonLabel"
 				"text": "JToggleButton:"
@@ -196,6 +203,13 @@ new FormModel {
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 2"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton18"
+				"text": "empty border"
+				"border": #EmptyBorder0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 2"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "checkBoxLabel"
@@ -383,6 +397,19 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 5,growx,wmax 100"
 			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox6"
+				"border": #EmptyBorder0
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "empty border"
+					addElement( "empty border" )
+					addElement( "a" )
+					addElement( "b" )
+					addElement( "c" )
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 5"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "spinnerLabel"
 				"text": "JSpinner:"
@@ -409,6 +436,15 @@ new FormModel {
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 6,growx"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner3"
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+				"model": new javax.swing.SpinnerNumberModel {
+					value: 12345
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 6"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "textFieldLabel"
@@ -450,6 +486,13 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 7,growx"
 			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField5"
+				"text": "empty border"
+				"border": #EmptyBorder0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 7"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "formattedTextFieldLabel"
 				"text": "JFormattedTextField:"
@@ -490,6 +533,13 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 8,growx"
 			} )
+			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
+				name: "formattedTextField6"
+				"text": "empty border"
+				"border": #EmptyBorder0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 8"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "passwordFieldLabel"
 				"text": "JPasswordField:"
@@ -529,6 +579,13 @@ new FormModel {
 				"$client.JTextField.placeholderText": "placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 9,growx"
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "passwordField6"
+				"text": "empty border"
+				"border": #EmptyBorder0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 9"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "textAreaLabel"
@@ -838,6 +895,24 @@ new FormModel {
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 13 1 6,growy"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane15"
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel3"
+					"preferredSize": new java.awt.Dimension( 800, 400 )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button21"
+						"text": "I'm a large button in a scrollpane with empty border"
+						"verticalAlignment": 1
+						"horizontalAlignment": 2
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 13,growy,width 100,height 50"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "scrollBarLabel"

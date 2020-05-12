@@ -96,7 +96,7 @@ public class FlatPasswordFieldUI
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 		capsLockIcon = UIManager.getIcon( "PasswordField.capsLockIcon" );
 
-		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
+		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
 		MigLayoutVisualPadding.install( getComponent(), focusWidth );
 	}

@@ -80,6 +80,7 @@ public class FlatComponentsTest
 		JButton button14 = new JButton();
 		JButton button15 = new JButton();
 		JButton button16 = new JButton();
+		JButton button20 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
 		JToggleButton toggleButton9 = new JToggleButton();
@@ -91,6 +92,7 @@ public class FlatComponentsTest
 		JToggleButton toggleButton12 = new JToggleButton();
 		JToggleButton toggleButton13 = new JToggleButton();
 		JToggleButton toggleButton14 = new JToggleButton();
+		JToggleButton toggleButton18 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
@@ -110,28 +112,33 @@ public class FlatComponentsTest
 		JComboBox<String> comboBox3 = new JComboBox<>();
 		JComboBox<String> comboBox4 = new JComboBox<>();
 		JComboBox<String> comboBox5 = new JComboBox<>();
+		JComboBox<String> comboBox6 = new JComboBox<>();
 		JLabel spinnerLabel = new JLabel();
 		JSpinner spinner1 = new JSpinner();
 		JSpinner spinner2 = new JSpinner();
 		JComboBox<String> comboBox7 = new JComboBox<>();
+		JSpinner spinner3 = new JSpinner();
 		JLabel textFieldLabel = new JLabel();
 		JTextField textField1 = new JTextField();
 		JTextField textField2 = new JTextField();
 		JTextField textField3 = new JTextField();
 		JTextField textField4 = new JTextField();
 		JTextField textField6 = new JTextField();
+		JTextField textField5 = new JTextField();
 		JLabel formattedTextFieldLabel = new JLabel();
 		JFormattedTextField formattedTextField1 = new JFormattedTextField();
 		JFormattedTextField formattedTextField2 = new JFormattedTextField();
 		JFormattedTextField formattedTextField3 = new JFormattedTextField();
 		JFormattedTextField formattedTextField4 = new JFormattedTextField();
 		JFormattedTextField formattedTextField5 = new JFormattedTextField();
+		JFormattedTextField formattedTextField6 = new JFormattedTextField();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField2 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
 		JPasswordField passwordField4 = new JPasswordField();
 		JPasswordField passwordField5 = new JPasswordField();
+		JPasswordField passwordField6 = new JPasswordField();
 		JLabel textAreaLabel = new JLabel();
 		JScrollPane scrollPane1 = new JScrollPane();
 		JTextArea textArea1 = new JTextArea();
@@ -181,6 +188,9 @@ public class FlatComponentsTest
 		JButton button10 = new JButton();
 		JButton button11 = new JButton();
 		JToggleButton toggleButton7 = new JToggleButton();
+		JScrollPane scrollPane15 = new JScrollPane();
+		JPanel panel3 = new JPanel();
+		JButton button21 = new JButton();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
@@ -221,7 +231,8 @@ public class FlatComponentsTest
 			"[]" +
 			"[]" +
 			"[]" +
-			"[]",
+			"[]" +
+			"[left]",
 			// rows
 			"[]" +
 			"[]" +
@@ -326,6 +337,11 @@ public class FlatComponentsTest
 		button16.setText("#");
 		add(button16, "cell 5 1");
 
+		//---- button20 ----
+		button20.setText("empty border");
+		button20.setBorder(BorderFactory.createEmptyBorder());
+		add(button20, "cell 6 1");
+
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");
 		add(toggleButtonLabel, "cell 0 2");
@@ -380,6 +396,11 @@ public class FlatComponentsTest
 		toggleButton14.setText("#");
 		toggleButton14.setSelected(true);
 		add(toggleButton14, "cell 5 2");
+
+		//---- toggleButton18 ----
+		toggleButton18.setText("empty border");
+		toggleButton18.setBorder(BorderFactory.createEmptyBorder());
+		add(toggleButton18, "cell 6 2");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
@@ -521,6 +542,16 @@ public class FlatComponentsTest
 		}));
 		add(comboBox5, "cell 5 5,growx,wmax 100");
 
+		//---- comboBox6 ----
+		comboBox6.setBorder(BorderFactory.createEmptyBorder());
+		comboBox6.setModel(new DefaultComboBoxModel<>(new String[] {
+			"empty border",
+			"a",
+			"b",
+			"c"
+		}));
+		add(comboBox6, "cell 6 5");
+
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");
 		add(spinnerLabel, "cell 0 6");
@@ -534,6 +565,11 @@ public class FlatComponentsTest
 		comboBox7.setEditable(true);
 		comboBox7.putClientProperty("JTextField.placeholderText", "placeholder");
 		add(comboBox7, "cell 5 6,growx");
+
+		//---- spinner3 ----
+		spinner3.setBorder(BorderFactory.createEmptyBorder());
+		spinner3.setModel(new SpinnerNumberModel(12345, null, null, 1));
+		add(spinner3, "cell 6 6");
 
 		//---- textFieldLabel ----
 		textFieldLabel.setText("JTextField:");
@@ -563,6 +599,11 @@ public class FlatComponentsTest
 		textField6.putClientProperty("JTextField.placeholderText", "placeholder");
 		add(textField6, "cell 5 7,growx");
 
+		//---- textField5 ----
+		textField5.setText("empty border");
+		textField5.setBorder(BorderFactory.createEmptyBorder());
+		add(textField5, "cell 6 7");
+
 		//---- formattedTextFieldLabel ----
 		formattedTextFieldLabel.setText("JFormattedTextField:");
 		add(formattedTextFieldLabel, "cell 0 8");
@@ -591,6 +632,11 @@ public class FlatComponentsTest
 		formattedTextField5.putClientProperty("JTextField.placeholderText", "placeholder");
 		add(formattedTextField5, "cell 5 8,growx");
 
+		//---- formattedTextField6 ----
+		formattedTextField6.setText("empty border");
+		formattedTextField6.setBorder(BorderFactory.createEmptyBorder());
+		add(formattedTextField6, "cell 6 8");
+
 		//---- passwordFieldLabel ----
 		passwordFieldLabel.setText("JPasswordField:");
 		add(passwordFieldLabel, "cell 0 9");
@@ -618,6 +664,11 @@ public class FlatComponentsTest
 		//---- passwordField5 ----
 		passwordField5.putClientProperty("JTextField.placeholderText", "placeholder");
 		add(passwordField5, "cell 5 9,growx");
+
+		//---- passwordField6 ----
+		passwordField6.setText("empty border");
+		passwordField6.setBorder(BorderFactory.createEmptyBorder());
+		add(passwordField6, "cell 6 9");
 
 		//---- textAreaLabel ----
 		textAreaLabel.setText("JTextArea:");
@@ -882,6 +933,25 @@ public class FlatComponentsTest
 			toolBar2.add(toggleButton7);
 		}
 		add(toolBar2, "cell 4 13 1 6,growy");
+
+		//======== scrollPane15 ========
+		{
+			scrollPane15.setBorder(BorderFactory.createEmptyBorder());
+
+			//======== panel3 ========
+			{
+				panel3.setPreferredSize(new Dimension(800, 400));
+				panel3.setLayout(new BorderLayout());
+
+				//---- button21 ----
+				button21.setText("I'm a large button in a scrollpane with empty border");
+				button21.setVerticalAlignment(SwingConstants.TOP);
+				button21.setHorizontalAlignment(SwingConstants.LEFT);
+				panel3.add(button21, BorderLayout.CENTER);
+			}
+			scrollPane15.setViewportView(panel3);
+		}
+		add(scrollPane15, "cell 6 13,growy,width 100,height 50");
 
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
