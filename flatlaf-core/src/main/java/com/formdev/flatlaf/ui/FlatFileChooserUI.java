@@ -86,6 +86,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault FileChooser.folderNameLabelText					String
  * @uiDefault FileChooser.filesOfTypeLabelMnemonic				String
  * @uiDefault FileChooser.filesOfTypeLabelText					String
+ *
  * @uiDefault FileChooser.upFolderToolTipText					String
  * @uiDefault FileChooser.upFolderAccessibleName				String
  * @uiDefault FileChooser.homeFolderToolTipText					String
@@ -96,6 +97,20 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault FileChooser.listViewButtonAccessibleName			String
  * @uiDefault FileChooser.detailsViewButtonToolTipText			String
  * @uiDefault FileChooser.detailsViewButtonAccessibleName		String
+ *
+ * <!-- FilePane -->
+ *
+ * @uiDefault FileChooser.fileNameHeaderText					String
+ * @uiDefault FileChooser.fileSizeHeaderText					String
+ * @uiDefault FileChooser.fileTypeHeaderText					String
+ * @uiDefault FileChooser.fileDateHeaderText					String
+ * @uiDefault FileChooser.fileAttrHeaderText					String
+ *
+ * @uiDefault FileChooser.viewMenuLabelText						String
+ * @uiDefault FileChooser.refreshActionLabelText				String
+ * @uiDefault FileChooser.newFolderActionLabelText				String
+ * @uiDefault FileChooser.listViewActionLabelText				String
+ * @uiDefault FileChooser.detailsViewActionLabelText			String
  *
  * @author Karl Tauber
  */

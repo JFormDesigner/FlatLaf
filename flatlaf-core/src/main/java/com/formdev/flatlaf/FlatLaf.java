@@ -268,8 +268,8 @@ public abstract class FlatLaf
 	public UIDefaults getDefaults() {
 		UIDefaults defaults = super.getDefaults();
 
-		// add Metal resource bundle, which is required for FlatFileChooserUI
-		defaults.addResourceBundle( "com.sun.swing.internal.plaf.metal.resources.metal" );
+		// add resource bundle for localized texts
+		defaults.addResourceBundle( "com.formdev.flatlaf.resources.Bundle" );
 
 		// initialize some defaults (for overriding) that are used in UI delegates,
 		// but are not set in BasicLookAndFeel

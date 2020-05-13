@@ -14,6 +14,8 @@ FlatLaf Change Log
   `flatlaf-swingx-<version>.jar`.
 - CheckBox and RadioButton: Flag `opaque` is no longer ignored when checkbox or
   radio button is used as table cell renderer. (issue #77)
+- FileChooser: Fixed missing labels in file chooser when running on Java 9 or
+  later. (issue #98)
 
 
 ## 0.34

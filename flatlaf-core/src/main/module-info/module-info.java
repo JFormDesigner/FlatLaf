@@ -26,5 +26,7 @@ module com.formdev.flatlaf {
 	exports com.formdev.flatlaf.ui;
 	exports com.formdev.flatlaf.util;
 
+	opens com.formdev.flatlaf.resources;
+
 	uses com.formdev.flatlaf.FlatDefaultsAddon;
 }
