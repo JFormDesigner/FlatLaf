@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 - Added drop shadows to popup menus, combobox popups, tooltips and internal
   frames. (issue #94)
+- Button and ToggleButton: Support round button style (set client property
+  `JButton.buttonType` to `roundRect`).
 - Paint nicely rounded buttons, comboboxes, spinners and text fields when
   setting `Button.arc`, `Component.arc` or `TextComponent.arc` to a large value
   (e.g. 1000).

@@ -49,8 +49,16 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button17"
-				"text": "square"
+				"text": "sq"
 				"$client.JButton.buttonType": "square"
+				"$client.JComponent.minimumWidth": 0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button22"
+				"text": "rd"
+				"$client.JButton.buttonType": "roundRect"
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
@@ -66,8 +74,17 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button18"
-				"text": "square"
+				"text": "sq"
 				"$client.JButton.buttonType": "square"
+				"enabled": false
+				"$client.JComponent.minimumWidth": 0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button23"
+				"text": "rd"
+				"$client.JButton.buttonType": "roundRect"
 				"enabled": false
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -127,6 +144,22 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 1"
 			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button24"
+				"text": "sq"
+				"border": #EmptyBorder0
+				"$client.JButton.buttonType": "square"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button25"
+				"text": "rd"
+				"border": &EmptyBorder1 new javax.swing.border.EmptyBorder( 0, 10, 0, 10 )
+				"$client.JButton.buttonType": "roundRect"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 1"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toggleButtonLabel"
 				"text": "JToggleButton:"
@@ -141,8 +174,15 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton9"
-				"text": "square"
+				"text": "sq"
 				"$client.JButton.buttonType": "square"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton19"
+				"text": "rd"
+				"$client.JButton.buttonType": "roundRect"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
@@ -155,8 +195,16 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton10"
-				"text": "square"
+				"text": "sq"
 				"$client.JButton.buttonType": "square"
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton20"
+				"text": "rd"
+				"$client.JButton.buttonType": "roundRect"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
@@ -208,6 +256,22 @@ new FormModel {
 				name: "toggleButton18"
 				"text": "empty border"
 				"border": #EmptyBorder0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 2"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton21"
+				"text": "sq"
+				"border": #EmptyBorder0
+				"$client.JButton.buttonType": "square"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 2"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton22"
+				"text": "rd"
+				"border": #EmptyBorder1
+				"$client.JButton.buttonType": "roundRect"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 2"
 			} )
@@ -1102,12 +1166,12 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "toggleButton15"
-					"icon": new com.jformdesigner.model.SwingIcon( 2, "FileView.computerIcon" )
+					"icon": &SwingIcon4 new com.jformdesigner.model.SwingIcon( 2, "FileView.computerIcon" )
 					"selected": true
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "toggleButton16"
-					"icon": new com.jformdesigner.model.SwingIcon( 2, "FileView.floppyDriveIcon" )
+					"icon": &SwingIcon5 new com.jformdesigner.model.SwingIcon( 2, "FileView.floppyDriveIcon" )
 					"selected": true
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
@@ -1116,11 +1180,77 @@ new FormModel {
 					"selected": true
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 23 3 1,growx"
+				"value": "cell 1 23 2 1,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "Square:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 23 3 1"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar3"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button26"
+					"icon": #SwingIcon1
+					"$client.JButton.buttonType": "square"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button27"
+					"icon": #SwingIcon2
+					"$client.JButton.buttonType": "square"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "toggleButton23"
+					"icon": #SwingIcon4
+					"selected": true
+					"$client.JButton.buttonType": "square"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "toggleButton24"
+					"icon": #SwingIcon5
+					"selected": true
+					"$client.JButton.buttonType": "square"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 23 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "Round:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 23 3 1"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar4"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button28"
+					"icon": #SwingIcon1
+					"$client.JButton.buttonType": "roundRect"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button29"
+					"icon": #SwingIcon2
+					"$client.JButton.buttonType": "roundRect"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "toggleButton25"
+					"icon": #SwingIcon4
+					"selected": true
+					"$client.JButton.buttonType": "roundRect"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "toggleButton26"
+					"icon": #SwingIcon5
+					"selected": true
+					"$client.JButton.buttonType": "roundRect"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 23 3 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 1005, 800 )
+			"size": new java.awt.Dimension( 1135, 800 )
 		} )
 	}
 }

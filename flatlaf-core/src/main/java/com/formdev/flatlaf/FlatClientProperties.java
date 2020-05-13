@@ -30,7 +30,8 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link #BUTTON_TYPE_SQUARE} and {@link #BUTTON_TYPE_HELP}
+	 * <strong>Allowed Values</strong> {@link #BUTTON_TYPE_SQUARE}, {@link #BUTTON_TYPE_ROUND_RECT},
+	 * {@link #BUTTON_TYPE_TAB} and {@link #BUTTON_TYPE_HELP}
 	 */
 	String BUTTON_TYPE = "JButton.buttonType";
 
@@ -42,6 +43,15 @@ public interface FlatClientProperties
 	 * @see #BUTTON_TYPE
 	 */
 	String BUTTON_TYPE_SQUARE = "square";
+
+	/**
+	 * Paint the button with round edges.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
+	 *
+	 * @see #BUTTON_TYPE
+	 */
+	String BUTTON_TYPE_ROUND_RECT = "roundRect";
 
 	/**
 	 * Paint the toggle button in tab style.
@@ -239,5 +249,15 @@ public interface FlatClientProperties
 	static Color clientPropertyColor( JComponent c, String key, Color defaultValue ) {
 		Object value = c.getClientProperty( key );
 		return (value instanceof Color) ? (Color) value : defaultValue;
+	}
+
+	static int clientPropertyChoice( JComponent c, String key, String... choices ) {
+		Object value = c.getClientProperty( key );
+		for( int i = 0; i < choices.length; i++ ) {
+			if( choices[i].equals( value ) )
+				return i;
+
+		}
+		return -1;
 	}
 }

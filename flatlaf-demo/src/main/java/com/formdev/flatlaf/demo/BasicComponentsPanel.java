@@ -179,9 +179,8 @@ class BasicComponentsPanel
 		add(button5, "cell 3 1");
 
 		//---- button6 ----
-		button6.setText("square");
-		button6.setEnabled(false);
-		button6.putClientProperty("JButton.buttonType", "square");
+		button6.setText("round");
+		button6.putClientProperty("JButton.buttonType", "roundRect");
 		add(button6, "cell 4 1");
 
 		//---- button3 ----

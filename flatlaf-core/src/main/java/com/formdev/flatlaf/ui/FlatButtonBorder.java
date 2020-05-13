@@ -125,7 +125,7 @@ public class FlatButtonBorder
 
 	@Override
 	protected float getFocusWidth( Component c ) {
-		return FlatToggleButtonUI.isTabButton( c ) ? 0 : super.getFocusWidth(c );
+		return FlatToggleButtonUI.isTabButton( c ) ? 0 : super.getFocusWidth( c );
 	}
 
 	@Override
@@ -135,6 +135,10 @@ public class FlatButtonBorder
 
 	@Override
 	protected float getArc( Component c ) {
-		return FlatButtonUI.isSquareButton( c ) ? 0 : scale( (float) arc );
+		switch( FlatButtonUI.getButtonType( c ) ) {
+			case FlatButtonUI.TYPE_SQUARE: return 0;
+			case FlatButtonUI.TYPE_ROUND_RECT: return Float.MAX_VALUE;
+			default: return scale( (float) arc );
+		}
 	}
 }

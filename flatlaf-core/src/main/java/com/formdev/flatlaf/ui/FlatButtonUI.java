@@ -236,8 +236,15 @@ public class FlatButtonUI
 			(icon == null && text != null && ("...".equals( text ) || text.length() == 1));
 	}
 
-	static boolean isSquareButton( Component c ) {
-		return c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_SQUARE );
+	// same indices as in parameters to clientPropertyChoice()
+	static final int TYPE_OTHER = -1;
+	static final int TYPE_SQUARE = 0;
+	static final int TYPE_ROUND_RECT = 1;
+
+	static int getButtonType( Component c ) {
+		return (c instanceof AbstractButton)
+			? clientPropertyChoice( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_SQUARE, BUTTON_TYPE_ROUND_RECT )
+			: TYPE_OTHER;
 	}
 
 	static boolean isHelpButton( Component c ) {
@@ -273,10 +280,20 @@ public class FlatButtonUI
 				FlatUIUtils.setRenderingHints( g2 );
 
 				Border border = c.getBorder();
+				int buttonType = FlatButtonUI.getButtonType( c );
 				boolean isToolBarButton = isToolBarButton( c );
 				float focusWidth = (border instanceof FlatBorder && !isToolBarButton) ? scale( (float) getFocusWidth( c ) ) : 0;
-				float arc = ((border instanceof FlatButtonBorder && !isSquareButton( c )) || isToolBarButton)
-					? scale( (float) this.arc ) : 0;
+				float arc;
+
+				if( buttonType == TYPE_SQUARE )
+					arc = 0;
+				else if( buttonType == TYPE_ROUND_RECT )
+					arc = Float.MAX_VALUE;
+				else if( border instanceof FlatButtonBorder || isToolBarButton )
+					arc = scale( (float) this.arc );
+				else
+					arc = 0;
+
 				boolean def = isDefaultButton( c );
 
 				int x = 0;
@@ -401,7 +418,7 @@ public class FlatButtonUI
 			return new Dimension( helpButtonIcon.getIconWidth(), helpButtonIcon.getIconHeight() );
 
 		Dimension prefSize = super.getPreferredSize( c );
-		if ( prefSize == null )
+		if( prefSize == null )
 			return null;
 
 		// make button square if it is a icon-only button
