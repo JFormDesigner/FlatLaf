@@ -53,17 +53,14 @@ public class FlatPopupFactory
 		if( !UIManager.getBoolean( "Popup.dropShadowPainted" ) )
 			return super.getPopup( owner, contents, x, y );
 
-		// always use heavy weight popup because the drop shadow increases
-		// the popup size and may overlap the window bounds
-		Popup popup = getHeavyWeightPopup( owner, contents, x, y );
-
-		// failed to get heavy weight popup --> do not add drop shadow
-		if( popup == null )
-			return super.getPopup( owner, contents, x, y );
-
 		// macOS and Linux adds drop shadow to heavy weight popups
-		if( SystemInfo.IS_MAC || SystemInfo.IS_LINUX )
-			return popup;
+		if( SystemInfo.IS_MAC || SystemInfo.IS_LINUX ) {
+			Popup popup = getHeavyWeightPopup( owner, contents, x, y );
+			return (popup != null) ? popup : super.getPopup( owner, contents, x, y );
+		}
+
+		// create popup
+		Popup popup = super.getPopup( owner, contents, x, y );
 
 		// create drop shadow popup
 		return new DropShadowPopup( popup, contents );
@@ -119,6 +116,7 @@ public class FlatPopupFactory
 		DropShadowPopup( Popup delegate, Component contents ) {
 			this.delegate = delegate;
 
+			// drop shadows on medium weight popups are not supported
 			if( delegate.getClass().getName().endsWith( "MediumWeightPopup" ) )
 				return;
 
