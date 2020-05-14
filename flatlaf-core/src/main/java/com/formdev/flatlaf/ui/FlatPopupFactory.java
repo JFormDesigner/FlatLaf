@@ -35,8 +35,8 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
- * A popup factory that adds drop shadows to popups on Windows and Linux.
- * On macOS, heavy weight popups (without drop shadow) are produced and the
+ * A popup factory that adds drop shadows to popups on Windows.
+ * On macOS and Linux, heavy weight popups (without drop shadow) are produced and the
  * operating system automatically adds drop shadows.
  *
  * @author Karl Tauber
@@ -52,23 +52,18 @@ public class FlatPopupFactory
 		throws IllegalArgumentException
 	{
 		if( !isDropShadowPainted( owner, contents ) )
-			return super.getPopup( owner, contents, x, y );
+			return new NonFlashingPopup( super.getPopup( owner, contents, x, y ), contents );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
 		if( SystemInfo.IS_MAC || SystemInfo.IS_LINUX ) {
 			Popup popup = getHeavyWeightPopup( owner, contents, x, y );
-			if ( popup != null ) {
-				// fix background flashing
-				SwingUtilities.windowForComponent( contents ).setBackground( contents.getBackground() );
-			}
-			return (popup != null) ? popup : super.getPopup( owner, contents, x, y );
+			if( popup == null )
+				popup = super.getPopup( owner, contents, x, y );
+			return new NonFlashingPopup( popup, contents );
 		}
 
-		// create popup
-		Popup popup = super.getPopup( owner, contents, x, y );
-
 		// create drop shadow popup
-		return new DropShadowPopup( popup, owner, contents );
+		return new DropShadowPopup( super.getPopup( owner, contents, x, y ), owner, contents );
 	}
 
 	private boolean isDropShadowPainted( Component owner, Component contents ) {
@@ -124,26 +119,69 @@ public class FlatPopupFactory
 		}
 	}
 
-	//---- class DropShadowPopup ----------------------------------------------
+	//---- class NonFlashingPopup ---------------------------------------------
 
-	private class DropShadowPopup
+	private class NonFlashingPopup
 		extends Popup
 	{
 		private Popup delegate;
 
+		// heavy weight
+		protected Window popupWindow;
+		private Color oldPopupWindowBackground;
+
+		NonFlashingPopup( Popup delegate, Component contents ) {
+			this.delegate = delegate;
+
+			popupWindow = SwingUtilities.windowForComponent( contents );
+			if( popupWindow != null ) {
+				// heavy weight popup
+
+				// fix background flashing which may occur on some platforms
+				// (e.g. macOS and Linux) when using dark theme
+				oldPopupWindowBackground = popupWindow.getBackground();
+				popupWindow.setBackground( contents.getBackground() );
+			}
+		}
+
+		@Override
+		public void show() {
+			delegate.show();
+		}
+
+		@Override
+		public void hide() {
+			if( delegate != null ) {
+				delegate.hide();
+				delegate = null;
+			}
+
+			if( popupWindow != null ) {
+				// restore background so that it can not affect other LaFs (when switching)
+				// because popup windows are cached and reused
+				popupWindow.setBackground( oldPopupWindowBackground );
+				popupWindow = null;
+			}
+		}
+	}
+
+	//---- class DropShadowPopup ----------------------------------------------
+
+	private class DropShadowPopup
+		extends NonFlashingPopup
+	{
 		// light weight
 		private JComponent lightComp;
 		private Border oldBorder;
 		private boolean oldOpaque;
 
 		// heavy weight
-		private Window popupWindow;
 		private Popup dropShadowDelegate;
 		private Window dropShadowWindow;
-		private Color oldBackground;
+		private Color oldDropShadowWindowBackground;
 
 		DropShadowPopup( Popup delegate, Component owner, Component contents ) {
-			this.delegate = delegate;
+			super( delegate, contents );
 
 			// drop shadows on medium weight popups are not supported
 			if( delegate.getClass().getName().endsWith( "MediumWeightPopup" ) )
@@ -153,7 +191,6 @@ public class FlatPopupFactory
 			if( size.width <= 0 || size.height <= 0 )
 				return;
 
-			popupWindow = SwingUtilities.windowForComponent( contents );
 			if( popupWindow != null ) {
 				// heavy weight popup
 
@@ -175,15 +212,15 @@ public class FlatPopupFactory
 					prefSize.width + insets.left + insets.right,
 					prefSize.height + insets.top + insets.bottom ) );
 
-				// create popup for drop shadow
+				// create heavy weight popup for drop shadow
 				int x = popupWindow.getX() - insets.left;
 				int y = popupWindow.getY() - insets.top;
 				dropShadowDelegate = getHeavyWeightPopup( owner, dropShadowPanel, x, y );
 
-				// make drop shadow popup translucent
+				// make drop shadow popup window translucent
 				dropShadowWindow = SwingUtilities.windowForComponent( dropShadowPanel );
 				if( dropShadowWindow != null ) {
-					oldBackground = dropShadowWindow.getBackground();
+					oldDropShadowWindowBackground = dropShadowWindow.getBackground();
 					dropShadowWindow.setBackground( new Color( 0, true ) );
 				}
 			} else {
@@ -213,7 +250,7 @@ public class FlatPopupFactory
 			if( dropShadowDelegate != null )
 				dropShadowDelegate.show();
 
-			delegate.show();
+			super.show();
 
 			// fix location of light weight popup in case it has left or top drop shadow
 			if( lightComp != null ) {
@@ -230,13 +267,10 @@ public class FlatPopupFactory
 				dropShadowDelegate = null;
 			}
 
-			if( delegate != null ) {
-				delegate.hide();
-				delegate = null;
-			}
+			super.hide();
 
 			if( dropShadowWindow != null ) {
-				dropShadowWindow.setBackground( oldBackground );
+				dropShadowWindow.setBackground( oldDropShadowWindowBackground );
 				dropShadowWindow = null;
 			}
 
