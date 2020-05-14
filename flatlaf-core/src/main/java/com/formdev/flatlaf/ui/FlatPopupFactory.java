@@ -20,12 +20,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Window;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
@@ -67,7 +67,7 @@ public class FlatPopupFactory
 		Popup popup = super.getPopup( owner, contents, x, y );
 
 		// create drop shadow popup
-		return new DropShadowPopup( popup, contents );
+		return new DropShadowPopup( popup, owner, contents );
 	}
 
 	/**
@@ -105,19 +105,23 @@ public class FlatPopupFactory
 
 	//---- class DropShadowPopup ----------------------------------------------
 
-	private static class DropShadowPopup
+	private class DropShadowPopup
 		extends Popup
 	{
 		private Popup delegate;
 
-		private JComponent parent;
+		// light weight
+		private JComponent lightComp;
 		private Border oldBorder;
 		private boolean oldOpaque;
 
-		private Window window;
+		// heavy weight
+		private Window popupWindow;
+		private Popup dropShadowDelegate;
+		private Window dropShadowWindow;
 		private Color oldBackground;
 
-		DropShadowPopup( Popup delegate, Component contents ) {
+		DropShadowPopup( Popup delegate, Component owner, Component contents ) {
 			this.delegate = delegate;
 
 			// drop shadows on medium weight popups are not supported
@@ -128,96 +132,91 @@ public class FlatPopupFactory
 			if( size.width <= 0 || size.height <= 0 )
 				return;
 
-			Container p = contents.getParent();
-			if( !(p instanceof JComponent) )
-				return;
+			popupWindow = SwingUtilities.windowForComponent( contents );
+			if( popupWindow != null ) {
+				// heavy weight popup
 
-			parent = (JComponent) p;
-			oldBorder = parent.getBorder();
-			oldOpaque = parent.isOpaque();
-			parent.setBorder( new FlatDropShadowBorder(
+				// Since Java has a problem with sub-pixel text rendering on translucent
+				// windows, we can not make the popup window translucent for the drop shadow.
+				// (see https://bugs.openjdk.java.net/browse/JDK-8215980)
+				// The solution is to create a second translucent window that paints
+				// the drop shadow and is positioned behind the popup window.
+
+				// create panel that paints the drop shadow
+				JPanel dropShadowPanel = new JPanel();
+				dropShadowPanel.setBorder( createDropShadowBorder() );
+				dropShadowPanel.setOpaque( false );
+
+				// set preferred size of drop shadow panel
+				Dimension prefSize = popupWindow.getPreferredSize();
+				Insets insets = dropShadowPanel.getInsets();
+				dropShadowPanel.setPreferredSize( new Dimension(
+					prefSize.width + insets.left + insets.right,
+					prefSize.height + insets.top + insets.bottom ) );
+
+				// create popup for drop shadow
+				int x = popupWindow.getX() - insets.left;
+				int y = popupWindow.getY() - insets.top;
+				dropShadowDelegate = getHeavyWeightPopup( owner, dropShadowPanel, x, y );
+
+				// make drop shadow popup translucent
+				dropShadowWindow = SwingUtilities.windowForComponent( dropShadowPanel );
+				if( dropShadowWindow != null ) {
+					oldBackground = dropShadowWindow.getBackground();
+					dropShadowWindow.setBackground( new Color( 0, true ) );
+				}
+			} else {
+				// light weight popup
+				Container p = contents.getParent();
+				if( !(p instanceof JComponent) )
+					return;
+
+				lightComp = (JComponent) p;
+				oldBorder = lightComp.getBorder();
+				oldOpaque = lightComp.isOpaque();
+				lightComp.setBorder( createDropShadowBorder() );
+				lightComp.setOpaque( false );
+				lightComp.setSize( lightComp.getPreferredSize() );
+			}
+		}
+
+		private Border createDropShadowBorder() {
+			return new FlatDropShadowBorder(
 				UIManager.getColor( "Popup.dropShadowColor" ),
 				UIManager.getInsets( "Popup.dropShadowInsets" ),
-				FlatUIUtils.getUIFloat( "Popup.dropShadowOpacity", 0.5f ) ) );
-			parent.setOpaque( false );
-
-			window = SwingUtilities.windowForComponent( contents );
-			if( window != null ) {
-				oldBackground = window.getBackground();
-				parent.setBorder( new FillBackgroundBorder( parent.getBorder(), oldBackground ) );
-				window.setBackground( new Color( 0, true ) );
-				window.setSize( window.getPreferredSize() );
-			} else
-				parent.setSize( parent.getPreferredSize() );
+				FlatUIUtils.getUIFloat( "Popup.dropShadowOpacity", 0.5f ) );
 		}
 
 		@Override
 		public void show() {
+			if( dropShadowDelegate != null )
+				dropShadowDelegate.show();
+
 			delegate.show();
 		}
 
 		@Override
 		public void hide() {
-			if( delegate == null )
-				return;
-
-			delegate.hide();
-
-			if( parent != null ) {
-				parent.setBorder( oldBorder );
-				parent.setOpaque( oldOpaque );
-				parent = null;
+			if( dropShadowDelegate != null ) {
+				dropShadowDelegate.hide();
+				dropShadowDelegate = null;
 			}
 
-			if( window != null ) {
-				window.setBackground( oldBackground );
-				window = null;
+			if( delegate != null ) {
+				delegate.hide();
+				delegate = null;
 			}
 
-			delegate = null;
-		}
-	}
+			if( dropShadowWindow != null ) {
+				dropShadowWindow.setBackground( oldBackground );
+				dropShadowWindow = null;
+			}
 
-	//---- class FillBackgroundBorder -----------------------------------------
-
-	/**
-	 * Fills the component background with the given color (and delegates border painting).
-	 * This avoids that underlying windows may shine thru which may happen because
-	 * the heavy weight popup window is transparent and the contained panel is not opaque.
-	 */
-	private static class FillBackgroundBorder
-		implements Border
-	{
-		private final Border delegate;
-		private final Color background;
-
-		FillBackgroundBorder( Border delegate, Color background ) {
-			this.delegate = delegate;
-			this.background = background;
-		}
-
-		@Override
-		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			Insets insets = getBorderInsets( c );
-			Color oldColor = g.getColor();
-			g.setColor( background );
-			g.fillRect( x + insets.left, y + insets.top,
-				width - insets.left - insets.right, height - insets.top - insets.bottom );
-
-			// restore color because delegate border may use it
-			g.setColor( oldColor );
-
-			delegate.paintBorder( c, g, x, y, width, height );
-		}
-
-		@Override
-		public Insets getBorderInsets( Component c ) {
-			return delegate.getBorderInsets( c );
-		}
-
-		@Override
-		public boolean isBorderOpaque() {
-			return delegate.isBorderOpaque();
+			if( lightComp != null ) {
+				lightComp.setBorder( oldBorder );
+				lightComp.setOpaque( oldOpaque );
+				lightComp = null;
+			}
 		}
 	}
 }
