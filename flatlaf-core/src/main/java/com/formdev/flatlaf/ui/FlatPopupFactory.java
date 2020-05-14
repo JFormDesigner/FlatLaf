@@ -56,6 +56,10 @@ public class FlatPopupFactory
 		// macOS and Linux adds drop shadow to heavy weight popups
 		if( SystemInfo.IS_MAC || SystemInfo.IS_LINUX ) {
 			Popup popup = getHeavyWeightPopup( owner, contents, x, y );
+			if ( popup != null ) {
+				// fix background flashing
+				SwingUtilities.windowForComponent( contents ).setBackground( contents.getBackground() );
+			}
 			return (popup != null) ? popup : super.getPopup( owner, contents, x, y );
 		}
 
