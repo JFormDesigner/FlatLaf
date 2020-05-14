@@ -73,16 +73,16 @@ public class FlatBorder
 			FlatUIUtils.setRenderingHints( g2 );
 
 			boolean isCellEditor = isTableCellEditor( c );
-			float focusWidth = isCellEditor ? 0 : getFocusWidth( c );
-			float borderWidth = getBorderWidth( c );
-			float arc = isCellEditor ? 0 : getArc( c );
+			float focusWidth = isCellEditor ? 0 : scale( (float) getFocusWidth( c ) );
+			float borderWidth = scale( (float) getBorderWidth( c ) );
+			float arc = isCellEditor ? 0 : scale( (float) getArc( c ) );
 
 			if( isFocused( c ) ) {
 				float innerFocusWidth = !(c instanceof JScrollPane) ? this.innerFocusWidth : 0;
 
 				g2.setColor( getFocusColor( c ) );
 				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,
-					getLineWidth( c ) + scale( innerFocusWidth ), arc );
+					scale( (float) getLineWidth( c ) ) + scale( innerFocusWidth ), arc );
 			}
 
 			g2.setPaint( getBorderColor( c ) );
@@ -153,7 +153,8 @@ public class FlatBorder
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
 		boolean isCellEditor = isTableCellEditor( c );
-		float ow = (isCellEditor ? 0 : getFocusWidth( c )) + getLineWidth( c );
+		float focusWidth = isCellEditor ? 0 : scale( (float) getFocusWidth( c ) );
+		float ow = focusWidth + scale( (float) getLineWidth( c ) );
 
 		insets = super.getBorderInsets( c, insets );
 		insets.top = Math.round( scale( (float) insets.top ) + ow );
@@ -163,19 +164,33 @@ public class FlatBorder
 		return insets;
 	}
 
-	protected float getFocusWidth( Component c ) {
-		return scale( (float) focusWidth );
+	/**
+	 * Returns the (unscaled) thickness of the outer focus border.
+	 */
+	protected int getFocusWidth( Component c ) {
+		return focusWidth;
 	}
 
-	protected float getLineWidth( Component c ) {
-		return scale( 1f );
+	/**
+	 * Returns the (unscaled) line thickness used to compute the border insets.
+	 * This may be different to {@link #getBorderWidth}.
+	 */
+	protected int getLineWidth( Component c ) {
+		return 1;
 	}
 
-	protected float getBorderWidth( Component c ) {
+	/**
+	 * Returns the (unscaled) line thickness used to paint the border.
+	 * This may be different to {@link #getLineWidth}.
+	 */
+	protected int getBorderWidth( Component c ) {
 		return getLineWidth( c );
 	}
 
-	protected float getArc( Component c ) {
+	/**
+	 * Returns the (unscaled) arc diameter of the border.
+	 */
+	protected int getArc( Component c ) {
 		return 0;
 	}
 }

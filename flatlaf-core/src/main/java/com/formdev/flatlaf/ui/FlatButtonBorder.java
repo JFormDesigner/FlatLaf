@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
@@ -124,21 +123,21 @@ public class FlatButtonBorder
 	}
 
 	@Override
-	protected float getFocusWidth( Component c ) {
+	protected int getFocusWidth( Component c ) {
 		return FlatToggleButtonUI.isTabButton( c ) ? 0 : super.getFocusWidth( c );
 	}
 
 	@Override
-	protected float getBorderWidth( Component c ) {
-		return FlatButtonUI.isDefaultButton( c ) ? scale( (float) defaultBorderWidth ) : super.getBorderWidth( c );
+	protected int getBorderWidth( Component c ) {
+		return FlatButtonUI.isDefaultButton( c ) ? defaultBorderWidth : super.getBorderWidth( c );
 	}
 
 	@Override
-	protected float getArc( Component c ) {
+	protected int getArc( Component c ) {
 		switch( FlatButtonUI.getButtonType( c ) ) {
 			case FlatButtonUI.TYPE_SQUARE: return 0;
-			case FlatButtonUI.TYPE_ROUND_RECT: return Float.MAX_VALUE;
-			default: return scale( (float) arc );
+			case FlatButtonUI.TYPE_ROUND_RECT: return Short.MAX_VALUE;
+			default: return arc;
 		}
 	}
 }

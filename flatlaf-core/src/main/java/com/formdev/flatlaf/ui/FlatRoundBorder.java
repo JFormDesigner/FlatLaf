@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Component;
 import javax.swing.UIManager;
 
@@ -33,7 +32,7 @@ public class FlatRoundBorder
 	protected final int arc = UIManager.getInt( "Component.arc" );
 
 	@Override
-	protected float getArc( Component c ) {
-		return scale( (float) arc );
+	protected int getArc( Component c ) {
+		return arc;
 	}
 }
