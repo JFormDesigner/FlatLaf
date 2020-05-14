@@ -214,6 +214,13 @@ public class FlatPopupFactory
 				dropShadowDelegate.show();
 
 			delegate.show();
+
+			// fix location of light weight popup in case it has left or top drop shadow
+			if( lightComp != null ) {
+				Insets insets = lightComp.getInsets();
+				if( insets.left != 0 || insets.top != 0 )
+					lightComp.setLocation( lightComp.getX() - insets.left, lightComp.getY() - insets.top );
+			}
 		}
 
 		@Override
