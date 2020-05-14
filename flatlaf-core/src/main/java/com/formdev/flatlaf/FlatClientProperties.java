@@ -104,6 +104,15 @@ public interface FlatClientProperties
 	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
 	/**
+	 * Specifies whether a drop shadow is painted if the component is shown in a popup
+	 * or if the component is the owner of another component that is shown in a popup.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String POPUP_DROP_SHADOW_PAINTED = "Popup.dropShadowPainted";
+
+	/**
 	 * Specifies whether the progress bar has always the larger height even if no string is painted.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JProgressBar}<br>

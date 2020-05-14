@@ -31,6 +31,7 @@ import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -50,7 +51,7 @@ public class FlatPopupFactory
 	public Popup getPopup( Component owner, Component contents, int x, int y )
 		throws IllegalArgumentException
 	{
-		if( !UIManager.getBoolean( "Popup.dropShadowPainted" ) )
+		if( !isDropShadowPainted( owner, contents ) )
 			return super.getPopup( owner, contents, x, y );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
@@ -68,6 +69,26 @@ public class FlatPopupFactory
 
 		// create drop shadow popup
 		return new DropShadowPopup( popup, owner, contents );
+	}
+
+	private boolean isDropShadowPainted( Component owner, Component contents ) {
+		Boolean b = isDropShadowPainted( owner );
+		if( b != null )
+			return b;
+
+		b = isDropShadowPainted( contents );
+		if( b != null )
+			return b;
+
+		return UIManager.getBoolean( "Popup.dropShadowPainted" );
+	}
+
+	private Boolean isDropShadowPainted( Component c ) {
+		if( !(c instanceof JComponent) )
+			return null;
+
+		Object value = ((JComponent)c).getClientProperty( FlatClientProperties.POPUP_DROP_SHADOW_PAINTED );
+		return (value instanceof Boolean ) ? (Boolean) value : null;
 	}
 
 	/**
