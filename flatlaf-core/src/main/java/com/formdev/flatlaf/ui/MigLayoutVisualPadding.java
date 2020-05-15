@@ -21,6 +21,7 @@ import java.awt.Insets;
 import java.beans.PropertyChangeListener;
 import java.util.function.Function;
 import javax.swing.JComponent;
+import javax.swing.border.Border;
 
 /**
  * Support for MigLayout visual paddings.
@@ -69,14 +70,17 @@ public class MigLayoutVisualPadding
 	/**
 	 * Convenience method that checks whether component border is a FlatBorder.
 	 */
-	public static void install( JComponent c, int focusWidth ) {
+	public static void install( JComponent c ) {
 		if( !migLayoutAvailable )
 			return;
 
 		install( c, c2 -> {
-			return (c2.getBorder() instanceof FlatBorder)
-				? new Insets( focusWidth, focusWidth, focusWidth, focusWidth )
-				: null;
+			Border border = c2.getBorder();
+			if( border instanceof FlatBorder ) {
+				int focusWidth = ((FlatBorder)border).getFocusWidth( c2 );
+				return new Insets( focusWidth, focusWidth, focusWidth, focusWidth );
+			} else
+				return null;
 		}, "border" );
 	}
 

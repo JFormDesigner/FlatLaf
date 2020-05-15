@@ -83,7 +83,7 @@ public class FlatScrollPaneUI
 		int focusWidth = UIManager.getInt( "Component.focusWidth" );
 		LookAndFeel.installProperty( c, "opaque", focusWidth == 0 );
 
-		MigLayoutVisualPadding.install( scrollpane, focusWidth );
+		MigLayoutVisualPadding.install( scrollpane );
 	}
 
 	@Override

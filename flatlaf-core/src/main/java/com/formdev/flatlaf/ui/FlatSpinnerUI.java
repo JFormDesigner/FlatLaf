@@ -56,8 +56,6 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
  *
  * <!-- FlatSpinnerUI -->
  *
- * @uiDefault Component.focusWidth				int
- * @uiDefault Component.arc						int
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.isIntelliJTheme			boolean
@@ -78,8 +76,6 @@ public class FlatSpinnerUI
 {
 	private Handler handler;
 
-	protected int focusWidth;
-	protected int arc;
 	protected int minimumWidth;
 	protected String arrowType;
 	protected boolean isIntelliJTheme;
@@ -103,8 +99,6 @@ public class FlatSpinnerUI
 
 		LookAndFeel.installProperty( spinner, "opaque", false );
 
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
-		arc = UIManager.getInt( "Component.arc" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
@@ -121,7 +115,7 @@ public class FlatSpinnerUI
 		// scale
 		padding = scale( padding );
 
-		MigLayoutVisualPadding.install( spinner, focusWidth );
+		MigLayoutVisualPadding.install( spinner );
 	}
 
 	@Override
@@ -246,8 +240,11 @@ public class FlatSpinnerUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
+		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+		float arc = FlatUIUtils.getBorderArc( c );
+
 		// fill background if opaque to avoid garbage if user sets opaque to true
-		if( c.isOpaque() && (focusWidth > 0 || arc != 0) )
+		if( c.isOpaque() && (focusWidth > 0 || arc > 0) )
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -255,8 +252,6 @@ public class FlatSpinnerUI
 
 		int width = c.getWidth();
 		int height = c.getHeight();
-		float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-		float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
 		Component nextButton = getHandler().nextButton;
 		int arrowX = nextButton.getX();
 		int arrowWidth = nextButton.getWidth();
@@ -328,8 +323,9 @@ public class FlatSpinnerUI
 			// the arrows width is the same as the inner height so that the arrows area is square
 			int minimumWidth = FlatUIUtils.minimumWidth( spinner, FlatSpinnerUI.this.minimumWidth );
 			int innerHeight = editorSize.height + padding.top + padding.bottom;
+			float focusWidth = FlatUIUtils.getBorderFocusWidth( spinner );
 			return new Dimension(
-				Math.max( insets.left + insets.right + editorSize.width + padding.left + padding.right + innerHeight, scale( minimumWidth + (focusWidth * 2) ) ),
+				Math.max( insets.left + insets.right + editorSize.width + padding.left + padding.right + innerHeight, scale( minimumWidth ) + Math.round( focusWidth * 2 ) ),
 				insets.top + insets.bottom + innerHeight );
 		}
 

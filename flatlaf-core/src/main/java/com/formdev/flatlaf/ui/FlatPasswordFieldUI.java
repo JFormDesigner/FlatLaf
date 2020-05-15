@@ -57,8 +57,6 @@ import com.formdev.flatlaf.FlatClientProperties;
  *
  * <!-- FlatPasswordFieldUI -->
  *
- * @uiDefault TextComponent.arc						int
- * @uiDefault Component.focusWidth					int
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
@@ -70,8 +68,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 public class FlatPasswordFieldUI
 	extends BasicPasswordFieldUI
 {
-	protected int arc;
-	protected int focusWidth;
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
@@ -89,8 +85,6 @@ public class FlatPasswordFieldUI
 		super.installDefaults();
 
 		String prefix = getPropertyPrefix();
-		arc = UIManager.getInt( "TextComponent.arc" );
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
@@ -98,7 +92,7 @@ public class FlatPasswordFieldUI
 
 		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
-		MigLayoutVisualPadding.install( getComponent(), focusWidth );
+		MigLayoutVisualPadding.install( getComponent() );
 	}
 
 	@Override
@@ -160,7 +154,7 @@ public class FlatPasswordFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		FlatTextFieldUI.paintBackground( g, getComponent(), focusWidth, arc, isIntelliJTheme );
+		FlatTextFieldUI.paintBackground( g, getComponent(), isIntelliJTheme );
 		FlatTextFieldUI.paintPlaceholder( g, getComponent(), placeholderForeground );
 		paintCapsLock( g );
 		super.paintSafely( g );
@@ -194,8 +188,8 @@ public class FlatPasswordFieldUI
 
 	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
 		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
-		int focusWidth = (c.getBorder() instanceof FlatBorder) ? this.focusWidth : 0;
-		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
+		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+		size.width = Math.max( size.width, scale( minimumWidth ) + Math.round( focusWidth * 2 ) );
 		return size;
 	}
 }

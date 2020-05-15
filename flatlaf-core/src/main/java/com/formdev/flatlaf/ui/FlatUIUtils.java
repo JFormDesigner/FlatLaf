@@ -39,6 +39,7 @@ import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
@@ -140,6 +141,26 @@ public class FlatUIUtils
 
 	public static boolean isPermanentFocusOwner( Component c ) {
 		return (KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner() == c);
+	}
+
+	/**
+	 * Returns the scaled thickness of the outer focus border for the given component.
+	 */
+	public static float getBorderFocusWidth( JComponent c ) {
+		Border border = c.getBorder();
+		return (border instanceof FlatBorder)
+			? UIScale.scale( (float) ((FlatBorder)border).getFocusWidth( c ) )
+			: 0;
+	}
+
+	/**
+	 * Returns the scaled arc diameter of the border for the given component.
+	 */
+	public static float getBorderArc( JComponent c ) {
+		Border border = c.getBorder();
+		return (border instanceof FlatBorder)
+			? UIScale.scale( (float) ((FlatBorder)border).getArc( c ) )
+			: 0;
 	}
 
 	/**

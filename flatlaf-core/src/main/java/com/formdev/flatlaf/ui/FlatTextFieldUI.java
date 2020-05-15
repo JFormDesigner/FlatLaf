@@ -60,8 +60,6 @@ import com.formdev.flatlaf.FlatClientProperties;
  *
  * <!-- FlatTextFieldUI -->
  *
- * @uiDefault TextComponent.arc					int
- * @uiDefault Component.focusWidth				int
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextField.placeholderForeground	Color
@@ -72,8 +70,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 public class FlatTextFieldUI
 	extends BasicTextFieldUI
 {
-	protected int arc;
-	protected int focusWidth;
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
@@ -89,15 +85,13 @@ public class FlatTextFieldUI
 		super.installDefaults();
 
 		String prefix = getPropertyPrefix();
-		arc = UIManager.getInt( "TextComponent.arc" );
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
-		MigLayoutVisualPadding.install( getComponent(), focusWidth );
+		MigLayoutVisualPadding.install( getComponent() );
 	}
 
 	@Override
@@ -140,7 +134,7 @@ public class FlatTextFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		paintBackground( g, getComponent(), focusWidth, arc, isIntelliJTheme );
+		paintBackground( g, getComponent(), isIntelliJTheme );
 		paintPlaceholder( g, getComponent(), placeholderForeground );
 		super.paintSafely( g );
 	}
@@ -150,7 +144,7 @@ public class FlatTextFieldUI
 		// background is painted elsewhere
 	}
 
-	static void paintBackground( Graphics g, JTextComponent c, int focusWidth, int arc, boolean isIntelliJTheme ) {
+	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme ) {
 		Border border = c.getBorder();
 
 		// do not paint background if:
@@ -161,6 +155,9 @@ public class FlatTextFieldUI
 		if( !c.isOpaque() && !(border instanceof FlatBorder) && FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) )
 			return;
 
+		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+		float arc = FlatUIUtils.getBorderArc( c );
+
 		// fill background if opaque to avoid garbage if user sets opaque to true
 		if( c.isOpaque() && (focusWidth > 0 || arc > 0) )
 			FlatUIUtils.paintParentBackground( g, c );
@@ -170,16 +167,13 @@ public class FlatTextFieldUI
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			float fFocusWidth = (border instanceof FlatBorder) ? scale( (float) focusWidth ) : 0;
-			float fArc = (border instanceof FlatTextBorder) ? scale( (float) arc ) : 0;
-
 			Color background = c.getBackground();
 			g2.setColor( !(background instanceof UIResource)
 				? background
 				: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
 					? FlatUIUtils.getParentBackground( c )
 					: background) );
-			FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), fFocusWidth, fArc );
+			FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 		} finally {
 			g2.dispose();
 		}
@@ -232,8 +226,8 @@ public class FlatTextFieldUI
 		  return size;
 
 		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
-		int focusWidth = (c.getBorder() instanceof FlatBorder) ? this.focusWidth : 0;
-		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
+		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+		size.width = Math.max( size.width, scale( minimumWidth ) + Math.round( focusWidth * 2 ) );
 		return size;
 	}
 }

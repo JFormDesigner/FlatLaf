@@ -76,8 +76,6 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatComboBoxUI -->
  *
- * @uiDefault Component.focusWidth				int
- * @uiDefault Component.arc						int
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
@@ -96,8 +94,6 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatComboBoxUI
 	extends BasicComboBoxUI
 {
-	protected int focusWidth;
-	protected int arc;
 	protected String arrowType;
 	protected boolean isIntelliJTheme;
 	protected Color borderColor;
@@ -150,8 +146,6 @@ public class FlatComboBoxUI
 
 		LookAndFeel.installProperty( comboBox, "opaque", false );
 
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
-		arc = UIManager.getInt( "Component.arc" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
@@ -170,7 +164,7 @@ public class FlatComboBoxUI
 		// scale
 		padding = UIScale.scale( padding );
 
-		MigLayoutVisualPadding.install( comboBox, focusWidth );
+		MigLayoutVisualPadding.install( comboBox );
 	}
 
 	@Override
@@ -318,6 +312,9 @@ public class FlatComboBoxUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
+		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+		float arc = FlatUIUtils.getBorderArc( c );
+
 		// fill background if opaque to avoid garbage if user sets opaque to true
 		if( c.isOpaque() && (focusWidth > 0 || arc > 0) )
 			FlatUIUtils.paintParentBackground( g, c );
@@ -327,8 +324,6 @@ public class FlatComboBoxUI
 
 		int width = c.getWidth();
 		int height = c.getHeight();
-		float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-		float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
 		int arrowX = arrowButton.getX();
 		int arrowWidth = arrowButton.getWidth();
 		boolean enabled = comboBox.isEnabled();

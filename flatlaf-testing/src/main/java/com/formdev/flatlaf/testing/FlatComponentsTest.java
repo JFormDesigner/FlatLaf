@@ -83,8 +83,6 @@ public class FlatComponentsTest
 		JButton button15 = new JButton();
 		JButton button16 = new JButton();
 		JButton button20 = new JButton();
-		JButton button24 = new JButton();
-		JButton button25 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
 		JToggleButton toggleButton9 = new JToggleButton();
@@ -99,8 +97,6 @@ public class FlatComponentsTest
 		JToggleButton toggleButton13 = new JToggleButton();
 		JToggleButton toggleButton14 = new JToggleButton();
 		JToggleButton toggleButton18 = new JToggleButton();
-		JToggleButton toggleButton21 = new JToggleButton();
-		JToggleButton toggleButton22 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
@@ -375,18 +371,6 @@ public class FlatComponentsTest
 		button20.setBorder(BorderFactory.createEmptyBorder());
 		add(button20, "cell 6 1");
 
-		//---- button24 ----
-		button24.setText("sq");
-		button24.setBorder(BorderFactory.createEmptyBorder());
-		button24.putClientProperty("JButton.buttonType", "square");
-		add(button24, "cell 6 1");
-
-		//---- button25 ----
-		button25.setText("rd");
-		button25.setBorder(new EmptyBorder(0, 10, 0, 10));
-		button25.putClientProperty("JButton.buttonType", "roundRect");
-		add(button25, "cell 6 1");
-
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");
 		add(toggleButtonLabel, "cell 0 2");
@@ -457,18 +441,6 @@ public class FlatComponentsTest
 		toggleButton18.setText("empty border");
 		toggleButton18.setBorder(BorderFactory.createEmptyBorder());
 		add(toggleButton18, "cell 6 2");
-
-		//---- toggleButton21 ----
-		toggleButton21.setText("sq");
-		toggleButton21.setBorder(BorderFactory.createEmptyBorder());
-		toggleButton21.putClientProperty("JButton.buttonType", "square");
-		add(toggleButton21, "cell 6 2");
-
-		//---- toggleButton22 ----
-		toggleButton22.setText("rd");
-		toggleButton22.setBorder(new EmptyBorder(0, 10, 0, 10));
-		toggleButton22.putClientProperty("JButton.buttonType", "roundRect");
-		add(toggleButton22, "cell 6 2");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");

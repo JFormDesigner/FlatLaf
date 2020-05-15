@@ -39,7 +39,6 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonListener;
@@ -61,8 +60,6 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatButtonUI -->
  *
- * @uiDefault Component.focusWidth				int
- * @uiDefault Button.arc						int
  * @uiDefault Button.minimumWidth				int
  * @uiDefault Button.iconTextGap				int
  * @uiDefault Button.startBackground			Color	optional; if set, a gradient paint is used and Button.background is ignored
@@ -92,8 +89,6 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatButtonUI
 	extends BasicButtonUI
 {
-	protected int focusWidth;
-	protected int arc;
 	protected int minimumWidth;
 	protected int iconTextGap;
 
@@ -139,8 +134,6 @@ public class FlatButtonUI
 		if( !defaults_initialized ) {
 			String prefix = getPropertyPrefix();
 
-			focusWidth = UIManager.getInt( "Component.focusWidth" );
-			arc = UIManager.getInt( "Button.arc" );
 			minimumWidth = UIManager.getInt( prefix + "minimumWidth" );
 			iconTextGap = FlatUIUtils.getUIInt( prefix + "iconTextGap", 4 );
 
@@ -187,7 +180,7 @@ public class FlatButtonUI
 		LookAndFeel.installProperty( b, "opaque", false );
 		LookAndFeel.installProperty( b, "iconTextGap", scale( iconTextGap ) );
 
-		MigLayoutVisualPadding.install( b, getFocusWidth( b ) );
+		MigLayoutVisualPadding.install( b );
 	}
 
 	@Override
@@ -279,20 +272,9 @@ public class FlatButtonUI
 			try {
 				FlatUIUtils.setRenderingHints( g2 );
 
-				Border border = c.getBorder();
-				int buttonType = FlatButtonUI.getButtonType( c );
 				boolean isToolBarButton = isToolBarButton( c );
-				float focusWidth = (border instanceof FlatBorder && !isToolBarButton) ? scale( (float) getFocusWidth( c ) ) : 0;
-				float arc;
-
-				if( buttonType == TYPE_SQUARE )
-					arc = 0;
-				else if( buttonType == TYPE_ROUND_RECT )
-					arc = Float.MAX_VALUE;
-				else if( border instanceof FlatButtonBorder || isToolBarButton )
-					arc = scale( (float) this.arc );
-				else
-					arc = 0;
+				float focusWidth = isToolBarButton ? 0 : FlatUIUtils.getBorderFocusWidth( c );
+				float arc = FlatUIUtils.getBorderArc( c );
 
 				boolean def = isDefaultButton( c );
 
@@ -426,15 +408,11 @@ public class FlatButtonUI
 		if( isIconOnlyButton( c ) )
 			prefSize.width = Math.max( prefSize.width, prefSize.height );
 		else if( !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
-			int focusWidth = getFocusWidth( c );
-			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) + (focusWidth * 2) ) );
-			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) + (focusWidth * 2) ) );
+			float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + Math.round( focusWidth * 2 ) );
+			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) ) + Math.round( focusWidth * 2 ) );
 		}
 
 		return prefSize;
-	}
-
-	protected int getFocusWidth( JComponent c ) {
-		return focusWidth;
 	}
 }

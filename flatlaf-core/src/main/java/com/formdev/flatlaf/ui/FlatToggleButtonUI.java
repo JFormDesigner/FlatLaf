@@ -138,7 +138,7 @@ public class FlatToggleButtonUI
 			case BUTTON_TYPE:
 				if( BUTTON_TYPE_TAB.equals( e.getOldValue() ) || BUTTON_TYPE_TAB.equals( e.getNewValue() ) ) {
 					MigLayoutVisualPadding.uninstall( b );
-					MigLayoutVisualPadding.install( b, getFocusWidth( b ) );
+					MigLayoutVisualPadding.install( b );
 					b.revalidate();
 				}
 
@@ -211,10 +211,5 @@ public class FlatToggleButtonUI
 			return selectedForeground;
 
 		return super.getForeground( c );
-	}
-
-	@Override
-	protected int getFocusWidth( JComponent c ) {
-		return isTabButton( c ) ? 0 : super.getFocusWidth( c );
 	}
 }
