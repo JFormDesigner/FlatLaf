@@ -17,8 +17,11 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Dimension;
+import java.io.File;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileView;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.metal.MetalFileChooserUI;
 import com.formdev.flatlaf.util.UIScale;
@@ -117,6 +120,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatFileChooserUI
 	extends MetalFileChooserUI
 {
+	private final FlatFileView fileView = new FlatFileView();
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatFileChooserUI( (JFileChooser) c );
 	}
@@ -133,5 +138,38 @@ public class FlatFileChooserUI
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
 		return UIScale.scale( super.getMinimumSize( c ) );
+	}
+
+	@Override
+	public FileView getFileView( JFileChooser fc ) {
+		return fileView;
+	}
+
+	@Override
+	public void clearIconCache() {
+		fileView.clearIconCache();
+	}
+
+	//---- class FlatFileView -------------------------------------------------
+
+	private class FlatFileView
+		extends BasicFileView
+	{
+		@Override
+		public Icon getIcon( File f ) {
+			Icon icon = getCachedIcon( f );
+			if( icon != null )
+				return icon;
+
+			if( f != null ) {
+				icon = getFileChooser().getFileSystemView().getSystemIcon( f );
+				if( icon != null ) {
+					cacheIcon( f, icon );
+					return icon;
+				}
+			}
+
+			return super.getIcon( f );
+		}
 	}
 }
