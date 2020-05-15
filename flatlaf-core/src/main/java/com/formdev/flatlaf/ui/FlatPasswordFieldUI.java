@@ -174,11 +174,11 @@ public class FlatPasswordFieldUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return FlatTextFieldUI.applyMinimumWidth( super.getPreferredSize( c ), minimumWidth, c );
+		return FlatTextFieldUI.applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return FlatTextFieldUI.applyMinimumWidth( super.getMinimumSize( c ), minimumWidth, c );
+		return FlatTextFieldUI.applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
 	}
 }

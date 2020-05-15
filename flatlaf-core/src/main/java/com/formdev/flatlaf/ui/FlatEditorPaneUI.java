@@ -85,20 +85,20 @@ public class FlatEditorPaneUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ) );
+		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ) );
+		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
 	}
 
-	private Dimension applyMinimumWidth( Dimension size ) {
+	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
 		// Assume that text area is in a scroll pane (that displays the border)
 		// and subtract 1px border line width.
 		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding
 		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
-		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
+		minimumWidth = FlatUIUtils.minimumWidth( c, minimumWidth );
 		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
 		return size;
 	}

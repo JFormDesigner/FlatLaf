@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -100,25 +99,19 @@ public class FlatTextAreaUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ), c );
+		return applyMinimumWidth( c, super.getPreferredSize( c ) );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ), c );
+		return applyMinimumWidth( c, super.getMinimumSize( c ) );
 	}
 
-	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
+	private Dimension applyMinimumWidth( JComponent c, Dimension size ) {
 		// do not apply minimum width if JTextArea.columns is set
 		if( c instanceof JTextArea && ((JTextArea)c).getColumns() > 0 )
 			return size;
 
-		// Assume that text area is in a scroll pane (that displays the border)
-		// and subtract 1px border line width.
-		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding
-		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
-		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
-		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
-		return size;
+		return FlatEditorPaneUI.applyMinimumWidth( c, size, minimumWidth );
 	}
 }

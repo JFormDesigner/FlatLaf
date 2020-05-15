@@ -213,15 +213,15 @@ public class FlatTextFieldUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ), minimumWidth, c );
+		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ), minimumWidth, c );
+		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
 	}
 
-	static Dimension applyMinimumWidth( Dimension size, int minimumWidth, JComponent c ) {
+	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
 		// do not apply minimum width if JTextField.columns is set
 		if( c instanceof JTextField && ((JTextField)c).getColumns() > 0 )
 			return size;
