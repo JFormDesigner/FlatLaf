@@ -127,9 +127,16 @@ public class FlatTextFieldUI
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
+		propertyChange( getComponent(), e );
+	}
 
-		if( FlatClientProperties.PLACEHOLDER_TEXT.equals( e.getPropertyName() ) )
-			getComponent().repaint();
+	static void propertyChange( JTextComponent c, PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case FlatClientProperties.PLACEHOLDER_TEXT:
+			case FlatClientProperties.COMPONENT_ROUND_RECT:
+				c.repaint();
+				break;
+		}
 	}
 
 	@Override

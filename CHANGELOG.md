@@ -7,6 +7,8 @@ FlatLaf Change Log
   frames. (issue #94)
 - Button and ToggleButton: Support round button style (set client property
   `JButton.buttonType` to `roundRect`).
+- ComboBox, Spinner and TextField: Support round border style (set client
+  property `JComponent.roundRect` to `true`).
 - Paint nicely rounded buttons, comboboxes, spinners and text fields when
   setting `Button.arc`, `Component.arc` or `TextComponent.arc` to a large value
   (e.g. 1000).

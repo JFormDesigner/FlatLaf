@@ -296,6 +296,23 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 3"
 			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "buttonTypeComboBox"
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "-"
+					addElement( "-" )
+					addElement( "square" )
+					addElement( "roundRect" )
+					addElement( "tab" )
+					addElement( "help" )
+				}
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 3"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "radioButtonLabel"
 				"text": "JRadioButton:"
@@ -342,6 +359,16 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "contentAreaFilledChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 4"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "roundRectCheckBox"
+				"text": "roundRect"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "roundRectChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 4"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "comboBoxLabel"

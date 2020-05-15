@@ -104,6 +104,15 @@ public interface FlatClientProperties
 	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
 	/**
+	 * Paint the component with round edges.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner},
+	 * {@link javax.swing.JTextField}, {@link javax.swing.JFormattedTextField} and {@link javax.swing.JPasswordField}
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String COMPONENT_ROUND_RECT = "JComponent.roundRect";
+
+	/**
 	 * Specifies whether a drop shadow is painted if the component is shown in a popup
 	 * or if the component is the owner of another component that is shown in a popup.
 	 * <p>

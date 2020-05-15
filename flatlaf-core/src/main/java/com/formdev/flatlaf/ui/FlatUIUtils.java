@@ -143,6 +143,11 @@ public class FlatUIUtils
 		return (KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner() == c);
 	}
 
+	public static boolean isRoundRect( Component c ) {
+		return c instanceof JComponent && FlatClientProperties.clientPropertyBoolean(
+			(JComponent) c, FlatClientProperties.COMPONENT_ROUND_RECT, false );
+	}
+
 	/**
 	 * Returns the scaled thickness of the outer focus border for the given component.
 	 */

@@ -208,6 +208,10 @@ public class FlatButtonUI
 			case MINIMUM_HEIGHT:
 				b.revalidate();
 				break;
+
+			case BUTTON_TYPE:
+				b.repaint();
+				break;
 		}
 	}
 

@@ -33,6 +33,6 @@ public class FlatTextBorder
 
 	@Override
 	protected int getArc( Component c ) {
-		return arc;
+		return FlatUIUtils.isRoundRect( c ) ? Short.MAX_VALUE : arc;
 	}
 }

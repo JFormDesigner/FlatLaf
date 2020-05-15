@@ -40,6 +40,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSpinnerUI;
+import com.formdev.flatlaf.FlatClientProperties;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
@@ -393,6 +394,10 @@ public class FlatSpinnerUI
 				case "foreground":
 				case "enabled":
 					updateEditorColors();
+					break;
+
+				case FlatClientProperties.COMPONENT_ROUND_RECT:
+					spinner.repaint();
 					break;
 			}
 		}

@@ -243,6 +243,8 @@ public class FlatComboBoxUI
 					editor.applyComponentOrientation( o );
 				} else if( editor != null && FlatClientProperties.PLACEHOLDER_TEXT.equals( propertyName ) )
 					editor.repaint();
+				else if( FlatClientProperties.COMPONENT_ROUND_RECT.equals( propertyName ) )
+					comboBox.repaint();
 			}
 		};
 	}

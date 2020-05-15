@@ -34,7 +34,6 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
-import com.formdev.flatlaf.FlatClientProperties;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
@@ -147,9 +146,7 @@ public class FlatPasswordFieldUI
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
-
-		if( FlatClientProperties.PLACEHOLDER_TEXT.equals( e.getPropertyName() ) )
-			getComponent().repaint();
+		FlatTextFieldUI.propertyChange( getComponent(), e );
 	}
 
 	@Override

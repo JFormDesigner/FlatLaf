@@ -19,6 +19,7 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
 
 /**
@@ -63,6 +64,26 @@ public class FlatComponentsTest
 		}
 	}
 
+	private void roundRectChanged() {
+		Boolean roundRect = roundRectCheckBox.isSelected() ? true : null;
+
+		for( Component c : getComponents() ) {
+			if( c instanceof JComponent )
+				((JComponent)c).putClientProperty( FlatClientProperties.COMPONENT_ROUND_RECT, roundRect );
+		}
+	}
+
+	private void buttonTypeChanged() {
+		String buttonType = (String) buttonTypeComboBox.getSelectedItem();
+		if( "-".equals( buttonType ) )
+			buttonType = null;
+
+		for( Component c : getComponents() ) {
+			if( c instanceof AbstractButton )
+				((AbstractButton)c).putClientProperty( FlatClientProperties.BUTTON_TYPE, buttonType );
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel labelLabel = new JLabel();
@@ -104,12 +125,14 @@ public class FlatComponentsTest
 		JCheckBox checkBox4 = new JCheckBox();
 		JToggleButton toggleButton5 = new JToggleButton();
 		JToggleButton toggleButton8 = new JToggleButton();
+		buttonTypeComboBox = new JComboBox<>();
 		JLabel radioButtonLabel = new JLabel();
 		JRadioButton radioButton1 = new JRadioButton();
 		JRadioButton radioButton2 = new JRadioButton();
 		JRadioButton radioButton3 = new JRadioButton();
 		JRadioButton radioButton4 = new JRadioButton();
 		contentAreaFilledCheckBox = new JCheckBox();
+		roundRectCheckBox = new JCheckBox();
 		JLabel comboBoxLabel = new JLabel();
 		JComboBox<String> comboBox1 = new JComboBox<>();
 		JComboBox<String> comboBox2 = new JComboBox<>();
@@ -481,6 +504,17 @@ public class FlatComponentsTest
 		toggleButton8.setSelected(true);
 		add(toggleButton8, "cell 5 3");
 
+		//---- buttonTypeComboBox ----
+		buttonTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+			"-",
+			"square",
+			"roundRect",
+			"tab",
+			"help"
+		}));
+		buttonTypeComboBox.addActionListener(e -> buttonTypeChanged());
+		add(buttonTypeComboBox, "cell 6 3");
+
 		//---- radioButtonLabel ----
 		radioButtonLabel.setText("JRadioButton:");
 		add(radioButtonLabel, "cell 0 4");
@@ -512,6 +546,11 @@ public class FlatComponentsTest
 		contentAreaFilledCheckBox.setSelected(true);
 		contentAreaFilledCheckBox.addActionListener(e -> contentAreaFilledChanged());
 		add(contentAreaFilledCheckBox, "cell 5 4");
+
+		//---- roundRectCheckBox ----
+		roundRectCheckBox.setText("roundRect");
+		roundRectCheckBox.addActionListener(e -> roundRectChanged());
+		add(roundRectCheckBox, "cell 6 4");
 
 		//---- comboBoxLabel ----
 		comboBoxLabel.setText("JComboBox:");
@@ -1210,7 +1249,9 @@ public class FlatComponentsTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JComboBox<String> buttonTypeComboBox;
 	private JCheckBox contentAreaFilledCheckBox;
+	private JCheckBox roundRectCheckBox;
 	private JProgressBar progressBar3;
 	private JProgressBar progressBar4;
 	private JSlider slider3;
