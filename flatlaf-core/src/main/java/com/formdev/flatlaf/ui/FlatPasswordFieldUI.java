@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -175,18 +174,11 @@ public class FlatPasswordFieldUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ), c );
+		return FlatTextFieldUI.applyMinimumWidth( super.getPreferredSize( c ), minimumWidth, c );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ), c );
-	}
-
-	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
-		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
-		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
-		size.width = Math.max( size.width, scale( minimumWidth ) + Math.round( focusWidth * 2 ) );
-		return size;
+		return FlatTextFieldUI.applyMinimumWidth( super.getMinimumSize( c ), minimumWidth, c );
 	}
 }

@@ -18,6 +18,8 @@ FlatLaf Change Log
   radio button is used as table cell renderer. (issue #77)
 - FileChooser: Fixed missing labels in file chooser when running on Java 9 or
   later. (issue #98)
+- PasswordField: Do not apply minimum width if `columns` property is greater
+  than zero.
 
 
 ## 0.34

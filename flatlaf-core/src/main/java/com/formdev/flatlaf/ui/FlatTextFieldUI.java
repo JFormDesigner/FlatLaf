@@ -213,26 +213,27 @@ public class FlatTextFieldUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ), c );
+		return applyMinimumWidth( super.getPreferredSize( c ), minimumWidth, c );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ), c );
+		return applyMinimumWidth( super.getMinimumSize( c ), minimumWidth, c );
 	}
 
-	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
+	static Dimension applyMinimumWidth( Dimension size, int minimumWidth, JComponent c ) {
 		// do not apply minimum width if JTextField.columns is set
 		if( c instanceof JTextField && ((JTextField)c).getColumns() > 0 )
 			return size;
 
+		// do not apply minimum width if used in combobox or spinner
 		Container parent = c.getParent();
 		if( parent instanceof JComboBox ||
 			parent instanceof JSpinner ||
 			(parent != null && parent.getParent() instanceof JSpinner) )
 		  return size;
 
-		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
+		minimumWidth = FlatUIUtils.minimumWidth( c, minimumWidth );
 		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
 		size.width = Math.max( size.width, scale( minimumWidth ) + Math.round( focusWidth * 2 ) );
 		return size;
