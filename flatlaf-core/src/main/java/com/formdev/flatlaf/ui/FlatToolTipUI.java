@@ -103,7 +103,7 @@ public class FlatToolTipUI
 			for( String line : lines )
 				width = Math.max( width, SwingUtilities.computeStringWidth( fm, line ) );
 
-			return new Dimension( insets.left + width + insets.right, insets.top + height + insets.bottom );
+			return new Dimension( insets.left + width + insets.right + 6, insets.top + height + insets.bottom );
 		} else
 			return super.getPreferredSize( c );
 	}
@@ -119,8 +119,8 @@ public class FlatToolTipUI
 
 			List<String> lines = StringUtils.split( ((JToolTip)c).getTipText(), '\n' );
 
-			int x = insets.left;
-			int x2 = c.getWidth() - insets.right;
+			int x = insets.left + 3;
+			int x2 = c.getWidth() - insets.right - 3;
 			int y = insets.top - fm.getDescent();
 			int lineHeight = fm.getHeight();
 			JComponent comp = ((JToolTip)c).getComponent();
