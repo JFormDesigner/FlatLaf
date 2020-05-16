@@ -19,11 +19,13 @@ package com.formdev.flatlaf.ui;
 import java.awt.Dimension;
 import java.io.File;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileView;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.metal.MetalFileChooserUI;
+import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -157,19 +159,32 @@ public class FlatFileChooserUI
 	{
 		@Override
 		public Icon getIcon( File f ) {
+			// get cached icon
 			Icon icon = getCachedIcon( f );
 			if( icon != null )
 				return icon;
 
+			// get system icon
 			if( f != null ) {
 				icon = getFileChooser().getFileSystemView().getSystemIcon( f );
+
 				if( icon != null ) {
+					if( icon instanceof ImageIcon )
+						icon = new ScaledImageIcon( (ImageIcon) icon );
 					cacheIcon( f, icon );
 					return icon;
 				}
 			}
 
-			return super.getIcon( f );
+			// get default icon
+			icon = super.getIcon( f );
+
+			if( icon instanceof ImageIcon ) {
+				icon = new ScaledImageIcon( (ImageIcon) icon );
+				cacheIcon( f, icon );
+			}
+
+			return icon;
 		}
 	}
 }

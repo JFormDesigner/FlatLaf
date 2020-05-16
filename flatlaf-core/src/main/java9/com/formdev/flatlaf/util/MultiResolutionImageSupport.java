@@ -21,6 +21,7 @@ import java.awt.image.AbstractMultiResolutionImage;
 import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.MultiResolutionImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -49,6 +50,18 @@ public class MultiResolutionImageSupport
 		return image instanceof MultiResolutionImage
 			? new MappedMultiResolutionImage( image, mapper )
 			: mapper.apply( image );
+	}
+
+	public static Image getResolutionVariant( Image image, int destImageWidth, int destImageHeight ) {
+		return (image instanceof MultiResolutionImage)
+			? ((MultiResolutionImage)image).getResolutionVariant( destImageWidth, destImageHeight )
+			: image;
+	}
+
+	public static List<Image> getResolutionVariants( Image image ) {
+		return (image instanceof MultiResolutionImage)
+			? ((MultiResolutionImage)image).getResolutionVariants()
+			: Collections.singletonList( image );
 	}
 
 	//---- class MappedMultiResolutionImage -----------------------------------

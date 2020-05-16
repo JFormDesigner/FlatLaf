@@ -17,6 +17,8 @@
 package com.formdev.flatlaf.util;
 
 import java.awt.Image;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -40,5 +42,13 @@ public class MultiResolutionImageSupport
 
 	public static Image map( Image image, Function<Image, Image> mapper ) {
 		return mapper.apply( image );
+	}
+
+	public static Image getResolutionVariant( Image image, int destImageWidth, int destImageHeight ) {
+		return image;
+	}
+
+	public static List<Image> getResolutionVariants( Image image ) {
+		return Collections.singletonList( image );
 	}
 }

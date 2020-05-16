@@ -62,7 +62,7 @@ public class FlatChooserTest
 			"[]",
 			// rows
 			"[top]" +
-			"[top]" +
+			"[grow,top]" +
 			"[]"));
 
 		//---- colorChooserLabel ----
@@ -73,7 +73,7 @@ public class FlatChooserTest
 		//---- fileChooserLabel ----
 		fileChooserLabel.setText("JFileChooser:");
 		add(fileChooserLabel, "cell 0 1");
-		add(fileChooser1, "cell 1 1");
+		add(fileChooser1, "cell 1 1,growy");
 
 		//---- label1 ----
 		label1.setText("icons:");
