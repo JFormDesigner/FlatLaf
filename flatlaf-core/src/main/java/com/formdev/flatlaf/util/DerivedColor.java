@@ -40,4 +40,8 @@ public class DerivedColor
 	public Color derive( Color baseColor ) {
 		return ColorFunctions.applyFunctions( baseColor, functions );
 	}
+
+	public ColorFunction[] getFunctions() {
+		return functions;
+	}
 }

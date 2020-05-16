@@ -1,6 +1,6 @@
 Class  com.formdev.flatlaf.FlatLightLaf
-ID     FlatLaf - Flat Light
-Name   Flat Light
+ID     FlatLaf - FlatLaf Light
+Name   FlatLaf Light
 Java   1.8.0_202
 OS     Windows 10
 

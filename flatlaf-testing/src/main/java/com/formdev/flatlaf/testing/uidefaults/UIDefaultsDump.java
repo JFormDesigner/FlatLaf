@@ -54,6 +54,9 @@ import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
+import com.formdev.flatlaf.util.ColorFunctions.HSLIncreaseDecrease;
+import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -275,6 +278,31 @@ public class UIDefaultsDump
 		out.printf( hasAlpha ? "#%08x    %s" : "#%06x    %s",
 			hasAlpha ? color.getRGB() : (color.getRGB() & 0xffffff),
 			dumpClass( color ) );
+
+		if( color instanceof DerivedColor ) {
+			out.print( "   " );
+			DerivedColor derivedColor = (DerivedColor) color;
+			for( ColorFunction function : derivedColor.getFunctions() ) {
+				out.print( " " );
+				dumpColorFunction( out, function );
+			}
+		}
+	}
+
+	private void dumpColorFunction( PrintWriter out, ColorFunction function ) {
+		if( function instanceof HSLIncreaseDecrease ) {
+			HSLIncreaseDecrease func = (HSLIncreaseDecrease) function;
+			String name;
+			switch( func.hslIndex ) {
+				case 2: name = func.increase ? "lighten" : "darken"; break;
+				case 1: name = func.increase ? "saturate" : "desaturate"; break;
+				default: throw new IllegalArgumentException();
+			}
+			out.printf( "%s(%.0f%%%s%s)", name, func.amount,
+				(func.relative ? " relative" : ""),
+				(func.autoInverse ? " autoInverse" : "") );
+		} else
+			throw new IllegalArgumentException( "unknown color function: " + function );
 	}
 
 	private void dumpFont( PrintWriter out, Font font ) {
