@@ -511,8 +511,10 @@ class UIDefaultsLoader
 			case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
 			case "hsl":			return parseColorHslOrHsla( false, params );
 			case "hsla":		return parseColorHslOrHsla( true, params );
-			case "lighten":		return parseColorLightenOrDarken( true, params, resolver, reportError );
-			case "darken":		return parseColorLightenOrDarken( false, params, resolver, reportError );
+			case "lighten":		return parseColorHSLIncreaseDecrease( 2, true, params, resolver, reportError );
+			case "darken":		return parseColorHSLIncreaseDecrease( 2, false, params, resolver, reportError );
+			case "saturate":	return parseColorHSLIncreaseDecrease( 1, true, params, resolver, reportError );
+			case "desaturate":	return parseColorHSLIncreaseDecrease( 1, false, params, resolver, reportError );
 		}
 
 		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
@@ -565,13 +567,14 @@ class UIDefaultsLoader
 	}
 
 	/**
-	 * Syntax: lighten(color,amount[,options]) or darken(color,amount[,options])
+	 * Syntax: lighten(color,amount[,options]) or darken(color,amount[,options]) or
+	 *         saturate(color,amount[,options]) or desaturate(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
 	 *   - options: [relative] [autoInverse] [lazy] [derived]
 	 */
-	private static Object parseColorLightenOrDarken( boolean lighten, List<String> params,
-		Function<String, String> resolver, boolean reportError )
+	private static Object parseColorHSLIncreaseDecrease( int hslIndex, boolean increase,
+		List<String> params, Function<String, String> resolver, boolean reportError )
 	{
 		String colorStr = params.get( 0 );
 		int amount = parsePercentage( params.get( 1 ) );
@@ -588,9 +591,8 @@ class UIDefaultsLoader
 			derived = options.contains( "derived" );
 		}
 
-		ColorFunctions.ColorFunction function = lighten
-			? new ColorFunctions.Lighten( amount, relative, autoInverse )
-			: new ColorFunctions.Darken( amount, relative, autoInverse );
+		ColorFunctions.ColorFunction function = new ColorFunctions.HSLIncreaseDecrease(
+			hslIndex, increase, amount, relative, autoInverse );
 
 		if( derived ) {
 			ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
