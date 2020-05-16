@@ -32,7 +32,7 @@ import com.formdev.flatlaf.FlatLaf;
  * value {@code "indeterminate"}.
  * <p>
  * FlatLaf and Mac Aqua LaF support the third state.
- * For other LaFs a magenta rectangle is painted around the component.
+ * For other LaFs a magenta rectangle is painted around the component for the third state.
  *
  * @author Karl Tauber
  */
@@ -115,7 +115,7 @@ public class TriStateCheckBox
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 
-		if( !isThirdStateSupported() ) {
+		if( state == State.INDETERMINATE && !isThirdStateSupported() ) {
 			g.setColor( Color.magenta );
 			g.drawRect( 0, 0, getWidth() - 1, getHeight() - 1 );
 		}
