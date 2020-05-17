@@ -101,8 +101,8 @@ public class FlatTestFrame
 			  continue;
 
 			if( (SystemInfo.IS_WINDOWS && className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" )) ||
-				(SystemInfo.IS_MAC && className.equals( "com.apple.laf.AquaLookAndFeel") ) ||
-				(SystemInfo.IS_LINUX && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel") ) )
+				(SystemInfo.IS_MAC && className.equals( "com.apple.laf.AquaLookAndFeel" )) ||
+				(SystemInfo.IS_LINUX && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" )) )
 				name += " (F9)";
 			else if( className.equals( MetalLookAndFeel.class.getName() ) )
 				name += " (F12)";
@@ -566,7 +566,7 @@ public class FlatTestFrame
 					"1.25",
 					"1.5",
 					"1.75",
-					"2.0",
+					"2",
 					"2.25",
 					"2.5",
 					"3",

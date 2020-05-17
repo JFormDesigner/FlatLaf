@@ -41,7 +41,7 @@ new FormModel {
 							addElement( "1.25" )
 							addElement( "1.5" )
 							addElement( "1.75" )
-							addElement( "2.0" )
+							addElement( "2" )
 							addElement( "2.25" )
 							addElement( "2.5" )
 							addElement( "3" )
