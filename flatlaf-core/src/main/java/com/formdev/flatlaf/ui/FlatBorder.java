@@ -69,6 +69,7 @@ public class FlatBorder
 {
 	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	protected final float innerFocusWidth = FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 );
+	protected final float innerOutlineWidth = FlatUIUtils.getUIFloat( "Component.innerOutlineWidth", 0 );
 	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
 	protected final Color borderColor = UIManager.getColor( "Component.borderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
@@ -93,7 +94,9 @@ public class FlatBorder
 			Color outlineColor = getOutlineColor( c );
 
 			if( outlineColor != null || isFocused( c ) ) {
-				float innerFocusWidth = !(c instanceof JScrollPane) ? this.innerFocusWidth : 0;
+				float innerFocusWidth = !(c instanceof JScrollPane)
+					? (outlineColor != null ? innerOutlineWidth : this.innerFocusWidth)
+					: 0;
 
 				g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
 				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,

@@ -211,6 +211,7 @@ Component.focusedBorderColor   #466d94    javax.swing.plaf.ColorUIResource [UI]
 Component.grayFilter           [lazy] [unknown type] com.formdev.flatlaf.util.GrayFilter
 Component.hideMnemonics        true
 Component.innerFocusWidth      0.5
+Component.innerOutlineWidth    1.0
 Component.linkColor            #589df6    javax.swing.plaf.ColorUIResource [UI]
 Component.minimumWidth         64
 Component.warning.borderColor  #725627    javax.swing.plaf.ColorUIResource [UI]
