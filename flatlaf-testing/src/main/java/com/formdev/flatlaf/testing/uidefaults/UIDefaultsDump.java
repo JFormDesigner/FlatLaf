@@ -20,16 +20,22 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.function.Predicate;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -162,13 +168,87 @@ public class UIDefaultsDump
 		File file = new File( dir, name + nameSuffix + "_"
 			+ System.getProperty( "java.version" ) + osSuffix + ".txt" );
 
+		// build differences
+		String content;
+		if( !osSuffix.isEmpty() && nameSuffix.isEmpty() ) {
+			File origFile = new File( dir, name + nameSuffix + "_"
+				+ System.getProperty( "java.version" ) + ".txt" );
+			try {
+				Map<String, String> defaults1 = parse( new FileReader( origFile ) );
+				Map<String, String> defaults2 = parse( new StringReader( stringWriter.toString() ) );
+
+				content = diff( defaults1, defaults2 );
+			} catch( Exception ex ) {
+				ex.printStackTrace();
+				return;
+			}
+		} else
+			content = stringWriter.toString().replace( "\r", "" );
+
 		// write to file
 		file.getParentFile().mkdirs();
 		try( FileWriter fileWriter = new FileWriter( file ) ) {
-			fileWriter.write( stringWriter.toString().replace( "\r", "" ) );
+			fileWriter.write( content );
 		} catch( IOException ex ) {
 			ex.printStackTrace();
 		}
+	}
+
+	private static String diff( Map<String, String> defaults1, Map<String, String> defaults2 ) {
+		defaults1 = new LinkedHashMap<>( defaults1 );
+
+		StringBuilder buf = new StringBuilder( 10000 );
+		for( Map.Entry<String, String> e : defaults2.entrySet() ) {
+			String key = e.getKey();
+			String value2 = e.getValue();
+			String value1 = defaults1.remove( key );
+			if( !value2.equals( value1 ) ) {
+				if( value1 != null )
+					buf.append( "- " ).append( key ).append( value1 ).append( '\n' );
+				buf.append( "+ " ).append( key ).append( value2 ).append( '\n' );
+				buf.append( '\n' );
+			}
+		}
+
+		for( Map.Entry<String, String> e : defaults1.entrySet() ) {
+			buf.append( "- " ).append( e.getKey() ).append( e.getValue() ).append( '\n' );
+			buf.append( '\n' );
+		}
+
+		return buf.toString();
+	}
+
+	private static Map<String, String> parse( Reader in ) throws IOException {
+		Map<String, String> defaults = new LinkedHashMap<>();
+		try( BufferedReader reader = new BufferedReader( in ) ) {
+			String lastKey = null;
+
+			String line;
+			while( (line = reader.readLine()) != null ) {
+				String trimmedLine = line.trim();
+				if( trimmedLine.isEmpty() || trimmedLine.startsWith( "#" ) ) {
+					lastKey = null;
+					continue;
+				}
+
+				if( Character.isWhitespace( line.charAt( 0 ) ) ) {
+					String value = defaults.get( lastKey );
+					value += '\n' + line;
+					defaults.put( lastKey, value );
+				} else {
+					int sep = line.indexOf( ' ' );
+					if( sep < 0 )
+						throw new IOException( line );
+
+					String key = line.substring( 0, sep );
+					String value = line.substring( sep );
+					defaults.put( key, value );
+
+					lastKey = key;
+				}
+			}
+		}
+		return defaults;
 	}
 
 	private UIDefaultsDump( LookAndFeel lookAndFeel ) {
