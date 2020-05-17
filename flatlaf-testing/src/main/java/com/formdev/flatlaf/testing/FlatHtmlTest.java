@@ -18,6 +18,7 @@ package com.formdev.flatlaf.testing;
 
 import java.awt.*;
 import javax.swing.*;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -36,6 +37,18 @@ public class FlatHtmlTest
 
 	FlatHtmlTest() {
 		initComponents();
+
+		String html = label1.getText();
+		label2.setText( html );
+		toolTip1.setTipText( html );
+		toolTip2.setTipText( html );
+
+		String html2 = StringUtils.removeLeading( StringUtils.removeTrailing( html, "</html>" ), "<html>" );
+		editorPane1.setText( html2 );
+		editorPane2.setText( html2 );
+		textPane1.setText( html2 );
+		textPane2.setText( html2 );
+
 		increaseFontSize();
 	}
 
@@ -88,7 +101,7 @@ public class FlatHtmlTest
 		add(toolTipLabel, "cell 3 0");
 
 		//---- label1 ----
-		label1.setText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p></html>");
+		label1.setText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p><hr><table border=\"1\"><tr><th>Col 1</th><th>Col 2</th></tr><tr><td>abc</td><td>def</td></tr></table><ul><li>item 1</li><li>item 2</li></ul></html>");
 		add(label1, "cell 0 1");
 
 		//======== scrollPane15 ========
@@ -96,7 +109,7 @@ public class FlatHtmlTest
 
 			//---- editorPane1 ----
 			editorPane1.setContentType("text/html");
-			editorPane1.setText("HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p>");
+			editorPane1.setText("text");
 			scrollPane15.setViewportView(editorPane1);
 		}
 		add(scrollPane15, "cell 1 1,grow");
@@ -106,17 +119,17 @@ public class FlatHtmlTest
 
 			//---- textPane1 ----
 			textPane1.setContentType("text/html");
-			textPane1.setText("HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p>");
+			textPane1.setText("text");
 			scrollPane16.setViewportView(textPane1);
 		}
 		add(scrollPane16, "cell 2 1");
 
 		//---- toolTip1 ----
-		toolTip1.setTipText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p></html>");
+		toolTip1.setTipText("text");
 		add(toolTip1, "cell 3 1");
 
 		//---- label2 ----
-		label2.setText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p></html>");
+		label2.setText("text");
 		add(label2, "cell 0 2");
 
 		//======== scrollPane17 ========
@@ -124,7 +137,7 @@ public class FlatHtmlTest
 
 			//---- editorPane2 ----
 			editorPane2.setContentType("text/html");
-			editorPane2.setText("HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p>");
+			editorPane2.setText("text");
 			scrollPane17.setViewportView(editorPane2);
 		}
 		add(scrollPane17, "cell 1 2,grow");
@@ -134,13 +147,13 @@ public class FlatHtmlTest
 
 			//---- textPane2 ----
 			textPane2.setContentType("text/html");
-			textPane2.setText("HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p>");
+			textPane2.setText("text");
 			scrollPane18.setViewportView(textPane2);
 		}
 		add(scrollPane18, "cell 2 2");
 
 		//---- toolTip2 ----
-		toolTip2.setTipText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p></html>");
+		toolTip2.setTipText("text");
 		add(toolTip2, "cell 3 2");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
