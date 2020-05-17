@@ -40,6 +40,7 @@ import javax.swing.plaf.InsetsUIResource;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
+import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
@@ -591,13 +592,9 @@ class UIDefaultsLoader
 			derived = options.contains( "derived" );
 		}
 
-		ColorFunctions.ColorFunction function = new ColorFunctions.HSLIncreaseDecrease(
+		// create function
+		ColorFunction function = new ColorFunctions.HSLIncreaseDecrease(
 			hslIndex, increase, amount, relative, autoInverse );
-
-		if( derived ) {
-			ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
-			return new DerivedColor( ColorFunctions.applyFunctions( color, function ), function );
-		}
 
 		if( lazy ) {
 			return (LazyValue) t -> {
@@ -608,8 +605,27 @@ class UIDefaultsLoader
 			};
 		}
 
-		ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
-		return new ColorUIResource( ColorFunctions.applyFunctions( color, function ) );
+		// parse base color
+		ColorUIResource baseColor = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+
+		// apply this function to base color
+		Color newColor = ColorFunctions.applyFunctions( baseColor, function );
+
+		if( derived ) {
+			ColorFunction[] functions;
+			if( baseColor instanceof DerivedColor ) {
+				// if the base color is also derived, join the color functions
+				ColorFunction[] baseFunctions = ((DerivedColor)baseColor).getFunctions();
+				functions = new ColorFunction[baseFunctions.length + 1];
+				System.arraycopy( baseFunctions, 0, functions, 0, baseFunctions.length );
+				functions[baseFunctions.length] = function;
+			} else
+				functions = new ColorFunction[] { function };
+
+			return new DerivedColor( newColor, functions );
+		}
+
+		return new ColorUIResource( newColor );
 	}
 
 	private static int parsePercentage( String value ) {
