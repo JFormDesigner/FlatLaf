@@ -84,6 +84,26 @@ public class FlatComponentsTest
 		}
 	}
 
+	private void outlineChanged() {
+		FlatTestFrame frame = (FlatTestFrame) SwingUtilities.getAncestorOfClass( FlatTestFrame.class, this );
+		if( frame == null )
+			return;
+
+		Object outline = errorOutlineRadioButton.isSelected() ? "error"
+			: warningOutlineRadioButton.isSelected() ? "warning"
+			: magentaOutlineRadioButton.isSelected() ? Color.magenta
+			: magentaCyanOutlineRadioButton.isSelected() ? new Color[] { Color.magenta, Color.cyan }
+			: null;
+
+		frame.updateComponentsRecur( this, (c, type) -> {
+			if( c instanceof JComponent )
+				((JComponent)c).putClientProperty( FlatClientProperties.OUTLINE, outline );
+		} );
+
+		frame.repaint();
+		textField1.requestFocusInWindow();
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel labelLabel = new JLabel();
@@ -146,7 +166,7 @@ public class FlatComponentsTest
 		JComboBox<String> comboBox7 = new JComboBox<>();
 		JSpinner spinner3 = new JSpinner();
 		JLabel textFieldLabel = new JLabel();
-		JTextField textField1 = new JTextField();
+		textField1 = new JTextField();
 		JTextField textField2 = new JTextField();
 		JTextField textField3 = new JTextField();
 		JTextField textField4 = new JTextField();
@@ -215,6 +235,12 @@ public class FlatComponentsTest
 		JButton button10 = new JButton();
 		JButton button11 = new JButton();
 		JToggleButton toggleButton7 = new JToggleButton();
+		JPanel panel4 = new JPanel();
+		noOutlineRadioButton = new JRadioButton();
+		errorOutlineRadioButton = new JRadioButton();
+		warningOutlineRadioButton = new JRadioButton();
+		magentaOutlineRadioButton = new JRadioButton();
+		magentaCyanOutlineRadioButton = new JRadioButton();
 		JScrollPane scrollPane15 = new JScrollPane();
 		JPanel panel3 = new JPanel();
 		JButton button21 = new JButton();
@@ -1013,6 +1039,38 @@ public class FlatComponentsTest
 		}
 		add(toolBar2, "cell 4 13 1 6,growy");
 
+		//======== panel4 ========
+		{
+			panel4.setLayout(new BoxLayout(panel4, BoxLayout.Y_AXIS));
+
+			//---- noOutlineRadioButton ----
+			noOutlineRadioButton.setText("no outline");
+			noOutlineRadioButton.setSelected(true);
+			noOutlineRadioButton.addActionListener(e -> outlineChanged());
+			panel4.add(noOutlineRadioButton);
+
+			//---- errorOutlineRadioButton ----
+			errorOutlineRadioButton.setText("error");
+			errorOutlineRadioButton.addActionListener(e -> outlineChanged());
+			panel4.add(errorOutlineRadioButton);
+
+			//---- warningOutlineRadioButton ----
+			warningOutlineRadioButton.setText("warning");
+			warningOutlineRadioButton.addActionListener(e -> outlineChanged());
+			panel4.add(warningOutlineRadioButton);
+
+			//---- magentaOutlineRadioButton ----
+			magentaOutlineRadioButton.setText("magenta");
+			magentaOutlineRadioButton.addActionListener(e -> outlineChanged());
+			panel4.add(magentaOutlineRadioButton);
+
+			//---- magentaCyanOutlineRadioButton ----
+			magentaCyanOutlineRadioButton.setText("magenta / cyan");
+			magentaCyanOutlineRadioButton.addActionListener(e -> outlineChanged());
+			panel4.add(magentaCyanOutlineRadioButton);
+		}
+		add(panel4, "cell 5 13");
+
 		//======== scrollPane15 ========
 		{
 			scrollPane15.setBorder(BorderFactory.createEmptyBorder());
@@ -1240,6 +1298,14 @@ public class FlatComponentsTest
 			toolBar4.add(toggleButton26);
 		}
 		add(toolBar4, "cell 3 23 3 1");
+
+		//---- buttonGroup1 ----
+		ButtonGroup buttonGroup1 = new ButtonGroup();
+		buttonGroup1.add(noOutlineRadioButton);
+		buttonGroup1.add(errorOutlineRadioButton);
+		buttonGroup1.add(warningOutlineRadioButton);
+		buttonGroup1.add(magentaOutlineRadioButton);
+		buttonGroup1.add(magentaCyanOutlineRadioButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 //		BasicComboBoxRenderer customRenderer = new BasicComboBoxRenderer();
@@ -1252,8 +1318,14 @@ public class FlatComponentsTest
 	private JComboBox<String> buttonTypeComboBox;
 	private JCheckBox contentAreaFilledCheckBox;
 	private JCheckBox roundRectCheckBox;
+	private JTextField textField1;
 	private JProgressBar progressBar3;
 	private JProgressBar progressBar4;
+	private JRadioButton noOutlineRadioButton;
+	private JRadioButton errorOutlineRadioButton;
+	private JRadioButton warningOutlineRadioButton;
+	private JRadioButton magentaOutlineRadioButton;
+	private JRadioButton magentaCyanOutlineRadioButton;
 	private JSlider slider3;
 	private JProgressBar progressBar1;
 	private JProgressBar progressBar2;

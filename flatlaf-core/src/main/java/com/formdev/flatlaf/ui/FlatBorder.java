@@ -36,6 +36,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.DerivedColor;
 
 /**
  * Border for various components (e.g. {@link javax.swing.JTextField}).
@@ -54,6 +56,12 @@ import javax.swing.text.JTextComponent;
  * @uiDefault Component.disabledBorderColor	Color
  * @uiDefault Component.focusedBorderColor	Color
  *
+ * @uiDefault Component.error.borderColor			Color
+ * @uiDefault Component.error.focusedBorderColor	Color
+ * @uiDefault Component.warning.borderColor			Color
+ * @uiDefault Component.warning.focusedBorderColor	Color
+ * @uiDefault Component.custom.borderColor			Color
+ *
  * @author Karl Tauber
  */
 public class FlatBorder
@@ -66,6 +74,12 @@ public class FlatBorder
 	protected final Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 	protected final Color focusedBorderColor = UIManager.getColor( "Component.focusedBorderColor" );
 
+	protected final Color errorBorderColor = UIManager.getColor( "Component.error.borderColor" );
+	protected final Color errorFocusedBorderColor = UIManager.getColor( "Component.error.focusedBorderColor" );
+	protected final Color warningBorderColor = UIManager.getColor( "Component.warning.borderColor" );
+	protected final Color warningFocusedBorderColor = UIManager.getColor( "Component.warning.focusedBorderColor" );
+	protected final Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
+
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 		Graphics2D g2 = (Graphics2D) g.create();
@@ -76,20 +90,46 @@ public class FlatBorder
 			float focusWidth = isCellEditor ? 0 : scale( (float) getFocusWidth( c ) );
 			float borderWidth = scale( (float) getBorderWidth( c ) );
 			float arc = isCellEditor ? 0 : scale( (float) getArc( c ) );
+			Color outlineColor = getOutlineColor( c );
 
-			if( isFocused( c ) ) {
+			if( outlineColor != null || isFocused( c ) ) {
 				float innerFocusWidth = !(c instanceof JScrollPane) ? this.innerFocusWidth : 0;
 
-				g2.setColor( getFocusColor( c ) );
+				g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
 				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,
 					scale( (float) getLineWidth( c ) ) + scale( innerFocusWidth ), arc );
 			}
 
-			g2.setPaint( getBorderColor( c ) );
+			g2.setPaint( (outlineColor != null) ? outlineColor : getBorderColor( c ) );
 			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, focusWidth, borderWidth, arc );
 		} finally {
 			g2.dispose();
 		}
+	}
+
+	protected Color getOutlineColor( Component c ) {
+		if( !(c instanceof JComponent) )
+			return null;
+
+		Object outline = ((JComponent)c).getClientProperty( FlatClientProperties.OUTLINE );
+		if( outline instanceof String ) {
+			switch( (String) outline ) {
+				case FlatClientProperties.OUTLINE_ERROR:
+					return isFocused( c ) ? errorFocusedBorderColor : errorBorderColor;
+
+				case FlatClientProperties.OUTLINE_WARNING:
+					return isFocused( c ) ? warningFocusedBorderColor : warningBorderColor;
+			}
+		} else if( outline instanceof Color ) {
+			Color color = (Color) outline;
+			// use color functions to compute color for unfocused state
+			if( !isFocused( c ) && customBorderColor instanceof DerivedColor )
+				color = ((DerivedColor)customBorderColor).derive( color );
+			return color;
+		} else if( outline instanceof Color[] && ((Color[])outline).length >= 2 )
+			return ((Color[])outline)[isFocused( c ) ? 0 : 1];
+
+		return null;
 	}
 
 	protected Color getFocusColor( Component c ) {

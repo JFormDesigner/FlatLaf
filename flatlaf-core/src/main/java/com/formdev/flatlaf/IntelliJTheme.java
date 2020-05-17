@@ -467,6 +467,12 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ComboBox.ArrowButton.iconColor",             "ComboBox.buttonArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.nonEditableBackground", "ComboBox.buttonBackground" );
 
+		// Component
+		uiKeyMapping.put( "Component.inactiveErrorFocusColor",   "Component.error.borderColor" );
+		uiKeyMapping.put( "Component.errorFocusColor",           "Component.error.focusedBorderColor" );
+		uiKeyMapping.put( "Component.inactiveWarningFocusColor", "Component.warning.borderColor" );
+		uiKeyMapping.put( "Component.warningFocusColor",         "Component.warning.focusedBorderColor" );
+
 		// Link
 		uiKeyMapping.put( "Link.activeForeground", "Component.linkColor" );
 

@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 - Added drop shadows to popup menus, combobox popups, tooltips and internal
   frames. (issue #94)
+- Support different component border colors to indicate errors, warnings or
+  custom state (set client property `JComponent.outline` to `error`, `warning`
+  or any `java.awt.Color`).
 - Button and ToggleButton: Support round button style (set client property
   `JButton.buttonType` to `roundRect`).
 - ComboBox, Spinner and TextField: Support round border style (set client

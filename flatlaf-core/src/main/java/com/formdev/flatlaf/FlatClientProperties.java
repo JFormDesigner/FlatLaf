@@ -104,6 +104,34 @@ public interface FlatClientProperties
 	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
 	/**
+	 * Specifies the outline color of the component border.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton}, {@link javax.swing.JComboBox},
+	 * {@link javax.swing.JFormattedTextField}, {@link javax.swing.JPasswordField},
+	 * {@link javax.swing.JScrollPane}, {@link javax.swing.JSpinner},
+	 * {@link javax.swing.JTextField} and {@link javax.swing.JToggleButton}<br>
+	 * <strong>Value type</strong> {@link java.lang.String} or {@link java.awt.Color} or {@link java.awt.Color}[2]<br>
+	 * <strong>Allowed Values</strong> {@link #OUTLINE_ERROR}, {@link #OUTLINE_WARNING},
+	 * any color (type {@link java.awt.Color}) or an array of two colors (type {@link java.awt.Color}[2])
+	 * where the first color is for focused state and the second for unfocused state
+	 */
+	String OUTLINE = "JComponent.outline";
+
+	/**
+	 * Paint the component border in another color (usually reddish) to indicate an error.
+	 *
+	 * @see #OUTLINE
+	 */
+	String OUTLINE_ERROR = "error";
+
+	/**
+	 * Paint the component border in another color (usually yellowish) to indicate a warning.
+	 *
+	 * @see #OUTLINE
+	 */
+	String OUTLINE_WARNING = "warning";
+
+	/**
 	 * Paint the component with round edges.
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner},

@@ -514,6 +514,9 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField1"
 				"text": "editable"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7,growx"
 			} )
@@ -955,6 +958,59 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 13 1 6,growy"
 			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+				"axis": 1
+			} ) {
+				name: "panel4"
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "noOutlineRadioButton"
+					"text": "no outline"
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "errorOutlineRadioButton"
+					"text": "error"
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "warningOutlineRadioButton"
+					"text": "warning"
+					"$buttonGroup": new FormReference( "buttonGroup1" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "magentaOutlineRadioButton"
+					"text": "magenta"
+					"$buttonGroup": &FormReference0 new FormReference( "buttonGroup1" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "magentaCyanOutlineRadioButton"
+					"text": "magenta / cyan"
+					"$buttonGroup": #FormReference0
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 13"
+			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane15"
 				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
@@ -1246,6 +1302,11 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 1135, 800 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 810 )
 		} )
 	}
 }

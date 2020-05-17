@@ -114,6 +114,14 @@ class BasicComponentsPanel
 		JScrollPane scrollPane12 = new JScrollPane();
 		JTextPane textPane4 = new JTextPane();
 		JTextPane textPane5 = new JTextPane();
+		JLabel label3 = new JLabel();
+		JTextField textField5 = new JTextField();
+		JComboBox comboBox7 = new JComboBox();
+		JSpinner spinner3 = new JSpinner();
+		JLabel label4 = new JLabel();
+		JTextField textField7 = new JTextField();
+		JComboBox comboBox8 = new JComboBox();
+		JSpinner spinner4 = new JSpinner();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -140,6 +148,8 @@ class BasicComponentsPanel
 			"[]" +
 			"[]" +
 			"[]" +
+			"[]" +
+			"[]para" +
 			"[]" +
 			"[]"));
 
@@ -595,6 +605,38 @@ class BasicComponentsPanel
 		//---- textPane5 ----
 		textPane5.setText("no scroll pane");
 		add(textPane5, "cell 5 11,growx");
+
+		//---- label3 ----
+		label3.setText("Error:");
+		add(label3, "cell 0 12");
+
+		//---- textField5 ----
+		textField5.putClientProperty("JComponent.outline", "error");
+		add(textField5, "cell 1 12,growx");
+
+		//---- comboBox7 ----
+		comboBox7.putClientProperty("JComponent.outline", "error");
+		add(comboBox7, "cell 2 12,growx");
+
+		//---- spinner3 ----
+		spinner3.putClientProperty("JComponent.outline", "error");
+		add(spinner3, "cell 3 12,growx");
+
+		//---- label4 ----
+		label4.setText("Warning:");
+		add(label4, "cell 0 13");
+
+		//---- textField7 ----
+		textField7.putClientProperty("JComponent.outline", "warning");
+		add(textField7, "cell 1 13,growx");
+
+		//---- comboBox8 ----
+		comboBox8.putClientProperty("JComponent.outline", "warning");
+		add(comboBox8, "cell 2 13,growx");
+
+		//---- spinner4 ----
+		spinner4.putClientProperty("JComponent.outline", "warning");
+		add(spinner4, "cell 3 13,growx");
 
 		//======== popupMenu1 ========
 		{

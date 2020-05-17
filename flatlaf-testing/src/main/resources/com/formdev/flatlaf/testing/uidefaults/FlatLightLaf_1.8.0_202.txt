@@ -202,7 +202,10 @@ ComboBoxUI                     com.formdev.flatlaf.ui.FlatComboBoxUI
 Component.arc                  5
 Component.arrowType            chevron
 Component.borderColor          #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
+Component.custom.borderColor   #f38d8d    com.formdev.flatlaf.util.DerivedColor [UI]    desaturate(20%) lighten(25%)
 Component.disabledBorderColor  #cfcfcf    javax.swing.plaf.ColorUIResource [UI]
+Component.error.borderColor    #ebb8bc    javax.swing.plaf.ColorUIResource [UI]
+Component.error.focusedBorderColor #e53e4d    javax.swing.plaf.ColorUIResource [UI]
 Component.focusColor           #97c3f3    javax.swing.plaf.ColorUIResource [UI]
 Component.focusWidth           0
 Component.focusedBorderColor   #87afda    javax.swing.plaf.ColorUIResource [UI]
@@ -211,6 +214,8 @@ Component.hideMnemonics        true
 Component.innerFocusWidth      0.5
 Component.linkColor            #2470b3    javax.swing.plaf.ColorUIResource [UI]
 Component.minimumWidth         64
+Component.warning.borderColor  #fed284    javax.swing.plaf.ColorUIResource [UI]
+Component.warning.focusedBorderColor #e2a53a    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- DatePicker ----
