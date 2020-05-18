@@ -21,13 +21,20 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.Panel;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
+import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -170,10 +177,17 @@ public class FlatPopupFactory
 	private class DropShadowPopup
 		extends NonFlashingPopup
 	{
+		private final Component owner;
+
 		// light weight
 		private JComponent lightComp;
 		private Border oldBorder;
 		private boolean oldOpaque;
+
+		// medium weight
+		private Panel mediumWeightPanel;
+		private JPanel dropShadowPanel;
+		private ComponentListener mediumPanelListener;
 
 		// heavy weight
 		private Popup dropShadowDelegate;
@@ -182,10 +196,7 @@ public class FlatPopupFactory
 
 		DropShadowPopup( Popup delegate, Component owner, Component contents ) {
 			super( delegate, contents );
-
-			// drop shadows on medium weight popups are not supported
-			if( delegate.getClass().getName().endsWith( "MediumWeightPopup" ) )
-				return;
+			this.owner = owner;
 
 			Dimension size = contents.getPreferredSize();
 			if( size.width <= 0 || size.height <= 0 )
@@ -224,17 +235,26 @@ public class FlatPopupFactory
 					dropShadowWindow.setBackground( new Color( 0, true ) );
 				}
 			} else {
-				// light weight popup
-				Container p = contents.getParent();
-				if( !(p instanceof JComponent) )
-					return;
+				mediumWeightPanel = (Panel) SwingUtilities.getAncestorOfClass( Panel.class, contents );
+				if( mediumWeightPanel != null ) {
+					// medium weight popup
+					dropShadowPanel = new JPanel();
+					dropShadowPanel.setBorder( createDropShadowBorder() );
+					dropShadowPanel.setOpaque( false );
+					dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
+				} else {
+					// light weight popup
+					Container p = contents.getParent();
+					if( !(p instanceof JComponent) )
+						return;
 
-				lightComp = (JComponent) p;
-				oldBorder = lightComp.getBorder();
-				oldOpaque = lightComp.isOpaque();
-				lightComp.setBorder( createDropShadowBorder() );
-				lightComp.setOpaque( false );
-				lightComp.setSize( lightComp.getPreferredSize() );
+					lightComp = (JComponent) p;
+					oldBorder = lightComp.getBorder();
+					oldOpaque = lightComp.isOpaque();
+					lightComp.setBorder( createDropShadowBorder() );
+					lightComp.setOpaque( false );
+					lightComp.setSize( lightComp.getPreferredSize() );
+				}
 			}
 		}
 
@@ -249,6 +269,9 @@ public class FlatPopupFactory
 		public void show() {
 			if( dropShadowDelegate != null )
 				dropShadowDelegate.show();
+
+			if( mediumWeightPanel != null )
+				showMediumWeightDropShadow();
 
 			super.show();
 
@@ -267,6 +290,12 @@ public class FlatPopupFactory
 				dropShadowDelegate = null;
 			}
 
+			if( mediumWeightPanel != null ) {
+				hideMediumWeightDropShadow();
+				dropShadowPanel = null;
+				mediumWeightPanel = null;
+			}
+
 			super.hide();
 
 			if( dropShadowWindow != null ) {
@@ -278,6 +307,56 @@ public class FlatPopupFactory
 				lightComp.setBorder( oldBorder );
 				lightComp.setOpaque( oldOpaque );
 				lightComp = null;
+			}
+		}
+
+		private void showMediumWeightDropShadow() {
+			Window window = SwingUtilities.windowForComponent( owner );
+			if( window == null )
+				return;
+
+			if( !(window instanceof RootPaneContainer) )
+				return;
+
+			dropShadowPanel.setVisible( false );
+
+			JLayeredPane layeredPane = ((RootPaneContainer)window).getLayeredPane();
+			layeredPane.add( dropShadowPanel, JLayeredPane.POPUP_LAYER, 0 );
+
+			mediumPanelListener = new ComponentListener() {
+				@Override
+				public void componentShown( ComponentEvent e ) {
+					dropShadowPanel.setVisible( true );
+				}
+
+				@Override
+				public void componentHidden( ComponentEvent e ) {
+					dropShadowPanel.setVisible( false );
+				}
+
+				@Override
+				public void componentMoved( ComponentEvent e ) {
+					Point location = mediumWeightPanel.getLocation();
+					Insets insets = dropShadowPanel.getInsets();
+					dropShadowPanel.setLocation( location.x - insets.left, location.y - insets.top );
+				}
+
+				@Override
+				public void componentResized( ComponentEvent e ) {
+					dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
+				}
+			};
+			mediumWeightPanel.addComponentListener( mediumPanelListener );
+		}
+
+		private void hideMediumWeightDropShadow() {
+			mediumWeightPanel.removeComponentListener( mediumPanelListener );
+
+			Container parent = dropShadowPanel.getParent();
+			if( parent != null ) {
+				Rectangle bounds = dropShadowPanel.getBounds();
+				parent.remove( dropShadowPanel );
+				parent.repaint( bounds.x, bounds.y, bounds.width, bounds.height );
 			}
 		}
 	}
