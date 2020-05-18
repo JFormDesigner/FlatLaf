@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -26,6 +27,7 @@ import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
+import javax.swing.JComponent;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicArrowButton;
 
@@ -151,6 +153,11 @@ public class FlatArrowButton
 			x--;
 		if( y + rh >= height && y > 0 )
 			y--;
+
+		// move arrow for round borders
+		Container parent = getParent();
+		if( parent instanceof JComponent && FlatUIUtils.hasRoundBorder( (JComponent) parent ) )
+			x -= scale( parent.getComponentOrientation().isLeftToRight() ? 1 : -1 );
 
 		// paint arrow
 		g.setColor( enabled

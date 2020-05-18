@@ -168,6 +168,10 @@ public class FlatUIUtils
 			: 0;
 	}
 
+	public static boolean hasRoundBorder( JComponent c ) {
+		return getBorderArc( c ) >= c.getHeight();
+	}
+
 	/**
 	 * Sets rendering hints used for painting.
 	 */
