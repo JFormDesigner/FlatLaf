@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.35
 
 - Added drop shadows to popup menus, combobox popups, tooltips and internal
   frames. (issue #94)
