@@ -249,7 +249,8 @@ public class FlatButtonUI
 	}
 
 	static boolean isToolBarButton( Component c ) {
-		return c.getParent() instanceof JToolBar;
+		return c.getParent() instanceof JToolBar ||
+			(c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON ));
 	}
 
 	@Override

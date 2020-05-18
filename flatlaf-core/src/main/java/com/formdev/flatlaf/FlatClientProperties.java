@@ -31,7 +31,7 @@ public interface FlatClientProperties
 	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
 	 * <strong>Allowed Values</strong> {@link #BUTTON_TYPE_SQUARE}, {@link #BUTTON_TYPE_ROUND_RECT},
-	 * {@link #BUTTON_TYPE_TAB} and {@link #BUTTON_TYPE_HELP}
+	 * {@link #BUTTON_TYPE_TAB}, {@link #BUTTON_TYPE_HELP} and {@link BUTTON_TYPE_TOOLBAR_BUTTON}
 	 */
 	String BUTTON_TYPE = "JButton.buttonType";
 
@@ -70,6 +70,15 @@ public interface FlatClientProperties
 	 * @see #BUTTON_TYPE
 	 */
 	String BUTTON_TYPE_HELP = "help";
+
+	/**
+	 * Paint the button in toolbar style.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
+	 *
+	 * @see #BUTTON_TYPE
+	 */
+	String BUTTON_TYPE_TOOLBAR_BUTTON = "toolBarButton";
 
 	/**
 	 * Specifies selected state of a checkbox.
