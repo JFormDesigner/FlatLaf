@@ -116,11 +116,11 @@ class BasicComponentsPanel
 		JTextPane textPane5 = new JTextPane();
 		JLabel label3 = new JLabel();
 		JTextField textField5 = new JTextField();
-		JComboBox comboBox7 = new JComboBox();
+		JComboBox<String> comboBox7 = new JComboBox<>();
 		JSpinner spinner3 = new JSpinner();
 		JLabel label4 = new JLabel();
 		JTextField textField7 = new JTextField();
-		JComboBox comboBox8 = new JComboBox();
+		JComboBox<String> comboBox8 = new JComboBox<>();
 		JSpinner spinner4 = new JSpinner();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
@@ -607,7 +607,7 @@ class BasicComponentsPanel
 		add(textPane5, "cell 5 11,growx");
 
 		//---- label3 ----
-		label3.setText("Error:");
+		label3.setText("Error hints:");
 		add(label3, "cell 0 12");
 
 		//---- textField5 ----
@@ -616,6 +616,10 @@ class BasicComponentsPanel
 
 		//---- comboBox7 ----
 		comboBox7.putClientProperty("JComponent.outline", "error");
+		comboBox7.setModel(new DefaultComboBoxModel<>(new String[] {
+			"editable"
+		}));
+		comboBox7.setEditable(true);
 		add(comboBox7, "cell 2 12,growx");
 
 		//---- spinner3 ----
@@ -623,7 +627,7 @@ class BasicComponentsPanel
 		add(spinner3, "cell 3 12,growx");
 
 		//---- label4 ----
-		label4.setText("Warning:");
+		label4.setText("Warning hints:");
 		add(label4, "cell 0 13");
 
 		//---- textField7 ----
@@ -632,6 +636,9 @@ class BasicComponentsPanel
 
 		//---- comboBox8 ----
 		comboBox8.putClientProperty("JComponent.outline", "warning");
+		comboBox8.setModel(new DefaultComboBoxModel<>(new String[] {
+			"not editable"
+		}));
 		add(comboBox8, "cell 2 13,growx");
 
 		//---- spinner4 ----
