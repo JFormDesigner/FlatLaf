@@ -73,8 +73,8 @@ public class FlatScrollBarUI
 	protected Color buttonDisabledArrowColor;
 
 	private MouseAdapter hoverListener;
-	private boolean hoverTrack;
-	private boolean hoverThumb;
+	protected boolean hoverTrack;
+	protected boolean hoverThumb;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatScrollBarUI();
