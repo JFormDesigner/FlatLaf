@@ -296,23 +296,6 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 3"
 			} )
-			add( new FormComponent( "javax.swing.JComboBox" ) {
-				name: "buttonTypeComboBox"
-				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "-"
-					addElement( "-" )
-					addElement( "square" )
-					addElement( "roundRect" )
-					addElement( "tab" )
-					addElement( "help" )
-				}
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 3"
-			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "radioButtonLabel"
 				"text": "JRadioButton:"
@@ -348,27 +331,6 @@ new FormModel {
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 4"
-			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
-				name: "contentAreaFilledCheckBox"
-				"text": "contentAreaFilled"
-				"selected": true
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "contentAreaFilledChanged", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 4"
-			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
-				name: "roundRectCheckBox"
-				"text": "roundRect"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "roundRectChanged", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 4"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "comboBoxLabel"
@@ -958,59 +920,6 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 13 1 6,growy"
 			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
-				"axis": 1
-			} ) {
-				name: "panel4"
-				add( new FormComponent( "javax.swing.JRadioButton" ) {
-					name: "noOutlineRadioButton"
-					"text": "no outline"
-					"$buttonGroup": new FormReference( "buttonGroup1" )
-					"selected": true
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
-				} )
-				add( new FormComponent( "javax.swing.JRadioButton" ) {
-					name: "errorOutlineRadioButton"
-					"text": "error"
-					"$buttonGroup": new FormReference( "buttonGroup1" )
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
-				} )
-				add( new FormComponent( "javax.swing.JRadioButton" ) {
-					name: "warningOutlineRadioButton"
-					"text": "warning"
-					"$buttonGroup": new FormReference( "buttonGroup1" )
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
-				} )
-				add( new FormComponent( "javax.swing.JRadioButton" ) {
-					name: "magentaOutlineRadioButton"
-					"text": "magenta"
-					"$buttonGroup": &FormReference0 new FormReference( "buttonGroup1" )
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
-				} )
-				add( new FormComponent( "javax.swing.JRadioButton" ) {
-					name: "magentaCyanOutlineRadioButton"
-					"text": "magenta / cyan"
-					"$buttonGroup": #FormReference0
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 13"
-			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane15"
 				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
@@ -1027,7 +936,119 @@ new FormModel {
 					} )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 13,growy,width 100,height 50"
+				"value": "cell 6 10 1 3,growy,width 100,height 50"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[][]"
+				"$rowConstraints": "[][][]"
+				"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			} ) {
+				name: "panel5"
+				"border": new javax.swing.border.TitledBorder( "Control" )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "buttonTypeComboBox"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "-"
+						addElement( "-" )
+						addElement( "square" )
+						addElement( "roundRect" )
+						addElement( "tab" )
+						addElement( "help" )
+					}
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "borderPaintedCheckBox"
+					"text": "borderPainted"
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "borderPaintedChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "roundRectCheckBox"
+					"text": "roundRect"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "roundRectChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "contentAreaFilledCheckBox"
+					"text": "contentAreaFilled"
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "contentAreaFilledChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel4"
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "noOutlineRadioButton"
+						"text": "no outline"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "errorOutlineRadioButton"
+						"text": "error"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "warningOutlineRadioButton"
+						"text": "warning"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "magentaOutlineRadioButton"
+						"text": "magenta"
+						"$buttonGroup": &FormReference0 new FormReference( "buttonGroup1" )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButton" ) {
+						name: "magentaCyanOutlineRadioButton"
+						"text": "magenta / cyan"
+						"$buttonGroup": #FormReference0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "outlineChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 13 2 10,grow"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "scrollBarLabel"
@@ -1231,13 +1252,13 @@ new FormModel {
 					"selected": true
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 23 2 1,growx"
+				"value": "cell 1 23 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label3"
 				"text": "Square:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 23 3 1"
+				"value": "cell 1 23 5 1"
 			} )
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar3"
@@ -1264,13 +1285,13 @@ new FormModel {
 					"$client.JButton.buttonType": "square"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 23 3 1"
+				"value": "cell 1 23 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label4"
 				"text": "Round:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 23 3 1"
+				"value": "cell 1 23 5 1"
 			} )
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar4"
@@ -1297,7 +1318,7 @@ new FormModel {
 					"$client.JButton.buttonType": "roundRect"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 23 3 1"
+				"value": "cell 1 23 5 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

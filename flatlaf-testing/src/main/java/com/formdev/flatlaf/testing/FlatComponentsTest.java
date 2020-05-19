@@ -55,6 +55,22 @@ public class FlatComponentsTest
 		progressBar4.setIndeterminate( indeterminate );
 	}
 
+	private void borderPaintedChanged() {
+		boolean borderPainted = borderPaintedCheckBox.isSelected();
+
+		for( Component c : getComponents() ) {
+			if( c instanceof AbstractButton )
+				((AbstractButton)c).setBorderPainted( borderPainted );
+			else if( c instanceof JProgressBar )
+				((JProgressBar)c).setBorderPainted( borderPainted );
+			else if( c instanceof JToolBar )
+				((JToolBar)c).setBorderPainted( borderPainted );
+
+			if( c instanceof JCheckBox )
+				((JCheckBox)c).setBorderPaintedFlat( borderPainted );
+		}
+	}
+
 	private void contentAreaFilledChanged() {
 		boolean contentAreaFilled = contentAreaFilledCheckBox.isSelected();
 
@@ -145,14 +161,11 @@ public class FlatComponentsTest
 		JCheckBox checkBox4 = new JCheckBox();
 		JToggleButton toggleButton5 = new JToggleButton();
 		JToggleButton toggleButton8 = new JToggleButton();
-		buttonTypeComboBox = new JComboBox<>();
 		JLabel radioButtonLabel = new JLabel();
 		JRadioButton radioButton1 = new JRadioButton();
 		JRadioButton radioButton2 = new JRadioButton();
 		JRadioButton radioButton3 = new JRadioButton();
 		JRadioButton radioButton4 = new JRadioButton();
-		contentAreaFilledCheckBox = new JCheckBox();
-		roundRectCheckBox = new JCheckBox();
 		JLabel comboBoxLabel = new JLabel();
 		JComboBox<String> comboBox1 = new JComboBox<>();
 		JComboBox<String> comboBox2 = new JComboBox<>();
@@ -235,15 +248,20 @@ public class FlatComponentsTest
 		JButton button10 = new JButton();
 		JButton button11 = new JButton();
 		JToggleButton toggleButton7 = new JToggleButton();
+		JScrollPane scrollPane15 = new JScrollPane();
+		JPanel panel3 = new JPanel();
+		JButton button21 = new JButton();
+		JPanel panel5 = new JPanel();
+		buttonTypeComboBox = new JComboBox<>();
+		borderPaintedCheckBox = new JCheckBox();
+		roundRectCheckBox = new JCheckBox();
+		contentAreaFilledCheckBox = new JCheckBox();
 		JPanel panel4 = new JPanel();
 		noOutlineRadioButton = new JRadioButton();
 		errorOutlineRadioButton = new JRadioButton();
 		warningOutlineRadioButton = new JRadioButton();
 		magentaOutlineRadioButton = new JRadioButton();
 		magentaCyanOutlineRadioButton = new JRadioButton();
-		JScrollPane scrollPane15 = new JScrollPane();
-		JPanel panel3 = new JPanel();
-		JButton button21 = new JButton();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
@@ -530,17 +548,6 @@ public class FlatComponentsTest
 		toggleButton8.setSelected(true);
 		add(toggleButton8, "cell 5 3");
 
-		//---- buttonTypeComboBox ----
-		buttonTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
-			"-",
-			"square",
-			"roundRect",
-			"tab",
-			"help"
-		}));
-		buttonTypeComboBox.addActionListener(e -> buttonTypeChanged());
-		add(buttonTypeComboBox, "cell 6 3");
-
 		//---- radioButtonLabel ----
 		radioButtonLabel.setText("JRadioButton:");
 		add(radioButtonLabel, "cell 0 4");
@@ -566,17 +573,6 @@ public class FlatComponentsTest
 		radioButton4.setSelected(true);
 		radioButton4.setEnabled(false);
 		add(radioButton4, "cell 4 4");
-
-		//---- contentAreaFilledCheckBox ----
-		contentAreaFilledCheckBox.setText("contentAreaFilled");
-		contentAreaFilledCheckBox.setSelected(true);
-		contentAreaFilledCheckBox.addActionListener(e -> contentAreaFilledChanged());
-		add(contentAreaFilledCheckBox, "cell 5 4");
-
-		//---- roundRectCheckBox ----
-		roundRectCheckBox.setText("roundRect");
-		roundRectCheckBox.addActionListener(e -> roundRectChanged());
-		add(roundRectCheckBox, "cell 6 4");
 
 		//---- comboBoxLabel ----
 		comboBoxLabel.setText("JComboBox:");
@@ -1039,38 +1035,6 @@ public class FlatComponentsTest
 		}
 		add(toolBar2, "cell 4 13 1 6,growy");
 
-		//======== panel4 ========
-		{
-			panel4.setLayout(new BoxLayout(panel4, BoxLayout.Y_AXIS));
-
-			//---- noOutlineRadioButton ----
-			noOutlineRadioButton.setText("no outline");
-			noOutlineRadioButton.setSelected(true);
-			noOutlineRadioButton.addActionListener(e -> outlineChanged());
-			panel4.add(noOutlineRadioButton);
-
-			//---- errorOutlineRadioButton ----
-			errorOutlineRadioButton.setText("error");
-			errorOutlineRadioButton.addActionListener(e -> outlineChanged());
-			panel4.add(errorOutlineRadioButton);
-
-			//---- warningOutlineRadioButton ----
-			warningOutlineRadioButton.setText("warning");
-			warningOutlineRadioButton.addActionListener(e -> outlineChanged());
-			panel4.add(warningOutlineRadioButton);
-
-			//---- magentaOutlineRadioButton ----
-			magentaOutlineRadioButton.setText("magenta");
-			magentaOutlineRadioButton.addActionListener(e -> outlineChanged());
-			panel4.add(magentaOutlineRadioButton);
-
-			//---- magentaCyanOutlineRadioButton ----
-			magentaCyanOutlineRadioButton.setText("magenta / cyan");
-			magentaCyanOutlineRadioButton.addActionListener(e -> outlineChanged());
-			panel4.add(magentaCyanOutlineRadioButton);
-		}
-		add(panel4, "cell 5 13");
-
 		//======== scrollPane15 ========
 		{
 			scrollPane15.setBorder(BorderFactory.createEmptyBorder());
@@ -1088,7 +1052,82 @@ public class FlatComponentsTest
 			}
 			scrollPane15.setViewportView(panel3);
 		}
-		add(scrollPane15, "cell 6 13,growy,width 100,height 50");
+		add(scrollPane15, "cell 6 10 1 3,growy,width 100,height 50");
+
+		//======== panel5 ========
+		{
+			panel5.setBorder(new TitledBorder("Control"));
+			panel5.setLayout(new MigLayout(
+				"ltr,insets dialog,hidemode 3",
+				// columns
+				"[]" +
+				"[]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]"));
+
+			//---- buttonTypeComboBox ----
+			buttonTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+				"-",
+				"square",
+				"roundRect",
+				"tab",
+				"help"
+			}));
+			buttonTypeComboBox.addActionListener(e -> buttonTypeChanged());
+			panel5.add(buttonTypeComboBox, "cell 0 0");
+
+			//---- borderPaintedCheckBox ----
+			borderPaintedCheckBox.setText("borderPainted");
+			borderPaintedCheckBox.setSelected(true);
+			borderPaintedCheckBox.addActionListener(e -> borderPaintedChanged());
+			panel5.add(borderPaintedCheckBox, "cell 1 0");
+
+			//---- roundRectCheckBox ----
+			roundRectCheckBox.setText("roundRect");
+			roundRectCheckBox.addActionListener(e -> roundRectChanged());
+			panel5.add(roundRectCheckBox, "cell 0 1");
+
+			//---- contentAreaFilledCheckBox ----
+			contentAreaFilledCheckBox.setText("contentAreaFilled");
+			contentAreaFilledCheckBox.setSelected(true);
+			contentAreaFilledCheckBox.addActionListener(e -> contentAreaFilledChanged());
+			panel5.add(contentAreaFilledCheckBox, "cell 1 1");
+
+			//======== panel4 ========
+			{
+				panel4.setLayout(new BoxLayout(panel4, BoxLayout.Y_AXIS));
+
+				//---- noOutlineRadioButton ----
+				noOutlineRadioButton.setText("no outline");
+				noOutlineRadioButton.setSelected(true);
+				noOutlineRadioButton.addActionListener(e -> outlineChanged());
+				panel4.add(noOutlineRadioButton);
+
+				//---- errorOutlineRadioButton ----
+				errorOutlineRadioButton.setText("error");
+				errorOutlineRadioButton.addActionListener(e -> outlineChanged());
+				panel4.add(errorOutlineRadioButton);
+
+				//---- warningOutlineRadioButton ----
+				warningOutlineRadioButton.setText("warning");
+				warningOutlineRadioButton.addActionListener(e -> outlineChanged());
+				panel4.add(warningOutlineRadioButton);
+
+				//---- magentaOutlineRadioButton ----
+				magentaOutlineRadioButton.setText("magenta");
+				magentaOutlineRadioButton.addActionListener(e -> outlineChanged());
+				panel4.add(magentaOutlineRadioButton);
+
+				//---- magentaCyanOutlineRadioButton ----
+				magentaCyanOutlineRadioButton.setText("magenta / cyan");
+				magentaCyanOutlineRadioButton.addActionListener(e -> outlineChanged());
+				panel4.add(magentaCyanOutlineRadioButton);
+			}
+			panel5.add(panel4, "cell 0 2");
+		}
+		add(panel5, "cell 5 13 2 10,grow");
 
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
@@ -1235,11 +1274,11 @@ public class FlatComponentsTest
 			toggleButton17.setSelected(true);
 			toolBar1.add(toggleButton17);
 		}
-		add(toolBar1, "cell 1 23 2 1,growx");
+		add(toolBar1, "cell 1 23 5 1");
 
 		//---- label3 ----
 		label3.setText("Square:");
-		add(label3, "cell 3 23 3 1");
+		add(label3, "cell 1 23 5 1");
 
 		//======== toolBar3 ========
 		{
@@ -1266,11 +1305,11 @@ public class FlatComponentsTest
 			toggleButton24.putClientProperty("JButton.buttonType", "square");
 			toolBar3.add(toggleButton24);
 		}
-		add(toolBar3, "cell 3 23 3 1");
+		add(toolBar3, "cell 1 23 5 1");
 
 		//---- label4 ----
 		label4.setText("Round:");
-		add(label4, "cell 3 23 3 1");
+		add(label4, "cell 1 23 5 1");
 
 		//======== toolBar4 ========
 		{
@@ -1297,7 +1336,7 @@ public class FlatComponentsTest
 			toggleButton26.putClientProperty("JButton.buttonType", "roundRect");
 			toolBar4.add(toggleButton26);
 		}
-		add(toolBar4, "cell 3 23 3 1");
+		add(toolBar4, "cell 1 23 5 1");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
@@ -1315,12 +1354,13 @@ public class FlatComponentsTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JComboBox<String> buttonTypeComboBox;
-	private JCheckBox contentAreaFilledCheckBox;
-	private JCheckBox roundRectCheckBox;
 	private JTextField textField1;
 	private JProgressBar progressBar3;
 	private JProgressBar progressBar4;
+	private JComboBox<String> buttonTypeComboBox;
+	private JCheckBox borderPaintedCheckBox;
+	private JCheckBox roundRectCheckBox;
+	private JCheckBox contentAreaFilledCheckBox;
 	private JRadioButton noOutlineRadioButton;
 	private JRadioButton errorOutlineRadioButton;
 	private JRadioButton warningOutlineRadioButton;
