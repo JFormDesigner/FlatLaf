@@ -572,7 +572,7 @@ class UIDefaultsLoader
 	 *         saturate(color,amount[,options]) or desaturate(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
-	 *   - options: [relative] [autoInverse] [lazy] [derived]
+	 *   - options: [relative] [autoInverse] [noAutoInverse] [lazy] [derived]
 	 */
 	private static Object parseColorHSLIncreaseDecrease( int hslIndex, boolean increase,
 		List<String> params, Function<String, String> resolver, boolean reportError )
@@ -590,6 +590,10 @@ class UIDefaultsLoader
 			autoInverse = options.contains( "autoInverse" );
 			lazy = options.contains( "lazy" );
 			derived = options.contains( "derived" );
+
+			// use autoInverse by default for derived colors, except if noAutoInverse is set
+			if( derived && !options.contains( "noAutoInverse" ) )
+				autoInverse = true;
 		}
 
 		// create function

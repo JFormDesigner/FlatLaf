@@ -58,11 +58,15 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "hsla", TOKEN_FUNCTION );
 		tokenMap.put( "lighten", TOKEN_FUNCTION );
 		tokenMap.put( "darken", TOKEN_FUNCTION );
+		tokenMap.put( "saturate", TOKEN_FUNCTION );
+		tokenMap.put( "desaturate", TOKEN_FUNCTION );
 		tokenMap.put( "lazy", TOKEN_FUNCTION );
 
 		// function options
 		tokenMap.put( "relative", Token.RESERVED_WORD );
+		tokenMap.put( "derived", Token.RESERVED_WORD );
 		tokenMap.put( "autoInverse", Token.RESERVED_WORD );
+		tokenMap.put( "noAutoInverse", Token.RESERVED_WORD );
 	}
 
 	/**
