@@ -32,7 +32,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
@@ -152,14 +151,12 @@ public class FlatTextFieldUI
 	}
 
 	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme ) {
-		Border border = c.getBorder();
-
 		// do not paint background if:
 		//   - not opaque and
 		//   - border is not a flat border and
 		//   - opaque was explicitly set (to false)
 		// (same behaviour as in AquaTextFieldUI)
-		if( !c.isOpaque() && !(border instanceof FlatBorder) && FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) )
+		if( !c.isOpaque() && FlatUIUtils.getOutsideFlatBorder( c ) == null && FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) )
 			return;
 
 		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );

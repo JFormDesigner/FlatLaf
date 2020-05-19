@@ -40,6 +40,7 @@ import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
@@ -152,9 +153,9 @@ public class FlatUIUtils
 	 * Returns the scaled thickness of the outer focus border for the given component.
 	 */
 	public static float getBorderFocusWidth( JComponent c ) {
-		Border border = c.getBorder();
-		return (border instanceof FlatBorder)
-			? UIScale.scale( (float) ((FlatBorder)border).getFocusWidth( c ) )
+		FlatBorder border = getOutsideFlatBorder( c );
+		return (border != null)
+			? UIScale.scale( (float) border.getFocusWidth( c ) )
 			: 0;
 	}
 
@@ -162,14 +163,26 @@ public class FlatUIUtils
 	 * Returns the scaled arc diameter of the border for the given component.
 	 */
 	public static float getBorderArc( JComponent c ) {
-		Border border = c.getBorder();
-		return (border instanceof FlatBorder)
-			? UIScale.scale( (float) ((FlatBorder)border).getArc( c ) )
+		FlatBorder border = getOutsideFlatBorder( c );
+		return (border != null)
+			? UIScale.scale( (float) border.getArc( c ) )
 			: 0;
 	}
 
 	public static boolean hasRoundBorder( JComponent c ) {
 		return getBorderArc( c ) >= c.getHeight();
+	}
+
+	public static FlatBorder getOutsideFlatBorder( JComponent c ) {
+		Border border = c.getBorder();
+		for(;;) {
+			if( border instanceof FlatBorder )
+				return (FlatBorder) border;
+			else if( border instanceof CompoundBorder )
+				border = ((CompoundBorder)border).getOutsideBorder();
+			else
+				return null;
+		}
 	}
 
 	/**
