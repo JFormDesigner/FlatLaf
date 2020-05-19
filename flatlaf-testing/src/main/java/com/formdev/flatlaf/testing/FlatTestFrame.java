@@ -112,10 +112,16 @@ public class FlatTestFrame
 			lafModel.addElement( new LookAndFeelInfo( name, className ) );
 		}
 
-		String substanceClassName = "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel";
-		if( SystemInfo.IS_JAVA_9_OR_LATER && isClassAvailable( substanceClassName ) ) {
-			lafModel.addElement( new LookAndFeelInfo( "Substance (F5)", substanceClassName ) );
-			registerSwitchToLookAndFeel( "F5", substanceClassName );
+		String substanceLightClassName = "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel";
+		if( SystemInfo.IS_JAVA_9_OR_LATER && isClassAvailable( substanceLightClassName ) ) {
+			lafModel.addElement( new LookAndFeelInfo( "Substance Business (F5)", substanceLightClassName ) );
+			registerSwitchToLookAndFeel( "F5", substanceLightClassName );
+		}
+
+		String substanceDarkClassName = "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel";
+		if( SystemInfo.IS_JAVA_9_OR_LATER && isClassAvailable( substanceDarkClassName ) ) {
+			lafModel.addElement( new LookAndFeelInfo( "Substance Graphite Aqua (Ctrl+F5)", substanceDarkClassName ) );
+			registerSwitchToLookAndFeel( "ctrl F5", substanceDarkClassName );
 		}
 
 		String webLafClassName = "com.alee.laf.WebLookAndFeel";
