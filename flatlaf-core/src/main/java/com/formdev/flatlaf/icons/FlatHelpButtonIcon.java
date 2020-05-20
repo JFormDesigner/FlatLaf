@@ -100,12 +100,12 @@ public class FlatHelpButtonIcon
 		g2.fill( new Ellipse2D.Float( focusWidth + 0.5f, focusWidth + 0.5f, 21, 21 ) );
 
 		// paint background
-		FlatUIUtils.setColor( g2, FlatButtonUI.buttonStateColor( c,
+		g2.setColor( FlatUIUtils.deriveColor( FlatButtonUI.buttonStateColor( c,
 			background,
 			disabledBackground,
 			focusedBackground,
 			hoverBackground,
-			pressedBackground ), background );
+			pressedBackground ), background ) );
 		g2.fill( new Ellipse2D.Float( focusWidth + 1.5f, focusWidth + 1.5f, 19, 19 ) );
 
 		// paint question mark

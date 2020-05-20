@@ -53,7 +53,7 @@ public abstract class FlatInternalFrameAbstractIcon
 	protected void paintBackground( Component c, Graphics2D g ) {
 		Color background = FlatButtonUI.buttonStateColor( c, null, null, null, hoverBackground, pressedBackground );
 		if( background != null ) {
-			FlatUIUtils.setColor( g, background, c.getBackground() );
+			g.setColor( FlatUIUtils.deriveColor( background, c.getBackground() ) );
 			g.fillRect( 0, 0, width, height );
 		}
 	}

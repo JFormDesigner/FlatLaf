@@ -194,10 +194,10 @@ public class FlatUIUtils
 			MAC_USE_QUARTZ ? RenderingHints.VALUE_STROKE_PURE : RenderingHints.VALUE_STROKE_NORMALIZE );
 	}
 
-	public static void setColor( Graphics g, Color color, Color baseColor ) {
-		if( color instanceof DerivedColor )
-			color = ((DerivedColor)color).derive( baseColor );
-		g.setColor( color );
+	public static Color deriveColor( Color color, Color baseColor ) {
+		return (color instanceof DerivedColor)
+			? ((DerivedColor)color).derive( baseColor )
+			: color;
 	}
 
 	/**

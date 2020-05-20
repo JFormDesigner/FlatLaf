@@ -312,7 +312,7 @@ public class FlatButtonUI
 				if( background == startBg && endBg != null && !startBg.equals( endBg ) )
 					g2.setPaint( new GradientPaint( 0, 0, startBg, 0, height, endBg ) );
 				else
-					FlatUIUtils.setColor( g2, background, def ? defaultBackground : c.getBackground() );
+					g2.setColor( FlatUIUtils.deriveColor( background, def ? defaultBackground : c.getBackground() ) );
 
 				FlatUIUtils.paintComponentBackground( g2, x, y, width, height, focusWidth, arc );
 			} finally {
