@@ -18,6 +18,8 @@ package com.formdev.flatlaf.demo;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import com.formdev.flatlaf.FlatLaf;
@@ -32,10 +34,18 @@ import net.miginfocom.swing.*;
 class DemoFrame
 	extends JFrame
 {
+	private final String[] availableFontFamilyNames;
+	private int initialFontMenuItemCount = -1;
+
 	DemoFrame() {
 		int tabIndex = DemoPrefs.getState().getInt( FlatLafDemo.KEY_TAB, 0 );
 
+		availableFontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment()
+			.getAvailableFontFamilyNames().clone();
+		Arrays.sort( availableFontFamilyNames );
+
 		initComponents();
+		updateFontMenuItems();
 		controlBar.initialize( this, tabbedPane );
 
 		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
@@ -91,6 +101,7 @@ class DemoFrame
 
 	private void restoreFont() {
 		UIManager.put( "defaultFont", null );
+		updateFontMenuItems();
 		FlatLaf.updateUI();
 	}
 
@@ -99,15 +110,77 @@ class DemoFrame
 		Font newFont = font.deriveFont( (float) (font.getSize() + 1) );
 		UIManager.put( "defaultFont", newFont );
 
+		updateFontMenuItems();
 		FlatLaf.updateUI();
 	}
 
 	private void decrFont() {
 		Font font = UIManager.getFont( "defaultFont" );
-		Font newFont = font.deriveFont( (float) Math.max( font.getSize() - 1, 8 ) );
+		Font newFont = font.deriveFont( (float) Math.max( font.getSize() - 1, 10 ) );
 		UIManager.put( "defaultFont", newFont );
 
+		updateFontMenuItems();
 		FlatLaf.updateUI();
+	}
+
+	void updateFontMenuItems() {
+		if( initialFontMenuItemCount < 0 )
+			initialFontMenuItemCount = fontMenu.getItemCount();
+		else {
+			// remove old font items
+			for( int i = fontMenu.getItemCount() - 1; i >= initialFontMenuItemCount; i-- )
+				fontMenu.remove( i );
+		}
+
+		// get current font
+		Font currentFont = UIManager.getFont( "Label.font" );
+		String currentFamily = currentFont.getFamily();
+		String currentSize = Integer.toString( currentFont.getSize() );
+
+		// add font families
+		fontMenu.addSeparator();
+		ArrayList<String> families = new ArrayList<>( Arrays.asList(
+			"Arial", "Comic Sans MS", "Courier New", "DejaVu Sans", "Dialog", "Monospaced",
+			"Noto Sans", "Roboto", "SansSerif", "Segoe UI", "Serif", "Tahoma", "Verdana" ) );
+		if( !families.contains( currentFamily ) )
+			families.add( currentFamily );
+		families.sort( String.CASE_INSENSITIVE_ORDER );
+
+		ButtonGroup familiesGroup = new ButtonGroup();
+		for( String family : families ) {
+			if( Arrays.binarySearch( availableFontFamilyNames, family ) < 0 )
+				continue; // not available
+
+			JCheckBoxMenuItem item = new JCheckBoxMenuItem( family );
+			item.setSelected( family.equals( currentFamily ) );
+			item.addActionListener( this::fontFamilyChanged );
+			fontMenu.add( item );
+
+			familiesGroup.add( item );
+		}
+
+		// add font sizes
+		fontMenu.addSeparator();
+		ArrayList<String> sizes = new ArrayList<>( Arrays.asList(
+			"10", "12", "14", "16", "18", "20", "24", "28" ) );
+		if( !sizes.contains( currentSize ) )
+			sizes.add( currentSize );
+		sizes.sort( String.CASE_INSENSITIVE_ORDER );
+
+		ButtonGroup sizesGroup = new ButtonGroup();
+		for( String size : sizes ) {
+			JCheckBoxMenuItem item = new JCheckBoxMenuItem( size );
+			item.setSelected( size.equals( currentSize ) );
+			item.addActionListener( this::fontSizeChanged );
+			fontMenu.add( item );
+
+			sizesGroup.add( item );
+		}
+
+		// enabled/disable items
+		boolean enabled = UIManager.getLookAndFeel() instanceof FlatLaf;
+		for( Component item : fontMenu.getMenuComponents() )
+			item.setEnabled( enabled );
 	}
 
 	private void initComponents() {
@@ -493,26 +566,6 @@ class DemoFrame
 		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
-
-		// add font families
-		fontMenu.addSeparator();
-		String[] fontFamilies = { "Arial", "Comic Sans MS", "Courier New", "Dialog",
-			"Monospaced", "SansSerif", "Serif", "Tahoma", "Verdana" };
-		for( String fontFamily : fontFamilies ) {
-			JMenuItem fontItem = new JMenuItem( fontFamily );
-			fontItem.addActionListener( this::fontFamilyChanged );
-			fontMenu.add( fontItem );
-		}
-
-		// add font sizes
-		fontMenu.addSeparator();
-		int[] fontSizes = { 8, 10, 12, 14, 16, 18, 20, 24, 28 };
-		for( int fontSize : fontSizes ) {
-			String fontSizeStr = Integer.toString( fontSize );
-			JMenuItem fontItem = new JMenuItem( fontSizeStr );
-			fontItem.addActionListener( this::fontSizeChanged );
-			fontMenu.add( fontItem );
-		}
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

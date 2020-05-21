@@ -37,7 +37,7 @@ import net.miginfocom.swing.*;
 class ControlBar
 	extends JPanel
 {
-	private JFrame frame;
+	private DemoFrame frame;
 	private JTabbedPane tabbedPane;
 
 	ControlBar() {
@@ -78,6 +78,9 @@ class ControlBar
 					// update info label because user scale factor may change
 					updateInfoLabel();
 
+					// update "Font" menu
+					frame.updateFontMenuItems();
+
 					// this is necessary because embedded JOptionPane's "steal" the default button
 					frame.getRootPane().setDefaultButton( closeButton );
 				} );
@@ -90,7 +93,15 @@ class ControlBar
 		} );
 	}
 
-	void initialize( JFrame frame, JTabbedPane tabbedPane ) {
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		if( infoLabel != null )
+			updateInfoLabel();
+	}
+
+	void initialize( DemoFrame frame, JTabbedPane tabbedPane ) {
 		this.frame = frame;
 		this.tabbedPane = tabbedPane;
 
@@ -141,10 +152,14 @@ class ControlBar
 	private void updateInfoLabel() {
 		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
 		float userScaleFactor = UIScale.getUserScaleFactor();
+		Font font = UIManager.getFont( "Label.font" );
 		String newInfo = "(Java " + System.getProperty( "java.version" )
 			+ (systemScaleFactor != 1 ? (";  system scale factor " + systemScaleFactor) : "")
 			+ (userScaleFactor != 1 ? (";  user scale factor " + userScaleFactor) : "")
 			+ (systemScaleFactor == 1 && userScaleFactor == 1 ? "; no scaling" : "")
+			+ "; " + font.getFamily() + " " + font.getSize()
+			+ (font.isBold() ? " BOLD" : "")
+			+ (font.isItalic() ? " ITALIC" : "")
 			+ ")";
 
 		if( !newInfo.equals( infoLabel.getText() ) )
@@ -176,6 +191,10 @@ class ControlBar
 			try {
 				// change look and feel
 				UIManager.setLookAndFeel( lafClassName );
+
+				// clear custom default font when switching to non-FlatLaf LaF
+				if( !(UIManager.getLookAndFeel() instanceof FlatLaf) )
+					UIManager.put( "defaultFont", null );
 
 				// update all components
 				FlatLaf.updateUI();
