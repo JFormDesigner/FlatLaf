@@ -100,6 +100,8 @@ public class UIDefaultsDump
 //			dump( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel", dir );
 //		else if( SystemInfo.IS_MAC )
 //			dump( "com.apple.laf.AquaLookAndFeel", dir );
+//		else if( SystemInfo.IS_LINUX )
+//			dump( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel", dir );
 //
 //		dump( "com.jgoodies.looks.plastic.PlasticLookAndFeel", dir );
 //		dump( "com.jgoodies.looks.windows.WindowsLookAndFeel", dir );
@@ -146,10 +148,9 @@ public class UIDefaultsDump
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 
 		dump( dir, name, "", lookAndFeel, key -> !key.contains( "InputMap" ) );
-		if( lookAndFeel.getClass() != FlatLightLaf.class )
-			return;
 
-		dump( dir, name, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
+		if( lookAndFeel.getClass() == FlatLightLaf.class || !(lookAndFeel instanceof FlatLaf) )
+			dump( dir, name, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
 	}
 
 	private static void dump( File dir, String name, String nameSuffix,
@@ -164,7 +165,11 @@ public class UIDefaultsDump
 				? BasicLookAndFeel.class.getSimpleName()
 				: lookAndFeel.getClass().getSimpleName();
 		}
-		String osSuffix = (SystemInfo.IS_MAC && lookAndFeel instanceof FlatLaf) ? "-mac" : "";
+		String osSuffix = (SystemInfo.IS_MAC && lookAndFeel instanceof FlatLaf)
+			? "-mac"
+			: ((SystemInfo.IS_LINUX && lookAndFeel instanceof FlatLaf)
+				? "-linux"
+				: "");
 		File file = new File( dir, name + nameSuffix + "_"
 			+ System.getProperty( "java.version" ) + osSuffix + ".txt" );
 
