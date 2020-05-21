@@ -74,6 +74,11 @@ class LinuxFontPolicy
 				family = family.isEmpty() ? word : (family + ' ' + word);
 		}
 
+		// Ubuntu font is rendered poorly (except if running in JetBrains VM)
+		// --> use default Java font
+		if( family.startsWith( "Ubuntu" ) && !SystemInfo.IS_JETBRAINS_JVM )
+			family = "sans";
+
 		// scale font size
 		double dsize = size * getGnomeFontScale();
 		size = (int) (dsize + 0.5);

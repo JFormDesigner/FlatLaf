@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Ubuntu Linux: Fixed poorly rendered font. (issue #105)
+
+
 ## 0.35
 
 - Added drop shadows to popup menus, combobox popups, tooltips and internal

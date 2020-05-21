@@ -141,7 +141,7 @@ class DemoFrame
 		fontMenu.addSeparator();
 		ArrayList<String> families = new ArrayList<>( Arrays.asList(
 			"Arial", "Comic Sans MS", "Courier New", "DejaVu Sans", "Dialog", "Monospaced",
-			"Noto Sans", "Roboto", "SansSerif", "Segoe UI", "Serif", "Tahoma", "Verdana" ) );
+			"Noto Sans", "Roboto", "SansSerif", "Segoe UI", "Serif", "Tahoma", "Ubuntu", "Verdana" ) );
 		if( !families.contains( currentFamily ) )
 			families.add( currentFamily );
 		families.sort( String.CASE_INSENSITIVE_ORDER );
