@@ -74,6 +74,7 @@ public abstract class FlatLaf
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
 	private String desktopPropertyName;
+	private String desktopPropertyName2;
 	private PropertyChangeListener desktopPropertyListener;
 
 	private static boolean aquaLoaded;
@@ -160,15 +161,19 @@ public abstract class FlatLaf
 			//   Settings > Ease of Access > Display > Make text bigger (100% - 225%)
 			desktopPropertyName = "win.messagebox.font";
 		} else if( SystemInfo.IS_LINUX ) {
+			// Linux/Gnome allows changing font in "Tweaks" app
+			desktopPropertyName = "gnome.Gtk/FontName";
+
 			// Linux/Gnome allows extra scaling and larger text:
 			//   Settings > Devices > Displays > Scale (100% or 200%)
 			//   Settings > Universal access > Large Text (off or on, 125%)
-			desktopPropertyName = "gnome.Xft/DPI";
+			//   "Tweaks" app > Fonts > Scaling Factor (0,5 - 3)
+			desktopPropertyName2 = "gnome.Xft/DPI";
 		}
 		if( desktopPropertyName != null ) {
 			desktopPropertyListener = e -> {
 				String propertyName = e.getPropertyName();
-				if( desktopPropertyName.equals( propertyName ) )
+				if( desktopPropertyName.equals( propertyName ) || propertyName.equals( desktopPropertyName2 ) )
 					reSetLookAndFeel();
 				else if( DESKTOPFONTHINTS.equals( propertyName ) ) {
 					if( UIManager.getLookAndFeel() instanceof FlatLaf ) {
@@ -179,6 +184,8 @@ public abstract class FlatLaf
 			};
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
 			toolkit.addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			if( desktopPropertyName2 != null )
+				toolkit.addPropertyChangeListener( desktopPropertyName2, desktopPropertyListener );
 			toolkit.addPropertyChangeListener( DESKTOPFONTHINTS, desktopPropertyListener );
 		}
 
@@ -201,8 +208,11 @@ public abstract class FlatLaf
 		if( desktopPropertyListener != null ) {
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
 			toolkit.removePropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			if( desktopPropertyName2 != null )
+				toolkit.removePropertyChangeListener( desktopPropertyName2, desktopPropertyListener );
 			toolkit.removePropertyChangeListener( DESKTOPFONTHINTS, desktopPropertyListener );
 			desktopPropertyName = null;
+			desktopPropertyName2 = null;
 			desktopPropertyListener = null;
 		}
 
