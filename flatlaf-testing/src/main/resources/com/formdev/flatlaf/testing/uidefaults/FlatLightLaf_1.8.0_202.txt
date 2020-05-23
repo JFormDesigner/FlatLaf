@@ -763,17 +763,22 @@ ScrollBar.buttonArrowColor     #666666    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.hoverThumbColor      #c3c3c3    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverThumbWithTrack  false
 ScrollBar.hoverTrackColor      #ededed    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.maximumThumbSize     4096,4096    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumThumbSize     8,8    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
 ScrollBar.thumb                #dcdcdc    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbArc             0
 ScrollBar.thumbDarkShadow      #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumbInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ScrollBar.thumbShadow          #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.track                #f5f5f5    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.trackArc             0
 ScrollBar.trackHighlight       #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.trackInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ScrollBar.width                10
 ScrollBarUI                    com.formdev.flatlaf.ui.FlatScrollBarUI
 

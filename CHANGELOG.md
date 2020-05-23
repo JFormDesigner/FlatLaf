@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- ScrollBar: Made styling more flexible by supporting insets and arc for track
+  and thumb. (issue #103)
 - Ubuntu Linux: Fixed poorly rendered font. (issue #105)
 
 

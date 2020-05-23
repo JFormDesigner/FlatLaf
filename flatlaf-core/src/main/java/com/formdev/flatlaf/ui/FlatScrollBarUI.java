@@ -19,6 +19,8 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -52,8 +54,13 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatScrollBarUI -->
  *
+ * @uiDefault ScrollBar.trackInsets					Insets
+ * @uiDefault ScrollBar.thumbInsets					Insets
+ * @uiDefault ScrollBar.trackArc					int
+ * @uiDefault ScrollBar.thumbArc					int
  * @uiDefault ScrollBar.hoverTrackColor				Color
  * @uiDefault ScrollBar.hoverThumbColor				Color
+ * @uiDefault ScrollBar.hoverThumbWithTrack			boolean
  * @uiDefault Component.arrowType					String	triangle (default) or chevron
  * @uiDefault ScrollBar.showButtons					boolean
  * @uiDefault ScrollBar.buttonArrowColor			Color
@@ -64,8 +71,13 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatScrollBarUI
 	extends BasicScrollBarUI
 {
+	protected Insets trackInsets;
+	protected Insets thumbInsets;
+	protected int trackArc;
+	protected int thumbArc;
 	protected Color hoverTrackColor;
 	protected Color hoverThumbColor;
+	protected boolean hoverThumbWithTrack;
 
 	protected boolean showButtons;
 	protected String arrowType;
@@ -102,8 +114,13 @@ public class FlatScrollBarUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		trackInsets = UIManager.getInsets( "ScrollBar.trackInsets" );
+		thumbInsets = UIManager.getInsets( "ScrollBar.thumbInsets" );
+		trackArc = UIManager.getInt( "ScrollBar.trackArc" );
+		thumbArc = UIManager.getInt( "ScrollBar.thumbArc" );
 		hoverTrackColor = UIManager.getColor( "ScrollBar.hoverTrackColor" );
 		hoverThumbColor = UIManager.getColor( "ScrollBar.hoverThumbColor" );
+		hoverThumbWithTrack = UIManager.getBoolean( "ScrollBar.hoverThumbWithTrack" );
 
 		showButtons = UIManager.getBoolean( "ScrollBar.showButtons" );
 		arrowType = UIManager.getString( "Component.arrowType" );
@@ -115,6 +132,8 @@ public class FlatScrollBarUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		trackInsets = null;
+		thumbInsets = null;
 		hoverTrackColor = null;
 		hoverThumbColor = null;
 
@@ -204,19 +223,15 @@ public class FlatScrollBarUI
 	}
 
 	@Override
-	protected void paintDecreaseHighlight( Graphics g ) {
-		// do not paint
-	}
-
-	@Override
-	protected void paintIncreaseHighlight( Graphics g ) {
-		// do not paint
+	public void paint( Graphics g, JComponent c ) {
+		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		super.paint( g, c );
 	}
 
 	@Override
 	protected void paintTrack( Graphics g, JComponent c, Rectangle trackBounds ) {
 		g.setColor( hoverTrack ? hoverTrackColor : trackColor );
-		g.fillRect( trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height );
+		paintTrackOrThumb( g, c, trackBounds, trackInsets, trackArc );
 	}
 
 	@Override
@@ -225,7 +240,30 @@ public class FlatScrollBarUI
 			return;
 
 		g.setColor( hoverThumb ? hoverThumbColor : thumbColor );
-		g.fillRect( thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height );
+		paintTrackOrThumb( g, c, thumbBounds, thumbInsets, thumbArc );
+	}
+
+	protected void paintTrackOrThumb( Graphics g, JComponent c, Rectangle bounds, Insets insets, int arc ) {
+		bounds = FlatUIUtils.subtractInsets( bounds, UIScale.scale( insets ) );
+
+		if( arc <= 0 ) {
+			// paint rectangle
+			g.fillRect( bounds.x, bounds.y, bounds.width, bounds.height );
+		} else {
+			// paint round rectangle
+			arc = Math.min( UIScale.scale( arc ), Math.min( bounds.width, bounds.height ) );
+			g.fillRoundRect( bounds.x, bounds.y, bounds.width, bounds.height, arc, arc );
+		}
+	}
+
+	@Override
+	protected void paintDecreaseHighlight( Graphics g ) {
+		// do not paint
+	}
+
+	@Override
+	protected void paintIncreaseHighlight( Graphics g ) {
+		// do not paint
 	}
 
 	@Override
@@ -276,7 +314,7 @@ public class FlatScrollBarUI
 			boolean inThumb = getThumbBounds().contains( x, y );
 			if( inTrack != hoverTrack || inThumb != hoverThumb ) {
 				hoverTrack = inTrack;
-				hoverThumb = inThumb;
+				hoverThumb = inThumb || (hoverThumbWithTrack && inTrack);
 				repaint();
 			}
 		}
