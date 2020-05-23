@@ -41,7 +41,7 @@ public class DerivedColor
 	}
 
 	public Color derive( Color baseColor ) {
-		if( hasBaseOfDefaultColor && baseOfDefaultColorRGB == baseColor.getRGB() )
+		if( (hasBaseOfDefaultColor && baseOfDefaultColorRGB == baseColor.getRGB()) || baseColor == this )
 			return this; // return default color
 
 		Color result = ColorFunctions.applyFunctions( baseColor, functions );

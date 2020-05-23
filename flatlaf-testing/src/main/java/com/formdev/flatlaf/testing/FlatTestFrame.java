@@ -348,13 +348,20 @@ public class FlatTestFrame
 			boolean explicit = explicitColorsCheckBox.isSelected();
 			ColorUIResource restoreColor = new ColorUIResource( Color.white );
 
+			LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+			boolean dark = (lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark());
+			Color magenta = dark ? Color.magenta.darker() : Color.magenta;
+			Color orange = dark ? Color.orange.darker() : Color.orange;
+			Color blue = dark ? Color.blue.darker() : Color.blue;
+			Color green = dark ? Color.green.darker() : Color.green;
+
 			updateComponentsRecur( content, (c, type) -> {
 				if( type == "view" || type == "tab" ) {
-					c.setForeground( explicit ? Color.magenta : restoreColor );
-					c.setBackground( explicit ? Color.orange : restoreColor );
+					c.setForeground( explicit ? magenta : restoreColor );
+					c.setBackground( explicit ? orange : restoreColor );
 				} else {
-					c.setForeground( explicit ? Color.blue : restoreColor );
-					c.setBackground( explicit ? Color.green : restoreColor );
+					c.setForeground( explicit ? blue : restoreColor );
+					c.setBackground( explicit ? green : restoreColor );
 				}
 			} );
 

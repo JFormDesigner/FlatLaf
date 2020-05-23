@@ -113,6 +113,10 @@ public class FlatArrowButton
 		this.yOffset = yOffset;
 	}
 
+	protected Color deriveHoverBackground( Color hoverBackground ) {
+		return hoverBackground;
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return scale( super.getPreferredSize() );
@@ -134,7 +138,7 @@ public class FlatArrowButton
 
 		// paint hover background
 		if( enabled && isHover() && hoverBackground != null ) {
-			g.setColor( hoverBackground );
+			g.setColor( deriveHoverBackground( hoverBackground ) );
 			g.fillRect( 0, 0, width, height );
 		}
 

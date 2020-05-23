@@ -610,15 +610,17 @@ class UIDefaultsLoader
 		}
 
 		// parse base color
-		ColorUIResource baseColor = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+		String resolvedColorStr = resolver.apply( colorStr );
+		ColorUIResource baseColor = (ColorUIResource) parseColorOrFunction( resolvedColorStr, resolver, reportError );
 
 		// apply this function to base color
 		Color newColor = ColorFunctions.applyFunctions( baseColor, function );
 
 		if( derived ) {
 			ColorFunction[] functions;
-			if( baseColor instanceof DerivedColor ) {
+			if( baseColor instanceof DerivedColor && resolvedColorStr == colorStr ) {
 				// if the base color is also derived, join the color functions
+				// but only if base color function is specified directly in this function
 				ColorFunction[] baseFunctions = ((DerivedColor)baseColor).getFunctions();
 				functions = new ColorFunction[baseFunctions.length + 1];
 				System.arraycopy( baseFunctions, 0, functions, 0, baseFunctions.length );

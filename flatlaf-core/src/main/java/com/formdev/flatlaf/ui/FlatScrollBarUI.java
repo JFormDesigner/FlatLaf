@@ -192,6 +192,11 @@ public class FlatScrollBarUI
 			arrowType, buttonArrowColor, buttonDisabledArrowColor, null, hoverTrackColor )
 		{
 			@Override
+			protected Color deriveHoverBackground( Color hoverBackground ) {
+				return getTrackColor( scrollbar, true ) ;
+			}
+
+			@Override
 			public Dimension getPreferredSize() {
 				if( isShowButtons() ) {
 					int w = UIScale.scale( scrollBarWidth );
@@ -231,7 +236,7 @@ public class FlatScrollBarUI
 
 	@Override
 	protected void paintTrack( Graphics g, JComponent c, Rectangle trackBounds ) {
-		g.setColor( hoverTrack ? hoverTrackColor : trackColor );
+		g.setColor( getTrackColor( c, hoverTrack ) );
 		paintTrackOrThumb( g, c, trackBounds, trackInsets, trackArc );
 	}
 
@@ -240,7 +245,7 @@ public class FlatScrollBarUI
 		if( thumbBounds.isEmpty() || !scrollbar.isEnabled() )
 			return;
 
-		g.setColor( hoverThumb ? hoverThumbColor : thumbColor );
+		g.setColor( getThumbColor( c, hoverThumb ) );
 		paintTrackOrThumb( g, c, thumbBounds, thumbInsets, thumbArc );
 	}
 
@@ -270,6 +275,17 @@ public class FlatScrollBarUI
 	@Override
 	protected void paintIncreaseHighlight( Graphics g ) {
 		// do not paint
+	}
+
+	protected Color getTrackColor( JComponent c, boolean hover ) {
+		Color trackColor = FlatUIUtils.deriveColor( this.trackColor, c.getBackground() );
+		return hover ? FlatUIUtils.deriveColor( hoverTrackColor, trackColor ) : trackColor;
+	}
+
+	protected Color getThumbColor( JComponent c, boolean hover ) {
+		Color trackColor = FlatUIUtils.deriveColor( this.trackColor, c.getBackground() );
+		Color thumbColor = FlatUIUtils.deriveColor( this.thumbColor, trackColor );
+		return hover ? FlatUIUtils.deriveColor( hoverThumbColor, thumbColor ) : thumbColor;
 	}
 
 	@Override

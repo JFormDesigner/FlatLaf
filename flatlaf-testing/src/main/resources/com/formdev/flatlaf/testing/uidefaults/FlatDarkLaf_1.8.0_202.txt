@@ -760,20 +760,20 @@ ScrollBar.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonArrowColor     #9a9da1    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.hoverThumbColor      #717678    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverThumbColor      #6e767a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
 ScrollBar.hoverThumbWithTrack  false
-ScrollBar.hoverTrackColor      #494c4f    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverTrackColor      #484c4f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(4%)
 ScrollBar.maximumThumbSize     4096,4096    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumThumbSize     8,8    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
-ScrollBar.thumb                #585c5e    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumb                #565c5f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
 ScrollBar.thumbArc             0
 ScrollBar.thumbDarkShadow      #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbHighlight       #242424    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ScrollBar.thumbShadow          #646464    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.track                #3f4244    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.track                #3e4244    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(1%)
 ScrollBar.trackArc             0
 ScrollBar.trackHighlight       #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.trackInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
@@ -783,7 +783,7 @@ ScrollBarUI                    com.formdev.flatlaf.ui.FlatScrollBarUI
 
 #---- ScrollPane ----
 
-ScrollPane.background          #3f4244    javax.swing.plaf.ColorUIResource [UI]
+ScrollPane.background          #3e4244    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(1%)
 ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
 ScrollPane.fillUpperCorner     true
 ScrollPane.font                [active] $defaultFont [UI]
@@ -1220,7 +1220,7 @@ laf.scaleFactor                [active] 1.0
 
 menu                           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 menuText                       #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-scrollbar                      #3f4244    javax.swing.plaf.ColorUIResource [UI]
+scrollbar                      #3e4244    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(1%)
 
 
 #---- swingx/TaskPane ----
