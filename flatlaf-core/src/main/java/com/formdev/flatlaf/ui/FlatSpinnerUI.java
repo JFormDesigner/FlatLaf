@@ -399,6 +399,10 @@ public class FlatSpinnerUI
 				case FlatClientProperties.COMPONENT_ROUND_RECT:
 					spinner.repaint();
 					break;
+
+				case FlatClientProperties.MINIMUM_WIDTH:
+					spinner.revalidate();
+					break;
 			}
 		}
 	}

@@ -135,6 +135,10 @@ public class FlatTextFieldUI
 			case FlatClientProperties.COMPONENT_ROUND_RECT:
 				c.repaint();
 				break;
+
+			case FlatClientProperties.MINIMUM_WIDTH:
+				c.revalidate();
+				break;
 		}
 	}
 

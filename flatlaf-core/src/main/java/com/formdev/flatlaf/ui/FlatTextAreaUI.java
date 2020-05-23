@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
@@ -80,6 +81,12 @@ public class FlatTextAreaUI
 
 		disabledBackground = null;
 		inactiveBackground = null;
+	}
+
+	@Override
+	protected void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+		FlatEditorPaneUI.propertyChange( getComponent(), e );
 	}
 
 	@Override

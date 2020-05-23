@@ -210,6 +210,7 @@ public class FlatButtonUI
 				break;
 
 			case BUTTON_TYPE:
+				b.revalidate();
 				b.repaint();
 				break;
 		}

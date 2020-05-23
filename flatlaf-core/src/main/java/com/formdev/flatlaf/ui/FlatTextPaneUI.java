@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
@@ -80,6 +81,12 @@ public class FlatTextPaneUI
 		super.uninstallDefaults();
 
 		getComponent().putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, oldHonorDisplayProperties );
+	}
+
+	@Override
+	protected void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+		FlatEditorPaneUI.propertyChange( getComponent(), e );
 	}
 
 	@Override
