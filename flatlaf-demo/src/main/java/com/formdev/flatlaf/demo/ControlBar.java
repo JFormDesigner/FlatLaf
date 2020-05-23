@@ -150,10 +150,14 @@ class ControlBar
 	}
 
 	private void updateInfoLabel() {
+		String javaVendor = System.getProperty( "java.vendor" );
+		if( "Oracle Corporation".equals( javaVendor ) )
+			javaVendor = null;
 		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
 		float userScaleFactor = UIScale.getUserScaleFactor();
 		Font font = UIManager.getFont( "Label.font" );
 		String newInfo = "(Java " + System.getProperty( "java.version" )
+			+ (javaVendor != null ? ("; " + javaVendor) : "")
 			+ (systemScaleFactor != 1 ? (";  system scale factor " + systemScaleFactor) : "")
 			+ (userScaleFactor != 1 ? (";  user scale factor " + userScaleFactor) : "")
 			+ (systemScaleFactor == 1 && userScaleFactor == 1 ? "; no scaling" : "")
