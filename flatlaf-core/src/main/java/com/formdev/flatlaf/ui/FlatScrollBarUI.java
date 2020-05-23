@@ -30,6 +30,7 @@ import java.util.Objects;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -244,6 +245,11 @@ public class FlatScrollBarUI
 	}
 
 	protected void paintTrackOrThumb( Graphics g, JComponent c, Rectangle bounds, Insets insets, int arc ) {
+		// rotate insets for horizontal orientation because they are given for vertical orientation
+		if( scrollbar.getOrientation() == JScrollBar.HORIZONTAL )
+			insets = new Insets( insets.right, insets.top, insets.left, insets.bottom );
+
+		// subtract insets from bounds
 		bounds = FlatUIUtils.subtractInsets( bounds, UIScale.scale( insets ) );
 
 		if( arc <= 0 ) {
