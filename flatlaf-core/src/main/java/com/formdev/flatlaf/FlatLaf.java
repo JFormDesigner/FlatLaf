@@ -419,7 +419,7 @@ public abstract class FlatLaf
 		// using StyleContext.getFont() here because it uses
 		// sun.font.FontUtilities.getCompositeFontUIResource()
 		// and creates a composite font that is able to display all Unicode characters
-		Font font = new StyleContext().getFont( family, style, size );
+		Font font = StyleContext.getDefaultStyleContext().getFont( family, style, size );
 		return (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 	}
 

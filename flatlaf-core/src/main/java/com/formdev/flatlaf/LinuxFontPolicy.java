@@ -75,9 +75,11 @@ class LinuxFontPolicy
 		}
 
 		// Ubuntu font is rendered poorly (except if running in JetBrains VM)
-		// --> use default Java font
-		if( family.startsWith( "Ubuntu" ) && !SystemInfo.IS_JETBRAINS_JVM )
-			family = "sans";
+		// --> use Liberation Sans font
+		if( family.startsWith( "Ubuntu" ) &&
+			!SystemInfo.IS_JETBRAINS_JVM &&
+			!Boolean.parseBoolean( System.getProperty( "flatlaf.useUbuntuFont" ) ) )
+		  family = "Liberation Sans";
 
 		// scale font size
 		double dsize = size * getGnomeFontScale();

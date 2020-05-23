@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
@@ -83,7 +84,7 @@ class DemoFrame
 		String fontFamily = e.getActionCommand();
 
 		Font font = UIManager.getFont( "defaultFont" );
-		Font newFont = new Font( fontFamily, font.getStyle(), font.getSize() );
+		Font newFont = StyleContext.getDefaultStyleContext().getFont( fontFamily, font.getStyle(), font.getSize() );
 		UIManager.put( "defaultFont", newFont );
 
 		FlatLaf.updateUI();
@@ -140,8 +141,9 @@ class DemoFrame
 		// add font families
 		fontMenu.addSeparator();
 		ArrayList<String> families = new ArrayList<>( Arrays.asList(
-			"Arial", "Comic Sans MS", "Courier New", "DejaVu Sans", "Dialog", "Monospaced",
-			"Noto Sans", "Roboto", "SansSerif", "Segoe UI", "Serif", "Tahoma", "Ubuntu", "Verdana" ) );
+			"Arial", "Cantarell", "Comic Sans MS", "Courier New", "DejaVu Sans",
+			"Dialog", "Liberation Sans", "Monospaced", "Noto Sans", "Roboto",
+			"SansSerif", "Segoe UI", "Serif", "Tahoma", "Ubuntu", "Verdana" ) );
 		if( !families.contains( currentFamily ) )
 			families.add( currentFamily );
 		families.sort( String.CASE_INSENSITIVE_ORDER );
