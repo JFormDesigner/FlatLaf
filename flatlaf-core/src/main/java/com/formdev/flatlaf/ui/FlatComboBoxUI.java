@@ -39,6 +39,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.InputMap;
 import javax.swing.JButton;
@@ -46,6 +47,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.LookAndFeel;
@@ -255,16 +257,27 @@ public class FlatComboBoxUI
 	}
 
 	@Override
+	protected ComboBoxEditor createEditor() {
+		ComboBoxEditor comboBoxEditor = super.createEditor();
+
+		Component editor = comboBoxEditor.getEditorComponent();
+		if( editor instanceof JTextField ) {
+			JTextField textField = (JTextField) editor;
+
+			// assign a non-null and non-javax.swing.plaf.UIResource border to the text field,
+			// otherwise it is replaced with default text field border when switching LaF
+			// because javax.swing.plaf.basic.BasicComboBoxEditor.BorderlessTextField.setBorder()
+			// uses "border instanceof javax.swing.plaf.basic.BasicComboBoxEditor.UIResource"
+			// instead of "border instanceof javax.swing.plaf.UIResource"
+			textField.setBorder( BorderFactory.createEmptyBorder() );
+		}
+
+		return comboBoxEditor;
+	}
+
+	@Override
 	protected void configureEditor() {
 		super.configureEditor();
-
-		// assign a non-javax.swing.plaf.UIResource border to the text field,
-		// otherwise it is replaced with default text field border when switching LaF
-		// because javax.swing.plaf.basic.BasicComboBoxEditor.BorderlessTextField.setBorder()
-		// uses "border instanceof javax.swing.plaf.basic.BasicComboBoxEditor.UIResource"
-		// instead of "border instanceof javax.swing.plaf.UIResource"
-		if( editor instanceof JTextComponent )
-			((JTextComponent)editor).setBorder( BorderFactory.createEmptyBorder() );
 
 		// explicitly make non-opaque
 		if( editor instanceof JComponent )

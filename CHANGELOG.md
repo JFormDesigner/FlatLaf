@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 - ScrollBar: Made styling more flexible by supporting insets and arc for track
   and thumb. (issue #103)
+- ComboBox: Support custom borders in combobox editors. (issue #102)
 - Ubuntu Linux: Fixed poorly rendered font. (issue #105)
 
 
