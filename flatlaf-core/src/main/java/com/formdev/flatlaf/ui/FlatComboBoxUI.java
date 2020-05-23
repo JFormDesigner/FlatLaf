@@ -78,6 +78,8 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatComboBoxUI -->
  *
+ * @uiDefault ComboBox.minimumWidth				int
+ * @uiDefault ComboBox.editorColumns			int
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
@@ -96,6 +98,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatComboBoxUI
 	extends BasicComboBoxUI
 {
+	protected int minimumWidth;
+	protected int editorColumns;
 	protected String arrowType;
 	protected boolean isIntelliJTheme;
 	protected Color borderColor;
@@ -148,6 +152,8 @@ public class FlatComboBoxUI
 
 		LookAndFeel.installProperty( comboBox, "opaque", false );
 
+		minimumWidth = UIManager.getInt( "ComboBox.minimumWidth" );
+		editorColumns = UIManager.getInt( "ComboBox.editorColumns" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
@@ -247,6 +253,8 @@ public class FlatComboBoxUI
 					editor.repaint();
 				else if( FlatClientProperties.COMPONENT_ROUND_RECT.equals( propertyName ) )
 					comboBox.repaint();
+				else if( FlatClientProperties.MINIMUM_WIDTH.equals( propertyName ) )
+					comboBox.revalidate();
 			}
 		};
 	}
@@ -263,6 +271,7 @@ public class FlatComboBoxUI
 		Component editor = comboBoxEditor.getEditorComponent();
 		if( editor instanceof JTextField ) {
 			JTextField textField = (JTextField) editor;
+			textField.setColumns( editorColumns );
 
 			// assign a non-null and non-javax.swing.plaf.UIResource border to the text field,
 			// otherwise it is replaced with default text field border when switching LaF
@@ -412,6 +421,13 @@ public class FlatComboBoxUI
 	}
 
 	@Override
+	public Dimension getMinimumSize( JComponent c ) {
+		Dimension minimumSize = super.getMinimumSize( c );
+		minimumSize.width = Math.max( minimumSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) );
+		return minimumSize;
+	}
+
+	@Override
 	protected Dimension getDefaultSize() {
 		@SuppressWarnings( "unchecked" )
 		ListCellRenderer<Object> renderer = comboBox.getRenderer();
@@ -430,6 +446,18 @@ public class FlatComboBoxUI
 		uninstallCellPaddingBorder( renderer );
 
 		Dimension displaySize = super.getDisplaySize();
+
+		// recalculate width without hardcoded 100 under special conditions
+		if( displaySize.width == 100 + padding.left + padding.right &&
+			comboBox.isEditable() &&
+			comboBox.getItemCount() == 0 &&
+			comboBox.getPrototypeDisplayValue() == null )
+		{
+			int width = getDefaultSize().width;
+			width = Math.max( width, editor.getPreferredSize().width );
+			width += padding.left + padding.right;
+			displaySize = new Dimension( width, displaySize.height );
+		}
 
 		uninstallCellPaddingBorder( renderer );
 		return displaySize;

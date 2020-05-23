@@ -186,9 +186,11 @@ ComboBox.buttonHoverArrowColor #999999    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonShadow          #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.disabledBackground    #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.disabledForeground    #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.editorColumns         0
 ComboBox.font                  [active] $defaultFont [UI]
 ComboBox.foreground            #000000    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.isEnterSelectablePopup false
+ComboBox.minimumWidth          72
 ComboBox.noActionOnKeyNavigation false
 ComboBox.padding               2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 ComboBox.selectionBackground   #2675bf    javax.swing.plaf.ColorUIResource [UI]

@@ -99,7 +99,8 @@ public interface FlatClientProperties
 	/**
 	 * Specifies minimum width of a component.
 	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton} and {@link javax.swing.text.JTextComponent}<br>
+	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton},
+	 * {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner} and {@link javax.swing.text.JTextComponent}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
 	 */
 	String MINIMUM_WIDTH = "JComponent.minimumWidth";
