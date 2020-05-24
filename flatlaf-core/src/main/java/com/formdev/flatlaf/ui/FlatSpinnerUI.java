@@ -141,6 +141,7 @@ public class FlatSpinnerUI
 		super.installListeners();
 
 		addEditorFocusListener( spinner.getEditor() );
+		spinner.addFocusListener( getHandler() );
 		spinner.addPropertyChangeListener( getHandler() );
 	}
 
@@ -149,6 +150,7 @@ public class FlatSpinnerUI
 		super.uninstallListeners();
 
 		removeEditorFocusListener( spinner.getEditor() );
+		spinner.removeFocusListener( getHandler() );
 		spinner.removePropertyChangeListener( getHandler() );
 
 		handler = null;
@@ -206,7 +208,7 @@ public class FlatSpinnerUI
 		}
 	}
 
-	private JTextField getEditorTextField( JComponent editor ) {
+	private static JTextField getEditorTextField( JComponent editor ) {
 		return editor instanceof JSpinner.DefaultEditor
 			? ((JSpinner.DefaultEditor)editor).getTextField()
 			: null;
@@ -379,6 +381,13 @@ public class FlatSpinnerUI
 		@Override
 		public void focusGained( FocusEvent e ) {
 			spinner.repaint();
+
+			// if spinner gained focus, transfer it to the editor text field
+			if( e.getComponent() == spinner ) {
+				JTextField textField = getEditorTextField( spinner.getEditor() );
+				if( textField != null )
+					textField.requestFocusInWindow();
+			}
 		}
 
 		@Override

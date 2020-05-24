@@ -178,6 +178,9 @@ public class FlatBorder
 			Component editorComponent = ((JComboBox<?>)c).getEditor().getEditorComponent();
 			return (editorComponent != null) ? FlatUIUtils.isPermanentFocusOwner( editorComponent ) : false;
 		} else if( c instanceof JSpinner ) {
+			if( FlatUIUtils.isPermanentFocusOwner( c ) )
+				return true;
+
 			JComponent editor = ((JSpinner)c).getEditor();
 			if( editor instanceof JSpinner.DefaultEditor ) {
 				JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
