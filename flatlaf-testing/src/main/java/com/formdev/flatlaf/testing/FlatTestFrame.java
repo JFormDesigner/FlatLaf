@@ -149,6 +149,7 @@ public class FlatTestFrame
 		if( scaleFactor != null )
 			scaleFactorComboBox.setSelectedItem( scaleFactor );
 
+		updateFontSizeSpinner();
 		updateSizeVariantComboBox();
 
 		// register F1, F2, ... keys to switch to Light, Dark or other LaFs
@@ -167,6 +168,21 @@ public class FlatTestFrame
 			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
 		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( "F11", NimbusLookAndFeel.class.getName() );
+
+		// register Ctrl+0, Ctrl++ and Ctrl+- to change font size
+		int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> restoreFont(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_0, menuShortcutKeyMask ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> incrFont(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_PLUS, menuShortcutKeyMask ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> decrFont(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_MINUS, menuShortcutKeyMask ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
 		// register ESC key to close frame
 		((JComponent)getContentPane()).registerKeyboardAction(
@@ -206,6 +222,9 @@ public class FlatTestFrame
 
 					// enable/disable scale factor combobox
 					updateScaleFactorComboBox();
+
+					// enable/disable font size spinner
+					updateFontSizeSpinner();
 
 					// show/hide size variant combobox
 					updateSizeVariantComboBox();
@@ -299,14 +318,27 @@ public class FlatTestFrame
 	private void applyLookAndFeel( String lafClassName, IntelliJTheme theme, boolean pack ) {
 		EventQueue.invokeLater( () -> {
 			try {
+				// clear custom default font before switching to other LaF
+				Font defaultFont = null;
+				if( UIManager.getLookAndFeel() instanceof FlatLaf ) {
+					Font font = UIManager.getFont( "defaultFont" );
+					if( font != UIManager.getLookAndFeelDefaults().getFont( "defaultFont" ) )
+						defaultFont = font;
+				}
+				UIManager.put( "defaultFont", null );
+
 				// change look and feel
 				if( theme != null )
 					UIManager.setLookAndFeel( IntelliJTheme.createLaf( theme ) );
 				else
 					UIManager.setLookAndFeel( lafClassName );
 
+				// restore custom default font when switched to other FlatLaf LaF
+				if( defaultFont != null && UIManager.getLookAndFeel() instanceof FlatLaf )
+					UIManager.put( "defaultFont", defaultFont );
+
 				// update all components
-				FlatLaf.updateUI();
+				updateUI2();
 
 				// increase size of frame if necessary
 				if( pack )
@@ -341,6 +373,25 @@ public class FlatTestFrame
 				ex.printStackTrace();
 			}
 		} );
+	}
+
+	private static void updateUI2() {
+		KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		Component permanentFocusOwner = keyboardFocusManager.getPermanentFocusOwner();
+		JSpinner spinner = (permanentFocusOwner != null)
+			? (JSpinner) SwingUtilities.getAncestorOfClass( JSpinner.class, permanentFocusOwner )
+			: null;
+
+		FlatLaf.updateUI();
+
+		if( spinner != null && keyboardFocusManager.getPermanentFocusOwner() == null ) {
+			JComponent editor = spinner.getEditor();
+			JTextField textField = (editor instanceof JSpinner.DefaultEditor)
+				? ((JSpinner.DefaultEditor)editor).getTextField()
+				: null;
+			if( textField != null )
+				textField.requestFocusInWindow();
+		}
 	}
 
 	private void explicitColorsChanged() {
@@ -425,6 +476,9 @@ public class FlatTestFrame
 			DemoPrefs.getState().remove( KEY_SCALE_FACTOR );
 		}
 
+		// always clear default font because a new font size is computed based on the scale factor
+		UIManager.put( "defaultFont", null );
+
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
 		IntelliJTheme theme = (lookAndFeel instanceof IntelliJTheme.ThemeLaf)
 			? ((IntelliJTheme.ThemeLaf)lookAndFeel).getTheme()
@@ -434,6 +488,43 @@ public class FlatTestFrame
 
 	private void updateScaleFactorComboBox() {
 		scaleFactorComboBox.setEnabled( UIManager.getLookAndFeel() instanceof FlatLaf );
+	}
+
+	private void restoreFont() {
+		fontSizeSpinner.setValue( 0 );
+	}
+
+	private void incrFont() {
+		fontSizeSpinner.setValue( fontSizeSpinner.getNextValue() );
+	}
+
+	private void decrFont() {
+		fontSizeSpinner.setValue( fontSizeSpinner.getPreviousValue() );
+	}
+
+	private void fontSizeChanged() {
+		if( !(UIManager.getLookAndFeel() instanceof FlatLaf) )
+			return;
+
+		Object value = fontSizeSpinner.getValue();
+		int newFontSize = (value instanceof Integer) ? (Integer) value : 0;
+
+		Font font = UIManager.getFont( "defaultFont" );
+		if( font == null || font.getSize() == newFontSize )
+			return;
+
+		Font newFont = (newFontSize >= 8) ? font.deriveFont( (float) newFontSize ) : null;
+		UIManager.put( "defaultFont", newFont );
+
+		if( newFont == null )
+			updateFontSizeSpinner();
+
+		updateUI2();
+	}
+
+	private void updateFontSizeSpinner() {
+		fontSizeSpinner.setEnabled( UIManager.getLookAndFeel() instanceof FlatLaf );
+		fontSizeSpinner.setValue( UIManager.getFont( "Label.font" ).getSize() );
 	}
 
 	private void sizeVariantChanged() {
@@ -517,6 +608,7 @@ public class FlatTestFrame
 		buttonBar = new JPanel();
 		lookAndFeelComboBox = new LookAndFeelsComboBox();
 		scaleFactorComboBox = new JComboBox<>();
+		fontSizeSpinner = new JSpinner();
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
 		inspectCheckBox = new JCheckBox();
@@ -562,6 +654,7 @@ public class FlatTestFrame
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
+					"[fill]" +
 					"[grow,fill]" +
 					"[button,fill]",
 					// rows
@@ -590,42 +683,48 @@ public class FlatTestFrame
 				scaleFactorComboBox.addActionListener(e -> scaleFactorChanged());
 				buttonBar.add(scaleFactorComboBox, "cell 1 0");
 
+				//---- fontSizeSpinner ----
+				fontSizeSpinner.putClientProperty("JComponent.minimumWidth", 50);
+				fontSizeSpinner.setModel(new SpinnerNumberModel(0, 0, null, 1));
+				fontSizeSpinner.addChangeListener(e -> fontSizeChanged());
+				buttonBar.add(fontSizeSpinner, "cell 2 0");
+
 				//---- rightToLeftCheckBox ----
 				rightToLeftCheckBox.setText("right-to-left");
 				rightToLeftCheckBox.setMnemonic('R');
 				rightToLeftCheckBox.addActionListener(e -> rightToLeftChanged());
-				buttonBar.add(rightToLeftCheckBox, "cell 2 0");
+				buttonBar.add(rightToLeftCheckBox, "cell 3 0");
 
 				//---- enabledCheckBox ----
 				enabledCheckBox.setText("enabled");
 				enabledCheckBox.setMnemonic('E');
 				enabledCheckBox.setSelected(true);
 				enabledCheckBox.addActionListener(e -> enabledChanged());
-				buttonBar.add(enabledCheckBox, "cell 3 0");
+				buttonBar.add(enabledCheckBox, "cell 4 0");
 
 				//---- inspectCheckBox ----
 				inspectCheckBox.setText("inspect");
 				inspectCheckBox.setMnemonic('I');
 				inspectCheckBox.addActionListener(e -> inspectChanged());
-				buttonBar.add(inspectCheckBox, "cell 4 0");
+				buttonBar.add(inspectCheckBox, "cell 5 0");
 
 				//---- explicitColorsCheckBox ----
 				explicitColorsCheckBox.setText("explicit colors");
 				explicitColorsCheckBox.setMnemonic('X');
 				explicitColorsCheckBox.addActionListener(e -> explicitColorsChanged());
-				buttonBar.add(explicitColorsCheckBox, "cell 5 0");
+				buttonBar.add(explicitColorsCheckBox, "cell 6 0");
 
 				//---- backgroundCheckBox ----
 				backgroundCheckBox.setText("background");
 				backgroundCheckBox.setMnemonic('B');
 				backgroundCheckBox.addActionListener(e -> backgroundChanged());
-				buttonBar.add(backgroundCheckBox, "cell 6 0");
+				buttonBar.add(backgroundCheckBox, "cell 7 0");
 
 				//---- opaqueTriStateCheckBox ----
 				opaqueTriStateCheckBox.setText("opaque");
 				opaqueTriStateCheckBox.setMnemonic('O');
 				opaqueTriStateCheckBox.addActionListener(e -> opaqueChanged());
-				buttonBar.add(opaqueTriStateCheckBox, "cell 7 0");
+				buttonBar.add(opaqueTriStateCheckBox, "cell 8 0");
 
 				//---- sizeVariantComboBox ----
 				sizeVariantComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -636,11 +735,11 @@ public class FlatTestFrame
 				}));
 				sizeVariantComboBox.setSelectedIndex(2);
 				sizeVariantComboBox.addActionListener(e -> sizeVariantChanged());
-				buttonBar.add(sizeVariantComboBox, "cell 8 0");
+				buttonBar.add(sizeVariantComboBox, "cell 9 0");
 
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 10 0");
+				buttonBar.add(closeButton, "cell 11 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 			dialogPane.add(themesPanel, BorderLayout.EAST);
@@ -655,6 +754,7 @@ public class FlatTestFrame
 	private JPanel buttonBar;
 	private LookAndFeelsComboBox lookAndFeelComboBox;
 	private JComboBox<String> scaleFactorComboBox;
+	private JSpinner fontSizeSpinner;
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
 	private JCheckBox inspectCheckBox;
