@@ -82,7 +82,7 @@ public class DemoPrefs
 				} else
 					UIManager.setLookAndFeel( lafClassName );
 			}
-		} catch( Exception ex ) {
+		} catch( Throwable ex ) {
 			ex.printStackTrace();
 
 			// fallback
