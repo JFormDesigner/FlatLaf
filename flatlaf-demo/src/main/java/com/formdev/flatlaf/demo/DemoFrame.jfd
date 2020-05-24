@@ -303,19 +303,19 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "restoreFontMenuItem"
 						"text": "Restore Font"
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 48, 130, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 48, 4226, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "restoreFont", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "incrFontMenuItem"
 						"text": "Increase Font Size"
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 521, 130, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 521, 4226, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "incrFont", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "decrFontMenuItem"
 						"text": "Decrease Font Size"
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 45, 130, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 45, 4226, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decrFont", false ) )
 					} )
 				} )

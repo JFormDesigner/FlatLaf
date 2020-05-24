@@ -431,19 +431,19 @@ class DemoFrame
 
 				//---- restoreFontMenuItem ----
 				restoreFontMenuItem.setText("Restore Font");
-				restoreFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, KeyEvent.CTRL_MASK));
+				restoreFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				restoreFontMenuItem.addActionListener(e -> restoreFont());
 				fontMenu.add(restoreFontMenuItem);
 
 				//---- incrFontMenuItem ----
 				incrFontMenuItem.setText("Increase Font Size");
-				incrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, KeyEvent.CTRL_MASK));
+				incrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				incrFontMenuItem.addActionListener(e -> incrFont());
 				fontMenu.add(incrFontMenuItem);
 
 				//---- decrFontMenuItem ----
 				decrFontMenuItem.setText("Decrease Font Size");
-				decrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_MASK));
+				decrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				decrFontMenuItem.addActionListener(e -> decrFont());
 				fontMenu.add(decrFontMenuItem);
 			}
