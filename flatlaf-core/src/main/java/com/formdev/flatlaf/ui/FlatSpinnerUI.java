@@ -367,12 +367,14 @@ public class FlatSpinnerUI
 			if( editor != null )
 				editor.setBounds( FlatUIUtils.subtractInsets( editorRect, padding ) );
 
-			int nextHeight = Math.round( buttonsRect.height / 2f );
+			int nextHeight = (buttonsRect.height / 2) + (buttonsRect.height % 2); // round up
 			if( nextButton != null )
 				nextButton.setBounds( buttonsRect.x, buttonsRect.y, buttonsRect.width, nextHeight );
 			if( previousButton != null ) {
-				previousButton.setBounds( buttonsRect.x, buttonsRect.y + nextHeight,
-					buttonsRect.width, buttonsRect.height - nextHeight );
+				// for precise layout of arrows, the "previous" button has the same height
+				// as the "next" button and may overlap on uneven buttonsRect.height
+				int previousY = buttonsRect.y + buttonsRect.height - nextHeight;
+				previousButton.setBounds( buttonsRect.x, previousY, buttonsRect.width, nextHeight );
 			}
 		}
 

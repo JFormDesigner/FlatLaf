@@ -149,8 +149,15 @@ public class FlatArrowButton
 		int h = scale( (arrowWidth / 2) + (chevron ? 0 : 1) );
 		int rw = vert ? w : h;
 		int rh = vert ? h : w;
-		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) );
-		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) );
+
+		// Adding -/+0.35 before rounding tends move up NORTH arrows and move down SOUTH arrows.
+		// This makes top margin of NORTH arrow equal to bottom margin of SOUTH arrow.
+		float rd = 0.35f;
+		float xrd = vert ? 0 : (direction == WEST ? -rd : rd);
+		float yrd = vert ? (direction == NORTH ? -rd : rd) : 0;
+
+		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) + xrd );
+		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) + yrd );
 
 		// optimization for small chevron arrows (e.g. OneTouchButtons in SplitPane)
 		if( x + rw >= width && x > 0 )
@@ -160,7 +167,7 @@ public class FlatArrowButton
 
 		// move arrow for round borders
 		Container parent = getParent();
-		if( parent instanceof JComponent && FlatUIUtils.hasRoundBorder( (JComponent) parent ) )
+		if( vert && parent instanceof JComponent && FlatUIUtils.hasRoundBorder( (JComponent) parent ) )
 			x -= scale( parent.getComponentOrientation().isLeftToRight() ? 1 : -1 );
 
 		// paint arrow
@@ -168,6 +175,9 @@ public class FlatArrowButton
 			? (isHover() && hoverForeground != null ? hoverForeground : foreground)
 			: disabledForeground );
 		g.translate( x, y );
+/*debug
+		debugPaint( g2, vert, w, h );
+debug*/
 		Shape arrowShape = createArrowShape( direction, chevron, w, h );
 		if( chevron ) {
 			g2.setStroke( new BasicStroke( scale( 1f ) ) );
@@ -188,4 +198,22 @@ public class FlatArrowButton
 			default:	return new Path2D.Float();
 		}
 	}
+
+/*debug
+	private void debugPaint( Graphics g, boolean vert, int w, int h ) {
+		Color oldColor = g.getColor();
+		g.setColor( Color.red );
+		g.drawRect( 0, 0, (vert ? w : h) - 1, (vert ? h : w) - 1 );
+
+		int xy1 = -2;
+		int xy2 = h + 1;
+		for( int i = 0; i < 20; i++ ) {
+			g.drawRect( vert ? 0 : xy1, vert ? xy1 : 0, 0, 0 );
+			g.drawRect( vert ? 0 : xy2, vert ? xy2 : 0, 0, 0 );
+			xy1 -= 2;
+			xy2 += 2;
+		}
+		g.setColor( oldColor );
+	}
+debug*/
 }
