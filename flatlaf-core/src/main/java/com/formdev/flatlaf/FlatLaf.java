@@ -111,6 +111,11 @@ public abstract class FlatLaf
 	public abstract boolean isDark();
 
 	@Override
+	public boolean getSupportsWindowDecorations() {
+		return SystemInfo.IS_WINDOWS;
+	}
+
+	@Override
 	public boolean isNativeLookAndFeel() {
 		return false;
 	}

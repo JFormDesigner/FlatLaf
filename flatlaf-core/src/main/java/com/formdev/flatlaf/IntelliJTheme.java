@@ -492,6 +492,10 @@ public class IntelliJTheme
 		// Slider
 		uiKeyMapping.put( "Slider.trackWidth", "" ); // ignore (used in Material Theme UI Lite)
 
+		// TitlePane
+		uiKeyMapping.put( "TitlePane.infoForeground",         "TitlePane.foreground" );
+		uiKeyMapping.put( "TitlePane.inactiveInfoForeground", "TitlePane.inactiveForeground" );
+
 		for( Map.Entry<String, String> e : uiKeyMapping.entrySet() )
 			uiKeyInverseMapping.put( e.getValue(), e.getKey() );
 

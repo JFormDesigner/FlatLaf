@@ -1,0 +1,336 @@
+JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[left]para"
+			"$rowConstraints": "para[][][][][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "menuBarCheckBox"
+				"text": "menu bar"
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuBarChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "resizableCheckBox"
+				"text": "resizable"
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "resizableChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Style:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[fill]"
+				"$rowConstraints": "[][][][][][][][][]"
+				"$layoutConstraints": "ltr,insets 0,hidemode 3,gap 0 0"
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "styleNoneRadioButton"
+					"text": "none"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "styleFrameRadioButton"
+					"text": "frame"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "stylePlainRadioButton"
+					"text": "plain dialog"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "styleInfoRadioButton"
+					"text": "info dialog"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "styleErrorRadioButton"
+					"text": "error dialog"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "styleQuestionRadioButton"
+					"text": "question dialog"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "styleWarningRadioButton"
+					"text": "warning dialog"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 6"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "styleColorChooserRadioButton"
+					"text": "color chooser dialog"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 7"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "styleFileChooserRadioButton"
+					"text": "file chooser dialog"
+					"$buttonGroup": new FormReference( "styleButtonGroup" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decorationStyleChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 8"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "openDialogButton"
+				"text": "Open Dialog"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDialog", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 450, 380 )
+		} )
+		add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+			name: "menuBar"
+			auxiliary() {
+				"JavaCodeGenerator.variableLocal": false
+			}
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "fileMenu"
+				"text": "File"
+				"mnemonic": 70
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "newMenuItem"
+					"text": "New"
+					"mnemonic": 78
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "openMenuItem"
+					"text": "Open"
+					"mnemonic": 79
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator2"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "closeMenuItem"
+					"text": "Close"
+					"mnemonic": 67
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "closeMenuItem2"
+					"text": "Close All"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator1"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "exitMenuItem"
+					"text": "Exit"
+					"mnemonic": 88
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "editMenu"
+				"text": "Edit"
+				"mnemonic": 69
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "undoMenuItem"
+					"text": "Undo"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 90, 4226, false )
+					"mnemonic": 85
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "redoMenuItem"
+					"text": "Redo"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 89, 4226, false )
+					"mnemonic": 82
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator4"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "cutMenuItem"
+					"text": "Cut"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 88, 4226, false )
+					"mnemonic": 67
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "copyMenuItem"
+					"text": "Copy"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 67, 4226, false )
+					"mnemonic": 79
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "pasteMenuItem"
+					"text": "Paste"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 86, 4226, false )
+					"mnemonic": 80
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator3"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "deleteMenuItem"
+					"text": "Delete"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 127, 0, false )
+					"mnemonic": 68
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "viewMenu"
+				"text": "View"
+				"mnemonic": 86
+				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+					name: "checkBoxMenuItem1"
+					"text": "Show Toolbar"
+					"selected": true
+					"mnemonic": 84
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu1"
+					"text": "Show View"
+					"mnemonic": 86
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "subViewsMenu"
+						"text": "Sub Views"
+						"mnemonic": 83
+						add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+							name: "subSubViewsMenu"
+							"text": "Sub sub Views"
+							"mnemonic": 85
+							add( new FormComponent( "javax.swing.JMenuItem" ) {
+								name: "errorLogViewMenuItem"
+								"text": "Error Log"
+								"mnemonic": 69
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+							} )
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "searchViewMenuItem"
+							"text": "Search"
+							"mnemonic": 83
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "projectViewMenuItem"
+						"text": "Project"
+						"mnemonic": 80
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "structureViewMenuItem"
+						"text": "Structure"
+						"mnemonic": 84
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "propertiesViewMenuItem"
+						"text": "Properties"
+						"mnemonic": 79
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+					} )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "helpMenu"
+				"text": "Help"
+				"mnemonic": 72
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "aboutMenuItem"
+					"text": "About"
+					"mnemonic": 65
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 410 )
+			"size": new java.awt.Dimension( 255, 30 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "styleButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 450 )
+		} )
+	}
+}
