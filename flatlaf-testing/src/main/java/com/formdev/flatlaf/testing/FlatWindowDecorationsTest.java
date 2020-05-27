@@ -17,7 +17,11 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.*;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 
@@ -39,9 +43,24 @@ public class FlatWindowDecorationsTest
 //			frame.setUndecorated( true );
 //			frame.getRootPane().setWindowDecorationStyle( JRootPane.FRAME );
 
+			Class<?> cls = FlatWindowDecorationsTest.class;
+			List<Image> images = Arrays.asList(
+				new ImageIcon( cls.getResource( "/com/formdev/flatlaf/testing/test16.png" ) ).getImage(),
+				new ImageIcon( cls.getResource( "/com/formdev/flatlaf/testing/test24.png" ) ).getImage(),
+				new ImageIcon( cls.getResource( "/com/formdev/flatlaf/testing/test32.png" ) ).getImage(),
+				new ImageIcon( cls.getResource( "/com/formdev/flatlaf/testing/test48.png" ) ).getImage(),
+				new ImageIcon( cls.getResource( "/com/formdev/flatlaf/testing/test64.png" ) ).getImage(),
+				new ImageIcon( cls.getResource( "/com/formdev/flatlaf/testing/test128.png" ) ).getImage()
+			);
+			// shuffle to test whether FlatLaf chooses the right size
+			Collections.shuffle( images );
+			frame.setIconImages( images );
+
 			frame.showFrame( FlatWindowDecorationsTest::new, panel -> ((FlatWindowDecorationsTest)panel).menuBar );
 		} );
 	}
+
+	private List<Image> images;
 
 	FlatWindowDecorationsTest() {
 		initComponents();
@@ -50,6 +69,14 @@ public class FlatWindowDecorationsTest
 	@Override
 	public void addNotify() {
 		super.addNotify();
+
+		Window window = SwingUtilities.windowForComponent( this );
+		menuBarCheckBox.setEnabled( window instanceof JFrame );
+
+		boolean windowHasIcons = (window != null && !window.getIconImages().isEmpty());
+		iconNoneRadioButton.setEnabled( windowHasIcons );
+		iconTestAllRadioButton.setEnabled( windowHasIcons );
+		iconTestRandomRadioButton.setEnabled( windowHasIcons );
 
 		JRootPane rootPane = getWindowRootPane();
 		if( rootPane != null ) {
@@ -89,7 +116,12 @@ public class FlatWindowDecorationsTest
 	}
 
 	private void openDialog() {
-		JOptionPane.showMessageDialog( this, new FlatWindowDecorationsTest() );
+		Window owner = SwingUtilities.windowForComponent( this );
+		JDialog dialog = new JDialog( owner, "Dialog", ModalityType.APPLICATION_MODAL );
+		dialog.add( new FlatWindowDecorationsTest() );
+		dialog.pack();
+		dialog.setLocationRelativeTo( this );
+		dialog.setVisible( true );
 	}
 
 	private void decorationStyleChanged() {
@@ -118,6 +150,22 @@ public class FlatWindowDecorationsTest
 			rootPane.setWindowDecorationStyle( style );
 	}
 
+	private void iconChanged() {
+		Window window = SwingUtilities.windowForComponent( this );
+		if( window == null )
+			return;
+
+		if( images == null )
+			images = window.getIconImages();
+
+		if( iconNoneRadioButton.isSelected() )
+			window.setIconImage( null );
+		else if( iconTestAllRadioButton.isSelected() )
+			window.setIconImages( images );
+		else if( iconTestRandomRadioButton.isSelected() )
+			window.setIconImage( images.get( (int) (Math.random() * images.size()) ) );
+	}
+
 	private JRootPane getWindowRootPane() {
 		Window window = SwingUtilities.windowForComponent( this );
 		if( window instanceof JFrame )
@@ -132,6 +180,7 @@ public class FlatWindowDecorationsTest
 		menuBarCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		JLabel label1 = new JLabel();
+		JLabel label2 = new JLabel();
 		JPanel panel1 = new JPanel();
 		styleNoneRadioButton = new JRadioButton();
 		styleFrameRadioButton = new JRadioButton();
@@ -142,6 +191,10 @@ public class FlatWindowDecorationsTest
 		styleWarningRadioButton = new JRadioButton();
 		styleColorChooserRadioButton = new JRadioButton();
 		styleFileChooserRadioButton = new JRadioButton();
+		JPanel panel2 = new JPanel();
+		iconNoneRadioButton = new JRadioButton();
+		iconTestAllRadioButton = new JRadioButton();
+		iconTestRandomRadioButton = new JRadioButton();
 		JButton openDialogButton = new JButton();
 		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu();
@@ -174,12 +227,13 @@ public class FlatWindowDecorationsTest
 		setLayout(new MigLayout(
 			"ltr,insets dialog,hidemode 3",
 			// columns
-			"[left]para",
+			"[left]para" +
+			"[fill]",
 			// rows
-			"para[]" +
+			"para[]0" +
 			"[]" +
 			"[]" +
-			"[]" +
+			"[top]" +
 			"[]"));
 
 		//---- menuBarCheckBox ----
@@ -197,6 +251,10 @@ public class FlatWindowDecorationsTest
 		//---- label1 ----
 		label1.setText("Style:");
 		add(label1, "cell 0 2");
+
+		//---- label2 ----
+		label2.setText("Icon:");
+		add(label2, "cell 1 2");
 
 		//======== panel1 ========
 		{
@@ -262,6 +320,35 @@ public class FlatWindowDecorationsTest
 			panel1.add(styleFileChooserRadioButton, "cell 0 8");
 		}
 		add(panel1, "cell 0 3");
+
+		//======== panel2 ========
+		{
+			panel2.setLayout(new MigLayout(
+				"ltr,insets 0,hidemode 3,gap 0 0",
+				// columns
+				"[fill]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]"));
+
+			//---- iconNoneRadioButton ----
+			iconNoneRadioButton.setText("none");
+			iconNoneRadioButton.addActionListener(e -> iconChanged());
+			panel2.add(iconNoneRadioButton, "cell 0 0");
+
+			//---- iconTestAllRadioButton ----
+			iconTestAllRadioButton.setText("test all");
+			iconTestAllRadioButton.setSelected(true);
+			iconTestAllRadioButton.addActionListener(e -> iconChanged());
+			panel2.add(iconTestAllRadioButton, "cell 0 1");
+
+			//---- iconTestRandomRadioButton ----
+			iconTestRandomRadioButton.setText("test random");
+			iconTestRandomRadioButton.addActionListener(e -> iconChanged());
+			panel2.add(iconTestRandomRadioButton, "cell 0 2");
+		}
+		add(panel2, "cell 1 3");
 
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
@@ -447,6 +534,12 @@ public class FlatWindowDecorationsTest
 		styleButtonGroup.add(styleWarningRadioButton);
 		styleButtonGroup.add(styleColorChooserRadioButton);
 		styleButtonGroup.add(styleFileChooserRadioButton);
+
+		//---- iconButtonGroup ----
+		ButtonGroup iconButtonGroup = new ButtonGroup();
+		iconButtonGroup.add(iconNoneRadioButton);
+		iconButtonGroup.add(iconTestAllRadioButton);
+		iconButtonGroup.add(iconTestRandomRadioButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -462,6 +555,9 @@ public class FlatWindowDecorationsTest
 	private JRadioButton styleWarningRadioButton;
 	private JRadioButton styleColorChooserRadioButton;
 	private JRadioButton styleFileChooserRadioButton;
+	private JRadioButton iconNoneRadioButton;
+	private JRadioButton iconTestAllRadioButton;
+	private JRadioButton iconTestRandomRadioButton;
 	private JMenuBar menuBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

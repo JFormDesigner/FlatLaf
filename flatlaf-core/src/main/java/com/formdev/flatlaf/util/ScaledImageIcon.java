@@ -37,30 +37,38 @@ public class ScaledImageIcon
 	implements Icon
 {
 	private final ImageIcon imageIcon;
+	private final int iconWidth;
+	private final int iconHeight;
 
 	private double lastSystemScaleFactor;
 	private float lastUserScaleFactor;
 	private Image lastImage;
 
 	public ScaledImageIcon( ImageIcon imageIcon ) {
+		this( imageIcon, imageIcon.getIconWidth(), imageIcon.getIconHeight() );
+	}
+
+	public ScaledImageIcon( ImageIcon imageIcon, int iconWidth, int iconHeight ) {
 		this.imageIcon = imageIcon;
+		this.iconWidth = iconWidth;
+		this.iconHeight = iconHeight;
 	}
 
 	@Override
 	public int getIconWidth() {
-		return UIScale.scale( imageIcon.getIconWidth() );
+		return UIScale.scale( iconWidth );
 	}
 
 	@Override
 	public int getIconHeight() {
-		return UIScale.scale( imageIcon.getIconHeight() );
+		return UIScale.scale( iconHeight );
 	}
 
 	@Override
 	public void paintIcon( Component c, Graphics g, int x, int y ) {
 /*debug
 		g.setColor( Color.red );
-		g.drawRect( x, y, getIconWidth(), getIconHeight() );
+		g.drawRect( x, y, getIconWidth() - 1, getIconHeight() - 1 );
 debug*/
 
 		// scale factor
@@ -69,7 +77,7 @@ debug*/
 		double scaleFactor = systemScaleFactor * userScaleFactor;
 
 		// paint input image icon if not necessary to scale
-		if( scaleFactor == 1 ) {
+		if( scaleFactor == 1 && iconWidth == imageIcon.getIconWidth() && iconHeight == imageIcon.getIconHeight() ) {
 			imageIcon.paintIcon( c, g, x, y );
 			return;
 		}
@@ -84,12 +92,11 @@ debug*/
 		}
 
 		// destination image size
-		int destImageWidth = (int) Math.round( imageIcon.getIconWidth() * scaleFactor );
-		int destImageHeight = (int) Math.round( imageIcon.getIconHeight() * scaleFactor );
+		int destImageWidth = (int) Math.round( iconWidth * scaleFactor );
+		int destImageHeight = (int) Math.round( iconHeight * scaleFactor );
 
 		// get resolution variant of image if it is a multi-resolution image
-		Image image = MultiResolutionImageSupport.getResolutionVariant(
-			imageIcon.getImage(), destImageWidth, destImageHeight );
+		Image image = getResolutionVariant( destImageWidth, destImageHeight );
 
 		// size of image
 		int imageWidth = image.getWidth( null );
@@ -122,6 +129,11 @@ debug*/
 
 		// paint image
 		paintLastImage( g, x, y );
+	}
+
+	protected Image getResolutionVariant( int destImageWidth, int destImageHeight ) {
+		return MultiResolutionImageSupport.getResolutionVariant(
+			imageIcon.getImage(), destImageWidth, destImageHeight );
 	}
 
 	private void paintLastImage( Graphics g, int x, int y ) {

@@ -19,8 +19,10 @@ package com.formdev.flatlaf.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -29,6 +31,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -39,7 +42,6 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF title bar.
@@ -48,6 +50,9 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.inactiveBackground					Color
  * @uiDefault TitlePane.foreground							Color
  * @uiDefault TitlePane.inactiveForeground					Color
+ * @uiDefault TitlePane.iconSize							Dimension
+ * @uiDefault TitlePane.iconMargins							Insets
+ * @uiDefault TitlePane.titleMargins						Insets
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -63,8 +68,11 @@ class FlatTitlePane
 	private final Color activeForeground = UIManager.getColor( "TitlePane.foreground" );
 	private final Color inactiveForeground = UIManager.getColor( "TitlePane.inactiveForeground" );
 
+	private final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
+
 	private final JRootPane rootPane;
 
+	private JLabel iconLabel;
 	private JLabel titleLabel;
 	private JPanel buttonPanel;
 	private JButton iconifyButton;
@@ -85,12 +93,15 @@ class FlatTitlePane
 	}
 
 	private void addSubComponents() {
+		iconLabel = new JLabel();
 		titleLabel = new JLabel();
+		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
 
 		createButtons();
 
-		setLayout( new BorderLayout( UIScale.scale( 4 ), 0 ) );
+		setLayout( new BorderLayout() );
+		add( iconLabel, BorderLayout.WEST );
 		add( titleLabel, BorderLayout.CENTER );
 		add( buttonPanel, BorderLayout.EAST );
 	}
@@ -157,6 +168,26 @@ class FlatTitlePane
 		}
 	}
 
+	private void updateIcon() {
+		// get window images
+		List<Image> images = window.getIconImages();
+		if( images.isEmpty() ) {
+			// search in owners
+			for( Window owner = window.getOwner(); owner != null; owner = owner.getOwner() ) {
+				images = owner.getIconImages();
+				if( !images.isEmpty() )
+					break;
+			}
+		}
+
+		// show/hide icon
+		boolean hasImages = !images.isEmpty();
+		iconLabel.setVisible( hasImages );
+
+		if( hasImages )
+			iconLabel.setIcon( FlatTitlePaneIcon.create( images, iconSize ) );
+	}
+
 	@Override
 	public void addNotify() {
 		super.addNotify();
@@ -167,6 +198,7 @@ class FlatTitlePane
 		if( window != null ) {
 			frameStateChanged();
 			activeChanged( window.isActive() );
+			updateIcon();
 			titleLabel.setText( getWindowTitle() );
 			installWindowListeners();
 		}
@@ -259,6 +291,10 @@ class FlatTitlePane
 				case "resizable":
 					if( window instanceof Frame )
 						frameStateChanged();
+					break;
+
+				case "iconImage":
+					updateIcon();
 					break;
 			}
 		}
