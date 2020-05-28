@@ -5,6 +5,7 @@
   "editorScheme": "/gruvbox_dark_hard.xml",
   "colors": {
     "bg0": "#282828",
+    "bg0_hh": "#101415",
     "bg0_h": "#1d2021",
     "bg0_s": "#32302f",
     "bg1": "#3c3836",
@@ -51,7 +52,7 @@
       "selectionBackgroundInactive": "bg0_s",
       "selectionInactiveBackground": "bg0_s",
 
-      "selectedBackground": "bg0_h",
+      "selectedBackground": "bg0_hh",
       "selectedForeground": "fg0",
       "selectedInactiveBackground": "bg0_s",
       "selectedBackgroundInactive": "bg0_s",
@@ -59,7 +60,7 @@
       "hoverBackground": "#28282866",
 
       "borderColor": "bg2",
-      "disabledBorderColor": "bg0_h",
+      "disabledBorderColor": "bg0_hh",
 
       "separatorColor": "bg2"
     },
@@ -91,6 +92,7 @@
     },
     "EditorTabs": {
       "selectedBackground": "bg0_s",
+      "underlinedTabBackground": "bg2",
       "underlineColor": "blue1",
       "inactiveMaskColor": "#28282866"
     },
@@ -101,8 +103,8 @@
       },
 
       "HeaderTab": {
-        "selectedInactiveBackground": "bg0_h",
-        "hoverInactiveBackground": "bg0_h"
+        "selectedInactiveBackground": "bg0_hh",
+        "hoverInactiveBackground": "bg0_hh"
       }
     },
     "Table": {

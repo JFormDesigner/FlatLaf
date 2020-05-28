@@ -159,6 +159,13 @@
         "inactiveBackground": "#44475a"
       }
     },
+    "ScrollBar": {
+      "Mac": {
+        "Transparent": {
+          "hoverThumbColor": "#bd93f9"
+        }
+      }
+    },
     "SearchEverywhere": {
       "SearchField": {
         "background": "#44475a"

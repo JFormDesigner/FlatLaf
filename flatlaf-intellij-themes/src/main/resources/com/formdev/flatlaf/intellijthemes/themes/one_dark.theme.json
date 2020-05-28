@@ -24,7 +24,7 @@
 
       "errorForeground": "#cd3359",
 
-      "borderColor": "#46494f",
+      "borderColor": "#333841",
       "disabledBorderColor": "#2d3137",
       "focusColor": "#21252b",
       "focusedBorderColor": "#568AF2",
@@ -93,8 +93,6 @@
       "foreground": "#abb2bf"
     },
 
-    "DebuggerPopup.borderColor": "#46494f",
-
     "DefaultTabs": {
       "underlineColor": "#568AF2",
       "inactiveUnderlineColor": "#4269b9",
@@ -104,7 +102,7 @@
     "DragAndDrop": {
       "areaForeground": "#abb2bf",
       "areaBackground": "#323844",
-      "areaBorderColor": "#46494f"
+      "areaBorderColor": "#333841"
     },
 
     "Editor": {
@@ -138,11 +136,6 @@
       "pressedForeground": "#6494ed",
       "visitedForeground": "#6494ed"
     },
-
-    "MenuBar.borderColor": "#46494f",
-    "Menu.borderColor": "#2d3137",
-
-    "NavBar.borderColor": "#46494f",
 
     "Notification": {
       "background": "#3d424b",
@@ -312,8 +305,7 @@
 
       "Header": {
         "background": "#414855",
-        "inactiveBackground": "#323844",
-        "borderColor": "#21252b"
+        "inactiveBackground": "#323844"
       },
 
       "HeaderTab": {

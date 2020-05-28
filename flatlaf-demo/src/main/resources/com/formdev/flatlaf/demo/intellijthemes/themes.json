@@ -46,21 +46,21 @@
 		"license": "MIT",
 		"licenseFile": "Gradianto.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
-		"sourceCodePath": "blob/master/resources/Gradianto_dark_fuchsia.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/Gradianto_dark_fuchsia.theme.json"
 	},
 	"Gradianto_deep_ocean.theme.json": {
 		"name": "Gradianto Deep Ocean",
 		"license": "MIT",
 		"licenseFile": "Gradianto.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
-		"sourceCodePath": "blob/master/resources/Gradianto_deep_ocean.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/Gradianto_deep_ocean.theme.json"
 	},
 	"Gradianto_midnight_blue.theme.json": {
 		"name": "Gradianto Midnight Blue",
 		"license": "MIT",
 		"licenseFile": "Gradianto.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
-		"sourceCodePath": "blob/master/resources/Gradianto_midnight_blue.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/Gradianto_midnight_blue.theme.json"
 	},
 	"Gray.theme.json": {
 		"name": "Gray",

@@ -1,7 +1,7 @@
 {
   "name": "Gradianto Midnight Blue",
   "dark": true,
-  "author": "",
+  "author": "thvardhan",
   "editorScheme": "/Gradianto_midnight_blue.xml",
   "ui": {
     "*": {
@@ -217,7 +217,7 @@
       "tagBackground": "#40405a",
       "lightSelectionBackground": "#48387e"
     },
-    "EditorPane.inactiveBackground": "#1a0225"
+    "EditorPane.inactiveBackground": "#414157ff"
   },
   "icons": {
     "ColorPalette": {
