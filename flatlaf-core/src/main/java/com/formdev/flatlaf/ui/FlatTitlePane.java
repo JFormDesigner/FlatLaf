@@ -22,13 +22,17 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -263,7 +267,46 @@ class FlatTitlePane
 	private void maximize() {
 		if( window instanceof Frame ) {
 			Frame frame = (Frame) window;
+			GraphicsConfiguration gc = window.getGraphicsConfiguration();
+
+			// remember current maximized bounds
+			Rectangle oldMaximizedBounds = frame.getMaximizedBounds();
+
+			// Scaled screen size, which may be smaller than physical size on Java 9+.
+			// E.g. if running a 3840x2160 screen at 200%, scaledSreenSize is 1920x1080.
+			// In Java 9+, each screen can have its own scale factor.
+			//
+			// On Java 8, which does not scale, scaledSreenSize of the primary screen
+			// is identical to its physical size. But when the primary screen is scaled,
+			// then scaledSreenSize of secondary screens is scaled with the scale factor
+			// of the primary screen.
+			// E.g. primary 3840x2160 screen at 150%, secondary 1920x1080 screen at 100%,
+			// then scaledSreenSize is 3840x2160 on primary and 2880x1560 on secondary.
+			Dimension scaledSreenSize = gc.getBounds().getSize();
+
+			// scale screen bounds to get physical screen size
+			AffineTransform defaultTransform = gc.getDefaultTransform();
+			int screenWidth = (int) (scaledSreenSize.width * defaultTransform.getScaleX());
+			int screenHeight = (int) (scaledSreenSize.height * defaultTransform.getScaleY());
+
+			// screen insets are in physical size,
+			// except for Java 8 on secondary screens where primary screen is scaled
+			Insets screenInsets = window.getToolkit().getScreenInsets( gc );
+
+			// maximized bounds are required in physical size,
+			// except for Java 8 on secondary screens where primary screen is scaled
+			Rectangle maximizedBounds = new Rectangle( screenInsets.left, screenInsets.top,
+				screenWidth - screenInsets.left - screenInsets.right,
+				screenHeight - screenInsets.top - screenInsets.bottom );
+
+			// temporary change maximized bounds
+			frame.setMaximizedBounds( maximizedBounds );
+
+			// maximize window
 			frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
+
+			// restore old maximized bounds
+			frame.setMaximizedBounds( oldMaximizedBounds );
 		}
 	}
 
@@ -336,10 +379,10 @@ class FlatTitlePane
 			{
 				// maximize/restore on double-click
 				Frame frame = (Frame) window;
-				int state = frame.getExtendedState();
-				frame.setExtendedState( ((state & Frame.MAXIMIZED_BOTH) != 0)
-					? (state & ~Frame.MAXIMIZED_BOTH)
-					: (state | Frame.MAXIMIZED_BOTH) );
+				if( (frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
+					restore();
+				else
+					maximize();
 			}
 		}
 
