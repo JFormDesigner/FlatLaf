@@ -30,6 +30,7 @@ import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
@@ -94,6 +95,7 @@ class FlatTitlePane
 		activeChanged( true );
 
 		addMouseListener( handler );
+		addMouseMotionListener( handler );
 	}
 
 	private void addSubComponents() {
@@ -329,7 +331,7 @@ class FlatTitlePane
 
 	private class Handler
 		extends WindowAdapter
-		implements PropertyChangeListener, MouseListener
+		implements PropertyChangeListener, MouseListener, MouseMotionListener
 	{
 		//---- interface PropertyChangeListener ----
 
@@ -370,6 +372,9 @@ class FlatTitlePane
 
 		//---- interface MouseListener ----
 
+		private int lastXOnScreen;
+		private int lastYOnScreen;
+
 		@Override
 		public void mouseClicked( MouseEvent e ) {
 			if( e.getClickCount() == 2 &&
@@ -386,9 +391,58 @@ class FlatTitlePane
 			}
 		}
 
-		@Override public void mousePressed( MouseEvent e ) {}
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			lastXOnScreen = e.getXOnScreen();
+			lastYOnScreen = e.getYOnScreen();
+		}
+
 		@Override public void mouseReleased( MouseEvent e ) {}
 		@Override public void mouseEntered( MouseEvent e ) {}
 		@Override public void mouseExited( MouseEvent e ) {}
+
+		//---- interface MouseMotionListener ----
+
+		@Override
+		public void mouseDragged( MouseEvent e ) {
+			int xOnScreen = e.getXOnScreen();
+			int yOnScreen = e.getYOnScreen();
+			if( lastXOnScreen == xOnScreen && lastYOnScreen == yOnScreen )
+				return;
+
+			// restore window if it is maximized
+			if( window instanceof Frame ) {
+				Frame frame = (Frame) window;
+				int state = frame.getExtendedState();
+				if( (state & Frame.MAXIMIZED_BOTH) != 0 ) {
+					int maximizedX = window.getX();
+					int maximizedY = window.getY();
+
+					// restore window size, which also moves window to pre-maximized location
+					frame.setExtendedState( state & ~Frame.MAXIMIZED_BOTH );
+
+					int restoredWidth = window.getWidth();
+					int newX = maximizedX;
+					if( xOnScreen >= maximizedX + restoredWidth - buttonPanel.getWidth() - 10 )
+						newX = xOnScreen + buttonPanel.getWidth() + 10 - restoredWidth;
+
+					// move window near mouse
+					window.setLocation( newX, maximizedY );
+					return;
+				}
+			}
+
+			// compute new window location
+			int newX = window.getX() + (xOnScreen - lastXOnScreen);
+			int newY = window.getY() + (yOnScreen - lastYOnScreen);
+
+			// move window
+			window.setLocation( newX, newY );
+
+			lastXOnScreen = xOnScreen;
+			lastYOnScreen = yOnScreen;
+		}
+
+		@Override public void mouseMoved( MouseEvent e ) {}
 	}
 }
