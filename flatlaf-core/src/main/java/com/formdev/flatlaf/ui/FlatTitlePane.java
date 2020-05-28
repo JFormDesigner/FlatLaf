@@ -47,6 +47,7 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF title bar.
@@ -58,6 +59,7 @@ import javax.swing.UIManager;
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
+ * @uiDefault TitlePane.buttonMaximizedHeight				int
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -74,6 +76,7 @@ class FlatTitlePane
 	private final Color inactiveForeground = UIManager.getColor( "TitlePane.inactiveForeground" );
 
 	private final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
+	private final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 
 	private final JRootPane rootPane;
 
@@ -118,7 +121,20 @@ class FlatTitlePane
 		restoreButton = createButton( "TitlePane.restoreIcon", "Restore", e -> restore() );
 		closeButton = createButton( "TitlePane.closeIcon", "Close", e -> close() );
 
-		buttonPanel = new JPanel();
+		buttonPanel = new JPanel() {
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension size = super.getPreferredSize();
+				if( buttonMaximizedHeight > 0 &&
+					window instanceof Frame &&
+					(((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
+				{
+					// make title pane height smaller when frame is maximized
+					size = new Dimension( size.width, Math.min( size.height, UIScale.scale( buttonMaximizedHeight ) ) );
+				}
+				return size;
+			}
+		};
 		buttonPanel.setOpaque( false );
 		buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.X_AXIS ) );
 		if( rootPane.getWindowDecorationStyle() == JRootPane.FRAME ) {
