@@ -28,8 +28,11 @@ import com.formdev.flatlaf.ui.FlatButtonUI;
 /**
  * "close" icon for {@link javax.swing.JInternalFrame}.
  *
- * @uiDefault InternalFrame.buttonHoverBackground		Color
- * @uiDefault InternalFrame.buttonPressedBackground		Color
+ * @uiDefault InternalFrame.buttonSize					Dimension
+ * @uiDefault InternalFrame.closeHoverBackground		Color
+ * @uiDefault InternalFrame.closePressedBackground		Color
+ * @uiDefault InternalFrame.closeHoverForeground		Color
+ * @uiDefault InternalFrame.closePressedForeground		Color
  *
  * @author Karl Tauber
  */
