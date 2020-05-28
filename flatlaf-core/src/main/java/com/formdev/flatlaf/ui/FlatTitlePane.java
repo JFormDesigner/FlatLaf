@@ -56,7 +56,7 @@ import javax.swing.UIManager;
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
- * @uiDefault TitlePane.minimizeIcon						Icon
+ * @uiDefault TitlePane.restoreIcon							Icon
  *
  * @author Karl Tauber
  */
@@ -109,7 +109,7 @@ class FlatTitlePane
 	private void createButtons() {
 		iconifyButton = createButton( "TitlePane.iconifyIcon", "Iconify", e -> iconify() );
 		maximizeButton = createButton( "TitlePane.maximizeIcon", "Maximize", e -> maximize() );
-		restoreButton = createButton( "TitlePane.minimizeIcon", "Restore", e -> restore() );
+		restoreButton = createButton( "TitlePane.restoreIcon", "Restore", e -> restore() );
 		closeButton = createButton( "TitlePane.closeIcon", "Close", e -> close() );
 
 		buttonPanel = new JPanel();
@@ -141,8 +141,17 @@ class FlatTitlePane
 	}
 
 	private void activeChanged( boolean active ) {
-		setBackground( active ? activeBackground : inactiveBackground );
-		titleLabel.setForeground( FlatUIUtils.nonUIResource( active ? activeForeground : inactiveForeground ) );
+		Color background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
+		Color foreground = FlatUIUtils.nonUIResource( active ? activeForeground : inactiveForeground );
+
+		setBackground( background );
+		titleLabel.setForeground( foreground );
+
+		// this is necessary because hover/pressed colors are derived from background color
+		iconifyButton.setBackground( background );
+		maximizeButton.setBackground( background );
+		restoreButton.setBackground( background );
+		closeButton.setBackground( background );
 	}
 
 	private void frameStateChanged() {
