@@ -20,14 +20,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -36,6 +40,7 @@ import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
@@ -233,6 +238,8 @@ class FlatTitlePane
 			titleLabel.setText( getWindowTitle() );
 			installWindowListeners();
 		}
+
+		updateJBRHitTestSpotsAndTitleBarHeight();
 	}
 
 	@Override
@@ -258,6 +265,7 @@ class FlatTitlePane
 		window.addPropertyChangeListener( handler );
 		window.addWindowListener( handler );
 		window.addWindowStateListener( handler );
+		window.addComponentListener( handler );
 	}
 
 	private void uninstallWindowListeners() {
@@ -267,6 +275,7 @@ class FlatTitlePane
 		window.removePropertyChangeListener( handler );
 		window.removeWindowListener( handler );
 		window.removeWindowStateListener( handler );
+		window.removeComponentListener( handler );
 	}
 
 	@Override
@@ -283,8 +292,12 @@ class FlatTitlePane
 	}
 
 	private void maximize() {
-		if( window instanceof Frame ) {
-			Frame frame = (Frame) window;
+		if( !(window instanceof Frame) )
+			return;
+
+		Frame frame = (Frame) window;
+
+		if( !hasJBRCustomDecoration() ) {
 			GraphicsConfiguration gc = window.getGraphicsConfiguration();
 
 			// remember current maximized bounds
@@ -325,6 +338,11 @@ class FlatTitlePane
 
 			// restore old maximized bounds
 			frame.setMaximizedBounds( oldMaximizedBounds );
+		} else {
+			// not necessary to set maximized bounds when running in JBR
+
+			// maximize window
+			frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
 		}
 	}
 
@@ -343,11 +361,45 @@ class FlatTitlePane
 			window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSING ) );
 	}
 
+	private boolean hasJBRCustomDecoration() {
+		return window != null && JBRCustomDecorations.hasCustomDecoration( window );
+	}
+
+	private void updateJBRHitTestSpotsAndTitleBarHeight() {
+		if( !isDisplayable() )
+			return;
+
+		if( !hasJBRCustomDecoration() )
+			return;
+
+		List<Rectangle> hitTestSpots = new ArrayList<>();
+		addJBRHitTestSpot( buttonPanel, hitTestSpots );
+
+		int titleBarHeight = getHeight();
+		// slightly reduce height so that component receives mouseExit events
+		if( titleBarHeight > 0 )
+			titleBarHeight--;
+
+		JBRCustomDecorations.setHitTestSpotsAndTitleBarHeight( window, hitTestSpots, titleBarHeight );
+	}
+
+	private void addJBRHitTestSpot( JComponent c, List<Rectangle> hitTestSpots ) {
+		Dimension size = c.getSize();
+		if( size.width <= 0 || size.height <= 0 )
+			return;
+
+		Point location = SwingUtilities.convertPoint( c, 0, 0, window );
+		Rectangle r = new Rectangle( location, size );
+		// slightly increase rectangle so that component receives mouseExit events
+		r.grow( 2, 2 );
+		hitTestSpots.add( r );
+	}
+
 	//---- class Handler ------------------------------------------------------
 
 	private class Handler
 		extends WindowAdapter
-		implements PropertyChangeListener, MouseListener, MouseMotionListener
+		implements PropertyChangeListener, MouseListener, MouseMotionListener, ComponentListener
 	{
 		//---- interface PropertyChangeListener ----
 
@@ -374,16 +426,19 @@ class FlatTitlePane
 		@Override
 		public void windowActivated( WindowEvent e ) {
 			activeChanged( true );
+			updateJBRHitTestSpotsAndTitleBarHeight();
 		}
 
 		@Override
 		public void windowDeactivated( WindowEvent e ) {
 			activeChanged( false );
+			updateJBRHitTestSpotsAndTitleBarHeight();
 		}
 
 		@Override
 		public void windowStateChanged( WindowEvent e ) {
 			frameStateChanged();
+			updateJBRHitTestSpotsAndTitleBarHeight();
 		}
 
 		//---- interface MouseListener ----
@@ -393,6 +448,9 @@ class FlatTitlePane
 
 		@Override
 		public void mouseClicked( MouseEvent e ) {
+			if( hasJBRCustomDecoration() )
+				return; // do nothing if running in JBR
+
 			if( e.getClickCount() == 2 &&
 				SwingUtilities.isLeftMouseButton( e ) &&
 				window instanceof Frame &&
@@ -421,6 +479,9 @@ class FlatTitlePane
 
 		@Override
 		public void mouseDragged( MouseEvent e ) {
+			if( hasJBRCustomDecoration() )
+				return; // do nothing if running in JBR
+
 			int xOnScreen = e.getXOnScreen();
 			int yOnScreen = e.getYOnScreen();
 			if( lastXOnScreen == xOnScreen && lastYOnScreen == yOnScreen )
@@ -460,5 +521,18 @@ class FlatTitlePane
 		}
 
 		@Override public void mouseMoved( MouseEvent e ) {}
+
+		//---- interface ComponentListener ----
+
+		@Override
+		public void componentResized( ComponentEvent e ) {
+			EventQueue.invokeLater( () -> {
+				updateJBRHitTestSpotsAndTitleBarHeight();
+			} );
+		}
+
+		@Override public void componentMoved( ComponentEvent e ) {}
+		@Override public void componentShown( ComponentEvent e ) {}
+		@Override public void componentHidden( ComponentEvent e ) {}
 	}
 }

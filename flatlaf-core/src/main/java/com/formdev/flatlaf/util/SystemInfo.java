@@ -32,13 +32,16 @@ public class SystemInfo
 	public static final boolean IS_LINUX;
 
 	// OS versions
+	public static final boolean IS_WINDOWS_10_OR_LATER;
 	public static final boolean IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER;
 
 	// Java versions
 	public static final boolean IS_JAVA_9_OR_LATER;
+	public static final boolean IS_JAVA_11_OR_LATER;
 
 	// Java VMs
 	public static final boolean IS_JETBRAINS_JVM;
+	public static final boolean IS_JETBRAINS_JVM_11_OR_LATER;
 
 	// UI toolkits
 	public static final boolean IS_KDE;
@@ -52,15 +55,18 @@ public class SystemInfo
 
 		// OS versions
 		long osVersion = scanVersion( System.getProperty( "os.version" ) );
+		IS_WINDOWS_10_OR_LATER = (IS_WINDOWS && osVersion >= toVersion( 10, 0, 0, 0 ));
 		IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER = (IS_MAC && osVersion >= toVersion( 10, 11, 0, 0 ));
 
 		// Java versions
 		long javaVersion = scanVersion( System.getProperty( "java.version" ) );
 		IS_JAVA_9_OR_LATER = (javaVersion >= toVersion( 9, 0, 0, 0 ));
+		IS_JAVA_11_OR_LATER = (javaVersion >= toVersion( 11, 0, 0, 0 ));
 
 		// Java VMs
 		IS_JETBRAINS_JVM = System.getProperty( "java.vm.vendor", "Unknown" )
 			.toLowerCase( Locale.ENGLISH ).contains( "jetbrains" );
+		IS_JETBRAINS_JVM_11_OR_LATER = IS_JETBRAINS_JVM && IS_JAVA_11_OR_LATER;
 
 		// UI toolkits
 		IS_KDE = (IS_LINUX && System.getenv( "KDE_FULL_SESSION" ) != null);

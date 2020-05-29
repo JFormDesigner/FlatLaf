@@ -43,6 +43,8 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
@@ -57,6 +59,7 @@ import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
+import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -110,8 +113,32 @@ public abstract class FlatLaf
 
 	public abstract boolean isDark();
 
+	/**
+	 * Returns whether FlatLaf supports custom window decorations.
+	 * <p>
+	 * To use custom window decorations in your application, enable them with
+	 * (before creating any frames or dialogs):
+	 * <pre>
+	 * JFrame.setDefaultLookAndFeelDecorated( true );
+	 * JDialog.setDefaultLookAndFeelDecorated( true );
+	 * </pre>
+	 * <p>
+	 * Returns {@code true} on Windows, {@code false} otherwise.
+	 * <p>
+	 * Return also {@code false} if running on Windows 10 in
+	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
+	 * (<a href="https://github.com/JetBrains/JetBrainsRuntime">source code on github</a>)
+	 * and JBR supports custom window decorations. In this case, JBR custom decorations
+	 * are enabled if {@link JFrame#isDefaultLookAndFeelDecorated()} or
+	 * {@link JDialog#isDefaultLookAndFeelDecorated()} return {@code true}.
+	 */
 	@Override
 	public boolean getSupportsWindowDecorations() {
+		if( SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER &&
+			SystemInfo.IS_WINDOWS_10_OR_LATER &&
+			JBRCustomDecorations.isSupported() )
+		  return false;
+
 		return SystemInfo.IS_WINDOWS;
 	}
 

@@ -30,6 +30,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicRootPaneUI;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JRootPane}.
@@ -55,6 +56,9 @@ public class FlatRootPaneUI
 
 		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE )
 			installClientDecorations();
+
+		if( SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER && SystemInfo.IS_WINDOWS_10_OR_LATER )
+			JBRCustomDecorations.install( rootPane );
 	}
 
 	@Override
