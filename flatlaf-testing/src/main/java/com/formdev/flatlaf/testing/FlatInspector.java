@@ -120,9 +120,6 @@ public class FlatInspector
 			public void mouseMoved( MouseEvent e ) {
 				lastX = e.getX();
 				lastY = e.getY();
-				inspectParentLevel = (e.isControlDown() ? 1 : 0)
-					+ (e.isShiftDown() ? 2 : 0)
-					+ (e.isAltDown() ? 4 : 0);
 				inspect( lastX, lastY );
 			}
 		};
@@ -132,6 +129,16 @@ public class FlatInspector
 		keyListener = e -> {
 			KeyEvent keyEvent = (KeyEvent) e;
 			int keyCode = keyEvent.getKeyCode();
+
+			if( e.getID() == KeyEvent.KEY_RELEASED ) {
+				if( keyCode == KeyEvent.VK_CONTROL ) {
+					inspectParentLevel++;
+					inspect( lastX, lastY );
+				} else if( keyCode == KeyEvent.VK_SHIFT && inspectParentLevel > 0 ) {
+					inspectParentLevel--;
+					inspect( lastX, lastY );
+				}
+			}
 
 			if( keyCode == KeyEvent.VK_ESCAPE ) {
 				// consume pressed and released ESC key events to e.g. avoid that dialog is closed
@@ -191,6 +198,7 @@ public class FlatInspector
 			inspect( lastX, lastY );
 		} else {
 			lastComponent = null;
+			inspectParentLevel = 0;
 
 			if( highlightFigure != null )
 				highlightFigure.getParent().remove( highlightFigure );
@@ -401,6 +409,11 @@ public class FlatInspector
 
 		if( inspectParentLevel > 0 )
 			text += "\n\nParent level: " + inspectParentLevel;
+
+		if( inspectParentLevel > 0 )
+			text += "\n(press Ctrl/Shift to increase/decrease level)";
+		else
+			text += "\n\n(press Ctrl key to inspect parent)";
 
 		return text;
 	}
