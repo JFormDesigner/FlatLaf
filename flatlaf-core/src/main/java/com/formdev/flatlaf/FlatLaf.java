@@ -377,7 +377,10 @@ public abstract class FlatLaf
 
 		} else if( SystemInfo.IS_MAC ) {
 			String fontName;
-			if( SystemInfo.IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER ) {
+			if( SystemInfo.IS_MAC_OS_10_15_CATALINA_OR_LATER ) {
+				// use Helvetica Neue font
+				fontName = "Helvetica Neue";
+			} else if( SystemInfo.IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER ) {
 				// use San Francisco Text font
 				fontName = ".SF NS Text";
 			} else {
