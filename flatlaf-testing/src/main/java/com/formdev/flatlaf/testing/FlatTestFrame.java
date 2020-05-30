@@ -455,8 +455,12 @@ public class FlatTestFrame
 	}
 
 	private void inspectChanged() {
-		if( inspector == null )
+		if( inspector == null ) {
 			inspector = new FlatInspector( getRootPane() );
+			inspector.addPropertyChangeListener( e -> {
+				inspectCheckBox.setSelected( inspector.isEnabled() );
+			} );
+		}
 		inspector.setEnabled( inspectCheckBox.isSelected() );
 	}
 

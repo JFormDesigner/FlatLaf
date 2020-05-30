@@ -28,15 +28,19 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
@@ -68,7 +72,10 @@ public class FlatInspector
 
 	private final JRootPane rootPane;
 	private final MouseMotionListener mouseMotionListener;
+	private final AWTEventListener keyListener;
+	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport( this );
 
+	private boolean enabled;
 	private Component lastComponent;
 	private int lastX;
 	private int lastY;
@@ -121,6 +128,25 @@ public class FlatInspector
 		};
 
 		rootPane.getGlassPane().addMouseMotionListener( mouseMotionListener );
+
+		keyListener = e -> {
+			KeyEvent keyEvent = (KeyEvent) e;
+			int keyCode = keyEvent.getKeyCode();
+
+			if( keyCode == KeyEvent.VK_ESCAPE ) {
+				// consume pressed and released ESC key events to e.g. avoid that dialog is closed
+				keyEvent.consume();
+
+				if( e.getID() == KeyEvent.KEY_PRESSED ) {
+					FlatInspector inspector = (FlatInspector) rootPane.getClientProperty( FlatInspector.class );
+					if( inspector == FlatInspector.this ) {
+						uninstall();
+						rootPane.putClientProperty( FlatInspector.class, null );
+					} else
+						setEnabled( false );
+				}
+			}
+		};
 	}
 
 	private void uninstall() {
@@ -129,10 +155,41 @@ public class FlatInspector
 		rootPane.getGlassPane().removeMouseMotionListener( mouseMotionListener );
 	}
 
+
+	public void addPropertyChangeListener( PropertyChangeListener l ) {
+		propertyChangeSupport.addPropertyChangeListener( l );
+	}
+
+	public void removePropertyChangeListener( PropertyChangeListener l ) {
+		propertyChangeSupport.removePropertyChangeListener( l );
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
 	public void setEnabled( boolean enabled ) {
+		if( this.enabled == enabled )
+			return;
+
+		this.enabled = enabled;
+
 		rootPane.getGlassPane().setVisible( enabled );
 
-		if( !enabled ) {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		if( enabled )
+			toolkit.addAWTEventListener( keyListener, AWTEvent.KEY_EVENT_MASK );
+		else
+			toolkit.removeAWTEventListener( keyListener );
+
+		if( enabled ) {
+			Point pt = new Point( MouseInfo.getPointerInfo().getLocation() );
+			SwingUtilities.convertPointFromScreen( pt, rootPane );
+
+			lastX = pt.x;
+			lastY = pt.y;
+			inspect( lastX, lastY );
+		} else {
 			lastComponent = null;
 
 			if( highlightFigure != null )
@@ -143,6 +200,8 @@ public class FlatInspector
 				tip.getParent().remove( tip );
 			tip = null;
 		}
+
+		propertyChangeSupport.firePropertyChange( "enabled", !enabled, enabled );
 	}
 
 	public void update() {
@@ -159,9 +218,8 @@ public class FlatInspector
 	private void inspect( int x, int y ) {
 		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, rootPane );
 		Component c = getDeepestComponentAt( rootPane, pt.x, pt.y );
-		for( int i = 0; i < inspectParentLevel && c != null; i++ ) {
+		for( int i = 0; i < inspectParentLevel && c != null; i++ )
 			c = c.getParent();
-		}
 
 		if( c == lastComponent )
 			return;
