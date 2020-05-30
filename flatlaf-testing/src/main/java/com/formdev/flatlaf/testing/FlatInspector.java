@@ -157,9 +157,8 @@ public class FlatInspector
 	}
 
 	private void inspect( int x, int y ) {
-		Container contentPane = rootPane.getContentPane();
-		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, contentPane );
-		Component c = SwingUtilities.getDeepestComponentAt( contentPane, pt.x, pt.y );
+		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, rootPane );
+		Component c = getDeepestComponentAt( rootPane, pt.x, pt.y );
 		for( int i = 0; i < inspectParentLevel && c != null; i++ ) {
 			c = c.getParent();
 		}
@@ -171,6 +170,38 @@ public class FlatInspector
 
 		highlight( c );
 		showToolTip( c, x, y );
+	}
+
+	private Component getDeepestComponentAt( Component parent, int x, int y ) {
+		if( !parent.contains( x, y ) )
+			return null;
+
+		if( parent instanceof Container ) {
+			for( Component child : ((Container)parent).getComponents() ) {
+				if( child == null || !child.isVisible() )
+					continue;
+
+				int cx = x - child.getX();
+				int cy = y - child.getY();
+				Component c = (child instanceof Container)
+					? getDeepestComponentAt( child, cx, cy )
+					: child.getComponentAt( cx, cy );
+				if( c == null || !c.isVisible() )
+					continue;
+
+				// ignore highlight figure and tooltip
+				if( c == highlightFigure || c == tip )
+					continue;
+
+				// ignore glass pane
+				if( c.getParent() instanceof JRootPane && c == ((JRootPane)c.getParent()).getGlassPane() )
+					continue;
+
+				return c;
+			}
+		}
+
+		return parent;
 	}
 
 	private void highlight( Component c ) {
@@ -308,7 +339,7 @@ public class FlatInspector
 			text += "ContentAreaFilled: " + ((AbstractButton)c).isContentAreaFilled() + '\n';
 		text += "Focusable: " + c.isFocusable() + '\n';
 		text += "Left-to-right: " + c.getComponentOrientation().isLeftToRight() + '\n';
-		text += "Parent: " + c.getParent().getClass().getName();
+		text += "Parent: " + (c.getParent() != null ? c.getParent().getClass().getName() : "null");
 
 		if( inspectParentLevel > 0 )
 			text += "\n\nParent level: " + inspectParentLevel;

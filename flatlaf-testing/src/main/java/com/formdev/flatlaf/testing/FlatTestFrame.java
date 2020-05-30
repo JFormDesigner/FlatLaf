@@ -456,7 +456,7 @@ public class FlatTestFrame
 
 	private void inspectChanged() {
 		if( inspector == null )
-			inspector = new FlatInspector( contentPanel );
+			inspector = new FlatInspector( getRootPane() );
 		inspector.setEnabled( inspectCheckBox.isSelected() );
 	}
 
