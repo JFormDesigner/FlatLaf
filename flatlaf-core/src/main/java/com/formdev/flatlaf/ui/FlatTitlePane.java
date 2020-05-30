@@ -115,9 +115,9 @@ class FlatTitlePane
 		createButtons();
 
 		setLayout( new BorderLayout() );
-		add( iconLabel, BorderLayout.WEST );
+		add( iconLabel, BorderLayout.LINE_START );
 		add( titleLabel, BorderLayout.CENTER );
-		add( buttonPanel, BorderLayout.EAST );
+		add( buttonPanel, BorderLayout.LINE_END );
 	}
 
 	private void createButtons() {
@@ -141,7 +141,7 @@ class FlatTitlePane
 			}
 		};
 		buttonPanel.setOpaque( false );
-		buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.X_AXIS ) );
+		buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.LINE_AXIS ) );
 		if( rootPane.getWindowDecorationStyle() == JRootPane.FRAME ) {
 			// JRootPane.FRAME works only for frames (and not for dialogs)
 			// but at this time the owner window type is unknown (not yet added)
@@ -418,6 +418,12 @@ class FlatTitlePane
 				case "iconImage":
 					updateIcon();
 					break;
+
+				case "componentOrientation":
+					EventQueue.invokeLater( () -> {
+						updateJBRHitTestSpotsAndTitleBarHeight();
+					} );
+					break;
 			}
 		}
 
@@ -500,8 +506,9 @@ class FlatTitlePane
 
 					int restoredWidth = window.getWidth();
 					int newX = maximizedX;
-					if( xOnScreen >= maximizedX + restoredWidth - buttonPanel.getWidth() - 10 )
-						newX = xOnScreen + buttonPanel.getWidth() + 10 - restoredWidth;
+					JComponent rightComp = getComponentOrientation().isLeftToRight() ? buttonPanel : iconLabel;
+					if( xOnScreen >= maximizedX + restoredWidth - rightComp.getWidth() - 10 )
+						newX = xOnScreen + rightComp.getWidth() + 10 - restoredWidth;
 
 					// move window near mouse
 					window.setLocation( newX, maximizedY );
