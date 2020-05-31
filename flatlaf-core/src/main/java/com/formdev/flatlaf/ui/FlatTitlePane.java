@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -53,6 +54,8 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -109,6 +112,8 @@ class FlatTitlePane
 	FlatTitlePane( JRootPane rootPane ) {
 		this.rootPane = rootPane;
 
+		setBorder( new TitlePaneBorder() );
+
 		addSubComponents();
 		activeChanged( true );
 
@@ -123,7 +128,6 @@ class FlatTitlePane
 		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
 
-		leftPanel.setBorder( new LineBorder( Color.red ) );
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
 		leftPanel.add( iconLabel );
@@ -315,6 +319,12 @@ class FlatTitlePane
 	Rectangle getMenuBarBounds() {
 		Rectangle bounds = menuBarPlaceholder.getBounds();
 		bounds = SwingUtilities.convertRectangle( menuBarPlaceholder.getParent(), bounds, rootPane );
+
+		// add menu bar bottom border insets to bounds so that menu bar overlaps
+		// title pane border (menu bar border is painted over title pane border)
+		Insets borderInsets = getBorder().getBorderInsets( this );
+		bounds.height += borderInsets.bottom;
+
 		return FlatUIUtils.subtractInsets( bounds, UIScale.scale( getMenuBarMargins() ) );
 	}
 
@@ -451,6 +461,39 @@ class FlatTitlePane
 		// slightly increase rectangle so that component receives mouseExit events
 		r.grow( 2, 2 );
 		hitTestSpots.add( r );
+	}
+
+	//---- class TitlePaneBorder ----------------------------------------------
+
+	private class TitlePaneBorder
+		extends AbstractBorder
+	{
+		@Override
+		public Insets getBorderInsets( Component c, Insets insets ) {
+			super.getBorderInsets( c, insets );
+
+			// if menu bar is embedded, add bottom insets of menu bar border
+			Border menuBarBorder = getMenuBarBorder();
+			if( menuBarBorder != null ) {
+				Insets menuBarInsets = menuBarBorder.getBorderInsets( c );
+				insets.bottom += menuBarInsets.bottom;
+			}
+
+			return insets;
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			// if menu bar is embedded, paint menu bar border
+			Border menuBarBorder = getMenuBarBorder();
+			if( menuBarBorder != null )
+				menuBarBorder.paintBorder( c, g, x, y, width, height );
+		}
+
+		private Border getMenuBarBorder() {
+			JMenuBar menuBar = rootPane.getJMenuBar();
+			return (menuBar != null && isMenuBarEmbedded()) ? menuBar.getBorder() : null;
+		}
 	}
 
 	//---- class Handler ------------------------------------------------------
