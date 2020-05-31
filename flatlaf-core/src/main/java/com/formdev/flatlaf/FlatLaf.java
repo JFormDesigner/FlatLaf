@@ -115,15 +115,17 @@ public abstract class FlatLaf
 
 	/**
 	 * Returns whether FlatLaf supports custom window decorations.
+	 * This depends on the operating system and on the used Java runtime.
 	 * <p>
 	 * To use custom window decorations in your application, enable them with
-	 * (before creating any frames or dialogs):
+	 * following code (before creating any frames or dialogs). Then custom window
+	 * decorations are only enabled if this method returns {@code true}.
 	 * <pre>
 	 * JFrame.setDefaultLookAndFeelDecorated( true );
 	 * JDialog.setDefaultLookAndFeelDecorated( true );
 	 * </pre>
 	 * <p>
-	 * Returns {@code true} on Windows, {@code false} otherwise.
+	 * Returns {@code true} on Windows 10, {@code false} otherwise.
 	 * <p>
 	 * Return also {@code false} if running on Windows 10 in
 	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
@@ -139,7 +141,7 @@ public abstract class FlatLaf
 			JBRCustomDecorations.isSupported() )
 		  return false;
 
-		return SystemInfo.IS_WINDOWS;
+		return SystemInfo.IS_WINDOWS_10_OR_LATER;
 	}
 
 	@Override
