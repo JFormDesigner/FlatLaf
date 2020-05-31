@@ -131,7 +131,7 @@ public class FlatRootPaneUI
 
 	//---- class FlatRootLayout -----------------------------------------------
 
-	private static class FlatRootLayout
+	private class FlatRootLayout
 		implements LayoutManager2
 	{
 		@Override public void addLayoutComponent( String name, Component comp ) {}
@@ -155,7 +155,6 @@ public class FlatRootPaneUI
 
 		private Dimension computeLayoutSize( Container parent, Function<Component, Dimension> getSizeFunc ) {
 			JRootPane rootPane = (JRootPane) parent;
-			FlatTitlePane titlePane = getTitlePane( rootPane );
 
 			Dimension titlePaneSize = (titlePane != null)
 				? getSizeFunc.apply( titlePane )
@@ -182,13 +181,6 @@ public class FlatRootPaneUI
 				height + insets.top + insets.bottom );
 		}
 
-		private FlatTitlePane getTitlePane( JRootPane rootPane ) {
-			return (rootPane.getWindowDecorationStyle() != JRootPane.NONE &&
-					rootPane.getUI() instanceof FlatRootPaneUI)
-				? ((FlatRootPaneUI)rootPane.getUI()).titlePane
-				: null;
-		}
-
 		@Override
 		public void layoutContainer( Container parent ) {
 			JRootPane rootPane = (JRootPane) parent;
@@ -205,7 +197,6 @@ public class FlatRootPaneUI
 				rootPane.getGlassPane().setBounds( x, y, width, height );
 
 			int nextY = 0;
-			FlatTitlePane titlePane = getTitlePane( rootPane );
 			if( titlePane != null ) {
 				Dimension prefSize = titlePane.getPreferredSize();
 				titlePane.setBounds( 0, 0, width, prefSize.height );
@@ -231,7 +222,6 @@ public class FlatRootPaneUI
 
 		@Override
 		public void invalidateLayout( Container parent ) {
-			FlatTitlePane titlePane = getTitlePane( (JRootPane) parent );
 			if( titlePane != null && titlePane.isMenuBarEmbedded() )
 				titlePane.menuBarChanged();
 		}
