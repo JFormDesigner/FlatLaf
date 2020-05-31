@@ -323,6 +323,15 @@ new FormModel {
 					name: "optionsMenu"
 					"text": "Options"
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "menuBarEmbeddedCheckBoxMenuItem"
+						"text": "Embedded menu bar"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuBarEmbeddedChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "underlineMenuSelectionMenuItem"
 						"text": "Use underline menu selection"
 						auxiliary() {

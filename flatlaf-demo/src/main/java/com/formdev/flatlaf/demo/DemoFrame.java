@@ -23,6 +23,7 @@ import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.StyleContext;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
@@ -69,6 +70,11 @@ class DemoFrame
 		SwingUtilities.invokeLater( () -> {
 			JOptionPane.showMessageDialog( this, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE );
 		} );
+	}
+
+	private void menuBarEmbeddedChanged() {
+		getRootPane().putClientProperty( FlatClientProperties.MENU_BAR_EMBEDDED,
+			menuBarEmbeddedCheckBoxMenuItem.isSelected() ? null : false );
 	}
 
 	private void underlineMenuSelection() {
@@ -219,6 +225,7 @@ class DemoFrame
 		JMenuItem incrFontMenuItem = new JMenuItem();
 		JMenuItem decrFontMenuItem = new JMenuItem();
 		JMenu optionsMenu = new JMenu();
+		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		JMenu helpMenu = new JMenu();
@@ -453,6 +460,12 @@ class DemoFrame
 			{
 				optionsMenu.setText("Options");
 
+				//---- menuBarEmbeddedCheckBoxMenuItem ----
+				menuBarEmbeddedCheckBoxMenuItem.setText("Embedded menu bar");
+				menuBarEmbeddedCheckBoxMenuItem.setSelected(true);
+				menuBarEmbeddedCheckBoxMenuItem.addActionListener(e -> menuBarEmbeddedChanged());
+				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
+
 				//---- underlineMenuSelectionMenuItem ----
 				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
 				underlineMenuSelectionMenuItem.addActionListener(e -> underlineMenuSelection());
@@ -572,6 +585,7 @@ class DemoFrame
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JMenu fontMenu;
+	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JTabbedPane tabbedPane;

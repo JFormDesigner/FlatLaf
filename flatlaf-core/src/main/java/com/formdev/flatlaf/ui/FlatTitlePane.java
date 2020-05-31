@@ -48,10 +48,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -61,9 +63,12 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.inactiveBackground					Color
  * @uiDefault TitlePane.foreground							Color
  * @uiDefault TitlePane.inactiveForeground					Color
+ * @uiDefault TitlePane.embeddedForeground					Color
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
+ * @uiDefault TitlePane.menuBarMargins						Insets
+ * @uiDefault TitlePane.menuBarEmbedded						boolean
  * @uiDefault TitlePane.buttonMaximizedHeight				int
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
@@ -79,13 +84,18 @@ class FlatTitlePane
 	private final Color inactiveBackground = UIManager.getColor( "TitlePane.inactiveBackground" );
 	private final Color activeForeground = UIManager.getColor( "TitlePane.foreground" );
 	private final Color inactiveForeground = UIManager.getColor( "TitlePane.inactiveForeground" );
+	private final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
 
+	private final boolean menuBarEmbedded = UIManager.getBoolean( "TitlePane.menuBarEmbedded" );
+	private final Insets menuBarMargins = UIManager.getInsets( "TitlePane.menuBarMargins" );
 	private final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	private final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 
 	private final JRootPane rootPane;
 
+	private JPanel leftPanel;
 	private JLabel iconLabel;
+	private JComponent menuBarPlaceholder;
 	private JLabel titleLabel;
 	private JPanel buttonPanel;
 	private JButton iconifyButton;
@@ -107,15 +117,32 @@ class FlatTitlePane
 	}
 
 	private void addSubComponents() {
+		leftPanel = new JPanel();
 		iconLabel = new JLabel();
 		titleLabel = new JLabel();
 		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
 
+		leftPanel.setBorder( new LineBorder( Color.red ) );
+		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
+		leftPanel.setOpaque( false );
+		leftPanel.add( iconLabel );
+
+		menuBarPlaceholder = new JComponent() {
+			@Override
+			public Dimension getPreferredSize() {
+				JMenuBar menuBar = rootPane.getJMenuBar();
+				return (menuBar != null && isMenuBarEmbedded())
+					? FlatUIUtils.addInsets( menuBar.getPreferredSize(), UIScale.scale( menuBarMargins ) )
+					: new Dimension();
+			}
+		};
+		leftPanel.add( menuBarPlaceholder );
+
 		createButtons();
 
 		setLayout( new BorderLayout() );
-		add( iconLabel, BorderLayout.LINE_START );
+		add( leftPanel, BorderLayout.LINE_START );
 		add( titleLabel, BorderLayout.CENTER );
 		add( buttonPanel, BorderLayout.LINE_END );
 	}
@@ -169,7 +196,9 @@ class FlatTitlePane
 
 	private void activeChanged( boolean active ) {
 		Color background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
-		Color foreground = FlatUIUtils.nonUIResource( active ? activeForeground : inactiveForeground );
+		Color foreground = FlatUIUtils.nonUIResource( active
+			? (rootPane.getJMenuBar() != null && isMenuBarEmbedded() ? embeddedForeground : activeForeground)
+			: inactiveForeground );
 
 		setBackground( background );
 		titleLabel.setForeground( foreground );
@@ -278,6 +307,32 @@ class FlatTitlePane
 		window.removeComponentListener( handler );
 	}
 
+	boolean isMenuBarEmbedded() {
+		return menuBarEmbedded && FlatClientProperties.clientPropertyBoolean(
+			rootPane, FlatClientProperties.MENU_BAR_EMBEDDED, true );
+	}
+
+	Rectangle getMenuBarBounds() {
+		Rectangle bounds = menuBarPlaceholder.getBounds();
+		bounds = SwingUtilities.convertRectangle( menuBarPlaceholder.getParent(), bounds, rootPane );
+		return FlatUIUtils.subtractInsets( bounds, UIScale.scale( getMenuBarMargins() ) );
+	}
+
+	void menuBarChanged() {
+		menuBarPlaceholder.invalidate();
+
+		// update title foreground color
+		EventQueue.invokeLater( () -> {
+			activeChanged( window == null || window.isActive() );
+		} );
+	}
+
+	private Insets getMenuBarMargins() {
+		return getComponentOrientation().isLeftToRight()
+			? menuBarMargins
+			: new Insets( menuBarMargins.top, menuBarMargins.right, menuBarMargins.bottom, menuBarMargins.left );
+	}
+
 	@Override
 	protected void paintComponent( Graphics g ) {
 		g.setColor( getBackground() );
@@ -373,7 +428,8 @@ class FlatTitlePane
 			return;
 
 		List<Rectangle> hitTestSpots = new ArrayList<>();
-		addJBRHitTestSpot( buttonPanel, hitTestSpots );
+		addJBRHitTestSpot( buttonPanel, false, hitTestSpots );
+		addJBRHitTestSpot( menuBarPlaceholder, true, hitTestSpots );//TOOD
 
 		int titleBarHeight = getHeight();
 		// slightly reduce height so that component receives mouseExit events
@@ -383,13 +439,15 @@ class FlatTitlePane
 		JBRCustomDecorations.setHitTestSpotsAndTitleBarHeight( window, hitTestSpots, titleBarHeight );
 	}
 
-	private void addJBRHitTestSpot( JComponent c, List<Rectangle> hitTestSpots ) {
+	private void addJBRHitTestSpot( JComponent c, boolean subtractMenuBarMargins, List<Rectangle> hitTestSpots ) {
 		Dimension size = c.getSize();
 		if( size.width <= 0 || size.height <= 0 )
 			return;
 
 		Point location = SwingUtilities.convertPoint( c, 0, 0, window );
 		Rectangle r = new Rectangle( location, size );
+		if( subtractMenuBarMargins )
+			r = FlatUIUtils.subtractInsets( r, UIScale.scale( getMenuBarMargins() ) );
 		// slightly increase rectangle so that component receives mouseExit events
 		r.grow( 2, 2 );
 		hitTestSpots.add( r );
@@ -506,7 +564,7 @@ class FlatTitlePane
 
 					int restoredWidth = window.getWidth();
 					int newX = maximizedX;
-					JComponent rightComp = getComponentOrientation().isLeftToRight() ? buttonPanel : iconLabel;
+					JComponent rightComp = getComponentOrientation().isLeftToRight() ? buttonPanel : leftPanel;
 					if( xOnScreen >= maximizedX + restoredWidth - rightComp.getWidth() - 10 )
 						newX = xOnScreen + rightComp.getWidth() + 10 - restoredWidth;
 

@@ -1038,6 +1038,32 @@ TextPane.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 TextPaneUI                     com.formdev.flatlaf.ui.FlatTextPaneUI
 
 
+#---- TitlePane ----
+
+TitlePane.background           #303234    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.buttonHoverBackground #484c4f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
+TitlePane.buttonMaximizedHeight 22
+TitlePane.buttonPressedBackground #616569    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20% autoInverse)
+TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI]
+TitlePane.closeHoverBackground #e81123    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closeHoverForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closeIcon            [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowCloseIcon [UI]
+TitlePane.closePressedBackground #99e81123    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closePressedForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.embeddedForeground   #959595    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.iconMargins          3,8,3,0    javax.swing.plaf.InsetsUIResource [UI]
+TitlePane.iconSize             16,16    javax.swing.plaf.DimensionUIResource [UI]
+TitlePane.iconifyIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowIconifyIcon [UI]
+TitlePane.inactiveBackground   #303234    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.inactiveForeground   #777777    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.maximizeIcon         [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowMaximizeIcon [UI]
+TitlePane.menuBarEmbedded      true
+TitlePane.menuBarMargins       0,8,0,22    javax.swing.plaf.InsetsUIResource [UI]
+TitlePane.restoreIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowRestoreIcon [UI]
+TitlePane.titleMargins         3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
+
+
 #---- TitledBorder ----
 
 TitledBorder.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#515151    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000

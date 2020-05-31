@@ -176,6 +176,15 @@ public interface FlatClientProperties
 	String PROGRESS_BAR_SQUARE = "JProgressBar.square";
 
 	/**
+	 * Specifies whether the menu bar is embedded into the title pane if custom
+	 * window decorations are enabled. Default is {@code true}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
+
+	/**
 	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JScrollBar} or {@link javax.swing.JScrollPane}<br>

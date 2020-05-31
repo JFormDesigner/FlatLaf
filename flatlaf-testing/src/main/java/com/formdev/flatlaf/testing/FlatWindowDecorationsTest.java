@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
 
 /**
@@ -103,6 +104,12 @@ public class FlatWindowDecorationsTest
 		}
 	}
 
+	private void menuBarEmbeddedChanged() {
+		JRootPane rootPane = getWindowRootPane();
+		if( rootPane != null )
+			rootPane.putClientProperty( FlatClientProperties.MENU_BAR_EMBEDDED, menuBarEmbeddedCheckBox.isSelected() );
+	}
+
 	private void resizableChanged() {
 		Window window = SwingUtilities.windowForComponent( this );
 		if( window instanceof Frame )
@@ -178,6 +185,7 @@ public class FlatWindowDecorationsTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBarCheckBox = new JCheckBox();
+		menuBarEmbeddedCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
@@ -231,6 +239,7 @@ public class FlatWindowDecorationsTest
 			"[fill]",
 			// rows
 			"para[]0" +
+			"[]0" +
 			"[]" +
 			"[]" +
 			"[top]" +
@@ -242,19 +251,25 @@ public class FlatWindowDecorationsTest
 		menuBarCheckBox.addActionListener(e -> menuBarChanged());
 		add(menuBarCheckBox, "cell 0 0");
 
+		//---- menuBarEmbeddedCheckBox ----
+		menuBarEmbeddedCheckBox.setText("embedded menu bar");
+		menuBarEmbeddedCheckBox.setSelected(true);
+		menuBarEmbeddedCheckBox.addActionListener(e -> menuBarEmbeddedChanged());
+		add(menuBarEmbeddedCheckBox, "cell 0 1");
+
 		//---- resizableCheckBox ----
 		resizableCheckBox.setText("resizable");
 		resizableCheckBox.setSelected(true);
 		resizableCheckBox.addActionListener(e -> resizableChanged());
-		add(resizableCheckBox, "cell 0 1");
+		add(resizableCheckBox, "cell 0 2");
 
 		//---- label1 ----
 		label1.setText("Style:");
-		add(label1, "cell 0 2");
+		add(label1, "cell 0 3");
 
 		//---- label2 ----
 		label2.setText("Icon:");
-		add(label2, "cell 1 2");
+		add(label2, "cell 1 3");
 
 		//======== panel1 ========
 		{
@@ -319,7 +334,7 @@ public class FlatWindowDecorationsTest
 			styleFileChooserRadioButton.addActionListener(e -> decorationStyleChanged());
 			panel1.add(styleFileChooserRadioButton, "cell 0 8");
 		}
-		add(panel1, "cell 0 3");
+		add(panel1, "cell 0 4");
 
 		//======== panel2 ========
 		{
@@ -348,12 +363,12 @@ public class FlatWindowDecorationsTest
 			iconTestRandomRadioButton.addActionListener(e -> iconChanged());
 			panel2.add(iconTestRandomRadioButton, "cell 0 2");
 		}
-		add(panel2, "cell 1 3");
+		add(panel2, "cell 1 4");
 
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
 		openDialogButton.addActionListener(e -> openDialog());
-		add(openDialogButton, "cell 0 4");
+		add(openDialogButton, "cell 0 5");
 
 		//======== menuBar ========
 		{
@@ -545,6 +560,7 @@ public class FlatWindowDecorationsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox menuBarCheckBox;
+	private JCheckBox menuBarEmbeddedCheckBox;
 	private JCheckBox resizableCheckBox;
 	private JRadioButton styleNoneRadioButton;
 	private JRadioButton styleFrameRadioButton;

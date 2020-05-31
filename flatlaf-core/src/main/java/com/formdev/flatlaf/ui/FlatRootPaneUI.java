@@ -30,6 +30,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicRootPaneUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -41,7 +42,7 @@ public class FlatRootPaneUI
 	extends BasicRootPaneUI
 {
 	private JRootPane rootPane;
-	private JComponent titlePane;
+	private FlatTitlePane titlePane;
 	private LayoutManager oldLayout;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -92,14 +93,17 @@ public class FlatRootPaneUI
 		}
 	}
 
-	private void setTitlePane( JComponent newTitlePane ) {
+	// layer title pane under frame content layer to allow placing menu bar over title pane
+	private final static Integer TITLE_PANE_LAYER = JLayeredPane.FRAME_CONTENT_LAYER - 1;
+
+	private void setTitlePane( FlatTitlePane newTitlePane ) {
 		JLayeredPane layeredPane = rootPane.getLayeredPane();
 
 		if( titlePane != null )
 			layeredPane.remove( titlePane );
 
 		if( newTitlePane != null )
-			layeredPane.add( newTitlePane, JLayeredPane.FRAME_CONTENT_LAYER );
+			layeredPane.add( newTitlePane, TITLE_PANE_LAYER );
 
 		titlePane = newTitlePane;
 	}
@@ -114,6 +118,14 @@ public class FlatRootPaneUI
 				if( rootPane.getWindowDecorationStyle() != JRootPane.NONE )
 					installClientDecorations();
 				break;
+
+			case FlatClientProperties.MENU_BAR_EMBEDDED:
+				if( titlePane != null ) {
+					titlePane.menuBarChanged();
+					rootPane.revalidate();
+					rootPane.repaint();
+				}
+				break;
 		}
 	}
 
@@ -125,7 +137,6 @@ public class FlatRootPaneUI
 		@Override public void addLayoutComponent( String name, Component comp ) {}
 		@Override public void addLayoutComponent( Component comp, Object constraints ) {}
 		@Override public void removeLayoutComponent( Component comp ) {}
-		@Override public void invalidateLayout( Container target ) {}
 
 		@Override
 		public Dimension preferredLayoutSize( Container parent ) {
@@ -144,20 +155,26 @@ public class FlatRootPaneUI
 
 		private Dimension computeLayoutSize( Container parent, Function<Component, Dimension> getSizeFunc ) {
 			JRootPane rootPane = (JRootPane) parent;
-			JComponent titlePane = getTitlePane( rootPane );
+			FlatTitlePane titlePane = getTitlePane( rootPane );
 
 			Dimension titlePaneSize = (titlePane != null)
 				? getSizeFunc.apply( titlePane )
-				: new Dimension();
-			Dimension menuBarSize = (rootPane.getJMenuBar() != null)
-				? getSizeFunc.apply( rootPane.getJMenuBar() )
 				: new Dimension();
 			Dimension contentSize = (rootPane.getContentPane() != null)
 				? getSizeFunc.apply( rootPane.getContentPane() )
 				: rootPane.getSize();
 
-			int width = Math.max( titlePaneSize.width, Math.max( menuBarSize.width, contentSize.width ) );
-			int height = titlePaneSize.height + menuBarSize.height + contentSize.height;
+			int width = Math.max( titlePaneSize.width, contentSize.width );
+			int height = titlePaneSize.height + contentSize.height;
+			if( titlePane == null || !titlePane.isMenuBarEmbedded() ) {
+				Dimension menuBarSize = (rootPane.getJMenuBar() != null)
+					? getSizeFunc.apply( rootPane.getJMenuBar() )
+					: new Dimension();
+
+				width = Math.max( width, menuBarSize.width );
+				height += menuBarSize.height;
+			}
+
 			Insets insets = rootPane.getInsets();
 
 			return new Dimension(
@@ -165,7 +182,7 @@ public class FlatRootPaneUI
 				height + insets.top + insets.bottom );
 		}
 
-		private JComponent getTitlePane( JRootPane rootPane ) {
+		private FlatTitlePane getTitlePane( JRootPane rootPane ) {
 			return (rootPane.getWindowDecorationStyle() != JRootPane.NONE &&
 					rootPane.getUI() instanceof FlatRootPaneUI)
 				? ((FlatRootPaneUI)rootPane.getUI()).titlePane
@@ -188,7 +205,7 @@ public class FlatRootPaneUI
 				rootPane.getGlassPane().setBounds( x, y, width, height );
 
 			int nextY = 0;
-			JComponent titlePane = getTitlePane( rootPane );
+			FlatTitlePane titlePane = getTitlePane( rootPane );
 			if( titlePane != null ) {
 				Dimension prefSize = titlePane.getPreferredSize();
 				titlePane.setBounds( 0, 0, width, prefSize.height );
@@ -197,14 +214,26 @@ public class FlatRootPaneUI
 
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			if( menuBar != null ) {
-				Dimension prefSize = menuBar.getPreferredSize();
-				menuBar.setBounds( 0, nextY, width, prefSize.height );
-				nextY += prefSize.height;
+				if( titlePane != null && titlePane.isMenuBarEmbedded() ) {
+					titlePane.validate();
+					menuBar.setBounds( titlePane.getMenuBarBounds() );
+				} else {
+					Dimension prefSize = menuBar.getPreferredSize();
+					menuBar.setBounds( 0, nextY, width, prefSize.height );
+					nextY += prefSize.height;
+				}
 			}
 
 			Container contentPane = rootPane.getContentPane();
 			if( contentPane != null )
 				contentPane.setBounds( 0, nextY, width, Math.max( height - nextY, 0 ) );
+		}
+
+		@Override
+		public void invalidateLayout( Container parent ) {
+			FlatTitlePane titlePane = getTitlePane( (JRootPane) parent );
+			if( titlePane != null && titlePane.isMenuBarEmbedded() )
+				titlePane.menuBarChanged();
 		}
 
 		@Override
