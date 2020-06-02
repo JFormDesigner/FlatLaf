@@ -226,8 +226,13 @@ public class FlatInspector
 	private void inspect( int x, int y ) {
 		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, rootPane );
 		Component c = getDeepestComponentAt( rootPane, pt.x, pt.y );
-		for( int i = 0; i < inspectParentLevel && c != null; i++ )
-			c = c.getParent();
+		for( int i = 0; i < inspectParentLevel && c != null; i++ ) {
+			Container parent = c.getParent();
+			if( parent == null )
+				break;
+
+			c = parent;
+		}
 
 		if( c == lastComponent )
 			return;
@@ -279,9 +284,9 @@ public class FlatInspector
 		highlightFigure.setVisible( c != null );
 
 		if( c != null ) {
-			Rectangle bounds = c.getBounds();
-			Rectangle highlightBounds = SwingUtilities.convertRectangle( c.getParent(), bounds, rootPane );
-			highlightFigure.setBounds( highlightBounds );
+			highlightFigure.setBounds( new Rectangle(
+				SwingUtilities.convertPoint( c, 0, 0, rootPane ),
+				c.getSize() ) );
 		}
 	}
 
