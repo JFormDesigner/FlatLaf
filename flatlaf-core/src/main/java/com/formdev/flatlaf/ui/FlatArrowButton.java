@@ -145,10 +145,20 @@ public class FlatArrowButton
 		int direction = getDirection();
 		boolean vert = (direction == NORTH || direction == SOUTH);
 
+		// compute width/height
 		int w = scale( arrowWidth + (chevron ? 0 : 1) );
 		int h = scale( (arrowWidth / 2) + (chevron ? 0 : 1) );
+
+		// rotate width/height
 		int rw = vert ? w : h;
 		int rh = vert ? h : w;
+
+		// chevron lines end 1px outside of width/height
+		if( chevron ) {
+			// add 1px to width/height for position calculation only
+			rw++;
+			rh++;
+		}
 
 		// Adding -/+0.35 before rounding tends move up NORTH arrows and move down SOUTH arrows.
 		// This makes top margin of NORTH arrow equal to bottom margin of SOUTH arrow.
@@ -158,12 +168,6 @@ public class FlatArrowButton
 
 		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) + xrd );
 		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) + yrd );
-
-		// optimization for small chevron arrows (e.g. OneTouchButtons in SplitPane)
-		if( x + rw >= width && x > 0 )
-			x--;
-		if( y + rh >= height && y > 0 )
-			y--;
 
 		// move arrow for round borders
 		Container parent = getParent();
@@ -176,7 +180,7 @@ public class FlatArrowButton
 			: disabledForeground );
 		g.translate( x, y );
 /*debug
-		debugPaint( g2, vert, w, h );
+		debugPaint( g2, vert, rw, rh );
 debug*/
 		Shape arrowShape = createArrowShape( direction, chevron, w, h );
 		if( chevron ) {
@@ -203,7 +207,7 @@ debug*/
 	private void debugPaint( Graphics g, boolean vert, int w, int h ) {
 		Color oldColor = g.getColor();
 		g.setColor( Color.red );
-		g.drawRect( 0, 0, (vert ? w : h) - 1, (vert ? h : w) - 1 );
+		g.drawRect( 0, 0, w - 1, h - 1 );
 
 		int xy1 = -2;
 		int xy2 = h + 1;

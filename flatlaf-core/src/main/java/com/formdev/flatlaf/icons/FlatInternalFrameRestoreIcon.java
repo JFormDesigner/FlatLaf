@@ -24,14 +24,14 @@ import java.awt.geom.Rectangle2D;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
- * "minimize" (actually "restore") icon for {@link javax.swing.JInternalFrame}.
+ * "restore" (or "minimize") icon for {@link javax.swing.JInternalFrame}.
  *
  * @author Karl Tauber
  */
-public class FlatInternalFrameMinimizeIcon
+public class FlatInternalFrameRestoreIcon
 	extends FlatInternalFrameAbstractIcon
 {
-	public FlatInternalFrameMinimizeIcon() {
+	public FlatInternalFrameRestoreIcon() {
 	}
 
 	@Override

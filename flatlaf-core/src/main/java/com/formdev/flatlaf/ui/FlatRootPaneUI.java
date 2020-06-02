@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -25,10 +26,14 @@ import java.awt.LayoutManager2;
 import java.beans.PropertyChangeEvent;
 import java.util.function.Function;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
+import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRootPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -68,6 +73,23 @@ public class FlatRootPaneUI
 
 		uninstallClientDecorations();
 		rootPane = null;
+	}
+
+	@Override
+	protected void installDefaults( JRootPane c ) {
+		super.installDefaults( c );
+
+		// Update background color of JFrame or JDialog parent to avoid bad border
+		// on HiDPI screens when switching from light to dark Laf.
+		// The background of JFrame is initialized in JFrame.frameInit() and
+		// the background of JDialog in JDialog.dialogInit(),
+		// but it was not updated when switching Laf.
+		Container parent = c.getParent();
+		if( parent instanceof JFrame || parent instanceof JDialog ) {
+			Color background = parent.getBackground();
+			if( background == null || background instanceof UIResource )
+				parent.setBackground( UIManager.getColor( "control" ) );
+		}
 	}
 
 	private void installClientDecorations() {

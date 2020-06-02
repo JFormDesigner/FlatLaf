@@ -28,15 +28,19 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
@@ -68,7 +72,10 @@ public class FlatInspector
 
 	private final JRootPane rootPane;
 	private final MouseMotionListener mouseMotionListener;
+	private final AWTEventListener keyListener;
+	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport( this );
 
+	private boolean enabled;
 	private Component lastComponent;
 	private int lastX;
 	private int lastY;
@@ -113,14 +120,40 @@ public class FlatInspector
 			public void mouseMoved( MouseEvent e ) {
 				lastX = e.getX();
 				lastY = e.getY();
-				inspectParentLevel = (e.isControlDown() ? 1 : 0)
-					+ (e.isShiftDown() ? 2 : 0)
-					+ (e.isAltDown() ? 4 : 0);
 				inspect( lastX, lastY );
 			}
 		};
 
 		rootPane.getGlassPane().addMouseMotionListener( mouseMotionListener );
+
+		keyListener = e -> {
+			KeyEvent keyEvent = (KeyEvent) e;
+			int keyCode = keyEvent.getKeyCode();
+
+			if( e.getID() == KeyEvent.KEY_RELEASED ) {
+				if( keyCode == KeyEvent.VK_CONTROL ) {
+					inspectParentLevel++;
+					inspect( lastX, lastY );
+				} else if( keyCode == KeyEvent.VK_SHIFT && inspectParentLevel > 0 ) {
+					inspectParentLevel--;
+					inspect( lastX, lastY );
+				}
+			}
+
+			if( keyCode == KeyEvent.VK_ESCAPE ) {
+				// consume pressed and released ESC key events to e.g. avoid that dialog is closed
+				keyEvent.consume();
+
+				if( e.getID() == KeyEvent.KEY_PRESSED ) {
+					FlatInspector inspector = (FlatInspector) rootPane.getClientProperty( FlatInspector.class );
+					if( inspector == FlatInspector.this ) {
+						uninstall();
+						rootPane.putClientProperty( FlatInspector.class, null );
+					} else
+						setEnabled( false );
+				}
+			}
+		};
 	}
 
 	private void uninstall() {
@@ -129,11 +162,43 @@ public class FlatInspector
 		rootPane.getGlassPane().removeMouseMotionListener( mouseMotionListener );
 	}
 
+
+	public void addPropertyChangeListener( PropertyChangeListener l ) {
+		propertyChangeSupport.addPropertyChangeListener( l );
+	}
+
+	public void removePropertyChangeListener( PropertyChangeListener l ) {
+		propertyChangeSupport.removePropertyChangeListener( l );
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
 	public void setEnabled( boolean enabled ) {
+		if( this.enabled == enabled )
+			return;
+
+		this.enabled = enabled;
+
 		rootPane.getGlassPane().setVisible( enabled );
 
-		if( !enabled ) {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		if( enabled )
+			toolkit.addAWTEventListener( keyListener, AWTEvent.KEY_EVENT_MASK );
+		else
+			toolkit.removeAWTEventListener( keyListener );
+
+		if( enabled ) {
+			Point pt = new Point( MouseInfo.getPointerInfo().getLocation() );
+			SwingUtilities.convertPointFromScreen( pt, rootPane );
+
+			lastX = pt.x;
+			lastY = pt.y;
+			inspect( lastX, lastY );
+		} else {
 			lastComponent = null;
+			inspectParentLevel = 0;
 
 			if( highlightFigure != null )
 				highlightFigure.getParent().remove( highlightFigure );
@@ -143,6 +208,8 @@ public class FlatInspector
 				tip.getParent().remove( tip );
 			tip = null;
 		}
+
+		propertyChangeSupport.firePropertyChange( "enabled", !enabled, enabled );
 	}
 
 	public void update() {
@@ -157,11 +224,14 @@ public class FlatInspector
 	}
 
 	private void inspect( int x, int y ) {
-		Container contentPane = rootPane.getContentPane();
-		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, contentPane );
-		Component c = SwingUtilities.getDeepestComponentAt( contentPane, pt.x, pt.y );
+		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, rootPane );
+		Component c = getDeepestComponentAt( rootPane, pt.x, pt.y );
 		for( int i = 0; i < inspectParentLevel && c != null; i++ ) {
-			c = c.getParent();
+			Container parent = c.getParent();
+			if( parent == null )
+				break;
+
+			c = parent;
 		}
 
 		if( c == lastComponent )
@@ -173,6 +243,38 @@ public class FlatInspector
 		showToolTip( c, x, y );
 	}
 
+	private Component getDeepestComponentAt( Component parent, int x, int y ) {
+		if( !parent.contains( x, y ) )
+			return null;
+
+		if( parent instanceof Container ) {
+			for( Component child : ((Container)parent).getComponents() ) {
+				if( child == null || !child.isVisible() )
+					continue;
+
+				int cx = x - child.getX();
+				int cy = y - child.getY();
+				Component c = (child instanceof Container)
+					? getDeepestComponentAt( child, cx, cy )
+					: child.getComponentAt( cx, cy );
+				if( c == null || !c.isVisible() )
+					continue;
+
+				// ignore highlight figure and tooltip
+				if( c == highlightFigure || c == tip )
+					continue;
+
+				// ignore glass pane
+				if( c.getParent() instanceof JRootPane && c == ((JRootPane)c.getParent()).getGlassPane() )
+					continue;
+
+				return c;
+			}
+		}
+
+		return parent;
+	}
+
 	private void highlight( Component c ) {
 		if( highlightFigure == null ) {
 			highlightFigure = createHighlightFigure();
@@ -182,9 +284,9 @@ public class FlatInspector
 		highlightFigure.setVisible( c != null );
 
 		if( c != null ) {
-			Rectangle bounds = c.getBounds();
-			Rectangle highlightBounds = SwingUtilities.convertRectangle( c.getParent(), bounds, rootPane );
-			highlightFigure.setBounds( highlightBounds );
+			highlightFigure.setBounds( new Rectangle(
+				SwingUtilities.convertPoint( c, 0, 0, rootPane ),
+				c.getSize() ) );
 		}
 	}
 
@@ -308,10 +410,15 @@ public class FlatInspector
 			text += "ContentAreaFilled: " + ((AbstractButton)c).isContentAreaFilled() + '\n';
 		text += "Focusable: " + c.isFocusable() + '\n';
 		text += "Left-to-right: " + c.getComponentOrientation().isLeftToRight() + '\n';
-		text += "Parent: " + c.getParent().getClass().getName();
+		text += "Parent: " + (c.getParent() != null ? c.getParent().getClass().getName() : "null");
 
 		if( inspectParentLevel > 0 )
 			text += "\n\nParent level: " + inspectParentLevel;
+
+		if( inspectParentLevel > 0 )
+			text += "\n(press Ctrl/Shift to increase/decrease level)";
+		else
+			text += "\n\n(press Ctrl key to inspect parent)";
 
 		return text;
 	}

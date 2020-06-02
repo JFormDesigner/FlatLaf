@@ -1,7 +1,7 @@
 {
   "name": "Gradianto Deep Ocean",
   "dark": true,
-  "author": "",
+  "author": "thvardhan",
   "editorScheme": "/Gradianto_deep_ocean.xml",
   "ui": {
     "*": {
@@ -214,7 +214,7 @@
       "tagBackground": "#3d445a",
       "lightSelectionBackground": "#3c4b7e"
     },
-    "EditorPane.inactiveBackground": "#040c25"
+    "EditorPane.inactiveBackground": "#25334aff"
   },
   "icons": {
     "ColorPalette": {

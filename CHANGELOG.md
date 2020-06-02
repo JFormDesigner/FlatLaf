@@ -9,6 +9,7 @@ FlatLaf Change Log
   for editable comboboxes).
 - ComboBox: Support custom borders in combobox editors. (issue #102)
 - Ubuntu Linux: Fixed poorly rendered font. (issue #105)
+- macOS Catalina: Use Helvetica Neue font.
 
 
 ## 0.35

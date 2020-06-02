@@ -27,6 +27,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * Base class for internal frame icons.
  *
+ * @uiDefault InternalFrame.buttonSize					Dimension
  * @uiDefault InternalFrame.buttonHoverBackground		Color
  * @uiDefault InternalFrame.buttonPressedBackground		Color
  *

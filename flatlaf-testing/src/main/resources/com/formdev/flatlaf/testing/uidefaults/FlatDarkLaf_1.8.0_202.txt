@@ -364,7 +364,7 @@ InternalFrame.inactiveDropShadowOpacity 0.75
 InternalFrame.inactiveTitleBackground #303234    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.inactiveTitleForeground #777777    javax.swing.plaf.ColorUIResource [UI]
 InternalFrame.maximizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameMaximizeIcon [UI]
-InternalFrame.minimizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameMinimizeIcon [UI]
+InternalFrame.minimizeIcon     [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameRestoreIcon [UI]
 InternalFrame.titleFont        [active] $defaultFont [UI]
 
 
