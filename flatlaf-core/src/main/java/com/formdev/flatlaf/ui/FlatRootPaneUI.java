@@ -20,9 +20,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
+import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.util.function.Function;
 import javax.swing.JComponent;
@@ -31,11 +34,14 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRootPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -93,6 +99,12 @@ public class FlatRootPaneUI
 	}
 
 	private void installClientDecorations() {
+		// install border
+		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE )
+			LookAndFeel.installBorder( rootPane, "RootPane.border" );
+		else
+			LookAndFeel.uninstallBorder( rootPane );
+
 		// install title pane
 		setTitlePane( new FlatTitlePane( rootPane ) );
 
@@ -102,6 +114,7 @@ public class FlatRootPaneUI
 	}
 
 	private void uninstallClientDecorations() {
+		LookAndFeel.uninstallBorder( rootPane );
 		setTitlePane( null );
 
 		if( oldLayout != null ) {
@@ -256,6 +269,32 @@ public class FlatRootPaneUI
 		@Override
 		public float getLayoutAlignmentY( Container target ) {
 			return 0;
+		}
+	}
+
+	//---- class FlatWindowBorder ---------------------------------------------
+
+	public static class FlatWindowBorder
+		extends BorderUIResource.EmptyBorderUIResource
+	{
+		public FlatWindowBorder() {
+			super( 1, 1, 1, 1 );
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			Object borderColorObj = Toolkit.getDefaultToolkit().getDesktopProperty(
+				"win.frame.activeBorderColor" );
+			Color borderColor = (borderColorObj instanceof Color)
+				? (Color) borderColorObj
+				: UIManager.getColor( "windowBorder" );
+
+			g.setColor( borderColor );
+			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height, this::paintImpl );
+		}
+
+		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
+			g.drawRect( x, y, width - 1, height - 1 );
 		}
 	}
 }

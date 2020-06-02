@@ -317,8 +317,10 @@ class FlatTitlePane
 	}
 
 	Rectangle getMenuBarBounds() {
-		Rectangle bounds = menuBarPlaceholder.getBounds();
-		bounds = SwingUtilities.convertRectangle( menuBarPlaceholder.getParent(), bounds, rootPane );
+		Insets insets = rootPane.getInsets();
+		Rectangle bounds = new Rectangle(
+			SwingUtilities.convertPoint( menuBarPlaceholder, -insets.left, -insets.top, rootPane ),
+			menuBarPlaceholder.getSize() );
 
 		// add menu bar bottom border insets to bounds so that menu bar overlaps
 		// title pane border (menu bar border is painted over title pane border)

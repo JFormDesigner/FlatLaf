@@ -743,6 +743,7 @@ Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.F
 
 #---- RootPane ----
 
+RootPane.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRootPaneUI$FlatWindowBorder [UI]
 RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [0] ENTER
     [1] press
