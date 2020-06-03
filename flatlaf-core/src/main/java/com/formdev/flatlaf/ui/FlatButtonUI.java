@@ -224,7 +224,11 @@ public class FlatButtonUI
 		return c instanceof JButton && ((JButton)c).isDefaultButton();
 	}
 
-	static boolean isIconOnlyButton( Component c ) {
+	/**
+	 * Returns true if the button has an icon but no text,
+	 * or it it does not have an icon and the text is either "..." or one character.
+	 */
+	static boolean isIconOnlyOrSingleCharacterButton( Component c ) {
 		if( !(c instanceof JButton) && !(c instanceof JToggleButton) )
 			return false;
 
@@ -409,11 +413,13 @@ public class FlatButtonUI
 		if( prefSize == null )
 			return null;
 
-		// make button square if it is a icon-only button
-		// or apply minimum width, if not in toolbar and not a icon-only button
-		if( isIconOnlyButton( c ) )
-			prefSize.width = Math.max( prefSize.width, prefSize.height );
-		else if( !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
+		// make button square if it is a single-character button
+		// or apply minimum width, if not in toolbar and not a icon-only or single-character button
+		if( isIconOnlyOrSingleCharacterButton( c ) ) {
+			// make only single-character buttons square to allow non-square icon-only buttons
+			if( ((AbstractButton)c).getIcon() == null )
+				prefSize.width = Math.max( prefSize.width, prefSize.height );
+		} else if( !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
 			float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
 			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + Math.round( focusWidth * 2 ) );
 			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) ) + Math.round( focusWidth * 2 ) );

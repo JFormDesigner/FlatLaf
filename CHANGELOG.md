@@ -8,6 +8,7 @@ FlatLaf Change Log
 - ComboBox: Minimum width is now 72 pixels (was ~50 for non-editable and ~130
   for editable comboboxes).
 - ComboBox: Support custom borders in combobox editors. (issue #102)
+- Button: Support non-square icon-only buttons. (issue #110)
 - Ubuntu Linux: Fixed poorly rendered font. (issue #105)
 - macOS Catalina: Use Helvetica Neue font.
 

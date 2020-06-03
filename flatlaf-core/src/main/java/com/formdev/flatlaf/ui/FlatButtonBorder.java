@@ -114,8 +114,8 @@ public class FlatButtonBorder
 		} else {
 			insets = super.getBorderInsets( c, insets );
 
-			// use smaller left and right insets for icon-only buttons (so that they are square)
-			if( FlatButtonUI.isIconOnlyButton( c ) && ((AbstractButton)c).getMargin() instanceof UIResource )
+			// use smaller left and right insets for icon-only or single-character buttons (so that they are square)
+			if( FlatButtonUI.isIconOnlyOrSingleCharacterButton( c ) && ((AbstractButton)c).getMargin() instanceof UIResource )
 				insets.left = insets.right = Math.min( insets.top, insets.bottom );
 		}
 
