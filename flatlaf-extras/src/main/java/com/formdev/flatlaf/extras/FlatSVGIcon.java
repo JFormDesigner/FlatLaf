@@ -29,7 +29,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.Icon;
-import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatIconColors;
 import com.formdev.flatlaf.FlatLaf;
@@ -164,8 +163,7 @@ public class FlatSVGIcon
 	}
 
 	private static void lafChanged() {
-		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
-		darkLaf = (lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark());
+		darkLaf = FlatLaf.isLafDark();
 	}
 
 	//---- class ColorFilter --------------------------------------------------

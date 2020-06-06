@@ -399,8 +399,7 @@ public class FlatTestFrame
 			boolean explicit = explicitColorsCheckBox.isSelected();
 			ColorUIResource restoreColor = new ColorUIResource( Color.white );
 
-			LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
-			boolean dark = (lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark());
+			boolean dark = FlatLaf.isLafDark();
 			Color magenta = dark ? Color.magenta.darker() : Color.magenta;
 			Color orange = dark ? Color.orange.darker() : Color.orange;
 			Color blue = dark ? Color.blue.darker() : Color.blue;

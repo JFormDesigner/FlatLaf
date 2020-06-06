@@ -598,12 +598,7 @@ public class FlatDisabledIconsTest
 		}
 
 		private ImageIcon getCurrentIcon() {
-			return isDark() ? darkIcon : lightIcon;
-		}
-
-		private boolean isDark() {
-			LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
-			return lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark();
+			return FlatLaf.isLafDark() ? darkIcon : lightIcon;
 		}
 
 		@Override

@@ -114,6 +114,14 @@ public abstract class FlatLaf
 	public abstract boolean isDark();
 
 	/**
+	 * Checks whether the current look and feel is dark.
+	 */
+	public static boolean isLafDark() {
+		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+		return lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark();
+	}
+
+	/**
 	 * Returns whether FlatLaf supports custom window decorations.
 	 * This depends on the operating system and on the used Java runtime.
 	 * <p>
