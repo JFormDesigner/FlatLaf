@@ -57,6 +57,7 @@ import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.JBRCustomDecorations.JBRWindowTopBorder;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -481,6 +482,9 @@ class FlatTitlePane
 				insets.bottom += menuBarInsets.bottom;
 			}
 
+			if( hasJBRCustomDecoration() )
+				insets = FlatUIUtils.addInsets( insets, JBRWindowTopBorder.getInstance().getBorderInsets() );
+
 			return insets;
 		}
 
@@ -490,6 +494,9 @@ class FlatTitlePane
 			Border menuBarBorder = getMenuBarBorder();
 			if( menuBarBorder != null )
 				menuBarBorder.paintBorder( c, g, x, y, width, height );
+
+			if( hasJBRCustomDecoration() )
+				JBRWindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
 		private Border getMenuBarBorder() {
@@ -536,12 +543,18 @@ class FlatTitlePane
 		public void windowActivated( WindowEvent e ) {
 			activeChanged( true );
 			updateJBRHitTestSpotsAndTitleBarHeight();
+
+			if( hasJBRCustomDecoration() )
+				JBRWindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 		}
 
 		@Override
 		public void windowDeactivated( WindowEvent e ) {
 			activeChanged( false );
 			updateJBRHitTestSpotsAndTitleBarHeight();
+
+			if( hasJBRCustomDecoration() )
+				JBRWindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 		}
 
 		@Override

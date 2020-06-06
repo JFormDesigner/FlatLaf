@@ -16,13 +16,18 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,8 +35,11 @@ import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.BorderUIResource;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -194,6 +202,101 @@ public class JBRCustomDecorations
 			Window_setHasCustomDecoration.setAccessible( true );
 		} catch( Exception ex ) {
 			// ignore
+		}
+	}
+
+	//---- class JBRWindowTopBorder -------------------------------------------
+
+	static class JBRWindowTopBorder
+		extends BorderUIResource.EmptyBorderUIResource
+	{
+		private static JBRWindowTopBorder instance;
+
+		private final Color defaultActiveBorder = new Color( 0x707070 );
+		private final Color inactiveLightColor = new Color( 0xaaaaaa );
+		private final Color inactiveDarkColor = new Color( 0x3f3f3f );
+
+		private boolean colorizationAffectsBorders;
+		private Color activeColor = defaultActiveBorder;
+
+		static JBRWindowTopBorder getInstance() {
+			if( instance == null )
+				instance = new JBRWindowTopBorder();
+			return instance;
+		}
+
+        private JBRWindowTopBorder() {
+			super( 1, 0, 0, 0 );
+
+			colorizationAffectsBorders = calculateAffectsBorders();
+			activeColor = calculateActiveBorderColor();
+
+			Toolkit toolkit = Toolkit.getDefaultToolkit();
+			toolkit.addPropertyChangeListener( "win.dwm.colorizationColor.affects.borders", e -> {
+				colorizationAffectsBorders = calculateAffectsBorders();
+				activeColor = calculateActiveBorderColor();
+			} );
+
+			PropertyChangeListener l = e -> {
+				activeColor = calculateActiveBorderColor();
+			};
+			toolkit.addPropertyChangeListener( "win.dwm.colorizationColor", l );
+			toolkit.addPropertyChangeListener( "win.dwm.colorizationColorBalance", l );
+			toolkit.addPropertyChangeListener( "win.frame.activeBorderColor", l );
+		}
+
+		private boolean calculateAffectsBorders() {
+			Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "win.dwm.colorizationColor.affects.borders" );
+			return (value instanceof Boolean) ? (Boolean) value : true;
+		}
+
+		private Color calculateActiveBorderColor() {
+			if( !colorizationAffectsBorders )
+				return defaultActiveBorder;
+
+			Toolkit toolkit = Toolkit.getDefaultToolkit();
+			Color colorizationColor = (Color) toolkit.getDesktopProperty( "win.dwm.colorizationColor" );
+			if( colorizationColor != null ) {
+				Object colorizationColorBalanceObj = toolkit.getDesktopProperty( "win.dwm.colorizationColorBalance" );
+				if( colorizationColorBalanceObj instanceof Integer ) {
+					int colorizationColorBalance = (Integer) colorizationColorBalanceObj;
+					if( colorizationColorBalance < 0 )
+						colorizationColorBalance = 100;
+
+					if( colorizationColorBalance == 0 )
+						return new Color( 0xD9D9D9 );
+					if( colorizationColorBalance == 100 )
+						return colorizationColor;
+
+					float alpha = colorizationColorBalance / 100.0f;
+					float remainder = 1 - alpha;
+					int r = Math.round( (colorizationColor.getRed() * alpha + 0xD9 * remainder) );
+					int g = Math.round( (colorizationColor.getGreen() * alpha + 0xD9 * remainder) );
+					int b = Math.round( (colorizationColor.getBlue() * alpha + 0xD9 * remainder) );
+					return new Color( r, g, b );
+				}
+				return colorizationColor;
+			}
+
+			Color activeBorderColor = (Color) toolkit.getDesktopProperty( "win.frame.activeBorderColor" );
+			return (activeBorderColor != null) ? activeBorderColor : UIManager.getColor( "MenuBar.borderColor" );
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			Window window = SwingUtilities.windowForComponent( c );
+			boolean active = (window != null) ? window.isActive() : false;
+
+			g.setColor( active ? activeColor : (FlatLaf.isLafDark() ? inactiveDarkColor : inactiveLightColor) );
+			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height, this::paintImpl );
+		}
+
+		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
+			g.drawRect( x, y, width - 1, 0 );
+		}
+
+		void repaintBorder( Component c ) {
+			c.repaint( 0, 0, c.getWidth(), 1 );
 		}
 	}
 }

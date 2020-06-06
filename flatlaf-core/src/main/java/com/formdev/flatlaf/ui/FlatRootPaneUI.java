@@ -109,7 +109,7 @@ public class FlatRootPaneUI
 
 	private void installClientDecorations() {
 		// install border
-		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE )
+		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE && !JBRCustomDecorations.isSupported() )
 			LookAndFeel.installBorder( rootPane, "RootPane.border" );
 		else
 			LookAndFeel.uninstallBorder( rootPane );
