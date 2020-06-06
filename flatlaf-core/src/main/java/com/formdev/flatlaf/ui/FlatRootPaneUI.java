@@ -55,6 +55,7 @@ public class FlatRootPaneUI
 	private JRootPane rootPane;
 	private FlatTitlePane titlePane;
 	private LayoutManager oldLayout;
+	private FlatWindowResizer windowResizer;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRootPaneUI();
@@ -111,11 +112,20 @@ public class FlatRootPaneUI
 		// install layout
 		oldLayout = rootPane.getLayout();
 		rootPane.setLayout( new FlatRootLayout() );
+
+		// install window resizer
+		if( !JBRCustomDecorations.isSupported() )
+			windowResizer = new FlatWindowResizer( rootPane );
 	}
 
 	private void uninstallClientDecorations() {
 		LookAndFeel.uninstallBorder( rootPane );
 		setTitlePane( null );
+
+		if( windowResizer != null ) {
+			windowResizer.uninstall();
+			windowResizer = null;
+		}
 
 		if( oldLayout != null ) {
 			rootPane.setLayout( oldLayout );

@@ -114,6 +114,8 @@ public class FlatWindowDecorationsTest
 		Window window = SwingUtilities.windowForComponent( this );
 		if( window instanceof Frame )
 			((Frame)window).setResizable( resizableCheckBox.isSelected() );
+		else if( window instanceof Dialog )
+			((Dialog)window).setResizable( resizableCheckBox.isSelected() );
 	}
 
 	private void menuItemActionPerformed(ActionEvent e) {
