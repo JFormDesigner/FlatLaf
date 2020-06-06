@@ -34,6 +34,7 @@ public class SystemInfo
 	// OS versions
 	public static final boolean IS_WINDOWS_10_OR_LATER;
 	public static final boolean IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER;
+	public static final boolean IS_MAC_OS_10_14_MOJAVE;
 	public static final boolean IS_MAC_OS_10_15_CATALINA_OR_LATER;
 
 	// Java versions
@@ -58,6 +59,7 @@ public class SystemInfo
 		long osVersion = scanVersion( System.getProperty( "os.version" ) );
 		IS_WINDOWS_10_OR_LATER = (IS_WINDOWS && osVersion >= toVersion( 10, 0, 0, 0 ));
 		IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER = (IS_MAC && osVersion >= toVersion( 10, 11, 0, 0 ));
+		IS_MAC_OS_10_14_MOJAVE = (IS_MAC && osVersion >= toVersion( 10, 14, 0, 0 ));
 		IS_MAC_OS_10_15_CATALINA_OR_LATER = (IS_MAC && osVersion >= toVersion( 10, 15, 0, 0 ));
 
 		// Java versions
