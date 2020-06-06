@@ -268,6 +268,9 @@ public class FlatInspector
 				if( c.getParent() instanceof JRootPane && c == ((JRootPane)c.getParent()).getGlassPane() )
 					continue;
 
+				if( "com.formdev.flatlaf.ui.FlatWindowResizer".equals( c.getClass().getName() ) )
+					continue;
+
 				return c;
 			}
 		}
