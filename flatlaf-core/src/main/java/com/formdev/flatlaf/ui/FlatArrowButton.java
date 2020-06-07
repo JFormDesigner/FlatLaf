@@ -160,14 +160,8 @@ public class FlatArrowButton
 			rh++;
 		}
 
-		// Adding -/+0.35 before rounding tends move up NORTH arrows and move down SOUTH arrows.
-		// This makes top margin of NORTH arrow equal to bottom margin of SOUTH arrow.
-		float rd = 0.35f;
-		float xrd = vert ? 0 : (direction == WEST ? -rd : rd);
-		float yrd = vert ? (direction == NORTH ? -rd : rd) : 0;
-
-		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) + xrd );
-		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) + yrd );
+		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) );
+		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) );
 
 		// move arrow for round borders
 		Container parent = getParent();
