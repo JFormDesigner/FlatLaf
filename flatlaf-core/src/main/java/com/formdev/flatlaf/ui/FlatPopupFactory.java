@@ -153,7 +153,8 @@ public class FlatPopupFactory
 
 		@Override
 		public void show() {
-			delegate.show();
+			if( delegate != null )
+				delegate.show();
 		}
 
 		@Override
@@ -185,6 +186,7 @@ public class FlatPopupFactory
 		private boolean oldOpaque;
 
 		// medium weight
+		private boolean mediumWeightShown;
 		private Panel mediumWeightPanel;
 		private JPanel dropShadowPanel;
 		private ComponentListener mediumPanelListener;
@@ -311,6 +313,11 @@ public class FlatPopupFactory
 		}
 
 		private void showMediumWeightDropShadow() {
+			if( mediumWeightShown )
+				return;
+
+			mediumWeightShown = true;
+
 			Window window = SwingUtilities.windowForComponent( owner );
 			if( window == null )
 				return;
@@ -326,24 +333,29 @@ public class FlatPopupFactory
 			mediumPanelListener = new ComponentListener() {
 				@Override
 				public void componentShown( ComponentEvent e ) {
-					dropShadowPanel.setVisible( true );
+					if( dropShadowPanel != null )
+						dropShadowPanel.setVisible( true );
 				}
 
 				@Override
 				public void componentHidden( ComponentEvent e ) {
-					dropShadowPanel.setVisible( false );
+					if( dropShadowPanel != null )
+						dropShadowPanel.setVisible( false );
 				}
 
 				@Override
 				public void componentMoved( ComponentEvent e ) {
-					Point location = mediumWeightPanel.getLocation();
-					Insets insets = dropShadowPanel.getInsets();
-					dropShadowPanel.setLocation( location.x - insets.left, location.y - insets.top );
+					if( dropShadowPanel != null && mediumWeightPanel != null ) {
+						Point location = mediumWeightPanel.getLocation();
+						Insets insets = dropShadowPanel.getInsets();
+						dropShadowPanel.setLocation( location.x - insets.left, location.y - insets.top );
+					}
 				}
 
 				@Override
 				public void componentResized( ComponentEvent e ) {
-					dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
+					if( dropShadowPanel != null )
+						dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
 				}
 			};
 			mediumWeightPanel.addComponentListener( mediumPanelListener );
