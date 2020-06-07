@@ -366,11 +366,9 @@ class FlatTitlePane
 
 		Frame frame = (Frame) window;
 
+		// set maximized bounds to avoid that maximized window overlaps Windows task bar
 		if( !hasJBRCustomDecoration() ) {
 			GraphicsConfiguration gc = window.getGraphicsConfiguration();
-
-			// remember current maximized bounds
-			Rectangle oldMaximizedBounds = frame.getMaximizedBounds();
 
 			// Screen bounds, which may be smaller than physical size on Java 9+.
 			// E.g. if running a 3840x2160 screen at 200%, screenBounds.size is 1920x1080.
@@ -415,20 +413,12 @@ class FlatTitlePane
 				maximizedWidth - screenInsets.left - screenInsets.right,
 				maximizedHeight - screenInsets.top - screenInsets.bottom );
 
-			// temporary change maximized bounds
+			// change maximized bounds
 			frame.setMaximizedBounds( maximizedBounds );
-
-			// maximize window
-			frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
-
-			// restore old maximized bounds
-			frame.setMaximizedBounds( oldMaximizedBounds );
-		} else {
-			// not necessary to set maximized bounds when running in JBR
-
-			// maximize window
-			frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
 		}
+
+		// maximize window
+		frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
 	}
 
 	private void restore() {
