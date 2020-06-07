@@ -58,6 +58,7 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.JBRCustomDecorations.JBRWindowTopBorder;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -371,32 +372,48 @@ class FlatTitlePane
 			// remember current maximized bounds
 			Rectangle oldMaximizedBounds = frame.getMaximizedBounds();
 
-			// Scaled screen size, which may be smaller than physical size on Java 9+.
-			// E.g. if running a 3840x2160 screen at 200%, scaledSreenSize is 1920x1080.
+			// Screen bounds, which may be smaller than physical size on Java 9+.
+			// E.g. if running a 3840x2160 screen at 200%, screenBounds.size is 1920x1080.
 			// In Java 9+, each screen can have its own scale factor.
 			//
-			// On Java 8, which does not scale, scaledSreenSize of the primary screen
+			// On Java 8, which does not scale, screenBounds.size of the primary screen
 			// is identical to its physical size. But when the primary screen is scaled,
-			// then scaledSreenSize of secondary screens is scaled with the scale factor
+			// then screenBounds.size of secondary screens is scaled with the scale factor
 			// of the primary screen.
 			// E.g. primary 3840x2160 screen at 150%, secondary 1920x1080 screen at 100%,
-			// then scaledSreenSize is 3840x2160 on primary and 2880x1560 on secondary.
-			Dimension scaledSreenSize = gc.getBounds().getSize();
+			// then screenBounds.size is 3840x2160 on primary and 2880x1560 on secondary.
+			Rectangle screenBounds = gc.getBounds();
 
-			// scale screen bounds to get physical screen size
-			AffineTransform defaultTransform = gc.getDefaultTransform();
-			int screenWidth = (int) (scaledSreenSize.width * defaultTransform.getScaleX());
-			int screenHeight = (int) (scaledSreenSize.height * defaultTransform.getScaleY());
+			int maximizedX = screenBounds.x;
+			int maximizedY = screenBounds.y;
+			int maximizedWidth = screenBounds.width;
+			int maximizedHeight = screenBounds.height;
 
-			// screen insets are in physical size,
-			// except for Java 8 on secondary screens where primary screen is scaled
+			if( !SystemInfo.IS_JAVA_15_OR_LATER ) {
+				// on Java 8 to 14, maximized x,y are 0,0 based on all screens in a multi-screen environment
+				maximizedX = 0;
+				maximizedY = 0;
+
+				// scale maximized screen size to get physical screen size for Java 9 to 14
+				AffineTransform defaultTransform = gc.getDefaultTransform();
+				maximizedWidth = (int) (maximizedWidth * defaultTransform.getScaleX());
+				maximizedHeight = (int) (maximizedHeight * defaultTransform.getScaleY());
+			}
+
+			// screen insets are in physical size, except for Java 15+
+			// (see https://bugs.openjdk.java.net/browse/JDK-8243925)
+			// and except for Java 8 on secondary screens where primary screen is scaled
 			Insets screenInsets = window.getToolkit().getScreenInsets( gc );
 
-			// maximized bounds are required in physical size,
-			// except for Java 8 on secondary screens where primary screen is scaled
-			Rectangle maximizedBounds = new Rectangle( screenInsets.left, screenInsets.top,
-				screenWidth - screenInsets.left - screenInsets.right,
-				screenHeight - screenInsets.top - screenInsets.bottom );
+			// maximized bounds are required in physical size, except for Java 15+
+			// (see https://bugs.openjdk.java.net/browse/JDK-8231564 and
+			//      https://bugs.openjdk.java.net/browse/JDK-8176359)
+			// and except for Java 8 on secondary screens where primary screen is scaled
+			Rectangle maximizedBounds = new Rectangle(
+				maximizedX + screenInsets.left,
+				maximizedY + screenInsets.top,
+				maximizedWidth - screenInsets.left - screenInsets.right,
+				maximizedHeight - screenInsets.top - screenInsets.bottom );
 
 			// temporary change maximized bounds
 			frame.setMaximizedBounds( maximizedBounds );
