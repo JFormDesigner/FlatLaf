@@ -32,6 +32,8 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
@@ -47,7 +49,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 class FlatWindowResizer
 	extends JComponent
-	implements PropertyChangeListener, ComponentListener
+	implements PropertyChangeListener, WindowStateListener, ComponentListener
 {
 	private final static Integer WINDOW_RESIZER_LAYER = JLayeredPane.DRAG_LAYER + 1;
 
@@ -86,8 +88,10 @@ class FlatWindowResizer
 
 		Container parent = rootPane.getParent();
 		window = (parent instanceof Window) ? (Window) parent : null;
-		if( window instanceof Frame )
+		if( window instanceof Frame ) {
 			window.addPropertyChangeListener( "resizable", this );
+			window.addWindowStateListener( this );
+		}
 
 		updateVisibility();
 	}
@@ -96,8 +100,10 @@ class FlatWindowResizer
 	public void removeNotify() {
 		super.removeNotify();
 
-		if( window instanceof Frame )
+		if( window instanceof Frame ) {
 			window.removePropertyChangeListener( "resizable", this );
+			window.removeWindowStateListener( this );
+		}
 		window = null;
 
 		updateVisibility();
@@ -123,7 +129,7 @@ class FlatWindowResizer
 
 	private boolean isWindowResizable() {
 		if( window instanceof Frame )
-			return ((Frame)window).isResizable();
+			return ((Frame)window).isResizable() && (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) == 0;
 		if( window instanceof Dialog )
 			return ((Dialog)window).isResizable();
 		return false;
@@ -131,6 +137,11 @@ class FlatWindowResizer
 
 	@Override
 	public void propertyChange( PropertyChangeEvent e ) {
+		updateVisibility();
+	}
+
+	@Override
+	public void windowStateChanged( WindowEvent e ) {
 		updateVisibility();
 	}
 
