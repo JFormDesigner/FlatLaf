@@ -43,6 +43,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -367,7 +368,11 @@ class FlatTitlePane
 		Frame frame = (Frame) window;
 
 		// set maximized bounds to avoid that maximized window overlaps Windows task bar
-		if( !hasJBRCustomDecoration() ) {
+		// (if not running in JBR and if not modified from the application)
+		if( !hasJBRCustomDecoration() &&
+			(frame.getMaximizedBounds() == null ||
+			 Objects.equals( frame.getMaximizedBounds(), rootPane.getClientProperty( "flatlaf.maximizedBounds" ) )) )
+		{
 			GraphicsConfiguration gc = window.getGraphicsConfiguration();
 
 			// Screen bounds, which may be smaller than physical size on Java 9+.
@@ -415,6 +420,10 @@ class FlatTitlePane
 
 			// change maximized bounds
 			frame.setMaximizedBounds( maximizedBounds );
+
+			// remember maximized bounds in client property to be able to detect
+			// whether maximized bounds are modified from the application
+			rootPane.putClientProperty( "flatlaf.maximizedBounds", maximizedBounds );
 		}
 
 		// maximize window

@@ -73,6 +73,8 @@ public class FlatWindowDecorationsTest
 
 		Window window = SwingUtilities.windowForComponent( this );
 		menuBarCheckBox.setEnabled( window instanceof JFrame );
+		menuBarEmbeddedCheckBox.setEnabled( window instanceof JFrame );
+		maximizedBoundsCheckBox.setEnabled( window instanceof Frame );
 
 		boolean windowHasIcons = (window != null && !window.getIconImages().isEmpty());
 		iconNoneRadioButton.setEnabled( windowHasIcons );
@@ -116,6 +118,15 @@ public class FlatWindowDecorationsTest
 			((Frame)window).setResizable( resizableCheckBox.isSelected() );
 		else if( window instanceof Dialog )
 			((Dialog)window).setResizable( resizableCheckBox.isSelected() );
+	}
+
+	private void maximizedBoundsChanged() {
+		Window window = SwingUtilities.windowForComponent( this );
+		if( window instanceof Frame ) {
+			((Frame)window).setMaximizedBounds( maximizedBoundsCheckBox.isSelected()
+				? new Rectangle( 50, 100, 1000, 700 )
+				: null );
+		}
 	}
 
 	private void menuItemActionPerformed(ActionEvent e) {
@@ -189,6 +200,7 @@ public class FlatWindowDecorationsTest
 		menuBarCheckBox = new JCheckBox();
 		menuBarEmbeddedCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
+		maximizedBoundsCheckBox = new JCheckBox();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
 		JPanel panel1 = new JPanel();
@@ -264,6 +276,11 @@ public class FlatWindowDecorationsTest
 		resizableCheckBox.setSelected(true);
 		resizableCheckBox.addActionListener(e -> resizableChanged());
 		add(resizableCheckBox, "cell 0 2");
+
+		//---- maximizedBoundsCheckBox ----
+		maximizedBoundsCheckBox.setText("maximized bounds (50,100, 1000,700)");
+		maximizedBoundsCheckBox.addActionListener(e -> maximizedBoundsChanged());
+		add(maximizedBoundsCheckBox, "cell 1 2");
 
 		//---- label1 ----
 		label1.setText("Style:");
@@ -564,6 +581,7 @@ public class FlatWindowDecorationsTest
 	private JCheckBox menuBarCheckBox;
 	private JCheckBox menuBarEmbeddedCheckBox;
 	private JCheckBox resizableCheckBox;
+	private JCheckBox maximizedBoundsCheckBox;
 	private JRadioButton styleNoneRadioButton;
 	private JRadioButton styleFrameRadioButton;
 	private JRadioButton stylePlainRadioButton;
