@@ -231,6 +231,9 @@ class ControlBar
 
 	private void enabledChanged() {
 		enabledDisable( tabbedPane, enabledCheckBox.isSelected() );
+
+		// repainting whole tabbed pane is faster than repainting many individual components
+		tabbedPane.repaint();
 	}
 
 	private void enabledDisable( Container container, boolean enabled ) {
