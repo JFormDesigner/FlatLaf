@@ -175,6 +175,7 @@ public class FlatSVGIcon
 		private static ColorFilter instance;
 
 		private final Map<Integer, String> rgb2keyMap = new HashMap<>();
+		private final Map<Color, Color> color2colorMap = new HashMap<>();
 
 		public static ColorFilter getInstance() {
 			if( instance == null )
@@ -187,12 +188,28 @@ public class FlatSVGIcon
 				rgb2keyMap.put( c.rgb, c.key );
 		}
 
+		public void addAll( Map<Color, Color> from2toMap ) {
+			color2colorMap.putAll( from2toMap );
+		}
+
+		public void add( Color from, Color to ) {
+			color2colorMap.put( from, to );
+		}
+
+		public void remove( Color from ) {
+			color2colorMap.remove( from );
+		}
+
 		public Color filter( Color color ) {
+			Color newColor = color2colorMap.get( color );
+			if( newColor != null )
+				return newColor;
+
 			String colorKey = rgb2keyMap.get( color.getRGB() & 0xffffff );
 			if( colorKey == null )
 				return color;
 
-			Color newColor = UIManager.getColor( colorKey );
+			newColor = UIManager.getColor( colorKey );
 			if( newColor == null )
 				return color;
 
