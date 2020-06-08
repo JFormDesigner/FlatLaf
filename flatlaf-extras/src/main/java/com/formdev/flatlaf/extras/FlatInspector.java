@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.testing;
+package com.formdev.flatlaf.extras;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
