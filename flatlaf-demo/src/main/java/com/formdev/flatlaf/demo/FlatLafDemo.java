@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.demo;
 
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -37,6 +38,9 @@ public class FlatLafDemo
 
 			// set look and feel
 			DemoPrefs.initLaf( args );
+
+			// install inspector
+			FlatInspector.install( "ctrl shift alt X" );
 
 			// create frame
 			DemoFrame frame = new DemoFrame();
