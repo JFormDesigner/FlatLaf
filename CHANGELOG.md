@@ -11,6 +11,7 @@ FlatLaf Change Log
 - Button: Support non-square icon-only buttons. (issue #110)
 - Ubuntu Linux: Fixed poorly rendered font. (issue #105)
 - macOS Catalina: Use Helvetica Neue font.
+- `FlatInspector` added (see [FlatLaf Extras](flatlaf-extras)).
 
 
 ## 0.35

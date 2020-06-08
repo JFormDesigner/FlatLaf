@@ -3,6 +3,9 @@ FlatLaf Extras
 
 This sub-project provides some additional components and classes:
 
+- [FlatInspector](src/main/java/com/formdev/flatlaf/extras/FlatInspector.java):
+  A simple UI inspector that shows information about UI component at mouse
+  location in a tooltip.
 - [FlatSVGIcon](src/main/java/com/formdev/flatlaf/extras/FlatSVGIcon.java): An
   icon that displays SVG using
   [svgSalamander](https://github.com/JFormDesigner/svgSalamander).
