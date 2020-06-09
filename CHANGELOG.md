@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.36
 
 - ScrollBar: Made styling more flexible by supporting insets and arc for track
   and thumb. (issue #103)
