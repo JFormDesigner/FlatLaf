@@ -50,6 +50,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ToggleButton.startBackground				Color	optional; if set, a gradient paint is used and ToggleButton.background is ignored
  * @uiDefault ToggleButton.endBackground				Color	optional; if set, a gradient paint is used
  * @uiDefault ToggleButton.pressedBackground			Color
+ * @uiDefault ToggleButton.disabledBackground			Color	optional
  * @uiDefault ToggleButton.disabledText					Color
  * @uiDefault ToggleButton.toolbar.hoverBackground		Color
  * @uiDefault ToggleButton.toolbar.pressedBackground	Color

@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Button and ToggleButton: Support disabled background color (use UI values
+  `Button.disabledBackground` and `ToggleButton.disabledBackground`). (issue
+  #112)
+
+
 ## 0.36
 
 - ScrollBar: Made styling more flexible by supporting insets and arc for track
