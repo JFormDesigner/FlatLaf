@@ -38,6 +38,7 @@ dependencies {
 	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
 	implementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
 	implementation( "com.jidesoft:jide-oss:3.6.18" )
+	implementation( "com.glazedlists:glazedlists:1.11.0" )
 	implementation( "org.netbeans.api:org-openide-awt:RELEASE112" )
 
 //	implementation( "org.pushing-pixels:radiance-substance:2.5.1" )
