@@ -6,6 +6,8 @@ FlatLaf Change Log
 - Button and ToggleButton: Support disabled background color (use UI values
   `Button.disabledBackground` and `ToggleButton.disabledBackground`). (issue
   #112)
+- TableHeader: Support top/bottom/left positioned sort arrow when using
+  [Glazed Lists](https://github.com/glazedlists/glazedlists). (issue #113)
 
 
 ## 0.36
