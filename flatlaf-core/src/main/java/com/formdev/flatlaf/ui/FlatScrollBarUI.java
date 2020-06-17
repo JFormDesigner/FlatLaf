@@ -245,7 +245,7 @@ public class FlatScrollBarUI
 		if( thumbBounds.isEmpty() || !scrollbar.isEnabled() )
 			return;
 
-		g.setColor( getThumbColor( c, hoverThumb ) );
+		g.setColor( getThumbColor( c, hoverThumb || (hoverThumbWithTrack && hoverTrack) ) );
 		paintTrackOrThumb( g, c, thumbBounds, thumbInsets, thumbArc );
 	}
 
@@ -336,7 +336,7 @@ public class FlatScrollBarUI
 			boolean inThumb = getThumbBounds().contains( x, y );
 			if( inTrack != hoverTrack || inThumb != hoverThumb ) {
 				hoverTrack = inTrack;
-				hoverThumb = inThumb || (hoverThumbWithTrack && inTrack);
+				hoverThumb = inThumb;
 				repaint();
 			}
 		}
