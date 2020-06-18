@@ -40,21 +40,21 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault Component.focusColor						Color
  * @uiDefault CheckBox.icon.focusedColor				Color	optional; defaults to Component.focusColor
  * @uiDefault CheckBox.icon.borderColor					Color
- * @uiDefault CheckBox.icon.disabledBorderColor			Color
- * @uiDefault CheckBox.icon.selectedBorderColor			Color
- * @uiDefault CheckBox.icon.focusedBorderColor			Color
- * @uiDefault CheckBox.icon.hoverBorderColor			Color	optional
- * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional
  * @uiDefault CheckBox.icon.background					Color
- * @uiDefault CheckBox.icon.disabledBackground			Color
- * @uiDefault CheckBox.icon.focusedBackground			Color	optional
- * @uiDefault CheckBox.icon.hoverBackground				Color	optional
- * @uiDefault CheckBox.icon.pressedBackground			Color	optional
+ * @uiDefault CheckBox.icon.selectedBorderColor			Color
  * @uiDefault CheckBox.icon.selectedBackground			Color
- * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional
- * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional
  * @uiDefault CheckBox.icon.checkmarkColor				Color
+ * @uiDefault CheckBox.icon.disabledBorderColor			Color
+ * @uiDefault CheckBox.icon.disabledBackground			Color
  * @uiDefault CheckBox.icon.disabledCheckmarkColor		Color
+ * @uiDefault CheckBox.icon.focusedBorderColor			Color
+ * @uiDefault CheckBox.icon.focusedBackground			Color	optional
+ * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional
+ * @uiDefault CheckBox.icon.hoverBorderColor			Color	optional
+ * @uiDefault CheckBox.icon.hoverBackground				Color	optional
+ * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional
+ * @uiDefault CheckBox.icon.pressedBackground			Color	optional
+ * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional
  * @uiDefault CheckBox.arc								int
  *
  * @author Karl Tauber
@@ -67,22 +67,31 @@ public class FlatCheckBoxIcon
 		UIManager.getColor( "Component.focusColor" ) );
 	protected final int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
 
+	// enabled
 	protected final Color borderColor = UIManager.getColor( "CheckBox.icon.borderColor" );
-	protected final Color disabledBorderColor = UIManager.getColor( "CheckBox.icon.disabledBorderColor" );
-	protected final Color selectedBorderColor = UIManager.getColor( "CheckBox.icon.selectedBorderColor" );
-	protected final Color focusedBorderColor = UIManager.getColor( "CheckBox.icon.focusedBorderColor" );
-	protected final Color hoverBorderColor = UIManager.getColor( "CheckBox.icon.hoverBorderColor" );
-	protected final Color selectedFocusedBorderColor = UIManager.getColor( "CheckBox.icon.selectedFocusedBorderColor" );
 	protected final Color background = UIManager.getColor( "CheckBox.icon.background" );
-	protected final Color disabledBackground = UIManager.getColor( "CheckBox.icon.disabledBackground" );
-	protected final Color focusedBackground = UIManager.getColor( "CheckBox.icon.focusedBackground" );
-	protected final Color hoverBackground = UIManager.getColor( "CheckBox.icon.hoverBackground" );
-	protected final Color pressedBackground = UIManager.getColor( "CheckBox.icon.pressedBackground" );
+	protected final Color selectedBorderColor = UIManager.getColor( "CheckBox.icon.selectedBorderColor" );
 	protected final Color selectedBackground = UIManager.getColor( "CheckBox.icon.selectedBackground" );
-	protected final Color selectedHoverBackground = UIManager.getColor( "CheckBox.icon.selectedHoverBackground" );
-	protected final Color selectedPressedBackground = UIManager.getColor( "CheckBox.icon.selectedPressedBackground" );
 	protected final Color checkmarkColor = UIManager.getColor( "CheckBox.icon.checkmarkColor" );
+
+	// disabled
+	protected final Color disabledBorderColor = UIManager.getColor( "CheckBox.icon.disabledBorderColor" );
+	protected final Color disabledBackground = UIManager.getColor( "CheckBox.icon.disabledBackground" );
 	protected final Color disabledCheckmarkColor = UIManager.getColor( "CheckBox.icon.disabledCheckmarkColor" );
+
+	// focused
+	protected final Color focusedBorderColor = UIManager.getColor( "CheckBox.icon.focusedBorderColor" );
+	protected final Color focusedBackground = UIManager.getColor( "CheckBox.icon.focusedBackground" );
+	protected final Color selectedFocusedBorderColor = UIManager.getColor( "CheckBox.icon.selectedFocusedBorderColor" );
+
+	// hover
+	protected final Color hoverBorderColor = UIManager.getColor( "CheckBox.icon.hoverBorderColor" );
+	protected final Color hoverBackground = UIManager.getColor( "CheckBox.icon.hoverBackground" );
+	protected final Color selectedHoverBackground = UIManager.getColor( "CheckBox.icon.selectedHoverBackground" );
+
+	// pressed
+	protected final Color pressedBackground = UIManager.getColor( "CheckBox.icon.pressedBackground" );
+	protected final Color selectedPressedBackground = UIManager.getColor( "CheckBox.icon.selectedPressedBackground" );
 
 	static final int ICON_SIZE = 15;
 
