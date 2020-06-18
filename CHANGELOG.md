@@ -6,6 +6,9 @@ FlatLaf Change Log
 - Button and ToggleButton: Support disabled background color (use UI values
   `Button.disabledBackground` and `ToggleButton.disabledBackground`). (issue
   #112)
+- ScrollBar: Support pressed track, thumb and button colors (use UI values
+  `ScrollBar.pressedTrackColor`, `ScrollBar.pressedThumbColor` and
+  `ScrollBar.pressedButtonBackground`). (issue #115)
 - TableHeader: Support top/bottom/left positioned sort arrow when using
   [Glazed Lists](https://github.com/glazedlists/glazedlists). (issue #113)
 

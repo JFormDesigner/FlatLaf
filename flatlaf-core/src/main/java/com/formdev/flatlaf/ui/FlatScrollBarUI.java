@@ -59,13 +59,18 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ScrollBar.thumbInsets					Insets
  * @uiDefault ScrollBar.trackArc					int
  * @uiDefault ScrollBar.thumbArc					int
- * @uiDefault ScrollBar.hoverTrackColor				Color
- * @uiDefault ScrollBar.hoverThumbColor				Color
+ * @uiDefault ScrollBar.hoverTrackColor				Color	optional
+ * @uiDefault ScrollBar.hoverThumbColor				Color	optional
  * @uiDefault ScrollBar.hoverThumbWithTrack			boolean
+ * @uiDefault ScrollBar.pressedTrackColor			Color	optional
+ * @uiDefault ScrollBar.pressedThumbColor			Color	optional
+ * @uiDefault ScrollBar.pressedThumbWithTrack		boolean
  * @uiDefault Component.arrowType					String	triangle (default) or chevron
  * @uiDefault ScrollBar.showButtons					boolean
  * @uiDefault ScrollBar.buttonArrowColor			Color
  * @uiDefault ScrollBar.buttonDisabledArrowColor	Color
+ * @uiDefault ScrollBar.hoverButtonBackground		Color	optional
+ * @uiDefault ScrollBar.pressedButtonBackground		Color	optional
  *
  * @author Karl Tauber
  */
@@ -79,11 +84,16 @@ public class FlatScrollBarUI
 	protected Color hoverTrackColor;
 	protected Color hoverThumbColor;
 	protected boolean hoverThumbWithTrack;
+	protected Color pressedTrackColor;
+	protected Color pressedThumbColor;
+	protected boolean pressedThumbWithTrack;
 
 	protected boolean showButtons;
 	protected String arrowType;
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
+	protected Color hoverButtonBackground;
+	protected Color pressedButtonBackground;
 
 	private MouseAdapter hoverListener;
 	protected boolean hoverTrack;
@@ -122,11 +132,16 @@ public class FlatScrollBarUI
 		hoverTrackColor = UIManager.getColor( "ScrollBar.hoverTrackColor" );
 		hoverThumbColor = UIManager.getColor( "ScrollBar.hoverThumbColor" );
 		hoverThumbWithTrack = UIManager.getBoolean( "ScrollBar.hoverThumbWithTrack" );
+		pressedTrackColor = UIManager.getColor( "ScrollBar.pressedTrackColor" );
+		pressedThumbColor = UIManager.getColor( "ScrollBar.pressedThumbColor" );
+		pressedThumbWithTrack = UIManager.getBoolean( "ScrollBar.pressedThumbWithTrack" );
 
 		showButtons = UIManager.getBoolean( "ScrollBar.showButtons" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		buttonArrowColor = UIManager.getColor( "ScrollBar.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ScrollBar.buttonDisabledArrowColor" );
+		hoverButtonBackground = UIManager.getColor( "ScrollBar.hoverButtonBackground" );
+		pressedButtonBackground = UIManager.getColor( "ScrollBar.pressedButtonBackground" );
 	}
 
 	@Override
@@ -137,9 +152,13 @@ public class FlatScrollBarUI
 		thumbInsets = null;
 		hoverTrackColor = null;
 		hoverThumbColor = null;
+		pressedTrackColor = null;
+		pressedThumbColor = null;
 
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
+		hoverButtonBackground = null;
+		pressedButtonBackground = null;
 	}
 
 	@Override
@@ -188,12 +207,12 @@ public class FlatScrollBarUI
 	}
 
 	private JButton createArrowButton( int orientation ) {
-		FlatArrowButton button = new FlatArrowButton( orientation,
-			arrowType, buttonArrowColor, buttonDisabledArrowColor, null, hoverTrackColor )
+		FlatArrowButton button = new FlatArrowButton( orientation, arrowType, buttonArrowColor,
+			buttonDisabledArrowColor, null, hoverButtonBackground, pressedButtonBackground )
 		{
 			@Override
-			protected Color deriveHoverBackground( Color hoverBackground ) {
-				return getTrackColor( scrollbar, true ) ;
+			protected Color deriveBackground( Color background ) {
+				return FlatUIUtils.deriveColor( background, scrollbar.getBackground() );
 			}
 
 			@Override
@@ -236,7 +255,7 @@ public class FlatScrollBarUI
 
 	@Override
 	protected void paintTrack( Graphics g, JComponent c, Rectangle trackBounds ) {
-		g.setColor( getTrackColor( c, hoverTrack ) );
+		g.setColor( getTrackColor( c, hoverTrack, isPressed && hoverTrack && !hoverThumb ) );
 		paintTrackOrThumb( g, c, trackBounds, trackInsets, trackArc );
 	}
 
@@ -245,7 +264,8 @@ public class FlatScrollBarUI
 		if( thumbBounds.isEmpty() || !scrollbar.isEnabled() )
 			return;
 
-		g.setColor( getThumbColor( c, hoverThumb || (hoverThumbWithTrack && hoverTrack) ) );
+		g.setColor( getThumbColor( c, hoverThumb || (hoverThumbWithTrack && hoverTrack),
+			isPressed && (hoverThumb || (pressedThumbWithTrack && hoverTrack)) ) );
 		paintTrackOrThumb( g, c, thumbBounds, thumbInsets, thumbArc );
 	}
 
@@ -277,15 +297,23 @@ public class FlatScrollBarUI
 		// do not paint
 	}
 
-	protected Color getTrackColor( JComponent c, boolean hover ) {
+	protected Color getTrackColor( JComponent c, boolean hover, boolean pressed ) {
 		Color trackColor = FlatUIUtils.deriveColor( this.trackColor, c.getBackground() );
-		return hover ? FlatUIUtils.deriveColor( hoverTrackColor, trackColor ) : trackColor;
+		return (pressed && pressedTrackColor != null)
+			? FlatUIUtils.deriveColor( pressedTrackColor, trackColor )
+			: ((hover && hoverTrackColor != null)
+				? FlatUIUtils.deriveColor( hoverTrackColor, trackColor )
+				: trackColor);
 	}
 
-	protected Color getThumbColor( JComponent c, boolean hover ) {
+	protected Color getThumbColor( JComponent c, boolean hover, boolean pressed ) {
 		Color trackColor = FlatUIUtils.deriveColor( this.trackColor, c.getBackground() );
 		Color thumbColor = FlatUIUtils.deriveColor( this.thumbColor, trackColor );
-		return hover ? FlatUIUtils.deriveColor( hoverThumbColor, thumbColor ) : thumbColor;
+		return (pressed && pressedThumbColor != null)
+			? FlatUIUtils.deriveColor( pressedThumbColor, thumbColor )
+			: ((hover && hoverThumbColor != null)
+				? FlatUIUtils.deriveColor( hoverThumbColor, thumbColor )
+				: thumbColor);
 	}
 
 	@Override
@@ -323,11 +351,14 @@ public class FlatScrollBarUI
 		@Override
 		public void mousePressed( MouseEvent e ) {
 			isPressed = true;
+			repaint();
 		}
 
 		@Override
 		public void mouseReleased( MouseEvent e ) {
 			isPressed = false;
+			repaint();
+
 			update( e.getX(), e.getY() );
 		}
 

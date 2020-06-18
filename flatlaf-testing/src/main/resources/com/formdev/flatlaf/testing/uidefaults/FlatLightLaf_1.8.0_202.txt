@@ -764,11 +764,15 @@ ScrollBar.background           #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonArrowColor     #666666    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverButtonBackground #e5e5e5    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5%)
 ScrollBar.hoverThumbColor      #c3c3c3    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
 ScrollBar.hoverThumbWithTrack  false
 ScrollBar.hoverTrackColor      #ededed    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3%)
 ScrollBar.maximumThumbSize     4096,4096    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumThumbSize     8,8    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.pressedButtonBackground #d9d9d9    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
+ScrollBar.pressedThumbColor    #a9a9a9    com.formdev.flatlaf.util.DerivedColor [UI]    darken(20%)
+ScrollBar.pressedThumbWithTrack false
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
 ScrollBar.thumb                #dcdcdc    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
