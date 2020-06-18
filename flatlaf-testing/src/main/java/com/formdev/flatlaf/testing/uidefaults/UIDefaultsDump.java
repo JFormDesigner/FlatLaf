@@ -89,9 +89,11 @@ public class UIDefaultsDump
 		dump( FlatLightLaf.class.getName(), dir );
 		dump( FlatDarkLaf.class.getName(), dir );
 
-//		dump( FlatIntelliJLaf.class.getName(), dir );
-//		dump( FlatDarculaLaf.class.getName(), dir );
-//
+		if( SystemInfo.IS_WINDOWS ) {
+			dump( FlatIntelliJLaf.class.getName(), dir );
+			dump( FlatDarculaLaf.class.getName(), dir );
+		}
+
 //		dump( MyBasicLookAndFeel.class.getName(), dir );
 //		dump( MetalLookAndFeel.class.getName(), dir );
 //		dump( NimbusLookAndFeel.class.getName(), dir );
@@ -170,14 +172,20 @@ public class UIDefaultsDump
 			: ((SystemInfo.IS_LINUX && lookAndFeel instanceof FlatLaf)
 				? "-linux"
 				: "");
+		String javaVersion = System.getProperty( "java.version" );
 		File file = new File( dir, name + nameSuffix + "_"
-			+ System.getProperty( "java.version" ) + osSuffix + ".txt" );
+			+ javaVersion + osSuffix + ".txt" );
 
 		// build differences
 		String content;
-		if( !osSuffix.isEmpty() && nameSuffix.isEmpty() ) {
-			File origFile = new File( dir, name + nameSuffix + "_"
-				+ System.getProperty( "java.version" ) + ".txt" );
+		File origFile = null;
+		if( !osSuffix.isEmpty() && nameSuffix.isEmpty() )
+			origFile = new File( dir, name + nameSuffix + "_" + javaVersion + ".txt" );
+		else if( lookAndFeel instanceof FlatIntelliJLaf && SystemInfo.IS_WINDOWS )
+			origFile = new File( dir, "FlatLightLaf_" + javaVersion + ".txt" );
+		else if( lookAndFeel instanceof FlatDarculaLaf && SystemInfo.IS_WINDOWS )
+			origFile = new File( dir, "FlatDarkLaf_" + javaVersion + ".txt" );
+		if( origFile != null ) {
 			try {
 				Map<String, String> defaults1 = parse( new FileReader( origFile ) );
 				Map<String, String> defaults2 = parse( new StringReader( stringWriter.toString() ) );

@@ -1,0 +1,100 @@
+- Class  com.formdev.flatlaf.FlatLightLaf
++ Class  com.formdev.flatlaf.FlatIntelliJLaf
+
+- ID     FlatLaf - FlatLaf Light
++ ID     FlatLaf - FlatLaf IntelliJ
+
+- Name   FlatLaf Light
++ Name   FlatLaf IntelliJ
+
+- Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
++ Button.border                  [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
+
+- Button.default.background      #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.background      #4d8ac9    javax.swing.plaf.ColorUIResource [UI]
+
++ Button.default.boldText        true
+
+- Button.default.borderColor     #4f9ee3    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.borderColor     #3d75b2    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.borderWidth     2
++ Button.default.borderWidth     1
+
+- Button.default.focusedBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.focusedBorderColor #a9c9f5    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.foreground      #000000    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.foreground      #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.hoverBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.hoverBorderColor #a9c9f5    javax.swing.plaf.ColorUIResource [UI]
+
+- CheckBox.icon.checkmarkColor   #4f9ee3    javax.swing.plaf.ColorUIResource [UI]
++ CheckBox.icon.checkmarkColor   #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+- CheckBox.icon.selectedBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ CheckBox.icon.selectedBackground #4f9ee3    javax.swing.plaf.ColorUIResource [UI]
+
+- CheckBox.icon.selectedBorderColor #b0b0b0    javax.swing.plaf.ColorUIResource [UI]
++ CheckBox.icon.selectedBorderColor #4b97d9    javax.swing.plaf.ColorUIResource [UI]
+
++ CheckBox.icon.selectedFocusedBorderColor #accff7    javax.swing.plaf.ColorUIResource [UI]
+
++ CheckBox.icon.selectedHoverBackground #5e94ce    javax.swing.plaf.ColorUIResource [UI]
+
++ CheckBox.icon.selectedPressedBackground #72a1d4    javax.swing.plaf.ColorUIResource [UI]
+
+- ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
++ ComboBox.border                [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
+
+- Component.arrowType            chevron
++ Component.arrowType            triangle
+
+- Component.focusWidth           0
++ Component.focusWidth           2
+
+- Component.innerFocusWidth      0.5
++ Component.innerFocusWidth      0
+
+- Component.innerOutlineWidth    1.0
++ Component.innerOutlineWidth    0
+
+- FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
++ FormattedTextField.border      [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+
+- HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
++ HelpButton.icon                [lazy] 26,26    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
+
+- JXDatePicker.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
++ JXDatePicker.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
+
+- PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
++ PasswordField.border           [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+
+- RadioButton.icon.centerDiameter 8
++ RadioButton.icon.centerDiameter 5
+
+- ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
++ ScrollPane.border              [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+
+- Spinner.border                 [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
++ Spinner.border                 [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
+
+- Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
++ Table.scrollPaneBorder         [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+
+- TextField.border               [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
++ TextField.border               [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+
+- ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
++ ToggleButton.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
+
+- Button.default.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
+- CheckBox.icon.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
+- HelpButton.focusedBackground   #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
