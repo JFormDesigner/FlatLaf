@@ -41,7 +41,7 @@ dependencies {
 	implementation( "com.glazedlists:glazedlists:1.11.0" )
 	implementation( "org.netbeans.api:org-openide-awt:RELEASE112" )
 
-//	implementation( "org.pushing-pixels:radiance-substance:2.5.1" )
-//	implementation( "com.weblookandfeel:weblaf-ui:1.2.12" )
+//	implementation( "org.pushing-pixels:radiance-substance:3.0.0" )
+//	implementation( "com.weblookandfeel:weblaf-ui:1.2.13" )
 //	implementation( "com.jgoodies:jgoodies-looks:2.7.0" )
 }
