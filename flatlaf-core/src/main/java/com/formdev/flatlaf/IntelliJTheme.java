@@ -511,7 +511,7 @@ public class IntelliJTheme
 		checkboxKeyMapping.put( "Checkbox.Border.Default",      "CheckBox.icon.borderColor" );
 		checkboxKeyMapping.put( "Checkbox.Border.Disabled",     "CheckBox.icon.disabledBorderColor" );
 		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Default",  "CheckBox.icon.focusedBorderColor" );
-		checkboxKeyMapping.put( "Checkbox.Focus.Wide",          "CheckBox.icon.focusedColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Wide",          "CheckBox.icon.focusColor" );
 		checkboxKeyMapping.put( "Checkbox.Foreground.Disabled", "CheckBox.icon.disabledCheckmarkColor" );
 		checkboxKeyMapping.put( "Checkbox.Background.Selected", "CheckBox.icon.selectedBackground" );
 		checkboxKeyMapping.put( "Checkbox.Border.Selected",     "CheckBox.icon.selectedBorderColor" );

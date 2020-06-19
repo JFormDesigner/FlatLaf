@@ -3,6 +3,9 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- CheckBox and RadioButton: Support changing selected icon style from outline to
+  filled (as in FlatLaf IntelliJ theme) with `UIManager.put(
+  "CheckBox.icon.style", "filled" );`.
 - Button and ToggleButton: Support disabled background color (use UI values
   `Button.disabledBackground` and `ToggleButton.disabledBackground`). (issue
   #112)

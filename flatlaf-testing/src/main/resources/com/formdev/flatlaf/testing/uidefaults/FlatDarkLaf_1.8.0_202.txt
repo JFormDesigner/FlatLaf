@@ -130,6 +130,11 @@ CheckBox.icon.selectedBorderColor #6b6b6b    javax.swing.plaf.ColorUIResource [U
 CheckBox.icon.selectedFocusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
 CheckBox.iconTextGap           4
+CheckBox.icon[filled].checkmarkColor #43494a    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedBackground #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedBorderColor #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedHoverBackground #9f9f9f    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedPressedBackground #989898    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.margin                2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 CheckBox.rollover              true
 CheckBox.textIconGap           4
@@ -704,6 +709,7 @@ RadioButton.highlight          #242424    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.icon.centerDiameter 8
 RadioButton.icon               [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonIcon [UI]
 RadioButton.iconTextGap        4
+RadioButton.icon[filled].centerDiameter 5
 RadioButton.light              #313131    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.margin             2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 RadioButton.rollover           true

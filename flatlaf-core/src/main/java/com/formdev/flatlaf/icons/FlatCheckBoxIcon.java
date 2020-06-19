@@ -36,9 +36,11 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  *       is painted outside of the icon bounds. Make sure that the checkbox
  *       has margins, which are equal or greater than focusWidth.
  *
+ * @uiDefault CheckBox.icon.style						String	optional; "outline"/null (default) or "filled"
  * @uiDefault Component.focusWidth						int
  * @uiDefault Component.focusColor						Color
- * @uiDefault CheckBox.icon.focusedColor				Color	optional; defaults to Component.focusColor
+ * @uiDefault CheckBox.icon.focusWidth					int		optional; defaults to Component.focusWidth
+ * @uiDefault CheckBox.icon.focusColor					Color	optional; defaults to Component.focusColor
  * @uiDefault CheckBox.icon.borderColor					Color
  * @uiDefault CheckBox.icon.background					Color
  * @uiDefault CheckBox.icon.selectedBorderColor			Color
@@ -50,6 +52,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault CheckBox.icon.focusedBorderColor			Color
  * @uiDefault CheckBox.icon.focusedBackground			Color	optional
  * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional
+ * @uiDefault CheckBox.icon.selectedFocusedBackground	Color	optional
  * @uiDefault CheckBox.icon.hoverBorderColor			Color	optional
  * @uiDefault CheckBox.icon.hoverBackground				Color	optional
  * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional
@@ -62,36 +65,62 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
 {
-	public final int focusWidth = UIManager.getInt( "Component.focusWidth" );
-	protected final Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusedColor",
+	protected final String style = UIManager.getString( "CheckBox.icon.style" );
+	public final int focusWidth = getUIInt( "CheckBox.icon.focusWidth",
+		UIManager.getInt( "Component.focusWidth" ), style );
+	protected final Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusColor",
 		UIManager.getColor( "Component.focusColor" ) );
 	protected final int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
 
 	// enabled
-	protected final Color borderColor = UIManager.getColor( "CheckBox.icon.borderColor" );
-	protected final Color background = UIManager.getColor( "CheckBox.icon.background" );
-	protected final Color selectedBorderColor = UIManager.getColor( "CheckBox.icon.selectedBorderColor" );
-	protected final Color selectedBackground = UIManager.getColor( "CheckBox.icon.selectedBackground" );
-	protected final Color checkmarkColor = UIManager.getColor( "CheckBox.icon.checkmarkColor" );
+	protected final Color borderColor = getUIColor( "CheckBox.icon.borderColor", style );
+	protected final Color background = getUIColor( "CheckBox.icon.background", style );
+	protected final Color selectedBorderColor = getUIColor( "CheckBox.icon.selectedBorderColor", style );
+	protected final Color selectedBackground = getUIColor( "CheckBox.icon.selectedBackground", style );
+	protected final Color checkmarkColor = getUIColor( "CheckBox.icon.checkmarkColor", style );
 
 	// disabled
-	protected final Color disabledBorderColor = UIManager.getColor( "CheckBox.icon.disabledBorderColor" );
-	protected final Color disabledBackground = UIManager.getColor( "CheckBox.icon.disabledBackground" );
-	protected final Color disabledCheckmarkColor = UIManager.getColor( "CheckBox.icon.disabledCheckmarkColor" );
+	protected final Color disabledBorderColor = getUIColor( "CheckBox.icon.disabledBorderColor", style );
+	protected final Color disabledBackground = getUIColor( "CheckBox.icon.disabledBackground", style );
+	protected final Color disabledCheckmarkColor = getUIColor( "CheckBox.icon.disabledCheckmarkColor", style );
 
 	// focused
-	protected final Color focusedBorderColor = UIManager.getColor( "CheckBox.icon.focusedBorderColor" );
-	protected final Color focusedBackground = UIManager.getColor( "CheckBox.icon.focusedBackground" );
-	protected final Color selectedFocusedBorderColor = UIManager.getColor( "CheckBox.icon.selectedFocusedBorderColor" );
+	protected final Color focusedBorderColor = getUIColor( "CheckBox.icon.focusedBorderColor", style );
+	protected final Color focusedBackground = getUIColor( "CheckBox.icon.focusedBackground", style );
+	protected final Color selectedFocusedBorderColor = getUIColor( "CheckBox.icon.selectedFocusedBorderColor", style );
+	protected final Color selectedFocusedBackground = getUIColor( "CheckBox.icon.selectedFocusedBackground", style );
+	protected final Color selectedFocusedCheckmarkColor = getUIColor( "CheckBox.icon.selectedFocusedCheckmarkColor", style );
 
 	// hover
-	protected final Color hoverBorderColor = UIManager.getColor( "CheckBox.icon.hoverBorderColor" );
-	protected final Color hoverBackground = UIManager.getColor( "CheckBox.icon.hoverBackground" );
-	protected final Color selectedHoverBackground = UIManager.getColor( "CheckBox.icon.selectedHoverBackground" );
+	protected final Color hoverBorderColor = getUIColor( "CheckBox.icon.hoverBorderColor", style );
+	protected final Color hoverBackground = getUIColor( "CheckBox.icon.hoverBackground", style );
+	protected final Color selectedHoverBackground = getUIColor( "CheckBox.icon.selectedHoverBackground", style );
 
 	// pressed
-	protected final Color pressedBackground = UIManager.getColor( "CheckBox.icon.pressedBackground" );
-	protected final Color selectedPressedBackground = UIManager.getColor( "CheckBox.icon.selectedPressedBackground" );
+	protected final Color pressedBackground = getUIColor( "CheckBox.icon.pressedBackground", style );
+	protected final Color selectedPressedBackground = getUIColor( "CheckBox.icon.selectedPressedBackground", style );
+
+	protected static Color getUIColor( String key, String style ) {
+		if( style != null ) {
+			Color color = UIManager.getColor( styleKey( key, style ) );
+			if( color != null )
+				return color;
+		}
+		return UIManager.getColor( key );
+	}
+
+	protected static int getUIInt( String key, int defaultValue, String style ) {
+		if( style != null ) {
+			Object value = UIManager.get( styleKey( key, style ) );
+			if( value instanceof Integer )
+				return (Integer) value;
+		}
+		return FlatUIUtils.getUIInt( key, defaultValue );
+	}
+
+	private static String styleKey( String key, String style ) {
+		return key.replace( ".icon.", ".icon[" + style + "]." );
+	}
 
 	static final int ICON_SIZE = 15;
 
@@ -103,9 +132,10 @@ public class FlatCheckBoxIcon
 	protected void paintIcon( Component c, Graphics2D g2 ) {
 		boolean indeterminate = c instanceof JComponent && clientPropertyEquals( (JComponent) c, SELECTED_STATE, SELECTED_STATE_INDETERMINATE );
 		boolean selected = indeterminate || (c instanceof AbstractButton && ((AbstractButton)c).isSelected());
+		boolean isFocused = FlatUIUtils.isPermanentFocusOwner( c );
 
 		// paint focused border
-		if( FlatUIUtils.isPermanentFocusOwner( c ) && focusWidth > 0 ) {
+		if( isFocused && focusWidth > 0 ) {
 			g2.setColor( focusColor );
 			paintFocusBorder( g2 );
 		}
@@ -123,15 +153,19 @@ public class FlatCheckBoxIcon
 		g2.setColor( FlatUIUtils.deriveColor( FlatButtonUI.buttonStateColor( c,
 			selected ? selectedBackground : background,
 			disabledBackground,
-			focusedBackground,
-			selected && selectedHoverBackground != null ? selectedHoverBackground : hoverBackground,
-			selected && selectedPressedBackground != null ? selectedPressedBackground : pressedBackground ),
+			(selected && selectedFocusedBackground != null) ? selectedFocusedBackground : focusedBackground,
+			(selected && selectedHoverBackground != null) ? selectedHoverBackground : hoverBackground,
+			(selected && selectedPressedBackground != null) ? selectedPressedBackground : pressedBackground ),
 			background ) );
 		paintBackground( g2 );
 
 		// paint checkmark
 		if( selected || indeterminate ) {
-			g2.setColor( c.isEnabled() ? checkmarkColor : disabledCheckmarkColor );
+			g2.setColor( c.isEnabled()
+				? ((selected && isFocused && selectedFocusedCheckmarkColor != null)
+					? selectedFocusedCheckmarkColor
+					: checkmarkColor)
+				: disabledCheckmarkColor );
 			if( indeterminate )
 				paintIndeterminate( g2 );
 			else
