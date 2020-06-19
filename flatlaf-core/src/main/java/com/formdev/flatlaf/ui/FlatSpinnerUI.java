@@ -58,6 +58,7 @@ import com.formdev.flatlaf.FlatClientProperties;
  * <!-- FlatSpinnerUI -->
  *
  * @uiDefault Component.minimumWidth			int
+ * @uiDefault Spinner.buttonStyle				String	button (default) or none
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
@@ -78,6 +79,7 @@ public class FlatSpinnerUI
 	private Handler handler;
 
 	protected int minimumWidth;
+	protected String buttonStyle;
 	protected String arrowType;
 	protected boolean isIntelliJTheme;
 	protected Color borderColor;
@@ -101,6 +103,7 @@ public class FlatSpinnerUI
 		LookAndFeel.installProperty( spinner, "opaque", false );
 
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
+		buttonStyle = UIManager.getString( "Spinner.buttonStyle" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
@@ -258,6 +261,7 @@ public class FlatSpinnerUI
 		Component nextButton = getHandler().nextButton;
 		int arrowX = nextButton.getX();
 		int arrowWidth = nextButton.getWidth();
+		boolean paintButton = !"none".equals( buttonStyle );
 		boolean enabled = spinner.isEnabled();
 		boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
 
@@ -268,7 +272,7 @@ public class FlatSpinnerUI
 		FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow buttons background
-		if( enabled ) {
+		if( paintButton && enabled ) {
 			g2.setColor( buttonBackground );
 			Shape oldClip = g2.getClip();
 			if( isLeftToRight )
@@ -280,10 +284,12 @@ public class FlatSpinnerUI
 		}
 
 		// paint vertical line between value and arrow buttons
-		g2.setColor( enabled ? borderColor : disabledBorderColor );
-		float lw = scale( 1f );
-		float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-		g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
+		if( paintButton ) {
+			g2.setColor( enabled ? borderColor : disabledBorderColor );
+			float lw = scale( 1f );
+			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
+		}
 
 		paint( g, c );
 	}

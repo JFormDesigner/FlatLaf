@@ -12,6 +12,10 @@ FlatLaf Change Log
 - ScrollBar: Support pressed track, thumb and button colors (use UI values
   `ScrollBar.pressedTrackColor`, `ScrollBar.pressedThumbColor` and
   `ScrollBar.pressedButtonBackground`). (issue #115)
+- ComboBox: Support changing arrow button style (set UI value
+  `ComboBox.buttonStyle` to `auto` (default), `button` or `none`). (issue #114)
+- Spinner: Support changing arrows button style (set UI value
+  `Spinner.buttonStyle` to `button` (default) or `none`).
 - TableHeader: Support top/bottom/left positioned sort arrow when using
   [Glazed Lists](https://github.com/glazedlists/glazedlists). (issue #113)
 

@@ -80,6 +80,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @uiDefault ComboBox.minimumWidth				int
  * @uiDefault ComboBox.editorColumns			int
+ * @uiDefault ComboBox.buttonStyle				String	auto (default), button or none
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
@@ -100,6 +101,7 @@ public class FlatComboBoxUI
 {
 	protected int minimumWidth;
 	protected int editorColumns;
+	protected String buttonStyle;
 	protected String arrowType;
 	protected boolean isIntelliJTheme;
 	protected Color borderColor;
@@ -154,6 +156,7 @@ public class FlatComboBoxUI
 
 		minimumWidth = UIManager.getInt( "ComboBox.minimumWidth" );
 		editorColumns = UIManager.getInt( "ComboBox.editorColumns" );
+		buttonStyle = UIManager.getString( "ComboBox.buttonStyle" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
@@ -350,6 +353,7 @@ public class FlatComboBoxUI
 		int height = c.getHeight();
 		int arrowX = arrowButton.getX();
 		int arrowWidth = arrowButton.getWidth();
+		boolean paintButton = (comboBox.isEditable() || "button".equals( buttonStyle )) && !"none".equals( buttonStyle );
 		boolean enabled = comboBox.isEnabled();
 		boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
@@ -361,7 +365,7 @@ public class FlatComboBoxUI
 
 		// paint arrow button background
 		if( enabled ) {
-			g2.setColor( comboBox.isEditable() ? buttonEditableBackground : buttonBackground );
+			g2.setColor( paintButton ? buttonEditableBackground : buttonBackground );
 			Shape oldClip = g2.getClip();
 			if( isLeftToRight )
 				g2.clipRect( arrowX, 0, width - arrowX, height );
@@ -372,7 +376,7 @@ public class FlatComboBoxUI
 		}
 
 		// paint vertical line between value and arrow button
-		if( comboBox.isEditable() ) {
+		if( paintButton ) {
 			g2.setColor( enabled ? borderColor : disabledBorderColor );
 			float lw = scale( 1f );
 			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;

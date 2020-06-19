@@ -193,6 +193,7 @@ ComboBox.buttonEditableBackground #fafafa    javax.swing.plaf.ColorUIResource [U
 ComboBox.buttonHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHoverArrowColor #999999    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonShadow          #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonStyle           auto
 ComboBox.disabledBackground    #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.disabledForeground    #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.editorColumns         0
@@ -855,6 +856,7 @@ Spinner.buttonArrowColor       #666666    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonBackground       #fafafa    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonHoverArrowColor  #999999    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonStyle            button
 Spinner.disabledBackground     #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 Spinner.disabledForeground     #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 Spinner.editorAlignment        11
