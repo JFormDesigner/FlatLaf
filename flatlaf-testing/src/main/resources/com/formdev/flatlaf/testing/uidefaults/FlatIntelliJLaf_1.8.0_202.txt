@@ -21,6 +21,8 @@
 - Button.default.borderWidth     2
 + Button.default.borderWidth     1
 
+- Button.default.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
 - Button.default.focusedBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.focusedBorderColor #a9c9f5    javax.swing.plaf.ColorUIResource [UI]
 
@@ -30,8 +32,12 @@
 - Button.default.hoverBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.hoverBorderColor #a9c9f5    javax.swing.plaf.ColorUIResource [UI]
 
+- Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
 - CheckBox.icon.checkmarkColor   #4f9ee3    javax.swing.plaf.ColorUIResource [UI]
 + CheckBox.icon.checkmarkColor   #ffffff    javax.swing.plaf.ColorUIResource [UI]
+
+- CheckBox.icon.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
 - CheckBox.icon.selectedBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 + CheckBox.icon.selectedBackground #4f9ee3    javax.swing.plaf.ColorUIResource [UI]
@@ -63,6 +69,8 @@
 - FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 + FormattedTextField.border      [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 
+- HelpButton.focusedBackground   #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
 - HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
 + HelpButton.icon                [lazy] 26,26    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
 
@@ -89,12 +97,4 @@
 
 - ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 + ToggleButton.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
-
-- Button.default.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
-
-- Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
-
-- CheckBox.icon.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
-
-- HelpButton.focusedBackground   #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
