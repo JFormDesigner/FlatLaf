@@ -240,7 +240,7 @@ public class FlatScrollBarUI
 		return button;
 	}
 
-	private boolean isShowButtons() {
+	protected boolean isShowButtons() {
 		Object showButtons = scrollbar.getClientProperty( FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS );
 		if( showButtons == null && scrollbar.getParent() instanceof JScrollPane )
 			showButtons = ((JScrollPane)scrollbar.getParent()).getClientProperty( FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS );

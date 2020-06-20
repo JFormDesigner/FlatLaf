@@ -371,7 +371,7 @@ debug*/
 		return menuItem instanceof JMenu && ((JMenu)menuItem).isTopLevelMenu();
 	}
 
-	private boolean isUnderlineSelection() {
+	protected boolean isUnderlineSelection() {
 		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
 	}
 
@@ -416,6 +416,13 @@ debug*/
 		if( accelerator == cachedAccelerator )
 			return cachedAcceleratorText;
 
+		cachedAccelerator = accelerator;
+		cachedAcceleratorText = getTextForAccelerator( accelerator );
+
+		return cachedAcceleratorText;
+	}
+
+	protected String getTextForAccelerator( KeyStroke accelerator ) {
 		StringBuilder buf = new StringBuilder();
 		int modifiers = accelerator.getModifiers();
 		if( modifiers != 0 )
@@ -427,10 +434,7 @@ debug*/
 		else
 			buf.append( accelerator.getKeyChar() );
 
-		cachedAccelerator = accelerator;
-		cachedAcceleratorText = buf.toString();
-
-		return cachedAcceleratorText;
+		return buf.toString();
 	}
 
 	//---- class MinSizeIcon --------------------------------------------------

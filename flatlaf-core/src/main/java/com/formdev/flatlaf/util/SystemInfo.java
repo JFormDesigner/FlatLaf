@@ -68,7 +68,7 @@ public class SystemInfo
 		IS_KDE = (IS_LINUX && System.getenv( "KDE_FULL_SESSION" ) != null);
 	}
 
-	private static long scanVersion( String version ) {
+	public static long scanVersion( String version ) {
 		int major = 1;
 		int minor = 0;
 		int micro = 0;
@@ -86,7 +86,7 @@ public class SystemInfo
 		return toVersion( major, minor, micro, patch );
 	}
 
-	private static long toVersion( int major, int minor, int micro, int patch ) {
+	public static long toVersion( int major, int minor, int micro, int patch ) {
 		return ((long) major << 48) + ((long) minor << 32) + ((long) micro << 16) + patch;
 	}
 }

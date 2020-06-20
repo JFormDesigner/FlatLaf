@@ -317,12 +317,11 @@ public class FlatComboBoxUI
 		// use non-UIResource colors because when SwingUtilities.updateComponentTreeUI()
 		// is used, then the editor is updated after the combobox and the
 		// colors are again replaced with default colors
-		boolean enabled = editor.isEnabled();
-		editor.setForeground( FlatUIUtils.nonUIResource( (enabled || editor instanceof JTextComponent)
-			? comboBox.getForeground()
-			: disabledForeground ) );
-		if( editor instanceof JTextComponent )
-			((JTextComponent)editor).setDisabledTextColor( FlatUIUtils.nonUIResource( disabledForeground ) );
+		boolean isTextComponent = editor instanceof JTextComponent;
+		editor.setForeground( FlatUIUtils.nonUIResource( getForeground( isTextComponent || editor.isEnabled() ) ) );
+
+		if( isTextComponent )
+			((JTextComponent)editor).setDisabledTextColor( FlatUIUtils.nonUIResource( getForeground( false ) ) );
 	}
 
 	@Override
@@ -358,9 +357,7 @@ public class FlatComboBoxUI
 		boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
 		// paint background
-		g2.setColor( enabled
-			? (editableBackground != null && comboBox.isEditable() ? editableBackground : c.getBackground())
-			: getDisabledBackground( comboBox ) );
+		g2.setColor( getBackground( enabled ) );
 		FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow button background
@@ -399,8 +396,8 @@ public class FlatComboBoxUI
 		uninstallCellPaddingBorder( c );
 
 		boolean enabled = comboBox.isEnabled();
-		c.setForeground( enabled ? comboBox.getForeground() : disabledForeground );
-		c.setBackground( enabled ? comboBox.getBackground() : getDisabledBackground( comboBox ) );
+		c.setBackground( getBackground( enabled ) );
+		c.setForeground( getForeground( enabled ) );
 
 		boolean shouldValidate = (c instanceof JPanel);
 		if( padding != null )
@@ -420,8 +417,14 @@ public class FlatComboBoxUI
 		// not necessary because already painted in update()
 	}
 
-	private Color getDisabledBackground( JComponent c ) {
-		return isIntelliJTheme ? FlatUIUtils.getParentBackground( c ) : disabledBackground;
+	protected Color getBackground( boolean enabled ) {
+		return enabled
+			? (editableBackground != null && comboBox.isEditable() ? editableBackground : comboBox.getBackground())
+			: (isIntelliJTheme ? FlatUIUtils.getParentBackground( comboBox ) : disabledBackground);
+	}
+
+	protected Color getForeground( boolean enabled ) {
+		return enabled ? comboBox.getForeground() : disabledForeground;
 	}
 
 	@Override

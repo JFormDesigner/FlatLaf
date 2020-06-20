@@ -206,8 +206,8 @@ public class FlatSpinnerUI
 			// use non-UIResource colors because when SwingUtilities.updateComponentTreeUI()
 			// is used, then the text field is updated after the spinner and the
 			// colors are again replaced with default colors
-			textField.setForeground( FlatUIUtils.nonUIResource( spinner.getForeground() ) );
-			textField.setDisabledTextColor( FlatUIUtils.nonUIResource( disabledForeground ) );
+			textField.setForeground( FlatUIUtils.nonUIResource( getForeground( true ) ) );
+			textField.setDisabledTextColor( FlatUIUtils.nonUIResource( getForeground( false ) ) );
 		}
 	}
 
@@ -215,6 +215,16 @@ public class FlatSpinnerUI
 		return editor instanceof JSpinner.DefaultEditor
 			? ((JSpinner.DefaultEditor)editor).getTextField()
 			: null;
+	}
+
+	protected Color getBackground( boolean enabled ) {
+		return enabled
+			? spinner.getBackground()
+			: (isIntelliJTheme ? FlatUIUtils.getParentBackground( spinner ) : disabledBackground);
+	}
+
+	protected Color getForeground( boolean enabled ) {
+		return enabled ? spinner.getForeground() : disabledForeground;
 	}
 
 	@Override
@@ -266,9 +276,7 @@ public class FlatSpinnerUI
 		boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
 
 		// paint background
-		g2.setColor( enabled
-			? c.getBackground()
-			: (isIntelliJTheme ? FlatUIUtils.getParentBackground( c ) : disabledBackground) );
+		g2.setColor( getBackground( enabled ) );
 		FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 
 		// paint arrow buttons background
