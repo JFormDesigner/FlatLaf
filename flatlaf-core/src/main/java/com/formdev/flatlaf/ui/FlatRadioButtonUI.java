@@ -153,7 +153,7 @@ public class FlatRadioButtonUI
 			}
 		}
 
-		super.paint( g, c );
+		super.paint( FlatLabelUI.createGraphicsHTMLTextYCorrection( g, c ), c );
 	}
 
 	@Override

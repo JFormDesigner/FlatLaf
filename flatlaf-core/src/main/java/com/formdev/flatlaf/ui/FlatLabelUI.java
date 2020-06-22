@@ -30,7 +30,6 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicLabelUI;
-import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
@@ -127,10 +126,15 @@ public class FlatLabelUI
 		BasicHTML.updateRenderer( c, text );
 	}
 
+	static Graphics createGraphicsHTMLTextYCorrection( Graphics g, JComponent c ) {
+		return (c.getClientProperty( BasicHTML.propertyKey ) != null)
+			? HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g )
+			: g;
+	}
+
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		View v = (View) c.getClientProperty( BasicHTML.propertyKey );
-		super.paint( (v != null) ? HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) : g, c );
+		super.paint( createGraphicsHTMLTextYCorrection( g, c ), c );
 	}
 
 	@Override

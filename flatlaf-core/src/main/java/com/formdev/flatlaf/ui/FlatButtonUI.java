@@ -330,6 +330,11 @@ public class FlatButtonUI
 	}
 
 	@Override
+	public void paint( Graphics g, JComponent c ) {
+		super.paint( FlatLabelUI.createGraphicsHTMLTextYCorrection( g, c ), c );
+	}
+
+	@Override
 	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
 		if( isHelpButton( b ) )
 			return;

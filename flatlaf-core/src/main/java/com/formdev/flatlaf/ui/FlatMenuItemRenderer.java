@@ -40,6 +40,7 @@ import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.Graphics2DProxy;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Renderer for menu items.
@@ -360,7 +361,7 @@ debug*/
 		if( isArmedOrSelected( menuItem ) && selectionForeground != null )
 			g = new GraphicsProxyWithTextColor( (Graphics2D) g, selectionForeground );
 
-		htmlView.paint( g, textRect );
+		htmlView.paint( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ), textRect );
 	}
 
 	protected static boolean isArmedOrSelected( JMenuItem menuItem ) {
