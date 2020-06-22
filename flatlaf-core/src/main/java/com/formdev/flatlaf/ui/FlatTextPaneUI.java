@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -26,6 +27,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextPaneUI;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextPane}.
@@ -97,6 +99,11 @@ public class FlatTextPaneUI
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
 		return FlatEditorPaneUI.applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
+	}
+
+	@Override
+	protected void paintSafely( Graphics g ) {
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
 	@Override

@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicToolTipUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
@@ -130,7 +131,7 @@ public class FlatToolTipUI
 				FlatUIUtils.drawString( c, g, line, leftToRight ? x : x2 - SwingUtilities.computeStringWidth( fm, line ), y );
 			}
 		} else
-			super.paint( g, c );
+			super.paint( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ), c );
 	}
 
 	private boolean isMultiLine( JComponent c ) {

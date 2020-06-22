@@ -38,6 +38,7 @@ import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
@@ -146,7 +147,8 @@ public class FlatTextFieldUI
 	protected void paintSafely( Graphics g ) {
 		paintBackground( g, getComponent(), isIntelliJTheme );
 		paintPlaceholder( g, getComponent(), placeholderForeground );
-		super.paintSafely( g );
+
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
 	@Override

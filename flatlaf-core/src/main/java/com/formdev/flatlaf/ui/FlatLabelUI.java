@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import javax.swing.Icon;
@@ -29,7 +30,9 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicLabelUI;
+import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -122,6 +125,12 @@ public class FlatLabelUI
 			return; // not necessary to invoke BasicHTML.updateRenderer()
 
 		BasicHTML.updateRenderer( c, text );
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		View v = (View) c.getClientProperty( BasicHTML.propertyKey );
+		super.paint( (v != null) ? HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) : g, c );
 	}
 
 	@Override

@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
@@ -27,6 +28,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextAreaUI;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextArea}.
@@ -87,6 +89,11 @@ public class FlatTextAreaUI
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
 		FlatEditorPaneUI.propertyChange( getComponent(), e );
+	}
+
+	@Override
+	protected void paintSafely( Graphics g ) {
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
 	@Override

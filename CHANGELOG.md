@@ -18,6 +18,8 @@ FlatLaf Change Log
   `Spinner.buttonStyle` to `button` (default) or `none`).
 - TableHeader: Support top/bottom/left positioned sort arrow when using
   [Glazed Lists](https://github.com/glazedlists/glazedlists). (issue #113)
+- Fixed/improved vertical position of text when scaled on HiDPI screens on
+  Windows when running on Java 9 or later.
 
 
 ## 0.36
