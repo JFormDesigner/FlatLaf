@@ -18,6 +18,7 @@ package com.formdev.flatlaf.testing;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -39,6 +40,7 @@ public class FlatPaintingStringTest
 	extends JPanel
 {
 	public static void main( String[] args ) {
+		System.setProperty( "flatlaf.uiScale", "1x" );
 		System.setProperty( "sun.java2d.uiScale", "1x" );
 
 		SwingUtilities.invokeLater( () -> {
@@ -54,26 +56,34 @@ public class FlatPaintingStringTest
 	FlatPaintingStringTest() {
 		initComponents();
 
-		if( !SystemInfo.IS_JAVA_9_OR_LATER ) {
-			add( new JLabel( "requires Java 9 or later" ) );
-			return;
-		}
-
 		add( new JLabel() );
 		add( new JLabel( "none" ) );
 		add( new JLabel( "flatlaf" ) );
 		add( new JLabel( "0.25*scale" ) );
 		add( new JLabel( "0.5*scale" ) );
-		add( new JLabel( "0.25" ) );
-		add( new JLabel( "0.5" ) );
-		add( new JLabel( "0.625" ) );
-		add( new JLabel( "0.75" ) );
-		add( new JLabel( "0.875" ) );
+		if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+			add( new JLabel( "0.25" ) );
+			add( new JLabel( "0.5" ) );
+			add( new JLabel( "0.625" ) );
+			add( new JLabel( "0.75" ) );
+			add( new JLabel( "0.875" ) );
+		} else {
+			add( new JLabel( "0.625*scale" ) );
+			add( new JLabel( "0.75*scale" ) );
+			add( new JLabel( "0.875*scale" ) );
+		}
 
 		YCorrectionFunction none = (g, scaleFactor) -> 0;
-		YCorrectionFunction flatlaf = (g, scaleFactor) -> HiDPIUtils.computeTextYCorrection( g );
+		YCorrectionFunction flatlaf = (g, scaleFactor) -> {
+			return SystemInfo.IS_JAVA_9_OR_LATER
+				? HiDPIUtils.computeTextYCorrection( g )
+				: (scaleFactor > 1 ? -(0.625f * scaleFactor) : 0);
+		};
 		YCorrectionFunction oneQSysScale = (g, scaleFactor) -> -(0.25f * scaleFactor);
 		YCorrectionFunction halfSysScale = (g, scaleFactor) -> -(0.5f * scaleFactor);
+		YCorrectionFunction fiveEightsQSysScale = (g, scaleFactor) -> -(0.625f * scaleFactor);
+		YCorrectionFunction threeQSysScale = (g, scaleFactor) -> -(0.75f * scaleFactor);
+		YCorrectionFunction sevenEightsSysScale = (g, scaleFactor) -> -(0.875f * scaleFactor);
 		YCorrectionFunction oneQ = (g, scaleFactor) -> -0.25f;
 		YCorrectionFunction half = (g, scaleFactor) -> -0.5f;
 		YCorrectionFunction fiveEights = (g, scaleFactor) -> -0.625f;
@@ -89,19 +99,28 @@ public class FlatPaintingStringTest
 			add( scaleFactor, flatlaf );
 			add( scaleFactor, oneQSysScale );
 			add( scaleFactor, halfSysScale );
-			add( scaleFactor, oneQ );
-			add( scaleFactor, half );
-			add( scaleFactor, fiveEights );
-			add( scaleFactor, threeQ );
-			add( scaleFactor, sevenEights );
+			if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+				add( scaleFactor, oneQ );
+				add( scaleFactor, half );
+				add( scaleFactor, fiveEights );
+				add( scaleFactor, threeQ );
+				add( scaleFactor, sevenEights );
+			} else {
+				add( scaleFactor, fiveEightsQSysScale );
+				add( scaleFactor, threeQSysScale );
+				add( scaleFactor, sevenEightsSysScale );
+			}
 		}
 	}
 
 	private void add( float scaleFactor, YCorrectionFunction correctionFunction ) {
-		add( new Painter( scaleFactor, correctionFunction, 0 ), "split 4, gapx 0 0" );
-		add( new Painter( scaleFactor, correctionFunction, 0.25f ), "gapx 0 0" );
-		add( new Painter( scaleFactor, correctionFunction, 0.5f ), "gapx 0 0" );
-		add( new Painter( scaleFactor, correctionFunction, 0.75f ), "gapx 0 0" );
+		if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+			add( new Painter( scaleFactor, correctionFunction, 0 ), "split 4, gapx 0 0" );
+			add( new Painter( scaleFactor, correctionFunction, 0.25f ), "gapx 0 0" );
+			add( new Painter( scaleFactor, correctionFunction, 0.5f ), "gapx 0 0" );
+			add( new Painter( scaleFactor, correctionFunction, 0.75f ), "gapx 0 0" );
+		} else
+			add( new Painter( scaleFactor, correctionFunction, 0 ) );
 	}
 
 	private void initComponents() {
@@ -114,7 +133,7 @@ public class FlatPaintingStringTest
 			// columns
 			"[fill]",
 			// rows
-			"[fill]"));
+			"[top]"));
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -139,7 +158,12 @@ public class FlatPaintingStringTest
 			this.scaleFactor = scaleFactor;
 			this.correctionFunction = correctionFunction;
 			this.yOffset = yOffset;
-			setBorder( new EmptyBorder( 2, 4, 2, 0 ) );
+			setBorder( new EmptyBorder( 2, 0, 2, 0 ) );
+
+			if( !SystemInfo.IS_JAVA_9_OR_LATER ) {
+				Font font = getFont();
+				setFont( font.deriveFont( (float) Math.round( font.getSize() * scaleFactor ) ) );
+			}
 		}
 
 		@Override
@@ -158,7 +182,7 @@ public class FlatPaintingStringTest
 			FlatUIUtils.setRenderingHints( g2 );
 
 			// simulate component y position at a fraction
-			if( scaleFactor > 1 )
+			if( scaleFactor > 1 && SystemInfo.IS_JAVA_9_OR_LATER )
 				g2.translate( 0, yOffset );
 
 			int width = getWidth();
@@ -173,7 +197,8 @@ public class FlatPaintingStringTest
 //					g.drawLine( 0, 0, width2, 0 );
 //					g.drawLine( 0, height2 - 1, width2, height2 - 1 );
 
-					int baseline = (int) Math.round( (insets.top + fm.getAscent()) * scaleFactor2 * scaleFactor ) - 1;
+					int baseline = (int) Math.round( (insets.top + fm.getAscent()) * scaleFactor2
+						* (SystemInfo.IS_JAVA_9_OR_LATER ? scaleFactor : 1f) ) - 1;
 					int topline = height2 - baseline - 1;
 
 					g.setColor( Color.red );
@@ -185,7 +210,8 @@ public class FlatPaintingStringTest
 			g.translate( insets.left, 0 );
 
 			// scale
-			((Graphics2D)g).scale( scaleFactor, scaleFactor );
+			if( SystemInfo.IS_JAVA_9_OR_LATER )
+				((Graphics2D)g).scale( scaleFactor, scaleFactor );
 
 			// compute Y correction
 			float yCorrection = correctionFunction.computeTextYCorrection( g2, scaleFactor );
@@ -217,7 +243,7 @@ public class FlatPaintingStringTest
 		}
 
 		private int scale( int value ) {
-			return Math.round( value * scaleFactor );
+			return SystemInfo.IS_JAVA_9_OR_LATER ? Math.round( value * scaleFactor ) : value;
 		}
 	}
 }

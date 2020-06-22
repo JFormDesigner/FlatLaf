@@ -18,6 +18,7 @@ package com.formdev.flatlaf.util;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
@@ -115,8 +116,11 @@ public class HiDPIUtils
 	 * This methods computes a correction value for the Y position.
 	 */
 	public static float computeTextYCorrection( Graphics2D g ) {
-		if( !useTextYCorrection() || !SystemInfo.IS_WINDOWS || !SystemInfo.IS_JAVA_9_OR_LATER )
+		if( !useTextYCorrection() || !SystemInfo.IS_WINDOWS )
 			return 0;
+
+		if( !SystemInfo.IS_JAVA_9_OR_LATER )
+			return UIScale.getUserScaleFactor() > 1 ? -UIScale.scale( 0.625f ) : 0;
 
 		AffineTransform t = g.getTransform();
 		double scaleY = t.getScaleY();
@@ -206,6 +210,21 @@ public class HiDPIUtils
 			@Override
 			public void drawString( AttributedCharacterIterator iterator, float x, float y ) {
 				super.drawString( iterator, x, y + yCorrection );
+			}
+
+			@Override
+			public void drawChars( char[] data, int offset, int length, int x, int y ) {
+				super.drawChars( data, offset, length, x, Math.round( y + yCorrection ) );
+			}
+
+			@Override
+			public void drawBytes( byte[] data, int offset, int length, int x, int y ) {
+				super.drawBytes( data, offset, length, x, Math.round( y + yCorrection ) );
+			}
+
+			@Override
+			public void drawGlyphVector( GlyphVector g, float x, float y ) {
+				super.drawGlyphVector( g, x, y + yCorrection );
 			}
 		};
 	}
