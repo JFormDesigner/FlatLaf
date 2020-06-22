@@ -91,12 +91,13 @@ public class ExtrasPanel
 		add(label1, "cell 0 1");
 
 		//---- triStateCheckBox1 ----
-		triStateCheckBox1.setText("three states");
+		triStateCheckBox1.setText("Three States");
 		triStateCheckBox1.addActionListener(e -> triStateCheckBox1Changed());
 		add(triStateCheckBox1, "cell 1 1");
 
 		//---- triStateLabel1 ----
 		triStateLabel1.setText("text");
+		triStateLabel1.setEnabled(false);
 		add(triStateLabel1, "cell 2 1");
 
 		//---- label2 ----

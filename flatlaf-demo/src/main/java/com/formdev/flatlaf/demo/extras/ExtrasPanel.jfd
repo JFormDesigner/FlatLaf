@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -23,7 +23,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.extras.TriStateCheckBox" ) {
 				name: "triStateCheckBox1"
-				"text": "three states"
+				"text": "Three States"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "triStateCheckBox1Changed", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
@@ -31,6 +31,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "triStateLabel1"
 				"text": "text"
+				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
