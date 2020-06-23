@@ -350,7 +350,7 @@ public class FlatButtonUI
 			}
 		}
 
-		paintText( g, b, textRect, text, b.isEnabled() ? getForeground( b ) : disabledText );
+		paintText( g, b, textRect, text, getForeground( b ) );
 	}
 
 	public static void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text, Color foreground ) {
@@ -408,6 +408,9 @@ public class FlatButtonUI
 	}
 
 	protected Color getForeground( JComponent c ) {
+		if( !c.isEnabled() )
+			return disabledText;
+
 		boolean def = isDefaultButton( c );
 		return def ? defaultForeground : c.getForeground();
 	}

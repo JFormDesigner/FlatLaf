@@ -206,9 +206,7 @@ public class FlatToggleButtonUI
 
 	@Override
 	protected Color getForeground( JComponent c ) {
-		ButtonModel model = ((AbstractButton)c).getModel();
-
-		if( model.isSelected() && !isToolBarButton( c ) )
+		if( c.isEnabled() && ((AbstractButton)c).isSelected() && !isToolBarButton( c ) )
 			return selectedForeground;
 
 		return super.getForeground( c );
