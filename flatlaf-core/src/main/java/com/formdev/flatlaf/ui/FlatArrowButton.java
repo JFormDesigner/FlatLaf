@@ -47,15 +47,23 @@ public class FlatArrowButton
 	private final Color disabledForeground;
 	private final Color hoverForeground;
 	private final Color hoverBackground;
+	private final Color pressedBackground;
 
 	private int arrowWidth = DEFAULT_ARROW_WIDTH;
 	private int xOffset = 0;
 	private int yOffset = 0;
 
 	private boolean hover;
+	private boolean pressed;
 
 	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
 		Color hoverForeground, Color hoverBackground )
+	{
+		this( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, null );
+	}
+
+	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
+		Color hoverForeground, Color hoverBackground, Color pressedBackground )
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
 
@@ -64,11 +72,12 @@ public class FlatArrowButton
 		this.disabledForeground = disabledForeground;
 		this.hoverForeground = hoverForeground;
 		this.hoverBackground = hoverBackground;
+		this.pressedBackground = pressedBackground;
 
 		setOpaque( false );
 		setBorder( null );
 
-		if( hoverForeground != null || hoverBackground != null ) {
+		if( hoverForeground != null || hoverBackground != null || pressedBackground != null ) {
 			addMouseListener( new MouseAdapter() {
 				@Override
 				public void mouseEntered( MouseEvent e ) {
@@ -79,6 +88,18 @@ public class FlatArrowButton
 				@Override
 				public void mouseExited( MouseEvent e ) {
 					hover = false;
+					repaint();
+				}
+
+				@Override
+				public void mousePressed( MouseEvent e ) {
+					pressed = true;
+					repaint();
+				}
+
+				@Override
+				public void mouseReleased( MouseEvent e ) {
+					pressed = false;
 					repaint();
 				}
 			} );
@@ -97,6 +118,10 @@ public class FlatArrowButton
 		return hover;
 	}
 
+	protected boolean isPressed() {
+		return pressed;
+	}
+
 	public int getXOffset() {
 		return xOffset;
 	}
@@ -113,8 +138,8 @@ public class FlatArrowButton
 		this.yOffset = yOffset;
 	}
 
-	protected Color deriveHoverBackground( Color hoverBackground ) {
-		return hoverBackground;
+	protected Color deriveBackground( Color background ) {
+		return background;
 	}
 
 	@Override
@@ -136,10 +161,18 @@ public class FlatArrowButton
 		int height = getHeight();
 		boolean enabled = isEnabled();
 
-		// paint hover background
-		if( enabled && isHover() && hoverBackground != null ) {
-			g.setColor( deriveHoverBackground( hoverBackground ) );
-			g.fillRect( 0, 0, width, height );
+		// paint hover or pressed background
+		if( enabled ) {
+			Color background = (pressedBackground != null && isPressed())
+				? deriveBackground( pressedBackground )
+				: ((hoverBackground != null && isHover())
+					? deriveBackground( hoverBackground )
+					: null);
+
+			if( background != null ) {
+				g.setColor( background );
+				g.fillRect( 0, 0, width, height );
+			}
 		}
 
 		int direction = getDirection();
@@ -160,14 +193,8 @@ public class FlatArrowButton
 			rh++;
 		}
 
-		// Adding -/+0.35 before rounding tends move up NORTH arrows and move down SOUTH arrows.
-		// This makes top margin of NORTH arrow equal to bottom margin of SOUTH arrow.
-		float rd = 0.35f;
-		float xrd = vert ? 0 : (direction == WEST ? -rd : rd);
-		float yrd = vert ? (direction == NORTH ? -rd : rd) : 0;
-
-		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) + xrd );
-		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) + yrd );
+		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) );
+		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) );
 
 		// move arrow for round borders
 		Container parent = getParent();

@@ -65,14 +65,14 @@ public class FlatMenuArrowIcon
 		}
 	}
 
-	private Color getArrowColor( Component c ) {
+	protected Color getArrowColor( Component c ) {
 		if( c instanceof JMenu && ((JMenu)c).isSelected() && !isUnderlineSelection() )
 			return selectionForeground;
 
 		return c.isEnabled() ? arrowColor : disabledArrowColor;
 	}
 
-	private boolean isUnderlineSelection() {
+	protected boolean isUnderlineSelection() {
 		// not storing value of "MenuItem.selectionType" in class to allow changing at runtime
 		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
 	}

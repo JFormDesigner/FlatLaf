@@ -287,7 +287,7 @@ public class FlatTestFrame
 		if( menuBarFactory != null )
 			setJMenuBar( menuBarFactory.apply( content ) );
 
-		contentPanel.getContentPane().add( content );
+		contentPanel.add( content );
 		pack();
 		setLocationRelativeTo( null );
 		setVisible( true );
@@ -589,9 +589,9 @@ public class FlatTestFrame
 	}
 
 	private void recreateContent() {
-		contentPanel.getContentPane().remove( content );
+		contentPanel.remove( content );
 		content = contentFactory.get();
-		contentPanel.getContentPane().add( content );
+		contentPanel.add( content );
 
 		if( rightToLeftCheckBox.isSelected() )
 			rightToLeftChanged();
@@ -607,7 +607,7 @@ public class FlatTestFrame
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		dialogPane = new JPanel();
-		contentPanel = new JRootPane();
+		contentPanel = new JPanel();
 		buttonBar = new JPanel();
 		lookAndFeelComboBox = new LookAndFeelsComboBox();
 		scaleFactorComboBox = new JComboBox<>();
@@ -633,8 +633,7 @@ public class FlatTestFrame
 
 			//======== contentPanel ========
 			{
-				Container contentPanelContentPane = contentPanel.getContentPane();
-				contentPanelContentPane.setLayout(new MigLayout(
+				contentPanel.setLayout(new MigLayout(
 					"insets 0,hidemode 3",
 					// columns
 					"[grow,fill]",
@@ -753,7 +752,7 @@ public class FlatTestFrame
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JPanel dialogPane;
-	private JRootPane contentPanel;
+	private JPanel contentPanel;
 	private JPanel buttonBar;
 	private LookAndFeelsComboBox lookAndFeelComboBox;
 	private JComboBox<String> scaleFactorComboBox;

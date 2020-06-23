@@ -36,6 +36,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -89,9 +91,11 @@ public class UIDefaultsDump
 		dump( FlatLightLaf.class.getName(), dir );
 		dump( FlatDarkLaf.class.getName(), dir );
 
-//		dump( FlatIntelliJLaf.class.getName(), dir );
-//		dump( FlatDarculaLaf.class.getName(), dir );
-//
+		if( SystemInfo.IS_WINDOWS ) {
+			dump( FlatIntelliJLaf.class.getName(), dir );
+			dump( FlatDarculaLaf.class.getName(), dir );
+		}
+
 //		dump( MyBasicLookAndFeel.class.getName(), dir );
 //		dump( MetalLookAndFeel.class.getName(), dir );
 //		dump( NimbusLookAndFeel.class.getName(), dir );
@@ -170,14 +174,20 @@ public class UIDefaultsDump
 			: ((SystemInfo.IS_LINUX && lookAndFeel instanceof FlatLaf)
 				? "-linux"
 				: "");
+		String javaVersion = System.getProperty( "java.version" );
 		File file = new File( dir, name + nameSuffix + "_"
-			+ System.getProperty( "java.version" ) + osSuffix + ".txt" );
+			+ javaVersion + osSuffix + ".txt" );
 
 		// build differences
 		String content;
-		if( !osSuffix.isEmpty() && nameSuffix.isEmpty() ) {
-			File origFile = new File( dir, name + nameSuffix + "_"
-				+ System.getProperty( "java.version" ) + ".txt" );
+		File origFile = null;
+		if( !osSuffix.isEmpty() && nameSuffix.isEmpty() )
+			origFile = new File( dir, name + nameSuffix + "_" + javaVersion + ".txt" );
+		else if( lookAndFeel instanceof FlatIntelliJLaf && SystemInfo.IS_WINDOWS )
+			origFile = new File( dir, "FlatLightLaf_" + javaVersion + ".txt" );
+		else if( lookAndFeel instanceof FlatDarculaLaf && SystemInfo.IS_WINDOWS )
+			origFile = new File( dir, "FlatDarkLaf_" + javaVersion + ".txt" );
+		if( origFile != null ) {
 			try {
 				Map<String, String> defaults1 = parse( new FileReader( origFile ) );
 				Map<String, String> defaults2 = parse( new StringReader( stringWriter.toString() ) );
@@ -200,27 +210,31 @@ public class UIDefaultsDump
 	}
 
 	private static String diff( Map<String, String> defaults1, Map<String, String> defaults2 ) {
-		defaults1 = new LinkedHashMap<>( defaults1 );
+		TreeSet<String> keys = new TreeSet<>();
+		keys.addAll( defaults1.keySet() );
+		keys.addAll( defaults2.keySet() );
 
 		StringBuilder buf = new StringBuilder( 10000 );
-		for( Map.Entry<String, String> e : defaults2.entrySet() ) {
-			String key = e.getKey();
-			String value2 = e.getValue();
-			String value1 = defaults1.remove( key );
-			if( !value2.equals( value1 ) ) {
-				if( value1 != null )
-					buf.append( "- " ).append( key ).append( value1 ).append( '\n' );
-				buf.append( "+ " ).append( key ).append( value2 ).append( '\n' );
-				buf.append( '\n' );
-			}
-		}
 
-		for( Map.Entry<String, String> e : defaults1.entrySet() ) {
-			buf.append( "- " ).append( e.getKey() ).append( e.getValue() ).append( '\n' );
-			buf.append( '\n' );
-		}
+		// diff header values
+		for( String key : new String[] { "Class", "ID", "Name", "Java", "OS" } )
+			diffValue( buf, key, defaults1.remove( key ), defaults2.remove( key ) );
+
+		// diff values
+		for( String key : keys )
+			diffValue( buf, key, defaults1.get( key ), defaults2.get( key ) );
 
 		return buf.toString();
+	}
+
+	private static void diffValue( StringBuilder buf, String key, String value1, String value2 ) {
+		if( !Objects.equals( value1, value2 ) ) {
+			if( value1 != null )
+				buf.append( "- " ).append( key ).append( value1 ).append( '\n' );
+			if( value2 != null )
+				buf.append( "+ " ).append( key ).append( value2 ).append( '\n' );
+			buf.append( '\n' );
+		}
 	}
 
 	private static Map<String, String> parse( Reader in ) throws IOException {

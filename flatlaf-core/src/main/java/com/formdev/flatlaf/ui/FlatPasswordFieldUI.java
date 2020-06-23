@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -33,6 +34,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
@@ -153,7 +155,8 @@ public class FlatPasswordFieldUI
 		FlatTextFieldUI.paintBackground( g, getComponent(), isIntelliJTheme );
 		FlatTextFieldUI.paintPlaceholder( g, getComponent(), placeholderForeground );
 		paintCapsLock( g );
-		super.paintSafely( g );
+
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
 	protected void paintCapsLock( Graphics g ) {

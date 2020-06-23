@@ -77,6 +77,7 @@ Button.default.hoverBackground #3b5f8b    com.formdev.flatlaf.util.DerivedColor 
 Button.default.hoverBorderColor #537699    javax.swing.plaf.ColorUIResource [UI]
 Button.default.pressedBackground #3f6796    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
 Button.defaultButtonFollowsFocus true
+Button.disabledBackground      #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledBorderColor     #5e6060    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledText            #777777    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedBorderColor      #466d94    javax.swing.plaf.ColorUIResource [UI]
@@ -129,6 +130,11 @@ CheckBox.icon.selectedBorderColor #6b6b6b    javax.swing.plaf.ColorUIResource [U
 CheckBox.icon.selectedFocusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
 CheckBox.iconTextGap           4
+CheckBox.icon[filled].checkmarkColor #43494a    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedBackground #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedBorderColor #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedHoverBackground #9f9f9f    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedPressedBackground #989898    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.margin                2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 CheckBox.rollover              true
 CheckBox.textIconGap           4
@@ -183,6 +189,7 @@ ComboBox.buttonEditableBackground #404445    javax.swing.plaf.ColorUIResource [U
 ComboBox.buttonHighlight       #242424    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHoverArrowColor #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonShadow          #646464    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonStyle           auto
 ComboBox.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.disabledForeground    #777777    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.editorColumns         0
@@ -703,6 +710,7 @@ RadioButton.highlight          #242424    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.icon.centerDiameter 8
 RadioButton.icon               [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonIcon [UI]
 RadioButton.iconTextGap        4
+RadioButton.icon[filled].centerDiameter 5
 RadioButton.light              #313131    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.margin             2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 RadioButton.rollover           true
@@ -766,11 +774,15 @@ ScrollBar.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonArrowColor     #9a9da1    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.hoverButtonBackground #484c4e    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(5%)
 ScrollBar.hoverThumbColor      #6e767a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
 ScrollBar.hoverThumbWithTrack  false
 ScrollBar.hoverTrackColor      #484c4f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(4%)
 ScrollBar.maximumThumbSize     4096,4096    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumThumbSize     8,8    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.pressedButtonBackground #54595c    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
+ScrollBar.pressedThumbColor    #7a8387    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(15%)
+ScrollBar.pressedThumbWithTrack false
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
 ScrollBar.thumb                #565c5f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
@@ -843,6 +855,7 @@ Spinner.buttonArrowColor       #9a9da1    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonBackground       #404445    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonHoverArrowColor  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonStyle            button
 Spinner.disabledBackground     #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Spinner.disabledForeground     #777777    javax.swing.plaf.ColorUIResource [UI]
 Spinner.editorAlignment        11
@@ -1085,6 +1098,7 @@ TitledPanelUI                  com.formdev.flatlaf.swingx.ui.FlatTitledPanelUI
 ToggleButton.background        #4c5052    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 ToggleButton.darkShadow        #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.disabledSelectedBackground #53585a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 ToggleButton.disabledText      #777777    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.font              [active] $defaultFont [UI]

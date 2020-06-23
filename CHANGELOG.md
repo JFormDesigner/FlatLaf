@@ -3,13 +3,38 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- CheckBox and RadioButton: Support changing selected icon style from outline to
+  filled (as in FlatLaf IntelliJ theme) with `UIManager.put(
+  "CheckBox.icon.style", "filled" );`.
+- Button and ToggleButton: Support disabled background color (use UI values
+  `Button.disabledBackground` and `ToggleButton.disabledBackground`). (issue
+  #112)
+- ScrollBar: Support pressed track, thumb and button colors (use UI values
+  `ScrollBar.pressedTrackColor`, `ScrollBar.pressedThumbColor` and
+  `ScrollBar.pressedButtonBackground`). (issue #115)
+- ComboBox: Support changing arrow button style (set UI value
+  `ComboBox.buttonStyle` to `auto` (default), `button` or `none`). (issue #114)
+- Spinner: Support changing arrows button style (set UI value
+  `Spinner.buttonStyle` to `button` (default) or `none`).
+- TableHeader: Support top/bottom/left positioned sort arrow when using
+  [Glazed Lists](https://github.com/glazedlists/glazedlists). (issue #113)
+- Fixed/improved vertical position of text when scaled on HiDPI screens on
+  Windows.
+
+
+## 0.36
+
 - ScrollBar: Made styling more flexible by supporting insets and arc for track
   and thumb. (issue #103)
+- ScrollBar: Use round thumb on macOS and Linux to make it look similar to
+  native platform scroll bars. (issue #103)
 - ComboBox: Minimum width is now 72 pixels (was ~50 for non-editable and ~130
   for editable comboboxes).
 - ComboBox: Support custom borders in combobox editors. (issue #102)
+- Button: Support non-square icon-only buttons. (issue #110)
 - Ubuntu Linux: Fixed poorly rendered font. (issue #105)
 - macOS Catalina: Use Helvetica Neue font.
+- `FlatInspector` added (see [FlatLaf Extras](flatlaf-extras)).
 
 
 ## 0.35

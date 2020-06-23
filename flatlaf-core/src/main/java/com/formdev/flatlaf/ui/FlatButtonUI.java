@@ -67,6 +67,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.focusedBackground			Color	optional
  * @uiDefault Button.hoverBackground			Color	optional
  * @uiDefault Button.pressedBackground			Color	optional
+ * @uiDefault Button.disabledBackground			Color	optional
  * @uiDefault Button.disabledText				Color
  * @uiDefault Button.default.background			Color
  * @uiDefault Button.default.startBackground	Color	optional; if set, a gradient paint is used and Button.default.background is ignored
@@ -97,6 +98,7 @@ public class FlatButtonUI
 	protected Color focusedBackground;
 	protected Color hoverBackground;
 	protected Color pressedBackground;
+	protected Color disabledBackground;
 	protected Color disabledText;
 
 	protected Color defaultBackground;
@@ -142,6 +144,7 @@ public class FlatButtonUI
 			focusedBackground = UIManager.getColor( prefix + "focusedBackground" );
 			hoverBackground = UIManager.getColor( prefix + "hoverBackground" );
 			pressedBackground = UIManager.getColor( prefix + "pressedBackground" );
+			disabledBackground = UIManager.getColor( prefix + "disabledBackground" );
 			disabledText = UIManager.getColor( prefix + "disabledText" );
 
 			if( UIManager.getBoolean( "Button.paintShadow" ) ) {
@@ -224,7 +227,11 @@ public class FlatButtonUI
 		return c instanceof JButton && ((JButton)c).isDefaultButton();
 	}
 
-	static boolean isIconOnlyButton( Component c ) {
+	/**
+	 * Returns true if the button has an icon but no text,
+	 * or it it does not have an icon and the text is either "..." or one character.
+	 */
+	static boolean isIconOnlyOrSingleCharacterButton( Component c ) {
 		if( !(c instanceof JButton) && !(c instanceof JToggleButton) )
 			return false;
 
@@ -323,6 +330,11 @@ public class FlatButtonUI
 	}
 
 	@Override
+	public void paint( Graphics g, JComponent c ) {
+		super.paint( FlatLabelUI.createGraphicsHTMLTextYCorrection( g, c ), c );
+	}
+
+	@Override
 	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
 		if( isHelpButton( b ) )
 			return;
@@ -352,7 +364,7 @@ public class FlatButtonUI
 
 	protected Color getBackground( JComponent c ) {
 		if( !c.isEnabled() )
-			return null;
+			return disabledBackground;
 
 		// toolbar button
 		if( isToolBarButton( c ) ) {
@@ -409,11 +421,13 @@ public class FlatButtonUI
 		if( prefSize == null )
 			return null;
 
-		// make button square if it is a icon-only button
-		// or apply minimum width, if not in toolbar and not a icon-only button
-		if( isIconOnlyButton( c ) )
-			prefSize.width = Math.max( prefSize.width, prefSize.height );
-		else if( !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
+		// make button square if it is a single-character button
+		// or apply minimum width, if not in toolbar and not a icon-only or single-character button
+		if( isIconOnlyOrSingleCharacterButton( c ) ) {
+			// make only single-character buttons square to allow non-square icon-only buttons
+			if( ((AbstractButton)c).getIcon() == null )
+				prefSize.width = Math.max( prefSize.width, prefSize.height );
+		} else if( !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
 			float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
 			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + Math.round( focusWidth * 2 ) );
 			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) ) + Math.round( focusWidth * 2 ) );

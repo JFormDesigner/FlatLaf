@@ -58,6 +58,34 @@ public class FlatHtmlTest
 		editorPaneLabel = new JLabel();
 		textPaneLabel = new JLabel();
 		toolTipLabel = new JLabel();
+		panel1 = new JPanel();
+		label5 = new JLabel();
+		label6 = new JLabel();
+		label7 = new JLabel();
+		label3 = new JLabel();
+		button1 = new JButton();
+		button2 = new JButton();
+		label11 = new JLabel();
+		toggleButton1 = new JToggleButton();
+		toggleButton2 = new JToggleButton();
+		label12 = new JLabel();
+		checkBox1 = new JCheckBox();
+		checkBox2 = new JCheckBox();
+		label13 = new JLabel();
+		radioButton1 = new JRadioButton();
+		radioButton2 = new JRadioButton();
+		label8 = new JLabel();
+		menu1 = new JMenu();
+		menu2 = new JMenu();
+		label4 = new JLabel();
+		menuItem1 = new JMenuItem();
+		menuItem2 = new JMenuItem();
+		label9 = new JLabel();
+		checkBoxMenuItem1 = new JCheckBoxMenuItem();
+		checkBoxMenuItem2 = new JCheckBoxMenuItem();
+		label10 = new JLabel();
+		radioButtonMenuItem1 = new JRadioButtonMenuItem();
+		radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		label1 = new JLabel();
 		scrollPane15 = new JScrollPane();
 		editorPane1 = new JEditorPane();
@@ -75,6 +103,7 @@ public class FlatHtmlTest
 		setLayout(new MigLayout(
 			"ltr,insets dialog,hidemode 3",
 			// columns
+			"[fill]" +
 			"[fill]" +
 			"[fill]" +
 			"[fill]" +
@@ -99,6 +128,145 @@ public class FlatHtmlTest
 		//---- toolTipLabel ----
 		toolTipLabel.setText("JToolTip:");
 		add(toolTipLabel, "cell 3 0");
+
+		//======== panel1 ========
+		{
+			panel1.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
+				// columns
+				"[fill]" +
+				"[fill]" +
+				"[fill]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]"));
+
+			//---- label5 ----
+			label5.setText("JLabel:");
+			panel1.add(label5, "cell 0 0");
+
+			//---- label6 ----
+			label6.setText("<html>Some <b>Bold</b> Text");
+			panel1.add(label6, "cell 1 0");
+
+			//---- label7 ----
+			label7.setText("Some text");
+			panel1.add(label7, "cell 2 0");
+
+			//---- label3 ----
+			label3.setText("JButon:");
+			panel1.add(label3, "cell 0 1");
+
+			//---- button1 ----
+			button1.setText("<html>Some <b>Bold</b> Text");
+			panel1.add(button1, "cell 1 1");
+
+			//---- button2 ----
+			button2.setText("Some text");
+			panel1.add(button2, "cell 2 1");
+
+			//---- label11 ----
+			label11.setText("text");
+			panel1.add(label11, "cell 0 2");
+
+			//---- toggleButton1 ----
+			toggleButton1.setText("<html>Some <b>Bold</b> Text");
+			toggleButton1.setSelected(true);
+			panel1.add(toggleButton1, "cell 1 2");
+
+			//---- toggleButton2 ----
+			toggleButton2.setText("Some text");
+			toggleButton2.setSelected(true);
+			panel1.add(toggleButton2, "cell 2 2");
+
+			//---- label12 ----
+			label12.setText("text");
+			panel1.add(label12, "cell 0 3");
+
+			//---- checkBox1 ----
+			checkBox1.setText("<html>Some <b>Bold</b> Text");
+			panel1.add(checkBox1, "cell 1 3");
+
+			//---- checkBox2 ----
+			checkBox2.setText("Some text");
+			panel1.add(checkBox2, "cell 2 3");
+
+			//---- label13 ----
+			label13.setText("text");
+			panel1.add(label13, "cell 0 4");
+
+			//---- radioButton1 ----
+			radioButton1.setText("<html>Some <b>Bold</b> Text");
+			panel1.add(radioButton1, "cell 1 4");
+
+			//---- radioButton2 ----
+			radioButton2.setText("Some text");
+			panel1.add(radioButton2, "cell 2 4");
+
+			//---- label8 ----
+			label8.setText("JMenu:");
+			panel1.add(label8, "cell 0 5");
+
+			//======== menu1 ========
+			{
+				menu1.setText("<html>Some <b>Bold</b> Text");
+			}
+			panel1.add(menu1, "cell 1 5");
+
+			//======== menu2 ========
+			{
+				menu2.setText("Some text");
+			}
+			panel1.add(menu2, "cell 2 5");
+
+			//---- label4 ----
+			label4.setText("JMenuItem:");
+			panel1.add(label4, "cell 0 6");
+
+			//---- menuItem1 ----
+			menuItem1.setText("<html>Some <b>Bold</b> Text");
+			panel1.add(menuItem1, "cell 1 6");
+
+			//---- menuItem2 ----
+			menuItem2.setText("Some text");
+			panel1.add(menuItem2, "cell 2 6");
+
+			//---- label9 ----
+			label9.setText("JCheckBoxMenuItem:");
+			panel1.add(label9, "cell 0 7");
+
+			//---- checkBoxMenuItem1 ----
+			checkBoxMenuItem1.setText("<html>Some <b>Bold</b> Text");
+			checkBoxMenuItem1.setSelected(true);
+			panel1.add(checkBoxMenuItem1, "cell 1 7");
+
+			//---- checkBoxMenuItem2 ----
+			checkBoxMenuItem2.setText("Some text");
+			checkBoxMenuItem2.setSelected(true);
+			panel1.add(checkBoxMenuItem2, "cell 2 7");
+
+			//---- label10 ----
+			label10.setText("JRadioButtonMenuItem:");
+			panel1.add(label10, "cell 0 8");
+
+			//---- radioButtonMenuItem1 ----
+			radioButtonMenuItem1.setText("<html>Some <b>Bold</b> Text");
+			radioButtonMenuItem1.setSelected(true);
+			panel1.add(radioButtonMenuItem1, "cell 1 8");
+
+			//---- radioButtonMenuItem2 ----
+			radioButtonMenuItem2.setText("Some text");
+			radioButtonMenuItem2.setSelected(true);
+			panel1.add(radioButtonMenuItem2, "cell 2 8");
+		}
+		add(panel1, "cell 4 0 1 3,aligny top,growy 0");
 
 		//---- label1 ----
 		label1.setText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p><hr><table border=\"1\"><tr><th>Col 1</th><th>Col 2</th></tr><tr><td>abc</td><td>def</td></tr></table><ul><li>item 1</li><li>item 2</li></ul></html>");
@@ -183,6 +351,34 @@ public class FlatHtmlTest
 	private JLabel editorPaneLabel;
 	private JLabel textPaneLabel;
 	private JLabel toolTipLabel;
+	private JPanel panel1;
+	private JLabel label5;
+	private JLabel label6;
+	private JLabel label7;
+	private JLabel label3;
+	private JButton button1;
+	private JButton button2;
+	private JLabel label11;
+	private JToggleButton toggleButton1;
+	private JToggleButton toggleButton2;
+	private JLabel label12;
+	private JCheckBox checkBox1;
+	private JCheckBox checkBox2;
+	private JLabel label13;
+	private JRadioButton radioButton1;
+	private JRadioButton radioButton2;
+	private JLabel label8;
+	private JMenu menu1;
+	private JMenu menu2;
+	private JLabel label4;
+	private JMenuItem menuItem1;
+	private JMenuItem menuItem2;
+	private JLabel label9;
+	private JCheckBoxMenuItem checkBoxMenuItem1;
+	private JCheckBoxMenuItem checkBoxMenuItem2;
+	private JLabel label10;
+	private JRadioButtonMenuItem radioButtonMenuItem1;
+	private JRadioButtonMenuItem radioButtonMenuItem2;
 	private JLabel label1;
 	private JScrollPane scrollPane15;
 	private JEditorPane editorPane1;

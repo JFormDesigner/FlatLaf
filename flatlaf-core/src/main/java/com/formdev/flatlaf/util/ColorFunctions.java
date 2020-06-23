@@ -35,7 +35,7 @@ public class ColorFunctions
 		return HSLColor.toRGB( hsl, alpha );
 	}
 
-	private static float clamp( float value ) {
+	public static float clamp( float value ) {
 		return (value < 0)
 			? 0
 			: ((value > 100)

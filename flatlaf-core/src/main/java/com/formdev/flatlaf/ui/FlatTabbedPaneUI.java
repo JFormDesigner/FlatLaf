@@ -333,28 +333,30 @@ public class FlatTabbedPaneUI
 		// paint tab separators
 		if( clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
 			!isLastInRun( tabIndex ) )
-		{
-			float sepWidth = UIScale.scale( 1f );
-			float offset = tabSeparatorsFullHeight ? 0 : UIScale.scale( 5f );
-
-			g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
-			if( tabPlacement == LEFT || tabPlacement == RIGHT ) {
-				// paint tab separator at bottom side
-				((Graphics2D)g).fill( new Rectangle2D.Float( x + offset, y + h - sepWidth, w - (offset * 2), sepWidth ) );
-			} else if( tabPane.getComponentOrientation().isLeftToRight() ) {
-				// paint tab separator at right side
-				((Graphics2D)g).fill( new Rectangle2D.Float( x + w - sepWidth, y + offset, sepWidth, h - (offset * 2) ) );
-			} else {
-				// paint tab separator at left side
-				((Graphics2D)g).fill( new Rectangle2D.Float( x, y + offset, sepWidth, h - (offset * 2) ) );
-			}
-		}
+		  paintTabSeparator( g, tabPlacement, x, y, w, h );
 
 		if( isSelected )
 			paintTabSelection( g, tabPlacement, x, y, w, h );
 	}
 
-	protected void paintTabSelection( Graphics g, int tabPlacement,  int x, int y, int w, int h ) {
+	protected void paintTabSeparator( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
+		float sepWidth = UIScale.scale( 1f );
+		float offset = tabSeparatorsFullHeight ? 0 : UIScale.scale( 5f );
+
+		g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
+		if( tabPlacement == LEFT || tabPlacement == RIGHT ) {
+			// paint tab separator at bottom side
+			((Graphics2D)g).fill( new Rectangle2D.Float( x + offset, y + h - sepWidth, w - (offset * 2), sepWidth ) );
+		} else if( tabPane.getComponentOrientation().isLeftToRight() ) {
+			// paint tab separator at right side
+			((Graphics2D)g).fill( new Rectangle2D.Float( x + w - sepWidth, y + offset, sepWidth, h - (offset * 2) ) );
+		} else {
+			// paint tab separator at left side
+			((Graphics2D)g).fill( new Rectangle2D.Float( x, y + offset, sepWidth, h - (offset * 2) ) );
+		}
+	}
+
+	protected void paintTabSelection( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
 		// increase clip bounds in scroll-tab-layout to paint over the separator line
 		Rectangle clipBounds = isScrollTabLayout() ? g.getClipBounds() : null;
 		if( clipBounds != null ) {

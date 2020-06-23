@@ -67,14 +67,14 @@ public class FlatCheckBoxMenuItemIcon
 		g2.draw( path );
 	}
 
-	private Color getCheckmarkColor( Component c ) {
+	protected Color getCheckmarkColor( Component c ) {
 		if( c instanceof JMenuItem && ((JMenuItem)c).isArmed() && !isUnderlineSelection() )
 			return selectionForeground;
 
 		return c.isEnabled() ? checkmarkColor : disabledCheckmarkColor;
 	}
 
-	private boolean isUnderlineSelection() {
+	protected boolean isUnderlineSelection() {
 		// not storing value of "MenuItem.selectionType" in class to allow changing at runtime
 		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
 	}

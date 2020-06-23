@@ -40,6 +40,7 @@ import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.Graphics2DProxy;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Renderer for menu items.
@@ -360,7 +361,7 @@ debug*/
 		if( isArmedOrSelected( menuItem ) && selectionForeground != null )
 			g = new GraphicsProxyWithTextColor( (Graphics2D) g, selectionForeground );
 
-		htmlView.paint( g, textRect );
+		htmlView.paint( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ), textRect );
 	}
 
 	protected static boolean isArmedOrSelected( JMenuItem menuItem ) {
@@ -371,7 +372,7 @@ debug*/
 		return menuItem instanceof JMenu && ((JMenu)menuItem).isTopLevelMenu();
 	}
 
-	private boolean isUnderlineSelection() {
+	protected boolean isUnderlineSelection() {
 		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
 	}
 
@@ -416,6 +417,13 @@ debug*/
 		if( accelerator == cachedAccelerator )
 			return cachedAcceleratorText;
 
+		cachedAccelerator = accelerator;
+		cachedAcceleratorText = getTextForAccelerator( accelerator );
+
+		return cachedAcceleratorText;
+	}
+
+	protected String getTextForAccelerator( KeyStroke accelerator ) {
 		StringBuilder buf = new StringBuilder();
 		int modifiers = accelerator.getModifiers();
 		if( modifiers != 0 )
@@ -427,10 +435,7 @@ debug*/
 		else
 			buf.append( accelerator.getKeyChar() );
 
-		cachedAccelerator = accelerator;
-		cachedAcceleratorText = buf.toString();
-
-		return cachedAcceleratorText;
+		return buf.toString();
 	}
 
 	//---- class MinSizeIcon --------------------------------------------------

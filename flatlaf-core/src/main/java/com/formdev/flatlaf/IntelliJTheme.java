@@ -147,6 +147,11 @@ public class IntelliJTheme
 		applyColorPalette( defaults );
 		applyCheckBoxColors( defaults );
 
+		// IDEA does not paint button background if disabled, but FlatLaf does
+		Object panelBackground = defaults.get( "Panel.background" );
+		defaults.put( "Button.disabledBackground", panelBackground );
+		defaults.put( "ToggleButton.disabledBackground", panelBackground );
+
 		// IDEA uses a SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
 		Object helpButtonBackground = defaults.get( "Button.startBackground" );
 		Object helpButtonBorderColor = defaults.get( "Button.startBorderColor" );
@@ -156,7 +161,7 @@ public class IntelliJTheme
 			helpButtonBorderColor = defaults.get( "Button.borderColor" );
 		defaults.put( "HelpButton.background", helpButtonBackground );
 		defaults.put( "HelpButton.borderColor", helpButtonBorderColor );
-		defaults.put( "HelpButton.disabledBackground", defaults.get( "Panel.background" ) );
+		defaults.put( "HelpButton.disabledBackground", panelBackground );
 		defaults.put( "HelpButton.disabledBorderColor", defaults.get( "Button.disabledBorderColor" ) );
 		defaults.put( "HelpButton.focusedBorderColor", defaults.get( "Button.focusedBorderColor" ) );
 		defaults.put( "HelpButton.focusedBackground", defaults.get( "Button.focusedBackground" ) );
@@ -510,7 +515,7 @@ public class IntelliJTheme
 		checkboxKeyMapping.put( "Checkbox.Border.Default",      "CheckBox.icon.borderColor" );
 		checkboxKeyMapping.put( "Checkbox.Border.Disabled",     "CheckBox.icon.disabledBorderColor" );
 		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Default",  "CheckBox.icon.focusedBorderColor" );
-		checkboxKeyMapping.put( "Checkbox.Focus.Wide",          "CheckBox.icon.focusedColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Wide",          "CheckBox.icon.focusColor" );
 		checkboxKeyMapping.put( "Checkbox.Foreground.Disabled", "CheckBox.icon.disabledCheckmarkColor" );
 		checkboxKeyMapping.put( "Checkbox.Background.Selected", "CheckBox.icon.selectedBackground" );
 		checkboxKeyMapping.put( "Checkbox.Border.Selected",     "CheckBox.icon.selectedBorderColor" );

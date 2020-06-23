@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.testing;
+package com.formdev.flatlaf.extras;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
@@ -61,6 +61,24 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
+ * A simple UI inspector that shows information about UI component at mouse location
+ * in a tooltip.
+ * <p>
+ * To use it in an application install it with:
+ * <pre>
+ * FlatInspector.install( "ctrl shift alt X" );
+ * </pre>
+ * This can be done e.g. in the main() method and allows enabling (and disabling)
+ * the UI inspector for the active window with the given keystroke.
+ * <p>
+ * When the UI inspector is active some additional keys are available:
+ * <ul>
+ *   <li>press <kbd>Esc</kbd> key to disable UI inspector</li>
+ *   <li>press <kbd>Ctrl</kbd> key to increase inspection level, which shows
+ *       information about parent of UI component at mouse location</li>
+ *   <li>press <kbd>Shift</kbd> key to decrease inspection level</li>
+ * </ul>
+ *
  * @author Karl Tauber
  */
 public class FlatInspector
@@ -80,6 +98,7 @@ public class FlatInspector
 	private int lastX;
 	private int lastY;
 	private int inspectParentLevel;
+	private boolean wasCtrlOrShiftKeyPressed;
 
 	private JComponent highlightFigure;
 	private JToolTip tip;
@@ -129,8 +148,14 @@ public class FlatInspector
 		keyListener = e -> {
 			KeyEvent keyEvent = (KeyEvent) e;
 			int keyCode = keyEvent.getKeyCode();
+			int id = e.getID();
 
-			if( e.getID() == KeyEvent.KEY_RELEASED ) {
+			if( id == KeyEvent.KEY_PRESSED ) {
+				// this avoids that the inspection level is changed when UI inspector
+				// is enabled with keyboard shortcut (e.g. Ctrl+Shift+Alt+X)
+				if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_SHIFT )
+					wasCtrlOrShiftKeyPressed = true;
+			} else if( id == KeyEvent.KEY_RELEASED && wasCtrlOrShiftKeyPressed ) {
 				if( keyCode == KeyEvent.VK_CONTROL ) {
 					inspectParentLevel++;
 					inspect( lastX, lastY );
@@ -144,7 +169,7 @@ public class FlatInspector
 				// consume pressed and released ESC key events to e.g. avoid that dialog is closed
 				keyEvent.consume();
 
-				if( e.getID() == KeyEvent.KEY_PRESSED ) {
+				if( id == KeyEvent.KEY_PRESSED ) {
 					FlatInspector inspector = (FlatInspector) rootPane.getClientProperty( FlatInspector.class );
 					if( inspector == FlatInspector.this ) {
 						uninstall();

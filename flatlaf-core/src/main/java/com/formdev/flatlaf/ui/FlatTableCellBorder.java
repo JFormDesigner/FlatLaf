@@ -86,7 +86,7 @@ public class FlatTableCellBorder
 		/**
 		 * Checks whether at least one selected cell is editable.
 		 */
-		private boolean isSelectionEditable( JTable table ) {
+		protected boolean isSelectionEditable( JTable table ) {
 			if( table.getRowSelectionAllowed() ) {
 				int columnCount = table.getColumnCount();
 				int[] selectedRows = table.getSelectedRows();

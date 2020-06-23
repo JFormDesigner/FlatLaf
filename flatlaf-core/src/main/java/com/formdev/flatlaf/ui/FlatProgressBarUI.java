@@ -31,6 +31,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicProgressBarUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -192,6 +193,11 @@ public class FlatProgressBarUI
 			if( progressBar.isStringPainted() )
 				paintString( g, x, y, width, height, amountFull, insets );
 		}
+	}
+
+	@Override
+	protected void paintString( Graphics g, int x, int y, int width, int height, int amountFull, Insets b ) {
+		super.paintString( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ), x, y, width, height, amountFull, b );
 	}
 
 	@Override

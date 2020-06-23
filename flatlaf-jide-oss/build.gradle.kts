@@ -33,6 +33,7 @@ tasks {
 	javadoc {
 		options {
 			this as StandardJavadocDocletOptions
+			use( true )
 			tags = listOf( "uiDefault", "clientProperty" )
 		}
 		isFailOnError = false

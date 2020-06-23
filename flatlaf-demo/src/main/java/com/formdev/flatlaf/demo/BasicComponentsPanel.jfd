@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -20,14 +20,14 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
-				"text": "enabled"
+				"text": "Enabled"
 				"displayedMnemonic": 69
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
-				"text": "disabled"
+				"text": "Disabled"
 				"displayedMnemonic": 68
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -41,14 +41,14 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
-				"text": "enabled"
+				"text": "Enabled"
 				"displayedMnemonicIndex": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button2"
-				"text": "disabled"
+				"text": "Disabled"
 				"displayedMnemonicIndex": 0
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -56,14 +56,14 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button5"
-				"text": "square"
+				"text": "Square"
 				"$client.JButton.buttonType": "square"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button6"
-				"text": "round"
+				"text": "Round"
 				"$client.JButton.buttonType": "roundRect"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"
@@ -115,14 +115,14 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "checkBox1"
-				"text": "enabled"
+				"text": "Enabled"
 				"mnemonic": 65
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "checkBox2"
-				"text": "disabled"
+				"text": "Disabled"
 				"enabled": false
 				"mnemonic": 68
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -130,14 +130,14 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "checkBox3"
-				"text": "selected"
+				"text": "Selected"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 2"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "checkBox4"
-				"text": "selected disabled"
+				"text": "Selected disabled"
 				"selected": true
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -151,14 +151,14 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton1"
-				"text": "enabled"
+				"text": "Enabled"
 				"mnemonic": 78
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 3"
 			} )
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton2"
-				"text": "disabled"
+				"text": "Disabled"
 				"enabled": false
 				"mnemonic": 83
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -166,14 +166,14 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton3"
-				"text": "selected"
+				"text": "Selected"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 3"
 			} )
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton4"
-				"text": "selected disabled"
+				"text": "Selected disabled"
 				"selected": true
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -191,8 +191,8 @@ new FormModel {
 				name: "comboBox1"
 				"editable": true
 				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "editable"
-					addElement( "editable" )
+					selectedItem: "Editable"
+					addElement( "Editable" )
 					addElement( "a" )
 					addElement( "bb" )
 					addElement( "ccc" )
@@ -205,8 +205,8 @@ new FormModel {
 				"editable": true
 				"enabled": false
 				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "disabled"
-					addElement( "disabled" )
+					selectedItem: "Disabled"
+					addElement( "Disabled" )
 					addElement( "a" )
 					addElement( "bb" )
 					addElement( "ccc" )
@@ -217,8 +217,8 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox3"
 				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "not editable"
-					addElement( "not editable" )
+					selectedItem: "Not editable"
+					addElement( "Not editable" )
 					addElement( "a" )
 					addElement( "bb" )
 					addElement( "ccc" )
@@ -229,8 +229,8 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox4"
 				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "not editable disabled"
-					addElement( "not editable disabled" )
+					selectedItem: "Not editable disabled"
+					addElement( "Not editable disabled" )
 					addElement( "a" )
 					addElement( "bb" )
 					addElement( "ccc" )
@@ -242,8 +242,8 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox5"
 				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "wide popup if text is longer"
-					addElement( "wide popup if text is longer" )
+					selectedItem: "Wide popup if text is longer"
+					addElement( "Wide popup if text is longer" )
 					addElement( "aa" )
 					addElement( "bbb" )
 					addElement( "cccc" )
@@ -273,7 +273,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox6"
 				"editable": true
-				"$client.JTextField.placeholderText": "placeholder"
+				"$client.JTextField.placeholderText": "Placeholder"
 				auxiliary() {
 					"JavaCodeGenerator.typeParameters": "String"
 				}
@@ -290,28 +290,28 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField1"
-				"text": "editable"
+				"text": "Editable"
 				"componentPopupMenu": &FormReference0 new FormReference( "popupMenu1" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 6,growx"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField2"
-				"text": "disabled"
+				"text": "Disabled"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 6,growx"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField3"
-				"text": "not editable"
+				"text": "Not editable"
 				"editable": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 6,growx"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField4"
-				"text": "not editable disabled"
+				"text": "Not editable disabled"
 				"enabled": false
 				"editable": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -319,7 +319,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField6"
-				"$client.JTextField.placeholderText": "placeholder"
+				"$client.JTextField.placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 6,growx"
 			} )
@@ -333,28 +333,28 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
 				name: "formattedTextField1"
-				"text": "editable"
+				"text": "Editable"
 				"componentPopupMenu": #FormReference0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7,growx"
 			} )
 			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
 				name: "formattedTextField2"
-				"text": "disabled"
+				"text": "Disabled"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 7,growx"
 			} )
 			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
 				name: "formattedTextField3"
-				"text": "not editable"
+				"text": "Not editable"
 				"editable": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 7,growx"
 			} )
 			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
 				name: "formattedTextField4"
-				"text": "not editable disabled"
+				"text": "Not editable disabled"
 				"enabled": false
 				"editable": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -362,7 +362,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
 				name: "formattedTextField5"
-				"$client.JTextField.placeholderText": "placeholder"
+				"$client.JTextField.placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 7,growx"
 			} )
@@ -374,27 +374,27 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField1"
-				"text": "editable"
+				"text": "Editable"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 8,growx"
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField2"
-				"text": "disabled"
+				"text": "Disabled"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 8,growx"
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField3"
-				"text": "not editable"
+				"text": "Not editable"
 				"editable": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 8,growx"
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField4"
-				"text": "not editable disabled"
+				"text": "Not editable disabled"
 				"enabled": false
 				"editable": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -402,7 +402,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField5"
-				"$client.JTextField.placeholderText": "placeholder"
+				"$client.JTextField.placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 8,growx"
 			} )
@@ -418,7 +418,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JTextArea" ) {
 					name: "textArea1"
-					"text": "editable"
+					"text": "Editable"
 					"rows": 2
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -430,7 +430,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JTextArea" ) {
 					name: "textArea2"
-					"text": "disabled"
+					"text": "Disabled"
 					"rows": 2
 					"enabled": false
 				} )
@@ -443,7 +443,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JTextArea" ) {
 					name: "textArea3"
-					"text": "not editable"
+					"text": "Not editable"
 					"rows": 2
 					"editable": false
 				} )
@@ -456,7 +456,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JTextArea" ) {
 					name: "textArea4"
-					"text": "not editable disabled"
+					"text": "Not editable disabled"
 					"rows": 2
 					"editable": false
 					"enabled": false
@@ -467,7 +467,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JTextArea" ) {
 				name: "textArea5"
 				"rows": 2
-				"text": "no scroll pane"
+				"text": "No scroll pane"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 9,growx"
 			} )
@@ -483,7 +483,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JEditorPane" ) {
 					name: "editorPane1"
-					"text": "editable"
+					"text": "Editable"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10,growx"
@@ -494,7 +494,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JEditorPane" ) {
 					name: "editorPane2"
-					"text": "disabled"
+					"text": "Disabled"
 					"enabled": false
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -506,7 +506,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JEditorPane" ) {
 					name: "editorPane3"
-					"text": "not editable"
+					"text": "Not editable"
 					"editable": false
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -518,7 +518,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JEditorPane" ) {
 					name: "editorPane4"
-					"text": "not editable disabled"
+					"text": "Not editable disabled"
 					"editable": false
 					"enabled": false
 				} )
@@ -527,7 +527,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JEditorPane" ) {
 				name: "editorPane5"
-				"text": "no scroll pane"
+				"text": "No scroll pane"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 10,growx"
 			} )
@@ -543,7 +543,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JTextPane" ) {
 					name: "textPane1"
-					"text": "editable"
+					"text": "Editable"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 11,growx"
@@ -554,7 +554,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JTextPane" ) {
 					name: "textPane2"
-					"text": "disabled"
+					"text": "Disabled"
 					"enabled": false
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -566,7 +566,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JTextPane" ) {
 					name: "textPane3"
-					"text": "not editable"
+					"text": "Not editable"
 					"editable": false
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -578,7 +578,7 @@ new FormModel {
 				"horizontalScrollBarPolicy": 31
 				add( new FormComponent( "javax.swing.JTextPane" ) {
 					name: "textPane4"
-					"text": "not editable disabled"
+					"text": "Not editable disabled"
 					"editable": false
 					"enabled": false
 				} )
@@ -587,7 +587,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextPane" ) {
 				name: "textPane5"
-				"text": "no scroll pane"
+				"text": "No scroll pane"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 11,growx"
 			} )
@@ -607,8 +607,8 @@ new FormModel {
 				name: "comboBox7"
 				"$client.JComponent.outline": "error"
 				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "editable"
-					addElement( "editable" )
+					selectedItem: "Editable"
+					addElement( "Editable" )
 				}
 				"editable": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -636,8 +636,8 @@ new FormModel {
 				name: "comboBox8"
 				"$client.JComponent.outline": "warning"
 				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "not editable"
-					addElement( "not editable" )
+					selectedItem: "Not editable"
+					addElement( "Not editable" )
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13,growx"

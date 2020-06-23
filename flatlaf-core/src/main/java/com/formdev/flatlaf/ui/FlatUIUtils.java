@@ -46,7 +46,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
-import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -449,23 +448,24 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Draws the given string at the specified location using text properties
-	 * and anti-aliasing hints from the provided component.
-	 *
-	 * Use this method instead of Graphics.drawString() for correct anti-aliasing.
-	 *
-	 * Replacement for SwingUtilities2.drawString()
+	 * Draws the given string at the specified location.
+	 * The provided component is used to query text properties and anti-aliasing hints.
+	 * <p>
+	 * Use this method instead of {@link Graphics#drawString(String, int, int)} for correct anti-aliasing.
+	 * <p>
+	 * Replacement for {@code SwingUtilities2.drawString()}.
+	 * Uses {@link HiDPIUtils#drawStringWithYCorrection(JComponent, Graphics2D, String, int, int)}.
 	 */
 	public static void drawString( JComponent c, Graphics g, String text, int x, int y ) {
-		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, -1, x, y );
+		HiDPIUtils.drawStringWithYCorrection( c, (Graphics2D) g, text, x, y );
 	}
 
 	/**
-	 * Draws the given string at the specified location underlining the specified
-	 * character. The provided component is used to query text properties and
-	 * anti-aliasing hints.
-	 *
-	 * Replacement for SwingUtilities2.drawStringUnderlineCharAt()
+	 * Draws the given string at the specified location underlining the specified character.
+	 * The provided component is used to query text properties and anti-aliasing hints.
+	 * <p>
+	 * Replacement for {@code SwingUtilities2.drawStringUnderlineCharAt()}.
+	 * Uses {@link HiDPIUtils#drawStringUnderlineCharAtWithYCorrection(JComponent, Graphics2D, String, int, int, int)}.
 	 */
 	public static void drawStringUnderlineCharAt( JComponent c, Graphics g,
 		String text, int underlinedIndex, int x, int y )
@@ -487,7 +487,7 @@ public class FlatUIUtils
 			};
 		}
 
-		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, underlinedIndex, x, y );
+		HiDPIUtils.drawStringUnderlineCharAtWithYCorrection( c, (Graphics2D) g, text, underlinedIndex, x, y );
 	}
 
 	public static boolean hasOpaqueBeenExplicitlySet( JComponent c ) {

@@ -1,0 +1,21 @@
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[fill]"
+			"$rowConstraints": "[top]"
+		} ) {
+			name: "this"
+			"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 450, 300 )
+		} )
+	}
+}

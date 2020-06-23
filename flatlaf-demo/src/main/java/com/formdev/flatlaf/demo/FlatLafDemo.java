@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.demo;
 
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -28,7 +29,8 @@ public class FlatLafDemo
 	static final String KEY_TAB = "tab";
 
 	public static void main( String[] args ) {
-		if( SystemInfo.IS_MAC )
+		// on macOS enable screen menu bar
+		if( SystemInfo.IS_MAC && System.getProperty( "apple.laf.useScreenMenuBar" ) == null )
 			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
 
 		SwingUtilities.invokeLater( () -> {
@@ -36,6 +38,9 @@ public class FlatLafDemo
 
 			// set look and feel
 			DemoPrefs.initLaf( args );
+
+			// install inspector
+			FlatInspector.install( "ctrl shift alt X" );
 
 			// create frame
 			DemoFrame frame = new DemoFrame();

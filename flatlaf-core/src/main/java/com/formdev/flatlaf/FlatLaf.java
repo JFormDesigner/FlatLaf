@@ -326,6 +326,7 @@ public abstract class FlatLaf
 		// initialize some defaults (for overriding) that are used in UI delegates,
 		// but are not set in BasicLookAndFeel
 		putDefaults( defaults, defaults.getColor( "control" ),
+			"Button.disabledBackground",
 			"EditorPane.disabledBackground",
 			"EditorPane.inactiveBackground",
 			"FormattedTextField.disabledBackground",
@@ -335,7 +336,8 @@ public abstract class FlatLaf
 			"TextArea.inactiveBackground",
 			"TextField.disabledBackground",
 			"TextPane.disabledBackground",
-			"TextPane.inactiveBackground" );
+			"TextPane.inactiveBackground",
+			"ToggleButton.disabledBackground" );
 		putDefaults( defaults, defaults.getColor( "textInactiveText" ),
 			"Button.disabledText",
 			"CheckBox.disabledText",

@@ -347,12 +347,12 @@ public class FlatComponentsTest
 		add(labelLabel, "cell 0 0");
 
 		//---- label1 ----
-		label1.setText("enabled");
+		label1.setText("Enabled");
 		label1.setDisplayedMnemonic('E');
 		add(label1, "cell 1 0");
 
 		//---- label2 ----
-		label2.setText("disabled");
+		label2.setText("Disabled");
 		label2.setDisplayedMnemonic('D');
 		label2.setEnabled(false);
 		add(label2, "cell 2 0");
@@ -362,46 +362,46 @@ public class FlatComponentsTest
 		add(buttonLabel, "cell 0 1");
 
 		//---- button1 ----
-		button1.setText("enabled");
+		button1.setText("Enabled");
 		button1.setDisplayedMnemonicIndex(0);
 		button1.setToolTipText("This button is enabled.");
 		add(button1, "cell 1 1");
 
 		//---- button17 ----
-		button17.setText("sq");
+		button17.setText("Sq");
 		button17.putClientProperty("JButton.buttonType", "square");
 		button17.putClientProperty("JComponent.minimumWidth", 0);
 		add(button17, "cell 1 1");
 
 		//---- button22 ----
-		button22.setText("rd");
+		button22.setText("Rd");
 		button22.putClientProperty("JButton.buttonType", "roundRect");
 		button22.putClientProperty("JComponent.minimumWidth", 0);
 		add(button22, "cell 1 1");
 
 		//---- button2 ----
-		button2.setText("disabled");
+		button2.setText("Disabled");
 		button2.setDisplayedMnemonicIndex(0);
 		button2.setEnabled(false);
 		button2.setToolTipText("This button is disabled.");
 		add(button2, "cell 2 1");
 
 		//---- button18 ----
-		button18.setText("sq");
+		button18.setText("Sq");
 		button18.putClientProperty("JButton.buttonType", "square");
 		button18.setEnabled(false);
 		button18.putClientProperty("JComponent.minimumWidth", 0);
 		add(button18, "cell 2 1");
 
 		//---- button23 ----
-		button23.setText("rd");
+		button23.setText("Rd");
 		button23.putClientProperty("JButton.buttonType", "roundRect");
 		button23.setEnabled(false);
 		button23.putClientProperty("JComponent.minimumWidth", 0);
 		add(button23, "cell 2 1");
 
 		//---- button5 ----
-		button5.setText("default");
+		button5.setText("Default");
 		button5.setDisplayedMnemonicIndex(0);
 		button5.setToolTipText("Tool tip with\nmultiple\nlines.");
 		add(button5, "cell 3 1");
@@ -434,7 +434,7 @@ public class FlatComponentsTest
 		add(button16, "cell 5 1");
 
 		//---- button20 ----
-		button20.setText("empty border");
+		button20.setText("Empty border");
 		button20.setBorder(BorderFactory.createEmptyBorder());
 		add(button20, "cell 6 1");
 
@@ -443,43 +443,43 @@ public class FlatComponentsTest
 		add(toggleButtonLabel, "cell 0 2");
 
 		//---- toggleButton1 ----
-		toggleButton1.setText("enabled");
+		toggleButton1.setText("Enabled");
 		add(toggleButton1, "cell 1 2");
 
 		//---- toggleButton9 ----
-		toggleButton9.setText("sq");
+		toggleButton9.setText("Sq");
 		toggleButton9.putClientProperty("JButton.buttonType", "square");
 		add(toggleButton9, "cell 1 2");
 
 		//---- toggleButton19 ----
-		toggleButton19.setText("rd");
+		toggleButton19.setText("Rd");
 		toggleButton19.putClientProperty("JButton.buttonType", "roundRect");
 		add(toggleButton19, "cell 1 2");
 
 		//---- toggleButton2 ----
-		toggleButton2.setText("disabled");
+		toggleButton2.setText("Disabled");
 		toggleButton2.setEnabled(false);
 		add(toggleButton2, "cell 2 2");
 
 		//---- toggleButton10 ----
-		toggleButton10.setText("sq");
+		toggleButton10.setText("Sq");
 		toggleButton10.putClientProperty("JButton.buttonType", "square");
 		toggleButton10.setEnabled(false);
 		add(toggleButton10, "cell 2 2");
 
 		//---- toggleButton20 ----
-		toggleButton20.setText("rd");
+		toggleButton20.setText("Rd");
 		toggleButton20.putClientProperty("JButton.buttonType", "roundRect");
 		toggleButton20.setEnabled(false);
 		add(toggleButton20, "cell 2 2");
 
 		//---- toggleButton3 ----
-		toggleButton3.setText("selected");
+		toggleButton3.setText("Selected");
 		toggleButton3.setSelected(true);
 		add(toggleButton3, "cell 3 2");
 
 		//---- toggleButton4 ----
-		toggleButton4.setText("selected disabled");
+		toggleButton4.setText("Selected disabled");
 		toggleButton4.setEnabled(false);
 		toggleButton4.setSelected(true);
 		add(toggleButton4, "cell 4 2");
@@ -505,7 +505,7 @@ public class FlatComponentsTest
 		add(toggleButton14, "cell 5 2");
 
 		//---- toggleButton18 ----
-		toggleButton18.setText("empty border");
+		toggleButton18.setText("Empty border");
 		toggleButton18.setBorder(BorderFactory.createEmptyBorder());
 		add(toggleButton18, "cell 6 2");
 
@@ -514,35 +514,35 @@ public class FlatComponentsTest
 		add(checkBoxLabel, "cell 0 3");
 
 		//---- checkBox1 ----
-		checkBox1.setText("enabled");
+		checkBox1.setText("Enabled");
 		checkBox1.setMnemonic('A');
 		add(checkBox1, "cell 1 3");
 
 		//---- checkBox2 ----
-		checkBox2.setText("disabled");
+		checkBox2.setText("Disabled");
 		checkBox2.setEnabled(false);
 		checkBox2.setMnemonic('D');
 		add(checkBox2, "cell 2 3");
 
 		//---- checkBox3 ----
-		checkBox3.setText("selected");
+		checkBox3.setText("Selected");
 		checkBox3.setSelected(true);
 		add(checkBox3, "cell 3 3");
 
 		//---- checkBox4 ----
-		checkBox4.setText("selected disabled");
+		checkBox4.setText("Selected disabled");
 		checkBox4.setSelected(true);
 		checkBox4.setEnabled(false);
 		add(checkBox4, "cell 4 3");
 
 		//---- toggleButton5 ----
-		toggleButton5.setText("tab");
+		toggleButton5.setText("Tab");
 		toggleButton5.putClientProperty("JButton.buttonType", "tab");
 		toggleButton5.setSelected(true);
 		add(toggleButton5, "cell 5 3");
 
 		//---- toggleButton8 ----
-		toggleButton8.setText("tab");
+		toggleButton8.setText("Tab");
 		toggleButton8.putClientProperty("JButton.buttonType", "tab");
 		toggleButton8.setEnabled(false);
 		toggleButton8.setSelected(true);
@@ -553,23 +553,23 @@ public class FlatComponentsTest
 		add(radioButtonLabel, "cell 0 4");
 
 		//---- radioButton1 ----
-		radioButton1.setText("enabled");
+		radioButton1.setText("Enabled");
 		radioButton1.setMnemonic('N');
 		add(radioButton1, "cell 1 4");
 
 		//---- radioButton2 ----
-		radioButton2.setText("disabled");
+		radioButton2.setText("Disabled");
 		radioButton2.setEnabled(false);
 		radioButton2.setMnemonic('S');
 		add(radioButton2, "cell 2 4");
 
 		//---- radioButton3 ----
-		radioButton3.setText("selected");
+		radioButton3.setText("Selected");
 		radioButton3.setSelected(true);
 		add(radioButton3, "cell 3 4");
 
 		//---- radioButton4 ----
-		radioButton4.setText("selected disabled");
+		radioButton4.setText("Selected disabled");
 		radioButton4.setSelected(true);
 		radioButton4.setEnabled(false);
 		add(radioButton4, "cell 4 4");
@@ -581,7 +581,7 @@ public class FlatComponentsTest
 		//---- comboBox1 ----
 		comboBox1.setEditable(true);
 		comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
-			"editable",
+			"Editable",
 			"a",
 			"bb",
 			"ccc",
@@ -600,7 +600,7 @@ public class FlatComponentsTest
 		comboBox2.setEditable(true);
 		comboBox2.setEnabled(false);
 		comboBox2.setModel(new DefaultComboBoxModel<>(new String[] {
-			"disabled",
+			"Disabled",
 			"a",
 			"bb",
 			"ccc"
@@ -609,7 +609,7 @@ public class FlatComponentsTest
 
 		//---- comboBox3 ----
 		comboBox3.setModel(new DefaultComboBoxModel<>(new String[] {
-			"not editable",
+			"Not editable",
 			"a",
 			"bb",
 			"ccc",
@@ -626,7 +626,7 @@ public class FlatComponentsTest
 
 		//---- comboBox4 ----
 		comboBox4.setModel(new DefaultComboBoxModel<>(new String[] {
-			"not editable disabled",
+			"Not editable disabled",
 			"a",
 			"bb",
 			"ccc"
@@ -636,7 +636,7 @@ public class FlatComponentsTest
 
 		//---- comboBox5 ----
 		comboBox5.setModel(new DefaultComboBoxModel<>(new String[] {
-			"wide popup if text is longer",
+			"Wide popup if text is longer",
 			"aa",
 			"bbb",
 			"cccc"
@@ -646,7 +646,7 @@ public class FlatComponentsTest
 		//---- comboBox6 ----
 		comboBox6.setBorder(BorderFactory.createEmptyBorder());
 		comboBox6.setModel(new DefaultComboBoxModel<>(new String[] {
-			"empty border",
+			"Empty border",
 			"a",
 			"b",
 			"c"
@@ -664,7 +664,7 @@ public class FlatComponentsTest
 
 		//---- comboBox7 ----
 		comboBox7.setEditable(true);
-		comboBox7.putClientProperty("JTextField.placeholderText", "placeholder");
+		comboBox7.putClientProperty("JTextField.placeholderText", "Placeholder");
 		add(comboBox7, "cell 5 6,growx");
 
 		//---- spinner3 ----
@@ -677,31 +677,31 @@ public class FlatComponentsTest
 		add(textFieldLabel, "cell 0 7");
 
 		//---- textField1 ----
-		textField1.setText("editable");
+		textField1.setText("Editable");
 		add(textField1, "cell 1 7,growx");
 
 		//---- textField2 ----
-		textField2.setText("disabled");
+		textField2.setText("Disabled");
 		textField2.setEnabled(false);
 		add(textField2, "cell 2 7,growx");
 
 		//---- textField3 ----
-		textField3.setText("not editable");
+		textField3.setText("Not editable");
 		textField3.setEditable(false);
 		add(textField3, "cell 3 7,growx");
 
 		//---- textField4 ----
-		textField4.setText("not editable disabled");
+		textField4.setText("Not editable disabled");
 		textField4.setEnabled(false);
 		textField4.setEditable(false);
 		add(textField4, "cell 4 7,growx");
 
 		//---- textField6 ----
-		textField6.putClientProperty("JTextField.placeholderText", "placeholder");
+		textField6.putClientProperty("JTextField.placeholderText", "Placeholder");
 		add(textField6, "cell 5 7,growx");
 
 		//---- textField5 ----
-		textField5.setText("empty border");
+		textField5.setText("Empty border");
 		textField5.setBorder(BorderFactory.createEmptyBorder());
 		add(textField5, "cell 6 7");
 
@@ -710,31 +710,31 @@ public class FlatComponentsTest
 		add(formattedTextFieldLabel, "cell 0 8");
 
 		//---- formattedTextField1 ----
-		formattedTextField1.setText("editable");
+		formattedTextField1.setText("Editable");
 		add(formattedTextField1, "cell 1 8,growx");
 
 		//---- formattedTextField2 ----
-		formattedTextField2.setText("disabled");
+		formattedTextField2.setText("Disabled");
 		formattedTextField2.setEnabled(false);
 		add(formattedTextField2, "cell 2 8,growx");
 
 		//---- formattedTextField3 ----
-		formattedTextField3.setText("not editable");
+		formattedTextField3.setText("Not editable");
 		formattedTextField3.setEditable(false);
 		add(formattedTextField3, "cell 3 8,growx");
 
 		//---- formattedTextField4 ----
-		formattedTextField4.setText("not editable disabled");
+		formattedTextField4.setText("Not editable disabled");
 		formattedTextField4.setEnabled(false);
 		formattedTextField4.setEditable(false);
 		add(formattedTextField4, "cell 4 8,growx");
 
 		//---- formattedTextField5 ----
-		formattedTextField5.putClientProperty("JTextField.placeholderText", "placeholder");
+		formattedTextField5.putClientProperty("JTextField.placeholderText", "Placeholder");
 		add(formattedTextField5, "cell 5 8,growx");
 
 		//---- formattedTextField6 ----
-		formattedTextField6.setText("empty border");
+		formattedTextField6.setText("Empty border");
 		formattedTextField6.setBorder(BorderFactory.createEmptyBorder());
 		add(formattedTextField6, "cell 6 8");
 
@@ -743,27 +743,27 @@ public class FlatComponentsTest
 		add(passwordFieldLabel, "cell 0 9");
 
 		//---- passwordField1 ----
-		passwordField1.setText("editable");
+		passwordField1.setText("Editable");
 		add(passwordField1, "cell 1 9,growx");
 
 		//---- passwordField2 ----
-		passwordField2.setText("disabled");
+		passwordField2.setText("Disabled");
 		passwordField2.setEnabled(false);
 		add(passwordField2, "cell 2 9,growx");
 
 		//---- passwordField3 ----
-		passwordField3.setText("not editable");
+		passwordField3.setText("Not editable");
 		passwordField3.setEditable(false);
 		add(passwordField3, "cell 3 9,growx");
 
 		//---- passwordField4 ----
-		passwordField4.setText("not editable disabled");
+		passwordField4.setText("Not editable disabled");
 		passwordField4.setEnabled(false);
 		passwordField4.setEditable(false);
 		add(passwordField4, "cell 4 9,growx");
 
 		//---- passwordField5 ----
-		passwordField5.putClientProperty("JTextField.placeholderText", "placeholder");
+		passwordField5.putClientProperty("JTextField.placeholderText", "Placeholder");
 		add(passwordField5, "cell 5 9,growx");
 
 		//---- passwordField6 ----
@@ -781,7 +781,7 @@ public class FlatComponentsTest
 			scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textArea1 ----
-			textArea1.setText("editable");
+			textArea1.setText("Editable");
 			textArea1.setRows(2);
 			scrollPane1.setViewportView(textArea1);
 		}
@@ -793,7 +793,7 @@ public class FlatComponentsTest
 			scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textArea2 ----
-			textArea2.setText("disabled");
+			textArea2.setText("Disabled");
 			textArea2.setRows(2);
 			textArea2.setEnabled(false);
 			scrollPane2.setViewportView(textArea2);
@@ -806,7 +806,7 @@ public class FlatComponentsTest
 			scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textArea3 ----
-			textArea3.setText("not editable");
+			textArea3.setText("Not editable");
 			textArea3.setRows(2);
 			textArea3.setEditable(false);
 			scrollPane3.setViewportView(textArea3);
@@ -819,7 +819,7 @@ public class FlatComponentsTest
 			scrollPane4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textArea4 ----
-			textArea4.setText("not editable disabled");
+			textArea4.setText("Not editable disabled");
 			textArea4.setRows(2);
 			textArea4.setEditable(false);
 			textArea4.setEnabled(false);
@@ -829,7 +829,7 @@ public class FlatComponentsTest
 
 		//---- textArea5 ----
 		textArea5.setRows(2);
-		textArea5.setText("no scroll pane");
+		textArea5.setText("No scroll pane");
 		add(textArea5, "cell 5 10,growx");
 
 		//---- editorPaneLabel ----
@@ -842,7 +842,7 @@ public class FlatComponentsTest
 			scrollPane5.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- editorPane1 ----
-			editorPane1.setText("editable");
+			editorPane1.setText("Editable");
 			scrollPane5.setViewportView(editorPane1);
 		}
 		add(scrollPane5, "cell 1 11,growx");
@@ -853,7 +853,7 @@ public class FlatComponentsTest
 			scrollPane6.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- editorPane2 ----
-			editorPane2.setText("disabled");
+			editorPane2.setText("Disabled");
 			editorPane2.setEnabled(false);
 			scrollPane6.setViewportView(editorPane2);
 		}
@@ -865,7 +865,7 @@ public class FlatComponentsTest
 			scrollPane7.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- editorPane3 ----
-			editorPane3.setText("not editable");
+			editorPane3.setText("Not editable");
 			editorPane3.setEditable(false);
 			scrollPane7.setViewportView(editorPane3);
 		}
@@ -877,7 +877,7 @@ public class FlatComponentsTest
 			scrollPane8.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- editorPane4 ----
-			editorPane4.setText("not editable disabled");
+			editorPane4.setText("Not editable disabled");
 			editorPane4.setEditable(false);
 			editorPane4.setEnabled(false);
 			scrollPane8.setViewportView(editorPane4);
@@ -885,7 +885,7 @@ public class FlatComponentsTest
 		add(scrollPane8, "cell 4 11,growx");
 
 		//---- editorPane5 ----
-		editorPane5.setText("no scroll pane");
+		editorPane5.setText("No scroll pane");
 		add(editorPane5, "cell 5 11,growx");
 
 		//---- textPaneLabel ----
@@ -898,7 +898,7 @@ public class FlatComponentsTest
 			scrollPane9.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textPane1 ----
-			textPane1.setText("editable");
+			textPane1.setText("Editable");
 			scrollPane9.setViewportView(textPane1);
 		}
 		add(scrollPane9, "cell 1 12,growx");
@@ -909,7 +909,7 @@ public class FlatComponentsTest
 			scrollPane10.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textPane2 ----
-			textPane2.setText("disabled");
+			textPane2.setText("Disabled");
 			textPane2.setEnabled(false);
 			scrollPane10.setViewportView(textPane2);
 		}
@@ -921,7 +921,7 @@ public class FlatComponentsTest
 			scrollPane11.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textPane3 ----
-			textPane3.setText("not editable");
+			textPane3.setText("Not editable");
 			textPane3.setEditable(false);
 			scrollPane11.setViewportView(textPane3);
 		}
@@ -933,7 +933,7 @@ public class FlatComponentsTest
 			scrollPane12.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textPane4 ----
-			textPane4.setText("not editable disabled");
+			textPane4.setText("Not editable disabled");
 			textPane4.setEditable(false);
 			textPane4.setEnabled(false);
 			scrollPane12.setViewportView(textPane4);
@@ -941,7 +941,7 @@ public class FlatComponentsTest
 		add(scrollPane12, "cell 4 12,growx");
 
 		//---- textPane5 ----
-		textPane5.setText("no scroll pane");
+		textPane5.setText("No scroll pane");
 		add(textPane5, "cell 5 12,growx");
 
 		//---- scrollPaneLabel ----
