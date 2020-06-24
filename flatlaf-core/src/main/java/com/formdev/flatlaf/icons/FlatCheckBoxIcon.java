@@ -135,7 +135,7 @@ public class FlatCheckBoxIcon
 		boolean isFocused = FlatUIUtils.isPermanentFocusOwner( c );
 
 		// paint focused border
-		if( isFocused && focusWidth > 0 ) {
+		if( isFocused && focusWidth > 0 && FlatButtonUI.isFocusPainted( c ) ) {
 			g2.setColor( focusColor );
 			paintFocusBorder( g2 );
 		}

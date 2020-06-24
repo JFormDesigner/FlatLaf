@@ -229,6 +229,10 @@ public class FlatButtonUI
 		return !(c instanceof AbstractButton) || ((AbstractButton)c).isContentAreaFilled();
 	}
 
+	public static boolean isFocusPainted( Component c ) {
+		return !(c instanceof AbstractButton) || ((AbstractButton)c).isFocusPainted();
+	}
+
 	static boolean isDefaultButton( Component c ) {
 		return c instanceof JButton && ((JButton)c).isDefaultButton();
 	}
@@ -315,7 +319,7 @@ public class FlatButtonUI
 			// paint shadow
 			Color shadowColor = def ? defaultShadowColor : this.shadowColor;
 			if( !isToolBarButton && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
-				!FlatUIUtils.isPermanentFocusOwner( c ) && c.isEnabled() )
+				!(isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c )) && c.isEnabled() )
 			{
 				g2.setColor( shadowColor );
 				g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
@@ -421,7 +425,7 @@ public class FlatButtonUI
 		if( hoverColor != null && b != null && b.getModel().isRollover() )
 			return hoverColor;
 
-		if( focusedColor != null && FlatUIUtils.isPermanentFocusOwner( c ) )
+		if( focusedColor != null && isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c ) )
 			return focusedColor;
 
 		return enabledColor;

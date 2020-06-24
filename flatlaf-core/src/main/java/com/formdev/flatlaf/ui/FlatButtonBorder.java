@@ -82,6 +82,11 @@ public class FlatButtonBorder
 	}
 
 	@Override
+	protected boolean isFocused( Component c ) {
+		return FlatButtonUI.isFocusPainted( c ) && super.isFocused( c );
+	}
+
+	@Override
 	protected Paint getBorderColor( Component c ) {
 		boolean def = FlatButtonUI.isDefaultButton( c );
 		Paint color = FlatButtonUI.buttonStateColor( c,

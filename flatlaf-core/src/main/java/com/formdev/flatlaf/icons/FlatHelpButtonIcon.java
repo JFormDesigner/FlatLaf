@@ -85,7 +85,7 @@ public class FlatHelpButtonIcon
 		boolean focused = FlatUIUtils.isPermanentFocusOwner( c );
 
 		// paint focused border
-		if( focused ) {
+		if( focused && FlatButtonUI.isFocusPainted( c ) ) {
 			g2.setColor( focusColor );
 			g2.fill( new Ellipse2D.Float( 0.5f, 0.5f, iconSize - 1, iconSize - 1 ) );
 		}

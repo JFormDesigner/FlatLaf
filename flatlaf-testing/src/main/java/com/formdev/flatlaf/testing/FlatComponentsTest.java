@@ -80,6 +80,15 @@ public class FlatComponentsTest
 		}
 	}
 
+	private void focusPaintedChanged() {
+		boolean focusPainted = focusPaintedCheckBox.isSelected();
+
+		for( Component c : getComponents() ) {
+			if( c instanceof AbstractButton )
+				((AbstractButton)c).setFocusPainted( focusPainted );
+		}
+	}
+
 	private void roundRectChanged() {
 		Boolean roundRect = roundRectCheckBox.isSelected() ? true : null;
 
@@ -262,6 +271,7 @@ public class FlatComponentsTest
 		warningOutlineRadioButton = new JRadioButton();
 		magentaOutlineRadioButton = new JRadioButton();
 		magentaCyanOutlineRadioButton = new JRadioButton();
+		focusPaintedCheckBox = new JCheckBox();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
@@ -1065,6 +1075,7 @@ public class FlatComponentsTest
 				// rows
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- buttonTypeComboBox ----
@@ -1125,7 +1136,13 @@ public class FlatComponentsTest
 				magentaCyanOutlineRadioButton.addActionListener(e -> outlineChanged());
 				panel4.add(magentaCyanOutlineRadioButton);
 			}
-			panel5.add(panel4, "cell 0 2");
+			panel5.add(panel4, "cell 0 2 1 2");
+
+			//---- focusPaintedCheckBox ----
+			focusPaintedCheckBox.setText("focusPainted");
+			focusPaintedCheckBox.setSelected(true);
+			focusPaintedCheckBox.addActionListener(e -> focusPaintedChanged());
+			panel5.add(focusPaintedCheckBox, "cell 1 2");
 		}
 		add(panel5, "cell 5 13 2 10,grow");
 
@@ -1366,6 +1383,7 @@ public class FlatComponentsTest
 	private JRadioButton warningOutlineRadioButton;
 	private JRadioButton magentaOutlineRadioButton;
 	private JRadioButton magentaCyanOutlineRadioButton;
+	private JCheckBox focusPaintedCheckBox;
 	private JSlider slider3;
 	private JProgressBar progressBar1;
 	private JProgressBar progressBar2;
