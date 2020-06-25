@@ -20,6 +20,8 @@ FlatLaf Change Log
   [Glazed Lists](https://github.com/glazedlists/glazedlists). (issue #113)
 - Button, CheckBox, RadioButton and ToggleButton: Do not paint focus indicator
   if `AbstractButton.isFocusPainted()` returns `false`.
+- ComboBox: Increase maximum row count of popup list to 20 (was 8). Set UI value
+  `ComboBox.maximumRowCount` to any integer to use a different value.
 - Fixed/improved vertical position of text when scaled on HiDPI screens on
   Windows.
 

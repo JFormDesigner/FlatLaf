@@ -80,6 +80,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @uiDefault ComboBox.minimumWidth				int
  * @uiDefault ComboBox.editorColumns			int
+ * @uiDefault ComboBox.maximumRowCount			int
  * @uiDefault ComboBox.buttonStyle				String	auto (default), button or none
  * @uiDefault Component.arrowType				String	triangle (default) or chevron
  * @uiDefault Component.isIntelliJTheme			boolean
@@ -171,6 +172,11 @@ public class FlatComboBoxUI
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
 		buttonHoverArrowColor = UIManager.getColor( "ComboBox.buttonHoverArrowColor" );
+
+		// set maximumRowCount
+		int maximumRowCount = UIManager.getInt( "ComboBox.maximumRowCount" );
+		if( maximumRowCount > 0 && maximumRowCount != 8 && comboBox.getMaximumRowCount() == 8 )
+			comboBox.setMaximumRowCount( maximumRowCount );
 
 		// scale
 		padding = UIScale.scale( padding );

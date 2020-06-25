@@ -604,6 +604,7 @@ public class FlatComponentsTest
 			"jj",
 			"kkk"
 		}));
+		comboBox1.setMaximumRowCount(6);
 		add(comboBox1, "cell 1 5,growx");
 
 		//---- comboBox2 ----
@@ -632,6 +633,7 @@ public class FlatComponentsTest
 			"jj",
 			"kkk"
 		}));
+		comboBox3.setMaximumRowCount(6);
 		add(comboBox3, "cell 3 5,growx");
 
 		//---- comboBox4 ----

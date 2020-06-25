@@ -356,6 +356,7 @@ new FormModel {
 					addElement( "jj" )
 					addElement( "kkk" )
 				}
+				"maximumRowCount": 6
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 5,growx"
 			} )
@@ -390,6 +391,7 @@ new FormModel {
 					addElement( "jj" )
 					addElement( "kkk" )
 				}
+				"maximumRowCount": 6
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 5,growx"
 			} )
