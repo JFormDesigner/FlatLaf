@@ -81,6 +81,11 @@ public class FlatWindowDecorationsTest
 		iconTestAllRadioButton.setEnabled( windowHasIcons );
 		iconTestRandomRadioButton.setEnabled( windowHasIcons );
 
+		if( window instanceof Frame )
+			undecoratedCheckBox.setSelected( ((Frame)window).isUndecorated() );
+		else if( window instanceof Dialog )
+			undecoratedCheckBox.setSelected( ((Dialog)window).isUndecorated() );
+
 		JRootPane rootPane = getWindowRootPane();
 		if( rootPane != null ) {
 			int style = rootPane.getWindowDecorationStyle();
@@ -118,6 +123,21 @@ public class FlatWindowDecorationsTest
 			((Frame)window).setResizable( resizableCheckBox.isSelected() );
 		else if( window instanceof Dialog )
 			((Dialog)window).setResizable( resizableCheckBox.isSelected() );
+	}
+
+	private void undecoratedChanged() {
+		Window window = SwingUtilities.windowForComponent( this );
+		if( window == null )
+			return;
+
+		window.dispose();
+
+		if( window instanceof Frame )
+			((Frame)window).setUndecorated( undecoratedCheckBox.isSelected() );
+		else if( window instanceof Dialog )
+			((Dialog)window).setUndecorated( undecoratedCheckBox.isSelected() );
+
+		window.setVisible( true );
 	}
 
 	private void maximizedBoundsChanged() {
@@ -201,6 +221,7 @@ public class FlatWindowDecorationsTest
 		menuBarEmbeddedCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
+		undecoratedCheckBox = new JCheckBox();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
 		JPanel panel1 = new JPanel();
@@ -254,6 +275,7 @@ public class FlatWindowDecorationsTest
 			// rows
 			"para[]0" +
 			"[]0" +
+			"[]0" +
 			"[]" +
 			"[]" +
 			"[top]" +
@@ -282,13 +304,18 @@ public class FlatWindowDecorationsTest
 		maximizedBoundsCheckBox.addActionListener(e -> maximizedBoundsChanged());
 		add(maximizedBoundsCheckBox, "cell 1 2");
 
+		//---- undecoratedCheckBox ----
+		undecoratedCheckBox.setText("undecorated");
+		undecoratedCheckBox.addActionListener(e -> undecoratedChanged());
+		add(undecoratedCheckBox, "cell 0 3");
+
 		//---- label1 ----
 		label1.setText("Style:");
-		add(label1, "cell 0 3");
+		add(label1, "cell 0 4");
 
 		//---- label2 ----
 		label2.setText("Icon:");
-		add(label2, "cell 1 3");
+		add(label2, "cell 1 4");
 
 		//======== panel1 ========
 		{
@@ -353,7 +380,7 @@ public class FlatWindowDecorationsTest
 			styleFileChooserRadioButton.addActionListener(e -> decorationStyleChanged());
 			panel1.add(styleFileChooserRadioButton, "cell 0 8");
 		}
-		add(panel1, "cell 0 4");
+		add(panel1, "cell 0 5");
 
 		//======== panel2 ========
 		{
@@ -382,12 +409,12 @@ public class FlatWindowDecorationsTest
 			iconTestRandomRadioButton.addActionListener(e -> iconChanged());
 			panel2.add(iconTestRandomRadioButton, "cell 0 2");
 		}
-		add(panel2, "cell 1 4");
+		add(panel2, "cell 1 5");
 
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
 		openDialogButton.addActionListener(e -> openDialog());
-		add(openDialogButton, "cell 0 5");
+		add(openDialogButton, "cell 0 6");
 
 		//======== menuBar ========
 		{
@@ -582,6 +609,7 @@ public class FlatWindowDecorationsTest
 	private JCheckBox menuBarEmbeddedCheckBox;
 	private JCheckBox resizableCheckBox;
 	private JCheckBox maximizedBoundsCheckBox;
+	private JCheckBox undecoratedCheckBox;
 	private JRadioButton styleNoneRadioButton;
 	private JRadioButton styleFrameRadioButton;
 	private JRadioButton stylePlainRadioButton;
