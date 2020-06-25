@@ -261,7 +261,9 @@ debug*/
 
 			// paint background
 			g.setColor( armedOrSelected
-				? (isUnderlineSelection() ? underlineSelectionBackground : selectionBackground)
+				? (isUnderlineSelection()
+					? deriveBackground( underlineSelectionBackground )
+					: selectionBackground)
 				: menuItem.getBackground() );
 			g.fillRect( 0, 0, width, height );
 
@@ -283,12 +285,20 @@ debug*/
 		}
 	}
 
+	protected Color deriveBackground( Color background ) {
+		Color baseColor = menuItem.isOpaque()
+			? menuItem.getBackground()
+			: FlatUIUtils.getParentBackground( menuItem );
+
+		return FlatUIUtils.deriveColor( background, baseColor );
+	}
+
 	protected void paintIcon( Graphics g, Rectangle iconRect, Icon icon ) {
 		// if checkbox/radiobutton menu item is selected and also has a custom icon,
 		// then use filled icon background to indicate selection (instead of using checkIcon)
 		if( menuItem.isSelected() && checkIcon != null && icon != checkIcon ) {
 			Rectangle r = FlatUIUtils.addInsets( iconRect, scale( checkMargins ) );
-			g.setColor( isUnderlineSelection() ? underlineSelectionCheckBackground : checkBackground );
+			g.setColor( deriveBackground( isUnderlineSelection() ? underlineSelectionCheckBackground : checkBackground ) );
 			g.fillRect( r.x, r.y, r.width, r.height );
 		}
 
@@ -303,7 +313,7 @@ debug*/
 		}
 
 		int mnemonicIndex = FlatLaf.isShowMnemonics() ? menuItem.getDisplayedMnemonicIndex() : -1;
-		Color foreground = menuItem.getForeground();
+		Color foreground = (isTopLevelMenu( menuItem ) ? menuItem.getParent() : menuItem).getForeground();
 
 		paintText( g, menuItem, textRect, text, mnemonicIndex, menuItem.getFont(),
 			foreground, isUnderlineSelection() ? foreground : selectionForeground, disabledForeground );

@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -23,6 +24,7 @@ import java.awt.Graphics;
 import java.awt.event.*;
 import java.util.function.Supplier;
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -67,6 +69,13 @@ public class FlatMenusTest
 
 		if( armedCheckBox.isSelected() )
 			FlatLaf.updateUI();
+	}
+
+	private void popupMenubackgroundChanged() {
+		UIManager.put( "PopupMenu.background", popupMenubackgroundCheckBox.isSelected()
+			? new ColorUIResource( Color.yellow )
+			: null );
+		FlatLaf.updateUI();
 	}
 
 	private void showPopupMenuButtonActionPerformed(ActionEvent e) {
@@ -207,6 +216,7 @@ public class FlatMenusTest
 		JButton showPopupMenuButton = new JButton();
 		armedCheckBox = new JCheckBox();
 		underlineCheckBox = new JCheckBox();
+		popupMenubackgroundCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -220,6 +230,7 @@ public class FlatMenusTest
 			// rows
 			"[]" +
 			"[top]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]"));
@@ -738,6 +749,11 @@ public class FlatMenusTest
 		underlineCheckBox.addActionListener(e -> underlineChanged());
 		add(underlineCheckBox, "cell 0 4 2 1");
 
+		//---- popupMenubackgroundCheckBox ----
+		popupMenubackgroundCheckBox.setText("yellow popup menu background");
+		popupMenubackgroundCheckBox.addActionListener(e -> popupMenubackgroundChanged());
+		add(popupMenubackgroundCheckBox, "cell 0 5 2 1");
+
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
 		buttonGroup1.add(radioButtonMenuItem5);
@@ -756,6 +772,7 @@ public class FlatMenusTest
 	private JCheckBox accelCheckBox;
 	private JCheckBox armedCheckBox;
 	private JCheckBox underlineCheckBox;
+	private JCheckBox popupMenubackgroundCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class PopupMenu ----------------------------------------------------

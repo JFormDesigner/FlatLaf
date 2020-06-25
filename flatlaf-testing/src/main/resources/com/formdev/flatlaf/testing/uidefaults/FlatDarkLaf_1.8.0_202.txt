@@ -515,7 +515,7 @@ MenuBar.borderColor            #515151    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.font                   [active] $defaultFont [UI]
 MenuBar.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.highlight              #242424    javax.swing.plaf.ColorUIResource [UI]
-MenuBar.hoverBackground        #484c4f    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.hoverBackground        #484c4f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
 MenuBar.itemMargins            3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
 MenuBar.shadow                 #646464    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.windowBindings         length=2    [Ljava.lang.Object;
@@ -535,7 +535,7 @@ MenuItem.arrowIcon             [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenu
 MenuItem.background            #303234    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
 MenuItem.borderPainted         true
-MenuItem.checkBackground       #484c4f    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.checkBackground       #484c4f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
 MenuItem.checkMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.disabledForeground    #777777    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.font                  [active] $defaultFont [UI]
@@ -549,8 +549,8 @@ MenuItem.selectionBackground   #4b6eaf    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.textAcceleratorGap    24
 MenuItem.textNoAcceleratorGap  6
-MenuItem.underlineSelectionBackground #484c4f    javax.swing.plaf.ColorUIResource [UI]
-MenuItem.underlineSelectionCheckBackground #616569    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.underlineSelectionBackground #484c4f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
+MenuItem.underlineSelectionCheckBackground #616569    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20% autoInverse)
 MenuItem.underlineSelectionColor #4a88c7    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
 

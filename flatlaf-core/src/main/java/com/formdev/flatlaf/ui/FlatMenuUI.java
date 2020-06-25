@@ -151,7 +151,7 @@ public class FlatMenuUI
 			if( model.isRollover() && !model.isArmed() && !model.isSelected() &&
 				model.isEnabled() && ((JMenu)menuItem).isTopLevelMenu() )
 			{
-				g.setColor( FlatUIUtils.deriveColor( hoverBackground, menuItem.getBackground() ) );
+				g.setColor( deriveBackground( hoverBackground ) );
 				g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
 			} else
 				super.paintBackground( g, selectionBackground );
