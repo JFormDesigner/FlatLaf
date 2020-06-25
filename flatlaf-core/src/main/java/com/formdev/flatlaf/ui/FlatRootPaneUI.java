@@ -48,11 +48,25 @@ import com.formdev.flatlaf.util.SystemInfo;
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JRootPane}.
  *
+ * <!-- FlatRootPaneUI -->
+ *
+ * @uiDefault RootPane.border								Border
+ *
+ * <!-- FlatWindowResizer -->
+ *
+ * @uiDefault RootPane.borderDragThickness					int
+ * @uiDefault RootPane.cornerDragWidth						int
+ * @uiDefault RootPane.honorMinimumSizeOnResize				boolean
+ *
  * @author Karl Tauber
  */
 public class FlatRootPaneUI
 	extends BasicRootPaneUI
 {
+	// check this field before using class JBRCustomDecorations to avoid unnecessary loading of that class
+	static final boolean canUseJBRCustomDecorations
+		= SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER && SystemInfo.IS_WINDOWS_10_OR_LATER;
+
 	private JRootPane rootPane;
 	private FlatTitlePane titlePane;
 	private LayoutManager oldLayout;
@@ -71,7 +85,7 @@ public class FlatRootPaneUI
 		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE )
 			installClientDecorations();
 
-		if( SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER && SystemInfo.IS_WINDOWS_10_OR_LATER )
+		if( canUseJBRCustomDecorations )
 			JBRCustomDecorations.install( rootPane );
 	}
 
@@ -108,8 +122,10 @@ public class FlatRootPaneUI
 	}
 
 	private void installClientDecorations() {
+		boolean isJBRSupported = canUseJBRCustomDecorations && JBRCustomDecorations.isSupported();
+
 		// install border
-		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE && !JBRCustomDecorations.isSupported() )
+		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE && !isJBRSupported )
 			LookAndFeel.installBorder( rootPane, "RootPane.border" );
 		else
 			LookAndFeel.uninstallBorder( rootPane );
@@ -122,7 +138,7 @@ public class FlatRootPaneUI
 		rootPane.setLayout( new FlatRootLayout() );
 
 		// install window resizer
-		if( !JBRCustomDecorations.isSupported() )
+		if( !isJBRSupported )
 			windowResizer = new FlatWindowResizer( rootPane );
 	}
 

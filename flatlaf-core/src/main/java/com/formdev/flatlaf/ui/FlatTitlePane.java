@@ -446,7 +446,9 @@ class FlatTitlePane
 	}
 
 	private boolean hasJBRCustomDecoration() {
-		return window != null && JBRCustomDecorations.hasCustomDecoration( window );
+		return window != null &&
+			FlatRootPaneUI.canUseJBRCustomDecorations &&
+			JBRCustomDecorations.hasCustomDecoration( window );
 	}
 
 	private void updateJBRHitTestSpotsAndTitleBarHeight() {

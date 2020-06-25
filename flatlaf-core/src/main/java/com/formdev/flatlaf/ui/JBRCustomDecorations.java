@@ -68,65 +68,26 @@ public class JBRCustomDecorations
 	}
 
 	static void install( JRootPane rootPane ) {
-		boolean frameIsDefaultLookAndFeelDecorated = JFrame.isDefaultLookAndFeelDecorated();
-		boolean dialogIsDefaultLookAndFeelDecorated = JDialog.isDefaultLookAndFeelDecorated();
-		boolean lafSupportsWindowDecorations = UIManager.getLookAndFeel().getSupportsWindowDecorations();
-
-		// check whether decorations are enabled
-		if( !frameIsDefaultLookAndFeelDecorated && !dialogIsDefaultLookAndFeelDecorated )
-			return;
-
-		// do not enable JBR decorations if JFrame and JDialog will use LaF decorations
-		if( lafSupportsWindowDecorations &&
-			frameIsDefaultLookAndFeelDecorated &&
-			dialogIsDefaultLookAndFeelDecorated )
-		  return;
-
 		if( !isSupported() )
 			return;
 
-		// use hierarchy listener to wait until the root pane is added to a window
+		// check whether root pane already has a parent, which is the case when switching LaF
+		if( rootPane.getParent() != null )
+			return;
+
+		// Use hierarchy listener to wait until the root pane is added to a window.
+		// Enabling JBR decorations must be done very early, probably before
+		// window becomes displayable (window.isDisplayable()). Tried also using
+		// "ancestor" property change event on root pane, but this is invoked too late.
 		HierarchyListener addListener = new HierarchyListener() {
 			@Override
 			public void hierarchyChanged( HierarchyEvent e ) {
-				if( (e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) == 0 )
+				if( e.getChanged() != rootPane || (e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) == 0 )
 					return;
 
 				Container parent = e.getChangedParent();
-				if( parent instanceof JFrame ) {
-					JFrame frame = (JFrame) parent;
-
-					// do not enable JBR decorations if JFrame will use LaF decorations
-					if( lafSupportsWindowDecorations && frameIsDefaultLookAndFeelDecorated )
-						return;
-
-					// do not enable JBR decorations if frame is undecorated
-					if( frame.isUndecorated() )
-						return;
-
-					// enable JBR custom window decoration for window
-					setHasCustomDecoration( frame );
-
-					// enable Swing window decoration
-					rootPane.setWindowDecorationStyle( JRootPane.FRAME );
-
-				} else if( parent instanceof JDialog ) {
-					JDialog dialog = (JDialog)parent;
-
-					// do not enable JBR decorations if JDialog will use LaF decorations
-					if( lafSupportsWindowDecorations && dialogIsDefaultLookAndFeelDecorated )
-						return;
-
-					// do not enable JBR decorations if dialog is undecorated
-					if( dialog.isUndecorated() )
-						return;
-
-					// enable JBR custom window decoration for window
-					setHasCustomDecoration( dialog );
-
-					// enable Swing window decoration
-					rootPane.setWindowDecorationStyle( JRootPane.PLAIN_DIALOG );
-				}
+				if( parent instanceof Window )
+					install( (Window) parent );
 
 				// use invokeLater to remove listener to avoid that listener
 				// is removed while listener queue is processed
@@ -136,6 +97,50 @@ public class JBRCustomDecorations
 			}
 		};
 		rootPane.addHierarchyListener( addListener );
+	}
+
+	static void install( Window window ) {
+		if( !isSupported() )
+			return;
+
+		// do not enable JBR decorations if LaF provides decorations
+		if( UIManager.getLookAndFeel().getSupportsWindowDecorations() )
+			return;
+
+		if( window instanceof JFrame ) {
+			JFrame frame = (JFrame) window;
+
+			// do not enable JBR decorations if JFrame should use system window decorations
+			if( !JFrame.isDefaultLookAndFeelDecorated()  )
+				return;
+
+			// do not enable JBR decorations if frame is undecorated
+			if( frame.isUndecorated() )
+				return;
+
+			// enable JBR custom window decoration for window
+			setHasCustomDecoration( frame );
+
+			// enable Swing window decoration
+			frame.getRootPane().setWindowDecorationStyle( JRootPane.FRAME );
+
+		} else if( window instanceof JDialog ) {
+			JDialog dialog = (JDialog) window;
+
+			// do not enable JBR decorations if JDialog should use system window decorations
+			if( !JDialog.isDefaultLookAndFeelDecorated() )
+				return;
+
+			// do not enable JBR decorations if dialog is undecorated
+			if( dialog.isUndecorated() )
+				return;
+
+			// enable JBR custom window decoration for window
+			setHasCustomDecoration( dialog );
+
+			// enable Swing window decoration
+			dialog.getRootPane().setWindowDecorationStyle( JRootPane.PLAIN_DIALOG );
+		}
 	}
 
 	static boolean hasCustomDecoration( Window window ) {
