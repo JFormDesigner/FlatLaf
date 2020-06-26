@@ -122,6 +122,9 @@ class FlatTitlePane
 
 		addMouseListener( handler );
 		addMouseMotionListener( handler );
+
+		// necessary for closing window with double-click on icon
+		iconLabel.addMouseListener( handler );
 	}
 
 	private void addSubComponents() {
@@ -258,6 +261,8 @@ class FlatTitlePane
 
 		if( hasImages )
 			iconLabel.setIcon( FlatTitlePaneIcon.create( images, iconSize ) );
+
+		updateJBRHitTestSpotsAndTitleBarHeightLater();
 	}
 
 	@Override
@@ -275,7 +280,7 @@ class FlatTitlePane
 			installWindowListeners();
 		}
 
-		updateJBRHitTestSpotsAndTitleBarHeight();
+		updateJBRHitTestSpotsAndTitleBarHeightLater();
 	}
 
 	@Override
@@ -446,9 +451,15 @@ class FlatTitlePane
 	}
 
 	private boolean hasJBRCustomDecoration() {
-		return window != null &&
-			FlatRootPaneUI.canUseJBRCustomDecorations &&
+		return FlatRootPaneUI.canUseJBRCustomDecorations &&
+			window != null &&
 			JBRCustomDecorations.hasCustomDecoration( window );
+	}
+
+	private void updateJBRHitTestSpotsAndTitleBarHeightLater() {
+		EventQueue.invokeLater( () -> {
+			updateJBRHitTestSpotsAndTitleBarHeight();
+		} );
 	}
 
 	private void updateJBRHitTestSpotsAndTitleBarHeight() {
@@ -459,8 +470,10 @@ class FlatTitlePane
 			return;
 
 		List<Rectangle> hitTestSpots = new ArrayList<>();
+		if( iconLabel.isVisible() )
+			addJBRHitTestSpot( iconLabel, false, hitTestSpots );
 		addJBRHitTestSpot( buttonPanel, false, hitTestSpots );
-		addJBRHitTestSpot( menuBarPlaceholder, true, hitTestSpots );//TOOD
+		addJBRHitTestSpot( menuBarPlaceholder, true, hitTestSpots );
 
 		int titleBarHeight = getHeight();
 		// slightly reduce height so that component receives mouseExit events
@@ -548,9 +561,7 @@ class FlatTitlePane
 					break;
 
 				case "componentOrientation":
-					EventQueue.invokeLater( () -> {
-						updateJBRHitTestSpotsAndTitleBarHeight();
-					} );
+					updateJBRHitTestSpotsAndTitleBarHeightLater();
 					break;
 			}
 		}
@@ -588,20 +599,21 @@ class FlatTitlePane
 
 		@Override
 		public void mouseClicked( MouseEvent e ) {
-			if( hasJBRCustomDecoration() )
-				return; // do nothing if running in JBR
-
-			if( e.getClickCount() == 2 &&
-				SwingUtilities.isLeftMouseButton( e ) &&
-				window instanceof Frame &&
-				((Frame)window).isResizable() )
-			{
-				// maximize/restore on double-click
-				Frame frame = (Frame) window;
-				if( (frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
-					restore();
-				else
-					maximize();
+			if( e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton( e ) ) {
+				if( e.getSource() == iconLabel ) {
+					// double-click on icon closes window
+					close();
+				} else if( !hasJBRCustomDecoration() &&
+					window instanceof Frame &&
+					((Frame)window).isResizable() )
+				{
+					// maximize/restore on double-click
+					Frame frame = (Frame) window;
+					if( (frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
+						restore();
+					else
+						maximize();
+				}
 			}
 		}
 
@@ -667,9 +679,7 @@ class FlatTitlePane
 
 		@Override
 		public void componentResized( ComponentEvent e ) {
-			EventQueue.invokeLater( () -> {
-				updateJBRHitTestSpotsAndTitleBarHeight();
-			} );
+			updateJBRHitTestSpotsAndTitleBarHeightLater();
 		}
 
 		@Override public void componentMoved( ComponentEvent e ) {}
