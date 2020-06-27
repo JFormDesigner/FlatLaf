@@ -24,6 +24,7 @@ FlatLaf Change Log
   `ComboBox.maximumRowCount` to any integer to use a different value.
 - Fixed/improved vertical position of text when scaled on HiDPI screens on
   Windows.
+- IntelliJ Themes: Updated Gradianto Themes.
 
 
 ## 0.36

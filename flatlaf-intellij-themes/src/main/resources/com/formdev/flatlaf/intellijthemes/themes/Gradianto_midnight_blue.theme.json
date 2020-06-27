@@ -30,7 +30,10 @@
 
       "separatorColor": "#383850"
     },
-
+    "VersionControl" :{
+      "Log.Commit.currentBranchBackground": "#3e2e61",
+      "Log.Commit.unmatchedForeground": "#7f80a8"
+    },
     "Tree.background": "#2c2c3e",
 
     "ActionButton": {

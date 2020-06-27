@@ -31,7 +31,10 @@
       "separatorColor": "#1d304b"
     },
     "Tree.background": "#24334a",
-
+    "VersionControl" :{
+      "Log.Commit.currentBranchBackground": "#263d61",
+      "Log.Commit.unmatchedForeground": "#7f8aa8"
+    },
     "ActionButton": {
       "hoverBackground": "#324565",
       "pressedBackground": "#284267",
@@ -112,12 +115,12 @@
       "visitedForeground": "#ede891"
     },
     "FileColor": {
-      "Yellow": "#d1b14225",
-      "Green": "#98c37925",
+      "Yellow": "#b6a76f25",
+      "Green": "#7c9e6425",
       "Blue": "#61afef25",
       "Violet": "#542a4f25",
-      "Orange": "#d13c0025",
-      "Rose": "#ae002f25"
+      "Orange": "#ad694f25",
+      "Rose": "#932d4825"
     },
     "SearchEverywhere": {
       "Tab": {
