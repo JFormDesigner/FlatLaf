@@ -58,6 +58,7 @@ import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.JBRCustomDecorations.JBRWindowTopBorder;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -320,8 +321,9 @@ class FlatTitlePane
 	}
 
 	boolean isMenuBarEmbedded() {
-		return menuBarEmbedded && FlatClientProperties.clientPropertyBoolean(
-			rootPane, FlatClientProperties.MENU_BAR_EMBEDDED, true );
+		return menuBarEmbedded &&
+			FlatClientProperties.clientPropertyBoolean( rootPane, FlatClientProperties.MENU_BAR_EMBEDDED, true ) &&
+			FlatSystemProperties.getBoolean( FlatSystemProperties.MENUBAR_EMBEDDED, true );
 	}
 
 	Rectangle getMenuBarBounds() {
@@ -376,7 +378,7 @@ class FlatTitlePane
 		// (if not running in JBR and if not modified from the application)
 		if( !hasJBRCustomDecoration() &&
 			(frame.getMaximizedBounds() == null ||
-			 Objects.equals( frame.getMaximizedBounds(), rootPane.getClientProperty( "flatlaf.maximizedBounds" ) )) )
+			 Objects.equals( frame.getMaximizedBounds(), rootPane.getClientProperty( "_flatlaf.maximizedBounds" ) )) )
 		{
 			GraphicsConfiguration gc = window.getGraphicsConfiguration();
 
@@ -428,7 +430,7 @@ class FlatTitlePane
 
 			// remember maximized bounds in client property to be able to detect
 			// whether maximized bounds are modified from the application
-			rootPane.putClientProperty( "flatlaf.maximizedBounds", maximizedBounds );
+			rootPane.putClientProperty( "_flatlaf.maximizedBounds", maximizedBounds );
 		}
 
 		// maximize window

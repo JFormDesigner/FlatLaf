@@ -39,6 +39,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -111,8 +112,10 @@ public class JBRCustomDecorations
 			JFrame frame = (JFrame) window;
 
 			// do not enable JBR decorations if JFrame should use system window decorations
-			if( !JFrame.isDefaultLookAndFeelDecorated()  )
-				return;
+			// and if not forced to use JBR decorations
+			if( !JFrame.isDefaultLookAndFeelDecorated() &&
+				!FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, false ))
+			  return;
 
 			// do not enable JBR decorations if frame is undecorated
 			if( frame.isUndecorated() )
@@ -128,8 +131,10 @@ public class JBRCustomDecorations
 			JDialog dialog = (JDialog) window;
 
 			// do not enable JBR decorations if JDialog should use system window decorations
-			if( !JDialog.isDefaultLookAndFeelDecorated() )
-				return;
+			// and if not forced to use JBR decorations
+			if( !JDialog.isDefaultLookAndFeelDecorated() &&
+				!FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, false ))
+			  return;
 
 			// do not enable JBR decorations if dialog is undecorated
 			if( dialog.isUndecorated() )
@@ -187,6 +192,9 @@ public class JBRCustomDecorations
 
 		// requires JetBrains Runtime 11 and Windows 10
 		if( !SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER || !SystemInfo.IS_WINDOWS_10_OR_LATER )
+			return;
+
+		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, true ) )
 			return;
 
 		try {

@@ -88,6 +88,9 @@ public abstract class FlatLaf
 
 	private Consumer<UIDefaults> postInitialization;
 
+	private Boolean oldFrameWindowDecorated;
+	private Boolean oldDialogWindowDecorated;
+
 	public static boolean install( LookAndFeel newLookAndFeel ) {
 		try {
 			UIManager.setLookAndFeel( newLookAndFeel );
@@ -242,6 +245,16 @@ public abstract class FlatLaf
 					String.format( "a { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
 			}
 		};
+
+		// enable/disable window decorations, but only if system property is either
+		// "true" or "false"; in other cases it is not changed
+		Boolean useWindowDecorations = FlatSystemProperties.getBooleanStrict( FlatSystemProperties.USE_WINDOW_DECORATIONS, null );
+		if( useWindowDecorations != null ) {
+			oldFrameWindowDecorated = JFrame.isDefaultLookAndFeelDecorated();
+			oldDialogWindowDecorated = JDialog.isDefaultLookAndFeelDecorated();
+			JFrame.setDefaultLookAndFeelDecorated( useWindowDecorations );
+			JDialog.setDefaultLookAndFeelDecorated( useWindowDecorations );
+		}
 	}
 
 	@Override
@@ -273,6 +286,14 @@ public abstract class FlatLaf
 		// restore default link color
 		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
 		postInitialization = null;
+
+		// restore enable/disable window decorations
+		if( oldFrameWindowDecorated != null ) {
+			JFrame.setDefaultLookAndFeelDecorated( oldFrameWindowDecorated );
+			JDialog.setDefaultLookAndFeelDecorated( oldDialogWindowDecorated );
+			oldFrameWindowDecorated = null;
+			oldDialogWindowDecorated = null;
+		}
 
 		super.uninitialize();
 	}

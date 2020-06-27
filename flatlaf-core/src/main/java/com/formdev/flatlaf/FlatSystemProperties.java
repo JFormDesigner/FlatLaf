@@ -16,6 +16,9 @@
 
 package com.formdev.flatlaf;
 
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
 /**
  * Defines/documents own system properties used in FlatLaf.
  *
@@ -47,6 +50,41 @@ public interface FlatSystemProperties
 	String USE_UBUNTU_FONT = "flatlaf.useUbuntuFont";
 
 	/**
+	 * Specifies whether custom look and feel window decorations should be used
+	 * when creating {@code JFrame} or {@code JDialog}.
+	 * <p>
+	 * If this system property is set, FlatLaf invokes {@link JFrame#setDefaultLookAndFeelDecorated(boolean)}
+	 * and {@link JDialog#setDefaultLookAndFeelDecorated(boolean)} on LaF initialization.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> none
+	 */
+	String USE_WINDOW_DECORATIONS = "flatlaf.useWindowDecorations";
+
+	/**
+	 * Specifies whether JetBrains Runtime custom window decorations should be used
+	 * when creating {@code JFrame} or {@code JDialog}.
+	 * Requires that the application runs in a
+	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime</a>
+	 * (based on OpenJDK).
+	 * <p>
+	 * Setting this to {@code true} forces using JetBrains Runtime custom window decorations
+	 * even if they are not enabled by the application.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 */
+	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
+
+	/**
+	 * Specifies whether menubar is embedded into custom window decorations.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 */
+	String MENUBAR_EMBEDDED = "flatlaf.menuBarEmbedded";
+
+	/**
 	 * Specifies whether vertical text position is corrected when UI is scaled on HiDPI screens.
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
@@ -62,5 +100,19 @@ public interface FlatSystemProperties
 	static boolean getBoolean( String key, boolean defaultValue ) {
 		String value = System.getProperty( key );
 		return (value != null) ? Boolean.parseBoolean( value ) : defaultValue;
+	}
+
+	/**
+	 * Checks whether a system property is set and returns {@code Boolean.TRUE} if its value
+	 * is {@code "true"} (case-insensitive) or returns {@code Boolean.FALSE} if its value
+	 * is {@code "false"} (case-insensitive). Otherwise {@code defaultValue} is returned.
+	 */
+	static Boolean getBooleanStrict( String key, Boolean defaultValue ) {
+		String value = System.getProperty( key );
+		if( "true".equalsIgnoreCase( value ) )
+			return Boolean.TRUE;
+		if( "false".equalsIgnoreCase( value ) )
+			return Boolean.FALSE;
+		return defaultValue;
 	}
 }
