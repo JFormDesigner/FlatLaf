@@ -26,6 +26,7 @@ import java.awt.Insets;
 import java.awt.geom.AffineTransform;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -40,7 +41,7 @@ public class FlatPaintingStringTest
 	extends JPanel
 {
 	public static void main( String[] args ) {
-		System.setProperty( "flatlaf.uiScale", "1x" );
+		System.setProperty( FlatSystemProperties.UI_SCALE, "1x" );
 		System.setProperty( "sun.java2d.uiScale", "1x" );
 
 		SwingUtilities.invokeLater( () -> {

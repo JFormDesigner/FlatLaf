@@ -35,6 +35,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
 import com.formdev.flatlaf.demo.DemoPrefs;
@@ -66,10 +67,10 @@ public class FlatTestFrame
 		DemoPrefs.init( PREFS_ROOT_PATH );
 
 		// set scale factor
-		if( System.getProperty( "flatlaf.uiScale", System.getProperty( "sun.java2d.uiScale" ) ) == null ) {
+		if( System.getProperty( FlatSystemProperties.UI_SCALE, System.getProperty( "sun.java2d.uiScale" ) ) == null ) {
 			String scaleFactor = DemoPrefs.getState().get( KEY_SCALE_FACTOR, null );
 			if( scaleFactor != null )
-				System.setProperty( "flatlaf.uiScale", scaleFactor );
+				System.setProperty( FlatSystemProperties.UI_SCALE, scaleFactor );
 		}
 
 		// set look and feel
@@ -145,7 +146,7 @@ public class FlatTestFrame
 		lookAndFeelComboBox.setModel( lafModel );
 
 		updateScaleFactorComboBox();
-		String scaleFactor = System.getProperty( "flatlaf.uiScale", System.getProperty( "sun.java2d.uiScale" ) );
+		String scaleFactor = System.getProperty( FlatSystemProperties.UI_SCALE, System.getProperty( "sun.java2d.uiScale" ) );
 		if( scaleFactor != null )
 			scaleFactorComboBox.setSelectedItem( scaleFactor );
 
@@ -472,10 +473,10 @@ public class FlatTestFrame
 		scaleFactorComboBox.setPopupVisible( false );
 
 		if( scaleFactor != null ) {
-			System.setProperty( "flatlaf.uiScale", scaleFactor );
+			System.setProperty( FlatSystemProperties.UI_SCALE, scaleFactor );
 			DemoPrefs.getState().put( KEY_SCALE_FACTOR, scaleFactor );
 		} else {
-			System.clearProperty( "flatlaf.uiScale" );
+			System.clearProperty( FlatSystemProperties.UI_SCALE );
 			DemoPrefs.getState().remove( KEY_SCALE_FACTOR );
 		}
 

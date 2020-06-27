@@ -32,6 +32,7 @@ import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import javax.swing.plaf.UIResource;
+import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
  * Two scaling modes are supported for HiDPI displays:
@@ -195,8 +196,7 @@ public class UIScale
 
 	private static boolean isUserScalingEnabled() {
 		// same as in IntelliJ IDEA
-		String hidpi = System.getProperty( "hidpi" );
-		return (hidpi != null) ? Boolean.parseBoolean( hidpi ) : true;
+		return FlatSystemProperties.getBoolean( "hidpi", true );
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class UIScale
 	 * to the given font.
 	 */
 	public static FontUIResource applyCustomScaleFactor( FontUIResource font ) {
-		String uiScale = System.getProperty( "flatlaf.uiScale" );
+		String uiScale = System.getProperty( FlatSystemProperties.UI_SCALE );
 		float scaleFactor = parseScaleFactor( uiScale );
 		if( scaleFactor <= 0 )
 			return font;

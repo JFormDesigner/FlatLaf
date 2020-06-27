@@ -84,7 +84,7 @@ public class UIDefaultsDump
 	public static void main( String[] args ) {
 		Locale.setDefault( Locale.ENGLISH );
 		System.setProperty( "sun.java2d.uiScale", "1x" );
-		System.setProperty( "flatlaf.uiScale", "1x" );
+		System.setProperty( FlatSystemProperties.UI_SCALE, "1x" );
 
 		File dir = new File( "src/main/resources/com/formdev/flatlaf/testing/uidefaults" );
 
