@@ -25,6 +25,8 @@ FlatLaf Change Log
 - Fixed/improved vertical position of text when scaled on HiDPI screens on
   Windows.
 - IntelliJ Themes: Updated Gradianto Themes.
+- IntelliJ Themes: Fixed menu bar and menu item margins in all Material UI Lite
+  themes.
 
 
 ## 0.36

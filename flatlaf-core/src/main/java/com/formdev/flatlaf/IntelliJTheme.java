@@ -481,6 +481,19 @@ public class IntelliJTheme
 		// Link
 		uiKeyMapping.put( "Link.activeForeground", "Component.linkColor" );
 
+		// Menu
+		uiKeyMapping.put( "Menu.border",                "Menu.margin" );
+		uiKeyMapping.put( "MenuItem.border",            "MenuItem.margin" );
+		uiKeyCopying.put( "CheckBoxMenuItem.margin",    "MenuItem.margin" );
+		uiKeyCopying.put( "RadioButtonMenuItem.margin", "MenuItem.margin" );
+		uiKeyMapping.put( "PopupMenu.border",           "PopupMenu.borderInsets" );
+
+		// IDEA uses List.selectionBackground also for menu selection
+		uiKeyCopying.put( "Menu.selectionBackground",                "List.selectionBackground" );
+		uiKeyCopying.put( "MenuItem.selectionBackground",            "List.selectionBackground" );
+		uiKeyCopying.put( "CheckBoxMenuItem.selectionBackground",    "List.selectionBackground" );
+		uiKeyCopying.put( "RadioButtonMenuItem.selectionBackground", "List.selectionBackground" );
+
 		// ProgressBar
 		uiKeyMapping.put( "ProgressBar.background",    "" ); // ignore
 		uiKeyMapping.put( "ProgressBar.foreground",    "" ); // ignore
