@@ -27,6 +27,7 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -174,6 +175,18 @@ public class FlatFileChooserUI
 						((JPanel)topButtonPanel).remove( i );
 				}
 			}
+		}
+
+		// increase maximum row count of directory combo box popup list
+		try {
+			Component directoryComboBox =  ((JPanel)topPanel).getComponent( 2 );
+			if( directoryComboBox instanceof JComboBox ) {
+				int maximumRowCount = UIManager.getInt( "ComboBox.maximumRowCount" );
+				if( maximumRowCount > 0 )
+					((JComboBox<?>)directoryComboBox).setMaximumRowCount( maximumRowCount );
+			}
+		} catch( ArrayIndexOutOfBoundsException ex ) {
+			// ignore
 		}
 	}
 
