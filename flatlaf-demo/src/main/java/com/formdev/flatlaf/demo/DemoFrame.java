@@ -27,6 +27,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.extras.SVGUtils;
 import net.miginfocom.swing.*;
 
 /**
@@ -48,6 +49,8 @@ class DemoFrame
 		initComponents();
 		updateFontMenuItems();
 		controlBar.initialize( this, tabbedPane );
+
+		setIconImages( SVGUtils.createWindowIconImages( "/com/formdev/flatlaf/demo/FlatLaf.svg" ) );
 
 		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
 			tabbedPane.setSelectedIndex( tabIndex );
