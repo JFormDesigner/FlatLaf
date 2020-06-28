@@ -93,7 +93,6 @@ class FlatTitlePane
 	private final Color inactiveForeground = UIManager.getColor( "TitlePane.inactiveForeground" );
 	private final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
 
-	private final boolean menuBarEmbedded = UIManager.getBoolean( "TitlePane.menuBarEmbedded" );
 	private final Insets menuBarMargins = UIManager.getInsets( "TitlePane.menuBarMargins" );
 	private final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	private final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
@@ -321,7 +320,8 @@ class FlatTitlePane
 	}
 
 	boolean isMenuBarEmbedded() {
-		return menuBarEmbedded &&
+		// not storing value of "TitlePane.menuBarEmbedded" in class to allow changing at runtime
+		return UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) &&
 			FlatClientProperties.clientPropertyBoolean( rootPane, FlatClientProperties.MENU_BAR_EMBEDDED, true ) &&
 			FlatSystemProperties.getBoolean( FlatSystemProperties.MENUBAR_EMBEDDED, true );
 	}

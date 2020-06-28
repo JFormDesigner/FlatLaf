@@ -28,6 +28,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import net.miginfocom.swing.*;
 
 /**
@@ -75,6 +76,11 @@ class DemoFrame
 	private void menuBarEmbeddedChanged() {
 		getRootPane().putClientProperty( FlatClientProperties.MENU_BAR_EMBEDDED,
 			menuBarEmbeddedCheckBoxMenuItem.isSelected() ? null : false );
+
+// alternative method for all frames and menu bars in an application
+//		UIManager.put( "TitlePane.menuBarEmbedded", menuBarEmbeddedCheckBoxMenuItem.isSelected() );
+//		revalidate();
+//		repaint();
 	}
 
 	private void underlineMenuSelection() {
@@ -581,6 +587,9 @@ class DemoFrame
 		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
+
+		menuBarEmbeddedCheckBoxMenuItem.setEnabled( UIManager.getLookAndFeel()
+			.getSupportsWindowDecorations() || JBRCustomDecorations.isSupported() );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

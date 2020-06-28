@@ -291,7 +291,7 @@ public class FlatRootPaneUI
 
 		@Override
 		public void invalidateLayout( Container parent ) {
-			if( titlePane != null && titlePane.isMenuBarEmbedded() )
+			if( titlePane != null )
 				titlePane.menuBarChanged();
 		}
 
