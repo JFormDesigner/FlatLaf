@@ -78,7 +78,7 @@ class LinuxFontPolicy
 		// --> use Liberation Sans font
 		if( family.startsWith( "Ubuntu" ) &&
 			!SystemInfo.IS_JETBRAINS_JVM &&
-			!Boolean.parseBoolean( System.getProperty( "flatlaf.useUbuntuFont" ) ) )
+			!FlatSystemProperties.getBoolean( FlatSystemProperties.USE_UBUNTU_FONT, false ) )
 		  family = "Liberation Sans";
 
 		// scale font size

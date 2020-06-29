@@ -23,6 +23,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedCharacterIterator;
 import javax.swing.JComponent;
+import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
  * @author Karl Tauber
@@ -104,7 +105,7 @@ public class HiDPIUtils
 
 	private static boolean useTextYCorrection() {
 		if( useTextYCorrection == null )
-			useTextYCorrection = Boolean.valueOf( System.getProperty( "flatlaf.useTextYCorrection", "true" ) );
+			useTextYCorrection = FlatSystemProperties.getBoolean( FlatSystemProperties.USE_TEXT_Y_CORRECTION, true );
 		return useTextYCorrection;
 	}
 

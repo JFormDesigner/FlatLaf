@@ -293,6 +293,9 @@ public class FlatInspector
 				if( c.getParent() instanceof JRootPane && c == ((JRootPane)c.getParent()).getGlassPane() )
 					continue;
 
+				if( "com.formdev.flatlaf.ui.FlatWindowResizer".equals( c.getClass().getName() ) )
+					continue;
+
 				return c;
 			}
 		}
@@ -309,8 +312,9 @@ public class FlatInspector
 		highlightFigure.setVisible( c != null );
 
 		if( c != null ) {
+			Insets insets = rootPane.getInsets();
 			highlightFigure.setBounds( new Rectangle(
-				SwingUtilities.convertPoint( c, 0, 0, rootPane ),
+				SwingUtilities.convertPoint( c, -insets.left, -insets.top, rootPane ),
 				c.getSize() ) );
 		}
 	}

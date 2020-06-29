@@ -23,11 +23,13 @@ import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.StyleContext;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.SVGUtils;
+import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import net.miginfocom.swing.*;
 
 /**
@@ -72,6 +74,26 @@ class DemoFrame
 		SwingUtilities.invokeLater( () -> {
 			JOptionPane.showMessageDialog( this, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE );
 		} );
+	}
+
+	private void windowDecorationsChanged() {
+		boolean windowDecorations = windowDecorationsCheckBoxMenuItem.isSelected();
+
+		dispose();
+		setUndecorated( windowDecorations );
+		getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
+		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
+		setVisible( true );
+	}
+
+	private void menuBarEmbeddedChanged() {
+		getRootPane().putClientProperty( FlatClientProperties.MENU_BAR_EMBEDDED,
+			menuBarEmbeddedCheckBoxMenuItem.isSelected() ? null : false );
+
+// alternative method for all frames and menu bars in an application
+//		UIManager.put( "TitlePane.menuBarEmbedded", menuBarEmbeddedCheckBoxMenuItem.isSelected() );
+//		revalidate();
+//		repaint();
 	}
 
 	private void underlineMenuSelection() {
@@ -222,6 +244,8 @@ class DemoFrame
 		JMenuItem incrFontMenuItem = new JMenuItem();
 		JMenuItem decrFontMenuItem = new JMenuItem();
 		JMenu optionsMenu = new JMenu();
+		windowDecorationsCheckBoxMenuItem = new JCheckBoxMenuItem();
+		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		JMenu helpMenu = new JMenu();
@@ -456,6 +480,18 @@ class DemoFrame
 			{
 				optionsMenu.setText("Options");
 
+				//---- windowDecorationsCheckBoxMenuItem ----
+				windowDecorationsCheckBoxMenuItem.setText("Window decorations");
+				windowDecorationsCheckBoxMenuItem.setSelected(true);
+				windowDecorationsCheckBoxMenuItem.addActionListener(e -> windowDecorationsChanged());
+				optionsMenu.add(windowDecorationsCheckBoxMenuItem);
+
+				//---- menuBarEmbeddedCheckBoxMenuItem ----
+				menuBarEmbeddedCheckBoxMenuItem.setText("Embedded menu bar");
+				menuBarEmbeddedCheckBoxMenuItem.setSelected(true);
+				menuBarEmbeddedCheckBoxMenuItem.addActionListener(e -> menuBarEmbeddedChanged());
+				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
+
 				//---- underlineMenuSelectionMenuItem ----
 				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
 				underlineMenuSelectionMenuItem.addActionListener(e -> underlineMenuSelection());
@@ -571,10 +607,17 @@ class DemoFrame
 		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
+
+		boolean supportsWindowDecorations = UIManager.getLookAndFeel()
+			.getSupportsWindowDecorations() || JBRCustomDecorations.isSupported();
+		windowDecorationsCheckBoxMenuItem.setEnabled( supportsWindowDecorations && !JBRCustomDecorations.isSupported() );
+		menuBarEmbeddedCheckBoxMenuItem.setEnabled( supportsWindowDecorations );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JMenu fontMenu;
+	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
+	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JTabbedPane tabbedPane;
