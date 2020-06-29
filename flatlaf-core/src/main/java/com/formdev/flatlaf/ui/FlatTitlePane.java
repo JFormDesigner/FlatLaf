@@ -47,6 +47,8 @@ import java.util.Objects;
 import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -60,6 +62,7 @@ import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.JBRCustomDecorations.JBRWindowTopBorder;
+import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -255,12 +258,24 @@ class FlatTitlePane
 			}
 		}
 
-		// show/hide icon
-		boolean hasImages = !images.isEmpty();
-		iconLabel.setVisible( hasImages );
+		boolean hasIcon = true;
 
-		if( hasImages )
+		// set icon
+		if( !images.isEmpty() )
 			iconLabel.setIcon( FlatTitlePaneIcon.create( images, iconSize ) );
+		else {
+			// no icon set on window --> use default icon
+			Icon defaultIcon = UIManager.getIcon( "InternalFrame.icon" );
+			if( defaultIcon != null ) {
+				if( defaultIcon instanceof ImageIcon )
+					defaultIcon = new ScaledImageIcon( (ImageIcon) defaultIcon, iconSize.width, iconSize.height );
+				iconLabel.setIcon( defaultIcon );
+			} else
+				hasIcon = false;
+		}
+
+		// show/hide icon
+		iconLabel.setVisible( hasIcon );
 
 		updateJBRHitTestSpotsAndTitleBarHeightLater();
 	}
