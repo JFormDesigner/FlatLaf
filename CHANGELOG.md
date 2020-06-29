@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.37
 
 - Custom window decorations (Windows 10 only; PR #108; issues #47 and #82)
   support:
