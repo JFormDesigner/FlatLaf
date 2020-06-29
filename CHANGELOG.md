@@ -3,6 +3,13 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Custom window decorations (Windows 10 only; PR #108; issues #47 and #82)
+  support:
+  - dark window title panes
+  - embedding menu bar into window title pane
+  - native Windows 10 borders and behavior when running in
+    [JetBrains Runtime 11](https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime)
+    or later (the JRE that IntelliJ IDEA uses)
 - CheckBox and RadioButton: Support changing selected icon style from outline to
   filled (as in FlatLaf IntelliJ theme) with `UIManager.put(
   "CheckBox.icon.style", "filled" );`.
