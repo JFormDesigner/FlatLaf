@@ -9,6 +9,8 @@ FlatLaf Change Log
 - Button and ToggleButton: Support disabled background color (use UI values
   `Button.disabledBackground` and `ToggleButton.disabledBackground`). (issue
   #112)
+- Button and ToggleButton: Support making buttons square (set client property
+  `JButton.squareSize` to `true`). (issue #118)
 - ScrollBar: Support pressed track, thumb and button colors (use UI values
   `ScrollBar.pressedTrackColor`, `ScrollBar.pressedThumbColor` and
   `ScrollBar.pressedButtonBackground`). (issue #115)

@@ -213,6 +213,7 @@ public class FlatButtonUI
 
 	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
 		switch( e.getPropertyName() ) {
+			case SQUARE_SIZE:
 			case MINIMUM_WIDTH:
 			case MINIMUM_HEIGHT:
 				b.revalidate();
@@ -457,13 +458,16 @@ public class FlatButtonUI
 		if( prefSize == null )
 			return null;
 
-		// make button square if it is a single-character button
-		// or apply minimum width, if not in toolbar and not a icon-only or single-character button
-		if( isIconOnlyOrSingleCharacterButton( c ) ) {
-			// make only single-character buttons square to allow non-square icon-only buttons
-			if( ((AbstractButton)c).getIcon() == null )
-				prefSize.width = Math.max( prefSize.width, prefSize.height );
-		} else if( !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
+		// make square or apply minimum width/height
+		boolean isIconOnlyOrSingleCharacter = isIconOnlyOrSingleCharacterButton( c );
+		if( clientPropertyBoolean( c, SQUARE_SIZE, false ) ) {
+			// make button square (increase width or height so that they are equal)
+			prefSize.width = prefSize.height = Math.max( prefSize.width, prefSize.height );
+		} else if( isIconOnlyOrSingleCharacter && ((AbstractButton)c).getIcon() == null ) {
+			// make single-character-no-icon button square (increase width)
+			prefSize.width = Math.max( prefSize.width, prefSize.height );
+		} else if( !isIconOnlyOrSingleCharacter && !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
+			// apply minimum width/height
 			float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
 			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + Math.round( focusWidth * 2 ) );
 			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) ) + Math.round( focusWidth * 2 ) );

@@ -97,6 +97,14 @@ public interface FlatClientProperties
 	String SELECTED_STATE_INDETERMINATE = "indeterminate";
 
 	/**
+	 * Specifies whether the button preferred size will be made square (quadratically).
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String SQUARE_SIZE = "JButton.squareSize";
+
+	/**
 	 * Specifies minimum width of a component.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton},
