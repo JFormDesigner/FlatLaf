@@ -47,7 +47,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @author Karl Tauber
  */
-class FlatWindowResizer
+public class FlatWindowResizer
 	extends JComponent
 	implements PropertyChangeListener, WindowStateListener, ComponentListener
 {
@@ -61,14 +61,14 @@ class FlatWindowResizer
 
 	private Window window;
 
-	FlatWindowResizer( JRootPane rootPane ) {
+	public FlatWindowResizer( JRootPane rootPane ) {
 		this.rootPane = rootPane;
 
 		setLayout( new BorderLayout() );
-		add( new DragBorderComponent( NW_RESIZE_CURSOR, N_RESIZE_CURSOR, NE_RESIZE_CURSOR ), BorderLayout.NORTH );
-		add( new DragBorderComponent( SW_RESIZE_CURSOR, S_RESIZE_CURSOR, SE_RESIZE_CURSOR ), BorderLayout.SOUTH );
-		add( new DragBorderComponent( NW_RESIZE_CURSOR, W_RESIZE_CURSOR, SW_RESIZE_CURSOR ), BorderLayout.WEST );
-		add( new DragBorderComponent( NE_RESIZE_CURSOR, E_RESIZE_CURSOR, SE_RESIZE_CURSOR ), BorderLayout.EAST );
+		add( createDragBorderComponent( NW_RESIZE_CURSOR, N_RESIZE_CURSOR, NE_RESIZE_CURSOR ), BorderLayout.NORTH );
+		add( createDragBorderComponent( SW_RESIZE_CURSOR, S_RESIZE_CURSOR, SE_RESIZE_CURSOR ), BorderLayout.SOUTH );
+		add( createDragBorderComponent( NW_RESIZE_CURSOR, W_RESIZE_CURSOR, SW_RESIZE_CURSOR ), BorderLayout.WEST );
+		add( createDragBorderComponent( NE_RESIZE_CURSOR, E_RESIZE_CURSOR, SE_RESIZE_CURSOR ), BorderLayout.EAST );
 
 		rootPane.addComponentListener( this );
 		rootPane.getLayeredPane().add( this, WINDOW_RESIZER_LAYER );
@@ -77,7 +77,11 @@ class FlatWindowResizer
 			setBounds( 0, 0, rootPane.getWidth(), rootPane.getHeight() );
 	}
 
-	void uninstall() {
+	protected DragBorderComponent createDragBorderComponent( int leadingResizeDir, int centerResizeDir, int trailingResizeDir ) {
+		return new DragBorderComponent( leadingResizeDir, centerResizeDir, trailingResizeDir );
+	}
+
+	public void uninstall() {
 		rootPane.removeComponentListener( this );
 		rootPane.getLayeredPane().remove( this );
 	}
@@ -157,7 +161,7 @@ class FlatWindowResizer
 
 	//---- class DragBorderComponent ------------------------------------------
 
-	private class DragBorderComponent
+	protected class DragBorderComponent
 		extends JComponent
 		implements MouseListener, MouseMotionListener
 	{
@@ -170,7 +174,7 @@ class FlatWindowResizer
 		private int dragStartMouseY;
 		private Rectangle dragStartWindowBounds;
 
-		DragBorderComponent( int leadingResizeDir, int centerResizeDir, int trailingResizeDir ) {
+		protected DragBorderComponent( int leadingResizeDir, int centerResizeDir, int trailingResizeDir ) {
 			this.leadingResizeDir = leadingResizeDir;
 			this.centerResizeDir = centerResizeDir;
 			this.trailingResizeDir = trailingResizeDir;
@@ -182,7 +186,7 @@ class FlatWindowResizer
 			addMouseMotionListener( this );
 		}
 
-		private void setResizeDir( int resizeDir ) {
+		protected void setResizeDir( int resizeDir ) {
 			if( this.resizeDir == resizeDir )
 				return;
 			this.resizeDir = resizeDir;

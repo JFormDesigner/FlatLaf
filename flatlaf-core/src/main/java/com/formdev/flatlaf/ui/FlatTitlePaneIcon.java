@@ -28,10 +28,10 @@ import com.formdev.flatlaf.util.ScaledImageIcon;
 /**
  * @author Karl Tauber
  */
-class FlatTitlePaneIcon
+public class FlatTitlePaneIcon
 	extends ScaledImageIcon
 {
-	static Icon create( List<Image> images, Dimension size ) {
+	public static Icon create( List<Image> images, Dimension size ) {
 		// collect all images including multi-resolution variants
 		List<Image> allImages = new ArrayList<>();
 		for( Image image : images ) {
@@ -52,7 +52,7 @@ class FlatTitlePaneIcon
 
 	private final List<Image> images;
 
-	FlatTitlePaneIcon( List<Image> images, Dimension size ) {
+	private FlatTitlePaneIcon( List<Image> images, Dimension size ) {
 		super( new ImageIcon( images.get( 0 ) ), size.width, size.height );
 		this.images = images;
 	}

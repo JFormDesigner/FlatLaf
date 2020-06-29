@@ -121,7 +121,7 @@ public class FlatRootPaneUI
 		}
 	}
 
-	private void installClientDecorations() {
+	protected void installClientDecorations() {
 		boolean isJBRSupported = canUseJBRCustomDecorations && JBRCustomDecorations.isSupported();
 
 		// install border
@@ -131,18 +131,18 @@ public class FlatRootPaneUI
 			LookAndFeel.uninstallBorder( rootPane );
 
 		// install title pane
-		setTitlePane( new FlatTitlePane( rootPane ) );
+		setTitlePane( createTitlePane() );
 
 		// install layout
 		oldLayout = rootPane.getLayout();
-		rootPane.setLayout( new FlatRootLayout() );
+		rootPane.setLayout( createRootLayout() );
 
 		// install window resizer
 		if( !isJBRSupported )
-			windowResizer = new FlatWindowResizer( rootPane );
+			windowResizer = createWindowResizer();
 	}
 
-	private void uninstallClientDecorations() {
+	protected void uninstallClientDecorations() {
 		LookAndFeel.uninstallBorder( rootPane );
 		setTitlePane( null );
 
@@ -162,10 +162,22 @@ public class FlatRootPaneUI
 		}
 	}
 
-	// layer title pane under frame content layer to allow placing menu bar over title pane
-	private final static Integer TITLE_PANE_LAYER = JLayeredPane.FRAME_CONTENT_LAYER - 1;
+	protected FlatRootLayout createRootLayout() {
+		return new FlatRootLayout();
+	}
 
-	private void setTitlePane( FlatTitlePane newTitlePane ) {
+	protected FlatWindowResizer createWindowResizer() {
+		return new FlatWindowResizer( rootPane );
+	}
+
+	protected FlatTitlePane createTitlePane() {
+		return new FlatTitlePane( rootPane );
+	}
+
+	// layer title pane under frame content layer to allow placing menu bar over title pane
+	protected final static Integer TITLE_PANE_LAYER = JLayeredPane.FRAME_CONTENT_LAYER - 1;
+
+	protected void setTitlePane( FlatTitlePane newTitlePane ) {
 		JLayeredPane layeredPane = rootPane.getLayeredPane();
 
 		if( titlePane != null )
@@ -200,7 +212,7 @@ public class FlatRootPaneUI
 
 	//---- class FlatRootLayout -----------------------------------------------
 
-	private class FlatRootLayout
+	protected class FlatRootLayout
 		implements LayoutManager2
 	{
 		@Override public void addLayoutComponent( String name, Component comp ) {}

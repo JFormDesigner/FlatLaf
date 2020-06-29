@@ -87,7 +87,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @author Karl Tauber
  */
-class FlatTitlePane
+public class FlatTitlePane
 	extends JComponent
 {
 	private final Color activeBackground = UIManager.getColor( "TitlePane.background" );
@@ -112,13 +112,14 @@ class FlatTitlePane
 	private JButton restoreButton;
 	private JButton closeButton;
 
-	private final Handler handler = new Handler();
+	private final Handler handler;
 	private Window window;
 
-	FlatTitlePane( JRootPane rootPane ) {
+	public FlatTitlePane( JRootPane rootPane ) {
 		this.rootPane = rootPane;
 
-		setBorder( new TitlePaneBorder() );
+		handler = createHandler();
+		setBorder( createTitlePaneBorder() );
 
 		addSubComponents();
 		activeChanged( true );
@@ -130,7 +131,15 @@ class FlatTitlePane
 		iconLabel.addMouseListener( handler );
 	}
 
-	private void addSubComponents() {
+	protected FlatTitlePaneBorder createTitlePaneBorder() {
+		return new FlatTitlePaneBorder();
+	}
+
+	protected Handler createHandler() {
+		return new Handler();
+	}
+
+	protected void addSubComponents() {
 		leftPanel = new JPanel();
 		iconLabel = new JLabel();
 		titleLabel = new JLabel();
@@ -160,7 +169,7 @@ class FlatTitlePane
 		add( buttonPanel, BorderLayout.LINE_END );
 	}
 
-	private void createButtons() {
+	protected void createButtons() {
 		iconifyButton = createButton( "TitlePane.iconifyIcon", "Iconify", e -> iconify() );
 		maximizeButton = createButton( "TitlePane.maximizeIcon", "Maximize", e -> maximize() );
 		restoreButton = createButton( "TitlePane.restoreIcon", "Restore", e -> restore() );
@@ -197,7 +206,7 @@ class FlatTitlePane
 		buttonPanel.add( closeButton );
 	}
 
-	private JButton createButton( String iconKey, String accessibleName, ActionListener action ) {
+	protected JButton createButton( String iconKey, String accessibleName, ActionListener action ) {
 		JButton button = new JButton( UIManager.getIcon( iconKey ) );
 		button.setFocusable( false );
 		button.setContentAreaFilled( false );
@@ -207,7 +216,7 @@ class FlatTitlePane
 		return button;
 	}
 
-	private void activeChanged( boolean active ) {
+	protected void activeChanged( boolean active ) {
 		Color background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
 		Color foreground = FlatUIUtils.nonUIResource( active
 			? (rootPane.getJMenuBar() != null && isMenuBarEmbedded() ? embeddedForeground : activeForeground)
@@ -223,7 +232,7 @@ class FlatTitlePane
 		closeButton.setBackground( background );
 	}
 
-	private void frameStateChanged() {
+	protected void frameStateChanged() {
 		if( window == null || rootPane.getWindowDecorationStyle() != JRootPane.FRAME )
 			return;
 
@@ -246,7 +255,7 @@ class FlatTitlePane
 		}
 	}
 
-	private void updateIcon() {
+	protected void updateIcon() {
 		// get window images
 		List<Image> images = window.getIconImages();
 		if( images.isEmpty() ) {
@@ -306,7 +315,7 @@ class FlatTitlePane
 		window = null;
 	}
 
-	private String getWindowTitle() {
+	protected String getWindowTitle() {
 		if( window instanceof Frame )
 			return ((Frame)window).getTitle();
 		if( window instanceof Dialog )
@@ -314,7 +323,7 @@ class FlatTitlePane
 		return null;
 	}
 
-	private void installWindowListeners() {
+	protected void installWindowListeners() {
 		if( window == null )
 			return;
 
@@ -324,7 +333,7 @@ class FlatTitlePane
 		window.addComponentListener( handler );
 	}
 
-	private void uninstallWindowListeners() {
+	protected void uninstallWindowListeners() {
 		if( window == null )
 			return;
 
@@ -334,14 +343,14 @@ class FlatTitlePane
 		window.removeComponentListener( handler );
 	}
 
-	boolean isMenuBarEmbedded() {
+	protected boolean isMenuBarEmbedded() {
 		// not storing value of "TitlePane.menuBarEmbedded" in class to allow changing at runtime
 		return UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) &&
 			FlatClientProperties.clientPropertyBoolean( rootPane, FlatClientProperties.MENU_BAR_EMBEDDED, true ) &&
 			FlatSystemProperties.getBoolean( FlatSystemProperties.MENUBAR_EMBEDDED, true );
 	}
 
-	Rectangle getMenuBarBounds() {
+	protected Rectangle getMenuBarBounds() {
 		Insets insets = rootPane.getInsets();
 		Rectangle bounds = new Rectangle(
 			SwingUtilities.convertPoint( menuBarPlaceholder, -insets.left, -insets.top, rootPane ),
@@ -355,7 +364,7 @@ class FlatTitlePane
 		return FlatUIUtils.subtractInsets( bounds, UIScale.scale( getMenuBarMargins() ) );
 	}
 
-	void menuBarChanged() {
+	protected void menuBarChanged() {
 		menuBarPlaceholder.invalidate();
 
 		// update title foreground color
@@ -364,7 +373,7 @@ class FlatTitlePane
 		} );
 	}
 
-	private Insets getMenuBarMargins() {
+	protected Insets getMenuBarMargins() {
 		return getComponentOrientation().isLeftToRight()
 			? menuBarMargins
 			: new Insets( menuBarMargins.top, menuBarMargins.right, menuBarMargins.bottom, menuBarMargins.left );
@@ -376,14 +385,20 @@ class FlatTitlePane
 		g.fillRect( 0, 0, getWidth(), getHeight() );
 	}
 
-	private void iconify() {
+	/**
+	 * Iconifies the window.
+	 */
+	protected void iconify() {
 		if( window instanceof Frame ) {
 			Frame frame = (Frame) window;
 			frame.setExtendedState( frame.getExtendedState() | Frame.ICONIFIED );
 		}
 	}
 
-	private void maximize() {
+	/**
+	 * Maximizes the window.
+	 */
+	protected void maximize() {
 		if( !(window instanceof Frame) )
 			return;
 
@@ -452,7 +467,10 @@ class FlatTitlePane
 		frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
 	}
 
-	private void restore() {
+	/**
+	 * Restores the window size.
+	 */
+	protected void restore() {
 		if( window instanceof Frame ) {
 			Frame frame = (Frame) window;
 			int state = frame.getExtendedState();
@@ -462,24 +480,27 @@ class FlatTitlePane
 		}
 	}
 
-	private void close() {
+	/**
+	 * Closes the window.
+	 */
+	protected void close() {
 		if( window != null )
 			window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSING ) );
 	}
 
-	private boolean hasJBRCustomDecoration() {
+	protected boolean hasJBRCustomDecoration() {
 		return FlatRootPaneUI.canUseJBRCustomDecorations &&
 			window != null &&
 			JBRCustomDecorations.hasCustomDecoration( window );
 	}
 
-	private void updateJBRHitTestSpotsAndTitleBarHeightLater() {
+	protected void updateJBRHitTestSpotsAndTitleBarHeightLater() {
 		EventQueue.invokeLater( () -> {
 			updateJBRHitTestSpotsAndTitleBarHeight();
 		} );
 	}
 
-	private void updateJBRHitTestSpotsAndTitleBarHeight() {
+	protected void updateJBRHitTestSpotsAndTitleBarHeight() {
 		if( !isDisplayable() )
 			return;
 
@@ -500,7 +521,7 @@ class FlatTitlePane
 		JBRCustomDecorations.setHitTestSpotsAndTitleBarHeight( window, hitTestSpots, titleBarHeight );
 	}
 
-	private void addJBRHitTestSpot( JComponent c, boolean subtractMenuBarMargins, List<Rectangle> hitTestSpots ) {
+	protected void addJBRHitTestSpot( JComponent c, boolean subtractMenuBarMargins, List<Rectangle> hitTestSpots ) {
 		Dimension size = c.getSize();
 		if( size.width <= 0 || size.height <= 0 )
 			return;
@@ -516,7 +537,7 @@ class FlatTitlePane
 
 	//---- class TitlePaneBorder ----------------------------------------------
 
-	private class TitlePaneBorder
+	protected class FlatTitlePaneBorder
 		extends AbstractBorder
 	{
 		@Override
@@ -547,7 +568,7 @@ class FlatTitlePane
 				JBRWindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
-		private Border getMenuBarBorder() {
+		protected Border getMenuBarBorder() {
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			return (menuBar != null && isMenuBarEmbedded()) ? menuBar.getBorder() : null;
 		}
@@ -555,7 +576,7 @@ class FlatTitlePane
 
 	//---- class Handler ------------------------------------------------------
 
-	private class Handler
+	protected class Handler
 		extends WindowAdapter
 		implements PropertyChangeListener, MouseListener, MouseMotionListener, ComponentListener
 	{
