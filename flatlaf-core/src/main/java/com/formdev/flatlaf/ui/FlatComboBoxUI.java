@@ -119,7 +119,7 @@ public class FlatComboBoxUI
 	protected Color buttonHoverArrowColor;
 
 	private MouseListener hoverListener;
-	private boolean hover;
+	protected boolean hover;
 
 	private WeakReference<Component> lastRendererComponent;
 
@@ -332,14 +332,7 @@ public class FlatComboBoxUI
 
 	@Override
 	protected JButton createArrowButton() {
-		return new FlatArrowButton( SwingConstants.SOUTH, arrowType, buttonArrowColor,
-			buttonDisabledArrowColor, buttonHoverArrowColor, null )
-		{
-			@Override
-			protected boolean isHover() {
-				return super.isHover() || (!comboBox.isEditable() ? hover : false);
-			}
-		};
+		return new FlatComboBoxButton();
 	}
 
 	@Override
@@ -504,6 +497,27 @@ public class FlatComboBoxUI
 		if( lastRendererComponent != null ) {
 			CellPaddingBorder.uninstall( lastRendererComponent );
 			lastRendererComponent = null;
+		}
+	}
+
+	//---- class FlatComboBoxButton -------------------------------------------
+
+	protected class FlatComboBoxButton
+		extends FlatArrowButton
+	{
+		protected FlatComboBoxButton() {
+			this( SwingConstants.SOUTH, arrowType, buttonArrowColor, buttonDisabledArrowColor, buttonHoverArrowColor, null, null );
+		}
+
+		protected FlatComboBoxButton( int direction, String type, Color foreground, Color disabledForeground,
+			Color hoverForeground, Color hoverBackground, Color pressedBackground )
+		{
+			super( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, pressedBackground );
+		}
+
+		@Override
+		protected boolean isHover() {
+			return super.isHover() || (!comboBox.isEditable() ? hover : false);
 		}
 	}
 

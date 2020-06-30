@@ -87,10 +87,10 @@ public class FlatSplitPaneUI
 
 	//---- class FlatSplitPaneDivider -----------------------------------------
 
-	private class FlatSplitPaneDivider
+	protected class FlatSplitPaneDivider
 		extends BasicSplitPaneDivider
 	{
-		public FlatSplitPaneDivider( BasicSplitPaneUI ui ) {
+		protected FlatSplitPaneDivider( BasicSplitPaneUI ui ) {
 			super( ui );
 		}
 

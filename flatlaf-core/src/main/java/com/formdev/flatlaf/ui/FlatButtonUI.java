@@ -202,13 +202,7 @@ public class FlatButtonUI
 
 	@Override
 	protected BasicButtonListener createButtonListener( AbstractButton b ) {
-		return new BasicButtonListener( b ) {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
-				FlatButtonUI.this.propertyChange( b, e );
-			}
-		};
+		return new FlatButtonListener( b );
 	}
 
 	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
@@ -474,5 +468,24 @@ public class FlatButtonUI
 		}
 
 		return prefSize;
+	}
+
+	//---- class FlatButtonListener -------------------------------------------
+
+	protected class FlatButtonListener
+		extends BasicButtonListener
+	{
+		private final AbstractButton b;
+
+		protected FlatButtonListener( AbstractButton b ) {
+			super( b );
+			this.b = b;
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			super.propertyChange( e );
+			FlatButtonUI.this.propertyChange( b, e );
+		}
 	}
 }

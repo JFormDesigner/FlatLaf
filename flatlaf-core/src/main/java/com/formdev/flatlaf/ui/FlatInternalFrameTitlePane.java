@@ -150,7 +150,7 @@ public class FlatInternalFrameTitlePane
 
 	//---- class FlatPropertyChangeHandler ------------------------------------
 
-	private class FlatPropertyChangeHandler
+	protected class FlatPropertyChangeHandler
 		extends PropertyChangeHandler
 	{
 		@Override

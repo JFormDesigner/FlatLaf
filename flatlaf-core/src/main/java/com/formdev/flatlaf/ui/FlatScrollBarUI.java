@@ -198,46 +198,12 @@ public class FlatScrollBarUI
 
 	@Override
 	protected JButton createDecreaseButton( int orientation ) {
-		return createArrowButton( orientation );
+		return new FlatScrollBarButton( orientation );
 	}
 
 	@Override
 	protected JButton createIncreaseButton( int orientation ) {
-		return createArrowButton( orientation );
-	}
-
-	private JButton createArrowButton( int orientation ) {
-		FlatArrowButton button = new FlatArrowButton( orientation, arrowType, buttonArrowColor,
-			buttonDisabledArrowColor, null, hoverButtonBackground, pressedButtonBackground )
-		{
-			@Override
-			protected Color deriveBackground( Color background ) {
-				return FlatUIUtils.deriveColor( background, scrollbar.getBackground() );
-			}
-
-			@Override
-			public Dimension getPreferredSize() {
-				if( isShowButtons() ) {
-					int w = UIScale.scale( scrollBarWidth );
-					return new Dimension( w, w );
-				} else
-					return new Dimension();
-			}
-
-			@Override
-			public Dimension getMinimumSize() {
-				return isShowButtons() ? super.getMinimumSize() : new Dimension();
-			}
-
-			@Override
-			public Dimension getMaximumSize() {
-				return isShowButtons() ? super.getMaximumSize() : new Dimension();
-			}
-		};
-		button.setArrowWidth( FlatArrowButton.DEFAULT_ARROW_WIDTH - 2 );
-		button.setFocusable( false );
-		button.setRequestFocusEnabled( false );
-		return button;
+		return new FlatScrollBarButton( orientation );
 	}
 
 	protected boolean isShowButtons() {
@@ -375,6 +341,51 @@ public class FlatScrollBarUI
 		private void repaint() {
 			if( scrollbar.isEnabled() )
 				scrollbar.repaint();
+		}
+	}
+
+	//---- class FlatScrollBarButton ------------------------------------------
+
+	protected class FlatScrollBarButton
+		extends FlatArrowButton
+	{
+		protected FlatScrollBarButton( int direction ) {
+			this( direction, arrowType, buttonArrowColor, buttonDisabledArrowColor,
+				null, hoverButtonBackground, pressedButtonBackground );
+		}
+
+		protected FlatScrollBarButton( int direction, String type, Color foreground, Color disabledForeground,
+			Color hoverForeground, Color hoverBackground, Color pressedBackground )
+		{
+			super( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, pressedBackground );
+
+			setArrowWidth( FlatArrowButton.DEFAULT_ARROW_WIDTH - 2 );
+			setFocusable( false );
+			setRequestFocusEnabled( false );
+		}
+
+		@Override
+		protected Color deriveBackground( Color background ) {
+			return FlatUIUtils.deriveColor( background, scrollbar.getBackground() );
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			if( isShowButtons() ) {
+				int w = UIScale.scale( scrollBarWidth );
+				return new Dimension( w, w );
+			} else
+				return new Dimension();
+		}
+
+		@Override
+		public Dimension getMinimumSize() {
+			return isShowButtons() ? super.getMinimumSize() : new Dimension();
+		}
+
+		@Override
+		public Dimension getMaximumSize() {
+			return isShowButtons() ? super.getMaximumSize() : new Dimension();
 		}
 	}
 }
