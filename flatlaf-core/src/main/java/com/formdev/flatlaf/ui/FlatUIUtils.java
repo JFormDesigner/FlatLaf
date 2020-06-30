@@ -38,6 +38,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -139,8 +140,14 @@ public class FlatUIUtils
 		return c instanceof JComponent && Boolean.TRUE.equals( ((JComponent)c).getClientProperty( "JComboBox.isTableCellEditor" ) );
 	}
 
+	/**
+	 * Returns whether the given component is the permanent focus owner and
+	 * is in the active window. Used to paint focus indicators.
+	 */
 	public static boolean isPermanentFocusOwner( Component c ) {
-		return (KeyboardFocusManager.getCurrentKeyboardFocusManager().getPermanentFocusOwner() == c);
+		KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		return keyboardFocusManager.getPermanentFocusOwner() == c &&
+			keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
 	}
 
 	public static boolean isRoundRect( Component c ) {

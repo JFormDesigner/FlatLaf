@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Hide focus indicator when window is inactive.
+
+
 ## 0.37
 
 - Custom window decorations (Windows 10 only; PR #108; issues #47 and #82)

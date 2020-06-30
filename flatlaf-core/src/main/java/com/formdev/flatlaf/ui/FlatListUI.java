@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JComponent;
@@ -106,7 +107,11 @@ public class FlatListUI
 			@Override
 			public void focusLost( FocusEvent e ) {
 				super.focusLost( e );
-				toggleSelectionColors();
+
+				// use invokeLater for the case that the window is deactivated
+				EventQueue.invokeLater( () -> {
+					toggleSelectionColors();
+				} );
 			}
 		};
 	}
