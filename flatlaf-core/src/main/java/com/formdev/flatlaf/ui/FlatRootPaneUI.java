@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -335,7 +336,20 @@ public class FlatRootPaneUI
 		}
 
 		@Override
+		public Insets getBorderInsets( Component c, Insets insets ) {
+			if( isWindowMaximized( c ) ) {
+				// hide border if window is maximized
+				insets.top = insets.left = insets.bottom = insets.right = 0;
+				return insets;
+			} else
+				return super.getBorderInsets( c, insets );
+		}
+
+		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			if( isWindowMaximized( c ) )
+				return;
+
 			Container parent = c.getParent();
 			boolean active = parent instanceof Window ? ((Window)parent).isActive() : false;
 
@@ -345,6 +359,13 @@ public class FlatRootPaneUI
 
 		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
 			g.drawRect( x, y, width - 1, height - 1 );
+		}
+
+		protected boolean isWindowMaximized( Component c ) {
+			Container parent = c.getParent();
+			return parent instanceof Frame
+				? (((Frame)parent).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0
+				: false;
 		}
 	}
 }

@@ -4,8 +4,8 @@ FlatLaf Change Log
 ## Unreleased
 
 - Hide focus indicator when window is inactive.
-- Improved/fixed window border color in dark themes in custom window
-  decorations.
+- Custom window decorations: Improved/fixed window border color in dark themes.
+- Custom window decorations: Hide window border if window is maximized.
 
 
 ## 0.37
