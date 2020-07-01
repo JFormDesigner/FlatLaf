@@ -51,15 +51,15 @@ public class FlatWindowResizer
 	extends JComponent
 	implements PropertyChangeListener, WindowStateListener, ComponentListener
 {
-	private final static Integer WINDOW_RESIZER_LAYER = JLayeredPane.DRAG_LAYER + 1;
+	protected final static Integer WINDOW_RESIZER_LAYER = JLayeredPane.DRAG_LAYER + 1;
 
-	private final JRootPane rootPane;
+	protected final JRootPane rootPane;
 
-	private final int borderDragThickness = FlatUIUtils.getUIInt( "RootPane.borderDragThickness", 5 );
-	private final int cornerDragWidth = FlatUIUtils.getUIInt( "RootPane.cornerDragWidth", 16 );
-	private final boolean honorMinimumSizeOnResize = UIManager.getBoolean( "RootPane.honorMinimumSizeOnResize" );
+	protected final int borderDragThickness = FlatUIUtils.getUIInt( "RootPane.borderDragThickness", 5 );
+	protected final int cornerDragWidth = FlatUIUtils.getUIInt( "RootPane.cornerDragWidth", 16 );
+	protected final boolean honorMinimumSizeOnResize = UIManager.getBoolean( "RootPane.honorMinimumSizeOnResize" );
 
-	private Window window;
+	protected Window window;
 
 	public FlatWindowResizer( JRootPane rootPane ) {
 		this.rootPane = rootPane;

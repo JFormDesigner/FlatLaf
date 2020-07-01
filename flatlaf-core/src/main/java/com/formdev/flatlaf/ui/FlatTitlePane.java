@@ -90,30 +90,31 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTitlePane
 	extends JComponent
 {
-	private final Color activeBackground = UIManager.getColor( "TitlePane.background" );
-	private final Color inactiveBackground = UIManager.getColor( "TitlePane.inactiveBackground" );
-	private final Color activeForeground = UIManager.getColor( "TitlePane.foreground" );
-	private final Color inactiveForeground = UIManager.getColor( "TitlePane.inactiveForeground" );
-	private final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
+	protected final Color activeBackground = UIManager.getColor( "TitlePane.background" );
+	protected final Color inactiveBackground = UIManager.getColor( "TitlePane.inactiveBackground" );
+	protected final Color activeForeground = UIManager.getColor( "TitlePane.foreground" );
+	protected final Color inactiveForeground = UIManager.getColor( "TitlePane.inactiveForeground" );
+	protected final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
 
-	private final Insets menuBarMargins = UIManager.getInsets( "TitlePane.menuBarMargins" );
-	private final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
-	private final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
+	protected final Insets menuBarMargins = UIManager.getInsets( "TitlePane.menuBarMargins" );
+	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
+	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 
-	private final JRootPane rootPane;
+	protected final JRootPane rootPane;
 
-	private JPanel leftPanel;
-	private JLabel iconLabel;
-	private JComponent menuBarPlaceholder;
-	private JLabel titleLabel;
-	private JPanel buttonPanel;
-	private JButton iconifyButton;
-	private JButton maximizeButton;
-	private JButton restoreButton;
-	private JButton closeButton;
+	protected JPanel leftPanel;
+	protected JLabel iconLabel;
+	protected JComponent menuBarPlaceholder;
+	protected JLabel titleLabel;
+	protected JPanel buttonPanel;
+	protected JButton iconifyButton;
+	protected JButton maximizeButton;
+	protected JButton restoreButton;
+	protected JButton closeButton;
+
+	protected Window window;
 
 	private final Handler handler;
-	private Window window;
 
 	public FlatTitlePane( JRootPane rootPane ) {
 		this.rootPane = rootPane;

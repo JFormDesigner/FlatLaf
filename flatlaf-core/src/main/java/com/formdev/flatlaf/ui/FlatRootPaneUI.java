@@ -69,10 +69,11 @@ public class FlatRootPaneUI
 	static final boolean canUseJBRCustomDecorations
 		= SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER && SystemInfo.IS_WINDOWS_10_OR_LATER;
 
-	private JRootPane rootPane;
-	private FlatTitlePane titlePane;
+	protected JRootPane rootPane;
+	protected FlatTitlePane titlePane;
+	protected FlatWindowResizer windowResizer;
+
 	private LayoutManager oldLayout;
-	private FlatWindowResizer windowResizer;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRootPaneUI();
