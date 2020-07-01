@@ -25,7 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
-import java.awt.Toolkit;
+import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.util.function.Function;
 import javax.swing.JComponent;
@@ -51,6 +51,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  * <!-- FlatRootPaneUI -->
  *
  * @uiDefault RootPane.border								Border
+ * @uiDefault RootPane.activeBorderColor					Color
+ * @uiDefault RootPane.inactiveBorderColor					Color
  *
  * <!-- FlatWindowResizer -->
  *
@@ -323,19 +325,20 @@ public class FlatRootPaneUI
 	public static class FlatWindowBorder
 		extends BorderUIResource.EmptyBorderUIResource
 	{
+		protected final Color activeBorderColor = UIManager.getColor( "RootPane.activeBorderColor" );
+		protected final Color inactiveBorderColor = UIManager.getColor( "RootPane.inactiveBorderColor" );
+		protected final Color baseBorderColor = UIManager.getColor( "Panel.background" );
+
 		public FlatWindowBorder() {
 			super( 1, 1, 1, 1 );
 		}
 
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			Object borderColorObj = Toolkit.getDefaultToolkit().getDesktopProperty(
-				"win.frame.activeBorderColor" );
-			Color borderColor = (borderColorObj instanceof Color)
-				? (Color) borderColorObj
-				: UIManager.getColor( "windowBorder" );
+			Container parent = c.getParent();
+			boolean active = parent instanceof Window ? ((Window)parent).isActive() : false;
 
-			g.setColor( borderColor );
+			g.setColor( FlatUIUtils.deriveColor( active ? activeBorderColor : inactiveBorderColor, baseBorderColor ) );
 			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height, this::paintImpl );
 		}
 

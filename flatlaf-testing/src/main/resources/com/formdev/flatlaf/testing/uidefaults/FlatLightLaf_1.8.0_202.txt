@@ -757,6 +757,7 @@ Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.F
 
 #---- RootPane ----
 
+RootPane.activeBorderColor     #707070    javax.swing.plaf.ColorUIResource [UI]
 RootPane.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRootPaneUI$FlatWindowBorder [UI]
 RootPane.borderDragThickness   5
 RootPane.cornerDragWidth       16
@@ -770,6 +771,7 @@ RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [6] ctrl released ENTER
     [7] release
 RootPane.honorMinimumSizeOnResize true
+RootPane.inactiveBorderColor   #a3a3a3    javax.swing.plaf.ColorUIResource [UI]
 RootPaneUI                     com.formdev.flatlaf.ui.FlatRootPaneUI
 
 

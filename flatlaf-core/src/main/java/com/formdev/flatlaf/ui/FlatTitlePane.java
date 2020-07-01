@@ -385,6 +385,16 @@ public class FlatTitlePane
 		g.fillRect( 0, 0, getWidth(), getHeight() );
 	}
 
+	protected void repaintWindowBorder() {
+		int width = rootPane.getWidth();
+		int height = rootPane.getHeight();
+		Insets insets = rootPane.getInsets();
+		rootPane.repaint( 0, 0, width, insets.top ); // top
+		rootPane.repaint( 0, 0, insets.left, height ); // left
+		rootPane.repaint( 0, height - insets.bottom, width, insets.bottom ); // bottom
+		rootPane.repaint( width - insets.right, 0, insets.right, height ); // right
+	}
+
 	/**
 	 * Iconifies the window.
 	 */
@@ -613,6 +623,8 @@ public class FlatTitlePane
 
 			if( hasJBRCustomDecoration() )
 				JBRWindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
+
+			repaintWindowBorder();
 		}
 
 		@Override
@@ -622,6 +634,8 @@ public class FlatTitlePane
 
 			if( hasJBRCustomDecoration() )
 				JBRWindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
+
+			repaintWindowBorder();
 		}
 
 		@Override
