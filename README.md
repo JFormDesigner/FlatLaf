@@ -100,6 +100,7 @@ Projects using FlatLaf
   [OFTP2](https://mendelson-e-c.com/oftp2) (commercial)
 - [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.1.6
 - [lsfusion platform](https://github.com/lsfusion/platform)
+- [Jes - Die Java-EÜR](https://www.jes-eur.de)
 - and more...
 
 
