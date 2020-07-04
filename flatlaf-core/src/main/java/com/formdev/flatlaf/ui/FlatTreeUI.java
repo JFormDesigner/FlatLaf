@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.JTree;
 import javax.swing.LookAndFeel;
@@ -225,6 +226,11 @@ public class FlatTreeUI
 		boolean cellHasFocus = hasFocus && (row == getLeadSelectionRow());
 		boolean isSelected = tree.isRowSelected( row );
 		boolean isDropRow = isDropRow( row );
+
+		// if tree is used as cell renderer in another component (e.g. in Rhino JavaScript debugger),
+		// check whether that component is focused to get correct selection colors
+		if( !hasFocus && isSelected && tree.getParent() instanceof CellRendererPane )
+			hasFocus = FlatUIUtils.isPermanentFocusOwner( tree.getParent().getParent() );
 
 		// wide selection background
 		if( wideSelection && (isSelected || isDropRow) ) {
