@@ -98,9 +98,15 @@ Projects using FlatLaf
   [mendelson AS2](https://mendelson-e-c.com/as2/),
   [AS4](https://mendelson-e-c.com/as4/) and
   [OFTP2](https://mendelson-e-c.com/oftp2) (commercial)
-- [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.1.6
+- [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2
 - [lsfusion platform](https://github.com/lsfusion/platform)
-- [Jes - Die Java-EÃœR](https://www.jes-eur.de)
+- [Jes - Die Java-EÜR](https://www.jes-eur.de)
+- [Mapton](https://mapton.org/) 2.0
+  ([source code](https://github.com/trixon/mapton)) based on NetBeans platform
+- [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE)
+- [Sound Analysis](https://github.com/tomasz-herman/SoundAnalysis)
+- [RemoteLight](https://github.com/Drumber/RemoteLight) - Multifunctional LED
+  Control Software
 - and more...
 
 
