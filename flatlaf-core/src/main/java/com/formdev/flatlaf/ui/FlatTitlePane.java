@@ -55,6 +55,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
@@ -147,6 +148,10 @@ public class FlatTitlePane
 		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
 
+		//TODO
+//		titleLabel.setHorizontalAlignment( JLabel.CENTER );
+//		titleLabel.setHorizontalAlignment( JLabel.RIGHT );
+
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
 		leftPanel.add( iconLabel );
@@ -218,13 +223,16 @@ public class FlatTitlePane
 	}
 
 	protected void activeChanged( boolean active ) {
+		boolean hasEmbeddedMenuBar = rootPane.getJMenuBar() != null && isMenuBarEmbedded();
 		Color background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
 		Color foreground = FlatUIUtils.nonUIResource( active
-			? (rootPane.getJMenuBar() != null && isMenuBarEmbedded() ? embeddedForeground : activeForeground)
+			? (hasEmbeddedMenuBar ? embeddedForeground : activeForeground)
 			: inactiveForeground );
 
 		setBackground( background );
 		titleLabel.setForeground( foreground );
+
+		titleLabel.setHorizontalAlignment( hasEmbeddedMenuBar ? SwingConstants.CENTER : SwingConstants.LEADING );
 
 		// this is necessary because hover/pressed colors are derived from background color
 		iconifyButton.setBackground( background );
