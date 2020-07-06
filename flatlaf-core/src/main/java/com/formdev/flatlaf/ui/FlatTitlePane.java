@@ -284,6 +284,8 @@ public class FlatTitlePane
 		else {
 			// no icon set on window --> use default icon
 			Icon defaultIcon = UIManager.getIcon( "InternalFrame.icon" );
+			if( defaultIcon != null && (defaultIcon.getIconWidth() == 0 || defaultIcon.getIconHeight() == 0) )
+				defaultIcon = null;
 			if( defaultIcon != null ) {
 				if( defaultIcon instanceof ImageIcon )
 					defaultIcon = new ScaledImageIcon( (ImageIcon) defaultIcon, iconSize.width, iconSize.height );
