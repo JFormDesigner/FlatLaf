@@ -76,6 +76,11 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.dropCellBackground				Color
  * @uiDefault Tree.dropCellForeground				Color
  *
+ * <!-- DefaultTreeCellEditor -->
+ *
+ * @uiDefault Tree.editorBorder						Border
+ * @uiDefault Tree.editorBorderSelectionColor		Color
+ *
  * <!-- FlatTreeUI -->
  *
  * @uiDefault Tree.border							Border

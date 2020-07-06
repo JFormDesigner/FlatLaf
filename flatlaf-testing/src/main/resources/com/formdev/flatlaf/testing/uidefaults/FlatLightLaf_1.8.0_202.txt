@@ -480,6 +480,7 @@ List.selectionBackground       #2675bf    javax.swing.plaf.ColorUIResource [UI]
 List.selectionForeground       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 List.selectionInactiveBackground #d4d4d4    javax.swing.plaf.ColorUIResource [UI]
 List.selectionInactiveForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+List.showCellFocusIndicator    false
 List.timeFactor                1000
 ListUI                         com.formdev.flatlaf.ui.FlatListUI
 
@@ -1195,7 +1196,7 @@ Tree.drawsFocusBorderAroundIcon false
 Tree.dropCellBackground        [lazy] #3f8fd9    javax.swing.plaf.ColorUIResource [UI]
 Tree.dropCellForeground        [lazy] #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Tree.dropLineColor             [lazy] #6aa7e1    javax.swing.plaf.ColorUIResource [UI]
-Tree.editorBorder              [lazy] line: #000000    java.awt.Color 1 false    1,1,1,1  true    javax.swing.plaf.BorderUIResource$LineBorderUIResource [UI]
+Tree.editorBorder              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Tree.expandedIcon              [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeExpandedIcon [UI]
 Tree.font                      [active] $defaultFont [UI]
 Tree.foreground                #000000    javax.swing.plaf.ColorUIResource [UI]
@@ -1221,6 +1222,7 @@ Tree.selectionBorderColor      #000000    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionForeground       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveBackground #d4d4d4    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveForeground #000000    javax.swing.plaf.ColorUIResource [UI]
+Tree.showCellFocusIndicator    false
 Tree.textBackground            #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Tree.textForeground            #000000    javax.swing.plaf.ColorUIResource [UI]
 Tree.timeFactor                1000
