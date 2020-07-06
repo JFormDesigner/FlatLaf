@@ -7,6 +7,7 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import java.beans.PropertyVetoException;
 import javax.swing.*;
+import com.formdev.flatlaf.extras.TriStateCheckBox;
 import com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -50,8 +51,10 @@ public class FlatInternalFrameTest
 			maximizableCheckBox.isSelected(),
 			iconifiableCheckBox.isSelected() );
 
-		if( iconCheckBox.isSelected() )
+		if( iconCheckBox.getState() == TriStateCheckBox.State.SELECTED )
 			internalFrame.setFrameIcon( new FlatFileViewFloppyDriveIcon() );
+		else if( iconCheckBox.getState() == TriStateCheckBox.State.UNSELECTED )
+			internalFrame.setFrameIcon( null );
 
 		if( menuBarCheckBox.isSelected() ) {
 			JMenuBar menuBar = new JMenuBar();
@@ -100,7 +103,7 @@ public class FlatInternalFrameTest
 		closableCheckBox = new JCheckBox();
 		iconifiableCheckBox = new JCheckBox();
 		maximizableCheckBox = new JCheckBox();
-		iconCheckBox = new JCheckBox();
+		iconCheckBox = new TriStateCheckBox();
 		menuBarCheckBox = new JCheckBox();
 		titleLabel = new JLabel();
 		titleField = new JTextField();
@@ -192,7 +195,7 @@ public class FlatInternalFrameTest
 	private JCheckBox closableCheckBox;
 	private JCheckBox iconifiableCheckBox;
 	private JCheckBox maximizableCheckBox;
-	private JCheckBox iconCheckBox;
+	private TriStateCheckBox iconCheckBox;
 	private JCheckBox menuBarCheckBox;
 	private JLabel titleLabel;
 	private JTextField titleField;

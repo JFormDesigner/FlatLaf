@@ -26,13 +26,14 @@ import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -103,14 +104,16 @@ public class FlatInternalFrameTitlePane
 		add( buttonPanel, BorderLayout.LINE_END );
 	}
 
-	private void updateFrameIcon() {
+	protected void updateFrameIcon() {
 		Icon frameIcon = frame.getFrameIcon();
-		if( frameIcon == UIManager.getIcon( "InternalFrame.icon" ) )
+		if( frameIcon != null && (frameIcon.getIconWidth() == 0 || frameIcon.getIconHeight() == 0) )
 			frameIcon = null;
+		else if( frameIcon instanceof ImageIcon )
+			frameIcon = new ScaledImageIcon( (ImageIcon) frameIcon );
 		titleLabel.setIcon( frameIcon );
 	}
 
-	private void updateColors() {
+	protected void updateColors() {
 		Color background = FlatUIUtils.nonUIResource( frame.isSelected() ? selectedTitleColor : notSelectedTitleColor );
 		Color foreground = FlatUIUtils.nonUIResource( frame.isSelected() ? selectedTextColor : notSelectedTextColor );
 
@@ -123,7 +126,7 @@ public class FlatInternalFrameTitlePane
 		closeButton.setForeground( foreground );
 	}
 
-	private void updateButtonsVisibility() {
+	protected void updateButtonsVisibility() {
 		iconButton.setVisible( frame.isIconifiable() );
 		maxButton.setVisible( frame.isMaximizable() );
 		closeButton.setVisible( frame.isClosable() );

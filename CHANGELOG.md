@@ -6,6 +6,8 @@ FlatLaf Change Log
 - Hide focus indicator when window is inactive.
 - Custom window decorations: Improved/fixed window border color in dark themes.
 - Custom window decorations: Hide window border if window is maximized.
+- Custom window decorations: Center title if menu bar is embedded.
+- InternalFrame: Use default icon in internal frames. (issue #122)
 
 
 ## 0.37
