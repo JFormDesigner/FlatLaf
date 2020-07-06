@@ -59,7 +59,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  *
  * @uiDefault RootPane.borderDragThickness					int
  * @uiDefault RootPane.cornerDragWidth						int
- * @uiDefault RootPane.honorMinimumSizeOnResize				boolean
+ * @uiDefault RootPane.honorFrameMinimumSizeOnResize		boolean
+ * @uiDefault RootPane.honorDialogMinimumSizeOnResize		boolean
  *
  * @author Karl Tauber
  */

@@ -770,7 +770,8 @@ RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [5] press
     [6] ctrl released ENTER
     [7] release
-RootPane.honorMinimumSizeOnResize true
+RootPane.honorDialogMinimumSizeOnResize true
+RootPane.honorFrameMinimumSizeOnResize false
 RootPane.inactiveBorderColor   #a3a3a3    javax.swing.plaf.ColorUIResource [UI]
 RootPaneUI                     com.formdev.flatlaf.ui.FlatRootPaneUI
 

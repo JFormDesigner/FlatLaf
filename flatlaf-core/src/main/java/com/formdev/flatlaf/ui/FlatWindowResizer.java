@@ -57,7 +57,8 @@ public class FlatWindowResizer
 
 	protected final int borderDragThickness = FlatUIUtils.getUIInt( "RootPane.borderDragThickness", 5 );
 	protected final int cornerDragWidth = FlatUIUtils.getUIInt( "RootPane.cornerDragWidth", 16 );
-	protected final boolean honorMinimumSizeOnResize = UIManager.getBoolean( "RootPane.honorMinimumSizeOnResize" );
+	protected final boolean honorFrameMinimumSizeOnResize = UIManager.getBoolean( "RootPane.honorFrameMinimumSizeOnResize" );
+	protected final boolean honorDialogMinimumSizeOnResize = UIManager.getBoolean( "RootPane.honorDialogMinimumSizeOnResize" );
 
 	protected Window window;
 
@@ -293,6 +294,9 @@ debug*/
 			newBounds.height += deltaHeight;
 
 			// apply minimum window size
+			boolean honorMinimumSizeOnResize =
+				(honorFrameMinimumSizeOnResize && window instanceof Frame) ||
+				(honorDialogMinimumSizeOnResize && window instanceof Dialog);
 			Dimension minimumSize = honorMinimumSizeOnResize ? window.getMinimumSize() : null;
 			if( minimumSize == null )
 				minimumSize = UIScale.scale( new Dimension( 150, 50 ) );
