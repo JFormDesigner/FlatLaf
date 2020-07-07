@@ -154,8 +154,11 @@ class UIDefaultsLoader
 				}
 			}
 
+			Function<String, String> propertiesGetter = key -> {
+				return properties.getProperty( key );
+			};
 			Function<String, String> resolver = value -> {
-				return resolveValue( properties, value );
+				return resolveValue( value, propertiesGetter );
 			};
 
 			// get globals, which override all other defaults that end with same suffix
@@ -165,7 +168,7 @@ class UIDefaultsLoader
 				if( !key.startsWith( GLOBAL_PREFIX ) )
 					continue;
 
-				String value = resolveValue( properties, (String) e.getValue() );
+				String value = resolveValue( (String) e.getValue(), propertiesGetter );
 				try {
 					globals.put( key.substring( GLOBAL_PREFIX.length() ),
 						parseValue( key, value, null, resolver, addonClassLoaders ) );
@@ -191,7 +194,7 @@ class UIDefaultsLoader
 				if( key.startsWith( VARIABLE_PREFIX ) || key.startsWith( GLOBAL_PREFIX ) )
 					continue;
 
-				String value = resolveValue( properties, (String) e.getValue() );
+				String value = resolveValue( (String) e.getValue(), propertiesGetter );
 				try {
 					defaults.put( key, parseValue( key, value, null, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
@@ -207,7 +210,7 @@ class UIDefaultsLoader
 		FlatLaf.LOG.log( level, "FlatLaf: Failed to parse: '" + key + '=' + value + '\'', ex );
 	}
 
-	static String resolveValue( Properties properties, String value ) {
+	static String resolveValue( String value, Function<String, String> propertiesGetter ) {
 		if( value.startsWith( PROPERTY_PREFIX ) )
 			value = value.substring( PROPERTY_PREFIX.length() );
 		else if( !value.startsWith( VARIABLE_PREFIX ) )
@@ -219,7 +222,7 @@ class UIDefaultsLoader
 			optional = true;
 		}
 
-		String newValue = properties.getProperty( value );
+		String newValue = propertiesGetter.apply( value );
 		if( newValue == null ) {
 			if( optional )
 				return "null";
@@ -227,7 +230,7 @@ class UIDefaultsLoader
 			throw new IllegalArgumentException( "variable or property '" + value + "' not found" );
 		}
 
-		return resolveValue( properties, newValue );
+		return resolveValue( newValue, propertiesGetter );
 	}
 
 	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,

@@ -37,6 +37,7 @@ class FlatThemePropertiesSupport
 	implements DocumentListener
 {
 	private final FlatSyntaxTextArea textArea;
+	private final Function<String, String> propertiesGetter;
 	private final Function<String, String> resolver;
 	private Properties propertiesCache;
 	private final Map<Integer, Object> parsedValueCache = new HashMap<>();
@@ -44,6 +45,9 @@ class FlatThemePropertiesSupport
 	FlatThemePropertiesSupport( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
 
+		propertiesGetter = key -> {
+			return getProperties().getProperty( key );
+		};
 		resolver = v -> {
 			return resolveValue( v );
 		};
@@ -52,7 +56,7 @@ class FlatThemePropertiesSupport
 	}
 
 	private String resolveValue( String value ) {
-		return UIDefaultsLoaderAccessor.resolveValue( getProperties(), value );
+		return UIDefaultsLoaderAccessor.resolveValue( value, propertiesGetter );
 	}
 
 	Object getParsedValueAtLine( int line ) {

@@ -17,7 +17,6 @@
 package com.formdev.flatlaf;
 
 import java.util.Collections;
-import java.util.Properties;
 import java.util.function.Function;
 import com.formdev.flatlaf.UIDefaultsLoader.ValueType;
 
@@ -49,8 +48,8 @@ public class UIDefaultsLoaderAccessor
 	public static Object NULL = ValueType.NULL;
 	public static Object LAZY = ValueType.LAZY;
 
-	public static String resolveValue( Properties properties, String value ) {
-		return UIDefaultsLoader.resolveValue( properties, value );
+	public static String resolveValue( String value, Function<String, String> propertiesGetter ) {
+		return UIDefaultsLoader.resolveValue( value, propertiesGetter );
 	}
 
 	public static Object parseValue( String key, String value, Object[] resultValueType,
