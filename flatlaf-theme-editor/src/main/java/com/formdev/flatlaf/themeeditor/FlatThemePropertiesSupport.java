@@ -17,9 +17,12 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Function;
@@ -42,17 +45,29 @@ class FlatThemePropertiesSupport
 	private Properties propertiesCache;
 	private final Map<Integer, Object> parsedValueCache = new HashMap<>();
 
+	private File[] baseFiles;
+	private long[] baseFilesLastModified;
+	private Properties[] basePropertiesCache;
+
 	FlatThemePropertiesSupport( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
 
 		propertiesGetter = key -> {
-			return getProperties().getProperty( key );
+			return getProperty( key );
 		};
 		resolver = v -> {
 			return resolveValue( v );
 		};
 
 		textArea.getDocument().addDocumentListener( this );
+	}
+
+	void setBaseFiles( List<File> baseFiles ) {
+		int size = baseFiles.size();
+		this.baseFiles = baseFiles.toArray( new File[size] );
+
+		baseFilesLastModified = new long[size];
+		basePropertiesCache = new Properties[size];
 	}
 
 	private String resolveValue( String value ) {
@@ -100,6 +115,37 @@ class FlatThemePropertiesSupport
 			// ignore
 			return null;
 		}
+	}
+
+	private String getProperty( String key ) {
+		// look in current text area
+		String value = getProperties().getProperty( key );
+		if( value != null )
+			return value;
+
+		if( baseFiles == null )
+			return null;
+
+		// look in base properties files
+		for( int i = 0; i < baseFiles.length; i++ ) {
+			long lastModified = baseFiles[i].lastModified();
+			if( baseFilesLastModified[i] != lastModified ) {
+				// (re)load base properties file
+				baseFilesLastModified[i] = lastModified;
+				basePropertiesCache[i] = new Properties();
+				try {
+					basePropertiesCache[i].load( new FileInputStream( baseFiles[i] ) );
+				} catch( IOException ex ) {
+					ex.printStackTrace(); //TODO
+				}
+			}
+
+			value = basePropertiesCache[i].getProperty( key );
+			if( value != null )
+				return value;
+		}
+
+		return null;
 	}
 
 	private Properties getProperties() {

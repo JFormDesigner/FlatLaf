@@ -19,8 +19,10 @@ package com.formdev.flatlaf.themeeditor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import javax.swing.JLayer;
 import javax.swing.JPanel;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -92,6 +94,10 @@ class FlatThemeEditorPane
 	private static Font scaleFont( Font font ) {
 		int newFontSize = UIScale.scale( font.getSize() );
 		return font.deriveFont( (float) newFontSize );
+	}
+
+	void setBaseFiles( List<File> baseFiles ) {
+		textArea.propertiesSupport.setBaseFiles( baseFiles );
 	}
 
 	void load( FileLocation loc ) throws IOException {

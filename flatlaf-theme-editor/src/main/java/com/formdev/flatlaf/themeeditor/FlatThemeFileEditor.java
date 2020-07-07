@@ -16,10 +16,15 @@
 
 package com.formdev.flatlaf.themeeditor;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -39,12 +44,17 @@ public class FlatThemeFileEditor
 			? args[0]
 			: "theme-editor-test.properties" ); // TODO
 
+		List<File> baseFiles = new ArrayList<>();
+		for( int i = 1; i < args.length; i++ )
+			baseFiles.add( new File( args[i] ) );
+
 		SwingUtilities.invokeLater( () -> {
 			FlatLightLaf.install();
 			FlatInspector.install( "ctrl alt shift X" );
 
 			FlatThemeFileEditor frame = new FlatThemeFileEditor();
 
+			frame.themeEditorArea.setBaseFiles( baseFiles );
 			try {
 				frame.themeEditorArea.load( FileLocation.create( file ) );
 			} catch( IOException ex ) {
