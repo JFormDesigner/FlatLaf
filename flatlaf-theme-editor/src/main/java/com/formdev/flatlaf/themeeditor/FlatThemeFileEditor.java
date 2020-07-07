@@ -17,11 +17,13 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -39,6 +41,7 @@ public class FlatThemeFileEditor
 
 		SwingUtilities.invokeLater( () -> {
 			FlatLightLaf.install();
+			FlatInspector.install( "ctrl alt shift X" );
 
 			FlatThemeFileEditor frame = new FlatThemeFileEditor();
 
@@ -47,6 +50,12 @@ public class FlatThemeFileEditor
 			} catch( IOException ex ) {
 				ex.printStackTrace();
 			}
+
+			int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+			((JComponent)frame.getContentPane()).registerKeyboardAction(
+				e -> frame.themeEditorArea.save(),
+				KeyStroke.getKeyStroke( KeyEvent.VK_S, menuShortcutKeyMask ),
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			frame.setSize( Math.min( UIScale.scale( 800 ), screenSize.width ),

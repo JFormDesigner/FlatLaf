@@ -94,7 +94,15 @@ class FlatThemeEditorPane
 		return font.deriveFont( (float) newFontSize );
 	}
 
-	public void load( FileLocation loc ) throws IOException {
+	void load( FileLocation loc ) throws IOException {
 		textArea.load( loc, StandardCharsets.ISO_8859_1 );
+	}
+
+	void save() {
+		try {
+			textArea.save();
+		} catch( IOException ex ) {
+			ex.printStackTrace(); // TODO
+		}
 	}
 }
