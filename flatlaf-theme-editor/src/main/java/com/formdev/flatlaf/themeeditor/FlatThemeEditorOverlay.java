@@ -103,11 +103,18 @@ class FlatThemeEditorOverlay
 				g.setColor( color );
 				g.fillRect( px, r.y, pw, r.height );
 
+				// if color is semi-transparent paint also none-transparent color
+				int alpha = color.getAlpha();
+				if( alpha != 255 && pw > r.height * 2 ) {
+					g.setColor( new Color( color.getRGB() ) );
+					g.fillRect( px + pw - r.height, r.y, r.height, r.height );
+				}
+
 				// paint text
 				int textX = px - maxTextWidth;
 				if( textX > r.x + gap) {
 					float[] hsl = HSLColor.fromRGB( color );
-					String hslStr = String.format( "HSL %d %d %d",
+					String hslStr = String.format( "HSL %3d %2d %2d",
 						Math.round( hsl[0] ), Math.round( hsl[1] ), Math.round( hsl[2] ) );
 					g.setColor( textArea.getForeground() );
 					FlatUIUtils.drawString( textArea, g, hslStr, textX,
@@ -120,6 +127,10 @@ class FlatThemeEditorOverlay
 	}
 
 	private Color getColorInLine( FlatSyntaxTextArea textArea, int line ) {
+		Object value = textArea.propertiesSupport.getParsedValueAtLine( line );
+		if( value instanceof Color )
+			return (Color) value;
+
 		Token token = textArea.getTokenListForLine( line );
 		for( Token t = token; t != null && t.isPaintable(); t = t.getNextToken() ) {
 			if( t.getType() == FlatThemeTokenMaker.TOKEN_COLOR ) {

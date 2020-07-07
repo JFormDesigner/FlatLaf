@@ -34,6 +34,7 @@ class FlatSyntaxTextArea
 {
 	private boolean useColorOfColorTokens;
 
+	final FlatThemePropertiesSupport propertiesSupport = new FlatThemePropertiesSupport( this );
 	private final Map<String, Color> parsedColorsMap = new HashMap<>();
 
 	FlatSyntaxTextArea() {

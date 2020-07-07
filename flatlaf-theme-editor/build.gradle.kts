@@ -21,5 +21,5 @@ plugins {
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 
-	implementation( "com.fifesoft:rsyntaxtextarea:3.1.0" )
+	implementation( "com.fifesoft:rsyntaxtextarea:3.1.1" )
 }

@@ -167,7 +167,8 @@ class UIDefaultsLoader
 
 				String value = resolveValue( properties, (String) e.getValue() );
 				try {
-					globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver, addonClassLoaders ) );
+					globals.put( key.substring( GLOBAL_PREFIX.length() ),
+						parseValue( key, value, null, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( Level.SEVERE, key, value, ex );
 				}
@@ -192,7 +193,7 @@ class UIDefaultsLoader
 
 				String value = resolveValue( properties, (String) e.getValue() );
 				try {
-					defaults.put( key, parseValue( key, value, resolver, addonClassLoaders ) );
+					defaults.put( key, parseValue( key, value, null, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( Level.SEVERE, key, value, ex );
 				}
@@ -206,7 +207,7 @@ class UIDefaultsLoader
 		FlatLaf.LOG.log( level, "FlatLaf: Failed to parse: '" + key + '=' + value + '\'', ex );
 	}
 
-	private static String resolveValue( Properties properties, String value ) {
+	static String resolveValue( Properties properties, String value ) {
 		if( value.startsWith( PROPERTY_PREFIX ) )
 			value = value.substring( PROPERTY_PREFIX.length() );
 		else if( !value.startsWith( VARIABLE_PREFIX ) )
@@ -229,26 +230,34 @@ class UIDefaultsLoader
 		return resolveValue( properties, newValue );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
-		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER }
+	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
+		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
+
+	private static ValueType[] tempResultValueType = new ValueType[1];
 
 	static Object parseValue( String key, String value ) {
-		return parseValue( key, value, v -> v, Collections.emptyList() );
+		return parseValue( key, value, null, v -> v, Collections.emptyList() );
 	}
 
-	private static Object parseValue( String key, String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
+	static Object parseValue( String key, String value, ValueType[] resultValueType,
+		Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
+	{
+		if( resultValueType == null )
+			resultValueType = tempResultValueType;
+
 		value = value.trim();
 
 		// null, false, true
 		switch( value ) {
-			case "null":	return null;
-			case "false":	return false;
-			case "true":	return true;
+			case "null":	resultValueType[0] = ValueType.NULL; return null;
+			case "false":	resultValueType[0] = ValueType.BOOLEAN; return false;
+			case "true":	resultValueType[0] = ValueType.BOOLEAN; return true;
 		}
 
 		// check for function "lazy"
 		//     Syntax: lazy(uiKey)
 		if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
+			resultValueType[0] = ValueType.LAZY;
 			String uiKey = value.substring( 5, value.length() - 1 ).trim();
 			return (LazyValue) t -> {
 				return lazyUIManagerGet( uiKey );
@@ -301,6 +310,8 @@ class UIDefaultsLoader
 				valueType = ValueType.GRAYFILTER;
 		}
 
+		resultValueType[0] = valueType;
+
 		// parse value
 		switch( valueType ) {
 			case STRING:		return value;
@@ -323,20 +334,27 @@ class UIDefaultsLoader
 			default:
 				// colors
 				Object color = parseColorOrFunction( value, resolver, false );
-				if( color != null )
+				if( color != null ) {
+					resultValueType[0] = ValueType.COLOR;
 					return color;
+				}
 
 				// integer
 				Integer integer = parseInteger( value, false );
-				if( integer != null )
+				if( integer != null ) {
+					resultValueType[0] = ValueType.INTEGER;
 					return integer;
+				}
 
 				// float
 				Float f = parseFloat( value, false );
-				if( f != null )
+				if( f != null ) {
+					resultValueType[0] = ValueType.FLOAT;
 					return f;
+				}
 
 				// string
+				resultValueType[0] = ValueType.STRING;
 				return value;
 		}
 	}
