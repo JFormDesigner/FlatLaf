@@ -120,6 +120,9 @@ public class UIDefaultsDump
 //		}
 
 //		dumpIntelliJThemes( dir );
+
+		// dump UI keys
+		UIDefaultsKeysDump.main( new String[0] );
 	}
 
 	@SuppressWarnings( "unused" )

@@ -23,4 +23,5 @@ dependencies {
 	implementation( project( ":flatlaf-extras" ) )
 
 	implementation( "com.fifesoft:rsyntaxtextarea:3.1.1" )
+	implementation( "com.fifesoft:autocomplete:3.1.0" )
 }

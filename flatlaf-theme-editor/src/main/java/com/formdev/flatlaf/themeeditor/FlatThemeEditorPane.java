@@ -25,6 +25,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.swing.JLayer;
 import javax.swing.JPanel;
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
@@ -73,6 +75,13 @@ class FlatThemeEditorPane
 		SyntaxScheme scheme = textArea.getSyntaxScheme();
 		scheme.getStyle( FlatThemeTokenMaker.TOKEN_COLOR ).background = new Color( 0x0a000000, true );
 		scheme.getStyle( FlatThemeTokenMaker.TOKEN_VARIABLE ).background = new Color( 0x1800cc00, true );
+
+		// autocomplete
+		CompletionProvider provider = new FlatCompletionProvider();
+		AutoCompletion ac = new AutoCompletion( provider );
+		ac.setChoicesWindowSize( UIScale.scale( 300 ), UIScale.scale( 400 ) );
+		ac.setDescriptionWindowSize( UIScale.scale( 300 ), UIScale.scale( 400 ) );
+		ac.install( textArea );
 
 		// create overlay layer
 		JLayer<FlatSyntaxTextArea> overlay = new JLayer<>( textArea, new FlatThemeEditorOverlay() );
