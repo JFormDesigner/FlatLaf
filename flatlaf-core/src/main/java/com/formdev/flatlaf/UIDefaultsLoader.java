@@ -211,6 +211,8 @@ class UIDefaultsLoader
 	}
 
 	static String resolveValue( String value, Function<String, String> propertiesGetter ) {
+		value = value.trim();
+
 		if( value.startsWith( PROPERTY_PREFIX ) )
 			value = value.substring( PROPERTY_PREFIX.length() );
 		else if( !value.startsWith( VARIABLE_PREFIX ) )
