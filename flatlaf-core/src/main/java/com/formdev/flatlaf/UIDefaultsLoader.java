@@ -212,6 +212,7 @@ class UIDefaultsLoader
 
 	static String resolveValue( String value, Function<String, String> propertiesGetter ) {
 		value = value.trim();
+		String value0 = value;
 
 		if( value.startsWith( PROPERTY_PREFIX ) )
 			value = value.substring( PROPERTY_PREFIX.length() );
@@ -231,6 +232,9 @@ class UIDefaultsLoader
 
 			throw new IllegalArgumentException( "variable or property '" + value + "' not found" );
 		}
+
+		if( newValue.equals( value0 ) )
+			throw new IllegalArgumentException( "endless recursion in variable or property '" + value + "'" );
 
 		return resolveValue( newValue, propertiesGetter );
 	}
