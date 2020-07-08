@@ -71,6 +71,21 @@ class FlatCompletionProvider
 		return (provider != null) ? provider.getCompletions( comp ) : null;
 	}
 
+	@Override
+	public boolean isAutoActivateOkay( JTextComponent tc ) {
+		int caretPosition = tc.getCaretPosition();
+		if( caretPosition <= 0 )
+			return false;
+
+		try {
+			char ch = tc.getText( caretPosition - 1, 1 ).charAt( 0 );
+			return ch == '$';
+		} catch( BadLocationException | IndexOutOfBoundsException ex ) {
+			// ignore
+			return false;
+		}
+	}
+
 	private CompletionProvider getProviderFor( JTextComponent comp ) {
 		RSyntaxTextArea rsta = (RSyntaxTextArea) comp;
 		try {
@@ -90,19 +105,43 @@ class FlatCompletionProvider
 			if( lineBeforeCaret.trim().startsWith( "#" ) )
 				return null;
 
-			if( lineBeforeCaret.indexOf( '=' ) < 0 ) {
-				if( keyProvider == null )
-					keyProvider = KeyCompletionProvider.getInstance();
-				return keyProvider;
-			} else {
-				if( valueProvider == null )
-					valueProvider = new ValueCompletionProvider();
-				return valueProvider;
+			// key
+			if( lineBeforeCaret.indexOf( '=' ) < 0 )
+				return getKeyProvider();
+
+			// value
+			for( int i = lineBeforeCaret.length() - 1; i >= 0; i-- ) {
+				switch( lineBeforeCaret.charAt( i ) ) {
+					case '=':
+					case '(':
+						return getValueProvider();
+
+					case '$':
+						return getKeyProvider();
+
+					case ' ':
+					case '\t':
+						return null;
+				}
 			}
+			return null;
+
 		} catch( BadLocationException ex ) {
 			// ignore
 			return null;
 		}
+	}
+
+	private CompletionProvider getKeyProvider() {
+		if( keyProvider == null )
+			keyProvider = KeyCompletionProvider.getInstance();
+		return keyProvider;
+	}
+
+	private CompletionProvider getValueProvider() {
+		if( valueProvider == null )
+			valueProvider = new ValueCompletionProvider();
+		return valueProvider;
 	}
 
 	//---- class KeyCompletionProvider ----------------------------------------
@@ -205,7 +244,13 @@ class FlatCompletionProvider
 				params.add( param );
 			}
 
-			FunctionCompletion f = new FunctionCompletion( this, name, null );
+			FunctionCompletion f = new FunctionCompletion( this, name, null ) {
+				@Override
+				public String toString() {
+					return getDefinitionString().replace( "(", " (" );
+				}
+			};
+
 			f.setParams( params );
 			addCompletion( f );
 		}

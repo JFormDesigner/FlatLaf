@@ -79,6 +79,7 @@ class FlatThemeEditorPane
 		// autocomplete
 		CompletionProvider provider = new FlatCompletionProvider();
 		AutoCompletion ac = new AutoCompletion( provider );
+		ac.setAutoActivationEnabled( true );
 		ac.setParameterAssistanceEnabled( true );
 		ac.setChoicesWindowSize( UIScale.scale( 300 ), UIScale.scale( 400 ) );
 		ac.setDescriptionWindowSize( UIScale.scale( 300 ), UIScale.scale( 400 ) );
