@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
@@ -133,8 +134,8 @@ class FlatThemePropertiesSupport
 				// (re)load base properties file
 				baseFilesLastModified[i] = lastModified;
 				basePropertiesCache[i] = new Properties();
-				try {
-					basePropertiesCache[i].load( new FileInputStream( baseFiles[i] ) );
+				try( InputStream in = new FileInputStream( baseFiles[i] ) ) {
+					basePropertiesCache[i].load( in );
 				} catch( IOException ex ) {
 					ex.printStackTrace(); //TODO
 				}
