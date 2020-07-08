@@ -42,6 +42,7 @@ class FlatCompletionProvider
 	extends CompletionProviderBase
 {
 	private KeyCompletionProvider keyProvider;
+	private ReferenceCompletionProvider referenceProvider;
 	private ValueCompletionProvider valueProvider;
 
 	FlatCompletionProvider() {
@@ -72,18 +73,9 @@ class FlatCompletionProvider
 	}
 
 	@Override
-	public boolean isAutoActivateOkay( JTextComponent tc ) {
-		int caretPosition = tc.getCaretPosition();
-		if( caretPosition <= 0 )
-			return false;
-
-		try {
-			char ch = tc.getText( caretPosition - 1, 1 ).charAt( 0 );
-			return ch == '$';
-		} catch( BadLocationException | IndexOutOfBoundsException ex ) {
-			// ignore
-			return false;
-		}
+	public boolean isAutoActivateOkay( JTextComponent comp ) {
+		CompletionProvider provider = getProviderFor( comp );
+		return (provider != null) ? provider.isAutoActivateOkay( comp ) : null;
 	}
 
 	private CompletionProvider getProviderFor( JTextComponent comp ) {
@@ -117,7 +109,7 @@ class FlatCompletionProvider
 						return getValueProvider();
 
 					case '$':
-						return getKeyProvider();
+						return getReferenceProvider();
 
 					case ' ':
 					case '\t':
@@ -134,8 +126,14 @@ class FlatCompletionProvider
 
 	private CompletionProvider getKeyProvider() {
 		if( keyProvider == null )
-			keyProvider = KeyCompletionProvider.getInstance();
+			keyProvider = new KeyCompletionProvider();
 		return keyProvider;
+	}
+
+	private CompletionProvider getReferenceProvider() {
+		if( referenceProvider == null )
+			referenceProvider = new ReferenceCompletionProvider();
+		return referenceProvider;
 	}
 
 	private CompletionProvider getValueProvider() {
@@ -144,20 +142,20 @@ class FlatCompletionProvider
 		return valueProvider;
 	}
 
-	//---- class KeyCompletionProvider ----------------------------------------
+	//---- class KnownKeysCompletionProvider ----------------------------------
 
-	private static class KeyCompletionProvider
+	private static final class KnownKeysCompletionProvider
 		extends DefaultCompletionProvider
 	{
-		private static KeyCompletionProvider instance;
+		private static KnownKeysCompletionProvider instance;
 
-		static KeyCompletionProvider getInstance() {
+		static KnownKeysCompletionProvider getInstance() {
 			if( instance == null )
-				instance = new KeyCompletionProvider();
+				instance = new KnownKeysCompletionProvider();
 			return instance;
 		}
 
-		KeyCompletionProvider() {
+		KnownKeysCompletionProvider() {
 			// load all keys
 			HashSet<String> keys = new HashSet<>();
 			try {
@@ -179,8 +177,11 @@ class FlatCompletionProvider
 			HashSet<String> keyParts = new HashSet<>();
 			for( String key : keys ) {
 				int delimIndex = key.length() + 1;
-				while( (delimIndex = key.lastIndexOf( '.', delimIndex - 1 )) >= 0 )
-					keyParts.add( key.substring( 0, delimIndex + 1 ) );
+				while( (delimIndex = key.lastIndexOf( '.', delimIndex - 1 )) >= 0 ) {
+					String part = key.substring( 0, delimIndex );
+					if( !keys.contains( part ) )
+						keyParts.add( part );
+				}
 			}
 
 			// add key parts
@@ -193,6 +194,51 @@ class FlatCompletionProvider
 		@Override
 		protected boolean isValidChar( char ch ) {
 			return super.isValidChar( ch ) || ch == '.';
+		}
+	}
+
+	//---- class KeyCompletionProvider ----------------------------------------
+
+	private static class KeyCompletionProvider
+		extends DefaultCompletionProvider
+	{
+		KeyCompletionProvider() {
+			setParent( KnownKeysCompletionProvider.getInstance() );
+		}
+
+		@Override
+		protected boolean isValidChar( char ch ) {
+			return super.isValidChar( ch ) || ch == '.';
+		}
+
+		@Override
+		public boolean isAutoActivateOkay( JTextComponent comp ) {
+			int caretPosition = comp.getCaretPosition();
+			if( caretPosition <= 0 )
+				return false;
+
+			try {
+				char ch = comp.getText( caretPosition - 1, 1 ).charAt( 0 );
+				return isAutoActivateOkay( ch );
+			} catch( BadLocationException | IndexOutOfBoundsException ex ) {
+				// ignore
+				return false;
+			}
+		}
+
+		protected boolean isAutoActivateOkay( char ch ) {
+			return Character.isLetter( ch ) || ch == '.';
+		}
+	}
+
+	//---- class ReferenceCompletionProvider ----------------------------------
+
+	private static class ReferenceCompletionProvider
+		extends KeyCompletionProvider
+	{
+		@Override
+		protected boolean isAutoActivateOkay( char ch ) {
+			return ch == '$' || super.isAutoActivateOkay( ch );
 		}
 	}
 
@@ -253,6 +299,11 @@ class FlatCompletionProvider
 
 			f.setParams( params );
 			addCompletion( f );
+		}
+
+		@Override
+		public boolean isAutoActivateOkay( JTextComponent tc ) {
+			return false;
 		}
 	}
 }
