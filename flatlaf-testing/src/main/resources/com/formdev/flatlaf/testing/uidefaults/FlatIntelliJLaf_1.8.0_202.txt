@@ -38,8 +38,6 @@
 
 + CheckBox.icon.style            filled
 
-+ CheckBox.icon[filled].focusWidth 2
-
 - CheckBox.icon[filled].selectedFocusedCheckmarkColor #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
 - ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]

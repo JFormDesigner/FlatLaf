@@ -412,6 +412,10 @@ public class IntelliJTheme
 
 			String newKey = checkboxKeyMapping.get( key );
 			if( newKey != null ) {
+				String checkBoxIconPrefix = "CheckBox.icon.";
+				if( !dark && newKey.startsWith( checkBoxIconPrefix ) )
+					newKey = "CheckBox.icon[filled].".concat( newKey.substring( checkBoxIconPrefix.length() ) );
+
 				ColorUIResource color = toColor( (String) value );
 				if( color != null ) {
 					defaults.put( newKey, color );
@@ -444,12 +448,23 @@ public class IntelliJTheme
 
 		// remove hover and pressed colors
 		if( checkboxModified ) {
+			defaults.remove( "CheckBox.icon.focusWidth" );
 			defaults.remove( "CheckBox.icon.hoverBorderColor" );
 			defaults.remove( "CheckBox.icon.focusedBackground" );
 			defaults.remove( "CheckBox.icon.hoverBackground" );
 			defaults.remove( "CheckBox.icon.pressedBackground" );
+			defaults.remove( "CheckBox.icon.selectedFocusedBackground" );
 			defaults.remove( "CheckBox.icon.selectedHoverBackground" );
 			defaults.remove( "CheckBox.icon.selectedPressedBackground" );
+
+			defaults.remove( "CheckBox.icon[filled].focusWidth" );
+			defaults.remove( "CheckBox.icon[filled].hoverBorderColor" );
+			defaults.remove( "CheckBox.icon[filled].focusedBackground" );
+			defaults.remove( "CheckBox.icon[filled].hoverBackground" );
+			defaults.remove( "CheckBox.icon[filled].pressedBackground" );
+			defaults.remove( "CheckBox.icon[filled].selectedFocusedBackground" );
+			defaults.remove( "CheckBox.icon[filled].selectedHoverBackground" );
+			defaults.remove( "CheckBox.icon[filled].selectedPressedBackground" );
 		}
 
 		// copy values

@@ -76,7 +76,6 @@ CheckBox.icon.selectedFocusedBorderColor
 CheckBox.icon.style
 CheckBox.iconTextGap
 CheckBox.icon[filled].checkmarkColor
-CheckBox.icon[filled].focusWidth
 CheckBox.icon[filled].selectedBackground
 CheckBox.icon[filled].selectedBorderColor
 CheckBox.icon[filled].selectedFocusedBackground
