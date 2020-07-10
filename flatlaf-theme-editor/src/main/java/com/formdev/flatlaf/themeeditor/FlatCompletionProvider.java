@@ -78,7 +78,7 @@ class FlatCompletionProvider
 	@Override
 	public boolean isAutoActivateOkay( JTextComponent comp ) {
 		CompletionProvider provider = getProviderFor( comp );
-		return (provider != null) ? provider.isAutoActivateOkay( comp ) : null;
+		return (provider != null) ? provider.isAutoActivateOkay( comp ) : false;
 	}
 
 	private CompletionProvider getProviderFor( JTextComponent comp ) {
