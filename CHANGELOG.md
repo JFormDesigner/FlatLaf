@@ -7,6 +7,8 @@ FlatLaf Change Log
 - Custom window decorations: Improved/fixed window border color in dark themes.
 - Custom window decorations: Hide window border if window is maximized.
 - Custom window decorations: Center title if menu bar is embedded.
+- Custom window decorations: Cursor of components (e.g. TextField) was not
+  changed. (issue #125)
 - InternalFrame: Use default icon in internal frames. (issue #122)
 
 

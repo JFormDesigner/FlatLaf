@@ -17,8 +17,6 @@
 package com.formdev.flatlaf.ui;
 
 import static java.awt.Cursor.*;
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -48,7 +46,6 @@ import com.formdev.flatlaf.util.UIScale;
  * @author Karl Tauber
  */
 public class FlatWindowResizer
-	extends JComponent
 	implements PropertyChangeListener, WindowStateListener, ComponentListener
 {
 	protected final static Integer WINDOW_RESIZER_LAYER = JLayeredPane.DRAG_LAYER + 1;
@@ -60,22 +57,32 @@ public class FlatWindowResizer
 	protected final boolean honorFrameMinimumSizeOnResize = UIManager.getBoolean( "RootPane.honorFrameMinimumSizeOnResize" );
 	protected final boolean honorDialogMinimumSizeOnResize = UIManager.getBoolean( "RootPane.honorDialogMinimumSizeOnResize" );
 
+	protected final JComponent north;
+	protected final JComponent south;
+	protected final JComponent west;
+	protected final JComponent east;
+
 	protected Window window;
 
 	public FlatWindowResizer( JRootPane rootPane ) {
 		this.rootPane = rootPane;
 
-		setLayout( new BorderLayout() );
-		add( createDragBorderComponent( NW_RESIZE_CURSOR, N_RESIZE_CURSOR, NE_RESIZE_CURSOR ), BorderLayout.NORTH );
-		add( createDragBorderComponent( SW_RESIZE_CURSOR, S_RESIZE_CURSOR, SE_RESIZE_CURSOR ), BorderLayout.SOUTH );
-		add( createDragBorderComponent( NW_RESIZE_CURSOR, W_RESIZE_CURSOR, SW_RESIZE_CURSOR ), BorderLayout.WEST );
-		add( createDragBorderComponent( NE_RESIZE_CURSOR, E_RESIZE_CURSOR, SE_RESIZE_CURSOR ), BorderLayout.EAST );
+		north = createDragBorderComponent( NW_RESIZE_CURSOR, N_RESIZE_CURSOR, NE_RESIZE_CURSOR );
+		south = createDragBorderComponent( SW_RESIZE_CURSOR, S_RESIZE_CURSOR, SE_RESIZE_CURSOR );
+		west = createDragBorderComponent( NW_RESIZE_CURSOR, W_RESIZE_CURSOR, SW_RESIZE_CURSOR );
+		east = createDragBorderComponent( NE_RESIZE_CURSOR, E_RESIZE_CURSOR, SE_RESIZE_CURSOR );
+
+		JLayeredPane layeredPane = rootPane.getLayeredPane();
+		layeredPane.add( north, WINDOW_RESIZER_LAYER );
+		layeredPane.add( south, WINDOW_RESIZER_LAYER );
+		layeredPane.add( west, WINDOW_RESIZER_LAYER );
+		layeredPane.add( east, WINDOW_RESIZER_LAYER );
 
 		rootPane.addComponentListener( this );
-		rootPane.getLayeredPane().add( this, WINDOW_RESIZER_LAYER );
+		rootPane.addPropertyChangeListener( "ancestor", this );
 
 		if( rootPane.isDisplayable() )
-			setBounds( 0, 0, rootPane.getWidth(), rootPane.getHeight() );
+			addNotify();
 	}
 
 	protected DragBorderComponent createDragBorderComponent( int leadingResizeDir, int centerResizeDir, int trailingResizeDir ) {
@@ -83,14 +90,40 @@ public class FlatWindowResizer
 	}
 
 	public void uninstall() {
+		removeNotify();
+
 		rootPane.removeComponentListener( this );
-		rootPane.getLayeredPane().remove( this );
+		rootPane.removePropertyChangeListener( "ancestor", this );
+
+		JLayeredPane layeredPane = rootPane.getLayeredPane();
+		layeredPane.remove( north );
+		layeredPane.remove( south );
+		layeredPane.remove( west );
+		layeredPane.remove( east );
 	}
 
-	@Override
-	public void addNotify() {
-		super.addNotify();
+	public void doLayout() {
+		if( !north.isVisible() )
+			return;
 
+		int x = 0;
+		int y = 0;
+		int width = rootPane.getWidth();
+		int height = rootPane.getHeight();
+		if( width == 0 || height == 0 )
+			return;
+
+		int thickness = UIScale.scale( borderDragThickness );
+		int y2 = y + thickness;
+		int height2 = height - (thickness * 2);
+
+		north.setBounds( x, y, width, thickness );
+		south.setBounds( x, y + height - thickness, width, thickness );
+		west.setBounds( x, y2, thickness, height2 );
+		east.setBounds( x + width - thickness, y2, thickness, height2 );
+	}
+
+	protected void addNotify() {
 		Container parent = rootPane.getParent();
 		window = (parent instanceof Window) ? (Window) parent : null;
 		if( window instanceof Frame ) {
@@ -101,10 +134,7 @@ public class FlatWindowResizer
 		updateVisibility();
 	}
 
-	@Override
-	public void removeNotify() {
-		super.removeNotify();
-
+	protected void removeNotify() {
 		if( window instanceof Frame ) {
 			window.removePropertyChangeListener( "resizable", this );
 			window.removeWindowStateListener( this );
@@ -114,25 +144,26 @@ public class FlatWindowResizer
 		updateVisibility();
 	}
 
-	@Override
-	protected void paintChildren( Graphics g ) {
-		super.paintChildren( g );
-
-		// this is necessary because Dialog.setResizable() does not fire events
-		if( window instanceof Dialog )
-			updateVisibility();
-	}
-
-	private void updateVisibility() {
+	protected void updateVisibility() {
 		boolean visible = isWindowResizable();
-		if( visible == getComponent( 0 ).isVisible() )
+		if( visible == north.isVisible() )
 			return;
 
-		for( Component c : getComponents() )
-			c.setVisible( visible );
+		north.setVisible( visible );
+		south.setVisible( visible );
+		west.setVisible( visible );
+
+		// The east component is not hidden, instead its bounds are set to 0,0,1,1 and
+		// it is disabled. This is necessary so that DragBorderComponent.paintComponent() is invoked.
+		east.setEnabled( visible );
+		if( visible ) {
+			east.setVisible( true ); // necessary because it is initially invisible
+			doLayout();
+		} else
+			east.setBounds( 0, 0, 1, 1 );
 	}
 
-	private boolean isWindowResizable() {
+	protected boolean isWindowResizable() {
 		if( window instanceof Frame )
 			return ((Frame)window).isResizable() && (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) == 0;
 		if( window instanceof Dialog )
@@ -142,7 +173,18 @@ public class FlatWindowResizer
 
 	@Override
 	public void propertyChange( PropertyChangeEvent e ) {
-		updateVisibility();
+		switch( e.getPropertyName() ) {
+			case "ancestor":
+				if( e.getNewValue() != null )
+					addNotify();
+				else
+					removeNotify();
+				break;
+
+			case "resizable":
+				updateVisibility();
+				break;
+		}
 	}
 
 	@Override
@@ -152,8 +194,7 @@ public class FlatWindowResizer
 
 	@Override
 	public void componentResized( ComponentEvent e ) {
-		setBounds( 0, 0, rootPane.getWidth(), rootPane.getHeight() );
-		validate();
+		doLayout();
 	}
 
 	@Override public void componentMoved( ComponentEvent e ) {}
@@ -201,13 +242,19 @@ public class FlatWindowResizer
 			return new Dimension( thickness, thickness );
 		}
 
-/*debug
 		@Override
 		protected void paintComponent( Graphics g ) {
+			super.paintChildren( g );
+
+			// this is necessary because Dialog.setResizable() does not fire events
+			if( window instanceof Dialog )
+				updateVisibility();
+
+/*debug
 			g.setColor( java.awt.Color.red );
 			g.drawRect( 0, 0, getWidth() - 1, getHeight() - 1 );
-		}
 debug*/
+		}
 
 		@Override
 		public void mouseClicked( MouseEvent e ) {
@@ -316,8 +363,7 @@ debug*/
 				window.setBounds( newBounds );
 
 				// immediately layout drag border components
-				FlatWindowResizer.this.setBounds( 0, 0, newBounds.width, newBounds.height );
-				FlatWindowResizer.this.validate();
+				FlatWindowResizer.this.doLayout();
 
 				if( Toolkit.getDefaultToolkit().isDynamicLayoutActive() ) {
 					window.validate();
