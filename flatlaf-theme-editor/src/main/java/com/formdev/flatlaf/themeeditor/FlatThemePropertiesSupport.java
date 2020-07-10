@@ -23,9 +23,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.function.Function;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -49,6 +51,8 @@ class FlatThemePropertiesSupport
 	private File[] baseFiles;
 	private long[] baseFilesLastModified;
 	private Properties[] basePropertiesCache;
+
+	private Set<String> allKeysCache;
 
 	FlatThemePropertiesSupport( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
@@ -129,19 +133,7 @@ class FlatThemePropertiesSupport
 
 		// look in base properties files
 		for( int i = 0; i < baseFiles.length; i++ ) {
-			long lastModified = baseFiles[i].lastModified();
-			if( baseFilesLastModified[i] != lastModified ) {
-				// (re)load base properties file
-				baseFilesLastModified[i] = lastModified;
-				basePropertiesCache[i] = new Properties();
-				try( InputStream in = new FileInputStream( baseFiles[i] ) ) {
-					basePropertiesCache[i].load( in );
-				} catch( IOException ex ) {
-					ex.printStackTrace(); //TODO
-				}
-			}
-
-			value = basePropertiesCache[i].getProperty( key );
+			value = getBaseProperties( i ).getProperty( key );
 			if( value != null )
 				return value;
 		}
@@ -162,9 +154,43 @@ class FlatThemePropertiesSupport
 		return propertiesCache;
 	}
 
+	private Properties getBaseProperties( int index ) {
+		long lastModified = baseFiles[index].lastModified();
+		if( baseFilesLastModified[index] != lastModified || basePropertiesCache[index] == null ) {
+			// (re)load base properties file
+			baseFilesLastModified[index] = lastModified;
+			basePropertiesCache[index] = new Properties();
+			try( InputStream in = new FileInputStream( baseFiles[index] ) ) {
+				basePropertiesCache[index].load( in );
+			} catch( IOException ex ) {
+				ex.printStackTrace(); //TODO
+			}
+		}
+
+		return basePropertiesCache[index];
+	}
+
+	Set<String> getAllKeys() {
+		if( allKeysCache != null )
+			return allKeysCache;
+
+		allKeysCache = new HashSet<>();
+
+		for( Object key : getProperties().keySet() )
+			allKeysCache.add( (String) key );
+
+		for( int i = 0; i < baseFiles.length; i++ ) {
+			for( Object key : getBaseProperties( i ).keySet() )
+				allKeysCache.add( (String) key );
+		}
+
+		return allKeysCache;
+	}
+
 	private void clearCache() {
 		propertiesCache = null;
 		parsedValueCache.clear();
+		allKeysCache = null;
 	}
 
 	//---- interface DocumentListener ----

@@ -22,10 +22,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
+import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.CompletionProviderBase;
@@ -109,10 +112,12 @@ class FlatCompletionProvider
 						return getValueProvider();
 
 					case '$':
+					case '@':
 						return getReferenceProvider();
 
 					case ' ':
 					case '\t':
+					case '#': // colors
 						return null;
 				}
 			}
@@ -126,7 +131,7 @@ class FlatCompletionProvider
 
 	private CompletionProvider getKeyProvider() {
 		if( keyProvider == null )
-			keyProvider = new KeyCompletionProvider();
+			keyProvider = KeyCompletionProvider.getInstance();
 		return keyProvider;
 	}
 
@@ -142,20 +147,25 @@ class FlatCompletionProvider
 		return valueProvider;
 	}
 
-	//---- class KnownKeysCompletionProvider ----------------------------------
+	//---- class KeyCompletionProvider ----------------------------------------
 
-	private static final class KnownKeysCompletionProvider
-		extends DefaultCompletionProvider
+	/**
+	 * A completion provider for keys, which always uses all known/predefined keys.
+	 */
+	private static final class KeyCompletionProvider
+		extends BaseCompletionProvider
 	{
-		private static KnownKeysCompletionProvider instance;
+		private static KeyCompletionProvider instance;
 
-		static KnownKeysCompletionProvider getInstance() {
+		static KeyCompletionProvider getInstance() {
 			if( instance == null )
-				instance = new KnownKeysCompletionProvider();
+				instance = new KeyCompletionProvider();
 			return instance;
 		}
 
-		KnownKeysCompletionProvider() {
+		KeyCompletionProvider() {
+			setAutoActivationRules( true, "." );
+
 			// load all keys
 			HashSet<String> keys = new HashSet<>();
 			try {
@@ -197,19 +207,14 @@ class FlatCompletionProvider
 		}
 	}
 
-	//---- class KeyCompletionProvider ----------------------------------------
+	//---- class BaseCompletionProvider ---------------------------------------
 
-	private static class KeyCompletionProvider
+	//TODO remove if https://github.com/bobbylight/AutoComplete/issues/77 is fixed
+	private static class BaseCompletionProvider
 		extends DefaultCompletionProvider
 	{
-		KeyCompletionProvider() {
-			setParent( KnownKeysCompletionProvider.getInstance() );
-		}
-
-		@Override
-		protected boolean isValidChar( char ch ) {
-			return super.isValidChar( ch ) || ch == '.';
-		}
+		private boolean autoActivateAfterLetters;
+		private String autoActivateChars;
 
 		@Override
 		public boolean isAutoActivateOkay( JTextComponent comp ) {
@@ -219,36 +224,90 @@ class FlatCompletionProvider
 
 			try {
 				char ch = comp.getText( caretPosition - 1, 1 ).charAt( 0 );
-				return isAutoActivateOkay( ch );
+				return (autoActivateAfterLetters && Character.isLetter( ch )) ||
+					(autoActivateChars != null && autoActivateChars.indexOf( ch ) >= 0);
 			} catch( BadLocationException | IndexOutOfBoundsException ex ) {
 				// ignore
 				return false;
 			}
 		}
 
-		protected boolean isAutoActivateOkay( char ch ) {
-			return Character.isLetter( ch ) || ch == '.';
+		@Override
+		public void setAutoActivationRules( boolean letters, String others ) {
+			autoActivateAfterLetters = letters;
+			autoActivateChars = others;
 		}
 	}
 
 	//---- class ReferenceCompletionProvider ----------------------------------
 
+	/**
+	 * A completion provider for references within values. Only keys defined
+	 * in current properties file and in base properties files are used.
+	 */
 	private static class ReferenceCompletionProvider
-		extends KeyCompletionProvider
+		extends BaseCompletionProvider
 	{
+		private Set<String> lastKeys;
+
+		ReferenceCompletionProvider() {
+			setAutoActivationRules( true, "$@." );
+		}
+
 		@Override
-		protected boolean isAutoActivateOkay( char ch ) {
-			return ch == '$' || super.isAutoActivateOkay( ch );
+		protected boolean isValidChar( char ch ) {
+			return super.isValidChar( ch ) || ch == '.' || ch == '$' || ch == '@';
+		}
+
+		@Override
+		protected List<Completion> getCompletionsImpl( JTextComponent comp ) {
+			updateCompletions( comp );
+			return super.getCompletionsImpl( comp );
+		}
+
+		@Override
+		public List<Completion> getCompletionsAt( JTextComponent comp, Point pt ) {
+			updateCompletions( comp );
+			return super.getCompletionsAt( comp, pt );
+		}
+
+		@Override
+		public List<ParameterizedCompletion> getParameterizedCompletions( JTextComponent comp ) {
+			updateCompletions( comp );
+			return super.getParameterizedCompletions( comp );
+		}
+
+		private void updateCompletions( JTextComponent comp ) {
+			FlatSyntaxTextArea fsta = (FlatSyntaxTextArea) comp;
+			Set<String> keys = fsta.propertiesSupport.getAllKeys();
+			if( keys == lastKeys )
+				return;
+
+			completions.clear();
+			for( String key : keys ) {
+				if( key.startsWith( "*." ) )
+					continue;
+
+				if( !key.startsWith( "@" ) )
+					key = "$".concat( key );
+
+				completions.add( new BasicCompletion( this, key ) );
+			}
+			Collections.sort(completions);
 		}
 	}
 
 	//---- class ValueCompletionProvider --------------------------------------
 
+	/**
+	 * A completion provider for values.
+	 */
 	private static class ValueCompletionProvider
-		extends DefaultCompletionProvider
+		extends BaseCompletionProvider
 	{
 		ValueCompletionProvider() {
-			setParameterizedCompletionParams( '(', ", ", ')' );
+			setAutoActivationRules( true, null );
+			setParameterizedCompletionParams( '(', ",", ')' );
 
 			addFunction( "rgb",
 				"red", "0-255 or 0-100%",
@@ -293,17 +352,12 @@ class FlatCompletionProvider
 			FunctionCompletion f = new FunctionCompletion( this, name, null ) {
 				@Override
 				public String toString() {
-					return getDefinitionString().replace( "(", " (" );
+					return getDefinitionString().replace( "(", " (" ).replace( ",", ", " );
 				}
 			};
 
 			f.setParams( params );
 			addCompletion( f );
-		}
-
-		@Override
-		public boolean isAutoActivateOkay( JTextComponent tc ) {
-			return false;
 		}
 	}
 }

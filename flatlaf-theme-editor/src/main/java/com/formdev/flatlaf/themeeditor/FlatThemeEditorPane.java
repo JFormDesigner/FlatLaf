@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.swing.JLayer;
@@ -63,8 +64,8 @@ class FlatThemeEditorPane
 //		textArea.setUseColorOfColorTokens( true );
 
 		// theme
-		try {
-			Theme theme = Theme.load( getClass().getResourceAsStream( "light.xml" ) );
+		try( InputStream in = getClass().getResourceAsStream( "light.xml" ) ) {
+			Theme theme = Theme.load( in );
 			theme.apply( textArea );
 		} catch( IOException ex ) {
 			ex.printStackTrace();
@@ -79,6 +80,7 @@ class FlatThemeEditorPane
 		// autocomplete
 		CompletionProvider provider = new FlatCompletionProvider();
 		AutoCompletion ac = new AutoCompletion( provider );
+		ac.setAutoCompleteSingleChoices( false );
 		ac.setAutoActivationEnabled( true );
 		ac.setParameterAssistanceEnabled( true );
 		ac.setChoicesWindowSize( UIScale.scale( 300 ), UIScale.scale( 400 ) );
