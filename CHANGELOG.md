@@ -9,7 +9,8 @@ FlatLaf Change Log
 - Custom window decorations: Center title if menu bar is embedded.
 - Custom window decorations: Cursor of components (e.g. TextField) was not
   changed. (issue #125)
-- CheckBox: Fixed colors in light IntelliJ themes. (issue #126)
+- CheckBox: Fixed colors in light IntelliJ themes. (issue #126; regression in
+  0.37)
 - InternalFrame: Use default icon in internal frames. (issue #122)
 
 
