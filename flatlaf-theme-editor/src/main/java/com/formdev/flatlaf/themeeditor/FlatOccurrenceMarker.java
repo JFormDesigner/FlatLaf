@@ -58,7 +58,7 @@ class FlatOccurrenceMarker
 		// make a copy of the token because it is overwritten in getTokenListForLine()
 		Token t2 = new TokenImpl( t );
 
-		// check whether token occurres more than once
+		// check whether token occurs more than once
 		boolean mark = false;
 		for( int i = 0; i < lineCount && !mark; i++ ) {
 			Token temp = doc.getTokenListForLine( i );
