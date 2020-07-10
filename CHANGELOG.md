@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.38
 
 - Hide focus indicator when window is inactive.
 - Custom window decorations: Improved/fixed window border color in dark themes.
