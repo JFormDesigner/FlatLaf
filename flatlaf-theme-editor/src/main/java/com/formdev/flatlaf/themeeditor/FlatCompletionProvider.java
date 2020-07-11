@@ -144,7 +144,7 @@ class FlatCompletionProvider
 
 	private CompletionProvider getValueProvider() {
 		if( valueProvider == null )
-			valueProvider = new ValueCompletionProvider();
+			valueProvider = new ValueCompletionProvider( getReferenceProvider() );
 		return valueProvider;
 	}
 
@@ -286,13 +286,16 @@ class FlatCompletionProvider
 
 			completions.clear();
 			for( String key : keys ) {
-				if( key.startsWith( "*." ) )
+				if( key.startsWith( "*." ) || key.startsWith( "[" ) )
 					continue;
 
 				if( !key.startsWith( "@" ) )
 					key = "$".concat( key );
 
-				completions.add( new BasicCompletion( this, key ) );
+				BasicCompletion completion = new BasicCompletion( this, key );
+				if( key.startsWith( "@" ) )
+					completion.setRelevance( 1 );
+				completions.add( completion );
 			}
 			Collections.sort(completions);
 		}
@@ -307,7 +310,8 @@ class FlatCompletionProvider
 		extends BaseCompletionProvider
 		implements ParameterChoicesProvider
 	{
-		ValueCompletionProvider() {
+		ValueCompletionProvider( CompletionProvider parent ) {
+			setParent( parent );
 			setAutoActivationRules( true, null );
 			setParameterizedCompletionParams( '(', ",", ')' );
 			setParameterChoicesProvider( this );
@@ -361,6 +365,7 @@ class FlatCompletionProvider
 			};
 
 			f.setParams( params );
+			f.setRelevance( 10 );
 			addCompletion( f );
 		}
 
