@@ -34,6 +34,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.CompletionProviderBase;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
+import org.fife.ui.autocomplete.ParameterChoicesProvider;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -304,10 +305,12 @@ class FlatCompletionProvider
 	 */
 	private static class ValueCompletionProvider
 		extends BaseCompletionProvider
+		implements ParameterChoicesProvider
 	{
 		ValueCompletionProvider() {
 			setAutoActivationRules( true, null );
 			setParameterizedCompletionParams( '(', ",", ')' );
+			setParameterChoicesProvider( this );
 
 			addFunction( "rgb",
 				"red", "0-255 or 0-100%",
@@ -343,7 +346,8 @@ class FlatCompletionProvider
 		private void addFunction( String name, String... paramNamesAndDescs ) {
 			List<Parameter> params = new ArrayList<>();
 			for( int i = 0; i < paramNamesAndDescs.length; i += 2 ) {
-				boolean endParam = i + 2 >= paramNamesAndDescs.length;
+//				boolean endParam = i + 2 >= paramNamesAndDescs.length;
+				boolean endParam = false;
 				Parameter param = new Parameter( null, paramNamesAndDescs[i], endParam );
 				param.setDescription( paramNamesAndDescs[i + 1] );
 				params.add( param );
@@ -358,6 +362,26 @@ class FlatCompletionProvider
 
 			f.setParams( params );
 			addCompletion( f );
+		}
+
+		@Override
+		public List<Completion> getParameterChoices( JTextComponent tc, Parameter param ) {
+			switch( param.getName() ) {
+				case "amount":
+					return createParameterChoices( "5%", "10%", "15%", "20%", "25%" );
+
+				case "options":
+					return createParameterChoices( "relative", "autoInverse", "noAutoInverse", "lazy", "derived" );
+			}
+
+			return null;
+		}
+
+		private List<Completion> createParameterChoices( String... values ) {
+			List<Completion> result = new ArrayList<>();
+			for( String value : values )
+				result.add( new BasicCompletion( this, value ) );
+			return result;
 		}
 	}
 }
