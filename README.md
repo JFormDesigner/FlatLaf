@@ -82,6 +82,7 @@ Projects using FlatLaf
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
 - [OWASP Zed Attack Proxy (ZAP)](https://www.zaproxy.org/) (in weekly releases)
+- ![New](images/new.svg) [jAlbum](https://jalbum.net/) 21 (commercial)
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (commercial)
 - [Total Validator](https://www.totalvalidator.com/) 15 (commercial)
 - [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org)
