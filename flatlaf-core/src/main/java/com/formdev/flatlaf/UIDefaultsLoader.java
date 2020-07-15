@@ -639,6 +639,8 @@ class UIDefaultsLoader
 		// parse base color
 		String resolvedColorStr = resolver.apply( colorStr );
 		ColorUIResource baseColor = (ColorUIResource) parseColorOrFunction( resolvedColorStr, resolver, reportError );
+		if( baseColor == null )
+			return null;
 
 		// apply this function to base color
 		Color newColor = ColorFunctions.applyFunctions( baseColor, function );
