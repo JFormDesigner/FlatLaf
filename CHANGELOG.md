@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+- Custom window decorations: Fixed maximized window bounds when programmatically
+  maximizing window. E.g. restoring window state at startup. (issue #129)
+
+
 ## 0.38
 
 - Hide focus indicator when window is inactive.

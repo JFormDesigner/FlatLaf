@@ -148,10 +148,6 @@ public class FlatTitlePane
 		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
 
-		//TODO
-//		titleLabel.setHorizontalAlignment( JLabel.CENTER );
-//		titleLabel.setHorizontalAlignment( JLabel.RIGHT );
-
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
 		leftPanel.add( iconLabel );
@@ -253,6 +249,22 @@ public class FlatTitlePane
 			iconifyButton.setVisible( true );
 			maximizeButton.setVisible( resizable && !maximized );
 			restoreButton.setVisible( resizable && maximized );
+
+			if( maximized ) {
+				// In case that frame was maximized from custom code (e.g. when restoring
+				// window state on application startup), then maximized bounds is not set
+				// and the window would overlap Windows task bar.
+				// To avoid this, update maximized bounds here and if it has changed
+				// re-maximize windows so that maximized bounds are used.
+				Rectangle oldMaximizedBounds = frame.getMaximizedBounds();
+				updateMaximizedBounds();
+				Rectangle newMaximizedBounds = frame.getMaximizedBounds();
+				if( newMaximizedBounds != null && !newMaximizedBounds.equals( oldMaximizedBounds ) ) {
+					int oldExtendedState = frame.getExtendedState();
+					frame.setExtendedState( oldExtendedState & ~Frame.MAXIMIZED_BOTH );
+					frame.setExtendedState( oldExtendedState );
+				}
+			}
 		} else {
 			// hide buttons because they are only supported in frames
 			iconifyButton.setVisible( false );
@@ -425,11 +437,21 @@ public class FlatTitlePane
 
 		Frame frame = (Frame) window;
 
+		updateMaximizedBounds();
+
+		// maximize window
+		frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
+	}
+
+	protected void updateMaximizedBounds() {
+		Frame frame = (Frame) window;
+
 		// set maximized bounds to avoid that maximized window overlaps Windows task bar
 		// (if not running in JBR and if not modified from the application)
+		Rectangle oldMaximizedBounds = frame.getMaximizedBounds();
 		if( !hasJBRCustomDecoration() &&
-			(frame.getMaximizedBounds() == null ||
-			 Objects.equals( frame.getMaximizedBounds(), rootPane.getClientProperty( "_flatlaf.maximizedBounds" ) )) )
+			(oldMaximizedBounds == null ||
+			 Objects.equals( oldMaximizedBounds, rootPane.getClientProperty( "_flatlaf.maximizedBounds" ) )) )
 		{
 			GraphicsConfiguration gc = window.getGraphicsConfiguration();
 
@@ -470,22 +492,21 @@ public class FlatTitlePane
 			// (see https://bugs.openjdk.java.net/browse/JDK-8231564 and
 			//      https://bugs.openjdk.java.net/browse/JDK-8176359)
 			// and except for Java 8 on secondary screens where primary screen is scaled
-			Rectangle maximizedBounds = new Rectangle(
+			Rectangle newMaximizedBounds = new Rectangle(
 				maximizedX + screenInsets.left,
 				maximizedY + screenInsets.top,
 				maximizedWidth - screenInsets.left - screenInsets.right,
 				maximizedHeight - screenInsets.top - screenInsets.bottom );
 
-			// change maximized bounds
-			frame.setMaximizedBounds( maximizedBounds );
+			if( !Objects.equals( oldMaximizedBounds, newMaximizedBounds ) ) {
+				// change maximized bounds
+				frame.setMaximizedBounds( newMaximizedBounds );
 
-			// remember maximized bounds in client property to be able to detect
-			// whether maximized bounds are modified from the application
-			rootPane.putClientProperty( "_flatlaf.maximizedBounds", maximizedBounds );
+				// remember maximized bounds in client property to be able to detect
+				// whether maximized bounds are modified from the application
+				rootPane.putClientProperty( "_flatlaf.maximizedBounds", newMaximizedBounds );
+			}
 		}
-
-		// maximize window
-		frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
 	}
 
 	/**
