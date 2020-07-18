@@ -766,8 +766,13 @@ public class FlatTitlePane
 			updateJBRHitTestSpotsAndTitleBarHeightLater();
 		}
 
+		@Override
+		public void componentShown( ComponentEvent e ) {
+			// necessary for the case that the frame is maximized before it is shown
+			frameStateChanged();
+		}
+
 		@Override public void componentMoved( ComponentEvent e ) {}
-		@Override public void componentShown( ComponentEvent e ) {}
 		@Override public void componentHidden( ComponentEvent e ) {}
 	}
 }
