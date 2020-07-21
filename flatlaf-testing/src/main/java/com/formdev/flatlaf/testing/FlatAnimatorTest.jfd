@@ -1,0 +1,62 @@
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[fill][grow,fill]"
+			"$rowConstraints": "[][][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Linear:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JScrollBar" ) {
+				name: "linearScrollBar"
+				"orientation": 0
+				"blockIncrement": 1
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "Ease in out:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JScrollBar" ) {
+				name: "easeInOutScrollBar"
+				"orientation": 0
+				"blockIncrement": 1
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "startButton"
+				"text": "Start"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "start", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 415, 350 )
+		} )
+	}
+}
