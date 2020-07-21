@@ -92,7 +92,21 @@ public class FlatInternalFrameTitlePane
 		updateFrameIcon();
 		updateColors();
 
-		buttonPanel = new JPanel();
+		buttonPanel = new JPanel() {
+			@Override
+			public Dimension getPreferredSize() {
+				Dimension size = super.getPreferredSize();
+				int height = size.height;
+				// use height of invisible buttons to always have same title pane height
+				if( !iconButton.isVisible() )
+					height = Math.max( height, iconButton.getPreferredSize().height );
+				if( !maxButton.isVisible() )
+					height = Math.max( height, maxButton.getPreferredSize().height );
+				if( !closeButton.isVisible() )
+					height = Math.max( height, closeButton.getPreferredSize().height );
+				return new Dimension( size.width, height );
+			}
+		};
 		buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.LINE_AXIS ) );
 		buttonPanel.setOpaque( false );
 
