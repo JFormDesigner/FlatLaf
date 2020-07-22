@@ -147,12 +147,12 @@ public abstract class FlatLaf
 	 */
 	@Override
 	public boolean getSupportsWindowDecorations() {
-		if( SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER &&
-			SystemInfo.IS_WINDOWS_10_OR_LATER &&
+		if( SystemInfo.isJetBrainsJVM_11_orLater &&
+			SystemInfo.isWindows_10_orLater &&
 			JBRCustomDecorations.isSupported() )
 		  return false;
 
-		return SystemInfo.IS_WINDOWS_10_OR_LATER;
+		return SystemInfo.isWindows_10_orLater;
 	}
 
 	@Override
@@ -187,7 +187,7 @@ public abstract class FlatLaf
 
 	@Override
 	public void initialize() {
-		if( SystemInfo.IS_MAC )
+		if( SystemInfo.isMacOS )
 			initializeAqua();
 
 		super.initialize();
@@ -201,11 +201,11 @@ public abstract class FlatLaf
 		mnemonicHandler.install();
 
 		// listen to desktop property changes to update UI if system font or scaling changes
-		if( SystemInfo.IS_WINDOWS ) {
+		if( SystemInfo.isWindows ) {
 			// Windows 10 allows increasing font size independent of scaling:
 			//   Settings > Ease of Access > Display > Make text bigger (100% - 225%)
 			desktopPropertyName = "win.messagebox.font";
-		} else if( SystemInfo.IS_LINUX ) {
+		} else if( SystemInfo.isLinux ) {
 			// Linux/Gnome allows changing font in "Tweaks" app
 			desktopPropertyName = "gnome.Gtk/FontName";
 
@@ -315,7 +315,7 @@ public abstract class FlatLaf
 		String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
 		BasicLookAndFeel aquaLaf;
 		try {
-			if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+			if( SystemInfo.isJava_9_orLater ) {
 				Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
 				aquaLaf = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
 			} else
@@ -391,7 +391,7 @@ public abstract class FlatLaf
 			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), isDark(), defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
-		if( SystemInfo.IS_MAC && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) ) {
+		if( SystemInfo.isMacOS && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) ) {
 			defaults.put( "MenuBarUI", "com.apple.laf.AquaMenuBarUI" );
 
 			// add defaults necessary for AquaMenuBarUI
@@ -435,17 +435,17 @@ public abstract class FlatLaf
 	private void initFonts( UIDefaults defaults ) {
 		FontUIResource uiFont = null;
 
-		if( SystemInfo.IS_WINDOWS ) {
+		if( SystemInfo.isWindows ) {
 			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
 			if( winFont != null )
 				uiFont = createCompositeFont( winFont.getFamily(), winFont.getStyle(), winFont.getSize() );
 
-		} else if( SystemInfo.IS_MAC ) {
+		} else if( SystemInfo.isMacOS ) {
 			String fontName;
-			if( SystemInfo.IS_MAC_OS_10_15_CATALINA_OR_LATER ) {
+			if( SystemInfo.isMacOS_10_15_Catalina_orLater ) {
 				// use Helvetica Neue font
 				fontName = "Helvetica Neue";
-			} else if( SystemInfo.IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER ) {
+			} else if( SystemInfo.isMacOS_10_11_ElCapitan_orLater ) {
 				// use San Francisco Text font
 				fontName = ".SF NS Text";
 			} else {
@@ -455,7 +455,7 @@ public abstract class FlatLaf
 
 			uiFont = createCompositeFont( fontName, Font.PLAIN, 13 );
 
-		} else if( SystemInfo.IS_LINUX ) {
+		} else if( SystemInfo.isLinux ) {
 			Font font = LinuxFontPolicy.getFont();
 			uiFont = (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 		}
@@ -515,7 +515,7 @@ public abstract class FlatLaf
 	}
 
 	private void putAATextInfo( UIDefaults defaults ) {
-		if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+		if( SystemInfo.isJava_9_orLater ) {
 			Object desktopHints = Toolkit.getDefaultToolkit().getDesktopProperty( DESKTOPFONTHINTS );
 			if( desktopHints instanceof Map ) {
 				@SuppressWarnings( "unchecked" )

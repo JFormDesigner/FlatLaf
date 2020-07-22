@@ -144,9 +144,9 @@ class UIDefaultsLoader
 
 				// handle platform specific properties
 				String platformPrefix =
-					SystemInfo.IS_WINDOWS ? "[win]" :
-					SystemInfo.IS_MAC ? "[mac]" :
-					SystemInfo.IS_LINUX ? "[linux]" : "[unknown]";
+					SystemInfo.isWindows ? "[win]" :
+					SystemInfo.isMacOS ? "[mac]" :
+					SystemInfo.isLinux ? "[linux]" : "[unknown]";
 				for( String key : platformSpecificKeys ) {
 					Object value = properties.remove( key );
 					if( key.startsWith( platformPrefix ) )

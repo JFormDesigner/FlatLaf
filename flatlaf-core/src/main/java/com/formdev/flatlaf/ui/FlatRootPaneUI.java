@@ -69,7 +69,7 @@ public class FlatRootPaneUI
 {
 	// check this field before using class JBRCustomDecorations to avoid unnecessary loading of that class
 	static final boolean canUseJBRCustomDecorations
-		= SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER && SystemInfo.IS_WINDOWS_10_OR_LATER;
+		= SystemInfo.isJetBrainsJVM_11_orLater && SystemInfo.isWindows_10_orLater;
 
 	protected JRootPane rootPane;
 	protected FlatTitlePane titlePane;
@@ -119,7 +119,7 @@ public class FlatRootPaneUI
 		}
 
 		// enable dark window appearance on macOS when running in JetBrains Runtime
-		if( SystemInfo.IS_JETBRAINS_JVM && SystemInfo.IS_MAC_OS_10_14_MOJAVE ) {
+		if( SystemInfo.isJetBrainsJVM && SystemInfo.isMacOS_10_14_Mojave_orLater ) {
 			LookAndFeel laf = UIManager.getLookAndFeel();
 			boolean isDark = laf instanceof FlatLaf && ((FlatLaf)laf).isDark();
 			c.putClientProperty( "jetbrains.awt.windowDarkAppearance", isDark );

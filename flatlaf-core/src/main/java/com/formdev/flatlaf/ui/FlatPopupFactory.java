@@ -62,7 +62,7 @@ public class FlatPopupFactory
 			return new NonFlashingPopup( super.getPopup( owner, contents, x, y ), contents );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
-		if( SystemInfo.IS_MAC || SystemInfo.IS_LINUX ) {
+		if( SystemInfo.isMacOS || SystemInfo.isLinux ) {
 			Popup popup = getHeavyWeightPopup( owner, contents, x, y );
 			if( popup == null )
 				popup = super.getPopup( owner, contents, x, y );
@@ -105,7 +105,7 @@ public class FlatPopupFactory
 		throws IllegalArgumentException
 	{
 		try {
-			if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+			if( SystemInfo.isJava_9_orLater ) {
 				if( java9getPopupMethod == null ) {
 					java9getPopupMethod = PopupFactory.class.getDeclaredMethod(
 						"getPopup", Component.class, Component.class, int.class, int.class, boolean.class );

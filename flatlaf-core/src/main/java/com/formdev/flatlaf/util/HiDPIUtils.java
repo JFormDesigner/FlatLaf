@@ -117,10 +117,10 @@ public class HiDPIUtils
 	 * This methods computes a correction value for the Y position.
 	 */
 	public static float computeTextYCorrection( Graphics2D g ) {
-		if( !useTextYCorrection() || !SystemInfo.IS_WINDOWS )
+		if( !useTextYCorrection() || !SystemInfo.isWindows )
 			return 0;
 
-		if( !SystemInfo.IS_JAVA_9_OR_LATER )
+		if( !SystemInfo.isJava_9_orLater )
 			return UIScale.getUserScaleFactor() > 1 ? -UIScale.scale( 0.625f ) : 0;
 
 		AffineTransform t = g.getTransform();

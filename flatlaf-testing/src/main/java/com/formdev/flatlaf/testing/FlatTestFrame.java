@@ -104,9 +104,9 @@ public class FlatTestFrame
 				className.equals( "com.sun.java.swing.plaf.motif.MotifLookAndFeel" ) )
 			  continue;
 
-			if( (SystemInfo.IS_WINDOWS && className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" )) ||
-				(SystemInfo.IS_MAC && className.equals( "com.apple.laf.AquaLookAndFeel" )) ||
-				(SystemInfo.IS_LINUX && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" )) )
+			if( (SystemInfo.isWindows && className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" )) ||
+				(SystemInfo.isMacOS && className.equals( "com.apple.laf.AquaLookAndFeel" )) ||
+				(SystemInfo.isLinux && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" )) )
 				name += " (F9)";
 			else if( className.equals( MetalLookAndFeel.class.getName() ) )
 				name += " (F12)";
@@ -117,13 +117,13 @@ public class FlatTestFrame
 		}
 
 		String substanceLightClassName = "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel";
-		if( SystemInfo.IS_JAVA_9_OR_LATER && isClassAvailable( substanceLightClassName ) ) {
+		if( SystemInfo.isJava_9_orLater && isClassAvailable( substanceLightClassName ) ) {
 			lafModel.addElement( new LookAndFeelInfo( "Substance Business (F5)", substanceLightClassName ) );
 			registerSwitchToLookAndFeel( "F5", substanceLightClassName );
 		}
 
 		String substanceDarkClassName = "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel";
-		if( SystemInfo.IS_JAVA_9_OR_LATER && isClassAvailable( substanceDarkClassName ) ) {
+		if( SystemInfo.isJava_9_orLater && isClassAvailable( substanceDarkClassName ) ) {
 			lafModel.addElement( new LookAndFeelInfo( "Substance Graphite Aqua (Ctrl+F5)", substanceDarkClassName ) );
 			registerSwitchToLookAndFeel( "ctrl F5", substanceDarkClassName );
 		}
@@ -141,7 +141,7 @@ public class FlatTestFrame
 		}
 
 		String looksWindowsClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
-		if( SystemInfo.IS_WINDOWS && isClassAvailable( looksWindowsClassName ) ) {
+		if( SystemInfo.isWindows && isClassAvailable( looksWindowsClassName ) ) {
 			lafModel.addElement( new LookAndFeelInfo( "JGoodies Looks Windows (F7)", looksWindowsClassName ) );
 			registerSwitchToLookAndFeel( "F7", looksWindowsClassName );
 		}
@@ -164,11 +164,11 @@ public class FlatTestFrame
 
 		registerSwitchToLookAndFeel( "F8", FlatTestLaf.class.getName() );
 
-		if( SystemInfo.IS_WINDOWS )
+		if( SystemInfo.isWindows )
 			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
-		else if( SystemInfo.IS_MAC )
+		else if( SystemInfo.isMacOS )
 			registerSwitchToLookAndFeel( "F9", "com.apple.laf.AquaLookAndFeel" );
-		else if( SystemInfo.IS_LINUX )
+		else if( SystemInfo.isLinux )
 			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
 		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( "F11", NimbusLookAndFeel.class.getName() );

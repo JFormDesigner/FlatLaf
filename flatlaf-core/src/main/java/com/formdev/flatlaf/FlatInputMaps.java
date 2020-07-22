@@ -35,7 +35,7 @@ class FlatInputMaps
 		initBasicInputMaps( defaults );
 		initTextComponentInputMaps( defaults );
 
-		if( SystemInfo.IS_MAC )
+		if( SystemInfo.isMacOS )
 			initMacInputMaps( defaults );
 	}
 
@@ -59,7 +59,7 @@ class FlatInputMaps
 			mac( "alt KP_DOWN", null ), "togglePopup"
 		);
 
-		if( !SystemInfo.IS_MAC ) {
+		if( !SystemInfo.isMacOS ) {
 			modifyInputMap( defaults, "FileChooser.ancestorInputMap",
 				"F2", "editFileName",
 				"BACK_SPACE", "Go Up"
@@ -93,7 +93,7 @@ class FlatInputMaps
 			mac( "shift ctrl END", null ), "selectLastColumnExtendSelection"
 		);
 
-		if( !SystemInfo.IS_MAC ) {
+		if( !SystemInfo.isMacOS ) {
 			modifyInputMap( defaults, "Tree.focusInputMap",
 				"ADD", "expand",
 				"SUBTRACT", "collapse"
@@ -164,7 +164,7 @@ class FlatInputMaps
 			"control shift O", "toggle-componentOrientation", // DefaultEditorKit.toggleComponentOrientation
 		};
 
-		Object[] macCommonTextComponentBindings = SystemInfo.IS_MAC ? new Object[] {
+		Object[] macCommonTextComponentBindings = SystemInfo.isMacOS ? new Object[] {
 			// move caret one character (without selecting text)
 			"ctrl B", backwardAction,
 			"ctrl F", forwardAction,
@@ -211,7 +211,7 @@ class FlatInputMaps
 			"ENTER", JTextField.notifyAction,
 		};
 
-		Object[] macSingleLineTextComponentBindings = SystemInfo.IS_MAC ? new Object[] {
+		Object[] macSingleLineTextComponentBindings = SystemInfo.isMacOS ? new Object[] {
 			// move caret to line begin/end (without selecting text)
 			"UP", beginLineAction,
 			"DOWN", endLineAction,
@@ -289,7 +289,7 @@ class FlatInputMaps
 			mac( "ctrl SPACE", "meta SPACE" ), "activate-link-action",
 		};
 
-		Object[] macMultiLineTextComponentBindings = SystemInfo.IS_MAC ? new Object[] {
+		Object[] macMultiLineTextComponentBindings = SystemInfo.isMacOS ? new Object[] {
 			// move caret one line (without selecting text)
 			"ctrl N", downAction,
 			"ctrl P", upAction,
@@ -579,7 +579,7 @@ class FlatInputMaps
 	}
 
 	private static <T> T mac( T value, T macValue ) {
-		return SystemInfo.IS_MAC ? macValue : value;
+		return SystemInfo.isMacOS ? macValue : value;
 	}
 
 	//---- class LazyInputMapEx -----------------------------------------------

@@ -585,7 +585,7 @@ public class FlatDisabledIconsTest
 		private static ImageIcon loadIcon( String iconName ) {
 			ImageIcon icon = new ImageIcon( LightOrDarkIcon.class.getResource( iconName ) );
 
-			if( SystemInfo.IS_MAC || !MultiResolutionImageSupport.isAvailable() || !iconName.endsWith( ".png" ) )
+			if( SystemInfo.isMacOS || !MultiResolutionImageSupport.isAvailable() || !iconName.endsWith( ".png" ) )
 				return icon;
 
 			String iconName2x = iconName.replace( ".png", "@2x.png" );

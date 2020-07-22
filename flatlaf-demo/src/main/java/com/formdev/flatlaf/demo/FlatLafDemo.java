@@ -32,7 +32,7 @@ public class FlatLafDemo
 
 	public static void main( String[] args ) {
 		// on macOS enable screen menu bar
-		if( SystemInfo.IS_MAC && System.getProperty( "apple.laf.useScreenMenuBar" ) == null )
+		if( SystemInfo.isMacOS && System.getProperty( "apple.laf.useScreenMenuBar" ) == null )
 			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
 
 		SwingUtilities.invokeLater( () -> {

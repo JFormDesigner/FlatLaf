@@ -306,7 +306,7 @@ public class FlatComboBoxUI
 		updateEditorColors();
 
 		// macOS
-		if( SystemInfo.IS_MAC && editor instanceof JTextComponent ) {
+		if( SystemInfo.isMacOS && editor instanceof JTextComponent ) {
 			// delegate actions from editor text field to combobox, which is necessary
 			// because text field on macOS already handle those keys
 			InputMap inputMap = ((JTextComponent)editor).getInputMap();

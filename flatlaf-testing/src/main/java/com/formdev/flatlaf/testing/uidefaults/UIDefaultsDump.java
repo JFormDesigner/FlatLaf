@@ -91,7 +91,7 @@ public class UIDefaultsDump
 		dump( FlatLightLaf.class.getName(), dir );
 		dump( FlatDarkLaf.class.getName(), dir );
 
-		if( SystemInfo.IS_WINDOWS ) {
+		if( SystemInfo.isWindows ) {
 			dump( FlatIntelliJLaf.class.getName(), dir );
 			dump( FlatDarculaLaf.class.getName(), dir );
 		}
@@ -100,11 +100,11 @@ public class UIDefaultsDump
 //		dump( MetalLookAndFeel.class.getName(), dir );
 //		dump( NimbusLookAndFeel.class.getName(), dir );
 //
-//		if( SystemInfo.IS_WINDOWS )
+//		if( SystemInfo.isWindows )
 //			dump( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel", dir );
-//		else if( SystemInfo.IS_MAC )
+//		else if( SystemInfo.isMacOS )
 //			dump( "com.apple.laf.AquaLookAndFeel", dir );
-//		else if( SystemInfo.IS_LINUX )
+//		else if( SystemInfo.isLinux )
 //			dump( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel", dir );
 //
 //		dump( "com.jgoodies.looks.plastic.PlasticLookAndFeel", dir );
@@ -172,9 +172,9 @@ public class UIDefaultsDump
 				? BasicLookAndFeel.class.getSimpleName()
 				: lookAndFeel.getClass().getSimpleName();
 		}
-		String osSuffix = (SystemInfo.IS_MAC && lookAndFeel instanceof FlatLaf)
+		String osSuffix = (SystemInfo.isMacOS && lookAndFeel instanceof FlatLaf)
 			? "-mac"
-			: ((SystemInfo.IS_LINUX && lookAndFeel instanceof FlatLaf)
+			: ((SystemInfo.isLinux && lookAndFeel instanceof FlatLaf)
 				? "-linux"
 				: "");
 		String javaVersion = System.getProperty( "java.version" );
@@ -186,9 +186,9 @@ public class UIDefaultsDump
 		File origFile = null;
 		if( !osSuffix.isEmpty() && nameSuffix.isEmpty() )
 			origFile = new File( dir, name + nameSuffix + "_" + javaVersion + ".txt" );
-		else if( lookAndFeel instanceof FlatIntelliJLaf && SystemInfo.IS_WINDOWS )
+		else if( lookAndFeel instanceof FlatIntelliJLaf && SystemInfo.isWindows )
 			origFile = new File( dir, "FlatLightLaf_" + javaVersion + ".txt" );
-		else if( lookAndFeel instanceof FlatDarculaLaf && SystemInfo.IS_WINDOWS )
+		else if( lookAndFeel instanceof FlatDarculaLaf && SystemInfo.isWindows )
 			origFile = new File( dir, "FlatDarkLaf_" + javaVersion + ".txt" );
 		if( origFile != null ) {
 			try {

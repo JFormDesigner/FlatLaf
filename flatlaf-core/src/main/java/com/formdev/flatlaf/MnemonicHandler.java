@@ -71,13 +71,13 @@ class MnemonicHandler
 	@Override
 	public boolean postProcessKeyEvent( KeyEvent e ) {
 		int keyCode = e.getKeyCode();
-		if( SystemInfo.IS_MAC ) {
+		if( SystemInfo.isMacOS ) {
 			// Ctrl+Alt keys must be pressed on Mac
 			if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT )
 				showMnemonics( shouldShowMnemonics( e ) && e.isControlDown() && e.isAltDown(), e.getComponent() );
 		} else {
 			// Alt key must be pressed on Windows and Linux
-			if( SystemInfo.IS_WINDOWS )
+			if( SystemInfo.isWindows )
 				return processKeyEventOnWindows( e );
 
 			if( keyCode == KeyEvent.VK_ALT )

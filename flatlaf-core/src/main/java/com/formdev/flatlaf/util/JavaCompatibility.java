@@ -48,10 +48,10 @@ public class JavaCompatibility
 		synchronized( JavaCompatibility.class ) {
 			if( drawStringUnderlineCharAtMethod == null ) {
 				try {
-					Class<?> cls = Class.forName( SystemInfo.IS_JAVA_9_OR_LATER
+					Class<?> cls = Class.forName( SystemInfo.isJava_9_orLater
 						? "javax.swing.plaf.basic.BasicGraphicsUtils"
 						: "sun.swing.SwingUtilities2" );
-					drawStringUnderlineCharAtMethod = cls.getMethod( "drawStringUnderlineCharAt", SystemInfo.IS_JAVA_9_OR_LATER
+					drawStringUnderlineCharAtMethod = cls.getMethod( "drawStringUnderlineCharAt", SystemInfo.isJava_9_orLater
 						? new Class[] { JComponent.class, Graphics2D.class, String.class, int.class, float.class, float.class }
 						: new Class[] { JComponent.class, Graphics.class, String.class, int.class, int.class, int.class } );
 				} catch( Exception ex ) {
@@ -62,7 +62,7 @@ public class JavaCompatibility
 		}
 
 		try {
-			if( SystemInfo.IS_JAVA_9_OR_LATER )
+			if( SystemInfo.isJava_9_orLater )
 				drawStringUnderlineCharAtMethod.invoke( null, c, g, text, underlinedIndex, (float) x, (float) y );
 			else
 				drawStringUnderlineCharAtMethod.invoke( null, c, g, text, underlinedIndex, x, y );

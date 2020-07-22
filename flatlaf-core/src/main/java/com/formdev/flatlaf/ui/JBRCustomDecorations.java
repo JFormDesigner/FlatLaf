@@ -191,7 +191,7 @@ public class JBRCustomDecorations
 		initialized = true;
 
 		// requires JetBrains Runtime 11 and Windows 10
-		if( !SystemInfo.IS_JETBRAINS_JVM_11_OR_LATER || !SystemInfo.IS_WINDOWS_10_OR_LATER )
+		if( !SystemInfo.isJetBrainsJVM_11_orLater || !SystemInfo.isWindows_10_orLater )
 			return;
 
 		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, true ) )

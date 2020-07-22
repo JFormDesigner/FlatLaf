@@ -27,55 +27,57 @@ import java.util.StringTokenizer;
 public class SystemInfo
 {
 	// platforms
-	public static final boolean IS_WINDOWS;
-	public static final boolean IS_MAC;
-	public static final boolean IS_LINUX;
+	public static final boolean isWindows;
+	public static final boolean isMacOS;
+	public static final boolean isLinux;
 
 	// OS versions
-	public static final boolean IS_WINDOWS_10_OR_LATER;
-	public static final boolean IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER;
-	public static final boolean IS_MAC_OS_10_14_MOJAVE;
-	public static final boolean IS_MAC_OS_10_15_CATALINA_OR_LATER;
+	public static final long osVersion;
+	public static final boolean isWindows_10_orLater;
+	public static final boolean isMacOS_10_11_ElCapitan_orLater;
+	public static final boolean isMacOS_10_14_Mojave_orLater;
+	public static final boolean isMacOS_10_15_Catalina_orLater;
 
 	// Java versions
-	public static final boolean IS_JAVA_9_OR_LATER;
-	public static final boolean IS_JAVA_11_OR_LATER;
-	public static final boolean IS_JAVA_15_OR_LATER;
+	public static final long javaVersion;
+	public static final boolean isJava_9_orLater;
+	public static final boolean isJava_11_orLater;
+	public static final boolean isJava_15_orLater;
 
 	// Java VMs
-	public static final boolean IS_JETBRAINS_JVM;
-	public static final boolean IS_JETBRAINS_JVM_11_OR_LATER;
+	public static final boolean isJetBrainsJVM;
+	public static final boolean isJetBrainsJVM_11_orLater;
 
 	// UI toolkits
-	public static final boolean IS_KDE;
+	public static final boolean isKDE;
 
 	static {
 		// platforms
 		String osName = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
-		IS_WINDOWS = osName.startsWith( "windows" );
-		IS_MAC = osName.startsWith( "mac" );
-		IS_LINUX = osName.startsWith( "linux" );
+		isWindows = osName.startsWith( "windows" );
+		isMacOS = osName.startsWith( "mac" );
+		isLinux = osName.startsWith( "linux" );
 
 		// OS versions
-		long osVersion = scanVersion( System.getProperty( "os.version" ) );
-		IS_WINDOWS_10_OR_LATER = (IS_WINDOWS && osVersion >= toVersion( 10, 0, 0, 0 ));
-		IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER = (IS_MAC && osVersion >= toVersion( 10, 11, 0, 0 ));
-		IS_MAC_OS_10_14_MOJAVE = (IS_MAC && osVersion >= toVersion( 10, 14, 0, 0 ));
-		IS_MAC_OS_10_15_CATALINA_OR_LATER = (IS_MAC && osVersion >= toVersion( 10, 15, 0, 0 ));
+		osVersion = scanVersion( System.getProperty( "os.version" ) );
+		isWindows_10_orLater = (isWindows && osVersion >= toVersion( 10, 0, 0, 0 ));
+		isMacOS_10_11_ElCapitan_orLater = (isMacOS && osVersion >= toVersion( 10, 11, 0, 0 ));
+		isMacOS_10_14_Mojave_orLater = (isMacOS && osVersion >= toVersion( 10, 14, 0, 0 ));
+		isMacOS_10_15_Catalina_orLater = (isMacOS && osVersion >= toVersion( 10, 15, 0, 0 ));
 
 		// Java versions
-		long javaVersion = scanVersion( System.getProperty( "java.version" ) );
-		IS_JAVA_9_OR_LATER = (javaVersion >= toVersion( 9, 0, 0, 0 ));
-		IS_JAVA_11_OR_LATER = (javaVersion >= toVersion( 11, 0, 0, 0 ));
-		IS_JAVA_15_OR_LATER = (javaVersion >= toVersion( 15, 0, 0, 0 ));
+		javaVersion = scanVersion( System.getProperty( "java.version" ) );
+		isJava_9_orLater = (javaVersion >= toVersion( 9, 0, 0, 0 ));
+		isJava_11_orLater = (javaVersion >= toVersion( 11, 0, 0, 0 ));
+		isJava_15_orLater = (javaVersion >= toVersion( 15, 0, 0, 0 ));
 
 		// Java VMs
-		IS_JETBRAINS_JVM = System.getProperty( "java.vm.vendor", "Unknown" )
+		isJetBrainsJVM = System.getProperty( "java.vm.vendor", "Unknown" )
 			.toLowerCase( Locale.ENGLISH ).contains( "jetbrains" );
-		IS_JETBRAINS_JVM_11_OR_LATER = IS_JETBRAINS_JVM && IS_JAVA_11_OR_LATER;
+		isJetBrainsJVM_11_orLater = isJetBrainsJVM && isJava_11_orLater;
 
 		// UI toolkits
-		IS_KDE = (IS_LINUX && System.getenv( "KDE_FULL_SESSION" ) != null);
+		isKDE = (isLinux && System.getenv( "KDE_FULL_SESSION" ) != null);
 	}
 
 	public static long scanVersion( String version ) {

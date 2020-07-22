@@ -82,7 +82,7 @@ public class FlatMenuBarUI
 			JMenuBar menuBar = (JMenuBar) e.getSource();
 			JMenu menu = menuBar.getMenu( 0 );
 			if( menu != null ) {
-				MenuSelectionManager.defaultManager().setSelectedPath( SystemInfo.IS_WINDOWS
+				MenuSelectionManager.defaultManager().setSelectedPath( SystemInfo.isWindows
 					? new MenuElement[] { menuBar, menu }
 					: new MenuElement[] { menuBar, menu, menu.getPopupMenu() } );
 

@@ -472,7 +472,7 @@ public class FlatTitlePane
 			int maximizedWidth = screenBounds.width;
 			int maximizedHeight = screenBounds.height;
 
-			if( !SystemInfo.IS_JAVA_15_OR_LATER ) {
+			if( !SystemInfo.isJava_15_orLater ) {
 				// on Java 8 to 14, maximized x,y are 0,0 based on all screens in a multi-screen environment
 				maximizedX = 0;
 				maximizedY = 0;

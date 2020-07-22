@@ -59,9 +59,9 @@ class ControlBar
 				className.equals( "com.sun.java.swing.plaf.motif.MotifLookAndFeel" ) )
 			  continue;
 
-			if( (SystemInfo.IS_WINDOWS && className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" )) ||
-				(SystemInfo.IS_MAC && className.equals( "com.apple.laf.AquaLookAndFeel") ) ||
-				(SystemInfo.IS_LINUX && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel") ) )
+			if( (SystemInfo.isWindows && className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" )) ||
+				(SystemInfo.isMacOS && className.equals( "com.apple.laf.AquaLookAndFeel") ) ||
+				(SystemInfo.isLinux && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel") ) )
 				name += " (F9)";
 			else if( className.equals( MetalLookAndFeel.class.getName() ) )
 				name += " (F12)";
@@ -112,11 +112,11 @@ class ControlBar
 		registerSwitchToLookAndFeel( KeyEvent.VK_F3, FlatIntelliJLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatDarculaLaf.class.getName() );
 
-		if( SystemInfo.IS_WINDOWS )
+		if( SystemInfo.isWindows )
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
-		else if( SystemInfo.IS_MAC )
+		else if( SystemInfo.isMacOS )
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.apple.laf.AquaLookAndFeel" );
-		else if( SystemInfo.IS_LINUX )
+		else if( SystemInfo.isLinux )
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F12, MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F11, NimbusLookAndFeel.class.getName() );

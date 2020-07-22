@@ -39,7 +39,7 @@ import com.formdev.flatlaf.util.UIScale;
 class LinuxFontPolicy
 {
 	static Font getFont() {
-		return SystemInfo.IS_KDE ? getKDEFont() : getGnomeFont();
+		return SystemInfo.isKDE ? getKDEFont() : getGnomeFont();
 	}
 
 	/**
@@ -77,7 +77,7 @@ class LinuxFontPolicy
 		// Ubuntu font is rendered poorly (except if running in JetBrains VM)
 		// --> use Liberation Sans font
 		if( family.startsWith( "Ubuntu" ) &&
-			!SystemInfo.IS_JETBRAINS_JVM &&
+			!SystemInfo.isJetBrainsJVM &&
 			!FlatSystemProperties.getBoolean( FlatSystemProperties.USE_UBUNTU_FONT, false ) )
 		  family = "Liberation Sans";
 

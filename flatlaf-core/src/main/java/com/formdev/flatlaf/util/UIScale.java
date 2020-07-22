@@ -90,10 +90,10 @@ public class UIScale
 
 		jreHiDPI = false;
 
-		if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+		if( SystemInfo.isJava_9_orLater ) {
 			// Java 9 and later supports per-monitor scaling
 			jreHiDPI = true;
-		} else if( SystemInfo.IS_JETBRAINS_JVM ) {
+		} else if( SystemInfo.isJetBrainsJVM ) {
 			// IntelliJ IDEA ships its own JetBrains Java 8 JRE that may supports per-monitor scaling
 			// see com.intellij.ui.JreHiDpiUtil.isJreHiDPIEnabled()
 			try {
@@ -177,18 +177,18 @@ public class UIScale
 		// default font size
 		float fontSizeDivider = 12f;
 
-		if( SystemInfo.IS_WINDOWS ) {
+		if( SystemInfo.isWindows ) {
 			// Windows LaF uses Tahoma font rather than the actual Windows system font (Segoe UI),
 			// and its size is always ca. 10% smaller than the actual system font size.
 			// Tahoma 11 is used at 100%
 			if( "Tahoma".equals( font.getFamily() ) )
 				fontSizeDivider = 11f;
-		} else if( SystemInfo.IS_MAC ) {
+		} else if( SystemInfo.isMacOS ) {
 			// default font size on macOS is 13
 			fontSizeDivider = 13f;
-		} else if( SystemInfo.IS_LINUX ) {
+		} else if( SystemInfo.isLinux ) {
 			// default font size for Unity and Gnome is 15 and for KDE it is 13
-			fontSizeDivider = SystemInfo.IS_KDE ? 13f : 15f;
+			fontSizeDivider = SystemInfo.isKDE ? 13f : 15f;
 		}
 
 		return font.getSize() / fontSizeDivider;
