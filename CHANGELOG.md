@@ -3,6 +3,7 @@ FlatLaf Change Log
 
 ## Unreleased
 
+- Animated theme change (see [FlatLaf Extras](flatlaf-extras)).
 - Custom window decorations: Fixed maximized window bounds when programmatically
   maximizing window. E.g. restoring window state at startup. (issue #129)
 - InternalFrame: Title pane height was too small when iconify, maximize and close

@@ -73,6 +73,9 @@ public class FlatTestFrame
 				System.setProperty( FlatSystemProperties.UI_SCALE, scaleFactor );
 		}
 
+		// disable animated Laf change
+		System.setProperty( "flatlaf.animatedLafChange", "false" );
+
 		// set look and feel
 		DemoPrefs.initLaf( args );
 

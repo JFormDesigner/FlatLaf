@@ -49,6 +49,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.DemoPrefs;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.StringUtils;
 import net.miginfocom.swing.*;
@@ -219,6 +220,8 @@ public class IJThemesPanel
 			if( themeInfo.lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 				return;
 
+			FlatAnimatedLafChange.showSnapshot();
+
 			try {
 				UIManager.setLookAndFeel( themeInfo.lafClassName );
 			} catch( Exception ex ) {
@@ -226,6 +229,8 @@ public class IJThemesPanel
 				showInformationDialog( "Failed to create '" + themeInfo.lafClassName + "'.", ex );
 			}
 		} else if( themeInfo.themeFile != null ) {
+			FlatAnimatedLafChange.showSnapshot();
+
 			try {
 				if( themeInfo.themeFile.getName().endsWith( ".properties" ) ) {
 				    FlatLaf.install( new FlatPropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
@@ -238,12 +243,15 @@ public class IJThemesPanel
 				showInformationDialog( "Failed to load '" + themeInfo.themeFile + "'.", ex );
 			}
 		} else {
+			FlatAnimatedLafChange.showSnapshot();
+
 			IntelliJTheme.install( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.resourceName ) );
 		    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.RESOURCE_PREFIX + themeInfo.resourceName );
 		}
 
 		// update all components
 		FlatLaf.updateUI();
+		FlatAnimatedLafChange.hideSnapshotWithAnimation();
 	}
 
 	private void saveTheme() {

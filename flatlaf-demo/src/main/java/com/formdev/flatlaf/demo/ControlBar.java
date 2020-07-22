@@ -27,6 +27,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -193,6 +194,8 @@ class ControlBar
 
 		EventQueue.invokeLater( () -> {
 			try {
+				FlatAnimatedLafChange.showSnapshot();
+
 				// change look and feel
 				UIManager.setLookAndFeel( lafClassName );
 
@@ -202,6 +205,7 @@ class ControlBar
 
 				// update all components
 				FlatLaf.updateUI();
+				FlatAnimatedLafChange.hideSnapshotWithAnimation();
 
 				// increase size of frame if necessary
 				int width = frame.getWidth();

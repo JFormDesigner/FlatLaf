@@ -27,6 +27,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.SVGUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
@@ -105,14 +106,21 @@ class DemoFrame
 		repaint();
 	}
 
+	private void animatedLafChangeChanged() {
+		System.setProperty( "flatlaf.animatedLafChange", String.valueOf( animatedLafChangeMenuItem.isSelected() ) );
+	}
+
 	private void fontFamilyChanged( ActionEvent e ) {
 		String fontFamily = e.getActionCommand();
+
+		FlatAnimatedLafChange.showSnapshot();
 
 		Font font = UIManager.getFont( "defaultFont" );
 		Font newFont = StyleContext.getDefaultStyleContext().getFont( fontFamily, font.getStyle(), font.getSize() );
 		UIManager.put( "defaultFont", newFont );
 
 		FlatLaf.updateUI();
+		FlatAnimatedLafChange.hideSnapshotWithAnimation();
 	}
 
 	private void fontSizeChanged( ActionEvent e ) {
@@ -248,6 +256,7 @@ class DemoFrame
 		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
+		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
 		JMenu helpMenu = new JMenu();
 		JMenuItem aboutMenuItem = new JMenuItem();
 		JToolBar toolBar1 = new JToolBar();
@@ -501,6 +510,12 @@ class DemoFrame
 				alwaysShowMnemonicsMenuItem.setText("Always show mnemonics");
 				alwaysShowMnemonicsMenuItem.addActionListener(e -> alwaysShowMnemonics());
 				optionsMenu.add(alwaysShowMnemonicsMenuItem);
+
+				//---- animatedLafChangeMenuItem ----
+				animatedLafChangeMenuItem.setText("Animated Laf Change");
+				animatedLafChangeMenuItem.setSelected(true);
+				animatedLafChangeMenuItem.addActionListener(e -> animatedLafChangeChanged());
+				optionsMenu.add(animatedLafChangeMenuItem);
 			}
 			menuBar1.add(optionsMenu);
 
@@ -620,6 +635,7 @@ class DemoFrame
 	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
+	private JCheckBoxMenuItem animatedLafChangeMenuItem;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

@@ -3,6 +3,8 @@ FlatLaf Extras
 
 This sub-project provides some additional components and classes:
 
+- [FlatAnimatedLafChange](src/main/java/com/formdev/flatlaf/extras/FlatAnimatedLafChange.java):
+  Animated Laf changing.
 - [FlatInspector](src/main/java/com/formdev/flatlaf/extras/FlatInspector.java):
   A simple UI inspector that shows information about UI component at mouse
   location in a tooltip.

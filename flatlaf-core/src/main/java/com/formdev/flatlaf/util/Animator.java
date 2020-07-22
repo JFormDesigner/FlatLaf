@@ -92,6 +92,7 @@ public class Animator
 	/**
 	 * Sets the resolution of the animation in milliseconds.
 	 *
+	 * @param resolution the resolution of the animation in milliseconds
 	 * @throws IllegalStateException if animation is running
 	 * @throws IllegalArgumentException if resolution is <= zero
 	 */

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -355,6 +355,15 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "alwaysShowMnemonics", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "animatedLafChangeMenuItem"
+						"text": "Animated Laf Change"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "animatedLafChangeChanged", false ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
