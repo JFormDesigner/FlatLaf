@@ -472,7 +472,7 @@ public class FlatTitlePane
 			int maximizedWidth = screenBounds.width;
 			int maximizedHeight = screenBounds.height;
 
-			if( !SystemInfo.isJava_15_orLater ) {
+			if( !isMaximizedBoundsFixed() ) {
 				// on Java 8 to 14, maximized x,y are 0,0 based on all screens in a multi-screen environment
 				maximizedX = 0;
 				maximizedY = 0;
@@ -507,6 +507,21 @@ public class FlatTitlePane
 				rootPane.putClientProperty( "_flatlaf.maximizedBounds", newMaximizedBounds );
 			}
 		}
+	}
+
+	/**
+	 * Frame.setMaximizedBounds() behaves different on some Java versions after issues
+	 *   https://bugs.openjdk.java.net/browse/JDK-8231564 and
+	 *   https://bugs.openjdk.java.net/browse/JDK-8176359
+	 *   (see also https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8176359)
+	 * were fixed in Java 15 and backported to 11.0.8 and 13.0.4.
+	 */
+	private boolean isMaximizedBoundsFixed() {
+		return SystemInfo.isJava_15_orLater ||
+			(SystemInfo.javaVersion >= SystemInfo.toVersion( 11, 0, 8, 0 ) &&
+			 SystemInfo.javaVersion <  SystemInfo.toVersion( 12, 0, 0, 0 )) ||
+			(SystemInfo.javaVersion >= SystemInfo.toVersion( 13, 0, 4, 0 ) &&
+			 SystemInfo.javaVersion <  SystemInfo.toVersion( 14, 0, 0, 0 ));
 	}
 
 	/**
