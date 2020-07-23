@@ -250,7 +250,11 @@ public class FlatTitlePane
 			maximizeButton.setVisible( resizable && !maximized );
 			restoreButton.setVisible( resizable && maximized );
 
-			if( maximized ) {
+			if( maximized &&
+				rootPane.getClientProperty( "_flatlaf.maximizedBoundsUpToDate" ) == null )
+			{
+				rootPane.putClientProperty( "_flatlaf.maximizedBoundsUpToDate", null );
+
 				// In case that frame was maximized from custom code (e.g. when restoring
 				// window state on application startup), then maximized bounds is not set
 				// and the window would overlap Windows task bar.
@@ -438,6 +442,9 @@ public class FlatTitlePane
 		Frame frame = (Frame) window;
 
 		updateMaximizedBounds();
+
+		// let our WindowStateListener know that the maximized bounds are up-to-date
+		rootPane.putClientProperty( "_flatlaf.maximizedBoundsUpToDate", true );
 
 		// maximize window
 		frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
