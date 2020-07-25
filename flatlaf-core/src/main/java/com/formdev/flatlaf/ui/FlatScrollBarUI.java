@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
@@ -203,6 +204,16 @@ public class FlatScrollBarUI
 		pressedButtonBackground = null;
 
 		oldStyleValues = null;
+	}
+
+	@Override
+	protected TrackListener createTrackListener() {
+		return new FlatTrackListener();
+	}
+
+	@Override
+	protected ScrollListener createScrollListener() {
+		return new FlatScrollListener();
 	}
 
 	@Override
@@ -452,10 +463,12 @@ public class FlatScrollBarUI
 	 * and then animate scroll bar value from old value to new value.
 	 */
 	public void runAndSetValueAnimated( Runnable r ) {
-		if( !isSmoothScrollingEnabled() ) {
+		if( inRunAndSetValueAnimated || !isSmoothScrollingEnabled() ) {
 			r.run();
 			return;
 		}
+
+		inRunAndSetValueAnimated = true;
 
 		if( animator != null )
 			animator.cancel();
@@ -470,11 +483,16 @@ public class FlatScrollBarUI
 		r.run();
 
 		int newValue = scrollbar.getValue();
-		scrollbar.setValue( oldValue );
+		if( newValue != oldValue ) {
+			scrollbar.setValue( oldValue );
 
-		setValueAnimated( newValue );
+			setValueAnimated( newValue );
+		}
+
+		inRunAndSetValueAnimated = false;
 	}
 
+	private boolean inRunAndSetValueAnimated;
 	private Animator animator;
 	private int targetValue = Integer.MIN_VALUE;
 	private int delta;
@@ -522,6 +540,32 @@ public class FlatScrollBarUI
 		// applications to turn smooth scrolling on or off at any time
 		// (e.g. in application options dialog).
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
+	}
+
+	//---- class FlatTrackListener --------------------------------------------
+
+	protected class FlatTrackListener
+		extends TrackListener
+	{
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			runAndSetValueAnimated( () -> {
+				super.mousePressed( e );
+			} );
+		}
+	}
+
+	//---- class FlatScrollListener -------------------------------------------
+
+	protected class FlatScrollListener
+		extends ScrollListener
+	{
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			runAndSetValueAnimated( () -> {
+				super.actionPerformed( e );
+			} );
+		}
 	}
 
 	//---- class ScrollBarHoverListener ---------------------------------------
