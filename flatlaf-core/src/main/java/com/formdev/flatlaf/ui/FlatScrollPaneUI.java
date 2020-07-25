@@ -135,12 +135,25 @@ public class FlatScrollPaneUI
 		MouseWheelListener superListener = super.createMouseWheelListener();
 		return e -> {
 			if( isSmoothScrollingEnabled() &&
-				scrollpane.isWheelScrollingEnabled() &&
-				e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
-				e.getPreciseWheelRotation() != 0 &&
-				e.getPreciseWheelRotation() != e.getWheelRotation() )
+				scrollpane.isWheelScrollingEnabled() )
 			{
-				mouseWheelMovedSmooth( e );
+				if( e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
+					e.getPreciseWheelRotation() != 0 &&
+					e.getPreciseWheelRotation() != e.getWheelRotation() )
+				{
+					// precise scrolling
+					mouseWheelMovedPrecise( e );
+				} else {
+					// smooth scrolling
+					JScrollBar scrollBar = findScrollBarToScroll( e );
+					if( scrollBar != null && scrollBar.getUI() instanceof FlatScrollBarUI ) {
+						FlatScrollBarUI ui = (FlatScrollBarUI) scrollBar.getUI();
+						ui.runAndSetValueAnimated( () -> {
+							superListener.mouseWheelMoved( e );
+						} );
+					} else
+						superListener.mouseWheelMoved( e );
+				}
 			} else
 				superListener.mouseWheelMoved( e );
 		};
@@ -157,19 +170,16 @@ public class FlatScrollPaneUI
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
 	}
 
-	private void mouseWheelMovedSmooth( MouseWheelEvent e ) {
+	private void mouseWheelMovedPrecise( MouseWheelEvent e ) {
 		// return if there is no viewport
 		JViewport viewport = scrollpane.getViewport();
 		if( viewport == null )
 			return;
 
 		// find scrollbar to scroll
-		JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
-		if( scrollbar == null || !scrollbar.isVisible() || e.isShiftDown() ) {
-			scrollbar = scrollpane.getHorizontalScrollBar();
-			if( scrollbar == null || !scrollbar.isVisible() )
-				return;
-		}
+		JScrollBar scrollbar = findScrollBarToScroll( e );
+		if( scrollbar == null )
+			return;
 
 		// consume event
 		e.consume();
@@ -260,6 +270,16 @@ public class FlatScrollPaneUI
 			minValue,
 			maxValue ) );
 */
+	}
+
+	private JScrollBar findScrollBarToScroll( MouseWheelEvent e ) {
+		JScrollBar scrollBar = scrollpane.getVerticalScrollBar();
+		if( scrollBar == null || !scrollBar.isVisible() || e.isShiftDown() ) {
+			scrollBar = scrollpane.getHorizontalScrollBar();
+			if( scrollBar == null || !scrollBar.isVisible() )
+				return null;
+		}
+		return scrollBar;
 	}
 
 	@Override

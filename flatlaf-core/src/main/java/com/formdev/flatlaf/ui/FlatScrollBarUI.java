@@ -28,8 +28,6 @@ import java.beans.PropertyChangeListener;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import java.util.Objects;
-import javax.swing.BoundedRangeModel;
-import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -37,7 +35,6 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -450,7 +447,11 @@ public class FlatScrollBarUI
 		} );
 	}
 
-	protected void runAndSetValueAnimated( Runnable r ) {
+	/**
+	 * Runs the given runnable, which should modify the scroll bar value,
+	 * and then animate scroll bar value from old value to new value.
+	 */
+	public void runAndSetValueAnimated( Runnable r ) {
 		if( !isSmoothScrollingEnabled() ) {
 			r.run();
 			return;
@@ -459,30 +460,26 @@ public class FlatScrollBarUI
 		if( animator != null )
 			animator.cancel();
 
-		int[] newValue = new int[1];
+		// if invoked while animation is running, calculation of new value
+		// should start at the previous target value
+		if( targetValue != Integer.MIN_VALUE )
+			scrollbar.setValue( targetValue );
 
-		runWithoutValueChangeEvents( scrollbar, () -> {
-			// if invoked while animation is running, calculation of new value
-			// should start at the previous target value
-			if( targetValue != Integer.MIN_VALUE )
-				scrollbar.setValue( targetValue );
+		int oldValue = scrollbar.getValue();
 
-			int oldValue = scrollbar.getValue();
+		r.run();
 
-			r.run();
+		int newValue = scrollbar.getValue();
+		scrollbar.setValue( oldValue );
 
-			newValue[0] = scrollbar.getValue();
-			scrollbar.setValue( oldValue );
-		} );
-
-		setValueAnimated( newValue[0] );
+		setValueAnimated( newValue );
 	}
 
 	private Animator animator;
 	private int targetValue = Integer.MIN_VALUE;
 	private int delta;
 
-	protected void setValueAnimated( int value ) {
+	public void setValueAnimated( int value ) {
 		// create animator
 		if( animator == null ) {
 			int duration = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.duration", 200 );
@@ -525,29 +522,6 @@ public class FlatScrollBarUI
 		// applications to turn smooth scrolling on or off at any time
 		// (e.g. in application options dialog).
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
-	}
-
-	protected static void runWithoutValueChangeEvents( JScrollBar scrollBar, Runnable r ) {
-		BoundedRangeModel model = scrollBar.getModel();
-		if( !(model instanceof DefaultBoundedRangeModel) ) {
-			r.run();
-			return;
-		}
-
-		DefaultBoundedRangeModel m = (DefaultBoundedRangeModel) model;
-
-		// remove all listeners
-		ChangeListener[] changeListeners = m.getChangeListeners();
-		for( ChangeListener l : changeListeners )
-			m.removeChangeListener( l );
-
-		try {
-			r.run();
-		} finally {
-			// add all listeners
-			for( ChangeListener l : changeListeners )
-				m.addChangeListener( l );
-		}
 	}
 
 	//---- class ScrollBarHoverListener ---------------------------------------
