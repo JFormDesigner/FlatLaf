@@ -31,6 +31,7 @@ public class Animator
 	private int resolution = 10;
 	private Interpolator interpolator;
 	private final ArrayList<TimingTarget> targets = new ArrayList<>();
+	private final Runnable endRunnable;
 
 	private boolean running;
 	private boolean hasBegun;
@@ -46,7 +47,7 @@ public class Animator
 	 * @param duration the duration of the animation in milliseconds
 	 */
 	public Animator( int duration ) {
-		this( duration, null );
+		this( duration, null, null );
 	}
 
 	/**
@@ -57,8 +58,21 @@ public class Animator
 	 * @param target the target that receives timing events
 	 */
 	public Animator( int duration, TimingTarget target ) {
+		this( duration, target, null );
+	}
+
+	/**
+	 * Creates an animation that runs duration milliseconds.
+	 * Use {@link #start()} to start the animation.
+	 *
+	 * @param duration the duration of the animation in milliseconds
+	 * @param target the target that receives timing events
+	 * @param endRunnable a runnable invoked when the animation ends; or {@code null}
+	 */
+	public Animator( int duration, TimingTarget target, Runnable endRunnable ) {
 		setDuration( duration );
 		addTarget( target );
+		this.endRunnable = endRunnable;
 	}
 
 	/**
@@ -249,6 +263,9 @@ public class Animator
 			for( TimingTarget target : targets )
 				target.end();
 		}
+
+		if( endRunnable != null )
+			endRunnable.run();
 	}
 
 	private void throwExceptionIfRunning() {

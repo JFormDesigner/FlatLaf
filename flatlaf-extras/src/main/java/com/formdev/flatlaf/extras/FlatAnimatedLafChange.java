@@ -115,26 +115,20 @@ public class FlatAnimatedLafChange
 			return;
 
 		// create animator
-		animator = new Animator( duration, new Animator.TimingTarget() {
-			@Override
-			public void timingEvent( float fraction ) {
-				if( fraction < 0.1 || fraction > 0.9 )
-					return; // ignore initial and last events
+		animator = new Animator( duration, fraction -> {
+			if( fraction < 0.1 || fraction > 0.9 )
+				return; // ignore initial and last events
 
-				alpha = 1f - fraction;
+			alpha = 1f - fraction;
 
-				// repaint snapshots
-				for( Map.Entry<JLayeredPane, JComponent> e : map.entrySet() ) {
-					if( e.getKey().isShowing() )
-						e.getValue().repaint();
-				}
+			// repaint snapshots
+			for( Map.Entry<JLayeredPane, JComponent> e : map.entrySet() ) {
+				if( e.getKey().isShowing() )
+					e.getValue().repaint();
 			}
-
-			@Override
-			public void end() {
-				hideSnapshot();
-				animator = null;
-			}
+		}, () -> {
+			hideSnapshot();
+			animator = null;
 		} );
 
 		animator.setResolution( resolution );

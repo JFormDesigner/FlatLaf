@@ -52,8 +52,8 @@ public class FlatAnimatorTest
 			linearAnimator.stop();
 			linearAnimator.start();
 		} else {
-			linearAnimator = new Animator( 1000, t -> {
-				linearScrollBar.setValue( Math.round( t * linearScrollBar.getMaximum() ) );
+			linearAnimator = new Animator( 1000, fraction -> {
+				linearScrollBar.setValue( Math.round( fraction * linearScrollBar.getMaximum() ) );
 			} );
 			linearAnimator.start();
 		}
@@ -64,8 +64,8 @@ public class FlatAnimatorTest
 			easeInOutAnimator.stop();
 			easeInOutAnimator.start();
 		} else {
-			easeInOutAnimator = new Animator( 1000, t -> {
-				easeInOutScrollBar.setValue( Math.round( t * easeInOutScrollBar.getMaximum() ) );
+			easeInOutAnimator = new Animator( 1000, fraction -> {
+				easeInOutScrollBar.setValue( Math.round( fraction * easeInOutScrollBar.getMaximum() ) );
 			} );
 			easeInOutAnimator.setInterpolator( CubicBezierEasing.EASE_IN_OUT );
 			easeInOutAnimator.start();
