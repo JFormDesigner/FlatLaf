@@ -8,6 +8,8 @@ FlatLaf Change Log
   maximizing window. E.g. restoring window state at startup. (issue #129)
 - InternalFrame: Title pane height was too small when iconify, maximize and close
   buttons are hidden. (issue #132)
+- ScrollPane: Enable/disable smooth scrolling per component if client property
+  "JScrollPane.smoothScrolling" is set to a `Boolean` on `JScrollPane`.
 
 
 ## 0.38

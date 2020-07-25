@@ -201,6 +201,14 @@ public interface FlatClientProperties
 	String SCROLL_BAR_SHOW_BUTTONS = "JScrollBar.showButtons";
 
 	/**
+	 * Specifies whether the scroll pane uses smooth scrolling.
+	 * <p>
+	 * <strong>Component</strong> {{@link javax.swing.JScrollPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String SCROLL_PANE_SMOOTH_SCROLLING = "JScrollPane.smoothScrolling";
+
+	/**
 	 * Specifies whether separators are shown between tabs.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>

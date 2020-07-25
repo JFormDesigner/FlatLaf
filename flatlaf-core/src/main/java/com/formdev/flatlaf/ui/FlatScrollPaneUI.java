@@ -114,10 +114,7 @@ public class FlatScrollPaneUI
 		return new BasicScrollPaneUI.MouseWheelHandler() {
 			@Override
 			public void mouseWheelMoved( MouseWheelEvent e ) {
-				// Note: Getting UI value "ScrollPane.smoothScrolling" here to allow
-				// applications to turn smooth scrolling on or off at any time
-				// (e.g. in application options dialog).
-				if( UIManager.getBoolean( "ScrollPane.smoothScrolling" ) &&
+				if( isSmoothScrollingEnabled() &&
 					scrollpane.isWheelScrollingEnabled() &&
 					e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
 					e.getPreciseWheelRotation() != 0 &&
@@ -128,6 +125,17 @@ public class FlatScrollPaneUI
 					super.mouseWheelMoved( e );
 			}
 		};
+	}
+
+	protected boolean isSmoothScrollingEnabled() {
+		Object smoothScrolling = scrollpane.getClientProperty( FlatClientProperties.SCROLL_PANE_SMOOTH_SCROLLING );
+		if( smoothScrolling instanceof Boolean )
+			return (Boolean) smoothScrolling;
+
+		// Note: Getting UI value "ScrollPane.smoothScrolling" here to allow
+		// applications to turn smooth scrolling on or off at any time
+		// (e.g. in application options dialog).
+		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
 	}
 
 	private static final double EPSILON = 1e-5d;
