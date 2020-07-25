@@ -28,6 +28,8 @@ import java.beans.PropertyChangeListener;
 import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import java.util.Objects;
+import javax.swing.BoundedRangeModel;
+import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -35,6 +37,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -43,6 +46,8 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.Animator;
+import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -429,6 +434,120 @@ public class FlatScrollBarUI
 	@Override
 	public boolean getSupportsAbsolutePositioning() {
 		return allowsAbsolutePositioning;
+	}
+
+	@Override
+	protected void scrollByBlock( int direction ) {
+		runAndSetValueAnimated( () -> {
+			super.scrollByBlock( direction );
+		} );
+	}
+
+	@Override
+	protected void scrollByUnit( int direction ) {
+		runAndSetValueAnimated( () -> {
+			super.scrollByUnit( direction );
+		} );
+	}
+
+	protected void runAndSetValueAnimated( Runnable r ) {
+		if( !isSmoothScrollingEnabled() ) {
+			r.run();
+			return;
+		}
+
+		if( animator != null )
+			animator.cancel();
+
+		int[] newValue = new int[1];
+
+		runWithoutValueChangeEvents( scrollbar, () -> {
+			// if invoked while animation is running, calculation of new value
+			// should start at the previous target value
+			if( targetValue != Integer.MIN_VALUE )
+				scrollbar.setValue( targetValue );
+
+			int oldValue = scrollbar.getValue();
+
+			r.run();
+
+			newValue[0] = scrollbar.getValue();
+			scrollbar.setValue( oldValue );
+		} );
+
+		setValueAnimated( newValue[0] );
+	}
+
+	private Animator animator;
+	private int targetValue = Integer.MIN_VALUE;
+	private int delta;
+
+	protected void setValueAnimated( int value ) {
+		// create animator
+		if( animator == null ) {
+			int duration = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.duration", 200 );
+			int resolution = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.resolution", 10 );
+			Object interpolator = UIManager.get( "ScrollPane.smoothScrolling.interpolator" );
+
+			animator = new Animator( duration, fraction -> {
+				if( !scrollbar.isShowing() ) {
+					animator.cancel();
+					return;
+				}
+
+				scrollbar.setValue( targetValue - delta + Math.round( delta * fraction ) );
+			}, () -> {
+				targetValue = Integer.MIN_VALUE;
+			});
+
+			animator.setResolution( resolution );
+			animator.setInterpolator( (interpolator instanceof Animator.Interpolator)
+				? (Animator.Interpolator) interpolator
+				: new CubicBezierEasing( 0.5f, 0.5f, 0.5f, 1 ) );
+		}
+
+		targetValue = value;
+		delta = targetValue - scrollbar.getValue();
+
+		animator.cancel();
+		animator.start();
+	}
+
+	protected boolean isSmoothScrollingEnabled() {
+		// if scroll bar is child of scroll pane, check only client property of scroll pane
+		Container parent = scrollbar.getParent();
+		JComponent c = (parent instanceof JScrollPane) ? (JScrollPane) parent : scrollbar;
+		Object smoothScrolling = c.getClientProperty( FlatClientProperties.SCROLL_PANE_SMOOTH_SCROLLING );
+		if( smoothScrolling instanceof Boolean )
+			return (Boolean) smoothScrolling;
+
+		// Note: Getting UI value "ScrollPane.smoothScrolling" here to allow
+		// applications to turn smooth scrolling on or off at any time
+		// (e.g. in application options dialog).
+		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
+	}
+
+	protected static void runWithoutValueChangeEvents( JScrollBar scrollBar, Runnable r ) {
+		BoundedRangeModel model = scrollBar.getModel();
+		if( !(model instanceof DefaultBoundedRangeModel) ) {
+			r.run();
+			return;
+		}
+
+		DefaultBoundedRangeModel m = (DefaultBoundedRangeModel) model;
+
+		// remove all listeners
+		ChangeListener[] changeListeners = m.getChangeListeners();
+		for( ChangeListener l : changeListeners )
+			m.removeChangeListener( l );
+
+		try {
+			r.run();
+		} finally {
+			// add all listeners
+			for( ChangeListener l : changeListeners )
+				m.addChangeListener( l );
+		}
 	}
 
 	//---- class ScrollBarHoverListener ---------------------------------------
