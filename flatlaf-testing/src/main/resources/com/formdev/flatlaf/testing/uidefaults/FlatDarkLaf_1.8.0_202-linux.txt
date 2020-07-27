@@ -7,6 +7,9 @@
 - ProgressBar.font               [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
 + ProgressBar.font               [active] Cantarell plain 13    javax.swing.plaf.FontUIResource [UI]
 
+- ScrollBar.minimumThumbSize     10,10    javax.swing.plaf.DimensionUIResource [UI]
++ ScrollBar.minimumThumbSize     18,18    javax.swing.plaf.DimensionUIResource [UI]
+
 - ScrollBar.thumbArc             0
 + ScrollBar.thumbArc             999
 

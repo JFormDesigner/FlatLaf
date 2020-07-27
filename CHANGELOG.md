@@ -6,10 +6,12 @@ FlatLaf Change Log
 - Animated theme change (see [FlatLaf Extras](flatlaf-extras)).
 - Custom window decorations: Fixed maximized window bounds when programmatically
   maximizing window. E.g. restoring window state at startup. (issue #129)
-- InternalFrame: Title pane height was too small when iconify, maximize and close
-  buttons are hidden. (issue #132)
+- InternalFrame: Title pane height was too small when iconify, maximize and
+  close buttons are hidden. (issue #132)
 - ScrollPane: Enable/disable smooth scrolling per component if client property
   "JScrollPane.smoothScrolling" is set to a `Boolean` on `JScrollPane`.
+- ScrollBar: Increased minimum thumb size on macOS and Linux from 8 to 18
+  pixels. On Windows, it is now 10 pixels. (issue #131)
 
 
 ## 0.38

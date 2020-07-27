@@ -284,12 +284,12 @@ public class FlatScrollBarUI
 
 	@Override
 	protected Dimension getMinimumThumbSize() {
-		return UIScale.scale( super.getMinimumThumbSize() );
+		return UIScale.scale( FlatUIUtils.addInsets( super.getMinimumThumbSize(), thumbInsets ) );
 	}
 
 	@Override
 	protected Dimension getMaximumThumbSize() {
-		return UIScale.scale( super.getMaximumThumbSize() );
+		return UIScale.scale( FlatUIUtils.addInsets( super.getMaximumThumbSize(), thumbInsets ) );
 	}
 
 	//---- class ScrollBarHoverListener ---------------------------------------
