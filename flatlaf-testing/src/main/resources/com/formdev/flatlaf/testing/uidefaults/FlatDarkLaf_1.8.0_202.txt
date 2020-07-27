@@ -937,6 +937,7 @@ Table.background               #45494a    javax.swing.plaf.ColorUIResource [UI]
 Table.cellFocusColor           #000000    javax.swing.plaf.ColorUIResource [UI]
 Table.cellMargins              2,3,2,3    javax.swing.plaf.InsetsUIResource [UI]
 Table.cellNoFocusBorder        [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Default [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+Table.consistentHomeEndKeyBehavior true
 Table.descendingSortIcon       [lazy] 10,5    com.formdev.flatlaf.icons.FlatDescendingSortIcon [UI]
 Table.dropCellBackground       [lazy] #3c588b    javax.swing.plaf.ColorUIResource [UI]
 Table.dropCellForeground       [lazy] #bbbbbb    javax.swing.plaf.ColorUIResource [UI]

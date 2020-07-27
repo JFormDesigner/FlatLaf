@@ -22,9 +22,11 @@ import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.LazyValue;
+import javax.swing.UIManager;
 import javax.swing.plaf.InputMapUIResource;
 import com.formdev.flatlaf.util.SystemInfo;
 import static javax.swing.text.DefaultEditorKit.*;
+import java.util.function.BooleanSupplier;
 
 /**
  * @author Karl Tauber
@@ -81,8 +83,11 @@ class FlatInputMaps
 			"shift ctrl TAB", "navigatePrevious"
 		);
 
-		modifyInputMap( defaults, "Table.ancestorInputMap",
-			// swap to make it consistent with List and Tree
+		// swap Home/End with Ctrl+Home/End to make it consistent with List and Tree
+		modifyInputMap( () -> {
+				return UIManager.getBoolean( "Table.consistentHomeEndKeyBehavior" );
+			},
+			defaults, "Table.ancestorInputMap",
 			"HOME", "selectFirstRow",
 			"END", "selectLastRow",
 			"shift HOME", "selectFirstRowExtendSelection",
@@ -574,8 +579,12 @@ class FlatInputMaps
 	}
 
 	private static void modifyInputMap( UIDefaults defaults, String key, Object... bindings ) {
-		// Note: not using `defaults.get(key)` here because this would resolve the lazy value
-		defaults.put( key, new LazyModifyInputMap( defaults.remove( key ), bindings ) );
+		modifyInputMap( null, defaults, key, bindings );
+	}
+
+	private static void modifyInputMap( BooleanSupplier condition, UIDefaults defaults, String key, Object... bindings ) {
+		// Note: not using `defaults.get(key)` here because this would resolve a lazy value
+		defaults.put( key, new LazyModifyInputMap( condition, defaults.remove( key ), bindings ) );
 	}
 
 	private static <T> T mac( T value, T macValue ) {
@@ -614,10 +623,12 @@ class FlatInputMaps
 	private static class LazyModifyInputMap
 		implements LazyValue
 	{
+		private final BooleanSupplier condition;
 		private final Object baseInputMap;
 		private final Object[] bindings;
 
-		LazyModifyInputMap( Object baseInputMap, Object[] bindings ) {
+		LazyModifyInputMap( BooleanSupplier condition, Object baseInputMap, Object[] bindings ) {
+			this.condition = condition;
 			this.baseInputMap = baseInputMap;
 			this.bindings = bindings;
 		}
@@ -628,6 +639,9 @@ class FlatInputMaps
 			InputMap inputMap = (baseInputMap instanceof LazyValue)
 				? (InputMap) ((LazyValue)baseInputMap).createValue( table )
 				: (InputMap) baseInputMap;
+
+			if( condition != null && !condition.getAsBoolean() )
+				return inputMap;
 
 			// modify input map (replace or remove)
 			for( int i = 0; i < bindings.length; i += 2 ) {

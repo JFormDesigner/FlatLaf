@@ -665,6 +665,7 @@ Table.background
 Table.cellFocusColor
 Table.cellMargins
 Table.cellNoFocusBorder
+Table.consistentHomeEndKeyBehavior
 Table.descendingSortIcon
 Table.dropCellBackground
 Table.dropCellForeground

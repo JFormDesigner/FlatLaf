@@ -71,6 +71,10 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.cellFocusColor						Color
  * @uiDefault Table.showCellFocusIndicator				boolean
  *
+ * <!-- FlatInputMaps -->
+ *
+ * @uiDefault Table.consistentHomeEndKeyBehavior		boolean
+ *
  * @author Karl Tauber
  */
 public class FlatTableUI
@@ -91,16 +95,6 @@ public class FlatTableUI
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableUI();
-	}
-
-	@Override
-	public void installUI( JComponent c ) {
-		super.installUI( c );
-	}
-
-	@Override
-	public void uninstallUI( JComponent c ) {
-		super.uninstallUI( c );
 	}
 
 	@Override
