@@ -94,6 +94,11 @@ public class FlatToolTipUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
+		// do not show tool tip if text is empty
+		String text = ((JToolTip)c).getTipText();
+		if( text == null || text.isEmpty() )
+			return new Dimension();
+
 		if( isMultiLine( c ) ) {
 			FontMetrics fm = c.getFontMetrics( c.getFont() );
 			Insets insets = c.getInsets();

@@ -12,6 +12,8 @@ FlatLaf Change Log
   "JScrollPane.smoothScrolling" is set to a `Boolean` on `JScrollPane`.
 - ScrollBar: Increased minimum thumb size on macOS and Linux from 8 to 18
   pixels. On Windows, it is now 10 pixels. (issue #131)
+- ToolTip: Do not show empty tooltip component if tooltip text is an empty
+  string. (issue #134)
 
 
 ## 0.38
