@@ -210,7 +210,7 @@ public class FlatUIUtils
 	 * Paints an outer border, which is usually a focus border.
 	 * <p>
 	 * The outside bounds of the painted border are {@code x,y,width,height}.
-	 * The line width of the painted border is {@code focusWidth + lineWidth}.
+	 * The line thickness of the painted border is {@code focusWidth + lineWidth}.
 	 * The given arc diameter refers to the inner rectangle ({@code x,y,width,height} minus {@code focusWidth}).
 	 *
 	 * @see #paintComponentBorder
@@ -219,6 +219,9 @@ public class FlatUIUtils
 	public static void paintComponentOuterBorder( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
+		if( focusWidth + lineWidth == 0 )
+			return; // nothing to paint
+
 		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
@@ -255,6 +258,7 @@ public class FlatUIUtils
 	 * <p>
 	 * The outside bounds of the painted border are
 	 * {@code x + focusWidth, y + focusWidth, width - (focusWidth * 2), height - (focusWidth * 2)}.
+	 * The line thickness of the painted border is {@code lineWidth}.
 	 * The given arc diameter refers to the painted rectangle (and not to {@code x,y,width,height}).
 	 *
 	 * @see #paintComponentOuterBorder
@@ -263,6 +267,9 @@ public class FlatUIUtils
 	public static void paintComponentBorder( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
+		if( lineWidth == 0 )
+			return; // nothing to paint
+
 		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%

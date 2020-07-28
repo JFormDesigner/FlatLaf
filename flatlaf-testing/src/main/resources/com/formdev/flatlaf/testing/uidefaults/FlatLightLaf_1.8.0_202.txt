@@ -65,6 +65,7 @@ Button.arc                     6
 Button.background              #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 Button.borderColor             #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
+Button.borderWidth             1
 Button.darkShadow              #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
 Button.default.background      #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Button.default.borderColor     #4f9ee3    javax.swing.plaf.ColorUIResource [UI]

@@ -12,6 +12,7 @@ Button.arc
 Button.background
 Button.border
 Button.borderColor
+Button.borderWidth
 Button.darkShadow
 Button.default.background
 Button.default.boldText

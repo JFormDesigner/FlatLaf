@@ -43,24 +43,24 @@ import com.formdev.flatlaf.util.DerivedColor;
  * Border for various components (e.g. {@link javax.swing.JTextField}).
  *
  * There is empty space around the component border, if Component.focusWidth is greater than zero,
- * which is used to paint focus border.
+ * which is used to paint outer focus border.
  *
- * Because there is empty space (if focus border is not painted),
+ * Because there is empty space (if outer focus border is not painted),
  * UI delegates that use this border (or subclasses) must invoke
  * {@link FlatUIUtils#paintParentBackground} to paint the empty space correctly.
  *
- * @uiDefault Component.focusWidth			int
- * @uiDefault Component.innerFocusWidth		int or float
- * @uiDefault Component.focusColor			Color
- * @uiDefault Component.borderColor			Color
- * @uiDefault Component.disabledBorderColor	Color
- * @uiDefault Component.focusedBorderColor	Color
+ * @uiDefault Component.focusWidth						int
+ * @uiDefault Component.innerFocusWidth					int or float
+ * @uiDefault Component.focusColor						Color
+ * @uiDefault Component.borderColor						Color
+ * @uiDefault Component.disabledBorderColor				Color
+ * @uiDefault Component.focusedBorderColor				Color
  *
- * @uiDefault Component.error.borderColor			Color
- * @uiDefault Component.error.focusedBorderColor	Color
- * @uiDefault Component.warning.borderColor			Color
- * @uiDefault Component.warning.focusedBorderColor	Color
- * @uiDefault Component.custom.borderColor			Color
+ * @uiDefault Component.error.borderColor				Color
+ * @uiDefault Component.error.focusedBorderColor		Color
+ * @uiDefault Component.warning.borderColor				Color
+ * @uiDefault Component.warning.focusedBorderColor		Color
+ * @uiDefault Component.custom.borderColor				Color
  *
  * @author Karl Tauber
  */
@@ -93,16 +93,18 @@ public class FlatBorder
 			float arc = isCellEditor ? 0 : scale( (float) getArc( c ) );
 			Color outlineColor = getOutlineColor( c );
 
+			// paint outer border
 			if( outlineColor != null || isFocused( c ) ) {
-				float innerFocusWidth = !(c instanceof JScrollPane)
-					? (outlineColor != null ? innerOutlineWidth : this.innerFocusWidth)
+				float innerWidth = !(c instanceof JScrollPane)
+					? (outlineColor != null ? innerOutlineWidth : innerFocusWidth)
 					: 0;
 
 				g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
-				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height, focusWidth,
-					scale( (float) getLineWidth( c ) ) + scale( innerFocusWidth ), arc );
+				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height,
+					focusWidth, borderWidth + scale( innerWidth ), arc );
 			}
 
+			// paint border
 			g2.setPaint( (outlineColor != null) ? outlineColor : getBorderColor( c ) );
 			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, focusWidth, borderWidth, arc );
 		} finally {
@@ -110,6 +112,10 @@ public class FlatBorder
 		}
 	}
 
+	/**
+	 * Returns the outline color of the component border specified in client property
+	 * {@link FlatClientProperties#OUTLINE}.
+	 */
 	protected Color getOutlineColor( Component c ) {
 		if( !(c instanceof JComponent) )
 			return null;

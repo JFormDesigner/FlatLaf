@@ -14,6 +14,7 @@ FlatLaf Change Log
   pixels. On Windows, it is now 10 pixels. (issue #131)
 - ToolTip: Do not show empty tooltip component if tooltip text is an empty
   string. (issue #134)
+- Button: Support specifying button border width.
 
 
 ## 0.38

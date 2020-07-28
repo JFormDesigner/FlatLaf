@@ -42,6 +42,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.default.hoverBorderColor	Color	optional
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
+ * @uiDefault Button.borderWidth				int
  * @uiDefault Button.default.borderWidth		int
  * @uiDefault Button.toolbar.margin				Insets
  * @uiDefault Button.toolbar.spacingInsets		Insets
@@ -62,6 +63,7 @@ public class FlatButtonBorder
 	protected final Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
 	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
+	protected final int borderWidth = UIManager.getInt( "Button.borderWidth" );
 	protected final int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
 	protected final Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
 	protected final Insets toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
@@ -134,7 +136,7 @@ public class FlatButtonBorder
 
 	@Override
 	protected int getBorderWidth( Component c ) {
-		return FlatButtonUI.isDefaultButton( c ) ? defaultBorderWidth : super.getBorderWidth( c );
+		return FlatButtonUI.isDefaultButton( c ) ? defaultBorderWidth : borderWidth;
 	}
 
 	@Override
