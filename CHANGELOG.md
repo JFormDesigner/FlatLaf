@@ -8,7 +8,7 @@ FlatLaf Change Log
 - Animated theme change (see [FlatLaf Extras](flatlaf-extras)). Used in Demo.
 - Demo: Added combo box above themes list to show only light or dark themes.
 - IntelliJ Themes:
-  - Added "Arc Dark" and "Arc Dark - Orange" themes.
+  - Added "Arc Dark", "Arc Dark - Orange", "Carbon" and "Cobalt 2" themes.
   - Replaced "Solarized" themes with much better ones from 4lex4.
   - Updated "Arc", "One Dark" and "Vuesion" themes.
 - ScrollPane: Enable/disable smooth scrolling per component if client property

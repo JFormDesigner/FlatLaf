@@ -29,6 +29,22 @@
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
 		"sourceCodePath": "blob/master/resources/arc_theme_dark_orange.theme.json"
 	},
+	"Carbon.theme.json": {
+		"name": "Carbon",
+		"dark": true,
+		"license": "Apache License 2.0",
+		"licenseFile": "arc-themes.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/luisfer0793/theme-carbon",
+		"sourceCodePath": "blob/master/resources/matte_carbon_basics.theme.json"
+	},
+	"Cobalt_2.theme.json": {
+		"name": "Cobalt 2",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "Cobalt_2.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/ngehlert/cobalt2",
+		"sourceCodePath": "blob/master/Cobalt2-UI-Theme/resources/Cobalt_2.theme.json"
+	},
 	"Cyan.theme.json": {
 		"name": "Cyan light",
 		"license": "MIT",

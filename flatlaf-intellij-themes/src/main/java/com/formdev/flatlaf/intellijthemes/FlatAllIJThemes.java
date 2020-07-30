@@ -28,6 +28,8 @@ public class FlatAllIJThemes
 		new LookAndFeelInfo( "Arc - Orange", "com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme" ),
 		new LookAndFeelInfo( "Arc Dark", "com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme" ),
 		new LookAndFeelInfo( "Arc Dark - Orange", "com.formdev.flatlaf.intellijthemes.FlatArcDarkOrangeIJTheme" ),
+		new LookAndFeelInfo( "Carbon", "com.formdev.flatlaf.intellijthemes.FlatCarbonIJTheme" ),
+		new LookAndFeelInfo( "Cobalt 2", "com.formdev.flatlaf.intellijthemes.FlatCobalt2IJTheme" ),
 		new LookAndFeelInfo( "Cyan light", "com.formdev.flatlaf.intellijthemes.FlatCyanLightIJTheme" ),
 		new LookAndFeelInfo( "Dark Flat", "com.formdev.flatlaf.intellijthemes.FlatDarkFlatIJTheme" ),
 		new LookAndFeelInfo( "Dark purple", "com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme" ),
