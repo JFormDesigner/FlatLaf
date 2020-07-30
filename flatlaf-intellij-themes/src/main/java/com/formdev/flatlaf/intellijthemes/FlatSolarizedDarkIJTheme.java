@@ -33,6 +33,6 @@ public class FlatSolarizedDarkIJTheme
 	}
 
 	public FlatSolarizedDarkIJTheme() {
-		super( Utils.loadTheme( "solarized_dark_theme.theme.json" ) );
+		super( Utils.loadTheme( "SolarizedDark.theme.json" ) );
 	}
 }

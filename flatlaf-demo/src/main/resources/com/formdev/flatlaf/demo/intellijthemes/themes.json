@@ -153,19 +153,19 @@
 		"sourceCodeUrl": "https://github.com/one-dark/jetbrains-one-dark-theme",
 		"sourceCodePath": "blob/master/buildSrc/templates/oneDark.template.theme.json"
 	},
-	"solarized_dark_theme.theme.json": {
+	"SolarizedDark.theme.json": {
 		"name": "Solarized Dark",
-		"license": "MIT",
-		"licenseFile": "solarized_dark_theme.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/snowe2010/solarized-jetbrains",
-		"sourceCodePath": "blob/master/src/solarized_dark_theme.theme.json"
+		"license": "The Unlicense",
+		"licenseFile": "Solarized.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/4lex4/intellij-platform-solarized",
+		"sourceCodePath": "blob/master/resources/SolarizedDark.theme.json"
 	},
-	"solarized_light_theme.theme.json": {
+	"SolarizedLight.theme.json": {
 		"name": "Solarized Light",
-		"license": "MIT",
-		"licenseFile": "solarized_light_theme.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/snowe2010/solarized-jetbrains",
-		"sourceCodePath": "blob/master/src/solarized_light_theme.theme.json"
+		"license": "The Unlicense",
+		"licenseFile": "Solarized.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/4lex4/intellij-platform-solarized",
+		"sourceCodePath": "blob/master/resources/SolarizedLight.theme.json"
 	},
 	"Spacegray.theme.json": {
 		"name": "Spacegray",

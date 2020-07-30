@@ -19,8 +19,10 @@ FlatLaf Change Log
   combo box and vertical scroll bar is visible. (issue #137)
 - ComboBox: Changed maximum row count of popup list to 15 (was 20). Set UI value
   `ComboBox.maximumRowCount` to any integer to use a different value.
-- IntelliJ Themes: Added "Arc Dark" and "Arc Dark - Orange" themes.
-- IntelliJ Themes: Updated "Arc", "One Dark" and "Vuesion" themes.
+- IntelliJ Themes:
+  - Added "Arc Dark" and "Arc Dark - Orange" themes.
+  - Replaced "Solarized" themes with much better ones from 4lex4.
+  - Updated "Arc", "One Dark" and "Vuesion" themes.
 
 
 ## 0.38

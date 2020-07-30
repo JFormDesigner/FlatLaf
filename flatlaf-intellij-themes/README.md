@@ -69,8 +69,8 @@ Name | Class
 [Monocai](https://github.com/bmikaili/intellij-monocai-theme) | `com.formdev.flatlaf.intellijthemes.FlatMonocaiIJTheme`
 [Nord](https://github.com/arcticicestudio/nord-jetbrains) | `com.formdev.flatlaf.intellijthemes.FlatNordIJTheme`
 [One Dark](https://github.com/one-dark/jetbrains-one-dark-theme) | `com.formdev.flatlaf.intellijthemes.FlatOneDarkIJTheme`
-[Solarized Dark](https://github.com/snowe2010/solarized-jetbrains) | `com.formdev.flatlaf.intellijthemes.FlatSolarizedDarkIJTheme`
-[Solarized Light](https://github.com/snowe2010/solarized-jetbrains) | `com.formdev.flatlaf.intellijthemes.FlatSolarizedLightIJTheme`
+[Solarized Dark](https://github.com/4lex4/intellij-platform-solarized) | `com.formdev.flatlaf.intellijthemes.FlatSolarizedDarkIJTheme`
+[Solarized Light](https://github.com/4lex4/intellij-platform-solarized) | `com.formdev.flatlaf.intellijthemes.FlatSolarizedLightIJTheme`
 [Spacegray](https://github.com/mturlo/intellij-spacegray) | `com.formdev.flatlaf.intellijthemes.FlatSpacegrayIJTheme`
 [Vuesion](https://github.com/vuesion/intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatVuesionIJTheme`
 

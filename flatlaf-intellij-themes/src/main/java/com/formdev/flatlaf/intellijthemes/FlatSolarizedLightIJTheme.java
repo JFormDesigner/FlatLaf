@@ -33,6 +33,6 @@ public class FlatSolarizedLightIJTheme
 	}
 
 	public FlatSolarizedLightIJTheme() {
-		super( Utils.loadTheme( "solarized_light_theme.theme.json" ) );
+		super( Utils.loadTheme( "SolarizedLight.theme.json" ) );
 	}
 }
