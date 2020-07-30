@@ -15,6 +15,8 @@ FlatLaf Change Log
 - ToolTip: Do not show empty tooltip component if tooltip text is an empty
   string. (issue #134)
 - Button: Support specifying button border width.
+- ComboBox: Changed maximum row count of popup list to 15 (was 20). Set UI value
+  `ComboBox.maximumRowCount` to any integer to use a different value.
 
 
 ## 0.38
