@@ -3,26 +3,31 @@ FlatLaf Change Log
 
 ## Unreleased
 
-- Animated theme change (see [FlatLaf Extras](flatlaf-extras)).
-- Custom window decorations: Fixed maximized window bounds when programmatically
-  maximizing window. E.g. restoring window state at startup. (issue #129)
-- InternalFrame: Title pane height was too small when iconify, maximize and
-  close buttons are hidden. (issue #132)
-- ScrollPane: Enable/disable smooth scrolling per component if client property
-  "JScrollPane.smoothScrolling" is set to a `Boolean` on `JScrollPane`.
-- ScrollBar: Increased minimum thumb size on macOS and Linux from 8 to 18
-  pixels. On Windows, it is now 10 pixels. (issue #131)
-- ToolTip: Do not show empty tooltip component if tooltip text is an empty
-  string. (issue #134)
-- Button: Support specifying button border width.
-- ComboBox: Fixed width of popup, which was too small if popup is wider than
-  combo box and vertical scroll bar is visible. (issue #137)
-- ComboBox: Changed maximum row count of popup list to 15 (was 20). Set UI value
-  `ComboBox.maximumRowCount` to any integer to use a different value.
+#### New features
+
+- Animated theme change (see [FlatLaf Extras](flatlaf-extras)). Used in Demo.
 - IntelliJ Themes:
   - Added "Arc Dark" and "Arc Dark - Orange" themes.
   - Replaced "Solarized" themes with much better ones from 4lex4.
   - Updated "Arc", "One Dark" and "Vuesion" themes.
+- ScrollPane: Enable/disable smooth scrolling per component if client property
+  "JScrollPane.smoothScrolling" is set to a `Boolean` on `JScrollPane`.
+- ScrollBar: Increased minimum thumb size on macOS and Linux from 8 to 18
+  pixels. On Windows, it is now 10 pixels. (issue #131)
+- Button: Support specifying button border width.
+- ComboBox: Changed maximum row count of popup list to 15 (was 20). Set UI value
+  `ComboBox.maximumRowCount` to any integer to use a different value.
+
+#### Fixed bugs
+
+- Custom window decorations: Fixed maximized window bounds when programmatically
+  maximizing window. E.g. restoring window state at startup. (issue #129)
+- InternalFrame: Title pane height was too small when iconify, maximize and
+  close buttons are hidden. (issue #132)
+- ToolTip: Do not show empty tooltip component if tooltip text is an empty
+  string. (issue #134)
+- ComboBox: Fixed width of popup, which was too small if popup is wider than
+  combo box and vertical scroll bar is visible. (issue #137)
 
 
 ## 0.38
