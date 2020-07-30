@@ -19,6 +19,7 @@ package com.formdev.flatlaf.demo.intellijthemes;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -120,6 +121,10 @@ public class IJThemesPanel
 	}
 
 	private void updateThemesList() {
+		int filterLightDark = filterComboBox.getSelectedIndex();
+		boolean showLight = (filterLightDark != 2);
+		boolean showDark = (filterLightDark != 1);
+
 		// load theme infos
 		themesManager.loadBundledThemes();
 		themesManager.loadThemesFromDirectory();
@@ -129,15 +134,22 @@ public class IJThemesPanel
 		themesManager.bundledThemes.sort( comparator );
 		themesManager.moreThemes.sort( comparator );
 
+		// remember selection (must be invoked before clearing themes field)
+		IJThemeInfo oldSel = themesList.getSelectedValue();
+
 		themes.clear();
 		categories.clear();
 
 		// add core themes at beginning
 		categories.put( themes.size(), "Core Themes" );
-		themes.add( new IJThemeInfo( "Flat Light", null, null, null, null, null, null, FlatLightLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat Dark", null, null, null, null, null, null, FlatDarkLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat IntelliJ", null, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat Darcula", null, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
+		if( showLight )
+			themes.add( new IJThemeInfo( "Flat Light", null, false, null, null, null, null, null, FlatLightLaf.class.getName() ) );
+		if( showDark )
+			themes.add( new IJThemeInfo( "Flat Dark", null, true, null, null, null, null, null, FlatDarkLaf.class.getName() ) );
+		if( showLight )
+			themes.add( new IJThemeInfo( "Flat IntelliJ", null, false, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
+		if( showDark )
+			themes.add( new IJThemeInfo( "Flat Darcula", null, true, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
 
 		// add themes from directory
 		categories.put( themes.size(), "Current Directory" );
@@ -146,15 +158,17 @@ public class IJThemesPanel
 		// add uncategorized bundled themes
 		categories.put( themes.size(), "IntelliJ Themes" );
 		for( IJThemeInfo ti : themesManager.bundledThemes ) {
-			if( !ti.name.contains( "/" ) )
+			boolean show = (showLight && !ti.dark) || (showDark && ti.dark);
+			if( show && !ti.name.contains( "/" ) )
 				themes.add( ti );
 		}
 
 		// add categorized bundled themes
 		String lastCategory = null;
 		for( IJThemeInfo ti : themesManager.bundledThemes ) {
+			boolean show = (showLight && !ti.dark) || (showDark && ti.dark);
 			int sep = ti.name.indexOf( '/' );
-			if( sep < 0 )
+			if( !show || sep < 0 )
 				continue;
 
 			String category = ti.name.substring( 0, sep ).trim();
@@ -165,9 +179,6 @@ public class IJThemesPanel
 
 			themes.add( ti );
 		}
-
-		// remember selection
-		IJThemeInfo oldSel = themesList.getSelectedValue();
 
 		// fill themes list
 		themesList.setModel( new AbstractListModel<IJThemeInfo>() {
@@ -194,6 +205,18 @@ public class IJThemesPanel
 					break;
 				}
 			}
+		}
+
+		// select first theme if none selected
+		if( themesList.getSelectedIndex() < 0 )
+			themesList.setSelectedIndex( 0 );
+
+		// scroll selection into visible area
+		int sel = themesList.getSelectedIndex();
+		if( sel >= 0 ) {
+			Rectangle bounds = themesList.getCellBounds( sel, sel );
+			if( bounds != null )
+				themesList.scrollRectToVisible( bounds );
 		}
 	}
 
@@ -381,12 +404,17 @@ public class IJThemesPanel
 		isAdjustingThemesList = false;
 	}
 
+	private void filterChanged() {
+		updateThemesList();
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel themesLabel = new JLabel();
 		toolBar = new JToolBar();
 		saveButton = new JButton();
 		sourceCodeButton = new JButton();
+		filterComboBox = new JComboBox<>();
 		themesScrollPane = new JScrollPane();
 		themesList = new JList<>();
 
@@ -419,6 +447,17 @@ public class IJThemesPanel
 		}
 		add(toolBar, "cell 0 0,alignx right,growx 0");
 
+		//---- filterComboBox ----
+		filterComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+			"all",
+			"light",
+			"dark"
+		}));
+		filterComboBox.putClientProperty("JComponent.minimumWidth", 0);
+		filterComboBox.setFocusable(false);
+		filterComboBox.addActionListener(e -> filterChanged());
+		add(filterComboBox, "cell 0 0,alignx right,growx 0");
+
 		//======== themesScrollPane ========
 		{
 
@@ -435,6 +474,7 @@ public class IJThemesPanel
 	private JToolBar toolBar;
 	private JButton saveButton;
 	private JButton sourceCodeButton;
+	private JComboBox<String> filterComboBox;
 	private JScrollPane themesScrollPane;
 	private JList<IJThemeInfo> themesList;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

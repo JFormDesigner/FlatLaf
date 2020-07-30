@@ -6,6 +6,7 @@ FlatLaf Change Log
 #### New features
 
 - Animated theme change (see [FlatLaf Extras](flatlaf-extras)). Used in Demo.
+- Demo: Added combo box above themes list to show only light or dark themes.
 - IntelliJ Themes:
   - Added "Arc Dark" and "Arc Dark - Orange" themes.
   - Replaced "Solarized" themes with much better ones from 4lex4.
