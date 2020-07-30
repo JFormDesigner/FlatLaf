@@ -47,6 +47,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
@@ -544,13 +545,26 @@ public class FlatComboBoxUI
 
 		@Override
 		protected Rectangle computePopupBounds( int px, int py, int pw, int ph ) {
-			// get maximum display size of all items
-			Dimension displaySize = getDisplaySize();
+			// get maximum display width of all items
+			int displayWidth = getDisplaySize().width;
+
+			// add border insets
+			for( Border border : new Border[] { scroller.getViewportBorder(), scroller.getBorder() } ) {
+				if( border != null ) {
+					Insets borderInsets = border.getBorderInsets( null );
+					displayWidth += borderInsets.left + borderInsets.right;
+				}
+			}
+
+			// add width of vertical scroll bar
+			JScrollBar verticalScrollBar = scroller.getVerticalScrollBar();
+			if( verticalScrollBar != null )
+				displayWidth += verticalScrollBar.getPreferredSize().width;
 
 			// make popup wider if necessary
-			if( displaySize.width > pw ) {
-				int diff = displaySize.width - pw;
-				pw = displaySize.width;
+			if( displayWidth > pw ) {
+				int diff = displayWidth - pw;
+				pw = displayWidth;
 
 				if( !comboBox.getComponentOrientation().isLeftToRight() )
 					px -= diff;
