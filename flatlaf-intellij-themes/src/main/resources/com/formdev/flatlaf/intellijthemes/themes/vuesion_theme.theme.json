@@ -82,9 +82,10 @@
     "ComboPopup.border": "1,1,1,1,303a45",
 
     "CompletionPopup": {
-      "matchForeground": "#f43b6c",
-      "selectionBackground": "#202831",
-      "selectionInactiveBackground": "#202831"
+      "foreground": "#c9cbcf",
+      "matchForeground": "#0d9660",
+      "selectionBackground": "#0c1014",
+      "selectionInactiveBackground": "#0c1014"
     },
 
     "Component": {
@@ -103,7 +104,6 @@
 
     "DebuggerPopup.borderColor": "#202831",
 
-    "DebuggerTabs.selectedBackground": "#303a45",
     "DebuggerTabs.underlineHeight": 1,
 
     "DefaultTabs": {
@@ -254,14 +254,14 @@
       "Transparent": {
         "thumbColor": "#303a45",
         "thumbBorderColor": "#303a45",
-        "hoverThumbColor": "#434e5b",
-        "hoverThumbBorderColor": "#434e5b",
+        "hoverThumbColor": "#9ca2aa",
+        "hoverThumbBorderColor": "#9ca2aa",
         "hoverTrackColor": "#434e5b"
       },
       "thumbColor": "#303a45",
       "thumbBorderColor": "#303a45",
-      "hoverThumbColor": "#434e5b",
-      "hoverThumbBorderColor": "#434e5b",
+      "hoverThumbColor": "#9ca2aa",
+      "hoverThumbBorderColor": "#9ca2aa",
       "trackColor": "#434e5b",
       "hoverTrackColor": "#434e5b",
 
@@ -269,14 +269,14 @@
         "Transparent": {
           "thumbColor": "#303a45",
           "thumbBorderColor": "#303a45",
-          "hoverThumbColor": "#434e5b",
-          "hoverThumbBorderColor": "#434e5b",
+          "hoverThumbColor": "#9ca2aa",
+          "hoverThumbBorderColor": "#9ca2aa",
           "hoverTrackColor": "#434e5b"
         },
         "thumbColor": "#303a45",
         "thumbBorderColor": "#303a45",
-        "hoverThumbColor": "#434e5b",
-        "hoverThumbBorderColor": "#434e5b",
+        "hoverThumbColor": "#9ca2aa",
+        "hoverThumbBorderColor": "#9ca2aa",
         "trackColor": "#434e5b",
         "hoverTrackColor": "#434e5b"
       }
@@ -349,7 +349,6 @@
       },
 
       "HeaderTab": {
-        "selectedBackground": "#303a45",
         "selectedInactiveBackground": "#303a45",
         "hoverBackground": "#303a45",
         "hoverInactiveBackground": "#303a45",

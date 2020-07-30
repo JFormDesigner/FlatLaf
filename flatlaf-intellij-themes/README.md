@@ -49,6 +49,8 @@ Name | Class
 -----|------
 [Arc](https://gitlab.com/zlamalp/arc-theme-idea) | `com.formdev.flatlaf.intellijthemes.FlatArcIJTheme`
 [Arc - Orange](https://gitlab.com/zlamalp/arc-theme-idea) | `com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme`
+[Arc Dark](https://gitlab.com/zlamalp/arc-theme-idea) | `com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme`
+[Arc Dark - Orange](https://gitlab.com/zlamalp/arc-theme-idea) | `com.formdev.flatlaf.intellijthemes.FlatArcDarkOrangeIJTheme`
 [Cyan light](https://github.com/OlyaB/CyanTheme) | `com.formdev.flatlaf.intellijthemes.FlatCyanLightIJTheme`
 [Dark Flat](https://github.com/nerzhulart/DarkFlatTheme) | `com.formdev.flatlaf.intellijthemes.FlatDarkFlatIJTheme`
 [Dark purple](https://github.com/OlyaB/DarkPurpleTheme) | `com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme`

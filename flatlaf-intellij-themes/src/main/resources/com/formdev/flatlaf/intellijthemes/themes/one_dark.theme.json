@@ -1,9 +1,11 @@
-
 {
   "name": "One Dark",
   "dark": true,
   "author": "Mark Skelton",
   "editorScheme": "/themes/one_dark.xml",
+  "colors": {
+    "accentColor": "#568AF2"
+  },
   "ui": {
     "*": {
       "background": "#21252b",
@@ -27,7 +29,7 @@
       "borderColor": "#333841",
       "disabledBorderColor": "#2d3137",
       "focusColor": "#21252b",
-      "focusedBorderColor": "#568AF2",
+      "focusedBorderColor": "accentColor",
 
       "separatorColor": "#32363c"
     },
@@ -50,10 +52,10 @@
 
       "default": {
         "foreground": "#ffffff",
-        "startBackground": "#568AF2",
-        "endBackground": "#568AF2",
-        "startBorderColor": "#568AF2",
-        "endBorderColor": "#568AF2",
+        "startBackground": "accentColor",
+        "endBackground": "accentColor",
+        "startBorderColor": "accentColor",
+        "endBorderColor": "accentColor",
         "focusedBorderColor": "#4269b9",
         "focusColor": "#4269b9"
       }
@@ -78,7 +80,7 @@
     "ComboPopup.border": "1,1,1,1,2d3137",
 
     "CompletionPopup":  {
-      "matchForeground": "#568AF2"
+      "matchForeground": "accentColor"
     },
 
     "Component": {
@@ -94,7 +96,7 @@
     },
 
     "DefaultTabs": {
-      "underlineColor": "#568AF2",
+      "underlineColor": "accentColor",
       "inactiveUnderlineColor": "#4269b9",
       "hoverBackground": "#323844"
     },
@@ -108,7 +110,7 @@
     "Editor": {
       "background": "#282c34",
       "foreground": "#abb2bf",
-      "shortcutForeground": "#568AF2"
+      "shortcutForeground": "accentColor"
     },
 
     "EditorPane.inactiveBackground": "#282c34",
@@ -179,13 +181,13 @@
       "tagForeground": "#abb2bf",
 
       "Button": {
-        "installForeground": "#568AF2",
-        "installBorderColor":"#568AF2",
+        "installForeground": "accentColor",
+        "installBorderColor":"accentColor",
         "installFillForeground": "#ffffff",
-        "installFillBackground": "#568AF2",
+        "installFillBackground": "accentColor",
         "updateForeground":"#ffffff",
-        "updateBackground": "#568AF2",
-        "updateBorderColor": "#568AF2"
+        "updateBackground": "accentColor",
+        "updateBorderColor": "accentColor"
       },
 
       "SearchField": {
@@ -215,8 +217,8 @@
 
     "ProgressBar": {
       "trackColor": "#1D1D26",
-      "progressColor": "#568AF2",
-      "indeterminateStartColor": "#568AF2",
+      "progressColor": "accentColor",
+      "indeterminateStartColor": "accentColor",
       "indeterminateEndColor": "#313469",
       "failedColor": "#bd3c5f",
       "failedEndColor": "#472c33",
@@ -240,8 +242,8 @@
     },
 
     "SearchMatch": {
-      "startBackground": "#568AF2",
-      "endBackground": "#568AF2"
+      "startBackground": "accentColor",
+      "endBackground": "accentColor"
     },
 
     "SpeedSearch": {
@@ -251,8 +253,10 @@
       "errorForeground": "#e06c75"
     },
 
+    "Settings.Spotlight.borderColor": "accentColor",
+
     "TabbedPane": {
-      "underlineColor": "#568AF2",
+      "underlineColor": "accentColor",
       "contentAreaColor": "#323844",
       "hoverColor": "#323844"
     },
@@ -285,7 +289,7 @@
 
     "ToggleButton": {
       "onForeground": "#ffffff",
-      "onBackground": "#568AF2",
+      "onBackground": "accentColor",
       "offForeground": "#9f9fa6",
       "offBackground": "#3d424b",
       "borderColor":  "#3d424b",
@@ -318,7 +322,7 @@
 
     "Tree": {
       "selectionBackground": "#4d78cc",
-      "modifiedItemForeground": "#568AF2",
+      "modifiedItemForeground": "accentColor",
       "rowHeight": 20
     },
 
@@ -353,9 +357,9 @@
       "Checkbox.Background.Default.Dark": "#282c34",
       "Checkbox.Border.Default.Dark": "#414855",
       "Checkbox.Foreground.Selected.Dark": "#abb2bf",
-      "Checkbox.Focus.Wide.Dark": "#568AF2",
-      "Checkbox.Focus.Thin.Default.Dark": "#568AF2",
-      "Checkbox.Focus.Thin.Selected.Dark": "#568AF2",
+      "Checkbox.Focus.Wide.Dark": "accentColor",
+      "Checkbox.Focus.Thin.Default.Dark": "accentColor",
+      "Checkbox.Focus.Thin.Selected.Dark": "accentColor",
       "Checkbox.Background.Disabled.Dark": "#21252b",
       "Checkbox.Border.Disabled.Dark": "#2c313a",
       "Checkbox.Foreground.Disabled.Dark": "#5c6370"

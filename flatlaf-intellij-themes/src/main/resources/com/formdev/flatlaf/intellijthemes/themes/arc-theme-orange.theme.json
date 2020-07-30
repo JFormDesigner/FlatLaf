@@ -2,6 +2,7 @@
   "name": "Arc Theme - Orange",
   "dark": false,
   "author": "Pavel Zlámal",
+  "editorScheme": "/arc-theme-light.xml",
 
   "ui": {
 
@@ -15,8 +16,8 @@
 	},
 
 	"Borders": {
-	  "color": "#e1e3e6",
-	  "ContrastBorderColor": "#E1E3E6"
+	  "color": "#C4C4C4",
+	  "ContrastBorderColor": "#C4C4C4"
 	},
 
 	"Button": {
@@ -25,6 +26,8 @@
 	  "endBorderColor": "#C4C4C4",
 	  "focusedBorderColor" : "#f57900",
 	  "background" : "#F5F5F5",
+	  "startBackground" : "#fcfdfd",
+	  "endBackground" : "#fcfdfd",
 	  "default": {
 		"foreground": "#FFFFFF",
 		"startBackground": "#f57900",
@@ -36,6 +39,13 @@
 	  }
 	},
 
+	"ActionButton.hoverBackground" : "#ffffff",
+	"ActionButton.hoverBorderColor" : "#C4C4C4",
+	"ActionButton.pressedBorderColor" : "#C4C4C4",
+	"ActionButton.pressedBackground" : "#ffffff",
+	"StatusBar.hoverBackground" : "#ffffff",
+	"StatusBar.borderColor" : "#C4C4C4",
+	"ToolBar.highlight" : "#ffffff",
 	"ToolBar.background" : "#F5F5F5",
 	"Popup.Toolbar.background" : "#F5F5F5",
 	"Panel.background": "#F5F5F5",
@@ -92,6 +102,7 @@
 	"TabbedPane.underlineColor" : "#f57900",
 	"TabbedPane.tabSelectionHeight" : 2,
 	"TabbedPane.background" : "#F5F5F5",
+	"TabbedPane.hoverColor" : "#ffffff",
 
 	"Link.hoverForeground" : "#f57900",
 	"Link.activeForeground" : "#f57900",
@@ -110,6 +121,18 @@
 	"FormattedTextField.background" : "#ffffff",
 	"Editor.background" : "#f5f5f5",
 	"EditorPane.background" : "#ffffff",
+
+	"Component.borderColor" : "#C4C4C4",
+	"HelpTooltip.borderColor" : "#C4C4C4",
+	"InplaceRefactoringPopup.borderColor" : "#C4C4C4",
+	"NavBar.borderColor" : "#C4C4C4",
+	"ComboPopup.border": "#C4C4C4",
+	"Popup.Header.activeBackground" : "#e7e8eb",
+	"Popup.borderColor" : "#C4C4C4",
+	"Popup.inactiveBorderColor" : "#C4C4C4",
+	"Popup.Advertiser.borderColor" : "#C4C4C4",
+	"Popup.Toolbar.borderColor" : "#C4C4C4",
+	"SpeedSearch.borderColor" : "#C4C4C4",
 
 	"CheckBox.background" : "#F5F5F5",
 	"RadioButton.background" : "#F5F5F5",
@@ -146,17 +169,25 @@
 
 	"ToolWindow.Header.background" : "#e7e8eb",
 	"ToolWindow.HeaderTab.selectedBackground" : "#dddee1",
-	"ToolWindow.HeaderTab.hoverInactiveBackground" : "#dddee1",
 	"ToolWindow.HeaderTab.selectedInactiveBackground" : "#dddee1",
 	"ToolWindow.Button.selectedBackground" : "#dddee1",
+	"ToolWindow.Button.hoverBackground" : "#ffffff",
 	"ToolWindow.HeaderTab.underlineHeight" : 2,
 	"ToolWindow.HeaderTab.underlineColor" : "#f57900",
+	"ToolWindow.HeaderTab.underlinedTabBackground" : "#F5F5F500",
+	"ToolWindow.HeaderTab.hoverBackground" : "#F5F5F5",
+	"ToolWindow.HeaderTab.hoverInactiveBackground" : "#F5F5F5",
 	"DefaultTabs.underlineHeight" : 2,
 	"DefaultTabs.underlineColor" : "#f57900",
+	"DefaultTabs.underlinedTabBackground" : "#ffffff",
 	"DefaultTabs.background" : "#F5F5F5",
+	"DefaultTabs.borderColor" : "#C4C4C4",
+	"DefaultTabs.hoverBackground" : "#ffffff90",
 	"EditorTabs.underlineHeight" : 2,
 	"EditorTabs.underlineColor" : "#f57900",
 	"EditorTabs.background" : "#F5F5F5",
+	"EditorTabs.borderColor": "#C4C4C4",
+	"EditorTabs.hoverBackground" : "#ffffff",
 
 	"Notification.background" : "#F5F5F5",
 	"Notification.MoreButton.background" : "#dddee1",

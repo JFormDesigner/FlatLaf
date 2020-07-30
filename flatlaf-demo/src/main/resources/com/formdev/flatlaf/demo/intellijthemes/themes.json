@@ -13,6 +13,20 @@
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
 		"sourceCodePath": "blob/master/resources/arc-theme-orange.theme.json"
 	},
+	"arc_theme_dark.theme.json": {
+		"name": "Arc Dark",
+		"license": "MIT",
+		"licenseFile": "arc-themes.LICENSE.txt",
+		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
+		"sourceCodePath": "blob/master/resources/arc_theme_dark.theme.json"
+	},
+	"arc_theme_dark_orange.theme.json": {
+		"name": "Arc Dark - Orange",
+		"license": "MIT",
+		"licenseFile": "arc-themes.LICENSE.txt",
+		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
+		"sourceCodePath": "blob/master/resources/arc_theme_dark_orange.theme.json"
+	},
 	"Cyan.theme.json": {
 		"name": "Cyan light",
 		"license": "MIT",
@@ -137,7 +151,7 @@
 		"license": "MIT",
 		"licenseFile": "one_dark.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/one-dark/jetbrains-one-dark-theme",
-		"sourceCodePath": "blob/master/src/main/resources/themes/one_dark.theme.json"
+		"sourceCodePath": "blob/master/buildSrc/templates/oneDark.template.theme.json"
 	},
 	"solarized_dark_theme.theme.json": {
 		"name": "Solarized Dark",
