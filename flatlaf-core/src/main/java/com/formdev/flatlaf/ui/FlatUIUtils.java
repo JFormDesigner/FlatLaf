@@ -136,7 +136,16 @@ public class FlatUIUtils
 		return FlatClientProperties.clientPropertyInt( c, FlatClientProperties.MINIMUM_HEIGHT, minimumHeight );
 	}
 
-	public static boolean isTableCellEditor( Component c ) {
+	public static boolean isCellEditor( Component c ) {
+		// check whether used as cell editor in file chooser
+		//   Tree.cellEditor is set in sun.swing.FilePane.editFileName()
+		//   Table.editor is set in JTable.GenericEditor constructor
+		String name = c.getName();
+		if( "Tree.cellEditor".equals( name ) || "Table.editor".equals( name ) )
+			return true;
+
+		// for using combo box as cell editor in table
+		//   JComboBox.isTableCellEditor is set in javax.swing.DefaultCellEditor(JComboBox) constructor
 		return c instanceof JComponent && Boolean.TRUE.equals( ((JComponent)c).getClientProperty( "JComboBox.isTableCellEditor" ) );
 	}
 

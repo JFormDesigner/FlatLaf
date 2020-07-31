@@ -87,7 +87,7 @@ public class FlatBorder
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			boolean isCellEditor = isTableCellEditor( c );
+			boolean isCellEditor = isCellEditor( c );
 			float focusWidth = isCellEditor ? 0 : scale( (float) getFocusWidth( c ) );
 			float borderWidth = scale( (float) getBorderWidth( c ) );
 			float arc = isCellEditor ? 0 : scale( (float) getArc( c ) );
@@ -95,7 +95,7 @@ public class FlatBorder
 
 			// paint outer border
 			if( outlineColor != null || isFocused( c ) ) {
-				float innerWidth = !(c instanceof JScrollPane)
+				float innerWidth = !isCellEditor && !(c instanceof JScrollPane)
 					? (outlineColor != null ? innerOutlineWidth : innerFocusWidth)
 					: 0;
 
@@ -198,13 +198,13 @@ public class FlatBorder
 			return FlatUIUtils.isPermanentFocusOwner( c );
 	}
 
-	protected boolean isTableCellEditor( Component c ) {
-		return FlatUIUtils.isTableCellEditor( c );
+	protected boolean isCellEditor( Component c ) {
+		return FlatUIUtils.isCellEditor( c );
 	}
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		boolean isCellEditor = isTableCellEditor( c );
+		boolean isCellEditor = isCellEditor( c );
 		float focusWidth = isCellEditor ? 0 : scale( (float) getFocusWidth( c ) );
 		float ow = focusWidth + scale( (float) getLineWidth( c ) );
 
@@ -213,6 +213,18 @@ public class FlatBorder
 		insets.left = Math.round( scale( (float) insets.left ) + ow );
 		insets.bottom = Math.round( scale( (float) insets.bottom ) + ow );
 		insets.right = Math.round( scale( (float) insets.right ) + ow );
+
+		if( isCellEditor ) {
+			// remove top and bottom insets if used as cell editor
+			insets.top = insets.bottom = 0;
+
+			// remove right/left insets to avoid that text is truncated (e.g. in file chooser)
+			if( c.getComponentOrientation().isLeftToRight() )
+				insets.right = 0;
+			else
+				insets.left = 0;
+		}
+
 		return insets;
 	}
 

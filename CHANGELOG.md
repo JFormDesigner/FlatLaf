@@ -31,6 +31,8 @@ FlatLaf Change Log
   combo box and vertical scroll bar is visible. (issue #137)
 - MenuItem on macOS: Removed plus characters from accelerator text and made
   modifier key order conform with macOS standard. (issue #141)
+- FileChooser: Fixed too small text field when renaming a file/directory in Flat
+  IntelliJ/Darcula themes. (issue #143)
 
 
 ## 0.38
