@@ -33,6 +33,7 @@ FlatLaf Change Log
   modifier key order conform with macOS standard. (issue #141)
 - FileChooser: Fixed too small text field when renaming a file/directory in Flat
   IntelliJ/Darcula themes. (issue #143)
+- IntelliJ Themes: Fixed text colors in ProgressBar. (issue #138)
 
 
 ## 0.38

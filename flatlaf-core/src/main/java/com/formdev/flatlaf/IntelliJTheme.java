@@ -147,6 +147,10 @@ public class IntelliJTheme
 		applyColorPalette( defaults );
 		applyCheckBoxColors( defaults );
 
+		// copy values
+		for( Map.Entry<String, String> e : uiKeyCopying.entrySet() )
+			defaults.put( e.getKey(), defaults.get( e.getValue() ) );
+
 		// IDEA does not paint button background if disabled, but FlatLaf does
 		Object panelBackground = defaults.get( "Panel.background" );
 		defaults.put( "Button.disabledBackground", panelBackground );
@@ -466,10 +470,6 @@ public class IntelliJTheme
 			defaults.remove( "CheckBox.icon[filled].selectedHoverBackground" );
 			defaults.remove( "CheckBox.icon[filled].selectedPressedBackground" );
 		}
-
-		// copy values
-		for( Map.Entry<String, String> e : uiKeyCopying.entrySet() )
-			defaults.put( e.getKey(), defaults.get( e.getValue() ) );
 	}
 
 	private static Map<String, String> uiKeyMapping = new HashMap<>();
@@ -514,6 +514,8 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ProgressBar.foreground",    "" ); // ignore
 		uiKeyMapping.put( "ProgressBar.trackColor",    "ProgressBar.background" );
 		uiKeyMapping.put( "ProgressBar.progressColor", "ProgressBar.foreground" );
+		uiKeyCopying.put( "ProgressBar.selectionForeground", "ProgressBar.background" );
+		uiKeyCopying.put( "ProgressBar.selectionBackground", "ProgressBar.foreground" );
 
 		// ScrollBar
 		uiKeyMapping.put( "ScrollBar.trackColor", "ScrollBar.track" );
