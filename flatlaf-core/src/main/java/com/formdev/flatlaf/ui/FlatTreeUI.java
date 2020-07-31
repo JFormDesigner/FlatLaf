@@ -261,16 +261,25 @@ public class FlatTreeUI
 
 		// apply inactive selection background/foreground if tree is not focused
 		Color oldBackgroundSelectionColor = null;
+		Boolean oldOpaque = null;
 		if( isSelected && !hasFocus && !isDropRow ) {
+			if (!rendererComponent.isOpaque()) {
+				oldOpaque = rendererComponent.isOpaque();
+			}
 			if( rendererComponent instanceof DefaultTreeCellRenderer ) {
 				DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) rendererComponent;
-				if( renderer.getBackgroundSelectionColor() == selectionBackground ) {
+				if( renderer.getBackgroundSelectionColor() == selectionBackground || Boolean.FALSE.equals( oldOpaque )) {
 					oldBackgroundSelectionColor = renderer.getBackgroundSelectionColor();
 					renderer.setBackgroundSelectionColor( selectionInactiveBackground );
+					renderer.setOpaque( true );
 				}
 			} else {
-				if( rendererComponent.getBackground() == selectionBackground )
+				if( rendererComponent.getBackground() == selectionBackground || Boolean.FALSE.equals( oldOpaque ) ) {
+					if ( rendererComponent instanceof JComponent ) {
+						((JComponent) rendererComponent).setOpaque( true );
+					}
 					rendererComponent.setBackground( selectionInactiveBackground );
+				}
 			}
 
 			if( rendererComponent.getForeground() == selectionForeground )
@@ -293,11 +302,13 @@ public class FlatTreeUI
 		// paint renderer
 		rendererPane.paintComponent( g, rendererComponent, tree, bounds.x, bounds.y, bounds.width, bounds.height, true );
 
-		// restore background selection color and border selection color
+		// restore background selection color, border selection color and opaque
 		if( oldBackgroundSelectionColor != null )
 			((DefaultTreeCellRenderer)rendererComponent).setBackgroundSelectionColor( oldBackgroundSelectionColor );
 		if( oldBorderSelectionColor != null )
 			((DefaultTreeCellRenderer)rendererComponent).setBorderSelectionColor( oldBorderSelectionColor );
+		if( oldOpaque != null && rendererComponent instanceof JComponent )
+			((JComponent)rendererComponent).setOpaque( oldOpaque );
 	}
 
 	/**
