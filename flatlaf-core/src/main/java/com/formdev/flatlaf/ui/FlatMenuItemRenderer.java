@@ -41,6 +41,7 @@ import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Renderer for menu items.
@@ -418,35 +419,77 @@ debug*/
 
 	private KeyStroke cachedAccelerator;
 	private String cachedAcceleratorText;
+	private boolean cachedAcceleratorLeftToRight;
 
 	private String getAcceleratorText() {
 		KeyStroke accelerator = menuItem.getAccelerator();
 		if( accelerator == null )
 			return null;
 
-		if( accelerator == cachedAccelerator )
+		boolean leftToRight = menuItem.getComponentOrientation().isLeftToRight();
+
+		if( accelerator == cachedAccelerator && leftToRight == cachedAcceleratorLeftToRight )
 			return cachedAcceleratorText;
 
 		cachedAccelerator = accelerator;
 		cachedAcceleratorText = getTextForAccelerator( accelerator );
+		cachedAcceleratorLeftToRight = leftToRight;
 
 		return cachedAcceleratorText;
 	}
 
 	protected String getTextForAccelerator( KeyStroke accelerator ) {
 		StringBuilder buf = new StringBuilder();
-		int modifiers = accelerator.getModifiers();
-		if( modifiers != 0 )
-			buf.append( InputEvent.getModifiersExText( modifiers ) ).append( acceleratorDelimiter );
+		boolean leftToRight = menuItem.getComponentOrientation().isLeftToRight();
 
+		// modifiers
+		int modifiers = accelerator.getModifiers();
+		if( modifiers != 0 ) {
+			if( SystemInfo.isMacOS ) {
+				if( leftToRight )
+					buf.append( getMacOSModifiersExText( modifiers, leftToRight ) );
+			} else
+				buf.append( InputEvent.getModifiersExText( modifiers ) ).append( acceleratorDelimiter );
+		}
+
+		// key
 		int keyCode = accelerator.getKeyCode();
 		if( keyCode != 0 )
 			buf.append( KeyEvent.getKeyText( keyCode ) );
 		else
 			buf.append( accelerator.getKeyChar() );
 
+		// modifiers if right-to-left on macOS
+		if( modifiers != 0 && !leftToRight && SystemInfo.isMacOS )
+			buf.append( getMacOSModifiersExText( modifiers, leftToRight ) );
+
 		return buf.toString();
 	}
+
+	protected String getMacOSModifiersExText( int modifiers, boolean leftToRight ) {
+		StringBuilder buf = new StringBuilder();
+
+		if( (modifiers & InputEvent.CTRL_DOWN_MASK) != 0 )
+			buf.append( controlGlyph );
+		if( (modifiers & (InputEvent.ALT_DOWN_MASK | InputEvent.ALT_GRAPH_DOWN_MASK)) != 0 )
+			buf.append( optionGlyph );
+		if( (modifiers & InputEvent.SHIFT_DOWN_MASK) != 0 )
+			buf.append( shiftGlyph );
+		if( (modifiers & InputEvent.META_DOWN_MASK) != 0 )
+			buf.append( commandGlyph );
+
+		// reverse order for right-to-left
+		if( !leftToRight )
+			buf.reverse();
+
+		return buf.toString();
+	}
+
+	private static final char
+		controlGlyph = 0x2303,
+		optionGlyph = 0x2325,
+		shiftGlyph = 0x21E7,
+		commandGlyph = 0x2318;
 
 	//---- class MinSizeIcon --------------------------------------------------
 

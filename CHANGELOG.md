@@ -29,6 +29,8 @@ FlatLaf Change Log
   string. (issue #134)
 - ComboBox: Fixed width of popup, which was too small if popup is wider than
   combo box and vertical scroll bar is visible. (issue #137)
+- MenuItem on macOS: Removed plus characters from accelerator text and made
+  modifier key order conform with macOS standard. (issue #141)
 
 
 ## 0.38
