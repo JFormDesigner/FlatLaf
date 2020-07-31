@@ -39,7 +39,7 @@ public class FlatDatePickerBorder
 	}
 
 	@Override
-	protected boolean isTableCellEditor( Component c ) {
+	protected boolean isCellEditor( Component c ) {
 		return c.getParent() instanceof JTable;
 	}
 }
