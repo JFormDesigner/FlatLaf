@@ -27,6 +27,8 @@ FlatLaf Change Log
   close buttons are hidden. (issue #132)
 - ToolTip: Do not show empty tooltip component if tooltip text is an empty
   string. (issue #134)
+- ToolTip: Fixed truncated text in HTML formatted tooltip on HiDPI displays.
+  (issue #142)
 - ComboBox: Fixed width of popup, which was too small if popup is wider than
   combo box and vertical scroll bar is visible. (issue #137)
 - MenuItem on macOS: Removed plus characters from accelerator text and made

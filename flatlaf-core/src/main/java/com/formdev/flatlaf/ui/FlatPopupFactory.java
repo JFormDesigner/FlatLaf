@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JToolTip;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.RootPaneContainer;
@@ -132,6 +133,7 @@ public class FlatPopupFactory
 		extends Popup
 	{
 		private Popup delegate;
+		private Component contents;
 
 		// heavy weight
 		protected Window popupWindow;
@@ -139,6 +141,7 @@ public class FlatPopupFactory
 
 		NonFlashingPopup( Popup delegate, Component contents ) {
 			this.delegate = delegate;
+			this.contents = contents;
 
 			popupWindow = SwingUtilities.windowForComponent( contents );
 			if( popupWindow != null ) {
@@ -153,8 +156,25 @@ public class FlatPopupFactory
 
 		@Override
 		public void show() {
-			if( delegate != null )
+			if( delegate != null ) {
 				delegate.show();
+
+				// increase tooltip size if necessary because it may be too small on HiDPI screens
+				//    https://bugs.openjdk.java.net/browse/JDK-8213535
+				if( contents instanceof JToolTip ) {
+					Container parent = contents.getParent();
+					if( parent instanceof JPanel ) {
+						Dimension prefSize = parent.getPreferredSize();
+						if( !prefSize.equals( parent.getSize() ) ) {
+							Container panel = SwingUtilities.getAncestorOfClass( Panel.class, parent );
+							if( panel != null )
+								panel.setSize( prefSize ); // for medium weight popup
+							else
+								parent.setSize( prefSize ); // for light weight popup
+						}
+					}
+				}
+			}
 		}
 
 		@Override
@@ -162,6 +182,7 @@ public class FlatPopupFactory
 			if( delegate != null ) {
 				delegate.hide();
 				delegate = null;
+				contents = null;
 			}
 
 			if( popupWindow != null ) {
