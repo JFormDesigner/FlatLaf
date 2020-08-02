@@ -40,6 +40,14 @@ public interface FlatSystemProperties
 	String UI_SCALE = "flatlaf.uiScale";
 
 	/**
+	 * Specifies whether user scaling mode is enabled.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 */
+	String UI_SCALE_ENABLED = "flatlaf.uiScale.enabled";
+
+	/**
 	 * Specifies whether Ubuntu font should be used on Ubuntu Linux.
 	 * By default, if not running in a JetBrains Runtime, the Liberation Sans font
 	 * is used because there are rendering issues (in Java) with Ubuntu fonts.

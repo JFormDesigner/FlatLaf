@@ -195,8 +195,7 @@ public class UIScale
 	}
 
 	private static boolean isUserScalingEnabled() {
-		// same as in IntelliJ IDEA
-		return FlatSystemProperties.getBoolean( "hidpi", true );
+		return FlatSystemProperties.getBoolean( FlatSystemProperties.UI_SCALE_ENABLED, true );
 	}
 
 	/**
@@ -204,6 +203,9 @@ public class UIScale
 	 * to the given font.
 	 */
 	public static FontUIResource applyCustomScaleFactor( FontUIResource font ) {
+		if( !isUserScalingEnabled() )
+			return font;
+
 		String uiScale = System.getProperty( FlatSystemProperties.UI_SCALE );
 		float scaleFactor = parseScaleFactor( uiScale );
 		if( scaleFactor <= 0 )
