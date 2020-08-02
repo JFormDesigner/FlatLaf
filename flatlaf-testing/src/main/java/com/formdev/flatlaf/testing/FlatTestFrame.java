@@ -67,7 +67,7 @@ public class FlatTestFrame
 		DemoPrefs.init( PREFS_ROOT_PATH );
 
 		// set scale factor
-		if( System.getProperty( FlatSystemProperties.UI_SCALE, System.getProperty( "sun.java2d.uiScale" ) ) == null ) {
+		if( System.getProperty( FlatSystemProperties.UI_SCALE ) == null ) {
 			String scaleFactor = DemoPrefs.getState().get( KEY_SCALE_FACTOR, null );
 			if( scaleFactor != null )
 				System.setProperty( FlatSystemProperties.UI_SCALE, scaleFactor );
@@ -149,7 +149,7 @@ public class FlatTestFrame
 		lookAndFeelComboBox.setModel( lafModel );
 
 		updateScaleFactorComboBox();
-		String scaleFactor = System.getProperty( FlatSystemProperties.UI_SCALE, System.getProperty( "sun.java2d.uiScale" ) );
+		String scaleFactor = System.getProperty( FlatSystemProperties.UI_SCALE );
 		if( scaleFactor != null )
 			scaleFactorComboBox.setSelectedItem( scaleFactor );
 
