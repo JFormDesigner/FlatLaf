@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.39
 
 #### New features
 
