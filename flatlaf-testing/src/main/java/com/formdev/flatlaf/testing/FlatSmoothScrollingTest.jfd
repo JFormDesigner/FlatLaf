@@ -1,0 +1,43 @@
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[][200]"
+			"$rowConstraints": "[][::200,grow,fill]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "smoothScrollingCheckBox"
+				"text": "Smooth scrolling"
+				"selected": true
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "smoothScrollingChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 2 1,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "listLabel"
+				"text": "JList:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1,aligny top,growy 0"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JList" ) {
+					name: "list1"
+					auxiliary() {
+						"JavaCodeGenerator.typeParameters": "String"
+						"JavaCodeGenerator.variableLocal": false
+					}
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1,growx"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 790, 715 )
+		} )
+	}
+}

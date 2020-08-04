@@ -473,6 +473,8 @@ public class FlatScrollBarUI
 		if( animator != null )
 			animator.cancel();
 
+		scrollbar.setValueIsAdjusting( true );
+
 		// if invoked while animation is running, calculation of new value
 		// should start at the previous target value
 		if( targetValue != Integer.MIN_VALUE )
@@ -487,7 +489,8 @@ public class FlatScrollBarUI
 			scrollbar.setValue( oldValue );
 
 			setValueAnimated( newValue );
-		}
+		} else
+			scrollbar.setValueIsAdjusting( false );
 
 		inRunAndSetValueAnimated = false;
 	}
@@ -498,6 +501,8 @@ public class FlatScrollBarUI
 	private int delta;
 
 	public void setValueAnimated( int value ) {
+		scrollbar.setValueIsAdjusting( true );
+
 		// create animator
 		if( animator == null ) {
 			int duration = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.duration", 200 );
@@ -510,9 +515,15 @@ public class FlatScrollBarUI
 					return;
 				}
 
+				// re-enable valueIsAdjusting if disabled while animation is running
+				// (e.g. in mouse released listener)
+				if( !scrollbar.getValueIsAdjusting() )
+					scrollbar.setValueIsAdjusting( true );
+
 				scrollbar.setValue( targetValue - delta + Math.round( delta * fraction ) );
 			}, () -> {
 				targetValue = Integer.MIN_VALUE;
+				scrollbar.setValueIsAdjusting( false );
 			});
 
 			animator.setResolution( resolution );
