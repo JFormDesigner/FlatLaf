@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+#### Fixed bugs
+
+- Custom window decorations: Embedded menu bar did not always respond to mouse
+  events after adding menus and when running in JetBrains Runtime. (issue #151)
+
+
 ## 0.39
 
 #### New features

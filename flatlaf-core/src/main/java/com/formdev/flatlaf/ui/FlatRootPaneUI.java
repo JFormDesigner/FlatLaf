@@ -304,6 +304,9 @@ public class FlatRootPaneUI
 			Container contentPane = rootPane.getContentPane();
 			if( contentPane != null )
 				contentPane.setBounds( 0, nextY, width, Math.max( height - nextY, 0 ) );
+
+			if( titlePane != null )
+				titlePane.menuBarLayouted();
 		}
 
 		@Override

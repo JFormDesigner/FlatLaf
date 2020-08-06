@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "13.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -8,7 +8,7 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[left]para[fill]"
+			"$columnConstraints": "[left]para[left]"
 			"$rowConstraints": "para[]0[]0[]0[][][top][]"
 		} ) {
 			name: "this"
@@ -22,6 +22,27 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuBarChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "addMenuButton"
+				"text": "Add menu"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addMenu", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0 1 2,align left top,grow 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "removeMenuButton"
+				"text": "Remove menu"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "removeMenu", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0 1 2,align left top,grow 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "changeMenuButton"
+				"text": "Change menu"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeMenu", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0 1 2,align left top,grow 0 0"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "menuBarEmbeddedCheckBox"
@@ -238,7 +259,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 450, 380 )
+			"size": new java.awt.Dimension( 550, 380 )
 		} )
 		add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 			name: "menuBar"

@@ -22,6 +22,7 @@ import java.awt.event.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
@@ -115,6 +116,32 @@ public class FlatWindowDecorationsTest
 		JRootPane rootPane = getWindowRootPane();
 		if( rootPane != null )
 			rootPane.putClientProperty( FlatClientProperties.MENU_BAR_EMBEDDED, menuBarEmbeddedCheckBox.isSelected() );
+	}
+
+	private void addMenu() {
+		JMenu menu = new JMenu( "Hello" );
+		menu.add( new JMenuItem( "world" ) );
+		menuBar.add( menu );
+		menuBar.revalidate();
+	}
+
+	private void removeMenu() {
+		int menuCount = menuBar.getMenuCount();
+		if( menuCount <= 0 )
+			return;
+
+		menuBar.remove( menuCount - 1 );
+		menuBar.revalidate();
+	}
+
+	private void changeMenu() {
+		int menuCount = menuBar.getMenuCount();
+		if( menuCount <= 0 )
+			return;
+
+		int len = new Random().nextInt( 20 );
+		String text = "1234567890abcdefghij".substring( 0, len + 1 );
+		menuBar.getMenu( menuCount - 1 ).setText( text );
 	}
 
 	private void resizableChanged() {
@@ -218,6 +245,9 @@ public class FlatWindowDecorationsTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBarCheckBox = new JCheckBox();
+		JButton addMenuButton = new JButton();
+		JButton removeMenuButton = new JButton();
+		JButton changeMenuButton = new JButton();
 		menuBarEmbeddedCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
@@ -271,7 +301,7 @@ public class FlatWindowDecorationsTest
 			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[left]para" +
-			"[fill]",
+			"[left]",
 			// rows
 			"para[]0" +
 			"[]0" +
@@ -286,6 +316,21 @@ public class FlatWindowDecorationsTest
 		menuBarCheckBox.setSelected(true);
 		menuBarCheckBox.addActionListener(e -> menuBarChanged());
 		add(menuBarCheckBox, "cell 0 0");
+
+		//---- addMenuButton ----
+		addMenuButton.setText("Add menu");
+		addMenuButton.addActionListener(e -> addMenu());
+		add(addMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+
+		//---- removeMenuButton ----
+		removeMenuButton.setText("Remove menu");
+		removeMenuButton.addActionListener(e -> removeMenu());
+		add(removeMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+
+		//---- changeMenuButton ----
+		changeMenuButton.setText("Change menu");
+		changeMenuButton.addActionListener(e -> changeMenu());
+		add(changeMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
 
 		//---- menuBarEmbeddedCheckBox ----
 		menuBarEmbeddedCheckBox.setText("embedded menu bar");

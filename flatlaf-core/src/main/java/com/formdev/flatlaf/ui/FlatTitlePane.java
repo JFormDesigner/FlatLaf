@@ -391,6 +391,12 @@ public class FlatTitlePane
 		return FlatUIUtils.subtractInsets( bounds, UIScale.scale( getMenuBarMargins() ) );
 	}
 
+	protected Insets getMenuBarMargins() {
+		return getComponentOrientation().isLeftToRight()
+			? menuBarMargins
+			: new Insets( menuBarMargins.top, menuBarMargins.right, menuBarMargins.bottom, menuBarMargins.left );
+	}
+
 	protected void menuBarChanged() {
 		menuBarPlaceholder.invalidate();
 
@@ -400,11 +406,26 @@ public class FlatTitlePane
 		} );
 	}
 
-	protected Insets getMenuBarMargins() {
-		return getComponentOrientation().isLeftToRight()
-			? menuBarMargins
-			: new Insets( menuBarMargins.top, menuBarMargins.right, menuBarMargins.bottom, menuBarMargins.left );
+	protected void menuBarLayouted() {
+		updateJBRHitTestSpotsAndTitleBarHeightLater();
 	}
+
+/*debug
+	@Override
+	public void paint( Graphics g ) {
+		super.paint( g );
+
+		if( debugTitleBarHeight > 0 ) {
+			g.setColor( Color.green );
+			g.drawLine( 0, debugTitleBarHeight, getWidth(), debugTitleBarHeight );
+		}
+		if( debugHitTestSpots != null ) {
+			g.setColor( Color.blue );
+			for( Rectangle r : debugHitTestSpots )
+				g.drawRect( r.x, r.y, r.width, r.height );
+		}
+	}
+debug*/
 
 	@Override
 	protected void paintComponent( Graphics g ) {
@@ -583,6 +604,12 @@ public class FlatTitlePane
 			titleBarHeight--;
 
 		JBRCustomDecorations.setHitTestSpotsAndTitleBarHeight( window, hitTestSpots, titleBarHeight );
+
+/*debug
+		debugHitTestSpots = hitTestSpots;
+		debugTitleBarHeight = titleBarHeight;
+		repaint();
+debug*/
 	}
 
 	protected void addJBRHitTestSpot( JComponent c, boolean subtractMenuBarMargins, List<Rectangle> hitTestSpots ) {
@@ -598,6 +625,11 @@ public class FlatTitlePane
 		r.grow( 2, 2 );
 		hitTestSpots.add( r );
 	}
+
+/*debug
+	private List<Rectangle> debugHitTestSpots;
+	private int debugTitleBarHeight;
+debug*/
 
 	//---- class TitlePaneBorder ----------------------------------------------
 
