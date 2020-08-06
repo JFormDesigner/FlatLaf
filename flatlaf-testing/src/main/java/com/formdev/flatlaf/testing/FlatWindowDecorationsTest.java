@@ -40,6 +40,7 @@ public class FlatWindowDecorationsTest
 			JDialog.setDefaultLookAndFeelDecorated( true );
 
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatWindowDecorationsTest" );
+			frame.applyComponentOrientationToFrame = true;
 
 			// WARNING: Do not this in real-world programs.
 //			frame.setUndecorated( true );

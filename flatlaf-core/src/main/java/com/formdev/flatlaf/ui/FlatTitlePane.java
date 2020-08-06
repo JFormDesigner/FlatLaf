@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -165,7 +166,25 @@ public class FlatTitlePane
 
 		createButtons();
 
-		setLayout( new BorderLayout() );
+		setLayout( new BorderLayout() {
+			@Override
+			public void layoutContainer( Container target ) {
+				super.layoutContainer( target );
+
+				// make left panel (with embedded menu bar) smaller if horizontal space is rare
+				// to avoid that embedded menu bar overlaps button bar
+				Insets insets = target.getInsets();
+				int width = target.getWidth() - insets.left - insets.right;
+				if( leftPanel.getWidth() + buttonPanel.getWidth() > width ) {
+					int oldWidth = leftPanel.getWidth();
+					int newWidth = Math.max( width - buttonPanel.getWidth(), 0 );
+					leftPanel.setSize( newWidth, leftPanel.getHeight() );
+					if( !getComponentOrientation().isLeftToRight() )
+						leftPanel.setLocation( leftPanel.getX() + (oldWidth - newWidth), leftPanel.getY() );
+				}
+			}
+		} );
+
 		add( leftPanel, BorderLayout.LINE_START );
 		add( titleLabel, BorderLayout.CENTER );
 		add( buttonPanel, BorderLayout.LINE_END );

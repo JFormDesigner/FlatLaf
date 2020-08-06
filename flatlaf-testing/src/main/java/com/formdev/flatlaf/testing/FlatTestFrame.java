@@ -62,6 +62,7 @@ public class FlatTestFrame
 	private FlatInspector inspector;
 
 	public boolean useApplyComponentOrientation;
+	public boolean applyComponentOrientationToFrame;
 
 	public static FlatTestFrame create( String[] args, String title ) {
 		DemoPrefs.init( PREFS_ROOT_PATH );
@@ -439,7 +440,9 @@ public class FlatTestFrame
 			? ComponentOrientation.RIGHT_TO_LEFT
 			: ComponentOrientation.LEFT_TO_RIGHT;
 
-		if( useApplyComponentOrientation )
+		if( applyComponentOrientationToFrame )
+			applyComponentOrientation( orientation );
+		else if( useApplyComponentOrientation )
 			content.applyComponentOrientation( orientation );
 		else {
 			updateComponentsRecur( content, (c, type) -> {

@@ -124,6 +124,14 @@ public class FlatMenuUI
 	}
 
 	@Override
+	public Dimension getMinimumSize( JComponent c ) {
+		// avoid that top-level menus (in menu bar) are made smaller if horizontal space is rare
+		// same code is in BasicMenuUI since Java 10
+		// see https://bugs.openjdk.java.net/browse/JDK-8178430
+		return ((JMenu)menuItem).isTopLevelMenu() ? c.getPreferredSize() : null;
+	}
+
+	@Override
 	protected Dimension getPreferredMenuItemSize( JComponent c, Icon checkIcon, Icon arrowIcon, int defaultTextIconGap ) {
 		return renderer.getPreferredMenuItemSize();
 	}
