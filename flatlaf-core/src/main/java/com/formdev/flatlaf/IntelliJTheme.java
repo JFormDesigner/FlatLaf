@@ -263,6 +263,9 @@ public class IntelliJTheme
 			for( Map.Entry<String, Object> e : ((Map<String, Object>)value).entrySet() )
 				apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache, uiKeys );
 		} else {
+			if( "".equals( value ) )
+				return; // ignore empty value
+
 			uiKeys.add( key );
 
 			// fix ComboBox size and Spinner border in all Material UI Lite themes

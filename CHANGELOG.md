@@ -16,6 +16,7 @@ FlatLaf Change Log
 
 - Custom window decorations: Embedded menu bar did not always respond to mouse
   events after adding menus and when running in JetBrains Runtime. (issue #151)
+- IntelliJ Themes: Fixed NPE in Solarized themes on scroll bar hover.
 
 
 ## 0.39
