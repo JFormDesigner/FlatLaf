@@ -16,6 +16,9 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -91,6 +94,33 @@ public class FlatComponents2Test
 		table1.setColumnSelectionAllowed( columnSelectionCheckBox.isSelected() );
 	}
 
+	private void showHorizontalLinesChanged() {
+		table1.setShowHorizontalLines( showHorizontalLinesCheckBox.isSelected() );
+	}
+
+	private void showVerticalLinesChanged() {
+		table1.setShowVerticalLines( showVerticalLinesCheckBox.isSelected() );
+	}
+
+	private void intercellSpacingChanged() {
+		table1.setIntercellSpacing( intercellSpacingCheckBox.isSelected() ? new Dimension( 1, 1 ) : new Dimension() );
+	}
+
+	private void redGridColorChanged() {
+		table1.setGridColor( redGridColorCheckBox.isSelected() ? Color.red : UIManager.getColor( "Table.gridColor" ) );
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		EventQueue.invokeLater( () -> {
+			showHorizontalLinesChanged();
+			showVerticalLinesChanged();
+			intercellSpacingChanged();
+		} );
+	}
+
 	@SuppressWarnings( { "unchecked", "rawtypes" } )
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -114,6 +144,10 @@ public class FlatComponents2Test
 		tableHeaderButtonCheckBox = new JCheckBox();
 		rowSelectionCheckBox = new JCheckBox();
 		columnSelectionCheckBox = new JCheckBox();
+		showHorizontalLinesCheckBox = new JCheckBox();
+		showVerticalLinesCheckBox = new JCheckBox();
+		intercellSpacingCheckBox = new JCheckBox();
+		redGridColorCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -127,6 +161,7 @@ public class FlatComponents2Test
 			"[]" +
 			"[::200]" +
 			"[150,grow]" +
+			"[]" +
 			"[]"));
 
 		//---- textFieldLabel ----
@@ -333,6 +368,26 @@ public class FlatComponents2Test
 		columnSelectionCheckBox.setText("column selection");
 		columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
 		add(columnSelectionCheckBox, "cell 0 4 3 1");
+
+		//---- showHorizontalLinesCheckBox ----
+		showHorizontalLinesCheckBox.setText("show horizontal lines");
+		showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
+		add(showHorizontalLinesCheckBox, "cell 0 5 3 1");
+
+		//---- showVerticalLinesCheckBox ----
+		showVerticalLinesCheckBox.setText("show vertical lines");
+		showVerticalLinesCheckBox.addActionListener(e -> showVerticalLinesChanged());
+		add(showVerticalLinesCheckBox, "cell 0 5 3 1");
+
+		//---- intercellSpacingCheckBox ----
+		intercellSpacingCheckBox.setText("intercell spacing");
+		intercellSpacingCheckBox.addActionListener(e -> intercellSpacingChanged());
+		add(intercellSpacingCheckBox, "cell 0 5 3 1");
+
+		//---- redGridColorCheckBox ----
+		redGridColorCheckBox.setText("red grid color");
+		redGridColorCheckBox.addActionListener(e -> redGridColorChanged());
+		add(redGridColorCheckBox, "cell 0 5 3 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		((JComboBox)((DefaultCellEditor)table1.getColumnModel().getColumn( 3 ).getCellEditor()).getComponent()).setEditable( true );
@@ -349,6 +404,10 @@ public class FlatComponents2Test
 	private JCheckBox tableHeaderButtonCheckBox;
 	private JCheckBox rowSelectionCheckBox;
 	private JCheckBox columnSelectionCheckBox;
+	private JCheckBox showHorizontalLinesCheckBox;
+	private JCheckBox showVerticalLinesCheckBox;
+	private JCheckBox intercellSpacingCheckBox;
+	private JCheckBox redGridColorCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class DummyTransferHandler -----------------------------------------
