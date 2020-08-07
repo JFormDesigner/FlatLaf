@@ -3,6 +3,15 @@ FlatLaf Change Log
 
 ## Unreleased
 
+#### New features
+
+- Table: Detect whether component is used in cell editor and automatically
+  disable round border style and reduce cell editor outer border width (used for
+  focus indicator) to zero. (issue #148)
+- ComboBox, Spinner and TextField: Support disabling round border style per
+  component, if globally enabled (set client property `JComponent.roundRect` to
+  `false`). (issue #148)
+
 #### Fixed bugs
 
 - Custom window decorations: Embedded menu bar did not always respond to mouse

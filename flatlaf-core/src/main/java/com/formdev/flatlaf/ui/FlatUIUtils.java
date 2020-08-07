@@ -37,6 +37,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.function.Consumer;
 import javax.swing.JComponent;
+import javax.swing.JTable;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -137,11 +138,21 @@ public class FlatUIUtils
 	}
 
 	public static boolean isCellEditor( Component c ) {
-		// check whether used as cell editor in file chooser
-		//   Tree.cellEditor is set in sun.swing.FilePane.editFileName()
+		// check whether used in cell editor (check 3 levels up)
+		Component c2 = c;
+		for( int i = 0; i <= 2 && c2 != null; i++ ) {
+			Container parent = c2.getParent();
+			if( parent instanceof JTable && ((JTable)parent).getEditorComponent() == c2 )
+				return true;
+
+			c2 = parent;
+		}
+
+		// check whether used as cell editor
 		//   Table.editor is set in JTable.GenericEditor constructor
+		//   Tree.cellEditor is set in sun.swing.FilePane.editFileName()
 		String name = c.getName();
-		if( "Tree.cellEditor".equals( name ) || "Table.editor".equals( name ) )
+		if( "Table.editor".equals( name ) || "Tree.cellEditor".equals( name ) )
 			return true;
 
 		// for using combo box as cell editor in table
@@ -159,9 +170,11 @@ public class FlatUIUtils
 			keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
 	}
 
-	public static boolean isRoundRect( Component c ) {
-		return c instanceof JComponent && FlatClientProperties.clientPropertyBoolean(
-			(JComponent) c, FlatClientProperties.COMPONENT_ROUND_RECT, false );
+	public static Boolean isRoundRect( Component c ) {
+		return (c instanceof JComponent)
+			? FlatClientProperties.clientPropertyBooleanStrict(
+				(JComponent) c, FlatClientProperties.COMPONENT_ROUND_RECT, null )
+			: null;
 	}
 
 	/**

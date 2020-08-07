@@ -87,15 +87,14 @@ public class FlatBorder
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			boolean isCellEditor = isCellEditor( c );
-			float focusWidth = isCellEditor ? 0 : scale( (float) getFocusWidth( c ) );
+			float focusWidth = scale( (float) getFocusWidth( c ) );
 			float borderWidth = scale( (float) getBorderWidth( c ) );
-			float arc = isCellEditor ? 0 : scale( (float) getArc( c ) );
+			float arc = scale( (float) getArc( c ) );
 			Color outlineColor = getOutlineColor( c );
 
 			// paint outer border
 			if( outlineColor != null || isFocused( c ) ) {
-				float innerWidth = !isCellEditor && !(c instanceof JScrollPane)
+				float innerWidth = !isCellEditor( c ) && !(c instanceof JScrollPane)
 					? (outlineColor != null ? innerOutlineWidth : innerFocusWidth)
 					: 0;
 
@@ -204,8 +203,7 @@ public class FlatBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		boolean isCellEditor = isCellEditor( c );
-		float focusWidth = isCellEditor ? 0 : scale( (float) getFocusWidth( c ) );
+		float focusWidth = scale( (float) getFocusWidth( c ) );
 		float ow = focusWidth + scale( (float) getLineWidth( c ) );
 
 		insets = super.getBorderInsets( c, insets );
@@ -214,7 +212,7 @@ public class FlatBorder
 		insets.bottom = Math.round( scale( (float) insets.bottom ) + ow );
 		insets.right = Math.round( scale( (float) insets.right ) + ow );
 
-		if( isCellEditor ) {
+		if( isCellEditor( c ) ) {
 			// remove top and bottom insets if used as cell editor
 			insets.top = insets.bottom = 0;
 
@@ -232,6 +230,9 @@ public class FlatBorder
 	 * Returns the (unscaled) thickness of the outer focus border.
 	 */
 	protected int getFocusWidth( Component c ) {
+		if( isCellEditor( c ) )
+			return 0;
+
 		return focusWidth;
 	}
 

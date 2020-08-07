@@ -315,6 +315,15 @@ public interface FlatClientProperties
 	}
 
 	/**
+	 * Checks whether a client property of a component is a {@link Boolean} and returns its value.
+	 * If the client property is not set, or not a {@link Boolean}, defaultValue is returned.
+	 */
+	static Boolean clientPropertyBooleanStrict( JComponent c, String key, Boolean defaultValue ) {
+		Object value = c.getClientProperty( key );
+		return (value instanceof Boolean) ? (Boolean) value : defaultValue;
+	}
+
+	/**
 	 * Checks whether a client property of a component is an integer and returns its value.
 	 * If the client property is not set, or not an integer, defaultValue is returned.
 	 */

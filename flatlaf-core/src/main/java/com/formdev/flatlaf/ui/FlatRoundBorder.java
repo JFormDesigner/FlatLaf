@@ -33,6 +33,10 @@ public class FlatRoundBorder
 
 	@Override
 	protected int getArc( Component c ) {
-		return FlatUIUtils.isRoundRect( c ) ? Short.MAX_VALUE : arc;
+		if( isCellEditor( c ) )
+			return 0;
+
+		Boolean roundRect = FlatUIUtils.isRoundRect( c );
+		return roundRect != null ? (roundRect ? Short.MAX_VALUE : 0) : arc;
 	}
 }

@@ -141,6 +141,9 @@ public class FlatButtonBorder
 
 	@Override
 	protected int getArc( Component c ) {
+		if( isCellEditor( c ) )
+			return 0;
+
 		switch( FlatButtonUI.getButtonType( c ) ) {
 			case FlatButtonUI.TYPE_SQUARE: return 0;
 			case FlatButtonUI.TYPE_ROUND_RECT: return Short.MAX_VALUE;
