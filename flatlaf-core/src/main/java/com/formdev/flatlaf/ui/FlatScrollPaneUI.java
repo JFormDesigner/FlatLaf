@@ -48,8 +48,10 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
@@ -160,6 +162,9 @@ public class FlatScrollPaneUI
 	}
 
 	protected boolean isSmoothScrollingEnabled() {
+		if( !Animator.useAnimation() || !FlatSystemProperties.getBoolean( FlatSystemProperties.SMOOTH_SCROLLING, true ) )
+			return false;
+
 		Object smoothScrolling = scrollpane.getClientProperty( FlatClientProperties.SCROLL_PANE_SMOOTH_SCROLLING );
 		if( smoothScrolling instanceof Boolean )
 			return (Boolean) smoothScrolling;

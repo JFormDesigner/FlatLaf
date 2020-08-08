@@ -67,7 +67,7 @@ public class FlatAnimatedLafChange
 	 * Invoke before setting new look and feel.
 	 */
 	public static void showSnapshot() {
-		if( !FlatSystemProperties.getBoolean( "flatlaf.animatedLafChange", true ) )
+		if( !Animator.useAnimation() || !FlatSystemProperties.getBoolean( "flatlaf.animatedLafChange", true ) )
 			return;
 
 		// stop already running animation
@@ -138,7 +138,7 @@ public class FlatAnimatedLafChange
 	 * Invoke after updating UI.
 	 */
 	public static void hideSnapshotWithAnimation() {
-		if( !FlatSystemProperties.getBoolean( "flatlaf.animatedLafChange", true ) )
+		if( !Animator.useAnimation() || !FlatSystemProperties.getBoolean( "flatlaf.animatedLafChange", true ) )
 			return;
 
 		if( oldUIsnapshots.isEmpty() )

@@ -40,6 +40,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
@@ -540,6 +541,9 @@ public class FlatScrollBarUI
 	}
 
 	protected boolean isSmoothScrollingEnabled() {
+		if( !Animator.useAnimation() || !FlatSystemProperties.getBoolean( FlatSystemProperties.SMOOTH_SCROLLING, true ) )
+			return false;
+
 		// if scroll bar is child of scroll pane, check only client property of scroll pane
 		Container parent = scrollbar.getParent();
 		JComponent c = (parent instanceof JScrollPane) ? (JScrollPane) parent : scrollbar;
