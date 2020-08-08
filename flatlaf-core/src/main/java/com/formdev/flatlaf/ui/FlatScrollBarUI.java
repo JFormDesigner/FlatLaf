@@ -474,7 +474,8 @@ public class FlatScrollBarUI
 		if( animator != null )
 			animator.cancel();
 
-		scrollbar.setValueIsAdjusting( true );
+		if( useValueIsAdjusting )
+			scrollbar.setValueIsAdjusting( true );
 
 		// if invoked while animation is running, calculation of new value
 		// should start at the previous target value
@@ -485,12 +486,18 @@ public class FlatScrollBarUI
 
 		r.run();
 
+		// do not use animation if started dragging thumb
+		if( isDragging ) {
+			inRunAndSetValueAnimated = false;
+			return;
+		}
+
 		int newValue = scrollbar.getValue();
 		if( newValue != oldValue ) {
 			scrollbar.setValue( oldValue );
 
 			setValueAnimated( newValue );
-		} else
+		} else if( useValueIsAdjusting )
 			scrollbar.setValueIsAdjusting( false );
 
 		inRunAndSetValueAnimated = false;
@@ -500,9 +507,11 @@ public class FlatScrollBarUI
 	private Animator animator;
 	private int targetValue = Integer.MIN_VALUE;
 	private int delta;
+	private boolean useValueIsAdjusting = true;
 
 	public void setValueAnimated( int value ) {
-		scrollbar.setValueIsAdjusting( true );
+		if( useValueIsAdjusting )
+			scrollbar.setValueIsAdjusting( true );
 
 		// create animator
 		if( animator == null ) {
@@ -518,13 +527,14 @@ public class FlatScrollBarUI
 
 				// re-enable valueIsAdjusting if disabled while animation is running
 				// (e.g. in mouse released listener)
-				if( !scrollbar.getValueIsAdjusting() )
+				if( useValueIsAdjusting && !scrollbar.getValueIsAdjusting() )
 					scrollbar.setValueIsAdjusting( true );
 
 				scrollbar.setValue( targetValue - delta + Math.round( delta * fraction ) );
 			}, () -> {
 				targetValue = Integer.MIN_VALUE;
-				scrollbar.setValueIsAdjusting( false );
+				if( useValueIsAdjusting )
+					scrollbar.setValueIsAdjusting( false );
 			});
 
 			animator.setResolution( resolution );
@@ -564,9 +574,23 @@ public class FlatScrollBarUI
 	{
 		@Override
 		public void mousePressed( MouseEvent e ) {
+			// Do not use valueIsAdjusting here (in runAndSetValueAnimated())
+			// for smooth scrolling because super.mousePressed() enables this itself
+			// and super.mouseRelease() disables it later.
+			// If we would disable valueIsAdjusting here (in runAndSetValueAnimated())
+			// and move the thumb with the mouse, then the thumb location is not updated
+			// if later scrolled with a key (e.g. HOME key).
+			useValueIsAdjusting = false;
+
 			runAndSetValueAnimated( () -> {
 				super.mousePressed( e );
 			} );
+		}
+
+		@Override
+		public void mouseReleased( MouseEvent e ) {
+			super.mouseReleased( e );
+			useValueIsAdjusting = true;
 		}
 	}
 
