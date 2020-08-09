@@ -44,6 +44,15 @@ public class FlatSmoothScrollingTest
 	FlatSmoothScrollingTest() {
 		initComponents();
 
+		// allow enabling/disabling smooth scrolling with Alt+S without moving focus to checkbox
+		registerKeyboardAction(
+			e -> {
+				smoothScrollingCheckBox.setSelected( !smoothScrollingCheckBox.isSelected() );
+				smoothScrollingChanged();
+			},
+			KeyStroke.getKeyStroke( "alt " + (char) smoothScrollingCheckBox.getMnemonic() ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
 		listScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "list vert" ) );
 		listScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "list horz" ) );
 
@@ -119,6 +128,10 @@ public class FlatSmoothScrollingTest
 		textArea.setText( text );
 		textPane.setText( text );
 		editorPane.setText( text );
+
+		textArea.select( 0, 0 );
+		textPane.select( 0, 0 );
+		editorPane.select( 0, 0 );
 	}
 
 	private void smoothScrollingChanged() {
@@ -165,6 +178,7 @@ public class FlatSmoothScrollingTest
 		//---- smoothScrollingCheckBox ----
 		smoothScrollingCheckBox.setText("Smooth scrolling");
 		smoothScrollingCheckBox.setSelected(true);
+		smoothScrollingCheckBox.setMnemonic('S');
 		smoothScrollingCheckBox.addActionListener(e -> smoothScrollingChanged());
 		add(smoothScrollingCheckBox, "cell 0 0,alignx left,growx 0");
 
@@ -188,16 +202,6 @@ public class FlatSmoothScrollingTest
 
 		//======== treeScrollPane ========
 		{
-
-			//---- tree ----
-			tree.setModel(new DefaultTreeModel(
-				new DefaultMutableTreeNode("root") {
-					{
-						add(new DefaultMutableTreeNode("a"));
-						add(new DefaultMutableTreeNode("b"));
-						add(new DefaultMutableTreeNode("c"));
-					}
-				}));
 			treeScrollPane.setViewportView(tree);
 		}
 		add(treeScrollPane, "cell 1 2");
@@ -306,7 +310,7 @@ public class FlatSmoothScrollingTest
 				@Override
 				public Point getViewPosition() {
 					Point viewPosition = super.getViewPosition();
-					System.out.println( "    viewPosition  " + viewPosition.x + "," + viewPosition.y );
+//					System.out.println( "    viewPosition  " + viewPosition.x + "," + viewPosition.y );
 					return viewPosition;
 				}
 			};

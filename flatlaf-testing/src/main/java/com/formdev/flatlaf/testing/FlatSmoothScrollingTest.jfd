@@ -13,6 +13,7 @@ new FormModel {
 				name: "smoothScrollingCheckBox"
 				"text": "Smooth scrolling"
 				"selected": true
+				"mnemonic": 83
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "smoothScrollingChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0,alignx left,growx 0"
@@ -51,18 +52,6 @@ new FormModel {
 				name: "treeScrollPane"
 				add( new FormComponent( "javax.swing.JTree" ) {
 					name: "tree"
-					"model": new javax.swing.tree.DefaultTreeModel( new javax.swing.tree.DefaultMutableTreeNode {
-						userObject: "root"
-						add( new javax.swing.tree.DefaultMutableTreeNode {
-							userObject: "a"
-						} )
-						add( new javax.swing.tree.DefaultMutableTreeNode {
-							userObject: "b"
-						} )
-						add( new javax.swing.tree.DefaultMutableTreeNode {
-							userObject: "c"
-						} )
-					} )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
