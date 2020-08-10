@@ -350,7 +350,7 @@ public class FlatSmoothScrollingTest
 		private final String name;
 		private final Color chartColor;
 		private int count;
-		private long lastTime;
+		private long lastTime = System.nanoTime() / 1000000;
 
 		ScrollBarChangeHandler( String name, Color chartColor ) {
 			this.name = name;
@@ -415,6 +415,12 @@ public class FlatSmoothScrollingTest
 			Data( double value, long time ) {
 				this.value = value;
 				this.time = time;
+			}
+
+			@Override
+			public String toString() {
+				// for debugging
+				return String.valueOf( value );
 			}
 		}
 
@@ -506,6 +512,7 @@ public class FlatSmoothScrollingTest
 			for( Map.Entry<Color, List<Data>> e : color2dataMap.entrySet() ) {
 				Color chartColor = e.getKey();
 				List<Data> chartData = e.getValue();
+				Color temporaryValueColor = new Color( (chartColor.getRGB() & 0xffffff) | 0x40000000, true );
 
 				long seqTime = 0;
 				int seqX = 0;
@@ -531,17 +538,31 @@ public class FlatSmoothScrollingTest
 						px = seqX;
 						pcount = 0;
 					} else {
+						boolean isTemporaryValue = isTemporaryValue( chartData, i ) || isTemporaryValue( chartData, i - 1 );
+						if( isTemporaryValue )
+							g.setColor( temporaryValueColor );
+
 						// line in sequence
 						int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * secondWidth));
 						g.drawLine( px, py, dx, dy );
 						px = dx;
 						pcount++;
+
+						if( isTemporaryValue )
+							g.setColor( chartColor );
 					}
 
 					py = dy;
 					ptime = data.time;
 				}
 			}
+		}
+
+		private boolean isTemporaryValue( List<Data> chartData, int i ) {
+			if( i == 0 || i == chartData.size() - 1 )
+				return false;
+
+			return chartData.get( i - 1 ).value == chartData.get( i + 1 ).value;
 		}
 
 		private int chartWidth() {
