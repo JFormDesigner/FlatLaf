@@ -23,8 +23,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.*;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -74,23 +74,23 @@ public class FlatSmoothScrollingTest
 		textPaneLabel.setIcon( new ColorIcon( Color.cyan.darker() ) );
 		editorPaneLabel.setIcon( new ColorIcon( Color.orange.darker() ) );
 
-		listScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "list vert", Color.red.darker() ) );
-		listScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "list horz", Color.red ) );
+		listScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "list vert", Color.red.darker() ) );
+		listScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "list horz", Color.red ) );
 
-		treeScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "tree vert", Color.blue.darker() ) );
-		treeScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "tree horz", Color.blue ) );
+		treeScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "tree vert", Color.blue.darker() ) );
+		treeScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "tree horz", Color.blue ) );
 
-		tableScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "table vert", Color.green.darker() ) );
-		tableScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "table horz", Color.green ) );
+		tableScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "table vert", Color.green.darker() ) );
+		tableScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "table horz", Color.green ) );
 
-		textAreaScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textArea vert", Color.magenta.darker() ) );
-		textAreaScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textArea horz", Color.magenta ) );
+		textAreaScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "textArea vert", Color.magenta.darker() ) );
+		textAreaScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "textArea horz", Color.magenta ) );
 
-		textPaneScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textPane vert", Color.cyan.darker() ) );
-		textPaneScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textPane horz", Color.cyan ) );
+		textPaneScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "textPane vert", Color.cyan.darker() ) );
+		textPaneScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "textPane horz", Color.cyan ) );
 
-		editorPaneScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "editorPane vert", Color.orange.darker() ) );
-		editorPaneScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "editorPane horz", Color.orange ) );
+		editorPaneScrollPane.getVerticalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "editorPane vert", Color.orange.darker() ) );
+		editorPaneScrollPane.getHorizontalScrollBar().getModel().addChangeListener( new ScrollBarChangeHandler( "editorPane horz", Color.orange ) );
 
 		ArrayList<String> items = new ArrayList<>();
 		for( char ch = '0'; ch < 'z'; ch++ ) {
@@ -342,48 +342,41 @@ public class FlatSmoothScrollingTest
 	private FlatSmoothScrollingTest.LineChartPanel lineChartPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
-	//---- class AdjustmentHandler --------------------------------------------
+	//---- class ScrollBarChangeHandler ---------------------------------------
 
-	private class AdjustmentHandler
-		implements AdjustmentListener
+	private class ScrollBarChangeHandler
+		implements ChangeListener
 	{
 		private final String name;
 		private final Color chartColor;
 		private int count;
+		private long lastTime;
 
-		AdjustmentHandler( String name ) {
-			this( name, null );
-		}
-
-		AdjustmentHandler( String name, Color chartColor ) {
+		ScrollBarChangeHandler( String name, Color chartColor ) {
 			this.name = name;
 			this.chartColor = chartColor;
 		}
 
 		@Override
-		public void adjustmentValueChanged( AdjustmentEvent e ) {
+		public void stateChanged( ChangeEvent e ) {
+			DefaultBoundedRangeModel m = (DefaultBoundedRangeModel) e.getSource();
+			int value = m.getValue();
+			boolean valueIsAdjusting = m.getValueIsAdjusting();
+
 			if( chartColor != null ) {
-				JScrollBar sb = (JScrollBar) e.getSource();
-				double value = (double) (e.getValue() - sb.getMinimum()) / (double) (sb.getMaximum() - sb.getVisibleAmount());
-				lineChartPanel.addValue( value, chartColor );
+				double chartValue = (double) (value - m.getMinimum()) / (double) (m.getMaximum() - m.getExtent());
+				lineChartPanel.addValue( chartValue, chartColor );
 			}
 
-			System.out.printf( "%s (%d):  %s  %3d  %b%n",
+			long t = System.nanoTime() / 1000000;
+
+			System.out.printf( "%s (%d):  %4d  %3d ms   %b%n",
 				name, ++count,
-				adjustmentType2Str( e.getAdjustmentType() ),
-				e.getValue(),
-				e.getValueIsAdjusting() );
-		}
+				value,
+				t - lastTime,
+				valueIsAdjusting );
 
-		private String adjustmentType2Str( int adjustmentType ) {
-			switch( adjustmentType ) {
-				case AdjustmentEvent.UNIT_INCREMENT:  return "UNIT_INCREMENT";
-				case AdjustmentEvent.UNIT_DECREMENT:  return "UNIT_DECREMENT";
-				case AdjustmentEvent.BLOCK_INCREMENT: return "BLOCK_INCREMENT";
-				case AdjustmentEvent.BLOCK_DECREMENT: return "BLOCK_DECREMENT";
-				case AdjustmentEvent.TRACK:           return "TRACK";
-				default:                              return "unknown type";
-			}
+			lastTime = t;
 		}
 	}
 
@@ -439,7 +432,7 @@ public class FlatSmoothScrollingTest
 
 		void addValue( double value, Color chartColor ) {
 			List<Data> chartData = color2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
-			chartData.add( new Data( value, System.currentTimeMillis()) );
+			chartData.add( new Data( value, System.nanoTime() / 1000000) );
 
 			lastUsedChartColor = chartColor;
 
@@ -505,7 +498,8 @@ public class FlatSmoothScrollingTest
 
 			// paint vertical lines
 			g.setColor( Color.LIGHT_GRAY );
-			for( int i = secondWidth; i < width; i += secondWidth )
+			int twoHundredMillisWidth = secondWidth / 5;
+			for( int i = twoHundredMillisWidth; i < width; i += twoHundredMillisWidth )
 				g.drawLine( i, 0, i, height );
 
 			// paint lines
