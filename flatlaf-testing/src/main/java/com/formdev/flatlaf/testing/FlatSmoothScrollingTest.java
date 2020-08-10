@@ -16,15 +16,27 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.*;
+import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
 /**
@@ -44,6 +56,8 @@ public class FlatSmoothScrollingTest
 	FlatSmoothScrollingTest() {
 		initComponents();
 
+		updateChartDelayedChanged();
+
 		// allow enabling/disabling smooth scrolling with Alt+S without moving focus to checkbox
 		registerKeyboardAction(
 			e -> {
@@ -53,23 +67,30 @@ public class FlatSmoothScrollingTest
 			KeyStroke.getKeyStroke( "alt " + (char) smoothScrollingCheckBox.getMnemonic() ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
-		listScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "list vert" ) );
-		listScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "list horz" ) );
+		listLabel.setIcon( new ColorIcon( Color.red.darker() ) );
+		treeLabel.setIcon( new ColorIcon( Color.blue.darker() ) );
+		tableLabel.setIcon( new ColorIcon( Color.green.darker() ) );
+		textAreaLabel.setIcon( new ColorIcon( Color.magenta.darker() ) );
+		textPaneLabel.setIcon( new ColorIcon( Color.cyan.darker() ) );
+		editorPaneLabel.setIcon( new ColorIcon( Color.orange.darker() ) );
 
-		treeScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "tree vert" ) );
-		treeScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "tree horz" ) );
+		listScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "list vert", Color.red.darker() ) );
+		listScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "list horz", Color.red ) );
 
-		tableScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "table vert" ) );
-		tableScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "table horz" ) );
+		treeScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "tree vert", Color.blue.darker() ) );
+		treeScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "tree horz", Color.blue ) );
 
-		textAreaScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textArea vert" ) );
-		textAreaScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textArea horz" ) );
+		tableScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "table vert", Color.green.darker() ) );
+		tableScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "table horz", Color.green ) );
 
-		textPaneScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textPane vert" ) );
-		textPaneScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textPane horz" ) );
+		textAreaScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textArea vert", Color.magenta.darker() ) );
+		textAreaScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textArea horz", Color.magenta ) );
 
-		editorPaneScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "editorPane vert" ) );
-		editorPaneScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "editorPane horz" ) );
+		textPaneScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textPane vert", Color.cyan.darker() ) );
+		textPaneScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "textPane horz", Color.cyan ) );
+
+		editorPaneScrollPane.getVerticalScrollBar().addAdjustmentListener( new AdjustmentHandler( "editorPane vert", Color.orange.darker() ) );
+		editorPaneScrollPane.getHorizontalScrollBar().addAdjustmentListener( new AdjustmentHandler( "editorPane horz", Color.orange ) );
 
 		ArrayList<String> items = new ArrayList<>();
 		for( char ch = '0'; ch < 'z'; ch++ ) {
@@ -138,27 +159,40 @@ public class FlatSmoothScrollingTest
 		UIManager.put( "ScrollPane.smoothScrolling", smoothScrollingCheckBox.isSelected() );
 	}
 
+	private void clearChart() {
+		lineChartPanel.clear();
+	}
+
+	private void updateChartDelayedChanged() {
+		lineChartPanel.setUpdateDelayed( updateChartDelayedCheckBox.isSelected() );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		smoothScrollingCheckBox = new JCheckBox();
 		listLabel = new JLabel();
-		label1 = new JLabel();
-		label5 = new JLabel();
+		treeLabel = new JLabel();
+		tableLabel = new JLabel();
 		listScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		list = new JList<>();
 		treeScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		tree = new JTree();
 		tableScrollPane = new JScrollPane();
 		table = new JTable();
-		label2 = new JLabel();
-		label3 = new JLabel();
-		label4 = new JLabel();
+		textAreaLabel = new JLabel();
+		textPaneLabel = new JLabel();
+		editorPaneLabel = new JLabel();
 		textAreaScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		textArea = new JTextArea();
 		textPaneScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		textPane = new JTextPane();
 		editorPaneScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		editorPane = new JEditorPane();
+		panel1 = new JPanel();
+		updateChartDelayedCheckBox = new JCheckBox();
+		clearChartButton = new JButton();
+		scrollPane1 = new JScrollPane();
+		lineChartPanel = new FlatSmoothScrollingTest.LineChartPanel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -173,7 +207,8 @@ public class FlatSmoothScrollingTest
 			"[]" +
 			"[200,grow,fill]" +
 			"[]" +
-			"[200,grow,fill]"));
+			"[200,grow,fill]" +
+			"[300,grow,fill]"));
 
 		//---- smoothScrollingCheckBox ----
 		smoothScrollingCheckBox.setText("Smooth scrolling");
@@ -184,15 +219,18 @@ public class FlatSmoothScrollingTest
 
 		//---- listLabel ----
 		listLabel.setText("JList:");
+		listLabel.setHorizontalTextPosition(SwingConstants.LEADING);
 		add(listLabel, "cell 0 1,aligny top,growy 0");
 
-		//---- label1 ----
-		label1.setText("JTree:");
-		add(label1, "cell 1 1");
+		//---- treeLabel ----
+		treeLabel.setText("JTree:");
+		treeLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+		add(treeLabel, "cell 1 1");
 
-		//---- label5 ----
-		label5.setText("JTable:");
-		add(label5, "cell 2 1");
+		//---- tableLabel ----
+		tableLabel.setText("JTable:");
+		tableLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+		add(tableLabel, "cell 2 1");
 
 		//======== listScrollPane ========
 		{
@@ -212,17 +250,20 @@ public class FlatSmoothScrollingTest
 		}
 		add(tableScrollPane, "cell 2 2 2 1,width 100,height 100");
 
-		//---- label2 ----
-		label2.setText("JTextArea:");
-		add(label2, "cell 0 3");
+		//---- textAreaLabel ----
+		textAreaLabel.setText("JTextArea:");
+		textAreaLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+		add(textAreaLabel, "cell 0 3");
 
-		//---- label3 ----
-		label3.setText("JTextPane:");
-		add(label3, "cell 1 3");
+		//---- textPaneLabel ----
+		textPaneLabel.setText("JTextPane:");
+		textPaneLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+		add(textPaneLabel, "cell 1 3");
 
-		//---- label4 ----
-		label4.setText("JEditorPane:");
-		add(label4, "cell 2 3");
+		//---- editorPaneLabel ----
+		editorPaneLabel.setText("JEditorPane:");
+		editorPaneLabel.setHorizontalTextPosition(SwingConstants.LEADING);
+		add(editorPaneLabel, "cell 2 3");
 
 		//======== textAreaScrollPane ========
 		{
@@ -241,45 +282,92 @@ public class FlatSmoothScrollingTest
 			editorPaneScrollPane.setViewportView(editorPane);
 		}
 		add(editorPaneScrollPane, "cell 2 4");
+
+		//======== panel1 ========
+		{
+			panel1.setLayout(new MigLayout(
+				"ltr,insets 0,hidemode 3,aligny bottom",
+				// columns
+				"[200,right]",
+				// rows
+				"[]" +
+				"[]"));
+
+			//---- updateChartDelayedCheckBox ----
+			updateChartDelayedCheckBox.setText("Update chart delayed");
+			updateChartDelayedCheckBox.setMnemonic('U');
+			updateChartDelayedCheckBox.setSelected(true);
+			updateChartDelayedCheckBox.addActionListener(e -> updateChartDelayedChanged());
+			panel1.add(updateChartDelayedCheckBox, "cell 0 0");
+
+			//---- clearChartButton ----
+			clearChartButton.setText("Clear Chart");
+			clearChartButton.addActionListener(e -> clearChart());
+			panel1.add(clearChartButton, "cell 0 1");
+		}
+		add(panel1, "cell 3 4");
+
+		//======== scrollPane1 ========
+		{
+			scrollPane1.setViewportView(lineChartPanel);
+		}
+		add(scrollPane1, "cell 0 5 4 1,width 100");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox smoothScrollingCheckBox;
 	private JLabel listLabel;
-	private JLabel label1;
-	private JLabel label5;
+	private JLabel treeLabel;
+	private JLabel tableLabel;
 	private FlatSmoothScrollingTest.DebugScrollPane listScrollPane;
 	private JList<String> list;
 	private FlatSmoothScrollingTest.DebugScrollPane treeScrollPane;
 	private JTree tree;
 	private JScrollPane tableScrollPane;
 	private JTable table;
-	private JLabel label2;
-	private JLabel label3;
-	private JLabel label4;
+	private JLabel textAreaLabel;
+	private JLabel textPaneLabel;
+	private JLabel editorPaneLabel;
 	private FlatSmoothScrollingTest.DebugScrollPane textAreaScrollPane;
 	private JTextArea textArea;
 	private FlatSmoothScrollingTest.DebugScrollPane textPaneScrollPane;
 	private JTextPane textPane;
 	private FlatSmoothScrollingTest.DebugScrollPane editorPaneScrollPane;
 	private JEditorPane editorPane;
+	private JPanel panel1;
+	private JCheckBox updateChartDelayedCheckBox;
+	private JButton clearChartButton;
+	private JScrollPane scrollPane1;
+	private FlatSmoothScrollingTest.LineChartPanel lineChartPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class AdjustmentHandler --------------------------------------------
 
-	private static class AdjustmentHandler
+	private class AdjustmentHandler
 		implements AdjustmentListener
 	{
 		private final String name;
+		private final Color chartColor;
 		private int count;
 
 		AdjustmentHandler( String name ) {
+			this( name, null );
+		}
+
+		AdjustmentHandler( String name, Color chartColor ) {
 			this.name = name;
+			this.chartColor = chartColor;
 		}
 
 		@Override
 		public void adjustmentValueChanged( AdjustmentEvent e ) {
+			if( chartColor != null ) {
+				JScrollBar sb = (JScrollBar) e.getSource();
+				double value = (double) (e.getValue() - sb.getMinimum()) / (double) (sb.getMaximum() - sb.getVisibleAmount());
+				lineChartPanel.addValue( value, chartColor );
+			}
+
 			System.out.printf( "%s (%d):  %s  %3d  %b%n",
 				name, ++count,
 				adjustmentType2Str( e.getAdjustmentType() ),
@@ -315,5 +403,252 @@ public class FlatSmoothScrollingTest
 				}
 			};
 		}
+	}
+
+	//---- class LineChartPanel -----------------------------------------------
+
+	private static class LineChartPanel
+		extends JComponent
+		implements Scrollable
+	{
+		private static final int SECOND_WIDTH = 200;
+		private static final int NEW_SEQUENCE_TIME_LAG = 500;
+		private static final int NEW_SEQUENCE_GAP = 20;
+
+		private static class Data {
+			final double value;
+			final long time; // in milliseconds
+
+			Data( double value, long time ) {
+				this.value = value;
+				this.time = time;
+			}
+		}
+
+		private final Map<Color, List<Data>> color2dataMap = new HashMap<>();
+		private final Timer repaintTime;
+		private Color lastUsedChartColor;
+		private boolean updateDelayed;
+
+		LineChartPanel() {
+			int resolution = FlatUIUtils.getUIInt( "ScrollPane.smoothScrolling.resolution", 10 );
+
+			repaintTime = new Timer( resolution * 2, e -> repaintAndRevalidate() );
+			repaintTime.setRepeats( false );
+		}
+
+		void addValue( double value, Color chartColor ) {
+			List<Data> chartData = color2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
+			chartData.add( new Data( value, System.currentTimeMillis()) );
+
+			lastUsedChartColor = chartColor;
+
+			if( updateDelayed ) {
+				repaintTime.stop();
+				repaintTime.start();
+			} else
+				repaintAndRevalidate();
+		}
+
+		void clear() {
+			color2dataMap.clear();
+			lastUsedChartColor = null;
+
+			repaint();
+			revalidate();
+		}
+
+		void setUpdateDelayed( boolean updateDelayed ) {
+			this.updateDelayed = updateDelayed;
+		}
+
+		private void repaintAndRevalidate() {
+			repaint();
+			revalidate();
+
+			// scroll horizontally
+			if( lastUsedChartColor != null ) {
+				int[] lastSeqX = new int[1];
+				int cw = chartWidth( color2dataMap.get( lastUsedChartColor ), lastSeqX );
+				scrollRectToVisible( new Rectangle( lastSeqX[0], 0, cw - lastSeqX[0], getHeight() ) );
+			}
+		}
+
+		@Override
+		protected void paintComponent( Graphics g ) {
+			Graphics g2 = g.create();
+			try {
+				HiDPIUtils.paintAtScale1x( (Graphics2D) g2, this, this::paintImpl );
+			} finally {
+				g2.dispose();
+			}
+		}
+
+		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
+			FlatUIUtils.setRenderingHints( g );
+
+			int secondWidth = (int) (SECOND_WIDTH * scaleFactor);
+			int seqGapWidth = (int) (NEW_SEQUENCE_GAP * scaleFactor);
+
+			g.translate( x, y );
+
+			// fill background
+			g.setColor( Color.white );
+			g.fillRect( x, y, width, height );
+
+			// paint horizontal lines
+			g.setColor( Color.LIGHT_GRAY );
+			for( int i = 1; i < 10; i++ ) {
+				int hy = (height * i) / 10;
+				g.drawLine( 0, hy, width, hy );
+			}
+
+			// paint vertical lines
+			g.setColor( Color.LIGHT_GRAY );
+			for( int i = secondWidth; i < width; i += secondWidth )
+				g.drawLine( i, 0, i, height );
+
+			// paint lines
+			for( Map.Entry<Color, List<Data>> e : color2dataMap.entrySet() ) {
+				Color chartColor = e.getKey();
+				List<Data> chartData = e.getValue();
+
+				long seqTime = 0;
+				int seqX = 0;
+				long ptime = 0;
+				int px = 0;
+				int py = 0;
+				int pcount = 0;
+
+				g.setColor( chartColor );
+
+				int size = chartData.size();
+				for( int i = 0; i < size; i++ ) {
+					Data data = chartData.get( i );
+					int dy = (int) ((height - 1) * data.value);
+
+					if( data.time > ptime + NEW_SEQUENCE_TIME_LAG ) {
+						if( i > 0 && pcount == 0 )
+							g.drawLine( px, py, px + (int) (4 * scaleFactor), py );
+
+						// start new sequence
+						seqTime = data.time;
+						seqX = (i > 0) ? px + seqGapWidth : 0;
+						px = seqX;
+						pcount = 0;
+					} else {
+						// line in sequence
+						int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * secondWidth));
+						g.drawLine( px, py, dx, dy );
+						px = dx;
+						pcount++;
+					}
+
+					py = dy;
+					ptime = data.time;
+				}
+			}
+		}
+
+		private int chartWidth() {
+			int width = 0;
+			for( List<Data> chartData : color2dataMap.values() )
+				width = Math.max( width, chartWidth( chartData, null ) );
+			return width;
+		}
+
+		private int chartWidth( List<Data> chartData, int[] lastSeqX ) {
+			long seqTime = 0;
+			int seqX = 0;
+			long ptime = 0;
+			int px = 0;
+
+			int size = chartData.size();
+			for( int i = 0; i < size; i++ ) {
+				Data data = chartData.get( i );
+
+				if( data.time > ptime + NEW_SEQUENCE_TIME_LAG ) {
+					// start new sequence
+					seqTime = data.time;
+					seqX = (i > 0) ? px + NEW_SEQUENCE_GAP : 0;
+					px = seqX;
+				} else {
+					// line in sequence
+					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * SECOND_WIDTH));
+					px = dx;
+				}
+
+				ptime = data.time;
+			}
+
+			if( lastSeqX != null )
+				lastSeqX[0] = seqX;
+
+			return px;
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			return new Dimension( chartWidth(), 200 );
+		}
+
+		@Override
+		public Dimension getPreferredScrollableViewportSize() {
+			return new Dimension( chartWidth(), 200 );
+		}
+
+		@Override
+		public int getScrollableUnitIncrement( Rectangle visibleRect, int orientation, int direction ) {
+			return SECOND_WIDTH;
+		}
+
+		@Override
+		public int getScrollableBlockIncrement( Rectangle visibleRect, int orientation, int direction ) {
+			JViewport viewport = (JViewport) SwingUtilities.getAncestorOfClass( JViewport.class, this );
+			return (viewport != null) ? viewport.getWidth() : 200;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			JViewport viewport = (JViewport) SwingUtilities.getAncestorOfClass( JViewport.class, this );
+			return (viewport != null) ? viewport.getWidth() > chartWidth() : true;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return true;
+		}
+	}
+
+	//---- class ColorIcon ----------------------------------------------------
+
+	private static class ColorIcon
+		implements Icon
+	{
+		private final Color color;
+
+		ColorIcon( Color color ) {
+			this.color = color;
+		}
+
+		@Override
+		public void paintIcon( Component c, Graphics g, int x, int y ) {
+			int width = getIconWidth();
+			int height = getIconHeight();
+
+			g.setColor( color );
+			g.fillRect( x, y, width, height );
+		}
+
+		@Override
+		public int getIconWidth() {
+			return UIScale.scale( 24 );
+		}
+
+		@Override
+		public int getIconHeight() {
+			return UIScale.scale( 12 );
+		}
+
 	}
 }
