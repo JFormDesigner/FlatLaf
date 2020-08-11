@@ -558,11 +558,20 @@ public class FlatSmoothScrollingTest
 			}
 		}
 
+		/**
+		 * One or two values between two equal values are considered "temporary",
+		 * which means that they are the target value for the following scroll animation.
+		 */
 		private boolean isTemporaryValue( List<Data> chartData, int i ) {
 			if( i == 0 || i == chartData.size() - 1 )
 				return false;
 
-			return chartData.get( i - 1 ).value == chartData.get( i + 1 ).value;
+			double valueBefore = chartData.get( i - 1 ).value;
+			double valueAfter = chartData.get( i + 1 ).value;
+
+			return valueBefore == valueAfter ||
+				(i < chartData.size() - 2 && valueBefore == chartData.get( i + 2 ).value) ||
+				(i > 1 && chartData.get( i - 2 ).value == valueAfter);
 		}
 
 		private int chartWidth() {

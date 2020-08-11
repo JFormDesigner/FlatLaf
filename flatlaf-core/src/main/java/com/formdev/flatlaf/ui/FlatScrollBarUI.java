@@ -477,12 +477,12 @@ public class FlatScrollBarUI
 		if( useValueIsAdjusting )
 			scrollbar.setValueIsAdjusting( true );
 
+		int oldValue = scrollbar.getValue();
+
 		// if invoked while animation is running, calculation of new value
 		// should start at the previous target value
 		if( targetValue != Integer.MIN_VALUE )
 			scrollbar.setValue( targetValue );
-
-		int oldValue = scrollbar.getValue();
 
 		r.run();
 
