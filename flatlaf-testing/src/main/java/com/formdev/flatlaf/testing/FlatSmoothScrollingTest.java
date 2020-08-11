@@ -19,6 +19,7 @@ package com.formdev.flatlaf.testing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -34,7 +35,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.*;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -167,6 +170,27 @@ public class FlatSmoothScrollingTest
 		lineChartPanel.setUpdateDelayed( updateChartDelayedCheckBox.isSelected() );
 	}
 
+	private void showTableGridChanged() {
+		boolean showGrid = showTableGridCheckBox.isSelected();
+		table.setShowHorizontalLines( showGrid );
+		table.setShowVerticalLines( showGrid );
+		table.setIntercellSpacing( showGrid ? new Dimension( 1, 1 ) : new Dimension() );
+		table.setGridColor( Color.gray );
+	}
+
+	private void autoResizeModeChanged() {
+		table.setAutoResizeMode( autoResizeModeCheckBox.isSelected() ? JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS : JTable.AUTO_RESIZE_OFF );
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		EventQueue.invokeLater( () -> {
+			showTableGridChanged();
+		} );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		smoothScrollingCheckBox = new JCheckBox();
@@ -189,6 +213,8 @@ public class FlatSmoothScrollingTest
 		editorPaneScrollPane = new FlatSmoothScrollingTest.DebugScrollPane();
 		editorPane = new JEditorPane();
 		panel1 = new JPanel();
+		showTableGridCheckBox = new JCheckBox();
+		autoResizeModeCheckBox = new JCheckBox();
 		updateChartDelayedCheckBox = new JCheckBox();
 		clearChartButton = new JButton();
 		scrollPane1 = new JScrollPane();
@@ -286,26 +312,42 @@ public class FlatSmoothScrollingTest
 		//======== panel1 ========
 		{
 			panel1.setLayout(new MigLayout(
-				"ltr,insets 0,hidemode 3,aligny bottom",
+				"ltr,insets 0,hidemode 3",
 				// columns
 				"[200,right]",
 				// rows
+				"[]0" +
+				"[]" +
+				"[grow]" +
 				"[]" +
 				"[]"));
+
+			//---- showTableGridCheckBox ----
+			showTableGridCheckBox.setText("Show table grid");
+			showTableGridCheckBox.setMnemonic('G');
+			showTableGridCheckBox.addActionListener(e -> showTableGridChanged());
+			panel1.add(showTableGridCheckBox, "cell 0 0");
+
+			//---- autoResizeModeCheckBox ----
+			autoResizeModeCheckBox.setText("Auto-resize mode");
+			autoResizeModeCheckBox.setSelected(true);
+			autoResizeModeCheckBox.addActionListener(e -> autoResizeModeChanged());
+			panel1.add(autoResizeModeCheckBox, "cell 0 1");
 
 			//---- updateChartDelayedCheckBox ----
 			updateChartDelayedCheckBox.setText("Update chart delayed");
 			updateChartDelayedCheckBox.setMnemonic('U');
 			updateChartDelayedCheckBox.setSelected(true);
 			updateChartDelayedCheckBox.addActionListener(e -> updateChartDelayedChanged());
-			panel1.add(updateChartDelayedCheckBox, "cell 0 0");
+			panel1.add(updateChartDelayedCheckBox, "cell 0 3");
 
 			//---- clearChartButton ----
 			clearChartButton.setText("Clear Chart");
+			clearChartButton.setMnemonic('C');
 			clearChartButton.addActionListener(e -> clearChart());
-			panel1.add(clearChartButton, "cell 0 1");
+			panel1.add(clearChartButton, "cell 0 4");
 		}
-		add(panel1, "cell 3 4");
+		add(panel1, "cell 3 3 1 2,growy");
 
 		//======== scrollPane1 ========
 		{
@@ -336,6 +378,8 @@ public class FlatSmoothScrollingTest
 	private FlatSmoothScrollingTest.DebugScrollPane editorPaneScrollPane;
 	private JEditorPane editorPane;
 	private JPanel panel1;
+	private JCheckBox showTableGridCheckBox;
+	private JCheckBox autoResizeModeCheckBox;
 	private JCheckBox updateChartDelayedCheckBox;
 	private JButton clearChartButton;
 	private JScrollPane scrollPane1;
@@ -350,7 +394,7 @@ public class FlatSmoothScrollingTest
 		private final String name;
 		private final Color chartColor;
 		private int count;
-		private long lastTime = System.nanoTime() / 1000000;
+		private long lastTime;
 
 		ScrollBarChangeHandler( String name, Color chartColor ) {
 			this.name = name;
@@ -492,26 +536,27 @@ public class FlatSmoothScrollingTest
 			g.translate( x, y );
 
 			// fill background
-			g.setColor( Color.white );
+			g.setColor( UIManager.getColor( "Table.background" ) );
 			g.fillRect( x, y, width, height );
 
 			// paint horizontal lines
-			g.setColor( Color.LIGHT_GRAY );
+			g.setColor( UIManager.getColor( "Component.borderColor" ) );
 			for( int i = 1; i < 10; i++ ) {
 				int hy = (height * i) / 10;
 				g.drawLine( 0, hy, width, hy );
 			}
 
 			// paint vertical lines
-			g.setColor( Color.LIGHT_GRAY );
 			int twoHundredMillisWidth = secondWidth / 5;
 			for( int i = twoHundredMillisWidth; i < width; i += twoHundredMillisWidth )
 				g.drawLine( i, 0, i, height );
 
 			// paint lines
 			for( Map.Entry<Color, List<Data>> e : color2dataMap.entrySet() ) {
-				Color chartColor = e.getKey();
 				List<Data> chartData = e.getValue();
+				Color chartColor = e.getKey();
+				if( FlatLaf.isLafDark() )
+					chartColor = new HSLColor( chartColor ).adjustTone( 50 );
 				Color temporaryValueColor = new Color( (chartColor.getRGB() & 0xffffff) | 0x40000000, true );
 
 				long seqTime = 0;
