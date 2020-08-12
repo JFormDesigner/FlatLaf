@@ -25,3 +25,29 @@ dependencies {
 	implementation( "com.fifesoft:rsyntaxtextarea:3.1.1" )
 	implementation( "com.fifesoft:autocomplete:3.1.0" )
 }
+
+tasks {
+	jar {
+		dependsOn( ":flatlaf-core:jar" )
+		dependsOn( ":flatlaf-extras:jar" )
+
+		manifest {
+			attributes( "Main-Class" to "com.formdev.flatlaf.themeeditor.FlatThemeFileEditor" )
+
+			if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
+				attributes( "Multi-Release" to "true" )
+		}
+
+		exclude( "module-info.class" )
+		exclude( "META-INF/versions/*/module-info.class" )
+
+		// include all dependencies in jar
+		from( {
+			configurations.runtimeClasspath.get()
+				.filter { it.name.endsWith( "jar" ) }
+				.map { zipTree( it ).matching {
+					exclude( "META-INF/LICENSE" )
+				} }
+		} )
+	}
+}
