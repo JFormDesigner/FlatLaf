@@ -6,7 +6,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[200,fill][200,fill][200,fill][200,fill]"
-			"$rowConstraints": "[][][200,grow,fill][][200,grow,fill][300,grow,fill]"
+			"$rowConstraints": "[][][200,grow,fill][][200,grow,fill][300,grow,fill][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
@@ -37,7 +37,23 @@ new FormModel {
 				"text": "JTable:"
 				"horizontalTextPosition": 10
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1"
+				"value": "cell 2 1 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "showTableGridCheckBox"
+				"text": "Show table grid"
+				"mnemonic": 71
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTableGridChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1 2 1,alignx right,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "autoResizeModeCheckBox"
+				"text": "Auto-resize mode"
+				"selected": true
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "autoResizeModeChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1 2 1,alignx right,growx 0"
 			} )
 			add( new FormContainer( "com.formdev.flatlaf.testing.FlatSmoothScrollingTest$DebugScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "listScrollPane"
@@ -88,6 +104,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 3"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "customLabel"
+				"text": "Custom:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 3"
+			} )
 			add( new FormContainer( "com.formdev.flatlaf.testing.FlatSmoothScrollingTest$DebugScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "textAreaScrollPane"
 				add( new FormComponent( "javax.swing.JTextArea" ) {
@@ -112,47 +134,17 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 4"
 			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$columnConstraints": "[200,right]"
-				"$rowConstraints": "[]0[][grow][][]"
-				"$layoutConstraints": "ltr,insets 0,hidemode 3"
-			} ) {
-				name: "panel1"
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "showTableGridCheckBox"
-					"text": "Show table grid"
-					"mnemonic": 71
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTableGridChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "autoResizeModeCheckBox"
-					"text": "Auto-resize mode"
-					"selected": true
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "autoResizeModeChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1"
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "updateChartDelayedCheckBox"
-					"text": "Update chart delayed"
-					"mnemonic": 85
-					"selected": true
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "updateChartDelayedChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 3"
-				} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "customScrollPane"
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "clearChartButton"
-					"text": "Clear Chart"
-					"mnemonic": 67
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "clearChart", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 4"
+					name: "button1"
+					"text": "I'm a large button, but do not implement Scrollable interface"
+					"preferredSize": new java.awt.Dimension( 800, 800 )
+					"horizontalAlignment": 10
+					"verticalAlignment": 1
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 3 1 2,growy"
+				"value": "cell 3 4"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
@@ -161,6 +153,29 @@ new FormModel {
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 5 4 1,width 100"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "X: time (200ms per line) / Y: scroll bar value (10% per line)"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 4 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "updateChartDelayedCheckBox"
+				"text": "Update chart delayed"
+				"mnemonic": 85
+				"selected": true
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "updateChartDelayedChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 4 1,alignx right,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "clearChartButton"
+				"text": "Clear Chart"
+				"mnemonic": 67
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "clearChart", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 4 1,alignx right,growx 0"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
