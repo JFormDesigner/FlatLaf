@@ -477,6 +477,7 @@ public class FlatScrollBarUI
 		if( useValueIsAdjusting )
 			scrollbar.setValueIsAdjusting( true );
 
+		// remember current scrollbar value so that we can start scroll animation from there
 		int oldValue = scrollbar.getValue();
 
 		// if invoked while animation is running, calculation of new value
@@ -488,30 +489,50 @@ public class FlatScrollBarUI
 
 		// do not use animation if started dragging thumb
 		if( isDragging ) {
+			// do not clear valueIsAdjusting here
 			inRunAndSetValueAnimated = false;
 			return;
 		}
 
 		int newValue = scrollbar.getValue();
 		if( newValue != oldValue ) {
-			scrollbar.setValue( oldValue );
-
-			setValueAnimated( newValue );
-		} else if( useValueIsAdjusting )
-			scrollbar.setValueIsAdjusting( false );
+			// start scroll animation if value has changed
+			setValueAnimated( oldValue, newValue );
+		} else {
+			// clear valueIsAdjusting if value has not changed
+			if( useValueIsAdjusting )
+				scrollbar.setValueIsAdjusting( false );
+		}
 
 		inRunAndSetValueAnimated = false;
 	}
 
 	private boolean inRunAndSetValueAnimated;
 	private Animator animator;
+	private int startValue = Integer.MIN_VALUE;
 	private int targetValue = Integer.MIN_VALUE;
-	private int delta;
 	private boolean useValueIsAdjusting = true;
 
-	public void setValueAnimated( int value ) {
+	public void setValueAnimated( int initialValue, int value ) {
+		// do some check if animation already running
+		if( animator != null && animator.isRunning() && targetValue != Integer.MIN_VALUE ) {
+			// ignore requests if animation still running and scroll direction is the same
+			// and new value is within currently running animation
+			// (this may occur when repeat-scrolling via keyboard)
+			if( value == targetValue ||
+				(value > startValue && value < targetValue) || // scroll down/right
+				(value < startValue && value > targetValue) )  // scroll up/left
+			  return;
+		}
+
 		if( useValueIsAdjusting )
 			scrollbar.setValueIsAdjusting( true );
+
+		// set scrollbar value to initial value
+		scrollbar.setValue( initialValue );
+
+		startValue = initialValue;
+		targetValue = value;
 
 		// create animator
 		if( animator == null ) {
@@ -521,7 +542,7 @@ public class FlatScrollBarUI
 
 			animator = new Animator( duration, fraction -> {
 				if( scrollbar == null || !scrollbar.isShowing() ) {
-					animator.cancel();
+					animator.stop();
 					return;
 				}
 
@@ -530,10 +551,11 @@ public class FlatScrollBarUI
 				if( useValueIsAdjusting && !scrollbar.getValueIsAdjusting() )
 					scrollbar.setValueIsAdjusting( true );
 
-				scrollbar.setValue( targetValue - delta + Math.round( delta * fraction ) );
+				scrollbar.setValue( startValue + Math.round( (targetValue - startValue) * fraction ) );
 			}, () -> {
-				targetValue = Integer.MIN_VALUE;
-				if( useValueIsAdjusting )
+				startValue = targetValue = Integer.MIN_VALUE;
+
+				if( useValueIsAdjusting && scrollbar != null )
 					scrollbar.setValueIsAdjusting( false );
 			});
 
@@ -543,9 +565,7 @@ public class FlatScrollBarUI
 				: new CubicBezierEasing( 0.5f, 0.5f, 0.5f, 1 ) );
 		}
 
-		targetValue = value;
-		delta = targetValue - scrollbar.getValue();
-
+		// restart animator
 		animator.cancel();
 		animator.start();
 	}
