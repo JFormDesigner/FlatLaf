@@ -158,7 +158,7 @@ public class FlatTableHeaderUI
 			g2.setColor( separatorColor );
 
 			int sepCount = columnCount;
-			if( header.getTable().getAutoResizeMode() != JTable.AUTO_RESIZE_OFF && !isVerticalScrollBarVisible() )
+			if( header.getTable() != null && header.getTable().getAutoResizeMode() != JTable.AUTO_RESIZE_OFF && !isVerticalScrollBarVisible() )
 				sepCount--;
 
 			if( header.getComponentOrientation().isLeftToRight() ) {
