@@ -1,6 +1,15 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+#### Other Changes
+
+- Extras: Updated dependency
+  [svgSalamander](https://github.com/JFormDesigner/svgSalamander) to version
+  1.1.2.3.
+
+
 ## 0.40
 
 #### New features
