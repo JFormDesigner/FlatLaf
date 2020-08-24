@@ -3,6 +3,11 @@ FlatLaf Change Log
 
 ## Unreleased
 
+#### New features
+
+- Extras: `FlatSVGIcon` now allows specifying `ClassLoader` that is used to load
+  SVG file. (issue #163)
+
 #### Other Changes
 
 - Extras: Updated dependency

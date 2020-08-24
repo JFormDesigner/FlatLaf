@@ -50,11 +50,18 @@ public class FlatSVGIcon
 	private static final SVGUniverse svgUniverse = new SVGUniverse();
 
 	private final String name;
+	private final ClassLoader classLoader;
+
 	private SVGDiagram diagram;
 	private boolean dark;
 
 	public FlatSVGIcon( String name ) {
+		this( name, null );
+	}
+
+	public FlatSVGIcon( String name, ClassLoader classLoader ) {
 		this.name = name;
+		this.classLoader = classLoader;
 	}
 
 	private void update() {
@@ -79,7 +86,14 @@ public class FlatSVGIcon
 			int dotIndex = name.lastIndexOf( '.' );
 			name = name.substring( 0, dotIndex ) + "_dark" + name.substring( dotIndex );
 		}
-		return FlatSVGIcon.class.getClassLoader().getResource( name );
+
+		ClassLoader cl = (classLoader != null) ? classLoader : FlatSVGIcon.class.getClassLoader();
+		return cl.getResource( name );
+	}
+
+	public boolean hasFound() {
+		update();
+		return diagram != null;
 	}
 
 	@Override
