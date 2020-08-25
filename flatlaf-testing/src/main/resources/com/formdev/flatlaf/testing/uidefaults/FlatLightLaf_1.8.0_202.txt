@@ -80,6 +80,7 @@ Button.default.pressedBackground #e6e6e6    com.formdev.flatlaf.util.DerivedColo
 Button.defaultButtonFollowsFocus true
 Button.disabledBackground      #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledBorderColor     #cfcfcf    javax.swing.plaf.ColorUIResource [UI]
+Button.disabledSelectedBackground #dedede    com.formdev.flatlaf.util.DerivedColor [UI]    darken(13% autoInverse)
 Button.disabledText            #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedBorderColor      #87afda    javax.swing.plaf.ColorUIResource [UI]
@@ -94,12 +95,15 @@ Button.margin                  2,14,2,14    javax.swing.plaf.InsetsUIResource [U
 Button.minimumWidth            72
 Button.pressedBackground       #e6e6e6    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 Button.rollover                true
+Button.selectedBackground      #cccccc    com.formdev.flatlaf.util.DerivedColor [UI]    darken(20% autoInverse)
+Button.selectedForeground      #000000    javax.swing.plaf.ColorUIResource [UI]
 Button.shadow                  #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
 Button.textIconGap             4
 Button.textShiftOffset         0
 Button.toolbar.hoverBackground #e0e0e0    com.formdev.flatlaf.util.DerivedColor [UI]    darken(12% autoInverse)
 Button.toolbar.margin          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 Button.toolbar.pressedBackground #d9d9d9    com.formdev.flatlaf.util.DerivedColor [UI]    darken(15% autoInverse)
+Button.toolbar.selectedBackground #cccccc    com.formdev.flatlaf.util.DerivedColor [UI]    darken(20% autoInverse)
 Button.toolbar.spacingInsets   1,2,1,2    javax.swing.plaf.InsetsUIResource [UI]
 ButtonUI                       com.formdev.flatlaf.ui.FlatButtonUI
 

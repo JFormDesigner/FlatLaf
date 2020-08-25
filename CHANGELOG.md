@@ -8,6 +8,10 @@ FlatLaf Change Log
 - Extras: `FlatSVGIcon` now allows specifying `ClassLoader` that is used to load
   SVG file. (issue #163)
 
+#### Fixed bugs
+
+- Button: "selected" state was not shown. (issue #161)
+
 #### Other Changes
 
 - Extras: Updated dependency

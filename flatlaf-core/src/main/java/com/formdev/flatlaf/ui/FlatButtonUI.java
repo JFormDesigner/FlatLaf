@@ -67,8 +67,11 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.focusedBackground			Color	optional
  * @uiDefault Button.hoverBackground			Color	optional
  * @uiDefault Button.pressedBackground			Color	optional
+ * @uiDefault Button.selectedBackground			Color
+ * @uiDefault Button.selectedForeground			Color
  * @uiDefault Button.disabledBackground			Color	optional
  * @uiDefault Button.disabledText				Color
+ * @uiDefault Button.disabledSelectedBackground	Color
  * @uiDefault Button.default.background			Color
  * @uiDefault Button.default.startBackground	Color	optional; if set, a gradient paint is used and Button.default.background is ignored
  * @uiDefault Button.default.endBackground		Color	optional; if set, a gradient paint is used
@@ -84,6 +87,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.toolbar.spacingInsets		Insets
  * @uiDefault Button.toolbar.hoverBackground	Color
  * @uiDefault Button.toolbar.pressedBackground	Color
+ * @uiDefault Button.toolbar.selectedBackground	Color
  *
  * @author Karl Tauber
  */
@@ -101,8 +105,11 @@ public class FlatButtonUI
 	protected Color focusedBackground;
 	protected Color hoverBackground;
 	protected Color pressedBackground;
+	protected Color selectedBackground;
+	protected Color selectedForeground;
 	protected Color disabledBackground;
 	protected Color disabledText;
+	protected Color disabledSelectedBackground;
 
 	protected Color defaultBackground;
 	protected Color defaultEndBackground;
@@ -119,6 +126,7 @@ public class FlatButtonUI
 	protected Insets toolbarSpacingInsets;
 	protected Color toolbarHoverBackground;
 	protected Color toolbarPressedBackground;
+	protected Color toolbarSelectedBackground;
 
 	private Icon helpButtonIcon;
 
@@ -150,8 +158,11 @@ public class FlatButtonUI
 			focusedBackground = UIManager.getColor( prefix + "focusedBackground" );
 			hoverBackground = UIManager.getColor( prefix + "hoverBackground" );
 			pressedBackground = UIManager.getColor( prefix + "pressedBackground" );
+			selectedBackground = UIManager.getColor( prefix + "selectedBackground" );
+			selectedForeground = UIManager.getColor( prefix + "selectedForeground" );
 			disabledBackground = UIManager.getColor( prefix + "disabledBackground" );
 			disabledText = UIManager.getColor( prefix + "disabledText" );
+			disabledSelectedBackground = UIManager.getColor( prefix + "disabledSelectedBackground" );
 
 			if( UIManager.getBoolean( "Button.paintShadow" ) ) {
 				shadowWidth = FlatUIUtils.getUIInt( "Button.shadowWidth", 2 );
@@ -174,6 +185,7 @@ public class FlatButtonUI
 			toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
 			toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
 			toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
+			toolbarSelectedBackground = UIManager.getColor( prefix + "toolbar.selectedBackground" );
 
 			helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
 
@@ -369,6 +381,17 @@ public class FlatButtonUI
 	}
 
 	protected Color getBackground( JComponent c ) {
+		if( ((AbstractButton)c).isSelected() ) {
+			// in toolbar use same colors for disabled and enabled because
+			// we assume that toolbar icon is shown disabled
+			boolean toolBarButton = isToolBarButton( c );
+			return buttonStateColor( c,
+				toolBarButton ? toolbarSelectedBackground : selectedBackground,
+				toolBarButton ? toolbarSelectedBackground : disabledSelectedBackground,
+				null, null,
+				toolBarButton ? toolbarPressedBackground : pressedBackground );
+		}
+
 		if( !c.isEnabled() )
 			return disabledBackground;
 
@@ -429,6 +452,9 @@ public class FlatButtonUI
 	protected Color getForeground( JComponent c ) {
 		if( !c.isEnabled() )
 			return disabledText;
+
+		if( ((AbstractButton)c).isSelected() && !isToolBarButton( c ) )
+			return selectedForeground;
 
 		// use component foreground if explicitly set
 		Color fg = c.getForeground();

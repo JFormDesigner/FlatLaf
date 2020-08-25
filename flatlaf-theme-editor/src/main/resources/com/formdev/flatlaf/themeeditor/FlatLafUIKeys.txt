@@ -28,6 +28,7 @@ Button.default.pressedBackground
 Button.defaultButtonFollowsFocus
 Button.disabledBackground
 Button.disabledBorderColor
+Button.disabledSelectedBackground
 Button.disabledText
 Button.focusInputMap
 Button.focusedBackground
@@ -43,12 +44,15 @@ Button.margin
 Button.minimumWidth
 Button.pressedBackground
 Button.rollover
+Button.selectedBackground
+Button.selectedForeground
 Button.shadow
 Button.textIconGap
 Button.textShiftOffset
 Button.toolbar.hoverBackground
 Button.toolbar.margin
 Button.toolbar.pressedBackground
+Button.toolbar.selectedBackground
 Button.toolbar.spacingInsets
 ButtonUI
 Caret.width
