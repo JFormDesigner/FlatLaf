@@ -33,6 +33,12 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 0"
 			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentsTest$TestMultiLineLabel" ) {
+				name: "testMultiLineLabel1"
+				"text": "Multi-line label based on JTextArea\n2nd line"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0 2 1"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "buttonLabel"
 				"text": "JButton:"

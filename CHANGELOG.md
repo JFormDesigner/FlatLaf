@@ -11,6 +11,9 @@ FlatLaf Change Log
 #### Fixed bugs
 
 - Button: "selected" state was not shown. (issue #161)
+- TextArea: Update background color property if enabled or editable state
+  changes in the same way as Swing does it for all other text components. (issue
+  #147)
 
 #### Other Changes
 

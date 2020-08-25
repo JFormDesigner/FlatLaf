@@ -134,6 +134,7 @@ public class FlatComponentsTest
 		JLabel labelLabel = new JLabel();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
+		FlatComponentsTest.TestMultiLineLabel testMultiLineLabel1 = new FlatComponentsTest.TestMultiLineLabel();
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
 		JButton button17 = new JButton();
@@ -366,6 +367,10 @@ public class FlatComponentsTest
 		label2.setDisplayedMnemonic('D');
 		label2.setEnabled(false);
 		add(label2, "cell 2 0");
+
+		//---- testMultiLineLabel1 ----
+		testMultiLineLabel1.setText("Multi-line label based on JTextArea\n2nd line");
+		add(testMultiLineLabel1, "cell 3 0 2 1");
 
 		//---- buttonLabel ----
 		buttonLabel.setText("JButton:");
@@ -1400,6 +1405,26 @@ public class FlatComponentsTest
 		@Override
 		public boolean isDefaultButton() {
 			return true;
+		}
+	}
+
+	//---- class TestMultiLineLabel -------------------------------------------
+
+	private static class TestMultiLineLabel
+		extends JTextArea
+	{
+		public TestMultiLineLabel() {
+			setEditable( false );
+			setFocusable( false );
+		}
+
+		@Override
+		public void updateUI() {
+			super.updateUI();
+			setBackground( UIManager.getColor( "Label.background" ) );
+			setForeground( UIManager.getColor( "Label.foreground" ) );
+			setFont( UIManager.getFont( "Label.font" ) );
+			setBorder( null );
 		}
 	}
 }

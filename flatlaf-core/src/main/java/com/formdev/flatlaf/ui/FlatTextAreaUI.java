@@ -60,6 +60,7 @@ public class FlatTextAreaUI
 {
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
+	protected Color background;
 	protected Color disabledBackground;
 	protected Color inactiveBackground;
 
@@ -68,11 +69,19 @@ public class FlatTextAreaUI
 	}
 
 	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		updateBackground();
+	}
+
+	@Override
 	protected void installDefaults() {
 		super.installDefaults();
 
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
+		background = UIManager.getColor( "TextArea.background" );
 		disabledBackground = UIManager.getColor( "TextArea.disabledBackground" );
 		inactiveBackground = UIManager.getColor( "TextArea.inactiveBackground" );
 	}
@@ -81,6 +90,7 @@ public class FlatTextAreaUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		background = null;
 		disabledBackground = null;
 		inactiveBackground = null;
 	}
@@ -89,26 +99,36 @@ public class FlatTextAreaUI
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
 		FlatEditorPaneUI.propertyChange( getComponent(), e );
+
+		switch( e.getPropertyName() ) {
+			case "editable":
+			case "enabled":
+				updateBackground();
+				break;
+		}
 	}
 
-	@Override
-	protected void paintSafely( Graphics g ) {
-		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
-	}
-
-	@Override
-	protected void paintBackground( Graphics g ) {
+	private void updateBackground() {
 		JTextComponent c = getComponent();
 
 		Color background = c.getBackground();
-		g.setColor( !(background instanceof UIResource)
-			? background
-			: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
-				? FlatUIUtils.getParentBackground( c )
-				: (!c.isEnabled()
-					? disabledBackground
-					: (!c.isEditable() ? inactiveBackground : background))) );
-		g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+		if( !(background instanceof UIResource) )
+			return;
+
+		// do not update background if it currently has a unknown color (assigned from outside)
+		if( background != this.background &&
+			background != disabledBackground &&
+			background != inactiveBackground )
+		  return;
+
+		Color newBackground = !c.isEnabled()
+			? disabledBackground
+			: (!c.isEditable()
+				? inactiveBackground
+				: this.background);
+
+		if( newBackground != background )
+			c.setBackground( newBackground );
 	}
 
 	@Override
@@ -127,5 +147,23 @@ public class FlatTextAreaUI
 			return size;
 
 		return FlatEditorPaneUI.applyMinimumWidth( c, size, minimumWidth );
+	}
+
+	@Override
+	protected void paintSafely( Graphics g ) {
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
+	}
+
+	@Override
+	protected void paintBackground( Graphics g ) {
+		JTextComponent c = getComponent();
+
+		// for compatibility with IntelliJ themes
+		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) && (c.getBackground() instanceof UIResource) ) {
+			FlatUIUtils.paintParentBackground( g, c );
+			return;
+		}
+
+		super.paintBackground( g );
 	}
 }
