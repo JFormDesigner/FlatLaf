@@ -240,12 +240,15 @@ public class FlatTitlePane
 	protected void activeChanged( boolean active ) {
 		boolean hasEmbeddedMenuBar = rootPane.getJMenuBar() != null && isMenuBarEmbedded();
 		Color background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
-		Color foreground = FlatUIUtils.nonUIResource( active
-			? (hasEmbeddedMenuBar ? embeddedForeground : activeForeground)
-			: inactiveForeground );
+		Color foreground = FlatUIUtils.nonUIResource( active ? activeForeground : inactiveForeground );
+		Color titleForeground = (hasEmbeddedMenuBar && active) ? FlatUIUtils.nonUIResource( embeddedForeground ) : foreground;
 
 		setBackground( background );
-		titleLabel.setForeground( foreground );
+		titleLabel.setForeground( titleForeground );
+		iconifyButton.setForeground( foreground );
+		maximizeButton.setForeground( foreground );
+		restoreButton.setForeground( foreground );
+		closeButton.setForeground( foreground );
 
 		titleLabel.setHorizontalAlignment( hasEmbeddedMenuBar ? SwingConstants.CENTER : SwingConstants.LEADING );
 

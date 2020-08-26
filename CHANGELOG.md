@@ -18,6 +18,8 @@ FlatLaf Change Log
   changes in the same way as Swing does it for all other text components. (issue
   #147)
 - Demo: Fixed restoring last used theme on startup. (regression in 0.39)
+- Custom window decorations: Fixed iconify, maximize and close icon colors if
+  window is inactive.
 
 #### Other Changes
 
