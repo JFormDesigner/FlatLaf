@@ -205,11 +205,11 @@ public class IJThemesPanel
 					break;
 				}
 			}
-		}
 
-		// select first theme if none selected
-		if( themesList.getSelectedIndex() < 0 )
-			themesList.setSelectedIndex( 0 );
+			// select first theme if none selected
+			if( themesList.getSelectedIndex() < 0 )
+				themesList.setSelectedIndex( 0 );
+		}
 
 		// scroll selection into visible area
 		int sel = themesList.getSelectedIndex();
