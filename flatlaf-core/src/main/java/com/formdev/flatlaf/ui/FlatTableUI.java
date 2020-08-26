@@ -188,6 +188,9 @@ public class FlatTableUI
 	 * or the application has to be changed to extend a FlatLaf renderer.
 	 */
 	private void toggleSelectionColors() {
+		if( table == null )
+			return;
+
 		if( FlatUIUtils.isPermanentFocusOwner( table ) ) {
 			if( table.getSelectionBackground() == selectionInactiveBackground )
 				table.setSelectionBackground( selectionBackground );

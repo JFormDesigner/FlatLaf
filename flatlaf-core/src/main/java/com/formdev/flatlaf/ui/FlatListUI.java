@@ -126,6 +126,9 @@ public class FlatListUI
 	 * or the application has to be changed to extend a FlatLaf renderer.
 	 */
 	private void toggleSelectionColors() {
+		if( list == null )
+			return;
+
 		if( FlatUIUtils.isPermanentFocusOwner( list ) ) {
 			if( list.getSelectionBackground() == selectionInactiveBackground )
 				list.setSelectionBackground( selectionBackground );
