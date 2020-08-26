@@ -19,6 +19,7 @@ package com.formdev.flatlaf.demo;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -41,6 +42,9 @@ public class FlatLafDemo
 			// enable window decorations
 			JFrame.setDefaultLookAndFeelDecorated( true );
 			JDialog.setDefaultLookAndFeelDecorated( true );
+
+			// application specific UI defaults
+			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.demo" );
 
 			// set look and feel
 			DemoPrefs.initLaf( args );

@@ -8,6 +8,8 @@ FlatLaf Change Log
 - Added API to register packages or folders where FlatLaf searches for
   application specific properties files with custom UI defaults (see
   `FlatLaf.registerCustomDefaultsSource(...)` methods).
+- Demo: Show hint popups to guide users to some features of the FlatLaf Demo
+  application.
 - Extras: `FlatSVGIcon` now allows specifying `ClassLoader` that is used to load
   SVG file. (issue #163)
 

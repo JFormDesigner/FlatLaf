@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -114,6 +114,9 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel" ) {
 				name: "themesPanel"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "East"
 			} )
@@ -322,6 +325,9 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "optionsMenu"
 					"text": "Options"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "windowDecorationsCheckBoxMenuItem"
 						"text": "Window decorations"
@@ -364,6 +370,11 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "animatedLafChangeChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "showHintsMenuItem"
+						"text": "Show hints"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHintsChanged", false ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {

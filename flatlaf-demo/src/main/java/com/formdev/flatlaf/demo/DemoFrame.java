@@ -20,11 +20,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.demo.HintManager.Hint;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
@@ -57,6 +59,35 @@ class DemoFrame
 
 		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
 			tabbedPane.setSelectedIndex( tabIndex );
+
+		SwingUtilities.invokeLater( () -> {
+			showHints();
+		} );
+	}
+
+	private void showHints() {
+		Hint fontMenuHint = new Hint(
+			"Use 'Font' menu to increase/decrease font size or try different fonts.",
+			fontMenu, SwingConstants.BOTTOM, "hint.fontMenu", null );
+
+		Hint optionsMenuHint = new Hint(
+			"Use 'Options' menu to try out various FlatLaf options.",
+			optionsMenu, SwingConstants.BOTTOM, "hint.optionsMenu", fontMenuHint );
+
+		Hint themesHint = new Hint(
+			"Use 'Themes' list to try out various themes.",
+			themesPanel, SwingConstants.LEFT, "hint.themesPanel", optionsMenuHint );
+
+		HintManager.showHint( themesHint );
+	}
+
+	private void clearHints() {
+		HintManager.hideAllHints();
+
+		Preferences state = DemoPrefs.getState();
+		state.remove( "hint.fontMenu" );
+		state.remove( "hint.optionsMenu" );
+		state.remove( "hint.themesPanel" );
 	}
 
 	private void exitActionPerformed() {
@@ -108,6 +139,11 @@ class DemoFrame
 
 	private void animatedLafChangeChanged() {
 		System.setProperty( "flatlaf.animatedLafChange", String.valueOf( animatedLafChangeMenuItem.isSelected() ) );
+	}
+
+	private void showHintsChanged() {
+		clearHints();
+		showHints();
 	}
 
 	private void fontFamilyChanged( ActionEvent e ) {
@@ -251,12 +287,13 @@ class DemoFrame
 		JMenuItem restoreFontMenuItem = new JMenuItem();
 		JMenuItem incrFontMenuItem = new JMenuItem();
 		JMenuItem decrFontMenuItem = new JMenuItem();
-		JMenu optionsMenu = new JMenu();
+		optionsMenu = new JMenu();
 		windowDecorationsCheckBoxMenuItem = new JCheckBoxMenuItem();
 		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
+		JMenuItem showHintsMenuItem = new JMenuItem();
 		JMenu helpMenu = new JMenu();
 		JMenuItem aboutMenuItem = new JMenuItem();
 		JToolBar toolBar1 = new JToolBar();
@@ -276,7 +313,7 @@ class DemoFrame
 		OptionPanePanel optionPanePanel = new OptionPanePanel();
 		ExtrasPanel extrasPanel1 = new ExtrasPanel();
 		controlBar = new ControlBar();
-		IJThemesPanel themesPanel = new IJThemesPanel();
+		themesPanel = new IJThemesPanel();
 
 		//======== this ========
 		setTitle("FlatLaf Demo");
@@ -516,6 +553,11 @@ class DemoFrame
 				animatedLafChangeMenuItem.setSelected(true);
 				animatedLafChangeMenuItem.addActionListener(e -> animatedLafChangeChanged());
 				optionsMenu.add(animatedLafChangeMenuItem);
+
+				//---- showHintsMenuItem ----
+				showHintsMenuItem.setText("Show hints");
+				showHintsMenuItem.addActionListener(e -> showHintsChanged());
+				optionsMenu.add(showHintsMenuItem);
 			}
 			menuBar1.add(optionsMenu);
 
@@ -631,6 +673,7 @@ class DemoFrame
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JMenu fontMenu;
+	private JMenu optionsMenu;
 	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
 	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
@@ -638,5 +681,6 @@ class DemoFrame
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
+	private IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
