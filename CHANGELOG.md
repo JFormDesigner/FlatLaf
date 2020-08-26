@@ -20,6 +20,8 @@ FlatLaf Change Log
 - Demo: Fixed restoring last used theme on startup. (regression in 0.39)
 - Custom window decorations: Fixed iconify, maximize and close icon colors if
   window is inactive.
+- Custom window decorations: Fixed title pane background color in IntelliJ
+  themes if window is inactive.
 
 #### Other Changes
 

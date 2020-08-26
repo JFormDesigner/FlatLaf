@@ -531,6 +531,7 @@ public class IntelliJTheme
 		uiKeyMapping.put( "Slider.trackWidth", "" ); // ignore (used in Material Theme UI Lite)
 
 		// TitlePane
+		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );
 		uiKeyMapping.put( "TitlePane.infoForeground",         "TitlePane.foreground" );
 		uiKeyMapping.put( "TitlePane.inactiveInfoForeground", "TitlePane.inactiveForeground" );
 
