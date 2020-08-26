@@ -23,6 +23,8 @@
   },
   "ui": {
     "*": {
+      "acceleratorForeground": "colorAcceleratorForeground",
+      "acceleratorSelectionForeground": "colorAcceleratorSelectionForeground",
       "background": "colorBackground",
       "caretForeground": "colorForeground",
       "disabledForeground": "colorDisabledForeground",
@@ -68,10 +70,7 @@
       "startBorderColor": "#B4BAB5"
     },
     "CheckBox": {},
-    "CheckBoxMenuItem": {
-      "acceleratorForeground": "colorAcceleratorForeground",
-      "acceleratorSelectionForeground": "colorAcceleratorSelectionForeground"
-    },
+    "CheckBoxMenuItem": {},
     "ColorChooser": {
       "swatchesDefaultRecentColor": "#CFD0C3"
     },
@@ -263,8 +262,6 @@
       "usedBackground": "#ADB5AF"
     },
     "Menu": {
-      "acceleratorForeground": "colorAcceleratorForeground",
-      "acceleratorSelectionForeground": "colorAcceleratorSelectionForeground",
       "borderColor": "#D3D2C6",
       "disabledBackground": "colorBackground",
       "separatorColor": "colorSeparator"
@@ -378,10 +375,7 @@
       "trackColor": "#BAC0B8"
     },
     "RadioButton": {},
-    "RadioButtonMenuItem": {
-      "acceleratorForeground": "colorAcceleratorForeground",
-      "acceleratorSelectionForeground": "colorAcceleratorSelectionForeground"
-    },
+    "RadioButtonMenuItem": {},
     "ScrollBar": {
       "background": "#F5F0E3",
       "hoverThumbBorderColor": "#4B5A5F47",
@@ -444,6 +438,11 @@
     },
     "Separator": {
       "separatorColor": "colorSeparator"
+    },
+    "Settings": {
+      "Spotlight": {
+        "borderColor": "#F6C00064"
+      }
     },
     "SidePanel": {
       "background": "#E2E2D4"
