@@ -29,6 +29,7 @@ import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,8 @@ public abstract class FlatLaf
 {
 	static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
+
+	private static List<Object> customDefaultsSources;
 
 	private String desktopPropertyName;
 	private String desktopPropertyName2;
@@ -550,6 +553,87 @@ public abstract class FlatLaf
 	private void putDefaults( UIDefaults defaults, Object value, String... keys ) {
 		for( String key : keys )
 			defaults.put( key, value );
+	}
+
+	static List<Object> getCustomDefaultsSources() {
+		return customDefaultsSources;
+	}
+
+	/**
+	 * Registers a package where FlatLaf searches for properties files with custom UI defaults.
+	 * <p>
+	 * This can be used to specify application specific UI defaults that override UI values
+	 * of existing themes or to define own UI values used in custom controls.
+	 * <p>
+	 * There may be multiple properties files in that package for multiple themes.
+	 * The properties file name must match the used theme class names.
+	 * E.g. {@code FlatLightLaf.properties} for class {@link FlatLightLaf}
+	 * or {@code FlatDarkLaf.properties} for class {@link FlatDarkLaf}.
+	 * {@code FlatLaf.properties} is loaded first for all themes.
+	 * <p>
+	 * These properties files are loaded after theme and addon properties files
+	 * and can therefore override all UI defaults.
+	 * <p>
+	 * Invoke this method before setting the look and feel.
+	 *
+	 * @param packageName a package name (e.g. "com.myapp.resources")
+	 */
+	public static void registerCustomDefaultsSource( String packageName ) {
+		registerCustomDefaultsSource( packageName, null );
+	}
+
+	public static void unregisterCustomDefaultsSource( String packageName ) {
+		unregisterCustomDefaultsSource( packageName, null );
+	}
+
+	/**
+	 * Registers a package where FlatLaf searches for properties files with custom UI defaults.
+	 * <p>
+	 * See {@link #registerCustomDefaultsSource(String)} for details.
+	 *
+	 * @param packageName a package name (e.g. "com.myapp.resources")
+	 * @param classLoader a class loader used to find resources, or {@code null}
+	 */
+	public static void registerCustomDefaultsSource( String packageName, ClassLoader classLoader ) {
+		if( customDefaultsSources == null )
+			customDefaultsSources = new ArrayList<>();
+		customDefaultsSources.add( packageName );
+		customDefaultsSources.add( classLoader );
+	}
+
+	public static void unregisterCustomDefaultsSource( String packageName, ClassLoader classLoader ) {
+		if( customDefaultsSources == null )
+			return;
+
+		int size = customDefaultsSources.size();
+		for( int i = 0; i < size - 1; i++ ) {
+			Object source = customDefaultsSources.get( i );
+			if( packageName.equals( source ) && customDefaultsSources.get( i + 1 ) == classLoader ) {
+				customDefaultsSources.remove( i + 1 );
+				customDefaultsSources.remove( i );
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Registers a folder where FlatLaf searches for properties files with custom UI defaults.
+	 * <p>
+	 * See {@link #registerCustomDefaultsSource(String)} for details.
+	 *
+	 * @param folder a folder
+	 */
+	public static void registerCustomDefaultsSource( File folder ) {
+		if( customDefaultsSources == null )
+			customDefaultsSources = new ArrayList<>();
+		customDefaultsSources.add( folder );
+	}
+
+	public static void unregisterCustomDefaultsSource( File folder ) {
+		if( customDefaultsSources == null )
+			return;
+
+		customDefaultsSources.remove( folder );
 	}
 
 	private static void reSetLookAndFeel() {

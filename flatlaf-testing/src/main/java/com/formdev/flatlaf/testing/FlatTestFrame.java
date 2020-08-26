@@ -77,6 +77,9 @@ public class FlatTestFrame
 		// disable animated Laf change
 		System.setProperty( "flatlaf.animatedLafChange", "false" );
 
+		// test loading custom defaults from package
+		FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.testing.customdefaults" );
+
 		// set look and feel
 		DemoPrefs.initLaf( args );
 

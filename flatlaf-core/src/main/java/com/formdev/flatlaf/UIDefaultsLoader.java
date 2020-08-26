@@ -19,6 +19,8 @@ package com.formdev.flatlaf;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -103,6 +105,42 @@ class UIDefaultsLoader
 					try( InputStream in = addon.getDefaults( lafClass ) ) {
 						if( in != null )
 							properties.load( in );
+					}
+				}
+			}
+
+			// load custom properties files (usually provides by applications)
+			List<Object> customDefaultsSources = FlatLaf.getCustomDefaultsSources();
+			int size = (customDefaultsSources != null) ? customDefaultsSources.size() : 0;
+			for( int i = 0; i < size; i++ ) {
+				Object source = customDefaultsSources.get( i );
+				if( source instanceof String && i + 1 < size ) {
+					// load from package in classloader
+					String packageName = (String) source;
+					ClassLoader classLoader = (ClassLoader) customDefaultsSources.get( ++i );
+
+					packageName = packageName.replace( '.', '/' );
+					if( classLoader == null )
+						classLoader = FlatLaf.class.getClassLoader();
+
+					for( Class<?> lafClass : lafClasses ) {
+						String propertiesName = packageName + '/' + lafClass.getSimpleName() + ".properties";
+						try( InputStream in = classLoader.getResourceAsStream( propertiesName ) ) {
+							if( in != null )
+								properties.load( in );
+						}
+					}
+				} else if( source instanceof File ) {
+					// load from folder
+					File folder = (File) source;
+					for( Class<?> lafClass : lafClasses ) {
+						File propertiesFile = new File( folder, lafClass.getSimpleName() + ".properties" );
+						if( !propertiesFile.isFile() )
+							continue;
+
+						try( InputStream in = new FileInputStream( propertiesFile ) ) {
+							properties.load( in );
+						}
 					}
 				}
 			}
