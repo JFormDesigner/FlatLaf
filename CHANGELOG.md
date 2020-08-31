@@ -24,6 +24,8 @@ FlatLaf Change Log
   window is inactive.
 - Custom window decorations: Fixed title pane background color in IntelliJ
   themes if window is inactive.
+- Fixed sub-pixel text rendering in animated theme change (see
+  [FlatLaf Extras](flatlaf-extras)).
 
 #### Other Changes
 

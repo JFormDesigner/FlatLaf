@@ -19,10 +19,10 @@ package com.formdev.flatlaf.extras;
 import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Window;
-import java.util.HashMap;
+import java.awt.image.VolatileImage;
 import java.util.Map;
+import java.util.WeakHashMap;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.RootPaneContainer;
@@ -56,7 +56,7 @@ public class FlatAnimatedLafChange
 	public static int resolution = 40;
 
 	private static Animator animator;
-	private static final Map<JLayeredPane, JComponent> map = new HashMap<>();
+	private static final Map<JLayeredPane, JComponent> map = new WeakHashMap<>();
 	private static float alpha;
 
 	/**
@@ -79,10 +79,14 @@ public class FlatAnimatedLafChange
 			if( !(window instanceof RootPaneContainer) || !window.isShowing() )
 				continue;
 
-			JLayeredPane layeredPane = ((RootPaneContainer)window).getLayeredPane();
+			// create snapshot image
+			// (using volatile image to have correct sub-pixel text rendering on Java 9+)
+			VolatileImage snapshot = window.createVolatileImage( window.getWidth(), window.getHeight() );
+			if( snapshot == null )
+				continue;
 
-			// create snapshot image of layered pane
-			Image snapshot = window.createImage( window.getWidth(), window.getHeight() );
+			// paint window to snapshot image
+			JLayeredPane layeredPane = ((RootPaneContainer)window).getLayeredPane();
 			layeredPane.paint( snapshot.getGraphics() );
 
 			// create snapshot layer, which is added to layered pane and paints
@@ -90,8 +94,19 @@ public class FlatAnimatedLafChange
 			JComponent snapshotLayer = new JComponent() {
 				@Override
 				public void paint( Graphics g ) {
+					if( snapshot.contentsLost() )
+						return;
+
 					((Graphics2D)g).setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, alpha ) );
 					g.drawImage( snapshot, 0, 0, null );
+				}
+
+				@Override
+				public void removeNotify() {
+					super.removeNotify();
+
+					// release system resources used by volatile image
+					snapshot.flush();
 				}
 			};
 			snapshotLayer.setSize( layeredPane.getSize() );
