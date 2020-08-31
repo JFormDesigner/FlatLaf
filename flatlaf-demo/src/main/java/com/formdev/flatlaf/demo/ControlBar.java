@@ -30,6 +30,9 @@ import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
+import net.miginfocom.layout.ConstraintParser;
+import net.miginfocom.layout.LC;
+import net.miginfocom.layout.UnitValue;
 import net.miginfocom.swing.*;
 
 /**
@@ -43,6 +46,18 @@ class ControlBar
 
 	ControlBar() {
 		initComponents();
+
+		// remove top insets
+		MigLayout layout = (MigLayout) getLayout();
+		LC lc = ConstraintParser.parseLayoutConstraint( (String) layout.getLayoutConstraints() );
+		UnitValue[] insets = lc.getInsets();
+		lc.setInsets( new UnitValue[] {
+			new UnitValue( 0, UnitValue.PIXEL, null ),
+			insets[1],
+			insets[2],
+			insets[3]
+		} );
+		layout.setLayoutConstraints( lc );
 
 		// initialize look and feels combo box
 		DefaultComboBoxModel<LookAndFeelInfo> lafModel = new DefaultComboBoxModel<>();
