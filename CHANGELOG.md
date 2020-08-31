@@ -3,7 +3,7 @@ FlatLaf Change Log
 
 ## Unreleased
 
-#### New features
+#### New features and improvements
 
 - Added API to register packages or folders where FlatLaf searches for
   application specific properties files with custom UI defaults (see
@@ -12,6 +12,8 @@ FlatLaf Change Log
   application.
 - Extras: `FlatSVGIcon` now allows specifying `ClassLoader` that is used to load
   SVG file. (issue #163)
+- Smoother transition from old to new theme, independent of UI complexity, when
+  using animated theme change (see [FlatLaf Extras](flatlaf-extras)).
 
 #### Fixed bugs
 

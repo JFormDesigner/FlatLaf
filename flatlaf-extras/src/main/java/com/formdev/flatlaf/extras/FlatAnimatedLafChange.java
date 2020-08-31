@@ -56,8 +56,10 @@ public class FlatAnimatedLafChange
 	public static int resolution = 40;
 
 	private static Animator animator;
-	private static final Map<JLayeredPane, JComponent> map = new WeakHashMap<>();
+	private static final Map<JLayeredPane, JComponent> oldUIsnapshots = new WeakHashMap<>();
+	private static final Map<JLayeredPane, JComponent> newUIsnapshots = new WeakHashMap<>();
 	private static float alpha;
+	private static boolean inShowSnapshot;
 
 	/**
 	 * Create a snapshot of the old UI and shows it on top of the UI.
@@ -72,6 +74,13 @@ public class FlatAnimatedLafChange
 			animator.stop();
 
 		alpha = 1;
+
+		// show snapshot of old UI
+		showSnapshot( true, oldUIsnapshots );
+	}
+
+	private static void showSnapshot( boolean useAlpha, Map<JLayeredPane, JComponent> map ) {
+		inShowSnapshot = true;
 
 		// create snapshots for all shown windows
 		Window[] windows = Window.getWindows();
@@ -94,10 +103,11 @@ public class FlatAnimatedLafChange
 			JComponent snapshotLayer = new JComponent() {
 				@Override
 				public void paint( Graphics g ) {
-					if( snapshot.contentsLost() )
+					if( inShowSnapshot || snapshot.contentsLost() )
 						return;
 
-					((Graphics2D)g).setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, alpha ) );
+					if( useAlpha )
+						((Graphics2D)g).setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, alpha ) );
 					g.drawImage( snapshot, 0, 0, null );
 				}
 
@@ -109,12 +119,16 @@ public class FlatAnimatedLafChange
 					snapshot.flush();
 				}
 			};
+			if( !useAlpha )
+				snapshotLayer.setOpaque( true );
 			snapshotLayer.setSize( layeredPane.getSize() );
 
 			// add image layer to layered pane
-			layeredPane.add( snapshotLayer, JLayeredPane.DRAG_LAYER );
+			layeredPane.add( snapshotLayer, Integer.valueOf( JLayeredPane.DRAG_LAYER + (useAlpha ? 2 : 1) ) );
 			map.put( layeredPane, snapshotLayer );
 		}
+
+		inShowSnapshot = false;
 	}
 
 	/**
@@ -126,8 +140,11 @@ public class FlatAnimatedLafChange
 		if( !FlatSystemProperties.getBoolean( "flatlaf.animatedLafChange", true ) )
 			return;
 
-		if( map.isEmpty() )
+		if( oldUIsnapshots.isEmpty() )
 			return;
+
+		// show snapshot of new UI
+		showSnapshot( false, newUIsnapshots );
 
 		// create animator
 		animator = new Animator( duration, fraction -> {
@@ -137,7 +154,7 @@ public class FlatAnimatedLafChange
 			alpha = 1f - fraction;
 
 			// repaint snapshots
-			for( Map.Entry<JLayeredPane, JComponent> e : map.entrySet() ) {
+			for( Map.Entry<JLayeredPane, JComponent> e : oldUIsnapshots.entrySet() ) {
 				if( e.getKey().isShowing() )
 					e.getValue().repaint();
 			}
@@ -151,6 +168,11 @@ public class FlatAnimatedLafChange
 	}
 
 	private static void hideSnapshot() {
+		hideSnapshot( oldUIsnapshots );
+		hideSnapshot( newUIsnapshots );
+	}
+
+	private static void hideSnapshot( Map<JLayeredPane, JComponent> map ) {
 		// remove snapshots
 		for( Map.Entry<JLayeredPane, JComponent> e : map.entrySet() ) {
 			e.getKey().remove( e.getValue() );
