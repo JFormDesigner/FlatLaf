@@ -11,9 +11,9 @@ scales on **HiDPI** displays and runs on Java 8 or newer.
 The look is heavily inspired by **Darcula** and **IntelliJ** themes from
 IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
 
-![Flat Light Demo](images/FlatLightDemo.png)
+![Flat Light](images/flat_light.png)
 
-![Flat Dark Demo](images/FlatDarkDemo.png)
+![Flat Dark](images/flat_dark.png)
 
 
 IntelliJ Platform Themes
@@ -22,9 +22,7 @@ IntelliJ Platform Themes
 FlatLaf can use 3rd party themes created for IntelliJ Platform (see
 [IntelliJ Themes Pack](flatlaf-intellij-themes)):
 
-![Cyan Light Demo](images/CyanLightDemo.png)
-
-![Dark Purple Demo](images/DarkPurpleDemo.png)
+![IntelliJ Platform Themes](images/intellij_platform_themes.png)
 
 
 Demo
