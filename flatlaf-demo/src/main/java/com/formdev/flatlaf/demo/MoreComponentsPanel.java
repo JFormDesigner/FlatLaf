@@ -59,7 +59,6 @@ class MoreComponentsPanel
 		JSeparator separator2 = new JSeparator();
 		JSlider slider2 = new JSlider();
 		JSlider slider4 = new JSlider();
-		JScrollPane scrollPane14 = new JScrollPane();
 		progressBar3 = new JProgressBar();
 		progressBar4 = new JProgressBar();
 		JToolBar toolBar2 = new JToolBar();
@@ -67,11 +66,12 @@ class MoreComponentsPanel
 		JButton button10 = new JButton();
 		JButton button11 = new JButton();
 		JToggleButton toggleButton7 = new JToggleButton();
+		JPanel panel2 = new JPanel();
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
-		JLabel label4 = new JLabel();
 		JScrollBar scrollBar4 = new JScrollBar();
 		JPanel panel3 = new JPanel();
+		JLabel label4 = new JLabel();
 		JLabel label3 = new JLabel();
 		JScrollPane scrollPane15 = new JScrollPane();
 		JEditorPane editorPane6 = new JEditorPane();
@@ -81,7 +81,6 @@ class MoreComponentsPanel
 		JScrollBar scrollBar6 = new JScrollBar();
 		JLabel separatorLabel = new JLabel();
 		JSeparator separator1 = new JSeparator();
-		JPanel panel2 = new JPanel();
 		JLabel sliderLabel = new JLabel();
 		JSlider slider1 = new JSlider();
 		JSlider slider6 = new JSlider();
@@ -105,9 +104,8 @@ class MoreComponentsPanel
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"hidemode 3",
+			"insets dialog,hidemode 3",
 			// columns
-			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -142,7 +140,7 @@ class MoreComponentsPanel
 			}
 			scrollPane13.setViewportView(panel1);
 		}
-		add(scrollPane13, "cell 1 0,grow,width 70,height 70");
+		add(scrollPane13, "cell 1 0,grow,width 70,height 40");
 		add(scrollBar2, "cell 2 0 1 6,growy");
 
 		//---- scrollBar3 ----
@@ -165,7 +163,7 @@ class MoreComponentsPanel
 		//---- slider2 ----
 		slider2.setOrientation(SwingConstants.VERTICAL);
 		slider2.setValue(30);
-		add(slider2, "cell 2 0 1 6,growy");
+		add(slider2, "cell 2 0 1 6,growy,height 100");
 
 		//---- slider4 ----
 		slider4.setMinorTickSpacing(10);
@@ -174,19 +172,18 @@ class MoreComponentsPanel
 		slider4.setPaintLabels(true);
 		slider4.setOrientation(SwingConstants.VERTICAL);
 		slider4.setValue(30);
-		add(slider4, "cell 2 0 1 6,growy");
-		add(scrollPane14, "cell 3 0,grow");
+		add(slider4, "cell 2 0 1 6,growy,height 100");
 
 		//---- progressBar3 ----
 		progressBar3.setOrientation(SwingConstants.VERTICAL);
 		progressBar3.setValue(60);
-		add(progressBar3, "cell 4 0 1 6,growy");
+		add(progressBar3, "cell 2 0 1 6,growy");
 
 		//---- progressBar4 ----
 		progressBar4.setOrientation(SwingConstants.VERTICAL);
 		progressBar4.setValue(60);
 		progressBar4.setStringPainted(true);
-		add(progressBar4, "cell 4 0 1 6,growy");
+		add(progressBar4, "cell 2 0 1 6,growy");
 
 		//======== toolBar2 ========
 		{
@@ -209,7 +206,14 @@ class MoreComponentsPanel
 			toggleButton7.setIcon(UIManager.getIcon("Tree.closedIcon"));
 			toolBar2.add(toggleButton7);
 		}
-		add(toolBar2, "cell 4 0 1 6,growy");
+		add(toolBar2, "cell 2 0 1 6,growy");
+
+		//======== panel2 ========
+		{
+			panel2.setBorder(new TitledBorder("TitledBorder"));
+			panel2.setLayout(new FlowLayout());
+		}
+		add(panel2, "cell 3 0 1 6,grow");
 
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
@@ -218,10 +222,6 @@ class MoreComponentsPanel
 		//---- scrollBar1 ----
 		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
 		add(scrollBar1, "cell 1 1,growx");
-
-		//---- label4 ----
-		label4.setText("HTML:");
-		add(label4, "cell 5 1");
 
 		//---- scrollBar4 ----
 		scrollBar4.setOrientation(Adjustable.HORIZONTAL);
@@ -238,11 +238,16 @@ class MoreComponentsPanel
 				// rows
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]"));
+
+			//---- label4 ----
+			label4.setText("HTML:");
+			panel3.add(label4, "cell 0 0");
 
 			//---- label3 ----
 			label3.setText("<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a></html>");
-			panel3.add(label3, "cell 0 0");
+			panel3.add(label3, "cell 0 1");
 
 			//======== scrollPane15 ========
 			{
@@ -252,7 +257,7 @@ class MoreComponentsPanel
 				editorPane6.setText("JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>");
 				scrollPane15.setViewportView(editorPane6);
 			}
-			panel3.add(scrollPane15, "cell 0 1,grow");
+			panel3.add(scrollPane15, "cell 0 2,grow");
 
 			//======== scrollPane16 ========
 			{
@@ -262,9 +267,9 @@ class MoreComponentsPanel
 				textPane6.setText("JTextPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>");
 				scrollPane16.setViewportView(textPane6);
 			}
-			panel3.add(scrollPane16, "cell 0 2,grow");
+			panel3.add(scrollPane16, "cell 0 3,grow");
 		}
-		add(panel3, "cell 5 2 1 9,aligny top,growy 0");
+		add(panel3, "cell 4 0 1 8,aligny top,growy 0");
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
@@ -281,13 +286,6 @@ class MoreComponentsPanel
 		separatorLabel.setText("JSeparator:");
 		add(separatorLabel, "cell 0 5");
 		add(separator1, "cell 1 5,growx");
-
-		//======== panel2 ========
-		{
-			panel2.setBorder(new TitledBorder("TitledBorder"));
-			panel2.setLayout(new FlowLayout());
-		}
-		add(panel2, "cell 3 5,grow");
 
 		//---- sliderLabel ----
 		sliderLabel.setText("JSlider:");
@@ -389,6 +387,17 @@ class MoreComponentsPanel
 		}
 		add(toolBar1, "cell 1 10 3 1,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		if( FlatLafDemo.screenshotsMode ) {
+			Component[] components = new Component[] {
+				indeterminateCheckBox,
+				toolTipLabel, toolTip1, toolTip2,
+				toolBarLabel, toolBar1, toolBar2,
+			};
+
+			for( Component c : components )
+				c.setVisible( false );
+		}
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

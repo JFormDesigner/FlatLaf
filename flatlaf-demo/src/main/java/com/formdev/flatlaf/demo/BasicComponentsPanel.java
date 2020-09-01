@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.demo;
 
+import java.awt.Component;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import net.miginfocom.swing.*;
@@ -114,14 +115,14 @@ class BasicComponentsPanel
 		JScrollPane scrollPane12 = new JScrollPane();
 		JTextPane textPane4 = new JTextPane();
 		JTextPane textPane5 = new JTextPane();
-		JLabel label3 = new JLabel();
-		JTextField textField5 = new JTextField();
-		JComboBox<String> comboBox7 = new JComboBox<>();
-		JSpinner spinner3 = new JSpinner();
-		JLabel label4 = new JLabel();
-		JTextField textField7 = new JTextField();
-		JComboBox<String> comboBox8 = new JComboBox<>();
-		JSpinner spinner4 = new JSpinner();
+		JLabel errorHintsLabel = new JLabel();
+		JTextField errorHintsTextField = new JTextField();
+		JComboBox<String> errorHintsComboBox = new JComboBox<>();
+		JSpinner errorHintsSpinner = new JSpinner();
+		JLabel warningHintsLabel = new JLabel();
+		JTextField warningHintsTextField = new JTextField();
+		JComboBox<String> warningHintsComboBox = new JComboBox<>();
+		JSpinner warningHintsSpinner = new JSpinner();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -129,12 +130,12 @@ class BasicComponentsPanel
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"hidemode 3",
+			"insets dialog,hidemode 3",
 			// columns
-			"[]" +
-			"[]" +
-			"[]" +
-			"[]" +
+			"[sizegroup 1]" +
+			"[sizegroup 1]" +
+			"[sizegroup 1]" +
+			"[sizegroup 1]" +
 			"[]" +
 			"[]",
 			// rows
@@ -606,44 +607,44 @@ class BasicComponentsPanel
 		textPane5.setText("No scroll pane");
 		add(textPane5, "cell 5 11,growx");
 
-		//---- label3 ----
-		label3.setText("Error hints:");
-		add(label3, "cell 0 12");
+		//---- errorHintsLabel ----
+		errorHintsLabel.setText("Error hints:");
+		add(errorHintsLabel, "cell 0 12");
 
-		//---- textField5 ----
-		textField5.putClientProperty("JComponent.outline", "error");
-		add(textField5, "cell 1 12,growx");
+		//---- errorHintsTextField ----
+		errorHintsTextField.putClientProperty("JComponent.outline", "error");
+		add(errorHintsTextField, "cell 1 12,growx");
 
-		//---- comboBox7 ----
-		comboBox7.putClientProperty("JComponent.outline", "error");
-		comboBox7.setModel(new DefaultComboBoxModel<>(new String[] {
+		//---- errorHintsComboBox ----
+		errorHintsComboBox.putClientProperty("JComponent.outline", "error");
+		errorHintsComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
 			"Editable"
 		}));
-		comboBox7.setEditable(true);
-		add(comboBox7, "cell 2 12,growx");
+		errorHintsComboBox.setEditable(true);
+		add(errorHintsComboBox, "cell 2 12,growx");
 
-		//---- spinner3 ----
-		spinner3.putClientProperty("JComponent.outline", "error");
-		add(spinner3, "cell 3 12,growx");
+		//---- errorHintsSpinner ----
+		errorHintsSpinner.putClientProperty("JComponent.outline", "error");
+		add(errorHintsSpinner, "cell 3 12,growx");
 
-		//---- label4 ----
-		label4.setText("Warning hints:");
-		add(label4, "cell 0 13");
+		//---- warningHintsLabel ----
+		warningHintsLabel.setText("Warning hints:");
+		add(warningHintsLabel, "cell 0 13");
 
-		//---- textField7 ----
-		textField7.putClientProperty("JComponent.outline", "warning");
-		add(textField7, "cell 1 13,growx");
+		//---- warningHintsTextField ----
+		warningHintsTextField.putClientProperty("JComponent.outline", "warning");
+		add(warningHintsTextField, "cell 1 13,growx");
 
-		//---- comboBox8 ----
-		comboBox8.putClientProperty("JComponent.outline", "warning");
-		comboBox8.setModel(new DefaultComboBoxModel<>(new String[] {
+		//---- warningHintsComboBox ----
+		warningHintsComboBox.putClientProperty("JComponent.outline", "warning");
+		warningHintsComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
 			"Not editable"
 		}));
-		add(comboBox8, "cell 2 13,growx");
+		add(warningHintsComboBox, "cell 2 13,growx");
 
-		//---- spinner4 ----
-		spinner4.putClientProperty("JComponent.outline", "warning");
-		add(spinner4, "cell 3 13,growx");
+		//---- warningHintsSpinner ----
+		warningHintsSpinner.putClientProperty("JComponent.outline", "warning");
+		add(warningHintsSpinner, "cell 3 13,growx");
 
 		//======== popupMenu1 ========
 		{
@@ -668,6 +669,33 @@ class BasicComponentsPanel
 		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
+
+		if( FlatLafDemo.screenshotsMode ) {
+			Component[] components = {
+				button13, button14, button15, button16, comboBox5, comboBox6,
+				textField6, passwordField5,
+
+				formattedTextFieldLabel, formattedTextField1, formattedTextField2, formattedTextField3, formattedTextField4, formattedTextField5,
+				textAreaLabel, scrollPane1, scrollPane2, scrollPane3, scrollPane4, textArea5,
+				editorPaneLabel, scrollPane5, scrollPane6, scrollPane7, scrollPane8, editorPane5,
+				textPaneLabel, scrollPane9, scrollPane10, scrollPane11, scrollPane12, textPane5,
+
+				errorHintsLabel, errorHintsTextField, errorHintsComboBox, errorHintsSpinner,
+				warningHintsLabel, warningHintsTextField, warningHintsComboBox, warningHintsSpinner,
+			};
+
+			for( Component c : components )
+				c.setVisible( false );
+
+			// move password fields one row up
+			Component[] formattedTextFields = { formattedTextFieldLabel, formattedTextField1, formattedTextField2, formattedTextField3, formattedTextField4 };
+			Component[] passwordFields = { passwordFieldLabel, passwordField1, passwordField2, passwordField3, passwordField4 };
+			MigLayout layout = (MigLayout) getLayout();
+			for( int i = 0; i < passwordFields.length; i++ ) {
+				Object cons = layout.getComponentConstraints( formattedTextFields[i] );
+				layout.setComponentConstraints( passwordFields[i], cons );
+			}
+		}
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

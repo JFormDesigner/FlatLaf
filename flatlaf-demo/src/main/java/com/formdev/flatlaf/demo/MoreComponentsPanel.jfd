@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -7,8 +7,8 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "hidemode 3"
-			"$columnConstraints": "[][][][][][]"
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[][][][][]"
 			"$rowConstraints": "[][][][][][][][][][][]"
 		} ) {
 			name: "this"
@@ -27,7 +27,7 @@ new FormModel {
 					"preferredSize": new java.awt.Dimension( 200, 200 )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0,grow,width 70,height 70"
+				"value": "cell 1 0,grow,width 70,height 40"
 			} )
 			add( new FormComponent( "javax.swing.JScrollBar" ) {
 				name: "scrollBar2"
@@ -64,7 +64,7 @@ new FormModel {
 				"orientation": 1
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0 1 6,growy"
+				"value": "cell 2 0 1 6,growy,height 100"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider4"
@@ -75,12 +75,7 @@ new FormModel {
 				"orientation": 1
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0 1 6,growy"
-			} )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "scrollPane14"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 0,grow"
+				"value": "cell 2 0 1 6,growy,height 100"
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar3"
@@ -90,7 +85,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 0 1 6,growy"
+				"value": "cell 2 0 1 6,growy"
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar4"
@@ -101,7 +96,7 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 0 1 6,growy"
+				"value": "cell 2 0 1 6,growy"
 			} )
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar2"
@@ -126,7 +121,13 @@ new FormModel {
 					"icon": new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 0 1 6,growy"
+				"value": "cell 2 0 1 6,growy"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+				name: "panel2"
+				"border": new javax.swing.border.TitledBorder( "TitledBorder" )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0 1 6,grow"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "scrollBarLabel"
@@ -140,12 +141,6 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1,growx"
 			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label4"
-				"text": "HTML:"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
-			} )
 			add( new FormComponent( "javax.swing.JScrollBar" ) {
 				name: "scrollBar4"
 				"orientation": 0
@@ -155,16 +150,22 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[]"
-				"$rowConstraints": "[][][]"
+				"$rowConstraints": "[][][][]"
 				"$layoutConstraints": "ltr,insets 0,hidemode 3"
 			} ) {
 				name: "panel3"
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label4"
+					"text": "HTML:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
 					"text": "<html>JLabel HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a></html>"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
+					"value": "cell 0 1"
 				} )
 				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 					name: "scrollPane15"
@@ -174,7 +175,7 @@ new FormModel {
 						"text": "JEditorPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>"
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1,grow"
+					"value": "cell 0 2,grow"
 				} )
 				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 					name: "scrollPane16"
@@ -184,10 +185,10 @@ new FormModel {
 						"text": "JTextPane HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a>"
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 2,grow"
+					"value": "cell 0 3,grow"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2 1 9,aligny top,growy 0"
+				"value": "cell 4 0 1 8,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JScrollBar" ) {
 				name: "scrollBar5"
@@ -214,12 +215,6 @@ new FormModel {
 				name: "separator1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 5,growx"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-				name: "panel2"
-				"border": new javax.swing.border.TitledBorder( "TitledBorder" )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 5,grow"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "sliderLabel"
@@ -365,7 +360,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 790, 715 )
+			"size": new java.awt.Dimension( 700, 420 )
 		} )
 	}
 }

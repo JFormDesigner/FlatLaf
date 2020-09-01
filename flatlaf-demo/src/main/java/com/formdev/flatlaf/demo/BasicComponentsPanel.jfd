@@ -7,8 +7,8 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "hidemode 3"
-			"$columnConstraints": "[][][][][][]"
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[sizegroup 1][sizegroup 1][sizegroup 1][sizegroup 1][][]"
 			"$rowConstraints": "[][][][][][][][][][][][]para[][]"
 		} ) {
 			name: "this"
@@ -592,19 +592,19 @@ new FormModel {
 				"value": "cell 5 11,growx"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label3"
+				name: "errorHintsLabel"
 				"text": "Error hints:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 12"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "textField5"
+				name: "errorHintsTextField"
 				"$client.JComponent.outline": "error"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 12,growx"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
-				name: "comboBox7"
+				name: "errorHintsComboBox"
 				"$client.JComponent.outline": "error"
 				"model": new javax.swing.DefaultComboBoxModel {
 					selectedItem: "Editable"
@@ -615,25 +615,25 @@ new FormModel {
 				"value": "cell 2 12,growx"
 			} )
 			add( new FormComponent( "javax.swing.JSpinner" ) {
-				name: "spinner3"
+				name: "errorHintsSpinner"
 				"$client.JComponent.outline": "error"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 12,growx"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label4"
+				name: "warningHintsLabel"
 				"text": "Warning hints:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 13"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "textField7"
+				name: "warningHintsTextField"
 				"$client.JComponent.outline": "warning"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 13,growx"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
-				name: "comboBox8"
+				name: "warningHintsComboBox"
 				"$client.JComponent.outline": "warning"
 				"model": new javax.swing.DefaultComboBoxModel {
 					selectedItem: "Not editable"
@@ -643,7 +643,7 @@ new FormModel {
 				"value": "cell 2 13,growx"
 			} )
 			add( new FormComponent( "javax.swing.JSpinner" ) {
-				name: "spinner4"
+				name: "warningHintsSpinner"
 				"$client.JComponent.outline": "warning"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 13,growx"

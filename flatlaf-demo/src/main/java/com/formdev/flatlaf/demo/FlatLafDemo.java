@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.demo;
 
+import java.awt.Dimension;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -30,6 +31,8 @@ public class FlatLafDemo
 {
 	static final String PREFS_ROOT_PATH = "/flatlaf-demo";
 	static final String KEY_TAB = "tab";
+
+	static boolean screenshotsMode = Boolean.parseBoolean( System.getProperty( "flatlaf.demo.screenshotsMode" ) );
 
 	public static void main( String[] args ) {
 		// on macOS enable screen menu bar
@@ -54,6 +57,9 @@ public class FlatLafDemo
 
 			// create frame
 			DemoFrame frame = new DemoFrame();
+
+			if( FlatLafDemo.screenshotsMode )
+				frame.setPreferredSize( new Dimension( 1280, 620 ) );
 
 			// show frame
 			frame.pack();
