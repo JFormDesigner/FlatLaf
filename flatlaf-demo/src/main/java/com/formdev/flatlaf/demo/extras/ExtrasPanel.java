@@ -71,7 +71,7 @@ public class ExtrasPanel
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"hidemode 3",
+			"insets dialog,hidemode 3",
 			// columns
 			"[]" +
 			"[]" +
@@ -98,7 +98,7 @@ public class ExtrasPanel
 		//---- triStateLabel1 ----
 		triStateLabel1.setText("text");
 		triStateLabel1.setEnabled(false);
-		add(triStateLabel1, "cell 2 1");
+		add(triStateLabel1, "cell 2 1,gapx 30");
 
 		//---- label2 ----
 		label2.setText("SVG Icons:");

@@ -17,7 +17,6 @@
 package com.formdev.flatlaf.testing.extras;
 
 import javax.swing.*;
-import com.formdev.flatlaf.FlatIconColors;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.testing.*;
 import net.miginfocom.swing.*;
@@ -31,7 +30,6 @@ public class FlatExtrasTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatExtrasTest" );
-			System.out.println( UIManager.getColor( FlatIconColors.ACTIONS_GREY.key ) );
 			frame.showFrame( FlatExtrasTest::new );
 		} );
 	}
@@ -109,7 +107,8 @@ public class FlatExtrasTest
 
 		//---- triStateLabel1 ----
 		triStateLabel1.setText("text");
-		add(triStateLabel1, "cell 2 0");
+		triStateLabel1.setEnabled(false);
+		add(triStateLabel1, "cell 2 0,gapx 30");
 
 		//---- triStateCheckBox2 ----
 		triStateCheckBox2.setText("third state disabled");
@@ -119,7 +118,8 @@ public class FlatExtrasTest
 
 		//---- triStateLabel2 ----
 		triStateLabel2.setText("text");
-		add(triStateLabel2, "cell 2 1");
+		triStateLabel2.setEnabled(false);
+		add(triStateLabel2, "cell 2 1,gapx 30");
 
 		//---- label2 ----
 		label2.setText("SVG Icons:");

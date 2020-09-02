@@ -154,13 +154,13 @@ public class FlatComponents2Test
 			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[]" +
-			"[200]" +
-			"[200]",
+			"[200,fill]" +
+			"[200,fill]",
 			// rows
 			"[]" +
-			"[]" +
-			"[::200]" +
-			"[150,grow]" +
+			"[150,grow,sizegroup 1,fill]" +
+			"[150,grow,sizegroup 1,fill]" +
+			"[150,grow,sizegroup 1,fill]" +
 			"[]" +
 			"[]"));
 
@@ -179,7 +179,7 @@ public class FlatComponents2Test
 
 		//---- listLabel ----
 		listLabel.setText("JList:");
-		add(listLabel, "cell 0 1");
+		add(listLabel, "cell 0 1,aligny top,growy 0");
 
 		//======== scrollPane1 ========
 		{
@@ -210,7 +210,7 @@ public class FlatComponents2Test
 			});
 			scrollPane1.setViewportView(list1);
 		}
-		add(scrollPane1, "cell 1 1,growx");
+		add(scrollPane1, "cell 1 1");
 
 		//======== scrollPane2 ========
 		{
@@ -242,11 +242,11 @@ public class FlatComponents2Test
 			list2.setEnabled(false);
 			scrollPane2.setViewportView(list2);
 		}
-		add(scrollPane2, "cell 2 1,growx");
+		add(scrollPane2, "cell 2 1");
 
 		//---- treeLabel ----
 		treeLabel.setText("JTree:");
-		add(treeLabel, "cell 0 2");
+		add(treeLabel, "cell 0 2,aligny top,growy 0");
 
 		//======== scrollPane3 ========
 		{
@@ -256,7 +256,7 @@ public class FlatComponents2Test
 			tree1.setEditable(true);
 			scrollPane3.setViewportView(tree1);
 		}
-		add(scrollPane3, "cell 1 2,growx");
+		add(scrollPane3, "cell 1 2");
 
 		//======== scrollPane4 ========
 		{
@@ -265,11 +265,11 @@ public class FlatComponents2Test
 			tree2.setEnabled(false);
 			scrollPane4.setViewportView(tree2);
 		}
-		add(scrollPane4, "cell 2 2,growx");
+		add(scrollPane4, "cell 2 2");
 
 		//---- tableLabel ----
 		tableLabel.setText("JTable:");
-		add(tableLabel, "cell 0 3");
+		add(tableLabel, "cell 0 3,aligny top,growy 0");
 
 		//======== scrollPane5 ========
 		{
@@ -345,7 +345,7 @@ public class FlatComponents2Test
 			table1.setAutoCreateRowSorter(true);
 			scrollPane5.setViewportView(table1);
 		}
-		add(scrollPane5, "cell 1 3 2 1,growx,width 300");
+		add(scrollPane5, "cell 1 3 2 1,width 300");
 
 		//---- dndCheckBox ----
 		dndCheckBox.setText("enable drag and drop");

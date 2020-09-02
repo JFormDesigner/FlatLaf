@@ -111,7 +111,7 @@ class TabsPanel
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"hidemode 3",
+			"insets dialog,hidemode 3",
 			// columns
 			"[grow,fill]",
 			// rows
@@ -120,8 +120,8 @@ class TabsPanel
 		//======== panel9 ========
 		{
 			panel9.setLayout(new FormLayout(
-				"70dlu:grow, $lcgap, 70dlu:grow",
-				"default, $lgap, fill:70dlu, $lgap, pref, 2*($lgap, fill:70dlu:grow), $lgap, pref"));
+				"70dlu:grow, $ugap, 70dlu:grow",
+				"default, $lgap, fill:70dlu, $pgap, pref, $lgap, 2*(fill:70dlu:grow, $ugap), pref"));
 
 			//---- splitPaneLabel ----
 			splitPaneLabel.setText("JSplitPane:");
@@ -301,24 +301,24 @@ class TabsPanel
 					"[center]"));
 
 				//---- moreTabsCheckBox ----
-				moreTabsCheckBox.setText("more tabs");
+				moreTabsCheckBox.setText("More tabs");
 				moreTabsCheckBox.setMnemonic('M');
 				moreTabsCheckBox.addActionListener(e -> moreTabsChanged());
 				panel14.add(moreTabsCheckBox, "cell 0 0");
 
 				//---- tabScrollCheckBox ----
-				tabScrollCheckBox.setText("tabLayoutPolicy = SCROLL");
+				tabScrollCheckBox.setText("Use scroll layout");
 				tabScrollCheckBox.setMnemonic('S');
 				tabScrollCheckBox.addActionListener(e -> tabScrollChanged());
 				panel14.add(tabScrollCheckBox, "cell 1 0,alignx left,growx 0");
 
 				//---- showTabSeparatorsCheckBox ----
-				showTabSeparatorsCheckBox.setText("JTabbedPane.showTabSeparators");
+				showTabSeparatorsCheckBox.setText("Show tab separators");
 				showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
 				panel14.add(showTabSeparatorsCheckBox, "cell 2 0");
 
 				//---- hasFullBorderCheckBox ----
-				hasFullBorderCheckBox.setText("JTabbedPane.hasFullBorder");
+				hasFullBorderCheckBox.setText("Show full border");
 				hasFullBorderCheckBox.setMnemonic('F');
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
 				panel14.add(hasFullBorderCheckBox, "cell 3 0,alignx left,growx 0");

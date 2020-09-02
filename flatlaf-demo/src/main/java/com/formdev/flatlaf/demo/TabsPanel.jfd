@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.0.0.194" Java: "11.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -7,14 +7,14 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "hidemode 3"
+			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[grow,fill]"
 			"$rowConstraints": "[grow,fill]"
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
-				"$columnSpecs": "70dlu:grow, labelcompgap, 70dlu:grow"
-				"$rowSpecs": "default, linegap, fill:70dlu, linegap, pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref"
+				"$columnSpecs": "70dlu:grow, unrelgap, 70dlu:grow"
+				"$rowSpecs": "default, linegap, fill:70dlu, pargap, pref, linegap, fill:70dlu:grow, unrelgap, fill:70dlu:grow, unrelgap, pref"
 			} ) {
 				name: "panel9"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -205,7 +205,7 @@ new FormModel {
 					name: "panel14"
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "moreTabsCheckBox"
-						"text": "more tabs"
+						"text": "More tabs"
 						"mnemonic": 77
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
@@ -216,7 +216,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "tabScrollCheckBox"
-						"text": "tabLayoutPolicy = SCROLL"
+						"text": "Use scroll layout"
 						"mnemonic": 83
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
@@ -227,7 +227,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "showTabSeparatorsCheckBox"
-						"text": "JTabbedPane.showTabSeparators"
+						"text": "Show tab separators"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -237,7 +237,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "hasFullBorderCheckBox"
-						"text": "JTabbedPane.hasFullBorder"
+						"text": "Show full border"
 						"mnemonic": 70
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false

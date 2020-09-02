@@ -8,8 +8,8 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[][200][200]"
-			"$rowConstraints": "[][][::200][150,grow][][]"
+			"$columnConstraints": "[][200,fill][200,fill]"
+			"$rowConstraints": "[][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -35,7 +35,7 @@ new FormModel {
 				name: "listLabel"
 				"text": "JList:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1"
+				"value": "cell 0 1,aligny top,growy 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
@@ -64,7 +64,7 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1,growx"
+				"value": "cell 1 1"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane2"
@@ -94,13 +94,13 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1,growx"
+				"value": "cell 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "treeLabel"
 				"text": "JTree:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2"
+				"value": "cell 0 2,aligny top,growy 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane3"
@@ -113,7 +113,7 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2,growx"
+				"value": "cell 1 2"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane4"
@@ -125,13 +125,13 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 2,growx"
+				"value": "cell 2 2"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "tableLabel"
 				"text": "JTable:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 3"
+				"value": "cell 0 3,aligny top,growy 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane5"
@@ -272,7 +272,7 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3 2 1,growx,width 300"
+				"value": "cell 1 3 2 1,width 300"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "dndCheckBox"
