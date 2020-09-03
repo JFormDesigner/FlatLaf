@@ -33,6 +33,9 @@ import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.SVGUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
+import net.miginfocom.layout.ConstraintParser;
+import net.miginfocom.layout.LC;
+import net.miginfocom.layout.UnitValue;
 import net.miginfocom.swing.*;
 
 /**
@@ -669,6 +672,18 @@ class DemoFrame
 			.getSupportsWindowDecorations() || JBRCustomDecorations.isSupported();
 		windowDecorationsCheckBoxMenuItem.setEnabled( supportsWindowDecorations && !JBRCustomDecorations.isSupported() );
 		menuBarEmbeddedCheckBoxMenuItem.setEnabled( supportsWindowDecorations );
+
+		// remove contentPanel bottom insets
+		MigLayout layout = (MigLayout) contentPanel.getLayout();
+		LC lc = ConstraintParser.parseLayoutConstraint( (String) layout.getLayoutConstraints() );
+		UnitValue[] insets = lc.getInsets();
+		lc.setInsets( new UnitValue[] {
+			insets[0],
+			insets[1],
+			new UnitValue( 0, UnitValue.PIXEL, null ),
+			insets[3]
+		} );
+		layout.setLayoutConstraints( lc );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
