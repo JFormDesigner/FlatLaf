@@ -754,8 +754,7 @@ debug*/
 
 		//---- interface MouseListener ----
 
-		private int lastXOnScreen;
-		private int lastYOnScreen;
+		private Point dragOffset;
 
 		@Override
 		public void mouseClicked( MouseEvent e ) {
@@ -779,8 +778,10 @@ debug*/
 
 		@Override
 		public void mousePressed( MouseEvent e ) {
-			lastXOnScreen = e.getXOnScreen();
-			lastYOnScreen = e.getYOnScreen();
+			if( window == null )
+				return; // should newer occur
+
+			dragOffset = SwingUtilities.convertPoint( FlatTitlePane.this, e.getPoint(), window );
 		}
 
 		@Override public void mouseReleased( MouseEvent e ) {}
@@ -791,46 +792,45 @@ debug*/
 
 		@Override
 		public void mouseDragged( MouseEvent e ) {
+			if( window == null )
+				return; // should newer occur
+
 			if( hasJBRCustomDecoration() )
 				return; // do nothing if running in JBR
-
-			int xOnScreen = e.getXOnScreen();
-			int yOnScreen = e.getYOnScreen();
-			if( lastXOnScreen == xOnScreen && lastYOnScreen == yOnScreen )
-				return;
 
 			// restore window if it is maximized
 			if( window instanceof Frame ) {
 				Frame frame = (Frame) window;
 				int state = frame.getExtendedState();
 				if( (state & Frame.MAXIMIZED_BOTH) != 0 ) {
-					int maximizedX = window.getX();
-					int maximizedY = window.getY();
+					int maximizedWidth = window.getWidth();
 
 					// restore window size, which also moves window to pre-maximized location
 					frame.setExtendedState( state & ~Frame.MAXIMIZED_BOTH );
 
+					// fix drag offset to ensure that window remains under mouse position
+					// for the case that dragging starts in the right area of the maximized window
 					int restoredWidth = window.getWidth();
-					int newX = maximizedX;
-					JComponent rightComp = getComponentOrientation().isLeftToRight() ? buttonPanel : leftPanel;
-					if( xOnScreen >= maximizedX + restoredWidth - rightComp.getWidth() - 10 )
-						newX = xOnScreen + rightComp.getWidth() + 10 - restoredWidth;
-
-					// move window near mouse
-					window.setLocation( newX, maximizedY );
-					return;
+					int center = restoredWidth / 2;
+					if( dragOffset.x > center ) {
+						// this is same/similar to what Windows 10 does
+						if( dragOffset.x > maximizedWidth - center )
+							dragOffset.x = restoredWidth - (maximizedWidth - dragOffset.x);
+						else
+							dragOffset.x = center;
+					}
 				}
 			}
 
 			// compute new window location
-			int newX = window.getX() + (xOnScreen - lastXOnScreen);
-			int newY = window.getY() + (yOnScreen - lastYOnScreen);
+			int newX = e.getXOnScreen() - dragOffset.x;
+			int newY = e.getYOnScreen() - dragOffset.y;
+
+			if( newX == window.getX() && newY == window.getY() )
+				return;
 
 			// move window
 			window.setLocation( newX, newY );
-
-			lastXOnScreen = xOnScreen;
-			lastYOnScreen = yOnScreen;
 		}
 
 		@Override public void mouseMoved( MouseEvent e ) {}

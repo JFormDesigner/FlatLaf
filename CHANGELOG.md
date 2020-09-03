@@ -8,6 +8,11 @@ FlatLaf Change Log
 - Demo: Improved "SplitPane & Tabs" and "Data Components" tabs.
 - Menu items "File > Open" and "File > Save As" now show file choosers.
 
+#### Fixed bugs
+
+- Custom window decorations: Fixed wrong window placement when moving window to
+  another screen with different scaling factor. (issue #166)
+
 
 ## 0.41
 
