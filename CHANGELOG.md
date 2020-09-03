@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+#### New features and improvements
+
+- Demo: Improved "SplitPane & Tabs" and "Data Components" tabs.
+
+
+
 ## 0.41
 
 #### New features and improvements

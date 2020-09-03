@@ -1,5 +1,17 @@
 /*
- * Created by JFormDesigner on Tue Aug 27 21:47:02 CEST 2019
+ * Copyright 2020 FormDev Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.formdev.flatlaf.demo;
@@ -20,6 +32,8 @@ class TabsPanel
 {
 	TabsPanel() {
 		initComponents();
+
+		addInitialTabs( tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 );
 	}
 
 	private void tabScrollChanged() {
@@ -28,7 +42,19 @@ class TabsPanel
 		tabbedPane2.setTabLayoutPolicy( tabLayoutPolicy );
 		tabbedPane3.setTabLayoutPolicy( tabLayoutPolicy );
 		tabbedPane4.setTabLayoutPolicy( tabLayoutPolicy );
+
+		if( !autoMoreTabs && tabScrollCheckBox.isSelected() && !moreTabsCheckBox.isSelected() ) {
+			moreTabsCheckBox.setSelected( true );
+			moreTabsChanged();
+			autoMoreTabs = true;
+		} else if( autoMoreTabs && !tabScrollCheckBox.isSelected() && moreTabsCheckBox.isSelected() ) {
+			moreTabsCheckBox.setSelected( false );
+			moreTabsChanged();
+			autoMoreTabs = false;
+		}
 	}
+
+	private boolean autoMoreTabs;
 
 	private void showTabSeparatorsChanged() {
 		Boolean showTabSeparators = showTabSeparatorsCheckBox.isSelected() ? true : null;
@@ -52,15 +78,17 @@ class TabsPanel
 		addRemoveMoreTabs( tabbedPane2, moreTabs );
 		addRemoveMoreTabs( tabbedPane3, moreTabs );
 		addRemoveMoreTabs( tabbedPane4, moreTabs );
+
+		autoMoreTabs = false;
 	}
 
 	private void addRemoveMoreTabs( JTabbedPane tabbedPane, boolean add ) {
 		if( add ) {
-			tabbedPane.addTab( "Tab 4", new JLabel( "tab 4" ) );
-			tabbedPane.addTab( "Tab 5", new JLabel( "tab 5" ) );
-			tabbedPane.addTab( "Tab 6", new JLabel( "tab 6" ) );
-			tabbedPane.addTab( "Tab 7", new JLabel( "tab 7" ) );
-			tabbedPane.addTab( "Tab 8", new JLabel( "tab 8" ) );
+			addTab( tabbedPane, "Tab 4", "tab content 4" );
+			addTab( tabbedPane, "Tab 5", "tab content 5" );
+			addTab( tabbedPane, "Tab 6", "tab content 6" );
+			addTab( tabbedPane, "Tab 7", "tab content 7" );
+			addTab( tabbedPane, "Tab 8", "tab content 8" );
 		} else {
 			int tabCount = tabbedPane.getTabCount();
 			if( tabCount > 3 ) {
@@ -70,6 +98,39 @@ class TabsPanel
 		}
 	}
 
+	private void addInitialTabs( JTabbedPane... tabbedPanes ) {
+		for( JTabbedPane tabbedPane : tabbedPanes ) {
+			String placement = "unknown";
+			switch( tabbedPane.getTabPlacement() ) {
+				case JTabbedPane.TOP:	placement = "TOP"; break;
+				case JTabbedPane.BOTTOM:	placement = "BOTTOM"; break;
+				case JTabbedPane.LEFT:	placement = "LEFT"; break;
+				case JTabbedPane.RIGHT:	placement = "RIGHT"; break;
+			}
+			addTab( tabbedPane, "Tab 1", "<html><center>" + placement + "<br>tab placement</center></html>" );
+
+			JComponent tab2 = createTab( "tab content 2" );
+			tab2.setBorder( new LineBorder( Color.magenta ) );
+			tabbedPane.addTab( "Second Tab", tab2 );
+
+			addTab( tabbedPane, "Disabled", "tab content 3" );
+			tabbedPane.setEnabledAt( 2, false );
+		}
+	}
+
+	private void addTab( JTabbedPane tabbedPane, String title, String text ) {
+		tabbedPane.addTab( title, createTab( text ) );
+	}
+
+	private JComponent createTab( String text ) {
+		JLabel label = new JLabel( text );
+		label.setHorizontalAlignment( SwingConstants.CENTER );
+
+		JPanel tab = new JPanel( new BorderLayout() );
+		tab.add( label, BorderLayout.CENTER );
+		return tab;
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -77,31 +138,19 @@ class TabsPanel
 		JSplitPane splitPane3 = new JSplitPane();
 		JSplitPane splitPane1 = new JSplitPane();
 		JPanel panel10 = new JPanel();
+		JLabel label1 = new JLabel();
 		JPanel panel11 = new JPanel();
+		JLabel label2 = new JLabel();
 		JSplitPane splitPane2 = new JSplitPane();
 		JPanel panel12 = new JPanel();
+		JLabel label3 = new JLabel();
 		JPanel panel13 = new JPanel();
+		JLabel label4 = new JLabel();
 		JLabel tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new JTabbedPane();
-		JPanel panel1 = new JPanel();
-		JLabel label1 = new JLabel();
-		JPanel panel2 = new JPanel();
-		JLabel label2 = new JLabel();
 		tabbedPane3 = new JTabbedPane();
-		JPanel panel5 = new JPanel();
-		JLabel label5 = new JLabel();
-		JPanel panel6 = new JPanel();
-		JLabel label6 = new JLabel();
 		tabbedPane2 = new JTabbedPane();
-		JPanel panel3 = new JPanel();
-		JLabel label3 = new JLabel();
-		JPanel panel4 = new JPanel();
-		JLabel label4 = new JLabel();
 		tabbedPane4 = new JTabbedPane();
-		JPanel panel7 = new JPanel();
-		JLabel label7 = new JLabel();
-		JPanel panel8 = new JPanel();
-		JLabel label8 = new JLabel();
 		JPanel panel14 = new JPanel();
 		moreTabsCheckBox = new JCheckBox();
 		tabScrollCheckBox = new JCheckBox();
@@ -121,7 +170,7 @@ class TabsPanel
 		{
 			panel9.setLayout(new FormLayout(
 				"70dlu:grow, $ugap, 70dlu:grow",
-				"default, $lgap, fill:70dlu, $pgap, pref, $lgap, 2*(fill:70dlu:grow, $ugap), pref"));
+				"default, $lgap, fill:70dlu, $pgap, pref, $lgap, 2*(fill:80dlu:grow, $ugap), pref"));
 
 			//---- splitPaneLabel ----
 			splitPaneLabel.setText("JSplitPane:");
@@ -134,19 +183,30 @@ class TabsPanel
 				//======== splitPane1 ========
 				{
 					splitPane1.setResizeWeight(0.5);
-					splitPane1.setOneTouchExpandable(true);
 
 					//======== panel10 ========
 					{
-						panel10.setBackground(Color.orange);
-						panel10.setLayout(new FlowLayout());
+						panel10.setBackground(new Color(217, 163, 67));
+						panel10.setLayout(new BorderLayout());
+
+						//---- label1 ----
+						label1.setText("LEFT");
+						label1.setHorizontalAlignment(SwingConstants.CENTER);
+						label1.setForeground(Color.white);
+						panel10.add(label1, BorderLayout.CENTER);
 					}
 					splitPane1.setLeftComponent(panel10);
 
 					//======== panel11 ========
 					{
-						panel11.setBackground(Color.magenta);
-						panel11.setLayout(new FlowLayout());
+						panel11.setBackground(new Color(98, 181, 67));
+						panel11.setLayout(new BorderLayout());
+
+						//---- label2 ----
+						label2.setText("RIGHT");
+						label2.setHorizontalAlignment(SwingConstants.CENTER);
+						label2.setForeground(Color.white);
+						panel11.add(label2, BorderLayout.CENTER);
 					}
 					splitPane1.setRightComponent(panel11);
 				}
@@ -156,19 +216,30 @@ class TabsPanel
 				{
 					splitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
 					splitPane2.setResizeWeight(0.5);
-					splitPane2.setOneTouchExpandable(true);
 
 					//======== panel12 ========
 					{
-						panel12.setBackground(Color.orange);
-						panel12.setLayout(new FlowLayout());
+						panel12.setBackground(new Color(242, 101, 34));
+						panel12.setLayout(new BorderLayout());
+
+						//---- label3 ----
+						label3.setText("TOP");
+						label3.setHorizontalAlignment(SwingConstants.CENTER);
+						label3.setForeground(Color.white);
+						panel12.add(label3, BorderLayout.CENTER);
 					}
 					splitPane2.setTopComponent(panel12);
 
 					//======== panel13 ========
 					{
-						panel13.setBackground(Color.magenta);
-						panel13.setLayout(new FlowLayout());
+						panel13.setBackground(new Color(64, 182, 224));
+						panel13.setLayout(new BorderLayout());
+
+						//---- label4 ----
+						label4.setText("BOTTOM");
+						label4.setHorizontalAlignment(SwingConstants.CENTER);
+						label4.setForeground(Color.white);
+						panel13.add(label4, BorderLayout.CENTER);
 					}
 					splitPane2.setBottomComponent(panel13);
 				}
@@ -179,112 +250,23 @@ class TabsPanel
 			//---- tabbedPaneLabel ----
 			tabbedPaneLabel.setText("JTabbedPane:");
 			panel9.add(tabbedPaneLabel, cc.xy(1, 5));
-
-			//======== tabbedPane1 ========
-			{
-
-				//======== panel1 ========
-				{
-					panel1.setLayout(new FlowLayout());
-
-					//---- label1 ----
-					label1.setText("TOP");
-					panel1.add(label1);
-				}
-				tabbedPane1.addTab("Tab 1", panel1);
-
-				//======== panel2 ========
-				{
-					panel2.setBorder(new LineBorder(Color.magenta));
-					panel2.setLayout(new FlowLayout());
-				}
-				tabbedPane1.addTab("Tab 2", panel2);
-
-				//---- label2 ----
-				label2.setText("text");
-				tabbedPane1.addTab("Tab 3", label2);
-			}
 			panel9.add(tabbedPane1, cc.xy(1, 7));
 
 			//======== tabbedPane3 ========
 			{
 				tabbedPane3.setTabPlacement(SwingConstants.LEFT);
-
-				//======== panel5 ========
-				{
-					panel5.setLayout(new FlowLayout());
-
-					//---- label5 ----
-					label5.setText("LEFT");
-					panel5.add(label5);
-				}
-				tabbedPane3.addTab("Tab 1", panel5);
-
-				//======== panel6 ========
-				{
-					panel6.setBorder(new LineBorder(Color.magenta));
-					panel6.setLayout(new FlowLayout());
-				}
-				tabbedPane3.addTab("Tab 2", panel6);
-
-				//---- label6 ----
-				label6.setText("text");
-				tabbedPane3.addTab("Tab 3", label6);
 			}
 			panel9.add(tabbedPane3, cc.xy(3, 7));
 
 			//======== tabbedPane2 ========
 			{
 				tabbedPane2.setTabPlacement(SwingConstants.BOTTOM);
-
-				//======== panel3 ========
-				{
-					panel3.setLayout(new FlowLayout());
-
-					//---- label3 ----
-					label3.setText("BOTTOM");
-					panel3.add(label3);
-				}
-				tabbedPane2.addTab("Tab 1", panel3);
-
-				//======== panel4 ========
-				{
-					panel4.setBorder(new LineBorder(Color.magenta));
-					panel4.setLayout(new FlowLayout());
-				}
-				tabbedPane2.addTab("Tab 2", panel4);
-				tabbedPane2.setEnabledAt(1, false);
-
-				//---- label4 ----
-				label4.setText("text");
-				tabbedPane2.addTab("Tab 3", label4);
 			}
 			panel9.add(tabbedPane2, cc.xy(1, 9));
 
 			//======== tabbedPane4 ========
 			{
 				tabbedPane4.setTabPlacement(SwingConstants.RIGHT);
-
-				//======== panel7 ========
-				{
-					panel7.setLayout(new FlowLayout());
-
-					//---- label7 ----
-					label7.setText("RIGHT");
-					panel7.add(label7);
-				}
-				tabbedPane4.addTab("Tab 1", panel7);
-
-				//======== panel8 ========
-				{
-					panel8.setBorder(new LineBorder(Color.magenta));
-					panel8.setLayout(new FlowLayout());
-				}
-				tabbedPane4.addTab("Tab 2", panel8);
-
-				//---- label8 ----
-				label8.setText("text");
-				tabbedPane4.addTab("Tab 3", label8);
 			}
 			panel9.add(tabbedPane4, cc.xy(3, 9));
 
@@ -318,8 +300,7 @@ class TabsPanel
 				panel14.add(showTabSeparatorsCheckBox, "cell 2 0");
 
 				//---- hasFullBorderCheckBox ----
-				hasFullBorderCheckBox.setText("Show full border");
-				hasFullBorderCheckBox.setMnemonic('F');
+				hasFullBorderCheckBox.setText("Show content border");
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
 				panel14.add(hasFullBorderCheckBox, "cell 3 0,alignx left,growx 0");
 			}

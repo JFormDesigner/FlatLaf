@@ -14,7 +14,7 @@ new FormModel {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
 				"$columnSpecs": "70dlu:grow, unrelgap, 70dlu:grow"
-				"$rowSpecs": "default, linegap, fill:70dlu, pargap, pref, linegap, fill:70dlu:grow, unrelgap, fill:70dlu:grow, unrelgap, pref"
+				"$rowSpecs": "default, linegap, fill:70dlu, pargap, pref, linegap, fill:80dlu:grow, unrelgap, fill:80dlu:grow, unrelgap, pref"
 			} ) {
 				name: "panel9"
 				"opaque": false
@@ -29,31 +29,15 @@ new FormModel {
 						name: "splitPane1"
 						"resizeWeight": 0.5
 						"oneTouchExpandable": true
-						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-							name: "panel10"
-							"background": sfield java.awt.Color orange
-							add( new FormComponent( "javax.swing.JTextField" ) {
-								name: "textField2"
-								"text": "some text"
-							} )
-							add( new FormComponent( "javax.swing.JButton" ) {
-								name: "button1"
-								"text": "..."
-							} )
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatContainerTest$Panel1" ) {
+							name: "panel15"
+							"background": new java.awt.Color( 217, 163, 67, 255 )
 						}, new FormLayoutConstraints( class java.lang.String ) {
 							"value": "left"
 						} )
-						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-							name: "panel11"
-							"background": sfield java.awt.Color magenta
-							add( new FormComponent( "javax.swing.JTextField" ) {
-								name: "textField3"
-								"text": "some text"
-							} )
-							add( new FormComponent( "javax.swing.JButton" ) {
-								name: "button2"
-								"text": "..."
-							} )
+						add( new FormComponent( "com.formdev.flatlaf.testing.FlatContainerTest$Panel2" ) {
+							name: "panel21"
+							"background": new java.awt.Color( 98, 181, 67, 255 )
 						}, new FormLayoutConstraints( class java.lang.String ) {
 							"value": "right"
 						} )
@@ -65,15 +49,31 @@ new FormModel {
 						"orientation": 0
 						"resizeWeight": 0.5
 						"oneTouchExpandable": true
-						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 							name: "panel12"
-							"background": sfield java.awt.Color orange
+							"background": new java.awt.Color( 242, 101, 34, 255 )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label3"
+								"text": "TOP"
+								"horizontalAlignment": 0
+								"foreground": sfield java.awt.Color white
+							}, new FormLayoutConstraints( class java.lang.String ) {
+								"value": "Center"
+							} )
 						}, new FormLayoutConstraints( class java.lang.String ) {
 							"value": "left"
 						} )
-						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 							name: "panel13"
-							"background": sfield java.awt.Color magenta
+							"background": new java.awt.Color( 64, 182, 224, 255 )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label4"
+								"text": "BOTTOM"
+								"horizontalAlignment": 0
+								"foreground": sfield java.awt.Color white
+							}, new FormLayoutConstraints( class java.lang.String ) {
+								"value": "Center"
+							} )
 						}, new FormLayoutConstraints( class java.lang.String ) {
 							"value": "right"
 						} )
@@ -96,43 +96,6 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-						name: "panel1"
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "label1"
-							"text": "TOP"
-						} )
-						add( new FormComponent( "javax.swing.JTextField" ) {
-							name: "textField4"
-							"text": "some text"
-						} )
-						add( new FormComponent( "javax.swing.JButton" ) {
-							name: "button3"
-							"text": "..."
-						} )
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 1"
-					} )
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-						name: "panel2"
-						"border": &LineBorder0 new javax.swing.border.LineBorder( sfield java.awt.Color magenta, 1, false )
-						add( new FormComponent( "javax.swing.JTextField" ) {
-							name: "textField5"
-							"text": "some text"
-						} )
-						add( new FormComponent( "javax.swing.JButton" ) {
-							name: "button4"
-							"text": "..."
-						} )
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 2"
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label2"
-						"text": "text"
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 3"
-					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
 					"gridY": 7
@@ -143,27 +106,6 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-						name: "panel5"
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "label5"
-							"text": "LEFT"
-						} )
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 1"
-					} )
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-						name: "panel6"
-						"border": #LineBorder0
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 2"
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label6"
-						"text": "text"
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 3"
-					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 3
 					"gridY": 7
@@ -174,28 +116,6 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-						name: "panel3"
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "label3"
-							"text": "BOTTOM"
-						} )
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 1"
-					} )
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-						name: "panel4"
-						"border": #LineBorder0
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 2"
-						"enabled": false
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label4"
-						"text": "text"
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 3"
-					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridY": 9
 				} )
@@ -205,27 +125,6 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-						name: "panel7"
-						add( new FormComponent( "javax.swing.JLabel" ) {
-							name: "label7"
-							"text": "RIGHT"
-						} )
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 1"
-					} )
-					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-						name: "panel8"
-						"border": #LineBorder0
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 2"
-					} )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label8"
-						"text": "text"
-					}, new FormLayoutConstraints( null ) {
-						"title": "Tab 3"
-					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 3
 					"gridY": 9
@@ -271,8 +170,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "hasFullBorderCheckBox"
-						"text": "Show full border"
-						"mnemonic": 70
+						"text": "Show content border"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -290,6 +188,62 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 625, 515 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3,align center center"
+			"$columnConstraints": "[fill][fill][fill]"
+			"$rowConstraints": "[fill]"
+		} ) {
+			name: "panel1"
+			auxiliary() {
+				"JavaCodeGenerator.className": "Panel1"
+			}
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "text"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField4"
+				"text": "some text"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button3"
+				"text": "..."
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 595 )
+			"size": new java.awt.Dimension( 291, 118 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets 0,hidemode 3,align center center"
+			"$columnConstraints": "[fill][fill]"
+			"$rowConstraints": "[fill]"
+		} ) {
+			name: "panel2"
+			auxiliary() {
+				"JavaCodeGenerator.className": "Panel2"
+			}
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField5"
+				"text": "more text"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button4"
+				"text": "..."
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 340, 595 )
+			"size": new java.awt.Dimension( 291, 118 )
 		} )
 	}
 }
