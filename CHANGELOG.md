@@ -6,7 +6,7 @@ FlatLaf Change Log
 #### New features and improvements
 
 - Demo: Improved "SplitPane & Tabs" and "Data Components" tabs.
-
+- Menu items "File > Open" and "File > Save As" now show file choosers.
 
 
 ## 0.41

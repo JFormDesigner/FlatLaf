@@ -93,6 +93,16 @@ class DemoFrame
 		state.remove( "hint.themesPanel" );
 	}
 
+	private void openActionPerformed() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.showOpenDialog( this );
+	}
+
+	private void saveAsActionPerformed() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.showSaveDialog( this );
+	}
+
 	private void exitActionPerformed() {
 		dispose();
 	}
@@ -263,6 +273,7 @@ class DemoFrame
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
 		JMenuItem openMenuItem = new JMenuItem();
+		JMenuItem saveAsMenuItem = new JMenuItem();
 		JMenuItem closeMenuItem = new JMenuItem();
 		JMenuItem exitMenuItem = new JMenuItem();
 		JMenu editMenu = new JMenu();
@@ -340,11 +351,18 @@ class DemoFrame
 				fileMenu.add(newMenuItem);
 
 				//---- openMenuItem ----
-				openMenuItem.setText("Open");
+				openMenuItem.setText("Open...");
 				openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				openMenuItem.setMnemonic('O');
-				openMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+				openMenuItem.addActionListener(e -> openActionPerformed());
 				fileMenu.add(openMenuItem);
+
+				//---- saveAsMenuItem ----
+				saveAsMenuItem.setText("Save As...");
+				saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				saveAsMenuItem.setMnemonic('S');
+				saveAsMenuItem.addActionListener(e -> saveAsActionPerformed());
+				fileMenu.add(saveAsMenuItem);
 				fileMenu.addSeparator();
 
 				//---- closeMenuItem ----
