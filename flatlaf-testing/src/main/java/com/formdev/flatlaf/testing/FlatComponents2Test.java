@@ -225,14 +225,14 @@ public class FlatComponents2Test
 		JPanel tableOptionsPanel = new JPanel();
 		JLabel tableRowCountLabel = new JLabel();
 		tableRowCountSpinner = new JSpinner();
-		dndCheckBox = new JCheckBox();
-		tableHeaderButtonCheckBox = new JCheckBox();
-		rowSelectionCheckBox = new JCheckBox();
-		columnSelectionCheckBox = new JCheckBox();
 		showHorizontalLinesCheckBox = new JCheckBox();
 		showVerticalLinesCheckBox = new JCheckBox();
 		intercellSpacingCheckBox = new JCheckBox();
 		redGridColorCheckBox = new JCheckBox();
+		rowSelectionCheckBox = new JCheckBox();
+		columnSelectionCheckBox = new JCheckBox();
+		dndCheckBox = new JCheckBox();
+		tableHeaderButtonCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -246,9 +246,7 @@ public class FlatComponents2Test
 			"[]" +
 			"[150,grow,sizegroup 1,fill]" +
 			"[150,grow,sizegroup 1,fill]" +
-			"[150,grow,sizegroup 1,fill]" +
-			"[]" +
-			"[]"));
+			"[150,grow,sizegroup 1,fill]"));
 
 		//---- textFieldLabel ----
 		textFieldLabel.setText("JTextField:");
@@ -365,9 +363,17 @@ public class FlatComponents2Test
 			tableOptionsPanel.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns
-				"[fill]" +
+				"[]" +
 				"[90,fill]",
 				// rows
+				"[]" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
 				"[]"));
 
 			//---- tableRowCountLabel ----
@@ -378,50 +384,50 @@ public class FlatComponents2Test
 			tableRowCountSpinner.setModel(new SpinnerNumberModel(20, 0, null, 10));
 			tableRowCountSpinner.addChangeListener(e -> tableRowCountChanged());
 			tableOptionsPanel.add(tableRowCountSpinner, "cell 1 0");
+
+			//---- showHorizontalLinesCheckBox ----
+			showHorizontalLinesCheckBox.setText("show horizontal lines");
+			showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
+			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 1 2 1");
+
+			//---- showVerticalLinesCheckBox ----
+			showVerticalLinesCheckBox.setText("show vertical lines");
+			showVerticalLinesCheckBox.addActionListener(e -> showVerticalLinesChanged());
+			tableOptionsPanel.add(showVerticalLinesCheckBox, "cell 0 2 2 1");
+
+			//---- intercellSpacingCheckBox ----
+			intercellSpacingCheckBox.setText("intercell spacing");
+			intercellSpacingCheckBox.addActionListener(e -> intercellSpacingChanged());
+			tableOptionsPanel.add(intercellSpacingCheckBox, "cell 0 3 2 1");
+
+			//---- redGridColorCheckBox ----
+			redGridColorCheckBox.setText("red grid color");
+			redGridColorCheckBox.addActionListener(e -> redGridColorChanged());
+			tableOptionsPanel.add(redGridColorCheckBox, "cell 0 4 2 1");
+
+			//---- rowSelectionCheckBox ----
+			rowSelectionCheckBox.setText("row selection");
+			rowSelectionCheckBox.setSelected(true);
+			rowSelectionCheckBox.addActionListener(e -> rowSelectionChanged());
+			tableOptionsPanel.add(rowSelectionCheckBox, "cell 0 5 2 1");
+
+			//---- columnSelectionCheckBox ----
+			columnSelectionCheckBox.setText("column selection");
+			columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
+			tableOptionsPanel.add(columnSelectionCheckBox, "cell 0 6 2 1");
+
+			//---- dndCheckBox ----
+			dndCheckBox.setText("enable drag and drop");
+			dndCheckBox.setMnemonic('D');
+			dndCheckBox.addActionListener(e -> dndChanged());
+			tableOptionsPanel.add(dndCheckBox, "cell 0 7 2 1");
+
+			//---- tableHeaderButtonCheckBox ----
+			tableHeaderButtonCheckBox.setText("show button in table header");
+			tableHeaderButtonCheckBox.addActionListener(e -> tableHeaderButtonChanged());
+			tableOptionsPanel.add(tableHeaderButtonCheckBox, "cell 0 8 2 1");
 		}
 		add(tableOptionsPanel, "cell 3 3");
-
-		//---- dndCheckBox ----
-		dndCheckBox.setText("enable drag and drop");
-		dndCheckBox.setMnemonic('D');
-		dndCheckBox.addActionListener(e -> dndChanged());
-		add(dndCheckBox, "cell 0 4 3 1");
-
-		//---- tableHeaderButtonCheckBox ----
-		tableHeaderButtonCheckBox.setText("show button in table header");
-		tableHeaderButtonCheckBox.addActionListener(e -> tableHeaderButtonChanged());
-		add(tableHeaderButtonCheckBox, "cell 0 4 3 1");
-
-		//---- rowSelectionCheckBox ----
-		rowSelectionCheckBox.setText("row selection");
-		rowSelectionCheckBox.setSelected(true);
-		rowSelectionCheckBox.addActionListener(e -> rowSelectionChanged());
-		add(rowSelectionCheckBox, "cell 0 4 3 1");
-
-		//---- columnSelectionCheckBox ----
-		columnSelectionCheckBox.setText("column selection");
-		columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
-		add(columnSelectionCheckBox, "cell 0 4 3 1");
-
-		//---- showHorizontalLinesCheckBox ----
-		showHorizontalLinesCheckBox.setText("show horizontal lines");
-		showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
-		add(showHorizontalLinesCheckBox, "cell 0 5 3 1");
-
-		//---- showVerticalLinesCheckBox ----
-		showVerticalLinesCheckBox.setText("show vertical lines");
-		showVerticalLinesCheckBox.addActionListener(e -> showVerticalLinesChanged());
-		add(showVerticalLinesCheckBox, "cell 0 5 3 1");
-
-		//---- intercellSpacingCheckBox ----
-		intercellSpacingCheckBox.setText("intercell spacing");
-		intercellSpacingCheckBox.addActionListener(e -> intercellSpacingChanged());
-		add(intercellSpacingCheckBox, "cell 0 5 3 1");
-
-		//---- redGridColorCheckBox ----
-		redGridColorCheckBox.setText("red grid color");
-		redGridColorCheckBox.addActionListener(e -> redGridColorChanged());
-		add(redGridColorCheckBox, "cell 0 5 3 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -435,14 +441,14 @@ public class FlatComponents2Test
 	private JScrollPane scrollPane5;
 	private JTable table1;
 	private JSpinner tableRowCountSpinner;
-	private JCheckBox dndCheckBox;
-	private JCheckBox tableHeaderButtonCheckBox;
-	private JCheckBox rowSelectionCheckBox;
-	private JCheckBox columnSelectionCheckBox;
 	private JCheckBox showHorizontalLinesCheckBox;
 	private JCheckBox showVerticalLinesCheckBox;
 	private JCheckBox intercellSpacingCheckBox;
 	private JCheckBox redGridColorCheckBox;
+	private JCheckBox rowSelectionCheckBox;
+	private JCheckBox columnSelectionCheckBox;
+	private JCheckBox dndCheckBox;
+	private JCheckBox tableHeaderButtonCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	private final String[] randomRowStrings = new String[1000];
