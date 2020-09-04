@@ -84,6 +84,8 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 public class FlatInternalFrameUI
 	extends BasicInternalFrameUI
 {
+	protected FlatWindowResizer windowResizer;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatInternalFrameUI( (JInternalFrame) c );
 	}
@@ -97,11 +99,27 @@ public class FlatInternalFrameUI
 		super.installUI( c );
 
 		LookAndFeel.installProperty( frame, "opaque", false );
+
+		windowResizer = createWindowResizer();
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		if( windowResizer != null ) {
+			windowResizer.uninstall();
+			windowResizer = null;
+		}
 	}
 
 	@Override
 	protected JComponent createNorthPane( JInternalFrame w ) {
 		return new FlatInternalFrameTitlePane( w );
+	}
+
+	protected FlatWindowResizer createWindowResizer() {
+		return new FlatWindowResizer.InternalFrameResizer( frame, this::getDesktopManager );
 	}
 
 	//---- class FlatInternalFrameBorder --------------------------------------

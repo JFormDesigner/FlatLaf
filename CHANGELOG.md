@@ -7,6 +7,8 @@ FlatLaf Change Log
 
 - Demo: Improved "SplitPane & Tabs" and "Data Components" tabs.
 - Menu items "File > Open" and "File > Save As" now show file choosers.
+- InternalFrame: Support draggable border for resizing frame inside of the
+  visible frame border. (issue #121)
 
 #### Fixed bugs
 

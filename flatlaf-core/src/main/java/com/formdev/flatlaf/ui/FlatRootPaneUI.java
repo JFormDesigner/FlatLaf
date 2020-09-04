@@ -172,7 +172,7 @@ public class FlatRootPaneUI
 	}
 
 	protected FlatWindowResizer createWindowResizer() {
-		return new FlatWindowResizer( rootPane );
+		return new FlatWindowResizer.WindowResizer( rootPane );
 	}
 
 	protected FlatTitlePane createTitlePane() {
