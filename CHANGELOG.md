@@ -12,6 +12,8 @@ FlatLaf Change Log
 
 - Custom window decorations: Fixed wrong window placement when moving window to
   another screen with different scaling factor. (issue #166)
+- Custom window decorations: Fixed wrong window bounds when resizing window to
+  another screen with different scaling factor. (issue #166)
 
 
 ## 0.41

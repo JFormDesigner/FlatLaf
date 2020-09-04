@@ -212,9 +212,12 @@ public class FlatWindowResizer
 		private final int trailingResizeDir;
 
 		private int resizeDir = -1;
-		private int dragStartMouseX;
-		private int dragStartMouseY;
-		private Rectangle dragStartWindowBounds;
+
+		// offsets of mouse position to window edges
+		private int dragLeftOffset;
+		private int dragRightOffset;
+		private int dragTopOffset;
+		private int dragBottomOffset;
 
 		protected DragBorderComponent( int leadingResizeDir, int centerResizeDir, int trailingResizeDir ) {
 			this.leadingResizeDir = leadingResizeDir;
@@ -265,23 +268,20 @@ debug*/
 			if( window == null )
 				return;
 
-			dragStartMouseX = e.getXOnScreen();
-			dragStartMouseY = e.getYOnScreen();
-			dragStartWindowBounds = window.getBounds();
+			int xOnScreen = e.getXOnScreen();
+			int yOnScreen = e.getYOnScreen();
+			Rectangle windowBounds = window.getBounds();
+
+			// compute offsets of mouse position to window edges
+			dragLeftOffset = xOnScreen - windowBounds.x;
+			dragTopOffset = yOnScreen - windowBounds.y;
+			dragRightOffset = windowBounds.x + windowBounds.width - xOnScreen;
+			dragBottomOffset = windowBounds.y + windowBounds.height - yOnScreen;
 		}
 
-		@Override
-		public void mouseReleased( MouseEvent e ) {
-			dragStartWindowBounds = null;
-		}
-
-		@Override
-		public void mouseEntered( MouseEvent e ) {
-		}
-
-		@Override
-		public void mouseExited( MouseEvent e ) {
-		}
+		@Override public void mouseReleased( MouseEvent e ) {}
+		@Override public void mouseEntered( MouseEvent e ) {}
+		@Override public void mouseExited( MouseEvent e ) {}
 
 		@Override
 		public void mouseMoved( MouseEvent e ) {
@@ -299,46 +299,42 @@ debug*/
 
 		@Override
 		public void mouseDragged( MouseEvent e ) {
-			if( dragStartWindowBounds == null )
-				return;
-
 			if( !isWindowResizable() )
 				return;
 
-			int mouseDeltaX = e.getXOnScreen() - dragStartMouseX;
-			int mouseDeltaY = e.getYOnScreen() - dragStartMouseY;
+			int xOnScreen = e.getXOnScreen();
+			int yOnScreen = e.getYOnScreen();
 
-			int deltaX = 0;
-            int deltaY = 0;
-            int deltaWidth = 0;
-            int deltaHeight = 0;
-
-			// north
-			if( resizeDir == N_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR ) {
-				deltaY = mouseDeltaY;
-				deltaHeight = -mouseDeltaY;
-			}
-
-			// south
-			if( resizeDir == S_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR )
-				deltaHeight = mouseDeltaY;
-
-			// west
-			if( resizeDir == W_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR ) {
-				deltaX = mouseDeltaX;
-				deltaWidth = -mouseDeltaX;
-			}
-
-			// east
-			if( resizeDir == E_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR )
-				deltaWidth = mouseDeltaX;
+			// Get current window bounds and compute new bounds based them.
+			// This is necessary because window manager may alter window bounds while resizing.
+			// E.g. when having two monitors with different scale factors and resizing
+			// a window on first screen to the second screen, then the window manager may
+			// decide at some point that the window should be only on second screen
+			// and adjusts its bounds.
+			Rectangle oldBounds = window.getBounds();
+			Rectangle newBounds = new Rectangle( oldBounds );
 
 			// compute new window bounds
-			Rectangle newBounds = new Rectangle( dragStartWindowBounds );
-			newBounds.x += deltaX;
-			newBounds.y += deltaY;
-			newBounds.width += deltaWidth;
-			newBounds.height += deltaHeight;
+
+			// top
+			if( resizeDir == N_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR ) {
+				newBounds.y = yOnScreen - dragTopOffset;
+				newBounds.height += (oldBounds.y - newBounds.y);
+			}
+
+			// bottom
+			if( resizeDir == S_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR )
+				newBounds.height = (yOnScreen + dragBottomOffset) - newBounds.y;
+
+			// left
+			if( resizeDir == W_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR ) {
+				newBounds.x = xOnScreen - dragLeftOffset;
+				newBounds.width += (oldBounds.x - newBounds.x);
+			}
+
+			// right
+			if( resizeDir == E_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR )
+				newBounds.width = (xOnScreen + dragRightOffset) - newBounds.x;
 
 			// apply minimum window size
 			boolean honorMinimumSizeOnResize =
@@ -348,18 +344,18 @@ debug*/
 			if( minimumSize == null )
 				minimumSize = UIScale.scale( new Dimension( 150, 50 ) );
 			if( newBounds.width < minimumSize.width ) {
-				if( deltaX != 0 )
+				if( newBounds.x != oldBounds.x )
 					newBounds.x -= (minimumSize.width - newBounds.width);
 				newBounds.width = minimumSize.width;
 			}
 			if( newBounds.height < minimumSize.height ) {
-				if( deltaY != 0 )
+				if( newBounds.y != oldBounds.y )
 					newBounds.y -= (minimumSize.height - newBounds.height);
 				newBounds.height = minimumSize.height;
 			}
 
 			// set window bounds
-			if( !newBounds.equals( dragStartWindowBounds ) ) {
+			if( !newBounds.equals( oldBounds ) ) {
 				window.setBounds( newBounds );
 
 				// immediately layout drag border components
