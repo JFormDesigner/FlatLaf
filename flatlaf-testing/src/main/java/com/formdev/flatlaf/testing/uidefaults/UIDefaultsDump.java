@@ -61,6 +61,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
+import com.formdev.flatlaf.testing.FlatTestLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
 import com.formdev.flatlaf.util.ColorFunctions.HSLIncreaseDecrease;
@@ -95,6 +96,8 @@ public class UIDefaultsDump
 			dump( FlatIntelliJLaf.class.getName(), dir );
 			dump( FlatDarculaLaf.class.getName(), dir );
 		}
+
+		dump( FlatTestLaf.class.getName(), dir );
 
 //		dump( MyBasicLookAndFeel.class.getName(), dir );
 //		dump( MetalLookAndFeel.class.getName(), dir );
