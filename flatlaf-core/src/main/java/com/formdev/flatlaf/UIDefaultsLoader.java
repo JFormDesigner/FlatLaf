@@ -109,6 +109,14 @@ class UIDefaultsLoader
 				}
 			}
 
+			// collect addon class loaders
+			List<ClassLoader> addonClassLoaders = new ArrayList<>();
+			for( FlatDefaultsAddon addon : addons ) {
+				ClassLoader addonClassLoader = addon.getClass().getClassLoader();
+				if( !addonClassLoaders.contains( addonClassLoader ) )
+					addonClassLoaders.add( addonClassLoader );
+			}
+
 			// load custom properties files (usually provides by applications)
 			List<Object> customDefaultsSources = FlatLaf.getCustomDefaultsSources();
 			int size = (customDefaultsSources != null) ? customDefaultsSources.size() : 0;
@@ -118,6 +126,10 @@ class UIDefaultsLoader
 					// load from package in classloader
 					String packageName = (String) source;
 					ClassLoader classLoader = (ClassLoader) customDefaultsSources.get( ++i );
+
+					// use class loader also for instantiating classes specified in values
+					if( classLoader != null && !addonClassLoaders.contains( classLoader ) )
+						addonClassLoaders.add( classLoader );
 
 					packageName = packageName.replace( '.', '/' );
 					if( classLoader == null )
@@ -143,14 +155,6 @@ class UIDefaultsLoader
 						}
 					}
 				}
-			}
-
-			// collect addon class loaders
-			List<ClassLoader> addonClassLoaders = new ArrayList<>();
-			for( FlatDefaultsAddon addon : addons ) {
-				ClassLoader addonClassLoader = addon.getClass().getClassLoader();
-				if( !addonClassLoaders.contains( addonClassLoader ) )
-					addonClassLoaders.add( addonClassLoader );
 			}
 
 			// add additional defaults
