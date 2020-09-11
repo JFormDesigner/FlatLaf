@@ -158,10 +158,20 @@ public class FlatInspector
 			} else if( id == KeyEvent.KEY_RELEASED && wasCtrlOrShiftKeyPressed ) {
 				if( keyCode == KeyEvent.VK_CONTROL ) {
 					inspectParentLevel++;
-					inspect( lastX, lastY );
+					int parentLevel = inspect( lastX, lastY );
+
+					// limit level
+					if( inspectParentLevel > parentLevel )
+						inspectParentLevel = parentLevel;
 				} else if( keyCode == KeyEvent.VK_SHIFT && inspectParentLevel > 0 ) {
 					inspectParentLevel--;
-					inspect( lastX, lastY );
+					int parentLevel = inspect( lastX, lastY );
+
+					// decrease level
+					if( inspectParentLevel > parentLevel ) {
+						inspectParentLevel = Math.max( parentLevel - 1, 0 );
+						inspect( lastX, lastY );
+					}
 				}
 			}
 
@@ -248,24 +258,28 @@ public class FlatInspector
 		} );
 	}
 
-	private void inspect( int x, int y ) {
+	private int inspect( int x, int y ) {
 		Point pt = SwingUtilities.convertPoint( rootPane.getGlassPane(), x, y, rootPane );
 		Component c = getDeepestComponentAt( rootPane, pt.x, pt.y );
+		int parentLevel = 0;
 		for( int i = 0; i < inspectParentLevel && c != null; i++ ) {
 			Container parent = c.getParent();
 			if( parent == null )
 				break;
 
 			c = parent;
+			parentLevel++;
 		}
 
 		if( c == lastComponent )
-			return;
+			return parentLevel;
 
 		lastComponent = c;
 
 		highlight( c );
-		showToolTip( c, x, y );
+		showToolTip( c, x, y, parentLevel );
+
+		return parentLevel;
 	}
 
 	private Component getDeepestComponentAt( Component parent, int x, int y ) {
@@ -338,7 +352,7 @@ public class FlatInspector
 		return c;
 	}
 
-	private void showToolTip( Component c, int x, int y ) {
+	private void showToolTip( Component c, int x, int y, int parentLevel ) {
 		if( c == null ) {
 			if( tip != null )
 				tip.setVisible( false );
@@ -356,7 +370,7 @@ public class FlatInspector
 		} else
 			tip.setVisible( true );
 
-		tip.setTipText( buildToolTipText( c ) );
+		tip.setTipText( buildToolTipText( c, parentLevel ) );
 
 		int tx = x + UIScale.scale( 8 );
 		int ty = y + UIScale.scale( 16 );
@@ -377,7 +391,7 @@ public class FlatInspector
 		tip.repaint();
 	}
 
-	private String buildToolTipText( Component c ) {
+	private static String buildToolTipText( Component c, int parentLevel ) {
 		String name = c.getClass().getName();
 		name = name.substring( name.lastIndexOf( '.' ) + 1 );
 
@@ -441,10 +455,10 @@ public class FlatInspector
 		text += "Left-to-right: " + c.getComponentOrientation().isLeftToRight() + '\n';
 		text += "Parent: " + (c.getParent() != null ? c.getParent().getClass().getName() : "null");
 
-		if( inspectParentLevel > 0 )
-			text += "\n\nParent level: " + inspectParentLevel;
+		if( parentLevel > 0 )
+			text += "\n\nParent level: " + parentLevel;
 
-		if( inspectParentLevel > 0 )
+		if( parentLevel > 0 )
 			text += "\n(press Ctrl/Shift to increase/decrease level)";
 		else
 			text += "\n\n(press Ctrl key to inspect parent)";
