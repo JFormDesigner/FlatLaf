@@ -198,13 +198,6 @@ class UIDefaultsLoader
 				}
 			}
 
-			Function<String, String> propertiesGetter = key -> {
-				return properties.getProperty( key );
-			};
-			Function<String, String> resolver = value -> {
-				return resolveValue( value, propertiesGetter );
-			};
-
 			// get (and remove) globals, which override all other defaults that end with same suffix
 			HashMap<String, String> globals = new HashMap<>();
 			Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
@@ -227,6 +220,13 @@ class UIDefaultsLoader
 						properties.put( key, globalValue );
 				}
 			}
+
+			Function<String, String> propertiesGetter = key -> {
+				return properties.getProperty( key );
+			};
+			Function<String, String> resolver = value -> {
+				return resolveValue( value, propertiesGetter );
+			};
 
 			// parse and add properties to UI defaults
 			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
