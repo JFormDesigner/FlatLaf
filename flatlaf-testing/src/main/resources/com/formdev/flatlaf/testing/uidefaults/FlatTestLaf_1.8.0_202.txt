@@ -714,6 +714,7 @@ RadioButton.highlight          #ffffff    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.icon.centerDiameter 8
 RadioButton.icon               [lazy] 15,15    com.formdev.flatlaf.icons.FlatRadioButtonIcon [UI]
 RadioButton.iconTextGap        4
+RadioButton.icon[filled].centerDiameter 5
 RadioButton.light              #e3e3e3    javax.swing.plaf.ColorUIResource [UI]
 RadioButton.margin             2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 RadioButton.rollover           true
