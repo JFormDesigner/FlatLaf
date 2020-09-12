@@ -26,9 +26,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -203,37 +205,33 @@ class UIDefaultsLoader
 				return resolveValue( value, propertiesGetter );
 			};
 
-			// get globals, which override all other defaults that end with same suffix
-			HashMap<String, Object> globals = new HashMap<>();
-			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
+			// get (and remove) globals, which override all other defaults that end with same suffix
+			HashMap<String, String> globals = new HashMap<>();
+			Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
+			while( it.hasNext() ) {
+				Entry<Object, Object> e = it.next();
 				String key = (String) e.getKey();
-				if( !key.startsWith( GLOBAL_PREFIX ) )
-					continue;
-
-				String value = resolveValue( (String) e.getValue(), propertiesGetter );
-				try {
-					globals.put( key.substring( GLOBAL_PREFIX.length() ),
-						parseValue( key, value, null, resolver, addonClassLoaders ) );
-				} catch( RuntimeException ex ) {
-					logParseError( Level.SEVERE, key, value, ex );
+				if( key.startsWith( GLOBAL_PREFIX ) ) {
+					globals.put( key.substring( GLOBAL_PREFIX.length() ), (String) e.getValue() );
+					it.remove();
 				}
 			}
 
 			// override UI defaults with globals
-			for( Object key : defaults.keySet() ) {
-				if( key instanceof String && ((String)key).contains( "." ) ) {
-					String skey = (String) key;
-					String globalKey = skey.substring( skey.lastIndexOf( '.' ) + 1 );
-					Object globalValue = globals.get( globalKey );
-					if( globalValue != null )
-						defaults.put( key, globalValue );
+			for( Object okey : defaults.keySet() ) {
+				if( okey instanceof String && ((String)okey).contains( "." ) ) {
+					String key = (String) okey;
+					String globalKey = key.substring( key.lastIndexOf( '.' ) + 1 );
+					String globalValue = globals.get( globalKey );
+					if( globalValue != null && !properties.containsKey( key ) )
+						properties.put( key, globalValue );
 				}
 			}
 
-			// add non-global properties to UI defaults
+			// parse and add properties to UI defaults
 			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
 				String key = (String) e.getKey();
-				if( key.startsWith( VARIABLE_PREFIX ) || key.startsWith( GLOBAL_PREFIX ) )
+				if( key.startsWith( VARIABLE_PREFIX ) )
 					continue;
 
 				String value = resolveValue( (String) e.getValue(), propertiesGetter );
