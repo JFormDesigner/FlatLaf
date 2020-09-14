@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
+import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -52,8 +53,9 @@ public class FlatLafDemo
 			// set look and feel
 			DemoPrefs.initLaf( args );
 
-			// install inspector
+			// install inspectors
 			FlatInspector.install( "ctrl shift alt X" );
+			FlatUIDefaultsInspector.install( "ctrl shift alt Y" );
 
 			// create frame
 			DemoFrame frame = new DemoFrame();

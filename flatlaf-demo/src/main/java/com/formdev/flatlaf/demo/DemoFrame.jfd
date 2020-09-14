@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "this"
 			"title": "FlatLaf Demo"
-			"defaultCloseOperation": 2
+			"defaultCloseOperation": 3
 			"$locationPolicy": 2
 			"$sizePolicy": 2
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
@@ -382,6 +382,11 @@ new FormModel {
 						name: "showHintsMenuItem"
 						"text": "Show hints"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHintsChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "showUIDefaultsInspectorMenuItem"
+						"text": "Show UIDefaults Inspector"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showUIDefaultsInspector", false ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {

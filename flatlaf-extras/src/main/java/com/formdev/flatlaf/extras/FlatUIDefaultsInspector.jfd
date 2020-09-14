@@ -1,0 +1,33 @@
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "frame"
+			"title": "UI Defaults"
+			"defaultCloseOperation": 2
+			"$sizePolicy": 2
+			"$locationPolicy": 2
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosed", "windowClosed", false ) )
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosing", "saveWindowBounds", false ) )
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowDeactivated", "saveWindowBounds", false ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panel"
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane"
+					add( new FormComponent( "javax.swing.JTable" ) {
+						name: "table"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+	}
+}

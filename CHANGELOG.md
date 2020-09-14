@@ -9,6 +9,9 @@ FlatLaf Change Log
 - Menu items "File > Open" and "File > Save As" now show file choosers.
 - InternalFrame: Support draggable border for resizing frame inside of the
   visible frame border. (issue #121)
+- `FlatUIDefaultsInspector` added (see [FlatLaf Extras](flatlaf-extras)). A
+  simple UI defaults inspector that shows a window with all UI defaults used in
+  current theme (look and feel).
 
 #### Fixed bugs
 

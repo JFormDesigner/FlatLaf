@@ -11,6 +11,9 @@ This sub-project provides some additional components and classes:
 - [FlatSVGIcon](src/main/java/com/formdev/flatlaf/extras/FlatSVGIcon.java): An
   icon that displays SVG using
   [svgSalamander](https://github.com/JFormDesigner/svgSalamander).
+- [FlatUIDefaultsInspector](src/main/java/com/formdev/flatlaf/extras/FlatUIDefaultsInspector.java):
+  A simple UI defaults inspector that shows a window with all UI defaults used
+  in current theme (look and feel).
 - [TriStateCheckBox](src/main/java/com/formdev/flatlaf/extras/TriStateCheckBox.java):
   A tri-state check box.
 

@@ -31,6 +31,7 @@ import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.SVGUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import net.miginfocom.layout.ConstraintParser;
@@ -93,6 +94,10 @@ class DemoFrame
 		state.remove( "hint.themesPanel" );
 	}
 
+	private void showUIDefaultsInspector() {
+		FlatUIDefaultsInspector.show();
+	}
+
 	private void openActionPerformed() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.showOpenDialog( this );
@@ -104,7 +109,7 @@ class DemoFrame
 	}
 
 	private void exitActionPerformed() {
-		dispose();
+		System.exit( 0 );
 	}
 
 	private void aboutActionPerformed() {
@@ -308,6 +313,7 @@ class DemoFrame
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
 		JMenuItem showHintsMenuItem = new JMenuItem();
+		JMenuItem showUIDefaultsInspectorMenuItem = new JMenuItem();
 		JMenu helpMenu = new JMenu();
 		JMenuItem aboutMenuItem = new JMenuItem();
 		JToolBar toolBar1 = new JToolBar();
@@ -331,7 +337,7 @@ class DemoFrame
 
 		//======== this ========
 		setTitle("FlatLaf Demo");
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
@@ -579,6 +585,11 @@ class DemoFrame
 				showHintsMenuItem.setText("Show hints");
 				showHintsMenuItem.addActionListener(e -> showHintsChanged());
 				optionsMenu.add(showHintsMenuItem);
+
+				//---- showUIDefaultsInspectorMenuItem ----
+				showUIDefaultsInspectorMenuItem.setText("Show UIDefaults Inspector");
+				showUIDefaultsInspectorMenuItem.addActionListener(e -> showUIDefaultsInspector());
+				optionsMenu.add(showUIDefaultsInspectorMenuItem);
 			}
 			menuBar1.add(optionsMenu);
 
