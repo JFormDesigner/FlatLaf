@@ -211,10 +211,7 @@ public class FlatUIDefaultsInspector
 			if( value instanceof Class )
 				continue;
 
-			Item item = new Item();
-			item.key = String.valueOf( key );
-			item.value = value;
-			items.add( item );
+			items.add( new Item( String.valueOf( key ), value ) );
 		}
 
 		items.sort( (item1, item2) -> item1.key.compareToIgnoreCase( item2.key ) );
@@ -264,8 +261,9 @@ public class FlatUIDefaultsInspector
 			  return false;
 
 			String lkey = item.key.toLowerCase( Locale.ENGLISH );
+			String lvalue = item.getValueAsString().toLowerCase( Locale.ENGLISH );
 			for( String f : filters ) {
-				if( lkey.contains( f ) )
+				if( lkey.contains( f ) || lvalue.contains( f ) )
 					return true;
 			}
 			return false;
@@ -412,8 +410,63 @@ public class FlatUIDefaultsInspector
 	//---- class Item ---------------------------------------------------------
 
 	private static class Item {
-		String key;
-		Object value;
+		final String key;
+		final Object value;
+
+		private String valueStr;
+
+		Item( String key, Object value ) {
+			this.key = key;
+			this.value = value;
+		}
+
+		String getValueAsString() {
+			if( valueStr != null )
+				return valueStr;
+
+			if( value instanceof Color ) {
+				Color color = (Color) value;
+				HSLColor hslColor = new HSLColor( color );
+				if( color.getAlpha() == 255 ) {
+					valueStr = String.format( "#%06x    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
+						color.getRGB() & 0xffffff,
+						color.getRed(), color.getGreen(), color.getBlue(),
+						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
+						(int) hslColor.getLuminance() );
+				} else {
+					valueStr = String.format( "#%06x%02x   rgba(%d, %d, %d, %d)    hsla(%d, %d, %d, %d)",
+						color.getRGB() & 0xffffff, color.getAlpha(),
+						color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
+						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
+						(int) hslColor.getLuminance(), (int) (hslColor.getAlpha() * 100) );
+				}
+			} else if( value instanceof Insets ) {
+				Insets insets = (Insets) value;
+				valueStr = insets.top + "," + insets.left + "," + insets.bottom + "," + insets.right;
+			} else if( value instanceof Dimension ) {
+				Dimension dim = (Dimension) value;
+				valueStr = dim.width + "," + dim.height;
+			} else if( value instanceof Font ) {
+				Font font = (Font) value;
+				valueStr = font.getFamily() + " " + font.getSize();
+				if( font.isBold() )
+					valueStr += " bold";
+				if( font.isItalic() )
+					valueStr += " italic";
+			} else if( value instanceof Icon ) {
+				Icon icon = (Icon) value;
+				valueStr = icon.getIconWidth() + "x" + icon.getIconHeight() + "   " + icon.getClass().getName();
+			} else if( value instanceof ActionMap ) {
+				ActionMap actionMap = (ActionMap) value;
+				valueStr = "ActionMap (" + actionMap.size() + ")";
+			} else if( value instanceof InputMap ) {
+				InputMap inputMap = (InputMap) value;
+				valueStr = "InputMap (" + inputMap.size() + ")";
+			} else
+				valueStr = String.valueOf( value );
+
+			return valueStr;
+		}
 	}
 
 	//---- class ItemsTableModel ----------------------------------------------
@@ -605,47 +658,7 @@ public class FlatUIDefaultsInspector
 				setIcon( null );
 
 			// value to string
-			if( item.value instanceof Color ) {
-				Color color = (Color) item.value;
-				HSLColor hslColor = new HSLColor( color );
-				if( color.getAlpha() == 255 ) {
-					value = String.format( "#%06x    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
-						color.getRGB() & 0xffffff,
-						color.getRed(), color.getGreen(), color.getBlue(),
-						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
-						(int) hslColor.getLuminance() );
-				} else {
-					value = String.format( "#%06x%02x   rgba(%d, %d, %d, %d)    hsla(%d, %d, %d, %d)",
-						color.getRGB() & 0xffffff, color.getAlpha(),
-						color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
-						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
-						(int) hslColor.getLuminance(), (int) (hslColor.getAlpha() * 100) );
-				}
-			} else if( item.value instanceof Insets ) {
-				Insets insets = (Insets) item.value;
-				value = insets.top + "," + insets.left + "," + insets.bottom + "," + insets.right;
-			} else if( item.value instanceof Dimension ) {
-				Dimension dim = (Dimension) item.value;
-				value = dim.width + "," + dim.height;
-			} else if( item.value instanceof Font ) {
-				Font font = (Font) item.value;
-				value = font.getFamily() + " " + font.getSize();
-				if( font.isBold() )
-					value += " bold";
-				if( font.isItalic() )
-					value += " italic";
-			} else if( item.value instanceof Icon ) {
-				Icon icon = (Icon) item.value;
-				value = icon.getIconWidth() + "x" + icon.getIconHeight() + "   " + icon.getClass().getName();
-				setIcon( new SafeIcon( icon ) );
-			} else if( item.value instanceof ActionMap ) {
-				ActionMap actionMap = (ActionMap) item.value;
-				value = "ActionMap (" + actionMap.size() + ")";
-			} else if( item.value instanceof InputMap ) {
-				InputMap inputMap = (InputMap) item.value;
-				value = "InputMap (" + inputMap.size() + ")";
-			} else
-				value = item.value;
+			value = item.getValueAsString();
 
 			super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
 
@@ -654,6 +667,9 @@ public class FlatUIDefaultsInspector
 				boolean isDark = new HSLColor( color ).getLuminance() < 70;
 				setBackground( color );
 				setForeground( isDark ? Color.white : Color.black );
+			} else if( item.value instanceof Icon ) {
+				Icon icon = (Icon) item.value;
+				setIcon( new SafeIcon( icon ) );
 			}
 
 			setToolTipText( String.valueOf( item.value ) );
