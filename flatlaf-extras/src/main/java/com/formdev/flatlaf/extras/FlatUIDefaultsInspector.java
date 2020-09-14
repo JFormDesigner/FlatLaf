@@ -27,6 +27,8 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import com.formdev.flatlaf.util.UIScale;
@@ -89,6 +91,7 @@ public class FlatUIDefaultsInspector
 		// initialize table
 		Item[] items = getUIDefaultsItems();
 		table.setModel( new ItemsTableModel( items ) );
+		table.setDefaultRenderer( String.class, new KeyRenderer() );
 		table.setDefaultRenderer( Item.class, new ValueRenderer() );
 
 		// restore window bounds
@@ -263,16 +266,112 @@ public class FlatUIDefaultsInspector
 		}
 	}
 
+	//---- class Renderer -----------------------------------------------------
+
+	private static class Renderer
+		extends DefaultTableCellRenderer
+	{
+		protected boolean selected;
+		protected boolean first;
+
+		protected void init( JTable table, String key, boolean selected, int row ) {
+			this.selected = selected;
+
+			first = false;
+			if( row > 0 ) {
+				String previousKey = (String) table.getValueAt( row - 1, 0 );
+				int dot = key.indexOf( '.' );
+				if( dot > 0 ) {
+					String prefix = key.substring( 0, dot + 1 );
+					first = !previousKey.startsWith( prefix );
+				} else
+					first = previousKey.indexOf( '.' ) > 0;
+			}
+		}
+
+		protected void paintSeparator( Graphics g ) {
+			if( first && !selected ) {
+				g.setColor( FlatLaf.isLafDark() ? Color.gray : Color.lightGray );
+				g.fillRect( 0, 0, getWidth() - 1, 1 );
+			}
+		}
+	}
+
+	//---- class KeyRenderer --------------------------------------------------
+
+	private static class KeyRenderer
+		extends Renderer
+	{
+		private String key;
+
+		@Override
+		public Component getTableCellRendererComponent( JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column )
+		{
+			key = (String) value;
+			init( table, key, isSelected, row );
+			setToolTipText( key );
+			return super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
+		}
+
+		@Override
+		protected void paintComponent( Graphics g ) {
+			int width = getWidth();
+			int height = getHeight();
+			Insets insets = getInsets();
+			FontMetrics fm = getFontMetrics( getFont() );
+
+			g.setColor( getBackground() );
+			g.fillRect( 0, 0, width, height );
+
+			Rectangle viewR = new Rectangle( insets.left, insets.top,
+				width - (insets.left + insets.right),
+				height - (insets.top + insets.bottom) );
+			Rectangle iconR = new Rectangle();
+			Rectangle textR = new Rectangle();
+
+			String clippedText = SwingUtilities.layoutCompoundLabel( this, fm, key, null,
+				getVerticalAlignment(), getHorizontalAlignment(),
+				getVerticalTextPosition(), getHorizontalTextPosition(),
+				viewR, iconR, textR, getIconTextGap() );
+			int x = textR.x;
+			int y = textR.y + fm.getAscent();
+
+			int dot = key.indexOf( '.' );
+			if( dot > 0 && !selected ) {
+				g.setColor( UIManager.getColor( "Label.disabledForeground" ) );
+
+				if( dot >= clippedText.length() )
+					FlatUIUtils.drawString( this, g, clippedText, x, y );
+				else {
+					String prefix = clippedText.substring( 0, dot + 1 );
+					String subkey = clippedText.substring( dot + 1 );
+
+					FlatUIUtils.drawString( this, g, prefix, x, y );
+
+					g.setColor( getForeground() );
+					FlatUIUtils.drawString( this, g, subkey, x + fm.stringWidth( prefix ), y );
+				}
+			} else {
+				g.setColor( getForeground() );
+				FlatUIUtils.drawString( this, g, clippedText, x, y );
+			}
+
+			paintSeparator( g );
+		}
+	}
+
 	//---- class ValueRenderer ------------------------------------------------
 
 	private static class ValueRenderer
-		extends DefaultTableCellRenderer
+		extends Renderer
 	{
 		@Override
 		public Component getTableCellRendererComponent( JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column )
 		{
 			Item item = (Item) value;
+			init( table, item.key, isSelected, row );
 
 			// reset background, foreground and icon
 			if( !(item.value instanceof Color) ) {
@@ -336,6 +435,12 @@ public class FlatUIDefaultsInspector
 
 			setToolTipText( String.valueOf( item.value ) );
 			return this;
+		}
+
+		@Override
+		protected void paintComponent( Graphics g ) {
+			super.paintComponent( g );
+			paintSeparator( g );
 		}
 	}
 
