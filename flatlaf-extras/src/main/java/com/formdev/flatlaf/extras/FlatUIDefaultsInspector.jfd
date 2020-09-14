@@ -73,6 +73,7 @@ new FormModel {
 					name: "scrollPane"
 					add( new FormComponent( "javax.swing.JTable" ) {
 						name: "table"
+						"autoCreateRowSorter": true
 					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "Center"

@@ -21,6 +21,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.function.Predicate;
@@ -124,6 +125,8 @@ public class FlatUIDefaultsInspector
 		table.setModel( new ItemsTableModel( getUIDefaultsItems() ) );
 		table.setDefaultRenderer( String.class, new KeyRenderer() );
 		table.setDefaultRenderer( Item.class, new ValueRenderer() );
+		table.getRowSorter().setSortKeys( Collections.singletonList(
+			new RowSorter.SortKey( 0, SortOrder.ASCENDING ) ) );
 
 		// restore window bounds
 		Preferences prefs = getPrefs();
@@ -214,7 +217,6 @@ public class FlatUIDefaultsInspector
 			items.add( new Item( String.valueOf( key ), value ) );
 		}
 
-		items.sort( (item1, item2) -> item1.key.compareToIgnoreCase( item2.key ) );
 		return items.toArray( new Item[items.size()] );
 	}
 
@@ -386,6 +388,9 @@ public class FlatUIDefaultsInspector
 
 				//======== scrollPane ========
 				{
+
+					//---- table ----
+					table.setAutoCreateRowSorter(true);
 					scrollPane.setViewportView(table);
 				}
 				panel.add(scrollPane, BorderLayout.CENTER);
@@ -483,6 +488,12 @@ public class FlatUIDefaultsInspector
 				return String.format( hasAlpha ? "#%03X%X" : "#%03X", srgb, (rgb >> 24) & 0xf );
 			} else
 				return String.format( hasAlpha ? "#%06X%02X" : "#%06X", rgb & 0xffffff, (rgb >> 24) & 0xff );
+		}
+
+		// used for sorting by value
+		@Override
+		public String toString() {
+			return getValueAsString();
 		}
 	}
 
