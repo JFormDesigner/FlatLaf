@@ -22,8 +22,13 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Locale;
+import java.util.function.Predicate;
 import java.util.prefs.Preferences;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -87,6 +92,23 @@ public class FlatUIDefaultsInspector
 		initComponents();
 
 		panel.setBorder( new ScaledEmptyBorder( 10, 10, 10, 10 ) );
+		filterPanel.setBorder( new ScaledEmptyBorder( 0, 0, 10, 0 ) );
+
+		// initialize filter
+		filterField.getDocument().addDocumentListener( new DocumentListener() {
+			@Override
+			public void removeUpdate( DocumentEvent e ) {
+				filterChanged();
+			}
+			@Override
+			public void insertUpdate( DocumentEvent e ) {
+				filterChanged();
+			}
+			@Override
+			public void changedUpdate( DocumentEvent e ) {
+				filterChanged();
+			}
+		} );
 
 		// initialize table
 		Item[] items = getUIDefaultsItems();
@@ -110,6 +132,14 @@ public class FlatUIDefaultsInspector
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn( 0 ).setPreferredWidth( prefs.getInt( "column1width", 100 ) );
 		columnModel.getColumn( 1 ).setPreferredWidth( prefs.getInt( "column2width", 100 ) );
+
+		// restore filter
+		String filter = prefs.get( "filter", "" );
+		String valueType = prefs.get( "valueType", null );
+		if( filter != null && !filter.isEmpty() )
+			filterField.setText( filter );
+		if( valueType != null )
+			valueTypeField.setSelectedItem( valueType );
 	}
 
 	private Item[] getUIDefaultsItems() {
@@ -159,10 +189,68 @@ public class FlatUIDefaultsInspector
 		inspector = null;
 	}
 
+	private void filterChanged() {
+		String filter = filterField.getText().trim();
+		String valueType = (String) valueTypeField.getSelectedItem();
+
+		// split filter string on space characters
+		String[] filters = filter.split( " +" );
+		for( int i = 0; i < filters.length; i++ )
+			filters[i] = filters[i].toLowerCase( Locale.ENGLISH );
+
+		ItemsTableModel model = (ItemsTableModel) table.getModel();
+		model.setFilter( item -> {
+			if( valueType != null &&
+				!valueType.equals( "(any)" ) &&
+				!valueType.equals( typeOfValue( item.value ) ) )
+			  return false;
+
+			String lkey = item.key.toLowerCase( Locale.ENGLISH );
+			for( String f : filters ) {
+				if( lkey.contains( f ) )
+					return true;
+			}
+			return false;
+		} );
+
+		Preferences prefs = getPrefs();
+		prefs.put( "filter", filter );
+		prefs.put( "valueType", valueType );
+	}
+
+	private String typeOfValue( Object value ) {
+		if( value instanceof Boolean )
+			return "Boolean";
+		if( value instanceof Border )
+			return "Border";
+		if( value instanceof Color )
+			return "Color";
+		if( value instanceof Dimension )
+			return "Dimension";
+		if( value instanceof Float )
+			return "Float";
+		if( value instanceof Font )
+			return "Font";
+		if( value instanceof Icon )
+			return "Icon";
+		if( value instanceof Insets )
+			return "Insets";
+		if( value instanceof Integer )
+			return "Integer";
+		if( value instanceof String )
+			return "String";
+		return "(other)";
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		frame = new JFrame();
 		panel = new JPanel();
+		filterPanel = new JPanel();
+		flterLabel = new JLabel();
+		filterField = new JTextField();
+		valueTypeLabel = new JLabel();
+		valueTypeField = new JComboBox<>();
 		scrollPane = new JScrollPane();
 		table = new JTable();
 
@@ -191,6 +279,55 @@ public class FlatUIDefaultsInspector
 			{
 				panel.setLayout(new BorderLayout());
 
+				//======== filterPanel ========
+				{
+					filterPanel.setLayout(new GridBagLayout());
+					((GridBagLayout)filterPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0};
+					((GridBagLayout)filterPanel.getLayout()).rowHeights = new int[] {0, 0};
+					((GridBagLayout)filterPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
+					((GridBagLayout)filterPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+
+					//---- flterLabel ----
+					flterLabel.setText("Filter:");
+					flterLabel.setLabelFor(filterField);
+					flterLabel.setDisplayedMnemonic('F');
+					filterPanel.add(flterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+						new Insets(0, 0, 0, 10), 0, 0));
+					filterPanel.add(filterField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+						new Insets(0, 0, 0, 10), 0, 0));
+
+					//---- valueTypeLabel ----
+					valueTypeLabel.setText("Value Type:");
+					valueTypeLabel.setLabelFor(valueTypeField);
+					valueTypeLabel.setDisplayedMnemonic('T');
+					filterPanel.add(valueTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+						new Insets(0, 0, 0, 10), 0, 0));
+
+					//---- valueTypeField ----
+					valueTypeField.setModel(new DefaultComboBoxModel<>(new String[] {
+						"(any)",
+						"Boolean",
+						"Border",
+						"Color",
+						"Dimension",
+						"Float",
+						"Font",
+						"Icon",
+						"Insets",
+						"Integer",
+						"String",
+						"(other)"
+					}));
+					valueTypeField.addActionListener(e -> filterChanged());
+					filterPanel.add(valueTypeField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+						new Insets(0, 0, 0, 0), 0, 0));
+				}
+				panel.add(filterPanel, BorderLayout.NORTH);
+
 				//======== scrollPane ========
 				{
 					scrollPane.setViewportView(table);
@@ -205,6 +342,11 @@ public class FlatUIDefaultsInspector
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JFrame frame;
 	private JPanel panel;
+	private JPanel filterPanel;
+	private JLabel flterLabel;
+	private JTextField filterField;
+	private JLabel valueTypeLabel;
+	private JComboBox<String> valueTypeField;
 	private JScrollPane scrollPane;
 	private JTable table;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
@@ -221,10 +363,25 @@ public class FlatUIDefaultsInspector
 	private static class ItemsTableModel
 		extends AbstractTableModel
 	{
-		private final Item[] items;
+		private final Item[] allItems;
+		private Item[] items;
 
 		ItemsTableModel( Item[] items ) {
-			this.items = items;
+			this.allItems = this.items = items;
+		}
+
+		void setFilter( Predicate<Item> filter ) {
+			if( filter != null ) {
+				ArrayList<Item> list = new ArrayList<>( allItems.length );
+				for( Item item : allItems ) {
+					if( filter.test( item ) )
+						list.add( item );
+				}
+				items = list.toArray( new Item[list.size()] );
+			} else
+				items = allItems;
+
+			fireTableDataChanged();
 		}
 
 		@Override
