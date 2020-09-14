@@ -428,14 +428,14 @@ public class FlatUIDefaultsInspector
 				Color color = (Color) value;
 				HSLColor hslColor = new HSLColor( color );
 				if( color.getAlpha() == 255 ) {
-					valueStr = String.format( "#%06x    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
-						color.getRGB() & 0xffffff,
+					valueStr = String.format( "%s    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
+						color2hex( color ),
 						color.getRed(), color.getGreen(), color.getBlue(),
 						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
 						(int) hslColor.getLuminance() );
 				} else {
-					valueStr = String.format( "#%06x%02x   rgba(%d, %d, %d, %d)    hsla(%d, %d, %d, %d)",
-						color.getRGB() & 0xffffff, color.getAlpha(),
+					valueStr = String.format( "%s   rgba(%d, %d, %d, %d)    hsla(%d, %d, %d, %d)",
+						color2hex( color ),
 						color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
 						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
 						(int) hslColor.getLuminance(), (int) (hslColor.getAlpha() * 100) );
@@ -466,6 +466,23 @@ public class FlatUIDefaultsInspector
 				valueStr = String.valueOf( value );
 
 			return valueStr;
+		}
+
+		private String color2hex( Color color ) {
+			int rgb = color.getRGB();
+			boolean hasAlpha = color.getAlpha() != 255;
+
+			boolean useShortFormat =
+				(rgb & 0xf0000000) == (rgb & 0xf000000) << 4 &&
+				(rgb & 0xf00000) == (rgb & 0xf0000) << 4 &&
+				(rgb & 0xf000) == (rgb & 0xf00) << 4 &&
+				(rgb & 0xf0) == (rgb & 0xf) << 4;
+
+			if( useShortFormat ) {
+				int srgb = ((rgb & 0xf0000) >> 8) | ((rgb & 0xf00) >> 4) | (rgb & 0xf);
+				return String.format( hasAlpha ? "#%03X%X" : "#%03X", srgb, (rgb >> 24) & 0xf );
+			} else
+				return String.format( hasAlpha ? "#%06X%02X" : "#%06X", rgb & 0xffffff, (rgb >> 24) & 0xff );
 		}
 	}
 
