@@ -18,8 +18,6 @@ package com.formdev.flatlaf.extras;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -109,6 +107,10 @@ public class FlatUIDefaultsInspector
 				filterChanged();
 			}
 		} );
+		delegateKey( KeyEvent.VK_UP, "unitScrollUp" );
+		delegateKey( KeyEvent.VK_DOWN, "unitScrollDown" );
+		delegateKey( KeyEvent.VK_PAGE_UP, "scrollUp" );
+		delegateKey( KeyEvent.VK_PAGE_DOWN, "scrollDown" );
 
 		// initialize table
 		Item[] items = getUIDefaultsItems();
@@ -140,6 +142,23 @@ public class FlatUIDefaultsInspector
 			filterField.setText( filter );
 		if( valueType != null )
 			valueTypeField.setSelectedItem( valueType );
+	}
+
+	private void delegateKey( int keyCode, String actionKey ) {
+		KeyStroke keyStroke = KeyStroke.getKeyStroke( keyCode, 0 );
+		String actionMapKey = "delegate-" + actionKey;
+
+		filterField.getInputMap().put( keyStroke, actionMapKey );
+		filterField.getActionMap().put( actionMapKey, new AbstractAction() {
+			@Override
+			public void actionPerformed( ActionEvent e ) {
+				Action action = scrollPane.getActionMap().get( actionKey );
+				if( action != null ) {
+					action.actionPerformed( new ActionEvent( scrollPane,
+						e.getID(), actionKey, e.getWhen(), e.getModifiers() ) );
+				}
+			}
+		} );
 	}
 
 	private Item[] getUIDefaultsItems() {
