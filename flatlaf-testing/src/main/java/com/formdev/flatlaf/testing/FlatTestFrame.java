@@ -74,6 +74,10 @@ public class FlatTestFrame
 				System.setProperty( FlatSystemProperties.UI_SCALE, scaleFactor );
 		}
 
+		// install inspectors
+		FlatInspector.install( "ctrl shift alt X" );
+		FlatUIDefaultsInspector.install( "ctrl shift alt Y" );
+
 		// disable animated Laf change
 		System.setProperty( "flatlaf.animatedLafChange", "false" );
 
@@ -633,7 +637,7 @@ public class FlatTestFrame
 		themesPanel = new IJThemesPanel();
 
 		//======== this ========
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 

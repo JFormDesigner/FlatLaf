@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "13.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -7,7 +7,7 @@ new FormModel {
 			name: "this"
 			"$locationPolicy": 2
 			"$sizePolicy": 2
-			"defaultCloseOperation": 2
+			"defaultCloseOperation": 3
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {

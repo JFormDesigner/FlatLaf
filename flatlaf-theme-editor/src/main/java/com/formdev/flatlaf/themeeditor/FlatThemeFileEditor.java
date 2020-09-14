@@ -29,6 +29,7 @@ import javax.swing.*;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
+import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -51,6 +52,7 @@ public class FlatThemeFileEditor
 		SwingUtilities.invokeLater( () -> {
 			FlatLightLaf.install();
 			FlatInspector.install( "ctrl alt shift X" );
+			FlatUIDefaultsInspector.install( "ctrl shift alt Y" );
 
 			FlatThemeFileEditor frame = new FlatThemeFileEditor();
 
@@ -85,7 +87,7 @@ public class FlatThemeFileEditor
 		themeEditorArea = new FlatThemeEditorPane();
 
 		//======== this ========
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setTitle("FlatLaf Theme Editor");
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
