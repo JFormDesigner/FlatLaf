@@ -5,7 +5,7 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "frame"
-			"title": "UI Defaults"
+			"title": "UI Defaults Inspector"
 			"defaultCloseOperation": 2
 			"$sizePolicy": 2
 			"$locationPolicy": 2

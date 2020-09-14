@@ -18,6 +18,8 @@ package com.formdev.flatlaf.extras;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -55,6 +57,9 @@ public class FlatUIDefaultsInspector
 
 	private static FlatUIDefaultsInspector inspector;
 
+	private final String title;
+	private final PropertyChangeListener lafListener = this::lafChanged;
+
 	/**
 	 * Installs a key listener into the application that allows enabling and disabling
 	 * the UI inspector with the given keystroke (e.g. "ctrl shift alt Y").
@@ -89,6 +94,9 @@ public class FlatUIDefaultsInspector
 	private FlatUIDefaultsInspector() {
 		initComponents();
 
+		title = frame.getTitle();
+		updateWindowTitle();
+
 		panel.setBorder( new ScaledEmptyBorder( 10, 10, 10, 10 ) );
 		filterPanel.setBorder( new ScaledEmptyBorder( 0, 0, 10, 0 ) );
 
@@ -113,8 +121,7 @@ public class FlatUIDefaultsInspector
 		delegateKey( KeyEvent.VK_PAGE_DOWN, "scrollDown" );
 
 		// initialize table
-		Item[] items = getUIDefaultsItems();
-		table.setModel( new ItemsTableModel( items ) );
+		table.setModel( new ItemsTableModel( getUIDefaultsItems() ) );
 		table.setDefaultRenderer( String.class, new KeyRenderer() );
 		table.setDefaultRenderer( Item.class, new ValueRenderer() );
 
@@ -142,6 +149,20 @@ public class FlatUIDefaultsInspector
 			filterField.setText( filter );
 		if( valueType != null )
 			valueTypeField.setSelectedItem( valueType );
+
+		UIManager.addPropertyChangeListener( lafListener );
+
+		// register F5 key to refresh
+		((JComponent)frame.getContentPane()).registerKeyboardAction(
+			e -> refresh(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_F5, 0, false ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
+		// register ESC key to close frame
+		((JComponent)frame.getContentPane()).registerKeyboardAction(
+			e -> frame.dispose(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 	}
 
 	private void delegateKey( int keyCode, String actionKey ) {
@@ -159,6 +180,18 @@ public class FlatUIDefaultsInspector
 				}
 			}
 		} );
+	}
+
+	void lafChanged( PropertyChangeEvent e ) {
+		if( "lookAndFeel".equals( e.getPropertyName() ) )
+			refresh();
+	}
+
+	void refresh() {
+		ItemsTableModel model = (ItemsTableModel) table.getModel();
+		model.setItems( getUIDefaultsItems() );
+
+		updateWindowTitle();
 	}
 
 	private Item[] getUIDefaultsItems() {
@@ -188,6 +221,10 @@ public class FlatUIDefaultsInspector
 		return items.toArray( new Item[items.size()] );
 	}
 
+	private void updateWindowTitle() {
+		frame.setTitle( title + "  -  " + UIManager.getLookAndFeel().getName() );
+	}
+
 	private void saveWindowBounds() {
 		Preferences prefs = getPrefs();
 		prefs.putInt( "x", frame.getX() );
@@ -205,6 +242,8 @@ public class FlatUIDefaultsInspector
 	}
 
 	private void windowClosed() {
+		UIManager.removePropertyChangeListener( lafListener );
+
 		inspector = null;
 	}
 
@@ -275,7 +314,7 @@ public class FlatUIDefaultsInspector
 
 		//======== frame ========
 		{
-			frame.setTitle("UI Defaults");
+			frame.setTitle("UI Defaults Inspector");
 			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			frame.addWindowListener(new WindowAdapter() {
 				@Override
@@ -382,14 +421,22 @@ public class FlatUIDefaultsInspector
 	private static class ItemsTableModel
 		extends AbstractTableModel
 	{
-		private final Item[] allItems;
+		private Item[] allItems;
 		private Item[] items;
+		private Predicate<Item> filter;
 
 		ItemsTableModel( Item[] items ) {
 			this.allItems = this.items = items;
 		}
 
+		void setItems( Item[] items ) {
+			this.allItems = this.items = items;
+			setFilter( filter );
+		}
+
 		void setFilter( Predicate<Item> filter ) {
+			this.filter = filter;
+
 			if( filter != null ) {
 				ArrayList<Item> list = new ArrayList<>( allItems.length );
 				for( Item item : allItems ) {
