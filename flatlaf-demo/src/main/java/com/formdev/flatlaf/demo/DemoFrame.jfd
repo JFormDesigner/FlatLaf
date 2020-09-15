@@ -275,6 +275,11 @@ new FormModel {
 						} )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem2"
+						"text": "Disabled Item"
+						"enabled": false
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "menuItem1"
 						"text": "<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>"
 					} )

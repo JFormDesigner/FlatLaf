@@ -12,6 +12,8 @@ FlatLaf Change Log
 - `FlatUIDefaultsInspector` added (see [FlatLaf Extras](flatlaf-extras)). A
   simple UI defaults inspector that shows a window with all UI defaults used in
   current theme (look and feel).
+- Made disabled text color slightly lighter in dark themes for better
+  readability. (issue #174)
 
 #### Fixed bugs
 

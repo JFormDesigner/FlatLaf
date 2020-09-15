@@ -305,6 +305,7 @@ class DemoFrame
 		JMenuItem projectViewMenuItem = new JMenuItem();
 		JMenuItem structureViewMenuItem = new JMenuItem();
 		JMenuItem propertiesViewMenuItem = new JMenuItem();
+		JMenuItem menuItem2 = new JMenuItem();
 		JMenuItem menuItem1 = new JMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
@@ -505,6 +506,11 @@ class DemoFrame
 					menu1.add(propertiesViewMenuItem);
 				}
 				viewMenu.add(menu1);
+
+				//---- menuItem2 ----
+				menuItem2.setText("Disabled Item");
+				menuItem2.setEnabled(false);
+				viewMenu.add(menuItem2);
 
 				//---- menuItem1 ----
 				menuItem1.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
