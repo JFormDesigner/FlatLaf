@@ -34,6 +34,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
@@ -199,6 +200,7 @@ public class FlatUIDefaultsInspector
 
 	private Item[] getUIDefaultsItems() {
 		UIDefaults defaults = UIManager.getDefaults();
+		UIDefaults lafDefaults = UIManager.getLookAndFeelDefaults();
 
 		ArrayList<Item> items = new ArrayList<>( defaults.size() );
 		Enumeration<Object> e = defaults.keys();
@@ -214,7 +216,7 @@ public class FlatUIDefaultsInspector
 			if( value instanceof Class )
 				continue;
 
-			items.add( new Item( String.valueOf( key ), value ) );
+			items.add( new Item( String.valueOf( key ), value, lafDefaults.get( key ) ) );
 		}
 
 		return items.toArray( new Item[items.size()] );
@@ -417,29 +419,34 @@ public class FlatUIDefaultsInspector
 	private static class Item {
 		final String key;
 		final Object value;
+		final Object lafValue;
 
 		private String valueStr;
 
-		Item( String key, Object value ) {
+		Item( String key, Object value, Object lafValue ) {
 			this.key = key;
 			this.value = value;
+			this.lafValue = lafValue;
 		}
 
 		String getValueAsString() {
-			if( valueStr != null )
-				return valueStr;
+			if( valueStr == null )
+				valueStr = valueAsString( value );
+			return valueStr;
+		}
 
+		static String valueAsString( Object value ) {
 			if( value instanceof Color ) {
 				Color color = (Color) value;
 				HSLColor hslColor = new HSLColor( color );
 				if( color.getAlpha() == 255 ) {
-					valueStr = String.format( "%s    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
+					return String.format( "%s    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
 						color2hex( color ),
 						color.getRed(), color.getGreen(), color.getBlue(),
 						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
 						(int) hslColor.getLuminance() );
 				} else {
-					valueStr = String.format( "%s   rgba(%d, %d, %d, %d)    hsla(%d, %d, %d, %d)",
+					return String.format( "%s   rgba(%d, %d, %d, %d)    hsla(%d, %d, %d, %d)",
 						color2hex( color ),
 						color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
 						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
@@ -447,33 +454,32 @@ public class FlatUIDefaultsInspector
 				}
 			} else if( value instanceof Insets ) {
 				Insets insets = (Insets) value;
-				valueStr = insets.top + "," + insets.left + "," + insets.bottom + "," + insets.right;
+				return insets.top + "," + insets.left + "," + insets.bottom + "," + insets.right;
 			} else if( value instanceof Dimension ) {
 				Dimension dim = (Dimension) value;
-				valueStr = dim.width + "," + dim.height;
+				return dim.width + "," + dim.height;
 			} else if( value instanceof Font ) {
 				Font font = (Font) value;
-				valueStr = font.getFamily() + " " + font.getSize();
+				String s = font.getFamily() + " " + font.getSize();
 				if( font.isBold() )
-					valueStr += " bold";
+					s += " bold";
 				if( font.isItalic() )
-					valueStr += " italic";
+					s += " italic";
+				return s;
 			} else if( value instanceof Icon ) {
 				Icon icon = (Icon) value;
-				valueStr = icon.getIconWidth() + "x" + icon.getIconHeight() + "   " + icon.getClass().getName();
+				return icon.getIconWidth() + "x" + icon.getIconHeight() + "   " + icon.getClass().getName();
 			} else if( value instanceof ActionMap ) {
 				ActionMap actionMap = (ActionMap) value;
-				valueStr = "ActionMap (" + actionMap.size() + ")";
+				return "ActionMap (" + actionMap.size() + ")";
 			} else if( value instanceof InputMap ) {
 				InputMap inputMap = (InputMap) value;
-				valueStr = "InputMap (" + inputMap.size() + ")";
+				return "InputMap (" + inputMap.size() + ")";
 			} else
-				valueStr = String.valueOf( value );
-
-			return valueStr;
+				return String.valueOf( value );
 		}
 
-		private String color2hex( Color color ) {
+		private static String color2hex( Color color ) {
 			int rgb = color.getRGB();
 			boolean hasAlpha = color.getAlpha() != 255;
 
@@ -623,6 +629,8 @@ public class FlatUIDefaultsInspector
 		extends Renderer
 	{
 		private String key;
+		private boolean isOverridden;
+		private Icon overriddenIcon;
 
 		@Override
 		public Component getTableCellRendererComponent( JTable table, Object value,
@@ -630,7 +638,16 @@ public class FlatUIDefaultsInspector
 		{
 			key = (String) value;
 			init( table, key, isSelected, row );
-			setToolTipText( key );
+
+			Item item = (Item) table.getValueAt( row, 1 );
+			isOverridden = (item.lafValue != item.value);
+
+			// set tooltip
+			String toolTipText = key;
+			if( isOverridden )
+				toolTipText += "    \n\nLaF UI default value was overridden with UIManager.put(key,value).";
+			setToolTipText( toolTipText );
+
 			return super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
 		}
 
@@ -663,6 +680,23 @@ public class FlatUIDefaultsInspector
 			} else {
 				g.setColor( getForeground() );
 				FlatUIUtils.drawString( this, g, clippedText, x, y );
+			}
+
+			if( isOverridden ) {
+				if( overriddenIcon == null ) {
+					overriddenIcon = new FlatAbstractIcon( 16, 16, null ) {
+						@Override
+						protected void paintIcon( Component c, Graphics2D g2 ) {
+							g2.setColor( FlatUIUtils.getUIColor( "Actions.Red", Color.red ) );
+							g2.setStroke( new BasicStroke( 2f ) );
+							g2.draw( FlatUIUtils.createPath( false, 3,10, 8,5, 13,10 ) );
+						}
+					};
+				}
+
+				overriddenIcon.paintIcon( this, g,
+					getWidth() - overriddenIcon.getIconWidth(),
+					(getHeight() - overriddenIcon.getIconHeight()) / 2 );
 			}
 
 			paintSeparator( g );
@@ -706,7 +740,14 @@ public class FlatUIDefaultsInspector
 				setIcon( new SafeIcon( icon ) );
 			}
 
-			setToolTipText( String.valueOf( item.value ) );
+			// set tooltip
+			String toolTipText = String.valueOf( item.value );
+			if( item.value != item.lafValue ) {
+				toolTipText += "    \n\nLaF UI default value was overridden with UIManager.put(key,value):\n    "
+					+ Item.valueAsString( item.lafValue ) + "\n    " + String.valueOf( item.lafValue );
+			}
+			setToolTipText( toolTipText );
+
 			return this;
 		}
 
