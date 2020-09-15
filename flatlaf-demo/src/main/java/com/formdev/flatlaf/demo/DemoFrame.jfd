@@ -390,7 +390,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "showUIDefaultsInspectorMenuItem"
-						"text": "Show UIDefaults Inspector"
+						"text": "Show UI Defaults Inspector"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showUIDefaultsInspector", false ) )
 					} )
 				} )

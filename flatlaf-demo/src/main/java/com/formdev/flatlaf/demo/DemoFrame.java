@@ -600,7 +600,7 @@ class DemoFrame
 				optionsMenu.add(showHintsMenuItem);
 
 				//---- showUIDefaultsInspectorMenuItem ----
-				showUIDefaultsInspectorMenuItem.setText("Show UIDefaults Inspector");
+				showUIDefaultsInspectorMenuItem.setText("Show UI Defaults Inspector");
 				showUIDefaultsInspectorMenuItem.addActionListener(e -> showUIDefaultsInspector());
 				optionsMenu.add(showUIDefaultsInspectorMenuItem);
 			}

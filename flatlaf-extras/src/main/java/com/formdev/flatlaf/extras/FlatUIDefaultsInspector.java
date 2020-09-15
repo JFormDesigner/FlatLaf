@@ -408,6 +408,9 @@ public class FlatUIDefaultsInspector
 					filterPanel.add(flterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 						new Insets(0, 0, 0, 10), 0, 0));
+
+					//---- filterField ----
+					filterField.putClientProperty("JTextField.placeholderText", "enter one or more filter strings, separated by space characters");
 					filterPanel.add(filterField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 						new Insets(0, 0, 0, 10), 0, 0));
