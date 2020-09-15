@@ -599,6 +599,22 @@ public class FlatUIDefaultsInspector
 				g.fillRect( 0, 0, getWidth() - 1, 1 );
 			}
 		}
+
+		protected String layoutLabel( FontMetrics fm, String text, Rectangle textR ) {
+			int width = getWidth();
+			int height = getHeight();
+			Insets insets = getInsets();
+
+			Rectangle viewR = new Rectangle( insets.left, insets.top,
+				width - (insets.left + insets.right),
+				height - (insets.top + insets.bottom) );
+			Rectangle iconR = new Rectangle();
+
+			return SwingUtilities.layoutCompoundLabel( this, fm, text, null,
+				getVerticalAlignment(), getHorizontalAlignment(),
+				getVerticalTextPosition(), getHorizontalTextPosition(),
+				viewR, iconR, textR, getIconTextGap() );
+		}
 	}
 
 	//---- class KeyRenderer --------------------------------------------------
@@ -620,24 +636,12 @@ public class FlatUIDefaultsInspector
 
 		@Override
 		protected void paintComponent( Graphics g ) {
-			int width = getWidth();
-			int height = getHeight();
-			Insets insets = getInsets();
-			FontMetrics fm = getFontMetrics( getFont() );
-
 			g.setColor( getBackground() );
-			g.fillRect( 0, 0, width, height );
+			g.fillRect( 0, 0, getWidth(), getHeight() );
 
-			Rectangle viewR = new Rectangle( insets.left, insets.top,
-				width - (insets.left + insets.right),
-				height - (insets.top + insets.bottom) );
-			Rectangle iconR = new Rectangle();
+			FontMetrics fm = getFontMetrics( getFont() );
 			Rectangle textR = new Rectangle();
-
-			String clippedText = SwingUtilities.layoutCompoundLabel( this, fm, key, null,
-				getVerticalAlignment(), getHorizontalAlignment(),
-				getVerticalTextPosition(), getHorizontalTextPosition(),
-				viewR, iconR, textR, getIconTextGap() );
+			String clippedText = layoutLabel( fm, key, textR );
 			int x = textR.x;
 			int y = textR.y + fm.getAscent();
 
@@ -670,11 +674,13 @@ public class FlatUIDefaultsInspector
 	private static class ValueRenderer
 		extends Renderer
 	{
+		private Item item;
+
 		@Override
 		public Component getTableCellRendererComponent( JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column )
 		{
-			Item item = (Item) value;
+			item = (Item) value;
 			init( table, item.key, isSelected, row );
 
 			// reset background, foreground and icon
@@ -706,7 +712,38 @@ public class FlatUIDefaultsInspector
 
 		@Override
 		protected void paintComponent( Graphics g ) {
-			super.paintComponent( g );
+			if( item.value instanceof Color ) {
+				// fill background
+				g.setColor( getBackground() );
+				g.fillRect( 0, 0, getWidth(), getHeight() );
+
+				// layout text
+				FontMetrics fm = getFontMetrics( getFont() );
+				String text = getText();
+				Rectangle textR = new Rectangle();
+				layoutLabel( fm, text, textR );
+				int x = textR.x;
+				int y = textR.y + fm.getAscent();
+
+				g.setColor( getForeground() );
+
+				// paint rgb() and hsl() horizontally aligned
+				int rgbIndex = text.indexOf( "rgb" );
+				int hslIndex = text.indexOf( "hsl" );
+				if( rgbIndex > 0 && hslIndex > rgbIndex ) {
+					String hexText = text.substring( 0, rgbIndex );
+					String rgbText = text.substring( rgbIndex, hslIndex );
+					String hslText = text.substring( hslIndex );
+					int hexWidth = Math.max( fm.stringWidth( hexText ), fm.stringWidth( "#DDDDDD    " ) );
+					int rgbWidth = Math.max( fm.stringWidth( rgbText ), fm.stringWidth( "rgb(444, 444, 444)    " ) );
+					FlatUIUtils.drawString( this, g, hexText, x, y );
+					FlatUIUtils.drawString( this, g, rgbText, x + hexWidth, y );
+					FlatUIUtils.drawString( this, g, hslText, x + hexWidth + rgbWidth, y );
+				} else
+					FlatUIUtils.drawString( this, g, text, x, y );
+			} else
+				super.paintComponent( g );
+
 			paintSeparator( g );
 		}
 	}
