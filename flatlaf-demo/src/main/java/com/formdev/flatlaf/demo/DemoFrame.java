@@ -69,6 +69,13 @@ class DemoFrame
 		} );
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+
+		System.exit( 0 );
+	}
+
 	private void showHints() {
 		Hint fontMenuHint = new Hint(
 			"Use 'Font' menu to increase/decrease font size or try different fonts.",
@@ -109,7 +116,7 @@ class DemoFrame
 	}
 
 	private void exitActionPerformed() {
-		System.exit( 0 );
+		dispose();
 	}
 
 	private void aboutActionPerformed() {
@@ -337,7 +344,7 @@ class DemoFrame
 
 		//======== this ========
 		setTitle("FlatLaf Demo");
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 

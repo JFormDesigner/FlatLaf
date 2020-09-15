@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "this"
 			"title": "FlatLaf Demo"
-			"defaultCloseOperation": 3
+			"defaultCloseOperation": 2
 			"$locationPolicy": 2
 			"$sizePolicy": 2
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {

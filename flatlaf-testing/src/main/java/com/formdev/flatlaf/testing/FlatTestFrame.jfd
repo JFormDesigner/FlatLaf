@@ -7,7 +7,7 @@ new FormModel {
 			name: "this"
 			"$locationPolicy": 2
 			"$sizePolicy": 2
-			"defaultCloseOperation": 3
+			"defaultCloseOperation": 2
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane"
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {

@@ -253,6 +253,13 @@ public class FlatTestFrame
 		} );
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+
+		System.exit( 0 );
+	}
+
 	private void updateTitle() {
 		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
 		float userScaleFactor = UIScale.getUserScaleFactor();
@@ -637,7 +644,7 @@ public class FlatTestFrame
 		themesPanel = new IJThemesPanel();
 
 		//======== this ========
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
