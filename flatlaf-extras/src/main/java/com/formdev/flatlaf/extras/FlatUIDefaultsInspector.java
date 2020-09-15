@@ -23,8 +23,10 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.prefs.Preferences;
 import javax.swing.*;
@@ -68,6 +70,8 @@ public class FlatUIDefaultsInspector
 
 	private final String title;
 	private final PropertyChangeListener lafListener = this::lafChanged;
+	private final PropertyChangeListener lafDefaultsListener = this::lafDefaultsChanged;
+	private boolean refreshPending;
 
 	/**
 	 * Installs a key listener into the application that allows enabling and disabling
@@ -164,6 +168,7 @@ public class FlatUIDefaultsInspector
 			valueTypeField.setSelectedItem( valueType );
 
 		UIManager.addPropertyChangeListener( lafListener );
+		UIManager.getDefaults().addPropertyChangeListener( lafDefaultsListener );
 
 		// register F5 key to refresh
 		((JComponent)frame.getContentPane()).registerKeyboardAction(
@@ -217,6 +222,17 @@ public class FlatUIDefaultsInspector
 			refresh();
 	}
 
+	void lafDefaultsChanged( PropertyChangeEvent e ) {
+		if( refreshPending )
+			return;
+
+		refreshPending = true;
+		EventQueue.invokeLater( () -> {
+			refresh();
+			refreshPending = false;
+		} );
+	}
+
 	void refresh() {
 		ItemsTableModel model = (ItemsTableModel) table.getModel();
 		model.setItems( getUIDefaultsItems() );
@@ -228,10 +244,11 @@ public class FlatUIDefaultsInspector
 		UIDefaults defaults = UIManager.getDefaults();
 		UIDefaults lafDefaults = UIManager.getLookAndFeelDefaults();
 
-		ArrayList<Item> items = new ArrayList<>( defaults.size() );
-		Enumeration<Object> e = defaults.keys();
-		while( e.hasMoreElements() ) {
-			Object key = e.nextElement();
+		Set<Entry<Object, Object>> defaultsSet = defaults.entrySet();
+		ArrayList<Item> items = new ArrayList<>( defaultsSet.size() );
+		HashSet<Object> keys = new HashSet<>( defaultsSet.size() );
+		for( Entry<Object,Object> e : defaultsSet ) {
+			Object key = e.getKey();
 
 			// ignore non-string keys
 			if( !(key instanceof String) )
@@ -242,7 +259,17 @@ public class FlatUIDefaultsInspector
 			if( value instanceof Class )
 				continue;
 
-			items.add( new Item( String.valueOf( key ), value, lafDefaults.get( key ) ) );
+			// avoid duplicate keys if UIManager.put(key,value) was used to override a LaF value
+			if( !keys.add( key ) )
+				continue;
+
+			// check whether key was overridden using UIManager.put(key,value)
+			Object lafValue = null;
+			if( defaults.containsKey( key ) )
+				lafValue = lafDefaults.get( key );
+
+			// add item
+			items.add( new Item( String.valueOf( key ), value, lafValue ) );
 		}
 
 		return items.toArray( new Item[items.size()] );
@@ -270,6 +297,7 @@ public class FlatUIDefaultsInspector
 
 	private void windowClosed() {
 		UIManager.removePropertyChangeListener( lafListener );
+		UIManager.getDefaults().removePropertyChangeListener( lafDefaultsListener );
 
 		inspector = null;
 	}
@@ -691,7 +719,7 @@ public class FlatUIDefaultsInspector
 			init( table, key, isSelected, row );
 
 			Item item = (Item) table.getValueAt( row, 1 );
-			isOverridden = (item.lafValue != item.value);
+			isOverridden = (item.lafValue != null);
 
 			// set tooltip
 			String toolTipText = key;
@@ -793,7 +821,7 @@ public class FlatUIDefaultsInspector
 
 			// set tooltip
 			String toolTipText = String.valueOf( item.value );
-			if( item.value != item.lafValue ) {
+			if( item.lafValue != null ) {
 				toolTipText += "    \n\nLaF UI default value was overridden with UIManager.put(key,value):\n    "
 					+ Item.valueAsString( item.lafValue ) + "\n    " + String.valueOf( item.lafValue );
 			}
