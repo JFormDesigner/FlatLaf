@@ -21,6 +21,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -28,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
@@ -35,7 +37,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
+import com.formdev.flatlaf.ui.FlatBorder;
+import com.formdev.flatlaf.ui.FlatEmptyBorder;
+import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.ui.FlatMarginBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import com.formdev.flatlaf.util.UIScale;
@@ -469,13 +476,38 @@ public class FlatUIDefaultsInspector
 			} else if( value instanceof Icon ) {
 				Icon icon = (Icon) value;
 				return icon.getIconWidth() + "x" + icon.getIconHeight() + "   " + icon.getClass().getName();
+			} else if( value instanceof Border ) {
+				Border border = (Border) value;
+				if( border instanceof FlatLineBorder ) {
+					FlatLineBorder lineBorder = (FlatLineBorder) border;
+					return valueAsString( lineBorder.getUnscaledBorderInsets() )
+						+ "  " + Item.color2hex( lineBorder.getLineColor() )
+						+ "  " + lineBorder.getLineThickness()
+						+ "    " + border.getClass().getName();
+				} else if( border instanceof EmptyBorder ) {
+					Insets insets = (border instanceof FlatEmptyBorder)
+						? ((FlatEmptyBorder)border).getUnscaledBorderInsets()
+						: ((EmptyBorder)border).getBorderInsets();
+					return valueAsString( insets ) + "    " + border.getClass().getName();
+				} else if( border instanceof FlatBorder || border instanceof FlatMarginBorder )
+					return border.getClass().getName();
+				else
+					return String.valueOf( value );
+			} else if( value instanceof GrayFilter ) {
+				GrayFilter grayFilter = (GrayFilter) value;
+				return grayFilter.getBrightness() + "," + grayFilter.getContrast()
+					+ " " + grayFilter.getAlpha() + "    " + grayFilter.getClass().getName();
 			} else if( value instanceof ActionMap ) {
 				ActionMap actionMap = (ActionMap) value;
 				return "ActionMap (" + actionMap.size() + ")";
 			} else if( value instanceof InputMap ) {
 				InputMap inputMap = (InputMap) value;
 				return "InputMap (" + inputMap.size() + ")";
-			} else
+			} else if( value instanceof Object[] )
+				return Arrays.toString( (Object[]) value );
+			else if( value instanceof int[] )
+				return Arrays.toString( (int[]) value );
+			else
 				return String.valueOf( value );
 		}
 
@@ -802,11 +834,17 @@ public class FlatUIDefaultsInspector
 
 		@Override
 		public void paintIcon( Component c, Graphics g, int x, int y ) {
+			int width = getIconWidth();
+			int height = getIconHeight();
+
 			try {
+				g.setColor( UIManager.getColor( "Panel.background" ) );
+				g.fillRect( x, y, width, height );
+
 				icon.paintIcon( c, g, x, y );
 			} catch( Exception ex ) {
 				g.setColor( Color.red );
-				g.drawRect( x, y, getIconWidth() - 1, getIconHeight() - 1 );
+				g.drawRect( x, y, width - 1, height - 1 );
 			}
 		}
 

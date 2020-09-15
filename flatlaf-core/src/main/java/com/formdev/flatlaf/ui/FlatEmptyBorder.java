@@ -57,4 +57,8 @@ public class FlatEmptyBorder
 		insets.bottom = scale( bottom );
 		return insets;
 	}
+
+	public Insets getUnscaledBorderInsets() {
+		return super.getBorderInsets();
+	}
 }
