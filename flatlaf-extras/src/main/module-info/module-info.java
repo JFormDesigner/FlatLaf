@@ -19,6 +19,7 @@
  */
 module com.formdev.flatlaf.extras {
 	requires java.desktop;
+	requires java.prefs;
 	requires static com.kitfox.svg; // optional at runtime
 	requires com.formdev.flatlaf;
 
