@@ -87,6 +87,7 @@ public class FlatUIDefaultsInspector
 
 	public static void show() {
 		if( inspector != null ) {
+			inspector.ensureOnScreen();
 			inspector.frame.toFront();
 			return;
 		}
@@ -143,9 +144,10 @@ public class FlatUIDefaultsInspector
 		int width = prefs.getInt( "width", UIScale.scale( 600 ) );
 		int height = prefs.getInt( "height", UIScale.scale( 800 ) );
 		frame.setSize( width, height );
-		if( x >= 0 && y >= 0 )
+		if( x != -1 && y != -1 ) {
 			frame.setLocation( x, y );
-		else
+			ensureOnScreen();
+		} else
 			frame.setLocationRelativeTo( null );
 
 		// restore column widths
@@ -191,6 +193,23 @@ public class FlatUIDefaultsInspector
 				}
 			}
 		} );
+	}
+
+	private void ensureOnScreen() {
+		Rectangle frameBounds = frame.getBounds();
+		boolean onScreen = false;
+		for( GraphicsDevice screen : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices() ) {
+			GraphicsConfiguration gc = screen.getDefaultConfiguration();
+			Rectangle screenBounds = FlatUIUtils.subtractInsets( gc.getBounds(),
+				Toolkit.getDefaultToolkit().getScreenInsets( gc ) );
+			if( frameBounds.intersects( screenBounds ) ) {
+				onScreen = true;
+				break;
+			}
+		}
+
+		if( !onScreen )
+			frame.setLocationRelativeTo( null );
 	}
 
 	void lafChanged( PropertyChangeEvent e ) {
