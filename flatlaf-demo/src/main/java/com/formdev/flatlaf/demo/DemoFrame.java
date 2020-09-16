@@ -73,7 +73,7 @@ class DemoFrame
 	public void dispose() {
 		super.dispose();
 
-		System.exit( 0 );
+		FlatUIDefaultsInspector.hide();
 	}
 
 	private void showHints() {
