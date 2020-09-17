@@ -86,6 +86,9 @@ public class FlatHtmlTest
 		label10 = new JLabel();
 		radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		radioButtonMenuItem2 = new JRadioButtonMenuItem();
+		label14 = new JLabel();
+		label15 = new JLabel();
+		label16 = new JLabel();
 		label1 = new JLabel();
 		scrollPane15 = new JScrollPane();
 		editorPane1 = new JEditorPane();
@@ -146,6 +149,7 @@ public class FlatHtmlTest
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- label5 ----
@@ -173,7 +177,7 @@ public class FlatHtmlTest
 			panel1.add(button2, "cell 2 1");
 
 			//---- label11 ----
-			label11.setText("text");
+			label11.setText("JToggleButton:");
 			panel1.add(label11, "cell 0 2");
 
 			//---- toggleButton1 ----
@@ -187,7 +191,7 @@ public class FlatHtmlTest
 			panel1.add(toggleButton2, "cell 2 2");
 
 			//---- label12 ----
-			label12.setText("text");
+			label12.setText("JCheckBox:");
 			panel1.add(label12, "cell 0 3");
 
 			//---- checkBox1 ----
@@ -199,7 +203,7 @@ public class FlatHtmlTest
 			panel1.add(checkBox2, "cell 2 3");
 
 			//---- label13 ----
-			label13.setText("text");
+			label13.setText("JRadioButton:");
 			panel1.add(label13, "cell 0 4");
 
 			//---- radioButton1 ----
@@ -265,6 +269,20 @@ public class FlatHtmlTest
 			radioButtonMenuItem2.setText("Some text");
 			radioButtonMenuItem2.setSelected(true);
 			panel1.add(radioButtonMenuItem2, "cell 2 8");
+
+			//---- label14 ----
+			label14.setText("JToolTip:");
+			panel1.add(label14, "cell 0 9");
+
+			//---- label15 ----
+			label15.setText("(move mouse here)");
+			label15.setToolTipText("<html>Some <b>Bold</b> Text");
+			panel1.add(label15, "cell 1 9");
+
+			//---- label16 ----
+			label16.setText("(move mouse here)");
+			label16.setToolTipText("Some text");
+			panel1.add(label16, "cell 2 9");
 		}
 		add(panel1, "cell 4 0 1 3,aligny top,growy 0");
 
@@ -379,6 +397,9 @@ public class FlatHtmlTest
 	private JLabel label10;
 	private JRadioButtonMenuItem radioButtonMenuItem1;
 	private JRadioButtonMenuItem radioButtonMenuItem2;
+	private JLabel label14;
+	private JLabel label15;
+	private JLabel label16;
 	private JLabel label1;
 	private JScrollPane scrollPane15;
 	private JEditorPane editorPane1;
