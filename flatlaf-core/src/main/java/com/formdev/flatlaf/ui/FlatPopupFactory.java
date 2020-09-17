@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.MouseInfo;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -42,6 +43,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * A popup factory that adds drop shadows to popups on Windows.
@@ -60,6 +62,12 @@ public class FlatPopupFactory
 	public Popup getPopup( Component owner, Component contents, int x, int y )
 		throws IllegalArgumentException
 	{
+		Point pt = fixToolTipLocation( owner, contents, x, y );
+		if( pt != null ) {
+			x = pt.x;
+			y = pt.y;
+		}
+
 		if( !isDropShadowPainted( owner, contents ) )
 			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, false ), contents );
 
@@ -198,6 +206,31 @@ public class FlatPopupFactory
 			// ignore
 			return null;
 		}
+	}
+
+	/**
+	 * Usually ToolTipManager places a tooltip at (mouseLocation.x, mouseLocation.y + 20).
+	 * In case that the tooltip would be partly outside of the screen,
+	 * ToolTipManagerthe changes the location so that the entire tooltip fits on screen.
+	 * But this can place the tooltip under the mouse location and hide the owner component.
+	 * <p>
+	 * This method checks whether the current mouse location is within tooltip bounds
+	 * and corrects the y-location so that the tooltip is placed above the mouse location.
+	 */
+	private Point fixToolTipLocation( Component owner, Component contents, int x, int y ) {
+		if( !(contents instanceof JToolTip) )
+			return null;
+
+		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+		Dimension tipSize = contents.getPreferredSize();
+
+		// check whether mouse location is within tooltip bounds
+		Rectangle tipBounds = new Rectangle( x, y, tipSize.width, tipSize.height );
+		if( !tipBounds.contains( mouseLocation ) )
+			return null;
+
+		// place tooltip above mouse location
+		return new Point( x, mouseLocation.y - tipSize.height - UIScale.scale( 20 ) );
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
