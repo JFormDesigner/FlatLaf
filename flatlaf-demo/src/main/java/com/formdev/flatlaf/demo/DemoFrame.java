@@ -105,6 +105,11 @@ class DemoFrame
 		FlatUIDefaultsInspector.show();
 	}
 
+	private void newActionPerformed() {
+		NewDialog newDialog = new NewDialog( this );
+		newDialog.setVisible( true );
+	}
+
 	private void openActionPerformed() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.showOpenDialog( this );
@@ -361,7 +366,7 @@ class DemoFrame
 				newMenuItem.setText("New");
 				newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				newMenuItem.setMnemonic('N');
-				newMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+				newMenuItem.addActionListener(e -> newActionPerformed());
 				fileMenu.add(newMenuItem);
 
 				//---- openMenuItem ----

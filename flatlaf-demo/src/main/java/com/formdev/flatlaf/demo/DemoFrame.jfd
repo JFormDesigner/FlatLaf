@@ -131,7 +131,7 @@ new FormModel {
 						"text": "New"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 78, 4226, false )
 						"mnemonic": 78
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "newActionPerformed", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "openMenuItem"
