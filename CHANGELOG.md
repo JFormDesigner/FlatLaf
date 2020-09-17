@@ -1,12 +1,12 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.42
 
 #### New features and improvements
 
 - Demo: Improved "SplitPane & Tabs" and "Data Components" tabs.
-- Menu items "File > Open" and "File > Save As" now show file choosers.
+- Demo: Menu items "File > Open" and "File > Save As" now show file choosers.
 - InternalFrame: Support draggable border for resizing frame inside of the
   visible frame border. (issue #121)
 - `FlatUIDefaultsInspector` added (see [FlatLaf Extras](flatlaf-extras)). A
