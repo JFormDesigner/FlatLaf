@@ -78,6 +78,10 @@ public class FlatWindowDecorationsTest
 		menuBarEmbeddedCheckBox.setEnabled( window instanceof JFrame );
 		maximizedBoundsCheckBox.setEnabled( window instanceof Frame );
 
+		addMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
+		removeMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
+		changeMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
+
 		boolean windowHasIcons = (window != null && !window.getIconImages().isEmpty());
 		iconNoneRadioButton.setEnabled( windowHasIcons );
 		iconTestAllRadioButton.setEnabled( windowHasIcons );
@@ -246,9 +250,9 @@ public class FlatWindowDecorationsTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBarCheckBox = new JCheckBox();
-		JButton addMenuButton = new JButton();
-		JButton removeMenuButton = new JButton();
-		JButton changeMenuButton = new JButton();
+		addMenuButton = new JButton();
+		removeMenuButton = new JButton();
+		changeMenuButton = new JButton();
 		menuBarEmbeddedCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
@@ -652,6 +656,9 @@ public class FlatWindowDecorationsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox menuBarCheckBox;
+	private JButton addMenuButton;
+	private JButton removeMenuButton;
+	private JButton changeMenuButton;
 	private JCheckBox menuBarEmbeddedCheckBox;
 	private JCheckBox resizableCheckBox;
 	private JCheckBox maximizedBoundsCheckBox;

@@ -26,6 +26,9 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "addMenuButton"
 				"text": "Add menu"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addMenu", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0 1 2,align left top,grow 0 0"
@@ -33,6 +36,9 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "removeMenuButton"
 				"text": "Remove menu"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "removeMenu", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0 1 2,align left top,grow 0 0"
@@ -40,6 +46,9 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "changeMenuButton"
 				"text": "Change menu"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeMenu", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0 1 2,align left top,grow 0 0"
