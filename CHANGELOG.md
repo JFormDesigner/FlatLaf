@@ -14,6 +14,7 @@ FlatLaf Change Log
   current theme (look and feel).
 - Made disabled text color slightly lighter in dark themes for better
   readability. (issue #174)
+- PasswordField: Support disabling Caps Lock warning icon. (issue #172)
 
 #### Fixed bugs
 

@@ -60,6 +60,7 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
+ * @uiDefault PasswordField.showCapsLock			boolean
  * @uiDefault PasswordField.capsLockIcon			Icon
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  *
@@ -71,6 +72,7 @@ public class FlatPasswordFieldUI
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
+	protected boolean showCapsLock;
 	protected Icon capsLockIcon;
 
 	private FocusListener focusListener;
@@ -88,6 +90,7 @@ public class FlatPasswordFieldUI
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
+		showCapsLock = UIManager.getBoolean( "PasswordField.showCapsLock" );
 		capsLockIcon = UIManager.getIcon( "PasswordField.capsLockIcon" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", false );
@@ -160,6 +163,9 @@ public class FlatPasswordFieldUI
 	}
 
 	protected void paintCapsLock( Graphics g ) {
+		if( !showCapsLock )
+			return;
+
 		JTextComponent c = getComponent();
 		if( !FlatUIUtils.isPermanentFocusOwner( c ) ||
 			!Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK ) )

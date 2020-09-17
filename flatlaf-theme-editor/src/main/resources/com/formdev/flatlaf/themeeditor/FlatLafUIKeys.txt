@@ -452,6 +452,7 @@ PasswordField.margin
 PasswordField.placeholderForeground
 PasswordField.selectionBackground
 PasswordField.selectionForeground
+PasswordField.showCapsLock
 PasswordFieldUI
 Popup.dropShadowColor
 Popup.dropShadowInsets

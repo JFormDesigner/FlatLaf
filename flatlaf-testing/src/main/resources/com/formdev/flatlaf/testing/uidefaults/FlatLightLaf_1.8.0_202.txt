@@ -657,6 +657,7 @@ PasswordField.margin           2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 PasswordField.placeholderForeground #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionBackground #2675bf    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.showCapsLock     true
 PasswordFieldUI                com.formdev.flatlaf.ui.FlatPasswordFieldUI
 
 
