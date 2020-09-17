@@ -22,6 +22,8 @@ FlatLaf Change Log
   another screen with different scaling factor. (issue #166)
 - Custom window decorations: Fixed wrong window bounds when resizing window to
   another screen with different scaling factor. (issue #166)
+- Fixed occasional wrong positioning of heavy weight popups when using multiple
+  screens with different scaling factors. (issue #166)
 
 
 ## 0.41

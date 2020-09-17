@@ -33,6 +33,7 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
+import javax.swing.JWindow;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.RootPaneContainer;
@@ -60,18 +61,90 @@ public class FlatPopupFactory
 		throws IllegalArgumentException
 	{
 		if( !isDropShadowPainted( owner, contents ) )
-			return new NonFlashingPopup( super.getPopup( owner, contents, x, y ), contents );
+			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, false ), contents );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
 		if( SystemInfo.isMacOS || SystemInfo.isLinux ) {
-			Popup popup = getHeavyWeightPopup( owner, contents, x, y );
+			Popup popup = getPopupForScreenOfOwner( owner, contents, x, y, true );
 			if( popup == null )
-				popup = super.getPopup( owner, contents, x, y );
+				popup = getPopupForScreenOfOwner( owner, contents, x, y, false );
 			return new NonFlashingPopup( popup, contents );
 		}
 
 		// create drop shadow popup
-		return new DropShadowPopup( super.getPopup( owner, contents, x, y ), owner, contents );
+		return new DropShadowPopup( getPopupForScreenOfOwner( owner, contents, x, y, false ), owner, contents );
+	}
+
+	/**
+	 * Creates a popup for the screen that the owner component is on.
+	 * <p>
+	 * PopupFactory caches heavy weight popup windows and reuses them.
+	 * On a dual screen setup, if the popup owner has moved from one screen to the other one,
+	 * then the cached heavy weight popup window may be connected to the wrong screen.
+	 * If the two screens use different scaling factors, then the popup location and size
+	 * is scaled when the popup becomes visible, which shows the popup in the wrong location
+	 * (or on wrong screen). The re-scaling is done in WWindowPeer.setBounds() (Java 9+).
+	 * <p>
+	 * To fix this, dispose popup windows that are on wrong screen and get new popup.
+	 * <p>
+	 * This is a workaround for https://bugs.openjdk.java.net/browse/JDK-8224608
+	 */
+	private Popup getPopupForScreenOfOwner( Component owner, Component contents, int x, int y, boolean forceHeavyWeight )
+		throws IllegalArgumentException
+	{
+		int count = 0;
+
+		for(;;) {
+			// create new or get cached popup
+			Popup popup = forceHeavyWeight
+				? getHeavyWeightPopup( owner, contents, x, y )
+				: super.getPopup( owner, contents, x, y );
+
+			// get heavy weight popup window; is null for non-heavy weight popup
+			Window popupWindow = SwingUtilities.windowForComponent( contents );
+
+			// check whether heavy weight popup window is on same screen as owner component
+			if( popupWindow == null ||
+				popupWindow.getGraphicsConfiguration() == owner.getGraphicsConfiguration() )
+			  return popup;
+
+			// remove contents component from popup window
+			if( popupWindow instanceof JWindow )
+				((JWindow)popupWindow).getContentPane().removeAll();
+
+			// dispose unused popup
+			// (do not invoke popup.hide() because this would cache the popup window)
+			popupWindow.dispose();
+
+			// avoid endless loop (should newer happen; PopupFactory cache size is 5)
+			if( ++count > 10 )
+				return popup;
+		}
+	}
+
+	/**
+	 * Shows the given popup and, if necessary, fixes the location of a heavy weight popup window.
+	 * <p>
+	 * On a dual screen setup, where screens use different scale factors, it may happen
+	 * that the window location changes when showing a heavy weight popup window.
+	 * E.g. when opening an dialog on the secondary screen and making combobox popup visible.
+	 * <p>
+	 * This is a workaround for https://bugs.openjdk.java.net/browse/JDK-8224608
+	 */
+	private static void showPopupAndFixLocation( Popup popup, Window popupWindow ) {
+		if( popupWindow != null ) {
+			// remember location of heavy weight popup window
+			int x = popupWindow.getX();
+			int y = popupWindow.getY();
+
+			popup.show();
+
+			// restore popup window location if it has changed
+			// (probably scaled when screens use different scale factors)
+			if( popupWindow.getX() != x || popupWindow.getY() != y )
+				popupWindow.setLocation( x, y );
+		} else
+			popup.show();
 	}
 
 	private boolean isDropShadowPainted( Component owner, Component contents ) {
@@ -157,7 +230,7 @@ public class FlatPopupFactory
 		@Override
 		public void show() {
 			if( delegate != null ) {
-				delegate.show();
+				showPopupAndFixLocation( delegate, popupWindow );
 
 				// increase tooltip size if necessary because it may be too small on HiDPI screens
 				//    https://bugs.openjdk.java.net/browse/JDK-8213535
@@ -249,7 +322,7 @@ public class FlatPopupFactory
 				// create heavy weight popup for drop shadow
 				int x = popupWindow.getX() - insets.left;
 				int y = popupWindow.getY() - insets.top;
-				dropShadowDelegate = getHeavyWeightPopup( owner, dropShadowPanel, x, y );
+				dropShadowDelegate = getPopupForScreenOfOwner( owner, dropShadowPanel, x, y, true );
 
 				// make drop shadow popup window translucent
 				dropShadowWindow = SwingUtilities.windowForComponent( dropShadowPanel );
@@ -291,7 +364,7 @@ public class FlatPopupFactory
 		@Override
 		public void show() {
 			if( dropShadowDelegate != null )
-				dropShadowDelegate.show();
+				showPopupAndFixLocation( dropShadowDelegate, dropShadowWindow );
 
 			if( mediumWeightPanel != null )
 				showMediumWeightDropShadow();
