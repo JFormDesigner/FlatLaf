@@ -87,7 +87,7 @@ public class UIDefaultsDump
 		System.setProperty( "sun.java2d.uiScale", "1x" );
 		System.setProperty( FlatSystemProperties.UI_SCALE, "1x" );
 
-		File dir = new File( "src/main/resources/com/formdev/flatlaf/testing/uidefaults" );
+		File dir = new File( "dumps/uidefaults" );
 
 		dump( FlatLightLaf.class.getName(), dir );
 		dump( FlatDarkLaf.class.getName(), dir );
