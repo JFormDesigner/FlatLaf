@@ -1,0 +1,120 @@
+Java version:   1.8.0_202
+OS:             Windows 10
+
+Screen scale:   1.0
+Text scale:     1.5
+
+Java scale:     1.0
+Font scale:     1.5
+
+DnD.gestureMotionThreshold               2
+awt.dynamicLayoutSupported               true
+awt.file.showAttribCol                   false
+awt.file.showHiddenFiles                 true
+awt.font.desktophints                    {Text-specific antialiasing enable key=LCD HRGB antialiasing text mode, Text-specific LCD contrast key=120}
+awt.mouse.numButtons                     5
+awt.multiClickInterval                   500
+awt.wheelMousePresent                    true
+win.3d.backgroundColor                   java.awt.Color[r=240,g=240,b=240]
+win.3d.darkShadowColor                   java.awt.Color[r=105,g=105,b=105]
+win.3d.highlightColor                    java.awt.Color[r=255,g=255,b=255]
+win.3d.lightColor                        java.awt.Color[r=227,g=227,b=227]
+win.3d.shadowColor                       java.awt.Color[r=160,g=160,b=160]
+win.ansiFixed.font                       java.awt.Font[family=Monospaced,name=Monospaced,style=plain,size=13]
+win.ansiFixed.font.height                13
+win.ansiVar.font                         java.awt.Font[family=Microsoft Sans Serif,name=Microsoft Sans Serif,style=plain,size=11]
+win.ansiVar.font.height                  11
+win.button.textColor                     java.awt.Color[r=0,g=0,b=0]
+win.caret.width                          1
+win.defaultGUI.font                      java.awt.Font[family=Tahoma,name=Tahoma,style=plain,size=11]
+win.defaultGUI.font.height               11
+win.desktop.backgroundColor              java.awt.Color[r=0,g=0,b=0]
+win.deviceDefault.font                   java.awt.Font[family=Dialog,name=Dialog,style=bold,size=16]
+win.deviceDefault.font.height            16
+win.drag.height                          4
+win.drag.width                           4
+win.frame.activeBorderColor              java.awt.Color[r=180,g=180,b=180]
+win.frame.activeCaptionColor             java.awt.Color[r=153,g=180,b=209]
+win.frame.activeCaptionGradientColor     java.awt.Color[r=185,g=209,b=234]
+win.frame.backgroundColor                java.awt.Color[r=255,g=255,b=255]
+win.frame.captionButtonHeight            27
+win.frame.captionButtonWidth             44
+win.frame.captionFont                    java.awt.Font[family=Segoe UI,name=Segoe UI,style=plain,size=18]
+win.frame.captionFont.height             18
+win.frame.captionGradientsOn             true
+win.frame.captionHeight                  27
+win.frame.captionTextColor               java.awt.Color[r=0,g=0,b=0]
+win.frame.color                          java.awt.Color[r=100,g=100,b=100]
+win.frame.fullWindowDragsOn              true
+win.frame.inactiveBorderColor            java.awt.Color[r=244,g=247,b=252]
+win.frame.inactiveCaptionColor           java.awt.Color[r=191,g=205,b=219]
+win.frame.inactiveCaptionGradientColor   java.awt.Color[r=215,g=228,b=242]
+win.frame.inactiveCaptionTextColor       java.awt.Color[r=0,g=0,b=0]
+win.frame.sizingBorderWidth              5
+win.frame.smallCaptionButtonHeight       27
+win.frame.smallCaptionButtonWidth        22
+win.frame.smallCaptionFont               java.awt.Font[family=Segoe UI,name=Segoe UI,style=plain,size=18]
+win.frame.smallCaptionFont.height        18
+win.frame.smallCaptionHeight             27
+win.frame.textColor                      java.awt.Color[r=0,g=0,b=0]
+win.highContrast.on                      false
+win.icon.font                            java.awt.Font[family=Segoe UI,name=Segoe UI,style=plain,size=18]
+win.icon.font.height                     18
+win.icon.hspacing                        114
+win.icon.titleWrappingOn                 true
+win.icon.vspacing                        75
+win.item.highlightColor                  java.awt.Color[r=0,g=120,b=215]
+win.item.highlightTextColor              java.awt.Color[r=255,g=255,b=255]
+win.item.hotTrackedColor                 java.awt.Color[r=0,g=102,b=204]
+win.item.hotTrackingOn                   true
+win.mdi.backgroundColor                  java.awt.Color[r=171,g=171,b=171]
+win.menu.backgroundColor                 java.awt.Color[r=240,g=240,b=240]
+win.menu.buttonWidth                     19
+win.menu.font                            java.awt.Font[family=Segoe UI,name=Segoe UI,style=plain,size=18]
+win.menu.font.height                     18
+win.menu.height                          27
+win.menu.keyboardCuesOn                  false
+win.menu.textColor                       java.awt.Color[r=0,g=0,b=0]
+win.menubar.backgroundColor              java.awt.Color[r=240,g=240,b=240]
+win.messagebox.font                      java.awt.Font[family=Segoe UI,name=Segoe UI,style=plain,size=18]
+win.messagebox.font.height               18
+win.oemFixed.font                        java.awt.Font[family=Dialog,name=8514oem,style=plain,size=18]
+win.oemFixed.font.height                 18
+win.properties.version                   3
+win.scrollbar.backgroundColor            java.awt.Color[r=200,g=200,b=200]
+win.scrollbar.height                     17
+win.scrollbar.width                      17
+win.sound.asterisk                       WinPlaySound(SystemAsterisk)
+win.sound.close                          WinPlaySound(Close)
+win.sound.default                        WinPlaySound(.Default)
+win.sound.exclamation                    WinPlaySound(SystemExclamation)
+win.sound.exit                           WinPlaySound(SystemExit)
+win.sound.hand                           WinPlaySound(SystemHand)
+win.sound.maximize                       WinPlaySound(Maximize)
+win.sound.menuCommand                    WinPlaySound(MenuCommand)
+win.sound.menuPopup                      WinPlaySound(MenuPopup)
+win.sound.minimize                       WinPlaySound(Minimize)
+win.sound.open                           WinPlaySound(Open)
+win.sound.question                       WinPlaySound(SystemQuestion)
+win.sound.restoreDown                    WinPlaySound(RestoreDown)
+win.sound.restoreUp                      WinPlaySound(RestoreUp)
+win.sound.start                          WinPlaySound(SystemStart)
+win.status.font                          java.awt.Font[family=Segoe UI,name=Segoe UI,style=plain,size=18]
+win.status.font.height                   18
+win.system.font                          java.awt.Font[family=Dialog,name=Dialog,style=bold,size=16]
+win.system.font.height                   16
+win.systemFixed.font                     java.awt.Font[family=Dialog,name=Fixedsys,style=plain,size=18]
+win.systemFixed.font.height              18
+win.text.fontSmoothingContrast           1200
+win.text.fontSmoothingOn                 true
+win.text.fontSmoothingOrientation        1
+win.text.fontSmoothingType               2
+win.text.grayedTextColor                 java.awt.Color[r=109,g=109,b=109]
+win.tooltip.backgroundColor              java.awt.Color[r=255,g=255,b=225]
+win.tooltip.font                         java.awt.Font[family=Segoe UI,name=Segoe UI,style=plain,size=18]
+win.tooltip.font.height                  18
+win.tooltip.textColor                    java.awt.Color[r=0,g=0,b=0]
+win.xpstyle.colorName                    NormalColor
+win.xpstyle.dllName                      C:\Windows\resources\themes\Aero\Aero.msstyles
+win.xpstyle.sizeName                     NormalSize
+win.xpstyle.themeActive                  true
