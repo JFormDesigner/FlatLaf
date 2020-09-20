@@ -1269,6 +1269,7 @@ infoText                       #ff0000    javax.swing.plaf.ColorUIResource [UI]
 
 #---- laf ----
 
+laf.dark                       false
 laf.scaleFactor                [active] 1.0
 
 

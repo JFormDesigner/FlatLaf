@@ -344,6 +344,10 @@ public abstract class FlatLaf
 	public UIDefaults getDefaults() {
 		UIDefaults defaults = super.getDefaults();
 
+		// add flag that indicates whether the LaF is light or dark
+		// (can be queried without using FlatLaf API)
+		defaults.put( "laf.dark", isDark() );
+
 		// add resource bundle for localized texts
 		defaults.addResourceBundle( "com.formdev.flatlaf.resources.Bundle" );
 
