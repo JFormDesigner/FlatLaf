@@ -64,6 +64,7 @@ public class FlatScreenInfo
 		System.out.println();
 
 		System.out.println( "Java version:   " + System.getProperty( "java.version" ) );
+		System.out.println( "Java vendor:    " + System.getProperty( "java.vendor" ) );
 
 		for( GraphicsDevice gd : screenDevices ) {
 			GraphicsConfiguration gc = gd.getDefaultConfiguration();
@@ -101,6 +102,19 @@ public class FlatScreenInfo
 			System.out.printf( "Insets:  left %d / right %d / top %d / bottom %d%n",
 				screenInsets.left, screenInsets.right, screenInsets.top, screenInsets.bottom );
 			System.out.println( "Scale:   " + toString( scaleX, scaleY ) );
+
+			// report warning if screen bounds intersects with another screen
+			// https://github.com/JFormDesigner/FlatLaf/issues/177
+			for( GraphicsDevice gd2 : screenDevices ) {
+				if( gd2 == gd )
+					continue;
+
+				Rectangle bounds2 = gd2.getDefaultConfiguration().getBounds();
+				if( bounds2.intersects( bounds ) ) {
+					System.out.println( "Warning: bounds of this screen intersect with bounds of " + gd2.getIDstring() );
+					System.out.println( "         this can lead to misplaced popups" );
+				}
+			}
 		}
 	}
 
