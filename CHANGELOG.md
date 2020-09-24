@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## Unreleased
+## 0.43-SNAPSHOT
 
 #### New features and improvements
 
@@ -16,6 +16,9 @@ FlatLaf Change Log
 
 - ComboBox: If using own `JTextField` as editor, default text field border is
   now removed to avoid duplicate border.
+- FileChooser: Fixed localizing special Windows folders (e.g. "Documents") and
+  enabled hiding known file extensions (if enabled in Windows Explorer). (issue
+  #178)
 
 
 ## 0.42

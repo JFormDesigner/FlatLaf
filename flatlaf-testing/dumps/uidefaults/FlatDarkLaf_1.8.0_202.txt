@@ -285,7 +285,7 @@ FileChooser.listViewIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatFil
 FileChooser.newFolderIcon      [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserNewFolderIcon [UI]
 FileChooser.readOnly           false
 FileChooser.upFolderIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileChooserUpFolderIcon [UI]
-FileChooser.useSystemExtensionHiding false
+FileChooser.useSystemExtensionHiding true
 FileChooser.usesSingleFilePane true
 FileChooserUI                  com.formdev.flatlaf.ui.FlatFileChooserUI
 
