@@ -1,6 +1,16 @@
 FlatLaf Change Log
 ==================
 
+## Unreleased
+
+#### New features and improvements
+
+- TabbedPane: Made tabs separator color lighter in dark themes so that it is
+  easier to recognize the tabbed pane.
+- TabbedPane: Added top and bottom tab insets to avoid that large tab icons are
+  painted over active tab underline.
+
+
 ## 0.42
 
 #### New features and improvements

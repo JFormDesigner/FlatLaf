@@ -131,6 +131,27 @@ public class FlatContainerTest
 		return tab;
 	}
 
+	private void tabIconsChanged() {
+		boolean showTabIcons = tabIconsCheckBox.isSelected();
+
+		setTabIcons( tabbedPane1, showTabIcons );
+		setTabIcons( tabbedPane2, showTabIcons );
+		setTabIcons( tabbedPane3, showTabIcons );
+		setTabIcons( tabbedPane4, showTabIcons );
+
+		tabIconSizeSpinner.setEnabled( showTabIcons );
+	}
+
+	private void setTabIcons( JTabbedPane tabbedPane, boolean showTabIcons ) {
+		Object iconSize = tabIconSizeSpinner.getValue();
+
+		Icon icon = showTabIcons
+			? new ImageIcon( getClass().getResource( "/com/formdev/flatlaf/testing/test" + iconSize + ".png" ) )
+			: null;
+		tabbedPane.setIconAt( 0, icon );
+		tabbedPane.setIconAt( 1, icon );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -154,6 +175,8 @@ public class FlatContainerTest
 		tabScrollCheckBox = new JCheckBox();
 		showTabSeparatorsCheckBox = new JCheckBox();
 		hasFullBorderCheckBox = new JCheckBox();
+		tabIconsCheckBox = new JCheckBox();
+		tabIconSizeSpinner = new JSpinner();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -262,7 +285,9 @@ public class FlatContainerTest
 					"[]" +
 					"[]" +
 					"[]" +
-					"[]",
+					"[]" +
+					"[fill]" +
+					"[fill]",
 					// rows
 					"[center]"));
 
@@ -287,6 +312,17 @@ public class FlatContainerTest
 				hasFullBorderCheckBox.setText("Show content border");
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
 				panel14.add(hasFullBorderCheckBox, "cell 3 0,alignx left,growx 0");
+
+				//---- tabIconsCheckBox ----
+				tabIconsCheckBox.setText("Tab icons");
+				tabIconsCheckBox.addActionListener(e -> tabIconsChanged());
+				panel14.add(tabIconsCheckBox, "cell 4 0");
+
+				//---- tabIconSizeSpinner ----
+				tabIconSizeSpinner.setModel(new SpinnerListModel(new String[] {"16", "24", "32", "48", "64"}));
+				tabIconSizeSpinner.setEnabled(false);
+				tabIconSizeSpinner.addChangeListener(e -> tabIconsChanged());
+				panel14.add(tabIconSizeSpinner, "cell 5 0");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -303,6 +339,8 @@ public class FlatContainerTest
 	private JCheckBox tabScrollCheckBox;
 	private JCheckBox showTabSeparatorsCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
+	private JCheckBox tabIconsCheckBox;
+	private JSpinner tabIconSizeSpinner;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Tab1Panel ----------------------------------------------------
