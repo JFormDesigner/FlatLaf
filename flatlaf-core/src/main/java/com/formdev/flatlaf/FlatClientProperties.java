@@ -217,6 +217,14 @@ public interface FlatClientProperties
 	String TABBED_PANE_SHOW_TAB_SEPARATORS = "JTabbedPane.showTabSeparators";
 
 	/**
+	 * Specifies whether the separator between tabs area and content area should be shown.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TABBED_PANE_SHOW_CONTENT_SEPARATOR = "JTabbedPane.showContentSeparator";
+
+	/**
 	 * Specifies whether a full border is painted around a tabbed pane.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>

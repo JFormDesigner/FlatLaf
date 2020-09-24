@@ -17,10 +17,12 @@
 package com.formdev.flatlaf.testing;
 
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
+import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_CONTENT_SEPARATOR;
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_TAB_SEPARATORS;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.jgoodies.forms.layout.*;
 import net.miginfocom.swing.*;
 
@@ -65,18 +67,24 @@ public class FlatContainerTest
 
 	private void showTabSeparatorsChanged() {
 		Boolean showTabSeparators = showTabSeparatorsCheckBox.isSelected() ? true : null;
-		tabbedPane1.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
-		tabbedPane2.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
-		tabbedPane3.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
-		tabbedPane4.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
+		putTabbedPanesClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
+	}
+
+	private void hideContentSeparatorChanged() {
+		Boolean showContentSeparator = hideContentSeparatorCheckBox.isSelected() ? false : null;
+		putTabbedPanesClientProperty( TABBED_PANE_SHOW_CONTENT_SEPARATOR, showContentSeparator );
 	}
 
 	private void hasFullBorderChanged() {
 		Boolean hasFullBorder = hasFullBorderCheckBox.isSelected() ? true : null;
-		tabbedPane1.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
-		tabbedPane2.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
-		tabbedPane3.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
-		tabbedPane4.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
+		putTabbedPanesClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
+	}
+
+	private void putTabbedPanesClientProperty( String key, Object value ) {
+		tabbedPane1.putClientProperty( key, value );
+		tabbedPane2.putClientProperty( key, value );
+		tabbedPane3.putClientProperty( key, value );
+		tabbedPane4.putClientProperty( key, value );
 	}
 
 	private void moreTabsChanged() {
@@ -98,7 +106,7 @@ public class FlatContainerTest
 			addTab( tabbedPane, "Tab 8", "tab content 8" );
 		} else {
 			int tabCount = tabbedPane.getTabCount();
-			if( tabCount > 3 ) {
+			if( tabCount > 4 ) {
 				for( int i = 0; i < 5; i++ )
 					tabbedPane.removeTabAt( tabbedPane.getTabCount() - 1 );
 			}
@@ -115,6 +123,8 @@ public class FlatContainerTest
 
 			addTab( tabbedPane, "Disabled", "tab content 3" );
 			tabbedPane.setEnabledAt( 2, false );
+
+			tabbedPane.addTab( "Tab 4", new JLabel( "non-opaque content", SwingConstants.CENTER ) );
 		}
 	}
 
@@ -146,7 +156,7 @@ public class FlatContainerTest
 		Object iconSize = tabIconSizeSpinner.getValue();
 
 		Icon icon = showTabIcons
-			? new ImageIcon( getClass().getResource( "/com/formdev/flatlaf/testing/test" + iconSize + ".png" ) )
+			? new ScaledImageIcon( new ImageIcon( getClass().getResource( "/com/formdev/flatlaf/testing/test" + iconSize + ".png" ) ) )
 			: null;
 		tabbedPane.setIconAt( 0, icon );
 		tabbedPane.setIconAt( 1, icon );
@@ -174,6 +184,7 @@ public class FlatContainerTest
 		moreTabsCheckBox = new JCheckBox();
 		tabScrollCheckBox = new JCheckBox();
 		showTabSeparatorsCheckBox = new JCheckBox();
+		hideContentSeparatorCheckBox = new JCheckBox();
 		hasFullBorderCheckBox = new JCheckBox();
 		tabIconsCheckBox = new JCheckBox();
 		tabIconSizeSpinner = new JSpinner();
@@ -285,6 +296,7 @@ public class FlatContainerTest
 					"[]" +
 					"[]" +
 					"[]" +
+					"[fill]" +
 					"[]" +
 					"[fill]" +
 					"[fill]",
@@ -308,21 +320,26 @@ public class FlatContainerTest
 				showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
 				panel14.add(showTabSeparatorsCheckBox, "cell 2 0");
 
+				//---- hideContentSeparatorCheckBox ----
+				hideContentSeparatorCheckBox.setText("Hide content separator");
+				hideContentSeparatorCheckBox.addActionListener(e -> hideContentSeparatorChanged());
+				panel14.add(hideContentSeparatorCheckBox, "cell 3 0");
+
 				//---- hasFullBorderCheckBox ----
 				hasFullBorderCheckBox.setText("Show content border");
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
-				panel14.add(hasFullBorderCheckBox, "cell 3 0,alignx left,growx 0");
+				panel14.add(hasFullBorderCheckBox, "cell 4 0,alignx left,growx 0");
 
 				//---- tabIconsCheckBox ----
 				tabIconsCheckBox.setText("Tab icons");
 				tabIconsCheckBox.addActionListener(e -> tabIconsChanged());
-				panel14.add(tabIconsCheckBox, "cell 4 0");
+				panel14.add(tabIconsCheckBox, "cell 5 0");
 
 				//---- tabIconSizeSpinner ----
 				tabIconSizeSpinner.setModel(new SpinnerListModel(new String[] {"16", "24", "32", "48", "64"}));
 				tabIconSizeSpinner.setEnabled(false);
 				tabIconSizeSpinner.addChangeListener(e -> tabIconsChanged());
-				panel14.add(tabIconSizeSpinner, "cell 5 0");
+				panel14.add(tabIconSizeSpinner, "cell 6 0");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -338,6 +355,7 @@ public class FlatContainerTest
 	private JCheckBox moreTabsCheckBox;
 	private JCheckBox tabScrollCheckBox;
 	private JCheckBox showTabSeparatorsCheckBox;
+	private JCheckBox hideContentSeparatorCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
 	private JCheckBox tabIconsCheckBox;
 	private JSpinner tabIconSizeSpinner;

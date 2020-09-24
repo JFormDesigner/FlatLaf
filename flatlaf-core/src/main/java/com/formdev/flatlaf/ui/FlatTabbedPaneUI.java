@@ -196,6 +196,7 @@ public class FlatTabbedPaneUI
 
 				switch( e.getPropertyName() ) {
 					case TABBED_PANE_SHOW_TAB_SEPARATORS:
+					case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
 					case TABBED_PANE_HAS_FULL_BORDER:
 					case TABBED_PANE_TAB_HEIGHT:
 						tabPane.revalidate();
@@ -255,6 +256,9 @@ public class FlatTabbedPaneUI
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
+		if( contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+			return new Insets( 0, 0, 0, 0 );
+
 		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
 		int sh = scale( contentSeparatorHeight );
 		Insets insets = hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 );
@@ -359,7 +363,10 @@ public class FlatTabbedPaneUI
 	protected void paintTabSelection( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
 		// increase clip bounds in scroll-tab-layout to paint over the separator line
 		Rectangle clipBounds = isScrollTabLayout() ? g.getClipBounds() : null;
-		if( clipBounds != null ) {
+		if( clipBounds != null &&
+			this.contentSeparatorHeight != 0 &&
+			clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+		{
 			Rectangle newClipBounds = new Rectangle( clipBounds );
 			int contentSeparatorHeight = scale( this.contentSeparatorHeight );
 			switch( tabPlacement ) {
@@ -436,43 +443,49 @@ public class FlatTabbedPaneUI
 
 		// remove tabs from bounds
 		switch( tabPlacement ) {
-			case LEFT:
-				x += calculateTabAreaWidth( tabPlacement, runCount, maxTabWidth );
-				if( tabsOverlapBorder )
-					x -= tabAreaInsets.right;
-				w -= (x - insets.left);
-				break;
-			case RIGHT:
-				w -= calculateTabAreaWidth( tabPlacement, runCount, maxTabWidth );
-				if( tabsOverlapBorder )
-					w += tabAreaInsets.left;
-				break;
-			case BOTTOM:
-				h -= calculateTabAreaHeight( tabPlacement, runCount, maxTabHeight );
-				if( tabsOverlapBorder )
-					h += tabAreaInsets.top;
-				break;
 			case TOP:
 			default:
 				y += calculateTabAreaHeight( tabPlacement, runCount, maxTabHeight );
 				if( tabsOverlapBorder )
 					y -= tabAreaInsets.bottom;
 				h -= (y - insets.top);
+				break;
+
+			case BOTTOM:
+				h -= calculateTabAreaHeight( tabPlacement, runCount, maxTabHeight );
+				if( tabsOverlapBorder )
+					h += tabAreaInsets.top;
+				break;
+
+			case LEFT:
+				x += calculateTabAreaWidth( tabPlacement, runCount, maxTabWidth );
+				if( tabsOverlapBorder )
+					x -= tabAreaInsets.right;
+				w -= (x - insets.left);
+				break;
+
+			case RIGHT:
+				w -= calculateTabAreaWidth( tabPlacement, runCount, maxTabWidth );
+				if( tabsOverlapBorder )
+					w += tabAreaInsets.left;
+				break;
 		}
 
-		// compute insets for separator or full border
-		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
-		int sh = scale( contentSeparatorHeight * 100 ); // multiply by 100 because rotateInsets() does not use floats
-		Insets ci = new Insets( 0, 0, 0, 0 );
-		rotateInsets( hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 ), ci, tabPlacement );
+		if( contentSeparatorHeight != 0 && clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) ) {
+			// compute insets for separator or full border
+			boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
+			int sh = scale( contentSeparatorHeight * 100 ); // multiply by 100 because rotateInsets() does not use floats
+			Insets ci = new Insets( 0, 0, 0, 0 );
+			rotateInsets( hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 ), ci, tabPlacement );
 
-		// paint content area
-		g.setColor( contentAreaColor );
-		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new Rectangle2D.Float( x, y, w, h ), false );
-		path.append( new Rectangle2D.Float( x + (ci.left / 100f), y + (ci.top / 100f),
-			w - (ci.left / 100f) - (ci.right / 100f), h - (ci.top / 100f) - (ci.bottom / 100f) ), false );
-		((Graphics2D)g).fill( path );
+			// paint content separator or full border
+			g.setColor( contentAreaColor );
+			Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+			path.append( new Rectangle2D.Float( x, y, w, h ), false );
+			path.append( new Rectangle2D.Float( x + (ci.left / 100f), y + (ci.top / 100f),
+				w - (ci.left / 100f) - (ci.right / 100f), h - (ci.top / 100f) - (ci.bottom / 100f) ), false );
+			((Graphics2D)g).fill( path );
+		}
 
 		// repaint selection in scroll-tab-layout because it may be painted before
 		// the content border was painted (from BasicTabbedPaneUI$ScrollableTabPanel)

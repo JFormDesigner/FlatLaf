@@ -9,6 +9,8 @@ FlatLaf Change Log
   easier to recognize the tabbed pane.
 - TabbedPane: Added top and bottom tab insets to avoid that large tab icons are
   painted over active tab underline.
+- TabbedPane: Support hiding separator between tabs and content area (set client
+  property `JTabbedPane.showContentSeparator` to `false`).
 
 
 ## 0.42

@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.demo;
 
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
+import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_CONTENT_SEPARATOR;
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_TAB_SEPARATORS;
 import java.awt.*;
 import javax.swing.*;
@@ -58,18 +59,24 @@ class TabsPanel
 
 	private void showTabSeparatorsChanged() {
 		Boolean showTabSeparators = showTabSeparatorsCheckBox.isSelected() ? true : null;
-		tabbedPane1.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
-		tabbedPane2.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
-		tabbedPane3.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
-		tabbedPane4.putClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
+		putTabbedPanesClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
+	}
+
+	private void hideContentSeparatorChanged() {
+		Boolean showContentSeparator = hideContentSeparatorCheckBox.isSelected() ? false : null;
+		putTabbedPanesClientProperty( TABBED_PANE_SHOW_CONTENT_SEPARATOR, showContentSeparator );
 	}
 
 	private void hasFullBorderChanged() {
 		Boolean hasFullBorder = hasFullBorderCheckBox.isSelected() ? true : null;
-		tabbedPane1.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
-		tabbedPane2.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
-		tabbedPane3.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
-		tabbedPane4.putClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
+		putTabbedPanesClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
+	}
+
+	private void putTabbedPanesClientProperty( String key, Object value ) {
+		tabbedPane1.putClientProperty( key, value );
+		tabbedPane2.putClientProperty( key, value );
+		tabbedPane3.putClientProperty( key, value );
+		tabbedPane4.putClientProperty( key, value );
 	}
 
 	private void moreTabsChanged() {
@@ -155,6 +162,7 @@ class TabsPanel
 		moreTabsCheckBox = new JCheckBox();
 		tabScrollCheckBox = new JCheckBox();
 		showTabSeparatorsCheckBox = new JCheckBox();
+		hideContentSeparatorCheckBox = new JCheckBox();
 		hasFullBorderCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
@@ -278,6 +286,7 @@ class TabsPanel
 					"[]" +
 					"[]" +
 					"[]" +
+					"[fill]" +
 					"[]",
 					// rows
 					"[center]"));
@@ -299,10 +308,15 @@ class TabsPanel
 				showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
 				panel14.add(showTabSeparatorsCheckBox, "cell 2 0");
 
+				//---- hideContentSeparatorCheckBox ----
+				hideContentSeparatorCheckBox.setText("Hide content separator");
+				hideContentSeparatorCheckBox.addActionListener(e -> hideContentSeparatorChanged());
+				panel14.add(hideContentSeparatorCheckBox, "cell 3 0");
+
 				//---- hasFullBorderCheckBox ----
 				hasFullBorderCheckBox.setText("Show content border");
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
-				panel14.add(hasFullBorderCheckBox, "cell 3 0,alignx left,growx 0");
+				panel14.add(hasFullBorderCheckBox, "cell 4 0,alignx left,growx 0");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -318,6 +332,7 @@ class TabsPanel
 	private JCheckBox moreTabsCheckBox;
 	private JCheckBox tabScrollCheckBox;
 	private JCheckBox showTabSeparatorsCheckBox;
+	private JCheckBox hideContentSeparatorCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
