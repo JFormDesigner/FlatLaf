@@ -654,11 +654,13 @@ TabbedPane.selectedLabelShift
 TabbedPane.selectedTabPadInsets
 TabbedPane.selectionFollowsFocus
 TabbedPane.shadow
+TabbedPane.showTabSeparators
 TabbedPane.tabAreaInsets
 TabbedPane.tabHeight
 TabbedPane.tabInsets
 TabbedPane.tabRunOverlay
 TabbedPane.tabSelectionHeight
+TabbedPane.tabSeparatorsFullHeight
 TabbedPane.tabsOpaque
 TabbedPane.tabsOverlapBorder
 TabbedPane.textIconGap
