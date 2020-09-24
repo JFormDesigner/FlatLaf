@@ -21,11 +21,13 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.*;
 import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
@@ -147,10 +149,12 @@ public class FlatMenusTest
 		JMenuItem menuItem37 = new JMenuItem();
 		JCheckBoxMenuItem checkBoxMenuItem6 = new JCheckBoxMenuItem();
 		JCheckBoxMenuItem checkBoxMenuItem7 = new JCheckBoxMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem8 = new JCheckBoxMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem5 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem6 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem8 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem9 = new JRadioButtonMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem10 = new JRadioButtonMenuItem();
 		JMenu menu6 = new JMenu();
 		JMenuItem menuItem5 = new JMenuItem();
 		JMenuItem menuItem6 = new JMenuItem();
@@ -299,6 +303,11 @@ public class FlatMenusTest
 				checkBoxMenuItem7.setSelected(true);
 				checkBoxMenuItem7.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
 				menu5.add(checkBoxMenuItem7);
+
+				//---- checkBoxMenuItem8 ----
+				checkBoxMenuItem8.setText("check with larger icon");
+				checkBoxMenuItem8.setSelected(true);
+				menu5.add(checkBoxMenuItem8);
 				menu5.addSeparator();
 
 				//---- radioButtonMenuItem5 ----
@@ -321,6 +330,10 @@ public class FlatMenusTest
 				radioButtonMenuItem9.setText("radio with icon 2");
 				radioButtonMenuItem9.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png")));
 				menu5.add(radioButtonMenuItem9);
+
+				//---- radioButtonMenuItem10 ----
+				radioButtonMenuItem10.setText("radio with larger icon");
+				menu5.add(radioButtonMenuItem10);
 			}
 			menuBar1.add(menu5);
 
@@ -763,7 +776,17 @@ public class FlatMenusTest
 		ButtonGroup buttonGroup2 = new ButtonGroup();
 		buttonGroup2.add(radioButtonMenuItem8);
 		buttonGroup2.add(radioButtonMenuItem9);
+		buttonGroup2.add(radioButtonMenuItem10);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		Icon largerIcon = new FlatAbstractIcon( 16, 16, Color.orange ) {
+			@Override
+			protected void paintIcon( Component c, Graphics2D g2 ) {
+				g2.fillRect( 0, 0, 16, 16 );
+			}
+		};
+		checkBoxMenuItem8.setIcon( largerIcon );
+		radioButtonMenuItem10.setIcon( largerIcon );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

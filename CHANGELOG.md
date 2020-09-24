@@ -11,6 +11,9 @@ FlatLaf Change Log
   painted over active tab underline.
 - TabbedPane: Support hiding separator between tabs and content area (set client
   property `JTabbedPane.showContentSeparator` to `false`).
+- CheckBoxMenuItem and RadioButtonMenuItem: Improved checkmark background colors
+  of selected menu items that have also an icon. This makes it is easier to
+  recognize selected menu items.
 
 #### Fixed bugs
 

@@ -535,7 +535,7 @@ MenuItem.arrowIcon             [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenu
 MenuItem.background            #ffffff    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
 MenuItem.borderPainted         true
-MenuItem.checkBackground       #e6e6e6    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.checkBackground       #ccccff    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.checkMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.disabledForeground    #000088    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.font                  [active] $defaultFont [UI]
@@ -550,7 +550,7 @@ MenuItem.selectionForeground   #ffff00    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.textAcceleratorGap    24
 MenuItem.textNoAcceleratorGap  6
 MenuItem.underlineSelectionBackground #e6e6e6    javax.swing.plaf.ColorUIResource [UI]
-MenuItem.underlineSelectionCheckBackground #cccccc    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.underlineSelectionCheckBackground #ccccff    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionColor #4a88c7    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
 

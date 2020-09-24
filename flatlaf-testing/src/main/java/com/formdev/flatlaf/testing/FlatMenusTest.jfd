@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -77,6 +77,11 @@ new FormModel {
 						"selected": true
 						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png" )
 					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "checkBoxMenuItem8"
+						"text": "check with larger icon"
+						"selected": true
+					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator5"
 					} )
@@ -104,8 +109,13 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
 						name: "radioButtonMenuItem9"
 						"text": "radio with icon 2"
-						"$buttonGroup": new FormReference( "buttonGroup2" )
+						"$buttonGroup": &FormReference0 new FormReference( "buttonGroup2" )
 						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png" )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "radioButtonMenuItem10"
+						"text": "radio with larger icon"
+						"$buttonGroup": #FormReference0
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
