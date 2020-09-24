@@ -1,11 +1,11 @@
-JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[][fill][fill][fill][fill][fill][fill]"
+			"$columnConstraints": "[][fill][fill][fill][fill][fill][fill][fill]"
 			"$rowConstraints": "[][][][][][][][][][][]"
 		} ) {
 			name: "this"
@@ -44,6 +44,12 @@ new FormModel {
 				"text": "with icon"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label10"
+				"text": "with default border"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label7"
@@ -232,6 +238,15 @@ new FormModel {
 				"value": "cell 6 5"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox21"
+				"editable": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 5"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox13"
 				"$client.JComponent.roundRect": true
 				"editable": true
@@ -290,6 +305,16 @@ new FormModel {
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 6"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox22"
+				"$client.JComponent.roundRect": true
+				"editable": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 6"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
@@ -404,7 +429,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 790, 715 )
+			"size": new java.awt.Dimension( 915, 715 )
 		} )
 	}
 }

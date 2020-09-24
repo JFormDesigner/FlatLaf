@@ -298,6 +298,10 @@ public class FlatComboBoxUI
 	protected void configureEditor() {
 		super.configureEditor();
 
+		// remove default text field border from editor
+		if( editor instanceof JTextField && ((JTextField)editor).getBorder() instanceof FlatTextBorder )
+			((JTextField)editor).setBorder( BorderFactory.createEmptyBorder() );
+
 		// explicitly make non-opaque
 		if( editor instanceof JComponent )
 			((JComponent)editor).setOpaque( false );

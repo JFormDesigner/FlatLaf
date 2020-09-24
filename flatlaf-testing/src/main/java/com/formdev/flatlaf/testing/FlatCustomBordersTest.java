@@ -97,6 +97,8 @@ public class FlatCustomBordersTest
 		applyCustomComboBoxEditorBorder( comboBox18 );
 		applyCustomComboBoxEditorBorderWithIcon( comboBox19 );
 		applyCustomComboBoxEditorBorderWithIcon( comboBox20 );
+		applyCustomComboBoxEditorBorder( comboBox21, null );
+		applyCustomComboBoxEditorBorder( comboBox22, null );
 	}
 
 	private void applyCustomInsideBorder( JComponent c, String uiKey ) {
@@ -117,7 +119,8 @@ public class FlatCustomBordersTest
 
 	private void applyCustomComboBoxEditorBorder( JComboBox<String> comboBox, Border border ) {
 		JTextField customTextField = new JTextField();
-		customTextField.setBorder( border );
+		if( border != null )
+			customTextField.setBorder( border );
 		comboBox.setEditor( new BasicComboBoxEditor() {
 			@Override
 			protected JTextField createEditorComponent() {
@@ -134,6 +137,7 @@ public class FlatCustomBordersTest
 		label2 = new JLabel();
 		label8 = new JLabel();
 		label9 = new JLabel();
+		label10 = new JLabel();
 		label7 = new JLabel();
 		button1 = new JButton();
 		button2 = new JButton();
@@ -158,12 +162,14 @@ public class FlatCustomBordersTest
 		comboBox12 = new JComboBox<>();
 		comboBox17 = new JComboBox<>();
 		comboBox19 = new JComboBox<>();
+		comboBox21 = new JComboBox<>();
 		comboBox13 = new JComboBox<>();
 		comboBox14 = new JComboBox<>();
 		comboBox15 = new JComboBox<>();
 		comboBox16 = new JComboBox<>();
 		comboBox18 = new JComboBox<>();
 		comboBox20 = new JComboBox<>();
+		comboBox22 = new JComboBox<>();
 		label6 = new JLabel();
 		spinner1 = new JSpinner();
 		spinner2 = new JSpinner();
@@ -188,6 +194,7 @@ public class FlatCustomBordersTest
 			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[]" +
+			"[fill]" +
 			"[fill]" +
 			"[fill]" +
 			"[fill]" +
@@ -230,6 +237,10 @@ public class FlatCustomBordersTest
 		//---- label9 ----
 		label9.setText("with icon");
 		add(label9, "cell 6 0");
+
+		//---- label10 ----
+		label10.setText("with default border");
+		add(label10, "cell 7 0");
 
 		//---- label7 ----
 		label7.setText("JButton:");
@@ -319,6 +330,10 @@ public class FlatCustomBordersTest
 		comboBox19.setEditable(true);
 		add(comboBox19, "cell 6 5");
 
+		//---- comboBox21 ----
+		comboBox21.setEditable(true);
+		add(comboBox21, "cell 7 5");
+
 		//---- comboBox13 ----
 		comboBox13.putClientProperty("JComponent.roundRect", true);
 		comboBox13.setEditable(true);
@@ -348,6 +363,11 @@ public class FlatCustomBordersTest
 		comboBox20.putClientProperty("JComponent.roundRect", true);
 		comboBox20.setEditable(true);
 		add(comboBox20, "cell 6 6");
+
+		//---- comboBox22 ----
+		comboBox22.putClientProperty("JComponent.roundRect", true);
+		comboBox22.setEditable(true);
+		add(comboBox22, "cell 7 6");
 
 		//---- label6 ----
 		label6.setText("JSpinner:");
@@ -425,6 +445,7 @@ public class FlatCustomBordersTest
 	private JLabel label2;
 	private JLabel label8;
 	private JLabel label9;
+	private JLabel label10;
 	private JLabel label7;
 	private JButton button1;
 	private JButton button2;
@@ -449,12 +470,14 @@ public class FlatCustomBordersTest
 	private JComboBox<String> comboBox12;
 	private JComboBox<String> comboBox17;
 	private JComboBox<String> comboBox19;
+	private JComboBox<String> comboBox21;
 	private JComboBox<String> comboBox13;
 	private JComboBox<String> comboBox14;
 	private JComboBox<String> comboBox15;
 	private JComboBox<String> comboBox16;
 	private JComboBox<String> comboBox18;
 	private JComboBox<String> comboBox20;
+	private JComboBox<String> comboBox22;
 	private JLabel label6;
 	private JSpinner spinner1;
 	private JSpinner spinner2;

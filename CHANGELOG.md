@@ -12,6 +12,11 @@ FlatLaf Change Log
 - TabbedPane: Support hiding separator between tabs and content area (set client
   property `JTabbedPane.showContentSeparator` to `false`).
 
+#### Fixed bugs
+
+- ComboBox: If using own `JTextField` as editor, default text field border is
+  now removed to avoid duplicate border.
+
 
 ## 0.42
 
