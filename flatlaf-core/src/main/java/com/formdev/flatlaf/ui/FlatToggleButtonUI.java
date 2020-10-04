@@ -82,12 +82,8 @@ public class FlatToggleButtonUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatToggleButtonUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatToggleButtonUI.class, FlatToggleButtonUI::new );
 	}
 
 	@Override

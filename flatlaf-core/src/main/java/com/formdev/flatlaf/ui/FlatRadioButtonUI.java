@@ -60,12 +60,8 @@ public class FlatRadioButtonUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatRadioButtonUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatRadioButtonUI.class, FlatRadioButtonUI::new );
 	}
 
 	@Override

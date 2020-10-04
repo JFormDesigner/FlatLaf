@@ -52,12 +52,8 @@ public class FlatSeparatorUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatSeparatorUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatSeparatorUI.class, FlatSeparatorUI::new );
 	}
 
 	@Override

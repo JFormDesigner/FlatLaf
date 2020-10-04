@@ -35,7 +35,10 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.IdentityHashMap;
+import java.util.WeakHashMap;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.LookAndFeel;
@@ -43,6 +46,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
@@ -58,6 +62,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatUIUtils
 {
 	public static final boolean MAC_USE_QUARTZ = Boolean.getBoolean( "apple.awt.graphics.UseQuartz" );
+
+	private static WeakHashMap<LookAndFeel, IdentityHashMap<Object, ComponentUI>> sharedUIinstances = new WeakHashMap<>();
 
 	public static Rectangle addInsets( Rectangle r, Insets insets ) {
 		return new Rectangle(
@@ -532,6 +538,19 @@ public class FlatUIUtils
 		boolean explicitlySet = c.isOpaque() == oldOpaque;
 		LookAndFeel.installProperty( c, "opaque", oldOpaque );
 		return explicitlySet;
+	}
+
+	/**
+	 * Creates a shared component UI for the given key and the current Laf.
+	 * Each Laf instance has its own shared component UI instance.
+	 * <p>
+	 * This is for GUI builders that support Laf switching and
+	 * may use multiple Laf instances at the same time.
+	 */
+	public static ComponentUI createSharedUI( Object key, Supplier<ComponentUI> newInstanceSupplier ) {
+		return sharedUIinstances
+			.computeIfAbsent( UIManager.getLookAndFeel(), k -> new IdentityHashMap<>() )
+			.computeIfAbsent( key, k -> newInstanceSupplier.get() );
 	}
 
 	//---- class HoverListener ------------------------------------------------

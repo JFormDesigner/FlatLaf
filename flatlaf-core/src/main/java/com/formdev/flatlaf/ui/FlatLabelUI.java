@@ -56,12 +56,8 @@ public class FlatLabelUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatLabelUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatLabelUI.class, FlatLabelUI::new );
 	}
 
 	@Override

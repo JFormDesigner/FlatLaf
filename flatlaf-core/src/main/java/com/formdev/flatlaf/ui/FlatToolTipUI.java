@@ -52,12 +52,8 @@ public class FlatToolTipUI
 {
 	private static PropertyChangeListener sharedPropertyChangedListener;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatToolTipUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatToolTipUI.class, FlatToolTipUI::new );
 	}
 
 	@Override

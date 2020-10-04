@@ -700,6 +700,18 @@ public abstract class FlatLaf
 		MnemonicHandler.showMnemonics( false, null );
 	}
 
+	// do not allow overriding to avoid issues in FlatUIUtils.createSharedUI()
+	@Override
+	public final boolean equals( Object obj ) {
+		return super.equals( obj );
+	}
+
+	// do not allow overriding to avoid issues in FlatUIUtils.createSharedUI()
+	@Override
+	public final int hashCode() {
+		return super.hashCode();
+	}
+
 	//---- class ActiveFont ---------------------------------------------------
 
 	private static class ActiveFont

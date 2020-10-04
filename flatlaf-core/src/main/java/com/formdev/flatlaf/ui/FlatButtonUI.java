@@ -132,12 +132,8 @@ public class FlatButtonUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatButtonUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatButtonUI.class, FlatButtonUI::new );
 	}
 
 	@Override

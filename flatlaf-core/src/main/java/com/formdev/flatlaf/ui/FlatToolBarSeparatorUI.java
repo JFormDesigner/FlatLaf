@@ -50,12 +50,8 @@ public class FlatToolBarSeparatorUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatToolBarSeparatorUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatToolBarSeparatorUI.class, FlatToolBarSeparatorUI::new );
 	}
 
 	@Override
