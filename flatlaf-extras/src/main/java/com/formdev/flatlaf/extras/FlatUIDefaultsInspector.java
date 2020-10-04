@@ -746,7 +746,8 @@ public class FlatUIDefaultsInspector
 
 			int dot = key.indexOf( '.' );
 			if( dot > 0 && !selected ) {
-				g.setColor( UIManager.getColor( "Label.disabledForeground" ) );
+				g.setColor( FlatUIUtils.getUIColor( "Label.disabledForeground",
+					FlatUIUtils.getUIColor( "Label.disabledText", Color.gray ) ) );
 
 				if( dot >= clippedText.length() )
 					FlatUIUtils.drawString( this, g, clippedText, x, y );
