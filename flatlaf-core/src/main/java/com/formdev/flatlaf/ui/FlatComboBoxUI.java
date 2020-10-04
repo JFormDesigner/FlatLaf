@@ -24,10 +24,12 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -567,6 +569,17 @@ public class FlatComboBoxUI
 
 			// make popup wider if necessary
 			if( displayWidth > pw ) {
+				// limit popup width to screen width
+				GraphicsConfiguration gc = comboBox.getGraphicsConfiguration();
+				if( gc != null ) {
+					Rectangle screenBounds = gc.getBounds();
+					Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets( gc );
+					displayWidth = Math.min( displayWidth, screenBounds.width - screenInsets.left - screenInsets.right );
+				} else {
+					Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+					displayWidth = Math.min( displayWidth, screenSize.width );
+				}
+
 				int diff = displayWidth - pw;
 				pw = displayWidth;
 

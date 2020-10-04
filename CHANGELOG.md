@@ -19,6 +19,7 @@ FlatLaf Change Log
 
 - ComboBox: If using own `JTextField` as editor, default text field border is
   now removed to avoid duplicate border.
+- ComboBox: Limit popup width to screen width for very long items. (issue #182)
 - FileChooser: Fixed localizing special Windows folders (e.g. "Documents") and
   enabled hiding known file extensions (if enabled in Windows Explorer). (issue
   #178)
