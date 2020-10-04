@@ -22,6 +22,8 @@ FlatLaf Change Log
 - FileChooser: Fixed localizing special Windows folders (e.g. "Documents") and
   enabled hiding known file extensions (if enabled in Windows Explorer). (issue
   #178)
+- Spinner: Fixed `NullPointerException` in case that arrow buttons were removed
+  to create button-less spinner. (issue #181)
 
 
 ## 0.42

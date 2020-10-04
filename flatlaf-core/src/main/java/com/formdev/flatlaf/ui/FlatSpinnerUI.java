@@ -268,31 +268,34 @@ public class FlatSpinnerUI
 
 		int width = c.getWidth();
 		int height = c.getHeight();
-		Component nextButton = getHandler().nextButton;
-		int arrowX = nextButton.getX();
-		int arrowWidth = nextButton.getWidth();
-		boolean paintButton = !"none".equals( buttonStyle );
 		boolean enabled = spinner.isEnabled();
-		boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
 
 		// paint background
 		g2.setColor( getBackground( enabled ) );
 		FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
 
-		// paint arrow buttons background
-		if( paintButton && enabled ) {
-			g2.setColor( buttonBackground );
-			Shape oldClip = g2.getClip();
-			if( isLeftToRight )
-				g2.clipRect( arrowX, 0, width - arrowX, height );
-			else
-				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-			FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
-			g2.setClip( oldClip );
-		}
+		// paint button background and separator
+		boolean paintButton = !"none".equals( buttonStyle );
+		Handler handler = getHandler();
+		if( paintButton && (handler.nextButton != null || handler.previousButton != null) ) {
+			Component button = (handler.nextButton != null) ? handler.nextButton : handler.previousButton;
+			int arrowX = button.getX();
+			int arrowWidth = button.getWidth();
+			boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
 
-		// paint vertical line between value and arrow buttons
-		if( paintButton ) {
+			// paint arrow buttons background
+			if( enabled ) {
+				g2.setColor( buttonBackground );
+				Shape oldClip = g2.getClip();
+				if( isLeftToRight )
+					g2.clipRect( arrowX, 0, width - arrowX, height );
+				else
+					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
+				FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
+				g2.setClip( oldClip );
+			}
+
+			// paint vertical line between value and arrow buttons
 			g2.setColor( enabled ? borderColor : disabledBorderColor );
 			float lw = scale( 1f );
 			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
@@ -359,7 +362,7 @@ public class FlatSpinnerUI
 
 			if( nextButton == null && previousButton == null ) {
 				if( editor != null )
-					editor.setBounds( r );
+					editor.setBounds( FlatUIUtils.subtractInsets( r, padding ) );
 				return;
 			}
 

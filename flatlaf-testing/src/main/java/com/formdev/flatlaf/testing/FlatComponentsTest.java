@@ -186,6 +186,8 @@ public class FlatComponentsTest
 		JLabel spinnerLabel = new JLabel();
 		JSpinner spinner1 = new JSpinner();
 		JSpinner spinner2 = new JSpinner();
+		FlatComponentsTest.ButtonlessSpinner buttonlessSpinner1 = new FlatComponentsTest.ButtonlessSpinner();
+		FlatComponentsTest.ButtonlessSpinner buttonlessSpinner2 = new FlatComponentsTest.ButtonlessSpinner();
 		JComboBox<String> comboBox7 = new JComboBox<>();
 		JSpinner spinner3 = new JSpinner();
 		JLabel textFieldLabel = new JLabel();
@@ -678,6 +680,8 @@ public class FlatComponentsTest
 		//---- spinner2 ----
 		spinner2.setEnabled(false);
 		add(spinner2, "cell 2 6,growx");
+		add(buttonlessSpinner1, "cell 3 6,growx");
+		add(buttonlessSpinner2, "cell 4 6,growx");
 
 		//---- comboBox7 ----
 		comboBox7.setEditable(true);
@@ -1425,6 +1429,24 @@ public class FlatComponentsTest
 			setForeground( UIManager.getColor( "Label.foreground" ) );
 			setFont( UIManager.getFont( "Label.font" ) );
 			setBorder( null );
+		}
+	}
+
+	//---- class ButtonlessSpinner --------------------------------------------
+
+	private static class ButtonlessSpinner
+		extends JSpinner
+	{
+		@Override
+		public void updateUI() {
+			super.updateUI();
+
+			// remove arrow buttons
+			for( Component c : getComponents() ) {
+				String name = c.getName();
+				if( "Spinner.nextButton".equals( name ) || "Spinner.previousButton".equals( name ) )
+					remove( c );
+			}
 		}
 	}
 }
