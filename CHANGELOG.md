@@ -14,6 +14,8 @@ FlatLaf Change Log
 - CheckBoxMenuItem and RadioButtonMenuItem: Improved checkmark background colors
   of selected menu items that have also an icon. This makes it is easier to
   recognize selected menu items.
+- Windows: Made scaling compatible with Windows OS scaling, which distinguish
+  between "screen scaling" and "text scaling". (issue #175)
 
 #### Fixed bugs
 

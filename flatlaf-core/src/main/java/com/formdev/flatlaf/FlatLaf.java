@@ -467,9 +467,11 @@ public abstract class FlatLaf
 			uiFont = (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 		}
 
+		// fallback
 		if( uiFont == null )
 			uiFont = createCompositeFont( Font.SANS_SERIF, Font.PLAIN, 12 );
 
+		// increase font size if system property "flatlaf.uiScale" is set
 		uiFont = UIScale.applyCustomScaleFactor( uiFont );
 
 		// use active value for all fonts to allow changing fonts in all components

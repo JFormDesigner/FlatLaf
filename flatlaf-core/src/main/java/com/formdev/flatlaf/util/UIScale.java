@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -162,6 +163,13 @@ public class UIScale
 		if( !isUserScalingEnabled() )
 			return;
 
+		// apply custom scale factor specified in system property "flatlaf.uiScale"
+		float customScaleFactor = getCustomScaleFactor();
+		if( customScaleFactor > 0 ) {
+			setUserScaleFactor( customScaleFactor );
+			return;
+		}
+
 		// use font size to calculate scale factor (instead of DPI)
 		// because even if we are on a HiDPI display it is not sure
 		// that a larger font size is set by the current LaF
@@ -170,7 +178,45 @@ public class UIScale
 		if( font == null )
 			font = UIManager.getFont( "Label.font" );
 
-		setUserScaleFactor( computeScaleFactor( font ) );
+		float newScaleFactor;
+		if( SystemInfo.isWindows ) {
+			// Special handling for Windows to be compatible with OS scaling,
+			// which distinguish between "screen scaling" and "text scaling".
+			//  - Windows "screen scaling" scales everything (text, icon, gaps, etc)
+			//    and may have different scaling factors for each screen.
+			//  - Windows "text scaling" increases only the font size, but on all screens.
+			//
+			// Both can be changed by the user in the Windows 10 Settings:
+			//  - Settings > Display > Scale and layout
+			//  - Settings > Ease of Access > Display > Make text bigger (100% - 225%)
+			if( font instanceof UIResource ) {
+				if( isSystemScalingEnabled() ) {
+					// Do not apply own scaling if the JRE scales using Windows screen scale factor.
+					// If user increases font size in Windows 10 settings, desktop property
+					// "win.messagebox.font" is changed and FlatLaf uses the larger font.
+					newScaleFactor = 1;
+				} else {
+					// If the JRE does not scale (Java 8), the size of the UI font
+					// (usually from desktop property "win.messagebox.font")
+					// combines the Windows screen and text scale factors.
+					// But the font in desktop property "win.defaultGUI.font" is only
+					// scaled with the Windows screen scale factor. So use it to compute
+					// our scale factor that is equal to Windows screen scale factor.
+					Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.defaultGUI.font" );
+					newScaleFactor = computeScaleFactor( (winFont != null) ? winFont : font );
+				}
+			} else {
+				// If font was explicitly set from outside (is not a UIResource)
+				// use it to compute scale factor. This allows applications to
+				// use custom fonts (e.g. that the user can change in UI) and
+				// get scaling if a larger font size is used.
+				// E.g. FlatLaf Demo supports increasing font size in "Font" menu and UI scales.
+				newScaleFactor = computeScaleFactor( font );
+			}
+		} else
+			newScaleFactor = computeScaleFactor( font );
+
+		setUserScaleFactor( newScaleFactor );
 	}
 
 	private static float computeScaleFactor( Font font ) {
@@ -206,8 +252,7 @@ public class UIScale
 		if( !isUserScalingEnabled() )
 			return font;
 
-		String uiScale = System.getProperty( FlatSystemProperties.UI_SCALE );
-		float scaleFactor = parseScaleFactor( uiScale );
+		float scaleFactor = getCustomScaleFactor();
 		if( scaleFactor <= 0 )
 			return font;
 
@@ -217,6 +262,13 @@ public class UIScale
 
 		int newFontSize = Math.round( (font.getSize() / fontScaleFactor) * scaleFactor );
 		return new FontUIResource( font.deriveFont( (float) newFontSize ) );
+	}
+
+	/**
+	 * Get custom scale factor specified in system property "flatlaf.uiScale".
+	 */
+	private static float getCustomScaleFactor() {
+		return parseScaleFactor( System.getProperty( FlatSystemProperties.UI_SCALE ) );
 	}
 
 	/**
