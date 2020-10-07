@@ -34,6 +34,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
@@ -46,6 +47,7 @@ import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.JViewport;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -266,11 +268,7 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected JButton createScrollButton( int direction ) {
-		// this method is invoked before installDefaults(), so we can not use color fields here
-		return new FlatArrowButton( direction, UIManager.getString( "Component.arrowType" ),
-			UIManager.getColor( "TabbedPane.foreground" ),
-			UIManager.getColor( "TabbedPane.disabledForeground" ), null,
-			UIManager.getColor( "TabbedPane.hoverColor" ) );
+		return new FlatScrollableTabButton( direction );
 	}
 
 	@Override
@@ -569,6 +567,63 @@ public class FlatTabbedPaneUI
 
 	private boolean isScrollTabLayout() {
 		return tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT;
+	}
+
+	//---- class FlatScrollableTabButton --------------------------------------
+
+	protected static class FlatScrollableTabButton
+		extends FlatArrowButton
+		implements MouseListener
+	{
+		private Timer autoRepeatTimer;
+
+		protected FlatScrollableTabButton( int direction ) {
+			// this method is invoked before installDefaults(), so we can not use color fields here
+			super( direction, UIManager.getString( "Component.arrowType" ),
+				UIManager.getColor( "TabbedPane.foreground" ),
+				UIManager.getColor( "TabbedPane.disabledForeground" ), null,
+				UIManager.getColor( "TabbedPane.hoverColor" ) );
+
+			addMouseListener( this );
+		}
+
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			if( SwingUtilities.isLeftMouseButton( e ) && isEnabled() ) {
+				if( autoRepeatTimer == null ) {
+					// using same delays as in BasicScrollBarUI and BasicSpinnerUI
+					autoRepeatTimer = new Timer( 60, e2 -> {
+						if( isEnabled() )
+							doClick();
+					} );
+					autoRepeatTimer.setInitialDelay( 300 );
+				}
+
+				autoRepeatTimer.start();
+			}
+		}
+
+		@Override
+		public void mouseReleased( MouseEvent e ) {
+			if( autoRepeatTimer != null )
+				autoRepeatTimer.stop();
+		}
+
+		@Override
+		public void mouseClicked( MouseEvent e ) {
+		}
+
+		@Override
+		public void mouseEntered( MouseEvent e ) {
+			if( autoRepeatTimer != null && isPressed() )
+				autoRepeatTimer.start();
+		}
+
+		@Override
+		public void mouseExited( MouseEvent e ) {
+			if( autoRepeatTimer != null )
+				autoRepeatTimer.stop();
+		}
 	}
 
 	//---- class FlatWheelTabScroller -----------------------------------------

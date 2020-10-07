@@ -7,6 +7,7 @@ FlatLaf Change Log
 
 - TabbedPane: Support scrolling tabs with mouse wheel (if `tabLayoutPolicy` is
   `SCROLL_TAB_LAYOUT`). (issue #40)
+- TabbedPane: Repeat scrolling as long as arrow buttons are pressed. (issue #40)
 
 
 ## 0.43
