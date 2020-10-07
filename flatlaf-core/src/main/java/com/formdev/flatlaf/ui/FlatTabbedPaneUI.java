@@ -20,17 +20,21 @@ import static com.formdev.flatlaf.util.UIScale.scale;
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
@@ -40,6 +44,7 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
+import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -117,6 +122,9 @@ public class FlatTabbedPaneUI
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
 
+	protected JViewport tabViewport;
+	protected FlatWheelTabScroller wheelTabScroller;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
 	}
@@ -185,6 +193,50 @@ public class FlatTabbedPaneUI
 		contentAreaColor = null;
 
 		MigLayoutVisualPadding.uninstall( tabPane );
+	}
+
+	@Override
+	protected void installComponents() {
+		super.installComponents();
+
+		// find scrollable tab viewport
+		tabViewport = null;
+		if( isScrollTabLayout() ) {
+			for( Component c : tabPane.getComponents() ) {
+				if( c instanceof JViewport && c.getClass().getName().equals( "javax.swing.plaf.basic.BasicTabbedPaneUI$ScrollableTabViewport" ) ) {
+					tabViewport = (JViewport) c;
+					break;
+				}
+			}
+		}
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		if( tabViewport != null && (wheelTabScroller = createWheelTabScroller()) != null ) {
+			// ideally we would add the mouse listeners to the viewport, but then the
+			// mouse listener of the tabbed pane would not receive events while
+			// the mouse pointer is over the viewport
+			tabPane.addMouseWheelListener( wheelTabScroller );
+			tabPane.addMouseListener( wheelTabScroller );
+		}
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		if( wheelTabScroller != null ) {
+			tabPane.removeMouseWheelListener( wheelTabScroller );
+			tabPane.removeMouseListener( wheelTabScroller );
+			wheelTabScroller = null;
+		}
+	}
+
+	protected FlatWheelTabScroller createWheelTabScroller() {
+		return new FlatWheelTabScroller();
 	}
 
 	@Override
@@ -489,17 +541,13 @@ public class FlatTabbedPaneUI
 
 		// repaint selection in scroll-tab-layout because it may be painted before
 		// the content border was painted (from BasicTabbedPaneUI$ScrollableTabPanel)
-		if( isScrollTabLayout() && selectedIndex >= 0 ) {
-			Component scrollableTabViewport = findComponentByClassName( tabPane,
-				BasicTabbedPaneUI.class.getName() + "$ScrollableTabViewport" );
-			if( scrollableTabViewport != null ) {
-				Rectangle tabRect = getTabBounds( tabPane, selectedIndex );
+		if( isScrollTabLayout() && selectedIndex >= 0 && tabViewport != null ) {
+			Rectangle tabRect = getTabBounds( tabPane, selectedIndex );
 
-				Shape oldClip = g.getClip();
-				g.setClip( scrollableTabViewport.getBounds() );
-				paintTabSelection( g, tabPlacement, tabRect.x, tabRect.y, tabRect.width, tabRect.height );
-				g.setClip( oldClip );
-			}
+			Shape oldClip = g.getClip();
+			g.setClip( tabViewport.getBounds() );
+			paintTabSelection( g, tabPlacement, tabRect.x, tabRect.y, tabRect.width, tabRect.height );
+			g.setClip( oldClip );
 		}
 	}
 
@@ -518,17 +566,46 @@ public class FlatTabbedPaneUI
 		return tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT;
 	}
 
-	private Component findComponentByClassName( Container c, String className ) {
-		for( Component child : c.getComponents() ) {
-			if( className.equals( child.getClass().getName() ) )
-				return child;
+	//---- class FlatWheelTabScroller -----------------------------------------
 
-			if( child instanceof Container ) {
-				Component c2 = findComponentByClassName( (Container) child, className );
-				if( c2 != null )
-					return c2;
+	protected class FlatWheelTabScroller
+		extends MouseAdapter
+	{
+		@Override
+		public void mouseWheelMoved( MouseWheelEvent e ) {
+			// because this listener receives mouse events for the whole tabbed pane,
+			// we have to check whether the mouse is located over the viewport
+			if( tabViewport == null || !tabViewport.getBounds().contains( e.getX(), e.getY() ) )
+				return;
+
+			// compute new view position
+			Point viewPosition = tabViewport.getViewPosition();
+			Dimension viewSize = tabViewport.getViewSize();
+			int x = viewPosition.x;
+			int y = viewPosition.y;
+			int tabPlacement = tabPane.getTabPlacement();
+			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				x += maxTabHeight * e.getWheelRotation();
+				x = Math.min( Math.max( x, 0 ), viewSize.width - tabViewport.getWidth() );
+			} else {
+				y += maxTabHeight * e.getWheelRotation();
+				y = Math.min( Math.max( y, 0 ), viewSize.height - tabViewport.getHeight() );
 			}
+
+			// update view position
+			tabViewport.setViewPosition( new Point( x, y ) );
+
+			updateHover( e );
 		}
-		return null;
+
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			// for the case that the tab was only partly visible before the user clicked it
+			updateHover( e );
+		}
+
+		private void updateHover( MouseEvent e ) {
+			setRolloverTab( tabForCoordinate( tabPane, e.getX(), e.getY() ) );
+		}
 	}
 }

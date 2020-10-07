@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 0.44-SNAPSHOT
+
+#### New features and improvements
+
+- TabbedPane: Support scrolling tabs with mouse wheel (if `tabLayoutPolicy` is
+  `SCROLL_TAB_LAYOUT`). (issue #40)
+
+
 ## 0.43
 
 #### New features and improvements
