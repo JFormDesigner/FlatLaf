@@ -46,6 +46,7 @@ import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.JViewport;
 import javax.swing.KeyStroke;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
@@ -220,6 +221,7 @@ public class FlatTabbedPaneUI
 			// mouse listener of the tabbed pane would not receive events while
 			// the mouse pointer is over the viewport
 			tabPane.addMouseWheelListener( wheelTabScroller );
+			tabPane.addMouseMotionListener( wheelTabScroller );
 			tabPane.addMouseListener( wheelTabScroller );
 		}
 	}
@@ -229,7 +231,10 @@ public class FlatTabbedPaneUI
 		super.uninstallListeners();
 
 		if( wheelTabScroller != null ) {
+			wheelTabScroller.uninstall();
+
 			tabPane.removeMouseWheelListener( wheelTabScroller );
+			tabPane.removeMouseMotionListener( wheelTabScroller );
 			tabPane.removeMouseListener( wheelTabScroller );
 			wheelTabScroller = null;
 		}
@@ -571,11 +576,20 @@ public class FlatTabbedPaneUI
 	protected class FlatWheelTabScroller
 		extends MouseAdapter
 	{
+		private boolean inViewport;
+		private boolean scrolled;
+		private Timer timer;
+
+		protected void uninstall() {
+			if( timer != null )
+				timer.stop();
+		}
+
 		@Override
 		public void mouseWheelMoved( MouseWheelEvent e ) {
 			// because this listener receives mouse events for the whole tabbed pane,
 			// we have to check whether the mouse is located over the viewport
-			if( tabViewport == null || !tabViewport.getBounds().contains( e.getX(), e.getY() ) )
+			if( !isInViewport( e ) )
 				return;
 
 			// compute new view position
@@ -593,9 +607,32 @@ public class FlatTabbedPaneUI
 			}
 
 			// update view position
-			tabViewport.setViewPosition( new Point( x, y ) );
+			Point newViewPosition = new Point( x, y );
+			tabViewport.setViewPosition( newViewPosition );
+
+			if( !newViewPosition.equals( viewPosition ))
+				scrolled = true;
 
 			updateHover( e );
+		}
+
+		@Override
+		public void mouseMoved( MouseEvent e ) {
+			boolean wasInViewport = inViewport;
+			inViewport = isInViewport( e );
+
+			if( inViewport != wasInViewport ) {
+				if( !inViewport )
+					viewportExited();
+				else if( timer != null )
+					timer.stop();
+			}
+		}
+
+		@Override
+		public void mouseExited( MouseEvent e ) {
+			inViewport = false;
+			viewportExited();
 		}
 
 		@Override
@@ -604,8 +641,40 @@ public class FlatTabbedPaneUI
 			updateHover( e );
 		}
 
-		private void updateHover( MouseEvent e ) {
+		protected boolean isInViewport( MouseEvent e ) {
+			return (tabViewport != null && tabViewport.getBounds().contains( e.getX(), e.getY() ) );
+		}
+
+		protected void updateHover( MouseEvent e ) {
 			setRolloverTab( tabForCoordinate( tabPane, e.getX(), e.getY() ) );
+		}
+
+		protected void viewportExited() {
+			if( !scrolled )
+				return;
+
+			if( timer == null ) {
+				timer = new Timer( 500, e -> ensureSelectedTabVisible() );
+				timer.setRepeats( false );
+			}
+
+			timer.start();
+		}
+
+		protected void ensureSelectedTabVisible() {
+			// check whether UI delegate was uninstalled because this method is invoked via timer
+			if( tabPane == null || tabViewport == null )
+				return;
+
+			if( !scrolled || tabViewport == null )
+				return;
+			scrolled = false;
+
+			int selectedIndex = tabPane.getSelectedIndex();
+			if( selectedIndex >= 0 ) {
+				Rectangle tabBounds = getTabBounds( tabPane, selectedIndex );
+				tabViewport.scrollRectToVisible( tabBounds );
+			}
 		}
 	}
 }
