@@ -55,6 +55,8 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.Animator;
+import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -635,20 +637,33 @@ public class FlatTabbedPaneUI
 		private boolean scrolled;
 		private Timer timer;
 
+		private Animator animator;
+		private Point startViewPosition;
+		private Point targetViewPosition;
+		private int lastMouseX;
+		private int lastMouseY;
+
 		protected void uninstall() {
 			if( timer != null )
 				timer.stop();
+			if( animator != null )
+				animator.cancel();
 		}
 
 		@Override
 		public void mouseWheelMoved( MouseWheelEvent e ) {
 			// because this listener receives mouse events for the whole tabbed pane,
 			// we have to check whether the mouse is located over the viewport
-			if( !isInViewport( e ) )
+			if( !isInViewport( e.getX(), e.getY() ) )
 				return;
 
+			lastMouseX = e.getX();
+			lastMouseY = e.getY();
+
 			// compute new view position
-			Point viewPosition = tabViewport.getViewPosition();
+			Point viewPosition = (targetViewPosition != null)
+				? targetViewPosition
+				: tabViewport.getViewPosition();
 			Dimension viewSize = tabViewport.getViewSize();
 			int x = viewPosition.x;
 			int y = viewPosition.y;
@@ -663,18 +678,68 @@ public class FlatTabbedPaneUI
 
 			// update view position
 			Point newViewPosition = new Point( x, y );
-			tabViewport.setViewPosition( newViewPosition );
+			setViewPositionAnimated( newViewPosition );
 
 			if( !newViewPosition.equals( viewPosition ))
 				scrolled = true;
+		}
 
-			updateHover( e );
+		protected void setViewPositionAnimated( Point viewPosition ) {
+			// check whether position is equal to current position
+			if( viewPosition.equals( tabViewport.getViewPosition() ) )
+				return;
+
+			// do not use animation if disabled
+			if( !Animator.useAnimation() ) {
+				tabViewport.setViewPosition( viewPosition );
+				updateHover( lastMouseX, lastMouseY );
+				return;
+			}
+
+			// remember start and target view positions
+			if( startViewPosition == null )
+				startViewPosition = tabViewport.getViewPosition();
+			targetViewPosition = viewPosition;
+
+			// create animator
+			if( animator == null ) {
+				// using same delays as in FlatScrollBarUI
+				int duration = 200;
+				int resolution = 10;
+
+				animator = new Animator( duration, fraction -> {
+					if( tabViewport == null || !tabViewport.isShowing() ) {
+						animator.stop();
+						return;
+					}
+
+					// update view position
+					int x = startViewPosition.x + Math.round( (targetViewPosition.x - startViewPosition.x) * fraction );
+					int y = startViewPosition.y + Math.round( (targetViewPosition.y - startViewPosition.y) * fraction );
+					tabViewport.setViewPosition( new Point( x, y ) );
+				}, () -> {
+					startViewPosition = targetViewPosition = null;
+
+					if( tabPane != null )
+						updateHover( lastMouseX, lastMouseY );
+				} );
+
+				animator.setResolution( resolution );
+				animator.setInterpolator( new CubicBezierEasing( 0.5f, 0.5f, 0.5f, 1 ) );
+			}
+
+			// restart animator
+			animator.cancel();
+			animator.start();
 		}
 
 		@Override
 		public void mouseMoved( MouseEvent e ) {
+			lastMouseX = e.getX();
+			lastMouseY = e.getY();
+
 			boolean wasInViewport = inViewport;
-			inViewport = isInViewport( e );
+			inViewport = isInViewport( e.getX(), e.getY() );
 
 			if( inViewport != wasInViewport ) {
 				if( !inViewport )
@@ -693,15 +758,15 @@ public class FlatTabbedPaneUI
 		@Override
 		public void mousePressed( MouseEvent e ) {
 			// for the case that the tab was only partly visible before the user clicked it
-			updateHover( e );
+			updateHover( e.getX(), e.getY() );
 		}
 
-		protected boolean isInViewport( MouseEvent e ) {
-			return (tabViewport != null && tabViewport.getBounds().contains( e.getX(), e.getY() ) );
+		protected boolean isInViewport( int x, int y ) {
+			return (tabViewport != null && tabViewport.getBounds().contains( x, y ) );
 		}
 
-		protected void updateHover( MouseEvent e ) {
-			setRolloverTab( tabForCoordinate( tabPane, e.getX(), e.getY() ) );
+		protected void updateHover( int x, int y ) {
+			setRolloverTab( tabForCoordinate( tabPane, x, y ) );
 		}
 
 		protected void viewportExited() {

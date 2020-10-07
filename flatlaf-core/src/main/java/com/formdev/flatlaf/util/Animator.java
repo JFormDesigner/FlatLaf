@@ -18,6 +18,7 @@ package com.formdev.flatlaf.util;
 
 import java.util.ArrayList;
 import javax.swing.Timer;
+import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
  * Simple animator based on ideas and concepts from "Filthy Rich Clients" book
@@ -38,6 +39,15 @@ public class Animator
 	private boolean timeToStop;
 	private long startTime;
 	private Timer timer;
+
+	/**
+	 * Checks whether animations are enabled (the default) or disabled via
+	 * system property {@code flatlaf.animation} set to {@code false}.
+	 * This allows disabling all animations at command line with {@code -Dflatlaf.animation=false}.
+	 */
+	public static boolean useAnimation() {
+		return FlatSystemProperties.getBoolean( FlatSystemProperties.ANIMATION, true );
+	}
 
 	/**
 	 * Creates an animation that runs duration milliseconds.
