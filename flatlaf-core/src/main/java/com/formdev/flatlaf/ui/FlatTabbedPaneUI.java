@@ -573,7 +573,7 @@ public class FlatTabbedPaneUI
 
 	//---- class FlatScrollableTabButton --------------------------------------
 
-	protected static class FlatScrollableTabButton
+	protected class FlatScrollableTabButton
 		extends FlatArrowButton
 		implements MouseListener
 	{
@@ -587,6 +587,15 @@ public class FlatTabbedPaneUI
 				UIManager.getColor( "TabbedPane.hoverColor" ) );
 
 			addMouseListener( this );
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			Dimension size = super.getPreferredSize();
+			if( direction == WEST || direction == EAST )
+				return new Dimension( size.width, Math.max( size.height, maxTabHeight ) );
+			else
+				return new Dimension( Math.max( size.width, maxTabWidth ), size.height );
 		}
 
 		@Override
