@@ -232,6 +232,16 @@ new FormModel {
 						"value": "cell 2 1"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "customTabsCheckBox"
+						"text": "Custom tabs"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customTabsChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 3 1"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "hasFullBorderCheckBox"
 						"text": "Show content border"
 						auxiliary() {

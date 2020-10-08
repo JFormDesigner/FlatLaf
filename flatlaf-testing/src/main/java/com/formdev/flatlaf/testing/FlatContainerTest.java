@@ -22,6 +22,8 @@ import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_TAB_SEPA
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon;
 import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.jgoodies.forms.layout.*;
 import net.miginfocom.swing.*;
@@ -47,6 +49,9 @@ public class FlatContainerTest
 
 		addInitialTabs( tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 );
 		initialTabCount = tabbedPane1.getTabCount();
+
+		tabScrollCheckBox.setSelected( true );
+		tabScrollChanged();
 	}
 
 	private void tabScrollChanged() {
@@ -177,6 +182,39 @@ public class FlatContainerTest
 		tabbedPane4.setBorder( border );
 	}
 
+	private void customTabsChanged() {
+		customTabsChanged( tabbedPane1 );
+		customTabsChanged( tabbedPane2 );
+		customTabsChanged( tabbedPane3 );
+		customTabsChanged( tabbedPane4 );
+	}
+
+	private void customTabsChanged( JTabbedPane tabbedPane ) {
+		if( customTabsCheckBox.isSelected() ) {
+			tabbedPane.setTabComponentAt( 1, new JButton( tabbedPane1.getTitleAt( 1 ) ) );
+			tabbedPane.setTabComponentAt( 3, createCustomTab( tabbedPane1.getTitleAt( 3 ) ) );
+		} else {
+			tabbedPane.setTabComponentAt( 1, null );
+			tabbedPane.setTabComponentAt( 3, null );
+		}
+	}
+
+	private Component createCustomTab( String tabTitle ) {
+		JButton closeButton;
+		if( UIManager.getLookAndFeel() instanceof FlatLaf ) {
+			closeButton = new JButton( new FlatInternalFrameCloseIcon() );
+			closeButton.setContentAreaFilled( false );
+			closeButton.setBorder( null );
+		} else
+			closeButton = new JButton( "x" );
+
+		JPanel tab = new JPanel( new BorderLayout( 5, 0 ) );
+		tab.setOpaque( false );
+		tab.add( closeButton, BorderLayout.EAST );
+		tab.add( new JLabel( tabTitle ), BorderLayout.CENTER );
+		return tab;
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -204,6 +242,7 @@ public class FlatContainerTest
 		tabIconsCheckBox = new JCheckBox();
 		tabIconSizeSpinner = new JSpinner();
 		customBorderCheckBox = new JCheckBox();
+		customTabsCheckBox = new JCheckBox();
 		hasFullBorderCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
@@ -363,6 +402,11 @@ public class FlatContainerTest
 				customBorderCheckBox.addActionListener(e -> customBorderChanged());
 				panel14.add(customBorderCheckBox, "cell 2 1");
 
+				//---- customTabsCheckBox ----
+				customTabsCheckBox.setText("Custom tabs");
+				customTabsCheckBox.addActionListener(e -> customTabsChanged());
+				panel14.add(customTabsCheckBox, "cell 3 1");
+
 				//---- hasFullBorderCheckBox ----
 				hasFullBorderCheckBox.setText("Show content border");
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
@@ -387,6 +431,7 @@ public class FlatContainerTest
 	private JCheckBox tabIconsCheckBox;
 	private JSpinner tabIconSizeSpinner;
 	private JCheckBox customBorderCheckBox;
+	private JCheckBox customTabsCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 

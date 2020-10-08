@@ -744,24 +744,14 @@ public class FlatTabbedPaneUI
 
 		@Override
 		public void mouseMoved( MouseEvent e ) {
-			lastMouseX = e.getX();
-			lastMouseY = e.getY();
-
-			boolean wasInViewport = inViewport;
-			inViewport = isInViewport( e.getX(), e.getY() );
-
-			if( inViewport != wasInViewport ) {
-				if( !inViewport )
-					viewportExited();
-				else if( timer != null )
-					timer.stop();
-			}
+			checkViewportExited( e.getX(), e.getY() );
 		}
 
 		@Override
 		public void mouseExited( MouseEvent e ) {
-			inViewport = false;
-			viewportExited();
+			// this event occurs also if mouse is moved to a custom tab component
+			// that handles mouse events (e.g. a close button)
+			checkViewportExited( e.getX(), e.getY() );
 		}
 
 		@Override
@@ -776,6 +766,21 @@ public class FlatTabbedPaneUI
 
 		protected void updateHover( int x, int y ) {
 			setRolloverTab( tabForCoordinate( tabPane, x, y ) );
+		}
+
+		protected void checkViewportExited( int x, int y ) {
+			lastMouseX = x;
+			lastMouseY = y;
+
+			boolean wasInViewport = inViewport;
+			inViewport = isInViewport( x, y );
+
+			if( inViewport != wasInViewport ) {
+				if( !inViewport )
+					viewportExited();
+				else if( timer != null )
+					timer.stop();
+			}
 		}
 
 		protected void viewportExited() {
