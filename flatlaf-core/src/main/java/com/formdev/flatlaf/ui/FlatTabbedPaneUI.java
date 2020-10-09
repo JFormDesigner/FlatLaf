@@ -100,6 +100,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
+ * @uiDefault ScrollPane.smoothScrolling				boolean
  *
  * @author Karl Tauber
  */
@@ -577,6 +578,16 @@ public class FlatTabbedPaneUI
 		return tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT;
 	}
 
+	protected boolean isSmoothScrollingEnabled() {
+		if( !Animator.useAnimation() )
+			return false;
+
+		// Note: Getting UI value "ScrollPane.smoothScrolling" here to allow
+		// applications to turn smooth scrolling on or off at any time
+		// (e.g. in application options dialog).
+		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
+	}
+
 	//---- class FlatScrollableTabButton --------------------------------------
 
 	protected class FlatScrollableTabButton
@@ -705,15 +716,14 @@ public class FlatTabbedPaneUI
 				return;
 
 			// do not use animation if disabled
-			if( !Animator.useAnimation() ) {
+			if( !isSmoothScrollingEnabled() ) {
 				tabViewport.setViewPosition( viewPosition );
 				setRolloverTab( lastMouseX, lastMouseY );
 				return;
 			}
 
 			// remember start and target view positions
-			if( startViewPosition == null )
-				startViewPosition = tabViewport.getViewPosition();
+			startViewPosition = tabViewport.getViewPosition();
 			targetViewPosition = viewPosition;
 
 			// create animator
