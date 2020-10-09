@@ -460,20 +460,23 @@ public class FlatSmoothScrollingTest
 
 	//---- class LineChartPanel -----------------------------------------------
 
-	private static class LineChartPanel
+	static class LineChartPanel
 		extends JComponent
 		implements Scrollable
 	{
-		private static final int SECOND_WIDTH = 200;
 		private static final int NEW_SEQUENCE_TIME_LAG = 500;
 		private static final int NEW_SEQUENCE_GAP = 20;
 
+		private int secondWidth = 1000;
+
 		private static class Data {
 			final double value;
+			final boolean dot;
 			final long time; // in milliseconds
 
-			Data( double value, long time ) {
+			Data( double value, boolean dot, long time ) {
 				this.value = value;
+				this.dot = dot;
 				this.time = time;
 			}
 
@@ -497,8 +500,12 @@ public class FlatSmoothScrollingTest
 		}
 
 		void addValue( double value, Color chartColor ) {
+			addValue( value, false, chartColor );
+		}
+
+		void addValue( double value, boolean dot, Color chartColor ) {
 			List<Data> chartData = color2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
-			chartData.add( new Data( value, System.nanoTime() / 1000000) );
+			chartData.add( new Data( value, dot, System.nanoTime() / 1000000) );
 
 			lastUsedChartColor = chartColor;
 
@@ -519,6 +526,10 @@ public class FlatSmoothScrollingTest
 
 		void setUpdateDelayed( boolean updateDelayed ) {
 			this.updateDelayed = updateDelayed;
+		}
+
+		void setSecondWidth( int secondWidth ) {
+			this.secondWidth = secondWidth;
 		}
 
 		private void repaintAndRevalidate() {
@@ -546,7 +557,7 @@ public class FlatSmoothScrollingTest
 		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
 			FlatUIUtils.setRenderingHints( g );
 
-			int secondWidth = (int) (SECOND_WIDTH * scaleFactor);
+			int secondWidth = (int) (this.secondWidth * scaleFactor);
 			int seqGapWidth = (int) (NEW_SEQUENCE_GAP * scaleFactor);
 
 			Color lineColor = FlatUIUtils.getUIColor( "Component.borderColor", Color.lightGray );
@@ -591,20 +602,32 @@ public class FlatSmoothScrollingTest
 
 				g.setColor( chartColor );
 
+				boolean first = true;
 				int size = chartData.size();
 				for( int i = 0; i < size; i++ ) {
 					Data data = chartData.get( i );
 					int dy = (int) ((height - 1) * data.value);
 
+					if( data.dot ) {
+						int dotx = px;
+						if( i > 0 && data.time > ptime + NEW_SEQUENCE_TIME_LAG )
+							dotx += seqGapWidth;
+						int o = UIScale.scale( 1 );
+						int s = UIScale.scale( 3 );
+						g.fillRect( dotx - o, dy - o, s, s );
+						continue;
+					}
+
 					if( data.time > ptime + NEW_SEQUENCE_TIME_LAG ) {
-						if( i > 0 && pcount == 0 )
+						if( !first && pcount == 0 )
 							g.drawLine( px, py, px + (int) (4 * scaleFactor), py );
 
 						// start new sequence
 						seqTime = data.time;
-						seqX = (i > 0) ? px + seqGapWidth : 0;
+						seqX = !first ? px + seqGapWidth : 0;
 						px = seqX;
 						pcount = 0;
+						first = false;
 					} else {
 						boolean isTemporaryValue = isTemporaryValue( chartData, i ) || isTemporaryValue( chartData, i - 1 );
 						if( isTemporaryValue )
@@ -634,8 +657,14 @@ public class FlatSmoothScrollingTest
 			if( i == 0 || i == chartData.size() - 1 )
 				return false;
 
-			double valueBefore = chartData.get( i - 1 ).value;
-			double valueAfter = chartData.get( i + 1 ).value;
+			Data dataBefore = chartData.get( i - 1 );
+			Data dataAfter = chartData.get( i + 1 );
+
+			if( dataBefore.dot || dataAfter.dot )
+				return false;
+
+			double valueBefore = dataBefore.value;
+			double valueAfter = dataAfter.value;
 
 			return valueBefore == valueAfter ||
 				(i < chartData.size() - 2 && valueBefore == chartData.get( i + 2 ).value) ||
@@ -666,7 +695,7 @@ public class FlatSmoothScrollingTest
 					px = seqX;
 				} else {
 					// line in sequence
-					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * SECOND_WIDTH));
+					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * secondWidth));
 					px = dx;
 				}
 
@@ -691,7 +720,7 @@ public class FlatSmoothScrollingTest
 
 		@Override
 		public int getScrollableUnitIncrement( Rectangle visibleRect, int orientation, int direction ) {
-			return SECOND_WIDTH;
+			return secondWidth;
 		}
 
 		@Override
