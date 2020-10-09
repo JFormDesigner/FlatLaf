@@ -130,6 +130,8 @@ public class FlatTabbedPaneUI
 	protected JViewport tabViewport;
 	protected FlatWheelTabScroller wheelTabScroller;
 
+	private Handler handler;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
 	}
@@ -220,6 +222,8 @@ public class FlatTabbedPaneUI
 	protected void installListeners() {
 		super.installListeners();
 
+		tabPane.addMouseListener( getHandler() );
+
 		if( tabViewport != null && (wheelTabScroller = createWheelTabScroller()) != null ) {
 			// ideally we would add the mouse listeners to the viewport, but then the
 			// mouse listener of the tabbed pane would not receive events while
@@ -234,6 +238,11 @@ public class FlatTabbedPaneUI
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
+		if( handler != null ) {
+			tabPane.removeMouseListener( handler );
+			handler = null;
+		}
+
 		if( wheelTabScroller != null ) {
 			wheelTabScroller.uninstall();
 
@@ -244,33 +253,30 @@ public class FlatTabbedPaneUI
 		}
 	}
 
+	private Handler getHandler() {
+		if( handler == null )
+			handler = new Handler();
+		return handler;
+	}
+
 	protected FlatWheelTabScroller createWheelTabScroller() {
 		return new FlatWheelTabScroller();
 	}
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new BasicTabbedPaneUI.PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
-
-				switch( e.getPropertyName() ) {
-					case TABBED_PANE_SHOW_TAB_SEPARATORS:
-					case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
-					case TABBED_PANE_HAS_FULL_BORDER:
-					case TABBED_PANE_TAB_HEIGHT:
-						tabPane.revalidate();
-						tabPane.repaint();
-						break;
-				}
-			}
-		};
+		Handler handler = getHandler();
+		handler.propertyChangeDelegate = super.createPropertyChangeListener();
+		return handler;
 	}
 
 	@Override
 	protected JButton createScrollButton( int direction ) {
 		return new FlatScrollableTabButton( direction );
+	}
+
+	protected void setRolloverTab( int x, int y ) {
+		setRolloverTab( tabForCoordinate( tabPane, x, y ) );
 	}
 
 	@Override
@@ -701,7 +707,7 @@ public class FlatTabbedPaneUI
 			// do not use animation if disabled
 			if( !Animator.useAnimation() ) {
 				tabViewport.setViewPosition( viewPosition );
-				updateHover( lastMouseX, lastMouseY );
+				setRolloverTab( lastMouseX, lastMouseY );
 				return;
 			}
 
@@ -730,7 +736,7 @@ public class FlatTabbedPaneUI
 					startViewPosition = targetViewPosition = null;
 
 					if( tabPane != null )
-						updateHover( lastMouseX, lastMouseY );
+						setRolloverTab( lastMouseX, lastMouseY );
 				} );
 
 				animator.setResolution( resolution );
@@ -757,15 +763,11 @@ public class FlatTabbedPaneUI
 		@Override
 		public void mousePressed( MouseEvent e ) {
 			// for the case that the tab was only partly visible before the user clicked it
-			updateHover( e.getX(), e.getY() );
+			setRolloverTab( e.getX(), e.getY() );
 		}
 
 		protected boolean isInViewport( int x, int y ) {
 			return (tabViewport != null && tabViewport.getBounds().contains( x, y ) );
-		}
-
-		protected void updateHover( int x, int y ) {
-			setRolloverTab( tabForCoordinate( tabPane, x, y ) );
 		}
 
 		protected void checkViewportExited( int x, int y ) {
@@ -808,6 +810,38 @@ public class FlatTabbedPaneUI
 			if( selectedIndex >= 0 ) {
 				Rectangle tabBounds = getTabBounds( tabPane, selectedIndex );
 				tabViewport.scrollRectToVisible( tabBounds );
+			}
+		}
+	}
+
+	//---- class Handler ------------------------------------------------------
+
+	private class Handler
+		extends MouseAdapter
+		implements PropertyChangeListener
+	{
+		PropertyChangeListener propertyChangeDelegate;
+
+		@Override
+		public void mouseExited( MouseEvent e ) {
+			// this event occurs also if mouse is moved to a custom tab component
+			// that handles mouse events (e.g. a close button)
+			// --> make sure that the tab stays highlighted
+			setRolloverTab( e.getX(), e.getY() );
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			propertyChangeDelegate.propertyChange( e );
+
+			switch( e.getPropertyName() ) {
+				case TABBED_PANE_SHOW_TAB_SEPARATORS:
+				case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
+				case TABBED_PANE_HAS_FULL_BORDER:
+				case TABBED_PANE_TAB_HEIGHT:
+					tabPane.revalidate();
+					tabPane.repaint();
+					break;
 			}
 		}
 	}
