@@ -184,14 +184,17 @@ public class Animator
 		timeToStop = false;
 		startTime = System.nanoTime() / 1000000;
 
-		timer = new Timer( resolution, e -> {
-			if( !hasBegun ) {
-				begin();
-				hasBegun = true;
-			}
+		if( timer == null ) {
+			timer = new Timer( resolution, e -> {
+				if( !hasBegun ) {
+					begin();
+					hasBegun = true;
+				}
 
-			timingEvent( getTimingFraction() );
-		} );
+				timingEvent( getTimingFraction() );
+			} );
+		} else
+			timer.setDelay( resolution );
 		timer.setInitialDelay( 0 );
 		timer.start();
 	}
@@ -213,10 +216,8 @@ public class Animator
 	}
 
 	private void stop( boolean cancel ) {
-		if( timer != null ) {
+		if( timer != null )
 			timer.stop();
-			timer = null;
-		}
 
 		if( !cancel )
 			end();
