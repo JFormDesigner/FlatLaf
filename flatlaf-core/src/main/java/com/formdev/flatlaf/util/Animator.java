@@ -216,6 +216,9 @@ public class Animator
 	}
 
 	private void stop( boolean cancel ) {
+		if( !running )
+			return;
+
 		if( timer != null )
 			timer.stop();
 
@@ -224,6 +227,15 @@ public class Animator
 
 		running = false;
 		timeToStop = false;
+	}
+
+	/**
+	 * Restarts the animation.
+	 * Invokes {@link #cancel()} and {@link #start()}.
+	 */
+	public void restart() {
+		cancel();
+		start();
 	}
 
 	/**

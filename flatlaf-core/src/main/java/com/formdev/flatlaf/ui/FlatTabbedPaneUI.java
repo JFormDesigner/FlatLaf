@@ -132,6 +132,7 @@ public class FlatTabbedPaneUI
 	protected FlatWheelTabScroller wheelTabScroller;
 
 	private Handler handler;
+	private boolean blockRollover;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
@@ -282,6 +283,9 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected void setRolloverTab( int index ) {
+		if( blockRollover )
+			return;
+
 		int oldIndex = getRolloverTab();
 		super.setRolloverTab( index );
 
@@ -659,19 +663,23 @@ public class FlatTabbedPaneUI
 	protected class FlatWheelTabScroller
 		extends MouseAdapter
 	{
+		private int lastMouseX;
+		private int lastMouseY;
+
 		private boolean inViewport;
 		private boolean scrolled;
-		private Timer timer;
+		private Timer rolloverTimer;
+		private Timer exitedTimer;
 
 		private Animator animator;
 		private Point startViewPosition;
 		private Point targetViewPosition;
-		private int lastMouseX;
-		private int lastMouseY;
 
 		protected void uninstall() {
-			if( timer != null )
-				timer.stop();
+			if( rolloverTimer != null )
+				rolloverTimer.stop();
+			if( exitedTimer != null )
+				exitedTimer.stop();
 			if( animator != null )
 				animator.cancel();
 		}
@@ -686,6 +694,8 @@ public class FlatTabbedPaneUI
 			lastMouseX = e.getX();
 			lastMouseY = e.getY();
 
+			double preciseWheelRotation = e.getPreciseWheelRotation();
+
 			// compute new view position
 			Point viewPosition = (targetViewPosition != null)
 				? targetViewPosition
@@ -695,19 +705,34 @@ public class FlatTabbedPaneUI
 			int y = viewPosition.y;
 			int tabPlacement = tabPane.getTabPlacement();
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
-				x += maxTabHeight * e.getWheelRotation();
+				x += maxTabHeight * preciseWheelRotation;
 				x = Math.min( Math.max( x, 0 ), viewSize.width - tabViewport.getWidth() );
 			} else {
-				y += maxTabHeight * e.getWheelRotation();
+				y += maxTabHeight * preciseWheelRotation;
 				y = Math.min( Math.max( y, 0 ), viewSize.height - tabViewport.getHeight() );
 			}
 
-			// update view position
+			// check whether view position has changed
 			Point newViewPosition = new Point( x, y );
-			setViewPositionAnimated( newViewPosition );
+			if( newViewPosition.equals( viewPosition ) )
+				return;
 
-			if( !newViewPosition.equals( viewPosition ))
-				scrolled = true;
+			// update view position
+			if( preciseWheelRotation != 0 &&
+				preciseWheelRotation != e.getWheelRotation() )
+			{
+				// do not use animation for precise scrolling (e.g. with trackpad)
+
+				// stop running animation (if any)
+				if( animator != null )
+					animator.stop();
+
+				tabViewport.setViewPosition( newViewPosition );
+				updateRolloverDelayed();
+			} else
+				setViewPositionAnimated( newViewPosition );
+
+			scrolled = true;
 		}
 
 		protected void setViewPositionAnimated( Point viewPosition ) {
@@ -718,7 +743,7 @@ public class FlatTabbedPaneUI
 			// do not use animation if disabled
 			if( !isSmoothScrollingEnabled() ) {
 				tabViewport.setViewPosition( viewPosition );
-				setRolloverTab( lastMouseX, lastMouseY );
+				updateRolloverDelayed();
 				return;
 			}
 
@@ -754,8 +779,38 @@ public class FlatTabbedPaneUI
 			}
 
 			// restart animator
-			animator.cancel();
-			animator.start();
+			animator.restart();
+		}
+
+		protected void updateRolloverDelayed() {
+			blockRollover = true;
+
+			// keep rollover on last tab until it would move to another tab, then clear it
+			int oldIndex = getRolloverTab();
+			if( oldIndex >= 0 ) {
+				int index = tabForCoordinate( tabPane, lastMouseX, lastMouseY );
+				if( index >= 0 && index != oldIndex ) {
+					// clear if moved to another tab
+					blockRollover = false;
+					setRolloverTab( -1 );
+					blockRollover = true;
+				}
+			}
+
+			// create timer
+			if( rolloverTimer == null ) {
+				rolloverTimer = new Timer( 150, e -> {
+					blockRollover = false;
+
+					// highlight tab at mouse location
+					if( tabPane != null )
+						setRolloverTab( lastMouseX, lastMouseY );
+				} );
+				rolloverTimer.setRepeats( false );
+			}
+
+			// restart timer
+			rolloverTimer.restart();
 		}
 
 		@Override
@@ -790,8 +845,8 @@ public class FlatTabbedPaneUI
 			if( inViewport != wasInViewport ) {
 				if( !inViewport )
 					viewportExited();
-				else if( timer != null )
-					timer.stop();
+				else if( exitedTimer != null )
+					exitedTimer.stop();
 			}
 		}
 
@@ -799,12 +854,12 @@ public class FlatTabbedPaneUI
 			if( !scrolled )
 				return;
 
-			if( timer == null ) {
-				timer = new Timer( 500, e -> ensureSelectedTabVisible() );
-				timer.setRepeats( false );
+			if( exitedTimer == null ) {
+				exitedTimer = new Timer( 500, e -> ensureSelectedTabVisible() );
+				exitedTimer.setRepeats( false );
 			}
 
-			timer.start();
+			exitedTimer.start();
 		}
 
 		protected void ensureSelectedTabVisible() {
