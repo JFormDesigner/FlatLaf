@@ -347,6 +347,7 @@ public class FlatSmoothScrollingTest
 
 		//======== scrollPane1 ========
 		{
+			scrollPane1.putClientProperty("JScrollPane.smoothScrolling", false);
 			scrollPane1.setViewportView(lineChartPanel);
 		}
 		add(scrollPane1, "cell 0 5 4 1,width 100");
@@ -465,7 +466,7 @@ public class FlatSmoothScrollingTest
 		implements Scrollable
 	{
 		private static final int NEW_SEQUENCE_TIME_LAG = 500;
-		private static final int NEW_SEQUENCE_GAP = 20;
+		private static final int NEW_SEQUENCE_GAP = 50;
 
 		private int secondWidth = 1000;
 
@@ -538,9 +539,15 @@ public class FlatSmoothScrollingTest
 
 			// scroll horizontally
 			if( lastUsedChartColor != null ) {
+				// compute chart width of last used color and start of last sequence
 				int[] lastSeqX = new int[1];
 				int cw = chartWidth( color2dataMap.get( lastUsedChartColor ), lastSeqX );
-				scrollRectToVisible( new Rectangle( lastSeqX[0], 0, cw - lastSeqX[0], getHeight() ) );
+
+				// scroll to end of last sequence (of last used color)
+				int lastSeqWidth = cw - lastSeqX[0];
+				int width = Math.min( lastSeqWidth, getParent().getWidth() );
+				int x = cw - width;
+				scrollRectToVisible( new Rectangle( x, 0, width, getHeight() ) );
 			}
 		}
 

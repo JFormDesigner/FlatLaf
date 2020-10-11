@@ -148,6 +148,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
+				"$client.JScrollPane.smoothScrolling": false
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatSmoothScrollingTest$LineChartPanel" ) {
 					name: "lineChartPanel"
 				} )
