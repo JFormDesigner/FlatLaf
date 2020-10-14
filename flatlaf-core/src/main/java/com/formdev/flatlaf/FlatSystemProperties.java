@@ -93,6 +93,14 @@ public interface FlatSystemProperties
 	String MENUBAR_EMBEDDED = "flatlaf.menuBarEmbedded";
 
 	/**
+	 * Specifies whether animations are enabled.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code true}
+	 */
+	String ANIMATION = "flatlaf.animation";
+
+	/**
 	 * Specifies whether vertical text position is corrected when UI is scaled on HiDPI screens.
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>

@@ -18,6 +18,7 @@ package com.formdev.flatlaf.util;
 
 import java.util.ArrayList;
 import javax.swing.Timer;
+import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
  * Simple animator based on ideas and concepts from "Filthy Rich Clients" book
@@ -38,6 +39,15 @@ public class Animator
 	private boolean timeToStop;
 	private long startTime;
 	private Timer timer;
+
+	/**
+	 * Checks whether animations are enabled (the default) or disabled via
+	 * system property {@code flatlaf.animation} set to {@code false}.
+	 * This allows disabling all animations at command line with {@code -Dflatlaf.animation=false}.
+	 */
+	public static boolean useAnimation() {
+		return FlatSystemProperties.getBoolean( FlatSystemProperties.ANIMATION, true );
+	}
 
 	/**
 	 * Creates an animation that runs duration milliseconds.
@@ -174,14 +184,17 @@ public class Animator
 		timeToStop = false;
 		startTime = System.nanoTime() / 1000000;
 
-		timer = new Timer( resolution, e -> {
-			if( !hasBegun ) {
-				begin();
-				hasBegun = true;
-			}
+		if( timer == null ) {
+			timer = new Timer( resolution, e -> {
+				if( !hasBegun ) {
+					begin();
+					hasBegun = true;
+				}
 
-			timingEvent( getTimingFraction() );
-		} );
+				timingEvent( getTimingFraction() );
+			} );
+		} else
+			timer.setDelay( resolution );
 		timer.setInitialDelay( 0 );
 		timer.start();
 	}
@@ -203,16 +216,26 @@ public class Animator
 	}
 
 	private void stop( boolean cancel ) {
-		if( timer != null ) {
+		if( !running )
+			return;
+
+		if( timer != null )
 			timer.stop();
-			timer = null;
-		}
 
 		if( !cancel )
 			end();
 
 		running = false;
 		timeToStop = false;
+	}
+
+	/**
+	 * Restarts the animation.
+	 * Invokes {@link #cancel()} and {@link #start()}.
+	 */
+	public void restart() {
+		cancel();
+		start();
 	}
 
 	/**

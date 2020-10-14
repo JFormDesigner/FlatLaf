@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- TabbedPane: Support scrolling tabs with mouse wheel (if `tabLayoutPolicy` is
+  `SCROLL_TAB_LAYOUT`). (issue #40)
+- TabbedPane: Repeat scrolling as long as arrow buttons are pressed. (issue #40)
 - Support painting separator line between window title and content (use UI value
   `TitlePane.borderColor`). (issue #184)
 
