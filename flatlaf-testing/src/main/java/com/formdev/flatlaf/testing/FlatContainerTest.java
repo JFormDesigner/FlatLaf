@@ -215,6 +215,27 @@ public class FlatContainerTest
 		return tab;
 	}
 
+	private void tabPlacementChanged() {
+		int tabPlacement = -1;
+		switch( (String) tabPlacementField.getSelectedItem() ) {
+			case "top":		tabPlacement = SwingConstants.TOP; break;
+			case "bottom":	tabPlacement = SwingConstants.BOTTOM; break;
+			case "left":	tabPlacement = SwingConstants.LEFT; break;
+			case "right":	tabPlacement = SwingConstants.RIGHT; break;
+		}
+
+		tabbedPane1.setTabPlacement( (tabPlacement >= 0) ? tabPlacement : SwingConstants.TOP );
+		tabbedPane2.setTabPlacement( (tabPlacement >= 0) ? tabPlacement : SwingConstants.BOTTOM );
+		tabbedPane3.setTabPlacement( (tabPlacement >= 0) ? tabPlacement : SwingConstants.LEFT );
+		tabbedPane4.setTabPlacement( (tabPlacement >= 0) ? tabPlacement : SwingConstants.RIGHT );
+	}
+
+	private void tabBackForegroundChanged() {
+		boolean enabled = tabBackForegroundCheckBox.isSelected();
+		tabbedPane1.setBackgroundAt( 0, enabled ? Color.red : null );
+		tabbedPane1.setForegroundAt( 1, enabled ? Color.red : null );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -244,6 +265,9 @@ public class FlatContainerTest
 		customBorderCheckBox = new JCheckBox();
 		customTabsCheckBox = new JCheckBox();
 		hasFullBorderCheckBox = new JCheckBox();
+		JLabel tabPlacementLabel = new JLabel();
+		tabPlacementField = new JComboBox<>();
+		tabBackForegroundCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -356,6 +380,7 @@ public class FlatContainerTest
 					"[fill]",
 					// rows
 					"[center]" +
+					"[]" +
 					"[]"));
 
 				//---- moreTabsCheckBox ----
@@ -411,6 +436,26 @@ public class FlatContainerTest
 				hasFullBorderCheckBox.setText("Show content border");
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
 				panel14.add(hasFullBorderCheckBox, "cell 4 1,alignx left,growx 0");
+
+				//---- tabPlacementLabel ----
+				tabPlacementLabel.setText("Tab placement:");
+				panel14.add(tabPlacementLabel, "cell 0 2");
+
+				//---- tabPlacementField ----
+				tabPlacementField.setModel(new DefaultComboBoxModel<>(new String[] {
+					"default",
+					"top",
+					"bottom",
+					"left",
+					"right"
+				}));
+				tabPlacementField.addActionListener(e -> tabPlacementChanged());
+				panel14.add(tabPlacementField, "cell 1 2");
+
+				//---- tabBackForegroundCheckBox ----
+				tabBackForegroundCheckBox.setText("Tab back/foreground");
+				tabBackForegroundCheckBox.addActionListener(e -> tabBackForegroundChanged());
+				panel14.add(tabBackForegroundCheckBox, "cell 4 2");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -433,6 +478,8 @@ public class FlatContainerTest
 	private JCheckBox customBorderCheckBox;
 	private JCheckBox customTabsCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
+	private JComboBox<String> tabPlacementField;
+	private JCheckBox tabBackForegroundCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Tab1Panel ----------------------------------------------------

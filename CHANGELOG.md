@@ -5,6 +5,11 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- TabbedPane: Replaced forward/backward scrolling arrow buttons with "Show
+  Hidden Tabs" button. If pressed, it shows a popup menu that contains (partly)
+  hidden tabs and selecting one activates that tab. If you prefer
+  forward/backward buttons, use `UIManager.put(
+  "TabbedPane.hiddenTabsNavigation", "arrowButtons" )`. (issue #40)
 - TabbedPane: Support scrolling tabs with mouse wheel (if `tabLayoutPolicy` is
   `SCROLL_TAB_LAYOUT`). (issue #40)
 - TabbedPane: Repeat scrolling as long as arrow buttons are pressed. (issue #40)

@@ -132,7 +132,7 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets 0,hidemode 3"
 					"$columnConstraints": "[][fill][][][fill]"
-					"$rowConstraints": "[center][]"
+					"$rowConstraints": "[center][][]"
 				} ) {
 					name: "panel14"
 					"opaque": false
@@ -251,6 +251,40 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 4 1,alignx left,growx 0"
 					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "tabPlacementLabel"
+						"text": "Tab placement:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "tabPlacementField"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "default"
+							addElement( "default" )
+							addElement( "top" )
+							addElement( "bottom" )
+							addElement( "left" )
+							addElement( "right" )
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+							"JavaCodeGenerator.typeParameters": "String"
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 2"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "tabBackForegroundCheckBox"
+						"text": "Tab back/foreground"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabBackForegroundChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 4 2"
+					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridY": 11
 					"gridWidth": 3
@@ -260,7 +294,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 810, 515 )
+			"size": new java.awt.Dimension( 810, 570 )
 		} )
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3,align center center"
