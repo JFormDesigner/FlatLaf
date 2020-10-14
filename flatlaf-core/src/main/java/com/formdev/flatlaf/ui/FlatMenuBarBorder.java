@@ -20,9 +20,7 @@ import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.geom.Rectangle2D;
 import javax.swing.JMenuBar;
 import javax.swing.UIManager;
 
@@ -40,16 +38,8 @@ public class FlatMenuBarBorder
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-		Graphics2D g2 = (Graphics2D) g.create();
-		try {
-			float lineHeight = scale( (float) 1 );
-
-			FlatUIUtils.setRenderingHints( g2 );
-			g2.setColor( borderColor );
-			g2.fill( new Rectangle2D.Float( x, y + height - lineHeight, width, lineHeight ) );
-		} finally {
-			g2.dispose();
-		}
+		float lineHeight = scale( (float) 1 );
+		FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 	}
 
 	@Override

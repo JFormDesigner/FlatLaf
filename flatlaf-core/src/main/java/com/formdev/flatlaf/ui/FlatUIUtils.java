@@ -379,6 +379,17 @@ public class FlatUIUtils
 		return new RoundRectangle2D.Float( x, y, w, h, arc, arc );
 	}
 
+	static void paintFilledRectangle( Graphics g, Color color, float x, float y, float w, float h ) {
+		Graphics2D g2 = (Graphics2D) g.create();
+		try {
+			FlatUIUtils.setRenderingHints( g2 );
+			g2.setColor( color );
+			g2.fill( new Rectangle2D.Float( x, y, w, h ) );
+		} finally {
+			g2.dispose();
+		}
+	}
+
 	/**
 	 * Fill background with parent's background color because the visible component
 	 * is smaller than its bounds (for the focus decoration).

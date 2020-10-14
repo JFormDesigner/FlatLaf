@@ -37,6 +37,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
@@ -45,6 +46,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JRootPane}.
@@ -54,6 +56,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault RootPane.border								Border
  * @uiDefault RootPane.activeBorderColor					Color
  * @uiDefault RootPane.inactiveBorderColor					Color
+ * @uiDefault TitlePane.borderColor							Color	optional
  *
  * <!-- FlatWindowResizer -->
  *
@@ -70,6 +73,8 @@ public class FlatRootPaneUI
 	// check this field before using class JBRCustomDecorations to avoid unnecessary loading of that class
 	static final boolean canUseJBRCustomDecorations
 		= SystemInfo.isJetBrainsJVM_11_orLater && SystemInfo.isWindows_10_orLater;
+
+	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
 	protected JRootPane rootPane;
 	protected FlatTitlePane titlePane;
@@ -89,9 +94,19 @@ public class FlatRootPaneUI
 
 		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE )
 			installClientDecorations();
+		else
+			installBorder();
 
 		if( canUseJBRCustomDecorations )
 			JBRCustomDecorations.install( rootPane );
+	}
+
+	protected void installBorder() {
+		if( borderColor != null ) {
+			Border b = rootPane.getBorder();
+			if( b == null || b instanceof UIResource )
+				rootPane.setBorder( new FlatWindowTitleBorder( borderColor ) );
+		}
 	}
 
 	@Override
@@ -119,11 +134,8 @@ public class FlatRootPaneUI
 		}
 
 		// enable dark window appearance on macOS when running in JetBrains Runtime
-		if( SystemInfo.isJetBrainsJVM && SystemInfo.isMacOS_10_14_Mojave_orLater ) {
-			LookAndFeel laf = UIManager.getLookAndFeel();
-			boolean isDark = laf instanceof FlatLaf && ((FlatLaf)laf).isDark();
-			c.putClientProperty( "jetbrains.awt.windowDarkAppearance", isDark );
-		}
+		if( SystemInfo.isJetBrainsJVM && SystemInfo.isMacOS_10_14_Mojave_orLater )
+			c.putClientProperty( "jetbrains.awt.windowDarkAppearance", FlatLaf.isLafDark() );
 	}
 
 	protected void installClientDecorations() {
@@ -203,6 +215,8 @@ public class FlatRootPaneUI
 				uninstallClientDecorations();
 				if( rootPane.getWindowDecorationStyle() != JRootPane.NONE )
 					installClientDecorations();
+				else
+					installBorder();
 				break;
 
 			case FlatClientProperties.MENU_BAR_EMBEDDED:
@@ -371,6 +385,42 @@ public class FlatRootPaneUI
 			return parent instanceof Frame
 				? (((Frame)parent).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0
 				: false;
+		}
+	}
+
+	//---- class FlatWindowTitleBorder ----------------------------------------
+
+	private static class FlatWindowTitleBorder
+		extends BorderUIResource.EmptyBorderUIResource
+	{
+		private final Color borderColor;
+
+		FlatWindowTitleBorder( Color borderColor ) {
+			super( 0, 0, 0, 0 );
+			this.borderColor = borderColor;
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			if( showBorder( c ) ) {
+				float lineHeight = UIScale.scale( (float) 1 );
+				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y, width, lineHeight );
+			}
+		}
+
+		@Override
+		public Insets getBorderInsets( Component c, Insets insets ) {
+			insets.set( showBorder( c ) ? 1 : 0, 0, 0, 0 );
+			return insets;
+		}
+
+		private boolean showBorder( Component c ) {
+			Container parent = c.getParent();
+			return
+				(parent instanceof JFrame &&
+				 (((JFrame)parent).getJMenuBar() == null ||
+				  !((JFrame)parent).getJMenuBar().isVisible())) ||
+				parent instanceof JDialog;
 		}
 	}
 }

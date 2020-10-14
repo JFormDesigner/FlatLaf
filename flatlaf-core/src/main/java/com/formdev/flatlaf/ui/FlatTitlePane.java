@@ -76,6 +76,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.foreground							Color
  * @uiDefault TitlePane.inactiveForeground					Color
  * @uiDefault TitlePane.embeddedForeground					Color
+ * @uiDefault TitlePane.borderColor							Color	optional
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
@@ -97,6 +98,7 @@ public class FlatTitlePane
 	protected final Color activeForeground = UIManager.getColor( "TitlePane.foreground" );
 	protected final Color inactiveForeground = UIManager.getColor( "TitlePane.inactiveForeground" );
 	protected final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
+	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
 	protected final Insets menuBarMargins = UIManager.getInsets( "TitlePane.menuBarMargins" );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
@@ -422,6 +424,10 @@ public class FlatTitlePane
 	protected void menuBarChanged() {
 		menuBarPlaceholder.invalidate();
 
+		// necessary for the case that an embedded menu bar is made invisible
+		// and a border color is specified
+		repaint();
+
 		// update title foreground color
 		EventQueue.invokeLater( () -> {
 			activeChanged( window == null || window.isActive() );
@@ -662,12 +668,13 @@ debug*/
 		public Insets getBorderInsets( Component c, Insets insets ) {
 			super.getBorderInsets( c, insets );
 
-			// if menu bar is embedded, add bottom insets of menu bar border
 			Border menuBarBorder = getMenuBarBorder();
 			if( menuBarBorder != null ) {
+				// if menu bar is embedded, add bottom insets of menu bar border
 				Insets menuBarInsets = menuBarBorder.getBorderInsets( c );
 				insets.bottom += menuBarInsets.bottom;
-			}
+			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) )
+				insets.bottom += UIScale.scale( 1 );
 
 			if( hasJBRCustomDecoration() )
 				insets = FlatUIUtils.addInsets( insets, JBRWindowTopBorder.getInstance().getBorderInsets() );
@@ -677,10 +684,16 @@ debug*/
 
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			// if menu bar is embedded, paint menu bar border
+			// paint bottom border
 			Border menuBarBorder = getMenuBarBorder();
-			if( menuBarBorder != null )
+			if( menuBarBorder != null ) {
+				// if menu bar is embedded, paint menu bar border
 				menuBarBorder.paintBorder( c, g, x, y, width, height );
+			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) ) {
+				// paint border between title pane and content if border color is specified
+				float lineHeight = UIScale.scale( (float) 1 );
+				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
+			}
 
 			if( hasJBRCustomDecoration() )
 				JBRWindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
