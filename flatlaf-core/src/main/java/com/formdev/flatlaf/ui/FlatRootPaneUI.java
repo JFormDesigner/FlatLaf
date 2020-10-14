@@ -252,8 +252,9 @@ public class FlatRootPaneUI
 			int width = Math.max( titlePaneSize.width, contentSize.width );
 			int height = titlePaneSize.height + contentSize.height;
 			if( titlePane == null || !titlePane.isMenuBarEmbedded() ) {
-				Dimension menuBarSize = (rootPane.getJMenuBar() != null)
-					? getSizeFunc.apply( rootPane.getJMenuBar() )
+				JMenuBar menuBar = rootPane.getJMenuBar();
+				Dimension menuBarSize = (menuBar != null && menuBar.isVisible())
+					? getSizeFunc.apply( menuBar )
 					: new Dimension();
 
 				width = Math.max( width, menuBarSize.width );
@@ -290,7 +291,7 @@ public class FlatRootPaneUI
 			}
 
 			JMenuBar menuBar = rootPane.getJMenuBar();
-			if( menuBar != null ) {
+			if( menuBar != null && menuBar.isVisible() ) {
 				if( titlePane != null && titlePane.isMenuBarEmbedded() ) {
 					titlePane.validate();
 					menuBar.setBounds( titlePane.getMenuBarBounds() );

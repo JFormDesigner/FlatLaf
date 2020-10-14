@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## 0.44-SNAPSHOT
+
+#### Fixed bugs
+
+- Custom window decorations: Not visible menu bar is now ignored in layout.
+
+
 ## 0.43
 
 #### New features and improvements

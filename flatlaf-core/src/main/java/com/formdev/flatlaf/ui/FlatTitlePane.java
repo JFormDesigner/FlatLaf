@@ -157,7 +157,7 @@ public class FlatTitlePane
 			@Override
 			public Dimension getPreferredSize() {
 				JMenuBar menuBar = rootPane.getJMenuBar();
-				return (menuBar != null && isMenuBarEmbedded())
+				return (menuBar != null && menuBar.isVisible() && isMenuBarEmbedded())
 					? FlatUIUtils.addInsets( menuBar.getPreferredSize(), UIScale.scale( menuBarMargins ) )
 					: new Dimension();
 			}
@@ -238,7 +238,7 @@ public class FlatTitlePane
 	}
 
 	protected void activeChanged( boolean active ) {
-		boolean hasEmbeddedMenuBar = rootPane.getJMenuBar() != null && isMenuBarEmbedded();
+		boolean hasEmbeddedMenuBar = rootPane.getJMenuBar() != null && rootPane.getJMenuBar().isVisible() && isMenuBarEmbedded();
 		Color background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
 		Color foreground = FlatUIUtils.nonUIResource( active ? activeForeground : inactiveForeground );
 		Color titleForeground = (hasEmbeddedMenuBar && active) ? FlatUIUtils.nonUIResource( embeddedForeground ) : foreground;
@@ -688,7 +688,7 @@ debug*/
 
 		protected Border getMenuBarBorder() {
 			JMenuBar menuBar = rootPane.getJMenuBar();
-			return (menuBar != null && isMenuBarEmbedded()) ? menuBar.getBorder() : null;
+			return (menuBar != null && menuBar.isVisible() && isMenuBarEmbedded()) ? menuBar.getBorder() : null;
 		}
 	}
 
