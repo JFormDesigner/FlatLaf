@@ -76,6 +76,7 @@ public class FlatWindowDecorationsTest
 		Window window = SwingUtilities.windowForComponent( this );
 		menuBarCheckBox.setEnabled( window instanceof JFrame );
 		menuBarEmbeddedCheckBox.setEnabled( window instanceof JFrame );
+		menuBarVisibleCheckBox.setEnabled( window instanceof JFrame );
 		maximizedBoundsCheckBox.setEnabled( window instanceof Frame );
 
 		addMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
@@ -121,6 +122,10 @@ public class FlatWindowDecorationsTest
 		JRootPane rootPane = getWindowRootPane();
 		if( rootPane != null )
 			rootPane.putClientProperty( FlatClientProperties.MENU_BAR_EMBEDDED, menuBarEmbeddedCheckBox.isSelected() );
+	}
+
+	private void menuBarVisibleChanged() {
+		menuBar.setVisible( menuBarVisibleCheckBox.isSelected() );
 	}
 
 	private void addMenu() {
@@ -254,6 +259,7 @@ public class FlatWindowDecorationsTest
 		removeMenuButton = new JButton();
 		changeMenuButton = new JButton();
 		menuBarEmbeddedCheckBox = new JCheckBox();
+		menuBarVisibleCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
 		undecoratedCheckBox = new JCheckBox();
@@ -311,6 +317,7 @@ public class FlatWindowDecorationsTest
 			"para[]0" +
 			"[]0" +
 			"[]0" +
+			"[]0" +
 			"[]" +
 			"[]" +
 			"[top]" +
@@ -343,29 +350,35 @@ public class FlatWindowDecorationsTest
 		menuBarEmbeddedCheckBox.addActionListener(e -> menuBarEmbeddedChanged());
 		add(menuBarEmbeddedCheckBox, "cell 0 1");
 
+		//---- menuBarVisibleCheckBox ----
+		menuBarVisibleCheckBox.setText("menu bar visible");
+		menuBarVisibleCheckBox.setSelected(true);
+		menuBarVisibleCheckBox.addActionListener(e -> menuBarVisibleChanged());
+		add(menuBarVisibleCheckBox, "cell 0 2");
+
 		//---- resizableCheckBox ----
 		resizableCheckBox.setText("resizable");
 		resizableCheckBox.setSelected(true);
 		resizableCheckBox.addActionListener(e -> resizableChanged());
-		add(resizableCheckBox, "cell 0 2");
+		add(resizableCheckBox, "cell 0 3");
 
 		//---- maximizedBoundsCheckBox ----
 		maximizedBoundsCheckBox.setText("maximized bounds (50,100, 1000,700)");
 		maximizedBoundsCheckBox.addActionListener(e -> maximizedBoundsChanged());
-		add(maximizedBoundsCheckBox, "cell 1 2");
+		add(maximizedBoundsCheckBox, "cell 1 3");
 
 		//---- undecoratedCheckBox ----
 		undecoratedCheckBox.setText("undecorated");
 		undecoratedCheckBox.addActionListener(e -> undecoratedChanged());
-		add(undecoratedCheckBox, "cell 0 3");
+		add(undecoratedCheckBox, "cell 0 4");
 
 		//---- label1 ----
 		label1.setText("Style:");
-		add(label1, "cell 0 4");
+		add(label1, "cell 0 5");
 
 		//---- label2 ----
 		label2.setText("Icon:");
-		add(label2, "cell 1 4");
+		add(label2, "cell 1 5");
 
 		//======== panel1 ========
 		{
@@ -430,7 +443,7 @@ public class FlatWindowDecorationsTest
 			styleFileChooserRadioButton.addActionListener(e -> decorationStyleChanged());
 			panel1.add(styleFileChooserRadioButton, "cell 0 8");
 		}
-		add(panel1, "cell 0 5");
+		add(panel1, "cell 0 6");
 
 		//======== panel2 ========
 		{
@@ -459,12 +472,12 @@ public class FlatWindowDecorationsTest
 			iconTestRandomRadioButton.addActionListener(e -> iconChanged());
 			panel2.add(iconTestRandomRadioButton, "cell 0 2");
 		}
-		add(panel2, "cell 1 5");
+		add(panel2, "cell 1 6");
 
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
 		openDialogButton.addActionListener(e -> openDialog());
-		add(openDialogButton, "cell 0 6");
+		add(openDialogButton, "cell 0 7");
 
 		//======== menuBar ========
 		{
@@ -660,6 +673,7 @@ public class FlatWindowDecorationsTest
 	private JButton removeMenuButton;
 	private JButton changeMenuButton;
 	private JCheckBox menuBarEmbeddedCheckBox;
+	private JCheckBox menuBarVisibleCheckBox;
 	private JCheckBox resizableCheckBox;
 	private JCheckBox maximizedBoundsCheckBox;
 	private JCheckBox undecoratedCheckBox;
