@@ -216,6 +216,9 @@ public class FlatInspector
 
 		this.enabled = enabled;
 
+		// make sure that glass pane is not opaque, which is not the case in WebLaF
+		((JComponent)rootPane.getGlassPane()).setOpaque( false );
+
 		rootPane.getGlassPane().setVisible( enabled );
 
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
