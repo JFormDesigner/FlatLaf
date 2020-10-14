@@ -141,11 +141,16 @@ class DemoFrame
 	private void windowDecorationsChanged() {
 		boolean windowDecorations = windowDecorationsCheckBoxMenuItem.isSelected();
 
+		// change window decoration of demo main frame
 		dispose();
 		setUndecorated( windowDecorations );
 		getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
 		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
 		setVisible( true );
+
+		// enable/disable window decoration for later created frames/dialogs
+		JFrame.setDefaultLookAndFeelDecorated( windowDecorations );
+		JDialog.setDefaultLookAndFeelDecorated( windowDecorations );
 	}
 
 	private void menuBarEmbeddedChanged() {
