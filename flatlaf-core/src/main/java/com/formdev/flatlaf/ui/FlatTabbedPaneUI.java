@@ -188,7 +188,6 @@ public class FlatTabbedPaneUI
 		} else
 			super.installDefaults();
 
-
 		disabledForeground = UIManager.getColor( "TabbedPane.disabledForeground" );
 		selectedBackground = UIManager.getColor( "TabbedPane.selectedBackground" );
 		selectedForeground = UIManager.getColor( "TabbedPane.selectedForeground" );
@@ -508,7 +507,8 @@ public class FlatTabbedPaneUI
 			viewRect.width -= 4; // subtract width of cropped edge
 			if( !viewRect.contains( textRect ) ) {
 				Rectangle r = viewRect.intersection( textRect );
-				title = JavaCompatibility.getClippedString( null, metrics, title, r.width );
+				if( r.x > viewRect.x )
+					title = JavaCompatibility.getClippedString( null, metrics, title, r.width );
 			}
 		}
 
