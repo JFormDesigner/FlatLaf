@@ -218,7 +218,7 @@ public class FlatPopupFactory
 	 * and corrects the y-location so that the tooltip is placed above the mouse location.
 	 */
 	private Point fixToolTipLocation( Component owner, Component contents, int x, int y ) {
-		if( !(contents instanceof JToolTip) )
+		if( !(contents instanceof JToolTip) || !wasInvokedFromToolTipManager() )
 			return null;
 
 		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
@@ -231,6 +231,16 @@ public class FlatPopupFactory
 
 		// place tooltip above mouse location
 		return new Point( x, mouseLocation.y - tipSize.height - UIScale.scale( 20 ) );
+	}
+
+	private boolean wasInvokedFromToolTipManager() {
+		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+		for( StackTraceElement stackTraceElement : stackTrace ) {
+			if( "javax.swing.ToolTipManager".equals( stackTraceElement.getClassName() ) &&
+				"showTipWindow".equals( stackTraceElement.getMethodName() ) )
+			  return true;
+		}
+		return false;
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
