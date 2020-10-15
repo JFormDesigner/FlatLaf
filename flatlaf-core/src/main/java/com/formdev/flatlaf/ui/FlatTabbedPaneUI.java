@@ -71,6 +71,7 @@ import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
+import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -495,6 +496,20 @@ public class FlatTabbedPaneUI
 		if( view != null ) {
 			view.paint( g, textRect );
 			return;
+		}
+
+		// clip title if "more tabs" button is used
+		// (normally this is done by invoker, but fails in this case)
+		if( hiddenTabsNavigation == MORE_TABS_BUTTON &&
+			tabViewport != null &&
+			(tabPlacement == TOP || tabPlacement == BOTTOM) )
+		{
+			Rectangle viewRect = tabViewport.getViewRect();
+			viewRect.width -= 4; // subtract width of cropped edge
+			if( !viewRect.contains( textRect ) ) {
+				Rectangle r = viewRect.intersection( textRect );
+				title = JavaCompatibility.getClippedString( null, metrics, title, r.width );
+			}
 		}
 
 		// plain text
