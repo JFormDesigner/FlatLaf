@@ -275,6 +275,28 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 2"
 					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "hiddenTabsNavigationLabel"
+						"text": "Hidden tabs navigation:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 2"
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "hiddenTabsNavigationField"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "default"
+							addElement( "default" )
+							addElement( "moreTabsButton" )
+							addElement( "arrowButtons" )
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+							"JavaCodeGenerator.typeParameters": "String"
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hiddenTabsNavigationChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 3 2"
+					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "tabBackForegroundCheckBox"
 						"text": "Tab back/foreground"

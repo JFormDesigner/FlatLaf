@@ -16,9 +16,7 @@
 
 package com.formdev.flatlaf.testing;
 
-import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
-import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_CONTENT_SEPARATOR;
-import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_TAB_SEPARATORS;
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -230,6 +228,19 @@ public class FlatContainerTest
 		tabbedPane4.setTabPlacement( (tabPlacement >= 0) ? tabPlacement : SwingConstants.RIGHT );
 	}
 
+	private void hiddenTabsNavigationChanged() {
+		String value = null;
+		switch( (String) hiddenTabsNavigationField.getSelectedItem() ) {
+			case "moreTabsButton":	value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON; break;
+			case "arrowButtons":	value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS; break;
+		}
+
+		tabbedPane1.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
+		tabbedPane2.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
+		tabbedPane3.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
+		tabbedPane4.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
+	}
+
 	private void tabBackForegroundChanged() {
 		boolean enabled = tabBackForegroundCheckBox.isSelected();
 		tabbedPane1.setBackgroundAt( 0, enabled ? Color.red : null );
@@ -267,6 +278,8 @@ public class FlatContainerTest
 		hasFullBorderCheckBox = new JCheckBox();
 		JLabel tabPlacementLabel = new JLabel();
 		tabPlacementField = new JComboBox<>();
+		JLabel hiddenTabsNavigationLabel = new JLabel();
+		hiddenTabsNavigationField = new JComboBox<>();
 		tabBackForegroundCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
@@ -452,6 +465,19 @@ public class FlatContainerTest
 				tabPlacementField.addActionListener(e -> tabPlacementChanged());
 				panel14.add(tabPlacementField, "cell 1 2");
 
+				//---- hiddenTabsNavigationLabel ----
+				hiddenTabsNavigationLabel.setText("Hidden tabs navigation:");
+				panel14.add(hiddenTabsNavigationLabel, "cell 2 2");
+
+				//---- hiddenTabsNavigationField ----
+				hiddenTabsNavigationField.setModel(new DefaultComboBoxModel<>(new String[] {
+					"default",
+					"moreTabsButton",
+					"arrowButtons"
+				}));
+				hiddenTabsNavigationField.addActionListener(e -> hiddenTabsNavigationChanged());
+				panel14.add(hiddenTabsNavigationField, "cell 3 2");
+
 				//---- tabBackForegroundCheckBox ----
 				tabBackForegroundCheckBox.setText("Tab back/foreground");
 				tabBackForegroundCheckBox.addActionListener(e -> tabBackForegroundChanged());
@@ -479,6 +505,7 @@ public class FlatContainerTest
 	private JCheckBox customTabsCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
 	private JComboBox<String> tabPlacementField;
+	private JComboBox<String> hiddenTabsNavigationField;
 	private JCheckBox tabBackForegroundCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 

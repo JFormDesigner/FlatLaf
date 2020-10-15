@@ -268,13 +268,27 @@ public class FlatTabbedPaneUI
 			}
 		}
 
-		// initialize here because used in installHiddenTabsNavigation() before installDefaults() was invoked
-		hiddenTabsNavigation = parseHiddenTabsNavigation( UIManager.getString( "TabbedPane.hiddenTabsNavigation" ) );
-
 		installHiddenTabsNavigation();
 	}
 
-	private void installHiddenTabsNavigation() {
+	@Override
+	protected void uninstallComponents() {
+		// uninstall hidden tabs navigation before invoking super.uninstallComponents() for
+		// correct uninstallation of BasicTabbedPaneUI tab scroller support
+		uninstallHiddenTabsNavigation();
+
+		super.uninstallComponents();
+
+		tabViewport = null;
+	}
+
+	protected void installHiddenTabsNavigation() {
+		// initialize here because used in installHiddenTabsNavigation() before installDefaults() was invoked
+		String hiddenTabsNavigationStr = (String) tabPane.getClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION );
+		if( hiddenTabsNavigationStr == null )
+			hiddenTabsNavigationStr = UIManager.getString( "TabbedPane.hiddenTabsNavigation" );
+		hiddenTabsNavigation = parseHiddenTabsNavigation( hiddenTabsNavigationStr );
+
 		if( hiddenTabsNavigation != MORE_TABS_BUTTON ||
 			!isScrollTabLayout() ||
 			tabViewport == null )
@@ -293,21 +307,16 @@ public class FlatTabbedPaneUI
 		tabPane.add( moreTabsButton );
 	}
 
-	@Override
-	protected void uninstallComponents() {
+	protected void uninstallHiddenTabsNavigation() {
 		// restore layout manager before invoking super.uninstallComponents() for
 		// correct uninstallation of BasicTabbedPaneUI tab scroller support
 		if( tabPane.getLayout() instanceof FlatTabbedPaneScrollLayout )
 			tabPane.setLayout( ((FlatTabbedPaneScrollLayout)tabPane.getLayout()).delegate );
 
-		super.uninstallComponents();
-
 		if( moreTabsButton != null ) {
 			tabPane.remove( moreTabsButton );
 			moreTabsButton = null;
 		}
-
-		tabViewport = null;
 	}
 
 	@Override
@@ -1274,6 +1283,12 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_HAS_FULL_BORDER:
 				case TABBED_PANE_TAB_HEIGHT:
 					tabPane.revalidate();
+					tabPane.repaint();
+					break;
+
+				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
+					uninstallHiddenTabsNavigation();
+					installHiddenTabsNavigation();
 					tabPane.repaint();
 					break;
 			}
