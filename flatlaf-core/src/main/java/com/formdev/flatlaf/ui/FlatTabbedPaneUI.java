@@ -802,12 +802,13 @@ public class FlatTabbedPaneUI
 		if( tabPane == null || tabViewport == null )
 			return;
 
+		ensureCurrentLayout();
+
 		int selectedIndex = tabPane.getSelectedIndex();
-		if( selectedIndex < 0 )
+		if( selectedIndex < 0 || selectedIndex >= rects.length )
 			return;
 
-		Rectangle tabBounds = getTabBounds( tabPane, selectedIndex );
-		tabViewport.scrollRectToVisible( tabBounds );
+		((JComponent)tabViewport.getView()).scrollRectToVisible( (Rectangle) rects[selectedIndex].clone() );
 	}
 
 	//---- class FlatMoreTabsButton -------------------------------------------
@@ -881,20 +882,23 @@ public class FlatTabbedPaneUI
 				}
 			}
 
-			// show popup menu
+			// compute popup menu location
 			int buttonWidth = getWidth();
 			int buttonHeight = getHeight();
-			int x = 0;
-			int y = 0;
 			Dimension popupSize = popupMenu.getPreferredSize();
+			boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
+
+			int x = leftToRight ? buttonWidth - popupSize.width : 0;
+			int y = buttonHeight - popupSize.height;
 			switch( tabPane.getTabPlacement() ) {
 				default:
-				case TOP:	x = buttonWidth - popupSize.width; y = buttonHeight; break;
-				case BOTTOM:	x = buttonWidth - popupSize.width; y = -popupSize.height; break;
-				case LEFT:	x = buttonWidth; y = buttonHeight - popupSize.height; break;
-				case RIGHT:	x = -popupSize.width; y = buttonHeight - popupSize.height; break;
-
+				case TOP:		y = buttonHeight; break;
+				case BOTTOM:	y = -popupSize.height; break;
+				case LEFT:		x = buttonWidth; break;
+				case RIGHT:		x = -popupSize.width; break;
 			}
+
+			// show popup menu
 			popupMenu.show( this, x, y );
 		}
 
@@ -916,8 +920,13 @@ public class FlatTabbedPaneUI
 			if( !tabPane.isEnabledAt( index ) )
 				menuItem.setEnabled( false );
 
-			menuItem.addActionListener( e -> tabPane.setSelectedIndex( index ) );
+			menuItem.addActionListener( e -> selectTab( index ) );
 			return menuItem;
+		}
+
+		protected void selectTab( int index ) {
+			tabPane.setSelectedIndex( index );
+			ensureSelectedTabIsVisible();
 		}
 
 		@Override
@@ -1052,6 +1061,7 @@ public class FlatTabbedPaneUI
 			lastMouseY = e.getY();
 
 			double preciseWheelRotation = e.getPreciseWheelRotation();
+			int amount = (int) (maxTabHeight * preciseWheelRotation);
 
 			// compute new view position
 			Point viewPosition = (targetViewPosition != null)
@@ -1062,10 +1072,11 @@ public class FlatTabbedPaneUI
 			int y = viewPosition.y;
 			int tabPlacement = tabPane.getTabPlacement();
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
-				x += maxTabHeight * preciseWheelRotation;
+				boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
+				x += leftToRight ? amount : -amount;
 				x = Math.min( Math.max( x, 0 ), viewSize.width - tabViewport.getWidth() );
 			} else {
-				y += maxTabHeight * preciseWheelRotation;
+				y += amount;
 				y = Math.min( Math.max( y, 0 ), viewSize.height - tabViewport.getHeight() );
 			}
 
@@ -1395,11 +1406,11 @@ public class FlatTabbedPaneUI
 
 			// check whether scroll buttons are visible, which is changed by original
 			// layout manager depending on whether there is enough room for all tabs
-			boolean scrollButtonsVisible = false;
+			boolean moreTabsButtonVisible = false;
 			Rectangle buttonsBounds = null;
 			for( Component c : tabPane.getComponents() ) {
 				if( c instanceof FlatScrollableTabButton && c.isVisible() ) {
-					scrollButtonsVisible = true;
+					moreTabsButtonVisible = true;
 
 					// compute union bounds of all scroll buttons
 					Rectangle r = c.getBounds();
@@ -1410,8 +1421,50 @@ public class FlatTabbedPaneUI
 				}
 			}
 
+			// fixes for bugs in TabbedPaneScrollLayout
+			if( tabPane.getTabPlacement() == TOP || tabPane.getTabPlacement() == BOTTOM ) {
+				Insets insets = tabPane.getInsets();
+				if( !tabPane.getComponentOrientation().isLeftToRight() ) {
+					// fixes for right-to-left, which is faulty in TabbedPaneScrollLayout.calculateTabRects()
+
+					// if tabbed pane width is smaller than total tabs width,
+					// the x locations are not zero based
+					int xLastTab = rects[rects.length - 1].x;
+					int offset = (xLastTab < 0) ? xLastTab : 0;
+					if( offset != 0 ) {
+						for( int i = 0; i < rects.length; i++ ) {
+							// fix x location in rects
+							rects[i].x -= offset;
+
+							// fix tab component location
+							Component c = tabPane.getTabComponentAt( i );
+							if( c != null )
+								c.setLocation( c.getX() - offset, c.getY() );
+						}
+
+						moreTabsButtonVisible = true;
+
+						Insets tabAreaInsets = getTabAreaInsets( tabPane.getTabPlacement() );
+						Rectangle bounds = tabViewport.getBounds();
+
+						// compute "more tabs" button bounds
+						int buttonWidth = moreTabsButton.getPreferredSize().width + UIScale.scale( 8 );
+						int buttonHeight = bounds.height - tabAreaInsets.top - tabAreaInsets.bottom;
+						buttonsBounds = new Rectangle( bounds.x, bounds.y + bounds.height - buttonHeight, buttonWidth, buttonHeight );
+
+						// make viewport smaller on left side so that there is room for the button
+						tabViewport.setBounds( bounds.x + buttonWidth, bounds.y, bounds.width - buttonWidth, bounds.height );
+					}
+				} else {
+					// TabbedPaneScrollLayout.layoutContainer() uses insets.left to
+					// compute button x-location where it should use insets.right
+					if( buttonsBounds != null && insets.left != insets.right )
+						buttonsBounds.x = tabPane.getWidth() - insets.right - buttonsBounds.width;
+				}
+			}
+
 			// show/hide "more tabs" button and layout it
-			moreTabsButton.setVisible( scrollButtonsVisible );
+			moreTabsButton.setVisible( moreTabsButtonVisible );
 			if( buttonsBounds != null )
 				moreTabsButton.setBounds( buttonsBounds );
 		}

@@ -38,6 +38,7 @@ public class FlatContainerTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatContainerTest" );
+			frame.useApplyComponentOrientation = true;
 			frame.showFrame( FlatContainerTest::new );
 		} );
 	}
@@ -115,7 +116,7 @@ public class FlatContainerTest
 			for( int i = oldTabCount + 1; i <= newTabCount; i++ )
 				addTab( tabbedPane, "Tab " + i, "tab content " + i );
 		} else if( newTabCount < oldTabCount ) {
-			while( tabbedPane.getTabCount() > 4 )
+			while( tabbedPane.getTabCount() > newTabCount )
 				tabbedPane.removeTabAt( tabbedPane.getTabCount() - 1 );
 		}
 	}
@@ -171,7 +172,7 @@ public class FlatContainerTest
 
 	private void customBorderChanged() {
 		Border border = customBorderCheckBox.isSelected()
-			? new LineBorder( Color.magenta, 20 )
+			? new MatteBorder( 10, 20, 25, 35, Color.green )
 			: null;
 
 		tabbedPane1.setBorder( border );
