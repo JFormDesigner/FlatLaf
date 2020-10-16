@@ -646,6 +646,7 @@ TabbedPane.focusInputMap
 TabbedPane.font
 TabbedPane.foreground
 TabbedPane.hasFullBorder
+TabbedPane.hiddenTabsNavigation
 TabbedPane.highlight
 TabbedPane.hoverColor
 TabbedPane.labelShift

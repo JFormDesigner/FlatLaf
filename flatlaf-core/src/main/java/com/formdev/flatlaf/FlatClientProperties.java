@@ -241,6 +241,30 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight";
 
 	/**
+	 * Specifies how to navigate to hidden tabs.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}
+	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON}
+	 * or {@link #TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS}
+	 */
+	String TABBED_PANE_HIDDEN_TABS_NAVIGATION = "JTabbedPane.hiddenTabsNavigation";
+
+	/**
+	 * Use "more tabs" button for navigation to hidden tabs.
+	 *
+	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
+	 */
+	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON = "moreTabsButton";
+
+	/**
+	 * Use forward/backward buttons for navigation to hidden tabs.
+	 *
+	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
+	 */
+	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS = "arrowButtons";
+
+	/**
 	 * Specifies whether all text is selected when the text component gains focus.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>

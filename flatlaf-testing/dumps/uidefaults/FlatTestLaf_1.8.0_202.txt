@@ -909,6 +909,7 @@ TabbedPane.focusColor          #dddddd    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.font                [active] $defaultFont [UI]
 TabbedPane.foreground          #ff0000    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.hasFullBorder       false
+TabbedPane.hiddenTabsNavigation moreTabsButton
 TabbedPane.highlight           #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.hoverColor          #eeeeee    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.labelShift          1
@@ -928,7 +929,7 @@ TabbedPane.tabSelectionHeight  3
 TabbedPane.tabSeparatorColor   #0000ff    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.tabSeparatorsFullHeight false
 TabbedPane.tabsOpaque          true
-TabbedPane.tabsOverlapBorder   true
+TabbedPane.tabsOverlapBorder   false
 TabbedPane.textIconGap         4
 TabbedPane.underlineColor      #4a88c7    javax.swing.plaf.ColorUIResource [UI]
 TabbedPaneUI                   com.formdev.flatlaf.ui.FlatTabbedPaneUI
