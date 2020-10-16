@@ -435,6 +435,21 @@ public class FlatTabbedPaneUI
 		return Math.max( tabHeight, super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2 /* was added by superclass */ );
 	}
 
+	@Override
+	protected Insets getTabAreaInsets( int tabPlacement ) {
+		Insets currentTabAreaInsets = super.getTabAreaInsets( tabPlacement );
+		Insets insets = (Insets) currentTabAreaInsets.clone();
+
+		// This is a "trick" to get rid of the cropped edge:
+		//     super.getTabAreaInsets() returns private field BasicTabbedPaneUI.currentTabAreaInsets,
+		//     which is also used to translate the origin of the cropped edge in
+		//     BasicTabbedPaneUI.CroppedEdge.paintComponent().
+		//     Giving it large values clips painting of the cropped edge and makes it invisible.
+		currentTabAreaInsets.top = currentTabAreaInsets.left = -10000;
+
+		return insets;
+	}
+
 	/**
 	 * The content border insets are used to create a separator between tabs and content.
 	 * If client property JTabbedPane.hasFullBorder is true, then the content border insets
