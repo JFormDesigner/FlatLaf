@@ -274,6 +274,8 @@ public class FlatTabbedPaneUI
 		}
 
 		installHiddenTabsNavigation();
+		installLeadingComponent();
+		installTrailingComponent();
 	}
 
 	@Override
@@ -281,6 +283,8 @@ public class FlatTabbedPaneUI
 		// uninstall hidden tabs navigation before invoking super.uninstallComponents() for
 		// correct uninstallation of BasicTabbedPaneUI tab scroller support
 		uninstallHiddenTabsNavigation();
+		uninstallLeadingComponent();
+		uninstallTrailingComponent();
 
 		super.uninstallComponents();
 
@@ -302,9 +306,6 @@ public class FlatTabbedPaneUI
 		// create and add "more tabs" button
 		moreTabsButton = createMoreTabsButton();
 		tabPane.add( moreTabsButton );
-
-		installLeadingComponent();
-		installTrailingComponent();
 	}
 
 	protected void uninstallHiddenTabsNavigation() {
@@ -317,9 +318,6 @@ public class FlatTabbedPaneUI
 			tabPane.remove( moreTabsButton );
 			moreTabsButton = null;
 		}
-
-		uninstallLeadingComponent();
-		uninstallTrailingComponent();
 	}
 
 	protected void installLeadingComponent() {
@@ -415,6 +413,14 @@ public class FlatTabbedPaneUI
 		return handler;
 	}
 
+	@Override
+	protected LayoutManager createLayoutManager() {
+		if( tabPane.getTabLayoutPolicy() == JTabbedPane.WRAP_TAB_LAYOUT )
+			return new FlatTabbedPaneLayout();
+
+		return super.createLayoutManager();
+	}
+
 	protected LayoutManager createScrollLayoutManager( TabbedPaneLayout delegate ) {
 		return new FlatTabbedPaneScrollLayout( delegate );
 	}
@@ -479,6 +485,24 @@ public class FlatTabbedPaneUI
 		//     BasicTabbedPaneUI.CroppedEdge.paintComponent().
 		//     Giving it large values clips painting of the cropped edge and makes it invisible.
 		currentTabAreaInsets.top = currentTabAreaInsets.left = -10000;
+
+		// increase insets for wrap layout if using leading/trailing components
+		if( tabPane.getTabLayoutPolicy() == JTabbedPane.WRAP_TAB_LAYOUT ) {
+			if( leadingComponent != null ) {
+				Dimension leadingSize = leadingComponent.getPreferredSize();
+				if( isHorizontalTabPlacement() )
+					insets.left += leadingSize.width;
+				else
+					insets.top += leadingSize.height;
+			}
+			if( trailingComponent != null ) {
+				Dimension trailingSize = trailingComponent.getPreferredSize();
+				if( isHorizontalTabPlacement() )
+					insets.right += trailingSize.width;
+				else
+					insets.bottom += trailingSize.height;
+			}
+		}
 
 		return insets;
 	}
@@ -872,6 +896,22 @@ public class FlatTabbedPaneUI
 			return;
 
 		((JComponent)tabViewport.getView()).scrollRectToVisible( (Rectangle) rects[selectedIndex].clone() );
+	}
+
+	private void shiftTabs( int sx, int sy ) {
+		if( sx == 0 && sy == 0 )
+			return;
+
+		for( int i = 0; i < rects.length; i++ ) {
+			// fix x location in rects
+			rects[i].x += sx;
+			rects[i].y += sy;
+
+			// fix tab component location
+			Component c = tabPane.getTabComponentAt( i );
+			if( c != null )
+				c.setLocation( c.getX() + sx, c.getY() + sy );
+		}
 	}
 
 	//---- class ContainerUIResource ------------------------------------------
@@ -1432,6 +1472,84 @@ public class FlatTabbedPaneUI
 		@Override public void componentHidden( ComponentEvent e ) {}
 	}
 
+	//---- class FlatTabbedPaneLayout -----------------------------------------
+
+	protected class FlatTabbedPaneLayout
+		extends TabbedPaneLayout
+	{
+		@Override
+		public void layoutContainer( Container parent ) {
+			super.layoutContainer( parent );
+
+			Rectangle bounds = tabPane.getBounds();
+			Insets insets = tabPane.getInsets();
+			int tabPlacement = tabPane.getTabPlacement();
+			Insets tabAreaInsets = getTabAreaInsets( tabPlacement );
+			boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
+
+			// layout leading and trailing components in tab area
+			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				// tab area bounds
+				int tx = insets.left;
+				int ty = (tabPlacement == TOP)
+					? insets.top
+					: (bounds.height - insets.bottom - maxTabHeight - tabAreaInsets.top - tabAreaInsets.bottom);
+				int tw = bounds.width - insets.left - insets.right;
+				int th = maxTabHeight;
+
+				int tyi = ty + tabAreaInsets.top;
+
+				// layout left component
+				Container leftComponent = leftToRight ? leadingComponent : trailingComponent;
+				if( leftComponent != null ) {
+					int leftWidth = leftComponent.getPreferredSize().width;
+					leftComponent.setBounds( tx, tyi, leftWidth, th );
+
+					// reduce tab area bounds
+					tx += leftWidth;
+					tw -= leftWidth;
+				}
+
+				// layout right component
+				Container rightComponent = leftToRight ? trailingComponent : leadingComponent;
+				if( rightComponent != null ) {
+					int rightWidth = rightComponent.getPreferredSize().width;
+					rightComponent.setBounds( tx + tw - rightWidth, tyi, rightWidth, th );
+				}
+
+				// fix x-locations of tabs in right-to-left component orientation
+				if( !leftToRight )
+					shiftTabs( insets.left + tabAreaInsets.right, 0 );
+			} else { // LEFT, RIGHT
+				// tab area bounds
+				int tx = (tabPlacement == LEFT)
+					? insets.left
+					: (bounds.width - insets.right - maxTabWidth - tabAreaInsets.left - tabAreaInsets.right);
+				int ty = insets.top;
+				int tw = maxTabWidth;
+				int th = bounds.height - insets.top - insets.bottom;
+
+				int txi = tx + tabAreaInsets.left;
+
+				// layout top component
+				if( leadingComponent != null ) {
+					int topHeight = leadingComponent.getPreferredSize().height;
+					leadingComponent.setBounds( txi, ty, tw, topHeight );
+
+					// reduce tab area bounds
+					ty += topHeight;
+					th -= topHeight;
+				}
+
+				// layout bottom component
+				if( trailingComponent != null ) {
+					int bottomHeight = trailingComponent.getPreferredSize().height;
+					trailingComponent.setBounds( txi, ty + th - bottomHeight, tw, bottomHeight );
+				}
+			}
+		}
+	}
+
 	//---- class FlatTabbedPaneScrollLayout -----------------------------------
 
 	/**
@@ -1539,22 +1657,22 @@ public class FlatTabbedPaneUI
 				// layout left component
 				Container leftComponent = leftToRight ? leadingComponent : trailingComponent;
 				if( leftComponent != null ) {
-					Dimension leftSize = leftComponent.getPreferredSize();
-					leftComponent.setBounds( tx, tyi, leftSize.width, th );
+					int leftWidth = leftComponent.getPreferredSize().width;
+					leftComponent.setBounds( tx, tyi, leftWidth, th );
 
 					// reduce tab area bounds
-					tx += leftSize.width;
-					tw -= leftSize.width;
+					tx += leftWidth;
+					tw -= leftWidth;
 				}
 
 				// layout right component
 				Container rightComponent = leftToRight ? trailingComponent : leadingComponent;
 				if( rightComponent != null ) {
-					Dimension rightSize = rightComponent.getPreferredSize();
-					rightComponent.setBounds( tx + tw - rightSize.width, tyi, rightSize.width, th );
+					int rightWidth = rightComponent.getPreferredSize().width;
+					rightComponent.setBounds( tx + tw - rightWidth, tyi, rightWidth, th );
 
 					// reduce tab area bounds
-					tw -= rightSize.width;
+					tw -= rightWidth;
 				}
 
 				int txi = tx + tabAreaInsets.left;
@@ -1601,21 +1719,21 @@ public class FlatTabbedPaneUI
 
 				// layout top component
 				if( leadingComponent != null ) {
-					Dimension topSize = leadingComponent.getPreferredSize();
-					leadingComponent.setBounds( txi, ty, tw, topSize.height );
+					int topHeight = leadingComponent.getPreferredSize().height;
+					leadingComponent.setBounds( txi, ty, tw, topHeight );
 
 					// reduce tab area bounds
-					ty += topSize.height;
-					th -= topSize.height;
+					ty += topHeight;
+					th -= topHeight;
 				}
 
 				// layout bottom component
 				if( trailingComponent != null ) {
-					Dimension bottomSize = trailingComponent.getPreferredSize();
-					trailingComponent.setBounds( txi, ty + th - bottomSize.height, tw, bottomSize.height );
+					int bottomHeight = trailingComponent.getPreferredSize().height;
+					trailingComponent.setBounds( txi, ty + th - bottomHeight, tw, bottomHeight );
 
 					// reduce tab area bounds
-					th -= bottomSize.height;
+					th -= bottomHeight;
 				}
 
 				int tyi = ty + tabAreaInsets.top;
@@ -1644,22 +1762,6 @@ public class FlatTabbedPaneUI
 			moreTabsButton.setVisible( useMoreButton && buttonsVisible );
 			backwardButton.setVisible( !useMoreButton && buttonsVisible );
 			forwardButton.setVisible( !useMoreButton && buttonsVisible );
-		}
-
-		private void shiftTabs( int sx, int sy ) {
-			if( sx == 0 && sy == 0 )
-				return;
-
-			for( int i = 0; i < rects.length; i++ ) {
-				// fix x location in rects
-				rects[i].x += sx;
-				rects[i].y += sy;
-
-				// fix tab component location
-				Component c = tabPane.getTabComponentAt( i );
-				if( c != null )
-					c.setLocation( c.getX() + sx, c.getY() + sy );
-			}
 		}
 	}
 }
