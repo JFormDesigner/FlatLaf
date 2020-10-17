@@ -1435,7 +1435,7 @@ public class FlatTabbedPaneUI
 	//---- class FlatTabbedPaneScrollLayout -----------------------------------
 
 	/**
-	 * Layout manager used if "TabbedPane.hiddenTabsNavigation" is "moreTabsButton".
+	 * Layout manager used for scroll tab layout policy.
 	 * <p>
 	 * Although this class delegates all methods to the original layout manager
 	 * {@link BasicTabbedPaneUI.TabbedPaneScrollLayout}, which extends
@@ -1468,36 +1468,6 @@ public class FlatTabbedPaneUI
 		@Override
 		public void removeLayoutComponent( Component comp ) {
 			delegate.removeLayoutComponent( comp );
-		}
-
-		@Override
-		public Dimension preferredLayoutSize( Container parent ) {
-			Dimension size = delegate.preferredLayoutSize( parent );
-			size = addLayoutSize( size, leadingComponent, false );
-			size = addLayoutSize( size, trailingComponent, false );
-			return size;
-		}
-
-		@Override
-		public Dimension minimumLayoutSize( Container parent ) {
-			Dimension size = delegate.minimumLayoutSize( parent );
-			size = addLayoutSize( size, leadingComponent, true );
-			size = addLayoutSize( size, trailingComponent, true );
-			return size;
-		}
-
-		private Dimension addLayoutSize( Dimension size, Container c, boolean minimum ) {
-			if( c == null )
-				return size;
-
-			Dimension compSize = minimum ? c.getMinimumSize() : c.getPreferredSize();
-
-			size = (Dimension) size.clone();
-			if( isHorizontalTabPlacement() )
-				size.width += compSize.width;
-			else
-				size.height += compSize.height;
-			return size;
 		}
 
 		@Override
