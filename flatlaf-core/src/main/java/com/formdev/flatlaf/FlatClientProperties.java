@@ -265,6 +265,22 @@ public interface FlatClientProperties
 	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS = "arrowButtons";
 
 	/**
+	 * Specifies a component that will be placed at the leading edge of the tabs area.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.awt.Component}
+	 */
+	String TABBED_PANE_LEADING_COMPONENT = "JTabbedPane.leadingComponent";
+
+	/**
+	 * Specifies a component that will be placed at the trailing edge of the tabs area.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.awt.Component}
+	 */
+	String TABBED_PANE_TRAILING_COMPONENT = "JTabbedPane.trailingComponent";
+
+	/**
 	 * Specifies whether all text is selected when the text component gains focus.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>

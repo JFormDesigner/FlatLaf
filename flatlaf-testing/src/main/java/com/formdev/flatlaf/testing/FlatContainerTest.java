@@ -248,6 +248,28 @@ public class FlatContainerTest
 		tabbedPane1.setForegroundAt( 1, enabled ? Color.red : null );
 	}
 
+	private void leadingComponentChanged() {
+		leadingTrailingComponentChanged( leadingComponentCheckBox.isSelected(), TABBED_PANE_LEADING_COMPONENT, "Leading", 4 );
+	}
+
+	private void trailingComponentChanged() {
+		leadingTrailingComponentChanged( trailingComponentCheckBox.isSelected(), TABBED_PANE_TRAILING_COMPONENT, "Trailing", 12 );
+	}
+
+	private void leadingTrailingComponentChanged( boolean enabled, String key, String text, int gap ) {
+		JTabbedPane[] tabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
+		for( JTabbedPane tabbedPane : tabbedPanes ) {
+			JComponent c = null;
+			if( enabled ) {
+				c = new JLabel( text );
+				c.setOpaque( true );
+				c.setBackground( Color.cyan );
+				c.setBorder( new EmptyBorder( gap, gap, gap, gap ) );
+			}
+			tabbedPane.putClientProperty( key, c );
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -282,6 +304,8 @@ public class FlatContainerTest
 		JLabel hiddenTabsNavigationLabel = new JLabel();
 		hiddenTabsNavigationField = new JComboBox<>();
 		tabBackForegroundCheckBox = new JCheckBox();
+		leadingComponentCheckBox = new JCheckBox();
+		trailingComponentCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -395,6 +419,7 @@ public class FlatContainerTest
 					// rows
 					"[center]" +
 					"[]" +
+					"[]" +
 					"[]"));
 
 				//---- moreTabsCheckBox ----
@@ -483,6 +508,16 @@ public class FlatContainerTest
 				tabBackForegroundCheckBox.setText("Tab back/foreground");
 				tabBackForegroundCheckBox.addActionListener(e -> tabBackForegroundChanged());
 				panel14.add(tabBackForegroundCheckBox, "cell 4 2");
+
+				//---- leadingComponentCheckBox ----
+				leadingComponentCheckBox.setText("Leading");
+				leadingComponentCheckBox.addActionListener(e -> leadingComponentChanged());
+				panel14.add(leadingComponentCheckBox, "cell 0 3");
+
+				//---- trailingComponentCheckBox ----
+				trailingComponentCheckBox.setText("Trailing");
+				trailingComponentCheckBox.addActionListener(e -> trailingComponentChanged());
+				panel14.add(trailingComponentCheckBox, "cell 1 3");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -508,6 +543,8 @@ public class FlatContainerTest
 	private JComboBox<String> tabPlacementField;
 	private JComboBox<String> hiddenTabsNavigationField;
 	private JCheckBox tabBackForegroundCheckBox;
+	private JCheckBox leadingComponentCheckBox;
+	private JCheckBox trailingComponentCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Tab1Panel ----------------------------------------------------
