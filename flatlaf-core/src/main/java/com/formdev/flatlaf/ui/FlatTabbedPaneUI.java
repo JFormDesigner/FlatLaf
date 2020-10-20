@@ -530,6 +530,14 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected Insets getTabInsets( int tabPlacement, int tabIndex ) {
+		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_INSETS );
+		return (value instanceof Insets)
+			? scale( (Insets) value )
+			: super.getTabInsets( tabPlacement, tabIndex );
+	}
+
+	@Override
 	protected Insets getTabAreaInsets( int tabPlacement ) {
 		Insets currentTabAreaInsets = super.getTabAreaInsets( tabPlacement );
 		Insets insets = (Insets) currentTabAreaInsets.clone();
@@ -1503,6 +1511,8 @@ public class FlatTabbedPaneUI
 		PropertyChangeListener propertyChangeDelegate;
 		ChangeListener changeDelegate;
 
+		private final PropertyChangeListener contentListener = this::contentPropertyChange;
+
 		private int pressedTabIndex = -1;
 
 		void installListeners() {
@@ -1512,7 +1522,7 @@ public class FlatTabbedPaneUI
 
 			for( Component c : tabPane.getComponents() ) {
 				if( !(c instanceof UIResource) )
-					c.addPropertyChangeListener( TABBED_PANE_TAB_CLOSABLE, this );
+					c.addPropertyChangeListener( contentListener );
 			}
 		}
 
@@ -1523,7 +1533,7 @@ public class FlatTabbedPaneUI
 
 			for( Component c : tabPane.getComponents() ) {
 				if( !(c instanceof UIResource) )
-					c.removePropertyChangeListener( TABBED_PANE_TAB_CLOSABLE, this );
+					c.removePropertyChangeListener( contentListener );
 			}
 		}
 
@@ -1604,21 +1614,19 @@ public class FlatTabbedPaneUI
 		@Override
 		public void propertyChange( PropertyChangeEvent e ) {
 			// invoke delegate listener
-			if( e.getSource() instanceof JTabbedPane ) {
-				switch( e.getPropertyName() ) {
-					case "tabPlacement":
-					case "opaque":
-					case "background":
-					case "indexForTabComponent":
-						runWithOriginalLayoutManager( () -> {
-							propertyChangeDelegate.propertyChange( e );
-						} );
-						break;
-
-					default:
+			switch( e.getPropertyName() ) {
+				case "tabPlacement":
+				case "opaque":
+				case "background":
+				case "indexForTabComponent":
+					runWithOriginalLayoutManager( () -> {
 						propertyChangeDelegate.propertyChange( e );
-						break;
-				}
+					} );
+					break;
+
+				default:
+					propertyChangeDelegate.propertyChange( e );
+					break;
 			}
 
 			// handle event
@@ -1636,6 +1644,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
 				case TABBED_PANE_HAS_FULL_BORDER:
 				case TABBED_PANE_TAB_HEIGHT:
+				case TABBED_PANE_TAB_INSETS:
 				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
 				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();
@@ -1671,6 +1680,16 @@ public class FlatTabbedPaneUI
 				ensureSelectedTabIsVisible();
 		}
 
+		protected void contentPropertyChange( PropertyChangeEvent e ) {
+			switch( e.getPropertyName() ) {
+				case TABBED_PANE_TAB_INSETS:
+				case TABBED_PANE_TAB_CLOSABLE:
+					tabPane.revalidate();
+					tabPane.repaint();
+					break;
+			}
+		}
+
 		//---- interface ComponentListener ----
 
 		@Override
@@ -1689,14 +1708,14 @@ public class FlatTabbedPaneUI
 		public void componentAdded( ContainerEvent e ) {
 			Component c = e.getChild();
 			if( !(c instanceof UIResource) )
-				c.addPropertyChangeListener( TABBED_PANE_TAB_CLOSABLE, this );
+				c.addPropertyChangeListener( contentListener );
 		}
 
 		@Override
 		public void componentRemoved( ContainerEvent e ) {
 			Component c = e.getChild();
 			if( !(c instanceof UIResource) )
-				c.removePropertyChangeListener( TABBED_PANE_TAB_CLOSABLE, this );
+				c.removePropertyChangeListener( contentListener );
 		}
 	}
 

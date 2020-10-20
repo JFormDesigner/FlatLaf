@@ -255,6 +255,15 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight";
 
 	/**
+	 * Specifies the insets of a tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.awt.Insets}
+	 */
+	String TABBED_PANE_TAB_INSETS = "JTabbedPane.tabInsets";
+
+	/**
 	 * Specifies whether tabs are closable.
 	 * If set to {@code true} on a tabbed pane component, all tabs in that tabbed pane are closable.
 	 * To make individual tabs closable, set it to {@code true} on a tab content component.

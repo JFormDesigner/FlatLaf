@@ -299,6 +299,26 @@ public class FlatContainerTest
 		}
 	}
 
+	private void smallerTabHeightChanged() {
+		Integer tabHeight = smallerTabHeightCheckBox.isSelected() ? 20 : null;
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_HEIGHT, tabHeight );
+	}
+
+	private void smallerInsetsChanged() {
+		Insets insets = smallerInsetsCheckBox.isSelected() ? new Insets( 2, 2, 2, 2 ) : null;
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_INSETS, insets );
+	}
+
+	private void secondTabWiderChanged() {
+		Insets insets = secondTabWiderCheckBox.isSelected() ? new Insets( 4, 20, 4, 20 ) : null;
+
+		JTabbedPane[] tabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
+		for( JTabbedPane tabbedPane : tabbedPanes ) {
+			Component c = tabbedPane.getComponentAt( 1 );
+			((JComponent)c).putClientProperty( TABBED_PANE_TAB_INSETS, insets );
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -337,6 +357,9 @@ public class FlatContainerTest
 		trailingComponentCheckBox = new JCheckBox();
 		tabsClosableCheckBox = new JCheckBox();
 		secondTabClosableCheckBox = new TriStateCheckBox();
+		smallerTabHeightCheckBox = new JCheckBox();
+		smallerInsetsCheckBox = new JCheckBox();
+		secondTabWiderCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -451,6 +474,7 @@ public class FlatContainerTest
 					"[center]" +
 					"[]" +
 					"[]" +
+					"[]" +
 					"[]"));
 
 				//---- moreTabsCheckBox ----
@@ -559,6 +583,21 @@ public class FlatContainerTest
 				secondTabClosableCheckBox.setText("Second Tab closable");
 				secondTabClosableCheckBox.addActionListener(e -> secondTabClosableChanged());
 				panel14.add(secondTabClosableCheckBox, "cell 3 3");
+
+				//---- smallerTabHeightCheckBox ----
+				smallerTabHeightCheckBox.setText("Smaller tab height");
+				smallerTabHeightCheckBox.addActionListener(e -> smallerTabHeightChanged());
+				panel14.add(smallerTabHeightCheckBox, "cell 0 4 2 1");
+
+				//---- smallerInsetsCheckBox ----
+				smallerInsetsCheckBox.setText("Smaller insets");
+				smallerInsetsCheckBox.addActionListener(e -> smallerInsetsChanged());
+				panel14.add(smallerInsetsCheckBox, "cell 2 4");
+
+				//---- secondTabWiderCheckBox ----
+				secondTabWiderCheckBox.setText("Second Tab wider");
+				secondTabWiderCheckBox.addActionListener(e -> secondTabWiderChanged());
+				panel14.add(secondTabWiderCheckBox, "cell 3 4");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -588,6 +627,9 @@ public class FlatContainerTest
 	private JCheckBox trailingComponentCheckBox;
 	private JCheckBox tabsClosableCheckBox;
 	private TriStateCheckBox secondTabClosableCheckBox;
+	private JCheckBox smallerTabHeightCheckBox;
+	private JCheckBox smallerInsetsCheckBox;
+	private JCheckBox secondTabWiderCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Tab1Panel ----------------------------------------------------
