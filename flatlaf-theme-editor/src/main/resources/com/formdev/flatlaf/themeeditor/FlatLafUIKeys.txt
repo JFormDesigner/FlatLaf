@@ -634,6 +634,17 @@ SplitPaneDivider.oneTouchHoverArrowColor
 SplitPaneUI
 TabbedPane.ancestorInputMap
 TabbedPane.background
+TabbedPane.closeArc
+TabbedPane.closeCrossFilledSize
+TabbedPane.closeCrossLineWidth
+TabbedPane.closeCrossPlainSize
+TabbedPane.closeForeground
+TabbedPane.closeHoverBackground
+TabbedPane.closeHoverForeground
+TabbedPane.closeIcon
+TabbedPane.closePressedBackground
+TabbedPane.closePressedForeground
+TabbedPane.closeSize
 TabbedPane.contentAreaColor
 TabbedPane.contentOpaque
 TabbedPane.contentSeparatorHeight

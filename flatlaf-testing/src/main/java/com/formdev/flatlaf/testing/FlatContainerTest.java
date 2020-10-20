@@ -18,9 +18,12 @@ package com.formdev.flatlaf.testing;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.function.BiConsumer;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.TriStateCheckBox;
 import com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon;
 import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.jgoodies.forms.layout.*;
@@ -48,6 +51,9 @@ public class FlatContainerTest
 
 		addInitialTabs( tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 );
 		initialTabCount = tabbedPane1.getTabCount();
+
+		tabsClosableCheckBox.setSelected( true );
+		tabsClosableChanged();
 
 		tabScrollCheckBox.setSelected( true );
 		tabScrollChanged();
@@ -236,10 +242,7 @@ public class FlatContainerTest
 			case "arrowButtons":	value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS; break;
 		}
 
-		tabbedPane1.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
-		tabbedPane2.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
-		tabbedPane3.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
-		tabbedPane4.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
+		putTabbedPanesClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
 	}
 
 	private void tabBackForegroundChanged() {
@@ -267,6 +270,32 @@ public class FlatContainerTest
 				c.setBorder( new EmptyBorder( gap, gap, gap, gap ) );
 			}
 			tabbedPane.putClientProperty( key, c );
+		}
+	}
+
+	private void tabsClosableChanged() {
+		boolean closable = tabsClosableCheckBox.isSelected();
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSABLE, closable ? true : null );
+
+		if( closable ) {
+			putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSE_CALLBACK,
+				(BiConsumer<JTabbedPane, Integer>) (tabbedPane, tabIndex) -> {
+					AWTEvent e = EventQueue.getCurrentEvent();
+					int modifiers = (e instanceof MouseEvent) ? ((MouseEvent)e).getModifiers() : 0;
+					JOptionPane.showMessageDialog( this, "Closed tab '" + tabbedPane.getTitleAt( tabIndex ) + "'."
+						+ "\n\n(modifiers: " + MouseEvent.getMouseModifiersText( modifiers ) + ")",
+						"Tab Closed", JOptionPane.PLAIN_MESSAGE );
+				} );
+		}
+	}
+
+	private void secondTabClosableChanged() {
+		Boolean value = secondTabClosableCheckBox.getValue();
+
+		JTabbedPane[] tabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
+		for( JTabbedPane tabbedPane : tabbedPanes ) {
+			Component c = tabbedPane.getComponentAt( 1 );
+			((JComponent)c).putClientProperty( TABBED_PANE_TAB_CLOSABLE, value );
 		}
 	}
 
@@ -306,6 +335,8 @@ public class FlatContainerTest
 		tabBackForegroundCheckBox = new JCheckBox();
 		leadingComponentCheckBox = new JCheckBox();
 		trailingComponentCheckBox = new JCheckBox();
+		tabsClosableCheckBox = new JCheckBox();
+		secondTabClosableCheckBox = new TriStateCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -518,6 +549,16 @@ public class FlatContainerTest
 				trailingComponentCheckBox.setText("Trailing");
 				trailingComponentCheckBox.addActionListener(e -> trailingComponentChanged());
 				panel14.add(trailingComponentCheckBox, "cell 1 3");
+
+				//---- tabsClosableCheckBox ----
+				tabsClosableCheckBox.setText("Tabs closable");
+				tabsClosableCheckBox.addActionListener(e -> tabsClosableChanged());
+				panel14.add(tabsClosableCheckBox, "cell 2 3");
+
+				//---- secondTabClosableCheckBox ----
+				secondTabClosableCheckBox.setText("Second Tab closable");
+				secondTabClosableCheckBox.addActionListener(e -> secondTabClosableChanged());
+				panel14.add(secondTabClosableCheckBox, "cell 3 3");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -545,6 +586,8 @@ public class FlatContainerTest
 	private JCheckBox tabBackForegroundCheckBox;
 	private JCheckBox leadingComponentCheckBox;
 	private JCheckBox trailingComponentCheckBox;
+	private JCheckBox tabsClosableCheckBox;
+	private TriStateCheckBox secondTabClosableCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Tab1Panel ----------------------------------------------------

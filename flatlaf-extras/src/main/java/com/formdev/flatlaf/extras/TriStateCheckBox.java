@@ -95,6 +95,19 @@ public class TriStateCheckBox
 		repaint();
 	}
 
+	public Boolean getValue() {
+		switch( state ) {
+			default:
+			case INDETERMINATE:	return null;
+			case SELECTED:		return true;
+			case UNSELECTED:	return false;
+		}
+	}
+
+	public void setValue( Boolean value ) {
+		setState( value == null ? State.INDETERMINATE : (value ? State.SELECTED : State.UNSELECTED) );
+	}
+
 	public boolean isThirdStateEnabled() {
 		return thirdStateEnabled;
 	}

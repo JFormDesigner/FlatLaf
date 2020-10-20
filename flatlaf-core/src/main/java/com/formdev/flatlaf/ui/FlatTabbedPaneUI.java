@@ -38,11 +38,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
@@ -51,6 +54,10 @@ import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.IntConsumer;
+import javax.swing.ButtonModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -119,6 +126,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.hasFullBorder					boolean
  * @uiDefault TabbedPane.hiddenTabsNavigation			String	moreTabsButton (default) or arrowButtons
  * @uiDefault ScrollPane.smoothScrolling				boolean
+ * @uiDefault TabbedPane.closeIcon						Icon
  *
  * @uiDefault TabbedPane.moreTabsButtonToolTipText		String
  *
@@ -152,18 +160,22 @@ public class FlatTabbedPaneUI
 	protected boolean hasFullBorder;
 
 	private String hiddenTabsNavigationStr;
+	protected Icon closeIcon;
 
 	protected String moreTabsButtonToolTipText;
 
 	protected JViewport tabViewport;
 	protected FlatWheelTabScroller wheelTabScroller;
 
+	private JButton tabCloseButton;
 	private JButton moreTabsButton;
 	private Container leadingComponent;
 	private Container trailingComponent;
 
 	private Handler handler;
 	private boolean blockRollover;
+	private boolean rolloverTabClose;
+	private boolean pressedTabClose;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
@@ -210,6 +222,7 @@ public class FlatTabbedPaneUI
 		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		hiddenTabsNavigationStr = UIManager.getString( "TabbedPane.hiddenTabsNavigation" );
+		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
 
 		Locale l = tabPane.getLocale();
 		moreTabsButtonToolTipText = UIManager.getString( "TabbedPane.moreTabsButtonToolTipText", l );
@@ -255,12 +268,19 @@ public class FlatTabbedPaneUI
 		tabSeparatorColor = null;
 		contentAreaColor = null;
 
+		closeIcon = null;
+
 		MigLayoutVisualPadding.uninstall( tabPane );
 	}
 
 	@Override
 	protected void installComponents() {
 		super.installComponents();
+
+		// create tab close button
+		tabCloseButton = new TabCloseButton();
+		tabCloseButton.setVisible( false );
+		tabPane.add( tabCloseButton );
 
 		// find scrollable tab viewport
 		tabViewport = null;
@@ -287,6 +307,11 @@ public class FlatTabbedPaneUI
 		uninstallTrailingComponent();
 
 		super.uninstallComponents();
+
+		if( tabCloseButton != null ) {
+			tabPane.remove( tabCloseButton );
+			tabCloseButton = null;
+		}
 
 		tabViewport = null;
 	}
@@ -354,9 +379,7 @@ public class FlatTabbedPaneUI
 	protected void installListeners() {
 		super.installListeners();
 
-		tabPane.addMouseListener( getHandler() );
-		tabPane.addMouseMotionListener( getHandler() );
-		tabPane.addComponentListener( getHandler() );
+		getHandler().installListeners();
 
 		if( tabViewport != null && (wheelTabScroller = createWheelTabScroller()) != null ) {
 			// ideally we would add the mouse listeners to the viewport, but then the
@@ -373,9 +396,7 @@ public class FlatTabbedPaneUI
 		super.uninstallListeners();
 
 		if( handler != null ) {
-			tabPane.removeMouseListener( handler );
-			tabPane.removeMouseMotionListener( handler );
-			tabPane.removeComponentListener( handler );
+			handler.uninstallListeners();
 			handler = null;
 		}
 
@@ -397,6 +418,13 @@ public class FlatTabbedPaneUI
 
 	protected FlatWheelTabScroller createWheelTabScroller() {
 		return new FlatWheelTabScroller();
+	}
+
+	@Override
+	protected MouseListener createMouseListener() {
+		Handler handler = getHandler();
+		handler.mouseDelegate = super.createMouseListener();
+		return handler;
 	}
 
 	@Override
@@ -454,6 +482,30 @@ public class FlatTabbedPaneUI
 		repaintTab( index );
 	}
 
+	protected boolean isRolloverTabClose() {
+		return rolloverTabClose;
+	}
+
+	protected void setRolloverTabClose( boolean rollover ) {
+		if( rolloverTabClose == rollover )
+			return;
+
+		rolloverTabClose = rollover;
+		repaintTab( getRolloverTab() );
+	}
+
+	protected boolean isPressedTabClose() {
+		return pressedTabClose;
+	}
+
+	protected void setPressedTabClose( boolean pressed ) {
+		if( pressedTabClose == pressed )
+			return;
+
+		pressedTabClose = pressed;
+		repaintTab( getRolloverTab() );
+	}
+
 	private void repaintTab( int tabIndex ) {
 		if( tabIndex < 0 || tabIndex >= tabPane.getTabCount() )
 			return;
@@ -465,7 +517,10 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int calculateTabWidth( int tabPlacement, int tabIndex, FontMetrics metrics ) {
-		return super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
+		int tabWidth = super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
+		if( isTabClosable( tabIndex ) )
+			tabWidth += closeIcon.getIconWidth();
+		return tabWidth;
 	}
 
 	@Override
@@ -528,6 +583,10 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int getTabLabelShiftX( int tabPlacement, int tabIndex, boolean isSelected ) {
+		if( isTabClosable( tabIndex ) ) {
+			int shift = closeIcon.getIconWidth() / 2;
+			return isLeftToRight() ? -shift : shift;
+		}
 		return 0;
 	}
 
@@ -619,6 +678,10 @@ public class FlatTabbedPaneUI
 	protected void paintTabBorder( Graphics g, int tabPlacement, int tabIndex,
 		int x, int y, int w, int h, boolean isSelected )
 	{
+		// paint tab close button
+		if( isTabClosable( tabIndex ) )
+			paintTabCloseButton( g, tabIndex, x, y, w, h );
+
 		// paint tab separators
 		if( clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
 			!isLastInRun( tabIndex ) )
@@ -626,6 +689,18 @@ public class FlatTabbedPaneUI
 
 		if( isSelected )
 			paintTabSelection( g, tabPlacement, x, y, w, h );
+	}
+
+	protected void paintTabCloseButton( Graphics g, int tabIndex, int x, int y, int w, int h ) {
+		// update state of tab close button
+		boolean rollover = (tabIndex == getRolloverTab());
+		ButtonModel bm = tabCloseButton.getModel();
+		bm.setRollover( rollover && isRolloverTabClose() );
+		bm.setPressed( rollover && isPressedTabClose() );
+
+		// paint tab close icon
+		Rectangle tabCloseRect = getTabCloseBounds( x, y, w, h, calcRect );
+		closeIcon.paintIcon( tabCloseButton, g, tabCloseRect.x, tabCloseRect.y );
 	}
 
 	protected void paintTabSeparator( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
@@ -636,7 +711,7 @@ public class FlatTabbedPaneUI
 		if( tabPlacement == LEFT || tabPlacement == RIGHT ) {
 			// paint tab separator at bottom side
 			((Graphics2D)g).fill( new Rectangle2D.Float( x + offset, y + h - sepWidth, w - (offset * 2), sepWidth ) );
-		} else if( tabPane.getComponentOrientation().isLeftToRight() ) {
+		} else if( isLeftToRight() ) {
 			// paint tab separator at right side
 			((Graphics2D)g).fill( new Rectangle2D.Float( x + w - sepWidth, y + offset, sepWidth, h - (offset * 2) ) );
 		} else {
@@ -819,6 +894,55 @@ public class FlatTabbedPaneUI
 			return super.getTabBounds( tabIndex, dest );
 	}
 
+	protected Rectangle getTabCloseBounds( int x, int y, int w, int h, Rectangle dest ) {
+		dest.width = closeIcon.getIconWidth();
+		dest.height = closeIcon.getIconHeight();
+		int xoffset = (h - dest.width) / 2;
+		int yoffset = (h - dest.height) / 2;
+		dest.x = isLeftToRight() ? (x + w - xoffset - dest.width) : (x + xoffset);
+		dest.y = y + yoffset;
+		return dest;
+	}
+
+	protected Rectangle getTabCloseHitArea( int tabIndex ) {
+		Rectangle tabRect = getTabBounds( tabPane, tabIndex );
+		Rectangle tabCloseRect = getTabCloseBounds( tabRect.x, tabRect.y, tabRect.width, tabRect.height, calcRect );
+		return new Rectangle( tabCloseRect.x, tabRect.y, tabCloseRect.width, tabRect.height );
+	}
+
+	protected boolean isTabClosable( int tabIndex ) {
+		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_CLOSABLE );
+		return (value instanceof Boolean) ? (boolean) value : false;
+	}
+
+	@SuppressWarnings( { "unchecked" } )
+	protected void closeTab( int tabIndex ) {
+		Object callback = getTabClientProperty( tabIndex, TABBED_PANE_TAB_CLOSE_CALLBACK );
+		if( callback instanceof IntConsumer )
+			((IntConsumer)callback).accept( tabIndex );
+		else if( callback instanceof BiConsumer )
+			((BiConsumer<JTabbedPane, Integer>)callback).accept( tabPane, tabIndex );
+		else {
+			throw new RuntimeException( "Missing tab close callback. "
+				+ "Set client property 'JTabbedPane.tabCloseCallback' "
+				+ "to a 'java.util.function.IntConsumer' "
+				+ "or 'java.util.function.BiConsumer<JTabbedPane, Integer>'" );
+		}
+	}
+
+	protected Object getTabClientProperty( int tabIndex, String key ) {
+		if( tabIndex < 0 )
+			return null;
+
+		Component c = tabPane.getComponentAt( tabIndex );
+		if( c instanceof JComponent ) {
+			Object value = ((JComponent)c).getClientProperty( key );
+			if( value != null )
+				return value;
+		}
+		return tabPane.getClientProperty( key );
+	}
+
 	protected void ensureCurrentLayout() {
 		// since super.ensureCurrentLayout() is private,
 		// use super.getTabRunCount() as workaround
@@ -832,6 +956,10 @@ public class FlatTabbedPaneUI
 
 	private boolean isScrollTabLayout() {
 		return tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT;
+	}
+
+	private boolean isLeftToRight() {
+		return tabPane.getComponentOrientation().isLeftToRight();
 	}
 
 	protected boolean isHorizontalTabPlacement() {
@@ -911,6 +1039,16 @@ public class FlatTabbedPaneUI
 			Component c = tabPane.getTabComponentAt( i );
 			if( c != null )
 				c.setLocation( c.getX() + sx, c.getY() + sy );
+		}
+	}
+
+	//---- class TabCloseButton -----------------------------------------------
+
+	private class TabCloseButton
+		extends JButton
+		implements UIResource
+	{
+		private TabCloseButton() {
 		}
 	}
 
@@ -1011,9 +1149,8 @@ public class FlatTabbedPaneUI
 			int buttonWidth = getWidth();
 			int buttonHeight = getHeight();
 			Dimension popupSize = popupMenu.getPreferredSize();
-			boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
 
-			int x = leftToRight ? buttonWidth - popupSize.width : 0;
+			int x = isLeftToRight() ? buttonWidth - popupSize.width : 0;
 			int y = buttonHeight - popupSize.height;
 			switch( tabPane.getTabPlacement() ) {
 				default:
@@ -1185,8 +1322,7 @@ public class FlatTabbedPaneUI
 			int y = viewPosition.y;
 			int tabPlacement = tabPane.getTabPlacement();
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
-				boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
-				x += leftToRight ? amount : -amount;
+				x += isLeftToRight() ? amount : -amount;
 				x = Math.min( Math.max( x, 0 ), viewSize.width - tabViewport.getWidth() );
 			} else {
 				y += amount;
@@ -1360,18 +1496,69 @@ public class FlatTabbedPaneUI
 	//---- class Handler ------------------------------------------------------
 
 	private class Handler
-		extends MouseAdapter
-		implements PropertyChangeListener, ChangeListener, ComponentListener
+		implements MouseListener, MouseMotionListener, PropertyChangeListener,
+			ChangeListener, ComponentListener, ContainerListener
 	{
+		MouseListener mouseDelegate;
 		PropertyChangeListener propertyChangeDelegate;
 		ChangeListener changeDelegate;
+
+		private int pressedTabIndex = -1;
+
+		void installListeners() {
+			tabPane.addMouseMotionListener( this );
+			tabPane.addComponentListener( this );
+			tabPane.addContainerListener( this );
+
+			for( Component c : tabPane.getComponents() ) {
+				if( !(c instanceof UIResource) )
+					c.addPropertyChangeListener( TABBED_PANE_TAB_CLOSABLE, this );
+			}
+		}
+
+		void uninstallListeners() {
+			tabPane.removeMouseMotionListener( this );
+			tabPane.removeComponentListener( this );
+			tabPane.removeContainerListener( this );
+
+			for( Component c : tabPane.getComponents() ) {
+				if( !(c instanceof UIResource) )
+					c.removePropertyChangeListener( TABBED_PANE_TAB_CLOSABLE, this );
+			}
+		}
 
 		//---- interface MouseListener ----
 
 		@Override
+		public void mouseClicked( MouseEvent e ) {
+			mouseDelegate.mouseClicked( e );
+		}
+
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			updateRollover( e, true );
+
+			if( !isPressedTabClose() )
+				mouseDelegate.mousePressed( e );
+		}
+
+		@Override
+		public void mouseReleased( MouseEvent e ) {
+			if( isPressedTabClose() ) {
+				updateRollover( e, false );
+				if( pressedTabIndex >= 0 && pressedTabIndex == getRolloverTab() )
+					closeTab( pressedTabIndex );
+			} else
+				mouseDelegate.mouseReleased( e );
+
+			pressedTabIndex = -1;
+			updateRollover( e, false );
+		}
+
+		@Override
 		public void mouseEntered( MouseEvent e ) {
 			// this is necessary for "more tabs" button
-			setRolloverTab( e.getX(), e.getY() );
+			updateRollover( e, false );
 		}
 
 		@Override
@@ -1379,15 +1566,37 @@ public class FlatTabbedPaneUI
 			// this event occurs also if mouse is moved to a custom tab component
 			// that handles mouse events (e.g. a close button)
 			// --> make sure that the tab stays highlighted
-			setRolloverTab( e.getX(), e.getY() );
+			updateRollover( e, false );
 		}
 
 		//---- interface MouseMotionListener ----
 
 		@Override
+		public void mouseDragged( MouseEvent e ) {
+			updateRollover( e, false );
+		}
+
+		@Override
 		public void mouseMoved( MouseEvent e ) {
-			// this is necessary for "more tabs" button
-			setRolloverTab( e.getX(), e.getY() );
+			updateRollover( e, false );
+		}
+
+		private void updateRollover( MouseEvent e, boolean pressed ) {
+			int x = e.getX();
+			int y = e.getY();
+
+			int tabIndex = tabForCoordinate( tabPane, x, y );
+
+			setRolloverTab( tabIndex );
+
+			// check whether mouse hit tab close area
+			boolean hitClose = isTabClosable( tabIndex )
+				? getTabCloseHitArea( tabIndex ).contains( x, y )
+				: false;
+			if( pressed )
+				pressedTabIndex = hitClose ? tabIndex : -1;
+			setRolloverTabClose( hitClose );
+			setPressedTabClose( hitClose && tabIndex == pressedTabIndex );
 		}
 
 		//---- interface PropertyChangeListener ----
@@ -1395,19 +1604,21 @@ public class FlatTabbedPaneUI
 		@Override
 		public void propertyChange( PropertyChangeEvent e ) {
 			// invoke delegate listener
-			switch( e.getPropertyName() ) {
-				case "tabPlacement":
-				case "opaque":
-				case "background":
-				case "indexForTabComponent":
-					runWithOriginalLayoutManager( () -> {
-						propertyChangeDelegate.propertyChange( e );
-					} );
-					break;
+			if( e.getSource() instanceof JTabbedPane ) {
+				switch( e.getPropertyName() ) {
+					case "tabPlacement":
+					case "opaque":
+					case "background":
+					case "indexForTabComponent":
+						runWithOriginalLayoutManager( () -> {
+							propertyChangeDelegate.propertyChange( e );
+						} );
+						break;
 
-				default:
-					propertyChangeDelegate.propertyChange( e );
-					break;
+					default:
+						propertyChangeDelegate.propertyChange( e );
+						break;
+				}
 			}
 
 			// handle event
@@ -1426,6 +1637,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_HAS_FULL_BORDER:
 				case TABBED_PANE_TAB_HEIGHT:
 				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
+				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();
 					tabPane.repaint();
 					break;
@@ -1470,6 +1682,22 @@ public class FlatTabbedPaneUI
 		@Override public void componentMoved( ComponentEvent e ) {}
 		@Override public void componentShown( ComponentEvent e ) {}
 		@Override public void componentHidden( ComponentEvent e ) {}
+
+		//---- interface ContainerListener ----
+
+		@Override
+		public void componentAdded( ContainerEvent e ) {
+			Component c = e.getChild();
+			if( !(c instanceof UIResource) )
+				c.addPropertyChangeListener( TABBED_PANE_TAB_CLOSABLE, this );
+		}
+
+		@Override
+		public void componentRemoved( ContainerEvent e ) {
+			Component c = e.getChild();
+			if( !(c instanceof UIResource) )
+				c.removePropertyChangeListener( TABBED_PANE_TAB_CLOSABLE, this );
+		}
 	}
 
 	//---- class FlatTabbedPaneLayout -----------------------------------------
@@ -1485,7 +1713,7 @@ public class FlatTabbedPaneUI
 			Insets insets = tabPane.getInsets();
 			int tabPlacement = tabPane.getTabPlacement();
 			Insets tabAreaInsets = getTabAreaInsets( tabPlacement );
-			boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
+			boolean leftToRight = isLeftToRight();
 
 			// layout leading and trailing components in tab area
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
@@ -1556,7 +1784,7 @@ public class FlatTabbedPaneUI
 	 * Layout manager used for scroll tab layout policy.
 	 * <p>
 	 * Although this class delegates all methods to the original layout manager
-	 * {@link BasicTabbedPaneUI.TabbedPaneScrollLayout}, which extends
+	 * {@code BasicTabbedPaneUI.TabbedPaneScrollLayout}, which extends
 	 * {@link BasicTabbedPaneUI.TabbedPaneLayout}, it is necessary that this class
 	 * also extends {@link TabbedPaneLayout} to avoid a {@code ClassCastException}
 	 * in {@link BasicTabbedPaneUI}.ensureCurrentLayout().
@@ -1624,7 +1852,7 @@ public class FlatTabbedPaneUI
 			Dimension moreButtonSize = useMoreButton ? moreTabsButton.getPreferredSize() : null;
 			Dimension backwardButtonSize = useMoreButton ? null : backwardButton.getPreferredSize();
 			Dimension forwardButtonSize = useMoreButton ? null : forwardButton.getPreferredSize();
-			boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
+			boolean leftToRight = isLeftToRight();
 			boolean buttonsVisible = false;
 
 			// TabbedPaneScrollLayout adds tabAreaInsets to tab coordinates,
