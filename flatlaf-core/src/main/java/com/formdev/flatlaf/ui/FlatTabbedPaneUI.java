@@ -1844,6 +1844,13 @@ public class FlatTabbedPaneUI
 			if( !useMoreButton && (backwardButton == null || forwardButton == null) )
 				return; // should never occur
 
+			if( rects.length == 0 ) {
+				moreTabsButton.setVisible( false );
+				backwardButton.setVisible( false );
+				forwardButton.setVisible( false );
+				return;
+			}
+
 			Rectangle bounds = tabPane.getBounds();
 			Insets insets = tabPane.getInsets();
 			int tabPlacement = tabPane.getTabPlacement();

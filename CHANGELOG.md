@@ -16,7 +16,7 @@ FlatLaf Change Log
 - TabbedPane: Support adding custom components to left and right sides of tabs
   area. (set client property `JTabbedPane.leadingComponent` or
   `JTabbedPane.trailingComponent` to a `java.awt.Component`) (issue #40)
-- TabbedPane: Support closable tabs. (issue #40)
+- TabbedPane: Support closable tabs. (issues #31 and #40)
 - Support painting separator line between window title and content (use UI value
   `TitlePane.borderColor`). (issue #184)
 
