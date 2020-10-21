@@ -281,6 +281,15 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_CLOSABLE = "JTabbedPane.tabClosable";
 
 	/**
+	 * Specifies the tooltip text used for tab close buttons.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.lang.String}
+	 */
+	String TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT = "JTabbedPane.tabCloseToolTipText";
+
+	/**
 	 * Specifies the callback that is invoked when a tab close button is clicked.
 	 * The callback is responsible for closing the tab.
 	 * <p>

@@ -1533,6 +1533,8 @@ public class FlatTabbedPaneUI
 		private final PropertyChangeListener contentListener = this::contentPropertyChange;
 
 		private int pressedTabIndex = -1;
+		private int lastTipTabIndex = -1;
+		private String lastTip;
 
 		void installListeners() {
 			tabPane.addMouseMotionListener( this );
@@ -1565,7 +1567,7 @@ public class FlatTabbedPaneUI
 
 		@Override
 		public void mousePressed( MouseEvent e ) {
-			updateRollover( e, true );
+			updateRollover( e );
 
 			if( !isPressedTabClose() )
 				mouseDelegate.mousePressed( e );
@@ -1574,20 +1576,20 @@ public class FlatTabbedPaneUI
 		@Override
 		public void mouseReleased( MouseEvent e ) {
 			if( isPressedTabClose() ) {
-				updateRollover( e, false );
+				updateRollover( e );
 				if( pressedTabIndex >= 0 && pressedTabIndex == getRolloverTab() )
 					closeTab( pressedTabIndex );
 			} else
 				mouseDelegate.mouseReleased( e );
 
 			pressedTabIndex = -1;
-			updateRollover( e, false );
+			updateRollover( e );
 		}
 
 		@Override
 		public void mouseEntered( MouseEvent e ) {
 			// this is necessary for "more tabs" button
-			updateRollover( e, false );
+			updateRollover( e );
 		}
 
 		@Override
@@ -1595,22 +1597,22 @@ public class FlatTabbedPaneUI
 			// this event occurs also if mouse is moved to a custom tab component
 			// that handles mouse events (e.g. a close button)
 			// --> make sure that the tab stays highlighted
-			updateRollover( e, false );
+			updateRollover( e );
 		}
 
 		//---- interface MouseMotionListener ----
 
 		@Override
 		public void mouseDragged( MouseEvent e ) {
-			updateRollover( e, false );
+			updateRollover( e );
 		}
 
 		@Override
 		public void mouseMoved( MouseEvent e ) {
-			updateRollover( e, false );
+			updateRollover( e );
 		}
 
-		private void updateRollover( MouseEvent e, boolean pressed ) {
+		private void updateRollover( MouseEvent e ) {
 			int x = e.getX();
 			int y = e.getY();
 
@@ -1622,10 +1624,41 @@ public class FlatTabbedPaneUI
 			boolean hitClose = isTabClosable( tabIndex )
 				? getTabCloseHitArea( tabIndex ).contains( x, y )
 				: false;
-			if( pressed )
+			if( e.getID() == MouseEvent.MOUSE_PRESSED )
 				pressedTabIndex = hitClose ? tabIndex : -1;
 			setRolloverTabClose( hitClose );
 			setPressedTabClose( hitClose && tabIndex == pressedTabIndex );
+
+			// update tooltip
+			if( tabIndex >= 0 && hitClose ) {
+				Object closeTip = getTabClientProperty( tabIndex, TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT );
+				if( closeTip instanceof String )
+					setCloseToolTip( tabIndex, (String) closeTip );
+				else
+					restoreTabToolTip();
+			} else
+				restoreTabToolTip();
+		}
+
+		private void setCloseToolTip( int tabIndex, String closeTip ) {
+			if( tabIndex == lastTipTabIndex )
+				return; // closeTip already set
+
+			if( tabIndex != lastTipTabIndex )
+				restoreTabToolTip();
+
+			lastTipTabIndex = tabIndex;
+			lastTip = tabPane.getToolTipTextAt( lastTipTabIndex );
+			tabPane.setToolTipTextAt( lastTipTabIndex, closeTip );
+		}
+
+		private void restoreTabToolTip() {
+			if( lastTipTabIndex < 0 )
+				return;
+
+			tabPane.setToolTipTextAt( lastTipTabIndex, lastTip );
+			lastTip = null;
+			lastTipTabIndex = -1;
 		}
 
 		//---- interface PropertyChangeListener ----

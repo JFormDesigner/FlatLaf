@@ -54,6 +54,7 @@ public class FlatContainerTest
 
 		tabsClosableCheckBox.setSelected( true );
 		tabsClosableChanged();
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT, "Close" );
 
 		tabScrollCheckBox.setSelected( true );
 		tabScrollChanged();
@@ -129,14 +130,15 @@ public class FlatContainerTest
 
 	private void addInitialTabs( JTabbedPane... tabbedPanes ) {
 		for( JTabbedPane tabbedPane : tabbedPanes ) {
-			tabbedPane.addTab( "Tab 1", new Panel1() );
+			tabbedPane.addTab( "Tab 1", null, new Panel1(), "First tab." );
 
 			JComponent tab2 = new Panel2();
 			tab2.setBorder( new LineBorder( Color.magenta ) );
-			tabbedPane.addTab( "Second Tab", tab2 );
+			tabbedPane.addTab( "Second Tab", null, tab2, "This is the second tab." );
 
 			addTab( tabbedPane, "Disabled", "tab content 3" );
 			tabbedPane.setEnabledAt( 2, false );
+			tabbedPane.setToolTipTextAt( 2, "Disabled tab." );
 
 			tabbedPane.addTab( "Tab 4", new JLabel( "non-opaque content", SwingConstants.CENTER ) );
 		}
