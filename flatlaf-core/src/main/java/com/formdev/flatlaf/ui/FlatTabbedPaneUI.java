@@ -97,7 +97,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.shadow							Color	used for scroll arrows and cropped line
  * @uiDefault TabbedPane.textIconGap					int
  * @uiDefault TabbedPane.tabInsets						Insets
- * @uiDefault TabbedPane.selectedTabPadInsets			Insets
+ * @uiDefault TabbedPane.selectedTabPadInsets			Insets	unused
  * @uiDefault TabbedPane.tabAreaInsets					Insets
  * @uiDefault TabbedPane.tabsOverlapBorder				boolean
  * @uiDefault TabbedPane.tabRunOverlay					int
@@ -152,6 +152,7 @@ public class FlatTabbedPaneUI
 	protected Color tabSeparatorColor;
 	protected Color contentAreaColor;
 
+	private int textIconGapUnscaled;
 	protected int tabHeight;
 	protected int tabSelectionHeight;
 	protected int contentSeparatorHeight;
@@ -215,6 +216,7 @@ public class FlatTabbedPaneUI
 		tabSeparatorColor = UIManager.getColor( "TabbedPane.tabSeparatorColor" );
 		contentAreaColor = UIManager.getColor( "TabbedPane.contentAreaColor" );
 
+		textIconGapUnscaled = UIManager.getInt( "TabbedPane.textIconGap" );
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
@@ -228,12 +230,7 @@ public class FlatTabbedPaneUI
 		moreTabsButtonToolTipText = UIManager.getString( "TabbedPane.moreTabsButtonToolTipText", l );
 
 		// scale
-		textIconGap = scale( textIconGap );
-		tabInsets = scale( tabInsets );
-		selectedTabPadInsets = scale( selectedTabPadInsets );
-		tabAreaInsets = scale( tabAreaInsets );
-		tabHeight = scale( tabHeight );
-		tabSelectionHeight = scale( tabSelectionHeight );
+		textIconGap = scale( textIconGapUnscaled );
 
 		// replace focus forward/backward traversal keys with TAB/Shift+TAB because
 		// the default also includes Ctrl+TAB/Ctrl+Shift+TAB, which we need to switch tabs
@@ -517,6 +514,9 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int calculateTabWidth( int tabPlacement, int tabIndex, FontMetrics metrics ) {
+		// update textIconGap before used in super class
+		textIconGap = scale( textIconGapUnscaled );
+
 		int tabWidth = super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
 		if( isTabClosable( tabIndex ) )
 			tabWidth += closeIcon.getIconWidth();
@@ -525,16 +525,21 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int calculateTabHeight( int tabPlacement, int tabIndex, int fontHeight ) {
-		int tabHeight = clientPropertyInt( tabPane, TABBED_PANE_TAB_HEIGHT, this.tabHeight );
+		int tabHeight = scale( clientPropertyInt( tabPane, TABBED_PANE_TAB_HEIGHT, this.tabHeight ) );
 		return Math.max( tabHeight, super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2 /* was added by superclass */ );
 	}
 
 	@Override
 	protected Insets getTabInsets( int tabPlacement, int tabIndex ) {
 		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_INSETS );
-		return (value instanceof Insets)
-			? scale( (Insets) value )
-			: super.getTabInsets( tabPlacement, tabIndex );
+		return scale( (value instanceof Insets)
+			? (Insets) value
+			: super.getTabInsets( tabPlacement, tabIndex ) );
+	}
+
+	@Override
+	protected Insets getSelectedTabPadInsets( int tabPlacement ) {
+		return new Insets( 0, 0, 0, 0 );
 	}
 
 	@Override
@@ -548,6 +553,9 @@ public class FlatTabbedPaneUI
 		//     BasicTabbedPaneUI.CroppedEdge.paintComponent().
 		//     Giving it large values clips painting of the cropped edge and makes it invisible.
 		currentTabAreaInsets.top = currentTabAreaInsets.left = -10000;
+
+		// scale insets (before adding leading/trailing component sizes)
+		insets = scale( insets );
 
 		// increase insets for wrap layout if using leading/trailing components
 		if( tabPane.getTabLayoutPolicy() == JTabbedPane.WRAP_TAB_LAYOUT ) {
@@ -765,6 +773,7 @@ public class FlatTabbedPaneUI
 		Insets contentInsets = getContentBorderInsets( tabPlacement );
 
 		// paint underline selection
+		int tabSelectionHeight = scale( this.tabSelectionHeight );
 		switch( tabPlacement ) {
 			case TOP:
 			default:
@@ -869,6 +878,16 @@ public class FlatTabbedPaneUI
 	protected void paintFocusIndicator( Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex,
 		Rectangle iconRect, Rectangle textRect, boolean isSelected )
 	{
+	}
+
+	@Override
+	protected void layoutLabel( int tabPlacement, FontMetrics metrics, int tabIndex, String title, Icon icon,
+		Rectangle tabRect, Rectangle iconRect, Rectangle textRect, boolean isSelected )
+	{
+		// update textIconGap before used in super class
+		textIconGap = scale( textIconGapUnscaled );
+
+		super.layoutLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
 	}
 
 	@Override

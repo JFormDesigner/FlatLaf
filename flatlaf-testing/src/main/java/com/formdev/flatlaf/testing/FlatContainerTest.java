@@ -300,7 +300,7 @@ public class FlatContainerTest
 	}
 
 	private void smallerTabHeightChanged() {
-		Integer tabHeight = smallerTabHeightCheckBox.isSelected() ? 20 : null;
+		Integer tabHeight = smallerTabHeightCheckBox.isSelected() ? 26 : null;
 		putTabbedPanesClientProperty( TABBED_PANE_TAB_HEIGHT, tabHeight );
 	}
 
