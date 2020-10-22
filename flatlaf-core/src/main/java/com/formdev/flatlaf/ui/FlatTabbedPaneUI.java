@@ -1600,6 +1600,13 @@ public class FlatTabbedPaneUI
 
 			boolean useMoreButton = (getHiddenTabsNavigation() == MORE_TABS_BUTTON);
 
+			// for right-to-left always use "more tabs" button for horizontal scrolling
+			// because methods scrollForward() and scrollBackward() in class
+			// BasicTabbedPaneUI.ScrollableTabSupport do not work for right-to-left
+			boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
+			if( !leftToRight && !useMoreButton && isHorizontalTabPlacement() )
+				useMoreButton = true;
+
 			// find backward/forward scroll buttons
 			JButton backwardButton = null;
 			JButton forwardButton = null;
@@ -1624,7 +1631,6 @@ public class FlatTabbedPaneUI
 			Dimension moreButtonSize = useMoreButton ? moreTabsButton.getPreferredSize() : null;
 			Dimension backwardButtonSize = useMoreButton ? null : backwardButton.getPreferredSize();
 			Dimension forwardButtonSize = useMoreButton ? null : forwardButton.getPreferredSize();
-			boolean leftToRight = tabPane.getComponentOrientation().isLeftToRight();
 			boolean buttonsVisible = false;
 
 			// TabbedPaneScrollLayout adds tabAreaInsets to tab coordinates,
@@ -1706,7 +1712,7 @@ public class FlatTabbedPaneUI
 					// fix x-locations of tabs so that they are right-aligned in the view
 					shiftTabs( tabViewport.getView().getWidth() - (rects[0].x + rects[0].width), 0 );
 				}
-			} else { // LEFT, RIGHT
+			} else { // LEFT and RIGHT tab placement
 				// tab area bounds
 				int tx = (tabPlacement == LEFT)
 					? insets.left
