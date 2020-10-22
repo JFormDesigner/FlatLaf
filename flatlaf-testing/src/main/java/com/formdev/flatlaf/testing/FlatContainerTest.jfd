@@ -288,6 +288,8 @@ new FormModel {
 							addElement( "default" )
 							addElement( "moreTabsButton" )
 							addElement( "arrowButtons" )
+							addElement( "arrowButtonsSplit" )
+							addElement( "arrowButtonsSplitHide" )
 						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false

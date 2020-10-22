@@ -351,6 +351,25 @@ public interface FlatClientProperties
 	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS = "arrowButtons";
 
 	/**
+	 * Use split forward/backward buttons for navigation to hidden tabs.
+	 * Backward button is on the left/top side of the tabs area,
+	 * forward button on the right/bottom side.
+	 *
+	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
+	 */
+	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS_SPLIT = "arrowButtonsSplit";
+
+	/**
+	 * Use split forward/backward buttons for navigation to hidden tabs.
+	 * Backward button is on the left/top side of the tabs area,
+	 * forward button on the right/bottom side.
+	 * Disabled buttons are hidden.
+	 *
+	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
+	 */
+	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS_SPLIT_HIDE = "arrowButtonsSplitHide";
+
+	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>

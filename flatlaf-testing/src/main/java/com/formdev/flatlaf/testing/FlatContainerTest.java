@@ -240,8 +240,10 @@ public class FlatContainerTest
 	private void hiddenTabsNavigationChanged() {
 		String value = null;
 		switch( (String) hiddenTabsNavigationField.getSelectedItem() ) {
-			case "moreTabsButton":	value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON; break;
-			case "arrowButtons":	value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS; break;
+			case "moreTabsButton":			value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON; break;
+			case "arrowButtons":			value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS; break;
+			case "arrowButtonsSplit":		value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS_SPLIT; break;
+			case "arrowButtonsSplitHide":	value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS_SPLIT_HIDE; break;
 		}
 
 		putTabbedPanesClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
@@ -556,7 +558,9 @@ public class FlatContainerTest
 				hiddenTabsNavigationField.setModel(new DefaultComboBoxModel<>(new String[] {
 					"default",
 					"moreTabsButton",
-					"arrowButtons"
+					"arrowButtons",
+					"arrowButtonsSplit",
+					"arrowButtonsSplitHide"
 				}));
 				hiddenTabsNavigationField.addActionListener(e -> hiddenTabsNavigationChanged());
 				panel14.add(hiddenTabsNavigationField, "cell 3 2");

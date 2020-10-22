@@ -9,14 +9,18 @@ FlatLaf Change Log
   Hidden Tabs" button. If pressed, it shows a popup menu that contains (partly)
   hidden tabs and selecting one activates that tab. If you prefer
   forward/backward buttons, use `UIManager.put(
-  "TabbedPane.hiddenTabsNavigation", "arrowButtons" )`. (issue #40)
+  "TabbedPane.hiddenTabsNavigation", "arrowButtons" )`. (PR #190; issue #40)
+- TabbedPane: Support split forward/backward scrolling buttons. Backward button
+  is on the left/top side of the tabs area, forward button on the right/bottom
+  side. Optionally hide disabled buttons. (PR #195; issue #40)
 - TabbedPane: Support scrolling tabs with mouse wheel (if `tabLayoutPolicy` is
-  `SCROLL_TAB_LAYOUT`). (issue #40)
-- TabbedPane: Repeat scrolling as long as arrow buttons are pressed. (issue #40)
+  `SCROLL_TAB_LAYOUT`). (PR #187; issue #40)
+- TabbedPane: Repeat scrolling as long as arrow buttons are pressed. (PR #187;
+  issue #40)
 - TabbedPane: Support adding custom components to left and right sides of tabs
   area. (set client property `JTabbedPane.leadingComponent` or
   `JTabbedPane.trailingComponent` to a `java.awt.Component`) (issue #40)
-- TabbedPane: Support closable tabs. (issues #31 and #40)
+- TabbedPane: Support closable tabs. (PR #193; issues #31 and #40)
 - Support painting separator line between window title and content (use UI value
   `TitlePane.borderColor`). (issue #184)
 
