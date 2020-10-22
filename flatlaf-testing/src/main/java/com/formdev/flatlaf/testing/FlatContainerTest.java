@@ -18,9 +18,12 @@ package com.formdev.flatlaf.testing;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.function.BiConsumer;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.TriStateCheckBox;
 import com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon;
 import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.jgoodies.forms.layout.*;
@@ -48,6 +51,10 @@ public class FlatContainerTest
 
 		addInitialTabs( tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 );
 		initialTabCount = tabbedPane1.getTabCount();
+
+		tabsClosableCheckBox.setSelected( true );
+		tabsClosableChanged();
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT, "Close" );
 
 		tabScrollCheckBox.setSelected( true );
 		tabScrollChanged();
@@ -123,14 +130,15 @@ public class FlatContainerTest
 
 	private void addInitialTabs( JTabbedPane... tabbedPanes ) {
 		for( JTabbedPane tabbedPane : tabbedPanes ) {
-			tabbedPane.addTab( "Tab 1", new Panel1() );
+			tabbedPane.addTab( "Tab 1", null, new Panel1(), "First tab." );
 
 			JComponent tab2 = new Panel2();
 			tab2.setBorder( new LineBorder( Color.magenta ) );
-			tabbedPane.addTab( "Second Tab", tab2 );
+			tabbedPane.addTab( "Second Tab", null, tab2, "This is the second tab." );
 
 			addTab( tabbedPane, "Disabled", "tab content 3" );
 			tabbedPane.setEnabledAt( 2, false );
+			tabbedPane.setToolTipTextAt( 2, "Disabled tab." );
 
 			tabbedPane.addTab( "Tab 4", new JLabel( "non-opaque content", SwingConstants.CENTER ) );
 		}
@@ -236,10 +244,7 @@ public class FlatContainerTest
 			case "arrowButtons":	value = TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS; break;
 		}
 
-		tabbedPane1.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
-		tabbedPane2.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
-		tabbedPane3.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
-		tabbedPane4.putClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
+		putTabbedPanesClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION, value );
 	}
 
 	private void tabBackForegroundChanged() {
@@ -267,6 +272,52 @@ public class FlatContainerTest
 				c.setBorder( new EmptyBorder( gap, gap, gap, gap ) );
 			}
 			tabbedPane.putClientProperty( key, c );
+		}
+	}
+
+	private void tabsClosableChanged() {
+		boolean closable = tabsClosableCheckBox.isSelected();
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSABLE, closable ? true : null );
+
+		if( closable ) {
+			putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSE_CALLBACK,
+				(BiConsumer<JTabbedPane, Integer>) (tabbedPane, tabIndex) -> {
+					AWTEvent e = EventQueue.getCurrentEvent();
+					int modifiers = (e instanceof MouseEvent) ? ((MouseEvent)e).getModifiers() : 0;
+					JOptionPane.showMessageDialog( this, "Closed tab '" + tabbedPane.getTitleAt( tabIndex ) + "'."
+						+ "\n\n(modifiers: " + MouseEvent.getMouseModifiersText( modifiers ) + ")",
+						"Tab Closed", JOptionPane.PLAIN_MESSAGE );
+				} );
+		}
+	}
+
+	private void secondTabClosableChanged() {
+		Boolean value = secondTabClosableCheckBox.getValue();
+
+		JTabbedPane[] tabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
+		for( JTabbedPane tabbedPane : tabbedPanes ) {
+			Component c = tabbedPane.getComponentAt( 1 );
+			((JComponent)c).putClientProperty( TABBED_PANE_TAB_CLOSABLE, value );
+		}
+	}
+
+	private void smallerTabHeightChanged() {
+		Integer tabHeight = smallerTabHeightCheckBox.isSelected() ? 26 : null;
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_HEIGHT, tabHeight );
+	}
+
+	private void smallerInsetsChanged() {
+		Insets insets = smallerInsetsCheckBox.isSelected() ? new Insets( 2, 2, 2, 2 ) : null;
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_INSETS, insets );
+	}
+
+	private void secondTabWiderChanged() {
+		Insets insets = secondTabWiderCheckBox.isSelected() ? new Insets( 4, 20, 4, 20 ) : null;
+
+		JTabbedPane[] tabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
+		for( JTabbedPane tabbedPane : tabbedPanes ) {
+			Component c = tabbedPane.getComponentAt( 1 );
+			((JComponent)c).putClientProperty( TABBED_PANE_TAB_INSETS, insets );
 		}
 	}
 
@@ -306,6 +357,11 @@ public class FlatContainerTest
 		tabBackForegroundCheckBox = new JCheckBox();
 		leadingComponentCheckBox = new JCheckBox();
 		trailingComponentCheckBox = new JCheckBox();
+		tabsClosableCheckBox = new JCheckBox();
+		secondTabClosableCheckBox = new TriStateCheckBox();
+		smallerTabHeightCheckBox = new JCheckBox();
+		smallerInsetsCheckBox = new JCheckBox();
+		secondTabWiderCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -420,6 +476,7 @@ public class FlatContainerTest
 					"[center]" +
 					"[]" +
 					"[]" +
+					"[]" +
 					"[]"));
 
 				//---- moreTabsCheckBox ----
@@ -518,6 +575,31 @@ public class FlatContainerTest
 				trailingComponentCheckBox.setText("Trailing");
 				trailingComponentCheckBox.addActionListener(e -> trailingComponentChanged());
 				panel14.add(trailingComponentCheckBox, "cell 1 3");
+
+				//---- tabsClosableCheckBox ----
+				tabsClosableCheckBox.setText("Tabs closable");
+				tabsClosableCheckBox.addActionListener(e -> tabsClosableChanged());
+				panel14.add(tabsClosableCheckBox, "cell 2 3");
+
+				//---- secondTabClosableCheckBox ----
+				secondTabClosableCheckBox.setText("Second Tab closable");
+				secondTabClosableCheckBox.addActionListener(e -> secondTabClosableChanged());
+				panel14.add(secondTabClosableCheckBox, "cell 3 3");
+
+				//---- smallerTabHeightCheckBox ----
+				smallerTabHeightCheckBox.setText("Smaller tab height");
+				smallerTabHeightCheckBox.addActionListener(e -> smallerTabHeightChanged());
+				panel14.add(smallerTabHeightCheckBox, "cell 0 4 2 1");
+
+				//---- smallerInsetsCheckBox ----
+				smallerInsetsCheckBox.setText("Smaller insets");
+				smallerInsetsCheckBox.addActionListener(e -> smallerInsetsChanged());
+				panel14.add(smallerInsetsCheckBox, "cell 2 4");
+
+				//---- secondTabWiderCheckBox ----
+				secondTabWiderCheckBox.setText("Second Tab wider");
+				secondTabWiderCheckBox.addActionListener(e -> secondTabWiderChanged());
+				panel14.add(secondTabWiderCheckBox, "cell 3 4");
 			}
 			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
 		}
@@ -545,6 +627,11 @@ public class FlatContainerTest
 	private JCheckBox tabBackForegroundCheckBox;
 	private JCheckBox leadingComponentCheckBox;
 	private JCheckBox trailingComponentCheckBox;
+	private JCheckBox tabsClosableCheckBox;
+	private TriStateCheckBox secondTabClosableCheckBox;
+	private JCheckBox smallerTabHeightCheckBox;
+	private JCheckBox smallerInsetsCheckBox;
+	private JCheckBox secondTabWiderCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Tab1Panel ----------------------------------------------------

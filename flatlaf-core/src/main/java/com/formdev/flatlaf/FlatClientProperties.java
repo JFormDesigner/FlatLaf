@@ -25,6 +25,8 @@ import javax.swing.JComponent;
  */
 public interface FlatClientProperties
 {
+	//---- JButton ------------------------------------------------------------
+
 	/**
 	 * Specifies type of a button.
 	 * <p>
@@ -104,6 +106,8 @@ public interface FlatClientProperties
 	 */
 	String SQUARE_SIZE = "JButton.squareSize";
 
+	//---- JComponent ---------------------------------------------------------
+
 	/**
 	 * Specifies minimum width of a component.
 	 * <p>
@@ -158,6 +162,8 @@ public interface FlatClientProperties
 	 */
 	String COMPONENT_ROUND_RECT = "JComponent.roundRect";
 
+	//---- Popup --------------------------------------------------------------
+
 	/**
 	 * Specifies whether a drop shadow is painted if the component is shown in a popup
 	 * or if the component is the owner of another component that is shown in a popup.
@@ -166,6 +172,8 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String POPUP_DROP_SHADOW_PAINTED = "Popup.dropShadowPainted";
+
+	//---- JProgressBar -------------------------------------------------------
 
 	/**
 	 * Specifies whether the progress bar has always the larger height even if no string is painted.
@@ -183,6 +191,8 @@ public interface FlatClientProperties
 	 */
 	String PROGRESS_BAR_SQUARE = "JProgressBar.square";
 
+	//---- JRootPane ----------------------------------------------------------
+
 	/**
 	 * Specifies whether the menu bar is embedded into the title pane if custom
 	 * window decorations are enabled. Default is {@code true}.
@@ -191,6 +201,8 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
+
+	//---- JScrollBar ---------------------------------------------------------
 
 	/**
 	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
@@ -207,6 +219,8 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String SCROLL_PANE_SMOOTH_SCROLLING = "JScrollPane.smoothScrolling";
+
+	//---- JTabbedPane --------------------------------------------------------
 
 	/**
 	 * Specifies whether separators are shown between tabs.
@@ -239,6 +253,78 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Integer}
 	 */
 	String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight";
+
+	/**
+	 * Specifies the insets of a tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.awt.Insets}
+	 */
+	String TABBED_PANE_TAB_INSETS = "JTabbedPane.tabInsets";
+
+	/**
+	 * Specifies whether tabs are closable.
+	 * If set to {@code true} on a tabbed pane component, all tabs in that tabbed pane are closable.
+	 * To make individual tabs closable, set it to {@code true} on a tab content component.
+	 * <p>
+	 * Note that you have to specify a callback (see {@link #TABBED_PANE_TAB_CLOSABLE})
+	 * that is invoked when the user clicks a tab close button.
+	 * The callback is responsible for closing the tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @see #TABBED_PANE_TAB_CLOSE_CALLBACK
+	 */
+	String TABBED_PANE_TAB_CLOSABLE = "JTabbedPane.tabClosable";
+
+	/**
+	 * Specifies the tooltip text used for tab close buttons.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.lang.String}
+	 */
+	String TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT = "JTabbedPane.tabCloseToolTipText";
+
+	/**
+	 * Specifies the callback that is invoked when a tab close button is clicked.
+	 * The callback is responsible for closing the tab.
+	 * <p>
+	 * Either use a {@link java.util.function.IntConsumer} that received the tab index as parameter:
+	 * <pre>{@code
+	 * myTabbedPane.putClientProperty( "JTabbedPane.tabCloseCallback",
+	 *     (IntConsumer) tabIndex -> {
+	 *         // close tab here
+	 *     } );
+	 * }</pre>
+	 * Or use a {@link java.util.function.BiConsumer}&lt;javax.swing.JTabbedPane, Integer&gt;
+	 * that received the tabbed pane and the tab index as parameters:
+	 * <pre>{@code
+	 * myTabbedPane.putClientProperty( "JTabbedPane.tabCloseCallback",
+	 *     (BiConsumer<JTabbedPane, Integer>) (tabbedPane, tabIndex) -> {
+	 *         // close tab here
+	 *     } );
+	 * }</pre>
+	 * If you need to check whether a modifier key (e.g. Alt or Shift) was pressed
+	 * while the user clicked the tab close button, use {@link java.awt.EventQueue#getCurrentEvent}
+	 * to get current event, check whether it is a {@link java.awt.event.MouseEvent}
+	 * and invoke its methods. E.g.
+	 * <pre>{@code
+	 * AWTEvent e = EventQueue.getCurrentEvent();
+	 * boolean shift = (e instanceof MouseEvent) ? ((MouseEvent)e).isShiftDown() : false;
+	 * }</pre>
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.util.function.IntConsumer}
+	 * or {@link java.util.function.BiConsumer}&lt;javax.swing.JTabbedPane, Integer&gt;
+	 *
+	 * @see #TABBED_PANE_TAB_CLOSABLE
+	 */
+	String TABBED_PANE_TAB_CLOSE_CALLBACK = "JTabbedPane.tabCloseCallback";
 
 	/**
 	 * Specifies how to navigate to hidden tabs.
@@ -279,6 +365,8 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.awt.Component}
 	 */
 	String TABBED_PANE_TRAILING_COMPONENT = "JTabbedPane.trailingComponent";
+
+	//---- JTextField ---------------------------------------------------------
 
 	/**
 	 * Specifies whether all text is selected when the text component gains focus.
@@ -322,6 +410,8 @@ public interface FlatClientProperties
 	 */
 	String PLACEHOLDER_TEXT = "JTextField.placeholderText";
 
+	//---- JToggleButton ------------------------------------------------------
+
 	/**
 	 * Height of underline if toggle button type is {@link #BUTTON_TYPE_TAB}.
 	 * <p>
@@ -345,6 +435,8 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.awt.Color}
 	 */
 	String TAB_BUTTON_SELECTED_BACKGROUND = "JToggleButton.tab.selectedBackground";
+
+	//---- helper methods -----------------------------------------------------
 
 	/**
 	 * Checks whether a client property of a component has the given value.
