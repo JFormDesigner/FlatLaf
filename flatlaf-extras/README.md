@@ -49,7 +49,7 @@ Tools
 
 A simple UI inspector that shows information about UI component at mouse
 location in a tooltip, which may be useful while developing an application.
-Should be not installed in released applications.
+Should not be installed in released applications.
 
 Once installed with following code (e.g. in method `main`), it can be activated
 for the active window with the given keystroke:
