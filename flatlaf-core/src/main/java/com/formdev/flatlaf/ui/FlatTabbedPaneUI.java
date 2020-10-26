@@ -715,7 +715,7 @@ public class FlatTabbedPaneUI
 		bm.setPressed( rollover && isPressedTabClose() );
 
 		// paint tab close icon
-		Rectangle tabCloseRect = getTabCloseBounds( x, y, w, h, calcRect );
+		Rectangle tabCloseRect = getTabCloseBounds( tabIndex, x, y, w, h, calcRect );
 		closeIcon.paintIcon( tabCloseButton, g, tabCloseRect.x, tabCloseRect.y );
 	}
 
@@ -921,19 +921,24 @@ public class FlatTabbedPaneUI
 			return super.getTabBounds( tabIndex, dest );
 	}
 
-	protected Rectangle getTabCloseBounds( int x, int y, int w, int h, Rectangle dest ) {
-		dest.width = closeIcon.getIconWidth();
-		dest.height = closeIcon.getIconHeight();
-		int xoffset = (h - dest.width) / 2;
-		int yoffset = (h - dest.height) / 2;
-		dest.x = isLeftToRight() ? (x + w - xoffset - dest.width) : (x + xoffset);
-		dest.y = y + yoffset;
+	protected Rectangle getTabCloseBounds( int tabIndex, int x, int y, int w, int h, Rectangle dest ) {
+		int iconWidth = closeIcon.getIconWidth();
+		int iconHeight = closeIcon.getIconHeight();
+		Insets tabInsets = getTabInsets( tabPane.getTabPlacement(), tabIndex );
+
+		// use one-third of right/left tab insets as gap between tab text and close button
+		dest.x = isLeftToRight()
+			? (x + w - (tabInsets.right / 3 * 2) - iconWidth)
+			: (x + (tabInsets.left / 3 * 2));
+		dest.y = y + (h - iconHeight) / 2;
+		dest.width = iconWidth;
+		dest.height = iconHeight;
 		return dest;
 	}
 
 	protected Rectangle getTabCloseHitArea( int tabIndex ) {
 		Rectangle tabRect = getTabBounds( tabPane, tabIndex );
-		Rectangle tabCloseRect = getTabCloseBounds( tabRect.x, tabRect.y, tabRect.width, tabRect.height, calcRect );
+		Rectangle tabCloseRect = getTabCloseBounds( tabIndex, tabRect.x, tabRect.y, tabRect.width, tabRect.height, calcRect );
 		return new Rectangle( tabCloseRect.x, tabRect.y, tabCloseRect.width, tabRect.height );
 	}
 
