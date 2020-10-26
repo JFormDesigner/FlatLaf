@@ -73,10 +73,10 @@ import com.formdev.flatlaf.util.UIScale;
  * <p>
  * When the UI inspector is active some additional keys are available:
  * <ul>
- *   <li>press <kbd>Esc</kbd> key to disable UI inspector</li>
- *   <li>press <kbd>Ctrl</kbd> key to increase inspection level, which shows
+ *   <li>press {@code Esc} key to disable UI inspector</li>
+ *   <li>press {@code Ctrl} key to increase inspection level, which shows
  *       information about parent of UI component at mouse location</li>
- *   <li>press <kbd>Shift</kbd> key to decrease inspection level</li>
+ *   <li>press {@code Shift} key to decrease inspection level</li>
  * </ul>
  *
  * @author Karl Tauber
@@ -106,6 +106,8 @@ public class FlatInspector
 	/**
 	 * Installs a key listener into the application that allows enabling and disabling
 	 * the UI inspector with the given keystroke (e.g. "ctrl shift alt X").
+	 *
+	 * @param activationKeys a keystroke (e.g. "ctrl shift alt X")
 	 */
 	public static void install( String activationKeys ) {
 		KeyStroke keyStroke = KeyStroke.getKeyStroke( activationKeys );

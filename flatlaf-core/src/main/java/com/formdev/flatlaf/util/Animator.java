@@ -96,7 +96,7 @@ public class Animator
 	 * Sets the duration of the animation in milliseconds.
 	 *
 	 * @throws IllegalStateException if animation is running
-	 * @throws IllegalArgumentException if duration is <= zero
+	 * @throws IllegalArgumentException if duration is &lt;= zero
 	 */
 	public void setDuration( int duration ) {
 		throwExceptionIfRunning();
@@ -118,7 +118,7 @@ public class Animator
 	 *
 	 * @param resolution the resolution of the animation in milliseconds
 	 * @throws IllegalStateException if animation is running
-	 * @throws IllegalArgumentException if resolution is <= zero
+	 * @throws IllegalArgumentException if resolution is &lt;= zero
 	 */
 	public void setResolution( int resolution ) {
 		throwExceptionIfRunning();
