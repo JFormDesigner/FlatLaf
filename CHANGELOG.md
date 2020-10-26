@@ -19,6 +19,8 @@ FlatLaf Change Log
 - TabbedPane: Support closable tabs. (issues #31 and #40)
 - Support painting separator line between window title and content (use UI value
   `TitlePane.borderColor`). (issue #184)
+- Extras: `FlatSVGIcon` now allows specifying icon width and height in
+  constructors. (issue #196)
 
 
 #### Fixed bugs

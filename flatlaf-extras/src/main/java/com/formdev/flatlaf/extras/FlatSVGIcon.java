@@ -41,6 +41,8 @@ import com.kitfox.svg.SVGException;
 import com.kitfox.svg.SVGUniverse;
 
 /**
+ * An icon that loads and paints SVG.
+ *
  * @author Karl Tauber
  */
 public class FlatSVGIcon
@@ -50,18 +52,137 @@ public class FlatSVGIcon
 	private static final SVGUniverse svgUniverse = new SVGUniverse();
 
 	private final String name;
+	private final int width;
+	private final int height;
+	private final float scale;
 	private final ClassLoader classLoader;
 
 	private SVGDiagram diagram;
 	private boolean dark;
 
+	/**
+	 * Creates an SVG icon from the given resource name.
+	 * <p>
+	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
+	 * in the tag {@code <svg>} are used as icon size.
+	 *
+	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @see ClassLoader#getResource(String)
+	 */
 	public FlatSVGIcon( String name ) {
-		this( name, null );
+		this( name, -1, -1, 1, null );
 	}
 
+	/**
+	 * Creates an SVG icon from the given resource name.
+	 * The SVG file is loaded from the given class loader.
+	 * <p>
+	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
+	 * in the tag {@code <svg>} are used as icon size.
+	 *
+	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param classLoader the class loader used to load the SVG resource
+	 * @see ClassLoader#getResource(String)
+	 */
 	public FlatSVGIcon( String name, ClassLoader classLoader ) {
+		this( name, -1, -1, 1, classLoader );
+	}
+
+	/**
+	 * Creates an SVG icon from the given resource name with the given width and height.
+	 * <p>
+	 * The icon is scaled if the given size is different to the size specified in the SVG file.
+	 *
+	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param width the width of the icon
+	 * @param height the height of the icon
+	 * @see ClassLoader#getResource(String)
+	 */
+	public FlatSVGIcon( String name, int width, int height ) {
+		this( name, width, height, 1, null );
+	}
+
+	/**
+	 * Creates an SVG icon from the given resource name with the given width and height.
+	 * The SVG file is loaded from the given class loader.
+	 * <p>
+	 * The icon is scaled if the given size is different to the size specified in the SVG file.
+	 *
+	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param width the width of the icon
+	 * @param height the height of the icon
+	 * @param classLoader the class loader used to load the SVG resource
+	 * @see ClassLoader#getResource(String)
+	 */
+	public FlatSVGIcon( String name, int width, int height, ClassLoader classLoader ) {
+		this( name, width, height, 1, classLoader );
+	}
+
+	/**
+	 * Creates an SVG icon from the given resource name that is scaled by the given amount.
+	 * <p>
+	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
+	 * in the tag {@code <svg>} are used as base icon size, which is multiplied
+	 * by the given scale factor.
+	 *
+	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param scale the amount by which the icon size is scaled
+	 * @see ClassLoader#getResource(String)
+	 */
+	public FlatSVGIcon( String name, float scale ) {
+		this( name, -1, -1, scale, null );
+	}
+
+	/**
+	 * Creates an SVG icon from the given resource name that is scaled by the given amount.
+	 * The SVG file is loaded from the given class loader.
+	 * <p>
+	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
+	 * in the tag {@code <svg>} are used as base icon size, which is multiplied
+	 * by the given scale factor.
+	 *
+	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param scale the amount by which the icon size is scaled
+	 * @param classLoader the class loader used to load the SVG resource
+	 * @see ClassLoader#getResource(String)
+	 */
+	public FlatSVGIcon( String name, float scale, ClassLoader classLoader ) {
+		this( name, -1, -1, scale, classLoader );
+	}
+
+	private FlatSVGIcon( String name, int width, int height, float scale, ClassLoader classLoader ) {
 		this.name = name;
 		this.classLoader = classLoader;
+		this.width = width;
+		this.height = height;
+		this.scale = scale;
+	}
+
+	/**
+	 * Creates a new icon with given width and height, which is derived from this icon.
+	 *
+	 * @param width the width of the new icon
+	 * @param height the height of the new icon
+	 * @return a new icon
+	 */
+	public FlatSVGIcon derive( int width, int height ) {
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, classLoader );
+		icon.diagram = diagram;
+		icon.dark = dark;
+		return icon;
+	}
+
+	/**
+	 * Creates a new icon with given scaling, which is derived from this icon.
+	 *
+	 * @param scale the amount by which the icon size is scaled
+	 * @return a new icon
+	 */
+	public FlatSVGIcon derive( float scale ) {
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, classLoader );
+		icon.diagram = diagram;
+		icon.dark = dark;
+		return icon;
 	}
 
 	private void update() {
@@ -91,27 +212,52 @@ public class FlatSVGIcon
 		return cl.getResource( name );
 	}
 
+	/**
+	 * Returns whether the SVG file was found.
+	 *
+	 * @return whether the SVG file was found
+	 */
 	public boolean hasFound() {
 		update();
 		return diagram != null;
 	}
 
+	/**
+	 * Returns the scaled width of the icon.
+	 */
 	@Override
 	public int getIconWidth() {
+		if( width > 0 )
+			return scaleSize( width );
+
 		update();
-		return (int) UIScale.scale( (diagram != null) ? diagram.getWidth() : 16 );
+		return scaleSize( (diagram != null) ? Math.round( diagram.getWidth() ) : 16 );
 	}
 
+	/**
+	 * Returns the scaled height of the icon.
+	 */
 	@Override
 	public int getIconHeight() {
+		if( height > 0 )
+			return scaleSize( height );
+
 		update();
-		return (int) UIScale.scale( (diagram != null) ? diagram.getHeight() : 16 );
+		return scaleSize( (diagram != null) ? Math.round( diagram.getHeight() ) : 16 );
+	}
+
+	private int scaleSize( int size ) {
+		int scaledSize = UIScale.scale( size );
+		if( scale != 1 )
+			scaledSize = Math.round( scaledSize * scale );
+		return scaledSize;
 	}
 
 	@Override
 	public void paintIcon( Component c, Graphics g, int x, int y ) {
 		update();
 
+		// check whether icon is outside of clipping area
 		Rectangle clipBounds = g.getClipBounds();
 		if( clipBounds != null && !clipBounds.intersects( new Rectangle( x, y, getIconWidth(), getIconHeight() ) ) )
 			return;
@@ -147,6 +293,14 @@ public class FlatSVGIcon
 		g.clipRect( 0, 0, getIconWidth(), getIconHeight() );
 
 		UIScale.scaleGraphics( g );
+		if( width > 0 || height > 0 ) {
+			double sx = (width > 0) ? width / diagram.getWidth() : 1;
+			double sy = (height > 0) ? height / diagram.getHeight() : 1;
+			if( sx != 1 || sy != 1 )
+				g.scale( sx, sy );
+		}
+		if( scale != 1 )
+			g.scale( scale, scale );
 
 		diagram.setIgnoringClipHeuristic( true );
 
