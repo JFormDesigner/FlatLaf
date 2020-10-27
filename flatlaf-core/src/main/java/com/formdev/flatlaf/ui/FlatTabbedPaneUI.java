@@ -118,6 +118,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.focusColor						Color
  * @uiDefault TabbedPane.tabSeparatorColor				Color	optional; defaults to TabbedPane.contentAreaColor
  * @uiDefault TabbedPane.contentAreaColor				Color
+ * @uiDefault TabbedPane.minimumTabWidth				int		optional
+ * @uiDefault TabbedPane.maximumTabWidth				int		optional
  * @uiDefault TabbedPane.tabHeight						int
  * @uiDefault TabbedPane.tabSelectionHeight				int
  * @uiDefault TabbedPane.contentSeparatorHeight			int
@@ -153,12 +155,15 @@ public class FlatTabbedPaneUI
 	protected Color contentAreaColor;
 
 	private int textIconGapUnscaled;
+	protected int minimumTabWidth;
+	protected int maximumTabWidth;
 	protected int tabHeight;
 	protected int tabSelectionHeight;
 	protected int contentSeparatorHeight;
 	protected boolean showTabSeparators;
 	protected boolean tabSeparatorsFullHeight;
 	protected boolean hasFullBorder;
+	protected boolean tabsOpaque = true;
 
 	private String hiddenTabsNavigationStr;
 	protected Icon closeIcon;
@@ -217,12 +222,15 @@ public class FlatTabbedPaneUI
 		contentAreaColor = UIManager.getColor( "TabbedPane.contentAreaColor" );
 
 		textIconGapUnscaled = UIManager.getInt( "TabbedPane.textIconGap" );
+		minimumTabWidth = UIManager.getInt( "TabbedPane.minimumTabWidth" );
+		maximumTabWidth = UIManager.getInt( "TabbedPane.maximumTabWidth" );
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
 		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
 		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
+		tabsOpaque = UIManager.getBoolean( "TabbedPane.tabsOpaque" );
 		hiddenTabsNavigationStr = UIManager.getString( "TabbedPane.hiddenTabsNavigation" );
 		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
 
@@ -518,8 +526,19 @@ public class FlatTabbedPaneUI
 		textIconGap = scale( textIconGapUnscaled );
 
 		int tabWidth = super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
+
+		// make tab wider if closable
 		if( isTabClosable( tabIndex ) )
 			tabWidth += closeIcon.getIconWidth();
+
+		// apply minimum and maximum tab width
+		int min = getTabClientPropertyInt( tabIndex, TABBED_PANE_MINIMUM_TAB_WIDTH, minimumTabWidth );
+		int max = getTabClientPropertyInt( tabIndex, TABBED_PANE_MAXIMUM_TAB_WIDTH, maximumTabWidth );
+		if( min > 0 )
+			tabWidth = Math.max( tabWidth, scale( min ) );
+		if( max > 0 && tabPane.getTabComponentAt( tabIndex ) == null )
+			tabWidth = Math.min( tabWidth, scale( max ) );
+
 		return tabWidth;
 	}
 
@@ -650,6 +669,46 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected void paintTab( Graphics g, int tabPlacement, Rectangle[] rects,
+		int tabIndex, Rectangle iconRect, Rectangle textRect )
+	{
+		Rectangle tabRect = rects[tabIndex];
+		boolean isSelected = (tabIndex == tabPane.getSelectedIndex());
+
+		// paint background
+		if( tabsOpaque || tabPane.isOpaque() )
+			paintTabBackground( g, tabPlacement, tabIndex, tabRect.x, tabRect.y, tabRect.width, tabRect.height, isSelected );
+
+		// paint border
+		paintTabBorder( g, tabPlacement, tabIndex, tabRect.x, tabRect.y, tabRect.width, tabRect.height, isSelected );
+
+		if( tabPane.getTabComponentAt( tabIndex ) != null )
+			return;
+
+		// layout title and icon
+		String title = tabPane.getTitleAt( tabIndex );
+		Icon icon = getIconForTab( tabIndex );
+		Font font = tabPane.getFont();
+		FontMetrics metrics = tabPane.getFontMetrics( font );
+		String clippedTitle = layoutAndClipLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
+
+		// special title clipping for scroll layout where title off last visible tab on right side may be truncated
+		if( tabViewport != null && (tabPlacement == TOP || tabPlacement == BOTTOM) ) {
+			Rectangle viewRect = tabViewport.getViewRect();
+			viewRect.width -= 4; // subtract width of cropped edge
+			if( !viewRect.contains( textRect ) ) {
+				Rectangle r = viewRect.intersection( textRect );
+				if( r.x > viewRect.x )
+					clippedTitle = JavaCompatibility.getClippedString( null, metrics, title, r.width );
+			}
+		}
+
+		// paint title and icon
+		paintText( g, tabPlacement, font, metrics, tabIndex, clippedTitle, textRect, isSelected );
+		paintIcon( g, tabPlacement, tabIndex, icon, iconRect, isSelected );
+	}
+
+	@Override
 	protected void paintText( Graphics g, int tabPlacement, Font font, FontMetrics metrics,
 		int tabIndex, String title, Rectangle textRect, boolean isSelected )
 	{
@@ -660,20 +719,6 @@ public class FlatTabbedPaneUI
 		if( view != null ) {
 			view.paint( g, textRect );
 			return;
-		}
-
-		// clip title if our layout manager is used
-		// (normally this is done by invoker, but fails in this case)
-		if( tabViewport != null &&
-			(tabPlacement == TOP || tabPlacement == BOTTOM) )
-		{
-			Rectangle viewRect = tabViewport.getViewRect();
-			viewRect.width -= 4; // subtract width of cropped edge
-			if( !viewRect.contains( textRect ) ) {
-				Rectangle r = viewRect.intersection( textRect );
-				if( r.x > viewRect.x )
-					title = JavaCompatibility.getClippedString( null, metrics, title, r.width );
-			}
 		}
 
 		// plain text
@@ -898,14 +943,37 @@ public class FlatTabbedPaneUI
 	{
 	}
 
-	@Override
-	protected void layoutLabel( int tabPlacement, FontMetrics metrics, int tabIndex, String title, Icon icon,
-		Rectangle tabRect, Rectangle iconRect, Rectangle textRect, boolean isSelected )
+	protected String layoutAndClipLabel( int tabPlacement, FontMetrics metrics, int tabIndex,
+		String title, Icon icon, Rectangle tabRect, Rectangle iconRect, Rectangle textRect, boolean isSelected )
 	{
-		// update textIconGap before used in super class
-		textIconGap = scale( textIconGapUnscaled );
+		// remove tab insets and space for close button from the tab rectangle
+		// to get correctly clipped title
+		tabRect = FlatUIUtils.subtractInsets( tabRect, getTabInsets( tabPlacement, tabIndex ) );
+		if( isTabClosable( tabIndex ) ) {
+			tabRect.width -= closeIcon.getIconWidth();
+			if( !isLeftToRight() )
+				tabRect.x += closeIcon.getIconWidth();
+		}
 
-		super.layoutLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
+		// reset rectangles
+		textRect.setBounds( 0, 0, 0, 0 );
+		iconRect.setBounds( 0, 0, 0, 0 );
+
+		// temporary set "html" client property on tabbed pane, which is used by SwingUtilities.layoutCompoundLabel()
+		View view = getTextViewForTab( tabIndex );
+		if( view != null )
+			tabPane.putClientProperty( "html", view );
+
+		// layout label
+		String clippedTitle = SwingUtilities.layoutCompoundLabel( tabPane, metrics, title, icon,
+			SwingUtilities.CENTER, SwingUtilities.CENTER,
+			SwingUtilities.CENTER, SwingUtilities.TRAILING,
+			tabRect, iconRect, textRect, scale( textIconGapUnscaled ) );
+
+		// remove temporary client property
+		tabPane.putClientProperty( "html", null );
+
+		return clippedTitle;
 	}
 
 	@Override
@@ -991,6 +1059,11 @@ public class FlatTabbedPaneUI
 				return value;
 		}
 		return tabPane.getClientProperty( key );
+	}
+
+	protected int getTabClientPropertyInt( int tabIndex, String key, int defaultValue ) {
+		Object value = getTabClientProperty( tabIndex, key );
+		return (value instanceof Integer) ? (int) value : defaultValue;
 	}
 
 	protected void ensureCurrentLayout() {
@@ -1718,6 +1791,8 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
 				case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
 				case TABBED_PANE_HAS_FULL_BORDER:
+				case TABBED_PANE_MINIMUM_TAB_WIDTH:
+				case TABBED_PANE_MAXIMUM_TAB_WIDTH:
 				case TABBED_PANE_TAB_HEIGHT:
 				case TABBED_PANE_TAB_INSETS:
 				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
@@ -1757,6 +1832,8 @@ public class FlatTabbedPaneUI
 
 		protected void contentPropertyChange( PropertyChangeEvent e ) {
 			switch( e.getPropertyName() ) {
+				case TABBED_PANE_MINIMUM_TAB_WIDTH:
+				case TABBED_PANE_MAXIMUM_TAB_WIDTH:
 				case TABBED_PANE_TAB_INSETS:
 				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();

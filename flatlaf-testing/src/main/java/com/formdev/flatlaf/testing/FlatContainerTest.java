@@ -323,6 +323,16 @@ public class FlatContainerTest
 		}
 	}
 
+	private void minimumTabWidthChanged() {
+		Integer minimumTabWidth = minimumTabWidthCheckBox.isSelected() ? 100 : null;
+		putTabbedPanesClientProperty( TABBED_PANE_MINIMUM_TAB_WIDTH, minimumTabWidth );
+	}
+
+	private void maximumTabWidthChanged() {
+		Integer maximumTabWidth = maximumTabWidthCheckBox.isSelected() ? 60 : null;
+		putTabbedPanesClientProperty( TABBED_PANE_MAXIMUM_TAB_WIDTH, maximumTabWidth );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -365,6 +375,8 @@ public class FlatContainerTest
 		trailingComponentCheckBox = new JCheckBox();
 		showTabSeparatorsCheckBox = new JCheckBox();
 		secondTabWiderCheckBox = new JCheckBox();
+		minimumTabWidthCheckBox = new JCheckBox();
+		maximumTabWidthCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -475,6 +487,8 @@ public class FlatContainerTest
 					"[]",
 					// rows
 					"[center]" +
+					"[]" +
+					"[]para" +
 					"[]" +
 					"[]para" +
 					"[]" +
@@ -605,6 +619,16 @@ public class FlatContainerTest
 				secondTabWiderCheckBox.setText("Second Tab insets wider (4,20,4,20)");
 				secondTabWiderCheckBox.addActionListener(e -> secondTabWiderChanged());
 				tabbedPaneControlPanel.add(secondTabWiderCheckBox, "cell 2 6");
+
+				//---- minimumTabWidthCheckBox ----
+				minimumTabWidthCheckBox.setText("Minimum tab width (100)");
+				minimumTabWidthCheckBox.addActionListener(e -> minimumTabWidthChanged());
+				tabbedPaneControlPanel.add(minimumTabWidthCheckBox, "cell 2 7");
+
+				//---- maximumTabWidthCheckBox ----
+				maximumTabWidthCheckBox.setText("Maximum tab width (60)");
+				maximumTabWidthCheckBox.addActionListener(e -> maximumTabWidthChanged());
+				tabbedPaneControlPanel.add(maximumTabWidthCheckBox, "cell 2 8");
 			}
 			panel9.add(tabbedPaneControlPanel, cc.xywh(1, 11, 3, 1));
 		}
@@ -637,6 +661,8 @@ public class FlatContainerTest
 	private JCheckBox trailingComponentCheckBox;
 	private JCheckBox showTabSeparatorsCheckBox;
 	private JCheckBox secondTabWiderCheckBox;
+	private JCheckBox minimumTabWidthCheckBox;
+	private JCheckBox maximumTabWidthCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Tab1Panel ----------------------------------------------------

@@ -19,6 +19,8 @@ FlatLaf Change Log
   `JTabbedPane.trailingComponent` to a `java.awt.Component`) (PR #192; issue
   #40)
 - TabbedPane: Support closable tabs. (PR #193; issues #31 and #40)
+- TabbedPane: Support minimum or maximum tab widths. (set client property
+  `JTabbedPane.minimumTabWidth` or `JTabbedPane.maximumTabWidth` to an integer)
 - Support painting separator line between window title and content (use UI value
   `TitlePane.borderColor`). (issue #184)
 - Extras: `FlatSVGIcon` now allows specifying icon width and height in

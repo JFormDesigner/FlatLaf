@@ -247,6 +247,27 @@ public interface FlatClientProperties
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
+	 * Specifies the minimum width of a tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 */
+	String TABBED_PANE_MINIMUM_TAB_WIDTH = "JTabbedPane.minimumTabWidth";
+
+	/**
+	 * Specifies the maximum width of a tab.
+	 * <p>
+	 * Applied only if tab does not have a custom tab component
+	 * (see {@link javax.swing.JTabbedPane#setTabComponentAt(int, java.awt.Component)}).
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 */
+	String TABBED_PANE_MAXIMUM_TAB_WIDTH = "JTabbedPane.maximumTabWidth";
+
+	/**
 	 * Specifies the height of a tab.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
