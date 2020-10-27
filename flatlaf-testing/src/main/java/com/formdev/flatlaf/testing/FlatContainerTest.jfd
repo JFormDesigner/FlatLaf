@@ -129,35 +129,29 @@ new FormModel {
 					"gridX": 3
 					"gridY": 9
 				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestFrame$NoRightToLeftPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets 0,hidemode 3"
 					"$columnConstraints": "[][fill][][][fill]"
 					"$rowConstraints": "[center][][][][]"
 				} ) {
-					name: "panel14"
+					name: "tabbedPaneControlPanel"
 					"opaque": false
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "moreTabsCheckBox"
-						"text": "More tabs"
-						"mnemonic": 77
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "moreTabsChanged", false ) )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "tabCountLabel"
+						"text": "Tab count:"
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 0"
 					} )
 					add( new FormComponent( "javax.swing.JSpinner" ) {
-						name: "moreTabsSpinner"
+						name: "tabCountSpinner"
 						"model": new javax.swing.SpinnerNumberModel {
 							minimum: 0
 							value: 4
 						}
-						"enabled": false
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
-						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "moreTabsSpinnerChanged", false ) )
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "tabCountChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 0"
 					} )
@@ -349,7 +343,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "smallerTabHeightCheckBox"
-						"text": "Smaller tab height"
+						"text": "Smaller tab height (26)"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -359,7 +353,7 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "smallerInsetsCheckBox"
-						"text": "Smaller insets"
+						"text": "Smaller insets (2,2,2,2)"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -369,13 +363,13 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "secondTabWiderCheckBox"
-						"text": "Second Tab wider"
+						"text": "Second Tab wider (4,20,4,20)"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "secondTabWiderChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 3 4"
+						"value": "cell 3 4 2 1"
 					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridY": 11
@@ -386,7 +380,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 810, 570 )
+			"size": new java.awt.Dimension( 810, 655 )
 		} )
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3,align center center"
@@ -416,7 +410,7 @@ new FormModel {
 				"value": "cell 2 0"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 595 )
+			"location": new java.awt.Point( 0, 680 )
 			"size": new java.awt.Dimension( 291, 118 )
 		} )
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
@@ -441,7 +435,7 @@ new FormModel {
 				"value": "cell 1 0"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 340, 595 )
+			"location": new java.awt.Point( 340, 680 )
 			"size": new java.awt.Dimension( 291, 118 )
 		} )
 	}

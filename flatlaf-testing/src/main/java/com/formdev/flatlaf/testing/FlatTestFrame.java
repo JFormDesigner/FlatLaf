@@ -788,4 +788,18 @@ public class FlatTestFrame
 	private JButton closeButton;
 	private IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class NoRightToLeftPanel -------------------------------------------
+
+	public static class NoRightToLeftPanel
+		extends JPanel
+	{
+		public NoRightToLeftPanel() {
+		}
+
+		@Override
+		public void applyComponentOrientation( ComponentOrientation o ) {
+			// ignore
+		}
+	}
 }
