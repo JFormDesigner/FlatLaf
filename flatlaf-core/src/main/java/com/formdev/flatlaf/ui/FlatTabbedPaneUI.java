@@ -529,6 +529,24 @@ public class FlatTabbedPaneUI
 		return Math.max( tabHeight, super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2 /* was added by superclass */ );
 	}
 
+	protected int calculateMaxExtrasWidth() {
+		int width = 0;
+		if( leadingComponent != null )
+			width = Math.max( width, leadingComponent.getPreferredSize().width );
+		if( trailingComponent != null )
+			width = Math.max( width, trailingComponent.getPreferredSize().width );
+		return width;
+	}
+
+	protected int calculateMaxExtrasHeight() {
+		int height = 0;
+		if( leadingComponent != null )
+			height = Math.max( height, leadingComponent.getPreferredSize().height );
+		if( trailingComponent != null )
+			height = Math.max( height, trailingComponent.getPreferredSize().height );
+		return height;
+	}
+
 	@Override
 	protected Insets getTabInsets( int tabPlacement, int tabIndex ) {
 		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_INSETS );
@@ -1793,21 +1811,34 @@ public class FlatTabbedPaneUI
 
 			// layout leading and trailing components in tab area
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				// fix x-locations of tabs in right-to-left component orientation
+				if( !leftToRight )
+					shiftTabs( insets.left + tabAreaInsets.right, 0 );
+
+				// tab area height (maxTabHeight is zero if tab count is zero)
+				int tabAreaHeight = (maxTabHeight > 0)
+					? maxTabHeight
+					: Math.max( calculateMaxExtrasHeight(), scale( clientPropertyInt( tabPane, TABBED_PANE_TAB_HEIGHT, tabHeight ) ) );
+
 				// tab area bounds
 				int tx = insets.left;
 				int ty = (tabPlacement == TOP)
-					? insets.top
-					: (bounds.height - insets.bottom - maxTabHeight - tabAreaInsets.top - tabAreaInsets.bottom);
+					? insets.top + tabAreaInsets.top
+					: (bounds.height - insets.bottom - tabAreaInsets.bottom - tabAreaHeight);
 				int tw = bounds.width - insets.left - insets.right;
-				int th = maxTabHeight;
-
-				int tyi = ty + tabAreaInsets.top;
+				int th = tabAreaHeight;
 
 				// layout left component
 				Container leftComponent = leftToRight ? leadingComponent : trailingComponent;
 				if( leftComponent != null ) {
-					int leftWidth = leftComponent.getPreferredSize().width;
-					leftComponent.setBounds( tx, tyi, leftWidth, th );
+					// trailing component fills all available horizontal space
+					int leftWidth = leftToRight
+						? leftComponent.getPreferredSize().width
+						: (rects.length > 0
+							? rects[rects.length-1].x - tx
+								- (tabAreaInsets.right - trailingComponent.getPreferredSize().width)
+							: tw - (leadingComponent != null ? leadingComponent.getPreferredSize().width : 0));
+					leftComponent.setBounds( tx, ty, leftWidth, th );
 
 					// reduce tab area bounds
 					tx += leftWidth;
@@ -1817,28 +1848,31 @@ public class FlatTabbedPaneUI
 				// layout right component
 				Container rightComponent = leftToRight ? trailingComponent : leadingComponent;
 				if( rightComponent != null ) {
-					int rightWidth = rightComponent.getPreferredSize().width;
-					rightComponent.setBounds( tx + tw - rightWidth, tyi, rightWidth, th );
+					// trailing component fills all available horizontal space
+					int rightWidth = !leftToRight
+						? rightComponent.getPreferredSize().width
+						: (rects.length > 0
+							? tx + tw - (rects[rects.length-1].x + rects[rects.length-1].width)
+								- (tabAreaInsets.right - trailingComponent.getPreferredSize().width)
+							: tw);
+					rightComponent.setBounds( tx + tw - rightWidth, ty, rightWidth, th );
 				}
+			} else { // LEFT and RIGHT tab placement
+				// tab area width (maxTabWidth is zero if tab count is zero)
+				int tabAreaWidth = (maxTabWidth > 0) ? maxTabWidth : calculateMaxExtrasWidth();
 
-				// fix x-locations of tabs in right-to-left component orientation
-				if( !leftToRight )
-					shiftTabs( insets.left + tabAreaInsets.right, 0 );
-			} else { // LEFT, RIGHT
 				// tab area bounds
 				int tx = (tabPlacement == LEFT)
-					? insets.left
-					: (bounds.width - insets.right - maxTabWidth - tabAreaInsets.left - tabAreaInsets.right);
+					? insets.left + tabAreaInsets.left
+					: (bounds.width - insets.right - tabAreaInsets.right - tabAreaWidth);
 				int ty = insets.top;
-				int tw = maxTabWidth;
+				int tw = tabAreaWidth;
 				int th = bounds.height - insets.top - insets.bottom;
-
-				int txi = tx + tabAreaInsets.left;
 
 				// layout top component
 				if( leadingComponent != null ) {
 					int topHeight = leadingComponent.getPreferredSize().height;
-					leadingComponent.setBounds( txi, ty, tw, topHeight );
+					leadingComponent.setBounds( tx, ty, tw, topHeight );
 
 					// reduce tab area bounds
 					ty += topHeight;
@@ -1847,8 +1881,12 @@ public class FlatTabbedPaneUI
 
 				// layout bottom component
 				if( trailingComponent != null ) {
-					int bottomHeight = trailingComponent.getPreferredSize().height;
-					trailingComponent.setBounds( txi, ty + th - bottomHeight, tw, bottomHeight );
+					// trailing component fills all available vertical space
+					int bottomHeight = (rects.length > 0)
+						? ty + th - (rects[rects.length-1].y + rects[rects.length-1].height)
+							- (tabAreaInsets.bottom - trailingComponent.getPreferredSize().height)
+						: th;
+					trailingComponent.setBounds( tx, ty + th - bottomHeight, tw, bottomHeight );
 				}
 			}
 		}
@@ -1927,18 +1965,10 @@ public class FlatTabbedPaneUI
 			if( !useMoreButton && (backwardButton == null || forwardButton == null) )
 				return; // should never occur
 
-			if( rects.length == 0 ) {
-				moreTabsButton.setVisible( false );
-				backwardButton.setVisible( false );
-				forwardButton.setVisible( false );
-				return;
-			}
-
 			Rectangle bounds = tabPane.getBounds();
 			Insets insets = tabPane.getInsets();
 			int tabPlacement = tabPane.getTabPlacement();
 			Insets tabAreaInsets = getTabAreaInsets( tabPlacement );
-			Rectangle lastRect = rects[rects.length - 1];
 			Dimension moreButtonSize = useMoreButton ? moreTabsButton.getPreferredSize() : null;
 			Dimension backwardButtonSize = useMoreButton ? null : backwardButton.getPreferredSize();
 			Dimension forwardButtonSize = useMoreButton ? null : forwardButton.getPreferredSize();
@@ -1961,21 +1991,32 @@ public class FlatTabbedPaneUI
 
 			// layout tab area
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				// tab area height (maxTabHeight is zero if tab count is zero)
+				int tabAreaHeight = (maxTabHeight > 0)
+					? maxTabHeight
+					: Math.max( calculateMaxExtrasHeight(), scale( clientPropertyInt( tabPane, TABBED_PANE_TAB_HEIGHT, tabHeight ) ) );
+
 				// tab area bounds
 				int tx = insets.left;
 				int ty = (tabPlacement == TOP)
-					? insets.top
-					: (bounds.height - insets.bottom - maxTabHeight - tabAreaInsets.top - tabAreaInsets.bottom);
+					? insets.top + tabAreaInsets.top
+					: (bounds.height - insets.bottom - tabAreaInsets.bottom - tabAreaHeight);
 				int tw = bounds.width - insets.left - insets.right;
-				int th = maxTabHeight;
-
-				int tyi = ty + tabAreaInsets.top;
+				int th = tabAreaHeight;
 
 				// layout left component
 				Container leftComponent = leftToRight ? leadingComponent : trailingComponent;
 				if( leftComponent != null ) {
 					int leftWidth = leftComponent.getPreferredSize().width;
-					leftComponent.setBounds( tx, tyi, leftWidth, th );
+					if( !leftToRight ) {
+						// trailing component fills all available horizontal space
+						int leadingWidth = (leadingComponent != null) ? leadingComponent.getPreferredSize().width : 0;
+						leftWidth = Math.max( leftWidth, (rects.length > 0)
+							? tw - leadingWidth - (rects[0].x + rects[0].width - rects[rects.length-1].x)
+								- (tabAreaInsets.left + tabAreaInsets.right)
+							: tw - leadingWidth );
+					}
+					leftComponent.setBounds( tx, ty, leftWidth, th );
 
 					// reduce tab area bounds
 					tx += leftWidth;
@@ -1986,58 +2027,70 @@ public class FlatTabbedPaneUI
 				Container rightComponent = leftToRight ? trailingComponent : leadingComponent;
 				if( rightComponent != null ) {
 					int rightWidth = rightComponent.getPreferredSize().width;
-					rightComponent.setBounds( tx + tw - rightWidth, tyi, rightWidth, th );
+					if( leftToRight ) {
+						// trailing component fills all available horizontal space
+						rightWidth = Math.max( rightWidth, (rects.length > 0)
+							? tw - (rects[rects.length-1].x + rects[rects.length-1].width)
+								- (tabAreaInsets.left + tabAreaInsets.right)
+							: tw );
+					}
+					rightComponent.setBounds( tx + tw - rightWidth, ty, rightWidth, th );
 
 					// reduce tab area bounds
 					tw -= rightWidth;
 				}
 
-				int txi = tx + tabAreaInsets.left;
-				int twi = tw - tabAreaInsets.left - tabAreaInsets.right;
+				// layout tab viewport and buttons
+				if( rects.length > 0 ) {
+					int txi = tx + (leftToRight ? tabAreaInsets.left : tabAreaInsets.right);
+					int twi = tw - tabAreaInsets.left - tabAreaInsets.right;
 
-				// layout viewport and buttons
-				int viewportWidth = twi;
-				int tabsWidth = leftToRight
-					? (lastRect.x + lastRect.width)
-					: (rects[0].x + rects[0].width - lastRect.x);
-				if( viewportWidth < tabsWidth ) {
-					// need buttons
-					buttonsVisible = true;
-					int buttonsWidth = useMoreButton ? moreButtonSize.width : (backwardButtonSize.width + forwardButtonSize.width);
-					viewportWidth = Math.max( viewportWidth - buttonsWidth, 0 );
+					// layout viewport and buttons
+					int viewportWidth = twi;
+					Rectangle lastRect = rects[rects.length - 1];
+					int tabsWidth = leftToRight
+						? (lastRect.x + lastRect.width)
+						: (rects[0].x + rects[0].width - lastRect.x);
+					if( viewportWidth < tabsWidth ) {
+						// need buttons
+						buttonsVisible = true;
+						int buttonsWidth = useMoreButton ? moreButtonSize.width : (backwardButtonSize.width + forwardButtonSize.width);
+						viewportWidth = Math.max( viewportWidth - buttonsWidth, 0 );
 
-					if( useMoreButton )
-						moreTabsButton.setBounds( leftToRight ? (txi + twi - buttonsWidth) : txi, tyi, moreButtonSize.width, th );
-					else {
-						backwardButton.setBounds( leftToRight ? (txi + twi - buttonsWidth) : txi, tyi, backwardButtonSize.width, th );
-						forwardButton.setBounds( leftToRight ? (txi + twi - forwardButtonSize.width) : (txi + backwardButtonSize.width), tyi, forwardButtonSize.width, th );
+						if( useMoreButton )
+							moreTabsButton.setBounds( leftToRight ? (txi + twi - buttonsWidth) : txi, ty, moreButtonSize.width, th );
+						else {
+							backwardButton.setBounds( leftToRight ? (txi + twi - buttonsWidth) : txi, ty, backwardButtonSize.width, th );
+							forwardButton.setBounds( leftToRight ? (txi + twi - forwardButtonSize.width) : (txi + backwardButtonSize.width), ty, forwardButtonSize.width, th );
+						}
+						tabViewport.setBounds( leftToRight ? txi : (txi + buttonsWidth), ty, viewportWidth, th );
+					} else
+						tabViewport.setBounds( txi, ty, viewportWidth, th );
+
+					if( !leftToRight ) {
+						// layout viewport so that we can get correct view width below
+						tabViewport.doLayout();
+
+						// fix x-locations of tabs so that they are right-aligned in the view
+						shiftTabs( tabViewport.getView().getWidth() - (rects[0].x + rects[0].width), 0 );
 					}
-					tabViewport.setBounds( leftToRight ? txi : (txi + buttonsWidth), tyi, viewportWidth, th );
-				} else
-					tabViewport.setBounds( txi, tyi, viewportWidth, th );
-
-				if( !leftToRight ) {
-					// layout viewport so that we can get correct view width below
-					tabViewport.doLayout();
-
-					// fix x-locations of tabs so that they are right-aligned in the view
-					shiftTabs( tabViewport.getView().getWidth() - (rects[0].x + rects[0].width), 0 );
 				}
 			} else { // LEFT and RIGHT tab placement
+				// tab area width (maxTabWidth is zero if tab count is zero)
+				int tabAreaWidth = (maxTabWidth > 0) ? maxTabWidth : calculateMaxExtrasWidth();
+
 				// tab area bounds
 				int tx = (tabPlacement == LEFT)
-					? insets.left
-					: (bounds.width - insets.right - maxTabWidth - tabAreaInsets.left - tabAreaInsets.right);
+					? insets.left + tabAreaInsets.left
+					: (bounds.width - insets.right - tabAreaInsets.right - tabAreaWidth);
 				int ty = insets.top;
-				int tw = maxTabWidth;
+				int tw = tabAreaWidth;
 				int th = bounds.height - insets.top - insets.bottom;
-
-				int txi = tx + tabAreaInsets.left;
 
 				// layout top component
 				if( leadingComponent != null ) {
 					int topHeight = leadingComponent.getPreferredSize().height;
-					leadingComponent.setBounds( txi, ty, tw, topHeight );
+					leadingComponent.setBounds( tx, ty, tw, topHeight );
 
 					// reduce tab area bounds
 					ty += topHeight;
@@ -2047,35 +2100,45 @@ public class FlatTabbedPaneUI
 				// layout bottom component
 				if( trailingComponent != null ) {
 					int bottomHeight = trailingComponent.getPreferredSize().height;
-					trailingComponent.setBounds( txi, ty + th - bottomHeight, tw, bottomHeight );
+					// trailing component fills all available vertical space
+					bottomHeight = Math.max( bottomHeight, (rects.length > 0)
+						? th - (rects[rects.length-1].y + rects[rects.length-1].height)
+							- (tabAreaInsets.top + tabAreaInsets.bottom)
+						: th );
+					trailingComponent.setBounds( tx, ty + th - bottomHeight, tw, bottomHeight );
 
 					// reduce tab area bounds
 					th -= bottomHeight;
 				}
 
-				int tyi = ty + tabAreaInsets.top;
-				int thi = th - tabAreaInsets.top - tabAreaInsets.bottom;
+				// layout tab viewport and buttons
+				if( rects.length > 0 ) {
+					int tyi = ty + tabAreaInsets.top;
+					int thi = th - tabAreaInsets.top - tabAreaInsets.bottom;
 
-				// layout viewport and buttons
-				int viewportHeight = thi;
-				int tabsHeight = lastRect.y + lastRect.height;
-				if( viewportHeight < tabsHeight ) {
-					// need buttons
-					buttonsVisible = true;
-					int buttonsHeight = useMoreButton ? moreButtonSize.height : (backwardButtonSize.height + forwardButtonSize.height);
-					viewportHeight = Math.max( viewportHeight - buttonsHeight, 0 );
+					// layout viewport and buttons
+					int viewportHeight = thi;
+					Rectangle lastRect = rects[rects.length - 1];
+					int tabsHeight = lastRect.y + lastRect.height;
+					if( viewportHeight < tabsHeight ) {
+						// need buttons
+						buttonsVisible = true;
+						int buttonsHeight = useMoreButton ? moreButtonSize.height : (backwardButtonSize.height + forwardButtonSize.height);
+						viewportHeight = Math.max( viewportHeight - buttonsHeight, 0 );
 
-					if( useMoreButton )
-						moreTabsButton.setBounds( txi, tyi + thi - buttonsHeight, tw, moreButtonSize.height );
-					else {
-						backwardButton.setBounds( txi, tyi + thi - buttonsHeight, tw, backwardButtonSize.height );
-						forwardButton.setBounds( txi, tyi + thi - forwardButtonSize.height, tw, forwardButtonSize.height );
+						if( useMoreButton )
+							moreTabsButton.setBounds( tx, tyi + thi - buttonsHeight, tw, moreButtonSize.height );
+						else {
+							backwardButton.setBounds( tx, tyi + thi - buttonsHeight, tw, backwardButtonSize.height );
+							forwardButton.setBounds( tx, tyi + thi - forwardButtonSize.height, tw, forwardButtonSize.height );
+						}
 					}
+					tabViewport.setBounds( tx, tyi, tw, viewportHeight );
 				}
-				tabViewport.setBounds( txi, tyi, tw, viewportHeight );
 			}
 
-			// show/hide buttons
+			// show/hide viewport and buttons
+			tabViewport.setVisible( rects.length > 0 );
 			moreTabsButton.setVisible( useMoreButton && buttonsVisible );
 			backwardButton.setVisible( !useMoreButton && buttonsVisible );
 			forwardButton.setVisible( !useMoreButton && buttonsVisible );

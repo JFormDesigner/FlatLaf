@@ -353,6 +353,11 @@ public interface FlatClientProperties
 	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
 	 * <p>
+	 * For top and bottom tab placement, the layed out component size will be
+	 * the preferred component width and the tab area height.<br>
+	 * For left and right tab placement, the layed out component size will be
+	 * the tab area width and the preferred component height.
+	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.awt.Component}
 	 */
@@ -360,6 +365,11 @@ public interface FlatClientProperties
 
 	/**
 	 * Specifies a component that will be placed at the trailing edge of the tabs area.
+	 * <p>
+	 * For top and bottom tab placement, the layed out component size will be
+	 * the available horizontal space (minimum is preferred component width) and the tab area height.<br>
+	 * For left and right tab placement, the layed out component size will be
+	 * the tab area width and the available vertical space (minimum is preferred component height).
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.awt.Component}
