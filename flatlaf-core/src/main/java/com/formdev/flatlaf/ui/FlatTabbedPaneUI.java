@@ -128,6 +128,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.hasFullBorder					boolean
  * @uiDefault TabbedPane.hiddenTabsNavigation			String	moreTabsButton (default) or arrowButtons
  * @uiDefault TabbedPane.tabAreaAlignment				String	leading (default), center, trailing or fill
+ * @uiDefault TabbedPane.tabWidthMode					String	preferred (default), equal or compact
  * @uiDefault ScrollPane.smoothScrolling				boolean
  * @uiDefault TabbedPane.closeIcon						Icon
  *
@@ -147,6 +148,10 @@ public class FlatTabbedPaneUI
 	protected static final int ALIGN_TRAILING = 1;
 	protected static final int ALIGN_CENTER = 2;
 	protected static final int ALIGN_FILL = 3;
+
+	protected static final int WIDTH_MODE_PREFERRED = 0;
+	protected static final int WIDTH_MODE_EQUAL = 1;
+	protected static final int WIDTH_MODE_COMPACT = 2;
 
 	private static Set<KeyStroke> focusForwardTraversalKeys;
 	private static Set<KeyStroke> focusBackwardTraversalKeys;
@@ -174,6 +179,7 @@ public class FlatTabbedPaneUI
 
 	private String hiddenTabsNavigationStr;
 	private String tabAreaAlignmentStr;
+	private String tabWidthModeStr;
 	protected Icon closeIcon;
 
 	protected String moreTabsButtonToolTipText;
@@ -241,6 +247,7 @@ public class FlatTabbedPaneUI
 		tabsOpaque = UIManager.getBoolean( "TabbedPane.tabsOpaque" );
 		hiddenTabsNavigationStr = UIManager.getString( "TabbedPane.hiddenTabsNavigation" );
 		tabAreaAlignmentStr = UIManager.getString( "TabbedPane.tabAreaAlignment" );
+		tabWidthModeStr = UIManager.getString( "TabbedPane.tabWidthMode" );
 		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
 
 		Locale l = tabPane.getLocale();
@@ -529,12 +536,35 @@ public class FlatTabbedPaneUI
 			tabPane.repaint( r );
 	}
 
+	private boolean inCalculateEqual;
+
 	@Override
 	protected int calculateTabWidth( int tabPlacement, int tabIndex, FontMetrics metrics ) {
+		int tabWidthMode = getTabWidthMode();
+		if( tabWidthMode == WIDTH_MODE_EQUAL && isHorizontalTabPlacement() && !inCalculateEqual ) {
+			inCalculateEqual = true;
+			try {
+				return calculateMaxTabWidth( tabPlacement );
+			} finally {
+				inCalculateEqual = false;
+			}
+		}
+
 		// update textIconGap before used in super class
 		textIconGap = scale( textIconGapUnscaled );
 
-		int tabWidth = super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
+		int tabWidth;
+		Icon icon;
+		if( tabWidthMode == WIDTH_MODE_COMPACT &&
+			tabIndex != tabPane.getSelectedIndex() &&
+			isHorizontalTabPlacement() &&
+			tabPane.getTabComponentAt( tabIndex ) == null &&
+			(icon = getIconForTab( tabIndex )) != null )
+		{
+			Insets tabInsets = getTabInsets( tabPlacement, tabIndex );
+			tabWidth = icon.getIconWidth() + tabInsets.left + tabInsets.right;
+		} else
+			tabWidth = super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
 
 		// make tab wider if closable
 		if( isTabClosable( tabIndex ) )
@@ -663,14 +693,26 @@ public class FlatTabbedPaneUI
 		int tabIndex, Rectangle iconRect, Rectangle textRect )
 	{
 		Rectangle tabRect = rects[tabIndex];
+		int x = tabRect.x;
+		int y = tabRect.y;
+		int w = tabRect.width;
+		int h = tabRect.height;
 		boolean isSelected = (tabIndex == tabPane.getSelectedIndex());
 
 		// paint background
 		if( tabsOpaque || tabPane.isOpaque() )
-			paintTabBackground( g, tabPlacement, tabIndex, tabRect.x, tabRect.y, tabRect.width, tabRect.height, isSelected );
+			paintTabBackground( g, tabPlacement, tabIndex, x, y, w, h, isSelected );
 
 		// paint border
-		paintTabBorder( g, tabPlacement, tabIndex, tabRect.x, tabRect.y, tabRect.width, tabRect.height, isSelected );
+		paintTabBorder( g, tabPlacement, tabIndex, x, y, w, h, isSelected );
+
+		// paint tab close button
+		if( isTabClosable( tabIndex ) )
+			paintTabCloseButton( g, tabIndex, x, y, w, h );
+
+		// paint selection indicator
+		if( isSelected )
+			paintTabSelection( g, tabPlacement, x, y, w, h );
 
 		if( tabPane.getTabComponentAt( tabIndex ) != null )
 			return;
@@ -680,9 +722,12 @@ public class FlatTabbedPaneUI
 		Icon icon = getIconForTab( tabIndex );
 		Font font = tabPane.getFont();
 		FontMetrics metrics = tabPane.getFontMetrics( font );
+		boolean isCompact = (icon != null && !isSelected && getTabWidthMode() == WIDTH_MODE_COMPACT && isHorizontalTabPlacement());
+		if( isCompact )
+			title = null;
 		String clippedTitle = layoutAndClipLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
 
-		// special title clipping for scroll layout where title off last visible tab on right side may be truncated
+		// special title clipping for scroll layout where title of last visible tab on right side may be truncated
 		if( tabViewport != null && (tabPlacement == TOP || tabPlacement == BOTTOM) ) {
 			Rectangle viewRect = tabViewport.getViewRect();
 			viewRect.width -= 4; // subtract width of cropped edge
@@ -694,7 +739,8 @@ public class FlatTabbedPaneUI
 		}
 
 		// paint title and icon
-		paintText( g, tabPlacement, font, metrics, tabIndex, clippedTitle, textRect, isSelected );
+		if( !isCompact )
+			paintText( g, tabPlacement, font, metrics, tabIndex, clippedTitle, textRect, isSelected );
 		paintIcon( g, tabPlacement, tabIndex, icon, iconRect, isSelected );
 	}
 
@@ -747,17 +793,10 @@ public class FlatTabbedPaneUI
 	protected void paintTabBorder( Graphics g, int tabPlacement, int tabIndex,
 		int x, int y, int w, int h, boolean isSelected )
 	{
-		// paint tab close button
-		if( isTabClosable( tabIndex ) )
-			paintTabCloseButton( g, tabIndex, x, y, w, h );
-
 		// paint tab separators
 		if( clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
 			!isLastInRun( tabIndex ) )
 		  paintTabSeparator( g, tabPlacement, x, y, w, h );
-
-		if( isSelected )
-			paintTabSelection( g, tabPlacement, x, y, w, h );
 	}
 
 	protected void paintTabCloseButton( Graphics g, int tabIndex, int x, int y, int w, int h ) {
@@ -1104,6 +1143,13 @@ public class FlatTabbedPaneUI
 		return parseTabAreaAlignment( str );
 	}
 
+	protected int getTabWidthMode() {
+		String str = (String) tabPane.getClientProperty( TABBED_PANE_TAB_WIDTH_MODE );
+		if( str == null )
+			str = tabWidthModeStr;
+		return parseTabWidthMode( str );
+	}
+
 	protected static int parseHiddenTabsNavigation( String str ) {
 		if( str == null )
 			return MORE_TABS_BUTTON;
@@ -1125,6 +1171,18 @@ public class FlatTabbedPaneUI
 			case TABBED_PANE_TAB_AREA_ALIGN_TRAILING:	return ALIGN_TRAILING;
 			case TABBED_PANE_TAB_AREA_ALIGN_CENTER:		return ALIGN_CENTER;
 			case TABBED_PANE_TAB_AREA_ALIGN_FILL:		return ALIGN_FILL;
+		}
+	}
+
+	protected static int parseTabWidthMode( String str ) {
+		if( str == null )
+			return WIDTH_MODE_PREFERRED;
+
+		switch( str ) {
+			default:
+			case TABBED_PANE_TAB_WIDTH_MODE_PREFERRED:	return WIDTH_MODE_PREFERRED;
+			case TABBED_PANE_TAB_WIDTH_MODE_EQUAL:		return WIDTH_MODE_EQUAL;
+			case TABBED_PANE_TAB_WIDTH_MODE_COMPACT:	return WIDTH_MODE_COMPACT;
 		}
 	}
 
@@ -1881,6 +1939,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_TAB_INSETS:
 				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
 				case TABBED_PANE_TAB_AREA_ALIGNMENT:
+				case TABBED_PANE_TAB_WIDTH_MODE:
 				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();
 					tabPane.repaint();

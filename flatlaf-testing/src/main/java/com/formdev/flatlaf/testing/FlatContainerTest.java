@@ -172,10 +172,8 @@ public class FlatContainerTest
 			? new ScaledImageIcon( new ImageIcon( getClass().getResource( "/com/formdev/flatlaf/testing/test" + iconSize + ".png" ) ) )
 			: null;
 		int tabCount = tabbedPane.getTabCount();
-		if( tabCount > 0 )
-			tabbedPane.setIconAt( 0, icon );
-		if( tabCount > 1 )
-			tabbedPane.setIconAt( 1, icon );
+		for( int i = 0; i < tabCount; i++ )
+			tabbedPane.setIconAt( i, icon );
 	}
 
 	private void customBorderChanged() {
@@ -250,6 +248,13 @@ public class FlatContainerTest
 		if( "default".equals( value ) )
 			value = null;
 		putTabbedPanesClientProperty( TABBED_PANE_TAB_AREA_ALIGNMENT, value );
+	}
+
+	private void tabWidthModeChanged() {
+		String value = (String) tabWidthModeField.getSelectedItem();
+		if( "default".equals( value ) )
+			value = null;
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_WIDTH_MODE, value );
 	}
 
 	private void tabBackForegroundChanged() {
@@ -387,6 +392,8 @@ public class FlatContainerTest
 		tabIconSizeSpinner = new JSpinner();
 		JLabel tabAreaAlignmentLabel = new JLabel();
 		tabAreaAlignmentField = new JComboBox<>();
+		JLabel tabWidthModeLabel = new JLabel();
+		tabWidthModeField = new JComboBox<>();
 		tabsClosableCheckBox = new JCheckBox();
 		customBorderCheckBox = new JCheckBox();
 		tabAreaInsetsCheckBox = new JCheckBox();
@@ -600,6 +607,20 @@ public class FlatContainerTest
 				tabAreaAlignmentField.addActionListener(e -> tabAreaAlignmentChanged());
 				tabbedPaneControlPanel.add(tabAreaAlignmentField, "cell 1 3");
 
+				//---- tabWidthModeLabel ----
+				tabWidthModeLabel.setText("Tab width mode:");
+				tabbedPaneControlPanel.add(tabWidthModeLabel, "cell 2 3");
+
+				//---- tabWidthModeField ----
+				tabWidthModeField.setModel(new DefaultComboBoxModel<>(new String[] {
+					"default",
+					"preferred",
+					"equal",
+					"compact"
+				}));
+				tabWidthModeField.addActionListener(e -> tabWidthModeChanged());
+				tabbedPaneControlPanel.add(tabWidthModeField, "cell 2 3");
+
 				//---- tabsClosableCheckBox ----
 				tabsClosableCheckBox.setText("Tabs closable");
 				tabsClosableCheckBox.addActionListener(e -> tabsClosableChanged());
@@ -690,6 +711,7 @@ public class FlatContainerTest
 	private JCheckBox tabIconsCheckBox;
 	private JSpinner tabIconSizeSpinner;
 	private JComboBox<String> tabAreaAlignmentField;
+	private JComboBox<String> tabWidthModeField;
 	private JCheckBox tabsClosableCheckBox;
 	private JCheckBox customBorderCheckBox;
 	private JCheckBox tabAreaInsetsCheckBox;

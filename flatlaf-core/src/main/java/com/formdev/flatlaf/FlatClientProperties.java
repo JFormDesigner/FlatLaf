@@ -411,6 +411,38 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_AREA_ALIGN_FILL = "fill";
 
 	/**
+	 * Specifies how the tabs should be sized.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}
+	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_TAB_WIDTH_MODE_PREFERRED} (default),
+	 * {@link #TABBED_PANE_TAB_WIDTH_MODE_EQUAL} or {@link #TABBED_PANE_TAB_WIDTH_MODE_COMPACT}
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE = "JTabbedPane.tabWidthMode";
+
+	/**
+	 * Tab width is adjusted to tab icon and title.
+	 *
+	 * @see #TABBED_PANE_TAB_WIDTH_MODE
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE_PREFERRED = "preferred";
+
+	/**
+	 * All tabs in a tabbed pane has same width.
+	 *
+	 * @see #TABBED_PANE_TAB_WIDTH_MODE
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE_EQUAL = "equal";
+
+	/**
+	 * Unselected tabs are smaller because they show only the tab icon, but no tab title.
+	 * Selected tabs show both.
+	 *
+	 * @see #TABBED_PANE_TAB_WIDTH_MODE
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE_COMPACT = "compact";
+
+	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
 	 * <p>
 	 * For top and bottom tab placement, the layed out component size will be
