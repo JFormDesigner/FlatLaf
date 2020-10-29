@@ -324,8 +324,8 @@ public class FlatContainerTest
 	}
 
 	private void tabAreaInsetsChanged() {
-		UIManager.put( "TabbedPane.tabAreaInsets", tabAreaInsetsCheckBox.isSelected() ? new Insets( 5, 5, 10, 10 ) : null );
-		FlatLaf.updateUI();
+		Insets insets = tabAreaInsetsCheckBox.isSelected() ? new Insets( 5, 5, 10, 10 ) : null;
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_AREA_INSETS, insets );
 	}
 
 	private void smallerTabHeightChanged() {

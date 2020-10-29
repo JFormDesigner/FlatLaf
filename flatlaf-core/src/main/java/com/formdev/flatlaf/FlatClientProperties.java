@@ -285,6 +285,14 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_INSETS = "JTabbedPane.tabInsets";
 
 	/**
+	 * Specifies the insets of the tab area.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * <strong>Value type</strong> {@link java.awt.Insets}
+	 */
+	String TABBED_PANE_TAB_AREA_INSETS = "JTabbedPane.tabAreaInsets";
+
+	/**
 	 * Specifies whether tabs are closable.
 	 * If set to {@code true} on a tabbed pane component, all tabs in that tabbed pane are closable.
 	 * To make individual tabs closable, set it to {@code true} on a tab content component.

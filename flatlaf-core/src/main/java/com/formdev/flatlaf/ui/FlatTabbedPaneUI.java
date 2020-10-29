@@ -604,6 +604,10 @@ public class FlatTabbedPaneUI
 		Insets currentTabAreaInsets = super.getTabAreaInsets( tabPlacement );
 		Insets insets = (Insets) currentTabAreaInsets.clone();
 
+		Object value = tabPane.getClientProperty( TABBED_PANE_TAB_AREA_INSETS );
+		if( value instanceof Insets )
+			rotateInsets( (Insets) value, insets, tabPlacement );
+
 		// This is a "trick" to get rid of the cropped edge:
 		//     super.getTabAreaInsets() returns private field BasicTabbedPaneUI.currentTabAreaInsets,
 		//     which is also used to translate the origin of the cropped edge in
@@ -1937,6 +1941,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_MAXIMUM_TAB_WIDTH:
 				case TABBED_PANE_TAB_HEIGHT:
 				case TABBED_PANE_TAB_INSETS:
+				case TABBED_PANE_TAB_AREA_INSETS:
 				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
 				case TABBED_PANE_TAB_AREA_ALIGNMENT:
 				case TABBED_PANE_TAB_WIDTH_MODE:
