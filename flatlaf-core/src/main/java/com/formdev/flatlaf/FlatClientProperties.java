@@ -372,6 +372,45 @@ public interface FlatClientProperties
 	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS = "arrowButtons";
 
 	/**
+	 * Specifies the alignment of the tab area.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}
+	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_TAB_AREA_ALIGN_LEADING} (default),
+	 * {@link #TABBED_PANE_TAB_AREA_ALIGN_TRAILING}, {@link #TABBED_PANE_TAB_AREA_ALIGN_CENTER}
+	 * or {@link #TABBED_PANE_TAB_AREA_ALIGN_FILL}
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGNMENT = "JTabbedPane.tabAreaAlignment";
+
+	/**
+	 * Align the tab area to the leading edge.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGN_LEADING = "leading";
+
+	/**
+	 * Align the tab area to the trailing edge.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGN_TRAILING = "trailing";
+
+	/**
+	 * Align the tab area to center.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGN_CENTER = "center";
+
+	/**
+	 * Stretch tabs to fill all available space.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGN_FILL = "fill";
+
+	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
 	 * <p>
 	 * For top and bottom tab placement, the layed out component size will be
