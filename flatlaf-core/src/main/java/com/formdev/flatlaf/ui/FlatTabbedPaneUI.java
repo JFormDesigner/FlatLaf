@@ -563,8 +563,29 @@ public class FlatTabbedPaneUI
 		{
 			Insets tabInsets = getTabInsets( tabPlacement, tabIndex );
 			tabWidth = icon.getIconWidth() + tabInsets.left + tabInsets.right;
-		} else
-			tabWidth = super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
+		} else {
+			int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING );
+			if( (iconPlacement == TOP || iconPlacement == BOTTOM) &&
+				tabPane.getTabComponentAt( tabIndex ) == null &&
+				(icon = getIconForTab( tabIndex )) != null )
+			{
+				// TOP and BOTTOM icon placement
+				tabWidth = icon.getIconWidth();
+
+				View view = getTextViewForTab( tabIndex );
+				if( view != null )
+					tabWidth = Math.max( tabWidth, (int) view.getPreferredSpan( View.X_AXIS ) );
+				else {
+					String title = tabPane.getTitleAt( tabIndex );
+					if( title != null )
+						tabWidth = Math.max( tabWidth, metrics.stringWidth( title ) );
+				}
+
+				Insets tabInsets = getTabInsets( tabPlacement, tabIndex );
+				tabWidth += tabInsets.left + tabInsets.right;
+			} else
+				tabWidth = super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 /* was added by superclass */;
+		}
 
 		// make tab wider if closable
 		if( isTabClosable( tabIndex ) )
@@ -583,8 +604,29 @@ public class FlatTabbedPaneUI
 
 	@Override
 	protected int calculateTabHeight( int tabPlacement, int tabIndex, int fontHeight ) {
-		int tabHeight = scale( clientPropertyInt( tabPane, TABBED_PANE_TAB_HEIGHT, this.tabHeight ) );
-		return Math.max( tabHeight, super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2 /* was added by superclass */ );
+		int tabHeight;
+
+		Icon icon;
+		int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING );
+		if( (iconPlacement == TOP || iconPlacement == BOTTOM) &&
+			tabPane.getTabComponentAt( tabIndex ) == null &&
+			(icon = getIconForTab( tabIndex )) != null )
+		{
+			// TOP and BOTTOM icon placement
+			tabHeight = icon.getIconHeight();
+
+			View view = getTextViewForTab( tabIndex );
+			if( view != null )
+				tabHeight += (int) view.getPreferredSpan( View.Y_AXIS ) + scale( textIconGapUnscaled );
+			else if( tabPane.getTitleAt( tabIndex ) != null )
+				tabHeight += fontHeight + scale( textIconGapUnscaled );
+
+			Insets tabInsets = getTabInsets( tabPlacement, tabIndex );
+			tabHeight += tabInsets.top + tabInsets.bottom;
+		} else
+			tabHeight = super.calculateTabHeight( tabPlacement, tabIndex, fontHeight ) - 2 /* was added by superclass */;
+
+		return Math.max( tabHeight, scale( clientPropertyInt( tabPane, TABBED_PANE_TAB_HEIGHT, this.tabHeight ) ) );
 	}
 
 	@Override
@@ -988,6 +1030,16 @@ public class FlatTabbedPaneUI
 				tabRect.x += closeIcon.getIconWidth();
 		}
 
+		// icon placement
+		int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING );
+		int verticalTextPosition = CENTER;
+		int horizontalTextPosition = TRAILING;
+		switch( iconPlacement ) {
+			case TRAILING:                                horizontalTextPosition = LEADING; break;
+			case TOP:      verticalTextPosition = BOTTOM; horizontalTextPosition = CENTER; break;
+			case BOTTOM:   verticalTextPosition = TOP;    horizontalTextPosition = CENTER; break;
+		}
+
 		// reset rectangles
 		textRect.setBounds( 0, 0, 0, 0 );
 		iconRect.setBounds( 0, 0, 0, 0 );
@@ -999,8 +1051,7 @@ public class FlatTabbedPaneUI
 
 		// layout label
 		String clippedTitle = SwingUtilities.layoutCompoundLabel( tabPane, metrics, title, icon,
-			SwingUtilities.CENTER, SwingUtilities.CENTER,
-			SwingUtilities.CENTER, SwingUtilities.TRAILING,
+			CENTER, CENTER, verticalTextPosition, horizontalTextPosition,
 			tabRect, iconRect, textRect, scale( textIconGapUnscaled ) );
 
 		// remove temporary client property
@@ -1945,6 +1996,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
 				case TABBED_PANE_TAB_AREA_ALIGNMENT:
 				case TABBED_PANE_TAB_WIDTH_MODE:
+				case TABBED_PANE_TAB_ICON_PLACEMENT:
 				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();
 					tabPane.repaint();

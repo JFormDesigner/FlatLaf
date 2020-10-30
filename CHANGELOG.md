@@ -28,6 +28,10 @@ FlatLaf Change Log
 - TabbedPane: Support equal and compact tab width modes. (set client property
   `JTabbedPane.tabWidthMode` to `"preferred"`, `"equal"` or `"compact"`) (PR
   #199)
+- TabbedPane: Support left, right, top and bottom tab icon placement. (set
+  client property `JTabbedPane.tabIconPlacement` to `SwingConstants.LEADING`,
+  `SwingConstants.TRAILING`, `SwingConstants.TOP` or `SwingConstants.BOTTOM`)
+  (PR #199)
 - Support painting separator line between window title and content (use UI value
   `TitlePane.borderColor`). (issue #184)
 - Extras: `FlatSVGIcon` now allows specifying icon width and height in

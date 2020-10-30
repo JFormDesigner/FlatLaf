@@ -176,6 +176,17 @@ public class FlatContainerTest
 			tabbedPane.setIconAt( i, icon );
 	}
 
+	private void iconPlacementChanged() {
+		Object iconPlacement = null;
+		switch( (String) iconPlacementField.getSelectedItem() ) {
+			case "leading":		iconPlacement = SwingConstants.LEADING; break;
+			case "trailing":	iconPlacement = SwingConstants.TRAILING; break;
+			case "top":			iconPlacement = SwingConstants.TOP; break;
+			case "bottom":		iconPlacement = SwingConstants.BOTTOM; break;
+		}
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_ICON_PLACEMENT, iconPlacement );
+	}
+
 	private void customBorderChanged() {
 		Border border = customBorderCheckBox.isSelected()
 			? new MatteBorder( 10, 20, 25, 35, Color.green )
@@ -390,6 +401,7 @@ public class FlatContainerTest
 		tabPlacementField = new JComboBox<>();
 		tabIconsCheckBox = new JCheckBox();
 		tabIconSizeSpinner = new JSpinner();
+		iconPlacementField = new JComboBox<>();
 		JLabel tabAreaAlignmentLabel = new JLabel();
 		tabAreaAlignmentField = new JComboBox<>();
 		JLabel tabWidthModeLabel = new JLabel();
@@ -592,6 +604,16 @@ public class FlatContainerTest
 				tabIconSizeSpinner.addChangeListener(e -> tabIconsChanged());
 				tabbedPaneControlPanel.add(tabIconSizeSpinner, "cell 2 2");
 
+				//---- iconPlacementField ----
+				iconPlacementField.setModel(new DefaultComboBoxModel<>(new String[] {
+					"leading",
+					"trailing",
+					"top",
+					"bottom"
+				}));
+				iconPlacementField.addActionListener(e -> iconPlacementChanged());
+				tabbedPaneControlPanel.add(iconPlacementField, "cell 2 2");
+
 				//---- tabAreaAlignmentLabel ----
 				tabAreaAlignmentLabel.setText("Tab area alignment:");
 				tabbedPaneControlPanel.add(tabAreaAlignmentLabel, "cell 0 3");
@@ -710,6 +732,7 @@ public class FlatContainerTest
 	private JComboBox<String> tabPlacementField;
 	private JCheckBox tabIconsCheckBox;
 	private JSpinner tabIconSizeSpinner;
+	private JComboBox<String> iconPlacementField;
 	private JComboBox<String> tabAreaAlignmentField;
 	private JComboBox<String> tabWidthModeField;
 	private JCheckBox tabsClosableCheckBox;
