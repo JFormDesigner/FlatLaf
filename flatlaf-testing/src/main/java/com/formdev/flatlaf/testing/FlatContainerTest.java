@@ -232,6 +232,26 @@ public class FlatContainerTest
 		return tab;
 	}
 
+	private void htmlTabsChanged() {
+		htmlTabsChanged( tabbedPane1 );
+		htmlTabsChanged( tabbedPane2 );
+		htmlTabsChanged( tabbedPane3 );
+		htmlTabsChanged( tabbedPane4 );
+	}
+
+	private void htmlTabsChanged( JTabbedPane tabbedPane ) {
+		boolean html = htmlTabsCheckBox.isSelected();
+		boolean multiLine = multiLineTabsCheckBox.isSelected();
+		String s = multiLine
+			? "<html><b>Bold</b> Tab<br>Second <i>Line</i> "
+			: (html ? "<html><b>Bold</b> Tab " : "Tab ");
+		int tabCount = tabbedPane.getTabCount();
+		if( tabCount > 0 )
+			tabbedPane.setTitleAt( 0, s + "1" );
+		if( tabCount > 3 )
+			tabbedPane.setTitleAt( 3, s + "4" );
+	}
+
 	private void tabPlacementChanged() {
 		int tabPlacement = -1;
 		switch( (String) tabPlacementField.getSelectedItem() ) {
@@ -394,6 +414,8 @@ public class FlatContainerTest
 		JLabel tabCountLabel = new JLabel();
 		tabCountSpinner = new JSpinner();
 		customTabsCheckBox = new JCheckBox();
+		htmlTabsCheckBox = new JCheckBox();
+		multiLineTabsCheckBox = new JCheckBox();
 		JLabel hiddenTabsNavigationLabel = new JLabel();
 		hiddenTabsNavigationField = new JComboBox<>();
 		tabBackForegroundCheckBox = new JCheckBox();
@@ -559,6 +581,16 @@ public class FlatContainerTest
 				customTabsCheckBox.setText("Custom tabs");
 				customTabsCheckBox.addActionListener(e -> customTabsChanged());
 				tabbedPaneControlPanel.add(customTabsCheckBox, "cell 2 0");
+
+				//---- htmlTabsCheckBox ----
+				htmlTabsCheckBox.setText("HTML");
+				htmlTabsCheckBox.addActionListener(e -> htmlTabsChanged());
+				tabbedPaneControlPanel.add(htmlTabsCheckBox, "cell 2 0");
+
+				//---- multiLineTabsCheckBox ----
+				multiLineTabsCheckBox.setText("multi-line");
+				multiLineTabsCheckBox.addActionListener(e -> htmlTabsChanged());
+				tabbedPaneControlPanel.add(multiLineTabsCheckBox, "cell 2 0");
 
 				//---- hiddenTabsNavigationLabel ----
 				hiddenTabsNavigationLabel.setText("Hidden tabs navigation:");
@@ -727,6 +759,8 @@ public class FlatContainerTest
 	private JCheckBox tabScrollCheckBox;
 	private JSpinner tabCountSpinner;
 	private JCheckBox customTabsCheckBox;
+	private JCheckBox htmlTabsCheckBox;
+	private JCheckBox multiLineTabsCheckBox;
 	private JComboBox<String> hiddenTabsNavigationField;
 	private JCheckBox tabBackForegroundCheckBox;
 	private JComboBox<String> tabPlacementField;
