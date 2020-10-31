@@ -551,7 +551,7 @@ MenuItem.textAcceleratorGap    24
 MenuItem.textNoAcceleratorGap  6
 MenuItem.underlineSelectionBackground #e6e6e6    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionCheckBackground #ccccff    javax.swing.plaf.ColorUIResource [UI]
-MenuItem.underlineSelectionColor #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.underlineSelectionColor #ffff00    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
 
 
@@ -909,7 +909,7 @@ TabbedPane.closeIcon           [lazy] 16,16    com.formdev.flatlaf.icons.FlatTab
 TabbedPane.closePressedBackground #00ff00    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.closePressedForeground #000000    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.closeSize           16,16    javax.swing.plaf.DimensionUIResource [UI]
-TabbedPane.contentAreaColor    #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.contentAreaColor    #ff0000    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.contentOpaque       true
 TabbedPane.contentSeparatorHeight 1
 TabbedPane.darkShadow          #696969    javax.swing.plaf.ColorUIResource [UI]
@@ -943,7 +943,7 @@ TabbedPane.tabSeparatorsFullHeight false
 TabbedPane.tabsOpaque          true
 TabbedPane.tabsOverlapBorder   false
 TabbedPane.textIconGap         4
-TabbedPane.underlineColor      #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.underlineColor      #ffff00    javax.swing.plaf.ColorUIResource [UI]
 TabbedPaneUI                   com.formdev.flatlaf.ui.FlatTabbedPaneUI
 
 
@@ -1138,7 +1138,7 @@ ToggleButton.tab.disabledUnderlineColor #7a7a7a    javax.swing.plaf.ColorUIResou
 ToggleButton.tab.focusBackground #dddddd    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.hoverBackground #eeeeee    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.selectedBackground #00ff00    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.tab.underlineColor #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.underlineColor #ffff00    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.underlineHeight 2
 ToggleButton.textIconGap       4
 ToggleButton.textShiftOffset   0

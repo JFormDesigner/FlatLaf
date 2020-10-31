@@ -875,42 +875,10 @@ public class FlatTabbedPaneUI
 	}
 
 	protected void paintTabSelection( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
-		// increase clip bounds in scroll-tab-layout to paint over the separator line
-		Rectangle clipBounds = isScrollTabLayout() ? g.getClipBounds() : null;
-		if( clipBounds != null &&
-			this.contentSeparatorHeight != 0 &&
-			clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
-		{
-			Rectangle newClipBounds = new Rectangle( clipBounds );
-			int contentSeparatorHeight = scale( this.contentSeparatorHeight );
-			switch( tabPlacement ) {
-				case TOP:
-				default:
-					newClipBounds.height += contentSeparatorHeight;
-					break;
-
-				case BOTTOM:
-					newClipBounds.y -= contentSeparatorHeight;
-					newClipBounds.height += contentSeparatorHeight;
-					break;
-
-				case LEFT:
-					newClipBounds.width += contentSeparatorHeight;
-					break;
-
-				case RIGHT:
-					newClipBounds.x -= contentSeparatorHeight;
-					newClipBounds.width += contentSeparatorHeight;
-					break;
-			}
-			g.setClip( newClipBounds );
-		}
-
 		g.setColor( tabPane.isEnabled() ? underlineColor : disabledUnderlineColor );
 
-		Insets contentInsets = getContentBorderInsets( tabPlacement );
-
 		// paint underline selection
+		Insets contentInsets = getContentBorderInsets( tabPlacement );
 		int tabSelectionHeight = scale( this.tabSelectionHeight );
 		switch( tabPlacement ) {
 			case TOP:
@@ -932,9 +900,6 @@ public class FlatTabbedPaneUI
 				g.fillRect( x - contentInsets.right, y, tabSelectionHeight, h );
 				break;
 		}
-
-		if( clipBounds != null )
-			g.setClip( clipBounds );
 	}
 
 	/**
@@ -1005,8 +970,15 @@ public class FlatTabbedPaneUI
 		if( isScrollTabLayout() && selectedIndex >= 0 && tabViewport != null ) {
 			Rectangle tabRect = getTabBounds( tabPane, selectedIndex );
 
+			// clip to "scrolling sides" of viewport
+			// (left and right if horizontal, top and bottom if vertical)
 			Shape oldClip = g.getClip();
-			g.setClip( tabViewport.getBounds() );
+			Rectangle vr = tabViewport.getBounds();
+			if( isHorizontalTabPlacement() )
+				g.clipRect( vr.x, 0, vr.width, tabPane.getHeight() );
+			else
+				g.clipRect( 0, vr.y, tabPane.getWidth(), vr.height );
+
 			paintTabSelection( g, tabPlacement, tabRect.x, tabRect.y, tabRect.width, tabRect.height );
 			g.setClip( oldClip );
 		}
