@@ -168,12 +168,21 @@ public class FlatContainerTest
 		boolean showTabIcons = tabIconsCheckBox.isSelected();
 		Object iconSize = tabIconSizeSpinner.getValue();
 
-		Icon icon = showTabIcons
-			? new ScaledImageIcon( new ImageIcon( getClass().getResource( "/com/formdev/flatlaf/testing/test" + iconSize + ".png" ) ) )
-			: null;
+		Icon icon = null;
+		Icon disabledIcon = null;
+		if( showTabIcons ) {
+			ImageIcon imageIcon = new ImageIcon( getClass().getResource( "/com/formdev/flatlaf/testing/test" + iconSize + ".png" ) );
+			icon = new ScaledImageIcon( imageIcon );
+			disabledIcon = UIManager.getLookAndFeel().getDisabledIcon( tabbedPane, imageIcon );
+			if( disabledIcon instanceof ImageIcon )
+				disabledIcon = new ScaledImageIcon( (ImageIcon) disabledIcon );
+		}
+
 		int tabCount = tabbedPane.getTabCount();
-		for( int i = 0; i < tabCount; i++ )
+		for( int i = 0; i < tabCount; i++ ) {
 			tabbedPane.setIconAt( i, icon );
+			tabbedPane.setDisabledIconAt( i, disabledIcon );
+		}
 	}
 
 	private void iconPlacementChanged() {
