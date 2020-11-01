@@ -2054,6 +2054,71 @@ public class FlatTabbedPaneUI
 		extends TabbedPaneLayout
 	{
 		@Override
+		protected Dimension calculateSize( boolean minimum ) {
+			if( isContentEmpty() )
+				return calculateTabAreaSize();
+
+			return super.calculateSize( minimum );
+		}
+
+		/**
+		 * Check whether all content components are either {@code null} or have zero preferred size.
+		 * <p>
+		 * If {@code true}, assume that the tabbed pane is used without any content and
+		 * use the size of the tab area (single run) as minimum/preferred size.
+		 */
+		protected boolean isContentEmpty() {
+			int tabCount = tabPane.getTabCount();
+			if( tabCount == 0 )
+				return false;
+
+			for( int i = 0; i < tabCount; i++ ) {
+				Component c = tabPane.getComponentAt( i );
+				if( c != null ) {
+					Dimension cs = c.getPreferredSize();
+					if( cs.width != 0 || cs.height != 0 )
+						return false;
+				}
+			}
+
+			return true;
+		}
+
+		protected Dimension calculateTabAreaSize() {
+			boolean horizontal = isHorizontalTabPlacement();
+			int tabPlacement = tabPane.getTabPlacement();
+			FontMetrics metrics = getFontMetrics();
+			int fontHeight = metrics.getHeight();
+
+			// calculate size of tabs
+			int width = 0;
+			int height = 0;
+			int tabCount = tabPane.getTabCount();
+			for( int i = 0; i < tabCount; i++ ) {
+				if( horizontal ) {
+					width += calculateTabWidth( tabPlacement, i, metrics );
+					height = Math.max( height, calculateTabHeight( tabPlacement, i, fontHeight ) );
+				} else {
+					width = Math.max( width, calculateTabWidth( tabPlacement, i, metrics ) );
+					height += calculateTabHeight( tabPlacement, i, fontHeight );
+				}
+			}
+
+			// add content separator thickness
+			if( horizontal )
+				height += scale( contentSeparatorHeight );
+			else
+				width += scale( contentSeparatorHeight );
+
+			// add insets
+			Insets insets = tabPane.getInsets();
+			Insets tabAreaInsets = getTabAreaInsets( tabPlacement );
+			return new Dimension(
+				width + insets.left + insets.right + tabAreaInsets.left + tabAreaInsets.right,
+				height + insets.bottom + insets.top + tabAreaInsets.top + tabAreaInsets.bottom );
+		}
+
+		@Override
 		public void layoutContainer( Container parent ) {
 			super.layoutContainer( parent );
 
@@ -2199,7 +2264,7 @@ public class FlatTabbedPaneUI
 	 * in {@link BasicTabbedPaneUI}.ensureCurrentLayout().
 	 */
 	protected class FlatTabbedPaneScrollLayout
-		extends TabbedPaneLayout
+		extends FlatTabbedPaneLayout
 		implements LayoutManager
 	{
 		private final TabbedPaneLayout delegate;
@@ -2213,7 +2278,35 @@ public class FlatTabbedPaneUI
 			delegate.calculateLayoutInfo();
 		}
 
+		@Override
+		protected Dimension calculateTabAreaSize() {
+			Dimension size = super.calculateTabAreaSize();
+
+			// limit width/height in scroll layout
+			if( isHorizontalTabPlacement() )
+				size.width = Math.min( size.width, scale( 100 ) );
+			else
+				size.height = Math.min( size.height, scale( 100 ) );
+			return size;
+		}
+
 		//---- interface LayoutManager ----
+
+		@Override
+		public Dimension preferredLayoutSize( Container parent ) {
+			if( isContentEmpty() )
+				return calculateTabAreaSize();
+
+			return delegate.preferredLayoutSize( parent );
+		}
+
+		@Override
+		public Dimension minimumLayoutSize( Container parent ) {
+			if( isContentEmpty() )
+				return calculateTabAreaSize();
+
+			return delegate.minimumLayoutSize( parent );
+		}
 
 		@Override
 		public void addLayoutComponent( String name, Component comp ) {
