@@ -58,10 +58,8 @@ public class FlatContainerTest
 
 	private void tabScrollChanged() {
 		int tabLayoutPolicy = tabScrollCheckBox.isSelected() ? JTabbedPane.SCROLL_TAB_LAYOUT : JTabbedPane.WRAP_TAB_LAYOUT;
-		tabbedPane1.setTabLayoutPolicy( tabLayoutPolicy );
-		tabbedPane2.setTabLayoutPolicy( tabLayoutPolicy );
-		tabbedPane3.setTabLayoutPolicy( tabLayoutPolicy );
-		tabbedPane4.setTabLayoutPolicy( tabLayoutPolicy );
+		for( JTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabLayoutPolicy( tabLayoutPolicy );
 
 		int tabCount = (Integer) tabCountSpinner.getValue();
 		if( tabLayoutPolicy == JTabbedPane.SCROLL_TAB_LAYOUT && tabCount == 4 )
@@ -86,17 +84,13 @@ public class FlatContainerTest
 	}
 
 	private void putTabbedPanesClientProperty( String key, Object value ) {
-		tabbedPane1.putClientProperty( key, value );
-		tabbedPane2.putClientProperty( key, value );
-		tabbedPane3.putClientProperty( key, value );
-		tabbedPane4.putClientProperty( key, value );
+		for( JTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.putClientProperty( key, value );
 	}
 
 	private void tabCountChanged() {
-		tabCountChanged( tabbedPane1 );
-		tabCountChanged( tabbedPane2 );
-		tabCountChanged( tabbedPane3 );
-		tabCountChanged( tabbedPane4 );
+		for( JTabbedPane tabbedPane : allTabbedPanes )
+			tabCountChanged( tabbedPane );
 	}
 
 	private void tabCountChanged( JTabbedPane tabbedPane ) {
@@ -156,10 +150,8 @@ public class FlatContainerTest
 	}
 
 	private void tabIconsChanged() {
-		setTabIcons( tabbedPane1 );
-		setTabIcons( tabbedPane2 );
-		setTabIcons( tabbedPane3 );
-		setTabIcons( tabbedPane4 );
+		for( JTabbedPane tabbedPane : allTabbedPanes )
+			setTabIcons( tabbedPane );
 
 		tabIconSizeSpinner.setEnabled( tabIconsCheckBox.isSelected() );
 	}
@@ -201,17 +193,13 @@ public class FlatContainerTest
 			? new MatteBorder( 10, 20, 25, 35, Color.green )
 			: null;
 
-		tabbedPane1.setBorder( border );
-		tabbedPane2.setBorder( border );
-		tabbedPane3.setBorder( border );
-		tabbedPane4.setBorder( border );
+		for( JTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setBorder( border );
 	}
 
 	private void customTabsChanged() {
-		customTabsChanged( tabbedPane1 );
-		customTabsChanged( tabbedPane2 );
-		customTabsChanged( tabbedPane3 );
-		customTabsChanged( tabbedPane4 );
+		for( JTabbedPane tabbedPane : allTabbedPanes )
+			customTabsChanged( tabbedPane );
 	}
 
 	private void customTabsChanged( JTabbedPane tabbedPane ) {
@@ -242,10 +230,8 @@ public class FlatContainerTest
 	}
 
 	private void htmlTabsChanged() {
-		htmlTabsChanged( tabbedPane1 );
-		htmlTabsChanged( tabbedPane2 );
-		htmlTabsChanged( tabbedPane3 );
-		htmlTabsChanged( tabbedPane4 );
+		for( JTabbedPane tabbedPane : allTabbedPanes )
+			htmlTabsChanged( tabbedPane );
 	}
 
 	private void htmlTabsChanged( JTabbedPane tabbedPane ) {
@@ -298,10 +284,8 @@ public class FlatContainerTest
 	}
 
 	private void tabBackForegroundChanged() {
-		tabBackForegroundChanged( tabbedPane1 );
-		tabBackForegroundChanged( tabbedPane2 );
-		tabBackForegroundChanged( tabbedPane3 );
-		tabBackForegroundChanged( tabbedPane4 );
+		for( JTabbedPane tabbedPane : allTabbedPanes )
+			tabBackForegroundChanged( tabbedPane );
 	}
 
 	private void tabBackForegroundChanged( JTabbedPane tabbedPane ) {
@@ -322,8 +306,7 @@ public class FlatContainerTest
 	}
 
 	private void leadingTrailingComponentChanged( boolean enabled, String key, String text, int gap ) {
-		JTabbedPane[] tabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
-		for( JTabbedPane tabbedPane : tabbedPanes ) {
+		for( JTabbedPane tabbedPane : allTabbedPanes ) {
 			JComponent c = null;
 			if( enabled ) {
 				c = new JLabel( text );
@@ -354,8 +337,7 @@ public class FlatContainerTest
 	private void secondTabClosableChanged() {
 		Boolean value = secondTabClosableCheckBox.getValue();
 
-		JTabbedPane[] tabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
-		for( JTabbedPane tabbedPane : tabbedPanes ) {
+		for( JTabbedPane tabbedPane : allTabbedPanes ) {
 			if( tabbedPane.getTabCount() > 1 ) {
 				Component c = tabbedPane.getComponentAt( 1 );
 				((JComponent)c).putClientProperty( TABBED_PANE_TAB_CLOSABLE, value );
@@ -381,8 +363,7 @@ public class FlatContainerTest
 	private void secondTabWiderChanged() {
 		Insets insets = secondTabWiderCheckBox.isSelected() ? new Insets( 4, 20, 4, 20 ) : null;
 
-		JTabbedPane[] tabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
-		for( JTabbedPane tabbedPane : tabbedPanes ) {
+		for( JTabbedPane tabbedPane : allTabbedPanes ) {
 			if( tabbedPane.getTabCount() > 1 ) {
 				Component c = tabbedPane.getComponentAt( 1 );
 				((JComponent)c).putClientProperty( TABBED_PANE_TAB_INSETS, insets );
@@ -758,6 +739,8 @@ public class FlatContainerTest
 		}
 		add(panel9, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		allTabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
@@ -793,6 +776,8 @@ public class FlatContainerTest
 	private JCheckBox minimumTabWidthCheckBox;
 	private JCheckBox maximumTabWidthCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	private JTabbedPane[] allTabbedPanes;
 
 	//---- class Tab1Panel ----------------------------------------------------
 
