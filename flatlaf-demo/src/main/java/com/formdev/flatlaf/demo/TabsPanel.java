@@ -141,18 +141,6 @@ class TabsPanel
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
-		JLabel splitPaneLabel = new JLabel();
-		JSplitPane splitPane3 = new JSplitPane();
-		JSplitPane splitPane1 = new JSplitPane();
-		JPanel panel10 = new JPanel();
-		JLabel label1 = new JLabel();
-		JPanel panel11 = new JPanel();
-		JLabel label2 = new JLabel();
-		JSplitPane splitPane2 = new JSplitPane();
-		JPanel panel12 = new JPanel();
-		JLabel label3 = new JLabel();
-		JPanel panel13 = new JPanel();
-		JLabel label4 = new JLabel();
 		JLabel tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new JTabbedPane();
 		tabbedPane3 = new JTabbedPane();
@@ -178,105 +166,30 @@ class TabsPanel
 		{
 			panel9.setLayout(new FormLayout(
 				"70dlu:grow, $ugap, 70dlu:grow",
-				"default, $lgap, fill:70dlu, $pgap, pref, $lgap, 2*(fill:80dlu:grow, $ugap), pref"));
-
-			//---- splitPaneLabel ----
-			splitPaneLabel.setText("JSplitPane:");
-			panel9.add(splitPaneLabel, cc.xy(1, 1));
-
-			//======== splitPane3 ========
-			{
-				splitPane3.setResizeWeight(0.5);
-
-				//======== splitPane1 ========
-				{
-					splitPane1.setResizeWeight(0.5);
-
-					//======== panel10 ========
-					{
-						panel10.setBackground(new Color(217, 163, 67));
-						panel10.setLayout(new BorderLayout());
-
-						//---- label1 ----
-						label1.setText("LEFT");
-						label1.setHorizontalAlignment(SwingConstants.CENTER);
-						label1.setForeground(Color.white);
-						panel10.add(label1, BorderLayout.CENTER);
-					}
-					splitPane1.setLeftComponent(panel10);
-
-					//======== panel11 ========
-					{
-						panel11.setBackground(new Color(98, 181, 67));
-						panel11.setLayout(new BorderLayout());
-
-						//---- label2 ----
-						label2.setText("RIGHT");
-						label2.setHorizontalAlignment(SwingConstants.CENTER);
-						label2.setForeground(Color.white);
-						panel11.add(label2, BorderLayout.CENTER);
-					}
-					splitPane1.setRightComponent(panel11);
-				}
-				splitPane3.setLeftComponent(splitPane1);
-
-				//======== splitPane2 ========
-				{
-					splitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
-					splitPane2.setResizeWeight(0.5);
-
-					//======== panel12 ========
-					{
-						panel12.setBackground(new Color(242, 101, 34));
-						panel12.setLayout(new BorderLayout());
-
-						//---- label3 ----
-						label3.setText("TOP");
-						label3.setHorizontalAlignment(SwingConstants.CENTER);
-						label3.setForeground(Color.white);
-						panel12.add(label3, BorderLayout.CENTER);
-					}
-					splitPane2.setTopComponent(panel12);
-
-					//======== panel13 ========
-					{
-						panel13.setBackground(new Color(64, 182, 224));
-						panel13.setLayout(new BorderLayout());
-
-						//---- label4 ----
-						label4.setText("BOTTOM");
-						label4.setHorizontalAlignment(SwingConstants.CENTER);
-						label4.setForeground(Color.white);
-						panel13.add(label4, BorderLayout.CENTER);
-					}
-					splitPane2.setBottomComponent(panel13);
-				}
-				splitPane3.setRightComponent(splitPane2);
-			}
-			panel9.add(splitPane3, cc.xywh(1, 3, 3, 1));
+				"pref, $lgap, 2*(fill:80dlu:grow, $ugap), pref"));
 
 			//---- tabbedPaneLabel ----
 			tabbedPaneLabel.setText("JTabbedPane:");
-			panel9.add(tabbedPaneLabel, cc.xy(1, 5));
-			panel9.add(tabbedPane1, cc.xy(1, 7));
+			panel9.add(tabbedPaneLabel, cc.xy(1, 1));
+			panel9.add(tabbedPane1, cc.xy(1, 3));
 
 			//======== tabbedPane3 ========
 			{
 				tabbedPane3.setTabPlacement(SwingConstants.LEFT);
 			}
-			panel9.add(tabbedPane3, cc.xy(3, 7));
+			panel9.add(tabbedPane3, cc.xy(3, 3));
 
 			//======== tabbedPane2 ========
 			{
 				tabbedPane2.setTabPlacement(SwingConstants.BOTTOM);
 			}
-			panel9.add(tabbedPane2, cc.xy(1, 9));
+			panel9.add(tabbedPane2, cc.xy(1, 5));
 
 			//======== tabbedPane4 ========
 			{
 				tabbedPane4.setTabPlacement(SwingConstants.RIGHT);
 			}
-			panel9.add(tabbedPane4, cc.xy(3, 9));
+			panel9.add(tabbedPane4, cc.xy(3, 5));
 
 			//======== panel14 ========
 			{
@@ -318,7 +231,7 @@ class TabsPanel
 				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
 				panel14.add(hasFullBorderCheckBox, "cell 4 0,alignx left,growx 0");
 			}
-			panel9.add(panel14, cc.xywh(1, 11, 3, 1));
+			panel9.add(panel14, cc.xywh(1, 7, 3, 1));
 		}
 		add(panel9, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents

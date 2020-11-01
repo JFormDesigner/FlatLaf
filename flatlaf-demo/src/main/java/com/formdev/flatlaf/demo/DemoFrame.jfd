@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -64,6 +64,7 @@ new FormModel {
 				name: "contentPanel"
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane"
+					"tabLayoutPolicy": 1
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -86,7 +87,7 @@ new FormModel {
 					add( new FormComponent( "com.formdev.flatlaf.demo.TabsPanel" ) {
 						name: "tabsPanel"
 					}, new FormLayoutConstraints( null ) {
-						"title": "SplitPane & Tabs"
+						"title": "Tabs"
 					} )
 					add( new FormComponent( "com.formdev.flatlaf.demo.OptionPanePanel" ) {
 						name: "optionPanePanel"

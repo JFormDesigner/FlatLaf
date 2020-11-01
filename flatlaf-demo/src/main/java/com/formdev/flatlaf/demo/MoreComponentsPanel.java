@@ -101,6 +101,18 @@ class MoreComponentsPanel
 		JButton button8 = new JButton();
 		JToggleButton toggleButton6 = new JToggleButton();
 		JButton button1 = new JButton();
+		JLabel splitPaneLabel = new JLabel();
+		JSplitPane splitPane3 = new JSplitPane();
+		JSplitPane splitPane1 = new JSplitPane();
+		JPanel panel10 = new JPanel();
+		JLabel label1 = new JLabel();
+		JPanel panel11 = new JPanel();
+		JLabel label2 = new JLabel();
+		JSplitPane splitPane2 = new JSplitPane();
+		JPanel panel12 = new JPanel();
+		JLabel label5 = new JLabel();
+		JPanel panel13 = new JPanel();
+		JLabel label6 = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -122,7 +134,8 @@ class MoreComponentsPanel
 			"[]" +
 			"[]" +
 			"[]" +
-			"[]"));
+			"[]" +
+			"[100,top]"));
 
 		//---- scrollPaneLabel ----
 		scrollPaneLabel.setText("JScrollPane:");
@@ -386,6 +399,81 @@ class MoreComponentsPanel
 			toolBar1.add(button1);
 		}
 		add(toolBar1, "cell 1 10 3 1,growx");
+
+		//---- splitPaneLabel ----
+		splitPaneLabel.setText("JSplitPane:");
+		add(splitPaneLabel, "cell 0 11");
+
+		//======== splitPane3 ========
+		{
+			splitPane3.setResizeWeight(0.5);
+
+			//======== splitPane1 ========
+			{
+				splitPane1.setResizeWeight(0.5);
+
+				//======== panel10 ========
+				{
+					panel10.setBackground(new Color(217, 163, 67));
+					panel10.setLayout(new BorderLayout());
+
+					//---- label1 ----
+					label1.setText("LEFT");
+					label1.setHorizontalAlignment(SwingConstants.CENTER);
+					label1.setForeground(Color.white);
+					panel10.add(label1, BorderLayout.CENTER);
+				}
+				splitPane1.setLeftComponent(panel10);
+
+				//======== panel11 ========
+				{
+					panel11.setBackground(new Color(98, 181, 67));
+					panel11.setLayout(new BorderLayout());
+
+					//---- label2 ----
+					label2.setText("RIGHT");
+					label2.setHorizontalAlignment(SwingConstants.CENTER);
+					label2.setForeground(Color.white);
+					panel11.add(label2, BorderLayout.CENTER);
+				}
+				splitPane1.setRightComponent(panel11);
+			}
+			splitPane3.setLeftComponent(splitPane1);
+
+			//======== splitPane2 ========
+			{
+				splitPane2.setOrientation(JSplitPane.VERTICAL_SPLIT);
+				splitPane2.setResizeWeight(0.5);
+
+				//======== panel12 ========
+				{
+					panel12.setBackground(new Color(242, 101, 34));
+					panel12.setLayout(new BorderLayout());
+
+					//---- label5 ----
+					label5.setText("TOP");
+					label5.setHorizontalAlignment(SwingConstants.CENTER);
+					label5.setForeground(Color.white);
+					panel12.add(label5, BorderLayout.CENTER);
+				}
+				splitPane2.setTopComponent(panel12);
+
+				//======== panel13 ========
+				{
+					panel13.setBackground(new Color(64, 182, 224));
+					panel13.setLayout(new BorderLayout());
+
+					//---- label6 ----
+					label6.setText("BOTTOM");
+					label6.setHorizontalAlignment(SwingConstants.CENTER);
+					label6.setForeground(Color.white);
+					panel13.add(label6, BorderLayout.CENTER);
+				}
+				splitPane2.setBottomComponent(panel13);
+			}
+			splitPane3.setRightComponent(splitPane2);
+		}
+		add(splitPane3, "cell 1 11 4 1,grow");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		if( FlatLafDemo.screenshotsMode ) {

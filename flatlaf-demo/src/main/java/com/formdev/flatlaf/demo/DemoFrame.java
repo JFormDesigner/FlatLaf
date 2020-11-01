@@ -680,11 +680,12 @@ class DemoFrame
 
 			//======== tabbedPane ========
 			{
+				tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 				tabbedPane.addChangeListener(e -> selectedTabChanged());
 				tabbedPane.addTab("Basic Components", basicComponentsPanel);
 				tabbedPane.addTab("More Components", moreComponentsPanel);
 				tabbedPane.addTab("Data Components", dataComponentsPanel);
-				tabbedPane.addTab("SplitPane & Tabs", tabsPanel);
+				tabbedPane.addTab("Tabs", tabsPanel);
 				tabbedPane.addTab("Option Pane", optionPanePanel);
 				tabbedPane.addTab("Extras", extrasPanel1);
 			}
