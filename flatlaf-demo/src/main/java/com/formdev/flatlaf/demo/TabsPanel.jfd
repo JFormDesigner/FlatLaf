@@ -3,132 +3,431 @@ JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
-		auxiliary() {
-			"JavaCodeGenerator.defaultVariableLocal": true
-		}
+		"$setComponentNames": true
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
-			"$columnConstraints": "[grow,fill]"
-			"$rowConstraints": "[grow,fill]"
+			"$columnConstraints": "[grow,fill]para[fill]para[fill]"
+			"$rowConstraints": "[grow,fill][]"
 		} ) {
 			name: "this"
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
-				"$columnSpecs": "70dlu:grow, unrelgap, 70dlu:grow"
-				"$rowSpecs": "pref, linegap, fill:80dlu:grow, unrelgap, fill:80dlu:grow, unrelgap, pref"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[grow,fill]"
+				"$rowConstraints": "[][fill]para[]0[][]para[][]para[][]"
 			} ) {
-				name: "panel9"
+				name: "panel1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "tabbedPaneLabel"
-					"text": "JTabbedPane:"
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 1
+					name: "tabPlacementLabel"
+					"text": "Tab placement"
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "tabPlacementToolBar"
+					"floatable": false
+					"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "topPlacementButton"
+						"text": "top"
+						"selected": true
+						"$buttonGroup": new FormReference( "tabPlacementButtonGroup" )
+						"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "bottomPlacementButton"
+						"text": "bottom"
+						"$buttonGroup": new FormReference( "tabPlacementButtonGroup" )
+						"font": #SwingDerivedFont0
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "leftPlacementButton"
+						"text": "left"
+						"$buttonGroup": new FormReference( "tabPlacementButtonGroup" )
+						"font": #SwingDerivedFont0
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "rightPlacementButton"
+						"text": "right"
+						"$buttonGroup": new FormReference( "tabPlacementButtonGroup" )
+						"font": #SwingDerivedFont0
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+						name: "separator1"
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "scrollButton"
+						"text": "scroll"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "borderButton"
+						"text": "border"
+						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "borderChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0,alignx right,growx 0"
 				} )
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
-					name: "tabbedPane1"
+					name: "tabPlacementTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1,width 300:300,height 100:100"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabLayoutLabel"
+					"text": "Tab layout"
+					"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
 					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.variableLocal": true
 					}
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 1
-					"gridY": 3
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "tabLayoutToolBar"
+					"floatable": false
+					"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "scrollTabLayoutButton"
+						"text": "scroll"
+						"$buttonGroup": new FormReference( "buttonGroup2" )
+						"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"selected": true
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabLayoutChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "wrapTabLayoutButton"
+						"text": "wrap"
+						"$buttonGroup": new FormReference( "buttonGroup2" )
+						"font": #SwingDerivedFont2
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabLayoutChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2,alignx right,growx 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "scrollLayoutNoteLabel"
+					"text": "(use mouse wheel to scroll; arrow button shows hidden tabs)"
+					"enabled": false
+					"font": &SwingDerivedFont3 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "wrapLayoutNoteLabel"
+					"text": "(probably better to use scroll layout?)"
+					"enabled": false
+					"font": #SwingDerivedFont3
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
 				} )
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
-					name: "tabbedPane3"
-					"tabPlacement": 2
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 3
-					"gridY": 3
+					name: "scrollLayoutTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
 				} )
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
-					name: "tabbedPane2"
-					"tabPlacement": 3
+					name: "wrapLayoutTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4,width 100:100,height pref*2px"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "closableTabsLabel"
+					"text": "Closable tabs"
+					"font": #SwingDerivedFont1
 					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.variableLocal": true
 					}
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridY": 5
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "closableTabsToolBar"
+					"floatable": false
+					"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "squareCloseButton"
+						"text": "square"
+						"font": &SwingDerivedFont4 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"selected": true
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "closeButtonStyleChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "circleCloseButton"
+						"text": "circle"
+						"font": #SwingDerivedFont4
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "closeButtonStyleChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "redCrossCloseButton"
+						"text": "red cross"
+						"font": #SwingDerivedFont4
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "closeButtonStyleChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5,alignx right,growx 0"
 				} )
 				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
-					name: "tabbedPane4"
-					"tabPlacement": 4
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridX": 3
-					"gridY": 5
+					name: "closableTabsTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 6"
 				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-					"$layoutConstraints": "insets 0,hidemode 3"
-					"$columnConstraints": "[][][][fill][]"
-					"$rowConstraints": "[center]"
-				} ) {
-					name: "panel14"
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "moreTabsCheckBox"
-						"text": "More tabs"
-						"mnemonic": 77
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "moreTabsChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 0"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabAreaComponentsLabel"
+					"text": "Custom tab area components"
+					"font": #SwingDerivedFont1
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 7"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "tabAreaComponentsToolBar"
+					"floatable": false
+					"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "leadingComponentButton"
+						"text": "leading"
+						"font": &SwingDerivedFont5 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"selected": true
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customComponentsChanged", false ) )
 					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "tabScrollCheckBox"
-						"text": "Use scroll layout"
-						"mnemonic": 83
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabScrollChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 1 0,alignx left,growx 0"
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "trailingComponentButton"
+						"text": "trailing"
+						"font": #SwingDerivedFont5
+						"selected": true
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customComponentsChanged", false ) )
 					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "showTabSeparatorsCheckBox"
-						"text": "Show tab separators"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTabSeparatorsChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 0"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "hideContentSeparatorCheckBox"
-						"text": "Hide content separator"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hideContentSeparatorChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 3 0"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "hasFullBorderCheckBox"
-						"text": "Show content border"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hasFullBorderChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 4 0,alignx left,growx 0"
-					} )
-				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
-					"gridY": 7
-					"gridWidth": 3
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 7,alignx right,growx 0"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "customComponentsTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 8"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
 			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[grow,fill]"
+				"$rowConstraints": "[]0[][fill][center][center][center]para[center]0[][center][center][center][]"
+			} ) {
+				name: "panel2"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabIconPlacementLabel"
+					"text": "Tab icon placement"
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabIconPlacementNodeLabel"
+					"text": "(top/bottom/leading/trailing)"
+					"enabled": false
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "iconTopTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "iconBottomTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "iconLeadingTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "iconTrailingTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabAreaAlignmentLabel"
+					"text": "Tab area alignment"
+					"font": &SwingDerivedFont6 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 6"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabAreaAlignmentNoteLabel"
+					"text": "(leading/center/trailing/fill)"
+					"enabled": false
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 7"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "alignLeadingTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 8"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "alignCenterTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 9"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "alignTrailingTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 10"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "alignFillTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 11"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0,growy"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[grow,fill]"
+				"$rowConstraints": "[]0[][][][]para[][][]"
+			} ) {
+				name: "panel3"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabWidthModeLabel"
+					"text": "Tab width mode"
+					"font": #SwingDerivedFont6
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabWidthModeNoteLabel"
+					"text": "(preferred/equal/compact)"
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+					"enabled": false
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "widthPreferredTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "widthEqualTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "widthCompactTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "minMaxTabWidthLabel"
+					"text": "Minimum/maximum tab width"
+					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": true
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "minimumTabWidthTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 6"
+				} )
+				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+					name: "maximumTabWidthTabbedPane"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 7"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[]"
+				"$rowConstraints": "[center]"
+			} ) {
+				name: "panel4"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": true
+				}
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "showTabSeparatorsCheckBox"
+					"text": "Show tab separators"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTabSeparatorsChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1 3 1"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 700, 515 )
+			"size": new java.awt.Dimension( 925, 825 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "tabPlacementButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 10, 1240 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 1292 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup2"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 1344 )
 		} )
 	}
 }
