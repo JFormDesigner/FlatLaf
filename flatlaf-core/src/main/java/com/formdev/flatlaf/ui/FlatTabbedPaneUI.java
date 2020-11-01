@@ -1405,7 +1405,8 @@ public class FlatTabbedPaneUI
 			if( direction == EAST || direction == WEST ) {
 				int xoffset = (getWidth() / 2) - getHeight();
 				setXOffset( (direction == EAST) ? xoffset : -xoffset );
-			}
+			} else
+				setXOffset( 0 );
 
 			super.paint( g );
 		}
