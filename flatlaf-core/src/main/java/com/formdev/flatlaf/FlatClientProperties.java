@@ -19,6 +19,7 @@ package com.formdev.flatlaf;
 import java.awt.Color;
 import java.util.Objects;
 import javax.swing.JComponent;
+import javax.swing.SwingConstants;
 
 /**
  * @author Karl Tauber
@@ -101,7 +102,7 @@ public interface FlatClientProperties
 	/**
 	 * Specifies whether the button preferred size will be made square (quadratically).
 	 * <p>
-	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String SQUARE_SIZE = "JButton.squareSize";
@@ -113,7 +114,7 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton},
 	 * {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner} and {@link javax.swing.text.JTextComponent}<br>
-	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
 	 */
 	String MINIMUM_WIDTH = "JComponent.minimumWidth";
 
@@ -121,7 +122,7 @@ public interface FlatClientProperties
 	 * Specifies minimum height of a component.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
-	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
 	 */
 	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
@@ -157,7 +158,7 @@ public interface FlatClientProperties
 	 * Paint the component with round edges.
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner},
-	 * {@link javax.swing.JTextField}, {@link javax.swing.JFormattedTextField} and {@link javax.swing.JPasswordField}
+	 * {@link javax.swing.JTextField}, {@link javax.swing.JFormattedTextField} and {@link javax.swing.JPasswordField}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String COMPONENT_ROUND_RECT = "JComponent.roundRect";
@@ -247,6 +248,27 @@ public interface FlatClientProperties
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
+	 * Specifies the minimum width of a tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 */
+	String TABBED_PANE_MINIMUM_TAB_WIDTH = "JTabbedPane.minimumTabWidth";
+
+	/**
+	 * Specifies the maximum width of a tab.
+	 * <p>
+	 * Applied only if tab does not have a custom tab component
+	 * (see {@link javax.swing.JTabbedPane#setTabComponentAt(int, java.awt.Component)}).
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 */
+	String TABBED_PANE_MAXIMUM_TAB_WIDTH = "JTabbedPane.maximumTabWidth";
+
+	/**
 	 * Specifies the height of a tab.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
@@ -262,6 +284,14 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.awt.Insets}
 	 */
 	String TABBED_PANE_TAB_INSETS = "JTabbedPane.tabInsets";
+
+	/**
+	 * Specifies the insets of the tab area.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.awt.Insets}
+	 */
+	String TABBED_PANE_TAB_AREA_INSETS = "JTabbedPane.tabAreaInsets";
 
 	/**
 	 * Specifies whether tabs are closable.
@@ -330,7 +360,7 @@ public interface FlatClientProperties
 	 * Specifies how to navigate to hidden tabs.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
-	 * <strong>Value type</strong> {@link java.lang.String}
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
 	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON}
 	 * or {@link #TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS}
 	 */
@@ -349,6 +379,88 @@ public interface FlatClientProperties
 	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
 	 */
 	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS = "arrowButtons";
+
+	/**
+	 * Specifies the alignment of the tab area.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_TAB_AREA_ALIGN_LEADING} (default),
+	 * {@link #TABBED_PANE_TAB_AREA_ALIGN_TRAILING}, {@link #TABBED_PANE_TAB_AREA_ALIGN_CENTER}
+	 * or {@link #TABBED_PANE_TAB_AREA_ALIGN_FILL}
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGNMENT = "JTabbedPane.tabAreaAlignment";
+
+	/**
+	 * Align the tab area to the leading edge.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGN_LEADING = "leading";
+
+	/**
+	 * Align the tab area to the trailing edge.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGN_TRAILING = "trailing";
+
+	/**
+	 * Align the tab area to center.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGN_CENTER = "center";
+
+	/**
+	 * Stretch tabs to fill all available space.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 */
+	String TABBED_PANE_TAB_AREA_ALIGN_FILL = "fill";
+
+	/**
+	 * Specifies how the tabs should be sized.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_TAB_WIDTH_MODE_PREFERRED} (default),
+	 * {@link #TABBED_PANE_TAB_WIDTH_MODE_EQUAL} or {@link #TABBED_PANE_TAB_WIDTH_MODE_COMPACT}
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE = "JTabbedPane.tabWidthMode";
+
+	/**
+	 * Tab width is adjusted to tab icon and title.
+	 *
+	 * @see #TABBED_PANE_TAB_WIDTH_MODE
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE_PREFERRED = "preferred";
+
+	/**
+	 * All tabs in a tabbed pane has same width.
+	 *
+	 * @see #TABBED_PANE_TAB_WIDTH_MODE
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE_EQUAL = "equal";
+
+	/**
+	 * Unselected tabs are smaller because they show only the tab icon, but no tab title.
+	 * Selected tabs show both.
+	 *
+	 * @see #TABBED_PANE_TAB_WIDTH_MODE
+	 */
+	String TABBED_PANE_TAB_WIDTH_MODE_COMPACT = "compact";
+
+	/**
+	 * Specifies the tab icon placement (relative to tab title).
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
+	 * <strong>Allowed Values</strong> {@link SwingConstants#LEADING} (default),
+	 * {@link SwingConstants#TRAILING}, {@link SwingConstants#TOP}
+	 * or {@link SwingConstants#BOTTOM}
+	 */
+	String TABBED_PANE_TAB_ICON_PLACEMENT = "JTabbedPane.tabIconPlacement";
 
 	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
