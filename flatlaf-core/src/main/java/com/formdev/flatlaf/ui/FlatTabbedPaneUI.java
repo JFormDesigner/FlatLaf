@@ -1594,6 +1594,10 @@ public class FlatTabbedPaneUI
 
 		@Override
 		public void mouseWheelMoved( MouseWheelEvent e ) {
+			// disable wheel scrolling if application has added its own mouse wheel listener
+			if( tabPane.getMouseWheelListeners().length > 1 )
+				return;
+
 			// because this listener receives mouse events for the whole tabbed pane,
 			// we have to check whether the mouse is located over the viewport
 			if( !isInViewport( e.getX(), e.getY() ) )
