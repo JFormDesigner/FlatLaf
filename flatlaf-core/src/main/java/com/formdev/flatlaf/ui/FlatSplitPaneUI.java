@@ -183,6 +183,13 @@ public class FlatSplitPaneUI
 						: (isLeftCollapsed()
 							? "SplitPaneDivider.expandLeftToolTipText"
 							: "SplitPaneDivider.collapseRightToolTipText"));
+
+				// get text from client property
+				Object value = splitPane.getClientProperty( key );
+				if( value instanceof String )
+					return (String) value;
+
+				// get text from bundle
 				return UIManager.getString( key, getLocale() );
 			}
 		}
