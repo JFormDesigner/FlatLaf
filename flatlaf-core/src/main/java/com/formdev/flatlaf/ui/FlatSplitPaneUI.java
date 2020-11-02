@@ -20,11 +20,13 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
@@ -152,6 +154,7 @@ public class FlatSplitPaneUI
 			protected FlatOneTouchButton( boolean left ) {
 				super( SwingConstants.NORTH, arrowType, oneTouchArrowColor, null, oneTouchHoverArrowColor, null );
 				setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
+				ToolTipManager.sharedInstance().registerComponent( this );
 
 				this.left = left;
 			}
@@ -161,6 +164,26 @@ public class FlatSplitPaneUI
 				return (orientation == JSplitPane.VERTICAL_SPLIT)
 					? (left ? SwingConstants.NORTH : SwingConstants.SOUTH)
 					: (left ? SwingConstants.WEST : SwingConstants.EAST);
+			}
+
+			@Override
+			public String getToolTipText( MouseEvent e ) {
+				String key = (orientation == JSplitPane.VERTICAL_SPLIT)
+					? (left
+						? (isRightCollapsed()
+							? "SplitPaneDivider.expandBottomToolTipText"
+							: "SplitPaneDivider.collapseTopToolTipText")
+						: (isLeftCollapsed()
+							? "SplitPaneDivider.expandTopToolTipText"
+							: "SplitPaneDivider.collapseBottomToolTipText"))
+					: (left
+						? (isRightCollapsed()
+							? "SplitPaneDivider.expandRightToolTipText"
+							: "SplitPaneDivider.collapseLeftToolTipText")
+						: (isLeftCollapsed()
+							? "SplitPaneDivider.expandLeftToolTipText"
+							: "SplitPaneDivider.collapseRightToolTipText"));
+				return UIManager.getString( key, getLocale() );
 			}
 		}
 
