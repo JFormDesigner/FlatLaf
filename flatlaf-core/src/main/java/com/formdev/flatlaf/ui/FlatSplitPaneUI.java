@@ -17,7 +17,10 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
@@ -54,8 +57,8 @@ public class FlatSplitPaneUI
 {
 	protected String arrowType;
 	private Boolean continuousLayout;
-	private Color oneTouchArrowColor;
-	private Color oneTouchHoverArrowColor;
+	protected Color oneTouchArrowColor;
+	protected Color oneTouchHoverArrowColor;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSplitPaneUI();
@@ -92,6 +95,8 @@ public class FlatSplitPaneUI
 	{
 		protected FlatSplitPaneDivider( BasicSplitPaneUI ui ) {
 			super( ui );
+
+			setLayout( new FlatDividerLayout() );
 		}
 
 		@Override
@@ -109,14 +114,42 @@ public class FlatSplitPaneUI
 			return new FlatOneTouchButton( false );
 		}
 
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			super.propertyChange( e );
+
+			switch( e.getPropertyName() ) {
+				case JSplitPane.DIVIDER_LOCATION_PROPERTY:
+					// necessary to show/hide one-touch buttons on expand/collapse
+					revalidate();
+					break;
+			}
+		}
+
+		protected boolean isLeftCollapsed() {
+			int location = splitPane.getDividerLocation();
+			Insets insets = splitPane.getInsets();
+			return (orientation == JSplitPane.VERTICAL_SPLIT)
+				? location == insets.top
+				: location == insets.left;
+		}
+
+		protected boolean isRightCollapsed() {
+			int location = splitPane.getDividerLocation();
+			Insets insets = splitPane.getInsets();
+			return (orientation == JSplitPane.VERTICAL_SPLIT)
+				? location == (splitPane.getHeight() - getHeight() - insets.bottom)
+				: location == (splitPane.getWidth() - getWidth() - insets.right);
+		}
+
 		//---- class FlatOneTouchButton ---------------------------------------
 
-		private class FlatOneTouchButton
+		protected class FlatOneTouchButton
 			extends FlatArrowButton
 		{
-			private final boolean left;
+			protected final boolean left;
 
-			public FlatOneTouchButton( boolean left ) {
+			protected FlatOneTouchButton( boolean left ) {
 				super( SwingConstants.NORTH, arrowType, oneTouchArrowColor, null, oneTouchHoverArrowColor, null );
 				setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
 
@@ -130,6 +163,39 @@ public class FlatSplitPaneUI
 					: (left ? SwingConstants.WEST : SwingConstants.EAST);
 			}
 		}
-	}
 
+		//---- class FlatDividerLayout ----------------------------------------
+
+		protected class FlatDividerLayout
+			extends DividerLayout
+		{
+			@Override
+			public void layoutContainer( Container c ) {
+				super.layoutContainer( c );
+
+				if( leftButton == null || rightButton == null || !splitPane.isOneTouchExpandable() )
+					return;
+
+				// increase side of buttons, which makes them easier to hit by the user
+				// and avoids cut arrows at small divider sizes
+				int extraSize = UIScale.scale( 4 );
+				if( orientation == JSplitPane.VERTICAL_SPLIT ) {
+					leftButton.setSize( leftButton.getWidth() + extraSize, leftButton.getHeight() );
+					rightButton.setBounds( leftButton.getX() + leftButton.getWidth(), rightButton.getY(),
+						rightButton.getWidth() + extraSize, rightButton.getHeight() );
+				} else {
+					leftButton.setSize( leftButton.getWidth(), leftButton.getHeight() + extraSize );
+					rightButton.setBounds( rightButton.getX(), leftButton.getY() + leftButton.getHeight(),
+						rightButton.getWidth(), rightButton.getHeight() + extraSize );
+				}
+
+				// hide buttons if not applicable
+				boolean leftCollapsed = isLeftCollapsed();
+				if( leftCollapsed )
+					rightButton.setLocation( leftButton.getLocation() );
+				leftButton.setVisible( !leftCollapsed );
+				rightButton.setVisible( !isRightCollapsed() );
+			}
+		}
+	}
 }

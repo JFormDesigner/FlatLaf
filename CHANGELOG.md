@@ -36,6 +36,7 @@ FlatLaf Change Log
   `TitlePane.borderColor`). (issue #184)
 - Extras: `FlatSVGIcon` now allows specifying icon width and height in
   constructors. (issue #196)
+- SplitPane: Hide not applicable expand/collapse buttons. (issue #198)
 
 
 #### Fixed bugs
