@@ -128,6 +128,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.hasFullBorder					boolean
  * @uiDefault TabbedPane.hiddenTabsNavigation			String	moreTabsButton (default) or arrowButtons
  * @uiDefault TabbedPane.tabAreaAlignment				String	leading (default), center, trailing or fill
+ * @uiDefault TabbedPane.tabAlignment					String	leading, center (default) or trailing
  * @uiDefault TabbedPane.tabWidthMode					String	preferred (default), equal or compact
  * @uiDefault ScrollPane.smoothScrolling				boolean
  * @uiDefault TabbedPane.closeIcon						Icon
@@ -144,10 +145,7 @@ public class FlatTabbedPaneUI
 	protected static final int ARROW_BUTTONS = 1;
 
 	// tab area alignment
-	protected static final int ALIGN_LEADING = 0;
-	protected static final int ALIGN_TRAILING = 1;
-	protected static final int ALIGN_CENTER = 2;
-	protected static final int ALIGN_FILL = 3;
+	protected static final int FILL = 100;
 
 	protected static final int WIDTH_MODE_PREFERRED = 0;
 	protected static final int WIDTH_MODE_EQUAL = 1;
@@ -178,7 +176,8 @@ public class FlatTabbedPaneUI
 	protected boolean tabsOpaque = true;
 
 	private String hiddenTabsNavigationStr;
-	private String tabAreaAlignmentStr;
+	protected int tabAreaAlignment;
+	protected int tabAlignment;
 	private String tabWidthModeStr;
 	protected Icon closeIcon;
 
@@ -246,7 +245,8 @@ public class FlatTabbedPaneUI
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOpaque = UIManager.getBoolean( "TabbedPane.tabsOpaque" );
 		hiddenTabsNavigationStr = UIManager.getString( "TabbedPane.hiddenTabsNavigation" );
-		tabAreaAlignmentStr = UIManager.getString( "TabbedPane.tabAreaAlignment" );
+		tabAreaAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAreaAlignment" ), LEADING );
+		tabAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAlignment" ), CENTER );
 		tabWidthModeStr = UIManager.getString( "TabbedPane.tabWidthMode" );
 		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
 
@@ -1003,11 +1003,12 @@ public class FlatTabbedPaneUI
 		}
 
 		// icon placement
-		int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING );
-		int verticalTextPosition = CENTER;
-		int horizontalTextPosition = TRAILING;
-		switch( iconPlacement ) {
-			case TRAILING:                                horizontalTextPosition = LEADING; break;
+		int verticalTextPosition;
+		int horizontalTextPosition;
+		switch( clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING ) ) {
+			default:
+			case LEADING:  verticalTextPosition = CENTER; horizontalTextPosition = TRAILING; break;
+			case TRAILING: verticalTextPosition = CENTER; horizontalTextPosition = LEADING; break;
 			case TOP:      verticalTextPosition = BOTTOM; horizontalTextPosition = CENTER; break;
 			case BOTTOM:   verticalTextPosition = TOP;    horizontalTextPosition = CENTER; break;
 		}
@@ -1023,7 +1024,7 @@ public class FlatTabbedPaneUI
 
 		// layout label
 		String clippedTitle = SwingUtilities.layoutCompoundLabel( tabPane, metrics, title, icon,
-			CENTER, CENTER, verticalTextPosition, horizontalTextPosition,
+			CENTER, getTabAlignment( tabIndex ), verticalTextPosition, horizontalTextPosition,
 			tabRect, iconRect, textRect, scale( textIconGapUnscaled ) );
 
 		// remove temporary client property
@@ -1164,10 +1165,23 @@ public class FlatTabbedPaneUI
 	}
 
 	protected int getTabAreaAlignment() {
-		String str = (String) tabPane.getClientProperty( TABBED_PANE_TAB_AREA_ALIGNMENT );
-		if( str == null )
-			str = tabAreaAlignmentStr;
-		return parseTabAreaAlignment( str );
+		Object value = tabPane.getClientProperty( TABBED_PANE_TAB_AREA_ALIGNMENT );
+		if( value instanceof Integer )
+			return (Integer) value;
+
+		return (value instanceof String)
+			? parseAlignment( (String) value, LEADING )
+			: tabAreaAlignment;
+	}
+
+	protected int getTabAlignment( int tabIndex ) {
+		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_ALIGNMENT );
+		if( value instanceof Integer )
+			return (Integer) value;
+
+		return (value instanceof String)
+			? parseAlignment( (String) value, CENTER )
+			: tabAlignment;
 	}
 
 	protected int getTabWidthMode() {
@@ -1188,16 +1202,16 @@ public class FlatTabbedPaneUI
 		}
 	}
 
-	protected static int parseTabAreaAlignment( String str ) {
+	protected static int parseAlignment( String str, int defaultValue ) {
 		if( str == null )
-			return ALIGN_LEADING;
+			return defaultValue;
 
 		switch( str ) {
-			default:
-			case TABBED_PANE_TAB_AREA_ALIGN_LEADING:	return ALIGN_LEADING;
-			case TABBED_PANE_TAB_AREA_ALIGN_TRAILING:	return ALIGN_TRAILING;
-			case TABBED_PANE_TAB_AREA_ALIGN_CENTER:		return ALIGN_CENTER;
-			case TABBED_PANE_TAB_AREA_ALIGN_FILL:		return ALIGN_FILL;
+			case TABBED_PANE_ALIGN_LEADING:		return LEADING;
+			case TABBED_PANE_ALIGN_TRAILING:	return TRAILING;
+			case TABBED_PANE_ALIGN_CENTER:		return CENTER;
+			case TABBED_PANE_ALIGN_FILL:		return FILL;
+			default:							return defaultValue;
 		}
 	}
 
@@ -1972,6 +1986,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_TAB_AREA_INSETS:
 				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
 				case TABBED_PANE_TAB_AREA_ALIGNMENT:
+				case TABBED_PANE_TAB_ALIGNMENT:
 				case TABBED_PANE_TAB_WIDTH_MODE:
 				case TABBED_PANE_TAB_ICON_PLACEMENT:
 				case TABBED_PANE_TAB_CLOSABLE:
@@ -2013,6 +2028,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_MINIMUM_TAB_WIDTH:
 				case TABBED_PANE_MAXIMUM_TAB_WIDTH:
 				case TABBED_PANE_TAB_INSETS:
+				case TABBED_PANE_TAB_ALIGNMENT:
 				case TABBED_PANE_TAB_CLOSABLE:
 					tabPane.revalidate();
 					tabPane.repaint();
@@ -2161,22 +2177,22 @@ public class FlatTabbedPaneUI
 					int diff = availWidth - totalTabWidth;
 
 					switch( tabAreaAlignment ) {
-						case ALIGN_LEADING:
+						case LEADING:
 							trailingWidth += diff;
 							break;
 
-						case ALIGN_TRAILING:
+						case TRAILING:
 							shiftTabs( leftToRight ? diff : -diff, 0 );
 							leadingWidth += diff;
 							break;
 
-						case ALIGN_CENTER:
+						case CENTER:
 							shiftTabs( (leftToRight ? diff : -diff) / 2, 0 );
 							leadingWidth += diff / 2;
 							trailingWidth += diff - (diff / 2);
 							break;
 
-						case ALIGN_FILL:
+						case FILL:
 							stretchTabsWidth( diff, leftToRight );
 							break;
 					}
@@ -2220,22 +2236,22 @@ public class FlatTabbedPaneUI
 					int diff = availHeight - totalTabHeight;
 
 					switch( tabAreaAlignment ) {
-						case ALIGN_LEADING:
+						case LEADING:
 							bottomHeight += diff;
 							break;
 
-						case ALIGN_TRAILING:
+						case TRAILING:
 							shiftTabs( 0, diff );
 							topHeight += diff;
 							break;
 
-						case ALIGN_CENTER:
+						case CENTER:
 							shiftTabs( 0, (diff) / 2 );
 							topHeight += diff / 2;
 							bottomHeight += diff - (diff / 2);
 							break;
 
-						case ALIGN_FILL:
+						case FILL:
 							stretchTabsHeight( diff );
 							break;
 					}
@@ -2405,20 +2421,20 @@ public class FlatTabbedPaneUI
 				if( totalTabWidth < availWidth && rects.length > 0 ) {
 					int diff = availWidth - totalTabWidth;
 					switch( tabAreaAlignment ) {
-						case ALIGN_LEADING:
+						case LEADING:
 							trailingWidth += diff;
 							break;
 
-						case ALIGN_TRAILING:
+						case TRAILING:
 							leadingWidth += diff;
 							break;
 
-						case ALIGN_CENTER:
+						case CENTER:
 							leadingWidth += diff / 2;
 							trailingWidth += diff - (diff / 2);
 							break;
 
-						case ALIGN_FILL:
+						case FILL:
 							stretchTabsWidth( diff, leftToRight );
 							totalTabWidth = rectsTotalWidth( leftToRight );
 							break;
@@ -2492,20 +2508,20 @@ public class FlatTabbedPaneUI
 				if( totalTabHeight < availHeight && rects.length > 0 ) {
 					int diff = availHeight - totalTabHeight;
 					switch( tabAreaAlignment ) {
-						case ALIGN_LEADING:
+						case LEADING:
 							bottomHeight += diff;
 							break;
 
-						case ALIGN_TRAILING:
+						case TRAILING:
 							topHeight += diff;
 							break;
 
-						case ALIGN_CENTER:
+						case CENTER:
 							topHeight += diff / 2;
 							bottomHeight += diff - (diff / 2);
 							break;
 
-						case ALIGN_FILL:
+						case FILL:
 							stretchTabsHeight( diff );
 							totalTabHeight = rectsTotalHeight();
 							break;

@@ -667,6 +667,7 @@ TabbedPane.selectedTabPadInsets
 TabbedPane.selectionFollowsFocus
 TabbedPane.shadow
 TabbedPane.showTabSeparators
+TabbedPane.tabAlignment
 TabbedPane.tabAreaAlignment
 TabbedPane.tabAreaInsets
 TabbedPane.tabHeight

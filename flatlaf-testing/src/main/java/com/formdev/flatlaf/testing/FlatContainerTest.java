@@ -276,6 +276,17 @@ public class FlatContainerTest
 		putTabbedPanesClientProperty( TABBED_PANE_TAB_AREA_ALIGNMENT, value );
 	}
 
+	private void tabAlignmentChanged() {
+		String value = (String) tabAlignmentField.getSelectedItem();
+		Integer tabAlignment = null;
+		switch( value ) {
+			case "center":		tabAlignment = SwingConstants.CENTER; break;
+			case "leading":		tabAlignment = SwingConstants.LEADING; break;
+			case "trailing":	tabAlignment = SwingConstants.TRAILING; break;
+		}
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_ALIGNMENT, tabAlignment );
+	}
+
 	private void tabWidthModeChanged() {
 		String value = (String) tabWidthModeField.getSelectedItem();
 		if( "default".equals( value ) )
@@ -416,6 +427,7 @@ public class FlatContainerTest
 		iconPlacementField = new JComboBox<>();
 		JLabel tabAreaAlignmentLabel = new JLabel();
 		tabAreaAlignmentField = new JComboBox<>();
+		tabAlignmentField = new JComboBox<>();
 		JLabel tabWidthModeLabel = new JLabel();
 		tabWidthModeField = new JComboBox<>();
 		tabsClosableCheckBox = new JCheckBox();
@@ -637,7 +649,7 @@ public class FlatContainerTest
 				tabbedPaneControlPanel.add(iconPlacementField, "cell 2 2");
 
 				//---- tabAreaAlignmentLabel ----
-				tabAreaAlignmentLabel.setText("Tab area alignment:");
+				tabAreaAlignmentLabel.setText("Tab area/title alignment:");
 				tabbedPaneControlPanel.add(tabAreaAlignmentLabel, "cell 0 3");
 
 				//---- tabAreaAlignmentField ----
@@ -650,6 +662,16 @@ public class FlatContainerTest
 				}));
 				tabAreaAlignmentField.addActionListener(e -> tabAreaAlignmentChanged());
 				tabbedPaneControlPanel.add(tabAreaAlignmentField, "cell 1 3");
+
+				//---- tabAlignmentField ----
+				tabAlignmentField.setModel(new DefaultComboBoxModel<>(new String[] {
+					"default",
+					"leading",
+					"trailing",
+					"center"
+				}));
+				tabAlignmentField.addActionListener(e -> tabAlignmentChanged());
+				tabbedPaneControlPanel.add(tabAlignmentField, "cell 1 3");
 
 				//---- tabWidthModeLabel ----
 				tabWidthModeLabel.setText("Tab width mode:");
@@ -760,6 +782,7 @@ public class FlatContainerTest
 	private JSpinner tabIconSizeSpinner;
 	private JComboBox<String> iconPlacementField;
 	private JComboBox<String> tabAreaAlignmentField;
+	private JComboBox<String> tabAlignmentField;
 	private JComboBox<String> tabWidthModeField;
 	private JCheckBox tabsClosableCheckBox;
 	private JCheckBox customBorderCheckBox;

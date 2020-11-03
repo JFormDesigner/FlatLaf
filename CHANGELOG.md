@@ -25,6 +25,9 @@ FlatLaf Change Log
 - TabbedPane: Support alignment of tab area. (set client property
   `JTabbedPane.tabAreaAlignment` to `"leading"`, `"trailing"`, `"center"` or
   `"fill"`) (PR #199)
+- TabbedPane: Support horizontal alignment of tab title and icon. (set client
+  property `JTabbedPane.tabAlignment` to `SwingConstants.LEADING`,
+  `SwingConstants.TRAILING` or `SwingConstants.CENTER`)
 - TabbedPane: Support equal and compact tab width modes. (set client property
   `JTabbedPane.tabWidthMode` to `"preferred"`, `"equal"` or `"compact"`) (PR
   #199)

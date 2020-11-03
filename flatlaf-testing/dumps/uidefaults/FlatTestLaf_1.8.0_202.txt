@@ -932,6 +932,7 @@ TabbedPane.selectedTabPadInsets 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI
 TabbedPane.selectionFollowsFocus true
 TabbedPane.shadow              #ccffcc    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.showTabSeparators   false
+TabbedPane.tabAlignment        center
 TabbedPane.tabAreaAlignment    leading
 TabbedPane.tabAreaInsets       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.tabHeight           32

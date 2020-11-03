@@ -53,10 +53,15 @@ class TabsPanel
 		initTabIconPlacement( iconLeadingTabbedPane, SwingConstants.LEADING );
 		initTabIconPlacement( iconTrailingTabbedPane, SwingConstants.TRAILING );
 
-		initTabAreaAlignment( alignLeadingTabbedPane, TABBED_PANE_TAB_AREA_ALIGN_LEADING );
-		initTabAreaAlignment( alignCenterTabbedPane, TABBED_PANE_TAB_AREA_ALIGN_CENTER );
-		initTabAreaAlignment( alignTrailingTabbedPane, TABBED_PANE_TAB_AREA_ALIGN_TRAILING );
-		initTabAreaAlignment( alignFillTabbedPane, TABBED_PANE_TAB_AREA_ALIGN_FILL );
+		initTabAreaAlignment( alignLeadingTabbedPane, TABBED_PANE_ALIGN_LEADING );
+		initTabAreaAlignment( alignCenterTabbedPane, TABBED_PANE_ALIGN_CENTER );
+		initTabAreaAlignment( alignTrailingTabbedPane, TABBED_PANE_ALIGN_TRAILING );
+		initTabAreaAlignment( alignFillTabbedPane, TABBED_PANE_ALIGN_FILL );
+
+		initTabAlignment( tabAlignLeadingTabbedPane, SwingConstants.LEADING );
+		initTabAlignment( tabAlignCenterTabbedPane, SwingConstants.CENTER );
+		initTabAlignment( tabAlignTrailingTabbedPane, SwingConstants.TRAILING );
+		initTabAlignment( tabAlignVerticalTabbedPane, SwingConstants.TRAILING );
 
 		initTabWidthMode( widthPreferredTabbedPane, TABBED_PANE_TAB_WIDTH_MODE_PREFERRED );
 		initTabWidthMode( widthEqualTabbedPane, TABBED_PANE_TAB_WIDTH_MODE_EQUAL );
@@ -223,7 +228,7 @@ class TabsPanel
 		int iconSize = topOrBottom ? 24 : 16;
 		tabbedPane.putClientProperty( TABBED_PANE_TAB_ICON_PLACEMENT, iconPlacement );
 		if( topOrBottom ) {
-			tabbedPane.putClientProperty( TABBED_PANE_TAB_AREA_ALIGNMENT, TABBED_PANE_TAB_AREA_ALIGN_FILL );
+			tabbedPane.putClientProperty( TABBED_PANE_TAB_AREA_ALIGNMENT, TABBED_PANE_ALIGN_FILL );
 			tabbedPane.putClientProperty( TABBED_PANE_TAB_WIDTH_MODE, TABBED_PANE_TAB_WIDTH_MODE_EQUAL );
 		}
 		tabbedPane.addTab( "Search", new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/search.svg", iconSize, iconSize ), null );
@@ -236,6 +241,18 @@ class TabsPanel
 		tabbedPane.putClientProperty( TABBED_PANE_TAB_AREA_ALIGNMENT, tabAreaAlignment );
 		tabbedPane.addTab( "Search", null );
 		tabbedPane.addTab( "Recents", null );
+	}
+
+	private void initTabAlignment( JTabbedPane tabbedPane, int tabAlignment ) {
+		boolean vertical = (tabbedPane.getTabPlacement() == JTabbedPane.LEFT || tabbedPane.getTabPlacement() == JTabbedPane.RIGHT);
+		tabbedPane.putClientProperty( TABBED_PANE_TAB_ALIGNMENT, tabAlignment );
+		if( !vertical )
+			tabbedPane.putClientProperty( TABBED_PANE_MINIMUM_TAB_WIDTH, 80 );
+		tabbedPane.addTab( "A", null );
+		if( vertical ) {
+			tabbedPane.addTab( "Search", null );
+			tabbedPane.addTab( "Recents", null );
+		}
 	}
 
 	private void initTabWidthMode( JTabbedPane tabbedPane, String tabWidthMode ) {
@@ -337,6 +354,14 @@ class TabsPanel
 		JLabel minMaxTabWidthLabel = new JLabel();
 		minimumTabWidthTabbedPane = new JTabbedPane();
 		maximumTabWidthTabbedPane = new JTabbedPane();
+		JLabel tabAlignmentLabel = new JLabel();
+		panel5 = new JPanel();
+		JLabel tabAlignmentNoteLabel = new JLabel();
+		JLabel tabAlignmentNoteLabel2 = new JLabel();
+		tabAlignLeadingTabbedPane = new JTabbedPane();
+		tabAlignVerticalTabbedPane = new JTabbedPane();
+		tabAlignCenterTabbedPane = new JTabbedPane();
+		tabAlignTrailingTabbedPane = new JTabbedPane();
 		JPanel panel4 = new JPanel();
 		showTabSeparatorsCheckBox = new JCheckBox();
 
@@ -681,6 +706,8 @@ class TabsPanel
 				"[]para" +
 				"[]" +
 				"[]" +
+				"[]para" +
+				"[]0" +
 				"[]"));
 
 			//---- tabWidthModeLabel ----
@@ -731,6 +758,67 @@ class TabsPanel
 				maximumTabWidthTabbedPane.setName("maximumTabWidthTabbedPane");
 			}
 			panel3.add(maximumTabWidthTabbedPane, "cell 0 7");
+
+			//---- tabAlignmentLabel ----
+			tabAlignmentLabel.setText("Tab title alignment");
+			tabAlignmentLabel.setFont(tabAlignmentLabel.getFont().deriveFont(tabAlignmentLabel.getFont().getSize() + 4f));
+			tabAlignmentLabel.setName("tabAlignmentLabel");
+			panel3.add(tabAlignmentLabel, "cell 0 8");
+
+			//======== panel5 ========
+			{
+				panel5.setName("panel5");
+				panel5.setLayout(new MigLayout(
+					"insets 0,hidemode 3",
+					// columns
+					"[grow,fill]para" +
+					"[fill]",
+					// rows
+					"[]" +
+					"[]" +
+					"[]" +
+					"[]"));
+
+				//---- tabAlignmentNoteLabel ----
+				tabAlignmentNoteLabel.setText("(leading/center/trailing)");
+				tabAlignmentNoteLabel.setEnabled(false);
+				tabAlignmentNoteLabel.setFont(tabAlignmentNoteLabel.getFont().deriveFont(tabAlignmentNoteLabel.getFont().getSize() - 2f));
+				tabAlignmentNoteLabel.setName("tabAlignmentNoteLabel");
+				panel5.add(tabAlignmentNoteLabel, "cell 0 0");
+
+				//---- tabAlignmentNoteLabel2 ----
+				tabAlignmentNoteLabel2.setText("(trailing)");
+				tabAlignmentNoteLabel2.setEnabled(false);
+				tabAlignmentNoteLabel2.setFont(tabAlignmentNoteLabel2.getFont().deriveFont(tabAlignmentNoteLabel2.getFont().getSize() - 2f));
+				tabAlignmentNoteLabel2.setName("tabAlignmentNoteLabel2");
+				panel5.add(tabAlignmentNoteLabel2, "cell 1 0,alignx right,growx 0");
+
+				//======== tabAlignLeadingTabbedPane ========
+				{
+					tabAlignLeadingTabbedPane.setName("tabAlignLeadingTabbedPane");
+				}
+				panel5.add(tabAlignLeadingTabbedPane, "cell 0 1");
+
+				//======== tabAlignVerticalTabbedPane ========
+				{
+					tabAlignVerticalTabbedPane.setTabPlacement(SwingConstants.LEFT);
+					tabAlignVerticalTabbedPane.setName("tabAlignVerticalTabbedPane");
+				}
+				panel5.add(tabAlignVerticalTabbedPane, "cell 1 1 1 3,growy");
+
+				//======== tabAlignCenterTabbedPane ========
+				{
+					tabAlignCenterTabbedPane.setName("tabAlignCenterTabbedPane");
+				}
+				panel5.add(tabAlignCenterTabbedPane, "cell 0 2");
+
+				//======== tabAlignTrailingTabbedPane ========
+				{
+					tabAlignTrailingTabbedPane.setName("tabAlignTrailingTabbedPane");
+				}
+				panel5.add(tabAlignTrailingTabbedPane, "cell 0 3");
+			}
+			panel3.add(panel5, "cell 0 9");
 		}
 		add(panel3, "cell 2 0");
 
@@ -759,16 +847,16 @@ class TabsPanel
 		tabPlacementButtonGroup.add(leftPlacementButton);
 		tabPlacementButtonGroup.add(rightPlacementButton);
 
-		//---- buttonGroup2 ----
-		ButtonGroup buttonGroup2 = new ButtonGroup();
-		buttonGroup2.add(scrollTabLayoutButton);
-		buttonGroup2.add(wrapTabLayoutButton);
+		//---- tabLayoutButtonGroup ----
+		ButtonGroup tabLayoutButtonGroup = new ButtonGroup();
+		tabLayoutButtonGroup.add(scrollTabLayoutButton);
+		tabLayoutButtonGroup.add(wrapTabLayoutButton);
 
-		//---- buttonGroup1 ----
-		ButtonGroup buttonGroup1 = new ButtonGroup();
-		buttonGroup1.add(squareCloseButton);
-		buttonGroup1.add(circleCloseButton);
-		buttonGroup1.add(redCrossCloseButton);
+		//---- closableTabsButtonGroup ----
+		ButtonGroup closableTabsButtonGroup = new ButtonGroup();
+		closableTabsButtonGroup.add(squareCloseButton);
+		closableTabsButtonGroup.add(circleCloseButton);
+		closableTabsButtonGroup.add(redCrossCloseButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -810,6 +898,11 @@ class TabsPanel
 	private JTabbedPane widthCompactTabbedPane;
 	private JTabbedPane minimumTabWidthTabbedPane;
 	private JTabbedPane maximumTabWidthTabbedPane;
+	private JPanel panel5;
+	private JTabbedPane tabAlignLeadingTabbedPane;
+	private JTabbedPane tabAlignVerticalTabbedPane;
+	private JTabbedPane tabAlignCenterTabbedPane;
+	private JTabbedPane tabAlignTrailingTabbedPane;
 	private JCheckBox showTabSeparatorsCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

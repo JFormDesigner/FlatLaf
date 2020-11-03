@@ -33,8 +33,12 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link #BUTTON_TYPE_SQUARE}, {@link #BUTTON_TYPE_ROUND_RECT},
-	 * {@link #BUTTON_TYPE_TAB}, {@link #BUTTON_TYPE_HELP} and {@link BUTTON_TYPE_TOOLBAR_BUTTON}
+	 * <strong>Allowed Values</strong>
+	 *     {@link #BUTTON_TYPE_SQUARE},
+	 *     {@link #BUTTON_TYPE_ROUND_RECT},
+	 *     {@link #BUTTON_TYPE_TAB},
+	 *     {@link #BUTTON_TYPE_HELP} or
+	 *     {@link BUTTON_TYPE_TOOLBAR_BUTTON}
 	 */
 	String BUTTON_TYPE = "JButton.buttonType";
 
@@ -134,9 +138,12 @@ public interface FlatClientProperties
 	 * {@link javax.swing.JScrollPane}, {@link javax.swing.JSpinner},
 	 * {@link javax.swing.JTextField} and {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.String} or {@link java.awt.Color} or {@link java.awt.Color}[2]<br>
-	 * <strong>Allowed Values</strong> {@link #OUTLINE_ERROR}, {@link #OUTLINE_WARNING},
-	 * any color (type {@link java.awt.Color}) or an array of two colors (type {@link java.awt.Color}[2])
-	 * where the first color is for focused state and the second for unfocused state
+	 * <strong>Allowed Values</strong>
+	 *     {@link #OUTLINE_ERROR},
+	 *     {@link #OUTLINE_WARNING},
+	 *     any color (type {@link java.awt.Color}) or
+	 *     an array of two colors (type {@link java.awt.Color}[2]) where the first color
+	 *     is for focused state and the second for unfocused state
 	 */
 	String OUTLINE = "JComponent.outline";
 
@@ -316,6 +323,8 @@ public interface FlatClientProperties
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
 	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
 	 * <strong>Value type</strong> {@link java.lang.String}
+	 *
+	 * @see #TABBED_PANE_TAB_CLOSABLE
 	 */
 	String TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT = "JTabbedPane.tabCloseToolTipText";
 
@@ -384,48 +393,74 @@ public interface FlatClientProperties
 	 * Specifies the alignment of the tab area.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
-	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_TAB_AREA_ALIGN_LEADING} (default),
-	 * {@link #TABBED_PANE_TAB_AREA_ALIGN_TRAILING}, {@link #TABBED_PANE_TAB_AREA_ALIGN_CENTER}
-	 * or {@link #TABBED_PANE_TAB_AREA_ALIGN_FILL}
+	 * <strong>Value type</strong> {@link java.lang.Integer} or {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link SwingConstants#LEADING} (default)
+	 *     {@link SwingConstants#TRAILING},
+	 *     {@link SwingConstants#CENTER},
+	 *     {@link #TABBED_PANE_ALIGN_LEADING} (default),
+	 *     {@link #TABBED_PANE_ALIGN_TRAILING},
+	 *     {@link #TABBED_PANE_ALIGN_CENTER} or
+	 *     {@link #TABBED_PANE_ALIGN_FILL}
 	 */
 	String TABBED_PANE_TAB_AREA_ALIGNMENT = "JTabbedPane.tabAreaAlignment";
 
 	/**
-	 * Align the tab area to the leading edge.
-	 *
-	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 * Specifies the horizontal alignment of the tab title and icon.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
+	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
+	 * <strong>Value type</strong> {@link java.lang.Integer} or {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link SwingConstants#LEADING},
+	 *     {@link SwingConstants#TRAILING},
+	 *     {@link SwingConstants#CENTER} (default),
+	 *     {@link #TABBED_PANE_ALIGN_LEADING},
+	 *     {@link #TABBED_PANE_ALIGN_TRAILING} or
+	 *     {@link #TABBED_PANE_ALIGN_CENTER} (default)
 	 */
-	String TABBED_PANE_TAB_AREA_ALIGN_LEADING = "leading";
+	String TABBED_PANE_TAB_ALIGNMENT = "JTabbedPane.tabAlignment";
 
 	/**
-	 * Align the tab area to the trailing edge.
+	 * Align to the leading edge.
 	 *
 	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 * @see #TABBED_PANE_TAB_ALIGNMENT
 	 */
-	String TABBED_PANE_TAB_AREA_ALIGN_TRAILING = "trailing";
+	String TABBED_PANE_ALIGN_LEADING = "leading";
 
 	/**
-	 * Align the tab area to center.
+	 * Align to the trailing edge.
 	 *
 	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 * @see #TABBED_PANE_TAB_ALIGNMENT
 	 */
-	String TABBED_PANE_TAB_AREA_ALIGN_CENTER = "center";
+	String TABBED_PANE_ALIGN_TRAILING = "trailing";
 
 	/**
-	 * Stretch tabs to fill all available space.
+	 * Align to center.
+	 *
+	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
+	 * @see #TABBED_PANE_TAB_ALIGNMENT
+	 */
+	String TABBED_PANE_ALIGN_CENTER = "center";
+
+	/**
+	 * Stretch to fill all available space.
 	 *
 	 * @see #TABBED_PANE_TAB_AREA_ALIGNMENT
 	 */
-	String TABBED_PANE_TAB_AREA_ALIGN_FILL = "fill";
+	String TABBED_PANE_ALIGN_FILL = "fill";
 
 	/**
 	 * Specifies how the tabs should be sized.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_TAB_WIDTH_MODE_PREFERRED} (default),
-	 * {@link #TABBED_PANE_TAB_WIDTH_MODE_EQUAL} or {@link #TABBED_PANE_TAB_WIDTH_MODE_COMPACT}
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_PREFERRED} (default),
+	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_EQUAL} or
+	 *     {@link #TABBED_PANE_TAB_WIDTH_MODE_COMPACT}
 	 */
 	String TABBED_PANE_TAB_WIDTH_MODE = "JTabbedPane.tabWidthMode";
 
@@ -456,9 +491,11 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
-	 * <strong>Allowed Values</strong> {@link SwingConstants#LEADING} (default),
-	 * {@link SwingConstants#TRAILING}, {@link SwingConstants#TOP}
-	 * or {@link SwingConstants#BOTTOM}
+	 * <strong>Allowed Values</strong>
+	 *     {@link SwingConstants#LEADING} (default),
+	 *     {@link SwingConstants#TRAILING},
+	 *     {@link SwingConstants#TOP} or
+	 *     {@link SwingConstants#BOTTOM}
 	 */
 	String TABBED_PANE_TAB_ICON_PLACEMENT = "JTabbedPane.tabIconPlacement";
 
@@ -495,9 +532,10 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link #SELECT_ALL_ON_FOCUS_POLICY_NEVER},
-	 * {@link #SELECT_ALL_ON_FOCUS_POLICY_ONCE} (default) or
-	 * {@link #SELECT_ALL_ON_FOCUS_POLICY_ALWAYS}
+	 * <strong>Allowed Values</strong>
+	 *     {@link #SELECT_ALL_ON_FOCUS_POLICY_NEVER},
+	 *     {@link #SELECT_ALL_ON_FOCUS_POLICY_ONCE} (default) or
+	 *     {@link #SELECT_ALL_ON_FOCUS_POLICY_ALWAYS}
 	 */
 	String SELECT_ALL_ON_FOCUS_POLICY = "JTextField.selectAllOnFocusPolicy";
 
