@@ -629,8 +629,13 @@ SplitPane.oneTouchButtonOffset
 SplitPane.oneTouchButtonSize
 SplitPane.shadow
 SplitPaneDivider.draggingColor
+SplitPaneDivider.gripColor
+SplitPaneDivider.gripDotCount
+SplitPaneDivider.gripDotSize
+SplitPaneDivider.gripGap
 SplitPaneDivider.oneTouchArrowColor
 SplitPaneDivider.oneTouchHoverArrowColor
+SplitPaneDivider.style
 SplitPaneUI
 TabbedPane.ancestorInputMap
 TabbedPane.background

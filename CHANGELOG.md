@@ -41,6 +41,8 @@ FlatLaf Change Log
   constructors. (issue #196)
 - SplitPane: Hide not applicable expand/collapse buttons. Added tooltips to
   expand/collapse buttons. (issue #198)
+- SplitPane: Added grip to divider. Can be disabled with `UIManager.put(
+  "SplitPaneDivider.style", "plain" )`. (issue #179)
 
 
 #### Fixed bugs

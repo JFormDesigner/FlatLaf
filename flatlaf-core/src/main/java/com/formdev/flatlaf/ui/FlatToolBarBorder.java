@@ -16,15 +16,16 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Border for {@link javax.swing.JToolBar}.
@@ -39,7 +40,7 @@ public class FlatToolBarBorder
 {
 	private static final int DOT_COUNT = 4;
 	private static final int DOT_SIZE = 2;
-	private static final int GRIP_WIDTH = DOT_SIZE * 3;
+	private static final int GRIP_SIZE = DOT_SIZE * 3;
 
 	protected final Color gripColor = UIManager.getColor( "ToolBar.gripColor" );
 
@@ -64,35 +65,27 @@ public class FlatToolBarBorder
 	}
 
 	protected void paintGrip( Component c, Graphics g, int x, int y, int width, int height ) {
-		int dotSize = scale( DOT_SIZE );
-		int gapSize = dotSize;
-		int gripSize = (dotSize * DOT_COUNT) + ((gapSize * (DOT_COUNT - 1)));
+		Rectangle r = calculateGripBounds( c, x, y, width, height );
+		FlatUIUtils.paintGrip( g, r.x, r.y, r.width, r.height,
+			((JToolBar)c).getOrientation() == SwingConstants.VERTICAL,
+			DOT_COUNT, DOT_SIZE, DOT_SIZE, false );
+	}
 
-		// include toolbar margin in grip position calculation
-		Insets insets = getBorderInsets( c );
+	protected Rectangle calculateGripBounds( Component c, int x, int y, int width, int height ) {
+		// include toolbar margin in grip bounds calculation
+		Insets insets = super.getBorderInsets( c, new Insets( 0, 0, 0, 0 ) );
+		Rectangle r = FlatUIUtils.subtractInsets( new Rectangle( x, y, width, height ), insets );
 
-		// calculate grip position
-		boolean horizontal = ((JToolBar)c).getOrientation() == SwingConstants.HORIZONTAL;
-		if( horizontal ) {
-			if( c.getComponentOrientation().isLeftToRight() )
-				x += insets.left - (dotSize * 2);
-			else
-				x += width - insets.right + dotSize;
-			y += Math.round( (height - gripSize) / 2f );
-		} else {
-			// vertical
-			x += Math.round( (width - gripSize) / 2f );
-			y += insets.top - (dotSize * 2);
-		}
+		// calculate grip bounds
+		int gripSize = UIScale.scale( GRIP_SIZE );
+		if( ((JToolBar)c).getOrientation() == SwingConstants.HORIZONTAL ) {
+			if( !c.getComponentOrientation().isLeftToRight() )
+				r.x = r.x + r.width - gripSize;
+			r.width = gripSize;
+		} else
+			r.height = gripSize;
 
-		// paint dots
-		for( int i = 0; i < DOT_COUNT; i++ ) {
-			g.fillOval( x, y, dotSize, dotSize );
-			if( horizontal )
-				y += dotSize + gapSize;
-			else
-				x += dotSize + gapSize;
-		}
+		return r;
 	}
 
 	@Override
@@ -101,7 +94,7 @@ public class FlatToolBarBorder
 
 		// add grip inset if floatable
 		if( c instanceof JToolBar && ((JToolBar)c).isFloatable() ) {
-			int gripInset = scale( GRIP_WIDTH );
+			int gripInset = UIScale.scale( GRIP_SIZE );
 			if( ((JToolBar)c).getOrientation() == SwingConstants.HORIZONTAL ) {
 				if( c.getComponentOrientation().isLeftToRight() )
 					insets.left += gripInset;

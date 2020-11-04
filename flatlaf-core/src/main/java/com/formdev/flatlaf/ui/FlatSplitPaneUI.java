@@ -19,6 +19,8 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -51,6 +53,11 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault SplitPane.continuousLayout				boolean
  * @uiDefault SplitPaneDivider.oneTouchArrowColor		Color
  * @uiDefault SplitPaneDivider.oneTouchHoverArrowColor	Color
+ * @uiDefault SplitPaneDivider.style					String	grip (default) or plain
+ * @uiDefault SplitPaneDivider.gripColor				Color
+ * @uiDefault SplitPaneDivider.gripDotCount				int
+ * @uiDefault SplitPaneDivider.gripDotSize				int
+ * @uiDefault SplitPaneDivider.gripGap					int
  *
  * @author Karl Tauber
  */
@@ -95,6 +102,12 @@ public class FlatSplitPaneUI
 	protected class FlatSplitPaneDivider
 		extends BasicSplitPaneDivider
 	{
+		protected final String style = UIManager.getString( "SplitPaneDivider.style" );
+		protected final Color gripColor = UIManager.getColor( "SplitPaneDivider.gripColor" );
+		protected final int gripDotCount = FlatUIUtils.getUIInt( "SplitPaneDivider.gripDotCount", 3 );
+		protected final int gripDotSize = FlatUIUtils.getUIInt( "SplitPaneDivider.gripDotSize", 3 );
+		protected final int gripGap = FlatUIUtils.getUIInt( "SplitPaneDivider.gripGap", 2 );
+
 		protected FlatSplitPaneDivider( BasicSplitPaneUI ui ) {
 			super( ui );
 
@@ -126,6 +139,25 @@ public class FlatSplitPaneUI
 					revalidate();
 					break;
 			}
+		}
+
+		@Override
+		public void paint( Graphics g ) {
+			super.paint( g );
+
+			if( "plain".equals( style ) )
+				return;
+
+			FlatUIUtils.setRenderingHints( (Graphics2D) g );
+
+			g.setColor( gripColor );
+			paintGrip( g, 0, 0, getWidth(), getHeight() );
+		}
+
+		protected void paintGrip( Graphics g, int x, int y, int width, int height ) {
+			FlatUIUtils.paintGrip( g, x, y, width, height,
+				splitPane.getOrientation() == JSplitPane.VERTICAL_SPLIT,
+				gripDotCount, gripDotSize, gripGap, true );
 		}
 
 		protected boolean isLeftCollapsed() {

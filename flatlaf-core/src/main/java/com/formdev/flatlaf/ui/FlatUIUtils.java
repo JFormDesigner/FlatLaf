@@ -32,6 +32,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
@@ -387,6 +388,41 @@ public class FlatUIUtils
 			g2.fill( new Rectangle2D.Float( x, y, w, h ) );
 		} finally {
 			g2.dispose();
+		}
+	}
+
+	public static void paintGrip( Graphics g, int x, int y, int width, int height,
+		boolean horizontal, int dotCount, int dotSize, int gap, boolean centerPrecise )
+	{
+		dotSize = UIScale.scale( dotSize );
+		gap = UIScale.scale( gap );
+		int gripSize = (dotSize * dotCount) + ((gap * (dotCount - 1)));
+
+		// calculate grip position
+		float gx;
+		float gy;
+		if( horizontal ) {
+			gx = x + Math.round( (width - gripSize) / 2f );
+			gy = y + ((height - dotSize) / 2f);
+
+			if( !centerPrecise )
+				gy = Math.round( gy );
+		} else {
+			// vertical
+			gx = x + ((width - dotSize) / 2f);
+			gy = y + Math.round( (height - gripSize) / 2f );
+
+			if( !centerPrecise )
+				gx = Math.round( gx );
+		}
+
+		// paint dots
+		for( int i = 0; i < dotCount; i++ ) {
+			((Graphics2D)g).fill( new Ellipse2D.Float( gx, gy, dotSize, dotSize ) );
+			if( horizontal )
+				gx += dotSize + gap;
+			else
+				gy += dotSize + gap;
 		}
 	}
 

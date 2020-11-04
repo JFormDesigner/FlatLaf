@@ -886,8 +886,13 @@ SplitPane.shadow               #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
 #---- SplitPaneDivider ----
 
 SplitPaneDivider.draggingColor #880000    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.gripColor     #afafaf    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.gripDotCount  3
+SplitPaneDivider.gripDotSize   3
+SplitPaneDivider.gripGap       2
 SplitPaneDivider.oneTouchArrowColor #00ff00    javax.swing.plaf.ColorUIResource [UI]
 SplitPaneDivider.oneTouchHoverArrowColor #ff0000    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.style         grip
 
 
 #---- SplitPane ----
