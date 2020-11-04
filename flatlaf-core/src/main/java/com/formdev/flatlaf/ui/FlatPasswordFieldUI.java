@@ -144,7 +144,7 @@ public class FlatPasswordFieldUI
 
 	@Override
 	protected Caret createCaret() {
-		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy" ) );
+		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy" ), UIManager.getBoolean( "TextComponent.selectAllOnMouseClick" ) );
 	}
 
 	@Override

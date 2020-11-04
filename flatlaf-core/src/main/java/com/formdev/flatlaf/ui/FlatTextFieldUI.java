@@ -64,6 +64,7 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextField.placeholderForeground	Color
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
+ * @uiDefault TextComponent.selectAllOnMouseClick			boolean
  *
  * @author Karl Tauber
  */
@@ -121,7 +122,7 @@ public class FlatTextFieldUI
 
 	@Override
 	protected Caret createCaret() {
-		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy" ) );
+		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy"), UIManager.getBoolean( "TextComponent.selectAllOnMouseClick" ) );
 	}
 
 	@Override
