@@ -35,7 +35,7 @@ public class ColorFunctions
 		return HSLColor.toRGB( hsl, alpha );
 	}
 
-	private static float clamp( float value ) {
+	public static float clamp( float value ) {
 		return (value < 0)
 			? 0
 			: ((value > 100)
@@ -49,20 +49,26 @@ public class ColorFunctions
 		void apply( float[] hsl );
 	}
 
-	//---- class Lighten ------------------------------------------------------
+	//---- class HSLIncreaseDecrease ------------------------------------------
 
 	/**
-	 * Increase the lightness of a color in the HSL color space by an absolute
-	 * or relative amount.
+	 * Increase or decrease hue, saturation or luminance of a color in the HSL color space
+	 * by an absolute or relative amount.
 	 */
-	public static class Lighten
+	public static class HSLIncreaseDecrease
 		implements ColorFunction
 	{
-		private final float amount;
-		private final boolean relative;
-		private final boolean autoInverse;
+		public final int hslIndex;
+		public final boolean increase;
+		public final float amount;
+		public final boolean relative;
+		public final boolean autoInverse;
 
-		public Lighten( float amount, boolean relative, boolean autoInverse ) {
+		public HSLIncreaseDecrease( int hslIndex, boolean increase,
+			float amount, boolean relative, boolean autoInverse )
+		{
+			this.hslIndex = hslIndex;
+			this.increase = increase;
 			this.amount = amount;
 			this.relative = relative;
 			this.autoInverse = autoInverse;
@@ -70,33 +76,17 @@ public class ColorFunctions
 
 		@Override
 		public void apply( float[] hsl ) {
-			float amount2 = autoInverse && shouldInverse( hsl ) ? -amount : amount;
-			hsl[2] = clamp( relative
-				? (hsl[2] * ((100 + amount2) / 100))
-				: (hsl[2] + amount2) );
+			float amount2 = increase ? amount : -amount;
+			amount2 = autoInverse && shouldInverse( hsl ) ? -amount2 : amount2;
+			hsl[hslIndex] = clamp( relative
+				? (hsl[hslIndex] * ((100 + amount2) / 100))
+				: (hsl[hslIndex] + amount2) );
 		}
 
 		protected boolean shouldInverse( float[] hsl ) {
-			return hsl[2] >= 50;
-		}
-	}
-
-	//---- class Darken -------------------------------------------------------
-
-	/**
-	 * Decrease the lightness of a color in the HSL color space by an absolute
-	 * or relative amount.
-	 */
-	public static class Darken
-		extends Lighten
-	{
-		public Darken( float amount, boolean relative, boolean autoInverse ) {
-			super( -amount, relative, autoInverse );
-		}
-
-		@Override
-		protected boolean shouldInverse( float[] hsl ) {
-			return hsl[2] < 50;
+			return increase
+				? hsl[hslIndex] >= 50
+				: hsl[hslIndex] < 50;
 		}
 	}
 }

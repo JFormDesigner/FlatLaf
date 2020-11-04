@@ -19,16 +19,19 @@ package com.formdev.flatlaf;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.ServiceLoader;
 import java.util.function.Function;
 import java.util.logging.Level;
 import javax.swing.UIDefaults;
@@ -41,7 +44,9 @@ import javax.swing.plaf.InsetsUIResource;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
+import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
 import com.formdev.flatlaf.util.DerivedColor;
+import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -63,13 +68,13 @@ class UIDefaultsLoader
 	private static final String TYPE_PREFIX = "{";
 	private static final String TYPE_PREFIX_END = "}";
 	private static final String VARIABLE_PREFIX = "@";
-	@Deprecated
-	private static final String REF_PREFIX = VARIABLE_PREFIX + "@";
 	private static final String PROPERTY_PREFIX = "$";
 	private static final String OPTIONAL_PREFIX = "?";
 	private static final String GLOBAL_PREFIX = "*.";
 
-	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, UIDefaults defaults ) {
+	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
+		Properties additionalDefaults, boolean dark, UIDefaults defaults )
+	{
 		// determine classes in class hierarchy in reverse order
 		ArrayList<Class<?>> lafClasses = new ArrayList<>();
 		for( Class<?> lafClass = lookAndFeelClass;
@@ -79,10 +84,12 @@ class UIDefaultsLoader
 			lafClasses.add( 0, lafClass );
 		}
 
-		loadDefaultsFromProperties( lafClasses, defaults );
+		loadDefaultsFromProperties( lafClasses, addons, additionalDefaults, dark, defaults );
 	}
 
-	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, UIDefaults defaults ) {
+	static void loadDefaultsFromProperties( List<Class<?>> lafClasses, List<FlatDefaultsAddon> addons,
+		Properties additionalDefaults, boolean dark, UIDefaults defaults )
+	{
 		try {
 			// load core properties files
 			Properties properties = new Properties();
@@ -94,15 +101,8 @@ class UIDefaultsLoader
 				}
 			}
 
-			// get addons and sort them by priority
-			ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
-			List<FlatDefaultsAddon> addonList = new ArrayList<>();
-			for( FlatDefaultsAddon addon : addonLoader )
-				addonList.add( addon );
-			addonList.sort( (addon1, addon2) -> addon1.getPriority() - addon2.getPriority() );
-
 			// load properties from addons
-			for( FlatDefaultsAddon addon : addonList ) {
+			for( FlatDefaultsAddon addon : addons ) {
 				for( Class<?> lafClass : lafClasses ) {
 					try( InputStream in = addon.getDefaults( lafClass ) ) {
 						if( in != null )
@@ -113,26 +113,84 @@ class UIDefaultsLoader
 
 			// collect addon class loaders
 			List<ClassLoader> addonClassLoaders = new ArrayList<>();
-			for( FlatDefaultsAddon addon : addonList ) {
+			for( FlatDefaultsAddon addon : addons ) {
 				ClassLoader addonClassLoader = addon.getClass().getClassLoader();
 				if( !addonClassLoaders.contains( addonClassLoader ) )
 					addonClassLoaders.add( addonClassLoader );
 			}
 
+			// load custom properties files (usually provides by applications)
+			List<Object> customDefaultsSources = FlatLaf.getCustomDefaultsSources();
+			int size = (customDefaultsSources != null) ? customDefaultsSources.size() : 0;
+			for( int i = 0; i < size; i++ ) {
+				Object source = customDefaultsSources.get( i );
+				if( source instanceof String && i + 1 < size ) {
+					// load from package in classloader
+					String packageName = (String) source;
+					ClassLoader classLoader = (ClassLoader) customDefaultsSources.get( ++i );
+
+					// use class loader also for instantiating classes specified in values
+					if( classLoader != null && !addonClassLoaders.contains( classLoader ) )
+						addonClassLoaders.add( classLoader );
+
+					packageName = packageName.replace( '.', '/' );
+					if( classLoader == null )
+						classLoader = FlatLaf.class.getClassLoader();
+
+					for( Class<?> lafClass : lafClasses ) {
+						String propertiesName = packageName + '/' + lafClass.getSimpleName() + ".properties";
+						try( InputStream in = classLoader.getResourceAsStream( propertiesName ) ) {
+							if( in != null )
+								properties.load( in );
+						}
+					}
+				} else if( source instanceof File ) {
+					// load from folder
+					File folder = (File) source;
+					for( Class<?> lafClass : lafClasses ) {
+						File propertiesFile = new File( folder, lafClass.getSimpleName() + ".properties" );
+						if( !propertiesFile.isFile() )
+							continue;
+
+						try( InputStream in = new FileInputStream( propertiesFile ) ) {
+							properties.load( in );
+						}
+					}
+				}
+			}
+
+			// add additional defaults
+			if( additionalDefaults != null )
+				properties.putAll( additionalDefaults );
+
 			// collect all platform specific keys (but do not modify properties)
 			ArrayList<String> platformSpecificKeys = new ArrayList<>();
-			for( Object key : properties.keySet() ) {
-				if( ((String)key).startsWith( "[" ) )
-					platformSpecificKeys.add( (String) key );
+			for( Object okey : properties.keySet() ) {
+				String key = (String) okey;
+				if( key.startsWith( "[" ) &&
+					(key.startsWith( "[win]" ) ||
+					 key.startsWith( "[mac]" ) ||
+					 key.startsWith( "[linux]" ) ||
+					 key.startsWith( "[light]" ) ||
+					 key.startsWith( "[dark]" )) )
+				  platformSpecificKeys.add( key );
 			}
 
 			// remove platform specific properties and re-add only properties
 			// for current platform, but with platform prefix removed
 			if( !platformSpecificKeys.isEmpty() ) {
+				// handle light/dark specific properties
+				String lightOrDarkPrefix = dark ? "[dark]" : "[light]";
+				for( String key : platformSpecificKeys ) {
+					if( key.startsWith( lightOrDarkPrefix ) )
+						properties.put( key.substring( lightOrDarkPrefix.length() ), properties.remove( key ) );
+				}
+
+				// handle platform specific properties
 				String platformPrefix =
-					SystemInfo.IS_WINDOWS ? "[win]" :
-					SystemInfo.IS_MAC ? "[mac]" :
-					SystemInfo.IS_LINUX ? "[linux]" : "[unknown]";
+					SystemInfo.isWindows ? "[win]" :
+					SystemInfo.isMacOS ? "[mac]" :
+					SystemInfo.isLinux ? "[linux]" : "[unknown]";
 				for( String key : platformSpecificKeys ) {
 					Object value = properties.remove( key );
 					if( key.startsWith( platformPrefix ) )
@@ -140,45 +198,45 @@ class UIDefaultsLoader
 				}
 			}
 
-			Function<String, String> resolver = value -> {
-				return resolveValue( properties, value );
-			};
-
-			// get globals, which override all other defaults that end with same suffix
-			HashMap<String, Object> globals = new HashMap<>();
-			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
+			// get (and remove) globals, which override all other defaults that end with same suffix
+			HashMap<String, String> globals = new HashMap<>();
+			Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
+			while( it.hasNext() ) {
+				Entry<Object, Object> e = it.next();
 				String key = (String) e.getKey();
-				if( !key.startsWith( GLOBAL_PREFIX ) )
-					continue;
-
-				String value = resolveValue( properties, (String) e.getValue() );
-				try {
-					globals.put( key.substring( GLOBAL_PREFIX.length() ), parseValue( key, value, resolver, addonClassLoaders ) );
-				} catch( RuntimeException ex ) {
-					logParseError( Level.SEVERE, key, value, ex );
+				if( key.startsWith( GLOBAL_PREFIX ) ) {
+					globals.put( key.substring( GLOBAL_PREFIX.length() ), (String) e.getValue() );
+					it.remove();
 				}
 			}
 
 			// override UI defaults with globals
-			for( Object key : defaults.keySet() ) {
-				if( key instanceof String && ((String)key).contains( "." ) ) {
-					String skey = (String) key;
-					String globalKey = skey.substring( skey.lastIndexOf( '.' ) + 1 );
-					Object globalValue = globals.get( globalKey );
-					if( globalValue != null )
-						defaults.put( key, globalValue );
+			for( Object okey : defaults.keySet() ) {
+				if( okey instanceof String && ((String)okey).contains( "." ) ) {
+					String key = (String) okey;
+					String globalKey = key.substring( key.lastIndexOf( '.' ) + 1 );
+					String globalValue = globals.get( globalKey );
+					if( globalValue != null && !properties.containsKey( key ) )
+						properties.put( key, globalValue );
 				}
 			}
 
-			// add non-global properties to UI defaults
+			Function<String, String> propertiesGetter = key -> {
+				return properties.getProperty( key );
+			};
+			Function<String, String> resolver = value -> {
+				return resolveValue( value, propertiesGetter );
+			};
+
+			// parse and add properties to UI defaults
 			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
 				String key = (String) e.getKey();
-				if( key.startsWith( VARIABLE_PREFIX ) || key.startsWith( GLOBAL_PREFIX ) )
+				if( key.startsWith( VARIABLE_PREFIX ) )
 					continue;
 
-				String value = resolveValue( properties, (String) e.getValue() );
+				String value = resolveValue( (String) e.getValue(), propertiesGetter );
 				try {
-					defaults.put( key, parseValue( key, value, resolver, addonClassLoaders ) );
+					defaults.put( key, parseValue( key, value, null, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( Level.SEVERE, key, value, ex );
 				}
@@ -192,17 +250,14 @@ class UIDefaultsLoader
 		FlatLaf.LOG.log( level, "FlatLaf: Failed to parse: '" + key + '=' + value + '\'', ex );
 	}
 
-	private static String resolveValue( Properties properties, String value ) {
+	static String resolveValue( String value, Function<String, String> propertiesGetter ) {
+		value = value.trim();
+		String value0 = value;
+
 		if( value.startsWith( PROPERTY_PREFIX ) )
 			value = value.substring( PROPERTY_PREFIX.length() );
 		else if( !value.startsWith( VARIABLE_PREFIX ) )
 			return value;
-
-		// for compatibility
-		if( value.startsWith( REF_PREFIX ) ) {
-			FlatLaf.LOG.log( Level.WARNING, "FlatLaf: Usage of '@@' in .properties files is deprecated. Use '$' instead." );
-			value = value.substring( REF_PREFIX.length() );
-		}
 
 		boolean optional = false;
 		if( value.startsWith( OPTIONAL_PREFIX ) ) {
@@ -210,7 +265,7 @@ class UIDefaultsLoader
 			optional = true;
 		}
 
-		String newValue = properties.getProperty( value );
+		String newValue = propertiesGetter.apply( value );
 		if( newValue == null ) {
 			if( optional )
 				return "null";
@@ -218,29 +273,40 @@ class UIDefaultsLoader
 			throw new IllegalArgumentException( "variable or property '" + value + "' not found" );
 		}
 
-		return resolveValue( properties, newValue );
+		if( newValue.equals( value0 ) )
+			throw new IllegalArgumentException( "endless recursion in variable or property '" + value + "'" );
+
+		return resolveValue( newValue, propertiesGetter );
 	}
 
-	private enum ValueType { UNKNOWN, STRING, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
-		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS }
+	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
+		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
+
+	private static ValueType[] tempResultValueType = new ValueType[1];
 
 	static Object parseValue( String key, String value ) {
-		return parseValue( key, value, v -> v, Collections.emptyList() );
+		return parseValue( key, value, null, v -> v, Collections.emptyList() );
 	}
 
-	private static Object parseValue( String key, String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
+	static Object parseValue( String key, String value, ValueType[] resultValueType,
+		Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
+	{
+		if( resultValueType == null )
+			resultValueType = tempResultValueType;
+
 		value = value.trim();
 
 		// null, false, true
 		switch( value ) {
-			case "null":	return null;
-			case "false":	return false;
-			case "true":	return true;
+			case "null":	resultValueType[0] = ValueType.NULL; return null;
+			case "false":	resultValueType[0] = ValueType.BOOLEAN; return false;
+			case "true":	resultValueType[0] = ValueType.BOOLEAN; return true;
 		}
 
 		// check for function "lazy"
 		//     Syntax: lazy(uiKey)
 		if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
+			resultValueType[0] = ValueType.LAZY;
 			String uiKey = value.substring( 5, value.length() - 1 ).trim();
 			return (LazyValue) t -> {
 				return lazyUIManagerGet( uiKey );
@@ -289,7 +355,11 @@ class UIDefaultsLoader
 				valueType = ValueType.CHARACTER;
 			else if( key.endsWith( "UI" ) )
 				valueType = ValueType.STRING;
+			else if( key.endsWith( "grayFilter" ) )
+				valueType = ValueType.GRAYFILTER;
 		}
+
+		resultValueType[0] = valueType;
 
 		// parse value
 		switch( valueType ) {
@@ -308,40 +378,49 @@ class UIDefaultsLoader
 			case SCALEDDIMENSION:return parseScaledDimension( value );
 			case INSTANCE:		return parseInstance( value, addonClassLoaders );
 			case CLASS:			return parseClass( value, addonClassLoaders );
+			case GRAYFILTER:	return parseGrayFilter( value );
 			case UNKNOWN:
 			default:
 				// colors
 				Object color = parseColorOrFunction( value, resolver, false );
-				if( color != null )
+				if( color != null ) {
+					resultValueType[0] = ValueType.COLOR;
 					return color;
+				}
 
 				// integer
 				Integer integer = parseInteger( value, false );
-				if( integer != null )
+				if( integer != null ) {
+					resultValueType[0] = ValueType.INTEGER;
 					return integer;
+				}
 
 				// float
 				Float f = parseFloat( value, false );
-				if( f != null )
+				if( f != null ) {
+					resultValueType[0] = ValueType.FLOAT;
 					return f;
+				}
 
 				// string
+				resultValueType[0] = ValueType.STRING;
 				return value;
 		}
 	}
 
 	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		if( value.indexOf( ',' ) >= 0 ) {
-			// top,left,bottom,right[,lineColor]
+			// top,left,bottom,right[,lineColor[,lineThickness]]
 			List<String> parts = split( value, ',' );
 			Insets insets = parseInsets( value );
-			ColorUIResource lineColor = (parts.size() == 5)
+			ColorUIResource lineColor = (parts.size() >= 5)
 				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
 				: null;
+			float lineThickness = (parts.size() >= 6) ? parseFloat( parts.get( 5 ), true ) : 1f;
 
 			return (LazyValue) t -> {
 				return (lineColor != null)
-					? new FlatLineBorder( insets, lineColor )
+					? new FlatLineBorder( insets, lineColor, lineThickness )
 					: new FlatEmptyBorder( insets );
 			};
 		} else
@@ -496,29 +575,42 @@ class UIDefaultsLoader
 			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 
 		switch( function ) {
-			case "rgb":			return parseColorRgbOrRgba( false, params );
-			case "rgba":		return parseColorRgbOrRgba( true, params );
+			case "rgb":			return parseColorRgbOrRgba( false, params, resolver, reportError );
+			case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
 			case "hsl":			return parseColorHslOrHsla( false, params );
 			case "hsla":		return parseColorHslOrHsla( true, params );
-			case "lighten":		return parseColorLightenOrDarken( true, params, resolver, reportError );
-			case "darken":		return parseColorLightenOrDarken( false, params, resolver, reportError );
+			case "lighten":		return parseColorHSLIncreaseDecrease( 2, true, params, resolver, reportError );
+			case "darken":		return parseColorHSLIncreaseDecrease( 2, false, params, resolver, reportError );
+			case "saturate":	return parseColorHSLIncreaseDecrease( 1, true, params, resolver, reportError );
+			case "desaturate":	return parseColorHSLIncreaseDecrease( 1, false, params, resolver, reportError );
 		}
 
 		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
 	}
 
 	/**
-	 * Syntax: rgb(red,green,blue) or rgba(red,green,blue,alpha)
-	 *   - red: an integer 0-255
-	 *   - green: an integer 0-255
-	 *   - blue: an integer 0-255
-	 *   - alpha: an integer 0-255
+	 * Syntax: rgb(red,green,blue) or rgba(red,green,blue,alpha) or rgba(color,alpha)
+	 *   - red:   an integer 0-255 or a percentage 0-100%
+	 *   - green: an integer 0-255 or a percentage 0-100%
+	 *   - blue:  an integer 0-255 or a percentage 0-100%
+	 *   - alpha: an integer 0-255 or a percentage 0-100%
 	 */
-	private static ColorUIResource parseColorRgbOrRgba( boolean hasAlpha, List<String> params ) {
-		int red = parseInteger( params.get( 0 ), 0, 255 );
-		int green = parseInteger( params.get( 1 ), 0, 255 );
-		int blue = parseInteger( params.get( 2 ), 0, 255 );
-		int alpha = hasAlpha ? parseInteger( params.get( 3 ), 0, 255 ) : 255;
+	private static ColorUIResource parseColorRgbOrRgba( boolean hasAlpha, List<String> params,
+		Function<String, String> resolver, boolean reportError )
+	{
+		if( hasAlpha && params.size() == 2 ) {
+			// syntax rgba(color,alpha), which allows adding alpha to any color
+			String colorStr = params.get( 0 );
+			int alpha = parseInteger( params.get( 1 ), 0, 255, true );
+
+			ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+			return new ColorUIResource( new Color( ((alpha & 0xff) << 24) | (color.getRGB() & 0xffffff), true ) );
+		}
+
+		int red = parseInteger( params.get( 0 ), 0, 255, true );
+		int green = parseInteger( params.get( 1 ), 0, 255, true );
+		int blue = parseInteger( params.get( 2 ), 0, 255, true );
+		int alpha = hasAlpha ? parseInteger( params.get( 3 ), 0, 255, true ) : 255;
 
 		return hasAlpha
 			? new ColorUIResource( new Color( red, green, blue, alpha ) )
@@ -533,7 +625,7 @@ class UIDefaultsLoader
 	 *   - alpha: a percentage 0-100%
 	 */
 	private static ColorUIResource parseColorHslOrHsla( boolean hasAlpha, List<String> params ) {
-		int hue = parseInteger( params.get( 0 ), 0, 360 );
+		int hue = parseInteger( params.get( 0 ), 0, 360, false );
 		int saturation = parsePercentage( params.get( 1 ) );
 		int lightness = parsePercentage( params.get( 2 ) );
 		int alpha = hasAlpha ? parsePercentage( params.get( 3 ) ) : 100;
@@ -543,35 +635,37 @@ class UIDefaultsLoader
 	}
 
 	/**
-	 * Syntax: lighten([color,]amount[,options]) or darken([color,]amount[,options])
+	 * Syntax: lighten(color,amount[,options]) or darken(color,amount[,options]) or
+	 *         saturate(color,amount[,options]) or desaturate(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
-	 *   - options: [relative] [autoInverse] [lazy]
+	 *   - options: [relative] [autoInverse] [noAutoInverse] [lazy] [derived]
 	 */
-	private static Object parseColorLightenOrDarken( boolean lighten, List<String> params,
-		Function<String, String> resolver, boolean reportError )
+	private static Object parseColorHSLIncreaseDecrease( int hslIndex, boolean increase,
+		List<String> params, Function<String, String> resolver, boolean reportError )
 	{
-		boolean isDerived = params.get( 0 ).endsWith( "%" );
-		String colorStr = isDerived ? null : params.get( 0 );
-		int nextParam = isDerived ? 0 : 1;
-		int amount = parsePercentage( params.get( nextParam++ ) );
+		String colorStr = params.get( 0 );
+		int amount = parsePercentage( params.get( 1 ) );
 		boolean relative = false;
 		boolean autoInverse = false;
 		boolean lazy = false;
+		boolean derived = false;
 
-		if( params.size() > nextParam ) {
-			String options = params.get( nextParam++ );
+		if( params.size() > 2 ) {
+			String options = params.get( 2 );
 			relative = options.contains( "relative" );
 			autoInverse = options.contains( "autoInverse" );
 			lazy = options.contains( "lazy" );
+			derived = options.contains( "derived" );
+
+			// use autoInverse by default for derived colors, except if noAutoInverse is set
+			if( derived && !options.contains( "noAutoInverse" ) )
+				autoInverse = true;
 		}
 
-		ColorFunctions.ColorFunction function = lighten
-			? new ColorFunctions.Lighten( amount, relative, autoInverse )
-			: new ColorFunctions.Darken( amount, relative, autoInverse );
-
-		if( isDerived )
-			return new DerivedColor( function );
+		// create function
+		ColorFunction function = new ColorFunctions.HSLIncreaseDecrease(
+			hslIndex, increase, amount, relative, autoInverse );
 
 		if( lazy ) {
 			return (LazyValue) t -> {
@@ -582,8 +676,31 @@ class UIDefaultsLoader
 			};
 		}
 
-		ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
-		return new ColorUIResource( ColorFunctions.applyFunctions( color, function ) );
+		// parse base color
+		String resolvedColorStr = resolver.apply( colorStr );
+		ColorUIResource baseColor = (ColorUIResource) parseColorOrFunction( resolvedColorStr, resolver, reportError );
+		if( baseColor == null )
+			return null;
+
+		// apply this function to base color
+		Color newColor = ColorFunctions.applyFunctions( baseColor, function );
+
+		if( derived ) {
+			ColorFunction[] functions;
+			if( baseColor instanceof DerivedColor && resolvedColorStr == colorStr ) {
+				// if the base color is also derived, join the color functions
+				// but only if base color function is specified directly in this function
+				ColorFunction[] baseFunctions = ((DerivedColor)baseColor).getFunctions();
+				functions = new ColorFunction[baseFunctions.length + 1];
+				System.arraycopy( baseFunctions, 0, functions, 0, baseFunctions.length );
+				functions[baseFunctions.length] = function;
+			} else
+				functions = new ColorFunction[] { function };
+
+			return new DerivedColor( newColor, functions );
+		}
+
+		return new ColorUIResource( newColor );
 	}
 
 	private static int parsePercentage( String value ) {
@@ -608,7 +725,12 @@ class UIDefaultsLoader
 		return value.charAt( 0 );
 	}
 
-	private static Integer parseInteger( String value, int min, int max ) {
+	private static Integer parseInteger( String value, int min, int max, boolean allowPercentage ) {
+		if( allowPercentage && value.endsWith( "%" ) ) {
+			int percent = parsePercentage( value );
+			return (max * percent) / 100;
+		}
+
 		Integer integer = parseInteger( value, true );
 		if( integer.intValue() < min || integer.intValue() > max )
 			throw new NumberFormatException( "integer '" + value + "' out of range (" + min + '-' + max + ')' );
@@ -661,6 +783,21 @@ class UIDefaultsLoader
 		return (ActiveValue) t -> {
 			return UIScale.scale( dimension );
 		};
+	}
+
+	private static Object parseGrayFilter( String value ) {
+		List<String> numbers = split( value, ',' );
+		try {
+			int brightness = Integer.parseInt( numbers.get( 0 ) );
+			int contrast = Integer.parseInt( numbers.get( 1 ) );
+			int alpha = Integer.parseInt( numbers.get( 2 ) );
+
+			return (LazyValue) t -> {
+				return new GrayFilter( brightness, contrast, alpha );
+			};
+		} catch( NumberFormatException ex ) {
+			throw new IllegalArgumentException( "invalid gray filter '" + value + "'" );
+		}
 	}
 
 	/**

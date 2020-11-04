@@ -55,12 +55,13 @@ class IJThemesManager
 			String resourceName = e.getKey();
 			Map<String, String> value = (Map<String, String>) e.getValue();
 			String name = value.get( "name" );
+			boolean dark = Boolean.parseBoolean( value.get( "dark" ) );
 			String license = value.get( "license" );
 			String licenseFile = value.get( "licenseFile" );
 			String sourceCodeUrl = value.get( "sourceCodeUrl" );
 			String sourceCodePath = value.get( "sourceCodePath" );
 
-			bundledThemes.add( new IJThemeInfo( name, resourceName, license, licenseFile, sourceCodeUrl, sourceCodePath, null, null ) );
+			bundledThemes.add( new IJThemeInfo( name, resourceName, dark, license, licenseFile, sourceCodeUrl, sourceCodePath, null, null ) );
 		}
 	}
 
@@ -68,7 +69,9 @@ class IJThemesManager
 		// get current working directory
 		File directory = new File( "" ).getAbsoluteFile();
 
-		File[] themeFiles = directory.listFiles( (dir, name) -> name.endsWith( ".theme.json" ) );
+		File[] themeFiles = directory.listFiles( (dir, name) -> {
+			return name.endsWith( ".theme.json" ) || name.endsWith( ".properties" );
+		} );
 		if( themeFiles == null )
 			return;
 
@@ -77,8 +80,11 @@ class IJThemesManager
 
 		moreThemes.clear();
 		for( File f : themeFiles ) {
-			String name = StringUtils.removeTrailing( f.getName(), ".theme.json" );
-			moreThemes.add( new IJThemeInfo( name, null, null, null, null, null, f, null ) );
+			String fname = f.getName();
+			String name = fname.endsWith( ".properties" )
+				? StringUtils.removeTrailing( fname, ".properties" )
+				: StringUtils.removeTrailing( fname, ".theme.json" );
+			moreThemes.add( new IJThemeInfo( name, null, false, null, null, null, null, f, null ) );
 			lastModifiedMap.put( f, f.lastModified() );
 		}
 	}

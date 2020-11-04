@@ -69,14 +69,17 @@ public class MigLayoutVisualPadding
 	/**
 	 * Convenience method that checks whether component border is a FlatBorder.
 	 */
-	public static void install( JComponent c, int focusWidth ) {
+	public static void install( JComponent c ) {
 		if( !migLayoutAvailable )
 			return;
 
 		install( c, c2 -> {
-			return (c2.getBorder() instanceof FlatBorder)
-				? new Insets( focusWidth, focusWidth, focusWidth, focusWidth )
-				: null;
+			FlatBorder border = FlatUIUtils.getOutsideFlatBorder( c2 );
+			if( border != null ) {
+				int focusWidth = border.getFocusWidth( c2 );
+				return new Insets( focusWidth, focusWidth, focusWidth, focusWidth );
+			} else
+				return null;
 		}, "border" );
 	}
 

@@ -16,11 +16,28 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Insets;
+import java.io.File;
+import javax.swing.AbstractButton;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JToggleButton;
+import javax.swing.UIManager;
+import javax.swing.filechooser.FileView;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.metal.MetalFileChooserUI;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -86,6 +103,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault FileChooser.folderNameLabelText					String
  * @uiDefault FileChooser.filesOfTypeLabelMnemonic				String
  * @uiDefault FileChooser.filesOfTypeLabelText					String
+ *
  * @uiDefault FileChooser.upFolderToolTipText					String
  * @uiDefault FileChooser.upFolderAccessibleName				String
  * @uiDefault FileChooser.homeFolderToolTipText					String
@@ -97,17 +115,79 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault FileChooser.detailsViewButtonToolTipText			String
  * @uiDefault FileChooser.detailsViewButtonAccessibleName		String
  *
+ * <!-- FilePane -->
+ *
+ * @uiDefault FileChooser.fileNameHeaderText					String
+ * @uiDefault FileChooser.fileSizeHeaderText					String
+ * @uiDefault FileChooser.fileTypeHeaderText					String
+ * @uiDefault FileChooser.fileDateHeaderText					String
+ * @uiDefault FileChooser.fileAttrHeaderText					String
+ *
+ * @uiDefault FileChooser.viewMenuLabelText						String
+ * @uiDefault FileChooser.refreshActionLabelText				String
+ * @uiDefault FileChooser.newFolderActionLabelText				String
+ * @uiDefault FileChooser.listViewActionLabelText				String
+ * @uiDefault FileChooser.detailsViewActionLabelText			String
+ *
  * @author Karl Tauber
  */
 public class FlatFileChooserUI
 	extends MetalFileChooserUI
 {
+	private final FlatFileView fileView = new FlatFileView();
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatFileChooserUI( (JFileChooser) c );
 	}
 
 	public FlatFileChooserUI( JFileChooser filechooser ) {
 		super( filechooser );
+	}
+
+	@Override
+	public void installComponents( JFileChooser fc ) {
+		super.installComponents( fc );
+
+		patchUI( fc );
+	}
+
+	private void patchUI( JFileChooser fc ) {
+		// turn top-right buttons into toolbar buttons
+		Component topPanel = fc.getComponent( 0 );
+		if( (topPanel instanceof JPanel) &&
+			(((JPanel)topPanel).getLayout() instanceof BorderLayout) )
+		{
+			Component topButtonPanel = ((JPanel)topPanel).getComponent( 0 );
+			if( (topButtonPanel instanceof JPanel) &&
+				(((JPanel)topButtonPanel).getLayout() instanceof BoxLayout) )
+			{
+				Insets margin = UIManager.getInsets( "Button.margin" );
+				Component[] comps = ((JPanel)topButtonPanel).getComponents();
+				for( int i = comps.length - 1; i >= 0; i-- ) {
+					Component c = comps[i];
+					if( c instanceof JButton || c instanceof JToggleButton ) {
+						AbstractButton b = (AbstractButton)c;
+						b.putClientProperty( FlatClientProperties.BUTTON_TYPE,
+							FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON );
+						b.setMargin( margin );
+						b.setFocusable( false );
+					} else if( c instanceof Box.Filler )
+						((JPanel)topButtonPanel).remove( i );
+				}
+			}
+		}
+
+		// increase maximum row count of directory combo box popup list
+		try {
+			Component directoryComboBox =  ((JPanel)topPanel).getComponent( 2 );
+			if( directoryComboBox instanceof JComboBox ) {
+				int maximumRowCount = UIManager.getInt( "ComboBox.maximumRowCount" );
+				if( maximumRowCount > 0 )
+					((JComboBox<?>)directoryComboBox).setMaximumRowCount( maximumRowCount );
+			}
+		} catch( ArrayIndexOutOfBoundsException ex ) {
+			// ignore
+		}
 	}
 
 	@Override
@@ -118,5 +198,51 @@ public class FlatFileChooserUI
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
 		return UIScale.scale( super.getMinimumSize( c ) );
+	}
+
+	@Override
+	public FileView getFileView( JFileChooser fc ) {
+		return fileView;
+	}
+
+	@Override
+	public void clearIconCache() {
+		fileView.clearIconCache();
+	}
+
+	//---- class FlatFileView -------------------------------------------------
+
+	private class FlatFileView
+		extends BasicFileView
+	{
+		@Override
+		public Icon getIcon( File f ) {
+			// get cached icon
+			Icon icon = getCachedIcon( f );
+			if( icon != null )
+				return icon;
+
+			// get system icon
+			if( f != null ) {
+				icon = getFileChooser().getFileSystemView().getSystemIcon( f );
+
+				if( icon != null ) {
+					if( icon instanceof ImageIcon )
+						icon = new ScaledImageIcon( (ImageIcon) icon );
+					cacheIcon( f, icon );
+					return icon;
+				}
+			}
+
+			// get default icon
+			icon = super.getIcon( f );
+
+			if( icon instanceof ImageIcon ) {
+				icon = new ScaledImageIcon( (ImageIcon) icon );
+				cacheIcon( f, icon );
+			}
+
+			return icon;
+		}
 	}
 }

@@ -40,7 +40,7 @@ public class FlatMenuItemBorder
 		if( c.getParent() instanceof JMenuBar ) {
 			insets.top = scale( menuBarItemMargins.top );
 			insets.left = scale( menuBarItemMargins.left );
-			insets.bottom = scale( menuBarItemMargins.bottom + 1 );
+			insets.bottom = scale( menuBarItemMargins.bottom );
 			insets.right = scale( menuBarItemMargins.right );
 			return insets;
 		} else

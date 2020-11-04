@@ -27,7 +27,9 @@ import javax.swing.JComponent;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicToolTipUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
@@ -50,12 +52,8 @@ public class FlatToolTipUI
 {
 	private static PropertyChangeListener sharedPropertyChangedListener;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatToolTipUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatToolTipUI.class, FlatToolTipUI::new );
 	}
 
 	@Override
@@ -92,6 +90,11 @@ public class FlatToolTipUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
+		// do not show tool tip if text is empty
+		String text = ((JToolTip)c).getTipText();
+		if( text == null || text.isEmpty() )
+			return new Dimension();
+
 		if( isMultiLine( c ) ) {
 			FontMetrics fm = c.getFontMetrics( c.getFont() );
 			Insets insets = c.getInsets();
@@ -102,7 +105,7 @@ public class FlatToolTipUI
 			for( String line : lines )
 				width = Math.max( width, SwingUtilities.computeStringWidth( fm, line ) );
 
-			return new Dimension( insets.left + width + insets.right, insets.top + height + insets.bottom );
+			return new Dimension( insets.left + width + insets.right + 6, insets.top + height + insets.bottom );
 		} else
 			return super.getPreferredSize( c );
 	}
@@ -118,8 +121,8 @@ public class FlatToolTipUI
 
 			List<String> lines = StringUtils.split( ((JToolTip)c).getTipText(), '\n' );
 
-			int x = insets.left;
-			int x2 = c.getWidth() - insets.right;
+			int x = insets.left + 3;
+			int x2 = c.getWidth() - insets.right - 3;
 			int y = insets.top - fm.getDescent();
 			int lineHeight = fm.getHeight();
 			JComponent comp = ((JToolTip)c).getComponent();
@@ -129,11 +132,11 @@ public class FlatToolTipUI
 				FlatUIUtils.drawString( c, g, line, leftToRight ? x : x2 - SwingUtilities.computeStringWidth( fm, line ), y );
 			}
 		} else
-			super.paint( g, c );
+			super.paint( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ), c );
 	}
 
 	private boolean isMultiLine( JComponent c ) {
 		String text = ((JToolTip)c).getTipText();
-		return c.getClientProperty( "html" ) == null && text != null && text.indexOf( '\n' ) >= 0;
+		return c.getClientProperty( BasicHTML.propertyKey ) == null && text != null && text.indexOf( '\n' ) >= 0;
 	}
 }

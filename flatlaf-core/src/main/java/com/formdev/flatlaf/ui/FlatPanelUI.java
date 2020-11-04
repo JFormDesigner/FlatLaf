@@ -35,11 +35,7 @@ import javax.swing.plaf.basic.BasicPanelUI;
 public class FlatPanelUI
 	extends BasicPanelUI
 {
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatPanelUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatPanelUI.class, FlatPanelUI::new );
 	}
 }

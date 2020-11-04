@@ -1,0 +1,34 @@
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[::200,fill]"
+			"$rowConstraints": "[]para[]"
+		} ) {
+			name: "panel"
+			auxiliary() {
+				"JavaCodeGenerator.className": "HintPanel"
+			}
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "hintLabel"
+				"text": "hint"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "gotItButton"
+				"text": "Got it!"
+				"focusable": false
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "gotIt", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1,alignx right,growx 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+	}
+}

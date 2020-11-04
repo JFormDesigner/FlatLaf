@@ -19,6 +19,8 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
@@ -26,6 +28,8 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JEditorPane}.
@@ -84,23 +88,42 @@ public class FlatEditorPaneUI
 	}
 
 	@Override
+	protected void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+		propertyChange( getComponent(), e );
+	}
+
+	static void propertyChange( JTextComponent c, PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case FlatClientProperties.MINIMUM_WIDTH:
+				c.revalidate();
+				break;
+		}
+	}
+
+	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ) );
+		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ) );
+		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
 	}
 
-	private Dimension applyMinimumWidth( Dimension size ) {
+	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
 		// Assume that text area is in a scroll pane (that displays the border)
 		// and subtract 1px border line width.
 		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding
 		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
-		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
+		minimumWidth = FlatUIUtils.minimumWidth( c, minimumWidth );
 		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
 		return size;
+	}
+
+	@Override
+	protected void paintSafely( Graphics g ) {
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
 	@Override

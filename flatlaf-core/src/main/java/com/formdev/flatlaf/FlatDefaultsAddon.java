@@ -17,6 +17,8 @@
 package com.formdev.flatlaf;
 
 import java.io.InputStream;
+import javax.swing.LookAndFeel;
+import javax.swing.UIDefaults;
 
 /**
  * Addon for FlatLaf UI defaults.
@@ -48,6 +50,13 @@ public abstract class FlatDefaultsAddon
 		String propertiesName = '/' + addonClass.getPackage().getName().replace( '.', '/' )
 			+ '/' + lafClass.getSimpleName() + ".properties";
 		return addonClass.getResourceAsStream( propertiesName );
+	}
+
+	/**
+	 * Allows modifying UI defaults after loading UI defaults.
+	 * The default implementation does nothing.
+	 */
+	public void afterDefaultsLoading( LookAndFeel laf, UIDefaults defaults ) {
 	}
 
 	/**

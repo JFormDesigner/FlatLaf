@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.0.0.194" Java: "13.0.1" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -7,16 +7,16 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "hidemode 3"
-			"$columnConstraints": "[][200][200]"
-			"$rowConstraints": "[][::200][::150][]"
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[][200,fill][200,fill][fill]"
+			"$rowConstraints": "[150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "listLabel"
 				"text": "JList:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0"
+				"value": "cell 0 0,aligny top,growy 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane1"
@@ -39,13 +39,14 @@ new FormModel {
 						addElement( "item 14" )
 						addElement( "item 15" )
 					}
+					"componentPopupMenu": new FormReference( "popupMenu2" )
 					auxiliary() {
 						"JavaCodeGenerator.typeParameters": "String"
 						"JavaCodeGenerator.variableLocal": false
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0,growx"
+				"value": "cell 1 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane2"
@@ -75,13 +76,13 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0,growx"
+				"value": "cell 2 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "treeLabel"
 				"text": "JTree:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1"
+				"value": "cell 0 1,aligny top,growy 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane3"
@@ -143,12 +144,13 @@ new FormModel {
 							} )
 						} )
 					} )
+					"componentPopupMenu": new FormReference( "popupMenu2" )
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1,growx"
+				"value": "cell 1 1"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane4"
@@ -160,13 +162,13 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1,growx"
+				"value": "cell 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "tableLabel"
 				"text": "JTable:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2"
+				"value": "cell 0 2,aligny top,growy 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane5"
@@ -299,27 +301,122 @@ new FormModel {
 						add( null )
 					} )
 					"autoCreateRowSorter": true
+					"componentPopupMenu": new FormReference( "popupMenu2" )
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2 2 1,growx,width 300"
+				"value": "cell 1 2 2 1,width 300"
 			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
-				name: "dndCheckBox"
-				"text": "enable drag and drop"
-				"mnemonic": 68
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dndChanged", false ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[]"
+				"$rowConstraints": "[]0[]0[]0[]0[]0[]0[]0"
+			} ) {
+				name: "tableOptionsPanel"
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "showHorizontalLinesCheckBox"
+					"text": "show horizontal lines"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHorizontalLinesChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "showVerticalLinesCheckBox"
+					"text": "show vertical lines"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showVerticalLinesChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "intercellSpacingCheckBox"
+					"text": "intercell spacing"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "intercellSpacingChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "redGridColorCheckBox"
+					"text": "red grid color"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "redGridColorChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "rowSelectionCheckBox"
+					"text": "row selection"
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "columnSelectionCheckBox"
+					"text": "column selection"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "columnSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "dndCheckBox"
+					"text": "enable drag and drop"
+					"mnemonic": 68
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dndChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 6"
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 3 3 1"
+				"value": "cell 3 2"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 790, 715 )
+			"size": new java.awt.Dimension( 790, 745 )
+		} )
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "popupMenu2"
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem3"
+				"text": "Some Action"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem4"
+				"text": "More Action"
+			} )
+			add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+				name: "separator1"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem5"
+				"text": "No Action"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem6"
+				"text": "Noop Action"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 800 )
 		} )
 	}
 }

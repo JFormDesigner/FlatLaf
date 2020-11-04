@@ -27,8 +27,12 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
+import net.miginfocom.layout.ConstraintParser;
+import net.miginfocom.layout.LC;
+import net.miginfocom.layout.UnitValue;
 import net.miginfocom.swing.*;
 
 /**
@@ -37,11 +41,23 @@ import net.miginfocom.swing.*;
 class ControlBar
 	extends JPanel
 {
-	private JFrame frame;
+	private DemoFrame frame;
 	private JTabbedPane tabbedPane;
 
 	ControlBar() {
 		initComponents();
+
+		// remove top insets
+		MigLayout layout = (MigLayout) getLayout();
+		LC lc = ConstraintParser.parseLayoutConstraint( (String) layout.getLayoutConstraints() );
+		UnitValue[] insets = lc.getInsets();
+		lc.setInsets( new UnitValue[] {
+			new UnitValue( 0, UnitValue.PIXEL, null ),
+			insets[1],
+			insets[2],
+			insets[3]
+		} );
+		layout.setLayoutConstraints( lc );
 
 		// initialize look and feels combo box
 		DefaultComboBoxModel<LookAndFeelInfo> lafModel = new DefaultComboBoxModel<>();
@@ -58,12 +74,12 @@ class ControlBar
 				className.equals( "com.sun.java.swing.plaf.motif.MotifLookAndFeel" ) )
 			  continue;
 
-			if( (SystemInfo.IS_WINDOWS && className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" )) ||
-				(SystemInfo.IS_MAC && className.equals( "com.apple.laf.AquaLookAndFeel") ) ||
-				(SystemInfo.IS_LINUX && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel") ) )
+			if( (SystemInfo.isWindows && className.equals( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" )) ||
+				(SystemInfo.isMacOS && className.equals( "com.apple.laf.AquaLookAndFeel") ) ||
+				(SystemInfo.isLinux && className.equals( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel") ) )
 				name += " (F9)";
 			else if( className.equals( MetalLookAndFeel.class.getName() ) )
-				name += " (F10)";
+				name += " (F12)";
 			else if( className.equals( NimbusLookAndFeel.class.getName() ) )
 				name += " (F11)";
 
@@ -78,14 +94,30 @@ class ControlBar
 					// update info label because user scale factor may change
 					updateInfoLabel();
 
+					// update "Font" menu
+					frame.updateFontMenuItems();
+
 					// this is necessary because embedded JOptionPane's "steal" the default button
 					frame.getRootPane().setDefaultButton( closeButton );
 				} );
 			}
 		} );
+
+		UIScale.addPropertyChangeListener( e -> {
+			// update info label because user scale factor may change
+			updateInfoLabel();
+		} );
 	}
 
-	void initialize( JFrame frame, JTabbedPane tabbedPane ) {
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		if( infoLabel != null )
+			updateInfoLabel();
+	}
+
+	void initialize( DemoFrame frame, JTabbedPane tabbedPane ) {
 		this.frame = frame;
 		this.tabbedPane = tabbedPane;
 
@@ -95,13 +127,13 @@ class ControlBar
 		registerSwitchToLookAndFeel( KeyEvent.VK_F3, FlatIntelliJLaf.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F4, FlatDarculaLaf.class.getName() );
 
-		if( SystemInfo.IS_WINDOWS )
+		if( SystemInfo.isWindows )
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
-		else if( SystemInfo.IS_MAC )
+		else if( SystemInfo.isMacOS )
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.apple.laf.AquaLookAndFeel" );
-		else if( SystemInfo.IS_LINUX )
+		else if( SystemInfo.isLinux )
 			registerSwitchToLookAndFeel( KeyEvent.VK_F9, "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
-		registerSwitchToLookAndFeel( KeyEvent.VK_F10, MetalLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( KeyEvent.VK_F12, MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F11, NimbusLookAndFeel.class.getName() );
 
 		// register ESC key to close frame
@@ -134,12 +166,20 @@ class ControlBar
 	}
 
 	private void updateInfoLabel() {
+		String javaVendor = System.getProperty( "java.vendor" );
+		if( "Oracle Corporation".equals( javaVendor ) )
+			javaVendor = null;
 		double systemScaleFactor = UIScale.getSystemScaleFactor( getGraphicsConfiguration() );
 		float userScaleFactor = UIScale.getUserScaleFactor();
+		Font font = UIManager.getFont( "Label.font" );
 		String newInfo = "(Java " + System.getProperty( "java.version" )
+			+ (javaVendor != null ? ("; " + javaVendor) : "")
 			+ (systemScaleFactor != 1 ? (";  system scale factor " + systemScaleFactor) : "")
 			+ (userScaleFactor != 1 ? (";  user scale factor " + userScaleFactor) : "")
 			+ (systemScaleFactor == 1 && userScaleFactor == 1 ? "; no scaling" : "")
+			+ "; " + font.getFamily() + " " + font.getSize()
+			+ (font.isBold() ? " BOLD" : "")
+			+ (font.isItalic() ? " ITALIC" : "")
 			+ ")";
 
 		if( !newInfo.equals( infoLabel.getText() ) )
@@ -169,11 +209,18 @@ class ControlBar
 
 		EventQueue.invokeLater( () -> {
 			try {
+				FlatAnimatedLafChange.showSnapshot();
+
 				// change look and feel
 				UIManager.setLookAndFeel( lafClassName );
 
+				// clear custom default font when switching to non-FlatLaf LaF
+				if( !(UIManager.getLookAndFeel() instanceof FlatLaf) )
+					UIManager.put( "defaultFont", null );
+
 				// update all components
 				FlatLaf.updateUI();
+				FlatAnimatedLafChange.hideSnapshotWithAnimation();
 
 				// increase size of frame if necessary
 				int width = frame.getWidth();
@@ -203,6 +250,9 @@ class ControlBar
 
 	private void enabledChanged() {
 		enabledDisable( tabbedPane, enabledCheckBox.isSelected() );
+
+		// repainting whole tabbed pane is faster than repainting many individual components
+		tabbedPane.repaint();
 	}
 
 	private void enabledDisable( Container container, boolean enabled ) {

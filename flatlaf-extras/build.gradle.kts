@@ -16,9 +16,37 @@
 
 plugins {
 	`java-library`
+	`flatlaf-module-info`
+	`flatlaf-publish`
 }
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( "com.formdev:svgSalamander:1.1.2.1" )
+	implementation( "com.formdev:svgSalamander:1.1.2.3" )
+}
+
+flatlafModuleInfo {
+	dependsOn( ":flatlaf-core:jar" )
+}
+
+java {
+	withSourcesJar()
+	withJavadocJar()
+}
+
+tasks {
+	javadoc {
+		options {
+			this as StandardJavadocDocletOptions
+			use( true )
+			tags = listOf( "uiDefault", "clientProperty" )
+		}
+		isFailOnError = false
+	}
+}
+
+flatlafPublish {
+	artifactId = "flatlaf-extras"
+	name = "FlatLaf Extras"
+	description = "Flat Look and Feel Extras"
 }

@@ -16,14 +16,13 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Component;
 import javax.swing.UIManager;
 
 /**
  * Border for various text components (e.g. {@link javax.swing.JTextField}).
  *
- * @uiDefault Component.arc					int
+ * @uiDefault TextComponent.arc				int
  *
  * @author Karl Tauber
  */
@@ -33,7 +32,11 @@ public class FlatTextBorder
 	protected final int arc = UIManager.getInt( "TextComponent.arc" );
 
 	@Override
-	protected float getArc( Component c ) {
-		return scale( (float) arc );
+	protected int getArc( Component c ) {
+		if( isCellEditor( c ) )
+			return 0;
+
+		Boolean roundRect = FlatUIUtils.isRoundRect( c );
+		return roundRect != null ? (roundRect ? Short.MAX_VALUE : 0) : arc;
 	}
 }

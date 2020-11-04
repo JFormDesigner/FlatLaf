@@ -16,12 +16,11 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.beans.PropertyChangeListener;
+import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.JMenuItem;
+import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicRadioButtonMenuItemUI;
 
@@ -46,13 +45,18 @@ import javax.swing.plaf.basic.BasicRadioButtonMenuItemUI;
  * @uiDefault RadioButtonMenuItem.arrowIcon							Icon
  * @uiDefault RadioButtonMenuItem.checkIcon							Icon
  * @uiDefault RadioButtonMenuItem.opaque							boolean
- * @uiDefault RadioButtonMenuItem.evenHeight						boolean
+ *
+ * <!-- FlatRadioButtonMenuItemUI -->
+ *
+ * @uiDefault MenuItem.iconTextGap									int
  *
  * @author Karl Tauber
  */
 public class FlatRadioButtonMenuItemUI
 	extends BasicRadioButtonMenuItemUI
 {
+	private FlatMenuItemRenderer renderer;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRadioButtonMenuItemUI();
 	}
@@ -61,25 +65,30 @@ public class FlatRadioButtonMenuItemUI
 	protected void installDefaults() {
 		super.installDefaults();
 
-		// scale
-		defaultTextIconGap = scale( defaultTextIconGap );
-	}
+		LookAndFeel.installProperty( menuItem, "iconTextGap", FlatUIUtils.getUIInt( "MenuItem.iconTextGap", 4 ) );
 
-	/**
-	 * Scale defaultTextIconGap again if iconTextGap property has changed.
-	 */
-	@Override
-	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
-		PropertyChangeListener superListener = super.createPropertyChangeListener( c );
-		return e -> {
-			superListener.propertyChange( e );
-			if( e.getPropertyName() == "iconTextGap" )
-				defaultTextIconGap = scale( defaultTextIconGap );
-		};
+		renderer = createRenderer();
 	}
 
 	@Override
-	protected void paintText( Graphics g, JMenuItem menuItem, Rectangle textRect, String text ) {
-		FlatMenuItemUI.paintText( g, menuItem, textRect, text, disabledForeground, selectionForeground );
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		renderer = null;
+	}
+
+	protected FlatMenuItemRenderer createRenderer() {
+		return new FlatMenuItemRenderer( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
+	}
+
+	@Override
+	protected Dimension getPreferredMenuItemSize( JComponent c, Icon checkIcon, Icon arrowIcon, int defaultTextIconGap ) {
+		return renderer.getPreferredMenuItemSize();
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		renderer.paintMenuItem( g, selectionBackground, selectionForeground, disabledForeground,
+			acceleratorForeground, acceleratorSelectionForeground );
 	}
 }

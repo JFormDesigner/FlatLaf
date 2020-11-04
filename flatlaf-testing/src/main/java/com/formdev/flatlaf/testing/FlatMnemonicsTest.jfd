@@ -1,0 +1,349 @@
+JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[fill][150,fill]para[300,grow,fill]"
+			"$rowConstraints": "[][][][][]para[][]para[]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Name"
+				"labelFor": new FormReference( "textField1" )
+				"displayedMnemonic": 78
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField1"
+				"componentPopupMenu": &FormReference0 new FormReference( "popupMenu1" )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "Phone"
+				"labelFor": new FormReference( "textField2" )
+				"displayedMnemonic": 80
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField2"
+				"componentPopupMenu": #FormReference0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "Planet"
+				"displayedMnemonic": 65
+				"labelFor": new FormReference( "comboBox1" )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox1"
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "Earth"
+					addElement( "Earth" )
+					addElement( "Moon" )
+					addElement( "Mars" )
+				}
+				"componentPopupMenu": #FormReference0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "checkBox1"
+				"text": "Astronaut"
+				"mnemonic": 83
+				"componentPopupMenu": #FormReference0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button1"
+				"text": "Lift off"
+				"mnemonic": 76
+				"componentPopupMenu": #FormReference0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "Text area that consumes Alt key:"
+				"labelFor": new FormReference( "textArea1" )
+				"displayedMnemonic": 84
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 5"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "textArea1"
+					"rows": 4
+					"componentPopupMenu": #FormReference0
+					addEvent( new FormEvent( "java.awt.event.KeyListener", "keyReleased", "textArea1KeyReleased", true ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 6,grow"
+			} )
+			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				name: "tabbedPane1"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+					name: "panel1"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label7"
+						"text": "Guitar"
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "Guitar"
+					"mnemonic": 71
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+					name: "panel2"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label6"
+						"text": "Drums"
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "Drums"
+					"mnemonic": 68
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+					name: "panel3"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label5"
+						"text": "Keyboard"
+					} )
+				}, new FormLayoutConstraints( null ) {
+					"title": "Keyboard"
+					"mnemonic": 75
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 6,aligny top,growy 0"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "alwaysShowMnemonicsCheckBox"
+				"text": "Always show mnemonics"
+				"mnemonic": 77
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "alwaysShowMnemonicsChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 7 2 1,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button2"
+				"text": "Open Dialog"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDialog", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 7,alignx left,growx 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 790, 380 )
+		} )
+		add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+			name: "menuBar"
+			auxiliary() {
+				"JavaCodeGenerator.variableLocal": false
+			}
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "fileMenu"
+				"text": "File"
+				"mnemonic": 70
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "newMenuItem"
+					"text": "New"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 74, 130, false )
+					"mnemonic": 78
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "openMenuItem"
+					"text": "Open"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 74, 520, false )
+					"mnemonic": 79
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator2"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "closeMenuItem"
+					"text": "Close"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 74, 650, false )
+					"mnemonic": 67
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "closeMenuItem2"
+					"text": "Close All"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 74, 585, false )
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator1"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "exitMenuItem"
+					"text": "Exit"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 74, 4811, false )
+					"mnemonic": 88
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "editMenu"
+				"text": "Edit"
+				"mnemonic": 69
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "undoMenuItem"
+					"text": "Undo"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 90, 4226, false )
+					"mnemonic": 85
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "redoMenuItem"
+					"text": "Redo"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 89, 4226, false )
+					"mnemonic": 82
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator4"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "cutMenuItem"
+					"text": "Cut"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 88, 4226, false )
+					"mnemonic": 67
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "copyMenuItem"
+					"text": "Copy"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 67, 4226, false )
+					"mnemonic": 79
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "pasteMenuItem"
+					"text": "Paste"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 86, 4226, false )
+					"mnemonic": 80
+				} )
+				add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+					name: "separator3"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "deleteMenuItem"
+					"text": "Delete"
+					"accelerator": static javax.swing.KeyStroke getKeyStroke( 127, 0, false )
+					"mnemonic": 68
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "viewMenu"
+				"text": "View"
+				"mnemonic": 86
+				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+					name: "checkBoxMenuItem1"
+					"text": "Show Toolbar"
+					"selected": true
+					"mnemonic": 84
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu1"
+					"text": "Show View"
+					"mnemonic": 86
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "subViewsMenu"
+						"text": "Sub Views"
+						"mnemonic": 83
+						add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+							name: "subSubViewsMenu"
+							"text": "Sub sub Views"
+							"mnemonic": 85
+							add( new FormComponent( "javax.swing.JMenuItem" ) {
+								name: "errorLogViewMenuItem"
+								"text": "Error Log"
+								"mnemonic": 69
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+							} )
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "searchViewMenuItem"
+							"text": "Search"
+							"mnemonic": 83
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "projectViewMenuItem"
+						"text": "Project"
+						"mnemonic": 80
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "structureViewMenuItem"
+						"text": "Structure"
+						"mnemonic": 84
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "propertiesViewMenuItem"
+						"text": "Properties"
+						"mnemonic": 79
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+					} )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "helpMenu"
+				"text": "Help"
+				"mnemonic": 72
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "aboutMenuItem"
+					"text": "About"
+					"mnemonic": 65
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 410 )
+			"size": new java.awt.Dimension( 255, 30 )
+		} )
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "popupMenu1"
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "cutMenuItem2"
+				"text": "Cut"
+				"mnemonic": 67
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "copyMenuItem2"
+				"text": "Copy"
+				"mnemonic": 79
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "pasteMenuItem2"
+				"text": "Paste"
+				"mnemonic": 80
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 300, 415 )
+			"size": new java.awt.Dimension( 91, 87 )
+		} )
+	}
+}

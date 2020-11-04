@@ -46,7 +46,7 @@ public class IJThemesUpdater
 			else if( fromUrl.contains( "gitlab.com" ) )
 				fromUrl = fromUrl.replace( "/blob/", "/raw/" );
 
-			String toPath = "src/main/resources/com/formdev/flatlaf/demo/intellijthemes/" + ti.resourceName;
+			String toPath = "../flatlaf-intellij-themes/src/main/resources" + IJThemesPanel.THEMES_PACKAGE + ti.resourceName;
 
 			download( fromUrl, toPath );
 		}

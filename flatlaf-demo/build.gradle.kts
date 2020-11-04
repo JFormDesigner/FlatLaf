@@ -27,10 +27,18 @@ plugins {
 	id( "com.jfrog.artifactory" )
 }
 
+repositories {
+	maven {
+		// for using MigLayout snapshot
+		url = uri( "https://oss.sonatype.org/content/repositories/snapshots/" )
+	}
+}
+
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
-	implementation( "com.miglayout:miglayout-swing:5.2" )
+	implementation( project( ":flatlaf-intellij-themes" ) )
+	implementation( "com.miglayout:miglayout-swing:5.3-SNAPSHOT" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
 }
 
@@ -38,12 +46,17 @@ tasks {
 	jar {
 		dependsOn( ":flatlaf-core:jar" )
 		dependsOn( ":flatlaf-extras:jar" )
+		dependsOn( ":flatlaf-intellij-themes:jar" )
 
 		manifest {
 			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )
+
+			if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
+				attributes( "Multi-Release" to "true" )
 		}
 
-		exclude( "META-INF/versions/**" )
+		exclude( "module-info.class" )
+		exclude( "META-INF/versions/*/module-info.class" )
 
 		// include all dependencies in jar
 		from( {

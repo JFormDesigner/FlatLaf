@@ -86,25 +86,11 @@ public class FlatTableHeaderUI
 			case "top":		sortIconPosition = SwingConstants.TOP; break;
 			case "bottom":	sortIconPosition = SwingConstants.BOTTOM; break;
 		}
-
-		// use own renderer if necessary
-		if( sortIconPosition != SwingConstants.RIGHT ) {
-			TableCellRenderer defaultRenderer = header.getDefaultRenderer();
-			if( defaultRenderer instanceof UIResource )
-				header.setDefaultRenderer( new FlatTableCellHeaderRenderer( defaultRenderer ) );
-		}
 	}
 
 	@Override
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
-
-		// restore default renderer
-		TableCellRenderer defaultRenderer = header.getDefaultRenderer();
-		if( defaultRenderer instanceof FlatTableCellHeaderRenderer ) {
-			((FlatTableCellHeaderRenderer)defaultRenderer).reset();
-			header.setDefaultRenderer( ((FlatTableCellHeaderRenderer)defaultRenderer).delegate );
-		}
 
 		separatorColor = null;
 		bottomSeparatorColor = null;
@@ -125,7 +111,21 @@ public class FlatTableHeaderUI
 		if( paintBorders )
 			paintColumnBorders( g, c );
 
+		// temporary use own default renderer if necessary
+		FlatTableCellHeaderRenderer sortIconRenderer = null;
+		if( sortIconPosition != SwingConstants.RIGHT ) {
+			sortIconRenderer = new FlatTableCellHeaderRenderer( header.getDefaultRenderer() );
+			header.setDefaultRenderer( sortIconRenderer );
+		}
+
+		// paint header
 		super.paint( g, c );
+
+		// restore default renderer
+		if( sortIconRenderer != null ) {
+			sortIconRenderer.reset();
+			header.setDefaultRenderer( sortIconRenderer.delegate );
+		}
 
 		if( paintBorders )
 			paintDraggedColumnBorders( g, c );
@@ -158,7 +158,7 @@ public class FlatTableHeaderUI
 			g2.setColor( separatorColor );
 
 			int sepCount = columnCount;
-			if( header.getTable().getAutoResizeMode() != JTable.AUTO_RESIZE_OFF && !isVerticalScrollBarVisible() )
+			if( header.getTable() != null && header.getTable().getAutoResizeMode() != JTable.AUTO_RESIZE_OFF && !isVerticalScrollBarVisible() )
 				sepCount--;
 
 			if( header.getComponentOrientation().isLeftToRight() ) {
@@ -257,6 +257,7 @@ public class FlatTableHeaderUI
 	{
 		private final TableCellRenderer delegate;
 
+		private JLabel l;
 		private int oldHorizontalTextPosition = -1;
 		private Border origBorder;
 		private Icon sortIcon;
@@ -273,7 +274,7 @@ public class FlatTableHeaderUI
 			if( !(c instanceof JLabel) )
 				return c;
 
-			JLabel l = (JLabel) c;
+			l = (JLabel) c;
 
 			if( sortIconPosition == SwingConstants.LEFT ) {
 				if( oldHorizontalTextPosition < 0 )
@@ -291,11 +292,8 @@ public class FlatTableHeaderUI
 		}
 
 		void reset() {
-			if( sortIconPosition == SwingConstants.LEFT && oldHorizontalTextPosition >= 0 ) {
-				Component c = getTableCellRendererComponent( header.getTable(), "", false, false, -1, 0 );
-				if( c instanceof JLabel && ((JLabel)c).getHorizontalTextPosition() == SwingConstants.RIGHT )
-					((JLabel)c).setHorizontalTextPosition( oldHorizontalTextPosition );
-			}
+			if( l != null && sortIconPosition == SwingConstants.LEFT && oldHorizontalTextPosition >= 0 )
+				l.setHorizontalTextPosition( oldHorizontalTextPosition );
 		}
 
 		@Override

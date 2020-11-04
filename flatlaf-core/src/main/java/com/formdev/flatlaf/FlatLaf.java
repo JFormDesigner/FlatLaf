@@ -18,38 +18,51 @@ package com.formdev.flatlaf;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.KeyEventPostProcessor;
-import java.awt.KeyboardFocusManager;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.KeyEvent;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.ref.WeakReference;
+import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.ServiceLoader;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractButton;
-import javax.swing.JLabel;
-import javax.swing.JRootPane;
-import javax.swing.JTabbedPane;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
+import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
+import com.formdev.flatlaf.ui.FlatPopupFactory;
+import com.formdev.flatlaf.ui.JBRCustomDecorations;
+import com.formdev.flatlaf.util.GrayFilter;
+import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -64,17 +77,22 @@ public abstract class FlatLaf
 	static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
+	private static List<Object> customDefaultsSources;
+
 	private String desktopPropertyName;
+	private String desktopPropertyName2;
 	private PropertyChangeListener desktopPropertyListener;
 
 	private static boolean aquaLoaded;
 	private static boolean updateUIPending;
 
-	private KeyEventPostProcessor mnemonicListener;
-	private static boolean showMnemonics;
-	private static WeakReference<Window> lastShowMnemonicWindow;
+	private PopupFactory oldPopupFactory;
+	private MnemonicHandler mnemonicHandler;
 
 	private Consumer<UIDefaults> postInitialization;
+
+	private Boolean oldFrameWindowDecorated;
+	private Boolean oldDialogWindowDecorated;
 
 	public static boolean install( LookAndFeel newLookAndFeel ) {
 		try {
@@ -101,6 +119,45 @@ public abstract class FlatLaf
 
 	public abstract boolean isDark();
 
+	/**
+	 * Checks whether the current look and feel is dark.
+	 */
+	public static boolean isLafDark() {
+		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+		return lookAndFeel instanceof FlatLaf && ((FlatLaf)lookAndFeel).isDark();
+	}
+
+	/**
+	 * Returns whether FlatLaf supports custom window decorations.
+	 * This depends on the operating system and on the used Java runtime.
+	 * <p>
+	 * To use custom window decorations in your application, enable them with
+	 * following code (before creating any frames or dialogs). Then custom window
+	 * decorations are only enabled if this method returns {@code true}.
+	 * <pre>
+	 * JFrame.setDefaultLookAndFeelDecorated( true );
+	 * JDialog.setDefaultLookAndFeelDecorated( true );
+	 * </pre>
+	 * <p>
+	 * Returns {@code true} on Windows 10, {@code false} otherwise.
+	 * <p>
+	 * Return also {@code false} if running on Windows 10 in
+	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
+	 * (<a href="https://github.com/JetBrains/JetBrainsRuntime">source code on github</a>)
+	 * and JBR supports custom window decorations. In this case, JBR custom decorations
+	 * are enabled if {@link JFrame#isDefaultLookAndFeelDecorated()} or
+	 * {@link JDialog#isDefaultLookAndFeelDecorated()} return {@code true}.
+	 */
+	@Override
+	public boolean getSupportsWindowDecorations() {
+		if( SystemInfo.isJetBrainsJVM_11_orLater &&
+			SystemInfo.isWindows_10_orLater &&
+			JBRCustomDecorations.isSupported() )
+		  return false;
+
+		return SystemInfo.isWindows_10_orLater;
+	}
+
 	@Override
 	public boolean isNativeLookAndFeel() {
 		return false;
@@ -112,34 +169,59 @@ public abstract class FlatLaf
 	}
 
 	@Override
+	public Icon getDisabledIcon( JComponent component, Icon icon ) {
+		if( icon instanceof ImageIcon ) {
+			Object grayFilter = UIManager.get( "Component.grayFilter" );
+			ImageFilter filter = (grayFilter instanceof ImageFilter)
+				? (ImageFilter) grayFilter
+				: GrayFilter.createDisabledIconFilter( isDark() ); // fallback
+
+			Function<Image, Image> mapper = img -> {
+				ImageProducer producer = new FilteredImageSource( img.getSource(), filter );
+				return Toolkit.getDefaultToolkit().createImage( producer );
+			};
+
+			Image image = ((ImageIcon)icon).getImage();
+			return new ImageIconUIResource( MultiResolutionImageSupport.map( image, mapper ) );
+		}
+
+		return null;
+	}
+
+	@Override
 	public void initialize() {
-		if( SystemInfo.IS_MAC )
+		if( SystemInfo.isMacOS )
 			initializeAqua();
 
 		super.initialize();
 
-		// add mnemonic listener
-		mnemonicListener = e -> {
-			checkShowMnemonics( e );
-			return false;
-		};
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor( mnemonicListener );
+		// install popup factory
+		oldPopupFactory = PopupFactory.getSharedInstance();
+		PopupFactory.setSharedInstance( new FlatPopupFactory() );
+
+		// install mnemonic handler
+		mnemonicHandler = new MnemonicHandler();
+		mnemonicHandler.install();
 
 		// listen to desktop property changes to update UI if system font or scaling changes
-		if( SystemInfo.IS_WINDOWS ) {
+		if( SystemInfo.isWindows ) {
 			// Windows 10 allows increasing font size independent of scaling:
 			//   Settings > Ease of Access > Display > Make text bigger (100% - 225%)
 			desktopPropertyName = "win.messagebox.font";
-		} else if( SystemInfo.IS_LINUX ) {
+		} else if( SystemInfo.isLinux ) {
+			// Linux/Gnome allows changing font in "Tweaks" app
+			desktopPropertyName = "gnome.Gtk/FontName";
+
 			// Linux/Gnome allows extra scaling and larger text:
 			//   Settings > Devices > Displays > Scale (100% or 200%)
 			//   Settings > Universal access > Large Text (off or on, 125%)
-			desktopPropertyName = "gnome.Xft/DPI";
+			//   "Tweaks" app > Fonts > Scaling Factor (0,5 - 3)
+			desktopPropertyName2 = "gnome.Xft/DPI";
 		}
 		if( desktopPropertyName != null ) {
 			desktopPropertyListener = e -> {
 				String propertyName = e.getPropertyName();
-				if( desktopPropertyName.equals( propertyName ) )
+				if( desktopPropertyName.equals( propertyName ) || propertyName.equals( desktopPropertyName2 ) )
 					reSetLookAndFeel();
 				else if( DESKTOPFONTHINTS.equals( propertyName ) ) {
 					if( UIManager.getLookAndFeel() instanceof FlatLaf ) {
@@ -150,6 +232,8 @@ public abstract class FlatLaf
 			};
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
 			toolkit.addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			if( desktopPropertyName2 != null )
+				toolkit.addPropertyChangeListener( desktopPropertyName2, desktopPropertyListener );
 			toolkit.addPropertyChangeListener( DESKTOPFONTHINTS, desktopPropertyListener );
 		}
 
@@ -164,6 +248,16 @@ public abstract class FlatLaf
 					String.format( "a { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
 			}
 		};
+
+		// enable/disable window decorations, but only if system property is either
+		// "true" or "false"; in other cases it is not changed
+		Boolean useWindowDecorations = FlatSystemProperties.getBooleanStrict( FlatSystemProperties.USE_WINDOW_DECORATIONS, null );
+		if( useWindowDecorations != null ) {
+			oldFrameWindowDecorated = JFrame.isDefaultLookAndFeelDecorated();
+			oldDialogWindowDecorated = JDialog.isDefaultLookAndFeelDecorated();
+			JFrame.setDefaultLookAndFeelDecorated( useWindowDecorations );
+			JDialog.setDefaultLookAndFeelDecorated( useWindowDecorations );
+		}
 	}
 
 	@Override
@@ -172,20 +266,37 @@ public abstract class FlatLaf
 		if( desktopPropertyListener != null ) {
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
 			toolkit.removePropertyChangeListener( desktopPropertyName, desktopPropertyListener );
+			if( desktopPropertyName2 != null )
+				toolkit.removePropertyChangeListener( desktopPropertyName2, desktopPropertyListener );
 			toolkit.removePropertyChangeListener( DESKTOPFONTHINTS, desktopPropertyListener );
 			desktopPropertyName = null;
+			desktopPropertyName2 = null;
 			desktopPropertyListener = null;
 		}
 
-		// remove mnemonic listener
-		if( mnemonicListener != null ) {
-			KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventPostProcessor( mnemonicListener );
-			mnemonicListener = null;
+		// uninstall popup factory
+		if( oldPopupFactory != null ) {
+			PopupFactory.setSharedInstance( oldPopupFactory );
+			oldPopupFactory = null;
+		}
+
+		// uninstall mnemonic handler
+		if( mnemonicHandler != null ) {
+			mnemonicHandler.uninstall();
+			mnemonicHandler = null;
 		}
 
 		// restore default link color
 		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
 		postInitialization = null;
+
+		// restore enable/disable window decorations
+		if( oldFrameWindowDecorated != null ) {
+			JFrame.setDefaultLookAndFeelDecorated( oldFrameWindowDecorated );
+			JDialog.setDefaultLookAndFeelDecorated( oldDialogWindowDecorated );
+			oldFrameWindowDecorated = null;
+			oldDialogWindowDecorated = null;
+		}
 
 		super.uninitialize();
 	}
@@ -207,7 +318,7 @@ public abstract class FlatLaf
 		String aquaLafClassName = "com.apple.laf.AquaLookAndFeel";
 		BasicLookAndFeel aquaLaf;
 		try {
-			if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+			if( SystemInfo.isJava_9_orLater ) {
 				Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
 				aquaLaf = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
 			} else
@@ -233,12 +344,17 @@ public abstract class FlatLaf
 	public UIDefaults getDefaults() {
 		UIDefaults defaults = super.getDefaults();
 
-		// add Metal resource bundle, which is required for FlatFileChooserUI
-		defaults.addResourceBundle( "com.sun.swing.internal.plaf.metal.resources.metal" );
+		// add flag that indicates whether the LaF is light or dark
+		// (can be queried without using FlatLaf API)
+		defaults.put( "laf.dark", isDark() );
+
+		// add resource bundle for localized texts
+		defaults.addResourceBundle( "com.formdev.flatlaf.resources.Bundle" );
 
 		// initialize some defaults (for overriding) that are used in UI delegates,
 		// but are not set in BasicLookAndFeel
 		putDefaults( defaults, defaults.getColor( "control" ),
+			"Button.disabledBackground",
 			"EditorPane.disabledBackground",
 			"EditorPane.inactiveBackground",
 			"FormattedTextField.disabledBackground",
@@ -248,7 +364,8 @@ public abstract class FlatLaf
 			"TextArea.inactiveBackground",
 			"TextField.disabledBackground",
 			"TextPane.disabledBackground",
-			"TextPane.inactiveBackground" );
+			"TextPane.inactiveBackground",
+			"ToggleButton.disabledBackground" );
 		putDefaults( defaults, defaults.getColor( "textInactiveText" ),
 			"Button.disabledText",
 			"CheckBox.disabledText",
@@ -266,73 +383,121 @@ public abstract class FlatLaf
 		initIconColors( defaults, isDark() );
 		FlatInputMaps.initInputMaps( defaults );
 
+		// get addons and sort them by priority
+		ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
+		List<FlatDefaultsAddon> addons = new ArrayList<>();
+		for( FlatDefaultsAddon addon : addonLoader )
+			addons.add( addon );
+		addons.sort( (addon1, addon2) -> addon1.getPriority() - addon2.getPriority() );
+
 		// load defaults from properties
 		List<Class<?>> lafClassesForDefaultsLoading = getLafClassesForDefaultsLoading();
 		if( lafClassesForDefaultsLoading != null )
-			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, defaults );
+			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons, getAdditionalDefaults(), isDark(), defaults );
 		else
-			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), defaults );
+			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), isDark(), defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
-		if( SystemInfo.IS_MAC && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) )
+		if( SystemInfo.isMacOS && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) ) {
 			defaults.put( "MenuBarUI", "com.apple.laf.AquaMenuBarUI" );
+
+			// add defaults necessary for AquaMenuBarUI
+			defaults.put( "MenuBar.backgroundPainter", BorderFactory.createEmptyBorder() );
+		}
 
 		// initialize text antialiasing
 		putAATextInfo( defaults );
 
-		invokePostInitialization( defaults );
+		// apply additional defaults (e.g. from IntelliJ themes)
+		applyAdditionalDefaults( defaults );
 
-		return defaults;
-	}
+		// allow addons modifying UI defaults
+		for( FlatDefaultsAddon addon : addons )
+			addon.afterDefaultsLoading( this, defaults );
 
-	void invokePostInitialization( UIDefaults defaults ) {
+		// add user scale factor to allow layout managers (e.g. MigLayout) to use it
+		defaults.put( "laf.scaleFactor", (ActiveValue) t -> {
+			return UIScale.getUserScaleFactor();
+		} );
+
 		if( postInitialization != null ) {
 			postInitialization.accept( defaults );
 			postInitialization = null;
 		}
+
+		return defaults;
 	}
 
-	List<Class<?>> getLafClassesForDefaultsLoading() {
+	void applyAdditionalDefaults( UIDefaults defaults ) {
+	}
+
+	protected List<Class<?>> getLafClassesForDefaultsLoading() {
+		return null;
+	}
+
+	protected Properties getAdditionalDefaults() {
 		return null;
 	}
 
 	private void initFonts( UIDefaults defaults ) {
 		FontUIResource uiFont = null;
 
-		if( SystemInfo.IS_WINDOWS ) {
+		if( SystemInfo.isWindows ) {
 			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
 			if( winFont != null )
-				uiFont = new FontUIResource( winFont );
+				uiFont = createCompositeFont( winFont.getFamily(), winFont.getStyle(), winFont.getSize() );
 
-		} else if( SystemInfo.IS_MAC ) {
+		} else if( SystemInfo.isMacOS ) {
 			String fontName;
-			if( SystemInfo.IS_MAC_OS_10_11_EL_CAPITAN_OR_LATER ) {
+			if( SystemInfo.isMacOS_10_15_Catalina_orLater ) {
+				// use Helvetica Neue font
+				fontName = "Helvetica Neue";
+			} else if( SystemInfo.isMacOS_10_11_ElCapitan_orLater ) {
 				// use San Francisco Text font
 				fontName = ".SF NS Text";
 			} else {
 				// default font on older systems (see com.apple.laf.AquaFonts)
 				fontName = "Lucida Grande";
 			}
-			uiFont = new FontUIResource( fontName, Font.PLAIN, 13 );
 
-		} else if( SystemInfo.IS_LINUX ) {
+			uiFont = createCompositeFont( fontName, Font.PLAIN, 13 );
+
+		} else if( SystemInfo.isLinux ) {
 			Font font = LinuxFontPolicy.getFont();
 			uiFont = (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 		}
 
+		// fallback
 		if( uiFont == null )
-			return;
+			uiFont = createCompositeFont( Font.SANS_SERIF, Font.PLAIN, 12 );
 
+		// increase font size if system property "flatlaf.uiScale" is set
 		uiFont = UIScale.applyCustomScaleFactor( uiFont );
+
+		// use active value for all fonts to allow changing fonts in all components
+		// (similar as in Nimbus L&F) with:
+		//     UIManager.put( "defaultFont", myFont );
+		Object activeFont =  new ActiveFont( 1 );
 
 		// override fonts
 		for( Object key : defaults.keySet() ) {
 			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
-				defaults.put( key, uiFont );
+				defaults.put( key, activeFont );
 		}
 
 		// use smaller font for progress bar
-		defaults.put( "ProgressBar.font", UIScale.scaleFont( uiFont, 0.85f ) );
+		defaults.put( "ProgressBar.font", new ActiveFont( 0.85f ) );
+
+		// set default font
+		defaults.put( "defaultFont", uiFont );
+	}
+
+	static FontUIResource createCompositeFont( String family, int style, int size ) {
+		// using StyleContext.getFont() here because it uses
+		// sun.font.FontUtilities.getCompositeFontUIResource()
+		// and creates a composite font that is able to display all Unicode characters
+		Font font = StyleContext.getDefaultStyleContext().getFont( family, style, size );
+		return (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 	}
 
 	/**
@@ -348,34 +513,18 @@ public abstract class FlatLaf
 	 *   <a href="https://jetbrains.design/intellij/principles/icons/#action-icons">Action icons</a>
 	 * and
 	 *   <a href="https://jetbrains.design/intellij/principles/icons/#noun-icons">Noun icons</a>
+	 * <p>
+	 * These colors may be changed by IntelliJ Platform themes.
 	 */
 	public static void initIconColors( UIDefaults defaults, boolean dark ) {
-		// colors for action icons
-		// see https://jetbrains.design/intellij/principles/icons/#action-icons
-		defaults.put( "Actions.Red",            new ColorUIResource( !dark ? 0xDB5860 : 0xC75450 ) );
-		defaults.put( "Actions.Yellow",         new ColorUIResource( !dark ? 0xEDA200 : 0xF0A732 ) );
-		defaults.put( "Actions.Green",          new ColorUIResource( !dark ? 0x59A869 : 0x499C54 ) );
-		defaults.put( "Actions.Blue",           new ColorUIResource( !dark ? 0x389FD6 : 0x3592C4 ) );
-		defaults.put( "Actions.Grey",           new ColorUIResource( !dark ? 0x6E6E6E : 0xAFB1B3 ) );
-		defaults.put( "Actions.GreyInline",     new ColorUIResource( !dark ? 0x7F8B91 : 0x7F8B91 ) );
-
-		// colors for object icons
-		// see https://jetbrains.design/intellij/principles/icons/#noun-icons
-		defaults.put( "Objects.Grey",           new ColorUIResource( 0x9AA7B0 ) );
-		defaults.put( "Objects.Blue",           new ColorUIResource( 0x40B6E0 ) );
-		defaults.put( "Objects.Green",          new ColorUIResource( 0x62B543 ) );
-		defaults.put( "Objects.Yellow",         new ColorUIResource( 0xF4AF3D ) );
-		defaults.put( "Objects.YellowDark",     new ColorUIResource( 0xD9A343 ) );
-		defaults.put( "Objects.Purple",         new ColorUIResource( 0xB99BF8 ) );
-		defaults.put( "Objects.Pink",           new ColorUIResource( 0xF98B9E ) );
-		defaults.put( "Objects.Red",            new ColorUIResource( 0xF26522 ) );
-		defaults.put( "Objects.RedStatus",      new ColorUIResource( 0xE05555 ) );
-		defaults.put( "Objects.GreenAndroid",   new ColorUIResource( 0xA4C639 ) );
-		defaults.put( "Objects.BlackText",      new ColorUIResource( 0x231F20 ) );
+		for( FlatIconColors c : FlatIconColors.values() ) {
+			if( c.light == !dark || c.dark == dark )
+				defaults.put( c.key, new ColorUIResource( c.rgb ) );
+		}
 	}
 
 	private void putAATextInfo( UIDefaults defaults ) {
-		if( SystemInfo.IS_JAVA_9_OR_LATER ) {
+		if( SystemInfo.isJava_9_orLater ) {
 			Object desktopHints = Toolkit.getDefaultToolkit().getDesktopProperty( DESKTOPFONTHINTS );
 			if( desktopHints instanceof Map ) {
 				@SuppressWarnings( "unchecked" )
@@ -410,6 +559,87 @@ public abstract class FlatLaf
 	private void putDefaults( UIDefaults defaults, Object value, String... keys ) {
 		for( String key : keys )
 			defaults.put( key, value );
+	}
+
+	static List<Object> getCustomDefaultsSources() {
+		return customDefaultsSources;
+	}
+
+	/**
+	 * Registers a package where FlatLaf searches for properties files with custom UI defaults.
+	 * <p>
+	 * This can be used to specify application specific UI defaults that override UI values
+	 * of existing themes or to define own UI values used in custom controls.
+	 * <p>
+	 * There may be multiple properties files in that package for multiple themes.
+	 * The properties file name must match the used theme class names.
+	 * E.g. {@code FlatLightLaf.properties} for class {@link FlatLightLaf}
+	 * or {@code FlatDarkLaf.properties} for class {@link FlatDarkLaf}.
+	 * {@code FlatLaf.properties} is loaded first for all themes.
+	 * <p>
+	 * These properties files are loaded after theme and addon properties files
+	 * and can therefore override all UI defaults.
+	 * <p>
+	 * Invoke this method before setting the look and feel.
+	 *
+	 * @param packageName a package name (e.g. "com.myapp.resources")
+	 */
+	public static void registerCustomDefaultsSource( String packageName ) {
+		registerCustomDefaultsSource( packageName, null );
+	}
+
+	public static void unregisterCustomDefaultsSource( String packageName ) {
+		unregisterCustomDefaultsSource( packageName, null );
+	}
+
+	/**
+	 * Registers a package where FlatLaf searches for properties files with custom UI defaults.
+	 * <p>
+	 * See {@link #registerCustomDefaultsSource(String)} for details.
+	 *
+	 * @param packageName a package name (e.g. "com.myapp.resources")
+	 * @param classLoader a class loader used to find resources, or {@code null}
+	 */
+	public static void registerCustomDefaultsSource( String packageName, ClassLoader classLoader ) {
+		if( customDefaultsSources == null )
+			customDefaultsSources = new ArrayList<>();
+		customDefaultsSources.add( packageName );
+		customDefaultsSources.add( classLoader );
+	}
+
+	public static void unregisterCustomDefaultsSource( String packageName, ClassLoader classLoader ) {
+		if( customDefaultsSources == null )
+			return;
+
+		int size = customDefaultsSources.size();
+		for( int i = 0; i < size - 1; i++ ) {
+			Object source = customDefaultsSources.get( i );
+			if( packageName.equals( source ) && customDefaultsSources.get( i + 1 ) == classLoader ) {
+				customDefaultsSources.remove( i + 1 );
+				customDefaultsSources.remove( i );
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Registers a folder where FlatLaf searches for properties files with custom UI defaults.
+	 * <p>
+	 * See {@link #registerCustomDefaultsSource(String)} for details.
+	 *
+	 * @param folder a folder
+	 */
+	public static void registerCustomDefaultsSource( File folder ) {
+		if( customDefaultsSources == null )
+			customDefaultsSources = new ArrayList<>();
+		customDefaultsSources.add( folder );
+	}
+
+	public static void unregisterCustomDefaultsSource( File folder ) {
+		if( customDefaultsSources == null )
+			return;
+
+		customDefaultsSources.remove( folder );
 	}
 
 	private static void reSetLookAndFeel() {
@@ -461,85 +691,75 @@ public abstract class FlatLaf
 	}
 
 	public static boolean isShowMnemonics() {
-		return showMnemonics || !UIManager.getBoolean( "Component.hideMnemonics" );
+		return MnemonicHandler.isShowMnemonics();
 	}
 
-	private static void checkShowMnemonics( KeyEvent e ) {
-		int keyCode = e.getKeyCode();
-		if( SystemInfo.IS_MAC ) {
-			// Ctrl+Alt keys must be pressed on Mac
-			if( keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown() && e.isAltDown(), e.getComponent() );
-		} else {
-			// Alt key must be pressed on Windows and Linux
-			if( keyCode == KeyEvent.VK_ALT )
-				showMnemonics( e.getID() == KeyEvent.KEY_PRESSED, e.getComponent() );
+	public static void showMnemonics( Component c ) {
+		MnemonicHandler.showMnemonics( true, c );
+	}
+
+	public static void hideMnemonics() {
+		MnemonicHandler.showMnemonics( false, null );
+	}
+
+	// do not allow overriding to avoid issues in FlatUIUtils.createSharedUI()
+	@Override
+	public final boolean equals( Object obj ) {
+		return super.equals( obj );
+	}
+
+	// do not allow overriding to avoid issues in FlatUIUtils.createSharedUI()
+	@Override
+	public final int hashCode() {
+		return super.hashCode();
+	}
+
+	//---- class ActiveFont ---------------------------------------------------
+
+	private static class ActiveFont
+		implements ActiveValue
+	{
+		private final float scaleFactor;
+
+		// cache (scaled) font
+		private Font font;
+		private Font lastDefaultFont;
+
+		ActiveFont( float scaleFactor ) {
+			this.scaleFactor = scaleFactor;
 		}
-	}
 
-	private static void showMnemonics( boolean show, Component c ) {
-		if( show == showMnemonics )
-			return;
+		@Override
+		public Object createValue( UIDefaults table ) {
+			Font defaultFont = UIManager.getFont( "defaultFont" );
 
-		showMnemonics = show;
+			if( lastDefaultFont != defaultFont ) {
+				lastDefaultFont = defaultFont;
 
-		// check whether it is necessary to repaint
-		if( !UIManager.getBoolean( "Component.hideMnemonics" ) )
-			return;
-
-		if( show ) {
-			// get root pane
-			JRootPane rootPane = SwingUtilities.getRootPane( c );
-			if( rootPane == null )
-				return;
-
-			// get window
-			Window window = SwingUtilities.getWindowAncestor( rootPane );
-			if( window == null )
-				return;
-
-			// repaint components with mnemonics in focused window
-			repaintMnemonics( window );
-
-			lastShowMnemonicWindow = new WeakReference<>( window );
-		} else if( lastShowMnemonicWindow != null ) {
-			Window window = lastShowMnemonicWindow.get();
-			if( window != null )
-				repaintMnemonics( window );
-
-			lastShowMnemonicWindow = null;
-		}
-	}
-
-	private static void repaintMnemonics( Container container ) {
-		for( Component c : container.getComponents() ) {
-			if( !c.isVisible() )
-				continue;
-
-			if( hasMnemonic( c ) )
-				c.repaint();
-
-			if( c instanceof Container )
-				repaintMnemonics( (Container) c );
-		}
-	}
-
-	private static boolean hasMnemonic( Component c ) {
-		if( c instanceof JLabel && ((JLabel)c).getDisplayedMnemonicIndex() >= 0 )
-			return true;
-
-		if( c instanceof AbstractButton && ((AbstractButton)c).getDisplayedMnemonicIndex() >= 0 )
-			return true;
-
-		if( c instanceof JTabbedPane ) {
-			JTabbedPane tabPane = (JTabbedPane) c;
-			int tabCount = tabPane.getTabCount();
-			for( int i = 0; i < tabCount; i++ ) {
-				if( tabPane.getDisplayedMnemonicIndexAt( i ) >= 0 )
-					return true;
+				if( scaleFactor != 1 ) {
+					// scale font
+					int newFontSize = Math.round( defaultFont.getSize() * scaleFactor );
+					font = new FontUIResource( defaultFont.deriveFont( (float) newFontSize ) );
+				} else {
+					// make sure that font is a UIResource for LaF switching
+					font = (defaultFont instanceof UIResource)
+						? defaultFont
+						: new FontUIResource( defaultFont );
+				}
 			}
-		}
 
-		return false;
+			return font;
+		}
+	}
+
+	//---- class ImageIconUIResource ------------------------------------------
+
+	private static class ImageIconUIResource
+		extends ImageIcon
+		implements UIResource
+	{
+		ImageIconUIResource( Image image ) {
+			super( image );
+		}
 	}
 }

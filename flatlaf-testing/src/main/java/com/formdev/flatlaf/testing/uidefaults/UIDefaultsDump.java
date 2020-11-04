@@ -20,15 +20,24 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -43,6 +52,7 @@ import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
@@ -50,6 +60,13 @@ import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
+import com.formdev.flatlaf.testing.FlatTestLaf;
+import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
+import com.formdev.flatlaf.util.ColorFunctions.HSLIncreaseDecrease;
+import com.formdev.flatlaf.util.DerivedColor;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -66,25 +83,32 @@ public class UIDefaultsDump
 	private JComponent dummyComponent;
 
 	public static void main( String[] args ) {
+		Locale.setDefault( Locale.ENGLISH );
 		System.setProperty( "sun.java2d.uiScale", "1x" );
-		System.setProperty( "flatlaf.uiScale", "1x" );
+		System.setProperty( FlatSystemProperties.UI_SCALE, "1x" );
 
-		File dir = new File( "src/main/resources/com/formdev/flatlaf/testing/uidefaults" );
+		File dir = new File( "dumps/uidefaults" );
 
 		dump( FlatLightLaf.class.getName(), dir );
 		dump( FlatDarkLaf.class.getName(), dir );
 
-//		dump( FlatIntelliJLaf.class.getName(), dir );
-//		dump( FlatDarculaLaf.class.getName(), dir );
-//
+		if( SystemInfo.isWindows ) {
+			dump( FlatIntelliJLaf.class.getName(), dir );
+			dump( FlatDarculaLaf.class.getName(), dir );
+		}
+
+		dump( FlatTestLaf.class.getName(), dir );
+
 //		dump( MyBasicLookAndFeel.class.getName(), dir );
 //		dump( MetalLookAndFeel.class.getName(), dir );
 //		dump( NimbusLookAndFeel.class.getName(), dir );
 //
-//		if( SystemInfo.IS_WINDOWS )
+//		if( SystemInfo.isWindows )
 //			dump( "com.sun.java.swing.plaf.windows.WindowsLookAndFeel", dir );
-//		else if( SystemInfo.IS_MAC )
+//		else if( SystemInfo.isMacOS )
 //			dump( "com.apple.laf.AquaLookAndFeel", dir );
+//		else if( SystemInfo.isLinux )
+//			dump( "com.sun.java.swing.plaf.gtk.GTKLookAndFeel", dir );
 //
 //		dump( "com.jgoodies.looks.plastic.PlasticLookAndFeel", dir );
 //		dump( "com.jgoodies.looks.windows.WindowsLookAndFeel", dir );
@@ -97,6 +121,26 @@ public class UIDefaultsDump
 //			// TODO Auto-generated catch block
 //			ex.printStackTrace();
 //		}
+
+//		dumpIntelliJThemes( dir );
+
+		// dump UI keys
+		UIDefaultsKeysDump.main( new String[0] );
+	}
+
+	@SuppressWarnings( "unused" )
+	private static void dumpIntelliJThemes( File dir ) {
+		dir = new File( dir, "intellijthemes" );
+
+		for( LookAndFeelInfo info : FlatAllIJThemes.INFOS ) {
+			String lafClassName = info.getClassName();
+			String relativeLafClassName = StringUtils.removeLeading( lafClassName, "com.formdev.flatlaf.intellijthemes." );
+			File dir2 = relativeLafClassName.lastIndexOf( '.' ) >= 0
+				? new File( dir, relativeLafClassName.substring( 0, relativeLafClassName.lastIndexOf( '.' ) ).replace( '.', '/' ) )
+				: dir;
+
+			dump( lafClassName, dir2 );
+		}
 	}
 
 	private static void dump( String lookAndFeelClassName, File dir ) {
@@ -107,33 +151,129 @@ public class UIDefaultsDump
 			return;
 		}
 
-		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
-
-		dump( dir, "", lookAndFeel, key -> !key.contains( "InputMap" ) );
-		if( lookAndFeel.getClass() != FlatLightLaf.class )
-			return;
-
-		dump( dir, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
+		dump( dir, null );
 	}
 
-	private static void dump( File dir, String nameSuffix, LookAndFeel lookAndFeel, Predicate<String> keyFilter ) {
+	private static void dump( File dir, String name ) {
+		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+
+		dump( dir, name, "", lookAndFeel, key -> !key.contains( "InputMap" ) );
+
+		if( lookAndFeel.getClass() == FlatLightLaf.class || !(lookAndFeel instanceof FlatLaf) )
+			dump( dir, name, "_InputMap", lookAndFeel, key -> key.contains( "InputMap" ) );
+	}
+
+	private static void dump( File dir, String name, String nameSuffix,
+		LookAndFeel lookAndFeel, Predicate<String> keyFilter )
+	{
 		// dump to string
 		StringWriter stringWriter = new StringWriter( 100000 );
 		new UIDefaultsDump( lookAndFeel ).dump( new PrintWriter( stringWriter ), keyFilter );
 
-		Class<?> lookAndFeelClass = lookAndFeel instanceof MyBasicLookAndFeel
-			? BasicLookAndFeel.class
-			: lookAndFeel.getClass();
-		String osSuffix = (SystemInfo.IS_MAC && lookAndFeel instanceof FlatLaf) ? "-mac" : "";
-		File file = new File( dir, lookAndFeelClass.getSimpleName() + nameSuffix + "_"
-			+ System.getProperty( "java.version" ) + osSuffix + ".txt" );
+		if( name == null ) {
+			name = lookAndFeel instanceof MyBasicLookAndFeel
+				? BasicLookAndFeel.class.getSimpleName()
+				: lookAndFeel.getClass().getSimpleName();
+		}
+		String osSuffix = (SystemInfo.isMacOS && lookAndFeel instanceof FlatLaf)
+			? "-mac"
+			: ((SystemInfo.isLinux && lookAndFeel instanceof FlatLaf)
+				? "-linux"
+				: "");
+		String javaVersion = System.getProperty( "java.version" );
+		File file = new File( dir, name + nameSuffix + "_"
+			+ javaVersion + osSuffix + ".txt" );
+
+		// build differences
+		String content;
+		File origFile = null;
+		if( !osSuffix.isEmpty() && nameSuffix.isEmpty() )
+			origFile = new File( dir, name + nameSuffix + "_" + javaVersion + ".txt" );
+		else if( lookAndFeel instanceof FlatIntelliJLaf && SystemInfo.isWindows )
+			origFile = new File( dir, "FlatLightLaf_" + javaVersion + ".txt" );
+		else if( lookAndFeel instanceof FlatDarculaLaf && SystemInfo.isWindows )
+			origFile = new File( dir, "FlatDarkLaf_" + javaVersion + ".txt" );
+		if( origFile != null ) {
+			try {
+				Map<String, String> defaults1 = parse( new FileReader( origFile ) );
+				Map<String, String> defaults2 = parse( new StringReader( stringWriter.toString() ) );
+
+				content = diff( defaults1, defaults2 );
+			} catch( Exception ex ) {
+				ex.printStackTrace();
+				return;
+			}
+		} else
+			content = stringWriter.toString().replace( "\r", "" );
 
 		// write to file
+		file.getParentFile().mkdirs();
 		try( FileWriter fileWriter = new FileWriter( file ) ) {
-			fileWriter.write( stringWriter.toString().replace( "\r", "" ) );
+			fileWriter.write( content );
 		} catch( IOException ex ) {
 			ex.printStackTrace();
 		}
+	}
+
+	private static String diff( Map<String, String> defaults1, Map<String, String> defaults2 ) {
+		TreeSet<String> keys = new TreeSet<>();
+		keys.addAll( defaults1.keySet() );
+		keys.addAll( defaults2.keySet() );
+
+		StringBuilder buf = new StringBuilder( 10000 );
+
+		// diff header values
+		for( String key : new String[] { "Class", "ID", "Name", "Java", "OS" } )
+			diffValue( buf, key, defaults1.remove( key ), defaults2.remove( key ) );
+
+		// diff values
+		for( String key : keys )
+			diffValue( buf, key, defaults1.get( key ), defaults2.get( key ) );
+
+		return buf.toString();
+	}
+
+	private static void diffValue( StringBuilder buf, String key, String value1, String value2 ) {
+		if( !Objects.equals( value1, value2 ) ) {
+			if( value1 != null )
+				buf.append( "- " ).append( key ).append( value1 ).append( '\n' );
+			if( value2 != null )
+				buf.append( "+ " ).append( key ).append( value2 ).append( '\n' );
+			buf.append( '\n' );
+		}
+	}
+
+	private static Map<String, String> parse( Reader in ) throws IOException {
+		Map<String, String> defaults = new LinkedHashMap<>();
+		try( BufferedReader reader = new BufferedReader( in ) ) {
+			String lastKey = null;
+
+			String line;
+			while( (line = reader.readLine()) != null ) {
+				String trimmedLine = line.trim();
+				if( trimmedLine.isEmpty() || trimmedLine.startsWith( "#" ) ) {
+					lastKey = null;
+					continue;
+				}
+
+				if( Character.isWhitespace( line.charAt( 0 ) ) ) {
+					String value = defaults.get( lastKey );
+					value += '\n' + line;
+					defaults.put( lastKey, value );
+				} else {
+					int sep = line.indexOf( ' ' );
+					if( sep < 0 )
+						throw new IOException( line );
+
+					String key = line.substring( 0, sep );
+					String value = line.substring( sep );
+					defaults.put( key, value );
+
+					lastKey = key;
+				}
+			}
+		}
+		return defaults;
 	}
 
 	private UIDefaultsDump( LookAndFeel lookAndFeel ) {
@@ -243,6 +383,31 @@ public class UIDefaultsDump
 		out.printf( hasAlpha ? "#%08x    %s" : "#%06x    %s",
 			hasAlpha ? color.getRGB() : (color.getRGB() & 0xffffff),
 			dumpClass( color ) );
+
+		if( color instanceof DerivedColor ) {
+			out.print( "   " );
+			DerivedColor derivedColor = (DerivedColor) color;
+			for( ColorFunction function : derivedColor.getFunctions() ) {
+				out.print( " " );
+				dumpColorFunction( out, function );
+			}
+		}
+	}
+
+	private void dumpColorFunction( PrintWriter out, ColorFunction function ) {
+		if( function instanceof HSLIncreaseDecrease ) {
+			HSLIncreaseDecrease func = (HSLIncreaseDecrease) function;
+			String name;
+			switch( func.hslIndex ) {
+				case 2: name = func.increase ? "lighten" : "darken"; break;
+				case 1: name = func.increase ? "saturate" : "desaturate"; break;
+				default: throw new IllegalArgumentException();
+			}
+			out.printf( "%s(%.0f%%%s%s)", name, func.amount,
+				(func.relative ? " relative" : ""),
+				(func.autoInverse ? " autoInverse" : "") );
+		} else
+			throw new IllegalArgumentException( "unknown color function: " + function );
 	}
 
 	private void dumpFont( PrintWriter out, Font font ) {
@@ -323,6 +488,13 @@ public class UIDefaultsDump
 				insets.top, insets.left, insets.bottom, insets.right,
 				border.isBorderOpaque(),
 				dumpClass( border ) );
+
+			if( border instanceof FlatLineBorder ) {
+				FlatLineBorder lineBorder = (FlatLineBorder) border;
+				out.print( "    lineColor=" );
+				dumpColor( out, lineBorder.getLineColor() );
+				out.printf( "    lineThickness=%f", lineBorder.getLineThickness() );
+			}
 		}
 	}
 
@@ -368,7 +540,16 @@ public class UIDefaultsDump
 
 	private void dumpActiveValue( PrintWriter out, ActiveValue value ) {
 		out.print( "[active] " );
-		dumpValue( out, value.createValue( defaults ) );
+		Object realValue = value.createValue( defaults );
+
+		if( realValue instanceof Font && realValue == UIManager.getFont( "defaultFont" ) ) {
+			// dump "$defaultFont" for the default font to make it easier to
+			// compare Windows/Linux dumps with macOS dumps
+			out.print( "$defaultFont" );
+			if( realValue instanceof UIResource )
+				out.print( " [UI]" );
+		} else
+			dumpValue( out, realValue );
 	}
 
 	private String dumpClass( Object value ) {

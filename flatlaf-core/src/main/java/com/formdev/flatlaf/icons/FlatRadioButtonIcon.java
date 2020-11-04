@@ -18,7 +18,6 @@ package com.formdev.flatlaf.icons;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
-import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * Icon for {@link javax.swing.JRadioButton}.
@@ -34,7 +33,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatRadioButtonIcon
 	extends FlatCheckBoxIcon
 {
-	protected final int centerDiameter = FlatUIUtils.getUIInt( "RadioButton.icon.centerDiameter", 8 );
+	protected final int centerDiameter = getUIInt( "RadioButton.icon.centerDiameter", 8, style );
 
 	@Override
 	protected void paintFocusBorder( Graphics2D g2 ) {

@@ -18,13 +18,16 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
+import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -68,6 +71,10 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.cellFocusColor						Color
  * @uiDefault Table.showCellFocusIndicator				boolean
  *
+ * <!-- FlatInputMaps -->
+ *
+ * @uiDefault Table.consistentHomeEndKeyBehavior		boolean
+ *
  * @author Karl Tauber
  */
 public class FlatTableUI
@@ -91,16 +98,6 @@ public class FlatTableUI
 	}
 
 	@Override
-	public void installUI( JComponent c ) {
-		super.installUI( c );
-	}
-
-	@Override
-	public void uninstallUI( JComponent c ) {
-		super.uninstallUI( c );
-	}
-
-	@Override
 	protected void installDefaults() {
 		super.installDefaults();
 
@@ -113,7 +110,7 @@ public class FlatTableUI
 		selectionInactiveBackground = UIManager.getColor( "Table.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Table.selectionInactiveForeground" );
 
-		toggleSelectionColors( table.hasFocus() );
+		toggleSelectionColors();
 
 		int rowHeight = FlatUIUtils.getUIInt( "Table.rowHeight", 16 );
 		if( rowHeight > 0 )
@@ -132,6 +129,12 @@ public class FlatTableUI
 			oldIntercellSpacing = table.getIntercellSpacing();
 			table.setIntercellSpacing( intercellSpacing );
 		}
+
+		// checkbox is non-opaque in FlatLaf and therefore would not paint selection
+		// --> make checkbox renderer opaque (but opaque in Metal or Windows LaF)
+		TableCellRenderer booleanRenderer = table.getDefaultRenderer( Boolean.class );
+		if( booleanRenderer instanceof JCheckBox )
+			((JCheckBox)booleanRenderer).setOpaque( true );
 	}
 
 	@Override
@@ -160,13 +163,17 @@ public class FlatTableUI
 			@Override
 			public void focusGained( FocusEvent e ) {
 				super.focusGained( e );
-				toggleSelectionColors( true );
+				toggleSelectionColors();
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
 				super.focusLost( e );
-				toggleSelectionColors( false );
+
+				// use invokeLater for the case that the window is deactivated
+				EventQueue.invokeLater( () -> {
+					toggleSelectionColors();
+				} );
 			}
 		};
 	}
@@ -180,8 +187,11 @@ public class FlatTableUI
 	 * already used in applications. Then either the inactive colors are not used,
 	 * or the application has to be changed to extend a FlatLaf renderer.
 	 */
-	private void toggleSelectionColors( boolean focused ) {
-		if( focused ) {
+	private void toggleSelectionColors() {
+		if( table == null )
+			return;
+
+		if( FlatUIUtils.isPermanentFocusOwner( table ) ) {
 			if( table.getSelectionBackground() == selectionInactiveBackground )
 				table.setSelectionBackground( selectionBackground );
 			if( table.getSelectionForeground() == selectionInactiveForeground )

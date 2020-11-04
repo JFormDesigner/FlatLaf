@@ -16,6 +16,9 @@
 
 package com.formdev.flatlaf.demo;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -64,6 +67,41 @@ class DataComponentsPanel
 		}
 	}
 
+	private void rowSelectionChanged() {
+		table1.setRowSelectionAllowed( rowSelectionCheckBox.isSelected() );
+	}
+
+	private void columnSelectionChanged() {
+		table1.setColumnSelectionAllowed( columnSelectionCheckBox.isSelected() );
+	}
+
+	private void showHorizontalLinesChanged() {
+		table1.setShowHorizontalLines( showHorizontalLinesCheckBox.isSelected() );
+	}
+
+	private void showVerticalLinesChanged() {
+		table1.setShowVerticalLines( showVerticalLinesCheckBox.isSelected() );
+	}
+
+	private void intercellSpacingChanged() {
+		table1.setIntercellSpacing( intercellSpacingCheckBox.isSelected() ? new Dimension( 1, 1 ) : new Dimension() );
+	}
+
+	private void redGridColorChanged() {
+		table1.setGridColor( redGridColorCheckBox.isSelected() ? Color.red : UIManager.getColor( "Table.gridColor" ) );
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		EventQueue.invokeLater( () -> {
+			showHorizontalLinesChanged();
+			showVerticalLinesChanged();
+			intercellSpacingChanged();
+		} );
+	}
+
 	@SuppressWarnings( { "unchecked", "rawtypes" } )
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -80,24 +118,36 @@ class DataComponentsPanel
 		JLabel tableLabel = new JLabel();
 		JScrollPane scrollPane5 = new JScrollPane();
 		table1 = new JTable();
+		JPanel tableOptionsPanel = new JPanel();
+		showHorizontalLinesCheckBox = new JCheckBox();
+		showVerticalLinesCheckBox = new JCheckBox();
+		intercellSpacingCheckBox = new JCheckBox();
+		redGridColorCheckBox = new JCheckBox();
+		rowSelectionCheckBox = new JCheckBox();
+		columnSelectionCheckBox = new JCheckBox();
 		dndCheckBox = new JCheckBox();
+		JPopupMenu popupMenu2 = new JPopupMenu();
+		JMenuItem menuItem3 = new JMenuItem();
+		JMenuItem menuItem4 = new JMenuItem();
+		JMenuItem menuItem5 = new JMenuItem();
+		JMenuItem menuItem6 = new JMenuItem();
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"hidemode 3",
+			"insets dialog,hidemode 3",
 			// columns
 			"[]" +
-			"[200]" +
-			"[200]",
+			"[200,fill]" +
+			"[200,fill]" +
+			"[fill]",
 			// rows
-			"[]" +
-			"[::200]" +
-			"[::150]" +
-			"[]"));
+			"[150,grow,sizegroup 1,fill]" +
+			"[150,grow,sizegroup 1,fill]" +
+			"[150,grow,sizegroup 1,fill]"));
 
 		//---- listLabel ----
 		listLabel.setText("JList:");
-		add(listLabel, "cell 0 0");
+		add(listLabel, "cell 0 0,aligny top,growy 0");
 
 		//======== scrollPane1 ========
 		{
@@ -126,9 +176,10 @@ class DataComponentsPanel
 				@Override
 				public String getElementAt(int i) { return values[i]; }
 			});
+			list1.setComponentPopupMenu(popupMenu2);
 			scrollPane1.setViewportView(list1);
 		}
-		add(scrollPane1, "cell 1 0,growx");
+		add(scrollPane1, "cell 1 0");
 
 		//======== scrollPane2 ========
 		{
@@ -160,11 +211,11 @@ class DataComponentsPanel
 			list2.setEnabled(false);
 			scrollPane2.setViewportView(list2);
 		}
-		add(scrollPane2, "cell 2 0,growx");
+		add(scrollPane2, "cell 2 0");
 
 		//---- treeLabel ----
 		treeLabel.setText("JTree:");
-		add(treeLabel, "cell 0 1");
+		add(treeLabel, "cell 0 1,aligny top,growy 0");
 
 		//======== scrollPane3 ========
 		{
@@ -198,9 +249,10 @@ class DataComponentsPanel
 						add(node1);
 					}
 				}));
+			tree1.setComponentPopupMenu(popupMenu2);
 			scrollPane3.setViewportView(tree1);
 		}
-		add(scrollPane3, "cell 1 1,growx");
+		add(scrollPane3, "cell 1 1");
 
 		//======== scrollPane4 ========
 		{
@@ -209,11 +261,11 @@ class DataComponentsPanel
 			tree2.setEnabled(false);
 			scrollPane4.setViewportView(tree2);
 		}
-		add(scrollPane4, "cell 2 1,growx");
+		add(scrollPane4, "cell 2 1");
 
 		//---- tableLabel ----
 		tableLabel.setText("JTable:");
-		add(tableLabel, "cell 0 2");
+		add(tableLabel, "cell 0 2,aligny top,growy 0");
 
 		//======== scrollPane5 ========
 		{
@@ -287,15 +339,85 @@ class DataComponentsPanel
 					}))));
 			}
 			table1.setAutoCreateRowSorter(true);
+			table1.setComponentPopupMenu(popupMenu2);
 			scrollPane5.setViewportView(table1);
 		}
-		add(scrollPane5, "cell 1 2 2 1,growx,width 300");
+		add(scrollPane5, "cell 1 2 2 1,width 300");
 
-		//---- dndCheckBox ----
-		dndCheckBox.setText("enable drag and drop");
-		dndCheckBox.setMnemonic('D');
-		dndCheckBox.addActionListener(e -> dndChanged());
-		add(dndCheckBox, "cell 0 3 3 1");
+		//======== tableOptionsPanel ========
+		{
+			tableOptionsPanel.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
+				// columns
+				"[]",
+				// rows
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0" +
+				"[]0"));
+
+			//---- showHorizontalLinesCheckBox ----
+			showHorizontalLinesCheckBox.setText("show horizontal lines");
+			showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
+			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 0");
+
+			//---- showVerticalLinesCheckBox ----
+			showVerticalLinesCheckBox.setText("show vertical lines");
+			showVerticalLinesCheckBox.addActionListener(e -> showVerticalLinesChanged());
+			tableOptionsPanel.add(showVerticalLinesCheckBox, "cell 0 1");
+
+			//---- intercellSpacingCheckBox ----
+			intercellSpacingCheckBox.setText("intercell spacing");
+			intercellSpacingCheckBox.addActionListener(e -> intercellSpacingChanged());
+			tableOptionsPanel.add(intercellSpacingCheckBox, "cell 0 2");
+
+			//---- redGridColorCheckBox ----
+			redGridColorCheckBox.setText("red grid color");
+			redGridColorCheckBox.addActionListener(e -> redGridColorChanged());
+			tableOptionsPanel.add(redGridColorCheckBox, "cell 0 3");
+
+			//---- rowSelectionCheckBox ----
+			rowSelectionCheckBox.setText("row selection");
+			rowSelectionCheckBox.setSelected(true);
+			rowSelectionCheckBox.addActionListener(e -> rowSelectionChanged());
+			tableOptionsPanel.add(rowSelectionCheckBox, "cell 0 4");
+
+			//---- columnSelectionCheckBox ----
+			columnSelectionCheckBox.setText("column selection");
+			columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
+			tableOptionsPanel.add(columnSelectionCheckBox, "cell 0 5");
+
+			//---- dndCheckBox ----
+			dndCheckBox.setText("enable drag and drop");
+			dndCheckBox.setMnemonic('D');
+			dndCheckBox.addActionListener(e -> dndChanged());
+			tableOptionsPanel.add(dndCheckBox, "cell 0 6");
+		}
+		add(tableOptionsPanel, "cell 3 2");
+
+		//======== popupMenu2 ========
+		{
+
+			//---- menuItem3 ----
+			menuItem3.setText("Some Action");
+			popupMenu2.add(menuItem3);
+
+			//---- menuItem4 ----
+			menuItem4.setText("More Action");
+			popupMenu2.add(menuItem4);
+			popupMenu2.addSeparator();
+
+			//---- menuItem5 ----
+			menuItem5.setText("No Action");
+			popupMenu2.add(menuItem5);
+
+			//---- menuItem6 ----
+			menuItem6.setText("Noop Action");
+			popupMenu2.add(menuItem6);
+		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		((JComboBox)((DefaultCellEditor)table1.getColumnModel().getColumn( 3 ).getCellEditor()).getComponent()).setEditable( true );
@@ -307,6 +429,12 @@ class DataComponentsPanel
 	private JTree tree1;
 	private JTree tree2;
 	private JTable table1;
+	private JCheckBox showHorizontalLinesCheckBox;
+	private JCheckBox showVerticalLinesCheckBox;
+	private JCheckBox intercellSpacingCheckBox;
+	private JCheckBox redGridColorCheckBox;
+	private JCheckBox rowSelectionCheckBox;
+	private JCheckBox columnSelectionCheckBox;
 	private JCheckBox dndCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 

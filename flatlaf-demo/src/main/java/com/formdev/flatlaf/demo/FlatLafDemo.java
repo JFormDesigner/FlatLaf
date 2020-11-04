@@ -16,7 +16,14 @@
 
 package com.formdev.flatlaf.demo;
 
+import java.awt.Dimension;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatInspector;
+import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * @author Karl Tauber
@@ -26,15 +33,35 @@ public class FlatLafDemo
 	static final String PREFS_ROOT_PATH = "/flatlaf-demo";
 	static final String KEY_TAB = "tab";
 
+	static boolean screenshotsMode = Boolean.parseBoolean( System.getProperty( "flatlaf.demo.screenshotsMode" ) );
+
 	public static void main( String[] args ) {
+		// on macOS enable screen menu bar
+		if( SystemInfo.isMacOS && System.getProperty( "apple.laf.useScreenMenuBar" ) == null )
+			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
+
 		SwingUtilities.invokeLater( () -> {
 			DemoPrefs.init( PREFS_ROOT_PATH );
+
+			// enable window decorations
+			JFrame.setDefaultLookAndFeelDecorated( true );
+			JDialog.setDefaultLookAndFeelDecorated( true );
+
+			// application specific UI defaults
+			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.demo" );
 
 			// set look and feel
 			DemoPrefs.initLaf( args );
 
+			// install inspectors
+			FlatInspector.install( "ctrl shift alt X" );
+			FlatUIDefaultsInspector.install( "ctrl shift alt Y" );
+
 			// create frame
 			DemoFrame frame = new DemoFrame();
+
+			if( FlatLafDemo.screenshotsMode )
+				frame.setPreferredSize( new Dimension( 1280, 620 ) );
 
 			// show frame
 			frame.pack();

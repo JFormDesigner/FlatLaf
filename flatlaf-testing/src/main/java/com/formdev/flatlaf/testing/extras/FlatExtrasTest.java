@@ -39,6 +39,29 @@ public class FlatExtrasTest
 
 		triStateLabel1.setText( triStateCheckBox1.getState().toString() );
 		triStateLabel2.setText( triStateCheckBox2.getState().toString() );
+
+		addSVGIcon( "actions/copy.svg" );
+		addSVGIcon( "actions/colors.svg" );
+		addSVGIcon( "actions/execute.svg" );
+		addSVGIcon( "actions/suspend.svg" );
+		addSVGIcon( "actions/intentionBulb.svg" );
+		addSVGIcon( "actions/quickfixOffBulb.svg" );
+
+		addSVGIcon( "objects/abstractClass.svg" );
+		addSVGIcon( "objects/abstractMethod.svg" );
+		addSVGIcon( "objects/annotationtype.svg" );
+		addSVGIcon( "objects/annotationtype.svg" );
+		addSVGIcon( "objects/css.svg" );
+		addSVGIcon( "objects/javaScript.svg" );
+		addSVGIcon( "objects/xhtml.svg" );
+
+		addSVGIcon( "errorDialog.svg" );
+		addSVGIcon( "informationDialog.svg" );
+		addSVGIcon( "warningDialog.svg" );
+	}
+
+	private void addSVGIcon( String name ) {
+		svgIconsPanel.add( new JLabel( new FlatSVGIcon( "com/formdev/flatlaf/demo/extras/svg/" + name ) ) );
 	}
 
 	private void triStateCheckBox1Changed() {
@@ -56,6 +79,9 @@ public class FlatExtrasTest
 		triStateLabel1 = new JLabel();
 		triStateCheckBox2 = new TriStateCheckBox();
 		triStateLabel2 = new JLabel();
+		label2 = new JLabel();
+		svgIconsPanel = new JPanel();
+		label3 = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -65,6 +91,8 @@ public class FlatExtrasTest
 			"[]" +
 			"[left]",
 			// rows
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]"));
 
@@ -79,7 +107,8 @@ public class FlatExtrasTest
 
 		//---- triStateLabel1 ----
 		triStateLabel1.setText("text");
-		add(triStateLabel1, "cell 2 0");
+		triStateLabel1.setEnabled(false);
+		add(triStateLabel1, "cell 2 0,gapx 30");
 
 		//---- triStateCheckBox2 ----
 		triStateCheckBox2.setText("third state disabled");
@@ -89,7 +118,27 @@ public class FlatExtrasTest
 
 		//---- triStateLabel2 ----
 		triStateLabel2.setText("text");
-		add(triStateLabel2, "cell 2 1");
+		triStateLabel2.setEnabled(false);
+		add(triStateLabel2, "cell 2 1,gapx 30");
+
+		//---- label2 ----
+		label2.setText("SVG Icons:");
+		add(label2, "cell 0 2");
+
+		//======== svgIconsPanel ========
+		{
+			svgIconsPanel.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
+				// columns
+				"[fill]",
+				// rows
+				"[grow,center]"));
+		}
+		add(svgIconsPanel, "cell 1 2 2 1");
+
+		//---- label3 ----
+		label3.setText("The icons may change colors when switching to another theme.");
+		add(label3, "cell 1 3 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -99,5 +148,8 @@ public class FlatExtrasTest
 	private JLabel triStateLabel1;
 	private TriStateCheckBox triStateCheckBox2;
 	private JLabel triStateLabel2;
+	private JLabel label2;
+	private JPanel svgIconsPanel;
+	private JLabel label3;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

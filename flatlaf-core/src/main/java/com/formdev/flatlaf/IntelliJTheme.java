@@ -86,7 +86,7 @@ public class IntelliJTheme
 	 * Using a buffered input stream is not necessary.
 	 */
 	public static FlatLaf createLaf( InputStream in )
-		throws IOException, ParseException
+		throws IOException
 	{
 		return createLaf( new IntelliJTheme( in ) );
 	}
@@ -106,11 +106,13 @@ public class IntelliJTheme
 	 */
 	@SuppressWarnings( "unchecked" )
 	public IntelliJTheme( InputStream in )
-		throws IOException, ParseException
+		throws IOException
 	{
 		Map<String, Object> json;
 	    try( Reader reader = new InputStreamReader( in, StandardCharsets.UTF_8 ) ) {
 	    		json = (Map<String, Object>) Json.parse( reader );
+		} catch( ParseException ex ) {
+			throw new IOException( ex.getMessage(), ex );
 		}
 
 	    name = (String) json.get( "name" );
@@ -132,6 +134,8 @@ public class IntelliJTheme
 		defaults.put( "Button.paintShadow", true );
 		defaults.put( "Button.shadowWidth", dark ? 2 : 1 );
 
+		Map<Object, Object> themeSpecificDefaults = removeThemeSpecificDefaults( defaults );
+
 		loadNamedColors( defaults );
 
 		// convert Json "ui" structure to UI defaults
@@ -143,6 +147,15 @@ public class IntelliJTheme
 		applyColorPalette( defaults );
 		applyCheckBoxColors( defaults );
 
+		// copy values
+		for( Map.Entry<String, String> e : uiKeyCopying.entrySet() )
+			defaults.put( e.getKey(), defaults.get( e.getValue() ) );
+
+		// IDEA does not paint button background if disabled, but FlatLaf does
+		Object panelBackground = defaults.get( "Panel.background" );
+		defaults.put( "Button.disabledBackground", panelBackground );
+		defaults.put( "ToggleButton.disabledBackground", panelBackground );
+
 		// IDEA uses a SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
 		Object helpButtonBackground = defaults.get( "Button.startBackground" );
 		Object helpButtonBorderColor = defaults.get( "Button.startBorderColor" );
@@ -152,7 +165,7 @@ public class IntelliJTheme
 			helpButtonBorderColor = defaults.get( "Button.borderColor" );
 		defaults.put( "HelpButton.background", helpButtonBackground );
 		defaults.put( "HelpButton.borderColor", helpButtonBorderColor );
-		defaults.put( "HelpButton.disabledBackground", defaults.get( "Panel.background" ) );
+		defaults.put( "HelpButton.disabledBackground", panelBackground );
 		defaults.put( "HelpButton.disabledBorderColor", defaults.get( "Button.disabledBorderColor" ) );
 		defaults.put( "HelpButton.focusedBorderColor", defaults.get( "Button.focusedBorderColor" ) );
 		defaults.put( "HelpButton.focusedBackground", defaults.get( "Button.focusedBackground" ) );
@@ -183,6 +196,42 @@ public class IntelliJTheme
 			if( !uiKeys.contains( "Spinner.background" ) )
 				defaults.put( "Spinner.background", textFieldBackground );
 		}
+
+		// fix ToggleButton
+		if( !uiKeys.contains( "ToggleButton.startBackground" ) && !uiKeys.contains( "*.startBackground" ) )
+			defaults.put( "ToggleButton.startBackground", defaults.get( "Button.startBackground" ) );
+		if( !uiKeys.contains( "ToggleButton.endBackground" ) && !uiKeys.contains( "*.endBackground" ) )
+			defaults.put( "ToggleButton.endBackground", defaults.get( "Button.endBackground" ) );
+		if( !uiKeys.contains( "ToggleButton.foreground" ) && uiKeys.contains( "Button.foreground" ) )
+			defaults.put( "ToggleButton.foreground", defaults.get( "Button.foreground" ) );
+
+		// limit tree row height
+		int rowHeight = defaults.getInt( "Tree.rowHeight" );
+		if( rowHeight > 22 )
+			defaults.put( "Tree.rowHeight", 22 );
+
+		// apply theme specific UI defaults at the end to allow overwriting
+		defaults.putAll( themeSpecificDefaults );
+	}
+
+	private Map<Object, Object> removeThemeSpecificDefaults( UIDefaults defaults ) {
+		// search for theme specific UI defaults keys
+		ArrayList<String> themeSpecificKeys = new ArrayList<>();
+		for( Object key : defaults.keySet() ) {
+			if( key instanceof String && ((String)key).startsWith( "[" ) )
+				themeSpecificKeys.add( (String) key );
+		}
+
+		// remove theme specific UI defaults and remember only those for current theme
+		Map<Object, Object> themeSpecificDefaults = new HashMap<>();
+		String currentThemePrefix = '[' + name.replace( ' ', '_' ) + ']';
+		for( String key : themeSpecificKeys ) {
+			Object value = defaults.remove( key );
+			if( key.startsWith( currentThemePrefix ) )
+				themeSpecificDefaults.put( key.substring( currentThemePrefix.length() ), value );
+		}
+
+		return themeSpecificDefaults;
 	}
 
 	/**
@@ -200,7 +249,7 @@ public class IntelliJTheme
 			if( color != null ) {
 				String key = e.getKey();
 				namedColors.put( key, color );
-				defaults.put( "ColorPalette." + e.getKey(), color );
+				defaults.put( "ColorPalette." + key, color );
 			}
 		}
 	}
@@ -214,7 +263,15 @@ public class IntelliJTheme
 			for( Map.Entry<String, Object> e : ((Map<String, Object>)value).entrySet() )
 				apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache, uiKeys );
 		} else {
+			if( "".equals( value ) )
+				return; // ignore empty value
+
 			uiKeys.add( key );
+
+			// fix ComboBox size and Spinner border in all Material UI Lite themes
+			boolean isMaterialUILite = author.equals( "Mallowigi" );
+			if( isMaterialUILite && (key.equals( "ComboBox.padding" ) || key.equals( "Spinner.border" )) )
+				return; // ignore
 
 			// map keys
 			key = uiKeyMapping.getOrDefault( key, key );
@@ -270,7 +327,7 @@ public class IntelliJTheme
 						// (e.g. set ComboBox.buttonEditableBackground to *.background
 						// because it is mapped from ComboBox.ArrowButton.background)
 						String km = uiKeyInverseMapping.getOrDefault( k, (String) k );
-						if( km.endsWith( tail ) && !noWildcardReplace.contains( k ) && !((String)k).startsWith( "CheckBox.icon." ) )
+						if( km.endsWith( tail ) && !((String)k).startsWith( "CheckBox.icon." ) )
 							defaults.put( k, uiValue );
 					}
 				}
@@ -362,6 +419,10 @@ public class IntelliJTheme
 
 			String newKey = checkboxKeyMapping.get( key );
 			if( newKey != null ) {
+				String checkBoxIconPrefix = "CheckBox.icon.";
+				if( !dark && newKey.startsWith( checkBoxIconPrefix ) )
+					newKey = "CheckBox.icon[filled].".concat( newKey.substring( checkBoxIconPrefix.length() ) );
+
 				ColorUIResource color = toColor( (String) value );
 				if( color != null ) {
 					defaults.put( newKey, color );
@@ -394,17 +455,24 @@ public class IntelliJTheme
 
 		// remove hover and pressed colors
 		if( checkboxModified ) {
+			defaults.remove( "CheckBox.icon.focusWidth" );
 			defaults.remove( "CheckBox.icon.hoverBorderColor" );
 			defaults.remove( "CheckBox.icon.focusedBackground" );
 			defaults.remove( "CheckBox.icon.hoverBackground" );
 			defaults.remove( "CheckBox.icon.pressedBackground" );
+			defaults.remove( "CheckBox.icon.selectedFocusedBackground" );
 			defaults.remove( "CheckBox.icon.selectedHoverBackground" );
 			defaults.remove( "CheckBox.icon.selectedPressedBackground" );
-		}
 
-		// copy values
-		for( Map.Entry<String, String> e : uiKeyCopying.entrySet() )
-			defaults.put( e.getKey(), defaults.get( e.getValue() ) );
+			defaults.remove( "CheckBox.icon[filled].focusWidth" );
+			defaults.remove( "CheckBox.icon[filled].hoverBorderColor" );
+			defaults.remove( "CheckBox.icon[filled].focusedBackground" );
+			defaults.remove( "CheckBox.icon[filled].hoverBackground" );
+			defaults.remove( "CheckBox.icon[filled].pressedBackground" );
+			defaults.remove( "CheckBox.icon[filled].selectedFocusedBackground" );
+			defaults.remove( "CheckBox.icon[filled].selectedHoverBackground" );
+			defaults.remove( "CheckBox.icon[filled].selectedPressedBackground" );
+		}
 	}
 
 	private static Map<String, String> uiKeyMapping = new HashMap<>();
@@ -412,7 +480,6 @@ public class IntelliJTheme
 	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
 	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
 	private static Map<String, String> checkboxDuplicateColors = new HashMap<>();
-	private static Set<String> noWildcardReplace = new HashSet<>();
 
 	static {
 		// ComboBox
@@ -423,14 +490,35 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ComboBox.ArrowButton.iconColor",             "ComboBox.buttonArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.nonEditableBackground", "ComboBox.buttonBackground" );
 
+		// Component
+		uiKeyMapping.put( "Component.inactiveErrorFocusColor",   "Component.error.borderColor" );
+		uiKeyMapping.put( "Component.errorFocusColor",           "Component.error.focusedBorderColor" );
+		uiKeyMapping.put( "Component.inactiveWarningFocusColor", "Component.warning.borderColor" );
+		uiKeyMapping.put( "Component.warningFocusColor",         "Component.warning.focusedBorderColor" );
+
 		// Link
 		uiKeyMapping.put( "Link.activeForeground", "Component.linkColor" );
+
+		// Menu
+		uiKeyMapping.put( "Menu.border",                "Menu.margin" );
+		uiKeyMapping.put( "MenuItem.border",            "MenuItem.margin" );
+		uiKeyCopying.put( "CheckBoxMenuItem.margin",    "MenuItem.margin" );
+		uiKeyCopying.put( "RadioButtonMenuItem.margin", "MenuItem.margin" );
+		uiKeyMapping.put( "PopupMenu.border",           "PopupMenu.borderInsets" );
+
+		// IDEA uses List.selectionBackground also for menu selection
+		uiKeyCopying.put( "Menu.selectionBackground",                "List.selectionBackground" );
+		uiKeyCopying.put( "MenuItem.selectionBackground",            "List.selectionBackground" );
+		uiKeyCopying.put( "CheckBoxMenuItem.selectionBackground",    "List.selectionBackground" );
+		uiKeyCopying.put( "RadioButtonMenuItem.selectionBackground", "List.selectionBackground" );
 
 		// ProgressBar
 		uiKeyMapping.put( "ProgressBar.background",    "" ); // ignore
 		uiKeyMapping.put( "ProgressBar.foreground",    "" ); // ignore
 		uiKeyMapping.put( "ProgressBar.trackColor",    "ProgressBar.background" );
 		uiKeyMapping.put( "ProgressBar.progressColor", "ProgressBar.foreground" );
+		uiKeyCopying.put( "ProgressBar.selectionForeground", "ProgressBar.background" );
+		uiKeyCopying.put( "ProgressBar.selectionBackground", "ProgressBar.foreground" );
 
 		// ScrollBar
 		uiKeyMapping.put( "ScrollBar.trackColor", "ScrollBar.track" );
@@ -441,6 +529,11 @@ public class IntelliJTheme
 
 		// Slider
 		uiKeyMapping.put( "Slider.trackWidth", "" ); // ignore (used in Material Theme UI Lite)
+
+		// TitlePane
+		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );
+		uiKeyMapping.put( "TitlePane.infoForeground",         "TitlePane.foreground" );
+		uiKeyMapping.put( "TitlePane.inactiveInfoForeground", "TitlePane.inactiveForeground" );
 
 		for( Map.Entry<String, String> e : uiKeyMapping.entrySet() )
 			uiKeyInverseMapping.put( e.getValue(), e.getKey() );
@@ -456,7 +549,7 @@ public class IntelliJTheme
 		checkboxKeyMapping.put( "Checkbox.Border.Default",      "CheckBox.icon.borderColor" );
 		checkboxKeyMapping.put( "Checkbox.Border.Disabled",     "CheckBox.icon.disabledBorderColor" );
 		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Default",  "CheckBox.icon.focusedBorderColor" );
-		checkboxKeyMapping.put( "Checkbox.Focus.Wide",          "CheckBox.icon.focusedColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Wide",          "CheckBox.icon.focusColor" );
 		checkboxKeyMapping.put( "Checkbox.Foreground.Disabled", "CheckBox.icon.disabledCheckmarkColor" );
 		checkboxKeyMapping.put( "Checkbox.Background.Selected", "CheckBox.icon.selectedBackground" );
 		checkboxKeyMapping.put( "Checkbox.Border.Selected",     "CheckBox.icon.selectedBorderColor" );
@@ -470,16 +563,6 @@ public class IntelliJTheme
 		Map.Entry<String, String>[] entries = checkboxDuplicateColors.entrySet().toArray( new Map.Entry[checkboxDuplicateColors.size()] );
 		for( Map.Entry<String, String> e : entries )
 			checkboxDuplicateColors.put( e.getValue(), e.getKey() );
-
-		// because FlatLaf uses Button.background and Button.borderColor,
-		// but IDEA uses Button.startBackground and Button.startBorderColor,
-		// our default button background and border colors may be replaced by
-		// wildcard *.background and *.borderColor colors
-		noWildcardReplace.add( "Button.background" );
-		noWildcardReplace.add( "Button.borderColor" );
-		noWildcardReplace.add( "Button.default.background" );
-		noWildcardReplace.add( "Button.default.borderColor" );
-		noWildcardReplace.add( "ToggleButton.background" );
 	}
 
 	//---- class ThemeLaf -----------------------------------------------------
@@ -513,19 +596,12 @@ public class IntelliJTheme
 		}
 
 		@Override
-		public UIDefaults getDefaults() {
-			UIDefaults defaults = super.getDefaults();
+		void applyAdditionalDefaults( UIDefaults defaults ) {
 			theme.applyProperties( defaults );
-			super.invokePostInitialization( defaults );
-			return defaults;
 		}
 
 		@Override
-		void invokePostInitialization( UIDefaults defaults ) {
-		}
-
-		@Override
-		ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
+		protected ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
 			ArrayList<Class<?>> lafClasses = new ArrayList<>();
 			lafClasses.add( FlatLaf.class );
 			lafClasses.add( theme.dark ? FlatDarkLaf.class : FlatLightLaf.class );

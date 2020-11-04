@@ -84,6 +84,8 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 public class FlatInternalFrameUI
 	extends BasicInternalFrameUI
 {
+	protected FlatWindowResizer windowResizer;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatInternalFrameUI( (JInternalFrame) c );
 	}
@@ -97,11 +99,27 @@ public class FlatInternalFrameUI
 		super.installUI( c );
 
 		LookAndFeel.installProperty( frame, "opaque", false );
+
+		windowResizer = createWindowResizer();
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		if( windowResizer != null ) {
+			windowResizer.uninstall();
+			windowResizer = null;
+		}
 	}
 
 	@Override
 	protected JComponent createNorthPane( JInternalFrame w ) {
 		return new FlatInternalFrameTitlePane( w );
+	}
+
+	protected FlatWindowResizer createWindowResizer() {
+		return new FlatWindowResizer.InternalFrameResizer( frame, this::getDesktopManager );
 	}
 
 	//---- class FlatInternalFrameBorder --------------------------------------
@@ -112,6 +130,16 @@ public class FlatInternalFrameUI
 		private final Color activeBorderColor = UIManager.getColor( "InternalFrame.activeBorderColor" );
 		private final Color inactiveBorderColor = UIManager.getColor( "InternalFrame.inactiveBorderColor" );
 		private final int borderLineWidth = FlatUIUtils.getUIInt( "InternalFrame.borderLineWidth", 1 );
+		private final boolean dropShadowPainted = UIManager.getBoolean( "InternalFrame.dropShadowPainted" );
+
+		private final FlatDropShadowBorder activeDropShadowBorder = new FlatDropShadowBorder(
+			UIManager.getColor( "InternalFrame.activeDropShadowColor" ),
+			UIManager.getInsets( "InternalFrame.activeDropShadowInsets" ),
+			FlatUIUtils.getUIFloat( "InternalFrame.activeDropShadowOpacity", 0.5f ) );
+		private final FlatDropShadowBorder inactiveDropShadowBorder = new FlatDropShadowBorder(
+			UIManager.getColor( "InternalFrame.inactiveDropShadowColor" ),
+			UIManager.getInsets( "InternalFrame.inactiveDropShadowInsets" ),
+			FlatUIUtils.getUIFloat( "InternalFrame.inactiveDropShadowOpacity", 0.5f ) );
 
 		public FlatInternalFrameBorder() {
 			super( UIManager.getInsets( "InternalFrame.borderMargins" ) );
@@ -137,16 +165,31 @@ public class FlatInternalFrameUI
 			Insets insets = getBorderInsets( c );
 			float lineWidth = scale( (float) borderLineWidth );
 
+			float rx = x + insets.left - lineWidth;
+			float ry = y + insets.top - lineWidth;
+			float rwidth = width - insets.left - insets.right + (lineWidth * 2);
+			float rheight = height - insets.top - insets.bottom + (lineWidth * 2);
+
 			Graphics2D g2 = (Graphics2D) g.create();
 			try {
 				FlatUIUtils.setRenderingHints( g2 );
 				g2.setColor( f.isSelected() ? activeBorderColor : inactiveBorderColor );
-				g2.fill( FlatUIUtils.createRectangle(
-					x + insets.left - lineWidth,
-					y + insets.top - lineWidth,
-					width - insets.left - insets.right + (lineWidth * 2),
-					height - insets.top - insets.bottom + (lineWidth * 2),
-					lineWidth ) );
+
+				// paint drop shadow
+				if( dropShadowPainted ) {
+					FlatDropShadowBorder dropShadowBorder = f.isSelected()
+						? activeDropShadowBorder : inactiveDropShadowBorder;
+
+					Insets dropShadowInsets = dropShadowBorder.getBorderInsets();
+					dropShadowBorder.paintBorder( c, g2,
+						(int) rx - dropShadowInsets.left,
+						(int) ry - dropShadowInsets.top,
+						(int) rwidth + dropShadowInsets.left + dropShadowInsets.right,
+						(int) rheight + dropShadowInsets.top + dropShadowInsets.bottom );
+				}
+
+				// paint border
+				g2.fill( FlatUIUtils.createRectangle( rx, ry, rwidth, rheight, lineWidth ) );
 			} finally {
 				g2.dispose();
 			}

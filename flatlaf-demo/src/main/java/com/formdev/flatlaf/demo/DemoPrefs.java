@@ -16,13 +16,16 @@
 
 package com.formdev.flatlaf.demo;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.prefs.Preferences;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel;
+import com.formdev.flatlaf.util.StringUtils;
 
 /**
  * @author Karl Tauber
@@ -30,12 +33,12 @@ import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel;
 public class DemoPrefs
 {
 	public static final String KEY_LAF = "laf";
-	public static final String KEY_LAF_INTELLIJ_THEME = "lafIntelliJTheme";
+	public static final String KEY_LAF_THEME = "lafTheme";
 
 	public static final String RESOURCE_PREFIX = "res:";
 	public static final String FILE_PREFIX = "file:";
 
-	public static final String INTELLIJ_THEME_UI_KEY = "__FlatLaf.demo.intelliJTheme";
+	public static final String THEME_UI_KEY = "__FlatLaf.demo.theme";
 
 	private static Preferences state;
 
@@ -55,20 +58,31 @@ public class DemoPrefs
 			else {
 				String lafClassName = state.get( KEY_LAF, FlatLightLaf.class.getName() );
 				if( IntelliJTheme.ThemeLaf.class.getName().equals( lafClassName ) ) {
-					String intelliJTheme = state.get( KEY_LAF_INTELLIJ_THEME, "" );
-					if( intelliJTheme.startsWith( RESOURCE_PREFIX ) )
-						IntelliJTheme.install( IJThemesPanel.class.getResourceAsStream( intelliJTheme.substring( RESOURCE_PREFIX.length() ) ) );
-					else if( intelliJTheme.startsWith( FILE_PREFIX ) )
-					    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( intelliJTheme.substring( FILE_PREFIX.length() ) ) ) );
+					String theme = state.get( KEY_LAF_THEME, "" );
+					if( theme.startsWith( RESOURCE_PREFIX ) )
+						IntelliJTheme.install( IJThemesPanel.class.getResourceAsStream( IJThemesPanel.THEMES_PACKAGE + theme.substring( RESOURCE_PREFIX.length() ) ) );
+					else if( theme.startsWith( FILE_PREFIX ) )
+					    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( theme.substring( FILE_PREFIX.length() ) ) ) );
 					else
 						FlatLightLaf.install();
 
-					if( !intelliJTheme.isEmpty() )
-						UIManager.getLookAndFeelDefaults().put( INTELLIJ_THEME_UI_KEY, intelliJTheme );
+					if( !theme.isEmpty() )
+						UIManager.getLookAndFeelDefaults().put( THEME_UI_KEY, theme );
+				} else if( FlatPropertiesLaf.class.getName().equals( lafClassName ) ) {
+					String theme = state.get( KEY_LAF_THEME, "" );
+					if( theme.startsWith( FILE_PREFIX ) ) {
+						File themeFile = new File( theme.substring( FILE_PREFIX.length() ) );
+						String themeName = StringUtils.removeTrailing( themeFile.getName(), ".properties" );
+						FlatLaf.install( new FlatPropertiesLaf( themeName, themeFile ) );
+					} else
+						FlatLightLaf.install();
+
+					if( !theme.isEmpty() )
+						UIManager.getLookAndFeelDefaults().put( THEME_UI_KEY, theme );
 				} else
 					UIManager.setLookAndFeel( lafClassName );
 			}
-		} catch( Exception ex ) {
+		} catch( Throwable ex ) {
 			ex.printStackTrace();
 
 			// fallback

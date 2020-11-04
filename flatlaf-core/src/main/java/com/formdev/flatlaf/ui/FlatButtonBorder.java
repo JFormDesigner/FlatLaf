@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
@@ -43,6 +42,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.default.hoverBorderColor	Color	optional
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
+ * @uiDefault Button.borderWidth				int
  * @uiDefault Button.default.borderWidth		int
  * @uiDefault Button.toolbar.margin				Insets
  * @uiDefault Button.toolbar.spacingInsets		Insets
@@ -63,6 +63,7 @@ public class FlatButtonBorder
 	protected final Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
 	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
+	protected final int borderWidth = UIManager.getInt( "Button.borderWidth" );
 	protected final int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
 	protected final Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
 	protected final Insets toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
@@ -80,6 +81,11 @@ public class FlatButtonBorder
 	@Override
 	protected Color getFocusColor( Component c ) {
 		return FlatButtonUI.isDefaultButton( c ) ? defaultFocusColor : super.getFocusColor( c );
+	}
+
+	@Override
+	protected boolean isFocused( Component c ) {
+		return FlatButtonUI.isFocusPainted( c ) && super.isFocused( c );
 	}
 
 	@Override
@@ -115,8 +121,8 @@ public class FlatButtonBorder
 		} else {
 			insets = super.getBorderInsets( c, insets );
 
-			// use smaller left and right insets for icon-only buttons (so that they are square)
-			if( FlatButtonUI.isIconOnlyButton( c ) && ((AbstractButton)c).getMargin() instanceof UIResource )
+			// use smaller left and right insets for icon-only or single-character buttons (so that they are square)
+			if( FlatButtonUI.isIconOnlyOrSingleCharacterButton( c ) && ((AbstractButton)c).getMargin() instanceof UIResource )
 				insets.left = insets.right = Math.min( insets.top, insets.bottom );
 		}
 
@@ -124,17 +130,24 @@ public class FlatButtonBorder
 	}
 
 	@Override
-	protected float getFocusWidth( Component c ) {
-		return FlatToggleButtonUI.isTabButton( c ) ? 0 : super.getFocusWidth(c );
+	protected int getFocusWidth( Component c ) {
+		return FlatToggleButtonUI.isTabButton( c ) ? 0 : super.getFocusWidth( c );
 	}
 
 	@Override
-	protected float getBorderWidth( Component c ) {
-		return FlatButtonUI.isDefaultButton( c ) ? scale( (float) defaultBorderWidth ) : super.getBorderWidth( c );
+	protected int getBorderWidth( Component c ) {
+		return FlatButtonUI.isDefaultButton( c ) ? defaultBorderWidth : borderWidth;
 	}
 
 	@Override
-	protected float getArc( Component c ) {
-		return FlatButtonUI.isSquareButton( c ) ? 0 : scale( (float) arc );
+	protected int getArc( Component c ) {
+		if( isCellEditor( c ) )
+			return 0;
+
+		switch( FlatButtonUI.getButtonType( c ) ) {
+			case FlatButtonUI.TYPE_SQUARE: return 0;
+			case FlatButtonUI.TYPE_ROUND_RECT: return Short.MAX_VALUE;
+			default: return arc;
+		}
 	}
 }

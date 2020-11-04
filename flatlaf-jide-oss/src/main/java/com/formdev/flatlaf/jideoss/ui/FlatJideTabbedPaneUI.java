@@ -216,7 +216,7 @@ public class FlatJideTabbedPaneUI
 		g.setColor( enabled && _tabPane.isEnabledAt( tabIndex ) &&
 				(_indexMouseOver == tabIndex || (_closeButtons != null && ((JideTabbedPane.NoFocusButton)_closeButtons[tabIndex]).isMouseOver()))
 			? hoverColor
-			: (enabled && isSelected && _tabPane.hasFocus()
+			: (enabled && isSelected && FlatUIUtils.isPermanentFocusOwner( _tabPane )
 				? focusColor
 				: _tabPane.getBackgroundAt( tabIndex )) );
 		g.fillRect( x, y, w, h );

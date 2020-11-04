@@ -1,0 +1,12 @@
+The icons in this folder starting with 'intellij-' are from IntelliJ IDEA Community Edition,
+which is licensed under the Apache 2.0 license. Copyright 2000-2020 JetBrains s.r.o.
+See: https://github.com/JetBrains/intellij-community/
+
+The icons in this folder starting with 'netbeans-' are from Apache NetBeans,
+which is licensed under the Apache 2.0 license to the Apache Software Foundation (ASF).
+See: https://github.com/apache/netbeans/
+
+zip128.png is from
+http://www.iconarchive.com/show/plump-icons-by-zerode/Folder-Archive-zip-icon.html
+License: Free for non-commercial use.
+Commercial usage: Not allowed

@@ -16,10 +16,10 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -34,7 +34,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
-import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
@@ -57,11 +57,10 @@ import com.formdev.flatlaf.FlatClientProperties;
  *
  * <!-- FlatPasswordFieldUI -->
  *
- * @uiDefault TextComponent.arc						int
- * @uiDefault Component.focusWidth					int
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
+ * @uiDefault PasswordField.showCapsLock			boolean
  * @uiDefault PasswordField.capsLockIcon			Icon
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  *
@@ -70,11 +69,10 @@ import com.formdev.flatlaf.FlatClientProperties;
 public class FlatPasswordFieldUI
 	extends BasicPasswordFieldUI
 {
-	protected int arc;
-	protected int focusWidth;
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
+	protected boolean showCapsLock;
 	protected Icon capsLockIcon;
 
 	private FocusListener focusListener;
@@ -89,16 +87,15 @@ public class FlatPasswordFieldUI
 		super.installDefaults();
 
 		String prefix = getPropertyPrefix();
-		arc = UIManager.getInt( "TextComponent.arc" );
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
+		showCapsLock = UIManager.getBoolean( "PasswordField.showCapsLock" );
 		capsLockIcon = UIManager.getIcon( "PasswordField.capsLockIcon" );
 
-		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
+		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
-		MigLayoutVisualPadding.install( getComponent(), focusWidth );
+		MigLayoutVisualPadding.install( getComponent() );
 	}
 
 	@Override
@@ -153,22 +150,24 @@ public class FlatPasswordFieldUI
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
-
-		if( FlatClientProperties.PLACEHOLDER_TEXT.equals( e.getPropertyName() ) )
-			getComponent().repaint();
+		FlatTextFieldUI.propertyChange( getComponent(), e );
 	}
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		FlatTextFieldUI.paintBackground( g, getComponent(), focusWidth, arc, isIntelliJTheme );
+		FlatTextFieldUI.paintBackground( g, getComponent(), isIntelliJTheme );
 		FlatTextFieldUI.paintPlaceholder( g, getComponent(), placeholderForeground );
 		paintCapsLock( g );
-		super.paintSafely( g );
+
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
 	protected void paintCapsLock( Graphics g ) {
+		if( !showCapsLock )
+			return;
+
 		JTextComponent c = getComponent();
-		if( !c.isFocusOwner() ||
+		if( !FlatUIUtils.isPermanentFocusOwner( c ) ||
 			!Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK ) )
 		  return;
 
@@ -184,18 +183,11 @@ public class FlatPasswordFieldUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ), c );
+		return FlatTextFieldUI.applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ), c );
-	}
-
-	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
-		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
-		int focusWidth = (c.getBorder() instanceof FlatBorder) ? this.focusWidth : 0;
-		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
-		return size;
+		return FlatTextFieldUI.applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
 	}
 }

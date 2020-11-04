@@ -24,6 +24,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -34,15 +35,23 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.IdentityHashMap;
+import java.util.WeakHashMap;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import javax.swing.JComponent;
+import javax.swing.JTable;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
-import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -53,6 +62,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatUIUtils
 {
 	public static final boolean MAC_USE_QUARTZ = Boolean.getBoolean( "apple.awt.graphics.UseQuartz" );
+
+	private static WeakHashMap<LookAndFeel, IdentityHashMap<Object, ComponentUI>> sharedUIinstances = new WeakHashMap<>();
 
 	public static Rectangle addInsets( Rectangle r, Insets insets ) {
 		return new Rectangle(
@@ -121,7 +132,7 @@ public class FlatUIUtils
 	}
 
 	public static Font nonUIResource( Font font ) {
-		return (font instanceof UIResource) ? new Font( font.getName(), font.getStyle(), font.getSize() ) : font;
+		return (font instanceof UIResource) ? font.deriveFont( font.getStyle() ) : font;
 	}
 
 	public static int minimumWidth( JComponent c, int minimumWidth ) {
@@ -132,8 +143,80 @@ public class FlatUIUtils
 		return FlatClientProperties.clientPropertyInt( c, FlatClientProperties.MINIMUM_HEIGHT, minimumHeight );
 	}
 
-	public static boolean isTableCellEditor( Component c ) {
+	public static boolean isCellEditor( Component c ) {
+		// check whether used in cell editor (check 3 levels up)
+		Component c2 = c;
+		for( int i = 0; i <= 2 && c2 != null; i++ ) {
+			Container parent = c2.getParent();
+			if( parent instanceof JTable && ((JTable)parent).getEditorComponent() == c2 )
+				return true;
+
+			c2 = parent;
+		}
+
+		// check whether used as cell editor
+		//   Table.editor is set in JTable.GenericEditor constructor
+		//   Tree.cellEditor is set in sun.swing.FilePane.editFileName()
+		String name = c.getName();
+		if( "Table.editor".equals( name ) || "Tree.cellEditor".equals( name ) )
+			return true;
+
+		// for using combo box as cell editor in table
+		//   JComboBox.isTableCellEditor is set in javax.swing.DefaultCellEditor(JComboBox) constructor
 		return c instanceof JComponent && Boolean.TRUE.equals( ((JComponent)c).getClientProperty( "JComboBox.isTableCellEditor" ) );
+	}
+
+	/**
+	 * Returns whether the given component is the permanent focus owner and
+	 * is in the active window. Used to paint focus indicators.
+	 */
+	public static boolean isPermanentFocusOwner( Component c ) {
+		KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		return keyboardFocusManager.getPermanentFocusOwner() == c &&
+			keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
+	}
+
+	public static Boolean isRoundRect( Component c ) {
+		return (c instanceof JComponent)
+			? FlatClientProperties.clientPropertyBooleanStrict(
+				(JComponent) c, FlatClientProperties.COMPONENT_ROUND_RECT, null )
+			: null;
+	}
+
+	/**
+	 * Returns the scaled thickness of the outer focus border for the given component.
+	 */
+	public static float getBorderFocusWidth( JComponent c ) {
+		FlatBorder border = getOutsideFlatBorder( c );
+		return (border != null)
+			? UIScale.scale( (float) border.getFocusWidth( c ) )
+			: 0;
+	}
+
+	/**
+	 * Returns the scaled arc diameter of the border for the given component.
+	 */
+	public static float getBorderArc( JComponent c ) {
+		FlatBorder border = getOutsideFlatBorder( c );
+		return (border != null)
+			? UIScale.scale( (float) border.getArc( c ) )
+			: 0;
+	}
+
+	public static boolean hasRoundBorder( JComponent c ) {
+		return getBorderArc( c ) >= c.getHeight();
+	}
+
+	public static FlatBorder getOutsideFlatBorder( JComponent c ) {
+		Border border = c.getBorder();
+		for(;;) {
+			if( border instanceof FlatBorder )
+				return (FlatBorder) border;
+			else if( border instanceof CompoundBorder )
+				border = ((CompoundBorder)border).getOutsideBorder();
+			else
+				return null;
+		}
 	}
 
 	/**
@@ -145,17 +228,17 @@ public class FlatUIUtils
 			MAC_USE_QUARTZ ? RenderingHints.VALUE_STROKE_PURE : RenderingHints.VALUE_STROKE_NORMALIZE );
 	}
 
-	public static void setColor( Graphics g, Color color, Color baseColor ) {
-		if( color instanceof DerivedColor )
-			color = ((DerivedColor)color).derive( baseColor );
-		g.setColor( color );
+	public static Color deriveColor( Color color, Color baseColor ) {
+		return (color instanceof DerivedColor)
+			? ((DerivedColor)color).derive( baseColor )
+			: color;
 	}
 
 	/**
 	 * Paints an outer border, which is usually a focus border.
 	 * <p>
 	 * The outside bounds of the painted border are {@code x,y,width,height}.
-	 * The line width of the painted border is {@code focusWidth + lineWidth}.
+	 * The line thickness of the painted border is {@code focusWidth + lineWidth}.
 	 * The given arc diameter refers to the inner rectangle ({@code x,y,width,height} minus {@code focusWidth}).
 	 *
 	 * @see #paintComponentBorder
@@ -164,6 +247,9 @@ public class FlatUIUtils
 	public static void paintComponentOuterBorder( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
+		if( focusWidth + lineWidth == 0 )
+			return; // nothing to paint
+
 		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
@@ -189,14 +275,9 @@ public class FlatUIUtils
 		if( arc > 0 && arc < UIScale.scale( 10 ) )
 			outerArc -= UIScale.scale( 2f );
 
-		if( outerArc < 0 )
-			outerArc = 0;
-		if( innerArc < 0 )
-			innerArc = 0;
-
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
-		path.append( new RoundRectangle2D.Float( x, y, width, height, outerArc, outerArc ), false );
-		path.append( new RoundRectangle2D.Float( x + ow, y + ow, width - (ow * 2), height - (ow * 2), innerArc, innerArc ), false );
+		path.append( createComponentRectangle( x, y, width, height, outerArc ), false );
+		path.append( createComponentRectangle( x + ow, y + ow, width - (ow * 2), height - (ow * 2), innerArc ), false );
 		g.fill( path );
 	}
 
@@ -205,6 +286,7 @@ public class FlatUIUtils
 	 * <p>
 	 * The outside bounds of the painted border are
 	 * {@code x + focusWidth, y + focusWidth, width - (focusWidth * 2), height - (focusWidth * 2)}.
+	 * The line thickness of the painted border is {@code lineWidth}.
 	 * The given arc diameter refers to the painted rectangle (and not to {@code x,y,width,height}).
 	 *
 	 * @see #paintComponentOuterBorder
@@ -213,6 +295,9 @@ public class FlatUIUtils
 	public static void paintComponentBorder( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
+		if( lineWidth == 0 )
+			return; // nothing to paint
+
 		double systemScaleFactor = UIScale.getSystemScaleFactor( g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
 			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
@@ -230,19 +315,16 @@ public class FlatUIUtils
 	private static void paintComponentBorderImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float lineWidth, float arc )
 	{
+		float x1 = x + focusWidth;
+		float y1 = y + focusWidth;
+		float width1 = width - focusWidth * 2;
+		float height1 = height - focusWidth * 2;
 		float arc2 = arc - (lineWidth * 2);
 
-		if( arc < 0 )
-			arc = 0;
-		if( arc2 < 0 )
-			arc2 = 0;
-
-		RoundRectangle2D.Float r1 = new RoundRectangle2D.Float(
-			x + focusWidth, y + focusWidth,
-			width - focusWidth * 2, height - focusWidth * 2, arc, arc );
-		RoundRectangle2D.Float r2 = new RoundRectangle2D.Float(
-			r1.x + lineWidth, r1.y + lineWidth,
-			r1.width - lineWidth * 2, r1.height - lineWidth * 2, arc2, arc2 );
+		Shape r1 = createComponentRectangle( x1, y1, width1, height1, arc );
+		Shape r2 = createComponentRectangle(
+			x1 + lineWidth, y1 + lineWidth,
+			width1 - lineWidth * 2, height1 - lineWidth * 2, arc2 );
 
 		Path2D border = new Path2D.Float( Path2D.WIND_EVEN_ODD );
 		border.append( r1, false );
@@ -280,12 +362,32 @@ public class FlatUIUtils
 	private static void paintComponentBackgroundImpl( Graphics2D g, int x, int y, int width, int height,
 		float focusWidth, float arc )
 	{
-		if( arc < 0 )
-			arc = 0;
-
-		g.fill( new RoundRectangle2D.Float(
+		g.fill( createComponentRectangle(
 			x + focusWidth, y + focusWidth,
-			width - focusWidth * 2, height - focusWidth * 2, arc, arc ) );
+			width - focusWidth * 2, height - focusWidth * 2, arc ) );
+	}
+
+	/**
+	 * Creates a (rounded) rectangle used to paint components (border, background, etc).
+	 * The given arc diameter is limited to min(width,height).
+	 */
+	public static Shape createComponentRectangle( float x, float y, float w, float h, float arc ) {
+		if( arc <= 0 )
+			return new Rectangle2D.Float( x, y, w, h );
+
+		arc = Math.min( arc, Math.min( w, h ) );
+		return new RoundRectangle2D.Float( x, y, w, h, arc, arc );
+	}
+
+	static void paintFilledRectangle( Graphics g, Color color, float x, float y, float w, float h ) {
+		Graphics2D g2 = (Graphics2D) g.create();
+		try {
+			FlatUIUtils.setRenderingHints( g2 );
+			g2.setColor( color );
+			g2.fill( new Rectangle2D.Float( x, y, w, h ) );
+		} finally {
+			g2.dispose();
+		}
 	}
 
 	/**
@@ -354,14 +456,12 @@ public class FlatUIUtils
 		if( arcTopLeft <= 0 && arcTopRight <= 0 && arcBottomLeft <= 0 && arcBottomRight <= 0 )
 			return new Rectangle2D.Float( x, y, width, height );
 
-		if( arcTopLeft < 0 )
-			arcTopLeft = 0;
-		if( arcTopRight < 0 )
-			arcTopRight = 0;
-		if( arcBottomLeft < 0 )
-			arcBottomLeft = 0;
-		if( arcBottomRight < 0 )
-			arcBottomRight = 0;
+		// limit arcs to min(width,height)
+		float maxArc = Math.min( width, height ) / 2;
+		arcTopLeft = (arcTopLeft > 0) ? Math.min( arcTopLeft, maxArc ) : 0;
+		arcTopRight = (arcTopRight > 0) ? Math.min( arcTopRight, maxArc ) : 0;
+		arcBottomLeft = (arcBottomLeft > 0) ? Math.min( arcBottomLeft, maxArc ) : 0;
+		arcBottomRight = (arcBottomRight > 0) ? Math.min( arcBottomRight, maxArc ) : 0;
 
 		float x2 = x + width;
 		float y2 = y + height;
@@ -401,28 +501,46 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Draws the given string at the specified location using text properties
-	 * and anti-aliasing hints from the provided component.
-	 *
-	 * Use this method instead of Graphics.drawString() for correct anti-aliasing.
-	 *
-	 * Replacement for SwingUtilities2.drawString()
+	 * Draws the given string at the specified location.
+	 * The provided component is used to query text properties and anti-aliasing hints.
+	 * <p>
+	 * Use this method instead of {@link Graphics#drawString(String, int, int)} for correct anti-aliasing.
+	 * <p>
+	 * Replacement for {@code SwingUtilities2.drawString()}.
+	 * Uses {@link HiDPIUtils#drawStringWithYCorrection(JComponent, Graphics2D, String, int, int)}.
 	 */
 	public static void drawString( JComponent c, Graphics g, String text, int x, int y ) {
-		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, -1, x, y );
+		HiDPIUtils.drawStringWithYCorrection( c, (Graphics2D) g, text, x, y );
 	}
 
 	/**
-	 * Draws the given string at the specified location underlining the specified
-	 * character. The provided component is used to query text properties and
-	 * anti-aliasing hints.
-	 *
-	 * Replacement for SwingUtilities2.drawStringUnderlineCharAt()
+	 * Draws the given string at the specified location underlining the specified character.
+	 * The provided component is used to query text properties and anti-aliasing hints.
+	 * <p>
+	 * Replacement for {@code SwingUtilities2.drawStringUnderlineCharAt()}.
+	 * Uses {@link HiDPIUtils#drawStringUnderlineCharAtWithYCorrection(JComponent, Graphics2D, String, int, int, int)}.
 	 */
 	public static void drawStringUnderlineCharAt( JComponent c, Graphics g,
 		String text, int underlinedIndex, int x, int y )
 	{
-		JavaCompatibility.drawStringUnderlineCharAt( c, g, text, underlinedIndex, x, y );
+		// scale underline height if necessary
+		if( underlinedIndex >= 0 && UIScale.getUserScaleFactor() > 1 ) {
+			g = new Graphics2DProxy( (Graphics2D) g ) {
+				@Override
+				public void fillRect( int x, int y, int width, int height ) {
+					if( height == 1 ) {
+						// scale height and correct y position
+						// (using 0.9f so that underline height is 1 at scale factor 1.5x)
+						height = Math.round( UIScale.scale( 0.9f ) );
+						y += height - 1;
+					}
+
+					super.fillRect( x, y, width, height );
+				}
+			};
+		}
+
+		HiDPIUtils.drawStringUnderlineCharAtWithYCorrection( c, (Graphics2D) g, text, underlinedIndex, x, y );
 	}
 
 	public static boolean hasOpaqueBeenExplicitlySet( JComponent c ) {
@@ -431,6 +549,19 @@ public class FlatUIUtils
 		boolean explicitlySet = c.isOpaque() == oldOpaque;
 		LookAndFeel.installProperty( c, "opaque", oldOpaque );
 		return explicitlySet;
+	}
+
+	/**
+	 * Creates a shared component UI for the given key and the current Laf.
+	 * Each Laf instance has its own shared component UI instance.
+	 * <p>
+	 * This is for GUI builders that support Laf switching and
+	 * may use multiple Laf instances at the same time.
+	 */
+	public static ComponentUI createSharedUI( Object key, Supplier<ComponentUI> newInstanceSupplier ) {
+		return sharedUIinstances
+			.computeIfAbsent( UIManager.getLookAndFeel(), k -> new IdentityHashMap<>() )
+			.computeIfAbsent( key, k -> newInstanceSupplier.get() );
 	}
 
 	//---- class HoverListener ------------------------------------------------

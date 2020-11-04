@@ -32,12 +32,31 @@ public class DerivedColor
 {
 	private final ColorFunction[] functions;
 
-	public DerivedColor( ColorFunction... functions ) {
-		super( Color.red );
+	private boolean hasBaseOfDefaultColor;
+	private int baseOfDefaultColorRGB;
+
+	public DerivedColor( Color defaultColor, ColorFunction... functions ) {
+		super( (defaultColor != null) ? defaultColor : Color.red );
 		this.functions = functions;
 	}
 
 	public Color derive( Color baseColor ) {
-		return ColorFunctions.applyFunctions( baseColor, functions );
+		if( (hasBaseOfDefaultColor && baseOfDefaultColorRGB == baseColor.getRGB()) || baseColor == this )
+			return this; // return default color
+
+		Color result = ColorFunctions.applyFunctions( baseColor, functions );
+
+		// if the result is equal to the default color, then the original base color
+		// was passed and we can cache this to avoid color calculations
+		if( !hasBaseOfDefaultColor && result.getRGB() == this.getRGB() ) {
+			hasBaseOfDefaultColor = true;
+			baseOfDefaultColorRGB = baseColor.getRGB();
+		}
+
+		return result;
+	}
+
+	public ColorFunction[] getFunctions() {
+		return functions;
 	}
 }

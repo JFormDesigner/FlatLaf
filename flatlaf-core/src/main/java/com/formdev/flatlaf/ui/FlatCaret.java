@@ -31,7 +31,7 @@ import javax.swing.text.JTextComponent;
  *
  * @author Karl Tauber
  */
-class FlatCaret
+public class FlatCaret
 	extends DefaultCaret
 	implements UIResource
 {
@@ -41,7 +41,7 @@ class FlatCaret
 	private boolean wasTemporaryLost;
 	private boolean isMousePressed;
 
-	FlatCaret( String selectAllOnFocusPolicy ) {
+	public FlatCaret( String selectAllOnFocusPolicy ) {
 		this.selectAllOnFocusPolicy = selectAllOnFocusPolicy;
 	}
 
@@ -87,7 +87,7 @@ class FlatCaret
 		super.mouseReleased( e );
 	}
 
-	private void selectAllOnFocusGained() {
+	protected void selectAllOnFocusGained() {
 		JTextComponent c = getComponent();
 		Document doc = c.getDocument();
 		if( doc == null || !c.isEnabled() || !c.isEditable() )

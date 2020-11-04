@@ -11,19 +11,18 @@ scales on **HiDPI** displays and runs on Java 8 or newer.
 The look is heavily inspired by **Darcula** and **IntelliJ** themes from
 IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
 
-![Flat Light Demo](images/FlatLightDemo.png)
+![Flat Light](images/flat_light.png)
 
-![Flat Dark Demo](images/FlatDarkDemo.png)
+![Flat Dark](images/flat_dark.png)
 
 
 IntelliJ Platform Themes
 ------------------------
 
-FlatLaf can use 3rd party themes created for IntelliJ Platform:
+FlatLaf can use 3rd party themes created for IntelliJ Platform (see
+[IntelliJ Themes Pack](flatlaf-intellij-themes)):
 
-![Cyan Light Demo](images/CyanLightDemo.png)
-
-![Dark Purple Demo](images/DarkPurpleDemo.png)
+![IntelliJ Platform Themes](images/intellij_platform_themes.png)
 
 
 Demo
@@ -68,6 +67,8 @@ docs).
 Addons
 ------
 
+- [IntelliJ Themes Pack](flatlaf-intellij-themes)
+- [Extras](flatlaf-extras)
 - [SwingX](flatlaf-swingx)
 - [JIDE Common Layer](flatlaf-jide-oss)
 
@@ -77,7 +78,16 @@ Projects using FlatLaf
 
 - [NetBeans](https://netbeans.apache.org/) 11.3
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
+- [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
+- [OWASP Zed Attack Proxy (ZAP)](https://www.zaproxy.org/) (in weekly releases)
+- ![New](images/new.svg) [jAlbum](https://jalbum.net/) 21 (commercial)
+- [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (commercial)
+- [Total Validator](https://www.totalvalidator.com/) 15 (commercial)
 - [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org)
+- [MegaMek](https://github.com/MegaMek/megamek) v0.47.4 and
+  [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5
+- [GUIslice Builder](https://github.com/ImpulseAdventure/GUIslice-Builder)
+  0.13.b024
 - [Rest Suite](https://github.com/supanadit/restsuite)
 - [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy)
 - [SpringRemote](https://github.com/HaleyWang/SpringRemote)
@@ -87,6 +97,15 @@ Projects using FlatLaf
   [mendelson AS2](https://mendelson-e-c.com/as2/),
   [AS4](https://mendelson-e-c.com/as4/) and
   [OFTP2](https://mendelson-e-c.com/oftp2) (commercial)
+- [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2
+- [lsfusion platform](https://github.com/lsfusion/platform)
+- [Jes - Die Java-EÜR](https://www.jes-eur.de)
+- [Mapton](https://mapton.org/) 2.0
+  ([source code](https://github.com/trixon/mapton)) based on NetBeans platform
+- [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE)
+- [Sound Analysis](https://github.com/tomasz-herman/SoundAnalysis)
+- [RemoteLight](https://github.com/Drumber/RemoteLight) - Multifunctional LED
+  Control Software
 - and more...
 
 

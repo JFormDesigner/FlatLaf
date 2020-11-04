@@ -1,0 +1,90 @@
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "frame"
+			"title": "UI Defaults Inspector"
+			"defaultCloseOperation": 2
+			"$sizePolicy": 2
+			"$locationPolicy": 2
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosed", "windowClosed", false ) )
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosing", "saveWindowBounds", false ) )
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowDeactivated", "saveWindowBounds", false ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panel"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "0, 0:1.0, 0, 0"
+					"$rowSpecs": "0"
+					"$hGap": 10
+					"$vGap": 5
+					"$alignLeft": true
+					"$alignTop": true
+				} ) {
+					name: "filterPanel"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "flterLabel"
+						"text": "Filter:"
+						"labelFor": new FormReference( "filterField" )
+						"displayedMnemonic": 70
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "filterField"
+						"$client.JTextField.placeholderText": "enter one or more filter strings, separated by space characters"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "valueTypeLabel"
+						"text": "Value Type:"
+						"labelFor": new FormReference( "valueTypeField" )
+						"displayedMnemonic": 84
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "valueTypeField"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "(any)"
+							addElement( "(any)" )
+							addElement( "Boolean" )
+							addElement( "Border" )
+							addElement( "Color" )
+							addElement( "Dimension" )
+							addElement( "Float" )
+							addElement( "Font" )
+							addElement( "Icon" )
+							addElement( "Insets" )
+							addElement( "Integer" )
+							addElement( "String" )
+							addElement( "(other)" )
+						}
+						auxiliary() {
+							"JavaCodeGenerator.typeParameters": "String"
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "filterChanged", false ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane"
+					add( new FormComponent( "javax.swing.JTable" ) {
+						name: "table"
+						"autoCreateRowSorter": true
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+	}
+}

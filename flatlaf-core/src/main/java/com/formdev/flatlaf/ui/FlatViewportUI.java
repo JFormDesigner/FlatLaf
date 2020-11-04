@@ -38,12 +38,8 @@ import javax.swing.plaf.basic.BasicViewportUI;
 public class FlatViewportUI
 	extends BasicViewportUI
 {
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatViewportUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatViewportUI.class, FlatViewportUI::new );
 	}
 
 	@Override

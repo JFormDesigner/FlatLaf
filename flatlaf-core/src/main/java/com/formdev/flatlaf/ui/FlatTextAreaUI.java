@@ -16,10 +16,11 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
@@ -27,6 +28,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextAreaUI;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextArea}.
@@ -58,6 +60,7 @@ public class FlatTextAreaUI
 {
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
+	protected Color background;
 	protected Color disabledBackground;
 	protected Color inactiveBackground;
 
@@ -66,11 +69,19 @@ public class FlatTextAreaUI
 	}
 
 	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		updateBackground();
+	}
+
+	@Override
 	protected void installDefaults() {
 		super.installDefaults();
 
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
+		background = UIManager.getColor( "TextArea.background" );
 		disabledBackground = UIManager.getColor( "TextArea.disabledBackground" );
 		inactiveBackground = UIManager.getColor( "TextArea.inactiveBackground" );
 	}
@@ -79,46 +90,80 @@ public class FlatTextAreaUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		background = null;
 		disabledBackground = null;
 		inactiveBackground = null;
+	}
+
+	@Override
+	protected void propertyChange( PropertyChangeEvent e ) {
+		super.propertyChange( e );
+		FlatEditorPaneUI.propertyChange( getComponent(), e );
+
+		switch( e.getPropertyName() ) {
+			case "editable":
+			case "enabled":
+				updateBackground();
+				break;
+		}
+	}
+
+	private void updateBackground() {
+		JTextComponent c = getComponent();
+
+		Color background = c.getBackground();
+		if( !(background instanceof UIResource) )
+			return;
+
+		// do not update background if it currently has a unknown color (assigned from outside)
+		if( background != this.background &&
+			background != disabledBackground &&
+			background != inactiveBackground )
+		  return;
+
+		Color newBackground = !c.isEnabled()
+			? disabledBackground
+			: (!c.isEditable()
+				? inactiveBackground
+				: this.background);
+
+		if( newBackground != background )
+			c.setBackground( newBackground );
+	}
+
+	@Override
+	public Dimension getPreferredSize( JComponent c ) {
+		return applyMinimumWidth( c, super.getPreferredSize( c ) );
+	}
+
+	@Override
+	public Dimension getMinimumSize( JComponent c ) {
+		return applyMinimumWidth( c, super.getMinimumSize( c ) );
+	}
+
+	private Dimension applyMinimumWidth( JComponent c, Dimension size ) {
+		// do not apply minimum width if JTextArea.columns is set
+		if( c instanceof JTextArea && ((JTextArea)c).getColumns() > 0 )
+			return size;
+
+		return FlatEditorPaneUI.applyMinimumWidth( c, size, minimumWidth );
+	}
+
+	@Override
+	protected void paintSafely( Graphics g ) {
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
 	@Override
 	protected void paintBackground( Graphics g ) {
 		JTextComponent c = getComponent();
 
-		Color background = c.getBackground();
-		g.setColor( !(background instanceof UIResource)
-			? background
-			: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
-				? FlatUIUtils.getParentBackground( c )
-				: (!c.isEnabled()
-					? disabledBackground
-					: (!c.isEditable() ? inactiveBackground : background))) );
-		g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
-	}
+		// for compatibility with IntelliJ themes
+		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) && (c.getBackground() instanceof UIResource) ) {
+			FlatUIUtils.paintParentBackground( g, c );
+			return;
+		}
 
-	@Override
-	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ), c );
-	}
-
-	@Override
-	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ), c );
-	}
-
-	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
-		// do not apply minimum width if JTextArea.columns is set
-		if( c instanceof JTextArea && ((JTextArea)c).getColumns() > 0 )
-			return size;
-
-		// Assume that text area is in a scroll pane (that displays the border)
-		// and subtract 1px border line width.
-		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding
-		// issues. E.g. at scale factor 1.5 the first returns 4, but the second 3.
-		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
-		size.width = Math.max( size.width, scale( minimumWidth ) - (scale( 1 ) * 2) );
-		return size;
+		super.paintBackground( g );
 	}
 }

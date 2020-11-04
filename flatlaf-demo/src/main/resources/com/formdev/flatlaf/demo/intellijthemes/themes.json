@@ -13,6 +13,38 @@
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
 		"sourceCodePath": "blob/master/resources/arc-theme-orange.theme.json"
 	},
+	"arc_theme_dark.theme.json": {
+		"name": "Arc Dark",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "arc-themes.LICENSE.txt",
+		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
+		"sourceCodePath": "blob/master/resources/arc_theme_dark.theme.json"
+	},
+	"arc_theme_dark_orange.theme.json": {
+		"name": "Arc Dark - Orange",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "arc-themes.LICENSE.txt",
+		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
+		"sourceCodePath": "blob/master/resources/arc_theme_dark_orange.theme.json"
+	},
+	"Carbon.theme.json": {
+		"name": "Carbon",
+		"dark": true,
+		"license": "Apache License 2.0",
+		"licenseFile": "arc-themes.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/luisfer0793/theme-carbon",
+		"sourceCodePath": "blob/master/resources/matte_carbon_basics.theme.json"
+	},
+	"Cobalt_2.theme.json": {
+		"name": "Cobalt 2",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "Cobalt_2.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/ngehlert/cobalt2",
+		"sourceCodePath": "blob/master/Cobalt2-UI-Theme/resources/Cobalt_2.theme.json"
+	},
 	"Cyan.theme.json": {
 		"name": "Cyan light",
 		"license": "MIT",
@@ -22,6 +54,7 @@
 	},
 	"DarkFlatTheme.theme.json": {
 		"name": "Dark Flat",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "DarkFlatTheme.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/nerzhulart/DarkFlatTheme",
@@ -29,6 +62,7 @@
 	},
 	"DarkPurple.theme.json": {
 		"name": "Dark purple",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "DarkPurple.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/OlyaB/DarkPurpleTheme",
@@ -36,6 +70,7 @@
 	},
 	"Dracula.theme.json": {
 		"name": "Dracula",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "Dracula.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/dracula/jetbrains",
@@ -43,24 +78,27 @@
 	},
 	"Gradianto_dark_fuchsia.theme.json": {
 		"name": "Gradianto Dark Fuchsia",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "Gradianto.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
-		"sourceCodePath": "blob/master/resources/Gradianto_dark_fuchsia.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/Gradianto_dark_fuchsia.theme.json"
 	},
 	"Gradianto_deep_ocean.theme.json": {
 		"name": "Gradianto Deep Ocean",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "Gradianto.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
-		"sourceCodePath": "blob/master/resources/Gradianto_deep_ocean.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/Gradianto_deep_ocean.theme.json"
 	},
 	"Gradianto_midnight_blue.theme.json": {
 		"name": "Gradianto Midnight Blue",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "Gradianto.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
-		"sourceCodePath": "blob/master/resources/Gradianto_midnight_blue.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/Gradianto_midnight_blue.theme.json"
 	},
 	"Gray.theme.json": {
 		"name": "Gray",
@@ -69,33 +107,45 @@
 		"sourceCodeUrl": "https://github.com/OlyaB/GreyTheme",
 		"sourceCodePath": "blob/master/src/Gray.theme.json"
 	},
-	"gruvbox_theme.theme.json": {
-		"name": "Gruvbox",
+	"gruvbox_dark_hard.theme.json": {
+		"name": "Gruvbox Dark Hard",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "gruvbox_theme.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/Vincent-P/gruvbox-intellij-theme",
-		"sourceCodePath": "blob/master/src/main/resources/gruvbox_theme.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/gruvbox_dark_hard.theme.json"
 	},
-	"Hiberbee.theme.json": {
-		"name": "Hiberbee",
+	"gruvbox_dark_medium.theme.json": {
+		"name": "Gruvbox Dark Medium",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "gruvbox_theme.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/Vincent-P/gruvbox-intellij-theme",
+		"sourceCodePath": "blob/master/src/main/resources/gruvbox_dark_medium.theme.json"
+	},
+	"gruvbox_dark_soft.theme.json": {
+		"name": "Gruvbox Dark Soft",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "gruvbox_theme.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/Vincent-P/gruvbox-intellij-theme",
+		"sourceCodePath": "blob/master/src/main/resources/gruvbox_dark_soft.theme.json"
+	},
+	"HiberbeeDark.theme.json": {
+		"name": "Hiberbee Dark",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "Hiberbee.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/Hiberbee/code-highlight-themes",
-		"sourceCodePath": "blob/master/src/main/resources/Hiberbee.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/HiberbeeDark.theme.json"
 	},
 	"HighContrast.theme.json": {
 		"name": "High contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "HighContrast.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/OlyaB/HighContrastTheme",
 		"sourceCodePath": "blob/master/src/HighContrast.theme.json"
-	},
-	"Light.theme.json": {
-		"name": "IntelliJ Light Preview",
-		"license": "MIT",
-		"licenseFile": "Light.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/OlyaB/IntelliJLightTheme",
-		"sourceCodePath": "blob/master/src/Light.theme.json"
 	},
 	"LightFlatTheme.theme.json": {
 		"name": "Light Flat",
@@ -106,6 +156,7 @@
 	},
 	"MaterialTheme.theme.json": {
 		"name": "Material Design Dark",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "MaterialTheme.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/xinkunZ/NotReallyMDTheme",
@@ -113,6 +164,7 @@
 	},
 	"Monocai.theme.json": {
 		"name": "Monocai",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "Monocai.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/bmikaili/intellij-monocai-theme",
@@ -120,6 +172,7 @@
 	},
 	"nord.theme.json": {
 		"name": "Nord",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "nord.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/arcticicestudio/nord-jetbrains",
@@ -127,27 +180,30 @@
 	},
 	"one_dark.theme.json": {
 		"name": "One Dark",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "one_dark.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/one-dark/jetbrains-one-dark-theme",
-		"sourceCodePath": "blob/master/src/main/resources/themes/one_dark.theme.json"
+		"sourceCodePath": "blob/master/buildSrc/templates/oneDark.template.theme.json"
 	},
-	"solarized_dark_theme.theme.json": {
+	"SolarizedDark.theme.json": {
 		"name": "Solarized Dark",
-		"license": "MIT",
-		"licenseFile": "solarized_dark_theme.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/snowe2010/solarized-jetbrains",
-		"sourceCodePath": "blob/master/src/solarized_dark_theme.theme.json"
+		"dark": true,
+		"license": "The Unlicense",
+		"licenseFile": "Solarized.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/4lex4/intellij-platform-solarized",
+		"sourceCodePath": "blob/master/resources/SolarizedDark.theme.json"
 	},
-	"solarized_light_theme.theme.json": {
+	"SolarizedLight.theme.json": {
 		"name": "Solarized Light",
-		"license": "MIT",
-		"licenseFile": "solarized_light_theme.LICENSE.txt",
-		"sourceCodeUrl": "https://github.com/snowe2010/solarized-jetbrains",
-		"sourceCodePath": "blob/master/src/solarized_light_theme.theme.json"
+		"license": "The Unlicense",
+		"licenseFile": "Solarized.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/4lex4/intellij-platform-solarized",
+		"sourceCodePath": "blob/master/resources/SolarizedLight.theme.json"
 	},
 	"Spacegray.theme.json": {
 		"name": "Spacegray",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "Spacegray.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mturlo/intellij-spacegray",
@@ -155,6 +211,7 @@
 	},
 	"vuesion_theme.theme.json": {
 		"name": "Vuesion",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "vuesion_theme.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/vuesion/intellij-theme",
@@ -163,6 +220,7 @@
 
 	"material-theme-ui-lite/Arc Dark.theme.json": {
 		"name": "Material Theme UI Lite / Arc Dark",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -170,6 +228,7 @@
 	},
 	"material-theme-ui-lite/Arc Dark Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Arc Dark Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -177,6 +236,7 @@
 	},
 	"material-theme-ui-lite/Atom One Dark.theme.json": {
 		"name": "Material Theme UI Lite / Atom One Dark",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -184,6 +244,7 @@
 	},
 	"material-theme-ui-lite/Atom One Dark Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Atom One Dark Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -205,6 +266,7 @@
 	},
 	"material-theme-ui-lite/Dracula.theme.json": {
 		"name": "Material Theme UI Lite / Dracula",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -212,6 +274,7 @@
 	},
 	"material-theme-ui-lite/Dracula Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Dracula Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -247,6 +310,7 @@
 	},
 	"material-theme-ui-lite/Material Darker.theme.json": {
 		"name": "Material Theme UI Lite / Material Darker",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -254,6 +318,7 @@
 	},
 	"material-theme-ui-lite/Material Darker Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Material Darker Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -261,6 +326,7 @@
 	},
 	"material-theme-ui-lite/Material Deep Ocean.theme.json": {
 		"name": "Material Theme UI Lite / Material Deep Ocean",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -268,6 +334,7 @@
 	},
 	"material-theme-ui-lite/Material Deep Ocean Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Material Deep Ocean Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -289,6 +356,7 @@
 	},
 	"material-theme-ui-lite/Material Oceanic.theme.json": {
 		"name": "Material Theme UI Lite / Material Oceanic",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -296,6 +364,7 @@
 	},
 	"material-theme-ui-lite/Material Oceanic Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Material Oceanic Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -303,6 +372,7 @@
 	},
 	"material-theme-ui-lite/Material Palenight.theme.json": {
 		"name": "Material Theme UI Lite / Material Palenight",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -310,6 +380,7 @@
 	},
 	"material-theme-ui-lite/Material Palenight Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Material Palenight Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -317,6 +388,7 @@
 	},
 	"material-theme-ui-lite/Monokai Pro.theme.json": {
 		"name": "Material Theme UI Lite / Monokai Pro",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -324,6 +396,7 @@
 	},
 	"material-theme-ui-lite/Monokai Pro Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Monokai Pro Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -331,6 +404,7 @@
 	},
 	"material-theme-ui-lite/Night Owl.theme.json": {
 		"name": "Material Theme UI Lite / Night Owl",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -338,6 +412,7 @@
 	},
 	"material-theme-ui-lite/Night Owl Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Night Owl Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -345,6 +420,7 @@
 	},
 	"material-theme-ui-lite/Solarized Dark.theme.json": {
 		"name": "Material Theme UI Lite / Solarized Dark",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
@@ -352,6 +428,7 @@
 	},
 	"material-theme-ui-lite/Solarized Dark Contrast.theme.json": {
 		"name": "Material Theme UI Lite / Solarized Dark Contrast",
+		"dark": true,
 		"license": "MIT",
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",

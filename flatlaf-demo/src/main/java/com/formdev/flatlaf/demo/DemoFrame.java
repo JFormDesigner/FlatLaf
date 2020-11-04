@@ -18,10 +18,25 @@ package com.formdev.flatlaf.demo;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.StyleContext;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.demo.HintManager.Hint;
+import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
+import com.formdev.flatlaf.extras.SVGUtils;
+import com.formdev.flatlaf.ui.JBRCustomDecorations;
+import net.miginfocom.layout.ConstraintParser;
+import net.miginfocom.layout.LC;
+import net.miginfocom.layout.UnitValue;
 import net.miginfocom.swing.*;
 
 /**
@@ -30,14 +45,79 @@ import net.miginfocom.swing.*;
 class DemoFrame
 	extends JFrame
 {
+	private final String[] availableFontFamilyNames;
+	private int initialFontMenuItemCount = -1;
+
 	DemoFrame() {
 		int tabIndex = DemoPrefs.getState().getInt( FlatLafDemo.KEY_TAB, 0 );
 
+		availableFontFamilyNames = GraphicsEnvironment.getLocalGraphicsEnvironment()
+			.getAvailableFontFamilyNames().clone();
+		Arrays.sort( availableFontFamilyNames );
+
 		initComponents();
+		updateFontMenuItems();
 		controlBar.initialize( this, tabbedPane );
+
+		setIconImages( SVGUtils.createWindowIconImages( "/com/formdev/flatlaf/demo/FlatLaf.svg" ) );
 
 		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
 			tabbedPane.setSelectedIndex( tabIndex );
+
+		SwingUtilities.invokeLater( () -> {
+			showHints();
+		} );
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+
+		FlatUIDefaultsInspector.hide();
+	}
+
+	private void showHints() {
+		Hint fontMenuHint = new Hint(
+			"Use 'Font' menu to increase/decrease font size or try different fonts.",
+			fontMenu, SwingConstants.BOTTOM, "hint.fontMenu", null );
+
+		Hint optionsMenuHint = new Hint(
+			"Use 'Options' menu to try out various FlatLaf options.",
+			optionsMenu, SwingConstants.BOTTOM, "hint.optionsMenu", fontMenuHint );
+
+		Hint themesHint = new Hint(
+			"Use 'Themes' list to try out various themes.",
+			themesPanel, SwingConstants.LEFT, "hint.themesPanel", optionsMenuHint );
+
+		HintManager.showHint( themesHint );
+	}
+
+	private void clearHints() {
+		HintManager.hideAllHints();
+
+		Preferences state = DemoPrefs.getState();
+		state.remove( "hint.fontMenu" );
+		state.remove( "hint.optionsMenu" );
+		state.remove( "hint.themesPanel" );
+	}
+
+	private void showUIDefaultsInspector() {
+		FlatUIDefaultsInspector.show();
+	}
+
+	private void newActionPerformed() {
+		NewDialog newDialog = new NewDialog( this );
+		newDialog.setVisible( true );
+	}
+
+	private void openActionPerformed() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.showOpenDialog( this );
+	}
+
+	private void saveAsActionPerformed() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.showSaveDialog( this );
 	}
 
 	private void exitActionPerformed() {
@@ -52,10 +132,161 @@ class DemoFrame
 		DemoPrefs.getState().putInt( FlatLafDemo.KEY_TAB, tabbedPane.getSelectedIndex() );
 	}
 
-	private void menuItemActionPerformed(ActionEvent e) {
+	private void menuItemActionPerformed( ActionEvent e ) {
 		SwingUtilities.invokeLater( () -> {
 			JOptionPane.showMessageDialog( this, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE );
 		} );
+	}
+
+	private void windowDecorationsChanged() {
+		boolean windowDecorations = windowDecorationsCheckBoxMenuItem.isSelected();
+
+		// change window decoration of demo main frame
+		dispose();
+		setUndecorated( windowDecorations );
+		getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
+		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
+		setVisible( true );
+
+		// enable/disable window decoration for later created frames/dialogs
+		JFrame.setDefaultLookAndFeelDecorated( windowDecorations );
+		JDialog.setDefaultLookAndFeelDecorated( windowDecorations );
+	}
+
+	private void menuBarEmbeddedChanged() {
+		getRootPane().putClientProperty( FlatClientProperties.MENU_BAR_EMBEDDED,
+			menuBarEmbeddedCheckBoxMenuItem.isSelected() ? null : false );
+
+// alternative method for all frames and menu bars in an application
+//		UIManager.put( "TitlePane.menuBarEmbedded", menuBarEmbeddedCheckBoxMenuItem.isSelected() );
+//		revalidate();
+//		repaint();
+	}
+
+	private void underlineMenuSelection() {
+		UIManager.put( "MenuItem.selectionType", underlineMenuSelectionMenuItem.isSelected() ? "underline" : null );
+	}
+
+	private void alwaysShowMnemonics() {
+		UIManager.put( "Component.hideMnemonics", !alwaysShowMnemonicsMenuItem.isSelected() );
+		repaint();
+	}
+
+	private void animatedLafChangeChanged() {
+		System.setProperty( "flatlaf.animatedLafChange", String.valueOf( animatedLafChangeMenuItem.isSelected() ) );
+	}
+
+	private void showHintsChanged() {
+		clearHints();
+		showHints();
+	}
+
+	private void fontFamilyChanged( ActionEvent e ) {
+		String fontFamily = e.getActionCommand();
+
+		FlatAnimatedLafChange.showSnapshot();
+
+		Font font = UIManager.getFont( "defaultFont" );
+		Font newFont = StyleContext.getDefaultStyleContext().getFont( fontFamily, font.getStyle(), font.getSize() );
+		UIManager.put( "defaultFont", newFont );
+
+		FlatLaf.updateUI();
+		FlatAnimatedLafChange.hideSnapshotWithAnimation();
+	}
+
+	private void fontSizeChanged( ActionEvent e ) {
+		String fontSizeStr = e.getActionCommand();
+
+		Font font = UIManager.getFont( "defaultFont" );
+		Font newFont = font.deriveFont( (float) Integer.parseInt( fontSizeStr ) );
+		UIManager.put( "defaultFont", newFont );
+
+		FlatLaf.updateUI();
+	}
+
+	private void restoreFont() {
+		UIManager.put( "defaultFont", null );
+		updateFontMenuItems();
+		FlatLaf.updateUI();
+	}
+
+	private void incrFont() {
+		Font font = UIManager.getFont( "defaultFont" );
+		Font newFont = font.deriveFont( (float) (font.getSize() + 1) );
+		UIManager.put( "defaultFont", newFont );
+
+		updateFontMenuItems();
+		FlatLaf.updateUI();
+	}
+
+	private void decrFont() {
+		Font font = UIManager.getFont( "defaultFont" );
+		Font newFont = font.deriveFont( (float) Math.max( font.getSize() - 1, 10 ) );
+		UIManager.put( "defaultFont", newFont );
+
+		updateFontMenuItems();
+		FlatLaf.updateUI();
+	}
+
+	void updateFontMenuItems() {
+		if( initialFontMenuItemCount < 0 )
+			initialFontMenuItemCount = fontMenu.getItemCount();
+		else {
+			// remove old font items
+			for( int i = fontMenu.getItemCount() - 1; i >= initialFontMenuItemCount; i-- )
+				fontMenu.remove( i );
+		}
+
+		// get current font
+		Font currentFont = UIManager.getFont( "Label.font" );
+		String currentFamily = currentFont.getFamily();
+		String currentSize = Integer.toString( currentFont.getSize() );
+
+		// add font families
+		fontMenu.addSeparator();
+		ArrayList<String> families = new ArrayList<>( Arrays.asList(
+			"Arial", "Cantarell", "Comic Sans MS", "Courier New", "DejaVu Sans",
+			"Dialog", "Liberation Sans", "Monospaced", "Noto Sans", "Roboto",
+			"SansSerif", "Segoe UI", "Serif", "Tahoma", "Ubuntu", "Verdana" ) );
+		if( !families.contains( currentFamily ) )
+			families.add( currentFamily );
+		families.sort( String.CASE_INSENSITIVE_ORDER );
+
+		ButtonGroup familiesGroup = new ButtonGroup();
+		for( String family : families ) {
+			if( Arrays.binarySearch( availableFontFamilyNames, family ) < 0 )
+				continue; // not available
+
+			JCheckBoxMenuItem item = new JCheckBoxMenuItem( family );
+			item.setSelected( family.equals( currentFamily ) );
+			item.addActionListener( this::fontFamilyChanged );
+			fontMenu.add( item );
+
+			familiesGroup.add( item );
+		}
+
+		// add font sizes
+		fontMenu.addSeparator();
+		ArrayList<String> sizes = new ArrayList<>( Arrays.asList(
+			"10", "12", "14", "16", "18", "20", "24", "28" ) );
+		if( !sizes.contains( currentSize ) )
+			sizes.add( currentSize );
+		sizes.sort( String.CASE_INSENSITIVE_ORDER );
+
+		ButtonGroup sizesGroup = new ButtonGroup();
+		for( String size : sizes ) {
+			JCheckBoxMenuItem item = new JCheckBoxMenuItem( size );
+			item.setSelected( size.equals( currentSize ) );
+			item.addActionListener( this::fontSizeChanged );
+			fontMenu.add( item );
+
+			sizesGroup.add( item );
+		}
+
+		// enabled/disable items
+		boolean enabled = UIManager.getLookAndFeel() instanceof FlatLaf;
+		for( Component item : fontMenu.getMenuComponents() )
+			item.setEnabled( enabled );
 	}
 
 	private void initComponents() {
@@ -64,6 +295,7 @@ class DemoFrame
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
 		JMenuItem openMenuItem = new JMenuItem();
+		JMenuItem saveAsMenuItem = new JMenuItem();
 		JMenuItem closeMenuItem = new JMenuItem();
 		JMenuItem exitMenuItem = new JMenuItem();
 		JMenu editMenu = new JMenu();
@@ -83,9 +315,23 @@ class DemoFrame
 		JMenuItem projectViewMenuItem = new JMenuItem();
 		JMenuItem structureViewMenuItem = new JMenuItem();
 		JMenuItem propertiesViewMenuItem = new JMenuItem();
+		JMenuItem menuItem2 = new JMenuItem();
+		JMenuItem menuItem1 = new JMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
+		fontMenu = new JMenu();
+		JMenuItem restoreFontMenuItem = new JMenuItem();
+		JMenuItem incrFontMenuItem = new JMenuItem();
+		JMenuItem decrFontMenuItem = new JMenuItem();
+		optionsMenu = new JMenu();
+		windowDecorationsCheckBoxMenuItem = new JCheckBoxMenuItem();
+		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
+		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
+		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
+		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
+		JMenuItem showHintsMenuItem = new JMenuItem();
+		JMenuItem showUIDefaultsInspectorMenuItem = new JMenuItem();
 		JMenu helpMenu = new JMenu();
 		JMenuItem aboutMenuItem = new JMenuItem();
 		JToolBar toolBar1 = new JToolBar();
@@ -103,8 +349,9 @@ class DemoFrame
 		DataComponentsPanel dataComponentsPanel = new DataComponentsPanel();
 		TabsPanel tabsPanel = new TabsPanel();
 		OptionPanePanel optionPanePanel = new OptionPanePanel();
+		ExtrasPanel extrasPanel1 = new ExtrasPanel();
 		controlBar = new ControlBar();
-		IJThemesPanel themesPanel = new IJThemesPanel();
+		themesPanel = new IJThemesPanel();
 
 		//======== this ========
 		setTitle("FlatLaf Demo");
@@ -124,15 +371,22 @@ class DemoFrame
 				newMenuItem.setText("New");
 				newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				newMenuItem.setMnemonic('N');
-				newMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+				newMenuItem.addActionListener(e -> newActionPerformed());
 				fileMenu.add(newMenuItem);
 
 				//---- openMenuItem ----
-				openMenuItem.setText("Open");
+				openMenuItem.setText("Open...");
 				openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				openMenuItem.setMnemonic('O');
-				openMenuItem.addActionListener(e -> menuItemActionPerformed(e));
+				openMenuItem.addActionListener(e -> openActionPerformed());
 				fileMenu.add(openMenuItem);
+
+				//---- saveAsMenuItem ----
+				saveAsMenuItem.setText("Save As...");
+				saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				saveAsMenuItem.setMnemonic('S');
+				saveAsMenuItem.addActionListener(e -> saveAsActionPerformed());
+				fileMenu.add(saveAsMenuItem);
 				fileMenu.addSeparator();
 
 				//---- closeMenuItem ----
@@ -262,6 +516,15 @@ class DemoFrame
 					menu1.add(propertiesViewMenuItem);
 				}
 				viewMenu.add(menu1);
+
+				//---- menuItem2 ----
+				menuItem2.setText("Disabled Item");
+				menuItem2.setEnabled(false);
+				viewMenu.add(menuItem2);
+
+				//---- menuItem1 ----
+				menuItem1.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
+				viewMenu.add(menuItem1);
 				viewMenu.addSeparator();
 
 				//---- radioButtonMenuItem1 ----
@@ -284,6 +547,74 @@ class DemoFrame
 				viewMenu.add(radioButtonMenuItem3);
 			}
 			menuBar1.add(viewMenu);
+
+			//======== fontMenu ========
+			{
+				fontMenu.setText("Font");
+
+				//---- restoreFontMenuItem ----
+				restoreFontMenuItem.setText("Restore Font");
+				restoreFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				restoreFontMenuItem.addActionListener(e -> restoreFont());
+				fontMenu.add(restoreFontMenuItem);
+
+				//---- incrFontMenuItem ----
+				incrFontMenuItem.setText("Increase Font Size");
+				incrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				incrFontMenuItem.addActionListener(e -> incrFont());
+				fontMenu.add(incrFontMenuItem);
+
+				//---- decrFontMenuItem ----
+				decrFontMenuItem.setText("Decrease Font Size");
+				decrFontMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				decrFontMenuItem.addActionListener(e -> decrFont());
+				fontMenu.add(decrFontMenuItem);
+			}
+			menuBar1.add(fontMenu);
+
+			//======== optionsMenu ========
+			{
+				optionsMenu.setText("Options");
+
+				//---- windowDecorationsCheckBoxMenuItem ----
+				windowDecorationsCheckBoxMenuItem.setText("Window decorations");
+				windowDecorationsCheckBoxMenuItem.setSelected(true);
+				windowDecorationsCheckBoxMenuItem.addActionListener(e -> windowDecorationsChanged());
+				optionsMenu.add(windowDecorationsCheckBoxMenuItem);
+
+				//---- menuBarEmbeddedCheckBoxMenuItem ----
+				menuBarEmbeddedCheckBoxMenuItem.setText("Embedded menu bar");
+				menuBarEmbeddedCheckBoxMenuItem.setSelected(true);
+				menuBarEmbeddedCheckBoxMenuItem.addActionListener(e -> menuBarEmbeddedChanged());
+				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
+
+				//---- underlineMenuSelectionMenuItem ----
+				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
+				underlineMenuSelectionMenuItem.addActionListener(e -> underlineMenuSelection());
+				optionsMenu.add(underlineMenuSelectionMenuItem);
+
+				//---- alwaysShowMnemonicsMenuItem ----
+				alwaysShowMnemonicsMenuItem.setText("Always show mnemonics");
+				alwaysShowMnemonicsMenuItem.addActionListener(e -> alwaysShowMnemonics());
+				optionsMenu.add(alwaysShowMnemonicsMenuItem);
+
+				//---- animatedLafChangeMenuItem ----
+				animatedLafChangeMenuItem.setText("Animated Laf Change");
+				animatedLafChangeMenuItem.setSelected(true);
+				animatedLafChangeMenuItem.addActionListener(e -> animatedLafChangeChanged());
+				optionsMenu.add(animatedLafChangeMenuItem);
+
+				//---- showHintsMenuItem ----
+				showHintsMenuItem.setText("Show hints");
+				showHintsMenuItem.addActionListener(e -> showHintsChanged());
+				optionsMenu.add(showHintsMenuItem);
+
+				//---- showUIDefaultsInspectorMenuItem ----
+				showUIDefaultsInspectorMenuItem.setText("Show UI Defaults Inspector");
+				showUIDefaultsInspectorMenuItem.addActionListener(e -> showUIDefaultsInspector());
+				optionsMenu.add(showUIDefaultsInspectorMenuItem);
+			}
+			menuBar1.add(optionsMenu);
 
 			//======== helpMenu ========
 			{
@@ -349,12 +680,14 @@ class DemoFrame
 
 			//======== tabbedPane ========
 			{
+				tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 				tabbedPane.addChangeListener(e -> selectedTabChanged());
 				tabbedPane.addTab("Basic Components", basicComponentsPanel);
 				tabbedPane.addTab("More Components", moreComponentsPanel);
 				tabbedPane.addTab("Data Components", dataComponentsPanel);
-				tabbedPane.addTab("SplitPane & Tabs", tabsPanel);
+				tabbedPane.addTab("Tabs", tabsPanel);
 				tabbedPane.addTab("Option Pane", optionPanePanel);
+				tabbedPane.addTab("Extras", extrasPanel1);
 			}
 			contentPanel.add(tabbedPane, "cell 0 0");
 		}
@@ -387,10 +720,35 @@ class DemoFrame
 		cutMenuItem.addActionListener( new DefaultEditorKit.CutAction() );
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
+
+		boolean supportsWindowDecorations = UIManager.getLookAndFeel()
+			.getSupportsWindowDecorations() || JBRCustomDecorations.isSupported();
+		windowDecorationsCheckBoxMenuItem.setEnabled( supportsWindowDecorations && !JBRCustomDecorations.isSupported() );
+		menuBarEmbeddedCheckBoxMenuItem.setEnabled( supportsWindowDecorations );
+
+		// remove contentPanel bottom insets
+		MigLayout layout = (MigLayout) contentPanel.getLayout();
+		LC lc = ConstraintParser.parseLayoutConstraint( (String) layout.getLayoutConstraints() );
+		UnitValue[] insets = lc.getInsets();
+		lc.setInsets( new UnitValue[] {
+			insets[0],
+			insets[1],
+			new UnitValue( 0, UnitValue.PIXEL, null ),
+			insets[3]
+		} );
+		layout.setLayoutConstraints( lc );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JMenu fontMenu;
+	private JMenu optionsMenu;
+	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
+	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
+	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
+	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
+	private JCheckBoxMenuItem animatedLafChangeMenuItem;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
+	private IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

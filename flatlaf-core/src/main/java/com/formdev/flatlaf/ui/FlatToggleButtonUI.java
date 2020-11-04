@@ -22,7 +22,6 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import javax.swing.AbstractButton;
-import javax.swing.ButtonModel;
 import javax.swing.JComponent;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
@@ -50,16 +49,16 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ToggleButton.startBackground				Color	optional; if set, a gradient paint is used and ToggleButton.background is ignored
  * @uiDefault ToggleButton.endBackground				Color	optional; if set, a gradient paint is used
  * @uiDefault ToggleButton.pressedBackground			Color
- * @uiDefault ToggleButton.disabledText					Color
- * @uiDefault ToggleButton.toolbar.hoverBackground		Color
- * @uiDefault ToggleButton.toolbar.pressedBackground	Color
- *
- * <!-- FlatToggleButtonUI -->
- *
  * @uiDefault ToggleButton.selectedBackground			Color
  * @uiDefault ToggleButton.selectedForeground			Color
+ * @uiDefault ToggleButton.disabledBackground			Color	optional
+ * @uiDefault ToggleButton.disabledText					Color
  * @uiDefault ToggleButton.disabledSelectedBackground	Color
+ * @uiDefault ToggleButton.toolbar.hoverBackground		Color
+ * @uiDefault ToggleButton.toolbar.pressedBackground	Color
  * @uiDefault ToggleButton.toolbar.selectedBackground	Color
+ *
+ * <!-- FlatToggleButtonUI -->
  *
  * @uiDefault ToggleButton.tab.underlineHeight			int
  * @uiDefault ToggleButton.tab.underlineColor			Color
@@ -74,12 +73,6 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatToggleButtonUI
 	extends FlatButtonUI
 {
-	protected Color selectedBackground;
-	protected Color selectedForeground;
-	protected Color disabledSelectedBackground;
-
-	protected Color toolbarSelectedBackground;
-
 	protected int tabUnderlineHeight;
 	protected Color tabUnderlineColor;
 	protected Color tabDisabledUnderlineColor;
@@ -89,12 +82,8 @@ public class FlatToggleButtonUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatToggleButtonUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatToggleButtonUI.class, FlatToggleButtonUI::new );
 	}
 
 	@Override
@@ -107,12 +96,6 @@ public class FlatToggleButtonUI
 		super.installDefaults( b );
 
 		if( !defaults_initialized ) {
-			selectedBackground = UIManager.getColor( "ToggleButton.selectedBackground" );
-			selectedForeground = UIManager.getColor( "ToggleButton.selectedForeground" );
-			disabledSelectedBackground = UIManager.getColor( "ToggleButton.disabledSelectedBackground" );
-
-			toolbarSelectedBackground = UIManager.getColor( "ToggleButton.toolbar.selectedBackground" );
-
 			tabUnderlineHeight = UIManager.getInt( "ToggleButton.tab.underlineHeight" );
 			tabUnderlineColor = UIManager.getColor( "ToggleButton.tab.underlineColor" );
 			tabDisabledUnderlineColor = UIManager.getColor( "ToggleButton.tab.disabledUnderlineColor" );
@@ -138,7 +121,7 @@ public class FlatToggleButtonUI
 			case BUTTON_TYPE:
 				if( BUTTON_TYPE_TAB.equals( e.getOldValue() ) || BUTTON_TYPE_TAB.equals( e.getNewValue() ) ) {
 					MigLayoutVisualPadding.uninstall( b );
-					MigLayoutVisualPadding.install( b, getFocusWidth( b ) );
+					MigLayoutVisualPadding.install( b );
 					b.revalidate();
 				}
 
@@ -183,38 +166,5 @@ public class FlatToggleButtonUI
 			}
 		} else
 			super.paintBackground( g, c );
-	}
-
-	@Override
-	protected Color getBackground( JComponent c ) {
-		ButtonModel model = ((AbstractButton)c).getModel();
-
-		if( model.isSelected() ) {
-			// in toolbar use same colors for disabled and enabled because
-			// we assume that toolbar icon is shown disabled
-			boolean toolBarButton = isToolBarButton( c );
-			return buttonStateColor( c,
-				toolBarButton ? toolbarSelectedBackground : selectedBackground,
-				toolBarButton ? toolbarSelectedBackground : disabledSelectedBackground,
-				null, null,
-				toolBarButton ? toolbarPressedBackground : pressedBackground );
-		}
-
-		return super.getBackground( c );
-	}
-
-	@Override
-	protected Color getForeground( JComponent c ) {
-		ButtonModel model = ((AbstractButton)c).getModel();
-
-		if( model.isSelected() && !isToolBarButton( c ) )
-			return selectedForeground;
-
-		return super.getForeground( c );
-	}
-
-	@Override
-	protected int getFocusWidth( JComponent c ) {
-		return isTabButton( c ) ? 0 : super.getFocusWidth( c );
 	}
 }

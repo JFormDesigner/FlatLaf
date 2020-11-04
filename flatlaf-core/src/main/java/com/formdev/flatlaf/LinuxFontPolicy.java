@@ -17,6 +17,7 @@
 package com.formdev.flatlaf;
 
 import java.awt.Font;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
@@ -28,9 +29,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
-import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * @author Karl Tauber
@@ -38,7 +39,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 class LinuxFontPolicy
 {
 	static Font getFont() {
-		return SystemInfo.IS_KDE ? getKDEFont() : getGnomeFont();
+		return SystemInfo.isKDE ? getKDEFont() : getGnomeFont();
 	}
 
 	/**
@@ -73,6 +74,13 @@ class LinuxFontPolicy
 				family = family.isEmpty() ? word : (family + ' ' + word);
 		}
 
+		// Ubuntu font is rendered poorly (except if running in JetBrains VM)
+		// --> use Liberation Sans font
+		if( family.startsWith( "Ubuntu" ) &&
+			!SystemInfo.isJetBrainsJVM &&
+			!FlatSystemProperties.getBoolean( FlatSystemProperties.USE_UBUNTU_FONT, false ) )
+		  family = "Liberation Sans";
+
 		// scale font size
 		double dsize = size * getGnomeFontScale();
 		size = (int) (dsize + 0.5);
@@ -88,9 +96,7 @@ class LinuxFontPolicy
 	}
 
 	private static Font createFont( String family, int style, int size, double dsize ) {
-		// using StyleContext.getFont() here because it uses
-		// sun.font.FontUtilities.getCompositeFontUIResource()
-		Font font = new StyleContext().getFont( family, style, size );
+		Font font = FlatLaf.createCompositeFont( family, style, size );
 
 		// set font size in floating points
 		font = font.deriveFont( style, (float) dsize );
@@ -99,6 +105,10 @@ class LinuxFontPolicy
 	}
 
 	private static double getGnomeFontScale() {
+		// do not scale font here if JRE scales
+		if( isSystemScaling() )
+			return 96. / 72.;
+
 		// see class com.sun.java.swing.plaf.gtk.PangoFonts background information
 
 		Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "gnome.Xft/DPI" );
@@ -168,7 +178,7 @@ class LinuxFontPolicy
 
 		// font dpi
 		int dpi = 96;
-		if( forceFontDPI != null ) {
+		if( forceFontDPI != null && !isSystemScaling() ) {
 			try {
 				dpi = Integer.parseInt( forceFontDPI );
 				if( dpi <= 0 )
@@ -246,5 +256,16 @@ class LinuxFontPolicy
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Returns true if the JRE scales, which is the case if:
+	 *   - environment variable GDK_SCALE is set and running on Java 9 or later
+	 *   - running on JetBrains Runtime 11 or later and scaling is enabled in system Settings
+	 */
+	private static boolean isSystemScaling() {
+		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment()
+			.getDefaultScreenDevice().getDefaultConfiguration();
+		return UIScale.getSystemScaleFactor( gc ) > 1;
 	}
 }

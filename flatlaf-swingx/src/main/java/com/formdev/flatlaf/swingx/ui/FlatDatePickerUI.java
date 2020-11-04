@@ -46,8 +46,6 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.calendar.DatePickerFormatter.DatePickerFormatterUIResource;
 import org.jdesktop.swingx.plaf.basic.BasicDatePickerUI;
 import com.formdev.flatlaf.ui.FlatArrowButton;
-import com.formdev.flatlaf.ui.FlatBorder;
-import com.formdev.flatlaf.ui.FlatRoundBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.MigLayoutVisualPadding;
 import com.formdev.flatlaf.util.UIScale;
@@ -62,8 +60,6 @@ public class FlatDatePickerUI
 {
 	protected Insets padding;
 
-	protected int focusWidth;
-	protected int arc;
 	protected String arrowType;
 	protected Color borderColor;
 	protected Color disabledBorderColor;
@@ -88,8 +84,6 @@ public class FlatDatePickerUI
 
 		padding = UIManager.getInsets( "ComboBox.padding" );
 
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
-		arc = UIManager.getInt( "Component.arc" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		borderColor = UIManager.getColor( "Component.borderColor" );
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
@@ -130,7 +124,7 @@ public class FlatDatePickerUI
 		LookAndFeel.installBorder( datePicker, "JXDatePicker.border" );
 		LookAndFeel.installProperty( datePicker, "opaque", Boolean.TRUE );
 
-		MigLayoutVisualPadding.install( datePicker, focusWidth );
+		MigLayoutVisualPadding.install( datePicker );
 	}
 
 	@Override
@@ -228,8 +222,8 @@ public class FlatDatePickerUI
 
 		int width = c.getWidth();
 		int height = c.getHeight();
-		float focusWidth = (c.getBorder() instanceof FlatBorder) ? scale( (float) this.focusWidth ) : 0;
-		float arc = (c.getBorder() instanceof FlatRoundBorder) ? scale( (float) this.arc ) : 0;
+		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+		float arc = FlatUIUtils.getBorderArc( c );
 		int arrowX = popupButton.getX();
 		int arrowWidth = popupButton.getWidth();
 		boolean enabled = c.isEnabled();

@@ -19,6 +19,7 @@ package com.formdev.flatlaf.demo.intellijthemes;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -46,8 +47,10 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.DemoPrefs;
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.StringUtils;
 import net.miginfocom.swing.*;
@@ -58,6 +61,8 @@ import net.miginfocom.swing.*;
 public class IJThemesPanel
 	extends JPanel
 {
+	public static final String THEMES_PACKAGE = "/com/formdev/flatlaf/intellijthemes/themes/";
+
 	private final IJThemesManager themesManager = new IJThemesManager();
 	private final List<IJThemeInfo> themes = new ArrayList<>();
 	private final HashMap<Integer, String> categories = new HashMap<>();
@@ -71,6 +76,7 @@ public class IJThemesPanel
 	private Window window;
 
 	private File lastDirectory;
+	private boolean isAdjustingThemesList;
 
 	public IJThemesPanel() {
 		initComponents();
@@ -115,6 +121,10 @@ public class IJThemesPanel
 	}
 
 	private void updateThemesList() {
+		int filterLightDark = filterComboBox.getSelectedIndex();
+		boolean showLight = (filterLightDark != 2);
+		boolean showDark = (filterLightDark != 1);
+
 		// load theme infos
 		themesManager.loadBundledThemes();
 		themesManager.loadThemesFromDirectory();
@@ -124,28 +134,41 @@ public class IJThemesPanel
 		themesManager.bundledThemes.sort( comparator );
 		themesManager.moreThemes.sort( comparator );
 
+		// remember selection (must be invoked before clearing themes field)
+		IJThemeInfo oldSel = themesList.getSelectedValue();
+
 		themes.clear();
 		categories.clear();
 
 		// add core themes at beginning
 		categories.put( themes.size(), "Core Themes" );
-		themes.add( new IJThemeInfo( "Flat Light", null, null, null, null, null, null, FlatLightLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat Dark", null, null, null, null, null, null, FlatDarkLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat IntelliJ", null, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
-		themes.add( new IJThemeInfo( "Flat Darcula", null, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
+		if( showLight )
+			themes.add( new IJThemeInfo( "Flat Light", null, false, null, null, null, null, null, FlatLightLaf.class.getName() ) );
+		if( showDark )
+			themes.add( new IJThemeInfo( "Flat Dark", null, true, null, null, null, null, null, FlatDarkLaf.class.getName() ) );
+		if( showLight )
+			themes.add( new IJThemeInfo( "Flat IntelliJ", null, false, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
+		if( showDark )
+			themes.add( new IJThemeInfo( "Flat Darcula", null, true, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
+
+		// add themes from directory
+		categories.put( themes.size(), "Current Directory" );
+		themes.addAll( themesManager.moreThemes );
 
 		// add uncategorized bundled themes
 		categories.put( themes.size(), "IntelliJ Themes" );
 		for( IJThemeInfo ti : themesManager.bundledThemes ) {
-			if( !ti.name.contains( "/" ) )
+			boolean show = (showLight && !ti.dark) || (showDark && ti.dark);
+			if( show && !ti.name.contains( "/" ) )
 				themes.add( ti );
 		}
 
 		// add categorized bundled themes
 		String lastCategory = null;
 		for( IJThemeInfo ti : themesManager.bundledThemes ) {
+			boolean show = (showLight && !ti.dark) || (showDark && ti.dark);
 			int sep = ti.name.indexOf( '/' );
-			if( sep < 0 )
+			if( !show || sep < 0 )
 				continue;
 
 			String category = ti.name.substring( 0, sep ).trim();
@@ -156,13 +179,6 @@ public class IJThemesPanel
 
 			themes.add( ti );
 		}
-
-		// add themes from directory
-		categories.put( themes.size(), "Current Directory" );
-		themes.addAll( themesManager.moreThemes );
-
-		// remember selection
-		IJThemeInfo oldSel = themesList.getSelectedValue();
 
 		// fill themes list
 		themesList.setModel( new AbstractListModel<IJThemeInfo>() {
@@ -189,17 +205,29 @@ public class IJThemesPanel
 					break;
 				}
 			}
+
+			// select first theme if none selected
+			if( themesList.getSelectedIndex() < 0 )
+				themesList.setSelectedIndex( 0 );
+		}
+
+		// scroll selection into visible area
+		int sel = themesList.getSelectedIndex();
+		if( sel >= 0 ) {
+			Rectangle bounds = themesList.getCellBounds( sel, sel );
+			if( bounds != null )
+				themesList.scrollRectToVisible( bounds );
 		}
 	}
 
 	private void themesListValueChanged( ListSelectionEvent e ) {
-		if( e.getValueIsAdjusting() )
-			return;
-
 		IJThemeInfo themeInfo = themesList.getSelectedValue();
 		boolean bundledTheme = (themeInfo != null && themeInfo.resourceName != null);
 		saveButton.setEnabled( bundledTheme );
 		sourceCodeButton.setEnabled( bundledTheme );
+
+		if( e.getValueIsAdjusting() || isAdjustingThemesList )
+			return;
 
 		EventQueue.invokeLater( () -> {
 			setTheme( themeInfo );
@@ -215,6 +243,8 @@ public class IJThemesPanel
 			if( themeInfo.lafClassName.equals( UIManager.getLookAndFeel().getClass().getName() ) )
 				return;
 
+			FlatAnimatedLafChange.showSnapshot();
+
 			try {
 				UIManager.setLookAndFeel( themeInfo.lafClassName );
 			} catch( Exception ex ) {
@@ -222,20 +252,29 @@ public class IJThemesPanel
 				showInformationDialog( "Failed to create '" + themeInfo.lafClassName + "'.", ex );
 			}
 		} else if( themeInfo.themeFile != null ) {
+			FlatAnimatedLafChange.showSnapshot();
+
 			try {
-			    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
-			    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_INTELLIJ_THEME, DemoPrefs.FILE_PREFIX + themeInfo.themeFile );
+				if( themeInfo.themeFile.getName().endsWith( ".properties" ) ) {
+				    FlatLaf.install( new FlatPropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
+				} else
+				    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
+
+				DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.FILE_PREFIX + themeInfo.themeFile );
 			} catch( Exception ex ) {
 				ex.printStackTrace();
 				showInformationDialog( "Failed to load '" + themeInfo.themeFile + "'.", ex );
 			}
 		} else {
-			IntelliJTheme.install( getClass().getResourceAsStream( themeInfo.resourceName ) );
-		    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_INTELLIJ_THEME, DemoPrefs.RESOURCE_PREFIX + themeInfo.resourceName );
+			FlatAnimatedLafChange.showSnapshot();
+
+			IntelliJTheme.install( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.resourceName ) );
+		    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.RESOURCE_PREFIX + themeInfo.resourceName );
 		}
 
 		// update all components
 		FlatLaf.updateUI();
+		FlatAnimatedLafChange.hideSnapshotWithAnimation();
 	}
 
 	private void saveTheme() {
@@ -253,7 +292,7 @@ public class IJThemesPanel
 
 		// save theme
 		try {
-			Files.copy( getClass().getResourceAsStream( themeInfo.resourceName ),
+			Files.copy( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.resourceName ),
 				file.toPath(), StandardCopyOption.REPLACE_EXISTING );
 		} catch( IOException ex ) {
 			showInformationDialog( "Failed to save theme to '" + file + "'.", ex );
@@ -266,7 +305,7 @@ public class IJThemesPanel
 				File licenseFile = new File( file.getParentFile(),
 					StringUtils.removeTrailing( file.getName(), ".theme.json" ) +
 					themeInfo.licenseFile.substring( themeInfo.licenseFile.indexOf( '.' ) ) );
-				Files.copy( getClass().getResourceAsStream( themeInfo.licenseFile ),
+				Files.copy( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.licenseFile ),
 					licenseFile.toPath(), StandardCopyOption.REPLACE_EXISTING );
 			} catch( IOException ex ) {
 				showInformationDialog( "Failed to save theme license to '" + file + "'.", ex );
@@ -331,17 +370,17 @@ public class IJThemesPanel
 
 	private void selectedCurrentLookAndFeel() {
 		LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
-		String intelliJTheme = UIManager.getLookAndFeelDefaults().getString( DemoPrefs.INTELLIJ_THEME_UI_KEY );
+		String theme = UIManager.getLookAndFeelDefaults().getString( DemoPrefs.THEME_UI_KEY );
 
-		if( intelliJTheme == null && lookAndFeel instanceof IntelliJTheme.ThemeLaf )
+		if( theme == null && (lookAndFeel instanceof IntelliJTheme.ThemeLaf || lookAndFeel instanceof FlatPropertiesLaf) )
 			return;
 
 		Predicate<IJThemeInfo> test;
-		if( intelliJTheme != null && intelliJTheme.startsWith( DemoPrefs.RESOURCE_PREFIX ) ) {
-			String resourceName = intelliJTheme.substring( DemoPrefs.RESOURCE_PREFIX.length() );
+		if( theme != null && theme.startsWith( DemoPrefs.RESOURCE_PREFIX ) ) {
+			String resourceName = theme.substring( DemoPrefs.RESOURCE_PREFIX.length() );
 			test = ti -> Objects.equals( ti.resourceName, resourceName );
-		} else if( intelliJTheme != null && intelliJTheme.startsWith( DemoPrefs.FILE_PREFIX ) ) {
-			File themeFile = new File( intelliJTheme.substring( DemoPrefs.FILE_PREFIX.length() ) );
+		} else if( theme != null && theme.startsWith( DemoPrefs.FILE_PREFIX ) ) {
+			File themeFile = new File( theme.substring( DemoPrefs.FILE_PREFIX.length() ) );
 			test = ti -> Objects.equals( ti.themeFile, themeFile );
 		} else {
 			String lafClassName = lookAndFeel.getClass().getName();
@@ -356,11 +395,17 @@ public class IJThemesPanel
 			}
 		}
 
+		isAdjustingThemesList = true;
 		if( newSel >= 0 ) {
 			if( newSel != themesList.getSelectedIndex() )
 				themesList.setSelectedIndex( newSel );
 		} else
 			themesList.clearSelection();
+		isAdjustingThemesList = false;
+	}
+
+	private void filterChanged() {
+		updateThemesList();
 	}
 
 	private void initComponents() {
@@ -369,6 +414,7 @@ public class IJThemesPanel
 		toolBar = new JToolBar();
 		saveButton = new JButton();
 		sourceCodeButton = new JButton();
+		filterComboBox = new JComboBox<>();
 		themesScrollPane = new JScrollPane();
 		themesList = new JList<>();
 
@@ -401,6 +447,17 @@ public class IJThemesPanel
 		}
 		add(toolBar, "cell 0 0,alignx right,growx 0");
 
+		//---- filterComboBox ----
+		filterComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+			"all",
+			"light",
+			"dark"
+		}));
+		filterComboBox.putClientProperty("JComponent.minimumWidth", 0);
+		filterComboBox.setFocusable(false);
+		filterComboBox.addActionListener(e -> filterChanged());
+		add(filterComboBox, "cell 0 0,alignx right,growx 0");
+
 		//======== themesScrollPane ========
 		{
 
@@ -417,6 +474,7 @@ public class IJThemesPanel
 	private JToolBar toolBar;
 	private JButton saveButton;
 	private JButton sourceCodeButton;
+	private JComboBox<String> filterComboBox;
 	private JScrollPane themesScrollPane;
 	private JList<IJThemeInfo> themesList;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

@@ -32,6 +32,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault Menu.icon.arrowColor				Color
  * @uiDefault Menu.icon.disabledArrowColor		Color
  * @uiDefault Menu.selectionForeground			Color
+ * @uiDefault MenuItem.selectionType			String
  *
  * @author Karl Tauber
  */
@@ -64,10 +65,15 @@ public class FlatMenuArrowIcon
 		}
 	}
 
-	private Color getArrowColor( Component c ) {
-		if( c instanceof JMenu && ((JMenu)c).isSelected() )
+	protected Color getArrowColor( Component c ) {
+		if( c instanceof JMenu && ((JMenu)c).isSelected() && !isUnderlineSelection() )
 			return selectionForeground;
 
 		return c.isEnabled() ? arrowColor : disabledArrowColor;
+	}
+
+	protected boolean isUnderlineSelection() {
+		// not storing value of "MenuItem.selectionType" in class to allow changing at runtime
+		return "underline".equals( UIManager.getString( "MenuItem.selectionType" ) );
 	}
 }

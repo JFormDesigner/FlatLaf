@@ -32,13 +32,13 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
@@ -60,8 +60,6 @@ import com.formdev.flatlaf.FlatClientProperties;
  *
  * <!-- FlatTextFieldUI -->
  *
- * @uiDefault TextComponent.arc					int
- * @uiDefault Component.focusWidth				int
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextField.placeholderForeground	Color
@@ -72,8 +70,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 public class FlatTextFieldUI
 	extends BasicTextFieldUI
 {
-	protected int arc;
-	protected int focusWidth;
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
@@ -89,15 +85,13 @@ public class FlatTextFieldUI
 		super.installDefaults();
 
 		String prefix = getPropertyPrefix();
-		arc = UIManager.getInt( "TextComponent.arc" );
-		focusWidth = UIManager.getInt( "Component.focusWidth" );
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 
-		LookAndFeel.installProperty( getComponent(), "opaque", focusWidth == 0 );
+		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
-		MigLayoutVisualPadding.install( getComponent(), focusWidth );
+		MigLayoutVisualPadding.install( getComponent() );
 	}
 
 	@Override
@@ -133,16 +127,28 @@ public class FlatTextFieldUI
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
+		propertyChange( getComponent(), e );
+	}
 
-		if( FlatClientProperties.PLACEHOLDER_TEXT.equals( e.getPropertyName() ) )
-			getComponent().repaint();
+	static void propertyChange( JTextComponent c, PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case FlatClientProperties.PLACEHOLDER_TEXT:
+			case FlatClientProperties.COMPONENT_ROUND_RECT:
+				c.repaint();
+				break;
+
+			case FlatClientProperties.MINIMUM_WIDTH:
+				c.revalidate();
+				break;
+		}
 	}
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		paintBackground( g, getComponent(), focusWidth, arc, isIntelliJTheme );
+		paintBackground( g, getComponent(), isIntelliJTheme );
 		paintPlaceholder( g, getComponent(), placeholderForeground );
-		super.paintSafely( g );
+
+		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
 	@Override
@@ -150,19 +156,20 @@ public class FlatTextFieldUI
 		// background is painted elsewhere
 	}
 
-	static void paintBackground( Graphics g, JTextComponent c, int focusWidth, int arc, boolean isIntelliJTheme ) {
-		Border border = c.getBorder();
-
+	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme ) {
 		// do not paint background if:
 		//   - not opaque and
 		//   - border is not a flat border and
 		//   - opaque was explicitly set (to false)
 		// (same behaviour as in AquaTextFieldUI)
-		if( !c.isOpaque() && !(border instanceof FlatBorder) && FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) )
+		if( !c.isOpaque() && FlatUIUtils.getOutsideFlatBorder( c ) == null && FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) )
 			return;
 
+		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+		float arc = FlatUIUtils.getBorderArc( c );
+
 		// fill background if opaque to avoid garbage if user sets opaque to true
-		if( c.isOpaque() && focusWidth > 0 )
+		if( c.isOpaque() && (focusWidth > 0 || arc > 0) )
 			FlatUIUtils.paintParentBackground( g, c );
 
 		// paint background
@@ -170,16 +177,13 @@ public class FlatTextFieldUI
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			float fFocusWidth = (border instanceof FlatBorder) ? scale( (float) focusWidth ) : 0;
-			float fArc = (border instanceof FlatTextBorder) ? scale( (float) arc ) : 0;
-
 			Color background = c.getBackground();
 			g2.setColor( !(background instanceof UIResource)
 				? background
 				: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
 					? FlatUIUtils.getParentBackground( c )
 					: background) );
-			FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), fFocusWidth, fArc );
+			FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 		} finally {
 			g2.dispose();
 		}
@@ -212,28 +216,29 @@ public class FlatTextFieldUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( super.getPreferredSize( c ), c );
+		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( super.getMinimumSize( c ), c );
+		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
 	}
 
-	private Dimension applyMinimumWidth( Dimension size, JComponent c ) {
+	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
 		// do not apply minimum width if JTextField.columns is set
 		if( c instanceof JTextField && ((JTextField)c).getColumns() > 0 )
 			return size;
 
+		// do not apply minimum width if used in combobox or spinner
 		Container parent = c.getParent();
 		if( parent instanceof JComboBox ||
 			parent instanceof JSpinner ||
 			(parent != null && parent.getParent() instanceof JSpinner) )
 		  return size;
 
-		int minimumWidth = FlatUIUtils.minimumWidth( getComponent(), this.minimumWidth );
-		int focusWidth = (c.getBorder() instanceof FlatBorder) ? this.focusWidth : 0;
-		size.width = Math.max( size.width, scale( minimumWidth + (focusWidth * 2) ) );
+		minimumWidth = FlatUIUtils.minimumWidth( c, minimumWidth );
+		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
+		size.width = Math.max( size.width, scale( minimumWidth ) + Math.round( focusWidth * 2 ) );
 		return size;
 	}
 }

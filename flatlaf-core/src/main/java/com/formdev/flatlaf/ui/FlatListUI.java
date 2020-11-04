@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JComponent;
@@ -81,7 +82,7 @@ public class FlatListUI
 		selectionInactiveBackground = UIManager.getColor( "List.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "List.selectionInactiveForeground" );
 
-		toggleSelectionColors( list.hasFocus() );
+		toggleSelectionColors();
 	}
 
 	@Override
@@ -100,13 +101,17 @@ public class FlatListUI
 			@Override
 			public void focusGained( FocusEvent e ) {
 				super.focusGained( e );
-				toggleSelectionColors( true );
+				toggleSelectionColors();
 			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
 				super.focusLost( e );
-				toggleSelectionColors( false );
+
+				// use invokeLater for the case that the window is deactivated
+				EventQueue.invokeLater( () -> {
+					toggleSelectionColors();
+				} );
 			}
 		};
 	}
@@ -120,8 +125,11 @@ public class FlatListUI
 	 * already used in applications. Then either the inactive colors are not used,
 	 * or the application has to be changed to extend a FlatLaf renderer.
 	 */
-	private void toggleSelectionColors( boolean focused ) {
-		if( focused ) {
+	private void toggleSelectionColors() {
+		if( list == null )
+			return;
+
+		if( FlatUIUtils.isPermanentFocusOwner( list ) ) {
 			if( list.getSelectionBackground() == selectionInactiveBackground )
 				list.setSelectionBackground( selectionBackground );
 			if( list.getSelectionForeground() == selectionInactiveForeground )

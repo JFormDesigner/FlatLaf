@@ -23,7 +23,6 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import javax.swing.AbstractButton;
-import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -61,12 +60,8 @@ public class FlatRadioButtonUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatRadioButtonUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatRadioButtonUI.class, FlatRadioButtonUI::new );
 	}
 
 	@Override
@@ -122,11 +117,10 @@ public class FlatRadioButtonUI
 	public void paint( Graphics g, JComponent c ) {
 		// fill background even if not opaque if
 		// - contentAreaFilled is true and
-		//   - used as cell renderer (because of selection background)
-		//   - or if background was explicitly set to a non-UIResource color
+		// - if background was explicitly set to a non-UIResource color
 		if( !c.isOpaque() &&
 			((AbstractButton)c).isContentAreaFilled() &&
-			(c.getParent() instanceof CellRendererPane || !(c.getBackground() instanceof UIResource)))
+			!(c.getBackground() instanceof UIResource) )
 		{
 			g.setColor( c.getBackground() );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
@@ -155,7 +149,7 @@ public class FlatRadioButtonUI
 			}
 		}
 
-		super.paint( g, c );
+		super.paint( FlatLabelUI.createGraphicsHTMLTextYCorrection( g, c ), c );
 	}
 
 	@Override

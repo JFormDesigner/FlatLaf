@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import javax.swing.Icon;
@@ -30,6 +31,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicLabelUI;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -54,12 +56,8 @@ public class FlatLabelUI
 
 	private boolean defaults_initialized = false;
 
-	private static ComponentUI instance;
-
 	public static ComponentUI createUI( JComponent c ) {
-		if( instance == null )
-			instance = new FlatLabelUI();
-		return instance;
+		return FlatUIUtils.createSharedUI( FlatLabelUI.class, FlatLabelUI::new );
 	}
 
 	@Override
@@ -122,6 +120,17 @@ public class FlatLabelUI
 			return; // not necessary to invoke BasicHTML.updateRenderer()
 
 		BasicHTML.updateRenderer( c, text );
+	}
+
+	static Graphics createGraphicsHTMLTextYCorrection( Graphics g, JComponent c ) {
+		return (c.getClientProperty( BasicHTML.propertyKey ) != null)
+			? HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g )
+			: g;
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		super.paint( createGraphicsHTMLTextYCorrection( g, c ), c );
 	}
 
 	@Override

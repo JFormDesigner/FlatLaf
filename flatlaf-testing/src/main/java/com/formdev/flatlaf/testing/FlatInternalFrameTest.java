@@ -1,5 +1,17 @@
 /*
- * Created by JFormDesigner on Tue Aug 27 21:47:02 CEST 2019
+ * Copyright 2020 FormDev Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.formdev.flatlaf.testing;
@@ -7,6 +19,7 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import java.beans.PropertyVetoException;
 import javax.swing.*;
+import com.formdev.flatlaf.extras.TriStateCheckBox;
 import com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -50,8 +63,18 @@ public class FlatInternalFrameTest
 			maximizableCheckBox.isSelected(),
 			iconifiableCheckBox.isSelected() );
 
-		if( iconCheckBox.isSelected() )
+		if( iconCheckBox.getState() == TriStateCheckBox.State.SELECTED )
 			internalFrame.setFrameIcon( new FlatFileViewFloppyDriveIcon() );
+		else if( iconCheckBox.getState() == TriStateCheckBox.State.UNSELECTED )
+			internalFrame.setFrameIcon( null );
+
+		if( menuBarCheckBox.isSelected() ) {
+			JMenuBar menuBar = new JMenuBar();
+			JMenu menu = new JMenu( "I'm a Menu Bar" );
+			menu.add( new JMenuItem( "Menu Item" ) );
+			menuBar.add( menu );
+			internalFrame.setJMenuBar( menuBar );
+		}
 
 		JPanel panel = new JPanel() {
 			private final Color color = new Color( (int) (Math.random() * 0xffffff) | 0x20000000, true );
@@ -92,7 +115,8 @@ public class FlatInternalFrameTest
 		closableCheckBox = new JCheckBox();
 		iconifiableCheckBox = new JCheckBox();
 		maximizableCheckBox = new JCheckBox();
-		iconCheckBox = new JCheckBox();
+		iconCheckBox = new TriStateCheckBox();
+		menuBarCheckBox = new JCheckBox();
 		titleLabel = new JLabel();
 		titleField = new JTextField();
 		createFrameButton = new JButton();
@@ -152,6 +176,10 @@ public class FlatInternalFrameTest
 				iconCheckBox.setText("Frame icon");
 				paletteContentPane.add(iconCheckBox, "cell 0 2");
 
+				//---- menuBarCheckBox ----
+				menuBarCheckBox.setText("Menu Bar");
+				paletteContentPane.add(menuBarCheckBox, "cell 1 2");
+
 				//---- titleLabel ----
 				titleLabel.setText("Frame title:");
 				paletteContentPane.add(titleLabel, "cell 0 3");
@@ -163,7 +191,7 @@ public class FlatInternalFrameTest
 				paletteContentPane.add(createFrameButton, "cell 1 4,alignx right,growx 0");
 			}
 			desktopPane.add(palette, JLayeredPane.PALETTE_LAYER);
-			palette.setBounds(15, 25, 220, 185);
+			palette.setBounds(15, 25, 275, 185);
 		}
 		add(desktopPane, "cell 0 0,width 600,height 600");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -179,7 +207,8 @@ public class FlatInternalFrameTest
 	private JCheckBox closableCheckBox;
 	private JCheckBox iconifiableCheckBox;
 	private JCheckBox maximizableCheckBox;
-	private JCheckBox iconCheckBox;
+	private TriStateCheckBox iconCheckBox;
+	private JCheckBox menuBarCheckBox;
 	private JLabel titleLabel;
 	private JTextField titleField;
 	private JButton createFrameButton;

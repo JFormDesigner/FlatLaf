@@ -1,0 +1,254 @@
+JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"title": "New"
+			"defaultCloseOperation": 2
+			"modal": true
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "insets dialog,hidemode 3"
+					"$columnConstraints": "[fill][grow,fill]"
+					"$rowConstraints": "[][][]"
+				} ) {
+					name: "contentPanel"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label1"
+						"text": "Name:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JTextField" ) {
+						name: "textField1"
+						"componentPopupMenu": new FormReference( "popupMenu1" )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label3"
+						"text": "Package:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "comboBox2"
+						"editable": true
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "com.myapp"
+							addElement( "com.myapp" )
+							addElement( "com.myapp.core" )
+							addElement( "com.myapp.ui" )
+							addElement( "com.myapp.util" )
+							addElement( "com.myapp.extras" )
+							addElement( "com.myapp.components" )
+							addElement( "com.myapp.dialogs" )
+							addElement( "com.myapp.windows" )
+						}
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 1"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label2"
+						"text": "Type:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "comboBox1"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "Class"
+							addElement( "Class" )
+							addElement( "Interface" )
+							addElement( "Package" )
+							addElement( "Annotation" )
+							addElement( "Enum" )
+							addElement( "Record" )
+							addElement( "Java Project" )
+							addElement( "Project" )
+							addElement( "Folder" )
+							addElement( "File" )
+						}
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 2"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "insets dialog,alignx right"
+					"$columnConstraints": "[button,fill][button,fill]"
+					"$rowSpecs": "[fill]"
+				} ) {
+					name: "buttonBar"
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "okButton"
+						"text": "OK"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okActionPerformed", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "cancelButton"
+						"text": "Cancel"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "cancelActionPerformed", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "South"
+				} )
+				add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+					name: "menuBar1"
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "menu1"
+						"text": "text"
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem8"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem7"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem6"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem5"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem4"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem3"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem2"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem1"
+							"text": "text"
+						} )
+					} )
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "menu2"
+						"text": "text"
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem18"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem17"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem16"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem15"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem14"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem13"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem12"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem11"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem10"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem9"
+							"text": "text"
+						} )
+					} )
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "menu3"
+						"text": "text"
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem25"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem26"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem24"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem23"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem22"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem21"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem20"
+							"text": "text"
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem19"
+							"text": "text"
+						} )
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 330, 210 )
+		} )
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "popupMenu1"
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "cutMenuItem"
+				"text": "Cut"
+				"mnemonic": 67
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "copyMenuItem"
+				"text": "Copy"
+				"mnemonic": 79
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "pasteMenuItem"
+				"text": "Paste"
+				"mnemonic": 80
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 220 )
+			"size": new java.awt.Dimension( 91, 87 )
+		} )
+	}
+}

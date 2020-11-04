@@ -1,0 +1,917 @@
+{
+  "name": "Night Owl",
+  "dark": true,
+  "author": "Mallowigi",
+  "editorScheme": "/colors/Night Owl.xml",
+  "ui": {
+    "*": {
+      "acceleratorSelectionForeground": "#5f7e97",
+      "background": "#011627",
+      "borderColor": "#122d42",
+      "disabledBackground": "#0e293f",
+      "disabledForeground": "#697098",
+      "disabledText": "#697098",
+      "focusColor": "#084d81",
+      "focusedBorderColor": "#7e57c2",
+      "foreground": "#d6deeb",
+      "inactiveBackground": "#0e293f",
+      "inactiveForeground": "#5f7e97",
+      "infoForeground": "#5f7e97",
+      "selectionBackground": "#5f7e97",
+      "selectionBackgroundInactive": "#0b2942",
+      "selectionForeground": "#ffffff",
+      "selectionInactiveBackground": "#0b2942",
+      "separatorColor": "#122d42"
+    },
+    "activeCaption": "#011627",
+    "ActionButton": {
+      "hoverBackground": "#7e57c250",
+      "hoverBorderColor": "#7e57c250",
+      "hoverSeparatorColor": "#0b253a",
+      "focusedBorderColor": "#7e57c250",
+      "pressedBackground": "#7e57c250",
+      "pressedBorderColor": "#7e57c250"
+    },
+    "Autocomplete": {
+      "selectionBackground": "#5f7e97"
+    },
+    "Borders.ContrastBorderColor": "#011627",
+    "Borders.color": "#122d42",
+    "Button": {
+      "arc": 0,
+      "background": "#011627",
+      "default": {
+        "endBackground": "#13344f",
+        "endBorderColor": "#13344f",
+        "foreground": "#ffffff",
+        "focusColor": "#7e57c2",
+        "focusedBorderColor": "#7e57c2",
+        "shadowColor": "#13344f",
+        "startBackground": "#13344f",
+        "startBorderColor": "#13344f"
+      },
+      "disabledBorderColor": "#0b253a",
+      "disabledText": "#697098",
+      "endBackground": "#0b253a",
+      "endBorderColor": "#0b253a",
+      "focus": "#084d81",
+      "focusedBorderColor": "#7e57c2",
+      "foreground": "#5f7e97",
+      "highlight": "#ffffff",
+      "mt.background": "#0b253a",
+      "mt.foreground": "#5f7e97",
+      "mt.selectedForeground": "#ffffff",
+      "mt.selection.color1": "#13344f",
+      "mt.selection.color2": "#13344f",
+      "startBackground": "#0b253a",
+      "startBorderColor": "#0b253a",
+      "shadowColor": "#0b253a",
+      "shadowWidth": 0
+    },
+    "Canvas": {
+      "Tooltip.borderColor": "#122d42",
+      "Tooltip.background": "#01111d"
+    },
+    "Content.background": "#010e1a",
+    "CheckBox": {
+      "background": "#011627",
+      "disabledText": "#697098",
+      "foreground": "#d6deeb",
+      "select": "#7e57c2"
+    },
+    "CheckBoxMenuItem": {
+      "acceleratorForeground": "#5f7e97",
+      "acceleratorSelectionForeground": "#5f7e97",
+      "background": "#011627",
+      "disabledBackground": "#011627",
+      "disabledForeground": "#697098",
+      "foreground": "#d6deeb",
+      "selectionBackground": "#5f7e97",
+      "selectionForeground": "#ffffff"
+    },
+    "ColorChooser": {
+      "background": "#011627",
+      "foreground": "#d6deeb",
+      "swatchesDefaultRecentColor": "#d6deeb"
+    },
+    "ComboBoxButton.background": "#0b253a",
+    "ComboBox": {
+      "ArrowButton": {
+        "background": "#0b253a",
+        "disabledIconColor": "#697098",
+        "iconColor": "#d6deeb",
+        "nonEditableBackground": "#011627"
+      },
+      "background": "#011627",
+      "buttonBackground": "#0b253a",
+      "disabledForeground": "#697098",
+      "foreground": "#d6deeb",
+      "modifiedItemForeground": "#7e57c2",
+      "nonEditableBackground": "#0b2942",
+      "padding": "5,5,5,5",
+      "selectionBackground": "#13344f",
+      "selectionForeground": "#ffffff"
+    },
+    "ComboPopup.border": "#122d42",
+    "CompletionPopup": {
+      "background": "#0b2942",
+      "foreground": "#d6deeb",
+      "infoForeground": "#5f7e97",
+      "matchForeground": "#7e57c2",
+      "matchSelectionForeground": "#7e57c2",
+      "nonFocusedState": "false",
+      "selectedGrayedForeground": "#ffffff",
+      "selectionGrayForeground": "#ffffff",
+      "selectionInactiveInfoForeground": "#5f7e97",
+      "selectionInactiveBackground": "#5f7e9750",
+      "selectionBackground": "#5f7e9780",
+      "selectionForeground": "#ffffff",
+      "selectionInfoForeground": "#ffffff"
+    },
+    "Component": {
+      "arc": 4,
+      "borderColor": "#084d81",
+      "disabledBorderColor": "#0b253a",
+      "focusColor": "#7e57c2",
+      "focusedBorderColor": "#7e57c2",
+      "hoverIconColor": "#7e57c2",
+      "infoForeground": "#5f7e97",
+      "iconColor": "#d6deeb"
+    },
+    "control": "#011627",
+    "controlText": "#5f7e97",
+    "Counter": {
+      "background": "#7e57c2",
+      "foreground": "#ffffff"
+    },
+    "Debugger": {
+      "Variables": {
+        "collectingDataForeground": "#5f7e97",
+        "changedValueForeground": "#7e57c2",
+        "errorMessageForeground": "#7fdbca",
+        "evaluatingExpressionForeground": "#5f7e97",
+        "exceptionForeground": "#FAD430",
+        "modifyingValueForeground": "#7e57c2",
+        "valueForeground": "#7e57c2"
+      }
+    },
+    "DebuggerTabs": {
+      "selectedBackground": "#084d81",
+      "underlinedTabBackground": "#084d81"
+    },
+    "DebuggerPopup": {
+      "borderColor": "#084d81"
+    },
+    "DefaultTabs": {
+      "background": "#011627",
+      "borderColor": "#011627",
+      "hoverBackground": "#13344f",
+      "hoverColor": "#011627",
+      "hoverMaskColor": "#084d81",
+      "inactiveColoredFileBackground": "#0b253a",
+      "inactiveUnderlineColor": "#697098",
+      "inactiveMaskColor": "#011627",
+      "underlineColor": "#7e57c2",
+      "underlinedTabBackground": "#13344f"
+    },
+    "Desktop.background": "#011627",
+    "DialogWrapper.southPanelBackground": "#011627",
+    "DialogWrapper.southPanelDivider": "#011627",
+    "DragAndDrop": {
+      "areaBackground": "#011627",
+      "areaBorderColor": "#011627",
+      "areaForeground": "#d6deeb"
+    },
+    "Editor": {
+      "background": "#011627",
+      "foreground": "#d6deeb",
+      "shortcutForeground": "#5f7e97"
+    },
+    "EditorPane": {
+      "background": "#011627",
+      "caretForeground": "#7e57c2",
+      "foreground": "#d6deeb",
+      "inactiveBackground": "#011627",
+      "inactiveForeground": "#697098",
+      "selectionBackground": "#5f7e97",
+      "selectionForeground": "#ffffff"
+    },
+    "EditorTabs": {
+      "borderColor": "#0b2942",
+      "hoverColor": "#084d81",
+      "hoverMaskColor": "#084d81",
+      "inactiveMaskColor": "#011627",
+      "inactiveColoredFileBackground": "#0116272",
+      "inactiveUnderlineColor": "#697098",
+      "selectedForeground": "#d6deeb",
+      "selectedBackground": "#13344f",
+      "underlineColor": "#7e57c2",
+      "underlinedTabBackground": "#13344f"
+    },
+    "EditorGroupsTabs": {
+      "background": "#011627",
+      "borderColor": "#0b2942",
+      "hoverBackground": "#084d81",
+      "hoverColor": "#084d81",
+      "inactiveUnderlineColor": "#7e57c2",
+      "underlineColor": "#7e57c2",
+      "underlinedTabBackground": "#13344f",
+      "underlinedTabForeground": "#d6deeb"
+    },
+    "FileColor": {
+      "Green": "#387002",
+      "Blue": "#004BA0",
+      "Yellow": "#0e293f",
+      "Orange": "#B53D00",
+      "Violet": "#4D2C91",
+      "Rose": "#A00037"
+    },
+    "FlameGraph": {
+      "JVMBackground": "#89DDF7",
+      "JVMFocusBackground": "#82AAFF",
+      "JVMSearchNotMatchedBackground": "#FF5370",
+      "JVMFocusSearchNotMatchedBackground": "#AB7967",
+      "nativeBackground": "#FFCB6B",
+      "nativeFocusBackground": "#F78C6C",
+      "nativeSearchNotMatchedBackground": "#C792EA",
+      "nativeFocusSearchNotMatchedBackground": "#BB80B3"
+    },
+    "Focus.color": "#122d42",
+    "FormattedTextField": {
+      "background": "#011627",
+      "caretForeground": "#7e57c2",
+      "foreground": "#d6deeb",
+      "inactiveBackground": "#0b253a",
+      "inactiveForeground": "#697098",
+      "selectionForeground": "#ffffff",
+      "selectionBackground": "#13344f"
+    },
+    "Group": {
+      "disabledSeparatorColor": "#122d42",
+      "separatorColor": "#122d42"
+    },
+    "GutterTooltip": {
+      "infoForeground": "#d6deeb",
+      "lineSeparatorColor": "#011627"
+    },
+    "HeaderColor": {
+      "active": "#011627",
+      "inactive": "#010e1a"
+    },
+    "HelpTooltip": {
+      "background": "#011627",
+      "borderColor": "#122d42",
+      "foreground": "#d6deeb",
+      "infoForeground": "#5f7e97",
+      "shortcutForeground": "#5f7e97"
+    },
+    "Hyperlink.linkColor": "#7e57c2",
+    "inactiveCaption": "#0b2942",
+    "inactiveCaptionBorder": "#011627",
+    "inactiveCaptionText": "#5f7e97",
+    "info": "#5f7e97",
+    "infoText": "#5f7e97",
+    "IdeStatusBar.border": "4,4,4,4",
+    "InformationHint.borderColor": "#122d42",
+    "InplaceRefactoringPopup": {
+      "borderColor": "#011627"
+    },
+    "InternalFrame": {
+      "activeTitleForeground": "#d6deeb",
+      "background": "#011627",
+      "inactiveTitleForeground": "#5f7e97"
+    },
+    "Label": {
+      "background": "#011627",
+      "disabledForeground": "#697098",
+      "disabledShadow": "#011627",
+      "disabledText": "#697098",
+      "foreground": "#d6deeb",
+      "infoForeground": "#5f7e97",
+      "selectedForeground": "#ffffff"
+    },
+    "Link": {
+      "activeForeground": "#7e57c2",
+      "hoverForeground": "#7e57c2",
+      "pressedForeground": "#7e57c2",
+      "secondaryForeground": "#5f7e97",
+      "visitedForeground": "#7e57c2"
+    },
+    "link.foreground": "#7e57c2",
+    "List": {
+      "background": "#0b2942",
+      "foreground": "#d6deeb",
+      "selectionBackground": "#5f7e9750",
+      "selectionForeground": "#ffffff",
+      "selectionInactiveForeground": "#ffffff",
+      "selectionInactiveBackground": "#13344f50"
+    },
+    "material": {
+      "background": "#011627",
+      "branchColor": "#d6deeb",
+      "contrast": "#010e1a",
+      "foreground": "#d6deeb",
+      "mergeCommits": "#0b253a",
+      "primaryColor": "#5f7e97",
+      "selectionForeground": "#ffffff",
+      "tab.backgroundColor": "#011627",
+      "tab.borderColor": "#7e57c2",
+      "tagColor": "#5f7e97"
+    },
+    "MemoryIndicator": {
+      "allocatedBackground": "#0b2942",
+      "usedColor": "#084d81",
+      "usedBackground": "#084d81"
+    },
+    "Menu": {
+      "acceleratorForeground": "#5f7e97",
+      "acceleratorSelectionForeground": "#ffffff",
+      "background": "#011627",
+      "border": "4,2,4,2",
+      "borderColor": "#0b2942",
+      "disabledBackground": "#0b2942",
+      "disabledForeground": "#697098",
+      "foreground": "#d6deeb",
+      "selectionBackground": "#5f7e97",
+      "selectionForeground": "#ffffff",
+      "separatorColor": "#122d42"
+    },
+    "MenuBar": {
+      "background": "#011627",
+      "borderColor": "#011627",
+      "disabledBackground": "#011627",
+      "disabledForeground": "#697098",
+      "foreground": "#d6deeb",
+      "highlight": "#011627",
+      "selectionBackground": "#5f7e97",
+      "selectionForeground": "#ffffff",
+      "shadow": "#011627"
+    },
+    "MenuItem": {
+      "acceleratorForeground": "#5f7e97",
+      "acceleratorSelectionForeground": "#ffffff",
+      "border": "4,2,4,2",
+      "background": "#011627",
+      "disabledBackground": "#011627",
+      "disabledForeground": "#697098",
+      "foreground": "#d6deeb",
+      "selectionBackground": "#5f7e97",
+      "selectionForeground": "#ffffff"
+    },
+    "NavBar": {
+      "arrowColor": "#d6deeb",
+      "borderColor": "#011627"
+    },
+    "NewClass": {
+      "Panel": {
+        "background": "#011627"
+      },
+      "SearchField": {
+        "background": "#011627"
+      }
+    },
+    "NewPSD.warning": "#7e57c2",
+    "Notification": {
+      "background": "#01111d",
+      "borderColor": "#01111d",
+      "errorBackground": "#01111d",
+      "errorBorderColor": "#01111d",
+      "foreground": "#d6deeb",
+      "MoreButton": {
+        "background": "#0b253a",
+        "foreground": "#d6deeb",
+        "innerBorderColor": "#0b253a"
+      },
+      "ToolWindow": {
+        "errorBackground": "#01111d",
+        "errorBorderColor": "#01111d",
+        "informativeBackground": "#01111d",
+        "informativeBorderColor": "#01111d",
+        "warningBackground": "#01111d",
+        "warningBorderColor": "#01111d"
+      }
+    },
+    "OnePixelDivider.background": "#122d42",
+    "OptionPane": {
+      "background": "#011627",
+      "foreground": "#d6deeb",
+      "messageForeground": "#d6deeb"
+    },
+    "Outline": {
+      "color": "#0b253a",
+      "focusedColor": "#7e57c2",
+      "disabledColor": "#697098"
+    },
+    "Panel": {
+      "background": "#011627",
+      "foreground": "#d6deeb"
+    },
+    "ParameterInfo": {
+      "background": "#0b2942",
+      "borderColor": "#13344f",
+      "currentOverloadBackground": "#13344f",
+      "currentParameterForeground": "#7e57c2",
+      "disabledForeground": "#697098",
+      "foreground": "#d6deeb",
+      "infoForeground": "#5f7e97",
+      "lineSeparatorColor": "#13344f"
+    },
+    "PasswordField": {
+      "background": "#011627",
+      "capsLockIconColor": "#7e57c2",
+      "caretForeground": "#7e57c2",
+      "foreground": "#d6deeb",
+      "inactiveForeground": "#697098",
+      "selectionBackground": "#13344f",
+      "selectionForeground": "#ffffff"
+    },
+    "Plugins": {
+      "background": "#011627",
+      "disabledForeground": "#697098",
+      "eapTagBackground": "#084d81",
+      "lightSelectionBackground": "#5f7e97",
+      "paidTagBackground": "#084d81",
+      "selectionBackground": "#5f7e97",
+      "tagForeground": "#7e57c2",
+      "tagBackground": "#084d81",
+      "trialTagBackground": "#084d81",
+      "Button": {
+        "installBackground": "#0b253a",
+        "installBorderColor": "#0b253a",
+        "installForeground": "#d6deeb",
+        "installFocusedBackground": "#084d81",
+        "installFillForeground": "#697098",
+        "installFillBackground": "#0b253a",
+        "updateBackground": "#0b253a",
+        "updateBorderColor": "#0b253a",
+        "updateForeground": "#d6deeb"
+      },
+      "SearchField": {
+        "background": "#011627",
+        "borderColor": "#122d42"
+      },
+      "SectionHeader": {
+        "background": "#0b2942",
+        "foreground": "#d6deeb"
+      },
+      "Tab": {
+        "hoverBackground": "#13344f",
+        "selectedForeground": "#ffffff",
+        "selectedBackground": "#13344f"
+      }
+    },
+    "Popup": {
+      "Advertiser": {
+        "background": "#011627",
+        "borderColor": "#011627",
+        "foreground": "#7e57c2"
+      },
+      "borderColor": "#010e1a",
+      "inactiveBorderColor": "#011627",
+      "innerBorderColor": "#0b2942",
+      "Header": {
+        "activeBackground": "#011627",
+        "inactiveBackground": "#010e1a"
+      },
+      "paintBorder": true,
+      "separatorForeground": "#d6deeb",
+      "separatorColor": "#0b2942",
+      "Toolbar": {
+        "Floating.background": "#010e1a",
+        "background": "#010e1a",
+        "borderColor": "#010e1a"
+      }
+    },
+    "PopupMenu": {
+      "background": "#011627",
+      "border": "2,0,2,0",
+      "foreground": "#d6deeb",
+      "translucentBackground": "#011627"
+    },
+    "PopupMenuSeparator.height": 10,
+    "PopupMenuSeparator.stripeIndent": 5,
+    "ProgressBar": {
+      "background": "#011627",
+      "foreground": "#7e57c2",
+      "indeterminateEndColor": "#7e57c2",
+      "indeterminateStartColor": "#7e57c2",
+      "progressColor": "#7e57c2",
+      "selectionBackground": "#084d81",
+      "trackColor": "#084d81"
+    },
+    "PsiViewer": {
+      "referenceHighlightColor": "#7e57c2"
+    },
+    "RadioButton": {
+      "background": "#011627",
+      "disabledText": "#697098",
+      "foreground": "#d6deeb"
+    },
+    "RadioButtonMenuItem": {
+      "acceleratorForeground": "#5f7e97",
+      "acceleratorSelectionForeground": "#5f7e97",
+      "background": "#011627",
+      "disabledBackground": "#011627",
+      "disabledForeground": "#697098",
+      "foreground": "#d6deeb",
+      "selectionBackground": "#5f7e97",
+      "selectionForeground": "#ffffff"
+    },
+    "ScrollBar": {
+      "background": "#011627",
+      "hoverThumbBorderColor": "#7e57c2",
+      "hoverThumbColor": "#7e57c2",
+      "hoverTrackColor": "#01162730",
+      "Mac": {
+        "hoverThumbBorderColor": "#7e57c2",
+        "hoverThumbColor": "#7e57c2",
+        "hoverTrackColor": "#01162730",
+        "thumbBorderColor": "#7e57c270",
+        "thumbColor": "#7e57c270",
+        "trackColor": "#01162730",
+        "Transparent": {
+          "hoverThumbBorderColor": "#7e57c2",
+          "hoverThumbColor": "#7e57c2",
+          "hoverTrackColor": "#01162730",
+          "thumbBorderColor": "#7e57c270",
+          "thumbColor": "#7e57c270",
+          "trackColor": "#01162730"
+        }
+      },
+      "thumb": "#084d81",
+      "thumbBorderColor": "#7e57c270",
+      "thumbColor": "#7e57c270",
+      "trackColor": "#01162730",
+      "Transparent": {
+        "hoverThumbBorderColor": "#7e57c2",
+        "hoverThumbColor": "#7e57c2",
+        "hoverTrackColor": "#01162730",
+        "thumbBorderColor": "#7e57c270",
+        "thumbColor": "#7e57c270",
+        "trackColor": "#01162730"
+      }
+    },
+    "SearchEverywhere": {
+      "Advertiser": {
+        "background": "#010e1a",
+        "foreground": "#5f7e97"
+      },
+      "Header": {
+        "background": "#011627"
+      },
+      "List": {
+        "separatorForeground": "#5f7e97",
+        "separatorColor": "#122d42"
+      },
+      "SearchField": {
+        "background": "#011627",
+        "borderColor": "#010e1a",
+        "infoForeground": "#5f7e97"
+      },
+      "Tab": {
+        "active.foreground": "#ffffff",
+        "selectedForeground": "#ffffff",
+        "selectedBackground": "#084d81"
+      }
+    },
+    "SearchMatch": {
+      "endBackground": "#7e57c2",
+      "startBackground": "#7e57c2"
+    },
+    "SearchField.errorBackground": "#01111d",
+    "Separator": {
+      "background": "#0b2942",
+      "foreground": "#0b2942",
+      "separatorColor": "#0b2942"
+    },
+    "SidePanel": {
+      "background": "#011627"
+    },
+    "Slider": {
+      "background": "#011627",
+      "buttonBorderColor": "#7e57c2",
+      "buttonColor": "#7e57c2",
+      "foreground": "#d6deeb",
+      "majorTickLength": 6,
+      "tickColor": "#0b2942",
+      "trackColor": "#13344f",
+      "trackWidth": 7,
+      "thumb": "#7e57c2"
+    },
+    "SpeedSearch": {
+      "background": "#084d81",
+      "borderColor": "#122d42",
+      "foreground": "#d6deeb",
+      "errorForeground": "#d6deeb"
+    },
+    "Spinner": {
+      "background": "#011627",
+      "border": "3,3,3,3",
+      "foreground": "#d6deeb",
+      "selectionForeground": "#ffffff"
+    },
+    "SplitPane": {
+      "background": "#011627",
+      "highlight": "#011627"
+    },
+    "SplitPaneDivider.draggingColor": "#0b2942",
+    "StatusBar": {
+      "borderColor": "#011627"
+    },
+    "TabbedPane": {
+      "background": "#011627",
+      "contentAreaColor": "#084d81",
+      "contentBorderInsets": "3,1,1,1",
+      "darkShadow": "#122d42",
+      "disabledForeground": "#697098",
+      "disabledUnderlineColor": "#697098",
+      "focus": "#13344f",
+      "focusColor": "#13344f",
+      "fontSizeOffset": 0,
+      "foreground": "#d6deeb",
+      "highlight": "#122d42",
+      "hoverColor": "#084d81",
+      "labelShift": 0,
+      "selectedForeground": "#ffffff",
+      "selectedLabelShift": 0,
+      "selectedTabPadInsets": "0,0,0,0",
+      "tabsOverlapBorder": true,
+      "tabHeight": 32,
+      "tabInsets": "5,10,5,10",
+      "tabSelectionHeight": 2,
+      "underlineColor": "#7e57c2"
+    },
+    "TabbedPane.mt.tab.background": "#011627",
+    "Table": {
+      "background": "#011627",
+      "cellNoFocusBorder": "10,5,10,5",
+      "focusCellHighlightBorder": "10,5,10,5",
+      "dropLineColor": "#7e57c2",
+      "dropLineShortColor": "#7e57c2",
+      "focusCellBackground": "#13344f",
+      "focusCellForeground": "#ffffff",
+      "foreground": "#d6deeb",
+      "gridColor": "#011627",
+      "highlightOuter": "#13344f",
+      "lightSelectionForeground": "#ffffff",
+      "lightSelectionInactiveForeground": "#5f7e97",
+      "lightSelectionInactiveBackground": "#0b2942",
+      "selectionBackground": "#13344f",
+      "selectionForeground": "#ffffff",
+      "selectionInactiveBackground": "#13344f",
+      "selectionInactiveForeground": "#ffffff",
+      "sortIconColor": "#d6deeb",
+      "stripeColor": "#010e1a"
+    },
+    "TableHeader": {
+      "background": "#011627",
+      "borderColor": "#011627",
+      "bottomSeparatorColor": "#0b2942",
+      "cellBorder": "4,0,4,0",
+      "disabledForeground": "#697098",
+      "foreground": "#d6deeb",
+      "focusCellBackground": "#13344f",
+      "focusCellForeground": "#ffffff",
+      "height": 25,
+      "separatorColor": "#0b2942"
+    },
+    "text": "#5f7e97",
+    "textInactiveText": "#5f7e97",
+    "textText": "#5f7e97",
+    "TextArea": {
+      "background": "#011627",
+      "caretForeground": "#7e57c2",
+      "foreground": "#d6deeb",
+      "inactiveForeground": "#697098",
+      "selectionBackground": "#13344f",
+      "selectionForeground": "#ffffff"
+    },
+    "TextField": {
+      "background": "#011627",
+      "caretForeground": "#7e57c2",
+      "foreground": "#d6deeb",
+      "inactiveForeground": "#697098",
+      "selectionBackground": "#13344f",
+      "selectionForeground": "#ffffff"
+    },
+    "TextPane": {
+      "background": "#011627",
+      "caretForeground": "#7e57c2",
+      "foreground": "#d6deeb",
+      "inactiveForeground": "#697098",
+      "selectionBackground": "#13344f",
+      "selectionForeground": "#ffffff"
+    },
+    "TitlePane": {
+      "background": "#010e1a",
+      "Button.hoverBackground": "#084d81",
+      "inactiveBackground": "#011627",
+      "infoForeground": "#5f7e97",
+      "inactiveInfoForeground": "#5f7e97"
+    },
+    "TitledBorder.titleColor": "#d6deeb",
+    "ToggleButton": {
+      "borderColor": "#0b253a",
+      "buttonColor": "#d6deeb",
+      "disabledText": "#697098",
+      "foreground": "#d6deeb",
+      "offForeground": "#011627",
+      "offBackground": "#011627",
+      "onBackground": "#7e57c2",
+      "onForeground": "#7e57c2"
+    },
+    "ToolBar": {
+      "background": "#011627",
+      "borderHandleColor": "#5f7e97",
+      "floatingForeground": "#5f7e97",
+      "foreground": "#d6deeb"
+    },
+    "ToolTip": {
+      "Actions.background": "#011627",
+      "Actions.infoForeground": "#5f7e97",
+      "background": "#011627",
+      "borderColor": "#084d81",
+      "foreground": "#d6deeb",
+      "infoForeground": "#5f7e97",
+      "separatorColor": "#122d42",
+      "shortcutForeground": "#5f7e97"
+    },
+    "ToolWindow": {
+      "Button": {
+        "hoverBackground": "#13344f",
+        "selectedForeground": "#ffffff",
+        "selectedBackground": "#010e1a"
+      },
+      "Header": {
+        "background": "#011627",
+        "borderColor": "#0b2942",
+        "inactiveBackground": "#011627"
+      },
+      "HeaderCloseButton": {
+        "background": "#011627"
+      },
+      "HeaderTab": {
+        "hoverBackground": "#084d81",
+        "hoverInactiveBackground": "#0b2942",
+        "inactiveUnderlineColor": "#7e57c2",
+        "selectedBackground": "#010e1a",
+        "selectedInactiveBackground": "#010e1a",
+        "underlineColor": "#7e57c2",
+        "underlinedTabBackground": "#084d81",
+        "underlinedTabInactiveBackground": "#0b2942"
+      }
+    },
+    "Tree": {
+      "background": "#011627",
+      "foreground": "#5f7e97",
+      "hash": "#122d42",
+      "modifiedItemForeground": "#7e57c2",
+      "rowHeight": 28,
+      "selectionBackground": "#13344f50",
+      "selectionForeground": "#ffffff",
+      "selectionInactiveForeground": "#ffffff",
+      "selectionInactiveBackground": "#13344f50",
+      "textBackground": "#011627"
+    },
+    "Tree.leftChildIndent": 10,
+    "Tree.rightChildIndent": 5,
+    "UiDesigner": {
+      "Activity.borderColor": "#122d42",
+      "ColorPicker.background": "#011627",
+      "ColorPicker.foreground": "#d6deeb",
+      "Component.borderColor": "#122d42",
+      "Component.background": "#011627",
+      "Component.foreground": "#d6deeb",
+      "Connector.borderColor": "#122d42",
+      "Connector.hoverBorderColor": "#084d81",
+      "Canvas.background": "#010e1a",
+      "highStroke.foreground": "#d6deeb",
+      "Label.foreground": "#5f7e97",
+      "List.selectionBackground": "#13344f50",
+      "Panel.borderColor": "#122d42",
+      "Panel.background": "#011627",
+      "percent.foreground": "#d6deeb",
+      "Placeholder.background": "#011627",
+      "Placeholder.borderColor": "#122d42",
+      "Placeholder.foreground": "#d6deeb",
+      "Placeholder.selectedForeground": "#ffffff",
+      "Preview.background": "#011627",
+      "stroke.acceleratorForeground": "#5f7e97"
+    },
+    "ValidationTooltip": {
+      "errorBackground": "#01111d",
+      "errorBorderColor": "#01111d",
+      "warningBackground": "#01111d",
+      "warningBorderColor": "#01111d"
+    },
+    "VersionControl": {
+      "FileHistory.Commit": {
+        "selectedBranchBackground": "#011627"
+      },
+      "GitCommits": {
+        "graphColor": "#084d81"
+      },
+      "GitLog": {
+        "localBranchIconColor": "#7e57c2",
+        "otherIconColor": "#5f7e97",
+        "remoteBranchIconColor": "#d6deeb",
+        "tagIconColor": "#5f7e97"
+      },
+      "HgLog": {
+        "branchIconColor": "#7e57c2",
+        "bookmarkIconColor": "#ffffff",
+        "closedBranchIconColor": "#697098",
+        "localTagIconColor": "#5f7e97",
+        "mqTagIconColor": "#5f7e97",
+        "tagIconColor": "#5f7e97",
+        "tipIconColor": "#5f7e97"
+      },
+      "Log": {
+        "Commit.unmatchedForeground": "#5f7e97",
+        "Commit.currentBranchBackground": "#0b2942"
+      },
+      "RefLabel": {
+        "foreground": "#ffffff",
+        "backgroundBase": "#084d81"
+      }
+    },
+    "Viewport": {
+      "background": "#011627",
+      "foreground": "#d6deeb"
+    },
+    "WelcomeScreen": {
+      "background": "#011627",
+      "borderColor": "#011627",
+      "captionBackground": "#010e1a",
+      "captionForeground": "#d6deeb",
+      "footerBackground": "#010e1a",
+      "footerForeground": "#d6deeb",
+      "headerBackground": "#011627",
+      "headerForeground": "#d6deeb",
+      "separatorColor": "#122d42",
+      "Projects": {
+        "background": "#0b2942",
+        "selectionBackground": "#5f7e97",
+        "selectionInactiveBackground": "#0b2942"
+      }
+    },
+    "window": "#011627",
+    "windowBorder": "#122d42",
+    "windowText": "#5f7e97",
+    "Window.border": "#122d42"
+  },
+  "icons": {
+    "ColorPalette": {
+      "#43494A": "#010e1a",
+      "#6B6B6B": "#5f7e97",
+      "#A7A7A7": "#011627",
+      "#3D6185": "#7e57c2",
+      "#466D94": "#7e57c2",
+      "#3C3F41": "#011627",
+      "#545556": "#697098",
+      "#606060": "#697098",
+      "#9AA7B0": "#d6deeb",
+      "#675133": "#7e57c2",
+      "Actions.Blue": "#82AAFF",
+      "Actions.Green": "#ecc48d",
+      "Actions.Grey": "#5f7e97",
+      "Actions.GreyInline": "#637777",
+      "Actions.GreyInline.Dark": "#d6deeb",
+      "Actions.Red": "#7fdbca",
+      "Actions.Yellow": "#FAD430",
+      "Checkbox.Background.Default": "#010e1a",
+      "Checkbox.Background.Default.Dark": "#010e1a",
+      "Checkbox.Background.Disabled": "#0e293f",
+      "Checkbox.Background.Disabled.Dark": "#0e293f",
+      "Checkbox.Border.Default": "#122d42",
+      "Checkbox.Border.Default.Dark": "#122d42",
+      "Checkbox.Border.Disabled": "#697098",
+      "Checkbox.Border.Disabled.Dark": "#697098",
+      "Checkbox.Focus.Thin.Default": "#7e57c2",
+      "Checkbox.Focus.Thin.Default.Dark": "#7e57c2",
+      "Checkbox.Focus.Wide": "#7e57c2",
+      "Checkbox.Focus.Wide.Dark": "#7e57c2",
+      "Checkbox.Foreground.Disabled": "#697098",
+      "Checkbox.Foreground.Disabled.Dark": "#697098",
+      "Checkbox.Background.Selected": "#7e57c2",
+      "Checkbox.Background.Selected.Dark": "#011627",
+      "Checkbox.Border.Selected": "#7e57c2",
+      "Checkbox.Border.Selected.Dark": "#7e57c2",
+      "Checkbox.Foreground.Selected": "#7e57c2",
+      "Checkbox.Foreground.Selected.Dark": "#7e57c2",
+      "Checkbox.Focus.Thin.Selected": "#d6deeb",
+      "Checkbox.Focus.Thin.Selected.Dark": "#d6deeb",
+      "Objects.Grey": "#637777",
+      "Objects.Blue": "#82AAFF",
+      "Objects.RedStatus": "#7fdbca",
+      "Objects.Red": "#7fdbca",
+      "Objects.Pink": "#c792ea",
+      "Objects.Yellow": "#FAD430",
+      "Objects.Green": "#ecc48d",
+      "Objects.Purple": "#c792ea",
+      "Objects.BlackText": "#d6deeb",
+      "Objects.YellowDark": "#f78c6c",
+      "Objects.GreenAndroid": "#ecc48d"
+    }
+  }
+}
