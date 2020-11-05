@@ -108,7 +108,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatTabbedPaneUI -->
  *
- * @uiDefault Component.arrowType						String	triangle (default) or chevron
+ * @uiDefault TabbedPane.arrowType						String	chevron (default) or triangle
  * @uiDefault TabbedPane.disabledForeground				Color
  * @uiDefault TabbedPane.selectedBackground				Color	optional
  * @uiDefault TabbedPane.selectedForeground				Color
@@ -1380,7 +1380,7 @@ public class FlatTabbedPaneUI
 
 		public FlatMoreTabsButton() {
 			// this method is invoked before installDefaults(), so we can not use color fields here
-			super( SOUTH, UIManager.getString( "Component.arrowType" ),
+			super( SOUTH, UIManager.getString( "TabbedPane.arrowType" ),
 				UIManager.getColor( "TabbedPane.foreground" ),
 				UIManager.getColor( "TabbedPane.disabledForeground" ), null,
 				UIManager.getColor( "TabbedPane.hoverColor" ) );
@@ -1527,7 +1527,7 @@ public class FlatTabbedPaneUI
 
 		protected FlatScrollableTabButton( int direction ) {
 			// this method is invoked before installDefaults(), so we can not use color fields here
-			super( direction, UIManager.getString( "Component.arrowType" ),
+			super( direction, UIManager.getString( "TabbedPane.arrowType" ),
 				UIManager.getColor( "TabbedPane.foreground" ),
 				UIManager.getColor( "TabbedPane.disabledForeground" ), null,
 				UIManager.getColor( "TabbedPane.hoverColor" ) );
