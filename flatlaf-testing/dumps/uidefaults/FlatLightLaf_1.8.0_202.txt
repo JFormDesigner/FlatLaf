@@ -956,6 +956,7 @@ TabbedPane.tabInsets           4,12,4,12    javax.swing.plaf.InsetsUIResource [U
 TabbedPane.tabRunOverlay       0
 TabbedPane.tabSelectionHeight  3
 TabbedPane.tabSeparatorsFullHeight false
+TabbedPane.tabWidthMode        preferred
 TabbedPane.tabsOpaque          true
 TabbedPane.tabsOverlapBorder   false
 TabbedPane.textIconGap         4

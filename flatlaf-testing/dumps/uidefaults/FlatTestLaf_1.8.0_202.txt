@@ -947,6 +947,7 @@ TabbedPane.tabRunOverlay       0
 TabbedPane.tabSelectionHeight  3
 TabbedPane.tabSeparatorColor   #0000ff    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.tabSeparatorsFullHeight false
+TabbedPane.tabWidthMode        preferred
 TabbedPane.tabsOpaque          true
 TabbedPane.tabsOverlapBorder   false
 TabbedPane.textIconGap         4
