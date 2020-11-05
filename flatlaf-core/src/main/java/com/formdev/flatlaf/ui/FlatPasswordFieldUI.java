@@ -63,6 +63,7 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault PasswordField.showCapsLock			boolean
  * @uiDefault PasswordField.capsLockIcon			Icon
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
+ * @uiDefault TextComponent.selectAllOnMouseClick	boolean
  *
  * @author Karl Tauber
  */
@@ -144,7 +145,8 @@ public class FlatPasswordFieldUI
 
 	@Override
 	protected Caret createCaret() {
-		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy" ) );
+		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy" ),
+			UIManager.getBoolean( "TextComponent.selectAllOnMouseClick" ) );
 	}
 
 	@Override

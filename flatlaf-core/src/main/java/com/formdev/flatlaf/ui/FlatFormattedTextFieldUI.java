@@ -45,6 +45,7 @@ import javax.swing.plaf.ComponentUI;
  * @uiDefault Component.isIntelliJTheme					boolean
  * @uiDefault FormattedTextField.placeholderForeground	Color
  * @uiDefault TextComponent.selectAllOnFocusPolicy		String	never, once (default) or always
+ * @uiDefault TextComponent.selectAllOnMouseClick		boolean
  *
  * @author Karl Tauber
  */

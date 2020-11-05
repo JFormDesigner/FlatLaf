@@ -36,13 +36,15 @@ public class FlatCaret
 	implements UIResource
 {
 	private final String selectAllOnFocusPolicy;
+	private final boolean selectAllOnMouseClick;
 
 	private boolean wasFocused;
 	private boolean wasTemporaryLost;
 	private boolean isMousePressed;
 
-	public FlatCaret( String selectAllOnFocusPolicy ) {
+	public FlatCaret( String selectAllOnFocusPolicy, boolean selectAllOnMouseClick ) {
 		this.selectAllOnFocusPolicy = selectAllOnFocusPolicy;
+		this.selectAllOnMouseClick = selectAllOnMouseClick;
 	}
 
 	@Override
@@ -61,7 +63,7 @@ public class FlatCaret
 
 	@Override
 	public void focusGained( FocusEvent e ) {
-		if( !wasTemporaryLost && !isMousePressed )
+		if( !wasTemporaryLost && (!isMousePressed || selectAllOnMouseClick) )
 			selectAllOnFocusGained();
 		wasTemporaryLost = false;
 		wasFocused = true;
