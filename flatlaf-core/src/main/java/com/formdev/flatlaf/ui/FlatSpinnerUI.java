@@ -59,7 +59,7 @@ import com.formdev.flatlaf.FlatClientProperties;
  *
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Spinner.buttonStyle				String	button (default) or none
- * @uiDefault Component.arrowType				String	triangle (default) or chevron
+ * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color

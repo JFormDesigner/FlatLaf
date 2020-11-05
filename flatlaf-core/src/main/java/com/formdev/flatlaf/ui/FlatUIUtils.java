@@ -128,6 +128,10 @@ public class FlatUIUtils
 		return (value instanceof Number) ? ((Number)value).floatValue() : defaultValue;
 	}
 
+	public static boolean isChevron( String arrowType ) {
+		return !"triangle".equals( arrowType );
+	}
+
 	public static Color nonUIResource( Color c ) {
 		return (c instanceof UIResource) ? new Color( c.getRGB(), true ) : c;
 	}

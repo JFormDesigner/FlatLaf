@@ -25,11 +25,12 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.ui.FlatArrowButton;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * "month down" icon for {@link org.jdesktop.swingx.JXMonthView}.
  *
- * @uiDefault Component.arrowType				String	triangle (default) or chevron
+ * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault JXMonthView.arrowColor			Color
  * @uiDefault JXMonthView.disabledArrowColor	Color
  *
@@ -38,7 +39,7 @@ import com.formdev.flatlaf.ui.FlatArrowButton;
 public class FlatMonthDownIcon
 	extends FlatAbstractIcon
 {
-	protected final boolean chevron = "chevron".equals( UIManager.getString( "Component.arrowType" ) );
+	protected final boolean chevron = FlatUIUtils.isChevron( UIManager.getString( "Component.arrowType" ) );
 	protected final Color arrowColor = UIManager.getColor( "JXMonthView.arrowColor" );
 	protected final Color disabledArrowColor = UIManager.getColor( "JXMonthView.disabledArrowColor" );
 

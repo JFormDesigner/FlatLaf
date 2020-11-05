@@ -85,7 +85,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ComboBox.editorColumns			int
  * @uiDefault ComboBox.maximumRowCount			int
  * @uiDefault ComboBox.buttonStyle				String	auto (default), button or none
- * @uiDefault Component.arrowType				String	triangle (default) or chevron
+ * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color

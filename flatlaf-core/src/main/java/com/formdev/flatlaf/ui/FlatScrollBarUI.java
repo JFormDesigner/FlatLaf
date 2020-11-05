@@ -65,7 +65,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ScrollBar.pressedTrackColor			Color	optional
  * @uiDefault ScrollBar.pressedThumbColor			Color	optional
  * @uiDefault ScrollBar.pressedThumbWithTrack		boolean
- * @uiDefault Component.arrowType					String	triangle (default) or chevron
+ * @uiDefault Component.arrowType					String	chevron (default) or triangle
  * @uiDefault ScrollBar.showButtons					boolean
  * @uiDefault ScrollBar.buttonArrowColor			Color
  * @uiDefault ScrollBar.buttonDisabledArrowColor	Color

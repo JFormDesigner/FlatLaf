@@ -67,7 +67,7 @@ public class FlatArrowButton
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
 
-		this.chevron = "chevron".equals( type );
+		this.chevron = FlatUIUtils.isChevron( type );
 		this.foreground = foreground;
 		this.disabledForeground = disabledForeground;
 		this.hoverForeground = hoverForeground;

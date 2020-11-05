@@ -28,7 +28,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "arrow" icon for {@link javax.swing.JMenu}.
  *
- * @uiDefault Component.arrowType				String	triangle (default) or chevron
+ * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault Menu.icon.arrowColor				Color
  * @uiDefault Menu.icon.disabledArrowColor		Color
  * @uiDefault Menu.selectionForeground			Color
@@ -39,7 +39,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatMenuArrowIcon
 	extends FlatAbstractIcon
 {
-	protected final boolean chevron = "chevron".equals( UIManager.getString( "Component.arrowType" ) );
+	protected final boolean chevron = FlatUIUtils.isChevron( UIManager.getString( "Component.arrowType" ) );
 	protected final Color arrowColor = UIManager.getColor( "Menu.icon.arrowColor" );
 	protected final Color disabledArrowColor = UIManager.getColor( "Menu.icon.disabledArrowColor" );
 	protected final Color selectionForeground = UIManager.getColor( "Menu.selectionForeground" );

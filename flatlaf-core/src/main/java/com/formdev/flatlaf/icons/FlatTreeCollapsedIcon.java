@@ -25,7 +25,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 /**
  * "collapsed" icon for {@link javax.swing.JTree}.
  *
- * @uiDefault Component.arrowType				String	triangle (default) or chevron
+ * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault Tree.icon.collapsedColor			Color
  *
  * @author Karl Tauber
@@ -41,7 +41,7 @@ public class FlatTreeCollapsedIcon
 
 	FlatTreeCollapsedIcon( Color color ) {
 		super( 11, 11, color );
-		chevron = "chevron".equals( UIManager.getString( "Component.arrowType" ) );
+		chevron = FlatUIUtils.isChevron( UIManager.getString( "Component.arrowType" ) );
 	}
 
 	@Override

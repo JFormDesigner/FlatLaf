@@ -49,7 +49,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatSplitPaneUI -->
  *
- * @uiDefault Component.arrowType						String	triangle (default) or chevron
+ * @uiDefault Component.arrowType						String	chevron (default) or triangle
  * @uiDefault SplitPane.continuousLayout				boolean
  * @uiDefault SplitPaneDivider.oneTouchArrowColor		Color
  * @uiDefault SplitPaneDivider.oneTouchHoverArrowColor	Color
