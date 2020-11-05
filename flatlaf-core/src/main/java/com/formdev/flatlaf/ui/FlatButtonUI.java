@@ -254,15 +254,23 @@ public class FlatButtonUI
 			(icon == null && text != null && ("...".equals( text ) || text.length() == 1));
 	}
 
-	// same indices as in parameters to clientPropertyChoice()
 	static final int TYPE_OTHER = -1;
 	static final int TYPE_SQUARE = 0;
 	static final int TYPE_ROUND_RECT = 1;
 
 	static int getButtonType( Component c ) {
-		return (c instanceof AbstractButton)
-			? clientPropertyChoice( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_SQUARE, BUTTON_TYPE_ROUND_RECT )
-			: TYPE_OTHER;
+		if( !(c instanceof AbstractButton) )
+			return TYPE_OTHER;
+
+		Object value = ((AbstractButton)c).getClientProperty( BUTTON_TYPE );
+		if( !(value instanceof String) )
+			return TYPE_OTHER;
+
+		switch( (String) value ) {
+			case BUTTON_TYPE_SQUARE:		return TYPE_SQUARE;
+			case BUTTON_TYPE_ROUND_RECT:	return TYPE_ROUND_RECT;
+			default:						return TYPE_OTHER;
+		}
 	}
 
 	static boolean isHelpButton( Component c ) {

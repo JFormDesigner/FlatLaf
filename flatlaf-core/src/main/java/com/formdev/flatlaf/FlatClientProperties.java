@@ -640,14 +640,4 @@ public interface FlatClientProperties
 		Object value = c.getClientProperty( key );
 		return (value instanceof Color) ? (Color) value : defaultValue;
 	}
-
-	static int clientPropertyChoice( JComponent c, String key, String... choices ) {
-		Object value = c.getClientProperty( key );
-		for( int i = 0; i < choices.length; i++ ) {
-			if( choices[i].equals( value ) )
-				return i;
-
-		}
-		return -1;
-	}
 }
