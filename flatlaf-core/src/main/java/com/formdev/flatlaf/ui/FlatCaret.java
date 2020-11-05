@@ -63,7 +63,7 @@ public class FlatCaret
 
 	@Override
 	public void focusGained( FocusEvent e ) {
-		if( !wasTemporaryLost && ( !isMousePressed || selectAllOnMouseClick) )
+		if( !wasTemporaryLost && ( !isMousePressed || selectAllOnMouseClick ) )
 			selectAllOnFocusGained();
 		wasTemporaryLost = false;
 		wasFocused = true;
