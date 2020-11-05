@@ -753,6 +753,7 @@ TextArea.selectionForeground
 TextAreaUI
 TextComponent.arc
 TextComponent.selectAllOnFocusPolicy
+TextComponent.selectAllOnMouseClick
 TextField.background
 TextField.border
 TextField.caretBlinkRate

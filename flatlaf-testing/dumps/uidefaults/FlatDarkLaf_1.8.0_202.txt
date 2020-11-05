@@ -1047,6 +1047,7 @@ TextAreaUI                     com.formdev.flatlaf.ui.FlatTextAreaUI
 
 TextComponent.arc              0
 TextComponent.selectAllOnFocusPolicy once
+TextComponent.selectAllOnMouseClick false
 
 
 #---- TextField ----
