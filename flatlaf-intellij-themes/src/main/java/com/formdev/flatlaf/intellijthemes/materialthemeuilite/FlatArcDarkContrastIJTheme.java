@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+//
+// DO NOT MODIFY
+// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
+//
+
 package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
 
 import com.formdev.flatlaf.IntelliJTheme;
@@ -34,5 +39,10 @@ public class FlatArcDarkContrastIJTheme
 
 	public FlatArcDarkContrastIJTheme() {
 		super( Utils.loadTheme( "Arc Dark Contrast.theme.json" ) );
+	}
+
+	@Override
+	public String getName() {
+		return "Arc Dark Contrast (Material)";
 	}
 }

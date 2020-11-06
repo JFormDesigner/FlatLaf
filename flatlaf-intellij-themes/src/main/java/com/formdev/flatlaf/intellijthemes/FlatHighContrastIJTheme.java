@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+//
+// DO NOT MODIFY
+// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
+//
+
 package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
@@ -34,5 +39,10 @@ public class FlatHighContrastIJTheme
 
 	public FlatHighContrastIJTheme() {
 		super( Utils.loadTheme( "HighContrast.theme.json" ) );
+	}
+
+	@Override
+	public String getName() {
+		return "High contrast";
 	}
 }

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+//
+// DO NOT MODIFY
+// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
+//
+
 package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
 
 import com.formdev.flatlaf.IntelliJTheme;
@@ -34,5 +39,10 @@ public class FlatMaterialPalenightContrastIJTheme
 
 	public FlatMaterialPalenightContrastIJTheme() {
 		super( Utils.loadTheme( "Material Palenight Contrast.theme.json" ) );
+	}
+
+	@Override
+	public String getName() {
+		return "Material Palenight Contrast (Material)";
 	}
 }

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+//
+// DO NOT MODIFY
+// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
+//
+
 package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
 
 import com.formdev.flatlaf.IntelliJTheme;
@@ -34,5 +39,10 @@ public class FlatLightOwlContrastIJTheme
 
 	public FlatLightOwlContrastIJTheme() {
 		super( Utils.loadTheme( "Light Owl Contrast.theme.json" ) );
+	}
+
+	@Override
+	public String getName() {
+		return "Light Owl Contrast (Material)";
 	}
 }

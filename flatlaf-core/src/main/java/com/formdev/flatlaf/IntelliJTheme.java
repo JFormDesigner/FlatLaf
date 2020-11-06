@@ -583,7 +583,7 @@ public class IntelliJTheme
 
 		@Override
 		public String getDescription() {
-			return theme.name;
+			return getName();
 		}
 
 		@Override

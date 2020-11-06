@@ -69,9 +69,9 @@ public class IJThemesClassGenerator
 		if( nameSep >= 0 )
 			name = name.substring( nameSep + 1 ).trim();
 
-		String displayName = name;
+		String themeName = name;
 		if( "material-theme-ui-lite".equals( resourcePath ) )
-			displayName += " (Material)";
+			themeName += " (Material)";
 
 		StringBuilder buf = new StringBuilder();
 		for( String n : name.split( " " ) ) {
@@ -91,7 +91,8 @@ public class IJThemesClassGenerator
 		String classBody = CLASS_HEADER + CLASS_TEMPLATE
 			.replace( "${subPackage}", subPackage )
 			.replace( "${themeClass}", themeClass )
-			.replace( "${themeFile}", themeFile );
+			.replace( "${themeFile}", themeFile )
+			.replace( "${themeName}", themeName );
 
 		File toDir = new File( toPath );
 		if( resourcePath != null )
@@ -105,10 +106,10 @@ public class IJThemesClassGenerator
 		allInfos.append( THEME_TEMPLATE
 			.replace( "${subPackage}", subPackage )
 			.replace( "${themeClass}", themeClass )
-			.replace( "${themeName}", displayName ) );
+			.replace( "${themeName}", themeName ) );
 
 		markdownTable.append( String.format( "[%s](%s) | `com.formdev.flatlaf.intellijthemes%s.%s`\n",
-			displayName, ti.sourceCodeUrl, subPackage, themeClass ) );
+			themeName, ti.sourceCodeUrl, subPackage, themeClass ) );
 	}
 
 	private static void writeFile( Path out, String content ) {
@@ -136,6 +137,11 @@ public class IJThemesClassGenerator
 		" * See the License for the specific language governing permissions and\n" +
 		" * limitations under the License.\n" +
 		" */\n" +
+		"\n" +
+		"//\n" +
+		"// DO NOT MODIFY\n" +
+		"// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator\n" +
+		"//\n" +
 		"\n";
 
 	private static final String CLASS_TEMPLATE =
@@ -159,6 +165,11 @@ public class IJThemesClassGenerator
 		"\n" +
 		"	public ${themeClass}() {\n" +
 		"		super( Utils.loadTheme( \"${themeFile}\" ) );\n" +
+		"	}\n" +
+		"\n" +
+		"	@Override\n" +
+		"	public String getName() {\n" +
+		"		return \"${themeName}\";\n" +
 		"	}\n" +
 		"}\n";
 

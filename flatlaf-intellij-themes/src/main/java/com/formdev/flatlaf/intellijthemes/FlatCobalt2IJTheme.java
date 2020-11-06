@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+//
+// DO NOT MODIFY
+// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
+//
+
 package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
@@ -34,5 +39,10 @@ public class FlatCobalt2IJTheme
 
 	public FlatCobalt2IJTheme() {
 		super( Utils.loadTheme( "Cobalt_2.theme.json" ) );
+	}
+
+	@Override
+	public String getName() {
+		return "Cobalt 2";
 	}
 }

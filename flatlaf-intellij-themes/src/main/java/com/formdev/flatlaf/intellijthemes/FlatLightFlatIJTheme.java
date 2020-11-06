@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+//
+// DO NOT MODIFY
+// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
+//
+
 package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
@@ -34,5 +39,10 @@ public class FlatLightFlatIJTheme
 
 	public FlatLightFlatIJTheme() {
 		super( Utils.loadTheme( "LightFlatTheme.theme.json" ) );
+	}
+
+	@Override
+	public String getName() {
+		return "Light Flat";
 	}
 }

@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+//
+// DO NOT MODIFY
+// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
+//
+
 package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
@@ -34,5 +39,10 @@ public class FlatArcDarkIJTheme
 
 	public FlatArcDarkIJTheme() {
 		super( Utils.loadTheme( "arc_theme_dark.theme.json" ) );
+	}
+
+	@Override
+	public String getName() {
+		return "Arc Dark";
 	}
 }
