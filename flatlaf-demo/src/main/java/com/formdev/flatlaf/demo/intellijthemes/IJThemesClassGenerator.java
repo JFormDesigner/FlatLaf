@@ -69,6 +69,10 @@ public class IJThemesClassGenerator
 		if( nameSep >= 0 )
 			name = name.substring( nameSep + 1 ).trim();
 
+		String displayName = name;
+		if( "material-theme-ui-lite".equals( resourcePath ) )
+			displayName += " (Material)";
+
 		StringBuilder buf = new StringBuilder();
 		for( String n : name.split( " " ) ) {
 			if( n.length() == 0 || n.equals( "-" ) )
@@ -101,10 +105,10 @@ public class IJThemesClassGenerator
 		allInfos.append( THEME_TEMPLATE
 			.replace( "${subPackage}", subPackage )
 			.replace( "${themeClass}", themeClass )
-			.replace( "${themeName}", name ) );
+			.replace( "${themeName}", displayName ) );
 
 		markdownTable.append( String.format( "[%s](%s) | `com.formdev.flatlaf.intellijthemes%s.%s`\n",
-			name, ti.sourceCodeUrl, subPackage, themeClass ) );
+			displayName, ti.sourceCodeUrl, subPackage, themeClass ) );
 	}
 
 	private static void writeFile( Path out, String content ) {

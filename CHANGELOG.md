@@ -50,6 +50,8 @@ FlatLaf Change Log
 - Custom window decorations: Not visible menu bar is now ignored in layout.
 - Popups using `JToolTip` components did not respect their location. (issue
   #188; regression in 0.42 in fix for #164)
+- IntelliJ Themes: Added suffix "(Material)" to names of all Material UI Lite
+  themes to avoid duplicate theme names. (issue #201)
 
 
 ## 0.43

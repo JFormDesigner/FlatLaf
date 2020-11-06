@@ -80,33 +80,33 @@ Material Theme UI Lite:
 
 Name | Class
 -----|------
-[Arc Dark](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkIJTheme`
-[Arc Dark Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkContrastIJTheme`
-[Atom One Dark](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneDarkIJTheme`
-[Atom One Dark Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneDarkContrastIJTheme`
-[Atom One Light](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightIJTheme`
-[Atom One Light Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightContrastIJTheme`
-[Dracula](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaIJTheme`
-[Dracula Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaContrastIJTheme`
-[GitHub](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme`
-[GitHub Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubContrastIJTheme`
-[Light Owl](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme`
-[Light Owl Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlContrastIJTheme`
-[Material Darker](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme`
-[Material Darker Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerContrastIJTheme`
-[Material Deep Ocean](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanIJTheme`
-[Material Deep Ocean Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanContrastIJTheme`
-[Material Lighter](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme`
-[Material Lighter Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterContrastIJTheme`
-[Material Oceanic](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialOceanicIJTheme`
-[Material Oceanic Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialOceanicContrastIJTheme`
-[Material Palenight](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialPalenightIJTheme`
-[Material Palenight Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialPalenightContrastIJTheme`
-[Monokai Pro](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProIJTheme`
-[Monokai Pro Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProContrastIJTheme`
-[Night Owl](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlIJTheme`
-[Night Owl Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlContrastIJTheme`
-[Solarized Dark](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedDarkIJTheme`
-[Solarized Dark Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedDarkContrastIJTheme`
-[Solarized Light](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedLightIJTheme`
-[Solarized Light Contrast](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedLightContrastIJTheme`
+[Arc Dark (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkIJTheme`
+[Arc Dark Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkContrastIJTheme`
+[Atom One Dark (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneDarkIJTheme`
+[Atom One Dark Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneDarkContrastIJTheme`
+[Atom One Light (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightIJTheme`
+[Atom One Light Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightContrastIJTheme`
+[Dracula (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaIJTheme`
+[Dracula Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaContrastIJTheme`
+[GitHub (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme`
+[GitHub Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubContrastIJTheme`
+[Light Owl (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme`
+[Light Owl Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlContrastIJTheme`
+[Material Darker (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme`
+[Material Darker Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerContrastIJTheme`
+[Material Deep Ocean (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanIJTheme`
+[Material Deep Ocean Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanContrastIJTheme`
+[Material Lighter (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme`
+[Material Lighter Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterContrastIJTheme`
+[Material Oceanic (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialOceanicIJTheme`
+[Material Oceanic Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialOceanicContrastIJTheme`
+[Material Palenight (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialPalenightIJTheme`
+[Material Palenight Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialPalenightContrastIJTheme`
+[Monokai Pro (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProIJTheme`
+[Monokai Pro Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProContrastIJTheme`
+[Night Owl (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlIJTheme`
+[Night Owl Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlContrastIJTheme`
+[Solarized Dark (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedDarkIJTheme`
+[Solarized Dark Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedDarkContrastIJTheme`
+[Solarized Light (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedLightIJTheme`
+[Solarized Light Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedLightContrastIJTheme`
