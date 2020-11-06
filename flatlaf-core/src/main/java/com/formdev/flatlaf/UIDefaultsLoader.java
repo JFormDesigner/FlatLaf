@@ -211,14 +211,17 @@ class UIDefaultsLoader
 			}
 
 			// override UI defaults with globals
-			for( Object okey : defaults.keySet() ) {
-				if( okey instanceof String && ((String)okey).contains( "." ) ) {
-					String key = (String) okey;
-					String globalKey = key.substring( key.lastIndexOf( '.' ) + 1 );
-					String globalValue = globals.get( globalKey );
-					if( globalValue != null && !properties.containsKey( key ) )
-						properties.put( key, globalValue );
-				}
+			for( Object key : defaults.keySet() ) {
+				int dot;
+				if( !(key instanceof String) ||
+					properties.containsKey( key ) ||
+					(dot = ((String)key).lastIndexOf( '.' )) < 0 )
+				  continue;
+
+				String globalKey = ((String)key).substring( dot + 1 );
+				String globalValue = globals.get( globalKey );
+				if( globalValue != null )
+					properties.put( key, globalValue );
 			}
 
 			Function<String, String> propertiesGetter = key -> {
