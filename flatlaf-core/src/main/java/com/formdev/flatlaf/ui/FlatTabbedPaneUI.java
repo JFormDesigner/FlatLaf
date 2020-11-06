@@ -108,7 +108,6 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatTabbedPaneUI -->
  *
- * @uiDefault TabbedPane.arrowType						String	chevron (default) or triangle
  * @uiDefault TabbedPane.disabledForeground				Color
  * @uiDefault TabbedPane.selectedBackground				Color	optional
  * @uiDefault TabbedPane.selectedForeground				Color
@@ -133,6 +132,12 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ScrollPane.smoothScrolling				boolean
  * @uiDefault TabbedPane.closeIcon						Icon
  *
+ * @uiDefault TabbedPane.arrowType						String	chevron (default) or triangle
+ * @uiDefault TabbedPane.buttonInsets					Insets
+ * @uiDefault TabbedPane.buttonArc						int
+ * @uiDefault TabbedPane.buttonHoverBackground			Color
+ * @uiDefault TabbedPane.buttonPressedBackground		Color
+ *
  * @uiDefault TabbedPane.moreTabsButtonToolTipText		String
  *
  * @author Karl Tauber
@@ -154,6 +159,7 @@ public class FlatTabbedPaneUI
 	private static Set<KeyStroke> focusForwardTraversalKeys;
 	private static Set<KeyStroke> focusBackwardTraversalKeys;
 
+	protected Color foreground;
 	protected Color disabledForeground;
 	protected Color selectedBackground;
 	protected Color selectedForeground;
@@ -181,6 +187,12 @@ public class FlatTabbedPaneUI
 	private String tabWidthModeStr;
 	protected Icon closeIcon;
 
+	protected String arrowType;
+	protected Insets buttonInsets;
+	protected int buttonArc;
+	protected Color buttonHoverBackground;
+	protected Color buttonPressedBackground;
+
 	protected String moreTabsButtonToolTipText;
 
 	protected JViewport tabViewport;
@@ -198,6 +210,19 @@ public class FlatTabbedPaneUI
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		// initialize this defaults here because they are used in constructor
+		// of FlatTabAreaButton, which is invoked before installDefaults()
+		arrowType = UIManager.getString( "TabbedPane.arrowType" );
+		foreground = UIManager.getColor( "TabbedPane.foreground" );
+		disabledForeground = UIManager.getColor( "TabbedPane.disabledForeground" );
+		buttonHoverBackground = UIManager.getColor( "TabbedPane.buttonHoverBackground" );
+		buttonPressedBackground = UIManager.getColor( "TabbedPane.buttonPressedBackground" );
+
+		super.installUI( c );
 	}
 
 	@Override
@@ -224,7 +249,6 @@ public class FlatTabbedPaneUI
 		} else
 			super.installDefaults();
 
-		disabledForeground = UIManager.getColor( "TabbedPane.disabledForeground" );
 		selectedBackground = UIManager.getColor( "TabbedPane.selectedBackground" );
 		selectedForeground = UIManager.getColor( "TabbedPane.selectedForeground" );
 		underlineColor = UIManager.getColor( "TabbedPane.underlineColor" );
@@ -249,6 +273,9 @@ public class FlatTabbedPaneUI
 		tabAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAlignment" ), CENTER );
 		tabWidthModeStr = UIManager.getString( "TabbedPane.tabWidthMode" );
 		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
+
+		buttonInsets = UIManager.getInsets( "TabbedPane.buttonInsets" );
+		buttonArc = UIManager.getInt( "TabbedPane.buttonArc" );
 
 		Locale l = tabPane.getLocale();
 		moreTabsButtonToolTipText = UIManager.getString( "TabbedPane.moreTabsButtonToolTipText", l );
@@ -279,6 +306,7 @@ public class FlatTabbedPaneUI
 
 		super.uninstallDefaults();
 
+		foreground = null;
 		disabledForeground = null;
 		selectedBackground = null;
 		selectedForeground = null;
@@ -288,8 +316,10 @@ public class FlatTabbedPaneUI
 		focusColor = null;
 		tabSeparatorColor = null;
 		contentAreaColor = null;
-
 		closeIcon = null;
+
+		buttonHoverBackground = null;
+		buttonPressedBackground = null;
 
 		MigLayoutVisualPadding.uninstall( tabPane );
 	}
@@ -825,13 +855,14 @@ public class FlatTabbedPaneUI
 	{
 		// paint tab background
 		boolean enabled = tabPane.isEnabled();
-		g.setColor( enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
+		Color background = enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
 			? hoverColor
 			: (enabled && isSelected && FlatUIUtils.isPermanentFocusOwner( tabPane )
 				? focusColor
 				: (selectedBackground != null && enabled && isSelected
 					? selectedBackground
-					: tabPane.getBackgroundAt( tabIndex ))) );
+					: tabPane.getBackgroundAt( tabIndex )));
+		g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
 		g.fillRect( x, y, w, h );
 	}
 
@@ -851,6 +882,10 @@ public class FlatTabbedPaneUI
 		ButtonModel bm = tabCloseButton.getModel();
 		bm.setRollover( rollover && isRolloverTabClose() );
 		bm.setPressed( rollover && isPressedTabClose() );
+
+		// copy colors from tabbed pane because close icon uses derives colors
+		tabCloseButton.setBackground( tabPane.getBackground() );
+		tabCloseButton.setForeground( tabPane.getForeground() );
 
 		// paint tab close icon
 		Rectangle tabCloseRect = getTabCloseBounds( tabIndex, x, y, w, h, calcRect );
@@ -1370,20 +1405,62 @@ public class FlatTabbedPaneUI
 		}
 	}
 
+	//---- class FlatTabAreaButton --------------------------------------------
+
+	protected class FlatTabAreaButton
+		extends FlatArrowButton
+	{
+		public FlatTabAreaButton( int direction ) {
+			super( direction, arrowType,
+				FlatTabbedPaneUI.this.foreground, FlatTabbedPaneUI.this.disabledForeground,
+				null, buttonHoverBackground, null, buttonPressedBackground );
+		}
+
+		@Override
+		protected Color deriveBackground( Color background ) {
+			return FlatUIUtils.deriveColor( background, tabPane.getBackground() );
+		}
+
+		@Override
+		public void paint( Graphics g ) {
+			// fill button background
+			if( tabsOpaque || tabPane.isOpaque() ) {
+				g.setColor( tabPane.getBackground() );
+				g.fillRect( 0, 0, getWidth(), getHeight() );
+			}
+
+			super.paint( g );
+		}
+
+		@Override
+		protected void paintBackground( Graphics2D g ) {
+			// rotate button insets
+			Insets insets = new Insets( 0, 0, 0, 0 );
+			rotateInsets( buttonInsets, insets, tabPane.getTabPlacement() );
+
+			// use UIScale.scale2() here because this gives smaller insets at 150% and 175%
+			int top = UIScale.scale2( insets.top );
+			int left = UIScale.scale2( insets.left );
+			int bottom = UIScale.scale2( insets.bottom );
+			int right = UIScale.scale2( insets.right );
+
+			FlatUIUtils.paintComponentBackground( g, left, top,
+				getWidth() - left - right,
+				getHeight() - top - bottom,
+				0, scale( buttonArc ) );
+		}
+	}
+
 	//---- class FlatMoreTabsButton -------------------------------------------
 
 	protected class FlatMoreTabsButton
-		extends FlatArrowButton
+		extends FlatTabAreaButton
 		implements ActionListener, PopupMenuListener
 	{
 		private boolean popupVisible;
 
 		public FlatMoreTabsButton() {
-			// this method is invoked before installDefaults(), so we can not use color fields here
-			super( SOUTH, UIManager.getString( "TabbedPane.arrowType" ),
-				UIManager.getColor( "TabbedPane.foreground" ),
-				UIManager.getColor( "TabbedPane.disabledForeground" ), null,
-				UIManager.getColor( "TabbedPane.hoverColor" ) );
+			super( SOUTH );
 
 			updateDirection();
 			setToolTipText( moreTabsButtonToolTipText );
@@ -1417,7 +1494,7 @@ public class FlatTabbedPaneUI
 		public void paint( Graphics g ) {
 			// paint arrow button near separator line
 			if( direction == EAST || direction == WEST ) {
-				int xoffset = (getWidth() / 2) - getHeight();
+				int xoffset = Math.max( UIScale.unscale( (getWidth() - getHeight()) / 2 ) - 4, 0 );
 				setXOffset( (direction == EAST) ? xoffset : -xoffset );
 			} else
 				setXOffset( 0 );
@@ -1520,17 +1597,13 @@ public class FlatTabbedPaneUI
 	//---- class FlatScrollableTabButton --------------------------------------
 
 	protected class FlatScrollableTabButton
-		extends FlatArrowButton
+		extends FlatTabAreaButton
 		implements MouseListener
 	{
 		private Timer autoRepeatTimer;
 
 		protected FlatScrollableTabButton( int direction ) {
-			// this method is invoked before installDefaults(), so we can not use color fields here
-			super( direction, UIManager.getString( "TabbedPane.arrowType" ),
-				UIManager.getColor( "TabbedPane.foreground" ),
-				UIManager.getColor( "TabbedPane.disabledForeground" ), null,
-				UIManager.getColor( "TabbedPane.hoverColor" ) );
+			super( direction );
 
 			addMouseListener( this );
 		}

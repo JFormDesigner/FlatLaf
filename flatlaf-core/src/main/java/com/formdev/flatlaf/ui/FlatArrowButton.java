@@ -42,12 +42,13 @@ public class FlatArrowButton
 {
 	public static final int DEFAULT_ARROW_WIDTH = 8;
 
-	private final boolean chevron;
-	private final Color foreground;
-	private final Color disabledForeground;
-	private final Color hoverForeground;
-	private final Color hoverBackground;
-	private final Color pressedBackground;
+	protected final boolean chevron;
+	protected final Color foreground;
+	protected final Color disabledForeground;
+	protected final Color hoverForeground;
+	protected final Color hoverBackground;
+	protected final Color pressedForeground;
+	protected final Color pressedBackground;
 
 	private int arrowWidth = DEFAULT_ARROW_WIDTH;
 	private int xOffset = 0;
@@ -65,6 +66,12 @@ public class FlatArrowButton
 	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
 		Color hoverForeground, Color hoverBackground, Color pressedBackground )
 	{
+		this( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, null, pressedBackground );
+	}
+
+	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
+		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
+	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
 
 		this.chevron = FlatUIUtils.isChevron( type );
@@ -72,6 +79,7 @@ public class FlatArrowButton
 		this.disabledForeground = disabledForeground;
 		this.hoverForeground = hoverForeground;
 		this.hoverBackground = hoverBackground;
+		this.pressedForeground = pressedForeground;
 		this.pressedBackground = pressedBackground;
 
 		setOpaque( false );
@@ -142,6 +150,10 @@ public class FlatArrowButton
 		return background;
 	}
 
+	protected Color deriveForeground( Color foreground ) {
+		return foreground;
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return scale( super.getPreferredSize() );
@@ -157,24 +169,36 @@ public class FlatArrowButton
 		Graphics2D g2 = (Graphics2D)g;
 		FlatUIUtils.setRenderingHints( g2 );
 
-		int width = getWidth();
-		int height = getHeight();
-		boolean enabled = isEnabled();
-
 		// paint hover or pressed background
-		if( enabled ) {
+		if( isEnabled() ) {
 			Color background = (pressedBackground != null && isPressed())
-				? deriveBackground( pressedBackground )
-				: ((hoverBackground != null && isHover())
-					? deriveBackground( hoverBackground )
+				? pressedBackground
+				: (hoverBackground != null && isHover()
+					? hoverBackground
 					: null);
 
 			if( background != null ) {
-				g.setColor( background );
-				g.fillRect( 0, 0, width, height );
+				g.setColor( deriveBackground( background ) );
+				paintBackground( g2 );
 			}
 		}
 
+		// paint arrow
+		g.setColor( deriveForeground( isEnabled()
+			? (pressedForeground != null && isPressed()
+				? pressedForeground
+				: (hoverForeground != null && isHover()
+					? hoverForeground
+					: foreground))
+			: disabledForeground ) );
+		paintArrow( g2 );
+	}
+
+	protected void paintBackground( Graphics2D g ) {
+		g.fillRect( 0, 0, getWidth(), getHeight() );
+	}
+
+	protected void paintArrow( Graphics2D g ) {
 		int direction = getDirection();
 		boolean vert = (direction == NORTH || direction == SOUTH);
 
@@ -193,8 +217,8 @@ public class FlatArrowButton
 			rh++;
 		}
 
-		int x = Math.round( (width - rw) / 2f + scale( (float) xOffset ) );
-		int y = Math.round( (height - rh) / 2f + scale( (float) yOffset ) );
+		int x = Math.round( (getWidth() - rw) / 2f + scale( (float) xOffset ) );
+		int y = Math.round( (getHeight() - rh) / 2f + scale( (float) yOffset ) );
 
 		// move arrow for round borders
 		Container parent = getParent();
@@ -202,20 +226,17 @@ public class FlatArrowButton
 			x -= scale( parent.getComponentOrientation().isLeftToRight() ? 1 : -1 );
 
 		// paint arrow
-		g.setColor( enabled
-			? (isHover() && hoverForeground != null ? hoverForeground : foreground)
-			: disabledForeground );
 		g.translate( x, y );
 /*debug
-		debugPaint( g2, vert, rw, rh );
+		debugPaint( g, vert, rw, rh );
 debug*/
 		Shape arrowShape = createArrowShape( direction, chevron, w, h );
 		if( chevron ) {
-			g2.setStroke( new BasicStroke( scale( 1f ) ) );
-			g2.draw( arrowShape );
+			g.setStroke( new BasicStroke( scale( 1f ) ) );
+			g.draw( arrowShape );
 		} else {
 			// triangle
-			g2.fill( arrowShape );
+			g.fill( arrowShape );
 		}
 		g.translate( -x, -y );
 	}

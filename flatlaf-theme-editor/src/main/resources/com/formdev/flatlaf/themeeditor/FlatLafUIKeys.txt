@@ -640,6 +640,10 @@ SplitPaneUI
 TabbedPane.ancestorInputMap
 TabbedPane.arrowType
 TabbedPane.background
+TabbedPane.buttonArc
+TabbedPane.buttonHoverBackground
+TabbedPane.buttonInsets
+TabbedPane.buttonPressedBackground
 TabbedPane.closeArc
 TabbedPane.closeCrossFilledSize
 TabbedPane.closeCrossLineWidth

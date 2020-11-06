@@ -68,13 +68,14 @@ public class FlatTabbedPaneCloseIcon
 		// paint background
 		Color bg = FlatButtonUI.buttonStateColor( c, background, null, null, hoverBackground, pressedBackground );
 		if( bg != null ) {
-			g.setColor( bg );
+			g.setColor( FlatUIUtils.deriveColor( bg, c.getBackground() ) );
 			g.fillRoundRect( (width - size.width) / 2, (height - size.height) / 2,
 				size.width, size.height, arc, arc );
 		}
 
 		// set cross color
-		g.setColor( FlatButtonUI.buttonStateColor( c, foreground, null, null, hoverForeground, pressedForeground ) );
+		Color fg = FlatButtonUI.buttonStateColor( c, foreground, null, null, hoverForeground, pressedForeground );
+		g.setColor( FlatUIUtils.deriveColor( fg, c.getForeground() ) );
 
 		float mx = width / 2;
 		float my = height / 2;

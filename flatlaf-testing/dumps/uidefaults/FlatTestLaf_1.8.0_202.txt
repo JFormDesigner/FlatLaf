@@ -904,6 +904,10 @@ SplitPaneUI                    com.formdev.flatlaf.ui.FlatSplitPaneUI
 
 TabbedPane.arrowType           chevron
 TabbedPane.background          #ccffcc    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.buttonArc           6
+TabbedPane.buttonHoverBackground #ffff00    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.buttonInsets        2,1,2,1    javax.swing.plaf.InsetsUIResource [UI]
+TabbedPane.buttonPressedBackground #ffc800    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.closeArc            999
 TabbedPane.closeCrossFilledSize 6.5
 TabbedPane.closeCrossLineWidth 2.0
