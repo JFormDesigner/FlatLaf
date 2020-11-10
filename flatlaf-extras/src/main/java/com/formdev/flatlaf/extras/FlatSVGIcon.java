@@ -18,6 +18,7 @@ package com.formdev.flatlaf.extras;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -30,6 +31,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
@@ -39,6 +41,7 @@ import com.formdev.flatlaf.FlatLaf.DisabledIconProvider;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.GrayFilter;
+import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.UIScale;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGException;
@@ -349,14 +352,33 @@ public class FlatSVGIcon
 	public Image getImage() {
 		update();
 
-		BufferedImage image = new BufferedImage( getIconWidth(), getIconHeight(), BufferedImage.TYPE_INT_ARGB );
-		Graphics2D g = image.createGraphics();
-		try {
-			paintIcon( null, g, 0, 0 );
-		} finally {
-			g.dispose();
-		}
-		return image;
+		// base size
+		int iconWidth = getIconWidth();
+		int iconHeight = getIconHeight();
+
+		Dimension[] dimensions = new Dimension[] {
+			new Dimension( iconWidth, iconHeight ),
+			new Dimension( iconWidth * 2, iconHeight * 2 ),
+		};
+
+		Function<Dimension, Image> producer = size -> {
+			BufferedImage image = new BufferedImage( size.width, size.height, BufferedImage.TYPE_INT_ARGB );
+			Graphics2D g = image.createGraphics();
+			try {
+				// scale from base size to passed size
+				double sx = (size.width > 0) ? (float) size.width / iconWidth : 1;
+				double sy = (size.height > 0) ? (float) size.height / iconHeight : 1;
+				if( sx != 1 || sy != 1 )
+					g.scale( sx, sy );
+
+				paintIcon( null, g, 0, 0 );
+			} finally {
+				g.dispose();
+			}
+			return image;
+		};
+
+		return MultiResolutionImageSupport.create( 0, dimensions, producer );
 	}
 
 	private static Boolean darkLaf;

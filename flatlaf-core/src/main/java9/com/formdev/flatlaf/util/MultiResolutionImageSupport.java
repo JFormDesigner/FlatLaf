@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.util;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.AbstractMultiResolutionImage;
 import java.awt.image.BaseMultiResolutionImage;
@@ -26,6 +27,14 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.function.Function;
 import javax.swing.ImageIcon;
+
+//
+// NOTE:
+//     This implementation is for Java 9 and later.
+//     There is also a variant for Java 8.
+//
+//     Make sure that the API is in sync.
+//
 
 /**
  * Support for multi-resolution images available since Java 9.
@@ -44,6 +53,10 @@ public class MultiResolutionImageSupport
 
 	public static Image create( int baseImageIndex, Image... resolutionVariants ) {
 		return new BaseMultiResolutionImage( baseImageIndex, resolutionVariants );
+	}
+
+	public static Image create( int baseImageIndex, Dimension[] dimensions, Function<Dimension, Image> producer ) {
+		return new ProducerMultiResolutionImage( dimensions, producer );
 	}
 
 	public static Image map( Image image, Function<Image, Image> mapper ) {
@@ -66,6 +79,9 @@ public class MultiResolutionImageSupport
 
 	//---- class MappedMultiResolutionImage -----------------------------------
 
+	/**
+	 * A multi-resolution image implementation that maps images on demand for requested sizes.
+	 */
 	private static class MappedMultiResolutionImage
 		extends AbstractMultiResolutionImage
 	{
@@ -102,7 +118,51 @@ public class MultiResolutionImageSupport
 
 		private Image mapAndCacheImage( Image image ) {
 			return cache.computeIfAbsent( image, img -> {
+				// using ImageIcon here makes sure that the image is loaded
 				return new ImageIcon( mapper.apply( img ) ).getImage();
+			} );
+		}
+	}
+
+	//---- class ProducerMultiResolutionImage ---------------------------------
+
+	/**
+	 * A multi-resolution image implementation that produces images on demand for requested sizes.
+	 */
+	private static class ProducerMultiResolutionImage
+		extends AbstractMultiResolutionImage
+	{
+		private final Dimension[] dimensions;
+		private final Function<Dimension, Image> producer;
+		private final IdentityHashMap<Dimension, Image> cache = new IdentityHashMap<>();
+
+		ProducerMultiResolutionImage( Dimension[] dimensions, Function<Dimension, Image> producer ) {
+			this.dimensions = dimensions;
+			this.producer = producer;
+		}
+
+		@Override
+		public Image getResolutionVariant( double destImageWidth, double destImageHeight ) {
+			return produceAndCacheImage( new Dimension( (int) destImageWidth, (int) destImageHeight ) );
+		}
+
+		@Override
+		public List<Image> getResolutionVariants() {
+			List<Image> mappedVariants = new ArrayList<>();
+			for( Dimension size : dimensions )
+				mappedVariants.add( produceAndCacheImage( size ) );
+			return mappedVariants;
+		}
+
+		@Override
+		protected Image getBaseImage() {
+			return produceAndCacheImage( dimensions[0] );
+		}
+
+		private Image produceAndCacheImage( Dimension size ) {
+			return cache.computeIfAbsent( size, size2 -> {
+				// using ImageIcon here makes sure that the image is loaded
+				return new ImageIcon( producer.apply( size2 ) ).getImage();
 			} );
 		}
 	}
