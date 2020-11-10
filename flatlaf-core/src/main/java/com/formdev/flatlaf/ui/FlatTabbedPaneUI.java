@@ -60,6 +60,7 @@ import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -76,6 +77,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.Animator;
@@ -1549,7 +1551,11 @@ public class FlatTabbedPaneUI
 		}
 
 		protected JMenuItem createMenuItem( int index ) {
-			JMenuItem menuItem = new JMenuItem( tabPane.getTitleAt( index ), tabPane.getIconAt( index ) );
+			String title = tabPane.getTitleAt( index );
+			if( title == null || title.isEmpty() )
+				title = findTabTitle( tabPane.getTabComponentAt( index ) );
+
+			JMenuItem menuItem = new JMenuItem( title, tabPane.getIconAt( index ) );
 			menuItem.setDisabledIcon( tabPane.getDisabledIconAt( index ) );
 			menuItem.setToolTipText( tabPane.getToolTipTextAt( index ) );
 
@@ -1568,6 +1574,33 @@ public class FlatTabbedPaneUI
 
 			menuItem.addActionListener( e -> selectTab( index ) );
 			return menuItem;
+		}
+
+		/**
+		 * Search for label or text component in custom tab component and return its text.
+		 */
+		private String findTabTitle( Component c ) {
+			if( c == null )
+				return null;
+
+			String title = null;
+			if( c instanceof JLabel )
+				title = ((JLabel)c).getText();
+			else if( c instanceof JTextComponent )
+				title = ((JTextComponent)c).getText();
+
+			if( title != null && !title.isEmpty() )
+				return title;
+
+			if( c instanceof Container ) {
+				for( Component child : ((Container)c).getComponents() ) {
+					title = findTabTitle( child );
+					if( title != null )
+						return title;
+				}
+			}
+
+			return null;
 		}
 
 		protected void selectTab( int index ) {
