@@ -58,6 +58,23 @@ public class FlatExtrasTest
 		addSVGIcon( "errorDialog.svg" );
 		addSVGIcon( "informationDialog.svg" );
 		addSVGIcon( "warningDialog.svg" );
+
+		FlatSVGIcon icon = new FlatSVGIcon( "com/formdev/flatlaf/demo/extras/svg/warningDialog.svg" );
+		Icon disabledIcon = icon.getDisabledIcon();
+		disabledLabel.setIcon( icon );
+		disabledButton.setIcon( icon );
+		disabledTabbedPane.addTab( "tab", null );
+		disabledTabbedPane.setIconAt( 0, icon );
+
+		disabledLabel2.setIcon( icon );
+		disabledLabel2.setDisabledIcon( disabledIcon );
+		disabledButton2.setIcon( icon );
+		disabledButton2.setDisabledIcon( disabledIcon );
+		disabledTabbedPane2.addTab( "tab", null );
+		disabledTabbedPane2.setIconAt( 0, icon );
+		disabledTabbedPane2.setDisabledIconAt( 0, disabledIcon );
+
+		disabledChanged();
 	}
 
 	private void addSVGIcon( String name ) {
@@ -72,6 +89,31 @@ public class FlatExtrasTest
 		triStateLabel2.setText( triStateCheckBox2.getState().toString() );
 	}
 
+	private void disabledChanged() {
+		boolean enabled = !disabledCheckBox.isSelected();
+
+		disabledLabel.setEnabled( enabled );
+		disabledButton.setEnabled( enabled );
+		disabledTabbedPane.setEnabledAt( 0, enabled );
+
+		disabledLabel2.setEnabled( enabled );
+		disabledButton2.setEnabled( enabled );
+		disabledTabbedPane2.setEnabledAt( 0, enabled );
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		if( disabledLabel == null )
+			return;
+
+		// clear automatically created disabled icons when switching Laf
+		disabledLabel.setDisabledIcon( null );
+		disabledButton.setDisabledIcon( null );
+		disabledTabbedPane.setDisabledIconAt( 0, null );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		label1 = new JLabel();
@@ -82,6 +124,16 @@ public class FlatExtrasTest
 		label2 = new JLabel();
 		svgIconsPanel = new JPanel();
 		label3 = new JLabel();
+		label4 = new JLabel();
+		disabledLabel = new JLabel();
+		disabledButton = new JButton();
+		disabledTabbedPane = new JTabbedPane();
+		label5 = new JLabel();
+		disabledCheckBox = new JCheckBox();
+		disabledLabel2 = new JLabel();
+		disabledButton2 = new JButton();
+		disabledTabbedPane2 = new JTabbedPane();
+		label6 = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -91,6 +143,9 @@ public class FlatExtrasTest
 			"[]" +
 			"[left]",
 			// rows
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -139,6 +194,45 @@ public class FlatExtrasTest
 		//---- label3 ----
 		label3.setText("The icons may change colors when switching to another theme.");
 		add(label3, "cell 1 3 2 1");
+
+		//---- label4 ----
+		label4.setText("Disabled SVG Icons:");
+		add(label4, "cell 0 4");
+
+		//---- disabledLabel ----
+		disabledLabel.setText("label");
+		add(disabledLabel, "cell 1 4 2 1");
+
+		//---- disabledButton ----
+		disabledButton.setText("button");
+		add(disabledButton, "cell 1 4 2 1");
+		add(disabledTabbedPane, "cell 1 4 2 1");
+
+		//---- label5 ----
+		label5.setText("only setIcon()");
+		label5.setEnabled(false);
+		add(label5, "cell 1 4 2 1,gapx 20");
+
+		//---- disabledCheckBox ----
+		disabledCheckBox.setText("disabled");
+		disabledCheckBox.setSelected(true);
+		disabledCheckBox.setMnemonic('D');
+		disabledCheckBox.addActionListener(e -> disabledChanged());
+		add(disabledCheckBox, "cell 0 5,alignx left,growx 0");
+
+		//---- disabledLabel2 ----
+		disabledLabel2.setText("label");
+		add(disabledLabel2, "cell 1 5 2 1");
+
+		//---- disabledButton2 ----
+		disabledButton2.setText("button");
+		add(disabledButton2, "cell 1 5 2 1");
+		add(disabledTabbedPane2, "cell 1 5 2 1");
+
+		//---- label6 ----
+		label6.setText("setIcon() and setDisabledIcon()");
+		label6.setEnabled(false);
+		add(label6, "cell 1 5 2 1,gapx 20");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -151,5 +245,15 @@ public class FlatExtrasTest
 	private JLabel label2;
 	private JPanel svgIconsPanel;
 	private JLabel label3;
+	private JLabel label4;
+	private JLabel disabledLabel;
+	private JButton disabledButton;
+	private JTabbedPane disabledTabbedPane;
+	private JLabel label5;
+	private JCheckBox disabledCheckBox;
+	private JLabel disabledLabel2;
+	private JButton disabledButton2;
+	private JTabbedPane disabledTabbedPane2;
+	private JLabel label6;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -52,6 +52,8 @@ FlatLaf Change Log
   #188; regression in 0.42 in fix for #164)
 - IntelliJ Themes: Added suffix "(Material)" to names of all Material UI Lite
   themes to avoid duplicate theme names. (issue #201)
+- Extras: `FlatSVGIcon` icons were not painted in disabled labels and disabled
+  tabs. (issue #205)
 
 
 ## 0.43

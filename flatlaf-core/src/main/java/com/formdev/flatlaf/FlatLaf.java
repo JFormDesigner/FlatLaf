@@ -170,6 +170,9 @@ public abstract class FlatLaf
 
 	@Override
 	public Icon getDisabledIcon( JComponent component, Icon icon ) {
+		if( icon instanceof DisabledIconProvider )
+			return ((DisabledIconProvider)icon).getDisabledIcon();
+
 		if( icon instanceof ImageIcon ) {
 			Object grayFilter = UIManager.get( "Component.grayFilter" );
 			ImageFilter filter = (grayFilter instanceof ImageFilter)
@@ -761,5 +764,25 @@ public abstract class FlatLaf
 		ImageIconUIResource( Image image ) {
 			super( image );
 		}
+	}
+
+	//---- interface DisabledIconProvider -------------------------------------
+
+	/**
+	 * A provider for disabled icons.
+	 * <p>
+	 * This is intended to be implemented by {@link javax.swing.Icon} implementations
+	 * that provide the ability to paint disabled state.
+	 * <p>
+	 * Used in {@link FlatLaf#getDisabledIcon(JComponent, Icon)} to create a disabled icon from an enabled icon.
+	 */
+	public interface DisabledIconProvider
+	{
+		/**
+		 * Returns an icon with a disabled appearance.
+		 *
+		 * @return a disabled icon
+		 */
+		Icon getDisabledIcon();
 	}
 }

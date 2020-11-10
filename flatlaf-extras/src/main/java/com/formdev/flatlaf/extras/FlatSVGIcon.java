@@ -20,18 +20,22 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.awt.image.RGBImageFilter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatIconColors;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLaf.DisabledIconProvider;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.GrayFilter;
@@ -46,7 +50,8 @@ import com.kitfox.svg.SVGUniverse;
  * @author Karl Tauber
  */
 public class FlatSVGIcon
-	implements Icon
+	extends ImageIcon
+	implements DisabledIconProvider
 {
 	// use own SVG universe so that it can not be cleared from anywhere
 	private static final SVGUniverse svgUniverse = new SVGUniverse();
@@ -55,6 +60,7 @@ public class FlatSVGIcon
 	private final int width;
 	private final int height;
 	private final float scale;
+	private final boolean disabled;
 	private final ClassLoader classLoader;
 
 	private SVGDiagram diagram;
@@ -70,7 +76,7 @@ public class FlatSVGIcon
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name ) {
-		this( name, -1, -1, 1, null );
+		this( name, -1, -1, 1, false, null );
 	}
 
 	/**
@@ -85,7 +91,7 @@ public class FlatSVGIcon
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, ClassLoader classLoader ) {
-		this( name, -1, -1, 1, classLoader );
+		this( name, -1, -1, 1, false, classLoader );
 	}
 
 	/**
@@ -99,7 +105,7 @@ public class FlatSVGIcon
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, int width, int height ) {
-		this( name, width, height, 1, null );
+		this( name, width, height, 1, false, null );
 	}
 
 	/**
@@ -115,7 +121,7 @@ public class FlatSVGIcon
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, int width, int height, ClassLoader classLoader ) {
-		this( name, width, height, 1, classLoader );
+		this( name, width, height, 1, false, classLoader );
 	}
 
 	/**
@@ -130,7 +136,7 @@ public class FlatSVGIcon
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, float scale ) {
-		this( name, -1, -1, scale, null );
+		this( name, -1, -1, scale, false, null );
 	}
 
 	/**
@@ -147,15 +153,16 @@ public class FlatSVGIcon
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, float scale, ClassLoader classLoader ) {
-		this( name, -1, -1, scale, classLoader );
+		this( name, -1, -1, scale, false, classLoader );
 	}
 
-	private FlatSVGIcon( String name, int width, int height, float scale, ClassLoader classLoader ) {
+	private FlatSVGIcon( String name, int width, int height, float scale, boolean disabled, ClassLoader classLoader ) {
 		this.name = name;
 		this.classLoader = classLoader;
 		this.width = width;
 		this.height = height;
 		this.scale = scale;
+		this.disabled = disabled;
 	}
 
 	/**
@@ -166,7 +173,10 @@ public class FlatSVGIcon
 	 * @return a new icon
 	 */
 	public FlatSVGIcon derive( int width, int height ) {
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, classLoader );
+		if( width == this.width && height == this.height )
+			return this;
+
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, false, classLoader );
 		icon.diagram = diagram;
 		icon.dark = dark;
 		return icon;
@@ -179,7 +189,26 @@ public class FlatSVGIcon
 	 * @return a new icon
 	 */
 	public FlatSVGIcon derive( float scale ) {
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, classLoader );
+		if( scale == this.scale )
+			return this;
+
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, false, classLoader );
+		icon.diagram = diagram;
+		icon.dark = dark;
+		return icon;
+	}
+
+	/**
+	 * Creates a new icon with disabled appearance, which is derived from this icon.
+	 *
+	 * @return a new icon
+	 */
+	@Override
+	public Icon getDisabledIcon() {
+		if( disabled )
+			return this;
+
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, true, classLoader );
 		icon.diagram = diagram;
 		icon.dark = dark;
 		return icon;
@@ -264,7 +293,7 @@ public class FlatSVGIcon
 
 		// get gray filter
 		RGBImageFilter grayFilter = null;
-		if( c != null && !c.isEnabled() ) {
+		if( disabled ) {
 			Object grayFilterObj = UIManager.get( "Component.grayFilter" );
 			grayFilter = (grayFilterObj instanceof RGBImageFilter)
 				? (RGBImageFilter) grayFilterObj
@@ -314,6 +343,20 @@ public class FlatSVGIcon
 	private void paintSvgError( Graphics2D g, int x, int y ) {
 		g.setColor( Color.red );
 		g.fillRect( x, y, getIconWidth(), getIconHeight() );
+	}
+
+	@Override
+	public Image getImage() {
+		update();
+
+		BufferedImage image = new BufferedImage( getIconWidth(), getIconHeight(), BufferedImage.TYPE_INT_ARGB );
+		Graphics2D g = image.createGraphics();
+		try {
+			paintIcon( null, g, 0, 0 );
+		} finally {
+			g.dispose();
+		}
+		return image;
 	}
 
 	private static Boolean darkLaf;
