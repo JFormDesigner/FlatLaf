@@ -70,8 +70,11 @@ public class FlatJideOssDefaultsAddon
 			for( Map.Entry<Object, Object> e : defaults.entrySet() ) {
 				Object key = e.getKey();
 				if( key instanceof String &&
-					(((String)key).startsWith( "Jide" ) ||
-					 ((String)key).equals( "Resizable.resizeBorder" )) )
+					(
+						((String)key).startsWith( "Jide" ) ||
+						((String)key).equals( "RangeSliderUI" ) ||
+					 ((String)key).equals( "Resizable.resizeBorder" ))
+				)
 				{
 					jideDefaults.put( key, e.getValue() );
 				}
