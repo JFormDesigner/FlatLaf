@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.testing.jideoss;
 
+import com.jgoodies.forms.factories.*;
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
 import java.awt.*;
 import java.awt.event.*;
@@ -37,7 +38,7 @@ public class FlatJideOssTest
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
-			FlatTestFrame frame = FlatTestFrame.create( args, "FlatJideOssTest" );
+			FlatTestFrame frame = FlatTestFrame.create( args, "FlatRangeSliderTest" );
 			LookAndFeelFactory.installJideExtension();
 			frame.showFrame( FlatJideOssTest::new );
 
@@ -106,229 +107,238 @@ public class FlatJideOssTest
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		JPanel panel9 = new JPanel();
-		JLabel tabbedPaneLabel = new JLabel();
-		tabbedPane1 = new JideTabbedPane();
-		JPanel panel1 = new JPanel();
-		JLabel label1 = new JLabel();
-		JPanel panel2 = new JPanel();
-		JLabel label2 = new JLabel();
-		tabbedPane3 = new JideTabbedPane();
-		JPanel panel5 = new JPanel();
-		JLabel label5 = new JLabel();
-		JPanel panel6 = new JPanel();
-		JLabel label6 = new JLabel();
-		tabbedPane2 = new JideTabbedPane();
-		JPanel panel3 = new JPanel();
-		JLabel label3 = new JLabel();
-		JPanel panel4 = new JPanel();
-		JLabel label4 = new JLabel();
-		tabbedPane4 = new JideTabbedPane();
-		JPanel panel7 = new JPanel();
-		JLabel label7 = new JLabel();
-		JPanel panel8 = new JPanel();
-		JLabel label8 = new JLabel();
-		JPanel panel14 = new JPanel();
-		moreTabsCheckBox = new JCheckBox();
-		tabScrollCheckBox = new JCheckBox();
-		hasFullBorderCheckBox = new JCheckBox();
-		JPanel panel10 = new JPanel();
-		JLabel jidePopupLabel = new JLabel();
-		JButton showJidePopupButton = new JButton();
-		CellConstraints cc = new CellConstraints();
+        // Generated using JFormDesigner Evaluation license - unknown
+        JPanel panel9 = new JPanel();
+        JLabel tabbedPaneLabel = new JLabel();
+        tabbedPane1 = new JideTabbedPane();
+        JPanel panel1 = new JPanel();
+        JLabel label1 = new JLabel();
+        JPanel panel2 = new JPanel();
+        JLabel label2 = new JLabel();
+        tabbedPane3 = new JideTabbedPane();
+        JPanel panel5 = new JPanel();
+        JLabel label5 = new JLabel();
+        JPanel panel6 = new JPanel();
+        JLabel label6 = new JLabel();
+        tabbedPane2 = new JideTabbedPane();
+        JPanel panel3 = new JPanel();
+        JLabel label3 = new JLabel();
+        JPanel panel4 = new JPanel();
+        JLabel label4 = new JLabel();
+        tabbedPane4 = new JideTabbedPane();
+        JPanel panel7 = new JPanel();
+        JLabel label7 = new JLabel();
+        JPanel panel8 = new JPanel();
+        JLabel label8 = new JLabel();
+        JPanel panel14 = new JPanel();
+        moreTabsCheckBox = new JCheckBox();
+        tabScrollCheckBox = new JCheckBox();
+        hasFullBorderCheckBox = new JCheckBox();
+        JPanel panel10 = new JPanel();
+        JLabel jidePopupLabel = new JLabel();
+        JButton showJidePopupButton = new JButton();
 
-		//======== this ========
-		setLayout(new MigLayout(
-			"insets dialog,hidemode 3",
-			// columns
-			"[grow,fill]",
-			// rows
-			"[grow,fill]"));
+        //======== this ========
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (
+        new javax. swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion"
+        , javax. swing. border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM
+        , new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,12 )
+        , java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (
+        new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e
+        ) {if ("\u0062order" .equals (e .getPropertyName () )) throw new RuntimeException( )
+        ; }} );
+        setLayout(new MigLayout(
+            "insets dialog,hidemode 3",
+            // columns
+            "[grow,fill]",
+            // rows
+            "[grow,fill]"));
 
-		//======== panel9 ========
-		{
-			panel9.setOpaque(false);
-			panel9.setLayout(new FormLayout(
-				"70dlu:grow, $lcgap, 70dlu:grow",
-				"pref, 2*($lgap, fill:70dlu:grow), $lgap, pref, $lgap, default"));
+        //======== panel9 ========
+        {
+            panel9.setOpaque(false);
+            panel9.setLayout(new FormLayout(
+                "70dlu:grow, $lcgap, 70dlu:grow",
+                "pref, 2*($lgap, fill:70dlu:grow), $lgap, pref, $lgap, default"));
 
-			//---- tabbedPaneLabel ----
-			tabbedPaneLabel.setText("JideTabbedPane:");
-			panel9.add(tabbedPaneLabel, cc.xy(1, 1));
+            //---- tabbedPaneLabel ----
+            tabbedPaneLabel.setText("JideTabbedPane:");
+            panel9.add(tabbedPaneLabel, CC.xy(1, 1));
 
-			//======== tabbedPane1 ========
-			{
+            //======== tabbedPane1 ========
+            {
 
-				//======== panel1 ========
-				{
-					panel1.setLayout(new FlowLayout());
+                //======== panel1 ========
+                {
+                    panel1.setLayout(new FlowLayout());
 
-					//---- label1 ----
-					label1.setText("TOP");
-					panel1.add(label1);
-				}
-				tabbedPane1.addTab("Tab 1", panel1);
+                    //---- label1 ----
+                    label1.setText("TOP");
+                    panel1.add(label1);
+                }
+                tabbedPane1.addTab("Tab 1", panel1);
 
-				//======== panel2 ========
-				{
-					panel2.setBorder(new LineBorder(Color.magenta));
-					panel2.setLayout(new FlowLayout());
-				}
-				tabbedPane1.addTab("Tab 2", panel2);
+                //======== panel2 ========
+                {
+                    panel2.setBorder(new LineBorder(Color.magenta));
+                    panel2.setLayout(new FlowLayout());
+                }
+                tabbedPane1.addTab("Tab 2", panel2);
 
-				//---- label2 ----
-				label2.setText("text");
-				tabbedPane1.addTab("Tab 3", label2);
-			}
-			panel9.add(tabbedPane1, cc.xy(1, 3));
+                //---- label2 ----
+                label2.setText("text");
+                tabbedPane1.addTab("Tab 3", label2);
+            }
+            panel9.add(tabbedPane1, CC.xy(1, 3));
 
-			//======== tabbedPane3 ========
-			{
-				tabbedPane3.setTabPlacement(SwingConstants.LEFT);
+            //======== tabbedPane3 ========
+            {
+                tabbedPane3.setTabPlacement(SwingConstants.LEFT);
 
-				//======== panel5 ========
-				{
-					panel5.setLayout(new FlowLayout());
+                //======== panel5 ========
+                {
+                    panel5.setLayout(new FlowLayout());
 
-					//---- label5 ----
-					label5.setText("LEFT");
-					panel5.add(label5);
-				}
-				tabbedPane3.addTab("Tab 1", panel5);
+                    //---- label5 ----
+                    label5.setText("LEFT");
+                    panel5.add(label5);
+                }
+                tabbedPane3.addTab("Tab 1", panel5);
 
-				//======== panel6 ========
-				{
-					panel6.setBorder(new LineBorder(Color.magenta));
-					panel6.setLayout(new FlowLayout());
-				}
-				tabbedPane3.addTab("Tab 2", panel6);
+                //======== panel6 ========
+                {
+                    panel6.setBorder(new LineBorder(Color.magenta));
+                    panel6.setLayout(new FlowLayout());
+                }
+                tabbedPane3.addTab("Tab 2", panel6);
 
-				//---- label6 ----
-				label6.setText("text");
-				tabbedPane3.addTab("Tab 3", label6);
-			}
-			panel9.add(tabbedPane3, cc.xy(3, 3));
+                //---- label6 ----
+                label6.setText("text");
+                tabbedPane3.addTab("Tab 3", label6);
+            }
+            panel9.add(tabbedPane3, CC.xy(3, 3));
 
-			//======== tabbedPane2 ========
-			{
-				tabbedPane2.setTabPlacement(SwingConstants.BOTTOM);
+            //======== tabbedPane2 ========
+            {
+                tabbedPane2.setTabPlacement(SwingConstants.BOTTOM);
 
-				//======== panel3 ========
-				{
-					panel3.setLayout(new FlowLayout());
+                //======== panel3 ========
+                {
+                    panel3.setLayout(new FlowLayout());
 
-					//---- label3 ----
-					label3.setText("BOTTOM");
-					panel3.add(label3);
-				}
-				tabbedPane2.addTab("Tab 1", panel3);
+                    //---- label3 ----
+                    label3.setText("BOTTOM");
+                    panel3.add(label3);
+                }
+                tabbedPane2.addTab("Tab 1", panel3);
 
-				//======== panel4 ========
-				{
-					panel4.setBorder(new LineBorder(Color.magenta));
-					panel4.setLayout(new FlowLayout());
-				}
-				tabbedPane2.addTab("Tab 2", panel4);
-				tabbedPane2.setEnabledAt(1, false);
+                //======== panel4 ========
+                {
+                    panel4.setBorder(new LineBorder(Color.magenta));
+                    panel4.setLayout(new FlowLayout());
+                }
+                tabbedPane2.addTab("Tab 2", panel4);
+                tabbedPane2.setEnabledAt(1, false);
 
-				//---- label4 ----
-				label4.setText("text");
-				tabbedPane2.addTab("Tab 3", label4);
-			}
-			panel9.add(tabbedPane2, cc.xy(1, 5));
+                //---- label4 ----
+                label4.setText("text");
+                tabbedPane2.addTab("Tab 3", label4);
+            }
+            panel9.add(tabbedPane2, CC.xy(1, 5));
 
-			//======== tabbedPane4 ========
-			{
-				tabbedPane4.setTabPlacement(SwingConstants.RIGHT);
+            //======== tabbedPane4 ========
+            {
+                tabbedPane4.setTabPlacement(SwingConstants.RIGHT);
 
-				//======== panel7 ========
-				{
-					panel7.setLayout(new FlowLayout());
+                //======== panel7 ========
+                {
+                    panel7.setLayout(new FlowLayout());
 
-					//---- label7 ----
-					label7.setText("RIGHT");
-					panel7.add(label7);
-				}
-				tabbedPane4.addTab("Tab 1", panel7);
+                    //---- label7 ----
+                    label7.setText("RIGHT");
+                    panel7.add(label7);
+                }
+                tabbedPane4.addTab("Tab 1", panel7);
 
-				//======== panel8 ========
-				{
-					panel8.setBorder(new LineBorder(Color.magenta));
-					panel8.setLayout(new FlowLayout());
-				}
-				tabbedPane4.addTab("Tab 2", panel8);
+                //======== panel8 ========
+                {
+                    panel8.setBorder(new LineBorder(Color.magenta));
+                    panel8.setLayout(new FlowLayout());
+                }
+                tabbedPane4.addTab("Tab 2", panel8);
 
-				//---- label8 ----
-				label8.setText("text");
-				tabbedPane4.addTab("Tab 3", label8);
-			}
-			panel9.add(tabbedPane4, cc.xy(3, 5));
+                //---- label8 ----
+                label8.setText("text");
+                tabbedPane4.addTab("Tab 3", label8);
+            }
+            panel9.add(tabbedPane4, CC.xy(3, 5));
 
-			//======== panel14 ========
-			{
-				panel14.setOpaque(false);
-				panel14.setLayout(new MigLayout(
-					"insets 0,hidemode 3",
-					// columns
-					"[]" +
-					"[]" +
-					"[]",
-					// rows
-					"[center]"));
+            //======== panel14 ========
+            {
+                panel14.setOpaque(false);
+                panel14.setLayout(new MigLayout(
+                    "insets 0,hidemode 3",
+                    // columns
+                    "[]" +
+                    "[]" +
+                    "[]",
+                    // rows
+                    "[center]"));
 
-				//---- moreTabsCheckBox ----
-				moreTabsCheckBox.setText("more tabs");
-				moreTabsCheckBox.setMnemonic('M');
-				moreTabsCheckBox.addActionListener(e -> moreTabsChanged());
-				panel14.add(moreTabsCheckBox, "cell 0 0");
+                //---- moreTabsCheckBox ----
+                moreTabsCheckBox.setText("more tabs");
+                moreTabsCheckBox.setMnemonic('M');
+                moreTabsCheckBox.addActionListener(e -> moreTabsChanged());
+                panel14.add(moreTabsCheckBox, "cell 0 0");
 
-				//---- tabScrollCheckBox ----
-				tabScrollCheckBox.setText("tabLayoutPolicy = SCROLL");
-				tabScrollCheckBox.setMnemonic('S');
-				tabScrollCheckBox.setSelected(true);
-				tabScrollCheckBox.addActionListener(e -> tabScrollChanged());
-				panel14.add(tabScrollCheckBox, "cell 1 0,alignx left,growx 0");
+                //---- tabScrollCheckBox ----
+                tabScrollCheckBox.setText("tabLayoutPolicy = SCROLL");
+                tabScrollCheckBox.setMnemonic('S');
+                tabScrollCheckBox.setSelected(true);
+                tabScrollCheckBox.addActionListener(e -> tabScrollChanged());
+                panel14.add(tabScrollCheckBox, "cell 1 0,alignx left,growx 0");
 
-				//---- hasFullBorderCheckBox ----
-				hasFullBorderCheckBox.setText("JTabbedPane.hasFullBorder");
-				hasFullBorderCheckBox.setMnemonic('F');
-				hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
-				panel14.add(hasFullBorderCheckBox, "cell 2 0,alignx left,growx 0");
-			}
-			panel9.add(panel14, cc.xywh(1, 7, 3, 1));
+                //---- hasFullBorderCheckBox ----
+                hasFullBorderCheckBox.setText("JTabbedPane.hasFullBorder");
+                hasFullBorderCheckBox.setMnemonic('F');
+                hasFullBorderCheckBox.addActionListener(e -> hasFullBorderChanged());
+                panel14.add(hasFullBorderCheckBox, "cell 2 0,alignx left,growx 0");
+            }
+            panel9.add(panel14, CC.xywh(1, 7, 3, 1));
 
-			//======== panel10 ========
-			{
-				panel10.setLayout(new MigLayout(
-					"insets 3 0 3 3,hidemode 3",
-					// columns
-					"[fill]" +
-					"[fill]",
-					// rows
-					"[]"));
+            //======== panel10 ========
+            {
+                panel10.setLayout(new MigLayout(
+                    "insets 3 0 3 3,hidemode 3",
+                    // columns
+                    "[fill]" +
+                    "[fill]",
+                    // rows
+                    "[]"));
 
-				//---- jidePopupLabel ----
-				jidePopupLabel.setText("JidePopup:");
-				panel10.add(jidePopupLabel, "cell 0 0");
+                //---- jidePopupLabel ----
+                jidePopupLabel.setText("JidePopup:");
+                panel10.add(jidePopupLabel, "cell 0 0");
 
-				//---- showJidePopupButton ----
-				showJidePopupButton.setText("show JidePopup");
-				showJidePopupButton.addActionListener(e -> showJidePopupButtonActionPerformed(e));
-				panel10.add(showJidePopupButton, "cell 1 0");
-			}
-			panel9.add(panel10, cc.xy(1, 9));
-		}
-		add(panel9, "cell 0 0");
+                //---- showJidePopupButton ----
+                showJidePopupButton.setText("show JidePopup");
+                showJidePopupButton.addActionListener(e -> showJidePopupButtonActionPerformed(e));
+                panel10.add(showJidePopupButton, "cell 1 0");
+            }
+            panel9.add(panel10, CC.xy(1, 9));
+        }
+        add(panel9, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JideTabbedPane tabbedPane1;
-	private JideTabbedPane tabbedPane3;
-	private JideTabbedPane tabbedPane2;
-	private JideTabbedPane tabbedPane4;
-	private JCheckBox moreTabsCheckBox;
-	private JCheckBox tabScrollCheckBox;
-	private JCheckBox hasFullBorderCheckBox;
+    // Generated using JFormDesigner Evaluation license - unknown
+    private JideTabbedPane tabbedPane1;
+    private JideTabbedPane tabbedPane3;
+    private JideTabbedPane tabbedPane2;
+    private JideTabbedPane tabbedPane4;
+    private JCheckBox moreTabsCheckBox;
+    private JCheckBox tabScrollCheckBox;
+    private JCheckBox hasFullBorderCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -61,14 +61,14 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatSliderUI
 	extends BasicSliderUI
 {
-	private int trackWidth;
-	private int thumbWidth;
+	protected int trackWidth;
+	protected int thumbWidth;
 
-	private Color trackColor;
-	private Color thumbColor;
-	private Color focusColor;
-	private Color hoverColor;
-	private Color disabledForeground;
+	protected Color trackColor;
+	protected Color thumbColor;
+	protected Color focusColor;
+	protected Color hoverColor;
+	protected Color disabledForeground;
 
 	private MouseListener hoverListener;
 	private boolean hover;
