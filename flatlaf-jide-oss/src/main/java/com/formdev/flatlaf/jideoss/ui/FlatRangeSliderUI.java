@@ -47,7 +47,7 @@ public class FlatRangeSliderUI
 		if( slider.getOrientation() == JSlider.HORIZONTAL ) {
 			float y = trackRect.y + (trackRect.height - tw) / 2f;
 			if( enabled ) {
-				if( !slider.getInverted() ) {
+				if( slider.getComponentOrientation().isLeftToRight() ) {
 					int cw = thumbRect.x + (thumbRect.width / 2) - trackRect.x;
 					if( second ) {
 						track = new RoundRectangle2D.Float( trackRect.x + cw, y, trackRect.width - cw, tw, arc, arc );
@@ -75,12 +75,12 @@ public class FlatRangeSliderUI
 			float x = trackRect.x + (trackRect.width - tw) / 2f;
 			if( enabled ) {
 				int ch = thumbRect.y + (thumbRect.height / 2) - trackRect.y;
-				if( second == true ) {
-					track = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, trackRect.height - ch, arc, arc );
+				if( second ) {
 					int firstCh = firstThumbRect.y + (firstThumbRect.height / 2) - trackRect.y;
-					coloredTrack = new RoundRectangle2D.Float( x, trackRect.y + firstCh, tw, ch - firstCh, arc, arc );
-				} else {
 					track = new RoundRectangle2D.Float( x, trackRect.y, tw, ch, arc, arc );
+					coloredTrack = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, firstCh - ch, arc, arc );
+				} else {
+					track = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, trackRect.height - ch, arc, arc );
 				}
 			} else {
 				track = new RoundRectangle2D.Float( x, trackRect.y, tw, trackRect.height, arc, arc );
@@ -102,8 +102,6 @@ public class FlatRangeSliderUI
 	// ********************************
 	//          From BasicRangeSliderUI
 	// ********************************
-
-
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {

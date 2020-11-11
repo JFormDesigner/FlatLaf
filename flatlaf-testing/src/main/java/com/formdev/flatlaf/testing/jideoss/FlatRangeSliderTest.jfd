@@ -14,7 +14,7 @@ new FormModel {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jgoodies.forms.layout.FormLayout ) {
 				"$columnSpecs": "70dlu:grow, labelcompgap, 70dlu:grow"
-				"$rowSpecs": "pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref, linegap, default"
+				"$rowSpecs": "pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref, linegap, default, linegap, default"
 			} ) {
 				name: "panel9"
 				"opaque": false
@@ -24,11 +24,31 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
 				} )
-				add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
-					name: "rangeSlider1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "Horizontal"
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
 					"gridY": 3
+				} )
+				add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
+					name: "horizontalRangeSlider"
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridX": 3
+					"gridY": 3
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label2"
+					"text": "Vertical"
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridX": 1
+					"gridY": 5
+				} )
+				add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
+					name: "verticalRangeSlider"
+				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
+					"gridY": 5
+					"gridX": 3
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets 0,hidemode 3"
@@ -102,7 +122,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 510, 500 )
+			"size": new java.awt.Dimension( 550, 500 )
 		} )
 	}
 }

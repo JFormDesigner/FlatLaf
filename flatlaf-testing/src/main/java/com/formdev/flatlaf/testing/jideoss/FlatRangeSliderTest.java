@@ -90,7 +90,10 @@ public class FlatRangeSliderTest
         // Generated using JFormDesigner Evaluation license - unknown
         JPanel panel9 = new JPanel();
         JLabel tabbedPaneLabel = new JLabel();
-        RangeSlider rangeSlider1 = new RangeSlider();
+        JLabel label1 = new JLabel();
+        RangeSlider horizontalRangeSlider = new RangeSlider();
+        JLabel label2 = new JLabel();
+        RangeSlider verticalRangeSlider = new RangeSlider();
         JPanel panel14 = new JPanel();
         moreTabsCheckBox = new JCheckBox();
         tabScrollCheckBox = new JCheckBox();
@@ -100,12 +103,14 @@ public class FlatRangeSliderTest
         JButton showJidePopupButton = new JButton();
 
         //======== this ========
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border. EmptyBorder
-        ( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border. TitledBorder. CENTER, javax. swing. border
-        . TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt
-        . Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void
-        propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException( )
-        ; }} );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(
+        new javax.swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion"
+        ,javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
+        ,new java.awt.Font("D\u0069alog",java.awt.Font.BOLD,12)
+        ,java.awt.Color.red), getBorder())); addPropertyChangeListener(
+        new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
+        ){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException()
+        ;}});
         setLayout(new MigLayout(
             "insets dialog,hidemode 3",
             // columns
@@ -118,12 +123,21 @@ public class FlatRangeSliderTest
             panel9.setOpaque(false);
             panel9.setLayout(new FormLayout(
                 "70dlu:grow, $lcgap, 70dlu:grow",
-                "pref, 2*($lgap, fill:70dlu:grow), $lgap, pref, $lgap, default"));
+                "pref, 2*($lgap, fill:70dlu:grow), $lgap, pref, 2*($lgap, default)"));
 
             //---- tabbedPaneLabel ----
             tabbedPaneLabel.setText("RangeSlider:");
             panel9.add(tabbedPaneLabel, CC.xy(1, 1));
-            panel9.add(rangeSlider1, CC.xy(1, 3));
+
+            //---- label1 ----
+            label1.setText("Horizontal");
+            panel9.add(label1, CC.xy(1, 3));
+            panel9.add(horizontalRangeSlider, CC.xy(3, 3));
+
+            //---- label2 ----
+            label2.setText("Vertical");
+            panel9.add(label2, CC.xy(1, 5));
+            panel9.add(verticalRangeSlider, CC.xy(3, 5));
 
             //======== panel14 ========
             {
@@ -181,6 +195,18 @@ public class FlatRangeSliderTest
         }
         add(panel9, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		horizontalRangeSlider.setOrientation( SwingConstants.HORIZONTAL );
+		horizontalRangeSlider.setMinimum(0  );
+		horizontalRangeSlider.setMaximum(100  );
+		horizontalRangeSlider.setLowValue( 10 );
+		horizontalRangeSlider.setHighValue( 90 );
+
+		verticalRangeSlider.setOrientation( SwingConstants.VERTICAL );
+		verticalRangeSlider.setMinimum(0  );
+		verticalRangeSlider.setMaximum(100  );
+		verticalRangeSlider.setLowValue( 10 );
+		verticalRangeSlider.setHighValue( 90 );
 	}
 
 	private void tabScrollChanged() {
