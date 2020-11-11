@@ -27,11 +27,6 @@ public class FlatRangeSliderUI
 		super();
 	}
 
-	public static ComponentUI createUI() {
-		return new FlatRangeSliderUI();
-	}
-
-	//not remove!
 	public static ComponentUI createUI( JComponent slider ) {
 		return new FlatRangeSliderUI();
 	}
@@ -100,7 +95,7 @@ public class FlatRangeSliderUI
 	}
 
 	// ********************************
-	//          From BasicRangeSliderUI
+	//      From BasicRangeSliderUI
 	// ********************************
 
 	@Override
