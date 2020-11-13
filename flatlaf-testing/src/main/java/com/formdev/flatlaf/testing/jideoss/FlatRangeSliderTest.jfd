@@ -16,7 +16,7 @@ new FormModel {
 				"$columnSpecs": "70dlu:grow, labelcompgap, 70dlu:grow"
 				"$rowSpecs": "pref, linegap, fill:70dlu:grow, linegap, fill:70dlu:grow, linegap, pref"
 			} ) {
-				name: "panel9"
+				name: "mainPanel"
 				"opaque": false
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabbedPaneLabel"
@@ -25,7 +25,7 @@ new FormModel {
 					"gridX": 1
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label1"
+					name: "horizontalLabel"
 					"text": "Horizontal"
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
@@ -33,12 +33,15 @@ new FormModel {
 				} )
 				add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
 					name: "horizontalRangeSlider"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 3
 					"gridY": 3
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label2"
+					name: "verticalLabel"
 					"text": "Vertical"
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridX": 1
@@ -46,6 +49,9 @@ new FormModel {
 				} )
 				add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
 					name: "verticalRangeSlider"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridY": 5
 					"gridX": 3
@@ -55,12 +61,13 @@ new FormModel {
 					"$columnConstraints": "[][][]"
 					"$rowConstraints": "[center]"
 				} ) {
-					name: "panel14"
+					name: "configurationPanel"
 					"opaque": false
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "paintTick"
 						"text": "PaintTicks"
-						"mnemonic": 77
+						"mnemonic": 84
+						"selected": true
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -71,7 +78,8 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "paintLabel"
 						"text": "PaintLabels"
-						"mnemonic": 70
+						"mnemonic": 76
+						"selected": true
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}

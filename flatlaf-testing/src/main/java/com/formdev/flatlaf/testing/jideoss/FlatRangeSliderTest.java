@@ -1,13 +1,11 @@
 package com.formdev.flatlaf.testing.jideoss;
 
-import java.awt.event.*;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.event.*;
 import com.formdev.flatlaf.testing.FlatTestFrame;
 import com.formdev.flatlaf.testing.FlatTestPanel;
 import com.jgoodies.forms.factories.CC;
@@ -19,9 +17,6 @@ import net.miginfocom.swing.MigLayout;
 public class FlatRangeSliderTest
 	extends FlatTestPanel
 {
-
-	private RangeSlider horizontalRangeSlider;
-	private RangeSlider verticalRangeSlider;
 
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
@@ -54,22 +49,24 @@ public class FlatRangeSliderTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
-        JPanel panel9 = new JPanel();
+        JPanel mainPanel = new JPanel();
         JLabel tabbedPaneLabel = new JLabel();
-        JLabel label1 = new JLabel();
+        JLabel horizontalLabel = new JLabel();
         horizontalRangeSlider = new RangeSlider();
-        JLabel label2 = new JLabel();
+        JLabel verticalLabel = new JLabel();
         verticalRangeSlider = new RangeSlider();
-        JPanel panel14 = new JPanel();
+        JPanel configurationPanel = new JPanel();
         paintTick = new JCheckBox();
         paintLabel = new JCheckBox();
 
         //======== this ========
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border.EmptyBorder(0
-        ,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e",javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
-        ,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12),java.awt.Color.red),
-         getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-        ){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException();}});
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
+        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing
+        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
+        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
+        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
+        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName (
+        ) )) throw new RuntimeException( ); }} );
         setLayout(new MigLayout(
             "insets dialog,hidemode 3",
             // columns
@@ -77,31 +74,31 @@ public class FlatRangeSliderTest
             // rows
             "[grow,fill]"));
 
-        //======== panel9 ========
+        //======== mainPanel ========
         {
-            panel9.setOpaque(false);
-            panel9.setLayout(new FormLayout(
+            mainPanel.setOpaque(false);
+            mainPanel.setLayout(new FormLayout(
                 "70dlu:grow, $lcgap, 70dlu:grow",
                 "pref, 2*($lgap, fill:70dlu:grow), $lgap, pref"));
 
             //---- tabbedPaneLabel ----
             tabbedPaneLabel.setText("RangeSlider:");
-            panel9.add(tabbedPaneLabel, CC.xy(1, 1));
+            mainPanel.add(tabbedPaneLabel, CC.xy(1, 1));
 
-            //---- label1 ----
-            label1.setText("Horizontal");
-            panel9.add(label1, CC.xy(1, 3));
-            panel9.add(horizontalRangeSlider, CC.xy(3, 3));
+            //---- horizontalLabel ----
+            horizontalLabel.setText("Horizontal");
+            mainPanel.add(horizontalLabel, CC.xy(1, 3));
+            mainPanel.add(horizontalRangeSlider, CC.xy(3, 3));
 
-            //---- label2 ----
-            label2.setText("Vertical");
-            panel9.add(label2, CC.xy(1, 5));
-            panel9.add(verticalRangeSlider, CC.xy(3, 5));
+            //---- verticalLabel ----
+            verticalLabel.setText("Vertical");
+            mainPanel.add(verticalLabel, CC.xy(1, 5));
+            mainPanel.add(verticalRangeSlider, CC.xy(3, 5));
 
-            //======== panel14 ========
+            //======== configurationPanel ========
             {
-                panel14.setOpaque(false);
-                panel14.setLayout(new MigLayout(
+                configurationPanel.setOpaque(false);
+                configurationPanel.setLayout(new MigLayout(
                     "insets 0,hidemode 3",
                     // columns
                     "[]" +
@@ -112,19 +109,21 @@ public class FlatRangeSliderTest
 
                 //---- paintTick ----
                 paintTick.setText("PaintTicks");
-                paintTick.setMnemonic('M');
+                paintTick.setMnemonic('T');
+                paintTick.setSelected(true);
                 paintTick.addActionListener(e -> paintTicks());
-                panel14.add(paintTick, "cell 0 0");
+                configurationPanel.add(paintTick, "cell 0 0");
 
                 //---- paintLabel ----
                 paintLabel.setText("PaintLabels");
-                paintLabel.setMnemonic('F');
+                paintLabel.setMnemonic('L');
+                paintLabel.setSelected(true);
                 paintLabel.addActionListener(e -> paintLabels());
-                panel14.add(paintLabel, "cell 2 0,alignx left,growx 0");
+                configurationPanel.add(paintLabel, "cell 2 0,alignx left,growx 0");
             }
-            panel9.add(panel14, CC.xywh(1, 7, 3, 1));
+            mainPanel.add(configurationPanel, CC.xywh(1, 7, 3, 1));
         }
-        add(panel9, "cell 0 0");
+        add(mainPanel, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		horizontalRangeSlider.setOrientation( SwingConstants.HORIZONTAL );
@@ -152,6 +151,8 @@ public class FlatRangeSliderTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - unknown
+    private RangeSlider horizontalRangeSlider;
+    private RangeSlider verticalRangeSlider;
     private JCheckBox paintTick;
     private JCheckBox paintLabel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

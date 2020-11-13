@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.LookAndFeel;
@@ -40,7 +42,39 @@ public class FlatRangeSliderUI
 	}
 
 	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		// update label UIs, which is necessary because RangeSlider does not invoke JSlider.updateLabelUIs()
+		updateLabelUIs( c );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		// update label UIs also on uninstall to avoid light labels when switching
+		// from dark FlatLaf theme to another Laf
+		updateLabelUIs( c );
+
+		super.uninstallUI( c );
+	}
+
+	protected void updateLabelUIs( JComponent c ) {
+		Dictionary<?,?> labelTable = ((JSlider)c).getLabelTable();
+		if( labelTable == null )
+			return;
+
+		Enumeration<?> e = labelTable.elements();
+		while( e.hasMoreElements() ) {
+			JComponent label = (JComponent) e.nextElement();
+			label.updateUI();
+			label.setSize( label.getPreferredSize() );
+		}
+	}
+
+	@Override
 	public void paint( Graphics g, JComponent c ) {
+		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+
 		second = false;
 		super.paint( g, c );
 
