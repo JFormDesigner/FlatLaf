@@ -7,7 +7,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[grow,fill]para[fill]para[fill]"
-			"$rowConstraints": "[grow,fill][]"
+			"$rowConstraints": "[grow,fill]para[][]"
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
@@ -98,7 +98,7 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 					name: "tabLayoutToolBar"
 					"floatable": false
-					"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+					"border": &EmptyBorder0 new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "scrollTabLayoutButton"
 						"text": "scroll"
@@ -450,15 +450,111 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 0"
 			} )
+			add( new FormComponent( "javax.swing.JSeparator" ) {
+				name: "separator2"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1 3 1"
+			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 0,hidemode 3"
-				"$columnConstraints": "[]"
-				"$rowConstraints": "[center]"
+				"$columnConstraints": "[][fill]para[fill][fill]para"
+				"$rowConstraints": "[][center]"
 			} ) {
 				name: "panel4"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": true
 				}
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "scrollButtonsPolicyLabel"
+					"text": "Scroll buttons policy:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "scrollButtonsPolicyToolBar"
+					"floatable": false
+					"border": #EmptyBorder0
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "scrollAsNeededSingleButton"
+						"text": "asNeededSingle"
+						"font": #SwingDerivedFont2
+						"selected": true
+						"$buttonGroup": new FormReference( "scrollButtonsPolicyButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPolicyChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "scrollAsNeededButton"
+						"text": "asNeeded"
+						"font": #SwingDerivedFont2
+						"$buttonGroup": new FormReference( "scrollButtonsPolicyButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPolicyChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "scrollNeverButton"
+						"text": "never"
+						"font": #SwingDerivedFont2
+						"$buttonGroup": new FormReference( "scrollButtonsPolicyButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPolicyChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "scrollButtonsPlacementLabel"
+					"text": "Scroll buttons placement:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 0"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "scrollButtonsPlacementToolBar"
+					"floatable": false
+					"border": #EmptyBorder0
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "scrollBothButton"
+						"text": "both"
+						"font": #SwingDerivedFont2
+						"selected": true
+						"$buttonGroup": new FormReference( "scrollButtonsPlacementButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPlacementChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "scrollTrailingButton"
+						"text": "trailing"
+						"font": #SwingDerivedFont2
+						"$buttonGroup": new FormReference( "scrollButtonsPlacementButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPlacementChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabsPopupPolicyLabel"
+					"text": "Tabs popup policy:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "tabsPopupPolicyToolBar"
+					"floatable": false
+					"border": #EmptyBorder0
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "popupAsNeededButton"
+						"text": "asNeeded"
+						"font": #SwingDerivedFont2
+						"selected": true
+						"$buttonGroup": new FormReference( "tabsPopupPolicyButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsPopupPolicyChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "popupNeverButton"
+						"text": "never"
+						"font": #SwingDerivedFont2
+						"$buttonGroup": new FormReference( "tabsPopupPolicyButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsPopupPolicyChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showTabSeparatorsCheckBox"
 					"text": "Show tab separators"
@@ -467,14 +563,14 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTabSeparatorsChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
+					"value": "cell 2 1 2 1"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 1 3 1"
+				"value": "cell 0 2 3 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 1075, 860 )
+			"size": new java.awt.Dimension( 1075, 895 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "tabPlacementButtonGroup"
@@ -490,6 +586,21 @@ new FormModel {
 			name: "tabLayoutButtonGroup"
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 1020 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "tabsPopupPolicyButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 200, 915 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "scrollButtonsPolicyButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 200, 965 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "scrollButtonsPlacementButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 200, 1020 )
 		} )
 	}
 }
