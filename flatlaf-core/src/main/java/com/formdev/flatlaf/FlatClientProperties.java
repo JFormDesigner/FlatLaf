@@ -387,7 +387,7 @@ public interface FlatClientProperties
 	 *     {@link #TABBED_PANE_POLICY_AS_NEEDED} or
 	 *     {@link #TABBED_PANE_POLICY_AS_NEEDED_SINGLE}
 	 */
-	String TABBED_PANE_SCROLL_BUTTONS_POLICY = "JTabbedPane.scrollButtondPolicy";
+	String TABBED_PANE_SCROLL_BUTTONS_POLICY = "JTabbedPane.scrollButtonsPolicy";
 
 	/**
 	 * Display never.
