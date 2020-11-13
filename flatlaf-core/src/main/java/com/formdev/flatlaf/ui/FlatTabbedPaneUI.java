@@ -2563,7 +2563,7 @@ public class FlatTabbedPaneUI
 			// because methods scrollForward() and scrollBackward() in class
 			// BasicTabbedPaneUI.ScrollableTabSupport do not work for right-to-left
 			boolean leftToRight = isLeftToRight();
-			if( !leftToRight && !useMoreTabsButton && isHorizontalTabPlacement() ) {
+			if( !leftToRight && isHorizontalTabPlacement() ) {
 				useMoreTabsButton = true;
 				useScrollButtons = false;
 			}
@@ -2581,7 +2581,7 @@ public class FlatTabbedPaneUI
 				}
 			}
 
-			if( !useMoreTabsButton && (backwardButton == null || forwardButton == null) )
+			if( backwardButton == null || forwardButton == null )
 				return; // should never occur
 
 			Rectangle bounds = tabPane.getBounds();
@@ -2610,6 +2610,13 @@ public class FlatTabbedPaneUI
 
 			// layout tab area
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				// avoid that tab area "jump" to the right when backward button becomes hidden
+				if( useScrollButtons && hideDisabledScrollButtons ) {
+					Point viewPosition = tabViewport.getViewPosition();
+					if( viewPosition.x <= backwardButton.getPreferredSize().width )
+						tabViewport.setViewPosition( new Point( 0, viewPosition.y ) );
+				}
+
 				// tab area height (maxTabHeight is zero if tab count is zero)
 				int tabAreaHeight = (maxTabHeight > 0)
 					? maxTabHeight
@@ -2726,6 +2733,13 @@ public class FlatTabbedPaneUI
 					}
 				}
 			} else { // LEFT and RIGHT tab placement
+				// avoid that tab area "jump" to the top when backward button becomes hidden
+				if( useScrollButtons && hideDisabledScrollButtons ) {
+					Point viewPosition = tabViewport.getViewPosition();
+					if( viewPosition.y <= backwardButton.getPreferredSize().height )
+						tabViewport.setViewPosition( new Point( viewPosition.x, 0 ) );
+				}
+
 				// tab area width (maxTabWidth is zero if tab count is zero)
 				int tabAreaWidth = (maxTabWidth > 0)
 					? maxTabWidth
