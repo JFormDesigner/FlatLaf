@@ -26,6 +26,13 @@ import java.util.List;
  */
 public class StringUtils
 {
+	/**
+	 * Returns {@code true} if given string is {@code null} or length is zero.
+	 */
+	public static boolean isEmpty( String string ) {
+		return string == null || string.isEmpty();
+	}
+
 	public static String removeLeading( String string, String leading ) {
 		return string.startsWith( leading )
 			? string.substring( leading.length() )

@@ -56,6 +56,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.IntConsumer;
+import javax.accessibility.Accessible;
+import javax.accessibility.AccessibleContext;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -83,6 +85,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.JavaCompatibility;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -1527,7 +1530,7 @@ public class FlatTabbedPaneUI
 					lastIndex = i;
 
 					// create menu item for tab
-					popupMenu.add( createMenuItem( i ) );
+					popupMenu.add( createTabMenuItem( i ) );
 				}
 			}
 
@@ -1550,29 +1553,44 @@ public class FlatTabbedPaneUI
 			popupMenu.show( this, x, y );
 		}
 
-		protected JMenuItem createMenuItem( int index ) {
-			String title = tabPane.getTitleAt( index );
-			if( title == null || title.isEmpty() )
-				title = findTabTitle( tabPane.getTabComponentAt( index ) );
+		protected JMenuItem createTabMenuItem( int tabIndex ) {
+			// search for tab name in this places
+			//   1. tab title
+			//   2. text of label or text component in custom tab component (including children)
+			//   3. accessible name of tab
+			//   4. accessible name of custom tab component (including children)
+			//   5. string "n. Tab"
+			String title = tabPane.getTitleAt( tabIndex );
+			if( StringUtils.isEmpty( title ) ) {
+				Component tabComp = tabPane.getTabComponentAt( tabIndex );
+				if( tabComp != null )
+					title = findTabTitle( tabComp );
+				if( StringUtils.isEmpty( title ) )
+					title = tabPane.getAccessibleContext().getAccessibleChild( tabIndex ).getAccessibleContext().getAccessibleName();
+				if( StringUtils.isEmpty( title ) && tabComp instanceof Accessible )
+					title = findTabTitleInAccessible( (Accessible) tabComp );
+				if( StringUtils.isEmpty( title ) )
+					title = (tabIndex + 1) + ". Tab";
+			}
 
-			JMenuItem menuItem = new JMenuItem( title, tabPane.getIconAt( index ) );
-			menuItem.setDisabledIcon( tabPane.getDisabledIconAt( index ) );
-			menuItem.setToolTipText( tabPane.getToolTipTextAt( index ) );
+			JMenuItem menuItem = new JMenuItem( title, tabPane.getIconAt( tabIndex ) );
+			menuItem.setDisabledIcon( tabPane.getDisabledIconAt( tabIndex ) );
+			menuItem.setToolTipText( tabPane.getToolTipTextAt( tabIndex ) );
 
-			Color foregroundAt = tabPane.getForegroundAt( index );
+			Color foregroundAt = tabPane.getForegroundAt( tabIndex );
 			if( foregroundAt != tabPane.getForeground() )
 				menuItem.setForeground( foregroundAt );
 
-			Color backgroundAt = tabPane.getBackgroundAt( index );
+			Color backgroundAt = tabPane.getBackgroundAt( tabIndex );
 			if( backgroundAt != tabPane.getBackground() ) {
 				menuItem.setBackground( backgroundAt );
 				menuItem.setOpaque( true );
 			}
 
-			if( !tabPane.isEnabledAt( index ) )
+			if( !tabPane.isEnabledAt( tabIndex ) )
 				menuItem.setEnabled( false );
 
-			menuItem.addActionListener( e -> selectTab( index ) );
+			menuItem.addActionListener( e -> selectTab( tabIndex ) );
 			return menuItem;
 		}
 
@@ -1580,16 +1598,13 @@ public class FlatTabbedPaneUI
 		 * Search for label or text component in custom tab component and return its text.
 		 */
 		private String findTabTitle( Component c ) {
-			if( c == null )
-				return null;
-
 			String title = null;
 			if( c instanceof JLabel )
 				title = ((JLabel)c).getText();
 			else if( c instanceof JTextComponent )
 				title = ((JTextComponent)c).getText();
 
-			if( title != null && !title.isEmpty() )
+			if( !StringUtils.isEmpty( title ) )
 				return title;
 
 			if( c instanceof Container ) {
@@ -1603,8 +1618,30 @@ public class FlatTabbedPaneUI
 			return null;
 		}
 
-		protected void selectTab( int index ) {
-			tabPane.setSelectedIndex( index );
+		/**
+		 * Search for accessible name.
+		 */
+		private String findTabTitleInAccessible( Accessible accessible ) {
+			AccessibleContext context = accessible.getAccessibleContext();
+			if( context == null )
+				return null;
+
+			String title = context.getAccessibleName();
+			if( !StringUtils.isEmpty( title ) )
+				return title;
+
+			int childrenCount = context.getAccessibleChildrenCount();
+			for( int i = 0; i < childrenCount; i++ ) {
+				title = findTabTitleInAccessible( context.getAccessibleChild( i ) );
+				if( title != null )
+					return title;
+			}
+
+			return null;
+		}
+
+		protected void selectTab( int tabIndex ) {
+			tabPane.setSelectedIndex( tabIndex );
 			ensureSelectedTabIsVisible();
 		}
 
