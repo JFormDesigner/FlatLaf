@@ -72,8 +72,8 @@ public class FlatJideOssDefaultsAddon
 				if( key instanceof String &&
 					(
 						((String)key).startsWith( "Jide" ) ||
-						((String)key).equals( "RangeSliderUI" ) ||
-					 ((String)key).equals( "Resizable.resizeBorder" ))
+						key.equals( "RangeSliderUI" ) ||
+						key.equals( "Resizable.resizeBorder" ))
 				)
 				{
 					jideDefaults.put( key, e.getValue() );
