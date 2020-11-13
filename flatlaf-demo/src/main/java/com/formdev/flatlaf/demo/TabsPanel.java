@@ -162,26 +162,28 @@ class TabsPanel
 	}
 
 	private void initCustomComponentsTabs( JTabbedPane tabbedPane ) {
-		addDefaultTabsNoContent( tabbedPane, 3 );
+		addDefaultTabsNoContent( tabbedPane, 2 );
 		customComponentsChanged();
 	}
 
 	private void customComponentsChanged() {
-		JComponent leading = null;
-		JComponent trailing = null;
+		JToolBar leading = null;
+		JToolBar trailing = null;
 		if( leadingComponentButton.isSelected() ) {
-			leading = new JLabel( "Leading" );
-			leading.setOpaque( true );
-			leading.setBackground( new Color( UIManager.getColor( "Objects.Green" ).getRGB() ) );
-			leading.setForeground( Color.black );
-			leading.setBorder( new EmptyBorder( 4, 4, 4, 4 ) );
+			leading = new JToolBar();
+			leading.setFloatable( false );
+			leading.setBorder( null );
+			leading.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/project.svg" ) ) );
 		}
 		if( trailingComponentButton.isSelected() ) {
-			trailing = new JLabel( "Trailing" );
-			trailing.setOpaque( true );
-			trailing.setBackground( new Color( UIManager.getColor( "Objects.Purple" ).getRGB() ) );
-			trailing.setForeground( Color.black );
-			trailing.setBorder( new EmptyBorder( 4, 4, 4, 4 ) );
+			trailing = new JToolBar();
+			trailing.setFloatable( false );
+			trailing.setBorder( null );
+			trailing.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/buildLoadChanges.svg" ) ) );
+			trailing.add( Box.createHorizontalGlue() );
+			trailing.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/commit.svg" ) ) );
+			trailing.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/diff.svg" ) ) );
+			trailing.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/listFiles.svg" ) ) );
 		}
 		customComponentsTabbedPane.putClientProperty( TABBED_PANE_LEADING_COMPONENT, leading );
 		customComponentsTabbedPane.putClientProperty( TABBED_PANE_TRAILING_COMPONENT, trailing );
