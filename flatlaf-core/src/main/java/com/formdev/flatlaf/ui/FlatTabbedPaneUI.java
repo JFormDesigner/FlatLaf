@@ -131,8 +131,9 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
  *
+ * @uiDefault TabbedPane.tabLayoutPolicy				String	wrap (default) or scroll
  * @uiDefault TabbedPane.tabsPopupPolicy				String	never or asNeeded (default)
- * @uiDefault TabbedPane.scrollButtonsPolicy				String	never, asNeeded or asNeededSingle (default)
+ * @uiDefault TabbedPane.scrollButtonsPolicy			String	never, asNeeded or asNeededSingle (default)
  * @uiDefault TabbedPane.scrollButtonsPlacement			String	both (default) or trailing
  *
  * @uiDefault TabbedPane.tabAreaAlignment				String	leading (default), center, trailing or fill
@@ -231,6 +232,18 @@ public class FlatTabbedPaneUI
 
 	@Override
 	public void installUI( JComponent c ) {
+		// initialize tab layout policy (if specified)
+		String tabLayoutPolicyStr = UIManager.getString( "TabbedPane.tabLayoutPolicy" );
+		if( tabLayoutPolicyStr != null ) {
+			int tabLayoutPolicy;
+			switch( tabLayoutPolicyStr ) {
+				default:
+				case "wrap":		tabLayoutPolicy = JTabbedPane.WRAP_TAB_LAYOUT; break;
+				case "scroll":	tabLayoutPolicy = JTabbedPane.SCROLL_TAB_LAYOUT; break;
+			}
+			((JTabbedPane)c).setTabLayoutPolicy( tabLayoutPolicy );
+		}
+
 		// initialize this defaults here because they are used in constructor
 		// of FlatTabAreaButton, which is invoked before installDefaults()
 		arrowType = UIManager.getString( "TabbedPane.arrowType" );

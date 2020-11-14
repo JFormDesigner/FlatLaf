@@ -11,7 +11,11 @@ FlatLaf Change Log
 - TabbedPane: Support forward/backward scroll arrow buttons on both sides of tab
   area. Backward button on left side, forward button on right side. Not
   applicable scroll buttons are hidden. (PR #211; issue #40)
-- TabbedPane: Support scrolling tabs with mouse wheel in scroll tab layout. (PR
+- TabbedPane: Support specifying default tab layout policy for all tabbed panes
+  in the application via UI value `TabbedPane.tabLayoutPolicy`. E.g. invoke
+  `UIManager.put( "TabbedPane.tabLayoutPolicy", "scroll" );` to use scroll
+  layout.
+- TabbedPane: Support tab scrolling with mouse wheel (in scroll tab layout). (PR
   #187; issue #40)
 - TabbedPane: Repeat scrolling as long as scroll arrow buttons are pressed. (PR
   #187; issue #40)
