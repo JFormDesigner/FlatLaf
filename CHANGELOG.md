@@ -5,16 +5,21 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- TabbedPane: Replaced forward/backward scrolling arrow buttons with "Show
-  Hidden Tabs" button. If pressed, it shows a popup menu that contains (partly)
-  hidden tabs and selecting one activates that tab. If you prefer
-  forward/backward buttons, use `UIManager.put(
-  "TabbedPane.hiddenTabsNavigation", "arrowButtons" )`. (PR #190; issue #40)
-- TabbedPane: Support scrolling tabs with mouse wheel (if `tabLayoutPolicy` is
-  `SCROLL_TAB_LAYOUT`). (PR #187; issue #40)
-- TabbedPane: Repeat scrolling as long as arrow buttons are pressed. (PR #187;
-  issue #40)
-- TabbedPane: Support adding custom components to left and right sides of tabs
+- TabbedPane: In scroll tab layout, added "Show Hidden Tabs" button to trailing
+  side of tab area. If pressed, it shows a popup menu that contains (partly)
+  hidden tabs and selecting one activates that tab. (PR #190; issue #40)
+- TabbedPane: Support forward/backward scroll arrow buttons on both sides of tab
+  area. Backward button on left side, forward button on right side. Not
+  applicable scroll buttons are hidden. (PR #211; issue #40)
+- TabbedPane: Support specifying default tab layout policy for all tabbed panes
+  in the application via UI value `TabbedPane.tabLayoutPolicy`. E.g. invoke
+  `UIManager.put( "TabbedPane.tabLayoutPolicy", "scroll" );` to use scroll
+  layout.
+- TabbedPane: Support tab scrolling with mouse wheel (in scroll tab layout). (PR
+  #187; issue #40)
+- TabbedPane: Repeat scrolling as long as scroll arrow buttons are pressed. (PR
+  #187; issue #40)
+- TabbedPane: Support adding custom components to left and right sides of tab
   area. (set client property `JTabbedPane.leadingComponent` or
   `JTabbedPane.trailingComponent` to a `java.awt.Component`) (PR #192; issue
   #40)

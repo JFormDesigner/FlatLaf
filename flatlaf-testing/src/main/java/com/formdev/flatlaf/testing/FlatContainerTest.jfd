@@ -132,7 +132,7 @@ new FormModel {
 				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestFrame$NoRightToLeftPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets 0,hidemode 3"
 					"$columnConstraints": "[][fill][]"
-					"$rowConstraints": "[center][][][]para[][]para[][]para[][]"
+					"$rowConstraints": "[center][][][][][]para[][]para[][]"
 				} ) {
 					name: "tabbedPaneControlPanel"
 					"opaque": false
@@ -197,24 +197,24 @@ new FormModel {
 						"value": "cell 2 0"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "hiddenTabsNavigationLabel"
-						"text": "Hidden tabs navigation:"
+						name: "tabsPopupPolicyLabel"
+						"text": "Tabs popup policy:"
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 1"
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
-						name: "hiddenTabsNavigationField"
+						name: "tabsPopupPolicyField"
 						"model": new javax.swing.DefaultComboBoxModel {
 							selectedItem: "default"
 							addElement( "default" )
-							addElement( "moreTabsButton" )
-							addElement( "arrowButtons" )
+							addElement( "asNeeded" )
+							addElement( "never" )
 						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 							"JavaCodeGenerator.typeParameters": "String"
 						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hiddenTabsNavigationChanged", false ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsPopupPolicyChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 1"
 					} )
@@ -229,26 +229,25 @@ new FormModel {
 						"value": "cell 2 1"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "tabPlacementLabel"
-						"text": "Tab placement:"
+						name: "scrollButtonsPolicyLabel"
+						"text": "Scroll buttons policy:"
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 2"
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
-						name: "tabPlacementField"
+						name: "scrollButtonsPolicyField"
 						"model": new javax.swing.DefaultComboBoxModel {
 							selectedItem: "default"
 							addElement( "default" )
-							addElement( "top" )
-							addElement( "bottom" )
-							addElement( "left" )
-							addElement( "right" )
+							addElement( "asNeededSingle" )
+							addElement( "asNeeded" )
+							addElement( "never" )
 						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 							"JavaCodeGenerator.typeParameters": "String"
 						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPolicyChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 2"
 					} )
@@ -299,10 +298,76 @@ new FormModel {
 						"value": "cell 2 2"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "scrollButtonsPlacementLabel"
+						"text": "Scroll buttons placement:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 3"
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "scrollButtonsPlacementField"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "default"
+							addElement( "default" )
+							addElement( "both" )
+							addElement( "trailing" )
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+							"JavaCodeGenerator.typeParameters": "String"
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPlacementChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 3"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "tabsClosableCheckBox"
+						"text": "Tabs closable"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsClosableChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 3"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "tabPlacementLabel"
+						"text": "Tab placement:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 4"
+					} )
+					add( new FormComponent( "javax.swing.JComboBox" ) {
+						name: "tabPlacementField"
+						"model": new javax.swing.DefaultComboBoxModel {
+							selectedItem: "default"
+							addElement( "default" )
+							addElement( "top" )
+							addElement( "bottom" )
+							addElement( "left" )
+							addElement( "right" )
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+							"JavaCodeGenerator.typeParameters": "String"
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 4"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.extras.TriStateCheckBox" ) {
+						name: "secondTabClosableCheckBox"
+						"text": "Second Tab closable"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "secondTabClosableChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 4"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "tabAreaAlignmentLabel"
 						"text": "Tab area/title alignment:"
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 3"
+						"value": "cell 0 5"
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "tabAreaAlignmentField"
@@ -320,7 +385,7 @@ new FormModel {
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabAreaAlignmentChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 1 3"
+						"value": "cell 1 5"
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "tabAlignmentField"
@@ -337,13 +402,13 @@ new FormModel {
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabAlignmentChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 1 3"
+						"value": "cell 1 5"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "tabWidthModeLabel"
 						"text": "Tab width mode:"
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 3"
+						"value": "cell 2 5"
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "tabWidthModeField"
@@ -360,66 +425,6 @@ new FormModel {
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabWidthModeChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 3"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "tabsClosableCheckBox"
-						"text": "Tabs closable"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsClosableChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 4"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "customBorderCheckBox"
-						"text": "Custom border"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customBorderChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 1 4"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "tabAreaInsetsCheckBox"
-						"text": "Tab area insets (5,5,10,10)"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabAreaInsetsChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 4"
-					} )
-					add( new FormComponent( "com.formdev.flatlaf.extras.TriStateCheckBox" ) {
-						name: "secondTabClosableCheckBox"
-						"text": "Second Tab closable"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "secondTabClosableChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 5"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "hasFullBorderCheckBox"
-						"text": "Show content border"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hasFullBorderChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 1 5,alignx left,growx 0"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "smallerTabHeightCheckBox"
-						"text": "Smaller tab height (26)"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "smallerTabHeightChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 5"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
@@ -433,22 +438,22 @@ new FormModel {
 						"value": "cell 0 6"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "hideContentSeparatorCheckBox"
-						"text": "Hide content separator"
+						name: "customBorderCheckBox"
+						"text": "Custom border"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hideContentSeparatorChanged", false ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customBorderChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 6"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "smallerInsetsCheckBox"
-						"text": "Smaller tab insets (2,2,2,2)"
+						name: "tabAreaInsetsCheckBox"
+						"text": "Tab area insets (5,5,10,10)"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "smallerInsetsChanged", false ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabAreaInsetsChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 6"
 					} )
@@ -463,22 +468,22 @@ new FormModel {
 						"value": "cell 0 7"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "showTabSeparatorsCheckBox"
-						"text": "Show tab separators"
+						name: "hasFullBorderCheckBox"
+						"text": "Show content border"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTabSeparatorsChanged", false ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hasFullBorderChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 1 7"
+						"value": "cell 1 7,alignx left,growx 0"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "secondTabWiderCheckBox"
-						"text": "Second Tab insets wider (4,20,4,20)"
+						name: "smallerTabHeightCheckBox"
+						"text": "Smaller tab height (26)"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "secondTabWiderChanged", false ) )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "smallerTabHeightChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 7"
 					} )
@@ -490,6 +495,26 @@ new FormModel {
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "minimumTabWidthChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 8"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "hideContentSeparatorCheckBox"
+						"text": "Hide content separator"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hideContentSeparatorChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 8"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "smallerInsetsCheckBox"
+						"text": "Smaller tab insets (2,2,2,2)"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "smallerInsetsChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 8"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
@@ -499,6 +524,26 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "maximumTabWidthChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 9"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "showTabSeparatorsCheckBox"
+						"text": "Show tab separators"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTabSeparatorsChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 9"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "secondTabWiderCheckBox"
+						"text": "Second Tab insets wider (4,20,4,20)"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "secondTabWiderChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 9"
 					} )

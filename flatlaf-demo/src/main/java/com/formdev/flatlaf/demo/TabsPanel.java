@@ -162,26 +162,28 @@ class TabsPanel
 	}
 
 	private void initCustomComponentsTabs( JTabbedPane tabbedPane ) {
-		addDefaultTabsNoContent( tabbedPane, 3 );
+		addDefaultTabsNoContent( tabbedPane, 2 );
 		customComponentsChanged();
 	}
 
 	private void customComponentsChanged() {
-		JComponent leading = null;
-		JComponent trailing = null;
+		JToolBar leading = null;
+		JToolBar trailing = null;
 		if( leadingComponentButton.isSelected() ) {
-			leading = new JLabel( "Leading" );
-			leading.setOpaque( true );
-			leading.setBackground( new Color( UIManager.getColor( "Objects.Green" ).getRGB() ) );
-			leading.setForeground( Color.black );
-			leading.setBorder( new EmptyBorder( 4, 4, 4, 4 ) );
+			leading = new JToolBar();
+			leading.setFloatable( false );
+			leading.setBorder( null );
+			leading.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/project.svg" ) ) );
 		}
 		if( trailingComponentButton.isSelected() ) {
-			trailing = new JLabel( "Trailing" );
-			trailing.setOpaque( true );
-			trailing.setBackground( new Color( UIManager.getColor( "Objects.Purple" ).getRGB() ) );
-			trailing.setForeground( Color.black );
-			trailing.setBorder( new EmptyBorder( 4, 4, 4, 4 ) );
+			trailing = new JToolBar();
+			trailing.setFloatable( false );
+			trailing.setBorder( null );
+			trailing.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/buildLoadChanges.svg" ) ) );
+			trailing.add( Box.createHorizontalGlue() );
+			trailing.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/commit.svg" ) ) );
+			trailing.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/diff.svg" ) ) );
+			trailing.add( new JButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/listFiles.svg" ) ) );
 		}
 		customComponentsTabbedPane.putClientProperty( TABBED_PANE_LEADING_COMPONENT, leading );
 		customComponentsTabbedPane.putClientProperty( TABBED_PANE_TRAILING_COMPONENT, trailing );
@@ -280,6 +282,25 @@ class TabsPanel
 		tabbedPane.addTab( "C", null );
 	}
 
+	private void tabsPopupPolicyChanged() {
+		String tabsPopupPolicy = popupNeverButton.isSelected() ? TABBED_PANE_POLICY_NEVER : null;
+		putTabbedPanesClientProperty( TABBED_PANE_TABS_POPUP_POLICY, tabsPopupPolicy );
+	}
+
+	private void scrollButtonsPolicyChanged() {
+		String scrollButtonsPolicy = scrollAsNeededButton.isSelected()
+			? TABBED_PANE_POLICY_AS_NEEDED
+			: (scrollNeverButton.isSelected()
+				? TABBED_PANE_POLICY_NEVER
+				: null);
+		putTabbedPanesClientProperty( TABBED_PANE_SCROLL_BUTTONS_POLICY, scrollButtonsPolicy );
+	}
+
+	private void scrollButtonsPlacementChanged() {
+		String scrollButtonsPlacement = scrollTrailingButton.isSelected() ? TABBED_PANE_PLACEMENT_TRAILING : null;
+		putTabbedPanesClientProperty( TABBED_PANE_SCROLL_BUTTONS_PLACEMENT, scrollButtonsPlacement );
+	}
+
 	private void showTabSeparatorsChanged() {
 		Boolean showTabSeparators = showTabSeparatorsCheckBox.isSelected() ? true : null;
 		putTabbedPanesClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
@@ -362,7 +383,21 @@ class TabsPanel
 		tabAlignVerticalTabbedPane = new JTabbedPane();
 		tabAlignCenterTabbedPane = new JTabbedPane();
 		tabAlignTrailingTabbedPane = new JTabbedPane();
+		separator2 = new JSeparator();
 		JPanel panel4 = new JPanel();
+		scrollButtonsPolicyLabel = new JLabel();
+		scrollButtonsPolicyToolBar = new JToolBar();
+		scrollAsNeededSingleButton = new JToggleButton();
+		scrollAsNeededButton = new JToggleButton();
+		scrollNeverButton = new JToggleButton();
+		scrollButtonsPlacementLabel = new JLabel();
+		scrollButtonsPlacementToolBar = new JToolBar();
+		scrollBothButton = new JToggleButton();
+		scrollTrailingButton = new JToggleButton();
+		tabsPopupPolicyLabel = new JLabel();
+		tabsPopupPolicyToolBar = new JToolBar();
+		popupAsNeededButton = new JToggleButton();
+		popupNeverButton = new JToggleButton();
 		showTabSeparatorsCheckBox = new JCheckBox();
 
 		//======== this ========
@@ -374,7 +409,8 @@ class TabsPanel
 			"[fill]para" +
 			"[fill]",
 			// rows
-			"[grow,fill]" +
+			"[grow,fill]para" +
+			"[]" +
 			"[]"));
 
 		//======== panel1 ========
@@ -822,23 +858,122 @@ class TabsPanel
 		}
 		add(panel3, "cell 2 0");
 
+		//---- separator2 ----
+		separator2.setName("separator2");
+		add(separator2, "cell 0 1 3 1");
+
 		//======== panel4 ========
 		{
 			panel4.setName("panel4");
 			panel4.setLayout(new MigLayout(
 				"insets 0,hidemode 3",
 				// columns
-				"[]",
+				"[]" +
+				"[fill]para" +
+				"[fill]" +
+				"[fill]para",
 				// rows
+				"[]" +
 				"[center]"));
+
+			//---- scrollButtonsPolicyLabel ----
+			scrollButtonsPolicyLabel.setText("Scroll buttons policy:");
+			scrollButtonsPolicyLabel.setName("scrollButtonsPolicyLabel");
+			panel4.add(scrollButtonsPolicyLabel, "cell 0 0");
+
+			//======== scrollButtonsPolicyToolBar ========
+			{
+				scrollButtonsPolicyToolBar.setFloatable(false);
+				scrollButtonsPolicyToolBar.setBorder(BorderFactory.createEmptyBorder());
+				scrollButtonsPolicyToolBar.setName("scrollButtonsPolicyToolBar");
+
+				//---- scrollAsNeededSingleButton ----
+				scrollAsNeededSingleButton.setText("asNeededSingle");
+				scrollAsNeededSingleButton.setFont(scrollAsNeededSingleButton.getFont().deriveFont(scrollAsNeededSingleButton.getFont().getSize() - 2f));
+				scrollAsNeededSingleButton.setSelected(true);
+				scrollAsNeededSingleButton.setName("scrollAsNeededSingleButton");
+				scrollAsNeededSingleButton.addActionListener(e -> scrollButtonsPolicyChanged());
+				scrollButtonsPolicyToolBar.add(scrollAsNeededSingleButton);
+
+				//---- scrollAsNeededButton ----
+				scrollAsNeededButton.setText("asNeeded");
+				scrollAsNeededButton.setFont(scrollAsNeededButton.getFont().deriveFont(scrollAsNeededButton.getFont().getSize() - 2f));
+				scrollAsNeededButton.setName("scrollAsNeededButton");
+				scrollAsNeededButton.addActionListener(e -> scrollButtonsPolicyChanged());
+				scrollButtonsPolicyToolBar.add(scrollAsNeededButton);
+
+				//---- scrollNeverButton ----
+				scrollNeverButton.setText("never");
+				scrollNeverButton.setFont(scrollNeverButton.getFont().deriveFont(scrollNeverButton.getFont().getSize() - 2f));
+				scrollNeverButton.setName("scrollNeverButton");
+				scrollNeverButton.addActionListener(e -> scrollButtonsPolicyChanged());
+				scrollButtonsPolicyToolBar.add(scrollNeverButton);
+			}
+			panel4.add(scrollButtonsPolicyToolBar, "cell 1 0");
+
+			//---- scrollButtonsPlacementLabel ----
+			scrollButtonsPlacementLabel.setText("Scroll buttons placement:");
+			scrollButtonsPlacementLabel.setName("scrollButtonsPlacementLabel");
+			panel4.add(scrollButtonsPlacementLabel, "cell 2 0");
+
+			//======== scrollButtonsPlacementToolBar ========
+			{
+				scrollButtonsPlacementToolBar.setFloatable(false);
+				scrollButtonsPlacementToolBar.setBorder(BorderFactory.createEmptyBorder());
+				scrollButtonsPlacementToolBar.setName("scrollButtonsPlacementToolBar");
+
+				//---- scrollBothButton ----
+				scrollBothButton.setText("both");
+				scrollBothButton.setFont(scrollBothButton.getFont().deriveFont(scrollBothButton.getFont().getSize() - 2f));
+				scrollBothButton.setSelected(true);
+				scrollBothButton.setName("scrollBothButton");
+				scrollBothButton.addActionListener(e -> scrollButtonsPlacementChanged());
+				scrollButtonsPlacementToolBar.add(scrollBothButton);
+
+				//---- scrollTrailingButton ----
+				scrollTrailingButton.setText("trailing");
+				scrollTrailingButton.setFont(scrollTrailingButton.getFont().deriveFont(scrollTrailingButton.getFont().getSize() - 2f));
+				scrollTrailingButton.setName("scrollTrailingButton");
+				scrollTrailingButton.addActionListener(e -> scrollButtonsPlacementChanged());
+				scrollButtonsPlacementToolBar.add(scrollTrailingButton);
+			}
+			panel4.add(scrollButtonsPlacementToolBar, "cell 3 0");
+
+			//---- tabsPopupPolicyLabel ----
+			tabsPopupPolicyLabel.setText("Tabs popup policy:");
+			tabsPopupPolicyLabel.setName("tabsPopupPolicyLabel");
+			panel4.add(tabsPopupPolicyLabel, "cell 0 1");
+
+			//======== tabsPopupPolicyToolBar ========
+			{
+				tabsPopupPolicyToolBar.setFloatable(false);
+				tabsPopupPolicyToolBar.setBorder(BorderFactory.createEmptyBorder());
+				tabsPopupPolicyToolBar.setName("tabsPopupPolicyToolBar");
+
+				//---- popupAsNeededButton ----
+				popupAsNeededButton.setText("asNeeded");
+				popupAsNeededButton.setFont(popupAsNeededButton.getFont().deriveFont(popupAsNeededButton.getFont().getSize() - 2f));
+				popupAsNeededButton.setSelected(true);
+				popupAsNeededButton.setName("popupAsNeededButton");
+				popupAsNeededButton.addActionListener(e -> tabsPopupPolicyChanged());
+				tabsPopupPolicyToolBar.add(popupAsNeededButton);
+
+				//---- popupNeverButton ----
+				popupNeverButton.setText("never");
+				popupNeverButton.setFont(popupNeverButton.getFont().deriveFont(popupNeverButton.getFont().getSize() - 2f));
+				popupNeverButton.setName("popupNeverButton");
+				popupNeverButton.addActionListener(e -> tabsPopupPolicyChanged());
+				tabsPopupPolicyToolBar.add(popupNeverButton);
+			}
+			panel4.add(tabsPopupPolicyToolBar, "cell 1 1");
 
 			//---- showTabSeparatorsCheckBox ----
 			showTabSeparatorsCheckBox.setText("Show tab separators");
 			showTabSeparatorsCheckBox.setName("showTabSeparatorsCheckBox");
 			showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
-			panel4.add(showTabSeparatorsCheckBox, "cell 0 0");
+			panel4.add(showTabSeparatorsCheckBox, "cell 2 1 2 1");
 		}
-		add(panel4, "cell 0 1 3 1");
+		add(panel4, "cell 0 2 3 1");
 
 		//---- tabPlacementButtonGroup ----
 		ButtonGroup tabPlacementButtonGroup = new ButtonGroup();
@@ -857,6 +992,22 @@ class TabsPanel
 		closableTabsButtonGroup.add(squareCloseButton);
 		closableTabsButtonGroup.add(circleCloseButton);
 		closableTabsButtonGroup.add(redCrossCloseButton);
+
+		//---- scrollButtonsPolicyButtonGroup ----
+		ButtonGroup scrollButtonsPolicyButtonGroup = new ButtonGroup();
+		scrollButtonsPolicyButtonGroup.add(scrollAsNeededSingleButton);
+		scrollButtonsPolicyButtonGroup.add(scrollAsNeededButton);
+		scrollButtonsPolicyButtonGroup.add(scrollNeverButton);
+
+		//---- scrollButtonsPlacementButtonGroup ----
+		ButtonGroup scrollButtonsPlacementButtonGroup = new ButtonGroup();
+		scrollButtonsPlacementButtonGroup.add(scrollBothButton);
+		scrollButtonsPlacementButtonGroup.add(scrollTrailingButton);
+
+		//---- tabsPopupPolicyButtonGroup ----
+		ButtonGroup tabsPopupPolicyButtonGroup = new ButtonGroup();
+		tabsPopupPolicyButtonGroup.add(popupAsNeededButton);
+		tabsPopupPolicyButtonGroup.add(popupNeverButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -903,6 +1054,20 @@ class TabsPanel
 	private JTabbedPane tabAlignVerticalTabbedPane;
 	private JTabbedPane tabAlignCenterTabbedPane;
 	private JTabbedPane tabAlignTrailingTabbedPane;
+	private JSeparator separator2;
+	private JLabel scrollButtonsPolicyLabel;
+	private JToolBar scrollButtonsPolicyToolBar;
+	private JToggleButton scrollAsNeededSingleButton;
+	private JToggleButton scrollAsNeededButton;
+	private JToggleButton scrollNeverButton;
+	private JLabel scrollButtonsPlacementLabel;
+	private JToolBar scrollButtonsPlacementToolBar;
+	private JToggleButton scrollBothButton;
+	private JToggleButton scrollTrailingButton;
+	private JLabel tabsPopupPolicyLabel;
+	private JToolBar tabsPopupPolicyToolBar;
+	private JToggleButton popupAsNeededButton;
+	private JToggleButton popupNeverButton;
 	private JCheckBox showTabSeparatorsCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

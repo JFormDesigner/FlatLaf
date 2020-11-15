@@ -672,6 +672,8 @@ TabbedPane.highlight
 TabbedPane.hoverColor
 TabbedPane.labelShift
 TabbedPane.light
+TabbedPane.scrollButtonsPlacement
+TabbedPane.scrollButtonsPolicy
 TabbedPane.selectedLabelShift
 TabbedPane.selectedTabPadInsets
 TabbedPane.selectionFollowsFocus
@@ -688,6 +690,7 @@ TabbedPane.tabSeparatorsFullHeight
 TabbedPane.tabWidthMode
 TabbedPane.tabsOpaque
 TabbedPane.tabsOverlapBorder
+TabbedPane.tabsPopupPolicy
 TabbedPane.textIconGap
 TabbedPane.underlineColor
 TabbedPaneUI

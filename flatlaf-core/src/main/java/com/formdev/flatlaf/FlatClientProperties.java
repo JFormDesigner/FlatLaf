@@ -366,28 +366,85 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_CLOSE_CALLBACK = "JTabbedPane.tabCloseCallback";
 
 	/**
-	 * Specifies how to navigate to hidden tabs.
+	 * Specifies the display policy for the "more tabs" button,
+	 * which shows a popup menu with the (partly) hidden tabs.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON}
-	 * or {@link #TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS}
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_POLICY_NEVER} or
+	 *     {@link #TABBED_PANE_POLICY_AS_NEEDED}
 	 */
-	String TABBED_PANE_HIDDEN_TABS_NAVIGATION = "JTabbedPane.hiddenTabsNavigation";
+	String TABBED_PANE_TABS_POPUP_POLICY = "JTabbedPane.tabsPopupPolicy";
 
 	/**
-	 * Use "more tabs" button for navigation to hidden tabs.
-	 *
-	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
+	 * Specifies the display policy for the forward/backward scroll arrow buttons.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_POLICY_NEVER},
+	 *     {@link #TABBED_PANE_POLICY_AS_NEEDED} or
+	 *     {@link #TABBED_PANE_POLICY_AS_NEEDED_SINGLE}
 	 */
-	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON = "moreTabsButton";
+	String TABBED_PANE_SCROLL_BUTTONS_POLICY = "JTabbedPane.scrollButtonsPolicy";
 
 	/**
-	 * Use forward/backward buttons for navigation to hidden tabs.
+	 * Display never.
 	 *
-	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
+	 * @see #TABBED_PANE_TABS_POPUP_POLICY
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_POLICY
 	 */
-	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS = "arrowButtons";
+	String TABBED_PANE_POLICY_NEVER = "never";
+
+	/**
+	 * Display only when needed.
+	 * <p>
+	 * If used for {@link #TABBED_PANE_SCROLL_BUTTONS_POLICY}, both scroll arrow buttons
+	 * are either shown or hidden. Buttons are disabled if scrolling in that
+	 * direction is not applicable.
+	 *
+	 * @see #TABBED_PANE_TABS_POPUP_POLICY
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_POLICY
+	 */
+	String TABBED_PANE_POLICY_AS_NEEDED = "asNeeded";
+
+	/**
+	 * Display single button only when needed.
+	 * <p>
+	 * If scroll button placement is trailing, then this option is ignored
+	 * and both buttons are shown or hidden as needed.
+	 *
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_POLICY
+	 */
+	String TABBED_PANE_POLICY_AS_NEEDED_SINGLE = "asNeededSingle";
+
+	/**
+	 * Specifies the placement of the forward/backward scroll arrow buttons.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_PLACEMENT_BOTH} or
+	 *     {@link #TABBED_PANE_PLACEMENT_TRAILING}
+	 */
+	String TABBED_PANE_SCROLL_BUTTONS_PLACEMENT = "JTabbedPane.scrollButtonsPlacement";
+
+	/**
+	 * The forward/backward scroll arrow buttons are placed on both sides of the tab area.
+	 * The backward scroll button at the left/top side.
+	 * The forward scroll button at the right/bottom side.
+	 *
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_PLACEMENT
+	 */
+	String TABBED_PANE_PLACEMENT_BOTH = "both";
+
+	/**
+	 * The forward/backward scroll arrow buttons are placed on the trailing side of the tab area.
+	 *
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_PLACEMENT
+	 */
+	String TABBED_PANE_PLACEMENT_TRAILING = "trailing";
 
 	/**
 	 * Specifies the alignment of the tab area.
