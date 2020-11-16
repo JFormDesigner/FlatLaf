@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 FormDev Software GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.formdev.flatlaf.jideoss.ui;
 
 import java.awt.Color;
@@ -19,26 +35,29 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import com.jidesoft.plaf.basic.BasicRangeSliderUI;
 
+/**
+ * Provides the Flat LaF UI delegate for {@link com.jidesoft.swing.RangeSlider}.
+ */
 public class FlatRangeSliderUI
 	extends BasicRangeSliderUI
-
 {
-
 	private int trackWidth;
 	private int thumbWidth;
+
 	private Color trackColor;
 	private Color thumbColor;
 	private Color focusColor;
 	private Color hoverColor;
 	private Color disabledForeground;
+
 	private Rectangle firstThumbRect;
 
-	public FlatRangeSliderUI( JComponent slider ) {
-		super( (JSlider) slider );
+	public static ComponentUI createUI( JComponent c ) {
+		return new FlatRangeSliderUI();
 	}
 
-	public static ComponentUI createUI( JComponent slider ) {
-		return new FlatRangeSliderUI( slider );
+	public FlatRangeSliderUI() {
+		super( null );
 	}
 
 	@Override
@@ -70,94 +89,6 @@ public class FlatRangeSliderUI
 			label.setSize( label.getPreferredSize() );
 		}
 	}
-
-	@Override
-	public void paint( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
-
-		second = false;
-		super.paint( g, c );
-
-		Rectangle clip = g.getClipBounds();
-
-		firstThumbRect = new Rectangle( thumbRect );
-
-		second = true;
-		Point p = adjustThumbForHighValue();
-
-		if( clip.intersects( thumbRect ) ) {
-			paintTrack( g );
-			paintThumb( g );
-		}
-
-		restoreThumbForLowValue( p );
-		second = false;
-	}
-
-	@Override
-	public void paintTrack( Graphics g ) {
-		boolean enabled = slider.isEnabled();
-		float tw = UIScale.scale( (float) trackWidth );
-		float arc = tw;
-
-		RoundRectangle2D coloredTrack = null;
-		RoundRectangle2D track;
-		if( slider.getOrientation() == JSlider.HORIZONTAL ) {
-			float y = trackRect.y + (trackRect.height - tw) / 2f;
-			if( enabled ) {
-				if( slider.getComponentOrientation().isLeftToRight() ) {
-					int cw = thumbRect.x + (thumbRect.width / 2) - trackRect.x;
-					if( second ) {
-						track = new RoundRectangle2D.Float( trackRect.x + cw, y, trackRect.width - cw, tw, arc, arc );
-						int firstCw = firstThumbRect.x + (firstThumbRect.width / 2) - trackRect.x;
-						coloredTrack = new RoundRectangle2D.Float( trackRect.x + firstCw, y, cw - firstCw, tw, arc,
-							arc );
-					} else {
-						track = new RoundRectangle2D.Float( trackRect.x, y, cw, tw, arc, arc );
-					}
-				} else {
-					int cw = trackRect.x + trackRect.width - thumbRect.x - (thumbRect.width / 2);
-					if( second ) {
-						int firstCw = trackRect.x + trackRect.width - firstThumbRect.x - (firstThumbRect.width / 2);
-						track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width - cw, tw, arc, arc );
-						coloredTrack = new RoundRectangle2D.Float( trackRect.x + trackRect.width - cw, y, cw - firstCw,
-							tw, arc, arc );
-					} else {
-						track = new RoundRectangle2D.Float( trackRect.x + trackRect.width - cw, y, cw, tw, arc, arc );
-					}
-				}
-			} else {
-				track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width, tw, arc, arc );
-			}
-		} else {
-			float x = trackRect.x + (trackRect.width - tw) / 2f;
-			if( enabled ) {
-				int ch = thumbRect.y + (thumbRect.height / 2) - trackRect.y;
-				if( second ) {
-					int firstCh = firstThumbRect.y + (firstThumbRect.height / 2) - trackRect.y;
-					track = new RoundRectangle2D.Float( x, trackRect.y, tw, ch, arc, arc );
-					coloredTrack = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, firstCh - ch, arc, arc );
-				} else {
-					track = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, trackRect.height - ch, arc, arc );
-				}
-			} else {
-				track = new RoundRectangle2D.Float( x, trackRect.y, tw, trackRect.height, arc, arc );
-			}
-		}
-
-		if( coloredTrack != null ) {
-			g.setColor( FlatUIUtils.deriveColor(
-				FlatUIUtils.isPermanentFocusOwner( slider ) ? focusColor : (hover ? hoverColor : thumbColor),
-				thumbColor ) );
-			((Graphics2D) g).fill( coloredTrack );
-		}
-
-		g.setColor( enabled ? trackColor : disabledForeground );
-		((Graphics2D) g).fill( track );
-
-	}
-
-	//above here the code is same of FlatSliderUI
 
 	@Override
 	protected void installDefaults( JSlider slider ) {
@@ -217,15 +148,92 @@ public class FlatRangeSliderUI
 	}
 
 	@Override
+	public void paint( Graphics g, JComponent c ) {
+		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+
+		second = false;
+		super.paint( g, c );
+
+		Rectangle clip = g.getClipBounds();
+
+		firstThumbRect = new Rectangle( thumbRect );
+
+		second = true;
+		Point p = adjustThumbForHighValue();
+
+		if( clip.intersects( thumbRect ) ) {
+			paintTrack( g );
+			paintThumb( g );
+		}
+
+		restoreThumbForLowValue( p );
+		second = false;
+	}
+
+	@Override
 	public void paintFocus( Graphics g ) {
 		// do not paint dashed focus rectangle
 	}
 
 	@Override
+	public void paintTrack( Graphics g ) {
+		boolean enabled = slider.isEnabled();
+		float tw = UIScale.scale( (float) trackWidth );
+		float arc = tw;
+
+		RoundRectangle2D coloredTrack = null;
+		RoundRectangle2D track;
+		if( slider.getOrientation() == JSlider.HORIZONTAL ) {
+			float y = trackRect.y + (trackRect.height - tw) / 2f;
+			if( enabled ) {
+				if( slider.getComponentOrientation().isLeftToRight() ) {
+					int cw = thumbRect.x + (thumbRect.width / 2) - trackRect.x;
+					if( second ) {
+						track = new RoundRectangle2D.Float( trackRect.x + cw, y, trackRect.width - cw, tw, arc, arc );
+						int firstCw = firstThumbRect.x + (firstThumbRect.width / 2) - trackRect.x;
+						coloredTrack = new RoundRectangle2D.Float( trackRect.x + firstCw, y, cw - firstCw, tw, arc, arc );
+					} else
+						track = new RoundRectangle2D.Float( trackRect.x, y, cw, tw, arc, arc );
+				} else {
+					int cw = trackRect.x + trackRect.width - thumbRect.x - (thumbRect.width / 2);
+					if( second ) {
+						int firstCw = trackRect.x + trackRect.width - firstThumbRect.x - (firstThumbRect.width / 2);
+						track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width - cw, tw, arc, arc );
+						coloredTrack = new RoundRectangle2D.Float( trackRect.x + trackRect.width - cw, y, cw - firstCw, tw, arc, arc );
+					} else
+						track = new RoundRectangle2D.Float( trackRect.x + trackRect.width - cw, y, cw, tw, arc, arc );
+				}
+			} else
+				track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width, tw, arc, arc );
+		} else {
+			float x = trackRect.x + (trackRect.width - tw) / 2f;
+			if( enabled ) {
+				int ch = thumbRect.y + (thumbRect.height / 2) - trackRect.y;
+				if( second ) {
+					int firstCh = firstThumbRect.y + (firstThumbRect.height / 2) - trackRect.y;
+					track = new RoundRectangle2D.Float( x, trackRect.y, tw, ch, arc, arc );
+					coloredTrack = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, firstCh - ch, arc, arc );
+				} else
+					track = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, trackRect.height - ch, arc, arc );
+			} else
+				track = new RoundRectangle2D.Float( x, trackRect.y, tw, trackRect.height, arc, arc );
+		}
+
+		if( coloredTrack != null ) {
+			g.setColor( FlatUIUtils.deriveColor( FlatUIUtils.isPermanentFocusOwner( slider ) ? focusColor : (hover ? hoverColor : thumbColor), thumbColor ) );
+			((Graphics2D)g).fill( coloredTrack );
+		}
+
+		g.setColor( enabled ? trackColor : disabledForeground );
+		((Graphics2D)g).fill( track );
+	}
+
+	@Override
 	public void paintThumb( Graphics g ) {
-		g.setColor( FlatUIUtils.deriveColor( slider.isEnabled() ? (FlatUIUtils.isPermanentFocusOwner( slider )
-			? focusColor
-			: (hover ? hoverColor : thumbColor)) : disabledForeground, thumbColor ) );
+		g.setColor( FlatUIUtils.deriveColor( slider.isEnabled()
+			? (FlatUIUtils.isPermanentFocusOwner( slider ) ? focusColor : (hover ? hoverColor : thumbColor))
+			: disabledForeground,
+			thumbColor ) );
 
 		if( isRoundThumb() )
 			g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
@@ -234,7 +242,7 @@ public class FlatRangeSliderUI
 			double h = thumbRect.height;
 			double wh = w / 2;
 
-			Path2D thumb = FlatUIUtils.createPath( 0, 0, w, 0, w, (h - wh), wh, h, 0, (h - wh) );
+			Path2D thumb = FlatUIUtils.createPath( 0,0, w,0, w,(h - wh), wh,h,  0,(h - wh) );
 
 			Graphics2D g2 = (Graphics2D) g.create();
 			try {
