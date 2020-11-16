@@ -7,6 +7,7 @@ This addon for FlatLaf adds support for **some**
 Following JIDE Common Layer components are currently supported by this addon:
 
 - `JideTabbedPane`
+- `RangeSlider`
 
 
 **Note**: We have currently no plans to support additional components. If you're

@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## 0.45-SNAPSHOT
+
+#### New features and improvements
+
+- JIDE Common Layer: Support `RangeSlider`. (PR #209)
+
+
 ## 0.44
 
 #### New features and improvements
