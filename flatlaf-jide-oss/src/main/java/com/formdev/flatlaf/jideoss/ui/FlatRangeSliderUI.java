@@ -163,23 +163,23 @@ public class FlatRangeSliderUI
 	public void paint( Graphics g, JComponent c ) {
 		FlatUIUtils.setRenderingHints( (Graphics2D) g );
 
-		second = false;
-		super.paint( g, c );
-
-		Rectangle clip = g.getClipBounds();
-
-		firstThumbRect = new Rectangle( thumbRect );
-
-		second = true;
+/*debug
+		g.setColor( Color.gray );
+		g.drawRect( 0, 0, c.getWidth() - 1, c.getHeight() - 1 );
+		g.setColor( Color.orange );
+		g.drawRect( focusRect.x, focusRect.y, focusRect.width - 1, focusRect.height - 1 );
+		g.setColor( Color.magenta );
+		g.drawRect( contentRect.x, contentRect.y, contentRect.width - 1, contentRect.height - 1 );
+		g.setColor( Color.blue );
+		g.drawRect( trackRect.x, trackRect.y, trackRect.width - 1, trackRect.height - 1 );
+		g.setColor( Color.red );
+		g.drawRect( thumbRect.x, thumbRect.y, thumbRect.width - 1, thumbRect.height - 1 );
 		Point p = adjustThumbForHighValue();
-
-		if( clip.intersects( thumbRect ) ) {
-			paintTrack( g );
-			paintThumb( g );
-		}
-
+		g.drawRect( thumbRect.x, thumbRect.y, thumbRect.width - 1, thumbRect.height - 1 );
 		restoreThumbForLowValue( p );
-		second = false;
+debug*/
+
+		super.paint( g, c );
 	}
 
 	@Override
@@ -193,43 +193,40 @@ public class FlatRangeSliderUI
 		float tw = UIScale.scale( (float) trackWidth );
 		float arc = tw;
 
+		// get rectangle of second thumb
+		Point p = adjustThumbForHighValue();
+		Rectangle thumbRect2 = new Rectangle( thumbRect );
+		restoreThumbForLowValue( p );
+
 		RoundRectangle2D coloredTrack = null;
 		RoundRectangle2D track;
 		if( slider.getOrientation() == JSlider.HORIZONTAL ) {
 			float y = trackRect.y + (trackRect.height - tw) / 2f;
 			if( enabled ) {
-				if( slider.getComponentOrientation().isLeftToRight() ) {
-					int cw = thumbRect.x + (thumbRect.width / 2) - trackRect.x;
-					if( second ) {
-						track = new RoundRectangle2D.Float( trackRect.x + cw, y, trackRect.width - cw, tw, arc, arc );
-						int firstCw = firstThumbRect.x + (firstThumbRect.width / 2) - trackRect.x;
-						coloredTrack = new RoundRectangle2D.Float( trackRect.x + firstCw, y, cw - firstCw, tw, arc, arc );
-					} else
-						track = new RoundRectangle2D.Float( trackRect.x, y, cw, tw, arc, arc );
-				} else {
-					int cw = trackRect.x + trackRect.width - thumbRect.x - (thumbRect.width / 2);
-					if( second ) {
-						int firstCw = trackRect.x + trackRect.width - firstThumbRect.x - (firstThumbRect.width / 2);
-						track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width - cw, tw, arc, arc );
-						coloredTrack = new RoundRectangle2D.Float( trackRect.x + trackRect.width - cw, y, cw - firstCw, tw, arc, arc );
-					} else
-						track = new RoundRectangle2D.Float( trackRect.x + trackRect.width - cw, y, cw, tw, arc, arc );
+				Rectangle thumbRect1 = thumbRect;
+				if( !slider.getComponentOrientation().isLeftToRight() ) {
+					Rectangle temp = thumbRect1;
+					thumbRect1 = thumbRect2;
+					thumbRect2 = temp;
 				}
-			} else
-				track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width, tw, arc, arc );
+
+				int cx = thumbRect1.x + (thumbRect1.width / 2);
+				int cw = thumbRect2.x - thumbRect1.x;
+				coloredTrack = new RoundRectangle2D.Float( cx, y, cw, tw, arc, arc );
+			}
+			track = new RoundRectangle2D.Float( trackRect.x, y, trackRect.width, tw, arc, arc );
 		} else {
 			float x = trackRect.x + (trackRect.width - tw) / 2f;
 			if( enabled ) {
-				int ch = thumbRect.y + (thumbRect.height / 2) - trackRect.y;
-				if( second ) {
-					int firstCh = firstThumbRect.y + (firstThumbRect.height / 2) - trackRect.y;
-					track = new RoundRectangle2D.Float( x, trackRect.y, tw, ch, arc, arc );
-					coloredTrack = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, firstCh - ch, arc, arc );
-				} else
-					track = new RoundRectangle2D.Float( x, trackRect.y + ch, tw, trackRect.height - ch, arc, arc );
-			} else
-				track = new RoundRectangle2D.Float( x, trackRect.y, tw, trackRect.height, arc, arc );
+				int cy = thumbRect2.y + (thumbRect2.height / 2);
+				int ch = thumbRect.y - thumbRect2.y;
+				coloredTrack = new RoundRectangle2D.Float( x, cy, tw, ch, arc, arc );
+			}
+			track = new RoundRectangle2D.Float( x, trackRect.y, tw, trackRect.height, arc, arc );
 		}
+
+		g.setColor( enabled ? trackColor : disabledTrackColor );
+		((Graphics2D)g).fill( track );
 
 		if( coloredTrack != null ) {
 			boolean trackHover = hover && rollover1 && rollover2;
@@ -241,9 +238,6 @@ public class FlatRangeSliderUI
 			g.setColor( FlatUIUtils.deriveColor( color, thumbColor ) );
 			((Graphics2D)g).fill( coloredTrack );
 		}
-
-		g.setColor( enabled ? trackColor : disabledTrackColor );
-		((Graphics2D)g).fill( track );
 	}
 
 	@Override
