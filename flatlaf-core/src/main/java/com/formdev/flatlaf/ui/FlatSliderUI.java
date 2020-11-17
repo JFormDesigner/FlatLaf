@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
@@ -53,25 +53,29 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Slider.trackColor				Color
  * @uiDefault Slider.thumbColor				Color
  * @uiDefault Slider.focusedColor			Color	optional; defaults to Component.focusColor
- * @uiDefault Slider.hoverColor				Color	optional; defaults to Slider.focusedColor
- * @uiDefault Slider.disabledForeground		Color	used for track and thumb is disabled
+ * @uiDefault Slider.hoverThumbColor		Color	optional
+ * @uiDefault Slider.pressedThumbColor		Color	optional
+ * @uiDefault Slider.disabledTrackColor		Color
+ * @uiDefault Slider.disabledThumbColor		Color
  *
  * @author Karl Tauber
  */
 public class FlatSliderUI
 	extends BasicSliderUI
 {
-	private int trackWidth;
-	private int thumbWidth;
+	protected int trackWidth;
+	protected int thumbWidth;
 
-	private Color trackColor;
-	private Color thumbColor;
-	private Color focusColor;
-	private Color hoverColor;
-	private Color disabledForeground;
+	protected Color trackColor;
+	protected Color thumbColor;
+	protected Color focusColor;
+	protected Color hoverThumbColor;
+	protected Color pressedThumbColor;
+	protected Color disabledTrackColor;
+	protected Color disabledThumbColor;
 
-	private MouseListener hoverListener;
-	private boolean hover;
+	protected boolean thumbHover;
+	protected boolean thumbPressed;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSliderUI();
@@ -79,24 +83,6 @@ public class FlatSliderUI
 
 	public FlatSliderUI() {
 		super( null );
-	}
-
-	@Override
-	protected void installListeners( JSlider slider ) {
-		super.installListeners( slider );
-
-		hoverListener = new FlatUIUtils.HoverListener( slider, h -> {
-			hover = h;
-		} );
-		slider.addMouseListener( hoverListener );
-	}
-
-	@Override
-	protected void uninstallListeners( JSlider slider ) {
-		super.uninstallListeners( slider );
-
-		slider.removeMouseListener( hoverListener );
-		hoverListener = null;
 	}
 
 	@Override
@@ -111,8 +97,10 @@ public class FlatSliderUI
 		trackColor = UIManager.getColor( "Slider.trackColor" );
 		thumbColor = UIManager.getColor( "Slider.thumbColor" );
 		focusColor = FlatUIUtils.getUIColor( "Slider.focusedColor", "Component.focusColor" );
-		hoverColor = FlatUIUtils.getUIColor( "Slider.hoverColor", focusColor );
-		disabledForeground = UIManager.getColor( "Slider.disabledForeground" );
+		hoverThumbColor = UIManager.getColor( "Slider.hoverThumbColor" );
+		pressedThumbColor = UIManager.getColor( "Slider.pressedThumbColor" );
+		disabledTrackColor = UIManager.getColor( "Slider.disabledTrackColor" );
+		disabledThumbColor = UIManager.getColor( "Slider.disabledThumbColor" );
 	}
 
 	@Override
@@ -122,8 +110,15 @@ public class FlatSliderUI
 		trackColor = null;
 		thumbColor = null;
 		focusColor = null;
-		hoverColor = null;
-		disabledForeground = null;
+		hoverThumbColor = null;
+		pressedThumbColor = null;
+		disabledTrackColor = null;
+		disabledThumbColor = null;
+	}
+
+	@Override
+	protected TrackListener createTrackListener( JSlider slider ) {
+		return new FlatTrackListener();
 	}
 
 	@Override
@@ -201,20 +196,17 @@ public class FlatSliderUI
 		}
 
 		if( coloredTrack != null ) {
-			g.setColor( FlatUIUtils.deriveColor( FlatUIUtils.isPermanentFocusOwner( slider ) ? focusColor : (hover ? hoverColor : thumbColor), thumbColor ) );
+			g.setColor( thumbColor );
 			((Graphics2D)g).fill( coloredTrack );
 		}
 
-		g.setColor( enabled ? trackColor : disabledForeground );
+		g.setColor( enabled ? trackColor : disabledTrackColor );
 		((Graphics2D)g).fill( track );
 	}
 
 	@Override
 	public void paintThumb( Graphics g ) {
-		g.setColor( FlatUIUtils.deriveColor( slider.isEnabled()
-			? (FlatUIUtils.isPermanentFocusOwner( slider ) ? focusColor : (hover ? hoverColor : thumbColor))
-			: disabledForeground,
-			thumbColor ) );
+		g.setColor( FlatUIUtils.deriveColor( getThumbColor(), thumbColor ) );
 
 		if( isRoundThumb() )
 			g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
@@ -244,7 +236,73 @@ public class FlatSliderUI
 		}
 	}
 
-	private boolean isRoundThumb() {
+	protected Color getThumbColor() {
+		if( !slider.isEnabled() )
+			return disabledThumbColor;
+		if( thumbPressed && pressedThumbColor != null )
+			return pressedThumbColor;
+		if( thumbHover && hoverThumbColor != null )
+			return hoverThumbColor;
+		if( FlatUIUtils.isPermanentFocusOwner( slider ) )
+			return focusColor;
+		return thumbColor;
+	}
+
+	protected boolean isRoundThumb() {
 		return !slider.getPaintTicks() && !slider.getPaintLabels();
+	}
+
+	//---- class FlatTrackListener --------------------------------------------
+
+	protected class FlatTrackListener
+		extends TrackListener
+	{
+		@Override
+		public void mouseEntered( MouseEvent e ) {
+			setThumbHover( isOverThumb( e ) );
+			super.mouseEntered( e );
+		}
+
+		@Override
+		public void mouseExited( MouseEvent e ) {
+			setThumbHover( false );
+			super.mouseExited( e );
+		}
+
+		@Override
+		public void mouseMoved( MouseEvent e ) {
+			setThumbHover( isOverThumb( e ) );
+			super.mouseMoved( e );
+		}
+
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			setThumbPressed( isOverThumb( e ) );
+			super.mousePressed( e );
+		}
+
+		@Override
+		public void mouseReleased( MouseEvent e ) {
+			setThumbPressed( false );
+			super.mouseReleased( e );
+		}
+
+		protected void setThumbHover( boolean hover ) {
+			if( hover != thumbHover ) {
+				thumbHover = hover;
+				slider.repaint( thumbRect );
+			}
+		}
+
+		protected void setThumbPressed( boolean pressed ) {
+			if( pressed != thumbPressed ) {
+				thumbPressed = pressed;
+				slider.repaint( thumbRect );
+			}
+		}
+
+		protected boolean isOverThumb( MouseEvent e ) {
+			return e != null && slider.isEnabled() && thumbRect.contains( e.getX(), e.getY() );
+		}
 	}
 }

@@ -841,17 +841,19 @@ SeparatorUI                    com.formdev.flatlaf.ui.FlatSeparatorUI
 #---- Slider ----
 
 Slider.background              #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-Slider.disabledForeground      #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Slider.disabledThumbColor      #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Slider.disabledTrackColor      #4c5052    javax.swing.plaf.ColorUIResource [UI]
 Slider.focus                   #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
 Slider.horizontalSize          200,21    java.awt.Dimension
-Slider.hoverColor              #808080    com.formdev.flatlaf.util.DerivedColor [UI]    darken(15% autoInverse)
+Slider.hoverThumbColor         #8d8d8d    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 Slider.minimumHorizontalSize   36,21    java.awt.Dimension
 Slider.minimumVerticalSize     21,36    java.awt.Dimension
 Slider.onlyLeftMouseButtonDrag true
+Slider.pressedThumbColor       #808080    com.formdev.flatlaf.util.DerivedColor [UI]    darken(15% autoInverse)
 Slider.shadow                  #646464    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbColor              #a6a6a6    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbWidth              11

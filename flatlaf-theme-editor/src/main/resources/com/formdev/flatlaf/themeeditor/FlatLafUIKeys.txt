@@ -581,7 +581,8 @@ Separator.stripeIndent
 Separator.stripeWidth
 SeparatorUI
 Slider.background
-Slider.disabledForeground
+Slider.disabledThumbColor
+Slider.disabledTrackColor
 Slider.focus
 Slider.focusInputMap
 Slider.focusInputMap.RightToLeft
@@ -590,10 +591,11 @@ Slider.font
 Slider.foreground
 Slider.highlight
 Slider.horizontalSize
-Slider.hoverColor
+Slider.hoverThumbColor
 Slider.minimumHorizontalSize
 Slider.minimumVerticalSize
 Slider.onlyLeftMouseButtonDrag
+Slider.pressedThumbColor
 Slider.shadow
 Slider.thumbColor
 Slider.thumbWidth
