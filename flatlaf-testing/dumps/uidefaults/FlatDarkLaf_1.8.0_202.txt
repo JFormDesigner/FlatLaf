@@ -752,6 +752,11 @@ RadioButtonMenuItemUI          com.formdev.flatlaf.ui.FlatRadioButtonMenuItemUI
 RadioButtonUI                  com.formdev.flatlaf.ui.FlatRadioButtonUI
 
 
+#---- RangeSlider ----
+
+RangeSliderUI                  com.formdev.flatlaf.jideoss.ui.FlatRangeSliderUI
+
+
 #---- Resizable ----
 
 Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#5e5e5e    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000

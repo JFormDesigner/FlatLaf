@@ -521,6 +521,7 @@ RadioButtonMenuItem.selectionBackground
 RadioButtonMenuItem.selectionForeground
 RadioButtonMenuItemUI
 RadioButtonUI
+RangeSliderUI
 Resizable.resizeBorder
 RootPane.activeBorderColor
 RootPane.ancestorInputMap
