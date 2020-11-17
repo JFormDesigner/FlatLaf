@@ -843,10 +843,12 @@ Slider.foreground              #ff0000    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Slider.horizontalSize          200,21    java.awt.Dimension
 Slider.hoverThumbColor         #0000ff    javax.swing.plaf.ColorUIResource [UI]
+Slider.hoverTrackColor         #4444ff    javax.swing.plaf.ColorUIResource [UI]
 Slider.minimumHorizontalSize   36,21    java.awt.Dimension
 Slider.minimumVerticalSize     21,36    java.awt.Dimension
 Slider.onlyLeftMouseButtonDrag true
 Slider.pressedThumbColor       #00ff00    javax.swing.plaf.ColorUIResource [UI]
+Slider.pressedTrackColor       #88ff88    javax.swing.plaf.ColorUIResource [UI]
 Slider.shadow                  #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbColor              #880000    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbWidth              11

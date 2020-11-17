@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
@@ -206,9 +207,19 @@ public class FlatSliderUI
 
 	@Override
 	public void paintThumb( Graphics g ) {
-		g.setColor( FlatUIUtils.deriveColor( getThumbColor(), thumbColor ) );
+		Color color = stateColor( slider, thumbHover, thumbPressed,
+			thumbColor, disabledThumbColor, focusColor, hoverThumbColor, pressedThumbColor );
+		color = FlatUIUtils.deriveColor( color, thumbColor );
 
-		if( isRoundThumb() )
+		paintThumb( g, slider, thumbRect, isRoundThumb(), color );
+	}
+
+	public static void paintThumb( Graphics g, JSlider slider, Rectangle thumbRect, boolean roundThumb,
+		Color thumbColor )
+	{
+		g.setColor( thumbColor );
+
+		if( roundThumb )
 			g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
 		else {
 			double w = thumbRect.width;
@@ -236,16 +247,18 @@ public class FlatSliderUI
 		}
 	}
 
-	protected Color getThumbColor() {
-		if( !slider.isEnabled() )
-			return disabledThumbColor;
-		if( thumbPressed && pressedThumbColor != null )
-			return pressedThumbColor;
-		if( thumbHover && hoverThumbColor != null )
-			return hoverThumbColor;
-		if( FlatUIUtils.isPermanentFocusOwner( slider ) )
-			return focusColor;
-		return thumbColor;
+	public static Color stateColor( JSlider slider, boolean hover, boolean pressed,
+		Color enabledColor, Color disabledColor, Color focusedColor, Color hoverColor, Color pressedColor )
+	{
+		if( disabledColor != null && !slider.isEnabled() )
+			return disabledColor;
+		if( pressedColor != null && pressed )
+			return pressedColor;
+		if( hoverColor != null && hover )
+			return hoverColor;
+		if( focusedColor != null && FlatUIUtils.isPermanentFocusOwner( slider ) )
+			return focusedColor;
+		return enabledColor;
 	}
 
 	protected boolean isRoundThumb() {
