@@ -587,6 +587,8 @@ Slider.focus
 Slider.focusInputMap
 Slider.focusInputMap.RightToLeft
 Slider.focusInsets
+Slider.focusWidth
+Slider.focusedColor
 Slider.font
 Slider.foreground
 Slider.highlight
@@ -601,6 +603,7 @@ Slider.thumbColor
 Slider.thumbWidth
 Slider.tickColor
 Slider.trackColor
+Slider.trackValueColor
 Slider.trackWidth
 Slider.verticalSize
 SliderUI

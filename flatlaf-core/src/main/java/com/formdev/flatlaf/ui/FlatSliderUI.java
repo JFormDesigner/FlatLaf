@@ -21,7 +21,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
@@ -51,13 +53,18 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @uiDefault Slider.trackWidth				int
  * @uiDefault Slider.thumbWidth				int
+ * @uiDefault Slider.focusWidth				int
+ * @uiDefault Slider.trackValueColor		Color	optional; defaults to Slider.thumbColor
  * @uiDefault Slider.trackColor				Color
  * @uiDefault Slider.thumbColor				Color
+ * @uiDefault Slider.thumbBorderColor		Color	optional; if null, no border is painted
  * @uiDefault Slider.focusedColor			Color	optional; defaults to Component.focusColor
+ * @uiDefault Slider.focusedThumbBorderColor Color	optional; defaults to Component.focusedBorderColor
  * @uiDefault Slider.hoverThumbColor		Color	optional
  * @uiDefault Slider.pressedThumbColor		Color	optional
  * @uiDefault Slider.disabledTrackColor		Color
  * @uiDefault Slider.disabledThumbColor		Color
+ * @uiDefault Slider.disabledThumbBorderColor Color	optional; defaults to Component.disabledBorderColor
  *
  * @author Karl Tauber
  */
@@ -66,14 +73,19 @@ public class FlatSliderUI
 {
 	protected int trackWidth;
 	protected int thumbWidth;
+	protected int focusWidth;
 
+	protected Color trackValueColor;
 	protected Color trackColor;
 	protected Color thumbColor;
-	protected Color focusColor;
+	protected Color thumbBorderColor;
+	protected Color focusedColor;
+	protected Color focusedThumbBorderColor;
 	protected Color hoverThumbColor;
 	protected Color pressedThumbColor;
 	protected Color disabledTrackColor;
 	protected Color disabledThumbColor;
+	protected Color disabledThumbBorderColor;
 
 	protected boolean thumbHover;
 	protected boolean thumbPressed;
@@ -94,27 +106,36 @@ public class FlatSliderUI
 
 		trackWidth = UIManager.getInt( "Slider.trackWidth" );
 		thumbWidth = UIManager.getInt( "Slider.thumbWidth" );
+		focusWidth = FlatUIUtils.getUIInt( "Slider.focusWidth", 4 );
 
+		trackValueColor = FlatUIUtils.getUIColor( "Slider.trackValueColor", "Slider.thumbColor" );
 		trackColor = UIManager.getColor( "Slider.trackColor" );
 		thumbColor = UIManager.getColor( "Slider.thumbColor" );
-		focusColor = FlatUIUtils.getUIColor( "Slider.focusedColor", "Component.focusColor" );
+		thumbBorderColor = UIManager.getColor( "Slider.thumbBorderColor" );
+		focusedColor = FlatUIUtils.getUIColor( "Slider.focusedColor", "Component.focusColor" );
+		focusedThumbBorderColor = FlatUIUtils.getUIColor( "Slider.focusedThumbBorderColor", "Component.focusedBorderColor" );
 		hoverThumbColor = UIManager.getColor( "Slider.hoverThumbColor" );
 		pressedThumbColor = UIManager.getColor( "Slider.pressedThumbColor" );
 		disabledTrackColor = UIManager.getColor( "Slider.disabledTrackColor" );
 		disabledThumbColor = UIManager.getColor( "Slider.disabledThumbColor" );
+		disabledThumbBorderColor = FlatUIUtils.getUIColor( "Slider.disabledThumbBorderColor", "Component.disabledBorderColor" );
 	}
 
 	@Override
 	protected void uninstallDefaults( JSlider slider ) {
 		super.uninstallDefaults( slider );
 
+		trackValueColor = null;
 		trackColor = null;
 		thumbColor = null;
-		focusColor = null;
+		thumbBorderColor = null;
+		focusedColor = null;
+		focusedThumbBorderColor = null;
 		hoverThumbColor = null;
 		pressedThumbColor = null;
 		disabledTrackColor = null;
 		disabledThumbColor = null;
+		disabledThumbBorderColor = null;
 	}
 
 	@Override
@@ -149,12 +170,27 @@ public class FlatSliderUI
 
 	@Override
 	protected Dimension getThumbSize() {
-		return new Dimension( UIScale.scale( thumbWidth ), UIScale.scale( thumbWidth ) );
+		int fw = UIScale.scale( focusWidth );
+		int w = UIScale.scale( thumbWidth ) + fw + fw;
+		return new Dimension( w, w );
 	}
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+
+/*debug
+		g.setColor( Color.gray );
+		g.drawRect( 0, 0, c.getWidth() - 1, c.getHeight() - 1 );
+		g.setColor( Color.orange );
+		g.drawRect( focusRect.x, focusRect.y, focusRect.width - 1, focusRect.height - 1 );
+		g.setColor( Color.magenta );
+		g.drawRect( contentRect.x, contentRect.y, contentRect.width - 1, contentRect.height - 1 );
+		g.setColor( Color.blue );
+		g.drawRect( trackRect.x, trackRect.y, trackRect.width - 1, trackRect.height - 1 );
+		g.setColor( Color.red );
+		g.drawRect( thumbRect.x, thumbRect.y, thumbRect.width - 1, thumbRect.height - 1 );
+debug*/
 
 		super.paint( g, c );
 	}
@@ -197,7 +233,7 @@ public class FlatSliderUI
 		}
 
 		if( coloredTrack != null ) {
-			g.setColor( thumbColor );
+			g.setColor( trackValueColor );
 			((Graphics2D)g).fill( coloredTrack );
 		}
 
@@ -208,26 +244,49 @@ public class FlatSliderUI
 	@Override
 	public void paintThumb( Graphics g ) {
 		Color color = stateColor( slider, thumbHover, thumbPressed,
-			thumbColor, disabledThumbColor, focusColor, hoverThumbColor, pressedThumbColor );
+			thumbColor, disabledThumbColor, null, hoverThumbColor, pressedThumbColor );
 		color = FlatUIUtils.deriveColor( color, thumbColor );
 
-		paintThumb( g, slider, thumbRect, isRoundThumb(), color );
+		Color borderColor = (thumbBorderColor != null)
+			? stateColor( slider, false, false, thumbBorderColor, disabledThumbBorderColor, focusedThumbBorderColor, null, null )
+			: null;
+
+		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, focusWidth );
 	}
 
 	public static void paintThumb( Graphics g, JSlider slider, Rectangle thumbRect, boolean roundThumb,
-		Color thumbColor )
+		Color thumbColor, Color thumbBorderColor, Color focusedColor, int focusWidth )
 	{
-		g.setColor( thumbColor );
+		int fw = UIScale.scale( focusWidth );
+		int x = thumbRect.x + fw;
+		int y = thumbRect.y + fw;
+		int width = thumbRect.width - fw - fw;
+		int height = thumbRect.height - fw - fw;
+		boolean focused = FlatUIUtils.isPermanentFocusOwner( slider );
 
-		if( roundThumb )
-			g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
-		else {
-			double w = thumbRect.width;
-			double h = thumbRect.height;
-			double wh = w / 2;
+		if( roundThumb ) {
+			// paint thumb focus border
+			if( focused ) {
+				g.setColor( focusedColor );
+				g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
+			}
 
-			Path2D thumb = FlatUIUtils.createPath( 0,0, w,0, w,(h - wh), wh,h,  0,(h - wh) );
+			if( thumbBorderColor != null ) {
+				// paint thumb border
+				g.setColor( thumbBorderColor );
+				g.fillOval( x, y, width, height );
 
+				// paint thumb background
+				float lw = UIScale.scale( 1f );
+				g.setColor( thumbColor );
+				((Graphics2D)g).fill( new Ellipse2D.Float( x + lw, y + lw,
+					width - lw - lw, height - lw - lw ) );
+			} else {
+				// paint thumb background
+				g.setColor( thumbColor );
+				g.fillOval( x, y, width, height );
+			}
+		} else {
 			Graphics2D g2 = (Graphics2D) g.create();
 			try {
 				g2.translate( thumbRect.x, thumbRect.y );
@@ -240,11 +299,49 @@ public class FlatSliderUI
 						g2.rotate( Math.toRadians( 90 ) );
 					}
 				}
-				g2.fill( thumb );
+
+				// paint thumb focus border
+				if( focused ) {
+					g2.setColor( focusedColor );
+					g2.fill( createDirectionalThumbShape( 0, 0,
+						thumbRect.width, thumbRect.height + (fw * 0.4142f), fw ) );
+				}
+
+				if( thumbBorderColor != null ) {
+					// paint thumb border
+					g2.setColor( thumbBorderColor );
+					g2.fill( createDirectionalThumbShape( fw, fw, width, height, 0 ) );
+
+					// paint thumb background
+					float lw = UIScale.scale( 1f );
+					g2.setColor( thumbColor );
+					g2.fill( createDirectionalThumbShape( fw + lw, fw + lw,
+						width - lw - lw, height - lw - lw - (lw * 0.4142f), 0 ) );
+				} else {
+					// paint thumb background
+					g2.setColor( thumbColor );
+					g2.fill( createDirectionalThumbShape( fw, fw, width, height, 0 ) );
+				}
 			} finally {
 				g2.dispose();
 			}
 		}
+	}
+
+	public static Shape createDirectionalThumbShape( double x, double y, double w, double h, double arc ) {
+		double wh = w / 2;
+
+		Path2D path = new Path2D.Float();
+		path.moveTo( x + wh, y + h );
+		path.lineTo( x, y + (h - wh) );
+		path.lineTo( x, y + arc );
+		path.quadTo( x, y, x + arc, y );
+		path.lineTo( x + (w - arc), y );
+		path.quadTo( x + w, y, x + w, y + arc );
+		path.lineTo( x + w, y + (h - wh) );
+		path.closePath();
+
+		return path;
 	}
 
 	public static Color stateColor( JSlider slider, boolean hover, boolean pressed,
