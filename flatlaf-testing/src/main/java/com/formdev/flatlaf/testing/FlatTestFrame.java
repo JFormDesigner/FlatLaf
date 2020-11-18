@@ -22,6 +22,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -35,6 +36,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
@@ -331,10 +333,12 @@ public class FlatTestFrame
 		// hide popup to avoid occasional StackOverflowError when updating UI
 		lookAndFeelComboBox.setPopupVisible( false );
 
-		applyLookAndFeel( lafClassName, null, false );
+		applyLookAndFeel( lafClassName, null, null, null, false );
 	}
 
-	private void applyLookAndFeel( String lafClassName, IntelliJTheme theme, boolean pack ) {
+	private void applyLookAndFeel( String lafClassName, IntelliJTheme theme,
+		String nameForProperties, Properties properties, boolean pack )
+	{
 		EventQueue.invokeLater( () -> {
 			try {
 				// clear custom default font before switching to other LaF
@@ -349,6 +353,8 @@ public class FlatTestFrame
 				// change look and feel
 				if( theme != null )
 					UIManager.setLookAndFeel( IntelliJTheme.createLaf( theme ) );
+				else if( properties != null )
+					UIManager.setLookAndFeel( new FlatPropertiesLaf( nameForProperties, properties ) );
 				else
 					UIManager.setLookAndFeel( lafClassName );
 
@@ -507,7 +513,13 @@ public class FlatTestFrame
 		IntelliJTheme theme = (lookAndFeel instanceof IntelliJTheme.ThemeLaf)
 			? ((IntelliJTheme.ThemeLaf)lookAndFeel).getTheme()
 			: null;
-		applyLookAndFeel( lookAndFeel.getClass().getName(), theme, true );
+		String nameForProperties = null;
+		Properties properties = null;
+		if( lookAndFeel instanceof FlatPropertiesLaf ) {
+			nameForProperties = lookAndFeel.getName();
+			properties = ((FlatPropertiesLaf)lookAndFeel).getProperties();
+		}
+		applyLookAndFeel( lookAndFeel.getClass().getName(), theme, nameForProperties, properties, true );
 	}
 
 	private void updateScaleFactorComboBox() {
