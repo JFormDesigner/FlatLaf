@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -141,6 +142,22 @@ public class FlatSliderUI
 	@Override
 	protected TrackListener createTrackListener( JSlider slider ) {
 		return new FlatTrackListener();
+	}
+
+	@Override
+	public int getBaseline( JComponent c, int width, int height ) {
+		if( c == null )
+			throw new NullPointerException();
+		if( width < 0 || height < 0 )
+			throw new IllegalArgumentException();
+
+		// no baseline for vertical orientation
+		if( slider.getOrientation() == JSlider.VERTICAL )
+			return -1;
+
+		// compute a baseline so that the track is vertically centered
+		FontMetrics fm = slider.getFontMetrics( slider.getFont() );
+		return trackRect.y + Math.round( (trackRect.height - fm.getHeight()) / 2f ) + fm.getAscent() - 1;
 	}
 
 	@Override
