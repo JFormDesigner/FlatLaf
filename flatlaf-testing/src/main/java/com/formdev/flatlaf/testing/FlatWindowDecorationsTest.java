@@ -186,6 +186,13 @@ public class FlatWindowDecorationsTest
 		}
 	}
 
+	private void fullScreenChanged() {
+		boolean fullScreen = fullScreenCheckBox.isSelected();
+
+		GraphicsDevice gd = getGraphicsConfiguration().getDevice();
+		gd.setFullScreenWindow( fullScreen ? SwingUtilities.windowForComponent( this ) : null );
+	}
+
 	private void menuItemActionPerformed(ActionEvent e) {
 		SwingUtilities.invokeLater( () -> {
 			JOptionPane.showMessageDialog( this, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE );
@@ -263,6 +270,7 @@ public class FlatWindowDecorationsTest
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
 		undecoratedCheckBox = new JCheckBox();
+		fullScreenCheckBox = new JCheckBox();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
 		JPanel panel1 = new JPanel();
@@ -371,6 +379,11 @@ public class FlatWindowDecorationsTest
 		undecoratedCheckBox.setText("undecorated");
 		undecoratedCheckBox.addActionListener(e -> undecoratedChanged());
 		add(undecoratedCheckBox, "cell 0 4");
+
+		//---- fullScreenCheckBox ----
+		fullScreenCheckBox.setText("full screen");
+		fullScreenCheckBox.addActionListener(e -> fullScreenChanged());
+		add(fullScreenCheckBox, "cell 1 4");
 
 		//---- label1 ----
 		label1.setText("Style:");
@@ -677,6 +690,7 @@ public class FlatWindowDecorationsTest
 	private JCheckBox resizableCheckBox;
 	private JCheckBox maximizedBoundsCheckBox;
 	private JCheckBox undecoratedCheckBox;
+	private JCheckBox fullScreenCheckBox;
 	private JRadioButton styleNoneRadioButton;
 	private JRadioButton styleFrameRadioButton;
 	private JRadioButton stylePlainRadioButton;

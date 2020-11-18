@@ -8,6 +8,12 @@ FlatLaf Change Log
 - JIDE Common Layer: Support `RangeSlider`. (PR #209)
 
 
+#### Fixed bugs
+
+- Custom window decorations: Title bar was not hidden if window is in
+  full-screen mode. (issue #212)
+
+
 ## 0.44
 
 #### New features and improvements

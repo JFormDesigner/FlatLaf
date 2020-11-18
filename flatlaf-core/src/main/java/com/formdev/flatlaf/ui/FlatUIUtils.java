@@ -23,11 +23,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -179,6 +182,16 @@ public class FlatUIUtils
 		KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		return keyboardFocusManager.getPermanentFocusOwner() == c &&
 			keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
+	}
+
+	/**
+	 * Returns whether the given component is in a window that is in full-screen mode.
+	 */
+	public static boolean isFullScreen( Component c ) {
+		GraphicsConfiguration gc = c.getGraphicsConfiguration();
+		GraphicsDevice gd = (gc != null) ? gc.getDevice() : null;
+		Window fullScreenWindow = (gd != null) ? gd.getFullScreenWindow() : null;
+		return (fullScreenWindow != null && fullScreenWindow == SwingUtilities.windowForComponent( c ));
 	}
 
 	public static Boolean isRoundRect( Component c ) {
