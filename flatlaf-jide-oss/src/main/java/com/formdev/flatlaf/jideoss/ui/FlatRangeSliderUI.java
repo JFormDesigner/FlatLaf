@@ -43,7 +43,7 @@ public class FlatRangeSliderUI
 	extends BasicRangeSliderUI
 {
 	protected int trackWidth;
-	protected int thumbWidth;
+	protected Dimension thumbSize;
 	protected int focusWidth;
 
 	protected Color trackValueColor;
@@ -105,7 +105,7 @@ public class FlatRangeSliderUI
 		LookAndFeel.installProperty( slider, "opaque", false );
 
 		trackWidth = UIManager.getInt( "Slider.trackWidth" );
-		thumbWidth = UIManager.getInt( "Slider.thumbWidth" );
+		thumbSize = UIManager.getDimension( "Slider.thumbSize" );
 		focusWidth = FlatUIUtils.getUIInt( "Slider.focusWidth", 4 );
 
 		trackValueColor = FlatUIUtils.getUIColor( "Slider.trackValueColor", "Slider.thumbColor" );
@@ -185,9 +185,7 @@ public class FlatRangeSliderUI
 
 	@Override
 	protected Dimension getThumbSize() {
-		int fw = UIScale.scale( focusWidth );
-		int w = UIScale.scale( thumbWidth ) + fw + fw;
-		return new Dimension( w, w );
+		return FlatSliderUI.calcThumbSize( slider, thumbSize, focusWidth );
 	}
 
 	@Override

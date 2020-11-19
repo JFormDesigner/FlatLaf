@@ -53,7 +53,7 @@ import com.formdev.flatlaf.util.UIScale;
  * <!-- FlatSliderUI -->
  *
  * @uiDefault Slider.trackWidth				int
- * @uiDefault Slider.thumbWidth				int
+ * @uiDefault Slider.thumbSize				Dimension
  * @uiDefault Slider.focusWidth				int
  * @uiDefault Slider.trackValueColor		Color	optional; defaults to Slider.thumbColor
  * @uiDefault Slider.trackColor				Color
@@ -73,7 +73,7 @@ public class FlatSliderUI
 	extends BasicSliderUI
 {
 	protected int trackWidth;
-	protected int thumbWidth;
+	protected Dimension thumbSize;
 	protected int focusWidth;
 
 	protected Color trackValueColor;
@@ -106,7 +106,12 @@ public class FlatSliderUI
 		LookAndFeel.installProperty( slider, "opaque", false );
 
 		trackWidth = UIManager.getInt( "Slider.trackWidth" );
-		thumbWidth = UIManager.getInt( "Slider.thumbWidth" );
+		thumbSize = UIManager.getDimension( "Slider.thumbSize" );
+		if( thumbSize == null ) {
+			// fallback for compatibility with old versions
+			int thumbWidth = UIManager.getInt( "Slider.thumbWidth" );
+			thumbSize = new Dimension( thumbWidth, thumbWidth );
+		}
 		focusWidth = FlatUIUtils.getUIInt( "Slider.focusWidth", 4 );
 
 		trackValueColor = FlatUIUtils.getUIColor( "Slider.trackValueColor", "Slider.thumbColor" );
@@ -187,9 +192,16 @@ public class FlatSliderUI
 
 	@Override
 	protected Dimension getThumbSize() {
+		return calcThumbSize( slider, thumbSize, focusWidth );
+	}
+
+	public static Dimension calcThumbSize( JSlider slider, Dimension thumbSize, int focusWidth ) {
 		int fw = UIScale.scale( focusWidth );
-		int w = UIScale.scale( thumbWidth ) + fw + fw;
-		return new Dimension( w, w );
+		int w = UIScale.scale( thumbSize.width ) + fw + fw;
+		int h = UIScale.scale( thumbSize.height ) + fw + fw;
+		return (slider.getOrientation() == JSlider.HORIZONTAL)
+			? new Dimension( w, h )
+			: new Dimension( h, w );
 	}
 
 	@Override
@@ -285,23 +297,23 @@ debug*/
 			// paint thumb focus border
 			if( focused ) {
 				g.setColor( focusedColor );
-				g.fillOval( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height );
+				((Graphics2D)g).fill( createRoundThumbShape( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height ) );
 			}
 
 			if( thumbBorderColor != null ) {
 				// paint thumb border
 				g.setColor( thumbBorderColor );
-				g.fillOval( x, y, width, height );
+				((Graphics2D)g).fill( createRoundThumbShape( x, y, width, height ) );
 
 				// paint thumb background
 				float lw = UIScale.scale( 1f );
 				g.setColor( thumbColor );
-				((Graphics2D)g).fill( new Ellipse2D.Float( x + lw, y + lw,
+				((Graphics2D)g).fill( createRoundThumbShape( x + lw, y + lw,
 					width - lw - lw, height - lw - lw ) );
 			} else {
 				// paint thumb background
 				g.setColor( thumbColor );
-				g.fillOval( x, y, width, height );
+				((Graphics2D)g).fill( createRoundThumbShape( x, y, width, height ) );
 			}
 		} else {
 			Graphics2D g2 = (Graphics2D) g.create();
@@ -315,13 +327,17 @@ debug*/
 						g2.translate( thumbRect.width, 0 );
 						g2.rotate( Math.toRadians( 90 ) );
 					}
+
+					int temp = width;
+					width = height;
+					height = temp;
 				}
 
 				// paint thumb focus border
 				if( focused ) {
 					g2.setColor( focusedColor );
 					g2.fill( createDirectionalThumbShape( 0, 0,
-						thumbRect.width, thumbRect.height + (fw * 0.4142f), fw ) );
+						width + fw + fw, height + fw + fw + (fw * 0.4142f), fw ) );
 				}
 
 				if( thumbBorderColor != null ) {
@@ -345,8 +361,17 @@ debug*/
 		}
 	}
 
-	public static Shape createDirectionalThumbShape( double x, double y, double w, double h, double arc ) {
-		double wh = w / 2;
+	public static Shape createRoundThumbShape( float x, float y, float w, float h ) {
+		if( w == h )
+			return new Ellipse2D.Float( x, y, w, h );
+		else {
+			float arc = Math.min( w, h );
+			return new RoundRectangle2D.Float( x, y, w, h, arc, arc );
+		}
+	}
+
+	public static Shape createDirectionalThumbShape( float x, float y, float w, float h, float arc ) {
+		float wh = w / 2;
 
 		Path2D path = new Path2D.Float();
 		path.moveTo( x + wh, y + h );

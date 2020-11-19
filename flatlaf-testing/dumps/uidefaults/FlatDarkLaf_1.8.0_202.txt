@@ -858,7 +858,7 @@ Slider.onlyLeftMouseButtonDrag true
 Slider.pressedThumbColor       #2e6296    com.formdev.flatlaf.util.DerivedColor [UI]    darken(15% autoInverse)
 Slider.shadow                  #646464    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbColor              #4a88c7    javax.swing.plaf.ColorUIResource [UI]
-Slider.thumbWidth              12
+Slider.thumbSize               12,12    javax.swing.plaf.DimensionUIResource [UI]
 Slider.tickColor               #888888    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackColor              #646464    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackValueColor         #4a88c7    javax.swing.plaf.ColorUIResource [UI]

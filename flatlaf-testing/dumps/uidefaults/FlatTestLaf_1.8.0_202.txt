@@ -853,7 +853,7 @@ Slider.pressedTrackColor       #88ff88    javax.swing.plaf.ColorUIResource [UI]
 Slider.shadow                  #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbBorderColor        #ff0000    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbColor              #ffaaaa    javax.swing.plaf.ColorUIResource [UI]
-Slider.thumbWidth              12
+Slider.thumbSize               12,12    javax.swing.plaf.DimensionUIResource [UI]
 Slider.tickColor               #ff0000    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackColor              #88ff88    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackWidth              2

@@ -600,7 +600,7 @@ Slider.onlyLeftMouseButtonDrag
 Slider.pressedThumbColor
 Slider.shadow
 Slider.thumbColor
-Slider.thumbWidth
+Slider.thumbSize
 Slider.tickColor
 Slider.trackColor
 Slider.trackValueColor
