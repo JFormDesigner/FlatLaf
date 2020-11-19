@@ -851,7 +851,7 @@ Slider.disabledTrackColor      #c0c0c0    javax.swing.plaf.ColorUIResource [UI]
 Slider.focus                   #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Slider.focusWidth              4
-Slider.focusedColor            #7f97c3f3    javax.swing.plaf.ColorUIResource [UI]
+Slider.focusedColor            #8097c3f3    javax.swing.plaf.ColorUIResource [UI]
 Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #000000    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]

@@ -586,13 +586,17 @@ class UIDefaultsLoader
 			case "darken":		return parseColorHSLIncreaseDecrease( 2, false, params, resolver, reportError );
 			case "saturate":	return parseColorHSLIncreaseDecrease( 1, true, params, resolver, reportError );
 			case "desaturate":	return parseColorHSLIncreaseDecrease( 1, false, params, resolver, reportError );
+			case "fadein":		return parseColorHSLIncreaseDecrease( 3, true, params, resolver, reportError );
+			case "fadeout":		return parseColorHSLIncreaseDecrease( 3, false, params, resolver, reportError );
+			case "fade":		return parseColorFade( params, resolver, reportError );
+			case "spin":		return parseColorSpin( params, resolver, reportError );
 		}
 
 		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
 	}
 
 	/**
-	 * Syntax: rgb(red,green,blue) or rgba(red,green,blue,alpha) or rgba(color,alpha)
+	 * Syntax: rgb(red,green,blue) or rgba(red,green,blue,alpha)
 	 *   - red:   an integer 0-255 or a percentage 0-100%
 	 *   - green: an integer 0-255 or a percentage 0-100%
 	 *   - blue:  an integer 0-255 or a percentage 0-100%
@@ -603,6 +607,8 @@ class UIDefaultsLoader
 	{
 		if( hasAlpha && params.size() == 2 ) {
 			// syntax rgba(color,alpha), which allows adding alpha to any color
+			// NOTE: this syntax is deprecated
+			//       use fade(color,alpha) instead
 			String colorStr = params.get( 0 );
 			int alpha = parseInteger( params.get( 1 ), 0, 255, true );
 
@@ -639,7 +645,8 @@ class UIDefaultsLoader
 
 	/**
 	 * Syntax: lighten(color,amount[,options]) or darken(color,amount[,options]) or
-	 *         saturate(color,amount[,options]) or desaturate(color,amount[,options])
+	 *         saturate(color,amount[,options]) or desaturate(color,amount[,options]) or
+	 *         fadein(color,amount[,options]) or fadeout(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
 	 *   - options: [relative] [autoInverse] [noAutoInverse] [lazy] [derived]
@@ -679,6 +686,59 @@ class UIDefaultsLoader
 			};
 		}
 
+		// parse base color, apply function and create derived color
+		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: fade(color,amount[,options])
+	 *   - color: a color (e.g. #f00) or a color function
+	 *   - amount: percentage 0-100%
+	 *   - options: [derived]
+	 */
+	private static Object parseColorFade( List<String> params, Function<String, String> resolver, boolean reportError ) {
+		String colorStr = params.get( 0 );
+		int amount = parsePercentage( params.get( 1 ) );
+		boolean derived = false;
+
+		if( params.size() > 2 ) {
+			String options = params.get( 2 );
+			derived = options.contains( "derived" );
+		}
+
+		// create function
+		ColorFunction function = new ColorFunctions.Fade( amount );
+
+		// parse base color, apply function and create derived color
+		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: spin(color,angle[,options])
+	 *   - color: a color (e.g. #f00) or a color function
+	 *   - angle: number of degrees to rotate
+	 *   - options: [derived]
+	 */
+	private static Object parseColorSpin( List<String> params, Function<String, String> resolver, boolean reportError ) {
+		String colorStr = params.get( 0 );
+		int amount = parseInteger( params.get( 1 ), true );
+		boolean derived = false;
+
+		if( params.size() > 2 ) {
+			String options = params.get( 2 );
+			derived = options.contains( "derived" );
+		}
+
+		// create function
+		ColorFunction function = new ColorFunctions.HSLIncreaseDecrease( 0, true, amount, false, false );
+
+		// parse base color, apply function and create derived color
+		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+	}
+
+	private static Object parseFunctionBaseColor( String colorStr, ColorFunction function,
+		boolean derived, Function<String, String> resolver, boolean reportError )
+	{
 		// parse base color
 		String resolvedColorStr = resolver.apply( colorStr );
 		ColorUIResource baseColor = (ColorUIResource) parseColorOrFunction( resolvedColorStr, resolver, reportError );
