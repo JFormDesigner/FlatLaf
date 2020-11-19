@@ -30,9 +30,11 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -286,74 +288,95 @@ debug*/
 	public static void paintThumb( Graphics g, JSlider slider, Rectangle thumbRect, boolean roundThumb,
 		Color thumbColor, Color thumbBorderColor, Color focusedColor, int focusWidth )
 	{
-		int fw = UIScale.scale( focusWidth );
-		int x = thumbRect.x + fw;
-		int y = thumbRect.y + fw;
-		int width = thumbRect.width - fw - fw;
-		int height = thumbRect.height - fw - fw;
+		double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
+		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
+			// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
+			HiDPIUtils.paintAtScale1x( (Graphics2D) g, thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height,
+				(g2d, x2, y2, width2, height2, scaleFactor) -> {
+					paintThumbImpl( g, slider, x2, y2, width2, height2,
+						roundThumb, thumbColor, thumbBorderColor, focusedColor,
+						(float) (focusWidth * scaleFactor) );
+				} );
+			return;
+		}
+
+		paintThumbImpl( g, slider, thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height,
+			roundThumb, thumbColor, thumbBorderColor, focusedColor, focusWidth );
+
+	}
+
+	private static void paintThumbImpl( Graphics g, JSlider slider, int x, int y, int width, int height,
+		boolean roundThumb, Color thumbColor, Color thumbBorderColor, Color focusedColor, float focusWidth )
+	{
+		int fw = Math.round( UIScale.scale( focusWidth ) );
+		int tx = x + fw;
+		int ty = y + fw;
+		int tw = width - fw - fw;
+		int th = height - fw - fw;
 		boolean focused = FlatUIUtils.isPermanentFocusOwner( slider );
 
 		if( roundThumb ) {
 			// paint thumb focus border
 			if( focused ) {
 				g.setColor( focusedColor );
-				((Graphics2D)g).fill( createRoundThumbShape( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height ) );
+				((Graphics2D)g).fill( createRoundThumbShape( x, y, width, height ) );
 			}
 
 			if( thumbBorderColor != null ) {
 				// paint thumb border
 				g.setColor( thumbBorderColor );
-				((Graphics2D)g).fill( createRoundThumbShape( x, y, width, height ) );
+				((Graphics2D)g).fill( createRoundThumbShape( tx, ty, tw, th ) );
 
 				// paint thumb background
 				float lw = UIScale.scale( 1f );
 				g.setColor( thumbColor );
-				((Graphics2D)g).fill( createRoundThumbShape( x + lw, y + lw,
-					width - lw - lw, height - lw - lw ) );
+				((Graphics2D)g).fill( createRoundThumbShape( tx + lw, ty + lw,
+					tw - lw - lw, th - lw - lw ) );
 			} else {
 				// paint thumb background
 				g.setColor( thumbColor );
-				((Graphics2D)g).fill( createRoundThumbShape( x, y, width, height ) );
+				((Graphics2D)g).fill( createRoundThumbShape( tx, ty, tw, th ) );
 			}
 		} else {
 			Graphics2D g2 = (Graphics2D) g.create();
 			try {
-				g2.translate( thumbRect.x, thumbRect.y );
+				g2.translate( x, y );
 				if( slider.getOrientation() == JSlider.VERTICAL ) {
 					if( slider.getComponentOrientation().isLeftToRight() ) {
-						g2.translate( 0, thumbRect.height );
+						g2.translate( 0, height );
 						g2.rotate( Math.toRadians( 270 ) );
 					} else {
-						g2.translate( thumbRect.width, 0 );
+						g2.translate( width, 0 );
 						g2.rotate( Math.toRadians( 90 ) );
 					}
 
-					int temp = width;
-					width = height;
-					height = temp;
+					// rotate thumb width/height
+					int temp = tw;
+					tw = th;
+					th = temp;
 				}
 
 				// paint thumb focus border
 				if( focused ) {
 					g2.setColor( focusedColor );
 					g2.fill( createDirectionalThumbShape( 0, 0,
-						width + fw + fw, height + fw + fw + (fw * 0.4142f), fw ) );
+						tw + fw + fw, th + fw + fw + (fw * 0.4142f), fw ) );
 				}
 
 				if( thumbBorderColor != null ) {
 					// paint thumb border
 					g2.setColor( thumbBorderColor );
-					g2.fill( createDirectionalThumbShape( fw, fw, width, height, 0 ) );
+					g2.fill( createDirectionalThumbShape( fw, fw, tw, th, 0 ) );
 
 					// paint thumb background
 					float lw = UIScale.scale( 1f );
 					g2.setColor( thumbColor );
 					g2.fill( createDirectionalThumbShape( fw + lw, fw + lw,
-						width - lw - lw, height - lw - lw - (lw * 0.4142f), 0 ) );
+						tw - lw - lw, th - lw - lw - (lw * 0.4142f), 0 ) );
 				} else {
 					// paint thumb background
 					g2.setColor( thumbColor );
-					g2.fill( createDirectionalThumbShape( fw, fw, width, height, 0 ) );
+					g2.fill( createDirectionalThumbShape( fw, fw, tw, th, 0 ) );
 				}
 			} finally {
 				g2.dispose();
@@ -402,6 +425,32 @@ debug*/
 
 	protected boolean isRoundThumb() {
 		return !slider.getPaintTicks() && !slider.getPaintLabels();
+	}
+
+	@Override
+	public void setThumbLocation( int x, int y ) {
+		if( !isRoundThumb() ) {
+			// the needle of the directional thumb is painted outside of thumbRect
+			// --> must increase repaint rectangle
+
+			// set new thumb location and compute union of old and new thumb bounds
+			Rectangle r = new Rectangle( thumbRect );
+			thumbRect.setLocation( x, y );
+			SwingUtilities.computeUnion( thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height, r );
+
+			// increase union rectangle for repaint
+			int extra = (int) Math.ceil( UIScale.scale( focusWidth ) * 0.4142f );
+			if( slider.getOrientation() == JSlider.HORIZONTAL )
+				r.height += extra;
+			else {
+				r.width += extra;
+				if( !slider.getComponentOrientation().isLeftToRight() )
+					r.x -= extra;
+			}
+
+			slider.repaint( r );
+		} else
+			super.setThumbLocation( x, y );
 	}
 
 	//---- class FlatTrackListener --------------------------------------------
