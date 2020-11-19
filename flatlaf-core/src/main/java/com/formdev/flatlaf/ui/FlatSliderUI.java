@@ -82,6 +82,7 @@ public class FlatSliderUI
 	protected Color trackColor;
 	protected Color thumbColor;
 	protected Color thumbBorderColor;
+	protected Color focusBaseColor;
 	protected Color focusedColor;
 	protected Color focusedThumbBorderColor;
 	protected Color hoverThumbColor;
@@ -120,7 +121,8 @@ public class FlatSliderUI
 		trackColor = UIManager.getColor( "Slider.trackColor" );
 		thumbColor = UIManager.getColor( "Slider.thumbColor" );
 		thumbBorderColor = UIManager.getColor( "Slider.thumbBorderColor" );
-		focusedColor = FlatUIUtils.getUIColor( "Slider.focusedColor", "Component.focusColor" );
+		focusBaseColor = UIManager.getColor( "Component.focusColor" );
+		focusedColor = FlatUIUtils.getUIColor( "Slider.focusedColor", focusBaseColor );
 		focusedThumbBorderColor = FlatUIUtils.getUIColor( "Slider.focusedThumbBorderColor", "Component.focusedBorderColor" );
 		hoverThumbColor = UIManager.getColor( "Slider.hoverThumbColor" );
 		pressedThumbColor = UIManager.getColor( "Slider.pressedThumbColor" );
@@ -137,6 +139,7 @@ public class FlatSliderUI
 		trackColor = null;
 		thumbColor = null;
 		thumbBorderColor = null;
+		focusBaseColor = null;
 		focusedColor = null;
 		focusedThumbBorderColor = null;
 		hoverThumbColor = null;
@@ -281,6 +284,8 @@ debug*/
 		Color borderColor = (thumbBorderColor != null)
 			? stateColor( slider, false, false, thumbBorderColor, disabledThumbBorderColor, focusedThumbBorderColor, null, null )
 			: null;
+
+		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor, focusBaseColor );
 
 		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, focusWidth );
 	}

@@ -475,7 +475,9 @@ public class IntelliJTheme
 		}
 	}
 
+	/** Rename UI default keys (key --> value). */
 	private static Map<String, String> uiKeyMapping = new HashMap<>();
+	/** Copy UI default keys (value --> key). */
 	private static Map<String, String> uiKeyCopying = new HashMap<>();
 	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
 	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
@@ -529,6 +531,9 @@ public class IntelliJTheme
 
 		// Slider
 		uiKeyMapping.put( "Slider.trackWidth", "" ); // ignore (used in Material Theme UI Lite)
+		uiKeyCopying.put( "Slider.trackValueColor", "ProgressBar.foreground" );
+		uiKeyCopying.put( "Slider.thumbColor", "ProgressBar.foreground" );
+		uiKeyCopying.put( "Slider.trackColor", "ProgressBar.background" );
 
 		// TitlePane
 		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );
