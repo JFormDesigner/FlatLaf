@@ -749,6 +749,6 @@ class DemoFrame
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
-	private IJThemesPanel themesPanel;
+	IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

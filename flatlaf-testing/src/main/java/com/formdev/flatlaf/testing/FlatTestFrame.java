@@ -198,6 +198,16 @@ public class FlatTestFrame
 			KeyStroke.getKeyStroke( KeyEvent.VK_MINUS, menuShortcutKeyMask ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
+		// register Alt+UP and Alt+DOWN to switch to previous/next theme
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> themesPanel.selectPreviousTheme(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_UP, KeyEvent.ALT_DOWN_MASK ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> themesPanel.selectNextTheme(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, KeyEvent.ALT_DOWN_MASK ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
 		// register ESC key to close frame
 		((JComponent)getContentPane()).registerKeyboardAction(
 			e -> {
