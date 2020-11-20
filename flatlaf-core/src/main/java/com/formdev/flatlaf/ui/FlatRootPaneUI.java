@@ -357,7 +357,7 @@ public class FlatRootPaneUI
 
 		@Override
 		public Insets getBorderInsets( Component c, Insets insets ) {
-			if( isWindowMaximized( c ) ) {
+			if( isWindowMaximized( c ) || FlatUIUtils.isFullScreen( c ) ) {
 				// hide border if window is maximized
 				insets.top = insets.left = insets.bottom = insets.right = 0;
 				return insets;
@@ -367,7 +367,7 @@ public class FlatRootPaneUI
 
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			if( isWindowMaximized( c ) )
+			if( isWindowMaximized( c ) || FlatUIUtils.isFullScreen( c ) )
 				return;
 
 			Container parent = c.getParent();
