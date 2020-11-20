@@ -519,15 +519,31 @@ public class FlatUIUtils
 		float x2 = x + width;
 		float y2 = y + height;
 
+		// same constant as in java.awt.geom.EllipseIterator.CtrlVal used to paint circles
+		double c = 0.5522847498307933;
+		double ci = 1. - c;
+		double ciTopLeft = arcTopLeft * ci;
+		double ciTopRight = arcTopRight * ci;
+		double ciBottomLeft = arcBottomLeft * ci;
+		double ciBottomRight = arcBottomRight * ci;
+
 		Path2D rect = new Path2D.Float();
-		rect.moveTo( x2 - arcTopRight, y );
-		rect.quadTo( x2, y, x2, y + arcTopRight );
-		rect.lineTo( x2, y2 - arcBottomRight );
-		rect.quadTo( x2, y2, x2 - arcBottomRight, y2 );
-		rect.lineTo( x + arcBottomLeft, y2 );
-		rect.quadTo( x, y2, x, y2 - arcBottomLeft );
-		rect.lineTo( x, y + arcTopLeft );
-		rect.quadTo( x, y, x + arcTopLeft, y );
+		rect.moveTo(  x2 - arcTopRight, y );
+		rect.curveTo( x2 - ciTopRight, y,
+					  x2, y + ciTopRight,
+					  x2, y + arcTopRight );
+		rect.lineTo(  x2, y2 - arcBottomRight );
+		rect.curveTo( x2, y2 - ciBottomRight,
+					  x2 - ciBottomRight, y2,
+					  x2 - arcBottomRight, y2 );
+		rect.lineTo(  x + arcBottomLeft, y2 );
+		rect.curveTo( x + ciBottomLeft, y2,
+					  x, y2 - ciBottomLeft,
+					  x, y2 - arcBottomLeft );
+		rect.lineTo(  x, y + arcTopLeft );
+		rect.curveTo( x, y + ciTopLeft,
+					  x + ciTopLeft, y,
+					  x + arcTopLeft, y );
 		rect.closePath();
 
 		return rect;
