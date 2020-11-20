@@ -50,6 +50,7 @@ public class FlatPaintingTest
 		FlatPaintingTest.BorderPainter borderPainter1 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter6 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter13 = new FlatPaintingTest.BorderPainter();
+		FlatPaintingTest.BorderPainter borderPainter25 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter17 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter21 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter29 = new FlatPaintingTest.BorderPainter();
@@ -57,6 +58,7 @@ public class FlatPaintingTest
 		FlatPaintingTest.BorderPainter borderPainter2 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter7 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter14 = new FlatPaintingTest.BorderPainter();
+		FlatPaintingTest.BorderPainter borderPainter30 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter18 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter22 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter28 = new FlatPaintingTest.BorderPainter();
@@ -64,6 +66,7 @@ public class FlatPaintingTest
 		FlatPaintingTest.BorderPainter borderPainter3 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter5 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter15 = new FlatPaintingTest.BorderPainter();
+		FlatPaintingTest.BorderPainter borderPainter31 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter19 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter23 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter27 = new FlatPaintingTest.BorderPainter();
@@ -71,6 +74,7 @@ public class FlatPaintingTest
 		FlatPaintingTest.BorderPainter borderPainter4 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter8 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter16 = new FlatPaintingTest.BorderPainter();
+		FlatPaintingTest.BorderPainter borderPainter32 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter20 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter24 = new FlatPaintingTest.BorderPainter();
 		FlatPaintingTest.BorderPainter borderPainter26 = new FlatPaintingTest.BorderPainter();
@@ -78,6 +82,7 @@ public class FlatPaintingTest
 		JLabel label2 = new JLabel();
 		JLabel label3 = new JLabel();
 		JLabel label4 = new JLabel();
+		JLabel label8 = new JLabel();
 		JLabel label5 = new JLabel();
 		JLabel label6 = new JLabel();
 		JLabel label7 = new JLabel();
@@ -91,8 +96,9 @@ public class FlatPaintingTest
 				"ltr,insets dialog,hidemode 3",
 				// columns
 				"[fill]" +
-				"[left]" +
-				"[left]" +
+				"[fill]" +
+				"[fill]" +
+				"[fill]" +
 				"[fill]" +
 				"[fill]" +
 				"[fill]" +
@@ -134,27 +140,34 @@ public class FlatPaintingTest
 			borderPainter13.setArc(20);
 			flatTestPanel1.add(borderPainter13, "cell 3 0");
 
+			//---- borderPainter25 ----
+			borderPainter25.setScale(8.0F);
+			borderPainter25.setPaintBorder(false);
+			borderPainter25.setPaintFocus(false);
+			borderPainter25.setArc(20);
+			flatTestPanel1.add(borderPainter25, "cell 4 0");
+
 			//---- borderPainter17 ----
 			borderPainter17.setScale(8.0F);
 			borderPainter17.setPaintBorder(false);
 			borderPainter17.setPaintFocus(false);
 			borderPainter17.setFocusWidth(0);
 			borderPainter17.setArc(0);
-			flatTestPanel1.add(borderPainter17, "cell 4 0");
+			flatTestPanel1.add(borderPainter17, "cell 5 0");
 
 			//---- borderPainter21 ----
 			borderPainter21.setScale(8.0F);
 			borderPainter21.setPaintBorder(false);
 			borderPainter21.setPaintFocus(false);
 			borderPainter21.setArc(0);
-			flatTestPanel1.add(borderPainter21, "cell 5 0");
+			flatTestPanel1.add(borderPainter21, "cell 6 0");
 
 			//---- borderPainter29 ----
 			borderPainter29.setScale(8.0F);
 			borderPainter29.setArc(3);
 			borderPainter29.setFocusWidth(1);
 			borderPainter29.setLineWidth(3);
-			flatTestPanel1.add(borderPainter29, "cell 7 0");
+			flatTestPanel1.add(borderPainter29, "cell 8 0");
 
 			//---- borderPainter10 ----
 			borderPainter10.setScale(8.0F);
@@ -185,27 +198,34 @@ public class FlatPaintingTest
 			borderPainter14.setArc(20);
 			flatTestPanel1.add(borderPainter14, "cell 3 1");
 
+			//---- borderPainter30 ----
+			borderPainter30.setScale(8.0F);
+			borderPainter30.setPaintBackground(false);
+			borderPainter30.setPaintFocus(false);
+			borderPainter30.setArc(20);
+			flatTestPanel1.add(borderPainter30, "cell 4 1");
+
 			//---- borderPainter18 ----
 			borderPainter18.setScale(8.0F);
 			borderPainter18.setPaintBackground(false);
 			borderPainter18.setPaintFocus(false);
 			borderPainter18.setFocusWidth(0);
 			borderPainter18.setArc(0);
-			flatTestPanel1.add(borderPainter18, "cell 4 1");
+			flatTestPanel1.add(borderPainter18, "cell 5 1");
 
 			//---- borderPainter22 ----
 			borderPainter22.setScale(8.0F);
 			borderPainter22.setPaintBackground(false);
 			borderPainter22.setPaintFocus(false);
 			borderPainter22.setArc(0);
-			flatTestPanel1.add(borderPainter22, "cell 5 1");
+			flatTestPanel1.add(borderPainter22, "cell 6 1");
 
 			//---- borderPainter28 ----
 			borderPainter28.setScale(8.0F);
 			borderPainter28.setArc(2);
 			borderPainter28.setFocusWidth(1);
 			borderPainter28.setLineWidth(3);
-			flatTestPanel1.add(borderPainter28, "cell 7 1");
+			flatTestPanel1.add(borderPainter28, "cell 8 1");
 
 			//---- borderPainter11 ----
 			borderPainter11.setScale(8.0F);
@@ -236,27 +256,34 @@ public class FlatPaintingTest
 			borderPainter15.setW(25);
 			flatTestPanel1.add(borderPainter15, "cell 3 2");
 
+			//---- borderPainter31 ----
+			borderPainter31.setScale(8.0F);
+			borderPainter31.setPaintBorder(false);
+			borderPainter31.setPaintBackground(false);
+			borderPainter31.setArc(20);
+			flatTestPanel1.add(borderPainter31, "cell 4 2");
+
 			//---- borderPainter19 ----
 			borderPainter19.setScale(8.0F);
 			borderPainter19.setPaintBorder(false);
 			borderPainter19.setPaintBackground(false);
 			borderPainter19.setFocusWidth(0);
 			borderPainter19.setArc(0);
-			flatTestPanel1.add(borderPainter19, "cell 4 2");
+			flatTestPanel1.add(borderPainter19, "cell 5 2");
 
 			//---- borderPainter23 ----
 			borderPainter23.setScale(8.0F);
 			borderPainter23.setPaintBorder(false);
 			borderPainter23.setPaintBackground(false);
 			borderPainter23.setArc(0);
-			flatTestPanel1.add(borderPainter23, "cell 5 2");
+			flatTestPanel1.add(borderPainter23, "cell 6 2");
 
 			//---- borderPainter27 ----
 			borderPainter27.setScale(8.0F);
 			borderPainter27.setArc(1);
 			borderPainter27.setFocusWidth(1);
 			borderPainter27.setLineWidth(3);
-			flatTestPanel1.add(borderPainter27, "cell 7 2");
+			flatTestPanel1.add(borderPainter27, "cell 8 2");
 
 			//---- borderPainter12 ----
 			borderPainter12.setScale(8.0F);
@@ -279,23 +306,28 @@ public class FlatPaintingTest
 			borderPainter16.setArc(20);
 			flatTestPanel1.add(borderPainter16, "cell 3 3");
 
+			//---- borderPainter32 ----
+			borderPainter32.setScale(8.0F);
+			borderPainter32.setArc(20);
+			flatTestPanel1.add(borderPainter32, "cell 4 3");
+
 			//---- borderPainter20 ----
 			borderPainter20.setScale(8.0F);
 			borderPainter20.setFocusWidth(0);
 			borderPainter20.setArc(0);
-			flatTestPanel1.add(borderPainter20, "cell 4 3");
+			flatTestPanel1.add(borderPainter20, "cell 5 3");
 
 			//---- borderPainter24 ----
 			borderPainter24.setScale(8.0F);
 			borderPainter24.setArc(0);
-			flatTestPanel1.add(borderPainter24, "cell 5 3");
+			flatTestPanel1.add(borderPainter24, "cell 6 3");
 
 			//---- borderPainter26 ----
 			borderPainter26.setScale(8.0F);
 			borderPainter26.setArc(0);
 			borderPainter26.setFocusWidth(1);
 			borderPainter26.setLineWidth(3);
-			flatTestPanel1.add(borderPainter26, "cell 7 3");
+			flatTestPanel1.add(borderPainter26, "cell 8 3");
 
 			//---- label1 ----
 			label1.setText("fw 0,  lw 1,  arc 6");
@@ -313,17 +345,21 @@ public class FlatPaintingTest
 			label4.setText("fw 2,  lw 1,  arc 20");
 			flatTestPanel1.add(label4, "cell 3 4");
 
+			//---- label8 ----
+			label8.setText("fw 2,  lw 1,  arc 20");
+			flatTestPanel1.add(label8, "cell 4 4");
+
 			//---- label5 ----
 			label5.setText("fw 0,  lw 1,  arc 0");
-			flatTestPanel1.add(label5, "cell 4 4");
+			flatTestPanel1.add(label5, "cell 5 4");
 
 			//---- label6 ----
 			label6.setText("fw 2,  lw 1,  arc 0");
-			flatTestPanel1.add(label6, "cell 5 4");
+			flatTestPanel1.add(label6, "cell 6 4");
 
 			//---- label7 ----
 			label7.setText("fw 1,  lw 3,  arc 3,2,1,0");
-			flatTestPanel1.add(label7, "cell 7 4");
+			flatTestPanel1.add(label7, "cell 8 4");
 		}
 		setViewportView(flatTestPanel1);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
