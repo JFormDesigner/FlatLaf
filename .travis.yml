@@ -22,8 +22,9 @@ before_install:
 
 stages:
   - name: test
+    if: branch = disabled
   - name: snapshot
-    if: branch = master AND type IN (push) AND tag IS blank
+    if: branch = disabled AND type IN (push) AND tag IS blank
   - name: release
     if: type IN (push) AND tag IS present
 
