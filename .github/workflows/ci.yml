@@ -10,13 +10,19 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        java: [1.8, 9]
+        # test against
+        # - Java 1.8 (minimum requirement)
+        # - Java 9 (first version with JPMS)
+        # - Java LTS versions (11, 17, ...)
+        # - last two Java versions
+        java: [1.8, 9, 11, 14, 15]
 
     steps:
+
     - uses: actions/checkout@v2
 
     - name: Setup Java ${{ matrix.java }}
@@ -38,4 +44,20 @@ jobs:
         restore-keys: ${{ runner.os }}-gradle
 
     - name: Build with Gradle
-      run: ./gradlew build
+      run: echo ./gradlew build
+
+    - name: Publish snapshot to oss.jfrog.org
+      run: echo ./gradlew artifactoryPublish
+      if: |
+        matrix.java == '11' &&
+        github.event_name == 'push' &&
+        github.ref == 'ref/head/github-actions' &&
+        github.repository == 'JFormDesigner/FlatLaf'
+
+    - name: Release a new stable version to bintray
+      run: echo ./gradlew bintrayUpload -Drelease=true
+      if: |
+        matrix.java == '11' &&
+        github.event_name == 'push' &&
+        startsWith( github.ref, 'refs/tags/' ) &&
+        github.repository == 'JFormDesigner/FlatLaf'
