@@ -23,6 +23,13 @@ jobs:
 
     steps:
 
+    - name: info
+      run: |
+        echo ${{ matrix.java }}
+        echo ${{ github.event_name }}
+        echo ${{ github.ref }}
+        echo ${{ github.repository }}
+
     - uses: actions/checkout@v2
 
     - name: Setup Java ${{ matrix.java }}
