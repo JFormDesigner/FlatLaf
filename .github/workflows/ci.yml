@@ -5,12 +5,12 @@ name: CI
 on:
   push:
     branches:
-      - github-actions
+      - '*'
     tags:
       - '[0-9]*'
   pull_request:
     branches: 
-      - github-actions
+      - '*'
 
 jobs:
   build:
@@ -24,11 +24,11 @@ jobs:
         # - Java LTS versions (11, 17, ...)
         # - lastest Java version(s)
         java:
-#          - 1.8
-#          - 9
+          - 1.8
+          - 9
           - 11  # LTS
-#          - 14
-#          - 15
+          - 14
+          - 15
 
     steps:
       - uses: actions/checkout@v2
@@ -74,9 +74,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     if: |
-      false &&
       github.event_name == 'push' &&
-      github.ref == 'refs/heads/github-actions' &&
+      github.ref == 'refs/heads/master' &&
       github.repository == 'JFormDesigner/FlatLaf'
 
     steps:
