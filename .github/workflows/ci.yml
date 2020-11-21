@@ -52,7 +52,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Build with Gradle
-        run: echo ./gradlew build
+        run: ./gradlew build
 
 
   snapshot:
@@ -85,7 +85,10 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Publish snapshot to oss.jfrog.org
-        run: echo ./gradlew artifactoryPublish
+        run: ./gradlew artifactoryPublish
+        env:
+          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+          BINTRAY_KEY:  ${{ secrets.BINTRAY_KEY }}
 
 
   release:
@@ -118,4 +121,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Release a new stable version to bintray
-        run: echo ./gradlew bintrayUpload -Drelease=true
+        run: ./gradlew bintrayUpload -Drelease=true
+        env:
+          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
+          BINTRAY_KEY:  ${{ secrets.BINTRAY_KEY }}
