@@ -58,7 +58,7 @@ jobs:
       if: |
         matrix.java == '11' &&
         github.event_name == 'push' &&
-        github.ref == 'ref/head/github-actions' &&
+        github.ref == 'refs/heads/github-actions' &&
         github.repository == 'JFormDesigner/FlatLaf'
 
     - name: Release a new stable version to bintray
