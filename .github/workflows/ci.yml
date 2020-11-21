@@ -24,7 +24,7 @@ jobs:
         # - Java LTS versions (11, 17, ...)
         # - lastest Java version(s)
         java:
-          - 1.8
+#          - 1.8
 #          - 9
           - 11  # LTS
 #          - 14
@@ -66,6 +66,8 @@ jobs:
             flatlaf-intellij-themes/build/libs
             flatlaf-jide-oss/build/libs
             flatlaf-swingx/build/libs
+            !**/*-javadoc.jar
+            !**/*-sources.jar
 
 
   snapshot:
