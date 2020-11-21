@@ -4,9 +4,13 @@ name: CI
 
 on:
   push:
-    branches: [github-actions]
+    branches:
+      - github-actions
+    tags:
+      - '[0-9]*'
   pull_request:
-    branches: [github-actions]
+    branches: 
+      - github-actions
 
 jobs:
   build:
@@ -18,53 +22,58 @@ jobs:
         # - Java 1.8 (minimum requirement)
         # - Java 9 (first version with JPMS)
         # - Java LTS versions (11, 17, ...)
-        # - last two Java versions
-        java: [1.8, 9, 11, 14, 15]
+        # - lastest Java version(s)
+        java:
+          - 1.8
+          - 9
+          - 14
+          - 15
+          - 11  # always last because used to build snapshots and releases
 
     steps:
 
-    - name: info
-      run: |
-        echo ${{ matrix.java }}
-        echo ${{ github.event_name }}
-        echo ${{ github.ref }}
-        echo ${{ github.repository }}
+      - name: info
+        run: |
+          echo ${{ matrix.java }}
+          echo ${{ github.event_name }}
+          echo ${{ github.ref }}
+          echo ${{ github.repository }}
 
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Setup Java ${{ matrix.java }}
-      uses: actions/setup-java@v1
-      with:
-        java-version: ${{ matrix.java }}
+      - name: Setup Java ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
 
-    - name: Cache Gradle wrapper
-      uses: actions/cache@v1
-      with:
-        path: ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
-    - name: Cache Gradle cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-        restore-keys: ${{ runner.os }}-gradle
+      - name: Cache Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
+          restore-keys: ${{ runner.os }}-gradle
 
-    - name: Build with Gradle
-      run: echo ./gradlew build
+      - name: Build with Gradle
+        run: echo ./gradlew build
 
-    - name: Publish snapshot to oss.jfrog.org
-      run: echo ./gradlew artifactoryPublish
-      if: |
-        matrix.java == '11' &&
-        github.event_name == 'push' &&
-        github.ref == 'refs/heads/github-actions' &&
-        github.repository == 'JFormDesigner/FlatLaf'
+      - name: Publish snapshot to oss.jfrog.org
+        run: echo ./gradlew artifactoryPublish
+        if: |
+          matrix.java == '11' &&
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/github-actions' &&
+          github.repository == 'JFormDesigner/FlatLaf'
 
-    - name: Release a new stable version to bintray
-      run: echo ./gradlew bintrayUpload -Drelease=true
-      if: |
-        matrix.java == '11' &&
-        github.event_name == 'push' &&
-        startsWith( github.ref, 'refs/tags/' ) &&
-        github.repository == 'JFormDesigner/FlatLaf'
+      - name: Release a new stable version to bintray
+        run: echo ./gradlew bintrayUpload -Drelease=true
+        if: |
+          matrix.java == '11' &&
+          github.event_name == 'push' &&
+          startsWith( github.ref, 'refs/tags/' ) &&
+          github.repository == 'JFormDesigner/FlatLaf'

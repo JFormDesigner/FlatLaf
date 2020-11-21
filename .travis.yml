@@ -25,8 +25,8 @@ stages:
     if: branch = disabled
   - name: snapshot
     if: branch = disabled AND type IN (push) AND tag IS blank
-  - name: release
-    if: type IN (push) AND tag IS present
+#  - name: release
+#    if: type IN (push) AND tag IS present
 
 jobs:
   include:
