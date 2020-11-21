@@ -48,7 +48,7 @@ extra["bintray.dryRun"] = false
 
 // if true, uploaded artifacts are visible to all
 // if false, only visible to owner when logged into bintray
-extra["bintray.publish"] = true
+extra["bintray.publish"] = false
 
 
 allprojects {
