@@ -4,14 +4,14 @@
 		"license": "MIT",
 		"licenseFile": "arc-themes.LICENSE.txt",
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
-		"sourceCodePath": "blob/master/resources/arc-theme.theme.json"
+		"sourceCodePath": "blob/master/arc-theme-idea-light/resources/arc-theme.theme.json"
 	},
 	"arc-theme-orange.theme.json": {
 		"name": "Arc - Orange",
 		"license": "MIT",
 		"licenseFile": "arc-themes.LICENSE.txt",
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
-		"sourceCodePath": "blob/master/resources/arc-theme-orange.theme.json"
+		"sourceCodePath": "blob/master/arc-theme-idea-light/resources/arc-theme-orange.theme.json"
 	},
 	"arc_theme_dark.theme.json": {
 		"name": "Arc Dark",
@@ -19,7 +19,7 @@
 		"license": "MIT",
 		"licenseFile": "arc-themes.LICENSE.txt",
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
-		"sourceCodePath": "blob/master/resources/arc_theme_dark.theme.json"
+		"sourceCodePath": "blob/master/arc-theme-idea-dark/resources/arc_theme_dark.theme.json"
 	},
 	"arc_theme_dark_orange.theme.json": {
 		"name": "Arc Dark - Orange",
@@ -27,7 +27,7 @@
 		"license": "MIT",
 		"licenseFile": "arc-themes.LICENSE.txt",
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
-		"sourceCodePath": "blob/master/resources/arc_theme_dark_orange.theme.json"
+		"sourceCodePath": "blob/master/arc-theme-idea-dark/resources/arc_theme_dark_orange.theme.json"
 	},
 	"Carbon.theme.json": {
 		"name": "Carbon",
@@ -74,7 +74,7 @@
 		"license": "MIT",
 		"licenseFile": "Dracula.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/dracula/jetbrains",
-		"sourceCodePath": "blob/master/src/main/resources/themes/Dracula.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/themes/dracula.theme.json"
 	},
 	"Gradianto_dark_fuchsia.theme.json": {
 		"name": "Gradianto Dark Fuchsia",
@@ -99,6 +99,14 @@
 		"licenseFile": "Gradianto.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
 		"sourceCodePath": "blob/master/src/main/resources/Gradianto_midnight_blue.theme.json"
+	},
+	"Gradianto_Nature_Green.theme.json": {
+		"name": "Gradianto Nature Green",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "Gradianto.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
+		"sourceCodePath": "blob/master/src/main/resources/Gradianto_Nature_Green.theme.json"
 	},
 	"Gray.theme.json": {
 		"name": "Gray",

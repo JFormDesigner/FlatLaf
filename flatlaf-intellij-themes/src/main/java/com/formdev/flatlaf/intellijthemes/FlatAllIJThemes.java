@@ -42,6 +42,7 @@ public class FlatAllIJThemes
 		new LookAndFeelInfo( "Gradianto Dark Fuchsia", "com.formdev.flatlaf.intellijthemes.FlatGradiantoDarkFuchsiaIJTheme" ),
 		new LookAndFeelInfo( "Gradianto Deep Ocean", "com.formdev.flatlaf.intellijthemes.FlatGradiantoDeepOceanIJTheme" ),
 		new LookAndFeelInfo( "Gradianto Midnight Blue", "com.formdev.flatlaf.intellijthemes.FlatGradiantoMidnightBlueIJTheme" ),
+		new LookAndFeelInfo( "Gradianto Nature Green", "com.formdev.flatlaf.intellijthemes.FlatGradiantoNatureGreenIJTheme" ),
 		new LookAndFeelInfo( "Gray", "com.formdev.flatlaf.intellijthemes.FlatGrayIJTheme" ),
 		new LookAndFeelInfo( "Gruvbox Dark Hard", "com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkHardIJTheme" ),
 		new LookAndFeelInfo( "Gruvbox Dark Medium", "com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkMediumIJTheme" ),

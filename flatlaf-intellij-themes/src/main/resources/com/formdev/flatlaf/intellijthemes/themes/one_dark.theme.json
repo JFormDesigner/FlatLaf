@@ -4,11 +4,13 @@
   "author": "Mark Skelton",
   "editorScheme": "/themes/one_dark.xml",
   "colors": {
-    "accentColor": "#568AF2"
+    "accentColor": "#568AF2",
+    "backgroundColor": "#21252b",
+    "borderColor": "#333841"
   },
   "ui": {
     "*": {
-      "background": "#21252b",
+      "background": "backgroundColor",
       "foreground": "#abb2bf",
 
       "infoForeground": "#5c6370",
@@ -18,8 +20,8 @@
       "selectionBackgroundInactive": "#2c313a",
       "selectionForeground": "#d7dae0",
 
-      "disabledBackground": "#21252b",
-      "inactiveBackground": "#21252b",
+      "disabledBackground": "backgroundColor",
+      "inactiveBackground": "backgroundColor",
 
       "acceleratorForeground": "#E6E6E6",
       "acceleratorSelectionForeground": "#E6E6E6",
@@ -28,7 +30,7 @@
 
       "borderColor": "#333841",
       "disabledBorderColor": "#2d3137",
-      "focusColor": "#21252b",
+      "focusColor": "backgroundColor",
       "focusedBorderColor": "accentColor",
 
       "separatorColor": "#32363c"
@@ -47,7 +49,7 @@
       "endBackground": "#3d424b",
       "startBorderColor": "#464c55",
       "endBorderColor": "#464c55",
-      "shadowColor": "#21252b",
+      "shadowColor": "backgroundColor",
       "focusedBorderColor": "#646a73",
 
       "default": {
@@ -120,12 +122,12 @@
     },
 
     "FileColor": {
-      "Yellow": "#563b2255",
-      "Green": "#334e1f55",
-      "Blue": "#28436d55",
-      "Violet": "#37115655",
-      "Orange": "#562b2255",
-      "Rose": "#561a2b55"
+      "Yellow": "#3d3026",
+      "Green": "#293a24",
+      "Blue": "#24354f",
+      "Violet": "#2d1942",
+      "Orange": "#3d3026",
+      "Rose": "#3d1e2b"
     },
 
     "Label": {
@@ -167,6 +169,8 @@
       }
     },
 
+    "Panel.background": "backgroundColor",
+
     "ParameterInfo": {
       "background": "#3d424b",
       "foreground": "#abb2bf",
@@ -176,6 +180,7 @@
 
     "Plugins": {
       "disabledForeground": "#5c6370",
+      "hoverBackground": "#323844",
       "lightSelectionBackground": "#323844",
       "tagBackground": "#414855",
       "tagForeground": "#abb2bf",
@@ -228,7 +233,7 @@
 
     "SearchEverywhere": {
       "Advertiser.foreground": "#5c6370",
-      "Header.background": "#21252b",
+      "Header.background": "backgroundColor",
 
       "SearchField":{
         "background": "#282c34",
@@ -335,7 +340,7 @@
 
     "VersionControl": {
       "Log.Commit": {
-        "currentBranchBackground": "#21252b",
+        "currentBranchBackground": "#282c35",
         "unmatchedForeground": "#5c6370"
       },
 
@@ -347,8 +352,13 @@
     },
 
     "WelcomeScreen": {
-      "Projects.selectionInactiveBackground": "#2c313a",
-      "separatorColor": "#2c313a"
+      "borderColor": "borderColor",
+      "Projects": {
+        "actions.background": "#323844",
+        "selectionInactiveBackground": "#2c313a"
+      },
+      "separatorColor": "#2c313a",
+      "SidePanel.background": "#282c34"
     }
   },
 
@@ -357,9 +367,9 @@
       "Checkbox.Background.Default.Dark": "#282c34",
       "Checkbox.Border.Default.Dark": "#414855",
       "Checkbox.Foreground.Selected.Dark": "#abb2bf",
-      "Checkbox.Focus.Wide.Dark": "accentColor",
-      "Checkbox.Focus.Thin.Default.Dark": "accentColor",
-      "Checkbox.Focus.Thin.Selected.Dark": "accentColor",
+      "Checkbox.Focus.Wide.Dark": "#568AF2",
+      "Checkbox.Focus.Thin.Default.Dark": "#568AF2",
+      "Checkbox.Focus.Thin.Selected.Dark": "#568AF2",
       "Checkbox.Background.Disabled.Dark": "#21252b",
       "Checkbox.Border.Disabled.Dark": "#2c313a",
       "Checkbox.Foreground.Disabled.Dark": "#5c6370"

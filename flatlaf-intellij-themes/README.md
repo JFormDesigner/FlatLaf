@@ -60,6 +60,7 @@ Name | Class
 [Gradianto Dark Fuchsia](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoDarkFuchsiaIJTheme`
 [Gradianto Deep Ocean](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoDeepOceanIJTheme`
 [Gradianto Midnight Blue](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoMidnightBlueIJTheme`
+[Gradianto Nature Green](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoNatureGreenIJTheme`
 [Gray](https://github.com/OlyaB/GreyTheme) | `com.formdev.flatlaf.intellijthemes.FlatGrayIJTheme`
 [Gruvbox Dark Hard](https://github.com/Vincent-P/gruvbox-intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkHardIJTheme`
 [Gruvbox Dark Medium](https://github.com/Vincent-P/gruvbox-intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkMediumIJTheme`

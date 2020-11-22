@@ -1,14 +1,14 @@
 {
   "name": "Dracula",
   "dark": true,
-  "author": "VermouthX",
-  "editorScheme": "/themes/Dracula.xml",
+  "author": "Zihan Ma",
+  "editorScheme": "/themes/dracula.xml",
   "ui": {
     "*": {
-      "arc": "5",
+      "arc": "7",
       "background": "#414450",
       "selectionBackground": "#6272a4",
-      "selectionInactiveBackground": "#4E5A82",
+      "selectionInactiveBackground": "#4e5a82",
       "inactiveBackground": "#414450",
       "borderColor": "#282a36"
     },
@@ -58,7 +58,7 @@
     },
     "CompletionPopup": {
       "selectionBackground": "#6272a4",
-      "selectionInactiveBackground": "#4E5A82",
+      "selectionInactiveBackground": "#4e5a82",
       "matchForeground": "#ff79c6"
     },
     "Component": {
@@ -148,7 +148,7 @@
       "failedEndColor": "#ff5554",
       "trackColor": "#6272a4",
       "progressColor": "#ff79c6",
-      "indeterminateStartColor": "#bd93f9",
+      "indeterminateStartColor": "#93b8f9",
       "indeterminateEndColor": "#bd93f9",
       "passedColor": "#50fa7b",
       "passedEndColor": "#50fa7b"
@@ -161,6 +161,7 @@
     },
     "ScrollBar": {
       "Mac": {
+        "hoverThumbColor": "#bd93f9",
         "Transparent": {
           "hoverThumbColor": "#bd93f9"
         }
@@ -212,7 +213,7 @@
     "Tree": {
       "modifiedItemForeground": "#ff79c6",
       "selectionBackground": "#6272a4",
-      "selectionInactiveBackground": "#4E5A82"
+      "selectionInactiveBackground": "#4e5a82"
     },
     "ValidationTooltip": {
       "errorBackground": "#ff5554",

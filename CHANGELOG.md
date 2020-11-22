@@ -6,6 +6,10 @@ FlatLaf Change Log
 #### New features and improvements
 
 - JIDE Common Layer: Support `RangeSlider`. (PR #209)
+- IntelliJ Themes:
+  - Added "Gradianto Nature Green" theme.
+  - Updated "Arc Dark", "Cyan", "Dark purple", "Gradianto", "Gray", "Gruvbox"
+    and "One Dark" themes.
 
 
 #### Fixed bugs
