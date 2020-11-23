@@ -142,6 +142,12 @@ public class FlatScrollBarUI
 		buttonDisabledArrowColor = UIManager.getColor( "ScrollBar.buttonDisabledArrowColor" );
 		hoverButtonBackground = UIManager.getColor( "ScrollBar.hoverButtonBackground" );
 		pressedButtonBackground = UIManager.getColor( "ScrollBar.pressedButtonBackground" );
+
+		// fallback (e.g. when used in NetBeans GUI builder)
+		if( trackInsets == null )
+			trackInsets = new Insets( 0, 0, 0, 0 );
+		if( thumbInsets == null )
+			thumbInsets = new Insets( 0, 0, 0, 0 );
 	}
 
 	@Override
