@@ -49,7 +49,9 @@ public class IJThemesClassGenerator
 		}
 
 		Path out = new File( toPath, "FlatAllIJThemes.java" ).toPath();
-		String allThemes = CLASS_HEADER + ALL_THEMES_TEMPLATE.replace( "${allInfos}", allInfos );
+		String allThemes = (CLASS_HEADER + ALL_THEMES_TEMPLATE)
+			.replace( "${subPackage}", "" )
+			.replace( "${allInfos}", allInfos );
 		writeFile( out, allThemes );
 
 		System.out.println( markdownTable );
@@ -88,7 +90,7 @@ public class IJThemesClassGenerator
 		String themeClass = "Flat" + buf + "IJTheme";
 		String themeFile = resourceName;
 
-		String classBody = CLASS_HEADER + CLASS_TEMPLATE
+		String classBody = (CLASS_HEADER + CLASS_TEMPLATE)
 			.replace( "${subPackage}", subPackage )
 			.replace( "${themeClass}", themeClass )
 			.replace( "${themeFile}", themeFile )
@@ -138,6 +140,8 @@ public class IJThemesClassGenerator
 		" * limitations under the License.\n" +
 		" */\n" +
 		"\n" +
+		"package com.formdev.flatlaf.intellijthemes${subPackage};\n" +
+		"\n" +
 		"//\n" +
 		"// DO NOT MODIFY\n" +
 		"// Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator\n" +
@@ -145,8 +149,6 @@ public class IJThemesClassGenerator
 		"\n";
 
 	private static final String CLASS_TEMPLATE =
-		"package com.formdev.flatlaf.intellijthemes${subPackage};\n" +
-		"\n" +
 		"import com.formdev.flatlaf.IntelliJTheme;\n" +
 		"\n" +
 		"/**\n" +
@@ -155,12 +157,18 @@ public class IJThemesClassGenerator
 		"public class ${themeClass}\n" +
 		"	extends IntelliJTheme.ThemeLaf\n" +
 		"{\n" +
-		"	public static boolean install( ) {\n" +
+		"	public static final String NAME = \"${themeName}\";\n" +
+		"\n" +
+		"	public static boolean install() {\n" +
 		"		try {\n" +
 		"			return install( new ${themeClass}() );\n" +
 		"		} catch( RuntimeException ex ) {\n" +
 		"			return false;\n" +
 		"		}\n" +
+		"	}\n" +
+		"\n" +
+		"	public static void installLafInfo() {\n" +
+		"		installLafInfo( NAME, ${themeClass}.class );\n" +
 		"	}\n" +
 		"\n" +
 		"	public ${themeClass}() {\n" +
@@ -169,13 +177,11 @@ public class IJThemesClassGenerator
 		"\n" +
 		"	@Override\n" +
 		"	public String getName() {\n" +
-		"		return \"${themeName}\";\n" +
+		"		return NAME;\n" +
 		"	}\n" +
 		"}\n";
 
 	private static final String ALL_THEMES_TEMPLATE =
-		"package com.formdev.flatlaf.intellijthemes;\n" +
-		"\n" +
 		"import javax.swing.UIManager.LookAndFeelInfo;\n" +
 		"\n" +
 		"/**\n" +

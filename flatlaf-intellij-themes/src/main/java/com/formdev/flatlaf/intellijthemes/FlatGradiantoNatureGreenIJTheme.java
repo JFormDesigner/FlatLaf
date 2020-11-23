@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatGradiantoNatureGreenIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "Gradianto Nature Green";
+
+	public static boolean install() {
 		try {
 			return install( new FlatGradiantoNatureGreenIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatGradiantoNatureGreenIJTheme.class );
 	}
 
 	public FlatGradiantoNatureGreenIJTheme() {
@@ -43,6 +49,6 @@ public class FlatGradiantoNatureGreenIJTheme
 
 	@Override
 	public String getName() {
-		return "Gradianto Nature Green";
+		return NAME;
 	}
 }

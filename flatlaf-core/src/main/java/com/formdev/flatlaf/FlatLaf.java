@@ -50,9 +50,9 @@ import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.UIResource;
@@ -94,6 +94,10 @@ public abstract class FlatLaf
 	private Boolean oldFrameWindowDecorated;
 	private Boolean oldDialogWindowDecorated;
 
+	/**
+	 * Sets the application look and feel to the given LaF
+	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
+	 */
 	public static boolean install( LookAndFeel newLookAndFeel ) {
 		try {
 			UIManager.setLookAndFeel( newLookAndFeel );
@@ -102,6 +106,16 @@ public abstract class FlatLaf
 			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
 			return false;
 		}
+	}
+
+	/**
+	 * Adds the given look and feel to the set of available look and feels.
+	 * <p>
+	 * Useful if your application uses {@link UIManager#getInstalledLookAndFeels()}
+	 * to query available LaFs and display them to the user in a combobox.
+	 */
+	public static void installLafInfo( String lafName, Class<? extends LookAndFeel> lafClass ) {
+		UIManager.installLookAndFeel( new UIManager.LookAndFeelInfo( lafName, lafClass.getName() ) );
 	}
 
 	/**

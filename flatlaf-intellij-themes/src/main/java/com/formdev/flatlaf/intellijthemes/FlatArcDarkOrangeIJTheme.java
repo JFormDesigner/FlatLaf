@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatArcDarkOrangeIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "Arc Dark - Orange";
+
+	public static boolean install() {
 		try {
 			return install( new FlatArcDarkOrangeIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatArcDarkOrangeIJTheme.class );
 	}
 
 	public FlatArcDarkOrangeIJTheme() {
@@ -43,6 +49,6 @@ public class FlatArcDarkOrangeIJTheme
 
 	@Override
 	public String getName() {
-		return "Arc Dark - Orange";
+		return NAME;
 	}
 }

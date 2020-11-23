@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatGitHubIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "GitHub (Material)";
+
+	public static boolean install() {
 		try {
 			return install( new FlatGitHubIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatGitHubIJTheme.class );
 	}
 
 	public FlatGitHubIJTheme() {
@@ -43,6 +49,6 @@ public class FlatGitHubIJTheme
 
 	@Override
 	public String getName() {
-		return "GitHub (Material)";
+		return NAME;
 	}
 }
