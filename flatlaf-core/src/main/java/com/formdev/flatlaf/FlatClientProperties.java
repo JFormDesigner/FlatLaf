@@ -181,6 +181,15 @@ public interface FlatClientProperties
 	 */
 	String POPUP_DROP_SHADOW_PAINTED = "Popup.dropShadowPainted";
 
+	/**
+	 * Specifies whether a heavy weight window should be used if the component is shown in a popup
+	 * or if the component is the owner of another component that is shown in a popup.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String POPUP_FORCE_HEAVY_WEIGHT = "Popup.forceHeavyWeight";
+
 	//---- JProgressBar -------------------------------------------------------
 
 	/**
