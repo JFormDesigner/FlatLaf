@@ -60,13 +60,16 @@ import javax.swing.plaf.basic.BasicMenuUI;
  * <!-- FlatMenuUI -->
  *
  * @uiDefault MenuItem.iconTextGap									int
- * @uiDefault MenuBar.hoverBackground								Color
+ * @uiDefault MenuBar.hoverBackground
+ * @uiDefault MenuBar.underlineSelectionColor						Color
  *
  * @author Karl Tauber
  */
 public class FlatMenuUI
 	extends BasicMenuUI
 {
+	protected final Color menuBarUnderlineSelectionColor = UIManager.getColor( "MenuBar.underlineSelectionColor" );
+
 	private Color hoverBackground;
 	private FlatMenuItemRenderer renderer;
 
@@ -154,7 +157,7 @@ public class FlatMenuUI
 		}
 
 		@Override
-		protected void paintBackground( Graphics g, Color selectionBackground ) {
+		protected void paintBackground( Graphics g, Color selectionBackground, Color menuItemUnderlineSelectionColor ) {
 			ButtonModel model = menuItem.getModel();
 			if( model.isRollover() && !model.isArmed() && !model.isSelected() &&
 				model.isEnabled() && ((JMenu)menuItem).isTopLevelMenu() )
@@ -162,7 +165,7 @@ public class FlatMenuUI
 				g.setColor( deriveBackground( hoverBackground ) );
 				g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
 			} else
-				super.paintBackground( g, selectionBackground );
+				super.paintBackground( g, selectionBackground, ((JMenu)menuItem).isTopLevelMenu() ? menuBarUnderlineSelectionColor : menuItemUnderlineSelectionColor );
 		}
 	}
 }

@@ -246,7 +246,7 @@ public class FlatMenuItemRenderer
 		g.setColor( Color.orange ); g.drawRect( arrowRect.x, arrowRect.y, arrowRect.width - 1, arrowRect.height - 1 );
 debug*/
 
-		paintBackground( g, selectionBackground );
+		paintBackground( g, selectionBackground, underlineSelectionColor );
 		paintIcon( g, iconRect, getIconForPainting() );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
@@ -254,7 +254,7 @@ debug*/
 			paintArrowIcon( g, arrowRect, arrowIcon );
 	}
 
-	protected void paintBackground( Graphics g, Color selectionBackground ) {
+	protected void paintBackground( Graphics g, Color selectionBackground, Color underlineSelectionColor ) {
 		boolean armedOrSelected = isArmedOrSelected( menuItem );
 		if( menuItem.isOpaque() || armedOrSelected ) {
 			int width = menuItem.getWidth();
