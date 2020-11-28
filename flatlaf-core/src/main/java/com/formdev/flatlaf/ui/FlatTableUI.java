@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.geom.Rectangle2D;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -210,17 +211,24 @@ public class FlatTableUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		if( table.getShowVerticalLines() ) {
+		boolean horizontalLines = table.getShowHorizontalLines();
+		boolean verticalLines = table.getShowVerticalLines();
+		if( horizontalLines || verticalLines ) {
 			// fix grid painting issues in BasicTableUI
 			//   - do not paint last vertical grid line if auto-resize mode is not off
 			//   - in right-to-left component orientation, do not paint last vertical grid line
 			//     in any auto-resize mode; can not paint on left side of table because
 			//     cells are painted over left line
+			//   - fix unstable grid line thickness when scaled at 125%, 150%, 175%, 225%, ...
+			//     which paints either 1px or 2px lines depending on location
 
 			boolean hideLastVerticalLine =
 				table.getAutoResizeMode() != JTable.AUTO_RESIZE_OFF ||
 				!table.getComponentOrientation().isLeftToRight();
 			int tableWidth = table.getWidth();
+
+			double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
+			double lineThickness = (1. / systemScaleFactor) * (int) systemScaleFactor;
 
 			// Java 8 uses drawLine() to paint grid lines
 			// Java 9+ uses fillRect() to paint grid lines
@@ -228,7 +236,7 @@ public class FlatTableUI
 				@Override
 				public void drawLine( int x1, int y1, int x2, int y2 ) {
 					// do not paint last vertical line
-					if( hideLastVerticalLine &&
+					if( hideLastVerticalLine && verticalLines &&
 						x1 == x2 && y1 == 0 && x1 == tableWidth - 1 &&
 						wasInvokedFromPaintGrid() )
 					  return;
@@ -239,10 +247,22 @@ public class FlatTableUI
 				@Override
 				public void fillRect( int x, int y, int width, int height ) {
 					// do not paint last vertical line
-					if( hideLastVerticalLine &&
+					if( hideLastVerticalLine && verticalLines &&
 						width == 1 && y == 0 && x == tableWidth - 1 &&
 						wasInvokedFromPaintGrid() )
 					  return;
+
+					// reduce line thickness to avoid unstable painted line thickness
+					if( lineThickness != 1 ) {
+						if( horizontalLines && height == 1 && wasInvokedFromPaintGrid() ) {
+							super.fill( new Rectangle2D.Double( x, y, width, lineThickness ) );
+							return;
+						}
+						if( verticalLines && width == 1 && y == 0 && wasInvokedFromPaintGrid() ) {
+							super.fill( new Rectangle2D.Double( x, y, lineThickness, height ) );
+							return;
+						}
+					}
 
 					super.fillRect( x, y, width, height );
 				}

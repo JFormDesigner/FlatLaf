@@ -14,6 +14,8 @@ FlatLaf Change Log
   property `JTabbedPane.hideTabAreaWithOneTab` to `true`)
 - Table: Do not paint last vertical grid line if auto-resize mode is not off.
   (issue #46)
+- Table: Fixed unstable grid line thickness when scaled on HiDPI screens. (issue
+  #152)
 
 
 #### Fixed bugs
