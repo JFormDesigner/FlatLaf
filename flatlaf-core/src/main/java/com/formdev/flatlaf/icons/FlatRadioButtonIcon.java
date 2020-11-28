@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.icons;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
@@ -36,25 +37,25 @@ public class FlatRadioButtonIcon
 	protected final int centerDiameter = getUIInt( "RadioButton.icon.centerDiameter", 8, style );
 
 	@Override
-	protected void paintFocusBorder( Graphics2D g2 ) {
+	protected void paintFocusBorder( Component c, Graphics2D g ) {
 		// the outline focus border is painted outside of the icon
 		int wh = ICON_SIZE + (focusWidth * 2);
-		g2.fillOval( -focusWidth, -focusWidth, wh, wh );
+		g.fillOval( -focusWidth, -focusWidth, wh, wh );
 	}
 
 	@Override
-	protected void paintBorder( Graphics2D g2 ) {
-		g2.fillOval( 0, 0, 15, 15 );
+	protected void paintBorder( Component c, Graphics2D g ) {
+		g.fillOval( 0, 0, 15, 15 );
 	}
 
 	@Override
-	protected void paintBackground( Graphics2D g2 ) {
-		g2.fillOval( 1, 1, 13, 13 );
+	protected void paintBackground( Component c, Graphics2D g ) {
+		g.fillOval( 1, 1, 13, 13 );
 	}
 
 	@Override
-	protected void paintCheckmark( Graphics2D g2 ) {
+	protected void paintCheckmark( Component c, Graphics2D g ) {
 		float xy = (ICON_SIZE - centerDiameter) / 2f;
-		g2.fill( new Ellipse2D.Float( xy, xy, centerDiameter, centerDiameter ) );
+		g.fill( new Ellipse2D.Float( xy, xy, centerDiameter, centerDiameter ) );
 	}
 }
