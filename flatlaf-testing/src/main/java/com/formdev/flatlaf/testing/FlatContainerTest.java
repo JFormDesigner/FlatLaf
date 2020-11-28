@@ -78,6 +78,11 @@ public class FlatContainerTest
 		putTabbedPanesClientProperty( TABBED_PANE_SHOW_CONTENT_SEPARATOR, showContentSeparator );
 	}
 
+	private void hideTabAreaWithOneTabChanged() {
+		boolean hideTabAreaWithOneTab = hideTabAreaWithOneTabCheckBox.isSelected();
+		putTabbedPanesClientProperty( TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, hideTabAreaWithOneTab );
+	}
+
 	private void hasFullBorderChanged() {
 		Boolean hasFullBorder = hasFullBorderCheckBox.isSelected() ? true : null;
 		putTabbedPanesClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
@@ -461,6 +466,7 @@ public class FlatContainerTest
 		maximumTabWidthCheckBox = new JCheckBox();
 		showTabSeparatorsCheckBox = new JCheckBox();
 		secondTabWiderCheckBox = new JCheckBox();
+		hideTabAreaWithOneTabCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -578,6 +584,7 @@ public class FlatContainerTest
 					"[]para" +
 					"[]" +
 					"[]para" +
+					"[]" +
 					"[]" +
 					"[]"));
 
@@ -800,6 +807,11 @@ public class FlatContainerTest
 				secondTabWiderCheckBox.setText("Second Tab insets wider (4,20,4,20)");
 				secondTabWiderCheckBox.addActionListener(e -> secondTabWiderChanged());
 				tabbedPaneControlPanel.add(secondTabWiderCheckBox, "cell 2 9");
+
+				//---- hideTabAreaWithOneTabCheckBox ----
+				hideTabAreaWithOneTabCheckBox.setText("Hide tab area with one tab");
+				hideTabAreaWithOneTabCheckBox.addActionListener(e -> hideTabAreaWithOneTabChanged());
+				tabbedPaneControlPanel.add(hideTabAreaWithOneTabCheckBox, "cell 1 10");
 			}
 			panel9.add(tabbedPaneControlPanel, cc.xywh(1, 11, 3, 1));
 		}
@@ -844,6 +856,7 @@ public class FlatContainerTest
 	private JCheckBox maximumTabWidthCheckBox;
 	private JCheckBox showTabSeparatorsCheckBox;
 	private JCheckBox secondTabWiderCheckBox;
+	private JCheckBox hideTabAreaWithOneTabCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	private JTabbedPane[] allTabbedPanes;

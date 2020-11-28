@@ -132,7 +132,7 @@ new FormModel {
 				add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestFrame$NoRightToLeftPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets 0,hidemode 3"
 					"$columnConstraints": "[][fill][]"
-					"$rowConstraints": "[center][][][][][]para[][]para[][]"
+					"$rowConstraints": "[center][][][][][]para[][]para[][][]"
 				} ) {
 					name: "tabbedPaneControlPanel"
 					"opaque": false
@@ -546,6 +546,16 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "secondTabWiderChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 9"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "hideTabAreaWithOneTabCheckBox"
+						"text": "Hide tab area with one tab"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hideTabAreaWithOneTabChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 10"
 					} )
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridY": 11

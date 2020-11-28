@@ -694,6 +694,26 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected int calculateMaxTabWidth( int tabPlacement ) {
+		return hideTabArea() ? 0 : super.calculateMaxTabWidth( tabPlacement );
+	}
+
+	@Override
+	protected int calculateMaxTabHeight( int tabPlacement ) {
+		return hideTabArea() ? 0 : super.calculateMaxTabHeight( tabPlacement );
+	}
+
+	@Override
+	protected int calculateTabAreaWidth( int tabPlacement, int vertRunCount, int maxTabWidth ) {
+		return hideTabArea() ? 0 : super.calculateTabAreaWidth( tabPlacement, vertRunCount, maxTabWidth );
+	}
+
+	@Override
+	protected int calculateTabAreaHeight( int tabPlacement, int horizRunCount, int maxTabHeight ) {
+		return hideTabArea() ? 0 : super.calculateTabAreaHeight( tabPlacement, horizRunCount, maxTabHeight );
+	}
+
+	@Override
 	protected Insets getTabInsets( int tabPlacement, int tabIndex ) {
 		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_INSETS );
 		return scale( (value instanceof Insets)
@@ -752,7 +772,7 @@ public class FlatTabbedPaneUI
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
-		if( contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+		if( hideTabArea() || contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
 			return new Insets( 0, 0, 0, 0 );
 
 		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
@@ -787,6 +807,9 @@ public class FlatTabbedPaneUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
+		if( hideTabArea() )
+			return;
+
 		ensureCurrentLayout();
 
 		int tabPlacement = tabPane.getTabPlacement();
@@ -1224,6 +1247,13 @@ public class FlatTabbedPaneUI
 		// applications to turn smooth scrolling on or off at any time
 		// (e.g. in application options dialog).
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
+	}
+
+	protected boolean hideTabArea() {
+		return tabPane.getTabCount() == 1 &&
+			leadingComponent == null &&
+			trailingComponent == null &&
+			clientPropertyBoolean( tabPane, TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, false );
 	}
 
 	protected int getTabsPopupPolicy() {
@@ -2193,6 +2223,7 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
 				case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
 				case TABBED_PANE_HAS_FULL_BORDER:
+				case TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB:
 				case TABBED_PANE_MINIMUM_TAB_WIDTH:
 				case TABBED_PANE_MAXIMUM_TAB_WIDTH:
 				case TABBED_PANE_TAB_HEIGHT:

@@ -10,7 +10,8 @@ FlatLaf Change Log
   - Added "Gradianto Nature Green" theme.
   - Updated "Arc Dark", "Cyan", "Dark purple", "Gradianto", "Gray", "Gruvbox"
     and "One Dark" themes.
-
+- TabbedPane: Support hiding tab area if it contains only one tab. (set client
+  property `JTabbedPane.hideTabAreaWithOneTab` to `true`)
 
 #### Fixed bugs
 

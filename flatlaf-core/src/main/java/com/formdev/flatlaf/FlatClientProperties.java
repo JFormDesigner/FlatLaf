@@ -219,7 +219,7 @@ public interface FlatClientProperties
 	 */
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
 
-	//---- JScrollBar ---------------------------------------------------------
+	//---- JScrollBar / JScrollPane -------------------------------------------
 
 	/**
 	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
@@ -262,6 +262,14 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
+
+	/**
+	 * Specifies whether the tab area should be hidded if it contains only one tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB = "JTabbedPane.hideTabAreaWithOneTab";
 
 	/**
 	 * Specifies the minimum width of a tab.
