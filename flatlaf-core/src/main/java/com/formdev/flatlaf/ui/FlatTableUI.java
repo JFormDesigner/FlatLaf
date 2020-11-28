@@ -19,15 +19,19 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JTable;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.TableCellRenderer;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -202,5 +206,59 @@ public class FlatTableUI
 			if( table.getSelectionForeground() == selectionForeground )
 				table.setSelectionForeground( selectionInactiveForeground );
 		}
+	}
+
+	@Override
+	public void paint( Graphics g, JComponent c ) {
+		if( table.getShowVerticalLines() ) {
+			// fix grid painting issues in BasicTableUI
+			//   - do not paint last vertical grid line if auto-resize mode is not off
+			//   - in right-to-left component orientation, do not paint last vertical grid line
+			//     in any auto-resize mode; can not paint on left side of table because
+			//     cells are painted over left line
+
+			boolean hideLastVerticalLine =
+				table.getAutoResizeMode() != JTable.AUTO_RESIZE_OFF ||
+				!table.getComponentOrientation().isLeftToRight();
+			int tableWidth = table.getWidth();
+
+			// Java 8 uses drawLine() to paint grid lines
+			// Java 9+ uses fillRect() to paint grid lines
+			g = new Graphics2DProxy( (Graphics2D) g ) {
+				@Override
+				public void drawLine( int x1, int y1, int x2, int y2 ) {
+					// do not paint last vertical line
+					if( hideLastVerticalLine &&
+						x1 == x2 && y1 == 0 && x1 == tableWidth - 1 &&
+						wasInvokedFromPaintGrid() )
+					  return;
+
+					super.drawLine( x1, y1, x2, y2 );
+				}
+
+				@Override
+				public void fillRect( int x, int y, int width, int height ) {
+					// do not paint last vertical line
+					if( hideLastVerticalLine &&
+						width == 1 && y == 0 && x == tableWidth - 1 &&
+						wasInvokedFromPaintGrid() )
+					  return;
+
+					super.fillRect( x, y, width, height );
+				}
+
+				private boolean wasInvokedFromPaintGrid() {
+					StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+					for( int i = 0; i < 10 || i < stackTrace.length; i++ ) {
+						if( "javax.swing.plaf.basic.BasicTableUI".equals( stackTrace[i].getClassName() ) &&
+							"paintGrid".equals( stackTrace[i].getMethodName() ) )
+						  return true;
+					}
+					return false;
+				}
+			};
+		}
+
+		super.paint( g, c );
 	}
 }

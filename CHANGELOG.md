@@ -12,6 +12,9 @@ FlatLaf Change Log
     and "One Dark" themes.
 - TabbedPane: Support hiding tab area if it contains only one tab. (set client
   property `JTabbedPane.hideTabAreaWithOneTab` to `true`)
+- Table: Do not paint last vertical grid line if auto-resize mode is not off.
+  (issue #46)
+
 
 #### Fixed bugs
 

@@ -121,6 +121,21 @@ public class FlatComponents2Test
 		tableModel.setRowCount( (Integer) tableRowCountSpinner.getValue() );
 	}
 
+	private void autoResizeModeChanged() {
+		int autoResizeMode = JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS;
+		Object sel = autoResizeModeField.getSelectedItem();
+		if( sel instanceof String ) {
+			switch( (String) sel ) {
+				case "off": autoResizeMode = JTable.AUTO_RESIZE_OFF; break;
+				case "nextColumn": autoResizeMode = JTable.AUTO_RESIZE_NEXT_COLUMN; break;
+				case "subsequentColumns": autoResizeMode = JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS; break;
+				case "lastColumn": autoResizeMode = JTable.AUTO_RESIZE_LAST_COLUMN; break;
+				case "allColumns": autoResizeMode = JTable.AUTO_RESIZE_ALL_COLUMNS; break;
+			}
+		}
+		table1.setAutoResizeMode( autoResizeMode );
+	}
+
 	private void dndChanged() {
 		boolean dnd = dndCheckBox.isSelected();
 		list1.setDragEnabled( dnd );
@@ -225,6 +240,8 @@ public class FlatComponents2Test
 		JPanel tableOptionsPanel = new JPanel();
 		JLabel tableRowCountLabel = new JLabel();
 		tableRowCountSpinner = new JSpinner();
+		JLabel autoResizeModeLabel = new JLabel();
+		autoResizeModeField = new JComboBox<>();
 		showHorizontalLinesCheckBox = new JCheckBox();
 		showVerticalLinesCheckBox = new JCheckBox();
 		intercellSpacingCheckBox = new JCheckBox();
@@ -367,6 +384,7 @@ public class FlatComponents2Test
 				"[90,fill]",
 				// rows
 				"[]" +
+				"[]" +
 				"[]0" +
 				"[]0" +
 				"[]0" +
@@ -385,47 +403,63 @@ public class FlatComponents2Test
 			tableRowCountSpinner.addChangeListener(e -> tableRowCountChanged());
 			tableOptionsPanel.add(tableRowCountSpinner, "cell 1 0");
 
+			//---- autoResizeModeLabel ----
+			autoResizeModeLabel.setText("Auto resize mode:");
+			tableOptionsPanel.add(autoResizeModeLabel, "cell 0 1");
+
+			//---- autoResizeModeField ----
+			autoResizeModeField.setModel(new DefaultComboBoxModel<>(new String[] {
+				"off",
+				"nextColumn",
+				"subsequentColumns",
+				"lastColumn",
+				"allColumns"
+			}));
+			autoResizeModeField.setSelectedIndex(2);
+			autoResizeModeField.addActionListener(e -> autoResizeModeChanged());
+			tableOptionsPanel.add(autoResizeModeField, "cell 1 1");
+
 			//---- showHorizontalLinesCheckBox ----
 			showHorizontalLinesCheckBox.setText("show horizontal lines");
 			showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
-			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 1 2 1");
+			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 2 2 1");
 
 			//---- showVerticalLinesCheckBox ----
 			showVerticalLinesCheckBox.setText("show vertical lines");
 			showVerticalLinesCheckBox.addActionListener(e -> showVerticalLinesChanged());
-			tableOptionsPanel.add(showVerticalLinesCheckBox, "cell 0 2 2 1");
+			tableOptionsPanel.add(showVerticalLinesCheckBox, "cell 0 3 2 1");
 
 			//---- intercellSpacingCheckBox ----
 			intercellSpacingCheckBox.setText("intercell spacing");
 			intercellSpacingCheckBox.addActionListener(e -> intercellSpacingChanged());
-			tableOptionsPanel.add(intercellSpacingCheckBox, "cell 0 3 2 1");
+			tableOptionsPanel.add(intercellSpacingCheckBox, "cell 0 4 2 1");
 
 			//---- redGridColorCheckBox ----
 			redGridColorCheckBox.setText("red grid color");
 			redGridColorCheckBox.addActionListener(e -> redGridColorChanged());
-			tableOptionsPanel.add(redGridColorCheckBox, "cell 0 4 2 1");
+			tableOptionsPanel.add(redGridColorCheckBox, "cell 0 5 2 1");
 
 			//---- rowSelectionCheckBox ----
 			rowSelectionCheckBox.setText("row selection");
 			rowSelectionCheckBox.setSelected(true);
 			rowSelectionCheckBox.addActionListener(e -> rowSelectionChanged());
-			tableOptionsPanel.add(rowSelectionCheckBox, "cell 0 5 2 1");
+			tableOptionsPanel.add(rowSelectionCheckBox, "cell 0 6 2 1");
 
 			//---- columnSelectionCheckBox ----
 			columnSelectionCheckBox.setText("column selection");
 			columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
-			tableOptionsPanel.add(columnSelectionCheckBox, "cell 0 6 2 1");
+			tableOptionsPanel.add(columnSelectionCheckBox, "cell 0 7 2 1");
 
 			//---- dndCheckBox ----
 			dndCheckBox.setText("enable drag and drop");
 			dndCheckBox.setMnemonic('D');
 			dndCheckBox.addActionListener(e -> dndChanged());
-			tableOptionsPanel.add(dndCheckBox, "cell 0 7 2 1");
+			tableOptionsPanel.add(dndCheckBox, "cell 0 8 2 1");
 
 			//---- tableHeaderButtonCheckBox ----
 			tableHeaderButtonCheckBox.setText("show button in table header");
 			tableHeaderButtonCheckBox.addActionListener(e -> tableHeaderButtonChanged());
-			tableOptionsPanel.add(tableHeaderButtonCheckBox, "cell 0 8 2 1");
+			tableOptionsPanel.add(tableHeaderButtonCheckBox, "cell 0 9 2 1");
 		}
 		add(tableOptionsPanel, "cell 3 3");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -441,6 +475,7 @@ public class FlatComponents2Test
 	private JScrollPane scrollPane5;
 	private JTable table1;
 	private JSpinner tableRowCountSpinner;
+	private JComboBox<String> autoResizeModeField;
 	private JCheckBox showHorizontalLinesCheckBox;
 	private JCheckBox showVerticalLinesCheckBox;
 	private JCheckBox intercellSpacingCheckBox;
