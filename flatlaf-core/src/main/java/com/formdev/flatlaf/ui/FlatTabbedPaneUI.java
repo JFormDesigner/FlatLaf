@@ -362,11 +362,6 @@ public class FlatTabbedPaneUI
 	protected void installComponents() {
 		super.installComponents();
 
-		// create tab close button
-		tabCloseButton = new TabCloseButton();
-		tabCloseButton.setVisible( false );
-		tabPane.add( tabCloseButton );
-
 		// find scrollable tab viewport
 		tabViewport = null;
 		if( isScrollTabLayout() ) {
@@ -393,11 +388,7 @@ public class FlatTabbedPaneUI
 
 		super.uninstallComponents();
 
-		if( tabCloseButton != null ) {
-			tabPane.remove( tabCloseButton );
-			tabCloseButton = null;
-		}
-
+		tabCloseButton = null;
 		tabViewport = null;
 	}
 
@@ -934,6 +925,12 @@ public class FlatTabbedPaneUI
 	}
 
 	protected void paintTabCloseButton( Graphics g, int tabIndex, int x, int y, int w, int h ) {
+		// create tab close button
+		if( tabCloseButton == null ) {
+			tabCloseButton = new TabCloseButton();
+			tabCloseButton.setVisible( false );
+		}
+
 		// update state of tab close button
 		boolean rollover = (tabIndex == getRolloverTab());
 		ButtonModel bm = tabCloseButton.getModel();

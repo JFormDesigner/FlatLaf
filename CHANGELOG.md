@@ -12,14 +12,16 @@ FlatLaf Change Log
     and "One Dark" themes.
 - TabbedPane: Support hiding tab area if it contains only one tab. (set client
   property `JTabbedPane.hideTabAreaWithOneTab` to `true`)
-- Table: Do not paint last vertical grid line if auto-resize mode is not off.
-  (issue #46)
-- Table: Fixed unstable grid line thickness when scaled on HiDPI screens. (issue
-  #152)
 
 
 #### Fixed bugs
 
+- Table: Do not paint last vertical grid line if auto-resize mode is not off.
+  (issue #46)
+- Table: Fixed unstable grid line thickness when scaled on HiDPI screens. (issue
+  #152)
+- TabbedPane: No longer add (internal) tab close button component as child to
+  `JTabbedPane`. (issue #219)
 - Custom window decorations: Title bar was not hidden if window is in
   full-screen mode. (issue #212)
 
