@@ -28,11 +28,12 @@ public class ColorFunctions
 	public static Color applyFunctions( Color color, ColorFunction... functions ) {
 		float[] hsl = HSLColor.fromRGB( color );
 		float alpha = color.getAlpha() / 255f;
+		float[] hsla = { hsl[0], hsl[1], hsl[2], alpha * 100 };
 
 		for( ColorFunction function : functions )
-			function.apply( hsl );
+			function.apply( hsla );
 
-		return HSLColor.toRGB( hsl, alpha );
+		return HSLColor.toRGB( hsla[0], hsla[1], hsla[2], hsla[3] / 100 );
 	}
 
 	public static float clamp( float value ) {
@@ -46,13 +47,13 @@ public class ColorFunctions
 	//---- interface ColorFunction --------------------------------------------
 
 	public interface ColorFunction {
-		void apply( float[] hsl );
+		void apply( float[] hsla );
 	}
 
 	//---- class HSLIncreaseDecrease ------------------------------------------
 
 	/**
-	 * Increase or decrease hue, saturation or luminance of a color in the HSL color space
+	 * Increase or decrease hue, saturation, luminance or alpha of a color in the HSL color space
 	 * by an absolute or relative amount.
 	 */
 	public static class HSLIncreaseDecrease
@@ -75,18 +76,45 @@ public class ColorFunctions
 		}
 
 		@Override
-		public void apply( float[] hsl ) {
+		public void apply( float[] hsla ) {
 			float amount2 = increase ? amount : -amount;
-			amount2 = autoInverse && shouldInverse( hsl ) ? -amount2 : amount2;
-			hsl[hslIndex] = clamp( relative
-				? (hsl[hslIndex] * ((100 + amount2) / 100))
-				: (hsl[hslIndex] + amount2) );
+
+			if( hslIndex == 0 ) {
+				// hue is range 0-360
+				hsla[0] = (hsla[0] + amount2) % 360;
+				return;
+			}
+
+			amount2 = autoInverse && shouldInverse( hsla ) ? -amount2 : amount2;
+			hsla[hslIndex] = clamp( relative
+				? (hsla[hslIndex] * ((100 + amount2) / 100))
+				: (hsla[hslIndex] + amount2) );
 		}
 
-		protected boolean shouldInverse( float[] hsl ) {
+		protected boolean shouldInverse( float[] hsla ) {
 			return increase
-				? hsl[hslIndex] >= 50
-				: hsl[hslIndex] < 50;
+				? hsla[hslIndex] >= 50
+				: hsla[hslIndex] < 50;
+		}
+	}
+
+	//---- class HSLIncreaseDecrease ------------------------------------------
+
+	/**
+	 * Set the alpha of a color.
+	 */
+	public static class Fade
+		implements ColorFunction
+	{
+		public final float amount;
+
+		public Fade( float amount ) {
+			this.amount = amount;
+		}
+
+		@Override
+		public void apply( float[] hsla ) {
+			hsla[3] = clamp( amount );
 		}
 	}
 }

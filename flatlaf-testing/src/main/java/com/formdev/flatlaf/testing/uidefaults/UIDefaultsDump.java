@@ -64,6 +64,7 @@ import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import com.formdev.flatlaf.testing.FlatTestLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
+import com.formdev.flatlaf.util.ColorFunctions.Fade;
 import com.formdev.flatlaf.util.ColorFunctions.HSLIncreaseDecrease;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.StringUtils;
@@ -399,13 +400,18 @@ public class UIDefaultsDump
 			HSLIncreaseDecrease func = (HSLIncreaseDecrease) function;
 			String name;
 			switch( func.hslIndex ) {
-				case 2: name = func.increase ? "lighten" : "darken"; break;
+				case 0: name = "spin"; break;
 				case 1: name = func.increase ? "saturate" : "desaturate"; break;
+				case 2: name = func.increase ? "lighten" : "darken"; break;
+				case 3: name = func.increase ? "fadein" : "fadeout"; break;
 				default: throw new IllegalArgumentException();
 			}
 			out.printf( "%s(%.0f%%%s%s)", name, func.amount,
 				(func.relative ? " relative" : ""),
 				(func.autoInverse ? " autoInverse" : "") );
+		} else if( function instanceof Fade ) {
+			Fade func = (Fade) function;
+			out.printf( "fade(%.0f%%)", func.amount );
 		} else
 			throw new IllegalArgumentException( "unknown color function: " + function );
 	}

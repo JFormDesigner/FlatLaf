@@ -1141,14 +1141,20 @@ new FormModel {
 				name: "slider1"
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 19 3 1,aligny top,grow 100 0"
+				"value": "cell 1 19 3 1,growx"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider6"
 				"enabled": false
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 19 3 1,aligny top,growy 0"
+				"value": "cell 1 19 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "sliderLabel2"
+				"text": "baseline"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 20,alignx right,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider3"
@@ -1162,7 +1168,7 @@ new FormModel {
 				}
 				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "changeProgress", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 20 3 1,aligny top,grow 100 0"
+				"value": "cell 1 20 3 1,growx"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider5"
@@ -1173,7 +1179,7 @@ new FormModel {
 				"enabled": false
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 20 3 1,aligny top,growy 0"
+				"value": "cell 1 20 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "progressBarLabel"

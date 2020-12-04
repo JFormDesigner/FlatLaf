@@ -841,23 +841,28 @@ SeparatorUI                    com.formdev.flatlaf.ui.FlatSeparatorUI
 #---- Slider ----
 
 Slider.background              #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-Slider.disabledForeground      #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Slider.disabledThumbColor      #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Slider.disabledTrackColor      #4c5052    javax.swing.plaf.ColorUIResource [UI]
 Slider.focus                   #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Slider.focusWidth              4
+Slider.focusedColor            #b33d6185    com.formdev.flatlaf.util.DerivedColor [UI]    fade(70%)
 Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
 Slider.horizontalSize          200,21    java.awt.Dimension
-Slider.hoverColor              #808080    com.formdev.flatlaf.util.DerivedColor [UI]    darken(15% autoInverse)
+Slider.hoverThumbColor         #346faa    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 Slider.minimumHorizontalSize   36,21    java.awt.Dimension
 Slider.minimumVerticalSize     21,36    java.awt.Dimension
 Slider.onlyLeftMouseButtonDrag true
+Slider.pressedThumbColor       #2e6296    com.formdev.flatlaf.util.DerivedColor [UI]    darken(15% autoInverse)
 Slider.shadow                  #646464    javax.swing.plaf.ColorUIResource [UI]
-Slider.thumbColor              #a6a6a6    javax.swing.plaf.ColorUIResource [UI]
-Slider.thumbWidth              11
+Slider.thumbColor              #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+Slider.thumbSize               12,12    javax.swing.plaf.DimensionUIResource [UI]
 Slider.tickColor               #888888    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackColor              #646464    javax.swing.plaf.ColorUIResource [UI]
-Slider.trackWidth              3
+Slider.trackValueColor         #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+Slider.trackWidth              2
 Slider.verticalSize            21,200    java.awt.Dimension
 SliderUI                       com.formdev.flatlaf.ui.FlatSliderUI
 
