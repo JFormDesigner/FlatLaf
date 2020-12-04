@@ -286,6 +286,7 @@ public class FlatComponentsTest
 		JLabel sliderLabel = new JLabel();
 		JSlider slider1 = new JSlider();
 		JSlider slider6 = new JSlider();
+		JLabel sliderLabel2 = new JLabel();
 		slider3 = new JSlider();
 		JSlider slider5 = new JSlider();
 		JLabel progressBarLabel = new JLabel();
@@ -1200,12 +1201,16 @@ public class FlatComponentsTest
 
 		//---- slider1 ----
 		slider1.setValue(30);
-		add(slider1, "cell 1 19 3 1,aligny top,grow 100 0");
+		add(slider1, "cell 1 19 3 1,growx");
 
 		//---- slider6 ----
 		slider6.setEnabled(false);
 		slider6.setValue(30);
-		add(slider6, "cell 1 19 3 1,aligny top,growy 0");
+		add(slider6, "cell 1 19 3 1");
+
+		//---- sliderLabel2 ----
+		sliderLabel2.setText("baseline");
+		add(sliderLabel2, "cell 0 20,alignx right,growx 0");
 
 		//---- slider3 ----
 		slider3.setMinorTickSpacing(10);
@@ -1214,7 +1219,7 @@ public class FlatComponentsTest
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
 		slider3.addChangeListener(e -> changeProgress());
-		add(slider3, "cell 1 20 3 1,aligny top,grow 100 0");
+		add(slider3, "cell 1 20 3 1,growx");
 
 		//---- slider5 ----
 		slider5.setMinorTickSpacing(10);
@@ -1223,7 +1228,7 @@ public class FlatComponentsTest
 		slider5.setPaintLabels(true);
 		slider5.setEnabled(false);
 		slider5.setValue(30);
-		add(slider5, "cell 1 20 3 1,aligny top,growy 0");
+		add(slider5, "cell 1 20 3 1");
 
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
