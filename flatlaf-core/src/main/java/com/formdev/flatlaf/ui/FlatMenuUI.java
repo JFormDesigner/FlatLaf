@@ -60,16 +60,19 @@ import javax.swing.plaf.basic.BasicMenuUI;
  * <!-- FlatMenuUI -->
  *
  * @uiDefault MenuItem.iconTextGap									int
- * @uiDefault MenuBar.hoverBackground
+ * @uiDefault MenuBar.hoverBackground								Color
+ *
+ * <!-- FlatMenuRenderer -->
+ *
+ * @uiDefault MenuBar.underlineSelectionBackground					Color
  * @uiDefault MenuBar.underlineSelectionColor						Color
+ * @uiDefault MenuBar.underlineSelectionHeight						int
  *
  * @author Karl Tauber
  */
 public class FlatMenuUI
 	extends BasicMenuUI
 {
-	protected final Color menuBarUnderlineSelectionColor = UIManager.getColor( "MenuBar.underlineSelectionColor" );
-
 	private Color hoverBackground;
 	private FlatMenuItemRenderer renderer;
 
@@ -150,6 +153,10 @@ public class FlatMenuUI
 	protected class FlatMenuRenderer
 		extends FlatMenuItemRenderer
 	{
+		protected final Color menuBarUnderlineSelectionBackground = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionBackground", underlineSelectionBackground );
+		protected final Color menuBarUnderlineSelectionColor = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionColor", underlineSelectionColor );
+		protected final int menuBarUnderlineSelectionHeight = FlatUIUtils.getUIInt( "MenuBar.underlineSelectionHeight", underlineSelectionHeight );
+
 		protected FlatMenuRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
 			Font acceleratorFont, String acceleratorDelimiter )
 		{
@@ -157,7 +164,10 @@ public class FlatMenuUI
 		}
 
 		@Override
-		protected void paintBackground( Graphics g, Color selectionBackground, Color menuItemUnderlineSelectionColor ) {
+		protected void paintBackground( Graphics g, Color selectionBackground ) {
+			if( isUnderlineSelection() && ((JMenu)menuItem).isTopLevelMenu() )
+				selectionBackground = menuBarUnderlineSelectionBackground;
+
 			ButtonModel model = menuItem.getModel();
 			if( model.isRollover() && !model.isArmed() && !model.isSelected() &&
 				model.isEnabled() && ((JMenu)menuItem).isTopLevelMenu() )
@@ -165,7 +175,17 @@ public class FlatMenuUI
 				g.setColor( deriveBackground( hoverBackground ) );
 				g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
 			} else
-				super.paintBackground( g, selectionBackground, ((JMenu)menuItem).isTopLevelMenu() ? menuBarUnderlineSelectionColor : menuItemUnderlineSelectionColor );
+				super.paintBackground( g, selectionBackground );
+		}
+
+		@Override
+		protected void paintUnderlineSelection( Graphics g, Color underlineSelectionColor, int underlineSelectionHeight ) {
+			if( ((JMenu)menuItem).isTopLevelMenu() ) {
+				underlineSelectionColor = menuBarUnderlineSelectionColor;
+				underlineSelectionHeight = menuBarUnderlineSelectionHeight;
+			}
+
+			super.paintUnderlineSelection( g, underlineSelectionColor, underlineSelectionHeight );
 		}
 	}
 }

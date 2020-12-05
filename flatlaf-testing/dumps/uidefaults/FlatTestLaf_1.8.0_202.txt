@@ -518,6 +518,9 @@ MenuBar.highlight              #ffffff    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.hoverBackground        #ffdddd    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.itemMargins            3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
 MenuBar.shadow                 #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.underlineSelectionBackground #00ff00    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.underlineSelectionColor #ff0000    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.underlineSelectionHeight 5
 MenuBar.windowBindings         length=2    [Ljava.lang.Object;
     [0] F10
     [1] takeFocus

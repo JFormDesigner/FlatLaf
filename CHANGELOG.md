@@ -10,6 +10,8 @@ FlatLaf Change Log
   - Added "Gradianto Nature Green" theme.
   - Updated "Arc Dark", "Cyan", "Dark purple", "Gradianto", "Gray", "Gruvbox"
     and "One Dark" themes.
+- MenuBar: Support different underline menu selection style UI defaults for
+  `MenuBar` and `MenuItem`. (PR #217; issue #216)
 
 
 #### Fixed bugs
