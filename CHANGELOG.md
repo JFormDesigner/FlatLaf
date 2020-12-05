@@ -13,6 +13,8 @@ FlatLaf Change Log
     and "One Dark" themes.
 - TabbedPane: Support hiding tab area if it contains only one tab. (set client
   property `JTabbedPane.hideTabAreaWithOneTab` to `true`)
+- MenuBar: Support different underline menu selection style UI defaults for
+  `MenuBar` and `MenuItem`. (PR #217; issue #216)
 
 
 #### Fixed bugs

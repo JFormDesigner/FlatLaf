@@ -62,6 +62,12 @@ import javax.swing.plaf.basic.BasicMenuUI;
  * @uiDefault MenuItem.iconTextGap									int
  * @uiDefault MenuBar.hoverBackground								Color
  *
+ * <!-- FlatMenuRenderer -->
+ *
+ * @uiDefault MenuBar.underlineSelectionBackground					Color
+ * @uiDefault MenuBar.underlineSelectionColor						Color
+ * @uiDefault MenuBar.underlineSelectionHeight						int
+ *
  * @author Karl Tauber
  */
 public class FlatMenuUI
@@ -147,6 +153,10 @@ public class FlatMenuUI
 	protected class FlatMenuRenderer
 		extends FlatMenuItemRenderer
 	{
+		protected final Color menuBarUnderlineSelectionBackground = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionBackground", underlineSelectionBackground );
+		protected final Color menuBarUnderlineSelectionColor = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionColor", underlineSelectionColor );
+		protected final int menuBarUnderlineSelectionHeight = FlatUIUtils.getUIInt( "MenuBar.underlineSelectionHeight", underlineSelectionHeight );
+
 		protected FlatMenuRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
 			Font acceleratorFont, String acceleratorDelimiter )
 		{
@@ -155,6 +165,9 @@ public class FlatMenuUI
 
 		@Override
 		protected void paintBackground( Graphics g, Color selectionBackground ) {
+			if( isUnderlineSelection() && ((JMenu)menuItem).isTopLevelMenu() )
+				selectionBackground = menuBarUnderlineSelectionBackground;
+
 			ButtonModel model = menuItem.getModel();
 			if( model.isRollover() && !model.isArmed() && !model.isSelected() &&
 				model.isEnabled() && ((JMenu)menuItem).isTopLevelMenu() )
@@ -163,6 +176,16 @@ public class FlatMenuUI
 				g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
 			} else
 				super.paintBackground( g, selectionBackground );
+		}
+
+		@Override
+		protected void paintUnderlineSelection( Graphics g, Color underlineSelectionColor, int underlineSelectionHeight ) {
+			if( ((JMenu)menuItem).isTopLevelMenu() ) {
+				underlineSelectionColor = menuBarUnderlineSelectionColor;
+				underlineSelectionHeight = menuBarUnderlineSelectionHeight;
+			}
+
+			super.paintUnderlineSelection( g, underlineSelectionColor, underlineSelectionHeight );
 		}
 	}
 }
