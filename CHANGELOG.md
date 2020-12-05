@@ -1,11 +1,12 @@
 FlatLaf Change Log
 ==================
 
-## 0.45-SNAPSHOT
+## 0.45
 
 #### New features and improvements
 
-- Slider: New design and improved customizing. (PR #214)
+- Slider: New design, added hover and pressed feedback and improved customizing.
+  (PR #214)
 - JIDE Common Layer: Support `RangeSlider`. (PR #209)
 - IntelliJ Themes:
   - Added "Gradianto Nature Green" theme.
