@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 0.46-SNAPSHOT
+
+#### Fixed bugs
+
+- SwingX: Fixed striping background highlighting color (e.g. alternating table
+  rows) in dark themes.
+
+
 ## 0.45
 
 #### New features and improvements

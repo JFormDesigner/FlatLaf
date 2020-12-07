@@ -928,6 +928,7 @@ Tree.textForeground
 Tree.timeFactor
 Tree.wideSelection
 TreeUI
+UIColorHighlighter.stripingBackground
 Viewport.background
 Viewport.font
 Viewport.foreground

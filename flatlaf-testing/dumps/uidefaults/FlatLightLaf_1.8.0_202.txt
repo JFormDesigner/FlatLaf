@@ -1000,7 +1000,7 @@ Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.F
 Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.font                     [active] $defaultFont [UI]
 Table.foreground               #000000    javax.swing.plaf.ColorUIResource [UI]
-Table.gridColor                #f7f7f7    javax.swing.plaf.ColorUIResource [UI]
+Table.gridColor                #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
 Table.rowHeight                20
 Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
@@ -1276,6 +1276,11 @@ Tree.textForeground            #000000    javax.swing.plaf.ColorUIResource [UI]
 Tree.timeFactor                1000
 Tree.wideSelection             true
 TreeUI                         com.formdev.flatlaf.ui.FlatTreeUI
+
+
+#---- UIColorHighlighter ----
+
+UIColorHighlighter.stripingBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- Viewport ----
