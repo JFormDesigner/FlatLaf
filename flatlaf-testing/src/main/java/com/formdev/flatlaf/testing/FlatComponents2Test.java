@@ -22,6 +22,7 @@ import java.awt.EventQueue;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,15 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
 import net.miginfocom.swing.*;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.decorator.ColorHighlighter;
+import org.jdesktop.swingx.decorator.HighlightPredicate;
+import org.jdesktop.swingx.decorator.Highlighter;
+import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.jdesktop.swingx.decorator.PatternPredicate;
+import org.jdesktop.swingx.decorator.ShadingColorHighlighter;
+import org.jdesktop.swingx.treetable.FileSystemModel;
 
 /**
  * @author Karl Tauber
@@ -50,6 +60,7 @@ public class FlatComponents2Test
 	private final TestListModel listModel;
 	private final TestTreeModel treeModel;
 	private final TestTableModel tableModel;
+	private final JTable[] allTables;
 
 	FlatComponents2Test() {
 		initComponents();
@@ -67,9 +78,32 @@ public class FlatComponents2Test
 		// table model
 		tableModel = new TestTableModel( (Integer) tableRowCountSpinner.getValue() );
 		table1.setModel( tableModel );
+		xTable1.setModel( tableModel );
 
 		// table column editors
-		TableColumnModel cm = table1.getColumnModel();
+		initTableEditors( table1 );
+		initTableEditors( xTable1 );
+
+		// JXTable
+		Highlighter simpleStriping = HighlighterFactory.createSimpleStriping();
+		PatternPredicate patternPredicate = new PatternPredicate( "^J", 2 );
+		ColorHighlighter magenta = new ColorHighlighter( patternPredicate, null, Color.MAGENTA, null, Color.MAGENTA );
+		ColorHighlighter rollover = new ColorHighlighter( HighlightPredicate.ROLLOVER_ROW, Color.cyan, null );
+		Highlighter shading = new ShadingColorHighlighter( new HighlightPredicate.ColumnHighlightPredicate( 1 ) );
+		xTable1.setHighlighters( simpleStriping, magenta, rollover, shading );
+
+		// JXTreeTable
+		xTreeTable1.setTreeTableModel( new FileSystemModel( new File( "." ) ) );
+		xTreeTable1.setHighlighters( simpleStriping, magenta, rollover, shading );
+
+		allTables = new JTable[] { table1, xTable1, xTreeTable1 };
+
+		expandTree( tree1 );
+		expandTree( tree2 );
+	}
+
+	private void initTableEditors( JTable table ) {
+		TableColumnModel cm = table.getColumnModel();
 		String[] months = new String[] {
 			"January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"
@@ -78,9 +112,6 @@ public class FlatComponents2Test
 		JComboBox<String> editableComboBox = new JComboBox<>( months );
 		editableComboBox.setEditable( true );
 		cm.getColumn(3).setCellEditor( new DefaultCellEditor( editableComboBox ) );
-
-		expandTree( tree1 );
-		expandTree( tree2 );
 	}
 
 	private void expandTree( JTree tree ) {
@@ -133,7 +164,8 @@ public class FlatComponents2Test
 				case "allColumns": autoResizeMode = JTable.AUTO_RESIZE_ALL_COLUMNS; break;
 			}
 		}
-		table1.setAutoResizeMode( autoResizeMode );
+		for( JTable table : allTables )
+			table.setAutoResizeMode( autoResizeMode );
 	}
 
 	private void dndChanged() {
@@ -143,11 +175,15 @@ public class FlatComponents2Test
 		tree1.setDragEnabled( dnd );
 		tree2.setDragEnabled( dnd );
 		table1.setDragEnabled( dnd );
+		xTable1.setDragEnabled( dnd );
+		xTreeTable1.setDragEnabled( dnd );
 
 		DropMode dropMode = dnd ? DropMode.ON_OR_INSERT : DropMode.USE_SELECTION;
 		list1.setDropMode( dropMode );
 		tree1.setDropMode( dropMode );
 		table1.setDropMode( dropMode );
+		xTable1.setDropMode( dropMode );
+		xTreeTable1.setDropMode( dropMode );
 
 		String key = "FlatLaf.oldTransferHandler";
 		if( dnd ) {
@@ -158,15 +194,27 @@ public class FlatComponents2Test
 			tree1.setTransferHandler( new DummyTransferHandler() );
 
 			table1.putClientProperty( key, table1.getTransferHandler() );
+			xTable1.putClientProperty( key, xTable1.getTransferHandler() );
+			xTreeTable1.putClientProperty( key, xTreeTable1.getTransferHandler() );
 			table1.setTransferHandler( new DummyTransferHandler() );
+			xTable1.setTransferHandler( new DummyTransferHandler() );
+			xTreeTable1.setTransferHandler( new DummyTransferHandler() );
 		} else {
 			list1.setTransferHandler( (TransferHandler) list1.getClientProperty( key ) );
 			tree1.setTransferHandler( (TransferHandler) tree1.getClientProperty( key ) );
 			table1.setTransferHandler( (TransferHandler) table1.getClientProperty( key ) );
+			xTable1.setTransferHandler( (TransferHandler) xTable1.getClientProperty( key ) );
+			xTreeTable1.setTransferHandler( (TransferHandler) xTreeTable1.getClientProperty( key ) );
 		}
 	}
 
 	private void tableHeaderButtonChanged() {
+		tableHeaderButtonChanged( table1ScrollPane );
+		tableHeaderButtonChanged( xTable1ScrollPane );
+		tableHeaderButtonChanged( xTreeTable1ScrollPane );
+	}
+
+	private void tableHeaderButtonChanged( JScrollPane scrollPane ) {
 		boolean show = tableHeaderButtonCheckBox.isSelected();
 		JButton button = null;
 		if( show ) {
@@ -175,31 +223,37 @@ public class FlatComponents2Test
 				JOptionPane.showMessageDialog( this, "hello" );
 			} );
 		}
-		scrollPane5.setCorner( JScrollPane.UPPER_TRAILING_CORNER, button );
+		scrollPane.setCorner( JScrollPane.UPPER_TRAILING_CORNER, button );
 	}
 
 	private void rowSelectionChanged() {
-		table1.setRowSelectionAllowed( rowSelectionCheckBox.isSelected() );
+		for( JTable table : allTables )
+			table.setRowSelectionAllowed( rowSelectionCheckBox.isSelected() );
 	}
 
 	private void columnSelectionChanged() {
-		table1.setColumnSelectionAllowed( columnSelectionCheckBox.isSelected() );
+		for( JTable table : allTables )
+			table.setColumnSelectionAllowed( columnSelectionCheckBox.isSelected() );
 	}
 
 	private void showHorizontalLinesChanged() {
-		table1.setShowHorizontalLines( showHorizontalLinesCheckBox.isSelected() );
+		for( JTable table : allTables )
+			table.setShowHorizontalLines( showHorizontalLinesCheckBox.isSelected() );
 	}
 
 	private void showVerticalLinesChanged() {
-		table1.setShowVerticalLines( showVerticalLinesCheckBox.isSelected() );
+		for( JTable table : allTables )
+			table.setShowVerticalLines( showVerticalLinesCheckBox.isSelected() );
 	}
 
 	private void intercellSpacingChanged() {
-		table1.setIntercellSpacing( intercellSpacingCheckBox.isSelected() ? new Dimension( 1, 1 ) : new Dimension() );
+		for( JTable table : allTables )
+			table.setIntercellSpacing( intercellSpacingCheckBox.isSelected() ? new Dimension( 1, 1 ) : new Dimension() );
 	}
 
 	private void redGridColorChanged() {
-		table1.setGridColor( redGridColorCheckBox.isSelected() ? Color.red : UIManager.getColor( "Table.gridColor" ) );
+		for( JTable table : allTables )
+			table.setGridColor( redGridColorCheckBox.isSelected() ? Color.red : UIManager.getColor( "Table.gridColor" ) );
 	}
 
 	@Override
@@ -218,28 +272,31 @@ public class FlatComponents2Test
 		JLabel textFieldLabel = new JLabel();
 		JTextField textField1 = new JTextField();
 		JTextField textField2 = new JTextField();
+		JTextField textField3 = new JTextField();
+		JTextField textField4 = new JTextField();
+		JPanel panel1 = new JPanel();
 		JLabel listLabel = new JLabel();
+		JLabel listRowCountLabel = new JLabel();
+		listRowCountSpinner = new JSpinner();
 		JScrollPane scrollPane1 = new JScrollPane();
 		list1 = new JList<>();
 		JScrollPane scrollPane2 = new JScrollPane();
 		list2 = new JList<>();
-		JPanel listOptionsPanel = new JPanel();
-		JLabel listRowCountLabel = new JLabel();
-		listRowCountSpinner = new JSpinner();
+		JPanel panel2 = new JPanel();
 		JLabel treeLabel = new JLabel();
+		JLabel treeRowCountLabel = new JLabel();
+		treeRowCountSpinner = new JSpinner();
 		JScrollPane scrollPane3 = new JScrollPane();
 		tree1 = new JTree();
 		JScrollPane scrollPane4 = new JScrollPane();
 		tree2 = new JTree();
-		JPanel treeOptionsPanel = new JPanel();
-		JLabel treeRowCountLabel = new JLabel();
-		treeRowCountSpinner = new JSpinner();
+		JPanel panel3 = new JPanel();
 		JLabel tableLabel = new JLabel();
-		scrollPane5 = new JScrollPane();
-		table1 = new JTable();
-		JPanel tableOptionsPanel = new JPanel();
 		JLabel tableRowCountLabel = new JLabel();
 		tableRowCountSpinner = new JSpinner();
+		table1ScrollPane = new JScrollPane();
+		table1 = new JTable();
+		JPanel tableOptionsPanel = new JPanel();
 		JLabel autoResizeModeLabel = new JLabel();
 		autoResizeModeField = new JComboBox<>();
 		showHorizontalLinesCheckBox = new JCheckBox();
@@ -250,15 +307,23 @@ public class FlatComponents2Test
 		columnSelectionCheckBox = new JCheckBox();
 		dndCheckBox = new JCheckBox();
 		tableHeaderButtonCheckBox = new JCheckBox();
+		JLabel label1 = new JLabel();
+		xTable1ScrollPane = new JScrollPane();
+		xTable1 = new JXTable();
+		JLabel label2 = new JLabel();
+		xTreeTable1ScrollPane = new JScrollPane();
+		xTreeTable1 = new JXTreeTable();
 
 		//======== this ========
 		setLayout(new MigLayout(
 			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[]" +
-			"[200,fill]" +
-			"[200,fill]" +
-			"[fill]",
+			"[200,grow,sizegroup 1,fill]" +
+			"[200,grow,sizegroup 1,fill]" +
+			"[fill]" +
+			"[200,grow,sizegroup 1,fill]" +
+			"[200,grow,sizegroup 1,fill]",
 			// rows
 			"[]" +
 			"[150,grow,sizegroup 1,fill]" +
@@ -278,9 +343,41 @@ public class FlatComponents2Test
 		textField2.setEnabled(false);
 		add(textField2, "cell 2 0,growx");
 
-		//---- listLabel ----
-		listLabel.setText("JList:");
-		add(listLabel, "cell 0 1,aligny top,growy 0");
+		//---- textField3 ----
+		textField3.setText("editable");
+		add(textField3, "cell 4 0,growx");
+
+		//---- textField4 ----
+		textField4.setText("disabled");
+		textField4.setEnabled(false);
+		add(textField4, "cell 5 0,growx");
+
+		//======== panel1 ========
+		{
+			panel1.setLayout(new MigLayout(
+				"ltr,insets 0,hidemode 3",
+				// columns
+				"[fill]",
+				// rows
+				"[]" +
+				"[grow]" +
+				"[]" +
+				"[]"));
+
+			//---- listLabel ----
+			listLabel.setText("JList:");
+			panel1.add(listLabel, "cell 0 0,aligny top,growy 0");
+
+			//---- listRowCountLabel ----
+			listRowCountLabel.setText("Row count:");
+			panel1.add(listRowCountLabel, "cell 0 2");
+
+			//---- listRowCountSpinner ----
+			listRowCountSpinner.setModel(new SpinnerNumberModel(20, 0, null, 10));
+			listRowCountSpinner.addChangeListener(e -> listRowCountChanged());
+			panel1.add(listRowCountSpinner, "cell 0 3");
+		}
+		add(panel1, "cell 0 1");
 
 		//======== scrollPane1 ========
 		{
@@ -297,30 +394,32 @@ public class FlatComponents2Test
 		}
 		add(scrollPane2, "cell 2 1");
 
-		//======== listOptionsPanel ========
+		//======== panel2 ========
 		{
-			listOptionsPanel.setLayout(new MigLayout(
-				"hidemode 3",
+			panel2.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
 				// columns
-				"[fill]" +
-				"[90,fill]",
+				"[fill]",
 				// rows
+				"[]" +
+				"[grow]" +
+				"[]" +
 				"[]"));
 
-			//---- listRowCountLabel ----
-			listRowCountLabel.setText("Row count:");
-			listOptionsPanel.add(listRowCountLabel, "cell 0 0");
+			//---- treeLabel ----
+			treeLabel.setText("JTree:");
+			panel2.add(treeLabel, "cell 0 0,aligny top,growy 0");
 
-			//---- listRowCountSpinner ----
-			listRowCountSpinner.setModel(new SpinnerNumberModel(20, 0, null, 10));
-			listRowCountSpinner.addChangeListener(e -> listRowCountChanged());
-			listOptionsPanel.add(listRowCountSpinner, "cell 1 0");
+			//---- treeRowCountLabel ----
+			treeRowCountLabel.setText("Row count:");
+			panel2.add(treeRowCountLabel, "cell 0 2");
+
+			//---- treeRowCountSpinner ----
+			treeRowCountSpinner.setModel(new SpinnerNumberModel(20, 20, null, 20));
+			treeRowCountSpinner.addChangeListener(e -> treeRowCountChanged());
+			panel2.add(treeRowCountSpinner, "cell 0 3");
 		}
-		add(listOptionsPanel, "cell 3 1");
-
-		//---- treeLabel ----
-		treeLabel.setText("JTree:");
-		add(treeLabel, "cell 0 2,aligny top,growy 0");
+		add(panel2, "cell 3 1");
 
 		//======== scrollPane3 ========
 		{
@@ -330,7 +429,7 @@ public class FlatComponents2Test
 			tree1.setEditable(true);
 			scrollPane3.setViewportView(tree1);
 		}
-		add(scrollPane3, "cell 1 2");
+		add(scrollPane3, "cell 4 1");
 
 		//======== scrollPane4 ========
 		{
@@ -339,41 +438,43 @@ public class FlatComponents2Test
 			tree2.setEnabled(false);
 			scrollPane4.setViewportView(tree2);
 		}
-		add(scrollPane4, "cell 2 2");
+		add(scrollPane4, "cell 5 1");
 
-		//======== treeOptionsPanel ========
+		//======== panel3 ========
 		{
-			treeOptionsPanel.setLayout(new MigLayout(
-				"hidemode 3",
+			panel3.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
 				// columns
-				"[fill]" +
-				"[90,fill]",
+				"[fill]",
 				// rows
+				"[]" +
+				"[grow]" +
+				"[]" +
 				"[]"));
 
-			//---- treeRowCountLabel ----
-			treeRowCountLabel.setText("Row count:");
-			treeOptionsPanel.add(treeRowCountLabel, "cell 0 0");
+			//---- tableLabel ----
+			tableLabel.setText("JTable:");
+			panel3.add(tableLabel, "cell 0 0");
 
-			//---- treeRowCountSpinner ----
-			treeRowCountSpinner.setModel(new SpinnerNumberModel(20, 20, null, 20));
-			treeRowCountSpinner.addChangeListener(e -> treeRowCountChanged());
-			treeOptionsPanel.add(treeRowCountSpinner, "cell 1 0");
+			//---- tableRowCountLabel ----
+			tableRowCountLabel.setText("Row count:");
+			panel3.add(tableRowCountLabel, "cell 0 2");
+
+			//---- tableRowCountSpinner ----
+			tableRowCountSpinner.setModel(new SpinnerNumberModel(20, 0, null, 10));
+			tableRowCountSpinner.addChangeListener(e -> tableRowCountChanged());
+			panel3.add(tableRowCountSpinner, "cell 0 3");
 		}
-		add(treeOptionsPanel, "cell 3 2");
+		add(panel3, "cell 0 2");
 
-		//---- tableLabel ----
-		tableLabel.setText("JTable:");
-		add(tableLabel, "cell 0 3,aligny top,growy 0");
-
-		//======== scrollPane5 ========
+		//======== table1ScrollPane ========
 		{
 
 			//---- table1 ----
 			table1.setAutoCreateRowSorter(true);
-			scrollPane5.setViewportView(table1);
+			table1ScrollPane.setViewportView(table1);
 		}
-		add(scrollPane5, "cell 1 3 2 1,width 300");
+		add(table1ScrollPane, "cell 1 2 2 1,width 300");
 
 		//======== tableOptionsPanel ========
 		{
@@ -381,9 +482,8 @@ public class FlatComponents2Test
 				"hidemode 3",
 				// columns
 				"[]" +
-				"[90,fill]",
+				"[]",
 				// rows
-				"[]" +
 				"[]" +
 				"[]0" +
 				"[]0" +
@@ -394,18 +494,9 @@ public class FlatComponents2Test
 				"[]0" +
 				"[]"));
 
-			//---- tableRowCountLabel ----
-			tableRowCountLabel.setText("Row count:");
-			tableOptionsPanel.add(tableRowCountLabel, "cell 0 0");
-
-			//---- tableRowCountSpinner ----
-			tableRowCountSpinner.setModel(new SpinnerNumberModel(20, 0, null, 10));
-			tableRowCountSpinner.addChangeListener(e -> tableRowCountChanged());
-			tableOptionsPanel.add(tableRowCountSpinner, "cell 1 0");
-
 			//---- autoResizeModeLabel ----
 			autoResizeModeLabel.setText("Auto resize mode:");
-			tableOptionsPanel.add(autoResizeModeLabel, "cell 0 1");
+			tableOptionsPanel.add(autoResizeModeLabel, "cell 0 0");
 
 			//---- autoResizeModeField ----
 			autoResizeModeField.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -417,64 +508,84 @@ public class FlatComponents2Test
 			}));
 			autoResizeModeField.setSelectedIndex(2);
 			autoResizeModeField.addActionListener(e -> autoResizeModeChanged());
-			tableOptionsPanel.add(autoResizeModeField, "cell 1 1");
+			tableOptionsPanel.add(autoResizeModeField, "cell 1 0");
 
 			//---- showHorizontalLinesCheckBox ----
 			showHorizontalLinesCheckBox.setText("show horizontal lines");
 			showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
-			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 2 2 1");
+			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 1");
 
 			//---- showVerticalLinesCheckBox ----
 			showVerticalLinesCheckBox.setText("show vertical lines");
 			showVerticalLinesCheckBox.addActionListener(e -> showVerticalLinesChanged());
-			tableOptionsPanel.add(showVerticalLinesCheckBox, "cell 0 3 2 1");
+			tableOptionsPanel.add(showVerticalLinesCheckBox, "cell 0 2");
 
 			//---- intercellSpacingCheckBox ----
 			intercellSpacingCheckBox.setText("intercell spacing");
 			intercellSpacingCheckBox.addActionListener(e -> intercellSpacingChanged());
-			tableOptionsPanel.add(intercellSpacingCheckBox, "cell 0 4 2 1");
+			tableOptionsPanel.add(intercellSpacingCheckBox, "cell 0 3");
 
 			//---- redGridColorCheckBox ----
 			redGridColorCheckBox.setText("red grid color");
 			redGridColorCheckBox.addActionListener(e -> redGridColorChanged());
-			tableOptionsPanel.add(redGridColorCheckBox, "cell 0 5 2 1");
+			tableOptionsPanel.add(redGridColorCheckBox, "cell 0 4");
 
 			//---- rowSelectionCheckBox ----
 			rowSelectionCheckBox.setText("row selection");
 			rowSelectionCheckBox.setSelected(true);
 			rowSelectionCheckBox.addActionListener(e -> rowSelectionChanged());
-			tableOptionsPanel.add(rowSelectionCheckBox, "cell 0 6 2 1");
+			tableOptionsPanel.add(rowSelectionCheckBox, "cell 0 5");
 
 			//---- columnSelectionCheckBox ----
 			columnSelectionCheckBox.setText("column selection");
 			columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
-			tableOptionsPanel.add(columnSelectionCheckBox, "cell 0 7 2 1");
+			tableOptionsPanel.add(columnSelectionCheckBox, "cell 0 6");
 
 			//---- dndCheckBox ----
 			dndCheckBox.setText("enable drag and drop");
 			dndCheckBox.setMnemonic('D');
 			dndCheckBox.addActionListener(e -> dndChanged());
-			tableOptionsPanel.add(dndCheckBox, "cell 0 8 2 1");
+			tableOptionsPanel.add(dndCheckBox, "cell 0 7");
 
 			//---- tableHeaderButtonCheckBox ----
 			tableHeaderButtonCheckBox.setText("show button in table header");
 			tableHeaderButtonCheckBox.addActionListener(e -> tableHeaderButtonChanged());
-			tableOptionsPanel.add(tableHeaderButtonCheckBox, "cell 0 9 2 1");
+			tableOptionsPanel.add(tableHeaderButtonCheckBox, "cell 0 8 2 1");
 		}
-		add(tableOptionsPanel, "cell 3 3");
+		add(tableOptionsPanel, "cell 4 2 2 1");
+
+		//---- label1 ----
+		label1.setText("JXTable:");
+		add(label1, "cell 0 3,aligny top,growy 0");
+
+		//======== xTable1ScrollPane ========
+		{
+			xTable1ScrollPane.setViewportView(xTable1);
+		}
+		add(xTable1ScrollPane, "cell 1 3 2 1");
+
+		//---- label2 ----
+		label2.setText("JXTreeTable:");
+		add(label2, "cell 3 3,aligny top,growy 0");
+
+		//======== xTreeTable1ScrollPane ========
+		{
+			xTreeTable1ScrollPane.setViewportView(xTreeTable1);
+		}
+		add(xTreeTable1ScrollPane, "cell 4 3 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JSpinner listRowCountSpinner;
 	private JList<String> list1;
 	private JList<String> list2;
-	private JSpinner listRowCountSpinner;
+	private JSpinner treeRowCountSpinner;
 	private JTree tree1;
 	private JTree tree2;
-	private JSpinner treeRowCountSpinner;
-	private JScrollPane scrollPane5;
-	private JTable table1;
 	private JSpinner tableRowCountSpinner;
+	private JScrollPane table1ScrollPane;
+	private JTable table1;
 	private JComboBox<String> autoResizeModeField;
 	private JCheckBox showHorizontalLinesCheckBox;
 	private JCheckBox showVerticalLinesCheckBox;
@@ -484,6 +595,10 @@ public class FlatComponents2Test
 	private JCheckBox columnSelectionCheckBox;
 	private JCheckBox dndCheckBox;
 	private JCheckBox tableHeaderButtonCheckBox;
+	private JScrollPane xTable1ScrollPane;
+	private JXTable xTable1;
+	private JScrollPane xTreeTable1ScrollPane;
+	private JXTreeTable xTreeTable1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	private final String[] randomRowStrings = new String[1000];
