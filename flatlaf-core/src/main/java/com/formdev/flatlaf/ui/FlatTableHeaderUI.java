@@ -98,10 +98,13 @@ public class FlatTableHeaderUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
+		if( header.getColumnModel().getColumnCount() <= 0 )
+			return;
+
 		// do not paint borders if JTableHeader.setDefaultRenderer() was used
 		TableCellRenderer defaultRenderer = header.getDefaultRenderer();
 		boolean paintBorders = isSystemDefaultRenderer( defaultRenderer );
-		if( !paintBorders && header.getColumnModel().getColumnCount() > 0 ) {
+		if( !paintBorders ) {
 			// check whether the renderer delegates to the system default renderer
 			Component rendererComponent = defaultRenderer.getTableCellRendererComponent(
 				header.getTable(), "", false, false, -1, 0 );
@@ -168,7 +171,8 @@ public class FlatTableHeaderUI
 					g2.fill( new Rectangle2D.Float( x - lineWidth, topLineIndent, lineWidth, height - bottomLineIndent ) );
 				}
 			} else {
-				int x = width;
+				Rectangle cellRect = header.getHeaderRect( 0 );
+				int x = cellRect.x + cellRect.width;
 				for( int i = 0; i < sepCount; i++ ) {
 					x -= columnModel.getColumn( i ).getWidth();
 					g2.fill( new Rectangle2D.Float( x - (i < sepCount - 1 ? lineWidth : 0),

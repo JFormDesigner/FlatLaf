@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- TableHeader: Fixed position of column separators in right-to-left component
+  orientation.
 - SwingX: Fixed striping background highlighting color (e.g. alternating table
   rows) in dark themes.
 
