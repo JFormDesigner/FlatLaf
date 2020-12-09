@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -26,8 +27,10 @@ import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
@@ -215,16 +218,11 @@ public class FlatTableUI
 		boolean verticalLines = table.getShowVerticalLines();
 		if( horizontalLines || verticalLines ) {
 			// fix grid painting issues in BasicTableUI
-			//   - do not paint last vertical grid line if auto-resize mode is not off
-			//   - in right-to-left component orientation, do not paint last vertical grid line
-			//     in any auto-resize mode; can not paint on left side of table because
-			//     cells are painted over left line
+			//   - do not paint last vertical grid line if line is on right edge of scroll pane
 			//   - fix unstable grid line thickness when scaled at 125%, 150%, 175%, 225%, ...
 			//     which paints either 1px or 2px lines depending on location
 
-			boolean hideLastVerticalLine =
-				table.getAutoResizeMode() != JTable.AUTO_RESIZE_OFF ||
-				!table.getComponentOrientation().isLeftToRight();
+			boolean hideLastVerticalLine = hideLastVerticalLine();
 			int tableWidth = table.getWidth();
 
 			double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
@@ -280,5 +278,27 @@ public class FlatTableUI
 		}
 
 		super.paint( g, c );
+	}
+
+	protected boolean hideLastVerticalLine() {
+		Container viewport = SwingUtilities.getUnwrappedParent( table );
+		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
+		if( !(viewportParent instanceof JScrollPane) )
+			return false;
+
+		// do not hide last vertical line if table is smaller than viewport
+		if( table.getX() + table.getWidth() < viewport.getWidth() )
+			return false;
+
+		// in left-to-right:
+		//   - do not hide last vertical line if table used as row header in scroll pane
+		// in right-to-left:
+		//   - hide last vertical line if table used as row header in scroll pane
+		//   - do not hide last vertical line if table is in center and scroll pane has row header
+		JScrollPane scrollPane = (JScrollPane) viewportParent;
+		JViewport rowHeader = scrollPane.getRowHeader();
+		return scrollPane.getComponentOrientation().isLeftToRight()
+			? (viewport != rowHeader)
+			: (viewport == rowHeader || rowHeader == null);
 	}
 }

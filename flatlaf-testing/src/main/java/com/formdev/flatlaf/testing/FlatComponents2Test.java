@@ -17,6 +17,8 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.datatransfer.DataFlavor;
@@ -29,10 +31,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTreeTable;
@@ -53,6 +58,7 @@ public class FlatComponents2Test
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatComponents2Test" );
+			frame.useApplyComponentOrientation = true;
 			frame.showFrame( FlatComponents2Test::new );
 		} );
 	}
@@ -60,7 +66,9 @@ public class FlatComponents2Test
 	private final TestListModel listModel;
 	private final TestTreeModel treeModel;
 	private final TestTableModel tableModel;
-	private final JTable[] allTables;
+	private final List<JTable> allTables = new ArrayList<>();
+	private final List<JTable> allTablesInclRowHeader = new ArrayList<>();
+	private JTable rowHeaderTable1;
 
 	FlatComponents2Test() {
 		initComponents();
@@ -96,7 +104,10 @@ public class FlatComponents2Test
 		xTreeTable1.setTreeTableModel( new FileSystemModel( new File( "." ) ) );
 		xTreeTable1.setHighlighters( simpleStriping, magenta, rollover, shading );
 
-		allTables = new JTable[] { table1, xTable1, xTreeTable1 };
+		allTables.add( table1 );
+		allTables.add( xTable1 );
+		allTables.add( xTreeTable1 );
+		allTablesInclRowHeader.addAll( allTables );
 
 		expandTree( tree1 );
 		expandTree( tree2 );
@@ -219,6 +230,7 @@ public class FlatComponents2Test
 		JButton button = null;
 		if( show ) {
 			button = new JButton( new FlatMenuArrowIcon() );
+			button.applyComponentOrientation( getComponentOrientation() );
 			button.addActionListener( e -> {
 				JOptionPane.showMessageDialog( this, "hello" );
 			} );
@@ -237,23 +249,70 @@ public class FlatComponents2Test
 	}
 
 	private void showHorizontalLinesChanged() {
-		for( JTable table : allTables )
+		for( JTable table : allTablesInclRowHeader )
 			table.setShowHorizontalLines( showHorizontalLinesCheckBox.isSelected() );
 	}
 
 	private void showVerticalLinesChanged() {
-		for( JTable table : allTables )
+		for( JTable table : allTablesInclRowHeader )
 			table.setShowVerticalLines( showVerticalLinesCheckBox.isSelected() );
 	}
 
 	private void intercellSpacingChanged() {
-		for( JTable table : allTables )
+		for( JTable table : allTablesInclRowHeader )
 			table.setIntercellSpacing( intercellSpacingCheckBox.isSelected() ? new Dimension( 1, 1 ) : new Dimension() );
 	}
 
 	private void redGridColorChanged() {
-		for( JTable table : allTables )
+		for( JTable table : allTablesInclRowHeader )
 			table.setGridColor( redGridColorCheckBox.isSelected() ? Color.red : UIManager.getColor( "Table.gridColor" ) );
+	}
+
+	private void rowHeaderChanged() {
+		if( rowHeaderCheckBox.isSelected() ) {
+			TestTableRowHeaderModel rowHeaderModel = new TestTableRowHeaderModel( tableModel );
+			rowHeaderTable1 = new JTable( rowHeaderModel );
+			rowHeaderTable1.setPreferredScrollableViewportSize( UIScale.scale( new Dimension( 50, 50 ) ) );
+			rowHeaderTable1.setSelectionModel( table1.getSelectionModel() );
+
+			DefaultTableCellRenderer rowHeaderRenderer = new DefaultTableCellRenderer();
+			rowHeaderRenderer.setHorizontalAlignment( JLabel.CENTER );
+			rowHeaderTable1.setDefaultRenderer( Object.class, rowHeaderRenderer );
+			table1ScrollPane.setRowHeaderView( rowHeaderTable1 );
+
+			JViewport headerViewport = new JViewport();
+			headerViewport.setView( rowHeaderTable1.getTableHeader() );
+			table1ScrollPane.setCorner( ScrollPaneConstants.UPPER_LEADING_CORNER, headerViewport );
+
+			table1ScrollPane.applyComponentOrientation( getComponentOrientation() );
+
+			allTablesInclRowHeader.add( rowHeaderTable1 );
+
+			showHorizontalLinesChanged();
+			showVerticalLinesChanged();
+			intercellSpacingChanged();
+			redGridColorChanged();
+		} else {
+			table1ScrollPane.setRowHeader( null );
+			table1ScrollPane.setCorner( ScrollPaneConstants.UPPER_LEADING_CORNER, null );
+			allTablesInclRowHeader.remove( rowHeaderTable1 );
+
+			((TestTableRowHeaderModel)rowHeaderTable1.getModel()).dispose();
+			rowHeaderTable1 = null;
+		}
+	}
+
+	@Override
+	public void applyComponentOrientation( ComponentOrientation o ) {
+		super.applyComponentOrientation( o );
+
+		// swap upper right and left corners (other corners are not used in this app)
+		Component leftCorner = table1ScrollPane.getCorner( ScrollPaneConstants.UPPER_LEFT_CORNER );
+		Component rightCorner = table1ScrollPane.getCorner( ScrollPaneConstants.UPPER_RIGHT_CORNER );
+		table1ScrollPane.setCorner( ScrollPaneConstants.UPPER_LEFT_CORNER, null );
+		table1ScrollPane.setCorner( ScrollPaneConstants.UPPER_RIGHT_CORNER, null );
+		table1ScrollPane.setCorner( ScrollPaneConstants.UPPER_LEFT_CORNER, rightCorner );
+		table1ScrollPane.setCorner( ScrollPaneConstants.UPPER_RIGHT_CORNER, leftCorner );
 	}
 
 	@Override
@@ -300,6 +359,7 @@ public class FlatComponents2Test
 		JLabel autoResizeModeLabel = new JLabel();
 		autoResizeModeField = new JComboBox<>();
 		showHorizontalLinesCheckBox = new JCheckBox();
+		rowHeaderCheckBox = new JCheckBox();
 		showVerticalLinesCheckBox = new JCheckBox();
 		intercellSpacingCheckBox = new JCheckBox();
 		redGridColorCheckBox = new JCheckBox();
@@ -461,7 +521,7 @@ public class FlatComponents2Test
 			panel3.add(tableRowCountLabel, "cell 0 2");
 
 			//---- tableRowCountSpinner ----
-			tableRowCountSpinner.setModel(new SpinnerNumberModel(20, 0, null, 10));
+			tableRowCountSpinner.setModel(new SpinnerNumberModel(20, 0, null, 5));
 			tableRowCountSpinner.addChangeListener(e -> tableRowCountChanged());
 			panel3.add(tableRowCountSpinner, "cell 0 3");
 		}
@@ -514,6 +574,11 @@ public class FlatComponents2Test
 			showHorizontalLinesCheckBox.setText("show horizontal lines");
 			showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
 			tableOptionsPanel.add(showHorizontalLinesCheckBox, "cell 0 1");
+
+			//---- rowHeaderCheckBox ----
+			rowHeaderCheckBox.setText("row header");
+			rowHeaderCheckBox.addActionListener(e -> rowHeaderChanged());
+			tableOptionsPanel.add(rowHeaderCheckBox, "cell 1 1");
 
 			//---- showVerticalLinesCheckBox ----
 			showVerticalLinesCheckBox.setText("show vertical lines");
@@ -588,6 +653,7 @@ public class FlatComponents2Test
 	private JTable table1;
 	private JComboBox<String> autoResizeModeField;
 	private JCheckBox showHorizontalLinesCheckBox;
+	private JCheckBox rowHeaderCheckBox;
 	private JCheckBox showVerticalLinesCheckBox;
 	private JCheckBox intercellSpacingCheckBox;
 	private JCheckBox redGridColorCheckBox;
@@ -883,6 +949,58 @@ public class FlatComponents2Test
 			}
 
 			fireTableCellUpdated( rowIndex, columnIndex );
+		}
+	}
+
+	//---- TestTableRowHeaderModel --------------------------------------------
+
+	private class TestTableRowHeaderModel
+		extends AbstractTableModel
+		implements TableModelListener
+	{
+		private final TableModel model;
+
+		TestTableRowHeaderModel( TableModel model ) {
+			this.model = model;
+
+			model.addTableModelListener( this );
+		}
+
+		void dispose() {
+			model.removeTableModelListener( this );
+		}
+
+		@Override
+		public int getRowCount() {
+			return model.getRowCount();
+		}
+
+		@Override
+		public int getColumnCount() {
+			return 1;
+		}
+
+		@Override
+		public String getColumnName( int columnIndex ) {
+			return "Row #";
+		}
+
+		@Override
+		public Object getValueAt( int rowIndex, int columnIndex ) {
+			return rowIndex + 1;
+		}
+
+		@Override
+		public void tableChanged( TableModelEvent e ) {
+			switch( e.getType() ) {
+				case TableModelEvent.INSERT:
+					fireTableRowsInserted( e.getFirstRow(), e.getLastRow() );
+					break;
+
+				case TableModelEvent.DELETE:
+					fireTableRowsDeleted( e.getFirstRow(), e.getLastRow() );
+					break;
+			}
 		}
 	}
 }

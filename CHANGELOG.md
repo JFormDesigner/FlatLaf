@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Table and TableHeader: Fixed missing right vertical grid line if using table
+  as row header in scroll pane. (issues #152 and #46)
 - TableHeader: Fixed position of column separators in right-to-left component
   orientation.
 - SwingX: Fixed striping background highlighting color (e.g. alternating table

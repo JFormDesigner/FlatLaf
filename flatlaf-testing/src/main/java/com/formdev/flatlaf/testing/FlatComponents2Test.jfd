@@ -64,7 +64,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JSpinner" ) {
 					name: "listRowCountSpinner"
-					"model": &SpinnerNumberModel0 new javax.swing.SpinnerNumberModel {
+					"model": new javax.swing.SpinnerNumberModel {
 						minimum: 0
 						stepSize: 10
 						value: 20
@@ -184,7 +184,11 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JSpinner" ) {
 					name: "tableRowCountSpinner"
-					"model": #SpinnerNumberModel0
+					"model": new javax.swing.SpinnerNumberModel {
+						minimum: 0
+						stepSize: 5
+						value: 20
+					}
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
@@ -250,6 +254,16 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHorizontalLinesChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "rowHeaderCheckBox"
+					"text": "row header"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowHeaderChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showVerticalLinesCheckBox"
