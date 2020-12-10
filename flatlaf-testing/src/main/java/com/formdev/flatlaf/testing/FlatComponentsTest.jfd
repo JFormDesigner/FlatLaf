@@ -466,10 +466,10 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 6,growx"
 			} )
-			add( new FormComponent( "javax.swing.JComboBox" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatComboBox" ) {
 				name: "comboBox7"
 				"editable": true
-				"$client.JTextField.placeholderText": "Placeholder"
+				"placeholderText": "Placeholder"
 				auxiliary() {
 					"JavaCodeGenerator.typeParameters": "String"
 				}
@@ -522,9 +522,9 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 7,growx"
 			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
 				name: "textField6"
-				"$client.JTextField.placeholderText": "Placeholder"
+				"placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 7,growx"
 			} )
@@ -569,9 +569,9 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 8,growx"
 			} )
-			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatFormattedTextField" ) {
 				name: "formattedTextField5"
-				"$client.JTextField.placeholderText": "Placeholder"
+				"placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 8,growx"
 			} )
@@ -616,9 +616,9 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 9,growx"
 			} )
-			add( new FormComponent( "javax.swing.JPasswordField" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatPasswordField" ) {
 				name: "passwordField5"
-				"$client.JTextField.placeholderText": "Placeholder"
+				"placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 9,growx"
 			} )
@@ -850,16 +850,16 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13 1 6,growy"
 			} )
-			add( new FormComponent( "javax.swing.JScrollBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatScrollBar" ) {
 				name: "scrollBar7"
-				"$client.JScrollBar.showButtons": true
+				"showButtons": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13 1 6,growy"
 			} )
-			add( new FormComponent( "javax.swing.JScrollBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatScrollBar" ) {
 				name: "scrollBar8"
 				"enabled": false
-				"$client.JScrollBar.showButtons": true
+				"showButtons": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13 1 6,growy"
 			} )
@@ -1098,18 +1098,18 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 15,growx"
 			} )
-			add( new FormComponent( "javax.swing.JScrollBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatScrollBar" ) {
 				name: "scrollBar5"
 				"orientation": 0
-				"$client.JScrollBar.showButtons": true
+				"showButtons": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 16,growx"
 			} )
-			add( new FormComponent( "javax.swing.JScrollBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatScrollBar" ) {
 				name: "scrollBar6"
 				"orientation": 0
 				"enabled": false
-				"$client.JScrollBar.showButtons": true
+				"showButtons": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 17,growx"
 			} )

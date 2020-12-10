@@ -20,6 +20,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.components.*;
 import net.miginfocom.swing.*;
 
 /**
@@ -188,28 +189,28 @@ public class FlatComponentsTest
 		JSpinner spinner2 = new JSpinner();
 		FlatComponentsTest.ButtonlessSpinner buttonlessSpinner1 = new FlatComponentsTest.ButtonlessSpinner();
 		FlatComponentsTest.ButtonlessSpinner buttonlessSpinner2 = new FlatComponentsTest.ButtonlessSpinner();
-		JComboBox<String> comboBox7 = new JComboBox<>();
+		FlatComboBox<String> comboBox7 = new FlatComboBox<>();
 		JSpinner spinner3 = new JSpinner();
 		JLabel textFieldLabel = new JLabel();
 		textField1 = new JTextField();
 		JTextField textField2 = new JTextField();
 		JTextField textField3 = new JTextField();
 		JTextField textField4 = new JTextField();
-		JTextField textField6 = new JTextField();
+		FlatTextField textField6 = new FlatTextField();
 		JTextField textField5 = new JTextField();
 		JLabel formattedTextFieldLabel = new JLabel();
 		JFormattedTextField formattedTextField1 = new JFormattedTextField();
 		JFormattedTextField formattedTextField2 = new JFormattedTextField();
 		JFormattedTextField formattedTextField3 = new JFormattedTextField();
 		JFormattedTextField formattedTextField4 = new JFormattedTextField();
-		JFormattedTextField formattedTextField5 = new JFormattedTextField();
+		FlatFormattedTextField formattedTextField5 = new FlatFormattedTextField();
 		JFormattedTextField formattedTextField6 = new JFormattedTextField();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField2 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
 		JPasswordField passwordField4 = new JPasswordField();
-		JPasswordField passwordField5 = new JPasswordField();
+		FlatPasswordField passwordField5 = new FlatPasswordField();
 		JPasswordField passwordField6 = new JPasswordField();
 		JLabel textAreaLabel = new JLabel();
 		JScrollPane scrollPane1 = new JScrollPane();
@@ -247,8 +248,8 @@ public class FlatComponentsTest
 		JButton button19 = new JButton();
 		JScrollBar scrollBar2 = new JScrollBar();
 		JScrollBar scrollBar3 = new JScrollBar();
-		JScrollBar scrollBar7 = new JScrollBar();
-		JScrollBar scrollBar8 = new JScrollBar();
+		FlatScrollBar scrollBar7 = new FlatScrollBar();
+		FlatScrollBar scrollBar8 = new FlatScrollBar();
 		JSeparator separator2 = new JSeparator();
 		JSlider slider2 = new JSlider();
 		JSlider slider4 = new JSlider();
@@ -278,8 +279,8 @@ public class FlatComponentsTest
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
-		JScrollBar scrollBar5 = new JScrollBar();
-		JScrollBar scrollBar6 = new JScrollBar();
+		FlatScrollBar scrollBar5 = new FlatScrollBar();
+		FlatScrollBar scrollBar6 = new FlatScrollBar();
 		JLabel separatorLabel = new JLabel();
 		JSeparator separator1 = new JSeparator();
 		JPanel panel2 = new JPanel();
@@ -686,7 +687,7 @@ public class FlatComponentsTest
 
 		//---- comboBox7 ----
 		comboBox7.setEditable(true);
-		comboBox7.putClientProperty("JTextField.placeholderText", "Placeholder");
+		comboBox7.setPlaceholderText("Placeholder");
 		add(comboBox7, "cell 5 6,growx");
 
 		//---- spinner3 ----
@@ -719,7 +720,7 @@ public class FlatComponentsTest
 		add(textField4, "cell 4 7,growx");
 
 		//---- textField6 ----
-		textField6.putClientProperty("JTextField.placeholderText", "Placeholder");
+		textField6.setPlaceholderText("Placeholder");
 		add(textField6, "cell 5 7,growx");
 
 		//---- textField5 ----
@@ -752,7 +753,7 @@ public class FlatComponentsTest
 		add(formattedTextField4, "cell 4 8,growx");
 
 		//---- formattedTextField5 ----
-		formattedTextField5.putClientProperty("JTextField.placeholderText", "Placeholder");
+		formattedTextField5.setPlaceholderText("Placeholder");
 		add(formattedTextField5, "cell 5 8,growx");
 
 		//---- formattedTextField6 ----
@@ -785,7 +786,7 @@ public class FlatComponentsTest
 		add(passwordField4, "cell 4 9,growx");
 
 		//---- passwordField5 ----
-		passwordField5.putClientProperty("JTextField.placeholderText", "Placeholder");
+		passwordField5.setPlaceholderText("Placeholder");
 		add(passwordField5, "cell 5 9,growx");
 
 		//---- passwordField6 ----
@@ -996,12 +997,12 @@ public class FlatComponentsTest
 		add(scrollBar3, "cell 2 13 1 6,growy");
 
 		//---- scrollBar7 ----
-		scrollBar7.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar7.setShowButtons(true);
 		add(scrollBar7, "cell 2 13 1 6,growy");
 
 		//---- scrollBar8 ----
 		scrollBar8.setEnabled(false);
-		scrollBar8.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar8.setShowButtons(true);
 		add(scrollBar8, "cell 2 13 1 6,growy");
 
 		//---- separator2 ----
@@ -1173,13 +1174,13 @@ public class FlatComponentsTest
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
-		scrollBar5.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar5.setShowButtons(true);
 		add(scrollBar5, "cell 1 16,growx");
 
 		//---- scrollBar6 ----
 		scrollBar6.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar6.setEnabled(false);
-		scrollBar6.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar6.setShowButtons(true);
 		add(scrollBar6, "cell 1 17,growx");
 
 		//---- separatorLabel ----
