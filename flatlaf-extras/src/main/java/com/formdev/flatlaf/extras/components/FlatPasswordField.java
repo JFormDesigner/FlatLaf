@@ -18,6 +18,7 @@ package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import javax.swing.JPasswordField;
+import com.formdev.flatlaf.extras.components.FlatTextField.SelectAllOnFocusPolicy;
 
 /**
  * Subclass of {@link JPasswordField} that provides easy access to FlatLaf specific client properties.
@@ -42,9 +43,6 @@ public class FlatPasswordField
 		putClientProperty( PLACEHOLDER_TEXT, placeholderText );
 	}
 
-
-	// NOTE: enum names must be equal to allowed strings
-	public enum SelectAllOnFocusPolicy { never, once, always };
 
 	/**
 	 * Returns whether all text is selected when the text component gains focus.
