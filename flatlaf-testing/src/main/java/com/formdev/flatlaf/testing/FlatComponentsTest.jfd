@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.0.337" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -892,7 +892,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 13,grow"
 			} )
-			add( new FormComponent( "javax.swing.JProgressBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar3"
 				"orientation": 1
 				"value": 60
@@ -902,7 +902,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 13 1 6,growy"
 			} )
-			add( new FormComponent( "javax.swing.JProgressBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar4"
 				"orientation": 1
 				"value": 60
@@ -1187,7 +1187,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 21"
 			} )
-			add( new FormComponent( "javax.swing.JProgressBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar1"
 				"value": 60
 				auxiliary() {
@@ -1196,7 +1196,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 21 3 1,growx"
 			} )
-			add( new FormComponent( "javax.swing.JProgressBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar2"
 				"stringPainted": true
 				"value": 60
@@ -1213,6 +1213,16 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "indeterminateProgress", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 21"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "squareCheckBox"
+				"text": "square"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "squareChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 21"
 			} )
@@ -1233,6 +1243,16 @@ new FormModel {
 				"tipText": "Tool tip with\nmultiple\nlines."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 22 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "largeHeightCheckBox"
+				"text": "large height"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "largeHeightChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 22,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toolBarLabel"

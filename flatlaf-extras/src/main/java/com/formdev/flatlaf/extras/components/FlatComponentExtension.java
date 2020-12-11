@@ -43,6 +43,16 @@ public interface FlatComponentExtension
 		return (value instanceof Boolean) ? (boolean) value : UIManager.getBoolean( defaultValueKey );
 	}
 
+	default boolean getClientPropertyBoolean( Object key, boolean defaultValue ) {
+		Object value = getClientProperty( key );
+		return (value instanceof Boolean) ? (boolean) value : defaultValue;
+	}
+
+	default void putClientPropertyBoolean( Object key, boolean value, boolean defaultValue ) {
+		putClientProperty( key, (value != defaultValue) ? value : null );
+	}
+
+
 	default <T extends Enum<T>> T getClientPropertyEnumString( Object key, Class<T> enumType,
 		String defaultValueKey, T defaultValue )
 	{

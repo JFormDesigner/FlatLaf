@@ -56,6 +56,22 @@ public class FlatComponentsTest
 		progressBar4.setIndeterminate( indeterminate );
 	}
 
+	private void squareChanged() {
+		boolean square = squareCheckBox.isSelected();
+		progressBar1.setSquare( square );
+		progressBar2.setSquare( square );
+		progressBar3.setSquare( square );
+		progressBar4.setSquare( square );
+	}
+
+	private void largeHeightChanged() {
+		boolean largeHeight = largeHeightCheckBox.isSelected();
+		progressBar1.setLargeHeight( largeHeight );
+		progressBar2.setLargeHeight( largeHeight );
+		progressBar3.setLargeHeight( largeHeight );
+		progressBar4.setLargeHeight( largeHeight );
+	}
+
 	private void borderPaintedChanged() {
 		boolean borderPainted = borderPaintedCheckBox.isSelected();
 
@@ -254,8 +270,8 @@ public class FlatComponentsTest
 		JSlider slider2 = new JSlider();
 		JSlider slider4 = new JSlider();
 		JScrollPane scrollPane14 = new JScrollPane();
-		progressBar3 = new JProgressBar();
-		progressBar4 = new JProgressBar();
+		progressBar3 = new FlatProgressBar();
+		progressBar4 = new FlatProgressBar();
 		JToolBar toolBar2 = new JToolBar();
 		JButton button9 = new JButton();
 		JButton button10 = new JButton();
@@ -291,12 +307,14 @@ public class FlatComponentsTest
 		slider3 = new JSlider();
 		JSlider slider5 = new JSlider();
 		JLabel progressBarLabel = new JLabel();
-		progressBar1 = new JProgressBar();
-		progressBar2 = new JProgressBar();
+		progressBar1 = new FlatProgressBar();
+		progressBar2 = new FlatProgressBar();
 		indeterminateCheckBox = new JCheckBox();
+		squareCheckBox = new JCheckBox();
 		JLabel toolTipLabel = new JLabel();
 		JToolTip toolTip1 = new JToolTip();
 		JToolTip toolTip2 = new JToolTip();
+		largeHeightCheckBox = new JCheckBox();
 		JLabel toolBarLabel = new JLabel();
 		JToolBar toolBar1 = new JToolBar();
 		JButton button4 = new JButton();
@@ -1249,6 +1267,11 @@ public class FlatComponentsTest
 		indeterminateCheckBox.addActionListener(e -> indeterminateProgress());
 		add(indeterminateCheckBox, "cell 4 21");
 
+		//---- squareCheckBox ----
+		squareCheckBox.setText("square");
+		squareCheckBox.addActionListener(e -> squareChanged());
+		add(squareCheckBox, "cell 4 21");
+
 		//---- toolTipLabel ----
 		toolTipLabel.setText("JToolTip:");
 		add(toolTipLabel, "cell 0 22");
@@ -1260,6 +1283,11 @@ public class FlatComponentsTest
 		//---- toolTip2 ----
 		toolTip2.setTipText("Tool tip with\nmultiple\nlines.");
 		add(toolTip2, "cell 1 22 3 1");
+
+		//---- largeHeightCheckBox ----
+		largeHeightCheckBox.setText("large height");
+		largeHeightCheckBox.addActionListener(e -> largeHeightChanged());
+		add(largeHeightCheckBox, "cell 4 22,aligny top,growy 0");
 
 		//---- toolBarLabel ----
 		toolBarLabel.setText("JToolBar:");
@@ -1389,8 +1417,8 @@ public class FlatComponentsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JTextField textField1;
-	private JProgressBar progressBar3;
-	private JProgressBar progressBar4;
+	private FlatProgressBar progressBar3;
+	private FlatProgressBar progressBar4;
 	private JComboBox<String> buttonTypeComboBox;
 	private JCheckBox borderPaintedCheckBox;
 	private JCheckBox roundRectCheckBox;
@@ -1402,9 +1430,11 @@ public class FlatComponentsTest
 	private JRadioButton magentaCyanOutlineRadioButton;
 	private JCheckBox focusPaintedCheckBox;
 	private JSlider slider3;
-	private JProgressBar progressBar1;
-	private JProgressBar progressBar2;
+	private FlatProgressBar progressBar1;
+	private FlatProgressBar progressBar2;
 	private JCheckBox indeterminateCheckBox;
+	private JCheckBox squareCheckBox;
+	private JCheckBox largeHeightCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class TestDefaultButton --------------------------------------------
