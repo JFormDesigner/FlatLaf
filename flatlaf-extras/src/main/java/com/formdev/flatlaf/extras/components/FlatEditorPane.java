@@ -17,37 +17,22 @@
 package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
-import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 
 /**
- * Subclass of {@link JComboBox} that provides easy access to FlatLaf specific client properties.
+ * Subclass of {@link JEditorPane} that provides easy access to FlatLaf specific client properties.
  *
  * @author Karl Tauber
  */
-public class FlatComboBox<E>
-	extends JComboBox<E>
+public class FlatEditorPane
+	extends JEditorPane
 	implements FlatComponentExtension
 {
-	/**
-	 * Returns the placeholder text that is only painted if the editable combo box is empty.
-	 */
-	public String getPlaceholderText() {
-		return (String) getClientProperty( PLACEHOLDER_TEXT );
-	}
-
-	/**
-	 * Sets the placeholder text that is only painted if the editable combo box is empty.
-	 */
-	public void setPlaceholderText( String placeholderText ) {
-		putClientProperty( PLACEHOLDER_TEXT, placeholderText );
-	}
-
-
 	/**
 	 * Returns minimum width of a component.
 	 */
 	public int getMinimumWidth() {
-		return getClientPropertyInt( MINIMUM_WIDTH, "ComboBox.minimumWidth" );
+		return getClientPropertyInt( MINIMUM_WIDTH, "Component.minimumWidth" );
 	}
 
 	/**
@@ -55,20 +40,5 @@ public class FlatComboBox<E>
 	 */
 	public void setMinimumWidth( int minimumWidth ) {
 		putClientProperty( MINIMUM_WIDTH, (minimumWidth >= 0) ? minimumWidth : null );
-	}
-
-
-	/**
-	 * Returns whether the component is painted with round edges.
-	 */
-	public boolean isRoundRect() {
-		return getClientPropertyBoolean( COMPONENT_ROUND_RECT, false );
-	}
-
-	/**
-	 * Specifies whether the component is painted with round edges.
-	 */
-	public void setRoundRect( boolean roundRect ) {
-		putClientPropertyBoolean( COMPONENT_ROUND_RECT, roundRect, false );
 	}
 }

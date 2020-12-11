@@ -17,37 +17,22 @@
 package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
-import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 
 /**
- * Subclass of {@link JComboBox} that provides easy access to FlatLaf specific client properties.
+ * Subclass of {@link JSpinner} that provides easy access to FlatLaf specific client properties.
  *
  * @author Karl Tauber
  */
-public class FlatComboBox<E>
-	extends JComboBox<E>
+public class FlatSpinner
+	extends JSpinner
 	implements FlatComponentExtension
 {
-	/**
-	 * Returns the placeholder text that is only painted if the editable combo box is empty.
-	 */
-	public String getPlaceholderText() {
-		return (String) getClientProperty( PLACEHOLDER_TEXT );
-	}
-
-	/**
-	 * Sets the placeholder text that is only painted if the editable combo box is empty.
-	 */
-	public void setPlaceholderText( String placeholderText ) {
-		putClientProperty( PLACEHOLDER_TEXT, placeholderText );
-	}
-
-
 	/**
 	 * Returns minimum width of a component.
 	 */
 	public int getMinimumWidth() {
-		return getClientPropertyInt( MINIMUM_WIDTH, "ComboBox.minimumWidth" );
+		return getClientPropertyInt( MINIMUM_WIDTH, "Component.minimumWidth" );
 	}
 
 	/**

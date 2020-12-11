@@ -60,4 +60,34 @@ public class FlatTextField
 	public void setSelectAllOnFocusPolicy( SelectAllOnFocusPolicy selectAllOnFocusPolicy ) {
 		putClientPropertyEnumString( SELECT_ALL_ON_FOCUS_POLICY, selectAllOnFocusPolicy );
 	}
+
+
+	/**
+	 * Returns minimum width of a component.
+	 */
+	public int getMinimumWidth() {
+		return getClientPropertyInt( MINIMUM_WIDTH, "Component.minimumWidth" );
+	}
+
+	/**
+	 * Specifies minimum width of a component.
+	 */
+	public void setMinimumWidth( int minimumWidth ) {
+		putClientProperty( MINIMUM_WIDTH, (minimumWidth >= 0) ? minimumWidth : null );
+	}
+
+
+	/**
+	 * Returns whether the component is painted with round edges.
+	 */
+	public boolean isRoundRect() {
+		return getClientPropertyBoolean( COMPONENT_ROUND_RECT, false );
+	}
+
+	/**
+	 * Specifies whether the component is painted with round edges.
+	 */
+	public void setRoundRect( boolean roundRect ) {
+		putClientPropertyBoolean( COMPONENT_ROUND_RECT, roundRect, false );
+	}
 }
