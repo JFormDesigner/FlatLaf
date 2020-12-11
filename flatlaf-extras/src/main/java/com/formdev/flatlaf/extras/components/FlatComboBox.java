@@ -16,17 +16,29 @@
 
 package com.formdev.flatlaf.extras.components;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import javax.swing.JComboBox;
-import com.formdev.flatlaf.extras.components.extensions.FlatComboBoxExtension;
 
 /**
- * Subclass of {@link JComboBox} that implements {@link FlatComboBoxExtension}
- * to provide easy access to FlatLaf specific client properties.
+ * Subclass of {@link JComboBox} that provides easy access to FlatLaf specific client properties.
  *
  * @author Karl Tauber
  */
 public class FlatComboBox<E>
 	extends JComboBox<E>
-	implements FlatComboBoxExtension
+	implements FlatComponentExtension
 {
+	/**
+	 * Returns the placeholder text that is only painted if the editable combo box is empty.
+	 */
+	public String getPlaceholderText() {
+		return (String) getClientProperty( PLACEHOLDER_TEXT );
+	}
+
+	/**
+	 * Sets the placeholder text that is only painted if the editable combo box is empty.
+	 */
+	public void setPlaceholderText( String placeholderText ) {
+		putClientProperty( PLACEHOLDER_TEXT, placeholderText );
+	}
 }

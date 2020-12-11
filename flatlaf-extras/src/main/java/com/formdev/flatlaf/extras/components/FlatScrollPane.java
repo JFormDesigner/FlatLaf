@@ -16,17 +16,44 @@
 
 package com.formdev.flatlaf.extras.components;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import javax.swing.JScrollPane;
-import com.formdev.flatlaf.extras.components.extensions.FlatScrollPaneExtension;
 
 /**
- * Subclass of {@link JScrollPane} that implements {@link FlatScrollPaneExtension}
- * to provide easy access to FlatLaf specific client properties.
+ * Subclass of {@link JScrollPane} that provides easy access to FlatLaf specific client properties.
  *
  * @author Karl Tauber
  */
 public class FlatScrollPane
 	extends JScrollPane
-	implements FlatScrollPaneExtension
+	implements FlatComponentExtension
 {
+	/**
+	 * Returns whether the decrease/increase arrow buttons of a scrollbar are shown.
+	 */
+	public boolean isShowButtons() {
+		return getClientPropertyBoolean( SCROLL_BAR_SHOW_BUTTONS, "ScrollBar.showButtons" );
+	}
+
+	/**
+	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
+	 */
+	public void setShowButtons( boolean showButtons ) {
+		putClientProperty( SCROLL_BAR_SHOW_BUTTONS, showButtons );
+	}
+
+
+	/**
+	 * Returns whether the scroll pane uses smooth scrolling.
+	 */
+	public boolean isSmoothScrolling() {
+		return getClientPropertyBoolean( SCROLL_PANE_SMOOTH_SCROLLING, "ScrollPane.smoothScrolling" );
+	}
+
+	/**
+	 * Specifies whether the scroll pane uses smooth scrolling.
+	 */
+	public void setSmoothScrolling( boolean smoothScrolling ) {
+		putClientProperty( SCROLL_PANE_SMOOTH_SCROLLING, smoothScrolling );
+	}
 }

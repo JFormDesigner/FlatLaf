@@ -16,17 +16,48 @@
 
 package com.formdev.flatlaf.extras.components;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import javax.swing.JTextField;
-import com.formdev.flatlaf.extras.components.extensions.FlatTextFieldExtension;
 
 /**
- * Subclass of {@link JTextField} that implements {@link FlatTextFieldExtension}
- * to provide easy access to FlatLaf specific client properties.
+ * Subclass of {@link JTextField} that provides easy access to FlatLaf specific client properties.
  *
  * @author Karl Tauber
  */
 public class FlatTextField
 	extends JTextField
-	implements FlatTextFieldExtension
+	implements FlatComponentExtension
 {
+	/**
+	 * Returns the placeholder text that is only painted if the text field is empty.
+	 */
+	public String getPlaceholderText() {
+		return (String) getClientProperty( PLACEHOLDER_TEXT );
+	}
+
+	/**
+	 * Sets the placeholder text that is only painted if the text field is empty.
+	 */
+	public void setPlaceholderText( String placeholderText ) {
+		putClientProperty( PLACEHOLDER_TEXT, placeholderText );
+	}
+
+
+	// NOTE: enum names must be equal to allowed strings
+	enum SelectAllOnFocusPolicy { never, once, always };
+
+	/**
+	 * Returns whether all text is selected when the text component gains focus.
+	 */
+	public SelectAllOnFocusPolicy getSelectAllOnFocusPolicy() {
+		return getClientPropertyEnumString( SELECT_ALL_ON_FOCUS_POLICY, SelectAllOnFocusPolicy.class,
+			"TextComponent.selectAllOnFocusPolicy", SelectAllOnFocusPolicy.once );
+	}
+
+	/**
+	 * Specifies whether all text is selected when the text component gains focus.
+	 */
+	public void setSelectAllOnFocusPolicy( SelectAllOnFocusPolicy selectAllOnFocusPolicy ) {
+		putClientPropertyEnumString( SELECT_ALL_ON_FOCUS_POLICY, selectAllOnFocusPolicy );
+	}
 }

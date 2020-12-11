@@ -16,17 +16,29 @@
 
 package com.formdev.flatlaf.extras.components;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import javax.swing.JScrollBar;
-import com.formdev.flatlaf.extras.components.extensions.FlatScrollBarExtension;
 
 /**
- * Subclass of {@link JScrollBar} that implements {@link FlatScrollBarExtension}
- * to provide easy access to FlatLaf specific client properties.
+ * Subclass of {@link JScrollBar} that provides easy access to FlatLaf specific client properties.
  *
  * @author Karl Tauber
  */
 public class FlatScrollBar
 	extends JScrollBar
-	implements FlatScrollBarExtension
+	implements FlatComponentExtension
 {
+	/**
+	 * Returns whether the decrease/increase arrow buttons of a scrollbar are shown.
+	 */
+	public boolean isShowButtons() {
+		return getClientPropertyBoolean( SCROLL_BAR_SHOW_BUTTONS, "ScrollBar.showButtons" );
+	}
+
+	/**
+	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
+	 */
+	public void setShowButtons( boolean showButtons ) {
+		putClientProperty( SCROLL_BAR_SHOW_BUTTONS, showButtons );
+	}
 }

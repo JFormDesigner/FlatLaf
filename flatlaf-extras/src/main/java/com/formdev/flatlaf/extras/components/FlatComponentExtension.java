@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.extras.components.extensions;
+package com.formdev.flatlaf.extras.components;
 
 import javax.swing.JComponent;
 import javax.swing.UIManager;
