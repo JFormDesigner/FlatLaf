@@ -53,19 +53,19 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button17"
 				"text": "Sq"
-				"$client.JButton.buttonType": "square"
-				"$client.JComponent.minimumWidth": 0
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
+				"minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button22"
 				"text": "Rd"
-				"$client.JButton.buttonType": "roundRect"
-				"$client.JComponent.minimumWidth": 0
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
+				"minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
@@ -78,21 +78,21 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button18"
 				"text": "Sq"
-				"$client.JButton.buttonType": "square"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				"enabled": false
-				"$client.JComponent.minimumWidth": 0
+				"minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button23"
 				"text": "Rd"
-				"$client.JButton.buttonType": "roundRect"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				"enabled": false
-				"$client.JComponent.minimumWidth": 0
+				"minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
@@ -104,17 +104,17 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button3"
 				"text": "Help"
-				"$client.JButton.buttonType": "help"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType help
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button12"
 				"text": "Help"
-				"$client.JButton.buttonType": "help"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType help
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"
@@ -162,17 +162,17 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton9"
 				"text": "Sq"
-				"$client.JButton.buttonType": "square"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton19"
 				"text": "Rd"
-				"$client.JButton.buttonType": "roundRect"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
@@ -183,18 +183,18 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton10"
 				"text": "Sq"
-				"$client.JButton.buttonType": "square"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton20"
 				"text": "Rd"
-				"$client.JButton.buttonType": "roundRect"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
@@ -285,18 +285,18 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 3"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton5"
 				"text": "Tab"
-				"$client.JButton.buttonType": "tab"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType tab
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 3"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton8"
 				"text": "Tab"
-				"$client.JButton.buttonType": "tab"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType tab
 				"enabled": false
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -963,18 +963,11 @@ new FormModel {
 			} ) {
 				name: "panel5"
 				"border": new javax.swing.border.TitledBorder( "Control" )
-				add( new FormComponent( "javax.swing.JComboBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 					name: "buttonTypeComboBox"
-					"model": new javax.swing.DefaultComboBoxModel {
-						selectedItem: "-"
-						addElement( "-" )
-						addElement( "square" )
-						addElement( "roundRect" )
-						addElement( "tab" )
-						addElement( "help" )
-					}
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.typeParameters": "ButtonType"
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -1317,27 +1310,27 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar3"
-				add( new FormComponent( "javax.swing.JButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button26"
 					"icon": #SwingIcon1
-					"$client.JButton.buttonType": "square"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button27"
 					"icon": #SwingIcon2
-					"$client.JButton.buttonType": "square"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 					name: "toggleButton23"
 					"icon": #SwingIcon4
 					"selected": true
-					"$client.JButton.buttonType": "square"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 					name: "toggleButton24"
 					"icon": #SwingIcon5
 					"selected": true
-					"$client.JButton.buttonType": "square"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 23 5 1"
@@ -1350,27 +1343,27 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar4"
-				add( new FormComponent( "javax.swing.JButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button28"
 					"icon": #SwingIcon1
-					"$client.JButton.buttonType": "roundRect"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button29"
 					"icon": #SwingIcon2
-					"$client.JButton.buttonType": "roundRect"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 					name: "toggleButton25"
 					"icon": #SwingIcon4
 					"selected": true
-					"$client.JButton.buttonType": "roundRect"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 					name: "toggleButton26"
 					"icon": #SwingIcon5
 					"selected": true
-					"$client.JButton.buttonType": "roundRect"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 23 5 1"

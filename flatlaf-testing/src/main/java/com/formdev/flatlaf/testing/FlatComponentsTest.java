@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.*;
+import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import net.miginfocom.swing.*;
 
 /**
@@ -38,6 +39,8 @@ public class FlatComponentsTest
 
 	FlatComponentsTest() {
 		initComponents();
+
+		buttonTypeComboBox.init( ButtonType.class, true );
 	}
 
 	private void changeProgress() {
@@ -116,13 +119,16 @@ public class FlatComponentsTest
 	}
 
 	private void buttonTypeChanged() {
-		String buttonType = (String) buttonTypeComboBox.getSelectedItem();
-		if( "-".equals( buttonType ) )
-			buttonType = null;
+		ButtonType buttonType = buttonTypeComboBox.getSelectedValue();
+		String buttonTypeStr = (buttonType != null && buttonType != ButtonType.none) ? buttonType.toString() : null;
 
 		for( Component c : getComponents() ) {
-			if( c instanceof AbstractButton )
-				((AbstractButton)c).putClientProperty( FlatClientProperties.BUTTON_TYPE, buttonType );
+			if( c instanceof FlatButton )
+				((FlatButton)c).setButtonType( buttonType );
+			else if( c instanceof FlatToggleButton )
+				((FlatToggleButton)c).setButtonType( buttonType );
+			else if( c instanceof AbstractButton )
+				((AbstractButton)c).putClientProperty( FlatClientProperties.BUTTON_TYPE, buttonTypeStr );
 		}
 	}
 
@@ -154,14 +160,14 @@ public class FlatComponentsTest
 		FlatComponentsTest.TestMultiLineLabel testMultiLineLabel1 = new FlatComponentsTest.TestMultiLineLabel();
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
-		JButton button17 = new JButton();
-		JButton button22 = new JButton();
+		FlatButton button17 = new FlatButton();
+		FlatButton button22 = new FlatButton();
 		JButton button2 = new JButton();
-		JButton button18 = new JButton();
-		JButton button23 = new JButton();
+		FlatButton button18 = new FlatButton();
+		FlatButton button23 = new FlatButton();
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
-		JButton button3 = new JButton();
-		JButton button12 = new JButton();
+		FlatButton button3 = new FlatButton();
+		FlatButton button12 = new FlatButton();
 		JButton button13 = new JButton();
 		JButton button14 = new JButton();
 		JButton button15 = new JButton();
@@ -169,11 +175,11 @@ public class FlatComponentsTest
 		JButton button20 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
-		JToggleButton toggleButton9 = new JToggleButton();
-		JToggleButton toggleButton19 = new JToggleButton();
+		FlatToggleButton toggleButton9 = new FlatToggleButton();
+		FlatToggleButton toggleButton19 = new FlatToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
-		JToggleButton toggleButton10 = new JToggleButton();
-		JToggleButton toggleButton20 = new JToggleButton();
+		FlatToggleButton toggleButton10 = new FlatToggleButton();
+		FlatToggleButton toggleButton20 = new FlatToggleButton();
 		JToggleButton toggleButton3 = new JToggleButton();
 		JToggleButton toggleButton4 = new JToggleButton();
 		JToggleButton toggleButton11 = new JToggleButton();
@@ -186,8 +192,8 @@ public class FlatComponentsTest
 		JCheckBox checkBox2 = new JCheckBox();
 		JCheckBox checkBox3 = new JCheckBox();
 		JCheckBox checkBox4 = new JCheckBox();
-		JToggleButton toggleButton5 = new JToggleButton();
-		JToggleButton toggleButton8 = new JToggleButton();
+		FlatToggleButton toggleButton5 = new FlatToggleButton();
+		FlatToggleButton toggleButton8 = new FlatToggleButton();
 		JLabel radioButtonLabel = new JLabel();
 		JRadioButton radioButton1 = new JRadioButton();
 		JRadioButton radioButton2 = new JRadioButton();
@@ -281,7 +287,7 @@ public class FlatComponentsTest
 		JPanel panel3 = new JPanel();
 		JButton button21 = new JButton();
 		JPanel panel5 = new JPanel();
-		buttonTypeComboBox = new JComboBox<>();
+		buttonTypeComboBox = new FlatTestEnumComboBox<>();
 		borderPaintedCheckBox = new JCheckBox();
 		roundRectCheckBox = new JCheckBox();
 		contentAreaFilledCheckBox = new JCheckBox();
@@ -327,16 +333,16 @@ public class FlatComponentsTest
 		JToggleButton toggleButton17 = new JToggleButton();
 		JLabel label3 = new JLabel();
 		JToolBar toolBar3 = new JToolBar();
-		JButton button26 = new JButton();
-		JButton button27 = new JButton();
-		JToggleButton toggleButton23 = new JToggleButton();
-		JToggleButton toggleButton24 = new JToggleButton();
+		FlatButton button26 = new FlatButton();
+		FlatButton button27 = new FlatButton();
+		FlatToggleButton toggleButton23 = new FlatToggleButton();
+		FlatToggleButton toggleButton24 = new FlatToggleButton();
 		JLabel label4 = new JLabel();
 		JToolBar toolBar4 = new JToolBar();
-		JButton button28 = new JButton();
-		JButton button29 = new JButton();
-		JToggleButton toggleButton25 = new JToggleButton();
-		JToggleButton toggleButton26 = new JToggleButton();
+		FlatButton button28 = new FlatButton();
+		FlatButton button29 = new FlatButton();
+		FlatToggleButton toggleButton25 = new FlatToggleButton();
+		FlatToggleButton toggleButton26 = new FlatToggleButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -406,14 +412,14 @@ public class FlatComponentsTest
 
 		//---- button17 ----
 		button17.setText("Sq");
-		button17.putClientProperty("JButton.buttonType", "square");
-		button17.putClientProperty("JComponent.minimumWidth", 0);
+		button17.setButtonType(FlatButton.ButtonType.square);
+		button17.setMinimumWidth(0);
 		add(button17, "cell 1 1");
 
 		//---- button22 ----
 		button22.setText("Rd");
-		button22.putClientProperty("JButton.buttonType", "roundRect");
-		button22.putClientProperty("JComponent.minimumWidth", 0);
+		button22.setButtonType(FlatButton.ButtonType.roundRect);
+		button22.setMinimumWidth(0);
 		add(button22, "cell 1 1");
 
 		//---- button2 ----
@@ -425,16 +431,16 @@ public class FlatComponentsTest
 
 		//---- button18 ----
 		button18.setText("Sq");
-		button18.putClientProperty("JButton.buttonType", "square");
+		button18.setButtonType(FlatButton.ButtonType.square);
 		button18.setEnabled(false);
-		button18.putClientProperty("JComponent.minimumWidth", 0);
+		button18.setMinimumWidth(0);
 		add(button18, "cell 2 1");
 
 		//---- button23 ----
 		button23.setText("Rd");
-		button23.putClientProperty("JButton.buttonType", "roundRect");
+		button23.setButtonType(FlatButton.ButtonType.roundRect);
 		button23.setEnabled(false);
-		button23.putClientProperty("JComponent.minimumWidth", 0);
+		button23.setMinimumWidth(0);
 		add(button23, "cell 2 1");
 
 		//---- button5 ----
@@ -445,12 +451,12 @@ public class FlatComponentsTest
 
 		//---- button3 ----
 		button3.setText("Help");
-		button3.putClientProperty("JButton.buttonType", "help");
+		button3.setButtonType(FlatButton.ButtonType.help);
 		add(button3, "cell 4 1");
 
 		//---- button12 ----
 		button12.setText("Help");
-		button12.putClientProperty("JButton.buttonType", "help");
+		button12.setButtonType(FlatButton.ButtonType.help);
 		button12.setEnabled(false);
 		add(button12, "cell 4 1");
 
@@ -485,12 +491,12 @@ public class FlatComponentsTest
 
 		//---- toggleButton9 ----
 		toggleButton9.setText("Sq");
-		toggleButton9.putClientProperty("JButton.buttonType", "square");
+		toggleButton9.setButtonType(FlatButton.ButtonType.square);
 		add(toggleButton9, "cell 1 2");
 
 		//---- toggleButton19 ----
 		toggleButton19.setText("Rd");
-		toggleButton19.putClientProperty("JButton.buttonType", "roundRect");
+		toggleButton19.setButtonType(FlatButton.ButtonType.roundRect);
 		add(toggleButton19, "cell 1 2");
 
 		//---- toggleButton2 ----
@@ -500,13 +506,13 @@ public class FlatComponentsTest
 
 		//---- toggleButton10 ----
 		toggleButton10.setText("Sq");
-		toggleButton10.putClientProperty("JButton.buttonType", "square");
+		toggleButton10.setButtonType(FlatButton.ButtonType.square);
 		toggleButton10.setEnabled(false);
 		add(toggleButton10, "cell 2 2");
 
 		//---- toggleButton20 ----
 		toggleButton20.setText("Rd");
-		toggleButton20.putClientProperty("JButton.buttonType", "roundRect");
+		toggleButton20.setButtonType(FlatButton.ButtonType.roundRect);
 		toggleButton20.setEnabled(false);
 		add(toggleButton20, "cell 2 2");
 
@@ -574,13 +580,13 @@ public class FlatComponentsTest
 
 		//---- toggleButton5 ----
 		toggleButton5.setText("Tab");
-		toggleButton5.putClientProperty("JButton.buttonType", "tab");
+		toggleButton5.setButtonType(FlatButton.ButtonType.tab);
 		toggleButton5.setSelected(true);
 		add(toggleButton5, "cell 5 3");
 
 		//---- toggleButton8 ----
 		toggleButton8.setText("Tab");
-		toggleButton8.putClientProperty("JButton.buttonType", "tab");
+		toggleButton8.setButtonType(FlatButton.ButtonType.tab);
 		toggleButton8.setEnabled(false);
 		toggleButton8.setSelected(true);
 		add(toggleButton8, "cell 5 3");
@@ -1110,13 +1116,6 @@ public class FlatComponentsTest
 				"[]"));
 
 			//---- buttonTypeComboBox ----
-			buttonTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
-				"-",
-				"square",
-				"roundRect",
-				"tab",
-				"help"
-			}));
 			buttonTypeComboBox.addActionListener(e -> buttonTypeChanged());
 			panel5.add(buttonTypeComboBox, "cell 0 0");
 
@@ -1347,24 +1346,24 @@ public class FlatComponentsTest
 
 			//---- button26 ----
 			button26.setIcon(UIManager.getIcon("Tree.closedIcon"));
-			button26.putClientProperty("JButton.buttonType", "square");
+			button26.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(button26);
 
 			//---- button27 ----
 			button27.setIcon(UIManager.getIcon("Tree.openIcon"));
-			button27.putClientProperty("JButton.buttonType", "square");
+			button27.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(button27);
 
 			//---- toggleButton23 ----
 			toggleButton23.setIcon(UIManager.getIcon("FileView.computerIcon"));
 			toggleButton23.setSelected(true);
-			toggleButton23.putClientProperty("JButton.buttonType", "square");
+			toggleButton23.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(toggleButton23);
 
 			//---- toggleButton24 ----
 			toggleButton24.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
 			toggleButton24.setSelected(true);
-			toggleButton24.putClientProperty("JButton.buttonType", "square");
+			toggleButton24.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(toggleButton24);
 		}
 		add(toolBar3, "cell 1 23 5 1");
@@ -1378,24 +1377,24 @@ public class FlatComponentsTest
 
 			//---- button28 ----
 			button28.setIcon(UIManager.getIcon("Tree.closedIcon"));
-			button28.putClientProperty("JButton.buttonType", "roundRect");
+			button28.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(button28);
 
 			//---- button29 ----
 			button29.setIcon(UIManager.getIcon("Tree.openIcon"));
-			button29.putClientProperty("JButton.buttonType", "roundRect");
+			button29.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(button29);
 
 			//---- toggleButton25 ----
 			toggleButton25.setIcon(UIManager.getIcon("FileView.computerIcon"));
 			toggleButton25.setSelected(true);
-			toggleButton25.putClientProperty("JButton.buttonType", "roundRect");
+			toggleButton25.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(toggleButton25);
 
 			//---- toggleButton26 ----
 			toggleButton26.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
 			toggleButton26.setSelected(true);
-			toggleButton26.putClientProperty("JButton.buttonType", "roundRect");
+			toggleButton26.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(toggleButton26);
 		}
 		add(toolBar4, "cell 1 23 5 1");
@@ -1419,7 +1418,7 @@ public class FlatComponentsTest
 	private JTextField textField1;
 	private FlatProgressBar progressBar3;
 	private FlatProgressBar progressBar4;
-	private JComboBox<String> buttonTypeComboBox;
+	private FlatTestEnumComboBox<ButtonType> buttonTypeComboBox;
 	private JCheckBox borderPaintedCheckBox;
 	private JCheckBox roundRectCheckBox;
 	private JCheckBox contentAreaFilledCheckBox;

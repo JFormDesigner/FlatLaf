@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.extras.components;
 
+import java.awt.Color;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
@@ -50,6 +51,23 @@ public interface FlatComponentExtension
 
 	default void putClientPropertyBoolean( Object key, boolean value, boolean defaultValue ) {
 		putClientProperty( key, (value != defaultValue) ? value : null );
+	}
+
+
+	default int getClientPropertyInt( Object key, String defaultValueKey ) {
+		Object value = getClientProperty( key );
+		return (value instanceof Integer) ? (int) value : UIManager.getInt( defaultValueKey );
+	}
+
+	default int getClientPropertyInt( Object key, int defaultValue ) {
+		Object value = getClientProperty( key );
+		return (value instanceof Integer) ? (int) value : defaultValue;
+	}
+
+
+	default Color getClientPropertyColor( Object key, String defaultValueKey ) {
+		Object value = getClientProperty( key );
+		return (value instanceof Color) ? (Color) value : UIManager.getColor( defaultValueKey );
 	}
 
 
