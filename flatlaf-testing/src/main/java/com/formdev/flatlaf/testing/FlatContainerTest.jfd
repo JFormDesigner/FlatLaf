@@ -320,7 +320,7 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 4"
 					} )
-					add( new FormComponent( "com.formdev.flatlaf.extras.TriStateCheckBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 						name: "secondTabClosableCheckBox"
 						"text": "Second Tab closable"
 						auxiliary() {

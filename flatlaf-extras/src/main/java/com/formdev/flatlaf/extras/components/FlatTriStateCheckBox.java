@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.extras;
+package com.formdev.flatlaf.extras.components;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ItemEvent;
@@ -36,7 +37,7 @@ import com.formdev.flatlaf.FlatLaf;
  *
  * @author Karl Tauber
  */
-public class TriStateCheckBox
+public class FlatTriStateCheckBox
 	extends JCheckBox
 {
 	public enum State { INDETERMINATE, SELECTED, UNSELECTED }
@@ -44,15 +45,15 @@ public class TriStateCheckBox
 	private State state;
 	private boolean thirdStateEnabled = true;
 
-	public TriStateCheckBox() {
+	public FlatTriStateCheckBox() {
 		this( null );
 	}
 
-	public TriStateCheckBox( String text ) {
+	public FlatTriStateCheckBox( String text ) {
 		this( text, State.INDETERMINATE );
 	}
 
-	public TriStateCheckBox( String text, State initialState ) {
+	public FlatTriStateCheckBox( String text, State initialState ) {
 		super( text );
 
 		setModel( new ToggleButtonModel() {
@@ -89,7 +90,7 @@ public class TriStateCheckBox
 		State oldState = this.state;
 		this.state = state;
 
-		putClientProperty( "JButton.selectedState", state == State.INDETERMINATE ? "indeterminate" : null );
+		putClientProperty( SELECTED_STATE, state == State.INDETERMINATE ? SELECTED_STATE_INDETERMINATE : null );
 
 		firePropertyChange( "state", oldState, state );
 		repaint();

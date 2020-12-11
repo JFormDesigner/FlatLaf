@@ -3,6 +3,13 @@ FlatLaf Change Log
 
 ## 0.46-SNAPSHOT
 
+#### New features and improvements
+
+- Extras: Renamed tri-state check box class from
+  `com.formdev.flatlaf.extras.TriStateCheckBox` to
+  `com.formdev.flatlaf.extras.components.FlatTriStateCheckBox`.
+
+
 #### Fixed bugs
 
 - Table and TableHeader: Fixed missing right vertical grid line if using table

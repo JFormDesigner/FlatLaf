@@ -22,9 +22,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.extras.TriStateCheckBox;
 import com.formdev.flatlaf.extras.components.FlatTabbedPane;
 import com.formdev.flatlaf.extras.components.FlatTabbedPane.*;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon;
 import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.jgoodies.forms.layout.*;
@@ -450,7 +450,7 @@ public class FlatContainerTest
 		tabsClosableCheckBox = new JCheckBox();
 		JLabel tabPlacementLabel = new JLabel();
 		tabPlacementField = new FlatTestEnumComboBox<>();
-		secondTabClosableCheckBox = new TriStateCheckBox();
+		secondTabClosableCheckBox = new FlatTriStateCheckBox();
 		JLabel tabAreaAlignmentLabel = new JLabel();
 		tabAreaAlignmentField = new FlatTestEnumComboBox<>();
 		tabAlignmentField = new FlatTestEnumComboBox<>();
@@ -795,7 +795,7 @@ public class FlatContainerTest
 	private FlatTestEnumComboBox<ScrollButtonsPlacement> scrollButtonsPlacementField;
 	private JCheckBox tabsClosableCheckBox;
 	private FlatTestEnumComboBox<TabPlacement> tabPlacementField;
-	private TriStateCheckBox secondTabClosableCheckBox;
+	private FlatTriStateCheckBox secondTabClosableCheckBox;
 	private FlatTestEnumComboBox<TabAreaAlignment> tabAreaAlignmentField;
 	private FlatTestEnumComboBox<TabAlignment> tabAlignmentField;
 	private FlatTestEnumComboBox<TabWidthMode> tabWidthModeField;

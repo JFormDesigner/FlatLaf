@@ -43,7 +43,8 @@ import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
 import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.*;
-import com.formdev.flatlaf.extras.TriStateCheckBox.State;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -660,7 +661,7 @@ public class FlatTestFrame
 		inspectCheckBox = new JCheckBox();
 		explicitColorsCheckBox = new JCheckBox();
 		backgroundCheckBox = new JCheckBox();
-		opaqueTriStateCheckBox = new TriStateCheckBox();
+		opaqueTriStateCheckBox = new FlatTriStateCheckBox();
 		sizeVariantComboBox = new JComboBox<>();
 		closeButton = new JButton();
 		themesPanel = new IJThemesPanel();
@@ -805,7 +806,7 @@ public class FlatTestFrame
 	private JCheckBox inspectCheckBox;
 	private JCheckBox explicitColorsCheckBox;
 	private JCheckBox backgroundCheckBox;
-	private TriStateCheckBox opaqueTriStateCheckBox;
+	private FlatTriStateCheckBox opaqueTriStateCheckBox;
 	private JComboBox<String> sizeVariantComboBox;
 	private JButton closeButton;
 	private IJThemesPanel themesPanel;

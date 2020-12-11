@@ -18,6 +18,7 @@ package com.formdev.flatlaf.testing.extras;
 
 import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
+import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.testing.*;
 import net.miginfocom.swing.*;
 
@@ -117,9 +118,9 @@ public class FlatExtrasTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		label1 = new JLabel();
-		triStateCheckBox1 = new TriStateCheckBox();
+		triStateCheckBox1 = new FlatTriStateCheckBox();
 		triStateLabel1 = new JLabel();
-		triStateCheckBox2 = new TriStateCheckBox();
+		triStateCheckBox2 = new FlatTriStateCheckBox();
 		triStateLabel2 = new JLabel();
 		label2 = new JLabel();
 		svgIconsPanel = new JPanel();
@@ -238,9 +239,9 @@ public class FlatExtrasTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JLabel label1;
-	private TriStateCheckBox triStateCheckBox1;
+	private FlatTriStateCheckBox triStateCheckBox1;
 	private JLabel triStateLabel1;
-	private TriStateCheckBox triStateCheckBox2;
+	private FlatTriStateCheckBox triStateCheckBox2;
 	private JLabel triStateLabel2;
 	private JLabel label2;
 	private JPanel svgIconsPanel;

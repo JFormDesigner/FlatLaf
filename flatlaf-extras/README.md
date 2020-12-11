@@ -7,7 +7,7 @@ This sub-project provides some additional components and classes:
   An icon that displays SVG using
   [svgSalamander](https://github.com/JFormDesigner/svgSalamander).\
   ![FlatSVGIcon.png](../images/extras-FlatSVGIcon.png)
-- [TriStateCheckBox](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/TriStateCheckBox.html):
+- [FlatTriStateCheckBox](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html):
   A tri-state check box.\
   ![TriStateCheckBox.png](../images/extras-TriStateCheckBox.png)
 - [FlatAnimatedLafChange](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/FlatAnimatedLafChange.html):
