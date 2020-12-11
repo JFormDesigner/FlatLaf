@@ -91,7 +91,7 @@ new FormModel {
 					"gridX": 1
 					"gridY": 5
 				} )
-				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				add( new FormContainer( "com.formdev.flatlaf.extras.components.FlatTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane1"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
@@ -100,7 +100,7 @@ new FormModel {
 					"gridX": 1
 					"gridY": 7
 				} )
-				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				add( new FormContainer( "com.formdev.flatlaf.extras.components.FlatTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane3"
 					"tabPlacement": 2
 					auxiliary() {
@@ -110,7 +110,7 @@ new FormModel {
 					"gridX": 3
 					"gridY": 7
 				} )
-				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				add( new FormContainer( "com.formdev.flatlaf.extras.components.FlatTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane2"
 					"tabPlacement": 3
 					auxiliary() {
@@ -119,7 +119,7 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.jgoodies.forms.layout.CellConstraints ) {
 					"gridY": 9
 				} )
-				add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				add( new FormContainer( "com.formdev.flatlaf.extras.components.FlatTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 					name: "tabbedPane4"
 					"tabPlacement": 4
 					auxiliary() {
@@ -202,17 +202,11 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 1"
 					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 						name: "tabsPopupPolicyField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "default"
-							addElement( "default" )
-							addElement( "asNeeded" )
-							addElement( "never" )
-						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
+							"JavaCodeGenerator.typeParameters": "TabsPopupPolicy"
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsPopupPolicyChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -234,18 +228,11 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 2"
 					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 						name: "scrollButtonsPolicyField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "default"
-							addElement( "default" )
-							addElement( "asNeededSingle" )
-							addElement( "asNeeded" )
-							addElement( "never" )
-						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
+							"JavaCodeGenerator.typeParameters": "ScrollButtonsPolicy"
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPolicyChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -280,18 +267,12 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 2"
 					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 						name: "iconPlacementField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "leading"
-							addElement( "leading" )
-							addElement( "trailing" )
-							addElement( "top" )
-							addElement( "bottom" )
-						}
+						"enabled": false
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
+							"JavaCodeGenerator.typeParameters": "TabIconPlacement"
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "iconPlacementChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -303,17 +284,11 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 3"
 					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 						name: "scrollButtonsPlacementField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "default"
-							addElement( "default" )
-							addElement( "both" )
-							addElement( "trailing" )
-						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
+							"JavaCodeGenerator.typeParameters": "ScrollButtonsPlacement"
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPlacementChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -335,19 +310,11 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 4"
 					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 						name: "tabPlacementField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "default"
-							addElement( "default" )
-							addElement( "top" )
-							addElement( "bottom" )
-							addElement( "left" )
-							addElement( "right" )
-						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
+							"JavaCodeGenerator.typeParameters": "TabPlacement"
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -369,36 +336,21 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 5"
 					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 						name: "tabAreaAlignmentField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "default"
-							addElement( "default" )
-							addElement( "leading" )
-							addElement( "trailing" )
-							addElement( "center" )
-							addElement( "fill" )
-						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
+							"JavaCodeGenerator.typeParameters": "TabAreaAlignment"
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabAreaAlignmentChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 1 5"
 					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 						name: "tabAlignmentField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "default"
-							addElement( "default" )
-							addElement( "leading" )
-							addElement( "trailing" )
-							addElement( "center" )
-						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
+							"JavaCodeGenerator.typeParameters": "TabAlignment"
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabAlignmentChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -410,18 +362,11 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 5"
 					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 						name: "tabWidthModeField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "default"
-							addElement( "default" )
-							addElement( "preferred" )
-							addElement( "equal" )
-							addElement( "compact" )
-						}
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
+							"JavaCodeGenerator.typeParameters": "TabWidthMode"
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabWidthModeChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

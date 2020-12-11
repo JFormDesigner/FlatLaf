@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.extras.components;
 
 import java.awt.Color;
+import java.awt.Insets;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 
@@ -68,6 +69,11 @@ public interface FlatComponentExtension
 	default Color getClientPropertyColor( Object key, String defaultValueKey ) {
 		Object value = getClientProperty( key );
 		return (value instanceof Color) ? (Color) value : UIManager.getColor( defaultValueKey );
+	}
+
+	default Insets getClientPropertyInsets( Object key, String defaultValueKey ) {
+		Object value = getClientProperty( key );
+		return (value instanceof Insets) ? (Insets) value : UIManager.getInsets( defaultValueKey );
 	}
 
 

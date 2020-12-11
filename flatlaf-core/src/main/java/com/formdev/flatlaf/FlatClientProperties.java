@@ -264,7 +264,7 @@ public interface FlatClientProperties
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
-	 * Specifies whether the tab area should be hidded if it contains only one tab.
+	 * Specifies whether the tab area should be hidden if it contains only one tab.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
@@ -349,7 +349,7 @@ public interface FlatClientProperties
 	 * Specifies the callback that is invoked when a tab close button is clicked.
 	 * The callback is responsible for closing the tab.
 	 * <p>
-	 * Either use a {@link java.util.function.IntConsumer} that received the tab index as parameter:
+	 * Either use a {@link java.util.function.IntConsumer} that receives the tab index as parameter:
 	 * <pre>{@code
 	 * myTabbedPane.putClientProperty( "JTabbedPane.tabCloseCallback",
 	 *     (IntConsumer) tabIndex -> {
@@ -357,7 +357,7 @@ public interface FlatClientProperties
 	 *     } );
 	 * }</pre>
 	 * Or use a {@link java.util.function.BiConsumer}&lt;javax.swing.JTabbedPane, Integer&gt;
-	 * that received the tabbed pane and the tab index as parameters:
+	 * that receives the tabbed pane and the tab index as parameters:
 	 * <pre>{@code
 	 * myTabbedPane.putClientProperty( "JTabbedPane.tabCloseCallback",
 	 *     (BiConsumer<JTabbedPane, Integer>) (tabbedPane, tabIndex) -> {
