@@ -25,10 +25,6 @@ Otherwise download `flatlaf-intellij-themes-<version>.jar` here:
 
 [![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-intellij-themes/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-intellij-themes/_latestVersion)
 
-You also need `flatlaf-<version>.jar`, which you can download here:
-
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
-
 
 How to use?
 -----------

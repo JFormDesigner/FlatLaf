@@ -38,7 +38,3 @@ build script:
 Otherwise download `flatlaf-swingx-<version>.jar` here:
 
 [![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-swingx/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-swingx/_latestVersion)
-
-You also need `flatlaf-<version>.jar`, which you can download here:
-
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)

@@ -32,7 +32,3 @@ build script:
 Otherwise download `flatlaf-jide-oss-<version>.jar` here:
 
 [![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-jide-oss/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-jide-oss/_latestVersion)
-
-You also need `flatlaf-<version>.jar`, which you can download here:
-
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
