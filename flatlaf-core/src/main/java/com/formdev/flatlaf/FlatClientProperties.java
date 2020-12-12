@@ -131,6 +131,15 @@ public interface FlatClientProperties
 	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
 	/**
+	 * Paint the component with round edges.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner},
+	 * {@link javax.swing.JTextField}, {@link javax.swing.JFormattedTextField} and {@link javax.swing.JPasswordField}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String COMPONENT_ROUND_RECT = "JComponent.roundRect";
+
+	/**
 	 * Specifies the outline color of the component border.
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JButton}, {@link javax.swing.JComboBox},
@@ -160,15 +169,6 @@ public interface FlatClientProperties
 	 * @see #OUTLINE
 	 */
 	String OUTLINE_WARNING = "warning";
-
-	/**
-	 * Paint the component with round edges.
-	 * <p>
-	 * <strong>Components</strong> {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner},
-	 * {@link javax.swing.JTextField}, {@link javax.swing.JFormattedTextField} and {@link javax.swing.JPasswordField}<br>
-	 * <strong>Value type</strong> {@link java.lang.Boolean}
-	 */
-	String COMPONENT_ROUND_RECT = "JComponent.roundRect";
 
 	//---- Popup --------------------------------------------------------------
 

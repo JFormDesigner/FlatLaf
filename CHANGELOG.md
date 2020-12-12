@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Extras: Added standard component extension classes that provides easy access
+  to FlatLaf specific client properties (see package
+  `com.formdev.flatlaf.extras.components`).
 - Extras: Renamed tri-state check box class from
   `com.formdev.flatlaf.extras.TriStateCheckBox` to
   `com.formdev.flatlaf.extras.components.FlatTriStateCheckBox`.

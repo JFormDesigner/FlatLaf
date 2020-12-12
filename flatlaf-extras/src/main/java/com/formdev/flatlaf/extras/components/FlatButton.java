@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
+import java.awt.Color;
 import javax.swing.JButton;
 
 /**
@@ -90,5 +91,30 @@ public class FlatButton
 	 */
 	public void setMinimumHeight( int minimumHeight ) {
 		putClientProperty( MINIMUM_HEIGHT, (minimumHeight >= 0) ? minimumHeight : null );
+	}
+
+
+	/**
+	 * Returns the outline color of the component border.
+	 */
+	public Object getOutline() {
+		return getClientProperty( OUTLINE );
+	}
+
+	/**
+	 * Specifies the outline color of the component border.
+	 * <p>
+	 * Allowed Values are:
+	 * <ul>
+	 *     <li>{@code null}
+	 *     <li>string {@code "error"}
+	 *     <li>string {@code "warning"}
+	 *     <li>any color (type {@link Color})
+	 *     <li>an array of two colors (type {@link Color}[2]) where the first color
+	 *         is for focused state and the second for unfocused state
+	 * </ul>
+	 */
+	public void setOutline( Object outline ) {
+		putClientProperty( OUTLINE, outline );
 	}
 }
