@@ -10,6 +10,9 @@ This sub-project provides some additional components and classes:
 - [FlatTriStateCheckBox](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html):
   A tri-state check box.\
   ![TriStateCheckBox.png](../images/extras-TriStateCheckBox.png)
+- Extension classes of standard Swing components that provide easy access to
+  FlatLaf specific client properties (see package
+  [com.formdev.flatlaf.extras.components](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/package-summary.html)).
 - [FlatAnimatedLafChange](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/FlatAnimatedLafChange.html):
   Animated Laf (theme) changing.
 - [FlatInspector](#ui-inspector): A simple UI inspector that shows information
