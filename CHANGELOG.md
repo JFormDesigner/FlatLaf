@@ -13,6 +13,8 @@ FlatLaf Change Log
   `com.formdev.flatlaf.extras.components.FlatTriStateCheckBox`.
 - Extras: Renamed SVG utility class from `com.formdev.flatlaf.extras.SVGUtils`
   to `com.formdev.flatlaf.extras.FlatSVGUtils`.
+- IntelliJ Themes: Added flag whether a theme is dark to
+  `FlatAllIJThemes.INFOS`. (issue #221)
 
 
 #### Fixed bugs

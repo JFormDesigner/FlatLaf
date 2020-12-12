@@ -108,7 +108,8 @@ public class IJThemesClassGenerator
 		allInfos.append( THEME_TEMPLATE
 			.replace( "${subPackage}", subPackage )
 			.replace( "${themeClass}", themeClass )
-			.replace( "${themeName}", themeName ) );
+			.replace( "${themeName}", themeName )
+			.replace( "${dark}", Boolean.toString( ti.dark ) ) );
 
 		markdownTable.append( String.format( "[%s](%s) | `com.formdev.flatlaf.intellijthemes%s.%s`\n",
 			themeName, ti.sourceCodeUrl, subPackage, themeClass ) );
@@ -189,11 +190,28 @@ public class IJThemesClassGenerator
 		" */\n" +
 		"public class FlatAllIJThemes\n" +
 		"{\n" +
-		"	public static final LookAndFeelInfo[] INFOS = {\n" +
+		"	public static final FlatIJLookAndFeelInfo[] INFOS = {\n" +
 		"${allInfos}\n" +
 		"	};\n" +
+		"\n" +
+		"	//---- class FlatIJLookAndFeelInfo ----------------------------------------\n" +
+		"\n" +
+		"	public static class FlatIJLookAndFeelInfo\n" +
+		"		extends LookAndFeelInfo\n" +
+		"	{\n" +
+		"		private final boolean dark;\n" +
+		"\n" +
+		"		public FlatIJLookAndFeelInfo( String name, String className, boolean dark ) {\n" +
+		"			super( name, className );\n" +
+		"			this.dark = dark;\n" +
+		"		}\n" +
+		"\n" +
+		"		public boolean isDark() {\n" +
+		"			return dark;\n" +
+		"		}\n" +
+		"	}\n" +
 		"}\n";
 
 	private static final String THEME_TEMPLATE =
-		"		new LookAndFeelInfo( \"${themeName}\", \"com.formdev.flatlaf.intellijthemes${subPackage}.${themeClass}\" ),";
+		"		new FlatIJLookAndFeelInfo( \"${themeName}\", \"com.formdev.flatlaf.intellijthemes${subPackage}.${themeClass}\", ${dark} ),";
 }
