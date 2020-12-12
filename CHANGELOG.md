@@ -8,6 +8,8 @@ FlatLaf Change Log
 - Extras: Renamed tri-state check box class from
   `com.formdev.flatlaf.extras.TriStateCheckBox` to
   `com.formdev.flatlaf.extras.components.FlatTriStateCheckBox`.
+- Extras: Renamed SVG utility class from `com.formdev.flatlaf.extras.SVGUtils`
+  to `com.formdev.flatlaf.extras.FlatSVGUtils`.
 
 
 #### Fixed bugs
