@@ -487,6 +487,7 @@ public class FlatComponentsTest
 
 		//---- toggleButton1 ----
 		toggleButton1.setText("Enabled");
+		toggleButton1.setToolTipText("LOOOOOOOOOOOOOONG TEXT");
 		add(toggleButton1, "cell 1 2");
 
 		//---- toggleButton9 ----

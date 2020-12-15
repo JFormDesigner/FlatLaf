@@ -271,16 +271,17 @@ public class FlatPopupFactory
 
 				// increase tooltip size if necessary because it may be too small on HiDPI screens
 				//    https://bugs.openjdk.java.net/browse/JDK-8213535
-				if( contents instanceof JToolTip ) {
+				if( contents instanceof JToolTip && popupWindow == null ) {
 					Container parent = contents.getParent();
 					if( parent instanceof JPanel ) {
 						Dimension prefSize = parent.getPreferredSize();
 						if( !prefSize.equals( parent.getSize() ) ) {
-							Container panel = SwingUtilities.getAncestorOfClass( Panel.class, parent );
-							if( panel != null )
-								panel.setSize( prefSize ); // for medium weight popup
-							else
-								parent.setSize( prefSize ); // for light weight popup
+							Container mediumWeightPanel = SwingUtilities.getAncestorOfClass( Panel.class, parent );
+							Container c = (mediumWeightPanel != null)
+								? mediumWeightPanel // medium weight popup
+								: parent;           // light weight popup
+							c.setSize( prefSize );
+							c.validate();
 						}
 					}
 				}

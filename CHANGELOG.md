@@ -23,6 +23,8 @@ FlatLaf Change Log
   as row header in scroll pane. (issues #152 and #46)
 - TableHeader: Fixed position of column separators in right-to-left component
   orientation.
+- ToolTip: Fixed drop shadow for wide tooltips on Windows and Java 9+. (issue
+  #224)
 - SwingX: Fixed striping background highlighting color (e.g. alternating table
   rows) in dark themes.
 
