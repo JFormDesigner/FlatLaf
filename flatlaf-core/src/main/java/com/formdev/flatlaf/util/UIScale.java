@@ -113,7 +113,7 @@ public class UIScale
 	}
 
 	public static double getSystemScaleFactor( Graphics2D g ) {
-		return isSystemScalingEnabled() ? g.getDeviceConfiguration().getDefaultTransform().getScaleX() : 1;
+		return isSystemScalingEnabled() ? getSystemScaleFactor( g.getDeviceConfiguration() ) : 1;
 	}
 
 	public static double getSystemScaleFactor( GraphicsConfiguration gc ) {
