@@ -155,7 +155,7 @@ public class FlatProgressBarUI
 			? 0
 			: Math.min( UIScale.scale( this.arc ), horizontal ? height : width );
 
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 		// paint track
 		RoundRectangle2D.Float trackShape = new RoundRectangle2D.Float( x, y, width, height, arc, arc );
@@ -163,6 +163,7 @@ public class FlatProgressBarUI
 		((Graphics2D)g).fill( trackShape );
 
 		// paint progress
+		int amountFull = 0;
 		if( progressBar.isIndeterminate() ) {
 			boxRect = getBox( boxRect );
 			if( boxRect != null ) {
@@ -170,11 +171,8 @@ public class FlatProgressBarUI
 				((Graphics2D)g).fill( new RoundRectangle2D.Float( boxRect.x, boxRect.y,
 					boxRect.width, boxRect.height, arc, arc ) );
 			}
-
-			if( progressBar.isStringPainted() )
-				paintString( g, x, y, width, height, 0, insets );
 		} else {
-			int amountFull = getAmountFull( insets, width, height );
+			amountFull = getAmountFull( insets, width, height );
 
 			RoundRectangle2D.Float progressShape = horizontal
 				? new RoundRectangle2D.Float( c.getComponentOrientation().isLeftToRight() ? x : x + (width - amountFull),
@@ -189,10 +187,12 @@ public class FlatProgressBarUI
 				((Graphics2D)g).fill( area );
 			} else
 				((Graphics2D)g).fill( progressShape );
-
-			if( progressBar.isStringPainted() )
-				paintString( g, x, y, width, height, amountFull, insets );
 		}
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+
+		if( progressBar.isStringPainted() )
+			paintString( g, x, y, width, height, amountFull, insets );
 	}
 
 	@Override

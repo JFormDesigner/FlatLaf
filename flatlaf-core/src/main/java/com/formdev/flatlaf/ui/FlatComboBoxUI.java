@@ -352,7 +352,7 @@ public class FlatComboBoxUI
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;
-		FlatUIUtils.setRenderingHints( g2 );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g2 );
 
 		int width = c.getWidth();
 		int height = c.getHeight();
@@ -385,6 +385,9 @@ public class FlatComboBoxUI
 			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
 			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2)) );
 		}
+
+		// avoid that the "current value" renderer is invoked with enabled antialiasing
+		FlatUIUtils.resetRenderingHints( g2, oldRenderingHints );
 
 		paint( g, c );
 	}

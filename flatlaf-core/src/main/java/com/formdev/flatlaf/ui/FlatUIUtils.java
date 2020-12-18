@@ -240,10 +240,57 @@ public class FlatUIUtils
 	/**
 	 * Sets rendering hints used for painting.
 	 */
-	public static void setRenderingHints( Graphics2D g ) {
-		g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL,
+	public static Object[] setRenderingHints( Graphics g ) {
+		Graphics2D g2 = (Graphics2D) g;
+		Object[] oldRenderingHints = new Object[] {
+			g2.getRenderingHint( RenderingHints.KEY_ANTIALIASING ),
+			g2.getRenderingHint( RenderingHints.KEY_STROKE_CONTROL ),
+		};
+
+		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+		g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL,
 			MAC_USE_QUARTZ ? RenderingHints.VALUE_STROKE_PURE : RenderingHints.VALUE_STROKE_NORMALIZE );
+
+		return oldRenderingHints;
+	}
+
+	/**
+	 * Resets rendering hints previously set with {@link #setRenderingHints(Graphics2D)}.
+	 */
+	public static void resetRenderingHints( Graphics g, Object[] oldRenderingHints ) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, oldRenderingHints[0] );
+		g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, oldRenderingHints[1] );
+	}
+
+	/**
+	 * Temporary resets rendering hints set with {@link #setRenderingHints(Graphics2D)}
+	 * and runs the given runnable.
+	 * <p>
+	 * This is intended for painting text while rendering hints are set.
+	 * <p>
+	 * If text antialiasing is disabled (in OS system settings or via
+	 * {@code -Dawt.useSystemAAFontSettings=off}), but general antialiasing is enabled,
+	 * then text is still painted using some kind of "grayscale" antialiasing,
+	 * which may make the text look bold (depends on font and font size).
+	 * To avoid this, temporary disable general antialiasing.
+	 * This does not affect text rendering if text antialiasing is enabled (usually the default).
+	 */
+	public static void runWithoutRenderingHints( Graphics g, Object[] oldRenderingHints, Runnable runnable ) {
+		if( oldRenderingHints == null ) {
+			runnable.run();
+			return;
+		}
+
+		Graphics2D g2 = (Graphics2D) g;
+		Object[] oldRenderingHints2 = new Object[] {
+			g2.getRenderingHint( RenderingHints.KEY_ANTIALIASING ),
+			g2.getRenderingHint( RenderingHints.KEY_STROKE_CONTROL ),
+		};
+
+		resetRenderingHints( g2, oldRenderingHints );
+		runnable.run();
+		resetRenderingHints( g2, oldRenderingHints2 );
 	}
 
 	public static Color deriveColor( Color color, Color baseColor ) {

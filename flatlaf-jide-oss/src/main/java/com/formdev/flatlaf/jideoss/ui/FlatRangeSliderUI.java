@@ -60,6 +60,8 @@ public class FlatRangeSliderUI
 	protected Color disabledThumbColor;
 	protected Color disabledThumbBorderColor;
 
+	private Object[] oldRenderingHints;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRangeSliderUI();
 	}
@@ -190,7 +192,7 @@ public class FlatRangeSliderUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 /*debug
 		g.setColor( Color.gray );
@@ -209,6 +211,16 @@ public class FlatRangeSliderUI
 debug*/
 
 		super.paint( g, c );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		oldRenderingHints = null;
+	}
+
+	@Override
+	public void paintLabels( Graphics g ) {
+		FlatUIUtils.runWithoutRenderingHints( g, oldRenderingHints, () -> {
+			super.paintLabels( g );
+		} );
 	}
 
 	@Override

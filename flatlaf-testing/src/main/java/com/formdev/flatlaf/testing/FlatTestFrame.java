@@ -68,6 +68,9 @@ public class FlatTestFrame
 	public boolean applyComponentOrientationToFrame;
 
 	public static FlatTestFrame create( String[] args, String title ) {
+		// disable text antialiasing
+//		System.setProperty( "awt.useSystemAAFontSettings", "off" );
+
 		DemoPrefs.init( PREFS_ROOT_PATH );
 
 		// set scale factor

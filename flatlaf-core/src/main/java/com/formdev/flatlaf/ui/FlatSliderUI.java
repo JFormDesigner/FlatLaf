@@ -94,6 +94,8 @@ public class FlatSliderUI
 	protected boolean thumbHover;
 	protected boolean thumbPressed;
 
+	private Object[] oldRenderingHints;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSliderUI();
 	}
@@ -211,7 +213,7 @@ public class FlatSliderUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 /*debug
 		g.setColor( Color.gray );
@@ -227,6 +229,16 @@ public class FlatSliderUI
 debug*/
 
 		super.paint( g, c );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		oldRenderingHints = null;
+	}
+
+	@Override
+	public void paintLabels( Graphics g ) {
+		FlatUIUtils.runWithoutRenderingHints( g, oldRenderingHints, () -> {
+			super.paintLabels( g );
+		} );
 	}
 
 	@Override

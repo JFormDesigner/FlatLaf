@@ -21,6 +21,7 @@ import javax.swing.*;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
+import org.jdesktop.swingx.*;
 
 /**
  * @author Karl Tauber
@@ -89,6 +90,12 @@ public class FlatHtmlTest
 		label14 = new JLabel();
 		label15 = new JLabel();
 		label16 = new JLabel();
+		label17 = new JLabel();
+		comboBox1 = new JComboBox<>();
+		comboBox2 = new JComboBox<>();
+		label18 = new JLabel();
+		xHyperlink1 = new JXHyperlink();
+		xHyperlink2 = new JXHyperlink();
 		label1 = new JLabel();
 		scrollPane15 = new JScrollPane();
 		editorPane1 = new JEditorPane();
@@ -141,6 +148,8 @@ public class FlatHtmlTest
 				"[fill]" +
 				"[fill]",
 				// rows
+				"[]" +
+				"[]" +
 				"[]" +
 				"[]" +
 				"[]" +
@@ -283,6 +292,38 @@ public class FlatHtmlTest
 			label16.setText("(move mouse here)");
 			label16.setToolTipText("Some text");
 			panel1.add(label16, "cell 2 9");
+
+			//---- label17 ----
+			label17.setText("JComboBox:");
+			panel1.add(label17, "cell 0 10");
+
+			//---- comboBox1 ----
+			comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
+				"<html>Some <b>Bold</b> Text",
+				"abc",
+				"def"
+			}));
+			panel1.add(comboBox1, "cell 1 10");
+
+			//---- comboBox2 ----
+			comboBox2.setModel(new DefaultComboBoxModel<>(new String[] {
+				"Some Text",
+				"abc",
+				"def"
+			}));
+			panel1.add(comboBox2, "cell 2 10");
+
+			//---- label18 ----
+			label18.setText("JXHyperlink:");
+			panel1.add(label18, "cell 0 11");
+
+			//---- xHyperlink1 ----
+			xHyperlink1.setText("<html>Some <b>Bold</b> Text");
+			panel1.add(xHyperlink1, "cell 1 11");
+
+			//---- xHyperlink2 ----
+			xHyperlink2.setText("Some text");
+			panel1.add(xHyperlink2, "cell 2 11");
 		}
 		add(panel1, "cell 4 0 1 3,aligny top,growy 0");
 
@@ -400,6 +441,12 @@ public class FlatHtmlTest
 	private JLabel label14;
 	private JLabel label15;
 	private JLabel label16;
+	private JLabel label17;
+	private JComboBox<String> comboBox1;
+	private JComboBox<String> comboBox2;
+	private JLabel label18;
+	private JXHyperlink xHyperlink1;
+	private JXHyperlink xHyperlink2;
 	private JLabel label1;
 	private JScrollPane scrollPane15;
 	private JEditorPane editorPane1;

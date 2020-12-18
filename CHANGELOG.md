@@ -27,6 +27,10 @@ FlatLaf Change Log
   #224)
 - SwingX: Fixed striping background highlighting color (e.g. alternating table
   rows) in dark themes.
+- Fixed: If text antialiasing is disabled (in OS system settings or via
+  `-Dawt.useSystemAAFontSettings=off`), then some components still did use
+  antialiasing to render text (not-editable ComboBox, ProgressBar, Slider,
+  TabbedPane and multiline ToolTip). (issue #227)
 
 
 ## 0.45

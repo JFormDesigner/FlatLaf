@@ -226,6 +226,8 @@ public class FlatTabbedPaneUI
 	private boolean rolloverTabClose;
 	private boolean pressedTabClose;
 
+	private Object[] oldRenderingHints;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
 	}
@@ -791,9 +793,12 @@ public class FlatTabbedPaneUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 		super.update( g, c );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		oldRenderingHints = null;
 	}
 
 	@Override
@@ -874,27 +879,29 @@ public class FlatTabbedPaneUI
 	{
 		g.setFont( font );
 
-		// html
-		View view = getTextViewForTab( tabIndex );
-		if( view != null ) {
-			view.paint( g, textRect );
-			return;
-		}
+		FlatUIUtils.runWithoutRenderingHints( g, oldRenderingHints, () -> {
+			// html
+			View view = getTextViewForTab( tabIndex );
+			if( view != null ) {
+				view.paint( g, textRect );
+				return;
+			}
 
-		// plain text
-		Color color;
-		if( tabPane.isEnabled() && tabPane.isEnabledAt( tabIndex ) ) {
-			color = tabPane.getForegroundAt( tabIndex );
-			if( isSelected && (color instanceof UIResource) && selectedForeground != null )
-				color = selectedForeground;
-		} else
-			color = disabledForeground;
+			// plain text
+			Color color;
+			if( tabPane.isEnabled() && tabPane.isEnabledAt( tabIndex ) ) {
+				color = tabPane.getForegroundAt( tabIndex );
+				if( isSelected && (color instanceof UIResource) && selectedForeground != null )
+					color = selectedForeground;
+			} else
+				color = disabledForeground;
 
-		int mnemIndex = FlatLaf.isShowMnemonics() ? tabPane.getDisplayedMnemonicIndexAt( tabIndex ) : -1;
+			int mnemIndex = FlatLaf.isShowMnemonics() ? tabPane.getDisplayedMnemonicIndexAt( tabIndex ) : -1;
 
-		g.setColor( color );
-		FlatUIUtils.drawStringUnderlineCharAt( tabPane, g, title, mnemIndex,
-			textRect.x, textRect.y + metrics.getAscent() );
+			g.setColor( color );
+			FlatUIUtils.drawStringUnderlineCharAt( tabPane, g, title, mnemIndex,
+				textRect.x, textRect.y + metrics.getAscent() );
+		} );
 	}
 
 	@Override

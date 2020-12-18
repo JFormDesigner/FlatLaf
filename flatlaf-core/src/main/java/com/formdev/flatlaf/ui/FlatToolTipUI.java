@@ -116,7 +116,6 @@ public class FlatToolTipUI
 			FontMetrics fm = c.getFontMetrics( c.getFont() );
 			Insets insets = c.getInsets();
 
-			FlatUIUtils.setRenderingHints( (Graphics2D) g );
 			g.setColor( c.getForeground() );
 
 			List<String> lines = StringUtils.split( ((JToolTip)c).getTipText(), '\n' );
