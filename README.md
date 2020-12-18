@@ -76,36 +76,50 @@ Addons
 Projects using FlatLaf
 ----------------------
 
-- [NetBeans](https://netbeans.apache.org/) 11.3
+- [Apache NetBeans](https://netbeans.apache.org/) 11.3 - IDE for Java, PHP, HTML
+  and much more
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
-- [OWASP Zed Attack Proxy (ZAP)](https://www.zaproxy.org/) (in weekly releases)
-- ![New](images/new.svg) [jAlbum](https://jalbum.net/) 21 (commercial)
+- ![New](images/new.svg) [OWASP ZAP](https://www.zaproxy.org/) 2.10 - the worlds
+  most widely used web app scanner
+- ![New](images/new.svg) [jAlbum](https://jalbum.net/) 21 (commercial) - creates
+  photo album websites
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (commercial)
-- [Total Validator](https://www.totalvalidator.com/) 15 (commercial)
-- [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org)
+- [Total Validator](https://www.totalvalidator.com/) 15 (commercial) - checks
+  your website
+- [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
 - [MegaMek](https://github.com/MegaMek/megamek) v0.47.4 and
-  [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5
+  [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5 - a turn-based sci-fi board
+  game
 - [GUIslice Builder](https://github.com/ImpulseAdventure/GUIslice-Builder)
-  0.13.b024
-- [Rest Suite](https://github.com/supanadit/restsuite)
-- [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy)
-- [SpringRemote](https://github.com/HaleyWang/SpringRemote)
+  0.13.b024 - GUI builder for
+  [GUIslice](https://github.com/ImpulseAdventure/GUIslice), a lightweight GUI
+  framework for embedded displays
+- [Rest Suite](https://github.com/supanadit/restsuite) - Rest API testing
+- [ControllerBuddy](https://github.com/bwRavencl/ControllerBuddy) - advanced
+  gamepad mapping software
+- [SpringRemote](https://github.com/HaleyWang/SpringRemote) - remote Linux SSH
+  connections manager
 - [mendelson AS2](https://sourceforge.net/projects/mec-as2/),
   [AS4](https://sourceforge.net/projects/mendelson-as4/) and
   [OFTP2](https://sourceforge.net/projects/mendelson-oftp2/) (open-source) and
   [mendelson AS2](https://mendelson-e-c.com/as2/),
   [AS4](https://mendelson-e-c.com/as4/) and
   [OFTP2](https://mendelson-e-c.com/oftp2) (commercial)
-- [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2
-- [lsfusion platform](https://github.com/lsfusion/platform)
+- [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2 - GIS and scientific
+  computation environment for meteorological community
+- [lsfusion platform](https://github.com/lsfusion/platform) - information
+  systems development platform
 - [Jes - Die Java-EÜR](https://www.jes-eur.de)
 - [Mapton](https://mapton.org/) 2.0
-  ([source code](https://github.com/trixon/mapton)) based on NetBeans platform
-- [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE)
-- [Sound Analysis](https://github.com/tomasz-herman/SoundAnalysis)
-- [RemoteLight](https://github.com/Drumber/RemoteLight) - Multifunctional LED
-  Control Software
+  ([source code](https://github.com/trixon/mapton)) based on NetBeans platform -
+  some kind of map application
+- [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE) -
+  IDE for Pseudo-Assembler
+- [Sound Analysis](https://github.com/tomasz-herman/SoundAnalysis) - analyze
+  sound files in time or frequency domain
+- [RemoteLight](https://github.com/Drumber/RemoteLight) - multifunctional LED
+  control software
 - and more...
 
 
