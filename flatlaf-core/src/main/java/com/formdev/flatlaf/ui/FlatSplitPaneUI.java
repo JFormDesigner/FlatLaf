@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -148,10 +147,12 @@ public class FlatSplitPaneUI
 			if( "plain".equals( style ) )
 				return;
 
-			FlatUIUtils.setRenderingHints( (Graphics2D) g );
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 			g.setColor( gripColor );
 			paintGrip( g, 0, 0, getWidth(), getHeight() );
+
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
 
 		protected void paintGrip( Graphics g, int x, int y, int width, int height ) {

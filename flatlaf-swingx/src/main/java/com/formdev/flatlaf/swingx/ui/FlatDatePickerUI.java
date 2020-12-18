@@ -218,7 +218,7 @@ public class FlatDatePickerUI
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;
-		FlatUIUtils.setRenderingHints( g2 );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g2 );
 
 		int width = c.getWidth();
 		int height = c.getHeight();
@@ -252,6 +252,8 @@ public class FlatDatePickerUI
 		g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
 
 		paint( g, c );
+
+		FlatUIUtils.resetRenderingHints( g2, oldRenderingHints );
 	}
 
 	//---- class DefaultEditor ------------------------------------------------

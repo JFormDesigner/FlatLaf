@@ -264,7 +264,7 @@ public class FlatSpinnerUI
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;
-		FlatUIUtils.setRenderingHints( g2 );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g2 );
 
 		int width = c.getWidth();
 		int height = c.getHeight();
@@ -303,6 +303,8 @@ public class FlatSpinnerUI
 		}
 
 		paint( g, c );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 
 	//---- class Handler ------------------------------------------------------

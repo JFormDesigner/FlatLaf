@@ -19,7 +19,6 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -221,8 +220,9 @@ public class FlatScrollBarUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 		super.paint( g, c );
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 
 	@Override

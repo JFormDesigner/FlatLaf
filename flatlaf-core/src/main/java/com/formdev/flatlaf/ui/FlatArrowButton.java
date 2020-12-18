@@ -166,8 +166,7 @@ public class FlatArrowButton
 
 	@Override
 	public void paint( Graphics g ) {
-		Graphics2D g2 = (Graphics2D)g;
-		FlatUIUtils.setRenderingHints( g2 );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 		// paint hover or pressed background
 		if( isEnabled() ) {
@@ -179,7 +178,7 @@ public class FlatArrowButton
 
 			if( background != null ) {
 				g.setColor( deriveBackground( background ) );
-				paintBackground( g2 );
+				paintBackground( (Graphics2D) g );
 			}
 		}
 
@@ -191,7 +190,9 @@ public class FlatArrowButton
 					? hoverForeground
 					: foreground))
 			: disabledForeground ) );
-		paintArrow( g2 );
+		paintArrow( (Graphics2D) g );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 
 	protected void paintBackground( Graphics2D g ) {

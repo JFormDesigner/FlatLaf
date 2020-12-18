@@ -471,7 +471,7 @@ public class FlatPaintingTest
 		@Override
 		protected void paintComponent( Graphics g ) {
 			Graphics2D g2 = (Graphics2D) g;
-			FlatUIUtils.setRenderingHints( g2 );
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g2 );
 
 			g2.scale( scale, scale );
 			g2.translate( 1, 1 );
@@ -503,6 +503,8 @@ public class FlatPaintingTest
 					g2d.setColor( Color.magenta );
 					g2d.drawRect( x2 - gap, y2 - gap, width2 + (gap * 2) - 1, height2 + (gap * 2) - 1 );
 				} );
+
+			FlatUIUtils.resetRenderingHints( g2, oldRenderingHints );
 		}
 	}
 }
