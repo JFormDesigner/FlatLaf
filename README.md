@@ -82,8 +82,10 @@ Projects using FlatLaf
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
 - ![New](images/new.svg) [OWASP ZAP](https://www.zaproxy.org/) 2.10 - the worlds
   most widely used web app scanner
-- ![New](images/new.svg) [jAlbum](https://jalbum.net/) 21 (commercial) - creates
-  photo album websites
+- ![New](images/new.svg) [JOSM](https://josm.openstreetmap.de/) - an extensible
+  editor for [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf
+  JOSM plugin)
+- [jAlbum](https://jalbum.net/) 21 (commercial) - creates photo album websites
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (commercial)
 - [Total Validator](https://www.totalvalidator.com/) 15 (commercial) - checks
   your website
@@ -120,6 +122,12 @@ Projects using FlatLaf
   sound files in time or frequency domain
 - [RemoteLight](https://github.com/Drumber/RemoteLight) - multifunctional LED
   control software
+- ![New](images/new.svg)
+  [Novel-Grabber](https://github.com/Flameish/Novel-Grabber) - download novels
+  from any webnovel and lightnovel site
+- ![New](images/new.svg)
+  [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
+  and fastboot commands easier to use
 - and more...
 
 
