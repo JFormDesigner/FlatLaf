@@ -102,6 +102,8 @@ Projects using FlatLaf
   gamepad mapping software
 - [SpringRemote](https://github.com/HaleyWang/SpringRemote) - remote Linux SSH
   connections manager
+- ![New](images/new.svg) [jEnTunnel](https://github.com/ggrandes/jentunnel) -
+  manage SSH Tunnels made easy
 - [mendelson AS2](https://sourceforge.net/projects/mec-as2/),
   [AS4](https://sourceforge.net/projects/mendelson-as4/) and
   [OFTP2](https://sourceforge.net/projects/mendelson-oftp2/) (open-source) and
@@ -112,19 +114,35 @@ Projects using FlatLaf
   computation environment for meteorological community
 - [lsfusion platform](https://github.com/lsfusion/platform) - information
   systems development platform
+- ![New](images/new.svg) [JPass](https://github.com/gaborbata/jpass) - password
+  manager with strong encryption
 - [Jes - Die Java-EÜR](https://www.jes-eur.de)
 - [Mapton](https://mapton.org/) 2.0
   ([source code](https://github.com/trixon/mapton)) based on NetBeans platform -
   some kind of map application
 - [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE) -
   IDE for Pseudo-Assembler
+- ![New](images/new.svg) [Linotte](https://github.com/cpc6128/LangageLinotte)
+  3.1 - French programming language created to learn programming
+- ![New](images/new.svg) [MEKA](https://github.com/Waikato/meka) 1.9.3 -
+  multi-label classifiers and evaluation procedures using the Weka machine
+  learning framework
+- ![New](images/new.svg) [Shutter Encoder](https://www.shutterencoder.com/) 14.2
+  ([source code](https://github.com/paulpacifico/shutter-encoder)) -
+  professional video converter and compression tool (screenshots show **old**
+  look)
 - [Sound Analysis](https://github.com/tomasz-herman/SoundAnalysis) - analyze
   sound files in time or frequency domain
 - [RemoteLight](https://github.com/Drumber/RemoteLight) - multifunctional LED
   control software
 - ![New](images/new.svg)
+  [ThunderFocus](https://github.com/marcocipriani01/ThunderFocus) -
+  Arduino-based telescope focuser
+- ![New](images/new.svg)
   [Novel-Grabber](https://github.com/Flameish/Novel-Grabber) - download novels
   from any webnovel and lightnovel site
+- ![New](images/new.svg) [lectureStudio](https://www.lecturestudio.org/)
+  4.3.1060 - digitize your lectures with ease
 - ![New](images/new.svg)
   [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
   and fastboot commands easier to use
