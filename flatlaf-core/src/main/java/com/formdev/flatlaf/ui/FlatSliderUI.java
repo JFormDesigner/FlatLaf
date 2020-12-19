@@ -279,6 +279,12 @@ debug*/
 		}
 
 		if( coloredTrack != null ) {
+			if( slider.getInverted() ) {
+				RoundRectangle2D temp = track;
+				track = coloredTrack;
+				coloredTrack = temp;
+			}
+
 			g.setColor( trackValueColor );
 			((Graphics2D)g).fill( coloredTrack );
 		}

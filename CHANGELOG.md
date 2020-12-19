@@ -21,6 +21,7 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Slider: Fixed painting of colored track if `JSlider.inverted` is `true`.
 - Table and TableHeader: Fixed missing right vertical grid line if using table
   as row header in scroll pane. (issues #152 and #46)
 - TableHeader: Fixed position of column separators in right-to-left component
