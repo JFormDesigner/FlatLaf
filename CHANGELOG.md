@@ -15,6 +15,7 @@ FlatLaf Change Log
   to `com.formdev.flatlaf.extras.FlatSVGUtils`.
 - IntelliJ Themes: Added flag whether a theme is dark to
   `FlatAllIJThemes.INFOS`. (issue #221)
+- JIDE Common Layer: Support `TristateCheckBox`.
 
 
 #### Fixed bugs

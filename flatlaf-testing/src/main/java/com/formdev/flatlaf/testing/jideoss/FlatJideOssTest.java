@@ -51,6 +51,8 @@ public class FlatJideOssTest
 
 	FlatJideOssTest() {
 		initComponents();
+
+		tristateCheckBox1Changed();
 	}
 
 	private void tabScrollChanged() {
@@ -104,6 +106,16 @@ public class FlatJideOssTest
 		popupMenu.showPopup();
 	}
 
+	private void tristateCheckBox1Changed() {
+		String text = null;
+		switch( tristateCheckBox1.getState() ) {
+			case TristateCheckBox.STATE_UNSELECTED:	text = "UNSELECTED"; break;
+			case TristateCheckBox.STATE_SELECTED:	text = "SELECTED"; break;
+			case TristateCheckBox.STATE_MIXED:		text = "MIXED"; break;
+		}
+		triStateLabel1.setText( text );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -135,6 +147,9 @@ public class FlatJideOssTest
 		JPanel panel10 = new JPanel();
 		JLabel jidePopupLabel = new JLabel();
 		JButton showJidePopupButton = new JButton();
+		JLabel label9 = new JLabel();
+		tristateCheckBox1 = new TristateCheckBox();
+		triStateLabel1 = new JLabel();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -303,8 +318,10 @@ public class FlatJideOssTest
 					"insets 3 0 3 3,hidemode 3",
 					// columns
 					"[fill]" +
+					"[fill]" +
 					"[fill]",
 					// rows
+					"[]" +
 					"[]"));
 
 				//---- jidePopupLabel ----
@@ -315,6 +332,20 @@ public class FlatJideOssTest
 				showJidePopupButton.setText("show JidePopup");
 				showJidePopupButton.addActionListener(e -> showJidePopupButtonActionPerformed(e));
 				panel10.add(showJidePopupButton, "cell 1 0");
+
+				//---- label9 ----
+				label9.setText("TristateCheckBox:");
+				panel10.add(label9, "cell 0 1");
+
+				//---- tristateCheckBox1 ----
+				tristateCheckBox1.setText("three states");
+				tristateCheckBox1.addActionListener(e -> tristateCheckBox1Changed());
+				panel10.add(tristateCheckBox1, "cell 1 1");
+
+				//---- triStateLabel1 ----
+				triStateLabel1.setText("text");
+				triStateLabel1.setEnabled(false);
+				panel10.add(triStateLabel1, "cell 2 1");
 			}
 			panel9.add(panel10, cc.xy(1, 9));
 		}
@@ -330,5 +361,7 @@ public class FlatJideOssTest
 	private JCheckBox moreTabsCheckBox;
 	private JCheckBox tabScrollCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
+	private TristateCheckBox tristateCheckBox1;
+	private JLabel triStateLabel1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

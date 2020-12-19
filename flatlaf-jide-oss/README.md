@@ -8,6 +8,7 @@ Following JIDE Common Layer components are currently supported by this addon:
 
 - `JideTabbedPane`
 - `RangeSlider`
+- `TristateCheckBox`
 
 
 **Note**: We have currently no plans to support additional components. If you're
