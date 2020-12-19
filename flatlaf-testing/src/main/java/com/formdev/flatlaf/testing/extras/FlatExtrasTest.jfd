@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -30,25 +30,40 @@ new FormModel {
 				"value": "cell 2 0,gapx 30"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
-				name: "triStateCheckBox2"
-				"text": "third state disabled"
-				"thirdStateEnabled": false
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "triStateCheckBox2Changed", false ) )
+				name: "triStateCheckBox3"
+				"text": "alt state cycle order"
+				"altStateCycleOrder": true
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "triStateCheckBox3Changed", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "triStateLabel3"
+				"text": "text"
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1,gapx 30"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
+				name: "triStateCheckBox2"
+				"text": "third state disabled"
+				"allowIndeterminate": false
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "triStateCheckBox2Changed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "triStateLabel2"
 				"text": "text"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1,gapx 30"
+				"value": "cell 2 2,gapx 30"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
 				"text": "SVG Icons:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2"
+				"value": "cell 0 3"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 0,hidemode 3"
@@ -57,43 +72,43 @@ new FormModel {
 			} ) {
 				name: "svgIconsPanel"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2 2 1"
+				"value": "cell 1 3 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label3"
 				"text": "The icons may change colors when switching to another theme."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3 2 1"
+				"value": "cell 1 4 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label4"
 				"text": "Disabled SVG Icons:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 4"
+				"value": "cell 0 5"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "disabledLabel"
 				"text": "label"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4 2 1"
+				"value": "cell 1 5 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "disabledButton"
 				"text": "button"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4 2 1"
+				"value": "cell 1 5 2 1"
 			} )
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "disabledTabbedPane"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4 2 1"
+				"value": "cell 1 5 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
 				"text": "only setIcon()"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4 2 1,gapx 20"
+				"value": "cell 1 5 2 1,gapx 20"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "disabledCheckBox"
@@ -102,35 +117,35 @@ new FormModel {
 				"mnemonic": 68
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "disabledChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 5,alignx left,growx 0"
+				"value": "cell 0 6,alignx left,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "disabledLabel2"
 				"text": "label"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5 2 1"
+				"value": "cell 1 6 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "disabledButton2"
 				"text": "button"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5 2 1"
+				"value": "cell 1 6 2 1"
 			} )
 			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "disabledTabbedPane2"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5 2 1"
+				"value": "cell 1 6 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
 				"text": "setIcon() and setDisabledIcon()"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5 2 1,gapx 20"
+				"value": "cell 1 6 2 1,gapx 20"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 595, 300 )
+			"size": new java.awt.Dimension( 595, 470 )
 		} )
 	}
 }

@@ -10,7 +10,8 @@ FlatLaf Change Log
   `com.formdev.flatlaf.extras.components`).
 - Extras: Renamed tri-state check box class from
   `com.formdev.flatlaf.extras.TriStateCheckBox` to
-  `com.formdev.flatlaf.extras.components.FlatTriStateCheckBox`.
+  `com.formdev.flatlaf.extras.components.FlatTriStateCheckBox`. Also
+  changed/improved API and added javadoc.
 - Extras: Renamed SVG utility class from `com.formdev.flatlaf.extras.SVGUtils`
   to `com.formdev.flatlaf.extras.FlatSVGUtils`.
 - IntelliJ Themes: Added flag whether a theme is dark to

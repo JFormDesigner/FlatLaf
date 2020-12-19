@@ -359,7 +359,7 @@ public class FlatContainerTest
 	}
 
 	private void secondTabClosableChanged() {
-		Boolean closable = secondTabClosableCheckBox.getValue();
+		Boolean closable = secondTabClosableCheckBox.getChecked();
 
 		for( FlatTabbedPane tabbedPane : allTabbedPanes ) {
 			if( tabbedPane.getTabCount() > 1 ) {
