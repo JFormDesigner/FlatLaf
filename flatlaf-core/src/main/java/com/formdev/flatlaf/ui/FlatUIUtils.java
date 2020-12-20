@@ -255,7 +255,7 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Resets rendering hints previously set with {@link #setRenderingHints(Graphics2D)}.
+	 * Resets rendering hints previously set with {@link #setRenderingHints}.
 	 */
 	public static void resetRenderingHints( Graphics g, Object[] oldRenderingHints ) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -264,7 +264,7 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Temporary resets rendering hints set with {@link #setRenderingHints(Graphics2D)}
+	 * Temporary resets rendering hints set with {@link #setRenderingHints}
 	 * and runs the given runnable.
 	 * <p>
 	 * This is intended for painting text while rendering hints are set.
