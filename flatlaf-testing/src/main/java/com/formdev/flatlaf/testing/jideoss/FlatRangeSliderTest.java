@@ -16,12 +16,14 @@
 
 package com.formdev.flatlaf.testing.jideoss;
 
+import javax.swing.*;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.testing.FlatTestFrame;
 import com.formdev.flatlaf.testing.FlatTestPanel;
 import com.jidesoft.plaf.LookAndFeelFactory;
@@ -46,8 +48,43 @@ public class FlatRangeSliderTest
 		} );
 	}
 
+	private final JSlider[] allSliders;
+	private final JSlider[] directionalSliders;
+
 	FlatRangeSliderTest() {
 		initComponents();
+
+		allSliders = new JSlider[] {
+			horizontalRangeSlider,
+			verticalRangeSlider,
+			horizontalSlider,
+			verticalSlider,
+			horizontalRangeSlider2,
+			verticalRangeSlider2,
+			horizontalSlider2,
+			verticalSlider2,
+		};
+		directionalSliders = new JSlider[] {
+			horizontalRangeSlider,
+			verticalRangeSlider,
+			horizontalSlider,
+			verticalSlider,
+		};
+
+		ChangeListener sliderChanged = e -> {
+			JSlider slider = (JSlider) e.getSource();
+			String text;
+			if( slider instanceof RangeSlider ) {
+				RangeSlider rangeSlider = (RangeSlider) slider;
+				text = rangeSlider.getLowValue() + " - " + rangeSlider.getHighValue()
+					+ "  " + slider.getValueIsAdjusting();
+			} else
+				text = slider.getValue() + "  " + slider.getValueIsAdjusting();
+			sliderValueLabel.setText( text );
+//			System.out.println( text );
+		};
+		for( JSlider slider : allSliders )
+			slider.addChangeListener( sliderChanged );
 	}
 
 	private void paintLabels() {
@@ -66,6 +103,26 @@ public class FlatRangeSliderTest
 		verticalSlider.setPaintTicks( selected );
 	}
 
+	private void sliderSnapToTicksChanged() {
+		boolean snapToTicks = sliderSnapToTicksCheckBox.isSelected();
+		for( JSlider slider : allSliders )
+			slider.setSnapToTicks( snapToTicks );
+	}
+
+	private void majorThickSpacingChanged() {
+		int majorTickSpacing = (Integer) majorTickSpacingSpinner.getValue();
+		for( JSlider slider : directionalSliders ) {
+			slider.setLabelTable( null );
+			slider.setMajorTickSpacing( majorTickSpacing );
+		}
+	}
+
+	private void minorThickSpacingChanged() {
+		int minorTickSpacing = (Integer) minorTickSpacingSpinner.getValue();
+		for( JSlider slider : directionalSliders )
+			slider.setMinorTickSpacing( minorTickSpacing );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel tabbedPaneLabel = new JLabel();
@@ -81,13 +138,18 @@ public class FlatRangeSliderTest
 		verticalSlider2 = new JSlider();
 		paintTick = new JCheckBox();
 		paintLabel = new JCheckBox();
+		sliderSnapToTicksCheckBox = new JCheckBox();
+		majorTickSpacingSpinner = new JSpinner();
+		minorTickSpacingSpinner = new JSpinner();
+		sliderValueLabel = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
 			"insets dialog,hidemode 3",
 			// columns
 			"[left]" +
-			"[240,left]",
+			"[240,left]" +
+			"[fill]",
 			// rows
 			"[fill]" +
 			"[center]" +
@@ -170,14 +232,33 @@ public class FlatRangeSliderTest
 		paintTick.setMnemonic('T');
 		paintTick.setSelected(true);
 		paintTick.addActionListener(e -> paintTicks());
-		add(paintTick, "cell 0 6 2 1");
+		add(paintTick, "cell 0 6 3 1");
 
 		//---- paintLabel ----
 		paintLabel.setText("PaintLabels");
 		paintLabel.setMnemonic('L');
 		paintLabel.setSelected(true);
 		paintLabel.addActionListener(e -> paintLabels());
-		add(paintLabel, "cell 0 6 2 1");
+		add(paintLabel, "cell 0 6 3 1");
+
+		//---- sliderSnapToTicksCheckBox ----
+		sliderSnapToTicksCheckBox.setText("snap to ticks");
+		sliderSnapToTicksCheckBox.addActionListener(e -> sliderSnapToTicksChanged());
+		add(sliderSnapToTicksCheckBox, "cell 0 6 3 1");
+
+		//---- majorTickSpacingSpinner ----
+		majorTickSpacingSpinner.setModel(new SpinnerNumberModel(10, 0, 100, 5));
+		majorTickSpacingSpinner.addChangeListener(e -> majorThickSpacingChanged());
+		add(majorTickSpacingSpinner, "cell 0 6 3 1");
+
+		//---- minorTickSpacingSpinner ----
+		minorTickSpacingSpinner.setModel(new SpinnerNumberModel(5, 0, 100, 5));
+		minorTickSpacingSpinner.addChangeListener(e -> minorThickSpacingChanged());
+		add(minorTickSpacingSpinner, "cell 0 6 3 1");
+
+		//---- sliderValueLabel ----
+		sliderValueLabel.setText("slider value");
+		add(sliderValueLabel, "cell 0 6 3 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -192,5 +273,9 @@ public class FlatRangeSliderTest
 	private JSlider verticalSlider2;
 	private JCheckBox paintTick;
 	private JCheckBox paintLabel;
+	private JCheckBox sliderSnapToTicksCheckBox;
+	private JSpinner majorTickSpacingSpinner;
+	private JSpinner minorTickSpacingSpinner;
+	private JLabel sliderValueLabel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

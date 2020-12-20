@@ -23,12 +23,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.ui.FlatSliderUI;
@@ -142,6 +144,11 @@ public class FlatRangeSliderUI
 		disabledTrackColor = null;
 		disabledThumbColor = null;
 		disabledThumbBorderColor = null;
+	}
+
+	@Override
+	protected TrackListener createTrackListener( JSlider slider ) {
+		return new FlatRangeTrackListener( super.createTrackListener( slider ) );
 	}
 
 	@Override
@@ -299,5 +306,65 @@ debug*/
 
 	protected boolean isRoundThumb() {
 		return !slider.getPaintTicks() && !slider.getPaintLabels();
+	}
+
+	//---- class FlatRangeTrackListener ---------------------------------------
+
+	protected class FlatRangeTrackListener
+		extends RangeTrackListener
+	{
+		public FlatRangeTrackListener( TrackListener listener ) {
+			super( listener );
+		}
+
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			if( !slider.isEnabled() )
+				return;
+
+			// use "old" behavior when clicking on track
+			if( UIManager.getBoolean( "Slider.scrollOnTrackClick" ) ) {
+				super.mousePressed( e );
+				return;
+			}
+
+			// "new" behavior set thumb to mouse location when clicking on track
+
+			int x = e.getX();
+			int y = e.getY();
+			int handle = getMouseHandle( x, y );
+
+			// clicked on thumb --> let super class do the work
+			if( handle != MOUSE_HANDLE_LOWER && handle != MOUSE_HANDLE_UPPER ) {
+				super.mousePressed( e );
+				return;
+			}
+
+			if( UIManager.getBoolean( "Slider.onlyLeftMouseButtonDrag" ) &&
+				!SwingUtilities.isLeftMouseButton( e ) )
+			  return;
+
+			// get low or high thumb rectangle
+			Rectangle thumbRect = FlatRangeSliderUI.this.thumbRect;
+			if( handle == MOUSE_HANDLE_UPPER ) {
+				Point p = adjustThumbForHighValue();
+				thumbRect = new Rectangle( FlatRangeSliderUI.this.thumbRect );
+				restoreThumbForLowValue( p );
+			}
+
+			// move the mouse event coordinates to the center of the thumb
+			int tx = thumbRect.x + (thumbRect.width / 2) - x;
+			int ty = thumbRect.y + (thumbRect.height / 2) - y;
+			e.translatePoint( tx, ty );
+
+			// invoke super mousePressed() to start dragging thumb
+			super.mousePressed( e );
+
+			// move the mouse event coordinates back to current mouse location
+			e.translatePoint( -tx, -ty );
+
+			// invoke mouseDragged() to update thumb location
+			mouseDragged( e );
+		}
 	}
 }

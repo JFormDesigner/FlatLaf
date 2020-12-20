@@ -5,8 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- Slider: Clicking on track now immediately moves the thumb to mouse location
-  and starts dragging the thumb. Use `UIManager.put(
+- Slider and JIDE RangeSlider: Clicking on track now immediately moves the thumb
+  to mouse location and starts dragging the thumb. Use `UIManager.put(
   "Slider.scrollOnTrackClick", true )` to enable old behavior that scrolls the
   thumb when clicking on track.
 - Slider: Snap to ticks is now done while dragging the thumb. Use
