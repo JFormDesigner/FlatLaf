@@ -928,6 +928,8 @@ Tree.textForeground
 Tree.timeFactor
 Tree.wideSelection
 TreeUI
+TristateCheckBox.clearMixed.clientProperty
+TristateCheckBox.setMixed.clientProperty
 UIColorHighlighter.stripingBackground
 Viewport.background
 Viewport.font

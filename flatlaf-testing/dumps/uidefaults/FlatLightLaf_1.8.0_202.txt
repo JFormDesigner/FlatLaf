@@ -1278,6 +1278,16 @@ Tree.wideSelection             true
 TreeUI                         com.formdev.flatlaf.ui.FlatTreeUI
 
 
+#---- TristateCheckBox ----
+
+TristateCheckBox.clearMixed.clientProperty length=2    [Ljava.lang.Object;
+    [0] JButton.selectedState
+    [1] null
+TristateCheckBox.setMixed.clientProperty length=2    [Ljava.lang.Object;
+    [0] JButton.selectedState
+    [1] indeterminate
+
+
 #---- UIColorHighlighter ----
 
 UIColorHighlighter.stripingBackground #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
