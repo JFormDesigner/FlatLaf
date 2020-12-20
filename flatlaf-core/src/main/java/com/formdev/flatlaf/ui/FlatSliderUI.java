@@ -226,6 +226,10 @@ public class FlatSliderUI
 		g.drawRect( trackRect.x, trackRect.y, trackRect.width - 1, trackRect.height - 1 );
 		g.setColor( Color.red );
 		g.drawRect( thumbRect.x, thumbRect.y, thumbRect.width - 1, thumbRect.height - 1 );
+		g.setColor( Color.green );
+		g.drawRect( tickRect.x, tickRect.y, tickRect.width - 1, tickRect.height - 1 );
+		g.setColor( Color.red );
+		g.drawRect( labelRect.x, labelRect.y, labelRect.width - 1, labelRect.height - 1 );
 debug*/
 
 		super.paint( g, c );
@@ -502,7 +506,47 @@ debug*/
 		@Override
 		public void mousePressed( MouseEvent e ) {
 			setThumbPressed( isOverThumb( e ) );
+
+			if( !slider.isEnabled() )
+				return;
+
+			// use "old" behavior when clicking on track
+			if( UIManager.getBoolean( "Slider.scrollOnTrackClick" ) ) {
+				super.mousePressed( e );
+				return;
+			}
+
+			// "new" behavior set thumb to mouse location when clicking on track
+
+			int x = e.getX();
+			int y = e.getY();
+
+			// clicked on thumb --> let super class do the work
+			calculateGeometry();
+			if( thumbRect.contains( x, y ) ) {
+				super.mousePressed( e );
+				return;
+			}
+
+			if( UIManager.getBoolean( "Slider.onlyLeftMouseButtonDrag" ) &&
+				!SwingUtilities.isLeftMouseButton( e ) )
+			  return;
+
+			// move the mouse event coordinates to the center of the thumb
+			int tx = thumbRect.x + (thumbRect.width / 2) - x;
+			int ty = thumbRect.y + (thumbRect.height / 2) - y;
+			e.translatePoint( tx, ty );
+
+			// invoke super mousePressed() to start dragging thumb
 			super.mousePressed( e );
+
+			// move the mouse event coordinates back to current mouse location
+			e.translatePoint( -tx, -ty );
+
+			// invoke super mouseDragged() to update thumb location
+			super.mouseDragged( e );
+
+			setThumbPressed( true );
 		}
 
 		@Override

@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Slider: Clicking on track now immediately moves the thumb to mouse location
+  and starts dragging the thumb.
 - Extras: Added standard component extension classes that provides easy access
   to FlatLaf specific client properties (see package
   `com.formdev.flatlaf.extras.components`).
