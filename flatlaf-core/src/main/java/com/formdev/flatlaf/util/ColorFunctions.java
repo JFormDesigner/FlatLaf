@@ -44,6 +44,38 @@ public class ColorFunctions
 				: value);
 	}
 
+	/**
+	 * Returns a color that is a mixture of two colors.
+	 *
+	 * @param color1 first color
+	 * @param color2 second color
+	 * @param weight the weight (in range 0-1) to mix the two colors.
+	 *               Larger weight uses more of first color, smaller weight more of second color.
+	 * @return mixture of colors
+	 */
+	public static Color mix( Color color1, Color color2, float weight ) {
+		if( weight >= 1 )
+			return color1;
+		if( weight <= 0 )
+			return color2;
+
+		int r1 = color1.getRed();
+		int g1 = color1.getGreen();
+		int b1 = color1.getBlue();
+		int a1 = color1.getAlpha();
+
+		int r2 = color2.getRed();
+		int g2 = color2.getGreen();
+		int b2 = color2.getBlue();
+		int a2 = color2.getAlpha();
+
+		return new Color(
+			Math.round( r2 + ((r1 - r2) * weight) ),
+			Math.round( g2 + ((g1 - g2) * weight) ),
+			Math.round( b2 + ((b1 - b2) * weight) ),
+			Math.round( a2 + ((a1 - a2) * weight) ) );
+	}
+
 	//---- interface ColorFunction --------------------------------------------
 
 	public interface ColorFunction {
