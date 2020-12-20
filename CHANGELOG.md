@@ -6,7 +6,12 @@ FlatLaf Change Log
 #### New features and improvements
 
 - Slider: Clicking on track now immediately moves the thumb to mouse location
-  and starts dragging the thumb.
+  and starts dragging the thumb. Use `UIManager.put(
+  "Slider.scrollOnTrackClick", true )` to enable old behavior that scrolls the
+  thumb when clicking on track.
+- Slider: Snap to ticks is now done while dragging the thumb. Use
+  `UIManager.put( "Slider.snapToTicksOnReleased", true )` to enable old behavior
+  that snaps to ticks on mouse released.
 - Extras: Added standard component extension classes that provides easy access
   to FlatLaf specific client properties (see package
   `com.formdev.flatlaf.extras.components`).

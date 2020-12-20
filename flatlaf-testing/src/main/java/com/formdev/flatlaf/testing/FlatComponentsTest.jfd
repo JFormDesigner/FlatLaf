@@ -1158,84 +1158,142 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[]"
-				"$rowConstraints": "[]0[]0[]"
+				"$rowConstraints": "[][][][]"
 				"$layoutConstraints": "ltr,insets 0,hidemode 3"
 			} ) {
-				name: "panel6"
-				"border": new javax.swing.border.TitledBorder( "JSlider Control" )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "sliderPaintTrackCheckBox"
-					"text": "track"
-					"selected": true
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintTrackChanged", false ) )
+				name: "panel8"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$columnConstraints": "[]"
+					"$rowConstraints": "[]0[]0[]0[]"
+					"$layoutConstraints": "ltr,insets 0,hidemode 3"
+				} ) {
+					name: "panel6"
+					"border": new javax.swing.border.TitledBorder( "JSlider Control" )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "sliderPaintTrackCheckBox"
+						"text": "track"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintTrackChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
+						name: "sliderPaintTicksCheckBox"
+						"text": "ticks"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintTicksChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
+						name: "sliderPaintLabelsCheckBox"
+						"text": "labels"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintLabelsChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "sliderInvertedCheckBox"
+						"text": "inverted"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderInvertedChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "sliderSnapToTicksCheckBox"
+						"text": "snap to ticks"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderSnapToTicksChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "majorTickSpacingSpinner"
+						"model": new javax.swing.SpinnerNumberModel( 50, 0, 100, 5 )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "majorThickSpacingChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "minorTickSpacingSpinner"
+						"model": new javax.swing.SpinnerNumberModel( 10, 0, 100, 5 )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "minorThickSpacingChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "sliderValueLabel"
+						"text": "slider value"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 3"
+					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
+					"value": "cell 0 0 1 2,grow"
 				} )
-				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
-					name: "sliderPaintTicksCheckBox"
-					"text": "ticks"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintTicksChanged", false ) )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$columnConstraints": "[][fill]"
+					"$rowConstraints": "[]0[]"
+					"$layoutConstraints": "ltr,insets 0,hidemode 3"
+				} ) {
+					name: "panel7"
+					"border": new javax.swing.border.TitledBorder( "JProgressBar Control" )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "indeterminateCheckBox"
+						"text": "indeterminate"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "indeterminateProgress", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "squareCheckBox"
+						"text": "square"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "squareChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "largeHeightCheckBox"
+						"text": "large height"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "largeHeightChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1,aligny top,growy 0"
+					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
-				} )
-				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
-					name: "sliderPaintLabelsCheckBox"
-					"text": "labels"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintLabelsChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "sliderInvertedCheckBox"
-					"text": "inverted"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderInvertedChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1"
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "sliderSnapToTicksCheckBox"
-					"text": "snap to ticks"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderSnapToTicksChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1"
-				} )
-				add( new FormComponent( "javax.swing.JSpinner" ) {
-					name: "majorTickSpacingSpinner"
-					"model": new javax.swing.SpinnerNumberModel( 50, 0, 100, 5 )
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "majorThickSpacingChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 2"
-				} )
-				add( new FormComponent( "javax.swing.JSpinner" ) {
-					name: "minorTickSpacingSpinner"
-					"model": new javax.swing.SpinnerNumberModel( 10, 0, 100, 5 )
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "minorThickSpacingChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 2"
+					"value": "cell 0 2 1 2,grow"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 19 1 2,grow"
+				"value": "cell 4 19 1 4"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "sliderLabel2"
@@ -1295,46 +1353,6 @@ new FormModel {
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 21 3 1,growx"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$columnConstraints": "[][fill]"
-				"$rowConstraints": "[]0[]"
-				"$layoutConstraints": "ltr,insets 0,hidemode 3"
-			} ) {
-				name: "panel7"
-				"border": new javax.swing.border.TitledBorder( "JProgressBar Control" )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "indeterminateCheckBox"
-					"text": "indeterminate"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "indeterminateProgress", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "squareCheckBox"
-					"text": "square"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "squareChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 1 0"
-				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "largeHeightCheckBox"
-					"text": "large height"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "largeHeightChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1,aligny top,growy 0"
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 21 1 2,grow"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toolTipLabel"

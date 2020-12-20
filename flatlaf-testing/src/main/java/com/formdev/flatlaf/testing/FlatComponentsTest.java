@@ -19,6 +19,7 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
@@ -49,6 +50,15 @@ public class FlatComponentsTest
 		allSliders = new JSlider[] { slider1, slider2, slider3, slider4, slider5, slider6 };
 		roundSliders = new JSlider[] { slider1, slider2, slider6 };
 		directionalSliders = new JSlider[] { slider3, slider4, slider5 };
+
+		ChangeListener sliderChanged = e -> {
+			JSlider slider = (JSlider) e.getSource();
+			String text = slider.getValue() + "  " + slider.getValueIsAdjusting();
+			sliderValueLabel.setText( text );
+//			System.out.println( text );
+		};
+		for( JSlider slider : allSliders )
+			slider.addChangeListener( sliderChanged );
 	}
 
 	private void changeProgress() {
@@ -375,6 +385,7 @@ public class FlatComponentsTest
 		JLabel sliderLabel = new JLabel();
 		slider1 = new JSlider();
 		slider6 = new JSlider();
+		JPanel panel8 = new JPanel();
 		JPanel panel6 = new JPanel();
 		sliderPaintTrackCheckBox = new JCheckBox();
 		sliderPaintTicksCheckBox = new FlatTriStateCheckBox();
@@ -383,16 +394,17 @@ public class FlatComponentsTest
 		sliderSnapToTicksCheckBox = new JCheckBox();
 		majorTickSpacingSpinner = new JSpinner();
 		minorTickSpacingSpinner = new JSpinner();
+		sliderValueLabel = new JLabel();
+		JPanel panel7 = new JPanel();
+		indeterminateCheckBox = new JCheckBox();
+		squareCheckBox = new JCheckBox();
+		largeHeightCheckBox = new JCheckBox();
 		JLabel sliderLabel2 = new JLabel();
 		slider3 = new JSlider();
 		slider5 = new JSlider();
 		JLabel progressBarLabel = new JLabel();
 		progressBar1 = new FlatProgressBar();
 		progressBar2 = new FlatProgressBar();
-		JPanel panel7 = new JPanel();
-		indeterminateCheckBox = new JCheckBox();
-		squareCheckBox = new JCheckBox();
-		largeHeightCheckBox = new JCheckBox();
 		JLabel toolTipLabel = new JLabel();
 		JToolTip toolTip1 = new JToolTip();
 		JToolTip toolTip2 = new JToolTip();
@@ -1302,55 +1314,103 @@ public class FlatComponentsTest
 		slider6.setValue(30);
 		add(slider6, "cell 1 19 3 1");
 
-		//======== panel6 ========
+		//======== panel8 ========
 		{
-			panel6.setBorder(new TitledBorder("JSlider Control"));
-			panel6.setLayout(new MigLayout(
+			panel8.setLayout(new MigLayout(
 				"ltr,insets 0,hidemode 3",
 				// columns
 				"[]",
 				// rows
-				"[]0" +
-				"[]0" +
+				"[]" +
+				"[]" +
+				"[]" +
 				"[]"));
 
-			//---- sliderPaintTrackCheckBox ----
-			sliderPaintTrackCheckBox.setText("track");
-			sliderPaintTrackCheckBox.setSelected(true);
-			sliderPaintTrackCheckBox.addActionListener(e -> sliderPaintTrackChanged());
-			panel6.add(sliderPaintTrackCheckBox, "cell 0 0");
+			//======== panel6 ========
+			{
+				panel6.setBorder(new TitledBorder("JSlider Control"));
+				panel6.setLayout(new MigLayout(
+					"ltr,insets 0,hidemode 3",
+					// columns
+					"[]",
+					// rows
+					"[]0" +
+					"[]0" +
+					"[]0" +
+					"[]"));
 
-			//---- sliderPaintTicksCheckBox ----
-			sliderPaintTicksCheckBox.setText("ticks");
-			sliderPaintTicksCheckBox.addActionListener(e -> sliderPaintTicksChanged());
-			panel6.add(sliderPaintTicksCheckBox, "cell 0 0");
+				//---- sliderPaintTrackCheckBox ----
+				sliderPaintTrackCheckBox.setText("track");
+				sliderPaintTrackCheckBox.setSelected(true);
+				sliderPaintTrackCheckBox.addActionListener(e -> sliderPaintTrackChanged());
+				panel6.add(sliderPaintTrackCheckBox, "cell 0 0");
 
-			//---- sliderPaintLabelsCheckBox ----
-			sliderPaintLabelsCheckBox.setText("labels");
-			sliderPaintLabelsCheckBox.addActionListener(e -> sliderPaintLabelsChanged());
-			panel6.add(sliderPaintLabelsCheckBox, "cell 0 0");
+				//---- sliderPaintTicksCheckBox ----
+				sliderPaintTicksCheckBox.setText("ticks");
+				sliderPaintTicksCheckBox.addActionListener(e -> sliderPaintTicksChanged());
+				panel6.add(sliderPaintTicksCheckBox, "cell 0 0");
 
-			//---- sliderInvertedCheckBox ----
-			sliderInvertedCheckBox.setText("inverted");
-			sliderInvertedCheckBox.addActionListener(e -> sliderInvertedChanged());
-			panel6.add(sliderInvertedCheckBox, "cell 0 1");
+				//---- sliderPaintLabelsCheckBox ----
+				sliderPaintLabelsCheckBox.setText("labels");
+				sliderPaintLabelsCheckBox.addActionListener(e -> sliderPaintLabelsChanged());
+				panel6.add(sliderPaintLabelsCheckBox, "cell 0 0");
 
-			//---- sliderSnapToTicksCheckBox ----
-			sliderSnapToTicksCheckBox.setText("snap to ticks");
-			sliderSnapToTicksCheckBox.addActionListener(e -> sliderSnapToTicksChanged());
-			panel6.add(sliderSnapToTicksCheckBox, "cell 0 1");
+				//---- sliderInvertedCheckBox ----
+				sliderInvertedCheckBox.setText("inverted");
+				sliderInvertedCheckBox.addActionListener(e -> sliderInvertedChanged());
+				panel6.add(sliderInvertedCheckBox, "cell 0 1");
 
-			//---- majorTickSpacingSpinner ----
-			majorTickSpacingSpinner.setModel(new SpinnerNumberModel(50, 0, 100, 5));
-			majorTickSpacingSpinner.addChangeListener(e -> majorThickSpacingChanged());
-			panel6.add(majorTickSpacingSpinner, "cell 0 2");
+				//---- sliderSnapToTicksCheckBox ----
+				sliderSnapToTicksCheckBox.setText("snap to ticks");
+				sliderSnapToTicksCheckBox.addActionListener(e -> sliderSnapToTicksChanged());
+				panel6.add(sliderSnapToTicksCheckBox, "cell 0 1");
 
-			//---- minorTickSpacingSpinner ----
-			minorTickSpacingSpinner.setModel(new SpinnerNumberModel(10, 0, 100, 5));
-			minorTickSpacingSpinner.addChangeListener(e -> minorThickSpacingChanged());
-			panel6.add(minorTickSpacingSpinner, "cell 0 2");
+				//---- majorTickSpacingSpinner ----
+				majorTickSpacingSpinner.setModel(new SpinnerNumberModel(50, 0, 100, 5));
+				majorTickSpacingSpinner.addChangeListener(e -> majorThickSpacingChanged());
+				panel6.add(majorTickSpacingSpinner, "cell 0 2");
+
+				//---- minorTickSpacingSpinner ----
+				minorTickSpacingSpinner.setModel(new SpinnerNumberModel(10, 0, 100, 5));
+				minorTickSpacingSpinner.addChangeListener(e -> minorThickSpacingChanged());
+				panel6.add(minorTickSpacingSpinner, "cell 0 2");
+
+				//---- sliderValueLabel ----
+				sliderValueLabel.setText("slider value");
+				panel6.add(sliderValueLabel, "cell 0 3");
+			}
+			panel8.add(panel6, "cell 0 0 1 2,grow");
+
+			//======== panel7 ========
+			{
+				panel7.setBorder(new TitledBorder("JProgressBar Control"));
+				panel7.setLayout(new MigLayout(
+					"ltr,insets 0,hidemode 3",
+					// columns
+					"[]" +
+					"[fill]",
+					// rows
+					"[]0" +
+					"[]"));
+
+				//---- indeterminateCheckBox ----
+				indeterminateCheckBox.setText("indeterminate");
+				indeterminateCheckBox.addActionListener(e -> indeterminateProgress());
+				panel7.add(indeterminateCheckBox, "cell 0 0");
+
+				//---- squareCheckBox ----
+				squareCheckBox.setText("square");
+				squareCheckBox.addActionListener(e -> squareChanged());
+				panel7.add(squareCheckBox, "cell 1 0");
+
+				//---- largeHeightCheckBox ----
+				largeHeightCheckBox.setText("large height");
+				largeHeightCheckBox.addActionListener(e -> largeHeightChanged());
+				panel7.add(largeHeightCheckBox, "cell 0 1,aligny top,growy 0");
+			}
+			panel8.add(panel7, "cell 0 2 1 2,grow");
 		}
-		add(panel6, "cell 4 19 1 2,grow");
+		add(panel8, "cell 4 19 1 4");
 
 		//---- sliderLabel2 ----
 		sliderLabel2.setText("baseline");
@@ -1386,35 +1446,6 @@ public class FlatComponentsTest
 		progressBar2.setStringPainted(true);
 		progressBar2.setValue(60);
 		add(progressBar2, "cell 1 21 3 1,growx");
-
-		//======== panel7 ========
-		{
-			panel7.setBorder(new TitledBorder("JProgressBar Control"));
-			panel7.setLayout(new MigLayout(
-				"ltr,insets 0,hidemode 3",
-				// columns
-				"[]" +
-				"[fill]",
-				// rows
-				"[]0" +
-				"[]"));
-
-			//---- indeterminateCheckBox ----
-			indeterminateCheckBox.setText("indeterminate");
-			indeterminateCheckBox.addActionListener(e -> indeterminateProgress());
-			panel7.add(indeterminateCheckBox, "cell 0 0");
-
-			//---- squareCheckBox ----
-			squareCheckBox.setText("square");
-			squareCheckBox.addActionListener(e -> squareChanged());
-			panel7.add(squareCheckBox, "cell 1 0");
-
-			//---- largeHeightCheckBox ----
-			largeHeightCheckBox.setText("large height");
-			largeHeightCheckBox.addActionListener(e -> largeHeightChanged());
-			panel7.add(largeHeightCheckBox, "cell 0 1,aligny top,growy 0");
-		}
-		add(panel7, "cell 4 21 1 2,grow");
 
 		//---- toolTipLabel ----
 		toolTipLabel.setText("JToolTip:");
@@ -1579,13 +1610,14 @@ public class FlatComponentsTest
 	private JCheckBox sliderSnapToTicksCheckBox;
 	private JSpinner majorTickSpacingSpinner;
 	private JSpinner minorTickSpacingSpinner;
+	private JLabel sliderValueLabel;
+	private JCheckBox indeterminateCheckBox;
+	private JCheckBox squareCheckBox;
+	private JCheckBox largeHeightCheckBox;
 	private JSlider slider3;
 	private JSlider slider5;
 	private FlatProgressBar progressBar1;
 	private FlatProgressBar progressBar2;
-	private JCheckBox indeterminateCheckBox;
-	private JCheckBox squareCheckBox;
-	private JCheckBox largeHeightCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class TestDefaultButton --------------------------------------------

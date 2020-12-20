@@ -543,8 +543,8 @@ debug*/
 			// move the mouse event coordinates back to current mouse location
 			e.translatePoint( -tx, -ty );
 
-			// invoke super mouseDragged() to update thumb location
-			super.mouseDragged( e );
+			// invoke mouseDragged() to update thumb location
+			mouseDragged( e );
 
 			setThumbPressed( true );
 		}
@@ -553,6 +553,20 @@ debug*/
 		public void mouseReleased( MouseEvent e ) {
 			setThumbPressed( false );
 			super.mouseReleased( e );
+		}
+
+		@Override
+		public void mouseDragged( MouseEvent e ) {
+			super.mouseDragged( e );
+
+			if( isDragging() &&
+				slider.getSnapToTicks() &&
+				slider.isEnabled() &&
+				!UIManager.getBoolean( "Slider.snapToTicksOnReleased" ) )
+			{
+				calculateThumbLocation();
+				slider.repaint();
+			}
 		}
 
 		protected void setThumbHover( boolean hover ) {
