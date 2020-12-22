@@ -33,15 +33,12 @@ import java.awt.Shape;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.IdentityHashMap;
 import java.util.WeakHashMap;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -678,37 +675,6 @@ public class FlatUIUtils
 		return sharedUIinstances
 			.computeIfAbsent( UIManager.getLookAndFeel(), k -> new IdentityHashMap<>() )
 			.computeIfAbsent( key, k -> newInstanceSupplier.get() );
-	}
-
-	//---- class HoverListener ------------------------------------------------
-
-	public static class HoverListener
-		extends MouseAdapter
-	{
-		private final Component repaintComponent;
-		private final Consumer<Boolean> hoverChanged;
-
-		public HoverListener( Component repaintComponent, Consumer<Boolean> hoverChanged ) {
-			this.repaintComponent = repaintComponent;
-			this.hoverChanged = hoverChanged;
-		}
-
-		@Override
-		public void mouseEntered( MouseEvent e ) {
-			hoverChanged.accept( true );
-			repaint();
-		}
-
-		@Override
-		public void mouseExited( MouseEvent e ) {
-			hoverChanged.accept( false );
-			repaint();
-		}
-
-		private void repaint() {
-			if( repaintComponent != null && repaintComponent.isEnabled() )
-				repaintComponent.repaint();
-		}
 	}
 
 	//---- class RepaintFocusListener -----------------------------------------

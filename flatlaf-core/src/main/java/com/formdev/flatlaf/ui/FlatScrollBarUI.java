@@ -357,13 +357,14 @@ public class FlatScrollBarUI
 	{
 		protected FlatScrollBarButton( int direction ) {
 			this( direction, arrowType, buttonArrowColor, buttonDisabledArrowColor,
-				null, hoverButtonBackground, pressedButtonBackground );
+				null, hoverButtonBackground, null, pressedButtonBackground );
 		}
 
 		protected FlatScrollBarButton( int direction, String type, Color foreground, Color disabledForeground,
-			Color hoverForeground, Color hoverBackground, Color pressedBackground )
+			Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 		{
-			super( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, pressedBackground );
+			super( direction, type, foreground, disabledForeground,
+				hoverForeground, hoverBackground, pressedForeground, pressedBackground );
 
 			setArrowWidth( FlatArrowButton.DEFAULT_ARROW_WIDTH - 2 );
 			setFocusable( false );

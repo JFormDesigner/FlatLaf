@@ -191,6 +191,7 @@ ComboBox.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [U
 ComboBox.buttonEditableBackground #cccccc    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHoverArrowColor #ff0000    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonPressedArrowColor #0000ff    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonShadow          #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonStyle           auto
 ComboBox.disabledBackground    #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
@@ -873,6 +874,7 @@ Spinner.buttonArrowColor       #666666    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonBackground       #cccccc    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonHoverArrowColor  #ff0000    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonPressedArrowColor #0000ff    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonStyle            button
 Spinner.disabledBackground     #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
 Spinner.disabledForeground     #000088    javax.swing.plaf.ColorUIResource [UI]
@@ -906,6 +908,7 @@ SplitPaneDivider.gripDotSize   3
 SplitPaneDivider.gripGap       2
 SplitPaneDivider.oneTouchArrowColor #00ff00    javax.swing.plaf.ColorUIResource [UI]
 SplitPaneDivider.oneTouchHoverArrowColor #ff0000    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.oneTouchPressedArrowColor #0000ff    javax.swing.plaf.ColorUIResource [UI]
 SplitPaneDivider.style         grip
 
 

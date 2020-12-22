@@ -69,6 +69,7 @@ import com.formdev.flatlaf.FlatClientProperties;
  * @uiDefault Spinner.buttonArrowColor			Color
  * @uiDefault Spinner.buttonDisabledArrowColor	Color
  * @uiDefault Spinner.buttonHoverArrowColor		Color
+ * @uiDefault Spinner.buttonPressedArrowColor	Color
  * @uiDefault Spinner.padding					Insets
  *
  * @author Karl Tauber
@@ -90,6 +91,7 @@ public class FlatSpinnerUI
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
 	protected Color buttonHoverArrowColor;
+	protected Color buttonPressedArrowColor;
 	protected Insets padding;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -114,6 +116,7 @@ public class FlatSpinnerUI
 		buttonArrowColor = UIManager.getColor( "Spinner.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "Spinner.buttonDisabledArrowColor" );
 		buttonHoverArrowColor = UIManager.getColor( "Spinner.buttonHoverArrowColor" );
+		buttonPressedArrowColor = UIManager.getColor( "Spinner.buttonPressedArrowColor" );
 		padding = UIManager.getInsets( "Spinner.padding" );
 
 		// scale
@@ -134,6 +137,7 @@ public class FlatSpinnerUI
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
+		buttonPressedArrowColor = null;
 		padding = null;
 
 		MigLayoutVisualPadding.uninstall( spinner );
@@ -244,7 +248,7 @@ public class FlatSpinnerUI
 
 	private Component createArrowButton( int direction, String name ) {
 		FlatArrowButton button = new FlatArrowButton( direction, arrowType, buttonArrowColor,
-			buttonDisabledArrowColor, buttonHoverArrowColor, null );
+			buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
 		button.setName( name );
 		button.setYOffset( (direction == SwingConstants.NORTH) ? 1 : -1 );
 		if( direction == SwingConstants.NORTH )

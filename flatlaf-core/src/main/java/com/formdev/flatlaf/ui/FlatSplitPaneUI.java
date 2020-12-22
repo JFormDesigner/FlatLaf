@@ -52,6 +52,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault SplitPane.continuousLayout				boolean
  * @uiDefault SplitPaneDivider.oneTouchArrowColor		Color
  * @uiDefault SplitPaneDivider.oneTouchHoverArrowColor	Color
+ * @uiDefault SplitPaneDivider.oneTouchPressedArrowColor Color
  * @uiDefault SplitPaneDivider.style					String	grip (default) or plain
  * @uiDefault SplitPaneDivider.gripColor				Color
  * @uiDefault SplitPaneDivider.gripDotCount				int
@@ -67,6 +68,7 @@ public class FlatSplitPaneUI
 	private Boolean continuousLayout;
 	protected Color oneTouchArrowColor;
 	protected Color oneTouchHoverArrowColor;
+	protected Color oneTouchPressedArrowColor;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSplitPaneUI();
@@ -80,10 +82,20 @@ public class FlatSplitPaneUI
 		// used in there on LaF switching
 		oneTouchArrowColor = UIManager.getColor( "SplitPaneDivider.oneTouchArrowColor" );
 		oneTouchHoverArrowColor = UIManager.getColor( "SplitPaneDivider.oneTouchHoverArrowColor" );
+		oneTouchPressedArrowColor = UIManager.getColor( "SplitPaneDivider.oneTouchPressedArrowColor" );
 
 		super.installDefaults();
 
 		continuousLayout = (Boolean) UIManager.get( "SplitPane.continuousLayout" );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		oneTouchArrowColor = null;
+		oneTouchHoverArrowColor = null;
+		oneTouchPressedArrowColor = null;
 	}
 
 	@Override
@@ -185,7 +197,8 @@ public class FlatSplitPaneUI
 			protected final boolean left;
 
 			protected FlatOneTouchButton( boolean left ) {
-				super( SwingConstants.NORTH, arrowType, oneTouchArrowColor, null, oneTouchHoverArrowColor, null );
+				super( SwingConstants.NORTH, arrowType, oneTouchArrowColor, null,
+					oneTouchHoverArrowColor, null, oneTouchPressedArrowColor, null );
 				setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
 				ToolTipManager.sharedInstance().registerComponent( this );
 

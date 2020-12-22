@@ -193,10 +193,11 @@ ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 ComboBox.buttonArrowColor      #666666    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonBackground      #ffffff    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonDarkShadow      #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonDisabledArrowColor #a6a6a6    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonEditableBackground #fafafa    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.buttonHoverArrowColor #999999    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonHoverArrowColor #999999    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
+ComboBox.buttonPressedArrowColor #b3b3b3    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(30%)
 ComboBox.buttonShadow          #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonStyle           auto
 ComboBox.disabledBackground    #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
@@ -793,7 +794,7 @@ RootPaneUI                     com.formdev.flatlaf.ui.FlatRootPaneUI
 ScrollBar.allowsAbsolutePositioning true
 ScrollBar.background           #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonArrowColor     #666666    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.buttonDisabledArrowColor #a6a6a6    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.hoverButtonBackground #e5e5e5    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5%)
 ScrollBar.hoverThumbColor      #c3c3c3    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
@@ -879,8 +880,9 @@ Spinner.background             #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Spinner.border                 [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 Spinner.buttonArrowColor       #666666    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonBackground       #fafafa    javax.swing.plaf.ColorUIResource [UI]
-Spinner.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
-Spinner.buttonHoverArrowColor  #999999    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonDisabledArrowColor #a6a6a6    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonHoverArrowColor  #999999    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
+Spinner.buttonPressedArrowColor #b3b3b3    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(30%)
 Spinner.buttonStyle            button
 Spinner.disabledBackground     #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 Spinner.disabledForeground     #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
@@ -913,7 +915,8 @@ SplitPaneDivider.gripDotCount  3
 SplitPaneDivider.gripDotSize   3
 SplitPaneDivider.gripGap       2
 SplitPaneDivider.oneTouchArrowColor #666666    javax.swing.plaf.ColorUIResource [UI]
-SplitPaneDivider.oneTouchHoverArrowColor #333333    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.oneTouchHoverArrowColor #999999    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
+SplitPaneDivider.oneTouchPressedArrowColor #b3b3b3    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(30%)
 SplitPaneDivider.style         grip
 
 

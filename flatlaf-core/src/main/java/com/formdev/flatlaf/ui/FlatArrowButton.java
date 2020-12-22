@@ -58,18 +58,6 @@ public class FlatArrowButton
 	private boolean pressed;
 
 	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
-		Color hoverForeground, Color hoverBackground )
-	{
-		this( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, null );
-	}
-
-	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
-		Color hoverForeground, Color hoverBackground, Color pressedBackground )
-	{
-		this( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, null, pressedBackground );
-	}
-
-	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
 		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
@@ -85,7 +73,9 @@ public class FlatArrowButton
 		setOpaque( false );
 		setBorder( null );
 
-		if( hoverForeground != null || hoverBackground != null || pressedBackground != null ) {
+		if( hoverForeground != null || hoverBackground != null ||
+			pressedForeground != null || pressedBackground != null )
+		{
 			addMouseListener( new MouseAdapter() {
 				@Override
 				public void mouseEntered( MouseEvent e ) {
@@ -151,7 +141,7 @@ public class FlatArrowButton
 	}
 
 	protected Color deriveForeground( Color foreground ) {
-		return foreground;
+		return FlatUIUtils.deriveColor( foreground, this.foreground );
 	}
 
 	@Override

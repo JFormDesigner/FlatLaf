@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 0.47-SNAPSHOT
+
+#### New features and improvements
+
+- ComboBox, Spinner and SplitPaneDivider: Added pressed feedback to arrow
+  buttons.
+
+
 ## 0.46
 
 #### New features and improvements

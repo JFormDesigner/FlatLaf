@@ -126,6 +126,7 @@ ComboBox.buttonDisabledArrowColor
 ComboBox.buttonEditableBackground
 ComboBox.buttonHighlight
 ComboBox.buttonHoverArrowColor
+ComboBox.buttonPressedArrowColor
 ComboBox.buttonShadow
 ComboBox.buttonStyle
 ComboBox.disabledBackground
@@ -615,6 +616,7 @@ Spinner.buttonArrowColor
 Spinner.buttonBackground
 Spinner.buttonDisabledArrowColor
 Spinner.buttonHoverArrowColor
+Spinner.buttonPressedArrowColor
 Spinner.buttonStyle
 Spinner.disabledBackground
 Spinner.disabledForeground
@@ -641,6 +643,7 @@ SplitPaneDivider.gripDotSize
 SplitPaneDivider.gripGap
 SplitPaneDivider.oneTouchArrowColor
 SplitPaneDivider.oneTouchHoverArrowColor
+SplitPaneDivider.oneTouchPressedArrowColor
 SplitPaneDivider.style
 SplitPaneUI
 TabbedPane.ancestorInputMap
