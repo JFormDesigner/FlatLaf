@@ -70,7 +70,7 @@ class UIDefaultsLoader
 	private static final String VARIABLE_PREFIX = "@";
 	private static final String PROPERTY_PREFIX = "$";
 	private static final String OPTIONAL_PREFIX = "?";
-	private static final String GLOBAL_PREFIX = "*.";
+	private static final String WILDCARD_PREFIX = "*.";
 
 	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
 		Properties additionalDefaults, boolean dark, UIDefaults defaults )
@@ -198,19 +198,19 @@ class UIDefaultsLoader
 				}
 			}
 
-			// get (and remove) globals, which override all other defaults that end with same suffix
-			HashMap<String, String> globals = new HashMap<>();
+			// get (and remove) wildcard replacements, which override all other defaults that end with same suffix
+			HashMap<String, String> wildcards = new HashMap<>();
 			Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
 			while( it.hasNext() ) {
 				Entry<Object, Object> e = it.next();
 				String key = (String) e.getKey();
-				if( key.startsWith( GLOBAL_PREFIX ) ) {
-					globals.put( key.substring( GLOBAL_PREFIX.length() ), (String) e.getValue() );
+				if( key.startsWith( WILDCARD_PREFIX ) ) {
+					wildcards.put( key.substring( WILDCARD_PREFIX.length() ), (String) e.getValue() );
 					it.remove();
 				}
 			}
 
-			// override UI defaults with globals
+			// override UI defaults with wildcard replacements
 			for( Object key : defaults.keySet() ) {
 				int dot;
 				if( !(key instanceof String) ||
@@ -218,10 +218,10 @@ class UIDefaultsLoader
 					(dot = ((String)key).lastIndexOf( '.' )) < 0 )
 				  continue;
 
-				String globalKey = ((String)key).substring( dot + 1 );
-				String globalValue = globals.get( globalKey );
-				if( globalValue != null )
-					properties.put( key, globalValue );
+				String wildcardKey = ((String)key).substring( dot + 1 );
+				String wildcardValue = wildcards.get( wildcardKey );
+				if( wildcardValue != null )
+					properties.put( key, wildcardValue );
 			}
 
 			Function<String, String> propertiesGetter = key -> {
@@ -341,7 +341,12 @@ class UIDefaultsLoader
 
 		// determine value type from key
 		if( valueType == ValueType.UNKNOWN ) {
-			if( key.endsWith( "ground" ) || key.endsWith( "Color" ) )
+			if( key.endsWith( "UI" ) )
+				valueType = ValueType.STRING;
+			else if( key.endsWith( "Color" ) ||
+				(key.endsWith( "ground" ) &&
+				 (key.endsWith( ".background" ) || key.endsWith( "Background" ) ||
+				  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ))) )
 				valueType = ValueType.COLOR;
 			else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
 				valueType = ValueType.BORDER;
@@ -356,8 +361,6 @@ class UIDefaultsLoader
 				valueType = ValueType.INTEGER;
 			else if( key.endsWith( "Char" ) )
 				valueType = ValueType.CHARACTER;
-			else if( key.endsWith( "UI" ) )
-				valueType = ValueType.STRING;
 			else if( key.endsWith( "grayFilter" ) )
 				valueType = ValueType.GRAYFILTER;
 		}
