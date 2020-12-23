@@ -7,6 +7,8 @@ FlatLaf Change Log
 
 - ComboBox, Spinner and SplitPaneDivider: Added pressed feedback to arrow
   buttons.
+- TextComponent: Clip placeholder text if it does not fit into visible area. (PR
+  #229)
 
 
 ## 0.46
