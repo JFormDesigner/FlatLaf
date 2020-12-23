@@ -39,6 +39,7 @@ import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.JavaCompatibility;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
@@ -213,7 +214,9 @@ public class FlatTextFieldUI
 
 		// paint placeholder
 		g.setColor( placeholderForeground );
-		FlatUIUtils.drawString( c, g, (String) placeholder, x, y );
+		String clippedPlaceholder = JavaCompatibility.getClippedString( jc, fm,
+				(String) placeholder, c.getWidth() - insets.left - insets.right );
+		FlatUIUtils.drawString( c, g, clippedPlaceholder, x, y );
 	}
 
 	@Override
