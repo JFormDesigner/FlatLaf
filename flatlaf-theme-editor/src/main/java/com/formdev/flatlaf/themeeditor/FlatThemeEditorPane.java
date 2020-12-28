@@ -31,6 +31,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -44,6 +45,8 @@ import com.formdev.flatlaf.util.UIScale;
 class FlatThemeEditorPane
 	extends JPanel
 {
+	static final String DIRTY_PROPERTY = TextEditorPane.DIRTY_PROPERTY;
+
 	private static final String FLATLAF_STYLE = "text/flatlaf";
 
 	private final RTextScrollPane scrollPane;
@@ -62,6 +65,10 @@ class FlatThemeEditorPane
 		textArea.setMarkOccurrences( true );
 		textArea.addParser( new FlatThemeParser() );
 //		textArea.setUseColorOfColorTokens( true );
+
+		textArea.addPropertyChangeListener( TextEditorPane.DIRTY_PROPERTY, e -> {
+			firePropertyChange( DIRTY_PROPERTY, e.getOldValue(), e.getNewValue() );
+		} );
 
 		// theme
 		try( InputStream in = getClass().getResourceAsStream( "light.xml" ) ) {
@@ -117,11 +124,15 @@ class FlatThemeEditorPane
 		textArea.load( loc, StandardCharsets.ISO_8859_1 );
 	}
 
-	void save() {
-		try {
-			textArea.save();
-		} catch( IOException ex ) {
-			ex.printStackTrace(); // TODO
-		}
+	void save() throws IOException {
+		textArea.save();
+	}
+
+	String getFileName() {
+		return textArea.getFileName();
+	}
+
+	boolean isDirty() {
+		return textArea.isDirty();
 	}
 }

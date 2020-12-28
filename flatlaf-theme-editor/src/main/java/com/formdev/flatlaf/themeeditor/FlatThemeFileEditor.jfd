@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -7,18 +7,61 @@ new FormModel {
 			name: "this"
 			"$locationPolicy": 2
 			"$sizePolicy": 2
-			"defaultCloseOperation": 3
+			"defaultCloseOperation": 0
 			"title": "FlatLaf Theme Editor"
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-				name: "dialogPane"
-				add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemeEditorPane" ) {
-					name: "themeEditorArea"
-				}, new FormLayoutConstraints( class java.lang.String ) {
-					"value": "Center"
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowClosing", "windowClosing", false ) )
+			addEvent( new FormEvent( "java.awt.event.WindowListener", "windowDeactivated", "windowDeactivated", false ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][grow,fill]"
+				"$rowConstraints": "[]"
+			} ) {
+				name: "controlPanel"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "directoryLabel"
+					"text": "Directory:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
 				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "directoryField"
+					"editable": false
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "North"
+			} )
+			add( new FormContainer( "com.formdev.flatlaf.extras.components.FlatTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				name: "tabbedPane"
+				"tabLayoutPolicy": 1
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )
+			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "menuBar"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "fileMenu"
+					"text": "File"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "saveAllMenuItem"
+						"text": "Save All"
+						"mnemonic": 83
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 83, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveAll", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator1"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "exitMenuItem"
+						"text": "Exit"
+						"mnemonic": 88
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 81, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exit", false ) )
+					} )
+				} )
+			}
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 535, 300 )

@@ -20,16 +20,19 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.function.Supplier;
 import javax.swing.*;
+import com.formdev.flatlaf.extras.components.*;
+import net.miginfocom.swing.*;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -41,13 +44,9 @@ public class FlatThemeFileEditor
 	extends JFrame
 {
 	public static void main( String[] args ) {
-		File file = new File( args.length > 0
+		File dir = new File( args.length > 0
 			? args[0]
-			: "theme-editor-test.properties" ); // TODO
-
-		List<File> baseFiles = new ArrayList<>();
-		for( int i = 1; i < args.length; i++ )
-			baseFiles.add( new File( args[i] ) );
+			: "." );
 
 		SwingUtilities.invokeLater( () -> {
 			FlatLightLaf.install();
@@ -56,18 +55,7 @@ public class FlatThemeFileEditor
 
 			FlatThemeFileEditor frame = new FlatThemeFileEditor();
 
-			frame.themeEditorArea.setBaseFiles( baseFiles );
-			try {
-				frame.themeEditorArea.load( FileLocation.create( file ) );
-			} catch( IOException ex ) {
-				ex.printStackTrace();
-			}
-
-			int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-			((JComponent)frame.getContentPane()).registerKeyboardAction(
-				e -> frame.themeEditorArea.save(),
-				KeyStroke.getKeyStroke( KeyEvent.VK_S, menuShortcutKeyMask ),
-				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+			frame.loadDirectory( dir );
 
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			frame.setSize( Math.min( UIScale.scale( 800 ), screenSize.width ),
@@ -81,28 +69,169 @@ public class FlatThemeFileEditor
 		initComponents();
 	}
 
+	public void loadDirectory( File dir ) {
+		try {
+			directoryField.setText( dir.getCanonicalPath() );
+		} catch( IOException ex ) {
+			directoryField.setText( dir.getAbsolutePath() );
+		}
+
+		File[] propertiesFiles = dir.listFiles( (d, name) -> {
+			return name.endsWith( ".properties" );
+		} );
+
+		Arrays.sort( propertiesFiles );
+
+		for( File file : propertiesFiles )
+			openFile( file );
+	}
+
+	public void openFile( File file ) {
+		FlatThemeEditorPane themeEditorArea = new FlatThemeEditorPane();
+		try {
+			themeEditorArea.load( FileLocation.create( file ) );
+		} catch( IOException ex ) {
+			ex.printStackTrace(); // TODO
+		}
+
+		Supplier<String> titleFun = () -> {
+			return (themeEditorArea.isDirty() ? "*" : "")
+				+ StringUtils.removeTrailing( themeEditorArea.getFileName(), ".properties" );
+
+		};
+		themeEditorArea.addPropertyChangeListener( FlatThemeEditorPane.DIRTY_PROPERTY, e -> {
+			int index = tabbedPane.indexOfComponent( themeEditorArea );
+			if( index >= 0 )
+				tabbedPane.setTitleAt( index, titleFun.get() );
+		} );
+
+		tabbedPane.addTab( titleFun.get(), null, themeEditorArea, file.getAbsolutePath() );
+	}
+
+	private boolean saveAll() {
+		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() ) {
+			try {
+				if( themeEditorPane.isDirty() )
+					themeEditorPane.save();
+			} catch( IOException ex ) {
+				JOptionPane.showMessageDialog( this,
+					"Failed to save '" + themeEditorPane.getFileName() + "'\n\nReason: " + ex.getMessage(),
+					getTitle(), JOptionPane.WARNING_MESSAGE );
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void exit() {
+		if( saveAll() )
+			System.exit( 0 );
+	}
+
+	private void windowClosing() {
+		exit();
+	}
+
+	private void windowDeactivated() {
+		saveAll();
+	}
+
+	private FlatThemeEditorPane[] getThemeEditorPanes() {
+		FlatThemeEditorPane[] result = new FlatThemeEditorPane[tabbedPane.getTabCount()];
+		for( int i = 0; i < result.length; i++ )
+			result[i] = (FlatThemeEditorPane) tabbedPane.getComponentAt( i );
+		return result;
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		dialogPane = new JPanel();
-		themeEditorArea = new FlatThemeEditorPane();
+		menuBar = new JMenuBar();
+		fileMenu = new JMenu();
+		saveAllMenuItem = new JMenuItem();
+		exitMenuItem = new JMenuItem();
+		controlPanel = new JPanel();
+		directoryLabel = new JLabel();
+		directoryField = new JTextField();
+		tabbedPane = new FlatTabbedPane();
 
 		//======== this ========
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setTitle("FlatLaf Theme Editor");
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				FlatThemeFileEditor.this.windowClosing();
+			}
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				FlatThemeFileEditor.this.windowDeactivated();
+			}
+		});
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		//======== dialogPane ========
+		//======== menuBar ========
 		{
-			dialogPane.setLayout(new BorderLayout());
-			dialogPane.add(themeEditorArea, BorderLayout.CENTER);
+
+			//======== fileMenu ========
+			{
+				fileMenu.setText("File");
+
+				//---- saveAllMenuItem ----
+				saveAllMenuItem.setText("Save All");
+				saveAllMenuItem.setMnemonic('S');
+				saveAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				saveAllMenuItem.addActionListener(e -> saveAll());
+				fileMenu.add(saveAllMenuItem);
+				fileMenu.addSeparator();
+
+				//---- exitMenuItem ----
+				exitMenuItem.setText("Exit");
+				exitMenuItem.setMnemonic('X');
+				exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				exitMenuItem.addActionListener(e -> exit());
+				fileMenu.add(exitMenuItem);
+			}
+			menuBar.add(fileMenu);
 		}
-		contentPane.add(dialogPane, BorderLayout.CENTER);
+		setJMenuBar(menuBar);
+
+		//======== controlPanel ========
+		{
+			controlPanel.setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]" +
+				"[grow,fill]",
+				// rows
+				"[]"));
+
+			//---- directoryLabel ----
+			directoryLabel.setText("Directory:");
+			controlPanel.add(directoryLabel, "cell 0 0");
+
+			//---- directoryField ----
+			directoryField.setEditable(false);
+			controlPanel.add(directoryField, "cell 1 0");
+		}
+		contentPane.add(controlPanel, BorderLayout.NORTH);
+
+		//======== tabbedPane ========
+		{
+			tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		}
+		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JPanel dialogPane;
-	private FlatThemeEditorPane themeEditorArea;
+	private JMenuBar menuBar;
+	private JMenu fileMenu;
+	private JMenuItem saveAllMenuItem;
+	private JMenuItem exitMenuItem;
+	private JPanel controlPanel;
+	private JLabel directoryLabel;
+	private JTextField directoryField;
+	private FlatTabbedPane tabbedPane;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
