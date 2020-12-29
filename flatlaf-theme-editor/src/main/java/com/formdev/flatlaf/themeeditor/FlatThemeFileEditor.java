@@ -95,7 +95,7 @@ public class FlatThemeFileEditor
 		}
 
 		Supplier<String> titleFun = () -> {
-			return (themeEditorArea.isDirty() ? "*" : "")
+			return (themeEditorArea.isDirty() ? "* " : "")
 				+ StringUtils.removeTrailing( themeEditorArea.getFileName(), ".properties" );
 
 		};
@@ -110,15 +110,8 @@ public class FlatThemeFileEditor
 
 	private boolean saveAll() {
 		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() ) {
-			try {
-				if( themeEditorPane.isDirty() )
-					themeEditorPane.save();
-			} catch( IOException ex ) {
-				JOptionPane.showMessageDialog( this,
-					"Failed to save '" + themeEditorPane.getFileName() + "'\n\nReason: " + ex.getMessage(),
-					getTitle(), JOptionPane.WARNING_MESSAGE );
+			if( !themeEditorPane.saveIfDirty() )
 				return false;
-			}
 		}
 		return true;
 	}
@@ -130,6 +123,11 @@ public class FlatThemeFileEditor
 
 	private void windowClosing() {
 		exit();
+	}
+
+	private void windowActivated() {
+		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
+			themeEditorPane.reloadIfNecessary();
 	}
 
 	private void windowDeactivated() {
@@ -158,6 +156,10 @@ public class FlatThemeFileEditor
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setTitle("FlatLaf Theme Editor");
 		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				FlatThemeFileEditor.this.windowActivated();
+			}
 			@Override
 			public void windowClosing(WindowEvent e) {
 				FlatThemeFileEditor.this.windowClosing();

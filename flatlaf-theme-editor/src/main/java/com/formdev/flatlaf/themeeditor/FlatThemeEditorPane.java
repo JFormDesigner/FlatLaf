@@ -19,13 +19,17 @@ package com.formdev.flatlaf.themeeditor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JLayer;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -124,8 +128,40 @@ class FlatThemeEditorPane
 		textArea.load( loc, StandardCharsets.ISO_8859_1 );
 	}
 
-	void save() throws IOException {
-		textArea.save();
+	void reloadIfNecessary() {
+		if( textArea.isModifiedOutsideEditor() ) {
+			if( textArea.isDirty() ) {
+				if( JOptionPane.showConfirmDialog( this,
+					"The file '" + textArea.getFileName()
+					+ "' has been changed. Replace the editor contents with these changes?",
+					getWindowTitle(), JOptionPane.YES_NO_OPTION ) != JOptionPane.YES_OPTION )
+				{
+					textArea.syncLastSaveOrLoadTimeToActualFile();
+					return;
+				}
+			}
+
+			try {
+				textArea.reload();
+			} catch( IOException ex ) {
+				JOptionPane.showMessageDialog( this,
+					"Failed to reload '" + textArea.getFileName() + "'\n\nReason: " + ex.getMessage(),
+					getWindowTitle(), JOptionPane.WARNING_MESSAGE );
+			}
+		}
+	}
+
+	boolean saveIfDirty() {
+		try {
+			if( textArea.isDirty() )
+				textArea.save();
+			return true;
+		} catch( IOException ex ) {
+			JOptionPane.showMessageDialog( this,
+				"Failed to save '" + textArea.getFileName() + "'\n\nReason: " + ex.getMessage(),
+				getWindowTitle(), JOptionPane.WARNING_MESSAGE );
+			return false;
+		}
 	}
 
 	String getFileName() {
@@ -134,5 +170,10 @@ class FlatThemeEditorPane
 
 	boolean isDirty() {
 		return textArea.isDirty();
+	}
+
+	private String getWindowTitle() {
+		Window window = SwingUtilities.windowForComponent( this );
+		return (window instanceof JFrame) ? ((JFrame)window).getTitle() : null;
 	}
 }
