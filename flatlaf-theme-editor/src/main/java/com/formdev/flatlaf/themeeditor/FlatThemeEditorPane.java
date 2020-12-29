@@ -56,6 +56,8 @@ class FlatThemeEditorPane
 	private final RTextScrollPane scrollPane;
 	private final FlatSyntaxTextArea textArea;
 
+	private File file;
+
 	FlatThemeEditorPane() {
 		super( new BorderLayout() );
 
@@ -124,11 +126,33 @@ class FlatThemeEditorPane
 		textArea.propertiesSupport.setBaseFiles( baseFiles );
 	}
 
-	void load( FileLocation loc ) throws IOException {
-		textArea.load( loc, StandardCharsets.ISO_8859_1 );
+	File getFile() {
+		return file;
 	}
 
-	void reloadIfNecessary() {
+	void load( File file ) throws IOException {
+		this.file = file;
+
+		textArea.load( FileLocation.create( file ), StandardCharsets.ISO_8859_1 );
+	}
+
+	boolean reloadIfNecessary() {
+		if( !file.isFile() ) {
+			if( textArea.isDirty() ) {
+				if( JOptionPane.showOptionDialog( this,
+					"The file '" + textArea.getFileName()
+					+ "' has been deleted. Replace the editor contents with these changes?",
+					getWindowTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null, new Object[] { "Save", "Close" }, "Save" ) == JOptionPane.YES_OPTION )
+				{
+					saveIfDirty();
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		if( textArea.isModifiedOutsideEditor() ) {
 			if( textArea.isDirty() ) {
 				if( JOptionPane.showConfirmDialog( this,
@@ -137,7 +161,7 @@ class FlatThemeEditorPane
 					getWindowTitle(), JOptionPane.YES_NO_OPTION ) != JOptionPane.YES_OPTION )
 				{
 					textArea.syncLastSaveOrLoadTimeToActualFile();
-					return;
+					return true;
 				}
 			}
 
@@ -149,6 +173,8 @@ class FlatThemeEditorPane
 					getWindowTitle(), JOptionPane.WARNING_MESSAGE );
 			}
 		}
+
+		return true;
 	}
 
 	boolean saveIfDirty() {
@@ -162,10 +188,6 @@ class FlatThemeEditorPane
 				getWindowTitle(), JOptionPane.WARNING_MESSAGE );
 			return false;
 		}
-	}
-
-	String getFileName() {
-		return textArea.getFileName();
 	}
 
 	boolean isDirty() {

@@ -24,11 +24,11 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.function.Supplier;
 import javax.swing.*;
 import com.formdev.flatlaf.extras.components.*;
 import net.miginfocom.swing.*;
-import org.fife.ui.rsyntaxtextarea.FileLocation;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
@@ -43,6 +43,8 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatThemeFileEditor
 	extends JFrame
 {
+	private File dir;
+
 	public static void main( String[] args ) {
 		File dir = new File( args.length > 0
 			? args[0]
@@ -69,43 +71,66 @@ public class FlatThemeFileEditor
 		initComponents();
 	}
 
-	public void loadDirectory( File dir ) {
+	private void loadDirectory( File dir ) {
+		this.dir = dir;
+
 		try {
 			directoryField.setText( dir.getCanonicalPath() );
 		} catch( IOException ex ) {
 			directoryField.setText( dir.getAbsolutePath() );
 		}
 
-		File[] propertiesFiles = dir.listFiles( (d, name) -> {
-			return name.endsWith( ".properties" );
-		} );
-
-		Arrays.sort( propertiesFiles );
-
-		for( File file : propertiesFiles )
+		for( File file : getPropertiesFiles( dir ) )
 			openFile( file );
 	}
 
-	public void openFile( File file ) {
-		FlatThemeEditorPane themeEditorArea = new FlatThemeEditorPane();
+	private void updateDirectory() {
+		// update open tabs and remove tabs if file was removed
+		HashSet<File> openFiles = new HashSet<>();
+		FlatThemeEditorPane[] themeEditorPanes = getThemeEditorPanes();
+		for( int i = themeEditorPanes.length - 1; i >= 0; i-- ) {
+			FlatThemeEditorPane themeEditorPane = themeEditorPanes[i];
+			if( themeEditorPane.reloadIfNecessary() )
+				openFiles.add( themeEditorPane.getFile() );
+			else
+				tabbedPane.removeTabAt( i );
+		}
+
+		// open newly created files
+		for( File file : getPropertiesFiles( dir ) ) {
+			if( !openFiles.contains( file ) )
+				openFile( file );
+		}
+	}
+
+	private File[] getPropertiesFiles( File dir ) {
+		File[] propertiesFiles = dir.listFiles( (d, name) -> {
+			return name.endsWith( ".properties" );
+		} );
+		Arrays.sort( propertiesFiles );
+		return propertiesFiles;
+	}
+
+	private void openFile( File file ) {
+		FlatThemeEditorPane themeEditorPane = new FlatThemeEditorPane();
 		try {
-			themeEditorArea.load( FileLocation.create( file ) );
+			themeEditorPane.load( file );
 		} catch( IOException ex ) {
 			ex.printStackTrace(); // TODO
 		}
 
 		Supplier<String> titleFun = () -> {
-			return (themeEditorArea.isDirty() ? "* " : "")
-				+ StringUtils.removeTrailing( themeEditorArea.getFileName(), ".properties" );
+			return (themeEditorPane.isDirty() ? "* " : "")
+				+ StringUtils.removeTrailing( themeEditorPane.getFile().getName(), ".properties" );
 
 		};
-		themeEditorArea.addPropertyChangeListener( FlatThemeEditorPane.DIRTY_PROPERTY, e -> {
-			int index = tabbedPane.indexOfComponent( themeEditorArea );
+		themeEditorPane.addPropertyChangeListener( FlatThemeEditorPane.DIRTY_PROPERTY, e -> {
+			int index = tabbedPane.indexOfComponent( themeEditorPane );
 			if( index >= 0 )
 				tabbedPane.setTitleAt( index, titleFun.get() );
 		} );
 
-		tabbedPane.addTab( titleFun.get(), null, themeEditorArea, file.getAbsolutePath() );
+		tabbedPane.addTab( titleFun.get(), null, themeEditorPane, file.getAbsolutePath() );
 	}
 
 	private boolean saveAll() {
@@ -126,8 +151,7 @@ public class FlatThemeFileEditor
 	}
 
 	private void windowActivated() {
-		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
-			themeEditorPane.reloadIfNecessary();
+		updateDirectory();
 	}
 
 	private void windowDeactivated() {
