@@ -10,6 +10,11 @@ FlatLaf Change Log
 - TextComponent: Clip placeholder text if it does not fit into visible area. (PR
   #229)
 
+#### Fixed bugs
+
+- Extras: Added missing export of package
+  `com.formdev.flatlaf.extras.components` to Java 9 module descriptor.
+
 
 ## 0.46
 
