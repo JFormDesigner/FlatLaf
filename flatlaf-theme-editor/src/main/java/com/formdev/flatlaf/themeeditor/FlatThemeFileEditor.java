@@ -165,12 +165,29 @@ public class FlatThemeFileEditor
 		return result;
 	}
 
+	private void nextEditor() {
+		int index = tabbedPane.getSelectedIndex() + 1;
+		if( index >= tabbedPane.getTabCount() )
+			index = 0;
+		tabbedPane.setSelectedIndex( index );
+	}
+
+	private void previousEditor() {
+		int index = tabbedPane.getSelectedIndex() - 1;
+		if( index < 0 )
+			index = tabbedPane.getTabCount() - 1;
+		tabbedPane.setSelectedIndex( index );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu();
 		saveAllMenuItem = new JMenuItem();
 		exitMenuItem = new JMenuItem();
+		windowMenu = new JMenu();
+		nextEditorMenuItem = new JMenuItem();
+		previousEditorMenuItem = new JMenuItem();
 		controlPanel = new JPanel();
 		directoryLabel = new JLabel();
 		directoryField = new JTextField();
@@ -219,6 +236,27 @@ public class FlatThemeFileEditor
 				fileMenu.add(exitMenuItem);
 			}
 			menuBar.add(fileMenu);
+
+			//======== windowMenu ========
+			{
+				windowMenu.setText("Window");
+				windowMenu.setMnemonic('W');
+
+				//---- nextEditorMenuItem ----
+				nextEditorMenuItem.setText("Next Editor");
+				nextEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				nextEditorMenuItem.setMnemonic('N');
+				nextEditorMenuItem.addActionListener(e -> nextEditor());
+				windowMenu.add(nextEditorMenuItem);
+
+				//---- previousEditorMenuItem ----
+				previousEditorMenuItem.setText("Previous Editor");
+				previousEditorMenuItem.setMnemonic('P');
+				previousEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_MASK));
+				previousEditorMenuItem.addActionListener(e -> previousEditor());
+				windowMenu.add(previousEditorMenuItem);
+			}
+			menuBar.add(windowMenu);
 		}
 		setJMenuBar(menuBar);
 
@@ -238,6 +276,7 @@ public class FlatThemeFileEditor
 
 			//---- directoryField ----
 			directoryField.setEditable(false);
+			directoryField.setFocusable(false);
 			controlPanel.add(directoryField, "cell 1 0");
 		}
 		contentPane.add(controlPanel, BorderLayout.NORTH);
@@ -255,6 +294,9 @@ public class FlatThemeFileEditor
 	private JMenu fileMenu;
 	private JMenuItem saveAllMenuItem;
 	private JMenuItem exitMenuItem;
+	private JMenu windowMenu;
+	private JMenuItem nextEditorMenuItem;
+	private JMenuItem previousEditorMenuItem;
 	private JPanel controlPanel;
 	private JLabel directoryLabel;
 	private JTextField directoryField;

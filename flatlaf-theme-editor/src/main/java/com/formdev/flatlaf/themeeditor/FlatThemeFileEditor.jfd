@@ -27,6 +27,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JTextField" ) {
 					name: "directoryField"
 					"editable": false
+					"focusable": false
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 0"
 				} )
@@ -60,6 +61,25 @@ new FormModel {
 						"mnemonic": 88
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 81, 4226, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exit", false ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "windowMenu"
+					"text": "Window"
+					"mnemonic": 87
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "nextEditorMenuItem"
+						"text": "Next Editor"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 9, 4226, false )
+						"mnemonic": 78
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nextEditor", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "previousEditorMenuItem"
+						"text": "Previous Editor"
+						"mnemonic": 80
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 9, 4291, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "previousEditor", false ) )
 					} )
 				} )
 			}
