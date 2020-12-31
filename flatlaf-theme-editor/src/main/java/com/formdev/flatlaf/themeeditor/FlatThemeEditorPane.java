@@ -30,10 +30,13 @@ import javax.swing.JLayer;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.MatteBorder;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
@@ -118,6 +121,7 @@ class FlatThemeEditorPane
 
 		// create scroll pane
 		scrollPane = new RTextScrollPane( viewPanel );
+		scrollPane.setBorder( null );
 		scrollPane.setLineNumbersEnabled( true );
 
 		// scale fonts
@@ -127,9 +131,13 @@ class FlatThemeEditorPane
 		// use same font for line numbers as in editor
 		scrollPane.getGutter().setLineNumberFont( textArea.getFont() );
 
+		// create error strip
+		ErrorStrip errorStrip = new ErrorStrip( textArea );
+
 		// create collapsible panel
 		collapsiblePanel = new CollapsibleSectionPanel();
 		collapsiblePanel.add( scrollPane );
+		collapsiblePanel.add( errorStrip, BorderLayout.LINE_END );
 		add( collapsiblePanel, BorderLayout.CENTER );
 	}
 
@@ -218,6 +226,8 @@ class FlatThemeEditorPane
 	void showFindReplaceBar() {
 		if( findReplaceBar == null ) {
 			findReplaceBar = new FlatFindReplaceBar( textArea );
+			findReplaceBar.setBorder( new MatteBorder( 1, 0, 0, 0,
+				UIManager.getColor( "Component.borderColor" ) ) );
 			collapsiblePanel.addBottomComponent( findReplaceBar );
 		}
 
