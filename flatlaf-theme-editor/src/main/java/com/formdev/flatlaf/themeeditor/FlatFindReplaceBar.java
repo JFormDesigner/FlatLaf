@@ -17,6 +17,9 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -44,6 +47,14 @@ class FlatFindReplaceBar
 		initComponents();
 
 		findField.getDocument().addDocumentListener( new MarkAllUpdater() );
+
+		// find previous/next with UP/DOWN keys
+		InputMap inputMap = findField.getInputMap();
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP, 0 ), "findPrevious" );
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, 0 ), "findNext" );
+		ActionMap actionMap = findField.getActionMap();
+		actionMap.put( "findPrevious", new ConsumerAction( e -> findPrevious() ) );
+		actionMap.put( "findNext", new ConsumerAction( e -> findNext() ) );
 
 		findPreviousButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowPrevMatches.svg" ) );
 		findNextButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowNextMatches.svg" ) );
@@ -266,6 +277,23 @@ class FlatFindReplaceBar
 		@Override
 		public void changedUpdate( DocumentEvent e ) {
 			markAll();
+		}
+	}
+
+	//---- class ConsumerAction -----------------------------------------------
+
+	private static class ConsumerAction
+		extends AbstractAction
+	{
+		private final Consumer<ActionEvent> consumer;
+
+		ConsumerAction( Consumer<ActionEvent> consumer ) {
+			this.consumer = consumer;
+		}
+
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			consumer.accept( e );
 		}
 	}
 }
