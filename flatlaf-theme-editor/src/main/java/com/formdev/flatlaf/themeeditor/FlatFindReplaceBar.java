@@ -72,6 +72,22 @@ class FlatFindReplaceBar
 		return findField.requestFocusInWindow();
 	}
 
+	@Override
+	public void addNotify() {
+		super.addNotify();
+
+		// if showing bar, highlight matches in editor
+		find();
+	}
+
+	@Override
+	public void removeNotify() {
+		super.removeNotify();
+
+		// if hiding bar, clear all highlighted matches in editor
+		SearchEngine.markAll( textArea, new SearchContext() );
+	}
+
 	private void findNext() {
 		context.setSearchForward( true );
 		find();
