@@ -84,23 +84,21 @@ class FlatFindReplaceBar
 	@Override
 	public boolean requestFocusInWindow() {
 		// invoked from CollapsibleSectionPanel
-		return findField.requestFocusInWindow();
-	}
-
-	@Override
-	public void addNotify() {
-		super.addNotify();
 
 		// if showing bar, highlight matches in editor
+		// (not invoking this from addNotify() because this would break the slide-in animation)
 		markAll();
+
+		return findField.requestFocusInWindow();
 	}
 
 	@Override
 	public void removeNotify() {
 		super.removeNotify();
 
-		// if hiding bar, clear all highlighted matches in editor
+		// if hiding bar, clear all highlighted matches in editor and focus it
 		SearchEngine.markAll( textArea, new SearchContext() );
+		textArea.requestFocusInWindow();
 	}
 
 	private void findNext() {
