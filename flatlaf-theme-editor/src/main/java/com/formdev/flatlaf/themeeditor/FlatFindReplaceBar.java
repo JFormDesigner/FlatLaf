@@ -77,7 +77,7 @@ class FlatFindReplaceBar
 		super.addNotify();
 
 		// if showing bar, highlight matches in editor
-		find();
+		markAll();
 	}
 
 	@Override
@@ -99,11 +99,21 @@ class FlatFindReplaceBar
 	}
 
 	private void find() {
+		findOrMarkAll( true );
+	}
+
+	private void markAll() {
+		findOrMarkAll( false );
+	}
+
+	private void findOrMarkAll( boolean find ) {
 		// update search context
 		context.setSearchFor( findField.getText() );
 
 		// find
-		SearchResult result = SearchEngine.find( textArea, context );
+		SearchResult result = find
+			? SearchEngine.find( textArea, context )
+			: SearchEngine.markAll( textArea, context );
 
 		// update matches info label
 		matchesLabel.setText( result.getMarkedCount() + " matches" );
@@ -111,17 +121,17 @@ class FlatFindReplaceBar
 
 	private void matchCaseChanged() {
 		context.setMatchCase( matchCaseToggleButton.isSelected() );
-		find();
+		markAll();
 	}
 
 	private void matchWholeWordChanged() {
 		context.setWholeWord( matchWholeWordToggleButton.isSelected() );
-		find();
+		markAll();
 	}
 
 	private void regexChanged() {
 		context.setRegularExpression( regexToggleButton.isSelected() );
-		find();
+		markAll();
 	}
 
 	private void close() {
