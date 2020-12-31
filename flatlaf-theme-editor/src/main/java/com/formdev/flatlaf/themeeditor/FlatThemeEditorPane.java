@@ -106,8 +106,18 @@ class FlatThemeEditorPane
 		// create overlay layer
 		JLayer<FlatSyntaxTextArea> overlay = new JLayer<>( textArea, new FlatThemeEditorOverlay() );
 
+		// create view panel that transfers focus to editor when hiding find/replace bar
+		JPanel viewPanel = new JPanel( new BorderLayout() ) {
+			@Override
+			public boolean requestFocusInWindow() {
+				// invoked from CollapsibleSectionPanel
+				return textArea.requestFocusInWindow();
+			}
+		};
+		viewPanel.add( overlay, BorderLayout.CENTER );
+
 		// create scroll pane
-		scrollPane = new RTextScrollPane( overlay );
+		scrollPane = new RTextScrollPane( viewPanel );
 		scrollPane.setLineNumbersEnabled( true );
 
 		// scale fonts

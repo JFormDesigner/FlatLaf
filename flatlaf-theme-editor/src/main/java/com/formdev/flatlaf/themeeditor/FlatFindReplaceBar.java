@@ -68,6 +68,7 @@ class FlatFindReplaceBar
 
 	@Override
 	public boolean requestFocusInWindow() {
+		// invoked from CollapsibleSectionPanel
 		return findField.requestFocusInWindow();
 	}
 
