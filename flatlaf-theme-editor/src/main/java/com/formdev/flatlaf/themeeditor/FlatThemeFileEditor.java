@@ -179,12 +179,20 @@ public class FlatThemeFileEditor
 		tabbedPane.setSelectedIndex( index );
 	}
 
+	private void find() {
+		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
+		if( themeEditorPane != null )
+			themeEditorPane.showFindReplaceBar();
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu();
 		saveAllMenuItem = new JMenuItem();
 		exitMenuItem = new JMenuItem();
+		editMenu = new JMenu();
+		findMenuItem = new JMenuItem();
 		windowMenu = new JMenu();
 		nextEditorMenuItem = new JMenuItem();
 		previousEditorMenuItem = new JMenuItem();
@@ -236,6 +244,20 @@ public class FlatThemeFileEditor
 				fileMenu.add(exitMenuItem);
 			}
 			menuBar.add(fileMenu);
+
+			//======== editMenu ========
+			{
+				editMenu.setText("Edit");
+				editMenu.setMnemonic('E');
+
+				//---- findMenuItem ----
+				findMenuItem.setText("Find...");
+				findMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				findMenuItem.setMnemonic('F');
+				findMenuItem.addActionListener(e -> find());
+				editMenu.add(findMenuItem);
+			}
+			menuBar.add(editMenu);
 
 			//======== windowMenu ========
 			{
@@ -294,6 +316,8 @@ public class FlatThemeFileEditor
 	private JMenu fileMenu;
 	private JMenuItem saveAllMenuItem;
 	private JMenuItem exitMenuItem;
+	private JMenu editMenu;
+	private JMenuItem findMenuItem;
 	private JMenu windowMenu;
 	private JMenuItem nextEditorMenuItem;
 	private JMenuItem previousEditorMenuItem;

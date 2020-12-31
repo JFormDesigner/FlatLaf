@@ -1,0 +1,83 @@
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets 3,hidemode 3"
+			"$columnConstraints": "[fill][fill]0[grow,fill]"
+			"$rowConstraints": "[]"
+		} ) {
+			name: "this"
+			"focusCycleRoot": true
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "findLabel"
+				"text": "Find:"
+				"displayedMnemonic": 70
+				"labelFor": new FormReference( "findField" )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "findField"
+				"columns": 16
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "find", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "findToolBar"
+				"floatable": false
+				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "findPreviousButton"
+					"toolTipText": "Previous Occurrence"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "findPrevious", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "findNextButton"
+					"toolTipText": "Next Occurrence"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "findNext", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator1"
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "matchCaseToggleButton"
+					"toolTipText": "Match Case"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "matchCaseChanged", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "matchWholeWordToggleButton"
+					"toolTipText": "Match Whole Word"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "matchWholeWordChanged", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "regexToggleButton"
+					"toolTipText": "Regex"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "regexChanged", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator2"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "matchesLabel"
+					"enabled": false
+				} )
+				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+					name: "hSpacer1"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "closeButton"
+					"toolTipText": "Close"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "close", false ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+	}
+}

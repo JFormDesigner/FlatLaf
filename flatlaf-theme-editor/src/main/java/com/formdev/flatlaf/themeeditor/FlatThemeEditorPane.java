@@ -30,6 +30,7 @@ import javax.swing.JLayer;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -53,8 +54,10 @@ class FlatThemeEditorPane
 
 	private static final String FLATLAF_STYLE = "text/flatlaf";
 
+	private final CollapsibleSectionPanel collapsiblePanel;
 	private final RTextScrollPane scrollPane;
 	private final FlatSyntaxTextArea textArea;
+	private FlatFindReplaceBar findReplaceBar;
 
 	private File file;
 
@@ -114,7 +117,10 @@ class FlatThemeEditorPane
 		// use same font for line numbers as in editor
 		scrollPane.getGutter().setLineNumberFont( textArea.getFont() );
 
-		add( scrollPane, BorderLayout.CENTER );
+		// create collapsible panel
+		collapsiblePanel = new CollapsibleSectionPanel();
+		collapsiblePanel.add( scrollPane );
+		add( collapsiblePanel, BorderLayout.CENTER );
 	}
 
 	private static Font scaleFont( Font font ) {
@@ -197,5 +203,14 @@ class FlatThemeEditorPane
 	private String getWindowTitle() {
 		Window window = SwingUtilities.windowForComponent( this );
 		return (window instanceof JFrame) ? ((JFrame)window).getTitle() : null;
+	}
+
+	void showFindReplaceBar() {
+		if( findReplaceBar == null ) {
+			findReplaceBar = new FlatFindReplaceBar( textArea );
+			collapsiblePanel.addBottomComponent( findReplaceBar );
+		}
+
+		collapsiblePanel.showBottomComponent( findReplaceBar );
 	}
 }
