@@ -18,6 +18,8 @@ package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Container;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.SearchContext;
@@ -40,6 +42,8 @@ class FlatFindReplaceBar
 		this.textArea = textArea;
 
 		initComponents();
+
+		findField.getDocument().addDocumentListener( new MarkAllUpdater() );
 
 		findPreviousButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowPrevMatches.svg" ) );
 		findNextButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowNextMatches.svg" ) );
@@ -108,7 +112,8 @@ class FlatFindReplaceBar
 
 	private void findOrMarkAll( boolean find ) {
 		// update search context
-		context.setSearchFor( findField.getText() );
+		String searchFor = findField.getText();
+		context.setSearchFor( searchFor );
 
 		// find
 		SearchResult result = find
@@ -117,6 +122,11 @@ class FlatFindReplaceBar
 
 		// update matches info label
 		matchesLabel.setText( result.getMarkedCount() + " matches" );
+
+		// enabled/disable
+		boolean findEnabled = (searchFor != null && !searchFor.isEmpty());
+		findPreviousButton.setEnabled( findEnabled );
+		findNextButton.setEnabled( findEnabled );
 	}
 
 	private void matchCaseChanged() {
@@ -237,4 +247,25 @@ class FlatFindReplaceBar
 	private JPanel hSpacer1;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class MarkAllUpdater -----------------------------------------------
+
+	private class MarkAllUpdater
+		implements DocumentListener
+	{
+		@Override
+		public void insertUpdate( DocumentEvent e ) {
+			markAll();
+		}
+
+		@Override
+		public void removeUpdate( DocumentEvent e ) {
+			markAll();
+		}
+
+		@Override
+		public void changedUpdate( DocumentEvent e ) {
+			markAll();
+		}
+	}
 }
