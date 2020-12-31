@@ -4,9 +4,9 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "insets 3,hidemode 3"
-			"$columnConstraints": "[fill][fill]0[grow,fill]"
-			"$rowConstraints": "[]"
+			"$layoutConstraints": "insets 3 6 3 3,hidemode 3"
+			"$columnConstraints": "[fill][fill]0[fill][grow,fill][fill]"
+			"$rowConstraints": "[]3[]"
 		} ) {
 			name: "this"
 			"focusCycleRoot": true
@@ -57,27 +57,69 @@ new FormModel {
 					"toolTipText": "Regex"
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "regexChanged", false ) )
 				} )
-				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
-					name: "separator2"
-				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "matchesLabel"
-					"enabled": false
-				} )
-				add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
-					name: "hSpacer1"
-				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "matchesLabel"
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 0"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "closeToolBar"
+				"floatable": false
+				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "closeButton"
 					"toolTipText": "Close"
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "close", false ) )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0"
+				"value": "cell 4 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "replaceLabel"
+				"text": "Replace:"
+				"displayedMnemonic": 82
+				"labelFor": new FormReference( "replaceField" )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "replaceField"
+				"columns": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar1"
+				"floatable": false
+				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "replaceButton"
+					"text": "Replace"
+					"mnemonic": 69
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "replace", false ) )
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "replaceAllButton"
+					"text": "Replace All"
+					"mnemonic": 65
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "replaceAll", false ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "replaceMatchesLabel"
+				"enabled": false
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 400, 300 )
+			"size": new java.awt.Dimension( 465, 125 )
 		} )
 	}
 }

@@ -69,7 +69,7 @@ new FormModel {
 					"mnemonic": 69
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "findMenuItem"
-						"text": "Find..."
+						"text": "Find/Replace..."
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 70, 4226, false )
 						"mnemonic": 70
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "find", false ) )

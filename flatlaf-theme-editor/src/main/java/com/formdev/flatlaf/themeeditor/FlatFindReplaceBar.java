@@ -48,13 +48,15 @@ class FlatFindReplaceBar
 
 		findField.getDocument().addDocumentListener( new MarkAllUpdater() );
 
-		// find previous/next with UP/DOWN keys
-		InputMap inputMap = findField.getInputMap();
+		// find previous/next with UP/DOWN keys; focus editor with F12 key
+		InputMap inputMap = getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP, 0 ), "findPrevious" );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, 0 ), "findNext" );
-		ActionMap actionMap = findField.getActionMap();
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_F12, 0 ), "focusEditor" );
+		ActionMap actionMap = getActionMap();
 		actionMap.put( "findPrevious", new ConsumerAction( e -> findPrevious() ) );
 		actionMap.put( "findNext", new ConsumerAction( e -> findNext() ) );
+		actionMap.put( "focusEditor", new ConsumerAction( e -> textArea.requestFocusInWindow() ) );
 
 		findPreviousButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowPrevMatches.svg" ) );
 		findNextButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowNextMatches.svg" ) );
@@ -76,6 +78,7 @@ class FlatFindReplaceBar
 		this.context = context;
 
 		findField.setText( context.getSearchFor() );
+		replaceField.setText( context.getReplaceWith() );
 		matchCaseToggleButton.setSelected( context.getMatchCase() );
 		matchWholeWordToggleButton.setSelected( context.getWholeWord() );
 		regexToggleButton.setSelected( context.isRegularExpression() );
@@ -130,7 +133,7 @@ class FlatFindReplaceBar
 			: SearchEngine.markAll( textArea, context );
 
 		// update matches info label
-		matchesLabel.setText( result.getMarkedCount() + " matches" );
+		updateMatchesLabel( result, false );
 
 		// enabled/disable
 		boolean findEnabled = (searchFor != null && !searchFor.isEmpty());
@@ -153,6 +156,33 @@ class FlatFindReplaceBar
 		markAll();
 	}
 
+	private void replace() {
+		// update search context
+		context.setReplaceWith( replaceField.getText() );
+
+		// replace
+		SearchResult result = SearchEngine.replace( textArea, context );
+
+		// update matches info labels
+		updateMatchesLabel( result, true );
+	}
+
+	private void replaceAll() {
+		// update search context
+		context.setReplaceWith( replaceField.getText() );
+
+		// replace all
+		SearchResult result = SearchEngine.replaceAll( textArea, context );
+
+		// update matches info labels
+		updateMatchesLabel( result, true );
+	}
+
+	private void updateMatchesLabel( SearchResult result, boolean replace ) {
+		matchesLabel.setText( result.getMarkedCount() + " matches" );
+		replaceMatchesLabel.setText( replace ? result.getCount() + " matches replaced" : null );
+	}
+
 	private void close() {
 		Container parent = getParent();
 		if( parent instanceof CollapsibleSectionPanel )
@@ -172,18 +202,27 @@ class FlatFindReplaceBar
 		matchWholeWordToggleButton = new JToggleButton();
 		regexToggleButton = new JToggleButton();
 		matchesLabel = new JLabel();
-		hSpacer1 = new JPanel(null);
+		closeToolBar = new JToolBar();
 		closeButton = new JButton();
+		replaceLabel = new JLabel();
+		replaceField = new JTextField();
+		toolBar1 = new JToolBar();
+		replaceButton = new JButton();
+		replaceAllButton = new JButton();
+		replaceMatchesLabel = new JLabel();
 
 		//======== this ========
 		setFocusCycleRoot(true);
 		setLayout(new MigLayout(
-			"insets 3,hidemode 3",
+			"insets 3 6 3 3,hidemode 3",
 			// columns
 			"[fill]" +
 			"[fill]0" +
-			"[grow,fill]",
+			"[fill]" +
+			"[grow,fill]" +
+			"[fill]",
 			// rows
+			"[]3" +
 			"[]"));
 
 		//---- findLabel ----
@@ -227,19 +266,57 @@ class FlatFindReplaceBar
 			regexToggleButton.setToolTipText("Regex");
 			regexToggleButton.addActionListener(e -> regexChanged());
 			findToolBar.add(regexToggleButton);
-			findToolBar.addSeparator();
+		}
+		add(findToolBar, "cell 2 0");
 
-			//---- matchesLabel ----
-			matchesLabel.setEnabled(false);
-			findToolBar.add(matchesLabel);
-			findToolBar.add(hSpacer1);
+		//---- matchesLabel ----
+		matchesLabel.setEnabled(false);
+		add(matchesLabel, "cell 3 0");
+
+		//======== closeToolBar ========
+		{
+			closeToolBar.setFloatable(false);
+			closeToolBar.setBorder(null);
 
 			//---- closeButton ----
 			closeButton.setToolTipText("Close");
 			closeButton.addActionListener(e -> close());
-			findToolBar.add(closeButton);
+			closeToolBar.add(closeButton);
 		}
-		add(findToolBar, "cell 2 0");
+		add(closeToolBar, "cell 4 0");
+
+		//---- replaceLabel ----
+		replaceLabel.setText("Replace:");
+		replaceLabel.setDisplayedMnemonic('R');
+		replaceLabel.setLabelFor(replaceField);
+		add(replaceLabel, "cell 0 1");
+
+		//---- replaceField ----
+		replaceField.setColumns(16);
+		add(replaceField, "cell 1 1");
+
+		//======== toolBar1 ========
+		{
+			toolBar1.setFloatable(false);
+			toolBar1.setBorder(null);
+
+			//---- replaceButton ----
+			replaceButton.setText("Replace");
+			replaceButton.setMnemonic('E');
+			replaceButton.addActionListener(e -> replace());
+			toolBar1.add(replaceButton);
+
+			//---- replaceAllButton ----
+			replaceAllButton.setText("Replace All");
+			replaceAllButton.setMnemonic('A');
+			replaceAllButton.addActionListener(e -> replaceAll());
+			toolBar1.add(replaceAllButton);
+		}
+		add(toolBar1, "cell 2 1");
+
+		//---- replaceMatchesLabel ----
+		replaceMatchesLabel.setEnabled(false);
+		add(replaceMatchesLabel, "cell 3 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -253,8 +330,14 @@ class FlatFindReplaceBar
 	private JToggleButton matchWholeWordToggleButton;
 	private JToggleButton regexToggleButton;
 	private JLabel matchesLabel;
-	private JPanel hSpacer1;
+	private JToolBar closeToolBar;
 	private JButton closeButton;
+	private JLabel replaceLabel;
+	private JTextField replaceField;
+	private JToolBar toolBar1;
+	private JButton replaceButton;
+	private JButton replaceAllButton;
+	private JLabel replaceMatchesLabel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class MarkAllUpdater -----------------------------------------------

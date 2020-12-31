@@ -251,7 +251,7 @@ public class FlatThemeFileEditor
 				editMenu.setMnemonic('E');
 
 				//---- findMenuItem ----
-				findMenuItem.setText("Find...");
+				findMenuItem.setText("Find/Replace...");
 				findMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				findMenuItem.setMnemonic('F');
 				findMenuItem.addActionListener(e -> find());
