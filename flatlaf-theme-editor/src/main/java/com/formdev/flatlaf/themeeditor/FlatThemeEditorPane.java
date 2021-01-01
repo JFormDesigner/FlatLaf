@@ -136,6 +136,11 @@ class FlatThemeEditorPane
 		return font.deriveFont( (float) newFontSize );
 	}
 
+	@Override
+	public boolean requestFocusInWindow() {
+		return textArea.requestFocusInWindow();
+	}
+
 	void setBaseFiles( List<File> baseFiles ) {
 		textArea.propertiesSupport.setBaseFiles( baseFiles );
 	}

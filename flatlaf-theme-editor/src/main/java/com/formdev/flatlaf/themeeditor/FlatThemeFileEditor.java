@@ -17,21 +17,27 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.prefs.Preferences;
 import javax.swing.*;
-import com.formdev.flatlaf.extras.components.*;
 import net.miginfocom.swing.*;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
+import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -43,21 +49,26 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatThemeFileEditor
 	extends JFrame
 {
+	private static final String PREFS_ROOT_PATH = "/flatlaf-theme-editor";
+	private static final String KEY_DIRECTORIES = "directories";
+	private static final String KEY_RECENT_DIRECTORY = "recentDirectory";
+	private static final String KEY_RECENT_FILE = "recentFile";
+
 	private File dir;
+	private Preferences state;
+	private boolean inLoadDirectory;
 
 	public static void main( String[] args ) {
-		File dir = new File( args.length > 0
-			? args[0]
-			: "." );
+		File dir = (args.length > 0)
+			? new File( args[0] )
+			: null;
 
 		SwingUtilities.invokeLater( () -> {
 			FlatLightLaf.install();
 			FlatInspector.install( "ctrl alt shift X" );
 			FlatUIDefaultsInspector.install( "ctrl shift alt Y" );
 
-			FlatThemeFileEditor frame = new FlatThemeFileEditor();
-
-			frame.loadDirectory( dir );
+			FlatThemeFileEditor frame = new FlatThemeFileEditor( dir );
 
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			frame.setSize( Math.min( UIScale.scale( 800 ), screenSize.width ),
@@ -67,24 +78,133 @@ public class FlatThemeFileEditor
 		} );
 	}
 
-	public FlatThemeFileEditor() {
+	private FlatThemeFileEditor( File dir ) {
 		initComponents();
+
+		openDirectoryButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/menu-open.svg" ) );
+
+		restoreState();
+
+		// load directory
+		if( dir == null ) {
+			String recentDirectory = state.get( KEY_RECENT_DIRECTORY, null );
+			if( recentDirectory != null )
+				dir = new File( recentDirectory );
+		}
+		if( dir != null && !dir.isDirectory() )
+			dir = null;
+		if( dir != null )
+			loadDirectory( dir );
+	}
+
+	private void openDirectory() {
+		// save all currently open editors before showing directory chooser
+		if( !saveAll() )
+			return;
+
+		// choose directory
+		JFileChooser chooser = new JFileChooser( dir ) {
+			@Override
+			public void approveSelection() {
+				if( !checkDirectory( this, getSelectedFile() ) )
+					return;
+
+				super.approveSelection();
+			}
+		};
+		chooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
+		if( chooser.showOpenDialog( this ) != JFileChooser.APPROVE_OPTION )
+			return;
+
+		File selectedFile = chooser.getSelectedFile();
+		if( selectedFile == null || selectedFile.equals( dir ) )
+			return;
+
+		// open new directory
+		loadDirectory( selectedFile );
+	}
+
+	private boolean checkDirectory( Component parentComponent, File dir ) {
+		if( !dir.isDirectory() ) {
+			JOptionPane.showMessageDialog( parentComponent,
+				"Directory '" + dir + "' does not exist.",
+				getTitle(), JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+
+		if( getPropertiesFiles( dir ).length == 0 ) {
+			JOptionPane.showMessageDialog( parentComponent,
+				"Directory '" + dir + "' does not contain properties files.",
+				getTitle(), JOptionPane.INFORMATION_MESSAGE );
+			return false;
+		}
+
+		return true;
+	}
+
+	private void directoryChanged() {
+		if( inLoadDirectory )
+			return;
+
+		Object selectedItem = directoryField.getSelectedItem();
+		if( selectedItem == null )
+			return;
+
+		File dir = new File( (String) selectedItem );
+		if( checkDirectory( this, dir ) )
+			loadDirectory( dir );
+		else {
+			// remove from directories history
+			directoryField.removeItem( selectedItem );
+			directoryField.setSelectedItem( this.dir.getAbsolutePath() );
+			saveState();
+		}
 	}
 
 	private void loadDirectory( File dir ) {
+		dir = getCanonicalFile( dir );
+		if( Objects.equals( this.dir, dir ) || !dir.isDirectory() )
+			return;
+
+		// save all currently open editors
+		if( !saveAll() )
+			return;
+
 		this.dir = dir;
 
-		try {
-			directoryField.setText( dir.getCanonicalPath() );
-		} catch( IOException ex ) {
-			directoryField.setText( dir.getAbsolutePath() );
-		}
+		inLoadDirectory = true;
 
+		// close all open editors
+		int tabCount = tabbedPane.getTabCount();
+		for( int i = tabCount - 1; i >= 0; i-- )
+			tabbedPane.removeTabAt( i );
+
+		// update directory field
+		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) directoryField.getModel();
+		String dirStr = dir.getAbsolutePath();
+		int indexOf = model.getIndexOf( dirStr );
+		if( indexOf < 0 )
+			model.addElement( dirStr );
+		directoryField.setSelectedItem( dirStr );
+
+		// open all properties files in directory
+		String recentFile = state.get( KEY_RECENT_FILE, null );
 		for( File file : getPropertiesFiles( dir ) )
-			openFile( file );
+			openFile( file, file.getName().equals( recentFile ) );
+
+		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
+		if( themeEditorPane != null )
+			themeEditorPane.requestFocusInWindow();
+
+		saveState();
+
+		inLoadDirectory = false;
 	}
 
 	private void updateDirectory() {
+		if( dir == null )
+			return;
+
 		// update open tabs and remove tabs if file was removed
 		HashSet<File> openFiles = new HashSet<>();
 		FlatThemeEditorPane[] themeEditorPanes = getThemeEditorPanes();
@@ -99,7 +219,18 @@ public class FlatThemeFileEditor
 		// open newly created files
 		for( File file : getPropertiesFiles( dir ) ) {
 			if( !openFiles.contains( file ) )
-				openFile( file );
+				openFile( file, false );
+		}
+	}
+
+	private File getCanonicalFile( File dir ) {
+		if( dir == null )
+			return null;
+
+		try {
+			return dir.getCanonicalFile();
+		} catch( IOException ex ) {
+			return dir.getAbsoluteFile();
 		}
 	}
 
@@ -111,7 +242,7 @@ public class FlatThemeFileEditor
 		return propertiesFiles;
 	}
 
-	private void openFile( File file ) {
+	private void openFile( File file, boolean select ) {
 		FlatThemeEditorPane themeEditorPane = new FlatThemeEditorPane();
 		try {
 			themeEditorPane.load( file );
@@ -122,7 +253,6 @@ public class FlatThemeFileEditor
 		Supplier<String> titleFun = () -> {
 			return (themeEditorPane.isDirty() ? "* " : "")
 				+ StringUtils.removeTrailing( themeEditorPane.getFile().getName(), ".properties" );
-
 		};
 		themeEditorPane.addPropertyChangeListener( FlatThemeEditorPane.DIRTY_PROPERTY, e -> {
 			int index = tabbedPane.indexOfComponent( themeEditorPane );
@@ -131,6 +261,18 @@ public class FlatThemeFileEditor
 		} );
 
 		tabbedPane.addTab( titleFun.get(), null, themeEditorPane, file.getAbsolutePath() );
+
+		if( select )
+			tabbedPane.setSelectedComponent( themeEditorPane );
+	}
+
+	private void selectedTabChanged() {
+		if( inLoadDirectory )
+			return;
+
+		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
+		String filename = (themeEditorPane != null) ? themeEditorPane.getFile().getName() : null;
+		putPrefsString( state, KEY_RECENT_FILE, filename );
 	}
 
 	private boolean saveAll() {
@@ -166,6 +308,9 @@ public class FlatThemeFileEditor
 	}
 
 	private void nextEditor() {
+		if( tabbedPane.getTabCount() == 0 )
+			return;
+
 		int index = tabbedPane.getSelectedIndex() + 1;
 		if( index >= tabbedPane.getTabCount() )
 			index = 0;
@@ -173,6 +318,9 @@ public class FlatThemeFileEditor
 	}
 
 	private void previousEditor() {
+		if( tabbedPane.getTabCount() == 0 )
+			return;
+
 		int index = tabbedPane.getSelectedIndex() - 1;
 		if( index < 0 )
 			index = tabbedPane.getTabCount() - 1;
@@ -185,10 +333,58 @@ public class FlatThemeFileEditor
 			themeEditorPane.showFindReplaceBar();
 	}
 
+	private void restoreState() {
+		state = Preferences.userRoot().node( PREFS_ROOT_PATH );
+
+		// restore directories history
+		String[] directories = getPrefsStrings( state, KEY_DIRECTORIES );
+		SortedComboBoxModel<String> model = new SortedComboBoxModel<>( directories );
+		directoryField.setModel( model );
+	}
+
+	private void saveState() {
+		// save directories history
+		ComboBoxModel<String> model = directoryField.getModel();
+		String[] directories = new String[model.getSize()];
+		for( int i = 0; i < directories.length; i++ )
+			directories[i] = model.getElementAt( i );
+		putPrefsStrings( state, KEY_DIRECTORIES, directories );
+
+		// save recent directory
+		putPrefsString( state, KEY_RECENT_DIRECTORY, dir.getAbsolutePath() );
+	}
+
+	private static void putPrefsString( Preferences prefs, String key, String value ) {
+		if( !StringUtils.isEmpty( value ) )
+			prefs.put( key, value );
+		else
+			prefs.remove( key );
+	}
+
+	private static String[] getPrefsStrings( Preferences prefs, String key ) {
+		ArrayList<String> arr = new ArrayList<>();
+		for( int i = 0; i < 10000; i++ ) {
+			String s = prefs.get( key+(i+1), null );
+			if( s == null )
+				break;
+			arr.add( s );
+		}
+		return arr.toArray( new String[arr.size()] );
+	}
+
+	private static void putPrefsStrings( Preferences prefs, String key, String[] strings ) {
+		for( int i = 0; i < strings.length; i++ )
+			prefs.put( key+(i+1), strings[i] );
+
+		for( int i = strings.length; prefs.get( key+(i+1), null ) != null; i++ )
+			prefs.remove( key+(i+1) );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu();
+		openDirectoryMenuItem = new JMenuItem();
 		saveAllMenuItem = new JMenuItem();
 		exitMenuItem = new JMenuItem();
 		editMenu = new JMenu();
@@ -198,7 +394,8 @@ public class FlatThemeFileEditor
 		previousEditorMenuItem = new JMenuItem();
 		controlPanel = new JPanel();
 		directoryLabel = new JLabel();
-		directoryField = new JTextField();
+		directoryField = new JComboBox<>();
+		openDirectoryButton = new JButton();
 		tabbedPane = new FlatTabbedPane();
 
 		//======== this ========
@@ -227,6 +424,13 @@ public class FlatThemeFileEditor
 			//======== fileMenu ========
 			{
 				fileMenu.setText("File");
+
+				//---- openDirectoryMenuItem ----
+				openDirectoryMenuItem.setText("Open Directory...");
+				openDirectoryMenuItem.setMnemonic('O');
+				openDirectoryMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				openDirectoryMenuItem.addActionListener(e -> openDirectory());
+				fileMenu.add(openDirectoryMenuItem);
 
 				//---- saveAllMenuItem ----
 				saveAllMenuItem.setText("Save All");
@@ -288,7 +492,8 @@ public class FlatThemeFileEditor
 				"hidemode 3",
 				// columns
 				"[fill]" +
-				"[grow,fill]",
+				"[grow,fill]" +
+				"[fill]",
 				// rows
 				"[]"));
 
@@ -299,13 +504,21 @@ public class FlatThemeFileEditor
 			//---- directoryField ----
 			directoryField.setEditable(false);
 			directoryField.setFocusable(false);
+			directoryField.addActionListener(e -> directoryChanged());
 			controlPanel.add(directoryField, "cell 1 0");
+
+			//---- openDirectoryButton ----
+			openDirectoryButton.setFocusable(false);
+			openDirectoryButton.addActionListener(e -> openDirectory());
+			controlPanel.add(openDirectoryButton, "cell 2 0");
 		}
 		contentPane.add(controlPanel, BorderLayout.NORTH);
 
 		//======== tabbedPane ========
 		{
 			tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+			tabbedPane.setFocusable(false);
+			tabbedPane.addChangeListener(e -> selectedTabChanged());
 		}
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -314,6 +527,7 @@ public class FlatThemeFileEditor
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JMenuBar menuBar;
 	private JMenu fileMenu;
+	private JMenuItem openDirectoryMenuItem;
 	private JMenuItem saveAllMenuItem;
 	private JMenuItem exitMenuItem;
 	private JMenu editMenu;
@@ -323,7 +537,67 @@ public class FlatThemeFileEditor
 	private JMenuItem previousEditorMenuItem;
 	private JPanel controlPanel;
 	private JLabel directoryLabel;
-	private JTextField directoryField;
+	private JComboBox<String> directoryField;
+	private JButton openDirectoryButton;
 	private FlatTabbedPane tabbedPane;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class SortedComboBoxModel ------------------------------------------
+
+	private static class SortedComboBoxModel<E>
+		extends DefaultComboBoxModel<E>
+	{
+		private Comparator<E> comparator;
+
+		public SortedComboBoxModel( E[] items ) {
+			this( items, null );
+		}
+
+		public SortedComboBoxModel( E[] items, Comparator<E> c ) {
+			super( sort( items, c ) );
+			this.comparator = c;
+		}
+
+		@Override
+		public void addElement( E obj ) {
+			if( getSize() == 0 ) {
+				super.addElement( obj );
+			} else {
+				int index = binarySearch( this, obj, comparator );
+				insertElementAt( obj, (index < 0) ? ((-index)-1) : index );
+			}
+		}
+
+		static <E> E[] sort( E[] items, Comparator<E> c ) {
+			// clone array
+			items = items.clone();
+
+			Arrays.sort( items, c );
+			return items;
+		}
+
+		@SuppressWarnings("unchecked")
+		static <E> int binarySearch( ListModel<E> model, E key, Comparator<E> c ) {
+			int low = 0;
+			int high = model.getSize() - 1;
+
+			while( low <= high ) {
+				int mid = (low + high) / 2;
+				E midVal = model.getElementAt( mid );
+				int cmp;
+				if( c != null )
+					cmp = c.compare( midVal, key );
+				else
+					cmp = ((Comparable<E>)midVal).compareTo( key );
+
+				if( cmp < 0 )
+					low = mid + 1;
+				else if( cmp > 0 )
+					high = mid - 1;
+				else
+					return mid; // key found
+			}
+			return -(low + 1); // key not found.
+	    }
+	}
 }
