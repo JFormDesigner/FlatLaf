@@ -29,6 +29,7 @@ import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.util.StringUtils;
 import net.miginfocom.swing.*;
 
 /**
@@ -88,6 +89,11 @@ class FlatFindReplaceBar
 	public boolean requestFocusInWindow() {
 		// invoked from CollapsibleSectionPanel
 
+		// use selected text in editor for searching
+		String selectedText = textArea.getSelectedText();
+		if( !StringUtils.isEmpty( selectedText ) && selectedText.indexOf( '\n' ) < 0 )
+			findField.setText( selectedText );
+
 		// if showing bar, highlight matches in editor
 		// (not invoking this from addNotify() because this would break the slide-in animation)
 		markAll();
@@ -136,7 +142,7 @@ class FlatFindReplaceBar
 		updateMatchesLabel( result, false );
 
 		// enabled/disable
-		boolean findEnabled = (searchFor != null && !searchFor.isEmpty());
+		boolean findEnabled = !StringUtils.isEmpty( searchFor );
 		findPreviousButton.setEnabled( findEnabled );
 		findNextButton.setEnabled( findEnabled );
 	}
@@ -158,6 +164,7 @@ class FlatFindReplaceBar
 
 	private void replace() {
 		// update search context
+		context.setSearchFor( findField.getText() );
 		context.setReplaceWith( replaceField.getText() );
 
 		// replace
@@ -169,6 +176,7 @@ class FlatFindReplaceBar
 
 	private void replaceAll() {
 		// update search context
+		context.setSearchFor( findField.getText() );
 		context.setReplaceWith( replaceField.getText() );
 
 		// replace all
