@@ -20,6 +20,9 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.io.File;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
@@ -38,6 +42,7 @@ import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.*;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -53,6 +58,7 @@ public class FlatThemeFileEditor
 	private static final String KEY_DIRECTORIES = "directories";
 	private static final String KEY_RECENT_DIRECTORY = "recentDirectory";
 	private static final String KEY_RECENT_FILE = "recentFile";
+	private static final String KEY_WINDOW_BOUNDS = "windowBounds";
 
 	private File dir;
 	private Preferences state;
@@ -69,11 +75,6 @@ public class FlatThemeFileEditor
 			FlatUIDefaultsInspector.install( "ctrl shift alt Y" );
 
 			FlatThemeFileEditor frame = new FlatThemeFileEditor( dir );
-
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			frame.setSize( Math.min( UIScale.scale( 800 ), screenSize.width ),
-				screenSize.height - UIScale.scale( 100 ) );
-			frame.setLocationRelativeTo( null );
 			frame.setVisible( true );
 		} );
 	}
@@ -84,6 +85,7 @@ public class FlatThemeFileEditor
 		openDirectoryButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/menu-open.svg" ) );
 
 		restoreState();
+		restoreWindowBounds();
 
 		// load directory
 		if( dir == null ) {
@@ -284,8 +286,11 @@ public class FlatThemeFileEditor
 	}
 
 	private void exit() {
-		if( saveAll() )
-			System.exit( 0 );
+		if( !saveAll() )
+			return;
+
+		saveWindowBounds();
+		System.exit( 0 );
 	}
 
 	private void windowClosing() {
@@ -352,6 +357,50 @@ public class FlatThemeFileEditor
 
 		// save recent directory
 		putPrefsString( state, KEY_RECENT_DIRECTORY, dir.getAbsolutePath() );
+	}
+
+	private void restoreWindowBounds() {
+		String windowBoundsStr = state.get( KEY_WINDOW_BOUNDS, null );
+		if( windowBoundsStr != null ) {
+			List<String> list = StringUtils.split( windowBoundsStr, ',' );
+			if( list.size() >= 4 ) {
+				try {
+					int x = Integer.parseInt( list.get( 0 ) );
+					int y = Integer.parseInt( list.get( 1 ) );
+					int w = Integer.parseInt( list.get( 2 ) );
+					int h = Integer.parseInt( list.get( 3 ) );
+
+					// limit to screen size
+					GraphicsConfiguration gc = getGraphicsConfiguration();
+					if( gc != null ) {
+						Rectangle screenBounds = gc.getBounds();
+						Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets( gc );
+						Rectangle r = FlatUIUtils.subtractInsets( screenBounds, screenInsets );
+
+						w = Math.min( w, r.width );
+						h = Math.min( h, r.height );
+						x = Math.max( Math.min( x, r.width - w ), r.x );
+						y = Math.max( Math.min( y, r.height - h ), r.y );
+					}
+
+					setBounds( x, y, w, h );
+					return;
+				} catch( NumberFormatException ex ) {
+					// ignore
+				}
+			}
+		}
+
+		// default window size
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize( Math.min( UIScale.scale( 800 ), screenSize.width ),
+			screenSize.height - UIScale.scale( 100 ) );
+		setLocationRelativeTo( null );
+	}
+
+	private void saveWindowBounds() {
+		Rectangle r = getBounds();
+		state.put( KEY_WINDOW_BOUNDS, r.x + "," + r.y + ',' + r.width + ',' + r.height );
 	}
 
 	private static void putPrefsString( Preferences prefs, String key, String value ) {
