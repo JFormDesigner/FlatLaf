@@ -24,7 +24,6 @@ import javax.swing.border.*;
 import com.formdev.flatlaf.testing.*;
 import com.formdev.flatlaf.testing.FlatTestFrame;
 import com.jgoodies.forms.layout.*;
-import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.popup.JidePopup;
 import com.jidesoft.swing.*;
 import net.miginfocom.swing.*;
@@ -38,14 +37,7 @@ public class FlatJideOssTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatJideOssTest" );
-			LookAndFeelFactory.installJideExtension();
 			frame.showFrame( FlatJideOssTest::new );
-
-			UIManager.addPropertyChangeListener( e -> {
-				if( "lookAndFeel".equals( e.getPropertyName() ) ) {
-					LookAndFeelFactory.installJideExtension();
-				}
-			} );
 		} );
 	}
 

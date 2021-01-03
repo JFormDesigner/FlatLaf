@@ -39,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.UIDefaultsLookup;
 import com.jidesoft.plaf.basic.BasicJideTabbedPaneUI;
 import com.jidesoft.swing.JideTabbedPane;
@@ -66,6 +67,7 @@ public class FlatJideTabbedPaneUI
 	private Object[] oldRenderingHints;
 
 	public static ComponentUI createUI( JComponent c ) {
+		LookAndFeelFactory.installJideExtension();
 		return new FlatJideTabbedPaneUI();
 	}
 

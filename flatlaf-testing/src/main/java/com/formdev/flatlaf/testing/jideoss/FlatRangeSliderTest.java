@@ -22,11 +22,9 @@ import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.testing.FlatTestFrame;
 import com.formdev.flatlaf.testing.FlatTestPanel;
-import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.swing.RangeSlider;
 import net.miginfocom.swing.MigLayout;
 
@@ -37,14 +35,7 @@ public class FlatRangeSliderTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatRangeSliderTest" );
-			LookAndFeelFactory.installJideExtension();
 			frame.showFrame( FlatRangeSliderTest::new );
-
-			UIManager.addPropertyChangeListener( e -> {
-				if( "lookAndFeel".equals( e.getPropertyName() ) ) {
-					LookAndFeelFactory.installJideExtension();
-				}
-			} );
 		} );
 	}
 

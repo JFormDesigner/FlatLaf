@@ -36,6 +36,7 @@ import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.ui.FlatSliderUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
+import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.basic.BasicRangeSliderUI;
 
 /**
@@ -65,6 +66,7 @@ public class FlatRangeSliderUI
 	private Object[] oldRenderingHints;
 
 	public static ComponentUI createUI( JComponent c ) {
+		LookAndFeelFactory.installJideExtension();
 		return new FlatRangeSliderUI();
 	}
 
