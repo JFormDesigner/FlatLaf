@@ -73,6 +73,20 @@ Addons
 - [JIDE Common Layer](flatlaf-jide-oss)
 
 
+Documentation
+-------------
+
+For more information and documentation visit
+[FlatLaf Home](https://www.formdev.com/flatlaf/)
+
+
+Buzz
+----
+
+- [What others say about FlatLaf on Twitter](https://twitter.com/search?f=live&q=flatlaf)
+- [FlatLaf announcement on Reddit](https://www.reddit.com/r/java/comments/dl0hu3/flatlaf_flat_look_and_feel/)
+
+
 Projects using FlatLaf
 ----------------------
 
@@ -112,14 +126,14 @@ Projects using FlatLaf
   [OFTP2](https://mendelson-e-c.com/oftp2) (commercial)
 - [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2 - GIS and scientific
   computation environment for meteorological community
-- [lsfusion platform](https://github.com/lsfusion/platform) - information
+- [lsfusion platform](https://github.com/lsfusion/platform) 4 - information
   systems development platform
 - ![New](images/new.svg) [JPass](https://github.com/gaborbata/jpass) - password
   manager with strong encryption
 - [Jes - Die Java-EÜR](https://www.jes-eur.de)
 - [Mapton](https://mapton.org/) 2.0
-  ([source code](https://github.com/trixon/mapton)) based on NetBeans platform -
-  some kind of map application
+  ([source code](https://github.com/trixon/mapton)) - some kind of map
+  application (based on NetBeans platform)
 - [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE) -
   IDE for Pseudo-Assembler
 - ![New](images/new.svg) [Linotte](https://github.com/cpc6128/LangageLinotte)
@@ -147,17 +161,3 @@ Projects using FlatLaf
   [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
   and fastboot commands easier to use
 - and more...
-
-
-Buzz
-----
-
-- [What others say about FlatLaf on Twitter](https://twitter.com/search?f=live&q=flatlaf)
-- [FlatLaf announcement on Reddit](https://www.reddit.com/r/java/comments/dl0hu3/flatlaf_flat_look_and_feel/)
-
-
-Documentation
--------------
-
-For more information and documentation visit
-[FlatLaf Home](https://www.formdev.com/flatlaf/)
