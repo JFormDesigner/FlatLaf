@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/com.formdev/flatlaf.svg)](https://search.maven.org/artifact/com.formdev/flatlaf/)
+
 FlatLaf - Flat Look and Feel
 ============================
 
