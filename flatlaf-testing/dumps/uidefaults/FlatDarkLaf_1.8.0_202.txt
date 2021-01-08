@@ -1246,7 +1246,7 @@ Tree.editorBorder              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 Tree.expandedIcon              [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeExpandedIcon [UI]
 Tree.font                      [active] $defaultFont [UI]
 Tree.foreground                #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-Tree.hash                      #505355    javax.swing.plaf.ColorUIResource [UI]
+Tree.hash                      #515657    javax.swing.plaf.ColorUIResource [UI]
 Tree.icon.closedColor          #adadad    javax.swing.plaf.ColorUIResource [UI]
 Tree.icon.collapsedColor       #adadad    javax.swing.plaf.ColorUIResource [UI]
 Tree.icon.expandedColor        #adadad    javax.swing.plaf.ColorUIResource [UI]
