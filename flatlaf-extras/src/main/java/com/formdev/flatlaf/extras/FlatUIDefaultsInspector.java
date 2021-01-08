@@ -66,9 +66,8 @@ public class FlatUIDefaultsInspector
 {
 	private static final int KEY_MODIFIERS_MASK = InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.META_DOWN_MASK;
 
-	private static FlatUIDefaultsInspector inspector;
+	private static JFrame inspectorFrame;
 
-	private final String title;
 	private final PropertyChangeListener lafListener = this::lafChanged;
 	private final PropertyChangeListener lafDefaultsListener = this::lafDefaultsChanged;
 	private boolean refreshPending;
@@ -92,26 +91,30 @@ public class FlatUIDefaultsInspector
 	}
 
 	public static void show() {
-		if( inspector != null ) {
-			inspector.ensureOnScreen();
-			inspector.frame.toFront();
+		if( inspectorFrame != null ) {
+			ensureOnScreen( inspectorFrame );
+			inspectorFrame.toFront();
 			return;
 		}
 
-		inspector = new FlatUIDefaultsInspector();
-		inspector.frame.setVisible( true );
+		inspectorFrame = new FlatUIDefaultsInspector().createFrame();
+		inspectorFrame.setVisible( true );
 	}
 
 	public static void hide() {
-		if( inspector != null )
-			inspector.frame.dispose();
+		if( inspectorFrame != null )
+			inspectorFrame.dispose();
+	}
+
+	/**
+	 * Creates a UI defaults inspector panel that can be embedded into any window.
+	 */
+	public static JComponent createInspectorPanel() {
+		return new FlatUIDefaultsInspector().panel;
 	}
 
 	private FlatUIDefaultsInspector() {
 		initComponents();
-
-		title = frame.getTitle();
-		updateWindowTitle();
 
 		panel.setBorder( new ScaledEmptyBorder( 10, 10, 10, 10 ) );
 		filterPanel.setBorder( new ScaledEmptyBorder( 0, 0, 10, 0 ) );
@@ -143,23 +146,20 @@ public class FlatUIDefaultsInspector
 		table.getRowSorter().setSortKeys( Collections.singletonList(
 			new RowSorter.SortKey( 0, SortOrder.ASCENDING ) ) );
 
-		// restore window bounds
-		Preferences prefs = getPrefs();
-		int x = prefs.getInt( "x", -1 );
-		int y = prefs.getInt( "y", -1 );
-		int width = prefs.getInt( "width", UIScale.scale( 600 ) );
-		int height = prefs.getInt( "height", UIScale.scale( 800 ) );
-		frame.setSize( width, height );
-		if( x != -1 && y != -1 ) {
-			frame.setLocation( x, y );
-			ensureOnScreen();
-		} else
-			frame.setLocationRelativeTo( null );
-
 		// restore column widths
+		Preferences prefs = getPrefs();
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn( 0 ).setPreferredWidth( prefs.getInt( "column1width", 100 ) );
 		columnModel.getColumn( 1 ).setPreferredWidth( prefs.getInt( "column2width", 100 ) );
+
+		PropertyChangeListener columnWidthListener = e -> {
+			if( "width".equals( e.getPropertyName() ) ) {
+				prefs.putInt( "column1width", columnModel.getColumn( 0 ).getWidth() );
+				prefs.putInt( "column2width", columnModel.getColumn( 1 ).getWidth() );
+			}
+		};
+		columnModel.getColumn( 0 ).addPropertyChangeListener( columnWidthListener );
+		columnModel.getColumn( 1 ).addPropertyChangeListener( columnWidthListener );
 
 		// restore filter
 		String filter = prefs.get( "filter", "" );
@@ -169,20 +169,66 @@ public class FlatUIDefaultsInspector
 		if( valueType != null )
 			valueTypeField.setSelectedItem( valueType );
 
-		UIManager.addPropertyChangeListener( lafListener );
-		UIManager.getDefaults().addPropertyChangeListener( lafDefaultsListener );
+		panel.addPropertyChangeListener( "ancestor", e -> {
+			if( e.getNewValue() != null ) {
+				UIManager.addPropertyChangeListener( lafListener );
+				UIManager.getDefaults().addPropertyChangeListener( lafDefaultsListener );
+			} else {
+				UIManager.removePropertyChangeListener( lafListener );
+				UIManager.getDefaults().removePropertyChangeListener( lafDefaultsListener );
+			}
+		} );
 
 		// register F5 key to refresh
-		((JComponent)frame.getContentPane()).registerKeyboardAction(
+		panel.registerKeyboardAction(
 			e -> refresh(),
 			KeyStroke.getKeyStroke( KeyEvent.VK_F5, 0, false ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	private JFrame createFrame() {
+		JFrame frame = new JFrame();
+		frame.setTitle( "UI Defaults Inspector" );
+		frame.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+		frame.addWindowListener( new WindowAdapter() {
+			@Override
+			public void windowClosed( WindowEvent e ) {
+				inspectorFrame = null;
+			}
+			@Override
+			public void windowClosing( WindowEvent e ) {
+				saveWindowBounds( frame );
+			}
+			@Override
+			public void windowDeactivated( WindowEvent e ) {
+				saveWindowBounds( frame );
+			}
+		} );
+
+		updateWindowTitle( frame );
+
+		frame.getContentPane().add( panel, BorderLayout.CENTER );
+
+		// restore window bounds
+		Preferences prefs = getPrefs();
+		int x = prefs.getInt( "x", -1 );
+		int y = prefs.getInt( "y", -1 );
+		int width = prefs.getInt( "width", UIScale.scale( 600 ) );
+		int height = prefs.getInt( "height", UIScale.scale( 800 ) );
+		frame.setSize( width, height );
+		if( x != -1 && y != -1 ) {
+			frame.setLocation( x, y );
+			ensureOnScreen( frame );
+		} else
+			frame.setLocationRelativeTo( null );
 
 		// register ESC key to close frame
 		((JComponent)frame.getContentPane()).registerKeyboardAction(
 			e -> frame.dispose(),
 			KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
+		return frame;
 	}
 
 	private void delegateKey( int keyCode, String actionKey ) {
@@ -202,7 +248,7 @@ public class FlatUIDefaultsInspector
 		} );
 	}
 
-	private void ensureOnScreen() {
+	private static void ensureOnScreen( JFrame frame ) {
 		Rectangle frameBounds = frame.getBounds();
 		boolean onScreen = false;
 		for( GraphicsDevice screen : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices() ) {
@@ -219,12 +265,12 @@ public class FlatUIDefaultsInspector
 			frame.setLocationRelativeTo( null );
 	}
 
-	void lafChanged( PropertyChangeEvent e ) {
+	private void lafChanged( PropertyChangeEvent e ) {
 		if( "lookAndFeel".equals( e.getPropertyName() ) )
 			refresh();
 	}
 
-	void lafDefaultsChanged( PropertyChangeEvent e ) {
+	private void lafDefaultsChanged( PropertyChangeEvent e ) {
 		if( refreshPending )
 			return;
 
@@ -235,11 +281,13 @@ public class FlatUIDefaultsInspector
 		} );
 	}
 
-	void refresh() {
+	private void refresh() {
 		ItemsTableModel model = (ItemsTableModel) table.getModel();
 		model.setItems( getUIDefaultsItems() );
 
-		updateWindowTitle();
+		JFrame frame = (JFrame) SwingUtilities.getAncestorOfClass( JFrame.class, panel );
+		if( frame != null )
+			updateWindowTitle( frame );
 	}
 
 	private Item[] getUIDefaultsItems() {
@@ -277,31 +325,25 @@ public class FlatUIDefaultsInspector
 		return items.toArray( new Item[items.size()] );
 	}
 
-	private void updateWindowTitle() {
-		frame.setTitle( title + "  -  " + UIManager.getLookAndFeel().getName() );
+	private void updateWindowTitle( JFrame frame ) {
+		String title = frame.getTitle();
+		String sep = "  -  ";
+		int sepIndex = title.indexOf( sep );
+		if( sepIndex >= 0 )
+			title = title.substring( 0, sepIndex );
+		frame.setTitle( title + sep + UIManager.getLookAndFeel().getName() );
 	}
 
-	private void saveWindowBounds() {
+	private void saveWindowBounds( JFrame frame ) {
 		Preferences prefs = getPrefs();
 		prefs.putInt( "x", frame.getX() );
 		prefs.putInt( "y", frame.getY() );
 		prefs.putInt( "width", frame.getWidth() );
 		prefs.putInt( "height", frame.getHeight() );
-
-		TableColumnModel columnModel = table.getColumnModel();
-		prefs.putInt( "column1width", columnModel.getColumn( 0 ).getWidth() );
-		prefs.putInt( "column2width", columnModel.getColumn( 1 ).getWidth() );
 	}
 
 	private Preferences getPrefs() {
 		return Preferences.userRoot().node( "flatlaf-uidefaults-inspector" );
-	}
-
-	private void windowClosed() {
-		UIManager.removePropertyChangeListener( lafListener );
-		UIManager.getDefaults().removePropertyChangeListener( lafDefaultsListener );
-
-		inspector = null;
 	}
 
 	private void filterChanged() {
@@ -360,7 +402,6 @@ public class FlatUIDefaultsInspector
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		frame = new JFrame();
 		panel = new JPanel();
 		filterPanel = new JPanel();
 		flterLabel = new JLabel();
@@ -370,99 +411,75 @@ public class FlatUIDefaultsInspector
 		scrollPane = new JScrollPane();
 		table = new JTable();
 
-		//======== frame ========
+		//======== panel ========
 		{
-			frame.setTitle("UI Defaults Inspector");
-			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			frame.addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosed(WindowEvent e) {
-					FlatUIDefaultsInspector.this.windowClosed();
-				}
-				@Override
-				public void windowClosing(WindowEvent e) {
-					saveWindowBounds();
-				}
-				@Override
-				public void windowDeactivated(WindowEvent e) {
-					saveWindowBounds();
-				}
-			});
-			Container frameContentPane = frame.getContentPane();
-			frameContentPane.setLayout(new BorderLayout());
+			panel.setLayout(new BorderLayout());
 
-			//======== panel ========
+			//======== filterPanel ========
 			{
-				panel.setLayout(new BorderLayout());
+				filterPanel.setLayout(new GridBagLayout());
+				((GridBagLayout)filterPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0};
+				((GridBagLayout)filterPanel.getLayout()).rowHeights = new int[] {0, 0};
+				((GridBagLayout)filterPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
+				((GridBagLayout)filterPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-				//======== filterPanel ========
-				{
-					filterPanel.setLayout(new GridBagLayout());
-					((GridBagLayout)filterPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0};
-					((GridBagLayout)filterPanel.getLayout()).rowHeights = new int[] {0, 0};
-					((GridBagLayout)filterPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
-					((GridBagLayout)filterPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+				//---- flterLabel ----
+				flterLabel.setText("Filter:");
+				flterLabel.setLabelFor(filterField);
+				flterLabel.setDisplayedMnemonic('F');
+				filterPanel.add(flterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 10), 0, 0));
 
-					//---- flterLabel ----
-					flterLabel.setText("Filter:");
-					flterLabel.setLabelFor(filterField);
-					flterLabel.setDisplayedMnemonic('F');
-					filterPanel.add(flterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-						new Insets(0, 0, 0, 10), 0, 0));
+				//---- filterField ----
+				filterField.putClientProperty("JTextField.placeholderText", "enter one or more filter strings, separated by space characters");
+				filterPanel.add(filterField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 10), 0, 0));
 
-					//---- filterField ----
-					filterField.putClientProperty("JTextField.placeholderText", "enter one or more filter strings, separated by space characters");
-					filterPanel.add(filterField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-						new Insets(0, 0, 0, 10), 0, 0));
+				//---- valueTypeLabel ----
+				valueTypeLabel.setText("Value Type:");
+				valueTypeLabel.setLabelFor(valueTypeField);
+				valueTypeLabel.setDisplayedMnemonic('T');
+				filterPanel.add(valueTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 10), 0, 0));
 
-					//---- valueTypeLabel ----
-					valueTypeLabel.setText("Value Type:");
-					valueTypeLabel.setLabelFor(valueTypeField);
-					valueTypeLabel.setDisplayedMnemonic('T');
-					filterPanel.add(valueTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-						new Insets(0, 0, 0, 10), 0, 0));
-
-					//---- valueTypeField ----
-					valueTypeField.setModel(new DefaultComboBoxModel<>(new String[] {
-						"(any)",
-						"Boolean",
-						"Border",
-						"Color",
-						"Dimension",
-						"Float",
-						"Font",
-						"Icon",
-						"Insets",
-						"Integer",
-						"String",
-						"(other)"
-					}));
-					valueTypeField.addActionListener(e -> filterChanged());
-					filterPanel.add(valueTypeField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-						new Insets(0, 0, 0, 0), 0, 0));
-				}
-				panel.add(filterPanel, BorderLayout.NORTH);
-
-				//======== scrollPane ========
-				{
-
-					//---- table ----
-					table.setAutoCreateRowSorter(true);
-					scrollPane.setViewportView(table);
-				}
-				panel.add(scrollPane, BorderLayout.CENTER);
+				//---- valueTypeField ----
+				valueTypeField.setModel(new DefaultComboBoxModel<>(new String[] {
+					"(any)",
+					"Boolean",
+					"Border",
+					"Color",
+					"Dimension",
+					"Float",
+					"Font",
+					"Icon",
+					"Insets",
+					"Integer",
+					"String",
+					"(other)"
+				}));
+				valueTypeField.addActionListener(e -> filterChanged());
+				filterPanel.add(valueTypeField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 0), 0, 0));
 			}
-			frameContentPane.add(panel, BorderLayout.CENTER);
+			panel.add(filterPanel, BorderLayout.NORTH);
+
+			//======== scrollPane ========
+			{
+
+				//---- table ----
+				table.setAutoCreateRowSorter(true);
+				scrollPane.setViewportView(table);
+			}
+			panel.add(scrollPane, BorderLayout.CENTER);
 		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JFrame frame;
 	private JPanel panel;
 	private JPanel filterPanel;
 	private JLabel flterLabel;

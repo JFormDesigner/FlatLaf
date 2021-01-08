@@ -27,6 +27,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import javax.swing.*;
+import javax.swing.FocusManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -504,6 +505,29 @@ public class FlatTestFrame
 		inspector.setEnabled( inspectCheckBox.isSelected() );
 	}
 
+	private void uiDefaultsInspectorChanged() {
+		getContentPane().removeAll();
+
+		FocusManager focusManager = FocusManager.getCurrentManager();
+		Component focusOwner = focusManager.getFocusOwner();
+
+		if( uiDefaultsInspectorCheckBox.isSelected() ) {
+			JComponent uiDefaultsInspector = FlatUIDefaultsInspector.createInspectorPanel();
+
+			JSplitPane splitPane = new JSplitPane();
+			splitPane.setLeftComponent( dialogPane );
+			splitPane.setRightComponent( uiDefaultsInspector );
+			getContentPane().add( splitPane, BorderLayout.CENTER );
+		} else
+			getContentPane().add( dialogPane, BorderLayout.CENTER );
+
+		if( focusOwner != null && focusOwner.isDisplayable() )
+			focusOwner.requestFocusInWindow();
+
+		pack();
+		setLocationRelativeTo( null );
+	}
+
 	private void scaleFactorChanged() {
 		String scaleFactor = (String) scaleFactorComboBox.getSelectedItem();
 		if( "default".equals( scaleFactor ) )
@@ -662,6 +686,7 @@ public class FlatTestFrame
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
 		inspectCheckBox = new JCheckBox();
+		uiDefaultsInspectorCheckBox = new JCheckBox();
 		explicitColorsCheckBox = new JCheckBox();
 		backgroundCheckBox = new JCheckBox();
 		opaqueTriStateCheckBox = new FlatTriStateCheckBox();
@@ -694,6 +719,7 @@ public class FlatTestFrame
 				buttonBar.setLayout(new MigLayout(
 					"insets dialog",
 					// columns
+					"[fill]" +
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
@@ -757,23 +783,29 @@ public class FlatTestFrame
 				inspectCheckBox.addActionListener(e -> inspectChanged());
 				buttonBar.add(inspectCheckBox, "cell 5 0");
 
+				//---- uiDefaultsInspectorCheckBox ----
+				uiDefaultsInspectorCheckBox.setText("UI defaults");
+				uiDefaultsInspectorCheckBox.setMnemonic('U');
+				uiDefaultsInspectorCheckBox.addActionListener(e -> uiDefaultsInspectorChanged());
+				buttonBar.add(uiDefaultsInspectorCheckBox, "cell 6 0");
+
 				//---- explicitColorsCheckBox ----
 				explicitColorsCheckBox.setText("explicit colors");
 				explicitColorsCheckBox.setMnemonic('X');
 				explicitColorsCheckBox.addActionListener(e -> explicitColorsChanged());
-				buttonBar.add(explicitColorsCheckBox, "cell 6 0");
+				buttonBar.add(explicitColorsCheckBox, "cell 7 0");
 
 				//---- backgroundCheckBox ----
 				backgroundCheckBox.setText("background");
 				backgroundCheckBox.setMnemonic('B');
 				backgroundCheckBox.addActionListener(e -> backgroundChanged());
-				buttonBar.add(backgroundCheckBox, "cell 7 0");
+				buttonBar.add(backgroundCheckBox, "cell 8 0");
 
 				//---- opaqueTriStateCheckBox ----
 				opaqueTriStateCheckBox.setText("opaque");
 				opaqueTriStateCheckBox.setMnemonic('O');
 				opaqueTriStateCheckBox.addActionListener(e -> opaqueChanged());
-				buttonBar.add(opaqueTriStateCheckBox, "cell 8 0");
+				buttonBar.add(opaqueTriStateCheckBox, "cell 9 0");
 
 				//---- sizeVariantComboBox ----
 				sizeVariantComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -784,11 +816,11 @@ public class FlatTestFrame
 				}));
 				sizeVariantComboBox.setSelectedIndex(2);
 				sizeVariantComboBox.addActionListener(e -> sizeVariantChanged());
-				buttonBar.add(sizeVariantComboBox, "cell 9 0");
+				buttonBar.add(sizeVariantComboBox, "cell 10 0");
 
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 11 0");
+				buttonBar.add(closeButton, "cell 12 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 			dialogPane.add(themesPanel, BorderLayout.EAST);
@@ -807,6 +839,7 @@ public class FlatTestFrame
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
 	private JCheckBox inspectCheckBox;
+	private JCheckBox uiDefaultsInspectorCheckBox;
 	private JCheckBox explicitColorsCheckBox;
 	private JCheckBox backgroundCheckBox;
 	private FlatTriStateCheckBox opaqueTriStateCheckBox;

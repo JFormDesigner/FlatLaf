@@ -9,6 +9,8 @@ FlatLaf Change Log
   buttons.
 - TextComponent: Clip placeholder text if it does not fit into visible area. (PR
   #229)
+- Extras: Support embedding UI defaults inspector into any window (see
+  `FlatUIDefaultsInspector.createInspectorPanel()`.
 
 #### Fixed bugs
 
