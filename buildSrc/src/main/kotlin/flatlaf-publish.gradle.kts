@@ -63,7 +63,13 @@ publishing {
 				}
 
 				scm {
+					connection.set( "scm:git:git://github.com/JFormDesigner/FlatLaf.git" )
 					url.set( "https://github.com/JFormDesigner/FlatLaf" )
+				}
+
+				issueManagement {
+					system.set( "GitHub" )
+					url.set( "https://github.com/JFormDesigner/FlatLaf/issues" )
 				}
 			}
 		}
