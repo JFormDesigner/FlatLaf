@@ -252,35 +252,35 @@
     "ScrollBar" : {
       "hoverThumbBorderColor" : "#3a2241b2",
       "background" : "#241632ff",
-      "hoverThumbColor": "#472950b2",
+      "hoverThumbColor": "#694f92ff",
       "hoverTrackColor": "#3d2240ff",
       "thumb": "#2f2040ff",
       "thumbBorderColor": "#2c152fff",
-      "thumbColor": "#2f1f4094",
+      "thumbColor": "#6c499194",
       "thumbDarkShadow": "#261226ff",
       "thumbHighlight": "#4f2a4eff",
       "thumbShadow": "#22162bff",
       "track": "#23182dff",
       "Transparent": {
-        "thumbColor": "#2f1f4094",
+        "thumbColor": "#6c499194",
         "hoverThumbBorderColor" : "#3a2241b2",
-        "hoverThumbColor": "#472950b2",
+        "hoverThumbColor": "#694f92ff",
         "hoverTrackColor": "#3d2240ff",
         "thumbBorderColor": "#2c152fff"
       },
       "Mac" : {
         "Transparent": {
-          "thumbColor": "#2f1f4094",
+          "thumbColor": "#6c499194",
           "hoverThumbBorderColor" : "#3a2241b2",
-          "hoverThumbColor": "#472950b2",
+          "hoverThumbColor": "#694f92ff",
           "hoverTrackColor": "#3d2240ff",
           "thumbBorderColor": "#2c152fff"
         },
         "hoverThumbBorderColor" : "#3a2241b2",
-        "hoverThumbColor": "#472950b2",
+        "hoverThumbColor": "#694f92ff",
         "hoverTrackColor": "#3d2240ff",
         "thumbBorderColor": "#2c152fff",
-        "thumbColor": "#2f1f4094"
+        "thumbColor": "#6c499194"
       }
     },
     "TabbedPane": {

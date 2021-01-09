@@ -13,6 +13,8 @@ FlatLaf Change Log
   - Support embedding UI defaults inspector panel into any window. See
     `FlatUIDefaultsInspector.createInspectorPanel()`.
   - Copy selected keys and values into clipboard via context menu.
+- IntelliJ Themes:
+  - Updated "Dracula" and "Gradianto" themes.
 
 #### Fixed bugs
 

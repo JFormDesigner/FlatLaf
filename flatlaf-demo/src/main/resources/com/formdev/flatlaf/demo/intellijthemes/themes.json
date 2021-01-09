@@ -74,7 +74,7 @@
 		"license": "MIT",
 		"licenseFile": "Dracula.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/dracula/jetbrains",
-		"sourceCodePath": "blob/master/src/main/resources/themes/dracula.theme.json"
+		"sourceCodePath": "blob/master/src/main/resources/themes/Dracula.theme.json"
 	},
 	"Gradianto_dark_fuchsia.theme.json": {
 		"name": "Gradianto Dark Fuchsia",
