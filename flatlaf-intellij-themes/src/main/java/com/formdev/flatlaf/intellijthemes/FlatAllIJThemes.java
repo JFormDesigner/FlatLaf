@@ -82,6 +82,8 @@ public class FlatAllIJThemes
 		new FlatIJLookAndFeelInfo( "Material Palenight Contrast (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialPalenightContrastIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Monokai Pro (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Monokai Pro Contrast (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProContrastIJTheme", true ),
+		new FlatIJLookAndFeelInfo( "Moonlight (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightIJTheme", true ),
+		new FlatIJLookAndFeelInfo( "Moonlight Contrast (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightContrastIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Night Owl (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Night Owl Contrast (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlContrastIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Solarized Dark (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedDarkIJTheme", true ),

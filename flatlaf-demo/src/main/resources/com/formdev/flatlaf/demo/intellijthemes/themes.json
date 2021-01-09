@@ -410,6 +410,22 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/Monokai Pro Contrast.theme.json"
 	},
+	"material-theme-ui-lite/Moonlight.theme.json": {
+		"name": "Material Theme UI Lite / Moonlight",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
+		"sourceCodePath": "blob/master/src/main/resources/themes/Moonlight.theme.json"
+	},
+	"material-theme-ui-lite/Moonlight Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Moonlight Contrast",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
+		"sourceCodePath": "blob/master/src/main/resources/themes/Moonlight Contrast.theme.json"
+	},
 	"material-theme-ui-lite/Night Owl.theme.json": {
 		"name": "Material Theme UI Lite / Night Owl",
 		"dark": true,
