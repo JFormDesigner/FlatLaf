@@ -66,6 +66,8 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JTable" ) {
 					name: "table"
 					"autoCreateRowSorter": true
+					"componentPopupMenu": new FormReference( "tablePopupMenu" )
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mousePressed", "tableMousePressed", true ) )
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
@@ -73,6 +75,26 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 400, 300 )
+		} )
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "tablePopupMenu"
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "copyKeyMenuItem"
+				"text": "Copy Key"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "copyKey", false ) )
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "copyValueMenuItem"
+				"text": "Copy Value"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "copyValue", false ) )
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "copyKeyAndValueMenuItem"
+				"text": "Copy Key and Value"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "copyKeyAndValue", false ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 370 )
 		} )
 	}
 }

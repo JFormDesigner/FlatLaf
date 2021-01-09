@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.extras;
 
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -325,7 +326,7 @@ public class FlatUIDefaultsInspector
 		return items.toArray( new Item[items.size()] );
 	}
 
-	private void updateWindowTitle( JFrame frame ) {
+	private static void updateWindowTitle( JFrame frame ) {
 		String title = frame.getTitle();
 		String sep = "  -  ";
 		int sepIndex = title.indexOf( sep );
@@ -400,6 +401,49 @@ public class FlatUIDefaultsInspector
 		return "(other)";
 	}
 
+	private void tableMousePressed( MouseEvent e ) {
+		if( !SwingUtilities.isRightMouseButton( e ) )
+			return;
+
+		int row = table.rowAtPoint( e.getPoint() );
+		if( row >= 0 && !table.isRowSelected( row ) )
+			table.setRowSelectionInterval( row, row );
+	}
+
+	private void copyKey() {
+		copyToClipboard( 0 );
+	}
+
+	private void copyValue() {
+		copyToClipboard( 1 );
+	}
+
+	private void copyKeyAndValue() {
+		copyToClipboard( -1 );
+	}
+
+	private void copyToClipboard( int column ) {
+		int[] rows = table.getSelectedRows();
+		if( rows.length == 0 )
+			return;
+
+		StringBuilder buf = new StringBuilder();
+		for( int i = 0; i < rows.length; i++ ) {
+			if( i > 0 )
+				buf.append( '\n' );
+
+			if( column < 0 || column == 0 )
+				buf.append( table.getValueAt( rows[i], 0 ) );
+			if( column < 0 )
+				buf.append( " = " );
+			if( column < 0 || column == 1 )
+				buf.append( table.getValueAt( rows[i], 1 ) );
+		}
+
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+			new StringSelection( buf.toString() ), null );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		panel = new JPanel();
@@ -410,6 +454,10 @@ public class FlatUIDefaultsInspector
 		valueTypeField = new JComboBox<>();
 		scrollPane = new JScrollPane();
 		table = new JTable();
+		tablePopupMenu = new JPopupMenu();
+		copyKeyMenuItem = new JMenuItem();
+		copyValueMenuItem = new JMenuItem();
+		copyKeyAndValueMenuItem = new JMenuItem();
 
 		//======== panel ========
 		{
@@ -472,9 +520,35 @@ public class FlatUIDefaultsInspector
 
 				//---- table ----
 				table.setAutoCreateRowSorter(true);
+				table.setComponentPopupMenu(tablePopupMenu);
+				table.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent e) {
+						tableMousePressed(e);
+					}
+				});
 				scrollPane.setViewportView(table);
 			}
 			panel.add(scrollPane, BorderLayout.CENTER);
+		}
+
+		//======== tablePopupMenu ========
+		{
+
+			//---- copyKeyMenuItem ----
+			copyKeyMenuItem.setText("Copy Key");
+			copyKeyMenuItem.addActionListener(e -> copyKey());
+			tablePopupMenu.add(copyKeyMenuItem);
+
+			//---- copyValueMenuItem ----
+			copyValueMenuItem.setText("Copy Value");
+			copyValueMenuItem.addActionListener(e -> copyValue());
+			tablePopupMenu.add(copyValueMenuItem);
+
+			//---- copyKeyAndValueMenuItem ----
+			copyKeyAndValueMenuItem.setText("Copy Key and Value");
+			copyKeyAndValueMenuItem.addActionListener(e -> copyKeyAndValue());
+			tablePopupMenu.add(copyKeyAndValueMenuItem);
 		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
@@ -488,6 +562,10 @@ public class FlatUIDefaultsInspector
 	private JComboBox<String> valueTypeField;
 	private JScrollPane scrollPane;
 	private JTable table;
+	private JPopupMenu tablePopupMenu;
+	private JMenuItem copyKeyMenuItem;
+	private JMenuItem copyValueMenuItem;
+	private JMenuItem copyKeyAndValueMenuItem;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Item ---------------------------------------------------------
