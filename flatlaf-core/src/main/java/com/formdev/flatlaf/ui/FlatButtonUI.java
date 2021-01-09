@@ -251,7 +251,10 @@ public class FlatButtonUI
 		Icon icon = ((AbstractButton)c).getIcon();
 		String text = ((AbstractButton)c).getText();
 		return (icon != null && (text == null || text.isEmpty())) ||
-			(icon == null && text != null && ("...".equals( text ) || text.length() == 1));
+			(icon == null && text != null &&
+			 ("...".equals( text ) ||
+			  text.length() == 1 ||
+			  (text.length() == 2 && Character.isSurrogatePair( text.charAt( 0 ), text.charAt( 1 ) ))));
 	}
 
 	static final int TYPE_OTHER = -1;

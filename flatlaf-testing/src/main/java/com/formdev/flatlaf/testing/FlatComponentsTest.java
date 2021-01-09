@@ -248,6 +248,7 @@ public class FlatComponentsTest
 		JButton button14 = new JButton();
 		JButton button15 = new JButton();
 		JButton button16 = new JButton();
+		JButton button24 = new JButton();
 		JButton button20 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
@@ -262,6 +263,7 @@ public class FlatComponentsTest
 		JToggleButton toggleButton12 = new JToggleButton();
 		JToggleButton toggleButton13 = new JToggleButton();
 		JToggleButton toggleButton14 = new JToggleButton();
+		JToggleButton toggleButton21 = new JToggleButton();
 		JToggleButton toggleButton18 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
@@ -549,24 +551,28 @@ public class FlatComponentsTest
 
 		//---- button13 ----
 		button13.setIcon(UIManager.getIcon("Tree.closedIcon"));
-		add(button13, "cell 5 1");
+		add(button13, "cell 5 1 2 1");
 
 		//---- button14 ----
 		button14.setText("...");
-		add(button14, "cell 5 1");
+		add(button14, "cell 5 1 2 1");
 
 		//---- button15 ----
 		button15.setText("\u2026");
-		add(button15, "cell 5 1");
+		add(button15, "cell 5 1 2 1");
 
 		//---- button16 ----
 		button16.setText("#");
-		add(button16, "cell 5 1");
+		add(button16, "cell 5 1 2 1");
+
+		//---- button24 ----
+		button24.setText("A");
+		add(button24, "cell 5 1 2 1");
 
 		//---- button20 ----
 		button20.setText("Empty border");
 		button20.setBorder(BorderFactory.createEmptyBorder());
-		add(button20, "cell 6 1");
+		add(button20, "cell 5 1 2 1");
 
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");
@@ -618,27 +624,32 @@ public class FlatComponentsTest
 		//---- toggleButton11 ----
 		toggleButton11.setIcon(UIManager.getIcon("Tree.closedIcon"));
 		toggleButton11.setSelected(true);
-		add(toggleButton11, "cell 5 2");
+		add(toggleButton11, "cell 5 2 2 1");
 
 		//---- toggleButton12 ----
 		toggleButton12.setText("...");
 		toggleButton12.setSelected(true);
-		add(toggleButton12, "cell 5 2");
+		add(toggleButton12, "cell 5 2 2 1");
 
 		//---- toggleButton13 ----
 		toggleButton13.setText("\u2026");
 		toggleButton13.setSelected(true);
-		add(toggleButton13, "cell 5 2");
+		add(toggleButton13, "cell 5 2 2 1");
 
 		//---- toggleButton14 ----
 		toggleButton14.setText("#");
 		toggleButton14.setSelected(true);
-		add(toggleButton14, "cell 5 2");
+		add(toggleButton14, "cell 5 2 2 1");
+
+		//---- toggleButton21 ----
+		toggleButton21.setText("A");
+		toggleButton21.setSelected(true);
+		add(toggleButton21, "cell 5 2 2 1");
 
 		//---- toggleButton18 ----
 		toggleButton18.setText("Empty border");
 		toggleButton18.setBorder(BorderFactory.createEmptyBorder());
-		add(toggleButton18, "cell 6 2");
+		add(toggleButton18, "cell 5 2 2 1");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
@@ -1578,6 +1589,11 @@ public class FlatComponentsTest
 		buttonGroup1.add(magentaOutlineRadioButton);
 		buttonGroup1.add(magentaCyanOutlineRadioButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		// Unicode surrogate character pair "script capital A"
+		// https://www.compart.com/en/unicode/U+1D49C
+		button24.setText("\uD835\uDC9C");
+		toggleButton21.setText("\uD835\uDC9C");
 
 //		BasicComboBoxRenderer customRenderer = new BasicComboBoxRenderer();
 //		customRenderer.setBorder( new LineBorder( Color.red ) );

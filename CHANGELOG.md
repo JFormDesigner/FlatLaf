@@ -19,6 +19,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Button and ToggleButton: Threat Unicode surrogate character pair as single
+  character and make button square. (issue #234)
 - Extras: Added missing export of package
   `com.formdev.flatlaf.extras.components` to Java 9 module descriptor.
 - JIDE Common Layer: Invoke `LookAndFeelFactory.installJideExtension()` when

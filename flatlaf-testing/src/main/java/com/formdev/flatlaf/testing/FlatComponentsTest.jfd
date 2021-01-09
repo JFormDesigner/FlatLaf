@@ -123,32 +123,38 @@ new FormModel {
 				name: "button13"
 				"icon": &SwingIcon0 new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button14"
 				"text": "..."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button15"
 				"text": "…"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button16"
 				"text": "#"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 5 1 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button24"
+				"text": "A"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button20"
 				"text": "Empty border"
 				"border": &EmptyBorder0 new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 1"
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toggleButtonLabel"
@@ -220,35 +226,42 @@ new FormModel {
 				"icon": #SwingIcon0
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2"
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton12"
 				"text": "..."
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2"
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton13"
 				"text": "…"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2"
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton14"
 				"text": "#"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2"
+				"value": "cell 5 2 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton21"
+				"text": "A"
+				"selected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton18"
 				"text": "Empty border"
 				"border": #EmptyBorder0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 2"
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "checkBoxLabel"
