@@ -2109,8 +2109,10 @@ public class FlatTabbedPaneUI
 		public void mouseReleased( MouseEvent e ) {
 			if( isPressedTabClose() ) {
 				updateRollover( e );
-				if( pressedTabIndex >= 0 && pressedTabIndex == getRolloverTab() )
+				if( pressedTabIndex >= 0 && pressedTabIndex == getRolloverTab() ) {
+					restoreTabToolTip();
 					closeTab( pressedTabIndex );
+				}
 			} else
 				mouseDelegate.mouseReleased( e );
 
@@ -2188,7 +2190,8 @@ public class FlatTabbedPaneUI
 			if( lastTipTabIndex < 0 )
 				return;
 
-			tabPane.setToolTipTextAt( lastTipTabIndex, lastTip );
+			if( lastTipTabIndex < tabPane.getTabCount() )
+				tabPane.setToolTipTextAt( lastTipTabIndex, lastTip );
 			lastTip = null;
 			lastTipTabIndex = -1;
 		}

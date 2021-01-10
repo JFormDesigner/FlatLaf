@@ -105,11 +105,11 @@ public class FlatContainerTest
 	}
 
 	private void tabCountChanged() {
-		for( JTabbedPane tabbedPane : allTabbedPanes )
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
 			tabCountChanged( tabbedPane );
 	}
 
-	private void tabCountChanged( JTabbedPane tabbedPane ) {
+	private void tabCountChanged( FlatTabbedPane tabbedPane ) {
 		int oldTabCount = tabbedPane.getTabCount();
 		int newTabCount = (Integer) tabCountSpinner.getValue();
 
@@ -126,7 +126,7 @@ public class FlatContainerTest
 		setTabIcons( tabbedPane );
 	}
 
-	private void addTab( JTabbedPane tabbedPane ) {
+	private void addTab( FlatTabbedPane tabbedPane ) {
 		switch( tabbedPane.getTabCount() ) {
 			case 0:
 				tabbedPane.addTab( "Tab 1", null, new Panel1(), "First tab." );
@@ -136,12 +136,14 @@ public class FlatContainerTest
 				JComponent tab2 = new Panel2();
 				tab2.setBorder( new LineBorder( Color.magenta ) );
 				tabbedPane.addTab( "Second Tab", null, tab2, "This is the second tab." );
+				tabbedPane.setTabCloseToolTipText( 1, "Close Second Tab" );
 				break;
 
 			case 2:
 				tabbedPane.addTab( "Disabled", createTab( "tab content 3" ) );
 				tabbedPane.setEnabledAt( 2, false );
 				tabbedPane.setToolTipTextAt( 2, "Disabled tab." );
+				tabbedPane.setTabCloseToolTipText( 2, "Close Disabled tab" );
 				break;
 
 			case 3:
@@ -348,9 +350,13 @@ public class FlatContainerTest
 		if( closable ) {
 			for( FlatTabbedPane tabbedPane : allTabbedPanes ) {
 				tabbedPane.setTabCloseCallback( (tabbedPane2, tabIndex) -> {
+					String tabTitle = tabbedPane2.getTitleAt( tabIndex );
 					AWTEvent e = EventQueue.getCurrentEvent();
 					int modifiers = (e instanceof MouseEvent) ? ((MouseEvent)e).getModifiers() : 0;
-					JOptionPane.showMessageDialog( this, "Closed tab '" + tabbedPane2.getTitleAt( tabIndex ) + "'."
+
+					tabbedPane2.removeTabAt( tabIndex );
+
+					JOptionPane.showMessageDialog( this, "Closed tab '" + tabTitle + "'."
 						+ "\n\n(modifiers: " + MouseEvent.getMouseModifiersText( modifiers ) + ")",
 						"Tab Closed", JOptionPane.PLAIN_MESSAGE );
 				} );

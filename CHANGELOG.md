@@ -21,6 +21,8 @@ FlatLaf Change Log
 
 - Button and ToggleButton: Threat Unicode surrogate character pair as single
   character and make button square. (issue #234)
+- TabbedPane: Fixed `IndexOutOfBoundsException` when using tooltip text on close
+  buttons and closing last/rightmost tab. (issue #235)
 - Extras: Added missing export of package
   `com.formdev.flatlaf.extras.components` to Java 9 module descriptor.
 - JIDE Common Layer: Invoke `LookAndFeelFactory.installJideExtension()` when
