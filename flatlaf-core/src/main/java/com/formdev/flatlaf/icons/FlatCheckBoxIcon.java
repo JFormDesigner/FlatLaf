@@ -49,15 +49,16 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault CheckBox.icon.disabledBorderColor			Color
  * @uiDefault CheckBox.icon.disabledBackground			Color
  * @uiDefault CheckBox.icon.disabledCheckmarkColor		Color
- * @uiDefault CheckBox.icon.focusedBorderColor			Color
+ * @uiDefault CheckBox.icon.focusedBorderColor			Color	optional
  * @uiDefault CheckBox.icon.focusedBackground			Color	optional
- * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional
- * @uiDefault CheckBox.icon.selectedFocusedBackground	Color	optional
+ * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional; CheckBox.icon.focusedBorderColor is used if not specified
+ * @uiDefault CheckBox.icon.selectedFocusedBackground	Color	optional; CheckBox.icon.focusedBackground is used if not specified
+ * @uiDefault CheckBox.icon.selectedFocusedCheckmarkColor	Color	optional; CheckBox.icon.checkmarkColor is used if not specified
  * @uiDefault CheckBox.icon.hoverBorderColor			Color	optional
  * @uiDefault CheckBox.icon.hoverBackground				Color	optional
- * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional
+ * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional; CheckBox.icon.hoverBackground is used if not specified
  * @uiDefault CheckBox.icon.pressedBackground			Color	optional
- * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional
+ * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional; CheckBox.icon.pressedBackground is used if not specified
  * @uiDefault CheckBox.arc								int
  *
  * @author Karl Tauber
@@ -145,7 +146,8 @@ public class FlatCheckBoxIcon
 		paintBorder( c, g );
 
 		// paint background
-		g.setColor( FlatUIUtils.deriveColor( getBackground( c, selected ), background ) );
+		g.setColor( FlatUIUtils.deriveColor( getBackground( c, selected ),
+			selected ? selectedBackground : background ) );
 		paintBackground( c, g );
 
 		// paint checkmark
