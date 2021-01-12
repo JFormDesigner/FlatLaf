@@ -14,6 +14,8 @@ FlatLaf Change Log
     `FlatUIDefaultsInspector.createInspectorPanel()`.
   - Copy selected keys and values into clipboard via context menu.
 - IntelliJ Themes:
+  - Added hover and pressed feedback to Button, CheckBox, RadioButton and
+    ToggleButton. (issue #176)
   - Added "Material Theme UI Lite / Moonlight" theme.
   - Updated "Dracula", "Gradianto" and "Material Theme UI Lite" themes.
 

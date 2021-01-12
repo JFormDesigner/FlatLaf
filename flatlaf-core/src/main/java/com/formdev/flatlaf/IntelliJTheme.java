@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -155,6 +156,11 @@ public class IntelliJTheme
 		Object panelBackground = defaults.get( "Panel.background" );
 		defaults.put( "Button.disabledBackground", panelBackground );
 		defaults.put( "ToggleButton.disabledBackground", panelBackground );
+
+		// fix Button borders
+		copyIfNotSet( defaults, "Button.focusedBorderColor", "Component.focusedBorderColor", uiKeys );
+		defaults.put( "Button.hoverBorderColor", defaults.get( "Button.focusedBorderColor" ) );
+		defaults.put( "HelpButton.hoverBorderColor", defaults.get( "Button.focusedBorderColor" ) );
 
 		// IDEA uses a SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
 		Object helpButtonBackground = defaults.get( "Button.startBackground" );
@@ -381,7 +387,7 @@ public class IntelliJTheme
 	}
 
 	/**
-	 * Because IDEA uses SVGs for check boxes and radio buttons the colors for
+	 * Because IDEA uses SVGs for check boxes and radio buttons, the colors for
 	 * this two components are specified in "icons > ColorPalette".
 	 * FlatLaf uses vector icons and expects colors for the two components in UI defaults.
 	 */
@@ -453,26 +459,42 @@ public class IntelliJTheme
 			}
 		}
 
-		// remove hover and pressed colors
+		// update hover, pressed and focused colors
 		if( checkboxModified ) {
+			// for non-filled checkbox/radiobutton used in dark themes
 			defaults.remove( "CheckBox.icon.focusWidth" );
-			defaults.remove( "CheckBox.icon.hoverBorderColor" );
-			defaults.remove( "CheckBox.icon.focusedBackground" );
-			defaults.remove( "CheckBox.icon.hoverBackground" );
-			defaults.remove( "CheckBox.icon.pressedBackground" );
-			defaults.remove( "CheckBox.icon.selectedFocusedBackground" );
-			defaults.remove( "CheckBox.icon.selectedHoverBackground" );
-			defaults.remove( "CheckBox.icon.selectedPressedBackground" );
+			defaults.put( "CheckBox.icon.hoverBorderColor", defaults.get( "CheckBox.icon.focusedBorderColor" ) );
 
+			// for filled checkbox/radiobutton used in light themes
 			defaults.remove( "CheckBox.icon[filled].focusWidth" );
-			defaults.remove( "CheckBox.icon[filled].hoverBorderColor" );
-			defaults.remove( "CheckBox.icon[filled].focusedBackground" );
-			defaults.remove( "CheckBox.icon[filled].hoverBackground" );
-			defaults.remove( "CheckBox.icon[filled].pressedBackground" );
-			defaults.remove( "CheckBox.icon[filled].selectedFocusedBackground" );
-			defaults.remove( "CheckBox.icon[filled].selectedHoverBackground" );
-			defaults.remove( "CheckBox.icon[filled].selectedPressedBackground" );
+			defaults.put( "CheckBox.icon[filled].hoverBorderColor", defaults.get( "CheckBox.icon[filled].focusedBorderColor" ) );
+			defaults.put( "CheckBox.icon[filled].selectedFocusedBackground", defaults.get( "CheckBox.icon[filled].selectedBackground" ) );
+
+			if( dark ) {
+				// IDEA Darcula checkBoxFocused.svg, checkBoxSelectedFocused.svg,
+				// radioFocused.svg and radioSelectedFocused.svg
+				// use opacity=".65" for the border
+				// --> add alpha to focused border colors
+				String[] focusedBorderColorKeys = new String[] {
+					"CheckBox.icon.focusedBorderColor",
+					"CheckBox.icon.selectedFocusedBorderColor",
+					"CheckBox.icon[filled].focusedBorderColor",
+					"CheckBox.icon[filled].selectedFocusedBorderColor",
+				};
+				for( String key : focusedBorderColorKeys ) {
+					Color color = defaults.getColor( key );
+					if( color != null ) {
+						defaults.put( key, new ColorUIResource( new Color(
+							(color.getRGB() & 0xffffff) | 0xa6000000, true ) ) );
+					}
+				}
+			}
 		}
+	}
+
+	private void copyIfNotSet( UIDefaults defaults, String destKey, String srcKey, Set<String> uiKeys ) {
+		if( !uiKeys.contains( destKey ) )
+			defaults.put( destKey, defaults.get( srcKey ) );
 	}
 
 	/** Rename UI default keys (key --> value). */
