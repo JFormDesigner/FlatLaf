@@ -30,6 +30,8 @@ FlatLaf Change Log
 - Button and ToggleButton: ToolBar buttons now respect explicitly set background
   color. If no background color is set, then the button background is not
   painted anymore. (issue #191)
+- ToggleButton: Tab style buttons (client property `JButton.buttonType` is
+  `tab`) now respect explicitly set background color.
 - TabbedPane: Fixed `IndexOutOfBoundsException` when using tooltip text on close
   buttons and closing last/rightmost tab. (issue #235)
 - Extras: Added missing export of package

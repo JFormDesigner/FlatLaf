@@ -146,10 +146,17 @@ public class FlatToggleButtonUI
 			int height = c.getHeight();
 			int width = c.getWidth();
 			boolean selected = ((AbstractButton)c).isSelected();
+			Color enabledColor = selected ? clientPropertyColor( c, TAB_BUTTON_SELECTED_BACKGROUND, tabSelectedBackground ) : null;
+
+			// use component background if explicitly set
+			if( enabledColor == null ) {
+				Color bg = c.getBackground();
+				if( isCustomBackground( bg ) )
+					enabledColor = bg;
+			}
 
 			// paint background
-			Color background = buttonStateColor( c,
-				selected ? clientPropertyColor( c, TAB_BUTTON_SELECTED_BACKGROUND, tabSelectedBackground ) : null,
+			Color background = buttonStateColor( c, enabledColor,
 				null, tabFocusBackground, tabHoverBackground, null );
 			if( background != null ) {
 				g.setColor( background );
