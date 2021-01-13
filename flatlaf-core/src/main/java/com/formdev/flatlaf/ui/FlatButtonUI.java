@@ -410,8 +410,13 @@ public class FlatButtonUI
 			if( model.isRollover() )
 				return toolbarHoverBackground;
 
-			// use background of toolbar
-			return c.getParent().getBackground();
+			// use component background if explicitly set
+			Color bg = c.getBackground();
+			if( isCustomBackground( bg ) )
+				return bg;
+
+			// do not paint background
+			return null;
 		}
 
 		boolean def = isDefaultButton( c );

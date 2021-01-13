@@ -933,7 +933,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 13 1 6,growy"
 			} )
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar2"
 				"orientation": 1
 				add( new FormComponent( "javax.swing.JButton" ) {
@@ -1391,7 +1391,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 23"
 			} )
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar1"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button4"
@@ -1446,7 +1446,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 23 5 1"
 			} )
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar3"
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button26"
@@ -1479,7 +1479,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 23 5 1"
 			} )
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar4"
 				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button28"

@@ -27,6 +27,9 @@ FlatLaf Change Log
 
 - Button and ToggleButton: Threat Unicode surrogate character pair as single
   character and make button square. (issue #234)
+- Button and ToggleButton: ToolBar buttons now respect explicitly set background
+  color. If no background color is set, then the button background is not
+  painted anymore. (issue #191)
 - TabbedPane: Fixed `IndexOutOfBoundsException` when using tooltip text on close
   buttons and closing last/rightmost tab. (issue #235)
 - Extras: Added missing export of package

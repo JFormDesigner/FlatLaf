@@ -356,7 +356,7 @@ public class FlatComponentsTest
 		JScrollPane scrollPane14 = new JScrollPane();
 		progressBar3 = new FlatProgressBar();
 		progressBar4 = new FlatProgressBar();
-		JToolBar toolBar2 = new JToolBar();
+		FlatComponentsTest.TestToolBar toolBar2 = new FlatComponentsTest.TestToolBar();
 		JButton button9 = new JButton();
 		JButton button10 = new JButton();
 		JButton button11 = new JButton();
@@ -411,7 +411,7 @@ public class FlatComponentsTest
 		JToolTip toolTip1 = new JToolTip();
 		JToolTip toolTip2 = new JToolTip();
 		JLabel toolBarLabel = new JLabel();
-		JToolBar toolBar1 = new JToolBar();
+		FlatComponentsTest.TestToolBar toolBar1 = new FlatComponentsTest.TestToolBar();
 		JButton button4 = new JButton();
 		JButton button6 = new JButton();
 		JButton button7 = new JButton();
@@ -421,13 +421,13 @@ public class FlatComponentsTest
 		JToggleButton toggleButton16 = new JToggleButton();
 		JToggleButton toggleButton17 = new JToggleButton();
 		JLabel label3 = new JLabel();
-		JToolBar toolBar3 = new JToolBar();
+		FlatComponentsTest.TestToolBar toolBar3 = new FlatComponentsTest.TestToolBar();
 		FlatButton button26 = new FlatButton();
 		FlatButton button27 = new FlatButton();
 		FlatToggleButton toggleButton23 = new FlatToggleButton();
 		FlatToggleButton toggleButton24 = new FlatToggleButton();
 		JLabel label4 = new JLabel();
-		JToolBar toolBar4 = new JToolBar();
+		FlatComponentsTest.TestToolBar toolBar4 = new FlatComponentsTest.TestToolBar();
 		FlatButton button28 = new FlatButton();
 		FlatButton button29 = new FlatButton();
 		FlatToggleButton toggleButton25 = new FlatToggleButton();
@@ -1682,6 +1682,39 @@ public class FlatComponentsTest
 				if( "Spinner.nextButton".equals( name ) || "Spinner.previousButton".equals( name ) )
 					remove( c );
 			}
+		}
+	}
+
+	//---- class TestToolBar --------------------------------------------------
+
+	private static class TestToolBar
+		extends JToolBar
+	{
+		@Override
+		protected void paintComponent( Graphics g ) {
+			super.paintComponent( g );
+
+			if( isPaintBackgroundPattern() && isOpaque() ) {
+				int width = getWidth();
+				int height = getHeight();
+
+				g.setColor( Color.blue );
+				for( int y = 0; y < height; y += 2 )
+					g.drawLine( 0, y, width - 1, y );
+			}
+		}
+
+		/**
+		 * Overridden to see which components paint background with color from parent.
+		 */
+		@Override
+		public Color getBackground() {
+			return isPaintBackgroundPattern() ? Color.orange : super.getBackground();
+		}
+
+		private boolean isPaintBackgroundPattern() {
+			FlatTestFrame frame = (FlatTestFrame) SwingUtilities.getAncestorOfClass( FlatTestFrame.class, this );
+			return frame != null && frame.isPaintBackgroundPattern();
 		}
 	}
 }
