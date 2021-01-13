@@ -57,6 +57,8 @@ public class IntelliJTheme
 	public final boolean dark;
 	public final String author;
 
+	private final boolean isMaterialUILite;
+
 	private final Map<String, String> colors;
 	private final Map<String, Object> ui;
 	private final Map<String, Object> icons;
@@ -119,6 +121,8 @@ public class IntelliJTheme
 	    name = (String) json.get( "name" );
 	    dark = Boolean.parseBoolean( (String) json.get( "dark" ) );
 	    author = (String) json.get( "author" );
+
+		isMaterialUILite = author.equals( "Mallowigi" );
 
 	    colors = (Map<String, String>) json.get( "colors" );
 	    ui = (Map<String, Object>) json.get( "ui" );
@@ -211,6 +215,12 @@ public class IntelliJTheme
 		if( !uiKeys.contains( "ToggleButton.foreground" ) && uiKeys.contains( "Button.foreground" ) )
 			defaults.put( "ToggleButton.foreground", defaults.get( "Button.foreground" ) );
 
+		// fix List and Table background colors in Material UI Lite themes
+		if( isMaterialUILite ) {
+			defaults.put( "List.background", defaults.get( "Tree.background" ) );
+			defaults.put( "Table.background", defaults.get( "Tree.background" ) );
+		}
+
 		// limit tree row height
 		int rowHeight = defaults.getInt( "Tree.rowHeight" );
 		if( rowHeight > 22 )
@@ -231,10 +241,17 @@ public class IntelliJTheme
 		// remove theme specific UI defaults and remember only those for current theme
 		Map<Object, Object> themeSpecificDefaults = new HashMap<>();
 		String currentThemePrefix = '[' + name.replace( ' ', '_' ) + ']';
+		String currentAuthorPrefix = "[author-" + author.replace( ' ', '_' ) + ']';
+		String allThemesPrefix = "[*]";
+		String[] prefixes = { currentThemePrefix, currentAuthorPrefix, allThemesPrefix };
 		for( String key : themeSpecificKeys ) {
 			Object value = defaults.remove( key );
-			if( key.startsWith( currentThemePrefix ) )
-				themeSpecificDefaults.put( key.substring( currentThemePrefix.length() ), value );
+			for( String prefix : prefixes ) {
+				if( key.startsWith( prefix ) ) {
+					themeSpecificDefaults.put( key.substring( prefix.length() ), value );
+					break;
+				}
+			}
 		}
 
 		return themeSpecificDefaults;
@@ -275,7 +292,6 @@ public class IntelliJTheme
 			uiKeys.add( key );
 
 			// fix ComboBox size and Spinner border in all Material UI Lite themes
-			boolean isMaterialUILite = author.equals( "Mallowigi" );
 			if( isMaterialUILite && (key.equals( "ComboBox.padding" ) || key.equals( "Spinner.border" )) )
 				return; // ignore
 
@@ -529,6 +545,7 @@ public class IntelliJTheme
 		uiKeyCopying.put( "CheckBoxMenuItem.margin",    "MenuItem.margin" );
 		uiKeyCopying.put( "RadioButtonMenuItem.margin", "MenuItem.margin" );
 		uiKeyMapping.put( "PopupMenu.border",           "PopupMenu.borderInsets" );
+		uiKeyCopying.put( "MenuItem.underlineSelectionColor", "TabbedPane.underlineColor" );
 
 		// IDEA uses List.selectionBackground also for menu selection
 		uiKeyCopying.put( "Menu.selectionBackground",                "List.selectionBackground" );

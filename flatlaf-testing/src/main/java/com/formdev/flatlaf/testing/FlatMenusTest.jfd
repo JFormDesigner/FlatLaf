@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -454,7 +454,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][][][]"
+				"$rowConstraints": "[][][][][][]"
 				"$layoutConstraints": "insets 0"
 			} ) {
 				name: "panel3"
@@ -490,12 +490,30 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
 				} )
+				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+					name: "checkBoxMenuItem9"
+					"text": "selected"
+					"selected": true
+					"accelerator": #KeyStroke1
+					"icon": &SwingIcon3 new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png" )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+					name: "radioButtonMenuItem7"
+					"text": "selected"
+					"selected": true
+					"accelerator": #KeyStroke1
+					"icon": #SwingIcon3
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 1"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][][][]"
+				"$rowConstraints": "[][][][][][]"
 				"$layoutConstraints": "insets 0"
 			} ) {
 				name: "panel4"
@@ -533,6 +551,26 @@ new FormModel {
 					"accelerator": #KeyStroke1
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+					name: "checkBoxMenuItem10"
+					"text": "selected disabled"
+					"enabled": false
+					"selected": true
+					"accelerator": #KeyStroke1
+					"icon": &SwingIcon4 new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png" )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+					name: "radioButtonMenuItem11"
+					"text": "selected disabled"
+					"enabled": false
+					"selected": true
+					"accelerator": #KeyStroke1
+					"icon": #SwingIcon4
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"

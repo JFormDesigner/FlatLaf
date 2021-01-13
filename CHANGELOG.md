@@ -29,6 +29,12 @@ FlatLaf Change Log
   `com.formdev.flatlaf.extras.components` to Java 9 module descriptor.
 - JIDE Common Layer: Invoke `LookAndFeelFactory.installJideExtension()` when
   using FlatLaf UI delegates. (issue #230)
+- IntelliJ Themes:
+  - Fixed menu item check colors.
+  - Fixed `MenuItem.underlineSelectionColor`.
+  - Fixed List, Tree and Table `selectionInactiveForeground` in light Arc
+    themes.
+  - Fixed List and Table background colors in Material UI Lite themes.
 
 
 ## 0.46

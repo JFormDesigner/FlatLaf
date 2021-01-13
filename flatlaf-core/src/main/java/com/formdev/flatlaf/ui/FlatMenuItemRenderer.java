@@ -57,6 +57,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuItem.underlineSelectionCheckBackground			Color
  * @uiDefault MenuItem.underlineSelectionColor						Color
  * @uiDefault MenuItem.underlineSelectionHeight						int
+ * @uiDefault MenuItem.selectionBackground							Color
  *
  * @author Karl Tauber
  */
@@ -81,6 +82,8 @@ public class FlatMenuItemRenderer
 	protected final Color underlineSelectionCheckBackground = UIManager.getColor( "MenuItem.underlineSelectionCheckBackground" );
 	protected final Color underlineSelectionColor = UIManager.getColor( "MenuItem.underlineSelectionColor" );
 	protected final int underlineSelectionHeight = UIManager.getInt( "MenuItem.underlineSelectionHeight" );
+
+	protected final Color selectionBackground = UIManager.getColor( "MenuItem.selectionBackground" );
 
 	protected FlatMenuItemRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
 		Font acceleratorFont, String acceleratorDelimiter )
@@ -303,7 +306,7 @@ debug*/
 		// then use filled icon background to indicate selection (instead of using checkIcon)
 		if( menuItem.isSelected() && checkIcon != null && icon != checkIcon ) {
 			Rectangle r = FlatUIUtils.addInsets( iconRect, scale( checkMargins ) );
-			g.setColor( deriveBackground( checkBackground ) );
+			g.setColor( FlatUIUtils.deriveColor( checkBackground, selectionBackground ) );
 			g.fillRect( r.x, r.y, r.width, r.height );
 		}
 
