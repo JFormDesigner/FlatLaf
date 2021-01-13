@@ -5,6 +5,10 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Button: Disabled `Button.defaultButtonFollowsFocus` on Windows (as on other
+  platforms). If you like to keep the old behavior in your application, use:
+  `if(SystemInfo.isWindows)
+  UIManager.put("Button.defaultButtonFollowsFocus",true);`.
 - ComboBox, Spinner and SplitPaneDivider: Added pressed feedback to arrow
   buttons.
 - TextComponent: Clip placeholder text if it does not fit into visible area. (PR

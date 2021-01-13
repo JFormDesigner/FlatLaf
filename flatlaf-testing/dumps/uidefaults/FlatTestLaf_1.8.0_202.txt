@@ -78,7 +78,7 @@ Button.default.hoverBorderColor #ff0000    javax.swing.plaf.ColorUIResource [UI]
 Button.default.pressedBackground #ffc800    javax.swing.plaf.ColorUIResource [UI]
 Button.default.startBackground #dddddd    javax.swing.plaf.ColorUIResource [UI]
 Button.default.startBorderColor #ff0000    javax.swing.plaf.ColorUIResource [UI]
-Button.defaultButtonFollowsFocus true
+Button.defaultButtonFollowsFocus false
 Button.disabledBackground      #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledBorderColor     #000088    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledText            #000088    javax.swing.plaf.ColorUIResource [UI]

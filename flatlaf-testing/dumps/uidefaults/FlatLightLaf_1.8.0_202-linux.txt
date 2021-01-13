@@ -1,9 +1,6 @@
 - OS     Windows 10
 + OS     Linux
 
-- Button.defaultButtonFollowsFocus true
-+ Button.defaultButtonFollowsFocus false
-
 - ProgressBar.font               [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
 + ProgressBar.font               [active] Cantarell plain 13    javax.swing.plaf.FontUIResource [UI]
 
