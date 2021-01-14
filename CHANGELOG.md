@@ -36,8 +36,10 @@ FlatLaf Change Log
   buttons and closing last/rightmost tab. (issue #235)
 - Extras: Added missing export of package
   `com.formdev.flatlaf.extras.components` to Java 9 module descriptor.
-- JIDE Common Layer: Invoke `LookAndFeelFactory.installJideExtension()` when
-  using FlatLaf UI delegates. (issue #230)
+- JIDE Common Layer:
+  - Invoke `LookAndFeelFactory.installJideExtension()` when using FlatLaf UI
+    delegates. (issue #230)
+  - RangeSlider: Fixed slider focused colors in IntelliJ themes.
 - IntelliJ Themes:
   - Fixed menu item check colors.
   - Fixed `MenuItem.underlineSelectionColor`.
