@@ -91,6 +91,9 @@ public class FlatSliderUI
 	protected Color disabledThumbColor;
 	protected Color disabledThumbBorderColor;
 
+	private Color defaultBackground;
+	private Color defaultForeground;
+
 	protected boolean thumbHover;
 	protected boolean thumbPressed;
 
@@ -131,6 +134,9 @@ public class FlatSliderUI
 		disabledTrackColor = UIManager.getColor( "Slider.disabledTrackColor" );
 		disabledThumbColor = UIManager.getColor( "Slider.disabledThumbColor" );
 		disabledThumbBorderColor = FlatUIUtils.getUIColor( "Slider.disabledThumbBorderColor", "Component.disabledBorderColor" );
+
+		defaultBackground = UIManager.getColor( "Slider.background" );
+		defaultForeground = UIManager.getColor( "Slider.foreground" );
 	}
 
 	@Override
@@ -149,6 +155,9 @@ public class FlatSliderUI
 		disabledTrackColor = null;
 		disabledThumbColor = null;
 		disabledThumbBorderColor = null;
+
+		defaultBackground = null;
+		defaultForeground = null;
 	}
 
 	@Override
@@ -289,25 +298,28 @@ debug*/
 				coloredTrack = temp;
 			}
 
-			g.setColor( trackValueColor );
+			g.setColor( getTrackValueColor() );
 			((Graphics2D)g).fill( coloredTrack );
 		}
 
-		g.setColor( enabled ? trackColor : disabledTrackColor );
+		g.setColor( enabled ? getTrackColor() : disabledTrackColor );
 		((Graphics2D)g).fill( track );
 	}
 
 	@Override
 	public void paintThumb( Graphics g ) {
+		Color thumbColor = getThumbColor();
 		Color color = stateColor( slider, thumbHover, thumbPressed,
 			thumbColor, disabledThumbColor, null, hoverThumbColor, pressedThumbColor );
 		color = FlatUIUtils.deriveColor( color, thumbColor );
 
-		Color borderColor = (thumbBorderColor != null)
+		Color foreground = slider.getForeground();
+		Color borderColor = (thumbBorderColor != null && foreground == defaultForeground)
 			? stateColor( slider, false, false, thumbBorderColor, disabledThumbBorderColor, focusedThumbBorderColor, null, null )
 			: null;
 
-		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor, focusBaseColor );
+		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor,
+			(foreground != defaultForeground) ? foreground : focusBaseColor );
 
 		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, focusWidth );
 	}
@@ -434,6 +446,21 @@ debug*/
 		path.closePath();
 
 		return path;
+	}
+
+	protected Color getTrackValueColor() {
+		Color foreground = slider.getForeground();
+		return (foreground != defaultForeground) ? foreground : trackValueColor;
+	}
+
+	protected Color getTrackColor() {
+		Color backround = slider.getBackground();
+		return (backround != defaultBackground) ? backround : trackColor;
+	}
+
+	protected Color getThumbColor() {
+		Color foreground = slider.getForeground();
+		return (foreground != defaultForeground) ? foreground : thumbColor;
 	}
 
 	public static Color stateColor( JSlider slider, boolean hover, boolean pressed,

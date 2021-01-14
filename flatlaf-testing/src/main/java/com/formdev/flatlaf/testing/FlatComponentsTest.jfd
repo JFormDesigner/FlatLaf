@@ -1243,6 +1243,16 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 0 2"
 					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "sliderBorderCheckBox"
+						"text": "border"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderBorderChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
 					add( new FormComponent( "javax.swing.JSpinner" ) {
 						name: "minorTickSpacingSpinner"
 						"model": new javax.swing.SpinnerNumberModel( 10, 0, 100, 5 )
@@ -1251,7 +1261,7 @@ new FormModel {
 						}
 						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "minorThickSpacingChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 2"
+						"value": "cell 0 3"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "sliderValueLabel"

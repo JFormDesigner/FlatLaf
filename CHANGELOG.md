@@ -11,6 +11,8 @@ FlatLaf Change Log
   UIManager.put("Button.defaultButtonFollowsFocus",true);`.
 - ComboBox, Spinner and SplitPaneDivider: Added pressed feedback to arrow
   buttons.
+- Slider: Support per component custom thumb and track colors via
+  `JSlider.setForeground(Color)` and `JSlider.setBackground(Color)`.
 - TextComponent: Clip placeholder text if it does not fit into visible area. (PR
   #229)
 - Extras: UI defaults inspector:

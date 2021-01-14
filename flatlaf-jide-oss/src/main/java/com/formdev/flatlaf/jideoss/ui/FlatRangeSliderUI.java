@@ -64,6 +64,9 @@ public class FlatRangeSliderUI
 	protected Color disabledThumbColor;
 	protected Color disabledThumbBorderColor;
 
+	private Color defaultBackground;
+	private Color defaultForeground;
+
 	private Object[] oldRenderingHints;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -129,6 +132,9 @@ public class FlatRangeSliderUI
 		disabledTrackColor = UIManager.getColor( "Slider.disabledTrackColor" );
 		disabledThumbColor = UIManager.getColor( "Slider.disabledThumbColor" );
 		disabledThumbBorderColor = FlatUIUtils.getUIColor( "Slider.disabledThumbBorderColor", "Component.disabledBorderColor" );
+
+		defaultBackground = UIManager.getColor( "Slider.background" );
+		defaultForeground = UIManager.getColor( "Slider.foreground" );
 	}
 
 	@Override
@@ -149,6 +155,9 @@ public class FlatRangeSliderUI
 		disabledTrackColor = null;
 		disabledThumbColor = null;
 		disabledThumbBorderColor = null;
+
+		defaultBackground = null;
+		defaultForeground = null;
 	}
 
 	@Override
@@ -278,13 +287,14 @@ debug*/
 			track = new RoundRectangle2D.Float( x, trackRect.y, tw, trackRect.height, arc, arc );
 		}
 
-		g.setColor( enabled ? trackColor : disabledTrackColor );
+		g.setColor( enabled ? getTrackColor() : disabledTrackColor );
 		((Graphics2D)g).fill( track );
 
 		if( coloredTrack != null ) {
 			boolean trackHover = hover && rollover1 && rollover2;
 			boolean trackPressed = pressed1 && pressed2;
 
+			Color trackValueColor = getTrackValueColor();
 			Color color = FlatSliderUI.stateColor( slider, trackHover, trackPressed,
 				trackValueColor, null, null, hoverTrackColor, pressedTrackColor );
 
@@ -298,17 +308,35 @@ debug*/
 		boolean thumbHover = hover && ((!second && rollover1) || (second && rollover2));
 		boolean thumbPressed = (!second && pressed1) || (second && pressed2);
 
+		Color thumbColor = getThumbColor();
 		Color color = FlatSliderUI.stateColor( slider, thumbHover, thumbPressed,
 			thumbColor, disabledThumbColor, null, hoverThumbColor, pressedThumbColor );
 		color = FlatUIUtils.deriveColor( color, thumbColor );
 
-		Color borderColor = (thumbBorderColor != null)
+		Color foreground = slider.getForeground();
+		Color borderColor = (thumbBorderColor != null && foreground == defaultForeground)
 			? FlatSliderUI.stateColor( slider, false, false, thumbBorderColor, disabledThumbBorderColor, focusedThumbBorderColor, null, null )
 			: null;
 
-		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor, focusBaseColor );
+		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor,
+			(foreground != defaultForeground) ? foreground : focusBaseColor );
 
 		FlatSliderUI.paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, focusWidth );
+	}
+
+	protected Color getTrackValueColor() {
+		Color foreground = slider.getForeground();
+		return (foreground != defaultForeground) ? foreground : trackValueColor;
+	}
+
+	protected Color getTrackColor() {
+		Color backround = slider.getBackground();
+		return (backround != defaultBackground) ? backround : trackColor;
+	}
+
+	protected Color getThumbColor() {
+		Color foreground = slider.getForeground();
+		return (foreground != defaultForeground) ? foreground : thumbColor;
 	}
 
 	protected boolean isRoundThumb() {

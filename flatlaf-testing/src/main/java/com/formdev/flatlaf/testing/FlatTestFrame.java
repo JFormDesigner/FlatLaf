@@ -446,7 +446,7 @@ public class FlatTestFrame
 			Color green = dark ? Color.green.darker() : Color.green;
 
 			updateComponentsRecur( content, (c, type) -> {
-				if( type == "view" || type == "tab" ) {
+				if( type == "view" || type == "tab" || c instanceof JSlider ) {
 					c.setForeground( explicit ? magenta : restoreColor );
 					c.setBackground( explicit ? orange : restoreColor );
 				} else {

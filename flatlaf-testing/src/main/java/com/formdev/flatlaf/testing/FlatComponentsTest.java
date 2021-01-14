@@ -214,6 +214,13 @@ public class FlatComponentsTest
 			slider.setSnapToTicks( snapToTicks );
 	}
 
+	private void sliderBorderChanged() {
+		boolean border = sliderBorderCheckBox.isSelected();
+		UIManager.put( "Slider.thumbBorderColor", border ? Color.green : null );
+		for( JSlider slider : allSliders )
+			slider.updateUI();
+	}
+
 	private void majorThickSpacingChanged() {
 		int majorTickSpacing = (Integer) majorTickSpacingSpinner.getValue();
 		for( JSlider slider : directionalSliders ) {
@@ -395,6 +402,7 @@ public class FlatComponentsTest
 		sliderInvertedCheckBox = new JCheckBox();
 		sliderSnapToTicksCheckBox = new JCheckBox();
 		majorTickSpacingSpinner = new JSpinner();
+		sliderBorderCheckBox = new JCheckBox();
 		minorTickSpacingSpinner = new JSpinner();
 		sliderValueLabel = new JLabel();
 		JPanel panel7 = new JPanel();
@@ -1381,10 +1389,15 @@ public class FlatComponentsTest
 				majorTickSpacingSpinner.addChangeListener(e -> majorThickSpacingChanged());
 				panel6.add(majorTickSpacingSpinner, "cell 0 2");
 
+				//---- sliderBorderCheckBox ----
+				sliderBorderCheckBox.setText("border");
+				sliderBorderCheckBox.addActionListener(e -> sliderBorderChanged());
+				panel6.add(sliderBorderCheckBox, "cell 0 2");
+
 				//---- minorTickSpacingSpinner ----
 				minorTickSpacingSpinner.setModel(new SpinnerNumberModel(10, 0, 100, 5));
 				minorTickSpacingSpinner.addChangeListener(e -> minorThickSpacingChanged());
-				panel6.add(minorTickSpacingSpinner, "cell 0 2");
+				panel6.add(minorTickSpacingSpinner, "cell 0 3");
 
 				//---- sliderValueLabel ----
 				sliderValueLabel.setText("slider value");
@@ -1625,6 +1638,7 @@ public class FlatComponentsTest
 	private JCheckBox sliderInvertedCheckBox;
 	private JCheckBox sliderSnapToTicksCheckBox;
 	private JSpinner majorTickSpacingSpinner;
+	private JCheckBox sliderBorderCheckBox;
 	private JSpinner minorTickSpacingSpinner;
 	private JLabel sliderValueLabel;
 	private JCheckBox indeterminateCheckBox;
