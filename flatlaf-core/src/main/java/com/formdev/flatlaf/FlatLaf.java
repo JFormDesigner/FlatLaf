@@ -467,8 +467,13 @@ public abstract class FlatLaf
 		} else if( SystemInfo.isMacOS ) {
 			String fontName;
 			if( SystemInfo.isMacOS_10_15_Catalina_orLater ) {
-				// use Helvetica Neue font
-				fontName = "Helvetica Neue";
+				if (SystemInfo.isJetBrainsJVM_11_orLater) {
+					// See https://youtrack.jetbrains.com/issue/JBR-1915
+					fontName = ".AppleSystemUIFont";
+				} else {
+					// use Helvetica Neue font
+					fontName = "Helvetica Neue";
+				}
 			} else if( SystemInfo.isMacOS_10_11_ElCapitan_orLater ) {
 				// use San Francisco Text font
 				fontName = ".SF NS Text";
