@@ -546,7 +546,7 @@ public abstract class FlatLaf
 	}
 
 	private void putAATextInfo( UIDefaults defaults ) {
-		if ( SystemInfo.isJetBrainsJVM ) {
+		if ( SystemInfo.isMacOS && SystemInfo.isJetBrainsJVM ) {
 			// The awt.font.desktophints property suggests sub-pixel anti-aliasing
 			// which renders text with too much weight on macOS in the JetBrains JRE.
 			// Use greyscale anti-aliasing instead.
