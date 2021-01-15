@@ -546,7 +546,12 @@ public abstract class FlatLaf
 	}
 
 	private void putAATextInfo( UIDefaults defaults ) {
-		if( SystemInfo.isJava_9_orLater ) {
+		if ( SystemInfo.isJetBrainsJVM ) {
+			// The awt.font.desktophints property suggests sub-pixel anti-aliasing
+			// which renders text with too much weight on macOS in the JetBrains JRE.
+			// Use greyscale anti-aliasing instead.
+			defaults.put( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON );
+		} else if( SystemInfo.isJava_9_orLater ) {
 			Object desktopHints = Toolkit.getDefaultToolkit().getDesktopProperty( DESKTOPFONTHINTS );
 			if( desktopHints instanceof Map ) {
 				@SuppressWarnings( "unchecked" )
