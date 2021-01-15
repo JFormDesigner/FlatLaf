@@ -381,6 +381,9 @@ MenuBar.highlight
 MenuBar.hoverBackground
 MenuBar.itemMargins
 MenuBar.shadow
+MenuBar.underlineSelectionBackground
+MenuBar.underlineSelectionColor
+MenuBar.underlineSelectionHeight
 MenuBar.windowBindings
 MenuBarUI
 MenuItem.acceleratorArrowGap
@@ -566,6 +569,7 @@ ScrollBar.minimumThumbSize
 ScrollBar.pressedButtonBackground
 ScrollBar.pressedThumbColor
 ScrollBar.pressedThumbWithTrack
+ScrollBar.pressedTrackColor
 ScrollBar.showButtons
 ScrollBar.squareButtons
 ScrollBar.thumb
@@ -699,6 +703,8 @@ TabbedPane.labelShift
 TabbedPane.light
 TabbedPane.scrollButtonsPlacement
 TabbedPane.scrollButtonsPolicy
+TabbedPane.selectedBackground
+TabbedPane.selectedForeground
 TabbedPane.selectedLabelShift
 TabbedPane.selectedTabPadInsets
 TabbedPane.selectionFollowsFocus

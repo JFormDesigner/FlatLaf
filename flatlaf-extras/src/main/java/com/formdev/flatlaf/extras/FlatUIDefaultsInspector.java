@@ -21,11 +21,14 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -45,6 +48,7 @@ import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.ui.FlatMarginBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
@@ -72,6 +76,7 @@ public class FlatUIDefaultsInspector
 	private final PropertyChangeListener lafListener = this::lafChanged;
 	private final PropertyChangeListener lafDefaultsListener = this::lafDefaultsChanged;
 	private boolean refreshPending;
+	private Properties derivedColorKeys;
 
 	/**
 	 * Installs a key listener into the application that allows enabling and disabling
@@ -298,6 +303,7 @@ public class FlatUIDefaultsInspector
 		Set<Entry<Object, Object>> defaultsSet = defaults.entrySet();
 		ArrayList<Item> items = new ArrayList<>( defaultsSet.size() );
 		HashSet<Object> keys = new HashSet<>( defaultsSet.size() );
+		Color[] pBaseColor = new Color[1];
 		for( Entry<Object,Object> e : defaultsSet ) {
 			Object key = e.getKey();
 
@@ -314,6 +320,13 @@ public class FlatUIDefaultsInspector
 			if( !keys.add( key ) )
 				continue;
 
+			// resolve derived color
+			if( value instanceof DerivedColor ) {
+				Color resolvedColor = resolveDerivedColor( defaults, (String) key, (DerivedColor) value, pBaseColor );
+				if( resolvedColor != value )
+					value = new Color[] { resolvedColor, pBaseColor[0], (Color) value };
+			}
+
 			// check whether key was overridden using UIManager.put(key,value)
 			Object lafValue = null;
 			if( defaults.containsKey( key ) )
@@ -324,6 +337,51 @@ public class FlatUIDefaultsInspector
 		}
 
 		return items.toArray( new Item[items.size()] );
+	}
+
+	private Color resolveDerivedColor( UIDefaults defaults, String key, Color color, Color[] pBaseColor ) {
+		if( pBaseColor != null )
+			pBaseColor[0] = null;
+
+		if( !(color instanceof DerivedColor) )
+			return color;
+
+		if( derivedColorKeys == null )
+			derivedColorKeys = loadDerivedColorKeys();
+
+		Object baseKey = derivedColorKeys.get( key );
+		if( baseKey == null )
+			return color;
+
+		// this is for keys that may be defined as derived colors, but do not derive them at runtime
+		if( "null".equals( baseKey ) )
+			return color;
+
+		Color baseColor = defaults.getColor( baseKey );
+		if( baseColor == null )
+			return color;
+
+		if( baseColor instanceof DerivedColor )
+			baseColor = resolveDerivedColor( defaults, (String) baseKey, baseColor, null );
+
+		if( pBaseColor != null )
+			pBaseColor[0] = baseColor;
+
+		Color newColor = FlatUIUtils.deriveColor( color, baseColor );
+
+		// creating a new color instance to drop Color.frgbvalue from newColor
+		// and avoid rounding issues/differences
+		return new Color( newColor.getRGB(), true );
+	}
+
+	private Properties loadDerivedColorKeys() {
+		Properties properties = new Properties();
+		try( InputStream in = getClass().getResourceAsStream( "/com/formdev/flatlaf/extras/resources/DerivedColorKeys.properties" ) ) {
+			properties.load( in );
+		} catch( IOException ex ) {
+			ex.printStackTrace();
+		}
+		return properties;
 	}
 
 	private static void updateWindowTitle( JFrame frame ) {
@@ -382,7 +440,7 @@ public class FlatUIDefaultsInspector
 			return "Boolean";
 		if( value instanceof Border )
 			return "Border";
-		if( value instanceof Color )
+		if( value instanceof Color || value instanceof Color[] )
 			return "Color";
 		if( value instanceof Dimension )
 			return "Dimension";
@@ -590,8 +648,8 @@ public class FlatUIDefaultsInspector
 		}
 
 		static String valueAsString( Object value ) {
-			if( value instanceof Color ) {
-				Color color = (Color) value;
+			if( value instanceof Color || value instanceof Color[] ) {
+				Color color = (value instanceof Color[]) ? ((Color[])value)[0] : (Color) value;
 				HSLColor hslColor = new HSLColor( color );
 				if( color.getAlpha() == 255 ) {
 					return String.format( "%s    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
@@ -628,7 +686,7 @@ public class FlatUIDefaultsInspector
 				if( border instanceof FlatLineBorder ) {
 					FlatLineBorder lineBorder = (FlatLineBorder) border;
 					return valueAsString( lineBorder.getUnscaledBorderInsets() )
-						+ "  " + Item.color2hex( lineBorder.getLineColor() )
+						+ "  " + color2hex( lineBorder.getLineColor() )
 						+ "  " + lineBorder.getLineThickness()
 						+ "    " + border.getClass().getName();
 				} else if( border instanceof EmptyBorder ) {
@@ -898,7 +956,7 @@ public class FlatUIDefaultsInspector
 			init( table, item.key, isSelected, row );
 
 			// reset background, foreground and icon
-			if( !(item.value instanceof Color) ) {
+			if( !(item.value instanceof Color) && !(item.value instanceof Color[]) ) {
 				setBackground( null );
 				setForeground( null );
 			}
@@ -910,8 +968,8 @@ public class FlatUIDefaultsInspector
 
 			super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
 
-			if( item.value instanceof Color ) {
-				Color color = (Color) item.value;
+			if( item.value instanceof Color || item.value instanceof Color[] ) {
+				Color color = (item.value instanceof Color[]) ? ((Color[])item.value)[0] : (Color) item.value;
 				boolean isDark = new HSLColor( color ).getLuminance() < 70;
 				setBackground( color );
 				setForeground( isDark ? Color.white : Color.black );
@@ -933,10 +991,31 @@ public class FlatUIDefaultsInspector
 
 		@Override
 		protected void paintComponent( Graphics g ) {
-			if( item.value instanceof Color ) {
-				// fill background
-				g.setColor( getBackground() );
-				g.fillRect( 0, 0, getWidth(), getHeight() );
+			if( item.value instanceof Color || item.value instanceof Color[] ) {
+				int width = getWidth();
+				int height = getHeight();
+				Color background = getBackground();
+
+				// paint color
+				fillRect( g, background, 0, 0, width, height );
+
+				if( item.value instanceof Color[] ) {
+					// paint base color
+					int width2 = height * 2;
+					fillRect( g, ((Color[])item.value)[1], width - width2, 0, width2, height );
+
+					// paint default color
+					Color defaultColor = ((Color[])item.value)[2];
+					if( defaultColor != null && !defaultColor.equals( background ) ) {
+						int width3 = height / 2;
+						fillRect( g, defaultColor, width - width3, 0, width3, height );
+					}
+
+					// paint "derived color" indicator
+					int width4 = height / 4;
+					g.setColor( Color.magenta );
+					g.fillRect( width - width4, 0, width4, height );
+				}
 
 				// layout text
 				FontMetrics fm = getFontMetrics( getFont() );
@@ -966,6 +1045,17 @@ public class FlatUIDefaultsInspector
 				super.paintComponent( g );
 
 			paintSeparator( g );
+		}
+
+		private void fillRect( Graphics g, Color color, int x, int y, int width, int height ) {
+			// fill white if color is translucent
+			if( color.getAlpha() != 255 ) {
+				g.setColor( Color.white );
+				g.fillRect( x, y, width, height );
+			}
+
+			g.setColor( color );
+			g.fillRect( x, y, width, height );
 		}
 	}
 
