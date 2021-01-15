@@ -185,7 +185,12 @@ class FlatThemeEditorPane
 			}
 
 			try {
+				int selectionStart = textArea.getSelectionStart();
+				int selectionEnd = textArea.getSelectionEnd();
+
 				textArea.reload();
+
+				textArea.select( selectionStart, selectionEnd );
 			} catch( IOException ex ) {
 				JOptionPane.showMessageDialog( this,
 					"Failed to reload '" + textArea.getFileName() + "'\n\nReason: " + ex.getMessage(),

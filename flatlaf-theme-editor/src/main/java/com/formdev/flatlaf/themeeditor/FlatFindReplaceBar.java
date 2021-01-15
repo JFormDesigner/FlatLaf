@@ -93,6 +93,8 @@ class FlatFindReplaceBar
 		String selectedText = textArea.getSelectedText();
 		if( !StringUtils.isEmpty( selectedText ) && selectedText.indexOf( '\n' ) < 0 )
 			findField.setText( selectedText );
+		else
+			findField.selectAll();
 
 		// if showing bar, highlight matches in editor
 		// (not invoking this from addNotify() because this would break the slide-in animation)
