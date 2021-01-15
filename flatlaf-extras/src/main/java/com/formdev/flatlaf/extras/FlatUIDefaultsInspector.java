@@ -410,9 +410,11 @@ public class FlatUIDefaultsInspector
 		String valueType = (String) valueTypeField.getSelectedItem();
 
 		// split filter string on space characters
-		String[] filters = filter.split( " +" );
-		for( int i = 0; i < filters.length; i++ )
-			filters[i] = filters[i].toLowerCase( Locale.ENGLISH );
+		String[] filters = !filter.isEmpty() ? filter.split( " +" ) : null;
+		if( filters != null ) {
+			for( int i = 0; i < filters.length; i++ )
+				filters[i] = filters[i].toLowerCase( Locale.ENGLISH );
+		}
 
 		ItemsTableModel model = (ItemsTableModel) table.getModel();
 		model.setFilter( item -> {
@@ -420,6 +422,9 @@ public class FlatUIDefaultsInspector
 				!valueType.equals( "(any)" ) &&
 				!valueType.equals( typeOfValue( item.value ) ) )
 			  return false;
+
+			if( filters == null )
+				return true;
 
 			String lkey = item.key.toLowerCase( Locale.ENGLISH );
 			String lvalue = item.getValueAsString().toLowerCase( Locale.ENGLISH );
@@ -652,15 +657,13 @@ public class FlatUIDefaultsInspector
 				Color color = (value instanceof Color[]) ? ((Color[])value)[0] : (Color) value;
 				HSLColor hslColor = new HSLColor( color );
 				if( color.getAlpha() == 255 ) {
-					return String.format( "%s    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
+					return String.format( "%-9s HSL %3d %3d %3d",
 						color2hex( color ),
-						color.getRed(), color.getGreen(), color.getBlue(),
 						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
 						(int) hslColor.getLuminance() );
 				} else {
-					return String.format( "%s   rgba(%d, %d, %d, %d)    hsla(%d, %d, %d, %d)",
+					return String.format( "%-9s HSL %3d %3d %3d %2d",
 						color2hex( color ),
-						color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
 						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
 						(int) hslColor.getLuminance(), (int) (hslColor.getAlpha() * 100) );
 				}
@@ -970,7 +973,7 @@ public class FlatUIDefaultsInspector
 
 			if( item.value instanceof Color || item.value instanceof Color[] ) {
 				Color color = (item.value instanceof Color[]) ? ((Color[])item.value)[0] : (Color) item.value;
-				boolean isDark = new HSLColor( color ).getLuminance() < 70;
+				boolean isDark = new HSLColor( color ).getLuminance() < 70 && color.getAlpha() >= 128;
 				setBackground( color );
 				setForeground( isDark ? Color.white : Color.black );
 			} else if( item.value instanceof Icon ) {
@@ -979,7 +982,9 @@ public class FlatUIDefaultsInspector
 			}
 
 			// set tooltip
-			String toolTipText = String.valueOf( item.value );
+			String toolTipText = (item.value instanceof Object[])
+				? Arrays.toString( (Object[]) item.value ).replace( ", ", ",\n" )
+				: String.valueOf( item.value );
 			if( item.lafValue != null ) {
 				toolTipText += "    \n\nLaF UI default value was overridden with UIManager.put(key,value):\n    "
 					+ Item.valueAsString( item.lafValue ) + "\n    " + String.valueOf( item.lafValue );
@@ -1027,18 +1032,14 @@ public class FlatUIDefaultsInspector
 
 				g.setColor( getForeground() );
 
-				// paint rgb() and hsl() horizontally aligned
-				int rgbIndex = text.indexOf( "rgb" );
-				int hslIndex = text.indexOf( "hsl" );
-				if( rgbIndex > 0 && hslIndex > rgbIndex ) {
-					String hexText = text.substring( 0, rgbIndex );
-					String rgbText = text.substring( rgbIndex, hslIndex );
+				// paint hsl horizontally aligned
+				int hslIndex = text.indexOf( "HSL" );
+				if( hslIndex > 0 ) {
+					String hexText = text.substring( 0, hslIndex );
 					String hslText = text.substring( hslIndex );
-					int hexWidth = Math.max( fm.stringWidth( hexText ), fm.stringWidth( "#DDDDDD    " ) );
-					int rgbWidth = Math.max( fm.stringWidth( rgbText ), fm.stringWidth( "rgb(444, 444, 444)    " ) );
+					int hexWidth = Math.max( fm.stringWidth( hexText ), fm.stringWidth( "#12345678  " ) );
 					FlatUIUtils.drawString( this, g, hexText, x, y );
-					FlatUIUtils.drawString( this, g, rgbText, x + hexWidth, y );
-					FlatUIUtils.drawString( this, g, hslText, x + hexWidth + rgbWidth, y );
+					FlatUIUtils.drawString( this, g, hslText, x + hexWidth, y );
 				} else
 					FlatUIUtils.drawString( this, g, text, x, y );
 			} else
