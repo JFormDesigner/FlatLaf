@@ -15,6 +15,8 @@ FlatLaf Change Log
   `JSlider.setForeground(Color)` and `JSlider.setBackground(Color)`.
 - TextComponent: Clip placeholder text if it does not fit into visible area. (PR
   #229)
+- macOS: Improved font rendering on macOS when using JetBrains Runtime. (PRs
+  #237, #239 and #241)
 - Extras: UI defaults inspector:
   - Support embedding UI defaults inspector panel into any window. See
     `FlatUIDefaultsInspector.createInspectorPanel()`.
