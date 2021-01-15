@@ -29,8 +29,14 @@
 - Button.default.foreground      #000000    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.foreground      #ffffff    javax.swing.plaf.ColorUIResource [UI]
 
+- Button.default.hoverBackground #f7f7f7    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
++ Button.default.hoverBackground #4182c5    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
+
 - Button.default.hoverBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.hoverBorderColor #a9c9f5    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.pressedBackground #e6e6e6    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
++ Button.default.pressedBackground #3571ae    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 
 - Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
