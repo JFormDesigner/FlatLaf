@@ -141,7 +141,7 @@ public class FlatTableHeaderUI
 			   rendererClassName.equals( "sun.swing.FilePane$AlignableTableHeaderRenderer" );
 	}
 
-	private void paintColumnBorders( Graphics g, JComponent c ) {
+	protected void paintColumnBorders( Graphics g, JComponent c ) {
 		int width = c.getWidth();
 		int height = c.getHeight();
 		float lineWidth = UIScale.scale( 1f );
