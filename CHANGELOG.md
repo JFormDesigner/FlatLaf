@@ -21,6 +21,8 @@ FlatLaf Change Log
   - Support embedding UI defaults inspector panel into any window. See
     `FlatUIDefaultsInspector.createInspectorPanel()`.
   - Copy selected keys and values into clipboard via context menu.
+  - Support wildcard matching in filter (`*` matches any number of characters,
+    `?` matches a single character, `^` beginning of line, `$` end of line).
 - IntelliJ Themes:
   - Added hover and pressed feedback to Button, CheckBox, RadioButton and
     ToggleButton. (issue #176)

@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -411,9 +412,33 @@ public class FlatUIDefaultsInspector
 
 		// split filter string on space characters
 		String[] filters = !filter.isEmpty() ? filter.split( " +" ) : null;
+		Pattern[] patterns = (filters != null) ? new Pattern[filters.length] : null;
 		if( filters != null ) {
-			for( int i = 0; i < filters.length; i++ )
+			for( int i = 0; i < filters.length; i++ ) {
 				filters[i] = filters[i].toLowerCase( Locale.ENGLISH );
+
+				// simple wildcard matching
+				//  - '*' matches any number of characters
+				//  - '?' matches a single character
+				//  - '^' beginning of line
+				//  - '$' end of line
+				String f = filters[i];
+				boolean matchBeginning = f.startsWith( "^" );
+				boolean matchEnd = f.endsWith( "$" );
+				if( f.indexOf( '*' ) >= 0 || f.indexOf( '?' ) >= 0 || matchBeginning || matchEnd ) {
+					if( matchBeginning )
+						f = f.substring( 1 );
+					if( matchEnd )
+						f = f.substring( 0, f.length() - 1 );
+
+					String regex = ("\\Q" + f + "\\E").replace( "*", "\\E.*\\Q" ).replace( "?", "\\E.\\Q" );
+					if( !matchBeginning )
+						regex = ".*" + regex;
+					if( !matchEnd )
+						regex = regex + ".*";
+					patterns[i] = Pattern.compile( regex );
+				}
+			}
 		}
 
 		ItemsTableModel model = (ItemsTableModel) table.getModel();
@@ -428,9 +453,16 @@ public class FlatUIDefaultsInspector
 
 			String lkey = item.key.toLowerCase( Locale.ENGLISH );
 			String lvalue = item.getValueAsString().toLowerCase( Locale.ENGLISH );
-			for( String f : filters ) {
-				if( lkey.contains( f ) || lvalue.contains( f ) )
-					return true;
+			for( int i = 0; i < filters.length; i++ ) {
+				Pattern p = patterns[i];
+				if( p != null ) {
+					if( p.matcher( lkey ).matches() || p.matcher( lvalue ).matches() )
+						return true;
+				} else {
+					String f = filters[i];
+					if( lkey.contains( f ) || lvalue.contains( f ) )
+						return true;
+				}
 			}
 			return false;
 		} );
