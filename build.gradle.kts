@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-val releaseVersion = "0.46"
-val developmentVersion = "0.47-SNAPSHOT"
+val releaseVersion = "1.0-rc1"
+val developmentVersion = "1.0-rc2-SNAPSHOT"
 
 version = if( java.lang.Boolean.getBoolean( "release" ) ) releaseVersion else developmentVersion
 
@@ -64,7 +64,7 @@ allprojects {
 			// manifest for all created JARs
 			manifest.attributes(mapOf(
 				"Implementation-Vendor" to "FormDev Software GmbH",
-				"Implementation-Copyright" to "Copyright (C) ${java.time.LocalDate.now().year} FormDev Software GmbH. All rights reserved.",
+				"Implementation-Copyright" to "Copyright (C) 2019-${java.time.LocalDate.now().year} FormDev Software GmbH. All rights reserved.",
 				"Implementation-Version" to project.version))
 
 			// add META-INF/LICENSE to all created JARs
