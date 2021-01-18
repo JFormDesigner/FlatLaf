@@ -40,6 +40,8 @@ FlatLaf Change Log
   `tab`) now respect explicitly set background color.
 - TabbedPane: Fixed `IndexOutOfBoundsException` when using tooltip text on close
   buttons and closing last/rightmost tab. (issue #235)
+- TabbedPane: Fixed scrolling tabs with touchpads and high-resolution mouse
+  wheels.
 - Extras: Added missing export of package
   `com.formdev.flatlaf.extras.components` to Java 9 module descriptor.
 - JIDE Common Layer:
