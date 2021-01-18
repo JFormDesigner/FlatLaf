@@ -52,6 +52,7 @@ FlatLaf Change Log
   - Fixed List, Tree and Table `selectionInactiveForeground` in light Arc
     themes.
   - Fixed List and Table background colors in Material UI Lite themes.
+  - Fixed menu accelerator colors in Monocai theme. (issue #243)
 
 
 ## 0.46
