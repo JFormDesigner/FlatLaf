@@ -13,6 +13,7 @@ FlatLaf Change Log
   buttons.
 - Slider: Support per component custom thumb and track colors via
   `JSlider.setForeground(Color)` and `JSlider.setBackground(Color)`.
+- Slider: Improved thumb hover and pressed colors.
 - TextComponent: Clip placeholder text if it does not fit into visible area. (PR
   #229)
 - macOS: Improved font rendering on macOS when using JetBrains Runtime. (PRs

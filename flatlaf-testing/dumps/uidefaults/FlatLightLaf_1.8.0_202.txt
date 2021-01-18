@@ -857,11 +857,11 @@ Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #000000    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Slider.horizontalSize          200,21    java.awt.Dimension
-Slider.hoverThumbColor         #1569bc    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
+Slider.hoverThumbColor         #1775d3    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5% autoInverse)
 Slider.minimumHorizontalSize   36,21    java.awt.Dimension
 Slider.minimumVerticalSize     21,36    java.awt.Dimension
 Slider.onlyLeftMouseButtonDrag true
-Slider.pressedThumbColor       #125ca5    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(15% autoInverse)
+Slider.pressedThumbColor       #166ec5    com.formdev.flatlaf.util.DerivedColor [UI]    darken(8% autoInverse)
 Slider.shadow                  #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbColor              #1e82e6    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbSize               12,12    javax.swing.plaf.DimensionUIResource [UI]

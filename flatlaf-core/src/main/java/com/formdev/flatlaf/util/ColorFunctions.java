@@ -125,8 +125,8 @@ public class ColorFunctions
 
 		protected boolean shouldInverse( float[] hsla ) {
 			return increase
-				? hsla[hslIndex] >= 50
-				: hsla[hslIndex] < 50;
+				? hsla[hslIndex] > 65
+				: hsla[hslIndex] < 35;
 		}
 	}
 
