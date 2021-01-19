@@ -16,6 +16,8 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -25,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Field;
 import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -119,7 +122,7 @@ public class FlatTreeUI
 		selectionInactiveBackground = UIManager.getColor( "Tree.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Tree.selectionInactiveForeground" );
 		selectionBorderColor = UIManager.getColor( "Tree.selectionBorderColor" );
-		wideSelection = UIManager.getBoolean( "Tree.wideSelection" );
+		wideSelection = clientPropertyBoolean( tree, TREE_WIDE_SELECTION, UIManager.getBoolean( "Tree.wideSelection" ));
 		showCellFocusIndicator = UIManager.getBoolean( "Tree.showCellFocusIndicator" );
 
 		// scale
@@ -145,9 +148,6 @@ public class FlatTreeUI
 
 	@Override
 	protected MouseListener createMouseListener() {
-		if( !wideSelection )
-			return super.createMouseListener();
-
 		return new BasicTreeUI.MouseHandler() {
 			@Override
 			public void mousePressed( MouseEvent e ) {
@@ -165,7 +165,7 @@ public class FlatTreeUI
 			}
 
 			private MouseEvent handleWideMouseEvent( MouseEvent e ) {
-				if( !tree.isEnabled() || !SwingUtilities.isLeftMouseButton( e ) || e.isConsumed() )
+				if( !wideSelection || !tree.isEnabled() || !SwingUtilities.isLeftMouseButton( e ) || e.isConsumed() )
 					return e;
 
 				int x = e.getX();
@@ -192,18 +192,33 @@ public class FlatTreeUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		if( !wideSelection )
-			return super.createPropertyChangeListener();
-
 		return new BasicTreeUI.PropertyChangeHandler() {
 			@Override
 			public void propertyChange( PropertyChangeEvent e ) {
 				super.propertyChange( e );
-
-				if( e.getSource() == tree && e.getPropertyName() == "dropLocation" ) {
-					JTree.DropLocation oldValue = (JTree.DropLocation) e.getOldValue();
-					repaintWideDropLocation( oldValue );
-					repaintWideDropLocation( tree.getDropLocation() );
+				if (e.getSource() == tree ) {
+					switch( e.getPropertyName() ) {
+						case TREE_WIDE_SELECTION:
+							wideSelection = (Boolean) e.getNewValue();
+							if (currentCellRenderer instanceof DefaultTreeCellRenderer) {
+								try {
+									Field fillBackgroundField = DefaultTreeCellRenderer.class
+										.getDeclaredField( "fillBackground" );
+									fillBackgroundField.setAccessible( true );
+									fillBackgroundField.set( currentCellRenderer, !wideSelection );
+								} catch( Exception ignored ) {
+								}
+							}
+							tree.repaint();
+							break;
+						case "dropLocation":
+							if (wideSelection) {
+								JTree.DropLocation oldValue = (JTree.DropLocation) e.getOldValue();
+								repaintWideDropLocation( oldValue );
+								repaintWideDropLocation( tree.getDropLocation() );
+							}
+							break;
+					}
 				}
 			}
 

@@ -670,6 +670,14 @@ public interface FlatClientProperties
 	 */
 	String TAB_BUTTON_SELECTED_BACKGROUND = "JToggleButton.tab.selectedBackground";
 
+	/**
+	 * Override if a tree shows a wide selection.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTree}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TREE_WIDE_SELECTION = "JTree.wideSelection";
+
 	//---- helper methods -----------------------------------------------------
 
 	/**
