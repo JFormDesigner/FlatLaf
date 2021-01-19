@@ -1,6 +1,16 @@
 FlatLaf Change Log
 ==================
 
+## 1.0-rc2-SNAPSHOT
+
+#### Fixed bugs
+
+- CheckBox and RadioButton: Fill component background as soon as background
+  color is different to default background color, even if component is not
+  opaque (which is the default). This paints selection if using the component as
+  cell renderer a Table, Tree or List.
+
+
 ## 1.0-rc1
 
 #### New features and improvements

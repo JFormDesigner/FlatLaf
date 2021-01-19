@@ -25,7 +25,6 @@ import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -34,7 +33,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
-import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -137,12 +135,6 @@ public class FlatTableUI
 			oldIntercellSpacing = table.getIntercellSpacing();
 			table.setIntercellSpacing( intercellSpacing );
 		}
-
-		// checkbox is non-opaque in FlatLaf and therefore would not paint selection
-		// --> make checkbox renderer opaque (but opaque in Metal or Windows LaF)
-		TableCellRenderer booleanRenderer = table.getDefaultRenderer( Boolean.class );
-		if( booleanRenderer instanceof JCheckBox )
-			((JCheckBox)booleanRenderer).setOpaque( true );
 	}
 
 	@Override
