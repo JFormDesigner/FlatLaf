@@ -3,6 +3,10 @@ FlatLaf Change Log
 
 ## 1.0-rc2-SNAPSHOT
 
+#### New features and improvements
+
+- JIDE Common Layer: Support `JidePopupMenu`.
+
 #### Fixed bugs
 
 - CheckBox and RadioButton: Fill component background as soon as background
