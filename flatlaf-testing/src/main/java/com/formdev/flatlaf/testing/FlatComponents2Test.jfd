@@ -8,47 +8,28 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[][200,grow,sizegroup 1,fill][200,grow,sizegroup 1,fill][fill][200,grow,sizegroup 1,fill][200,grow,sizegroup 1,fill][grow,sizegroup 1,fill]"
-			"$rowConstraints": "[][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill]"
+			"$columnConstraints": "[][200,grow,sizegroup 1,fill][200,grow,sizegroup 1,fill][fill][200,grow,sizegroup 1,fill][200,grow,sizegroup 1,fill]"
+			"$rowConstraints": "[][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill][fill]"
 		} ) {
 			name: "this"
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "textFieldLabel"
-				"text": "JTextField:"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0"
-			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField1"
-				"text": "editable"
+				"text": "item"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0,growx"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField2"
-				"text": "disabled"
+				"text": "item (check vertical text alignment)"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 0,growx"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField3"
-				"text": "editable"
+				"text": "item"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 0,growx"
-			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "textField4"
-				"text": "disabled"
-				"enabled": false
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 0,growx"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label3"
-				"text": "JXTree:"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 0"
+				"value": "cell 4 0 2 1,growx"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$columnConstraints": "[fill]"
@@ -115,77 +96,6 @@ new FormModel {
 				"$columnConstraints": "[fill]"
 				"$rowConstraints": "[][grow][][]"
 			} ) {
-				name: "panel2"
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "treeLabel"
-					"text": "JTree:"
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0,aligny top,growy 0"
-				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "treeRowCountLabel"
-					"text": "Row count:"
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 2"
-				} )
-				add( new FormComponent( "javax.swing.JSpinner" ) {
-					name: "treeRowCountSpinner"
-					"model": new javax.swing.SpinnerNumberModel {
-						minimum: 20
-						stepSize: 20
-						value: 20
-					}
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "treeRowCountChanged", false ) )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 3"
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 1"
-			} )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "scrollPane3"
-				add( new FormComponent( "javax.swing.JTree" ) {
-					name: "tree1"
-					"showsRootHandles": true
-					"editable": true
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 1"
-			} )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "scrollPane4"
-				add( new FormComponent( "javax.swing.JTree" ) {
-					name: "tree2"
-					"enabled": false
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
-			} )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "scrollPane5"
-				add( new FormComponent( "org.jdesktop.swingx.JXTree" ) {
-					name: "xTree1"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 1"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$layoutConstraints": "insets 0,hidemode 3"
-				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][grow][][]"
-			} ) {
 				name: "panel3"
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tableLabel"
@@ -214,7 +124,7 @@ new FormModel {
 					"value": "cell 0 3"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2"
+				"value": "cell 3 1"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "table1ScrollPane"
@@ -229,230 +139,73 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2 2 1,width 300"
+				"value": "cell 4 1 2 1,width 300"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$columnConstraints": "[200][200]"
-				"$rowConstraints": "[][150,grow,sizegroup 1,fill]"
-				"$layoutConstraints": "ltr,insets 0,hidemode 3"
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[fill]"
+				"$rowConstraints": "[][grow][][]"
 			} ) {
-				name: "optionsPanel"
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "dndCheckBox"
-					"text": "enable drag and drop (for lists, trees and tables)"
-					"mnemonic": 68
+				name: "panel2"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "treeLabel"
+					"text": "JTree:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0,aligny top,growy 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "treeRowCountLabel"
+					"text": "Row count:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JSpinner" ) {
+					name: "treeRowCountSpinner"
+					"model": new javax.swing.SpinnerNumberModel {
+						minimum: 20
+						stepSize: 20
+						value: 20
+					}
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dndChanged", false ) )
+					addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "treeRowCountChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0 2 1"
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-					"$layoutConstraints": "hidemode 3"
-					"$columnConstraints": "[]"
-					"$rowConstraints": "[][]0[]0[]0[]0[]0[]0[]0[]"
-				} ) {
-					name: "tableOptionsPanel"
-					"border": new javax.swing.border.TitledBorder( "JTable Control" )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "autoResizeModeLabel"
-						"text": "Auto resize mode:"
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 0"
-					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
-						name: "autoResizeModeField"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "off"
-							addElement( "off" )
-							addElement( "nextColumn" )
-							addElement( "subsequentColumns" )
-							addElement( "lastColumn" )
-							addElement( "allColumns" )
-						}
-						"selectedIndex": 2
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-							"JavaCodeGenerator.typeParameters": "String"
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "autoResizeModeChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 0"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "showHorizontalLinesCheckBox"
-						"text": "show horizontal lines"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHorizontalLinesChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 1"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "rowHeaderCheckBox"
-						"text": "row header"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowHeaderChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 1"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "showVerticalLinesCheckBox"
-						"text": "show vertical lines"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showVerticalLinesChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 2"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "intercellSpacingCheckBox"
-						"text": "intercell spacing"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "intercellSpacingChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 3"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "redGridColorCheckBox"
-						"text": "red grid color"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "redGridColorChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 4"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "rowSelectionCheckBox"
-						"text": "row selection"
-						"selected": true
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowSelectionChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 5"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "columnSelectionCheckBox"
-						"text": "column selection"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "columnSelectionChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 6"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "tableHeaderButtonCheckBox"
-						"text": "show button in table header"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tableHeaderButtonChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 8"
-					} )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1"
-				} )
-				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-					"$layoutConstraints": "hidemode 3"
-					"$columnConstraints": "[fill]"
-					"$rowConstraints": "[][]0[]"
-				} ) {
-					name: "treeOptionsPanel"
-					"border": new javax.swing.border.TitledBorder( "JTree Control" )
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "treeRendererLabel"
-						"text": "Renderer:"
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 0"
-					} )
-					add( new FormComponent( "javax.swing.JComboBox" ) {
-						name: "treeRendererComboBox"
-						"model": new javax.swing.DefaultComboBoxModel {
-							selectedItem: "default"
-							addElement( "default" )
-							addElement( "defaultSubclass" )
-							addElement( "label" )
-							addElement( "swingxDefault" )
-							addElement( "jideCheckBox" )
-							addElement( "jideStyled" )
-						}
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeRendererChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 0"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "treeWideSelectionCheckBox"
-						"text": "wide selection"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeWideSelectionChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 1"
-					} )
-					add( new FormComponent( "javax.swing.JCheckBox" ) {
-						name: "treePaintSelectionCheckBox"
-						"text": "paint selection"
-						"selected": true
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treePaintSelectionChanged", false ) )
-					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 0 2"
-					} )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 1 1"
+					"value": "cell 0 3"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 2 3 1"
+				"value": "cell 0 2"
 			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-				"$columnConstraints": "[grow,sizegroup 1,fill]"
-				"$rowConstraints": "[][150,grow,sizegroup 1,fill]"
-				"$layoutConstraints": "ltr,insets 0,hidemode 3"
-			} ) {
-				name: "panel4"
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label4"
-					"text": "JIDE CheckBoxTree:"
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0"
-				} )
-				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-					name: "scrollPane6"
-					add( new FormComponent( "com.jidesoft.swing.CheckBoxTree" ) {
-						name: "checkBoxTree1"
-						auxiliary() {
-							"JavaCodeGenerator.variableLocal": false
-						}
-					} )
-				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 1"
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane3"
+				add( new FormComponent( "javax.swing.JTree" ) {
+					name: "tree1"
+					"showsRootHandles": true
+					"editable": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 2"
+				"value": "cell 1 2"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane4"
+				add( new FormComponent( "javax.swing.JTree" ) {
+					name: "tree2"
+					"enabled": false
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
 				"text": "JXTable:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 3,aligny top,growy 0"
+				"value": "cell 3 2,aligny top,growy 0"
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "xTable1ScrollPane"
@@ -466,7 +219,56 @@ new FormModel {
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3 2 1"
+				"value": "cell 4 2 2 1"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[fill]"
+				"$rowConstraints": "[][]0[]"
+			} ) {
+				name: "panel4"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label3"
+					"text": "JXTree:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label4"
+					"text": "CheckBoxTree:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label5"
+					"text": "(JIDE)"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane5"
+				add( new FormComponent( "org.jdesktop.swingx.JXTree" ) {
+					name: "xTree1"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane6"
+				add( new FormComponent( "com.jidesoft.swing.CheckBoxTree" ) {
+					name: "checkBoxTree1"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 3"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
@@ -488,9 +290,201 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 3 2 1"
 			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][fill]"
+				"$rowConstraints": "[]"
+			} ) {
+				name: "panel5"
+				"border": new javax.swing.border.TitledBorder( "General Control" )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "dndCheckBox"
+					"text": "enable drag and drop"
+					"mnemonic": 68
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dndChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill]"
+				"$rowConstraints": "[][]0[]"
+			} ) {
+				name: "treeOptionsPanel"
+				"border": new javax.swing.border.TitledBorder( "JTree Control" )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "treeRendererLabel"
+					"text": "Renderer:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "treeRendererComboBox"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "default"
+						addElement( "default" )
+						addElement( "defaultSubclass" )
+						addElement( "label" )
+						addElement( "swingxDefault" )
+						addElement( "jideCheckBox" )
+						addElement( "jideStyled" )
+					}
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeRendererChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "treeWideSelectionCheckBox"
+					"text": "wide selection"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeWideSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "treePaintSelectionCheckBox"
+					"text": "paint selection"
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treePaintSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 4"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[][fill]"
+				"$rowConstraints": "[][]0[]0[]0[]0"
+			} ) {
+				name: "tableOptionsPanel"
+				"border": new javax.swing.border.TitledBorder( "JTable Control" )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "autoResizeModeLabel"
+					"text": "Auto resize mode:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0 2 1"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "autoResizeModeField"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "off"
+						addElement( "off" )
+						addElement( "nextColumn" )
+						addElement( "subsequentColumns" )
+						addElement( "lastColumn" )
+						addElement( "allColumns" )
+					}
+					"selectedIndex": 2
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.typeParameters": "String"
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "autoResizeModeChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0 2 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "showHorizontalLinesCheckBox"
+					"text": "show horizontal lines"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHorizontalLinesChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "rowSelectionCheckBox"
+					"text": "row selection"
+					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "showVerticalLinesCheckBox"
+					"text": "show vertical lines"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showVerticalLinesChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "columnSelectionCheckBox"
+					"text": "column selection"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "columnSelectionChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 2"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "intercellSpacingCheckBox"
+					"text": "intercell spacing"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "intercellSpacingChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "rowHeaderCheckBox"
+					"text": "row header"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowHeaderChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 3"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "redGridColorCheckBox"
+					"text": "red grid color"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "redGridColorChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "tableHeaderButtonCheckBox"
+					"text": "show button in table header"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tableHeaderButtonChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 4"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 4 2 1"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 1235, 825 )
+			"size": new java.awt.Dimension( 950, 600 )
 		} )
 	}
 }
