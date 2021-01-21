@@ -670,6 +670,8 @@ public interface FlatClientProperties
 	 */
 	String TAB_BUTTON_SELECTED_BACKGROUND = "JToggleButton.tab.selectedBackground";
 
+	//---- JTree --------------------------------------------------------------
+
 	/**
 	 * Override if a tree shows a wide selection.
 	 * <p>
@@ -677,6 +679,15 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String TREE_WIDE_SELECTION = "JTree.wideSelection";
+
+	/**
+	 * Specifies whether tree item selection is painted. Default is {@code true}.
+	 * If set to {@code false}, then the tree cell renderer is responsible for painting selection.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTree}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TREE_PAINT_SELECTION = "JTree.paintSelection";
 
 	//---- helper methods -----------------------------------------------------
 
