@@ -16,6 +16,8 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -26,7 +28,9 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.CellRendererPane;
+import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
@@ -145,9 +149,6 @@ public class FlatTreeUI
 
 	@Override
 	protected MouseListener createMouseListener() {
-		if( !wideSelection )
-			return super.createMouseListener();
-
 		return new BasicTreeUI.MouseHandler() {
 			@Override
 			public void mousePressed( MouseEvent e ) {
@@ -165,7 +166,7 @@ public class FlatTreeUI
 			}
 
 			private MouseEvent handleWideMouseEvent( MouseEvent e ) {
-				if( !tree.isEnabled() || !SwingUtilities.isLeftMouseButton( e ) || e.isConsumed() )
+				if( !isWideSelection() || !tree.isEnabled() || !SwingUtilities.isLeftMouseButton( e ) || e.isConsumed() )
 					return e;
 
 				int x = e.getX();
@@ -192,18 +193,26 @@ public class FlatTreeUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		if( !wideSelection )
-			return super.createPropertyChangeListener();
-
 		return new BasicTreeUI.PropertyChangeHandler() {
 			@Override
 			public void propertyChange( PropertyChangeEvent e ) {
 				super.propertyChange( e );
 
-				if( e.getSource() == tree && e.getPropertyName() == "dropLocation" ) {
-					JTree.DropLocation oldValue = (JTree.DropLocation) e.getOldValue();
-					repaintWideDropLocation( oldValue );
-					repaintWideDropLocation( tree.getDropLocation() );
+				if( e.getSource() == tree ) {
+					switch( e.getPropertyName() ) {
+						case TREE_WIDE_SELECTION:
+						case TREE_PAINT_SELECTION:
+							tree.repaint();
+							break;
+
+						case "dropLocation":
+							if( isWideSelection() ) {
+								JTree.DropLocation oldValue = (JTree.DropLocation) e.getOldValue();
+								repaintWideDropLocation( oldValue );
+								repaintWideDropLocation( tree.getDropLocation() );
+							}
+							break;
+					}
 				}
 			}
 
@@ -227,33 +236,21 @@ public class FlatTreeUI
 		TreePath path, int row, boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
 	{
 		boolean isEditing = (editingComponent != null && editingRow == row);
-		boolean hasFocus = FlatUIUtils.isPermanentFocusOwner( tree );
-		boolean cellHasFocus = hasFocus && (row == getLeadSelectionRow());
 		boolean isSelected = tree.isRowSelected( row );
 		boolean isDropRow = isDropRow( row );
+		boolean needsSelectionPainting = (isSelected || isDropRow) && isPaintSelection();
+
+		// do not paint row if editing, except if selection needs painted
+		if( isEditing && !needsSelectionPainting )
+			return;
+
+		boolean hasFocus = FlatUIUtils.isPermanentFocusOwner( tree );
+		boolean cellHasFocus = hasFocus && (row == getLeadSelectionRow());
 
 		// if tree is used as cell renderer in another component (e.g. in Rhino JavaScript debugger),
 		// check whether that component is focused to get correct selection colors
 		if( !hasFocus && isSelected && tree.getParent() instanceof CellRendererPane )
 			hasFocus = FlatUIUtils.isPermanentFocusOwner( tree.getParent().getParent() );
-
-		// wide selection background
-		if( wideSelection && (isSelected || isDropRow) ) {
-			// fill background
-			g.setColor( isDropRow
-				? UIManager.getColor( "Tree.dropCellBackground" )
-				: (hasFocus ? selectionBackground : selectionInactiveBackground) );
-			g.fillRect( 0, bounds.y, tree.getWidth(), bounds.height );
-
-			// paint expand/collapse icon
-			if( shouldPaintExpandControl( path, row, isExpanded, hasBeenExpanded, isLeaf ) ) {
-				paintExpandControl( g, clipBounds, insets, bounds,
-					path, row, isExpanded, hasBeenExpanded, isLeaf );
-			}
-		}
-
-		if( isEditing )
-			return;
 
 		// get renderer component
 		Component rendererComponent = currentCellRenderer.getTreeCellRendererComponent( tree,
@@ -290,8 +287,51 @@ public class FlatTreeUI
 			}
 		}
 
+		// paint selection background
+		if( needsSelectionPainting ) {
+			// set selection color
+			Color oldColor = g.getColor();
+			g.setColor( isDropRow
+				? UIManager.getColor( "Tree.dropCellBackground" )
+				: (rendererComponent instanceof DefaultTreeCellRenderer
+					? ((DefaultTreeCellRenderer)rendererComponent).getBackgroundSelectionColor()
+					: (hasFocus ? selectionBackground : selectionInactiveBackground)) );
+
+			if( isWideSelection() ) {
+				// wide selection
+				g.fillRect( 0, bounds.y, tree.getWidth(), bounds.height );
+
+				// paint expand/collapse icon
+				// (was already painted before, but painted over with wide selection)
+				if( shouldPaintExpandControl( path, row, isExpanded, hasBeenExpanded, isLeaf ) ) {
+					paintExpandControl( g, clipBounds, insets, bounds,
+						path, row, isExpanded, hasBeenExpanded, isLeaf );
+				}
+			} else {
+				// non-wide selection
+				int xOffset = 0;
+				int imageOffset = 0;
+
+				if( rendererComponent instanceof JLabel ) {
+					JLabel label = (JLabel) rendererComponent;
+					Icon icon = label.getIcon();
+					imageOffset = (icon != null && label.getText() != null)
+						? icon.getIconWidth() + Math.max( label.getIconTextGap() - 1, 0 )
+						: 0;
+					xOffset = label.getComponentOrientation().isLeftToRight() ? imageOffset : 0;
+				}
+
+				g.fillRect( bounds.x + xOffset, bounds.y, bounds.width - imageOffset, bounds.height );
+			}
+
+			// this is actually not necessary because renderer should always set color
+			// before painting, but doing anyway to avoid any side effect (in bad renderers)
+			g.setColor( oldColor );
+		}
+
 		// paint renderer
-		rendererPane.paintComponent( g, rendererComponent, tree, bounds.x, bounds.y, bounds.width, bounds.height, true );
+		if( !isEditing )
+			rendererPane.paintComponent( g, rendererComponent, tree, bounds.x, bounds.y, bounds.width, bounds.height, true );
 
 		// restore background selection color and border selection color
 		if( oldBackgroundSelectionColor != null )
@@ -314,6 +354,14 @@ public class FlatTreeUI
 	@Override
 	protected Rectangle getDropLineRect( DropLocation loc ) {
 		Rectangle r = super.getDropLineRect( loc );
-		return wideSelection ? new Rectangle( 0, r.y, tree.getWidth(), r.height ) : r;
+		return isWideSelection() ? new Rectangle( 0, r.y, tree.getWidth(), r.height ) : r;
+	}
+
+	protected boolean isWideSelection() {
+		return clientPropertyBoolean( tree, TREE_WIDE_SELECTION, wideSelection );
+	}
+
+	protected boolean isPaintSelection() {
+		return clientPropertyBoolean( tree, TREE_PAINT_SELECTION, true );
 	}
 }
