@@ -5,6 +5,11 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Tree: Support disabling wide selection per component. (set client property
+  `JTree.wideSelection` to `false`). (PR #245)
+- Tree: Support disabling selection painting per component. Then the tree cell
+  renderer is responsible for selection painting. (set client property
+  `JTree.paintSelection` to `false`).
 - JIDE Common Layer: Support `JidePopupMenu`.
 
 #### Fixed bugs
