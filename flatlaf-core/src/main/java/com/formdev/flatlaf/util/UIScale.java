@@ -36,9 +36,14 @@ import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatSystemProperties;
 
 /**
- * Two scaling modes are supported for HiDPI displays:
+ * This class handles scaling in Swing UIs.
+ * It computes user scaling factor based on font size and
+ * provides methods to scale integer, float, {@link Dimension} and {@link Insets}.
+ * This class is look and feel independent.
+ * <p>
+ * Two scaling modes are supported by FlatLaf for HiDPI displays:
  *
- * 1) system scaling mode
+ * <h3>1) system scaling mode</h3>
  *
  * This mode is supported since Java 9 on all platforms and in some Java 8 VMs
  * (e.g. Apple and JetBrains). The JRE determines the scale factor per-display and
@@ -49,7 +54,7 @@ import com.formdev.flatlaf.FlatSystemProperties;
  * The scale factor may be different for each connected display.
  * The scale factor may change for a window when moving the window from one display to another one.
  *
- * 2) user scaling mode
+ * <h3>2) user scaling mode</h3>
  *
  * This mode is mainly for Java 8 compatibility, but is also used on Linux
  * or if the default font is changed.
@@ -85,6 +90,9 @@ public class UIScale
 
 	private static Boolean jreHiDPI;
 
+	/**
+	 * Returns whether system scaling is enabled.
+	 */
 	public static boolean isSystemScalingEnabled() {
 		if( jreHiDPI != null )
 			return jreHiDPI;
@@ -112,10 +120,16 @@ public class UIScale
 		return jreHiDPI;
 	}
 
+	/**
+	 * Returns the system scale factor for the given graphics context.
+	 */
 	public static double getSystemScaleFactor( Graphics2D g ) {
 		return isSystemScalingEnabled() ? getSystemScaleFactor( g.getDeviceConfiguration() ) : 1;
 	}
 
+	/**
+	 * Returns the system scale factor for the given graphics configuration.
+	 */
 	public static double getSystemScaleFactor( GraphicsConfiguration gc ) {
 		return (isSystemScalingEnabled() && gc != null) ? gc.getDefaultTransform().getScaleX() : 1;
 	}
@@ -297,11 +311,17 @@ public class UIScale
 		}
 	}
 
+	/**
+	 * Returns the user scale factor.
+	 */
 	public static float getUserScaleFactor() {
 		initialize();
 		return scaleFactor;
 	}
 
+	/**
+	 * Sets the user scale factor.
+	 */
 	private static void setUserScaleFactor( float scaleFactor ) {
 		if( scaleFactor <= 1f )
 			scaleFactor = 1f;
@@ -318,40 +338,65 @@ public class UIScale
 			changeSupport.firePropertyChange( "userScaleFactor", oldScaleFactor, scaleFactor );
 	}
 
+	/**
+	 * Multiplies the given value by the user scale factor.
+	 */
 	public static float scale( float value ) {
 		initialize();
 		return (scaleFactor == 1) ? value : (value * scaleFactor);
 	}
 
+	/**
+	 * Multiplies the given value by the user scale factor and rounds the result.
+	 */
 	public static int scale( int value ) {
 		initialize();
 		return (scaleFactor == 1) ? value : Math.round( value * scaleFactor );
 	}
 
 	/**
-	 * Similar as scale(int) but always "rounds down".
+	 * Similar as {@link #scale(int)} but always "rounds down".
+	 * <p>
+	 * For use in special cases. {@link #scale(int)} is the preferred method.
 	 */
 	public static int scale2( int value ) {
 		initialize();
 		return (scaleFactor == 1) ? value : (int) (value * scaleFactor);
 	}
 
+	/**
+	 * Divides the given value by the user scale factor.
+	 */
 	public static float unscale( float value ) {
 		initialize();
 		return (scaleFactor == 1f) ? value : (value / scaleFactor);
 	}
 
+	/**
+	 * Divides the given value by the user scale factor and rounds the result.
+	 */
 	public static int unscale( int value ) {
 		initialize();
 		return (scaleFactor == 1f) ? value : Math.round( value / scaleFactor );
 	}
 
+	/**
+	 * If user scale factor is not 1, scale the given graphics context by invoking
+	 * {@link Graphics2D#scale(double, double)} with user scale factor.
+	 */
 	public static void scaleGraphics( Graphics2D g ) {
 		initialize();
 		if( scaleFactor != 1f )
 			g.scale( scaleFactor, scaleFactor );
 	}
 
+	/**
+	 * Scales the given dimension with the user scale factor.
+	 * <p>
+	 * If user scale factor is 1, then the given dimension is simply returned.
+	 * Otherwise a new instance of {@link Dimension} or {@link DimensionUIResource}
+	 * is returned, depending on whether the passed dimension implements {@link UIResource}.
+	 */
 	public static Dimension scale( Dimension dimension ) {
 		initialize();
 		return (dimension == null || scaleFactor == 1f)
@@ -361,6 +406,13 @@ public class UIScale
 				: new Dimension          ( scale( dimension.width ), scale( dimension.height ) ));
 	}
 
+	/**
+	 * Scales the given insets with the user scale factor.
+	 * <p>
+	 * If user scale factor is 1, then the given insets is simply returned.
+	 * Otherwise a new instance of {@link Insets} or {@link InsetsUIResource}
+	 * is returned, depending on whether the passed dimension implements {@link UIResource}.
+	 */
 	public static Insets scale( Insets insets ) {
 		initialize();
 		return (insets == null || scaleFactor == 1f)

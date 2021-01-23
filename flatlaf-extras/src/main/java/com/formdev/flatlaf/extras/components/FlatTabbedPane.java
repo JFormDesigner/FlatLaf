@@ -164,14 +164,16 @@ public class FlatTabbedPane
 
 
 	/**
-	 * Returns the height of a tab.
+	 * Returns the minimum height of a tab.
 	 */
 	public int getTabHeight() {
 		return getClientPropertyInt( TABBED_PANE_TAB_HEIGHT, "TabbedPane.tabHeight" );
 	}
 
 	/**
-	 * Specifies the height of a tab.
+	 * Specifies the minimum height of a tab.
+	 *
+	 * @see #setTabInsets(Insets)
 	 */
 	public void setTabHeight( int tabHeight ) {
 		putClientProperty( TABBED_PANE_TAB_HEIGHT, (tabHeight >= 0) ? tabHeight : null );
@@ -187,6 +189,8 @@ public class FlatTabbedPane
 
 	/**
 	 * Specifies the insets of a tab.
+	 *
+	 * @see #setTabHeight(int)
 	 */
 	public void setTabInsets( Insets tabInsets ) {
 		putClientProperty( TABBED_PANE_TAB_INSETS, tabInsets );
@@ -203,6 +207,8 @@ public class FlatTabbedPane
 
 	/**
 	 * Specifies the insets of the tab at the given tab index.
+	 *
+	 * @see #setTabHeight(int)
 	 */
 	public void setTabInsets( int tabIndex, Insets tabInsets ) {
 		JComponent c = (JComponent) getComponentAt( tabIndex );

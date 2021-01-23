@@ -119,7 +119,7 @@ class UIDefaultsLoader
 					addonClassLoaders.add( addonClassLoader );
 			}
 
-			// load custom properties files (usually provides by applications)
+			// load custom properties files (usually provided by applications)
 			List<Object> customDefaultsSources = FlatLaf.getCustomDefaultsSources();
 			int size = (customDefaultsSources != null) ? customDefaultsSources.size() : 0;
 			for( int i = 0; i < size; i++ ) {

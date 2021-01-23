@@ -22,6 +22,8 @@ import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 
 /**
+ * Defines/documents own client properties used in FlatLaf.
+ *
  * @author Karl Tauber
  */
 public interface FlatClientProperties
@@ -293,10 +295,12 @@ public interface FlatClientProperties
 	String TABBED_PANE_MAXIMUM_TAB_WIDTH = "JTabbedPane.maximumTabWidth";
 
 	/**
-	 * Specifies the height of a tab.
+	 * Specifies the minimum height of a tab.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 *
+	 * @see #TABBED_PANE_TAB_INSETS
 	 */
 	String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight";
 
@@ -306,6 +310,8 @@ public interface FlatClientProperties
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
 	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
 	 * <strong>Value type</strong> {@link java.awt.Insets}
+	 *
+	 * @see #TABBED_PANE_TAB_HEIGHT
 	 */
 	String TABBED_PANE_TAB_INSETS = "JTabbedPane.tabInsets";
 
