@@ -18,6 +18,8 @@ FlatLaf Change Log
   color is different to default background color, even if component is not
   opaque (which is the default). This paints selection if using the component as
   cell renderer a Table, Tree or List.
+- Custom window decorations: Fixed top window border in dark themes when running
+  in JetBrains Runtime.
 
 
 ## 1.0-rc1
