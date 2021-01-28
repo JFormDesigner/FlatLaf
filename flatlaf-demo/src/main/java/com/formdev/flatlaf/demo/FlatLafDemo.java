@@ -40,6 +40,9 @@ public class FlatLafDemo
 		if( SystemInfo.isMacOS && System.getProperty( "apple.laf.useScreenMenuBar" ) == null )
 			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
 
+		if( FlatLafDemo.screenshotsMode && !SystemInfo.isJava_9_orLater && System.getProperty( "flatlaf.uiScale" ) == null )
+			System.setProperty( "flatlaf.uiScale", "2x" );
+
 		SwingUtilities.invokeLater( () -> {
 			DemoPrefs.init( PREFS_ROOT_PATH );
 
@@ -61,7 +64,7 @@ public class FlatLafDemo
 			DemoFrame frame = new DemoFrame();
 
 			if( FlatLafDemo.screenshotsMode )
-				frame.setPreferredSize( new Dimension( 1280, 620 ) );
+				frame.setPreferredSize( new Dimension( 1660, 840 ) );
 
 			// show frame
 			frame.pack();
