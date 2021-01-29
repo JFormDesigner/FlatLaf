@@ -14,6 +14,14 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Button: Fixed behavior of <kbd>Enter</kbd> key on focused button on Windows
+  and Linux, which now clicks the focused button (instead of the default
+  button).
+  - On Windows, this is a regression in 1.0-rc1.
+  - On macOS, the <kbd>Enter</kbd> key always clicks the default button, which
+    is the platform behavior.
+  - On all platforms, the default button can be always clicked with
+    <kbd>Ctrl+Enter</kbd> keys, even if another button is focused.
 - CheckBox and RadioButton: Fill component background as soon as background
   color is different to default background color, even if component is not
   opaque (which is the default). This paints selection if using the component as
