@@ -437,6 +437,11 @@ JXTitledPanel.titleBackground  #4c5052    javax.swing.plaf.ColorUIResource [UI]
 JXTitledPanel.titleForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 
 
+#---- JidePopupMenu ----
+
+JidePopupMenuUI                com.formdev.flatlaf.jideoss.ui.FlatJidePopupMenuUI
+
+
 #---- JideTabbedPane ----
 
 JideTabbedPane.background      #3c3f41    javax.swing.plaf.ColorUIResource [UI]

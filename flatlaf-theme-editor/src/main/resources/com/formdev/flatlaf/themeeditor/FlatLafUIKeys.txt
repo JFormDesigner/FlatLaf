@@ -310,6 +310,7 @@ JXTitledPanel.borderColor
 JXTitledPanel.captionInsets
 JXTitledPanel.titleBackground
 JXTitledPanel.titleForeground
+JidePopupMenuUI
 JideTabbedPane.background
 JideTabbedPane.contentBorderInsets
 JideTabbedPane.foreground
