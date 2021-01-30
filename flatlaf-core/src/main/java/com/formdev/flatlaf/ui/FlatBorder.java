@@ -35,7 +35,6 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
-import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
 
@@ -159,7 +158,7 @@ public class FlatBorder
 				return false;
 		}
 
-		return c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
+		return c.isEnabled();
 	}
 
 	protected boolean isFocused( Component c ) {
