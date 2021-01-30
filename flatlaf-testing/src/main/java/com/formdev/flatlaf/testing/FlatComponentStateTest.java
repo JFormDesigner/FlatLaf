@@ -43,6 +43,7 @@ public class FlatComponentStateTest
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		label11 = new JLabel();
 		label12 = new JLabel();
+		label32 = new JLabel();
 		label5 = new JLabel();
 		label7 = new JLabel();
 		label6 = new JLabel();
@@ -51,6 +52,8 @@ public class FlatComponentStateTest
 		label14 = new JLabel();
 		label15 = new JLabel();
 		label16 = new JLabel();
+		label9 = new JLabel();
+		label33 = new JLabel();
 		label1 = new JLabel();
 		testStateButton1 = new FlatComponentStateTest.TestStateButton();
 		testStateButton7 = new FlatComponentStateTest.TestStateButton();
@@ -60,6 +63,8 @@ public class FlatComponentStateTest
 		testStateToggleButton5 = new FlatComponentStateTest.TestStateToggleButton();
 		testStateToggleButton9 = new FlatComponentStateTest.TestStateToggleButton();
 		testStateToggleButton12 = new FlatComponentStateTest.TestStateToggleButton();
+		testStateButton15 = new FlatComponentStateTest.TestStateButton();
+		testStateButton19 = new FlatComponentStateTest.TestStateButton();
 		label2 = new JLabel();
 		testStateButton2 = new FlatComponentStateTest.TestStateButton();
 		testStateButton8 = new FlatComponentStateTest.TestStateButton();
@@ -69,6 +74,8 @@ public class FlatComponentStateTest
 		testStateToggleButton6 = new FlatComponentStateTest.TestStateToggleButton();
 		testStateToggleButton10 = new FlatComponentStateTest.TestStateToggleButton();
 		testStateToggleButton13 = new FlatComponentStateTest.TestStateToggleButton();
+		testStateButton16 = new FlatComponentStateTest.TestStateButton();
+		testStateButton20 = new FlatComponentStateTest.TestStateButton();
 		label3 = new JLabel();
 		testStateButton3 = new FlatComponentStateTest.TestStateButton();
 		testStateButton9 = new FlatComponentStateTest.TestStateButton();
@@ -78,16 +85,20 @@ public class FlatComponentStateTest
 		testStateToggleButton7 = new FlatComponentStateTest.TestStateToggleButton();
 		testStateToggleButton11 = new FlatComponentStateTest.TestStateToggleButton();
 		testStateToggleButton14 = new FlatComponentStateTest.TestStateToggleButton();
+		testStateButton17 = new FlatComponentStateTest.TestStateButton();
+		testStateButton21 = new FlatComponentStateTest.TestStateButton();
 		label4 = new JLabel();
 		testStateButton13 = new FlatComponentStateTest.TestStateButton();
 		testStateButton14 = new FlatComponentStateTest.TestStateButton();
 		testStateToggleButton4 = new FlatComponentStateTest.TestStateToggleButton();
 		testStateToggleButton8 = new FlatComponentStateTest.TestStateToggleButton();
+		testStateButton18 = new FlatComponentStateTest.TestStateButton();
 		label10 = new JLabel();
 		button1 = new JButton();
 		testDefaultButton1 = new FlatComponentStateTest.TestDefaultButton();
 		toggleButton1 = new JToggleButton();
 		toggleButton2 = new JToggleButton();
+		button2 = new JButton();
 		separator1 = new JSeparator();
 		label22 = new JLabel();
 		label27 = new JLabel();
@@ -149,6 +160,8 @@ public class FlatComponentStateTest
 			"[fill]" +
 			"[fill]para" +
 			"[fill]" +
+			"[fill]para" +
+			"[fill]" +
 			"[fill]",
 			// rows
 			"[]" +
@@ -176,6 +189,11 @@ public class FlatComponentStateTest
 		label12.setText("JToggleButton");
 		label12.setFont(label12.getFont().deriveFont(label12.getFont().getSize() + 4f));
 		add(label12, "cell 5 0 3 1");
+
+		//---- label32 ----
+		label32.setText("Help Button");
+		label32.setFont(label32.getFont().deriveFont(label32.getFont().getSize() + 4f));
+		add(label32, "cell 9 0 2 1");
 
 		//---- label5 ----
 		label5.setText("regular");
@@ -208,6 +226,14 @@ public class FlatComponentStateTest
 		//---- label16 ----
 		label16.setText("selected");
 		add(label16, "cell 8 1");
+
+		//---- label9 ----
+		label9.setText("regular");
+		add(label9, "cell 9 1");
+
+		//---- label33 ----
+		label33.setText("focused");
+		add(label33, "cell 10 1");
 
 		//---- label1 ----
 		label1.setText("none");
@@ -256,6 +282,17 @@ public class FlatComponentStateTest
 		testStateToggleButton12.setStateSelected(true);
 		testStateToggleButton12.setStateFocused(true);
 		add(testStateToggleButton12, "cell 8 2");
+
+		//---- testStateButton15 ----
+		testStateButton15.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton15.putClientProperty("JButton.buttonType", "help");
+		add(testStateButton15, "cell 9 2");
+
+		//---- testStateButton19 ----
+		testStateButton19.setStateFocused(true);
+		testStateButton19.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton19.putClientProperty("JButton.buttonType", "help");
+		add(testStateButton19, "cell 10 2");
 
 		//---- label2 ----
 		label2.setText("hover");
@@ -313,6 +350,19 @@ public class FlatComponentStateTest
 		testStateToggleButton13.setStateFocused(true);
 		add(testStateToggleButton13, "cell 8 3");
 
+		//---- testStateButton16 ----
+		testStateButton16.setStateHover(true);
+		testStateButton16.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton16.putClientProperty("JButton.buttonType", "help");
+		add(testStateButton16, "cell 9 3");
+
+		//---- testStateButton20 ----
+		testStateButton20.setStateHover(true);
+		testStateButton20.setStateFocused(true);
+		testStateButton20.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton20.putClientProperty("JButton.buttonType", "help");
+		add(testStateButton20, "cell 10 3");
+
 		//---- label3 ----
 		label3.setText("pressed");
 		add(label3, "cell 0 4");
@@ -369,6 +419,19 @@ public class FlatComponentStateTest
 		testStateToggleButton14.setStateFocused(true);
 		add(testStateToggleButton14, "cell 8 4");
 
+		//---- testStateButton17 ----
+		testStateButton17.setStatePressed(true);
+		testStateButton17.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton17.putClientProperty("JButton.buttonType", "help");
+		add(testStateButton17, "cell 9 4");
+
+		//---- testStateButton21 ----
+		testStateButton21.setStatePressed(true);
+		testStateButton21.setStateFocused(true);
+		testStateButton21.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton21.putClientProperty("JButton.buttonType", "help");
+		add(testStateButton21, "cell 10 4");
+
 		//---- label4 ----
 		label4.setText("disabled");
 		add(label4, "cell 0 5");
@@ -397,6 +460,12 @@ public class FlatComponentStateTest
 		testStateToggleButton8.setStateSelected(true);
 		add(testStateToggleButton8, "cell 6 5");
 
+		//---- testStateButton18 ----
+		testStateButton18.setEnabled(false);
+		testStateButton18.putClientProperty("JComponent.minimumWidth", 0);
+		testStateButton18.putClientProperty("JButton.buttonType", "help");
+		add(testStateButton18, "cell 9 5");
+
 		//---- label10 ----
 		label10.setText("raw");
 		add(label10, "cell 0 6");
@@ -419,7 +488,12 @@ public class FlatComponentStateTest
 		toggleButton2.setText("text");
 		toggleButton2.setSelected(true);
 		add(toggleButton2, "cell 6 6");
-		add(separator1, "cell 0 7 9 1");
+
+		//---- button2 ----
+		button2.putClientProperty("JComponent.minimumWidth", 0);
+		button2.putClientProperty("JButton.buttonType", "help");
+		add(button2, "cell 9 6");
+		add(separator1, "cell 0 7 11 1");
 
 		//---- label22 ----
 		label22.setText("JCheckBox");
@@ -664,6 +738,7 @@ public class FlatComponentStateTest
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JLabel label11;
 	private JLabel label12;
+	private JLabel label32;
 	private JLabel label5;
 	private JLabel label7;
 	private JLabel label6;
@@ -672,6 +747,8 @@ public class FlatComponentStateTest
 	private JLabel label14;
 	private JLabel label15;
 	private JLabel label16;
+	private JLabel label9;
+	private JLabel label33;
 	private JLabel label1;
 	private FlatComponentStateTest.TestStateButton testStateButton1;
 	private FlatComponentStateTest.TestStateButton testStateButton7;
@@ -681,6 +758,8 @@ public class FlatComponentStateTest
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton5;
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton9;
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton12;
+	private FlatComponentStateTest.TestStateButton testStateButton15;
+	private FlatComponentStateTest.TestStateButton testStateButton19;
 	private JLabel label2;
 	private FlatComponentStateTest.TestStateButton testStateButton2;
 	private FlatComponentStateTest.TestStateButton testStateButton8;
@@ -690,6 +769,8 @@ public class FlatComponentStateTest
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton6;
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton10;
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton13;
+	private FlatComponentStateTest.TestStateButton testStateButton16;
+	private FlatComponentStateTest.TestStateButton testStateButton20;
 	private JLabel label3;
 	private FlatComponentStateTest.TestStateButton testStateButton3;
 	private FlatComponentStateTest.TestStateButton testStateButton9;
@@ -699,16 +780,20 @@ public class FlatComponentStateTest
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton7;
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton11;
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton14;
+	private FlatComponentStateTest.TestStateButton testStateButton17;
+	private FlatComponentStateTest.TestStateButton testStateButton21;
 	private JLabel label4;
 	private FlatComponentStateTest.TestStateButton testStateButton13;
 	private FlatComponentStateTest.TestStateButton testStateButton14;
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton4;
 	private FlatComponentStateTest.TestStateToggleButton testStateToggleButton8;
+	private FlatComponentStateTest.TestStateButton testStateButton18;
 	private JLabel label10;
 	private JButton button1;
 	private FlatComponentStateTest.TestDefaultButton testDefaultButton1;
 	private JToggleButton toggleButton1;
 	private JToggleButton toggleButton2;
+	private JButton button2;
 	private JSeparator separator1;
 	private JLabel label22;
 	private JLabel label27;
