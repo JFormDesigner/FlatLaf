@@ -5,7 +5,7 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "hidemode 3"
-			"$columnConstraints": "[fill][fill][fill]para[fill][fill]para[fill][fill][fill][fill]"
+			"$columnConstraints": "[fill][fill][fill]para[fill][fill]para[fill][fill]para[fill][fill]"
 			"$rowConstraints": "[][][][][][]para[][][][][][][][]para[]"
 		} ) {
 			name: "this"
@@ -17,13 +17,6 @@ new FormModel {
 				"value": "cell 1 0 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label9"
-				"text": "default JButton"
-				"font": #SwingDerivedFont0
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 0 2 1"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label12"
 				"text": "JToggleButton"
 				"font": #SwingDerivedFont0
@@ -32,31 +25,31 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
-				"text": "none"
+				"text": "regular"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label7"
+				"text": "default"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
 				"text": "focused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label7"
-				"text": "none"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label8"
-				"text": "focused"
+				"text": "default"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label13"
-				"text": "none"
+				"text": "unsel."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 1"
 			} )
@@ -87,20 +80,23 @@ new FormModel {
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
 				name: "testStateButton1"
 				"text": "text"
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
-				name: "testStateButton4"
-				"text": "text"
-				"stateFocused": true
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 2"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
 				name: "testStateButton7"
 				"text": "text"
 				"stateDefault": true
+				"$client.JComponent.minimumWidth": 0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
+				name: "testStateButton4"
+				"text": "text"
+				"stateFocused": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 2"
 			} )
@@ -109,6 +105,7 @@ new FormModel {
 				"text": "text"
 				"stateFocused": true
 				"stateDefault": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 2"
 			} )
@@ -150,22 +147,25 @@ new FormModel {
 				name: "testStateButton2"
 				"text": "text"
 				"stateHover": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 3"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
-				name: "testStateButton5"
-				"text": "text"
-				"stateHover": true
-				"stateFocused": true
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 3"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
 				name: "testStateButton8"
 				"text": "text"
 				"stateHover": true
 				"stateDefault": true
+				"$client.JComponent.minimumWidth": 0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 3"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
+				name: "testStateButton5"
+				"text": "text"
+				"stateHover": true
+				"stateFocused": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 3"
 			} )
@@ -175,6 +175,7 @@ new FormModel {
 				"stateHover": true
 				"stateFocused": true
 				"stateDefault": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 3"
 			} )
@@ -220,22 +221,25 @@ new FormModel {
 				name: "testStateButton3"
 				"text": "text"
 				"statePressed": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 4"
-			} )
-			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
-				name: "testStateButton6"
-				"text": "text"
-				"statePressed": true
-				"stateFocused": true
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
 				name: "testStateButton9"
 				"text": "text"
 				"statePressed": true
 				"stateDefault": true
+				"$client.JComponent.minimumWidth": 0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 4"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateButton" ) {
+				name: "testStateButton6"
+				"text": "text"
+				"statePressed": true
+				"stateFocused": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 4"
 			} )
@@ -245,6 +249,7 @@ new FormModel {
 				"statePressed": true
 				"stateFocused": true
 				"stateDefault": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 4"
 			} )
@@ -290,6 +295,7 @@ new FormModel {
 				name: "testStateButton13"
 				"text": "text"
 				"enabled": false
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 5"
 			} )
@@ -298,8 +304,9 @@ new FormModel {
 				"text": "text"
 				"enabled": false
 				"stateDefault": true
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 5"
+				"value": "cell 2 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateToggleButton" ) {
 				name: "testStateToggleButton4"
@@ -325,14 +332,16 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
 				"text": "text"
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestDefaultButton" ) {
 				name: "testDefaultButton1"
 				"text": "text"
+				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 6"
+				"value": "cell 2 6"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton1"
@@ -364,31 +373,55 @@ new FormModel {
 				"text": "JRadioButton"
 				"font": #SwingDerivedFont0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 8 2 1"
+				"value": "cell 5 8 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label23"
-				"text": "none"
+				"text": "unsel."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 9"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label28"
+				"text": "selected"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 9"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label24"
 				"text": "focused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 9"
+				"value": "cell 3 9"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label29"
+				"text": "selected"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 9"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label25"
-				"text": "none"
+				"text": "unsel."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 9"
+				"value": "cell 5 9"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label30"
+				"text": "selected"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 9"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label26"
 				"text": "focused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 9"
+				"value": "cell 7 9"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label31"
+				"text": "selected"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 8 9"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label17"
@@ -403,24 +436,54 @@ new FormModel {
 				"value": "cell 1 10"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
+				name: "testStateCheckBox8"
+				"text": "text"
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 10"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
 				name: "testStateCheckBox5"
 				"text": "text"
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 10"
+				"value": "cell 3 10"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
+				name: "testStateCheckBox12"
+				"text": "text"
+				"stateFocused": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 10"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
 				name: "testStateRadioButton1"
 				"text": "text"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 10"
+				"value": "cell 5 10"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
+				name: "testStateRadioButton8"
+				"text": "text"
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 10"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
 				name: "testStateRadioButton5"
 				"text": "text"
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 10"
+				"value": "cell 7 10"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
+				name: "testStateRadioButton9"
+				"text": "text"
+				"stateFocused": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 8 10"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label18"
@@ -436,19 +499,44 @@ new FormModel {
 				"value": "cell 1 11"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
+				name: "testStateCheckBox9"
+				"text": "text"
+				"stateHover": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 11"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
 				name: "testStateCheckBox6"
 				"text": "text"
 				"stateFocused": true
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 11"
+				"value": "cell 3 11"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
+				name: "testStateCheckBox13"
+				"text": "text"
+				"stateFocused": true
+				"stateHover": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 11"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
 				name: "testStateRadioButton2"
 				"text": "text"
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 11"
+				"value": "cell 5 11"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
+				name: "testStateRadioButton10"
+				"text": "text"
+				"stateHover": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 11"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
 				name: "testStateRadioButton6"
@@ -456,7 +544,16 @@ new FormModel {
 				"stateFocused": true
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 11"
+				"value": "cell 7 11"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
+				name: "testStateRadioButton11"
+				"text": "text"
+				"stateFocused": true
+				"stateHover": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 8 11"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label19"
@@ -472,19 +569,44 @@ new FormModel {
 				"value": "cell 1 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
+				name: "testStateCheckBox10"
+				"text": "text"
+				"statePressed": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
 				name: "testStateCheckBox7"
 				"text": "text"
 				"stateFocused": true
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 12"
+				"value": "cell 3 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
+				name: "testStateCheckBox14"
+				"text": "text"
+				"stateFocused": true
+				"statePressed": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
 				name: "testStateRadioButton3"
 				"text": "text"
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 12"
+				"value": "cell 5 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
+				name: "testStateRadioButton12"
+				"text": "text"
+				"statePressed": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
 				name: "testStateRadioButton7"
@@ -492,7 +614,16 @@ new FormModel {
 				"stateFocused": true
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 12"
+				"value": "cell 7 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
+				name: "testStateRadioButton13"
+				"text": "text"
+				"stateFocused": true
+				"statePressed": true
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 8 12"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label20"
@@ -507,12 +638,28 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 13"
 			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateCheckBox" ) {
+				name: "testStateCheckBox11"
+				"text": "text"
+				"enabled": false
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 13"
+			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
 				name: "testStateRadioButton4"
 				"text": "text"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 13"
+				"value": "cell 5 13"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatComponentStateTest$TestStateRadioButton" ) {
+				name: "testStateRadioButton14"
+				"text": "text"
+				"enabled": false
+				"stateSelected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 13"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label21"
@@ -526,11 +673,25 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 14"
 			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "checkBox2"
+				"text": "text"
+				"selected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 14"
+			} )
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton1"
 				"text": "text"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 14"
+				"value": "cell 5 14"
+			} )
+			add( new FormComponent( "javax.swing.JRadioButton" ) {
+				name: "radioButton2"
+				"text": "text"
+				"selected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 14"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
