@@ -172,6 +172,25 @@ public interface FlatClientProperties
 	 */
 	String OUTLINE_WARNING = "warning";
 
+	/**
+	 * Specifies a callback that is invoked to check whether a component is permanent focus owner.
+	 * Used to paint focus indicators.
+	 * <p>
+	 * May be useful in special cases for custom components.
+	 * <p>
+	 * Use a {@link java.util.function.Predicate} that receives the component as parameter:
+	 * <pre>{@code
+	 * myComponent.putClientProperty( "JComponent.focusOwner",
+	 *     (Predicate) c -> {
+	 *         return ...; // check here
+	 *     } );
+	 * }</pre>
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.util.function.Predicate&lt;javax.swing.JComponent&gt;
+	 */
+	String COMPONENT_FOCUS_OWNER = "JComponent.focusOwner";
+
 	//---- Popup --------------------------------------------------------------
 
 	/**

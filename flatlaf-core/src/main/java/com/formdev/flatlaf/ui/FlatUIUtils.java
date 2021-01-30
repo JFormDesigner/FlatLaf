@@ -39,6 +39,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.IdentityHashMap;
 import java.util.WeakHashMap;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -175,8 +176,18 @@ public class FlatUIUtils
 	 * Returns whether the given component is the permanent focus owner and
 	 * is in the active window. Used to paint focus indicators.
 	 */
+	@SuppressWarnings( "unchecked" )
 	public static boolean isPermanentFocusOwner( Component c ) {
 		KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+
+		if( c instanceof JComponent ) {
+			Object value = ((JComponent)c).getClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER );
+			if( value instanceof Predicate ) {
+				return ((Predicate<JComponent>)value).test( (JComponent) c ) &&
+					keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
+			}
+		}
+
 		return keyboardFocusManager.getPermanentFocusOwner() == c &&
 			keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
 	}
