@@ -64,6 +64,8 @@ public interface FlatSystemProperties
 	 * If this system property is set, FlatLaf invokes {@link JFrame#setDefaultLookAndFeelDecorated(boolean)}
 	 * and {@link JDialog#setDefaultLookAndFeelDecorated(boolean)} on LaF initialization.
 	 * <p>
+	 * (requires Window 10)
+	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none
 	 */
@@ -79,6 +81,8 @@ public interface FlatSystemProperties
 	 * Setting this to {@code true} forces using JetBrains Runtime custom window decorations
 	 * even if they are not enabled by the application.
 	 * <p>
+	 * (requires Window 10)
+	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code true}
 	 */
@@ -86,6 +90,8 @@ public interface FlatSystemProperties
 
 	/**
 	 * Specifies whether menubar is embedded into custom window decorations.
+	 * <p>
+	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code true}

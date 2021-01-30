@@ -234,7 +234,7 @@ public interface FlatClientProperties
 	/**
 	 * Specifies whether the scroll pane uses smooth scrolling.
 	 * <p>
-	 * <strong>Component</strong> {{@link javax.swing.JScrollPane}<br>
+	 * <strong>Component</strong> {@link javax.swing.JScrollPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String SCROLL_PANE_SMOOTH_SCROLLING = "JScrollPane.smoothScrolling";
@@ -679,7 +679,7 @@ public interface FlatClientProperties
 	//---- JTree --------------------------------------------------------------
 
 	/**
-	 * Override if a tree shows a wide selection.
+	 * Override if a tree shows a wide selection. Default is {@code true}.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTree}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
