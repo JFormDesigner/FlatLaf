@@ -181,7 +181,7 @@ public interface FlatClientProperties
 	 * Use a {@link java.util.function.Predicate} that receives the component as parameter:
 	 * <pre>{@code
 	 * myComponent.putClientProperty( "JComponent.focusOwner",
-	 *     (Predicate) c -> {
+	 *     (Predicate<JComponent>) c -> {
 	 *         return ...; // check here
 	 *     } );
 	 * }</pre>

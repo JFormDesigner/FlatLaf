@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.testing;
 
-import java.awt.Component;
 import java.util.function.Predicate;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -37,6 +36,13 @@ public class FlatComponentStateTest
 
 	FlatComponentStateTest() {
 		initComponents();
+
+		Predicate<JComponent> unfocused = c -> false;
+		Predicate<JComponent> focused = c -> true;
+		textField1.putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, unfocused );
+		textField2.putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, focused );
+		comboBox1.putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, unfocused );
+		comboBox2.putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, focused );
 	}
 
 	private void initComponents() {
@@ -147,6 +153,13 @@ public class FlatComponentStateTest
 		checkBox2 = new JCheckBox();
 		radioButton1 = new JRadioButton();
 		radioButton2 = new JRadioButton();
+		separator2 = new JSeparator();
+		label35 = new JLabel();
+		textField1 = new JTextField();
+		textField2 = new JTextField();
+		label38 = new JLabel();
+		comboBox1 = new JComboBox<>();
+		comboBox2 = new JComboBox<>();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -178,6 +191,9 @@ public class FlatComponentStateTest
 			"[]" +
 			"[]" +
 			"[]para" +
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]"));
 
 		//---- label11 ----
@@ -732,6 +748,19 @@ public class FlatComponentStateTest
 		radioButton2.setText("text");
 		radioButton2.setSelected(true);
 		add(radioButton2, "cell 6 14");
+		add(separator2, "cell 0 15 11 1");
+
+		//---- label35 ----
+		label35.setText("JTextField");
+		add(label35, "cell 0 16");
+		add(textField1, "cell 1 16 2 1");
+		add(textField2, "cell 3 16 2 1");
+
+		//---- label38 ----
+		label38.setText("JComboBox");
+		add(label38, "cell 0 17");
+		add(comboBox1, "cell 1 17 2 1");
+		add(comboBox2, "cell 3 17 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -842,6 +871,13 @@ public class FlatComponentStateTest
 	private JCheckBox checkBox2;
 	private JRadioButton radioButton1;
 	private JRadioButton radioButton2;
+	private JSeparator separator2;
+	private JLabel label35;
+	private JTextField textField1;
+	private JTextField textField2;
+	private JLabel label38;
+	private JComboBox<String> comboBox1;
+	private JComboBox<String> comboBox2;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class TestStateButton ----------------------------------------------
@@ -867,7 +903,7 @@ public class FlatComponentStateTest
 			} );
 
 			putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER,
-				(Predicate<Component>) c -> {
+				(Predicate<JComponent>) c -> {
 					return ((TestStateButton)c).isStateFocused();
 				} );
 		}
@@ -937,7 +973,7 @@ public class FlatComponentStateTest
 			} );
 
 			putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER,
-				(Predicate<Component>) c -> {
+				(Predicate<JComponent>) c -> {
 					return ((TestStateToggleButton)c).isStateFocused();
 				} );
 		}
@@ -1002,7 +1038,7 @@ public class FlatComponentStateTest
 			} );
 
 			putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER,
-				(Predicate<Component>) c -> {
+				(Predicate<JComponent>) c -> {
 					return ((TestStateCheckBox)c).isStateFocused();
 				} );
 		}
@@ -1067,7 +1103,7 @@ public class FlatComponentStateTest
 			} );
 
 			putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER,
-				(Predicate<Component>) c -> {
+				(Predicate<JComponent>) c -> {
 					return ((TestStateRadioButton)c).isStateFocused();
 				} );
 		}
