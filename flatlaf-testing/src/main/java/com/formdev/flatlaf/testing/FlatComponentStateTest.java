@@ -163,7 +163,7 @@ public class FlatComponentStateTest
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"hidemode 3",
+			"insets dialog,hidemode 3",
 			// columns
 			"[fill]" +
 			"[fill]" +
