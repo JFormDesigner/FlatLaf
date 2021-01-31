@@ -94,7 +94,7 @@ public class FlatBorder
 			// paint outer border
 			if( outlineColor != null || isFocused( c ) ) {
 				float innerWidth = !isCellEditor( c ) && !(c instanceof JScrollPane)
-					? (outlineColor != null ? innerOutlineWidth : innerFocusWidth)
+					? (outlineColor != null ? innerOutlineWidth : getInnerFocusWidth( c ))
 					: 0;
 
 				g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
@@ -233,6 +233,13 @@ public class FlatBorder
 			return 0;
 
 		return focusWidth;
+	}
+
+	/**
+	 * Returns the (unscaled) thickness of the inner focus border.
+	 */
+	protected float getInnerFocusWidth( Component c ) {
+		return innerFocusWidth;
 	}
 
 	/**

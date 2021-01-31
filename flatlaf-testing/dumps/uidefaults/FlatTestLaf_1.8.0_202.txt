@@ -92,6 +92,7 @@ Button.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBackground         #ffff00    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBorderColor        #ff0000    javax.swing.plaf.ColorUIResource [UI]
 Button.iconTextGap             4
+Button.innerFocusWidth         1
 Button.light                   #e3e3e3    javax.swing.plaf.ColorUIResource [UI]
 Button.margin                  2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
 Button.minimumWidth            72
@@ -319,6 +320,7 @@ HeaderUI                       com.formdev.flatlaf.swingx.ui.FlatHeaderUI
 
 HelpButton.background          #ffffff    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.borderColor         #878787    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.borderWidth         1
 HelpButton.disabledBackground  #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledBorderColor #bdbdbd    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledQuestionMarkColor #ababab    javax.swing.plaf.ColorUIResource [UI]
@@ -327,6 +329,7 @@ HelpButton.focusedBorderColor  #7b9fc7    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.hoverBackground     #ffff00    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.hoverBorderColor    #ff0000    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
+HelpButton.innerFocusWidth     1
 HelpButton.pressedBackground   #ffc800    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.questionMarkColor   #0000ff    javax.swing.plaf.ColorUIResource [UI]
 

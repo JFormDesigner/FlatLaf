@@ -39,6 +39,7 @@ Button.highlight
 Button.hoverBackground
 Button.hoverBorderColor
 Button.iconTextGap
+Button.innerFocusWidth
 Button.light
 Button.margin
 Button.minimumWidth
@@ -236,6 +237,7 @@ FormattedTextFieldUI
 HeaderUI
 HelpButton.background
 HelpButton.borderColor
+HelpButton.borderWidth
 HelpButton.disabledBackground
 HelpButton.disabledBorderColor
 HelpButton.disabledQuestionMarkColor
@@ -244,6 +246,7 @@ HelpButton.focusedBorderColor
 HelpButton.hoverBackground
 HelpButton.hoverBorderColor
 HelpButton.icon
+HelpButton.innerFocusWidth
 HelpButton.pressedBackground
 HelpButton.questionMarkColor
 Hyperlink.disabledText

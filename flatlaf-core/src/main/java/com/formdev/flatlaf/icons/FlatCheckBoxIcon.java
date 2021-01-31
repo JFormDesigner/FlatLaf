@@ -146,8 +146,14 @@ public class FlatCheckBoxIcon
 		paintBorder( c, g );
 
 		// paint background
-		g.setColor( FlatUIUtils.deriveColor( getBackground( c, selected ),
-			selected ? selectedBackground : background ) );
+		Color bg = FlatUIUtils.deriveColor( getBackground( c, selected ),
+			selected ? selectedBackground : background );
+		if( bg.getAlpha() < 255 ) {
+			// fill background with default color before filling with non-opaque background
+			g.setColor( selected ? selectedBackground : background );
+			paintBackground( c, g );
+		}
+		g.setColor( bg );
 		paintBackground( c, g );
 
 		// paint checkmark

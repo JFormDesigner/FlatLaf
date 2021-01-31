@@ -89,6 +89,7 @@ Button.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBackground         #53585a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 Button.hoverBorderColor        #466d94    javax.swing.plaf.ColorUIResource [UI]
 Button.iconTextGap             4
+Button.innerFocusWidth         1
 Button.light                   #313131    javax.swing.plaf.ColorUIResource [UI]
 Button.margin                  2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
 Button.minimumWidth            72
@@ -126,6 +127,7 @@ CheckBox.icon.checkmarkColor   #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledBorderColor #545556    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledCheckmarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.focusedBackground #4d466d94    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.focusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.hoverBackground  #4a5152    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 CheckBox.icon.hoverBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
@@ -326,6 +328,7 @@ HeaderUI                       com.formdev.flatlaf.swingx.ui.FlatHeaderUI
 
 HelpButton.background          #43494a    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.borderColor         #6b6b6b    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.borderWidth         1
 HelpButton.disabledBackground  #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledBorderColor #545556    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledQuestionMarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
@@ -333,6 +336,7 @@ HelpButton.focusedBorderColor  #466d94    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.hoverBackground     #4a5152    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 HelpButton.hoverBorderColor    #466d94    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
+HelpButton.innerFocusWidth     1
 HelpButton.pressedBackground   #52595a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
 HelpButton.questionMarkColor   #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
 
