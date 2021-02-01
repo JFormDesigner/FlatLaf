@@ -87,18 +87,17 @@ Buzz
 - [FlatLaf announcement on Reddit](https://www.reddit.com/r/java/comments/dl0hu3/flatlaf_flat_look_and_feel/)
 
 
-Projects using FlatLaf
-----------------------
+Applications using FlatLaf
+--------------------------
 
 - [Apache NetBeans](https://netbeans.apache.org/) 11.3 - IDE for Java, PHP, HTML
   and much more
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
-- ![New](images/new.svg) [OWASP ZAP](https://www.zaproxy.org/) 2.10 - the worlds
-  most widely used web app scanner
-- ![New](images/new.svg) [JOSM](https://josm.openstreetmap.de/) - an extensible
-  editor for [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf
-  JOSM plugin)
+- [OWASP ZAP](https://www.zaproxy.org/) 2.10 - the worlds most widely used web
+  app scanner
+- [JOSM](https://josm.openstreetmap.de/) - an extensible editor for
+  [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf JOSM plugin)
 - [jAlbum](https://jalbum.net/) 21 (commercial) - creates photo album websites
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (commercial)
 - [Total Validator](https://www.totalvalidator.com/) 15 (commercial) - checks
@@ -116,8 +115,8 @@ Projects using FlatLaf
   gamepad mapping software
 - [SpringRemote](https://github.com/HaleyWang/SpringRemote) - remote Linux SSH
   connections manager
-- ![New](images/new.svg) [jEnTunnel](https://github.com/ggrandes/jentunnel) -
-  manage SSH Tunnels made easy
+- [jEnTunnel](https://github.com/ggrandes/jentunnel) - manage SSH Tunnels made
+  easy
 - [mendelson AS2](https://sourceforge.net/projects/mec-as2/),
   [AS4](https://sourceforge.net/projects/mendelson-as4/) and
   [OFTP2](https://sourceforge.net/projects/mendelson-oftp2/) (open-source) and
@@ -128,20 +127,19 @@ Projects using FlatLaf
   computation environment for meteorological community
 - [lsfusion platform](https://github.com/lsfusion/platform) 4 - information
   systems development platform
-- ![New](images/new.svg) [JPass](https://github.com/gaborbata/jpass) - password
-  manager with strong encryption
+- [JPass](https://github.com/gaborbata/jpass) - password manager with strong
+  encryption
 - [Jes - Die Java-EÜR](https://www.jes-eur.de)
 - [Mapton](https://mapton.org/) 2.0
   ([source code](https://github.com/trixon/mapton)) - some kind of map
   application (based on NetBeans platform)
 - [Pseudo Assembler IDE](https://github.com/tomasz-herman/PseudoAssemblerIDE) -
   IDE for Pseudo-Assembler
-- ![New](images/new.svg) [Linotte](https://github.com/cpc6128/LangageLinotte)
-  3.1 - French programming language created to learn programming
-- ![New](images/new.svg) [MEKA](https://github.com/Waikato/meka) 1.9.3 -
-  multi-label classifiers and evaluation procedures using the Weka machine
-  learning framework
-- ![New](images/new.svg) [Shutter Encoder](https://www.shutterencoder.com/) 14.2
+- [Linotte](https://github.com/cpc6128/LangageLinotte) 3.1 - French programming
+  language created to learn programming
+- [MEKA](https://github.com/Waikato/meka) 1.9.3 - multi-label classifiers and
+  evaluation procedures using the Weka machine learning framework
+- [Shutter Encoder](https://www.shutterencoder.com/) 14.2
   ([source code](https://github.com/paulpacifico/shutter-encoder)) -
   professional video converter and compression tool (screenshots show **old**
   look)
@@ -149,15 +147,12 @@ Projects using FlatLaf
   sound files in time or frequency domain
 - [RemoteLight](https://github.com/Drumber/RemoteLight) - multifunctional LED
   control software
-- ![New](images/new.svg)
-  [ThunderFocus](https://github.com/marcocipriani01/ThunderFocus) -
+- [ThunderFocus](https://github.com/marcocipriani01/ThunderFocus) -
   Arduino-based telescope focuser
-- ![New](images/new.svg)
-  [Novel-Grabber](https://github.com/Flameish/Novel-Grabber) - download novels
+- [Novel-Grabber](https://github.com/Flameish/Novel-Grabber) - download novels
   from any webnovel and lightnovel site
-- ![New](images/new.svg) [lectureStudio](https://www.lecturestudio.org/)
-  4.3.1060 - digitize your lectures with ease
-- ![New](images/new.svg)
-  [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
+- [lectureStudio](https://www.lecturestudio.org/) 4.3.1060 - digitize your
+  lectures with ease
+- [Android Tool](https://github.com/fast-geek/Android-Tool) - makes popular adb
   and fastboot commands easier to use
 - and more...
