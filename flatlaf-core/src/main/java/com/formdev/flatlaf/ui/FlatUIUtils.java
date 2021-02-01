@@ -345,7 +345,7 @@ public class FlatUIUtils
 		float innerArc = arc - (lineWidth * 2);
 
 		// reduce outer arc slightly for small arcs to make the curve slightly wider
-		if( arc > 0 && arc < UIScale.scale( 10 ) )
+		if( focusWidth > 0 && arc > 0 && arc < UIScale.scale( 10 ) )
 			outerArc -= UIScale.scale( 2f );
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );

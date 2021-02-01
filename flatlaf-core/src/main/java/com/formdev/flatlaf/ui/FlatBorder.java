@@ -97,9 +97,11 @@ public class FlatBorder
 					? (outlineColor != null ? innerOutlineWidth : getInnerFocusWidth( c ))
 					: 0;
 
-				g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
-				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height,
-					focusWidth, borderWidth + scale( innerWidth ), arc );
+				if( focusWidth > 0 || innerWidth > 0 ) {
+					g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
+					FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height,
+						focusWidth, borderWidth + scale( innerWidth ), arc );
+				}
 			}
 
 			// paint border
