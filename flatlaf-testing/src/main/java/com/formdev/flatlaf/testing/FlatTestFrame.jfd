@@ -47,6 +47,8 @@ new FormModel {
 							addElement( "3" )
 							addElement( "3.5" )
 							addElement( "4" )
+							addElement( "5" )
+							addElement( "6" )
 						}
 						"maximumRowCount": 20
 						auxiliary() {
