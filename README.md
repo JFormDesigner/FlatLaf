@@ -94,8 +94,22 @@ Applications using FlatLaf
   and much more
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
+- ![New](images/new.svg) [DbVisualizer](https://www.dbvis.com/) 12.0
+  (**commercial**) - the universal database tool for developers, analysts and
+  DBAs
+- ![New](images/new.svg) [MagicPlot](https://magicplot.com/) 3.0
+  (**commercial**) - Software for nonlinear fitting, plotting and data analysis
+- ![New](images/new.svg)
+  [Thermo-Calc](https://thermocalc.com/products/thermo-calc/) 2021a
+  (**commercial**) - Thermodynamics and Properties Software
 - [OWASP ZAP](https://www.zaproxy.org/) 2.10 - the worlds most widely used web
   app scanner
+- ![New](images/new.svg)
+  [Burp Suite Professional and Community Edition](https://portswigger.net/burp/pro)
+  2020.11.2 (**commercial**) - the leading software for web security testing
+- ![New](images/new.svg)
+  [BurpCustomizer](https://github.com/CoreyD97/BurpCustomizer) - adds more
+  FlatLaf themes to Burp Suite
 - [JOSM](https://josm.openstreetmap.de/) - an extensible editor for
   [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf JOSM plugin)
 - [jAlbum](https://jalbum.net/) 21 (**commercial**) - creates photo album
@@ -124,6 +138,8 @@ Applications using FlatLaf
   [mendelson AS2](https://mendelson-e-c.com/as2/),
   [AS4](https://mendelson-e-c.com/as4/) and
   [OFTP2](https://mendelson-e-c.com/oftp2) (**commercial**)
+- ![New](images/new.svg) [IGMAS+](https://www.gfz-potsdam.de/igmas) -
+  Interactive Gravity and Magnetic Application System
 - [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2 - GIS and scientific
   computation environment for meteorological community
 - [lsfusion platform](https://github.com/lsfusion/platform) 4 - information
