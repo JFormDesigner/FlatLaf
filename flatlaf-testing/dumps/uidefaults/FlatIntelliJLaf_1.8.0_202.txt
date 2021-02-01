@@ -10,7 +10,7 @@
 - Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 + Button.border                  [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 
-- Button.default.background      #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+- Button.default.background      #ffffff    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.background      #4d8ac9    javax.swing.plaf.ColorUIResource [UI]
 
 + Button.default.boldText        true
@@ -18,23 +18,27 @@
 - Button.default.borderColor     #4f9ee3    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.borderColor     #3d75b2    javax.swing.plaf.ColorUIResource [UI]
 
+- Button.default.borderWidth     2
++ Button.default.borderWidth     1
+
+- Button.default.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
 - Button.default.focusedBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.focusedBorderColor #a9c9f5    javax.swing.plaf.ColorUIResource [UI]
 
 - Button.default.foreground      #000000    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.foreground      #ffffff    javax.swing.plaf.ColorUIResource [UI]
 
-- Button.default.hoverBackground #d6ebf8    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
+- Button.default.hoverBackground #f7f7f7    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
 + Button.default.hoverBackground #4182c5    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
 
 - Button.default.hoverBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
 + Button.default.hoverBorderColor #a9c9f5    javax.swing.plaf.ColorUIResource [UI]
 
-- Button.default.pressedBackground #b8dbf2    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
+- Button.default.pressedBackground #e6e6e6    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 + Button.default.pressedBackground #3571ae    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 
-- Button.innerFocusWidth         1
-+ Button.innerFocusWidth         0
+- Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
 - CheckBox.icon.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
@@ -60,11 +64,10 @@
 - FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 + FormattedTextField.border      [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 
+- HelpButton.focusedBackground   #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+
 - HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
 + HelpButton.icon                [lazy] 26,26    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
-
-- HelpButton.innerFocusWidth     1
-+ HelpButton.innerFocusWidth     0
 
 - JXDatePicker.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
 + JXDatePicker.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]

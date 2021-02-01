@@ -6,11 +6,8 @@ FlatLaf Change Log
 #### New features and improvements
 
 - Button:
-  - In "Flat Light" theme, changed styles of focused and default buttons to
-    avoid confusion with all other themes. Focused buttons now have a white
-    background (was light blue) and a slightly wider border. The default button
-    now has a light blue background (was white) and a thin border. In all other
-    themes the default button also has colored background.
+  - In "Flat Light" theme, use a slightly thinner border for focused buttons
+    (because they already have light blue background).
   - In "Flat Dark" theme, use slightly wider border for focused buttons.
 - CheckBox and RadioButton: In "Flat Dark" theme, use blueish background for
   focused components.

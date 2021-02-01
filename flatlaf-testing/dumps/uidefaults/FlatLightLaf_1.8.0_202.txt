@@ -67,20 +67,22 @@ Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 Button.borderColor             #c4c4c4    javax.swing.plaf.ColorUIResource [UI]
 Button.borderWidth             1
 Button.darkShadow              #9e9e9e    javax.swing.plaf.ColorUIResource [UI]
-Button.default.background      #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
+Button.default.background      #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Button.default.borderColor     #4f9ee3    javax.swing.plaf.ColorUIResource [UI]
-Button.default.borderWidth     1
+Button.default.borderWidth     2
 Button.default.focusColor      #97c3f3    javax.swing.plaf.ColorUIResource [UI]
+Button.default.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 Button.default.focusedBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
 Button.default.foreground      #000000    javax.swing.plaf.ColorUIResource [UI]
-Button.default.hoverBackground #d6ebf8    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
+Button.default.hoverBackground #f7f7f7    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
 Button.default.hoverBorderColor #87afda    javax.swing.plaf.ColorUIResource [UI]
-Button.default.pressedBackground #b8dbf2    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
+Button.default.pressedBackground #e6e6e6    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 Button.defaultButtonFollowsFocus false
 Button.disabledBackground      #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledBorderColor     #cfcfcf    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledSelectedBackground #dedede    com.formdev.flatlaf.util.DerivedColor [UI]    darken(13% autoInverse)
 Button.disabledText            #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
+Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedBorderColor      #87afda    javax.swing.plaf.ColorUIResource [UI]
 Button.font                    [active] $defaultFont [UI]
 Button.foreground              #000000    javax.swing.plaf.ColorUIResource [UI]
@@ -88,7 +90,7 @@ Button.highlight               #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBackground         #f7f7f7    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
 Button.hoverBorderColor        #87afda    javax.swing.plaf.ColorUIResource [UI]
 Button.iconTextGap             4
-Button.innerFocusWidth         1
+Button.innerFocusWidth         0
 Button.light                   #e3e3e3    javax.swing.plaf.ColorUIResource [UI]
 Button.margin                  2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
 Button.minimumWidth            72
@@ -334,11 +336,12 @@ HelpButton.borderWidth         1
 HelpButton.disabledBackground  #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledBorderColor #bdbdbd    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledQuestionMarkColor #ababab    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.focusedBackground   #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.focusedBorderColor  #7b9fc7    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.hoverBackground     #f7f7f7    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
 HelpButton.hoverBorderColor    #7b9fc7    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
-HelpButton.innerFocusWidth     1
+HelpButton.innerFocusWidth     0
 HelpButton.pressedBackground   #e6e6e6    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 HelpButton.questionMarkColor   #4f9ee3    javax.swing.plaf.ColorUIResource [UI]
 
