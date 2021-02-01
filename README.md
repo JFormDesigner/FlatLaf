@@ -98,10 +98,11 @@ Applications using FlatLaf
   app scanner
 - [JOSM](https://josm.openstreetmap.de/) - an extensible editor for
   [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf JOSM plugin)
-- [jAlbum](https://jalbum.net/) 21 (commercial) - creates photo album websites
-- [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (commercial)
-- [Total Validator](https://www.totalvalidator.com/) 15 (commercial) - checks
-  your website
+- [jAlbum](https://jalbum.net/) 21 (**commercial**) - creates photo album
+  websites
+- [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (**commercial**)
+- [Total Validator](https://www.totalvalidator.com/) 15 (**commercial**) -
+  checks your website
 - [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
 - [MegaMek](https://github.com/MegaMek/megamek) v0.47.4 and
   [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5 - a turn-based sci-fi board
@@ -122,7 +123,7 @@ Applications using FlatLaf
   [OFTP2](https://sourceforge.net/projects/mendelson-oftp2/) (open-source) and
   [mendelson AS2](https://mendelson-e-c.com/as2/),
   [AS4](https://mendelson-e-c.com/as4/) and
-  [OFTP2](https://mendelson-e-c.com/oftp2) (commercial)
+  [OFTP2](https://mendelson-e-c.com/oftp2) (**commercial**)
 - [MeteoInfo](https://github.com/meteoinfo/MeteoInfo) 2.2 - GIS and scientific
   computation environment for meteorological community
 - [lsfusion platform](https://github.com/lsfusion/platform) 4 - information
