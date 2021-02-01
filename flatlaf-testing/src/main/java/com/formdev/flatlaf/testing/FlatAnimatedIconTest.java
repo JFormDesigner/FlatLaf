@@ -196,10 +196,10 @@ public class FlatAnimatedIconTest
 			g.fillRoundRect( x, y, width, height, height, height );
 
 			int thumbSize = height - 4;
-			int thumbX = x + 2 + Math.round( (width - 4 - thumbSize) * animatedValue );
+			float thumbX = x + 2 + ((width - 4 - thumbSize) * animatedValue);
 			int thumbY = y + 2;
 			g.setColor( Color.white );
-			g.fillOval( thumbX, thumbY, thumbSize, thumbSize );
+			((Graphics2D)g).fill( new Ellipse2D.Float( thumbX, thumbY, thumbSize, thumbSize ) );
 		}
 
 		@Override
