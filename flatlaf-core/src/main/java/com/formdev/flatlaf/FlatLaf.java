@@ -50,9 +50,9 @@ import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.UIResource;
@@ -94,6 +94,10 @@ public abstract class FlatLaf
 	private Boolean oldFrameWindowDecorated;
 	private Boolean oldDialogWindowDecorated;
 
+	/**
+	 * Sets the application look and feel to the given LaF
+	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
+	 */
 	public static boolean install( LookAndFeel newLookAndFeel ) {
 		try {
 			UIManager.setLookAndFeel( newLookAndFeel );
@@ -102,6 +106,16 @@ public abstract class FlatLaf
 			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
 			return false;
 		}
+	}
+
+	/**
+	 * Adds the given look and feel to the set of available look and feels.
+	 * <p>
+	 * Useful if your application uses {@link UIManager#getInstalledLookAndFeels()}
+	 * to query available LaFs and display them to the user in a combobox.
+	 */
+	public static void installLafInfo( String lafName, Class<? extends LookAndFeel> lafClass ) {
+		UIManager.installLookAndFeel( new UIManager.LookAndFeelInfo( lafName, lafClass.getName() ) );
 	}
 
 	/**
@@ -453,8 +467,13 @@ public abstract class FlatLaf
 		} else if( SystemInfo.isMacOS ) {
 			String fontName;
 			if( SystemInfo.isMacOS_10_15_Catalina_orLater ) {
-				// use Helvetica Neue font
-				fontName = "Helvetica Neue";
+				if (SystemInfo.isJetBrainsJVM_11_orLater) {
+					// See https://youtrack.jetbrains.com/issue/JBR-1915
+					fontName = ".AppleSystemUIFont";
+				} else {
+					// use Helvetica Neue font
+					fontName = "Helvetica Neue";
+				}
 			} else if( SystemInfo.isMacOS_10_11_ElCapitan_orLater ) {
 				// use San Francisco Text font
 				fontName = ".SF NS Text";
@@ -527,7 +546,12 @@ public abstract class FlatLaf
 	}
 
 	private void putAATextInfo( UIDefaults defaults ) {
-		if( SystemInfo.isJava_9_orLater ) {
+		if ( SystemInfo.isMacOS && SystemInfo.isJetBrainsJVM ) {
+			// The awt.font.desktophints property suggests sub-pixel anti-aliasing
+			// which renders text with too much weight on macOS in the JetBrains JRE.
+			// Use greyscale anti-aliasing instead.
+			defaults.put( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON );
+		} else if( SystemInfo.isJava_9_orLater ) {
 			Object desktopHints = Toolkit.getDefaultToolkit().getDesktopProperty( DESKTOPFONTHINTS );
 			if( desktopHints instanceof Map ) {
 				@SuppressWarnings( "unchecked" )

@@ -51,7 +51,8 @@
       "hoverBackground": "#453e57",
       "hoverBorderColor": "#453E57",
       "pressedBackground": "#49415c",
-      "pressedBorderColor": "#49415C"
+      "pressedBorderColor": "#49415C",
+      "focusedBorderColor": "#476fcc"
     },
 
     "Button": {
@@ -94,7 +95,8 @@
       "matchForeground": "#ED94FF",
       "matchSelectionForeground": "#ED94FF",
       "selectionInactiveBackground": "#44405c",
-      "nonFocusedMask": "#00000033"
+      "nonFocusedMask": "#00000033",
+      "selectionBackground": "#623380"
     },
 
     "Component": {
@@ -123,7 +125,7 @@
 
     "DragAndDrop": {
       "areaForeground": "#D0D0D9",
-      "areaBackground": "#702F91",
+      "areaBackground": "#5d476680",
       "areaBorderColor": "#343142"
     },
 
@@ -166,7 +168,7 @@
       "visitedForeground": "#7094FF"
     },
 
-    "MenuBar.borderColor": "##1a1721",
+    "MenuBar.borderColor": "#1a1721",
 
     "NavBar.borderColor": "#1a1721",
 
@@ -280,6 +282,8 @@
       "endBackground": "#cca929"
     },
 
+    "SearchOption.selectedBackground": "#424885",
+
     "SpeedSearch": {
       "foreground": "#D0D0D9",
       "borderColor": "#69418c",
@@ -304,7 +308,10 @@
       "bottomSeparatorColor": "#282430"
     },
 
-    "Table.stripeColor": "#323242",
+    "Table": {
+      "stripeColor": "#323242",
+      "hoverBackground": "#00000028"
+    },
 
     "TextArea": {
       "background": "#3A384D",
@@ -327,7 +334,9 @@
 
     "ToolTip": {
       "background": "#463f57",
-      "Actions.background": "#323245"
+      "Actions.background": "#323245",
+      "infoForeground": "#8985a1",
+      "shortcutForeground": "#8985A1"
     },
 
     "ToolWindow": {
@@ -363,14 +372,17 @@
     "VersionControl": {
       "Log.Commit": {
         "currentBranchBackground": "#202340",
-        "unmatchedForeground": "#6d6a80"
+        "unmatchedForeground": "#6d6a80",
+        "hoveredBackground": "#000000B9"
       },
       "FileHistory.Commit.selectedBranchBackground": "#202340"
     },
 
     "WelcomeScreen": {
       "Projects.selectionInactiveBackground": "#713a91",
-      "separatorColor": "#1a1721"
+      "separatorColor": "#1a1721",
+      "Details.background": "#26262E",
+      "Projects.actions.background": "#343445"
     }
   },
 

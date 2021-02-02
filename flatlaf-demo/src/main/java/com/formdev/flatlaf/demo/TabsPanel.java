@@ -25,6 +25,8 @@ import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
+import net.miginfocom.layout.AC;
+import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.swing.*;
 
 /**
@@ -1009,6 +1011,29 @@ class TabsPanel
 		tabsPopupPolicyButtonGroup.add(popupAsNeededButton);
 		tabsPopupPolicyButtonGroup.add(popupNeverButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		if( FlatLafDemo.screenshotsMode ) {
+			Component[] components = new Component[] {
+				tabPlacementLabel, tabPlacementToolBar, tabPlacementTabbedPane,
+				iconBottomTabbedPane, iconTrailingTabbedPane,
+				alignLeadingTabbedPane, alignTrailingTabbedPane, alignFillTabbedPane,
+				panel3, separator2, panel4,
+			};
+
+			for( Component c : components )
+				c.setVisible( false );
+
+			// remove gaps
+			MigLayout layout1 = (MigLayout) panel1.getLayout();
+			AC rowSpecs1 = ConstraintParser.parseRowConstraints( (String) layout1.getRowConstraints() );
+			rowSpecs1.gap( "0!", 0, 1 );
+			layout1.setRowConstraints( rowSpecs1 );
+
+			MigLayout layout2 = (MigLayout) panel2.getLayout();
+			AC rowSpecs2 = ConstraintParser.parseRowConstraints( (String) layout2.getRowConstraints() );
+			rowSpecs2.gap( "0!", 2, 4, 8 );
+			layout2.setRowConstraints( rowSpecs2 );
+		}
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

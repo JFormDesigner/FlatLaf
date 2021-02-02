@@ -24,7 +24,6 @@ import javax.swing.border.*;
 import com.formdev.flatlaf.testing.*;
 import com.formdev.flatlaf.testing.FlatTestFrame;
 import com.jgoodies.forms.layout.*;
-import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.popup.JidePopup;
 import com.jidesoft.swing.*;
 import net.miginfocom.swing.*;
@@ -38,19 +37,14 @@ public class FlatJideOssTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatJideOssTest" );
-			LookAndFeelFactory.installJideExtension();
 			frame.showFrame( FlatJideOssTest::new );
-
-			UIManager.addPropertyChangeListener( e -> {
-				if( "lookAndFeel".equals( e.getPropertyName() ) ) {
-					LookAndFeelFactory.installJideExtension();
-				}
-			} );
 		} );
 	}
 
 	FlatJideOssTest() {
 		initComponents();
+
+		tristateCheckBox1Changed();
 	}
 
 	private void tabScrollChanged() {
@@ -90,18 +84,37 @@ public class FlatJideOssTest
 		}
 	}
 
-	private void showJidePopupButtonActionPerformed( ActionEvent e ) {
+	private void showJidePopup( ActionEvent e ) {
 		Component invoker = (Component) e.getSource();
 
 		JPanel panel = new JPanel( new MigLayout() );
 		panel.add( new JLabel( "Name:") );
 		panel.add( new JTextField( 20 ) );
 
-		JidePopup popupMenu = new JidePopup();
-		popupMenu.add( panel );
-		popupMenu.setDetached( true );
-		popupMenu.setOwner( invoker );
-		popupMenu.showPopup();
+		JidePopup popup = new JidePopup();
+		popup.add( panel );
+		popup.setDetached( true );
+		popup.setOwner( invoker );
+		popup.showPopup();
+	}
+
+	private void showJidePopupMenu( ActionEvent e ) {
+		Component invoker = (Component) e.getSource();
+
+		JidePopupMenu popupMenu = new JidePopupMenu();
+		for( int i = 1; i <= 100; i++ )
+			popupMenu.add( "menu item " + i );
+		popupMenu.show( invoker, 0, invoker.getHeight() );
+	}
+
+	private void tristateCheckBox1Changed() {
+		String text = null;
+		switch( tristateCheckBox1.getState() ) {
+			case TristateCheckBox.STATE_UNSELECTED:	text = "UNSELECTED"; break;
+			case TristateCheckBox.STATE_SELECTED:	text = "SELECTED"; break;
+			case TristateCheckBox.STATE_MIXED:		text = "MIXED"; break;
+		}
+		triStateLabel1.setText( text );
 	}
 
 	private void initComponents() {
@@ -135,6 +148,11 @@ public class FlatJideOssTest
 		JPanel panel10 = new JPanel();
 		JLabel jidePopupLabel = new JLabel();
 		JButton showJidePopupButton = new JButton();
+		JLabel jidePopupMenuLabel = new JLabel();
+		JButton showJidePopupMenuButton = new JButton();
+		JLabel label9 = new JLabel();
+		tristateCheckBox1 = new TristateCheckBox();
+		triStateLabel1 = new JLabel();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -303,8 +321,11 @@ public class FlatJideOssTest
 					"insets 3 0 3 3,hidemode 3",
 					// columns
 					"[fill]" +
+					"[fill]" +
 					"[fill]",
 					// rows
+					"[]" +
+					"[]" +
 					"[]"));
 
 				//---- jidePopupLabel ----
@@ -313,8 +334,31 @@ public class FlatJideOssTest
 
 				//---- showJidePopupButton ----
 				showJidePopupButton.setText("show JidePopup");
-				showJidePopupButton.addActionListener(e -> showJidePopupButtonActionPerformed(e));
+				showJidePopupButton.addActionListener(e -> showJidePopup(e));
 				panel10.add(showJidePopupButton, "cell 1 0");
+
+				//---- jidePopupMenuLabel ----
+				jidePopupMenuLabel.setText("JidePopupMenu:");
+				panel10.add(jidePopupMenuLabel, "cell 0 1");
+
+				//---- showJidePopupMenuButton ----
+				showJidePopupMenuButton.setText("show JidePopupMenu");
+				showJidePopupMenuButton.addActionListener(e -> showJidePopupMenu(e));
+				panel10.add(showJidePopupMenuButton, "cell 1 1");
+
+				//---- label9 ----
+				label9.setText("TristateCheckBox:");
+				panel10.add(label9, "cell 0 2");
+
+				//---- tristateCheckBox1 ----
+				tristateCheckBox1.setText("three states");
+				tristateCheckBox1.addActionListener(e -> tristateCheckBox1Changed());
+				panel10.add(tristateCheckBox1, "cell 1 2");
+
+				//---- triStateLabel1 ----
+				triStateLabel1.setText("text");
+				triStateLabel1.setEnabled(false);
+				panel10.add(triStateLabel1, "cell 2 2");
 			}
 			panel9.add(panel10, cc.xy(1, 9));
 		}
@@ -330,5 +374,7 @@ public class FlatJideOssTest
 	private JCheckBox moreTabsCheckBox;
 	private JCheckBox tabScrollCheckBox;
 	private JCheckBox hasFullBorderCheckBox;
+	private TristateCheckBox tristateCheckBox1;
+	private JLabel triStateLabel1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

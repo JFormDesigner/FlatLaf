@@ -58,18 +58,6 @@ public class FlatArrowButton
 	private boolean pressed;
 
 	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
-		Color hoverForeground, Color hoverBackground )
-	{
-		this( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, null );
-	}
-
-	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
-		Color hoverForeground, Color hoverBackground, Color pressedBackground )
-	{
-		this( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, null, pressedBackground );
-	}
-
-	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
 		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
@@ -85,7 +73,9 @@ public class FlatArrowButton
 		setOpaque( false );
 		setBorder( null );
 
-		if( hoverForeground != null || hoverBackground != null || pressedBackground != null ) {
+		if( hoverForeground != null || hoverBackground != null ||
+			pressedForeground != null || pressedBackground != null )
+		{
 			addMouseListener( new MouseAdapter() {
 				@Override
 				public void mouseEntered( MouseEvent e ) {
@@ -151,7 +141,7 @@ public class FlatArrowButton
 	}
 
 	protected Color deriveForeground( Color foreground ) {
-		return foreground;
+		return FlatUIUtils.deriveColor( foreground, this.foreground );
 	}
 
 	@Override
@@ -166,8 +156,7 @@ public class FlatArrowButton
 
 	@Override
 	public void paint( Graphics g ) {
-		Graphics2D g2 = (Graphics2D)g;
-		FlatUIUtils.setRenderingHints( g2 );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 		// paint hover or pressed background
 		if( isEnabled() ) {
@@ -179,7 +168,7 @@ public class FlatArrowButton
 
 			if( background != null ) {
 				g.setColor( deriveBackground( background ) );
-				paintBackground( g2 );
+				paintBackground( (Graphics2D) g );
 			}
 		}
 
@@ -191,7 +180,9 @@ public class FlatArrowButton
 					? hoverForeground
 					: foreground))
 			: disabledForeground ) );
-		paintArrow( g2 );
+		paintArrow( (Graphics2D) g );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 
 	protected void paintBackground( Graphics2D g ) {

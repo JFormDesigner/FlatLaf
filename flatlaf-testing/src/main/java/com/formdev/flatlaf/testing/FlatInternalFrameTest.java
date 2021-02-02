@@ -19,7 +19,7 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import java.beans.PropertyVetoException;
 import javax.swing.*;
-import com.formdev.flatlaf.extras.TriStateCheckBox;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -63,9 +63,9 @@ public class FlatInternalFrameTest
 			maximizableCheckBox.isSelected(),
 			iconifiableCheckBox.isSelected() );
 
-		if( iconCheckBox.getState() == TriStateCheckBox.State.SELECTED )
+		if( iconCheckBox.getState() == FlatTriStateCheckBox.State.SELECTED )
 			internalFrame.setFrameIcon( new FlatFileViewFloppyDriveIcon() );
-		else if( iconCheckBox.getState() == TriStateCheckBox.State.UNSELECTED )
+		else if( iconCheckBox.getState() == FlatTriStateCheckBox.State.UNSELECTED )
 			internalFrame.setFrameIcon( null );
 
 		if( menuBarCheckBox.isSelected() ) {
@@ -115,7 +115,7 @@ public class FlatInternalFrameTest
 		closableCheckBox = new JCheckBox();
 		iconifiableCheckBox = new JCheckBox();
 		maximizableCheckBox = new JCheckBox();
-		iconCheckBox = new TriStateCheckBox();
+		iconCheckBox = new FlatTriStateCheckBox();
 		menuBarCheckBox = new JCheckBox();
 		titleLabel = new JLabel();
 		titleField = new JTextField();
@@ -207,7 +207,7 @@ public class FlatInternalFrameTest
 	private JCheckBox closableCheckBox;
 	private JCheckBox iconifiableCheckBox;
 	private JCheckBox maximizableCheckBox;
-	private TriStateCheckBox iconCheckBox;
+	private FlatTriStateCheckBox iconCheckBox;
 	private JCheckBox menuBarCheckBox;
 	private JLabel titleLabel;
 	private JTextField titleField;

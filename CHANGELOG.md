@@ -1,11 +1,169 @@
 FlatLaf Change Log
 ==================
 
-## 0.45-SNAPSHOT
+## 1.0-rc2
 
 #### New features and improvements
 
+- Button:
+  - In "Flat Light" theme, use a slightly thinner border for focused buttons
+    (because they already have light blue background).
+  - In "Flat Dark" theme, use slightly wider border for focused buttons.
+- CheckBox and RadioButton: In "Flat Dark" theme, use blueish background for
+  focused components.
+- Tree: Support disabling wide selection per component. (set client property
+  `JTree.wideSelection` to `false`). (PR #245)
+- Tree: Support disabling selection painting per component. Then the tree cell
+  renderer is responsible for selection painting. (set client property
+  `JTree.paintSelection` to `false`).
+- JIDE Common Layer: Support `JidePopupMenu`.
+
+#### Fixed bugs
+
+- Button: Fixed behavior of <kbd>Enter</kbd> key on focused button on Windows
+  and Linux, which now clicks the focused button (instead of the default
+  button).
+  - On Windows, this is a regression in 1.0-rc1.
+  - On macOS, the <kbd>Enter</kbd> key always clicks the default button, which
+    is the platform behavior.
+  - On all platforms, the default button can be always clicked with
+    <kbd>Ctrl+Enter</kbd> keys, even if another button is focused.
+- CheckBox and RadioButton: Fill component background as soon as background
+  color is different to default background color, even if component is not
+  opaque (which is the default). This paints selection if using the component as
+  cell renderer a Table, Tree or List.
+- TextComponents: Border of focused non-editable text components had wrong
+  color.
+- Custom window decorations: Fixed top window border in dark themes when running
+  in JetBrains Runtime.
+
+
+## 1.0-rc1
+
+#### New features and improvements
+
+- Button: Disabled `Button.defaultButtonFollowsFocus` on Windows (as on other
+  platforms). If you like to keep the old behavior in your application, use:
+  `if(SystemInfo.isWindows)
+  UIManager.put("Button.defaultButtonFollowsFocus",true);`.
+- ComboBox, Spinner and SplitPaneDivider: Added pressed feedback to arrow
+  buttons.
+- Slider: Support per component custom thumb and track colors via
+  `JSlider.setForeground(Color)` and `JSlider.setBackground(Color)`.
+- Slider: Improved thumb hover and pressed colors.
+- TextComponent: Clip placeholder text if it does not fit into visible area. (PR
+  #229)
+- macOS: Improved font rendering on macOS when using JetBrains Runtime. (PRs
+  #237, #239 and #241)
+- Extras: UI defaults inspector:
+  - Support embedding UI defaults inspector panel into any window. See
+    `FlatUIDefaultsInspector.createInspectorPanel()`.
+  - Copy selected keys and values into clipboard via context menu.
+  - Support wildcard matching in filter (`*` matches any number of characters,
+    `?` matches a single character, `^` beginning of line, `$` end of line).
+- IntelliJ Themes:
+  - Added hover and pressed feedback to Button, CheckBox, RadioButton and
+    ToggleButton. (issue #176)
+  - Added "Material Theme UI Lite / Moonlight" theme.
+  - Updated "Dracula", "Gradianto" and "Material Theme UI Lite" themes.
+
+#### Fixed bugs
+
+- Button and ToggleButton: Threat Unicode surrogate character pair as single
+  character and make button square. (issue #234)
+- Button and ToggleButton: ToolBar buttons now respect explicitly set background
+  color. If no background color is set, then the button background is not
+  painted anymore. (issue #191)
+- ToggleButton: Tab style buttons (client property `JButton.buttonType` is
+  `tab`) now respect explicitly set background color.
+- TabbedPane: Fixed `IndexOutOfBoundsException` when using tooltip text on close
+  buttons and closing last/rightmost tab. (issue #235)
+- TabbedPane: Fixed scrolling tabs with touchpads and high-resolution mouse
+  wheels.
+- Extras: Added missing export of package
+  `com.formdev.flatlaf.extras.components` to Java 9 module descriptor.
+- JIDE Common Layer:
+  - Invoke `LookAndFeelFactory.installJideExtension()` when using FlatLaf UI
+    delegates. (issue #230)
+  - RangeSlider: Fixed slider focused colors in IntelliJ themes.
+- IntelliJ Themes:
+  - Fixed menu item check colors.
+  - Fixed `MenuItem.underlineSelectionColor`.
+  - Fixed List, Tree and Table `selectionInactiveForeground` in light Arc
+    themes.
+  - Fixed List and Table background colors in Material UI Lite themes.
+  - Fixed menu accelerator colors in Monocai theme. (issue #243)
+
+
+## 0.46
+
+#### New features and improvements
+
+- Slider and JIDE RangeSlider: Clicking on track now immediately moves the thumb
+  to mouse location and starts dragging the thumb. Use `UIManager.put(
+  "Slider.scrollOnTrackClick", true )` to enable old behavior that scrolls the
+  thumb when clicking on track.
+- Slider: Snap to ticks is now done while dragging the thumb. Use
+  `UIManager.put( "Slider.snapToTicksOnReleased", true )` to enable old behavior
+  that snaps to ticks on mouse released.
+- Extras: Added standard component extension classes that provides easy access
+  to FlatLaf specific client properties (see package
+  `com.formdev.flatlaf.extras.components`).
+- Extras: Renamed tri-state check box class from
+  `com.formdev.flatlaf.extras.TriStateCheckBox` to
+  `com.formdev.flatlaf.extras.components.FlatTriStateCheckBox`. Also
+  changed/improved API and added javadoc.
+- Extras: Renamed SVG utility class from `com.formdev.flatlaf.extras.SVGUtils`
+  to `com.formdev.flatlaf.extras.FlatSVGUtils`.
+- IntelliJ Themes: Added flag whether a theme is dark to
+  `FlatAllIJThemes.INFOS`. (issue #221)
+- JIDE Common Layer: Support `TristateCheckBox`.
+
+
+#### Fixed bugs
+
+- Slider: Fixed painting of colored track if `JSlider.inverted` is `true`.
+- Table and TableHeader: Fixed missing right vertical grid line if using table
+  as row header in scroll pane. (issues #152 and #46)
+- TableHeader: Fixed position of column separators in right-to-left component
+  orientation.
+- ToolTip: Fixed drop shadow for wide tooltips on Windows and Java 9+. (issue
+  #224)
+- SwingX: Fixed striping background highlighting color (e.g. alternating table
+  rows) in dark themes.
+- Fixed: If text antialiasing is disabled (in OS system settings or via
+  `-Dawt.useSystemAAFontSettings=off`), then some components still did use
+  antialiasing to render text (not-editable ComboBox, ProgressBar, Slider,
+  TabbedPane and multiline ToolTip). (issue #227)
+
+
+## 0.45
+
+#### New features and improvements
+
+- Slider: New design, added hover and pressed feedback and improved customizing.
+  (PR #214)
 - JIDE Common Layer: Support `RangeSlider`. (PR #209)
+- IntelliJ Themes:
+  - Added "Gradianto Nature Green" theme.
+  - Updated "Arc Dark", "Cyan", "Dark purple", "Gradianto", "Gray", "Gruvbox"
+    and "One Dark" themes.
+- TabbedPane: Support hiding tab area if it contains only one tab. (set client
+  property `JTabbedPane.hideTabAreaWithOneTab` to `true`)
+- MenuBar: Support different underline menu selection style UI defaults for
+  `MenuBar` and `MenuItem`. (PR #217; issue #216)
+
+
+#### Fixed bugs
+
+- Table: Do not paint last vertical grid line if auto-resize mode is not off.
+  (issue #46)
+- Table: Fixed unstable grid line thickness when scaled on HiDPI screens. (issue
+  #152)
+- TabbedPane: No longer add (internal) tab close button component as child to
+  `JTabbedPane`. (issue #219)
+- Custom window decorations: Title bar was not hidden if window is in
+  full-screen mode. (issue #212)
 
 
 ## 0.44

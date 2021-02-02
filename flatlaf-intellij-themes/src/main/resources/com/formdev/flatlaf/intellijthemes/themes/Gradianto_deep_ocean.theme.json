@@ -18,7 +18,6 @@
       "disabledForeground": "#a3a3a3",
       "disabledBackground": "#222f44",
       "inactiveBackground": "#325180",
-
       "errorForeground": "#b5b5b5",
 
       "disabledText": "#adadad",
@@ -45,6 +44,11 @@
       "color": "#2b3858cc",
       "ContrastBorderColor": "#0e1624"
     },
+    "TabbedPane": {
+      "focusColor": "#25334b",
+      "hoverColor": "#374c70",
+      "underlineColor": "#3D7EC0"
+    },
     "Button": {
       "startBackground": "#4a75a2",
       "endBackground": "#4a75a2",
@@ -62,6 +66,40 @@
     },
     "CompletionPopup": {
       "matchForeground": "#568AF2"
+    },
+    "ScrollBar" : {
+      "hoverThumbBorderColor" : "#12182994",
+      "background" : "#161f3294",
+      "hoverThumbColor": "#497486ff",
+      "hoverTrackColor": "#222a40b2",
+      "thumb": "#3c557cff",
+      "thumbBorderColor": "#12182994",
+      "thumbColor": "#3c557cff",
+      "thumbDarkShadow": "#0c0f1a94",
+      "thumbHighlight": "#3b496bb2",
+      "thumbShadow": "#161a2b94",
+      "track": "#181e2db2",
+      "Transparent": {
+        "thumbColor": "#3c557cff",
+        "hoverThumbBorderColor" : "#12182994",
+        "hoverThumbColor": "#497486ff",
+        "hoverTrackColor": "#222a40b2",
+        "thumbBorderColor": "#12182994"
+      },
+      "Mac" : {
+        "Transparent": {
+          "thumbColor": "#3c557cff",
+          "hoverThumbBorderColor" : "#12182994",
+          "hoverThumbColor": "#497486ff",
+          "hoverTrackColor": "#222a40b2",
+          "thumbBorderColor": "#12182994"
+        },
+        "hoverThumbBorderColor" : "#12182994",
+        "hoverThumbColor": "#497486ff",
+        "hoverTrackColor": "#222a40b2",
+        "thumbBorderColor": "#12182994",
+        "thumbColor": "#3c557cff"
+      }
     },
 
 

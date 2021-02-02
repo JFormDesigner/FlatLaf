@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-val releaseVersion = "0.44"
-val developmentVersion = "0.45-SNAPSHOT"
+val releaseVersion = "1.0-rc2"
+val developmentVersion = "1.0-rc3-SNAPSHOT"
 
 version = if( java.lang.Boolean.getBoolean( "release" ) ) releaseVersion else developmentVersion
 
@@ -48,7 +48,7 @@ extra["bintray.dryRun"] = false
 
 // if true, uploaded artifacts are visible to all
 // if false, only visible to owner when logged into bintray
-extra["bintray.publish"] = true
+extra["bintray.publish"] = false
 
 
 allprojects {
@@ -64,7 +64,7 @@ allprojects {
 			// manifest for all created JARs
 			manifest.attributes(mapOf(
 				"Implementation-Vendor" to "FormDev Software GmbH",
-				"Implementation-Copyright" to "Copyright (C) ${java.time.LocalDate.now().year} FormDev Software GmbH. All rights reserved.",
+				"Implementation-Copyright" to "Copyright (C) 2019-${java.time.LocalDate.now().year} FormDev Software GmbH. All rights reserved.",
 				"Implementation-Version" to project.version))
 
 			// add META-INF/LICENSE to all created JARs

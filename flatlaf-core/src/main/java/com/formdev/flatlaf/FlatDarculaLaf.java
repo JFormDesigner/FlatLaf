@@ -18,21 +18,28 @@ package com.formdev.flatlaf;
 
 /**
  * A Flat LaF that has a dark color scheme and looks like Darcula LaF.
- *
- * The UI defaults are loaded from FlatDarculaLaf.properties, FlatDarkLaf.properties and FlatLaf.properties
+ * <p>
+ * The UI defaults are loaded from {@code FlatDarculaLaf.properties},
+ * {@code FlatDarkLaf.properties} and {@code FlatLaf.properties}.
  *
  * @author Karl Tauber
  */
 public class FlatDarculaLaf
 	extends FlatDarkLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "FlatLaf Darcula";
+
+	public static boolean install() {
 		return install( new FlatDarculaLaf() );
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatDarculaLaf.class );
 	}
 
 	@Override
 	public String getName() {
-		return "FlatLaf Darcula";
+		return NAME;
 	}
 
 	@Override

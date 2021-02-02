@@ -25,10 +25,6 @@ Otherwise download `flatlaf-intellij-themes-<version>.jar` here:
 
 [![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-intellij-themes/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-intellij-themes/_latestVersion)
 
-You also need `flatlaf-<version>.jar`, which you can download here:
-
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
-
 
 How to use?
 -----------
@@ -60,6 +56,7 @@ Name | Class
 [Gradianto Dark Fuchsia](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoDarkFuchsiaIJTheme`
 [Gradianto Deep Ocean](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoDeepOceanIJTheme`
 [Gradianto Midnight Blue](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoMidnightBlueIJTheme`
+[Gradianto Nature Green](https://github.com/thvardhan/Gradianto) | `com.formdev.flatlaf.intellijthemes.FlatGradiantoNatureGreenIJTheme`
 [Gray](https://github.com/OlyaB/GreyTheme) | `com.formdev.flatlaf.intellijthemes.FlatGrayIJTheme`
 [Gruvbox Dark Hard](https://github.com/Vincent-P/gruvbox-intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkHardIJTheme`
 [Gruvbox Dark Medium](https://github.com/Vincent-P/gruvbox-intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkMediumIJTheme`
@@ -104,6 +101,8 @@ Name | Class
 [Material Palenight Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialPalenightContrastIJTheme`
 [Monokai Pro (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProIJTheme`
 [Monokai Pro Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMonokaiProContrastIJTheme`
+[Moonlight (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightIJTheme`
+[Moonlight Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightContrastIJTheme`
 [Night Owl (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlIJTheme`
 [Night Owl Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatNightOwlContrastIJTheme`
 [Solarized Dark (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatSolarizedDarkIJTheme`

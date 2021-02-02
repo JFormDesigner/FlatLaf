@@ -18,21 +18,28 @@ package com.formdev.flatlaf;
 
 /**
  * A Flat LaF that has a light color scheme and looks like IntelliJ LaF.
- *
- * The UI defaults are loaded from FlatIntelliJLaf.properties, FlatLightLaf.properties and FlatLaf.properties
+ * <p>
+ * The UI defaults are loaded from {@code FlatIntelliJLaf.properties},
+ * {@code FlatLightLaf.properties} and {@code FlatLaf.properties}.
  *
  * @author Karl Tauber
  */
 public class FlatIntelliJLaf
 	extends FlatLightLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "FlatLaf IntelliJ";
+
+	public static boolean install() {
 		return install( new FlatIntelliJLaf() );
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatIntelliJLaf.class );
 	}
 
 	@Override
 	public String getName() {
-		return "FlatLaf IntelliJ";
+		return NAME;
 	}
 
 	@Override

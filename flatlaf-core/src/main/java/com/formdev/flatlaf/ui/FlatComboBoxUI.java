@@ -34,6 +34,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
@@ -97,6 +99,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ComboBox.buttonArrowColor			Color
  * @uiDefault ComboBox.buttonDisabledArrowColor	Color
  * @uiDefault ComboBox.buttonHoverArrowColor	Color
+ * @uiDefault ComboBox.buttonPressedArrowColor	Color
  *
  * @author Karl Tauber
  */
@@ -120,9 +123,11 @@ public class FlatComboBoxUI
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
 	protected Color buttonHoverArrowColor;
+	protected Color buttonPressedArrowColor;
 
 	private MouseListener hoverListener;
 	protected boolean hover;
+	protected boolean pressed;
 
 	private WeakReference<Component> lastRendererComponent;
 
@@ -134,13 +139,36 @@ public class FlatComboBoxUI
 	protected void installListeners() {
 		super.installListeners();
 
-		hoverListener = new FlatUIUtils.HoverListener( null, h -> {
-			if( !comboBox.isEditable() ) {
-				hover = h;
-				if( arrowButton != null )
+		hoverListener = new MouseAdapter() {
+			@Override
+			public void mouseEntered( MouseEvent e ) {
+				hover = true;
+				repaintArrowButton();
+			}
+
+			@Override
+			public void mouseExited( MouseEvent e ) {
+				hover = false;
+				repaintArrowButton();
+			}
+
+			@Override
+			public void mousePressed( MouseEvent e ) {
+				pressed = true;
+				repaintArrowButton();
+			}
+
+			@Override
+			public void mouseReleased( MouseEvent e ) {
+				pressed = false;
+				repaintArrowButton();
+			}
+
+			private void repaintArrowButton() {
+				if( arrowButton != null && !comboBox.isEditable() )
 					arrowButton.repaint();
 			}
-		} );
+		};
 		comboBox.addMouseListener( hoverListener );
 	}
 
@@ -175,6 +203,7 @@ public class FlatComboBoxUI
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
 		buttonHoverArrowColor = UIManager.getColor( "ComboBox.buttonHoverArrowColor" );
+		buttonPressedArrowColor = UIManager.getColor( "ComboBox.buttonPressedArrowColor" );
 
 		// set maximumRowCount
 		int maximumRowCount = UIManager.getInt( "ComboBox.maximumRowCount" );
@@ -203,6 +232,7 @@ public class FlatComboBoxUI
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
+		buttonPressedArrowColor = null;
 
 		MigLayoutVisualPadding.uninstall( comboBox );
 	}
@@ -352,7 +382,7 @@ public class FlatComboBoxUI
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;
-		FlatUIUtils.setRenderingHints( g2 );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g2 );
 
 		int width = c.getWidth();
 		int height = c.getHeight();
@@ -385,6 +415,9 @@ public class FlatComboBoxUI
 			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
 			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2)) );
 		}
+
+		// avoid that the "current value" renderer is invoked with enabled antialiasing
+		FlatUIUtils.resetRenderingHints( g2, oldRenderingHints );
 
 		paint( g, c );
 	}
@@ -513,18 +546,25 @@ public class FlatComboBoxUI
 		extends FlatArrowButton
 	{
 		protected FlatComboBoxButton() {
-			this( SwingConstants.SOUTH, arrowType, buttonArrowColor, buttonDisabledArrowColor, buttonHoverArrowColor, null, null );
+			this( SwingConstants.SOUTH, arrowType, buttonArrowColor, buttonDisabledArrowColor,
+				buttonHoverArrowColor, null, buttonPressedArrowColor, null );
 		}
 
 		protected FlatComboBoxButton( int direction, String type, Color foreground, Color disabledForeground,
-			Color hoverForeground, Color hoverBackground, Color pressedBackground )
+			Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 		{
-			super( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, pressedBackground );
+			super( direction, type, foreground, disabledForeground,
+				hoverForeground, hoverBackground, pressedForeground, pressedBackground );
 		}
 
 		@Override
 		protected boolean isHover() {
 			return super.isHover() || (!comboBox.isEditable() ? hover : false);
+		}
+
+		@Override
+		protected boolean isPressed() {
+			return super.isPressed() || (!comboBox.isEditable() ? pressed : false);
 		}
 	}
 

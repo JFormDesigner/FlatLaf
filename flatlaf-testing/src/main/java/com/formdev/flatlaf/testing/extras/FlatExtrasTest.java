@@ -18,6 +18,7 @@ package com.formdev.flatlaf.testing.extras;
 
 import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
+import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.testing.*;
 import net.miginfocom.swing.*;
 
@@ -37,8 +38,8 @@ public class FlatExtrasTest
 	public FlatExtrasTest() {
 		initComponents();
 
-		triStateLabel1.setText( triStateCheckBox1.getState().toString() );
-		triStateLabel2.setText( triStateCheckBox2.getState().toString() );
+		triStateCheckBox1Changed();
+		triStateCheckBox2Changed();
 
 		addSVGIcon( "actions/copy.svg" );
 		addSVGIcon( "actions/colors.svg" );
@@ -89,6 +90,10 @@ public class FlatExtrasTest
 		triStateLabel2.setText( triStateCheckBox2.getState().toString() );
 	}
 
+	private void triStateCheckBox3Changed() {
+		triStateLabel3.setText( triStateCheckBox3.getState().toString() );
+	}
+
 	private void disabledChanged() {
 		boolean enabled = !disabledCheckBox.isSelected();
 
@@ -117,9 +122,11 @@ public class FlatExtrasTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		label1 = new JLabel();
-		triStateCheckBox1 = new TriStateCheckBox();
+		triStateCheckBox1 = new FlatTriStateCheckBox();
 		triStateLabel1 = new JLabel();
-		triStateCheckBox2 = new TriStateCheckBox();
+		triStateCheckBox3 = new FlatTriStateCheckBox();
+		triStateLabel3 = new JLabel();
+		triStateCheckBox2 = new FlatTriStateCheckBox();
 		triStateLabel2 = new JLabel();
 		label2 = new JLabel();
 		svgIconsPanel = new JPanel();
@@ -165,20 +172,31 @@ public class FlatExtrasTest
 		triStateLabel1.setEnabled(false);
 		add(triStateLabel1, "cell 2 0,gapx 30");
 
+		//---- triStateCheckBox3 ----
+		triStateCheckBox3.setText("alt state cycle order");
+		triStateCheckBox3.setAltStateCycleOrder(true);
+		triStateCheckBox3.addActionListener(e -> triStateCheckBox3Changed());
+		add(triStateCheckBox3, "cell 1 1");
+
+		//---- triStateLabel3 ----
+		triStateLabel3.setText("text");
+		triStateLabel3.setEnabled(false);
+		add(triStateLabel3, "cell 2 1,gapx 30");
+
 		//---- triStateCheckBox2 ----
 		triStateCheckBox2.setText("third state disabled");
-		triStateCheckBox2.setThirdStateEnabled(false);
+		triStateCheckBox2.setAllowIndeterminate(false);
 		triStateCheckBox2.addActionListener(e -> triStateCheckBox2Changed());
-		add(triStateCheckBox2, "cell 1 1");
+		add(triStateCheckBox2, "cell 1 2");
 
 		//---- triStateLabel2 ----
 		triStateLabel2.setText("text");
 		triStateLabel2.setEnabled(false);
-		add(triStateLabel2, "cell 2 1,gapx 30");
+		add(triStateLabel2, "cell 2 2,gapx 30");
 
 		//---- label2 ----
 		label2.setText("SVG Icons:");
-		add(label2, "cell 0 2");
+		add(label2, "cell 0 3");
 
 		//======== svgIconsPanel ========
 		{
@@ -189,58 +207,60 @@ public class FlatExtrasTest
 				// rows
 				"[grow,center]"));
 		}
-		add(svgIconsPanel, "cell 1 2 2 1");
+		add(svgIconsPanel, "cell 1 3 2 1");
 
 		//---- label3 ----
 		label3.setText("The icons may change colors when switching to another theme.");
-		add(label3, "cell 1 3 2 1");
+		add(label3, "cell 1 4 2 1");
 
 		//---- label4 ----
 		label4.setText("Disabled SVG Icons:");
-		add(label4, "cell 0 4");
+		add(label4, "cell 0 5");
 
 		//---- disabledLabel ----
 		disabledLabel.setText("label");
-		add(disabledLabel, "cell 1 4 2 1");
+		add(disabledLabel, "cell 1 5 2 1");
 
 		//---- disabledButton ----
 		disabledButton.setText("button");
-		add(disabledButton, "cell 1 4 2 1");
-		add(disabledTabbedPane, "cell 1 4 2 1");
+		add(disabledButton, "cell 1 5 2 1");
+		add(disabledTabbedPane, "cell 1 5 2 1");
 
 		//---- label5 ----
 		label5.setText("only setIcon()");
 		label5.setEnabled(false);
-		add(label5, "cell 1 4 2 1,gapx 20");
+		add(label5, "cell 1 5 2 1,gapx 20");
 
 		//---- disabledCheckBox ----
 		disabledCheckBox.setText("disabled");
 		disabledCheckBox.setSelected(true);
 		disabledCheckBox.setMnemonic('D');
 		disabledCheckBox.addActionListener(e -> disabledChanged());
-		add(disabledCheckBox, "cell 0 5,alignx left,growx 0");
+		add(disabledCheckBox, "cell 0 6,alignx left,growx 0");
 
 		//---- disabledLabel2 ----
 		disabledLabel2.setText("label");
-		add(disabledLabel2, "cell 1 5 2 1");
+		add(disabledLabel2, "cell 1 6 2 1");
 
 		//---- disabledButton2 ----
 		disabledButton2.setText("button");
-		add(disabledButton2, "cell 1 5 2 1");
-		add(disabledTabbedPane2, "cell 1 5 2 1");
+		add(disabledButton2, "cell 1 6 2 1");
+		add(disabledTabbedPane2, "cell 1 6 2 1");
 
 		//---- label6 ----
 		label6.setText("setIcon() and setDisabledIcon()");
 		label6.setEnabled(false);
-		add(label6, "cell 1 5 2 1,gapx 20");
+		add(label6, "cell 1 6 2 1,gapx 20");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JLabel label1;
-	private TriStateCheckBox triStateCheckBox1;
+	private FlatTriStateCheckBox triStateCheckBox1;
 	private JLabel triStateLabel1;
-	private TriStateCheckBox triStateCheckBox2;
+	private FlatTriStateCheckBox triStateCheckBox3;
+	private JLabel triStateLabel3;
+	private FlatTriStateCheckBox triStateCheckBox2;
 	private JLabel triStateLabel2;
 	private JLabel label2;
 	private JPanel svgIconsPanel;

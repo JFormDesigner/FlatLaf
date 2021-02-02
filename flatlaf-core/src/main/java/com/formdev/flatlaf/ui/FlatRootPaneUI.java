@@ -285,6 +285,7 @@ public class FlatRootPaneUI
 		@Override
 		public void layoutContainer( Container parent ) {
 			JRootPane rootPane = (JRootPane) parent;
+			boolean isFullScreen = FlatUIUtils.isFullScreen( rootPane );
 
 			Insets insets = rootPane.getInsets();
 			int x = insets.left;
@@ -298,7 +299,7 @@ public class FlatRootPaneUI
 				rootPane.getGlassPane().setBounds( x, y, width, height );
 
 			int nextY = 0;
-			if( titlePane != null ) {
+			if( !isFullScreen && titlePane != null ) {
 				Dimension prefSize = titlePane.getPreferredSize();
 				titlePane.setBounds( 0, 0, width, prefSize.height );
 				nextY += prefSize.height;
@@ -306,7 +307,7 @@ public class FlatRootPaneUI
 
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			if( menuBar != null && menuBar.isVisible() ) {
-				if( titlePane != null && titlePane.isMenuBarEmbedded() ) {
+				if( !isFullScreen && titlePane != null && titlePane.isMenuBarEmbedded() ) {
 					titlePane.validate();
 					menuBar.setBounds( titlePane.getMenuBarBounds() );
 				} else {
@@ -356,7 +357,7 @@ public class FlatRootPaneUI
 
 		@Override
 		public Insets getBorderInsets( Component c, Insets insets ) {
-			if( isWindowMaximized( c ) ) {
+			if( isWindowMaximized( c ) || FlatUIUtils.isFullScreen( c ) ) {
 				// hide border if window is maximized
 				insets.top = insets.left = insets.bottom = insets.right = 0;
 				return insets;
@@ -366,7 +367,7 @@ public class FlatRootPaneUI
 
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			if( isWindowMaximized( c ) )
+			if( isWindowMaximized( c ) || FlatUIUtils.isFullScreen( c ) )
 				return;
 
 			Container parent = c.getParent();

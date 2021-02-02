@@ -70,6 +70,7 @@ public class FlatDatePickerUI
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
 	protected Color buttonHoverArrowColor;
+	protected Color buttonPressedArrowColor;
 
 	private JButton popupButton;
 
@@ -94,6 +95,7 @@ public class FlatDatePickerUI
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
 		buttonHoverArrowColor = UIManager.getColor( "ComboBox.buttonHoverArrowColor" );
+		buttonPressedArrowColor = UIManager.getColor( "ComboBox.buttonPressedArrowColor" );
 
 		super.installUI( c );
 
@@ -140,6 +142,7 @@ public class FlatDatePickerUI
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
+		buttonPressedArrowColor = null;
 
 		if( datePicker.getBorder() instanceof UIResource )
 			datePicker.setBorder( null );
@@ -160,7 +163,7 @@ public class FlatDatePickerUI
 	@Override
 	protected JButton createPopupButton() {
 		popupButton = new FlatArrowButton( SwingConstants.SOUTH, arrowType, buttonArrowColor,
-			buttonDisabledArrowColor, buttonHoverArrowColor, null );
+			buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
 		popupButton.setName( "popupButton" );
 		return popupButton;
 	}
@@ -218,7 +221,7 @@ public class FlatDatePickerUI
 			FlatUIUtils.paintParentBackground( g, c );
 
 		Graphics2D g2 = (Graphics2D) g;
-		FlatUIUtils.setRenderingHints( g2 );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g2 );
 
 		int width = c.getWidth();
 		int height = c.getHeight();
@@ -252,6 +255,8 @@ public class FlatDatePickerUI
 		g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
 
 		paint( g, c );
+
+		FlatUIUtils.resetRenderingHints( g2, oldRenderingHints );
 	}
 
 	//---- class DefaultEditor ------------------------------------------------

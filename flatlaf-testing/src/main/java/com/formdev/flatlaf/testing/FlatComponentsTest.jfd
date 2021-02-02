@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -53,19 +53,19 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button17"
 				"text": "Sq"
-				"$client.JButton.buttonType": "square"
-				"$client.JComponent.minimumWidth": 0
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
+				"minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button22"
 				"text": "Rd"
-				"$client.JButton.buttonType": "roundRect"
-				"$client.JComponent.minimumWidth": 0
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
+				"minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
@@ -78,21 +78,21 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button18"
 				"text": "Sq"
-				"$client.JButton.buttonType": "square"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				"enabled": false
-				"$client.JComponent.minimumWidth": 0
+				"minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button23"
 				"text": "Rd"
-				"$client.JButton.buttonType": "roundRect"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				"enabled": false
-				"$client.JComponent.minimumWidth": 0
+				"minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1"
 			} )
@@ -104,17 +104,17 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button3"
 				"text": "Help"
-				"$client.JButton.buttonType": "help"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType help
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 				name: "button12"
 				"text": "Help"
-				"$client.JButton.buttonType": "help"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType help
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"
@@ -123,32 +123,38 @@ new FormModel {
 				name: "button13"
 				"icon": &SwingIcon0 new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button14"
 				"text": "..."
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button15"
 				"text": "…"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button16"
 				"text": "#"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 5 1 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button24"
+				"text": "A"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button20"
 				"text": "Empty border"
 				"border": &EmptyBorder0 new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 1"
+				"value": "cell 5 1 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toggleButtonLabel"
@@ -159,20 +165,21 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton1"
 				"text": "Enabled"
+				"toolTipText": "LOOOOOOOOOOOOOONG TEXT"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton9"
 				"text": "Sq"
-				"$client.JButton.buttonType": "square"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton19"
 				"text": "Rd"
-				"$client.JButton.buttonType": "roundRect"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
 			} )
@@ -183,18 +190,18 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton10"
 				"text": "Sq"
-				"$client.JButton.buttonType": "square"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton20"
 				"text": "Rd"
-				"$client.JButton.buttonType": "roundRect"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
@@ -219,35 +226,42 @@ new FormModel {
 				"icon": #SwingIcon0
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2"
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton12"
 				"text": "..."
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2"
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton13"
 				"text": "…"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2"
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton14"
 				"text": "#"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2"
+				"value": "cell 5 2 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton21"
+				"text": "A"
+				"selected": true
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton18"
 				"text": "Empty border"
 				"border": #EmptyBorder0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 2"
+				"value": "cell 5 2 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "checkBoxLabel"
@@ -285,18 +299,18 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 3"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton5"
 				"text": "Tab"
-				"$client.JButton.buttonType": "tab"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType tab
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 3"
 			} )
-			add( new FormComponent( "javax.swing.JToggleButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 				name: "toggleButton8"
 				"text": "Tab"
-				"$client.JButton.buttonType": "tab"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType tab
 				"enabled": false
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -466,10 +480,10 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 6,growx"
 			} )
-			add( new FormComponent( "javax.swing.JComboBox" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatComboBox" ) {
 				name: "comboBox7"
 				"editable": true
-				"$client.JTextField.placeholderText": "Placeholder"
+				"placeholderText": "Placeholder"
 				auxiliary() {
 					"JavaCodeGenerator.typeParameters": "String"
 				}
@@ -522,9 +536,9 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 7,growx"
 			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
 				name: "textField6"
-				"$client.JTextField.placeholderText": "Placeholder"
+				"placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 7,growx"
 			} )
@@ -569,9 +583,9 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 8,growx"
 			} )
-			add( new FormComponent( "javax.swing.JFormattedTextField" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatFormattedTextField" ) {
 				name: "formattedTextField5"
-				"$client.JTextField.placeholderText": "Placeholder"
+				"placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 8,growx"
 			} )
@@ -616,9 +630,9 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 9,growx"
 			} )
-			add( new FormComponent( "javax.swing.JPasswordField" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatPasswordField" ) {
 				name: "passwordField5"
-				"$client.JTextField.placeholderText": "Placeholder"
+				"placeholderText": "Placeholder"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 9,growx"
 			} )
@@ -850,16 +864,16 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13 1 6,growy"
 			} )
-			add( new FormComponent( "javax.swing.JScrollBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatScrollBar" ) {
 				name: "scrollBar7"
-				"$client.JScrollBar.showButtons": true
+				"showButtons": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13 1 6,growy"
 			} )
-			add( new FormComponent( "javax.swing.JScrollBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatScrollBar" ) {
 				name: "scrollBar8"
 				"enabled": false
-				"$client.JScrollBar.showButtons": true
+				"showButtons": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13 1 6,growy"
 			} )
@@ -873,6 +887,9 @@ new FormModel {
 				name: "slider2"
 				"orientation": 1
 				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13 1 6,growy"
 			} )
@@ -884,6 +901,9 @@ new FormModel {
 				"paintLabels": true
 				"orientation": 1
 				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 13 1 6,growy"
 			} )
@@ -892,7 +912,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 13,grow"
 			} )
-			add( new FormComponent( "javax.swing.JProgressBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar3"
 				"orientation": 1
 				"value": 60
@@ -902,7 +922,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 13 1 6,growy"
 			} )
-			add( new FormComponent( "javax.swing.JProgressBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar4"
 				"orientation": 1
 				"value": 60
@@ -913,7 +933,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 13 1 6,growy"
 			} )
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar2"
 				"orientation": 1
 				add( new FormComponent( "javax.swing.JButton" ) {
@@ -963,18 +983,11 @@ new FormModel {
 			} ) {
 				name: "panel5"
 				"border": new javax.swing.border.TitledBorder( "Control" )
-				add( new FormComponent( "javax.swing.JComboBox" ) {
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatTestEnumComboBox" ) {
 					name: "buttonTypeComboBox"
-					"model": new javax.swing.DefaultComboBoxModel {
-						selectedItem: "-"
-						addElement( "-" )
-						addElement( "square" )
-						addElement( "roundRect" )
-						addElement( "tab" )
-						addElement( "help" )
-					}
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.typeParameters": "ButtonType"
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -1098,18 +1111,18 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 15,growx"
 			} )
-			add( new FormComponent( "javax.swing.JScrollBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatScrollBar" ) {
 				name: "scrollBar5"
 				"orientation": 0
-				"$client.JScrollBar.showButtons": true
+				"showButtons": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 16,growx"
 			} )
-			add( new FormComponent( "javax.swing.JScrollBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatScrollBar" ) {
 				name: "scrollBar6"
 				"orientation": 0
 				"enabled": false
-				"$client.JScrollBar.showButtons": true
+				"showButtons": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 17,growx"
 			} )
@@ -1140,15 +1153,176 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider1"
 				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 19 3 1,aligny top,grow 100 0"
+				"value": "cell 1 19 3 1,growx"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider6"
 				"enabled": false
 				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 19 3 1,aligny top,growy 0"
+				"value": "cell 1 19 3 1"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$columnConstraints": "[]"
+				"$rowConstraints": "[][][][]"
+				"$layoutConstraints": "ltr,insets 0,hidemode 3"
+			} ) {
+				name: "panel8"
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$columnConstraints": "[]"
+					"$rowConstraints": "[]0[]0[]0[]"
+					"$layoutConstraints": "ltr,insets 0,hidemode 3"
+				} ) {
+					name: "panel6"
+					"border": new javax.swing.border.TitledBorder( "JSlider Control" )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "sliderPaintTrackCheckBox"
+						"text": "track"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintTrackChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
+						name: "sliderPaintTicksCheckBox"
+						"text": "ticks"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintTicksChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
+						name: "sliderPaintLabelsCheckBox"
+						"text": "labels"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderPaintLabelsChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "sliderInvertedCheckBox"
+						"text": "inverted"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderInvertedChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "sliderSnapToTicksCheckBox"
+						"text": "snap to ticks"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderSnapToTicksChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "majorTickSpacingSpinner"
+						"model": new javax.swing.SpinnerNumberModel( 50, 0, 100, 5 )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "majorThickSpacingChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "sliderBorderCheckBox"
+						"text": "border"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderBorderChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "minorTickSpacingSpinner"
+						"model": new javax.swing.SpinnerNumberModel( 10, 0, 100, 5 )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "minorThickSpacingChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 3"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "sliderValueLabel"
+						"text": "slider value"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 3"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0 1 2,grow"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$columnConstraints": "[][fill]"
+					"$rowConstraints": "[]0[]"
+					"$layoutConstraints": "ltr,insets 0,hidemode 3"
+				} ) {
+					name: "panel7"
+					"border": new javax.swing.border.TitledBorder( "JProgressBar Control" )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "indeterminateCheckBox"
+						"text": "indeterminate"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "indeterminateProgress", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "squareCheckBox"
+						"text": "square"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "squareChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "largeHeightCheckBox"
+						"text": "large height"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "largeHeightChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1,aligny top,growy 0"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2 1 2,grow"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 4 19 1 4"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "sliderLabel2"
+				"text": "baseline"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 20,alignx right,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider3"
@@ -1162,7 +1336,7 @@ new FormModel {
 				}
 				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "changeProgress", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 20 3 1,aligny top,grow 100 0"
+				"value": "cell 1 20 3 1,growx"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider5"
@@ -1172,8 +1346,11 @@ new FormModel {
 				"paintLabels": true
 				"enabled": false
 				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 20 3 1,aligny top,growy 0"
+				"value": "cell 1 20 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "progressBarLabel"
@@ -1181,7 +1358,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 21"
 			} )
-			add( new FormComponent( "javax.swing.JProgressBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar1"
 				"value": 60
 				auxiliary() {
@@ -1190,7 +1367,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 21 3 1,growx"
 			} )
-			add( new FormComponent( "javax.swing.JProgressBar" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar2"
 				"stringPainted": true
 				"value": 60
@@ -1199,16 +1376,6 @@ new FormModel {
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 21 3 1,growx"
-			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
-				name: "indeterminateCheckBox"
-				"text": "indeterminate"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "indeterminateProgress", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 21"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toolTipLabel"
@@ -1234,7 +1401,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 23"
 			} )
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar1"
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button4"
@@ -1289,29 +1456,29 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 23 5 1"
 			} )
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar3"
-				add( new FormComponent( "javax.swing.JButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button26"
 					"icon": #SwingIcon1
-					"$client.JButton.buttonType": "square"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button27"
 					"icon": #SwingIcon2
-					"$client.JButton.buttonType": "square"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 					name: "toggleButton23"
 					"icon": #SwingIcon4
 					"selected": true
-					"$client.JButton.buttonType": "square"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 					name: "toggleButton24"
 					"icon": #SwingIcon5
 					"selected": true
-					"$client.JButton.buttonType": "square"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType square
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 23 5 1"
@@ -1322,29 +1489,29 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 23 5 1"
 			} )
-			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.testing.FlatComponentsTest$TestToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar4"
-				add( new FormComponent( "javax.swing.JButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button28"
 					"icon": #SwingIcon1
-					"$client.JButton.buttonType": "roundRect"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatButton" ) {
 					name: "button29"
 					"icon": #SwingIcon2
-					"$client.JButton.buttonType": "roundRect"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 					name: "toggleButton25"
 					"icon": #SwingIcon4
 					"selected": true
-					"$client.JButton.buttonType": "roundRect"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
-				add( new FormComponent( "javax.swing.JToggleButton" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
 					name: "toggleButton26"
 					"icon": #SwingIcon5
 					"selected": true
-					"$client.JButton.buttonType": "roundRect"
+					"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType roundRect
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 23 5 1"

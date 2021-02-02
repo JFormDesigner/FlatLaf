@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatLightOwlIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "Light Owl (Material)";
+
+	public static boolean install() {
 		try {
 			return install( new FlatLightOwlIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatLightOwlIJTheme.class );
 	}
 
 	public FlatLightOwlIJTheme() {
@@ -43,6 +49,6 @@ public class FlatLightOwlIJTheme
 
 	@Override
 	public String getName() {
-		return "Light Owl (Material)";
+		return NAME;
 	}
 }

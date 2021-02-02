@@ -17,18 +17,23 @@
 package com.formdev.flatlaf.extras;
 
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -44,6 +49,7 @@ import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.ui.FlatMarginBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
@@ -66,12 +72,12 @@ public class FlatUIDefaultsInspector
 {
 	private static final int KEY_MODIFIERS_MASK = InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.META_DOWN_MASK;
 
-	private static FlatUIDefaultsInspector inspector;
+	private static JFrame inspectorFrame;
 
-	private final String title;
 	private final PropertyChangeListener lafListener = this::lafChanged;
 	private final PropertyChangeListener lafDefaultsListener = this::lafDefaultsChanged;
 	private boolean refreshPending;
+	private Properties derivedColorKeys;
 
 	/**
 	 * Installs a key listener into the application that allows enabling and disabling
@@ -92,26 +98,30 @@ public class FlatUIDefaultsInspector
 	}
 
 	public static void show() {
-		if( inspector != null ) {
-			inspector.ensureOnScreen();
-			inspector.frame.toFront();
+		if( inspectorFrame != null ) {
+			ensureOnScreen( inspectorFrame );
+			inspectorFrame.toFront();
 			return;
 		}
 
-		inspector = new FlatUIDefaultsInspector();
-		inspector.frame.setVisible( true );
+		inspectorFrame = new FlatUIDefaultsInspector().createFrame();
+		inspectorFrame.setVisible( true );
 	}
 
 	public static void hide() {
-		if( inspector != null )
-			inspector.frame.dispose();
+		if( inspectorFrame != null )
+			inspectorFrame.dispose();
+	}
+
+	/**
+	 * Creates a UI defaults inspector panel that can be embedded into any window.
+	 */
+	public static JComponent createInspectorPanel() {
+		return new FlatUIDefaultsInspector().panel;
 	}
 
 	private FlatUIDefaultsInspector() {
 		initComponents();
-
-		title = frame.getTitle();
-		updateWindowTitle();
 
 		panel.setBorder( new ScaledEmptyBorder( 10, 10, 10, 10 ) );
 		filterPanel.setBorder( new ScaledEmptyBorder( 0, 0, 10, 0 ) );
@@ -143,23 +153,20 @@ public class FlatUIDefaultsInspector
 		table.getRowSorter().setSortKeys( Collections.singletonList(
 			new RowSorter.SortKey( 0, SortOrder.ASCENDING ) ) );
 
-		// restore window bounds
-		Preferences prefs = getPrefs();
-		int x = prefs.getInt( "x", -1 );
-		int y = prefs.getInt( "y", -1 );
-		int width = prefs.getInt( "width", UIScale.scale( 600 ) );
-		int height = prefs.getInt( "height", UIScale.scale( 800 ) );
-		frame.setSize( width, height );
-		if( x != -1 && y != -1 ) {
-			frame.setLocation( x, y );
-			ensureOnScreen();
-		} else
-			frame.setLocationRelativeTo( null );
-
 		// restore column widths
+		Preferences prefs = getPrefs();
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn( 0 ).setPreferredWidth( prefs.getInt( "column1width", 100 ) );
 		columnModel.getColumn( 1 ).setPreferredWidth( prefs.getInt( "column2width", 100 ) );
+
+		PropertyChangeListener columnWidthListener = e -> {
+			if( "width".equals( e.getPropertyName() ) ) {
+				prefs.putInt( "column1width", columnModel.getColumn( 0 ).getWidth() );
+				prefs.putInt( "column2width", columnModel.getColumn( 1 ).getWidth() );
+			}
+		};
+		columnModel.getColumn( 0 ).addPropertyChangeListener( columnWidthListener );
+		columnModel.getColumn( 1 ).addPropertyChangeListener( columnWidthListener );
 
 		// restore filter
 		String filter = prefs.get( "filter", "" );
@@ -169,20 +176,66 @@ public class FlatUIDefaultsInspector
 		if( valueType != null )
 			valueTypeField.setSelectedItem( valueType );
 
-		UIManager.addPropertyChangeListener( lafListener );
-		UIManager.getDefaults().addPropertyChangeListener( lafDefaultsListener );
+		panel.addPropertyChangeListener( "ancestor", e -> {
+			if( e.getNewValue() != null ) {
+				UIManager.addPropertyChangeListener( lafListener );
+				UIManager.getDefaults().addPropertyChangeListener( lafDefaultsListener );
+			} else {
+				UIManager.removePropertyChangeListener( lafListener );
+				UIManager.getDefaults().removePropertyChangeListener( lafDefaultsListener );
+			}
+		} );
 
 		// register F5 key to refresh
-		((JComponent)frame.getContentPane()).registerKeyboardAction(
+		panel.registerKeyboardAction(
 			e -> refresh(),
 			KeyStroke.getKeyStroke( KeyEvent.VK_F5, 0, false ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	private JFrame createFrame() {
+		JFrame frame = new JFrame();
+		frame.setTitle( "UI Defaults Inspector" );
+		frame.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+		frame.addWindowListener( new WindowAdapter() {
+			@Override
+			public void windowClosed( WindowEvent e ) {
+				inspectorFrame = null;
+			}
+			@Override
+			public void windowClosing( WindowEvent e ) {
+				saveWindowBounds( frame );
+			}
+			@Override
+			public void windowDeactivated( WindowEvent e ) {
+				saveWindowBounds( frame );
+			}
+		} );
+
+		updateWindowTitle( frame );
+
+		frame.getContentPane().add( panel, BorderLayout.CENTER );
+
+		// restore window bounds
+		Preferences prefs = getPrefs();
+		int x = prefs.getInt( "x", -1 );
+		int y = prefs.getInt( "y", -1 );
+		int width = prefs.getInt( "width", UIScale.scale( 600 ) );
+		int height = prefs.getInt( "height", UIScale.scale( 800 ) );
+		frame.setSize( width, height );
+		if( x != -1 && y != -1 ) {
+			frame.setLocation( x, y );
+			ensureOnScreen( frame );
+		} else
+			frame.setLocationRelativeTo( null );
 
 		// register ESC key to close frame
 		((JComponent)frame.getContentPane()).registerKeyboardAction(
 			e -> frame.dispose(),
 			KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
+		return frame;
 	}
 
 	private void delegateKey( int keyCode, String actionKey ) {
@@ -202,7 +255,7 @@ public class FlatUIDefaultsInspector
 		} );
 	}
 
-	private void ensureOnScreen() {
+	private static void ensureOnScreen( JFrame frame ) {
 		Rectangle frameBounds = frame.getBounds();
 		boolean onScreen = false;
 		for( GraphicsDevice screen : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices() ) {
@@ -219,12 +272,12 @@ public class FlatUIDefaultsInspector
 			frame.setLocationRelativeTo( null );
 	}
 
-	void lafChanged( PropertyChangeEvent e ) {
+	private void lafChanged( PropertyChangeEvent e ) {
 		if( "lookAndFeel".equals( e.getPropertyName() ) )
 			refresh();
 	}
 
-	void lafDefaultsChanged( PropertyChangeEvent e ) {
+	private void lafDefaultsChanged( PropertyChangeEvent e ) {
 		if( refreshPending )
 			return;
 
@@ -235,11 +288,13 @@ public class FlatUIDefaultsInspector
 		} );
 	}
 
-	void refresh() {
+	private void refresh() {
 		ItemsTableModel model = (ItemsTableModel) table.getModel();
 		model.setItems( getUIDefaultsItems() );
 
-		updateWindowTitle();
+		JFrame frame = (JFrame) SwingUtilities.getAncestorOfClass( JFrame.class, panel );
+		if( frame != null )
+			updateWindowTitle( frame );
 	}
 
 	private Item[] getUIDefaultsItems() {
@@ -249,6 +304,7 @@ public class FlatUIDefaultsInspector
 		Set<Entry<Object, Object>> defaultsSet = defaults.entrySet();
 		ArrayList<Item> items = new ArrayList<>( defaultsSet.size() );
 		HashSet<Object> keys = new HashSet<>( defaultsSet.size() );
+		Color[] pBaseColor = new Color[1];
 		for( Entry<Object,Object> e : defaultsSet ) {
 			Object key = e.getKey();
 
@@ -265,6 +321,13 @@ public class FlatUIDefaultsInspector
 			if( !keys.add( key ) )
 				continue;
 
+			// resolve derived color
+			if( value instanceof DerivedColor ) {
+				Color resolvedColor = resolveDerivedColor( defaults, (String) key, (DerivedColor) value, pBaseColor );
+				if( resolvedColor != value )
+					value = new Color[] { resolvedColor, pBaseColor[0], (Color) value };
+			}
+
 			// check whether key was overridden using UIManager.put(key,value)
 			Object lafValue = null;
 			if( defaults.containsKey( key ) )
@@ -277,31 +340,70 @@ public class FlatUIDefaultsInspector
 		return items.toArray( new Item[items.size()] );
 	}
 
-	private void updateWindowTitle() {
-		frame.setTitle( title + "  -  " + UIManager.getLookAndFeel().getName() );
+	private Color resolveDerivedColor( UIDefaults defaults, String key, Color color, Color[] pBaseColor ) {
+		if( pBaseColor != null )
+			pBaseColor[0] = null;
+
+		if( !(color instanceof DerivedColor) )
+			return color;
+
+		if( derivedColorKeys == null )
+			derivedColorKeys = loadDerivedColorKeys();
+
+		Object baseKey = derivedColorKeys.get( key );
+		if( baseKey == null )
+			return color;
+
+		// this is for keys that may be defined as derived colors, but do not derive them at runtime
+		if( "null".equals( baseKey ) )
+			return color;
+
+		Color baseColor = defaults.getColor( baseKey );
+		if( baseColor == null )
+			return color;
+
+		if( baseColor instanceof DerivedColor )
+			baseColor = resolveDerivedColor( defaults, (String) baseKey, baseColor, null );
+
+		if( pBaseColor != null )
+			pBaseColor[0] = baseColor;
+
+		Color newColor = FlatUIUtils.deriveColor( color, baseColor );
+
+		// creating a new color instance to drop Color.frgbvalue from newColor
+		// and avoid rounding issues/differences
+		return new Color( newColor.getRGB(), true );
 	}
 
-	private void saveWindowBounds() {
+	private Properties loadDerivedColorKeys() {
+		Properties properties = new Properties();
+		try( InputStream in = getClass().getResourceAsStream( "/com/formdev/flatlaf/extras/resources/DerivedColorKeys.properties" ) ) {
+			properties.load( in );
+		} catch( IOException ex ) {
+			ex.printStackTrace();
+		}
+		return properties;
+	}
+
+	private static void updateWindowTitle( JFrame frame ) {
+		String title = frame.getTitle();
+		String sep = "  -  ";
+		int sepIndex = title.indexOf( sep );
+		if( sepIndex >= 0 )
+			title = title.substring( 0, sepIndex );
+		frame.setTitle( title + sep + UIManager.getLookAndFeel().getName() );
+	}
+
+	private void saveWindowBounds( JFrame frame ) {
 		Preferences prefs = getPrefs();
 		prefs.putInt( "x", frame.getX() );
 		prefs.putInt( "y", frame.getY() );
 		prefs.putInt( "width", frame.getWidth() );
 		prefs.putInt( "height", frame.getHeight() );
-
-		TableColumnModel columnModel = table.getColumnModel();
-		prefs.putInt( "column1width", columnModel.getColumn( 0 ).getWidth() );
-		prefs.putInt( "column2width", columnModel.getColumn( 1 ).getWidth() );
 	}
 
 	private Preferences getPrefs() {
 		return Preferences.userRoot().node( "flatlaf-uidefaults-inspector" );
-	}
-
-	private void windowClosed() {
-		UIManager.removePropertyChangeListener( lafListener );
-		UIManager.getDefaults().removePropertyChangeListener( lafDefaultsListener );
-
-		inspector = null;
 	}
 
 	private void filterChanged() {
@@ -309,9 +411,35 @@ public class FlatUIDefaultsInspector
 		String valueType = (String) valueTypeField.getSelectedItem();
 
 		// split filter string on space characters
-		String[] filters = filter.split( " +" );
-		for( int i = 0; i < filters.length; i++ )
-			filters[i] = filters[i].toLowerCase( Locale.ENGLISH );
+		String[] filters = !filter.isEmpty() ? filter.split( " +" ) : null;
+		Pattern[] patterns = (filters != null) ? new Pattern[filters.length] : null;
+		if( filters != null ) {
+			for( int i = 0; i < filters.length; i++ ) {
+				filters[i] = filters[i].toLowerCase( Locale.ENGLISH );
+
+				// simple wildcard matching
+				//  - '*' matches any number of characters
+				//  - '?' matches a single character
+				//  - '^' beginning of line
+				//  - '$' end of line
+				String f = filters[i];
+				boolean matchBeginning = f.startsWith( "^" );
+				boolean matchEnd = f.endsWith( "$" );
+				if( f.indexOf( '*' ) >= 0 || f.indexOf( '?' ) >= 0 || matchBeginning || matchEnd ) {
+					if( matchBeginning )
+						f = f.substring( 1 );
+					if( matchEnd )
+						f = f.substring( 0, f.length() - 1 );
+
+					String regex = ("\\Q" + f + "\\E").replace( "*", "\\E.*\\Q" ).replace( "?", "\\E.\\Q" );
+					if( !matchBeginning )
+						regex = ".*" + regex;
+					if( !matchEnd )
+						regex = regex + ".*";
+					patterns[i] = Pattern.compile( regex );
+				}
+			}
+		}
 
 		ItemsTableModel model = (ItemsTableModel) table.getModel();
 		model.setFilter( item -> {
@@ -320,11 +448,21 @@ public class FlatUIDefaultsInspector
 				!valueType.equals( typeOfValue( item.value ) ) )
 			  return false;
 
+			if( filters == null )
+				return true;
+
 			String lkey = item.key.toLowerCase( Locale.ENGLISH );
 			String lvalue = item.getValueAsString().toLowerCase( Locale.ENGLISH );
-			for( String f : filters ) {
-				if( lkey.contains( f ) || lvalue.contains( f ) )
-					return true;
+			for( int i = 0; i < filters.length; i++ ) {
+				Pattern p = patterns[i];
+				if( p != null ) {
+					if( p.matcher( lkey ).matches() || p.matcher( lvalue ).matches() )
+						return true;
+				} else {
+					String f = filters[i];
+					if( lkey.contains( f ) || lvalue.contains( f ) )
+						return true;
+				}
 			}
 			return false;
 		} );
@@ -339,7 +477,7 @@ public class FlatUIDefaultsInspector
 			return "Boolean";
 		if( value instanceof Border )
 			return "Border";
-		if( value instanceof Color )
+		if( value instanceof Color || value instanceof Color[] )
 			return "Color";
 		if( value instanceof Dimension )
 			return "Dimension";
@@ -358,9 +496,51 @@ public class FlatUIDefaultsInspector
 		return "(other)";
 	}
 
+	private void tableMousePressed( MouseEvent e ) {
+		if( !SwingUtilities.isRightMouseButton( e ) )
+			return;
+
+		int row = table.rowAtPoint( e.getPoint() );
+		if( row >= 0 && !table.isRowSelected( row ) )
+			table.setRowSelectionInterval( row, row );
+	}
+
+	private void copyKey() {
+		copyToClipboard( 0 );
+	}
+
+	private void copyValue() {
+		copyToClipboard( 1 );
+	}
+
+	private void copyKeyAndValue() {
+		copyToClipboard( -1 );
+	}
+
+	private void copyToClipboard( int column ) {
+		int[] rows = table.getSelectedRows();
+		if( rows.length == 0 )
+			return;
+
+		StringBuilder buf = new StringBuilder();
+		for( int i = 0; i < rows.length; i++ ) {
+			if( i > 0 )
+				buf.append( '\n' );
+
+			if( column < 0 || column == 0 )
+				buf.append( table.getValueAt( rows[i], 0 ) );
+			if( column < 0 )
+				buf.append( " = " );
+			if( column < 0 || column == 1 )
+				buf.append( table.getValueAt( rows[i], 1 ) );
+		}
+
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+			new StringSelection( buf.toString() ), null );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		frame = new JFrame();
 		panel = new JPanel();
 		filterPanel = new JPanel();
 		flterLabel = new JLabel();
@@ -369,100 +549,106 @@ public class FlatUIDefaultsInspector
 		valueTypeField = new JComboBox<>();
 		scrollPane = new JScrollPane();
 		table = new JTable();
+		tablePopupMenu = new JPopupMenu();
+		copyKeyMenuItem = new JMenuItem();
+		copyValueMenuItem = new JMenuItem();
+		copyKeyAndValueMenuItem = new JMenuItem();
 
-		//======== frame ========
+		//======== panel ========
 		{
-			frame.setTitle("UI Defaults Inspector");
-			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			frame.addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosed(WindowEvent e) {
-					FlatUIDefaultsInspector.this.windowClosed();
-				}
-				@Override
-				public void windowClosing(WindowEvent e) {
-					saveWindowBounds();
-				}
-				@Override
-				public void windowDeactivated(WindowEvent e) {
-					saveWindowBounds();
-				}
-			});
-			Container frameContentPane = frame.getContentPane();
-			frameContentPane.setLayout(new BorderLayout());
+			panel.setLayout(new BorderLayout());
 
-			//======== panel ========
+			//======== filterPanel ========
 			{
-				panel.setLayout(new BorderLayout());
+				filterPanel.setLayout(new GridBagLayout());
+				((GridBagLayout)filterPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0};
+				((GridBagLayout)filterPanel.getLayout()).rowHeights = new int[] {0, 0};
+				((GridBagLayout)filterPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
+				((GridBagLayout)filterPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-				//======== filterPanel ========
-				{
-					filterPanel.setLayout(new GridBagLayout());
-					((GridBagLayout)filterPanel.getLayout()).columnWidths = new int[] {0, 0, 0, 0, 0};
-					((GridBagLayout)filterPanel.getLayout()).rowHeights = new int[] {0, 0};
-					((GridBagLayout)filterPanel.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 1.0E-4};
-					((GridBagLayout)filterPanel.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+				//---- flterLabel ----
+				flterLabel.setText("Filter:");
+				flterLabel.setLabelFor(filterField);
+				flterLabel.setDisplayedMnemonic('F');
+				filterPanel.add(flterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 10), 0, 0));
 
-					//---- flterLabel ----
-					flterLabel.setText("Filter:");
-					flterLabel.setLabelFor(filterField);
-					flterLabel.setDisplayedMnemonic('F');
-					filterPanel.add(flterLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-						new Insets(0, 0, 0, 10), 0, 0));
+				//---- filterField ----
+				filterField.putClientProperty("JTextField.placeholderText", "enter one or more filter strings, separated by space characters");
+				filterPanel.add(filterField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 10), 0, 0));
 
-					//---- filterField ----
-					filterField.putClientProperty("JTextField.placeholderText", "enter one or more filter strings, separated by space characters");
-					filterPanel.add(filterField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-						new Insets(0, 0, 0, 10), 0, 0));
+				//---- valueTypeLabel ----
+				valueTypeLabel.setText("Value Type:");
+				valueTypeLabel.setLabelFor(valueTypeField);
+				valueTypeLabel.setDisplayedMnemonic('T');
+				filterPanel.add(valueTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 10), 0, 0));
 
-					//---- valueTypeLabel ----
-					valueTypeLabel.setText("Value Type:");
-					valueTypeLabel.setLabelFor(valueTypeField);
-					valueTypeLabel.setDisplayedMnemonic('T');
-					filterPanel.add(valueTypeLabel, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-						new Insets(0, 0, 0, 10), 0, 0));
-
-					//---- valueTypeField ----
-					valueTypeField.setModel(new DefaultComboBoxModel<>(new String[] {
-						"(any)",
-						"Boolean",
-						"Border",
-						"Color",
-						"Dimension",
-						"Float",
-						"Font",
-						"Icon",
-						"Insets",
-						"Integer",
-						"String",
-						"(other)"
-					}));
-					valueTypeField.addActionListener(e -> filterChanged());
-					filterPanel.add(valueTypeField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
-						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-						new Insets(0, 0, 0, 0), 0, 0));
-				}
-				panel.add(filterPanel, BorderLayout.NORTH);
-
-				//======== scrollPane ========
-				{
-
-					//---- table ----
-					table.setAutoCreateRowSorter(true);
-					scrollPane.setViewportView(table);
-				}
-				panel.add(scrollPane, BorderLayout.CENTER);
+				//---- valueTypeField ----
+				valueTypeField.setModel(new DefaultComboBoxModel<>(new String[] {
+					"(any)",
+					"Boolean",
+					"Border",
+					"Color",
+					"Dimension",
+					"Float",
+					"Font",
+					"Icon",
+					"Insets",
+					"Integer",
+					"String",
+					"(other)"
+				}));
+				valueTypeField.addActionListener(e -> filterChanged());
+				filterPanel.add(valueTypeField, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+					new Insets(0, 0, 0, 0), 0, 0));
 			}
-			frameContentPane.add(panel, BorderLayout.CENTER);
+			panel.add(filterPanel, BorderLayout.NORTH);
+
+			//======== scrollPane ========
+			{
+
+				//---- table ----
+				table.setAutoCreateRowSorter(true);
+				table.setComponentPopupMenu(tablePopupMenu);
+				table.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent e) {
+						tableMousePressed(e);
+					}
+				});
+				scrollPane.setViewportView(table);
+			}
+			panel.add(scrollPane, BorderLayout.CENTER);
+		}
+
+		//======== tablePopupMenu ========
+		{
+
+			//---- copyKeyMenuItem ----
+			copyKeyMenuItem.setText("Copy Key");
+			copyKeyMenuItem.addActionListener(e -> copyKey());
+			tablePopupMenu.add(copyKeyMenuItem);
+
+			//---- copyValueMenuItem ----
+			copyValueMenuItem.setText("Copy Value");
+			copyValueMenuItem.addActionListener(e -> copyValue());
+			tablePopupMenu.add(copyValueMenuItem);
+
+			//---- copyKeyAndValueMenuItem ----
+			copyKeyAndValueMenuItem.setText("Copy Key and Value");
+			copyKeyAndValueMenuItem.addActionListener(e -> copyKeyAndValue());
+			tablePopupMenu.add(copyKeyAndValueMenuItem);
 		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JFrame frame;
 	private JPanel panel;
 	private JPanel filterPanel;
 	private JLabel flterLabel;
@@ -471,6 +657,10 @@ public class FlatUIDefaultsInspector
 	private JComboBox<String> valueTypeField;
 	private JScrollPane scrollPane;
 	private JTable table;
+	private JPopupMenu tablePopupMenu;
+	private JMenuItem copyKeyMenuItem;
+	private JMenuItem copyValueMenuItem;
+	private JMenuItem copyKeyAndValueMenuItem;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class Item ---------------------------------------------------------
@@ -495,19 +685,17 @@ public class FlatUIDefaultsInspector
 		}
 
 		static String valueAsString( Object value ) {
-			if( value instanceof Color ) {
-				Color color = (Color) value;
+			if( value instanceof Color || value instanceof Color[] ) {
+				Color color = (value instanceof Color[]) ? ((Color[])value)[0] : (Color) value;
 				HSLColor hslColor = new HSLColor( color );
 				if( color.getAlpha() == 255 ) {
-					return String.format( "%s    rgb(%d, %d, %d)    hsl(%d, %d, %d)",
+					return String.format( "%-9s HSL %3d %3d %3d",
 						color2hex( color ),
-						color.getRed(), color.getGreen(), color.getBlue(),
 						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
 						(int) hslColor.getLuminance() );
 				} else {
-					return String.format( "%s   rgba(%d, %d, %d, %d)    hsla(%d, %d, %d, %d)",
+					return String.format( "%-9s HSL %3d %3d %3d %2d",
 						color2hex( color ),
-						color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(),
 						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
 						(int) hslColor.getLuminance(), (int) (hslColor.getAlpha() * 100) );
 				}
@@ -533,7 +721,7 @@ public class FlatUIDefaultsInspector
 				if( border instanceof FlatLineBorder ) {
 					FlatLineBorder lineBorder = (FlatLineBorder) border;
 					return valueAsString( lineBorder.getUnscaledBorderInsets() )
-						+ "  " + Item.color2hex( lineBorder.getLineColor() )
+						+ "  " + color2hex( lineBorder.getLineColor() )
 						+ "  " + lineBorder.getLineThickness()
 						+ "    " + border.getClass().getName();
 				} else if( border instanceof EmptyBorder ) {
@@ -803,7 +991,7 @@ public class FlatUIDefaultsInspector
 			init( table, item.key, isSelected, row );
 
 			// reset background, foreground and icon
-			if( !(item.value instanceof Color) ) {
+			if( !(item.value instanceof Color) && !(item.value instanceof Color[]) ) {
 				setBackground( null );
 				setForeground( null );
 			}
@@ -815,9 +1003,9 @@ public class FlatUIDefaultsInspector
 
 			super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
 
-			if( item.value instanceof Color ) {
-				Color color = (Color) item.value;
-				boolean isDark = new HSLColor( color ).getLuminance() < 70;
+			if( item.value instanceof Color || item.value instanceof Color[] ) {
+				Color color = (item.value instanceof Color[]) ? ((Color[])item.value)[0] : (Color) item.value;
+				boolean isDark = new HSLColor( color ).getLuminance() < 70 && color.getAlpha() >= 128;
 				setBackground( color );
 				setForeground( isDark ? Color.white : Color.black );
 			} else if( item.value instanceof Icon ) {
@@ -826,7 +1014,9 @@ public class FlatUIDefaultsInspector
 			}
 
 			// set tooltip
-			String toolTipText = String.valueOf( item.value );
+			String toolTipText = (item.value instanceof Object[])
+				? Arrays.toString( (Object[]) item.value ).replace( ", ", ",\n" )
+				: String.valueOf( item.value );
 			if( item.lafValue != null ) {
 				toolTipText += "    \n\nLaF UI default value was overridden with UIManager.put(key,value):\n    "
 					+ Item.valueAsString( item.lafValue ) + "\n    " + String.valueOf( item.lafValue );
@@ -838,10 +1028,31 @@ public class FlatUIDefaultsInspector
 
 		@Override
 		protected void paintComponent( Graphics g ) {
-			if( item.value instanceof Color ) {
-				// fill background
-				g.setColor( getBackground() );
-				g.fillRect( 0, 0, getWidth(), getHeight() );
+			if( item.value instanceof Color || item.value instanceof Color[] ) {
+				int width = getWidth();
+				int height = getHeight();
+				Color background = getBackground();
+
+				// paint color
+				fillRect( g, background, 0, 0, width, height );
+
+				if( item.value instanceof Color[] ) {
+					// paint base color
+					int width2 = height * 2;
+					fillRect( g, ((Color[])item.value)[1], width - width2, 0, width2, height );
+
+					// paint default color
+					Color defaultColor = ((Color[])item.value)[2];
+					if( defaultColor != null && !defaultColor.equals( background ) ) {
+						int width3 = height / 2;
+						fillRect( g, defaultColor, width - width3, 0, width3, height );
+					}
+
+					// paint "derived color" indicator
+					int width4 = height / 4;
+					g.setColor( Color.magenta );
+					g.fillRect( width - width4, 0, width4, height );
+				}
 
 				// layout text
 				FontMetrics fm = getFontMetrics( getFont() );
@@ -853,24 +1064,31 @@ public class FlatUIDefaultsInspector
 
 				g.setColor( getForeground() );
 
-				// paint rgb() and hsl() horizontally aligned
-				int rgbIndex = text.indexOf( "rgb" );
-				int hslIndex = text.indexOf( "hsl" );
-				if( rgbIndex > 0 && hslIndex > rgbIndex ) {
-					String hexText = text.substring( 0, rgbIndex );
-					String rgbText = text.substring( rgbIndex, hslIndex );
+				// paint hsl horizontally aligned
+				int hslIndex = text.indexOf( "HSL" );
+				if( hslIndex > 0 ) {
+					String hexText = text.substring( 0, hslIndex );
 					String hslText = text.substring( hslIndex );
-					int hexWidth = Math.max( fm.stringWidth( hexText ), fm.stringWidth( "#DDDDDD    " ) );
-					int rgbWidth = Math.max( fm.stringWidth( rgbText ), fm.stringWidth( "rgb(444, 444, 444)    " ) );
+					int hexWidth = Math.max( fm.stringWidth( hexText ), fm.stringWidth( "#12345678  " ) );
 					FlatUIUtils.drawString( this, g, hexText, x, y );
-					FlatUIUtils.drawString( this, g, rgbText, x + hexWidth, y );
-					FlatUIUtils.drawString( this, g, hslText, x + hexWidth + rgbWidth, y );
+					FlatUIUtils.drawString( this, g, hslText, x + hexWidth, y );
 				} else
 					FlatUIUtils.drawString( this, g, text, x, y );
 			} else
 				super.paintComponent( g );
 
 			paintSeparator( g );
+		}
+
+		private void fillRect( Graphics g, Color color, int x, int y, int width, int height ) {
+			// fill white if color is translucent
+			if( color.getAlpha() != 255 ) {
+				g.setColor( Color.white );
+				g.fillRect( x, y, width, height );
+			}
+
+			g.setColor( color );
+			g.fillRect( x, y, width, height );
 		}
 	}
 

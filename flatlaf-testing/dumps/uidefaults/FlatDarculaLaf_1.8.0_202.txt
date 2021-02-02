@@ -10,6 +10,11 @@
 - Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 + Button.border                  [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 
+- Button.innerFocusWidth         1
++ Button.innerFocusWidth         0
+
+- CheckBox.icon.focusedBackground #4d466d94    javax.swing.plaf.ColorUIResource [UI]
+
 - ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 + ComboBox.border                [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 
@@ -30,6 +35,9 @@
 
 - HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
 + HelpButton.icon                [lazy] 26,26    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
+
+- HelpButton.innerFocusWidth     1
++ HelpButton.innerFocusWidth     0
 
 - JXDatePicker.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
 + JXDatePicker.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]

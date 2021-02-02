@@ -106,13 +106,15 @@ public class FlatToolBarSeparatorUI
 		float lineWidth = scale( 1f );
 		float offset = scale( 2f );
 
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 		g.setColor( separatorColor );
 
 		if( isVertical( c ) )
 			((Graphics2D)g).fill( new Rectangle2D.Float( Math.round( (width - lineWidth) / 2f ), offset, lineWidth, height - (offset * 2) ) );
 		else
 			((Graphics2D)g).fill( new Rectangle2D.Float( offset, Math.round( (height - lineWidth) / 2f ), width - (offset * 2), lineWidth ) );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 
 	private boolean isVertical( JComponent c ) {

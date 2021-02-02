@@ -88,6 +88,10 @@ public class FlatPropertiesLaf
 		return dark;
 	}
 
+	public Properties getProperties() {
+		return properties;
+	}
+
 	@Override
 	protected ArrayList<Class<?>> getLafClassesForDefaultsLoading() {
 		ArrayList<Class<?>> lafClasses = new ArrayList<>();

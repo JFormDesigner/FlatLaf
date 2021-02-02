@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatNightOwlContrastIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "Night Owl Contrast (Material)";
+
+	public static boolean install() {
 		try {
 			return install( new FlatNightOwlContrastIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatNightOwlContrastIJTheme.class );
 	}
 
 	public FlatNightOwlContrastIJTheme() {
@@ -43,6 +49,6 @@ public class FlatNightOwlContrastIJTheme
 
 	@Override
 	public String getName() {
-		return "Night Owl Contrast (Material)";
+		return NAME;
 	}
 }

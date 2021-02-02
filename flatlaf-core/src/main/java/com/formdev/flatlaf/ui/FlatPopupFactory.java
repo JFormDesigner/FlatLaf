@@ -68,19 +68,17 @@ public class FlatPopupFactory
 			y = pt.y;
 		}
 
-		if( !isDropShadowPainted( owner, contents ) )
-			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, false ), contents );
+		boolean forceHeavyWeight = isOptionEnabled( owner, contents, FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, "Popup.forceHeavyWeight" );
+
+		if( !isOptionEnabled( owner, contents, FlatClientProperties.POPUP_DROP_SHADOW_PAINTED, "Popup.dropShadowPainted" ) )
+			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), contents );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
-		if( SystemInfo.isMacOS || SystemInfo.isLinux ) {
-			Popup popup = getPopupForScreenOfOwner( owner, contents, x, y, true );
-			if( popup == null )
-				popup = getPopupForScreenOfOwner( owner, contents, x, y, false );
-			return new NonFlashingPopup( popup, contents );
-		}
+		if( SystemInfo.isMacOS || SystemInfo.isLinux )
+			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, true ), contents );
 
 		// create drop shadow popup
-		return new DropShadowPopup( getPopupForScreenOfOwner( owner, contents, x, y, false ), owner, contents );
+		return new DropShadowPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), owner, contents );
 	}
 
 	/**
@@ -155,24 +153,20 @@ public class FlatPopupFactory
 			popup.show();
 	}
 
-	private boolean isDropShadowPainted( Component owner, Component contents ) {
-		Boolean b = isDropShadowPainted( owner );
-		if( b != null )
-			return b;
+	private boolean isOptionEnabled( Component owner, Component contents, String clientKey, String uiKey ) {
+		if( owner instanceof JComponent ) {
+			Boolean b = FlatClientProperties.clientPropertyBooleanStrict( (JComponent) owner, clientKey, null );
+			if( b != null )
+				return b;
+		}
 
-		b = isDropShadowPainted( contents );
-		if( b != null )
-			return b;
+		if( contents instanceof JComponent ) {
+			Boolean b = FlatClientProperties.clientPropertyBooleanStrict( (JComponent) contents, clientKey, null );
+			if( b != null )
+				return b;
+		}
 
-		return UIManager.getBoolean( "Popup.dropShadowPainted" );
-	}
-
-	private Boolean isDropShadowPainted( Component c ) {
-		if( !(c instanceof JComponent) )
-			return null;
-
-		Object value = ((JComponent)c).getClientProperty( FlatClientProperties.POPUP_DROP_SHADOW_PAINTED );
-		return (value instanceof Boolean ) ? (Boolean) value : null;
+		return UIManager.getBoolean( uiKey );
 	}
 
 	/**
@@ -277,16 +271,17 @@ public class FlatPopupFactory
 
 				// increase tooltip size if necessary because it may be too small on HiDPI screens
 				//    https://bugs.openjdk.java.net/browse/JDK-8213535
-				if( contents instanceof JToolTip ) {
+				if( contents instanceof JToolTip && popupWindow == null ) {
 					Container parent = contents.getParent();
 					if( parent instanceof JPanel ) {
 						Dimension prefSize = parent.getPreferredSize();
 						if( !prefSize.equals( parent.getSize() ) ) {
-							Container panel = SwingUtilities.getAncestorOfClass( Panel.class, parent );
-							if( panel != null )
-								panel.setSize( prefSize ); // for medium weight popup
-							else
-								parent.setSize( prefSize ); // for light weight popup
+							Container mediumWeightPanel = SwingUtilities.getAncestorOfClass( Panel.class, parent );
+							Container c = (mediumWeightPanel != null)
+								? mediumWeightPanel // medium weight popup
+								: parent;           // light weight popup
+							c.setSize( prefSize );
+							c.validate();
 						}
 					}
 				}

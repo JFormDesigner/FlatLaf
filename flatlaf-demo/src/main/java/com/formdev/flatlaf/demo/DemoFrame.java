@@ -32,7 +32,7 @@ import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
-import com.formdev.flatlaf.extras.SVGUtils;
+import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
@@ -59,7 +59,7 @@ class DemoFrame
 		updateFontMenuItems();
 		controlBar.initialize( this, tabbedPane );
 
-		setIconImages( SVGUtils.createWindowIconImages( "/com/formdev/flatlaf/demo/FlatLaf.svg" ) );
+		setIconImages( FlatSVGUtils.createWindowIconImages( "/com/formdev/flatlaf/demo/FlatLaf.svg" ) );
 
 		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
 			tabbedPane.setSelectedIndex( tabIndex );
@@ -749,6 +749,6 @@ class DemoFrame
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
-	private IJThemesPanel themesPanel;
+	IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

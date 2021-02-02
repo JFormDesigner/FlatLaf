@@ -34,7 +34,7 @@ import com.kitfox.svg.SVGException;
  *
  * @author Karl Tauber
  */
-public class SVGUtils
+public class FlatSVGUtils
 {
 	/**
 	 * Creates from the given SVG a list of icon images with different sizes that
@@ -131,7 +131,7 @@ public class SVGUtils
 	 */
 	private static SVGDiagram loadSVG( String svgName ) {
 		try {
-			URL url = SVGUtils.class.getResource( svgName );
+			URL url = FlatSVGUtils.class.getResource( svgName );
 			return SVGCache.getSVGUniverse().getDiagram( url.toURI() );
 		} catch( URISyntaxException ex ) {
 			throw new RuntimeException( ex );

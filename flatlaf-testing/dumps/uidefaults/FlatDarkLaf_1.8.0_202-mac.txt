@@ -1,9 +1,6 @@
 - OS     Windows 10
 + OS     Mac OS X
 
-- Button.defaultButtonFollowsFocus true
-+ Button.defaultButtonFollowsFocus false
-
 + ComboBox.showPopupOnNavigation true
 
 - Menu.shortcutKeys              length=1    [I

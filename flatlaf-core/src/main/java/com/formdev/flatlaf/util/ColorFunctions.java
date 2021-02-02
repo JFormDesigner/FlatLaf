@@ -28,11 +28,12 @@ public class ColorFunctions
 	public static Color applyFunctions( Color color, ColorFunction... functions ) {
 		float[] hsl = HSLColor.fromRGB( color );
 		float alpha = color.getAlpha() / 255f;
+		float[] hsla = { hsl[0], hsl[1], hsl[2], alpha * 100 };
 
 		for( ColorFunction function : functions )
-			function.apply( hsl );
+			function.apply( hsla );
 
-		return HSLColor.toRGB( hsl, alpha );
+		return HSLColor.toRGB( hsla[0], hsla[1], hsla[2], hsla[3] / 100 );
 	}
 
 	public static float clamp( float value ) {
@@ -43,16 +44,48 @@ public class ColorFunctions
 				: value);
 	}
 
+	/**
+	 * Returns a color that is a mixture of two colors.
+	 *
+	 * @param color1 first color
+	 * @param color2 second color
+	 * @param weight the weight (in range 0-1) to mix the two colors.
+	 *               Larger weight uses more of first color, smaller weight more of second color.
+	 * @return mixture of colors
+	 */
+	public static Color mix( Color color1, Color color2, float weight ) {
+		if( weight >= 1 )
+			return color1;
+		if( weight <= 0 )
+			return color2;
+
+		int r1 = color1.getRed();
+		int g1 = color1.getGreen();
+		int b1 = color1.getBlue();
+		int a1 = color1.getAlpha();
+
+		int r2 = color2.getRed();
+		int g2 = color2.getGreen();
+		int b2 = color2.getBlue();
+		int a2 = color2.getAlpha();
+
+		return new Color(
+			Math.round( r2 + ((r1 - r2) * weight) ),
+			Math.round( g2 + ((g1 - g2) * weight) ),
+			Math.round( b2 + ((b1 - b2) * weight) ),
+			Math.round( a2 + ((a1 - a2) * weight) ) );
+	}
+
 	//---- interface ColorFunction --------------------------------------------
 
 	public interface ColorFunction {
-		void apply( float[] hsl );
+		void apply( float[] hsla );
 	}
 
 	//---- class HSLIncreaseDecrease ------------------------------------------
 
 	/**
-	 * Increase or decrease hue, saturation or luminance of a color in the HSL color space
+	 * Increase or decrease hue, saturation, luminance or alpha of a color in the HSL color space
 	 * by an absolute or relative amount.
 	 */
 	public static class HSLIncreaseDecrease
@@ -75,18 +108,45 @@ public class ColorFunctions
 		}
 
 		@Override
-		public void apply( float[] hsl ) {
+		public void apply( float[] hsla ) {
 			float amount2 = increase ? amount : -amount;
-			amount2 = autoInverse && shouldInverse( hsl ) ? -amount2 : amount2;
-			hsl[hslIndex] = clamp( relative
-				? (hsl[hslIndex] * ((100 + amount2) / 100))
-				: (hsl[hslIndex] + amount2) );
+
+			if( hslIndex == 0 ) {
+				// hue is range 0-360
+				hsla[0] = (hsla[0] + amount2) % 360;
+				return;
+			}
+
+			amount2 = autoInverse && shouldInverse( hsla ) ? -amount2 : amount2;
+			hsla[hslIndex] = clamp( relative
+				? (hsla[hslIndex] * ((100 + amount2) / 100))
+				: (hsla[hslIndex] + amount2) );
 		}
 
-		protected boolean shouldInverse( float[] hsl ) {
+		protected boolean shouldInverse( float[] hsla ) {
 			return increase
-				? hsl[hslIndex] >= 50
-				: hsl[hslIndex] < 50;
+				? hsla[hslIndex] > 65
+				: hsla[hslIndex] < 35;
+		}
+	}
+
+	//---- class HSLIncreaseDecrease ------------------------------------------
+
+	/**
+	 * Set the alpha of a color.
+	 */
+	public static class Fade
+		implements ColorFunction
+	{
+		public final float amount;
+
+		public Fade( float amount ) {
+			this.amount = amount;
+		}
+
+		@Override
+		public void apply( float[] hsla ) {
+			hsla[3] = clamp( amount );
 		}
 	}
 }

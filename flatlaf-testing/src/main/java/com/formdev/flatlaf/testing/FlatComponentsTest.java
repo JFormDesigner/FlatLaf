@@ -19,7 +19,10 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.components.*;
+import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import net.miginfocom.swing.*;
 
 /**
@@ -35,8 +38,27 @@ public class FlatComponentsTest
 		} );
 	}
 
+	private final JSlider[] allSliders;
+	private final JSlider[] roundSliders;
+	private final JSlider[] directionalSliders;
+
 	FlatComponentsTest() {
 		initComponents();
+
+		buttonTypeComboBox.init( ButtonType.class, true );
+
+		allSliders = new JSlider[] { slider1, slider2, slider3, slider4, slider5, slider6 };
+		roundSliders = new JSlider[] { slider1, slider2, slider6 };
+		directionalSliders = new JSlider[] { slider3, slider4, slider5 };
+
+		ChangeListener sliderChanged = e -> {
+			JSlider slider = (JSlider) e.getSource();
+			String text = slider.getValue() + "  " + slider.getValueIsAdjusting();
+			sliderValueLabel.setText( text );
+//			System.out.println( text );
+		};
+		for( JSlider slider : allSliders )
+			slider.addChangeListener( sliderChanged );
 	}
 
 	private void changeProgress() {
@@ -53,6 +75,22 @@ public class FlatComponentsTest
 		progressBar2.setIndeterminate( indeterminate );
 		progressBar3.setIndeterminate( indeterminate );
 		progressBar4.setIndeterminate( indeterminate );
+	}
+
+	private void squareChanged() {
+		boolean square = squareCheckBox.isSelected();
+		progressBar1.setSquare( square );
+		progressBar2.setSquare( square );
+		progressBar3.setSquare( square );
+		progressBar4.setSquare( square );
+	}
+
+	private void largeHeightChanged() {
+		boolean largeHeight = largeHeightCheckBox.isSelected();
+		progressBar1.setLargeHeight( largeHeight );
+		progressBar2.setLargeHeight( largeHeight );
+		progressBar3.setLargeHeight( largeHeight );
+		progressBar4.setLargeHeight( largeHeight );
 	}
 
 	private void borderPaintedChanged() {
@@ -99,13 +137,16 @@ public class FlatComponentsTest
 	}
 
 	private void buttonTypeChanged() {
-		String buttonType = (String) buttonTypeComboBox.getSelectedItem();
-		if( "-".equals( buttonType ) )
-			buttonType = null;
+		ButtonType buttonType = buttonTypeComboBox.getSelectedValue();
+		String buttonTypeStr = (buttonType != null && buttonType != ButtonType.none) ? buttonType.toString() : null;
 
 		for( Component c : getComponents() ) {
-			if( c instanceof AbstractButton )
-				((AbstractButton)c).putClientProperty( FlatClientProperties.BUTTON_TYPE, buttonType );
+			if( c instanceof FlatButton )
+				((FlatButton)c).setButtonType( buttonType );
+			else if( c instanceof FlatToggleButton )
+				((FlatToggleButton)c).setButtonType( buttonType );
+			else if( c instanceof AbstractButton )
+				((AbstractButton)c).putClientProperty( FlatClientProperties.BUTTON_TYPE, buttonTypeStr );
 		}
 	}
 
@@ -129,6 +170,71 @@ public class FlatComponentsTest
 		textField1.requestFocusInWindow();
 	}
 
+	private void sliderPaintTrackChanged() {
+		boolean paintTrack = sliderPaintTrackCheckBox.isSelected();
+		for( JSlider slider : allSliders )
+			slider.setPaintTrack( paintTrack );
+	}
+
+	private void sliderPaintTicksChanged() {
+		Boolean paintTicks = sliderPaintTicksCheckBox.getChecked();
+		if( paintTicks != null ) {
+			for( JSlider slider : allSliders )
+				slider.setPaintTicks( paintTicks );
+		} else {
+			for( JSlider slider : roundSliders )
+				slider.setPaintTicks( false );
+			for( JSlider slider : directionalSliders )
+				slider.setPaintTicks( true );
+		}
+	}
+
+	private void sliderPaintLabelsChanged() {
+		Boolean paintLabels = sliderPaintLabelsCheckBox.getChecked();
+		if( paintLabels != null ) {
+			for( JSlider slider : allSliders )
+				slider.setPaintLabels( paintLabels );
+		} else {
+			for( JSlider slider : roundSliders )
+				slider.setPaintLabels( false );
+			for( JSlider slider : directionalSliders )
+				slider.setPaintLabels( true );
+		}
+	}
+
+	private void sliderInvertedChanged() {
+		boolean inverted = sliderInvertedCheckBox.isSelected();
+		for( JSlider slider : allSliders )
+			slider.setInverted( inverted );
+	}
+
+	private void sliderSnapToTicksChanged() {
+		boolean snapToTicks = sliderSnapToTicksCheckBox.isSelected();
+		for( JSlider slider : allSliders )
+			slider.setSnapToTicks( snapToTicks );
+	}
+
+	private void sliderBorderChanged() {
+		boolean border = sliderBorderCheckBox.isSelected();
+		UIManager.put( "Slider.thumbBorderColor", border ? Color.green : null );
+		for( JSlider slider : allSliders )
+			slider.updateUI();
+	}
+
+	private void majorThickSpacingChanged() {
+		int majorTickSpacing = (Integer) majorTickSpacingSpinner.getValue();
+		for( JSlider slider : directionalSliders ) {
+			slider.setLabelTable( null );
+			slider.setMajorTickSpacing( majorTickSpacing );
+		}
+	}
+
+	private void minorThickSpacingChanged() {
+		int minorTickSpacing = (Integer) minorTickSpacingSpinner.getValue();
+		for( JSlider slider : directionalSliders )
+			slider.setMinorTickSpacing( minorTickSpacing );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel labelLabel = new JLabel();
@@ -137,40 +243,42 @@ public class FlatComponentsTest
 		FlatComponentsTest.TestMultiLineLabel testMultiLineLabel1 = new FlatComponentsTest.TestMultiLineLabel();
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
-		JButton button17 = new JButton();
-		JButton button22 = new JButton();
+		FlatButton button17 = new FlatButton();
+		FlatButton button22 = new FlatButton();
 		JButton button2 = new JButton();
-		JButton button18 = new JButton();
-		JButton button23 = new JButton();
+		FlatButton button18 = new FlatButton();
+		FlatButton button23 = new FlatButton();
 		FlatComponentsTest.TestDefaultButton button5 = new FlatComponentsTest.TestDefaultButton();
-		JButton button3 = new JButton();
-		JButton button12 = new JButton();
+		FlatButton button3 = new FlatButton();
+		FlatButton button12 = new FlatButton();
 		JButton button13 = new JButton();
 		JButton button14 = new JButton();
 		JButton button15 = new JButton();
 		JButton button16 = new JButton();
+		JButton button24 = new JButton();
 		JButton button20 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
-		JToggleButton toggleButton9 = new JToggleButton();
-		JToggleButton toggleButton19 = new JToggleButton();
+		FlatToggleButton toggleButton9 = new FlatToggleButton();
+		FlatToggleButton toggleButton19 = new FlatToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
-		JToggleButton toggleButton10 = new JToggleButton();
-		JToggleButton toggleButton20 = new JToggleButton();
+		FlatToggleButton toggleButton10 = new FlatToggleButton();
+		FlatToggleButton toggleButton20 = new FlatToggleButton();
 		JToggleButton toggleButton3 = new JToggleButton();
 		JToggleButton toggleButton4 = new JToggleButton();
 		JToggleButton toggleButton11 = new JToggleButton();
 		JToggleButton toggleButton12 = new JToggleButton();
 		JToggleButton toggleButton13 = new JToggleButton();
 		JToggleButton toggleButton14 = new JToggleButton();
+		JToggleButton toggleButton21 = new JToggleButton();
 		JToggleButton toggleButton18 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
 		JCheckBox checkBox3 = new JCheckBox();
 		JCheckBox checkBox4 = new JCheckBox();
-		JToggleButton toggleButton5 = new JToggleButton();
-		JToggleButton toggleButton8 = new JToggleButton();
+		FlatToggleButton toggleButton5 = new FlatToggleButton();
+		FlatToggleButton toggleButton8 = new FlatToggleButton();
 		JLabel radioButtonLabel = new JLabel();
 		JRadioButton radioButton1 = new JRadioButton();
 		JRadioButton radioButton2 = new JRadioButton();
@@ -188,28 +296,28 @@ public class FlatComponentsTest
 		JSpinner spinner2 = new JSpinner();
 		FlatComponentsTest.ButtonlessSpinner buttonlessSpinner1 = new FlatComponentsTest.ButtonlessSpinner();
 		FlatComponentsTest.ButtonlessSpinner buttonlessSpinner2 = new FlatComponentsTest.ButtonlessSpinner();
-		JComboBox<String> comboBox7 = new JComboBox<>();
+		FlatComboBox<String> comboBox7 = new FlatComboBox<>();
 		JSpinner spinner3 = new JSpinner();
 		JLabel textFieldLabel = new JLabel();
 		textField1 = new JTextField();
 		JTextField textField2 = new JTextField();
 		JTextField textField3 = new JTextField();
 		JTextField textField4 = new JTextField();
-		JTextField textField6 = new JTextField();
+		FlatTextField textField6 = new FlatTextField();
 		JTextField textField5 = new JTextField();
 		JLabel formattedTextFieldLabel = new JLabel();
 		JFormattedTextField formattedTextField1 = new JFormattedTextField();
 		JFormattedTextField formattedTextField2 = new JFormattedTextField();
 		JFormattedTextField formattedTextField3 = new JFormattedTextField();
 		JFormattedTextField formattedTextField4 = new JFormattedTextField();
-		JFormattedTextField formattedTextField5 = new JFormattedTextField();
+		FlatFormattedTextField formattedTextField5 = new FlatFormattedTextField();
 		JFormattedTextField formattedTextField6 = new JFormattedTextField();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField2 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
 		JPasswordField passwordField4 = new JPasswordField();
-		JPasswordField passwordField5 = new JPasswordField();
+		FlatPasswordField passwordField5 = new FlatPasswordField();
 		JPasswordField passwordField6 = new JPasswordField();
 		JLabel textAreaLabel = new JLabel();
 		JScrollPane scrollPane1 = new JScrollPane();
@@ -247,15 +355,15 @@ public class FlatComponentsTest
 		JButton button19 = new JButton();
 		JScrollBar scrollBar2 = new JScrollBar();
 		JScrollBar scrollBar3 = new JScrollBar();
-		JScrollBar scrollBar7 = new JScrollBar();
-		JScrollBar scrollBar8 = new JScrollBar();
+		FlatScrollBar scrollBar7 = new FlatScrollBar();
+		FlatScrollBar scrollBar8 = new FlatScrollBar();
 		JSeparator separator2 = new JSeparator();
-		JSlider slider2 = new JSlider();
-		JSlider slider4 = new JSlider();
+		slider2 = new JSlider();
+		slider4 = new JSlider();
 		JScrollPane scrollPane14 = new JScrollPane();
-		progressBar3 = new JProgressBar();
-		progressBar4 = new JProgressBar();
-		JToolBar toolBar2 = new JToolBar();
+		progressBar3 = new FlatProgressBar();
+		progressBar4 = new FlatProgressBar();
+		FlatComponentsTest.TestToolBar toolBar2 = new FlatComponentsTest.TestToolBar();
 		JButton button9 = new JButton();
 		JButton button10 = new JButton();
 		JButton button11 = new JButton();
@@ -264,7 +372,7 @@ public class FlatComponentsTest
 		JPanel panel3 = new JPanel();
 		JButton button21 = new JButton();
 		JPanel panel5 = new JPanel();
-		buttonTypeComboBox = new JComboBox<>();
+		buttonTypeComboBox = new FlatTestEnumComboBox<>();
 		borderPaintedCheckBox = new JCheckBox();
 		roundRectCheckBox = new JCheckBox();
 		contentAreaFilledCheckBox = new JCheckBox();
@@ -278,25 +386,40 @@ public class FlatComponentsTest
 		JLabel scrollBarLabel = new JLabel();
 		JScrollBar scrollBar1 = new JScrollBar();
 		JScrollBar scrollBar4 = new JScrollBar();
-		JScrollBar scrollBar5 = new JScrollBar();
-		JScrollBar scrollBar6 = new JScrollBar();
+		FlatScrollBar scrollBar5 = new FlatScrollBar();
+		FlatScrollBar scrollBar6 = new FlatScrollBar();
 		JLabel separatorLabel = new JLabel();
 		JSeparator separator1 = new JSeparator();
 		JPanel panel2 = new JPanel();
 		JLabel sliderLabel = new JLabel();
-		JSlider slider1 = new JSlider();
-		JSlider slider6 = new JSlider();
-		slider3 = new JSlider();
-		JSlider slider5 = new JSlider();
-		JLabel progressBarLabel = new JLabel();
-		progressBar1 = new JProgressBar();
-		progressBar2 = new JProgressBar();
+		slider1 = new JSlider();
+		slider6 = new JSlider();
+		JPanel panel8 = new JPanel();
+		JPanel panel6 = new JPanel();
+		sliderPaintTrackCheckBox = new JCheckBox();
+		sliderPaintTicksCheckBox = new FlatTriStateCheckBox();
+		sliderPaintLabelsCheckBox = new FlatTriStateCheckBox();
+		sliderInvertedCheckBox = new JCheckBox();
+		sliderSnapToTicksCheckBox = new JCheckBox();
+		majorTickSpacingSpinner = new JSpinner();
+		sliderBorderCheckBox = new JCheckBox();
+		minorTickSpacingSpinner = new JSpinner();
+		sliderValueLabel = new JLabel();
+		JPanel panel7 = new JPanel();
 		indeterminateCheckBox = new JCheckBox();
+		squareCheckBox = new JCheckBox();
+		largeHeightCheckBox = new JCheckBox();
+		JLabel sliderLabel2 = new JLabel();
+		slider3 = new JSlider();
+		slider5 = new JSlider();
+		JLabel progressBarLabel = new JLabel();
+		progressBar1 = new FlatProgressBar();
+		progressBar2 = new FlatProgressBar();
 		JLabel toolTipLabel = new JLabel();
 		JToolTip toolTip1 = new JToolTip();
 		JToolTip toolTip2 = new JToolTip();
 		JLabel toolBarLabel = new JLabel();
-		JToolBar toolBar1 = new JToolBar();
+		FlatComponentsTest.TestToolBar toolBar1 = new FlatComponentsTest.TestToolBar();
 		JButton button4 = new JButton();
 		JButton button6 = new JButton();
 		JButton button7 = new JButton();
@@ -306,17 +429,17 @@ public class FlatComponentsTest
 		JToggleButton toggleButton16 = new JToggleButton();
 		JToggleButton toggleButton17 = new JToggleButton();
 		JLabel label3 = new JLabel();
-		JToolBar toolBar3 = new JToolBar();
-		JButton button26 = new JButton();
-		JButton button27 = new JButton();
-		JToggleButton toggleButton23 = new JToggleButton();
-		JToggleButton toggleButton24 = new JToggleButton();
+		FlatComponentsTest.TestToolBar toolBar3 = new FlatComponentsTest.TestToolBar();
+		FlatButton button26 = new FlatButton();
+		FlatButton button27 = new FlatButton();
+		FlatToggleButton toggleButton23 = new FlatToggleButton();
+		FlatToggleButton toggleButton24 = new FlatToggleButton();
 		JLabel label4 = new JLabel();
-		JToolBar toolBar4 = new JToolBar();
-		JButton button28 = new JButton();
-		JButton button29 = new JButton();
-		JToggleButton toggleButton25 = new JToggleButton();
-		JToggleButton toggleButton26 = new JToggleButton();
+		FlatComponentsTest.TestToolBar toolBar4 = new FlatComponentsTest.TestToolBar();
+		FlatButton button28 = new FlatButton();
+		FlatButton button29 = new FlatButton();
+		FlatToggleButton toggleButton25 = new FlatToggleButton();
+		FlatToggleButton toggleButton26 = new FlatToggleButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -386,14 +509,14 @@ public class FlatComponentsTest
 
 		//---- button17 ----
 		button17.setText("Sq");
-		button17.putClientProperty("JButton.buttonType", "square");
-		button17.putClientProperty("JComponent.minimumWidth", 0);
+		button17.setButtonType(FlatButton.ButtonType.square);
+		button17.setMinimumWidth(0);
 		add(button17, "cell 1 1");
 
 		//---- button22 ----
 		button22.setText("Rd");
-		button22.putClientProperty("JButton.buttonType", "roundRect");
-		button22.putClientProperty("JComponent.minimumWidth", 0);
+		button22.setButtonType(FlatButton.ButtonType.roundRect);
+		button22.setMinimumWidth(0);
 		add(button22, "cell 1 1");
 
 		//---- button2 ----
@@ -405,16 +528,16 @@ public class FlatComponentsTest
 
 		//---- button18 ----
 		button18.setText("Sq");
-		button18.putClientProperty("JButton.buttonType", "square");
+		button18.setButtonType(FlatButton.ButtonType.square);
 		button18.setEnabled(false);
-		button18.putClientProperty("JComponent.minimumWidth", 0);
+		button18.setMinimumWidth(0);
 		add(button18, "cell 2 1");
 
 		//---- button23 ----
 		button23.setText("Rd");
-		button23.putClientProperty("JButton.buttonType", "roundRect");
+		button23.setButtonType(FlatButton.ButtonType.roundRect);
 		button23.setEnabled(false);
-		button23.putClientProperty("JComponent.minimumWidth", 0);
+		button23.setMinimumWidth(0);
 		add(button23, "cell 2 1");
 
 		//---- button5 ----
@@ -425,35 +548,39 @@ public class FlatComponentsTest
 
 		//---- button3 ----
 		button3.setText("Help");
-		button3.putClientProperty("JButton.buttonType", "help");
+		button3.setButtonType(FlatButton.ButtonType.help);
 		add(button3, "cell 4 1");
 
 		//---- button12 ----
 		button12.setText("Help");
-		button12.putClientProperty("JButton.buttonType", "help");
+		button12.setButtonType(FlatButton.ButtonType.help);
 		button12.setEnabled(false);
 		add(button12, "cell 4 1");
 
 		//---- button13 ----
 		button13.setIcon(UIManager.getIcon("Tree.closedIcon"));
-		add(button13, "cell 5 1");
+		add(button13, "cell 5 1 2 1");
 
 		//---- button14 ----
 		button14.setText("...");
-		add(button14, "cell 5 1");
+		add(button14, "cell 5 1 2 1");
 
 		//---- button15 ----
 		button15.setText("\u2026");
-		add(button15, "cell 5 1");
+		add(button15, "cell 5 1 2 1");
 
 		//---- button16 ----
 		button16.setText("#");
-		add(button16, "cell 5 1");
+		add(button16, "cell 5 1 2 1");
+
+		//---- button24 ----
+		button24.setText("A");
+		add(button24, "cell 5 1 2 1");
 
 		//---- button20 ----
 		button20.setText("Empty border");
 		button20.setBorder(BorderFactory.createEmptyBorder());
-		add(button20, "cell 6 1");
+		add(button20, "cell 5 1 2 1");
 
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");
@@ -461,16 +588,17 @@ public class FlatComponentsTest
 
 		//---- toggleButton1 ----
 		toggleButton1.setText("Enabled");
+		toggleButton1.setToolTipText("LOOOOOOOOOOOOOONG TEXT");
 		add(toggleButton1, "cell 1 2");
 
 		//---- toggleButton9 ----
 		toggleButton9.setText("Sq");
-		toggleButton9.putClientProperty("JButton.buttonType", "square");
+		toggleButton9.setButtonType(FlatButton.ButtonType.square);
 		add(toggleButton9, "cell 1 2");
 
 		//---- toggleButton19 ----
 		toggleButton19.setText("Rd");
-		toggleButton19.putClientProperty("JButton.buttonType", "roundRect");
+		toggleButton19.setButtonType(FlatButton.ButtonType.roundRect);
 		add(toggleButton19, "cell 1 2");
 
 		//---- toggleButton2 ----
@@ -480,13 +608,13 @@ public class FlatComponentsTest
 
 		//---- toggleButton10 ----
 		toggleButton10.setText("Sq");
-		toggleButton10.putClientProperty("JButton.buttonType", "square");
+		toggleButton10.setButtonType(FlatButton.ButtonType.square);
 		toggleButton10.setEnabled(false);
 		add(toggleButton10, "cell 2 2");
 
 		//---- toggleButton20 ----
 		toggleButton20.setText("Rd");
-		toggleButton20.putClientProperty("JButton.buttonType", "roundRect");
+		toggleButton20.setButtonType(FlatButton.ButtonType.roundRect);
 		toggleButton20.setEnabled(false);
 		add(toggleButton20, "cell 2 2");
 
@@ -504,27 +632,32 @@ public class FlatComponentsTest
 		//---- toggleButton11 ----
 		toggleButton11.setIcon(UIManager.getIcon("Tree.closedIcon"));
 		toggleButton11.setSelected(true);
-		add(toggleButton11, "cell 5 2");
+		add(toggleButton11, "cell 5 2 2 1");
 
 		//---- toggleButton12 ----
 		toggleButton12.setText("...");
 		toggleButton12.setSelected(true);
-		add(toggleButton12, "cell 5 2");
+		add(toggleButton12, "cell 5 2 2 1");
 
 		//---- toggleButton13 ----
 		toggleButton13.setText("\u2026");
 		toggleButton13.setSelected(true);
-		add(toggleButton13, "cell 5 2");
+		add(toggleButton13, "cell 5 2 2 1");
 
 		//---- toggleButton14 ----
 		toggleButton14.setText("#");
 		toggleButton14.setSelected(true);
-		add(toggleButton14, "cell 5 2");
+		add(toggleButton14, "cell 5 2 2 1");
+
+		//---- toggleButton21 ----
+		toggleButton21.setText("A");
+		toggleButton21.setSelected(true);
+		add(toggleButton21, "cell 5 2 2 1");
 
 		//---- toggleButton18 ----
 		toggleButton18.setText("Empty border");
 		toggleButton18.setBorder(BorderFactory.createEmptyBorder());
-		add(toggleButton18, "cell 6 2");
+		add(toggleButton18, "cell 5 2 2 1");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
@@ -554,13 +687,13 @@ public class FlatComponentsTest
 
 		//---- toggleButton5 ----
 		toggleButton5.setText("Tab");
-		toggleButton5.putClientProperty("JButton.buttonType", "tab");
+		toggleButton5.setButtonType(FlatButton.ButtonType.tab);
 		toggleButton5.setSelected(true);
 		add(toggleButton5, "cell 5 3");
 
 		//---- toggleButton8 ----
 		toggleButton8.setText("Tab");
-		toggleButton8.putClientProperty("JButton.buttonType", "tab");
+		toggleButton8.setButtonType(FlatButton.ButtonType.tab);
 		toggleButton8.setEnabled(false);
 		toggleButton8.setSelected(true);
 		add(toggleButton8, "cell 5 3");
@@ -685,7 +818,7 @@ public class FlatComponentsTest
 
 		//---- comboBox7 ----
 		comboBox7.setEditable(true);
-		comboBox7.putClientProperty("JTextField.placeholderText", "Placeholder");
+		comboBox7.setPlaceholderText("Placeholder");
 		add(comboBox7, "cell 5 6,growx");
 
 		//---- spinner3 ----
@@ -718,7 +851,7 @@ public class FlatComponentsTest
 		add(textField4, "cell 4 7,growx");
 
 		//---- textField6 ----
-		textField6.putClientProperty("JTextField.placeholderText", "Placeholder");
+		textField6.setPlaceholderText("Placeholder");
 		add(textField6, "cell 5 7,growx");
 
 		//---- textField5 ----
@@ -751,7 +884,7 @@ public class FlatComponentsTest
 		add(formattedTextField4, "cell 4 8,growx");
 
 		//---- formattedTextField5 ----
-		formattedTextField5.putClientProperty("JTextField.placeholderText", "Placeholder");
+		formattedTextField5.setPlaceholderText("Placeholder");
 		add(formattedTextField5, "cell 5 8,growx");
 
 		//---- formattedTextField6 ----
@@ -784,7 +917,7 @@ public class FlatComponentsTest
 		add(passwordField4, "cell 4 9,growx");
 
 		//---- passwordField5 ----
-		passwordField5.putClientProperty("JTextField.placeholderText", "Placeholder");
+		passwordField5.setPlaceholderText("Placeholder");
 		add(passwordField5, "cell 5 9,growx");
 
 		//---- passwordField6 ----
@@ -995,12 +1128,12 @@ public class FlatComponentsTest
 		add(scrollBar3, "cell 2 13 1 6,growy");
 
 		//---- scrollBar7 ----
-		scrollBar7.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar7.setShowButtons(true);
 		add(scrollBar7, "cell 2 13 1 6,growy");
 
 		//---- scrollBar8 ----
 		scrollBar8.setEnabled(false);
-		scrollBar8.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar8.setShowButtons(true);
 		add(scrollBar8, "cell 2 13 1 6,growy");
 
 		//---- separator2 ----
@@ -1090,13 +1223,6 @@ public class FlatComponentsTest
 				"[]"));
 
 			//---- buttonTypeComboBox ----
-			buttonTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
-				"-",
-				"square",
-				"roundRect",
-				"tab",
-				"help"
-			}));
 			buttonTypeComboBox.addActionListener(e -> buttonTypeChanged());
 			panel5.add(buttonTypeComboBox, "cell 0 0");
 
@@ -1172,13 +1298,13 @@ public class FlatComponentsTest
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
-		scrollBar5.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar5.setShowButtons(true);
 		add(scrollBar5, "cell 1 16,growx");
 
 		//---- scrollBar6 ----
 		scrollBar6.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar6.setEnabled(false);
-		scrollBar6.putClientProperty("JScrollBar.showButtons", true);
+		scrollBar6.setShowButtons(true);
 		add(scrollBar6, "cell 1 17,growx");
 
 		//---- separatorLabel ----
@@ -1200,12 +1326,119 @@ public class FlatComponentsTest
 
 		//---- slider1 ----
 		slider1.setValue(30);
-		add(slider1, "cell 1 19 3 1,aligny top,grow 100 0");
+		add(slider1, "cell 1 19 3 1,growx");
 
 		//---- slider6 ----
 		slider6.setEnabled(false);
 		slider6.setValue(30);
-		add(slider6, "cell 1 19 3 1,aligny top,growy 0");
+		add(slider6, "cell 1 19 3 1");
+
+		//======== panel8 ========
+		{
+			panel8.setLayout(new MigLayout(
+				"ltr,insets 0,hidemode 3",
+				// columns
+				"[]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]"));
+
+			//======== panel6 ========
+			{
+				panel6.setBorder(new TitledBorder("JSlider Control"));
+				panel6.setLayout(new MigLayout(
+					"ltr,insets 0,hidemode 3",
+					// columns
+					"[]",
+					// rows
+					"[]0" +
+					"[]0" +
+					"[]0" +
+					"[]"));
+
+				//---- sliderPaintTrackCheckBox ----
+				sliderPaintTrackCheckBox.setText("track");
+				sliderPaintTrackCheckBox.setSelected(true);
+				sliderPaintTrackCheckBox.addActionListener(e -> sliderPaintTrackChanged());
+				panel6.add(sliderPaintTrackCheckBox, "cell 0 0");
+
+				//---- sliderPaintTicksCheckBox ----
+				sliderPaintTicksCheckBox.setText("ticks");
+				sliderPaintTicksCheckBox.addActionListener(e -> sliderPaintTicksChanged());
+				panel6.add(sliderPaintTicksCheckBox, "cell 0 0");
+
+				//---- sliderPaintLabelsCheckBox ----
+				sliderPaintLabelsCheckBox.setText("labels");
+				sliderPaintLabelsCheckBox.addActionListener(e -> sliderPaintLabelsChanged());
+				panel6.add(sliderPaintLabelsCheckBox, "cell 0 0");
+
+				//---- sliderInvertedCheckBox ----
+				sliderInvertedCheckBox.setText("inverted");
+				sliderInvertedCheckBox.addActionListener(e -> sliderInvertedChanged());
+				panel6.add(sliderInvertedCheckBox, "cell 0 1");
+
+				//---- sliderSnapToTicksCheckBox ----
+				sliderSnapToTicksCheckBox.setText("snap to ticks");
+				sliderSnapToTicksCheckBox.addActionListener(e -> sliderSnapToTicksChanged());
+				panel6.add(sliderSnapToTicksCheckBox, "cell 0 1");
+
+				//---- majorTickSpacingSpinner ----
+				majorTickSpacingSpinner.setModel(new SpinnerNumberModel(50, 0, 100, 5));
+				majorTickSpacingSpinner.addChangeListener(e -> majorThickSpacingChanged());
+				panel6.add(majorTickSpacingSpinner, "cell 0 2");
+
+				//---- sliderBorderCheckBox ----
+				sliderBorderCheckBox.setText("border");
+				sliderBorderCheckBox.addActionListener(e -> sliderBorderChanged());
+				panel6.add(sliderBorderCheckBox, "cell 0 2");
+
+				//---- minorTickSpacingSpinner ----
+				minorTickSpacingSpinner.setModel(new SpinnerNumberModel(10, 0, 100, 5));
+				minorTickSpacingSpinner.addChangeListener(e -> minorThickSpacingChanged());
+				panel6.add(minorTickSpacingSpinner, "cell 0 3");
+
+				//---- sliderValueLabel ----
+				sliderValueLabel.setText("slider value");
+				panel6.add(sliderValueLabel, "cell 0 3");
+			}
+			panel8.add(panel6, "cell 0 0 1 2,grow");
+
+			//======== panel7 ========
+			{
+				panel7.setBorder(new TitledBorder("JProgressBar Control"));
+				panel7.setLayout(new MigLayout(
+					"ltr,insets 0,hidemode 3",
+					// columns
+					"[]" +
+					"[fill]",
+					// rows
+					"[]0" +
+					"[]"));
+
+				//---- indeterminateCheckBox ----
+				indeterminateCheckBox.setText("indeterminate");
+				indeterminateCheckBox.addActionListener(e -> indeterminateProgress());
+				panel7.add(indeterminateCheckBox, "cell 0 0");
+
+				//---- squareCheckBox ----
+				squareCheckBox.setText("square");
+				squareCheckBox.addActionListener(e -> squareChanged());
+				panel7.add(squareCheckBox, "cell 1 0");
+
+				//---- largeHeightCheckBox ----
+				largeHeightCheckBox.setText("large height");
+				largeHeightCheckBox.addActionListener(e -> largeHeightChanged());
+				panel7.add(largeHeightCheckBox, "cell 0 1,aligny top,growy 0");
+			}
+			panel8.add(panel7, "cell 0 2 1 2,grow");
+		}
+		add(panel8, "cell 4 19 1 4");
+
+		//---- sliderLabel2 ----
+		sliderLabel2.setText("baseline");
+		add(sliderLabel2, "cell 0 20,alignx right,growx 0");
 
 		//---- slider3 ----
 		slider3.setMinorTickSpacing(10);
@@ -1214,7 +1447,7 @@ public class FlatComponentsTest
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
 		slider3.addChangeListener(e -> changeProgress());
-		add(slider3, "cell 1 20 3 1,aligny top,grow 100 0");
+		add(slider3, "cell 1 20 3 1,growx");
 
 		//---- slider5 ----
 		slider5.setMinorTickSpacing(10);
@@ -1223,7 +1456,7 @@ public class FlatComponentsTest
 		slider5.setPaintLabels(true);
 		slider5.setEnabled(false);
 		slider5.setValue(30);
-		add(slider5, "cell 1 20 3 1,aligny top,growy 0");
+		add(slider5, "cell 1 20 3 1");
 
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
@@ -1237,11 +1470,6 @@ public class FlatComponentsTest
 		progressBar2.setStringPainted(true);
 		progressBar2.setValue(60);
 		add(progressBar2, "cell 1 21 3 1,growx");
-
-		//---- indeterminateCheckBox ----
-		indeterminateCheckBox.setText("indeterminate");
-		indeterminateCheckBox.addActionListener(e -> indeterminateProgress());
-		add(indeterminateCheckBox, "cell 4 21");
 
 		//---- toolTipLabel ----
 		toolTipLabel.setText("JToolTip:");
@@ -1313,24 +1541,24 @@ public class FlatComponentsTest
 
 			//---- button26 ----
 			button26.setIcon(UIManager.getIcon("Tree.closedIcon"));
-			button26.putClientProperty("JButton.buttonType", "square");
+			button26.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(button26);
 
 			//---- button27 ----
 			button27.setIcon(UIManager.getIcon("Tree.openIcon"));
-			button27.putClientProperty("JButton.buttonType", "square");
+			button27.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(button27);
 
 			//---- toggleButton23 ----
 			toggleButton23.setIcon(UIManager.getIcon("FileView.computerIcon"));
 			toggleButton23.setSelected(true);
-			toggleButton23.putClientProperty("JButton.buttonType", "square");
+			toggleButton23.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(toggleButton23);
 
 			//---- toggleButton24 ----
 			toggleButton24.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
 			toggleButton24.setSelected(true);
-			toggleButton24.putClientProperty("JButton.buttonType", "square");
+			toggleButton24.setButtonType(FlatButton.ButtonType.square);
 			toolBar3.add(toggleButton24);
 		}
 		add(toolBar3, "cell 1 23 5 1");
@@ -1344,24 +1572,24 @@ public class FlatComponentsTest
 
 			//---- button28 ----
 			button28.setIcon(UIManager.getIcon("Tree.closedIcon"));
-			button28.putClientProperty("JButton.buttonType", "roundRect");
+			button28.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(button28);
 
 			//---- button29 ----
 			button29.setIcon(UIManager.getIcon("Tree.openIcon"));
-			button29.putClientProperty("JButton.buttonType", "roundRect");
+			button29.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(button29);
 
 			//---- toggleButton25 ----
 			toggleButton25.setIcon(UIManager.getIcon("FileView.computerIcon"));
 			toggleButton25.setSelected(true);
-			toggleButton25.putClientProperty("JButton.buttonType", "roundRect");
+			toggleButton25.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(toggleButton25);
 
 			//---- toggleButton26 ----
 			toggleButton26.setIcon(UIManager.getIcon("FileView.floppyDriveIcon"));
 			toggleButton26.setSelected(true);
-			toggleButton26.putClientProperty("JButton.buttonType", "roundRect");
+			toggleButton26.setButtonType(FlatButton.ButtonType.roundRect);
 			toolBar4.add(toggleButton26);
 		}
 		add(toolBar4, "cell 1 23 5 1");
@@ -1375,6 +1603,11 @@ public class FlatComponentsTest
 		buttonGroup1.add(magentaCyanOutlineRadioButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
+		// Unicode surrogate character pair "script capital A"
+		// https://www.compart.com/en/unicode/U+1D49C
+		button24.setText("\uD835\uDC9C");
+		toggleButton21.setText("\uD835\uDC9C");
+
 //		BasicComboBoxRenderer customRenderer = new BasicComboBoxRenderer();
 //		customRenderer.setBorder( new LineBorder( Color.red ) );
 //		comboBox1.setRenderer( customRenderer );
@@ -1383,9 +1616,11 @@ public class FlatComponentsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JTextField textField1;
-	private JProgressBar progressBar3;
-	private JProgressBar progressBar4;
-	private JComboBox<String> buttonTypeComboBox;
+	private JSlider slider2;
+	private JSlider slider4;
+	private FlatProgressBar progressBar3;
+	private FlatProgressBar progressBar4;
+	private FlatTestEnumComboBox<ButtonType> buttonTypeComboBox;
 	private JCheckBox borderPaintedCheckBox;
 	private JCheckBox roundRectCheckBox;
 	private JCheckBox contentAreaFilledCheckBox;
@@ -1395,10 +1630,24 @@ public class FlatComponentsTest
 	private JRadioButton magentaOutlineRadioButton;
 	private JRadioButton magentaCyanOutlineRadioButton;
 	private JCheckBox focusPaintedCheckBox;
-	private JSlider slider3;
-	private JProgressBar progressBar1;
-	private JProgressBar progressBar2;
+	private JSlider slider1;
+	private JSlider slider6;
+	private JCheckBox sliderPaintTrackCheckBox;
+	private FlatTriStateCheckBox sliderPaintTicksCheckBox;
+	private FlatTriStateCheckBox sliderPaintLabelsCheckBox;
+	private JCheckBox sliderInvertedCheckBox;
+	private JCheckBox sliderSnapToTicksCheckBox;
+	private JSpinner majorTickSpacingSpinner;
+	private JCheckBox sliderBorderCheckBox;
+	private JSpinner minorTickSpacingSpinner;
+	private JLabel sliderValueLabel;
 	private JCheckBox indeterminateCheckBox;
+	private JCheckBox squareCheckBox;
+	private JCheckBox largeHeightCheckBox;
+	private JSlider slider3;
+	private JSlider slider5;
+	private FlatProgressBar progressBar1;
+	private FlatProgressBar progressBar2;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class TestDefaultButton --------------------------------------------
@@ -1447,6 +1696,39 @@ public class FlatComponentsTest
 				if( "Spinner.nextButton".equals( name ) || "Spinner.previousButton".equals( name ) )
 					remove( c );
 			}
+		}
+	}
+
+	//---- class TestToolBar --------------------------------------------------
+
+	private static class TestToolBar
+		extends JToolBar
+	{
+		@Override
+		protected void paintComponent( Graphics g ) {
+			super.paintComponent( g );
+
+			if( isPaintBackgroundPattern() && isOpaque() ) {
+				int width = getWidth();
+				int height = getHeight();
+
+				g.setColor( Color.blue );
+				for( int y = 0; y < height; y += 2 )
+					g.drawLine( 0, y, width - 1, y );
+			}
+		}
+
+		/**
+		 * Overridden to see which components paint background with color from parent.
+		 */
+		@Override
+		public Color getBackground() {
+			return isPaintBackgroundPattern() ? Color.orange : super.getBackground();
+		}
+
+		private boolean isPaintBackgroundPattern() {
+			FlatTestFrame frame = (FlatTestFrame) SwingUtilities.getAncestorOfClass( FlatTestFrame.class, this );
+			return frame != null && frame.isPaintBackgroundPattern();
 		}
 	}
 }

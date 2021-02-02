@@ -31,6 +31,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -98,10 +99,13 @@ public class FlatTableHeaderUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
+		if( header.getColumnModel().getColumnCount() <= 0 )
+			return;
+
 		// do not paint borders if JTableHeader.setDefaultRenderer() was used
 		TableCellRenderer defaultRenderer = header.getDefaultRenderer();
 		boolean paintBorders = isSystemDefaultRenderer( defaultRenderer );
-		if( !paintBorders && header.getColumnModel().getColumnCount() > 0 ) {
+		if( !paintBorders ) {
 			// check whether the renderer delegates to the system default renderer
 			Component rendererComponent = defaultRenderer.getTableCellRendererComponent(
 				header.getTable(), "", false, false, -1, 0 );
@@ -137,7 +141,7 @@ public class FlatTableHeaderUI
 			   rendererClassName.equals( "sun.swing.FilePane$AlignableTableHeaderRenderer" );
 	}
 
-	private void paintColumnBorders( Graphics g, JComponent c ) {
+	protected void paintColumnBorders( Graphics g, JComponent c ) {
 		int width = c.getWidth();
 		int height = c.getHeight();
 		float lineWidth = UIScale.scale( 1f );
@@ -145,6 +149,9 @@ public class FlatTableHeaderUI
 		float bottomLineIndent = lineWidth * 3;
 		TableColumnModel columnModel = header.getColumnModel();
 		int columnCount = columnModel.getColumnCount();
+		int sepCount = columnCount;
+		if( hideLastVerticalLine() )
+			sepCount--;
 
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
@@ -157,23 +164,30 @@ public class FlatTableHeaderUI
 			// paint column separator lines
 			g2.setColor( separatorColor );
 
-			int sepCount = columnCount;
-			if( header.getTable() != null && header.getTable().getAutoResizeMode() != JTable.AUTO_RESIZE_OFF && !isVerticalScrollBarVisible() )
-				sepCount--;
+			float y = topLineIndent;
+			float h = height - bottomLineIndent;
 
 			if( header.getComponentOrientation().isLeftToRight() ) {
 				int x = 0;
 				for( int i = 0; i < sepCount; i++ ) {
 					x += columnModel.getColumn( i ).getWidth();
-					g2.fill( new Rectangle2D.Float( x - lineWidth, topLineIndent, lineWidth, height - bottomLineIndent ) );
+					g2.fill( new Rectangle2D.Float( x - lineWidth, y, lineWidth, h ) );
 				}
+
+				// paint trailing separator (on right side)
+				if( !hideTrailingVerticalLine() )
+					g2.fill( new Rectangle2D.Float( header.getWidth() - lineWidth, y, lineWidth, h ) );
 			} else {
-				int x = width;
+				Rectangle cellRect = header.getHeaderRect( 0 );
+				int x = cellRect.x + cellRect.width;
 				for( int i = 0; i < sepCount; i++ ) {
 					x -= columnModel.getColumn( i ).getWidth();
-					g2.fill( new Rectangle2D.Float( x - (i < sepCount - 1 ? lineWidth : 0),
-						topLineIndent, lineWidth, height - bottomLineIndent ) );
+					g2.fill( new Rectangle2D.Float( x - (i < sepCount - 1 ? lineWidth : 0), y, lineWidth, h ) );
 				}
+
+				// paint trailing separator (on left side)
+				if( !hideTrailingVerticalLine() )
+					g2.fill( new Rectangle2D.Float( 0, y, lineWidth, h ) );
 			}
 		} finally {
 			g2.dispose();
@@ -230,20 +244,30 @@ public class FlatTableHeaderUI
 		return size;
 	}
 
-	private boolean isVerticalScrollBarVisible() {
-		JScrollPane scrollPane = getScrollPane();
-		return (scrollPane != null && scrollPane.getVerticalScrollBar() != null)
-			? scrollPane.getVerticalScrollBar().isVisible()
-			: false;
+	protected boolean hideLastVerticalLine() {
+		Container viewport = header.getParent();
+		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
+		if( !(viewportParent instanceof JScrollPane) )
+			return false;
+
+		Rectangle cellRect = header.getHeaderRect( header.getColumnModel().getColumnCount() - 1 );
+
+		// using component orientation of scroll pane here because it is also used in FlatTableUI
+		JScrollPane scrollPane = (JScrollPane) viewportParent;
+		return scrollPane.getComponentOrientation().isLeftToRight()
+			? cellRect.x + cellRect.width >= viewport.getWidth()
+			: cellRect.x <= 0;
 	}
 
-	private JScrollPane getScrollPane() {
-		Container parent = header.getParent();
-		if( parent == null )
-			return null;
+	protected boolean hideTrailingVerticalLine() {
+		Container viewport = header.getParent();
+		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
+		if( !(viewportParent instanceof JScrollPane) )
+			return false;
 
-		parent = parent.getParent();
-		return (parent instanceof JScrollPane) ? (JScrollPane) parent : null;
+		JScrollPane scrollPane = (JScrollPane) viewportParent;
+		return viewport == scrollPane.getColumnHeader() &&
+			scrollPane.getCorner( ScrollPaneConstants.UPPER_TRAILING_CORNER ) == null;
 	}
 
 	//---- class FlatTableCellHeaderRenderer ----------------------------------

@@ -19,11 +19,12 @@ package com.formdev.flatlaf.testing;
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.function.BiConsumer;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.extras.TriStateCheckBox;
+import com.formdev.flatlaf.extras.components.FlatTabbedPane;
+import com.formdev.flatlaf.extras.components.FlatTabbedPane.*;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon;
 import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.jgoodies.forms.layout.*;
@@ -46,11 +47,21 @@ public class FlatContainerTest
 	public FlatContainerTest() {
 		initComponents();
 
+		tabPlacementField.init( TabPlacement.class, true );
+		iconPlacementField.init( TabIconPlacement.class, true );
+		tabsPopupPolicyField.init( TabsPopupPolicy.class, true );
+		scrollButtonsPolicyField.init( ScrollButtonsPolicy.class, true );
+		scrollButtonsPlacementField.init( ScrollButtonsPlacement.class, true );
+		tabAreaAlignmentField.init( TabAreaAlignment.class, true );
+		tabAlignmentField.init( TabAlignment.class, true );
+		tabWidthModeField.init( TabWidthMode.class, true );
+
 		tabCountChanged();
 
 		tabsClosableCheckBox.setSelected( true );
 		tabsClosableChanged();
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT, "Close" );
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabCloseToolTipText( "Close" );
 
 		tabScrollCheckBox.setSelected( true );
 		tabScrollChanged();
@@ -78,6 +89,11 @@ public class FlatContainerTest
 		putTabbedPanesClientProperty( TABBED_PANE_SHOW_CONTENT_SEPARATOR, showContentSeparator );
 	}
 
+	private void hideTabAreaWithOneTabChanged() {
+		Boolean hideTabAreaWithOneTab = hideTabAreaWithOneTabCheckBox.isSelected() ? true : null;
+		putTabbedPanesClientProperty( TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, hideTabAreaWithOneTab );
+	}
+
 	private void hasFullBorderChanged() {
 		Boolean hasFullBorder = hasFullBorderCheckBox.isSelected() ? true : null;
 		putTabbedPanesClientProperty( TABBED_PANE_HAS_FULL_BORDER, hasFullBorder );
@@ -89,11 +105,11 @@ public class FlatContainerTest
 	}
 
 	private void tabCountChanged() {
-		for( JTabbedPane tabbedPane : allTabbedPanes )
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
 			tabCountChanged( tabbedPane );
 	}
 
-	private void tabCountChanged( JTabbedPane tabbedPane ) {
+	private void tabCountChanged( FlatTabbedPane tabbedPane ) {
 		int oldTabCount = tabbedPane.getTabCount();
 		int newTabCount = (Integer) tabCountSpinner.getValue();
 
@@ -110,7 +126,7 @@ public class FlatContainerTest
 		setTabIcons( tabbedPane );
 	}
 
-	private void addTab( JTabbedPane tabbedPane ) {
+	private void addTab( FlatTabbedPane tabbedPane ) {
 		switch( tabbedPane.getTabCount() ) {
 			case 0:
 				tabbedPane.addTab( "Tab 1", null, new Panel1(), "First tab." );
@@ -120,12 +136,14 @@ public class FlatContainerTest
 				JComponent tab2 = new Panel2();
 				tab2.setBorder( new LineBorder( Color.magenta ) );
 				tabbedPane.addTab( "Second Tab", null, tab2, "This is the second tab." );
+				tabbedPane.setTabCloseToolTipText( 1, "Close Second Tab" );
 				break;
 
 			case 2:
 				tabbedPane.addTab( "Disabled", createTab( "tab content 3" ) );
 				tabbedPane.setEnabledAt( 2, false );
 				tabbedPane.setToolTipTextAt( 2, "Disabled tab." );
+				tabbedPane.setTabCloseToolTipText( 2, "Close Disabled tab" );
 				break;
 
 			case 3:
@@ -153,6 +171,7 @@ public class FlatContainerTest
 			setTabIcons( tabbedPane );
 
 		tabIconSizeSpinner.setEnabled( tabIconsCheckBox.isSelected() );
+		iconPlacementField.setEnabled( tabIconsCheckBox.isSelected() );
 	}
 
 	private void setTabIcons( JTabbedPane tabbedPane ) {
@@ -177,14 +196,10 @@ public class FlatContainerTest
 	}
 
 	private void iconPlacementChanged() {
-		Object iconPlacement = null;
-		switch( (String) iconPlacementField.getSelectedItem() ) {
-			case "leading":		iconPlacement = SwingConstants.LEADING; break;
-			case "trailing":	iconPlacement = SwingConstants.TRAILING; break;
-			case "top":			iconPlacement = SwingConstants.TOP; break;
-			case "bottom":		iconPlacement = SwingConstants.BOTTOM; break;
-		}
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_ICON_PLACEMENT, iconPlacement );
+		TabIconPlacement value = iconPlacementField.getSelectedValue();
+		int iconPlacement = (value != null) ? value.value : -1;
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabIconPlacement( iconPlacement );
 	}
 
 	private void customBorderChanged() {
@@ -247,13 +262,8 @@ public class FlatContainerTest
 	}
 
 	private void tabPlacementChanged() {
-		int tabPlacement = -1;
-		switch( (String) tabPlacementField.getSelectedItem() ) {
-			case "top":		tabPlacement = SwingConstants.TOP; break;
-			case "bottom":	tabPlacement = SwingConstants.BOTTOM; break;
-			case "left":	tabPlacement = SwingConstants.LEFT; break;
-			case "right":	tabPlacement = SwingConstants.RIGHT; break;
-		}
+		TabPlacement value = tabPlacementField.getSelectedValue();
+		int tabPlacement = (value != null) ? value.value : -1;
 
 		tabbedPane1.setTabPlacement( (tabPlacement >= 0) ? tabPlacement : SwingConstants.TOP );
 		tabbedPane2.setTabPlacement( (tabPlacement >= 0) ? tabPlacement : SwingConstants.BOTTOM );
@@ -262,49 +272,39 @@ public class FlatContainerTest
 	}
 
 	private void tabsPopupPolicyChanged() {
-		String value = (String) tabsPopupPolicyField.getSelectedItem();
-		if( "default".equals( value ) )
-			value = null;
-		putTabbedPanesClientProperty( TABBED_PANE_TABS_POPUP_POLICY, value );
+		TabsPopupPolicy value = tabsPopupPolicyField.getSelectedValue();
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabsPopupPolicy( value );
 	}
 
 	private void scrollButtonsPolicyChanged() {
-		String value = (String) scrollButtonsPolicyField.getSelectedItem();
-		if( "default".equals( value ) )
-			value = null;
-		putTabbedPanesClientProperty( TABBED_PANE_SCROLL_BUTTONS_POLICY, value );
+		ScrollButtonsPolicy value = scrollButtonsPolicyField.getSelectedValue();
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setScrollButtonsPolicy( value );
 	}
 
 	private void scrollButtonsPlacementChanged() {
-		String value = (String) scrollButtonsPlacementField.getSelectedItem();
-		if( "default".equals( value ) )
-			value = null;
-		putTabbedPanesClientProperty( TABBED_PANE_SCROLL_BUTTONS_PLACEMENT, value );
+		ScrollButtonsPlacement value = scrollButtonsPlacementField.getSelectedValue();
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setScrollButtonsPlacement( value );
 	}
 
 	private void tabAreaAlignmentChanged() {
-		String value = (String) tabAreaAlignmentField.getSelectedItem();
-		if( "default".equals( value ) )
-			value = null;
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_AREA_ALIGNMENT, value );
+		TabAreaAlignment value = tabAreaAlignmentField.getSelectedValue();
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabAreaAlignment( value );
 	}
 
 	private void tabAlignmentChanged() {
-		String value = (String) tabAlignmentField.getSelectedItem();
-		Integer tabAlignment = null;
-		switch( value ) {
-			case "center":		tabAlignment = SwingConstants.CENTER; break;
-			case "leading":		tabAlignment = SwingConstants.LEADING; break;
-			case "trailing":	tabAlignment = SwingConstants.TRAILING; break;
-		}
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_ALIGNMENT, tabAlignment );
+		TabAlignment value = tabAlignmentField.getSelectedValue();
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabAlignment( value );
 	}
 
 	private void tabWidthModeChanged() {
-		String value = (String) tabWidthModeField.getSelectedItem();
-		if( "default".equals( value ) )
-			value = null;
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_WIDTH_MODE, value );
+		TabWidthMode value = tabWidthModeField.getSelectedValue();
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabWidthMode( value );
 	}
 
 	private void tabBackForegroundChanged() {
@@ -344,65 +344,78 @@ public class FlatContainerTest
 
 	private void tabsClosableChanged() {
 		boolean closable = tabsClosableCheckBox.isSelected();
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSABLE, closable ? true : null );
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabsClosable( closable );
 
 		if( closable ) {
-			putTabbedPanesClientProperty( TABBED_PANE_TAB_CLOSE_CALLBACK,
-				(BiConsumer<JTabbedPane, Integer>) (tabbedPane, tabIndex) -> {
+			for( FlatTabbedPane tabbedPane : allTabbedPanes ) {
+				tabbedPane.setTabCloseCallback( (tabbedPane2, tabIndex) -> {
+					String tabTitle = tabbedPane2.getTitleAt( tabIndex );
 					AWTEvent e = EventQueue.getCurrentEvent();
 					int modifiers = (e instanceof MouseEvent) ? ((MouseEvent)e).getModifiers() : 0;
-					JOptionPane.showMessageDialog( this, "Closed tab '" + tabbedPane.getTitleAt( tabIndex ) + "'."
+
+					tabbedPane2.removeTabAt( tabIndex );
+
+					JOptionPane.showMessageDialog( this, "Closed tab '" + tabTitle + "'."
 						+ "\n\n(modifiers: " + MouseEvent.getMouseModifiersText( modifiers ) + ")",
 						"Tab Closed", JOptionPane.PLAIN_MESSAGE );
 				} );
+			}
 		}
 	}
 
 	private void secondTabClosableChanged() {
-		Boolean value = secondTabClosableCheckBox.getValue();
+		Boolean closable = secondTabClosableCheckBox.getChecked();
 
-		for( JTabbedPane tabbedPane : allTabbedPanes ) {
+		for( FlatTabbedPane tabbedPane : allTabbedPanes ) {
 			if( tabbedPane.getTabCount() > 1 ) {
-				Component c = tabbedPane.getComponentAt( 1 );
-				((JComponent)c).putClientProperty( TABBED_PANE_TAB_CLOSABLE, value );
+				if( closable != null )
+					tabbedPane.setTabClosable( 1, closable );
+				else {
+					JComponent c = (JComponent) tabbedPane.getComponentAt( 1 );
+					c.putClientProperty( TABBED_PANE_TAB_CLOSABLE, null );
+				}
 			}
 		}
 	}
 
 	private void tabAreaInsetsChanged() {
 		Insets insets = tabAreaInsetsCheckBox.isSelected() ? new Insets( 5, 5, 10, 10 ) : null;
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_AREA_INSETS, insets );
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabAreaInsets( insets );
 	}
 
 	private void smallerTabHeightChanged() {
-		Integer tabHeight = smallerTabHeightCheckBox.isSelected() ? 26 : null;
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_HEIGHT, tabHeight );
+		int tabHeight = smallerTabHeightCheckBox.isSelected() ? 26 : -1;
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabHeight( tabHeight );
 	}
 
 	private void smallerInsetsChanged() {
 		Insets insets = smallerInsetsCheckBox.isSelected() ? new Insets( 2, 2, 2, 2 ) : null;
-		putTabbedPanesClientProperty( TABBED_PANE_TAB_INSETS, insets );
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabInsets( insets );
 	}
 
 	private void secondTabWiderChanged() {
 		Insets insets = secondTabWiderCheckBox.isSelected() ? new Insets( 4, 20, 4, 20 ) : null;
 
-		for( JTabbedPane tabbedPane : allTabbedPanes ) {
-			if( tabbedPane.getTabCount() > 1 ) {
-				Component c = tabbedPane.getComponentAt( 1 );
-				((JComponent)c).putClientProperty( TABBED_PANE_TAB_INSETS, insets );
-			}
+		for( FlatTabbedPane tabbedPane : allTabbedPanes ) {
+			if( tabbedPane.getTabCount() > 1 )
+				tabbedPane.setTabInsets( 1, insets );
 		}
 	}
 
 	private void minimumTabWidthChanged() {
-		Integer minimumTabWidth = minimumTabWidthCheckBox.isSelected() ? 100 : null;
-		putTabbedPanesClientProperty( TABBED_PANE_MINIMUM_TAB_WIDTH, minimumTabWidth );
+		int minimumTabWidth = minimumTabWidthCheckBox.isSelected() ? 100 : -1;
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setMinimumTabWidth( minimumTabWidth );
 	}
 
 	private void maximumTabWidthChanged() {
-		Integer maximumTabWidth = maximumTabWidthCheckBox.isSelected() ? 60 : null;
-		putTabbedPanesClientProperty( TABBED_PANE_MAXIMUM_TAB_WIDTH, maximumTabWidth );
+		int maximumTabWidth = maximumTabWidthCheckBox.isSelected() ? 60 : -1;
+		for( FlatTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setMaximumTabWidth( maximumTabWidth );
 	}
 
 	private void initComponents() {
@@ -419,10 +432,10 @@ public class FlatContainerTest
 		JPanel panel13 = new JPanel();
 		JLabel label4 = new JLabel();
 		JLabel tabbedPaneLabel = new JLabel();
-		tabbedPane1 = new JTabbedPane();
-		tabbedPane3 = new JTabbedPane();
-		tabbedPane2 = new JTabbedPane();
-		tabbedPane4 = new JTabbedPane();
+		tabbedPane1 = new FlatTabbedPane();
+		tabbedPane3 = new FlatTabbedPane();
+		tabbedPane2 = new FlatTabbedPane();
+		tabbedPane4 = new FlatTabbedPane();
 		FlatTestFrame.NoRightToLeftPanel tabbedPaneControlPanel = new FlatTestFrame.NoRightToLeftPanel();
 		tabScrollCheckBox = new JCheckBox();
 		JLabel tabCountLabel = new JLabel();
@@ -431,24 +444,24 @@ public class FlatContainerTest
 		htmlTabsCheckBox = new JCheckBox();
 		multiLineTabsCheckBox = new JCheckBox();
 		JLabel tabsPopupPolicyLabel = new JLabel();
-		tabsPopupPolicyField = new JComboBox<>();
+		tabsPopupPolicyField = new FlatTestEnumComboBox<>();
 		tabBackForegroundCheckBox = new JCheckBox();
 		JLabel scrollButtonsPolicyLabel = new JLabel();
-		scrollButtonsPolicyField = new JComboBox<>();
+		scrollButtonsPolicyField = new FlatTestEnumComboBox<>();
 		tabIconsCheckBox = new JCheckBox();
 		tabIconSizeSpinner = new JSpinner();
-		iconPlacementField = new JComboBox<>();
+		iconPlacementField = new FlatTestEnumComboBox<>();
 		JLabel scrollButtonsPlacementLabel = new JLabel();
-		scrollButtonsPlacementField = new JComboBox<>();
+		scrollButtonsPlacementField = new FlatTestEnumComboBox<>();
 		tabsClosableCheckBox = new JCheckBox();
 		JLabel tabPlacementLabel = new JLabel();
-		tabPlacementField = new JComboBox<>();
-		secondTabClosableCheckBox = new TriStateCheckBox();
+		tabPlacementField = new FlatTestEnumComboBox<>();
+		secondTabClosableCheckBox = new FlatTriStateCheckBox();
 		JLabel tabAreaAlignmentLabel = new JLabel();
-		tabAreaAlignmentField = new JComboBox<>();
-		tabAlignmentField = new JComboBox<>();
+		tabAreaAlignmentField = new FlatTestEnumComboBox<>();
+		tabAlignmentField = new FlatTestEnumComboBox<>();
 		JLabel tabWidthModeLabel = new JLabel();
-		tabWidthModeField = new JComboBox<>();
+		tabWidthModeField = new FlatTestEnumComboBox<>();
 		leadingComponentCheckBox = new JCheckBox();
 		customBorderCheckBox = new JCheckBox();
 		tabAreaInsetsCheckBox = new JCheckBox();
@@ -461,6 +474,7 @@ public class FlatContainerTest
 		maximumTabWidthCheckBox = new JCheckBox();
 		showTabSeparatorsCheckBox = new JCheckBox();
 		secondTabWiderCheckBox = new JCheckBox();
+		hideTabAreaWithOneTabCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -579,6 +593,7 @@ public class FlatContainerTest
 					"[]" +
 					"[]para" +
 					"[]" +
+					"[]" +
 					"[]"));
 
 				//---- tabScrollCheckBox ----
@@ -616,11 +631,6 @@ public class FlatContainerTest
 				tabbedPaneControlPanel.add(tabsPopupPolicyLabel, "cell 0 1");
 
 				//---- tabsPopupPolicyField ----
-				tabsPopupPolicyField.setModel(new DefaultComboBoxModel<>(new String[] {
-					"default",
-					"asNeeded",
-					"never"
-				}));
 				tabsPopupPolicyField.addActionListener(e -> tabsPopupPolicyChanged());
 				tabbedPaneControlPanel.add(tabsPopupPolicyField, "cell 1 1");
 
@@ -634,12 +644,6 @@ public class FlatContainerTest
 				tabbedPaneControlPanel.add(scrollButtonsPolicyLabel, "cell 0 2");
 
 				//---- scrollButtonsPolicyField ----
-				scrollButtonsPolicyField.setModel(new DefaultComboBoxModel<>(new String[] {
-					"default",
-					"asNeededSingle",
-					"asNeeded",
-					"never"
-				}));
 				scrollButtonsPolicyField.addActionListener(e -> scrollButtonsPolicyChanged());
 				tabbedPaneControlPanel.add(scrollButtonsPolicyField, "cell 1 2");
 
@@ -655,12 +659,7 @@ public class FlatContainerTest
 				tabbedPaneControlPanel.add(tabIconSizeSpinner, "cell 2 2");
 
 				//---- iconPlacementField ----
-				iconPlacementField.setModel(new DefaultComboBoxModel<>(new String[] {
-					"leading",
-					"trailing",
-					"top",
-					"bottom"
-				}));
+				iconPlacementField.setEnabled(false);
 				iconPlacementField.addActionListener(e -> iconPlacementChanged());
 				tabbedPaneControlPanel.add(iconPlacementField, "cell 2 2");
 
@@ -669,11 +668,6 @@ public class FlatContainerTest
 				tabbedPaneControlPanel.add(scrollButtonsPlacementLabel, "cell 0 3");
 
 				//---- scrollButtonsPlacementField ----
-				scrollButtonsPlacementField.setModel(new DefaultComboBoxModel<>(new String[] {
-					"default",
-					"both",
-					"trailing"
-				}));
 				scrollButtonsPlacementField.addActionListener(e -> scrollButtonsPlacementChanged());
 				tabbedPaneControlPanel.add(scrollButtonsPlacementField, "cell 1 3");
 
@@ -687,13 +681,6 @@ public class FlatContainerTest
 				tabbedPaneControlPanel.add(tabPlacementLabel, "cell 0 4");
 
 				//---- tabPlacementField ----
-				tabPlacementField.setModel(new DefaultComboBoxModel<>(new String[] {
-					"default",
-					"top",
-					"bottom",
-					"left",
-					"right"
-				}));
 				tabPlacementField.addActionListener(e -> tabPlacementChanged());
 				tabbedPaneControlPanel.add(tabPlacementField, "cell 1 4");
 
@@ -707,23 +694,10 @@ public class FlatContainerTest
 				tabbedPaneControlPanel.add(tabAreaAlignmentLabel, "cell 0 5");
 
 				//---- tabAreaAlignmentField ----
-				tabAreaAlignmentField.setModel(new DefaultComboBoxModel<>(new String[] {
-					"default",
-					"leading",
-					"trailing",
-					"center",
-					"fill"
-				}));
 				tabAreaAlignmentField.addActionListener(e -> tabAreaAlignmentChanged());
 				tabbedPaneControlPanel.add(tabAreaAlignmentField, "cell 1 5");
 
 				//---- tabAlignmentField ----
-				tabAlignmentField.setModel(new DefaultComboBoxModel<>(new String[] {
-					"default",
-					"leading",
-					"trailing",
-					"center"
-				}));
 				tabAlignmentField.addActionListener(e -> tabAlignmentChanged());
 				tabbedPaneControlPanel.add(tabAlignmentField, "cell 1 5");
 
@@ -732,12 +706,6 @@ public class FlatContainerTest
 				tabbedPaneControlPanel.add(tabWidthModeLabel, "cell 2 5");
 
 				//---- tabWidthModeField ----
-				tabWidthModeField.setModel(new DefaultComboBoxModel<>(new String[] {
-					"default",
-					"preferred",
-					"equal",
-					"compact"
-				}));
 				tabWidthModeField.addActionListener(e -> tabWidthModeChanged());
 				tabbedPaneControlPanel.add(tabWidthModeField, "cell 2 5");
 
@@ -800,38 +768,43 @@ public class FlatContainerTest
 				secondTabWiderCheckBox.setText("Second Tab insets wider (4,20,4,20)");
 				secondTabWiderCheckBox.addActionListener(e -> secondTabWiderChanged());
 				tabbedPaneControlPanel.add(secondTabWiderCheckBox, "cell 2 9");
+
+				//---- hideTabAreaWithOneTabCheckBox ----
+				hideTabAreaWithOneTabCheckBox.setText("Hide tab area with one tab");
+				hideTabAreaWithOneTabCheckBox.addActionListener(e -> hideTabAreaWithOneTabChanged());
+				tabbedPaneControlPanel.add(hideTabAreaWithOneTabCheckBox, "cell 1 10");
 			}
 			panel9.add(tabbedPaneControlPanel, cc.xywh(1, 11, 3, 1));
 		}
 		add(panel9, "cell 0 0");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
-		allTabbedPanes = new JTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
+		allTabbedPanes = new FlatTabbedPane[] { tabbedPane1, tabbedPane2, tabbedPane3, tabbedPane4 };
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JTabbedPane tabbedPane1;
-	private JTabbedPane tabbedPane3;
-	private JTabbedPane tabbedPane2;
-	private JTabbedPane tabbedPane4;
+	private FlatTabbedPane tabbedPane1;
+	private FlatTabbedPane tabbedPane3;
+	private FlatTabbedPane tabbedPane2;
+	private FlatTabbedPane tabbedPane4;
 	private JCheckBox tabScrollCheckBox;
 	private JSpinner tabCountSpinner;
 	private JCheckBox customTabsCheckBox;
 	private JCheckBox htmlTabsCheckBox;
 	private JCheckBox multiLineTabsCheckBox;
-	private JComboBox<String> tabsPopupPolicyField;
+	private FlatTestEnumComboBox<TabsPopupPolicy> tabsPopupPolicyField;
 	private JCheckBox tabBackForegroundCheckBox;
-	private JComboBox<String> scrollButtonsPolicyField;
+	private FlatTestEnumComboBox<ScrollButtonsPolicy> scrollButtonsPolicyField;
 	private JCheckBox tabIconsCheckBox;
 	private JSpinner tabIconSizeSpinner;
-	private JComboBox<String> iconPlacementField;
-	private JComboBox<String> scrollButtonsPlacementField;
+	private FlatTestEnumComboBox<TabIconPlacement> iconPlacementField;
+	private FlatTestEnumComboBox<ScrollButtonsPlacement> scrollButtonsPlacementField;
 	private JCheckBox tabsClosableCheckBox;
-	private JComboBox<String> tabPlacementField;
-	private TriStateCheckBox secondTabClosableCheckBox;
-	private JComboBox<String> tabAreaAlignmentField;
-	private JComboBox<String> tabAlignmentField;
-	private JComboBox<String> tabWidthModeField;
+	private FlatTestEnumComboBox<TabPlacement> tabPlacementField;
+	private FlatTriStateCheckBox secondTabClosableCheckBox;
+	private FlatTestEnumComboBox<TabAreaAlignment> tabAreaAlignmentField;
+	private FlatTestEnumComboBox<TabAlignment> tabAlignmentField;
+	private FlatTestEnumComboBox<TabWidthMode> tabWidthModeField;
 	private JCheckBox leadingComponentCheckBox;
 	private JCheckBox customBorderCheckBox;
 	private JCheckBox tabAreaInsetsCheckBox;
@@ -844,9 +817,40 @@ public class FlatContainerTest
 	private JCheckBox maximumTabWidthCheckBox;
 	private JCheckBox showTabSeparatorsCheckBox;
 	private JCheckBox secondTabWiderCheckBox;
+	private JCheckBox hideTabAreaWithOneTabCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
-	private JTabbedPane[] allTabbedPanes;
+	private FlatTabbedPane[] allTabbedPanes;
+
+	//---- enum TabPlacement --------------------------------------------------
+
+	enum TabPlacement {
+		top( SwingConstants.TOP ),
+		bottom( SwingConstants.BOTTOM ),
+		left( SwingConstants.LEFT ),
+		right( SwingConstants.RIGHT );
+
+		public final int value;
+
+		TabPlacement( int value ) {
+			this.value = value;
+		}
+	};
+
+	//---- enum TabIconPlacement ----------------------------------------------
+
+	enum TabIconPlacement {
+		leading( SwingConstants.LEADING ),
+		trailing( SwingConstants.TRAILING ),
+		top( SwingConstants.TOP ),
+		bottom( SwingConstants.BOTTOM );
+
+		public final int value;
+
+		TabIconPlacement( int value ) {
+			this.value = value;
+		}
+	};
 
 	//---- class Tab1Panel ----------------------------------------------------
 

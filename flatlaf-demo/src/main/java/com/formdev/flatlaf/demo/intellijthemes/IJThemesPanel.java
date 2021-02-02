@@ -220,6 +220,17 @@ public class IJThemesPanel
 		}
 	}
 
+	public void selectPreviousTheme() {
+		int sel = themesList.getSelectedIndex();
+		if( sel > 0 )
+			themesList.setSelectedIndex( sel - 1 );
+	}
+
+	public void selectNextTheme() {
+		int sel = themesList.getSelectedIndex();
+		themesList.setSelectedIndex( sel + 1 );
+	}
+
 	private void themesListValueChanged( ListSelectionEvent e ) {
 		IJThemeInfo themeInfo = themesList.getSelectedValue();
 		boolean bundledTheme = (themeInfo != null && themeInfo.resourceName != null);

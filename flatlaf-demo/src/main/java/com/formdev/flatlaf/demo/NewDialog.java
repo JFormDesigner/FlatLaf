@@ -44,10 +44,12 @@ class NewDialog
 	}
 
 	private void okActionPerformed() {
+		System.out.println( "ok" );
 		dispose();
 	}
 
 	private void cancelActionPerformed() {
+		System.out.println( "cancel" );
 		dispose();
 	}
 

@@ -99,6 +99,8 @@
     "FileColor.Yellow": "#F5F0DF",
     "FileColor.Green": "#E8F2DF",
 
+    "GotItTooltip.borderColor": "#0000001F",
+
     "Label.errorForeground": "#C7222D",
 
     "Link": {
@@ -137,7 +139,8 @@
       "SectionHeader.foreground": "#808080",
       "Tab.selectedBackground": "#D5D6D7",
       "Tab.hoverBackground": "#D5D6D7",
-      "lightSelectionBackground": "#F4F9FF"
+      "lightSelectionBackground": "#E9EFF7",
+      "hoverBackground": "#f7faff"
     },
 
     "Popup": {
@@ -185,12 +188,13 @@
       "contentAreaColor": "#E1E3E6"
     },
 
-    "Table.stripeColor": "#F2F3F5",
+    "Table": {
+      "stripeColor": "#F2F3F5",
+      "hoverBackground": "#00000009"
+    },
 
     "TableHeader": {
-      "cellBorder": "3,0,3,0",
-      "background": "#fafbfc",
-      "bottomSeparatorColor": "#ebedf0"
+      "cellBorder": "3,0,3,0"
     },
 
     "TextArea.background": "#FFFFFF",
@@ -225,8 +229,14 @@
 
     "VersionControl": {
       "Log.Commit.currentBranchBackground": "#e6f0f2",
-      "FileHistory.Commit.selectedBranchBackground": "#e6f0f2"
+      "FileHistory.Commit.selectedBranchBackground": "#e6f0f2",
+      "Log.Commit.hoveredBackground": "#000000EE"
+    },
+
+    "WelcomeScreen": {
+      "Details.background": "#FAFBFC"
     }
+
 
   },
 

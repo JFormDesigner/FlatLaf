@@ -16,23 +16,41 @@
 
 package com.formdev.flatlaf;
 
+import javax.swing.UIManager;
+
 /**
  * A Flat LaF that has a light color scheme.
- *
- * The UI defaults are loaded from FlatLightLaf.properties and FlatLaf.properties
+ * <p>
+ * The UI defaults are loaded from {@code FlatLightLaf.properties} and {@code FlatLaf.properties}.
  *
  * @author Karl Tauber
  */
 public class FlatLightLaf
 	extends FlatLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "FlatLaf Light";
+
+	/**
+	 * Sets the application look and feel to this LaF
+	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
+	 */
+	public static boolean install() {
 		return install( new FlatLightLaf() );
+	}
+
+	/**
+	 * Adds this look and feel to the set of available look and feels.
+	 * <p>
+	 * Useful if your application uses {@link UIManager#getInstalledLookAndFeels()}
+	 * to query available LaFs and display them to the user in a combobox.
+	 */
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatLightLaf.class );
 	}
 
 	@Override
 	public String getName() {
-		return "FlatLaf Light";
+		return NAME;
 	}
 
 	@Override

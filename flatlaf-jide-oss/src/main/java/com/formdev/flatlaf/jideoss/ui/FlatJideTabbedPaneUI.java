@@ -21,6 +21,7 @@ import static com.formdev.flatlaf.FlatClientProperties.clientPropertyBoolean;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -38,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.UIDefaultsLookup;
 import com.jidesoft.plaf.basic.BasicJideTabbedPaneUI;
 import com.jidesoft.swing.JideTabbedPane;
@@ -62,7 +64,10 @@ public class FlatJideTabbedPaneUI
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
 
+	private Object[] oldRenderingHints;
+
 	public static ComponentUI createUI( JComponent c ) {
+		LookAndFeelFactory.installJideExtension();
 		return new FlatJideTabbedPaneUI();
 	}
 
@@ -193,9 +198,12 @@ public class FlatJideTabbedPaneUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 		super.update( g, c );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		oldRenderingHints = null;
 	}
 
 	@Override
@@ -220,6 +228,15 @@ public class FlatJideTabbedPaneUI
 				? focusColor
 				: _tabPane.getBackgroundAt( tabIndex )) );
 		g.fillRect( x, y, w, h );
+	}
+
+	@Override
+	protected void paintText( Graphics g, int tabPlacement, Font font, FontMetrics metrics,
+		int tabIndex, String title, Rectangle textRect, boolean isSelected )
+	{
+		FlatUIUtils.runWithoutRenderingHints( g, oldRenderingHints, () -> {
+			super.paintText( g, tabPlacement, font, metrics, tabIndex, title, textRect, isSelected );
+		} );
 	}
 
 	@Override

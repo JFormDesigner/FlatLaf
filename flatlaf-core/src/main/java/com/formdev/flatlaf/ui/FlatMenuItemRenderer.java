@@ -39,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -55,7 +56,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuItem.underlineSelectionBackground					Color
  * @uiDefault MenuItem.underlineSelectionCheckBackground			Color
  * @uiDefault MenuItem.underlineSelectionColor						Color
- * @uiDefault MenuItem.underlineSelectionHeight						Color
+ * @uiDefault MenuItem.underlineSelectionHeight						int
+ * @uiDefault MenuItem.selectionBackground							Color
  *
  * @author Karl Tauber
  */
@@ -80,6 +82,8 @@ public class FlatMenuItemRenderer
 	protected final Color underlineSelectionCheckBackground = UIManager.getColor( "MenuItem.underlineSelectionCheckBackground" );
 	protected final Color underlineSelectionColor = UIManager.getColor( "MenuItem.underlineSelectionColor" );
 	protected final int underlineSelectionHeight = UIManager.getInt( "MenuItem.underlineSelectionHeight" );
+
+	protected final Color selectionBackground = UIManager.getColor( "MenuItem.selectionBackground" );
 
 	protected FlatMenuItemRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
 		Font acceleratorFont, String acceleratorDelimiter )
@@ -246,8 +250,11 @@ public class FlatMenuItemRenderer
 		g.setColor( Color.orange ); g.drawRect( arrowRect.x, arrowRect.y, arrowRect.width - 1, arrowRect.height - 1 );
 debug*/
 
-		paintBackground( g, selectionBackground );
-		paintIcon( g, iconRect, getIconForPainting() );
+		boolean underlineSelection = isUnderlineSelection();
+		paintBackground( g, underlineSelection ? underlineSelectionBackground : selectionBackground );
+		if( underlineSelection && isArmedOrSelected( menuItem ) )
+			paintUnderlineSelection( g, underlineSelectionColor, underlineSelectionHeight );
+		paintIcon( g, iconRect, getIconForPainting(), underlineSelection ? underlineSelectionCheckBackground : checkBackground );
 		paintText( g, textRect, menuItem.getText(), selectionForeground, disabledForeground );
 		paintAccelerator( g, accelRect, getAcceleratorText(), acceleratorForeground, acceleratorSelectionForeground, disabledForeground );
 		if( !isTopLevelMenu( menuItem ) )
@@ -257,36 +264,36 @@ debug*/
 	protected void paintBackground( Graphics g, Color selectionBackground ) {
 		boolean armedOrSelected = isArmedOrSelected( menuItem );
 		if( menuItem.isOpaque() || armedOrSelected ) {
-			int width = menuItem.getWidth();
-			int height = menuItem.getHeight();
-
 			// paint background
 			g.setColor( armedOrSelected
-				? (isUnderlineSelection()
-					? deriveBackground( underlineSelectionBackground )
-					: selectionBackground)
+				? deriveBackground( selectionBackground )
 				: menuItem.getBackground() );
-			g.fillRect( 0, 0, width, height );
+			g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
+		}
+	}
 
-			// paint underline
-			if( armedOrSelected && isUnderlineSelection() ) {
-				int underlineHeight = scale( underlineSelectionHeight );
-				g.setColor( underlineSelectionColor );
-				if( isTopLevelMenu( menuItem ) ) {
-					// paint underline at bottom
-					g.fillRect( 0, height - underlineHeight, width, underlineHeight );
-				} else if( menuItem.getComponentOrientation().isLeftToRight() ) {
-					// paint underline at left side
-					g.fillRect( 0, 0, underlineHeight, height );
-				} else {
-					// paint underline at right side
-					g.fillRect( width - underlineHeight, 0, underlineHeight, height );
-				}
-			}
+	protected void paintUnderlineSelection( Graphics g, Color underlineSelectionColor, int underlineSelectionHeight ) {
+		int width = menuItem.getWidth();
+		int height = menuItem.getHeight();
+
+		int underlineHeight = scale( underlineSelectionHeight );
+		g.setColor( underlineSelectionColor );
+		if( isTopLevelMenu( menuItem ) ) {
+			// paint underline at bottom
+			g.fillRect( 0, height - underlineHeight, width, underlineHeight );
+		} else if( menuItem.getComponentOrientation().isLeftToRight() ) {
+			// paint underline at left side
+			g.fillRect( 0, 0, underlineHeight, height );
+		} else {
+			// paint underline at right side
+			g.fillRect( width - underlineHeight, 0, underlineHeight, height );
 		}
 	}
 
 	protected Color deriveBackground( Color background ) {
+		if( !(background instanceof DerivedColor) )
+			return background;
+
 		Color baseColor = menuItem.isOpaque()
 			? menuItem.getBackground()
 			: FlatUIUtils.getParentBackground( menuItem );
@@ -294,12 +301,12 @@ debug*/
 		return FlatUIUtils.deriveColor( background, baseColor );
 	}
 
-	protected void paintIcon( Graphics g, Rectangle iconRect, Icon icon ) {
+	protected void paintIcon( Graphics g, Rectangle iconRect, Icon icon, Color checkBackground ) {
 		// if checkbox/radiobutton menu item is selected and also has a custom icon,
 		// then use filled icon background to indicate selection (instead of using checkIcon)
 		if( menuItem.isSelected() && checkIcon != null && icon != checkIcon ) {
 			Rectangle r = FlatUIUtils.addInsets( iconRect, scale( checkMargins ) );
-			g.setColor( deriveBackground( isUnderlineSelection() ? underlineSelectionCheckBackground : checkBackground ) );
+			g.setColor( FlatUIUtils.deriveColor( checkBackground, selectionBackground ) );
 			g.fillRect( r.x, r.y, r.width, r.height );
 		}
 

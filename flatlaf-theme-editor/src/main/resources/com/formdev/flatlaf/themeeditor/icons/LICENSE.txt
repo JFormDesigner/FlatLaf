@@ -1,0 +1,3 @@
+The icons in this folder are from IntelliJ IDEA Community Edition,
+which is licensed under the Apache 2.0 license. Copyright 2000-2019 JetBrains s.r.o.
+See: https://github.com/JetBrains/intellij-community/

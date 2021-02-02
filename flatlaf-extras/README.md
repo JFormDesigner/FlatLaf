@@ -7,9 +7,12 @@ This sub-project provides some additional components and classes:
   An icon that displays SVG using
   [svgSalamander](https://github.com/JFormDesigner/svgSalamander).\
   ![FlatSVGIcon.png](../images/extras-FlatSVGIcon.png)
-- [TriStateCheckBox](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/TriStateCheckBox.html):
+- [FlatTriStateCheckBox](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html):
   A tri-state check box.\
   ![TriStateCheckBox.png](../images/extras-TriStateCheckBox.png)
+- Extension classes of standard Swing components that provide easy access to
+  FlatLaf specific client properties (see package
+  [com.formdev.flatlaf.extras.components](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/package-summary.html)).
 - [FlatAnimatedLafChange](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/FlatAnimatedLafChange.html):
   Animated Laf (theme) changing.
 - [FlatInspector](#ui-inspector): A simple UI inspector that shows information
@@ -35,10 +38,8 @@ Otherwise download `flatlaf-extras-<version>.jar` here:
 
 [![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-extras/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-extras/_latestVersion)
 
-You also need `flatlaf-<version>.jar` and `svgSalamander-<version>.jar`, which
-you can download here:
+If SVG classes are used, `svgSalamander-<version>.jar` is also required:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
 [![Download](https://api.bintray.com/packages/jformdesigner/svgSalamander/svgSalamander/images/download.svg)](https://bintray.com/jformdesigner/svgSalamander/svgSalamander/_latestVersion)
 
 

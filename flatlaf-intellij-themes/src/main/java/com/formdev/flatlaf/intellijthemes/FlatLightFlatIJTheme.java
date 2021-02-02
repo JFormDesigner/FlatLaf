@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatLightFlatIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "Light Flat";
+
+	public static boolean install() {
 		try {
 			return install( new FlatLightFlatIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatLightFlatIJTheme.class );
 	}
 
 	public FlatLightFlatIJTheme() {
@@ -43,6 +49,6 @@ public class FlatLightFlatIJTheme
 
 	@Override
 	public String getName() {
-		return "Light Flat";
+		return NAME;
 	}
 }

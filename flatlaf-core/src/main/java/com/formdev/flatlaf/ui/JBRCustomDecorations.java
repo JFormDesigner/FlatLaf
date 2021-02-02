@@ -227,7 +227,6 @@ public class JBRCustomDecorations
 
 		private final Color defaultActiveBorder = new Color( 0x707070 );
 		private final Color inactiveLightColor = new Color( 0xaaaaaa );
-		private final Color inactiveDarkColor = new Color( 0x3f3f3f );
 
 		private boolean colorizationAffectsBorders;
 		private Color activeColor = defaultActiveBorder;
@@ -273,7 +272,7 @@ public class JBRCustomDecorations
 				Object colorizationColorBalanceObj = toolkit.getDesktopProperty( "win.dwm.colorizationColorBalance" );
 				if( colorizationColorBalanceObj instanceof Integer ) {
 					int colorizationColorBalance = (Integer) colorizationColorBalanceObj;
-					if( colorizationColorBalance < 0 )
+					if( colorizationColorBalance < 0 || colorizationColorBalance > 100 )
 						colorizationColorBalance = 100;
 
 					if( colorizationColorBalance == 0 )
@@ -283,9 +282,15 @@ public class JBRCustomDecorations
 
 					float alpha = colorizationColorBalance / 100.0f;
 					float remainder = 1 - alpha;
-					int r = Math.round( (colorizationColor.getRed() * alpha + 0xD9 * remainder) );
-					int g = Math.round( (colorizationColor.getGreen() * alpha + 0xD9 * remainder) );
-					int b = Math.round( (colorizationColor.getBlue() * alpha + 0xD9 * remainder) );
+					int r = Math.round( colorizationColor.getRed() * alpha + 0xD9 * remainder );
+					int g = Math.round( colorizationColor.getGreen() * alpha + 0xD9 * remainder );
+					int b = Math.round( colorizationColor.getBlue() * alpha + 0xD9 * remainder );
+
+					// avoid potential IllegalArgumentException in Color constructor
+					r = Math.min( Math.max( r, 0 ), 255 );
+					g = Math.min( Math.max( g, 0 ), 255 );
+					b = Math.min( Math.max( b, 0 ), 255 );
+
 					return new Color( r, g, b );
 				}
 				return colorizationColor;
@@ -300,7 +305,14 @@ public class JBRCustomDecorations
 			Window window = SwingUtilities.windowForComponent( c );
 			boolean active = (window != null) ? window.isActive() : false;
 
-			g.setColor( active ? activeColor : (FlatLaf.isLafDark() ? inactiveDarkColor : inactiveLightColor) );
+			// paint top border
+			//  - in light themes
+			//  - in dark themes only for active windows if colorization affects borders
+			boolean paintTopBorder = !FlatLaf.isLafDark() || (active && colorizationAffectsBorders);
+			if( !paintTopBorder )
+				return;
+
+			g.setColor( active ? activeColor : inactiveLightColor );
 			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height, this::paintImpl );
 		}
 

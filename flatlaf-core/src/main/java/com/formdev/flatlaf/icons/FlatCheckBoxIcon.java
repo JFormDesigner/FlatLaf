@@ -49,15 +49,16 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault CheckBox.icon.disabledBorderColor			Color
  * @uiDefault CheckBox.icon.disabledBackground			Color
  * @uiDefault CheckBox.icon.disabledCheckmarkColor		Color
- * @uiDefault CheckBox.icon.focusedBorderColor			Color
+ * @uiDefault CheckBox.icon.focusedBorderColor			Color	optional
  * @uiDefault CheckBox.icon.focusedBackground			Color	optional
- * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional
- * @uiDefault CheckBox.icon.selectedFocusedBackground	Color	optional
+ * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional; CheckBox.icon.focusedBorderColor is used if not specified
+ * @uiDefault CheckBox.icon.selectedFocusedBackground	Color	optional; CheckBox.icon.focusedBackground is used if not specified
+ * @uiDefault CheckBox.icon.selectedFocusedCheckmarkColor	Color	optional; CheckBox.icon.checkmarkColor is used if not specified
  * @uiDefault CheckBox.icon.hoverBorderColor			Color	optional
  * @uiDefault CheckBox.icon.hoverBackground				Color	optional
- * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional
+ * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional; CheckBox.icon.hoverBackground is used if not specified
  * @uiDefault CheckBox.icon.pressedBackground			Color	optional
- * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional
+ * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional; CheckBox.icon.pressedBackground is used if not specified
  * @uiDefault CheckBox.arc								int
  *
  * @author Karl Tauber
@@ -129,78 +130,108 @@ public class FlatCheckBoxIcon
 	}
 
 	@Override
-	protected void paintIcon( Component c, Graphics2D g2 ) {
-		boolean indeterminate = c instanceof JComponent && clientPropertyEquals( (JComponent) c, SELECTED_STATE, SELECTED_STATE_INDETERMINATE );
-		boolean selected = indeterminate || (c instanceof AbstractButton && ((AbstractButton)c).isSelected());
+	protected void paintIcon( Component c, Graphics2D g ) {
+		boolean indeterminate = isIndeterminate( c );
+		boolean selected = indeterminate || isSelected( c );
 		boolean isFocused = FlatUIUtils.isPermanentFocusOwner( c );
 
 		// paint focused border
 		if( isFocused && focusWidth > 0 && FlatButtonUI.isFocusPainted( c ) ) {
-			g2.setColor( focusColor );
-			paintFocusBorder( g2 );
+			g.setColor( getFocusColor( c ) );
+			paintFocusBorder( c, g );
 		}
 
 		// paint border
-		g2.setColor( FlatButtonUI.buttonStateColor( c,
-			selected ? selectedBorderColor : borderColor,
-			disabledBorderColor,
-			selected && selectedFocusedBorderColor != null ? selectedFocusedBorderColor : focusedBorderColor,
-			hoverBorderColor,
-			null ) );
-		paintBorder( g2 );
+		g.setColor( getBorderColor( c, selected ) );
+		paintBorder( c, g );
 
 		// paint background
-		g2.setColor( FlatUIUtils.deriveColor( FlatButtonUI.buttonStateColor( c,
-			selected ? selectedBackground : background,
-			disabledBackground,
-			(selected && selectedFocusedBackground != null) ? selectedFocusedBackground : focusedBackground,
-			(selected && selectedHoverBackground != null) ? selectedHoverBackground : hoverBackground,
-			(selected && selectedPressedBackground != null) ? selectedPressedBackground : pressedBackground ),
-			background ) );
-		paintBackground( g2 );
+		Color bg = FlatUIUtils.deriveColor( getBackground( c, selected ),
+			selected ? selectedBackground : background );
+		if( bg.getAlpha() < 255 ) {
+			// fill background with default color before filling with non-opaque background
+			g.setColor( selected ? selectedBackground : background );
+			paintBackground( c, g );
+		}
+		g.setColor( bg );
+		paintBackground( c, g );
 
 		// paint checkmark
 		if( selected || indeterminate ) {
-			g2.setColor( c.isEnabled()
-				? ((selected && isFocused && selectedFocusedCheckmarkColor != null)
-					? selectedFocusedCheckmarkColor
-					: checkmarkColor)
-				: disabledCheckmarkColor );
+			g.setColor( getCheckmarkColor( c, selected, isFocused ) );
 			if( indeterminate )
-				paintIndeterminate( g2 );
+				paintIndeterminate( c, g );
 			else
-				paintCheckmark( g2 );
+				paintCheckmark( c, g );
 		}
 	}
 
-	protected void paintFocusBorder( Graphics2D g2 ) {
+	protected void paintFocusBorder( Component c, Graphics2D g ) {
 		// the outline focus border is painted outside of the icon
 		int wh = ICON_SIZE - 1 + (focusWidth * 2);
 		int arcwh = arc + (focusWidth * 2);
-		g2.fillRoundRect( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh );
+		g.fillRoundRect( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh );
 	}
 
-	protected void paintBorder( Graphics2D g2 ) {
+	protected void paintBorder( Component c, Graphics2D g ) {
 		int arcwh = arc;
-		g2.fillRoundRect( 1, 0, 14, 14, arcwh, arcwh );
+		g.fillRoundRect( 1, 0, 14, 14, arcwh, arcwh );
 	}
 
-	protected void paintBackground( Graphics2D g2 ) {
+	protected void paintBackground( Component c, Graphics2D g ) {
 		int arcwh = arc - 1;
-		g2.fillRoundRect( 2, 1, 12, 12, arcwh, arcwh );
+		g.fillRoundRect( 2, 1, 12, 12, arcwh, arcwh );
 	}
 
-	protected void paintCheckmark( Graphics2D g2 ) {
+	protected void paintCheckmark( Component c, Graphics2D g ) {
 		Path2D.Float path = new Path2D.Float();
 		path.moveTo( 4.5f, 7.5f );
 		path.lineTo( 6.6f, 10f );
 		path.lineTo( 11.25f, 3.5f );
 
-		g2.setStroke( new BasicStroke( 1.9f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
-		g2.draw( path );
+		g.setStroke( new BasicStroke( 1.9f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
+		g.draw( path );
 	}
 
-	protected void paintIndeterminate( Graphics2D g2 ) {
-		g2.fill( new RoundRectangle2D.Float( 3.75f, 5.75f, 8.5f, 2.5f, 2f, 2f ) );
+	protected void paintIndeterminate( Component c, Graphics2D g ) {
+		g.fill( new RoundRectangle2D.Float( 3.75f, 5.75f, 8.5f, 2.5f, 2f, 2f ) );
+	}
+
+	protected boolean isIndeterminate( Component c ) {
+		return c instanceof JComponent && clientPropertyEquals( (JComponent) c, SELECTED_STATE, SELECTED_STATE_INDETERMINATE );
+	}
+
+	protected boolean isSelected( Component c ) {
+		return c instanceof AbstractButton && ((AbstractButton)c).isSelected();
+	}
+
+	protected Color getFocusColor( Component c ) {
+		return focusColor;
+	}
+
+	protected Color getBorderColor( Component c, boolean selected ) {
+		return FlatButtonUI.buttonStateColor( c,
+			selected ? selectedBorderColor : borderColor,
+			disabledBorderColor,
+			selected && selectedFocusedBorderColor != null ? selectedFocusedBorderColor : focusedBorderColor,
+			hoverBorderColor,
+			null );
+	}
+
+	protected Color getBackground( Component c, boolean selected ) {
+		return FlatButtonUI.buttonStateColor( c,
+			selected ? selectedBackground : background,
+			disabledBackground,
+			(selected && selectedFocusedBackground != null) ? selectedFocusedBackground : focusedBackground,
+			(selected && selectedHoverBackground != null) ? selectedHoverBackground : hoverBackground,
+			(selected && selectedPressedBackground != null) ? selectedPressedBackground : pressedBackground );
+	}
+
+	protected Color getCheckmarkColor( Component c, boolean selected, boolean isFocused ) {
+		return c.isEnabled()
+			? ((selected && isFocused && selectedFocusedCheckmarkColor != null)
+				? selectedFocusedCheckmarkColor
+				: checkmarkColor)
+			: disabledCheckmarkColor;
 	}
 }

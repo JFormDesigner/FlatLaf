@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.LayoutManager;
@@ -348,8 +347,9 @@ public class FlatInspector
 
 			@Override
 			protected void paintBorder( Graphics g ) {
-				FlatUIUtils.setRenderingHints( (Graphics2D) g );
+				Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 				super.paintBorder( g );
+				FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 			}
 		};
 		c.setBackground( new Color( 255, 0, 0, 32 ) );

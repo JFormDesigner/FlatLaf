@@ -19,6 +19,7 @@ package com.formdev.flatlaf.jideoss;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
 import com.formdev.flatlaf.FlatDefaultsAddon;
 import com.formdev.flatlaf.FlatLaf;
@@ -47,6 +48,14 @@ public class FlatJideOssDefaultsAddon
 	}
 
 	@Override
+	public void afterDefaultsLoading( LookAndFeel laf, UIDefaults defaults ) {
+		// TristateCheckBox
+		defaults.put( "TristateCheckBox.icon", null );
+		defaults.put( "TristateCheckBox.setMixed.clientProperty",   new Object[] { "JButton.selectedState", "indeterminate" } );
+		defaults.put( "TristateCheckBox.clearMixed.clientProperty", new Object[] { "JButton.selectedState", null } );
+	}
+
+	@Override
 	public int getPriority() {
 		return 11;
 	}
@@ -71,6 +80,7 @@ public class FlatJideOssDefaultsAddon
 				Object key = e.getKey();
 				if( key instanceof String &&
 					(((String)key).startsWith( "Jide" ) ||
+					 ((String)key).startsWith( "TristateCheckBox." ) ||
 					 key.equals( "RangeSliderUI" ) ||
 					 key.equals( "Resizable.resizeBorder" )) )
 				{
@@ -85,6 +95,9 @@ public class FlatJideOssDefaultsAddon
 				defaults.putAll( jideDefaults );
 				jideDefaults = null;
 			}
+
+			// TristateCheckBox
+			defaults.put( "TristateCheckBox.icon", null );
 		}
 	}
 }

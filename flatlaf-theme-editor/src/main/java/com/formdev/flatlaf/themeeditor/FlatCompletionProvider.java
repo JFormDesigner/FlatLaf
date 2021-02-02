@@ -336,8 +336,9 @@ class FlatCompletionProvider
 				"lightness",  "0-100%",
 				"alpha", "0-100%" );
 
+			String colorParamDesc = "a color (e.g. #f00), a reference (e.g. $Other.key) or a color function";
 			String[] hslIncreaseDecreaseParams = {
-				"color", "a color (e.g. #f00), a reference (e.g. $Other.key) or a color function",
+				"color", colorParamDesc,
 				"amount", "0-100%",
 				"options", "(optional) [relative] [autoInverse] [noAutoInverse] [lazy] [derived]"
 			};
@@ -345,6 +346,17 @@ class FlatCompletionProvider
 			addFunction( "darken", hslIncreaseDecreaseParams );
 			addFunction( "saturate", hslIncreaseDecreaseParams );
 			addFunction( "desaturate", hslIncreaseDecreaseParams );
+			addFunction( "fadein", hslIncreaseDecreaseParams );
+			addFunction( "fadeout", hslIncreaseDecreaseParams );
+
+			addFunction( "fade",
+				"color", colorParamDesc,
+				"amount", "0-100%",
+				"options", "(optional) [derived]" );
+			addFunction( "spin",
+				"color", colorParamDesc,
+				"angle", "number of degrees to rotate",
+				"options", "(optional) [derived]" );
 		}
 
 		private void addFunction( String name, String... paramNamesAndDescs ) {

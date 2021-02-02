@@ -16,8 +16,10 @@
 
 package com.formdev.flatlaf.testing.uidefaults;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -42,13 +44,24 @@ public class UIDefaultsKeysDump
 
 		File keysFile = new File( "../flatlaf-theme-editor/src/main/resources/com/formdev/flatlaf/themeeditor/FlatLafUIKeys.txt" );
 
+		// load existing keys file
 		HashSet<String> keys = new HashSet<>();
+		try( BufferedReader reader = new BufferedReader( new FileReader( keysFile ) ) ) {
+			String key;
+			while( (key = reader.readLine()) != null ) {
+				keys.add( key );
+			}
+		} catch( IOException ex ) {
+			ex.printStackTrace();
+		}
 
+		// collect keys used in Lafs
 		collectKeys( FlatLightLaf.class.getName(), keys );
 		collectKeys( FlatDarkLaf.class.getName(), keys );
 		collectKeys( FlatIntelliJLaf.class.getName(), keys );
 		collectKeys( FlatDarculaLaf.class.getName(), keys );
 
+		// write key file
 		try( Writer fileWriter = new BufferedWriter( new FileWriter( keysFile ) ) ) {
 			String[] sortedKeys = keys.toArray( new String[keys.size()] );
 			Arrays.sort( sortedKeys );

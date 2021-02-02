@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 import javax.swing.Icon;
@@ -63,7 +65,9 @@ import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import com.formdev.flatlaf.testing.FlatTestLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
+import com.formdev.flatlaf.util.ColorFunctions.Fade;
 import com.formdev.flatlaf.util.ColorFunctions.HSLIncreaseDecrease;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.StringUtils;
@@ -78,6 +82,8 @@ public class UIDefaultsDump
 {
 	private final LookAndFeel lookAndFeel;
 	private final UIDefaults defaults;
+	private final Properties derivedColorKeys;
+	private final boolean isIntelliJTheme;
 
 	private String lastPrefix;
 	private JComponent dummyComponent;
@@ -279,6 +285,9 @@ public class UIDefaultsDump
 	private UIDefaultsDump( LookAndFeel lookAndFeel ) {
 		this.lookAndFeel = lookAndFeel;
 		this.defaults = lookAndFeel.getDefaults();
+
+		derivedColorKeys = loadDerivedColorKeys();
+		isIntelliJTheme = (lookAndFeel instanceof IntelliJTheme.ThemeLaf);
 	}
 
 	private void dump( PrintWriter out, Predicate<String> keyFilter ) {
@@ -315,12 +324,12 @@ public class UIDefaultsDump
 				}
 
 				out.printf( "%-30s ", strKey );
-				dumpValue( out, value );
+				dumpValue( out, strKey, value );
 				out.println();
 			} );
 	}
 
-	private void dumpValue( PrintWriter out, Object value ) {
+	private void dumpValue( PrintWriter out, String key, Object value ) {
 		if( value == null ||
 			value instanceof String ||
 			value instanceof Number ||
@@ -338,7 +347,7 @@ public class UIDefaultsDump
 		else if( value instanceof List )
 			dumpList( out, (List<?>) value );
 		else if( value instanceof Color )
-			dumpColor( out, (Color) value );
+			dumpColor( out, key, (Color) value );
 		else if( value instanceof Font )
 			dumpFont( out, (Font) value );
 		else if( value instanceof Insets )
@@ -366,7 +375,7 @@ public class UIDefaultsDump
 		out.printf( "length=%d    %s", length, dumpClass( array ) );
 		for( int i = 0; i < length; i++ ) {
 			out.printf( "%n    [%d] ", i );
-			dumpValue( out, Array.get( array, i ) );
+			dumpValue( out, null, Array.get( array, i ) );
 		}
 	}
 
@@ -374,14 +383,25 @@ public class UIDefaultsDump
 		out.printf( "size=%d    %s", list.size(), dumpClass( list ) );
 		for( int i = 0; i < list.size(); i++ ) {
 			out.printf( "%n    [%d] ", i );
-			dumpValue( out, list.get( i ) );
+			dumpValue( out, null, list.get( i ) );
 		}
 	}
 
-	private void dumpColor( PrintWriter out, Color color ) {
-		boolean hasAlpha = (color.getAlpha() != 255);
-		out.printf( hasAlpha ? "#%08x    %s" : "#%06x    %s",
-			hasAlpha ? color.getRGB() : (color.getRGB() & 0xffffff),
+	private void dumpColor( PrintWriter out, String key, Color color ) {
+		Color resolvedColor = resolveDerivedColor( key, color );
+		if( resolvedColor != color && resolvedColor.getRGB() != color.getRGB() ) {
+			if( !isIntelliJTheme ) {
+				System.err.println( "Key '" + key + "': derived colors not equal" );
+				System.err.println( "  Default color:  " + dumpColorHex( color ) );
+				System.err.println( "  Resolved color: " + dumpColorHex( resolvedColor ) );
+			}
+
+			out.printf( "%s / ",
+				dumpColorHex( resolvedColor ) );
+		}
+
+		out.printf( "%s    %s",
+			dumpColorHex( color ),
 			dumpClass( color ) );
 
 		if( color instanceof DerivedColor ) {
@@ -394,18 +414,29 @@ public class UIDefaultsDump
 		}
 	}
 
+	private String dumpColorHex( Color color ) {
+		boolean hasAlpha = (color.getAlpha() != 255);
+		return String.format( hasAlpha ? "#%08x" : "#%06x",
+			hasAlpha ? color.getRGB() : (color.getRGB() & 0xffffff) );
+	}
+
 	private void dumpColorFunction( PrintWriter out, ColorFunction function ) {
 		if( function instanceof HSLIncreaseDecrease ) {
 			HSLIncreaseDecrease func = (HSLIncreaseDecrease) function;
 			String name;
 			switch( func.hslIndex ) {
-				case 2: name = func.increase ? "lighten" : "darken"; break;
+				case 0: name = "spin"; break;
 				case 1: name = func.increase ? "saturate" : "desaturate"; break;
+				case 2: name = func.increase ? "lighten" : "darken"; break;
+				case 3: name = func.increase ? "fadein" : "fadeout"; break;
 				default: throw new IllegalArgumentException();
 			}
 			out.printf( "%s(%.0f%%%s%s)", name, func.amount,
 				(func.relative ? " relative" : ""),
 				(func.autoInverse ? " autoInverse" : "") );
+		} else if( function instanceof Fade ) {
+			Fade func = (Fade) function;
+			out.printf( "fade(%.0f%%)", func.amount );
 		} else
 			throw new IllegalArgumentException( "unknown color function: " + function );
 	}
@@ -451,7 +482,7 @@ public class UIDefaultsDump
 			if( border instanceof LineBorder ) {
 				LineBorder b = (LineBorder) border;
 				out.print( "line: " );
-				dumpValue( out, b.getLineColor() );
+				dumpValue( out, null, b.getLineColor() );
 				out.printf( " %d %b    ", b.getThickness(), b.getRoundedCorners() );
 			}
 
@@ -492,7 +523,7 @@ public class UIDefaultsDump
 			if( border instanceof FlatLineBorder ) {
 				FlatLineBorder lineBorder = (FlatLineBorder) border;
 				out.print( "    lineColor=" );
-				dumpColor( out, lineBorder.getLineColor() );
+				dumpColor( out, null, lineBorder.getLineColor() );
 				out.printf( "    lineThickness=%f", lineBorder.getLineThickness() );
 			}
 		}
@@ -535,7 +566,7 @@ public class UIDefaultsDump
 
 	private void dumpLazyValue( PrintWriter out, LazyValue value ) {
 		out.print( "[lazy] " );
-		dumpValue( out, value.createValue( defaults ) );
+		dumpValue( out, null, value.createValue( defaults ) );
 	}
 
 	private void dumpActiveValue( PrintWriter out, ActiveValue value ) {
@@ -549,7 +580,7 @@ public class UIDefaultsDump
 			if( realValue instanceof UIResource )
 				out.print( " [UI]" );
 		} else
-			dumpValue( out, realValue );
+			dumpValue( out, null, realValue );
 	}
 
 	private String dumpClass( Object value ) {
@@ -557,6 +588,46 @@ public class UIDefaultsDump
 		if( value instanceof UIResource )
 			classname += " [UI]";
 		return classname;
+	}
+
+	private Properties loadDerivedColorKeys() {
+		Properties properties = new Properties();
+		try( InputStream in = getClass().getResourceAsStream( "/com/formdev/flatlaf/extras/resources/DerivedColorKeys.properties" ) ) {
+			properties.load( in );
+		} catch( IOException ex ) {
+			ex.printStackTrace();
+		}
+		return properties;
+	}
+
+	private Color resolveDerivedColor( String key, Color color ) {
+		if( !(color instanceof DerivedColor) )
+			return color;
+
+		if( key == null )
+			throw new NullPointerException( "Key must not null." );
+
+		Object baseKey = derivedColorKeys.get( key );
+
+		if( baseKey == null )
+			throw new IllegalStateException( "Key '" + key + "' not found in DerivedColorKeys.properties." );
+
+		// this is for keys that may be defined as derived colors, but do not derive them at runtime
+		if( "null".equals( baseKey ) )
+			return color;
+
+		Color baseColor = defaults.getColor( baseKey );
+		if( baseColor == null )
+			throw new IllegalStateException( "Missing base color '" + baseKey + "' for key '" + key + "'." );
+
+		if( baseColor instanceof DerivedColor )
+			baseColor = resolveDerivedColor( (String) baseKey, baseColor );
+
+		Color newColor = FlatUIUtils.deriveColor( color, baseColor );
+
+		// creating a new color instance to drop Color.frgbvalue from newColor
+		// and avoid rounding issues/differences
+		return new Color( newColor.getRGB(), true );
 	}
 
 	//---- class MyBasicLookAndFeel -------------------------------------------

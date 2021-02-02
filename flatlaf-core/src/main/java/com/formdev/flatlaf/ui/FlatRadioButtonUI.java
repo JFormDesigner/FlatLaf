@@ -27,7 +27,6 @@ import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.util.UIScale;
@@ -58,6 +57,8 @@ public class FlatRadioButtonUI
 	protected int iconTextGap;
 	protected Color disabledText;
 
+	private Color defaultBackground;
+
 	private boolean defaults_initialized = false;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -73,6 +74,8 @@ public class FlatRadioButtonUI
 
 			iconTextGap = FlatUIUtils.getUIInt( prefix + "iconTextGap", 4 );
 			disabledText = UIManager.getColor( prefix + "disabledText" );
+
+			defaultBackground = UIManager.getColor( prefix + "background" );
 
 			defaults_initialized = true;
 		}
@@ -120,7 +123,7 @@ public class FlatRadioButtonUI
 		// - if background was explicitly set to a non-UIResource color
 		if( !c.isOpaque() &&
 			((AbstractButton)c).isContentAreaFilled() &&
-			!(c.getBackground() instanceof UIResource) )
+			(c.getBackground() != defaultBackground) )
 		{
 			g.setColor( c.getBackground() );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );

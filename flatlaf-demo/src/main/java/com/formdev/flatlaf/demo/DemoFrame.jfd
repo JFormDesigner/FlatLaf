@@ -117,6 +117,7 @@ new FormModel {
 				name: "themesPanel"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
+					"JavaCodeGenerator.variableModifiers": 0
 				}
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "East"

@@ -134,7 +134,7 @@ public class HiDPIUtils
 		// - fractional scale factors result in fractional component Y device coordinates
 		// - fractional text Y device coordinates are rounded for horizontal lines of characters
 		// - maybe different rounding methods for drawing primitives (e.g. rectangle) and text
-		// - Java adds 0.5 to X/Y positions in before drawing string in BufferedTextPipe.enqueueGlyphList()
+		// - Java adds 0.5 to X/Y positions before drawing string in BufferedTextPipe.enqueueGlyphList()
 
 		// this is not the optimal solution, but works very good in most cases
 		// (tested with class FlatPaintingStringTest on Windows 10 with font "Segoe UI")
