@@ -6,7 +6,8 @@
   "colors": {
     "accentColor": "#568AF2",
     "backgroundColor": "#21252b",
-    "borderColor": "#333841"
+    "borderColor": "#333841",
+    "infoForeground": "#7e8491"
   },
   "ui": {
     "*": {
@@ -131,7 +132,7 @@
     },
 
     "Label": {
-      "infoForeground": "#7e8491"
+      "infoForeground": "infoForeground"
     },
 
     "Link": {
@@ -323,6 +324,11 @@
         "selectedBackground": "#323844",
         "selectedInactiveBackground": "#3d424b"
       }
+    },
+
+    "TitlePane" : {
+      "infoForeground": "infoForeground",
+      "inactiveInfoForeground": "#5C6370"
     },
 
     "Tree": {
