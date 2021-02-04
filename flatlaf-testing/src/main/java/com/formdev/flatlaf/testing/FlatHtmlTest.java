@@ -55,73 +55,110 @@ public class FlatHtmlTest
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-		labelLabel = new JLabel();
-		editorPaneLabel = new JLabel();
-		textPaneLabel = new JLabel();
-		toolTipLabel = new JLabel();
-		panel1 = new JPanel();
-		label5 = new JLabel();
-		label6 = new JLabel();
-		label7 = new JLabel();
-		label3 = new JLabel();
-		button1 = new JButton();
-		button2 = new JButton();
-		label11 = new JLabel();
-		toggleButton1 = new JToggleButton();
-		toggleButton2 = new JToggleButton();
-		label12 = new JLabel();
-		checkBox1 = new JCheckBox();
-		checkBox2 = new JCheckBox();
-		label13 = new JLabel();
-		radioButton1 = new JRadioButton();
-		radioButton2 = new JRadioButton();
-		label8 = new JLabel();
-		menu1 = new JMenu();
-		menu2 = new JMenu();
-		label4 = new JLabel();
-		menuItem1 = new JMenuItem();
-		menuItem2 = new JMenuItem();
-		label9 = new JLabel();
-		checkBoxMenuItem1 = new JCheckBoxMenuItem();
-		checkBoxMenuItem2 = new JCheckBoxMenuItem();
-		label10 = new JLabel();
-		radioButtonMenuItem1 = new JRadioButtonMenuItem();
-		radioButtonMenuItem2 = new JRadioButtonMenuItem();
-		label14 = new JLabel();
-		label15 = new JLabel();
-		label16 = new JLabel();
-		label17 = new JLabel();
-		comboBox1 = new JComboBox<>();
-		comboBox2 = new JComboBox<>();
-		label18 = new JLabel();
-		xHyperlink1 = new JXHyperlink();
-		xHyperlink2 = new JXHyperlink();
+		JLabel labelLabel = new JLabel();
+		JLabel editorPaneLabel = new JLabel();
+		JLabel textPaneLabel = new JLabel();
+		JLabel toolTipLabel = new JLabel();
+		JPanel panel1 = new JPanel();
+		JLabel label5 = new JLabel();
+		JLabel label6 = new JLabel();
+		JLabel label7 = new JLabel();
+		JLabel label3 = new JLabel();
+		JButton button1 = new JButton();
+		JButton button2 = new JButton();
+		JLabel label11 = new JLabel();
+		JToggleButton toggleButton1 = new JToggleButton();
+		JToggleButton toggleButton2 = new JToggleButton();
+		JLabel label12 = new JLabel();
+		JCheckBox checkBox1 = new JCheckBox();
+		JCheckBox checkBox2 = new JCheckBox();
+		JLabel label13 = new JLabel();
+		JRadioButton radioButton1 = new JRadioButton();
+		JRadioButton radioButton2 = new JRadioButton();
+		JLabel label8 = new JLabel();
+		JMenu menu1 = new JMenu();
+		JMenu menu2 = new JMenu();
+		JLabel label4 = new JLabel();
+		JMenuItem menuItem1 = new JMenuItem();
+		JMenuItem menuItem2 = new JMenuItem();
+		JLabel label9 = new JLabel();
+		JCheckBoxMenuItem checkBoxMenuItem1 = new JCheckBoxMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem2 = new JCheckBoxMenuItem();
+		JLabel label10 = new JLabel();
+		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
+		JLabel label14 = new JLabel();
+		JLabel label15 = new JLabel();
+		JLabel label16 = new JLabel();
+		JLabel label17 = new JLabel();
+		JComboBox<String> comboBox1 = new JComboBox<>();
+		JComboBox<String> comboBox2 = new JComboBox<>();
+		JLabel label18 = new JLabel();
+		JXHyperlink xHyperlink1 = new JXHyperlink();
+		JXHyperlink xHyperlink2 = new JXHyperlink();
 		label1 = new JLabel();
-		scrollPane15 = new JScrollPane();
+		JScrollPane scrollPane15 = new JScrollPane();
 		editorPane1 = new JEditorPane();
-		scrollPane16 = new JScrollPane();
+		JScrollPane scrollPane16 = new JScrollPane();
 		textPane1 = new JTextPane();
 		toolTip1 = new JToolTip();
 		label2 = new JLabel();
-		scrollPane17 = new JScrollPane();
+		JScrollPane scrollPane17 = new JScrollPane();
 		editorPane2 = new JEditorPane();
-		scrollPane18 = new JScrollPane();
+		JScrollPane scrollPane18 = new JScrollPane();
 		textPane2 = new JTextPane();
 		toolTip2 = new JToolTip();
+		panel2 = new JPanel();
+		JLabel label22 = new JLabel();
+		JLabel label19 = new JLabel();
+		JLabel label20 = new JLabel();
+		JLabel label25 = new JLabel();
+		JLabel label28 = new JLabel();
+		JLabel label31 = new JLabel();
+		JLabel label23 = new JLabel();
+		JLabel label35 = new JLabel();
+		JLabel label41 = new JLabel();
+		JLabel label37 = new JLabel();
+		JLabel label32 = new JLabel();
+		JLabel label36 = new JLabel();
+		JLabel label30 = new JLabel();
+		JLabel label29 = new JLabel();
+		JLabel label34 = new JLabel();
+		JLabel label40 = new JLabel();
+		JLabel label39 = new JLabel();
+		JLabel label49 = new JLabel();
+		JLabel label50 = new JLabel();
+		JLabel label43 = new JLabel();
+		JLabel label42 = new JLabel();
+		JLabel label51 = new JLabel();
+		JLabel label26 = new JLabel();
+		JLabel label38 = new JLabel();
+		JLabel label27 = new JLabel();
+		JLabel label45 = new JLabel();
+		JLabel label52 = new JLabel();
+		JLabel label44 = new JLabel();
+		JLabel label21 = new JLabel();
+		JLabel label24 = new JLabel();
+		JLabel label46 = new JLabel();
+		JLabel label47 = new JLabel();
+		JLabel label53 = new JLabel();
+		JLabel label48 = new JLabel();
+		JLabel label54 = new JLabel();
+		JLabel label56 = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
 			"ltr,insets dialog,hidemode 3",
 			// columns
-			"[fill]" +
-			"[fill]" +
-			"[fill]" +
-			"[fill]" +
+			"[grow,sizegroup 1,fill]" +
+			"[grow,sizegroup 1,fill]" +
+			"[grow,sizegroup 1,fill]" +
+			"[grow,sizegroup 1,fill]" +
 			"[fill]",
 			// rows
 			"[]" +
-			"[top]" +
-			"[top]"));
+			"[fill]" +
+			"[grow,fill]"));
 
 		//---- labelLabel ----
 		labelLabel.setText("JLabel:");
@@ -325,10 +362,11 @@ public class FlatHtmlTest
 			xHyperlink2.setText("Some text");
 			panel1.add(xHyperlink2, "cell 2 11");
 		}
-		add(panel1, "cell 4 0 1 3,aligny top,growy 0");
+		add(panel1, "cell 4 0 1 2,aligny top,growy 0");
 
 		//---- label1 ----
-		label1.setText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p><hr><table border=\"1\"><tr><th>Col 1</th><th>Col 2</th></tr><tr><td>abc</td><td>def</td></tr></table><ul><li>item 1</li><li>item 2</li></ul></html>");
+		label1.setText("<html>HTML<br>Sample <b>content</b><br> <u>text</u> with <a href=\"#\">link</a><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6><p>Paragraph</p><address>Address</address><hr><table border=\"1\"><tr><th>Col 1</th><th>Col 2</th></tr><tr><td>abc</td><td>def</td></tr></table><ul><li>item 1</li><li>item 2</li></ul></html>");
+		label1.setVerticalAlignment(SwingConstants.TOP);
 		add(label1, "cell 0 1");
 
 		//======== scrollPane15 ========
@@ -357,6 +395,7 @@ public class FlatHtmlTest
 
 		//---- label2 ----
 		label2.setText("text");
+		label2.setVerticalAlignment(SwingConstants.TOP);
 		add(label2, "cell 0 2");
 
 		//======== scrollPane17 ========
@@ -367,7 +406,7 @@ public class FlatHtmlTest
 			editorPane2.setText("text");
 			scrollPane17.setViewportView(editorPane2);
 		}
-		add(scrollPane17, "cell 1 2,grow");
+		add(scrollPane17, "cell 1 2");
 
 		//======== scrollPane18 ========
 		{
@@ -382,6 +421,175 @@ public class FlatHtmlTest
 		//---- toolTip2 ----
 		toolTip2.setTipText("text");
 		add(toolTip2, "cell 3 2");
+
+		//======== panel2 ========
+		{
+			panel2.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
+				// columns
+				"[fill]para" +
+				"[fill]" +
+				"[fill]" +
+				"[fill]" +
+				"[fill]" +
+				"[fill]" +
+				"[fill]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]para" +
+				"[]para" +
+				"[]" +
+				"[]"));
+
+			//---- label22 ----
+			label22.setText("plain");
+			panel2.add(label22, "cell 0 0");
+
+			//---- label19 ----
+			label19.setText("<html><h1>h1</h1></html>");
+			panel2.add(label19, "cell 1 0");
+
+			//---- label20 ----
+			label20.setText("<html><h2>h2</h2></html>");
+			panel2.add(label20, "cell 2 0");
+
+			//---- label25 ----
+			label25.setText("<html><h3>h3</h3></html>");
+			panel2.add(label25, "cell 3 0");
+
+			//---- label28 ----
+			label28.setText("<html><h4>h4</h4></html>");
+			panel2.add(label28, "cell 4 0");
+
+			//---- label31 ----
+			label31.setText("<html><h5>h5</h5></html>");
+			panel2.add(label31, "cell 5 0");
+
+			//---- label23 ----
+			label23.setText("<html><h6>h6</h6></html>");
+			panel2.add(label23, "cell 6 0");
+
+			//---- label35 ----
+			label35.setText("plain");
+			panel2.add(label35, "cell 0 1");
+
+			//---- label41 ----
+			label41.setText("<html><strong>strong</strong></html>");
+			panel2.add(label41, "cell 1 1");
+
+			//---- label37 ----
+			label37.setText("<html><b>b</b></html>");
+			panel2.add(label37, "cell 2 1");
+
+			//---- label32 ----
+			label32.setText("<html><em>em</em></html>");
+			panel2.add(label32, "cell 3 1");
+
+			//---- label36 ----
+			label36.setText("<html><i>i</i></html>");
+			panel2.add(label36, "cell 4 1");
+
+			//---- label30 ----
+			label30.setText("<html><cite>cite</cite></html>");
+			panel2.add(label30, "cell 5 1");
+
+			//---- label29 ----
+			label29.setText("<html><dfn>dfn</dfn></html>");
+			panel2.add(label29, "cell 6 1");
+
+			//---- label34 ----
+			label34.setText("plain");
+			panel2.add(label34, "cell 0 2");
+
+			//---- label40 ----
+			label40.setText("<html><strike>strike</strike></html>");
+			panel2.add(label40, "cell 1 2");
+
+			//---- label39 ----
+			label39.setText("<html><s>s</s></html>");
+			panel2.add(label39, "cell 2 2");
+
+			//---- label49 ----
+			label49.setText("<html><body>body</body></html>");
+			panel2.add(label49, "cell 3 2");
+
+			//---- label50 ----
+			label50.setText("<html><a href=\"#\">a</a></html>");
+			panel2.add(label50, "cell 4 2");
+
+			//---- label43 ----
+			label43.setText("<html><u>u</u></html>");
+			panel2.add(label43, "cell 5 2");
+
+			//---- label42 ----
+			label42.setText("<html><var>var</var></html>");
+			panel2.add(label42, "cell 6 2");
+
+			//---- label51 ----
+			label51.setText("plain");
+			panel2.add(label51, "cell 0 3");
+
+			//---- label26 ----
+			label26.setText("<html><code>code</code></html>");
+			panel2.add(label26, "cell 1 3");
+
+			//---- label38 ----
+			label38.setText("<html><kbd>kbd</kbd></html>");
+			panel2.add(label38, "cell 2 3");
+
+			//---- label27 ----
+			label27.setText("<html><samp>samp</samp></html>");
+			panel2.add(label27, "cell 3 3");
+
+			//---- label45 ----
+			label45.setText("<html><tt>tt</tt></html>");
+			panel2.add(label45, "cell 4 3");
+
+			//---- label52 ----
+			label52.setText("plain");
+			panel2.add(label52, "cell 0 4");
+
+			//---- label44 ----
+			label44.setText("<html><pre>pre</pre></html>");
+			panel2.add(label44, "cell 1 4");
+
+			//---- label21 ----
+			label21.setText("<html><big>big</big></html>");
+			panel2.add(label21, "cell 2 4");
+
+			//---- label24 ----
+			label24.setText("<html><small>small</small></html>");
+			panel2.add(label24, "cell 3 4");
+
+			//---- label46 ----
+			label46.setText("<html><sub>sub</sub></html>");
+			panel2.add(label46, "cell 4 4");
+
+			//---- label47 ----
+			label47.setText("<html><sup>sup</sup></html>");
+			panel2.add(label47, "cell 5 4");
+
+			//---- label53 ----
+			label53.setText("plain");
+			panel2.add(label53, "cell 0 5");
+
+			//---- label48 ----
+			label48.setText("<html><address>address</address></html>");
+			panel2.add(label48, "cell 1 5");
+
+			//---- label54 ----
+			label54.setText("Test whether inserted rule affects display:");
+			panel2.add(label54, "cell 0 7 7 1");
+
+			//---- label56 ----
+			label56.setText("<html><head><style>body { color: red }</style></head>leading <big>red</big> trailing</html>");
+			panel2.add(label56, "cell 0 8 7 1");
+		}
+		add(panel2, "cell 4 2");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -399,65 +607,29 @@ public class FlatHtmlTest
 		increaseFontSize( editorPane2, editorPane1.getFont() );
 		increaseFontSize( textPane2, textPane1.getFont() );
 		increaseFontSize( toolTip2, toolTip1.getFont() );
+
+		Font largeLabelFont = increaseFontSize( UIManager.getFont( "Label.font" ) );
+		for( Component c : panel2.getComponents() )
+			c.setFont( largeLabelFont );
 	}
 
 	private void increaseFontSize( JComponent c, Font baseFont ) {
-		c.setFont( baseFont.deriveFont( Font.PLAIN, baseFont.getSize() + UIScale.scale( 10f ) ) );
+		c.setFont( increaseFontSize( baseFont ) );
+	}
+
+	private Font increaseFontSize( Font baseFont ) {
+		return baseFont.deriveFont( Font.PLAIN, baseFont.getSize() + UIScale.scale( 10f ) );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-	private JLabel labelLabel;
-	private JLabel editorPaneLabel;
-	private JLabel textPaneLabel;
-	private JLabel toolTipLabel;
-	private JPanel panel1;
-	private JLabel label5;
-	private JLabel label6;
-	private JLabel label7;
-	private JLabel label3;
-	private JButton button1;
-	private JButton button2;
-	private JLabel label11;
-	private JToggleButton toggleButton1;
-	private JToggleButton toggleButton2;
-	private JLabel label12;
-	private JCheckBox checkBox1;
-	private JCheckBox checkBox2;
-	private JLabel label13;
-	private JRadioButton radioButton1;
-	private JRadioButton radioButton2;
-	private JLabel label8;
-	private JMenu menu1;
-	private JMenu menu2;
-	private JLabel label4;
-	private JMenuItem menuItem1;
-	private JMenuItem menuItem2;
-	private JLabel label9;
-	private JCheckBoxMenuItem checkBoxMenuItem1;
-	private JCheckBoxMenuItem checkBoxMenuItem2;
-	private JLabel label10;
-	private JRadioButtonMenuItem radioButtonMenuItem1;
-	private JRadioButtonMenuItem radioButtonMenuItem2;
-	private JLabel label14;
-	private JLabel label15;
-	private JLabel label16;
-	private JLabel label17;
-	private JComboBox<String> comboBox1;
-	private JComboBox<String> comboBox2;
-	private JLabel label18;
-	private JXHyperlink xHyperlink1;
-	private JXHyperlink xHyperlink2;
 	private JLabel label1;
-	private JScrollPane scrollPane15;
 	private JEditorPane editorPane1;
-	private JScrollPane scrollPane16;
 	private JTextPane textPane1;
 	private JToolTip toolTip1;
 	private JLabel label2;
-	private JScrollPane scrollPane17;
 	private JEditorPane editorPane2;
-	private JScrollPane scrollPane18;
 	private JTextPane textPane2;
 	private JToolTip toolTip2;
+	private JPanel panel2;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

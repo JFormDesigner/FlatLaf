@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.0-rc3-SNAPSHOT
+
+#### Fixed bugs
+
+- Label and ToolTip: Fixed font sizes for `<code>`, `<kbd>`, `<big>`, `<small>`
+  and `<samp>` tags in HTML text.
+
+
 ## 1.0-rc2
 
 #### New features and improvements
