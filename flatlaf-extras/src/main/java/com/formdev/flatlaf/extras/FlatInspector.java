@@ -55,7 +55,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.UIResource;
 import javax.swing.text.JTextComponent;
-import com.formdev.flatlaf.ui.FlatToolTipUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -365,12 +364,7 @@ public class FlatInspector
 		}
 
 		if( tip == null ) {
-			tip = new JToolTip() {
-				@Override
-				public void updateUI() {
-					setUI( FlatToolTipUI.createUI( this ) );
-				}
-			};
+			tip = new JToolTip();
 			rootPane.getLayeredPane().add( tip, TOOLTIP_LAYER );
 		} else
 			tip.setVisible( true );
@@ -397,15 +391,18 @@ public class FlatInspector
 	}
 
 	private static String buildToolTipText( Component c, int parentLevel ) {
+		StringBuilder buf = new StringBuilder( 1500 );
+		buf.append( "<html><style>" );
+		buf.append( "td { padding: 0 10 0 0; }" );
+		buf.append( "</style><table>" );
+
 		String name = c.getClass().getName();
 		name = name.substring( name.lastIndexOf( '.' ) + 1 );
-
-		String text =
-			"Class: " + name + " (" + c.getClass().getPackage().getName() + ")\n" +
-			"Size: " + c.getWidth() + ',' + c.getHeight() + "  @ " + c.getX() + ',' + c.getY() + '\n';
+		appendRow( buf, "Class", name + " (" + c.getClass().getPackage().getName() + ")" );
+		appendRow( buf, "Size", c.getWidth() + ", " + c.getHeight() + "&nbsp;&nbsp; @ " + c.getX() + ", " + c.getY() );
 
 		if( c instanceof Container )
-			text += "Insets: " + toString( ((Container)c).getInsets() ) + '\n';
+			appendRow( buf, "Insets", toString( ((Container)c).getInsets() ) );
 
 		Insets margin = null;
 		if( c instanceof AbstractButton )
@@ -418,28 +415,28 @@ public class FlatInspector
 			margin = ((JToolBar) c).getMargin();
 
 		if( margin != null )
-			text += "Margin: " + toString( margin ) + '\n';
+			appendRow( buf, "Margin", toString( margin ) );
 
 		Dimension prefSize = c.getPreferredSize();
 		Dimension minSize = c.getMinimumSize();
 		Dimension maxSize = c.getMaximumSize();
-		text += "Pref size: " + prefSize.width + ',' + prefSize.height + '\n' +
-			"Min size: " + minSize.width + ',' + minSize.height + '\n' +
-			"Max size: " + maxSize.width + ',' + maxSize.height + '\n';
+		appendRow( buf, "Pref size", prefSize.width + ", " + prefSize.height );
+		appendRow( buf, "Min size", minSize.width + ", " + minSize.height );
+		appendRow( buf, "Max size", maxSize.width + ", " + maxSize.height );
 
 		if( c instanceof JComponent )
-			text += "Border: " + toString( ((JComponent)c).getBorder() ) + '\n';
+			appendRow( buf, "Border", toString( ((JComponent)c).getBorder() ) );
 
-		text += "Background: " + toString( c.getBackground() ) + '\n' +
-			"Foreground: " + toString( c.getForeground() ) + '\n' +
-			"Font: " + toString( c.getFont() ) + '\n';
+		appendRow( buf, "Background", toString( c.getBackground() ) );
+		appendRow( buf, "Foreground", toString( c.getForeground() ) );
+		appendRow( buf, "Font", toString( c.getFont() ) );
 
 		if( c instanceof JComponent ) {
 			try {
 				Field f = JComponent.class.getDeclaredField( "ui" );
 				f.setAccessible( true );
 				Object ui = f.get( c );
-				text += "UI: " + (ui != null ? ui.getClass().getName() : "null") + '\n';
+				appendRow( buf, "UI", (ui != null ? ui.getClass().getName() : "null") );
 			} catch( NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex ) {
 				// ignore
 			}
@@ -448,34 +445,46 @@ public class FlatInspector
 		if( c instanceof Container ) {
 			LayoutManager layout = ((Container)c).getLayout();
 			if( layout != null )
-				text += "Layout: " + layout.getClass().getName() + '\n';
+				appendRow( buf, "Layout", layout.getClass().getName() );
 		}
 
-		text += "Enabled: " + c.isEnabled() + '\n';
-		text += "Opaque: " + c.isOpaque() + (c instanceof JComponent &&
-			FlatUIUtils.hasOpaqueBeenExplicitlySet( (JComponent) c ) ? " EXPLICIT" : "") + '\n';
+		appendRow( buf, "Enabled", String.valueOf( c.isEnabled() ) );
+		appendRow( buf, "Opaque", String.valueOf( c.isOpaque() )
+			+ (c instanceof JComponent && FlatUIUtils.hasOpaqueBeenExplicitlySet( (JComponent) c ) ? " EXPLICIT" : "") );
 		if( c instanceof AbstractButton )
-			text += "ContentAreaFilled: " + ((AbstractButton)c).isContentAreaFilled() + '\n';
-		text += "Focusable: " + c.isFocusable() + '\n';
-		text += "Left-to-right: " + c.getComponentOrientation().isLeftToRight() + '\n';
-		text += "Parent: " + (c.getParent() != null ? c.getParent().getClass().getName() : "null");
+			appendRow( buf, "ContentAreaFilled", String.valueOf( ((AbstractButton)c).isContentAreaFilled() ) );
+		appendRow( buf, "Focusable", String.valueOf( c.isFocusable() ) );
+		appendRow( buf, "Left-to-right", String.valueOf( c.getComponentOrientation().isLeftToRight() ) );
+		appendRow( buf, "Parent", (c.getParent() != null ? c.getParent().getClass().getName() : "null") );
+
+		buf.append( "<tr><td colspan=\"2\">" );
+		if( parentLevel > 0 )
+			buf.append( "<br>Parent level: " + parentLevel );
 
 		if( parentLevel > 0 )
-			text += "\n\nParent level: " + parentLevel;
-
-		if( parentLevel > 0 )
-			text += "\n(press Ctrl/Shift to increase/decrease level)";
+			buf.append( "<br>(press Ctrl/Shift to increase/decrease level)" );
 		else
-			text += "\n\n(press Ctrl key to inspect parent)";
+			buf.append( "<br>(press Ctrl key to inspect parent)" );
 
-		return text;
+		buf.append( "</td></tr>" );
+		buf.append( "</table></html>" );
+
+		return buf.toString();
+	}
+
+	private static void appendRow( StringBuilder buf, String key, String value ) {
+		buf.append( "<tr><td><b>" )
+			.append( key )
+			.append( ":</b></td><td>" )
+			.append( value )
+			.append( "</td></tr>" );
 	}
 
 	private static String toString( Insets insets ) {
 		if( insets == null )
 			return "null";
 
-		return insets.top + "," + insets.left + ',' + insets.bottom + ',' + insets.right
+		return insets.top + ", " + insets.left + ", " + insets.bottom + ", " + insets.right
 			+ (insets instanceof UIResource ? " UI" : "");
 	}
 
@@ -483,10 +492,29 @@ public class FlatInspector
 		if( c == null )
 			return "null";
 
-		String s = Long.toString( c.getRGB() & 0xffffffffl, 16 );
+		StringBuilder buf = new StringBuilder( 150 );
+
+		buf.append( "<tt>" ); // <tt> is similar to <code>, but uses same font size as body
+		buf.append( (c.getAlpha() != 255)
+			? String.format( "#%06x%02x", c.getRGB() & 0xffffff, (c.getRGB() >> 24) & 0xff )
+			: String.format( "#%06x", c.getRGB() & 0xffffff ) );
+		buf.append( "</tt>" );
+
 		if( c instanceof UIResource )
-			s += " UI";
-		return s;
+			buf.append( " UI" );
+
+		// color preview
+		buf.append( "&nbsp; &nbsp;" )
+			.append( "<span style=\"background: " )
+			.append( String.format( "#%06x", c.getRGB() & 0xffffff ) ) // Java CSS does not support alpha; see CSS.hexToColor()
+			.append( ";\">" )
+			.append( "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;" )
+			.append( "</span>" );
+
+		if( c.getAlpha() != 255 )
+			buf.append( " " ).append( Math.round( c.getAlpha() / 2.55f ) ).append( '%' );
+
+		return buf.toString();
 	}
 
 	private static String toString( Font f ) {

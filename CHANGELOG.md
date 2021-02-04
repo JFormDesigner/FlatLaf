@@ -3,6 +3,12 @@ FlatLaf Change Log
 
 ## 1.0-rc3-SNAPSHOT
 
+#### New features and improvements
+
+- Extras:
+  - UI Inspector: Use HTML in tooltip. Display color value in same format as
+    used in FlatLaf properties files. Added color preview.
+
 #### Fixed bugs
 
 - Label and ToolTip: Fixed font sizes for `<code>`, `<kbd>`, `<big>`, `<small>`
