@@ -7,6 +7,7 @@ FlatLaf Change Log
 
 - Label and ToolTip: Fixed font sizes for `<code>`, `<kbd>`, `<big>`, `<small>`
   and `<samp>` tags in HTML text.
+- Fixed color of `<address>` tag in HTML text.
 
 
 ## 1.0-rc2

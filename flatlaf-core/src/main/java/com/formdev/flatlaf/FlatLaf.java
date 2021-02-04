@@ -262,7 +262,7 @@ public abstract class FlatLaf
 			Color linkColor = defaults.getColor( "Component.linkColor" );
 			if( linkColor != null ) {
 				new HTMLEditorKit().getStyleSheet().addRule(
-					String.format( "a { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
+					String.format( "a, address { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
 			}
 		};
 
@@ -304,7 +304,7 @@ public abstract class FlatLaf
 		}
 
 		// restore default link color
-		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
+		new HTMLEditorKit().getStyleSheet().addRule( "a, address { color: blue; }" );
 		postInitialization = null;
 
 		// restore enable/disable window decorations
