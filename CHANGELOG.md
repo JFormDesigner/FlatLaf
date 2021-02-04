@@ -14,6 +14,8 @@ FlatLaf Change Log
 - Label and ToolTip: Fixed font sizes for `<code>`, `<kbd>`, `<big>`, `<small>`
   and `<samp>` tags in HTML text.
 - Fixed color of `<address>` tag in HTML text.
+- IntelliJ Themes: Fixed table header background when dragging column in "Dark
+  Flat" and "Light Flat" themes.
 
 
 ## 1.0-rc2
