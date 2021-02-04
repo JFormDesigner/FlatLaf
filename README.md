@@ -37,7 +37,7 @@ Requires Java 8 or newer.
 Download
 --------
 
-FlatLaf binaries are available on **JCenter** and **Maven Central**.
+FlatLaf binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
 build script:
@@ -48,7 +48,7 @@ build script:
 
 Otherwise download `flatlaf-<version>.jar` here:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf)
 
 
 ### Snapshots

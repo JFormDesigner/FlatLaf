@@ -11,8 +11,7 @@ out.
 Download
 --------
 
-FlatLaf IntelliJ Themes Pack binaries are available on **JCenter** and **Maven
-Central**.
+FlatLaf IntelliJ Themes Pack binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
 build script:
@@ -23,7 +22,7 @@ build script:
 
 Otherwise download `flatlaf-intellij-themes-<version>.jar` here:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-intellij-themes/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-intellij-themes/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-intellij-themes/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-intellij-themes)
 
 
 How to use?

@@ -25,7 +25,7 @@ This sub-project provides some additional components and classes:
 Download
 --------
 
-FlatLaf Extras binaries are available on **JCenter** and **Maven Central**.
+FlatLaf Extras binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
 build script:
@@ -36,11 +36,11 @@ build script:
 
 Otherwise download `flatlaf-extras-<version>.jar` here:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-extras/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-extras/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras)
 
 If SVG classes are used, `svgSalamander-<version>.jar` is also required:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/svgSalamander/svgSalamander/images/download.svg)](https://bintray.com/jformdesigner/svgSalamander/svgSalamander/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/svgSalamander/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/svgSalamander)
 
 
 Tools

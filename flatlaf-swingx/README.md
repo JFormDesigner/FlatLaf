@@ -26,7 +26,7 @@ this addon:
 Download
 --------
 
-FlatLaf for SwingX binaries are available on **JCenter** and **Maven Central**.
+FlatLaf for SwingX binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
 build script:
@@ -37,4 +37,4 @@ build script:
 
 Otherwise download `flatlaf-swingx-<version>.jar` here:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-swingx/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-swingx/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-swingx/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-swingx)
