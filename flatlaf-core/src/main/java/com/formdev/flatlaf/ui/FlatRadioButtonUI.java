@@ -123,7 +123,7 @@ public class FlatRadioButtonUI
 		// - if background was explicitly set to a non-UIResource color
 		if( !c.isOpaque() &&
 			((AbstractButton)c).isContentAreaFilled() &&
-			(c.getBackground() != defaultBackground) )
+			!defaultBackground.equals( c.getBackground() ) )
 		{
 			g.setColor( c.getBackground() );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );

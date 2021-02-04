@@ -16,6 +16,8 @@ FlatLaf Change Log
 - Fixed color of `<address>` tag in HTML text.
 - IntelliJ Themes: Fixed table header background when dragging column in "Dark
   Flat" and "Light Flat" themes.
+- CheckBox: Fixed background of check boxes in JIDE `CheckBoxTree`. (regression
+  in 1.0-rc2)
 
 
 ## 1.0-rc2
