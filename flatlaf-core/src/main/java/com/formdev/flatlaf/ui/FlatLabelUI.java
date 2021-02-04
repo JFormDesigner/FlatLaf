@@ -110,14 +110,26 @@ public class FlatLabelUI
 			c.getClientProperty( "html.disable" ) != Boolean.TRUE &&
 			needsFontBaseSize( text ) )
 		{
-			int headIndex = text.indexOf( "<head>" );
-
 			// BASE_SIZE rule is parsed in javax.swing.text.html.StyleSheet.addRule()
 			String style = "<style>BASE_SIZE " + c.getFont().getSize() + "</style>";
-			if( headIndex < 0 )
-				style = "<head>" + style + "</head>";
 
-			int insertIndex = headIndex >= 0 ? (headIndex + "<head>".length()) : "<html>".length();
+			String lowerText = text.toLowerCase();
+			int headIndex;
+			int styleIndex;
+
+			int insertIndex;
+			if( (headIndex = lowerText.indexOf( "<head>" )) >= 0 ) {
+				// there is a <head> tag --> insert after <head> tag
+				insertIndex = headIndex + "<head>".length();
+			} else if( (styleIndex = lowerText.indexOf( "<style>" )) >= 0 ) {
+				// there is a <style> tag --> insert before <style> tag
+				insertIndex = styleIndex;
+			} else {
+				// no <head> or <style> tag --> insert <head> tag after <html> tag
+				style = "<head>" + style + "</head>";
+				insertIndex = "<html>".length();
+			}
+
 			text = text.substring( 0, insertIndex )
 				+ style
 				+ text.substring( insertIndex );

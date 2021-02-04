@@ -145,6 +145,7 @@ public class FlatHtmlTest
 		JLabel label48 = new JLabel();
 		JLabel label54 = new JLabel();
 		JLabel label56 = new JLabel();
+		JLabel label57 = new JLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -443,6 +444,7 @@ public class FlatHtmlTest
 				"[]para" +
 				"[]para" +
 				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- label22 ----
@@ -588,6 +590,10 @@ public class FlatHtmlTest
 			//---- label56 ----
 			label56.setText("<html><head><style>body { color: red }</style></head>leading <big>red</big> trailing</html>");
 			panel2.add(label56, "cell 0 8 7 1");
+
+			//---- label57 ----
+			label57.setText("<html><style>body { color: red }</style><p>leading <big>red</big> trailing</p></html>");
+			panel2.add(label57, "cell 0 9 7 1");
 		}
 		add(panel2, "cell 4 2");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
