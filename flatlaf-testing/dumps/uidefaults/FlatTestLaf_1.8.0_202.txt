@@ -706,7 +706,7 @@ ProgressBar.cellLength         1
 ProgressBar.cellSpacing        0
 ProgressBar.cycleTime          10000
 ProgressBar.font               [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
-ProgressBar.foreground         #33737373    javax.swing.plaf.ColorUIResource [UI]
+ProgressBar.foreground         #73737333  20%    javax.swing.plaf.ColorUIResource [UI]
 ProgressBar.horizontalSize     146,4    javax.swing.plaf.DimensionUIResource [UI]
 ProgressBar.repaintInterval    15
 ProgressBar.selectionBackground #000088    javax.swing.plaf.ColorUIResource [UI]
@@ -805,7 +805,7 @@ ScrollBar.minimumThumbSize     10,10    javax.swing.plaf.DimensionUIResource [UI
 ScrollBar.pressedThumbWithTrack false
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
-ScrollBar.thumb                #33737373    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.thumb                #73737333  20%    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbArc             0
 ScrollBar.thumbDarkShadow      #696969    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -1127,7 +1127,7 @@ TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI
 TitlePane.closeHoverBackground #e81123    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closeHoverForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closeIcon            [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowCloseIcon [UI]
-TitlePane.closePressedBackground #99e81123    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closePressedBackground #e8112399  60%    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closePressedForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.foreground           #0000ff    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.iconMargins          3,8,3,0    javax.swing.plaf.InsetsUIResource [UI]

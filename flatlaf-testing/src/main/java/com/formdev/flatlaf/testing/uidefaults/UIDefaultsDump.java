@@ -416,8 +416,9 @@ public class UIDefaultsDump
 
 	private String dumpColorHex( Color color ) {
 		boolean hasAlpha = (color.getAlpha() != 255);
-		return String.format( hasAlpha ? "#%08x" : "#%06x",
-			hasAlpha ? color.getRGB() : (color.getRGB() & 0xffffff) );
+		return hasAlpha
+			? String.format( "#%06x%02x  %d%%", color.getRGB() & 0xffffff, (color.getRGB() >> 24) & 0xff, Math.round( color.getAlpha() / 2.55f ) )
+			: String.format( "#%06x", color.getRGB() & 0xffffff );
 	}
 
 	private void dumpColorFunction( PrintWriter out, ColorFunction function ) {

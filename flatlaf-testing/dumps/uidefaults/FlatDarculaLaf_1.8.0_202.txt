@@ -13,7 +13,7 @@
 - Button.innerFocusWidth         1
 + Button.innerFocusWidth         0
 
-- CheckBox.icon.focusedBackground #4d466d94    javax.swing.plaf.ColorUIResource [UI]
+- CheckBox.icon.focusedBackground #466d944d  30%    javax.swing.plaf.ColorUIResource [UI]
 
 - ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 + ComboBox.border                [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
