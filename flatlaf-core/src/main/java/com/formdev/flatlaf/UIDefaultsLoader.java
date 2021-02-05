@@ -72,6 +72,8 @@ class UIDefaultsLoader
 	private static final String OPTIONAL_PREFIX = "?";
 	private static final String WILDCARD_PREFIX = "*.";
 
+	private static int parseColorDepth;
+
 	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
 		Properties additionalDefaults, boolean dark, UIDefaults defaults )
 	{
@@ -580,19 +582,27 @@ class UIDefaultsLoader
 		if( params.isEmpty() )
 			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 
-		switch( function ) {
-			case "rgb":			return parseColorRgbOrRgba( false, params, resolver, reportError );
-			case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
-			case "hsl":			return parseColorHslOrHsla( false, params );
-			case "hsla":		return parseColorHslOrHsla( true, params );
-			case "lighten":		return parseColorHSLIncreaseDecrease( 2, true, params, resolver, reportError );
-			case "darken":		return parseColorHSLIncreaseDecrease( 2, false, params, resolver, reportError );
-			case "saturate":	return parseColorHSLIncreaseDecrease( 1, true, params, resolver, reportError );
-			case "desaturate":	return parseColorHSLIncreaseDecrease( 1, false, params, resolver, reportError );
-			case "fadein":		return parseColorHSLIncreaseDecrease( 3, true, params, resolver, reportError );
-			case "fadeout":		return parseColorHSLIncreaseDecrease( 3, false, params, resolver, reportError );
-			case "fade":		return parseColorFade( params, resolver, reportError );
-			case "spin":		return parseColorSpin( params, resolver, reportError );
+		if( parseColorDepth > 100 )
+			throw new IllegalArgumentException( "endless recursion in color function '" + value + "'" );
+
+		parseColorDepth++;
+		try {
+			switch( function ) {
+				case "rgb":			return parseColorRgbOrRgba( false, params, resolver, reportError );
+				case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
+				case "hsl":			return parseColorHslOrHsla( false, params );
+				case "hsla":		return parseColorHslOrHsla( true, params );
+				case "lighten":		return parseColorHSLIncreaseDecrease( 2, true, params, resolver, reportError );
+				case "darken":		return parseColorHSLIncreaseDecrease( 2, false, params, resolver, reportError );
+				case "saturate":	return parseColorHSLIncreaseDecrease( 1, true, params, resolver, reportError );
+				case "desaturate":	return parseColorHSLIncreaseDecrease( 1, false, params, resolver, reportError );
+				case "fadein":		return parseColorHSLIncreaseDecrease( 3, true, params, resolver, reportError );
+				case "fadeout":		return parseColorHSLIncreaseDecrease( 3, false, params, resolver, reportError );
+				case "fade":		return parseColorFade( params, resolver, reportError );
+				case "spin":		return parseColorSpin( params, resolver, reportError );
+			}
+		} finally {
+			parseColorDepth--;
 		}
 
 		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
