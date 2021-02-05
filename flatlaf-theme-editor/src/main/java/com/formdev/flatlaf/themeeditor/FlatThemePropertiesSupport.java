@@ -179,6 +179,9 @@ class FlatThemePropertiesSupport
 		for( Object key : getProperties().keySet() )
 			allKeysCache.add( (String) key );
 
+		if( baseFiles == null )
+			return allKeysCache;
+
 		for( int i = 0; i < baseFiles.length; i++ ) {
 			for( Object key : getBaseProperties( i ).keySet() )
 				allKeysCache.add( (String) key );
