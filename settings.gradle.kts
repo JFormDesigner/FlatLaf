@@ -24,11 +24,3 @@ include( "flatlaf-intellij-themes" )
 include( "flatlaf-demo" )
 include( "flatlaf-testing" )
 include( "flatlaf-theme-editor" )
-
-pluginManagement {
-	plugins {
-		// NOTE: keep plugin versions in sync with buildSrc/build.gradle.kts
-		id( "com.jfrog.bintray" ) version "1.8.4"
-		id( "com.jfrog.artifactory" ) version "4.13.0"
-	}
-}

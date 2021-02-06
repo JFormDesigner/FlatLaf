@@ -99,11 +99,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      - name: Publish snapshot to oss.jfrog.org
-        run: ./gradlew artifactoryPublish
+      - name: Publish snapshot to oss.sonatype.org
+        run: ./gradlew publish -Dorg.gradle.internal.publish.checksums.insecure=true
         env:
-          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_KEY:  ${{ secrets.BINTRAY_KEY }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
 
 
   release:
@@ -135,8 +135,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      - name: Release a new stable version to bintray
-        run: ./gradlew bintrayUpload -Drelease=true
+      - name: Release a new stable version to Maven Central
+        run: ./gradlew publish -Drelease=true
         env:
-          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_KEY:  ${{ secrets.BINTRAY_KEY }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_KEY:      ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}

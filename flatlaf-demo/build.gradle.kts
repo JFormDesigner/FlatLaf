@@ -16,15 +16,6 @@
 
 plugins {
 	`java-library`
-	id( "com.jfrog.bintray" )
-
-	// Although artifactory plugin is not used in this subproject, the plugin is required
-	// because otherwise gradle fails with following error:
-	//     Caused by: org.codehaus.groovy.runtime.typehandling.GroovyCastException:
-	//     Cannot cast object 'task ':bintrayUpload''
-	//     with class 'com.jfrog.bintray.gradle.tasks.BintrayUploadTask_Decorated'
-	//     to class 'com.jfrog.bintray.gradle.tasks.BintrayUploadTask'
-	id( "com.jfrog.artifactory" )
 }
 
 repositories {
@@ -66,26 +57,5 @@ tasks {
 					exclude( "META-INF/LICENSE" )
 				} }
 		} )
-	}
-}
-
-bintray {
-	user = rootProject.extra["bintray.user"] as String?
-	key = rootProject.extra["bintray.key"] as String?
-
-	setConfigurations( "archives" )
-
-	with( pkg ) {
-		repo = "flatlaf"
-		name = "flatlaf-demo"
-		setLicenses( "Apache-2.0" )
-		vcsUrl = "https://github.com/JFormDesigner/FlatLaf"
-
-		with( version ) {
-			name = project.version.toString()
-		}
-
-		publish = rootProject.extra["bintray.publish"] as Boolean
-		dryRun = rootProject.extra["bintray.dryRun"] as Boolean
 	}
 }

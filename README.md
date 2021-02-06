@@ -53,11 +53,11 @@ Otherwise download `flatlaf-<version>.jar` here:
 
 ### Snapshots
 
-FlatLaf snapshot binaries are available in
-[JFrog Artifactory](https://oss.jfrog.org/artifactory/oss-snapshot-local/com/formdev/).
-To access the latest snapshot, change the FlatLaf version(s) in the dependencies
+FlatLaf snapshot binaries are available on
+[Sonatype OSSRH](https://oss.sonatype.org/content/repositories/snapshots/com/formdev/flatlaf/).
+To access the latest snapshot, change the FlatLaf version in your dependencies
 to `<version>-SNAPSHOT` (e.g. `0.27-SNAPSHOT`) and add the repository
-`https://oss.jfrog.org/artifactory/oss-snapshot-local` to your build (see
+`https://oss.sonatype.org/content/repositories/snapshots/` to your build (see
 [Maven](https://maven.apache.org/guides/mini/guide-multiple-repositories.html)
 and
 [Gradle](https://docs.gradle.org/current/userguide/declaring_repositories.html#sec:declaring_custom_repository)

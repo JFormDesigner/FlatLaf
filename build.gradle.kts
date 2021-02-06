@@ -23,7 +23,7 @@ allprojects {
 	version = rootProject.version
 
 	repositories {
-		jcenter()
+		mavenCentral()
 	}
 }
 
@@ -38,17 +38,6 @@ println( "FlatLaf Version: ${version}" )
 println( "Gradle ${gradle.gradleVersion} at ${gradle.gradleHomeDir}" )
 println( "Java ${System.getProperty( "java.version" )}" )
 println()
-
-
-extra["bintray.user"] = System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" )
-extra["bintray.key"]  = System.getenv( "BINTRAY_KEY" )  ?: System.getProperty( "bintray.key" )
-
-// if true, do not upload to bintray
-extra["bintray.dryRun"] = false
-
-// if true, uploaded artifacts are visible to all
-// if false, only visible to owner when logged into bintray
-extra["bintray.publish"] = false
 
 
 allprojects {
