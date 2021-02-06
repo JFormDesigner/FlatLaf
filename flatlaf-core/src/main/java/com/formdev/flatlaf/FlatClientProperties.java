@@ -187,7 +187,7 @@ public interface FlatClientProperties
 	 * }</pre>
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
-	 * <strong>Value type</strong> {@link java.util.function.Predicate&lt;javax.swing.JComponent&gt;
+	 * <strong>Value type</strong> {@link java.util.function.Predicate}&lt;javax.swing.JComponent&gt;
 	 */
 	String COMPONENT_FOCUS_OWNER = "JComponent.focusOwner";
 
