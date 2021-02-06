@@ -59,4 +59,17 @@ public class DerivedColor
 	public ColorFunction[] getFunctions() {
 		return functions;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder();
+		buf.append( super.toString() );
+
+		for( ColorFunction function : functions ) {
+			buf.append( '\n' );
+			buf.append( function.toString() );
+		}
+
+		return buf.toString();
+	}
 }

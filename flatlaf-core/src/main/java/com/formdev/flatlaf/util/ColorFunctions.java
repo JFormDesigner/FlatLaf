@@ -128,6 +128,21 @@ public class ColorFunctions
 				? hsla[hslIndex] > 65
 				: hsla[hslIndex] < 35;
 		}
+
+		@Override
+		public String toString() {
+			String name;
+			switch( hslIndex ) {
+				case 0: name = "spin"; break;
+				case 1: name = increase ? "saturate" : "desaturate"; break;
+				case 2: name = increase ? "lighten" : "darken"; break;
+				case 3: name = increase ? "fadein" : "fadeout"; break;
+				default: throw new IllegalArgumentException();
+			}
+			return String.format( "%s(%.0f%%%s%s)", name, amount,
+				(relative ? " relative" : ""),
+				(autoInverse ? " autoInverse" : "") );
+		}
 	}
 
 	//---- class HSLIncreaseDecrease ------------------------------------------
@@ -147,6 +162,11 @@ public class ColorFunctions
 		@Override
 		public void apply( float[] hsla ) {
 			hsla[3] = clamp( amount );
+		}
+
+		@Override
+		public String toString() {
+			return String.format( "fade(%.0f%%)", amount );
 		}
 	}
 }

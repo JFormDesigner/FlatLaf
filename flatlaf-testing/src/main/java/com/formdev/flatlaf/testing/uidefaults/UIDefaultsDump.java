@@ -67,8 +67,6 @@ import com.formdev.flatlaf.testing.FlatTestLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
-import com.formdev.flatlaf.util.ColorFunctions.Fade;
-import com.formdev.flatlaf.util.ColorFunctions.HSLIncreaseDecrease;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -409,7 +407,7 @@ public class UIDefaultsDump
 			DerivedColor derivedColor = (DerivedColor) color;
 			for( ColorFunction function : derivedColor.getFunctions() ) {
 				out.print( " " );
-				dumpColorFunction( out, function );
+				out.print( function.toString() );
 			}
 		}
 	}
@@ -419,27 +417,6 @@ public class UIDefaultsDump
 		return hasAlpha
 			? String.format( "#%06x%02x  %d%%", color.getRGB() & 0xffffff, (color.getRGB() >> 24) & 0xff, Math.round( color.getAlpha() / 2.55f ) )
 			: String.format( "#%06x", color.getRGB() & 0xffffff );
-	}
-
-	private void dumpColorFunction( PrintWriter out, ColorFunction function ) {
-		if( function instanceof HSLIncreaseDecrease ) {
-			HSLIncreaseDecrease func = (HSLIncreaseDecrease) function;
-			String name;
-			switch( func.hslIndex ) {
-				case 0: name = "spin"; break;
-				case 1: name = func.increase ? "saturate" : "desaturate"; break;
-				case 2: name = func.increase ? "lighten" : "darken"; break;
-				case 3: name = func.increase ? "fadein" : "fadeout"; break;
-				default: throw new IllegalArgumentException();
-			}
-			out.printf( "%s(%.0f%%%s%s)", name, func.amount,
-				(func.relative ? " relative" : ""),
-				(func.autoInverse ? " autoInverse" : "") );
-		} else if( function instanceof Fade ) {
-			Fade func = (Fade) function;
-			out.printf( "fade(%.0f%%)", func.amount );
-		} else
-			throw new IllegalArgumentException( "unknown color function: " + function );
 	}
 
 	private void dumpFont( PrintWriter out, Font font ) {
