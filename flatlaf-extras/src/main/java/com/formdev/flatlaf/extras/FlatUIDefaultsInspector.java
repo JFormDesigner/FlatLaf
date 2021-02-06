@@ -322,10 +322,11 @@ public class FlatUIDefaultsInspector
 				continue;
 
 			// resolve derived color
+			Object info = null;
 			if( value instanceof DerivedColor ) {
 				Color resolvedColor = resolveDerivedColor( defaults, (String) key, (DerivedColor) value, pBaseColor );
 				if( resolvedColor != value )
-					value = new Color[] { resolvedColor, pBaseColor[0], (Color) value };
+					info = new Color[] { resolvedColor, pBaseColor[0] };
 			}
 
 			// check whether key was overridden using UIManager.put(key,value)
@@ -334,7 +335,7 @@ public class FlatUIDefaultsInspector
 				lafValue = lafDefaults.get( key );
 
 			// add item
-			items.add( new Item( String.valueOf( key ), value, lafValue ) );
+			items.add( new Item( String.valueOf( key ), value, lafValue, info ) );
 		}
 
 		return items.toArray( new Item[items.size()] );
@@ -477,7 +478,7 @@ public class FlatUIDefaultsInspector
 			return "Boolean";
 		if( value instanceof Border )
 			return "Border";
-		if( value instanceof Color || value instanceof Color[] )
+		if( value instanceof Color )
 			return "Color";
 		if( value instanceof Dimension )
 			return "Dimension";
@@ -669,24 +670,26 @@ public class FlatUIDefaultsInspector
 		final String key;
 		final Object value;
 		final Object lafValue;
+		final Object info;
 
 		private String valueStr;
 
-		Item( String key, Object value, Object lafValue ) {
+		Item( String key, Object value, Object lafValue, Object info ) {
 			this.key = key;
 			this.value = value;
 			this.lafValue = lafValue;
+			this.info = info;
 		}
 
 		String getValueAsString() {
 			if( valueStr == null )
-				valueStr = valueAsString( value );
+				valueStr = valueAsString( value, info );
 			return valueStr;
 		}
 
-		static String valueAsString( Object value ) {
-			if( value instanceof Color || value instanceof Color[] ) {
-				Color color = (value instanceof Color[]) ? ((Color[])value)[0] : (Color) value;
+		static String valueAsString( Object value, Object info ) {
+			if( value instanceof Color ) {
+				Color color = (info instanceof Color[]) ? ((Color[])info)[0] : (Color) value;
 				HSLColor hslColor = new HSLColor( color );
 				if( color.getAlpha() == 255 ) {
 					return String.format( "%-9s HSL %3d %3d %3d",
@@ -720,7 +723,7 @@ public class FlatUIDefaultsInspector
 				Border border = (Border) value;
 				if( border instanceof FlatLineBorder ) {
 					FlatLineBorder lineBorder = (FlatLineBorder) border;
-					return valueAsString( lineBorder.getUnscaledBorderInsets() )
+					return valueAsString( lineBorder.getUnscaledBorderInsets(), null )
 						+ "  " + color2hex( lineBorder.getLineColor() )
 						+ "  " + lineBorder.getLineThickness()
 						+ "    " + border.getClass().getName();
@@ -728,7 +731,7 @@ public class FlatUIDefaultsInspector
 					Insets insets = (border instanceof FlatEmptyBorder)
 						? ((FlatEmptyBorder)border).getUnscaledBorderInsets()
 						: ((EmptyBorder)border).getBorderInsets();
-					return valueAsString( insets ) + "    " + border.getClass().getName();
+					return valueAsString( insets, null ) + "    " + border.getClass().getName();
 				} else if( border instanceof FlatBorder || border instanceof FlatMarginBorder )
 					return border.getClass().getName();
 				else
@@ -991,7 +994,7 @@ public class FlatUIDefaultsInspector
 			init( table, item.key, isSelected, row );
 
 			// reset background, foreground and icon
-			if( !(item.value instanceof Color) && !(item.value instanceof Color[]) ) {
+			if( !(item.value instanceof Color) ) {
 				setBackground( null );
 				setForeground( null );
 			}
@@ -1003,8 +1006,8 @@ public class FlatUIDefaultsInspector
 
 			super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
 
-			if( item.value instanceof Color || item.value instanceof Color[] ) {
-				Color color = (item.value instanceof Color[]) ? ((Color[])item.value)[0] : (Color) item.value;
+			if( item.value instanceof Color ) {
+				Color color = (item.info instanceof Color[]) ? ((Color[])item.info)[0] : (Color) item.value;
 				boolean isDark = new HSLColor( color ).getLuminance() < 70 && color.getAlpha() >= 128;
 				setBackground( color );
 				setForeground( isDark ? Color.white : Color.black );
@@ -1019,7 +1022,7 @@ public class FlatUIDefaultsInspector
 				: String.valueOf( item.value );
 			if( item.lafValue != null ) {
 				toolTipText += "    \n\nLaF UI default value was overridden with UIManager.put(key,value):\n    "
-					+ Item.valueAsString( item.lafValue ) + "\n    " + String.valueOf( item.lafValue );
+					+ Item.valueAsString( item.lafValue, null ) + "\n    " + String.valueOf( item.lafValue );
 			}
 			setToolTipText( toolTipText );
 
@@ -1028,7 +1031,7 @@ public class FlatUIDefaultsInspector
 
 		@Override
 		protected void paintComponent( Graphics g ) {
-			if( item.value instanceof Color || item.value instanceof Color[] ) {
+			if( item.value instanceof Color ) {
 				int width = getWidth();
 				int height = getHeight();
 				Color background = getBackground();
@@ -1036,13 +1039,13 @@ public class FlatUIDefaultsInspector
 				// paint color
 				fillRect( g, background, 0, 0, width, height );
 
-				if( item.value instanceof Color[] ) {
+				if( item.info instanceof Color[] ) {
 					// paint base color
 					int width2 = height * 2;
-					fillRect( g, ((Color[])item.value)[1], width - width2, 0, width2, height );
+					fillRect( g, ((Color[])item.info)[1], width - width2, 0, width2, height );
 
 					// paint default color
-					Color defaultColor = ((Color[])item.value)[2];
+					Color defaultColor = (Color) item.value;
 					if( defaultColor != null && !defaultColor.equals( background ) ) {
 						int width3 = height / 2;
 						fillRect( g, defaultColor, width - width3, 0, width3, height );
