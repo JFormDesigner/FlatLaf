@@ -136,9 +136,20 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Release a new stable version to Maven Central
-        run: ./gradlew publish -Drelease=true
+        run: ./gradlew publish :flatlaf-demo:build -Drelease=true
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           SIGNING_KEY:      ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+
+      - name: Upload demo
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          forceSsl: true
+          localDir: "flatlaf-demo/build/libs"
+          remoteDir: "."
+          options: "--only-newer --no-recursion --verbose=1"
