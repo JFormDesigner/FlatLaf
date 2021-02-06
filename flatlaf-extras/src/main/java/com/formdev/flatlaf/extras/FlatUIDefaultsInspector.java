@@ -446,7 +446,7 @@ public class FlatUIDefaultsInspector
 		model.setFilter( item -> {
 			if( valueType != null &&
 				!valueType.equals( "(any)" ) &&
-				!valueType.equals( typeOfValue( item.value ) ) )
+				!typeOfValue( item.value ).startsWith( valueType ) )
 			  return false;
 
 			if( filters == null )
@@ -478,8 +478,13 @@ public class FlatUIDefaultsInspector
 			return "Boolean";
 		if( value instanceof Border )
 			return "Border";
-		if( value instanceof Color )
+		if( value instanceof Color ) {
+			if( ((Color)value).getAlpha() != 255 )
+				return "Color (\u03b1)";
+			if( value instanceof DerivedColor )
+				return "Color (\u0192)";
 			return "Color";
+		}
 		if( value instanceof Dimension )
 			return "Dimension";
 		if( value instanceof Float )
@@ -595,6 +600,8 @@ public class FlatUIDefaultsInspector
 					"Boolean",
 					"Border",
 					"Color",
+					"Color (\u03b1)",
+					"Color (\u0192)",
 					"Dimension",
 					"Float",
 					"Font",

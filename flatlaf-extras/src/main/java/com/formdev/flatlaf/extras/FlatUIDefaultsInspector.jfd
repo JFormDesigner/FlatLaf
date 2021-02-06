@@ -42,6 +42,8 @@ new FormModel {
 						addElement( "Boolean" )
 						addElement( "Border" )
 						addElement( "Color" )
+						addElement( "Color (α)" )
+						addElement( "Color (ƒ)" )
 						addElement( "Dimension" )
 						addElement( "Float" )
 						addElement( "Font" )
