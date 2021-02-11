@@ -38,6 +38,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
@@ -48,6 +51,8 @@ import javax.swing.JRootPane;
 import javax.swing.JToolBar;
 import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -55,6 +60,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.UIResource;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -82,7 +88,6 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatInspector
 {
 	private static final Integer HIGHLIGHT_LAYER = 401;
-	private static final Integer TOOLTIP_LAYER = 402;
 
 	private static final int KEY_MODIFIERS_MASK = InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.META_DOWN_MASK;
 
@@ -90,6 +95,8 @@ public class FlatInspector
 	private final MouseMotionListener mouseMotionListener;
 	private final AWTEventListener keyListener;
 	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport( this );
+	private final WindowListener windowListener;
+	private Window window;
 
 	private boolean enabled;
 	private Component lastComponent;
@@ -99,7 +106,7 @@ public class FlatInspector
 	private boolean wasCtrlOrShiftKeyPressed;
 
 	private JComponent highlightFigure;
-	private JToolTip tip;
+	private Popup popup;
 
 	/**
 	 * Installs a key listener into the application that allows enabling and disabling
@@ -189,6 +196,18 @@ public class FlatInspector
 				}
 			}
 		};
+
+		windowListener = new WindowAdapter() {
+			@Override
+			public void windowActivated( WindowEvent e ) {
+				update();
+			}
+
+			@Override
+			public void windowDeactivated( WindowEvent e ) {
+				hidePopup();
+			}
+		};
 	}
 
 	private void uninstall() {
@@ -221,12 +240,28 @@ public class FlatInspector
 
 		rootPane.getGlassPane().setVisible( enabled );
 
+		// add/remove key listener
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		if( enabled )
 			toolkit.addAWTEventListener( keyListener, AWTEvent.KEY_EVENT_MASK );
 		else
 			toolkit.removeAWTEventListener( keyListener );
 
+		// add/remove window listener
+		if( enabled ) {
+			System.out.println( "add "+window );
+			window = SwingUtilities.windowForComponent( rootPane );
+			if( window != null )
+				window.addWindowListener( windowListener );
+		} else {
+			System.out.println( "rem" );
+			if( window != null ) {
+				window.removeWindowListener( windowListener );
+				window = null;
+			}
+		}
+
+		// show/hide popup
 		if( enabled ) {
 			Point pt = new Point( MouseInfo.getPointerInfo().getLocation() );
 			SwingUtilities.convertPointFromScreen( pt, rootPane );
@@ -242,12 +277,17 @@ public class FlatInspector
 				highlightFigure.getParent().remove( highlightFigure );
 			highlightFigure = null;
 
-			if( tip != null )
-				tip.getParent().remove( tip );
-			tip = null;
+			hidePopup();
 		}
 
 		propertyChangeSupport.firePropertyChange( "enabled", !enabled, enabled );
+	}
+
+	private void hidePopup() {
+		if( popup != null ) {
+			popup.hide();
+			popup = null;
+		}
 	}
 
 	public void update() {
@@ -303,7 +343,7 @@ public class FlatInspector
 					continue;
 
 				// ignore highlight figure and tooltip
-				if( c == highlightFigure || c == tip )
+				if( c == highlightFigure )
 					continue;
 
 				// ignore glass pane
@@ -357,26 +397,24 @@ public class FlatInspector
 	}
 
 	private void showToolTip( Component c, int x, int y, int parentLevel ) {
-		if( c == null ) {
-			if( tip != null )
-				tip.setVisible( false );
+		hidePopup();
+
+		if( c == null || (window != null && !window.isActive()) )
 			return;
-		}
 
-		if( tip == null ) {
-			tip = new JToolTip();
-			rootPane.getLayeredPane().add( tip, TOOLTIP_LAYER );
-		} else
-			tip.setVisible( true );
-
+		JToolTip tip = new JToolTip();
 		tip.setTipText( buildToolTipText( c, parentLevel ) );
+		tip.putClientProperty( FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, true );
 
-		int tx = x + UIScale.scale( 8 );
-		int ty = y + UIScale.scale( 16 );
+		Point pt = new Point( x, y );
+		SwingUtilities.convertPointToScreen( pt, rootPane.getGlassPane() );
+		int tx = pt.x + UIScale.scale( 8 );
+		int ty = pt.y + UIScale.scale( 16 );
+
 		Dimension size = tip.getPreferredSize();
 
 		// position the tip in the visible area
-		Rectangle visibleRect = rootPane.getVisibleRect();
+		Rectangle visibleRect = rootPane.getGraphicsConfiguration().getBounds();
 		if( tx + size.width > visibleRect.x + visibleRect.width )
 			tx -= size.width + UIScale.scale( 16 );
 		if( ty + size.height > visibleRect.y + visibleRect.height )
@@ -386,8 +424,9 @@ public class FlatInspector
 		if( ty < visibleRect.y )
 			ty = visibleRect.y;
 
-		tip.setBounds( tx, ty, size.width, size.height );
-		tip.repaint();
+		PopupFactory popupFactory = PopupFactory.getSharedInstance();
+		popup = popupFactory.getPopup( c, tip, tx, ty );
+		popup.show();
 	}
 
 	private static String buildToolTipText( Component c, int parentLevel ) {
@@ -473,9 +512,9 @@ public class FlatInspector
 	}
 
 	private static void appendRow( StringBuilder buf, String key, String value ) {
-		buf.append( "<tr><td><b>" )
+		buf.append( "<tr><td>" )
 			.append( key )
-			.append( ":</b></td><td>" )
+			.append( ":</td><td>" )
 			.append( value )
 			.append( "</td></tr>" );
 	}

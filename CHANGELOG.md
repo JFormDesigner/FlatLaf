@@ -3,6 +3,10 @@ FlatLaf Change Log
 
 ## 1.0-rc4-SNAPSHOT
 
+#### New features and improvements
+
+- Extras: UI Inspector: Tooltip is no longer limited to window bounds.
+
 #### Fixed bugs
 
 - TabbedPane: Custom `TabbedPane.selectedForeground` color did not work when
