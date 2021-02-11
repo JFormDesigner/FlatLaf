@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.0-rc4-SNAPSHOT
+
+#### Fixed bugs
+
+- TabbedPane: Custom `TabbedPane.selectedForeground` color did not work when
+  `TabbedPane.foreground` has also custom color. (issue #257)
+
+
 ## 1.0-rc3
 
 #### New features and improvements

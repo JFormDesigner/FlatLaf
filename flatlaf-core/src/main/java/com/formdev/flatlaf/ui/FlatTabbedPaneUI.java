@@ -893,7 +893,7 @@ public class FlatTabbedPaneUI
 			Color color;
 			if( tabPane.isEnabled() && tabPane.isEnabledAt( tabIndex ) ) {
 				color = tabPane.getForegroundAt( tabIndex );
-				if( isSelected && (color instanceof UIResource) && selectedForeground != null )
+				if( isSelected && selectedForeground != null && color == tabPane.getForeground() )
 					color = selectedForeground;
 			} else
 				color = disabledForeground;
