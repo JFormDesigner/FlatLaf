@@ -11,6 +11,8 @@ FlatLaf Change Log
 
 - TabbedPane: Custom `TabbedPane.selectedForeground` color did not work when
   `TabbedPane.foreground` has also custom color. (issue #257)
+- FileChooser: Fixed display of date in details view if current user is selected
+  in "Look in" combobox. (Windows 10 only; issue #249)
 
 
 ## 1.0-rc3
