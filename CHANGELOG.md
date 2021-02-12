@@ -13,6 +13,8 @@ FlatLaf Change Log
   `TabbedPane.foreground` has also custom color. (issue #257)
 - FileChooser: Fixed display of date in details view if current user is selected
   in "Look in" combobox. (Windows 10 only; issue #249)
+- Table: Fixed wrong grid line thickness in dragged column on HiDPI screens on
+  Java 9+. (issue #236)
 
 
 ## 1.0-rc3

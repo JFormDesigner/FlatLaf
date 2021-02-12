@@ -33,7 +33,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
+import javax.swing.table.JTableHeader;
 import com.formdev.flatlaf.util.Graphics2DProxy;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -213,15 +215,18 @@ public class FlatTableUI
 			//   - do not paint last vertical grid line if line is on right edge of scroll pane
 			//   - fix unstable grid line thickness when scaled at 125%, 150%, 175%, 225%, ...
 			//     which paints either 1px or 2px lines depending on location
+			//   - on Java 9+, fix wrong grid line thickness in dragged column
 
 			boolean hideLastVerticalLine = hideLastVerticalLine();
 			int tableWidth = table.getWidth();
+			JTableHeader header = table.getTableHeader();
+			boolean isDragging = (header != null && header.getDraggedColumn() != null);
 
 			double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
 			double lineThickness = (1. / systemScaleFactor) * (int) systemScaleFactor;
 
 			// Java 8 uses drawLine() to paint grid lines
-			// Java 9+ uses fillRect() to paint grid lines
+			// Java 9+ uses fillRect() to paint grid lines (except for dragged column)
 			g = new Graphics2DProxy( (Graphics2D) g ) {
 				@Override
 				public void drawLine( int x1, int y1, int x2, int y2 ) {
@@ -230,6 +235,22 @@ public class FlatTableUI
 						x1 == x2 && y1 == 0 && x1 == tableWidth - 1 &&
 						wasInvokedFromPaintGrid() )
 					  return;
+
+					// on Java 9+, fix wrong grid line thickness in dragged column
+					if( isDragging &&
+						SystemInfo.isJava_9_orLater &&
+						((horizontalLines && y1 == y2) || (verticalLines && x1 == x2)) &&
+						wasInvokedFromPaintDraggedArea() )
+					{
+						if( y1 == y2 ) {
+							// horizontal grid line
+							super.fill( new Rectangle2D.Double( x1, y1, x2 - x1 + 1, lineThickness ) );
+						} else if( x1 == x2 ) {
+							// vertical grid line
+							super.fill( new Rectangle2D.Double( x1, y1, lineThickness, y2 - y1 + 1 ) );
+						}
+						return;
+					}
 
 					super.drawLine( x1, y1, x2, y2 );
 				}
@@ -258,11 +279,23 @@ public class FlatTableUI
 				}
 
 				private boolean wasInvokedFromPaintGrid() {
+					return wasInvokedFromMethod( "paintGrid" );
+				}
+
+				private boolean wasInvokedFromPaintDraggedArea() {
+					return wasInvokedFromMethod( "paintDraggedArea" );
+				}
+
+				private boolean wasInvokedFromMethod( String methodName ) {
 					StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 					for( int i = 0; i < 10 || i < stackTrace.length; i++ ) {
-						if( "javax.swing.plaf.basic.BasicTableUI".equals( stackTrace[i].getClassName() ) &&
-							"paintGrid".equals( stackTrace[i].getMethodName() ) )
-						  return true;
+						if( "javax.swing.plaf.basic.BasicTableUI".equals( stackTrace[i].getClassName() ) ) {
+							String methodName2 = stackTrace[i].getMethodName();
+							if( "paintCell".equals( methodName2 ) )
+								return false;
+							if( methodName.equals( methodName2 ) )
+								return true;
+						}
 					}
 					return false;
 				}
