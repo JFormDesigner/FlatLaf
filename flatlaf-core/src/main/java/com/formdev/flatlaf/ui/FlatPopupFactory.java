@@ -62,7 +62,7 @@ public class FlatPopupFactory
 	public Popup getPopup( Component owner, Component contents, int x, int y )
 		throws IllegalArgumentException
 	{
-		Point pt = fixToolTipLocation( owner, contents, x, y );
+		Point pt = fixToolTipLocation( contents, x, y );
 		if( pt != null ) {
 			x = pt.x;
 			y = pt.y;
@@ -111,6 +111,7 @@ public class FlatPopupFactory
 
 			// check whether heavy weight popup window is on same screen as owner component
 			if( popupWindow == null ||
+				owner == null ||
 				popupWindow.getGraphicsConfiguration() == owner.getGraphicsConfiguration() )
 			  return popup;
 
@@ -211,7 +212,7 @@ public class FlatPopupFactory
 	 * This method checks whether the current mouse location is within tooltip bounds
 	 * and corrects the y-location so that the tooltip is placed above the mouse location.
 	 */
-	private Point fixToolTipLocation( Component owner, Component contents, int x, int y ) {
+	private Point fixToolTipLocation( Component contents, int x, int y ) {
 		if( !(contents instanceof JToolTip) || !wasInvokedFromToolTipManager() )
 			return null;
 
@@ -450,10 +451,10 @@ public class FlatPopupFactory
 
 			mediumWeightShown = true;
 
-			Window window = SwingUtilities.windowForComponent( owner );
-			if( window == null )
+			if( owner == null )
 				return;
 
+			Window window = SwingUtilities.windowForComponent( owner );
 			if( !(window instanceof RootPaneContainer) )
 				return;
 

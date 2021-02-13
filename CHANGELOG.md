@@ -15,6 +15,8 @@ FlatLaf Change Log
   in "Look in" combobox. (Windows 10 only; issue #249)
 - Table: Fixed wrong grid line thickness in dragged column on HiDPI screens on
   Java 9+. (issue #236)
+- PopupFactory: Fixed `NullPointerException` when `PopupFactory.getPopup()` is
+  invoked with parameter `owner` set to `null`.
 
 
 ## 1.0-rc3
