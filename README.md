@@ -73,11 +73,31 @@ Addons
 - [JIDE Common Layer](flatlaf-jide-oss)
 
 
+Getting started
+---------------
+
+To enable FlatLaf, add following code to your main method before you create any
+Swing component:
+
+~~~java
+FlatLightLaf.install();
+
+// create UI here...
+~~~
+
+
 Documentation
 -------------
 
 For more information and documentation visit
-[FlatLaf Home](https://www.formdev.com/flatlaf/)
+[FlatLaf Home](https://www.formdev.com/flatlaf/):
+
+- [Themes](https://www.formdev.com/flatlaf/themes/)
+- [Customizing](https://www.formdev.com/flatlaf/customizing/)
+- [How to Customize](https://www.formdev.com/flatlaf/how-to-customize/)
+- [Properties Files](https://www.formdev.com/flatlaf/properties-files/)
+- [Client Properties](https://www.formdev.com/flatlaf/client-properties/)
+- [System Properties](https://www.formdev.com/flatlaf/system-properties/)
 
 
 Buzz
