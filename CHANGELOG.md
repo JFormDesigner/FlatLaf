@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.1-SNAPSHOT
+
+#### Fixed bugs
+
+- IntelliJ Themes: Fixed text color of CheckBoxMenuItem and RadioButtonMenuItem
+  in all "Arc" themes. (issue #259)
+
+
 ## 1.0
 
 #### New features and improvements
