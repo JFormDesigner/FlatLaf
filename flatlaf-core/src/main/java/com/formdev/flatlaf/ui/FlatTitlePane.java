@@ -337,7 +337,7 @@ public class FlatTitlePane
 		// show/hide icon
 		iconLabel.setVisible( hasIcon );
 
-		updateJBRHitTestSpotsAndTitleBarHeightLater();
+		updateNativeTitleBarHeightAndHitTestSpotsLater();
 	}
 
 	@Override
@@ -355,7 +355,7 @@ public class FlatTitlePane
 			installWindowListeners();
 		}
 
-		updateJBRHitTestSpotsAndTitleBarHeightLater();
+		updateNativeTitleBarHeightAndHitTestSpotsLater();
 	}
 
 	@Override
@@ -435,7 +435,7 @@ public class FlatTitlePane
 	}
 
 	protected void menuBarLayouted() {
-		updateJBRHitTestSpotsAndTitleBarHeightLater();
+		updateNativeTitleBarHeightAndHitTestSpotsLater();
 	}
 
 /*debug
@@ -449,8 +449,9 @@ public class FlatTitlePane
 		}
 		if( debugHitTestSpots != null ) {
 			g.setColor( Color.blue );
+			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
 			for( Rectangle r : debugHitTestSpots )
-				g.drawRect( r.x, r.y, r.width, r.height );
+				g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 		}
 	}
 debug*/
@@ -503,9 +504,9 @@ debug*/
 		Frame frame = (Frame) window;
 
 		// set maximized bounds to avoid that maximized window overlaps Windows task bar
-		// (if not running in JBR and if not modified from the application)
+		// (if not having native window border and if not modified from the application)
 		Rectangle oldMaximizedBounds = frame.getMaximizedBounds();
-		if( !hasJBRCustomDecoration() &&
+		if( !hasNativeCustomDecoration() &&
 			(oldMaximizedBounds == null ||
 			 Objects.equals( oldMaximizedBounds, rootPane.getClientProperty( "_flatlaf.maximizedBounds" ) )) )
 		{
@@ -601,46 +602,51 @@ debug*/
 			window.dispatchEvent( new WindowEvent( window, WindowEvent.WINDOW_CLOSING ) );
 	}
 
-	protected boolean hasJBRCustomDecoration() {
-		return FlatRootPaneUI.canUseJBRCustomDecorations &&
-			window != null &&
-			JBRCustomDecorations.hasCustomDecoration( window );
+	private boolean hasJBRCustomDecoration() {
+		return window != null && JBRCustomDecorations.hasCustomDecoration( window );
 	}
 
-	protected void updateJBRHitTestSpotsAndTitleBarHeightLater() {
+	/**
+	 * Returns whether windows uses native window border and has custom decorations enabled.
+	 */
+	protected boolean hasNativeCustomDecoration() {
+		return window != null && FlatNativeWindowBorder.hasCustomDecoration( window );
+	}
+
+	protected void updateNativeTitleBarHeightAndHitTestSpotsLater() {
 		EventQueue.invokeLater( () -> {
-			updateJBRHitTestSpotsAndTitleBarHeight();
+			updateNativeTitleBarHeightAndHitTestSpots();
 		} );
 	}
 
-	protected void updateJBRHitTestSpotsAndTitleBarHeight() {
+	protected void updateNativeTitleBarHeightAndHitTestSpots() {
 		if( !isDisplayable() )
 			return;
 
-		if( !hasJBRCustomDecoration() )
+		if( !hasNativeCustomDecoration() )
 			return;
-
-		List<Rectangle> hitTestSpots = new ArrayList<>();
-		if( iconLabel.isVisible() )
-			addJBRHitTestSpot( iconLabel, false, hitTestSpots );
-		addJBRHitTestSpot( buttonPanel, false, hitTestSpots );
-		addJBRHitTestSpot( menuBarPlaceholder, true, hitTestSpots );
 
 		int titleBarHeight = getHeight();
 		// slightly reduce height so that component receives mouseExit events
 		if( titleBarHeight > 0 )
 			titleBarHeight--;
 
-		JBRCustomDecorations.setHitTestSpotsAndTitleBarHeight( window, hitTestSpots, titleBarHeight );
+		List<Rectangle> hitTestSpots = new ArrayList<>();
+		if( iconLabel.isVisible() )
+			addNativeHitTestSpot( iconLabel, false, hitTestSpots );
+		addNativeHitTestSpot( buttonPanel, false, hitTestSpots );
+		addNativeHitTestSpot( menuBarPlaceholder, true, hitTestSpots );
+
+		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots );
 
 /*debug
-		debugHitTestSpots = hitTestSpots;
 		debugTitleBarHeight = titleBarHeight;
+		debugHitTestSpots = hitTestSpots;
 		repaint();
 debug*/
 	}
 
-	protected void addJBRHitTestSpot( JComponent c, boolean subtractMenuBarMargins, List<Rectangle> hitTestSpots ) {
+	protected void addNativeHitTestSpot( JComponent c, boolean subtractMenuBarMargins, List<Rectangle> hitTestSpots ) {
 		Dimension size = c.getSize();
 		if( size.width <= 0 || size.height <= 0 )
 			return;
@@ -655,8 +661,8 @@ debug*/
 	}
 
 /*debug
-	private List<Rectangle> debugHitTestSpots;
 	private int debugTitleBarHeight;
+	private List<Rectangle> debugHitTestSpots;
 debug*/
 
 	//---- class TitlePaneBorder ----------------------------------------------
@@ -730,7 +736,7 @@ debug*/
 					break;
 
 				case "componentOrientation":
-					updateJBRHitTestSpotsAndTitleBarHeightLater();
+					updateNativeTitleBarHeightAndHitTestSpotsLater();
 					break;
 			}
 		}
@@ -740,7 +746,7 @@ debug*/
 		@Override
 		public void windowActivated( WindowEvent e ) {
 			activeChanged( true );
-			updateJBRHitTestSpotsAndTitleBarHeight();
+			updateNativeTitleBarHeightAndHitTestSpots();
 
 			if( hasJBRCustomDecoration() )
 				JBRWindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
@@ -751,7 +757,7 @@ debug*/
 		@Override
 		public void windowDeactivated( WindowEvent e ) {
 			activeChanged( false );
-			updateJBRHitTestSpotsAndTitleBarHeight();
+			updateNativeTitleBarHeightAndHitTestSpots();
 
 			if( hasJBRCustomDecoration() )
 				JBRWindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
@@ -762,7 +768,7 @@ debug*/
 		@Override
 		public void windowStateChanged( WindowEvent e ) {
 			frameStateChanged();
-			updateJBRHitTestSpotsAndTitleBarHeight();
+			updateNativeTitleBarHeightAndHitTestSpots();
 		}
 
 		//---- interface MouseListener ----
@@ -775,7 +781,7 @@ debug*/
 				if( e.getSource() == iconLabel ) {
 					// double-click on icon closes window
 					close();
-				} else if( !hasJBRCustomDecoration() &&
+				} else if( !hasNativeCustomDecoration() &&
 					window instanceof Frame &&
 					((Frame)window).isResizable() )
 				{
@@ -808,8 +814,8 @@ debug*/
 			if( window == null )
 				return; // should newer occur
 
-			if( hasJBRCustomDecoration() )
-				return; // do nothing if running in JBR
+			if( hasNativeCustomDecoration() )
+				return; // do nothing if having native window border
 
 			// restore window if it is maximized
 			if( window instanceof Frame ) {
@@ -852,7 +858,7 @@ debug*/
 
 		@Override
 		public void componentResized( ComponentEvent e ) {
-			updateJBRHitTestSpotsAndTitleBarHeightLater();
+			updateNativeTitleBarHeightAndHitTestSpotsLater();
 		}
 
 		@Override

@@ -38,6 +38,9 @@ public class SystemInfo
 	public static final boolean isMacOS_10_14_Mojave_orLater;
 	public static final boolean isMacOS_10_15_Catalina_orLater;
 
+	// OS architecture
+	public static final boolean isX86_64;
+
 	// Java versions
 	public static final long javaVersion;
 	public static final boolean isJava_9_orLater;
@@ -64,6 +67,10 @@ public class SystemInfo
 		isMacOS_10_11_ElCapitan_orLater = (isMacOS && osVersion >= toVersion( 10, 11, 0, 0 ));
 		isMacOS_10_14_Mojave_orLater = (isMacOS && osVersion >= toVersion( 10, 14, 0, 0 ));
 		isMacOS_10_15_Catalina_orLater = (isMacOS && osVersion >= toVersion( 10, 15, 0, 0 ));
+
+		// OS architecture
+		String osArch = System.getProperty( "os.arch" );
+		isX86_64 = osArch.equals( "amd64" ) || osArch.equals( "x86_64" );
 
 		// Java versions
 		javaVersion = scanVersion( System.getProperty( "java.version" ) );

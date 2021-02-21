@@ -29,11 +29,10 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -55,26 +54,29 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class JBRCustomDecorations
 {
-	private static boolean initialized;
+	private static Boolean supported;
 	private static Method Window_hasCustomDecoration;
 	private static Method Window_setHasCustomDecoration;
-	private static Method WWindowPeer_setCustomDecorationHitTestSpots;
 	private static Method WWindowPeer_setCustomDecorationTitleBarHeight;
+	private static Method WWindowPeer_setCustomDecorationHitTestSpots;
 	private static Method AWTAccessor_getComponentAccessor;
 	private static Method AWTAccessor_ComponentAccessor_getPeer;
 
 	public static boolean isSupported() {
 		initialize();
-		return Window_setHasCustomDecoration != null;
+		return supported;
 	}
 
-	static void install( JRootPane rootPane ) {
+	static Object install( JRootPane rootPane ) {
 		if( !isSupported() )
-			return;
+			return null;
 
 		// check whether root pane already has a parent, which is the case when switching LaF
-		if( rootPane.getParent() != null )
-			return;
+		Window window = SwingUtilities.windowForComponent( rootPane );
+		if( window != null ) {
+			FlatNativeWindowBorder.install( window, FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS );
+			return null;
+		}
 
 		// Use hierarchy listener to wait until the root pane is added to a window.
 		// Enabling JBR decorations must be done very early, probably before
@@ -88,8 +90,9 @@ public class JBRCustomDecorations
 
 				Container parent = e.getChangedParent();
 				if( parent instanceof Window )
-					install( (Window) parent );
+					FlatNativeWindowBorder.install( (Window) parent, FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS );
 
+				// remove listener since it is actually not possible to uninstall JBR decorations
 				// use invokeLater to remove listener to avoid that listener
 				// is removed while listener queue is processed
 				EventQueue.invokeLater( () -> {
@@ -98,54 +101,20 @@ public class JBRCustomDecorations
 			}
 		};
 		rootPane.addHierarchyListener( addListener );
+		return addListener;
 	}
 
-	static void install( Window window ) {
-		if( !isSupported() )
-			return;
+	static void uninstall( JRootPane rootPane, Object data ) {
+		// remove listener (if not yet done)
+		if( data instanceof HierarchyListener )
+			rootPane.removeHierarchyListener( (HierarchyListener) data );
 
-		// do not enable JBR decorations if LaF provides decorations
-		if( UIManager.getLookAndFeel().getSupportsWindowDecorations() )
-			return;
-
-		if( window instanceof JFrame ) {
-			JFrame frame = (JFrame) window;
-
-			// do not enable JBR decorations if JFrame should use system window decorations
-			// and if not forced to use JBR decorations
-			if( !JFrame.isDefaultLookAndFeelDecorated() &&
-				!FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, false ))
-			  return;
-
-			// do not enable JBR decorations if frame is undecorated
-			if( frame.isUndecorated() )
-				return;
-
-			// enable JBR custom window decoration for window
-			setHasCustomDecoration( frame );
-
-			// enable Swing window decoration
-			frame.getRootPane().setWindowDecorationStyle( JRootPane.FRAME );
-
-		} else if( window instanceof JDialog ) {
-			JDialog dialog = (JDialog) window;
-
-			// do not enable JBR decorations if JDialog should use system window decorations
-			// and if not forced to use JBR decorations
-			if( !JDialog.isDefaultLookAndFeelDecorated() &&
-				!FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, false ))
-			  return;
-
-			// do not enable JBR decorations if dialog is undecorated
-			if( dialog.isUndecorated() )
-				return;
-
-			// enable JBR custom window decoration for window
-			setHasCustomDecoration( dialog );
-
-			// enable Swing window decoration
-			dialog.getRootPane().setWindowDecorationStyle( JRootPane.PLAIN_DIALOG );
-		}
+		// since it is actually not possible to uninstall JBR decorations,
+		// simply reduce titleBarHeight so that it is still possible to resize window
+		// and remove hitTestSpots
+		Window window = SwingUtilities.windowForComponent( rootPane );
+		if( window != null )
+			setHasCustomDecoration( window, false );
 	}
 
 	static boolean hasCustomDecoration( Window window ) {
@@ -160,35 +129,38 @@ public class JBRCustomDecorations
 		}
 	}
 
-	static void setHasCustomDecoration( Window window ) {
+	static void setHasCustomDecoration( Window window, boolean hasCustomDecoration ) {
 		if( !isSupported() )
 			return;
 
 		try {
-			Window_setHasCustomDecoration.invoke( window );
+			if( hasCustomDecoration )
+				Window_setHasCustomDecoration.invoke( window );
+			else
+				setTitleBarHeightAndHitTestSpots( window, 4, Collections.emptyList() );
 		} catch( Exception ex ) {
 			Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
 		}
 	}
 
-	static void setHitTestSpotsAndTitleBarHeight( Window window, List<Rectangle> hitTestSpots, int titleBarHeight ) {
+	static void setTitleBarHeightAndHitTestSpots( Window window, int titleBarHeight, List<Rectangle> hitTestSpots ) {
 		if( !isSupported() )
 			return;
 
 		try {
 			Object compAccessor = AWTAccessor_getComponentAccessor.invoke( null );
 			Object peer = AWTAccessor_ComponentAccessor_getPeer.invoke( compAccessor, window );
-			WWindowPeer_setCustomDecorationHitTestSpots.invoke( peer, hitTestSpots );
 			WWindowPeer_setCustomDecorationTitleBarHeight.invoke( peer, titleBarHeight );
+			WWindowPeer_setCustomDecorationHitTestSpots.invoke( peer, hitTestSpots );
 		} catch( Exception ex ) {
 			Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
 		}
 	}
 
 	private static void initialize() {
-		if( initialized )
+		if( supported != null )
 			return;
-		initialized = true;
+		supported = false;
 
 		// requires JetBrains Runtime 11 and Windows 10
 		if( !SystemInfo.isJetBrainsJVM_11_orLater || !SystemInfo.isWindows_10_orLater )
@@ -204,15 +176,17 @@ public class JBRCustomDecorations
 			AWTAccessor_ComponentAccessor_getPeer = compAccessorClass.getDeclaredMethod( "getPeer", Component.class );
 
 			Class<?> peerClass = Class.forName( "sun.awt.windows.WWindowPeer" );
-			WWindowPeer_setCustomDecorationHitTestSpots = peerClass.getDeclaredMethod( "setCustomDecorationHitTestSpots", List.class );
 			WWindowPeer_setCustomDecorationTitleBarHeight = peerClass.getDeclaredMethod( "setCustomDecorationTitleBarHeight", int.class );
-			WWindowPeer_setCustomDecorationHitTestSpots.setAccessible( true );
+			WWindowPeer_setCustomDecorationHitTestSpots = peerClass.getDeclaredMethod( "setCustomDecorationHitTestSpots", List.class );
 			WWindowPeer_setCustomDecorationTitleBarHeight.setAccessible( true );
+			WWindowPeer_setCustomDecorationHitTestSpots.setAccessible( true );
 
 			Window_hasCustomDecoration = Window.class.getDeclaredMethod( "hasCustomDecoration" );
 			Window_setHasCustomDecoration = Window.class.getDeclaredMethod( "setHasCustomDecoration" );
 			Window_hasCustomDecoration.setAccessible( true );
 			Window_setHasCustomDecoration.setAccessible( true );
+
+			supported = true;
 		} catch( Exception ex ) {
 			// ignore
 		}

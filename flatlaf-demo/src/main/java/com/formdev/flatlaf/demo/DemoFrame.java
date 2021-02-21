@@ -33,6 +33,7 @@ import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
+import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
@@ -142,11 +143,16 @@ class DemoFrame
 		boolean windowDecorations = windowDecorationsCheckBoxMenuItem.isSelected();
 
 		// change window decoration of demo main frame
-		dispose();
-		setUndecorated( windowDecorations );
-		getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
+		if( FlatNativeWindowBorder.isSupported() ) {
+			FlatNativeWindowBorder.setHasCustomDecoration( this, windowDecorations );
+			getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
+		} else {
+			dispose();
+			setUndecorated( windowDecorations );
+			getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
+			setVisible( true );
+		}
 		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
-		setVisible( true );
 
 		// enable/disable window decoration for later created frames/dialogs
 		JFrame.setDefaultLookAndFeelDecorated( windowDecorations );
@@ -722,7 +728,7 @@ class DemoFrame
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
 		boolean supportsWindowDecorations = UIManager.getLookAndFeel()
-			.getSupportsWindowDecorations() || JBRCustomDecorations.isSupported();
+			.getSupportsWindowDecorations() || FlatNativeWindowBorder.isSupported();
 		windowDecorationsCheckBoxMenuItem.setEnabled( supportsWindowDecorations && !JBRCustomDecorations.isSupported() );
 		menuBarEmbeddedCheckBoxMenuItem.setEnabled( supportsWindowDecorations );
 

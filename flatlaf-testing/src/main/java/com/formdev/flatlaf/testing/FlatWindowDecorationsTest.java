@@ -202,6 +202,7 @@ public class FlatWindowDecorationsTest
 	private void openDialog() {
 		Window owner = SwingUtilities.windowForComponent( this );
 		JDialog dialog = new JDialog( owner, "Dialog", ModalityType.APPLICATION_MODAL );
+		dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
 		dialog.add( new FlatWindowDecorationsTest() );
 		dialog.pack();
 		dialog.setLocationRelativeTo( this );

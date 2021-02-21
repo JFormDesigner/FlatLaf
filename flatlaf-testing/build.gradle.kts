@@ -27,6 +27,7 @@ repositories {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
+	implementation( project( ":flatlaf-native-jna" ) )
 	implementation( project( ":flatlaf-extras" ) )
 	implementation( project( ":flatlaf-swingx" ) )
 	implementation( project( ":flatlaf-jide-oss" ) )

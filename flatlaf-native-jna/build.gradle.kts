@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 FormDev Software GmbH
+ * Copyright 2021 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-rootProject.name = "FlatLaf"
+plugins {
+	`java-library`
+	`flatlaf-module-info`
+}
 
-include( "flatlaf-core" )
-include( "flatlaf-native-jna" )
-include( "flatlaf-extras" )
-include( "flatlaf-swingx" )
-include( "flatlaf-jide-oss" )
-include( "flatlaf-intellij-themes" )
-include( "flatlaf-demo" )
-include( "flatlaf-testing" )
-include( "flatlaf-theme-editor" )
+dependencies {
+	implementation( project( ":flatlaf-core" ) )
+	implementation( "net.java.dev.jna:jna:5.7.0" )
+	implementation( "net.java.dev.jna:jna-platform:5.7.0" )
+}
+
+flatlafModuleInfo {
+	dependsOn( ":flatlaf-core:jar" )
+}
