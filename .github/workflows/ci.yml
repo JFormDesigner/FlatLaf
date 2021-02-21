@@ -62,12 +62,7 @@ jobs:
         with:
           name: FlatLaf-build-artifacts
           path: |
-            flatlaf-core/build/libs
-            flatlaf-demo/build/libs
-            flatlaf-extras/build/libs
-            flatlaf-intellij-themes/build/libs
-            flatlaf-jide-oss/build/libs
-            flatlaf-swingx/build/libs
+            flatlaf-*/build/libs
             !**/*-javadoc.jar
             !**/*-sources.jar
 
