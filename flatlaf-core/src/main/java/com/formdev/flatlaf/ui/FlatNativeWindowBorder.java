@@ -59,9 +59,14 @@ public class FlatNativeWindowBorder
 		if( !isSupported() )
 			return null;
 
-		// check whether root pane already has a parent, which is the case when switching LaF
+		// Check whether root pane already has a window, which is the case when switching LaF.
+		// Also check whether the window is displayable, which is required to install
+		// FlatLaf native window border.
+		// If the window is not displayable, then it was probably closed/disposed but not yet removed
+		// from the list of windows that AWT maintains and returns with Window.getWindows().
+		// It could be also be a window that is currently hidden, but may be shown later.
 		Window window = SwingUtilities.windowForComponent( rootPane );
-		if( window != null ) {
+		if( window != null && window.isDisplayable() ) {
 			install( window, FlatSystemProperties.USE_NATIVE_WINDOW_DECORATIONS );
 			return null;
 		}
@@ -92,7 +97,7 @@ public class FlatNativeWindowBorder
 			JFrame frame = (JFrame) window;
 
 			// do not enable native window border if JFrame should use system window decorations
-			// and if not forced to use TODO JBR decorations
+			// and if not forced to use FlatLaf/JBR native window decorations
 			if( !JFrame.isDefaultLookAndFeelDecorated() &&
 				!FlatSystemProperties.getBoolean( systemPropertyKey, false ))
 			  return;
@@ -111,7 +116,7 @@ public class FlatNativeWindowBorder
 			JDialog dialog = (JDialog) window;
 
 			// do not enable native window border if JDialog should use system window decorations
-			// and if not forced to use TODO JBR decorations
+			// and if not forced to use FlatLaf/JBR native window decorations
 			if( !JDialog.isDefaultLookAndFeelDecorated() &&
 				!FlatSystemProperties.getBoolean( systemPropertyKey, false ))
 			  return;
