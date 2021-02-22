@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.nativejna.windows;
 
+import static com.sun.jna.platform.win32.ShellAPI.*;
 import static com.sun.jna.platform.win32.WinUser.*;
 import java.awt.Dialog;
 import java.awt.Frame;
@@ -37,12 +38,15 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.platform.win32.BaseTSD;
+import com.sun.jna.platform.win32.Shell32;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.LPARAM;
 import com.sun.jna.platform.win32.WinDef.LRESULT;
 import com.sun.jna.platform.win32.WinDef.RECT;
+import com.sun.jna.platform.win32.WinDef.UINT_PTR;
 import com.sun.jna.platform.win32.WinDef.WPARAM;
+import com.sun.jna.platform.win32.WinUser.HMONITOR;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.win32.W32APIOptions;
 
@@ -166,6 +170,9 @@ public class FlatWindowsNativeWindowBorder
 			HTCAPTION = 2,
 			HTTOP = 12;
 
+		private static final int ABS_AUTOHIDE = 0x0000001;
+		private static final int ABM_GETAUTOHIDEBAREX = 0x0000000b;
+
 		private Window window;
 		private final HWND hwnd;
 		private final BaseTSD.LONG_PTR defaultWndProc;
@@ -279,9 +286,30 @@ public class FlatWindowsNativeWindowBorder
 				// do not appear because you don't need them (because you can't resize
 				// a window when it's maximized unless you restore it).
 				params.rgrc[0].top += getResizeHandleHeight();
-			}
 
-			//TODO support autohide taskbar
+				// check whether taskbar is in the autohide state
+				APPBARDATA autohide = new APPBARDATA();
+				autohide.cbSize = new DWORD( autohide.size() );
+				int state = Shell32.INSTANCE.SHAppBarMessage( new DWORD( ABM_GETSTATE ), autohide ).intValue();
+				if( (state & ABS_AUTOHIDE) != 0 ) {
+					// get monitor info
+					// (using MONITOR_DEFAULTTONEAREST finds right monitor when restoring from minimized)
+					HMONITOR hMonitor = User32.INSTANCE.MonitorFromWindow( hwnd, MONITOR_DEFAULTTONEAREST );
+					MONITORINFO monitorInfo = new MONITORINFO();
+					User32.INSTANCE.GetMonitorInfo( hMonitor, monitorInfo );
+
+					// If there's a taskbar on any side of the monitor, reduce our size
+					// a little bit on that edge.
+					if( hasAutohideTaskbar( ABE_TOP, monitorInfo.rcMonitor ) )
+						params.rgrc[0].top++;
+					if( hasAutohideTaskbar( ABE_BOTTOM, monitorInfo.rcMonitor ) )
+						params.rgrc[0].bottom--;
+					if( hasAutohideTaskbar( ABE_LEFT, monitorInfo.rcMonitor ) )
+						params.rgrc[0].left++;
+					if( hasAutohideTaskbar( ABE_RIGHT, monitorInfo.rcMonitor ) )
+						params.rgrc[0].right--;
+				}
+			}
 
 			// write changed params back to native memory
 			params.write();
@@ -348,6 +376,18 @@ public class FlatWindowsNativeWindowBorder
 			// there isn't a SM_CYPADDEDBORDER for the Y axis
 			return User32Ex.INSTANCE.GetSystemMetricsForDpi( SM_CXPADDEDBORDER, dpi )
 				 + User32Ex.INSTANCE.GetSystemMetricsForDpi( SM_CYSIZEFRAME, dpi );
+		}
+
+		/**
+		 * Returns whether there is an autohide taskbar on the given edge.
+		 */
+		private boolean hasAutohideTaskbar( int edge, RECT rcMonitor ) {
+			APPBARDATA data = new APPBARDATA();
+			data.cbSize = new DWORD( data.size() );
+			data.uEdge = new UINT( edge );
+			data.rc = rcMonitor;
+			UINT_PTR hTaskbar = Shell32.INSTANCE.SHAppBarMessage( new DWORD( ABM_GETAUTOHIDEBAREX ), data );
+			return hTaskbar.longValue() != 0;
 		}
 
 		/**
