@@ -196,7 +196,9 @@ public class FlatNativeWindowBorder
 		nativeProvider.setHasCustomDecoration( window, hasCustomDecoration );
 	}
 
-	static void setTitleBarHeightAndHitTestSpots( Window window, int titleBarHeight, List<Rectangle> hitTestSpots ) {
+	static void setTitleBarHeightAndHitTestSpots( Window window, int titleBarHeight,
+		List<Rectangle> hitTestSpots, Rectangle appIconBounds )
+	{
 		if( canUseJBRCustomDecorations ) {
 			JBRCustomDecorations.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots );
 			return;
@@ -207,6 +209,7 @@ public class FlatNativeWindowBorder
 
 		nativeProvider.setTitleBarHeight( window, titleBarHeight );
 		nativeProvider.setTitleBarHitTestSpots( window, hitTestSpots );
+		nativeProvider.setTitleBarAppIconBounds( window, appIconBounds );
 	}
 
 	private static void initialize() {
@@ -240,5 +243,6 @@ public class FlatNativeWindowBorder
 		void setHasCustomDecoration( Window window, boolean hasCustomDecoration );
 		void setTitleBarHeight( Window window, int titleBarHeight );
 		void setTitleBarHitTestSpots( Window window, List<Rectangle> hitTestSpots );
+		void setTitleBarAppIconBounds( Window window, Rectangle appIconBounds );
 	}
 }

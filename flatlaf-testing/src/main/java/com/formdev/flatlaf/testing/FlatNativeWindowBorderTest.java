@@ -28,8 +28,8 @@ import java.util.WeakHashMap;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
-import com.formdev.flatlaf.nativejna.windows.FlatWindowsNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import net.miginfocom.swing.*;
 
 /**
@@ -258,7 +258,7 @@ public class FlatNativeWindowBorderTest
 	}
 
 	private void nativeChanged() {
-		FlatWindowsNativeWindowBorder.getInstance().setHasCustomDecoration( window, nativeCheckBox.isSelected() );
+		FlatNativeWindowBorder.setHasCustomDecoration( window, nativeCheckBox.isSelected() );
 	}
 
 	private void revalidateLayout() {

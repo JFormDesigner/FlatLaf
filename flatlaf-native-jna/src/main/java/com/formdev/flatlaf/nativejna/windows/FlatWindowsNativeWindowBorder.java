@@ -157,6 +157,15 @@ public class FlatWindowsNativeWindowBorder
 		wndProc.hitTestSpots = hitTestSpots.toArray( new Rectangle[hitTestSpots.size()] );
 	}
 
+	@Override
+	public void setTitleBarAppIconBounds( Window window, Rectangle appIconBounds ) {
+		WndProc wndProc = windowsMap.get( window );
+		if( wndProc == null )
+			return;
+
+		wndProc.appIconBounds = (appIconBounds != null) ? new Rectangle( appIconBounds ) : null;
+	}
+
 	//---- class WndProc ------------------------------------------------------
 
 	private class WndProc
@@ -164,14 +173,16 @@ public class FlatWindowsNativeWindowBorder
 	{
 		private static final int GWLP_WNDPROC = -4;
 
-		private static final int WM_NCCALCSIZE = 0x0083;
-		private static final int WM_NCHITTEST = 0x0084;
-		private static final int WM_NCRBUTTONUP = 0x00A5;
+		private static final int
+			WM_NCCALCSIZE = 0x0083,
+			WM_NCHITTEST = 0x0084,
+			WM_NCRBUTTONUP = 0x00A5;
 
 		// WM_NCHITTEST mouse position codes
 		private static final int
 			HTCLIENT = 1,
 			HTCAPTION = 2,
+			HTSYSMENU = 3,
 			HTTOP = 12;
 
 		private static final int ABS_AUTOHIDE = 0x0000001;
@@ -198,6 +209,7 @@ public class FlatWindowsNativeWindowBorder
 
 		private int titleBarHeight;
 		private Rectangle[] hitTestSpots;
+		private Rectangle appIconBounds;
 
 		WndProc( Window window ) {
 			this.window = window;
@@ -242,7 +254,7 @@ public class FlatWindowsNativeWindowBorder
 					return WmNcHitTest( hwnd, uMsg, wParam, lParam );
 
 				case WM_NCRBUTTONUP:
-					if( wParam.longValue() == HTCAPTION )
+					if( wParam.longValue() == HTCAPTION || wParam.longValue() == HTSYSMENU )
 						openSystemMenu( hwnd, GET_X_LPARAM( lParam ), GET_Y_LPARAM( lParam ) );
 					break;
 
@@ -367,6 +379,12 @@ public class FlatWindowsNativeWindowBorder
 			int sx = pt.x;
 			int sy = pt.y;
 
+			// return HTSYSMENU if mouse is over application icon
+			//   - left-click on HTSYSMENU area shows system menu
+			//   - double-left-click sends WM_CLOSE
+			if( appIconBounds != null && appIconBounds.contains( sx, sy ) )
+				return new LRESULT( HTSYSMENU );
+
 			int resizeBorderHeight = getResizeHandleHeight();
 			boolean isOnResizeBorder = (y < resizeBorderHeight) &&
 				(User32.INSTANCE.GetWindowLong( hwnd, GWL_STYLE ) & WS_THICKFRAME) != 0;
@@ -415,7 +433,7 @@ public class FlatWindowsNativeWindowBorder
 
 		/**
 		 * Scales down in the same way as AWT.
-		 * See AwtWin32GraphicsDevice::ScaleDownX()
+		 * See AwtWin32GraphicsDevice::ScaleDownX() and ::ScaleDownY()
 		 */
 		private Point scaleDown( int x, int y ) {
 			GraphicsConfiguration gc = window.getGraphicsConfiguration();

@@ -453,6 +453,12 @@ public class FlatTitlePane
 			for( Rectangle r : debugHitTestSpots )
 				g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 		}
+		if( debugAppIconBounds != null ) {
+			g.setColor( Color.red );
+			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
+			Rectangle r = debugAppIconBounds;
+			g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
+		}
 	}
 debug*/
 
@@ -632,16 +638,31 @@ debug*/
 			titleBarHeight--;
 
 		List<Rectangle> hitTestSpots = new ArrayList<>();
-		if( iconLabel.isVisible() )
-			addNativeHitTestSpot( iconLabel, false, hitTestSpots );
+		Rectangle appIconBounds = null;
+		if( iconLabel.isVisible() ) {
+			// compute real icon size (without insets)
+			Point location = SwingUtilities.convertPoint( iconLabel, 0, 0, window );
+			Insets iconInsets = iconLabel.getInsets();
+			Rectangle iconBounds = new Rectangle(
+				location.x + iconInsets.left,
+				location.y + iconInsets.top,
+				iconLabel.getWidth() - iconInsets.left - iconInsets.right,
+				iconLabel.getHeight() - iconInsets.top - iconInsets.bottom );
+
+			if( hasJBRCustomDecoration() )
+				hitTestSpots.add( iconBounds );
+			else
+				appIconBounds = iconBounds;
+		}
 		addNativeHitTestSpot( buttonPanel, false, hitTestSpots );
 		addNativeHitTestSpot( menuBarPlaceholder, true, hitTestSpots );
 
-		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots );
+		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots, appIconBounds );
 
 /*debug
 		debugTitleBarHeight = titleBarHeight;
 		debugHitTestSpots = hitTestSpots;
+		debugAppIconBounds = appIconBounds;
 		repaint();
 debug*/
 	}
@@ -663,6 +684,7 @@ debug*/
 /*debug
 	private int debugTitleBarHeight;
 	private List<Rectangle> debugHitTestSpots;
+	private Rectangle debugAppIconBounds;
 debug*/
 
 	//---- class TitlePaneBorder ----------------------------------------------
