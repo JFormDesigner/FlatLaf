@@ -38,8 +38,11 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.platform.win32.BaseTSD;
+import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
 import com.sun.jna.platform.win32.Shell32;
 import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WTypes.LPWSTR;
+import com.sun.jna.platform.win32.WinDef.HMENU;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.LPARAM;
 import com.sun.jna.platform.win32.WinDef.LRESULT;
@@ -163,6 +166,7 @@ public class FlatWindowsNativeWindowBorder
 
 		private static final int WM_NCCALCSIZE = 0x0083;
 		private static final int WM_NCHITTEST = 0x0084;
+		private static final int WM_NCRBUTTONUP = 0x00A5;
 
 		// WM_NCHITTEST mouse position codes
 		private static final int
@@ -172,6 +176,21 @@ public class FlatWindowsNativeWindowBorder
 
 		private static final int ABS_AUTOHIDE = 0x0000001;
 		private static final int ABM_GETAUTOHIDEBAREX = 0x0000000b;
+
+		private static final int
+			SC_SIZE = 0xF000,
+			SC_MOVE = 0xF010,
+			SC_MINIMIZE = 0xF020,
+			SC_MAXIMIZE = 0xF030,
+			SC_CLOSE = 0xF060,
+			SC_RESTORE = 0xF120;
+
+		private static final int
+			MIIM_STATE = 0x00000001,
+			MFT_STRING = 0x00000000,
+			MF_ENABLED = 0x00000000,
+			MF_DISABLED = 0x00000002,
+			TPM_RETURNCMD = 0x0100;
 
 		private Window window;
 		private final HWND hwnd;
@@ -222,12 +241,16 @@ public class FlatWindowsNativeWindowBorder
 				case WM_NCHITTEST:
 					return WmNcHitTest( hwnd, uMsg, wParam, lParam );
 
+				case WM_NCRBUTTONUP:
+					if( wParam.longValue() == HTCAPTION )
+						openSystemMenu( hwnd, GET_X_LPARAM( lParam ), GET_Y_LPARAM( lParam ) );
+					break;
+
 				case WM_DESTROY:
 					return WmDestroy( hwnd, uMsg, wParam, lParam );
-
-				default:
-					return User32Ex.INSTANCE.CallWindowProc( defaultWndProc, hwnd, uMsg, wParam, lParam );
 			}
+
+			return User32Ex.INSTANCE.CallWindowProc( defaultWndProc, hwnd, uMsg, wParam, lParam );
 		}
 
 		/**
@@ -442,6 +465,44 @@ public class FlatWindowsNativeWindowBorder
 		private int GET_Y_LPARAM( LPARAM lParam ) {
 			return (short) ((lParam.longValue() >> 16) & 0xffff);
 		}
+
+		/**
+		 * Opens the window's system menu.
+		 * The system menu is the menu that opens when the user presses Alt+Space or
+		 * right clicks on the title bar
+		 */
+		private void openSystemMenu( HWND hwnd, int x, int y ) {
+			// get system menu
+			HMENU systemMenu = User32Ex.INSTANCE.GetSystemMenu( hwnd, false );
+
+			// update system menu
+			boolean isMaximized = User32Ex.INSTANCE.IsZoomed( hwnd );
+			setMenuItemState( systemMenu, SC_RESTORE, isMaximized );
+			setMenuItemState( systemMenu, SC_MOVE, !isMaximized );
+			setMenuItemState( systemMenu, SC_SIZE, !isMaximized );
+			setMenuItemState( systemMenu, SC_MINIMIZE, true );
+			setMenuItemState( systemMenu, SC_MAXIMIZE, !isMaximized );
+			setMenuItemState( systemMenu, SC_CLOSE, true );
+
+			// make "Close" item the default to be consistent with the system menu shown
+			// when pressing Alt+Space
+			User32Ex.INSTANCE.SetMenuDefaultItem( systemMenu, SC_CLOSE, 0 );
+
+			// show system menu
+			int ret = User32Ex.INSTANCE.TrackPopupMenu( systemMenu, TPM_RETURNCMD,
+				x, y, 0, hwnd, null ).intValue();
+			if( ret != 0 )
+				User32Ex.INSTANCE.PostMessage( hwnd, WM_SYSCOMMAND, new WPARAM( ret ), null );
+		}
+
+		private void setMenuItemState( HMENU systemMenu, int item, boolean enabled ) {
+			MENUITEMINFO mii = new MENUITEMINFO();
+			mii.cbSize = new UINT( mii.size() );
+			mii.fMask = new UINT( MIIM_STATE );
+			mii.fType = new UINT( MFT_STRING );
+			mii.fState = new UINT( enabled ? MF_ENABLED : MF_DISABLED );
+			User32Ex.INSTANCE.SetMenuItemInfo( systemMenu, item, false, mii );
+		}
 	}
 
 	//---- interface User32Ex -------------------------------------------------
@@ -460,6 +521,11 @@ public class FlatWindowsNativeWindowBorder
 
 		boolean IsZoomed( HWND hWnd );
 		HANDLE GetProp( HWND hWnd, String lpString );
+
+		HMENU GetSystemMenu( HWND hWnd, boolean bRevert );
+		boolean SetMenuItemInfo( HMENU hmenu, int item, boolean fByPositon, MENUITEMINFO lpmii );
+		boolean SetMenuDefaultItem( HMENU hMenu, int uItem, int fByPos );
+		BOOL TrackPopupMenu( HMENU hMenu, int uFlags, int x, int y, int nReserved, HWND hWnd, RECT prcRect );
 	}
 
 	//---- class NCCALCSIZE_PARAMS --------------------------------------------
@@ -476,5 +542,26 @@ public class FlatWindowsNativeWindowBorder
 			super( pointer );
 			read();
 		}
+	}
+
+	//---- class MENUITEMINFO -------------------------------------------------
+
+	@FieldOrder( { "cbSize", "fMask", "fType", "fState", "wID", "hSubMenu",
+		"hbmpChecked", "hbmpUnchecked", "dwItemData", "dwTypeData", "cch", "hbmpItem" } )
+	public static class MENUITEMINFO
+		extends Structure
+	{
+		public UINT cbSize;
+		public UINT fMask;
+		public UINT fType;
+		public UINT fState;
+		public UINT wID;
+		public HMENU hSubMenu;
+		public HBITMAP hbmpChecked;
+		public HBITMAP hbmpUnchecked;
+		public ULONG_PTR dwItemData;
+		public LPWSTR dwTypeData;
+		public UINT cch;
+		public HBITMAP hbmpItem;
 	}
 }
