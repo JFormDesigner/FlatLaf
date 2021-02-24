@@ -63,7 +63,7 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
-import com.formdev.flatlaf.ui.JBRCustomDecorations.JBRWindowTopBorder;
+import com.formdev.flatlaf.ui.FlatNativeWindowBorder.WindowTopBorder;
 import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -704,8 +704,8 @@ debug*/
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) )
 				insets.bottom += UIScale.scale( 1 );
 
-			if( hasJBRCustomDecoration() )
-				insets = FlatUIUtils.addInsets( insets, JBRWindowTopBorder.getInstance().getBorderInsets() );
+			if( hasNativeCustomDecoration() )
+				insets = FlatUIUtils.addInsets( insets, WindowTopBorder.getInstance().getBorderInsets() );
 
 			return insets;
 		}
@@ -723,8 +723,8 @@ debug*/
 				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 			}
 
-			if( hasJBRCustomDecoration() )
-				JBRWindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
+			if( hasNativeCustomDecoration() )
+				WindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
 		protected Border getMenuBarBorder() {
@@ -770,8 +770,8 @@ debug*/
 			activeChanged( true );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( hasJBRCustomDecoration() )
-				JBRWindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
+			if( hasNativeCustomDecoration() )
+				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
 			repaintWindowBorder();
 		}
@@ -781,8 +781,8 @@ debug*/
 			activeChanged( false );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( hasJBRCustomDecoration() )
-				JBRWindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
+			if( hasNativeCustomDecoration() )
+				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
 			repaintWindowBorder();
 		}

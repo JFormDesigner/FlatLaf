@@ -17,8 +17,11 @@
 package com.formdev.flatlaf.nativejna.windows;
 
 import static com.sun.jna.platform.win32.ShellAPI.*;
+import static com.sun.jna.platform.win32.WinReg.*;
 import static com.sun.jna.platform.win32.WinUser.*;
+import java.awt.Color;
 import java.awt.Dialog;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Point;
@@ -31,12 +34,17 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.Structure.FieldOrder;
+import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.BaseTSD;
 import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
 import com.sun.jna.platform.win32.Shell32;
@@ -63,6 +71,7 @@ import com.sun.jna.win32.W32APIOptions;
 //     https://medium.com/swlh/customizing-the-title-bar-of-an-application-window-50a4ac3ed27e
 //     https://github.com/kalbetredev/CustomDecoratedJFrame
 //     https://github.com/Guerra24/NanoUI-win32
+//     https://github.com/oberth/custom-chrome
 //     https://github.com/rossy/borderless-window
 //
 
@@ -80,6 +89,13 @@ public class FlatWindowsNativeWindowBorder
 	implements FlatNativeWindowBorder.Provider
 {
 	private final Map<Window, WndProc> windowsMap = Collections.synchronizedMap( new IdentityHashMap<>() );
+	private final EventListenerList listenerList = new EventListenerList();
+	private Timer fireStateChangedTimer;
+
+	private boolean colorizationUpToDate;
+	private boolean colorizationColorAffectsBorders;
+	private Color colorizationColor;
+	private int colorizationColorBalance;
 
 	private static FlatWindowsNativeWindowBorder instance;
 
@@ -166,6 +182,92 @@ public class FlatWindowsNativeWindowBorder
 		wndProc.appIconBounds = (appIconBounds != null) ? new Rectangle( appIconBounds ) : null;
 	}
 
+	@Override
+	public boolean isColorizationColorAffectsBorders() {
+		updateColorization();
+		return colorizationColorAffectsBorders;
+	}
+
+	@Override
+	public Color getColorizationColor() {
+		updateColorization();
+		return colorizationColor;
+	}
+
+	@Override
+	public int getColorizationColorBalance() {
+		updateColorization();
+		return colorizationColorBalance;
+	}
+
+	private void updateColorization() {
+		if( colorizationUpToDate )
+			return;
+		colorizationUpToDate = true;
+
+		String subKey = "SOFTWARE\\Microsoft\\Windows\\DWM";
+
+		int value = RegGetDword( HKEY_CURRENT_USER, subKey, "ColorPrevalence" );
+		colorizationColorAffectsBorders = (value > 0);
+
+		value = RegGetDword( HKEY_CURRENT_USER, subKey, "ColorizationColor" );
+		colorizationColor = (value != -1) ? new Color( value ) : null;
+
+		colorizationColorBalance = RegGetDword( HKEY_CURRENT_USER, subKey, "ColorizationColorBalance" );
+	}
+
+	private static int RegGetDword( HKEY hkey, String lpSubKey, String lpValue ) {
+		try {
+			return Advapi32Util.registryGetIntValue( hkey, lpSubKey, lpValue );
+		} catch( RuntimeException ex ) {
+			return -1;
+		}
+	}
+
+	@Override
+	public void addChangeListener( ChangeListener l ) {
+		listenerList.add( ChangeListener.class, l );
+	}
+
+	@Override
+	public void removeChangeListener( ChangeListener l ) {
+		listenerList.remove( ChangeListener.class, l );
+	}
+
+	private void fireStateChanged() {
+		Object[] listeners = listenerList.getListenerList();
+		if( listeners.length == 0 )
+			return;
+
+		ChangeEvent e = new ChangeEvent( this );
+		for( int i = 0; i < listeners.length; i += 2 ) {
+			if( listeners[i] == ChangeListener.class )
+				((ChangeListener)listeners[i+1]).stateChanged( e );
+		}
+	}
+
+	/**
+	 * Because there may be sent many WM_DWMCOLORIZATIONCOLORCHANGED messages,
+	 * slightly delay event firing and fire it only once (on the AWT thread).
+	 */
+	void fireStateChangedLaterOnce() {
+		EventQueue.invokeLater( () -> {
+			if( fireStateChangedTimer != null ) {
+				fireStateChangedTimer.restart();
+				return;
+			}
+
+			fireStateChangedTimer = new Timer( 300, e -> {
+				fireStateChangedTimer = null;
+				colorizationUpToDate = false;
+
+				fireStateChanged();
+			} );
+			fireStateChangedTimer.setRepeats( false );
+			fireStateChangedTimer.start();
+		} );
+	}
+
 	//---- class WndProc ------------------------------------------------------
 
 	private class WndProc
@@ -176,7 +278,8 @@ public class FlatWindowsNativeWindowBorder
 		private static final int
 			WM_NCCALCSIZE = 0x0083,
 			WM_NCHITTEST = 0x0084,
-			WM_NCRBUTTONUP = 0x00A5;
+			WM_NCRBUTTONUP = 0x00A5,
+			WM_DWMCOLORIZATIONCOLORCHANGED = 0x0320;
 
 		// WM_NCHITTEST mouse position codes
 		private static final int
@@ -256,6 +359,10 @@ public class FlatWindowsNativeWindowBorder
 				case WM_NCRBUTTONUP:
 					if( wParam.longValue() == HTCAPTION || wParam.longValue() == HTSYSMENU )
 						openSystemMenu( hwnd, GET_X_LPARAM( lParam ), GET_Y_LPARAM( lParam ) );
+					break;
+
+				case WM_DWMCOLORIZATIONCOLORCHANGED:
+					fireStateChangedLaterOnce();
 					break;
 
 				case WM_DESTROY:

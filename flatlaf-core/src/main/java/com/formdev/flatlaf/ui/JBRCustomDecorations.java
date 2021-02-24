@@ -211,15 +211,22 @@ public class JBRCustomDecorations
 			return instance;
 		}
 
-        private JBRWindowTopBorder() {
+        JBRWindowTopBorder() {
 			super( 1, 0, 0, 0 );
 
-			colorizationAffectsBorders = calculateAffectsBorders();
-			activeColor = calculateActiveBorderColor();
+			update();
+			installListeners();
+        }
 
+        void update() {
+			colorizationAffectsBorders = isColorizationColorAffectsBorders();
+			activeColor = calculateActiveBorderColor();
+        }
+
+        void installListeners() {
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
 			toolkit.addPropertyChangeListener( "win.dwm.colorizationColor.affects.borders", e -> {
-				colorizationAffectsBorders = calculateAffectsBorders();
+				colorizationAffectsBorders = isColorizationColorAffectsBorders();
 				activeColor = calculateActiveBorderColor();
 			} );
 
@@ -231,46 +238,50 @@ public class JBRCustomDecorations
 			toolkit.addPropertyChangeListener( "win.frame.activeBorderColor", l );
 		}
 
-		private boolean calculateAffectsBorders() {
+        boolean isColorizationColorAffectsBorders() {
 			Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "win.dwm.colorizationColor.affects.borders" );
 			return (value instanceof Boolean) ? (Boolean) value : true;
 		}
+
+        Color getColorizationColor() {
+			return (Color) Toolkit.getDefaultToolkit().getDesktopProperty( "win.dwm.colorizationColor" );
+        }
+
+        int getColorizationColorBalance() {
+			Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "win.dwm.colorizationColorBalance" );
+			return (value instanceof Integer) ? (Integer) value : -1;
+        }
 
 		private Color calculateActiveBorderColor() {
 			if( !colorizationAffectsBorders )
 				return defaultActiveBorder;
 
-			Toolkit toolkit = Toolkit.getDefaultToolkit();
-			Color colorizationColor = (Color) toolkit.getDesktopProperty( "win.dwm.colorizationColor" );
+			Color colorizationColor = getColorizationColor();
 			if( colorizationColor != null ) {
-				Object colorizationColorBalanceObj = toolkit.getDesktopProperty( "win.dwm.colorizationColorBalance" );
-				if( colorizationColorBalanceObj instanceof Integer ) {
-					int colorizationColorBalance = (Integer) colorizationColorBalanceObj;
-					if( colorizationColorBalance < 0 || colorizationColorBalance > 100 )
-						colorizationColorBalance = 100;
+				int colorizationColorBalance = getColorizationColorBalance();
+				if( colorizationColorBalance < 0 || colorizationColorBalance > 100 )
+					colorizationColorBalance = 100;
 
-					if( colorizationColorBalance == 0 )
-						return new Color( 0xD9D9D9 );
-					if( colorizationColorBalance == 100 )
-						return colorizationColor;
+				if( colorizationColorBalance == 0 )
+					return new Color( 0xD9D9D9 );
+				if( colorizationColorBalance == 100 )
+					return colorizationColor;
 
-					float alpha = colorizationColorBalance / 100.0f;
-					float remainder = 1 - alpha;
-					int r = Math.round( colorizationColor.getRed() * alpha + 0xD9 * remainder );
-					int g = Math.round( colorizationColor.getGreen() * alpha + 0xD9 * remainder );
-					int b = Math.round( colorizationColor.getBlue() * alpha + 0xD9 * remainder );
+				float alpha = colorizationColorBalance / 100.0f;
+				float remainder = 1 - alpha;
+				int r = Math.round( colorizationColor.getRed() * alpha + 0xD9 * remainder );
+				int g = Math.round( colorizationColor.getGreen() * alpha + 0xD9 * remainder );
+				int b = Math.round( colorizationColor.getBlue() * alpha + 0xD9 * remainder );
 
-					// avoid potential IllegalArgumentException in Color constructor
-					r = Math.min( Math.max( r, 0 ), 255 );
-					g = Math.min( Math.max( g, 0 ), 255 );
-					b = Math.min( Math.max( b, 0 ), 255 );
+				// avoid potential IllegalArgumentException in Color constructor
+				r = Math.min( Math.max( r, 0 ), 255 );
+				g = Math.min( Math.max( g, 0 ), 255 );
+				b = Math.min( Math.max( b, 0 ), 255 );
 
-					return new Color( r, g, b );
-				}
-				return colorizationColor;
+				return new Color( r, g, b );
 			}
 
-			Color activeBorderColor = (Color) toolkit.getDesktopProperty( "win.frame.activeBorderColor" );
+			Color activeBorderColor = (Color) Toolkit.getDefaultToolkit().getDesktopProperty( "win.frame.activeBorderColor" );
 			return (activeBorderColor != null) ? activeBorderColor : UIManager.getColor( "MenuBar.borderColor" );
 		}
 

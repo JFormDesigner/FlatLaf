@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
@@ -26,8 +27,10 @@ import javax.swing.JFrame;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
+import com.formdev.flatlaf.ui.JBRCustomDecorations.JBRWindowTopBorder;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -244,5 +247,57 @@ public class FlatNativeWindowBorder
 		void setTitleBarHeight( Window window, int titleBarHeight );
 		void setTitleBarHitTestSpots( Window window, List<Rectangle> hitTestSpots );
 		void setTitleBarAppIconBounds( Window window, Rectangle appIconBounds );
+
+		boolean isColorizationColorAffectsBorders();
+		Color getColorizationColor();
+		int getColorizationColorBalance();
+
+		void addChangeListener( ChangeListener l );
+		void removeChangeListener( ChangeListener l );
+	}
+
+	//---- class WindowTopBorder -------------------------------------------
+
+	static class WindowTopBorder
+		extends JBRCustomDecorations.JBRWindowTopBorder
+	{
+		private static WindowTopBorder instance;
+
+		static JBRWindowTopBorder getInstance() {
+			if( canUseJBRCustomDecorations )
+				return JBRWindowTopBorder.getInstance();
+
+			if( instance == null )
+				instance = new WindowTopBorder();
+			return instance;
+		}
+
+		@Override
+		void installListeners() {
+			nativeProvider.addChangeListener( e -> {
+				update();
+
+				// repaint top borders of all windows
+				for( Window window : Window.getWindows() ) {
+					if( window.isDisplayable() )
+						window.repaint( 0, 0, window.getWidth(), 1 );
+				}
+			} );
+		}
+
+		@Override
+		boolean isColorizationColorAffectsBorders() {
+			return nativeProvider.isColorizationColorAffectsBorders();
+		}
+
+		@Override
+		Color getColorizationColor() {
+			return nativeProvider.getColorizationColor();
+		}
+
+		@Override
+		int getColorizationColorBalance() {
+			return nativeProvider.getColorizationColorBalance();
+		}
 	}
 }
