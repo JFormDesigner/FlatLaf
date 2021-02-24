@@ -114,6 +114,9 @@ Applications using FlatLaf
   and much more
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
+- ![New](images/new.svg)
+  [install4j](https://www.ej-technologies.com/products/install4j/overview.html)
+  9.0 (**commercial**) - the powerful multi-platform Java installer builder
 - ![New](images/new.svg) [DbVisualizer](https://www.dbvis.com/) 12.0
   (**commercial**) - the universal database tool for developers, analysts and
   DBAs
