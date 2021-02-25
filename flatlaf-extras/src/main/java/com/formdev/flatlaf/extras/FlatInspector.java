@@ -249,12 +249,10 @@ public class FlatInspector
 
 		// add/remove window listener
 		if( enabled ) {
-			System.out.println( "add "+window );
 			window = SwingUtilities.windowForComponent( rootPane );
 			if( window != null )
 				window.addWindowListener( windowListener );
 		} else {
-			System.out.println( "rem" );
 			if( window != null ) {
 				window.removeWindowListener( windowListener );
 				window = null;
