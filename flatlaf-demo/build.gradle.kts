@@ -27,7 +27,7 @@ repositories {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( project( ":flatlaf-native-jna" ) )
+	implementation( project( ":flatlaf-natives-jna" ) )
 	implementation( project( ":flatlaf-extras" ) )
 	implementation( project( ":flatlaf-intellij-themes" ) )
 	implementation( "com.miglayout:miglayout-swing:5.3-SNAPSHOT" )
@@ -37,7 +37,7 @@ dependencies {
 tasks {
 	jar {
 		dependsOn( ":flatlaf-core:jar" )
-		dependsOn( ":flatlaf-native-jna:jar" )
+		dependsOn( ":flatlaf-natives-jna:jar" )
 		dependsOn( ":flatlaf-extras:jar" )
 		dependsOn( ":flatlaf-intellij-themes:jar" )
 

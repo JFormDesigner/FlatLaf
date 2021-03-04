@@ -17,7 +17,6 @@
 rootProject.name = "FlatLaf"
 
 include( "flatlaf-core" )
-include( "flatlaf-native-jna" )
 include( "flatlaf-extras" )
 include( "flatlaf-swingx" )
 include( "flatlaf-jide-oss" )
@@ -25,3 +24,10 @@ include( "flatlaf-intellij-themes" )
 include( "flatlaf-demo" )
 include( "flatlaf-testing" )
 include( "flatlaf-theme-editor" )
+
+includeProject( "flatlaf-natives-jna",     "flatlaf-natives/flatlaf-natives-jna" )
+
+fun includeProject( projectPath: String, projectDir: String ) {
+	include( projectPath )
+	project( ":$projectPath" ).projectDir = file( projectDir )
+}

@@ -228,7 +228,7 @@ public class FlatNativeWindowBorder
 			return;
 
 		try {
-			Class<?> cls = Class.forName( "com.formdev.flatlaf.nativejna.windows.FlatWindowsNativeWindowBorder" );
+			Class<?> cls = Class.forName( "com.formdev.flatlaf.natives.jna.windows.FlatWindowsNativeWindowBorder" );
 			Method m = cls.getMethod( "getInstance" );
 			nativeProvider = (Provider) m.invoke( null );
 

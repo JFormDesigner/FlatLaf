@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-/**
- * @author Karl Tauber
- */
-module com.formdev.flatlaf.nativejna {
-	requires java.desktop;
-	requires com.sun.jna;
-	requires com.sun.jna.platform;
-	requires com.formdev.flatlaf;
+plugins {
+	`java-library`
+}
 
-	exports com.formdev.flatlaf.nativejna.windows;
+dependencies {
+	implementation( project( ":flatlaf-core" ) )
+	implementation( "net.java.dev.jna:jna:5.7.0" )
+	implementation( "net.java.dev.jna:jna-platform:5.7.0" )
 }

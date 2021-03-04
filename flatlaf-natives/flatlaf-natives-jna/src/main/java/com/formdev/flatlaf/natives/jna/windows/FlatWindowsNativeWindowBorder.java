@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.nativejna.windows;
+package com.formdev.flatlaf.natives.jna.windows;
 
 import static com.sun.jna.platform.win32.ShellAPI.*;
 import static com.sun.jna.platform.win32.WinReg.*;
