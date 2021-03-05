@@ -21,10 +21,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComponent;
-import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.LoggingFacade;
 
 /**
  * Provides Java version compatibility methods.
@@ -58,7 +56,7 @@ public class JavaCompatibility
 						? new Class[] { JComponent.class, Graphics2D.class, String.class, int.class, float.class, float.class }
 						: new Class[] { JComponent.class, Graphics.class, String.class, int.class, int.class, int.class } );
 				} catch( Exception ex ) {
-					Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+					LoggingFacade.logSevere( ex );
 					throw new RuntimeException( ex );
 				}
 			}
@@ -70,7 +68,7 @@ public class JavaCompatibility
 			else
 				drawStringUnderlineCharAtMethod.invoke( null, c, g, text, underlinedIndex, x, y );
 		} catch( IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
-			Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+			LoggingFacade.logSevere( ex );
 			throw new RuntimeException( ex );
 		}
 	}
@@ -94,7 +92,7 @@ public class JavaCompatibility
 							: "clipStringIfNecessary",
 						new Class[] { JComponent.class, FontMetrics.class, String.class, int.class } );
 				} catch( Exception ex ) {
-					Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+					LoggingFacade.logSevere( ex );
 					throw new RuntimeException( ex );
 				}
 			}
@@ -103,7 +101,7 @@ public class JavaCompatibility
 		try {
 			return (String) getClippedStringMethod.invoke( null, c, fm, string, availTextWidth );
 		} catch( IllegalAccessException | IllegalArgumentException | InvocationTargetException ex ) {
-			Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+			LoggingFacade.logSevere( ex );
 			throw new RuntimeException( ex );
 		}
 	}

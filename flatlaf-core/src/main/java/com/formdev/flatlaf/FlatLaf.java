@@ -38,8 +38,6 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -74,7 +72,6 @@ import com.formdev.flatlaf.util.UIScale;
 public abstract class FlatLaf
 	extends BasicLookAndFeel
 {
-	static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
 	private static List<Object> customDefaultsSources;
@@ -103,7 +100,7 @@ public abstract class FlatLaf
 			UIManager.setLookAndFeel( newLookAndFeel );
 			return true;
 		} catch( Exception ex ) {
-			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
+			LoggingFacade.logSevere( "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
 			return false;
 		}
 	}
@@ -341,7 +338,7 @@ public abstract class FlatLaf
 			} else
 				aquaLaf = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
 		} catch( Exception ex ) {
-			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
+			LoggingFacade.logSevere( "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
 			throw new IllegalStateException();
 		}
 
@@ -577,7 +574,7 @@ public abstract class FlatLaf
 					.invoke( null, true );
 				defaults.put( key, value );
 			} catch( Exception ex ) {
-				Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+				LoggingFacade.logSevere( null, ex );
 				throw new RuntimeException( ex );
 			}
 		}
@@ -684,7 +681,7 @@ public abstract class FlatLaf
 				// update UI
 				updateUI();
 			} catch( UnsupportedLookAndFeelException ex ) {
-				LOG.log( Level.SEVERE, "FlatLaf: Failed to reinitialize look and feel '" + lookAndFeel.getClass().getName() + "'.", ex );
+				LoggingFacade.logSevere(  "FlatLaf: Failed to reinitialize look and feel '" + lookAndFeel.getClass().getName() + "'.", ex );
 			}
 		} );
 	}

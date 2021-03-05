@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -172,7 +171,7 @@ class LinuxFontPolicy
 				if( "1".equals( strs.get( 5 ) ) )
 					style |= Font.ITALIC;
 			} catch( RuntimeException ex ) {
-				FlatLaf.LOG.log( Level.CONFIG, "FlatLaf: Failed to parse 'font=" + generalFont + "'.", ex );
+				LoggingFacade.logConfig( "FlatLaf: Failed to parse 'font=" + generalFont + "'.", ex );
 			}
 		}
 
@@ -186,7 +185,7 @@ class LinuxFontPolicy
 				if( dpi < 50 )
 					dpi = 50;
 			} catch( NumberFormatException ex ) {
-				FlatLaf.LOG.log( Level.CONFIG, "FlatLaf: Failed to parse 'forceFontDPI=" + forceFontDPI + "'.", ex );
+				LoggingFacade.logConfig( "FlatLaf: Failed to parse 'forceFontDPI=" + forceFontDPI + "'.", ex );
 			}
 		}
 
@@ -225,7 +224,7 @@ class LinuxFontPolicy
 			while( (line = reader.readLine()) != null )
 				lines.add( line );
 		} catch( IOException ex ) {
-			FlatLaf.LOG.log( Level.CONFIG, "FlatLaf: Failed to read '" + filename + "'.", ex );
+			LoggingFacade.logConfig( "FlatLaf: Failed to read '" + filename + "'.", ex );
 		}
 		return lines;
 	}

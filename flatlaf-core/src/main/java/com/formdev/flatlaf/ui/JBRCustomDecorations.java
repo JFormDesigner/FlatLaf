@@ -30,8 +30,6 @@ import java.awt.event.HierarchyListener;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
@@ -40,6 +38,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
+import com.formdev.flatlaf.LoggingFacade;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -155,7 +154,7 @@ public class JBRCustomDecorations
 		try {
 			return (Boolean) Window_hasCustomDecoration.invoke( window );
 		} catch( Exception ex ) {
-			Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+			LoggingFacade.logSevere( null, ex );
 			return false;
 		}
 	}
@@ -167,7 +166,7 @@ public class JBRCustomDecorations
 		try {
 			Window_setHasCustomDecoration.invoke( window );
 		} catch( Exception ex ) {
-			Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+			LoggingFacade.logSevere( null, ex );
 		}
 	}
 
@@ -181,7 +180,7 @@ public class JBRCustomDecorations
 			WWindowPeer_setCustomDecorationHitTestSpots.invoke( peer, hitTestSpots );
 			WWindowPeer_setCustomDecorationTitleBarHeight.invoke( peer, titleBarHeight );
 		} catch( Exception ex ) {
-			Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+			LoggingFacade.logSevere( null, ex );
 		}
 	}
 
