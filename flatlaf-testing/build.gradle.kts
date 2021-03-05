@@ -27,12 +27,12 @@ repositories {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( project( ":flatlaf-natives-jna" ) )
 	implementation( project( ":flatlaf-extras" ) )
 	implementation( project( ":flatlaf-swingx" ) )
 	implementation( project( ":flatlaf-jide-oss" ) )
 	implementation( project( ":flatlaf-intellij-themes" ) )
 	implementation( project( ":flatlaf-demo" ) )
+//	implementation( project( ":flatlaf-natives-jna" ) )
 
 	implementation( "com.miglayout:miglayout-swing:5.3-SNAPSHOT" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )

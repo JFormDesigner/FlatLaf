@@ -74,14 +74,13 @@ public interface FlatSystemProperties
 	/**
 	 * Specifies whether FlatLaf native window decorations should be used
 	 * when creating {@code JFrame} or {@code JDialog}.
-	 * Requires that {@code flatlaf-natives-jna.jar} is on classpath/modulepath.
 	 * <p>
 	 * Setting this to {@code true} forces using FlatLaf native window decorations
 	 * even if they are not enabled by the application.
 	 * <p>
 	 * Setting this to {@code false} disables using FlatLaf native window decorations.
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Window 10 64bit)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none

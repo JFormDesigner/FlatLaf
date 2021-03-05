@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Method;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -228,9 +227,12 @@ public class FlatNativeWindowBorder
 			return;
 
 		try {
+/*
 			Class<?> cls = Class.forName( "com.formdev.flatlaf.natives.jna.windows.FlatWindowsNativeWindowBorder" );
 			Method m = cls.getMethod( "getInstance" );
 			nativeProvider = (Provider) m.invoke( null );
+*/
+			nativeProvider = FlatWindowsNativeWindowBorder.getInstance();
 
 			supported = (nativeProvider != null);
 		} catch( Exception ex ) {

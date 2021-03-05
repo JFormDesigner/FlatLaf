@@ -15,8 +15,11 @@
 # BINARY FILES:
 #   Disable line ending normalize on checkin.
 
+*.dll binary
+*.dylib binary
 *.gif binary
 *.jar binary
 *.png binary
 *.sketch binary
+*.so binary
 *.zip binary
