@@ -17,10 +17,12 @@
 package com.formdev.flatlaf.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +37,9 @@ import com.formdev.flatlaf.FlatLaf;
  */
 public class NativeLibrary
 {
+	private static final String DELETE_SUFFIX = ".delete";
+	private static boolean deletedTemporary;
+
 	private final boolean loaded;
 
 	/**
@@ -71,6 +76,7 @@ public class NativeLibrary
 			return false;
 		}
 
+		File tempFile = null;
 		try {
 			// for development environment
 			if( "file".equals( libraryUrl.getProtocol() ) ) {
@@ -83,11 +89,8 @@ public class NativeLibrary
 			}
 
 			// create temporary file
-			Path tempPath = Files.createTempFile( "jni", basename( libraryName ) );
-			File tempFile = tempPath.toFile();
-
-			//TODO this does not work on Windows
-			tempFile.deleteOnExit();
+			Path tempPath = createTempFile( libraryName );
+			tempFile = tempPath.toFile();
 
 			// copy library to temporary file
 			try( InputStream in = libraryUrl.openStream() ) {
@@ -97,9 +100,15 @@ public class NativeLibrary
 			// load library
 			System.load( tempFile.getCanonicalPath() );
 
+			// delete library
+			deleteOrMarkForDeletion( tempFile );
+
 			return true;
 		} catch( Throwable ex ) {
 			log( null, ex );
+
+			if( tempFile != null )
+				deleteOrMarkForDeletion( tempFile );
 			return false;
 		}
 	}
@@ -116,12 +125,69 @@ public class NativeLibrary
 			: "lib" + libraryName + suffix;
 	}
 
-	private static String basename( String libName ) {
-		int sep = libName.lastIndexOf( '/' );
-		return (sep >= 0) ? libName.substring( sep + 1 ) : libName;
-	}
-
 	private static void log( String msg, Throwable thrown ) {
 		Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, msg, thrown );
+	}
+
+	private static Path createTempFile( String libraryName ) throws IOException {
+		int sep = libraryName.lastIndexOf( '/' );
+		String name = (sep >= 0) ? libraryName.substring( sep + 1 ) : libraryName;
+
+		int dot = name.lastIndexOf( '.' );
+		String prefix = ((dot >= 0) ? name.substring( 0, dot ) : name) + '-';
+		String suffix = (dot >= 0) ? name.substring( dot ) : "";
+
+		Path tempDir = getTempDir();
+		if( tempDir != null ) {
+			deleteTemporaryFiles( tempDir );
+
+			return Files.createTempFile( tempDir, prefix, suffix );
+		} else
+			return Files.createTempFile( prefix, suffix );
+	}
+
+	private static Path getTempDir() throws IOException {
+		if( SystemInfo.isWindows ) {
+			// On Windows, where File.delete() and File.deleteOnExit() does not work
+			// for loaded native libraries, they will be deleted on next application startup.
+			// The default temporary directory may contain hundreds or thousands of files.
+			// To make searching for "marked for deletion" files as fast as possible,
+			// use a sub directory that contains only our temporary native libraries.
+			Path tempDir = Paths.get( System.getProperty( "java.io.tmpdir" ) + "/flatlaf.temp" );
+			Files.createDirectories( tempDir );
+			return tempDir;
+		} else
+			return null; // use standard temporary directory
+	}
+
+	private static void deleteTemporaryFiles( Path tempDir ) {
+		if( deletedTemporary )
+			return;
+		deletedTemporary = true;
+
+		File[] markerFiles = tempDir.toFile().listFiles( (dir, name) -> name.endsWith( DELETE_SUFFIX ) );
+		if( markerFiles == null )
+			return;
+
+		for( File markerFile : markerFiles ) {
+			File toDeleteFile = new File( markerFile.getParent(), StringUtils.removeTrailing( markerFile.getName(), DELETE_SUFFIX ) );
+			if( !toDeleteFile.exists() || toDeleteFile.delete() )
+				markerFile.delete();
+		}
+	}
+
+	private static void deleteOrMarkForDeletion( File file ) {
+		// try to delete the native library
+		if( file.delete() )
+			return;
+
+		// not possible to delete on Windows because native library file is locked
+		// --> create "to delete" marker file (used at next startup)
+		try {
+			File markFile = new File( file.getParent(), file.getName() + DELETE_SUFFIX );
+			markFile.createNewFile();
+		} catch( IOException ex2 ) {
+			// ignore
+		}
 	}
 }
