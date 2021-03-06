@@ -55,7 +55,7 @@ library {
 				compilerArgs.addAll( toolChain.map {
 					when( it ) {
 						is Gcc, is Clang -> listOf( "-O2" )
-						is VisualCpp -> listOf( "/O2" )
+						is VisualCpp -> listOf( "/O2", "/Zl", "/GS-" )
 						else -> emptyList()
 					}
 				} )
@@ -70,8 +70,8 @@ library {
 				val jawt = "${org.gradle.internal.jvm.Jvm.current().javaHome}/lib/jawt"
 				linkerArgs.addAll( toolChain.map {
 					when( it ) {
-						is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lshell32", "-lAdvAPI32" )
-						is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "shell32.lib", "AdvAPI32.lib" )
+						is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lshell32", "-lAdvAPI32", "-lKernel32" )
+						is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "/NODEFAULTLIB" )
 						else -> emptyList()
 					}
 				} )

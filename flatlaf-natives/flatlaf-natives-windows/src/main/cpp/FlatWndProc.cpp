@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+// avoid inlining of printf()
+#define _NO_CRT_STDIO_INLINE
+
 #include <windows.h>
 #include <windowsx.h>
 #include <shellapi.h>
 #include <jawt.h>
 #include <jawt_md.h>
-#include <map>
 #include "FlatWndProc.h"
 #include "com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc.h"
 
@@ -50,7 +52,7 @@ jmethodID FlatWndProc::onNcHitTestMID;
 jmethodID FlatWndProc::isFullscreenMID;
 jmethodID FlatWndProc::fireStateChangedLaterOnceMID;
 
-std::map<HWND, FlatWndProc*> FlatWndProc::hwndMap = std::map<HWND, FlatWndProc*>();
+HWNDMap* FlatWndProc::hwndMap;
 
 //---- class FlatWndProc methods ----------------------------------------------
 
@@ -63,21 +65,25 @@ FlatWndProc::FlatWndProc() {
 }
 
 HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
-    initIDs( env, obj );
+	initIDs( env, obj );
 
-    if( initialized < 0 )
-    		return 0;
+	if( initialized < 0 )
+		return 0;
+
+	// create HWND map
+	if( hwndMap == NULL )
+		hwndMap = new HWNDMap();
 
 	// get window handle
 	HWND hwnd = getWindowHandle( env, window );
-	if( hwnd == NULL || hwndMap.count( hwnd ) > 0 )
+	if( hwnd == NULL || hwndMap->get( hwnd ) != NULL )
 		return 0;
 
 	FlatWndProc* fwp = new FlatWndProc();
 	env->GetJavaVM( &fwp->jvm );
 	fwp->obj = env->NewGlobalRef( obj );
 	fwp->hwnd = hwnd;
-	hwndMap[hwnd] = fwp;
+	hwndMap->put( hwnd, fwp );
 
 	// replace window procedure
 	fwp->defaultWndProc = reinterpret_cast<WNDPROC>(
@@ -90,11 +96,14 @@ HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
 }
 
 void FlatWndProc::uninstall( JNIEnv *env, jobject obj, HWND hwnd ) {
-    if( hwnd == NULL || hwndMap.count( hwnd ) == 0 )
-    		return;
+	if( hwnd == NULL )
+		return;
 
-    FlatWndProc* fwp = hwndMap[hwnd];
-	hwndMap.erase( hwnd );
+	FlatWndProc* fwp = (FlatWndProc*) hwndMap->get( hwnd );
+	if( fwp == NULL )
+		return;
+
+	hwndMap->remove( hwnd );
 
 	// restore original window procedure
 	::SetWindowLongPtr( hwnd, GWLP_WNDPROC, (LONG_PTR) fwp->defaultWndProc );
@@ -132,7 +141,7 @@ void FlatWndProc::updateFrame() {
 }
 
 LRESULT CALLBACK FlatWndProc::StaticWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
-	FlatWndProc* fwp = hwndMap[hwnd];
+	FlatWndProc* fwp = (FlatWndProc*) hwndMap->get( hwnd );
 	return fwp->WindowProc( hwnd, uMsg, wParam, lParam );
 }
 
@@ -175,7 +184,7 @@ LRESULT FlatWndProc::WmDestroy( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lPara
 
 	// cleanup
 	getEnv()->DeleteGlobalRef( obj );
-	hwndMap.erase( hwnd );
+	hwndMap->remove( hwnd );
 	delete this;
 
 	// call original AWT window procedure because it may fire window closed event in AwtWindow::WmDestroy()

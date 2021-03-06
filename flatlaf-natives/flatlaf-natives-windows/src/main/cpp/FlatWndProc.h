@@ -15,6 +15,7 @@
  */
 
 #include <windows.h>
+#include "HWNDMap.h"
 
 /**
  * @author Karl Tauber
@@ -31,7 +32,7 @@ private:
 	static jmethodID isFullscreenMID;
 	static jmethodID fireStateChangedLaterOnceMID;
 
-	static std::map<HWND, FlatWndProc*> hwndMap;
+	static HWNDMap* hwndMap;
 
 	JavaVM* jvm;
 	JNIEnv* env; // attached to AWT-Windows/Win32 thread

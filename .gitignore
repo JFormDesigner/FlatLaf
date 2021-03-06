@@ -9,3 +9,5 @@ out/
 *.iml
 *.ipr
 *.iws
+.vs/
+.vscode/
