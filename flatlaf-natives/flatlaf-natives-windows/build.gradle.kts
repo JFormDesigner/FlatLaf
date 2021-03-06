@@ -91,7 +91,7 @@ library {
 			}
 
 			tasks.named( "jar" ) {
-				onlyIf { isBuildable }
+				onlyIf { false }
 			}
 		}
 	}
