@@ -352,12 +352,13 @@ void FlatWndProc::openSystemMenu( HWND hwnd, int x, int y ) {
 	HMENU systemMenu = ::GetSystemMenu( hwnd, false );
 
 	// update system menu
+	LONG style = ::GetWindowLong( hwnd, GWL_STYLE );
 	bool isMaximized = ::IsZoomed( hwnd );
 	setMenuItemState( systemMenu, SC_RESTORE, isMaximized );
 	setMenuItemState( systemMenu, SC_MOVE, !isMaximized );
-	setMenuItemState( systemMenu, SC_SIZE, !isMaximized );
-	setMenuItemState( systemMenu, SC_MINIMIZE, true );
-	setMenuItemState( systemMenu, SC_MAXIMIZE, !isMaximized );
+	setMenuItemState( systemMenu, SC_SIZE, (style & WS_THICKFRAME) != 0 && !isMaximized );
+	setMenuItemState( systemMenu, SC_MINIMIZE, (style & WS_MINIMIZEBOX) != 0 );
+	setMenuItemState( systemMenu, SC_MAXIMIZE, (style & WS_MAXIMIZEBOX) != 0 && !isMaximized );
 	setMenuItemState( systemMenu, SC_CLOSE, true );
 
 	// make "Close" item the default to be consistent with the system menu shown
