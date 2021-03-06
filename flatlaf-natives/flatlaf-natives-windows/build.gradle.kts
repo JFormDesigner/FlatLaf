@@ -30,6 +30,8 @@ library {
 
 		sharedLibrary {
 			compileTasks.configureEach {
+				onlyIf { isBuildable }
+
 				doFirst {
 					println( "Used Tool Chain:" )
 					println( "  - ${toolChain.get()}" )
@@ -62,6 +64,8 @@ library {
 			}
 
 			linkTask.configure {
+				onlyIf { isBuildable }
+
 				val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
 				val libraryName = "flatlaf-windows-x86_64.dll"
 
@@ -84,6 +88,10 @@ library {
 						rename( "flatlaf-natives-windows.dll", libraryName )
 					}
 				}
+			}
+
+			tasks.named( "jar" ) {
+				onlyIf { isBuildable }
 			}
 		}
 	}
