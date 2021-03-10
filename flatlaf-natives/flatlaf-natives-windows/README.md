@@ -13,4 +13,5 @@ pre-built DLL is checked into Git at
 
 This DLL was built on a GitHub server with the help of GitHub Actions. See:
 [Native Libraries](https://github.com/JFormDesigner/FlatLaf/actions/workflows/natives.yml)
-workflow. Then the produced Artifacts ZIP was downloaded and checked into Git.
+workflow. Then the produced Artifacts ZIP was downloaded and the DLL checked
+into Git.
