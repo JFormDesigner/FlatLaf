@@ -38,7 +38,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
-import com.formdev.flatlaf.LoggingFacade;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 

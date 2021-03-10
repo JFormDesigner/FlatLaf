@@ -60,6 +60,7 @@ import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.GrayFilter;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;

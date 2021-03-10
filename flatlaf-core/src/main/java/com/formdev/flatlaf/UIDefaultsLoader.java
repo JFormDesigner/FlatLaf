@@ -47,6 +47,7 @@ import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -932,7 +933,7 @@ class UIDefaultsLoader
 
 		Object value = UIManager.get( uiKey );
 		if( value == null && !optional )
-			LoggingFacade.logSevere( "FlatLaf: '" + uiKey + "' not found in UI defaults." );
+			LoggingFacade.logSevere( "FlatLaf: '" + uiKey + "' not found in UI defaults.", null );
 		return value;
 	}
 }

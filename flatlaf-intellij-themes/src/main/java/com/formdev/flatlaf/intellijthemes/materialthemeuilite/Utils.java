@@ -18,7 +18,7 @@ package com.formdev.flatlaf.intellijthemes.materialthemeuilite;
 
 import java.io.IOException;
 import com.formdev.flatlaf.IntelliJTheme;
-import com.formdev.flatlaf.LoggingFacade;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * @author Karl Tauber
