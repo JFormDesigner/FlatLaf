@@ -247,16 +247,16 @@ class UIDefaultsLoader
 				}
 			}
 		} catch( IOException ex ) {
-			LoggingFacade.logSevere( "FlatLaf: Failed to load properties files.", ex );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load properties files.", ex );
 		}
 	}
 
 	static void logParseError( String key, String value, RuntimeException ex, boolean severe ) {
 		String message = "FlatLaf: Failed to parse: '" + key + '=' + value + '\'';
 		if (severe) {
-			LoggingFacade.logSevere( message, ex );
+			LoggingFacade.INSTANCE.logSevere( message, ex );
 		} else {
-			LoggingFacade.logConfig( message, ex );
+			LoggingFacade.INSTANCE.logConfig( message, ex );
 		}
 	}
 
@@ -445,7 +445,7 @@ class UIDefaultsLoader
 			try {
 				return findClass( value, addonClassLoaders ).newInstance();
 			} catch( InstantiationException | IllegalAccessException | ClassNotFoundException ex ) {
-				LoggingFacade.logSevere( "FlatLaf: Failed to instantiate '" + value + "'.", ex );
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to instantiate '" + value + "'.", ex );
 				return null;
 			}
 		};
@@ -456,7 +456,7 @@ class UIDefaultsLoader
 			try {
 				return findClass( value, addonClassLoaders );
 			} catch( ClassNotFoundException ex ) {
-				LoggingFacade.logSevere( "FlatLaf: Failed to find class '" + value + "'.", ex );
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to find class '" + value + "'.", ex );
 				return null;
 			}
 		};
@@ -933,7 +933,7 @@ class UIDefaultsLoader
 
 		Object value = UIManager.get( uiKey );
 		if( value == null && !optional )
-			LoggingFacade.logSevere( "FlatLaf: '" + uiKey + "' not found in UI defaults.", null );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: '" + uiKey + "' not found in UI defaults.", null );
 		return value;
 	}
 }

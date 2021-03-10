@@ -76,7 +76,7 @@ public class IntelliJTheme
 		try {
 		    return FlatLaf.install( createLaf( in ) );
 		} catch( Exception ex ) {
-			LoggingFacade.logSevere(  "FlatLaf: Failed to load IntelliJ theme", ex );
+			LoggingFacade.INSTANCE.logSevere(  "FlatLaf: Failed to load IntelliJ theme", ex );
 		    return false;
 		}
 	}

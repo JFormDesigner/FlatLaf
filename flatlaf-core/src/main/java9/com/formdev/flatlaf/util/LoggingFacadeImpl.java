@@ -14,35 +14,19 @@
  * limitations under the License.
  */
 
-plugins {
-	java
-}
+package com.formdev.flatlaf.util;
 
-if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
-	sourceSets {
-		create( "java9" ) {
-			java {
-				setSrcDirs( listOf( "src/main/java9" ) )
-			}
-		}
+import com.formdev.flatlaf.FlatLaf;
+
+public class LoggingFacadeImpl implements LoggingFacade
+{
+	private static final System.Logger LOG = System.getLogger( FlatLaf.class.getName() );
+
+	public void logSevere( String message, Throwable t ) {
+		LOG.log( System.Logger.Level.ERROR, message, t );
 	}
 
-	dependencies {
-		add("java9Compile", sourceSets.main.get().output)
-	}
-
-	tasks {
-		named<JavaCompile>( "compileJava9Java" ) {
-			sourceCompatibility = "9"
-			targetCompatibility = "9"
-		}
-
-		jar {
-			manifest.attributes( "Multi-Release" to "true" )
-
-			into( "META-INF/versions/9" ) {
-				from( sourceSets["java9"].output )
-			}
-		}
+	public void logConfig( String message, Throwable t ) {
+		LOG.log( System.Logger.Level.DEBUG, message, t );
 	}
 }

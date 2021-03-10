@@ -16,48 +16,11 @@
 
 package com.formdev.flatlaf.util;
 
-import com.formdev.flatlaf.FlatLaf;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class LoggingFacade
+public interface LoggingFacade
 {
-	private static final Logger LOG = createLogger();
+	LoggingFacade INSTANCE = new LoggingFacadeImpl();
 
-	private static Logger createLogger() {
-		try {
-			return Logger.getLogger( FlatLaf.class.getName() );
-		} catch( Throwable e ) {
-			// Module java.logging is not present
-			return null;
-		}
-	}
+	void logSevere( String message, Throwable t );
 
-	public static void logSevere( String message, Throwable t ) {
-		if( LOG != null ) {
-			LOG.log( Level.SEVERE, message, t );
-		} else {
-			if( message != null ) {
-				System.err.println( message );
-			}
-			if( t != null ) {
-				t.printStackTrace();
-			}
-		}
-	}
-
-	public static void logConfig( String message, Throwable t ) {
-		if( LOG != null ) {
-			LOG.log( Level.CONFIG, message, t );
-		} else {
-			if (Boolean.getBoolean( "flatLaf.logConfig" )) {
-				if( message != null ) {
-					System.err.println( message );
-				}
-				if( t != null ) {
-					t.printStackTrace();
-				}
-			}
-		}
-	}
+	void logConfig( String message, Throwable t );
 }

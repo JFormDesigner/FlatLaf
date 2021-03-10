@@ -101,7 +101,7 @@ public abstract class FlatLaf
 			UIManager.setLookAndFeel( newLookAndFeel );
 			return true;
 		} catch( Exception ex ) {
-			LoggingFacade.logSevere( "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
 			return false;
 		}
 	}
@@ -339,7 +339,7 @@ public abstract class FlatLaf
 			} else
 				aquaLaf = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
 		} catch( Exception ex ) {
-			LoggingFacade.logSevere( "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
 			throw new IllegalStateException();
 		}
 
@@ -575,7 +575,7 @@ public abstract class FlatLaf
 					.invoke( null, true );
 				defaults.put( key, value );
 			} catch( Exception ex ) {
-				LoggingFacade.logSevere( null, ex );
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 				throw new RuntimeException( ex );
 			}
 		}
@@ -682,7 +682,7 @@ public abstract class FlatLaf
 				// update UI
 				updateUI();
 			} catch( UnsupportedLookAndFeelException ex ) {
-				LoggingFacade.logSevere(  "FlatLaf: Failed to reinitialize look and feel '" + lookAndFeel.getClass().getName() + "'.", ex );
+				LoggingFacade.INSTANCE.logSevere(  "FlatLaf: Failed to reinitialize look and feel '" + lookAndFeel.getClass().getName() + "'.", ex );
 			}
 		} );
 	}

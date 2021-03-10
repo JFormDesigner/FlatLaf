@@ -154,7 +154,7 @@ public class JBRCustomDecorations
 		try {
 			return (Boolean) Window_hasCustomDecoration.invoke( window );
 		} catch( Exception ex ) {
-			LoggingFacade.logSevere( null, ex );
+			LoggingFacade.INSTANCE.logSevere( null, ex );
 			return false;
 		}
 	}
@@ -166,7 +166,7 @@ public class JBRCustomDecorations
 		try {
 			Window_setHasCustomDecoration.invoke( window );
 		} catch( Exception ex ) {
-			LoggingFacade.logSevere( null, ex );
+			LoggingFacade.INSTANCE.logSevere( null, ex );
 		}
 	}
 
@@ -180,7 +180,7 @@ public class JBRCustomDecorations
 			WWindowPeer_setCustomDecorationHitTestSpots.invoke( peer, hitTestSpots );
 			WWindowPeer_setCustomDecorationTitleBarHeight.invoke( peer, titleBarHeight );
 		} catch( Exception ex ) {
-			LoggingFacade.logSevere( null, ex );
+			LoggingFacade.INSTANCE.logSevere( null, ex );
 		}
 	}
 

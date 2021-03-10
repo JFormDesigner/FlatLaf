@@ -173,7 +173,7 @@ class LinuxFontPolicy
 				if( "1".equals( strs.get( 5 ) ) )
 					style |= Font.ITALIC;
 			} catch( RuntimeException ex ) {
-				LoggingFacade.logConfig( "FlatLaf: Failed to parse 'font=" + generalFont + "'.", ex );
+				LoggingFacade.INSTANCE.logConfig( "FlatLaf: Failed to parse 'font=" + generalFont + "'.", ex );
 			}
 		}
 
@@ -187,7 +187,7 @@ class LinuxFontPolicy
 				if( dpi < 50 )
 					dpi = 50;
 			} catch( NumberFormatException ex ) {
-				LoggingFacade.logConfig( "FlatLaf: Failed to parse 'forceFontDPI=" + forceFontDPI + "'.", ex );
+				LoggingFacade.INSTANCE.logConfig( "FlatLaf: Failed to parse 'forceFontDPI=" + forceFontDPI + "'.", ex );
 			}
 		}
 
@@ -226,7 +226,7 @@ class LinuxFontPolicy
 			while( (line = reader.readLine()) != null )
 				lines.add( line );
 		} catch( IOException ex ) {
-			LoggingFacade.logConfig( "FlatLaf: Failed to read '" + filename + "'.", ex );
+			LoggingFacade.INSTANCE.logConfig( "FlatLaf: Failed to read '" + filename + "'.", ex );
 		}
 		return lines;
 	}

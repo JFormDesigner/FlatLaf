@@ -31,7 +31,7 @@ class Utils
 				"/com/formdev/flatlaf/intellijthemes/themes/material-theme-ui-lite/" + name ) );
 		} catch( IOException ex ) {
 			String msg = "FlatLaf: Failed to load IntelliJ theme '" + name + "'";
-			LoggingFacade.logSevere( msg, ex );
+			LoggingFacade.INSTANCE.logSevere( msg, ex );
 			throw new RuntimeException( msg, ex );
 		}
 	}
