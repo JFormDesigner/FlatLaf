@@ -166,6 +166,7 @@ public class JBRCustomDecorations
 		if( !SystemInfo.isJetBrainsJVM_11_orLater || !SystemInfo.isWindows_10_orLater )
 			return;
 
+		// check whether disabled via system property
 		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, true ) )
 			return;
 

@@ -3,6 +3,13 @@ FlatLaf Change Log
 
 ## 1.1-SNAPSHOT
 
+#### New features and improvements
+
+- Native window decorations for Windows 10 enables dark frame/dialog title bar
+  and embedded menu bar with all JREs, while still having native Windows 10
+  border drop shadows, resize behavior, window snapping and system window menu.
+  (PR #267)
+
 #### Fixed bugs
 
 - IntelliJ Themes: Fixed text color of CheckBoxMenuItem and RadioButtonMenuItem

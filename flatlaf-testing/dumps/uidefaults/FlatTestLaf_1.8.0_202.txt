@@ -1140,6 +1140,7 @@ TitlePane.menuBarEmbedded      true
 TitlePane.menuBarMargins       0,8,0,22    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.restoreIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowRestoreIcon [UI]
 TitlePane.titleMargins         3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
+TitlePane.useWindowDecorations true
 
 
 #---- TitledBorder ----

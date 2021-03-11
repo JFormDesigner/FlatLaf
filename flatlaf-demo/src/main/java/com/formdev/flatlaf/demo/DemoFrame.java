@@ -155,8 +155,7 @@ class DemoFrame
 		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
 
 		// enable/disable window decoration for later created frames/dialogs
-		JFrame.setDefaultLookAndFeelDecorated( windowDecorations );
-		JDialog.setDefaultLookAndFeelDecorated( windowDecorations );
+		UIManager.put( "TitlePane.useWindowDecorations", windowDecorations );
 	}
 
 	private void menuBarEmbeddedChanged() {
