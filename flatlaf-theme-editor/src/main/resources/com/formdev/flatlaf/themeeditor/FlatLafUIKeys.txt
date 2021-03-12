@@ -850,7 +850,6 @@ TitlePane.inactiveBackground
 TitlePane.inactiveForeground
 TitlePane.maximizeIcon
 TitlePane.menuBarEmbedded
-TitlePane.menuBarMargins
 TitlePane.restoreIcon
 TitlePane.titleMargins
 TitlePane.useWindowDecorations

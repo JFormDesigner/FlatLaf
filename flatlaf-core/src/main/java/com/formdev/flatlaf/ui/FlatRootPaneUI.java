@@ -305,7 +305,8 @@ public class FlatRootPaneUI
 
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			if( menuBar != null && menuBar.isVisible() ) {
-				if( !isFullScreen && titlePane != null && titlePane.isMenuBarEmbedded() ) {
+				boolean embedded = !isFullScreen && titlePane != null && titlePane.isMenuBarEmbedded();
+				if( embedded ) {
 					titlePane.validate();
 					menuBar.setBounds( titlePane.getMenuBarBounds() );
 				} else {
@@ -313,6 +314,9 @@ public class FlatRootPaneUI
 					menuBar.setBounds( 0, nextY, width, prefSize.height );
 					nextY += prefSize.height;
 				}
+
+				// mark menubar as embedded, which is used when painting menubar background
+				menuBar.putClientProperty( "flatlaf.internal.menuBarEmbedded", embedded ? true : null );
 			}
 
 			Container contentPane = rootPane.getContentPane();

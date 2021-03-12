@@ -16,18 +16,21 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.LookAndFeel;
 import javax.swing.MenuElement;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuBarUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -56,6 +59,13 @@ public class FlatMenuBarUI
 	 */
 
 	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		LookAndFeel.installProperty( menuBar, "opaque", false );
+	}
+
+	@Override
 	protected void installKeyboardActions() {
 		super.installKeyboardActions();
 
@@ -65,6 +75,19 @@ public class FlatMenuBarUI
 			SwingUtilities.replaceUIActionMap( menuBar, map );
 		}
 		map.put( "takeFocus", new TakeFocus() );
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		// do not fill background if menubar is embedded into title pane
+		if( c.isOpaque() ||
+			!FlatClientProperties.clientPropertyBoolean( menuBar, "flatlaf.internal.menuBarEmbedded", false ) )
+		{
+			g.setColor( c.getBackground() );
+			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+		}
+
+		paint( g, c );
 	}
 
 	//---- class TakeFocus ----------------------------------------------------

@@ -128,10 +128,45 @@ public class FlatWindowDecorationsTest
 		menuBar.setVisible( menuBarVisibleCheckBox.isSelected() );
 	}
 
+	private void colorizeMenuBar() {
+		boolean colorize = colorizeMenuBarCheckBox.isSelected();
+		Color menuBarBackground = colorize ? new Color( 0xffccff ) : UIManager.getColor( "MenuBar.background" );
+
+		menuBar.setOpaque( colorize );
+		menuBar.setBackground( menuBarBackground );
+	}
+
+	private void colorizeMenus() {
+		boolean colorize = colorizeMenusCheckBox.isSelected();
+		Color menuBackground = colorize ? new Color( 0xaaffff ) : UIManager.getColor( "Menu.background" );
+
+		for( Component c : menuBar.getComponents() ) {
+			if( c instanceof JMenu ) {
+				((JMenu)c).setOpaque( colorize );
+				c.setBackground( menuBackground );
+			}
+		}
+	}
+
 	private void addMenu() {
 		JMenu menu = new JMenu( "Hello" );
 		menu.add( new JMenuItem( "world" ) );
+
+		if( colorizeMenusCheckBox.isSelected() ) {
+			menu.setOpaque( true );
+			menu.setBackground( new Color( 0xaaffff ) );
+		}
+
 		menuBar.add( menu );
+		menuBar.revalidate();
+	}
+
+	private void addGlue() {
+		for( Component c : menuBar.getComponents() ) {
+			if( c instanceof Box.Filler )
+				return;
+		}
+		menuBar.add( Box.createGlue() );
 		menuBar.revalidate();
 	}
 
@@ -264,10 +299,13 @@ public class FlatWindowDecorationsTest
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBarCheckBox = new JCheckBox();
 		addMenuButton = new JButton();
+		JButton addGlueButton = new JButton();
 		removeMenuButton = new JButton();
 		changeMenuButton = new JButton();
 		menuBarEmbeddedCheckBox = new JCheckBox();
 		menuBarVisibleCheckBox = new JCheckBox();
+		colorizeMenuBarCheckBox = new JCheckBox();
+		colorizeMenusCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
 		undecoratedCheckBox = new JCheckBox();
@@ -325,9 +363,9 @@ public class FlatWindowDecorationsTest
 			// rows
 			"para[]0" +
 			"[]0" +
+			"[]unrel" +
 			"[]0" +
-			"[]0" +
-			"[]" +
+			"[]unrel" +
 			"[]" +
 			"[top]" +
 			"[]"));
@@ -342,6 +380,11 @@ public class FlatWindowDecorationsTest
 		addMenuButton.setText("Add menu");
 		addMenuButton.addActionListener(e -> addMenu());
 		add(addMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+
+		//---- addGlueButton ----
+		addGlueButton.setText("Add glue");
+		addGlueButton.addActionListener(e -> addGlue());
+		add(addGlueButton, "cell 1 0 1 2,align left top,grow 0 0");
 
 		//---- removeMenuButton ----
 		removeMenuButton.setText("Remove menu");
@@ -364,6 +407,16 @@ public class FlatWindowDecorationsTest
 		menuBarVisibleCheckBox.setSelected(true);
 		menuBarVisibleCheckBox.addActionListener(e -> menuBarVisibleChanged());
 		add(menuBarVisibleCheckBox, "cell 0 2");
+
+		//---- colorizeMenuBarCheckBox ----
+		colorizeMenuBarCheckBox.setText("colorize menu bar");
+		colorizeMenuBarCheckBox.addActionListener(e -> colorizeMenuBar());
+		add(colorizeMenuBarCheckBox, "cell 1 2");
+
+		//---- colorizeMenusCheckBox ----
+		colorizeMenusCheckBox.setText("colorize menus");
+		colorizeMenusCheckBox.addActionListener(e -> colorizeMenus());
+		add(colorizeMenusCheckBox, "cell 1 2");
 
 		//---- resizableCheckBox ----
 		resizableCheckBox.setText("resizable");
@@ -688,6 +741,8 @@ public class FlatWindowDecorationsTest
 	private JButton changeMenuButton;
 	private JCheckBox menuBarEmbeddedCheckBox;
 	private JCheckBox menuBarVisibleCheckBox;
+	private JCheckBox colorizeMenuBarCheckBox;
+	private JCheckBox colorizeMenusCheckBox;
 	private JCheckBox resizableCheckBox;
 	private JCheckBox maximizedBoundsCheckBox;
 	private JCheckBox undecoratedCheckBox;
