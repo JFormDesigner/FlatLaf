@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 FormDev Software GmbH
+ * Copyright 2021 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,35 +14,24 @@
  * limitations under the License.
  */
 
-plugins {
-	java
-}
+package com.formdev.flatlaf.util;
 
-if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
-	sourceSets {
-		create( "java9" ) {
-			java {
-				setSrcDirs( listOf( "src/main/java9" ) )
-			}
-		}
+import com.formdev.flatlaf.FlatLaf;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+class LoggingFacadeImpl
+	implements LoggingFacade
+{
+	private static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
+
+	@Override
+	public void logSevere( String message, Throwable t ) {
+		LOG.log( Level.SEVERE, message, t );
 	}
 
-	dependencies {
-		add( "java9Compile", sourceSets.main.get().output )
-	}
-
-	tasks {
-		named<JavaCompile>( "compileJava9Java" ) {
-			sourceCompatibility = "9"
-			targetCompatibility = "9"
-		}
-
-		jar {
-			manifest.attributes( "Multi-Release" to "true" )
-
-			into( "META-INF/versions/9" ) {
-				from( sourceSets["java9"].output )
-			}
-		}
+	@Override
+	public void logConfig( String message, Throwable t ) {
+		LOG.log( Level.CONFIG, message, t );
 	}
 }

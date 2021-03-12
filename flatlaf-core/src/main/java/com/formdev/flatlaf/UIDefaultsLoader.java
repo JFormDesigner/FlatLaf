@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.function.Function;
-import java.util.logging.Level;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UIDefaults.ActiveValue;
@@ -48,6 +47,7 @@ import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -243,16 +243,20 @@ class UIDefaultsLoader
 				try {
 					defaults.put( key, parseValue( key, value, null, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
-					logParseError( Level.SEVERE, key, value, ex );
+					logParseError( key, value, ex, true );
 				}
 			}
 		} catch( IOException ex ) {
-			FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to load properties files.", ex );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load properties files.", ex );
 		}
 	}
 
-	static void logParseError( Level level, String key, String value, RuntimeException ex ) {
-		FlatLaf.LOG.log( level, "FlatLaf: Failed to parse: '" + key + '=' + value + '\'', ex );
+	static void logParseError( String key, String value, RuntimeException ex, boolean severe ) {
+		String message = "FlatLaf: Failed to parse: '" + key + '=' + value + '\'';
+		if( severe )
+			LoggingFacade.INSTANCE.logSevere( message, ex );
+		else
+			LoggingFacade.INSTANCE.logConfig( message, ex );
 	}
 
 	static String resolveValue( String value, Function<String, String> propertiesGetter ) {
@@ -440,7 +444,7 @@ class UIDefaultsLoader
 			try {
 				return findClass( value, addonClassLoaders ).newInstance();
 			} catch( InstantiationException | IllegalAccessException | ClassNotFoundException ex ) {
-				FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to instantiate '" + value + "'.", ex );
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to instantiate '" + value + "'.", ex );
 				return null;
 			}
 		};
@@ -451,7 +455,7 @@ class UIDefaultsLoader
 			try {
 				return findClass( value, addonClassLoaders );
 			} catch( ClassNotFoundException ex ) {
-				FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to find class '" + value + "'.", ex );
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to find class '" + value + "'.", ex );
 				return null;
 			}
 		};
@@ -928,7 +932,7 @@ class UIDefaultsLoader
 
 		Object value = UIManager.get( uiKey );
 		if( value == null && !optional )
-			FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: '" + uiKey + "' not found in UI defaults." );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: '" + uiKey + "' not found in UI defaults.", null );
 		return value;
 	}
 }

@@ -19,7 +19,6 @@
  */
 module com.formdev.flatlaf.intellijthemes {
 	requires java.desktop;
-	requires java.logging;
 	requires com.formdev.flatlaf;
 
 	exports com.formdev.flatlaf.intellijthemes;
