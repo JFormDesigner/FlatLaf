@@ -72,6 +72,25 @@ public interface FlatSystemProperties
 	String USE_WINDOW_DECORATIONS = "flatlaf.useWindowDecorations";
 
 	/**
+	 * Specifies whether FlatLaf native window decorations should be used
+	 * when creating {@code JFrame} or {@code JDialog}.
+	 * Requires that {@code flatlaf-natives-jna.jar} is on classpath/modulepath.
+	 * <p>
+	 * Setting this to {@code true} forces using FlatLaf native window decorations
+	 * even if they are not enabled by the application.
+	 * <p>
+	 * Setting this to {@code false} disables using FlatLaf native window decorations.
+	 * <p>
+	 * (requires Window 10)
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> none
+	 *
+	 * @since 1.1
+	 */
+	String USE_NATIVE_WINDOW_DECORATIONS = "flatlaf.useNativeWindowDecorations";
+
+	/**
 	 * Specifies whether JetBrains Runtime custom window decorations should be used
 	 * when creating {@code JFrame} or {@code JDialog}.
 	 * Requires that the application runs in a
@@ -81,10 +100,12 @@ public interface FlatSystemProperties
 	 * Setting this to {@code true} forces using JetBrains Runtime custom window decorations
 	 * even if they are not enabled by the application.
 	 * <p>
+	 * Setting this to {@code false} disables using JetBrains Runtime custom window decorations.
+	 * <p>
 	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
-	 * <strong>Default</strong> {@code true}
+	 * <strong>Default</strong> none
 	 */
 	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
 

@@ -44,6 +44,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
@@ -57,8 +58,8 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
+import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
-import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
@@ -144,27 +145,39 @@ public abstract class FlatLaf
 	 * This depends on the operating system and on the used Java runtime.
 	 * <p>
 	 * To use custom window decorations in your application, enable them with
-	 * following code (before creating any frames or dialogs). Then custom window
-	 * decorations are only enabled if this method returns {@code true}.
+	 * following code (before creating any frames or dialogs).
 	 * <pre>
 	 * JFrame.setDefaultLookAndFeelDecorated( true );
 	 * JDialog.setDefaultLookAndFeelDecorated( true );
 	 * </pre>
 	 * <p>
-	 * Returns {@code true} on Windows 10, {@code false} otherwise.
+	 * Then custom window decorations are only enabled if this method returns {@code true}.
+	 * In this case, when creating a {@link JFrame} or {@link JDialog}, the frame/dialog will be made
+	 * undecorated ({@link JFrame#setUndecorated(boolean)} / {@link JDialog#setUndecorated(boolean)}),
+	 * the window decoration style of the {@link JRootPane} will
+	 * {@link JRootPane#FRAME} / {@link JRootPane#PLAIN_DIALOG}
+	 * (see {@link JRootPane#setWindowDecorationStyle(int)}) and the look and feel
+	 * is responsible for the whole frame/dialog border (including window resizing).
 	 * <p>
-	 * Return also {@code false} if running on Windows 10 in
+	 * This method returns {@code true} on Windows 10 (see exception below), {@code false} otherwise.
+	 * <p>
+	 * Returns also {@code false} on Windows 10 if:
+	 * <ul>
+	 * <li>FlatLaf native window border support is available (requires {@code flatlaf-natives-jna.jar})</li>
+	 * <li>running in
 	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
 	 * (<a href="https://github.com/JetBrains/JetBrainsRuntime">source code on github</a>)
-	 * and JBR supports custom window decorations. In this case, JBR custom decorations
-	 * are enabled if {@link JFrame#isDefaultLookAndFeelDecorated()} or
+	 * and JBR supports custom window decorations
+	 * </li>
+	 * </ul>
+	 * In this case, custom decorations are enabled by the root pane
+	 * if {@link JFrame#isDefaultLookAndFeelDecorated()} or
 	 * {@link JDialog#isDefaultLookAndFeelDecorated()} return {@code true}.
 	 */
 	@Override
 	public boolean getSupportsWindowDecorations() {
-		if( SystemInfo.isJetBrainsJVM_11_orLater &&
-			SystemInfo.isWindows_10_orLater &&
-			JBRCustomDecorations.isSupported() )
+		if( SystemInfo.isWindows_10_orLater &&
+			FlatNativeWindowBorder.isSupported() )
 		  return false;
 
 		return SystemInfo.isWindows_10_orLater;

@@ -70,16 +70,13 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatRootPaneUI
 	extends BasicRootPaneUI
 {
-	// check this field before using class JBRCustomDecorations to avoid unnecessary loading of that class
-	static final boolean canUseJBRCustomDecorations
-		= SystemInfo.isJetBrainsJVM_11_orLater && SystemInfo.isWindows_10_orLater;
-
 	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
 	protected JRootPane rootPane;
 	protected FlatTitlePane titlePane;
 	protected FlatWindowResizer windowResizer;
 
+	private Object nativeWindowBorderData;
 	private LayoutManager oldLayout;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -97,8 +94,7 @@ public class FlatRootPaneUI
 		else
 			installBorder();
 
-		if( canUseJBRCustomDecorations )
-			JBRCustomDecorations.install( rootPane );
+		nativeWindowBorderData = FlatNativeWindowBorder.install( rootPane );
 	}
 
 	protected void installBorder() {
@@ -112,6 +108,8 @@ public class FlatRootPaneUI
 	@Override
 	public void uninstallUI( JComponent c ) {
 		super.uninstallUI( c );
+
+		FlatNativeWindowBorder.uninstall( rootPane, nativeWindowBorderData );
 
 		uninstallClientDecorations();
 		rootPane = null;
@@ -139,10 +137,10 @@ public class FlatRootPaneUI
 	}
 
 	protected void installClientDecorations() {
-		boolean isJBRSupported = canUseJBRCustomDecorations && JBRCustomDecorations.isSupported();
+		boolean isNativeWindowBorderSupported = FlatNativeWindowBorder.isSupported();
 
 		// install border
-		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE && !isJBRSupported )
+		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE && !isNativeWindowBorderSupported )
 			LookAndFeel.installBorder( rootPane, "RootPane.border" );
 		else
 			LookAndFeel.uninstallBorder( rootPane );
@@ -155,7 +153,7 @@ public class FlatRootPaneUI
 		rootPane.setLayout( createRootLayout() );
 
 		// install window resizer
-		if( !isJBRSupported )
+		if( !isNativeWindowBorderSupported )
 			windowResizer = createWindowResizer();
 	}
 
