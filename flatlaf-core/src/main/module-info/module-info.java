@@ -19,7 +19,6 @@
  */
 module com.formdev.flatlaf {
 	requires java.desktop;
-	requires static java.logging;
 
 	exports com.formdev.flatlaf;
 	exports com.formdev.flatlaf.icons;
