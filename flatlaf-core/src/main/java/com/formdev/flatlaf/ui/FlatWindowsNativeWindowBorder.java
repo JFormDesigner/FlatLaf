@@ -29,15 +29,13 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
-import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.NativeLibrary;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -96,7 +94,7 @@ class FlatWindowsNativeWindowBorder
 				try {
 					System.loadLibrary( "jawt" );
 				} catch( Exception ex ) {
-					Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+					LoggingFacade.INSTANCE.logSevere( null, ex );
 				}
 			}
 

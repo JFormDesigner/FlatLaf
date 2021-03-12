@@ -24,9 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import com.formdev.flatlaf.FlatLaf;
 
 /**
  * Helper class to load native library (.dll, .so or .dylib) stored in Jar.
@@ -126,7 +123,7 @@ public class NativeLibrary
 	}
 
 	private static void log( String msg, Throwable thrown ) {
-		Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, msg, thrown );
+		LoggingFacade.INSTANCE.logSevere( msg, thrown );
 	}
 
 	private static Path createTempFile( String libraryName ) throws IOException {
