@@ -27,19 +27,19 @@ repositories {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( project( ":flatlaf-natives-jna" ) )
 	implementation( project( ":flatlaf-extras" ) )
 	implementation( project( ":flatlaf-intellij-themes" ) )
 	implementation( "com.miglayout:miglayout-swing:5.3-SNAPSHOT" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
+//	implementation( project( ":flatlaf-natives-jna" ) )
 }
 
 tasks {
 	jar {
 		dependsOn( ":flatlaf-core:jar" )
-		dependsOn( ":flatlaf-natives-jna:jar" )
 		dependsOn( ":flatlaf-extras:jar" )
 		dependsOn( ":flatlaf-intellij-themes:jar" )
+//		dependsOn( ":flatlaf-natives-jna:jar" )
 
 		manifest {
 			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )

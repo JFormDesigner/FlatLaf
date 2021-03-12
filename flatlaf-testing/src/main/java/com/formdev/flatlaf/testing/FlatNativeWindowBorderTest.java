@@ -50,9 +50,6 @@ public class FlatNativeWindowBorderTest
 			FlatLightLaf.install();
 			FlatInspector.install( "ctrl shift alt X" );
 
-			JFrame.setDefaultLookAndFeelDecorated( true );
-			JDialog.setDefaultLookAndFeelDecorated( true );
-
 			mainFrame = showFrame();
 		} );
 	}

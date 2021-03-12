@@ -207,20 +207,20 @@ public class FlatWindowsNativeWindowBorder
 
 		String subKey = "SOFTWARE\\Microsoft\\Windows\\DWM";
 
-		int value = RegGetDword( HKEY_CURRENT_USER, subKey, "ColorPrevalence" );
+		int value = registryGetIntValue( subKey, "ColorPrevalence", -1 );
 		colorizationColorAffectsBorders = (value > 0);
 
-		value = RegGetDword( HKEY_CURRENT_USER, subKey, "ColorizationColor" );
+		value = registryGetIntValue( subKey, "ColorizationColor", -1 );
 		colorizationColor = (value != -1) ? new Color( value ) : null;
 
-		colorizationColorBalance = RegGetDword( HKEY_CURRENT_USER, subKey, "ColorizationColorBalance" );
+		colorizationColorBalance = registryGetIntValue( subKey, "ColorizationColorBalance", -1 );
 	}
 
-	private static int RegGetDword( HKEY hkey, String lpSubKey, String lpValue ) {
+	private static int registryGetIntValue( String key, String valueName, int defaultValue ) {
 		try {
-			return Advapi32Util.registryGetIntValue( hkey, lpSubKey, lpValue );
+			return Advapi32Util.registryGetIntValue( HKEY_CURRENT_USER, key, valueName );
 		} catch( RuntimeException ex ) {
-			return -1;
+			return defaultValue;
 		}
 	}
 

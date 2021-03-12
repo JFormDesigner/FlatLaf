@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Method;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -70,7 +69,7 @@ public class FlatNativeWindowBorder
 		// It could be also be a window that is currently hidden, but may be shown later.
 		Window window = SwingUtilities.windowForComponent( rootPane );
 		if( window != null && window.isDisplayable() ) {
-			install( window, FlatSystemProperties.USE_NATIVE_WINDOW_DECORATIONS );
+			install( window, FlatSystemProperties.USE_WINDOW_DECORATIONS );
 			return null;
 		}
 
@@ -80,7 +79,7 @@ public class FlatNativeWindowBorder
 		PropertyChangeListener ancestorListener = e -> {
 			Object newValue = e.getNewValue();
 			if( newValue instanceof Window )
-				install( (Window) newValue, FlatSystemProperties.USE_NATIVE_WINDOW_DECORATIONS );
+				install( (Window) newValue, FlatSystemProperties.USE_WINDOW_DECORATIONS );
 			else if( newValue == null && e.getOldValue() instanceof Window )
 				uninstall( (Window) e.getOldValue() );
 		};
@@ -102,7 +101,8 @@ public class FlatNativeWindowBorder
 			// do not enable native window border if JFrame should use system window decorations
 			// and if not forced to use FlatLaf/JBR native window decorations
 			if( !JFrame.isDefaultLookAndFeelDecorated() &&
-				!FlatSystemProperties.getBoolean( systemPropertyKey, false ))
+				!UIManager.getBoolean( "TitlePane.useWindowDecorations" ) &&
+				!FlatSystemProperties.getBoolean( systemPropertyKey, false ) )
 			  return;
 
 			// do not enable native window border if frame is undecorated
@@ -121,7 +121,8 @@ public class FlatNativeWindowBorder
 			// do not enable native window border if JDialog should use system window decorations
 			// and if not forced to use FlatLaf/JBR native window decorations
 			if( !JDialog.isDefaultLookAndFeelDecorated() &&
-				!FlatSystemProperties.getBoolean( systemPropertyKey, false ))
+				!UIManager.getBoolean( "TitlePane.useWindowDecorations" ) &&
+				!FlatSystemProperties.getBoolean( systemPropertyKey, false ) )
 			  return;
 
 			// do not enable native window border if dialog is undecorated
@@ -224,13 +225,17 @@ public class FlatNativeWindowBorder
 		if( !SystemInfo.isWindows_10_orLater || !SystemInfo.isX86_64 )
 			return;
 
-		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_NATIVE_WINDOW_DECORATIONS, true ) )
+		// check whether disabled via system property
+		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_WINDOW_DECORATIONS, true ) )
 			return;
 
 		try {
+/*
 			Class<?> cls = Class.forName( "com.formdev.flatlaf.natives.jna.windows.FlatWindowsNativeWindowBorder" );
 			Method m = cls.getMethod( "getInstance" );
 			nativeProvider = (Provider) m.invoke( null );
+*/
+			nativeProvider = FlatWindowsNativeWindowBorder.getInstance();
 
 			supported = (nativeProvider != null);
 		} catch( Exception ex ) {

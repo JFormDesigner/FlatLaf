@@ -16,9 +16,6 @@
 
 package com.formdev.flatlaf;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-
 /**
  * Defines/documents own system properties used in FlatLaf.
  *
@@ -58,37 +55,20 @@ public interface FlatSystemProperties
 	String USE_UBUNTU_FONT = "flatlaf.useUbuntuFont";
 
 	/**
-	 * Specifies whether custom look and feel window decorations should be used
-	 * when creating {@code JFrame} or {@code JDialog}.
-	 * <p>
-	 * If this system property is set, FlatLaf invokes {@link JFrame#setDefaultLookAndFeelDecorated(boolean)}
-	 * and {@link JDialog#setDefaultLookAndFeelDecorated(boolean)} on LaF initialization.
-	 * <p>
-	 * (requires Window 10)
-	 * <p>
-	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
-	 * <strong>Default</strong> none
-	 */
-	String USE_WINDOW_DECORATIONS = "flatlaf.useWindowDecorations";
-
-	/**
 	 * Specifies whether FlatLaf native window decorations should be used
 	 * when creating {@code JFrame} or {@code JDialog}.
-	 * Requires that {@code flatlaf-natives-jna.jar} is on classpath/modulepath.
 	 * <p>
 	 * Setting this to {@code true} forces using FlatLaf native window decorations
 	 * even if they are not enabled by the application.
 	 * <p>
 	 * Setting this to {@code false} disables using FlatLaf native window decorations.
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Window 10 64-bit)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none
-	 *
-	 * @since 1.1
 	 */
-	String USE_NATIVE_WINDOW_DECORATIONS = "flatlaf.useNativeWindowDecorations";
+	String USE_WINDOW_DECORATIONS = "flatlaf.useWindowDecorations";
 
 	/**
 	 * Specifies whether JetBrains Runtime custom window decorations should be used

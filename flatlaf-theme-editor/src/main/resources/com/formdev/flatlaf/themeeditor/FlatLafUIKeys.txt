@@ -853,6 +853,7 @@ TitlePane.menuBarEmbedded
 TitlePane.menuBarMargins
 TitlePane.restoreIcon
 TitlePane.titleMargins
+TitlePane.useWindowDecorations
 TitledBorder.border
 TitledBorder.font
 TitledBorder.titleColor
