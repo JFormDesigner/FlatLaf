@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 FormDev Software GmbH
+ * Copyright 2021 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,5 @@ public interface LoggingFacade
 	LoggingFacade INSTANCE = new LoggingFacadeImpl();
 
 	void logSevere( String message, Throwable t );
-
 	void logConfig( String message, Throwable t );
 }

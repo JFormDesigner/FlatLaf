@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 FormDev Software GmbH
+ * Copyright 2021 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,17 @@ import com.formdev.flatlaf.FlatLaf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoggingFacadeImpl implements LoggingFacade
+class LoggingFacadeImpl
+	implements LoggingFacade
 {
 	private static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
 
+	@Override
 	public void logSevere( String message, Throwable t ) {
 		LOG.log( Level.SEVERE, message, t );
 	}
 
+	@Override
 	public void logConfig( String message, Throwable t ) {
 		LOG.log( Level.CONFIG, message, t );
 	}

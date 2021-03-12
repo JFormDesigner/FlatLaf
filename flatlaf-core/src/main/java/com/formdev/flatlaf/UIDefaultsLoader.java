@@ -253,11 +253,10 @@ class UIDefaultsLoader
 
 	static void logParseError( String key, String value, RuntimeException ex, boolean severe ) {
 		String message = "FlatLaf: Failed to parse: '" + key + '=' + value + '\'';
-		if (severe) {
+		if( severe )
 			LoggingFacade.INSTANCE.logSevere( message, ex );
-		} else {
+		else
 			LoggingFacade.INSTANCE.logConfig( message, ex );
-		}
 	}
 
 	static String resolveValue( String value, Function<String, String> propertiesGetter ) {
