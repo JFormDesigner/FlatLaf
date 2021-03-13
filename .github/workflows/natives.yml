@@ -10,11 +10,13 @@ on:
             - '[0-9]*'
         paths:
             - 'flatlaf-natives/flatlaf-natives-windows/**'
+            - '.github/workflows/natives.yml'
     pull_request:
         branches:
             - '*'
         paths:
             - 'flatlaf-natives/flatlaf-natives-windows/**'
+            - '.github/workflows/natives.yml'
 
 jobs:
     Windows:
