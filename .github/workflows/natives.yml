@@ -9,14 +9,12 @@ on:
         tags:
             - '[0-9]*'
         paths:
-            - '**.cpp'
-            - '**.h'
+            - 'flatlaf-natives/flatlaf-natives-windows/**'
     pull_request:
         branches:
             - '*'
         paths:
-            - '**.cpp'
-            - '**.h'
+            - 'flatlaf-natives/flatlaf-natives-windows/**'
 
 jobs:
     Windows:
