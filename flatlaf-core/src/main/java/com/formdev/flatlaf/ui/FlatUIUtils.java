@@ -119,6 +119,11 @@ public class FlatUIUtils
 		return (color != null) ? color : UIManager.getColor( defaultKey );
 	}
 
+	public static boolean getUIBoolean( String key, boolean defaultValue ) {
+		Object value = UIManager.get( key );
+		return (value instanceof Boolean) ? (Boolean) value : defaultValue;
+	}
+
 	public static int getUIInt( String key, int defaultValue ) {
 		Object value = UIManager.get( key );
 		return (value instanceof Integer) ? (Integer) value : defaultValue;

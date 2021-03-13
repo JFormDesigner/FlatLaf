@@ -83,6 +83,9 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.titleMargins						Insets
  * @uiDefault TitlePane.menuBarEmbedded						boolean
  * @uiDefault TitlePane.buttonMaximizedHeight				int
+ * @uiDefault TitlePane.centerTitle							boolean
+ * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
+ * @uiDefault TitlePane.menuBarTitleGap						int
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -102,6 +105,9 @@ public class FlatTitlePane
 
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
+	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
+	protected final boolean centerTitleIfMenuBarEmbedded = FlatUIUtils.getUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", true );
+	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 20 );
 
 	protected final JRootPane rootPane;
 
@@ -146,9 +152,15 @@ public class FlatTitlePane
 	protected void addSubComponents() {
 		leftPanel = new JPanel();
 		iconLabel = new JLabel();
-		titleLabel = new JLabel();
+		titleLabel = new JLabel() {
+			@Override
+			public void updateUI() {
+				setUI( new FlatTitleLabelUI() );
+			}
+		};
 		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
+		titleLabel.setHorizontalAlignment( SwingConstants.CENTER );
 
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
@@ -260,8 +272,6 @@ public class FlatTitlePane
 		maximizeButton.setForeground( foreground );
 		restoreButton.setForeground( foreground );
 		closeButton.setForeground( foreground );
-
-		titleLabel.setHorizontalAlignment( hasEmbeddedMenuBar ? SwingConstants.CENTER : SwingConstants.LEADING );
 
 		// this is necessary because hover/pressed colors are derived from background color
 		iconifyButton.setBackground( background );
@@ -472,6 +482,7 @@ public class FlatTitlePane
 
 	protected void menuBarLayouted() {
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
+		revalidate();
 	}
 
 /*debug
@@ -795,6 +806,41 @@ debug*/
 		protected Border getMenuBarBorder() {
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			return hasVisibleEmbeddedMenuBar( menuBar ) ? menuBar.getBorder() : null;
+		}
+	}
+
+	//---- class FlatTitleLabelUI ---------------------------------------------
+
+	protected class FlatTitleLabelUI
+		extends FlatLabelUI
+	{
+		@Override
+		protected void paintEnabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
+			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() );
+			int labelWidth = l.getWidth();
+			int textWidth = labelWidth - (textX * 2);
+			int gap = UIScale.scale( menuBarTitleGap );
+
+			// The passed in textX coordinate is always to horizontally center the text within the label bounds.
+			// Modify textX so that the text is painted either centered within the window bounds or leading aligned.
+			boolean center = hasEmbeddedMenuBar ? centerTitleIfMenuBarEmbedded : centerTitle;
+			if( center ) {
+				// If window is wide enough, center title within window bounds.
+				// Otherwise leave it centered within free space (label bounds).
+				int centeredTextX = ((l.getParent().getWidth() - textWidth) / 2) - l.getX();
+				if( centeredTextX >= gap && centeredTextX + textWidth <= labelWidth - gap )
+					textX = centeredTextX;
+			} else {
+				// leading aligned
+				boolean leftToRight = getComponentOrientation().isLeftToRight();
+				Insets insets = l.getInsets();
+				int leadingInset = hasEmbeddedMenuBar ? gap : (leftToRight ? insets.left : insets.right);
+				int leadingTextX = leftToRight ? leadingInset : labelWidth - leadingInset - textWidth;
+				if( leftToRight ? leadingTextX < textX : leadingTextX > textX )
+					textX = leadingTextX;
+			}
+
+			super.paintEnabledText( l, g, s, textX, textY );
 		}
 	}
 

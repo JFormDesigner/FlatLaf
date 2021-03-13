@@ -9,8 +9,10 @@ FlatLaf Change Log
   and embedded menu bar with all JREs, while still having native Windows 10
   border drop shadows, resize behavior, window snapping and system window menu.
   (PR #267)
-- Support right aligned components in `JFrame` title bar with embedded menu bar
-  (using `Box.createHorizontalGlue()`). (PR #268)
+- Custom window decorations: Support right aligned components in `JFrame` title
+  bar with embedded menu bar (using `Box.createHorizontalGlue()`). (PR #268)
+- Custom window decorations: Improved centering of window title with embedded
+  menu bar. (issue #252)
 
 #### Fixed bugs
 

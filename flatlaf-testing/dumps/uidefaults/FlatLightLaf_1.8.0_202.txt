@@ -1131,6 +1131,8 @@ TitlePane.buttonHoverBackground #e6e6e6    com.formdev.flatlaf.util.DerivedColor
 TitlePane.buttonMaximizedHeight 22
 TitlePane.buttonPressedBackground #cccccc    com.formdev.flatlaf.util.DerivedColor [UI]    darken(20% autoInverse)
 TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI]
+TitlePane.centerTitle          false
+TitlePane.centerTitleIfMenuBarEmbedded true
 TitlePane.closeHoverBackground #e81123    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closeHoverForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closeIcon            [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowCloseIcon [UI]
@@ -1145,6 +1147,7 @@ TitlePane.inactiveBackground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.inactiveForeground   #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.maximizeIcon         [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowMaximizeIcon [UI]
 TitlePane.menuBarEmbedded      true
+TitlePane.menuBarTitleGap      20
 TitlePane.restoreIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowRestoreIcon [UI]
 TitlePane.titleMargins         3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.useWindowDecorations true

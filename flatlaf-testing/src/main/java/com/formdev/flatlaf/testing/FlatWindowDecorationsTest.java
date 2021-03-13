@@ -189,6 +189,14 @@ public class FlatWindowDecorationsTest
 		menuBar.getMenu( menuCount - 1 ).setText( text );
 	}
 
+	private void changeTitle() {
+		Window window = SwingUtilities.windowForComponent( this );
+		if( window instanceof Frame )
+			((Frame)window).setTitle( ((Frame)window).getTitle() + " bla" );
+		else if( window instanceof Dialog )
+			((Dialog)window).setTitle( ((Dialog)window).getTitle() + " bla" );
+	}
+
 	private void resizableChanged() {
 		Window window = SwingUtilities.windowForComponent( this );
 		if( window instanceof Frame )
@@ -308,6 +316,8 @@ public class FlatWindowDecorationsTest
 		colorizeMenusCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
+		JPanel hSpacer1 = new JPanel(null);
+		JButton changeTitleButton = new JButton();
 		undecoratedCheckBox = new JCheckBox();
 		fullScreenCheckBox = new JCheckBox();
 		JLabel label1 = new JLabel();
@@ -428,6 +438,12 @@ public class FlatWindowDecorationsTest
 		maximizedBoundsCheckBox.setText("maximized bounds (50,100, 1000,700)");
 		maximizedBoundsCheckBox.addActionListener(e -> maximizedBoundsChanged());
 		add(maximizedBoundsCheckBox, "cell 1 3");
+		add(hSpacer1, "cell 1 3,growx");
+
+		//---- changeTitleButton ----
+		changeTitleButton.setText("Change title");
+		changeTitleButton.addActionListener(e -> changeTitle());
+		add(changeTitleButton, "cell 1 3");
 
 		//---- undecoratedCheckBox ----
 		undecoratedCheckBox.setText("undecorated");
