@@ -32,6 +32,8 @@ import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
+import com.formdev.flatlaf.extras.components.FlatButton;
+import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
@@ -706,6 +708,15 @@ class DemoFrame
 		buttonGroup1.add(radioButtonMenuItem2);
 		buttonGroup1.add(radioButtonMenuItem3);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+		// add "Users" button to menubar
+		FlatButton usersButton = new FlatButton();
+		usersButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/users.svg" ) );
+		usersButton.setButtonType( ButtonType.toolBarButton );
+		usersButton.setFocusable( false );
+		usersButton.addActionListener( e -> JOptionPane.showMessageDialog( null, "Hello User! How are you?", "User", JOptionPane.INFORMATION_MESSAGE ) );
+		menuBar1.add( Box.createGlue() );
+		menuBar1.add( usersButton );
 
 		undoMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/undo.svg" ) );
 		redoMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/redo.svg" ) );
