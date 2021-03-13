@@ -221,8 +221,8 @@ public class FlatNativeWindowBorder
 			return;
 		supported = false;
 
-		// requires Windows 10 on x86_64
-		if( !SystemInfo.isWindows_10_orLater || !SystemInfo.isX86_64 )
+		// requires Windows 10
+		if( !SystemInfo.isWindows_10_orLater )
 			return;
 
 		// check whether disabled via system property

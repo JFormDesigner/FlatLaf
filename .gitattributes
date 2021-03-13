@@ -19,6 +19,7 @@
 *.dylib binary
 *.gif binary
 *.jar binary
+*.lib binary
 *.png binary
 *.sketch binary
 *.so binary

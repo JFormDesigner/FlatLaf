@@ -144,7 +144,7 @@ public abstract class FlatLaf
 	 * <p>
 	 * Returns also {@code false} on Windows 10 if:
 	 * <ul>
-	 * <li>FlatLaf native window border support is available (requires Windows 10 64-bit)</li>
+	 * <li>FlatLaf native window border support is available (requires Windows 10)</li>
 	 * <li>running in
 	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
 	 * (<a href="https://github.com/JetBrains/JetBrainsRuntime">source code on github</a>)

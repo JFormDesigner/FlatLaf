@@ -79,8 +79,8 @@ class FlatWindowsNativeWindowBorder
 	private static FlatWindowsNativeWindowBorder instance;
 
 	static FlatNativeWindowBorder.Provider getInstance() {
-		// requires Windows 10 on x86_64
-		if( !SystemInfo.isWindows_10_orLater || !SystemInfo.isX86_64 )
+		// requires Windows 10
+		if( !SystemInfo.isWindows_10_orLater )
 			return null;
 
 		// load native library
@@ -98,8 +98,11 @@ class FlatWindowsNativeWindowBorder
 				}
 			}
 
-			nativeLibrary = new NativeLibrary(
-				"com/formdev/flatlaf/natives/flatlaf-windows-x86_64",
+			String libraryName = "com/formdev/flatlaf/natives/flatlaf-windows-x86";
+			if( SystemInfo.isX86_64 )
+				libraryName += "_64";
+
+			nativeLibrary = new NativeLibrary( libraryName,
 				FlatWindowsNativeWindowBorder.class.getClassLoader(), true );
 		}
 
@@ -135,8 +138,8 @@ class FlatWindowsNativeWindowBorder
 	}
 
 	private void install( Window window ) {
-		// requires Windows 10 on x86_64
-		if( !SystemInfo.isWindows_10_orLater || !SystemInfo.isX86_64 )
+		// requires Windows 10
+		if( !SystemInfo.isWindows_10_orLater )
 			return;
 
 		// only JFrame and JDialog are supported

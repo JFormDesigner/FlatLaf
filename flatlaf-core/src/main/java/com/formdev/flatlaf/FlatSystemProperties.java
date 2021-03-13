@@ -63,7 +63,7 @@ public interface FlatSystemProperties
 	 * <p>
 	 * Setting this to {@code false} disables using FlatLaf native window decorations.
 	 * <p>
-	 * (requires Window 10 64-bit)
+	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none

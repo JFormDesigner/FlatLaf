@@ -127,8 +127,8 @@ public class FlatWindowsNativeWindowBorder
 	}
 
 	private void install( Window window ) {
-		// requires Windows 10 on x86_64
-		if( !SystemInfo.isWindows_10_orLater || !SystemInfo.isX86_64 )
+		// requires Windows 10
+		if( !SystemInfo.isWindows_10_orLater )
 			return;
 
 		// only JFrame and JDialog are supported
@@ -321,7 +321,10 @@ public class FlatWindowsNativeWindowBorder
 			hwnd = new HWND( Native.getComponentPointer( window ) );
 
 			// replace window procedure
-			defaultWndProc = User32Ex.INSTANCE.SetWindowLongPtr( hwnd, GWLP_WNDPROC, this );
+			if( SystemInfo.isX86_64 )
+				defaultWndProc = User32Ex.INSTANCE.SetWindowLongPtr( hwnd, GWLP_WNDPROC, this );
+			else
+				defaultWndProc = User32Ex.INSTANCE.SetWindowLong( hwnd, GWLP_WNDPROC, this );
 
 			// remove the OS window title bar
 			updateFrame();
@@ -329,7 +332,10 @@ public class FlatWindowsNativeWindowBorder
 
 		void uninstall() {
 			// restore original window procedure
-			User32Ex.INSTANCE.SetWindowLongPtr( hwnd, GWLP_WNDPROC, defaultWndProc );
+			if( SystemInfo.isX86_64 )
+				User32Ex.INSTANCE.SetWindowLongPtr( hwnd, GWLP_WNDPROC, defaultWndProc );
+			else
+				User32Ex.INSTANCE.SetWindowLong( hwnd, GWLP_WNDPROC, defaultWndProc );
 
 			// show the OS window title bar
 			updateFrame();
@@ -382,7 +388,10 @@ public class FlatWindowsNativeWindowBorder
 			LRESULT lResult = User32Ex.INSTANCE.CallWindowProc( defaultWndProc, hwnd, uMsg, wParam, lParam );
 
 			// restore original window procedure
-			User32Ex.INSTANCE.SetWindowLongPtr( hwnd, GWLP_WNDPROC, defaultWndProc );
+			if( SystemInfo.isX86_64 )
+				User32Ex.INSTANCE.SetWindowLongPtr( hwnd, GWLP_WNDPROC, defaultWndProc );
+			else
+				User32Ex.INSTANCE.SetWindowLong( hwnd, GWLP_WNDPROC, defaultWndProc );
 
 			// cleanup
 			windowsMap.remove( window );
@@ -640,6 +649,8 @@ public class FlatWindowsNativeWindowBorder
 
 		LONG_PTR SetWindowLongPtr( HWND hWnd, int nIndex, WindowProc wndProc );
 		LONG_PTR SetWindowLongPtr( HWND hWnd, int nIndex, LONG_PTR wndProc );
+		LONG_PTR SetWindowLong( HWND hWnd, int nIndex, WindowProc wndProc );
+		LONG_PTR SetWindowLong( HWND hWnd, int nIndex, LONG_PTR wndProc );
 		LRESULT CallWindowProc( LONG_PTR lpPrevWndFunc, HWND hWnd, int uMsg, WPARAM wParam, LPARAM lParam );
 
 		int GetDpiForWindow( HWND hwnd );

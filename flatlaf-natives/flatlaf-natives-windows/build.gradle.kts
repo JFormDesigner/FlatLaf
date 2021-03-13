@@ -20,17 +20,15 @@ plugins {
 }
 
 library {
-	targetMachines.set( listOf( machines.windows.x86_64 ) )
+	targetMachines.set( listOf( machines.windows.x86, machines.windows.x86_64 ) )
 
 	variants.configureEach {
-		// depend on :flatlaf-core:compileJava because this task generates the JNI headers
-		tasks.named( "compileCpp" ) {
-			dependsOn( ":flatlaf-core:compileJava" )
-		}
-
 		sharedLibrary {
 			compileTasks.configureEach {
 				onlyIf { isBuildable }
+
+				// depend on :flatlaf-core:compileJava because it generates the JNI headers
+				dependsOn( ":flatlaf-core:compileJava" )
 
 				doFirst {
 					println( "Used Tool Chain:" )
@@ -67,11 +65,12 @@ library {
 				onlyIf { isBuildable }
 
 				val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
-				val libraryName = "flatlaf-windows-x86_64.dll"
+				val is64Bit = targetMachine.architecture.is64Bit
+				val libraryName = if( is64Bit ) "flatlaf-windows-x86_64.dll" else "flatlaf-windows-x86.dll"
+				val jawt = if( is64Bit ) "lib/jawt-x86_64" else "lib/jawt-x86"
 
 				outputs.file( "$nativesDir/$libraryName" )
 
-				val jawt = "${org.gradle.internal.jvm.Jvm.current().javaHome}/lib/jawt"
 				linkerArgs.addAll( toolChain.map {
 					when( it ) {
 						is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lshell32", "-lAdvAPI32", "-lKernel32" )
@@ -90,8 +89,10 @@ library {
 				}
 			}
 
-			tasks.named( "jar" ) {
-				onlyIf { false }
+			for( taskName in listOf( "jarX86", "jarX86-64" ) ) {
+				tasks.named( taskName ) {
+					onlyIf { false }
+				}
 			}
 		}
 	}
