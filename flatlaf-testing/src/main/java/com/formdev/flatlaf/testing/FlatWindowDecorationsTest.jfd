@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -8,8 +8,8 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[left]para[left]"
-			"$rowConstraints": "para[]0[]0[]0[]0[][][top][]"
+			"$columnConstraints": "[left]para[left][fill]"
+			"$rowConstraints": "para[]0[]0[]unrel[]0[]unrel[][top][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
@@ -23,35 +23,68 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "addMenuButton"
-				"text": "Add menu"
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "unifiedBackgroundCheckBox"
+				"text": "unified background"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addMenu", false ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "unifiedBackgroundChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0 1 2,align left top,grow 0 0"
+				"value": "cell 1 0"
 			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "removeMenuButton"
-				"text": "Remove menu"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "removeMenu", false ) )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill]"
+				"$rowConstraints": "[][][][]unrel[]"
+			} ) {
+				name: "panel3"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "addMenuButton"
+					"text": "Add menu"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addMenu", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "addGlueButton"
+					"text": "Add glue"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addGlue", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 1"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "removeMenuButton"
+					"text": "Remove menu"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "removeMenu", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 2"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "changeMenuButton"
+					"text": "Change menu"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeMenu", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "changeTitleButton"
+					"text": "Change title"
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeTitle", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 4"
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0 1 2,align left top,grow 0 0"
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "changeMenuButton"
-				"text": "Change menu"
-				auxiliary() {
-					"JavaCodeGenerator.variableLocal": false
-				}
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeMenu", false ) )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 0 1 2,align left top,grow 0 0"
+				"value": "cell 2 0 1 6,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "menuBarEmbeddedCheckBox"
@@ -65,6 +98,16 @@ new FormModel {
 				"value": "cell 0 1"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "colorizeMenuBarCheckBox"
+				"text": "colorize menu bar"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorizeMenuBar", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "menuBarVisibleCheckBox"
 				"text": "menu bar visible"
 				"selected": true
@@ -74,6 +117,16 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuBarVisibleChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 2"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "colorizeMenusCheckBox"
+				"text": "colorize menus"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorizeMenus", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "resizableCheckBox"
@@ -289,7 +342,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 550, 440 )
+			"size": new java.awt.Dimension( 690, 440 )
 		} )
 		add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 			name: "menuBar"

@@ -16,17 +16,22 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JRootPane;
+import javax.swing.LookAndFeel;
 import javax.swing.MenuElement;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -40,12 +45,15 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuBar.background						Color
  * @uiDefault MenuBar.foreground						Color
  * @uiDefault MenuBar.border							Border
+ * @uiDefault TitlePane.unifiedBackground				boolean
  *
  * @author Karl Tauber
  */
 public class FlatMenuBarUI
 	extends BasicMenuBarUI
 {
+	protected boolean unifiedBackground;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuBarUI();
 	}
@@ -54,6 +62,15 @@ public class FlatMenuBarUI
 	 * WARNING: This class is not used on macOS if screen menu bar is enabled.
 	 *          Do not add any functionality here.
 	 */
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		LookAndFeel.installProperty( menuBar, "opaque", false );
+
+		unifiedBackground = UIManager.getBoolean( "TitlePane.unifiedBackground" );
+	}
 
 	@Override
 	protected void installKeyboardActions() {
@@ -65,6 +82,35 @@ public class FlatMenuBarUI
 			SwingUtilities.replaceUIActionMap( menuBar, map );
 		}
 		map.put( "takeFocus", new TakeFocus() );
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		// do not fill background if menubar is embedded into title pane
+		if( isFillBackground( c ) ) {
+			g.setColor( c.getBackground() );
+			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+		}
+
+		paint( g, c );
+	}
+
+	protected boolean isFillBackground( JComponent c ) {
+		// paint background in opaque or having custom background color
+		if( c.isOpaque() || !(c.getBackground() instanceof UIResource) )
+			return true;
+
+		// do not paint background for unified title pane
+		if( unifiedBackground )
+			return false;
+
+		// paint background in full screen mode
+		JRootPane rootPane = SwingUtilities.getRootPane( c );
+		if( rootPane == null || FlatUIUtils.isFullScreen( rootPane ) )
+			return true;
+
+		// do not paint background if menu bar is embedded into title pane
+		return rootPane.getJMenuBar() != c || !FlatRootPaneUI.isMenuBarEmbedded( rootPane );
 	}
 
 	//---- class TakeFocus ----------------------------------------------------

@@ -32,6 +32,8 @@ import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
+import com.formdev.flatlaf.extras.components.FlatButton;
+import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
@@ -166,6 +168,11 @@ class DemoFrame
 //		UIManager.put( "TitlePane.menuBarEmbedded", menuBarEmbeddedCheckBoxMenuItem.isSelected() );
 //		revalidate();
 //		repaint();
+	}
+
+	private void unifiedTitleBar() {
+		UIManager.put( "TitlePane.unifiedBackground", unifiedTitleBarMenuItem.isSelected() );
+		FlatLaf.updateUI();
 	}
 
 	private void underlineMenuSelection() {
@@ -332,6 +339,7 @@ class DemoFrame
 		optionsMenu = new JMenu();
 		windowDecorationsCheckBoxMenuItem = new JCheckBoxMenuItem();
 		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
+		unifiedTitleBarMenuItem = new JCheckBoxMenuItem();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
@@ -593,6 +601,11 @@ class DemoFrame
 				menuBarEmbeddedCheckBoxMenuItem.addActionListener(e -> menuBarEmbeddedChanged());
 				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
 
+				//---- unifiedTitleBarMenuItem ----
+				unifiedTitleBarMenuItem.setText("Unified Title Bar");
+				unifiedTitleBarMenuItem.addActionListener(e -> unifiedTitleBar());
+				optionsMenu.add(unifiedTitleBarMenuItem);
+
 				//---- underlineMenuSelectionMenuItem ----
 				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
 				underlineMenuSelectionMenuItem.addActionListener(e -> underlineMenuSelection());
@@ -707,6 +720,15 @@ class DemoFrame
 		buttonGroup1.add(radioButtonMenuItem3);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
+		// add "Users" button to menubar
+		FlatButton usersButton = new FlatButton();
+		usersButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/users.svg" ) );
+		usersButton.setButtonType( ButtonType.toolBarButton );
+		usersButton.setFocusable( false );
+		usersButton.addActionListener( e -> JOptionPane.showMessageDialog( null, "Hello User! How are you?", "User", JOptionPane.INFORMATION_MESSAGE ) );
+		menuBar1.add( Box.createGlue() );
+		menuBar1.add( usersButton );
+
 		undoMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/undo.svg" ) );
 		redoMenuItem.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/redo.svg" ) );
 
@@ -749,6 +771,7 @@ class DemoFrame
 	private JMenu optionsMenu;
 	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
 	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
+	private JCheckBoxMenuItem unifiedTitleBarMenuItem;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;

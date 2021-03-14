@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -77,12 +78,15 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.inactiveForeground					Color
  * @uiDefault TitlePane.embeddedForeground					Color
  * @uiDefault TitlePane.borderColor							Color	optional
+ * @uiDefault TitlePane.unifiedBackground					boolean
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
- * @uiDefault TitlePane.menuBarMargins						Insets
  * @uiDefault TitlePane.menuBarEmbedded						boolean
  * @uiDefault TitlePane.buttonMaximizedHeight				int
+ * @uiDefault TitlePane.centerTitle							boolean
+ * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
+ * @uiDefault TitlePane.menuBarTitleGap						int
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -100,9 +104,12 @@ public class FlatTitlePane
 	protected final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
 	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
-	protected final Insets menuBarMargins = UIManager.getInsets( "TitlePane.menuBarMargins" );
+	protected final boolean unifiedBackground = UIManager.getBoolean( "TitlePane.unifiedBackground" );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
+	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
+	protected final boolean centerTitleIfMenuBarEmbedded = FlatUIUtils.getUIBoolean( "TitlePane.centerTitleIfMenuBarEmbedded", true );
+	protected final int menuBarTitleGap = FlatUIUtils.getUIInt( "TitlePane.menuBarTitleGap", 20 );
 
 	protected final JRootPane rootPane;
 
@@ -147,9 +154,15 @@ public class FlatTitlePane
 	protected void addSubComponents() {
 		leftPanel = new JPanel();
 		iconLabel = new JLabel();
-		titleLabel = new JLabel();
+		titleLabel = new JLabel() {
+			@Override
+			public void updateUI() {
+				setUI( new FlatTitleLabelUI() );
+			}
+		};
 		iconLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.iconMargins" ) ) );
 		titleLabel.setBorder( new FlatEmptyBorder( UIManager.getInsets( "TitlePane.titleMargins" ) ) );
+		titleLabel.setHorizontalAlignment( SwingConstants.CENTER );
 
 		leftPanel.setLayout( new BoxLayout( leftPanel, BoxLayout.LINE_AXIS ) );
 		leftPanel.setOpaque( false );
@@ -159,9 +172,7 @@ public class FlatTitlePane
 			@Override
 			public Dimension getPreferredSize() {
 				JMenuBar menuBar = rootPane.getJMenuBar();
-				return (menuBar != null && menuBar.isVisible() && isMenuBarEmbedded())
-					? FlatUIUtils.addInsets( menuBar.getPreferredSize(), UIScale.scale( menuBarMargins ) )
-					: new Dimension();
+				return hasVisibleEmbeddedMenuBar( menuBar ) ? menuBar.getPreferredSize() : new Dimension();
 			}
 		};
 		leftPanel.add( menuBarPlaceholder );
@@ -183,6 +194,18 @@ public class FlatTitlePane
 					leftPanel.setSize( newWidth, leftPanel.getHeight() );
 					if( !getComponentOrientation().isLeftToRight() )
 						leftPanel.setLocation( leftPanel.getX() + (oldWidth - newWidth), leftPanel.getY() );
+				}
+
+				// If menu bar is embedded and contains a horizontal glue component,
+				// then move the title label to the same location as the glue component.
+				// This allows placing any component on the trailing side of the title pane.
+				JMenuBar menuBar = rootPane.getJMenuBar();
+				if( hasVisibleEmbeddedMenuBar( menuBar ) ) {
+					Component horizontalGlue = findHorizontalGlue( menuBar );
+					if( horizontalGlue != null ) {
+						Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, titleLabel );
+						titleLabel.setLocation( titleLabel.getX() + glueLocation.x, titleLabel.getY() );
+					}
 				}
 			}
 		} );
@@ -240,7 +263,7 @@ public class FlatTitlePane
 	}
 
 	protected void activeChanged( boolean active ) {
-		boolean hasEmbeddedMenuBar = rootPane.getJMenuBar() != null && rootPane.getJMenuBar().isVisible() && isMenuBarEmbedded();
+		boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() );
 		Color background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
 		Color foreground = FlatUIUtils.nonUIResource( active ? activeForeground : inactiveForeground );
 		Color titleForeground = (hasEmbeddedMenuBar && active) ? FlatUIUtils.nonUIResource( embeddedForeground ) : foreground;
@@ -251,8 +274,6 @@ public class FlatTitlePane
 		maximizeButton.setForeground( foreground );
 		restoreButton.setForeground( foreground );
 		closeButton.setForeground( foreground );
-
-		titleLabel.setHorizontalAlignment( hasEmbeddedMenuBar ? SwingConstants.CENTER : SwingConstants.LEADING );
 
 		// this is necessary because hover/pressed colors are derived from background color
 		iconifyButton.setBackground( background );
@@ -394,6 +415,16 @@ public class FlatTitlePane
 		window.removeComponentListener( handler );
 	}
 
+	/**
+	 * Returns whether this title pane currently has an visible and embedded menubar.
+	 */
+	protected boolean hasVisibleEmbeddedMenuBar( JMenuBar menuBar ) {
+		return menuBar != null && menuBar.isVisible() && isMenuBarEmbedded();
+	}
+
+	/**
+	 * Returns whether the menubar should be embedded into the title pane.
+	 */
 	protected boolean isMenuBarEmbedded() {
 		// not storing value of "TitlePane.menuBarEmbedded" in class to allow changing at runtime
 		return UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) &&
@@ -412,13 +443,30 @@ public class FlatTitlePane
 		Insets borderInsets = getBorder().getBorderInsets( this );
 		bounds.height += borderInsets.bottom;
 
-		return FlatUIUtils.subtractInsets( bounds, UIScale.scale( getMenuBarMargins() ) );
+		// If menu bar is embedded and contains a horizontal glue component,
+		// then make the menu bar wider so that it completely overlaps the title label.
+		// Since the menu bar is not opaque, the title label is still visible.
+		// The title label is moved to the location of the glue component by the layout manager.
+		// This allows placing any component on the trailing side of the title pane.
+		Component horizontalGlue = findHorizontalGlue( rootPane.getJMenuBar() );
+		if( horizontalGlue != null ) {
+			int titleWidth = Math.max( titleLabel.getWidth(), 0 ); // title width may be negative
+			bounds.width += titleWidth;
+			if( !getComponentOrientation().isLeftToRight() )
+				bounds.x -= titleWidth;
+		}
+
+		return bounds;
 	}
 
-	protected Insets getMenuBarMargins() {
-		return getComponentOrientation().isLeftToRight()
-			? menuBarMargins
-			: new Insets( menuBarMargins.top, menuBarMargins.right, menuBarMargins.bottom, menuBarMargins.left );
+	protected Component findHorizontalGlue( JMenuBar menuBar ) {
+		int count = menuBar.getComponentCount();
+		for( int i = count - 1; i >= 0; i-- ) {
+			Component c = menuBar.getComponent( i );
+			if( c instanceof Box.Filler && c.getMaximumSize().width >= Short.MAX_VALUE )
+				return c;
+		}
+		return null;
 	}
 
 	protected void menuBarChanged() {
@@ -436,6 +484,7 @@ public class FlatTitlePane
 
 	protected void menuBarLayouted() {
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
+		revalidate();
 	}
 
 /*debug
@@ -464,8 +513,10 @@ debug*/
 
 	@Override
 	protected void paintComponent( Graphics g ) {
-		g.setColor( getBackground() );
-		g.fillRect( 0, 0, getWidth(), getHeight() );
+		if( !unifiedBackground ) {
+			g.setColor( getBackground() );
+			g.fillRect( 0, 0, getWidth(), getHeight() );
+		}
 	}
 
 	protected void repaintWindowBorder() {
@@ -654,8 +705,37 @@ debug*/
 			else
 				appIconBounds = iconBounds;
 		}
-		addNativeHitTestSpot( buttonPanel, false, hitTestSpots );
-		addNativeHitTestSpot( menuBarPlaceholder, true, hitTestSpots );
+
+		Rectangle r = getNativeHitTestSpot( buttonPanel );
+		if( r != null )
+			hitTestSpots.add( r );
+
+		r = getNativeHitTestSpot( menuBarPlaceholder );
+		if( r != null ) {
+			Component horizontalGlue = findHorizontalGlue( rootPane.getJMenuBar() );
+			if( horizontalGlue != null ) {
+				// If menu bar is embedded and contains a horizontal glue component,
+				// then split the hit test spot into two spots so that
+				// the glue component area can used to move the window.
+
+				Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, window );
+				Rectangle r2;
+				if( getComponentOrientation().isLeftToRight() ) {
+					int trailingWidth = (r.x + r.width - HIT_TEST_SPOT_GROW) - glueLocation.x;
+					r.width -= trailingWidth;
+					r2 = new Rectangle( glueLocation.x + horizontalGlue.getWidth(), r.y, trailingWidth, r.height );
+				} else {
+					int leadingWidth = (glueLocation.x + horizontalGlue.getWidth()) - (r.x + HIT_TEST_SPOT_GROW);
+					r.x += leadingWidth;
+					r.width -= leadingWidth;
+					r2 = new Rectangle( glueLocation.x -leadingWidth, r.y, leadingWidth, r.height );
+				}
+				r2.grow( HIT_TEST_SPOT_GROW, HIT_TEST_SPOT_GROW );
+				hitTestSpots.add( r2 );
+			}
+
+			hitTestSpots.add( r );
+		}
 
 		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots, appIconBounds );
 
@@ -667,19 +747,19 @@ debug*/
 debug*/
 	}
 
-	protected void addNativeHitTestSpot( JComponent c, boolean subtractMenuBarMargins, List<Rectangle> hitTestSpots ) {
+	protected Rectangle getNativeHitTestSpot( JComponent c ) {
 		Dimension size = c.getSize();
 		if( size.width <= 0 || size.height <= 0 )
-			return;
+			return null;
 
 		Point location = SwingUtilities.convertPoint( c, 0, 0, window );
 		Rectangle r = new Rectangle( location, size );
-		if( subtractMenuBarMargins )
-			r = FlatUIUtils.subtractInsets( r, UIScale.scale( getMenuBarMargins() ) );
 		// slightly increase rectangle so that component receives mouseExit events
-		r.grow( 2, 2 );
-		hitTestSpots.add( r );
+		r.grow( HIT_TEST_SPOT_GROW, HIT_TEST_SPOT_GROW );
+		return r;
 	}
+
+	private static final int HIT_TEST_SPOT_GROW = 2;
 
 /*debug
 	private int debugTitleBarHeight;
@@ -687,7 +767,7 @@ debug*/
 	private Rectangle debugAppIconBounds;
 debug*/
 
-	//---- class TitlePaneBorder ----------------------------------------------
+	//---- class FlatTitlePaneBorder ------------------------------------------
 
 	protected class FlatTitlePaneBorder
 		extends AbstractBorder
@@ -729,7 +809,42 @@ debug*/
 
 		protected Border getMenuBarBorder() {
 			JMenuBar menuBar = rootPane.getJMenuBar();
-			return (menuBar != null && menuBar.isVisible() && isMenuBarEmbedded()) ? menuBar.getBorder() : null;
+			return hasVisibleEmbeddedMenuBar( menuBar ) ? menuBar.getBorder() : null;
+		}
+	}
+
+	//---- class FlatTitleLabelUI ---------------------------------------------
+
+	protected class FlatTitleLabelUI
+		extends FlatLabelUI
+	{
+		@Override
+		protected void paintEnabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
+			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() );
+			int labelWidth = l.getWidth();
+			int textWidth = labelWidth - (textX * 2);
+			int gap = UIScale.scale( menuBarTitleGap );
+
+			// The passed in textX coordinate is always to horizontally center the text within the label bounds.
+			// Modify textX so that the text is painted either centered within the window bounds or leading aligned.
+			boolean center = hasEmbeddedMenuBar ? centerTitleIfMenuBarEmbedded : centerTitle;
+			if( center ) {
+				// If window is wide enough, center title within window bounds.
+				// Otherwise leave it centered within free space (label bounds).
+				int centeredTextX = ((l.getParent().getWidth() - textWidth) / 2) - l.getX();
+				if( centeredTextX >= gap && centeredTextX + textWidth <= labelWidth - gap )
+					textX = centeredTextX;
+			} else {
+				// leading aligned
+				boolean leftToRight = getComponentOrientation().isLeftToRight();
+				Insets insets = l.getInsets();
+				int leadingInset = hasEmbeddedMenuBar ? gap : (leftToRight ? insets.left : insets.right);
+				int leadingTextX = leftToRight ? leadingInset : labelWidth - leadingInset - textWidth;
+				if( leftToRight ? leadingTextX < textX : leadingTextX > textX )
+					textX = leadingTextX;
+			}
+
+			super.paintEnabledText( l, g, s, textX, textY );
 		}
 	}
 
