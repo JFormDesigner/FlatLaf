@@ -40,6 +40,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.RootPaneUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRootPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -227,6 +228,13 @@ public class FlatRootPaneUI
 		}
 	}
 
+	protected static boolean isMenuBarEmbedded( JRootPane rootPane ) {
+		RootPaneUI ui = rootPane.getUI();
+		return ui instanceof FlatRootPaneUI &&
+			((FlatRootPaneUI)ui).titlePane != null &&
+			((FlatRootPaneUI)ui).titlePane.isMenuBarEmbedded();
+	}
+
 	//---- class FlatRootLayout -----------------------------------------------
 
 	protected class FlatRootLayout
@@ -297,10 +305,10 @@ public class FlatRootPaneUI
 				rootPane.getGlassPane().setBounds( x, y, width, height );
 
 			int nextY = 0;
-			if( !isFullScreen && titlePane != null ) {
-				Dimension prefSize = titlePane.getPreferredSize();
-				titlePane.setBounds( 0, 0, width, prefSize.height );
-				nextY += prefSize.height;
+			if( titlePane != null ) {
+				int prefHeight = !isFullScreen ? titlePane.getPreferredSize().height : 0;
+				titlePane.setBounds( 0, 0, width, prefHeight );
+				nextY += prefHeight;
 			}
 
 			JMenuBar menuBar = rootPane.getJMenuBar();
@@ -314,9 +322,6 @@ public class FlatRootPaneUI
 					menuBar.setBounds( 0, nextY, width, prefSize.height );
 					nextY += prefSize.height;
 				}
-
-				// mark menubar as embedded, which is used when painting menubar background
-				menuBar.putClientProperty( "flatlaf.internal.menuBarEmbedded", embedded ? true : null );
 			}
 
 			Container contentPane = rootPane.getContentPane();
@@ -346,6 +351,9 @@ public class FlatRootPaneUI
 
 	//---- class FlatWindowBorder ---------------------------------------------
 
+	/**
+	 * Window border used for non-native window decorations.
+	 */
 	public static class FlatWindowBorder
 		extends BorderUIResource.EmptyBorderUIResource
 	{
@@ -360,7 +368,7 @@ public class FlatRootPaneUI
 		@Override
 		public Insets getBorderInsets( Component c, Insets insets ) {
 			if( isWindowMaximized( c ) || FlatUIUtils.isFullScreen( c ) ) {
-				// hide border if window is maximized
+				// hide border if window is maximized or full screen
 				insets.top = insets.left = insets.bottom = insets.right = 0;
 				return insets;
 			} else

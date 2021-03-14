@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Random;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatLaf;
 import net.miginfocom.swing.*;
 
 /**
@@ -107,6 +108,11 @@ public class FlatWindowDecorationsTest
 			else
 				throw new RuntimeException(); // not used
 		}
+	}
+
+	private void unifiedBackgroundChanged() {
+		UIManager.put( "TitlePane.unifiedBackground", unifiedBackgroundCheckBox.isSelected() );
+		FlatLaf.updateUI();
 	}
 
 	private void menuBarChanged() {
@@ -306,18 +312,19 @@ public class FlatWindowDecorationsTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBarCheckBox = new JCheckBox();
+		unifiedBackgroundCheckBox = new JCheckBox();
+		JPanel panel3 = new JPanel();
 		addMenuButton = new JButton();
 		JButton addGlueButton = new JButton();
 		removeMenuButton = new JButton();
 		changeMenuButton = new JButton();
+		JButton changeTitleButton = new JButton();
 		menuBarEmbeddedCheckBox = new JCheckBox();
-		menuBarVisibleCheckBox = new JCheckBox();
 		colorizeMenuBarCheckBox = new JCheckBox();
+		menuBarVisibleCheckBox = new JCheckBox();
 		colorizeMenusCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
-		JPanel hSpacer1 = new JPanel(null);
-		JButton changeTitleButton = new JButton();
 		undecoratedCheckBox = new JCheckBox();
 		fullScreenCheckBox = new JCheckBox();
 		JLabel label1 = new JLabel();
@@ -369,7 +376,8 @@ public class FlatWindowDecorationsTest
 			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[left]para" +
-			"[left]",
+			"[left]" +
+			"[fill]",
 			// rows
 			"para[]0" +
 			"[]0" +
@@ -386,25 +394,50 @@ public class FlatWindowDecorationsTest
 		menuBarCheckBox.addActionListener(e -> menuBarChanged());
 		add(menuBarCheckBox, "cell 0 0");
 
-		//---- addMenuButton ----
-		addMenuButton.setText("Add menu");
-		addMenuButton.addActionListener(e -> addMenu());
-		add(addMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+		//---- unifiedBackgroundCheckBox ----
+		unifiedBackgroundCheckBox.setText("unified background");
+		unifiedBackgroundCheckBox.addActionListener(e -> unifiedBackgroundChanged());
+		add(unifiedBackgroundCheckBox, "cell 1 0");
 
-		//---- addGlueButton ----
-		addGlueButton.setText("Add glue");
-		addGlueButton.addActionListener(e -> addGlue());
-		add(addGlueButton, "cell 1 0 1 2,align left top,grow 0 0");
+		//======== panel3 ========
+		{
+			panel3.setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]unrel" +
+				"[]"));
 
-		//---- removeMenuButton ----
-		removeMenuButton.setText("Remove menu");
-		removeMenuButton.addActionListener(e -> removeMenu());
-		add(removeMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+			//---- addMenuButton ----
+			addMenuButton.setText("Add menu");
+			addMenuButton.addActionListener(e -> addMenu());
+			panel3.add(addMenuButton, "cell 0 0");
 
-		//---- changeMenuButton ----
-		changeMenuButton.setText("Change menu");
-		changeMenuButton.addActionListener(e -> changeMenu());
-		add(changeMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+			//---- addGlueButton ----
+			addGlueButton.setText("Add glue");
+			addGlueButton.addActionListener(e -> addGlue());
+			panel3.add(addGlueButton, "cell 0 1");
+
+			//---- removeMenuButton ----
+			removeMenuButton.setText("Remove menu");
+			removeMenuButton.addActionListener(e -> removeMenu());
+			panel3.add(removeMenuButton, "cell 0 2");
+
+			//---- changeMenuButton ----
+			changeMenuButton.setText("Change menu");
+			changeMenuButton.addActionListener(e -> changeMenu());
+			panel3.add(changeMenuButton, "cell 0 3");
+
+			//---- changeTitleButton ----
+			changeTitleButton.setText("Change title");
+			changeTitleButton.addActionListener(e -> changeTitle());
+			panel3.add(changeTitleButton, "cell 0 4");
+		}
+		add(panel3, "cell 2 0 1 6,aligny top,growy 0");
 
 		//---- menuBarEmbeddedCheckBox ----
 		menuBarEmbeddedCheckBox.setText("embedded menu bar");
@@ -412,16 +445,16 @@ public class FlatWindowDecorationsTest
 		menuBarEmbeddedCheckBox.addActionListener(e -> menuBarEmbeddedChanged());
 		add(menuBarEmbeddedCheckBox, "cell 0 1");
 
+		//---- colorizeMenuBarCheckBox ----
+		colorizeMenuBarCheckBox.setText("colorize menu bar");
+		colorizeMenuBarCheckBox.addActionListener(e -> colorizeMenuBar());
+		add(colorizeMenuBarCheckBox, "cell 1 1");
+
 		//---- menuBarVisibleCheckBox ----
 		menuBarVisibleCheckBox.setText("menu bar visible");
 		menuBarVisibleCheckBox.setSelected(true);
 		menuBarVisibleCheckBox.addActionListener(e -> menuBarVisibleChanged());
 		add(menuBarVisibleCheckBox, "cell 0 2");
-
-		//---- colorizeMenuBarCheckBox ----
-		colorizeMenuBarCheckBox.setText("colorize menu bar");
-		colorizeMenuBarCheckBox.addActionListener(e -> colorizeMenuBar());
-		add(colorizeMenuBarCheckBox, "cell 1 2");
 
 		//---- colorizeMenusCheckBox ----
 		colorizeMenusCheckBox.setText("colorize menus");
@@ -438,12 +471,6 @@ public class FlatWindowDecorationsTest
 		maximizedBoundsCheckBox.setText("maximized bounds (50,100, 1000,700)");
 		maximizedBoundsCheckBox.addActionListener(e -> maximizedBoundsChanged());
 		add(maximizedBoundsCheckBox, "cell 1 3");
-		add(hSpacer1, "cell 1 3,growx");
-
-		//---- changeTitleButton ----
-		changeTitleButton.setText("Change title");
-		changeTitleButton.addActionListener(e -> changeTitle());
-		add(changeTitleButton, "cell 1 3");
 
 		//---- undecoratedCheckBox ----
 		undecoratedCheckBox.setText("undecorated");
@@ -752,12 +779,13 @@ public class FlatWindowDecorationsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox menuBarCheckBox;
+	private JCheckBox unifiedBackgroundCheckBox;
 	private JButton addMenuButton;
 	private JButton removeMenuButton;
 	private JButton changeMenuButton;
 	private JCheckBox menuBarEmbeddedCheckBox;
-	private JCheckBox menuBarVisibleCheckBox;
 	private JCheckBox colorizeMenuBarCheckBox;
+	private JCheckBox menuBarVisibleCheckBox;
 	private JCheckBox colorizeMenusCheckBox;
 	private JCheckBox resizableCheckBox;
 	private JCheckBox maximizedBoundsCheckBox;

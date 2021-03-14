@@ -78,6 +78,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.inactiveForeground					Color
  * @uiDefault TitlePane.embeddedForeground					Color
  * @uiDefault TitlePane.borderColor							Color	optional
+ * @uiDefault TitlePane.unifiedBackground					boolean
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
@@ -103,6 +104,7 @@ public class FlatTitlePane
 	protected final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
 	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
+	protected final boolean unifiedBackground = UIManager.getBoolean( "TitlePane.unifiedBackground" );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
@@ -511,8 +513,10 @@ debug*/
 
 	@Override
 	protected void paintComponent( Graphics g ) {
-		g.setColor( getBackground() );
-		g.fillRect( 0, 0, getWidth(), getHeight() );
+		if( !unifiedBackground ) {
+			g.setColor( getBackground() );
+			g.fillRect( 0, 0, getWidth(), getHeight() );
+		}
 	}
 
 	protected void repaintWindowBorder() {

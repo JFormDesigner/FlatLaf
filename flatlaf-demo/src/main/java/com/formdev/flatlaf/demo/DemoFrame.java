@@ -170,6 +170,11 @@ class DemoFrame
 //		repaint();
 	}
 
+	private void unifiedTitleBar() {
+		UIManager.put( "TitlePane.unifiedBackground", unifiedTitleBarMenuItem.isSelected() );
+		FlatLaf.updateUI();
+	}
+
 	private void underlineMenuSelection() {
 		UIManager.put( "MenuItem.selectionType", underlineMenuSelectionMenuItem.isSelected() ? "underline" : null );
 	}
@@ -334,6 +339,7 @@ class DemoFrame
 		optionsMenu = new JMenu();
 		windowDecorationsCheckBoxMenuItem = new JCheckBoxMenuItem();
 		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
+		unifiedTitleBarMenuItem = new JCheckBoxMenuItem();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
@@ -595,6 +601,11 @@ class DemoFrame
 				menuBarEmbeddedCheckBoxMenuItem.addActionListener(e -> menuBarEmbeddedChanged());
 				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
 
+				//---- unifiedTitleBarMenuItem ----
+				unifiedTitleBarMenuItem.setText("Unified Title Bar");
+				unifiedTitleBarMenuItem.addActionListener(e -> unifiedTitleBar());
+				optionsMenu.add(unifiedTitleBarMenuItem);
+
 				//---- underlineMenuSelectionMenuItem ----
 				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
 				underlineMenuSelectionMenuItem.addActionListener(e -> underlineMenuSelection());
@@ -760,6 +771,7 @@ class DemoFrame
 	private JMenu optionsMenu;
 	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
 	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
+	private JCheckBoxMenuItem unifiedTitleBarMenuItem;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;

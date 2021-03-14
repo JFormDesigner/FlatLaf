@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -359,6 +359,14 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuBarEmbeddedChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "unifiedTitleBarMenuItem"
+						"text": "Unified Title Bar"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "unifiedTitleBar", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "underlineMenuSelectionMenuItem"

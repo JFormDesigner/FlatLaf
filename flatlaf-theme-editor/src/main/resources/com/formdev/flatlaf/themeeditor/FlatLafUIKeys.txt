@@ -855,6 +855,7 @@ TitlePane.menuBarEmbedded
 TitlePane.menuBarTitleGap
 TitlePane.restoreIcon
 TitlePane.titleMargins
+TitlePane.unifiedBackground
 TitlePane.useWindowDecorations
 TitledBorder.border
 TitledBorder.font

@@ -5,14 +5,20 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- Native window decorations for Windows 10 enables dark frame/dialog title bar
-  and embedded menu bar with all JREs, while still having native Windows 10
-  border drop shadows, resize behavior, window snapping and system window menu.
-  (PR #267)
-- Custom window decorations: Support right aligned components in `JFrame` title
-  bar with embedded menu bar (using `Box.createHorizontalGlue()`). (PR #268)
-- Custom window decorations: Improved centering of window title with embedded
-  menu bar. (issue #252)
+- Windows 10 only:
+  - Native window decorations for Windows 10 enables dark frame/dialog title bar
+    and embedded menu bar with all JREs, while still having native Windows 10
+    border drop shadows, resize behavior, window snapping and system window
+    menu. (PR #267)
+  - Custom window decorations: Support right aligned components in `JFrame`
+    title bar with embedded menu bar (using `Box.createHorizontalGlue()`). (PR
+    #268)
+  - Custom window decorations: Improved centering of window title with embedded
+    menu bar. (PR #268; issue #252)
+  - Custom window decorations: Support unified backgrounds for window title bar,
+    menu bar and main content. If enabled with `UIManager.put(
+    "TitlePane.unifiedBackground", true );` then window title bar and menu bar
+    use same background color as main content. (PR #268; issue #254)
 
 #### Fixed bugs
 
