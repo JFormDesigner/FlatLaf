@@ -257,6 +257,10 @@ public class UIScale
 	private static boolean isUserScalingEnabled() {
 		return FlatSystemProperties.getBoolean( FlatSystemProperties.UI_SCALE_ENABLED, true );
 	}
+        
+        private static boolean isDownscalingEnabled() {
+		return FlatSystemProperties.getBoolean( FlatSystemProperties.UI_DOWNSCALE_ENABLED, false );
+	}
 
 	/**
 	 * Applies a custom scale factor given in system property "flatlaf.uiScale"
@@ -323,7 +327,7 @@ public class UIScale
 	 * Sets the user scale factor.
 	 */
 	private static void setUserScaleFactor( float scaleFactor ) {
-		if( scaleFactor <= 1f )
+		if( ( !isDownscalingEnabled() && scaleFactor <= 1f ) || scaleFactor <= 0f )
 			scaleFactor = 1f;
 		else // round scale factor to 1/4
 			scaleFactor = Math.round( scaleFactor * 4f ) / 4f;

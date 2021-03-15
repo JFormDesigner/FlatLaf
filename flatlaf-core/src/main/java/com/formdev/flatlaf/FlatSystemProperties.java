@@ -43,6 +43,14 @@ public interface FlatSystemProperties
 	 * <strong>Default</strong> {@code true}
 	 */
 	String UI_SCALE_ENABLED = "flatlaf.uiScale.enabled";
+        
+        /**
+	 * Specifies whether values smaller than 1.0f are allowed for the custom scale factor.
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code false}
+	 */
+	String UI_DOWNSCALE_ENABLED = "flatlaf.uiDowncale.enabled";
 
 	/**
 	 * Specifies whether Ubuntu font should be used on Ubuntu Linux.
