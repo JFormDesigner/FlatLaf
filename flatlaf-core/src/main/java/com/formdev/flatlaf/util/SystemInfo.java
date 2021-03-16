@@ -54,6 +54,9 @@ public class SystemInfo
 	// UI toolkits
 	public static final boolean isKDE;
 
+	// other
+	public static final boolean isProjector;
+
 	static {
 		// platforms
 		String osName = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
@@ -85,6 +88,9 @@ public class SystemInfo
 
 		// UI toolkits
 		isKDE = (isLinux && System.getenv( "KDE_FULL_SESSION" ) != null);
+
+		// other
+		isProjector = Boolean.getBoolean( "org.jetbrains.projector.server.enable" );
 	}
 
 	public static long scanVersion( String version ) {

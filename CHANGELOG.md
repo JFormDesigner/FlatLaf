@@ -20,6 +20,7 @@ FlatLaf Change Log
     "TitlePane.unifiedBackground", true );` then window title bar and menu bar
     use same background color as main content. (PR #268; issue #254)
 - JIDE Common Layer: Support `JideButton`, `JideLabel` and `JideToggleButton`.
+- Support running in [JetBrains Projector](https://jetbrains.com/projector/).
 
 #### Fixed bugs
 

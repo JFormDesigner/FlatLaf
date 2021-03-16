@@ -157,6 +157,9 @@ public abstract class FlatLaf
 	 */
 	@Override
 	public boolean getSupportsWindowDecorations() {
+		if( SystemInfo.isProjector )
+			return false;
+
 		if( SystemInfo.isWindows_10_orLater &&
 			FlatNativeWindowBorder.isSupported() )
 		  return false;
