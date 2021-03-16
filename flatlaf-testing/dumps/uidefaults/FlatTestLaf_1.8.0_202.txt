@@ -64,6 +64,7 @@ BusyLabelUI                    com.formdev.flatlaf.swingx.ui.FlatBusyLabelUI
 Button.arc                     6
 Button.background              #ccffcc    javax.swing.plaf.ColorUIResource [UI]
 Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
+Button.borderColor             #00ff00    javax.swing.plaf.ColorUIResource [UI]
 Button.borderWidth             1
 Button.darkShadow              #696969    javax.swing.plaf.ColorUIResource [UI]
 Button.default.borderWidth     1
@@ -81,6 +82,7 @@ Button.default.startBorderColor #ff0000    javax.swing.plaf.ColorUIResource [UI]
 Button.defaultButtonFollowsFocus false
 Button.disabledBackground      #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledBorderColor     #000088    javax.swing.plaf.ColorUIResource [UI]
+Button.disabledForeground      #000088    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledText            #000088    javax.swing.plaf.ColorUIResource [UI]
 Button.endBackground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Button.endBorderColor          #ff0000    javax.swing.plaf.ColorUIResource [UI]
@@ -98,6 +100,7 @@ Button.margin                  2,14,2,14    javax.swing.plaf.InsetsUIResource [U
 Button.minimumWidth            72
 Button.pressedBackground       #ffc800    javax.swing.plaf.ColorUIResource [UI]
 Button.rollover                true
+Button.selectedBackground      #ffbbbb    javax.swing.plaf.ColorUIResource [UI]
 Button.shadow                  #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
 Button.startBackground         #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Button.startBorderColor        #0000ff    javax.swing.plaf.ColorUIResource [UI]
@@ -106,6 +109,7 @@ Button.textShiftOffset         0
 Button.toolbar.hoverBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 Button.toolbar.margin          3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 Button.toolbar.pressedBackground #eeeeee    javax.swing.plaf.ColorUIResource [UI]
+Button.toolbar.selectedBackground #dddddd    javax.swing.plaf.ColorUIResource [UI]
 Button.toolbar.spacingInsets   1,2,1,2    javax.swing.plaf.InsetsUIResource [UI]
 ButtonUI                       com.formdev.flatlaf.ui.FlatButtonUI
 
@@ -432,6 +436,24 @@ JXTitledPanel.borderColor      #0000ff    javax.swing.plaf.ColorUIResource [UI]
 JXTitledPanel.captionInsets    4,10,4,10    javax.swing.plaf.InsetsUIResource [UI]
 JXTitledPanel.titleBackground  #ffff00    javax.swing.plaf.ColorUIResource [UI]
 JXTitledPanel.titleForeground  #ff00ff    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- JideButton ----
+
+JideButton.background          #ccffcc    javax.swing.plaf.ColorUIResource [UI]
+JideButton.border              [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+JideButton.borderColor         #00ff00    javax.swing.plaf.ColorUIResource [UI]
+JideButton.darkShadow          #00ff00    javax.swing.plaf.ColorUIResource [UI]
+JideButton.focusedBackground   #ffffff    javax.swing.plaf.ColorUIResource [UI]
+JideButton.foreground          #ff0000    javax.swing.plaf.ColorUIResource [UI]
+JideButton.highlight           #ffbbbb    javax.swing.plaf.ColorUIResource [UI]
+JideButton.light               #00ff00    javax.swing.plaf.ColorUIResource [UI]
+JideButton.margin              3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+JideButton.selectedAndFocusedBackground #eeeeee    javax.swing.plaf.ColorUIResource [UI]
+JideButton.selectedBackground  #dddddd    javax.swing.plaf.ColorUIResource [UI]
+JideButton.shadow              #00ff00    javax.swing.plaf.ColorUIResource [UI]
+JideButton.textIconGap         [active] 4
+JideButtonUI                   com.formdev.flatlaf.jideoss.ui.FlatJideButtonUI
 
 
 #---- JidePopupMenu ----

@@ -66,22 +66,8 @@
 
 #---- JideButton ----
 
-+ JideButton.background          [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.border              0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
-+ JideButton.borderColor         [active] #0078d7    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.darkShadow          [active] #696969    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.focusedBackground   [active] #cfeafe    javax.swing.plaf.ColorUIResource [UI]
 + JideButton.font                Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
-+ JideButton.foreground          [active] #000000    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.highlight           [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.light               [active] #e3e3e3    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.margin              3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
-+ JideButton.selectedAndFocusedBackground [active] #88caff    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.selectedBackground  [active] #acdafe    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.shadow              [active] #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
-+ JideButton.textIconGap         4
 + JideButton.textShiftOffset     0
-+ JideButtonUI                   com.jidesoft.plaf.basic.BasicJideButtonUI
 
 
 #---- JideComboBox ----

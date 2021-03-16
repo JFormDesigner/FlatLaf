@@ -23,7 +23,9 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
 import com.formdev.flatlaf.FlatDefaultsAddon;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.jideoss.ui.FlatJidePainter;
 import com.jidesoft.plaf.LookAndFeelFactory;
+import com.jidesoft.plaf.UIDefaultsLookup;
 import com.jidesoft.plaf.LookAndFeelFactory.UIDefaultsCustomizer;
 import com.jidesoft.plaf.LookAndFeelFactory.UIDefaultsInitializer;
 
@@ -66,6 +68,8 @@ public class FlatJideOssDefaultsAddon
 	 * Because JIDE overwrites our UI defaults (from properties files) with its
 	 * own UI defaults, we have to first remember our UI defaults in the initializer
 	 * (invoked before JIDE overwrites UI defaults) and then restore them in the customizer.
+	 * <p>
+	 * Invoked from {@link LookAndFeelFactory#installJideExtension()}.
 	 */
 	public static class FlatJideUIDefaultsCustomizer
 		implements UIDefaultsInitializer, UIDefaultsCustomizer
@@ -95,6 +99,9 @@ public class FlatJideOssDefaultsAddon
 				defaults.putAll( jideDefaults );
 				jideDefaults = null;
 			}
+
+			// painter
+			UIDefaultsLookup.put( defaults, "Theme.painter", FlatJidePainter.getInstance() );
 
 			// TristateCheckBox
 			defaults.put( "TristateCheckBox.icon", null );
