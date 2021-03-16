@@ -88,8 +88,8 @@ public class FlatJideOssTest
 			: SwingUtilities.HORIZONTAL;
 
 		frame.updateComponentsRecur( this, (c, type) -> {
-			if( c instanceof JideButton )
-				((JideButton)c).setOrientation( orientation );
+			if( c instanceof Alignable )
+				((Alignable)c).setOrientation( orientation );
 		} );
 
 		revalidate();
@@ -108,6 +108,8 @@ public class FlatJideOssTest
 		frame.updateComponentsRecur( this, (c, type) -> {
 			if( c instanceof JideButton )
 				((JideButton)c).setIcon( icon );
+			else if( c instanceof JideLabel )
+				((JideLabel)c).setIcon( icon );
 		} );
 
 		revalidate();
@@ -155,6 +157,12 @@ public class FlatJideOssTest
 		JToolBar toolBar4 = new JToolBar();
 		JideToggleButton jideToggleButton10 = new JideToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
+		JLabel jideLabelLabel = new JLabel();
+		JideLabel jideLabel1 = new JideLabel();
+		JideLabel jideLabel2 = new JideLabel();
+		JLabel styledLabelLabel = new JLabel();
+		StyledLabel styledLabel1 = new StyledLabel();
+		StyledLabel styledLabel2 = new StyledLabel();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -171,6 +179,8 @@ public class FlatJideOssTest
 			"[]para" +
 			"[]" +
 			"[]" +
+			"[]" +
+			"[]para" +
 			"[]" +
 			"[]"));
 
@@ -368,6 +378,32 @@ public class FlatJideOssTest
 			toolBar4.add(toggleButton2);
 		}
 		add(toolBar4, "cell 1 6 3 1");
+
+		//---- jideLabelLabel ----
+		jideLabelLabel.setText("JideLabel:");
+		add(jideLabelLabel, "cell 0 7");
+
+		//---- jideLabel1 ----
+		jideLabel1.setText("enabled");
+		add(jideLabel1, "cell 1 7");
+
+		//---- jideLabel2 ----
+		jideLabel2.setText("disabled");
+		jideLabel2.setEnabled(false);
+		add(jideLabel2, "cell 1 7");
+
+		//---- styledLabelLabel ----
+		styledLabelLabel.setText("StyledLabel:");
+		add(styledLabelLabel, "cell 0 8");
+
+		//---- styledLabel1 ----
+		styledLabel1.setText("enabled");
+		add(styledLabel1, "cell 1 8");
+
+		//---- styledLabel2 ----
+		styledLabel2.setText("disabled");
+		styledLabel2.setEnabled(false);
+		add(styledLabel2, "cell 1 8");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

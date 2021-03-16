@@ -7,6 +7,7 @@ This addon for FlatLaf adds support for **some**
 Following JIDE Common Layer components are currently supported by this addon:
 
 - `JideButton`
+- `JideLabel`
 - `JidePopupMenu`
 - `JideTabbedPane`
 - `JideToggleButton`

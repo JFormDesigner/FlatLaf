@@ -465,6 +465,14 @@ JideButton.textIconGap         [active] 4
 JideButtonUI                   com.formdev.flatlaf.jideoss.ui.FlatJideButtonUI
 
 
+#---- JideLabel ----
+
+JideLabel.background           #f2f2f2    javax.swing.plaf.ColorUIResource [UI]
+JideLabel.disabledForeground   #8c8c8c    javax.swing.plaf.ColorUIResource [UI]
+JideLabel.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
+JideLabelUI                    com.formdev.flatlaf.jideoss.ui.FlatJideLabelUI
+
+
 #---- JidePopupMenu ----
 
 JidePopupMenuUI                com.formdev.flatlaf.jideoss.ui.FlatJidePopupMenuUI

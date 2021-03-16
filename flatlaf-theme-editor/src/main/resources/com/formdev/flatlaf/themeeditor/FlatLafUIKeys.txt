@@ -328,6 +328,10 @@ JideButton.selectedBackground
 JideButton.shadow
 JideButton.textIconGap
 JideButtonUI
+JideLabel.background
+JideLabel.disabledForeground
+JideLabel.foreground
+JideLabelUI
 JidePopupMenuUI
 JideTabbedPane.background
 JideTabbedPane.contentBorderInsets
