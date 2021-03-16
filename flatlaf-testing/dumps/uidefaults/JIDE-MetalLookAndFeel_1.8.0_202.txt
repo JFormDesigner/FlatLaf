@@ -1,0 +1,245 @@
+#---- ButtonPanel ----
+
++ ButtonPanel.buttonGap          5
++ ButtonPanel.groupGap           5
++ ButtonPanel.minButtonWidth     57
++ ButtonPanel.oppositeOrder      H
++ ButtonPanel.order              ACO
+
+
+#---- Cursor ----
+
++ Cursor.delete                  32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.drag                    32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.dragStop                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.dragText                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.dragTextStop            32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.east                    32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.float                   32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.horizontal              32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.hsplit                  32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.moveEast                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.moveWest                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.north                   32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.percentage              32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.south                   32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.tab                     32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.vertical                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.vsplit                  32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.west                    32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
+
+
+#---- FolderChooser ----
+
++ FolderChooserUI                com.jidesoft.plaf.basic.BasicFolderChooserUI
+
+
+#---- FormattedTextField ----
+
+- FormattedTextField.font        [active] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
++ FormattedTextField.font        Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- Gripper ----
+
++ Gripper.foreground             #eeeeee    javax.swing.plaf.ColorUIResource [UI]
++ Gripper.painter                [unknown type] com.jidesoft.plaf.vsnet.VsnetMetalUtils$1 [UI]
++ Gripper.size                   8
++ GripperUI                      com.jidesoft.plaf.vsnet.VsnetGripperUI
+
+
+#---- HeaderBox ----
+
++ HeaderBox.background           #eeeeee    javax.swing.plaf.ColorUIResource [UI]
++ HeaderBoxUI                    com.jidesoft.plaf.basic.BasicHeaderBoxUI
+
+
+#---- Icon ----
+
++ Icon.floating                  false
+
+
+#---- JideButton ----
+
++ JideButton.background          #eeeeee    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.border              0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
++ JideButton.borderColor         #000000    java.awt.Color
++ JideButton.darkShadow          #7a8a99    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.focusedBackground   #f3f7fa    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.font                Dialog bold 12    javax.swing.plaf.FontUIResource [UI]
++ JideButton.foreground          #333333    sun.swing.PrintColorUIResource [UI]
++ JideButton.highlight           #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.light               #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.margin              3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
++ JideButton.selectedAndFocusedBackground #e2ebf4    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.selectedBackground  #eaf1f7    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.shadow              #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.textIconGap         4
++ JideButton.textShiftOffset     0
++ JideButtonUI                   com.jidesoft.plaf.basic.BasicJideButtonUI
+
+
+#---- JideComboBox ----
+
++ JideComboBoxUI                 com.jidesoft.plaf.basic.BasicJideComboBoxUI
+
+
+#---- JideLabel ----
+
++ JideLabel.background           #eeeeee    javax.swing.plaf.ColorUIResource [UI]
++ JideLabel.font                 Dialog bold 12    javax.swing.plaf.FontUIResource [UI]
++ JideLabel.foreground           #333333    sun.swing.PrintColorUIResource [UI]
++ JideLabelUI                    com.jidesoft.plaf.basic.BasicJideLabelUI
+
+
+#---- JidePopupMenu ----
+
++ JidePopupMenuUI                com.jidesoft.plaf.basic.BasicJidePopupMenuUI
+
+
+#---- JidePopup ----
+
++ JidePopupUI                    com.jidesoft.plaf.basic.BasicJidePopupUI
+
+
+#---- JideScrollPane ----
+
++ JideScrollPane.border          1,1,1,1  true    javax.swing.plaf.BorderUIResource [UI]
+
+
+#---- JideSplitButton ----
+
++ JideSplitButton.border         0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
++ JideSplitButton.borderPainted  false
++ JideSplitButton.font           Dialog bold 12    javax.swing.plaf.FontUIResource [UI]
++ JideSplitButton.margin         3,3,3,7    javax.swing.plaf.InsetsUIResource [UI]
++ JideSplitButton.selectionBackground #a3b8cc    javax.swing.plaf.ColorUIResource [UI]
++ JideSplitButton.textIconGap    4
++ JideSplitButtonUI              com.jidesoft.plaf.metal.MetalJideSplitButtonUI
+
+
+#---- JideSplitPane ----
+
++ JideSplitPane.dividerSize      3
+
+
+#---- JideSplitPaneDivider ----
+
++ JideSplitPaneDivider.background #eeeeee    javax.swing.plaf.ColorUIResource [UI]
++ JideSplitPaneDivider.border    0,0,0,0  false    javax.swing.plaf.BorderUIResource [UI]
++ JideSplitPaneDivider.gripperPainter [unknown type] com.jidesoft.plaf.vsnet.VsnetMetalUtils$1 [UI]
+
+
+#---- JideTabbedPane ----
+
++ JideTabbedPane.background      #f4f8fb    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.border          0,0,0,0  false    javax.swing.plaf.BorderUIResource [UI]
++ JideTabbedPane.buttonMargin    5
++ JideTabbedPane.buttonSize      18
++ JideTabbedPane.closeButtonAlignment 11
++ JideTabbedPane.closeButtonLeftMargin 2
++ JideTabbedPane.closeButtonMargin 2
++ JideTabbedPane.closeButtonMarginHorizonal 3
++ JideTabbedPane.closeButtonMarginSize 6
++ JideTabbedPane.closeButtonMarginVertical 3
++ JideTabbedPane.closeButtonRightMargin 2
++ JideTabbedPane.compressedStyleCloseButtonMarginHorizontal 0
++ JideTabbedPane.compressedStyleCloseButtonMarginVertical 0
++ JideTabbedPane.compressedStyleIconMargin 12
++ JideTabbedPane.compressedStyleNoIconRectSize 24
++ JideTabbedPane.contentBorderInsets 2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
++ JideTabbedPane.darkShadow      #333333    sun.swing.PrintColorUIResource [UI]
++ JideTabbedPane.defaultResizeMode 1
++ JideTabbedPane.defaultTabBorderShadowColor #736d63    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.defaultTabColorTheme 3
++ JideTabbedPane.defaultTabShape 2
++ JideTabbedPane.fitStyleBoundSize 8
++ JideTabbedPane.fitStyleFirstTabMargin 4
++ JideTabbedPane.fitStyleIconMinWidth 24
++ JideTabbedPane.fitStyleTextMinWidth 16
++ JideTabbedPane.fixedStyleRectSize 60
++ JideTabbedPane.font            Dialog bold 12    javax.swing.plaf.FontUIResource [UI]
++ JideTabbedPane.foreground      #333333    sun.swing.PrintColorUIResource [UI]
++ JideTabbedPane.gripLeftMargin  4
++ JideTabbedPane.gripperPainter  [unknown type] com.jidesoft.plaf.vsnet.VsnetMetalUtils$1 [UI]
++ JideTabbedPane.highlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.iconMargin      5
++ JideTabbedPane.ignoreContentBorderInsetsIfNoTabs false
++ JideTabbedPane.light           #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.noIconMargin    2
++ JideTabbedPane.selectedTabBackground #eeeeee    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.selectedTabBackgroundDk #ffc73c    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.selectedTabBackgroundLt #e68b2c    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.selectedTabFont Dialog bold 12    javax.swing.plaf.FontUIResource [UI]
++ JideTabbedPane.selectedTabTextForeground #7a8a99    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.shadow          #b8cfe5    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.showCloseButtonOnTab false
++ JideTabbedPane.showIconOnTab   true
++ JideTabbedPane.tabAreaBackground #f4f8fb    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.tabAreaBackgroundDk #eeeeee    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.tabAreaBackgroundLt #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.tabAreaInsets   2,4,0,4    javax.swing.plaf.InsetsUIResource [UI]
++ JideTabbedPane.tabInsets       1,4,1,4    javax.swing.plaf.InsetsUIResource [UI]
++ JideTabbedPane.tabListBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.tabRectPadding  2
++ JideTabbedPane.tabRunOverlay   2
++ JideTabbedPane.textIconGap     4
++ JideTabbedPane.textMarginVertical 4
++ JideTabbedPane.textPadding     6
++ JideTabbedPane.unselectedTabTextForeground #7a8a99    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPaneUI               com.jidesoft.plaf.vsnet.VsnetJideTabbedPaneUI
+
+
+#---- MenuBar ----
+
+- MenuBar.border                 [lazy] 0,0,2,0  false    javax.swing.plaf.metal.MetalBorders$MenuBarBorder [UI]
++ MenuBar.border                 1,0,1,0  false    javax.swing.plaf.BorderUIResource [UI]
+
+
+#---- MeterProgressBar ----
+
++ MeterProgressBar.background    #000000    javax.swing.plaf.ColorUIResource [UI]
++ MeterProgressBar.border        1,1,1,1  true    javax.swing.plaf.BorderUIResource [UI]
++ MeterProgressBar.cellBackground #008000    javax.swing.plaf.ColorUIResource [UI]
++ MeterProgressBar.cellForeground #00ff00    javax.swing.plaf.ColorUIResource [UI]
++ MeterProgressBar.cellLength    2
++ MeterProgressBar.cellSpacing   2
++ MeterProgressBar.foreground    #00ff00    javax.swing.plaf.ColorUIResource [UI]
++ MeterProgressBarUI             com.jidesoft.plaf.basic.MeterProgressBarUI
+
+
+#---- RangeSlider ----
+
++ RangeSliderUI                  com.jidesoft.plaf.metal.MetalRangeSliderUI
+
+
+#---- Resizable ----
+
++ Resizable.resizeBorder         4,4,4,4  true    com.jidesoft.plaf.vsnet.ResizeFrameBorder [UI]
+
+
+#---- Spinner ----
+
+- Spinner.font                   [active] Dialog bold 12    javax.swing.plaf.FontUIResource [UI]
++ Spinner.font                   Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- StyledLabel ----
+
++ StyledLabelUI                  com.jidesoft.plaf.basic.BasicStyledLabelUI
+
+
+#---- Theme ----
+
++ Theme.painter                  [unknown type] java.util.HashMap
+
+
+#---- TristateCheckBox ----
+
++ TristateCheckBox.icon          13,13    com.jidesoft.plaf.metal.MetalIconFactory$CheckBoxIcon [UI]
+
+
+#---- jidesoft ----
+
++ jidesoft.extensionInstalled    true
++ jidesoft.extensionStyle        0

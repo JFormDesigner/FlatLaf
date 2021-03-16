@@ -7,6 +7,8 @@
 - Name   FlatLaf Light
 + Name   FlatLaf IntelliJ
 
+#---- Button ----
+
 - Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 + Button.border                  [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 
@@ -40,14 +42,23 @@
 
 - Button.focusedBackground       #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
+
+#---- CheckBox ----
+
 - CheckBox.icon.focusedBackground #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
 + CheckBox.icon.style            filled
 
 - CheckBox.icon[filled].selectedFocusedCheckmarkColor #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
+
+#---- ComboBox ----
+
 - ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 + ComboBox.border                [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
+
+
+#---- Component ----
 
 - Component.arrowType            chevron
 + Component.arrowType            triangle
@@ -61,32 +72,58 @@
 - Component.innerOutlineWidth    1.0
 + Component.innerOutlineWidth    0
 
+
+#---- FormattedTextField ----
+
 - FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 + FormattedTextField.border      [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+
+
+#---- HelpButton ----
 
 - HelpButton.focusedBackground   #e3f1fa    javax.swing.plaf.ColorUIResource [UI]
 
 - HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
 + HelpButton.icon                [lazy] 26,26    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
 
+
+#---- JXDatePicker ----
+
 - JXDatePicker.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
 + JXDatePicker.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
+
+
+#---- PasswordField ----
 
 - PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 + PasswordField.border           [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 
+
+#---- ScrollPane ----
+
 - ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
 + ScrollPane.border              [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+
+
+#---- Spinner ----
 
 - Spinner.border                 [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 + Spinner.border                 [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 
+
+#---- Table ----
+
 - Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
 + Table.scrollPaneBorder         [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+
+
+#---- TextField ----
 
 - TextField.border               [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 + TextField.border               [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 
+
+#---- ToggleButton ----
+
 - ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
 + ToggleButton.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
-
