@@ -1559,7 +1559,7 @@ public class FlatTabbedPaneUI
 			FlatUIUtils.paintComponentBackground( g, left, top,
 				getWidth() - left - right,
 				getHeight() - top - bottom,
-				0, scale( buttonArc ) );
+				0, scale( (float) buttonArc ) );
 		}
 	}
 
