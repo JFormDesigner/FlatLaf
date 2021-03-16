@@ -473,7 +473,7 @@ public abstract class FlatLaf
 		// use active value for all fonts to allow changing fonts in all components
 		// (similar as in Nimbus L&F) with:
 		//     UIManager.put( "defaultFont", myFont );
-		Object activeFont =  new ActiveFont( 1 );
+		Object activeFont = new ActiveFont( 1 );
 
 		// override fonts
 		for( Object key : defaults.keySet() ) {
@@ -494,6 +494,10 @@ public abstract class FlatLaf
 		// and creates a composite font that is able to display all Unicode characters
 		Font font = StyleContext.getDefaultStyleContext().getFont( family, style, size );
 		return (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
+	}
+
+	public static ActiveValue createActiveFontValue( float scaleFactor ) {
+		return new ActiveFont( scaleFactor );
 	}
 
 	/**

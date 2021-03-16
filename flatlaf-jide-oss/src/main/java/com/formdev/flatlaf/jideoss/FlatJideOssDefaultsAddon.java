@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.ActiveValue;
 import com.formdev.flatlaf.FlatDefaultsAddon;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.jideoss.ui.FlatJidePainter;
@@ -102,6 +103,19 @@ public class FlatJideOssDefaultsAddon
 
 			// painter
 			UIDefaultsLookup.put( defaults, "Theme.painter", FlatJidePainter.getInstance() );
+
+			// fonts
+			ActiveValue font = FlatLaf.createActiveFontValue( 1f );
+			defaults.put( "JideButton.font", font );
+			defaults.put( "JideLabel.font", font );
+			defaults.put( "JideSplitButton.font", font );
+			defaults.put( "JideTabbedPane.font", font );
+			defaults.put( "JideTabbedPane.selectedTabFont", font );
+
+			// reset standard fonts modified by LookAndFeelFactory.installJideExtension()
+			defaults.put( "FormattedTextField.font", font );
+			defaults.put( "Spinner.font", font );
+			defaults.put( "TextArea.font", font );
 
 			// TristateCheckBox
 			defaults.put( "TristateCheckBox.icon", null );
