@@ -19,6 +19,7 @@ package com.formdev.flatlaf.jideoss.ui;
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.ui.FlatPopupMenuUI;
+import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.basic.BasicJidePopupMenuUI;
 
 /**
@@ -28,6 +29,10 @@ public class FlatJidePopupMenuUI
 	extends FlatPopupMenuUI
 {
 	public static ComponentUI createUI( JComponent c ) {
+		// usually JIDE would invoke this in JidePopupMenu.updateUI(),
+		// but it does not because FlatLaf already has added the UI class to the UI defaults
+		LookAndFeelFactory.installJideExtension();
+
 		return new FlatJidePopupMenuUI();
 	}
 

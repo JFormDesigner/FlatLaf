@@ -70,7 +70,10 @@ public class FlatRangeSliderUI
 	private Object[] oldRenderingHints;
 
 	public static ComponentUI createUI( JComponent c ) {
+		// usually JIDE would invoke this in RangeSlider.updateUI(),
+		// but it does not because FlatLaf already has added the UI class to the UI defaults
 		LookAndFeelFactory.installJideExtension();
+
 		return new FlatRangeSliderUI();
 	}
 
