@@ -435,7 +435,8 @@ public class FlatInspector
 
 		String name = c.getClass().getName();
 		name = name.substring( name.lastIndexOf( '.' ) + 1 );
-		appendRow( buf, "Class", name + " (" + c.getClass().getPackage().getName() + ")" );
+		Package pkg = c.getClass().getPackage();
+		appendRow( buf, "Class", name + " (" + (pkg != null ? pkg.getName() : "-") + ")" );
 		appendRow( buf, "Size", c.getWidth() + ", " + c.getHeight() + "&nbsp;&nbsp; @ " + c.getX() + ", " + c.getY() );
 
 		if( c instanceof Container )
