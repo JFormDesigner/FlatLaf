@@ -38,7 +38,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import javax.swing.AbstractAction;
@@ -274,30 +273,28 @@ public class FlatComboBoxUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new BasicComboBoxUI.PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
 
-				Object source = e.getSource();
-				String propertyName = e.getPropertyName();
+			Object source = e.getSource();
+			String propertyName = e.getPropertyName();
 
-				if( editor != null &&
-					((source == comboBox && propertyName == "foreground") ||
-					 (source == editor && propertyName == "enabled")) )
-				{
-					// fix editor component colors
-					updateEditorColors();
-				} else if( editor != null && source == comboBox && propertyName == "componentOrientation" ) {
-					ComponentOrientation o = (ComponentOrientation) e.getNewValue();
-					editor.applyComponentOrientation( o );
-				} else if( editor != null && FlatClientProperties.PLACEHOLDER_TEXT.equals( propertyName ) )
-					editor.repaint();
-				else if( FlatClientProperties.COMPONENT_ROUND_RECT.equals( propertyName ) )
-					comboBox.repaint();
-				else if( FlatClientProperties.MINIMUM_WIDTH.equals( propertyName ) )
-					comboBox.revalidate();
-			}
+			if( editor != null &&
+				((source == comboBox && propertyName == "foreground") ||
+				 (source == editor && propertyName == "enabled")) )
+			{
+				// fix editor component colors
+				updateEditorColors();
+			} else if( editor != null && source == comboBox && propertyName == "componentOrientation" ) {
+				ComponentOrientation o = (ComponentOrientation) e.getNewValue();
+				editor.applyComponentOrientation( o );
+			} else if( editor != null && FlatClientProperties.PLACEHOLDER_TEXT.equals( propertyName ) )
+				editor.repaint();
+			else if( FlatClientProperties.COMPONENT_ROUND_RECT.equals( propertyName ) )
+				comboBox.repaint();
+			else if( FlatClientProperties.MINIMUM_WIDTH.equals( propertyName ) )
+				comboBox.revalidate();
 		};
 	}
 
@@ -648,14 +645,12 @@ public class FlatComboBoxUI
 
 		@Override
 		protected PropertyChangeListener createPropertyChangeListener() {
-			return new BasicComboPopup.PropertyChangeHandler() {
-				@Override
-				public void propertyChange( PropertyChangeEvent e ) {
-					super.propertyChange( e );
+			PropertyChangeListener superListener = super.createPropertyChangeListener();
+			return e -> {
+				superListener.propertyChange( e );
 
-					if( e.getPropertyName() == "renderer" )
-						list.setCellRenderer( new PopupListCellRenderer() );
-				}
+				if( e.getPropertyName() == "renderer" )
+					list.setCellRenderer( new PopupListCellRenderer() );
 			};
 		}
 

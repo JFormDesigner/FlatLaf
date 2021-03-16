@@ -25,7 +25,6 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.CellRendererPane;
 import javax.swing.Icon;
@@ -193,38 +192,36 @@ public class FlatTreeUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new BasicTreeUI.PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
 
-				if( e.getSource() == tree ) {
-					switch( e.getPropertyName() ) {
-						case TREE_WIDE_SELECTION:
-						case TREE_PAINT_SELECTION:
-							tree.repaint();
-							break;
+			if( e.getSource() == tree ) {
+				switch( e.getPropertyName() ) {
+					case TREE_WIDE_SELECTION:
+					case TREE_PAINT_SELECTION:
+						tree.repaint();
+						break;
 
-						case "dropLocation":
-							if( isWideSelection() ) {
-								JTree.DropLocation oldValue = (JTree.DropLocation) e.getOldValue();
-								repaintWideDropLocation( oldValue );
-								repaintWideDropLocation( tree.getDropLocation() );
-							}
-							break;
-					}
+					case "dropLocation":
+						if( isWideSelection() ) {
+							JTree.DropLocation oldValue = (JTree.DropLocation) e.getOldValue();
+							repaintWideDropLocation( oldValue );
+							repaintWideDropLocation( tree.getDropLocation() );
+						}
+						break;
 				}
 			}
-
-			private void repaintWideDropLocation(JTree.DropLocation loc) {
-				if( loc == null || isDropLine( loc ) )
-					return;
-
-				Rectangle r = tree.getPathBounds( loc.getPath() );
-				if( r != null )
-					tree.repaint( 0, r.y, tree.getWidth(), r.height );
-			}
 		};
+	}
+
+	private void repaintWideDropLocation(JTree.DropLocation loc) {
+		if( loc == null || isDropLine( loc ) )
+			return;
+
+		Rectangle r = tree.getPathBounds( loc.getPath() );
+		if( r != null )
+			tree.repaint( 0, r.y, tree.getWidth(), r.height );
 	}
 
 	/**

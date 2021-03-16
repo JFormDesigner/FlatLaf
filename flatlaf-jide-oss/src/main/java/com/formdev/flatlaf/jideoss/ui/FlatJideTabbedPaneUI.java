@@ -32,7 +32,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -111,19 +110,17 @@ public class FlatJideTabbedPaneUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
 
-				String propertyName = e.getPropertyName();
-				if( JideTabbedPane.PROPERTY_SELECTED_INDEX.equals( propertyName ) ) {
-					repaintTab( (Integer) e.getOldValue() );
-					repaintTab( (Integer) e.getNewValue() );
-				} else if( FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER.equals( propertyName ) ) {
-					_tabPane.revalidate();
-					_tabPane.repaint();
-				}
+			String propertyName = e.getPropertyName();
+			if( JideTabbedPane.PROPERTY_SELECTED_INDEX.equals( propertyName ) ) {
+				repaintTab( (Integer) e.getOldValue() );
+				repaintTab( (Integer) e.getNewValue() );
+			} else if( FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER.equals( propertyName ) ) {
+				_tabPane.revalidate();
+				_tabPane.repaint();
 			}
 		};
 	}

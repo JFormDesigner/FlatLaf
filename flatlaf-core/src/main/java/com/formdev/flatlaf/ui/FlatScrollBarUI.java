@@ -23,7 +23,6 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import javax.swing.InputMap;
@@ -168,30 +167,28 @@ public class FlatScrollBarUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new BasicScrollBarUI.PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
 
-				switch( e.getPropertyName() ) {
-					case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
-						scrollbar.revalidate();
-						scrollbar.repaint();
-						break;
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
+					scrollbar.revalidate();
+					scrollbar.repaint();
+					break;
 
-					case "componentOrientation":
-						// this is missing in BasicScrollBarUI.Handler.propertyChange()
-						InputMap inputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap" );
-						if( !scrollbar.getComponentOrientation().isLeftToRight() ) {
-							InputMap rtlInputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap.RightToLeft" );
-							if( rtlInputMap != null ) {
-								rtlInputMap.setParent( inputMap );
-								inputMap = rtlInputMap;
-							}
+				case "componentOrientation":
+					// this is missing in BasicScrollBarUI.Handler.propertyChange()
+					InputMap inputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap" );
+					if( !scrollbar.getComponentOrientation().isLeftToRight() ) {
+						InputMap rtlInputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap.RightToLeft" );
+						if( rtlInputMap != null ) {
+							rtlInputMap.setParent( inputMap );
+							inputMap = rtlInputMap;
 						}
-						SwingUtilities.replaceUIInputMap( scrollbar, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap );
-						break;
-				}
+					}
+					SwingUtilities.replaceUIInputMap( scrollbar, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap );
+					break;
 			}
 		};
 	}

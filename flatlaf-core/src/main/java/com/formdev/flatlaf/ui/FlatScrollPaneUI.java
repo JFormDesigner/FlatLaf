@@ -105,19 +105,17 @@ public class FlatScrollPaneUI
 
 	@Override
 	protected MouseWheelListener createMouseWheelListener() {
-		return new BasicScrollPaneUI.MouseWheelHandler() {
-			@Override
-			public void mouseWheelMoved( MouseWheelEvent e ) {
-				if( isSmoothScrollingEnabled() &&
-					scrollpane.isWheelScrollingEnabled() &&
-					e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
-					e.getPreciseWheelRotation() != 0 &&
-					e.getPreciseWheelRotation() != e.getWheelRotation() )
-				{
-					mouseWheelMovedSmooth( e );
-				} else
-					super.mouseWheelMoved( e );
-			}
+		MouseWheelListener superListener = super.createMouseWheelListener();
+		return e -> {
+			if( isSmoothScrollingEnabled() &&
+				scrollpane.isWheelScrollingEnabled() &&
+				e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
+				e.getPreciseWheelRotation() != 0 &&
+				e.getPreciseWheelRotation() != e.getWheelRotation() )
+			{
+				mouseWheelMovedSmooth( e );
+			} else
+				superListener.mouseWheelMoved( e );
 		};
 	}
 
@@ -239,41 +237,39 @@ public class FlatScrollPaneUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new BasicScrollPaneUI.PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
 
-				switch( e.getPropertyName() ) {
-					case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
-						JScrollBar vsb = scrollpane.getVerticalScrollBar();
-						JScrollBar hsb = scrollpane.getHorizontalScrollBar();
-						if( vsb != null ) {
-							vsb.revalidate();
-							vsb.repaint();
-						}
-						if( hsb != null ) {
-							hsb.revalidate();
-							hsb.repaint();
-						}
-						break;
-
-					case ScrollPaneConstants.LOWER_LEFT_CORNER:
-					case ScrollPaneConstants.LOWER_RIGHT_CORNER:
-					case ScrollPaneConstants.UPPER_LEFT_CORNER:
-					case ScrollPaneConstants.UPPER_RIGHT_CORNER:
-						// remove border from buttons added to corners
-						Object corner = e.getNewValue();
-						if( corner instanceof JButton &&
-							((JButton)corner).getBorder() instanceof FlatButtonBorder &&
-							scrollpane.getViewport() != null &&
-							scrollpane.getViewport().getView() instanceof JTable )
-						{
-							((JButton)corner).setBorder( BorderFactory.createEmptyBorder() );
-							((JButton)corner).setFocusable( false );
-						}
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
+					JScrollBar vsb = scrollpane.getVerticalScrollBar();
+					JScrollBar hsb = scrollpane.getHorizontalScrollBar();
+					if( vsb != null ) {
+						vsb.revalidate();
+						vsb.repaint();
+					}
+					if( hsb != null ) {
+						hsb.revalidate();
+						hsb.repaint();
+					}
 					break;
-				}
+
+				case ScrollPaneConstants.LOWER_LEFT_CORNER:
+				case ScrollPaneConstants.LOWER_RIGHT_CORNER:
+				case ScrollPaneConstants.UPPER_LEFT_CORNER:
+				case ScrollPaneConstants.UPPER_RIGHT_CORNER:
+					// remove border from buttons added to corners
+					Object corner = e.getNewValue();
+					if( corner instanceof JButton &&
+						((JButton)corner).getBorder() instanceof FlatButtonBorder &&
+						scrollpane.getViewport() != null &&
+						scrollpane.getViewport().getView() instanceof JTable )
+					{
+						((JButton)corner).setBorder( BorderFactory.createEmptyBorder() );
+						((JButton)corner).setFocusable( false );
+					}
+				break;
 			}
 		};
 	}
