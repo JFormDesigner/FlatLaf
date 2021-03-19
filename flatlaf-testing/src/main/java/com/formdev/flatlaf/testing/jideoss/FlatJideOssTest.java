@@ -43,6 +43,17 @@ public class FlatJideOssTest
 		initComponents();
 
 		tristateCheckBox1Changed();
+
+		FlatTestFrame.updateComponentsRecur( this, (c, type) -> {
+			if( c instanceof JideSplitButton ) {
+				JideSplitButton splitButton = (JideSplitButton) c;
+				if( splitButton.getMenuComponentCount() == 0 ) {
+					splitButton.add( "Item 1" );
+					splitButton.add( "Item 2" );
+					splitButton.add( "Item 3" );
+				}
+			}
+		} );
 	}
 
 	private void showJidePopup( ActionEvent e ) {
@@ -79,15 +90,11 @@ public class FlatJideOssTest
 	}
 
 	private void verticalChanged() {
-		FlatTestFrame frame = (FlatTestFrame) SwingUtilities.getAncestorOfClass( FlatTestFrame.class, this );
-		if( frame == null )
-			return;
-
 		int orientation = verticalCheckBox.isSelected()
 			? SwingUtilities.VERTICAL
 			: SwingUtilities.HORIZONTAL;
 
-		frame.updateComponentsRecur( this, (c, type) -> {
+		FlatTestFrame.updateComponentsRecur( this, (c, type) -> {
 			if( c instanceof Alignable )
 				((Alignable)c).setOrientation( orientation );
 		} );
@@ -96,23 +103,39 @@ public class FlatJideOssTest
 	}
 
 	private void iconChanged() {
-		FlatTestFrame frame = (FlatTestFrame) SwingUtilities.getAncestorOfClass( FlatTestFrame.class, this );
-		if( frame == null )
-			return;
-
 		Icon icon = iconCheckBox.isSelected()
 			? new ScaledImageIcon( new ImageIcon(getClass().getResource(
 				"/com/formdev/flatlaf/testing/test16.png" ) ) )
 			: null;
 
-		frame.updateComponentsRecur( this, (c, type) -> {
+		FlatTestFrame.updateComponentsRecur( this, (c, type) -> {
 			if( c instanceof JideButton )
 				((JideButton)c).setIcon( icon );
+			else if( c instanceof JideSplitButton )
+				((JideSplitButton)c).setIcon( icon );
 			else if( c instanceof JideLabel )
 				((JideLabel)c).setIcon( icon );
 		} );
 
 		revalidate();
+	}
+
+	private void alwaysDropdownChanged() {
+		boolean alwaysDropdown = alwaysDropdownCheckBox.isSelected();
+
+		FlatTestFrame.updateComponentsRecur( this, (c, type) -> {
+			if( c instanceof JideSplitButton )
+				((JideSplitButton)c).setAlwaysDropdown( alwaysDropdown );
+		} );
+	}
+
+	private void buttonEnabledChanged() {
+		boolean buttonEnabled = buttonEnabledCheckBox.isSelected();
+
+		FlatTestFrame.updateComponentsRecur( this, (c, type) -> {
+			if( c instanceof JideSplitButton )
+				((JideSplitButton)c).setButtonEnabled( buttonEnabled );
+		} );
 	}
 
 	private void initComponents() {
@@ -157,6 +180,24 @@ public class FlatJideOssTest
 		JToolBar toolBar4 = new JToolBar();
 		JideToggleButton jideToggleButton10 = new JideToggleButton();
 		JToggleButton toggleButton2 = new JToggleButton();
+		JLabel jideSplitButtonLabel = new JLabel();
+		JideSplitButton jideSplitButton1 = new JideSplitButton();
+		JideSplitButton jideSplitButton2 = new JideSplitButton();
+		JideSplitButton jideSplitButton3 = new JideSplitButton();
+		alwaysDropdownCheckBox = new JCheckBox();
+		JLabel label3 = new JLabel();
+		JideSplitButton jideSplitButton5 = new JideSplitButton();
+		JideSplitButton jideSplitButton6 = new JideSplitButton();
+		JideSplitButton jideSplitButton7 = new JideSplitButton();
+		buttonEnabledCheckBox = new JCheckBox();
+		JLabel jideToggleSplitButtonLabel2 = new JLabel();
+		JideToggleSplitButton jideToggleSplitButton1 = new JideToggleSplitButton();
+		JideToggleSplitButton jideToggleSplitButton2 = new JideToggleSplitButton();
+		JideToggleSplitButton jideToggleSplitButton3 = new JideToggleSplitButton();
+		JLabel label4 = new JLabel();
+		JideToggleSplitButton jideToggleSplitButton4 = new JideToggleSplitButton();
+		JideToggleSplitButton jideToggleSplitButton5 = new JideToggleSplitButton();
+		JideToggleSplitButton jideToggleSplitButton6 = new JideToggleSplitButton();
 		JLabel jideLabelLabel = new JLabel();
 		JideLabel jideLabel1 = new JideLabel();
 		JideLabel jideLabel2 = new JideLabel();
@@ -174,6 +215,10 @@ public class FlatJideOssTest
 			"[fill]" +
 			"[fill]",
 			// rows
+			"[]" +
+			"[]" +
+			"[]para" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]para" +
@@ -379,31 +424,146 @@ public class FlatJideOssTest
 		}
 		add(toolBar4, "cell 1 6 3 1");
 
+		//---- jideSplitButtonLabel ----
+		jideSplitButtonLabel.setText("JideSplitButton:");
+		add(jideSplitButtonLabel, "cell 0 7");
+
+		//======== jideSplitButton1 ========
+		{
+			jideSplitButton1.setText("TOOLBAR");
+		}
+		add(jideSplitButton1, "cell 1 7 3 1");
+
+		//======== jideSplitButton2 ========
+		{
+			jideSplitButton2.setText("TOOLBOX");
+			jideSplitButton2.setButtonStyle(1);
+		}
+		add(jideSplitButton2, "cell 1 7 3 1");
+
+		//======== jideSplitButton3 ========
+		{
+			jideSplitButton3.setText("FLAT");
+			jideSplitButton3.setButtonStyle(2);
+		}
+		add(jideSplitButton3, "cell 1 7 3 1");
+
+		//---- alwaysDropdownCheckBox ----
+		alwaysDropdownCheckBox.setText("always dropdown");
+		alwaysDropdownCheckBox.addActionListener(e -> alwaysDropdownChanged());
+		add(alwaysDropdownCheckBox, "cell 4 7");
+
+		//---- label3 ----
+		label3.setText("selected");
+		label3.setEnabled(false);
+		add(label3, "cell 0 8,alignx right,growx 0");
+
+		//======== jideSplitButton5 ========
+		{
+			jideSplitButton5.setText("TOOLBAR");
+			jideSplitButton5.setButtonSelected(true);
+		}
+		add(jideSplitButton5, "cell 1 8 3 1");
+
+		//======== jideSplitButton6 ========
+		{
+			jideSplitButton6.setText("TOOLBOX");
+			jideSplitButton6.setButtonStyle(1);
+			jideSplitButton6.setButtonSelected(true);
+		}
+		add(jideSplitButton6, "cell 1 8 3 1");
+
+		//======== jideSplitButton7 ========
+		{
+			jideSplitButton7.setText("FLAT");
+			jideSplitButton7.setButtonStyle(2);
+			jideSplitButton7.setButtonSelected(true);
+		}
+		add(jideSplitButton7, "cell 1 8 3 1");
+
+		//---- buttonEnabledCheckBox ----
+		buttonEnabledCheckBox.setText("button enabled");
+		buttonEnabledCheckBox.setSelected(true);
+		buttonEnabledCheckBox.addActionListener(e -> buttonEnabledChanged());
+		add(buttonEnabledCheckBox, "cell 4 8");
+
+		//---- jideToggleSplitButtonLabel2 ----
+		jideToggleSplitButtonLabel2.setText("JideToggleSplitButton:");
+		add(jideToggleSplitButtonLabel2, "cell 0 9");
+
+		//======== jideToggleSplitButton1 ========
+		{
+			jideToggleSplitButton1.setText("TOOLBAR");
+		}
+		add(jideToggleSplitButton1, "cell 1 9");
+
+		//======== jideToggleSplitButton2 ========
+		{
+			jideToggleSplitButton2.setText("TOOLBOX");
+			jideToggleSplitButton2.setButtonStyle(1);
+		}
+		add(jideToggleSplitButton2, "cell 1 9");
+
+		//======== jideToggleSplitButton3 ========
+		{
+			jideToggleSplitButton3.setText("FLAT");
+			jideToggleSplitButton3.setButtonStyle(2);
+		}
+		add(jideToggleSplitButton3, "cell 1 9");
+
+		//---- label4 ----
+		label4.setText("selected");
+		label4.setEnabled(false);
+		add(label4, "cell 0 10,alignx right,growx 0");
+
+		//======== jideToggleSplitButton4 ========
+		{
+			jideToggleSplitButton4.setText("TOOLBAR");
+			jideToggleSplitButton4.setButtonSelected(true);
+		}
+		add(jideToggleSplitButton4, "cell 1 10");
+
+		//======== jideToggleSplitButton5 ========
+		{
+			jideToggleSplitButton5.setText("TOOLBOX");
+			jideToggleSplitButton5.setButtonStyle(1);
+			jideToggleSplitButton5.setButtonSelected(true);
+		}
+		add(jideToggleSplitButton5, "cell 1 10");
+
+		//======== jideToggleSplitButton6 ========
+		{
+			jideToggleSplitButton6.setText("FLAT");
+			jideToggleSplitButton6.setButtonStyle(2);
+			jideToggleSplitButton6.setButtonSelected(true);
+		}
+		add(jideToggleSplitButton6, "cell 1 10");
+
 		//---- jideLabelLabel ----
 		jideLabelLabel.setText("JideLabel:");
-		add(jideLabelLabel, "cell 0 7");
+		add(jideLabelLabel, "cell 0 11");
 
 		//---- jideLabel1 ----
 		jideLabel1.setText("enabled");
-		add(jideLabel1, "cell 1 7");
+		add(jideLabel1, "cell 1 11");
 
 		//---- jideLabel2 ----
 		jideLabel2.setText("disabled");
 		jideLabel2.setEnabled(false);
-		add(jideLabel2, "cell 1 7");
+		add(jideLabel2, "cell 1 11");
 
 		//---- styledLabelLabel ----
 		styledLabelLabel.setText("StyledLabel:");
-		add(styledLabelLabel, "cell 0 8");
+		add(styledLabelLabel, "cell 0 12");
 
 		//---- styledLabel1 ----
 		styledLabel1.setText("enabled");
-		add(styledLabel1, "cell 1 8");
+		add(styledLabel1, "cell 1 12");
 
 		//---- styledLabel2 ----
 		styledLabel2.setText("disabled");
 		styledLabel2.setEnabled(false);
-		add(styledLabel2, "cell 1 8");
+		add(styledLabel2, "cell 1 12");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -412,5 +572,7 @@ public class FlatJideOssTest
 	private JLabel triStateLabel1;
 	private JCheckBox verticalCheckBox;
 	private JCheckBox iconCheckBox;
+	private JCheckBox alwaysDropdownCheckBox;
+	private JCheckBox buttonEnabledCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

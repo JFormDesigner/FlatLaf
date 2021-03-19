@@ -333,6 +333,13 @@ JideLabel.disabledForeground
 JideLabel.foreground
 JideLabelUI
 JidePopupMenuUI
+JideSplitButton.border
+JideSplitButton.buttonArrowColor
+JideSplitButton.buttonDisabledArrowColor
+JideSplitButton.margin
+JideSplitButton.selectionForeground
+JideSplitButton.textIconGap
+JideSplitButtonUI
 JideTabbedPane.background
 JideTabbedPane.contentBorderInsets
 JideTabbedPane.foreground

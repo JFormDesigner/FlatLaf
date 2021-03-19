@@ -55,7 +55,7 @@
 
 #---- Icon ----
 
-+ Icon.floating                  true
++ Icon.floating                  false
 
 
 #---- JideButton ----
@@ -86,13 +86,8 @@
 
 #---- JideSplitButton ----
 
-+ JideSplitButton.border         0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
 + JideSplitButton.borderPainted  false
 + JideSplitButton.font           [active] $defaultFont [UI]
-+ JideSplitButton.margin         3,3,3,7    javax.swing.plaf.InsetsUIResource [UI]
-+ JideSplitButton.selectionForeground [active] #000000    javax.swing.plaf.ColorUIResource [UI]
-+ JideSplitButton.textIconGap    4
-+ JideSplitButtonUI              com.jidesoft.plaf.basic.BasicJideSplitButtonUI
 
 
 #---- JideSplitPane ----

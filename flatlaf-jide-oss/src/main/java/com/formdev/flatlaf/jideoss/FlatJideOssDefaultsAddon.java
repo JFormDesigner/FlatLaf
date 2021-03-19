@@ -104,6 +104,9 @@ public class FlatJideOssDefaultsAddon
 			// painter
 			UIDefaultsLookup.put( defaults, "Theme.painter", FlatJidePainter.getInstance() );
 
+			// avoid that JideButton and JideSplitButton shift icon on hover/selection
+			defaults.put( "Icon.floating", false );
+
 			// fonts
 			ActiveValue font = FlatLaf.createActiveFontValue( 1f );
 			defaults.put( "JideButton.font", font );

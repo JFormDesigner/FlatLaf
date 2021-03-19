@@ -473,6 +473,17 @@ JideLabelUI                    com.formdev.flatlaf.jideoss.ui.FlatJideLabelUI
 JidePopupMenuUI                com.formdev.flatlaf.jideoss.ui.FlatJidePopupMenuUI
 
 
+#---- JideSplitButton ----
+
+JideSplitButton.border         [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+JideSplitButton.buttonArrowColor #9a9da1    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.buttonDisabledArrowColor #5a5d61    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.margin         3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+JideSplitButton.selectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.textIconGap    [active] 4
+JideSplitButtonUI              com.formdev.flatlaf.jideoss.ui.FlatJideSplitButtonUI
+
+
 #---- JideTabbedPane ----
 
 JideTabbedPane.background      #3c3f41    javax.swing.plaf.ColorUIResource [UI]

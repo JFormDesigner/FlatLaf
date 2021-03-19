@@ -9,8 +9,10 @@ Following JIDE Common Layer components are currently supported by this addon:
 - `JideButton`
 - `JideLabel`
 - `JidePopupMenu`
+- `JideSplitButton`
 - `JideTabbedPane`
 - `JideToggleButton`
+- `JideToggleSplitButton`
 - `RangeSlider`
 - `TristateCheckBox`
 

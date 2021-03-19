@@ -151,22 +151,18 @@ public class FlatComponentsTest
 	}
 
 	private void outlineChanged() {
-		FlatTestFrame frame = (FlatTestFrame) SwingUtilities.getAncestorOfClass( FlatTestFrame.class, this );
-		if( frame == null )
-			return;
-
 		Object outline = errorOutlineRadioButton.isSelected() ? "error"
 			: warningOutlineRadioButton.isSelected() ? "warning"
 			: magentaOutlineRadioButton.isSelected() ? Color.magenta
 			: magentaCyanOutlineRadioButton.isSelected() ? new Color[] { Color.magenta, Color.cyan }
 			: null;
 
-		frame.updateComponentsRecur( this, (c, type) -> {
+		FlatTestFrame.updateComponentsRecur( this, (c, type) -> {
 			if( c instanceof JComponent )
 				((JComponent)c).putClientProperty( FlatClientProperties.OUTLINE, outline );
 		} );
 
-		frame.repaint();
+		repaint();
 		textField1.requestFocusInWindow();
 	}
 
