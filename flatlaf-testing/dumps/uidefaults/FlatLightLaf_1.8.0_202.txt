@@ -480,9 +480,11 @@ JidePopupMenuUI                com.formdev.flatlaf.jideoss.ui.FlatJidePopupMenuU
 
 #---- JideSplitButton ----
 
+JideSplitButton.background     #ffffff    javax.swing.plaf.ColorUIResource [UI]
 JideSplitButton.border         [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
 JideSplitButton.buttonArrowColor #666666    javax.swing.plaf.ColorUIResource [UI]
 JideSplitButton.buttonDisabledArrowColor #a6a6a6    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.foreground     #000000    javax.swing.plaf.ColorUIResource [UI]
 JideSplitButton.margin         3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 JideSplitButton.selectionForeground #000000    javax.swing.plaf.ColorUIResource [UI]
 JideSplitButton.textIconGap    [active] 4
