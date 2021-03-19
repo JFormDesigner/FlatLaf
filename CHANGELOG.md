@@ -24,6 +24,9 @@ FlatLaf Change Log
 - JIDE Common Layer: The library on Maven Central no longer depends on
   `com.jidesoft:jide-oss:3.6.18` to avoid problems when another JIDE library
   should be used. (issue #270)
+- SwingX: The library on Maven Central no longer depends on
+  `org.swinglabs.swingx:swingx-all:1.6.5-1` to avoid problems when another
+  SwingX library should be used.
 - Support running in [JetBrains Projector](https://jetbrains.com/projector/).
 
 #### Fixed bugs

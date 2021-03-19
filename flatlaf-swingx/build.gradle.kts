@@ -22,7 +22,9 @@ plugins {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
+
+	// use compileOnly() because there are various SwingX libraries available on Maven Central
+	compileOnly( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
 }
 
 flatlafModuleInfo {
