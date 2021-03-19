@@ -56,7 +56,8 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 			dependsOn( extension.paths )
 
 			options.compilerArgs.add( "--module-path" )
-			options.compilerArgs.add( configurations.runtimeClasspath.get().asPath )
+			options.compilerArgs.add( configurations.runtimeClasspath.get().asPath
+				+ File.pathSeparator + configurations.compileClasspath.get().asPath )
 		}
 
 		jar {
