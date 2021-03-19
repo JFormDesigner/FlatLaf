@@ -17,10 +17,14 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
+import javax.swing.border.*;
+import com.formdev.flatlaf.ui.FlatArrowButton;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
@@ -41,6 +45,54 @@ public class FlatPaintingTest
 
 	FlatPaintingTest() {
 		initComponents();
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		getHorizontalScrollBar().setUnitIncrement( UIScale.scale( 25 ) );
+		getVerticalScrollBar().setUnitIncrement( UIScale.scale( 25 ) );
+	}
+
+	private void arrowSizeChanged() {
+		int width = (int) arrowWidthSpinner.getValue();
+		int height = (int) arrowHeightSpinner.getValue();
+		int arrowSize = (int) arrowSizeSpinner.getValue();
+
+		FlatTestFrame.updateComponentsRecur( (Container) getViewport().getView(), (c, type) -> {
+			if( c instanceof ArrowPainter ) {
+				ArrowPainter painter = (ArrowPainter) c;
+				painter.setW( painter.isHalfWidth() ? width / 2 : width );
+				painter.setH( painter.isHalfHeight() ? height / 2 : height );
+				painter.setArrowSize( arrowSize );
+			}
+		} );
+
+		revalidate();
+		repaint();
+	}
+
+	private void vectorChanged() {
+		boolean vector = vectorCheckBox.isSelected();
+
+		FlatTestFrame.updateComponentsRecur( (Container) getViewport().getView(), (c, type) -> {
+			if( c instanceof ArrowPainter )
+				((ArrowPainter) c).vector = vector;
+		} );
+
+		repaint();
+	}
+
+	private void checkBox1ActionPerformed() {
+		boolean button = buttonCheckBox.isSelected();
+
+		FlatTestFrame.updateComponentsRecur( (Container) getViewport().getView(), (c, type) -> {
+			if( c instanceof ArrowPainter )
+				((ArrowPainter)c).button = button;
+		} );
+
+		repaint();
 	}
 
 	private void initComponents() {
@@ -86,6 +138,35 @@ public class FlatPaintingTest
 		JLabel label5 = new JLabel();
 		JLabel label6 = new JLabel();
 		JLabel label7 = new JLabel();
+		FlatPaintingTest.ArrowPainter arrowPainter1 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter2 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter3 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter4 = new FlatPaintingTest.ArrowPainter();
+		JPanel panel1 = new JPanel();
+		FlatPaintingTest.ArrowPainter arrowPainter5 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter6 = new FlatPaintingTest.ArrowPainter();
+		JPanel panel2 = new JPanel();
+		FlatPaintingTest.ArrowPainter arrowPainter7 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter8 = new FlatPaintingTest.ArrowPainter();
+		JPanel panel5 = new JPanel();
+		JLabel arrowWidthLabel = new JLabel();
+		arrowWidthSpinner = new JSpinner();
+		JLabel arrowHeightLabel = new JLabel();
+		arrowHeightSpinner = new JSpinner();
+		JLabel arrowSizeLabel = new JLabel();
+		arrowSizeSpinner = new JSpinner();
+		vectorCheckBox = new JCheckBox();
+		buttonCheckBox = new JCheckBox();
+		FlatPaintingTest.ArrowPainter arrowPainter9 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter10 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter11 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter12 = new FlatPaintingTest.ArrowPainter();
+		JPanel panel3 = new JPanel();
+		FlatPaintingTest.ArrowPainter arrowPainter13 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter14 = new FlatPaintingTest.ArrowPainter();
+		JPanel panel4 = new JPanel();
+		FlatPaintingTest.ArrowPainter arrowPainter15 = new FlatPaintingTest.ArrowPainter();
+		FlatPaintingTest.ArrowPainter arrowPainter16 = new FlatPaintingTest.ArrowPainter();
 
 		//======== this ========
 		setBorder(null);
@@ -109,6 +190,8 @@ public class FlatPaintingTest
 				"[top]" +
 				"[top]" +
 				"[top]" +
+				"[]para" +
+				"[]" +
 				"[]"));
 
 			//---- borderPainter9 ----
@@ -360,15 +443,206 @@ public class FlatPaintingTest
 			//---- label7 ----
 			label7.setText("fw 1,  lw 3,  arc 3,2,1,0");
 			flatTestPanel1.add(label7, "cell 8 4");
+
+			//---- arrowPainter1 ----
+			arrowPainter1.setScale(8.0F);
+			flatTestPanel1.add(arrowPainter1, "cell 0 5,align left top,grow 0 0");
+
+			//---- arrowPainter2 ----
+			arrowPainter2.setScale(8.0F);
+			arrowPainter2.setDirection(1);
+			flatTestPanel1.add(arrowPainter2, "cell 1 5,align left top,grow 0 0");
+
+			//---- arrowPainter3 ----
+			arrowPainter3.setScale(8.0F);
+			arrowPainter3.setDirection(7);
+			flatTestPanel1.add(arrowPainter3, "cell 2 5,align left top,grow 0 0");
+
+			//---- arrowPainter4 ----
+			arrowPainter4.setScale(8.0F);
+			arrowPainter4.setDirection(3);
+			flatTestPanel1.add(arrowPainter4, "cell 3 5,align left top,grow 0 0");
+
+			//======== panel1 ========
+			{
+				panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
+
+				//---- arrowPainter5 ----
+				arrowPainter5.setScale(8.0F);
+				arrowPainter5.setDirection(1);
+				arrowPainter5.setH(10);
+				arrowPainter5.setHalfHeight(true);
+				arrowPainter5.setYOffset(1);
+				panel1.add(arrowPainter5);
+
+				//---- arrowPainter6 ----
+				arrowPainter6.setScale(8.0F);
+				arrowPainter6.setH(10);
+				arrowPainter6.setHalfHeight(true);
+				arrowPainter6.setYOffset(-1);
+				panel1.add(arrowPainter6);
+			}
+			flatTestPanel1.add(panel1, "cell 4 5,align left top,grow 0 0");
+
+			//======== panel2 ========
+			{
+				panel2.setLayout(new BoxLayout(panel2, BoxLayout.X_AXIS));
+
+				//---- arrowPainter7 ----
+				arrowPainter7.setScale(8.0F);
+				arrowPainter7.setDirection(7);
+				arrowPainter7.setW(10);
+				arrowPainter7.setHalfWidth(true);
+				arrowPainter7.setXOffset(1);
+				panel2.add(arrowPainter7);
+
+				//---- arrowPainter8 ----
+				arrowPainter8.setScale(8.0F);
+				arrowPainter8.setDirection(3);
+				arrowPainter8.setW(10);
+				arrowPainter8.setHalfWidth(true);
+				arrowPainter8.setXOffset(-1);
+				panel2.add(arrowPainter8);
+			}
+			flatTestPanel1.add(panel2, "cell 5 5,align left top,grow 0 0");
+
+			//======== panel5 ========
+			{
+				panel5.setBorder(new TitledBorder("Arrow Control"));
+				panel5.setLayout(new MigLayout(
+					"hidemode 3",
+					// columns
+					"[fill]" +
+					"[fill]",
+					// rows
+					"[]" +
+					"[]" +
+					"[]" +
+					"[]" +
+					"[]"));
+
+				//---- arrowWidthLabel ----
+				arrowWidthLabel.setText("Width:");
+				panel5.add(arrowWidthLabel, "cell 0 0");
+
+				//---- arrowWidthSpinner ----
+				arrowWidthSpinner.setModel(new SpinnerNumberModel(20, 0, null, 1));
+				arrowWidthSpinner.addChangeListener(e -> arrowSizeChanged());
+				panel5.add(arrowWidthSpinner, "cell 1 0");
+
+				//---- arrowHeightLabel ----
+				arrowHeightLabel.setText("Height:");
+				panel5.add(arrowHeightLabel, "cell 0 1");
+
+				//---- arrowHeightSpinner ----
+				arrowHeightSpinner.setModel(new SpinnerNumberModel(20, 0, null, 1));
+				arrowHeightSpinner.addChangeListener(e -> arrowSizeChanged());
+				panel5.add(arrowHeightSpinner, "cell 1 1");
+
+				//---- arrowSizeLabel ----
+				arrowSizeLabel.setText("Arrow Size:");
+				panel5.add(arrowSizeLabel, "cell 0 2");
+
+				//---- arrowSizeSpinner ----
+				arrowSizeSpinner.setModel(new SpinnerNumberModel(8, 2, null, 1));
+				arrowSizeSpinner.addChangeListener(e -> arrowSizeChanged());
+				panel5.add(arrowSizeSpinner, "cell 1 2");
+
+				//---- vectorCheckBox ----
+				vectorCheckBox.setText("vector");
+				vectorCheckBox.addActionListener(e -> vectorChanged());
+				panel5.add(vectorCheckBox, "cell 0 3 2 1,alignx left,growx 0");
+
+				//---- buttonCheckBox ----
+				buttonCheckBox.setText("FlatArrowButton");
+				buttonCheckBox.addActionListener(e -> checkBox1ActionPerformed());
+				panel5.add(buttonCheckBox, "cell 0 4 2 1,alignx left,growx 0");
+			}
+			flatTestPanel1.add(panel5, "cell 6 5,aligny top,growy 0");
+
+			//---- arrowPainter9 ----
+			arrowPainter9.setScale(8.0F);
+			arrowPainter9.setChevron(false);
+			flatTestPanel1.add(arrowPainter9, "cell 0 6,align left top,grow 0 0");
+
+			//---- arrowPainter10 ----
+			arrowPainter10.setScale(8.0F);
+			arrowPainter10.setDirection(1);
+			arrowPainter10.setChevron(false);
+			flatTestPanel1.add(arrowPainter10, "cell 1 6,align left top,grow 0 0");
+
+			//---- arrowPainter11 ----
+			arrowPainter11.setScale(8.0F);
+			arrowPainter11.setDirection(7);
+			arrowPainter11.setChevron(false);
+			flatTestPanel1.add(arrowPainter11, "cell 2 6,align left top,grow 0 0");
+
+			//---- arrowPainter12 ----
+			arrowPainter12.setScale(8.0F);
+			arrowPainter12.setDirection(3);
+			arrowPainter12.setChevron(false);
+			flatTestPanel1.add(arrowPainter12, "cell 3 6,align left top,grow 0 0");
+
+			//======== panel3 ========
+			{
+				panel3.setLayout(new BoxLayout(panel3, BoxLayout.Y_AXIS));
+
+				//---- arrowPainter13 ----
+				arrowPainter13.setScale(8.0F);
+				arrowPainter13.setDirection(1);
+				arrowPainter13.setH(10);
+				arrowPainter13.setChevron(false);
+				arrowPainter13.setHalfHeight(true);
+				arrowPainter13.setYOffset(1);
+				panel3.add(arrowPainter13);
+
+				//---- arrowPainter14 ----
+				arrowPainter14.setScale(8.0F);
+				arrowPainter14.setH(10);
+				arrowPainter14.setChevron(false);
+				arrowPainter14.setHalfHeight(true);
+				arrowPainter14.setYOffset(-1);
+				panel3.add(arrowPainter14);
+			}
+			flatTestPanel1.add(panel3, "cell 4 6,align left top,grow 0 0");
+
+			//======== panel4 ========
+			{
+				panel4.setLayout(new BoxLayout(panel4, BoxLayout.X_AXIS));
+
+				//---- arrowPainter15 ----
+				arrowPainter15.setScale(8.0F);
+				arrowPainter15.setDirection(7);
+				arrowPainter15.setW(10);
+				arrowPainter15.setChevron(false);
+				arrowPainter15.setHalfWidth(true);
+				arrowPainter15.setXOffset(1);
+				panel4.add(arrowPainter15);
+
+				//---- arrowPainter16 ----
+				arrowPainter16.setScale(8.0F);
+				arrowPainter16.setDirection(3);
+				arrowPainter16.setW(10);
+				arrowPainter16.setChevron(false);
+				arrowPainter16.setHalfWidth(true);
+				arrowPainter16.setXOffset(-1);
+				panel4.add(arrowPainter16);
+			}
+			flatTestPanel1.add(panel4, "cell 5 6,align left top,grow 0 0");
 		}
 		setViewportView(flatTestPanel1);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JSpinner arrowWidthSpinner;
+	private JSpinner arrowHeightSpinner;
+	private JSpinner arrowSizeSpinner;
+	private JCheckBox vectorCheckBox;
+	private JCheckBox buttonCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
-	//---- class Preview ----
+	//---- class BorderPainter ------------------------------------------------
 
 	public static class BorderPainter
 		extends JComponent
@@ -505,6 +779,172 @@ public class FlatPaintingTest
 				} );
 
 			FlatUIUtils.resetRenderingHints( g2, oldRenderingHints );
+		}
+	}
+
+	//---- class ArrowPainter -------------------------------------------------
+
+	public static class ArrowPainter
+		extends JComponent
+	{
+		private int w = 20;
+		private int h = 20;
+		private int direction = SwingConstants.SOUTH;
+		private boolean chevron = true;
+		private int arrowSize = FlatArrowButton.DEFAULT_ARROW_WIDTH;
+		private int xOffset = 0;
+		private int yOffset = 0;
+		private float scale = 1;
+		private boolean halfWidth;
+		private boolean halfHeight;
+		public boolean vector;
+		public boolean button;
+
+		public ArrowPainter() {
+		}
+
+		public int getW() {
+			return w;
+		}
+
+		public void setW( int w ) {
+			this.w = w;
+			invalidate();
+		}
+
+		public int getH() {
+			return h;
+		}
+
+		public void setH( int h ) {
+			this.h = h;
+			invalidate();
+		}
+
+		public int getDirection() {
+			return direction;
+		}
+
+		public void setDirection( int direction ) {
+			this.direction = direction;
+		}
+
+		public boolean isChevron() {
+			return chevron;
+		}
+
+		public void setChevron( boolean chevron ) {
+			this.chevron = chevron;
+		}
+
+		public int getArrowSize() {
+			return arrowSize;
+		}
+
+		public void setArrowSize( int arrowSize ) {
+			this.arrowSize = arrowSize;
+		}
+
+		public int getXOffset() {
+			return xOffset;
+		}
+
+		public void setXOffset( int xOffset ) {
+			this.xOffset = xOffset;
+		}
+
+		public int getYOffset() {
+			return yOffset;
+		}
+
+		public void setYOffset( int yOffset ) {
+			this.yOffset = yOffset;
+		}
+
+		public float getScale() {
+			return scale;
+		}
+
+		public void setScale( float scale ) {
+			this.scale = scale;
+		}
+
+		public boolean isHalfWidth() {
+			return halfWidth;
+		}
+
+		public void setHalfWidth( boolean halfWidth ) {
+			this.halfWidth = halfWidth;
+		}
+
+		public boolean isHalfHeight() {
+			return halfHeight;
+		}
+
+		public void setHalfHeight( boolean halfHeight ) {
+			this.halfHeight = halfHeight;
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			return UIScale.scale( new Dimension( (int) (w * scale), (int) (h * scale) ) );
+		}
+
+		@Override
+		public Dimension getMinimumSize() {
+			return getPreferredSize();
+		}
+
+		@Override
+		protected void paintComponent( Graphics g ) {
+			Graphics2D g2 = (Graphics2D) g;
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g2 );
+
+			g2.scale( scale, scale );
+
+			int width = UIScale.scale( w );
+			int height = UIScale.scale( h );
+
+			if( vector ) {
+				g.setColor( Color.blue );
+				paintArrow( g2, width, height );
+			} else {
+				BufferedImage bi = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
+				Graphics bg = bi.createGraphics();
+				try {
+					FlatUIUtils.setRenderingHints( bg );
+
+					bg.setColor( Color.blue );
+					paintArrow( (Graphics2D) bg, width, height );
+				} finally {
+					bg.dispose();
+				}
+
+				g.drawImage( bi, 0, 0, width, height, null );
+			}
+
+			HiDPIUtils.paintAtScale1x( g2, 0, 0, width, height,
+				(g2d, x2, y2, width2, height2, scaleFactor) -> {
+					g2d.setColor( Color.magenta );
+					g2d.drawRect( x2, y2, width2 - 1, height2 - 1 );
+				} );
+
+			FlatUIUtils.resetRenderingHints( g2, oldRenderingHints );
+		}
+
+		private void paintArrow( Graphics2D g, int width, int height ) {
+			FlatUIUtils.paintArrow( g, 0, 0, width, height,
+				direction, chevron, arrowSize, xOffset, yOffset );
+
+			if( button ) {
+				FlatArrowButton arrowButton = new FlatArrowButton( direction,
+					chevron ? null : "triangle", Color.black, null, null, null, null, null );
+				arrowButton.setArrowWidth( arrowSize );
+				arrowButton.setXOffset( xOffset );
+				arrowButton.setYOffset( yOffset );
+				arrowButton.setSize( width, height );
+				arrowButton.paint( g );
+			}
 		}
 	}
 }

@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -30,6 +31,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -44,6 +46,7 @@ import java.util.function.Supplier;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -608,6 +611,111 @@ public class FlatUIUtils
 
 		return rect;
 	}
+
+	/**
+	 * Paints a chevron or triangle arrow in the center of the given rectangle.
+	 *
+	 * @param g the graphics context used for painting
+	 * @param x the x coordinate of the rectangle
+	 * @param y the y coordinate of the rectangle
+	 * @param width the width of the rectangle
+	 * @param height the height of the rectangle
+	 * @param direction the arrow direction ({@link SwingConstants#NORTH}, {@link SwingConstants#SOUTH}
+	 *        {@link SwingConstants#WEST} or {@link SwingConstants#EAST})
+	 * @param chevron {@code true} for chevron arrow, {@code false} for triangle arrow
+	 * @param arrowSize the width of the painted arrow (for vertical direction) (will be scaled)
+	 * @param xOffset a offset added to the x coordinate of the arrow to paint it out-of-center. Usually zero. (will be scaled)
+	 * @param yOffset a offset added to the y coordinate of the arrow to paint it out-of-center. Usually zero. (will be scaled)
+	 *
+	 * @since 1.1
+	 */
+	public static void paintArrow( Graphics2D g, int x, int y, int width, int height,
+		int direction, boolean chevron, int arrowSize, int xOffset, int yOffset )
+	{
+		// compute arrow width/height
+		int aw = UIScale.scale( arrowSize + (chevron ? 0 : 1) );
+		int ah = UIScale.scale( (arrowSize / 2) + (chevron ? 0 : 1) );
+
+		// rotate arrow width/height for horizontal directions
+		boolean vert = (direction == SwingConstants.NORTH || direction == SwingConstants.SOUTH);
+		if( !vert ) {
+			int temp = aw;
+			aw = ah;
+			ah = temp;
+		}
+
+		// chevron lines end 1px outside of width/height
+		// --> add 1px to arrow width/height for position calculation
+		int extra = chevron ? 1 : 0;
+
+		// compute arrow location
+		int ax = x + Math.round( ((width - (aw + extra)) / 2f) + UIScale.scale( (float) xOffset ) );
+		int ay = y + Math.round( ((height - (ah + extra)) / 2f) + UIScale.scale( (float) yOffset ) );
+
+		// paint arrow
+		g.translate( ax, ay );
+/*debug
+		debugPaintArrow( g, Color.red, vert, aw + extra, ah + extra );
+debug*/
+		Shape arrowShape = createArrowShape( direction, chevron, aw, ah );
+		if( chevron ) {
+			Stroke oldStroke = g.getStroke();
+			g.setStroke( new BasicStroke( UIScale.scale( 1f ) ) );
+			g.draw( arrowShape );
+			g.setStroke( oldStroke );
+		} else {
+			// triangle
+			g.fill( arrowShape );
+		}
+		g.translate( -ax, -ay );
+	}
+
+	/**
+	 * Creates a chevron or triangle arrow shape for the given direction and size.
+	 * <p>
+	 * The chevron shape is a open path that can be painted with {@link Graphics2D#draw(Shape)}.
+	 * The triangle shape is a close path that can be painted with {@link Graphics2D#fill(Shape)}.
+	 *
+	 * @param direction the arrow direction ({@link SwingConstants#NORTH}, {@link SwingConstants#SOUTH}
+	 *        {@link SwingConstants#WEST} or {@link SwingConstants#EAST})
+	 * @param chevron {@code true} for chevron arrow, {@code false} for triangle arrow
+	 * @param w the width of the returned shape
+	 * @param h the height of the returned shape
+	 *
+	 * @since 1.1
+	 */
+	public static Shape createArrowShape( int direction, boolean chevron, float w, float h ) {
+		switch( direction ) {
+			case SwingConstants.NORTH:	return createPath( !chevron, 0,h, (w / 2f),0, w,h );
+			case SwingConstants.SOUTH:	return createPath( !chevron, 0,0, (w / 2f),h, w,0 );
+			case SwingConstants.WEST:	return createPath( !chevron, w,0, 0,(h / 2f), w,h );
+			case SwingConstants.EAST:	return createPath( !chevron, 0,0, w,(h / 2f), 0,h );
+			default:					return new Path2D.Float();
+		}
+	}
+
+/*debug
+	private static void debugPaintArrow( Graphics2D g, Color color, boolean vert, int w, int h ) {
+		Color oldColor = g.getColor();
+		g.setColor( color );
+		g.fill( createRectangle( 0, 0, w, h, 1 ) );
+
+		int xy1 = -2;
+		int x2 = w + 1;
+		int y2 = h + 1;
+		for( int i = 0; i < 20; i++ ) {
+			g.fillRect( 0, xy1, 1, 1 );
+			g.fillRect( 0, y2, 1, 1 );
+			g.fillRect( xy1, 0, 1, 1 );
+			g.fillRect( x2, 0, 1, 1 );
+			xy1 -= 2;
+			x2 += 2;
+			y2 += 2;
+		}
+
+		g.setColor( oldColor );
+	}
+debug*/
 
 	/**
 	 * Creates a closed path for the given points.

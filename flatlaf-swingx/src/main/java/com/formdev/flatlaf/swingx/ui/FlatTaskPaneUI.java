@@ -36,7 +36,6 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
-import com.formdev.flatlaf.ui.FlatArrowButton;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -223,7 +222,7 @@ public class FlatTaskPaneUI
 
 			// create arrow shape
 			int direction = group.isCollapsed() ? SwingConstants.SOUTH : SwingConstants.NORTH;
-			Shape arrowShape = FlatArrowButton.createArrowShape( direction, true, cw, ch );
+			Shape arrowShape = FlatUIUtils.createArrowShape( direction, true, cw, ch );
 
 			// fix position of controls
 			x = group.getComponentOrientation().isLeftToRight() ? (group.getWidth() - width - y) : y;
