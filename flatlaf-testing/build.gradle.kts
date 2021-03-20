@@ -38,7 +38,7 @@ dependencies {
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
 	implementation( "org.swinglabs.swingx:swingx-all:1.6.5-1" )
 	implementation( "org.swinglabs.swingx:swingx-beaninfo:1.6.5-1" )
-	implementation( "com.jidesoft:jide-oss:3.6.18" )
+	implementation( "com.formdev:jide-oss:3.7.11.1" )
 	implementation( "com.glazedlists:glazedlists:1.11.0" )
 	implementation( "org.netbeans.api:org-openide-awt:RELEASE112" )
 
