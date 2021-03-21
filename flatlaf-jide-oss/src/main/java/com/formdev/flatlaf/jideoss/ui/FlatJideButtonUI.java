@@ -25,6 +25,7 @@ import com.jidesoft.plaf.basic.BasicJideButtonUI;
  * Provides the Flat LaF UI delegate for {@link com.jidesoft.swing.JideButton}.
  *
  * @author Karl Tauber
+ * @since 1.1
  */
 public class FlatJideButtonUI
 	extends BasicJideButtonUI

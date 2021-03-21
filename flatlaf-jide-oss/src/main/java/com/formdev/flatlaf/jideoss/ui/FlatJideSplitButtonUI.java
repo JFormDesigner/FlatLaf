@@ -40,6 +40,7 @@ import com.jidesoft.swing.JideSwingUtilities;
  * Provides the Flat LaF UI delegate for {@link com.jidesoft.swing.JideSplitButton}.
  *
  * @author Karl Tauber
+ * @since 1.1
  */
 public class FlatJideSplitButtonUI
 	extends BasicJideSplitButtonUI

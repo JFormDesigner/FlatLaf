@@ -20,6 +20,9 @@ import com.formdev.flatlaf.FlatLaf;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @since 1.1
+ */
 class LoggingFacadeImpl
 	implements LoggingFacade
 {

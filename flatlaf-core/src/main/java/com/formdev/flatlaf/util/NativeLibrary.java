@@ -31,6 +31,7 @@ import java.nio.file.StandardCopyOption;
  * Copies native library to users temporary folder before loading it.
  *
  * @author Karl Tauber
+ * @since 1.1
  */
 public class NativeLibrary
 {

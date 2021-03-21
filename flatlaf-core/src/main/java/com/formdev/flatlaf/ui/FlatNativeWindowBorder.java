@@ -36,6 +36,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * Support for custom window decorations with native window border.
  *
  * @author Karl Tauber
+ * @since 1.1
  */
 public class FlatNativeWindowBorder
 {

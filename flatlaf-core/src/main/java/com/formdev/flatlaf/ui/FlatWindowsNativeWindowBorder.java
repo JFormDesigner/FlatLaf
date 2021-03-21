@@ -62,6 +62,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * https://support.microsoft.com/en-us/windows/snap-your-windows-885a9b1e-a983-a3b1-16cd-c531795e6241
  *
  * @author Karl Tauber
+ * @since 1.1
  */
 class FlatWindowsNativeWindowBorder
 	implements FlatNativeWindowBorder.Provider

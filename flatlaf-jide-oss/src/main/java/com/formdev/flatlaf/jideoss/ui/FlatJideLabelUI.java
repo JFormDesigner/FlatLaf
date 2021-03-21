@@ -31,6 +31,7 @@ import com.jidesoft.plaf.basic.BasicJideLabelUI;
  * Provides the Flat LaF UI delegate for {@link com.jidesoft.swing.JideLabel}.
  *
  * @author Karl Tauber
+ * @since 1.1
  */
 public class FlatJideLabelUI
 	extends BasicJideLabelUI

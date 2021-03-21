@@ -16,6 +16,9 @@
 
 package com.formdev.flatlaf.util;
 
+/**
+ * @since 1.1
+ */
 public interface LoggingFacade
 {
 	LoggingFacade INSTANCE = new LoggingFacadeImpl();

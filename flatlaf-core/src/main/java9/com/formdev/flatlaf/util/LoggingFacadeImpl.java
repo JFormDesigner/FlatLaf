@@ -18,6 +18,9 @@ package com.formdev.flatlaf.util;
 
 import com.formdev.flatlaf.FlatLaf;
 
+/**
+ * @since 1.1
+ */
 class LoggingFacadeImpl
 	implements LoggingFacade
 {

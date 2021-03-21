@@ -39,7 +39,7 @@ public class SystemInfo
 	public static final boolean isMacOS_10_15_Catalina_orLater;
 
 	// OS architecture
-	public static final boolean isX86_64;
+	/** @since 1.1 */ public static final boolean isX86_64;
 
 	// Java versions
 	public static final long javaVersion;
@@ -55,7 +55,7 @@ public class SystemInfo
 	public static final boolean isKDE;
 
 	// other
-	public static final boolean isProjector;
+	/** @since 1.1 */ public static final boolean isProjector;
 
 	static {
 		// platforms

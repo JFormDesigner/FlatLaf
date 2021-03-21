@@ -34,6 +34,7 @@ import com.jidesoft.swing.JideSplitButton;
 
 /**
  * @author Karl Tauber
+ * @since 1.1
  */
 public class FlatJidePainter
 	extends BasicPainter
