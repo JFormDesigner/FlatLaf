@@ -38,3 +38,9 @@ build script:
 Otherwise download `flatlaf-jide-oss-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-jide-oss/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-jide-oss)
+
+
+JIDE Common Layer library `jide-oss-<version>.jar` (or
+`jide-common-<version>.jar`) is also required:
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/jide-oss/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/jide-oss)

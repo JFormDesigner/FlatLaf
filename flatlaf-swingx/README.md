@@ -38,3 +38,8 @@ build script:
 Otherwise download `flatlaf-swingx-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-swingx/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-swingx)
+
+
+SwingX library `swingx-all-<version>.jar` is also required:
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.swinglabs.swingx/swingx-all/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/org.swinglabs.swingx/swingx-all)
