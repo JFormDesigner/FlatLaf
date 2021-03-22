@@ -40,7 +40,8 @@ public interface FlatClientProperties
 	 *     {@link #BUTTON_TYPE_ROUND_RECT},
 	 *     {@link #BUTTON_TYPE_TAB},
 	 *     {@link #BUTTON_TYPE_HELP} or
-	 *     {@link BUTTON_TYPE_TOOLBAR_BUTTON}
+	 *     {@link #BUTTON_TYPE_TOOLBAR_BUTTON}
+	 *     {@link #BUTTON_TYPE_BORDER_LESS}
 	 */
 	String BUTTON_TYPE = "JButton.buttonType";
 
@@ -88,6 +89,15 @@ public interface FlatClientProperties
 	 * @see #BUTTON_TYPE
 	 */
 	String BUTTON_TYPE_TOOLBAR_BUTTON = "toolBarButton";
+
+	/**
+	 * Paint the button without a border in the unfocused state.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JButton} and {@link javax.swing.JToggleButton}
+	 *
+	 * @see #BUTTON_TYPE
+	 */
+	String BUTTON_TYPE_BORDER_LESS = "borderLess";
 
 	/**
 	 * Specifies selected state of a checkbox.

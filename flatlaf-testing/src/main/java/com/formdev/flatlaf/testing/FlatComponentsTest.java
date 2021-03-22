@@ -253,6 +253,7 @@ public class FlatComponentsTest
 		JButton button16 = new JButton();
 		JButton button24 = new JButton();
 		JButton button20 = new JButton();
+		JButton button25 = new JButton();
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
 		FlatToggleButton toggleButton9 = new FlatToggleButton();
@@ -268,6 +269,7 @@ public class FlatComponentsTest
 		JToggleButton toggleButton14 = new JToggleButton();
 		JToggleButton toggleButton21 = new JToggleButton();
 		JToggleButton toggleButton18 = new JToggleButton();
+		JToggleButton toggleButton22 = new JToggleButton();
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
@@ -578,6 +580,11 @@ public class FlatComponentsTest
 		button20.setBorder(BorderFactory.createEmptyBorder());
 		add(button20, "cell 5 1 2 1");
 
+		//---- button25 ----
+		button25.setIcon(UIManager.getIcon("Tree.closedIcon"));
+		button25.putClientProperty("JButton.buttonType", "borderLess");
+		add(button25, "cell 5 1 2 1");
+
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");
 		add(toggleButtonLabel, "cell 0 2");
@@ -654,6 +661,12 @@ public class FlatComponentsTest
 		toggleButton18.setText("Empty border");
 		toggleButton18.setBorder(BorderFactory.createEmptyBorder());
 		add(toggleButton18, "cell 5 2 2 1");
+
+		//---- toggleButton22 ----
+		toggleButton22.setIcon(UIManager.getIcon("Tree.closedIcon"));
+		toggleButton22.setSelected(true);
+		toggleButton22.putClientProperty("JButton.buttonType", "borderLess");
+		add(toggleButton22, "cell 5 2 2 1");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");

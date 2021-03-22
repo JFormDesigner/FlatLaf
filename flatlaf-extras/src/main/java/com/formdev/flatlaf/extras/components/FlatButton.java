@@ -30,7 +30,7 @@ public class FlatButton
 	implements FlatComponentExtension
 {
 	// NOTE: enum names must be equal to allowed strings
-	public enum ButtonType { none, square, roundRect, tab, help, toolBarButton };
+	public enum ButtonType { none, square, roundRect, tab, help, toolBarButton, borderLess }
 
 	/**
 	 * Returns type of a button.

@@ -285,6 +285,10 @@ public class FlatButtonUI
 			(c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON ));
 	}
 
+	static boolean isBorderLessButton( Component c ) {
+		return c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_BORDER_LESS );
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// fill background if opaque to avoid garbage if user sets opaque to true
@@ -332,7 +336,7 @@ public class FlatButtonUI
 
 			// paint shadow
 			Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-			if( !isToolBarButton && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
+			if( !isToolBarButton && !isBorderLessButton( c ) && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
 				!(isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c )) && c.isEnabled() )
 			{
 				g2.setColor( shadowColor );
@@ -391,7 +395,7 @@ public class FlatButtonUI
 		if( ((AbstractButton)c).isSelected() ) {
 			// in toolbar use same colors for disabled and enabled because
 			// we assume that toolbar icon is shown disabled
-			boolean toolBarButton = isToolBarButton( c );
+			boolean toolBarButton = isToolBarButton( c ) || isBorderLessButton( c );
 			return buttonStateColor( c,
 				toolBarButton ? toolbarSelectedBackground : selectedBackground,
 				toolBarButton ? toolbarSelectedBackground : disabledSelectedBackground,
@@ -403,7 +407,7 @@ public class FlatButtonUI
 			return disabledBackground;
 
 		// toolbar button
-		if( isToolBarButton( c ) ) {
+		if( isToolBarButton( c ) || isBorderLessButton( c ) ) {
 			ButtonModel model = ((AbstractButton)c).getModel();
 			if( model.isPressed() )
 				return toolbarPressedBackground;
@@ -465,7 +469,7 @@ public class FlatButtonUI
 		if( !c.isEnabled() )
 			return disabledText;
 
-		if( ((AbstractButton)c).isSelected() && !isToolBarButton( c ) )
+		if( ((AbstractButton)c).isSelected() && !( isToolBarButton( c ) || isBorderLessButton( c ) ) )
 			return selectedForeground;
 
 		// use component foreground if explicitly set
