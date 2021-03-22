@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.2-SNAPSHOT
+
+#### Fixed bugs
+
+- Custom window decorations: Fixed NPE in `FlatTitlePane.findHorizontalGlue()`.
+  (issue #275)
+
+
 ## 1.1
 
 #### New features and improvements

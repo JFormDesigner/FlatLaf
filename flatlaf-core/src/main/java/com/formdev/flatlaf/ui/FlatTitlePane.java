@@ -460,6 +460,9 @@ public class FlatTitlePane
 	}
 
 	protected Component findHorizontalGlue( JMenuBar menuBar ) {
+		if( menuBar == null )
+			return null;
+
 		int count = menuBar.getComponentCount();
 		for( int i = count - 1; i >= 0; i-- ) {
 			Component c = menuBar.getComponent( i );
@@ -710,31 +713,34 @@ debug*/
 		if( r != null )
 			hitTestSpots.add( r );
 
-		r = getNativeHitTestSpot( menuBarPlaceholder );
-		if( r != null ) {
-			Component horizontalGlue = findHorizontalGlue( rootPane.getJMenuBar() );
-			if( horizontalGlue != null ) {
-				// If menu bar is embedded and contains a horizontal glue component,
-				// then split the hit test spot into two spots so that
-				// the glue component area can used to move the window.
+		JMenuBar menuBar = rootPane.getJMenuBar();
+		if( hasVisibleEmbeddedMenuBar( menuBar ) ) {
+			r = getNativeHitTestSpot( menuBarPlaceholder );
+			if( r != null ) {
+				Component horizontalGlue = findHorizontalGlue( menuBar );
+				if( horizontalGlue != null ) {
+					// If menu bar is embedded and contains a horizontal glue component,
+					// then split the hit test spot into two spots so that
+					// the glue component area can used to move the window.
 
-				Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, window );
-				Rectangle r2;
-				if( getComponentOrientation().isLeftToRight() ) {
-					int trailingWidth = (r.x + r.width - HIT_TEST_SPOT_GROW) - glueLocation.x;
-					r.width -= trailingWidth;
-					r2 = new Rectangle( glueLocation.x + horizontalGlue.getWidth(), r.y, trailingWidth, r.height );
-				} else {
-					int leadingWidth = (glueLocation.x + horizontalGlue.getWidth()) - (r.x + HIT_TEST_SPOT_GROW);
-					r.x += leadingWidth;
-					r.width -= leadingWidth;
-					r2 = new Rectangle( glueLocation.x -leadingWidth, r.y, leadingWidth, r.height );
+					Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, window );
+					Rectangle r2;
+					if( getComponentOrientation().isLeftToRight() ) {
+						int trailingWidth = (r.x + r.width - HIT_TEST_SPOT_GROW) - glueLocation.x;
+						r.width -= trailingWidth;
+						r2 = new Rectangle( glueLocation.x + horizontalGlue.getWidth(), r.y, trailingWidth, r.height );
+					} else {
+						int leadingWidth = (glueLocation.x + horizontalGlue.getWidth()) - (r.x + HIT_TEST_SPOT_GROW);
+						r.x += leadingWidth;
+						r.width -= leadingWidth;
+						r2 = new Rectangle( glueLocation.x -leadingWidth, r.y, leadingWidth, r.height );
+					}
+					r2.grow( HIT_TEST_SPOT_GROW, HIT_TEST_SPOT_GROW );
+					hitTestSpots.add( r2 );
 				}
-				r2.grow( HIT_TEST_SPOT_GROW, HIT_TEST_SPOT_GROW );
-				hitTestSpots.add( r2 );
-			}
 
-			hitTestSpots.add( r );
+				hitTestSpots.add( r );
+			}
 		}
 
 		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots, appIconBounds );
