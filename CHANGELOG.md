@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Native window decorations: Fixed double window title bar when first disposing
+  a window with `frame.dispose()` and then showing it again with
+  `frame.setVisible(true)`. (issue #277)
 - Custom window decorations: Fixed NPE in `FlatTitlePane.findHorizontalGlue()`.
   (issue #275)
 

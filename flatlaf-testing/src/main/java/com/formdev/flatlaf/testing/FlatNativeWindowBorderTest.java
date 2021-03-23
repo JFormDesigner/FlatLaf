@@ -26,10 +26,17 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.WeakHashMap;
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
+import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.swing.*;
 
 /**
@@ -144,6 +151,22 @@ public class FlatNativeWindowBorderTest
 				System.out.println( windowId + " windowDeactivated" );
 			}
 		} );
+
+		registerSwitchToLookAndFeel( "F1", FlatLightLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F2", FlatDarkLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F3", FlatIntelliJLaf.class.getName() );
+		registerSwitchToLookAndFeel( "F4", FlatDarculaLaf.class.getName() );
+
+		registerSwitchToLookAndFeel( "F8", FlatTestLaf.class.getName() );
+
+		if( SystemInfo.isWindows )
+			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.windows.WindowsLookAndFeel" );
+		else if( SystemInfo.isMacOS )
+			registerSwitchToLookAndFeel( "F9", "com.apple.laf.AquaLookAndFeel" );
+		else if( SystemInfo.isLinux )
+			registerSwitchToLookAndFeel( "F9", "com.sun.java.swing.plaf.gtk.GTKLookAndFeel" );
+		registerSwitchToLookAndFeel( "F12", MetalLookAndFeel.class.getName() );
+		registerSwitchToLookAndFeel( "F11", NimbusLookAndFeel.class.getName() );
 	}
 
 	private void updateInfo() {
@@ -218,6 +241,28 @@ public class FlatNativeWindowBorderTest
 			r2.y - r1.y,
 			(r1.x + r1.width) - (r2.x + r2.width),
 			(r1.y + r1.height) - (r2.y + r2.height) );
+	}
+
+	private void registerSwitchToLookAndFeel( String keyStrokeStr, String lafClassName ) {
+		KeyStroke keyStroke = KeyStroke.getKeyStroke( keyStrokeStr );
+		if( keyStroke == null )
+			throw new IllegalArgumentException( "Invalid key stroke '" + keyStrokeStr + "'" );
+
+		((JComponent)((RootPaneContainer)window).getContentPane()).registerKeyboardAction(
+			e -> applyLookAndFeel( lafClassName ),
+			keyStroke,
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	private void applyLookAndFeel( String lafClassName ) {
+		EventQueue.invokeLater( () -> {
+			try {
+				UIManager.setLookAndFeel( lafClassName );
+				FlatLaf.updateUI();
+			} catch( Exception ex ) {
+				ex.printStackTrace();
+			}
+		} );
 	}
 
 	private void resizableChanged() {
@@ -298,6 +343,23 @@ public class FlatNativeWindowBorderTest
 		}
 	}
 
+	private void reopen() {
+		window.dispose();
+		window.setVisible( true );
+	}
+
+	private void reshow() {
+		window.setVisible( false );
+
+		try {
+			Thread.sleep( 100 );
+		} catch( InterruptedException ex ) {
+			// ignore
+		}
+
+		window.setVisible( true );
+	}
+
 	private void close() {
 		window.dispose();
 	}
@@ -310,12 +372,14 @@ public class FlatNativeWindowBorderTest
 		undecoratedCheckBox = new JCheckBox();
 		fullScreenCheckBox = new JCheckBox();
 		nativeCheckBox = new JCheckBox();
-		revalidateButton = new JButton();
-		replaceRootPaneButton = new JButton();
 		openDialogButton = new JButton();
-		openFrameButton = new JButton();
 		hideWindowButton = new JButton();
+		reopenButton = new JButton();
+		replaceRootPaneButton = new JButton();
+		openFrameButton = new JButton();
 		showHiddenWindowButton = new JButton();
+		reshowButton = new JButton();
+		revalidateButton = new JButton();
 		hSpacer1 = new JPanel(null);
 		closeButton = new JButton();
 
@@ -330,6 +394,7 @@ public class FlatNativeWindowBorderTest
 			"[grow,top]para" +
 			"[]0" +
 			"[]0" +
+			"[]" +
 			"[]" +
 			"[]"));
 
@@ -368,43 +433,53 @@ public class FlatNativeWindowBorderTest
 		nativeCheckBox.addActionListener(e -> nativeChanged());
 		add(nativeCheckBox, "cell 0 3 3 1");
 
-		//---- revalidateButton ----
-		revalidateButton.setText("revalidate");
-		revalidateButton.addActionListener(e -> revalidateLayout());
-		add(revalidateButton, "cell 0 3 3 1");
-
-		//---- replaceRootPaneButton ----
-		replaceRootPaneButton.setText("replace rootpane");
-		replaceRootPaneButton.addActionListener(e -> replaceRootPane());
-		add(replaceRootPaneButton, "cell 0 3 3 1");
-
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
 		openDialogButton.setMnemonic('D');
 		openDialogButton.addActionListener(e -> openDialog());
 		add(openDialogButton, "cell 0 4 3 1");
 
-		//---- openFrameButton ----
-		openFrameButton.setText("Open Frame");
-		openFrameButton.setMnemonic('A');
-		openFrameButton.addActionListener(e -> openFrame());
-		add(openFrameButton, "cell 0 4 3 1");
-
 		//---- hideWindowButton ----
 		hideWindowButton.setText("Hide");
 		hideWindowButton.addActionListener(e -> hideWindow());
 		add(hideWindowButton, "cell 0 4 3 1");
 
+		//---- reopenButton ----
+		reopenButton.setText("Dispose and Reopen");
+		reopenButton.addActionListener(e -> reopen());
+		add(reopenButton, "cell 0 4 3 1");
+
+		//---- replaceRootPaneButton ----
+		replaceRootPaneButton.setText("replace rootpane");
+		replaceRootPaneButton.addActionListener(e -> replaceRootPane());
+		add(replaceRootPaneButton, "cell 0 4 3 1");
+
+		//---- openFrameButton ----
+		openFrameButton.setText("Open Frame");
+		openFrameButton.setMnemonic('A');
+		openFrameButton.addActionListener(e -> openFrame());
+		add(openFrameButton, "cell 0 5 3 1");
+
 		//---- showHiddenWindowButton ----
 		showHiddenWindowButton.setText("Show hidden");
 		showHiddenWindowButton.addActionListener(e -> showHiddenWindow());
-		add(showHiddenWindowButton, "cell 0 4 3 1");
-		add(hSpacer1, "cell 0 4 3 1,growx");
+		add(showHiddenWindowButton, "cell 0 5 3 1");
+
+		//---- reshowButton ----
+		reshowButton.setText("Hide and Show");
+		reshowButton.addActionListener(e -> reshow());
+		add(reshowButton, "cell 0 5 3 1");
+
+		//---- revalidateButton ----
+		revalidateButton.setText("revalidate");
+		revalidateButton.addActionListener(e -> revalidateLayout());
+		add(revalidateButton, "cell 0 5 3 1");
+		add(hSpacer1, "cell 0 5 3 1,growx");
 
 		//---- closeButton ----
 		closeButton.setText("Close");
 		closeButton.addActionListener(e -> close());
-		add(closeButton, "cell 0 4 3 1");
+		add(closeButton, "cell 0 5 3 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -415,12 +490,14 @@ public class FlatNativeWindowBorderTest
 	private JCheckBox undecoratedCheckBox;
 	private JCheckBox fullScreenCheckBox;
 	private JCheckBox nativeCheckBox;
-	private JButton revalidateButton;
-	private JButton replaceRootPaneButton;
 	private JButton openDialogButton;
-	private JButton openFrameButton;
 	private JButton hideWindowButton;
+	private JButton reopenButton;
+	private JButton replaceRootPaneButton;
+	private JButton openFrameButton;
 	private JButton showHiddenWindowButton;
+	private JButton reshowButton;
+	private JButton revalidateButton;
 	private JPanel hSpacer1;
 	private JButton closeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

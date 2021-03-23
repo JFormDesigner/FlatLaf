@@ -62,20 +62,20 @@ public class FlatNativeWindowBorder
 		if( !isSupported() )
 			return null;
 
-		// Check whether root pane already has a window, which is the case when switching LaF.
+		// Check whether root pane already has a window, which is the case when
+		// switching from another LaF to FlatLaf.
 		// Also check whether the window is displayable, which is required to install
 		// FlatLaf native window border.
 		// If the window is not displayable, then it was probably closed/disposed but not yet removed
 		// from the list of windows that AWT maintains and returns with Window.getWindows().
 		// It could be also be a window that is currently hidden, but may be shown later.
 		Window window = SwingUtilities.windowForComponent( rootPane );
-		if( window != null && window.isDisplayable() ) {
+		if( window != null && window.isDisplayable() )
 			install( window, FlatSystemProperties.USE_WINDOW_DECORATIONS );
-			return null;
-		}
 
 		// Install FlatLaf native window border, which must be done late,
 		// when the native window is already created, because it needs access to the window.
+		// Uninstall FlatLaf native window border when window is disposed (or root pane removed).
 		// "ancestor" property change event is fired from JComponent.addNotify() and removeNotify().
 		PropertyChangeListener ancestorListener = e -> {
 			Object newValue = e.getNewValue();
@@ -148,7 +148,11 @@ public class FlatNativeWindowBorder
 		if( data instanceof PropertyChangeListener )
 			rootPane.removePropertyChangeListener( "ancestor", (PropertyChangeListener) data );
 
-		// uninstall native window border, except when switching to another FlatLaf theme
+		// do not uninstall when switching to another FlatLaf theme
+		if( UIManager.getLookAndFeel() instanceof FlatLaf )
+			return;
+
+		// uninstall native window border
 		Window window = SwingUtilities.windowForComponent( rootPane );
 		if( window != null )
 			uninstall( window );
@@ -156,10 +160,6 @@ public class FlatNativeWindowBorder
 
 	private static void uninstall( Window window ) {
 		if( !hasCustomDecoration( window ) )
-			return;
-
-		// do not uninstall when switching to another FlatLaf theme
-		if( UIManager.getLookAndFeel() instanceof FlatLaf )
 			return;
 
 		// disable native window border for window
