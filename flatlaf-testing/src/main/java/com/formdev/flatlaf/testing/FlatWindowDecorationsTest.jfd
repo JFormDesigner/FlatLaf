@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -52,6 +52,9 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "addGlueButton"
 					"text": "Add glue"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addGlue", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 1"
@@ -79,6 +82,9 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "changeTitleButton"
 					"text": "Change title"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "changeTitle", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 4"
@@ -338,7 +344,15 @@ new FormModel {
 				"text": "Open Dialog"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDialog", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 7"
+				"value": "cell 0 7 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "openFrameButton"
+				"text": "Open Frame"
+				"mnemonic": 65
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openFrame", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 7 2 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

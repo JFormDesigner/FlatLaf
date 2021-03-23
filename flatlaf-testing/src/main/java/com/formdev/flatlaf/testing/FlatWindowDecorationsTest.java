@@ -75,14 +75,14 @@ public class FlatWindowDecorationsTest
 		super.addNotify();
 
 		Window window = SwingUtilities.windowForComponent( this );
-		menuBarCheckBox.setEnabled( window instanceof JFrame );
-		menuBarEmbeddedCheckBox.setEnabled( window instanceof JFrame );
-		menuBarVisibleCheckBox.setEnabled( window instanceof JFrame );
+		menuBarCheckBox.setSelected( window instanceof JFrame );
 		maximizedBoundsCheckBox.setEnabled( window instanceof Frame );
 
 		addMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
+		addGlueButton.setEnabled( menuBarCheckBox.isEnabled() );
 		removeMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
 		changeMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
+		changeTitleButton.setEnabled( menuBarCheckBox.isEnabled() );
 
 		boolean windowHasIcons = (window != null && !window.getIconImages().isEmpty());
 		iconNoneRadioButton.setEnabled( windowHasIcons );
@@ -117,11 +117,12 @@ public class FlatWindowDecorationsTest
 
 	private void menuBarChanged() {
 		Window window = SwingUtilities.windowForComponent( this );
-		if( window instanceof JFrame ) {
+		if( window instanceof JFrame )
 			((JFrame)window).setJMenuBar( menuBarCheckBox.isSelected() ? menuBar : null );
-			window.revalidate();
-			window.repaint();
-		}
+		else if( window instanceof JDialog )
+			((JDialog)window).setJMenuBar( menuBarCheckBox.isSelected() ? menuBar : null );
+		window.revalidate();
+		window.repaint();
 	}
 
 	private void menuBarEmbeddedChanged() {
@@ -250,12 +251,23 @@ public class FlatWindowDecorationsTest
 
 	private void openDialog() {
 		Window owner = SwingUtilities.windowForComponent( this );
-		JDialog dialog = new JDialog( owner, "Dialog", ModalityType.APPLICATION_MODAL );
+		JDialog dialog = new JDialog( owner, "Dialog", ModalityType.DOCUMENT_MODAL );
 		dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
 		dialog.add( new FlatWindowDecorationsTest() );
 		dialog.pack();
 		dialog.setLocationRelativeTo( this );
 		dialog.setVisible( true );
+	}
+
+	private void openFrame() {
+		FlatWindowDecorationsTest comp = new FlatWindowDecorationsTest();
+		JFrame frame = new JFrame( "Frame" );
+		frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		frame.add( comp );
+		frame.setJMenuBar( comp.menuBar );
+		frame.pack();
+		frame.setLocationRelativeTo( this );
+		frame.setVisible( true );
 	}
 
 	private void decorationStyleChanged() {
@@ -315,10 +327,10 @@ public class FlatWindowDecorationsTest
 		unifiedBackgroundCheckBox = new JCheckBox();
 		JPanel panel3 = new JPanel();
 		addMenuButton = new JButton();
-		JButton addGlueButton = new JButton();
+		addGlueButton = new JButton();
 		removeMenuButton = new JButton();
 		changeMenuButton = new JButton();
-		JButton changeTitleButton = new JButton();
+		changeTitleButton = new JButton();
 		menuBarEmbeddedCheckBox = new JCheckBox();
 		colorizeMenuBarCheckBox = new JCheckBox();
 		menuBarVisibleCheckBox = new JCheckBox();
@@ -344,6 +356,7 @@ public class FlatWindowDecorationsTest
 		iconTestAllRadioButton = new JRadioButton();
 		iconTestRandomRadioButton = new JRadioButton();
 		JButton openDialogButton = new JButton();
+		JButton openFrameButton = new JButton();
 		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
@@ -587,7 +600,13 @@ public class FlatWindowDecorationsTest
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
 		openDialogButton.addActionListener(e -> openDialog());
-		add(openDialogButton, "cell 0 7");
+		add(openDialogButton, "cell 0 7 2 1");
+
+		//---- openFrameButton ----
+		openFrameButton.setText("Open Frame");
+		openFrameButton.setMnemonic('A');
+		openFrameButton.addActionListener(e -> openFrame());
+		add(openFrameButton, "cell 0 7 2 1");
 
 		//======== menuBar ========
 		{
@@ -781,8 +800,10 @@ public class FlatWindowDecorationsTest
 	private JCheckBox menuBarCheckBox;
 	private JCheckBox unifiedBackgroundCheckBox;
 	private JButton addMenuButton;
+	private JButton addGlueButton;
 	private JButton removeMenuButton;
 	private JButton changeMenuButton;
+	private JButton changeTitleButton;
 	private JCheckBox menuBarEmbeddedCheckBox;
 	private JCheckBox colorizeMenuBarCheckBox;
 	private JCheckBox menuBarVisibleCheckBox;

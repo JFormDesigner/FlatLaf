@@ -431,7 +431,9 @@ public class FlatRootPaneUI
 				(parent instanceof JFrame &&
 				 (((JFrame)parent).getJMenuBar() == null ||
 				  !((JFrame)parent).getJMenuBar().isVisible())) ||
-				parent instanceof JDialog;
+				(parent instanceof JDialog &&
+				 (((JDialog)parent).getJMenuBar() == null ||
+				  !((JDialog)parent).getJMenuBar().isVisible()));
 		}
 	}
 }
