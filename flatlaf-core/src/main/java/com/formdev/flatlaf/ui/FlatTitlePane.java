@@ -197,14 +197,16 @@ public class FlatTitlePane
 				}
 
 				// If menu bar is embedded and contains a horizontal glue component,
-				// then move the title label to the same location as the glue component.
+				// then move the title label to the same location as the glue component
+				// and give it the same width.
 				// This allows placing any component on the trailing side of the title pane.
 				JMenuBar menuBar = rootPane.getJMenuBar();
 				if( hasVisibleEmbeddedMenuBar( menuBar ) ) {
 					Component horizontalGlue = findHorizontalGlue( menuBar );
 					if( horizontalGlue != null ) {
 						Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, titleLabel );
-						titleLabel.setLocation( titleLabel.getX() + glueLocation.x, titleLabel.getY() );
+						titleLabel.setBounds( titleLabel.getX() + glueLocation.x, titleLabel.getY(),
+							horizontalGlue.getWidth(), titleLabel.getHeight() );
 					}
 				}
 			}
@@ -450,9 +452,13 @@ public class FlatTitlePane
 		// This allows placing any component on the trailing side of the title pane.
 		Component horizontalGlue = findHorizontalGlue( rootPane.getJMenuBar() );
 		if( horizontalGlue != null ) {
-			int titleWidth = Math.max( titleLabel.getWidth(), 0 ); // title width may be negative
+			boolean leftToRight = getComponentOrientation().isLeftToRight();
+			int titleWidth = leftToRight
+				? buttonPanel.getX() - (leftPanel.getX() + leftPanel.getWidth())
+				: leftPanel.getX() - (buttonPanel.getX() + buttonPanel.getWidth());
+			titleWidth = Math.max( titleWidth, 0 ); // title width may be negative
 			bounds.width += titleWidth;
-			if( !getComponentOrientation().isLeftToRight() )
+			if( !leftToRight )
 				bounds.x -= titleWidth;
 		}
 

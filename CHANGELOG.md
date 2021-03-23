@@ -16,6 +16,8 @@ FlatLaf Change Log
   `frame.setVisible(true)`. (issue #277)
 - Custom window decorations: Fixed NPE in `FlatTitlePane.findHorizontalGlue()`.
   (issue #275)
+- Custom window decorations: Fixed right aligned progress bar in embedded menu
+  bar was overlapping window title. (issue #272)
 - InternalFrame: Fixed translucent internal frame menu bar background if
   `TitlePane.unifiedBackground` is `true`. (issue #274)
 
