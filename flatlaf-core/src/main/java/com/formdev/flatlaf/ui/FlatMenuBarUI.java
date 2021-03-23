@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Graphics;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -86,7 +87,7 @@ public class FlatMenuBarUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		// do not fill background if menubar is embedded into title pane
+		// paint background
 		if( isFillBackground( c ) ) {
 			g.setColor( c.getBackground() );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
@@ -96,8 +97,13 @@ public class FlatMenuBarUI
 	}
 
 	protected boolean isFillBackground( JComponent c ) {
-		// paint background in opaque or having custom background color
+		// paint background if opaque or if having custom background color
 		if( c.isOpaque() || !(c.getBackground() instanceof UIResource) )
+			return true;
+
+		// paint background if menu bar is not the "main" menu bar
+		JRootPane rootPane = SwingUtilities.getRootPane( c );
+		if( rootPane == null || !(rootPane.getParent() instanceof Window) || rootPane.getJMenuBar() != c )
 			return true;
 
 		// do not paint background for unified title pane
@@ -105,12 +111,11 @@ public class FlatMenuBarUI
 			return false;
 
 		// paint background in full screen mode
-		JRootPane rootPane = SwingUtilities.getRootPane( c );
-		if( rootPane == null || FlatUIUtils.isFullScreen( rootPane ) )
+		if( FlatUIUtils.isFullScreen( rootPane ) )
 			return true;
 
 		// do not paint background if menu bar is embedded into title pane
-		return rootPane.getJMenuBar() != c || !FlatRootPaneUI.isMenuBarEmbedded( rootPane );
+		return !FlatRootPaneUI.isMenuBarEmbedded( rootPane );
 	}
 
 	//---- class TakeFocus ----------------------------------------------------
