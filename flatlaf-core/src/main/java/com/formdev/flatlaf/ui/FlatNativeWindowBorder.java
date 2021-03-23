@@ -247,14 +247,17 @@ public class FlatNativeWindowBorder
 /*
 			Class<?> cls = Class.forName( "com.formdev.flatlaf.natives.jna.windows.FlatWindowsNativeWindowBorder" );
 			Method m = cls.getMethod( "getInstance" );
-			nativeProvider = (Provider) m.invoke( null );
+			setNativeProvider( (Provider) m.invoke( null ) );
 */
-			nativeProvider = FlatWindowsNativeWindowBorder.getInstance();
-
-			supported = (nativeProvider != null);
+			setNativeProvider( FlatWindowsNativeWindowBorder.getInstance() );
 		} catch( Exception ex ) {
 			// ignore
 		}
+	}
+
+	public static void setNativeProvider( Provider nativeProvider ) {
+		FlatNativeWindowBorder.nativeProvider = nativeProvider;
+		supported = nativeProvider != null;
 	}
 
 	//---- interface Provider -------------------------------------------------
