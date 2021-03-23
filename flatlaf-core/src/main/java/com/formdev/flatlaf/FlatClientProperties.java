@@ -232,8 +232,26 @@ public interface FlatClientProperties
 	//---- JRootPane ----------------------------------------------------------
 
 	/**
+	 * Specifies whether FlatLaf native window decorations should be used
+	 * when creating {@code JFrame} or {@code JDialog}.
+	 * <p>
+	 * Setting this to {@code false} disables using FlatLaf native window decorations
+	 * for the window that contains the root pane. Needs to be set before showing the window.
+	 * <p>
+	 * (requires Window 10)
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 1.1.1
+	 */
+	String USE_WINDOW_DECORATIONS = "JRootPane.useWindowDecorations";
+
+	/**
 	 * Specifies whether the menu bar is embedded into the title pane if custom
 	 * window decorations are enabled. Default is {@code true}.
+	 * <p>
+	 * (requires Window 10)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}

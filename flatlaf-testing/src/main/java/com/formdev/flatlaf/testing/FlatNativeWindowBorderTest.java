@@ -28,6 +28,7 @@ import java.util.WeakHashMap;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -303,6 +304,12 @@ public class FlatNativeWindowBorderTest
 		FlatNativeWindowBorder.setHasCustomDecoration( window, nativeCheckBox.isSelected() );
 	}
 
+	private void native2Changed() {
+		((RootPaneContainer)window).getRootPane().putClientProperty( FlatClientProperties.USE_WINDOW_DECORATIONS, native2CheckBox.isSelected() );
+		window.dispose();
+		window.setVisible( true );
+	}
+
 	private void revalidateLayout() {
 		window.revalidate();
 	}
@@ -372,6 +379,7 @@ public class FlatNativeWindowBorderTest
 		undecoratedCheckBox = new JCheckBox();
 		fullScreenCheckBox = new JCheckBox();
 		nativeCheckBox = new JCheckBox();
+		native2CheckBox = new JCheckBox();
 		openDialogButton = new JButton();
 		hideWindowButton = new JButton();
 		reopenButton = new JButton();
@@ -433,6 +441,12 @@ public class FlatNativeWindowBorderTest
 		nativeCheckBox.addActionListener(e -> nativeChanged());
 		add(nativeCheckBox, "cell 0 3 3 1");
 
+		//---- native2CheckBox ----
+		native2CheckBox.setText("JRootPane.useWindowDecorations");
+		native2CheckBox.setSelected(true);
+		native2CheckBox.addActionListener(e -> native2Changed());
+		add(native2CheckBox, "cell 0 3 3 1");
+
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
 		openDialogButton.setMnemonic('D');
@@ -490,6 +504,7 @@ public class FlatNativeWindowBorderTest
 	private JCheckBox undecoratedCheckBox;
 	private JCheckBox fullScreenCheckBox;
 	private JCheckBox nativeCheckBox;
+	private JCheckBox native2CheckBox;
 	private JButton openDialogButton;
 	private JButton hideWindowButton;
 	private JButton reopenButton;

@@ -3,6 +3,12 @@ FlatLaf Change Log
 
 ## 1.2-SNAPSHOT
 
+#### New features and improvements
+
+- Native window decorations: Support disabling native window decorations per
+  window. (set client property `JRootPane.useWindowDecorations` to `false` on
+  root pane).
+
 #### Fixed bugs
 
 - Native window decorations: Fixed double window title bar when first disposing

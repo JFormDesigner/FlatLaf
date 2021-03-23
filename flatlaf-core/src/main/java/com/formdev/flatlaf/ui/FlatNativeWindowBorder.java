@@ -27,6 +27,7 @@ import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeListener;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.JBRCustomDecorations.JBRWindowTopBorder;
@@ -99,6 +100,10 @@ public class FlatNativeWindowBorder
 		if( window instanceof JFrame ) {
 			JFrame frame = (JFrame) window;
 
+			// check whether disabled via client property
+			if( !FlatClientProperties.clientPropertyBoolean( frame.getRootPane(), FlatClientProperties.USE_WINDOW_DECORATIONS, true ) )
+				return;
+
 			// do not enable native window border if JFrame should use system window decorations
 			// and if not forced to use FlatLaf/JBR native window decorations
 			if( !JFrame.isDefaultLookAndFeelDecorated() &&
@@ -118,6 +123,10 @@ public class FlatNativeWindowBorder
 
 		} else if( window instanceof JDialog ) {
 			JDialog dialog = (JDialog) window;
+
+			// check whether disabled via client property
+			if( !FlatClientProperties.clientPropertyBoolean( dialog.getRootPane(), FlatClientProperties.USE_WINDOW_DECORATIONS, true ) )
+				return;
 
 			// do not enable native window border if JDialog should use system window decorations
 			// and if not forced to use FlatLaf/JBR native window decorations
