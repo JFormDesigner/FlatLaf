@@ -18,6 +18,7 @@ FlatLaf Change Log
   (issue #275)
 - Custom window decorations: Fixed right aligned progress bar in embedded menu
   bar was overlapping window title. (issue #272)
+- Fixed missing focus indicators in heavy-weight popups. (issue #273)
 - InternalFrame: Fixed translucent internal frame menu bar background if
   `TitlePane.unifiedBackground` is `true`. (issue #274)
 

@@ -185,7 +185,8 @@ public class FlatUIUtils
 
 	/**
 	 * Returns whether the given component is the permanent focus owner and
-	 * is in the active window. Used to paint focus indicators.
+	 * is in the active window or in a popup window owned by the active window.
+	 * Used to paint focus indicators.
 	 */
 	@SuppressWarnings( "unchecked" )
 	public static boolean isPermanentFocusOwner( Component c ) {
@@ -195,12 +196,18 @@ public class FlatUIUtils
 			Object value = ((JComponent)c).getClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER );
 			if( value instanceof Predicate ) {
 				return ((Predicate<JComponent>)value).test( (JComponent) c ) &&
-					keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
+					isInActiveWindow( c, keyboardFocusManager.getActiveWindow() );
 			}
 		}
 
 		return keyboardFocusManager.getPermanentFocusOwner() == c &&
-			keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
+			isInActiveWindow( c, keyboardFocusManager.getActiveWindow() );
+	}
+
+	private static boolean isInActiveWindow( Component c, Window activeWindow ) {
+		Window window = SwingUtilities.windowForComponent( c );
+		return window == activeWindow ||
+			(window != null && window.getType() == Window.Type.POPUP && window.getOwner() == activeWindow);
 	}
 
 	/**
