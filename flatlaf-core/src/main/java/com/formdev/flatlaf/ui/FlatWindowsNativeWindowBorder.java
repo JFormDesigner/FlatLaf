@@ -198,6 +198,16 @@ class FlatWindowsNativeWindowBorder
 	}
 
 	@Override
+	public boolean showWindow( Window window, int cmd ) {
+		WndProc wndProc = windowsMap.get( window );
+		if( wndProc == null )
+			return false;
+
+		wndProc.showWindow( wndProc.hwnd, cmd );
+		return true;
+	}
+
+	@Override
 	public boolean isColorizationColorAffectsBorders() {
 		updateColorization();
 		return colorizationColorAffectsBorders;
@@ -310,6 +320,7 @@ class FlatWindowsNativeWindowBorder
 
 		private native long installImpl( Window window );
 		private native void uninstallImpl( long hwnd );
+		private native void showWindow( long hwnd, int cmd );
 
 		// invoked from native code
 		private int onNcHitTest( int x, int y, boolean isOnResizeBorder ) {

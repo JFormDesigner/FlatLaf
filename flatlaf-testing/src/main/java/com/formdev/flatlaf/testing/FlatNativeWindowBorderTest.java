@@ -153,6 +153,10 @@ public class FlatNativeWindowBorderTest
 			}
 		} );
 
+		window.addWindowStateListener( e -> {
+			System.out.println( windowId + " windowStateChanged  " + e.getOldState() + " --> " + e.getNewState() );
+		} );
+
 		registerSwitchToLookAndFeel( "F1", FlatLightLaf.class.getName() );
 		registerSwitchToLookAndFeel( "F2", FlatDarkLaf.class.getName() );
 		registerSwitchToLookAndFeel( "F3", FlatIntelliJLaf.class.getName() );

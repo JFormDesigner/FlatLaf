@@ -45,6 +45,13 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
 	FlatWndProc::uninstall( env, obj, reinterpret_cast<HWND>( hwnd ) );
 }
 
+extern "C"
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_showWindow
+	( JNIEnv *env, jobject obj, jlong hwnd, jint cmd )
+{
+	::ShowWindow( reinterpret_cast<HWND>( hwnd ), cmd );
+}
+
 //---- class FlatWndProc fields -----------------------------------------------
 
 int FlatWndProc::initialized = 0;

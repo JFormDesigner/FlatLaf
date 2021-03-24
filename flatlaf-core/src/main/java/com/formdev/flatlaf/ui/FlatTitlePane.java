@@ -542,10 +542,12 @@ debug*/
 	 * Iconifies the window.
 	 */
 	protected void iconify() {
-		if( window instanceof Frame ) {
-			Frame frame = (Frame) window;
+		if( !(window instanceof Frame) )
+			return;
+
+		Frame frame = (Frame) window;
+		if( !FlatNativeWindowBorder.showWindow( window, FlatNativeWindowBorder.Provider.SW_MINIMIZE ) )
 			frame.setExtendedState( frame.getExtendedState() | Frame.ICONIFIED );
-		}
 	}
 
 	/**
@@ -563,7 +565,8 @@ debug*/
 		rootPane.putClientProperty( "_flatlaf.maximizedBoundsUpToDate", true );
 
 		// maximize window
-		frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
+		if( !FlatNativeWindowBorder.showWindow( frame, FlatNativeWindowBorder.Provider.SW_MAXIMIZE ) )
+			frame.setExtendedState( frame.getExtendedState() | Frame.MAXIMIZED_BOTH );
 	}
 
 	protected void updateMaximizedBounds() {
@@ -651,8 +654,11 @@ debug*/
 	 * Restores the window size.
 	 */
 	protected void restore() {
-		if( window instanceof Frame ) {
-			Frame frame = (Frame) window;
+		if( !(window instanceof Frame) )
+			return;
+
+		Frame frame = (Frame) window;
+		if( !FlatNativeWindowBorder.showWindow( window, FlatNativeWindowBorder.Provider.SW_RESTORE ) ) {
 			int state = frame.getExtendedState();
 			frame.setExtendedState( ((state & Frame.ICONIFIED) != 0)
 				? (state & ~Frame.ICONIFIED)

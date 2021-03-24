@@ -226,6 +226,13 @@ public class FlatNativeWindowBorder
 		nativeProvider.setTitleBarAppIconBounds( window, appIconBounds );
 	}
 
+	static boolean showWindow( Window window, int cmd ) {
+		if( canUseJBRCustomDecorations || !isSupported() )
+			return false;
+
+		return nativeProvider.showWindow( window, cmd );
+	}
+
 	private static void initialize() {
 		if( supported != null )
 			return;
@@ -275,6 +282,13 @@ public class FlatNativeWindowBorder
 		void setTitleBarHeight( Window window, int titleBarHeight );
 		void setTitleBarHitTestSpots( Window window, List<Rectangle> hitTestSpots );
 		void setTitleBarAppIconBounds( Window window, Rectangle appIconBounds );
+
+		// commands for showWindow(); values must match Win32 API
+		// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+		int SW_MAXIMIZE = 3;
+		int SW_MINIMIZE = 6;
+		int SW_RESTORE = 9;
+		boolean showWindow( Window window, int cmd );
 
 		boolean isColorizationColorAffectsBorders();
 		Color getColorizationColor();

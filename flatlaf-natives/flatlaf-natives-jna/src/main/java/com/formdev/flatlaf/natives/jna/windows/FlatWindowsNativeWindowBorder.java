@@ -184,6 +184,16 @@ public class FlatWindowsNativeWindowBorder
 	}
 
 	@Override
+	public boolean showWindow( Window window, int cmd ) {
+		WndProc wndProc = windowsMap.get( window );
+		if( wndProc == null )
+			return false;
+
+		User32.INSTANCE.ShowWindow( wndProc.hwnd, cmd );
+		return true;
+	}
+
+	@Override
 	public boolean isColorizationColorAffectsBorders() {
 		updateColorization();
 		return colorizationColorAffectsBorders;

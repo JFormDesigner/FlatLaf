@@ -31,6 +31,14 @@ JNIEXPORT jlong JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorde
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_uninstallImpl
   (JNIEnv *, jobject, jlong);
 
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc
+ * Method:    showWindow
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_showWindow
+  (JNIEnv *, jobject, jlong, jint);
+
 #ifdef __cplusplus
 }
 #endif
