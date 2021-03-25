@@ -71,7 +71,7 @@ public class FlatNativeWindowBorderTest
 			frame.dispose();
 		}, KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
-		frame.pack();
+		frame.setSize( new Dimension( 800, 600 ) );
 		frame.setLocationRelativeTo( null );
 		int offset = 20 * Window.getWindows().length;
 		frame.setLocation( frame.getX() + offset, frame.getY() + offset );
@@ -88,7 +88,7 @@ public class FlatNativeWindowBorderTest
 			dialog.dispose();
 		}, KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0, false ), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
-		dialog.pack();
+		dialog.setSize( new Dimension( 800, 600 ) );
 		dialog.setLocationRelativeTo( owner );
 		dialog.setLocation( dialog.getX() + 20, dialog.getY() + 20 );
 		dialog.setVisible( true );
@@ -104,7 +104,6 @@ public class FlatNativeWindowBorderTest
 			hideWindowButton.setEnabled( false );
 
 		setBorder( new FlatLineBorder( new Insets( 0, 0, 0, 0 ), Color.red ) );
-		setPreferredSize( new Dimension( 800, 600 ) );
 
 		updateInfo();
 

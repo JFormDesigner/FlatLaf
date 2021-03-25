@@ -309,6 +309,18 @@ class FlatWindowsNativeWindowBorder
 			this.window = window;
 
 			hwnd = installImpl( window );
+
+			// remove the OS window title bar
+			if( window instanceof JFrame && ((JFrame)window).getExtendedState() != 0 ) {
+				// In case that the frame should be maximized or minimized immediately
+				// when showing, then it is necessary to defer ::SetWindowPos() invocation.
+				// Otherwise the frame will not be maximized or minimized.
+				// This occurs only if frame.pack() was no invoked.
+				EventQueue.invokeLater( () -> {
+					updateFrame( hwnd );
+				});
+			} else
+				updateFrame( hwnd );
 		}
 
 		void uninstall() {
@@ -320,6 +332,7 @@ class FlatWindowsNativeWindowBorder
 
 		private native long installImpl( Window window );
 		private native void uninstallImpl( long hwnd );
+		private native void updateFrame( long hwnd );
 		private native void showWindow( long hwnd, int cmd );
 
 		// invoked from native code

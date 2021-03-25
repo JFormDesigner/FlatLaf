@@ -13,6 +13,8 @@ FlatLaf Change Log
 
 - Native window decorations: Fixed missing animations when minimizing,
   maximizing or restoring a window using window title bar buttons. (issue #282)
+- Native window decorations: Fixed broken maximizing window when restoring frame
+  state at startup. (issue #283)
 - Native window decorations: Fixed double window title bar when first disposing
   a window with `frame.dispose()` and then showing it again with
   `frame.setVisible(true)`. (issue #277)

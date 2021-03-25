@@ -46,8 +46,15 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
 }
 
 extern "C"
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_updateFrame
+	( JNIEnv* env, jobject obj, jlong hwnd )
+{
+	FlatWndProc::updateFrame( reinterpret_cast<HWND>( hwnd ) );
+}
+
+extern "C"
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_showWindow
-	( JNIEnv *env, jobject obj, jlong hwnd, jint cmd )
+	( JNIEnv* env, jobject obj, jlong hwnd, jint cmd )
 {
 	::ShowWindow( reinterpret_cast<HWND>( hwnd ), cmd );
 }
@@ -96,9 +103,6 @@ HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
 	fwp->defaultWndProc = reinterpret_cast<WNDPROC>(
 		::SetWindowLongPtr( hwnd, GWLP_WNDPROC, (LONG_PTR) FlatWndProc::StaticWindowProc ) );
 
-	// remove the OS window title bar
-	fwp->updateFrame();
-
 	return hwnd;
 }
 
@@ -116,7 +120,7 @@ void FlatWndProc::uninstall( JNIEnv *env, jobject obj, HWND hwnd ) {
 	::SetWindowLongPtr( hwnd, GWLP_WNDPROC, (LONG_PTR) fwp->defaultWndProc );
 
 	// show the OS window title bar
-	fwp->updateFrame();
+	updateFrame( hwnd );
 
 	// cleanup
 	env->DeleteGlobalRef( fwp->obj );
@@ -141,10 +145,10 @@ void FlatWndProc::initIDs( JNIEnv *env, jobject obj ) {
 	  initialized = 1;
 }
 
-void FlatWndProc::updateFrame() {
+void FlatWndProc::updateFrame( HWND hwnd ) {
 	// this sends WM_NCCALCSIZE and removes/shows the window title bar
 	::SetWindowPos( hwnd, hwnd, 0, 0, 0, 0,
-		SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER );
+		SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
 }
 
 LRESULT CALLBACK FlatWndProc::StaticWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {

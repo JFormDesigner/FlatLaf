@@ -338,7 +338,16 @@ public class FlatWindowsNativeWindowBorder
 				defaultWndProc = User32Ex.INSTANCE.SetWindowLong( hwnd, GWLP_WNDPROC, this );
 
 			// remove the OS window title bar
-			updateFrame();
+			if( window instanceof JFrame && ((JFrame)window).getExtendedState() != 0 ) {
+				// In case that the frame should be maximized or minimized immediately
+				// when showing, then it is necessary to defer ::SetWindowPos() invocation.
+				// Otherwise the frame will not be maximized or minimized.
+				// This occurs only if frame.pack() was no invoked.
+				EventQueue.invokeLater( () -> {
+					updateFrame();
+				});
+			} else
+				updateFrame();
 		}
 
 		void uninstall() {
@@ -358,7 +367,7 @@ public class FlatWindowsNativeWindowBorder
 		private void updateFrame() {
 			// this sends WM_NCCALCSIZE and removes/shows the window title bar
 			User32.INSTANCE.SetWindowPos( hwnd, hwnd, 0, 0, 0, 0,
-				SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER );
+				SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
 		}
 
 		/**
