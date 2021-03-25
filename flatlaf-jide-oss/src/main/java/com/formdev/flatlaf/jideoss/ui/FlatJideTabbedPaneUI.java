@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.jideoss.ui;
 
 import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
+import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_TAB_SEPARATORS;
 import static com.formdev.flatlaf.FlatClientProperties.clientPropertyBoolean;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
@@ -36,8 +37,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.UIScale;
 import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.UIDefaultsLookup;
 import com.jidesoft.plaf.basic.BasicJideTabbedPaneUI;
@@ -51,15 +52,19 @@ import com.jidesoft.swing.JideTabbedPane;
 public class FlatJideTabbedPaneUI
 	extends BasicJideTabbedPaneUI
 {
+	protected Color selectedBackground;
 	protected Color underlineColor;
 	protected Color disabledUnderlineColor;
 	protected Color hoverColor;
 	protected Color focusColor;
+	protected Color tabSeparatorColor;
 	protected Color contentAreaColor;
 
 	protected int tabHeight;
 	protected int tabSelectionHeight;
 	protected int contentSeparatorHeight;
+	protected boolean showTabSeparators;
+	protected boolean tabSeparatorsFullHeight;
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
 
@@ -79,15 +84,19 @@ public class FlatJideTabbedPaneUI
 
 		_background = UIDefaultsLookup.getColor( "JideTabbedPane.background" );
 
+		selectedBackground = UIManager.getColor( "TabbedPane.selectedBackground" );
 		underlineColor = UIManager.getColor( "TabbedPane.underlineColor" );
 		disabledUnderlineColor = UIManager.getColor( "TabbedPane.disabledUnderlineColor" );
 		hoverColor = UIManager.getColor( "TabbedPane.hoverColor" );
 		focusColor = UIManager.getColor( "TabbedPane.focusColor" );
+		tabSeparatorColor = UIManager.getColor( "TabbedPane.tabSeparatorColor" );
 		contentAreaColor = UIManager.getColor( "TabbedPane.contentAreaColor" );
 
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
+		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
+		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOverlapBorder = UIManager.getBoolean( "TabbedPane.tabsOverlapBorder" );
 
@@ -101,10 +110,12 @@ public class FlatJideTabbedPaneUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		selectedBackground = null;
 		underlineColor = null;
 		disabledUnderlineColor = null;
 		hoverColor = null;
 		focusColor = null;
+		tabSeparatorColor = null;
 		contentAreaColor = null;
 	}
 
@@ -114,13 +125,17 @@ public class FlatJideTabbedPaneUI
 		return e -> {
 			superListener.propertyChange( e );
 
-			String propertyName = e.getPropertyName();
-			if( JideTabbedPane.PROPERTY_SELECTED_INDEX.equals( propertyName ) ) {
-				repaintTab( (Integer) e.getOldValue() );
-				repaintTab( (Integer) e.getNewValue() );
-			} else if( FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER.equals( propertyName ) ) {
-				_tabPane.revalidate();
-				_tabPane.repaint();
+			switch( e.getPropertyName() ) {
+				case JideTabbedPane.PROPERTY_SELECTED_INDEX:
+					repaintTab( (Integer) e.getOldValue() );
+					repaintTab( (Integer) e.getNewValue() );
+					break;
+
+				case TABBED_PANE_SHOW_TAB_SEPARATORS:
+				case TABBED_PANE_HAS_FULL_BORDER:
+					_tabPane.revalidate();
+					_tabPane.repaint();
+					break;
 			}
 		};
 	}
@@ -226,7 +241,9 @@ public class FlatJideTabbedPaneUI
 			? hoverColor
 			: (enabled && isSelected && FlatUIUtils.isPermanentFocusOwner( _tabPane )
 				? focusColor
-				: _tabPane.getBackgroundAt( tabIndex )) );
+				: (selectedBackground != null && enabled && isSelected
+					? selectedBackground
+					: _tabPane.getBackgroundAt( tabIndex ))) );
 		g.fillRect( x, y, w, h );
 	}
 
@@ -243,8 +260,30 @@ public class FlatJideTabbedPaneUI
 	protected void paintTabBorder( Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h,
 		boolean isSelected )
 	{
+		// paint tab separators
+		if( clientPropertyBoolean( _tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
+			!isLastInRun( tabIndex ) )
+		  paintTabSeparator( g, tabPlacement, x, y, w, h );
+
 		if( isSelected )
 			paintTabSelection( g, tabPlacement, x, y, w, h );
+	}
+
+	protected void paintTabSeparator( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
+		float sepWidth = UIScale.scale( 1f );
+		float offset = tabSeparatorsFullHeight ? 0 : UIScale.scale( 5f );
+
+		g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
+		if( tabPlacement == LEFT || tabPlacement == RIGHT ) {
+			// paint tab separator at bottom side
+			((Graphics2D)g).fill( new Rectangle2D.Float( x + offset, y + h - sepWidth, w - (offset * 2), sepWidth ) );
+		} else if( _tabPane.getComponentOrientation().isLeftToRight() ) {
+			// paint tab separator at right side
+			((Graphics2D)g).fill( new Rectangle2D.Float( x + w - sepWidth, y + offset, sepWidth, h - (offset * 2) ) );
+		} else {
+			// paint tab separator at left side
+			((Graphics2D)g).fill( new Rectangle2D.Float( x, y + offset, sepWidth, h - (offset * 2) ) );
+		}
 	}
 
 	protected void paintTabSelection( Graphics g, int tabPlacement,  int x, int y, int w, int h ) {
@@ -385,5 +424,10 @@ public class FlatJideTabbedPaneUI
 	protected void paintFocusIndicator( Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex,
 		Rectangle iconRect, Rectangle textRect, boolean isSelected )
 	{
+	}
+
+	private boolean isLastInRun( int tabIndex ) {
+		int run = getRunForTab( _tabPane.getTabCount(), tabIndex );
+		return lastTabInRun( _tabPane.getTabCount(), run ) == tabIndex;
 	}
 }
