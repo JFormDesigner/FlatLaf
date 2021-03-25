@@ -87,6 +87,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.centerTitle							boolean
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
  * @uiDefault TitlePane.menuBarTitleGap						int
+ * @uiDefault TitlePane.icon								Icon
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -346,7 +347,7 @@ public class FlatTitlePane
 			iconLabel.setIcon( FlatTitlePaneIcon.create( images, iconSize ) );
 		else {
 			// no icon set on window --> use default icon
-			Icon defaultIcon = UIManager.getIcon( "InternalFrame.icon" );
+			Icon defaultIcon = UIManager.getIcon( "TitlePane.icon" );
 			if( defaultIcon != null && (defaultIcon.getIconWidth() == 0 || defaultIcon.getIconHeight() == 0) )
 				defaultIcon = null;
 			if( defaultIcon != null ) {

@@ -873,6 +873,7 @@ TitlePane.closePressedBackground
 TitlePane.closePressedForeground
 TitlePane.embeddedForeground
 TitlePane.foreground
+TitlePane.icon
 TitlePane.iconMargins
 TitlePane.iconSize
 TitlePane.iconifyIcon

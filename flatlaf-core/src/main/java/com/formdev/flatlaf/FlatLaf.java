@@ -377,6 +377,12 @@ public abstract class FlatLaf
 		initIconColors( defaults, isDark() );
 		FlatInputMaps.initInputMaps( defaults );
 
+		// copy InternalFrame.icon (the Java cup) to TitlePane.icon
+		// (using defaults.remove() to avoid that lazy value is resolved and icon loaded here)
+		Object icon = defaults.remove( "InternalFrame.icon" );
+		defaults.put( "InternalFrame.icon", icon );
+		defaults.put( "TitlePane.icon", icon );
+
 		// get addons and sort them by priority
 		ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
 		List<FlatDefaultsAddon> addons = new ArrayList<>();

@@ -1180,6 +1180,7 @@ TitlePane.closePressedBackground #e8112399  60%    javax.swing.plaf.ColorUIResou
 TitlePane.closePressedForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.embeddedForeground   #595959    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.foreground           #000000    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.icon                 [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
 TitlePane.iconMargins          3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.iconSize             16,16    javax.swing.plaf.DimensionUIResource [UI]
 TitlePane.iconifyIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowIconifyIcon [UI]
