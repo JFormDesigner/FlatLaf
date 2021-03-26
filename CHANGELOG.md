@@ -25,6 +25,7 @@ FlatLaf Change Log
 - Fixed missing focus indicators in heavy-weight popups. (issue #273)
 - InternalFrame: Fixed translucent internal frame menu bar background if
   `TitlePane.unifiedBackground` is `true`. (issue #274)
+- Extras: UI Inspector: Fixed `InaccessibleObjectException` when running in Java 16.
 
 
 ## 1.1

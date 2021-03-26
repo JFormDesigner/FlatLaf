@@ -475,7 +475,7 @@ public class FlatInspector
 				f.setAccessible( true );
 				Object ui = f.get( c );
 				appendRow( buf, "UI", (ui != null ? ui.getClass().getName() : "null") );
-			} catch( NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex ) {
+			} catch( Exception ex ) {
 				// ignore
 			}
 		}
