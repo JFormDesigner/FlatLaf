@@ -41,7 +41,9 @@ jobs:
             - name: Cache Gradle cache
               uses: actions/cache@v2
               with:
-                  path: ~/.gradle/caches
+                  path: |
+                    ~/.gradle/caches
+                    !~/.gradle/caches/modules-2/modules-2.lock
                   key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
                   restore-keys: ${{ runner.os }}-gradle
 
