@@ -157,7 +157,7 @@ public abstract class FlatLaf
 	 */
 	@Override
 	public boolean getSupportsWindowDecorations() {
-		if( SystemInfo.isProjector )
+		if( SystemInfo.isProjector || SystemInfo.isWinPE )
 			return false;
 
 		if( SystemInfo.isWindows_10_orLater &&
@@ -443,7 +443,10 @@ public abstract class FlatLaf
 		FontUIResource uiFont = null;
 
 		if( SystemInfo.isWindows ) {
-			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
+			// on WinPE use "win.defaultGUI.font", which is usually Tahoma,
+			// because Segoe UI font is not available on WinPE
+			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty(
+				SystemInfo.isWinPE ? "win.defaultGUI.font" : "win.messagebox.font" );
 			if( winFont != null )
 				uiFont = createCompositeFont( winFont.getFamily(), winFont.getStyle(), winFont.getSize() );
 

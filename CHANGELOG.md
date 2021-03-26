@@ -8,6 +8,7 @@ FlatLaf Change Log
 - Native window decorations: Support disabling native window decorations per
   window. (set client property `JRootPane.useWindowDecorations` to `false` on
   root pane).
+- Support running on WinPE. (issue #279)
 
 #### Fixed bugs
 

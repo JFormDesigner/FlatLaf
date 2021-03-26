@@ -242,8 +242,8 @@ public class FlatNativeWindowBorder
 		if( !SystemInfo.isWindows_10_orLater )
 			return;
 
-		// do not use when running in JetBrains Projector
-		if( SystemInfo.isProjector )
+		// do not use when running in JetBrains Projector or WinPE
+		if( SystemInfo.isProjector || SystemInfo.isWinPE )
 			return;
 
 		// check whether disabled via system property
