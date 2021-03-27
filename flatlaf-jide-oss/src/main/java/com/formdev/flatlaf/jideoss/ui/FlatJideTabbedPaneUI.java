@@ -475,6 +475,33 @@ public class FlatJideTabbedPaneUI
 	{
 	}
 
+	@Override
+	protected void layoutLabel( int tabPlacement, FontMetrics metrics, int tabIndex, String title, Icon icon,
+		Rectangle tabRect, Rectangle iconRect, Rectangle textRect, boolean isSelected )
+	{
+		if( tabPlacement == LEFT || tabPlacement == RIGHT ) {
+			Rectangle tabRect2 = new Rectangle( 0, 0, tabRect.height, tabRect.width );
+			Rectangle iconRect2 = new Rectangle();
+			Rectangle textRect2 = new Rectangle();
+
+			super.layoutLabel( TOP, metrics, tabIndex, title, icon, tabRect2, iconRect2, textRect2, isSelected );
+
+			textRect.x = tabRect.x + textRect2.y;
+			textRect.y = tabRect.y + textRect2.x;
+			textRect.width = textRect2.height;
+			textRect.height = textRect2.width;
+
+			if( tabPlacement == LEFT )
+				textRect.y += metrics.getHeight() / 2;
+
+			iconRect.x = tabRect.x + iconRect2.y;
+			iconRect.y = tabRect.y + iconRect2.x;
+			iconRect.width = iconRect2.height;
+			iconRect.height = iconRect2.width;
+		} else
+			super.layoutLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
+	}
+
 	private boolean isLastInRun( int tabIndex ) {
 		int run = getRunForTab( _tabPane.getTabCount(), tabIndex );
 		return lastTabInRun( _tabPane.getTabCount(), run ) == tabIndex;
