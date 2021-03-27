@@ -584,12 +584,15 @@ public class FlatJideTabbedPaneUI
 			if( !scrollableTabLayoutEnabled() || !isShowCloseButton() || !isShowCloseButtonOnTab() )
 				return;
 
+			Color background = _tabPane.getBackground();
+
 			for( int i = 0; i < _closeButtons.length; i++ ) {
 				JButton closeButton = _closeButtons[i];
 				if( closeButton.getWidth() == 0 || closeButton.getHeight() == 0 )
 					continue; // not visible
 
 				closeButton.setBounds( getTabCloseBounds( i ) );
+				closeButton.setBackground( background );
 			}
 		}
 
