@@ -369,6 +369,13 @@ public class FlatJideOssContainerTest
 			tabbedPane.setShowTabButtons( showTabButtons );
 	}
 
+	private void showGripperChanged() {
+		boolean showGripper = showGripperCheckBox.isSelected();
+
+		for( JideTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setShowGripper( showGripper );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -405,6 +412,7 @@ public class FlatJideOssContainerTest
 		boldActiveTabCheckBox = new JCheckBox();
 		showTabButtonsCheckBox = new JCheckBox();
 		smallerInsetsCheckBox = new JCheckBox();
+		showGripperCheckBox = new JCheckBox();
 		showTabSeparatorsCheckBox = new JCheckBox();
 		hideTabAreaWithOneTabCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
@@ -600,6 +608,11 @@ public class FlatJideOssContainerTest
 				smallerInsetsCheckBox.addActionListener(e -> smallerInsetsChanged());
 				tabbedPaneControlPanel.add(smallerInsetsCheckBox, "cell 2 8");
 
+				//---- showGripperCheckBox ----
+				showGripperCheckBox.setText("Show gripper");
+				showGripperCheckBox.addActionListener(e -> showGripperChanged());
+				tabbedPaneControlPanel.add(showGripperCheckBox, "cell 0 9");
+
 				//---- showTabSeparatorsCheckBox ----
 				showTabSeparatorsCheckBox.setText("Show tab separators");
 				showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
@@ -646,6 +659,7 @@ public class FlatJideOssContainerTest
 	private JCheckBox boldActiveTabCheckBox;
 	private JCheckBox showTabButtonsCheckBox;
 	private JCheckBox smallerInsetsCheckBox;
+	private JCheckBox showGripperCheckBox;
 	private JCheckBox showTabSeparatorsCheckBox;
 	private JCheckBox hideTabAreaWithOneTabCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

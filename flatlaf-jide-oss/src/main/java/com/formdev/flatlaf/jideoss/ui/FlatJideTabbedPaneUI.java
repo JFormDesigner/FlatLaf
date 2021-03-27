@@ -151,6 +151,7 @@ public class FlatJideTabbedPaneUI
 
 				case JideTabbedPane.PROPERTY_TAB_AREA_INSETS:
 				case JideTabbedPane.PROPERTY_TAB_INSETS:
+				case JideTabbedPane.GRIPPER_PROPERTY:
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
 				case TABBED_PANE_HAS_FULL_BORDER:
 					_tabPane.revalidate();

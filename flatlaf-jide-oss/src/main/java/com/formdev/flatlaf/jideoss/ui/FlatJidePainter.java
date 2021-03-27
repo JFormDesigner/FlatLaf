@@ -107,4 +107,22 @@ public class FlatJidePainter
 		} else
 			super.paintBackground( c, g, rect, borderColor, background, orientation );
 	}
+
+	@Override
+	public void paintGripper( JComponent c, Graphics g, Rectangle rect, int orientation, int state ) {
+		float userScaleFactor = UIScale.getUserScaleFactor();
+		if( userScaleFactor > 1 ) {
+			// scale gripper
+			Graphics2D g2 = (Graphics2D) g.create();
+			try {
+				g2.translate( rect.x, rect.y );
+				g2.scale( userScaleFactor, userScaleFactor );
+				Rectangle rect2 = new Rectangle( 0, 0, UIScale.unscale( rect.width ), UIScale.unscale( rect.height ) );
+				super.paintGripper( c, g2, rect2, orientation, state );
+			} finally {
+				g2.dispose();
+			}
+		} else
+			super.paintGripper( c, g, rect, orientation, state );
+	}
 }

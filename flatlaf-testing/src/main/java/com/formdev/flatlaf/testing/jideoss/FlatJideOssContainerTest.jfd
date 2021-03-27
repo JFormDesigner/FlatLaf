@@ -338,6 +338,16 @@ new FormModel {
 						"value": "cell 2 8"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "showGripperCheckBox"
+						"text": "Show gripper"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showGripperChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 9"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "showTabSeparatorsCheckBox"
 						"text": "Show tab separators"
 						auxiliary() {
