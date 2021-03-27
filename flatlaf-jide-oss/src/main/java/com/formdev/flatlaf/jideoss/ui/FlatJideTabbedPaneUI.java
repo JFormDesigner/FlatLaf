@@ -503,6 +503,13 @@ public class FlatJideTabbedPaneUI
 			super.layoutLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
 	}
 
+	@Override
+	protected Rectangle getTabsTextBoundsAt( int tabIndex ) {
+		Rectangle rect = super.getTabsTextBoundsAt( tabIndex );
+		rect.x += getTabInsets( _tabPane.getTabPlacement(), tabIndex ).left;
+		return rect;
+	}
+
 	private boolean isLastInRun( int tabIndex ) {
 		int run = getRunForTab( _tabPane.getTabCount(), tabIndex );
 		return lastTabInRun( _tabPane.getTabCount(), run ) == tabIndex;

@@ -376,6 +376,13 @@ public class FlatJideOssContainerTest
 			tabbedPane.setShowGripper( showGripper );
 	}
 
+	private void tabEditingAllowedChanged() {
+		boolean tabEditingAllowed = tabEditingAllowedCheckBox.isSelected();
+
+		for( JideTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setTabEditingAllowed( tabEditingAllowed );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -414,6 +421,7 @@ public class FlatJideOssContainerTest
 		smallerInsetsCheckBox = new JCheckBox();
 		showGripperCheckBox = new JCheckBox();
 		showTabSeparatorsCheckBox = new JCheckBox();
+		tabEditingAllowedCheckBox = new JCheckBox();
 		hideTabAreaWithOneTabCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
@@ -618,6 +626,11 @@ public class FlatJideOssContainerTest
 				showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
 				tabbedPaneControlPanel.add(showTabSeparatorsCheckBox, "cell 1 9");
 
+				//---- tabEditingAllowedCheckBox ----
+				tabEditingAllowedCheckBox.setText("Tab editing allowed");
+				tabEditingAllowedCheckBox.addActionListener(e -> tabEditingAllowedChanged());
+				tabbedPaneControlPanel.add(tabEditingAllowedCheckBox, "cell 0 10");
+
 				//---- hideTabAreaWithOneTabCheckBox ----
 				hideTabAreaWithOneTabCheckBox.setText("Hide tab area with one tab");
 				hideTabAreaWithOneTabCheckBox.addActionListener(e -> hideTabAreaWithOneTabChanged());
@@ -661,6 +674,7 @@ public class FlatJideOssContainerTest
 	private JCheckBox smallerInsetsCheckBox;
 	private JCheckBox showGripperCheckBox;
 	private JCheckBox showTabSeparatorsCheckBox;
+	private JCheckBox tabEditingAllowedCheckBox;
 	private JCheckBox hideTabAreaWithOneTabCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
