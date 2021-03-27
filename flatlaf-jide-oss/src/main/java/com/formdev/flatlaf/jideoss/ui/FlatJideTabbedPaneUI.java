@@ -508,6 +508,29 @@ public class FlatJideTabbedPaneUI
 	}
 
 	@Override
+	protected void ensureCurrentRects( int leftMargin, int tabCount ) {
+		int oldFitStyleBoundSize = _fitStyleBoundSize;
+		int oldFitStyleFirstTabMargin = _fitStyleFirstTabMargin;
+		int oldCompressedStyleNoIconRectSize = _compressedStyleNoIconRectSize;
+		int oldCompressedStyleIconMargin = _compressedStyleIconMargin;
+		int oldFixedStyleRectSize = _fixedStyleRectSize;
+
+		_fitStyleBoundSize = scale( _fitStyleBoundSize );
+		_fitStyleFirstTabMargin = scale( _fitStyleFirstTabMargin );
+		_compressedStyleNoIconRectSize = scale( _compressedStyleNoIconRectSize );
+		_compressedStyleIconMargin = scale( _compressedStyleIconMargin );
+		_fixedStyleRectSize = scale( _fixedStyleRectSize );
+
+		super.ensureCurrentRects( leftMargin, tabCount );
+
+		_fitStyleBoundSize = oldFitStyleBoundSize;
+		_fitStyleFirstTabMargin = oldFitStyleFirstTabMargin;
+		_compressedStyleNoIconRectSize = oldCompressedStyleNoIconRectSize;
+		_compressedStyleIconMargin = oldCompressedStyleIconMargin;
+		_fixedStyleRectSize = oldFixedStyleRectSize;
+	}
+
+	@Override
 	public void ensureCloseButtonCreated() {
 		super.ensureCloseButtonCreated();
 

@@ -121,8 +121,6 @@
 + JideTabbedPane.defaultTabBorderShadowColor #736d63    javax.swing.plaf.ColorUIResource [UI]
 + JideTabbedPane.defaultTabColorTheme 3
 + JideTabbedPane.defaultTabShape 2
-+ JideTabbedPane.fitStyleBoundSize 8
-+ JideTabbedPane.fitStyleFirstTabMargin 4
 + JideTabbedPane.fitStyleIconMinWidth 24
 + JideTabbedPane.fitStyleTextMinWidth 16
 + JideTabbedPane.fixedStyleRectSize 60
