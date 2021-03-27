@@ -343,6 +343,8 @@ JideSplitButton.selectionForeground
 JideSplitButton.textIconGap
 JideSplitButtonUI
 JideTabbedPane.background
+JideTabbedPane.closeButtonLeftMargin
+JideTabbedPane.closeButtonRightMargin
 JideTabbedPane.contentBorderInsets
 JideTabbedPane.foreground
 JideTabbedPane.shadow

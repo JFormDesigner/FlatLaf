@@ -21,12 +21,15 @@ import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_SHOW_TAB_SEPA
 import static com.formdev.flatlaf.FlatClientProperties.clientPropertyBoolean;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.MouseListener;
@@ -34,15 +37,19 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
+import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.UIDefaultsLookup;
 import com.jidesoft.plaf.basic.BasicJideTabbedPaneUI;
 import com.jidesoft.swing.JideTabbedPane;
+import com.jidesoft.swing.JideTabbedPane.NoFocusButton;
 
 /**
  * Provides the Flat LaF UI delegate for {@link com.jidesoft.swing.JideTabbedPane}.
@@ -67,6 +74,11 @@ public class FlatJideTabbedPaneUI
 	protected boolean tabSeparatorsFullHeight;
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
+
+	protected Icon closeIcon;
+
+	protected int closeButtonLeftMarginUnscaled;
+	protected int closeButtonRightMarginUnscaled;
 
 	private Object[] oldRenderingHints;
 
@@ -100,6 +112,11 @@ public class FlatJideTabbedPaneUI
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOverlapBorder = UIManager.getBoolean( "TabbedPane.tabsOverlapBorder" );
 
+		closeIcon = new FlatJideTabCloseIcon();
+
+		closeButtonLeftMarginUnscaled = _closeButtonLeftMargin;
+		closeButtonRightMarginUnscaled = _closeButtonRightMargin;
+
 		// scale
 		_textIconGap = scale( _textIconGap );
 		tabHeight = scale( tabHeight );
@@ -117,6 +134,7 @@ public class FlatJideTabbedPaneUI
 		focusColor = null;
 		tabSeparatorColor = null;
 		contentAreaColor = null;
+		closeIcon = null;
 	}
 
 	@Override
@@ -160,13 +178,22 @@ public class FlatJideTabbedPaneUI
 	}
 
 	@Override
+	protected LayoutManager createLayoutManager() {
+		return (_tabPane.getTabLayoutPolicy() == JideTabbedPane.SCROLL_TAB_LAYOUT)
+			? new FlatJideTabbedPaneScrollLayout()
+			: super.createLayoutManager();
+	}
+
+	@Override
 	protected int calculateTabHeight( int tabPlacement, int tabIndex, FontMetrics metrics ) {
+		updateCloseButtonMargins();
 		return Math.max( tabHeight, super.calculateTabHeight( tabPlacement, tabIndex, metrics ) );
 	}
 
 	@Override
 	protected int calculateTabWidth( int tabPlacement, int tabIndex, FontMetrics metrics ) {
-		return Math.max( tabHeight, super.calculateTabWidth( tabPlacement, tabIndex, metrics ) );
+		updateCloseButtonMargins();
+		return Math.max( tabHeight, super.calculateTabWidth( tabPlacement, tabIndex, metrics ) - 3 );
 	}
 
 	@Override
@@ -187,6 +214,26 @@ public class FlatJideTabbedPaneUI
 	@Override
 	protected int getTabShape() {
 		return JideTabbedPane.SHAPE_BOX;
+	}
+
+	@Override
+	protected int getLeftMargin() {
+		return 0;
+	}
+
+	@Override
+	protected int getTabGap() {
+		return 0;
+	}
+
+	@Override
+	protected int getLayoutSize() {
+		return 0;
+	}
+
+	@Override
+	protected int getTabRightPadding() {
+		return 0;
 	}
 
 	/**
@@ -429,5 +476,104 @@ public class FlatJideTabbedPaneUI
 	private boolean isLastInRun( int tabIndex ) {
 		int run = getRunForTab( _tabPane.getTabCount(), tabIndex );
 		return lastTabInRun( _tabPane.getTabCount(), run ) == tabIndex;
+	}
+
+	@Override
+	public void ensureCloseButtonCreated() {
+		super.ensureCloseButtonCreated();
+
+		if( _closeButtons == null )
+			return;
+
+		// make sure that close buttons use our icon and do not fill background
+		for( JButton closeButton : _closeButtons ) {
+			if( closeButton.getIcon() != closeIcon )
+				closeButton.setIcon( closeIcon );
+			if( closeButton.isContentAreaFilled() )
+				closeButton.setContentAreaFilled( false );
+		}
+	}
+
+	protected void updateCloseButtonMargins() {
+		// scale close button margins
+		_closeButtonLeftMargin = scale( closeButtonLeftMarginUnscaled );
+		_closeButtonRightMargin = scale( closeButtonRightMarginUnscaled );
+
+		// since close button size is hardcoded to 16x16 in NoFocusButton.getPreferredSize(),
+		// add difference between scaled and unscaled close button size to margins
+		int offset = (closeIcon.getIconWidth() - 16) / 2;
+		_closeButtonLeftMargin += offset;
+		_closeButtonRightMargin += offset;
+	}
+
+	//---- class FlatJideTabbedPaneScrollLayout -------------------------------
+
+	protected class FlatJideTabbedPaneScrollLayout
+		extends TabbedPaneScrollLayout
+	{
+		@Override
+		public void layoutContainer( Container parent ) {
+			updateCloseButtonMargins();
+
+			super.layoutContainer( parent );
+
+			updateCloseButtons();
+		}
+
+		private void updateCloseButtons() {
+			if( !scrollableTabLayoutEnabled() || !isShowCloseButton() || !isShowCloseButtonOnTab() )
+				return;
+
+			for( int i = 0; i < _closeButtons.length; i++ ) {
+				JButton closeButton = _closeButtons[i];
+				if( closeButton.getWidth() == 0 || closeButton.getHeight() == 0 )
+					continue; // not visible
+
+				closeButton.setBounds( getTabCloseBounds( i ) );
+			}
+		}
+
+		private Rectangle getTabCloseBounds( int tabIndex ) {
+			int iconWidth = closeIcon.getIconWidth();
+			int iconHeight = closeIcon.getIconHeight();
+			Rectangle tabRect = _rects[tabIndex];
+			Insets tabInsets = getTabInsets( _tabPane.getTabPlacement(), tabIndex );
+
+			// use one-third of right/left tab insets as gap between tab text and close button
+			if( _tabPane.getTabPlacement() == JideTabbedPane.TOP || _tabPane.getTabPlacement() == JideTabbedPane.BOTTOM ) {
+				return new Rectangle(
+					_tabPane.getComponentOrientation().isLeftToRight()
+						? (tabRect.x + tabRect.width - (tabInsets.right / 3 * 2) - iconWidth)
+						: (tabRect.x + (tabInsets.left / 3 * 2)),
+					tabRect.y + (tabRect.height - iconHeight) / 2,
+					iconWidth,
+					iconHeight );
+			} else {
+				return new Rectangle(
+					tabRect.x + (tabRect.width - iconWidth) / 2,
+					tabRect.y + tabRect.height - (tabInsets.bottom / 3 * 2) - iconHeight,
+					iconWidth,
+					iconHeight );
+			}
+		}
+	}
+
+	//---- class FlatJideTabAreaArrowIcon -------------------------------------
+
+	protected class FlatJideTabCloseIcon
+		extends FlatTabbedPaneCloseIcon
+	{
+		@Override
+		public void paintIcon( Component c, Graphics g, int x, int y ) {
+			NoFocusButton button = (NoFocusButton) c;
+
+			if( _tabPane.isShowCloseButtonOnMouseOver() && !button.isMouseOver() ) {
+				Object property = _tabPane.getClientProperty( "JideTabbedPane.mouseOverTabIndex" );
+				if( property instanceof Integer && button.getIndex() >= 0 && (Integer) property != button.getIndex() )
+					return;
+			}
+
+			super.paintIcon( c, g, x, y );
+		}
 	}
 }

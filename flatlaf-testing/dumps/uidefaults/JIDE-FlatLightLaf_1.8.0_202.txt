@@ -108,12 +108,10 @@
 + JideTabbedPane.buttonMargin    5
 + JideTabbedPane.buttonSize      18
 + JideTabbedPane.closeButtonAlignment 11
-+ JideTabbedPane.closeButtonLeftMargin 2
 + JideTabbedPane.closeButtonMargin 2
 + JideTabbedPane.closeButtonMarginHorizonal 3
 + JideTabbedPane.closeButtonMarginSize 6
 + JideTabbedPane.closeButtonMarginVertical 3
-+ JideTabbedPane.closeButtonRightMargin 2
 + JideTabbedPane.compressedStyleCloseButtonMarginHorizontal 0
 + JideTabbedPane.compressedStyleCloseButtonMarginVertical 0
 + JideTabbedPane.compressedStyleIconMargin 12

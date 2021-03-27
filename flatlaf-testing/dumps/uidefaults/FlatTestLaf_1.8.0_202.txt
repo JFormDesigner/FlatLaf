@@ -485,6 +485,8 @@ JideSplitButtonUI              com.formdev.flatlaf.jideoss.ui.FlatJideSplitButto
 #---- JideTabbedPane ----
 
 JideTabbedPane.background      #ccffcc    javax.swing.plaf.ColorUIResource [UI]
+JideTabbedPane.closeButtonLeftMargin 0
+JideTabbedPane.closeButtonRightMargin 0
 JideTabbedPane.contentBorderInsets 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 JideTabbedPane.foreground      #ff0000    javax.swing.plaf.ColorUIResource [UI]
 JideTabbedPane.shadow          #ccffcc    javax.swing.plaf.ColorUIResource [UI]
