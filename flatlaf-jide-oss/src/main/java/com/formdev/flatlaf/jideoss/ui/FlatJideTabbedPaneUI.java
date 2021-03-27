@@ -44,6 +44,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.UIScale;
 import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.UIDefaultsLookup;
@@ -59,6 +60,7 @@ import com.jidesoft.swing.JideTabbedPane.NoFocusButton;
 public class FlatJideTabbedPaneUI
 	extends BasicJideTabbedPaneUI
 {
+	protected Color disabledForeground;
 	protected Color selectedBackground;
 	protected Color underlineColor;
 	protected Color disabledUnderlineColor;
@@ -96,6 +98,7 @@ public class FlatJideTabbedPaneUI
 
 		_background = UIDefaultsLookup.getColor( "JideTabbedPane.background" );
 
+		disabledForeground = UIManager.getColor( "TabbedPane.disabledForeground" );
 		selectedBackground = UIManager.getColor( "TabbedPane.selectedBackground" );
 		underlineColor = UIManager.getColor( "TabbedPane.underlineColor" );
 		disabledUnderlineColor = UIManager.getColor( "TabbedPane.disabledUnderlineColor" );
@@ -127,6 +130,7 @@ public class FlatJideTabbedPaneUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		disabledForeground = null;
 		selectedBackground = null;
 		underlineColor = null;
 		disabledUnderlineColor = null;
@@ -301,8 +305,38 @@ public class FlatJideTabbedPaneUI
 	protected void paintText( Graphics g, int tabPlacement, Font font, FontMetrics metrics,
 		int tabIndex, String title, Rectangle textRect, boolean isSelected )
 	{
+		if( !_tabPane.isEnabled() || !_tabPane.isEnabledAt( tabIndex ) ) {
+			// super method paints disabled text twice with different colors
+			// and one pixel offset to simulate disabled text
+			// --> draw only once with disabledForeground
+			class DisabledTextGraphics extends Graphics2DProxy {
+				private int count;
+
+				public DisabledTextGraphics( Graphics delegate ) {
+					super( (Graphics2D) delegate );
+				}
+
+				@Override
+				public Graphics create() {
+					return new DisabledTextGraphics( super.create() );
+				}
+
+				@Override
+				public void drawString( String str, int x, int y ) {
+					count++;
+					if( (count % 2) != 1 )
+						return;
+
+					setColor( disabledForeground );
+					super.drawString( str, x, y );
+				}
+			}
+			g = new DisabledTextGraphics( g );
+		}
+
+		Graphics g2 = g;
 		FlatUIUtils.runWithoutRenderingHints( g, oldRenderingHints, () -> {
-			super.paintText( g, tabPlacement, font, metrics, tabIndex, title, textRect, isSelected );
+			super.paintText( g2, tabPlacement, font, metrics, tabIndex, title, textRect, isSelected );
 		} );
 	}
 
