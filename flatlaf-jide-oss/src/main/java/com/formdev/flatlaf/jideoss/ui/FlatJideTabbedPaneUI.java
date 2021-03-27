@@ -149,6 +149,8 @@ public class FlatJideTabbedPaneUI
 					repaintTab( (Integer) e.getNewValue() );
 					break;
 
+				case JideTabbedPane.PROPERTY_TAB_AREA_INSETS:
+				case JideTabbedPane.PROPERTY_TAB_INSETS:
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
 				case TABBED_PANE_HAS_FULL_BORDER:
 					_tabPane.revalidate();
