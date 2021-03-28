@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 1.2-SNAPSHOT
+## 1.1.1
 
 #### New features and improvements
 
