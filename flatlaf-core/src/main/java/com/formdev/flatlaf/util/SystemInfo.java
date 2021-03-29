@@ -56,6 +56,7 @@ public class SystemInfo
 
 	// other
 	/** @since 1.1 */ public static final boolean isProjector;
+	/** @since 1.1.2 */ public static final boolean isWebswing;
 	/** @since 1.1.1 */ public static final boolean isWinPE;
 
 	static {
@@ -92,6 +93,7 @@ public class SystemInfo
 
 		// other
 		isProjector = Boolean.getBoolean( "org.jetbrains.projector.server.enable" );
+		isWebswing = (System.getProperty( "webswing.rootDir" ) != null);
 		isWinPE = isWindows && "X:\\Windows\\System32".equalsIgnoreCase( System.getProperty( "user.dir" ) );
 	}
 

@@ -157,7 +157,7 @@ public abstract class FlatLaf
 	 */
 	@Override
 	public boolean getSupportsWindowDecorations() {
-		if( SystemInfo.isProjector || SystemInfo.isWinPE )
+		if( SystemInfo.isProjector || SystemInfo.isWebswing || SystemInfo.isWinPE )
 			return false;
 
 		if( SystemInfo.isWindows_10_orLater &&

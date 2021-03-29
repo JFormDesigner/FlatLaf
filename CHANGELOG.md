@@ -1,6 +1,13 @@
 FlatLaf Change Log
 ==================
 
+## 1.2-SNAPSHOT
+
+#### Fixed bugs
+
+- Fixed crash when running in Webswing. (issue #290)
+
+
 ## 1.1.1
 
 #### New features and improvements

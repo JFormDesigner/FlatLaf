@@ -70,7 +70,7 @@ public class FlatPopupFactory
 
 		boolean forceHeavyWeight = isOptionEnabled( owner, contents, FlatClientProperties.POPUP_FORCE_HEAVY_WEIGHT, "Popup.forceHeavyWeight" );
 
-		if( !isOptionEnabled( owner, contents, FlatClientProperties.POPUP_DROP_SHADOW_PAINTED, "Popup.dropShadowPainted" ) || SystemInfo.isProjector )
+		if( !isOptionEnabled( owner, contents, FlatClientProperties.POPUP_DROP_SHADOW_PAINTED, "Popup.dropShadowPainted" ) || SystemInfo.isProjector || SystemInfo.isWebswing )
 			return new NonFlashingPopup( getPopupForScreenOfOwner( owner, contents, x, y, forceHeavyWeight ), contents );
 
 		// macOS and Linux adds drop shadow to heavy weight popups
