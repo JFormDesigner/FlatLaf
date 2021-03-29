@@ -105,7 +105,6 @@ public class FlatTitlePane
 	protected final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
 	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
-	protected final boolean unifiedBackground = UIManager.getBoolean( "TitlePane.unifiedBackground" );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
@@ -523,7 +522,8 @@ debug*/
 
 	@Override
 	protected void paintComponent( Graphics g ) {
-		if( !unifiedBackground ) {
+		// not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime
+		if( !UIManager.getBoolean( "TitlePane.unifiedBackground" ) ) {
 			g.setColor( getBackground() );
 			g.fillRect( 0, 0, getWidth(), getHeight() );
 		}

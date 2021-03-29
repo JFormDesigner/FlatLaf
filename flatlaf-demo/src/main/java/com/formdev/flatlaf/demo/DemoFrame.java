@@ -172,7 +172,7 @@ class DemoFrame
 
 	private void unifiedTitleBar() {
 		UIManager.put( "TitlePane.unifiedBackground", unifiedTitleBarMenuItem.isSelected() );
-		FlatLaf.updateUI();
+		repaint();
 	}
 
 	private void underlineMenuSelection() {

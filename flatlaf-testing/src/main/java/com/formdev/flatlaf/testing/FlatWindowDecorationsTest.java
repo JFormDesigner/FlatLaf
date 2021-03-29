@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Random;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.FlatLaf;
 import net.miginfocom.swing.*;
 
 /**
@@ -112,7 +111,9 @@ public class FlatWindowDecorationsTest
 
 	private void unifiedBackgroundChanged() {
 		UIManager.put( "TitlePane.unifiedBackground", unifiedBackgroundCheckBox.isSelected() );
-		FlatLaf.updateUI();
+		Window window = SwingUtilities.windowForComponent( this );
+		if( window != null )
+			window.repaint();
 	}
 
 	private void menuBarChanged() {

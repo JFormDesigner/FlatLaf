@@ -53,8 +53,6 @@ import com.formdev.flatlaf.util.SystemInfo;
 public class FlatMenuBarUI
 	extends BasicMenuBarUI
 {
-	protected boolean unifiedBackground;
-
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuBarUI();
 	}
@@ -69,8 +67,6 @@ public class FlatMenuBarUI
 		super.installDefaults();
 
 		LookAndFeel.installProperty( menuBar, "opaque", false );
-
-		unifiedBackground = UIManager.getBoolean( "TitlePane.unifiedBackground" );
 	}
 
 	@Override
@@ -107,7 +103,8 @@ public class FlatMenuBarUI
 			return true;
 
 		// do not paint background for unified title pane
-		if( unifiedBackground )
+		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
+		if( UIManager.getBoolean( "TitlePane.unifiedBackground" ) )
 			return false;
 
 		// paint background in full screen mode
