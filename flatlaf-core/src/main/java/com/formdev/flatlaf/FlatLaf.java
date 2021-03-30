@@ -443,12 +443,17 @@ public abstract class FlatLaf
 		FontUIResource uiFont = null;
 
 		if( SystemInfo.isWindows ) {
-			// on WinPE use "win.defaultGUI.font", which is usually Tahoma,
-			// because Segoe UI font is not available on WinPE
-			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty(
-				SystemInfo.isWinPE ? "win.defaultGUI.font" : "win.messagebox.font" );
-			if( winFont != null )
-				uiFont = createCompositeFont( winFont.getFamily(), winFont.getStyle(), winFont.getSize() );
+			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
+			if( winFont != null ) {
+				if( SystemInfo.isWinPE ) {
+					// on WinPE use "win.defaultGUI.font", which is usually Tahoma,
+					// because Segoe UI font is not available on WinPE
+					Font winPEFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.defaultGUI.font" );
+					if( winPEFont != null )
+						uiFont = createCompositeFont( winPEFont.getFamily(), winPEFont.getStyle(), winFont.getSize() );
+				} else
+					uiFont = createCompositeFont( winFont.getFamily(), winFont.getStyle(), winFont.getSize() );
+			}
 
 		} else if( SystemInfo.isMacOS ) {
 			String fontName;
