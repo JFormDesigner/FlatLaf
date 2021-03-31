@@ -392,39 +392,31 @@ public class FlatButtonUI
 
 		// selected state
 		if( ((AbstractButton)c).isSelected() ) {
-			// in toolbar use same colors for disabled and enabled because
+			// in toolbar use same background colors for disabled and enabled because
 			// we assume that toolbar icon is shown disabled
 			return buttonStateColor( c,
 				toolBarButton ? toolbarSelectedBackground : selectedBackground,
 				toolBarButton ? toolbarSelectedBackground : disabledSelectedBackground,
-				null, null,
+				null,
+				null,
 				toolBarButton ? toolbarPressedBackground : pressedBackground );
 		}
 
-		if( !c.isEnabled() )
-			return toolBarButton ? null : disabledBackground;
-
 		// toolbar button
 		if( toolBarButton ) {
-			ButtonModel model = ((AbstractButton)c).getModel();
-			if( model.isPressed() )
-				return toolbarPressedBackground;
-			if( model.isRollover() )
-				return toolbarHoverBackground;
-
-			// use component background if explicitly set
 			Color bg = c.getBackground();
-			if( isCustomBackground( bg ) )
-				return bg;
-
-			// do not paint background
-			return null;
+			return buttonStateColor( c,
+				isCustomBackground( bg ) ? bg : null,
+				null,
+				null,
+				toolbarHoverBackground,
+				toolbarPressedBackground );
 		}
 
 		boolean def = isDefaultButton( c );
 		return buttonStateColor( c,
 			getBackgroundBase( c, def ),
-			null,
+			disabledBackground,
 			isCustomBackground( c.getBackground() ) ? null : (def ? defaultFocusedBackground : focusedBackground),
 			def ? defaultHoverBackground : hoverBackground,
 			def ? defaultPressedBackground : pressedBackground );
@@ -446,16 +438,18 @@ public class FlatButtonUI
 	public static Color buttonStateColor( Component c, Color enabledColor, Color disabledColor,
 		Color focusedColor, Color hoverColor, Color pressedColor )
 	{
-		AbstractButton b = (c instanceof AbstractButton) ? (AbstractButton) c : null;
-
 		if( !c.isEnabled() )
 			return disabledColor;
 
-		if( pressedColor != null && b != null && b.getModel().isPressed() )
-			return pressedColor;
+		if( c instanceof AbstractButton ) {
+			ButtonModel model = ((AbstractButton)c).getModel();
 
-		if( hoverColor != null && b != null && b.getModel().isRollover() )
-			return hoverColor;
+			if( pressedColor != null && model.isPressed() )
+				return pressedColor;
+
+			if( hoverColor != null && model.isRollover() )
+				return hoverColor;
+		}
 
 		if( focusedColor != null && isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c ) )
 			return focusedColor;
