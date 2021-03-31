@@ -5,11 +5,13 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
-- Fixed crash when running in Webswing. (issue #290)
+- Native window decorations: Fixed loading of native library when using Java
+  Platform Module System (JPMS) for application. (issue #289)
 - Native window decorations: Removed superfluous pixel-line at top of screen
   when window is maximized. (issue #296)
 - Button and ToggleButton: Do not paint background of disabled (and unselected)
   toolBar buttons. (issue #292; regression since fixing #112)
+- Fixed crash when running in Webswing. (issue #290)
 
 
 ## 1.1.1

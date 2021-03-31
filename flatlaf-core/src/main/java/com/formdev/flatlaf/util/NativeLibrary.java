@@ -42,9 +42,15 @@ public class NativeLibrary
 
 	/**
 	 * Load native library from given classloader.
+	 * <p>
+	 * Note regarding Java Platform Module System (JPMS):
+	 * If classloader is {@code null}, the library can be only loaded from the module
+	 * that contains this class.
+	 * If classloader is not {@code null}, then the package that contains the library
+	 * must be specified as "open" in module-info.java of the module that contains the library.
 	 *
 	 * @param libraryName resource name of the native library (without "lib" prefix and without extension)
-	 * @param classLoader the classloader used to locate the library
+	 * @param classLoader the classloader used to locate the library, or {@code null}
 	 * @param supported whether the native library is supported on the current platform
 	 */
 	public NativeLibrary( String libraryName, ClassLoader classLoader, boolean supported ) {
@@ -68,7 +74,9 @@ public class NativeLibrary
 		libraryName = decorateLibraryName( libraryName );
 
 		// find library
-		URL libraryUrl = classLoader.getResource( libraryName );
+		URL libraryUrl = (classLoader != null)
+			? classLoader.getResource( libraryName )
+			: NativeLibrary.class.getResource( "/" + libraryName );
 		if( libraryUrl == null ) {
 			log( "Library '" + libraryName + "' not found", null );
 			return false;

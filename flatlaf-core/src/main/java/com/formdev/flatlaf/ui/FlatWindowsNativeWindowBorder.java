@@ -103,8 +103,7 @@ class FlatWindowsNativeWindowBorder
 			if( SystemInfo.isX86_64 )
 				libraryName += "_64";
 
-			nativeLibrary = new NativeLibrary( libraryName,
-				FlatWindowsNativeWindowBorder.class.getClassLoader(), true );
+			nativeLibrary = new NativeLibrary( libraryName, null, true );
 		}
 
 		// check whether native library was successfully loaded
