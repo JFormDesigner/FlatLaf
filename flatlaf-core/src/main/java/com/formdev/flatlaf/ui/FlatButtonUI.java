@@ -388,10 +388,12 @@ public class FlatButtonUI
 	}
 
 	protected Color getBackground( JComponent c ) {
+		boolean toolBarButton = isToolBarButton( c );
+
+		// selected state
 		if( ((AbstractButton)c).isSelected() ) {
 			// in toolbar use same colors for disabled and enabled because
 			// we assume that toolbar icon is shown disabled
-			boolean toolBarButton = isToolBarButton( c );
 			return buttonStateColor( c,
 				toolBarButton ? toolbarSelectedBackground : selectedBackground,
 				toolBarButton ? toolbarSelectedBackground : disabledSelectedBackground,
@@ -400,10 +402,10 @@ public class FlatButtonUI
 		}
 
 		if( !c.isEnabled() )
-			return disabledBackground;
+			return toolBarButton ? null : disabledBackground;
 
 		// toolbar button
-		if( isToolBarButton( c ) ) {
+		if( toolBarButton ) {
 			ButtonModel model = ((AbstractButton)c).getModel();
 			if( model.isPressed() )
 				return toolbarPressedBackground;

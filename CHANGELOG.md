@@ -8,6 +8,8 @@ FlatLaf Change Log
 - Fixed crash when running in Webswing. (issue #290)
 - Native window decorations: Removed superfluous pixel-line at top of screen
   when window is maximized. (issue #296)
+- Button and ToggleButton: Do not paint background of disabled (and unselected)
+  toolBar buttons. (issue #292; regression since fixing #112)
 
 
 ## 1.1.1
