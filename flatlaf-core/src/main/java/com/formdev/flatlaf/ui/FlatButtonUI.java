@@ -394,7 +394,7 @@ public class FlatButtonUI
 			boolean toolBarButton = isToolBarButton( c );
 			return buttonStateColor( c,
 				toolBarButton ? toolbarSelectedBackground : selectedBackground,
-				toolBarButton ? toolbarSelectedBackground : disabledSelectedBackground,
+				toolBarButton ? null : disabledSelectedBackground,
 				null, null,
 				toolBarButton ? toolbarPressedBackground : pressedBackground );
 		}
