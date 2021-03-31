@@ -307,11 +307,14 @@ public class FlatButtonUI
 		if( background == null )
 			return;
 
+		boolean isToolBarButton = isToolBarButton( c );
+		if( isToolBarButton && !c.isEnabled() )
+			return;
+
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			boolean isToolBarButton = isToolBarButton( c );
 			float focusWidth = isToolBarButton ? 0 : FlatUIUtils.getBorderFocusWidth( c );
 			float arc = FlatUIUtils.getBorderArc( c );
 
