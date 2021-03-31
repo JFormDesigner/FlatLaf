@@ -40,6 +40,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.RootPaneUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicRootPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -70,16 +71,13 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatRootPaneUI
 	extends BasicRootPaneUI
 {
-	// check this field before using class JBRCustomDecorations to avoid unnecessary loading of that class
-	static final boolean canUseJBRCustomDecorations
-		= SystemInfo.isJetBrainsJVM_11_orLater && SystemInfo.isWindows_10_orLater;
-
 	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
 	protected JRootPane rootPane;
 	protected FlatTitlePane titlePane;
 	protected FlatWindowResizer windowResizer;
 
+	private Object nativeWindowBorderData;
 	private LayoutManager oldLayout;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -97,8 +95,7 @@ public class FlatRootPaneUI
 		else
 			installBorder();
 
-		if( canUseJBRCustomDecorations )
-			JBRCustomDecorations.install( rootPane );
+		nativeWindowBorderData = FlatNativeWindowBorder.install( rootPane );
 	}
 
 	protected void installBorder() {
@@ -112,6 +109,8 @@ public class FlatRootPaneUI
 	@Override
 	public void uninstallUI( JComponent c ) {
 		super.uninstallUI( c );
+
+		FlatNativeWindowBorder.uninstall( rootPane, nativeWindowBorderData );
 
 		uninstallClientDecorations();
 		rootPane = null;
@@ -139,10 +138,10 @@ public class FlatRootPaneUI
 	}
 
 	protected void installClientDecorations() {
-		boolean isJBRSupported = canUseJBRCustomDecorations && JBRCustomDecorations.isSupported();
+		boolean isNativeWindowBorderSupported = FlatNativeWindowBorder.isSupported();
 
 		// install border
-		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE && !isJBRSupported )
+		if( rootPane.getWindowDecorationStyle() != JRootPane.NONE && !isNativeWindowBorderSupported )
 			LookAndFeel.installBorder( rootPane, "RootPane.border" );
 		else
 			LookAndFeel.uninstallBorder( rootPane );
@@ -155,7 +154,7 @@ public class FlatRootPaneUI
 		rootPane.setLayout( createRootLayout() );
 
 		// install window resizer
-		if( !isJBRSupported )
+		if( !isNativeWindowBorderSupported )
 			windowResizer = createWindowResizer();
 	}
 
@@ -229,6 +228,13 @@ public class FlatRootPaneUI
 		}
 	}
 
+	protected static boolean isMenuBarEmbedded( JRootPane rootPane ) {
+		RootPaneUI ui = rootPane.getUI();
+		return ui instanceof FlatRootPaneUI &&
+			((FlatRootPaneUI)ui).titlePane != null &&
+			((FlatRootPaneUI)ui).titlePane.isMenuBarEmbedded();
+	}
+
 	//---- class FlatRootLayout -----------------------------------------------
 
 	protected class FlatRootLayout
@@ -285,6 +291,7 @@ public class FlatRootPaneUI
 		@Override
 		public void layoutContainer( Container parent ) {
 			JRootPane rootPane = (JRootPane) parent;
+			boolean isFullScreen = FlatUIUtils.isFullScreen( rootPane );
 
 			Insets insets = rootPane.getInsets();
 			int x = insets.left;
@@ -299,14 +306,15 @@ public class FlatRootPaneUI
 
 			int nextY = 0;
 			if( titlePane != null ) {
-				Dimension prefSize = titlePane.getPreferredSize();
-				titlePane.setBounds( 0, 0, width, prefSize.height );
-				nextY += prefSize.height;
+				int prefHeight = !isFullScreen ? titlePane.getPreferredSize().height : 0;
+				titlePane.setBounds( 0, 0, width, prefHeight );
+				nextY += prefHeight;
 			}
 
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			if( menuBar != null && menuBar.isVisible() ) {
-				if( titlePane != null && titlePane.isMenuBarEmbedded() ) {
+				boolean embedded = !isFullScreen && titlePane != null && titlePane.isMenuBarEmbedded();
+				if( embedded ) {
 					titlePane.validate();
 					menuBar.setBounds( titlePane.getMenuBarBounds() );
 				} else {
@@ -343,6 +351,9 @@ public class FlatRootPaneUI
 
 	//---- class FlatWindowBorder ---------------------------------------------
 
+	/**
+	 * Window border used for non-native window decorations.
+	 */
 	public static class FlatWindowBorder
 		extends BorderUIResource.EmptyBorderUIResource
 	{
@@ -356,8 +367,8 @@ public class FlatRootPaneUI
 
 		@Override
 		public Insets getBorderInsets( Component c, Insets insets ) {
-			if( isWindowMaximized( c ) ) {
-				// hide border if window is maximized
+			if( isWindowMaximized( c ) || FlatUIUtils.isFullScreen( c ) ) {
+				// hide border if window is maximized or full screen
 				insets.top = insets.left = insets.bottom = insets.right = 0;
 				return insets;
 			} else
@@ -366,7 +377,7 @@ public class FlatRootPaneUI
 
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			if( isWindowMaximized( c ) )
+			if( isWindowMaximized( c ) || FlatUIUtils.isFullScreen( c ) )
 				return;
 
 			Container parent = c.getParent();
@@ -420,7 +431,9 @@ public class FlatRootPaneUI
 				(parent instanceof JFrame &&
 				 (((JFrame)parent).getJMenuBar() == null ||
 				  !((JFrame)parent).getJMenuBar().isVisible())) ||
-				parent instanceof JDialog;
+				(parent instanceof JDialog &&
+				 (((JDialog)parent).getJMenuBar() == null ||
+				  !((JDialog)parent).getJMenuBar().isVisible()));
 		}
 	}
 }

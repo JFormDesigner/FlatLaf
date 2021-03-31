@@ -22,6 +22,8 @@ import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 
 /**
+ * Defines/documents own client properties used in FlatLaf.
+ *
  * @author Karl Tauber
  */
 public interface FlatClientProperties
@@ -131,6 +133,15 @@ public interface FlatClientProperties
 	String MINIMUM_HEIGHT = "JComponent.minimumHeight";
 
 	/**
+	 * Paint the component with round edges.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner},
+	 * {@link javax.swing.JTextField}, {@link javax.swing.JFormattedTextField} and {@link javax.swing.JPasswordField}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String COMPONENT_ROUND_RECT = "JComponent.roundRect";
+
+	/**
 	 * Specifies the outline color of the component border.
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JButton}, {@link javax.swing.JComboBox},
@@ -162,13 +173,23 @@ public interface FlatClientProperties
 	String OUTLINE_WARNING = "warning";
 
 	/**
-	 * Paint the component with round edges.
+	 * Specifies a callback that is invoked to check whether a component is permanent focus owner.
+	 * Used to paint focus indicators.
 	 * <p>
-	 * <strong>Components</strong> {@link javax.swing.JComboBox}, {@link javax.swing.JSpinner},
-	 * {@link javax.swing.JTextField}, {@link javax.swing.JFormattedTextField} and {@link javax.swing.JPasswordField}<br>
-	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 * May be useful in special cases for custom components.
+	 * <p>
+	 * Use a {@link java.util.function.Predicate} that receives the component as parameter:
+	 * <pre>{@code
+	 * myComponent.putClientProperty( "JComponent.focusOwner",
+	 *     (Predicate<JComponent>) c -> {
+	 *         return ...; // check here
+	 *     } );
+	 * }</pre>
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.util.function.Predicate}&lt;javax.swing.JComponent&gt;
 	 */
-	String COMPONENT_ROUND_RECT = "JComponent.roundRect";
+	String COMPONENT_FOCUS_OWNER = "JComponent.focusOwner";
 
 	//---- Popup --------------------------------------------------------------
 
@@ -180,6 +201,15 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String POPUP_DROP_SHADOW_PAINTED = "Popup.dropShadowPainted";
+
+	/**
+	 * Specifies whether a heavy weight window should be used if the component is shown in a popup
+	 * or if the component is the owner of another component that is shown in a popup.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String POPUP_FORCE_HEAVY_WEIGHT = "Popup.forceHeavyWeight";
 
 	//---- JProgressBar -------------------------------------------------------
 
@@ -202,15 +232,33 @@ public interface FlatClientProperties
 	//---- JRootPane ----------------------------------------------------------
 
 	/**
+	 * Specifies whether FlatLaf native window decorations should be used
+	 * when creating {@code JFrame} or {@code JDialog}.
+	 * <p>
+	 * Setting this to {@code false} disables using FlatLaf native window decorations
+	 * for the window that contains the root pane. Needs to be set before showing the window.
+	 * <p>
+	 * (requires Window 10)
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 1.1.1
+	 */
+	String USE_WINDOW_DECORATIONS = "JRootPane.useWindowDecorations";
+
+	/**
 	 * Specifies whether the menu bar is embedded into the title pane if custom
 	 * window decorations are enabled. Default is {@code true}.
+	 * <p>
+	 * (requires Window 10)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
 
-	//---- JScrollBar ---------------------------------------------------------
+	//---- JScrollBar / JScrollPane -------------------------------------------
 
 	/**
 	 * Specifies whether the decrease/increase arrow buttons of a scrollbar are shown.
@@ -223,7 +271,7 @@ public interface FlatClientProperties
 	/**
 	 * Specifies whether the scroll pane uses smooth scrolling.
 	 * <p>
-	 * <strong>Component</strong> {{@link javax.swing.JScrollPane}<br>
+	 * <strong>Component</strong> {@link javax.swing.JScrollPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String SCROLL_PANE_SMOOTH_SCROLLING = "JScrollPane.smoothScrolling";
@@ -255,6 +303,14 @@ public interface FlatClientProperties
 	String TABBED_PANE_HAS_FULL_BORDER = "JTabbedPane.hasFullBorder";
 
 	/**
+	 * Specifies whether the tab area should be hidden if it contains only one tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB = "JTabbedPane.hideTabAreaWithOneTab";
+
+	/**
 	 * Specifies the minimum width of a tab.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
@@ -276,10 +332,12 @@ public interface FlatClientProperties
 	String TABBED_PANE_MAXIMUM_TAB_WIDTH = "JTabbedPane.maximumTabWidth";
 
 	/**
-	 * Specifies the height of a tab.
+	 * Specifies the minimum height of a tab.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}
+	 *
+	 * @see #TABBED_PANE_TAB_INSETS
 	 */
 	String TABBED_PANE_TAB_HEIGHT = "JTabbedPane.tabHeight";
 
@@ -289,6 +347,8 @@ public interface FlatClientProperties
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}
 	 * or tab content components (see {@link javax.swing.JTabbedPane#setComponentAt(int, java.awt.Component)})<br>
 	 * <strong>Value type</strong> {@link java.awt.Insets}
+	 *
+	 * @see #TABBED_PANE_TAB_HEIGHT
 	 */
 	String TABBED_PANE_TAB_INSETS = "JTabbedPane.tabInsets";
 
@@ -332,7 +392,7 @@ public interface FlatClientProperties
 	 * Specifies the callback that is invoked when a tab close button is clicked.
 	 * The callback is responsible for closing the tab.
 	 * <p>
-	 * Either use a {@link java.util.function.IntConsumer} that received the tab index as parameter:
+	 * Either use a {@link java.util.function.IntConsumer} that receives the tab index as parameter:
 	 * <pre>{@code
 	 * myTabbedPane.putClientProperty( "JTabbedPane.tabCloseCallback",
 	 *     (IntConsumer) tabIndex -> {
@@ -340,7 +400,7 @@ public interface FlatClientProperties
 	 *     } );
 	 * }</pre>
 	 * Or use a {@link java.util.function.BiConsumer}&lt;javax.swing.JTabbedPane, Integer&gt;
-	 * that received the tabbed pane and the tab index as parameters:
+	 * that receives the tabbed pane and the tab index as parameters:
 	 * <pre>{@code
 	 * myTabbedPane.putClientProperty( "JTabbedPane.tabCloseCallback",
 	 *     (BiConsumer<JTabbedPane, Integer>) (tabbedPane, tabIndex) -> {
@@ -366,28 +426,85 @@ public interface FlatClientProperties
 	String TABBED_PANE_TAB_CLOSE_CALLBACK = "JTabbedPane.tabCloseCallback";
 
 	/**
-	 * Specifies how to navigate to hidden tabs.
+	 * Specifies the display policy for the "more tabs" button,
+	 * which shows a popup menu with the (partly) hidden tabs.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.String}<br>
-	 * <strong>Allowed Values</strong> {@link #TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON}
-	 * or {@link #TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS}
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_POLICY_NEVER} or
+	 *     {@link #TABBED_PANE_POLICY_AS_NEEDED}
 	 */
-	String TABBED_PANE_HIDDEN_TABS_NAVIGATION = "JTabbedPane.hiddenTabsNavigation";
+	String TABBED_PANE_TABS_POPUP_POLICY = "JTabbedPane.tabsPopupPolicy";
 
 	/**
-	 * Use "more tabs" button for navigation to hidden tabs.
-	 *
-	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
+	 * Specifies the display policy for the forward/backward scroll arrow buttons.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_POLICY_NEVER},
+	 *     {@link #TABBED_PANE_POLICY_AS_NEEDED} or
+	 *     {@link #TABBED_PANE_POLICY_AS_NEEDED_SINGLE}
 	 */
-	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON = "moreTabsButton";
+	String TABBED_PANE_SCROLL_BUTTONS_POLICY = "JTabbedPane.scrollButtonsPolicy";
 
 	/**
-	 * Use forward/backward buttons for navigation to hidden tabs.
+	 * Display never.
 	 *
-	 * @see #TABBED_PANE_HIDDEN_TABS_NAVIGATION
+	 * @see #TABBED_PANE_TABS_POPUP_POLICY
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_POLICY
 	 */
-	String TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS = "arrowButtons";
+	String TABBED_PANE_POLICY_NEVER = "never";
+
+	/**
+	 * Display only when needed.
+	 * <p>
+	 * If used for {@link #TABBED_PANE_SCROLL_BUTTONS_POLICY}, both scroll arrow buttons
+	 * are either shown or hidden. Buttons are disabled if scrolling in that
+	 * direction is not applicable.
+	 *
+	 * @see #TABBED_PANE_TABS_POPUP_POLICY
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_POLICY
+	 */
+	String TABBED_PANE_POLICY_AS_NEEDED = "asNeeded";
+
+	/**
+	 * Display single button only when needed.
+	 * <p>
+	 * If scroll button placement is trailing, then this option is ignored
+	 * and both buttons are shown or hidden as needed.
+	 *
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_POLICY
+	 */
+	String TABBED_PANE_POLICY_AS_NEEDED_SINGLE = "asNeededSingle";
+
+	/**
+	 * Specifies the placement of the forward/backward scroll arrow buttons.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_PLACEMENT_BOTH} or
+	 *     {@link #TABBED_PANE_PLACEMENT_TRAILING}
+	 */
+	String TABBED_PANE_SCROLL_BUTTONS_PLACEMENT = "JTabbedPane.scrollButtonsPlacement";
+
+	/**
+	 * The forward/backward scroll arrow buttons are placed on both sides of the tab area.
+	 * The backward scroll button at the left/top side.
+	 * The forward scroll button at the right/bottom side.
+	 *
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_PLACEMENT
+	 */
+	String TABBED_PANE_PLACEMENT_BOTH = "both";
+
+	/**
+	 * The forward/backward scroll arrow buttons are placed on the trailing side of the tab area.
+	 *
+	 * @see #TABBED_PANE_SCROLL_BUTTONS_PLACEMENT
+	 */
+	String TABBED_PANE_PLACEMENT_TRAILING = "trailing";
 
 	/**
 	 * Specifies the alignment of the tab area.
@@ -595,6 +712,25 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.awt.Color}
 	 */
 	String TAB_BUTTON_SELECTED_BACKGROUND = "JToggleButton.tab.selectedBackground";
+
+	//---- JTree --------------------------------------------------------------
+
+	/**
+	 * Override if a tree shows a wide selection. Default is {@code true}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTree}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TREE_WIDE_SELECTION = "JTree.wideSelection";
+
+	/**
+	 * Specifies whether tree item selection is painted. Default is {@code true}.
+	 * If set to {@code false}, then the tree cell renderer is responsible for painting selection.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTree}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TREE_PAINT_SELECTION = "JTree.paintSelection";
 
 	//---- helper methods -----------------------------------------------------
 

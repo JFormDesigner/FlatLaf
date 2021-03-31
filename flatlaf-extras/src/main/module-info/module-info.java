@@ -24,4 +24,7 @@ module com.formdev.flatlaf.extras {
 	requires com.formdev.flatlaf;
 
 	exports com.formdev.flatlaf.extras;
+	exports com.formdev.flatlaf.extras.components;
+
+	opens com.formdev.flatlaf.extras.resources;
 }

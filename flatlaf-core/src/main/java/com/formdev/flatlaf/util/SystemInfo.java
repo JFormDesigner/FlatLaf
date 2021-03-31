@@ -38,6 +38,9 @@ public class SystemInfo
 	public static final boolean isMacOS_10_14_Mojave_orLater;
 	public static final boolean isMacOS_10_15_Catalina_orLater;
 
+	// OS architecture
+	/** @since 1.1 */ public static final boolean isX86_64;
+
 	// Java versions
 	public static final long javaVersion;
 	public static final boolean isJava_9_orLater;
@@ -50,6 +53,11 @@ public class SystemInfo
 
 	// UI toolkits
 	public static final boolean isKDE;
+
+	// other
+	/** @since 1.1 */ public static final boolean isProjector;
+	/** @since 1.1.2 */ public static final boolean isWebswing;
+	/** @since 1.1.1 */ public static final boolean isWinPE;
 
 	static {
 		// platforms
@@ -65,6 +73,10 @@ public class SystemInfo
 		isMacOS_10_14_Mojave_orLater = (isMacOS && osVersion >= toVersion( 10, 14, 0, 0 ));
 		isMacOS_10_15_Catalina_orLater = (isMacOS && osVersion >= toVersion( 10, 15, 0, 0 ));
 
+		// OS architecture
+		String osArch = System.getProperty( "os.arch" );
+		isX86_64 = osArch.equals( "amd64" ) || osArch.equals( "x86_64" );
+
 		// Java versions
 		javaVersion = scanVersion( System.getProperty( "java.version" ) );
 		isJava_9_orLater = (javaVersion >= toVersion( 9, 0, 0, 0 ));
@@ -78,6 +90,11 @@ public class SystemInfo
 
 		// UI toolkits
 		isKDE = (isLinux && System.getenv( "KDE_FULL_SESSION" ) != null);
+
+		// other
+		isProjector = Boolean.getBoolean( "org.jetbrains.projector.server.enable" );
+		isWebswing = (System.getProperty( "webswing.rootDir" ) != null);
+		isWinPE = isWindows && "X:\\Windows\\System32".equalsIgnoreCase( System.getProperty( "user.dir" ) );
 	}
 
 	public static long scanVersion( String version ) {

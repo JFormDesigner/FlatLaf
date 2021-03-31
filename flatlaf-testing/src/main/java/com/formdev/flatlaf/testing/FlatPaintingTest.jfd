@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.0.0.194" Java: "13.0.1" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -11,8 +11,8 @@ new FormModel {
 			"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
 			add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-				"$columnConstraints": "[fill][left][left][fill][fill][fill][fill][fill]"
-				"$rowConstraints": "[top][top][top][top][]"
+				"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill][fill][fill]"
+				"$rowConstraints": "[top][top][top][top][]para[][]"
 			} ) {
 				name: "flatTestPanel1"
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
@@ -53,6 +53,15 @@ new FormModel {
 					"value": "cell 3 0"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
+					name: "borderPainter25"
+					"scale": 8.0f
+					"paintBorder": false
+					"paintFocus": false
+					"arc": 20
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter17"
 					"scale": 8.0f
 					"paintBorder": false
@@ -60,7 +69,7 @@ new FormModel {
 					"focusWidth": 0
 					"arc": 0
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 4 0"
+					"value": "cell 5 0"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter21"
@@ -69,7 +78,7 @@ new FormModel {
 					"paintFocus": false
 					"arc": 0
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 5 0"
+					"value": "cell 6 0"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter29"
@@ -78,7 +87,7 @@ new FormModel {
 					"focusWidth": 1
 					"lineWidth": 3
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 7 0"
+					"value": "cell 8 0"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter10"
@@ -118,6 +127,15 @@ new FormModel {
 					"value": "cell 3 1"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
+					name: "borderPainter30"
+					"scale": 8.0f
+					"paintBackground": false
+					"paintFocus": false
+					"arc": 20
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 1"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter18"
 					"scale": 8.0f
 					"paintBackground": false
@@ -125,7 +143,7 @@ new FormModel {
 					"focusWidth": 0
 					"arc": 0
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 4 1"
+					"value": "cell 5 1"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter22"
@@ -134,7 +152,7 @@ new FormModel {
 					"paintFocus": false
 					"arc": 0
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 5 1"
+					"value": "cell 6 1"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter28"
@@ -143,7 +161,7 @@ new FormModel {
 					"focusWidth": 1
 					"lineWidth": 3
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 7 1"
+					"value": "cell 8 1"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter11"
@@ -183,6 +201,15 @@ new FormModel {
 					"value": "cell 3 2"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
+					name: "borderPainter31"
+					"scale": 8.0f
+					"paintBorder": false
+					"paintBackground": false
+					"arc": 20
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 2"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter19"
 					"scale": 8.0f
 					"paintBorder": false
@@ -190,7 +217,7 @@ new FormModel {
 					"focusWidth": 0
 					"arc": 0
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 4 2"
+					"value": "cell 5 2"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter23"
@@ -199,7 +226,7 @@ new FormModel {
 					"paintBackground": false
 					"arc": 0
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 5 2"
+					"value": "cell 6 2"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter27"
@@ -208,7 +235,7 @@ new FormModel {
 					"focusWidth": 1
 					"lineWidth": 3
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 7 2"
+					"value": "cell 8 2"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter12"
@@ -240,19 +267,26 @@ new FormModel {
 					"value": "cell 3 3"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
+					name: "borderPainter32"
+					"scale": 8.0f
+					"arc": 20
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 3"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter20"
 					"scale": 8.0f
 					"focusWidth": 0
 					"arc": 0
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 4 3"
+					"value": "cell 5 3"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter24"
 					"scale": 8.0f
 					"arc": 0
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 5 3"
+					"value": "cell 6 3"
 				} )
 				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$BorderPainter" ) {
 					name: "borderPainter26"
@@ -261,7 +295,7 @@ new FormModel {
 					"focusWidth": 1
 					"lineWidth": 3
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 7 3"
+					"value": "cell 8 3"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label1"
@@ -288,27 +322,268 @@ new FormModel {
 					"value": "cell 3 4"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label8"
+					"text": "fw 2,  lw 1,  arc 20"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 4"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label5"
 					"text": "fw 0,  lw 1,  arc 0"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 4 4"
+					"value": "cell 5 4"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label6"
 					"text": "fw 2,  lw 1,  arc 0"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 5 4"
+					"value": "cell 6 4"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label7"
 					"text": "fw 1,  lw 3,  arc 3,2,1,0"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 7 4"
+					"value": "cell 8 4"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+					name: "arrowPainter1"
+					"scale": 8.0f
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5,align left top,grow 0 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+					name: "arrowPainter2"
+					"scale": 8.0f
+					"direction": 1
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 5,align left top,grow 0 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+					name: "arrowPainter3"
+					"scale": 8.0f
+					"direction": 7
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 5,align left top,grow 0 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+					name: "arrowPainter4"
+					"scale": 8.0f
+					"direction": 3
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 5,align left top,grow 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel1"
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+						name: "arrowPainter5"
+						"scale": 8.0f
+						"direction": 1
+						"h": 10
+						"halfHeight": true
+						"YOffset": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+						name: "arrowPainter6"
+						"scale": 8.0f
+						"h": 10
+						"halfHeight": true
+						"YOffset": -1
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 5,align left top,grow 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) ) {
+					name: "panel2"
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+						name: "arrowPainter7"
+						"scale": 8.0f
+						"direction": 7
+						"w": 10
+						"halfWidth": true
+						"XOffset": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+						name: "arrowPainter8"
+						"scale": 8.0f
+						"direction": 3
+						"w": 10
+						"halfWidth": true
+						"XOffset": -1
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 5 5,align left top,grow 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "hidemode 3"
+					"$columnConstraints": "[fill][fill]"
+					"$rowConstraints": "[][][][][]"
+				} ) {
+					name: "panel5"
+					"border": new javax.swing.border.TitledBorder( "Arrow Control" )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "arrowWidthLabel"
+						"text": "Width:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 0"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "arrowWidthSpinner"
+						"model": new javax.swing.SpinnerNumberModel {
+							minimum: 0
+							value: 20
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arrowSizeChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "arrowHeightLabel"
+						"text": "Height:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "arrowHeightSpinner"
+						"model": new javax.swing.SpinnerNumberModel {
+							minimum: 0
+							value: 20
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arrowSizeChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 1"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "arrowSizeLabel"
+						"text": "Arrow Size:"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 2"
+					} )
+					add( new FormComponent( "javax.swing.JSpinner" ) {
+						name: "arrowSizeSpinner"
+						"model": new javax.swing.SpinnerNumberModel {
+							minimum: 2
+							value: 8
+						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "arrowSizeChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 2"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "vectorCheckBox"
+						"text": "vector"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "vectorChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 3 2 1,alignx left,growx 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "buttonCheckBox"
+						"text": "FlatArrowButton"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "checkBox1ActionPerformed", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 4 2 1,alignx left,growx 0"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 6 5,aligny top,growy 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+					name: "arrowPainter9"
+					"scale": 8.0f
+					"chevron": false
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 6,align left top,grow 0 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+					name: "arrowPainter10"
+					"scale": 8.0f
+					"direction": 1
+					"chevron": false
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 6,align left top,grow 0 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+					name: "arrowPainter11"
+					"scale": 8.0f
+					"direction": 7
+					"chevron": false
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 6,align left top,grow 0 0"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+					name: "arrowPainter12"
+					"scale": 8.0f
+					"direction": 3
+					"chevron": false
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 6,align left top,grow 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) {
+					"axis": 1
+				} ) {
+					name: "panel3"
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+						name: "arrowPainter13"
+						"scale": 8.0f
+						"direction": 1
+						"h": 10
+						"chevron": false
+						"halfHeight": true
+						"YOffset": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+						name: "arrowPainter14"
+						"scale": 8.0f
+						"h": 10
+						"chevron": false
+						"halfHeight": true
+						"YOffset": -1
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 6,align left top,grow 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class javax.swing.BoxLayout ) ) {
+					name: "panel4"
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+						name: "arrowPainter15"
+						"scale": 8.0f
+						"direction": 7
+						"w": 10
+						"chevron": false
+						"halfWidth": true
+						"XOffset": 1
+					} )
+					add( new FormComponent( "com.formdev.flatlaf.testing.FlatPaintingTest$ArrowPainter" ) {
+						name: "arrowPainter16"
+						"scale": 8.0f
+						"direction": 3
+						"w": 10
+						"chevron": false
+						"halfWidth": true
+						"XOffset": -1
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 5 6,align left top,grow 0 0"
 				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 1435, 880 )
+			"size": new java.awt.Dimension( 1610, 1160 )
 		} )
 	}
 }

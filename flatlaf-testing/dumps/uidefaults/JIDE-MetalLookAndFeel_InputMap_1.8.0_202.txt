@@ -1,0 +1,34 @@
+#---- JideButton ----
+
++ JideButton.focusInputMap       [lazy] 2    javax.swing.plaf.InputMapUIResource [UI]
+    SPACE                 pressed
+    released SPACE        released
+
+
+#---- JideSplitButton ----
+
++ JideSplitButton.focusInputMap  [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    DOWN                  downPressed
+    SPACE                 pressed
+    released DOWN         downReleased
+    released SPACE        released
+
+
+#---- JideTabbedPane ----
+
++ JideTabbedPane.ancestorInputMap [lazy] 4    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl KP_UP            requestFocus
+    ctrl PAGE_DOWN        navigatePageDown
+    ctrl PAGE_UP          navigatePageUp
+    ctrl UP               requestFocus
++ JideTabbedPane.focusInputMap   [lazy] 10    javax.swing.plaf.InputMapUIResource [UI]
+    ctrl DOWN             requestFocusForVisibleComponent
+    ctrl KP_DOWN          requestFocusForVisibleComponent
+    DOWN                  navigateDown
+    KP_DOWN               navigateDown
+    KP_LEFT               navigateLeft
+    KP_RIGHT              navigateRight
+    KP_UP                 navigateUp
+    LEFT                  navigateLeft
+    RIGHT                 navigateRight
+    UP                    navigateUp

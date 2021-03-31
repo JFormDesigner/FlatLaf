@@ -256,6 +256,8 @@ public abstract class FlatWindowResizer
 
 		@Override
 		protected boolean isWindowResizable() {
+			if( FlatUIUtils.isFullScreen( resizeComp ) )
+				return false;
 			if( window instanceof Frame )
 				return ((Frame)window).isResizable() && (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) == 0;
 			if( window instanceof Dialog )
@@ -429,9 +431,9 @@ public abstract class FlatWindowResizer
 		protected void paintComponent( Graphics g ) {
 			super.paintChildren( g );
 
-			// this is necessary because Dialog.setResizable() does not fire events
-			if( isDialog() )
-				updateVisibility();
+			// for dialogs: necessary because Dialog.setResizable() does not fire events
+			// for frames: necessary because GraphicsDevice.setFullScreenWindow() does not fire events
+			updateVisibility();
 
 /*debug
 			int width = getWidth();

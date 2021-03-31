@@ -61,13 +61,6 @@ public class FlatHyperlinkUI
 	}
 
 	@Override
-	public void paint( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
-
-		super.paint( g, c );
-	}
-
-	@Override
 	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
 		FlatButtonUI.paintText( g, b, textRect, text, b.isEnabled() ? b.getForeground() : disabledText );
 
@@ -78,8 +71,12 @@ public class FlatHyperlinkUI
 	private void paintUnderline( Graphics g, Rectangle rect ) {
 		int descent = g.getFontMetrics().getDescent();
 
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+
 		((Graphics2D)g).fill( new Rectangle2D.Float(
 			rect.x, (rect.y + rect.height) - descent + UIScale.scale( 1f ),
 			rect.width, UIScale.scale( 1f ) ) );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 }

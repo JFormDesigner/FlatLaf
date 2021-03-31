@@ -71,7 +71,7 @@ public class FlatToolTipUI
 		if( sharedPropertyChangedListener == null ) {
 			sharedPropertyChangedListener = e -> {
 				String name = e.getPropertyName();
-				if( name == "text" || name == "font" || name == "foreground" ) {
+				if( name == "tiptext" || name == "font" || name == "foreground" ) {
 					JToolTip toolTip = (JToolTip) e.getSource();
 					FlatLabelUI.updateHTMLRenderer( toolTip, toolTip.getTipText(), false );
 				}
@@ -116,7 +116,6 @@ public class FlatToolTipUI
 			FontMetrics fm = c.getFontMetrics( c.getFont() );
 			Insets insets = c.getInsets();
 
-			FlatUIUtils.setRenderingHints( (Graphics2D) g );
 			g.setColor( c.getForeground() );
 
 			List<String> lines = StringUtils.split( ((JToolTip)c).getTipText(), '\n' );

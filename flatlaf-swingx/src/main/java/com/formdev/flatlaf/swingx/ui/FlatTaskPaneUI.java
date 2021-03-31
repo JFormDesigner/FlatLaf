@@ -36,7 +36,6 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
-import com.formdev.flatlaf.ui.FlatArrowButton;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -146,7 +145,7 @@ public class FlatTaskPaneUI
 			if( color == null )
 				return;
 
-			FlatUIUtils.setRenderingHints( (Graphics2D) g );
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 			g.setColor( color );
 
@@ -155,6 +154,8 @@ public class FlatTaskPaneUI
 			path.append( new Rectangle2D.Float( x, y, width, height ), false );
 			path.append( new Rectangle2D.Float( x + lineWidth, y, width - (lineWidth * 2), height - lineWidth ), false );
 			((Graphics2D)g).fill( path );
+
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
 
 		@Override
@@ -179,9 +180,11 @@ public class FlatTaskPaneUI
 	{
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			FlatUIUtils.setRenderingHints( (Graphics2D) g );
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 			super.paintBorder( c, g, x, y, width, height );
+
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
 
 		@Override
@@ -219,7 +222,7 @@ public class FlatTaskPaneUI
 
 			// create arrow shape
 			int direction = group.isCollapsed() ? SwingConstants.SOUTH : SwingConstants.NORTH;
-			Shape arrowShape = FlatArrowButton.createArrowShape( direction, true, cw, ch );
+			Shape arrowShape = FlatUIUtils.createArrowShape( direction, true, cw, ch );
 
 			// fix position of controls
 			x = group.getComponentOrientation().isLeftToRight() ? (group.getWidth() - width - y) : y;

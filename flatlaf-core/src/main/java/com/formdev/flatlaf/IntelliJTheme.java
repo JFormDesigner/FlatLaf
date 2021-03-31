@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,11 +30,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import javax.swing.UIDefaults;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.json.Json;
 import com.formdev.flatlaf.json.ParseException;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
@@ -56,6 +57,8 @@ public class IntelliJTheme
 	public final boolean dark;
 	public final String author;
 
+	private final boolean isMaterialUILite;
+
 	private final Map<String, String> colors;
 	private final Map<String, Object> ui;
 	private final Map<String, Object> icons;
@@ -73,7 +76,7 @@ public class IntelliJTheme
 		try {
 		    return FlatLaf.install( createLaf( in ) );
 		} catch( Exception ex ) {
-			FlatLaf.LOG.log( Level.SEVERE, "FlatLaf: Failed to load IntelliJ theme", ex );
+			LoggingFacade.INSTANCE.logSevere(  "FlatLaf: Failed to load IntelliJ theme", ex );
 		    return false;
 		}
 	}
@@ -119,6 +122,8 @@ public class IntelliJTheme
 	    dark = Boolean.parseBoolean( (String) json.get( "dark" ) );
 	    author = (String) json.get( "author" );
 
+		isMaterialUILite = author.equals( "Mallowigi" );
+
 	    colors = (Map<String, String>) json.get( "colors" );
 	    ui = (Map<String, Object>) json.get( "ui" );
 	    icons = (Map<String, Object>) json.get( "icons" );
@@ -155,6 +160,11 @@ public class IntelliJTheme
 		Object panelBackground = defaults.get( "Panel.background" );
 		defaults.put( "Button.disabledBackground", panelBackground );
 		defaults.put( "ToggleButton.disabledBackground", panelBackground );
+
+		// fix Button borders
+		copyIfNotSet( defaults, "Button.focusedBorderColor", "Component.focusedBorderColor", uiKeys );
+		defaults.put( "Button.hoverBorderColor", defaults.get( "Button.focusedBorderColor" ) );
+		defaults.put( "HelpButton.hoverBorderColor", defaults.get( "Button.focusedBorderColor" ) );
 
 		// IDEA uses a SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
 		Object helpButtonBackground = defaults.get( "Button.startBackground" );
@@ -205,6 +215,12 @@ public class IntelliJTheme
 		if( !uiKeys.contains( "ToggleButton.foreground" ) && uiKeys.contains( "Button.foreground" ) )
 			defaults.put( "ToggleButton.foreground", defaults.get( "Button.foreground" ) );
 
+		// fix List and Table background colors in Material UI Lite themes
+		if( isMaterialUILite ) {
+			defaults.put( "List.background", defaults.get( "Tree.background" ) );
+			defaults.put( "Table.background", defaults.get( "Tree.background" ) );
+		}
+
 		// limit tree row height
 		int rowHeight = defaults.getInt( "Tree.rowHeight" );
 		if( rowHeight > 22 )
@@ -225,10 +241,17 @@ public class IntelliJTheme
 		// remove theme specific UI defaults and remember only those for current theme
 		Map<Object, Object> themeSpecificDefaults = new HashMap<>();
 		String currentThemePrefix = '[' + name.replace( ' ', '_' ) + ']';
+		String currentAuthorPrefix = "[author-" + author.replace( ' ', '_' ) + ']';
+		String allThemesPrefix = "[*]";
+		String[] prefixes = { currentThemePrefix, currentAuthorPrefix, allThemesPrefix };
 		for( String key : themeSpecificKeys ) {
 			Object value = defaults.remove( key );
-			if( key.startsWith( currentThemePrefix ) )
-				themeSpecificDefaults.put( key.substring( currentThemePrefix.length() ), value );
+			for( String prefix : prefixes ) {
+				if( key.startsWith( prefix ) ) {
+					themeSpecificDefaults.put( key.substring( prefix.length() ), value );
+					break;
+				}
+			}
 		}
 
 		return themeSpecificDefaults;
@@ -269,7 +292,6 @@ public class IntelliJTheme
 			uiKeys.add( key );
 
 			// fix ComboBox size and Spinner border in all Material UI Lite themes
-			boolean isMaterialUILite = author.equals( "Mallowigi" );
 			if( isMaterialUILite && (key.equals( "ComboBox.padding" ) || key.equals( "Spinner.border" )) )
 				return; // ignore
 
@@ -302,7 +324,7 @@ public class IntelliJTheme
 				try {
 					uiValue = UIDefaultsLoader.parseValue( key, valueStr );
 				} catch( RuntimeException ex ) {
-					UIDefaultsLoader.logParseError( Level.CONFIG, key, valueStr, ex );
+					UIDefaultsLoader.logParseError( key, valueStr, ex, false );
 					return; // ignore invalid value
 				}
 			}
@@ -381,7 +403,7 @@ public class IntelliJTheme
 	}
 
 	/**
-	 * Because IDEA uses SVGs for check boxes and radio buttons the colors for
+	 * Because IDEA uses SVGs for check boxes and radio buttons, the colors for
 	 * this two components are specified in "icons > ColorPalette".
 	 * FlatLaf uses vector icons and expects colors for the two components in UI defaults.
 	 */
@@ -453,29 +475,47 @@ public class IntelliJTheme
 			}
 		}
 
-		// remove hover and pressed colors
+		// update hover, pressed and focused colors
 		if( checkboxModified ) {
+			// for non-filled checkbox/radiobutton used in dark themes
 			defaults.remove( "CheckBox.icon.focusWidth" );
-			defaults.remove( "CheckBox.icon.hoverBorderColor" );
-			defaults.remove( "CheckBox.icon.focusedBackground" );
-			defaults.remove( "CheckBox.icon.hoverBackground" );
-			defaults.remove( "CheckBox.icon.pressedBackground" );
-			defaults.remove( "CheckBox.icon.selectedFocusedBackground" );
-			defaults.remove( "CheckBox.icon.selectedHoverBackground" );
-			defaults.remove( "CheckBox.icon.selectedPressedBackground" );
+			defaults.put( "CheckBox.icon.hoverBorderColor", defaults.get( "CheckBox.icon.focusedBorderColor" ) );
 
+			// for filled checkbox/radiobutton used in light themes
 			defaults.remove( "CheckBox.icon[filled].focusWidth" );
-			defaults.remove( "CheckBox.icon[filled].hoverBorderColor" );
-			defaults.remove( "CheckBox.icon[filled].focusedBackground" );
-			defaults.remove( "CheckBox.icon[filled].hoverBackground" );
-			defaults.remove( "CheckBox.icon[filled].pressedBackground" );
-			defaults.remove( "CheckBox.icon[filled].selectedFocusedBackground" );
-			defaults.remove( "CheckBox.icon[filled].selectedHoverBackground" );
-			defaults.remove( "CheckBox.icon[filled].selectedPressedBackground" );
+			defaults.put( "CheckBox.icon[filled].hoverBorderColor", defaults.get( "CheckBox.icon[filled].focusedBorderColor" ) );
+			defaults.put( "CheckBox.icon[filled].selectedFocusedBackground", defaults.get( "CheckBox.icon[filled].selectedBackground" ) );
+
+			if( dark ) {
+				// IDEA Darcula checkBoxFocused.svg, checkBoxSelectedFocused.svg,
+				// radioFocused.svg and radioSelectedFocused.svg
+				// use opacity=".65" for the border
+				// --> add alpha to focused border colors
+				String[] focusedBorderColorKeys = new String[] {
+					"CheckBox.icon.focusedBorderColor",
+					"CheckBox.icon.selectedFocusedBorderColor",
+					"CheckBox.icon[filled].focusedBorderColor",
+					"CheckBox.icon[filled].selectedFocusedBorderColor",
+				};
+				for( String key : focusedBorderColorKeys ) {
+					Color color = defaults.getColor( key );
+					if( color != null ) {
+						defaults.put( key, new ColorUIResource( new Color(
+							(color.getRGB() & 0xffffff) | 0xa6000000, true ) ) );
+					}
+				}
+			}
 		}
 	}
 
+	private void copyIfNotSet( UIDefaults defaults, String destKey, String srcKey, Set<String> uiKeys ) {
+		if( !uiKeys.contains( destKey ) )
+			defaults.put( destKey, defaults.get( srcKey ) );
+	}
+
+	/** Rename UI default keys (key --> value). */
 	private static Map<String, String> uiKeyMapping = new HashMap<>();
+	/** Copy UI default keys (value --> key). */
 	private static Map<String, String> uiKeyCopying = new HashMap<>();
 	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
 	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
@@ -505,6 +545,7 @@ public class IntelliJTheme
 		uiKeyCopying.put( "CheckBoxMenuItem.margin",    "MenuItem.margin" );
 		uiKeyCopying.put( "RadioButtonMenuItem.margin", "MenuItem.margin" );
 		uiKeyMapping.put( "PopupMenu.border",           "PopupMenu.borderInsets" );
+		uiKeyCopying.put( "MenuItem.underlineSelectionColor", "TabbedPane.underlineColor" );
 
 		// IDEA uses List.selectionBackground also for menu selection
 		uiKeyCopying.put( "Menu.selectionBackground",                "List.selectionBackground" );
@@ -529,6 +570,9 @@ public class IntelliJTheme
 
 		// Slider
 		uiKeyMapping.put( "Slider.trackWidth", "" ); // ignore (used in Material Theme UI Lite)
+		uiKeyCopying.put( "Slider.trackValueColor", "ProgressBar.foreground" );
+		uiKeyCopying.put( "Slider.thumbColor", "ProgressBar.foreground" );
+		uiKeyCopying.put( "Slider.trackColor", "ProgressBar.background" );
 
 		// TitlePane
 		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );

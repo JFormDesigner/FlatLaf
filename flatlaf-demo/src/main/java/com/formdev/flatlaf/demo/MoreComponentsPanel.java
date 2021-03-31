@@ -481,6 +481,7 @@ class MoreComponentsPanel
 				indeterminateCheckBox,
 				toolTipLabel, toolTip1, toolTip2,
 				toolBarLabel, toolBar1, toolBar2,
+				splitPaneLabel, splitPane3,
 			};
 
 			for( Component c : components )

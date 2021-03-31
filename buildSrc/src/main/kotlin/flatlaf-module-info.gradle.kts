@@ -33,9 +33,17 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	sourceSets {
 		create( "module-info" ) {
 			java {
-				// include "src/main/java" here to get compile errors if classes are
+				// include "src/main/java" and "src/main/java9" here to get compile errors if classes are
 				// used from other modules that are not specified in module dependencies
-				setSrcDirs( listOf( "src/main/module-info", "src/main/java" ) )
+				setSrcDirs( listOf( "src/main/module-info", "src/main/java", "src/main/java9" ) )
+
+				// exclude Java 8 source file if an equally named Java 9+ source file exists
+				exclude {
+					if( it.isDirectory )
+						return@exclude false
+					val java9file = file( "${projectDir}/src/main/java9/${it.path}" )
+					java9file.exists() && java9file != it.file
+				}
 			}
 		}
 	}
@@ -48,7 +56,8 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 			dependsOn( extension.paths )
 
 			options.compilerArgs.add( "--module-path" )
-			options.compilerArgs.add( configurations.runtimeClasspath.get().asPath )
+			options.compilerArgs.add( configurations.runtimeClasspath.get().asPath
+				+ File.pathSeparator + configurations.compileClasspath.get().asPath )
 		}
 
 		jar {

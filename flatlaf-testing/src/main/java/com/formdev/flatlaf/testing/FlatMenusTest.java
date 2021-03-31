@@ -211,11 +211,15 @@ public class FlatMenusTest
 		JMenuItem menuItem3 = new JMenuItem();
 		JCheckBoxMenuItem checkBoxMenuItem3 = new JCheckBoxMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem9 = new JCheckBoxMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem7 = new JRadioButtonMenuItem();
 		JPanel panel4 = new JPanel();
 		JMenu menu4 = new JMenu();
 		JMenuItem menuItem4 = new JMenuItem();
 		JCheckBoxMenuItem checkBoxMenuItem4 = new JCheckBoxMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem4 = new JRadioButtonMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem10 = new JCheckBoxMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem11 = new JRadioButtonMenuItem();
 		JLabel popupMenuLabel = new JLabel();
 		JButton showPopupMenuButton = new JButton();
 		armedCheckBox = new JCheckBox();
@@ -670,6 +674,8 @@ public class FlatMenusTest
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]" +
+				"[]" +
 				"[]"));
 
 			//======== menu3 ========
@@ -696,6 +702,20 @@ public class FlatMenusTest
 			radioButtonMenuItem3.setSelected(true);
 			radioButtonMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			panel3.add(radioButtonMenuItem3, "cell 0 3");
+
+			//---- checkBoxMenuItem9 ----
+			checkBoxMenuItem9.setText("selected");
+			checkBoxMenuItem9.setSelected(true);
+			checkBoxMenuItem9.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			checkBoxMenuItem9.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
+			panel3.add(checkBoxMenuItem9, "cell 0 4");
+
+			//---- radioButtonMenuItem7 ----
+			radioButtonMenuItem7.setText("selected");
+			radioButtonMenuItem7.setSelected(true);
+			radioButtonMenuItem7.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			radioButtonMenuItem7.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
+			panel3.add(radioButtonMenuItem7, "cell 0 5");
 		}
 		add(panel3, "cell 3 1");
 
@@ -707,6 +727,8 @@ public class FlatMenusTest
 				// columns
 				"[fill]",
 				// rows
+				"[]" +
+				"[]" +
 				"[]" +
 				"[]" +
 				"[]" +
@@ -739,6 +761,22 @@ public class FlatMenusTest
 			radioButtonMenuItem4.setSelected(true);
 			radioButtonMenuItem4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 			panel4.add(radioButtonMenuItem4, "cell 0 3");
+
+			//---- checkBoxMenuItem10 ----
+			checkBoxMenuItem10.setText("selected disabled");
+			checkBoxMenuItem10.setEnabled(false);
+			checkBoxMenuItem10.setSelected(true);
+			checkBoxMenuItem10.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			checkBoxMenuItem10.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
+			panel4.add(checkBoxMenuItem10, "cell 0 4");
+
+			//---- radioButtonMenuItem11 ----
+			radioButtonMenuItem11.setText("selected disabled");
+			radioButtonMenuItem11.setEnabled(false);
+			radioButtonMenuItem11.setSelected(true);
+			radioButtonMenuItem11.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			radioButtonMenuItem11.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showReadAccess.png")));
+			panel4.add(radioButtonMenuItem11, "cell 0 5");
 		}
 		add(panel4, "cell 4 1");
 

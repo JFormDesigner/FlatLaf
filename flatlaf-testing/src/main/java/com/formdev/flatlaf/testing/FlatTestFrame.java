@@ -22,10 +22,12 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import javax.swing.*;
+import javax.swing.FocusManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -35,13 +37,15 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.LookAndFeelsComboBox;
 import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.demo.intellijthemes.*;
 import com.formdev.flatlaf.extras.*;
-import com.formdev.flatlaf.extras.TriStateCheckBox.State;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox.State;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -65,6 +69,9 @@ public class FlatTestFrame
 	public boolean applyComponentOrientationToFrame;
 
 	public static FlatTestFrame create( String[] args, String title ) {
+		// disable text antialiasing
+//		System.setProperty( "awt.useSystemAAFontSettings", "off" );
+
 		DemoPrefs.init( PREFS_ROOT_PATH );
 
 		// set scale factor
@@ -194,6 +201,16 @@ public class FlatTestFrame
 		((JComponent)getContentPane()).registerKeyboardAction(
 			e -> decrFont(),
 			KeyStroke.getKeyStroke( KeyEvent.VK_MINUS, menuShortcutKeyMask ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
+		// register Alt+UP and Alt+DOWN to switch to previous/next theme
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> themesPanel.selectPreviousTheme(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_UP, KeyEvent.ALT_DOWN_MASK ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> themesPanel.selectNextTheme(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, KeyEvent.ALT_DOWN_MASK ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
 		// register ESC key to close frame
@@ -331,10 +348,12 @@ public class FlatTestFrame
 		// hide popup to avoid occasional StackOverflowError when updating UI
 		lookAndFeelComboBox.setPopupVisible( false );
 
-		applyLookAndFeel( lafClassName, null, false );
+		applyLookAndFeel( lafClassName, null, null, null, false );
 	}
 
-	private void applyLookAndFeel( String lafClassName, IntelliJTheme theme, boolean pack ) {
+	private void applyLookAndFeel( String lafClassName, IntelliJTheme theme,
+		String nameForProperties, Properties properties, boolean pack )
+	{
 		EventQueue.invokeLater( () -> {
 			try {
 				// clear custom default font before switching to other LaF
@@ -349,6 +368,8 @@ public class FlatTestFrame
 				// change look and feel
 				if( theme != null )
 					UIManager.setLookAndFeel( IntelliJTheme.createLaf( theme ) );
+				else if( properties != null )
+					UIManager.setLookAndFeel( new FlatPropertiesLaf( nameForProperties, properties ) );
 				else
 					UIManager.setLookAndFeel( lafClassName );
 
@@ -425,7 +446,7 @@ public class FlatTestFrame
 			Color green = dark ? Color.green.darker() : Color.green;
 
 			updateComponentsRecur( content, (c, type) -> {
-				if( type == "view" || type == "tab" ) {
+				if( type == "view" || type == "tab" || c instanceof JSlider ) {
 					c.setForeground( explicit ? magenta : restoreColor );
 					c.setBackground( explicit ? orange : restoreColor );
 				} else {
@@ -484,6 +505,29 @@ public class FlatTestFrame
 		inspector.setEnabled( inspectCheckBox.isSelected() );
 	}
 
+	private void uiDefaultsInspectorChanged() {
+		getContentPane().removeAll();
+
+		FocusManager focusManager = FocusManager.getCurrentManager();
+		Component focusOwner = focusManager.getFocusOwner();
+
+		if( uiDefaultsInspectorCheckBox.isSelected() ) {
+			JComponent uiDefaultsInspector = FlatUIDefaultsInspector.createInspectorPanel();
+
+			JSplitPane splitPane = new JSplitPane();
+			splitPane.setLeftComponent( dialogPane );
+			splitPane.setRightComponent( uiDefaultsInspector );
+			getContentPane().add( splitPane, BorderLayout.CENTER );
+		} else
+			getContentPane().add( dialogPane, BorderLayout.CENTER );
+
+		if( focusOwner != null && focusOwner.isDisplayable() )
+			focusOwner.requestFocusInWindow();
+
+		pack();
+		setLocationRelativeTo( null );
+	}
+
 	private void scaleFactorChanged() {
 		String scaleFactor = (String) scaleFactorComboBox.getSelectedItem();
 		if( "default".equals( scaleFactor ) )
@@ -507,7 +551,13 @@ public class FlatTestFrame
 		IntelliJTheme theme = (lookAndFeel instanceof IntelliJTheme.ThemeLaf)
 			? ((IntelliJTheme.ThemeLaf)lookAndFeel).getTheme()
 			: null;
-		applyLookAndFeel( lookAndFeel.getClass().getName(), theme, true );
+		String nameForProperties = null;
+		Properties properties = null;
+		if( lookAndFeel instanceof FlatPropertiesLaf ) {
+			nameForProperties = lookAndFeel.getName();
+			properties = ((FlatPropertiesLaf)lookAndFeel).getProperties();
+		}
+		applyLookAndFeel( lookAndFeel.getClass().getName(), theme, nameForProperties, properties, true );
 	}
 
 	private void updateScaleFactorComboBox() {
@@ -568,7 +618,7 @@ public class FlatTestFrame
 		sizeVariantComboBox.setVisible( visible );
 	}
 
-	void updateComponentsRecur( Container container, BiConsumer<Component, String> action ) {
+	public static void updateComponentsRecur( Container container, BiConsumer<Component, String> action ) {
 		for( Component c : container.getComponents() ) {
 			if( c instanceof JPanel || c instanceof JDesktopPane ) {
 				updateComponentsRecur( (Container) c, action );
@@ -636,9 +686,10 @@ public class FlatTestFrame
 		rightToLeftCheckBox = new JCheckBox();
 		enabledCheckBox = new JCheckBox();
 		inspectCheckBox = new JCheckBox();
+		uiDefaultsInspectorCheckBox = new JCheckBox();
 		explicitColorsCheckBox = new JCheckBox();
 		backgroundCheckBox = new JCheckBox();
-		opaqueTriStateCheckBox = new TriStateCheckBox();
+		opaqueTriStateCheckBox = new FlatTriStateCheckBox();
 		sizeVariantComboBox = new JComboBox<>();
 		closeButton = new JButton();
 		themesPanel = new IJThemesPanel();
@@ -678,6 +729,7 @@ public class FlatTestFrame
 					"[fill]" +
 					"[fill]" +
 					"[fill]" +
+					"[fill]" +
 					"[grow,fill]" +
 					"[button,fill]",
 					// rows
@@ -700,7 +752,9 @@ public class FlatTestFrame
 					"2.5",
 					"3",
 					"3.5",
-					"4"
+					"4",
+					"5",
+					"6"
 				}));
 				scaleFactorComboBox.setMaximumRowCount(20);
 				scaleFactorComboBox.addActionListener(e -> scaleFactorChanged());
@@ -731,23 +785,29 @@ public class FlatTestFrame
 				inspectCheckBox.addActionListener(e -> inspectChanged());
 				buttonBar.add(inspectCheckBox, "cell 5 0");
 
+				//---- uiDefaultsInspectorCheckBox ----
+				uiDefaultsInspectorCheckBox.setText("UI defaults");
+				uiDefaultsInspectorCheckBox.setMnemonic('U');
+				uiDefaultsInspectorCheckBox.addActionListener(e -> uiDefaultsInspectorChanged());
+				buttonBar.add(uiDefaultsInspectorCheckBox, "cell 6 0");
+
 				//---- explicitColorsCheckBox ----
 				explicitColorsCheckBox.setText("explicit colors");
 				explicitColorsCheckBox.setMnemonic('X');
 				explicitColorsCheckBox.addActionListener(e -> explicitColorsChanged());
-				buttonBar.add(explicitColorsCheckBox, "cell 6 0");
+				buttonBar.add(explicitColorsCheckBox, "cell 7 0");
 
 				//---- backgroundCheckBox ----
 				backgroundCheckBox.setText("background");
 				backgroundCheckBox.setMnemonic('B');
 				backgroundCheckBox.addActionListener(e -> backgroundChanged());
-				buttonBar.add(backgroundCheckBox, "cell 7 0");
+				buttonBar.add(backgroundCheckBox, "cell 8 0");
 
 				//---- opaqueTriStateCheckBox ----
 				opaqueTriStateCheckBox.setText("opaque");
 				opaqueTriStateCheckBox.setMnemonic('O');
 				opaqueTriStateCheckBox.addActionListener(e -> opaqueChanged());
-				buttonBar.add(opaqueTriStateCheckBox, "cell 8 0");
+				buttonBar.add(opaqueTriStateCheckBox, "cell 9 0");
 
 				//---- sizeVariantComboBox ----
 				sizeVariantComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -758,11 +818,11 @@ public class FlatTestFrame
 				}));
 				sizeVariantComboBox.setSelectedIndex(2);
 				sizeVariantComboBox.addActionListener(e -> sizeVariantChanged());
-				buttonBar.add(sizeVariantComboBox, "cell 9 0");
+				buttonBar.add(sizeVariantComboBox, "cell 10 0");
 
 				//---- closeButton ----
 				closeButton.setText("Close");
-				buttonBar.add(closeButton, "cell 11 0");
+				buttonBar.add(closeButton, "cell 12 0");
 			}
 			dialogPane.add(buttonBar, BorderLayout.SOUTH);
 			dialogPane.add(themesPanel, BorderLayout.EAST);
@@ -781,9 +841,10 @@ public class FlatTestFrame
 	private JCheckBox rightToLeftCheckBox;
 	private JCheckBox enabledCheckBox;
 	private JCheckBox inspectCheckBox;
+	private JCheckBox uiDefaultsInspectorCheckBox;
 	private JCheckBox explicitColorsCheckBox;
 	private JCheckBox backgroundCheckBox;
-	private TriStateCheckBox opaqueTriStateCheckBox;
+	private FlatTriStateCheckBox opaqueTriStateCheckBox;
 	private JComboBox<String> sizeVariantComboBox;
 	private JButton closeButton;
 	private IJThemesPanel themesPanel;

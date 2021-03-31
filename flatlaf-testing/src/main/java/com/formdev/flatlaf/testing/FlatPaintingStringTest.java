@@ -180,7 +180,7 @@ public class FlatPaintingStringTest
 		@Override
 		protected void paintComponent( Graphics g ) {
 			Graphics2D g2 = (Graphics2D) g;
-			FlatUIUtils.setRenderingHints( g2 );
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g2 );
 
 			// simulate component y position at a fraction
 			if( scaleFactor > 1 && SystemInfo.isJava_9_orLater )
@@ -241,6 +241,8 @@ public class FlatPaintingStringTest
 				double textY = t.getTranslateY() + (y * t.getScaleY());
 				setToolTipText( textY + " + " + yCorrection + " = " + (textY + yCorrection) );
 			}
+
+			FlatUIUtils.resetRenderingHints( g2, oldRenderingHints );
 		}
 
 		private int scale( int value ) {

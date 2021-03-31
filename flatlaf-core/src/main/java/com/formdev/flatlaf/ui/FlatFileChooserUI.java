@@ -31,13 +31,17 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileView;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.metal.MetalFileChooserUI;
+import javax.swing.table.TableCellRenderer;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.ScaledImageIcon;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -188,6 +192,62 @@ public class FlatFileChooserUI
 		} catch( ArrayIndexOutOfBoundsException ex ) {
 			// ignore
 		}
+	}
+
+	@Override
+	protected JPanel createDetailsView( JFileChooser fc ) {
+		JPanel p = super.createDetailsView( fc );
+
+		if( !SystemInfo.isWindows )
+			return p;
+
+		// find scroll pane
+		JScrollPane scrollPane = null;
+		for( Component c : p.getComponents() ) {
+			if( c instanceof JScrollPane ) {
+				scrollPane = (JScrollPane) c;
+				break;
+			}
+		}
+		if( scrollPane == null )
+			return p;
+
+		// get scroll view, which should be a table
+		Component view = scrollPane.getViewport().getView();
+		if( !(view instanceof JTable) )
+			return p;
+
+		JTable table = (JTable) view;
+
+		// on Windows 10, the date may contain left-to-right (0x200e) and right-to-left (0x200f)
+		// mark characters (see https://en.wikipedia.org/wiki/Left-to-right_mark)
+		// when the "current user" item is selected in the "look in" combobox
+		// --> remove them
+		TableCellRenderer defaultRenderer = table.getDefaultRenderer( Object.class );
+		table.setDefaultRenderer( Object.class, new TableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected,
+				boolean hasFocus, int row, int column )
+			{
+				// remove left-to-right and right-to-left mark characters
+				if( value instanceof String && ((String)value).startsWith( "\u200e" ) ) {
+					String str = (String) value;
+					char[] buf = new char[str.length()];
+					int j = 0;
+					for( int i = 0; i < buf.length; i++ ) {
+						char ch = str.charAt( i );
+						if( ch != '\u200e' && ch != '\u200f' )
+							buf[j++] = ch;
+					}
+					value = new String( buf, 0, j );
+				}
+
+				return defaultRenderer.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
+			}
+
+		} );
+
+		return p;
 	}
 
 	@Override

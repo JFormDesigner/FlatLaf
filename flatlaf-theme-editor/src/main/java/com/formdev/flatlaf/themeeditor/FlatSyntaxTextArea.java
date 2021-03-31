@@ -17,6 +17,8 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Color;
+import java.awt.KeyboardFocusManager;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.text.BadLocationException;
@@ -38,6 +40,9 @@ class FlatSyntaxTextArea
 	private final Map<String, Color> parsedColorsMap = new HashMap<>();
 
 	FlatSyntaxTextArea() {
+		// remove Ctrl+Tab and Ctrl+Shift+Tab focus traversal keys to allow tabbed pane to process them
+		setFocusTraversalKeys( KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet() );
+		setFocusTraversalKeys( KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.emptySet() );
 	}
 
 	boolean isUseColorOfColorTokens() {

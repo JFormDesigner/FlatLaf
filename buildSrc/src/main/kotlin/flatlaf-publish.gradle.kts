@@ -26,8 +26,7 @@ val extension = project.extensions.create<PublishExtension>( "flatlafPublish" )
 
 plugins {
 	`maven-publish`
-	id( "com.jfrog.bintray" )
-	id( "com.jfrog.artifactory" )
+	signing
 }
 
 publishing {
@@ -63,54 +62,51 @@ publishing {
 				}
 
 				scm {
+					connection.set( "scm:git:git://github.com/JFormDesigner/FlatLaf.git" )
 					url.set( "https://github.com/JFormDesigner/FlatLaf" )
 				}
+
+				issueManagement {
+					system.set( "GitHub" )
+					url.set( "https://github.com/JFormDesigner/FlatLaf/issues" )
+				}
+			}
+		}
+	}
+
+	repositories {
+		maven {
+			name = "OSSRH"
+
+			val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+			val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+			url = uri( if( java.lang.Boolean.getBoolean( "release" ) ) releasesRepoUrl else snapshotsRepoUrl )
+
+			credentials {
+				// get from gradle.properties
+				val ossrhUsername: String? by project
+				val ossrhPassword: String? by project
+
+				username = System.getenv( "OSSRH_USERNAME" ) ?: ossrhUsername
+				password = System.getenv( "OSSRH_PASSWORD" ) ?: ossrhPassword
 			}
 		}
 	}
 }
 
-bintray {
-	user = rootProject.extra["bintray.user"] as String?
-	key = rootProject.extra["bintray.key"] as String?
+signing {
+	// get from gradle.properties
+	val signingKey: String? by project
+	val signingPassword: String? by project
 
-	setPublications( "maven" )
+	val key = System.getenv( "SIGNING_KEY" ) ?: signingKey
+	val password = System.getenv( "SIGNING_PASSWORD" ) ?: signingPassword
 
-	with( pkg ) {
-		repo = "flatlaf"
-		afterEvaluate {
-			this@with.name = extension.artifactId
-		}
-		setLicenses( "Apache-2.0" )
-		vcsUrl = "https://github.com/JFormDesigner/FlatLaf"
-
-		with( version ) {
-			name = project.version.toString()
-		}
-
-		publish = rootProject.extra["bintray.publish"] as Boolean
-		dryRun = rootProject.extra["bintray.dryRun"] as Boolean
-	}
+	useInMemoryPgpKeys( key, password )
+	sign( publishing.publications["maven"] )
 }
 
-artifactory {
-	setContextUrl( "https://oss.jfrog.org" )
-
-	publish( closureOf<org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig> {
-		repository( delegateClosureOf<groovy.lang.GroovyObject> {
-			setProperty( "repoKey", "oss-snapshot-local" )
-			setProperty( "username", rootProject.extra["bintray.user"] as String? )
-			setProperty( "password", rootProject.extra["bintray.key"] as String? )
-		} )
-
-		defaults( delegateClosureOf<groovy.lang.GroovyObject> {
-			invokeMethod( "publications", "maven" )
-			setProperty( "publishArtifacts", true )
-			setProperty( "publishPom", true )
-		} )
-	} )
-
-	resolve( delegateClosureOf<org.jfrog.gradle.plugin.artifactory.dsl.ResolverConfig> {
-		setProperty( "repoKey", "jcenter" )
-	} )
+// disable signing of snapshots
+tasks.withType<Sign>().configureEach {
+	onlyIf { java.lang.Boolean.getBoolean( "release" ) }
 }

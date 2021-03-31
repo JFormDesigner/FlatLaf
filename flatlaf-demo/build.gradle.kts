@@ -16,15 +16,6 @@
 
 plugins {
 	`java-library`
-	id( "com.jfrog.bintray" )
-
-	// Although artifactory plugin is not used in this subproject, the plugin is required
-	// because otherwise gradle fails with following error:
-	//     Caused by: org.codehaus.groovy.runtime.typehandling.GroovyCastException:
-	//     Cannot cast object 'task ':bintrayUpload''
-	//     with class 'com.jfrog.bintray.gradle.tasks.BintrayUploadTask_Decorated'
-	//     to class 'com.jfrog.bintray.gradle.tasks.BintrayUploadTask'
-	id( "com.jfrog.artifactory" )
 }
 
 repositories {
@@ -40,6 +31,7 @@ dependencies {
 	implementation( project( ":flatlaf-intellij-themes" ) )
 	implementation( "com.miglayout:miglayout-swing:5.3-SNAPSHOT" )
 	implementation( "com.jgoodies:jgoodies-forms:1.9.0" )
+//	implementation( project( ":flatlaf-natives-jna" ) )
 }
 
 tasks {
@@ -47,6 +39,7 @@ tasks {
 		dependsOn( ":flatlaf-core:jar" )
 		dependsOn( ":flatlaf-extras:jar" )
 		dependsOn( ":flatlaf-intellij-themes:jar" )
+//		dependsOn( ":flatlaf-natives-jna:jar" )
 
 		manifest {
 			attributes( "Main-Class" to "com.formdev.flatlaf.demo.FlatLafDemo" )
@@ -66,26 +59,5 @@ tasks {
 					exclude( "META-INF/LICENSE" )
 				} }
 		} )
-	}
-}
-
-bintray {
-	user = rootProject.extra["bintray.user"] as String?
-	key = rootProject.extra["bintray.key"] as String?
-
-	setConfigurations( "archives" )
-
-	with( pkg ) {
-		repo = "flatlaf"
-		name = "flatlaf-demo"
-		setLicenses( "Apache-2.0" )
-		vcsUrl = "https://github.com/JFormDesigner/FlatLaf"
-
-		with( version ) {
-			name = project.version.toString()
-		}
-
-		publish = rootProject.extra["bintray.publish"] as Boolean
-		dryRun = rootProject.extra["bintray.dryRun"] as Boolean
 	}
 }

@@ -18,12 +18,21 @@ plugins {
 	`java-library`
 }
 
+repositories {
+	maven {
+		// for using MigLayout snapshot
+		url = uri( "https://oss.sonatype.org/content/repositories/snapshots/" )
+	}
+}
+
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
 	implementation( project( ":flatlaf-extras" ) )
 
-	implementation( "com.fifesoft:rsyntaxtextarea:3.1.1" )
-	implementation( "com.fifesoft:autocomplete:3.1.0" )
+	implementation( "com.miglayout:miglayout-swing:5.3-SNAPSHOT" )
+	implementation( "com.fifesoft:rsyntaxtextarea:3.1.2" )
+	implementation( "com.fifesoft:autocomplete:3.1.1" )
+	implementation( "com.fifesoft:rstaui:3.1.1" )
 }
 
 tasks {

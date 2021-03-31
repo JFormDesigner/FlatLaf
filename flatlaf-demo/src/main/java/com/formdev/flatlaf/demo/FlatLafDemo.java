@@ -17,8 +17,6 @@
 package com.formdev.flatlaf.demo;
 
 import java.awt.Dimension;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
@@ -40,12 +38,11 @@ public class FlatLafDemo
 		if( SystemInfo.isMacOS && System.getProperty( "apple.laf.useScreenMenuBar" ) == null )
 			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
 
+		if( FlatLafDemo.screenshotsMode && !SystemInfo.isJava_9_orLater && System.getProperty( "flatlaf.uiScale" ) == null )
+			System.setProperty( "flatlaf.uiScale", "2x" );
+
 		SwingUtilities.invokeLater( () -> {
 			DemoPrefs.init( PREFS_ROOT_PATH );
-
-			// enable window decorations
-			JFrame.setDefaultLookAndFeelDecorated( true );
-			JDialog.setDefaultLookAndFeelDecorated( true );
 
 			// application specific UI defaults
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.demo" );
@@ -61,7 +58,7 @@ public class FlatLafDemo
 			DemoFrame frame = new DemoFrame();
 
 			if( FlatLafDemo.screenshotsMode )
-				frame.setPreferredSize( new Dimension( 1280, 620 ) );
+				frame.setPreferredSize( new Dimension( 1660, 840 ) );
 
 			// show frame
 			frame.pack();

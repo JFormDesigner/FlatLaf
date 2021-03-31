@@ -21,7 +21,9 @@ plugins {
 
 dependencies {
 	implementation( project( ":flatlaf-core" ) )
-	implementation( "com.jidesoft:jide-oss:3.6.18" )
+
+	// use compileOnly() because there are various JIDE libraries available on Maven Central
+	compileOnly( "com.formdev:jide-oss:3.7.11.1" )
 }
 
 java {

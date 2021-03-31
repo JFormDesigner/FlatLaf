@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatGruvboxDarkHardIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "Gruvbox Dark Hard";
+
+	public static boolean install() {
 		try {
 			return install( new FlatGruvboxDarkHardIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatGruvboxDarkHardIJTheme.class );
 	}
 
 	public FlatGruvboxDarkHardIJTheme() {
@@ -43,6 +49,6 @@ public class FlatGruvboxDarkHardIJTheme
 
 	@Override
 	public String getName() {
-		return "Gruvbox Dark Hard";
+		return NAME;
 	}
 }

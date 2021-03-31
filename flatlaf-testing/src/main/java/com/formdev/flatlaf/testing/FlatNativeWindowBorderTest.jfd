@@ -1,0 +1,151 @@
+JFDML JFormDesigner: "7.0.3.1.342" Java: "16" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[][][grow,fill]"
+			"$rowConstraints": "[grow,top]para[]0[]0[][][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "info"
+				"text": "text"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "resizableCheckBox"
+				"text": "resizable"
+				"selected": true
+				"mnemonic": 82
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "resizableChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "maximizedBoundsCheckBox"
+				"text": "maximized bounds (50,100, 1000,700)"
+				"mnemonic": 77
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "maximizedBoundsChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "undecoratedCheckBox"
+				"text": "undecorated"
+				"mnemonic": 85
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "undecoratedChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "fullScreenCheckBox"
+				"text": "full screen"
+				"mnemonic": 70
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "fullScreenChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "nativeCheckBox"
+				"text": "FlatLaf native window decorations"
+				"selected": true
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nativeChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "native2CheckBox"
+				"text": "JRootPane.useWindowDecorations"
+				"selected": true
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "native2Changed", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "openDialogButton"
+				"text": "Open Dialog"
+				"mnemonic": 68
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDialog", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "hideWindowButton"
+				"text": "Hide"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hideWindow", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "reopenButton"
+				"text": "Dispose and Reopen"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reopen", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "replaceRootPaneButton"
+				"text": "replace rootpane"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "replaceRootPane", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "openFrameButton"
+				"text": "Open Frame"
+				"mnemonic": 65
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openFrame", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showHiddenWindowButton"
+				"text": "Show hidden"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHiddenWindow", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "reshowButton"
+				"text": "Hide and Show"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reshow", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "revalidateButton"
+				"text": "revalidate"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "revalidateLayout", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5 3 1"
+			} )
+			add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
+				name: "hSpacer1"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5 3 1,growx"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "closeButton"
+				"text": "Close"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "close", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5 3 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 520, 300 )
+		} )
+	}
+}

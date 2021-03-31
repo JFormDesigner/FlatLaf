@@ -22,6 +22,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -96,23 +99,37 @@ public class FlatLabelUI
 	}
 
 	/**
-	 * Checks whether text contains HTML headings and adds a special CSS rule to
-	 * re-calculate heading font sizes based on current component font size.
+	 * Checks whether text contains HTML tags that use "absolute-size" keywords
+	 * (e.g. "x-large") for font-size in default style sheet
+	 * (see javax/swing/text/html/default.css).
+	 * If yes, adds a special CSS rule (BASE_SIZE) to the HTML text, which
+	 * re-calculates font sizes based on current component font size.
 	 */
 	static void updateHTMLRenderer( JComponent c, String text, boolean always ) {
 		if( BasicHTML.isHTMLString( text ) &&
 			c.getClientProperty( "html.disable" ) != Boolean.TRUE &&
-			text.contains( "<h" ) &&
-			(text.contains( "<h1" ) || text.contains( "<h2" ) || text.contains( "<h3" ) ||
-			 text.contains( "<h4" ) || text.contains( "<h5" ) || text.contains( "<h6" )) )
+			needsFontBaseSize( text ) )
 		{
-			int headIndex = text.indexOf( "<head>" );
-
+			// BASE_SIZE rule is parsed in javax.swing.text.html.StyleSheet.addRule()
 			String style = "<style>BASE_SIZE " + c.getFont().getSize() + "</style>";
-			if( headIndex < 0 )
-				style = "<head>" + style + "</head>";
 
-			int insertIndex = headIndex >= 0 ? (headIndex + "<head>".length()) : "<html>".length();
+			String lowerText = text.toLowerCase();
+			int headIndex;
+			int styleIndex;
+
+			int insertIndex;
+			if( (headIndex = lowerText.indexOf( "<head>" )) >= 0 ) {
+				// there is a <head> tag --> insert after <head> tag
+				insertIndex = headIndex + "<head>".length();
+			} else if( (styleIndex = lowerText.indexOf( "<style>" )) >= 0 ) {
+				// there is a <style> tag --> insert before <style> tag
+				insertIndex = styleIndex;
+			} else {
+				// no <head> or <style> tag --> insert <head> tag after <html> tag
+				style = "<head>" + style + "</head>";
+				insertIndex = "<html>".length();
+			}
+
 			text = text.substring( 0, insertIndex )
 				+ style
 				+ text.substring( insertIndex );
@@ -120,6 +137,44 @@ public class FlatLabelUI
 			return; // not necessary to invoke BasicHTML.updateRenderer()
 
 		BasicHTML.updateRenderer( c, text );
+	}
+
+	private static Set<String> tagsUseFontSizeSet;
+
+	private static boolean needsFontBaseSize( String text ) {
+		if( tagsUseFontSizeSet == null ) {
+			// tags that use font-size in javax/swing/text/html/default.css
+			tagsUseFontSizeSet = new HashSet<>( Arrays.asList(
+				"h1", "h2", "h3", "h4", "h5", "h6", "code", "kbd", "big", "small", "samp" ) );
+		}
+
+		// search for tags in HTML text
+		int textLength = text.length();
+		for( int i = 6; i < textLength - 1; i++ ) {
+			if( text.charAt( i ) == '<' ) {
+				switch( text.charAt( i + 1 ) ) {
+					// first letters of tags in tagsUseFontSizeSet
+					case 'b': case 'B':
+					case 'c': case 'C':
+					case 'h': case 'H':
+					case 'k': case 'K':
+					case 's': case 'S':
+						int tagBegin = i + 1;
+						for( i += 2; i < textLength; i++ ) {
+							if( !Character.isLetterOrDigit( text.charAt( i ) ) ) {
+								String tag = text.substring( tagBegin, i ).toLowerCase();
+								if( tagsUseFontSizeSet.contains( tag ) )
+									return true;
+
+								break;
+							}
+						}
+						break;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	static Graphics createGraphicsHTMLTextYCorrection( Graphics g, JComponent c ) {

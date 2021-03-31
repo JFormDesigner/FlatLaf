@@ -16,9 +16,6 @@
 
 package com.formdev.flatlaf;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-
 /**
  * Defines/documents own system properties used in FlatLaf.
  *
@@ -58,11 +55,15 @@ public interface FlatSystemProperties
 	String USE_UBUNTU_FONT = "flatlaf.useUbuntuFont";
 
 	/**
-	 * Specifies whether custom look and feel window decorations should be used
+	 * Specifies whether FlatLaf native window decorations should be used
 	 * when creating {@code JFrame} or {@code JDialog}.
 	 * <p>
-	 * If this system property is set, FlatLaf invokes {@link JFrame#setDefaultLookAndFeelDecorated(boolean)}
-	 * and {@link JDialog#setDefaultLookAndFeelDecorated(boolean)} on LaF initialization.
+	 * Setting this to {@code true} forces using FlatLaf native window decorations
+	 * even if they are not enabled by the application.
+	 * <p>
+	 * Setting this to {@code false} disables using FlatLaf native window decorations.
+	 * <p>
+	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none
@@ -79,13 +80,19 @@ public interface FlatSystemProperties
 	 * Setting this to {@code true} forces using JetBrains Runtime custom window decorations
 	 * even if they are not enabled by the application.
 	 * <p>
+	 * Setting this to {@code false} disables using JetBrains Runtime custom window decorations.
+	 * <p>
+	 * (requires Window 10)
+	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
-	 * <strong>Default</strong> {@code true}
+	 * <strong>Default</strong> none
 	 */
 	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
 
 	/**
 	 * Specifies whether menubar is embedded into custom window decorations.
+	 * <p>
+	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> {@code true}

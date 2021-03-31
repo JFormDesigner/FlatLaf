@@ -19,10 +19,14 @@ package com.formdev.flatlaf.jideoss;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.ActiveValue;
 import com.formdev.flatlaf.FlatDefaultsAddon;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.jideoss.ui.FlatJidePainter;
 import com.jidesoft.plaf.LookAndFeelFactory;
+import com.jidesoft.plaf.UIDefaultsLookup;
 import com.jidesoft.plaf.LookAndFeelFactory.UIDefaultsCustomizer;
 import com.jidesoft.plaf.LookAndFeelFactory.UIDefaultsInitializer;
 
@@ -47,6 +51,14 @@ public class FlatJideOssDefaultsAddon
 	}
 
 	@Override
+	public void afterDefaultsLoading( LookAndFeel laf, UIDefaults defaults ) {
+		// TristateCheckBox
+		defaults.put( "TristateCheckBox.icon", null );
+		defaults.put( "TristateCheckBox.setMixed.clientProperty",   new Object[] { "JButton.selectedState", "indeterminate" } );
+		defaults.put( "TristateCheckBox.clearMixed.clientProperty", new Object[] { "JButton.selectedState", null } );
+	}
+
+	@Override
 	public int getPriority() {
 		return 11;
 	}
@@ -57,6 +69,8 @@ public class FlatJideOssDefaultsAddon
 	 * Because JIDE overwrites our UI defaults (from properties files) with its
 	 * own UI defaults, we have to first remember our UI defaults in the initializer
 	 * (invoked before JIDE overwrites UI defaults) and then restore them in the customizer.
+	 * <p>
+	 * Invoked from {@link LookAndFeelFactory#installJideExtension()}.
 	 */
 	public static class FlatJideUIDefaultsCustomizer
 		implements UIDefaultsInitializer, UIDefaultsCustomizer
@@ -71,7 +85,9 @@ public class FlatJideOssDefaultsAddon
 				Object key = e.getKey();
 				if( key instanceof String &&
 					(((String)key).startsWith( "Jide" ) ||
-					 ((String)key).equals( "Resizable.resizeBorder" )) )
+					 ((String)key).startsWith( "TristateCheckBox." ) ||
+					 key.equals( "RangeSliderUI" ) ||
+					 key.equals( "Resizable.resizeBorder" )) )
 				{
 					jideDefaults.put( key, e.getValue() );
 				}
@@ -84,6 +100,28 @@ public class FlatJideOssDefaultsAddon
 				defaults.putAll( jideDefaults );
 				jideDefaults = null;
 			}
+
+			// painter
+			UIDefaultsLookup.put( defaults, "Theme.painter", FlatJidePainter.getInstance() );
+
+			// avoid that JideButton and JideSplitButton shift icon on hover/selection
+			defaults.put( "Icon.floating", false );
+
+			// fonts
+			ActiveValue font = FlatLaf.createActiveFontValue( 1f );
+			defaults.put( "JideButton.font", font );
+			defaults.put( "JideLabel.font", font );
+			defaults.put( "JideSplitButton.font", font );
+			defaults.put( "JideTabbedPane.font", font );
+			defaults.put( "JideTabbedPane.selectedTabFont", font );
+
+			// reset standard fonts modified by LookAndFeelFactory.installJideExtension()
+			defaults.put( "FormattedTextField.font", font );
+			defaults.put( "Spinner.font", font );
+			defaults.put( "TextArea.font", font );
+
+			// TristateCheckBox
+			defaults.put( "TristateCheckBox.icon", null );
 		}
 	}
 }

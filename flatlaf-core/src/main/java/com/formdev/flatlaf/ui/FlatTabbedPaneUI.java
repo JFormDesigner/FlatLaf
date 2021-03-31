@@ -56,6 +56,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.IntConsumer;
+import javax.accessibility.Accessible;
+import javax.accessibility.AccessibleContext;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -83,6 +85,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.JavaCompatibility;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -127,7 +130,12 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
- * @uiDefault TabbedPane.hiddenTabsNavigation			String	moreTabsButton (default) or arrowButtons
+ *
+ * @uiDefault TabbedPane.tabLayoutPolicy				String	wrap (default) or scroll
+ * @uiDefault TabbedPane.tabsPopupPolicy				String	never or asNeeded (default)
+ * @uiDefault TabbedPane.scrollButtonsPolicy			String	never, asNeeded or asNeededSingle (default)
+ * @uiDefault TabbedPane.scrollButtonsPlacement			String	both (default) or trailing
+ *
  * @uiDefault TabbedPane.tabAreaAlignment				String	leading (default), center, trailing or fill
  * @uiDefault TabbedPane.tabAlignment					String	leading, center (default) or trailing
  * @uiDefault TabbedPane.tabWidthMode					String	preferred (default), equal or compact
@@ -147,9 +155,14 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTabbedPaneUI
 	extends BasicTabbedPaneUI
 {
-	// hidden tabs navigation types
-	protected static final int MORE_TABS_BUTTON = 0;
-	protected static final int ARROW_BUTTONS = 1;
+	// tabs popup policy / scroll arrows policy
+	protected static final int NEVER = 0;
+//	protected static final int ALWAYS = 1;
+	protected static final int AS_NEEDED = 2;
+	protected static final int AS_NEEDED_SINGLE = 3;
+
+	// scroll arrows placement
+	protected static final int BOTH = 100;
 
 	// tab area alignment
 	protected static final int FILL = 100;
@@ -183,10 +196,13 @@ public class FlatTabbedPaneUI
 	protected boolean hasFullBorder;
 	protected boolean tabsOpaque = true;
 
-	private String hiddenTabsNavigationStr;
-	protected int tabAreaAlignment;
-	protected int tabAlignment;
-	private String tabWidthModeStr;
+	private int tabsPopupPolicy;
+	private int scrollButtonsPolicy;
+	private int scrollButtonsPlacement;
+
+	private int tabAreaAlignment;
+	private int tabAlignment;
+	private int tabWidthMode;
 	protected Icon closeIcon;
 
 	protected String arrowType;
@@ -205,10 +221,14 @@ public class FlatTabbedPaneUI
 	private Container leadingComponent;
 	private Container trailingComponent;
 
+	private Dimension scrollBackwardButtonPrefSize;
+
 	private Handler handler;
 	private boolean blockRollover;
 	private boolean rolloverTabClose;
 	private boolean pressedTabClose;
+
+	private Object[] oldRenderingHints;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
@@ -216,6 +236,18 @@ public class FlatTabbedPaneUI
 
 	@Override
 	public void installUI( JComponent c ) {
+		// initialize tab layout policy (if specified)
+		String tabLayoutPolicyStr = UIManager.getString( "TabbedPane.tabLayoutPolicy" );
+		if( tabLayoutPolicyStr != null ) {
+			int tabLayoutPolicy;
+			switch( tabLayoutPolicyStr ) {
+				default:
+				case "wrap":		tabLayoutPolicy = JTabbedPane.WRAP_TAB_LAYOUT; break;
+				case "scroll":	tabLayoutPolicy = JTabbedPane.SCROLL_TAB_LAYOUT; break;
+			}
+			((JTabbedPane)c).setTabLayoutPolicy( tabLayoutPolicy );
+		}
+
 		// initialize this defaults here because they are used in constructor
 		// of FlatTabAreaButton, which is invoked before installDefaults()
 		arrowType = UIManager.getString( "TabbedPane.arrowType" );
@@ -270,10 +302,14 @@ public class FlatTabbedPaneUI
 		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOpaque = UIManager.getBoolean( "TabbedPane.tabsOpaque" );
-		hiddenTabsNavigationStr = UIManager.getString( "TabbedPane.hiddenTabsNavigation" );
+
+		tabsPopupPolicy = parseTabsPopupPolicy( UIManager.getString( "TabbedPane.tabsPopupPolicy" ) );
+		scrollButtonsPolicy = parseScrollButtonsPolicy( UIManager.getString( "TabbedPane.scrollButtonsPolicy" ) );
+		scrollButtonsPlacement = parseScrollButtonsPlacement( UIManager.getString( "TabbedPane.scrollButtonsPlacement" ) );
+
 		tabAreaAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAreaAlignment" ), LEADING );
 		tabAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAlignment" ), CENTER );
-		tabWidthModeStr = UIManager.getString( "TabbedPane.tabWidthMode" );
+		tabWidthMode = parseTabWidthMode( UIManager.getString( "TabbedPane.tabWidthMode" ) );
 		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
 
 		buttonInsets = UIManager.getInsets( "TabbedPane.buttonInsets" );
@@ -330,11 +366,6 @@ public class FlatTabbedPaneUI
 	protected void installComponents() {
 		super.installComponents();
 
-		// create tab close button
-		tabCloseButton = new TabCloseButton();
-		tabCloseButton.setVisible( false );
-		tabPane.add( tabCloseButton );
-
 		// find scrollable tab viewport
 		tabViewport = null;
 		if( isScrollTabLayout() ) {
@@ -361,11 +392,7 @@ public class FlatTabbedPaneUI
 
 		super.uninstallComponents();
 
-		if( tabCloseButton != null ) {
-			tabPane.remove( tabCloseButton );
-			tabCloseButton = null;
-		}
-
+		tabCloseButton = null;
 		tabViewport = null;
 	}
 
@@ -662,6 +689,26 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected int calculateMaxTabWidth( int tabPlacement ) {
+		return hideTabArea() ? 0 : super.calculateMaxTabWidth( tabPlacement );
+	}
+
+	@Override
+	protected int calculateMaxTabHeight( int tabPlacement ) {
+		return hideTabArea() ? 0 : super.calculateMaxTabHeight( tabPlacement );
+	}
+
+	@Override
+	protected int calculateTabAreaWidth( int tabPlacement, int vertRunCount, int maxTabWidth ) {
+		return hideTabArea() ? 0 : super.calculateTabAreaWidth( tabPlacement, vertRunCount, maxTabWidth );
+	}
+
+	@Override
+	protected int calculateTabAreaHeight( int tabPlacement, int horizRunCount, int maxTabHeight ) {
+		return hideTabArea() ? 0 : super.calculateTabAreaHeight( tabPlacement, horizRunCount, maxTabHeight );
+	}
+
+	@Override
 	protected Insets getTabInsets( int tabPlacement, int tabIndex ) {
 		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_INSETS );
 		return scale( (value instanceof Insets)
@@ -720,7 +767,7 @@ public class FlatTabbedPaneUI
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
-		if( contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+		if( hideTabArea() || contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
 			return new Insets( 0, 0, 0, 0 );
 
 		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
@@ -748,13 +795,19 @@ public class FlatTabbedPaneUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 		super.update( g, c );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		oldRenderingHints = null;
 	}
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
+		if( hideTabArea() )
+			return;
+
 		ensureCurrentLayout();
 
 		int tabPlacement = tabPane.getTabPlacement();
@@ -828,27 +881,29 @@ public class FlatTabbedPaneUI
 	{
 		g.setFont( font );
 
-		// html
-		View view = getTextViewForTab( tabIndex );
-		if( view != null ) {
-			view.paint( g, textRect );
-			return;
-		}
+		FlatUIUtils.runWithoutRenderingHints( g, oldRenderingHints, () -> {
+			// html
+			View view = getTextViewForTab( tabIndex );
+			if( view != null ) {
+				view.paint( g, textRect );
+				return;
+			}
 
-		// plain text
-		Color color;
-		if( tabPane.isEnabled() && tabPane.isEnabledAt( tabIndex ) ) {
-			color = tabPane.getForegroundAt( tabIndex );
-			if( isSelected && (color instanceof UIResource) && selectedForeground != null )
-				color = selectedForeground;
-		} else
-			color = disabledForeground;
+			// plain text
+			Color color;
+			if( tabPane.isEnabled() && tabPane.isEnabledAt( tabIndex ) ) {
+				color = tabPane.getForegroundAt( tabIndex );
+				if( isSelected && selectedForeground != null && color == tabPane.getForeground() )
+					color = selectedForeground;
+			} else
+				color = disabledForeground;
 
-		int mnemIndex = FlatLaf.isShowMnemonics() ? tabPane.getDisplayedMnemonicIndexAt( tabIndex ) : -1;
+			int mnemIndex = FlatLaf.isShowMnemonics() ? tabPane.getDisplayedMnemonicIndexAt( tabIndex ) : -1;
 
-		g.setColor( color );
-		FlatUIUtils.drawStringUnderlineCharAt( tabPane, g, title, mnemIndex,
-			textRect.x, textRect.y + metrics.getAscent() );
+			g.setColor( color );
+			FlatUIUtils.drawStringUnderlineCharAt( tabPane, g, title, mnemIndex,
+				textRect.x, textRect.y + metrics.getAscent() );
+		} );
 	}
 
 	@Override
@@ -879,6 +934,12 @@ public class FlatTabbedPaneUI
 	}
 
 	protected void paintTabCloseButton( Graphics g, int tabIndex, int x, int y, int w, int h ) {
+		// create tab close button
+		if( tabCloseButton == null ) {
+			tabCloseButton = new TabCloseButton();
+			tabCloseButton.setVisible( false );
+		}
+
 		// update state of tab close button
 		boolean rollover = (tabIndex == getRolloverTab());
 		ButtonModel bm = tabCloseButton.getModel();
@@ -1194,11 +1255,35 @@ public class FlatTabbedPaneUI
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
 	}
 
-	protected int getHiddenTabsNavigation() {
-		String str = (String) tabPane.getClientProperty( TABBED_PANE_HIDDEN_TABS_NAVIGATION );
-		if( str == null )
-			str = hiddenTabsNavigationStr;
-		return parseHiddenTabsNavigation( str );
+	protected boolean hideTabArea() {
+		return tabPane.getTabCount() == 1 &&
+			leadingComponent == null &&
+			trailingComponent == null &&
+			clientPropertyBoolean( tabPane, TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, false );
+	}
+
+	protected int getTabsPopupPolicy() {
+		Object value = tabPane.getClientProperty( TABBED_PANE_TABS_POPUP_POLICY );
+
+		return (value instanceof String)
+			? parseTabsPopupPolicy( (String) value )
+			: tabsPopupPolicy;
+	}
+
+	protected int getScrollButtonsPolicy() {
+		Object value = tabPane.getClientProperty( TABBED_PANE_SCROLL_BUTTONS_POLICY );
+
+		return (value instanceof String)
+			? parseScrollButtonsPolicy( (String) value )
+			: scrollButtonsPolicy;
+	}
+
+	protected int getScrollButtonsPlacement() {
+		Object value = tabPane.getClientProperty( TABBED_PANE_SCROLL_BUTTONS_PLACEMENT );
+
+		return (value instanceof String)
+			? parseScrollButtonsPlacement( (String) value )
+			: scrollButtonsPlacement;
 	}
 
 	protected int getTabAreaAlignment() {
@@ -1222,20 +1307,44 @@ public class FlatTabbedPaneUI
 	}
 
 	protected int getTabWidthMode() {
-		String str = (String) tabPane.getClientProperty( TABBED_PANE_TAB_WIDTH_MODE );
-		if( str == null )
-			str = tabWidthModeStr;
-		return parseTabWidthMode( str );
+		Object value = tabPane.getClientProperty( TABBED_PANE_TAB_WIDTH_MODE );
+
+		return (value instanceof String)
+			? parseTabWidthMode( (String) value )
+			: tabWidthMode;
 	}
 
-	protected static int parseHiddenTabsNavigation( String str ) {
+	protected static int parseTabsPopupPolicy( String str ) {
 		if( str == null )
-			return MORE_TABS_BUTTON;
+			return AS_NEEDED;
 
 		switch( str ) {
 			default:
-			case TABBED_PANE_HIDDEN_TABS_NAVIGATION_MORE_TABS_BUTTON:	return MORE_TABS_BUTTON;
-			case TABBED_PANE_HIDDEN_TABS_NAVIGATION_ARROW_BUTTONS:		return ARROW_BUTTONS;
+			case TABBED_PANE_POLICY_AS_NEEDED:			return AS_NEEDED;
+			case TABBED_PANE_POLICY_NEVER:				return NEVER;
+		}
+	}
+
+	protected static int parseScrollButtonsPolicy( String str ) {
+		if( str == null )
+			return AS_NEEDED_SINGLE;
+
+		switch( str ) {
+			default:
+			case TABBED_PANE_POLICY_AS_NEEDED_SINGLE:	return AS_NEEDED_SINGLE;
+			case TABBED_PANE_POLICY_AS_NEEDED:			return AS_NEEDED;
+			case TABBED_PANE_POLICY_NEVER:				return NEVER;
+		}
+	}
+
+	protected static int parseScrollButtonsPlacement( String str ) {
+		if( str == null )
+			return BOTH;
+
+		switch( str ) {
+			default:
+			case TABBED_PANE_PLACEMENT_BOTH:			return BOTH;
+			case TABBED_PANE_PLACEMENT_TRAILING:		return TRAILING;
 		}
 	}
 
@@ -1416,6 +1525,7 @@ public class FlatTabbedPaneUI
 			super( direction, arrowType,
 				FlatTabbedPaneUI.this.foreground, FlatTabbedPaneUI.this.disabledForeground,
 				null, buttonHoverBackground, null, buttonPressedBackground );
+			setArrowWidth( 10 );
 		}
 
 		@Override
@@ -1449,7 +1559,7 @@ public class FlatTabbedPaneUI
 			FlatUIUtils.paintComponentBackground( g, left, top,
 				getWidth() - left - right,
 				getHeight() - top - bottom,
-				0, scale( buttonArc ) );
+				0, scale( (float) buttonArc ) );
 		}
 	}
 
@@ -1527,7 +1637,7 @@ public class FlatTabbedPaneUI
 					lastIndex = i;
 
 					// create menu item for tab
-					popupMenu.add( createMenuItem( i ) );
+					popupMenu.add( createTabMenuItem( i ) );
 				}
 			}
 
@@ -1550,29 +1660,44 @@ public class FlatTabbedPaneUI
 			popupMenu.show( this, x, y );
 		}
 
-		protected JMenuItem createMenuItem( int index ) {
-			String title = tabPane.getTitleAt( index );
-			if( title == null || title.isEmpty() )
-				title = findTabTitle( tabPane.getTabComponentAt( index ) );
+		protected JMenuItem createTabMenuItem( int tabIndex ) {
+			// search for tab name in this places
+			//   1. tab title
+			//   2. text of label or text component in custom tab component (including children)
+			//   3. accessible name of tab
+			//   4. accessible name of custom tab component (including children)
+			//   5. string "n. Tab"
+			String title = tabPane.getTitleAt( tabIndex );
+			if( StringUtils.isEmpty( title ) ) {
+				Component tabComp = tabPane.getTabComponentAt( tabIndex );
+				if( tabComp != null )
+					title = findTabTitle( tabComp );
+				if( StringUtils.isEmpty( title ) )
+					title = tabPane.getAccessibleContext().getAccessibleChild( tabIndex ).getAccessibleContext().getAccessibleName();
+				if( StringUtils.isEmpty( title ) && tabComp instanceof Accessible )
+					title = findTabTitleInAccessible( (Accessible) tabComp );
+				if( StringUtils.isEmpty( title ) )
+					title = (tabIndex + 1) + ". Tab";
+			}
 
-			JMenuItem menuItem = new JMenuItem( title, tabPane.getIconAt( index ) );
-			menuItem.setDisabledIcon( tabPane.getDisabledIconAt( index ) );
-			menuItem.setToolTipText( tabPane.getToolTipTextAt( index ) );
+			JMenuItem menuItem = new JMenuItem( title, tabPane.getIconAt( tabIndex ) );
+			menuItem.setDisabledIcon( tabPane.getDisabledIconAt( tabIndex ) );
+			menuItem.setToolTipText( tabPane.getToolTipTextAt( tabIndex ) );
 
-			Color foregroundAt = tabPane.getForegroundAt( index );
+			Color foregroundAt = tabPane.getForegroundAt( tabIndex );
 			if( foregroundAt != tabPane.getForeground() )
 				menuItem.setForeground( foregroundAt );
 
-			Color backgroundAt = tabPane.getBackgroundAt( index );
+			Color backgroundAt = tabPane.getBackgroundAt( tabIndex );
 			if( backgroundAt != tabPane.getBackground() ) {
 				menuItem.setBackground( backgroundAt );
 				menuItem.setOpaque( true );
 			}
 
-			if( !tabPane.isEnabledAt( index ) )
+			if( !tabPane.isEnabledAt( tabIndex ) )
 				menuItem.setEnabled( false );
 
-			menuItem.addActionListener( e -> selectTab( index ) );
+			menuItem.addActionListener( e -> selectTab( tabIndex ) );
 			return menuItem;
 		}
 
@@ -1580,16 +1705,13 @@ public class FlatTabbedPaneUI
 		 * Search for label or text component in custom tab component and return its text.
 		 */
 		private String findTabTitle( Component c ) {
-			if( c == null )
-				return null;
-
 			String title = null;
 			if( c instanceof JLabel )
 				title = ((JLabel)c).getText();
 			else if( c instanceof JTextComponent )
 				title = ((JTextComponent)c).getText();
 
-			if( title != null && !title.isEmpty() )
+			if( !StringUtils.isEmpty( title ) )
 				return title;
 
 			if( c instanceof Container ) {
@@ -1603,8 +1725,30 @@ public class FlatTabbedPaneUI
 			return null;
 		}
 
-		protected void selectTab( int index ) {
-			tabPane.setSelectedIndex( index );
+		/**
+		 * Search for accessible name.
+		 */
+		private String findTabTitleInAccessible( Accessible accessible ) {
+			AccessibleContext context = accessible.getAccessibleContext();
+			if( context == null )
+				return null;
+
+			String title = context.getAccessibleName();
+			if( !StringUtils.isEmpty( title ) )
+				return title;
+
+			int childrenCount = context.getAccessibleChildrenCount();
+			for( int i = 0; i < childrenCount; i++ ) {
+				title = findTabTitleInAccessible( context.getAccessibleChild( i ) );
+				if( title != null )
+					return title;
+			}
+
+			return null;
+		}
+
+		protected void selectTab( int tabIndex ) {
+			tabPane.setSelectedIndex( tabIndex );
 			ensureSelectedTabIsVisible();
 		}
 
@@ -1728,23 +1872,70 @@ public class FlatTabbedPaneUI
 			lastMouseY = e.getY();
 
 			double preciseWheelRotation = e.getPreciseWheelRotation();
+			boolean isPreciseWheel = (preciseWheelRotation != 0 && preciseWheelRotation != e.getWheelRotation());
 			int amount = (int) (maxTabHeight * preciseWheelRotation);
+
+			// scroll at least one pixel to avoid "hanging"
+			if( amount == 0 ) {
+				if( preciseWheelRotation > 0 )
+					amount = 1;
+				else if( preciseWheelRotation < 0 )
+					amount = -1;
+			}
 
 			// compute new view position
 			Point viewPosition = (targetViewPosition != null)
 				? targetViewPosition
 				: tabViewport.getViewPosition();
 			Dimension viewSize = tabViewport.getViewSize();
+			boolean horizontal = isHorizontalTabPlacement();
 			int x = viewPosition.x;
 			int y = viewPosition.y;
-			int tabPlacement = tabPane.getTabPlacement();
-			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+			if( horizontal )
 				x += isLeftToRight() ? amount : -amount;
-				x = Math.min( Math.max( x, 0 ), viewSize.width - tabViewport.getWidth() );
-			} else {
+			else
 				y += amount;
-				y = Math.min( Math.max( y, 0 ), viewSize.height - tabViewport.getHeight() );
+
+			// In case of having scroll buttons on both sides and hiding disabled buttons,
+			// the viewport is moved when the scroll backward button becomes visible
+			// or is hidden. For non-precise wheel scrolling (e.g. mouse wheel on Windows),
+			// this is no problem because the scroll amount is at least a tab-height.
+			// For precise wheel scrolling (e.g. touchpad on Mac), this is a problem
+			// because it is possible to scroll by a fraction of a tab-height.
+			if( isPreciseWheel &&
+				getScrollButtonsPlacement() == BOTH &&
+				getScrollButtonsPolicy() == AS_NEEDED_SINGLE &&
+				(isLeftToRight() || !horizontal) || // scroll buttons are hidden in right-to-left
+				scrollBackwardButtonPrefSize != null )
+			{
+				// special cases for scrolling with touchpad or high-resolution wheel:
+				//   1. if view is at 0/0 and scrolling right/down, then the scroll backward button
+				//      becomes visible, which moves the viewport right/down by the width/height of
+				//      the button --> add button width/height to new view position so that
+				//      tabs seems to stay in place at screen
+				//   2. if scrolling left/up to the beginning, then the scroll backward button
+				//      becomes hidden, which moves the viewport left/up by the width/height of
+				//      the button --> set new view position to 0/0 so that
+				//      tabs seems to stay in place at screen
+				if( horizontal ) {
+					//
+					if( viewPosition.x == 0 && x > 0 )
+						x += scrollBackwardButtonPrefSize.width;
+					else if( amount < 0 && x <= scrollBackwardButtonPrefSize.width )
+						x = 0;
+				} else {
+					if( viewPosition.y == 0 && y > 0 )
+						y += scrollBackwardButtonPrefSize.height;
+					else if( amount < 0 && y <= scrollBackwardButtonPrefSize.height )
+						y = 0;
+				}
 			}
+
+			// limit new view position
+			if( horizontal )
+				x = Math.min( Math.max( x, 0 ), viewSize.width - tabViewport.getWidth() );
+			else
+				y = Math.min( Math.max( y, 0 ), viewSize.height - tabViewport.getHeight() );
 
 			// check whether view position has changed
 			Point newViewPosition = new Point( x, y );
@@ -1752,9 +1943,7 @@ public class FlatTabbedPaneUI
 				return;
 
 			// update view position
-			if( preciseWheelRotation != 0 &&
-				preciseWheelRotation != e.getWheelRotation() )
-			{
+			if( isPreciseWheel ) {
 				// do not use animation for precise scrolling (e.g. with trackpad)
 
 				// stop running animation (if any)
@@ -1967,8 +2156,10 @@ public class FlatTabbedPaneUI
 		public void mouseReleased( MouseEvent e ) {
 			if( isPressedTabClose() ) {
 				updateRollover( e );
-				if( pressedTabIndex >= 0 && pressedTabIndex == getRolloverTab() )
+				if( pressedTabIndex >= 0 && pressedTabIndex == getRolloverTab() ) {
+					restoreTabToolTip();
 					closeTab( pressedTabIndex );
+				}
 			} else
 				mouseDelegate.mouseReleased( e );
 
@@ -2046,7 +2237,8 @@ public class FlatTabbedPaneUI
 			if( lastTipTabIndex < 0 )
 				return;
 
-			tabPane.setToolTipTextAt( lastTipTabIndex, lastTip );
+			if( lastTipTabIndex < tabPane.getTabCount() )
+				tabPane.setToolTipTextAt( lastTipTabIndex, lastTip );
 			lastTip = null;
 			lastTipTabIndex = -1;
 		}
@@ -2085,12 +2277,17 @@ public class FlatTabbedPaneUI
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
 				case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
 				case TABBED_PANE_HAS_FULL_BORDER:
+				case TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB:
 				case TABBED_PANE_MINIMUM_TAB_WIDTH:
 				case TABBED_PANE_MAXIMUM_TAB_WIDTH:
 				case TABBED_PANE_TAB_HEIGHT:
 				case TABBED_PANE_TAB_INSETS:
 				case TABBED_PANE_TAB_AREA_INSETS:
-				case TABBED_PANE_HIDDEN_TABS_NAVIGATION:
+
+				case TABBED_PANE_TABS_POPUP_POLICY:
+				case TABBED_PANE_SCROLL_BUTTONS_POLICY:
+				case TABBED_PANE_SCROLL_BUTTONS_PLACEMENT:
+
 				case TABBED_PANE_TAB_AREA_ALIGNMENT:
 				case TABBED_PANE_TAB_ALIGNMENT:
 				case TABBED_PANE_TAB_WIDTH_MODE:
@@ -2451,14 +2648,23 @@ public class FlatTabbedPaneUI
 				delegate.layoutContainer( parent );
 			} );
 
-			boolean useMoreButton = (getHiddenTabsNavigation() == MORE_TABS_BUTTON);
+			int tabsPopupPolicy = getTabsPopupPolicy();
+			int scrollButtonsPolicy = getScrollButtonsPolicy();
+			int scrollButtonsPlacement = getScrollButtonsPlacement();
+
+			boolean useMoreTabsButton = (tabsPopupPolicy == AS_NEEDED);
+			boolean useScrollButtons = (scrollButtonsPolicy == AS_NEEDED || scrollButtonsPolicy == AS_NEEDED_SINGLE);
+			boolean hideDisabledScrollButtons = (scrollButtonsPolicy == AS_NEEDED_SINGLE && scrollButtonsPlacement == BOTH);
+			boolean trailingScrollButtons = (scrollButtonsPlacement == TRAILING);
 
 			// for right-to-left always use "more tabs" button for horizontal scrolling
 			// because methods scrollForward() and scrollBackward() in class
 			// BasicTabbedPaneUI.ScrollableTabSupport do not work for right-to-left
 			boolean leftToRight = isLeftToRight();
-			if( !leftToRight && !useMoreButton && isHorizontalTabPlacement() )
-				useMoreButton = true;
+			if( !leftToRight && isHorizontalTabPlacement() ) {
+				useMoreTabsButton = true;
+				useScrollButtons = false;
+			}
 
 			// find backward/forward scroll buttons
 			JButton backwardButton = null;
@@ -2473,7 +2679,7 @@ public class FlatTabbedPaneUI
 				}
 			}
 
-			if( !useMoreButton && (backwardButton == null || forwardButton == null) )
+			if( backwardButton == null || forwardButton == null )
 				return; // should never occur
 
 			Rectangle bounds = tabPane.getBounds();
@@ -2481,10 +2687,9 @@ public class FlatTabbedPaneUI
 			int tabPlacement = tabPane.getTabPlacement();
 			int tabAreaAlignment = getTabAreaAlignment();
 			Insets tabAreaInsets = getRealTabAreaInsets( tabPlacement );
-			Dimension moreButtonSize = useMoreButton ? moreTabsButton.getPreferredSize() : null;
-			Dimension backwardButtonSize = useMoreButton ? null : backwardButton.getPreferredSize();
-			Dimension forwardButtonSize = useMoreButton ? null : forwardButton.getPreferredSize();
-			boolean buttonsVisible = false;
+			boolean moreTabsButtonVisible = false;
+			boolean backwardButtonVisible = false;
+			boolean forwardButtonVisible = false;
 
 			// TabbedPaneScrollLayout adds tabAreaInsets to tab coordinates,
 			// but we use it to position the viewport
@@ -2503,6 +2708,13 @@ public class FlatTabbedPaneUI
 
 			// layout tab area
 			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				// avoid that tab area "jump" to the right when backward button becomes hidden
+				if( useScrollButtons && hideDisabledScrollButtons ) {
+					Point viewPosition = tabViewport.getViewPosition();
+					if( viewPosition.x <= backwardButton.getPreferredSize().width )
+						tabViewport.setViewPosition( new Point( 0, viewPosition.y ) );
+				}
+
 				// tab area height (maxTabHeight is zero if tab count is zero)
 				int tabAreaHeight = (maxTabHeight > 0)
 					? maxTabHeight
@@ -2566,22 +2778,49 @@ public class FlatTabbedPaneUI
 					int twi = tw - leftWidth - rightWidth - tabAreaInsets.left - tabAreaInsets.right;
 
 					// layout viewport and buttons
-					int viewportWidth = twi;
-					if( viewportWidth < totalTabWidth ) {
-						// need buttons
-						buttonsVisible = true;
-						int buttonsWidth = useMoreButton ? moreButtonSize.width : (backwardButtonSize.width + forwardButtonSize.width);
-						viewportWidth = Math.max( viewportWidth - buttonsWidth, 0 );
+					int x = txi;
+					int w = twi;
 
-						if( useMoreButton )
-							moreTabsButton.setBounds( leftToRight ? (txi + twi - buttonsWidth) : txi, ty, moreButtonSize.width, th );
-						else {
-							backwardButton.setBounds( leftToRight ? (txi + twi - buttonsWidth) : txi, ty, backwardButtonSize.width, th );
-							forwardButton.setBounds( leftToRight ? (txi + twi - forwardButtonSize.width) : (txi + backwardButtonSize.width), ty, forwardButtonSize.width, th );
+					if( w < totalTabWidth ) {
+						// available width is too small for all tabs --> need buttons
+
+						// layout more button on trailing side
+						if( useMoreTabsButton ) {
+							int buttonWidth = moreTabsButton.getPreferredSize().width;
+							moreTabsButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, ty, buttonWidth, th );
+							x += leftToRight ? 0 : buttonWidth;
+							w -= buttonWidth;
+							moreTabsButtonVisible = true;
 						}
-						tabViewport.setBounds( leftToRight ? txi : (txi + buttonsWidth), ty, viewportWidth, th );
-					} else
-						tabViewport.setBounds( txi, ty, viewportWidth, th );
+						if( useScrollButtons ) {
+							// layout forward button on trailing side
+							if( !hideDisabledScrollButtons || forwardButton.isEnabled() ) {
+								int buttonWidth = forwardButton.getPreferredSize().width;
+								forwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, ty, buttonWidth, th );
+								x += leftToRight ? 0 : buttonWidth;
+								w -= buttonWidth;
+								forwardButtonVisible = true;
+							}
+
+							// layout backward button
+							if( !hideDisabledScrollButtons || backwardButton.isEnabled() ) {
+								int buttonWidth = backwardButton.getPreferredSize().width;
+								if( trailingScrollButtons ) {
+									// on trailing side
+									backwardButton.setBounds( leftToRight ? (x + w - buttonWidth) : x, ty, buttonWidth, th );
+									x += leftToRight ? 0 : buttonWidth;
+								} else {
+									// on leading side
+									backwardButton.setBounds( leftToRight ? x : (x + w - buttonWidth), ty, buttonWidth, th );
+									x += leftToRight ? buttonWidth : 0;
+								}
+								w -= buttonWidth;
+								backwardButtonVisible = true;
+							}
+						}
+					}
+
+					tabViewport.setBounds( x, ty, w, th );
 
 					if( !leftToRight ) {
 						// layout viewport so that we can get correct view width below
@@ -2592,6 +2831,13 @@ public class FlatTabbedPaneUI
 					}
 				}
 			} else { // LEFT and RIGHT tab placement
+				// avoid that tab area "jump" to the top when backward button becomes hidden
+				if( useScrollButtons && hideDisabledScrollButtons ) {
+					Point viewPosition = tabViewport.getViewPosition();
+					if( viewPosition.y <= backwardButton.getPreferredSize().height )
+						tabViewport.setViewPosition( new Point( viewPosition.x, 0 ) );
+				}
+
 				// tab area width (maxTabWidth is zero if tab count is zero)
 				int tabAreaWidth = (maxTabWidth > 0)
 					? maxTabWidth
@@ -2649,29 +2895,56 @@ public class FlatTabbedPaneUI
 					int thi = th - topHeight - bottomHeight - tabAreaInsets.top - tabAreaInsets.bottom;
 
 					// layout viewport and buttons
-					int viewportHeight = thi;
-					if( viewportHeight < totalTabHeight ) {
-						// need buttons
-						buttonsVisible = true;
-						int buttonsHeight = useMoreButton ? moreButtonSize.height : (backwardButtonSize.height + forwardButtonSize.height);
-						viewportHeight = Math.max( viewportHeight - buttonsHeight, 0 );
+					int y = tyi;
+					int h = thi;
 
-						if( useMoreButton )
-							moreTabsButton.setBounds( tx, tyi + thi - buttonsHeight, tw, moreButtonSize.height );
-						else {
-							backwardButton.setBounds( tx, tyi + thi - buttonsHeight, tw, backwardButtonSize.height );
-							forwardButton.setBounds( tx, tyi + thi - forwardButtonSize.height, tw, forwardButtonSize.height );
+					if( h < totalTabHeight ) {
+						// available height is too small for all tabs --> need buttons
+
+						// layout more button on bottom side
+						if( useMoreTabsButton ) {
+							int buttonHeight = moreTabsButton.getPreferredSize().height;
+							moreTabsButton.setBounds( tx, y + h - buttonHeight, tw, buttonHeight );
+							h -= buttonHeight;
+							moreTabsButtonVisible = true;
+						}
+						if( useScrollButtons ) {
+							// layout forward button on bottom side
+							if( !hideDisabledScrollButtons || forwardButton.isEnabled() ) {
+								int buttonHeight = forwardButton.getPreferredSize().height;
+								forwardButton.setBounds( tx, y + h - buttonHeight, tw, buttonHeight );
+								h -= buttonHeight;
+								forwardButtonVisible = true;
+							}
+
+							// layout backward button
+							if( !hideDisabledScrollButtons || backwardButton.isEnabled() ) {
+								int buttonHeight = backwardButton.getPreferredSize().height;
+								if( trailingScrollButtons ) {
+									// on bottom side
+									backwardButton.setBounds( tx, y + h - buttonHeight, tw, buttonHeight );
+								} else {
+									// on top side
+									backwardButton.setBounds( tx, y, tw, buttonHeight );
+									y += buttonHeight;
+								}
+								h -= buttonHeight;
+								backwardButtonVisible = true;
+							}
 						}
 					}
-					tabViewport.setBounds( tx, tyi, tw, viewportHeight );
+
+					tabViewport.setBounds( tx, y, tw, h );
 				}
 			}
 
 			// show/hide viewport and buttons
 			tabViewport.setVisible( rects.length > 0 );
-			moreTabsButton.setVisible( useMoreButton && buttonsVisible );
-			backwardButton.setVisible( !useMoreButton && buttonsVisible );
-			forwardButton.setVisible( !useMoreButton && buttonsVisible );
+			moreTabsButton.setVisible( moreTabsButtonVisible );
+			backwardButton.setVisible( backwardButtonVisible );
+			forwardButton.setVisible( forwardButtonVisible );
+
+			scrollBackwardButtonPrefSize = backwardButton.getPreferredSize();
 		}
 	}
 }

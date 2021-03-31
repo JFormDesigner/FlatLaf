@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -21,7 +21,7 @@ new FormModel {
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 					"$layoutConstraints": "insets dialog"
-					"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][grow,fill][button,fill]"
+					"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][fill][grow,fill][button,fill]"
 					"$rowSpecs": "[fill]"
 				} ) {
 					name: "buttonBar"
@@ -47,6 +47,8 @@ new FormModel {
 							addElement( "3" )
 							addElement( "3.5" )
 							addElement( "4" )
+							addElement( "5" )
+							addElement( "6" )
 						}
 						"maximumRowCount": 20
 						auxiliary() {
@@ -92,12 +94,20 @@ new FormModel {
 						"value": "cell 5 0"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "uiDefaultsInspectorCheckBox"
+						"text": "UI defaults"
+						"mnemonic": 85
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "uiDefaultsInspectorChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 6 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "explicitColorsCheckBox"
 						"text": "explicit colors"
 						"mnemonic": 88
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "explicitColorsChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 6 0"
+						"value": "cell 7 0"
 					} )
 					add( new FormComponent( "javax.swing.JCheckBox" ) {
 						name: "backgroundCheckBox"
@@ -105,15 +115,15 @@ new FormModel {
 						"mnemonic": 66
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "backgroundChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 7 0"
+						"value": "cell 8 0"
 					} )
-					add( new FormComponent( "com.formdev.flatlaf.extras.TriStateCheckBox" ) {
+					add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 						name: "opaqueTriStateCheckBox"
 						"text": "opaque"
 						"mnemonic": 79
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "opaqueChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 8 0"
+						"value": "cell 9 0"
 					} )
 					add( new FormComponent( "javax.swing.JComboBox" ) {
 						name: "sizeVariantComboBox"
@@ -127,13 +137,13 @@ new FormModel {
 						"selectedIndex": 2
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sizeVariantChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 9 0"
+						"value": "cell 10 0"
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "closeButton"
 						"text": "Close"
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 11 0"
+						"value": "cell 12 0"
 					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "South"

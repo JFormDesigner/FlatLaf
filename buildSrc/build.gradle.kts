@@ -20,15 +20,5 @@ plugins {
 
 // required for kotlin-dsl or embedded-kotlin plugins
 repositories {
-	jcenter()
-}
-
-dependencies {
-	// NOTE: keep plugin versions in sync with settings.gradle.kts
-
-	// "com.jfrog.bintray" plugin
-	implementation( "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4" )
-
-	// "com.jfrog.artifactory" plugin
-	implementation( "org.jfrog.buildinfo:build-info-extractor-gradle:4.13.0" )
+	mavenCentral()
 }

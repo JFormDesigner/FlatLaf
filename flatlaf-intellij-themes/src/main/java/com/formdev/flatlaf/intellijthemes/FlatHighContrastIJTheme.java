@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatHighContrastIJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "High contrast";
+
+	public static boolean install() {
 		try {
 			return install( new FlatHighContrastIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatHighContrastIJTheme.class );
 	}
 
 	public FlatHighContrastIJTheme() {
@@ -43,6 +49,6 @@ public class FlatHighContrastIJTheme
 
 	@Override
 	public String getName() {
-		return "High contrast";
+		return NAME;
 	}
 }

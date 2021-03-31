@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -23,26 +24,29 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.IdentityHashMap;
 import java.util.WeakHashMap;
-import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -118,6 +122,14 @@ public class FlatUIUtils
 		return (color != null) ? color : UIManager.getColor( defaultKey );
 	}
 
+	/**
+	 * @since 1.1
+	 */
+	public static boolean getUIBoolean( String key, boolean defaultValue ) {
+		Object value = UIManager.get( key );
+		return (value instanceof Boolean) ? (Boolean) value : defaultValue;
+	}
+
 	public static int getUIInt( String key, int defaultValue ) {
 		Object value = UIManager.get( key );
 		return (value instanceof Integer) ? (Integer) value : defaultValue;
@@ -173,12 +185,39 @@ public class FlatUIUtils
 
 	/**
 	 * Returns whether the given component is the permanent focus owner and
-	 * is in the active window. Used to paint focus indicators.
+	 * is in the active window or in a popup window owned by the active window.
+	 * Used to paint focus indicators.
 	 */
+	@SuppressWarnings( "unchecked" )
 	public static boolean isPermanentFocusOwner( Component c ) {
 		KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+
+		if( c instanceof JComponent ) {
+			Object value = ((JComponent)c).getClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER );
+			if( value instanceof Predicate ) {
+				return ((Predicate<JComponent>)value).test( (JComponent) c ) &&
+					isInActiveWindow( c, keyboardFocusManager.getActiveWindow() );
+			}
+		}
+
 		return keyboardFocusManager.getPermanentFocusOwner() == c &&
-			keyboardFocusManager.getActiveWindow() == SwingUtilities.windowForComponent( c );
+			isInActiveWindow( c, keyboardFocusManager.getActiveWindow() );
+	}
+
+	private static boolean isInActiveWindow( Component c, Window activeWindow ) {
+		Window window = SwingUtilities.windowForComponent( c );
+		return window == activeWindow ||
+			(window != null && window.getType() == Window.Type.POPUP && window.getOwner() == activeWindow);
+	}
+
+	/**
+	 * Returns whether the given component is in a window that is in full-screen mode.
+	 */
+	public static boolean isFullScreen( Component c ) {
+		GraphicsConfiguration gc = c.getGraphicsConfiguration();
+		GraphicsDevice gd = (gc != null) ? gc.getDevice() : null;
+		Window fullScreenWindow = (gd != null) ? gd.getFullScreenWindow() : null;
+		return (fullScreenWindow != null && fullScreenWindow == SwingUtilities.windowForComponent( c ));
 	}
 
 	public static Boolean isRoundRect( Component c ) {
@@ -227,10 +266,57 @@ public class FlatUIUtils
 	/**
 	 * Sets rendering hints used for painting.
 	 */
-	public static void setRenderingHints( Graphics2D g ) {
-		g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL,
+	public static Object[] setRenderingHints( Graphics g ) {
+		Graphics2D g2 = (Graphics2D) g;
+		Object[] oldRenderingHints = new Object[] {
+			g2.getRenderingHint( RenderingHints.KEY_ANTIALIASING ),
+			g2.getRenderingHint( RenderingHints.KEY_STROKE_CONTROL ),
+		};
+
+		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+		g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL,
 			MAC_USE_QUARTZ ? RenderingHints.VALUE_STROKE_PURE : RenderingHints.VALUE_STROKE_NORMALIZE );
+
+		return oldRenderingHints;
+	}
+
+	/**
+	 * Resets rendering hints previously set with {@link #setRenderingHints}.
+	 */
+	public static void resetRenderingHints( Graphics g, Object[] oldRenderingHints ) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint( RenderingHints.KEY_ANTIALIASING, oldRenderingHints[0] );
+		g2.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, oldRenderingHints[1] );
+	}
+
+	/**
+	 * Temporary resets rendering hints set with {@link #setRenderingHints}
+	 * and runs the given runnable.
+	 * <p>
+	 * This is intended for painting text while rendering hints are set.
+	 * <p>
+	 * If text antialiasing is disabled (in OS system settings or via
+	 * {@code -Dawt.useSystemAAFontSettings=off}), but general antialiasing is enabled,
+	 * then text is still painted using some kind of "grayscale" antialiasing,
+	 * which may make the text look bold (depends on font and font size).
+	 * To avoid this, temporary disable general antialiasing.
+	 * This does not affect text rendering if text antialiasing is enabled (usually the default).
+	 */
+	public static void runWithoutRenderingHints( Graphics g, Object[] oldRenderingHints, Runnable runnable ) {
+		if( oldRenderingHints == null ) {
+			runnable.run();
+			return;
+		}
+
+		Graphics2D g2 = (Graphics2D) g;
+		Object[] oldRenderingHints2 = new Object[] {
+			g2.getRenderingHint( RenderingHints.KEY_ANTIALIASING ),
+			g2.getRenderingHint( RenderingHints.KEY_STROKE_CONTROL ),
+		};
+
+		resetRenderingHints( g2, oldRenderingHints );
+		runnable.run();
+		resetRenderingHints( g2, oldRenderingHints2 );
 	}
 
 	public static Color deriveColor( Color color, Color baseColor ) {
@@ -277,7 +363,7 @@ public class FlatUIUtils
 		float innerArc = arc - (lineWidth * 2);
 
 		// reduce outer arc slightly for small arcs to make the curve slightly wider
-		if( arc > 0 && arc < UIScale.scale( 10 ) )
+		if( focusWidth > 0 && arc > 0 && arc < UIScale.scale( 10 ) )
 			outerArc -= UIScale.scale( 2f );
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
@@ -506,19 +592,140 @@ public class FlatUIUtils
 		float x2 = x + width;
 		float y2 = y + height;
 
+		// same constant as in java.awt.geom.EllipseIterator.CtrlVal used to paint circles
+		double c = 0.5522847498307933;
+		double ci = 1. - c;
+		double ciTopLeft = arcTopLeft * ci;
+		double ciTopRight = arcTopRight * ci;
+		double ciBottomLeft = arcBottomLeft * ci;
+		double ciBottomRight = arcBottomRight * ci;
+
 		Path2D rect = new Path2D.Float();
-		rect.moveTo( x2 - arcTopRight, y );
-		rect.quadTo( x2, y, x2, y + arcTopRight );
-		rect.lineTo( x2, y2 - arcBottomRight );
-		rect.quadTo( x2, y2, x2 - arcBottomRight, y2 );
-		rect.lineTo( x + arcBottomLeft, y2 );
-		rect.quadTo( x, y2, x, y2 - arcBottomLeft );
-		rect.lineTo( x, y + arcTopLeft );
-		rect.quadTo( x, y, x + arcTopLeft, y );
+		rect.moveTo(  x2 - arcTopRight, y );
+		rect.curveTo( x2 - ciTopRight, y,
+					  x2, y + ciTopRight,
+					  x2, y + arcTopRight );
+		rect.lineTo(  x2, y2 - arcBottomRight );
+		rect.curveTo( x2, y2 - ciBottomRight,
+					  x2 - ciBottomRight, y2,
+					  x2 - arcBottomRight, y2 );
+		rect.lineTo(  x + arcBottomLeft, y2 );
+		rect.curveTo( x + ciBottomLeft, y2,
+					  x, y2 - ciBottomLeft,
+					  x, y2 - arcBottomLeft );
+		rect.lineTo(  x, y + arcTopLeft );
+		rect.curveTo( x, y + ciTopLeft,
+					  x + ciTopLeft, y,
+					  x + arcTopLeft, y );
 		rect.closePath();
 
 		return rect;
 	}
+
+	/**
+	 * Paints a chevron or triangle arrow in the center of the given rectangle.
+	 *
+	 * @param g the graphics context used for painting
+	 * @param x the x coordinate of the rectangle
+	 * @param y the y coordinate of the rectangle
+	 * @param width the width of the rectangle
+	 * @param height the height of the rectangle
+	 * @param direction the arrow direction ({@link SwingConstants#NORTH}, {@link SwingConstants#SOUTH}
+	 *        {@link SwingConstants#WEST} or {@link SwingConstants#EAST})
+	 * @param chevron {@code true} for chevron arrow, {@code false} for triangle arrow
+	 * @param arrowSize the width of the painted arrow (for vertical direction) (will be scaled)
+	 * @param xOffset a offset added to the x coordinate of the arrow to paint it out-of-center. Usually zero. (will be scaled)
+	 * @param yOffset a offset added to the y coordinate of the arrow to paint it out-of-center. Usually zero. (will be scaled)
+	 *
+	 * @since 1.1
+	 */
+	public static void paintArrow( Graphics2D g, int x, int y, int width, int height,
+		int direction, boolean chevron, int arrowSize, int xOffset, int yOffset )
+	{
+		// compute arrow width/height
+		int aw = UIScale.scale( arrowSize + (chevron ? 0 : 1) );
+		int ah = UIScale.scale( (arrowSize / 2) + (chevron ? 0 : 1) );
+
+		// rotate arrow width/height for horizontal directions
+		boolean vert = (direction == SwingConstants.NORTH || direction == SwingConstants.SOUTH);
+		if( !vert ) {
+			int temp = aw;
+			aw = ah;
+			ah = temp;
+		}
+
+		// chevron lines end 1px outside of width/height
+		// --> add 1px to arrow width/height for position calculation
+		int extra = chevron ? 1 : 0;
+
+		// compute arrow location
+		int ax = x + Math.round( ((width - (aw + extra)) / 2f) + UIScale.scale( (float) xOffset ) );
+		int ay = y + Math.round( ((height - (ah + extra)) / 2f) + UIScale.scale( (float) yOffset ) );
+
+		// paint arrow
+		g.translate( ax, ay );
+/*debug
+		debugPaintArrow( g, Color.red, vert, aw + extra, ah + extra );
+debug*/
+		Shape arrowShape = createArrowShape( direction, chevron, aw, ah );
+		if( chevron ) {
+			Stroke oldStroke = g.getStroke();
+			g.setStroke( new BasicStroke( UIScale.scale( 1f ) ) );
+			g.draw( arrowShape );
+			g.setStroke( oldStroke );
+		} else {
+			// triangle
+			g.fill( arrowShape );
+		}
+		g.translate( -ax, -ay );
+	}
+
+	/**
+	 * Creates a chevron or triangle arrow shape for the given direction and size.
+	 * <p>
+	 * The chevron shape is a open path that can be painted with {@link Graphics2D#draw(Shape)}.
+	 * The triangle shape is a close path that can be painted with {@link Graphics2D#fill(Shape)}.
+	 *
+	 * @param direction the arrow direction ({@link SwingConstants#NORTH}, {@link SwingConstants#SOUTH}
+	 *        {@link SwingConstants#WEST} or {@link SwingConstants#EAST})
+	 * @param chevron {@code true} for chevron arrow, {@code false} for triangle arrow
+	 * @param w the width of the returned shape
+	 * @param h the height of the returned shape
+	 *
+	 * @since 1.1
+	 */
+	public static Shape createArrowShape( int direction, boolean chevron, float w, float h ) {
+		switch( direction ) {
+			case SwingConstants.NORTH:	return createPath( !chevron, 0,h, (w / 2f),0, w,h );
+			case SwingConstants.SOUTH:	return createPath( !chevron, 0,0, (w / 2f),h, w,0 );
+			case SwingConstants.WEST:	return createPath( !chevron, w,0, 0,(h / 2f), w,h );
+			case SwingConstants.EAST:	return createPath( !chevron, 0,0, w,(h / 2f), 0,h );
+			default:					return new Path2D.Float();
+		}
+	}
+
+/*debug
+	private static void debugPaintArrow( Graphics2D g, Color color, boolean vert, int w, int h ) {
+		Color oldColor = g.getColor();
+		g.setColor( color );
+		g.fill( createRectangle( 0, 0, w, h, 1 ) );
+
+		int xy1 = -2;
+		int x2 = w + 1;
+		int y2 = h + 1;
+		for( int i = 0; i < 20; i++ ) {
+			g.fillRect( 0, xy1, 1, 1 );
+			g.fillRect( 0, y2, 1, 1 );
+			g.fillRect( xy1, 0, 1, 1 );
+			g.fillRect( x2, 0, 1, 1 );
+			xy1 -= 2;
+			x2 += 2;
+			y2 += 2;
+		}
+
+		g.setColor( oldColor );
+	}
+debug*/
 
 	/**
 	 * Creates a closed path for the given points.
@@ -602,37 +809,6 @@ public class FlatUIUtils
 		return sharedUIinstances
 			.computeIfAbsent( UIManager.getLookAndFeel(), k -> new IdentityHashMap<>() )
 			.computeIfAbsent( key, k -> newInstanceSupplier.get() );
-	}
-
-	//---- class HoverListener ------------------------------------------------
-
-	public static class HoverListener
-		extends MouseAdapter
-	{
-		private final Component repaintComponent;
-		private final Consumer<Boolean> hoverChanged;
-
-		public HoverListener( Component repaintComponent, Consumer<Boolean> hoverChanged ) {
-			this.repaintComponent = repaintComponent;
-			this.hoverChanged = hoverChanged;
-		}
-
-		@Override
-		public void mouseEntered( MouseEvent e ) {
-			hoverChanged.accept( true );
-			repaint();
-		}
-
-		@Override
-		public void mouseExited( MouseEvent e ) {
-			hoverChanged.accept( false );
-			repaint();
-		}
-
-		private void repaint() {
-			if( repaintComponent != null && repaintComponent.isEnabled() )
-				repaintComponent.repaint();
-		}
 	}
 
 	//---- class RepaintFocusListener -----------------------------------------

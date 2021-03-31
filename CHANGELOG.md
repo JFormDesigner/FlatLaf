@@ -1,20 +1,296 @@
 FlatLaf Change Log
 ==================
 
-## 0.44-SNAPSHOT
+## 1.2-SNAPSHOT
+
+#### Fixed bugs
+
+- Fixed crash when running in Webswing. (issue #290)
+
+
+## 1.1.1
 
 #### New features and improvements
 
-- TabbedPane: Replaced forward/backward scrolling arrow buttons with "Show
-  Hidden Tabs" button. If pressed, it shows a popup menu that contains (partly)
-  hidden tabs and selecting one activates that tab. If you prefer
-  forward/backward buttons, use `UIManager.put(
-  "TabbedPane.hiddenTabsNavigation", "arrowButtons" )`. (PR #190; issue #40)
-- TabbedPane: Support scrolling tabs with mouse wheel (if `tabLayoutPolicy` is
-  `SCROLL_TAB_LAYOUT`). (PR #187; issue #40)
-- TabbedPane: Repeat scrolling as long as arrow buttons are pressed. (PR #187;
-  issue #40)
-- TabbedPane: Support adding custom components to left and right sides of tabs
+- Native window decorations: Support disabling native window decorations per
+  window. (set client property `JRootPane.useWindowDecorations` to `false` on
+  root pane).
+- Support running on WinPE. (issue #279)
+
+#### Fixed bugs
+
+- Native window decorations: Fixed missing animations when minimizing,
+  maximizing or restoring a window using window title bar buttons. (issue #282)
+- Native window decorations: Fixed broken maximizing window when restoring frame
+  state at startup. (issue #283)
+- Native window decorations: Fixed double window title bar when first disposing
+  a window with `frame.dispose()` and then showing it again with
+  `frame.setVisible(true)`. (issue #277)
+- Custom window decorations: Fixed NPE in `FlatTitlePane.findHorizontalGlue()`.
+  (issue #275)
+- Custom window decorations: Fixed right aligned progress bar in embedded menu
+  bar was overlapping window title. (issue #272)
+- Fixed missing focus indicators in heavy-weight popups. (issue #273)
+- InternalFrame: Fixed translucent internal frame menu bar background if
+  `TitlePane.unifiedBackground` is `true`. (issue #274)
+- Extras: UI Inspector: Fixed `InaccessibleObjectException` when running in Java 16.
+
+
+## 1.1
+
+#### New features and improvements
+
+- Windows 10 only:
+  - Native window decorations for Windows 10 enables dark frame/dialog title bar
+    and embedded menu bar with all JREs, while still having native Windows 10
+    border drop shadows, resize behavior, window snapping and system window
+    menu. (PR #267)
+  - Custom window decorations: Support right aligned components in `JFrame`
+    title bar with embedded menu bar (using `Box.createHorizontalGlue()`). (PR
+    #268)
+  - Custom window decorations: Improved centering of window title with embedded
+    menu bar. (PR #268; issue #252)
+  - Custom window decorations: Support unified backgrounds for window title bar,
+    menu bar and main content. If enabled with `UIManager.put(
+    "TitlePane.unifiedBackground", true );` then window title bar and menu bar
+    use same background color as main content. (PR #268; issue #254)
+- JIDE Common Layer: Support `JideButton`, `JideLabel`, `JideSplitButton`,
+  `JideToggleButton` and `JideToggleSplitButton`.
+- JIDE Common Layer: The library on Maven Central no longer depends on
+  `com.jidesoft:jide-oss:3.6.18` to avoid problems when another JIDE library
+  should be used. (issue #270)
+- SwingX: The library on Maven Central no longer depends on
+  `org.swinglabs.swingx:swingx-all:1.6.5-1` to avoid problems when another
+  SwingX library should be used.
+- Support running in [JetBrains Projector](https://jetbrains.com/projector/).
+
+#### Fixed bugs
+
+- IntelliJ Themes: Fixed text color of CheckBoxMenuItem and RadioButtonMenuItem
+  in all "Arc" themes. (issue #259)
+
+
+## 1.0
+
+#### New features and improvements
+
+- Extras: UI Inspector: Tooltip is no longer limited to window bounds.
+
+#### Fixed bugs
+
+- TabbedPane: Custom `TabbedPane.selectedForeground` color did not work when
+  `TabbedPane.foreground` has also custom color. (issue #257)
+- FileChooser: Fixed display of date in details view if current user is selected
+  in "Look in" combobox. (Windows 10 only; issue #249)
+- Table: Fixed wrong grid line thickness in dragged column on HiDPI screens on
+  Java 9+. (issue #236)
+- PopupFactory: Fixed `NullPointerException` when `PopupFactory.getPopup()` is
+  invoked with parameter `owner` set to `null`.
+
+
+## 1.0-rc3
+
+#### New features and improvements
+
+- Extras:
+  - UI Inspector: Use HTML in tooltip. Display color value in same format as
+    used in FlatLaf properties files. Added color preview.
+
+#### Fixed bugs
+
+- Label and ToolTip: Fixed font sizes for `<code>`, `<kbd>`, `<big>`, `<small>`
+  and `<samp>` tags in HTML text.
+- Fixed color of `<address>` tag in HTML text.
+- IntelliJ Themes: Fixed table header background when dragging column in "Dark
+  Flat" and "Light Flat" themes.
+- CheckBox: Fixed background of check boxes in JIDE `CheckBoxTree`. (regression
+  in 1.0-rc2)
+
+
+## 1.0-rc2
+
+#### New features and improvements
+
+- Button:
+  - In "Flat Light" theme, use a slightly thinner border for focused buttons
+    (because they already have light blue background).
+  - In "Flat Dark" theme, use slightly wider border for focused buttons.
+- CheckBox and RadioButton: In "Flat Dark" theme, use blueish background for
+  focused components.
+- Tree: Support disabling wide selection per component. (set client property
+  `JTree.wideSelection` to `false`). (PR #245)
+- Tree: Support disabling selection painting per component. Then the tree cell
+  renderer is responsible for selection painting. (set client property
+  `JTree.paintSelection` to `false`).
+- JIDE Common Layer: Support `JidePopupMenu`.
+
+#### Fixed bugs
+
+- Button: Fixed behavior of <kbd>Enter</kbd> key on focused button on Windows
+  and Linux, which now clicks the focused button (instead of the default
+  button).
+  - On Windows, this is a regression in 1.0-rc1.
+  - On macOS, the <kbd>Enter</kbd> key always clicks the default button, which
+    is the platform behavior.
+  - On all platforms, the default button can be always clicked with
+    <kbd>Ctrl+Enter</kbd> keys, even if another button is focused.
+- CheckBox and RadioButton: Fill component background as soon as background
+  color is different to default background color, even if component is not
+  opaque (which is the default). This paints selection if using the component as
+  cell renderer a Table, Tree or List.
+- TextComponents: Border of focused non-editable text components had wrong
+  color.
+- Custom window decorations: Fixed top window border in dark themes when running
+  in JetBrains Runtime.
+
+
+## 1.0-rc1
+
+#### New features and improvements
+
+- Button: Disabled `Button.defaultButtonFollowsFocus` on Windows (as on other
+  platforms). If you like to keep the old behavior in your application, use:
+  `if(SystemInfo.isWindows)
+  UIManager.put("Button.defaultButtonFollowsFocus",true);`.
+- ComboBox, Spinner and SplitPaneDivider: Added pressed feedback to arrow
+  buttons.
+- Slider: Support per component custom thumb and track colors via
+  `JSlider.setForeground(Color)` and `JSlider.setBackground(Color)`.
+- Slider: Improved thumb hover and pressed colors.
+- TextComponent: Clip placeholder text if it does not fit into visible area. (PR
+  #229)
+- macOS: Improved font rendering on macOS when using JetBrains Runtime. (PRs
+  #237, #239 and #241)
+- Extras: UI defaults inspector:
+  - Support embedding UI defaults inspector panel into any window. See
+    `FlatUIDefaultsInspector.createInspectorPanel()`.
+  - Copy selected keys and values into clipboard via context menu.
+  - Support wildcard matching in filter (`*` matches any number of characters,
+    `?` matches a single character, `^` beginning of line, `$` end of line).
+- IntelliJ Themes:
+  - Added hover and pressed feedback to Button, CheckBox, RadioButton and
+    ToggleButton. (issue #176)
+  - Added "Material Theme UI Lite / Moonlight" theme.
+  - Updated "Dracula", "Gradianto" and "Material Theme UI Lite" themes.
+
+#### Fixed bugs
+
+- Button and ToggleButton: Threat Unicode surrogate character pair as single
+  character and make button square. (issue #234)
+- Button and ToggleButton: ToolBar buttons now respect explicitly set background
+  color. If no background color is set, then the button background is not
+  painted anymore. (issue #191)
+- ToggleButton: Tab style buttons (client property `JButton.buttonType` is
+  `tab`) now respect explicitly set background color.
+- TabbedPane: Fixed `IndexOutOfBoundsException` when using tooltip text on close
+  buttons and closing last/rightmost tab. (issue #235)
+- TabbedPane: Fixed scrolling tabs with touchpads and high-resolution mouse
+  wheels.
+- Extras: Added missing export of package
+  `com.formdev.flatlaf.extras.components` to Java 9 module descriptor.
+- JIDE Common Layer:
+  - Invoke `LookAndFeelFactory.installJideExtension()` when using FlatLaf UI
+    delegates. (issue #230)
+  - RangeSlider: Fixed slider focused colors in IntelliJ themes.
+- IntelliJ Themes:
+  - Fixed menu item check colors.
+  - Fixed `MenuItem.underlineSelectionColor`.
+  - Fixed List, Tree and Table `selectionInactiveForeground` in light Arc
+    themes.
+  - Fixed List and Table background colors in Material UI Lite themes.
+  - Fixed menu accelerator colors in Monocai theme. (issue #243)
+
+
+## 0.46
+
+#### New features and improvements
+
+- Slider and JIDE RangeSlider: Clicking on track now immediately moves the thumb
+  to mouse location and starts dragging the thumb. Use `UIManager.put(
+  "Slider.scrollOnTrackClick", true )` to enable old behavior that scrolls the
+  thumb when clicking on track.
+- Slider: Snap to ticks is now done while dragging the thumb. Use
+  `UIManager.put( "Slider.snapToTicksOnReleased", true )` to enable old behavior
+  that snaps to ticks on mouse released.
+- Extras: Added standard component extension classes that provides easy access
+  to FlatLaf specific client properties (see package
+  `com.formdev.flatlaf.extras.components`).
+- Extras: Renamed tri-state check box class from
+  `com.formdev.flatlaf.extras.TriStateCheckBox` to
+  `com.formdev.flatlaf.extras.components.FlatTriStateCheckBox`. Also
+  changed/improved API and added javadoc.
+- Extras: Renamed SVG utility class from `com.formdev.flatlaf.extras.SVGUtils`
+  to `com.formdev.flatlaf.extras.FlatSVGUtils`.
+- IntelliJ Themes: Added flag whether a theme is dark to
+  `FlatAllIJThemes.INFOS`. (issue #221)
+- JIDE Common Layer: Support `TristateCheckBox`.
+
+
+#### Fixed bugs
+
+- Slider: Fixed painting of colored track if `JSlider.inverted` is `true`.
+- Table and TableHeader: Fixed missing right vertical grid line if using table
+  as row header in scroll pane. (issues #152 and #46)
+- TableHeader: Fixed position of column separators in right-to-left component
+  orientation.
+- ToolTip: Fixed drop shadow for wide tooltips on Windows and Java 9+. (issue
+  #224)
+- SwingX: Fixed striping background highlighting color (e.g. alternating table
+  rows) in dark themes.
+- Fixed: If text antialiasing is disabled (in OS system settings or via
+  `-Dawt.useSystemAAFontSettings=off`), then some components still did use
+  antialiasing to render text (not-editable ComboBox, ProgressBar, Slider,
+  TabbedPane and multiline ToolTip). (issue #227)
+
+
+## 0.45
+
+#### New features and improvements
+
+- Slider: New design, added hover and pressed feedback and improved customizing.
+  (PR #214)
+- JIDE Common Layer: Support `RangeSlider`. (PR #209)
+- IntelliJ Themes:
+  - Added "Gradianto Nature Green" theme.
+  - Updated "Arc Dark", "Cyan", "Dark purple", "Gradianto", "Gray", "Gruvbox"
+    and "One Dark" themes.
+- TabbedPane: Support hiding tab area if it contains only one tab. (set client
+  property `JTabbedPane.hideTabAreaWithOneTab` to `true`)
+- MenuBar: Support different underline menu selection style UI defaults for
+  `MenuBar` and `MenuItem`. (PR #217; issue #216)
+
+
+#### Fixed bugs
+
+- Table: Do not paint last vertical grid line if auto-resize mode is not off.
+  (issue #46)
+- Table: Fixed unstable grid line thickness when scaled on HiDPI screens. (issue
+  #152)
+- TabbedPane: No longer add (internal) tab close button component as child to
+  `JTabbedPane`. (issue #219)
+- Custom window decorations: Title bar was not hidden if window is in
+  full-screen mode. (issue #212)
+
+
+## 0.44
+
+#### New features and improvements
+
+- TabbedPane: In scroll tab layout, added "Show Hidden Tabs" button to trailing
+  side of tab area. If pressed, it shows a popup menu that contains (partly)
+  hidden tabs and selecting one activates that tab. (PR #190; issue #40)
+- TabbedPane: Support forward/backward scroll arrow buttons on both sides of tab
+  area. Backward button on left side, forward button on right side. Not
+  applicable scroll buttons are hidden. (PR #211; issue #40)
+- TabbedPane: Support specifying default tab layout policy for all tabbed panes
+  in the application via UI value `TabbedPane.tabLayoutPolicy`. E.g. invoke
+  `UIManager.put( "TabbedPane.tabLayoutPolicy", "scroll" );` to use scroll
+  layout.
+- TabbedPane: Support tab scrolling with mouse wheel (in scroll tab layout). (PR
+  #187; issue #40)
+- TabbedPane: Repeat scrolling as long as scroll arrow buttons are pressed. (PR
+  #187; issue #40)
+- TabbedPane: Support adding custom components to left and right sides of tab
   area. (set client property `JTabbedPane.leadingComponent` or
   `JTabbedPane.trailingComponent` to a `java.awt.Component`) (PR #192; issue
   #40)

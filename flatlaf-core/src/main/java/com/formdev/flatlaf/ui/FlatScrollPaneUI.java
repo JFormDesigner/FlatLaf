@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-/*
- * Smooth scrolling code partly based on code from IntelliJ IDEA Community Edition,
- * which is licensed under the Apache 2.0 license. Copyright 2000-2016 JetBrains s.r.o.
- * See: https://github.com/JetBrains/intellij-community/blob/31e1b5a8e43219b9571951bab6457cfb3012e3ef/platform/platform-api/src/com/intellij/ui/components/SmoothScrollPane.java#L141-L185
- *
- */
 package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
@@ -111,19 +105,17 @@ public class FlatScrollPaneUI
 
 	@Override
 	protected MouseWheelListener createMouseWheelListener() {
-		return new BasicScrollPaneUI.MouseWheelHandler() {
-			@Override
-			public void mouseWheelMoved( MouseWheelEvent e ) {
-				if( isSmoothScrollingEnabled() &&
-					scrollpane.isWheelScrollingEnabled() &&
-					e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
-					e.getPreciseWheelRotation() != 0 &&
-					e.getPreciseWheelRotation() != e.getWheelRotation() )
-				{
-					mouseWheelMovedSmooth( e );
-				} else
-					super.mouseWheelMoved( e );
-			}
+		MouseWheelListener superListener = super.createMouseWheelListener();
+		return e -> {
+			if( isSmoothScrollingEnabled() &&
+				scrollpane.isWheelScrollingEnabled() &&
+				e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL &&
+				e.getPreciseWheelRotation() != 0 &&
+				e.getPreciseWheelRotation() != e.getWheelRotation() )
+			{
+				mouseWheelMovedSmooth( e );
+			} else
+				superListener.mouseWheelMoved( e );
 		};
 	}
 
@@ -137,8 +129,6 @@ public class FlatScrollPaneUI
 		// (e.g. in application options dialog).
 		return UIManager.getBoolean( "ScrollPane.smoothScrolling" );
 	}
-
-	private static final double EPSILON = 1e-5d;
 
 	private void mouseWheelMovedSmooth( MouseWheelEvent e ) {
 		// return if there is no viewport
@@ -160,24 +150,22 @@ public class FlatScrollPaneUI
 		// get precise wheel rotation
 		double rotation = e.getPreciseWheelRotation();
 
-		// get unit and block increment
+		// get unit increment
 		int unitIncrement;
-		int blockIncrement;
 		int orientation = scrollbar.getOrientation();
 		Component view = viewport.getView();
 		if( view instanceof Scrollable ) {
 			Scrollable scrollable = (Scrollable) view;
 
-			// Use (0, 0) view position to obtain constant unit increment of first item
-			// (which might otherwise be variable on smaller-than-unit scrolling).
+			// Use (0, 0) view position to obtain a constant unit increment of first item.
+			// Unit increment may be different for each item.
 			Rectangle visibleRect = new Rectangle( viewport.getViewSize() );
 			unitIncrement = scrollable.getScrollableUnitIncrement( visibleRect, orientation, 1 );
-			blockIncrement = scrollable.getScrollableBlockIncrement( visibleRect, orientation, 1 );
 
 			if( unitIncrement > 0 ) {
 				// For the case that the first item (e.g. in a list) is larger
-				// than the other items, get the unit increment of the second item
-				// and use the smaller one.
+				// than the other items (e.g. themes list in FlatLaf Demo),
+				// get the unit increment of the second item and use the smaller one.
 				if( orientation == SwingConstants.VERTICAL ) {
 					visibleRect.y += unitIncrement;
 					visibleRect.height -= unitIncrement;
@@ -192,92 +180,96 @@ public class FlatScrollPaneUI
 		} else {
 			int direction = rotation < 0 ? -1 : 1;
 			unitIncrement = scrollbar.getUnitIncrement( direction );
-			blockIncrement = scrollbar.getBlockIncrement( direction );
 		}
 
-		// limit scroll amount (number of units to scroll) for small viewports
-		// (e.g. vertical scrolling in file chooser)
-		int scrollAmount = e.getScrollAmount();
+		// get viewport width/height (the visible width/height)
 		int viewportWH = (orientation == SwingConstants.VERTICAL)
 			? viewport.getHeight()
 			: viewport.getWidth();
-		if( unitIncrement * scrollAmount > viewportWH )
-			scrollAmount = Math.max( viewportWH / unitIncrement, 1 );
+
+		// limit scroll increment to viewport width/height
+		// - if scroll amount is set to a large value in OS settings
+		// - for large unit increments in small viewports (e.g. horizontal scrolling in file chooser)
+		int scrollIncrement = Math.min( unitIncrement * e.getScrollAmount(), viewportWH );
 
 		// compute relative delta
-		double delta = rotation * scrollAmount * unitIncrement;
-		boolean adjustDelta = Math.abs( rotation ) < (1.0 + EPSILON);
-		double adjustedDelta = adjustDelta
-			? Math.max( -blockIncrement, Math.min( delta, blockIncrement ) )
-			: delta;
+		double delta = rotation * scrollIncrement;
+		int idelta = (int) Math.round( delta );
+
+		// scroll at least one pixel to avoid "hanging"
+		// - for "super-low-speed" scrolling (move fingers very slowly on trackpad)
+		// - if unit increment is very small (e.g. 1 if scroll view does not implement
+		//   javax.swing.Scrollable interface)
+		if( idelta == 0 ) {
+			if( rotation > 0 )
+				idelta = 1;
+			else if( rotation < 0 )
+				idelta = -1;
+		}
 
 		// compute new value
 		int value = scrollbar.getValue();
-		double minDelta = scrollbar.getMinimum() - value;
-		double maxDelta = scrollbar.getMaximum() - scrollbar.getModel().getExtent() - value;
-		double boundedDelta = Math.max( minDelta, Math.min( adjustedDelta, maxDelta ) );
-		int newValue = value + (int) Math.round( boundedDelta );
+		int minValue = scrollbar.getMinimum();
+		int maxValue = scrollbar.getMaximum() - scrollbar.getModel().getExtent();
+		int newValue = Math.max( minValue, Math.min( value + idelta, maxValue ) );
 
 		// set new value
 		if( newValue != value )
 			scrollbar.setValue( newValue );
 
 /*debug
-		System.out.println( String.format( "%4d  %9f / %4d %4d / %12f %5s %12f / %4d %4d %4d / %12f %12f %12f / %4d",
+		System.out.println( String.format( "%s  %4d  %9f  /  %3d * %d = %3d  [%3d]  /  %8.2f %5d  /  %4d --> %4d  [%d, %d]",
+			(orientation == SwingConstants.VERTICAL) ? "V" : "H",
 			e.getWheelRotation(),
 			e.getPreciseWheelRotation(),
 			unitIncrement,
-			blockIncrement,
+			e.getScrollAmount(),
+			scrollIncrement,
+			viewportWH,
 			delta,
-			adjustDelta,
-			adjustedDelta,
+			idelta,
 			value,
-			scrollbar.getMinimum(),
-			scrollbar.getMaximum(),
-			minDelta,
-			maxDelta,
-			boundedDelta,
-			newValue ) );
+			newValue,
+			minValue,
+			maxValue ) );
 */
 	}
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new BasicScrollPaneUI.PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
 
-				switch( e.getPropertyName() ) {
-					case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
-						JScrollBar vsb = scrollpane.getVerticalScrollBar();
-						JScrollBar hsb = scrollpane.getHorizontalScrollBar();
-						if( vsb != null ) {
-							vsb.revalidate();
-							vsb.repaint();
-						}
-						if( hsb != null ) {
-							hsb.revalidate();
-							hsb.repaint();
-						}
-						break;
-
-					case ScrollPaneConstants.LOWER_LEFT_CORNER:
-					case ScrollPaneConstants.LOWER_RIGHT_CORNER:
-					case ScrollPaneConstants.UPPER_LEFT_CORNER:
-					case ScrollPaneConstants.UPPER_RIGHT_CORNER:
-						// remove border from buttons added to corners
-						Object corner = e.getNewValue();
-						if( corner instanceof JButton &&
-							((JButton)corner).getBorder() instanceof FlatButtonBorder &&
-							scrollpane.getViewport() != null &&
-							scrollpane.getViewport().getView() instanceof JTable )
-						{
-							((JButton)corner).setBorder( BorderFactory.createEmptyBorder() );
-							((JButton)corner).setFocusable( false );
-						}
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
+					JScrollBar vsb = scrollpane.getVerticalScrollBar();
+					JScrollBar hsb = scrollpane.getHorizontalScrollBar();
+					if( vsb != null ) {
+						vsb.revalidate();
+						vsb.repaint();
+					}
+					if( hsb != null ) {
+						hsb.revalidate();
+						hsb.repaint();
+					}
 					break;
-				}
+
+				case ScrollPaneConstants.LOWER_LEFT_CORNER:
+				case ScrollPaneConstants.LOWER_RIGHT_CORNER:
+				case ScrollPaneConstants.UPPER_LEFT_CORNER:
+				case ScrollPaneConstants.UPPER_RIGHT_CORNER:
+					// remove border from buttons added to corners
+					Object corner = e.getNewValue();
+					if( corner instanceof JButton &&
+						((JButton)corner).getBorder() instanceof FlatButtonBorder &&
+						scrollpane.getViewport() != null &&
+						scrollpane.getViewport().getView() instanceof JTable )
+					{
+						((JButton)corner).setBorder( BorderFactory.createEmptyBorder() );
+						((JButton)corner).setFocusable( false );
+					}
+				break;
 			}
 		};
 	}

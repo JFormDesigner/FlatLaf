@@ -42,10 +42,12 @@ class FlatInputMaps
 	}
 
 	private static void initBasicInputMaps( UIDefaults defaults ) {
-		defaults.put( "Button.focusInputMap", new UIDefaults.LazyInputMap( new Object[] {
-			"SPACE", "pressed",
-			"released SPACE", "released"
-		} ) );
+		if( SystemInfo.isMacOS ) {
+			defaults.put( "Button.focusInputMap", new UIDefaults.LazyInputMap( new Object[] {
+				"SPACE", "pressed",
+				"released SPACE", "released"
+			} ) );
+		}
 
 		modifyInputMap( defaults, "ComboBox.ancestorInputMap",
 			"SPACE", "spacePopup",

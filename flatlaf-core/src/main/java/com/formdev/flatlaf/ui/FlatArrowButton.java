@@ -17,16 +17,13 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Path2D;
 import javax.swing.JComponent;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicArrowButton;
@@ -58,18 +55,6 @@ public class FlatArrowButton
 	private boolean pressed;
 
 	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
-		Color hoverForeground, Color hoverBackground )
-	{
-		this( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, null );
-	}
-
-	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
-		Color hoverForeground, Color hoverBackground, Color pressedBackground )
-	{
-		this( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, null, pressedBackground );
-	}
-
-	public FlatArrowButton( int direction, String type, Color foreground, Color disabledForeground,
 		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
@@ -85,7 +70,9 @@ public class FlatArrowButton
 		setOpaque( false );
 		setBorder( null );
 
-		if( hoverForeground != null || hoverBackground != null || pressedBackground != null ) {
+		if( hoverForeground != null || hoverBackground != null ||
+			pressedForeground != null || pressedBackground != null )
+		{
 			addMouseListener( new MouseAdapter() {
 				@Override
 				public void mouseEntered( MouseEvent e ) {
@@ -151,7 +138,7 @@ public class FlatArrowButton
 	}
 
 	protected Color deriveForeground( Color foreground ) {
-		return foreground;
+		return FlatUIUtils.deriveColor( foreground, this.foreground );
 	}
 
 	@Override
@@ -166,8 +153,7 @@ public class FlatArrowButton
 
 	@Override
 	public void paint( Graphics g ) {
-		Graphics2D g2 = (Graphics2D)g;
-		FlatUIUtils.setRenderingHints( g2 );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 		// paint hover or pressed background
 		if( isEnabled() ) {
@@ -179,7 +165,7 @@ public class FlatArrowButton
 
 			if( background != null ) {
 				g.setColor( deriveBackground( background ) );
-				paintBackground( g2 );
+				paintBackground( (Graphics2D) g );
 			}
 		}
 
@@ -191,7 +177,9 @@ public class FlatArrowButton
 					? hoverForeground
 					: foreground))
 			: disabledForeground ) );
-		paintArrow( g2 );
+		paintArrow( (Graphics2D) g );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 
 	protected void paintBackground( Graphics2D g ) {
@@ -199,73 +187,14 @@ public class FlatArrowButton
 	}
 
 	protected void paintArrow( Graphics2D g ) {
-		int direction = getDirection();
 		boolean vert = (direction == NORTH || direction == SOUTH);
-
-		// compute width/height
-		int w = scale( arrowWidth + (chevron ? 0 : 1) );
-		int h = scale( (arrowWidth / 2) + (chevron ? 0 : 1) );
-
-		// rotate width/height
-		int rw = vert ? w : h;
-		int rh = vert ? h : w;
-
-		// chevron lines end 1px outside of width/height
-		if( chevron ) {
-			// add 1px to width/height for position calculation only
-			rw++;
-			rh++;
-		}
-
-		int x = Math.round( (getWidth() - rw) / 2f + scale( (float) xOffset ) );
-		int y = Math.round( (getHeight() - rh) / 2f + scale( (float) yOffset ) );
+		int x = 0;
 
 		// move arrow for round borders
 		Container parent = getParent();
 		if( vert && parent instanceof JComponent && FlatUIUtils.hasRoundBorder( (JComponent) parent ) )
 			x -= scale( parent.getComponentOrientation().isLeftToRight() ? 1 : -1 );
 
-		// paint arrow
-		g.translate( x, y );
-/*debug
-		debugPaint( g, vert, rw, rh );
-debug*/
-		Shape arrowShape = createArrowShape( direction, chevron, w, h );
-		if( chevron ) {
-			g.setStroke( new BasicStroke( scale( 1f ) ) );
-			g.draw( arrowShape );
-		} else {
-			// triangle
-			g.fill( arrowShape );
-		}
-		g.translate( -x, -y );
+		FlatUIUtils.paintArrow( g, x, 0, getWidth(), getHeight(), getDirection(), chevron, arrowWidth, xOffset, yOffset );
 	}
-
-	public static Shape createArrowShape( int direction, boolean chevron, float w, float h ) {
-		switch( direction ) {
-			case NORTH:	return FlatUIUtils.createPath( !chevron, 0,h, (w / 2f),0, w,h );
-			case SOUTH:	return FlatUIUtils.createPath( !chevron, 0,0, (w / 2f),h, w,0 );
-			case WEST:	return FlatUIUtils.createPath( !chevron, h,0, 0,(w / 2f), h,w );
-			case EAST:	return FlatUIUtils.createPath( !chevron, 0,0, h,(w / 2f), 0,w );
-			default:	return new Path2D.Float();
-		}
-	}
-
-/*debug
-	private void debugPaint( Graphics g, boolean vert, int w, int h ) {
-		Color oldColor = g.getColor();
-		g.setColor( Color.red );
-		g.drawRect( 0, 0, w - 1, h - 1 );
-
-		int xy1 = -2;
-		int xy2 = h + 1;
-		for( int i = 0; i < 20; i++ ) {
-			g.drawRect( vert ? 0 : xy1, vert ? xy1 : 0, 0, 0 );
-			g.drawRect( vert ? 0 : xy2, vert ? xy2 : 0, 0, 0 );
-			xy1 -= 2;
-			xy2 += 2;
-		}
-		g.setColor( oldColor );
-	}
-debug*/
 }

@@ -77,9 +77,10 @@ Button.default.foreground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Button.default.hoverBackground #3b5f8b    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 Button.default.hoverBorderColor #537699    javax.swing.plaf.ColorUIResource [UI]
 Button.default.pressedBackground #3f6796    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
-Button.defaultButtonFollowsFocus true
+Button.defaultButtonFollowsFocus false
 Button.disabledBackground      #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledBorderColor     #5e6060    javax.swing.plaf.ColorUIResource [UI]
+Button.disabledForeground      #888888    javax.swing.plaf.ColorUIResource [UI]
 Button.disabledSelectedBackground #53585a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 Button.disabledText            #888888    javax.swing.plaf.ColorUIResource [UI]
 Button.focusedBorderColor      #466d94    javax.swing.plaf.ColorUIResource [UI]
@@ -89,6 +90,7 @@ Button.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
 Button.hoverBackground         #53585a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 Button.hoverBorderColor        #466d94    javax.swing.plaf.ColorUIResource [UI]
 Button.iconTextGap             4
+Button.innerFocusWidth         1
 Button.light                   #313131    javax.swing.plaf.ColorUIResource [UI]
 Button.margin                  2,14,2,14    javax.swing.plaf.InsetsUIResource [UI]
 Button.minimumWidth            72
@@ -126,20 +128,20 @@ CheckBox.icon.checkmarkColor   #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledBorderColor #545556    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledCheckmarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.focusedBackground #466d944d  30%    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.focusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.hoverBackground  #4a5152    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 CheckBox.icon.hoverBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.pressedBackground #52595a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
 CheckBox.icon.selectedBackground #43494a    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.selectedBorderColor #6b6b6b    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon.selectedFocusedBorderColor #466d94    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
 CheckBox.iconTextGap           4
 CheckBox.icon[filled].checkmarkColor #43494a    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon[filled].selectedBackground #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon[filled].selectedBorderColor #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon[filled].selectedHoverBackground #9f9f9f    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon[filled].selectedPressedBackground #989898    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].selectedHoverBackground #9f9f9f    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
+CheckBox.icon[filled].selectedPressedBackground #989898    com.formdev.flatlaf.util.DerivedColor [UI]    darken(6% autoInverse)
 CheckBox.margin                2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 CheckBox.rollover              true
 CheckBox.textIconGap           4
@@ -189,10 +191,11 @@ ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 ComboBox.buttonArrowColor      #9a9da1    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonBackground      #45494a    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonDarkShadow      #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonDisabledArrowColor #5a5d61    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonEditableBackground #404445    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHighlight       #242424    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.buttonHoverArrowColor #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonHoverArrowColor #b4b7ba    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
+ComboBox.buttonPressedArrowColor #cfd0d2    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
 ComboBox.buttonShadow          #646464    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonStyle           auto
 ComboBox.disabledBackground    #3c3f41    javax.swing.plaf.ColorUIResource [UI]
@@ -326,6 +329,7 @@ HeaderUI                       com.formdev.flatlaf.swingx.ui.FlatHeaderUI
 
 HelpButton.background          #43494a    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.borderColor         #6b6b6b    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.borderWidth         1
 HelpButton.disabledBackground  #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledBorderColor #545556    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.disabledQuestionMarkColor #606060    javax.swing.plaf.ColorUIResource [UI]
@@ -333,6 +337,7 @@ HelpButton.focusedBorderColor  #466d94    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.hoverBackground     #4a5152    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 HelpButton.hoverBorderColor    #466d94    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
+HelpButton.innerFocusWidth     1
 HelpButton.pressedBackground   #52595a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(6% autoInverse)
 HelpButton.questionMarkColor   #a7a7a7    javax.swing.plaf.ColorUIResource [UI]
 
@@ -435,6 +440,50 @@ JXTitledPanel.borderColor      #5e6060    javax.swing.plaf.ColorUIResource [UI]
 JXTitledPanel.captionInsets    4,10,4,10    javax.swing.plaf.InsetsUIResource [UI]
 JXTitledPanel.titleBackground  #4c5052    javax.swing.plaf.ColorUIResource [UI]
 JXTitledPanel.titleForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- JideButton ----
+
+JideButton.background          #4c5052    javax.swing.plaf.ColorUIResource [UI]
+JideButton.border              [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+JideButton.borderColor         #5e6060    javax.swing.plaf.ColorUIResource [UI]
+JideButton.darkShadow          #5e6060    javax.swing.plaf.ColorUIResource [UI]
+JideButton.focusedBackground   #4e5355    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(1% autoInverse)
+JideButton.foreground          #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+JideButton.highlight           #656a6c    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
+JideButton.light               #5e6060    javax.swing.plaf.ColorUIResource [UI]
+JideButton.margin              3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+JideButton.selectedAndFocusedBackground #565a5d    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(4% autoInverse)
+JideButton.selectedBackground  #5d6265    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(7% autoInverse)
+JideButton.shadow              #5e6060    javax.swing.plaf.ColorUIResource [UI]
+JideButton.textIconGap         [active] 4
+JideButtonUI                   com.formdev.flatlaf.jideoss.ui.FlatJideButtonUI
+
+
+#---- JideLabel ----
+
+JideLabel.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
+JideLabel.disabledForeground   #888888    javax.swing.plaf.ColorUIResource [UI]
+JideLabel.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+JideLabelUI                    com.formdev.flatlaf.jideoss.ui.FlatJideLabelUI
+
+
+#---- JidePopupMenu ----
+
+JidePopupMenuUI                com.formdev.flatlaf.jideoss.ui.FlatJidePopupMenuUI
+
+
+#---- JideSplitButton ----
+
+JideSplitButton.background     #4c5052    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.border         [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMarginBorder [UI]
+JideSplitButton.buttonArrowColor #9a9da1    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.buttonDisabledArrowColor #5a5d61    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.foreground     #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.margin         3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
+JideSplitButton.selectionForeground #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+JideSplitButton.textIconGap    [active] 4
+JideSplitButtonUI              com.formdev.flatlaf.jideoss.ui.FlatJideSplitButtonUI
 
 
 #---- JideTabbedPane ----
@@ -542,7 +591,7 @@ MenuItem.arrowIcon             [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenu
 MenuItem.background            #303234    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
 MenuItem.borderPainted         true
-MenuItem.checkBackground       #3c588b    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.checkBackground       #3c588b    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
 MenuItem.checkMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.disabledForeground    #888888    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.font                  [active] $defaultFont [UI]
@@ -557,7 +606,7 @@ MenuItem.selectionForeground   #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.textAcceleratorGap    24
 MenuItem.textNoAcceleratorGap  6
 MenuItem.underlineSelectionBackground #484c4f    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10% autoInverse)
-MenuItem.underlineSelectionCheckBackground #3c588b    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.underlineSelectionCheckBackground #3c588b    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
 MenuItem.underlineSelectionColor #4a88c7    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
 
@@ -639,7 +688,7 @@ PanelUI                        com.formdev.flatlaf.ui.FlatPanelUI
 PasswordField.background       #45494a    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 PasswordField.capsLockIcon     [lazy] 16,16    com.formdev.flatlaf.icons.FlatCapsLockIcon [UI]
-PasswordField.capsLockIconColor #64ffffff    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.capsLockIconColor #ffffff64  39%    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground #3c3f41    javax.swing.plaf.ColorUIResource [UI]
@@ -752,6 +801,11 @@ RadioButtonMenuItemUI          com.formdev.flatlaf.ui.FlatRadioButtonMenuItemUI
 RadioButtonUI                  com.formdev.flatlaf.ui.FlatRadioButtonUI
 
 
+#---- RangeSlider ----
+
+RangeSliderUI                  com.formdev.flatlaf.jideoss.ui.FlatRangeSliderUI
+
+
 #---- Resizable ----
 
 Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.FlatLineBorder [UI]    lineColor=#5e5e5e    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
@@ -759,7 +813,7 @@ Resizable.resizeBorder         [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.F
 
 #---- RootPane ----
 
-RootPane.activeBorderColor     #4d5154    com.formdev.flatlaf.util.DerivedColor [UI]    darken(7% autoInverse)
+RootPane.activeBorderColor     #4d5154    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(7% autoInverse)
 RootPane.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRootPaneUI$FlatWindowBorder [UI]
 RootPane.borderDragThickness   5
 RootPane.cornerDragWidth       16
@@ -774,7 +828,7 @@ RootPane.defaultButtonWindowKeyBindings length=8    [Ljava.lang.Object;
     [7] release
 RootPane.honorDialogMinimumSizeOnResize true
 RootPane.honorFrameMinimumSizeOnResize false
-RootPane.inactiveBorderColor   #484c4e    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5% autoInverse)
+RootPane.inactiveBorderColor   #484c4e    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(5% autoInverse)
 RootPaneUI                     com.formdev.flatlaf.ui.FlatRootPaneUI
 
 
@@ -783,7 +837,7 @@ RootPaneUI                     com.formdev.flatlaf.ui.FlatRootPaneUI
 ScrollBar.allowsAbsolutePositioning true
 ScrollBar.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.buttonArrowColor     #9a9da1    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
+ScrollBar.buttonDisabledArrowColor #5a5d61    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.hoverButtonBackground #484c4e    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(5%)
 ScrollBar.hoverThumbColor      #6e767a    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
@@ -836,23 +890,28 @@ SeparatorUI                    com.formdev.flatlaf.ui.FlatSeparatorUI
 #---- Slider ----
 
 Slider.background              #3c3f41    javax.swing.plaf.ColorUIResource [UI]
-Slider.disabledForeground      #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Slider.disabledThumbColor      #4c5052    javax.swing.plaf.ColorUIResource [UI]
+Slider.disabledTrackColor      #4c5052    javax.swing.plaf.ColorUIResource [UI]
 Slider.focus                   #7e7e7e    javax.swing.plaf.ColorUIResource [UI]
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+Slider.focusWidth              4
+Slider.focusedColor            #3d6185b3  70%    com.formdev.flatlaf.util.DerivedColor [UI]    fade(70%)
 Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #242424    javax.swing.plaf.ColorUIResource [UI]
 Slider.horizontalSize          200,21    java.awt.Dimension
-Slider.hoverColor              #808080    com.formdev.flatlaf.util.DerivedColor [UI]    darken(15% autoInverse)
+Slider.hoverThumbColor         #5d95cd    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(5% autoInverse)
 Slider.minimumHorizontalSize   36,21    java.awt.Dimension
 Slider.minimumVerticalSize     21,36    java.awt.Dimension
 Slider.onlyLeftMouseButtonDrag true
+Slider.pressedThumbColor       #699cd1    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(8% autoInverse)
 Slider.shadow                  #646464    javax.swing.plaf.ColorUIResource [UI]
-Slider.thumbColor              #a6a6a6    javax.swing.plaf.ColorUIResource [UI]
-Slider.thumbWidth              11
+Slider.thumbColor              #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+Slider.thumbSize               12,12    javax.swing.plaf.DimensionUIResource [UI]
 Slider.tickColor               #888888    javax.swing.plaf.ColorUIResource [UI]
 Slider.trackColor              #646464    javax.swing.plaf.ColorUIResource [UI]
-Slider.trackWidth              3
+Slider.trackValueColor         #4a88c7    javax.swing.plaf.ColorUIResource [UI]
+Slider.trackWidth              2
 Slider.verticalSize            21,200    java.awt.Dimension
 SliderUI                       com.formdev.flatlaf.ui.FlatSliderUI
 
@@ -864,8 +923,9 @@ Spinner.background             #45494a    javax.swing.plaf.ColorUIResource [UI]
 Spinner.border                 [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
 Spinner.buttonArrowColor       #9a9da1    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonBackground       #404445    javax.swing.plaf.ColorUIResource [UI]
-Spinner.buttonDisabledArrowColor #585858    javax.swing.plaf.ColorUIResource [UI]
-Spinner.buttonHoverArrowColor  #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonDisabledArrowColor #5a5d61    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonHoverArrowColor  #b4b7ba    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
+Spinner.buttonPressedArrowColor #cfd0d2    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
 Spinner.buttonStyle            button
 Spinner.disabledBackground     #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 Spinner.disabledForeground     #888888    javax.swing.plaf.ColorUIResource [UI]
@@ -898,7 +958,8 @@ SplitPaneDivider.gripDotCount  3
 SplitPaneDivider.gripDotSize   3
 SplitPaneDivider.gripGap       2
 SplitPaneDivider.oneTouchArrowColor #9a9da1    javax.swing.plaf.ColorUIResource [UI]
-SplitPaneDivider.oneTouchHoverArrowColor #7a7d81    javax.swing.plaf.ColorUIResource [UI]
+SplitPaneDivider.oneTouchHoverArrowColor #b4b7ba    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
+SplitPaneDivider.oneTouchPressedArrowColor #cfd0d2    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
 SplitPaneDivider.style         grip
 
 
@@ -942,6 +1003,8 @@ TabbedPane.highlight           #242424    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.hoverColor          #303234    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5%)
 TabbedPane.labelShift          1
 TabbedPane.light               #313131    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.scrollButtonsPlacement both
+TabbedPane.scrollButtonsPolicy asNeededSingle
 TabbedPane.selectedLabelShift  -1
 TabbedPane.selectedTabPadInsets 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.selectionFollowsFocus true
@@ -958,6 +1021,7 @@ TabbedPane.tabSeparatorsFullHeight false
 TabbedPane.tabWidthMode        preferred
 TabbedPane.tabsOpaque          true
 TabbedPane.tabsOverlapBorder   false
+TabbedPane.tabsPopupPolicy     asNeeded
 TabbedPane.textIconGap         4
 TabbedPane.underlineColor      #4a88c7    javax.swing.plaf.ColorUIResource [UI]
 TabbedPaneUI                   com.formdev.flatlaf.ui.FlatTabbedPaneUI
@@ -982,7 +1046,7 @@ Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.F
 Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#000000    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.font                     [active] $defaultFont [UI]
 Table.foreground               #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-Table.gridColor                #4c5152    javax.swing.plaf.ColorUIResource [UI]
+Table.gridColor                #515657    javax.swing.plaf.ColorUIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
 Table.rowHeight                20
 Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
@@ -1102,23 +1166,28 @@ TitlePane.buttonHoverBackground #484c4f    com.formdev.flatlaf.util.DerivedColor
 TitlePane.buttonMaximizedHeight 22
 TitlePane.buttonPressedBackground #616569    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20% autoInverse)
 TitlePane.buttonSize           44,30    javax.swing.plaf.DimensionUIResource [UI]
+TitlePane.centerTitle          false
+TitlePane.centerTitleIfMenuBarEmbedded true
 TitlePane.closeHoverBackground #e81123    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closeHoverForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closeIcon            [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowCloseIcon [UI]
-TitlePane.closePressedBackground #99e81123    javax.swing.plaf.ColorUIResource [UI]
+TitlePane.closePressedBackground #e8112399  60%    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.closePressedForeground #ffffff    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.embeddedForeground   #959595    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.foreground           #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-TitlePane.iconMargins          3,8,3,0    javax.swing.plaf.InsetsUIResource [UI]
+TitlePane.icon                 [lazy] 16,16    sun.swing.ImageIconUIResource [UI]  (sun.awt.image.ToolkitImage)
+TitlePane.iconMargins          3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
 TitlePane.iconSize             16,16    javax.swing.plaf.DimensionUIResource [UI]
 TitlePane.iconifyIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowIconifyIcon [UI]
 TitlePane.inactiveBackground   #303234    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.inactiveForeground   #888888    javax.swing.plaf.ColorUIResource [UI]
 TitlePane.maximizeIcon         [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowMaximizeIcon [UI]
 TitlePane.menuBarEmbedded      true
-TitlePane.menuBarMargins       0,8,0,22    javax.swing.plaf.InsetsUIResource [UI]
+TitlePane.menuBarTitleGap      20
 TitlePane.restoreIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowRestoreIcon [UI]
-TitlePane.titleMargins         3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
+TitlePane.titleMargins         3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
+TitlePane.unifiedBackground    false
+TitlePane.useWindowDecorations true
 
 
 #---- TitledBorder ----
@@ -1230,7 +1299,7 @@ Tree.editorBorder              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 Tree.expandedIcon              [lazy] 11,11    com.formdev.flatlaf.icons.FlatTreeExpandedIcon [UI]
 Tree.font                      [active] $defaultFont [UI]
 Tree.foreground                #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
-Tree.hash                      #505355    javax.swing.plaf.ColorUIResource [UI]
+Tree.hash                      #515657    javax.swing.plaf.ColorUIResource [UI]
 Tree.icon.closedColor          #adadad    javax.swing.plaf.ColorUIResource [UI]
 Tree.icon.collapsedColor       #adadad    javax.swing.plaf.ColorUIResource [UI]
 Tree.icon.expandedColor        #adadad    javax.swing.plaf.ColorUIResource [UI]
@@ -1258,6 +1327,21 @@ Tree.textForeground            #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 Tree.timeFactor                1000
 Tree.wideSelection             true
 TreeUI                         com.formdev.flatlaf.ui.FlatTreeUI
+
+
+#---- TristateCheckBox ----
+
+TristateCheckBox.clearMixed.clientProperty length=2    [Ljava.lang.Object;
+    [0] JButton.selectedState
+    [1] null
+TristateCheckBox.setMixed.clientProperty length=2    [Ljava.lang.Object;
+    [0] JButton.selectedState
+    [1] indeterminate
+
+
+#---- UIColorHighlighter ----
+
+UIColorHighlighter.stripingBackground #515657    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- Viewport ----

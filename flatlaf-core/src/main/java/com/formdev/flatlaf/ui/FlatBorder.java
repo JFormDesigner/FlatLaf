@@ -35,7 +35,6 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
-import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.DerivedColor;
 
@@ -95,12 +94,14 @@ public class FlatBorder
 			// paint outer border
 			if( outlineColor != null || isFocused( c ) ) {
 				float innerWidth = !isCellEditor( c ) && !(c instanceof JScrollPane)
-					? (outlineColor != null ? innerOutlineWidth : innerFocusWidth)
+					? (outlineColor != null ? innerOutlineWidth : getInnerFocusWidth( c ))
 					: 0;
 
-				g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
-				FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height,
-					focusWidth, borderWidth + scale( innerWidth ), arc );
+				if( focusWidth > 0 || innerWidth > 0 ) {
+					g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
+					FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height,
+						focusWidth, borderWidth + scale( innerWidth ), arc );
+				}
 			}
 
 			// paint border
@@ -159,7 +160,7 @@ public class FlatBorder
 				return false;
 		}
 
-		return c.isEnabled() && (!(c instanceof JTextComponent) || ((JTextComponent)c).isEditable());
+		return c.isEnabled();
 	}
 
 	protected boolean isFocused( Component c ) {
@@ -234,6 +235,13 @@ public class FlatBorder
 			return 0;
 
 		return focusWidth;
+	}
+
+	/**
+	 * Returns the (unscaled) thickness of the inner focus border.
+	 */
+	protected float getInnerFocusWidth( Component c ) {
+		return innerFocusWidth;
 	}
 
 	/**

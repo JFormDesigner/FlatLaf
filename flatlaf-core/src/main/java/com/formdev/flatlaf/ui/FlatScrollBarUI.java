@@ -19,12 +19,10 @@ package com.formdev.flatlaf.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import javax.swing.InputMap;
@@ -142,6 +140,12 @@ public class FlatScrollBarUI
 		buttonDisabledArrowColor = UIManager.getColor( "ScrollBar.buttonDisabledArrowColor" );
 		hoverButtonBackground = UIManager.getColor( "ScrollBar.hoverButtonBackground" );
 		pressedButtonBackground = UIManager.getColor( "ScrollBar.pressedButtonBackground" );
+
+		// fallback (e.g. when used in NetBeans GUI builder)
+		if( trackInsets == null )
+			trackInsets = new Insets( 0, 0, 0, 0 );
+		if( thumbInsets == null )
+			thumbInsets = new Insets( 0, 0, 0, 0 );
 	}
 
 	@Override
@@ -163,30 +167,28 @@ public class FlatScrollBarUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new BasicScrollBarUI.PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
 
-				switch( e.getPropertyName() ) {
-					case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
-						scrollbar.revalidate();
-						scrollbar.repaint();
-						break;
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS:
+					scrollbar.revalidate();
+					scrollbar.repaint();
+					break;
 
-					case "componentOrientation":
-						// this is missing in BasicScrollBarUI.Handler.propertyChange()
-						InputMap inputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap" );
-						if( !scrollbar.getComponentOrientation().isLeftToRight() ) {
-							InputMap rtlInputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap.RightToLeft" );
-							if( rtlInputMap != null ) {
-								rtlInputMap.setParent( inputMap );
-								inputMap = rtlInputMap;
-							}
+				case "componentOrientation":
+					// this is missing in BasicScrollBarUI.Handler.propertyChange()
+					InputMap inputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap" );
+					if( !scrollbar.getComponentOrientation().isLeftToRight() ) {
+						InputMap rtlInputMap = (InputMap) UIManager.get( "ScrollBar.ancestorInputMap.RightToLeft" );
+						if( rtlInputMap != null ) {
+							rtlInputMap.setParent( inputMap );
+							inputMap = rtlInputMap;
 						}
-						SwingUtilities.replaceUIInputMap( scrollbar, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap );
-						break;
-				}
+					}
+					SwingUtilities.replaceUIInputMap( scrollbar, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, inputMap );
+					break;
 			}
 		};
 	}
@@ -215,8 +217,9 @@ public class FlatScrollBarUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 		super.paint( g, c );
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 
 	@Override
@@ -351,13 +354,14 @@ public class FlatScrollBarUI
 	{
 		protected FlatScrollBarButton( int direction ) {
 			this( direction, arrowType, buttonArrowColor, buttonDisabledArrowColor,
-				null, hoverButtonBackground, pressedButtonBackground );
+				null, hoverButtonBackground, null, pressedButtonBackground );
 		}
 
 		protected FlatScrollBarButton( int direction, String type, Color foreground, Color disabledForeground,
-			Color hoverForeground, Color hoverBackground, Color pressedBackground )
+			Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 		{
-			super( direction, type, foreground, disabledForeground, hoverForeground, hoverBackground, pressedBackground );
+			super( direction, type, foreground, disabledForeground,
+				hoverForeground, hoverBackground, pressedForeground, pressedBackground );
 
 			setArrowWidth( FlatArrowButton.DEFAULT_ARROW_WIDTH - 2 );
 			setFocusable( false );

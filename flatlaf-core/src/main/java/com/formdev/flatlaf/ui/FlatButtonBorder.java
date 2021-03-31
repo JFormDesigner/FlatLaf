@@ -44,6 +44,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.default.focusColor			Color
  * @uiDefault Button.borderWidth				int
  * @uiDefault Button.default.borderWidth		int
+ * @uiDefault Button.innerFocusWidth			int or float	optional; defaults to Component.innerFocusWidth
  * @uiDefault Button.toolbar.margin				Insets
  * @uiDefault Button.toolbar.spacingInsets		Insets
  * @uiDefault Button.arc						int
@@ -65,6 +66,7 @@ public class FlatButtonBorder
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
 	protected final int borderWidth = UIManager.getInt( "Button.borderWidth" );
 	protected final int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
+	protected final float buttonInnerFocusWidth = FlatUIUtils.getUIFloat( "Button.innerFocusWidth", innerFocusWidth );
 	protected final Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
 	protected final Insets toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
 	protected final int arc = UIManager.getInt( "Button.arc" );
@@ -132,6 +134,11 @@ public class FlatButtonBorder
 	@Override
 	protected int getFocusWidth( Component c ) {
 		return FlatToggleButtonUI.isTabButton( c ) ? 0 : super.getFocusWidth( c );
+	}
+
+	@Override
+	protected float getInnerFocusWidth( Component c ) {
+		return buttonInnerFocusWidth;
 	}
 
 	@Override

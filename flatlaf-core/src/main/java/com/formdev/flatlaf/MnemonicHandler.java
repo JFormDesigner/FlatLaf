@@ -28,6 +28,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.lang.ref.WeakReference;
 import javax.swing.AbstractButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -137,10 +138,17 @@ class MnemonicHandler
 					// get menu bar and first menu
 					Component c = e.getComponent();
 					JRootPane rootPane = SwingUtilities.getRootPane( c );
-					Window window = (rootPane != null) ? SwingUtilities.getWindowAncestor( rootPane ) : null;
 					JMenuBar menuBar = (rootPane != null) ? rootPane.getJMenuBar() : null;
-					if( menuBar == null && window instanceof JFrame )
-						menuBar = ((JFrame)window).getJMenuBar();
+					if( menuBar == null ) {
+						// get menu bar from frame/dialog because there
+						// may be multiple nested root panes in a frame/dialog
+						// (e.g. each internal frame has its own root pane)
+						Window window = SwingUtilities.getWindowAncestor( c );
+						if( window instanceof JFrame )
+							menuBar = ((JFrame)window).getJMenuBar();
+						else if( window instanceof JDialog )
+							menuBar = ((JDialog)window).getJMenuBar();
+					}
 					JMenu firstMenu = (menuBar != null) ? menuBar.getMenu( 0 ) : null;
 
 					// select first menu and show mnemonics

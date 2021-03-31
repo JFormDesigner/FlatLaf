@@ -1,0 +1,197 @@
+JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[left][240,left][fill]"
+			"$rowConstraints": "[fill][center][][][][grow,fill][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "tabbedPaneLabel"
+				"text": "RangeSlider:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "horizontalLabel"
+				"text": "Horizontal"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
+				name: "horizontalRangeSlider"
+				"lowValue": 30
+				"highValue": 80
+				"majorTickSpacing": 10
+				"minorTickSpacing": 5
+				"paintTicks": true
+				"paintLabels": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1,growx"
+			} )
+			add( new FormComponent( "javax.swing.JSlider" ) {
+				name: "horizontalSlider"
+				"minorTickSpacing": 5
+				"paintTicks": true
+				"majorTickSpacing": 10
+				"paintLabels": true
+				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2,growx"
+			} )
+			add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
+				name: "horizontalRangeSlider2"
+				"lowValue": 30
+				"highValue": 80
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3,growx"
+			} )
+			add( new FormComponent( "javax.swing.JSlider" ) {
+				name: "horizontalSlider2"
+				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "verticalLabel"
+				"text": "Vertical"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5,aligny top,growy 0"
+			} )
+			add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
+				name: "verticalRangeSlider"
+				"orientation": 1
+				"lowValue": 30
+				"highValue": 80
+				"majorTickSpacing": 10
+				"minorTickSpacing": 5
+				"paintTicks": true
+				"paintLabels": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 5,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JSlider" ) {
+				name: "verticalSlider"
+				"minorTickSpacing": 5
+				"paintTicks": true
+				"majorTickSpacing": 10
+				"paintLabels": true
+				"orientation": 1
+				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 5"
+			} )
+			add( new FormComponent( "com.jidesoft.swing.RangeSlider" ) {
+				name: "verticalRangeSlider2"
+				"orientation": 1
+				"lowValue": 30
+				"highValue": 80
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 5"
+			} )
+			add( new FormComponent( "javax.swing.JSlider" ) {
+				name: "verticalSlider2"
+				"orientation": 1
+				"value": 30
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 5"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "paintTick"
+				"text": "PaintTicks"
+				"mnemonic": 84
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "paintTicks", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "paintLabel"
+				"text": "PaintLabels"
+				"mnemonic": 76
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "paintLabels", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "sliderSnapToTicksCheckBox"
+				"text": "snap to ticks"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sliderSnapToTicksChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "majorTickSpacingSpinner"
+				"model": new javax.swing.SpinnerNumberModel( 10, 0, 100, 5 )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "majorThickSpacingChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "minorTickSpacingSpinner"
+				"model": new javax.swing.SpinnerNumberModel( 5, 0, 100, 5 )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "minorThickSpacingChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "sliderValueLabel"
+				"text": "slider value"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6 3 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 550, 500 )
+		} )
+	}
+}

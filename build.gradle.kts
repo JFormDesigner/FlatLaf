@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-val releaseVersion = "0.43"
-val developmentVersion = "0.44-SNAPSHOT"
+val releaseVersion = "1.1.1"
+val developmentVersion = "1.2-SNAPSHOT"
 
 version = if( java.lang.Boolean.getBoolean( "release" ) ) releaseVersion else developmentVersion
 
@@ -23,7 +23,7 @@ allprojects {
 	version = rootProject.version
 
 	repositories {
-		jcenter()
+		mavenCentral()
 	}
 }
 
@@ -40,17 +40,6 @@ println( "Java ${System.getProperty( "java.version" )}" )
 println()
 
 
-extra["bintray.user"] = System.getenv( "BINTRAY_USER" ) ?: System.getProperty( "bintray.user" )
-extra["bintray.key"]  = System.getenv( "BINTRAY_KEY" )  ?: System.getProperty( "bintray.key" )
-
-// if true, do not upload to bintray
-extra["bintray.dryRun"] = false
-
-// if true, uploaded artifacts are visible to all
-// if false, only visible to owner when logged into bintray
-extra["bintray.publish"] = true
-
-
 allprojects {
 	tasks {
 		withType<JavaCompile>().configureEach {
@@ -64,7 +53,7 @@ allprojects {
 			// manifest for all created JARs
 			manifest.attributes(mapOf(
 				"Implementation-Vendor" to "FormDev Software GmbH",
-				"Implementation-Copyright" to "Copyright (C) ${java.time.LocalDate.now().year} FormDev Software GmbH. All rights reserved.",
+				"Implementation-Copyright" to "Copyright (C) 2019-${java.time.LocalDate.now().year} FormDev Software GmbH. All rights reserved.",
 				"Implementation-Version" to project.version))
 
 			// add META-INF/LICENSE to all created JARs

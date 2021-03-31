@@ -7,6 +7,7 @@
     "bg0": "#282828",
     "bg0_h": "#1d2021",
     "bg0_s": "#32302f",
+    "bg0_ss": "#4F4945",
     "bg1": "#3c3836",
     "bg2": "#504945",
     "bg3": "#665c54",
@@ -45,11 +46,11 @@
       "infoForeground": "fg",
 
       "lightSelectionBackground": "bg1",
-      "selectionBackground": "#4F4945",
+      "selectionBackground": "bg0_ss",
       "selectionForeground": "fg0",
 
-      "selectionBackgroundInactive": "bg0_s",
-      "selectionInactiveBackground": "bg0_s",
+      "selectionBackgroundInactive": "bg0_ss",
+      "selectionInactiveBackground": "bg0_ss",
 
       "selectedBackground": "bg0_h",
       "selectedForeground": "fg0",

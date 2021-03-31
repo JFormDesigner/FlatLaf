@@ -1,0 +1,410 @@
+#---- ButtonPanel ----
+
++ ButtonPanel.buttonGap          6
++ ButtonPanel.groupGap           6
++ ButtonPanel.minButtonWidth     75
++ ButtonPanel.oppositeOrder      H
++ ButtonPanel.order              ACO
+
+
+#---- CheckBoxMenuItem ----
+
+- CheckBoxMenuItem.acceleratorFont [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
++ CheckBoxMenuItem.acceleratorFont Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+- CheckBoxMenuItem.checkIcon     [active] 22,22    com.sun.java.swing.plaf.windows.WindowsIconFactory$VistaMenuItemCheckIconFactory$VistaMenuItemCheckIcon [UI]
++ CheckBoxMenuItem.checkIcon     20,20    com.jidesoft.icons.MenuCheckIcon [UI]
+
+- CheckBoxMenuItem.font          [active] Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
++ CheckBoxMenuItem.font          Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+- CheckBoxMenuItem.margin        [active] 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
++ CheckBoxMenuItem.margin        3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
+
++ CheckBoxMenuItem.mouseHoverBackground [active] #f6f6f6    javax.swing.plaf.ColorUIResource [UI]
++ CheckBoxMenuItem.mouseHoverBorder 1,1,1,1  true    javax.swing.plaf.BorderUIResource [UI]
+
+- CheckBoxMenuItem.selectionBackground [active] #0078d7    javax.swing.plaf.ColorUIResource [UI]
++ CheckBoxMenuItem.selectionBackground [active] #f6f6f6    javax.swing.plaf.ColorUIResource [UI]
+
+- CheckBoxMenuItem.selectionForeground [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ CheckBoxMenuItem.selectionForeground [active] #000000    javax.swing.plaf.ColorUIResource [UI]
+
++ CheckBoxMenuItem.textIconGap   8
+
+- CheckBoxMenuItemUI             com.sun.java.swing.plaf.windows.WindowsCheckBoxMenuItemUI
++ CheckBoxMenuItemUI             com.jidesoft.plaf.vsnet.VsnetCheckBoxMenuItemUI
+
+
+#---- Content ----
+
++ Content.background             [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- Cursor ----
+
++ Cursor.delete                  32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.drag                    32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.dragStop                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.dragText                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.dragTextStop            32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.east                    32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.float                   32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.horizontal              32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.hsplit                  32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.moveEast                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.moveWest                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.north                   32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.percentage              32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.south                   32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.tab                     32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.vertical                32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.vsplit                  32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
++ Cursor.west                    32,32    javax.swing.ImageIcon  (java.awt.image.BufferedImage)
+
+
+#---- FolderChooser ----
+
++ FolderChooserUI                com.jidesoft.plaf.basic.BasicFolderChooserUI
+
+
+#---- FormattedTextField ----
+
+- FormattedTextField.font        [active] Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
++ FormattedTextField.font        Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- Gripper ----
+
++ Gripper.foreground             [active] #b2b2b2    javax.swing.plaf.ColorUIResource [UI]
++ Gripper.painter                [unknown type] com.jidesoft.plaf.office2003.Office2003WindowsUtils$1 [UI]
++ Gripper.size                   8
++ GripperUI                      com.jidesoft.plaf.vsnet.VsnetGripperUI
+
+
+#---- HeaderBox ----
+
++ HeaderBox.background           [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
++ HeaderBoxUI                    com.jidesoft.plaf.basic.BasicHeaderBoxUI
+
+
+#---- Icon ----
+
++ Icon.floating                  false
+
+
+#---- JideButton ----
+
++ JideButton.background          [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.border              0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
++ JideButton.borderColor         [active] #0078d7    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.darkShadow          [active] #696969    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.focusedBackground   [active] #cfeafe    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.font                Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
++ JideButton.foreground          [active] #000000    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.highlight           [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.light               [active] #e3e3e3    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.margin              3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
++ JideButton.selectedAndFocusedBackground [active] #88caff    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.selectedBackground  [active] #acdafe    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.shadow              [active] #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
++ JideButton.textIconGap         4
++ JideButton.textShiftOffset     0
++ JideButtonUI                   com.jidesoft.plaf.basic.BasicJideButtonUI
+
+
+#---- JideComboBox ----
+
++ JideComboBoxUI                 com.jidesoft.plaf.basic.BasicJideComboBoxUI
+
+
+#---- JideLabel ----
+
++ JideLabel.background           [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
++ JideLabel.font                 Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
++ JideLabel.foreground           [active] #000000    javax.swing.plaf.ColorUIResource [UI]
++ JideLabelUI                    com.jidesoft.plaf.basic.BasicJideLabelUI
+
+
+#---- JidePopupMenu ----
+
++ JidePopupMenuUI                com.jidesoft.plaf.windows.WindowsJidePopupMenuUI
+
+
+#---- JidePopup ----
+
++ JidePopupUI                    com.jidesoft.plaf.basic.BasicJidePopupUI
+
+
+#---- JideScrollPane ----
+
++ JideScrollPane.border          line: #828790    javax.swing.plaf.ColorUIResource [UI] 1 false    1,1,1,1  true    com.sun.java.swing.plaf.windows.XPStyle$XPFillBorder [UI]
+
+
+#---- JideSplitButton ----
+
++ JideSplitButton.border         0,0,0,0  false    javax.swing.plaf.basic.BasicBorders$MarginBorder [UI]
++ JideSplitButton.borderPainted  false
++ JideSplitButton.font           Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
++ JideSplitButton.margin         3,3,3,7    javax.swing.plaf.InsetsUIResource [UI]
++ JideSplitButton.selectionForeground [active] #000000    javax.swing.plaf.ColorUIResource [UI]
++ JideSplitButton.textIconGap    4
++ JideSplitButtonUI              com.jidesoft.plaf.basic.BasicJideSplitButtonUI
+
+
+#---- JideSplitPane ----
+
++ JideSplitPane.dividerSize      4
+
+
+#---- JideSplitPaneDivider ----
+
++ JideSplitPaneDivider.background [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
++ JideSplitPaneDivider.border    0,0,0,0  false    javax.swing.plaf.BorderUIResource [UI]
++ JideSplitPaneDivider.gripperPainter [unknown type] com.jidesoft.plaf.office2003.Office2003WindowsUtils$1 [UI]
+
+
+#---- JideTabbedPane ----
+
++ JideTabbedPane.alwaysShowLineBorder false
++ JideTabbedPane.background      [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.border          0,0,0,0  false    javax.swing.plaf.BorderUIResource [UI]
++ JideTabbedPane.buttonMargin    5
++ JideTabbedPane.buttonSize      18
++ JideTabbedPane.closeButtonAlignment 11
++ JideTabbedPane.closeButtonLeftMargin 2
++ JideTabbedPane.closeButtonMargin 2
++ JideTabbedPane.closeButtonMarginHorizonal 3
++ JideTabbedPane.closeButtonMarginSize 6
++ JideTabbedPane.closeButtonMarginVertical 3
++ JideTabbedPane.closeButtonRightMargin 2
++ JideTabbedPane.compressedStyleCloseButtonMarginHorizontal 0
++ JideTabbedPane.compressedStyleCloseButtonMarginVertical 0
++ JideTabbedPane.compressedStyleIconMargin 12
++ JideTabbedPane.compressedStyleNoIconRectSize 24
++ JideTabbedPane.contentBorderInsets 3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
++ JideTabbedPane.darkShadow      [active] #000000    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.defaultResizeMode 1
++ JideTabbedPane.defaultTabBorderShadowColor #736d63    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.defaultTabColorTheme 2
++ JideTabbedPane.defaultTabShape 4
++ JideTabbedPane.fitStyleBoundSize 8
++ JideTabbedPane.fitStyleFirstTabMargin 4
++ JideTabbedPane.fitStyleIconMinWidth 24
++ JideTabbedPane.fitStyleTextMinWidth 16
++ JideTabbedPane.fixedStyleRectSize 60
++ JideTabbedPane.font            Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
++ JideTabbedPane.foreground      [active] #000000    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.gripLeftMargin  4
++ JideTabbedPane.gripperPainter  [unknown type] com.jidesoft.plaf.office2003.Office2003WindowsUtils$1 [UI]
++ JideTabbedPane.highlight       [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.iconMargin      5
++ JideTabbedPane.ignoreContentBorderInsetsIfNoTabs false
++ JideTabbedPane.light           [active] #e3e3e3    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.noIconMargin    2
++ JideTabbedPane.selectedTabBackground [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.selectedTabBackgroundDk #ffc73c    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.selectedTabBackgroundLt #e68b2c    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.selectedTabFont Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
++ JideTabbedPane.selectedTabTextForeground [active] #000000    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.shadow          [active] #a0a0a0    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.showCloseButtonOnTab false
++ JideTabbedPane.showFocusIndicator true
++ JideTabbedPane.showIconOnTab   true
++ JideTabbedPane.tabAreaBackground [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.tabAreaBackgroundDk [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.tabAreaBackgroundLt [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.tabAreaInsets   2,4,0,4    javax.swing.plaf.InsetsUIResource [UI]
++ JideTabbedPane.tabInsets       1,4,1,4    javax.swing.plaf.InsetsUIResource [UI]
++ JideTabbedPane.tabListBackground #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPane.tabRectPadding  2
++ JideTabbedPane.tabRunOverlay   2
++ JideTabbedPane.textIconGap     4
++ JideTabbedPane.textMarginVertical 4
++ JideTabbedPane.textPadding     6
++ JideTabbedPane.unselectedTabTextForeground [active] #000000    javax.swing.plaf.ColorUIResource [UI]
++ JideTabbedPaneUI               com.jidesoft.plaf.office2003.Office2003JideTabbedPaneUI
+
+
+#---- Menu ----
+
+- Menu.acceleratorFont           [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
++ Menu.acceleratorFont           Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+- Menu.checkIcon                 [active] 22,22    com.sun.java.swing.plaf.windows.WindowsIconFactory$VistaMenuItemCheckIconFactory$VistaMenuItemCheckIcon [UI]
++ Menu.checkIcon                 20,20    com.jidesoft.icons.MenuCheckIcon [UI]
+
+- Menu.font                      [active] Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
++ Menu.font                      Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+- Menu.margin                    [active] 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
++ Menu.margin                    2,7,3,7    javax.swing.plaf.InsetsUIResource [UI]
+
++ Menu.mouseHoverBackground      [active] #f6f6f6    javax.swing.plaf.ColorUIResource [UI]
++ Menu.mouseHoverBorder          1,1,1,1  true    javax.swing.plaf.BorderUIResource [UI]
+
+- Menu.selectionBackground       [active] #0078d7    javax.swing.plaf.ColorUIResource [UI]
++ Menu.selectionBackground       [active] #f6f6f6    javax.swing.plaf.ColorUIResource [UI]
+
+- Menu.selectionForeground       [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ Menu.selectionForeground       [active] #000000    javax.swing.plaf.ColorUIResource [UI]
+
+- Menu.submenuPopupOffsetX       -4
++ Menu.submenuPopupOffsetX       1
+
+- Menu.submenuPopupOffsetY       -3
++ Menu.submenuPopupOffsetY       0
+
++ Menu.textIconGap               2
+
+
+#---- MenuBar ----
+
+- MenuBar.border                 [lazy] 0,0,2,0  false    javax.swing.plaf.basic.BasicBorders$MenuBarBorder [UI]
++ MenuBar.border                 1,2,1,2  false    javax.swing.plaf.BorderUIResource [UI]
+
+
+#---- MenuItem ----
+
++ MenuItem.accelEndGap           18
+
+- MenuItem.acceleratorFont       [active] Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
++ MenuItem.acceleratorFont       Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+- MenuItem.background            [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
++ MenuItem.background            [active] #fcfcfc    javax.swing.plaf.ColorUIResource [UI]
+
+- MenuItem.checkIcon             [active] 22,22    com.sun.java.swing.plaf.windows.WindowsIconFactory$VistaMenuItemCheckIconFactory$VistaMenuItemCheckIcon [UI]
++ MenuItem.checkIcon             20,20    com.jidesoft.icons.MenuCheckIcon [UI]
+
+- MenuItem.font                  [active] Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
++ MenuItem.font                  Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+- MenuItem.margin                [active] 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
++ MenuItem.margin                3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
+
+- MenuItem.selectionBackground   [active] #0078d7    javax.swing.plaf.ColorUIResource [UI]
++ MenuItem.selectionBackground   [active] #f6f6f6    javax.swing.plaf.ColorUIResource [UI]
+
++ MenuItem.selectionBorderColor  [active] #0078d7    javax.swing.plaf.ColorUIResource [UI]
+
+- MenuItem.selectionForeground   [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ MenuItem.selectionForeground   [active] #000000    javax.swing.plaf.ColorUIResource [UI]
+
++ MenuItem.shadowColor           [active] #fafafa    javax.swing.plaf.ColorUIResource [UI]
++ MenuItem.shadowWidth           24
++ MenuItem.textIconGap           8
+
+- MenuItemUI                     com.sun.java.swing.plaf.windows.WindowsMenuItemUI
++ MenuItemUI                     com.jidesoft.plaf.vsnet.VsnetMenuItemUI
+
+
+#---- Menu ----
+
+- MenuUI                         com.sun.java.swing.plaf.windows.WindowsMenuUI
++ MenuUI                         com.jidesoft.plaf.vsnet.VsnetMenuUI
+
+
+#---- MeterProgressBar ----
+
++ MeterProgressBar.background    #000000    javax.swing.plaf.ColorUIResource [UI]
++ MeterProgressBar.border        1,1,1,1  true    javax.swing.plaf.BorderUIResource [UI]
++ MeterProgressBar.cellBackground #008000    javax.swing.plaf.ColorUIResource [UI]
++ MeterProgressBar.cellForeground #00ff00    javax.swing.plaf.ColorUIResource [UI]
++ MeterProgressBar.cellLength    2
++ MeterProgressBar.cellSpacing   2
++ MeterProgressBar.foreground    #00ff00    javax.swing.plaf.ColorUIResource [UI]
++ MeterProgressBarUI             com.jidesoft.plaf.basic.MeterProgressBarUI
+
+
+#---- PopupMenu ----
+
+- PopupMenu.background           [active] #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
++ PopupMenu.background           [active] #fcfcfc    javax.swing.plaf.ColorUIResource [UI]
+
+- PopupMenu.border               [active] javax.swing.plaf.BorderUIResource$CompoundBorderUIResource [UI]
+    line: #a0a0a0    javax.swing.plaf.ColorUIResource [UI] 1 false    1,1,1,1  true    com.sun.java.swing.plaf.windows.XPStyle$XPFillBorder [UI]
+    2,2,2,2  false    javax.swing.border.EmptyBorder
++ PopupMenu.border               [active] 2,2,2,2  false    javax.swing.plaf.BorderUIResource [UI]
+
+
+#---- PopupMenuSeparator ----
+
++ PopupMenuSeparator.background  [active] #fcfcfc    javax.swing.plaf.ColorUIResource [UI]
++ PopupMenuSeparator.foreground  [active] #e4e4e4    javax.swing.plaf.ColorUIResource [UI]
+
+- PopupMenuSeparatorUI           com.sun.java.swing.plaf.windows.WindowsPopupMenuSeparatorUI
++ PopupMenuSeparatorUI           com.jidesoft.plaf.vsnet.VsnetPopupMenuSeparatorUI
+
+
+#---- RadioButtonMenuItem ----
+
+- RadioButtonMenuItem.acceleratorFont [lazy] Dialog plain 12    javax.swing.plaf.FontUIResource [UI]
++ RadioButtonMenuItem.acceleratorFont Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+- RadioButtonMenuItem.checkIcon  [active] 22,22    com.sun.java.swing.plaf.windows.WindowsIconFactory$VistaMenuItemCheckIconFactory$VistaMenuItemCheckIcon [UI]
++ RadioButtonMenuItem.checkIcon  20,20    com.jidesoft.icons.MenuCheckIcon [UI]
+
+- RadioButtonMenuItem.font       [active] Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
++ RadioButtonMenuItem.font       Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
+
+- RadioButtonMenuItem.margin     [active] 0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
++ RadioButtonMenuItem.margin     3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
+
++ RadioButtonMenuItem.mouseHoverBackground [active] #f6f6f6    javax.swing.plaf.ColorUIResource [UI]
++ RadioButtonMenuItem.mouseHoverBorder 1,1,1,1  true    javax.swing.plaf.BorderUIResource [UI]
+
+- RadioButtonMenuItem.selectionBackground [active] #0078d7    javax.swing.plaf.ColorUIResource [UI]
++ RadioButtonMenuItem.selectionBackground [active] #f6f6f6    javax.swing.plaf.ColorUIResource [UI]
+
+- RadioButtonMenuItem.selectionForeground [active] #ffffff    javax.swing.plaf.ColorUIResource [UI]
++ RadioButtonMenuItem.selectionForeground [active] #000000    javax.swing.plaf.ColorUIResource [UI]
+
++ RadioButtonMenuItem.textIconGap 8
+
+- RadioButtonMenuItemUI          com.sun.java.swing.plaf.windows.WindowsRadioButtonMenuItemUI
++ RadioButtonMenuItemUI          com.jidesoft.plaf.vsnet.VsnetRadioButtonMenuItemUI
+
+
+#---- RangeSlider ----
+
++ RangeSliderUI                  com.jidesoft.plaf.windows.WindowsRangeSliderUI
+
+
+#---- Resizable ----
+
++ Resizable.resizeBorder         [active] 4,4,4,4  true    com.jidesoft.plaf.vsnet.ResizeFrameBorder [UI]
+
+
+#---- Spinner ----
+
+- Spinner.font                   [active] Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
++ Spinner.font                   Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- StyledLabel ----
+
++ StyledLabelUI                  com.jidesoft.plaf.basic.BasicStyledLabelUI
+
+
+#---- TextArea ----
+
+- TextArea.font                  [active] Monospaced plain 13    javax.swing.plaf.FontUIResource [UI]
++ TextArea.font                  Tahoma plain 11    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- Theme ----
+
++ Theme.highContrast             [active] false
++ Theme.painter                  [unknown type] java.util.HashMap
+
+
+#---- TristateCheckBox ----
+
++ TristateCheckBox.icon          13,13    com.jidesoft.plaf.windows.WindowsIconFactory$CheckBoxIcon [UI]
+
+
+#---- jidesoft ----
+
++ jidesoft.extensionInstalled    true
++ jidesoft.extensionStyle        3

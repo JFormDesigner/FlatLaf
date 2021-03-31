@@ -25,10 +25,10 @@ include( "flatlaf-demo" )
 include( "flatlaf-testing" )
 include( "flatlaf-theme-editor" )
 
-pluginManagement {
-	plugins {
-		// NOTE: keep plugin versions in sync with buildSrc/build.gradle.kts
-		id( "com.jfrog.bintray" ) version "1.8.4"
-		id( "com.jfrog.artifactory" ) version "4.13.0"
-	}
+includeProject( "flatlaf-natives-windows", "flatlaf-natives/flatlaf-natives-windows" )
+includeProject( "flatlaf-natives-jna",     "flatlaf-natives/flatlaf-natives-jna" )
+
+fun includeProject( projectPath: String, projectDir: String ) {
+	include( projectPath )
+	project( ":$projectPath" ).projectDir = file( projectDir )
 }

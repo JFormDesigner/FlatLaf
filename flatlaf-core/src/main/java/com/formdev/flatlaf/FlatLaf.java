@@ -38,8 +38,6 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -50,18 +48,19 @@ import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
+import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
+import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
-import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.GrayFilter;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -74,7 +73,6 @@ import com.formdev.flatlaf.util.UIScale;
 public abstract class FlatLaf
 	extends BasicLookAndFeel
 {
-	static final Logger LOG = Logger.getLogger( FlatLaf.class.getName() );
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
 	private static List<Object> customDefaultsSources;
@@ -91,17 +89,28 @@ public abstract class FlatLaf
 
 	private Consumer<UIDefaults> postInitialization;
 
-	private Boolean oldFrameWindowDecorated;
-	private Boolean oldDialogWindowDecorated;
-
+	/**
+	 * Sets the application look and feel to the given LaF
+	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
+	 */
 	public static boolean install( LookAndFeel newLookAndFeel ) {
 		try {
 			UIManager.setLookAndFeel( newLookAndFeel );
 			return true;
 		} catch( Exception ex ) {
-			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
 			return false;
 		}
+	}
+
+	/**
+	 * Adds the given look and feel to the set of available look and feels.
+	 * <p>
+	 * Useful if your application uses {@link UIManager#getInstalledLookAndFeels()}
+	 * to query available LaFs and display them to the user in a combobox.
+	 */
+	public static void installLafInfo( String lafName, Class<? extends LookAndFeel> lafClass ) {
+		UIManager.installLookAndFeel( new UIManager.LookAndFeelInfo( lafName, lafClass.getName() ) );
 	}
 
 	/**
@@ -131,28 +140,28 @@ public abstract class FlatLaf
 	 * Returns whether FlatLaf supports custom window decorations.
 	 * This depends on the operating system and on the used Java runtime.
 	 * <p>
-	 * To use custom window decorations in your application, enable them with
-	 * following code (before creating any frames or dialogs). Then custom window
-	 * decorations are only enabled if this method returns {@code true}.
-	 * <pre>
-	 * JFrame.setDefaultLookAndFeelDecorated( true );
-	 * JDialog.setDefaultLookAndFeelDecorated( true );
-	 * </pre>
+	 * This method returns {@code true} on Windows 10 (see exception below), {@code false} otherwise.
 	 * <p>
-	 * Returns {@code true} on Windows 10, {@code false} otherwise.
-	 * <p>
-	 * Return also {@code false} if running on Windows 10 in
+	 * Returns also {@code false} on Windows 10 if:
+	 * <ul>
+	 * <li>FlatLaf native window border support is available (requires Windows 10)</li>
+	 * <li>running in
 	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
 	 * (<a href="https://github.com/JetBrains/JetBrainsRuntime">source code on github</a>)
-	 * and JBR supports custom window decorations. In this case, JBR custom decorations
-	 * are enabled if {@link JFrame#isDefaultLookAndFeelDecorated()} or
-	 * {@link JDialog#isDefaultLookAndFeelDecorated()} return {@code true}.
+	 * and JBR supports custom window decorations
+	 * </li>
+	 * </ul>
+	 * In this cases, custom decorations are enabled by the root pane.
+	 * Usage of {@link JFrame#setDefaultLookAndFeelDecorated(boolean)} or
+	 * {@link JDialog#setDefaultLookAndFeelDecorated(boolean)} is not necessary.
 	 */
 	@Override
 	public boolean getSupportsWindowDecorations() {
-		if( SystemInfo.isJetBrainsJVM_11_orLater &&
-			SystemInfo.isWindows_10_orLater &&
-			JBRCustomDecorations.isSupported() )
+		if( SystemInfo.isProjector || SystemInfo.isWebswing || SystemInfo.isWinPE )
+			return false;
+
+		if( SystemInfo.isWindows_10_orLater &&
+			FlatNativeWindowBorder.isSupported() )
 		  return false;
 
 		return SystemInfo.isWindows_10_orLater;
@@ -248,19 +257,9 @@ public abstract class FlatLaf
 			Color linkColor = defaults.getColor( "Component.linkColor" );
 			if( linkColor != null ) {
 				new HTMLEditorKit().getStyleSheet().addRule(
-					String.format( "a { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
+					String.format( "a, address { color: #%06x; }", linkColor.getRGB() & 0xffffff ) );
 			}
 		};
-
-		// enable/disable window decorations, but only if system property is either
-		// "true" or "false"; in other cases it is not changed
-		Boolean useWindowDecorations = FlatSystemProperties.getBooleanStrict( FlatSystemProperties.USE_WINDOW_DECORATIONS, null );
-		if( useWindowDecorations != null ) {
-			oldFrameWindowDecorated = JFrame.isDefaultLookAndFeelDecorated();
-			oldDialogWindowDecorated = JDialog.isDefaultLookAndFeelDecorated();
-			JFrame.setDefaultLookAndFeelDecorated( useWindowDecorations );
-			JDialog.setDefaultLookAndFeelDecorated( useWindowDecorations );
-		}
 	}
 
 	@Override
@@ -290,16 +289,8 @@ public abstract class FlatLaf
 		}
 
 		// restore default link color
-		new HTMLEditorKit().getStyleSheet().addRule( "a { color: blue; }" );
+		new HTMLEditorKit().getStyleSheet().addRule( "a, address { color: blue; }" );
 		postInitialization = null;
-
-		// restore enable/disable window decorations
-		if( oldFrameWindowDecorated != null ) {
-			JFrame.setDefaultLookAndFeelDecorated( oldFrameWindowDecorated );
-			JDialog.setDefaultLookAndFeelDecorated( oldDialogWindowDecorated );
-			oldFrameWindowDecorated = null;
-			oldDialogWindowDecorated = null;
-		}
 
 		super.uninitialize();
 	}
@@ -327,7 +318,7 @@ public abstract class FlatLaf
 			} else
 				aquaLaf = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
 		} catch( Exception ex ) {
-			LOG.log( Level.SEVERE, "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
 			throw new IllegalStateException();
 		}
 
@@ -385,6 +376,12 @@ public abstract class FlatLaf
 		initFonts( defaults );
 		initIconColors( defaults, isDark() );
 		FlatInputMaps.initInputMaps( defaults );
+
+		// copy InternalFrame.icon (the Java cup) to TitlePane.icon
+		// (using defaults.remove() to avoid that lazy value is resolved and icon loaded here)
+		Object icon = defaults.remove( "InternalFrame.icon" );
+		defaults.put( "InternalFrame.icon", icon );
+		defaults.put( "TitlePane.icon", icon );
 
 		// get addons and sort them by priority
 		ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
@@ -447,14 +444,27 @@ public abstract class FlatLaf
 
 		if( SystemInfo.isWindows ) {
 			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
-			if( winFont != null )
-				uiFont = createCompositeFont( winFont.getFamily(), winFont.getStyle(), winFont.getSize() );
+			if( winFont != null ) {
+				if( SystemInfo.isWinPE ) {
+					// on WinPE use "win.defaultGUI.font", which is usually Tahoma,
+					// because Segoe UI font is not available on WinPE
+					Font winPEFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.defaultGUI.font" );
+					if( winPEFont != null )
+						uiFont = createCompositeFont( winPEFont.getFamily(), winPEFont.getStyle(), winFont.getSize() );
+				} else
+					uiFont = createCompositeFont( winFont.getFamily(), winFont.getStyle(), winFont.getSize() );
+			}
 
 		} else if( SystemInfo.isMacOS ) {
 			String fontName;
 			if( SystemInfo.isMacOS_10_15_Catalina_orLater ) {
-				// use Helvetica Neue font
-				fontName = "Helvetica Neue";
+				if (SystemInfo.isJetBrainsJVM_11_orLater) {
+					// See https://youtrack.jetbrains.com/issue/JBR-1915
+					fontName = ".AppleSystemUIFont";
+				} else {
+					// use Helvetica Neue font
+					fontName = "Helvetica Neue";
+				}
 			} else if( SystemInfo.isMacOS_10_11_ElCapitan_orLater ) {
 				// use San Francisco Text font
 				fontName = ".SF NS Text";
@@ -480,7 +490,7 @@ public abstract class FlatLaf
 		// use active value for all fonts to allow changing fonts in all components
 		// (similar as in Nimbus L&F) with:
 		//     UIManager.put( "defaultFont", myFont );
-		Object activeFont =  new ActiveFont( 1 );
+		Object activeFont = new ActiveFont( 1 );
 
 		// override fonts
 		for( Object key : defaults.keySet() ) {
@@ -501,6 +511,13 @@ public abstract class FlatLaf
 		// and creates a composite font that is able to display all Unicode characters
 		Font font = StyleContext.getDefaultStyleContext().getFont( family, style, size );
 		return (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
+	}
+
+	/**
+	 * @since 1.1
+	 */
+	public static ActiveValue createActiveFontValue( float scaleFactor ) {
+		return new ActiveFont( scaleFactor );
 	}
 
 	/**
@@ -527,7 +544,12 @@ public abstract class FlatLaf
 	}
 
 	private void putAATextInfo( UIDefaults defaults ) {
-		if( SystemInfo.isJava_9_orLater ) {
+		if ( SystemInfo.isMacOS && SystemInfo.isJetBrainsJVM ) {
+			// The awt.font.desktophints property suggests sub-pixel anti-aliasing
+			// which renders text with too much weight on macOS in the JetBrains JRE.
+			// Use greyscale anti-aliasing instead.
+			defaults.put( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON );
+		} else if( SystemInfo.isJava_9_orLater ) {
 			Object desktopHints = Toolkit.getDefaultToolkit().getDesktopProperty( DESKTOPFONTHINTS );
 			if( desktopHints instanceof Map ) {
 				@SuppressWarnings( "unchecked" )
@@ -553,7 +575,7 @@ public abstract class FlatLaf
 					.invoke( null, true );
 				defaults.put( key, value );
 			} catch( Exception ex ) {
-				Logger.getLogger( FlatLaf.class.getName() ).log( Level.SEVERE, null, ex );
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 				throw new RuntimeException( ex );
 			}
 		}
@@ -660,7 +682,7 @@ public abstract class FlatLaf
 				// update UI
 				updateUI();
 			} catch( UnsupportedLookAndFeelException ex ) {
-				LOG.log( Level.SEVERE, "FlatLaf: Failed to reinitialize look and feel '" + lookAndFeel.getClass().getName() + "'.", ex );
+				LoggingFacade.INSTANCE.logSevere(  "FlatLaf: Failed to reinitialize look and feel '" + lookAndFeel.getClass().getName() + "'.", ex );
 			}
 		} );
 	}

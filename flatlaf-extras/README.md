@@ -7,9 +7,12 @@ This sub-project provides some additional components and classes:
   An icon that displays SVG using
   [svgSalamander](https://github.com/JFormDesigner/svgSalamander).\
   ![FlatSVGIcon.png](../images/extras-FlatSVGIcon.png)
-- [TriStateCheckBox](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/TriStateCheckBox.html):
+- [FlatTriStateCheckBox](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/FlatTriStateCheckBox.html):
   A tri-state check box.\
   ![TriStateCheckBox.png](../images/extras-TriStateCheckBox.png)
+- Extension classes of standard Swing components that provide easy access to
+  FlatLaf specific client properties (see package
+  [com.formdev.flatlaf.extras.components](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/components/package-summary.html)).
 - [FlatAnimatedLafChange](https://www.javadoc.io/doc/com.formdev/flatlaf-extras/latest/com/formdev/flatlaf/extras/FlatAnimatedLafChange.html):
   Animated Laf (theme) changing.
 - [FlatInspector](#ui-inspector): A simple UI inspector that shows information
@@ -22,7 +25,7 @@ This sub-project provides some additional components and classes:
 Download
 --------
 
-FlatLaf Extras binaries are available on **JCenter** and **Maven Central**.
+FlatLaf Extras binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
 build script:
@@ -33,13 +36,11 @@ build script:
 
 Otherwise download `flatlaf-extras-<version>.jar` here:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-extras/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-extras/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-extras)
 
-You also need `flatlaf-<version>.jar` and `svgSalamander-<version>.jar`, which
-you can download here:
+If SVG classes are used, `svgSalamander-<version>.jar` is also required:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
-[![Download](https://api.bintray.com/packages/jformdesigner/svgSalamander/svgSalamander/images/download.svg)](https://bintray.com/jformdesigner/svgSalamander/svgSalamander/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/svgSalamander/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/svgSalamander)
 
 
 Tools

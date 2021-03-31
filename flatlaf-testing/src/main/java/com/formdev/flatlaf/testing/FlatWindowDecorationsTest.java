@@ -74,14 +74,14 @@ public class FlatWindowDecorationsTest
 		super.addNotify();
 
 		Window window = SwingUtilities.windowForComponent( this );
-		menuBarCheckBox.setEnabled( window instanceof JFrame );
-		menuBarEmbeddedCheckBox.setEnabled( window instanceof JFrame );
-		menuBarVisibleCheckBox.setEnabled( window instanceof JFrame );
+		menuBarCheckBox.setSelected( window instanceof JFrame );
 		maximizedBoundsCheckBox.setEnabled( window instanceof Frame );
 
 		addMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
+		addGlueButton.setEnabled( menuBarCheckBox.isEnabled() );
 		removeMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
 		changeMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
+		changeTitleButton.setEnabled( menuBarCheckBox.isEnabled() );
 
 		boolean windowHasIcons = (window != null && !window.getIconImages().isEmpty());
 		iconNoneRadioButton.setEnabled( windowHasIcons );
@@ -109,13 +109,21 @@ public class FlatWindowDecorationsTest
 		}
 	}
 
+	private void unifiedBackgroundChanged() {
+		UIManager.put( "TitlePane.unifiedBackground", unifiedBackgroundCheckBox.isSelected() );
+		Window window = SwingUtilities.windowForComponent( this );
+		if( window != null )
+			window.repaint();
+	}
+
 	private void menuBarChanged() {
 		Window window = SwingUtilities.windowForComponent( this );
-		if( window instanceof JFrame ) {
+		if( window instanceof JFrame )
 			((JFrame)window).setJMenuBar( menuBarCheckBox.isSelected() ? menuBar : null );
-			window.revalidate();
-			window.repaint();
-		}
+		else if( window instanceof JDialog )
+			((JDialog)window).setJMenuBar( menuBarCheckBox.isSelected() ? menuBar : null );
+		window.revalidate();
+		window.repaint();
 	}
 
 	private void menuBarEmbeddedChanged() {
@@ -128,10 +136,87 @@ public class FlatWindowDecorationsTest
 		menuBar.setVisible( menuBarVisibleCheckBox.isSelected() );
 	}
 
+	private void rightCompChanged() {
+		removeNonMenusFromMenuBar();
+
+		if( rightCompCheckBox.isSelected() ) {
+			rightStretchCompCheckBox.setSelected( false );
+
+			JButton myButton = new JButton( "?" );
+			myButton.putClientProperty( "JButton.buttonType", "toolBarButton" );
+			myButton.setFocusable( false );
+
+			menuBar.add( Box.createGlue() );
+			menuBar.add( myButton );
+		}
+
+		menuBar.revalidate();
+		menuBar.repaint();
+	}
+
+	private void rightStretchCompChanged() {
+		removeNonMenusFromMenuBar();
+
+		if( rightStretchCompCheckBox.isSelected() ) {
+			rightCompCheckBox.setSelected( false );
+
+			menuBar.add( Box.createGlue() );
+			menuBar.add( new JProgressBar() );
+		}
+
+		menuBar.revalidate();
+		menuBar.repaint();
+	}
+
+	private void removeNonMenusFromMenuBar() {
+		Component[] components = menuBar.getComponents();
+		for( int i = components.length - 1; i >= 0; i-- ) {
+			if( !(components[i] instanceof JMenu) )
+				menuBar.remove( i );
+			else
+				break;
+		}
+	}
+
+	private void colorizeMenuBar() {
+		boolean colorize = colorizeMenuBarCheckBox.isSelected();
+		Color menuBarBackground = colorize ? new Color( 0xffccff ) : UIManager.getColor( "MenuBar.background" );
+
+		menuBar.setOpaque( colorize );
+		menuBar.setBackground( menuBarBackground );
+	}
+
+	private void colorizeMenus() {
+		boolean colorize = colorizeMenusCheckBox.isSelected();
+		Color menuBackground = colorize ? new Color( 0xaaffff ) : UIManager.getColor( "Menu.background" );
+
+		for( Component c : menuBar.getComponents() ) {
+			if( c instanceof JMenu ) {
+				((JMenu)c).setOpaque( colorize );
+				c.setBackground( menuBackground );
+			}
+		}
+	}
+
 	private void addMenu() {
 		JMenu menu = new JMenu( "Hello" );
 		menu.add( new JMenuItem( "world" ) );
+
+		if( colorizeMenusCheckBox.isSelected() ) {
+			menu.setOpaque( true );
+			menu.setBackground( new Color( 0xaaffff ) );
+		}
+
 		menuBar.add( menu );
+		menuBar.revalidate();
+	}
+
+	private void addGlue() {
+		for( Component c : menuBar.getComponents() ) {
+			if( c instanceof Box.Filler )
+				return;
+		}
+		menuBar.add( Box.createGlue() );
 		menuBar.revalidate();
 	}
 
@@ -152,6 +237,14 @@ public class FlatWindowDecorationsTest
 		int len = new Random().nextInt( 20 );
 		String text = "1234567890abcdefghij".substring( 0, len + 1 );
 		menuBar.getMenu( menuCount - 1 ).setText( text );
+	}
+
+	private void changeTitle() {
+		Window window = SwingUtilities.windowForComponent( this );
+		if( window instanceof Frame )
+			((Frame)window).setTitle( ((Frame)window).getTitle() + " bla" );
+		else if( window instanceof Dialog )
+			((Dialog)window).setTitle( ((Dialog)window).getTitle() + " bla" );
 	}
 
 	private void resizableChanged() {
@@ -186,6 +279,13 @@ public class FlatWindowDecorationsTest
 		}
 	}
 
+	private void fullScreenChanged() {
+		boolean fullScreen = fullScreenCheckBox.isSelected();
+
+		GraphicsDevice gd = getGraphicsConfiguration().getDevice();
+		gd.setFullScreenWindow( fullScreen ? SwingUtilities.windowForComponent( this ) : null );
+	}
+
 	private void menuItemActionPerformed(ActionEvent e) {
 		SwingUtilities.invokeLater( () -> {
 			JOptionPane.showMessageDialog( this, e.getActionCommand(), "Menu Item", JOptionPane.PLAIN_MESSAGE );
@@ -194,11 +294,23 @@ public class FlatWindowDecorationsTest
 
 	private void openDialog() {
 		Window owner = SwingUtilities.windowForComponent( this );
-		JDialog dialog = new JDialog( owner, "Dialog", ModalityType.APPLICATION_MODAL );
+		JDialog dialog = new JDialog( owner, "Dialog", ModalityType.DOCUMENT_MODAL );
+		dialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
 		dialog.add( new FlatWindowDecorationsTest() );
 		dialog.pack();
 		dialog.setLocationRelativeTo( this );
 		dialog.setVisible( true );
+	}
+
+	private void openFrame() {
+		FlatWindowDecorationsTest comp = new FlatWindowDecorationsTest();
+		JFrame frame = new JFrame( "Frame" );
+		frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		frame.add( comp );
+		frame.setJMenuBar( comp.menuBar );
+		frame.pack();
+		frame.setLocationRelativeTo( this );
+		frame.setVisible( true );
 	}
 
 	private void decorationStyleChanged() {
@@ -255,14 +367,23 @@ public class FlatWindowDecorationsTest
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		menuBarCheckBox = new JCheckBox();
+		rightCompCheckBox = new JCheckBox();
+		JPanel panel3 = new JPanel();
 		addMenuButton = new JButton();
+		addGlueButton = new JButton();
 		removeMenuButton = new JButton();
 		changeMenuButton = new JButton();
+		changeTitleButton = new JButton();
 		menuBarEmbeddedCheckBox = new JCheckBox();
+		rightStretchCompCheckBox = new JCheckBox();
 		menuBarVisibleCheckBox = new JCheckBox();
+		colorizeMenuBarCheckBox = new JCheckBox();
+		unifiedBackgroundCheckBox = new JCheckBox();
+		colorizeMenusCheckBox = new JCheckBox();
 		resizableCheckBox = new JCheckBox();
 		maximizedBoundsCheckBox = new JCheckBox();
 		undecoratedCheckBox = new JCheckBox();
+		fullScreenCheckBox = new JCheckBox();
 		JLabel label1 = new JLabel();
 		JLabel label2 = new JLabel();
 		JPanel panel1 = new JPanel();
@@ -280,6 +401,7 @@ public class FlatWindowDecorationsTest
 		iconTestAllRadioButton = new JRadioButton();
 		iconTestRandomRadioButton = new JRadioButton();
 		JButton openDialogButton = new JButton();
+		JButton openFrameButton = new JButton();
 		menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu();
 		JMenuItem newMenuItem = new JMenuItem();
@@ -312,13 +434,15 @@ public class FlatWindowDecorationsTest
 			"ltr,insets dialog,hidemode 3",
 			// columns
 			"[left]para" +
-			"[left]",
+			"[left]" +
+			"[fill]",
 			// rows
 			"para[]0" +
 			"[]0" +
 			"[]0" +
+			"[]unrel" +
 			"[]0" +
-			"[]" +
+			"[]unrel" +
 			"[]" +
 			"[top]" +
 			"[]"));
@@ -329,20 +453,50 @@ public class FlatWindowDecorationsTest
 		menuBarCheckBox.addActionListener(e -> menuBarChanged());
 		add(menuBarCheckBox, "cell 0 0");
 
-		//---- addMenuButton ----
-		addMenuButton.setText("Add menu");
-		addMenuButton.addActionListener(e -> addMenu());
-		add(addMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+		//---- rightCompCheckBox ----
+		rightCompCheckBox.setText("right aligned component");
+		rightCompCheckBox.addActionListener(e -> rightCompChanged());
+		add(rightCompCheckBox, "cell 1 0");
 
-		//---- removeMenuButton ----
-		removeMenuButton.setText("Remove menu");
-		removeMenuButton.addActionListener(e -> removeMenu());
-		add(removeMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+		//======== panel3 ========
+		{
+			panel3.setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]unrel" +
+				"[]"));
 
-		//---- changeMenuButton ----
-		changeMenuButton.setText("Change menu");
-		changeMenuButton.addActionListener(e -> changeMenu());
-		add(changeMenuButton, "cell 1 0 1 2,align left top,grow 0 0");
+			//---- addMenuButton ----
+			addMenuButton.setText("Add menu");
+			addMenuButton.addActionListener(e -> addMenu());
+			panel3.add(addMenuButton, "cell 0 0");
+
+			//---- addGlueButton ----
+			addGlueButton.setText("Add glue");
+			addGlueButton.addActionListener(e -> addGlue());
+			panel3.add(addGlueButton, "cell 0 1");
+
+			//---- removeMenuButton ----
+			removeMenuButton.setText("Remove menu");
+			removeMenuButton.addActionListener(e -> removeMenu());
+			panel3.add(removeMenuButton, "cell 0 2");
+
+			//---- changeMenuButton ----
+			changeMenuButton.setText("Change menu");
+			changeMenuButton.addActionListener(e -> changeMenu());
+			panel3.add(changeMenuButton, "cell 0 3");
+
+			//---- changeTitleButton ----
+			changeTitleButton.setText("Change title");
+			changeTitleButton.addActionListener(e -> changeTitle());
+			panel3.add(changeTitleButton, "cell 0 4");
+		}
+		add(panel3, "cell 2 0 1 7,aligny top,growy 0");
 
 		//---- menuBarEmbeddedCheckBox ----
 		menuBarEmbeddedCheckBox.setText("embedded menu bar");
@@ -350,35 +504,60 @@ public class FlatWindowDecorationsTest
 		menuBarEmbeddedCheckBox.addActionListener(e -> menuBarEmbeddedChanged());
 		add(menuBarEmbeddedCheckBox, "cell 0 1");
 
+		//---- rightStretchCompCheckBox ----
+		rightStretchCompCheckBox.setText("right aligned stretching component");
+		rightStretchCompCheckBox.addActionListener(e -> rightStretchCompChanged());
+		add(rightStretchCompCheckBox, "cell 1 1");
+
 		//---- menuBarVisibleCheckBox ----
 		menuBarVisibleCheckBox.setText("menu bar visible");
 		menuBarVisibleCheckBox.setSelected(true);
 		menuBarVisibleCheckBox.addActionListener(e -> menuBarVisibleChanged());
 		add(menuBarVisibleCheckBox, "cell 0 2");
 
+		//---- colorizeMenuBarCheckBox ----
+		colorizeMenuBarCheckBox.setText("colorize menu bar");
+		colorizeMenuBarCheckBox.addActionListener(e -> colorizeMenuBar());
+		add(colorizeMenuBarCheckBox, "cell 1 2");
+
+		//---- unifiedBackgroundCheckBox ----
+		unifiedBackgroundCheckBox.setText("unified background");
+		unifiedBackgroundCheckBox.addActionListener(e -> unifiedBackgroundChanged());
+		add(unifiedBackgroundCheckBox, "cell 0 3");
+
+		//---- colorizeMenusCheckBox ----
+		colorizeMenusCheckBox.setText("colorize menus");
+		colorizeMenusCheckBox.addActionListener(e -> colorizeMenus());
+		add(colorizeMenusCheckBox, "cell 1 3");
+
 		//---- resizableCheckBox ----
 		resizableCheckBox.setText("resizable");
 		resizableCheckBox.setSelected(true);
 		resizableCheckBox.addActionListener(e -> resizableChanged());
-		add(resizableCheckBox, "cell 0 3");
+		add(resizableCheckBox, "cell 0 4");
 
 		//---- maximizedBoundsCheckBox ----
 		maximizedBoundsCheckBox.setText("maximized bounds (50,100, 1000,700)");
 		maximizedBoundsCheckBox.addActionListener(e -> maximizedBoundsChanged());
-		add(maximizedBoundsCheckBox, "cell 1 3");
+		add(maximizedBoundsCheckBox, "cell 1 4");
 
 		//---- undecoratedCheckBox ----
 		undecoratedCheckBox.setText("undecorated");
 		undecoratedCheckBox.addActionListener(e -> undecoratedChanged());
-		add(undecoratedCheckBox, "cell 0 4");
+		add(undecoratedCheckBox, "cell 0 5");
+
+		//---- fullScreenCheckBox ----
+		fullScreenCheckBox.setText("full screen");
+		fullScreenCheckBox.addActionListener(e -> fullScreenChanged());
+		add(fullScreenCheckBox, "cell 1 5");
 
 		//---- label1 ----
 		label1.setText("Style:");
-		add(label1, "cell 0 5");
+		add(label1, "cell 0 6");
 
 		//---- label2 ----
 		label2.setText("Icon:");
-		add(label2, "cell 1 5");
+		add(label2, "cell 1 6");
 
 		//======== panel1 ========
 		{
@@ -443,7 +622,7 @@ public class FlatWindowDecorationsTest
 			styleFileChooserRadioButton.addActionListener(e -> decorationStyleChanged());
 			panel1.add(styleFileChooserRadioButton, "cell 0 8");
 		}
-		add(panel1, "cell 0 6");
+		add(panel1, "cell 0 7");
 
 		//======== panel2 ========
 		{
@@ -472,12 +651,18 @@ public class FlatWindowDecorationsTest
 			iconTestRandomRadioButton.addActionListener(e -> iconChanged());
 			panel2.add(iconTestRandomRadioButton, "cell 0 2");
 		}
-		add(panel2, "cell 1 6");
+		add(panel2, "cell 1 7");
 
 		//---- openDialogButton ----
 		openDialogButton.setText("Open Dialog");
 		openDialogButton.addActionListener(e -> openDialog());
-		add(openDialogButton, "cell 0 7");
+		add(openDialogButton, "cell 0 8 2 1");
+
+		//---- openFrameButton ----
+		openFrameButton.setText("Open Frame");
+		openFrameButton.setMnemonic('A');
+		openFrameButton.addActionListener(e -> openFrame());
+		add(openFrameButton, "cell 0 8 2 1");
 
 		//======== menuBar ========
 		{
@@ -669,14 +854,22 @@ public class FlatWindowDecorationsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox menuBarCheckBox;
+	private JCheckBox rightCompCheckBox;
 	private JButton addMenuButton;
+	private JButton addGlueButton;
 	private JButton removeMenuButton;
 	private JButton changeMenuButton;
+	private JButton changeTitleButton;
 	private JCheckBox menuBarEmbeddedCheckBox;
+	private JCheckBox rightStretchCompCheckBox;
 	private JCheckBox menuBarVisibleCheckBox;
+	private JCheckBox colorizeMenuBarCheckBox;
+	private JCheckBox unifiedBackgroundCheckBox;
+	private JCheckBox colorizeMenusCheckBox;
 	private JCheckBox resizableCheckBox;
 	private JCheckBox maximizedBoundsCheckBox;
 	private JCheckBox undecoratedCheckBox;
+	private JCheckBox fullScreenCheckBox;
 	private JRadioButton styleNoneRadioButton;
 	private JRadioButton styleFrameRadioButton;
 	private JRadioButton stylePlainRadioButton;

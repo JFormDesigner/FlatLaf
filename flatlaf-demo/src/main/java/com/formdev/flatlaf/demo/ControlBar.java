@@ -136,6 +136,16 @@ class ControlBar
 		registerSwitchToLookAndFeel( KeyEvent.VK_F12, MetalLookAndFeel.class.getName() );
 		registerSwitchToLookAndFeel( KeyEvent.VK_F11, NimbusLookAndFeel.class.getName() );
 
+		// register Alt+UP and Alt+DOWN to switch to previous/next theme
+		((JComponent)frame.getContentPane()).registerKeyboardAction(
+			e -> frame.themesPanel.selectPreviousTheme(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_UP, KeyEvent.ALT_DOWN_MASK ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		((JComponent)frame.getContentPane()).registerKeyboardAction(
+			e -> frame.themesPanel.selectNextTheme(),
+			KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, KeyEvent.ALT_DOWN_MASK ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+
 		// register ESC key to close frame
 		((JComponent)frame.getContentPane()).registerKeyboardAction(
 			e -> {

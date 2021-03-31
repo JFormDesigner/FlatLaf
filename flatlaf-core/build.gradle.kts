@@ -27,6 +27,16 @@ java {
 }
 
 tasks {
+	compileJava {
+		// generate JNI headers
+		options.headerOutputDirectory.set( buildDir.resolve( "generated/jni-headers" ) )
+	}
+
+	processResources {
+		// build native libraries
+		dependsOn( ":flatlaf-natives-windows:assemble" )
+	}
+
 	jar {
 		archiveBaseName.set( "flatlaf" )
 

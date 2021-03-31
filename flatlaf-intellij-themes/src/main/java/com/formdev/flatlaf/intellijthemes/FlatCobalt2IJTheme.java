@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+package com.formdev.flatlaf.intellijthemes;
+
 //
 // DO NOT MODIFY
 // Generated with com.formdev.flatlaf.demo.intellijthemes.IJThemesClassGenerator
 //
-
-package com.formdev.flatlaf.intellijthemes;
 
 import com.formdev.flatlaf.IntelliJTheme;
 
@@ -29,12 +29,18 @@ import com.formdev.flatlaf.IntelliJTheme;
 public class FlatCobalt2IJTheme
 	extends IntelliJTheme.ThemeLaf
 {
-	public static boolean install( ) {
+	public static final String NAME = "Cobalt 2";
+
+	public static boolean install() {
 		try {
 			return install( new FlatCobalt2IJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	public static void installLafInfo() {
+		installLafInfo( NAME, FlatCobalt2IJTheme.class );
 	}
 
 	public FlatCobalt2IJTheme() {
@@ -43,6 +49,6 @@ public class FlatCobalt2IJTheme
 
 	@Override
 	public String getName() {
-		return "Cobalt 2";
+		return NAME;
 	}
 }

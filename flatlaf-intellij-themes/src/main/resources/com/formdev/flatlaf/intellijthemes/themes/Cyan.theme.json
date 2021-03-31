@@ -88,6 +88,10 @@
       "hoverBackground": "#ced2d9"
     },
 
+    "DragAndDrop": {
+      "areaBackground": "#4cb2c733"
+    },
+
     "Editor": {
       "background": "#d0d3d9",
       "foreground": "#808080",
@@ -201,7 +205,10 @@
       "contentAreaColor": "#bec5cd"
     },
 
-    "Table.background": "#eef0f4",
+    "Table": {
+      "background": "#eef0f4",
+      "hoverBackground": "#C3D2E366"
+    },
 
     "TableHeader": {
       "cellBorder": "3,0,3,0",
@@ -242,7 +249,12 @@
       }
     },
 
-    "Tree.background": "#eef0f4"
+    "Tree.background": "#eef0f4",
+
+    "WelcomeScreen": {
+      "Details.background": "#eef0f4",
+      "Projects.actions.background": "#E1E4EB"
+    }
   },
 
   "icons": {

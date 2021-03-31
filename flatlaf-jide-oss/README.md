@@ -6,7 +6,15 @@ This addon for FlatLaf adds support for **some**
 
 Following JIDE Common Layer components are currently supported by this addon:
 
+- `JideButton`
+- `JideLabel`
+- `JidePopupMenu`
+- `JideSplitButton`
 - `JideTabbedPane`
+- `JideToggleButton`
+- `JideToggleSplitButton`
+- `RangeSlider`
+- `TristateCheckBox`
 
 
 **Note**: We have currently no plans to support additional components. If you're
@@ -18,8 +26,7 @@ and create a pull request.
 Download
 --------
 
-FlatLaf for JIDE Common Layer binaries are available on **JCenter** and **Maven
-Central**.
+FlatLaf for JIDE Common Layer binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
 build script:
@@ -30,8 +37,10 @@ build script:
 
 Otherwise download `flatlaf-jide-oss-<version>.jar` here:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf-jide-oss/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf-jide-oss/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-jide-oss/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-jide-oss)
 
-You also need `flatlaf-<version>.jar`, which you can download here:
 
-[![Download](https://api.bintray.com/packages/jformdesigner/flatlaf/flatlaf/images/download.svg)](https://bintray.com/jformdesigner/flatlaf/flatlaf/_latestVersion)
+JIDE Common Layer library `jide-oss-<version>.jar` (or
+`jide-common-<version>.jar`) is also required:
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/jide-oss/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/jide-oss)

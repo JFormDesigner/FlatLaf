@@ -24,6 +24,13 @@ package com.formdev.flatlaf.util;
 public class CubicBezierEasing
 	implements Animator.Interpolator
 {
+	/**
+	 * Standard easing as specified in Material design (0.4, 0, 0.2, 1).
+	 *
+	 * @see <a href="https://material.io/design/motion/speed.html#easing">https://material.io/design/motion/speed.html#easing</a>
+	 */
+	public static final CubicBezierEasing STANDARD_EASING = new CubicBezierEasing( 0.4f, 0f, 0.2f, 1f );
+
 	// common cubic-bezier easing functions (same as in CSS)
 	// https://developer.mozilla.org/en-US/docs/Web/CSS/easing-function
 	public static final CubicBezierEasing EASE = new CubicBezierEasing( 0.25f, 0.1f, 0.25f, 1f );

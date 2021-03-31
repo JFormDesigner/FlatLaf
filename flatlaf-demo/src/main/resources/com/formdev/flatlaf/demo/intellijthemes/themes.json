@@ -4,14 +4,14 @@
 		"license": "MIT",
 		"licenseFile": "arc-themes.LICENSE.txt",
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
-		"sourceCodePath": "blob/master/resources/arc-theme.theme.json"
+		"sourceCodePath": "blob/master/arc-theme-idea-light/resources/arc-theme.theme.json"
 	},
 	"arc-theme-orange.theme.json": {
 		"name": "Arc - Orange",
 		"license": "MIT",
 		"licenseFile": "arc-themes.LICENSE.txt",
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
-		"sourceCodePath": "blob/master/resources/arc-theme-orange.theme.json"
+		"sourceCodePath": "blob/master/arc-theme-idea-light/resources/arc-theme-orange.theme.json"
 	},
 	"arc_theme_dark.theme.json": {
 		"name": "Arc Dark",
@@ -19,7 +19,7 @@
 		"license": "MIT",
 		"licenseFile": "arc-themes.LICENSE.txt",
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
-		"sourceCodePath": "blob/master/resources/arc_theme_dark.theme.json"
+		"sourceCodePath": "blob/master/arc-theme-idea-dark/resources/arc_theme_dark.theme.json"
 	},
 	"arc_theme_dark_orange.theme.json": {
 		"name": "Arc Dark - Orange",
@@ -27,7 +27,7 @@
 		"license": "MIT",
 		"licenseFile": "arc-themes.LICENSE.txt",
 		"sourceCodeUrl": "https://gitlab.com/zlamalp/arc-theme-idea",
-		"sourceCodePath": "blob/master/resources/arc_theme_dark_orange.theme.json"
+		"sourceCodePath": "blob/master/arc-theme-idea-dark/resources/arc_theme_dark_orange.theme.json"
 	},
 	"Carbon.theme.json": {
 		"name": "Carbon",
@@ -99,6 +99,14 @@
 		"licenseFile": "Gradianto.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
 		"sourceCodePath": "blob/master/src/main/resources/Gradianto_midnight_blue.theme.json"
+	},
+	"Gradianto_Nature_Green.theme.json": {
+		"name": "Gradianto Nature Green",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "Gradianto.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/thvardhan/Gradianto",
+		"sourceCodePath": "blob/master/src/main/resources/Gradianto_Nature_Green.theme.json"
 	},
 	"Gray.theme.json": {
 		"name": "Gray",
@@ -401,6 +409,22 @@
 		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/Monokai Pro Contrast.theme.json"
+	},
+	"material-theme-ui-lite/Moonlight.theme.json": {
+		"name": "Material Theme UI Lite / Moonlight",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
+		"sourceCodePath": "blob/master/src/main/resources/themes/Moonlight.theme.json"
+	},
+	"material-theme-ui-lite/Moonlight Contrast.theme.json": {
+		"name": "Material Theme UI Lite / Moonlight Contrast",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
+		"sourceCodePath": "blob/master/src/main/resources/themes/Moonlight Contrast.theme.json"
 	},
 	"material-theme-ui-lite/Night Owl.theme.json": {
 		"name": "Material Theme UI Lite / Night Owl",

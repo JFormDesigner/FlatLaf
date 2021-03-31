@@ -27,6 +27,10 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 		}
 	}
 
+	dependencies {
+		add( "java9Compile", sourceSets.main.get().output )
+	}
+
 	tasks {
 		named<JavaCompile>( "compileJava9Java" ) {
 			sourceCompatibility = "9"

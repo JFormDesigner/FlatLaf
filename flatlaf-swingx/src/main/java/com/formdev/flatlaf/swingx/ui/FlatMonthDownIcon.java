@@ -24,7 +24,6 @@ import java.awt.Shape;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
-import com.formdev.flatlaf.ui.FlatArrowButton;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -56,14 +55,14 @@ public class FlatMonthDownIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		int h = chevron ? 4 : 5;
-		int w = chevron ? 8 : 9;
-		int x = Math.round( (width - h) / 2f );
-		int y = Math.round( (height - w) / 2f );
+		int w = chevron ? 4 : 5;
+		int h = chevron ? 8 : 9;
+		int x = Math.round( (width - w) / 2f );
+		int y = Math.round( (height - h) / 2f );
 
 		g.setColor( c.isEnabled() ? arrowColor : disabledArrowColor );
 		g.translate( x, y );
-		Shape arrowShape = FlatArrowButton.createArrowShape( direction, chevron, w, h );
+		Shape arrowShape = FlatUIUtils.createArrowShape( direction, chevron, w, h );
 		if( chevron ) {
 			// chevron arrow
 			g.setStroke( new BasicStroke( 1f ) );

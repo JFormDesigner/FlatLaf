@@ -31,6 +31,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  *
  * @uiDefault Component.focusWidth						int
  * @uiDefault Component.focusColor						Color
+ * @uiDefault HelpButton.innerFocusWidth				int or float	optional; defaults to Component.innerFocusWidth
+ * @uiDefault HelpButton.borderWidth					int		optional; default is 1
  * @uiDefault HelpButton.borderColor					Color
  * @uiDefault HelpButton.disabledBorderColor			Color
  * @uiDefault HelpButton.focusedBorderColor				Color
@@ -50,6 +52,8 @@ public class FlatHelpButtonIcon
 {
 	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
+	protected final float innerFocusWidth = FlatUIUtils.getUIFloat( "HelpButton.innerFocusWidth", FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 ) );
+	protected final int borderWidth = FlatUIUtils.getUIInt( "HelpButton.borderWidth", 1 );
 
 	protected final Color borderColor = UIManager.getColor( "HelpButton.borderColor" );
 	protected final Color disabledBorderColor = UIManager.getColor( "HelpButton.disabledBorderColor" );
@@ -84,11 +88,17 @@ public class FlatHelpButtonIcon
 		boolean enabled = c.isEnabled();
 		boolean focused = FlatUIUtils.isPermanentFocusOwner( c );
 
-		// paint focused border
+		float xy = 0.5f;
+		float wh = iconSize - 1;
+
+		// paint outer focus border
 		if( focused && FlatButtonUI.isFocusPainted( c ) ) {
 			g2.setColor( focusColor );
-			g2.fill( new Ellipse2D.Float( 0.5f, 0.5f, iconSize - 1, iconSize - 1 ) );
+			g2.fill( new Ellipse2D.Float( xy, xy, wh, wh ) );
 		}
+
+		xy += focusWidth;
+		wh -= (focusWidth * 2);
 
 		// paint border
 		g2.setColor( FlatButtonUI.buttonStateColor( c,
@@ -97,7 +107,19 @@ public class FlatHelpButtonIcon
 			focusedBorderColor,
 			hoverBorderColor,
 			null ) );
-		g2.fill( new Ellipse2D.Float( focusWidth + 0.5f, focusWidth + 0.5f, 21, 21 ) );
+		g2.fill( new Ellipse2D.Float( xy, xy, wh, wh ) );
+
+		xy += borderWidth;
+		wh -= (borderWidth * 2);
+
+		// paint inner focus border
+		if( innerFocusWidth > 0 && focused && FlatButtonUI.isFocusPainted( c ) ) {
+			g2.setColor( focusColor );
+			g2.fill( new Ellipse2D.Float( xy, xy, wh, wh ) );
+
+			xy += innerFocusWidth;
+			wh -= (innerFocusWidth * 2);
+		}
 
 		// paint background
 		g2.setColor( FlatUIUtils.deriveColor( FlatButtonUI.buttonStateColor( c,
@@ -106,7 +128,7 @@ public class FlatHelpButtonIcon
 			focusedBackground,
 			hoverBackground,
 			pressedBackground ), background ) );
-		g2.fill( new Ellipse2D.Float( focusWidth + 1.5f, focusWidth + 1.5f, 19, 19 ) );
+		g2.fill( new Ellipse2D.Float( xy, xy, wh, wh ) );
 
 		// paint question mark
 		Path2D q = new Path2D.Float();

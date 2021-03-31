@@ -21,6 +21,7 @@ import static com.formdev.flatlaf.FlatClientProperties.clientPropertyBoolean;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -31,13 +32,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.jidesoft.plaf.LookAndFeelFactory;
 import com.jidesoft.plaf.UIDefaultsLookup;
 import com.jidesoft.plaf.basic.BasicJideTabbedPaneUI;
 import com.jidesoft.swing.JideTabbedPane;
@@ -62,7 +63,13 @@ public class FlatJideTabbedPaneUI
 	protected boolean hasFullBorder;
 	protected boolean tabsOverlapBorder;
 
+	private Object[] oldRenderingHints;
+
 	public static ComponentUI createUI( JComponent c ) {
+		// usually JIDE would invoke this in JideTabbedPane.updateUI(),
+		// but it does not because FlatLaf already has added the UI class to the UI defaults
+		LookAndFeelFactory.installJideExtension();
+
 		return new FlatJideTabbedPaneUI();
 	}
 
@@ -103,19 +110,17 @@ public class FlatJideTabbedPaneUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return new PropertyChangeHandler() {
-			@Override
-			public void propertyChange( PropertyChangeEvent e ) {
-				super.propertyChange( e );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
 
-				String propertyName = e.getPropertyName();
-				if( JideTabbedPane.PROPERTY_SELECTED_INDEX.equals( propertyName ) ) {
-					repaintTab( (Integer) e.getOldValue() );
-					repaintTab( (Integer) e.getNewValue() );
-				} else if( FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER.equals( propertyName ) ) {
-					_tabPane.revalidate();
-					_tabPane.repaint();
-				}
+			String propertyName = e.getPropertyName();
+			if( JideTabbedPane.PROPERTY_SELECTED_INDEX.equals( propertyName ) ) {
+				repaintTab( (Integer) e.getOldValue() );
+				repaintTab( (Integer) e.getNewValue() );
+			} else if( FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER.equals( propertyName ) ) {
+				_tabPane.revalidate();
+				_tabPane.repaint();
 			}
 		};
 	}
@@ -193,9 +198,12 @@ public class FlatJideTabbedPaneUI
 
 	@Override
 	public void update( Graphics g, JComponent c ) {
-		FlatUIUtils.setRenderingHints( (Graphics2D) g );
+		oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 
 		super.update( g, c );
+
+		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		oldRenderingHints = null;
 	}
 
 	@Override
@@ -220,6 +228,15 @@ public class FlatJideTabbedPaneUI
 				? focusColor
 				: _tabPane.getBackgroundAt( tabIndex )) );
 		g.fillRect( x, y, w, h );
+	}
+
+	@Override
+	protected void paintText( Graphics g, int tabPlacement, Font font, FontMetrics metrics,
+		int tabIndex, String title, Rectangle textRect, boolean isSelected )
+	{
+		FlatUIUtils.runWithoutRenderingHints( g, oldRenderingHints, () -> {
+			super.paintText( g, tabPlacement, font, metrics, tabIndex, title, textRect, isSelected );
+		} );
 	}
 
 	@Override
