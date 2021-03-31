@@ -803,7 +803,7 @@ debug*/
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) )
 				insets.bottom += UIScale.scale( 1 );
 
-			if( hasNativeCustomDecoration() )
+			if( hasNativeCustomDecoration() && !isWindowMaximized( c ) )
 				insets = FlatUIUtils.addInsets( insets, WindowTopBorder.getInstance().getBorderInsets() );
 
 			return insets;
@@ -822,13 +822,19 @@ debug*/
 				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 			}
 
-			if( hasNativeCustomDecoration() )
+			if( hasNativeCustomDecoration() && !isWindowMaximized( c ) )
 				WindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
 		protected Border getMenuBarBorder() {
 			JMenuBar menuBar = rootPane.getJMenuBar();
 			return hasVisibleEmbeddedMenuBar( menuBar ) ? menuBar.getBorder() : null;
+		}
+
+		protected boolean isWindowMaximized( Component c ) {
+			return window instanceof Frame
+				? (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0
+				: false;
 		}
 	}
 

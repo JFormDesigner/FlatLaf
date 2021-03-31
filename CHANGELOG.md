@@ -6,6 +6,8 @@ FlatLaf Change Log
 #### Fixed bugs
 
 - Fixed crash when running in Webswing. (issue #290)
+- Native window decorations: Removed superfluous pixel-line at top of screen
+  when window is maximized. (issue #296)
 
 
 ## 1.1.1
