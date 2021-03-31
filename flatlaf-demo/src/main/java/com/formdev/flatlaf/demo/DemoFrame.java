@@ -750,8 +750,16 @@ class DemoFrame
 
 		boolean supportsWindowDecorations = UIManager.getLookAndFeel()
 			.getSupportsWindowDecorations() || FlatNativeWindowBorder.isSupported();
-		windowDecorationsCheckBoxMenuItem.setEnabled( supportsWindowDecorations && !JBRCustomDecorations.isSupported() );
-		menuBarEmbeddedCheckBoxMenuItem.setEnabled( supportsWindowDecorations );
+		if( !supportsWindowDecorations || JBRCustomDecorations.isSupported() ) {
+			windowDecorationsCheckBoxMenuItem.setEnabled( false );
+			windowDecorationsCheckBoxMenuItem.setSelected( false );
+			windowDecorationsCheckBoxMenuItem.setToolTipText( "Not supported on your system." );
+		}
+		if( !supportsWindowDecorations ) {
+			menuBarEmbeddedCheckBoxMenuItem.setEnabled( false );
+			menuBarEmbeddedCheckBoxMenuItem.setSelected( false );
+			menuBarEmbeddedCheckBoxMenuItem.setToolTipText( "Not supported on your system." );
+		}
 
 		// remove contentPanel bottom insets
 		MigLayout layout = (MigLayout) contentPanel.getLayout();
