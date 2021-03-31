@@ -47,6 +47,7 @@ public class FlatDesktopPaneUI
 		if (old instanceof FlatDesktopManager) return;
 
 		if( old == null ) {
+			// default version
 			desktopManager = new FlatDesktopManager();
 
 		} else {
