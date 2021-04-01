@@ -750,6 +750,9 @@ class DemoFrame
 
 		boolean supportsWindowDecorations = UIManager.getLookAndFeel()
 			.getSupportsWindowDecorations() || FlatNativeWindowBorder.isSupported();
+
+		// If the JetBrainsRuntime is used, it forces the use of it's own custom
+		// window decoration, meaning we can't use our own.
 		if( !supportsWindowDecorations || JBRCustomDecorations.isSupported() ) {
 			windowDecorationsCheckBoxMenuItem.setEnabled( false );
 			windowDecorationsCheckBoxMenuItem.setSelected( false );
