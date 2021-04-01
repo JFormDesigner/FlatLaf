@@ -722,6 +722,13 @@ public class FlatTabbedPaneUI
 	}
 
 	protected Insets getRealTabAreaInsets( int tabPlacement ) {
+		// this is to avoid potential NPE in ensureSelectedTabIsVisible()
+		// (see https://github.com/JFormDesigner/FlatLaf/issues/299)
+		// but now should actually never occur because added more checks to
+		// ensureSelectedTabIsVisibleLater() and ensureSelectedTabIsVisible()
+		if( tabAreaInsets == null )
+			tabAreaInsets = new Insets( 0, 0, 0, 0 );
+
 		Insets currentTabAreaInsets = super.getTabAreaInsets( tabPlacement );
 		Insets insets = (Insets) currentTabAreaInsets.clone();
 
@@ -1386,13 +1393,18 @@ public class FlatTabbedPaneUI
 	}
 
 	protected void ensureSelectedTabIsVisibleLater() {
+		// do nothing if not yet displayable or if not invoked from dispatch thread,
+		// which may be the case when creating/modifying in another thread
+		if( !tabPane.isDisplayable() || !EventQueue.isDispatchThread() )
+			return;
+
 		EventQueue.invokeLater( () -> {
 			ensureSelectedTabIsVisible();
 		} );
 	}
 
 	protected void ensureSelectedTabIsVisible() {
-		if( tabPane == null || tabViewport == null )
+		if( tabPane == null || tabViewport == null || !tabPane.isDisplayable() )
 			return;
 
 		ensureCurrentLayout();

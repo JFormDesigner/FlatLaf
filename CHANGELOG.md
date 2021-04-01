@@ -11,6 +11,7 @@ FlatLaf Change Log
   when window is maximized. (issue #296)
 - Button and ToggleButton: Do not paint background of disabled (and unselected)
   toolBar buttons. (issue #292; regression since fixing #112)
+- TabbedPane: Fixed NPE when creating/modifying in another thread. (issue #299)
 - Fixed crash when running in Webswing. (issue #290)
 
 
