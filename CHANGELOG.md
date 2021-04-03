@@ -3,6 +3,13 @@ FlatLaf Change Log
 
 ## 1.2-SNAPSHOT
 
+#### New features and improvements
+
+- Native window decorations: Added API to check whether current platform
+  supports window decorations (`FlatLaf.supportsNativeWindowDecorations()`) and
+  to toggle window decorations of all windows
+  (`FlatLaf.setUseNativeWindowDecorations(boolean)`).
+
 #### Fixed bugs
 
 - Native window decorations: Fixed loading of native library when using Java

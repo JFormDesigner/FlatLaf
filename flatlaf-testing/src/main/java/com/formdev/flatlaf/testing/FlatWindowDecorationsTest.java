@@ -35,16 +35,8 @@ public class FlatWindowDecorationsTest
 {
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
-			// enable custom window decoration (if LaF supports it)
-			JFrame.setDefaultLookAndFeelDecorated( true );
-			JDialog.setDefaultLookAndFeelDecorated( true );
-
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatWindowDecorationsTest" );
 			frame.applyComponentOrientationToFrame = true;
-
-			// WARNING: Do not this in real-world programs.
-//			frame.setUndecorated( true );
-//			frame.getRootPane().setWindowDecorationStyle( JRootPane.FRAME );
 
 			Class<?> cls = FlatWindowDecorationsTest.class;
 			List<Image> images = Arrays.asList(

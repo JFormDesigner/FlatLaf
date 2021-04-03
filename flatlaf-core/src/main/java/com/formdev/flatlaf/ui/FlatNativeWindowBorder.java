@@ -99,17 +99,11 @@ public class FlatNativeWindowBorder
 
 		if( window instanceof JFrame ) {
 			JFrame frame = (JFrame) window;
+			JRootPane rootPane = frame.getRootPane();
 
-			// check whether disabled via client property
-			if( !FlatClientProperties.clientPropertyBoolean( frame.getRootPane(), FlatClientProperties.USE_WINDOW_DECORATIONS, true ) )
+			// check whether disabled via system property, client property or UI default
+			if( !useWindowDecorations( rootPane, systemPropertyKey ) )
 				return;
-
-			// do not enable native window border if JFrame should use system window decorations
-			// and if not forced to use FlatLaf/JBR native window decorations
-			if( !JFrame.isDefaultLookAndFeelDecorated() &&
-				!UIManager.getBoolean( "TitlePane.useWindowDecorations" ) &&
-				!FlatSystemProperties.getBoolean( systemPropertyKey, false ) )
-			  return;
 
 			// do not enable native window border if frame is undecorated
 			if( frame.isUndecorated() )
@@ -119,21 +113,15 @@ public class FlatNativeWindowBorder
 			setHasCustomDecoration( frame, true );
 
 			// enable Swing window decoration
-			frame.getRootPane().setWindowDecorationStyle( JRootPane.FRAME );
+			rootPane.setWindowDecorationStyle( JRootPane.FRAME );
 
 		} else if( window instanceof JDialog ) {
 			JDialog dialog = (JDialog) window;
+			JRootPane rootPane = dialog.getRootPane();
 
-			// check whether disabled via client property
-			if( !FlatClientProperties.clientPropertyBoolean( dialog.getRootPane(), FlatClientProperties.USE_WINDOW_DECORATIONS, true ) )
+			// check whether disabled via system property, client property or UI default
+			if( !useWindowDecorations( rootPane, systemPropertyKey ) )
 				return;
-
-			// do not enable native window border if JDialog should use system window decorations
-			// and if not forced to use FlatLaf/JBR native window decorations
-			if( !JDialog.isDefaultLookAndFeelDecorated() &&
-				!UIManager.getBoolean( "TitlePane.useWindowDecorations" ) &&
-				!FlatSystemProperties.getBoolean( systemPropertyKey, false ) )
-			  return;
 
 			// do not enable native window border if dialog is undecorated
 			if( dialog.isUndecorated() )
@@ -143,7 +131,7 @@ public class FlatNativeWindowBorder
 			setHasCustomDecoration( dialog, true );
 
 			// enable Swing window decoration
-			dialog.getRootPane().setWindowDecorationStyle( JRootPane.PLAIN_DIALOG );
+			rootPane.setWindowDecorationStyle( JRootPane.PLAIN_DIALOG );
 		}
 	}
 
@@ -153,12 +141,15 @@ public class FlatNativeWindowBorder
 			return;
 		}
 
+		if( !isSupported() )
+			return;
+
 		// remove listener
 		if( data instanceof PropertyChangeListener )
 			rootPane.removePropertyChangeListener( "ancestor", (PropertyChangeListener) data );
 
-		// do not uninstall when switching to another FlatLaf theme
-		if( UIManager.getLookAndFeel() instanceof FlatLaf )
+		// do not uninstall when switching to another FlatLaf theme and if still enabled
+		if( UIManager.getLookAndFeel() instanceof FlatLaf && useWindowDecorations( rootPane, FlatSystemProperties.USE_WINDOW_DECORATIONS ) )
 			return;
 
 		// uninstall native window border
@@ -186,6 +177,20 @@ public class FlatNativeWindowBorder
 			// disable Swing window decoration
 			dialog.getRootPane().setWindowDecorationStyle( JRootPane.NONE );
 		}
+	}
+
+	private static boolean useWindowDecorations( JRootPane rootPane, String systemPropertyKey ) {
+		// check whether forced to enabled/disabled via system property
+		Boolean enabled = FlatSystemProperties.getBooleanStrict( systemPropertyKey, null );
+		if( enabled != null )
+			return enabled;
+
+		// check whether forced to enabled/disabled via client property
+		enabled = FlatClientProperties.clientPropertyBooleanStrict( rootPane, FlatClientProperties.USE_WINDOW_DECORATIONS, null );
+		if( enabled != null )
+			return enabled;
+
+		return UIManager.getBoolean( "TitlePane.useWindowDecorations" );
 	}
 
 	public static boolean hasCustomDecoration( Window window ) {

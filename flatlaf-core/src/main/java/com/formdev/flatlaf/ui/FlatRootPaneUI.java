@@ -95,7 +95,7 @@ public class FlatRootPaneUI
 		else
 			installBorder();
 
-		nativeWindowBorderData = FlatNativeWindowBorder.install( rootPane );
+		installNativeWindowBorder();
 	}
 
 	protected void installBorder() {
@@ -110,8 +110,7 @@ public class FlatRootPaneUI
 	public void uninstallUI( JComponent c ) {
 		super.uninstallUI( c );
 
-		FlatNativeWindowBorder.uninstall( rootPane, nativeWindowBorderData );
-
+		uninstallNativeWindowBorder();
 		uninstallClientDecorations();
 		rootPane = null;
 	}
@@ -135,6 +134,34 @@ public class FlatRootPaneUI
 		// enable dark window appearance on macOS when running in JetBrains Runtime
 		if( SystemInfo.isJetBrainsJVM && SystemInfo.isMacOS_10_14_Mojave_orLater )
 			c.putClientProperty( "jetbrains.awt.windowDarkAppearance", FlatLaf.isLafDark() );
+	}
+
+	/**
+	 * @since 1.1.2
+	 */
+	protected void installNativeWindowBorder() {
+		nativeWindowBorderData = FlatNativeWindowBorder.install( rootPane );
+	}
+
+	/**
+	 * @since 1.1.2
+	 */
+	protected void uninstallNativeWindowBorder() {
+		FlatNativeWindowBorder.uninstall( rootPane, nativeWindowBorderData );
+		nativeWindowBorderData = null;
+	}
+
+	/**
+	 * @since 1.1.2
+	 */
+	public static void updateNativeWindowBorder( JRootPane rootPane ) {
+		RootPaneUI rui = rootPane.getUI();
+		if( !(rui instanceof FlatRootPaneUI) )
+			return;
+
+		FlatRootPaneUI ui = (FlatRootPaneUI) rui;
+		ui.uninstallNativeWindowBorder();
+		ui.installNativeWindowBorder();
 	}
 
 	protected void installClientDecorations() {
@@ -216,6 +243,10 @@ public class FlatRootPaneUI
 					installClientDecorations();
 				else
 					installBorder();
+				break;
+
+			case FlatClientProperties.USE_WINDOW_DECORATIONS:
+				updateNativeWindowBorder( rootPane );
 				break;
 
 			case FlatClientProperties.MENU_BAR_EMBEDDED:

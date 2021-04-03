@@ -65,10 +65,9 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 3 3 1"
 			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
 				name: "native2CheckBox"
 				"text": "JRootPane.useWindowDecorations"
-				"selected": true
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "native2Changed", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 3 3 1"

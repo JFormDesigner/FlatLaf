@@ -63,6 +63,10 @@ public interface FlatSystemProperties
 	 * <p>
 	 * Setting this to {@code false} disables using FlatLaf native window decorations.
 	 * <p>
+	 * This system property has higher priority than client property
+	 * {@link FlatClientProperties#USE_WINDOW_DECORATIONS} and
+	 * UI default {@code TitlePane.useWindowDecorations}.
+	 * <p>
 	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>

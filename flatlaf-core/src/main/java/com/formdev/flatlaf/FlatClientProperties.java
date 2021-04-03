@@ -233,10 +233,14 @@ public interface FlatClientProperties
 
 	/**
 	 * Specifies whether FlatLaf native window decorations should be used
-	 * when creating {@code JFrame} or {@code JDialog}.
+	 * for {@code JFrame} or {@code JDialog}.
 	 * <p>
-	 * Setting this to {@code false} disables using FlatLaf native window decorations
-	 * for the window that contains the root pane. Needs to be set before showing the window.
+	 * Setting this enables/disables using FlatLaf native window decorations
+	 * for the window that contains the root pane.
+	 * <p>
+	 * This client property has lower priority than system property
+	 * {@link FlatSystemProperties#USE_WINDOW_DECORATIONS}, but higher priority
+	 * than UI default {@code TitlePane.useWindowDecorations}.
 	 * <p>
 	 * (requires Window 10)
 	 * <p>

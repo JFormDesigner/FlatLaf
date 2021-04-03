@@ -24,7 +24,6 @@ import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.StyleContext;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.demo.HintManager.Hint;
 import com.formdev.flatlaf.demo.extras.*;
@@ -35,7 +34,6 @@ import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
-import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
@@ -144,35 +142,21 @@ class DemoFrame
 	private void windowDecorationsChanged() {
 		boolean windowDecorations = windowDecorationsCheckBoxMenuItem.isSelected();
 
-		// change window decoration of demo main frame
-		if( FlatNativeWindowBorder.isSupported() ) {
-			FlatNativeWindowBorder.setHasCustomDecoration( this, windowDecorations );
-			getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
-		} else {
-			dispose();
-			setUndecorated( windowDecorations );
-			getRootPane().setWindowDecorationStyle( windowDecorations ? JRootPane.FRAME : JRootPane.NONE );
-			setVisible( true );
-		}
-		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
+		// change window decoration of all frames and dialogs
+		FlatLaf.setUseNativeWindowDecorations( windowDecorations );
 
-		// enable/disable window decoration for later created frames/dialogs
-		UIManager.put( "TitlePane.useWindowDecorations", windowDecorations );
+		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
+		unifiedTitleBarMenuItem.setEnabled( windowDecorations );
 	}
 
 	private void menuBarEmbeddedChanged() {
-		getRootPane().putClientProperty( FlatClientProperties.MENU_BAR_EMBEDDED,
-			menuBarEmbeddedCheckBoxMenuItem.isSelected() ? null : false );
-
-// alternative method for all frames and menu bars in an application
-//		UIManager.put( "TitlePane.menuBarEmbedded", menuBarEmbeddedCheckBoxMenuItem.isSelected() );
-//		revalidate();
-//		repaint();
+		UIManager.put( "TitlePane.menuBarEmbedded", menuBarEmbeddedCheckBoxMenuItem.isSelected() );
+		FlatLaf.revalidateAndRepaintAllFramesAndDialogs();
 	}
 
 	private void unifiedTitleBar() {
 		UIManager.put( "TitlePane.unifiedBackground", unifiedTitleBarMenuItem.isSelected() );
-		repaint();
+		FlatLaf.repaintAllFramesAndDialogs();
 	}
 
 	private void underlineMenuSelection() {
@@ -748,8 +732,7 @@ class DemoFrame
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
-		boolean supportsWindowDecorations = UIManager.getLookAndFeel()
-			.getSupportsWindowDecorations() || FlatNativeWindowBorder.isSupported();
+		boolean supportsWindowDecorations = FlatLaf.supportsNativeWindowDecorations();
 
 		// If the JetBrainsRuntime is used, it forces the use of it's own custom
 		// window decoration, meaning we can't use our own.

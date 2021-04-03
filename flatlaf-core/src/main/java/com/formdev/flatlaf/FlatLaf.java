@@ -46,6 +46,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
+import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.ActiveValue;
@@ -59,6 +60,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
+import com.formdev.flatlaf.ui.FlatRootPaneUI;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
@@ -713,6 +715,79 @@ public abstract class FlatLaf
 				updateUIPending = false;
 			}
 		} );
+	}
+
+	/**
+	 * Returns whether native window decorations are supported on current platform.
+	 * <p>
+	 * This requires Windows 10, but may be disabled if running in special environments
+	 * (JetBrains Projector, Webswing or WinPE) or if loading native library fails.
+	 * If system property {@link FlatSystemProperties#USE_WINDOW_DECORATIONS} is set to
+	 * {@code false}, then this method also returns {@code false}.
+	 *
+	 * @since 1.1.2
+	 */
+	public static boolean supportsNativeWindowDecorations() {
+		return SystemInfo.isWindows_10_orLater && FlatNativeWindowBorder.isSupported();
+	}
+
+	/**
+	 * Returns whether native window decorations are enabled.
+	 *
+	 * @since 1.1.2
+	 */
+	public static boolean isUseNativeWindowDecorations() {
+		return UIManager.getBoolean( "TitlePane.useWindowDecorations" );
+	}
+
+	/**
+	 * Sets whether native window decorations are enabled.
+	 * <p>
+	 * Existing frames and dialogs will be updated.
+	 *
+	 * @since 1.1.2
+	 */
+	public static void setUseNativeWindowDecorations( boolean enabled ) {
+		UIManager.put( "TitlePane.useWindowDecorations", enabled );
+
+		if( !(UIManager.getLookAndFeel() instanceof FlatLaf) )
+			return;
+
+		// update existing frames and dialogs
+		for( Window w : Window.getWindows() ) {
+			if( isDisplayableFrameOrDialog( w ) )
+				FlatRootPaneUI.updateNativeWindowBorder( ((RootPaneContainer)w).getRootPane() );
+		}
+	}
+
+	/**
+	 * Revalidate and repaint all displayable frames and dialogs.
+	 *
+	 * @since 1.1.2
+	 */
+	public static void revalidateAndRepaintAllFramesAndDialogs() {
+		for( Window w : Window.getWindows() ) {
+			if( isDisplayableFrameOrDialog( w ) ) {
+				w.revalidate();
+				w.repaint();
+			}
+		}
+	}
+
+	/**
+	 * Repaint all displayable frames and dialogs.
+	 *
+	 * @since 1.1.2
+	 */
+	public static void repaintAllFramesAndDialogs() {
+		for( Window w : Window.getWindows() ) {
+			if( isDisplayableFrameOrDialog( w ) )
+				w.repaint();
+		}
+	}
+
+	private static boolean isDisplayableFrameOrDialog( Window w ) {
+		return w.isDisplayable() && (w instanceof JFrame || w instanceof JDialog);
 	}
 
 	public static boolean isShowMnemonics() {
