@@ -35,6 +35,7 @@ import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
+import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
 import net.miginfocom.layout.UnitValue;
@@ -264,7 +265,7 @@ class DemoFrame
 		// add font sizes
 		fontMenu.addSeparator();
 		ArrayList<String> sizes = new ArrayList<>( Arrays.asList(
-			"10", "12", "14", "16", "18", "20", "24", "28" ) );
+			"10", "11", "12", "14", "16", "18", "20", "24", "28" ) );
 		if( !sizes.contains( currentSize ) )
 			sizes.add( currentSize );
 		sizes.sort( String.CASE_INSENSITIVE_ORDER );
@@ -586,7 +587,7 @@ class DemoFrame
 				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
 
 				//---- unifiedTitleBarMenuItem ----
-				unifiedTitleBarMenuItem.setText("Unified Title Bar");
+				unifiedTitleBarMenuItem.setText("Unified window title bar");
 				unifiedTitleBarMenuItem.addActionListener(e -> unifiedTitleBar());
 				optionsMenu.add(unifiedTitleBarMenuItem);
 
@@ -732,20 +733,20 @@ class DemoFrame
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
-		boolean supportsWindowDecorations = FlatLaf.supportsNativeWindowDecorations();
+		if( FlatLaf.supportsNativeWindowDecorations() ) {
+			if( JBRCustomDecorations.isSupported() ) {
+				// If the JetBrains Runtime is used, it forces the use of it's own custom
+				// window decoration, which can not disabled.
+				windowDecorationsCheckBoxMenuItem.setEnabled( false );
+			}
+		} else {
+			unsupported( windowDecorationsCheckBoxMenuItem );
+			unsupported( menuBarEmbeddedCheckBoxMenuItem );
+			unsupported( unifiedTitleBarMenuItem );
+		}
 
-		// If the JetBrainsRuntime is used, it forces the use of it's own custom
-		// window decoration, meaning we can't use our own.
-		if( !supportsWindowDecorations || JBRCustomDecorations.isSupported() ) {
-			windowDecorationsCheckBoxMenuItem.setEnabled( false );
-			windowDecorationsCheckBoxMenuItem.setSelected( false );
-			windowDecorationsCheckBoxMenuItem.setToolTipText( "Not supported on your system." );
-		}
-		if( !supportsWindowDecorations ) {
-			menuBarEmbeddedCheckBoxMenuItem.setEnabled( false );
-			menuBarEmbeddedCheckBoxMenuItem.setSelected( false );
-			menuBarEmbeddedCheckBoxMenuItem.setToolTipText( "Not supported on your system." );
-		}
+		if( SystemInfo.isMacOS )
+			unsupported( underlineMenuSelectionMenuItem );
 
 		// remove contentPanel bottom insets
 		MigLayout layout = (MigLayout) contentPanel.getLayout();
@@ -758,6 +759,12 @@ class DemoFrame
 			insets[3]
 		} );
 		layout.setLayoutConstraints( lc );
+	}
+
+	private void unsupported( JCheckBoxMenuItem menuItem ) {
+		menuItem.setEnabled( false );
+		menuItem.setSelected( false );
+		menuItem.setToolTipText( "Not supported on your system." );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
