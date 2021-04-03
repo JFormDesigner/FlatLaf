@@ -193,17 +193,11 @@ public class FlatNativeWindowBorder
 	}
 
 	private static boolean useWindowDecorations( JRootPane rootPane ) {
-		// check whether forced to enabled/disabled via system property
-		Boolean enabled = FlatSystemProperties.getBooleanStrict( FlatSystemProperties.USE_WINDOW_DECORATIONS, null );
-		if( enabled != null )
-			return enabled;
-
-		// check whether forced to enabled/disabled via client property
-		enabled = FlatClientProperties.clientPropertyBooleanStrict( rootPane, FlatClientProperties.USE_WINDOW_DECORATIONS, null );
-		if( enabled != null )
-			return enabled;
-
-		return UIManager.getBoolean( "TitlePane.useWindowDecorations" );
+		return FlatUIUtils.getBoolean( rootPane,
+			FlatSystemProperties.USE_WINDOW_DECORATIONS,
+			FlatClientProperties.USE_WINDOW_DECORATIONS,
+			"TitlePane.useWindowDecorations",
+			false );
 	}
 
 	public static boolean hasCustomDecoration( Window window ) {

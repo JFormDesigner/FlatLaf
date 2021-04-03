@@ -429,9 +429,11 @@ public class FlatTitlePane
 	 */
 	protected boolean isMenuBarEmbedded() {
 		// not storing value of "TitlePane.menuBarEmbedded" in class to allow changing at runtime
-		return UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) &&
-			FlatClientProperties.clientPropertyBoolean( rootPane, FlatClientProperties.MENU_BAR_EMBEDDED, true ) &&
-			FlatSystemProperties.getBoolean( FlatSystemProperties.MENUBAR_EMBEDDED, true );
+		return FlatUIUtils.getBoolean( rootPane,
+			FlatSystemProperties.MENUBAR_EMBEDDED,
+			FlatClientProperties.MENU_BAR_EMBEDDED,
+			"TitlePane.menuBarEmbedded",
+			false );
 	}
 
 	protected Rectangle getMenuBarBounds() {

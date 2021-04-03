@@ -54,6 +54,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -138,6 +139,25 @@ public class FlatUIUtils
 	public static float getUIFloat( String key, float defaultValue ) {
 		Object value = UIManager.get( key );
 		return (value instanceof Number) ? ((Number)value).floatValue() : defaultValue;
+	}
+
+	/**
+	 * @since 1.1.2
+	 */
+	public static boolean getBoolean( JComponent c, String systemPropertyKey,
+		String clientPropertyKey, String uiKey, boolean defaultValue )
+	{
+		// check whether forced to true/false via system property
+		Boolean value = FlatSystemProperties.getBooleanStrict( systemPropertyKey, null );
+		if( value != null )
+			return value;
+
+		// check whether forced to true/false via client property
+		value = FlatClientProperties.clientPropertyBooleanStrict( c, clientPropertyKey, null );
+		if( value != null )
+			return value;
+
+		return getUIBoolean( uiKey, defaultValue );
 	}
 
 	public static boolean isChevron( String arrowType ) {

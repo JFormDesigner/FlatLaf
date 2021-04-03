@@ -59,8 +59,7 @@ public interface FlatSystemProperties
 	 * when creating {@code JFrame} or {@code JDialog}.
 	 * <p>
 	 * Setting this to {@code true} forces using native window decorations
-	 * even if they are not enabled by the application.
-	 * <p>
+	 * even if they are not enabled by the application.<br>
 	 * Setting this to {@code false} disables using native window decorations.
 	 * <p>
 	 * This system property has higher priority than client property
@@ -92,12 +91,20 @@ public interface FlatSystemProperties
 	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
 
 	/**
-	 * Specifies whether menubar is embedded into custom window decorations.
+	 * Specifies whether the menu bar is embedded into the window title pane
+	 * if window decorations are enabled.
+	 * <p>
+	 * Setting this to {@code true} forces embedding.<br>
+	 * Setting this to {@code false} disables embedding.
+	 * <p>
+	 * This system property has higher priority than client property
+	 * {@link FlatClientProperties#MENU_BAR_EMBEDDED} and
+	 * UI default {@code TitlePane.menuBarEmbedded}.
 	 * <p>
 	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
-	 * <strong>Default</strong> {@code true}
+	 * <strong>Default</strong> none
 	 */
 	String MENUBAR_EMBEDDED = "flatlaf.menuBarEmbedded";
 

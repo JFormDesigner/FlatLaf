@@ -252,8 +252,15 @@ public interface FlatClientProperties
 	String USE_WINDOW_DECORATIONS = "JRootPane.useWindowDecorations";
 
 	/**
-	 * Specifies whether the menu bar is embedded into the title pane if custom
-	 * window decorations are enabled. Default is {@code true}.
+	 * Specifies whether the menu bar is embedded into the window title pane
+	 * if window decorations are enabled.
+	 * <p>
+	 * Setting this enables/disables embedding
+	 * for the window that contains the root pane.
+	 * <p>
+	 * This client property has lower priority than system property
+	 * {@link FlatSystemProperties#MENUBAR_EMBEDDED}, but higher priority
+	 * than UI default {@code TitlePane.menuBarEmbedded}.
 	 * <p>
 	 * (requires Window 10)
 	 * <p>
