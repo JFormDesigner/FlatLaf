@@ -104,8 +104,9 @@ public class FlatMenuBarUI
 
 		// do not paint background for unified title pane
 		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
-		if( UIManager.getBoolean( "TitlePane.unifiedBackground" ) )
-			return false;
+		if( UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
+			FlatNativeWindowBorder.hasCustomDecoration( (Window) rootPane.getParent() ) )
+		  return false;
 
 		// paint background in full screen mode
 		if( FlatUIUtils.isFullScreen( rootPane ) )
