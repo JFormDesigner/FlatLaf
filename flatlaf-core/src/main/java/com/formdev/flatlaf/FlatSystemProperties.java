@@ -55,13 +55,13 @@ public interface FlatSystemProperties
 	String USE_UBUNTU_FONT = "flatlaf.useUbuntuFont";
 
 	/**
-	 * Specifies whether FlatLaf native window decorations should be used
+	 * Specifies whether native window decorations should be used
 	 * when creating {@code JFrame} or {@code JDialog}.
 	 * <p>
-	 * Setting this to {@code true} forces using FlatLaf native window decorations
+	 * Setting this to {@code true} forces using native window decorations
 	 * even if they are not enabled by the application.
 	 * <p>
-	 * Setting this to {@code false} disables using FlatLaf native window decorations.
+	 * Setting this to {@code false} disables using native window decorations.
 	 * <p>
 	 * This system property has higher priority than client property
 	 * {@link FlatClientProperties#USE_WINDOW_DECORATIONS} and
@@ -81,15 +81,13 @@ public interface FlatSystemProperties
 	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime</a>
 	 * (based on OpenJDK).
 	 * <p>
-	 * Setting this to {@code true} forces using JetBrains Runtime custom window decorations
-	 * even if they are not enabled by the application.
-	 * <p>
 	 * Setting this to {@code false} disables using JetBrains Runtime custom window decorations.
+	 * Then FlatLaf native window decorations are used.
 	 * <p>
 	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
-	 * <strong>Default</strong> none
+	 * <strong>Default</strong> true
 	 */
 	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
 

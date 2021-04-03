@@ -36,7 +36,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -73,7 +72,7 @@ public class JBRCustomDecorations
 		// check whether root pane already has a parent, which is the case when switching LaF
 		Window window = SwingUtilities.windowForComponent( rootPane );
 		if( window != null ) {
-			FlatNativeWindowBorder.install( window, FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS );
+			FlatNativeWindowBorder.install( window );
 			return null;
 		}
 
@@ -89,7 +88,7 @@ public class JBRCustomDecorations
 
 				Container parent = e.getChangedParent();
 				if( parent instanceof Window )
-					FlatNativeWindowBorder.install( (Window) parent, FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS );
+					FlatNativeWindowBorder.install( (Window) parent );
 
 				// remove listener since it is actually not possible to uninstall JBR decorations
 				// use invokeLater to remove listener to avoid that listener
@@ -163,10 +162,6 @@ public class JBRCustomDecorations
 
 		// requires JetBrains Runtime 11 and Windows 10
 		if( !SystemInfo.isJetBrainsJVM_11_orLater || !SystemInfo.isWindows_10_orLater )
-			return;
-
-		// check whether disabled via system property
-		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, true ) )
 			return;
 
 		try {

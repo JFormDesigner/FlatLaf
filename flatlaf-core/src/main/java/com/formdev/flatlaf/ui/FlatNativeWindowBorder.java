@@ -41,9 +41,22 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatNativeWindowBorder
 {
+	// can use window decorations if:
+	// - on Windows 10
+	// - not when running in JetBrains Projector, Webswing or WinPE
+	// - not disabled via system property
+	private static final boolean canUseWindowDecorations =
+		SystemInfo.isWindows_10_orLater &&
+		!SystemInfo.isProjector &&
+		!SystemInfo.isWebswing &&
+		!SystemInfo.isWinPE &&
+		FlatSystemProperties.getBoolean( FlatSystemProperties.USE_WINDOW_DECORATIONS, true );
+
 	// check this field before using class JBRCustomDecorations to avoid unnecessary loading of that class
-	private static final boolean canUseJBRCustomDecorations
-		= SystemInfo.isJetBrainsJVM_11_orLater && SystemInfo.isWindows_10_orLater;
+	private static final boolean canUseJBRCustomDecorations =
+		canUseWindowDecorations &&
+		SystemInfo.isJetBrainsJVM_11_orLater &&
+		FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, true );
 
 	private static Boolean supported;
 	private static Provider nativeProvider;
@@ -72,7 +85,7 @@ public class FlatNativeWindowBorder
 		// It could be also be a window that is currently hidden, but may be shown later.
 		Window window = SwingUtilities.windowForComponent( rootPane );
 		if( window != null && window.isDisplayable() )
-			install( window, FlatSystemProperties.USE_WINDOW_DECORATIONS );
+			install( window );
 
 		// Install FlatLaf native window border, which must be done late,
 		// when the native window is already created, because it needs access to the window.
@@ -81,7 +94,7 @@ public class FlatNativeWindowBorder
 		PropertyChangeListener ancestorListener = e -> {
 			Object newValue = e.getNewValue();
 			if( newValue instanceof Window )
-				install( (Window) newValue, FlatSystemProperties.USE_WINDOW_DECORATIONS );
+				install( (Window) newValue );
 			else if( newValue == null && e.getOldValue() instanceof Window )
 				uninstall( (Window) e.getOldValue() );
 		};
@@ -89,7 +102,7 @@ public class FlatNativeWindowBorder
 		return ancestorListener;
 	}
 
-	static void install( Window window, String systemPropertyKey ) {
+	static void install( Window window ) {
 		if( hasCustomDecoration( window ) )
 			return;
 
@@ -102,7 +115,7 @@ public class FlatNativeWindowBorder
 			JRootPane rootPane = frame.getRootPane();
 
 			// check whether disabled via system property, client property or UI default
-			if( !useWindowDecorations( rootPane, systemPropertyKey ) )
+			if( !useWindowDecorations( rootPane ) )
 				return;
 
 			// do not enable native window border if frame is undecorated
@@ -120,7 +133,7 @@ public class FlatNativeWindowBorder
 			JRootPane rootPane = dialog.getRootPane();
 
 			// check whether disabled via system property, client property or UI default
-			if( !useWindowDecorations( rootPane, systemPropertyKey ) )
+			if( !useWindowDecorations( rootPane ) )
 				return;
 
 			// do not enable native window border if dialog is undecorated
@@ -149,7 +162,7 @@ public class FlatNativeWindowBorder
 			rootPane.removePropertyChangeListener( "ancestor", (PropertyChangeListener) data );
 
 		// do not uninstall when switching to another FlatLaf theme and if still enabled
-		if( UIManager.getLookAndFeel() instanceof FlatLaf && useWindowDecorations( rootPane, FlatSystemProperties.USE_WINDOW_DECORATIONS ) )
+		if( UIManager.getLookAndFeel() instanceof FlatLaf && useWindowDecorations( rootPane ) )
 			return;
 
 		// uninstall native window border
@@ -179,9 +192,9 @@ public class FlatNativeWindowBorder
 		}
 	}
 
-	private static boolean useWindowDecorations( JRootPane rootPane, String systemPropertyKey ) {
+	private static boolean useWindowDecorations( JRootPane rootPane ) {
 		// check whether forced to enabled/disabled via system property
-		Boolean enabled = FlatSystemProperties.getBooleanStrict( systemPropertyKey, null );
+		Boolean enabled = FlatSystemProperties.getBooleanStrict( FlatSystemProperties.USE_WINDOW_DECORATIONS, null );
 		if( enabled != null )
 			return enabled;
 
@@ -243,16 +256,7 @@ public class FlatNativeWindowBorder
 			return;
 		supported = false;
 
-		// requires Windows 10
-		if( !SystemInfo.isWindows_10_orLater )
-			return;
-
-		// do not use when running in JetBrains Projector, Webswing or WinPE
-		if( SystemInfo.isProjector || SystemInfo.isWebswing || SystemInfo.isWinPE )
-			return;
-
-		// check whether disabled via system property
-		if( !FlatSystemProperties.getBoolean( FlatSystemProperties.USE_WINDOW_DECORATIONS, true ) )
+		if( !canUseWindowDecorations )
 			return;
 
 		try {
