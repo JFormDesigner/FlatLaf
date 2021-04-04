@@ -525,10 +525,10 @@ debug*/
 	@Override
 	protected void paintComponent( Graphics g ) {
 		// not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime
-		if( !UIManager.getBoolean( "TitlePane.unifiedBackground" ) ) {
-			g.setColor( getBackground() );
-			g.fillRect( 0, 0, getWidth(), getHeight() );
-		}
+		g.setColor( UIManager.getBoolean( "TitlePane.unifiedBackground" )
+			? FlatUIUtils.getParentBackground( this )
+			: getBackground() );
+		g.fillRect( 0, 0, getWidth(), getHeight() );
 	}
 
 	protected void repaintWindowBorder() {

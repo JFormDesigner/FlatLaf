@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -84,36 +85,39 @@ public class FlatMenuBarUI
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// paint background
-		if( isFillBackground( c ) ) {
-			g.setColor( c.getBackground() );
+		Color background = getBackground( c );
+		if( background != null ) {
+			g.setColor( background );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 		}
 
 		paint( g, c );
 	}
 
-	protected boolean isFillBackground( JComponent c ) {
+	protected Color getBackground( JComponent c ) {
+		Color background = c.getBackground();
+
 		// paint background if opaque or if having custom background color
-		if( c.isOpaque() || !(c.getBackground() instanceof UIResource) )
-			return true;
+		if( c.isOpaque() || !(background instanceof UIResource) )
+			return background;
 
 		// paint background if menu bar is not the "main" menu bar
 		JRootPane rootPane = SwingUtilities.getRootPane( c );
 		if( rootPane == null || !(rootPane.getParent() instanceof Window) || rootPane.getJMenuBar() != c )
-			return true;
+			return background;
 
-		// do not paint background for unified title pane
+		// paint background for unified title pane in color of parent
 		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
 		if( UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
 			FlatNativeWindowBorder.hasCustomDecoration( (Window) rootPane.getParent() ) )
-		  return false;
+		  return FlatUIUtils.getParentBackground( c );
 
 		// paint background in full screen mode
 		if( FlatUIUtils.isFullScreen( rootPane ) )
-			return true;
+			return background;
 
 		// do not paint background if menu bar is embedded into title pane
-		return !FlatRootPaneUI.isMenuBarEmbedded( rootPane );
+		return FlatRootPaneUI.isMenuBarEmbedded( rootPane ) ? null :background;
 	}
 
 	//---- class TakeFocus ----------------------------------------------------
