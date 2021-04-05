@@ -9,6 +9,10 @@ FlatLaf Change Log
   supports window decorations (`FlatLaf.supportsNativeWindowDecorations()`) and
   to toggle window decorations of all windows
   (`FlatLaf.setUseNativeWindowDecorations(boolean)`).
+- Native window decorations: Support changing title bar background and
+  foreground colors per window. (set client properties
+  `JRootPane.titleBarBackground` and `JRootPane.titleBarForeground` on root pane
+  to a `java.awt.Color`).
 
 #### Fixed bugs
 
@@ -30,8 +34,8 @@ FlatLaf Change Log
 #### New features and improvements
 
 - Native window decorations: Support disabling native window decorations per
-  window. (set client property `JRootPane.useWindowDecorations` to `false` on
-  root pane).
+  window. (set client property `JRootPane.useWindowDecorations` on root pane to
+  `false`).
 - Support running on WinPE. (issue #279)
 
 #### Fixed bugs

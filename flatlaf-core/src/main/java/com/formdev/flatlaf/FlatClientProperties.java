@@ -269,6 +269,26 @@ public interface FlatClientProperties
 	 */
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
 
+	/**
+	 * Background color of window title bar (requires enabled window decorations).
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.awt.Color}
+	 *
+	 * @since 1.1.2
+	 */
+	String TITLE_BAR_BACKGROUND = "JRootPane.titleBarBackground";
+
+	/**
+	 * Foreground color of window title bar (requires enabled window decorations).
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.awt.Color}
+	 *
+	 * @since 1.1.2
+	 */
+	String TITLE_BAR_FOREGROUND = "JRootPane.titleBarForeground";
+
 	//---- JScrollBar / JScrollPane -------------------------------------------
 
 	/**

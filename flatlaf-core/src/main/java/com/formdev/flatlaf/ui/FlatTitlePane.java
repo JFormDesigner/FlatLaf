@@ -265,10 +265,17 @@ public class FlatTitlePane
 	}
 
 	protected void activeChanged( boolean active ) {
-		boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() );
-		Color background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
-		Color foreground = FlatUIUtils.nonUIResource( active ? activeForeground : inactiveForeground );
-		Color titleForeground = (hasEmbeddedMenuBar && active) ? FlatUIUtils.nonUIResource( embeddedForeground ) : foreground;
+		Color background = FlatClientProperties.clientPropertyColor( rootPane, FlatClientProperties.TITLE_BAR_BACKGROUND, null );
+		Color foreground = FlatClientProperties.clientPropertyColor( rootPane, FlatClientProperties.TITLE_BAR_FOREGROUND, null );
+		Color titleForeground = foreground;
+		if( background == null )
+			background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
+		if( foreground == null ) {
+			foreground = FlatUIUtils.nonUIResource( active ? activeForeground : inactiveForeground );
+			titleForeground = (active && hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() ))
+				? FlatUIUtils.nonUIResource( embeddedForeground )
+				: foreground;
+		}
 
 		setBackground( background );
 		titleLabel.setForeground( titleForeground );
@@ -478,6 +485,11 @@ public class FlatTitlePane
 				return c;
 		}
 		return null;
+	}
+
+	protected void titleBarColorsChanged() {
+		activeChanged( window == null || window.isActive() );
+		repaint();
 	}
 
 	protected void menuBarChanged() {

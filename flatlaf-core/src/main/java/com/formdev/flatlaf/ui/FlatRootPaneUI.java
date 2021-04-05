@@ -256,6 +256,12 @@ public class FlatRootPaneUI
 					rootPane.repaint();
 				}
 				break;
+
+			case FlatClientProperties.TITLE_BAR_BACKGROUND:
+			case FlatClientProperties.TITLE_BAR_FOREGROUND:
+				if( titlePane != null )
+					titlePane.titleBarColorsChanged();
+				break;
 		}
 	}
 
