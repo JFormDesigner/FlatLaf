@@ -46,10 +46,13 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault SplitPaneDivider.border					Border
  * @uiDefault SplitPaneDivider.draggingColor			Color	only used if continuousLayout is false
  *
+ * <!-- JSplitPane -->
+ *
+ * @uiDefault SplitPane.continuousLayout				boolean
+ *
  * <!-- FlatSplitPaneUI -->
  *
  * @uiDefault Component.arrowType						String	chevron (default) or triangle
- * @uiDefault SplitPane.continuousLayout				boolean
  * @uiDefault SplitPaneDivider.oneTouchArrowColor		Color
  * @uiDefault SplitPaneDivider.oneTouchHoverArrowColor	Color
  * @uiDefault SplitPaneDivider.oneTouchPressedArrowColor Color
@@ -65,7 +68,6 @@ public class FlatSplitPaneUI
 	extends BasicSplitPaneUI
 {
 	protected String arrowType;
-	private Boolean continuousLayout;
 	protected Color oneTouchArrowColor;
 	protected Color oneTouchHoverArrowColor;
 	protected Color oneTouchPressedArrowColor;
@@ -85,8 +87,6 @@ public class FlatSplitPaneUI
 		oneTouchPressedArrowColor = UIManager.getColor( "SplitPaneDivider.oneTouchPressedArrowColor" );
 
 		super.installDefaults();
-
-		continuousLayout = (Boolean) UIManager.get( "SplitPane.continuousLayout" );
 	}
 
 	@Override
@@ -96,11 +96,6 @@ public class FlatSplitPaneUI
 		oneTouchArrowColor = null;
 		oneTouchHoverArrowColor = null;
 		oneTouchPressedArrowColor = null;
-	}
-
-	@Override
-	public boolean isContinuousLayout() {
-		return super.isContinuousLayout() || (continuousLayout != null && Boolean.TRUE.equals( continuousLayout ));
 	}
 
 	@Override
