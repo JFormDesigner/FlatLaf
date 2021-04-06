@@ -74,6 +74,10 @@ public class FlatTextComponentsTest
 		JComboBox<String> comboBox3 = new JComboBox<>();
 		JLabel spinnerLabel = new JLabel();
 		JSpinner spinner1 = new JSpinner();
+		JSpinner spinner2 = new JSpinner();
+		JSpinner spinner3 = new JSpinner();
+		JComboBox comboBox2 = new JComboBox();
+		JComboBox comboBox4 = new JComboBox();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -96,6 +100,10 @@ public class FlatTextComponentsTest
 			"[50,fill]" +
 			"[50,fill]" +
 			"[50,fill]" +
+			"[]" +
+			"[]para" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]"));
 
@@ -306,6 +314,24 @@ public class FlatTextComponentsTest
 		spinner1.setComponentPopupMenu(popupMenu1);
 		spinner1.setName("spinner1");
 		add(spinner1, "cell 1 7,growx");
+
+		//---- spinner2 ----
+		spinner2.setName("spinner2");
+		add(spinner2, "cell 1 8,growx,height 40");
+
+		//---- spinner3 ----
+		spinner3.setName("spinner3");
+		add(spinner3, "cell 1 9,growx,hmax 14");
+
+		//---- comboBox2 ----
+		comboBox2.setEditable(true);
+		comboBox2.setName("comboBox2");
+		add(comboBox2, "cell 1 10,growx,height 40");
+
+		//---- comboBox4 ----
+		comboBox4.setEditable(true);
+		comboBox4.setName("comboBox4");
+		add(comboBox4, "cell 1 11,growx,hmax 14");
 
 		//======== popupMenu1 ========
 		{

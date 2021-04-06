@@ -243,7 +243,24 @@ public class FlatComboBoxUI
 			public void layoutContainer( Container parent ) {
 				super.layoutContainer( parent );
 
-				if ( editor != null && padding != null ) {
+				if( arrowButton != null ) {
+					Insets insets = getInsets();
+					int buttonWidth = parent.getPreferredSize().height - insets.top - insets.bottom;
+					if( buttonWidth != arrowButton.getWidth() ) {
+						// set width of arrow button to preferred height of combobox
+						int xOffset = comboBox.getComponentOrientation().isLeftToRight()
+							? arrowButton.getWidth() - buttonWidth
+							: 0;
+						arrowButton.setBounds( arrowButton.getX() + xOffset, arrowButton.getY(),
+							buttonWidth, arrowButton.getHeight() );
+
+						// update editor bounds
+						if( editor != null )
+							editor.setBounds( rectangleForCurrentValue() );
+					}
+				}
+
+				if( editor != null && padding != null ) {
 					// fix editor bounds by subtracting padding
 					editor.setBounds( FlatUIUtils.subtractInsets( editor.getBounds(), padding ) );
 				}

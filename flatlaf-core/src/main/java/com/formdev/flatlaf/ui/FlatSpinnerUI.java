@@ -375,8 +375,8 @@ public class FlatSpinnerUI
 			Rectangle editorRect = new Rectangle( r );
 			Rectangle buttonsRect = new Rectangle( r );
 
-			// make button area square
-			int buttonsWidth = r.height;
+			// make button area square (if spinner has preferred height)
+			int buttonsWidth = parent.getPreferredSize().height - insets.top - insets.bottom;
 			buttonsRect.width = buttonsWidth;
 
 			if( parent.getComponentOrientation().isLeftToRight() ) {

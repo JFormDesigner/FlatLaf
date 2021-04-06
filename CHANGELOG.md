@@ -28,6 +28,8 @@ FlatLaf Change Log
 - IntelliJ Themes: Fixed system colors.
 - Button and ToggleButton: Do not paint background of disabled (and unselected)
   toolBar buttons. (issue #292; regression since fixing #112)
+- ComboBox and Spinner: Fixed too wide arrow button if component is higher than
+  preferred. (issue #302)
 - SplitPane: `JSplitPane.setContinuousLayout(false)` did not work. (issue #301)
 - TabbedPane: Fixed NPE when creating/modifying in another thread. (issue #299)
 - Fixed crash when running in Webswing. (issue #290)
