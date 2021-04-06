@@ -21,8 +21,10 @@ FlatLaf Change Log
 - Native window decorations: Removed superfluous pixel-line at top of screen
   when window is maximized. (issue #296)
 - Window decorations: Fixed random window title bar background in cases were
-  background is not filled by custom window/rootpane components and
-  `TitlePane.unifiedBackground` is `true`.
+  background is not filled by custom window or root pane components and unified
+  background is enabled.
+- IntelliJ Themes: Fixed window title bar background if unified background is
+  enabled.
 - Button and ToggleButton: Do not paint background of disabled (and unselected)
   toolBar buttons. (issue #292; regression since fixing #112)
 - SplitPane: `JSplitPane.setContinuousLayout(false)` did not work. (issue #301)
