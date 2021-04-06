@@ -16,6 +16,8 @@
 
 package com.formdev.flatlaf;
 
+import com.formdev.flatlaf.util.UIScale;
+
 /**
  * Defines/documents own system properties used in FlatLaf.
  *
@@ -32,6 +34,8 @@ public interface FlatSystemProperties
 	 * To replace the Java 9+ system scale factor, use system property "sun.java2d.uiScale",
 	 * which has the same syntax as this one.
 	 * <p>
+	 * Since FlatLaf 1.1.2: Scale factors less then 100% are allowed.
+	 * <p>
 	 * <strong>Allowed Values</strong> e.g. {@code 1.5}, {@code 1.5x}, {@code 150%} or {@code 144dpi} (96dpi is 100%)<br>
 	 */
 	String UI_SCALE = "flatlaf.uiScale";
@@ -43,6 +47,17 @@ public interface FlatSystemProperties
 	 * <strong>Default</strong> {@code true}
 	 */
 	String UI_SCALE_ENABLED = "flatlaf.uiScale.enabled";
+
+	/**
+	 * Specifies whether values smaller than 100% are allowed for the user scale factor
+	 * (see {@link UIScale#getUserScaleFactor()}).
+	 * <p>
+	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
+	 * <strong>Default</strong> {@code false}
+	 *
+	 * @since 1.1.2
+	 */
+	String UI_SCALE_ALLOW_SCALE_DOWN = "flatlaf.uiScale.allowScaleDown";
 
 	/**
 	 * Specifies whether Ubuntu font should be used on Ubuntu Linux.

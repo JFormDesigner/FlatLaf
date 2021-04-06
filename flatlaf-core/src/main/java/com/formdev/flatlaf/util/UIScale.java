@@ -180,7 +180,7 @@ public class UIScale
 		// apply custom scale factor specified in system property "flatlaf.uiScale"
 		float customScaleFactor = getCustomScaleFactor();
 		if( customScaleFactor > 0 ) {
-			setUserScaleFactor( customScaleFactor );
+			setUserScaleFactor( customScaleFactor, false );
 			return;
 		}
 
@@ -230,7 +230,7 @@ public class UIScale
 		} else
 			newScaleFactor = computeScaleFactor( font );
 
-		setUserScaleFactor( newScaleFactor );
+		setUserScaleFactor( newScaleFactor, true );
 	}
 
 	private static float computeScaleFactor( Font font ) {
@@ -274,7 +274,7 @@ public class UIScale
 		if( scaleFactor == fontScaleFactor )
 			return font;
 
-		int newFontSize = Math.round( (font.getSize() / fontScaleFactor) * scaleFactor );
+		int newFontSize = Math.max( Math.round( (font.getSize() / fontScaleFactor) * scaleFactor ), 1 );
 		return new FontUIResource( font.deriveFont( (float) newFontSize ) );
 	}
 
@@ -322,11 +322,18 @@ public class UIScale
 	/**
 	 * Sets the user scale factor.
 	 */
-	private static void setUserScaleFactor( float scaleFactor ) {
-		if( scaleFactor <= 1f )
-			scaleFactor = 1f;
-		else // round scale factor to 1/4
-			scaleFactor = Math.round( scaleFactor * 4f ) / 4f;
+	private static void setUserScaleFactor( float scaleFactor, boolean normalize ) {
+		if( normalize ) {
+			if( scaleFactor < 1f ) {
+				scaleFactor = FlatSystemProperties.getBoolean( FlatSystemProperties.UI_SCALE_ALLOW_SCALE_DOWN, false )
+					? Math.round( scaleFactor * 10f ) / 10f // round small scale factor to 1/10
+					: 1f;
+			} else if( scaleFactor > 1f ) // round scale factor to 1/4
+				scaleFactor = Math.round( scaleFactor * 4f ) / 4f;
+		}
+
+		// minimum scale factor
+		scaleFactor = Math.max( scaleFactor, 0.1f );
 
 		float oldScaleFactor = UIScale.scaleFactor;
 		UIScale.scaleFactor = scaleFactor;
