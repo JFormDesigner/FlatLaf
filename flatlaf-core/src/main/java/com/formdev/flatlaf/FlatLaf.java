@@ -833,6 +833,10 @@ public abstract class FlatLaf
 		public Object createValue( UIDefaults table ) {
 			Font defaultFont = UIManager.getFont( "defaultFont" );
 
+			// fallback (to avoid NPE in case that this is used in another Laf)
+			if( defaultFont == null )
+				defaultFont = UIManager.getFont( "Label.font" );
+
 			if( lastDefaultFont != defaultFont ) {
 				lastDefaultFont = defaultFont;
 

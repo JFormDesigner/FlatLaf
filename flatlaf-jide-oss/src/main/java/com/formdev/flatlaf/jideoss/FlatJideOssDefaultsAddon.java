@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 import javax.swing.UIDefaults.ActiveValue;
 import com.formdev.flatlaf.FlatDefaultsAddon;
 import com.formdev.flatlaf.FlatLaf;
@@ -70,6 +71,9 @@ public class FlatJideOssDefaultsAddon
 	 * own UI defaults, we have to first remember our UI defaults in the initializer
 	 * (invoked before JIDE overwrites UI defaults) and then restore them in the customizer.
 	 * <p>
+	 * Do not register this class yourself with JIDE.
+	 * It is automatically registered.
+	 * <p>
 	 * Invoked from {@link LookAndFeelFactory#installJideExtension()}.
 	 */
 	public static class FlatJideUIDefaultsCustomizer
@@ -79,6 +83,10 @@ public class FlatJideOssDefaultsAddon
 
 		@Override
 		public void initialize( UIDefaults defaults ) {
+			// do nothing in other Lafs if (wrongly) registered with LookAndFeelFactory.addUIDefaultsInitializer()
+			if( !(UIManager.getLookAndFeel() instanceof FlatLaf) )
+				return;
+
 			jideDefaults = new HashMap<>();
 
 			for( Map.Entry<Object, Object> e : defaults.entrySet() ) {
@@ -96,6 +104,10 @@ public class FlatJideOssDefaultsAddon
 
 		@Override
 		public void customize( UIDefaults defaults ) {
+			// do nothing in other Lafs if (wrongly) registered with LookAndFeelFactory.addUIDefaultsCustomizer()
+			if( !(UIManager.getLookAndFeel() instanceof FlatLaf) )
+				return;
+
 			if( jideDefaults != null ) {
 				defaults.putAll( jideDefaults );
 				jideDefaults = null;
