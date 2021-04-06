@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -265,8 +266,8 @@ public class FlatTitlePane
 	}
 
 	protected void activeChanged( boolean active ) {
-		Color background = FlatClientProperties.clientPropertyColor( rootPane, FlatClientProperties.TITLE_BAR_BACKGROUND, null );
-		Color foreground = FlatClientProperties.clientPropertyColor( rootPane, FlatClientProperties.TITLE_BAR_FOREGROUND, null );
+		Color background = clientPropertyColor( rootPane, TITLE_BAR_BACKGROUND, null );
+		Color foreground = clientPropertyColor( rootPane, TITLE_BAR_FOREGROUND, null );
 		Color titleForeground = foreground;
 		if( background == null )
 			background = FlatUIUtils.nonUIResource( active ? activeBackground : inactiveBackground );
@@ -537,7 +538,8 @@ debug*/
 	@Override
 	protected void paintComponent( Graphics g ) {
 		// not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime
-		g.setColor( UIManager.getBoolean( "TitlePane.unifiedBackground" )
+		g.setColor( (UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
+				clientPropertyColor( rootPane, TITLE_BAR_BACKGROUND, null ) == null)
 			? FlatUIUtils.getParentBackground( this )
 			: getBackground() );
 		g.fillRect( 0, 0, getWidth(), getHeight() );

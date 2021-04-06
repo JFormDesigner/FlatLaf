@@ -106,18 +106,18 @@ public class FlatMenuBarUI
 		if( rootPane == null || !(rootPane.getParent() instanceof Window) || rootPane.getJMenuBar() != c )
 			return background;
 
-		// paint background for unified title pane in color of parent
+		// use parent background for unified title pane
 		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
 		if( UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
 			FlatNativeWindowBorder.hasCustomDecoration( (Window) rootPane.getParent() ) )
-		  return FlatUIUtils.getParentBackground( c );
+		  background = FlatUIUtils.getParentBackground( c );
 
 		// paint background in full screen mode
 		if( FlatUIUtils.isFullScreen( rootPane ) )
 			return background;
 
 		// do not paint background if menu bar is embedded into title pane
-		return FlatRootPaneUI.isMenuBarEmbedded( rootPane ) ? null :background;
+		return FlatRootPaneUI.isMenuBarEmbedded( rootPane ) ? null : background;
 	}
 
 	//---- class TakeFocus ----------------------------------------------------
