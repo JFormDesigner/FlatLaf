@@ -25,6 +25,7 @@ FlatLaf Change Log
   background is enabled.
 - IntelliJ Themes: Fixed window title bar background if unified background is
   enabled.
+- IntelliJ Themes: Fixed system colors.
 - Button and ToggleButton: Do not paint background of disabled (and unselected)
   toolBar buttons. (issue #292; regression since fixing #112)
 - SplitPane: `JSplitPane.setContinuousLayout(false)` did not work. (issue #301)
