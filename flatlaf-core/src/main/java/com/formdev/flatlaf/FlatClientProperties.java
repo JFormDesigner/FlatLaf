@@ -272,6 +272,8 @@ public interface FlatClientProperties
 	/**
 	 * Background color of window title bar (requires enabled window decorations).
 	 * <p>
+	 * (requires Window 10)
+	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.awt.Color}
 	 *
@@ -281,6 +283,8 @@ public interface FlatClientProperties
 
 	/**
 	 * Foreground color of window title bar (requires enabled window decorations).
+	 * <p>
+	 * (requires Window 10)
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
 	 * <strong>Value type</strong> {@link java.awt.Color}

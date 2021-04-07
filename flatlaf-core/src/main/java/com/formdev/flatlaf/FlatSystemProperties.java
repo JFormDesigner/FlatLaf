@@ -101,7 +101,7 @@ public interface FlatSystemProperties
 	 * (requires Window 10)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
-	 * <strong>Default</strong> true
+	 * <strong>Default</strong> {@code true}
 	 */
 	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
 
