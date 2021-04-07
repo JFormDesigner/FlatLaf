@@ -58,6 +58,8 @@ import java.util.function.BiConsumer;
 import java.util.function.IntConsumer;
 import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -487,6 +489,20 @@ public class FlatTabbedPaneUI
 			tabPane.removeMouseMotionListener( wheelTabScroller );
 			tabPane.removeMouseListener( wheelTabScroller );
 			wheelTabScroller = null;
+		}
+	}
+
+	@Override
+	protected void installKeyboardActions() {
+		super.installKeyboardActions();
+
+		// get shared action map, used for all tabbed panes
+		ActionMap map = SwingUtilities.getUIActionMap( tabPane );
+		if( map != null ) {
+			// this is required for the case that those actions are used from outside
+			// (e.g. wheel tab scroller in NetBeans)
+			RunWithOriginalLayoutManagerDelegateAction.install( map, "scrollTabsForwardAction" );
+			RunWithOriginalLayoutManagerDelegateAction.install( map, "scrollTabsBackwardAction" );
 		}
 	}
 
@@ -2957,6 +2973,53 @@ public class FlatTabbedPaneUI
 			forwardButton.setVisible( forwardButtonVisible );
 
 			scrollBackwardButtonPrefSize = backwardButton.getPreferredSize();
+		}
+	}
+
+	//---- class RunWithOriginalLayoutManagerDelegateAction -------------------
+
+	private static class RunWithOriginalLayoutManagerDelegateAction
+		implements Action
+	{
+		private final Action delegate;
+
+		static void install( ActionMap map, String key ) {
+			Action oldAction = map.get( key );
+			if( oldAction == null || oldAction instanceof RunWithOriginalLayoutManagerDelegateAction )
+				return; // not found or already installed
+
+			map.put( key, new RunWithOriginalLayoutManagerDelegateAction( oldAction ) );
+		}
+
+		private RunWithOriginalLayoutManagerDelegateAction( Action delegate ) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public Object getValue( String key ) {
+			return delegate.getValue( key );
+		}
+
+		@Override
+		public boolean isEnabled() {
+			return delegate.isEnabled();
+		}
+
+		@Override public void putValue( String key, Object value ) {}
+		@Override public void setEnabled( boolean b ) {}
+		@Override public void addPropertyChangeListener( PropertyChangeListener listener ) {}
+		@Override public void removePropertyChangeListener( PropertyChangeListener listener ) {}
+
+		@Override
+		public void actionPerformed( ActionEvent e ) {
+			JTabbedPane tabbedPane = (JTabbedPane) e.getSource();
+			ComponentUI ui = tabbedPane.getUI();
+			if( ui instanceof FlatTabbedPaneUI ) {
+				((FlatTabbedPaneUI)ui).runWithOriginalLayoutManager( () -> {
+					delegate.actionPerformed( e );
+				} );
+			} else
+				delegate.actionPerformed( e );
 		}
 	}
 }

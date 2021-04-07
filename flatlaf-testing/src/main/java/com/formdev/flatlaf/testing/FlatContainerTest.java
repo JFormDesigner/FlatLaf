@@ -18,7 +18,10 @@ package com.formdev.flatlaf.testing;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.FlatLaf;
@@ -418,6 +421,32 @@ public class FlatContainerTest
 			tabbedPane.setMaximumTabWidth( maximumTabWidth );
 	}
 
+	private void customWheelScrollingChanged() {
+		if( custoMouseWheelScroller != null ) {
+			for( FlatTabbedPane tabbedPane : allTabbedPanes )
+				tabbedPane.removeMouseWheelListener( custoMouseWheelScroller );
+			custoMouseWheelScroller = null;
+		}
+
+		if( customWheelScrollingCheckBox.isSelected() ) {
+			custoMouseWheelScroller = new MouseWheelListener() {
+				@Override
+				public void mouseWheelMoved( MouseWheelEvent e ) {
+					if( e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL ) {
+						JTabbedPane tabbedPane = (JTabbedPane) e.getComponent();
+						ActionMap actionMap = tabbedPane.getActionMap();
+						Action scrollAction = actionMap.get( (e.getWheelRotation() < 0)
+							? "scrollTabsBackwardAction" : "scrollTabsForwardAction" );
+						if( scrollAction != null && scrollAction.isEnabled() )
+							scrollAction.actionPerformed( new ActionEvent( tabbedPane, 0, "" ) );
+					}
+				}
+			};
+			for( FlatTabbedPane tabbedPane : allTabbedPanes )
+				tabbedPane.addMouseWheelListener( custoMouseWheelScroller );
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel panel9 = new JPanel();
@@ -475,6 +504,7 @@ public class FlatContainerTest
 		showTabSeparatorsCheckBox = new JCheckBox();
 		secondTabWiderCheckBox = new JCheckBox();
 		hideTabAreaWithOneTabCheckBox = new JCheckBox();
+		customWheelScrollingCheckBox = new JCheckBox();
 		CellConstraints cc = new CellConstraints();
 
 		//======== this ========
@@ -773,6 +803,11 @@ public class FlatContainerTest
 				hideTabAreaWithOneTabCheckBox.setText("Hide tab area with one tab");
 				hideTabAreaWithOneTabCheckBox.addActionListener(e -> hideTabAreaWithOneTabChanged());
 				tabbedPaneControlPanel.add(hideTabAreaWithOneTabCheckBox, "cell 1 10");
+
+				//---- customWheelScrollingCheckBox ----
+				customWheelScrollingCheckBox.setText("Custom wheel scrolling");
+				customWheelScrollingCheckBox.addActionListener(e -> customWheelScrollingChanged());
+				tabbedPaneControlPanel.add(customWheelScrollingCheckBox, "cell 2 10");
 			}
 			panel9.add(tabbedPaneControlPanel, cc.xywh(1, 11, 3, 1));
 		}
@@ -818,9 +853,11 @@ public class FlatContainerTest
 	private JCheckBox showTabSeparatorsCheckBox;
 	private JCheckBox secondTabWiderCheckBox;
 	private JCheckBox hideTabAreaWithOneTabCheckBox;
+	private JCheckBox customWheelScrollingCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	private FlatTabbedPane[] allTabbedPanes;
+	private MouseWheelListener custoMouseWheelScroller;
 
 	//---- enum TabPlacement --------------------------------------------------
 
