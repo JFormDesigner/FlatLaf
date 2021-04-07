@@ -246,12 +246,18 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox2"
 				"editable": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10,growx,height 40"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox4"
 				"editable": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 11,growx,hmax 14"
 			} )

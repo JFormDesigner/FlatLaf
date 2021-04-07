@@ -76,8 +76,8 @@ public class FlatTextComponentsTest
 		JSpinner spinner1 = new JSpinner();
 		JSpinner spinner2 = new JSpinner();
 		JSpinner spinner3 = new JSpinner();
-		JComboBox comboBox2 = new JComboBox();
-		JComboBox comboBox4 = new JComboBox();
+		JComboBox<String> comboBox2 = new JComboBox<>();
+		JComboBox<String> comboBox4 = new JComboBox<>();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
