@@ -41,7 +41,7 @@ public interface FlatClientProperties
 	 *     {@link #BUTTON_TYPE_TAB},
 	 *     {@link #BUTTON_TYPE_HELP} or
 	 *     {@link #BUTTON_TYPE_TOOLBAR_BUTTON}
-	 *     {@link #BUTTON_TYPE_BORDER_LESS}
+	 *     {@link #BUTTON_TYPE_BORDERLESS}
 	 */
 	String BUTTON_TYPE = "JButton.buttonType";
 
@@ -97,7 +97,7 @@ public interface FlatClientProperties
 	 *
 	 * @see #BUTTON_TYPE
 	 */
-	String BUTTON_TYPE_BORDER_LESS = "borderLess";
+	String BUTTON_TYPE_BORDERLESS = "borderless";
 
 	/**
 	 * Specifies selected state of a checkbox.

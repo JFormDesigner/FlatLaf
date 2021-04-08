@@ -285,8 +285,9 @@ public class FlatButtonUI
 			(c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON ));
 	}
 
-	static boolean isBorderLessButton( Component c ) {
-		return c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_BORDER_LESS );
+	static boolean isBorderlessButton( Component c ) {
+		return c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE,
+			BUTTON_TYPE_BORDERLESS );
 	}
 
 	@Override
@@ -336,7 +337,7 @@ public class FlatButtonUI
 
 			// paint shadow
 			Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-			if( !isToolBarButton && !isBorderLessButton( c ) && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
+			if( !isToolBarButton && !isBorderlessButton( c ) && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
 				!(isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c )) && c.isEnabled() )
 			{
 				g2.setColor( shadowColor );
@@ -395,7 +396,7 @@ public class FlatButtonUI
 		if( ((AbstractButton)c).isSelected() ) {
 			// in toolbar use same colors for disabled and enabled because
 			// we assume that toolbar icon is shown disabled
-			boolean toolBarButton = isToolBarButton( c ) || isBorderLessButton( c );
+			boolean toolBarButton = isToolBarButton( c ) || isBorderlessButton( c );
 			return buttonStateColor( c,
 				toolBarButton ? toolbarSelectedBackground : selectedBackground,
 				toolBarButton ? toolbarSelectedBackground : disabledSelectedBackground,
@@ -407,7 +408,7 @@ public class FlatButtonUI
 			return disabledBackground;
 
 		// toolbar button
-		if( isToolBarButton( c ) || isBorderLessButton( c ) ) {
+		if( isToolBarButton( c ) || isBorderlessButton( c ) ) {
 			ButtonModel model = ((AbstractButton)c).getModel();
 			if( model.isPressed() )
 				return toolbarPressedBackground;
@@ -469,7 +470,7 @@ public class FlatButtonUI
 		if( !c.isEnabled() )
 			return disabledText;
 
-		if( ((AbstractButton)c).isSelected() && !( isToolBarButton( c ) || isBorderLessButton( c ) ) )
+		if( ((AbstractButton)c).isSelected() && !( isToolBarButton( c ) || isBorderlessButton( c ) ) )
 			return selectedForeground;
 
 		// use component foreground if explicitly set

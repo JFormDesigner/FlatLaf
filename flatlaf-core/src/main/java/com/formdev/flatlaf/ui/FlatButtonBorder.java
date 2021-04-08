@@ -75,7 +75,7 @@ public class FlatButtonBorder
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 		if( FlatButtonUI.isContentAreaFilled( c ) &&
 			!FlatButtonUI.isToolBarButton( c ) &&
-			( !FlatButtonUI.isBorderLessButton( c ) || FlatUIUtils.isPermanentFocusOwner( c ) ) &&
+			( !FlatButtonUI.isBorderlessButton( c ) || FlatUIUtils.isPermanentFocusOwner( c ) ) &&
 			!FlatButtonUI.isHelpButton( c ) &&
 			!FlatToggleButtonUI.isTabButton( c ) )
 		  super.paintBorder( c, g, x, y, width, height );
