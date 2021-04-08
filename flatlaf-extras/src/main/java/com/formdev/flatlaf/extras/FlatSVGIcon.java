@@ -66,7 +66,7 @@ public class FlatSVGIcon
 	private final boolean disabled;
 	private final ClassLoader classLoader;
 
-	private RGBImageFilter userFilter = null;
+	private ColorFilter userColorFilter = null;
 
 	private SVGDiagram diagram;
 	private boolean dark;
@@ -161,7 +161,7 @@ public class FlatSVGIcon
 		this( name, -1, -1, scale, false, classLoader );
 	}
 
-	private FlatSVGIcon( String name, int width, int height, float scale, boolean disabled, ClassLoader classLoader ) {
+	protected FlatSVGIcon( String name, int width, int height, float scale, boolean disabled, ClassLoader classLoader ) {
 		this.name = name;
 		this.classLoader = classLoader;
 		this.width = width;
@@ -171,16 +171,29 @@ public class FlatSVGIcon
 	}
 
 	/**
-	 * Sets an RGBImageFilter to be used when painting the icon.
-	 * For simple RGB modifications you can use the {@link FlatRGBFilter}.
-	 * @param filter
+	 * Sets a color filter that can freely modify colors of this icon during painting.<br>
+	 * <br>
+	 * This method accepts a {@link ColorFilter}. Usually you would want to use a ColorFilter created using the
+	 * {@link ColorFilter#ColorFilter(Function)} constructor.<br>
+	 * <br>
+	 * This can be used to brighten colors of the icon:
+	 * <pre>icon.setFilter( new FlatSVGIcon.ColorFilter( color -> color.brighter() ) );</pre><br>
+	 * <br>
+	 * Using a filter, icons can also be turned monochrome (painted with a single color):
+	 * <pre>icon.setFilter( new FlatSVGIcon.ColorFilter( color -> Color.RED ) );</pre><br>
+	 * <br>
+	 * Note: If a filter is already set, it will be replaced.
+	 * @param filter The color filter
 	 */
-	public void setFilter(RGBImageFilter filter) {
-		this.userFilter = filter;
+	public void setFilter(ColorFilter filter) {
+		this.userColorFilter = filter;
 	}
 
-	public RGBImageFilter getFilter() {
-		return userFilter;
+	/**
+	 * @return The currently active {@link ColorFilter} or null.
+	 */
+	public ColorFilter getFilter() {
+		return userColorFilter;
 	}
 
 	/**
@@ -318,7 +331,7 @@ public class FlatSVGIcon
 				: GrayFilter.createDisabledIconFilter( dark );
 		}
 
-		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), ColorFilter.getInstance(), grayFilter, this.userFilter );
+		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), ColorFilter.getInstance(), grayFilter, this.userColorFilter );
 
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
@@ -416,37 +429,139 @@ public class FlatSVGIcon
 
 	//---- class ColorFilter --------------------------------------------------
 
+	/**
+	 * A color filter that can modify colors of a painted {@link FlatSVGIcon}.<br>
+	 * <br>
+	 * The ColorFilter modifes color in two ways.<br>
+	 * Either using a color map, where specific colors are mapped to different ones.<br>
+	 * And/or by modifying the colors directly, applying a modification to their rgba values.<br>
+	 * <br>
+	 * When filtering a color. Mappings are applied first, then an rgb color filter is applied.<br>
+	 * <br>
+	 * Global {@link FlatSVGIcon} ColorFilter can be retrieved using the {@link ColorFilter#getInstance()} methods.
+ 	 *
+	 * @see ColorFilter#ColorFilter(Function)
+	 * @see ColorFilter#ColorFilter(boolean)
+	 */
 	public static class ColorFilter
 	{
 		private static ColorFilter instance;
 
+		//Color maps
 		private final Map<Integer, String> rgb2keyMap = new HashMap<>();
 		private final Map<Color, Color> color2colorMap = new HashMap<>();
 
+		//Color modification
+		private Function<Color, Color> colorFilter = null;
+
+		/**
+		 * Returns the global ColorFilter instance. If one doesn't exist, a new one is created.
+		 */
 		public static ColorFilter getInstance() {
+			return(getInstance(true));
+		}
+
+		/**
+		 * Returns the global ColorFilter instance. If one doesn't exist, a new one is created.
+		 * @param createDefaultColorMaps If true, default FlatLaf color maps are created.
+		 */
+		public static ColorFilter getInstance(boolean createDefaultColorMaps) {
 			if( instance == null )
 				instance = new ColorFilter();
 			return instance;
 		}
 
+		/**
+		 * Creates a color filter with default color mappings.
+		 */
 		public ColorFilter() {
-			for( FlatIconColors c : FlatIconColors.values() )
-				rgb2keyMap.put( c.rgb, c.key );
+			this(true);
 		}
 
+		/**
+		 * Creates a color filter. Default color maps can be optionally created.
+		 * @param createDefaultColorMaps If true, default FlatLaf color maps are created.
+		 */
+		public ColorFilter(boolean createDefaultColorMaps) {
+			if (createDefaultColorMaps) {
+				for( FlatIconColors c : FlatIconColors.values() )
+					rgb2keyMap.put( c.rgb, c.key );
+			}
+		}
+
+		/**
+		 * Creates a color modifying function that changes painted colors.<br>
+		 * The {@link Function} gets passed the original color and returns a modified one.
+		 * <br>
+		 * Examples:
+		 * A ColorFilter can be used to brighten colors of the icon:
+		 * <pre>new ColorFilter( color -> color.brighter() );</pre>
+		 * <br>
+		 * Using a ColorFilter, icons can also be turned monochrome (painted with a single color):
+		 * <pre>new ColorFilter( color -> Color.RED );</pre>
+		 * <br>
+		 * @param filter The color filter function
+		 */
+		public ColorFilter(Function<Color, Color> filter) {
+			setFilter(filter);
+		}
+
+		/**
+		 * Sets a color modifying function that changes painted colors.<br>
+		 * The {@link Function} gets passed the original color and returns a modified one.
+		 * <br>
+		 * Examples:
+		 * A ColorFilter can be used to brighten colors of the icon:
+		 * <pre>filter.setFilter( color -> color.brighter() );</pre>
+		 * <br>
+		 * Using a ColorFilter, icons can also be turned monochrome (painted with a single color):
+		 * <pre>filter.setFilter( color -> Color.RED );</pre>
+		 * <br>
+		 * @param filter The color filter function
+		 */
+		public void setFilter(Function<Color, Color> filter) {
+			this.colorFilter = filter;
+		}
+
+		/**
+		 * Adds a color mappings.
+		 */
 		public void addAll( Map<Color, Color> from2toMap ) {
 			color2colorMap.putAll( from2toMap );
 		}
 
+		/**
+		 * Adds a color mapping.
+		 */
 		public void add( Color from, Color to ) {
 			color2colorMap.put( from, to );
 		}
 
+		/**
+		 * Removes a specific color mapping.
+		 */
 		public void remove( Color from ) {
 			color2colorMap.remove( from );
 		}
 
+		/**
+		 * Removes all color mappings.
+		 */
+		public void removeAll() {
+			for ( Color from : color2colorMap.keySet()) {
+				color2colorMap.remove( from );
+			}
+		}
+
 		public Color filter( Color color ) {
+			color = filterMappings( color );
+			if (colorFilter != null) {
+				color = colorFilter.apply( color );
+			}
+			return color;
+		};
+
+		protected Color filterMappings( Color color ) {
 			Color newColor = color2colorMap.get( color );
 			if( newColor != null )
 				return newColor;
@@ -462,7 +577,7 @@ public class FlatSVGIcon
 			return (newColor.getAlpha() != color.getAlpha())
 				? new Color( (newColor.getRGB() & 0x00ffffff) | (color.getRGB() & 0xff000000) )
 				: newColor;
-		};
+		}
 	}
 
 	//---- class GraphicsFilter -----------------------------------------------
@@ -472,9 +587,9 @@ public class FlatSVGIcon
 	{
 		private final ColorFilter colorFilter;
 		private final RGBImageFilter grayFilter;
-		private final RGBImageFilter userFilter;
+		private final ColorFilter userFilter;
 
-		public GraphicsFilter( Graphics2D delegate, ColorFilter colorFilter, RGBImageFilter grayFilter, RGBImageFilter userFilter) {
+		public GraphicsFilter( Graphics2D delegate, ColorFilter colorFilter, RGBImageFilter grayFilter,ColorFilter userFilter) {
 			super( delegate );
 			this.colorFilter = colorFilter;
 			this.grayFilter = grayFilter;
@@ -494,11 +609,8 @@ public class FlatSVGIcon
 		}
 
 		private Color filterColor( Color color ) {
-			if( userFilter != null ) {
-				int oldRGB = color.getRGB();
-				int newRGB = userFilter.filterRGB( 0, 0, oldRGB );
-				color = (newRGB != oldRGB) ? new Color( newRGB, true ) : color;
-			}
+			if( userFilter != null )
+				color = userFilter.filter( color );
 			if( colorFilter != null )
 				color = colorFilter.filter( color );
 			if( grayFilter != null ) {

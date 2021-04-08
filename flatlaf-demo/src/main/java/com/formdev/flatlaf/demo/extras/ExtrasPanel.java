@@ -18,8 +18,10 @@ package com.formdev.flatlaf.demo.extras;
 
 import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
+import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import net.miginfocom.swing.*;
+import java.awt.*;
 
 /**
  * @author Karl Tauber
@@ -27,6 +29,8 @@ import net.miginfocom.swing.*;
 public class ExtrasPanel
 	extends JPanel
 {
+	public int counter = 0;
+
 	public ExtrasPanel() {
 		initComponents();
 
@@ -69,6 +73,12 @@ public class ExtrasPanel
 		label2 = new JLabel();
 		svgIconsPanel = new JPanel();
 		label3 = new JLabel();
+		separator1 = new JSeparator();
+		label5 = new JLabel();
+		label6 = new JLabel();
+		label7 = new JLabel();
+		rainbowIcon = new JLabel();
+		toggleButton1 = new JToggleButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -79,6 +89,9 @@ public class ExtrasPanel
 			"[left]",
 			// rows
 			"[]para" +
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]"));
@@ -119,7 +132,53 @@ public class ExtrasPanel
 		//---- label3 ----
 		label3.setText("The icons may change colors when switching to another theme.");
 		add(label3, "cell 1 3 2 1");
+
+		add(separator1, "cell 1 4, grow");
+
+		//---- label5 ----
+		label5.setText("Color filters can be also applied to icons. Globally or for each instance.");
+		add(label5, "cell 1 5");
+
+		//---- label6 ----
+		label6.setText( "Rainbow color filter" );
+		add(label6, "cell 1 6");
+
+		//---- rainbowIcon ----
+		rainbowIcon = createRainbowIcon("informationDialog.svg");
+		add(rainbowIcon, "cell 1 6");
+
+		//---- label7 ----
+		label7.setText( "Global icon color filter" );
+		add(label7, "cell 1 7");
+
+		// ---- button1 ----
+		toggleButton1.setText( "Toggle red" );
+		add(toggleButton1, "cell 1 7");
+
+		// ---- toggleButton1 ----
+		toggleButton1.addActionListener( (e) -> {
+			if (toggleButton1.isSelected())
+				FlatSVGIcon.ColorFilter.getInstance().setFilter( color -> Color.RED );
+			else
+				FlatSVGIcon.ColorFilter.getInstance().setFilter( null );
+			SwingUtilities.getRootPane( toggleButton1 ).repaint();
+		} );
+
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
+	}
+
+	private JLabel createRainbowIcon(String name) {
+		FlatSVGIcon rainbowIcon = new FlatSVGIcon( "com/formdev/flatlaf/demo/extras/svg/" + name);
+		rainbowIcon.setFilter( new ColorFilter( (color) -> {
+			counter+=1;
+			counter%=255;
+			return Color.getHSBColor(counter/255f, 1, 1);
+		}) );
+		JLabel label = new JLabel(rainbowIcon);
+		new Timer(30, (e) -> {
+			label.repaint();
+		}).start();
+		return label;
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
@@ -130,5 +189,11 @@ public class ExtrasPanel
 	private JLabel label2;
 	private JPanel svgIconsPanel;
 	private JLabel label3;
+	private JLabel label5;
+	private JLabel label6;
+	private JLabel label7;
+	private JSeparator separator1;
+	private JLabel rainbowIcon;
+	private JToggleButton toggleButton1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
