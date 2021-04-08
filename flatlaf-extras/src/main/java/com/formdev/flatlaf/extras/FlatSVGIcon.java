@@ -66,6 +66,8 @@ public class FlatSVGIcon
 	private final boolean disabled;
 	private final ClassLoader classLoader;
 
+	private RGBImageFilter userFilter = null;
+
 	private SVGDiagram diagram;
 	private boolean dark;
 
@@ -166,6 +168,19 @@ public class FlatSVGIcon
 		this.height = height;
 		this.scale = scale;
 		this.disabled = disabled;
+	}
+
+	/**
+	 * Sets an RGBImageFilter to be used when painting the icon.
+	 * For simple RGB modifications you can use the {@link FlatRGBFilter}.
+	 * @param filter
+	 */
+	public void setFilter(RGBImageFilter filter) {
+		this.userFilter = filter;
+	}
+
+	public RGBImageFilter getFilter() {
+		return userFilter;
 	}
 
 	/**
@@ -303,7 +318,7 @@ public class FlatSVGIcon
 				: GrayFilter.createDisabledIconFilter( dark );
 		}
 
-		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), ColorFilter.getInstance(), grayFilter );
+		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), ColorFilter.getInstance(), grayFilter, this.userFilter );
 
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
@@ -457,11 +472,13 @@ public class FlatSVGIcon
 	{
 		private final ColorFilter colorFilter;
 		private final RGBImageFilter grayFilter;
+		private final RGBImageFilter userFilter;
 
-		public GraphicsFilter( Graphics2D delegate, ColorFilter colorFilter, RGBImageFilter grayFilter ) {
+		public GraphicsFilter( Graphics2D delegate, ColorFilter colorFilter, RGBImageFilter grayFilter, RGBImageFilter userFilter) {
 			super( delegate );
 			this.colorFilter = colorFilter;
 			this.grayFilter = grayFilter;
+			this.userFilter = userFilter;
 		}
 
 		@Override
@@ -477,6 +494,11 @@ public class FlatSVGIcon
 		}
 
 		private Color filterColor( Color color ) {
+			if( userFilter != null ) {
+				int oldRGB = color.getRGB();
+				int newRGB = userFilter.filterRGB( 0, 0, oldRGB );
+				color = (newRGB != oldRGB) ? new Color( newRGB, true ) : color;
+			}
 			if( colorFilter != null )
 				color = colorFilter.filter( color );
 			if( grayFilter != null ) {
