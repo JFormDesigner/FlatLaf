@@ -331,7 +331,7 @@ public class FlatSVGIcon
 				: GrayFilter.createDisabledIconFilter( dark );
 		}
 
-		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), ColorFilter.getInstance(), grayFilter, this.userColorFilter );
+		Graphics2D g2 = new GraphicsFilter( (Graphics2D) g.create(), ColorFilter.getInstance(), this.userColorFilter, grayFilter );
 
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
@@ -438,7 +438,7 @@ public class FlatSVGIcon
 	 * <br>
 	 * When filtering a color. Mappings are applied first, then an rgb color filter is applied.<br>
 	 * <br>
-	 * Global {@link FlatSVGIcon} ColorFilter can be retrieved using the {@link ColorFilter#getInstance()} methods.
+	 * Global {@link FlatSVGIcon} ColorFilter can be retrieved using the {@link ColorFilter#getInstance()} method.
  	 *
 	 * @see ColorFilter#ColorFilter(Function)
 	 * @see ColorFilter#ColorFilter(boolean)
@@ -455,17 +455,9 @@ public class FlatSVGIcon
 		private Function<Color, Color> colorFilter = null;
 
 		/**
-		 * Returns the global ColorFilter instance. If one doesn't exist, a new one is created.
+		 * Returns the global ColorFilter instance. If one doesn't exist, a new one is created with default color maps.
 		 */
 		public static ColorFilter getInstance() {
-			return(getInstance(true));
-		}
-
-		/**
-		 * Returns the global ColorFilter instance. If one doesn't exist, a new one is created.
-		 * @param createDefaultColorMaps If true, default FlatLaf color maps are created.
-		 */
-		public static ColorFilter getInstance(boolean createDefaultColorMaps) {
 			if( instance == null )
 				instance = new ColorFilter();
 			return instance;
@@ -490,7 +482,7 @@ public class FlatSVGIcon
 		}
 
 		/**
-		 * Creates a color modifying function that changes painted colors.<br>
+		 * Creates a color filter with a color modifying function that changes painted colors.<br>
 		 * The {@link Function} gets passed the original color and returns a modified one.
 		 * <br>
 		 * Examples:
@@ -545,7 +537,7 @@ public class FlatSVGIcon
 		}
 
 		/**
-		 * Removes all color mappings.
+		 * Removes all current color mappings.
 		 */
 		public void removeAll() {
 			for ( Color from : color2colorMap.keySet()) {
@@ -578,6 +570,19 @@ public class FlatSVGIcon
 				? new Color( (newColor.getRGB() & 0x00ffffff) | (color.getRGB() & 0xff000000) )
 				: newColor;
 		}
+
+		/**
+		 * Creates a color modifying function that changes color brightness, contrast and alpha.
+		 * Can be set to a {@link ColorFilter} using {@link ColorFilter#setFilter(Function)}.
+		 *
+		 * @param brightness in range [-100..100] where 0 has no effect
+		 * @param contrast in range [-100..100] where 0 has no effect
+		 * @param alpha in range [0..100] where 0 is transparent, 100 has no effect
+		 * @see GrayFilter
+		 */
+		public static Function<Color, Color> createGrayFilterFunction(int brightness, int contrast, int alpha) {
+			return color -> new Color(new GrayFilter().filterRGB( 0, 0, color.getRGB() ));
+		}
 	}
 
 	//---- class GraphicsFilter -----------------------------------------------
@@ -589,11 +594,12 @@ public class FlatSVGIcon
 		private final RGBImageFilter grayFilter;
 		private final ColorFilter userFilter;
 
-		public GraphicsFilter( Graphics2D delegate, ColorFilter colorFilter, RGBImageFilter grayFilter,ColorFilter userFilter) {
+		public GraphicsFilter( Graphics2D delegate, ColorFilter globalColorFilter, ColorFilter userColorFilter,
+			RGBImageFilter grayFilter ) {
 			super( delegate );
-			this.colorFilter = colorFilter;
+			this.colorFilter = globalColorFilter;
 			this.grayFilter = grayFilter;
-			this.userFilter = userFilter;
+			this.userFilter = userColorFilter;
 		}
 
 		@Override

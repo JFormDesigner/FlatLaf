@@ -20,6 +20,7 @@ import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.util.GrayFilter;
 import net.miginfocom.swing.*;
 import java.awt.*;
 
@@ -152,13 +153,13 @@ public class ExtrasPanel
 		add(label7, "cell 1 7");
 
 		// ---- button1 ----
-		toggleButton1.setText( "Toggle red" );
+		toggleButton1.setText( "Toggle brighter" );
 		add(toggleButton1, "cell 1 7");
 
 		// ---- toggleButton1 ----
 		toggleButton1.addActionListener( (e) -> {
 			if (toggleButton1.isSelected())
-				FlatSVGIcon.ColorFilter.getInstance().setFilter( color -> Color.RED );
+				FlatSVGIcon.ColorFilter.getInstance().setFilter( color -> color.brighter().brighter() );
 			else
 				FlatSVGIcon.ColorFilter.getInstance().setFilter( null );
 			SwingUtilities.getRootPane( toggleButton1 ).repaint();
