@@ -107,6 +107,12 @@ public class FlatInternalFrameTest
 		frameCount++;
 	}
 
+	private void customDesktopManagerChanged() {
+		desktopPane.setDesktopManager( customDesktopManagerCheckBox.isSelected()
+			? new CustomDesktopManager()
+			: null );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		desktopPane = new JDesktopPane();
@@ -120,6 +126,8 @@ public class FlatInternalFrameTest
 		titleLabel = new JLabel();
 		titleField = new JTextField();
 		createFrameButton = new JButton();
+		panel1 = new JPanel();
+		customDesktopManagerCheckBox = new JCheckBox();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -127,7 +135,8 @@ public class FlatInternalFrameTest
 			// columns
 			"[grow,fill]",
 			// rows
-			"[grow,fill]"));
+			"[grow,fill]" +
+			"[]"));
 
 		//======== desktopPane ========
 		{
@@ -194,6 +203,22 @@ public class FlatInternalFrameTest
 			palette.setBounds(15, 25, 275, 185);
 		}
 		add(desktopPane, "cell 0 0,width 600,height 600");
+
+		//======== panel1 ========
+		{
+			panel1.setLayout(new MigLayout(
+				"insets 0,hidemode 3",
+				// columns
+				"[fill]",
+				// rows
+				"[]"));
+
+			//---- customDesktopManagerCheckBox ----
+			customDesktopManagerCheckBox.setText("custom desktop manager");
+			customDesktopManagerCheckBox.addActionListener(e -> customDesktopManagerChanged());
+			panel1.add(customDesktopManagerCheckBox, "cell 0 0");
+		}
+		add(panel1, "cell 0 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		if( UIScale.getUserScaleFactor() > 1 )
@@ -212,5 +237,37 @@ public class FlatInternalFrameTest
 	private JLabel titleLabel;
 	private JTextField titleField;
 	private JButton createFrameButton;
+	private JPanel panel1;
+	private JCheckBox customDesktopManagerCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class CustomDesktopManager -----------------------------------------
+
+	private static class CustomDesktopManager
+		extends DefaultDesktopManager
+	{
+		@Override
+		public void activateFrame( JInternalFrame f ) {
+			System.out.println( "activateFrame: " + f.getTitle() );
+			super.activateFrame( f );
+		}
+
+		@Override
+		public void deactivateFrame( JInternalFrame f ) {
+			System.out.println( "deactivateFrame: " + f.getTitle() );
+			super.deactivateFrame( f );
+		}
+
+		@Override
+		public void iconifyFrame( JInternalFrame f ) {
+			System.out.println( "iconifyFrame: " + f.getTitle() );
+			super.iconifyFrame( f );
+		}
+
+		@Override
+		public void deiconifyFrame( JInternalFrame f ) {
+			System.out.println( "deiconifyFrame: " + f.getTitle() );
+			super.deiconifyFrame( f );
+		}
+	}
 }

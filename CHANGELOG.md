@@ -8,6 +8,11 @@ FlatLaf Change Log
 - Button and ToggleButton: Support borderless button style (set client property
   `JButton.buttonType` to `borderless`). (PR #276)
 
+#### Fixed bugs
+
+- DesktopPane: Fixed empty minimized icon when using a custom desktop manager.
+  (PR #294)
+
 
 ## 1.1.2
 
