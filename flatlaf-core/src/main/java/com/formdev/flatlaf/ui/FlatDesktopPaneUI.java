@@ -16,7 +16,10 @@
 
 package com.formdev.flatlaf.ui;
 
-import javax.swing.*;
+import javax.swing.DefaultDesktopManager;
+import javax.swing.DesktopManager;
+import javax.swing.JComponent;
+import javax.swing.JInternalFrame;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicDesktopPaneUI;
@@ -40,26 +43,35 @@ public class FlatDesktopPaneUI
 
 	@Override
 	protected void installDesktopManager() {
-		// Check current installed desktop manager
-		// to avoid recursive call with property change event (will fire a stack overflow)
-		// Do not handle install if already installed
-		DesktopManager old = desktop.getDesktopManager();
-		if (old instanceof FlatDesktopManager) return;
+		// Check current installed desktop manager to avoid recursive call
+		// with property change event (will fire a stack overflow).
+		// Do not handle install if already installed.
+		DesktopManager dm = desktop.getDesktopManager();
+		if( dm instanceof FlatDesktopManager || dm instanceof FlatWrapperDesktopManager )
+			return;
 
-		if( old == null ) {
-			// default version
-			desktopManager = new FlatDesktopManager();
+		desktopManager = (dm != null)
+			? new FlatWrapperDesktopManager( dm )
+			: new FlatDesktopManager();
+		desktop.setDesktopManager( desktopManager );
+	}
 
-		} else {
-			// create the wrapper version of the desktop manager
-			desktopManager = new FlatWrapperDesktopManager(old);
+	@Override
+	protected void uninstallDesktopManager() {
+		// uninstall wrapper
+		DesktopManager dm = desktop.getDesktopManager();
+		if( dm instanceof FlatWrapperDesktopManager )
+			desktop.setDesktopManager( ((FlatWrapperDesktopManager)dm).parent );
 
-		}
-		desktop.setDesktopManager(desktopManager);
+		super.uninstallDesktopManager();
+	}
 
+	private static void updateDockIcon( JInternalFrame f ) {
+		((FlatDesktopIconUI)f.getDesktopIcon().getUI()).updateDockIcon();
 	}
 
 	//---- class FlatDesktopManager -------------------------------------------
+
 	private class FlatDesktopManager
 		extends DefaultDesktopManager
 		implements UIResource
@@ -68,96 +80,98 @@ public class FlatDesktopPaneUI
 		public void iconifyFrame( JInternalFrame f ) {
 			super.iconifyFrame( f );
 
-			((FlatDesktopIconUI)f.getDesktopIcon().getUI()).updateDockIcon();
+			updateDockIcon( f );
 		}
 	}
 
-	//---- class for already installed desktop manager to use the flat desktop manager features
+	//---- class FlatWrapperDesktopManager ------------------------------------
+
+	/**
+	 * For already installed desktop manager to use the flat desktop manager features.
+	 */
 	private class FlatWrapperDesktopManager
-		extends FlatDesktopManager
-
+		implements DesktopManager
 	{
-		private DesktopManager parent = null;
+		private final DesktopManager parent;
 
-		private FlatWrapperDesktopManager(DesktopManager parent) {
-			super();
+		private FlatWrapperDesktopManager( DesktopManager parent ) {
 			this.parent = parent;
-
 		}
 
 		@Override
-		public void openFrame(JInternalFrame f) {
+		public void openFrame( JInternalFrame f ) {
 			parent.openFrame( f );
 		}
 
 		@Override
-		public void closeFrame(JInternalFrame f) {
+		public void closeFrame( JInternalFrame f ) {
 			parent.closeFrame( f );
 		}
 
 		@Override
-		public void maximizeFrame(JInternalFrame f) {
+		public void maximizeFrame( JInternalFrame f ) {
 			parent.maximizeFrame( f );
 		}
 
 		@Override
-		public void minimizeFrame(JInternalFrame f) {
+		public void minimizeFrame( JInternalFrame f ) {
 			parent.minimizeFrame( f );
 		}
 
 		@Override
-		public void activateFrame(JInternalFrame f) {
+		public void activateFrame( JInternalFrame f ) {
 			parent.activateFrame( f );
 		}
 
 		@Override
-		public void deactivateFrame(JInternalFrame f) {
+		public void deactivateFrame( JInternalFrame f ) {
 			parent.deactivateFrame( f );
 		}
 
 		@Override
 		public void iconifyFrame( JInternalFrame f ) {
-			super.iconifyFrame( f );
+			parent.iconifyFrame( f );
 
+			updateDockIcon( f );
 		}
 
 		@Override
 		public void deiconifyFrame( JInternalFrame f ) {
-			super.deiconifyFrame( f );
+			parent.deiconifyFrame( f );
 		}
 
 		@Override
-		public void beginDraggingFrame(JComponent f) {
+		public void beginDraggingFrame( JComponent f ) {
 			parent.beginDraggingFrame( f );
 		}
 
 		@Override
-		public void dragFrame(JComponent f, int newX, int newY) {
+		public void dragFrame( JComponent f, int newX, int newY ) {
 			parent.dragFrame( f, newX, newY );
 		}
 
 		@Override
-		public void endDraggingFrame(JComponent f) {
+		public void endDraggingFrame( JComponent f ) {
 			parent.endDraggingFrame( f );
 		}
 
 		@Override
-		public void beginResizingFrame(JComponent f, int direction) {
+		public void beginResizingFrame( JComponent f, int direction ) {
 			parent.beginResizingFrame( f, direction );
 		}
 
 		@Override
-		public void resizeFrame(JComponent f, int newX, int newY, int newWidth, int newHeight) {
+		public void resizeFrame( JComponent f, int newX, int newY, int newWidth, int newHeight ) {
 			parent.resizeFrame( f, newX, newY, newWidth, newHeight );
 		}
 
 		@Override
-		public void endResizingFrame(JComponent f) {
+		public void endResizingFrame( JComponent f ) {
 			parent.endResizingFrame( f );
 		}
 
 		@Override
-		public void setBoundsForFrame(JComponent f, int newX, int newY, int newWidth, int newHeight) {
+		public void setBoundsForFrame( JComponent f, int newX, int newY, int newWidth, int newHeight ) {
 			parent.setBoundsForFrame( f, newX, newY, newWidth, newHeight );
 		}
 	}

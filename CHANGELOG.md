@@ -7,6 +7,11 @@ FlatLaf Change Log
 
 - Fixed crash when running in Webswing. (issue #290)
 
+#### Fixed bugs
+
+- DesktopPane: Fixed empty minimized icon when using a custom desktop manager.
+  (PR #294)
+
 
 ## 1.1.1
 
