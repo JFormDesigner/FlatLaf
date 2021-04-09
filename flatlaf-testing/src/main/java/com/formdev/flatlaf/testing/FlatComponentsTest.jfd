@@ -156,6 +156,13 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 1 2 1"
 			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button25"
+				"icon": &SwingIcon0 new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
+				"$client.JButton.buttonType": "borderLess"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 1 2 1"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "toggleButtonLabel"
 				"text": "JToggleButton:"
@@ -260,6 +267,14 @@ new FormModel {
 				name: "toggleButton18"
 				"text": "Empty border"
 				"border": #EmptyBorder0
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 2 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "toggleButton22"
+				"icon": &SwingIcon0 new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
+				"selected": true
+				"$client.JButton.buttonType": "borderLess"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 2 2 1"
 			} )

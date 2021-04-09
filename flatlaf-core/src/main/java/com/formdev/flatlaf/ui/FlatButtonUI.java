@@ -285,6 +285,10 @@ public class FlatButtonUI
 			(c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON ));
 	}
 
+	static boolean isBorderlessButton( Component c ) {
+		return c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_BORDERLESS );
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		// fill background if opaque to avoid garbage if user sets opaque to true
@@ -332,7 +336,7 @@ public class FlatButtonUI
 
 			// paint shadow
 			Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-			if( !isToolBarButton && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
+			if( !isToolBarButton && !isBorderlessButton( c ) && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
 				!(isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c )) && c.isEnabled() )
 			{
 				g2.setColor( shadowColor );
@@ -388,7 +392,7 @@ public class FlatButtonUI
 	}
 
 	protected Color getBackground( JComponent c ) {
-		boolean toolBarButton = isToolBarButton( c );
+		boolean toolBarButton = isToolBarButton( c ) || isBorderlessButton( c );
 
 		// selected state
 		if( ((AbstractButton)c).isSelected() ) {
@@ -461,7 +465,7 @@ public class FlatButtonUI
 		if( !c.isEnabled() )
 			return disabledText;
 
-		if( ((AbstractButton)c).isSelected() && !isToolBarButton( c ) )
+		if( ((AbstractButton)c).isSelected() && !(isToolBarButton( c ) || isBorderlessButton( c )) )
 			return selectedForeground;
 
 		// use component foreground if explicitly set
