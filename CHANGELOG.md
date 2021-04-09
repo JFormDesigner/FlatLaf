@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.2-SNAPSHOT
+
+#### New features and improvements
+
+- Button and ToggleButton: Support borderless button style (set client property
+  `JButton.buttonType` to `borderless`). (PR #276)
+
+
 ## 1.1.2
 
 #### New features and improvements

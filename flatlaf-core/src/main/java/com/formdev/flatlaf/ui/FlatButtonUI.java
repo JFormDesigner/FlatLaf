@@ -336,8 +336,9 @@ public class FlatButtonUI
 
 			// paint shadow
 			Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-			if( !isToolBarButton && !isBorderlessButton( c ) && shadowColor != null && shadowWidth > 0 && focusWidth > 0 &&
-				!(isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c )) && c.isEnabled() )
+			if( shadowColor != null && shadowWidth > 0 && focusWidth > 0 && c.isEnabled() &&
+				!isToolBarButton && !isBorderlessButton( c ) &&
+				!(isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c )) )
 			{
 				g2.setColor( shadowColor );
 				g2.fill( new RoundRectangle2D.Float( focusWidth, focusWidth + UIScale.scale( (float) shadowWidth ),
