@@ -581,7 +581,7 @@ public class FlatSVGIcon
 		 * @see GrayFilter
 		 */
 		public static Function<Color, Color> createGrayFilterFunction(int brightness, int contrast, int alpha) {
-			return color -> new Color(new GrayFilter().filterRGB( 0, 0, color.getRGB() ));
+			return color -> new Color(new GrayFilter(brightness, contrast, alpha).filterRGB( 0, 0, color.getRGB() ));
 		}
 	}
 
