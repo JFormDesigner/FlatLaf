@@ -246,13 +246,22 @@ public class FlatDesktopIconUI
 			}
 		}
 
+		// layout internal frame title pane, which was recreated when switching Laf
+		// (directly invoke doLayout() because frame.validate() does not work here
+		// because frame is not displayable)
+		if( !frame.isValid() )
+			frame.doLayout();
+		for( Component c : frame.getComponents() ) {
+			if( !c.isValid() )
+				c.doLayout();
+		}
+
 		// paint internal frame to buffered image
 		int frameWidth = Math.max( frame.getWidth(), 1 );
 		int frameHeight = Math.max( frame.getHeight(), 1 );
 		BufferedImage frameImage = new BufferedImage( frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB );
 		Graphics2D g = frameImage.createGraphics();
 		try {
-			//TODO fix missing internal frame header when switching LaF
 			frame.paint( g );
 		} finally {
 			g.dispose();

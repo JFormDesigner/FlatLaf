@@ -16,8 +16,9 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
-- DesktopPane: Fixed empty minimized icon when using a custom desktop manager.
-  (PR #294)
+- DesktopPane:
+  - Fixed empty minimized icon when using a custom desktop manager. (PR #294)
+  - Fixed incomplete minimized icon when switching LaF.
 
 
 ## 1.1.2
