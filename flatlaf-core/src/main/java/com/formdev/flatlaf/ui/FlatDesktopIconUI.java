@@ -45,6 +45,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicDesktopIconUI;
+import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -279,6 +280,27 @@ public class FlatDesktopIconUI
 
 		// scale preview
 		Image previewImage = frameImage.getScaledInstance( previewWidth, previewHeight, Image.SCALE_SMOOTH );
+		if( MultiResolutionImageSupport.isAvailable() ) {
+			// On HiDPI screens, create preview images for 1x, 2x and current scale factor.
+			// The icon then chooses the best resolution for painting, which is usually
+			// the one for the current scale factor. But if changing scale factor or
+			// moving window to another screen with different scale factor, then another
+			// resolution may be used because the preview icon is not updated.
+			Image previewImage2x = frameImage.getScaledInstance( previewWidth * 2, previewHeight * 2, Image.SCALE_SMOOTH );
+			double scaleFactor = UIScale.getSystemScaleFactor( desktopIcon.getGraphicsConfiguration() );
+			if( scaleFactor != 1 && scaleFactor != 2 ) {
+				Image previewImageCurrent = frameImage.getScaledInstance(
+					(int) Math.round( previewWidth * scaleFactor ),
+					(int) Math.round( previewHeight * scaleFactor ),
+					Image.SCALE_SMOOTH );
+
+				// the images must be ordered by resolution
+				previewImage = (scaleFactor < 2)
+					? MultiResolutionImageSupport.create( 0, previewImage, previewImageCurrent, previewImage2x )
+					: MultiResolutionImageSupport.create( 0, previewImage, previewImage2x, previewImageCurrent );
+			} else
+				previewImage = MultiResolutionImageSupport.create( 0, previewImage, previewImage2x );
+		}
 		dockIcon.setIcon( new ImageIcon( previewImage ) );
 	}
 

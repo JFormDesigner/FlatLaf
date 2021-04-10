@@ -8,7 +8,7 @@ FlatLaf Change Log
 - Button and ToggleButton: Support borderless button style (set client property
   `JButton.buttonType` to `borderless`). (PR #276)
 - DesktopPane: Improved layout of iconified internal frames in dock:
-  - Always placed in bottom left of desktop pane.
+  - Always placed at bottom-left in desktop pane.
   - Newly iconified frames are added to the right side of the dock.
   - If frame is deiconified, dock is compacted (icons move to the left).
   - If dock is wider than desktop width, additional rows are used.
@@ -17,8 +17,12 @@ FlatLaf Change Log
 #### Fixed bugs
 
 - DesktopPane:
-  - Fixed empty minimized icon when using a custom desktop manager. (PR #294)
-  - Fixed incomplete minimized icon when switching LaF.
+  - Fixed missing preview of iconified internal frames in dock when using a
+    custom desktop manager. (PR #294)
+  - Fixed incomplete preview of iconified internal frames in dock when switching
+    LaF.
+  - On HiDPI screens, use high-resolution images for preview of iconified
+    internal frames in dock.
 
 
 ## 1.1.2
