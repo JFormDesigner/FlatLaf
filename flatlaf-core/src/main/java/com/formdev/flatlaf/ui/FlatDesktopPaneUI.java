@@ -29,6 +29,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JInternalFrame.JDesktopIcon;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicDesktopIconUI;
 import javax.swing.plaf.basic.BasicDesktopPaneUI;
 
 /**
@@ -181,9 +182,21 @@ public class FlatDesktopPaneUI
 
 	/**
 	 * For already installed desktop manager to use the flat desktop manager features.
+	 * <p>
+	 * Although this class extends {@link DefaultDesktopManager}, it does not invoke
+	 * any method of the superclass.
+	 * All methods are delegated to parent desktop manager.
+	 * <p>
+	 * This class extends {@link DefaultDesktopManager}
+	 * (instead of implementing {@link DesktopManager}),
+	 * because otherwise {@link DesktopManager#iconifyFrame(JInternalFrame)}
+	 * and {@link DesktopManager#deiconifyFrame(JInternalFrame)} are not invoked
+	 * from {@link BasicDesktopIconUI#installUI(JComponent)}
+	 * and {@link BasicDesktopIconUI#uninstallUI(JComponent)}
+	 * when switching Laf.
 	 */
 	private class FlatWrapperDesktopManager
-		implements DesktopManager
+		extends DefaultDesktopManager
 	{
 		private final DesktopManager parent;
 
