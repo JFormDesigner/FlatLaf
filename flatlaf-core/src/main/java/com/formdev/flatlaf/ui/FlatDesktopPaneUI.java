@@ -16,10 +16,17 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultDesktopManager;
 import javax.swing.DesktopManager;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
+import javax.swing.JInternalFrame.JDesktopIcon;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicDesktopPaneUI;
@@ -37,8 +44,41 @@ import javax.swing.plaf.basic.BasicDesktopPaneUI;
 public class FlatDesktopPaneUI
 	extends BasicDesktopPaneUI
 {
+	private ComponentListener componentListener;
+
+	// list of iconified internal frames, which define the order of icons in dock
+	private List<JInternalFrame> iconifiedFrames;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatDesktopPaneUI();
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		iconifiedFrames = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		componentListener = new ComponentAdapter() {
+			@Override
+			public void componentResized( ComponentEvent e ) {
+				layoutDesktopIcons();
+			}
+		};
+		desktop.addComponentListener( componentListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		desktop.removeComponentListener( componentListener );
+		componentListener = null;
 	}
 
 	@Override
@@ -66,8 +106,50 @@ public class FlatDesktopPaneUI
 		super.uninstallDesktopManager();
 	}
 
-	private static void updateDockIcon( JInternalFrame f ) {
+	private void layoutDesktopIcons() {
+		if( iconifiedFrames == null || iconifiedFrames.isEmpty() )
+			return;
+
+		Dimension desktopSize = desktop.getSize();
+		int x = 0;
+		int y = desktopSize.height;
+		int rowHeight = 0;
+
+		for( JInternalFrame f : iconifiedFrames ) {
+			JDesktopIcon icon = f.getDesktopIcon();
+			Dimension iconSize = icon.getPreferredSize();
+
+			if( x + iconSize.width > desktopSize.width ) {
+				// new row
+				x = 0;
+				y -= rowHeight;
+				rowHeight = 0;
+			}
+
+			icon.setLocation( x, y - iconSize.height );
+
+			x += iconSize.width;
+			rowHeight = Math.max( iconSize.height, rowHeight );
+		}
+	}
+
+	private void addToDock( JInternalFrame f ) {
+		if( iconifiedFrames == null )
+			iconifiedFrames = new ArrayList<>();
+
+		if( !iconifiedFrames.contains( f ) )
+			iconifiedFrames.add( f );
+		layoutDesktopIcons();
+
 		((FlatDesktopIconUI)f.getDesktopIcon().getUI()).updateDockIcon();
+	}
+
+	private void removeFromDock( JInternalFrame f ) {
+		if( iconifiedFrames == null )
+			return;
+
+		iconifiedFrames.remove( f );
+		layoutDesktopIcons();
 	}
 
 	//---- class FlatDesktopManager -------------------------------------------
@@ -79,8 +161,19 @@ public class FlatDesktopPaneUI
 		@Override
 		public void iconifyFrame( JInternalFrame f ) {
 			super.iconifyFrame( f );
+			addToDock( f );
+		}
 
-			updateDockIcon( f );
+		@Override
+		public void deiconifyFrame( JInternalFrame f ) {
+			super.deiconifyFrame( f );
+			removeFromDock( f );
+		}
+
+		@Override
+		public void closeFrame( JInternalFrame f ) {
+			super.closeFrame( f );
+			removeFromDock( f );
 		}
 	}
 
@@ -106,6 +199,7 @@ public class FlatDesktopPaneUI
 		@Override
 		public void closeFrame( JInternalFrame f ) {
 			parent.closeFrame( f );
+			removeFromDock( f );
 		}
 
 		@Override
@@ -131,13 +225,13 @@ public class FlatDesktopPaneUI
 		@Override
 		public void iconifyFrame( JInternalFrame f ) {
 			parent.iconifyFrame( f );
-
-			updateDockIcon( f );
+			addToDock( f );
 		}
 
 		@Override
 		public void deiconifyFrame( JInternalFrame f ) {
 			parent.deiconifyFrame( f );
+			removeFromDock( f );
 		}
 
 		@Override
