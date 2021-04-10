@@ -47,7 +47,7 @@ public class FlatDesktopPaneUI
 	private ComponentListener componentListener;
 
 	// list of iconified internal frames, which define the order of icons in dock
-	private List<JInternalFrame> iconifiedFrames;
+	protected List<JInternalFrame> iconifiedFrames;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatDesktopPaneUI();
@@ -67,7 +67,7 @@ public class FlatDesktopPaneUI
 		componentListener = new ComponentAdapter() {
 			@Override
 			public void componentResized( ComponentEvent e ) {
-				layoutDesktopIcons();
+				layoutDock();
 			}
 		};
 		desktop.addComponentListener( componentListener );
@@ -106,7 +106,7 @@ public class FlatDesktopPaneUI
 		super.uninstallDesktopManager();
 	}
 
-	private void layoutDesktopIcons() {
+	protected void layoutDock() {
 		if( iconifiedFrames == null || iconifiedFrames.isEmpty() )
 			return;
 
@@ -133,23 +133,23 @@ public class FlatDesktopPaneUI
 		}
 	}
 
-	private void addToDock( JInternalFrame f ) {
+	protected void addToDock( JInternalFrame f ) {
 		if( iconifiedFrames == null )
 			iconifiedFrames = new ArrayList<>();
 
 		if( !iconifiedFrames.contains( f ) )
 			iconifiedFrames.add( f );
-		layoutDesktopIcons();
+		layoutDock();
 
 		((FlatDesktopIconUI)f.getDesktopIcon().getUI()).updateDockIcon();
 	}
 
-	private void removeFromDock( JInternalFrame f ) {
+	protected void removeFromDock( JInternalFrame f ) {
 		if( iconifiedFrames == null )
 			return;
 
 		iconifiedFrames.remove( f );
-		layoutDesktopIcons();
+		layoutDock();
 	}
 
 	//---- class FlatDesktopManager -------------------------------------------
