@@ -68,6 +68,8 @@ public class FlatAllIJThemes
 		new FlatIJLookAndFeelInfo( "Dracula Contrast (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaContrastIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "GitHub (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme", false ),
 		new FlatIJLookAndFeelInfo( "GitHub Contrast (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubContrastIJTheme", false ),
+		new FlatIJLookAndFeelInfo( "GitHub Dark (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme", true ),
+		new FlatIJLookAndFeelInfo( "GitHub Dark Contrast (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkContrastIJTheme", true ),
 		new FlatIJLookAndFeelInfo( "Light Owl (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme", false ),
 		new FlatIJLookAndFeelInfo( "Light Owl Contrast (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlContrastIJTheme", false ),
 		new FlatIJLookAndFeelInfo( "Material Darker (Material)", "com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme", true ),

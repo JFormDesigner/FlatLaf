@@ -13,6 +13,7 @@ FlatLaf Change Log
   - If frame is deiconified, dock is compacted (icons move to the left).
   - If dock is wider than desktop width, additional rows are used.
   - If desktop pane is resized, layout of dock is updated.
+- IntelliJ Themes: Added "Material Theme UI Lite / GitHub Dark" theme.
 
 #### Fixed bugs
 

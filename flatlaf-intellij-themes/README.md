@@ -86,6 +86,8 @@ Name | Class
 [Dracula Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatDraculaContrastIJTheme`
 [GitHub (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme`
 [GitHub Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubContrastIJTheme`
+[GitHub Dark (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme`
+[GitHub Dark Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkContrastIJTheme`
 [Light Owl (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme`
 [Light Owl Contrast (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlContrastIJTheme`
 [Material Darker (Material)](https://github.com/mallowigi/material-theme-ui-lite) | `com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme`

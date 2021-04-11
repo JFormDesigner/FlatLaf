@@ -302,6 +302,22 @@
 		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
 		"sourceCodePath": "blob/master/src/main/resources/themes/GitHub Contrast.theme.json"
 	},
+	"material-theme-ui-lite/GitHub Dark.theme.json": {
+		"name": "Material Theme UI Lite / GitHub Dark",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
+		"sourceCodePath": "blob/master/src/main/resources/themes/GitHub Dark.theme.json"
+	},
+	"material-theme-ui-lite/GitHub Dark Contrast.theme.json": {
+		"name": "Material Theme UI Lite / GitHub Dark Contrast",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "material-theme-ui-lite/Material Theme UI Lite.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/mallowigi/material-theme-ui-lite",
+		"sourceCodePath": "blob/master/src/main/resources/themes/GitHub Dark Contrast.theme.json"
+	},
 	"material-theme-ui-lite/Light Owl.theme.json": {
 		"name": "Material Theme UI Lite / Light Owl",
 		"license": "MIT",
