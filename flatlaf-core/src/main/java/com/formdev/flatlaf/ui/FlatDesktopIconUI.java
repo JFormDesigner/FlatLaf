@@ -30,6 +30,7 @@ import java.awt.Point;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -79,9 +80,19 @@ public class FlatDesktopIconUI
 	private JToolTip titleTip;
 	private ActionListener closeListener;
 	private MouseInputListener mouseInputListener;
+	private PropertyChangeListener ancestorListener;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatDesktopIconUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		// update dock icon preview if already iconified
+		if( c.isDisplayable() )
+			updateDockIconPreviewLater();
 	}
 
 	@Override
@@ -140,6 +151,17 @@ public class FlatDesktopIconUI
 		};
 		closeButton.addActionListener( closeListener );
 		closeButton.addMouseListener( mouseInputListener );
+
+		ancestorListener = e -> {
+			if( e.getNewValue() != null ) {
+				// update dock icon preview if desktopIcon is added to desktop (internal frame was iconified)
+				updateDockIconPreviewLater();
+			} else {
+				// remove preview icon to release memory
+				dockIcon.setIcon( null );
+			}
+		};
+		desktopIcon.addPropertyChangeListener( "ancestor", ancestorListener );
 	}
 
 	@Override
@@ -150,6 +172,9 @@ public class FlatDesktopIconUI
 		closeButton.removeMouseListener( mouseInputListener );
 		closeListener = null;
 		mouseInputListener = null;
+
+		desktopIcon.removePropertyChangeListener( "ancestor", ancestorListener );
+		ancestorListener = null;
 	}
 
 	@Override
@@ -247,15 +272,15 @@ public class FlatDesktopIconUI
 		paint( g, c );
 	}
 
-	void updateDockIcon() {
+	private void updateDockIconPreviewLater() {
 		// use invoke later to make sure that components are updated when switching LaF
 		EventQueue.invokeLater( () -> {
 			if( dockIcon != null )
-				updateDockIconLater();
+				updateDockIconPreview();
 		} );
 	}
 
-	private void updateDockIconLater() {
+	protected void updateDockIconPreview() {
 		// make sure that frame is not selected
 		if( frame.isSelected() ) {
 			try {

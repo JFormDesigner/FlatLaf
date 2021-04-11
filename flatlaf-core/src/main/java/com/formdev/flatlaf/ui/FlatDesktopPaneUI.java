@@ -141,8 +141,6 @@ public class FlatDesktopPaneUI
 		if( !iconifiedFrames.contains( f ) )
 			iconifiedFrames.add( f );
 		layoutDock();
-
-		((FlatDesktopIconUI)f.getDesktopIcon().getUI()).updateDockIcon();
 	}
 
 	protected void removeFromDock( JInternalFrame f ) {
