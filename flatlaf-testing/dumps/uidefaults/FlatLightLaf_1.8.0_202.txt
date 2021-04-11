@@ -253,7 +253,7 @@ Desktop.minOnScreenInsets      3,3,3,3    javax.swing.plaf.InsetsUIResource [UI]
 
 #---- DesktopIcon ----
 
-DesktopIcon.background         #c6d2dd    javax.swing.plaf.ColorUIResource [UI]
+DesktopIcon.background         #c6d2dd    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 DesktopIcon.border             [lazy] 4,4,4,4  false    com.formdev.flatlaf.ui.FlatEmptyBorder [UI]
 DesktopIcon.closeIcon          [lazy] 24,24    com.formdev.flatlaf.icons.FlatInternalFrameCloseIcon [UI]
 DesktopIcon.closeSize          20,20    javax.swing.plaf.DimensionUIResource [UI]

@@ -446,7 +446,9 @@ public class FlatTestFrame
 			Color green = dark ? Color.green.darker() : Color.green;
 
 			updateComponentsRecur( content, (c, type) -> {
-				if( type == "view" || type == "tab" || c instanceof JSlider ) {
+				if( type == "view" || type == "tab" || c instanceof JSlider || c instanceof JInternalFrame ) {
+					if( c instanceof JInternalFrame )
+						c = ((JInternalFrame)c).getContentPane();
 					c.setForeground( explicit ? magenta : restoreColor );
 					c.setBackground( explicit ? orange : restoreColor );
 				} else {
@@ -620,7 +622,7 @@ public class FlatTestFrame
 
 	public static void updateComponentsRecur( Container container, BiConsumer<Component, String> action ) {
 		for( Component c : container.getComponents() ) {
-			if( c instanceof JPanel || c instanceof JDesktopPane ) {
+			if( c instanceof JPanel ) {
 				updateComponentsRecur( (Container) c, action );
 				continue;
 			}
@@ -639,6 +641,9 @@ public class FlatTestFrame
 					if( tab != null )
 						action.accept( tab, "tab" );
 				}
+			} else if( c instanceof JDesktopPane ) {
+				for( JInternalFrame f : ((JDesktopPane)c).getAllFrames() )
+					action.accept( f, null );
 			}
 
 			if( c instanceof JToolBar )

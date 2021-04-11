@@ -16,10 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
@@ -33,6 +35,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 import javax.swing.JLabel;
@@ -227,6 +230,21 @@ public class FlatDesktopIconUI
 	@Override
 	public Dimension getMaximumSize( JComponent c ) {
 		return getPreferredSize( c );
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		if( c.isOpaque() ) {
+			// fill background with color derived from desktop pane
+			Color background = c.getBackground();
+			JDesktopPane desktopPane = desktopIcon.getDesktopPane();
+			g.setColor( (desktopPane != null)
+				? FlatUIUtils.deriveColor( background, desktopPane.getBackground() )
+				: background );
+			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+		}
+
+		paint( g, c );
 	}
 
 	void updateDockIcon() {
