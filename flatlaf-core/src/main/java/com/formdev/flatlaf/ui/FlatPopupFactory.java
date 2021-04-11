@@ -24,6 +24,7 @@ import java.awt.Insets;
 import java.awt.MouseInfo;
 import java.awt.Panel;
 import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ComponentEvent;
@@ -216,7 +217,11 @@ public class FlatPopupFactory
 		if( !(contents instanceof JToolTip) || !wasInvokedFromToolTipManager() )
 			return null;
 
-		Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+		PointerInfo pointerInfo = MouseInfo.getPointerInfo();
+		if( pointerInfo == null )
+			return null;
+
+		Point mouseLocation = pointerInfo.getLocation();
 		Dimension tipSize = contents.getPreferredSize();
 
 		// check whether mouse location is within tooltip bounds

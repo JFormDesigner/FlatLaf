@@ -23,6 +23,8 @@ FlatLaf Change Log
     LaF.
   - On HiDPI screens, use high-resolution images for preview of iconified
     internal frames in dock.
+- PopupFactory: Fixed occasional `NullPointerException` in
+  `FlatPopupFactory.fixToolTipLocation()`. (issue #305)
 
 
 ## 1.1.2
