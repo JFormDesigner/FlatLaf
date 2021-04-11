@@ -34,6 +34,7 @@ import javax.swing.UIDefaults;
 import javax.swing.plaf.ColorUIResource;
 import com.formdev.flatlaf.json.Json;
 import com.formdev.flatlaf.json.ParseException;
+import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 
@@ -215,6 +216,12 @@ public class IntelliJTheme
 		if( !uiKeys.contains( "ToggleButton.foreground" ) && uiKeys.contains( "Button.foreground" ) )
 			defaults.put( "ToggleButton.foreground", defaults.get( "Button.foreground" ) );
 
+		// fix DesktopPane background (use Panel.background and make it 5% darker/lighter)
+		Color desktopBackgroundBase = defaults.getColor( "Panel.background" );
+		Color desktopBackground = ColorFunctions.applyFunctions( desktopBackgroundBase,
+			new ColorFunctions.HSLIncreaseDecrease( 2, dark, 5, false, true ) );
+		defaults.put( "Desktop.background", new ColorUIResource( desktopBackground ) );
+
 		// fix List and Table background colors in Material UI Lite themes
 		if( isMaterialUILite ) {
 			defaults.put( "List.background", defaults.get( "Tree.background" ) );
@@ -345,6 +352,10 @@ public class IntelliJTheme
 
 				// replace all values in UI defaults that match the wildcard key
 				for( Object k : defaultsKeysCache ) {
+					if( k.equals( "Desktop.background" ) ||
+						k.equals( "DesktopIcon.background" ) )
+					  continue;
+
 					if( k instanceof String ) {
 						// support replacing of mapped keys
 						// (e.g. set ComboBox.buttonEditableBackground to *.background

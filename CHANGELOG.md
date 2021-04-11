@@ -26,6 +26,8 @@ FlatLaf Change Log
     internal frames in dock.
 - PopupFactory: Fixed occasional `NullPointerException` in
   `FlatPopupFactory.fixToolTipLocation()`. (issue #305)
+- IntelliJ Themes: Fixed background colors of DesktopPane and DesktopIcon in all
+  themes.
 
 
 ## 1.1.2
