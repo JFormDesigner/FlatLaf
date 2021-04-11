@@ -2,13 +2,7 @@
   "name": "Arc Dark Contrast",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Arc Dark.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/arcdark.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Arc Dark.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#8b9eb5",
@@ -138,10 +132,11 @@
       "matchForeground": "#42A5F5",
       "matchSelectionForeground": "#42A5F5",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#8b9eb5",
-      "selectionInactiveBackground": "#8888FF55",
+      "selectionInactiveBackground": "#393f4c",
       "selectionBackground": "#8888FF55",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"

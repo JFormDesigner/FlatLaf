@@ -2,13 +2,7 @@
   "name": "Material Palenight",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Material Palenight.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/palenight.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Material Palenight.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#676E95",
@@ -138,10 +132,11 @@
       "matchForeground": "#ab47bc",
       "matchSelectionForeground": "#ab47bc",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#676E95",
-      "selectionInactiveBackground": "#717CB470",
+      "selectionInactiveBackground": "#444267",
       "selectionBackground": "#717CB470",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"

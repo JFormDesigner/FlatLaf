@@ -2,13 +2,7 @@
   "name": "Solarized Light Contrast",
   "dark": false,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Solarized Light.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/solarlight.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Solarized Light.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#93a1a1",
@@ -138,10 +132,11 @@
       "matchForeground": "#d33682",
       "matchSelectionForeground": "#d33682",
       "nonFocusedState": "false",
+      "selectedForeground": "#002b36",
       "selectedGrayedForeground": "#002b36",
       "selectionGrayForeground": "#002b36",
       "selectionInactiveInfoForeground": "#93a1a1",
-      "selectionInactiveBackground": "#e8dcb6",
+      "selectionInactiveBackground": "#d1cbb8",
       "selectionBackground": "#e8dcb6",
       "selectionForeground": "#002b36",
       "selectionInfoForeground": "#002b36"

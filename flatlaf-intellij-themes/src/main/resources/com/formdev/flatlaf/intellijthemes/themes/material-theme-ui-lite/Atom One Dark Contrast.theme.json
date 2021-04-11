@@ -2,13 +2,7 @@
   "name": "Atom One Dark Contrast",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Atom One Dark.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/onedark.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Atom One Dark.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#979FAD",
@@ -138,10 +132,11 @@
       "matchForeground": "#2979ff",
       "matchSelectionForeground": "#2979ff",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#979FAD",
-      "selectionInactiveBackground": "#4D515D",
+      "selectionInactiveBackground": "#383D48",
       "selectionBackground": "#4D515D",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"

@@ -2,13 +2,7 @@
   "name": "Material Darker",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Material Darker.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/darker.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Material Darker.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#727272",
@@ -138,10 +132,11 @@
       "matchForeground": "#FF9800",
       "matchSelectionForeground": "#FF9800",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#727272",
-      "selectionInactiveBackground": "#404040",
+      "selectionInactiveBackground": "#3F3F3F",
       "selectionBackground": "#404040",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"

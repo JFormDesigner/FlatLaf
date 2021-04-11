@@ -2,13 +2,7 @@
   "name": "Material Oceanic",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Material Oceanic.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/oceanic.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Material Oceanic.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#607D8B",
@@ -138,10 +132,11 @@
       "matchForeground": "#009688",
       "matchSelectionForeground": "#009688",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#607D8B",
-      "selectionInactiveBackground": "#546E7A",
+      "selectionInactiveBackground": "#425B67",
       "selectionBackground": "#546E7A",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"

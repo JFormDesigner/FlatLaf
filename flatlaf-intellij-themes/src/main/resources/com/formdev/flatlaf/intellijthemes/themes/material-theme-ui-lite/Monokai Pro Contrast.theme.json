@@ -2,13 +2,7 @@
   "name": "Monokai Pro Contrast",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Monokai Pro.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/monokai.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Monokai Pro.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#939293",
@@ -138,10 +132,11 @@
       "matchForeground": "#ffd866",
       "matchSelectionForeground": "#ffd866",
       "nonFocusedState": "false",
+      "selectedForeground": "#ffd866",
       "selectedGrayedForeground": "#ffd866",
       "selectionGrayForeground": "#ffd866",
       "selectionInactiveInfoForeground": "#939293",
-      "selectionInactiveBackground": "#6E6C6F",
+      "selectionInactiveBackground": "#5b595c",
       "selectionBackground": "#6E6C6F",
       "selectionForeground": "#ffd866",
       "selectionInfoForeground": "#ffd866"

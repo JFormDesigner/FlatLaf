@@ -2,13 +2,7 @@
   "name": "Atom One Light",
   "dark": false,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Atom One Light.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/onelight.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Atom One Light.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#7f7f7f",
@@ -138,6 +132,7 @@
       "matchForeground": "#2979ff",
       "matchSelectionForeground": "#2979ff",
       "nonFocusedState": "false",
+      "selectedForeground": "#232324",
       "selectedGrayedForeground": "#232324",
       "selectionGrayForeground": "#232324",
       "selectionInactiveInfoForeground": "#7f7f7f",

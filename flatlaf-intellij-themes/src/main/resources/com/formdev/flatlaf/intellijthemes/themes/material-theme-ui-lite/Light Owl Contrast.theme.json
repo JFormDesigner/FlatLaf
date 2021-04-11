@@ -2,13 +2,7 @@
   "name": "Light Owl Contrast",
   "dark": false,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Light Owl.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/lightowl.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Light Owl.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#90A7B2",
@@ -138,10 +132,11 @@
       "matchForeground": "#2AA298",
       "matchSelectionForeground": "#2AA298",
       "nonFocusedState": "false",
+      "selectedForeground": "#403f53",
       "selectedGrayedForeground": "#403f53",
       "selectionGrayForeground": "#403f53",
       "selectionInactiveInfoForeground": "#90A7B2",
-      "selectionInactiveBackground": "#d3e8f8",
+      "selectionInactiveBackground": "#CCCCCC",
       "selectionBackground": "#d3e8f8",
       "selectionForeground": "#403f53",
       "selectionInfoForeground": "#403f53"

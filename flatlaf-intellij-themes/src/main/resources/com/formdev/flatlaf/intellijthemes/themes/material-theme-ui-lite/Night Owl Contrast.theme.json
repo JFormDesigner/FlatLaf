@@ -2,13 +2,7 @@
   "name": "Night Owl Contrast",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Night Owl.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/nightowl.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Night Owl.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#5f7e97",
@@ -138,10 +132,11 @@
       "matchForeground": "#7e57c2",
       "matchSelectionForeground": "#7e57c2",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#5f7e97",
-      "selectionInactiveBackground": "#5f7e9790",
+      "selectionInactiveBackground": "#084d81",
       "selectionBackground": "#5f7e9790",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"

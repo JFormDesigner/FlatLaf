@@ -2,13 +2,7 @@
   "name": "Solarized Dark Contrast",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Solarized Dark.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/solardark.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Solarized Dark.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#586e75",
@@ -138,10 +132,11 @@
       "matchForeground": "#d33682",
       "matchSelectionForeground": "#d33682",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#586e75",
-      "selectionInactiveBackground": "#2E4C52",
+      "selectionInactiveBackground": "#005a6f",
       "selectionBackground": "#2E4C52",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"

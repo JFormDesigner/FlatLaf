@@ -2,13 +2,7 @@
   "name": "Moonlight",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Moonlight.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/moonlight.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Moonlight.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#a9b8e8",
@@ -138,6 +132,7 @@
       "matchForeground": "#74a0f1",
       "matchSelectionForeground": "#74a0f1",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#a9b8e8",

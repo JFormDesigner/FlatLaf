@@ -2,13 +2,7 @@
   "name": "GitHub Contrast",
   "dark": false,
   "author": "Mallowigi",
-  "editorScheme": "/colors/GitHub.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/github.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/GitHub.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#292D31",
@@ -138,10 +132,11 @@
       "matchForeground": "#79CB60",
       "matchSelectionForeground": "#79CB60",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#292D31",
-      "selectionInactiveBackground": "#3A66D150",
+      "selectionInactiveBackground": "#CCE5FF",
       "selectionBackground": "#3A66D150",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"

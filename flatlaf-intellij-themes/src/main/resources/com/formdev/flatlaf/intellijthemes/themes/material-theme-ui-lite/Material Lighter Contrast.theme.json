@@ -2,13 +2,7 @@
   "name": "Material Lighter Contrast",
   "dark": false,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Material Lighter.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/lighter.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Material Lighter.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#94A7B0",
@@ -138,10 +132,11 @@
       "matchForeground": "#00BCD4",
       "matchSelectionForeground": "#00BCD4",
       "nonFocusedState": "false",
+      "selectedForeground": "#546e7a",
       "selectedGrayedForeground": "#546e7a",
       "selectionGrayForeground": "#546e7a",
       "selectionInactiveInfoForeground": "#94A7B0",
-      "selectionInactiveBackground": "#80CBC440",
+      "selectionInactiveBackground": "#E7E7E8",
       "selectionBackground": "#80CBC440",
       "selectionForeground": "#546e7a",
       "selectionInfoForeground": "#546e7a"

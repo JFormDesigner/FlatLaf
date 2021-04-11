@@ -2,13 +2,7 @@
   "name": "Dracula",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Dracula.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/dracula.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Dracula.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#6272A4",
@@ -138,10 +132,11 @@
       "matchForeground": "#FF79C5",
       "matchSelectionForeground": "#FF79C5",
       "nonFocusedState": "false",
+      "selectedForeground": "#8BE9FD",
       "selectedGrayedForeground": "#8BE9FD",
       "selectionGrayForeground": "#8BE9FD",
       "selectionInactiveInfoForeground": "#6272A4",
-      "selectionInactiveBackground": "#44475A",
+      "selectionInactiveBackground": "#6272A4",
       "selectionBackground": "#44475A",
       "selectionForeground": "#8BE9FD",
       "selectionInfoForeground": "#8BE9FD"

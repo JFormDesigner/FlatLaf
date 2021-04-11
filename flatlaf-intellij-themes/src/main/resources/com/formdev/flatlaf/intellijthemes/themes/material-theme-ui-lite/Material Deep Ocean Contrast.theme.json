@@ -2,13 +2,7 @@
   "name": "Material Deep Ocean Contrast",
   "dark": true,
   "author": "Mallowigi",
-  "editorScheme": "/colors/Material Deep Ocean.xml",
-  "emptyFrameBackground": {
-    "anchor": "center",
-    "image": "/walls/deepocean.svg",
-    "fill": "scale",
-    "transparency": 50
-  },
+  "editorScheme": "colors/Material Deep Ocean.xml",
   "ui": {
     "*": {
       "acceleratorSelectionForeground": "#4B526D",
@@ -138,10 +132,11 @@
       "matchForeground": "#84ffff",
       "matchSelectionForeground": "#84ffff",
       "nonFocusedState": "false",
+      "selectedForeground": "#FFFFFF",
       "selectedGrayedForeground": "#FFFFFF",
       "selectionGrayForeground": "#FFFFFF",
       "selectionInactiveInfoForeground": "#4B526D",
-      "selectionInactiveBackground": "#717CB480",
+      "selectionInactiveBackground": "#1F2233",
       "selectionBackground": "#717CB480",
       "selectionForeground": "#FFFFFF",
       "selectionInfoForeground": "#FFFFFF"
