@@ -14,6 +14,7 @@ FlatLaf Change Log
   - If dock is wider than desktop width, additional rows are used.
   - If desktop pane is resized, layout of dock is updated.
 - IntelliJ Themes: Added "Material Theme UI Lite / GitHub Dark" theme.
+- JIDE Common Layer: Improved support for `JideTabbedPane`. (PR #306)
 
 #### Fixed bugs
 
