@@ -308,11 +308,11 @@ public class FlatJideOssContainerTest
 
 	private void tabsClosableChanged() {
 		boolean closable = tabsClosableCheckBox.isSelected() && tabScrollCheckBox.isSelected();
-		boolean onTab = showCloseButtonOnTabCheckBox.isSelected();
+		boolean onTab = closable && showCloseButtonOnTabCheckBox.isSelected();
 
 		for( JideTabbedPane tabbedPane : allTabbedPanes ) {
-			tabbedPane.setShowCloseButton( closable );
 			tabbedPane.setShowCloseButtonOnTab( onTab );
+			tabbedPane.setShowCloseButton( closable );
 		}
 	}
 
@@ -323,13 +323,6 @@ public class FlatJideOssContainerTest
 			if( tabbedPane.getTabCount() > 1 )
 				tabbedPane.setTabClosableAt( 1, closable );
 		}
-	}
-
-	private void showCloseButtonOnTabChanged() {
-		boolean onTab = showCloseButtonOnTabCheckBox.isSelected();
-
-		for( JideTabbedPane tabbedPane : allTabbedPanes )
-			tabbedPane.setShowCloseButtonOnTab( onTab );
 	}
 
 	private void showCloseButtonOnSelectedTabChanged() {
@@ -554,7 +547,7 @@ public class FlatJideOssContainerTest
 				//---- showCloseButtonOnTabCheckBox ----
 				showCloseButtonOnTabCheckBox.setText("on tab");
 				showCloseButtonOnTabCheckBox.setSelected(true);
-				showCloseButtonOnTabCheckBox.addActionListener(e -> showCloseButtonOnTabChanged());
+				showCloseButtonOnTabCheckBox.addActionListener(e -> tabsClosableChanged());
 				tabbedPaneControlPanel.add(showCloseButtonOnTabCheckBox, "cell 2 3");
 
 				//---- showCloseButtonOnSelectedTabCheckBox ----

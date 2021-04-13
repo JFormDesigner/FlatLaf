@@ -709,7 +709,7 @@ public class FlatJideTabbedPaneUI
 		}
 
 		private void updateArrowButtons() {
-			if( !scrollableTabLayoutEnabled() )
+			if( !scrollableTabLayoutEnabled() || !_tabPane.isTabShown() )
 				return;
 
 			Insets insets = _tabPane.getInsets();
@@ -739,7 +739,8 @@ public class FlatJideTabbedPaneUI
 					y += tabAreaInsets.top;
 
 				// layout buttons
-				x = layoutButtonHorizontal( _tabScroller.closeButton, 16, x, y, h, leftToRight );
+				if( !isShowCloseButtonOnTab() )
+					x = layoutButtonHorizontal( _tabScroller.closeButton, 16, x, y, h, leftToRight );
 				x = layoutButtonHorizontal( _tabScroller.listButton, 24, x, y, h, leftToRight );
 				x = layoutButtonHorizontal( _tabScroller.scrollForwardButton, 16, x, y, h, leftToRight );
 				x = layoutButtonHorizontal( _tabScroller.scrollBackwardButton, 16, x, y, h, leftToRight );
@@ -770,7 +771,8 @@ public class FlatJideTabbedPaneUI
 					x += tabAreaInsets.left;
 
 				// layout buttons
-				y = layoutButtonVertical( _tabScroller.closeButton, 16, x, y, w );
+				if( !isShowCloseButtonOnTab() )
+					y = layoutButtonVertical( _tabScroller.closeButton, 16, x, y, w );
 				y = layoutButtonVertical( _tabScroller.listButton, 24, x, y, w );
 				y = layoutButtonVertical( _tabScroller.scrollForwardButton, 16, x, y, w );
 				y = layoutButtonVertical( _tabScroller.scrollBackwardButton, 16, x, y, w );
