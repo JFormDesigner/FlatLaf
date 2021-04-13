@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.3.1.342" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -175,6 +175,17 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsClosableChanged", false ) )
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 2 3"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "showCloseButtonOnTabCheckBox"
+						"text": "on tab"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showCloseButtonOnTabChanged", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 3"
 					} )

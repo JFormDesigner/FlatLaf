@@ -168,10 +168,12 @@ public class FlatJideTabbedPaneUI
 			_tabScroller.scrollForwardButton.setIcon( arrowIcon );
 			_tabScroller.scrollBackwardButton.setIcon( arrowIcon );
 			_tabScroller.listButton.setIcon( arrowIcon );
+			_tabScroller.closeButton.setIcon( closeIcon );
 
 			_tabScroller.scrollForwardButton.setContentAreaFilled( false );
 			_tabScroller.scrollBackwardButton.setContentAreaFilled( false );
 			_tabScroller.listButton.setContentAreaFilled( false );
+			_tabScroller.closeButton.setContentAreaFilled( false );
 		}
 	}
 
@@ -737,6 +739,7 @@ public class FlatJideTabbedPaneUI
 					y += tabAreaInsets.top;
 
 				// layout buttons
+				x = layoutButtonHorizontal( _tabScroller.closeButton, 16, x, y, h, leftToRight );
 				x = layoutButtonHorizontal( _tabScroller.listButton, 24, x, y, h, leftToRight );
 				x = layoutButtonHorizontal( _tabScroller.scrollForwardButton, 16, x, y, h, leftToRight );
 				x = layoutButtonHorizontal( _tabScroller.scrollBackwardButton, 16, x, y, h, leftToRight );
@@ -767,6 +770,7 @@ public class FlatJideTabbedPaneUI
 					x += tabAreaInsets.left;
 
 				// layout buttons
+				y = layoutButtonVertical( _tabScroller.closeButton, 16, x, y, w );
 				y = layoutButtonVertical( _tabScroller.listButton, 24, x, y, w );
 				y = layoutButtonVertical( _tabScroller.scrollForwardButton, 16, x, y, w );
 				y = layoutButtonVertical( _tabScroller.scrollBackwardButton, 16, x, y, w );

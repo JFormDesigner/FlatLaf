@@ -308,9 +308,11 @@ public class FlatJideOssContainerTest
 
 	private void tabsClosableChanged() {
 		boolean closable = tabsClosableCheckBox.isSelected() && tabScrollCheckBox.isSelected();
+		boolean onTab = showCloseButtonOnTabCheckBox.isSelected();
+
 		for( JideTabbedPane tabbedPane : allTabbedPanes ) {
 			tabbedPane.setShowCloseButton( closable );
-			tabbedPane.setShowCloseButtonOnTab( closable );
+			tabbedPane.setShowCloseButtonOnTab( onTab );
 		}
 	}
 
@@ -321,6 +323,13 @@ public class FlatJideOssContainerTest
 			if( tabbedPane.getTabCount() > 1 )
 				tabbedPane.setTabClosableAt( 1, closable );
 		}
+	}
+
+	private void showCloseButtonOnTabChanged() {
+		boolean onTab = showCloseButtonOnTabCheckBox.isSelected();
+
+		for( JideTabbedPane tabbedPane : allTabbedPanes )
+			tabbedPane.setShowCloseButtonOnTab( onTab );
 	}
 
 	private void showCloseButtonOnSelectedTabChanged() {
@@ -407,6 +416,7 @@ public class FlatJideOssContainerTest
 		tabIconsCheckBox = new JCheckBox();
 		tabIconSizeSpinner = new JSpinner();
 		tabsClosableCheckBox = new JCheckBox();
+		showCloseButtonOnTabCheckBox = new JCheckBox();
 		showCloseButtonOnSelectedTabCheckBox = new JCheckBox();
 		JLabel tabPlacementLabel = new JLabel();
 		tabPlacementField = new FlatTestEnumComboBox<>();
@@ -541,6 +551,12 @@ public class FlatJideOssContainerTest
 				tabsClosableCheckBox.addActionListener(e -> tabsClosableChanged());
 				tabbedPaneControlPanel.add(tabsClosableCheckBox, "cell 2 3");
 
+				//---- showCloseButtonOnTabCheckBox ----
+				showCloseButtonOnTabCheckBox.setText("on tab");
+				showCloseButtonOnTabCheckBox.setSelected(true);
+				showCloseButtonOnTabCheckBox.addActionListener(e -> showCloseButtonOnTabChanged());
+				tabbedPaneControlPanel.add(showCloseButtonOnTabCheckBox, "cell 2 3");
+
 				//---- showCloseButtonOnSelectedTabCheckBox ----
 				showCloseButtonOnSelectedTabCheckBox.setText("show on selected");
 				showCloseButtonOnSelectedTabCheckBox.addActionListener(e -> showCloseButtonOnSelectedTabChanged());
@@ -663,6 +679,7 @@ public class FlatJideOssContainerTest
 	private JCheckBox tabIconsCheckBox;
 	private JSpinner tabIconSizeSpinner;
 	private JCheckBox tabsClosableCheckBox;
+	private JCheckBox showCloseButtonOnTabCheckBox;
 	private JCheckBox showCloseButtonOnSelectedTabCheckBox;
 	private FlatTestEnumComboBox<TabPlacement> tabPlacementField;
 	private JCheckBox secondTabClosableCheckBox;
