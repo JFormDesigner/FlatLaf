@@ -415,6 +415,9 @@ public class FlatJideTabbedPaneUI
 	}
 
 	protected void paintTabSelection( Graphics g, int tabPlacement,  int x, int y, int w, int h ) {
+		if( !_tabPane.isTabShown() )
+			return;
+
 		// increase clip bounds in scroll-tab-layout to paint over the separator line
 		Rectangle clipBounds = scrollableTabLayoutEnabled() ? g.getClipBounds() : null;
 		if( clipBounds != null ) {
@@ -480,7 +483,7 @@ public class FlatJideTabbedPaneUI
 	 */
 	@Override
 	protected void paintContentBorder( Graphics g, int tabPlacement, int selectedIndex ) {
-		if( _tabPane.getTabCount() <= 0 )
+		if( !_tabPane.isTabShown() )
 			return;
 
 		Insets insets = _tabPane.getInsets();
