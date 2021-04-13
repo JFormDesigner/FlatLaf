@@ -60,6 +60,7 @@ import com.jidesoft.swing.JideTabbedPane.NoFocusButton;
 public class FlatJideTabbedPaneUI
 	extends BasicJideTabbedPaneUI
 {
+	protected Color foreground;
 	protected Color disabledForeground;
 	protected Color selectedBackground;
 	protected Color underlineColor;
@@ -78,6 +79,13 @@ public class FlatJideTabbedPaneUI
 	protected boolean tabsOverlapBorder;
 
 	protected Icon closeIcon;
+	protected Icon arrowIcon;
+
+	protected String arrowType;
+	protected Insets buttonInsets;
+	protected int buttonArc;
+	protected Color buttonHoverBackground;
+	protected Color buttonPressedBackground;
 
 	protected int closeButtonLeftMarginUnscaled;
 	protected int closeButtonRightMarginUnscaled;
@@ -98,6 +106,7 @@ public class FlatJideTabbedPaneUI
 
 		_background = UIDefaultsLookup.getColor( "JideTabbedPane.background" );
 
+		foreground = UIManager.getColor( "TabbedPane.foreground" );
 		disabledForeground = UIManager.getColor( "TabbedPane.disabledForeground" );
 		selectedBackground = UIManager.getColor( "TabbedPane.selectedBackground" );
 		underlineColor = UIManager.getColor( "TabbedPane.underlineColor" );
@@ -115,7 +124,11 @@ public class FlatJideTabbedPaneUI
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOverlapBorder = UIManager.getBoolean( "TabbedPane.tabsOverlapBorder" );
 
-		closeIcon = new FlatJideTabCloseIcon();
+		arrowType = UIManager.getString( "TabbedPane.arrowType" );
+		buttonInsets = UIManager.getInsets( "TabbedPane.buttonInsets" );
+		buttonArc = UIManager.getInt( "TabbedPane.buttonArc" );
+		buttonHoverBackground = UIManager.getColor( "TabbedPane.buttonHoverBackground" );
+		buttonPressedBackground = UIManager.getColor( "TabbedPane.buttonPressedBackground" );
 
 		closeButtonLeftMarginUnscaled = _closeButtonLeftMargin;
 		closeButtonRightMarginUnscaled = _closeButtonRightMargin;
@@ -130,6 +143,7 @@ public class FlatJideTabbedPaneUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		foreground = null;
 		disabledForeground = null;
 		selectedBackground = null;
 		underlineColor = null;
@@ -138,7 +152,35 @@ public class FlatJideTabbedPaneUI
 		focusColor = null;
 		tabSeparatorColor = null;
 		contentAreaColor = null;
+
+		buttonHoverBackground = null;
+		buttonPressedBackground = null;
+	}
+
+	@Override
+	protected void installComponents() {
+		super.installComponents();
+
+		closeIcon = new FlatJideTabCloseIcon();
+		arrowIcon = new FlatJideTabAreaArrowIcon();
+
+		if( _tabScroller != null ) {
+			_tabScroller.scrollForwardButton.setIcon( arrowIcon );
+			_tabScroller.scrollBackwardButton.setIcon( arrowIcon );
+			_tabScroller.listButton.setIcon( arrowIcon );
+
+			_tabScroller.scrollForwardButton.setContentAreaFilled( false );
+			_tabScroller.scrollBackwardButton.setContentAreaFilled( false );
+			_tabScroller.listButton.setContentAreaFilled( false );
+		}
+	}
+
+	@Override
+	protected void uninstallComponents() {
+		super.uninstallComponents();
+
 		closeIcon = null;
+		arrowIcon = null;
 	}
 
 	@Override
@@ -549,6 +591,15 @@ public class FlatJideTabbedPaneUI
 		return lastTabInRun( _tabPane.getTabCount(), run ) == tabIndex;
 	}
 
+	private boolean isLeftToRight() {
+		return _tabPane.getComponentOrientation().isLeftToRight();
+	}
+
+	private boolean isHorizontalTabPlacement() {
+		int tabPlacement = _tabPane.getTabPlacement();
+		return tabPlacement == TOP || tabPlacement == BOTTOM;
+	}
+
 	@Override
 	protected void ensureCurrentRects( int leftMargin, int tabCount ) {
 		int oldFitStyleBoundSize = _fitStyleBoundSize;
@@ -612,6 +663,7 @@ public class FlatJideTabbedPaneUI
 			super.layoutContainer( parent );
 
 			updateCloseButtons();
+			updateArrowButtons();
 		}
 
 		private void updateCloseButtons() {
@@ -653,9 +705,101 @@ public class FlatJideTabbedPaneUI
 					iconHeight );
 			}
 		}
+
+		private void updateArrowButtons() {
+			if( !scrollableTabLayoutEnabled() )
+				return;
+
+			Insets insets = _tabPane.getInsets();
+			int tabPlacement = _tabPane.getTabPlacement();
+			Insets tabAreaInsets = getTabAreaInsets( tabPlacement );
+			Dimension tsize = isTabTrailingComponentVisible() ? _tabTrailingComponent.getSize() : new Dimension();
+
+			if( tabPlacement == TOP || tabPlacement == BOTTOM ) {
+				// for BOTTOM tab placement, _maxTabHeight is not correct if having tall leading/trailing component
+				int maxTabHeight = (tabPlacement == BOTTOM)
+					? calculateMaxTabHeight( tabPlacement )
+					: _maxTabHeight;
+
+				// button bounds
+				boolean leftToRight = isLeftToRight();
+				int x = leftToRight
+					? _tabPane.getWidth() - insets.right - tsize.width
+					: insets.left + tsize.width;
+				int y = _tabScroller.viewport.getY();
+				int h = maxTabHeight;
+				if( tabPlacement == TOP ) {
+					// if leading or trailing component is taller than tab area then
+					// _tabScroller.viewport has same height as leading/trailing component
+					// but tabs are painted smaller
+					y += (_tabScroller.viewport.getHeight() - h - tabAreaInsets.bottom);
+				} else
+					y += tabAreaInsets.top;
+
+				// layout buttons
+				x = layoutButtonHorizontal( _tabScroller.listButton, 24, x, y, h, leftToRight );
+				x = layoutButtonHorizontal( _tabScroller.scrollForwardButton, 16, x, y, h, leftToRight );
+				x = layoutButtonHorizontal( _tabScroller.scrollBackwardButton, 16, x, y, h, leftToRight );
+
+				// layout tab area
+				Rectangle r = _tabScroller.viewport.getBounds();
+				if( leftToRight )
+					_tabScroller.viewport.setSize( x - r.x, r.height );
+				else
+					_tabScroller.viewport.setBounds( x, r.y, r.width - (x - r.x), r.height );
+
+			} else { // LEFT and RIGHT tab placement
+				// for RIGHT tab placement, _maxTabWidth is not correct if having wide leading/trailing component
+				int maxTabWidth = (tabPlacement == RIGHT)
+					? calculateMaxTabWidth( tabPlacement )
+					: _maxTabWidth;
+
+				// button bounds
+				int x = _tabScroller.viewport.getX();
+				int y = _tabPane.getHeight() - insets.bottom - tsize.height;
+				int w = maxTabWidth;
+				if( tabPlacement == LEFT ) {
+					// if leading or trailing component is wider than tab area then
+					// _tabScroller.viewport has same width as leading/trailing component
+					// but tabs are painted smaller
+					x += (_tabScroller.viewport.getWidth() - w - tabAreaInsets.right);
+				} else
+					x += tabAreaInsets.left;
+
+				// layout buttons
+				y = layoutButtonVertical( _tabScroller.listButton, 24, x, y, w );
+				y = layoutButtonVertical( _tabScroller.scrollForwardButton, 16, x, y, w );
+				y = layoutButtonVertical( _tabScroller.scrollBackwardButton, 16, x, y, w );
+
+				// layout tab area
+				Rectangle r = _tabScroller.viewport.getBounds();
+				_tabScroller.viewport.setSize( r.width, y - r.y );
+			}
+		}
+
+		private int layoutButtonHorizontal( JButton button, int wu, int x, int y, int h, boolean leftToRight ) {
+			if( button.isVisible() ) {
+				int w = scale( wu );
+				if( leftToRight )
+					x -= w;
+				button.setBounds( x, y, w, h );
+				if( !leftToRight )
+					x += w;
+			}
+			return x;
+		}
+
+		private int layoutButtonVertical( JButton button, int hu, int x, int y, int w ) {
+			if( button.isVisible() ) {
+				int h = scale( hu );
+				y -= h;
+				button.setBounds( x, y, w, h );
+			}
+			return y;
+		}
 	}
 
-	//---- class FlatJideTabAreaArrowIcon -------------------------------------
+	//---- class FlatJideTabCloseIcon -----------------------------------------
 
 	protected class FlatJideTabCloseIcon
 		extends FlatTabbedPaneCloseIcon
@@ -671,6 +815,86 @@ public class FlatJideTabbedPaneUI
 			}
 
 			super.paintIcon( c, g, x, y );
+		}
+	}
+
+	//---- class FlatJideTabAreaArrowIcon -------------------------------------
+
+	protected class FlatJideTabAreaArrowIcon
+		implements Icon
+	{
+		@Override
+		public void paintIcon( Component c, Graphics g, int x, int y ) {
+			NoFocusButton button = (NoFocusButton) c;
+
+			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+
+			// paint hover or pressed background
+			if( button.isEnabled() ) {
+				Color background = (buttonPressedBackground != null && button.isMousePressed())
+					? buttonPressedBackground
+					: (buttonHoverBackground != null && button.isMouseOver()
+						? buttonHoverBackground
+						: null);
+
+				if( background != null ) {
+					// rotate button insets
+					Insets insets = new Insets( 0, 0, 0, 0 );
+					rotateInsets( buttonInsets, insets, _tabPane.getTabPlacement() );
+
+					// fill background
+					g.setColor( FlatUIUtils.deriveColor( background, _tabPane.getBackground() ) );
+					FlatUIUtils.paintComponentBackground( (Graphics2D) g,
+						insets.left, insets.top,
+						button.getWidth() - insets.left - insets.right,
+						button.getHeight() - insets.top - insets.bottom,
+						0, scale( (float) buttonArc ) );
+				}
+			}
+
+			// arrow direction
+			int direction = -1;
+			switch( button.getType() ) {
+				case JideTabbedPane.BUTTON_WEST:
+					direction = isHorizontalTabPlacement()
+						? (isLeftToRight() ? WEST : EAST)
+						: NORTH;
+					break;
+
+				case JideTabbedPane.BUTTON_EAST:
+					direction = isHorizontalTabPlacement()
+						? (isLeftToRight() ? EAST : WEST)
+						: SOUTH;
+					break;
+
+				case JideTabbedPane.BUTTON_LIST:
+					switch( _tabPane.getTabPlacement() ) {
+						default:
+						case TOP:	direction = SOUTH; break;
+						case BOTTOM:	direction = NORTH; break;
+						case LEFT:	direction = EAST; break;
+						case RIGHT:	direction = WEST; break;
+					}
+					break;
+			}
+
+			// paint arrow
+			g.setColor( button.isEnabled() ? foreground : disabledForeground );
+			FlatUIUtils.paintArrow( (Graphics2D) g,
+				0, 0, button.getWidth(), button.getHeight(),
+				direction, FlatUIUtils.isChevron( arrowType ), 10, 0, 0 );
+
+			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+		}
+
+		@Override
+		public int getIconWidth() {
+			return scale( 16 );
+		}
+
+		@Override
+		public int getIconHeight() {
+			return scale( 16 );
 		}
 	}
 }

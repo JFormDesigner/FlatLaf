@@ -296,6 +296,8 @@ public class FlatJideOssContainerTest
 				c.setOpaque( true );
 				c.setBackground( leading ? Color.cyan : Color.orange );
 				c.setBorder( new EmptyBorder( gap, gap, gap, gap ) );
+				if( leading && (tabbedPane.getTabPlacement() == SwingConstants.TOP || tabbedPane.getTabPlacement() == SwingConstants.BOTTOM) )
+					c.setPreferredSize( new Dimension( 20, 80 ) );
 			}
 			if( leading )
 				tabbedPane.setTabLeadingComponent( c );
@@ -343,8 +345,11 @@ public class FlatJideOssContainerTest
 
 	private void tabAreaInsetsChanged() {
 		Insets insets = tabAreaInsetsCheckBox.isSelected() ? new Insets( 5, 5, 10, 10 ) : null;
-		for( JideTabbedPane tabbedPane : allTabbedPanes )
+		for( JideTabbedPane tabbedPane : allTabbedPanes ) {
 			tabbedPane.setTabAreaInsets( insets );
+			tabbedPane.revalidate();
+			tabbedPane.repaint();
+		}
 	}
 
 	private void smallerInsetsChanged() {
