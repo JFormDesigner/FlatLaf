@@ -40,6 +40,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
 import com.formdev.flatlaf.util.UIScale;
 import com.jidesoft.swing.*;
@@ -191,6 +192,15 @@ public class FlatComponents2Test
 		}
 		for( JTable table : allTables )
 			table.setAutoResizeMode( autoResizeMode );
+	}
+
+	private void sortIconPositionChanged() {
+		Object sel = sortIconPositionComboBox.getSelectedItem();
+		if( "right".equals( sel ) )
+			sel = null;
+
+		UIManager.put( "TableHeader.sortIconPosition", sel );
+		FlatLaf.updateUILater();
 	}
 
 	private void dndChanged() {
@@ -442,6 +452,8 @@ public class FlatComponents2Test
 		JPanel tableOptionsPanel = new JPanel();
 		JLabel autoResizeModeLabel = new JLabel();
 		autoResizeModeField = new JComboBox<>();
+		JLabel sortIconPositionLabel = new JLabel();
+		sortIconPositionComboBox = new JComboBox<>();
 		showHorizontalLinesCheckBox = new JCheckBox();
 		rowSelectionCheckBox = new JCheckBox();
 		showVerticalLinesCheckBox = new JCheckBox();
@@ -753,6 +765,20 @@ public class FlatComponents2Test
 			autoResizeModeField.addActionListener(e -> autoResizeModeChanged());
 			tableOptionsPanel.add(autoResizeModeField, "cell 0 0 2 1");
 
+			//---- sortIconPositionLabel ----
+			sortIconPositionLabel.setText("Sort icon:");
+			tableOptionsPanel.add(sortIconPositionLabel, "cell 0 0 2 1");
+
+			//---- sortIconPositionComboBox ----
+			sortIconPositionComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+				"right",
+				"left",
+				"top",
+				"bottom"
+			}));
+			sortIconPositionComboBox.addActionListener(e -> sortIconPositionChanged());
+			tableOptionsPanel.add(sortIconPositionComboBox, "cell 0 0 2 1");
+
 			//---- showHorizontalLinesCheckBox ----
 			showHorizontalLinesCheckBox.setText("show horizontal lines");
 			showHorizontalLinesCheckBox.addActionListener(e -> showHorizontalLinesChanged());
@@ -819,6 +845,7 @@ public class FlatComponents2Test
 	private JCheckBox treeWideSelectionCheckBox;
 	private JCheckBox treePaintSelectionCheckBox;
 	private JComboBox<String> autoResizeModeField;
+	private JComboBox<String> sortIconPositionComboBox;
 	private JCheckBox showHorizontalLinesCheckBox;
 	private JCheckBox rowSelectionCheckBox;
 	private JCheckBox showVerticalLinesCheckBox;

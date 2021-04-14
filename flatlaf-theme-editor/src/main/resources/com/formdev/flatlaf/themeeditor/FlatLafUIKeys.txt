@@ -795,6 +795,7 @@ TableHeader.ancestorInputMap
 TableHeader.background
 TableHeader.bottomSeparatorColor
 TableHeader.cellBorder
+TableHeader.cellMargins
 TableHeader.focusCellBackground
 TableHeader.font
 TableHeader.foreground

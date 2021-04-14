@@ -13,6 +13,9 @@ FlatLaf Change Log
   - If frame is deiconified, dock is compacted (icons move to the left).
   - If dock is wider than desktop width, additional rows are used.
   - If desktop pane is resized, layout of dock is updated.
+- TableHeader: Moved table header column border painting from
+  `FlatTableHeaderUI` to new border `FlatTableHeaderBorder` to improve
+  compatibility with custom table header implementations. (issue #228)
 - IntelliJ Themes: Added "Material Theme UI Lite / GitHub Dark" theme.
 - JIDE Common Layer: Improved support for `JideTabbedPane`. (PR #306)
 

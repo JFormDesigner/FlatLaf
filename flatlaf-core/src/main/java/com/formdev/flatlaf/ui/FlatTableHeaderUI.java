@@ -18,20 +18,16 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.Objects;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -39,7 +35,6 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -54,17 +49,21 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatTableHeaderUI -->
  *
- * @uiDefault TableHeader.separatorColor		Color
  * @uiDefault TableHeader.bottomSeparatorColor	Color
  * @uiDefault TableHeader.height				int
  * @uiDefault TableHeader.sortIconPosition		String	right (default), left, top or bottom
+ *
+ * <!-- FlatTableHeaderBorder -->
+ *
+ * @uiDefault TableHeader.cellMargins			Insets
+ * @uiDefault TableHeader.separatorColor		Color
+ * @uiDefault TableHeader.bottomSeparatorColor	Color
  *
  * @author Karl Tauber
  */
 public class FlatTableHeaderUI
 	extends BasicTableHeaderUI
 {
-	protected Color separatorColor;
 	protected Color bottomSeparatorColor;
 	protected int height;
 	protected int sortIconPosition;
@@ -77,7 +76,6 @@ public class FlatTableHeaderUI
 	protected void installDefaults() {
 		super.installDefaults();
 
-		separatorColor = UIManager.getColor( "TableHeader.separatorColor" );
 		bottomSeparatorColor = UIManager.getColor( "TableHeader.bottomSeparatorColor" );
 		height = UIManager.getInt( "TableHeader.height" );
 		switch( Objects.toString( UIManager.getString( "TableHeader.sortIconPosition" ), "right" ) ) {
@@ -93,27 +91,38 @@ public class FlatTableHeaderUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
-		separatorColor = null;
 		bottomSeparatorColor = null;
 	}
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
-		if( header.getColumnModel().getColumnCount() <= 0 )
+		TableColumnModel columnModel = header.getColumnModel();
+		if( columnModel.getColumnCount() <= 0 )
 			return;
 
-		// do not paint borders if JTableHeader.setDefaultRenderer() was used
-		TableCellRenderer defaultRenderer = header.getDefaultRenderer();
-		boolean paintBorders = isSystemDefaultRenderer( defaultRenderer );
-		if( !paintBorders ) {
-			// check whether the renderer delegates to the system default renderer
-			Component rendererComponent = defaultRenderer.getTableCellRendererComponent(
-				header.getTable(), "", false, false, -1, 0 );
-			paintBorders = isSystemDefaultRenderer( rendererComponent );
-		}
+		// compute total width of all columns
+		int columnCount = columnModel.getColumnCount();
+		int totalWidth = 0;
+		for( int i = 0; i < columnCount; i++ )
+			totalWidth += columnModel.getColumn( i ).getWidth();
 
-		if( paintBorders )
-			paintColumnBorders( g, c );
+		if( totalWidth < header.getWidth() ) {
+			// do not paint bottom separator if JTableHeader.setDefaultRenderer() was used
+			TableCellRenderer defaultRenderer = header.getDefaultRenderer();
+			boolean paintBottomSeparator = isSystemDefaultRenderer( defaultRenderer );
+			if( !paintBottomSeparator && header.getTable() != null ) {
+				// check whether the renderer delegates to the system default renderer
+				Component rendererComponent = defaultRenderer.getTableCellRendererComponent(
+					header.getTable(), "", false, false, -1, 0 );
+				paintBottomSeparator = isSystemDefaultRenderer( rendererComponent );
+			}
+
+			if( paintBottomSeparator ) {
+				int w = c.getWidth() - totalWidth;
+				int x = header.getComponentOrientation().isLeftToRight() ? c.getWidth() - w : 0;
+				paintBottomSeparator( g, c, x, w );
+			}
+		}
 
 		// temporary use own default renderer if necessary
 		FlatTableCellHeaderRenderer sortIconRenderer = null;
@@ -130,9 +139,6 @@ public class FlatTableHeaderUI
 			sortIconRenderer.reset();
 			header.setDefaultRenderer( sortIconRenderer.delegate );
 		}
-
-		if( paintBorders )
-			paintDraggedColumnBorders( g, c );
 	}
 
 	private boolean isSystemDefaultRenderer( Object headerRenderer ) {
@@ -141,17 +147,8 @@ public class FlatTableHeaderUI
 			   rendererClassName.equals( "sun.swing.FilePane$AlignableTableHeaderRenderer" );
 	}
 
-	protected void paintColumnBorders( Graphics g, JComponent c ) {
-		int width = c.getWidth();
-		int height = c.getHeight();
+	protected void paintBottomSeparator( Graphics g, JComponent c, int x, int w ) {
 		float lineWidth = UIScale.scale( 1f );
-		float topLineIndent = lineWidth;
-		float bottomLineIndent = lineWidth * 3;
-		TableColumnModel columnModel = header.getColumnModel();
-		int columnCount = columnModel.getColumnCount();
-		int sepCount = columnCount;
-		if( hideLastVerticalLine() )
-			sepCount--;
 
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
@@ -159,78 +156,7 @@ public class FlatTableHeaderUI
 
 			// paint bottom line
 			g2.setColor( bottomSeparatorColor );
-			g2.fill( new Rectangle2D.Float( 0, height - lineWidth, width, lineWidth ) );
-
-			// paint column separator lines
-			g2.setColor( separatorColor );
-
-			float y = topLineIndent;
-			float h = height - bottomLineIndent;
-
-			if( header.getComponentOrientation().isLeftToRight() ) {
-				int x = 0;
-				for( int i = 0; i < sepCount; i++ ) {
-					x += columnModel.getColumn( i ).getWidth();
-					g2.fill( new Rectangle2D.Float( x - lineWidth, y, lineWidth, h ) );
-				}
-
-				// paint trailing separator (on right side)
-				if( !hideTrailingVerticalLine() )
-					g2.fill( new Rectangle2D.Float( header.getWidth() - lineWidth, y, lineWidth, h ) );
-			} else {
-				Rectangle cellRect = header.getHeaderRect( 0 );
-				int x = cellRect.x + cellRect.width;
-				for( int i = 0; i < sepCount; i++ ) {
-					x -= columnModel.getColumn( i ).getWidth();
-					g2.fill( new Rectangle2D.Float( x - (i < sepCount - 1 ? lineWidth : 0), y, lineWidth, h ) );
-				}
-
-				// paint trailing separator (on left side)
-				if( !hideTrailingVerticalLine() )
-					g2.fill( new Rectangle2D.Float( 0, y, lineWidth, h ) );
-			}
-		} finally {
-			g2.dispose();
-		}
-	}
-
-	private void paintDraggedColumnBorders( Graphics g, JComponent c ) {
-		TableColumn draggedColumn = header.getDraggedColumn();
-		if( draggedColumn == null )
-			return;
-
-		// find index of dragged column
-		TableColumnModel columnModel = header.getColumnModel();
-		int columnCount = columnModel.getColumnCount();
-		int draggedColumnIndex = -1;
-		for( int i = 0; i < columnCount; i++ ) {
-			if( columnModel.getColumn( i ) == draggedColumn ) {
-				draggedColumnIndex = i;
-				break;
-			}
-		}
-
-		if( draggedColumnIndex < 0 )
-			return;
-
-		float lineWidth = UIScale.scale( 1f );
-		float topLineIndent = lineWidth;
-		float bottomLineIndent = lineWidth * 3;
-		Rectangle r = header.getHeaderRect( draggedColumnIndex );
-		r.x += header.getDraggedDistance();
-
-		Graphics2D g2 = (Graphics2D) g.create();
-		try {
-			FlatUIUtils.setRenderingHints( g2 );
-
-			// paint dragged bottom line
-			g2.setColor( bottomSeparatorColor );
-			g2.fill( new Rectangle2D.Float( r.x, r.y + r.height - lineWidth, r.width, lineWidth ) );
-
-			// paint dragged column separator lines
-			g2.setColor( separatorColor );
-			g2.fill( new Rectangle2D.Float( r.x, topLineIndent, lineWidth, r.height - bottomLineIndent ) );
-			g2.fill( new Rectangle2D.Float( r.x + r.width - lineWidth, r.y + topLineIndent, lineWidth, r.height - bottomLineIndent ) );
+			g2.fill( new Rectangle2D.Float( x, c.getHeight() - lineWidth, w, lineWidth ) );
 		} finally {
 			g2.dispose();
 		}
@@ -242,32 +168,6 @@ public class FlatTableHeaderUI
 		if( size.height > 0 )
 			size.height = Math.max( size.height, UIScale.scale( height ) );
 		return size;
-	}
-
-	protected boolean hideLastVerticalLine() {
-		Container viewport = header.getParent();
-		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
-		if( !(viewportParent instanceof JScrollPane) )
-			return false;
-
-		Rectangle cellRect = header.getHeaderRect( header.getColumnModel().getColumnCount() - 1 );
-
-		// using component orientation of scroll pane here because it is also used in FlatTableUI
-		JScrollPane scrollPane = (JScrollPane) viewportParent;
-		return scrollPane.getComponentOrientation().isLeftToRight()
-			? cellRect.x + cellRect.width >= viewport.getWidth()
-			: cellRect.x <= 0;
-	}
-
-	protected boolean hideTrailingVerticalLine() {
-		Container viewport = header.getParent();
-		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
-		if( !(viewportParent instanceof JScrollPane) )
-			return false;
-
-		JScrollPane scrollPane = (JScrollPane) viewportParent;
-		return viewport == scrollPane.getColumnHeader() &&
-			scrollPane.getCorner( ScrollPaneConstants.UPPER_TRAILING_CORNER ) == null;
 	}
 
 	//---- class FlatTableCellHeaderRenderer ----------------------------------
