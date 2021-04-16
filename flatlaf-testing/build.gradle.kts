@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import java.util.Properties
+
 plugins {
 	`java-library`
 }
@@ -41,8 +43,20 @@ dependencies {
 	implementation( "com.formdev:jide-oss:3.7.11.1" )
 	implementation( "com.glazedlists:glazedlists:1.11.0" )
 	implementation( "org.netbeans.api:org-openide-awt:RELEASE112" )
+}
 
-//	implementation( "org.pushing-pixels:radiance-substance:3.5.1" )
-//	implementation( "com.weblookandfeel:weblaf-ui:1.2.13" )
-//	implementation( "com.jgoodies:jgoodies-looks:2.7.0" )
+applyLafs()
+
+fun applyLafs() {
+	val properties = Properties()
+	file( "lafs.properties" ).inputStream().use {
+		properties.load( it )
+	}
+
+	for( value in properties.values ) {
+		value as String
+		val parts = value.split( ';' )
+		if( parts.size >= 3 )
+			dependencies.implementation( parts[2] )
+	}
 }

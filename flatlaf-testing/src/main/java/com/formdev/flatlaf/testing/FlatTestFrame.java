@@ -22,6 +22,11 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -131,35 +136,7 @@ public class FlatTestFrame
 			lafModel.addElement( new LookAndFeelInfo( name, className ) );
 		}
 
-		String substanceLightClassName = "org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel";
-		if( SystemInfo.isJava_9_orLater && isClassAvailable( substanceLightClassName ) ) {
-			lafModel.addElement( new LookAndFeelInfo( "Substance Business (F5)", substanceLightClassName ) );
-			registerSwitchToLookAndFeel( "F5", substanceLightClassName );
-		}
-
-		String substanceDarkClassName = "org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel";
-		if( SystemInfo.isJava_9_orLater && isClassAvailable( substanceDarkClassName ) ) {
-			lafModel.addElement( new LookAndFeelInfo( "Substance Graphite Aqua (Ctrl+F5)", substanceDarkClassName ) );
-			registerSwitchToLookAndFeel( "ctrl F5", substanceDarkClassName );
-		}
-
-		String webLafClassName = "com.alee.laf.WebLookAndFeel";
-		if( isClassAvailable( webLafClassName ) ) {
-			lafModel.addElement( new LookAndFeelInfo( "WebLaf (Ctrl+F12)", webLafClassName ) );
-			registerSwitchToLookAndFeel( "ctrl F12", webLafClassName );
-		}
-
-		String looksPlasticClassName = "com.jgoodies.looks.plastic.PlasticLookAndFeel";
-		if( isClassAvailable( looksPlasticClassName ) ) {
-			lafModel.addElement( new LookAndFeelInfo( "JGoodies Looks Plastic (F6)", looksPlasticClassName ) );
-			registerSwitchToLookAndFeel( "F6", looksPlasticClassName );
-		}
-
-		String looksWindowsClassName = "com.jgoodies.looks.windows.WindowsLookAndFeel";
-		if( SystemInfo.isWindows && isClassAvailable( looksWindowsClassName ) ) {
-			lafModel.addElement( new LookAndFeelInfo( "JGoodies Looks Windows (F7)", looksWindowsClassName ) );
-			registerSwitchToLookAndFeel( "F7", looksWindowsClassName );
-		}
+		loadLafs( lafModel );
 
 		lookAndFeelComboBox.setModel( lafModel );
 
@@ -301,6 +278,37 @@ public class FlatTestFrame
 			},
 			keyStroke,
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+	}
+
+	private void loadLafs( DefaultComboBoxModel<LookAndFeelInfo> lafModel ) {
+		Properties properties = new Properties();
+		try( InputStream in = new FileInputStream( "lafs.properties" ) ) {
+			properties.load( in );
+		} catch( IOException ex ) {
+			ex.printStackTrace();
+		}
+
+		ArrayList<LookAndFeelInfo> lafs = new ArrayList<>();
+		for( Map.Entry<Object, Object> entry : properties.entrySet() ) {
+			String lafClassName = (String) entry.getKey();
+			String[] parts = ((String)entry.getValue()).split( ";" );
+			String lafName = parts[0];
+			String keyStrokeStr = (parts.length >= 1) ? parts[1] : null;
+
+			if( !isClassAvailable( lafClassName ) )
+				continue;
+
+			if( keyStrokeStr != null ) {
+				registerSwitchToLookAndFeel( keyStrokeStr, lafClassName );
+				lafName += " (" + keyStrokeStr + ")";
+			}
+
+			lafs.add( new LookAndFeelInfo( lafName, lafClassName ) );
+		}
+
+		lafs.sort( (laf1, laf2) -> laf1.getName().compareToIgnoreCase( laf2.getName() ) );
+		for( LookAndFeelInfo laf : lafs )
+			lafModel.addElement( laf );
 	}
 
 	private boolean isClassAvailable( String className ) {
