@@ -171,6 +171,69 @@ public class FlatSVGIcon
 	}
 
 	/**
+	 * Returns the name of the SVG resource (a '/'-separated path).
+	 *
+	 * @since 1.2
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns the custom icon width specified in {@link #FlatSVGIcon(String, int, int)},
+	 * {@link #FlatSVGIcon(String, int, int, ClassLoader)} or {@link #derive(int, int)}.
+	 * Otherwise {@code -1} is returned.
+	 * <p>
+	 * To get the painted icon width, use {@link #getIconWidth()}.
+	 *
+	 * @since 1.2
+	 */
+	public int getWidth() {
+		return width;
+	}
+
+	/**
+	 * Returns the custom icon height specified in {@link #FlatSVGIcon(String, int, int)},
+	 * {@link #FlatSVGIcon(String, int, int, ClassLoader)} or {@link #derive(int, int)}.
+	 * Otherwise {@code -1} is returned.
+	 * <p>
+	 * To get the painted icon height, use {@link #getIconHeight()}.
+	 *
+	 * @since 1.2
+	 */
+	public int getHeight() {
+		return height;
+	}
+
+	/**
+	 * Returns the amount by which the icon size is scaled. Usually {@code 1}.
+	 *
+	 * @since 1.2
+	 */
+	public float getScale() {
+		return scale;
+	}
+
+	/**
+	 * Returns whether the icon is pained in "disabled" state.
+	 *
+	 * @see #getDisabledIcon()
+	 * @since 1.2
+	 */
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	/**
+	 * Returns the class loader used to load the SVG resource.
+	 *
+	 * @since 1.2
+	 */
+	public ClassLoader getClassLoader() {
+		return classLoader;
+	}
+
+	/**
 	 * Creates a new icon with given width and height, which is derived from this icon.
 	 *
 	 * @param width the width of the new icon
@@ -181,7 +244,7 @@ public class FlatSVGIcon
 		if( width == this.width && height == this.height )
 			return this;
 
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, false, classLoader );
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader );
 		icon.diagram = diagram;
 		icon.dark = dark;
 		return icon;
@@ -197,7 +260,7 @@ public class FlatSVGIcon
 		if( scale == this.scale )
 			return this;
 
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, false, classLoader );
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader );
 		icon.diagram = diagram;
 		icon.dark = dark;
 		return icon;
@@ -448,8 +511,8 @@ public class FlatSVGIcon
 	{
 		private static ColorFilter instance;
 
-		private final Map<Integer, String> rgb2keyMap = new HashMap<>();
-		private final Map<Color, Color> color2colorMap = new HashMap<>();
+		private Map<Integer, String> rgb2keyMap;
+		private Map<Color, Color> color2colorMap;
 		private Function<Color, Color> mapper;
 
 		/**
@@ -460,6 +523,7 @@ public class FlatSVGIcon
 				instance = new ColorFilter();
 
 				// add default color palette
+				instance.rgb2keyMap = new HashMap<>();
 				for( FlatIconColors c : FlatIconColors.values() )
 					instance.rgb2keyMap.put( c.rgb, c.key );
 			}
@@ -521,6 +585,8 @@ public class FlatSVGIcon
 		 * Adds color mappings.
 		 */
 		public void addAll( Map<Color, Color> from2toMap ) {
+			if( color2colorMap == null )
+				color2colorMap = new HashMap<>();
 			color2colorMap.putAll( from2toMap );
 		}
 
@@ -528,6 +594,8 @@ public class FlatSVGIcon
 		 * Adds a color mapping.
 		 */
 		public void add( Color from, Color to ) {
+			if( color2colorMap == null )
+				color2colorMap = new HashMap<>();
 			color2colorMap.put( from, to );
 		}
 
@@ -535,7 +603,8 @@ public class FlatSVGIcon
 		 * Removes a specific color mapping.
 		 */
 		public void remove( Color from ) {
-			color2colorMap.remove( from );
+			if( color2colorMap != null )
+				color2colorMap.remove( from );
 		}
 
 		/**
@@ -544,7 +613,8 @@ public class FlatSVGIcon
 		 * @since 1.2
 		 */
 		public void removeAll() {
-			color2colorMap.clear();
+			if( color2colorMap != null )
+				color2colorMap.clear();
 		}
 
 		public Color filter( Color color ) {
@@ -559,21 +629,30 @@ public class FlatSVGIcon
 		};
 
 		private Color applyMappings( Color color ) {
-			Color newColor = color2colorMap.get( color );
-			if( newColor != null )
-				return newColor;
+			if( color2colorMap != null ) {
+				Color newColor = color2colorMap.get( color );
+				if( newColor != null )
+					return newColor;
+			}
 
-			String colorKey = rgb2keyMap.get( color.getRGB() & 0xffffff );
-			if( colorKey == null )
-				return color;
+			if( rgb2keyMap != null ) {
+				// RGB is mapped to a key in UI defaults, which contains the real color.
+				// IntelliJ themes define such theme specific icon colors in .theme.json files.
+				String colorKey = rgb2keyMap.get( color.getRGB() & 0xffffff );
+				if( colorKey == null )
+					return color;
 
-			newColor = UIManager.getColor( colorKey );
-			if( newColor == null )
-				return color;
+				Color newColor = UIManager.getColor( colorKey );
+				if( newColor == null )
+					return color;
 
-			return (newColor.getAlpha() != color.getAlpha())
-				? new Color( (newColor.getRGB() & 0x00ffffff) | (color.getRGB() & 0xff000000) )
-				: newColor;
+				// preserve alpha of original color
+				return (newColor.getAlpha() != color.getAlpha())
+					? new Color( (newColor.getRGB() & 0x00ffffff) | (color.getRGB() & 0xff000000) )
+					: newColor;
+			}
+
+			return color;
 		}
 
 		/**
