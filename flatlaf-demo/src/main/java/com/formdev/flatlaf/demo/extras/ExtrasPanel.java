@@ -20,7 +20,6 @@ import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
-import com.formdev.flatlaf.util.GrayFilter;
 import net.miginfocom.swing.*;
 import java.awt.*;
 
@@ -159,9 +158,9 @@ public class ExtrasPanel
 		// ---- toggleButton1 ----
 		toggleButton1.addActionListener( (e) -> {
 			if (toggleButton1.isSelected())
-				FlatSVGIcon.ColorFilter.getInstance().setFilter( color -> color.brighter().brighter() );
+				FlatSVGIcon.ColorFilter.getInstance().setMapper( color -> color.brighter() );
 			else
-				FlatSVGIcon.ColorFilter.getInstance().setFilter( null );
+				FlatSVGIcon.ColorFilter.getInstance().setMapper( null );
 			SwingUtilities.getRootPane( toggleButton1 ).repaint();
 		} );
 
@@ -170,7 +169,7 @@ public class ExtrasPanel
 
 	private JLabel createRainbowIcon(String name) {
 		FlatSVGIcon rainbowIcon = new FlatSVGIcon( "com/formdev/flatlaf/demo/extras/svg/" + name);
-		rainbowIcon.setFilter( new ColorFilter( (color) -> {
+		rainbowIcon.setColorFilter( new ColorFilter( (color) -> {
 			counter+=1;
 			counter%=255;
 			return Color.getHSBColor(counter/255f, 1, 1);
