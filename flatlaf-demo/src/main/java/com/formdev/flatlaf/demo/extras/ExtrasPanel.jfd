@@ -85,6 +85,13 @@ new FormModel {
 				"value": "cell 1 7 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
+				name: "redToggleButton"
+				"text": "Toggle RED"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "redChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 7 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "brighterToggleButton"
 				"text": "Toggle brighter"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "brighterChanged", false ) )

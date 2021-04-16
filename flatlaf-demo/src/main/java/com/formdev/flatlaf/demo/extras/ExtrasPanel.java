@@ -20,9 +20,11 @@ import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.util.HSLColor;
 import net.miginfocom.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyEvent;
+import java.util.function.Function;
 
 /**
  * @author Karl Tauber
@@ -94,7 +96,27 @@ public class ExtrasPanel
 		triStateLabel1.setText( triStateCheckBox1.getState().toString() );
 	}
 
+	private void redChanged() {
+		brighterToggleButton.setSelected( false );
+
+		Function<Color, Color> mapper = null;
+		if( redToggleButton.isSelected() ) {
+			float[] redHSL = HSLColor.fromRGB( Color.red );
+			mapper = color -> {
+				float[] hsl = HSLColor.fromRGB( color );
+				return HSLColor.toRGB( redHSL[0], 70, hsl[2] );
+			};
+		}
+		FlatSVGIcon.ColorFilter.getInstance().setMapper( mapper );
+
+		// repaint whole application window because global color filter also affects
+		// icons in menubar, toolbar, etc.
+		SwingUtilities.windowForComponent( this ).repaint();
+	}
+
 	private void brighterChanged() {
+		redToggleButton.setSelected( false );
+
 		FlatSVGIcon.ColorFilter.getInstance().setMapper( brighterToggleButton.isSelected()
 			? color -> color.brighter().brighter()
 			: null );
@@ -118,6 +140,7 @@ public class ExtrasPanel
 		label6 = new JLabel();
 		rainbowIcon = new JLabel();
 		label7 = new JLabel();
+		redToggleButton = new JToggleButton();
 		brighterToggleButton = new JToggleButton();
 
 		//======== this ========
@@ -188,6 +211,11 @@ public class ExtrasPanel
 		label7.setText("Global icon color filter");
 		add(label7, "cell 1 7 2 1");
 
+		//---- redToggleButton ----
+		redToggleButton.setText("Toggle RED");
+		redToggleButton.addActionListener(e -> redChanged());
+		add(redToggleButton, "cell 1 7 2 1");
+
 		//---- brighterToggleButton ----
 		brighterToggleButton.setText("Toggle brighter");
 		brighterToggleButton.addActionListener(e -> brighterChanged());
@@ -208,6 +236,7 @@ public class ExtrasPanel
 	private JLabel label6;
 	private JLabel rainbowIcon;
 	private JLabel label7;
+	private JToggleButton redToggleButton;
 	private JToggleButton brighterToggleButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
