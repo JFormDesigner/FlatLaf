@@ -46,6 +46,7 @@ import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.JToolBar;
@@ -87,7 +88,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatInspector
 {
-	private static final Integer HIGHLIGHT_LAYER = 401;
+	private static final Integer HIGHLIGHT_LAYER = JLayeredPane.POPUP_LAYER - 1;
 
 	private static final int KEY_MODIFIERS_MASK = InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.META_DOWN_MASK;
 
