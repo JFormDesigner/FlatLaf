@@ -702,10 +702,14 @@ public class FlatSVGIcon
 		}
 
 		private Color filterColor( Color color ) {
-			if( colorFilter != null )
-				color = colorFilter.filter( color );
-			if( globalColorFilter != null )
+			if( colorFilter != null ) {
+				Color newColor = colorFilter.filter( color );
+				color = (newColor != color)
+					? newColor
+					: globalColorFilter.filter( color );
+			} else
 				color = globalColorFilter.filter( color );
+
 			if( grayFilter != null ) {
 				int oldRGB = color.getRGB();
 				int newRGB = grayFilter.filterRGB( 0, 0, oldRGB );
