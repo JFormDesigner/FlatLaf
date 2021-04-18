@@ -236,6 +236,8 @@ public class FlatSVGIcon
 
 	/**
 	 * Creates a new icon with given width and height, which is derived from this icon.
+	 * <p>
+	 * If the icon has a color filter, then it is shared with the new icon.
 	 *
 	 * @param width the width of the new icon
 	 * @param height the height of the new icon
@@ -246,6 +248,7 @@ public class FlatSVGIcon
 			return this;
 
 		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader );
+		icon.colorFilter = colorFilter;
 		icon.diagram = diagram;
 		icon.dark = dark;
 		return icon;
@@ -253,6 +256,8 @@ public class FlatSVGIcon
 
 	/**
 	 * Creates a new icon with given scaling, which is derived from this icon.
+	 * <p>
+	 * If the icon has a color filter, then it is shared with the new icon.
 	 *
 	 * @param scale the amount by which the icon size is scaled
 	 * @return a new icon
@@ -262,6 +267,7 @@ public class FlatSVGIcon
 			return this;
 
 		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader );
+		icon.colorFilter = colorFilter;
 		icon.diagram = diagram;
 		icon.dark = dark;
 		return icon;
@@ -269,6 +275,8 @@ public class FlatSVGIcon
 
 	/**
 	 * Creates a new icon with disabled appearance, which is derived from this icon.
+	 * <p>
+	 * If the icon has a color filter, then it is shared with the new icon.
 	 *
 	 * @return a new icon
 	 */
@@ -278,6 +286,7 @@ public class FlatSVGIcon
 			return this;
 
 		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, true, classLoader );
+		icon.colorFilter = colorFilter;
 		icon.diagram = diagram;
 		icon.dark = dark;
 		return icon;
