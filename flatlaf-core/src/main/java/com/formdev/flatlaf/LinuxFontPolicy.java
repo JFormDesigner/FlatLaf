@@ -261,9 +261,9 @@ class LinuxFontPolicy
 	 * <br>
 	 * Some fonts seem to use hyphens to declare their style
 	 * (e.g <i>NimbusSans-Bold</i>), while others include numbers within their name
-	 * (e.g <i>QumpellkaNo12</i>) or both (e.g <i>ZnikomitNo24-Bold</i>), if we query
+	 * (e.g <i>QumpellkaNo12</i>) or both (e.g <i>ZnikomitNo24-Bold</i>); If we query
 	 * {@code gnome.Gtk/FontName} we'll get a font name which won't be recognized by
-	 * {@code new Font()}; Trying to create a Font object using such name will produce
+	 * {@code new Font()}, so any Font object created using such name will produce
 	 * unexpected results.
 	 * <br>
 	 * <br>
