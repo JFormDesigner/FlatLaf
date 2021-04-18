@@ -19,15 +19,19 @@ package com.formdev.flatlaf;
 import java.awt.Font;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
@@ -45,35 +49,16 @@ class LinuxFontPolicy
 
 	/**
 	 * Gets the default font for Gnome.
+	 * <br>
+	 * <br>
+	 * See {@link com.sun.java.swing.plaf.gtk.PangoFonts} for background information.
 	 */
 	private static Font getGnomeFont() {
-		// see class com.sun.java.swing.plaf.gtk.PangoFonts background information
+		Font guessedFont = guessGnomeFont();
 
-		Object fontName = Toolkit.getDefaultToolkit().getDesktopProperty( "gnome.Gtk/FontName" );
-		if( !(fontName instanceof String) )
-			fontName = "sans 10";
-
-		String family = "";
-		int style = Font.PLAIN;
-		int size = 10;
-
-		StringTokenizer st = new StringTokenizer( (String) fontName );
-		while( st.hasMoreTokens() ) {
-			String word = st.nextToken();
-
-			if( word.equalsIgnoreCase( "italic" ) )
-				style |= Font.ITALIC;
-			else if( word.equalsIgnoreCase( "bold" ) )
-				style |= Font.BOLD;
-			else if( Character.isDigit( word.charAt( 0 ) ) ) {
-				try {
-					size = Integer.parseInt( word );
-				} catch( NumberFormatException ex ) {
-					// ignore
-				}
-			} else
-				family = family.isEmpty() ? word : (family + ' ' + word);
-		}
+		int size = guessedFont.getSize();
+		int style = guessedFont.getStyle();
+		String family = guessedFont.getFamily(Locale.ENGLISH);
 
 		// Ubuntu font is rendered poorly (except if running in JetBrains VM)
 		// --> use Liberation Sans font
@@ -268,5 +253,69 @@ class LinuxFontPolicy
 		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment()
 			.getDefaultScreenDevice().getDefaultConfiguration();
 		return UIScale.getSystemScaleFactor( gc ) > 1;
+	}
+	
+	/**
+	 * Tries to find out which font it's currently in use by gnome based desktop environments.
+	 * <br>
+	 * <br>
+	 * Some fonts seem to use hyphens to declare their style
+	 * (e.g <i>NimbusSans-Bold</i>), while others include numbers within their name
+	 * (e.g <i>QumpellkaNo12</i>) or both (e.g <i>ZnikomitNo24-Bold</i>), if we query
+	 * {@code gnome.Gtk/FontName} we'll get a font name which won't be recognized by
+	 * {@code new Font()}; Trying to create a Font object using such name will produce
+	 * unexpected results.
+	 * <br>
+	 * <br>
+	 * This implementation works around the above by taking U+0020 (" ") as the only reliable
+	 * token separator; It also considers last token as the current font size in use by your Desktop
+	 * Environment.
+	 *
+	 * @author guekho64
+	 */
+	private static Font guessGnomeFont () {
+		final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+		// Make sure we're not getting a headless GraphicsEnvironment
+		// instance, and throw an exception in case we actually did
+		if( ge.isHeadlessInstance() ) throw(new HeadlessException());
+
+		final String originalName = Toolkit.getDefaultToolkit().getDesktopProperty("gnome.Gtk/FontName").toString().trim();
+
+		// Stores what results from splitting the original name
+		final List<String> tmpList = Arrays.asList(originalName.split(" "));
+
+		Collections.reverse(tmpList);
+
+		// We should easily obtain font size by getting last token from original name
+		// Of course, once our list has been reversed, last token becomes first one
+		final String sizeToken = tmpList.get(0);
+		final int fontSize = Double.valueOf(sizeToken).intValue();
+
+		// Skips first token, as we're already sure it's the font size
+		for(int skip = 1, tokenCount = tmpList.size(); skip++ < tokenCount;) {
+
+			// Stores every token which hasn't been tested yet
+			final List<String> tmpList2 = tmpList.stream().skip(skip).collect(Collectors.toList());
+
+			// Undo last reverse
+			Collections.reverse(tmpList2);
+
+			int intStyle = Font.PLAIN;
+			final String trimmedName = tmpList2.stream().collect(Collectors.joining(" "));
+			final String style = originalName.substring(trimmedName.length(), originalName.indexOf(sizeToken)).toLowerCase().trim();
+
+			if( style.contains("bold") ) intStyle |= Font.BOLD;
+			if( style.contains("italic") || style.contains("oblique") ) intStyle |= Font.ITALIC;
+
+			final Optional<String> possibleResult = Arrays.stream(ge.getAllFonts()).map(x -> {
+				return(x.getName());
+			}).filter(x -> {
+				return(x.startsWith(trimmedName));
+			}).findFirst();
+
+			if( possibleResult.isPresent() ) return new Font(possibleResult.get(), intStyle, fontSize);
+		}
+		return new Font(originalName, Font.PLAIN, fontSize);
 	}
 }
