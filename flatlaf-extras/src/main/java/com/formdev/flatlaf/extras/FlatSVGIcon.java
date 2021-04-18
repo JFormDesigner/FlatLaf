@@ -608,12 +608,13 @@ public class FlatSVGIcon
 		/**
 		 * Adds color mappings. Used for light and dark themes.
 		 */
-		public void addAll( Map<Color, Color> from2toMap ) {
+		public ColorFilter addAll( Map<Color, Color> from2toMap ) {
 			ensureColorMap();
 
 			colorMap.putAll( from2toMap );
 			if( darkColorMap != null )
 				darkColorMap.putAll( from2toMap );
+			return this;
 		}
 
 		/**
@@ -621,23 +622,25 @@ public class FlatSVGIcon
 		 *
 		 * @since 1.2
 		 */
-		public void addAll( Map<Color, Color> from2toLightMap, Map<Color, Color> from2toDarkMap ) {
+		public ColorFilter addAll( Map<Color, Color> from2toLightMap, Map<Color, Color> from2toDarkMap ) {
 			ensureColorMap();
 			ensureDarkColorMap();
 
 			colorMap.putAll( from2toLightMap );
 			darkColorMap.putAll( from2toDarkMap );
+			return this;
 		}
 
 		/**
 		 * Adds a color mapping. Used for light and dark themes.
 		 */
-		public void add( Color from, Color to ) {
+		public ColorFilter add( Color from, Color to ) {
 			ensureColorMap();
 
 			colorMap.put( from, to );
 			if( darkColorMap != null )
 				darkColorMap.put( from, to );
+			return this;
 		}
 
 		/**
@@ -645,7 +648,7 @@ public class FlatSVGIcon
 		 *
 		 * @since 1.2
 		 */
-		public void add( Color from, Color toLight, Color toDark ) {
+		public ColorFilter add( Color from, Color toLight, Color toDark ) {
 			ensureColorMap();
 			ensureDarkColorMap();
 
@@ -653,16 +656,18 @@ public class FlatSVGIcon
 				colorMap.put( from, toLight );
 			if( toDark != null )
 				darkColorMap.put( from, toDark );
+			return this;
 		}
 
 		/**
 		 * Removes a specific color mapping.
 		 */
-		public void remove( Color from ) {
+		public ColorFilter remove( Color from ) {
 			if( colorMap != null )
 				colorMap.remove( from );
 			if( darkColorMap != null )
 				darkColorMap.remove( from );
+			return this;
 		}
 
 		/**
@@ -670,9 +675,10 @@ public class FlatSVGIcon
 		 *
 		 * @since 1.2
 		 */
-		public void removeAll() {
+		public ColorFilter removeAll() {
 			colorMap = null;
 			darkColorMap = null;
+			return this;
 		}
 
 		private void ensureColorMap() {
