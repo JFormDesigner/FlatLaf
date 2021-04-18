@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RGBImageFilter;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -478,7 +479,7 @@ public class FlatSVGIcon
 
 	private static Boolean darkLaf;
 
-	private static boolean isDarkLaf() {
+	public static boolean isDarkLaf() {
 		if( darkLaf == null ) {
 			lafChanged();
 
@@ -512,7 +513,8 @@ public class FlatSVGIcon
 		private static ColorFilter instance;
 
 		private Map<Integer, String> rgb2keyMap;
-		private Map<Color, Color> color2colorMap;
+		private Map<Color, Color> colorMap;
+		private Map<Color, Color> darkColorMap;
 		private Function<Color, Color> mapper;
 
 		/**
@@ -582,29 +584,85 @@ public class FlatSVGIcon
 		}
 
 		/**
-		 * Adds color mappings.
+		 * Returns the color mappings used for light themes.
+		 *
+		 * @since 1.2
 		 */
-		public void addAll( Map<Color, Color> from2toMap ) {
-			if( color2colorMap == null )
-				color2colorMap = new HashMap<>();
-			color2colorMap.putAll( from2toMap );
+		public Map<Color, Color> getLightColorMap() {
+			return (colorMap != null)
+				? Collections.unmodifiableMap( colorMap )
+				: Collections.emptyMap();
 		}
 
 		/**
-		 * Adds a color mapping.
+		 * Returns the color mappings used for dark themes.
+		 *
+		 * @since 1.2
+		 */
+		public Map<Color, Color> getDarkColorMap() {
+			return (darkColorMap != null)
+				? Collections.unmodifiableMap( darkColorMap )
+				: getLightColorMap();
+		}
+
+		/**
+		 * Adds color mappings. Used for light and dark themes.
+		 */
+		public void addAll( Map<Color, Color> from2toMap ) {
+			ensureColorMap();
+
+			colorMap.putAll( from2toMap );
+			if( darkColorMap != null )
+				darkColorMap.putAll( from2toMap );
+		}
+
+		/**
+		 * Adds a color mappings, which has different colors for light and dark themes.
+		 *
+		 * @since 1.2
+		 */
+		public void addAll( Map<Color, Color> from2toLightMap, Map<Color, Color> from2toDarkMap ) {
+			ensureColorMap();
+			ensureDarkColorMap();
+
+			colorMap.putAll( from2toLightMap );
+			darkColorMap.putAll( from2toDarkMap );
+		}
+
+		/**
+		 * Adds a color mapping. Used for light and dark themes.
 		 */
 		public void add( Color from, Color to ) {
-			if( color2colorMap == null )
-				color2colorMap = new HashMap<>();
-			color2colorMap.put( from, to );
+			ensureColorMap();
+
+			colorMap.put( from, to );
+			if( darkColorMap != null )
+				darkColorMap.put( from, to );
+		}
+
+		/**
+		 * Adds a color mapping, which has different colors for light and dark themes.
+		 *
+		 * @since 1.2
+		 */
+		public void add( Color from, Color toLight, Color toDark ) {
+			ensureColorMap();
+			ensureDarkColorMap();
+
+			if( toLight != null )
+				colorMap.put( from, toLight );
+			if( toDark != null )
+				darkColorMap.put( from, toDark );
 		}
 
 		/**
 		 * Removes a specific color mapping.
 		 */
 		public void remove( Color from ) {
-			if( color2colorMap != null )
-				color2colorMap.remove( from );
+			if( colorMap != null )
+				colorMap.remove( from );
+			if( darkColorMap != null )
+				darkColorMap.remove( from );
 		}
 
 		/**
@@ -613,8 +671,18 @@ public class FlatSVGIcon
 		 * @since 1.2
 		 */
 		public void removeAll() {
-			if( color2colorMap != null )
-				color2colorMap.clear();
+			colorMap = null;
+			darkColorMap = null;
+		}
+
+		private void ensureColorMap() {
+			if( colorMap == null )
+				colorMap = new HashMap<>();
+		}
+
+		private void ensureDarkColorMap() {
+			if( darkColorMap == null )
+				darkColorMap = new HashMap<>( colorMap );
 		}
 
 		public Color filter( Color color ) {
@@ -629,8 +697,9 @@ public class FlatSVGIcon
 		};
 
 		private Color applyMappings( Color color ) {
-			if( color2colorMap != null ) {
-				Color newColor = color2colorMap.get( color );
+			if( colorMap != null ) {
+				Map<Color, Color> map = (darkColorMap != null && isDarkLaf()) ? darkColorMap : colorMap;
+				Color newColor = map.get( color );
 				if( newColor != null )
 					return newColor;
 			}
