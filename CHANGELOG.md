@@ -18,6 +18,11 @@ FlatLaf Change Log
   compatibility with custom table header implementations. (issue #228)
 - IntelliJ Themes: Added "Material Theme UI Lite / GitHub Dark" theme.
 - JIDE Common Layer: Improved support for `JideTabbedPane`. (PR #306)
+- Extras: `FlatSVGIcon` improvements:
+  - Each icon can now have its own color filter. (PR #303)
+  - Use mapper function in color filter to dynamically map colors. (PR #303)
+  - Color filter supports light and dark themes.
+  - Getters for icon name, classloader, etc.
 
 #### Fixed bugs
 

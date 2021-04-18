@@ -479,6 +479,13 @@ public class FlatSVGIcon
 
 	private static Boolean darkLaf;
 
+	/**
+	 * Checks whether the current look and feel is dark.
+	 * <p>
+	 * Uses {@link FlatLaf#isLafDark()} and caches the result.
+	 *
+	 * @since 1.2
+	 */
 	public static boolean isDarkLaf() {
 		if( darkLaf == null ) {
 			lafChanged();
