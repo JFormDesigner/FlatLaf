@@ -18,8 +18,13 @@ package com.formdev.flatlaf.demo.extras;
 
 import javax.swing.*;
 import com.formdev.flatlaf.extras.*;
+import com.formdev.flatlaf.extras.FlatSVGIcon.ColorFilter;
 import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
+import com.formdev.flatlaf.util.HSLColor;
 import net.miginfocom.swing.*;
+import java.awt.*;
+import java.awt.event.HierarchyEvent;
+import java.util.function.Function;
 
 /**
  * @author Karl Tauber
@@ -27,6 +32,9 @@ import net.miginfocom.swing.*;
 public class ExtrasPanel
 	extends JPanel
 {
+	private Timer rainbowIconTimer;
+	private int rainbowCounter = 0;
+
 	public ExtrasPanel() {
 		initComponents();
 
@@ -50,6 +58,34 @@ public class ExtrasPanel
 		addSVGIcon( "errorDialog.svg" );
 		addSVGIcon( "informationDialog.svg" );
 		addSVGIcon( "warningDialog.svg" );
+
+		initRainbowIcon();
+	}
+
+	private void initRainbowIcon() {
+		FlatSVGIcon icon = new FlatSVGIcon( "com/formdev/flatlaf/demo/extras/svg/informationDialog.svg" );
+		icon.setColorFilter( new ColorFilter( color -> {
+			rainbowCounter += 1;
+			rainbowCounter %= 255;
+			return Color.getHSBColor( rainbowCounter / 255f, 1, 1 );
+		} ) );
+		rainbowIcon.setIcon( icon );
+
+		rainbowIconTimer = new Timer( 30, e -> {
+			rainbowIcon.repaint();
+		} );
+
+		// start rainbow timer only if panel is shown ("Extras" tab is active)
+		addHierarchyListener( e -> {
+			if( e.getID() == HierarchyEvent.HIERARCHY_CHANGED &&
+				(e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 )
+			{
+				if( isShowing() )
+					rainbowIconTimer.start();
+				else
+					rainbowIconTimer.stop();
+			}
+		} );
 	}
 
 	private void addSVGIcon( String name ) {
@@ -58,6 +94,36 @@ public class ExtrasPanel
 
 	private void triStateCheckBox1Changed() {
 		triStateLabel1.setText( triStateCheckBox1.getState().toString() );
+	}
+
+	private void redChanged() {
+		brighterToggleButton.setSelected( false );
+
+		Function<Color, Color> mapper = null;
+		if( redToggleButton.isSelected() ) {
+			float[] redHSL = HSLColor.fromRGB( Color.red );
+			mapper = color -> {
+				float[] hsl = HSLColor.fromRGB( color );
+				return HSLColor.toRGB( redHSL[0], 70, hsl[2] );
+			};
+		}
+		FlatSVGIcon.ColorFilter.getInstance().setMapper( mapper );
+
+		// repaint whole application window because global color filter also affects
+		// icons in menubar, toolbar, etc.
+		SwingUtilities.windowForComponent( this ).repaint();
+	}
+
+	private void brighterChanged() {
+		redToggleButton.setSelected( false );
+
+		FlatSVGIcon.ColorFilter.getInstance().setMapper( brighterToggleButton.isSelected()
+			? color -> color.brighter().brighter()
+			: null );
+
+		// repaint whole application window because global color filter also affects
+		// icons in menubar, toolbar, etc.
+		SwingUtilities.windowForComponent( this ).repaint();
 	}
 
 	private void initComponents() {
@@ -69,6 +135,13 @@ public class ExtrasPanel
 		label2 = new JLabel();
 		svgIconsPanel = new JPanel();
 		label3 = new JLabel();
+		separator1 = new JSeparator();
+		label5 = new JLabel();
+		label6 = new JLabel();
+		rainbowIcon = new JLabel();
+		label7 = new JLabel();
+		redToggleButton = new JToggleButton();
+		brighterToggleButton = new JToggleButton();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -79,6 +152,10 @@ public class ExtrasPanel
 			"[left]",
 			// rows
 			"[]para" +
+			"[]" +
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]"));
@@ -119,6 +196,30 @@ public class ExtrasPanel
 		//---- label3 ----
 		label3.setText("The icons may change colors when switching to another theme.");
 		add(label3, "cell 1 3 2 1");
+		add(separator1, "cell 1 4 2 1,growx");
+
+		//---- label5 ----
+		label5.setText("Color filters can be also applied to icons. Globally or for each instance.");
+		add(label5, "cell 1 5 2 1");
+
+		//---- label6 ----
+		label6.setText("Rainbow color filter");
+		add(label6, "cell 1 6 2 1");
+		add(rainbowIcon, "cell 1 6 2 1");
+
+		//---- label7 ----
+		label7.setText("Global icon color filter");
+		add(label7, "cell 1 7 2 1");
+
+		//---- redToggleButton ----
+		redToggleButton.setText("Toggle RED");
+		redToggleButton.addActionListener(e -> redChanged());
+		add(redToggleButton, "cell 1 7 2 1");
+
+		//---- brighterToggleButton ----
+		brighterToggleButton.setText("Toggle brighter");
+		brighterToggleButton.addActionListener(e -> brighterChanged());
+		add(brighterToggleButton, "cell 1 7 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -130,5 +231,12 @@ public class ExtrasPanel
 	private JLabel label2;
 	private JPanel svgIconsPanel;
 	private JLabel label3;
+	private JSeparator separator1;
+	private JLabel label5;
+	private JLabel label6;
+	private JLabel rainbowIcon;
+	private JLabel label7;
+	private JToggleButton redToggleButton;
+	private JToggleButton brighterToggleButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
