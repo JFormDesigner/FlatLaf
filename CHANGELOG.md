@@ -26,6 +26,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- CheckBox and RadioButton: Do not fill background if used as cell renderer,
+  except if cell is selected or has different background color. (issue #311)
 - DesktopPane:
   - Fixed missing preview of iconified internal frames in dock when using a
     custom desktop manager. (PR #294)
@@ -202,7 +204,7 @@ FlatLaf Change Log
 - CheckBox and RadioButton: Fill component background as soon as background
   color is different to default background color, even if component is not
   opaque (which is the default). This paints selection if using the component as
-  cell renderer a Table, Tree or List.
+  cell renderer in Table, Tree or List.
 - TextComponents: Border of focused non-editable text components had wrong
   color.
 - Custom window decorations: Fixed top window border in dark themes when running

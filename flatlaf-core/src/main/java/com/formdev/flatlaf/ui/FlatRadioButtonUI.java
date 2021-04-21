@@ -18,11 +18,14 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.util.Objects;
 import javax.swing.AbstractButton;
+import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -120,10 +123,11 @@ public class FlatRadioButtonUI
 	public void paint( Graphics g, JComponent c ) {
 		// fill background even if not opaque if
 		// - contentAreaFilled is true and
-		// - if background was explicitly set to a non-UIResource color
+		// - if background color is different to default background color
+		// (this paints selection if using the component as cell renderer)
 		if( !c.isOpaque() &&
 			((AbstractButton)c).isContentAreaFilled() &&
-			!defaultBackground.equals( c.getBackground() ) )
+			!Objects.equals( c.getBackground(), getDefaultBackground( c ) ) )
 		{
 			g.setColor( c.getBackground() );
 			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
@@ -158,6 +162,18 @@ public class FlatRadioButtonUI
 	@Override
 	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
 		FlatButtonUI.paintText( g, b, textRect, text, b.isEnabled() ? b.getForeground() : disabledText );
+	}
+
+	/**
+	 * Returns the default background color of the component.
+	 * If the component is used as cell renderer (e.g. in JTable),
+	 * then the background color of the renderer container is returned.
+	 */
+	private Color getDefaultBackground( JComponent c ) {
+		Container parent = c.getParent();
+		return (parent instanceof CellRendererPane && parent.getParent() != null)
+			? parent.getParent().getBackground()
+			: defaultBackground;
 	}
 
 	private int getIconFocusWidth( JComponent c ) {
