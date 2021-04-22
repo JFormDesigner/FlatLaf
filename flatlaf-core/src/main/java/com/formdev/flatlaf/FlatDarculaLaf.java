@@ -16,6 +16,8 @@
 
 package com.formdev.flatlaf;
 
+import javax.swing.UIManager;
+
 /**
  * A Flat LaF that has a dark color scheme and looks like Darcula LaF.
  * <p>
@@ -29,10 +31,28 @@ public class FlatDarculaLaf
 {
 	public static final String NAME = "FlatLaf Darcula";
 
-	public static boolean install() {
-		return install( new FlatDarculaLaf() );
+	/**
+	 * Sets the application look and feel to this LaF
+	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
+	 */
+	public static boolean setup() {
+		return setup( new FlatDarculaLaf() );
 	}
 
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
+	}
+
+	/**
+	 * Adds this look and feel to the set of available look and feels.
+	 * <p>
+	 * Useful if your application uses {@link UIManager#getInstalledLookAndFeels()}
+	 * to query available LaFs and display them to the user in a combobox.
+	 */
 	public static void installLafInfo() {
 		installLafInfo( NAME, FlatDarculaLaf.class );
 	}

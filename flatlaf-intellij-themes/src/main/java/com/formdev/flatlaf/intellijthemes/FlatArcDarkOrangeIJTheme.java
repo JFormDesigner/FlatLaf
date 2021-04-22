@@ -31,12 +31,20 @@ public class FlatArcDarkOrangeIJTheme
 {
 	public static final String NAME = "Arc Dark - Orange";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatArcDarkOrangeIJTheme() );
+			return setup( new FlatArcDarkOrangeIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

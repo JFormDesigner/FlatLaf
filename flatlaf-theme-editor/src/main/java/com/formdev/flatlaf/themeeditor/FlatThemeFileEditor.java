@@ -70,7 +70,7 @@ public class FlatThemeFileEditor
 			: null;
 
 		SwingUtilities.invokeLater( () -> {
-			FlatLightLaf.install();
+			FlatLightLaf.setup();
 			FlatInspector.install( "ctrl alt shift X" );
 			FlatUIDefaultsInspector.install( "ctrl shift alt Y" );
 

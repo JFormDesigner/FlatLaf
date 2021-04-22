@@ -50,7 +50,7 @@ public class DemoPrefs
 		state = Preferences.userRoot().node( rootPath );
 	}
 
-	public static void initLaf( String[] args ) {
+	public static void setupLaf( String[] args ) {
 		// set look and feel
 		try {
 			if( args.length > 0 )
@@ -60,11 +60,11 @@ public class DemoPrefs
 				if( IntelliJTheme.ThemeLaf.class.getName().equals( lafClassName ) ) {
 					String theme = state.get( KEY_LAF_THEME, "" );
 					if( theme.startsWith( RESOURCE_PREFIX ) )
-						IntelliJTheme.install( IJThemesPanel.class.getResourceAsStream( IJThemesPanel.THEMES_PACKAGE + theme.substring( RESOURCE_PREFIX.length() ) ) );
+						IntelliJTheme.setup( IJThemesPanel.class.getResourceAsStream( IJThemesPanel.THEMES_PACKAGE + theme.substring( RESOURCE_PREFIX.length() ) ) );
 					else if( theme.startsWith( FILE_PREFIX ) )
-					    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( theme.substring( FILE_PREFIX.length() ) ) ) );
+					    FlatLaf.setup( IntelliJTheme.createLaf( new FileInputStream( theme.substring( FILE_PREFIX.length() ) ) ) );
 					else
-						FlatLightLaf.install();
+						FlatLightLaf.setup();
 
 					if( !theme.isEmpty() )
 						UIManager.getLookAndFeelDefaults().put( THEME_UI_KEY, theme );
@@ -73,9 +73,9 @@ public class DemoPrefs
 					if( theme.startsWith( FILE_PREFIX ) ) {
 						File themeFile = new File( theme.substring( FILE_PREFIX.length() ) );
 						String themeName = StringUtils.removeTrailing( themeFile.getName(), ".properties" );
-						FlatLaf.install( new FlatPropertiesLaf( themeName, themeFile ) );
+						FlatLaf.setup( new FlatPropertiesLaf( themeName, themeFile ) );
 					} else
-						FlatLightLaf.install();
+						FlatLightLaf.setup();
 
 					if( !theme.isEmpty() )
 						UIManager.getLookAndFeelDefaults().put( THEME_UI_KEY, theme );
@@ -86,7 +86,7 @@ public class DemoPrefs
 			ex.printStackTrace();
 
 			// fallback
-			FlatLightLaf.install();
+			FlatLightLaf.setup();
 		}
 
 		// remember active look and feel

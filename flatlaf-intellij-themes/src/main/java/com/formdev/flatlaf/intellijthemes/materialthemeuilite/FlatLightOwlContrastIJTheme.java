@@ -31,12 +31,20 @@ public class FlatLightOwlContrastIJTheme
 {
 	public static final String NAME = "Light Owl Contrast (Material)";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatLightOwlContrastIJTheme() );
+			return setup( new FlatLightOwlContrastIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

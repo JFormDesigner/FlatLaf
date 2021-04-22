@@ -31,12 +31,20 @@ public class FlatNightOwlIJTheme
 {
 	public static final String NAME = "Night Owl (Material)";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatNightOwlIJTheme() );
+			return setup( new FlatNightOwlIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

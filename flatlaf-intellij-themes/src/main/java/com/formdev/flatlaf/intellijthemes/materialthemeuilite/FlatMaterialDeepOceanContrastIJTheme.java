@@ -31,12 +31,20 @@ public class FlatMaterialDeepOceanContrastIJTheme
 {
 	public static final String NAME = "Material Deep Ocean Contrast (Material)";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatMaterialDeepOceanContrastIJTheme() );
+			return setup( new FlatMaterialDeepOceanContrastIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

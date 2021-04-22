@@ -31,12 +31,20 @@ public class FlatMaterialLighterIJTheme
 {
 	public static final String NAME = "Material Lighter (Material)";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatMaterialLighterIJTheme() );
+			return setup( new FlatMaterialLighterIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

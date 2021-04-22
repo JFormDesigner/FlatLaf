@@ -31,12 +31,20 @@ public class FlatGradiantoDarkFuchsiaIJTheme
 {
 	public static final String NAME = "Gradianto Dark Fuchsia";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatGradiantoDarkFuchsiaIJTheme() );
+			return setup( new FlatGradiantoDarkFuchsiaIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

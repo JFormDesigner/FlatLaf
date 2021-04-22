@@ -31,12 +31,20 @@ public class FlatGradiantoMidnightBlueIJTheme
 {
 	public static final String NAME = "Gradianto Midnight Blue";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatGradiantoMidnightBlueIJTheme() );
+			return setup( new FlatGradiantoMidnightBlueIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

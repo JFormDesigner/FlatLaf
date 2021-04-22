@@ -267,9 +267,9 @@ public class IJThemesPanel
 
 			try {
 				if( themeInfo.themeFile.getName().endsWith( ".properties" ) ) {
-				    FlatLaf.install( new FlatPropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
+				    FlatLaf.setup( new FlatPropertiesLaf( themeInfo.name, themeInfo.themeFile ) );
 				} else
-				    FlatLaf.install( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
+				    FlatLaf.setup( IntelliJTheme.createLaf( new FileInputStream( themeInfo.themeFile ) ) );
 
 				DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.FILE_PREFIX + themeInfo.themeFile );
 			} catch( Exception ex ) {
@@ -279,7 +279,7 @@ public class IJThemesPanel
 		} else {
 			FlatAnimatedLafChange.showSnapshot();
 
-			IntelliJTheme.install( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.resourceName ) );
+			IntelliJTheme.setup( getClass().getResourceAsStream( THEMES_PACKAGE + themeInfo.resourceName ) );
 		    DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.RESOURCE_PREFIX + themeInfo.resourceName );
 		}
 

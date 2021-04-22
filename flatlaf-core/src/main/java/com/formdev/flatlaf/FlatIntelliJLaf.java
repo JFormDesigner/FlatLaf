@@ -16,6 +16,8 @@
 
 package com.formdev.flatlaf;
 
+import javax.swing.UIManager;
+
 /**
  * A Flat LaF that has a light color scheme and looks like IntelliJ LaF.
  * <p>
@@ -29,10 +31,28 @@ public class FlatIntelliJLaf
 {
 	public static final String NAME = "FlatLaf IntelliJ";
 
-	public static boolean install() {
-		return install( new FlatIntelliJLaf() );
+	/**
+	 * Sets the application look and feel to this LaF
+	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
+	 */
+	public static boolean setup() {
+		return setup( new FlatIntelliJLaf() );
 	}
 
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
+	}
+
+	/**
+	 * Adds this look and feel to the set of available look and feels.
+	 * <p>
+	 * Useful if your application uses {@link UIManager#getInstalledLookAndFeels()}
+	 * to query available LaFs and display them to the user in a combobox.
+	 */
 	public static void installLafInfo() {
 		installLafInfo( NAME, FlatIntelliJLaf.class );
 	}

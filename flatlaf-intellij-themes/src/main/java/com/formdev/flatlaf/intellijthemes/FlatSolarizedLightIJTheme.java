@@ -31,12 +31,20 @@ public class FlatSolarizedLightIJTheme
 {
 	public static final String NAME = "Solarized Light";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatSolarizedLightIJTheme() );
+			return setup( new FlatSolarizedLightIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

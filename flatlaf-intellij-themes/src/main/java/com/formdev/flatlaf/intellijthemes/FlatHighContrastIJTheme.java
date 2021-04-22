@@ -31,12 +31,20 @@ public class FlatHighContrastIJTheme
 {
 	public static final String NAME = "High contrast";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatHighContrastIJTheme() );
+			return setup( new FlatHighContrastIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

@@ -31,12 +31,20 @@ public class FlatHiberbeeDarkIJTheme
 {
 	public static final String NAME = "Hiberbee Dark";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatHiberbeeDarkIJTheme() );
+			return setup( new FlatHiberbeeDarkIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

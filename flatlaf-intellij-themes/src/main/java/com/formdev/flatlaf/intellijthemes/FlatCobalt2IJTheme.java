@@ -31,12 +31,20 @@ public class FlatCobalt2IJTheme
 {
 	public static final String NAME = "Cobalt 2";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatCobalt2IJTheme() );
+			return setup( new FlatCobalt2IJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

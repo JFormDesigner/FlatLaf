@@ -23,6 +23,10 @@ FlatLaf Change Log
   - Use mapper function in color filter to dynamically map colors. (PR #303)
   - Color filter supports light and dark themes.
   - Getters for icon name, classloader, etc.
+- Renamed `Flat*Laf.install()` methods to `Flat*Laf.setup()` to avoid confusion
+  with `UIManager.installLookAndFeel(LookAndFeelInfo info)`. The old
+  `Flat*Laf.install()` methods are still there, but marked as deprecated. They
+  will be removed in a future version.
 
 #### Fixed bugs
 

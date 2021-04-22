@@ -31,12 +31,20 @@ public class FlatNordIJTheme
 {
 	public static final String NAME = "Nord";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatNordIJTheme() );
+			return setup( new FlatNordIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

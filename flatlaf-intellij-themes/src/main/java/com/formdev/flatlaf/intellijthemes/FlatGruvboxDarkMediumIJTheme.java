@@ -31,12 +31,20 @@ public class FlatGruvboxDarkMediumIJTheme
 {
 	public static final String NAME = "Gruvbox Dark Medium";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatGruvboxDarkMediumIJTheme() );
+			return setup( new FlatGruvboxDarkMediumIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

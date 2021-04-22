@@ -55,7 +55,7 @@ public class FlatNativeWindowBorderTest
 
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
-			FlatLightLaf.install();
+			FlatLightLaf.setup();
 			FlatInspector.install( "ctrl shift alt X" );
 
 			mainFrame = showFrame();

@@ -68,18 +68,26 @@ public class IntelliJTheme
 
 	/**
 	 * Loads a IntelliJ .theme.json file from the given input stream,
-	 * creates a Laf instance for it and installs it.
+	 * creates a Laf instance for it and sets it up.
 	 *
 	 * The input stream is automatically closed.
 	 * Using a buffered input stream is not necessary.
 	 */
-	public static boolean install( InputStream in ) {
+	public static boolean setup( InputStream in ) {
 		try {
-		    return FlatLaf.install( createLaf( in ) );
+		    return FlatLaf.setup( createLaf( in ) );
 		} catch( Exception ex ) {
 			LoggingFacade.INSTANCE.logSevere(  "FlatLaf: Failed to load IntelliJ theme", ex );
 		    return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup(InputStream)} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install( InputStream in ) {
+		return setup( in );
 	}
 
 	/**

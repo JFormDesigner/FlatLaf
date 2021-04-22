@@ -160,12 +160,20 @@ public class IJThemesClassGenerator
 		"{\n" +
 		"	public static final String NAME = \"${themeName}\";\n" +
 		"\n" +
-		"	public static boolean install() {\n" +
+		"	public static boolean setup() {\n" +
 		"		try {\n" +
-		"			return install( new ${themeClass}() );\n" +
+		"			return setup( new ${themeClass}() );\n" +
 		"		} catch( RuntimeException ex ) {\n" +
 		"			return false;\n" +
 		"		}\n" +
+		"	}\n" +
+		"\n" +
+		"	/**\n" +
+		"	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version\n" +
+		"	 */\n" +
+		"	@Deprecated\n" +
+		"	public static boolean install() {\n" +
+		"		return setup();\n" +
 		"	}\n" +
 		"\n" +
 		"	public static void installLafInfo() {\n" +

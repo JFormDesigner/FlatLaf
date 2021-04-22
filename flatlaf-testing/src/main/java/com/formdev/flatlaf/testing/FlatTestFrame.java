@@ -97,7 +97,7 @@ public class FlatTestFrame
 		FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.testing.customdefaults" );
 
 		// set look and feel
-		DemoPrefs.initLaf( args );
+		DemoPrefs.setupLaf( args );
 
 		// create frame
 		return new FlatTestFrame( title );

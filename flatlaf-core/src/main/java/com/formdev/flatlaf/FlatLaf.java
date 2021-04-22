@@ -95,14 +95,22 @@ public abstract class FlatLaf
 	 * Sets the application look and feel to the given LaF
 	 * using {@link UIManager#setLookAndFeel(javax.swing.LookAndFeel)}.
 	 */
-	public static boolean install( LookAndFeel newLookAndFeel ) {
+	public static boolean setup( LookAndFeel newLookAndFeel ) {
 		try {
 			UIManager.setLookAndFeel( newLookAndFeel );
 			return true;
 		} catch( Exception ex ) {
-			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to initialize look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to setup look and feel '" + newLookAndFeel.getClass().getName() + "'.", ex );
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup(LookAndFeel)} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install( LookAndFeel newLookAndFeel ) {
+		return setup( newLookAndFeel );
 	}
 
 	/**

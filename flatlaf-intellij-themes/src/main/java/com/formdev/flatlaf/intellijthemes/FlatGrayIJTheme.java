@@ -31,12 +31,20 @@ public class FlatGrayIJTheme
 {
 	public static final String NAME = "Gray";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatGrayIJTheme() );
+			return setup( new FlatGrayIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

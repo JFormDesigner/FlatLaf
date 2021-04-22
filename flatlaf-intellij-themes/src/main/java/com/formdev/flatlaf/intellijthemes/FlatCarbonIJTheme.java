@@ -31,12 +31,20 @@ public class FlatCarbonIJTheme
 {
 	public static final String NAME = "Carbon";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatCarbonIJTheme() );
+			return setup( new FlatCarbonIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

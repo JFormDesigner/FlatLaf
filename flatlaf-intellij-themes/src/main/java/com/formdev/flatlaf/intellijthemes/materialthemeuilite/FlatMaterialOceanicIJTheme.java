@@ -31,12 +31,20 @@ public class FlatMaterialOceanicIJTheme
 {
 	public static final String NAME = "Material Oceanic (Material)";
 
-	public static boolean install() {
+	public static boolean setup() {
 		try {
-			return install( new FlatMaterialOceanicIJTheme() );
+			return setup( new FlatMaterialOceanicIJTheme() );
 		} catch( RuntimeException ex ) {
 			return false;
 		}
+	}
+
+	/**
+	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
+	 */
+	@Deprecated
+	public static boolean install() {
+		return setup();
 	}
 
 	public static void installLafInfo() {

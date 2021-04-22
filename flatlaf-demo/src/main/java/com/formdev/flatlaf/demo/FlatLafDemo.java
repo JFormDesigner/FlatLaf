@@ -48,7 +48,7 @@ public class FlatLafDemo
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.demo" );
 
 			// set look and feel
-			DemoPrefs.initLaf( args );
+			DemoPrefs.setupLaf( args );
 
 			// install inspectors
 			FlatInspector.install( "ctrl shift alt X" );
