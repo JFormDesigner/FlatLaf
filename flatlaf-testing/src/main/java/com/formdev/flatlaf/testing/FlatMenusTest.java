@@ -124,11 +124,11 @@ public class FlatMenusTest
 	private int randomKeyStrokeIndex = 0;
 	private final KeyStroke[] randomKeyStrokes = {
 		KeyStroke.getKeyStroke( KeyEvent.VK_F2, 0 ),
-		KeyStroke.getKeyStroke( KeyEvent.VK_A, KeyEvent.CTRL_MASK ),
-		KeyStroke.getKeyStroke( KeyEvent.VK_B, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_MASK ),
+		KeyStroke.getKeyStroke( KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK ),
+		KeyStroke.getKeyStroke( KeyEvent.VK_B, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK ),
 		KeyStroke.getKeyStroke( KeyEvent.VK_BACK_SPACE, 0 ),
 		KeyStroke.getKeyStroke( KeyEvent.VK_PAGE_UP, 0 ),
-		KeyStroke.getKeyStroke( KeyEvent.VK_C, KeyEvent.ALT_MASK ),
+		KeyStroke.getKeyStroke( KeyEvent.VK_C, KeyEvent.ALT_DOWN_MASK ),
 		KeyStroke.getKeyStroke( KeyEvent.VK_ENTER, 0 ),
 		KeyStroke.getKeyStroke( KeyEvent.VK_F10, 0 ),
 		KeyStroke.getKeyStroke( KeyEvent.VK_0, 0 ),

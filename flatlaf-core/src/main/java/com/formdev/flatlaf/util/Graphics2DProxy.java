@@ -257,11 +257,6 @@ public class Graphics2DProxy
 	}
 
 	@Override
-	public void finalize() {
-		delegate.finalize();
-	}
-
-	@Override
 	public String toString() {
 		return delegate.toString();
 	}

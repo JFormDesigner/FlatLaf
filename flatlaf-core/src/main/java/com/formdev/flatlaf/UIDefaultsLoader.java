@@ -442,8 +442,8 @@ class UIDefaultsLoader
 	private static Object parseInstance( String value, List<ClassLoader> addonClassLoaders ) {
 		return (LazyValue) t -> {
 			try {
-				return findClass( value, addonClassLoaders ).newInstance();
-			} catch( InstantiationException | IllegalAccessException | ClassNotFoundException ex ) {
+				return findClass( value, addonClassLoaders ).getDeclaredConstructor().newInstance();
+			} catch( Exception ex ) {
 				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to instantiate '" + value + "'.", ex );
 				return null;
 			}

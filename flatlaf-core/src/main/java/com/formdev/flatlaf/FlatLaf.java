@@ -326,7 +326,7 @@ public abstract class FlatLaf
 				Method m = UIManager.class.getMethod( "createLookAndFeel", String.class );
 				aquaLaf = (BasicLookAndFeel) m.invoke( null, "Mac OS X" );
 			} else
-				aquaLaf = (BasicLookAndFeel) Class.forName( aquaLafClassName ).newInstance();
+				aquaLaf = (BasicLookAndFeel) Class.forName( aquaLafClassName ).getDeclaredConstructor().newInstance();
 		} catch( Exception ex ) {
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to initialize Aqua look and feel '" + aquaLafClassName + "'.", ex );
 			throw new IllegalStateException();
