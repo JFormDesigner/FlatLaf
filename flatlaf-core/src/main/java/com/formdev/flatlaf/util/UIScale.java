@@ -43,7 +43,7 @@ import com.formdev.flatlaf.FlatSystemProperties;
  * <p>
  * Two scaling modes are supported by FlatLaf for HiDPI displays:
  *
- * <h3>1) system scaling mode</h3>
+ * <h2>1) system scaling mode</h2>
  *
  * This mode is supported since Java 9 on all platforms and in some Java 8 VMs
  * (e.g. Apple and JetBrains). The JRE determines the scale factor per-display and
@@ -54,7 +54,7 @@ import com.formdev.flatlaf.FlatSystemProperties;
  * The scale factor may be different for each connected display.
  * The scale factor may change for a window when moving the window from one display to another one.
  *
- * <h3>2) user scaling mode</h3>
+ * <h2>2) user scaling mode</h2>
  *
  * This mode is mainly for Java 8 compatibility, but is also used on Linux
  * or if the default font is changed.

@@ -37,6 +37,7 @@ tasks {
 			this as StandardJavadocDocletOptions
 			use( true )
 			tags = listOf( "uiDefault", "clientProperty" )
+			addStringOption( "Xdoclint:all,-missing", "-Xdoclint:all,-missing" )
 		}
 		isFailOnError = false
 	}
