@@ -47,6 +47,7 @@ allprojects {
 			targetCompatibility = "1.8"
 
 			options.encoding = "ISO-8859-1"
+			options.isDeprecation = false
 		}
 
 		withType<Jar>().configureEach {
@@ -60,6 +61,20 @@ allprojects {
 			from("${rootDir}/LICENSE") {
 				into("META-INF")
 			}
+		}
+
+		withType<Javadoc>().configureEach {
+			options {
+				this as StandardJavadocDocletOptions
+
+				title = "${project.name} $version"
+				header = title
+				isUse = true
+				tags = listOf( "uiDefault", "clientProperty" )
+				addStringOption( "Xdoclint:all,-missing", "-Xdoclint:all,-missing" )
+				links( "https://docs.oracle.com/en/java/javase/11/docs/api/" )
+			}
+			isFailOnError = false
 		}
 	}
 }

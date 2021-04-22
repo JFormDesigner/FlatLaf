@@ -34,18 +34,6 @@ java {
 	withJavadocJar()
 }
 
-tasks {
-	javadoc {
-		options {
-			this as StandardJavadocDocletOptions
-			use( true )
-			tags = listOf( "uiDefault", "clientProperty" )
-			addStringOption( "Xdoclint:all,-missing", "-Xdoclint:all,-missing" )
-		}
-		isFailOnError = false
-	}
-}
-
 flatlafPublish {
 	artifactId = "flatlaf-extras"
 	name = "FlatLaf Extras"

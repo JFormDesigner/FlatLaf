@@ -36,18 +36,6 @@ java {
 	withJavadocJar()
 }
 
-tasks {
-	javadoc {
-		options {
-			this as StandardJavadocDocletOptions
-			use( true )
-			tags = listOf( "uiDefault", "clientProperty" )
-			addStringOption( "Xdoclint:all,-missing", "-Xdoclint:all,-missing" )
-		}
-		isFailOnError = false
-	}
-}
-
 flatlafPublish {
 	artifactId = "flatlaf-swingx"
 	name = "FlatLaf addon for SwingX"
