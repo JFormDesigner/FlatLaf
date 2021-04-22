@@ -308,10 +308,10 @@ public class FlatSVGIcon
 	 * {@link ColorFilter#ColorFilter(Function)} constructor.
 	 * <p>
 	 * This can be used to brighten colors of the icon:
-	 * <pre>icon.setColorFilter( new FlatSVGIcon.ColorFilter( color -> color.brighter() ) );</pre>
+	 * <pre>icon.setColorFilter( new FlatSVGIcon.ColorFilter( color -&gt; color.brighter() ) );</pre>
 	 * <p>
 	 * Using a filter, icons can also be turned monochrome (painted with a single color):
-	 * <pre>icon.setColorFilter( new FlatSVGIcon.ColorFilter( color -> Color.RED ) );</pre>
+	 * <pre>icon.setColorFilter( new FlatSVGIcon.ColorFilter( color -&gt; Color.RED ) );</pre>
 	 * <p>
 	 * Note: If a filter is already set, it will be replaced.
 	 *
@@ -560,10 +560,10 @@ public class FlatSVGIcon
 		 * <p>
 		 * Examples:
 		 * A ColorFilter can be used to brighten colors of the icon:
-		 * <pre>new ColorFilter( color -> color.brighter() );</pre>
+		 * <pre>new ColorFilter( color -&gt; color.brighter() );</pre>
 		 * <p>
 		 * Using a ColorFilter, icons can also be turned monochrome (painted with a single color):
-		 * <pre>new ColorFilter( color -> Color.RED );</pre>
+		 * <pre>new ColorFilter( color -&gt; Color.RED );</pre>
 		 *
 		 * @param mapper The color mapper function
 		 * @since 1.2
@@ -587,10 +587,10 @@ public class FlatSVGIcon
 		 * <p>
 		 * Examples:
 		 * A ColorFilter can be used to brighten colors of the icon:
-		 * <pre>filter.setMapper( color -> color.brighter() );</pre>
+		 * <pre>filter.setMapper( color -&gt; color.brighter() );</pre>
 		 * <p>
 		 * Using a ColorFilter, icons can also be turned monochrome (painted with a single color):
-		 * <pre>filter.setMapper( color -> Color.RED );</pre>
+		 * <pre>filter.setMapper( color -&gt; Color.RED );</pre>
 		 *
 		 * @param mapper The color mapper function
 		 * @since 1.2
