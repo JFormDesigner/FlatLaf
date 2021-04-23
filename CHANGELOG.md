@@ -43,6 +43,8 @@ FlatLaf Change Log
   `FlatPopupFactory.fixToolTipLocation()`. (issue #305)
 - IntelliJ Themes: Fixed background colors of DesktopPane and DesktopIcon in all
   themes.
+- Native window decorations: Fixed occasional double window title bar when
+  creating many frames or dialogs. (issue #315)
 
 
 ## 1.1.2

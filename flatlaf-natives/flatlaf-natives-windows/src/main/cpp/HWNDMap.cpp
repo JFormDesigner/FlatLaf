@@ -102,17 +102,17 @@ void HWNDMap::remove( HWND key ) {
 }
 
 int HWNDMap::binarySearch( HWND key ) {
+	__int64 ikey = reinterpret_cast<__int64>( key );
 	int low = 0;
 	int high = size - 1;
 
 	while( low <= high ) {
 		int mid = (low + high) >> 1;
 
-		HWND midKey = table[mid].key;
-		int cmp = midKey - key;
-		if( cmp < 0 )
+		__int64 midKey = reinterpret_cast<__int64>( table[mid].key );
+		if( midKey < ikey )
 			low = mid + 1;
-		else if( cmp > 0 )
+		else if( midKey > ikey )
 			high = mid - 1;
 		else
 			return mid;
