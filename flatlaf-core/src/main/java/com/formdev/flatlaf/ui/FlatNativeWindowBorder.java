@@ -125,6 +125,10 @@ public class FlatNativeWindowBorder
 			// enable native window border for window
 			setHasCustomDecoration( frame, true );
 
+			// avoid double window title bar if enabling native window border failed
+			if( !hasCustomDecoration( frame ) )
+				return;
+
 			// enable Swing window decoration
 			rootPane.setWindowDecorationStyle( JRootPane.FRAME );
 
@@ -142,6 +146,10 @@ public class FlatNativeWindowBorder
 
 			// enable native window border for window
 			setHasCustomDecoration( dialog, true );
+
+			// avoid double window title bar if enabling native window border failed
+			if( !hasCustomDecoration( dialog ) )
+				return;
 
 			// enable Swing window decoration
 			rootPane.setWindowDecorationStyle( JRootPane.PLAIN_DIALOG );

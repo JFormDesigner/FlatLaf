@@ -308,6 +308,8 @@ class FlatWindowsNativeWindowBorder
 			this.window = window;
 
 			hwnd = installImpl( window );
+			if( hwnd == 0 )
+				return;
 
 			// remove the OS window title bar
 			if( window instanceof JFrame && ((JFrame)window).getExtendedState() != 0 ) {
