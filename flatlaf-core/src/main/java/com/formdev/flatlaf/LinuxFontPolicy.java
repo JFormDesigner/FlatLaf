@@ -55,24 +55,38 @@ class LinuxFontPolicy
 
 		String family = "";
 		int style = Font.PLAIN;
-		int size = 10;
+		double dsize = 10;
 
+		// parse pango font description
+		// see https://developer.gnome.org/pango/1.46/pango-Fonts.html#pango-font-description-from-string
 		StringTokenizer st = new StringTokenizer( (String) fontName );
 		while( st.hasMoreTokens() ) {
 			String word = st.nextToken();
 
-			if( word.equalsIgnoreCase( "italic" ) )
+			// remove trailing ',' (e.g. in "Ubuntu Condensed, 11" or "Ubuntu Condensed, Bold 11")
+			if( word.endsWith( "," ) )
+				word = word.substring( 0, word.length() - 1 ).trim();
+
+			String lword = word.toLowerCase();
+			if( lword.equals( "italic" ) || lword.equals( "oblique" ) )
 				style |= Font.ITALIC;
-			else if( word.equalsIgnoreCase( "bold" ) )
+			else if( lword.equals( "bold" ) )
 				style |= Font.BOLD;
 			else if( Character.isDigit( word.charAt( 0 ) ) ) {
 				try {
-					size = Integer.parseInt( word );
+					dsize = Double.parseDouble( word );
 				} catch( NumberFormatException ex ) {
 					// ignore
 				}
-			} else
+			} else {
+				// remove '-' from "Semi-Bold", "Extra-Light", etc
+				if( lword.startsWith( "semi-" ) || lword.startsWith( "demi-" ) )
+					word = word.substring( 0, 4 ) + word.substring( 5 );
+				else if( lword.startsWith( "extra-" ) || lword.startsWith( "ultra-" ) )
+					word = word.substring( 0, 5 ) + word.substring( 6 );
+
 				family = family.isEmpty() ? word : (family + ' ' + word);
+			}
 		}
 
 		// Ubuntu font is rendered poorly (except if running in JetBrains VM)
@@ -83,8 +97,8 @@ class LinuxFontPolicy
 		  family = "Liberation Sans";
 
 		// scale font size
-		double dsize = size * getGnomeFontScale();
-		size = (int) (dsize + 0.5);
+		dsize *= getGnomeFontScale();
+		int size = (int) (dsize + 0.5);
 		if( size < 1 )
 			size = 1;
 
@@ -93,7 +107,37 @@ class LinuxFontPolicy
 		if( logicalFamily != null )
 			family = logicalFamily;
 
-		return createFont( family, style, size, dsize );
+		return createFontEx( family, style, size, dsize );
+	}
+
+	/**
+	 * Create a font for the given family, style and size.
+	 * If the font family does not match any font on the system,
+	 * then the last word (usually a font weight) from the family name is removed and tried again.
+	 * E.g. family 'URW Bookman Light' is not found, but 'URW Bookman' is found.
+	 * If still not found, then font of family 'Dialog' is returned.
+	 */
+	private static Font createFontEx( String family, int style, int size, double dsize ) {
+		for(;;) {
+			Font font = createFont( family, style, size, dsize );
+
+			// if the font family does not match any font on the system, "Dialog" family is returned
+			if( !"Dialog".equals( font.getFamily() ) || "Dialog".equals( family ) )
+				return font;
+
+			// find last word in family
+			int index = family.lastIndexOf( ' ' );
+			if( index < 0 )
+				return createFont( "Dialog", style, size, dsize );;
+
+			// check whether last work contains some font weight (e.g. Ultra-Bold or Heavy)
+			String lastWord = family.substring( index + 1 ).toLowerCase();
+			if( lastWord.contains( "bold" ) || lastWord.contains( "heavy" ) || lastWord.contains( "black" ) )
+				style |= Font.BOLD;
+
+			// remove last word from family and try again
+			family = family.substring( 0, index );
+		}
 	}
 
 	private static Font createFont( String family, int style, int size, double dsize ) {

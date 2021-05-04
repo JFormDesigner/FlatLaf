@@ -48,6 +48,7 @@ FlatLaf Change Log
   themes.
 - Native window decorations: Fixed occasional double window title bar when
   creating many frames or dialogs. (issue #315)
+- Linux: Fixed/improved detection of user font settings. (issue #309)
 
 
 ## 1.1.2
