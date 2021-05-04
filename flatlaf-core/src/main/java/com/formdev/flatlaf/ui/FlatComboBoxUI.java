@@ -42,6 +42,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.CellRendererPane;
 import javax.swing.ComboBoxEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.InputMap;
@@ -390,6 +391,15 @@ public class FlatComboBoxUI
 	public void update( Graphics g, JComponent c ) {
 		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
 		float arc = FlatUIUtils.getBorderArc( c );
+		boolean paintBackground = true;
+
+		// check whether used as cell renderer
+		boolean isCellRenderer = c.getParent() instanceof CellRendererPane;
+		if( isCellRenderer ) {
+			focusWidth = 0;
+			arc = 0;
+			paintBackground = isCellRendererBackgroundChanged();
+		}
 
 		// fill background if opaque to avoid garbage if user sets opaque to true
 		if( c.isOpaque() && (focusWidth > 0 || arc > 0) )
@@ -407,27 +417,29 @@ public class FlatComboBoxUI
 		boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
 		// paint background
-		g2.setColor( getBackground( enabled ) );
-		FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
-
-		// paint arrow button background
-		if( enabled ) {
-			g2.setColor( paintButton ? buttonEditableBackground : buttonBackground );
-			Shape oldClip = g2.getClip();
-			if( isLeftToRight )
-				g2.clipRect( arrowX, 0, width - arrowX, height );
-			else
-				g2.clipRect( 0, 0, arrowX + arrowWidth, height );
+		if( paintBackground || c.isOpaque() ) {
+			g2.setColor( getBackground( enabled ) );
 			FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
-			g2.setClip( oldClip );
-		}
 
-		// paint vertical line between value and arrow button
-		if( paintButton ) {
-			g2.setColor( enabled ? borderColor : disabledBorderColor );
-			float lw = scale( 1f );
-			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2)) );
+			// paint arrow button background
+			if( enabled && !isCellRenderer ) {
+				g2.setColor( paintButton ? buttonEditableBackground : buttonBackground );
+				Shape oldClip = g2.getClip();
+				if( isLeftToRight )
+					g2.clipRect( arrowX, 0, width - arrowX, height );
+				else
+					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
+				FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
+				g2.setClip( oldClip );
+			}
+
+			// paint vertical line between value and arrow button
+			if( paintButton ) {
+				g2.setColor( enabled ? borderColor : disabledBorderColor );
+				float lw = scale( 1f );
+				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2)) );
+			}
 		}
 
 		// avoid that the "current value" renderer is invoked with enabled antialiasing
@@ -554,6 +566,16 @@ public class FlatComboBoxUI
 		}
 	}
 
+	private boolean isCellRenderer() {
+		return comboBox.getParent() instanceof CellRendererPane;
+	}
+
+	private boolean isCellRendererBackgroundChanged() {
+		// parent is a CellRendererPane, parentParent is e.g. a JTable
+		Container parentParent = comboBox.getParent().getParent();
+		return parentParent != null && !comboBox.getBackground().equals( parentParent.getBackground() );
+	}
+
 	//---- class FlatComboBoxButton -------------------------------------------
 
 	protected class FlatComboBoxButton
@@ -579,6 +601,14 @@ public class FlatComboBoxUI
 		@Override
 		protected boolean isPressed() {
 			return super.isPressed() || (!comboBox.isEditable() ? pressed : false);
+		}
+
+		@Override
+		protected Color getArrowColor() {
+			if( isCellRenderer() && isCellRendererBackgroundChanged() )
+				return comboBox.getForeground();
+
+			return super.getArrowColor();
 		}
 	}
 

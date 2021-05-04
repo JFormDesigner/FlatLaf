@@ -5,8 +5,13 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Renamed `Flat*Laf.install()` methods to `Flat*Laf.setup()` to avoid confusion
+  with `UIManager.installLookAndFeel(LookAndFeelInfo info)`. The old
+  `Flat*Laf.install()` methods are still there, but marked as deprecated. They
+  will be removed in a future version.
 - Button and ToggleButton: Support borderless button style (set client property
   `JButton.buttonType` to `borderless`). (PR #276)
+- ComboBox: Support using as cell renderer (e.g. in `JTable`).
 - DesktopPane: Improved layout of iconified internal frames in dock:
   - Always placed at bottom-left in desktop pane.
   - Newly iconified frames are added to the right side of the dock.
@@ -23,10 +28,6 @@ FlatLaf Change Log
   - Use mapper function in color filter to dynamically map colors. (PR #303)
   - Color filter supports light and dark themes.
   - Getters for icon name, classloader, etc.
-- Renamed `Flat*Laf.install()` methods to `Flat*Laf.setup()` to avoid confusion
-  with `UIManager.installLookAndFeel(LookAndFeelInfo info)`. The old
-  `Flat*Laf.install()` methods are still there, but marked as deprecated. They
-  will be removed in a future version.
 
 #### Fixed bugs
 

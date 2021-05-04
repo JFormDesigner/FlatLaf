@@ -134,6 +134,7 @@ public class FlatComponents2Test
 			"January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"
 		};
+		cm.getColumn(2).setCellRenderer( new TestComboBoxTableCellRenderer() );
 		cm.getColumn(2).setCellEditor( new DefaultCellEditor( new JComboBox<>( months ) ) );
 		JComboBox<String> editableComboBox = new JComboBox<>( months );
 		editableComboBox.setEditable( true );
@@ -1216,6 +1217,25 @@ public class FlatComponents2Test
 			boolean leaf, int row, boolean hasFocus )
 		{
 			setText( String.valueOf( value ) );
+			return this;
+		}
+	}
+
+	//---- class TestComboBoxTableCellRenderer --------------------------------
+
+	private static class TestComboBoxTableCellRenderer
+		extends JComboBox<String>
+		implements TableCellRenderer
+	{
+		@Override
+		public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected,
+			boolean hasFocus, int row, int column )
+		{
+			setModel( new DefaultComboBoxModel<>( new String[] { String.valueOf( value ) } ) );
+
+			setBackground( isSelected ? table.getSelectionBackground() : table.getBackground() );
+			setForeground( isSelected ? table.getSelectionForeground() : table.getForeground() );
+			setBorder( null );
 			return this;
 		}
 	}

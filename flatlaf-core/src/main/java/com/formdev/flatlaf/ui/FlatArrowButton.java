@@ -141,6 +141,21 @@ public class FlatArrowButton
 		return FlatUIUtils.deriveColor( foreground, this.foreground );
 	}
 
+	/**
+	 * Returns the color used to paint the arrow.
+	 *
+	 * @since 1.2
+	 */
+	protected Color getArrowColor() {
+		return isEnabled()
+			? (pressedForeground != null && isPressed()
+				? pressedForeground
+				: (hoverForeground != null && isHover()
+					? hoverForeground
+					: foreground))
+			: disabledForeground;
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return scale( super.getPreferredSize() );
@@ -170,13 +185,7 @@ public class FlatArrowButton
 		}
 
 		// paint arrow
-		g.setColor( deriveForeground( isEnabled()
-			? (pressedForeground != null && isPressed()
-				? pressedForeground
-				: (hoverForeground != null && isHover()
-					? hoverForeground
-					: foreground))
-			: disabledForeground ) );
+		g.setColor( deriveForeground( getArrowColor() ) );
 		paintArrow( (Graphics2D) g );
 
 		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
