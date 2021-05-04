@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -561,6 +562,8 @@ public abstract class FlatLaf
 			defaults.put( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON );
 		} else if( SystemInfo.isJava_9_orLater ) {
 			Object desktopHints = Toolkit.getDefaultToolkit().getDesktopProperty( DESKTOPFONTHINTS );
+			if( desktopHints == null )
+				desktopHints = fallbackAATextInfo();
 			if( desktopHints instanceof Map ) {
 				@SuppressWarnings( "unchecked" )
 				Map<Object, Object> hints = (Map<Object, Object>) desktopHints;
@@ -583,7 +586,50 @@ public abstract class FlatLaf
 				Object value = Class.forName( "sun.swing.SwingUtilities2$AATextInfo" )
 					.getMethod( "getAATextInfo", boolean.class )
 					.invoke( null, true );
+				if( value == null )
+					value = fallbackAATextInfo();
 				defaults.put( key, value );
+			} catch( Exception ex ) {
+				LoggingFacade.INSTANCE.logSevere( null, ex );
+				throw new RuntimeException( ex );
+			}
+		}
+	}
+
+	private Object fallbackAATextInfo() {
+		// do nothing if explicitly overridden
+		if( System.getProperty( "awt.useSystemAAFontSettings" ) != null )
+			return null;
+
+		Object aaHint = null;
+		Integer lcdContrastHint = null;
+
+		if( SystemInfo.isLinux ) {
+			// see sun.awt.UNIXToolkit.getDesktopAAHints()
+			Toolkit toolkit = Toolkit.getDefaultToolkit();
+			if( toolkit.getDesktopProperty( "gnome.Xft/Antialias" ) == null &&
+				toolkit.getDesktopProperty( "fontconfig/Antialias" ) == null )
+			{
+				// no Gnome or KDE Desktop properties available
+				// --> enable antialiasing
+				aaHint = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
+			}
+		}
+
+		if( aaHint == null )
+			return null;
+
+		if( SystemInfo.isJava_9_orLater ) {
+			Map<Object, Object> hints = new HashMap<>();
+			hints.put( RenderingHints.KEY_TEXT_ANTIALIASING, aaHint );
+			hints.put( RenderingHints.KEY_TEXT_LCD_CONTRAST, lcdContrastHint );
+			return hints;
+		} else {
+			// Java 8
+			try {
+				return Class.forName( "sun.swing.SwingUtilities2$AATextInfo" )
+					.getConstructor( Object.class, Integer.class )
+					.newInstance( aaHint, lcdContrastHint );
 			} catch( Exception ex ) {
 				LoggingFacade.INSTANCE.logSevere( null, ex );
 				throw new RuntimeException( ex );

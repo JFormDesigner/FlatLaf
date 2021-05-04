@@ -21,6 +21,8 @@ FlatLaf Change Log
 - TableHeader: Moved table header column border painting from
   `FlatTableHeaderUI` to new border `FlatTableHeaderBorder` to improve
   compatibility with custom table header implementations. (issue #228)
+- Linux: Enable text anti-aliasing if no Gnome or KDE Desktop properties are
+  available. (issue #218)
 - IntelliJ Themes: Added "Material Theme UI Lite / GitHub Dark" theme.
 - JIDE Common Layer: Improved support for `JideTabbedPane`. (PR #306)
 - Extras: `FlatSVGIcon` improvements:
