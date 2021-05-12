@@ -1200,9 +1200,26 @@ public class FlatComponents2Test
 		extends DefaultTreeCellRenderer
 	{
 		public TestDefaultTreeCellRenderer() {
-			setBackgroundNonSelectionColor( Color.red );
 			setBackgroundSelectionColor( Color.green );
 			setTextSelectionColor( Color.blue );
+		}
+
+		@Override
+		public Component getTreeCellRendererComponent( JTree tree, Object value, boolean sel, boolean expanded,
+			boolean leaf, int row, boolean hasFocus )
+		{
+			Color nonSelectionBg = null;
+			Color nonSelectionFg = null;
+			switch( String.valueOf( value ) ) {
+				case "blue":		nonSelectionFg = Color.blue; break;
+				case "red":		nonSelectionFg = Color.red; break;
+				case "yellow":	nonSelectionBg = Color.yellow; break;
+				case "violet":	nonSelectionBg = Color.magenta; break;
+			}
+			setBackgroundNonSelectionColor( nonSelectionBg );
+			setTextNonSelectionColor( (nonSelectionFg != null) ? nonSelectionFg : UIManager.getColor( "Tree.textForeground" ) );
+
+			return super.getTreeCellRendererComponent( tree, value, sel, expanded, leaf, row, hasFocus );
 		}
 	}
 

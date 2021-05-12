@@ -44,6 +44,9 @@ FlatLaf Change Log
     internal frames in dock.
 - PopupFactory: Fixed occasional `NullPointerException` in
   `FlatPopupFactory.fixToolTipLocation()`. (issue #305)
+- Tree: Fill cell background if
+  `DefaultTreeCellRenderer.setBackgroundNonSelectionColor(Color)` was used.
+  (issue #322)
 - IntelliJ Themes: Fixed background colors of DesktopPane and DesktopIcon in all
   themes.
 - Native window decorations: Fixed occasional double window title bar when
