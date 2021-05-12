@@ -53,6 +53,8 @@ FlatLaf Change Log
   themes.
 - Native window decorations: Fixed occasional double window title bar when
   creating many frames or dialogs. (issue #315)
+- Native window decorations: Fixed slow application startup under particular
+  conditions. (e.g. incomplete custom JRE) (issue #319)
 - Linux: Fixed/improved detection of user font settings. (issue #309)
 
 

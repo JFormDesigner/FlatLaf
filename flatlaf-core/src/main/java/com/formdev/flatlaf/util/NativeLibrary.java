@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -144,26 +145,46 @@ public class NativeLibrary
 		String suffix = (dot >= 0) ? name.substring( dot ) : "";
 
 		Path tempDir = getTempDir();
-		if( tempDir != null ) {
-			deleteTemporaryFiles( tempDir );
 
-			return Files.createTempFile( tempDir, prefix, suffix );
-		} else
-			return Files.createTempFile( prefix, suffix );
+		// Note:
+		// Not using Files.createTempFile() here because it uses random number generator SecureRandom,
+		// which may take 5-10 seconds to initialize under particular conditions.
+
+		// Use current time in nanoseconds instead of a random number.
+		// To avoid (theoretical) collisions, append a counter.
+		long nanoTime = System.nanoTime();
+		for( int i = 0;; i++ ) {
+			String s = prefix + Long.toUnsignedString( nanoTime ) + i + suffix;
+			try {
+				return Files.createFile( tempDir.resolve( s ) );
+			} catch( FileAlreadyExistsException ex ) {
+				// ignore --> increment counter and try again
+			}
+		}
 	}
 
 	private static Path getTempDir() throws IOException {
+		// get standard temporary directory
+		String tmpdir = System.getProperty( "java.io.tmpdir" );
+
 		if( SystemInfo.isWindows ) {
 			// On Windows, where File.delete() and File.deleteOnExit() does not work
 			// for loaded native libraries, they will be deleted on next application startup.
 			// The default temporary directory may contain hundreds or thousands of files.
 			// To make searching for "marked for deletion" files as fast as possible,
 			// use a sub directory that contains only our temporary native libraries.
-			Path tempDir = Paths.get( System.getProperty( "java.io.tmpdir" ) + "/flatlaf.temp" );
-			Files.createDirectories( tempDir );
-			return tempDir;
-		} else
-			return null; // use standard temporary directory
+			tmpdir += "\\flatlaf.temp";
+		}
+
+		// create temporary directory
+		Path tempDir = Paths.get( tmpdir );
+		Files.createDirectories( tempDir );
+
+		// delete no longer needed temporary files (from already exited applications)
+		if( SystemInfo.isWindows )
+			deleteTemporaryFiles( tempDir );
+
+		return tempDir;
 	}
 
 	private static void deleteTemporaryFiles( Path tempDir ) {
