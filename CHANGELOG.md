@@ -30,6 +30,8 @@ FlatLaf Change Log
   - Use mapper function in color filter to dynamically map colors. (PR #303)
   - Color filter supports light and dark themes.
   - Getters for icon name, classloader, etc.
+- Extras: UI Inspector: Show class hierarchies when pressing <kbd>Alt</kbd> key
+  and prettified class names (dimmed package name).
 
 #### Fixed bugs
 
