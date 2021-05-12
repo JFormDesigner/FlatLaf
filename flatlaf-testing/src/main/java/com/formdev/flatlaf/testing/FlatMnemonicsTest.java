@@ -258,14 +258,14 @@ public class FlatMnemonicsTest
 
 				//---- newMenuItem ----
 				newMenuItem.setText("New");
-				newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_MASK));
+				newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_DOWN_MASK));
 				newMenuItem.setMnemonic('N');
 				newMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				fileMenu.add(newMenuItem);
 
 				//---- openMenuItem ----
 				openMenuItem.setText("Open");
-				openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.ALT_MASK));
+				openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.ALT_DOWN_MASK));
 				openMenuItem.setMnemonic('O');
 				openMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				fileMenu.add(openMenuItem);
@@ -273,21 +273,21 @@ public class FlatMnemonicsTest
 
 				//---- closeMenuItem ----
 				closeMenuItem.setText("Close");
-				closeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_MASK|KeyEvent.ALT_MASK));
+				closeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_DOWN_MASK|KeyEvent.ALT_DOWN_MASK));
 				closeMenuItem.setMnemonic('C');
 				closeMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				fileMenu.add(closeMenuItem);
 
 				//---- closeMenuItem2 ----
 				closeMenuItem2.setText("Close All");
-				closeMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.ALT_MASK|KeyEvent.SHIFT_MASK));
+				closeMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.ALT_DOWN_MASK|KeyEvent.SHIFT_DOWN_MASK));
 				closeMenuItem2.addActionListener(e -> menuItemActionPerformed(e));
 				fileMenu.add(closeMenuItem2);
 				fileMenu.addSeparator();
 
 				//---- exitMenuItem ----
 				exitMenuItem.setText("Exit");
-				exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.ALT_MASK|KeyEvent.SHIFT_MASK));
+				exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.ALT_DOWN_MASK|KeyEvent.SHIFT_DOWN_MASK));
 				exitMenuItem.setMnemonic('X');
 				exitMenuItem.addActionListener(e -> menuItemActionPerformed(e));
 				fileMenu.add(exitMenuItem);

@@ -527,7 +527,7 @@ public class FlatThemeFileEditor
 				//---- previousEditorMenuItem ----
 				previousEditorMenuItem.setText("Previous Editor");
 				previousEditorMenuItem.setMnemonic('P');
-				previousEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_MASK));
+				previousEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_DOWN_MASK));
 				previousEditorMenuItem.addActionListener(e -> previousEditor());
 				windowMenu.add(previousEditorMenuItem);
 			}

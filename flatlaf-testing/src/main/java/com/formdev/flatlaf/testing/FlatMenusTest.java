@@ -264,7 +264,7 @@ public class FlatMenusTest
 				menuItem7.setText("text");
 				menuItem7.setMnemonic('X');
 				menuItem7.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-showWriteAccess.png")));
-				menuItem7.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_MASK|KeyEvent.SHIFT_MASK));
+				menuItem7.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_DOWN_MASK|KeyEvent.SHIFT_DOWN_MASK));
 				menu5.add(menuItem7);
 
 				//---- menuItem34 ----
@@ -363,7 +363,7 @@ public class FlatMenusTest
 				//======== menuWithAccelerator2 ========
 				{
 					menuWithAccelerator2.setText("text");
-					menuWithAccelerator2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
+					menuWithAccelerator2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK));
 
 					//---- menuItem40 ----
 					menuItem40.setText("text");
@@ -373,7 +373,7 @@ public class FlatMenusTest
 
 				//---- menuItem39 ----
 				menuItem39.setText("text");
-				menuItem39.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
+				menuItem39.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK));
 				menuWithAccelerator1.add(menuItem39);
 			}
 			menuBar1.add(menuWithAccelerator1);
@@ -587,7 +587,7 @@ public class FlatMenusTest
 
 			//---- menuItem1 ----
 			menuItem1.setText("enabled");
-			menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
+			menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK));
 			menuItem1.setMnemonic('N');
 			panel1.add(menuItem1, "cell 1 1");
 
@@ -643,7 +643,7 @@ public class FlatMenusTest
 			//---- menuItem2 ----
 			menuItem2.setText("disabled");
 			menuItem2.setEnabled(false);
-			menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.ALT_MASK|KeyEvent.SHIFT_MASK));
+			menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.ALT_DOWN_MASK|KeyEvent.SHIFT_DOWN_MASK));
 			menuItem2.setMnemonic('I');
 			panel2.add(menuItem2, "cell 0 1");
 
