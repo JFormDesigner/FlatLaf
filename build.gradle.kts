@@ -52,14 +52,15 @@ allprojects {
 
 		withType<Jar>().configureEach {
 			// manifest for all created JARs
-			manifest.attributes(mapOf(
+			manifest.attributes(
 				"Implementation-Vendor" to "FormDev Software GmbH",
 				"Implementation-Copyright" to "Copyright (C) 2019-${java.time.LocalDate.now().year} FormDev Software GmbH. All rights reserved.",
-				"Implementation-Version" to project.version))
+				"Implementation-Version" to project.version
+			)
 
 			// add META-INF/LICENSE to all created JARs
-			from("${rootDir}/LICENSE") {
-				into("META-INF")
+			from( "${rootDir}/LICENSE" ) {
+				into( "META-INF" )
 			}
 		}
 

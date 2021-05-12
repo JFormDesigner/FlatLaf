@@ -45,11 +45,11 @@ tasks {
 		}
 	}
 
-	named<Jar>("sourcesJar" ) {
+	named<Jar>( "sourcesJar" ) {
 		archiveBaseName.set( "flatlaf" )
 	}
 
-	named<Jar>("javadocJar" ) {
+	named<Jar>( "javadocJar" ) {
 		archiveBaseName.set( "flatlaf" )
 	}
 }
