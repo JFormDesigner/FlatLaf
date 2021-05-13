@@ -51,10 +51,13 @@ FlatLaf Change Log
   (issue #322)
 - IntelliJ Themes: Fixed background colors of DesktopPane and DesktopIcon in all
   themes.
-- Native window decorations: Fixed occasional double window title bar when
-  creating many frames or dialogs. (issue #315)
-- Native window decorations: Fixed slow application startup under particular
-  conditions. (e.g. incomplete custom JRE) (issue #319)
+- Native window decorations:
+  - Fixed slow application startup under particular conditions. (e.g. incomplete
+    custom JRE) (issue #319)
+  - Fixed occasional double window title bar when creating many frames or
+    dialogs. (issue #315)
+  - Fixed broken maximizing window (under special conditions) when restoring
+    frame state at startup.
 - Linux: Fixed/improved detection of user font settings. (issue #309)
 
 

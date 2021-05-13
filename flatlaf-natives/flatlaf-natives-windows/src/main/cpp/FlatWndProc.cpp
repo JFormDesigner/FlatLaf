@@ -47,9 +47,9 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
 
 extern "C"
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_updateFrame
-	( JNIEnv* env, jobject obj, jlong hwnd )
+	( JNIEnv* env, jobject obj, jlong hwnd, jint state )
 {
-	FlatWndProc::updateFrame( reinterpret_cast<HWND>( hwnd ) );
+	FlatWndProc::updateFrame( reinterpret_cast<HWND>( hwnd ), state );
 }
 
 extern "C"
@@ -68,6 +68,9 @@ jmethodID FlatWndProc::fireStateChangedLaterOnceMID;
 
 HWNDMap* FlatWndProc::hwndMap;
 
+#define java_awt_Frame_ICONIFIED			1
+#define java_awt_Frame_MAXIMIZED_BOTH		(4 | 2)
+
 //---- class FlatWndProc methods ----------------------------------------------
 
 FlatWndProc::FlatWndProc() {
@@ -76,6 +79,7 @@ FlatWndProc::FlatWndProc() {
 	obj = NULL;
 	hwnd = NULL;
 	defaultWndProc = NULL;
+	wmSizeWParam = -1;
 }
 
 HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
@@ -120,7 +124,7 @@ void FlatWndProc::uninstall( JNIEnv *env, jobject obj, HWND hwnd ) {
 	::SetWindowLongPtr( hwnd, GWLP_WNDPROC, (LONG_PTR) fwp->defaultWndProc );
 
 	// show the OS window title bar
-	updateFrame( hwnd );
+	updateFrame( hwnd, 0 );
 
 	// cleanup
 	env->DeleteGlobalRef( fwp->obj );
@@ -145,10 +149,29 @@ void FlatWndProc::initIDs( JNIEnv *env, jobject obj ) {
 	  initialized = 1;
 }
 
-void FlatWndProc::updateFrame( HWND hwnd ) {
+void FlatWndProc::updateFrame( HWND hwnd, int state ) {
+	// Following SetWindowPos() sends a WM_SIZE(SIZE_RESTORED) message to the window
+	// (although SWP_NOSIZE is set), which would prevent maximizing/minimizing
+	// when making the frame visible.
+	// AWT uses WM_SIZE wParam SIZE_RESTORED to update JFrame.extendedState and
+	// removes MAXIMIZED_BOTH and ICONIFIED. (see method AwtFrame::WmSize() in awt_Frame.cpp)
+	// To avoid this, change WM_SIZE wParam to SIZE_MAXIMIZED or SIZE_MINIMIZED if necessary.
+	FlatWndProc* fwp = (FlatWndProc*) hwndMap->get( hwnd );
+	if( fwp != NULL ) {
+		if( (state & java_awt_Frame_ICONIFIED) != 0 )
+			fwp->wmSizeWParam = SIZE_MINIMIZED;
+		else if( (state & java_awt_Frame_MAXIMIZED_BOTH) == java_awt_Frame_MAXIMIZED_BOTH )
+			fwp->wmSizeWParam = SIZE_MAXIMIZED;
+		else
+			fwp->wmSizeWParam = -1;
+	}
+
 	// this sends WM_NCCALCSIZE and removes/shows the window title bar
 	::SetWindowPos( hwnd, hwnd, 0, 0, 0, 0,
 		SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
+
+	if( fwp != NULL )
+		fwp->wmSizeWParam = -1;
 }
 
 LRESULT CALLBACK FlatWndProc::StaticWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
@@ -174,6 +197,11 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 
 		case WM_DWMCOLORIZATIONCOLORCHANGED:
 			fireStateChangedLaterOnce();
+			break;
+
+		case WM_SIZE:
+			if( wmSizeWParam >= 0 )
+				wParam = wmSizeWParam;
 			break;
 
 		case WM_DESTROY:

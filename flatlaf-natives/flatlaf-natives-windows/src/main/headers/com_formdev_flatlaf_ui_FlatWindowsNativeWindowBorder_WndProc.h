@@ -34,10 +34,10 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
 /*
  * Class:     com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc
  * Method:    updateFrame
- * Signature: (J)V
+ * Signature: (JI)V
  */
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_updateFrame
-  (JNIEnv *, jobject, jlong);
+  (JNIEnv *, jobject, jlong, jint);
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc

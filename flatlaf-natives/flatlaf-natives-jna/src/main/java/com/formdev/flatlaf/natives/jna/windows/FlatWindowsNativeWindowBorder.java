@@ -292,6 +292,11 @@ public class FlatWindowsNativeWindowBorder
 			WM_NCRBUTTONUP = 0x00A5,
 			WM_DWMCOLORIZATIONCOLORCHANGED = 0x0320;
 
+		// WM_SIZE wParam
+		private static final int
+			SIZE_MINIMIZED = 1,
+			SIZE_MAXIMIZED = 2;
+
 		// WM_NCHITTEST mouse position codes
 		private static final int
 			HTCLIENT = 1,
@@ -320,6 +325,7 @@ public class FlatWindowsNativeWindowBorder
 		private Window window;
 		private final HWND hwnd;
 		private final BaseTSD.LONG_PTR defaultWndProc;
+		private int wmSizeWParam = -1;
 
 		private int titleBarHeight;
 		private Rectangle[] hitTestSpots;
@@ -338,16 +344,7 @@ public class FlatWindowsNativeWindowBorder
 				defaultWndProc = User32Ex.INSTANCE.SetWindowLong( hwnd, GWLP_WNDPROC, this );
 
 			// remove the OS window title bar
-			if( window instanceof JFrame && ((JFrame)window).getExtendedState() != 0 ) {
-				// In case that the frame should be maximized or minimized immediately
-				// when showing, then it is necessary to defer ::SetWindowPos() invocation.
-				// Otherwise the frame will not be maximized or minimized.
-				// This occurs only if frame.pack() was no invoked.
-				EventQueue.invokeLater( () -> {
-					updateFrame();
-				});
-			} else
-				updateFrame();
+			updateFrame( (window instanceof JFrame) ? ((JFrame)window).getExtendedState() : 0 );
 		}
 
 		void uninstall() {
@@ -358,16 +355,31 @@ public class FlatWindowsNativeWindowBorder
 				User32Ex.INSTANCE.SetWindowLong( hwnd, GWLP_WNDPROC, defaultWndProc );
 
 			// show the OS window title bar
-			updateFrame();
+			updateFrame( 0 );
 
 			// cleanup
 			window = null;
 		}
 
-		private void updateFrame() {
+		private void updateFrame( int state ) {
+			// Following SetWindowPos() sends a WM_SIZE(SIZE_RESTORED) message to the window
+			// (although SWP_NOSIZE is set), which would prevent maximizing/minimizing
+			// when making the frame visible.
+			// AWT uses WM_SIZE wParam SIZE_RESTORED to update JFrame.extendedState and
+			// removes MAXIMIZED_BOTH and ICONIFIED. (see method AwtFrame::WmSize() in awt_Frame.cpp)
+			// To avoid this, change WM_SIZE wParam to SIZE_MAXIMIZED or SIZE_MINIMIZED if necessary.
+			if( (state & JFrame.ICONIFIED) != 0 )
+				wmSizeWParam = SIZE_MINIMIZED;
+			else if( (state & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH )
+				wmSizeWParam = SIZE_MAXIMIZED;
+			else
+				wmSizeWParam = -1;
+
 			// this sends WM_NCCALCSIZE and removes/shows the window title bar
 			User32.INSTANCE.SetWindowPos( hwnd, hwnd, 0, 0, 0, 0,
 				SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
+
+			wmSizeWParam = -1;
 		}
 
 		/**
@@ -389,6 +401,11 @@ public class FlatWindowsNativeWindowBorder
 
 				case WM_DWMCOLORIZATIONCOLORCHANGED:
 					fireStateChangedLaterOnce();
+					break;
+
+				case WM_SIZE:
+					if( wmSizeWParam >= 0 )
+						wParam = new WPARAM( wmSizeWParam );
 					break;
 
 				case WM_DESTROY:

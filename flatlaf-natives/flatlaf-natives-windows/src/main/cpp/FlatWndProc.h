@@ -25,7 +25,7 @@ class FlatWndProc
 public:
 	static HWND install( JNIEnv *env, jobject obj, jobject window );
 	static void uninstall( JNIEnv *env, jobject obj, HWND hwnd );
-	static void updateFrame( HWND hwnd );
+	static void updateFrame( HWND hwnd, int state );
 
 private:
 	static int initialized;
@@ -40,6 +40,7 @@ private:
 	jobject obj;
 	HWND hwnd;
 	WNDPROC defaultWndProc;
+	int wmSizeWParam;
 
 	FlatWndProc();
 	static void initIDs( JNIEnv *env, jobject obj );
