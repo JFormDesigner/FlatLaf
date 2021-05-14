@@ -19,12 +19,16 @@ package com.formdev.flatlaf.testing;
 import java.awt.*;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import net.miginfocom.swing.*;
 
 /**
@@ -355,6 +359,32 @@ public class FlatWindowDecorationsTest
 			window.setIconImages( images );
 		else if( iconTestRandomRadioButton.isSelected() )
 			window.setIconImage( images.get( (int) (Math.random() * images.size()) ) );
+		else if( iconTestMRIRadioButton.isSelected() ) {
+			ArrayList<Image> sortedImages = new ArrayList<>( images );
+			sortedImages.sort( (image1, image2) -> {
+				return image1.getWidth( null ) - image2.getWidth( null );
+			} );
+			window.setIconImage( MultiResolutionImageSupport.create( 0, sortedImages.toArray( new Image[sortedImages.size()] ) ) );
+		} else if( iconTestDynMRIRadioButton.isSelected() ) {
+			window.setIconImage( MultiResolutionImageSupport.create( 0,
+				new Dimension[] {
+					new Dimension( 16, 16 ),
+			}, dim -> {
+				BufferedImage image = new BufferedImage( dim.width, dim.height, BufferedImage.TYPE_INT_ARGB );
+				Graphics2D g = image.createGraphics();
+				try {
+					g.setColor( Color.getHSBColor( (dim.width - 16) / 64f, 1, 0.8f ) );
+					g.fillRect( 0, 0, dim.width, dim.height );
+
+					g.setColor( Color.white );
+					g.setFont( new Font( "Dialog", Font.PLAIN, (int) (dim.width * 0.8) ) );
+					FlatUIUtils.drawString( this, g, String.valueOf( dim.width ), 0, dim.height - 2 );
+				} finally {
+					g.dispose();
+				}
+				return image;
+			} ) );
+		}
 	}
 
 	private JRootPane getWindowRootPane() {
@@ -403,6 +433,8 @@ public class FlatWindowDecorationsTest
 		iconNoneRadioButton = new JRadioButton();
 		iconTestAllRadioButton = new JRadioButton();
 		iconTestRandomRadioButton = new JRadioButton();
+		iconTestMRIRadioButton = new JRadioButton();
+		iconTestDynMRIRadioButton = new JRadioButton();
 		JButton openDialogButton = new JButton();
 		JButton openFrameButton = new JButton();
 		menuBar = new JMenuBar();
@@ -642,6 +674,8 @@ public class FlatWindowDecorationsTest
 				// rows
 				"[]" +
 				"[]" +
+				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- iconNoneRadioButton ----
@@ -659,6 +693,16 @@ public class FlatWindowDecorationsTest
 			iconTestRandomRadioButton.setText("test random");
 			iconTestRandomRadioButton.addActionListener(e -> iconChanged());
 			panel2.add(iconTestRandomRadioButton, "cell 0 2");
+
+			//---- iconTestMRIRadioButton ----
+			iconTestMRIRadioButton.setText("test multi-resolution (Java 9+)");
+			iconTestMRIRadioButton.addActionListener(e -> iconChanged());
+			panel2.add(iconTestMRIRadioButton, "cell 0 3");
+
+			//---- iconTestDynMRIRadioButton ----
+			iconTestDynMRIRadioButton.setText("test dynamic multi-resolution (Java 9+)");
+			iconTestDynMRIRadioButton.addActionListener(e -> iconChanged());
+			panel2.add(iconTestDynMRIRadioButton, "cell 0 4");
 		}
 		add(panel2, "cell 1 8");
 
@@ -858,6 +902,8 @@ public class FlatWindowDecorationsTest
 		iconButtonGroup.add(iconNoneRadioButton);
 		iconButtonGroup.add(iconTestAllRadioButton);
 		iconButtonGroup.add(iconTestRandomRadioButton);
+		iconButtonGroup.add(iconTestMRIRadioButton);
+		iconButtonGroup.add(iconTestDynMRIRadioButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -892,6 +938,8 @@ public class FlatWindowDecorationsTest
 	private JRadioButton iconNoneRadioButton;
 	private JRadioButton iconTestAllRadioButton;
 	private JRadioButton iconTestRandomRadioButton;
+	private JRadioButton iconTestMRIRadioButton;
+	private JRadioButton iconTestDynMRIRadioButton;
 	private JMenuBar menuBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

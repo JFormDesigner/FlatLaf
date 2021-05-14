@@ -351,7 +351,7 @@ public class FlatTitlePane
 
 		// set icon
 		if( !images.isEmpty() )
-			iconLabel.setIcon( FlatTitlePaneIcon.create( images, iconSize ) );
+			iconLabel.setIcon( new FlatTitlePaneIcon( images, iconSize ) );
 		else {
 			// no icon set on window --> use default icon
 			Icon defaultIcon = UIManager.getIcon( "TitlePane.icon" );

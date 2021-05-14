@@ -77,7 +77,7 @@ debug*/
 		double scaleFactor = systemScaleFactor * userScaleFactor;
 
 		// paint input image icon if not necessary to scale
-		if( scaleFactor == 1 && iconWidth == imageIcon.getIconWidth() && iconHeight == imageIcon.getIconHeight() ) {
+		if( scaleFactor == 1 && imageIcon != null && iconWidth == imageIcon.getIconWidth() && iconHeight == imageIcon.getIconHeight() ) {
 			imageIcon.paintIcon( c, g, x, y );
 			return;
 		}

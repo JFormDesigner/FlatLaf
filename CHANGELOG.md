@@ -32,6 +32,9 @@ FlatLaf Change Log
   - Getters for icon name, classloader, etc.
 - Extras: UI Inspector: Show class hierarchies when pressing <kbd>Alt</kbd> key
   and prettified class names (dimmed package name).
+- Extras: `FlatSVGUtils.createWindowIconImages()` now returns a single
+  multi-resolution image that creates requested image sizes on demand from SVG
+  (Java 9+).
 
 #### Fixed bugs
 
@@ -58,6 +61,10 @@ FlatLaf Change Log
     dialogs. (issue #315)
   - Fixed broken maximizing window (under special conditions) when restoring
     frame state at startup.
+  - Title icon: For multi-resolution images now use `getResolutionVariant(width,
+    height)` (instead of `getResolutionVariants()`) to allow creation of
+    requested size on demand. This also avoids creation of all resolution
+    variants.
 - Linux: Fixed/improved detection of user font settings. (issue #309)
 
 
