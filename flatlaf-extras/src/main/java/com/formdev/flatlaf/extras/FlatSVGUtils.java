@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.JWindow;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.kitfox.svg.SVGCache;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGException;
@@ -44,7 +45,7 @@ public class FlatSVGUtils
 	 * can be used for windows headers. The SVG should have a size of 16x16,
 	 * otherwise it is scaled.
 	 * <p>
-	 * If running on Java 9 or later and multi-resolution image support is available,
+	 * If running on Windows in Java 9 or later and multi-resolution image support is available,
 	 * then a single multi-resolution image is returned that creates images on demand
 	 * for requested sizes from SVG.
 	 * This has the advantage that only images for used sizes are created.
@@ -58,7 +59,7 @@ public class FlatSVGUtils
 	public static List<Image> createWindowIconImages( String svgName ) {
 		SVGDiagram diagram = loadSVG( svgName );
 
-		if( MultiResolutionImageSupport.isAvailable() ) {
+		if( SystemInfo.isWindows && MultiResolutionImageSupport.isAvailable() ) {
 			// use a multi-resolution image that creates images on demand for requested sizes
 			return Collections.singletonList( MultiResolutionImageSupport.create( 0,
 				new Dimension[] {

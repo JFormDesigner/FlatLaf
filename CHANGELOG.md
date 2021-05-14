@@ -34,7 +34,7 @@ FlatLaf Change Log
   and prettified class names (dimmed package name).
 - Extras: `FlatSVGUtils.createWindowIconImages()` now returns a single
   multi-resolution image that creates requested image sizes on demand from SVG
-  (Java 9+).
+  (only on Windows with Java 9+).
 
 #### Fixed bugs
 
