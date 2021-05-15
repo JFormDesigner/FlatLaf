@@ -55,6 +55,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.IconUIResource;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.StyleContext;
@@ -190,8 +191,10 @@ public abstract class FlatLaf
 
 	@Override
 	public Icon getDisabledIcon( JComponent component, Icon icon ) {
-		if( icon instanceof DisabledIconProvider )
-			return ((DisabledIconProvider)icon).getDisabledIcon();
+		if( icon instanceof DisabledIconProvider ) {
+			Icon disabledIcon = ((DisabledIconProvider)icon).getDisabledIcon();
+			return !(disabledIcon instanceof UIResource) ? new IconUIResource( disabledIcon ) : disabledIcon;
+		}
 
 		if( icon instanceof ImageIcon ) {
 			Object grayFilter = UIManager.get( "Component.grayFilter" );
