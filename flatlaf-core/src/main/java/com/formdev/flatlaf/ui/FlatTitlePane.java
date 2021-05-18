@@ -521,13 +521,13 @@ public class FlatTitlePane
 			g.drawLine( 0, debugTitleBarHeight, getWidth(), debugTitleBarHeight );
 		}
 		if( debugHitTestSpots != null ) {
-			g.setColor( Color.blue );
+			g.setColor( Color.red );
 			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
 			for( Rectangle r : debugHitTestSpots )
 				g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 		}
 		if( debugAppIconBounds != null ) {
-			g.setColor( Color.red );
+			g.setColor( Color.blue);
 			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
 			Rectangle r = debugAppIconBounds;
 			g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
@@ -723,14 +723,29 @@ debug*/
 		List<Rectangle> hitTestSpots = new ArrayList<>();
 		Rectangle appIconBounds = null;
 		if( iconLabel.isVisible() ) {
-			// compute real icon size (without insets)
+			// compute real icon size (without insets; 1px wider for easier hitting)
 			Point location = SwingUtilities.convertPoint( iconLabel, 0, 0, window );
 			Insets iconInsets = iconLabel.getInsets();
 			Rectangle iconBounds = new Rectangle(
-				location.x + iconInsets.left,
-				location.y + iconInsets.top,
-				iconLabel.getWidth() - iconInsets.left - iconInsets.right,
-				iconLabel.getHeight() - iconInsets.top - iconInsets.bottom );
+				location.x + iconInsets.left - 1,
+				location.y + iconInsets.top - 1,
+				iconLabel.getWidth() - iconInsets.left - iconInsets.right + 2,
+				iconLabel.getHeight() - iconInsets.top - iconInsets.bottom + 2 );
+
+			// if frame is maximized, increase icon bounds to upper-left corner
+			// of window to allow closing window via double-click in upper-left corner
+			if( window instanceof Frame &&
+				(((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0 )
+			{
+				iconBounds.height += iconBounds.y;
+				iconBounds.y = 0;
+
+				if( window.getComponentOrientation().isLeftToRight() ) {
+					iconBounds.width += iconBounds.x;
+					iconBounds.x = 0;
+				} else
+					iconBounds.width += iconInsets.right;
+			}
 
 			if( hasJBRCustomDecoration() )
 				hitTestSpots.add( iconBounds );

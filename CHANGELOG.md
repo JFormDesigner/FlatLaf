@@ -65,6 +65,8 @@ FlatLaf Change Log
     height)` (instead of `getResolutionVariants()`) to allow creation of
     requested size on demand. This also avoids creation of all resolution
     variants.
+  - Double-click at upper-left corner of maximized frame did not close window.
+    (issue #326)
 - Linux: Fixed/improved detection of user font settings. (issue #309)
 
 
