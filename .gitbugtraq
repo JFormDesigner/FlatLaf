@@ -1,0 +1,8 @@
+# links issue numbers in git commit messages to issue tracker 
+# https://github.com/mstrap/bugtraq
+# for SmartGit - https://www.syntevo.com/smartgit/
+
+[bugtraq]
+url = "https://github.com/JFormDesigner/FlatLaf/issues/%BUGID%"
+loglinkregex = "#[0-9]{1,5}"
+logregex = "[0-9]{1,5}"
