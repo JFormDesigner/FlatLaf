@@ -76,11 +76,11 @@ Addons
 Getting started
 ---------------
 
-To enable FlatLaf, add following code to your main method before you create any
+To use FlatLaf, add following code to your main method before you create any
 Swing component:
 
 ~~~java
-FlatLightLaf.install();
+FlatLightLaf.setup();
 
 // create UI here...
 ~~~
