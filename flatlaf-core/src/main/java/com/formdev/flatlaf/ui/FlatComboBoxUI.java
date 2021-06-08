@@ -702,6 +702,9 @@ public class FlatComboBoxUI
 			super.configureList();
 
 			list.setCellRenderer( new PopupListCellRenderer() );
+			if( focusedBackground != null ) {
+		        list.setBackground( focusedBackground );
+			}
 		}
 
 		@Override
