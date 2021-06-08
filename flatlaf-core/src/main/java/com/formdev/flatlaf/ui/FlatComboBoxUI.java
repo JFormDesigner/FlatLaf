@@ -92,10 +92,12 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault ComboBox.editableBackground		Color	optional; defaults to ComboBox.background
+ * @uiDefault ComboBox.focusedBackground		Color	optional
  * @uiDefault ComboBox.disabledBackground		Color
  * @uiDefault ComboBox.disabledForeground		Color
  * @uiDefault ComboBox.buttonBackground			Color
  * @uiDefault ComboBox.buttonEditableBackground	Color
+ * @uiDefault ComboBox.buttonFocusedBackground	Color	optional
  * @uiDefault ComboBox.buttonArrowColor			Color
  * @uiDefault ComboBox.buttonDisabledArrowColor	Color
  * @uiDefault ComboBox.buttonHoverArrowColor	Color
@@ -116,10 +118,12 @@ public class FlatComboBoxUI
 
 	protected Color editableBackground;
 	protected Color disabledBackground;
+	protected Color focusedBackground;
 	protected Color disabledForeground;
 
 	protected Color buttonBackground;
 	protected Color buttonEditableBackground;
+	protected Color buttonFocusedBackground;
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
 	protected Color buttonHoverArrowColor;
@@ -196,9 +200,11 @@ public class FlatComboBoxUI
 
 		editableBackground = UIManager.getColor( "ComboBox.editableBackground" );
 		disabledBackground = UIManager.getColor( "ComboBox.disabledBackground" );
+		focusedBackground = UIManager.getColor( "ComboBox.focusedBackground" );
 		disabledForeground = UIManager.getColor( "ComboBox.disabledForeground" );
 
 		buttonBackground = UIManager.getColor( "ComboBox.buttonBackground" );
+		buttonFocusedBackground = UIManager.getColor( "ComboBox.buttonFocusedBackground" );
 		buttonEditableBackground = UIManager.getColor( "ComboBox.buttonEditableBackground" );
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
@@ -225,10 +231,12 @@ public class FlatComboBoxUI
 
 		editableBackground = null;
 		disabledBackground = null;
+		focusedBackground = null;
 		disabledForeground = null;
 
 		buttonBackground = null;
 		buttonEditableBackground = null;
+		buttonFocusedBackground = null;
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
@@ -423,7 +431,7 @@ public class FlatComboBoxUI
 
 			// paint arrow button background
 			if( enabled && !isCellRenderer ) {
-				g2.setColor( paintButton ? buttonEditableBackground : buttonBackground );
+				g2.setColor( paintButton ? buttonEditableBackground : buttonFocusedBackground != null && isFocusOwner() ? buttonFocusedBackground : buttonBackground );
 				Shape oldClip = g2.getClip();
 				if( isLeftToRight )
 					g2.clipRect( arrowX, 0, width - arrowX, height );
@@ -484,8 +492,14 @@ public class FlatComboBoxUI
 
 	protected Color getBackground( boolean enabled ) {
 		return enabled
-			? (editableBackground != null && comboBox.isEditable() ? editableBackground : comboBox.getBackground())
+			? (focusedBackground != null && isFocusOwner()
+				? focusedBackground
+				: (editableBackground != null && comboBox.isEditable() ? editableBackground : comboBox.getBackground()) )
 			: (isIntelliJTheme ? FlatUIUtils.getParentBackground( comboBox ) : disabledBackground);
+	}
+	
+	protected boolean isFocusOwner() {
+		return FlatUIUtils.isPermanentFocusOwner( comboBox ) || comboBox.getEditor() != null && comboBox.getEditor().getEditorComponent() != null && FlatUIUtils.isPermanentFocusOwner( comboBox.getEditor().getEditorComponent() );
 	}
 
 	protected Color getForeground( boolean enabled ) {

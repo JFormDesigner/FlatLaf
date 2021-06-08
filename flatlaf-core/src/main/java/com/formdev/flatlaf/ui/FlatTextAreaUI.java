@@ -42,6 +42,7 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault TextArea.selectionBackground		Color
  * @uiDefault TextArea.selectionForeground		Color
  * @uiDefault TextArea.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault TextArea.focusedBackground		Color	optional
  * @uiDefault TextArea.border					Border
  * @uiDefault TextArea.margin					Insets
  * @uiDefault TextArea.caretBlinkRate			int		default is 500 milliseconds
@@ -63,6 +64,7 @@ public class FlatTextAreaUI
 	protected Color background;
 	protected Color disabledBackground;
 	protected Color inactiveBackground;
+	protected Color focusedBackground;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextAreaUI();
@@ -84,6 +86,7 @@ public class FlatTextAreaUI
 		background = UIManager.getColor( "TextArea.background" );
 		disabledBackground = UIManager.getColor( "TextArea.disabledBackground" );
 		inactiveBackground = UIManager.getColor( "TextArea.inactiveBackground" );
+		focusedBackground = UIManager.getColor( "TextArea.focusedBackground" );
 	}
 
 	@Override
@@ -93,6 +96,7 @@ public class FlatTextAreaUI
 		background = null;
 		disabledBackground = null;
 		inactiveBackground = null;
+		focusedBackground = null;
 	}
 
 	@Override
@@ -161,6 +165,12 @@ public class FlatTextAreaUI
 		// for compatibility with IntelliJ themes
 		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) && (c.getBackground() instanceof UIResource) ) {
 			FlatUIUtils.paintParentBackground( g, c );
+			return;
+		}
+
+		if( focusedBackground != null && FlatUIUtils.isPermanentFocusOwner( c ) ) {
+			g.setColor( focusedBackground );
+			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
 			return;
 		}
 

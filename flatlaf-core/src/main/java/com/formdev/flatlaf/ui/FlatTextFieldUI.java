@@ -55,6 +55,7 @@ import com.formdev.flatlaf.util.JavaCompatibility;
  * @uiDefault TextField.disabledBackground		Color	used if not enabled
  * @uiDefault TextField.inactiveBackground		Color	used if not editable
  * @uiDefault TextField.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
+ * @uiDefault TextField.focusedBackground		Color	optional
  * @uiDefault TextField.border					Border
  * @uiDefault TextField.margin					Insets
  * @uiDefault TextField.caretBlinkRate			int		default is 500 milliseconds
@@ -75,6 +76,7 @@ public class FlatTextFieldUI
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
+	protected Color focusedBackground;
 
 	private FocusListener focusListener;
 
@@ -90,6 +92,7 @@ public class FlatTextFieldUI
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
+		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
@@ -101,6 +104,7 @@ public class FlatTextFieldUI
 		super.uninstallDefaults();
 
 		placeholderForeground = null;
+		focusedBackground = null;
 
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
@@ -148,7 +152,7 @@ public class FlatTextFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		paintBackground( g, getComponent(), isIntelliJTheme );
+		paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
 		paintPlaceholder( g, getComponent(), placeholderForeground );
 
 		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
@@ -159,7 +163,7 @@ public class FlatTextFieldUI
 		// background is painted elsewhere
 	}
 
-	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme ) {
+	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme, Color focusedBackground ) {
 		// do not paint background if:
 		//   - not opaque and
 		//   - border is not a flat border and
@@ -180,7 +184,7 @@ public class FlatTextFieldUI
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			Color background = c.getBackground();
+			Color background = focusedBackground != null && FlatUIUtils.isPermanentFocusOwner( c ) ? focusedBackground : c.getBackground();
 			g2.setColor( !(background instanceof UIResource)
 				? background
 				: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
