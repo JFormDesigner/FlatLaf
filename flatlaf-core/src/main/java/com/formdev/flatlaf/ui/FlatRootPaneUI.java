@@ -27,6 +27,8 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
 import java.awt.Window;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.beans.PropertyChangeEvent;
 import java.util.function.Function;
 import javax.swing.JComponent;
@@ -79,6 +81,7 @@ public class FlatRootPaneUI
 
 	private Object nativeWindowBorderData;
 	private LayoutManager oldLayout;
+	private HierarchyListener hierarchyListener;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRootPaneUI();
@@ -134,6 +137,39 @@ public class FlatRootPaneUI
 		// enable dark window appearance on macOS when running in JetBrains Runtime
 		if( SystemInfo.isJetBrainsJVM && SystemInfo.isMacOS_10_14_Mojave_orLater )
 			c.putClientProperty( "jetbrains.awt.windowDarkAppearance", FlatLaf.isLafDark() );
+	}
+
+	@Override
+	protected void installListeners( JRootPane root ) {
+		super.installListeners( root );
+
+		if( SystemInfo.isJava_9_orLater ) {
+			// On HiDPI screens, where scaling is used, there may be white lines at the
+			// bottom and at the right side of the window when it is initially shown.
+			// This is very disturbing in dark themes, but hard to notice in light themes.
+			// Seems to be a rounding issue when Swing adds dirty region of window
+			// using RepaintManager.nativeAddDirtyRegion().
+			hierarchyListener = e -> {
+				if( (e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 &&
+					rootPane.getParent() instanceof Window )
+				{
+					// add whole root pane to dirty regions when window is initially shown
+					rootPane.getParent().repaint( rootPane.getX(), rootPane.getY(),
+						rootPane.getWidth(), rootPane.getHeight() );
+				}
+			};
+			root.addHierarchyListener( hierarchyListener );
+		}
+	}
+
+	@Override
+	protected void uninstallListeners( JRootPane root ) {
+		super.uninstallListeners( root );
+
+		if( SystemInfo.isJava_9_orLater ) {
+			root.removeHierarchyListener( hierarchyListener );
+			hierarchyListener = null;
+		}
 	}
 
 	/**

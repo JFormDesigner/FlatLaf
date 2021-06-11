@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.3-SNAPSHOT
+
+#### Fixed bugs
+
+- Fixed white lines at bottom and right side of window (in dark themes on HiDPI
+  screens with scaling enabled).
+
+
 ## 1.2
 
 #### New features and improvements
