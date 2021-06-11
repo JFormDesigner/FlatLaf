@@ -7,6 +7,7 @@ FlatLaf Change Log
 
 - Fixed white lines at bottom and right side of window (in dark themes on HiDPI
   screens with scaling enabled).
+- ToolTip: Fixed positioning of huge tooltips. (issue #333)
 
 
 ## 1.2
