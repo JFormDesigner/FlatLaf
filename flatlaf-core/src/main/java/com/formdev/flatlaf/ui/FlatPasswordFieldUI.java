@@ -50,7 +50,6 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault PasswordField.disabledBackground		Color	used if not enabled
  * @uiDefault PasswordField.inactiveBackground		Color	used if not editable
  * @uiDefault PasswordField.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
- * @uiDefault PasswordField.focusedBackground		Color	optional
  * @uiDefault PasswordField.border					Border
  * @uiDefault PasswordField.margin					Insets
  * @uiDefault PasswordField.echoChar				character
@@ -61,6 +60,7 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
+ * @uiDefault PasswordField.focusedBackground		Color	optional
  * @uiDefault PasswordField.showCapsLock			boolean
  * @uiDefault PasswordField.capsLockIcon			Icon
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
@@ -117,7 +117,10 @@ public class FlatPasswordFieldUI
 	protected void installListeners() {
 		super.installListeners();
 
-		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent() );
+		// necessary to update focus border and background
+		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent(), null );
+
+		// update caps lock indicator
 		capsLockListener = new KeyAdapter() {
 			@Override
 			public void keyPressed( KeyEvent e ) {

@@ -55,7 +55,6 @@ import com.formdev.flatlaf.util.JavaCompatibility;
  * @uiDefault TextField.disabledBackground		Color	used if not enabled
  * @uiDefault TextField.inactiveBackground		Color	used if not editable
  * @uiDefault TextField.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
- * @uiDefault TextField.focusedBackground		Color	optional
  * @uiDefault TextField.border					Border
  * @uiDefault TextField.margin					Insets
  * @uiDefault TextField.caretBlinkRate			int		default is 500 milliseconds
@@ -65,6 +64,7 @@ import com.formdev.flatlaf.util.JavaCompatibility;
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextField.placeholderForeground	Color
+ * @uiDefault TextField.focusedBackground		Color	optional
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  * @uiDefault TextComponent.selectAllOnMouseClick	boolean
  *
@@ -113,7 +113,8 @@ public class FlatTextFieldUI
 	protected void installListeners() {
 		super.installListeners();
 
-		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent() );
+		// necessary to update focus border and background
+		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent(), null );
 		getComponent().addFocusListener( focusListener );
 	}
 
@@ -184,16 +185,29 @@ public class FlatTextFieldUI
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			Color background = focusedBackground != null && FlatUIUtils.isPermanentFocusOwner( c ) ? focusedBackground : c.getBackground();
-			g2.setColor( !(background instanceof UIResource)
-				? background
-				: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
-					? FlatUIUtils.getParentBackground( c )
-					: background) );
+			g2.setColor( getBackground( c, isIntelliJTheme, focusedBackground ) );
 			FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 		} finally {
 			g2.dispose();
 		}
+	}
+
+	static Color getBackground( JTextComponent c, boolean isIntelliJTheme, Color focusedBackground ) {
+		Color background = c.getBackground();
+
+		// always use explicitly set color
+		if( !(background instanceof UIResource) )
+			return background;
+
+		// for compatibility with IntelliJ themes
+		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) )
+			return FlatUIUtils.getParentBackground( c );
+
+		// focused and editable
+		if( focusedBackground != null && c.isEditable() && FlatUIUtils.isPermanentFocusOwner( c ) )
+			return focusedBackground;
+
+		return background;
 	}
 
 	static void paintPlaceholder( Graphics g, JTextComponent c, Color placeholderForeground ) {

@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
@@ -42,7 +43,6 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault TextArea.selectionBackground		Color
  * @uiDefault TextArea.selectionForeground		Color
  * @uiDefault TextArea.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
- * @uiDefault TextArea.focusedBackground		Color	optional
  * @uiDefault TextArea.border					Border
  * @uiDefault TextArea.margin					Insets
  * @uiDefault TextArea.caretBlinkRate			int		default is 500 milliseconds
@@ -53,6 +53,7 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextArea.disabledBackground		Color	used if not enabled
  * @uiDefault TextArea.inactiveBackground		Color	used if not editable
+ * @uiDefault TextArea.focusedBackground		Color	optional
  *
  * @author Karl Tauber
  */
@@ -65,6 +66,8 @@ public class FlatTextAreaUI
 	protected Color disabledBackground;
 	protected Color inactiveBackground;
 	protected Color focusedBackground;
+
+	private FocusListener focusListener;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextAreaUI();
@@ -97,6 +100,23 @@ public class FlatTextAreaUI
 		disabledBackground = null;
 		inactiveBackground = null;
 		focusedBackground = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		// necessary to update focus background
+		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent(), c -> focusedBackground != null );
+		getComponent().addFocusListener( focusListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		getComponent().removeFocusListener( focusListener );
+		focusListener = null;
 	}
 
 	@Override
@@ -160,20 +180,6 @@ public class FlatTextAreaUI
 
 	@Override
 	protected void paintBackground( Graphics g ) {
-		JTextComponent c = getComponent();
-
-		// for compatibility with IntelliJ themes
-		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) && (c.getBackground() instanceof UIResource) ) {
-			FlatUIUtils.paintParentBackground( g, c );
-			return;
-		}
-
-		if( focusedBackground != null && FlatUIUtils.isPermanentFocusOwner( c ) ) {
-			g.setColor( focusedBackground );
-			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
-			return;
-		}
-
-		super.paintBackground( g );
+		FlatEditorPaneUI.paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
 	}
 }
