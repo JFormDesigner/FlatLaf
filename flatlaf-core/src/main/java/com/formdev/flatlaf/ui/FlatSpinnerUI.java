@@ -221,6 +221,16 @@ public class FlatSpinnerUI
 			: null;
 	}
 
+	public static boolean isPermanentFocusOwner( JSpinner spinner ) {
+		if( FlatUIUtils.isPermanentFocusOwner( spinner ) )
+			return true;
+
+		JTextField textField = getEditorTextField( spinner.getEditor() );
+		return (textField != null)
+			? FlatUIUtils.isPermanentFocusOwner( textField )
+			: false;
+	}
+
 	protected Color getBackground( boolean enabled ) {
 		return enabled
 			? spinner.getBackground()

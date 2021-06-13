@@ -22,17 +22,12 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.KeyboardFocusManager;
 import java.awt.Paint;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -164,37 +159,13 @@ public class FlatBorder
 	}
 
 	protected boolean isFocused( Component c ) {
-		if( c instanceof JScrollPane ) {
-			JViewport viewport = ((JScrollPane)c).getViewport();
-			Component view = (viewport != null) ? viewport.getView() : null;
-			if( view != null ) {
-				if( FlatUIUtils.isPermanentFocusOwner( view ) )
-					return true;
-
-				if( (view instanceof JTable && ((JTable)view).isEditing()) ||
-					(view instanceof JTree && ((JTree)view).isEditing()) )
-				{
-					Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-					if( focusOwner != null )
-						return SwingUtilities.isDescendingFrom( focusOwner, view );
-				}
-			}
-			return false;
-		} else if( c instanceof JComboBox && ((JComboBox<?>)c).isEditable() ) {
-			Component editorComponent = ((JComboBox<?>)c).getEditor().getEditorComponent();
-			return (editorComponent != null) ? FlatUIUtils.isPermanentFocusOwner( editorComponent ) : false;
-		} else if( c instanceof JSpinner ) {
-			if( FlatUIUtils.isPermanentFocusOwner( c ) )
-				return true;
-
-			JComponent editor = ((JSpinner)c).getEditor();
-			if( editor instanceof JSpinner.DefaultEditor ) {
-				JTextField textField = ((JSpinner.DefaultEditor)editor).getTextField();
-				if( textField != null )
-					return FlatUIUtils.isPermanentFocusOwner( textField );
-			}
-			return false;
-		} else
+		if( c instanceof JScrollPane )
+			return FlatScrollPaneUI.isPermanentFocusOwner( (JScrollPane) c );
+		else if( c instanceof JComboBox )
+			return FlatComboBoxUI.isPermanentFocusOwner( (JComboBox<?>) c );
+		else if( c instanceof JSpinner )
+			return FlatSpinnerUI.isPermanentFocusOwner( (JSpinner) c );
+		else
 			return FlatUIUtils.isPermanentFocusOwner( c );
 	}
 

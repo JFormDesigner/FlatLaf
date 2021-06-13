@@ -590,6 +590,14 @@ public class FlatComboBoxUI
 		return parentParent != null && !comboBox.getBackground().equals( parentParent.getBackground() );
 	}
 
+	public static boolean isPermanentFocusOwner( JComboBox<?> comboBox ) {
+		if( comboBox.isEditable() ) {
+			Component editorComponent = comboBox.getEditor().getEditorComponent();
+			return (editorComponent != null) ? FlatUIUtils.isPermanentFocusOwner( editorComponent ) : false;
+		} else
+			return FlatUIUtils.isPermanentFocusOwner( comboBox );
+	}
+
 	//---- class FlatComboBoxButton -------------------------------------------
 
 	protected class FlatComboBoxButton
