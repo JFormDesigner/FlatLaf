@@ -64,6 +64,7 @@ import com.formdev.flatlaf.util.JavaCompatibility;
  * @uiDefault Component.minimumWidth			int
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextField.placeholderForeground	Color
+ * @uiDefault TextField.focusedBackground		Color	optional
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  * @uiDefault TextComponent.selectAllOnMouseClick	boolean
  *
@@ -75,6 +76,7 @@ public class FlatTextFieldUI
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
+	protected Color focusedBackground;
 
 	private FocusListener focusListener;
 
@@ -90,6 +92,7 @@ public class FlatTextFieldUI
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
+		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
@@ -101,6 +104,7 @@ public class FlatTextFieldUI
 		super.uninstallDefaults();
 
 		placeholderForeground = null;
+		focusedBackground = null;
 
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
@@ -109,7 +113,8 @@ public class FlatTextFieldUI
 	protected void installListeners() {
 		super.installListeners();
 
-		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent() );
+		// necessary to update focus border and background
+		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent(), null );
 		getComponent().addFocusListener( focusListener );
 	}
 
@@ -148,7 +153,7 @@ public class FlatTextFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		paintBackground( g, getComponent(), isIntelliJTheme );
+		paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
 		paintPlaceholder( g, getComponent(), placeholderForeground );
 
 		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
@@ -159,7 +164,7 @@ public class FlatTextFieldUI
 		// background is painted elsewhere
 	}
 
-	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme ) {
+	static void paintBackground( Graphics g, JTextComponent c, boolean isIntelliJTheme, Color focusedBackground ) {
 		// do not paint background if:
 		//   - not opaque and
 		//   - border is not a flat border and
@@ -180,16 +185,29 @@ public class FlatTextFieldUI
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
-			Color background = c.getBackground();
-			g2.setColor( !(background instanceof UIResource)
-				? background
-				: (isIntelliJTheme && (!c.isEnabled() || !c.isEditable())
-					? FlatUIUtils.getParentBackground( c )
-					: background) );
+			g2.setColor( getBackground( c, isIntelliJTheme, focusedBackground ) );
 			FlatUIUtils.paintComponentBackground( g2, 0, 0, c.getWidth(), c.getHeight(), focusWidth, arc );
 		} finally {
 			g2.dispose();
 		}
+	}
+
+	static Color getBackground( JTextComponent c, boolean isIntelliJTheme, Color focusedBackground ) {
+		Color background = c.getBackground();
+
+		// always use explicitly set color
+		if( !(background instanceof UIResource) )
+			return background;
+
+		// for compatibility with IntelliJ themes
+		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) )
+			return FlatUIUtils.getParentBackground( c );
+
+		// focused and editable
+		if( focusedBackground != null && c.isEditable() && FlatUIUtils.isPermanentFocusOwner( c ) )
+			return focusedBackground;
+
+		return background;
 	}
 
 	static void paintPlaceholder( Graphics g, JTextComponent c, Color placeholderForeground ) {

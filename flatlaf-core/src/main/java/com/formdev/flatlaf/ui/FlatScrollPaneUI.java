@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
@@ -34,11 +35,13 @@ import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTree;
 import javax.swing.JViewport;
 import javax.swing.LookAndFeel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
@@ -329,6 +332,28 @@ public class FlatScrollPaneUI
 		paint( g, c );
 	}
 
+	public static boolean isPermanentFocusOwner( JScrollPane scrollPane ) {
+		JViewport viewport = scrollPane.getViewport();
+		Component view = (viewport != null) ? viewport.getView() : null;
+		if( view == null )
+			return false;
+
+		// check whether view is focus owner
+		if( FlatUIUtils.isPermanentFocusOwner( view ) )
+			return true;
+
+		// check whether editor component in JTable or JTree is focus owner
+		if( (view instanceof JTable && ((JTable)view).isEditing()) ||
+			(view instanceof JTree && ((JTree)view).isEditing()) )
+		{
+			Component focusOwner = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+			if( focusOwner != null )
+				return SwingUtilities.isDescendingFrom( focusOwner, view );
+		}
+
+		return false;
+	}
+
 	//---- class Handler ------------------------------------------------------
 
 	/**
@@ -350,11 +375,13 @@ public class FlatScrollPaneUI
 
 		@Override
 		public void focusGained( FocusEvent e ) {
+			// necessary to update focus border
 			scrollpane.repaint();
 		}
 
 		@Override
 		public void focusLost( FocusEvent e ) {
+			// necessary to update focus border
 			scrollpane.repaint();
 		}
 	}

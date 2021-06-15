@@ -837,19 +837,23 @@ debug*/
 		implements FocusListener
 	{
 		private final Component repaintComponent;
+		private final Predicate<Component> repaintCondition;
 
-		public RepaintFocusListener( Component repaintComponent ) {
+		public RepaintFocusListener( Component repaintComponent, Predicate<Component> repaintCondition ) {
 			this.repaintComponent = repaintComponent;
+			this.repaintCondition = repaintCondition;
 		}
 
 		@Override
 		public void focusGained( FocusEvent e ) {
-			repaintComponent.repaint();
+			if( repaintCondition == null || repaintCondition.test( repaintComponent ) )
+				repaintComponent.repaint();
 		}
 
 		@Override
 		public void focusLost( FocusEvent e ) {
-			repaintComponent.repaint();
+			if( repaintCondition == null || repaintCondition.test( repaintComponent ) )
+				repaintComponent.repaint();
 		}
 	}
 }

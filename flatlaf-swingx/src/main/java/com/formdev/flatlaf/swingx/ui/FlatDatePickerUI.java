@@ -156,7 +156,7 @@ public class FlatDatePickerUI
 		editor.setName( "dateField" );
 		editor.setBorder( BorderFactory.createEmptyBorder() );
 		editor.setOpaque( false );
-		editor.addFocusListener( new FlatUIUtils.RepaintFocusListener( datePicker ) );
+		editor.addFocusListener( new FlatUIUtils.RepaintFocusListener( datePicker, null ) );
 		return editor;
 	}
 

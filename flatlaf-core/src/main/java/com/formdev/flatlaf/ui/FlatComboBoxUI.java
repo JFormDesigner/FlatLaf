@@ -61,6 +61,7 @@ import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
@@ -92,14 +93,17 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Component.borderColor				Color
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault ComboBox.editableBackground		Color	optional; defaults to ComboBox.background
+ * @uiDefault ComboBox.focusedBackground		Color	optional
  * @uiDefault ComboBox.disabledBackground		Color
  * @uiDefault ComboBox.disabledForeground		Color
  * @uiDefault ComboBox.buttonBackground			Color
  * @uiDefault ComboBox.buttonEditableBackground	Color
+ * @uiDefault ComboBox.buttonFocusedBackground	Color	optional; defaults to ComboBox.focusedBackground
  * @uiDefault ComboBox.buttonArrowColor			Color
  * @uiDefault ComboBox.buttonDisabledArrowColor	Color
  * @uiDefault ComboBox.buttonHoverArrowColor	Color
  * @uiDefault ComboBox.buttonPressedArrowColor	Color
+ * @uiDefault ComboBox.popupFocusedBackground	Color	optional
  *
  * @author Karl Tauber
  */
@@ -115,15 +119,19 @@ public class FlatComboBoxUI
 	protected Color disabledBorderColor;
 
 	protected Color editableBackground;
+	protected Color focusedBackground;
 	protected Color disabledBackground;
 	protected Color disabledForeground;
 
 	protected Color buttonBackground;
 	protected Color buttonEditableBackground;
+	protected Color buttonFocusedBackground;
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
 	protected Color buttonHoverArrowColor;
 	protected Color buttonPressedArrowColor;
+
+	protected Color popupFocusedBackground;
 
 	private MouseListener hoverListener;
 	protected boolean hover;
@@ -195,15 +203,19 @@ public class FlatComboBoxUI
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 
 		editableBackground = UIManager.getColor( "ComboBox.editableBackground" );
+		focusedBackground = UIManager.getColor( "ComboBox.focusedBackground" );
 		disabledBackground = UIManager.getColor( "ComboBox.disabledBackground" );
 		disabledForeground = UIManager.getColor( "ComboBox.disabledForeground" );
 
 		buttonBackground = UIManager.getColor( "ComboBox.buttonBackground" );
+		buttonFocusedBackground = UIManager.getColor( "ComboBox.buttonFocusedBackground" );
 		buttonEditableBackground = UIManager.getColor( "ComboBox.buttonEditableBackground" );
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
 		buttonHoverArrowColor = UIManager.getColor( "ComboBox.buttonHoverArrowColor" );
 		buttonPressedArrowColor = UIManager.getColor( "ComboBox.buttonPressedArrowColor" );
+
+		popupFocusedBackground = UIManager.getColor( "ComboBox.popupFocusedBackground" );
 
 		// set maximumRowCount
 		int maximumRowCount = UIManager.getInt( "ComboBox.maximumRowCount" );
@@ -224,15 +236,19 @@ public class FlatComboBoxUI
 		disabledBorderColor = null;
 
 		editableBackground = null;
+		focusedBackground = null;
 		disabledBackground = null;
 		disabledForeground = null;
 
 		buttonBackground = null;
 		buttonEditableBackground = null;
+		buttonFocusedBackground = null;
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
 		buttonPressedArrowColor = null;
+
+		popupFocusedBackground = null;
 
 		MigLayoutVisualPadding.uninstall( comboBox );
 	}
@@ -423,7 +439,11 @@ public class FlatComboBoxUI
 
 			// paint arrow button background
 			if( enabled && !isCellRenderer ) {
-				g2.setColor( paintButton ? buttonEditableBackground : buttonBackground );
+				g2.setColor( paintButton
+					? buttonEditableBackground
+					: (buttonFocusedBackground != null || focusedBackground != null) && isPermanentFocusOwner( comboBox )
+						? (buttonFocusedBackground != null ? buttonFocusedBackground : focusedBackground)
+						: buttonBackground );
 				Shape oldClip = g2.getClip();
 				if( isLeftToRight )
 					g2.clipRect( arrowX, 0, width - arrowX, height );
@@ -483,9 +503,20 @@ public class FlatComboBoxUI
 	}
 
 	protected Color getBackground( boolean enabled ) {
-		return enabled
-			? (editableBackground != null && comboBox.isEditable() ? editableBackground : comboBox.getBackground())
-			: (isIntelliJTheme ? FlatUIUtils.getParentBackground( comboBox ) : disabledBackground);
+		if( enabled ) {
+			Color background = comboBox.getBackground();
+
+			// always use explicitly set color
+			if( !(background instanceof UIResource) )
+				return background;
+
+			// focused
+			if( focusedBackground != null && isPermanentFocusOwner( comboBox ) )
+				return focusedBackground;
+
+			return (editableBackground != null && comboBox.isEditable()) ? editableBackground : background;
+		} else
+			return isIntelliJTheme ? FlatUIUtils.getParentBackground( comboBox ) : disabledBackground;
 	}
 
 	protected Color getForeground( boolean enabled ) {
@@ -574,6 +605,14 @@ public class FlatComboBoxUI
 		// parent is a CellRendererPane, parentParent is e.g. a JTable
 		Container parentParent = comboBox.getParent().getParent();
 		return parentParent != null && !comboBox.getBackground().equals( parentParent.getBackground() );
+	}
+
+	public static boolean isPermanentFocusOwner( JComboBox<?> comboBox ) {
+		if( comboBox.isEditable() ) {
+			Component editorComponent = comboBox.getEditor().getEditorComponent();
+			return (editorComponent != null) ? FlatUIUtils.isPermanentFocusOwner( editorComponent ) : false;
+		} else
+			return FlatUIUtils.isPermanentFocusOwner( comboBox );
 	}
 
 	//---- class FlatComboBoxButton -------------------------------------------
@@ -688,6 +727,8 @@ public class FlatComboBoxUI
 			super.configureList();
 
 			list.setCellRenderer( new PopupListCellRenderer() );
+			if( popupFocusedBackground != null )
+		        list.setBackground( popupFocusedBackground );
 		}
 
 		@Override

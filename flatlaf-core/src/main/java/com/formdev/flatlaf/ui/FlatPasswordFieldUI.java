@@ -60,6 +60,7 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
+ * @uiDefault PasswordField.focusedBackground		Color	optional
  * @uiDefault PasswordField.showCapsLock			boolean
  * @uiDefault PasswordField.capsLockIcon			Icon
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
@@ -73,6 +74,7 @@ public class FlatPasswordFieldUI
 	protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
+	protected Color focusedBackground;
 	protected boolean showCapsLock;
 	protected Icon capsLockIcon;
 
@@ -91,6 +93,7 @@ public class FlatPasswordFieldUI
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
+		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
 		showCapsLock = UIManager.getBoolean( "PasswordField.showCapsLock" );
 		capsLockIcon = UIManager.getIcon( "PasswordField.capsLockIcon" );
 
@@ -104,6 +107,7 @@ public class FlatPasswordFieldUI
 		super.uninstallDefaults();
 
 		placeholderForeground = null;
+		focusedBackground = null;
 		capsLockIcon = null;
 
 		MigLayoutVisualPadding.uninstall( getComponent() );
@@ -113,7 +117,10 @@ public class FlatPasswordFieldUI
 	protected void installListeners() {
 		super.installListeners();
 
-		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent() );
+		// necessary to update focus border and background
+		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent(), null );
+
+		// update caps lock indicator
 		capsLockListener = new KeyAdapter() {
 			@Override
 			public void keyPressed( KeyEvent e ) {
@@ -157,7 +164,7 @@ public class FlatPasswordFieldUI
 
 	@Override
 	protected void paintSafely( Graphics g ) {
-		FlatTextFieldUI.paintBackground( g, getComponent(), isIntelliJTheme );
+		FlatTextFieldUI.paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
 		FlatTextFieldUI.paintPlaceholder( g, getComponent(), placeholderForeground );
 		paintCapsLock( g );
 
