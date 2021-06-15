@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.StringUtils;
@@ -45,6 +46,7 @@ public class FlatStyleSupport
 	 *                      the function must return the old value
 	 * @return map of old values modified by the given style, or {@code null}
 	 * @throws IllegalArgumentException on syntax errors
+	 * @throws ClassCastException if value type does not fit to expected type 
 	 */
 	public static Map<String, Object> parse( Map<String, Object> oldStyleValues,
 		String style, BiFunction<String, Object, Object> applyProperty ) throws IllegalArgumentException
@@ -82,8 +84,8 @@ public class FlatStyleSupport
 				throw new IllegalArgumentException( "missing value in '" + part + "'" );
 
 			// parse value string and convert it into binary value
-			Object val = FlatLaf.parseDefaultsValue( key, value );
-			Object oldValue = applyProperty.apply( key, val );
+			Object newValue = parseValue( key, value );
+			Object oldValue = applyProperty.apply( key, newValue );
 
 			// remember previous value
 			if( oldValues == null )
@@ -92,6 +94,13 @@ public class FlatStyleSupport
 		}
 
 		return oldValues;
+	}
+
+	private static Object parseValue( String key, String value ) {
+		if( value.startsWith( "$" ) )
+			return UIManager.get( value.substring( 1 ) );
+
+		return FlatLaf.parseDefaultsValue( key, value );
 	}
 
 	public static boolean hasStyle( JComponent c ) {
