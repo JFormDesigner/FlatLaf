@@ -39,6 +39,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 import com.formdev.flatlaf.FlatClientProperties;
 
@@ -65,6 +66,7 @@ import com.formdev.flatlaf.FlatClientProperties;
  * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault Spinner.disabledBackground		Color
  * @uiDefault Spinner.disabledForeground		Color
+ * @uiDefault Spinner.focusedBackground			Color	optional
  * @uiDefault Spinner.buttonBackground			Color
  * @uiDefault Spinner.buttonArrowColor			Color
  * @uiDefault Spinner.buttonDisabledArrowColor	Color
@@ -87,6 +89,7 @@ public class FlatSpinnerUI
 	protected Color disabledBorderColor;
 	protected Color disabledBackground;
 	protected Color disabledForeground;
+	protected Color focusedBackground;
 	protected Color buttonBackground;
 	protected Color buttonArrowColor;
 	protected Color buttonDisabledArrowColor;
@@ -112,6 +115,7 @@ public class FlatSpinnerUI
 		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 		disabledBackground = UIManager.getColor( "Spinner.disabledBackground" );
 		disabledForeground = UIManager.getColor( "Spinner.disabledForeground" );
+		focusedBackground = UIManager.getColor( "Spinner.focusedBackground" );
 		buttonBackground = UIManager.getColor( "Spinner.buttonBackground" );
 		buttonArrowColor = UIManager.getColor( "Spinner.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "Spinner.buttonDisabledArrowColor" );
@@ -133,6 +137,7 @@ public class FlatSpinnerUI
 		disabledBorderColor = null;
 		disabledBackground = null;
 		disabledForeground = null;
+		focusedBackground = null;
 		buttonBackground = null;
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
@@ -232,9 +237,20 @@ public class FlatSpinnerUI
 	}
 
 	protected Color getBackground( boolean enabled ) {
-		return enabled
-			? spinner.getBackground()
-			: (isIntelliJTheme ? FlatUIUtils.getParentBackground( spinner ) : disabledBackground);
+		if( enabled ) {
+			Color background = spinner.getBackground();
+
+			// always use explicitly set color
+			if( !(background instanceof UIResource) )
+				return background;
+
+			// focused
+			if( focusedBackground != null && isPermanentFocusOwner( spinner ) )
+				return focusedBackground;
+
+			return background;
+		} else
+			return isIntelliJTheme ? FlatUIUtils.getParentBackground( spinner ) : disabledBackground;
 	}
 
 	protected Color getForeground( boolean enabled ) {
@@ -415,6 +431,7 @@ public class FlatSpinnerUI
 
 		@Override
 		public void focusGained( FocusEvent e ) {
+			// necessary to update focus border
 			spinner.repaint();
 
 			// if spinner gained focus, transfer it to the editor text field
@@ -427,6 +444,7 @@ public class FlatSpinnerUI
 
 		@Override
 		public void focusLost( FocusEvent e ) {
+			// necessary to update focus border
 			spinner.repaint();
 		}
 

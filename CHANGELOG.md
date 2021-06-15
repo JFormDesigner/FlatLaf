@@ -1,6 +1,19 @@
 FlatLaf Change Log
 ==================
 
+## 1.3-SNAPSHOT
+
+#### New features and improvements
+
+- TextComponents, ComboBox and Spinner: Support different background color when
+  component is focused (use UI values `TextField.focusedBackground`,
+  `PasswordField.focusedBackground`, `FormattedTextField.focusedBackground`,
+  `TextArea.focusedBackground`, `TextPane.focusedBackground`,
+  `EditorPane.focusedBackground`, `ComboBox.focusedBackground`,
+  `ComboBox.buttonFocusedBackground`, `ComboBox.popupFocusedBackground` and
+  `Spinner.focusedBackground`). (issue #335)
+
+
 ## 1.2
 
 #### New features and improvements
