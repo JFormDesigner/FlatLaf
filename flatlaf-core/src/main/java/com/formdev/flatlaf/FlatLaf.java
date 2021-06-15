@@ -726,6 +726,21 @@ public abstract class FlatLaf
 		customDefaultsSources.remove( folder );
 	}
 
+	/**
+	 * Parses a UI defaults value string and converts it into a binary object.
+	 * <p>
+	 * See: <a href="https://www.formdev.com/flatlaf/properties-files/">https://www.formdev.com/flatlaf/properties-files/</a>
+	 *
+	 * @param key the key, which is used to determine the value type
+	 * @param value the value string
+	 * @return the binary value
+	 * @throws IllegalArgumentException on syntax errors
+	 * @since TODO
+	 */
+	public static Object parseDefaultsValue( String key, String value ) throws IllegalArgumentException {
+		return UIDefaultsLoader.parseValue( key, value );
+	}
+
 	private static void reSetLookAndFeel() {
 		EventQueue.invokeLater( () -> {
 			LookAndFeel lookAndFeel = UIManager.getLookAndFeel();

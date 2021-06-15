@@ -27,6 +27,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.LookAndFeel;
@@ -34,6 +36,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -90,6 +94,7 @@ public class FlatSliderUI
 	protected Color disabledTrackColor;
 	protected Color disabledThumbColor;
 	protected Color disabledThumbBorderColor;
+	protected Color tickColor;
 
 	private Color defaultBackground;
 	private Color defaultForeground;
@@ -98,6 +103,7 @@ public class FlatSliderUI
 	protected boolean thumbPressed;
 
 	private Object[] oldRenderingHints;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSliderUI();
@@ -105,6 +111,13 @@ public class FlatSliderUI
 
 	public FlatSliderUI() {
 		super( null );
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( slider ) );
 	}
 
 	@Override
@@ -134,6 +147,7 @@ public class FlatSliderUI
 		disabledTrackColor = UIManager.getColor( "Slider.disabledTrackColor" );
 		disabledThumbColor = UIManager.getColor( "Slider.disabledThumbColor" );
 		disabledThumbBorderColor = FlatUIUtils.getUIColor( "Slider.disabledThumbBorderColor", "Component.disabledBorderColor" );
+		tickColor = FlatUIUtils.getUIColor( "Slider.tickColor", Color.BLACK ); // see BasicSliderUI.paintTicks()
 
 		defaultBackground = UIManager.getColor( "Slider.background" );
 		defaultForeground = UIManager.getColor( "Slider.foreground" );
@@ -155,14 +169,68 @@ public class FlatSliderUI
 		disabledTrackColor = null;
 		disabledThumbColor = null;
 		disabledThumbBorderColor = null;
+		tickColor = null;
 
 		defaultBackground = null;
 		defaultForeground = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override
 	protected TrackListener createTrackListener( JSlider slider ) {
 		return new FlatTrackListener();
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener( JSlider slider ) {
+		PropertyChangeListener superListener = super.createPropertyChangeListener( slider );
+		return e -> {
+			superListener.propertyChange( e );
+
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.COMPONENT_STYLE:
+					applyStyle( FlatStyleSupport.toString( e.getNewValue() ) );
+					slider.revalidate();
+					slider.repaint();
+					break;
+			}
+		};
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( String style ) {
+		oldStyleValues = FlatStyleSupport.parse( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		Object oldValue;
+		switch( key ) {
+			case "trackWidth": oldValue = trackWidth; trackWidth = (int) value; break;
+			case "thumbSize": oldValue = thumbSize; thumbSize = (Dimension) value; break;
+			case "focusWidth": oldValue = focusWidth; focusWidth = (int) value; break;
+
+			case "trackValueColor": oldValue = trackValueColor; trackValueColor = (Color) value; break;
+			case "trackColor": oldValue = trackColor; trackColor = (Color) value; break;
+			case "thumbColor": oldValue = thumbColor; thumbColor = (Color) value; break;
+			case "thumbBorderColor": oldValue = thumbBorderColor; thumbBorderColor = (Color) value; break;
+			case "focusedColor": oldValue = focusedColor; focusedColor = (Color) value; break;
+			case "focusedThumbBorderColor": oldValue = focusedThumbBorderColor; focusedThumbBorderColor = (Color) value; break;
+			case "hoverThumbColor": oldValue = hoverThumbColor; hoverThumbColor = (Color) value; break;
+			case "pressedThumbColor": oldValue = pressedThumbColor; pressedThumbColor = (Color) value; break;
+			case "disabledTrackColor": oldValue = disabledTrackColor; disabledTrackColor = (Color) value; break;
+			case "disabledThumbColor": oldValue = disabledThumbColor; disabledThumbColor = (Color) value; break;
+			case "disabledThumbBorderColor": oldValue = disabledThumbBorderColor; disabledThumbBorderColor = (Color) value; break;
+			case "tickColor": oldValue = tickColor; tickColor = (Color) value; break;
+
+			default: throw new IllegalArgumentException( "unknown style '" + key + "'" );
+		}
+		return oldValue;
 	}
 
 	@Override
@@ -304,6 +372,19 @@ debug*/
 
 		g.setColor( enabled ? getTrackColor() : disabledTrackColor );
 		((Graphics2D)g).fill( track );
+	}
+
+	@Override
+	public void paintTicks( Graphics g ) {
+		// because BasicSliderUI.paintTicks() always uses
+		//   g.setColor( UIManager.getColor("Slider.tickColor") )
+		// we override this method and use our tickColor field to allow styling
+		super.paintTicks( new Graphics2DProxy( (Graphics2D) g ) {
+			@Override
+			public void setColor( Color c ) {
+				super.setColor( tickColor );
+			}
+		} );
 	}
 
 	@Override

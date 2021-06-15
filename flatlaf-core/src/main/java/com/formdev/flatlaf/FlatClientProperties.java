@@ -127,6 +127,16 @@ public interface FlatClientProperties
 	//---- JComponent ---------------------------------------------------------
 
 	/**
+	 * Specifies the style of a component in CSS syntax ("key1: value1; key2: value2; ...").
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 *
+	 * @since TODO
+	 */
+	String COMPONENT_STYLE = "JComponent.style";
+
+	/**
 	 * Specifies minimum width of a component.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton},
