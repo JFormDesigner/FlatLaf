@@ -130,7 +130,7 @@ public interface FlatClientProperties
 	 * Specifies the style of a component in CSS syntax ("key1: value1; key2: value2; ...").
 	 * <p>
 	 * <strong>Components</strong> {@link javax.swing.JComponent}<br>
-	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Value type</strong> {@link java.lang.String} or {@link java.util.Map}&lt;String, Object&gt;<br>
 	 *
 	 * @since TODO
 	 */

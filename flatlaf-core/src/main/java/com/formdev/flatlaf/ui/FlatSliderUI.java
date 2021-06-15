@@ -190,7 +190,7 @@ public class FlatSliderUI
 
 			switch( e.getPropertyName() ) {
 				case FlatClientProperties.COMPONENT_STYLE:
-					applyStyle( FlatStyleSupport.toString( e.getNewValue() ) );
+					applyStyle( e.getNewValue() );
 					slider.revalidate();
 					slider.repaint();
 					break;
@@ -201,8 +201,8 @@ public class FlatSliderUI
 	/**
 	 * @since TODO
 	 */
-	protected void applyStyle( String style ) {
-		oldStyleValues = FlatStyleSupport.parse( oldStyleValues, style, this::applyStyleProperty );
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
