@@ -108,7 +108,7 @@ public class FlatStyleSupport
 		if( style == null || style.trim().isEmpty() )
 			return null;
 
-		Map<String, Object> map = new LinkedHashMap<>();
+		Map<String, Object> map = null;
 
 		// split style into parts and process them
 		for( String part : StringUtils.split( style, ';' ) ) {
@@ -131,6 +131,8 @@ public class FlatStyleSupport
 				throw new IllegalArgumentException( "missing value in '" + part + "'" );
 
 			// parse value string and convert it into binary value
+			if( map == null )
+				map = new LinkedHashMap<>();
 			map.put( key, parseValue( key, value ) );
 		}
 
@@ -142,10 +144,6 @@ public class FlatStyleSupport
 			return UIManager.get( value.substring( 1 ) );
 
 		return FlatLaf.parseDefaultsValue( key, value );
-	}
-
-	public static boolean hasStyle( JComponent c ) {
-		return getStyle( c ) != null;
 	}
 
 	public static Object getStyle( JComponent c ) {

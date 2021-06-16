@@ -831,6 +831,14 @@ debug*/
 			.computeIfAbsent( key, k -> newInstanceSupplier.get() );
 	}
 
+	/**
+	 * Returns whether the component UI for the given component can be shared
+	 * with other components. This is only possible if it does not have styles.
+	 */
+	public static boolean canUseSharedUI( JComponent c ) {
+		return FlatStyleSupport.getStyle( c ) == null;
+	}
+
 	//---- class RepaintFocusListener -----------------------------------------
 
 	public static class RepaintFocusListener
