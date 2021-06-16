@@ -166,7 +166,7 @@ public class FlatStyleSupport
 	 * Applies the given value to an annotated field of the given object.
 	 * The field must be annotated with {@link Styleable}.
 	 *
-	 * @param object the object
+	 * @param obj the object
 	 * @param key the name of the field
 	 * @param value the new value
 	 * @return the old value of the field
