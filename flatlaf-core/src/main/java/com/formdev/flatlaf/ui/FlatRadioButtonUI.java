@@ -68,6 +68,7 @@ public class FlatRadioButtonUI
 	private Color defaultBackground;
 
 	private final boolean shared;
+	private boolean iconShared;
 	private boolean defaults_initialized = false;
 	private Map<String, Object> oldStyleValues;
 
@@ -82,6 +83,7 @@ public class FlatRadioButtonUI
 	 */
 	protected FlatRadioButtonUI( boolean shared ) {
 		this.shared = shared;
+		iconShared = true;
 	}
 
 	@Override
@@ -159,7 +161,24 @@ public class FlatRadioButtonUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		//TODO style icon
+		// style icon
+		if( key.startsWith( "icon." ) ) {
+			key = key.substring( "icon.".length() );
+
+			if( !(icon instanceof FlatCheckBoxIcon) )
+				return null;
+
+			if( iconShared ) {
+				try {
+					icon = icon.getClass().getDeclaredConstructor().newInstance();
+				} catch( Exception ex ) {
+					throw new IllegalArgumentException( "failed to clone icon '" + icon.getClass().getName() + "'" );
+				}
+				iconShared = false;
+			}
+
+			return ((FlatCheckBoxIcon)icon).applyStyleProperty( key, value );
+		}
 
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}

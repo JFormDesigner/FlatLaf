@@ -17,16 +17,28 @@
 package com.formdev.flatlaf.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
+import com.formdev.flatlaf.icons.FlatRadioButtonIcon;
 
 /**
  * @author Karl Tauber
  */
 public class FlatStylingTests
 {
+	@BeforeAll
+	static void setup() {
+		FlatLightLaf.setup();
+	}
+
 	@Test
 	void parse() {
 		assertEquals( null, FlatStyleSupport.parse( null ) );
@@ -53,18 +65,65 @@ public class FlatStylingTests
 		return map;
 	}
 
-	@Test
-	void checkbox() {
-		FlatCheckBoxUI ui = new FlatCheckBoxUI( false );
+	//---- components ---------------------------------------------------------
 
-		ui.applyStyle( "disabledText: #fff" );
+	@Test
+	void checkBox() {
+		FlatCheckBoxUI ui = new FlatCheckBoxUI( false );
+		ui.installDefaults( new JCheckBox() ); // assign icon
+		assertTrue( ui.getDefaultIcon() instanceof FlatCheckBoxIcon );
+
+		// FlatCheckBoxUI extends FlatRadioButtonUI
+		radioButton( ui );
 	}
 
 	@Test
-	void radiobutton() {
+	void radioButton() {
 		FlatRadioButtonUI ui = new FlatRadioButtonUI( false );
+		ui.installDefaults( new JRadioButton() ); // assign icon
+		assertTrue( ui.getDefaultIcon() instanceof FlatRadioButtonIcon );
 
+		radioButton( ui );
+
+		ui.applyStyle( "icon.centerDiameter: 8" );
+	}
+
+	private void radioButton( FlatRadioButtonUI ui ) {
 		ui.applyStyle( "disabledText: #fff" );
+
+		//---- icon ----
+
+		ui.applyStyle( "icon.focusWidth: 2" );
+		ui.applyStyle( "icon.focusColor: #fff" );
+		ui.applyStyle( "icon.arc: 5" );
+
+		// enabled
+		ui.applyStyle( "icon.borderColor: #fff" );
+		ui.applyStyle( "icon.background: #fff" );
+		ui.applyStyle( "icon.selectedBorderColor: #fff" );
+		ui.applyStyle( "icon.selectedBackground: #fff" );
+		ui.applyStyle( "icon.checkmarkColor: #fff" );
+
+		// disabled
+		ui.applyStyle( "icon.disabledBorderColor: #fff" );
+		ui.applyStyle( "icon.disabledBackground: #fff" );
+		ui.applyStyle( "icon.disabledCheckmarkColor: #fff" );
+
+		// focused
+		ui.applyStyle( "icon.focusedBorderColor: #fff" );
+		ui.applyStyle( "icon.focusedBackground: #fff" );
+		ui.applyStyle( "icon.selectedFocusedBorderColor: #fff" );
+		ui.applyStyle( "icon.selectedFocusedBackground: #fff" );
+		ui.applyStyle( "icon.selectedFocusedCheckmarkColor: #fff" );
+
+		// hover
+		ui.applyStyle( "icon.hoverBorderColor: #fff" );
+		ui.applyStyle( "icon.hoverBackground: #fff" );
+		ui.applyStyle( "icon.selectedHoverBackground: #fff" );
+
+		// pressed
+		ui.applyStyle( "icon.pressedBackground: #fff" );
+		ui.applyStyle( "icon.selectedPressedBackground: #fff" );
 	}
 
 	@Test
@@ -87,5 +146,58 @@ public class FlatStylingTests
 		ui.applyStyle( "disabledThumbColor: #fff" );
 		ui.applyStyle( "disabledThumbBorderColor: #fff" );
 		ui.applyStyle( "tickColor: #fff" );
+	}
+
+	//---- icons --------------------------------------------------------------
+
+	@Test
+	void checkBoxIcon() {
+		FlatCheckBoxIcon icon = new FlatCheckBoxIcon();
+
+		checkBoxIcon( icon );
+	}
+
+	@Test
+	void radioButtonIcon() {
+		FlatRadioButtonIcon icon = new FlatRadioButtonIcon();
+
+		// FlatRadioButtonIcon extends FlatCheckBoxIcon
+		checkBoxIcon( icon );
+
+		icon.applyStyleProperty( "centerDiameter", 8 );
+	}
+
+	private void checkBoxIcon( FlatCheckBoxIcon icon ) {
+		icon.applyStyleProperty( "focusWidth", 2 );
+		icon.applyStyleProperty( "focusColor", Color.WHITE );
+		icon.applyStyleProperty( "arc", 5 );
+
+		// enabled
+		icon.applyStyleProperty( "borderColor", Color.WHITE );
+		icon.applyStyleProperty( "background", Color.WHITE );
+		icon.applyStyleProperty( "selectedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "selectedBackground", Color.WHITE );
+		icon.applyStyleProperty( "checkmarkColor", Color.WHITE );
+
+		// disabled
+		icon.applyStyleProperty( "disabledBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "disabledBackground", Color.WHITE );
+		icon.applyStyleProperty( "disabledCheckmarkColor", Color.WHITE );
+
+		// focused
+		icon.applyStyleProperty( "focusedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "focusedBackground", Color.WHITE );
+		icon.applyStyleProperty( "selectedFocusedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "selectedFocusedBackground", Color.WHITE );
+		icon.applyStyleProperty( "selectedFocusedCheckmarkColor", Color.WHITE );
+
+		// hover
+		icon.applyStyleProperty( "hoverBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "hoverBackground", Color.WHITE );
+		icon.applyStyleProperty( "selectedHoverBackground", Color.WHITE );
+
+		// pressed
+		icon.applyStyleProperty( "pressedBackground", Color.WHITE );
+		icon.applyStyleProperty( "selectedPressedBackground", Color.WHITE );
 	}
 }
