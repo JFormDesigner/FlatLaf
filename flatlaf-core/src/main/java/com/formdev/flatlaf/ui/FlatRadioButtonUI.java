@@ -36,6 +36,7 @@ import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -62,7 +63,7 @@ public class FlatRadioButtonUI
 	extends BasicRadioButtonUI
 {
 	protected int iconTextGap;
-	protected Color disabledText;
+	@Styleable protected Color disabledText;
 
 	private Color defaultBackground;
 
@@ -158,15 +159,9 @@ public class FlatRadioButtonUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		Object oldValue;
-		switch( key ) {
-			case "disabledText": oldValue = disabledText; disabledText = (Color) value; break;
+		//TODO style icon
 
-			//TODO style icon
-
-			default: throw new IllegalArgumentException( "unknown style '" + key + "'" );
-		}
-		return oldValue;
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	private static Insets tempInsets = new Insets( 0, 0, 0, 0 );

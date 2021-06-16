@@ -16,6 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,6 +40,16 @@ import com.formdev.flatlaf.util.StringUtils;
  */
 public class FlatStyleSupport
 {
+	/**
+	 * Indicates that a field is intended to be used by FlatLaf styling support.
+	 * <p>
+	 * <strong>Do not rename fields annotated with this annotation.</strong>
+	 */
+	@Target(ElementType.FIELD)
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface Styleable {
+	}
+
 	/**
 	 * Parses styles in CSS syntax ("key1: value1; key2: value2; ..."),
 	 * converts the value strings into binary and invokes the given function
@@ -144,6 +160,59 @@ public class FlatStyleSupport
 			return UIManager.get( value.substring( 1 ) );
 
 		return FlatLaf.parseDefaultsValue( key, value );
+	}
+
+	/**
+	 * Applies the given value to an annotated field of the given object.
+	 * The field must be annotated with {@link Styleable}.
+	 *
+	 * @param object the object
+	 * @param key the name of the field
+	 * @param value the new value
+	 * @return the old value of the field
+	 * @throws IllegalArgumentException if object does not have a annotated field with given name
+	 *         or if value type does not fit to expected type 
+	 */
+	public static Object applyToAnnotatedObject( Object obj, String key, Object value )
+		throws IllegalArgumentException
+	{
+		Class<?> cls = obj.getClass();
+
+		for(;;) {
+			try {
+				Field f = cls.getDeclaredField( key );
+				if( f.isAnnotationPresent( Styleable.class ) ) {
+					if( Modifier.isFinal( f.getModifiers() ) )
+						throw new IllegalArgumentException( "field '" + cls.getName() + "." + key + "' is final" );
+
+					try {
+						// necessary to access protected fields in other packages
+						f.setAccessible( true );
+
+						// get old value and set new value
+						Object oldValue = f.get( obj );
+						f.set( obj, value );
+						return oldValue;
+					} catch( IllegalAccessException ex ) {
+						throw new IllegalArgumentException( "failed to access field '" + cls.getName() + "." + key + "'" );
+					}
+				}
+			} catch( NoSuchFieldException ex ) {
+				// field not found in class --> try superclass
+			}
+
+			cls = cls.getSuperclass();
+			if( cls == null )
+				throw newUnknownStyleException( key );
+
+			String superclassName = cls.getName();
+			if( superclassName.startsWith( "java." ) || superclassName.startsWith( "javax." ) )
+				throw newUnknownStyleException( key );
+		}
+	}
+
+	public static IllegalArgumentException newUnknownStyleException( String key ) {
+		return new IllegalArgumentException( "unknown style '" + key + "'" );
 	}
 
 	public static Object getStyle( JComponent c ) {

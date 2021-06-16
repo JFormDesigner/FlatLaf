@@ -37,6 +37,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
@@ -78,23 +79,23 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatSliderUI
 	extends BasicSliderUI
 {
-	protected int trackWidth;
-	protected Dimension thumbSize;
-	protected int focusWidth;
+	@Styleable protected int trackWidth;
+	@Styleable protected Dimension thumbSize;
+	@Styleable protected int focusWidth;
 
-	protected Color trackValueColor;
-	protected Color trackColor;
-	protected Color thumbColor;
-	protected Color thumbBorderColor;
+	@Styleable protected Color trackValueColor;
+	@Styleable protected Color trackColor;
+	@Styleable protected Color thumbColor;
+	@Styleable protected Color thumbBorderColor;
 	protected Color focusBaseColor;
-	protected Color focusedColor;
-	protected Color focusedThumbBorderColor;
-	protected Color hoverThumbColor;
-	protected Color pressedThumbColor;
-	protected Color disabledTrackColor;
-	protected Color disabledThumbColor;
-	protected Color disabledThumbBorderColor;
-	protected Color tickColor;
+	@Styleable protected Color focusedColor;
+	@Styleable protected Color focusedThumbBorderColor;
+	@Styleable protected Color hoverThumbColor;
+	@Styleable protected Color pressedThumbColor;
+	@Styleable protected Color disabledTrackColor;
+	@Styleable protected Color disabledThumbColor;
+	@Styleable protected Color disabledThumbBorderColor;
+	@Styleable protected Color tickColor;
 
 	private Color defaultBackground;
 	private Color defaultForeground;
@@ -209,28 +210,7 @@ public class FlatSliderUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		Object oldValue;
-		switch( key ) {
-			case "trackWidth": oldValue = trackWidth; trackWidth = (int) value; break;
-			case "thumbSize": oldValue = thumbSize; thumbSize = (Dimension) value; break;
-			case "focusWidth": oldValue = focusWidth; focusWidth = (int) value; break;
-
-			case "trackValueColor": oldValue = trackValueColor; trackValueColor = (Color) value; break;
-			case "trackColor": oldValue = trackColor; trackColor = (Color) value; break;
-			case "thumbColor": oldValue = thumbColor; thumbColor = (Color) value; break;
-			case "thumbBorderColor": oldValue = thumbBorderColor; thumbBorderColor = (Color) value; break;
-			case "focusedColor": oldValue = focusedColor; focusedColor = (Color) value; break;
-			case "focusedThumbBorderColor": oldValue = focusedThumbBorderColor; focusedThumbBorderColor = (Color) value; break;
-			case "hoverThumbColor": oldValue = hoverThumbColor; hoverThumbColor = (Color) value; break;
-			case "pressedThumbColor": oldValue = pressedThumbColor; pressedThumbColor = (Color) value; break;
-			case "disabledTrackColor": oldValue = disabledTrackColor; disabledTrackColor = (Color) value; break;
-			case "disabledThumbColor": oldValue = disabledThumbColor; disabledThumbColor = (Color) value; break;
-			case "disabledThumbBorderColor": oldValue = disabledThumbBorderColor; disabledThumbBorderColor = (Color) value; break;
-			case "tickColor": oldValue = tickColor; tickColor = (Color) value; break;
-
-			default: throw new IllegalArgumentException( "unknown style '" + key + "'" );
-		}
-		return oldValue;
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	@Override
