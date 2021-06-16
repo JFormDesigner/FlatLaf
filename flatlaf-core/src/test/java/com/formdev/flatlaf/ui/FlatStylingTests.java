@@ -23,9 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
-import org.junit.jupiter.api.BeforeAll;
+import javax.swing.UIManager;
 import org.junit.jupiter.api.Test;
-import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.icons.FlatRadioButtonIcon;
 
@@ -34,11 +33,6 @@ import com.formdev.flatlaf.icons.FlatRadioButtonIcon;
  */
 public class FlatStylingTests
 {
-	@BeforeAll
-	static void setup() {
-		FlatLightLaf.setup();
-	}
-
 	@Test
 	void parse() {
 		assertEquals( null, FlatStyleSupport.parse( null ) );
@@ -70,7 +64,10 @@ public class FlatStylingTests
 	@Test
 	void checkBox() {
 		FlatCheckBoxUI ui = new FlatCheckBoxUI( false );
-		ui.installDefaults( new JCheckBox() ); // assign icon
+
+		// assign icon
+		UIManager.put( "CheckBox.icon", new FlatCheckBoxIcon() );
+		ui.installDefaults( new JCheckBox() );
 		assertTrue( ui.getDefaultIcon() instanceof FlatCheckBoxIcon );
 
 		// FlatCheckBoxUI extends FlatRadioButtonUI
@@ -80,6 +77,9 @@ public class FlatStylingTests
 	@Test
 	void radioButton() {
 		FlatRadioButtonUI ui = new FlatRadioButtonUI( false );
+
+		// assign icon
+		UIManager.put( "RadioButton.icon", new FlatRadioButtonIcon() );
 		ui.installDefaults( new JRadioButton() ); // assign icon
 		assertTrue( ui.getDefaultIcon() instanceof FlatRadioButtonIcon );
 
