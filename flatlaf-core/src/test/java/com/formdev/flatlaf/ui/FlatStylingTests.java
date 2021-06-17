@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
+import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
@@ -206,6 +207,25 @@ public class FlatStylingTests
 		ui.applyStyle( "disabledThumbColor: #fff" );
 		ui.applyStyle( "disabledThumbBorderColor: #fff" );
 		ui.applyStyle( "tickColor: #fff" );
+	}
+
+	@Test
+	void splitPane() {
+		FlatSplitPaneUI ui = new FlatSplitPaneUI();
+
+		// create divider and one-touch buttons
+		ui.installUI( new JSplitPane() );
+
+		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "oneTouchArrowColor: #fff" );
+		ui.applyStyle( "oneTouchHoverArrowColor: #fff" );
+		ui.applyStyle( "oneTouchPressedArrowColor: #fff" );
+
+		ui.applyStyle( "style: grip" );
+		ui.applyStyle( "gripColor: #fff" );
+		ui.applyStyle( "gripDotCount: 3" );
+		ui.applyStyle( "gripDotSize: {integer}3" );
+		ui.applyStyle( "gripGap: 2" );
 	}
 
 	//---- icons --------------------------------------------------------------

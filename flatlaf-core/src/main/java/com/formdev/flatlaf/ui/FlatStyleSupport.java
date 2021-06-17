@@ -61,11 +61,13 @@ public class FlatStyleSupport
 	 *                      first parameter is the key, second the binary value;
 	 *                      the function must return the old value
 	 * @return map of old values modified by the given style, or {@code null}
+	 * @throws UnknownStyleException on unknown style keys
 	 * @throws IllegalArgumentException on syntax errors
 	 * @throws ClassCastException if value type does not fit to expected type 
 	 */
 	public static Map<String, Object> parseAndApply( Map<String, Object> oldStyleValues,
-		Object style, BiFunction<String, Object, Object> applyProperty ) throws IllegalArgumentException
+		Object style, BiFunction<String, Object, Object> applyProperty )
+			throws UnknownStyleException, IllegalArgumentException
 	{
 		// restore previous values
 		if( oldStyleValues != null ) {
@@ -170,11 +172,11 @@ public class FlatStyleSupport
 	 * @param key the name of the field
 	 * @param value the new value
 	 * @return the old value of the field
-	 * @throws IllegalArgumentException if object does not have a annotated field with given name
-	 *         or if value type does not fit to expected type 
+	 * @throws UnknownStyleException if object does not have a annotated field with given name
+	 * @throws IllegalArgumentException if value type does not fit to expected type 
 	 */
 	public static Object applyToAnnotatedObject( Object obj, String key, Object value )
-		throws IllegalArgumentException
+		throws UnknownStyleException, IllegalArgumentException
 	{
 		Class<?> cls = obj.getClass();
 
@@ -203,19 +205,30 @@ public class FlatStyleSupport
 
 			cls = cls.getSuperclass();
 			if( cls == null )
-				throw newUnknownStyleException( key );
+				throw new UnknownStyleException( key );
 
 			String superclassName = cls.getName();
 			if( superclassName.startsWith( "java." ) || superclassName.startsWith( "javax." ) )
-				throw newUnknownStyleException( key );
+				throw new UnknownStyleException( key );
 		}
-	}
-
-	public static IllegalArgumentException newUnknownStyleException( String key ) {
-		return new IllegalArgumentException( "unknown style '" + key + "'" );
 	}
 
 	public static Object getStyle( JComponent c ) {
 		return c.getClientProperty( FlatClientProperties.COMPONENT_STYLE );
+	}
+
+	//---- class UnknownStyleException ----------------------------------------
+
+	public static class UnknownStyleException
+		extends IllegalArgumentException
+	{
+		UnknownStyleException( String key ) {
+			super( key );
+		}
+
+		@Override
+		public String getMessage() {
+			return "unknown style '" + super.getMessage() + "'";
+		}
 	}
 }
