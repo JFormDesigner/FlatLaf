@@ -75,6 +75,15 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void progressBar() {
+		FlatProgressBarUI ui = new FlatProgressBarUI();
+
+		ui.applyStyle( "arc: 5" );
+		ui.applyStyle( "horizontalSize: 100,12" );
+		ui.applyStyle( "verticalSize: 12,100" );
+	}
+
+	@Test
 	void radioButton() {
 		FlatRadioButtonUI ui = new FlatRadioButtonUI( false );
 

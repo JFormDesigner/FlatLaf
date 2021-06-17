@@ -25,12 +25,14 @@ import java.awt.Insets;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicProgressBarUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -59,14 +61,22 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatProgressBarUI
 	extends BasicProgressBarUI
 {
-	protected int arc;
-	protected Dimension horizontalSize;
-	protected Dimension verticalSize;
+	@Styleable protected int arc;
+	@Styleable protected Dimension horizontalSize;
+	@Styleable protected Dimension verticalSize;
 
 	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatProgressBarUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( progressBar ) );
 	}
 
 	@Override
@@ -91,6 +101,12 @@ public class FlatProgressBarUI
 					progressBar.revalidate();
 					progressBar.repaint();
 					break;
+
+				case COMPONENT_STYLE:
+					applyStyle( e.getNewValue() );
+					progressBar.revalidate();
+					progressBar.repaint();
+					break;
 			}
 		};
 		progressBar.addPropertyChangeListener( propertyChangeListener );
@@ -102,6 +118,20 @@ public class FlatProgressBarUI
 
 		progressBar.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	@Override
