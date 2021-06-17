@@ -39,13 +39,13 @@ public class FlatArrowButton
 {
 	public static final int DEFAULT_ARROW_WIDTH = 8;
 
-	protected final boolean chevron;
-	protected final Color foreground;
-	protected final Color disabledForeground;
-	protected final Color hoverForeground;
-	protected final Color hoverBackground;
-	protected final Color pressedForeground;
-	protected final Color pressedBackground;
+	protected boolean chevron;
+	protected Color foreground;
+	protected Color disabledForeground;
+	protected Color hoverForeground;
+	protected Color hoverBackground;
+	protected Color pressedForeground;
+	protected Color pressedBackground;
 
 	private int arrowWidth = DEFAULT_ARROW_WIDTH;
 	private int xOffset = 0;
@@ -58,14 +58,8 @@ public class FlatArrowButton
 		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
-
-		this.chevron = FlatUIUtils.isChevron( type );
-		this.foreground = foreground;
-		this.disabledForeground = disabledForeground;
-		this.hoverForeground = hoverForeground;
-		this.hoverBackground = hoverBackground;
-		this.pressedForeground = pressedForeground;
-		this.pressedBackground = pressedBackground;
+		update( type, foreground, disabledForeground, hoverForeground, hoverBackground,
+			pressedForeground, pressedBackground );
 
 		setOpaque( false );
 		setBorder( null );
@@ -99,6 +93,21 @@ public class FlatArrowButton
 				}
 			} );
 		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	public void update( String type, Color foreground, Color disabledForeground,
+		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
+	{
+		this.chevron = FlatUIUtils.isChevron( type );
+		this.foreground = foreground;
+		this.disabledForeground = disabledForeground;
+		this.hoverForeground = hoverForeground;
+		this.hoverBackground = hoverBackground;
+		this.pressedForeground = pressedForeground;
+		this.pressedBackground = pressedBackground;
 	}
 
 	public int getArrowWidth() {

@@ -127,6 +127,36 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void scrollBar() {
+		FlatScrollBarUI ui = new FlatScrollBarUI();
+
+		ui.applyStyle( "track: #fff" );
+		ui.applyStyle( "thumb: #fff" );
+		ui.applyStyle( "width: 10" );
+		ui.applyStyle( "minimumThumbSize: 1,2" );
+		ui.applyStyle( "maximumThumbSize: 1,2" );
+		ui.applyStyle( "allowsAbsolutePositioning: true" );
+
+		ui.applyStyle( "trackInsets: 1,2,3,4" );
+		ui.applyStyle( "thumbInsets: 1,2,3,4" );
+		ui.applyStyle( "trackArc: 5" );
+		ui.applyStyle( "thumbArc: 10" );
+		ui.applyStyle( "hoverTrackColor: #fff" );
+		ui.applyStyle( "hoverThumbColor: #fff" );
+		ui.applyStyle( "hoverThumbWithTrack: true" );
+		ui.applyStyle( "pressedTrackColor: #fff" );
+		ui.applyStyle( "pressedThumbColor: #fff" );
+		ui.applyStyle( "pressedThumbWithTrack: true" );
+
+		ui.applyStyle( "showButtons: true" );
+		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "buttonArrowColor: #fff" );
+		ui.applyStyle( "buttonDisabledArrowColor: #fff" );
+		ui.applyStyle( "hoverButtonBackground: #fff" );
+		ui.applyStyle( "pressedButtonBackground: #fff" );
+	}
+
+	@Test
 	void slider() {
 		FlatSliderUI ui = new FlatSliderUI();
 
