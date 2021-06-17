@@ -75,6 +75,14 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void popupMenuSeparator() {
+		FlatPopupMenuSeparatorUI ui = new FlatPopupMenuSeparatorUI( false );
+
+		// FlatPopupMenuSeparatorUI extends FlatSeparatorUI
+		separator( ui );
+	}
+
+	@Test
 	void progressBar() {
 		FlatProgressBarUI ui = new FlatProgressBarUI();
 
@@ -163,6 +171,19 @@ public class FlatStylingTests
 		ui.applyStyle( "buttonDisabledArrowColor: #fff" );
 		ui.applyStyle( "hoverButtonBackground: #fff" );
 		ui.applyStyle( "pressedButtonBackground: #fff" );
+	}
+
+	@Test
+	void separator() {
+		FlatSeparatorUI ui = new FlatSeparatorUI( false );
+
+		separator( ui );
+	}
+
+	private void separator( FlatSeparatorUI ui ) {
+		ui.applyStyle( "height: 6" );
+		ui.applyStyle( "stripeWidth: 2" );
+		ui.applyStyle( "stripeIndent: 10" );
 	}
 
 	@Test

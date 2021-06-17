@@ -21,11 +21,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSeparatorUI;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSeparator}.
@@ -46,14 +50,37 @@ import javax.swing.plaf.basic.BasicSeparatorUI;
 public class FlatSeparatorUI
 	extends BasicSeparatorUI
 {
-	protected int height;
-	protected int stripeWidth;
-	protected int stripeIndent;
+	@Styleable protected int height;
+	@Styleable protected int stripeWidth;
+	@Styleable protected int stripeIndent;
 
+	private final boolean shared;
 	private boolean defaults_initialized = false;
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatSeparatorUI.class, FlatSeparatorUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatSeparatorUI.class, () -> new FlatSeparatorUI( true ) )
+			: new FlatSeparatorUI( false );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected FlatSeparatorUI( boolean shared ) {
+		this.shared = shared;
+	}
+
+	protected String getPropertyPrefix() {
+		return "Separator";
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -76,8 +103,54 @@ public class FlatSeparatorUI
 		defaults_initialized = false;
 	}
 
-	protected String getPropertyPrefix() {
-		return "Separator";
+	@Override
+	protected void installListeners( JSeparator s ) {
+		super.installListeners( s );
+
+		propertyChangeListener = e -> {
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.COMPONENT_STYLE:
+					applyStyle( s, this, e.getNewValue() );
+					s.revalidate();
+					s.repaint();
+					break;
+			}
+		};
+		s.addPropertyChangeListener( propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners( JSeparator s ) {
+		super.uninstallListeners( s );
+
+		s.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
+	}
+
+	private static void applyStyle( JSeparator s, FlatSeparatorUI ui, Object style ) {
+		// unshare component UI if necessary
+		if( style != null && ui.shared ) {
+			s.updateUI();
+			ui = (FlatSeparatorUI) s.getUI();
+		}
+
+		ui.applyStyle( style );
+		s.revalidate();
+		s.repaint();
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	@Override
