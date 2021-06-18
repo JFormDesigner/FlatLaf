@@ -22,6 +22,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
@@ -29,6 +30,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextAreaUI;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
@@ -60,14 +62,15 @@ import com.formdev.flatlaf.util.HiDPIUtils;
 public class FlatTextAreaUI
 	extends BasicTextAreaUI
 {
-	protected int minimumWidth;
+	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
 	protected Color background;
-	protected Color disabledBackground;
-	protected Color inactiveBackground;
-	protected Color focusedBackground;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color inactiveBackground;
+	@Styleable protected Color focusedBackground;
 
 	private FocusListener focusListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextAreaUI();
@@ -77,7 +80,7 @@ public class FlatTextAreaUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		updateBackground();
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -122,7 +125,7 @@ public class FlatTextAreaUI
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
-		FlatEditorPaneUI.propertyChange( getComponent(), e );
+		FlatEditorPaneUI.propertyChange( getComponent(), e, this::applyStyle );
 
 		switch( e.getPropertyName() ) {
 			case "editable":
@@ -130,6 +133,21 @@ public class FlatTextAreaUI
 				updateBackground();
 				break;
 		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		updateBackground();
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	private void updateBackground() {

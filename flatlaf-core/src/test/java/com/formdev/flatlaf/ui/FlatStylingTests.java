@@ -27,6 +27,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import org.junit.jupiter.api.Test;
@@ -78,6 +79,14 @@ public class FlatStylingTests
 
 		// FlatCheckBoxUI extends FlatRadioButtonUI
 		radioButton( ui );
+	}
+
+	@Test
+	void editorPane() {
+		FlatEditorPaneUI ui = new FlatEditorPaneUI();
+
+		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "focusedBackground: #fff" );
 	}
 
 	@Test
@@ -267,6 +276,18 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void textArea() {
+		FlatTextAreaUI ui = new FlatTextAreaUI();
+
+		ui.installUI( new JTextArea() );
+
+		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "disabledBackground: #fff" );
+		ui.applyStyle( "inactiveBackground: #fff" );
+		ui.applyStyle( "focusedBackground: #fff" );
+	}
+
+	@Test
 	void textField() {
 		FlatTextFieldUI ui = new FlatTextFieldUI();
 
@@ -284,6 +305,14 @@ public class FlatStylingTests
 
 		// border
 		flatTextBorder( style -> ui.applyStyle( style ) );
+	}
+
+	@Test
+	void textPane() {
+		FlatTextPaneUI ui = new FlatTextPaneUI();
+
+		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "focusedBackground: #fff" );
 	}
 
 	//---- component borders --------------------------------------------------

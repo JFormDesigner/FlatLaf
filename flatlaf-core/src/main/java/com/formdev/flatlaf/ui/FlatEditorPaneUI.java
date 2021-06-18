@@ -23,6 +23,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
+import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
@@ -30,6 +32,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
@@ -61,15 +64,23 @@ import com.formdev.flatlaf.util.HiDPIUtils;
 public class FlatEditorPaneUI
 	extends BasicEditorPaneUI
 {
-	protected int minimumWidth;
+	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
-	protected Color focusedBackground;
+	@Styleable protected Color focusedBackground;
 
 	private Object oldHonorDisplayProperties;
 	private FocusListener focusListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatEditorPaneUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -115,15 +126,35 @@ public class FlatEditorPaneUI
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
-		propertyChange( getComponent(), e );
+		propertyChange( getComponent(), e, this::applyStyle );
 	}
 
-	static void propertyChange( JTextComponent c, PropertyChangeEvent e ) {
+	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Consumer<Object> applyStyle ) {
 		switch( e.getPropertyName() ) {
 			case FlatClientProperties.MINIMUM_WIDTH:
 				c.revalidate();
 				break;
+
+			case FlatClientProperties.COMPONENT_STYLE:
+				applyStyle.accept( e.getNewValue() );
+				c.revalidate();
+				c.repaint();
+				break;
 		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	@Override
