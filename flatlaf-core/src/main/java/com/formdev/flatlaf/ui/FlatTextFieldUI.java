@@ -26,18 +26,23 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
+import java.util.function.Consumer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
 
@@ -73,15 +78,24 @@ import com.formdev.flatlaf.util.JavaCompatibility;
 public class FlatTextFieldUI
 	extends BasicTextFieldUI
 {
-	protected int minimumWidth;
+	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
-	protected Color placeholderForeground;
-	protected Color focusedBackground;
+	@Styleable protected Color placeholderForeground;
+	@Styleable protected Color focusedBackground;
 
 	private FocusListener focusListener;
+	private Map<String, Object> oldStyleValues;
+	private boolean borderShared = true;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextFieldUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -135,10 +149,10 @@ public class FlatTextFieldUI
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
-		propertyChange( getComponent(), e );
+		propertyChange( getComponent(), e, this::applyStyle );
 	}
 
-	static void propertyChange( JTextComponent c, PropertyChangeEvent e ) {
+	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Consumer<Object> applyStyle ) {
 		switch( e.getPropertyName() ) {
 			case FlatClientProperties.PLACEHOLDER_TEXT:
 			case FlatClientProperties.COMPONENT_ROUND_RECT:
@@ -148,6 +162,44 @@ public class FlatTextFieldUI
 			case FlatClientProperties.MINIMUM_WIDTH:
 				c.revalidate();
 				break;
+
+			case FlatClientProperties.COMPONENT_STYLE:
+				applyStyle.accept( e.getNewValue() );
+				c.revalidate();
+				c.repaint();
+				break;
+		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		try {
+			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		} catch( UnknownStyleException ex ) {
+			Border border = getComponent().getBorder();
+			if( border instanceof FlatBorder ) {
+				if( borderShared ) {
+					border = FlatStyleSupport.cloneBorder( border );
+					getComponent().setBorder( border );
+					borderShared = false;
+				}
+
+				try {
+					return ((FlatBorder)border).applyStyleProperty( key, value );
+				} catch( UnknownStyleException ex2 ) {
+					// ignore
+				}
+			}
+			throw ex;
 		}
 	}
 

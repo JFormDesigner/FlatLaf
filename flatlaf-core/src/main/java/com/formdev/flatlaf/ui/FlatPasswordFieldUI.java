@@ -26,14 +26,19 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.icons.FlatCapsLockIcon;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
@@ -71,18 +76,28 @@ import com.formdev.flatlaf.util.HiDPIUtils;
 public class FlatPasswordFieldUI
 	extends BasicPasswordFieldUI
 {
-	protected int minimumWidth;
+	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
-	protected Color placeholderForeground;
-	protected Color focusedBackground;
-	protected boolean showCapsLock;
+	@Styleable protected Color placeholderForeground;
+	@Styleable protected Color focusedBackground;
+	@Styleable protected boolean showCapsLock;
 	protected Icon capsLockIcon;
 
 	private FocusListener focusListener;
 	private KeyListener capsLockListener;
+	private Map<String, Object> oldStyleValues;
+	private boolean borderShared = true;
+	private boolean capsLockIconShared = true;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatPasswordFieldUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -159,7 +174,47 @@ public class FlatPasswordFieldUI
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
 		super.propertyChange( e );
-		FlatTextFieldUI.propertyChange( getComponent(), e );
+		FlatTextFieldUI.propertyChange( getComponent(), e, this::applyStyle );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof FlatCapsLockIcon ) {
+			if( capsLockIconShared ) {
+				capsLockIcon = FlatStyleSupport.cloneIcon( capsLockIcon );
+				capsLockIconShared = false;
+			}
+			return ((FlatCapsLockIcon)capsLockIcon).applyStyleProperty( key, value );
+		}
+
+		try {
+			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		} catch( UnknownStyleException ex ) {
+			Border border = getComponent().getBorder();
+			if( border instanceof FlatBorder ) {
+				if( borderShared ) {
+					border = FlatStyleSupport.cloneBorder( border );
+					getComponent().setBorder( border );
+					borderShared = false;
+				}
+
+				try {
+					return ((FlatBorder)border).applyStyleProperty( key, value );
+				} catch( UnknownStyleException ex2 ) {
+					// ignore
+				}
+			}
+			throw ex;
+		}
 	}
 
 	@Override

@@ -26,8 +26,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.StringUtils;
@@ -217,12 +219,30 @@ public class FlatStyleSupport
 		return c.getClientProperty( FlatClientProperties.COMPONENT_STYLE );
 	}
 
+	static Border cloneBorder( Border border ) {
+		Class<? extends Border> borderClass = border.getClass();
+		try {
+			return borderClass.getDeclaredConstructor().newInstance();
+		} catch( Exception ex ) {
+			throw new IllegalArgumentException( "failed to clone border '" + borderClass.getName() + "'" );
+		}
+	}
+
+	static Icon cloneIcon( Icon icon ) {
+		Class<? extends Icon> iconClass = icon.getClass();
+		try {
+			return iconClass.getDeclaredConstructor().newInstance();
+		} catch( Exception ex ) {
+			throw new IllegalArgumentException( "failed to clone icon '" + iconClass.getName() + "'" );
+		}
+	}
+
 	//---- class UnknownStyleException ----------------------------------------
 
 	public static class UnknownStyleException
 		extends IllegalArgumentException
 	{
-		UnknownStyleException( String key ) {
+		public UnknownStyleException( String key ) {
 			super( key );
 		}
 

@@ -21,11 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import org.junit.jupiter.api.Test;
+import com.formdev.flatlaf.icons.FlatCapsLockIcon;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.icons.FlatRadioButtonIcon;
 
@@ -73,6 +78,39 @@ public class FlatStylingTests
 
 		// FlatCheckBoxUI extends FlatRadioButtonUI
 		radioButton( ui );
+	}
+
+	@Test
+	void formattedTextField() {
+		FlatFormattedTextFieldUI ui = new FlatFormattedTextFieldUI();
+
+		// create border
+		UIManager.put( "FormattedTextField.border", new FlatTextBorder() );
+		ui.installUI( new JFormattedTextField() );
+
+		// FlatFormattedTextFieldUI extends FlatTextFieldUI
+		textField( ui );
+	}
+
+	@Test
+	void passwordField() {
+		FlatPasswordFieldUI ui = new FlatPasswordFieldUI();
+
+		// create border and capsLockIcon
+		UIManager.put( "PasswordField.border", new FlatTextBorder() );
+		UIManager.put( "PasswordField.capsLockIcon", new FlatCapsLockIcon() );
+		ui.installUI( new JPasswordField() );
+
+		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "placeholderForeground: #fff" );
+		ui.applyStyle( "focusedBackground: #fff" );
+		ui.applyStyle( "showCapsLock: true" );
+
+		// capsLockIcon
+		ui.applyStyle( "capsLockIconColor: #fff" );
+
+		// border
+		flatTextBorder( style -> ui.applyStyle( style ) );
 	}
 
 	@Test
@@ -228,26 +266,105 @@ public class FlatStylingTests
 		ui.applyStyle( "gripGap: 2" );
 	}
 
-	//---- icons --------------------------------------------------------------
+	@Test
+	void textField() {
+		FlatTextFieldUI ui = new FlatTextFieldUI();
+
+		// create border
+		UIManager.put( "TextField.border", new FlatTextBorder() );
+		ui.installUI( new JTextField() );
+
+		textField( ui );
+	}
+
+	private void textField( FlatTextFieldUI ui ) {
+		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "placeholderForeground: #fff" );
+		ui.applyStyle( "focusedBackground: #fff" );
+
+		// border
+		flatTextBorder( style -> ui.applyStyle( style ) );
+	}
+
+	//---- component borders --------------------------------------------------
+
+	private void flatTextBorder( Consumer<String> applyStyle ) {
+		flatBorder( applyStyle );
+
+		applyStyle.accept( "arc: 6" );
+	}
+
+	private void flatBorder( Consumer<String> applyStyle ) {
+		applyStyle.accept( "focusWidth: 2" );
+		applyStyle.accept( "innerFocusWidth: {float}0.5" );
+		applyStyle.accept( "innerOutlineWidth: {float}1.5" );
+		applyStyle.accept( "focusColor: #fff" );
+		applyStyle.accept( "borderColor: #fff" );
+		applyStyle.accept( "disabledBorderColor: #fff" );
+		applyStyle.accept( "focusedBorderColor: #fff" );
+
+		applyStyle.accept( "error.borderColor: #fff" );
+		applyStyle.accept( "error.focusedBorderColor: #fff" );
+		applyStyle.accept( "warning.borderColor: #fff" );
+		applyStyle.accept( "warning.focusedBorderColor: #fff" );
+		applyStyle.accept( "custom.borderColor: desaturate(#f00,50%,relative derived noAutoInverse)" );
+	}
+
+	//---- borders ------------------------------------------------------------
 
 	@Test
-	void checkBoxIcon() {
-		FlatCheckBoxIcon icon = new FlatCheckBoxIcon();
+	void flatTextBorder() {
+		FlatTextBorder border = new FlatTextBorder();
 
-		checkBoxIcon( icon );
+		// FlatTextBorder extends FlatBorder
+		flatBorder( border );
+
+		border.applyStyleProperty( "arc", 6 );
 	}
 
 	@Test
-	void radioButtonIcon() {
+	void flatBorder() {
+		FlatBorder border = new FlatBorder();
+
+		flatBorder( border );
+	}
+
+	private void flatBorder( FlatBorder border ) {
+		border.applyStyleProperty( "focusWidth", 2 );
+		border.applyStyleProperty( "innerFocusWidth", 0.5f );
+		border.applyStyleProperty( "innerOutlineWidth", 1.5f );
+		border.applyStyleProperty( "focusColor", Color.WHITE );
+		border.applyStyleProperty( "borderColor", Color.WHITE );
+		border.applyStyleProperty( "disabledBorderColor", Color.WHITE );
+		border.applyStyleProperty( "focusedBorderColor", Color.WHITE );
+
+		border.applyStyleProperty( "error.borderColor", Color.WHITE );
+		border.applyStyleProperty( "error.focusedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "warning.borderColor", Color.WHITE );
+		border.applyStyleProperty( "warning.focusedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "custom.borderColor", Color.WHITE );
+	}
+
+	//---- icons --------------------------------------------------------------
+
+	@Test
+	void flatCheckBoxIcon() {
+		FlatCheckBoxIcon icon = new FlatCheckBoxIcon();
+
+		flatCheckBoxIcon( icon );
+	}
+
+	@Test
+	void flatRadioButtonIcon() {
 		FlatRadioButtonIcon icon = new FlatRadioButtonIcon();
 
 		// FlatRadioButtonIcon extends FlatCheckBoxIcon
-		checkBoxIcon( icon );
+		flatCheckBoxIcon( icon );
 
 		icon.applyStyleProperty( "centerDiameter", 8 );
 	}
 
-	private void checkBoxIcon( FlatCheckBoxIcon icon ) {
+	private void flatCheckBoxIcon( FlatCheckBoxIcon icon ) {
 		icon.applyStyleProperty( "focusWidth", 2 );
 		icon.applyStyleProperty( "focusColor", Color.WHITE );
 		icon.applyStyleProperty( "arc", 5 );

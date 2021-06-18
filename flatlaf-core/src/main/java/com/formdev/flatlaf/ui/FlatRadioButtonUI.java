@@ -68,7 +68,7 @@ public class FlatRadioButtonUI
 	private Color defaultBackground;
 
 	private final boolean shared;
-	private boolean iconShared;
+	private boolean iconShared = true;
 	private boolean defaults_initialized = false;
 	private Map<String, Object> oldStyleValues;
 
@@ -83,7 +83,6 @@ public class FlatRadioButtonUI
 	 */
 	protected FlatRadioButtonUI( boolean shared ) {
 		this.shared = shared;
-		iconShared = true;
 	}
 
 	@Override
@@ -169,11 +168,7 @@ public class FlatRadioButtonUI
 				return null;
 
 			if( iconShared ) {
-				try {
-					icon = icon.getClass().getDeclaredConstructor().newInstance();
-				} catch( Exception ex ) {
-					throw new IllegalArgumentException( "failed to clone icon '" + icon.getClass().getName() + "'" );
-				}
+				icon = FlatStyleSupport.cloneIcon( icon );
 				iconShared = false;
 			}
 

@@ -31,6 +31,7 @@ import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.DerivedColor;
 
 /**
@@ -61,19 +62,35 @@ import com.formdev.flatlaf.util.DerivedColor;
 public class FlatBorder
 	extends BasicBorders.MarginBorder
 {
-	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
-	protected final float innerFocusWidth = FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 );
-	protected final float innerOutlineWidth = FlatUIUtils.getUIFloat( "Component.innerOutlineWidth", 0 );
-	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
-	protected final Color borderColor = UIManager.getColor( "Component.borderColor" );
-	protected final Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
-	protected final Color focusedBorderColor = UIManager.getColor( "Component.focusedBorderColor" );
+	@Styleable protected int focusWidth = UIManager.getInt( "Component.focusWidth" );
+	@Styleable protected float innerFocusWidth = FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 );
+	@Styleable protected float innerOutlineWidth = FlatUIUtils.getUIFloat( "Component.innerOutlineWidth", 0 );
+	@Styleable protected Color focusColor = UIManager.getColor( "Component.focusColor" );
+	@Styleable protected Color borderColor = UIManager.getColor( "Component.borderColor" );
+	@Styleable protected Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
+	@Styleable protected Color focusedBorderColor = UIManager.getColor( "Component.focusedBorderColor" );
 
-	protected final Color errorBorderColor = UIManager.getColor( "Component.error.borderColor" );
-	protected final Color errorFocusedBorderColor = UIManager.getColor( "Component.error.focusedBorderColor" );
-	protected final Color warningBorderColor = UIManager.getColor( "Component.warning.borderColor" );
-	protected final Color warningFocusedBorderColor = UIManager.getColor( "Component.warning.focusedBorderColor" );
-	protected final Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
+	protected Color errorBorderColor = UIManager.getColor( "Component.error.borderColor" );
+	protected Color errorFocusedBorderColor = UIManager.getColor( "Component.error.focusedBorderColor" );
+	protected Color warningBorderColor = UIManager.getColor( "Component.warning.borderColor" );
+	protected Color warningFocusedBorderColor = UIManager.getColor( "Component.warning.focusedBorderColor" );
+	protected Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
+
+	/**
+	 * @since TODO
+	 */
+	public Object applyStyleProperty( String key, Object value ) {
+		Object oldValue;
+		switch( key ) {
+			case "error.borderColor": oldValue = errorBorderColor; errorBorderColor = (Color) value; return oldValue;
+			case "error.focusedBorderColor": oldValue = errorFocusedBorderColor; errorFocusedBorderColor = (Color) value; return oldValue;
+			case "warning.borderColor": oldValue = warningBorderColor; warningBorderColor = (Color) value; return oldValue;
+			case "warning.focusedBorderColor": oldValue = warningFocusedBorderColor; warningFocusedBorderColor = (Color) value; return oldValue;
+			case "custom.borderColor": oldValue = customBorderColor; customBorderColor = (Color) value; return oldValue;
+		}
+
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
