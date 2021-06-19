@@ -66,7 +66,13 @@ public class FlatEditorPaneUI
 {
 	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
+	private Color background;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color inactiveBackground;
 	@Styleable protected Color focusedBackground;
+
+	private Color oldDisabledBackground;
+	private Color oldInactiveBackground;
 
 	private Object oldHonorDisplayProperties;
 	private FocusListener focusListener;
@@ -90,6 +96,9 @@ public class FlatEditorPaneUI
 		String prefix = getPropertyPrefix();
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
+		background = UIManager.getColor( prefix + ".background" );
+		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
+		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
 		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
 
 		// use component font and foreground for HTML text
@@ -101,7 +110,13 @@ public class FlatEditorPaneUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		background = null;
+		disabledBackground = null;
+		inactiveBackground = null;
 		focusedBackground = null;
+
+		oldDisabledBackground = null;
+		oldInactiveBackground = null;
 
 		getComponent().putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, oldHonorDisplayProperties );
 	}
@@ -125,6 +140,11 @@ public class FlatEditorPaneUI
 
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
+		// invoke updateBackground() before super.propertyChange()
+		String propertyName = e.getPropertyName();
+		if( "editable".equals( propertyName ) || "enabled".equals( propertyName ) )
+			updateBackground();
+
 		super.propertyChange( e );
 		propertyChange( getComponent(), e, this::applyStyle );
 	}
@@ -147,7 +167,12 @@ public class FlatEditorPaneUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
+		oldDisabledBackground = disabledBackground;
+		oldInactiveBackground = inactiveBackground;
+
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		updateBackground();
 	}
 
 	/**
@@ -155,6 +180,12 @@ public class FlatEditorPaneUI
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	private void updateBackground() {
+		FlatTextFieldUI.updateBackground( getComponent(), background,
+			disabledBackground, inactiveBackground,
+			oldDisabledBackground, oldInactiveBackground );
 	}
 
 	@Override

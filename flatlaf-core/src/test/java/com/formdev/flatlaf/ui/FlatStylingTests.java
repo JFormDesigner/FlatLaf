@@ -23,12 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import javax.swing.JCheckBox;
+import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.icons.FlatCapsLockIcon;
@@ -85,7 +87,12 @@ public class FlatStylingTests
 	void editorPane() {
 		FlatEditorPaneUI ui = new FlatEditorPaneUI();
 
+		// for FlatEditorPaneUI.updateBackground()
+		ui.installUI( new JEditorPane() );
+
 		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "disabledBackground: #fff" );
+		ui.applyStyle( "inactiveBackground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
 	}
 
@@ -111,6 +118,8 @@ public class FlatStylingTests
 		ui.installUI( new JPasswordField() );
 
 		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "disabledBackground: #fff" );
+		ui.applyStyle( "inactiveBackground: #fff" );
 		ui.applyStyle( "placeholderForeground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
 		ui.applyStyle( "showCapsLock: true" );
@@ -279,6 +288,7 @@ public class FlatStylingTests
 	void textArea() {
 		FlatTextAreaUI ui = new FlatTextAreaUI();
 
+		// for FlatEditorPaneUI.updateBackground()
 		ui.installUI( new JTextArea() );
 
 		ui.applyStyle( "minimumWidth: 100" );
@@ -300,6 +310,8 @@ public class FlatStylingTests
 
 	private void textField( FlatTextFieldUI ui ) {
 		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "disabledBackground: #fff" );
+		ui.applyStyle( "inactiveBackground: #fff" );
 		ui.applyStyle( "placeholderForeground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
 
@@ -311,7 +323,12 @@ public class FlatStylingTests
 	void textPane() {
 		FlatTextPaneUI ui = new FlatTextPaneUI();
 
+		// for FlatEditorPaneUI.updateBackground()
+		ui.installUI( new JTextPane() );
+
 		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "disabledBackground: #fff" );
+		ui.applyStyle( "inactiveBackground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
 	}
 

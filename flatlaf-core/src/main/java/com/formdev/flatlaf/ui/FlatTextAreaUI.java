@@ -27,9 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextAreaUI;
-import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.HiDPIUtils;
 
@@ -64,10 +62,13 @@ public class FlatTextAreaUI
 {
 	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
-	protected Color background;
+	private Color background;
 	@Styleable protected Color disabledBackground;
 	@Styleable protected Color inactiveBackground;
 	@Styleable protected Color focusedBackground;
+
+	private Color oldDisabledBackground;
+	private Color oldInactiveBackground;
 
 	private FocusListener focusListener;
 	private Map<String, Object> oldStyleValues;
@@ -103,6 +104,9 @@ public class FlatTextAreaUI
 		disabledBackground = null;
 		inactiveBackground = null;
 		focusedBackground = null;
+
+		oldDisabledBackground = null;
+		oldInactiveBackground = null;
 	}
 
 	@Override
@@ -124,22 +128,24 @@ public class FlatTextAreaUI
 
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
+		// invoke updateBackground() before super.propertyChange()
+		String propertyName = e.getPropertyName();
+		if( "editable".equals( propertyName ) || "enabled".equals( propertyName ) )
+			updateBackground();
+
 		super.propertyChange( e );
 		FlatEditorPaneUI.propertyChange( getComponent(), e, this::applyStyle );
-
-		switch( e.getPropertyName() ) {
-			case "editable":
-			case "enabled":
-				updateBackground();
-				break;
-		}
 	}
 
 	/**
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
+		oldDisabledBackground = disabledBackground;
+		oldInactiveBackground = inactiveBackground;
+
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
 		updateBackground();
 	}
 
@@ -151,26 +157,9 @@ public class FlatTextAreaUI
 	}
 
 	private void updateBackground() {
-		JTextComponent c = getComponent();
-
-		Color background = c.getBackground();
-		if( !(background instanceof UIResource) )
-			return;
-
-		// do not update background if it currently has a unknown color (assigned from outside)
-		if( background != this.background &&
-			background != disabledBackground &&
-			background != inactiveBackground )
-		  return;
-
-		Color newBackground = !c.isEnabled()
-			? disabledBackground
-			: (!c.isEditable()
-				? inactiveBackground
-				: this.background);
-
-		if( newBackground != background )
-			c.setBackground( newBackground );
+		FlatTextFieldUI.updateBackground( getComponent(), background,
+			disabledBackground, inactiveBackground,
+			oldDisabledBackground, oldInactiveBackground );
 	}
 
 	@Override

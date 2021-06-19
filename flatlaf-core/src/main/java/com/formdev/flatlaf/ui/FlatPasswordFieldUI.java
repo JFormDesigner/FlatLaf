@@ -78,10 +78,16 @@ public class FlatPasswordFieldUI
 {
 	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
+	private Color background;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color inactiveBackground;
 	@Styleable protected Color placeholderForeground;
 	@Styleable protected Color focusedBackground;
 	@Styleable protected boolean showCapsLock;
 	protected Icon capsLockIcon;
+
+	private Color oldDisabledBackground;
+	private Color oldInactiveBackground;
 
 	private FocusListener focusListener;
 	private KeyListener capsLockListener;
@@ -107,6 +113,9 @@ public class FlatPasswordFieldUI
 		String prefix = getPropertyPrefix();
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
+		background = UIManager.getColor( prefix + ".background" );
+		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
+		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
 		showCapsLock = UIManager.getBoolean( "PasswordField.showCapsLock" );
@@ -121,9 +130,15 @@ public class FlatPasswordFieldUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		background = null;
+		disabledBackground = null;
+		inactiveBackground = null;
 		placeholderForeground = null;
 		focusedBackground = null;
 		capsLockIcon = null;
+
+		oldDisabledBackground = null;
+		oldInactiveBackground = null;
 
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
@@ -173,7 +188,11 @@ public class FlatPasswordFieldUI
 
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
-		super.propertyChange( e );
+		String propertyName = e.getPropertyName();
+		if( "editable".equals( propertyName ) || "enabled".equals( propertyName ) )
+			updateBackground();
+		else
+			super.propertyChange( e );
 		FlatTextFieldUI.propertyChange( getComponent(), e, this::applyStyle );
 	}
 
@@ -181,7 +200,12 @@ public class FlatPasswordFieldUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
+		oldDisabledBackground = disabledBackground;
+		oldInactiveBackground = inactiveBackground;
+
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		updateBackground();
 	}
 
 	/**
@@ -215,6 +239,12 @@ public class FlatPasswordFieldUI
 			}
 			throw ex;
 		}
+	}
+
+	private void updateBackground() {
+		FlatTextFieldUI.updateBackground( getComponent(), background,
+			disabledBackground, inactiveBackground,
+			oldDisabledBackground, oldInactiveBackground );
 	}
 
 	@Override
