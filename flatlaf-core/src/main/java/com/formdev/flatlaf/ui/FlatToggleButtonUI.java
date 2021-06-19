@@ -26,6 +26,7 @@ import javax.swing.JComponent;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -73,17 +74,23 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatToggleButtonUI
 	extends FlatButtonUI
 {
-	protected int tabUnderlineHeight;
-	protected Color tabUnderlineColor;
-	protected Color tabDisabledUnderlineColor;
-	protected Color tabSelectedBackground;
-	protected Color tabHoverBackground;
-	protected Color tabFocusBackground;
+	@Styleable(dot=true) protected int tabUnderlineHeight;
+	@Styleable(dot=true) protected Color tabUnderlineColor;
+	@Styleable(dot=true) protected Color tabDisabledUnderlineColor;
+	@Styleable(dot=true) protected Color tabSelectedBackground;
+	@Styleable(dot=true) protected Color tabHoverBackground;
+	@Styleable(dot=true) protected Color tabFocusBackground;
 
 	private boolean defaults_initialized = false;
 
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatToggleButtonUI.class, FlatToggleButtonUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatToggleButtonUI.class, () -> new FlatToggleButtonUI( true ) )
+			: new FlatToggleButtonUI( false );
+	}
+
+	protected FlatToggleButtonUI( boolean shared ) {
+		super( shared );
 	}
 
 	@Override

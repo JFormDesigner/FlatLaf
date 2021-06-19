@@ -19,9 +19,12 @@ package com.formdev.flatlaf.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
+import java.awt.Insets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
@@ -31,6 +34,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.icons.FlatCapsLockIcon;
@@ -69,6 +73,51 @@ public class FlatStylingTests
 	}
 
 	//---- components ---------------------------------------------------------
+
+	@Test
+	void button() {
+		FlatButtonUI ui = new FlatButtonUI( false );
+
+		// create border
+		UIManager.put( "Button.border", new FlatButtonBorder() );
+		JButton b = new JButton();
+		ui.installUI( b );
+
+		button( b, ui );
+	}
+
+	private void button( AbstractButton b, FlatButtonUI ui ) {
+		ui.applyStyle( b, "minimumWidth: 100" );
+
+		ui.applyStyle( b, "focusedBackground: #fff" );
+		ui.applyStyle( b, "hoverBackground: #fff" );
+		ui.applyStyle( b, "pressedBackground: #fff" );
+		ui.applyStyle( b, "selectedBackground: #fff" );
+		ui.applyStyle( b, "selectedForeground: #fff" );
+		ui.applyStyle( b, "disabledBackground: #fff" );
+		ui.applyStyle( b, "disabledText: #fff" );
+		ui.applyStyle( b, "disabledSelectedBackground: #fff" );
+
+		ui.applyStyle( b, "default.background: #fff" );
+		ui.applyStyle( b, "default.foreground: #fff" );
+		ui.applyStyle( b, "default.focusedBackground: #fff" );
+		ui.applyStyle( b, "default.hoverBackground: #fff" );
+		ui.applyStyle( b, "default.pressedBackground: #fff" );
+		ui.applyStyle( b, "default.boldText: true" );
+
+		ui.applyStyle( b, "paintShadow: true" );
+		ui.applyStyle( b, "shadowWidth: 2" );
+		ui.applyStyle( b, "shadowColor: #fff" );
+		ui.applyStyle( b, "default.shadowColor: #fff" );
+
+		ui.applyStyle( b, "toolbar.spacingInsets: 1,2,3,4" );
+		ui.applyStyle( b, "toolbar.hoverBackground: #fff" );
+		ui.applyStyle( b, "toolbar.pressedBackground: #fff" );
+		ui.applyStyle( b, "toolbar.selectedBackground: #fff" );
+
+		// border
+		flatButtonBorder( style -> ui.applyStyle( b, style ) );
+	}
 
 	@Test
 	void checkBox() {
@@ -332,7 +381,47 @@ public class FlatStylingTests
 		ui.applyStyle( "focusedBackground: #fff" );
 	}
 
+	@Test
+	void toggleButton() {
+		FlatToggleButtonUI ui = new FlatToggleButtonUI( false );
+
+		// create border
+		UIManager.put( "ToggleButton.border", new FlatButtonBorder() );
+		JToggleButton b = new JToggleButton();
+		ui.installUI( b );
+
+		// FlatToggleButtonUI extends FlatButtonUI
+		button( b, ui );
+
+		ui.applyStyle( b, "tab.underlineHeight: 3" );
+		ui.applyStyle( b, "tab.underlineColor: #fff" );
+		ui.applyStyle( b, "tab.disabledUnderlineColor: #fff" );
+		ui.applyStyle( b, "tab.selectedBackground: #fff" );
+		ui.applyStyle( b, "tab.hoverBackground: #fff" );
+		ui.applyStyle( b, "tab.focusBackground: #fff" );
+	}
+
 	//---- component borders --------------------------------------------------
+
+	private void flatButtonBorder( Consumer<String> applyStyle ) {
+		flatBorder( applyStyle );
+
+		applyStyle.accept( "borderColor: #fff" );
+		applyStyle.accept( "disabledBorderColor: #fff" );
+		applyStyle.accept( "focusedBorderColor: #fff" );
+		applyStyle.accept( "hoverBorderColor: #fff" );
+
+		applyStyle.accept( "default.borderColor: #fff" );
+		applyStyle.accept( "default.focusedBorderColor: #fff" );
+		applyStyle.accept( "default.focusColor: #fff" );
+		applyStyle.accept( "default.hoverBorderColor: #fff" );
+
+		applyStyle.accept( "borderWidth: 1" );
+		applyStyle.accept( "default.borderWidth: 2" );
+		applyStyle.accept( "toolbar.margin: 1,2,3,4" );
+		applyStyle.accept( "toolbar.spacingInsets: 1,2,3,4" );
+		applyStyle.accept( "arc: 6" );
+	}
 
 	private void flatTextBorder( Consumer<String> applyStyle ) {
 		flatBorder( applyStyle );
@@ -357,6 +446,30 @@ public class FlatStylingTests
 	}
 
 	//---- borders ------------------------------------------------------------
+
+	@Test
+	void flatButtonBorder() {
+		FlatButtonBorder border = new FlatButtonBorder();
+
+		// FlatButtonBorder extends FlatBorder
+		flatBorder( border );
+
+		border.applyStyleProperty( "borderColor", Color.WHITE );
+		border.applyStyleProperty( "disabledBorderColor", Color.WHITE );
+		border.applyStyleProperty( "focusedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "hoverBorderColor", Color.WHITE );
+
+		border.applyStyleProperty( "default.borderColor", Color.WHITE );
+		border.applyStyleProperty( "default.focusedBorderColor", Color.WHITE );
+		border.applyStyleProperty( "default.focusColor", Color.WHITE );
+		border.applyStyleProperty( "default.hoverBorderColor", Color.WHITE );
+
+		border.applyStyleProperty( "borderWidth", 1 );
+		border.applyStyleProperty( "default.borderWidth", 2 );
+		border.applyStyleProperty( "toolbar.margin", new Insets( 1, 2, 3, 4 ) );
+		border.applyStyleProperty( "toolbar.spacingInsets", new Insets( 1, 2, 3, 4 ) );
+		border.applyStyleProperty( "arc", 6 );
+	}
 
 	@Test
 	void flatTextBorder() {

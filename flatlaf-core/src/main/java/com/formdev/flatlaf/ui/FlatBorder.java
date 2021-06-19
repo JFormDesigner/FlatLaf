@@ -70,25 +70,16 @@ public class FlatBorder
 	@Styleable protected Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 	@Styleable protected Color focusedBorderColor = UIManager.getColor( "Component.focusedBorderColor" );
 
-	protected Color errorBorderColor = UIManager.getColor( "Component.error.borderColor" );
-	protected Color errorFocusedBorderColor = UIManager.getColor( "Component.error.focusedBorderColor" );
-	protected Color warningBorderColor = UIManager.getColor( "Component.warning.borderColor" );
-	protected Color warningFocusedBorderColor = UIManager.getColor( "Component.warning.focusedBorderColor" );
-	protected Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
+	@Styleable(dot=true) protected Color errorBorderColor = UIManager.getColor( "Component.error.borderColor" );
+	@Styleable(dot=true) protected Color errorFocusedBorderColor = UIManager.getColor( "Component.error.focusedBorderColor" );
+	@Styleable(dot=true) protected Color warningBorderColor = UIManager.getColor( "Component.warning.borderColor" );
+	@Styleable(dot=true) protected Color warningFocusedBorderColor = UIManager.getColor( "Component.warning.focusedBorderColor" );
+	@Styleable(dot=true) protected Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
 
 	/**
 	 * @since TODO
 	 */
 	public Object applyStyleProperty( String key, Object value ) {
-		Object oldValue;
-		switch( key ) {
-			case "error.borderColor": oldValue = errorBorderColor; errorBorderColor = (Color) value; return oldValue;
-			case "error.focusedBorderColor": oldValue = errorFocusedBorderColor; errorFocusedBorderColor = (Color) value; return oldValue;
-			case "warning.borderColor": oldValue = warningBorderColor; warningBorderColor = (Color) value; return oldValue;
-			case "warning.focusedBorderColor": oldValue = warningFocusedBorderColor; warningFocusedBorderColor = (Color) value; return oldValue;
-			case "custom.borderColor": oldValue = customBorderColor; customBorderColor = (Color) value; return oldValue;
-		}
-
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 

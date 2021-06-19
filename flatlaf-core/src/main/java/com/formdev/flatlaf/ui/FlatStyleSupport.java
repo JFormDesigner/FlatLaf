@@ -50,6 +50,7 @@ public class FlatStyleSupport
 	@Target(ElementType.FIELD)
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Styleable {
+		boolean dot() default false;
 	}
 
 	/**
@@ -180,14 +181,24 @@ public class FlatStyleSupport
 	public static Object applyToAnnotatedObject( Object obj, String key, Object value )
 		throws UnknownStyleException, IllegalArgumentException
 	{
+		String fieldName = key;
+		int dotIndex = key.indexOf( '.' );
+		if( dotIndex >= 0 ) {
+			// remove first dot in key and change subsequent character to uppercase
+			fieldName = key.substring( 0, dotIndex )
+				+ Character.toUpperCase( key.charAt( dotIndex + 1 ) )
+				+ key.substring( dotIndex + 2 );
+		}
+
 		Class<?> cls = obj.getClass();
 
 		for(;;) {
 			try {
-				Field f = cls.getDeclaredField( key );
-				if( f.isAnnotationPresent( Styleable.class ) ) {
+				Field f = cls.getDeclaredField( fieldName );
+				Styleable styleable = f.getAnnotation( Styleable.class );
+				if( styleable != null && styleable.dot() == (dotIndex >= 0) ) {
 					if( Modifier.isFinal( f.getModifiers() ) )
-						throw new IllegalArgumentException( "field '" + cls.getName() + "." + key + "' is final" );
+						throw new IllegalArgumentException( "field '" + cls.getName() + "." + fieldName + "' is final" );
 
 					try {
 						// necessary to access protected fields in other packages
@@ -198,7 +209,7 @@ public class FlatStyleSupport
 						f.set( obj, value );
 						return oldValue;
 					} catch( IllegalAccessException ex ) {
-						throw new IllegalArgumentException( "failed to access field '" + cls.getName() + "." + key + "'" );
+						throw new IllegalArgumentException( "failed to access field '" + cls.getName() + "." + fieldName + "'" );
 					}
 				}
 			} catch( NoSuchFieldException ex ) {
