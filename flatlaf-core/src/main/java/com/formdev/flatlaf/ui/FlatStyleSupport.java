@@ -33,6 +33,7 @@ import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.StringUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Support for styling components in CSS syntax.
@@ -108,6 +109,19 @@ public class FlatStyleSupport
 		for( Map.Entry<String, Object> e : style.entrySet() ) {
 			String key = e.getKey();
 			Object newValue = e.getValue();
+
+			if( key.startsWith( "[" ) ) {
+				if( (SystemInfo.isWindows && key.startsWith( "[win]" )) ||
+					(SystemInfo.isMacOS && key.startsWith( "[mac]" )) ||
+					(SystemInfo.isLinux && key.startsWith( "[linux]" )) ||
+					(key.startsWith( "[light]" ) && !FlatLaf.isLafDark()) ||
+					(key.startsWith( "[dark]" ) && FlatLaf.isLafDark()) )
+				{
+					// prefix is known and enabled --> remove prefix
+					key = key.substring( key.indexOf( ']' ) + 1 );
+				} else
+					continue;
+			}
 
 			Object oldValue = applyProperty.apply( key, newValue );
 			oldValues.put( key, oldValue );
