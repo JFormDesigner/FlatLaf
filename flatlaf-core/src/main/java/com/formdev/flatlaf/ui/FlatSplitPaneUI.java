@@ -119,7 +119,7 @@ public class FlatSplitPaneUI
 
 		propertyChangeListener = e -> {
 			switch( e.getPropertyName() ) {
-				case FlatClientProperties.COMPONENT_STYLE:
+				case FlatClientProperties.STYLE:
 					applyStyle( e.getNewValue() );
 					splitPane.revalidate();
 					splitPane.repaint();

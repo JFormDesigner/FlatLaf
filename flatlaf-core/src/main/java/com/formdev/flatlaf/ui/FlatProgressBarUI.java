@@ -102,7 +102,7 @@ public class FlatProgressBarUI
 					progressBar.repaint();
 					break;
 
-				case COMPONENT_STYLE:
+				case STYLE:
 					applyStyle( e.getNewValue() );
 					progressBar.revalidate();
 					progressBar.repaint();

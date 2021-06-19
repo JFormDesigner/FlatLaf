@@ -109,7 +109,7 @@ public class FlatSeparatorUI
 
 		propertyChangeListener = e -> {
 			switch( e.getPropertyName() ) {
-				case FlatClientProperties.COMPONENT_STYLE:
+				case FlatClientProperties.STYLE:
 					applyStyle( s, this, e.getNewValue() );
 					s.revalidate();
 					s.repaint();

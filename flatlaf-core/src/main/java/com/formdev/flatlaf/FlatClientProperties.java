@@ -134,7 +134,7 @@ public interface FlatClientProperties
 	 *
 	 * @since TODO
 	 */
-	String COMPONENT_STYLE = "JComponent.style";
+	String STYLE = "FlatLaf.style";
 
 	/**
 	 * Specifies minimum width of a component.

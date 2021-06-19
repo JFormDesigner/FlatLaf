@@ -190,7 +190,7 @@ public class FlatSliderUI
 			superListener.propertyChange( e );
 
 			switch( e.getPropertyName() ) {
-				case FlatClientProperties.COMPONENT_STYLE:
+				case FlatClientProperties.STYLE:
 					applyStyle( e.getNewValue() );
 					slider.revalidate();
 					slider.repaint();

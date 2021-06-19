@@ -17,7 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static com.formdev.flatlaf.FlatClientProperties.COMPONENT_STYLE;
+import static com.formdev.flatlaf.FlatClientProperties.STYLE;
 import java.util.function.Supplier;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
@@ -131,7 +131,7 @@ public class FlatTextComponentTests
 		String style1 = "inactiveBackground: #00ee00; disabledBackground: #0000ee";
 		String style2 = "inactiveBackground: #00dd00; disabledBackground: #0000dd";
 
-		c.putClientProperty( COMPONENT_STYLE, style1 );
+		c.putClientProperty( STYLE, style1 );
 
 		assertEquals( background, c.getBackground() );
 		c.setEditable( false ); assertEquals( inactiveBackground1, c.getBackground() );
@@ -139,23 +139,23 @@ public class FlatTextComponentTests
 		c.setEditable( true );  assertEquals( disabledBackground1, c.getBackground() );
 		c.setEnabled( true );   assertEquals( background, c.getBackground() );
 
-		c.putClientProperty( COMPONENT_STYLE, null );
+		c.putClientProperty( STYLE, null );
 		assertEquals( background, c.getBackground() );
 
 		c.setEditable( false );
-		c.putClientProperty( COMPONENT_STYLE, style1 );
+		c.putClientProperty( STYLE, style1 );
 		assertEquals( inactiveBackground1, c.getBackground() );
 
-		c.putClientProperty( COMPONENT_STYLE, null );
+		c.putClientProperty( STYLE, null );
 		assertEquals( inactiveBackground, c.getBackground() );
 
 		c.setEnabled( false );
-		c.putClientProperty( COMPONENT_STYLE, style1 );
+		c.putClientProperty( STYLE, style1 );
 		assertEquals( disabledBackground1, c.getBackground() );
 
 
 		// change from style1 to style2
-		c.putClientProperty( COMPONENT_STYLE, style2 );
+		c.putClientProperty( STYLE, style2 );
 		assertEquals( disabledBackground2, c.getBackground() );
 
 		c.setEnabled( true );
@@ -163,7 +163,7 @@ public class FlatTextComponentTests
 
 
 		// remove style
-		c.putClientProperty( COMPONENT_STYLE, null );
+		c.putClientProperty( STYLE, null );
 		assertEquals( inactiveBackground, c.getBackground() );
 	}
 }

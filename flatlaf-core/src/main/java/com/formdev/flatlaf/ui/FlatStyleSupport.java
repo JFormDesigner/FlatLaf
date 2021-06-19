@@ -216,7 +216,7 @@ public class FlatStyleSupport
 	}
 
 	public static Object getStyle( JComponent c ) {
-		return c.getClientProperty( FlatClientProperties.COMPONENT_STYLE );
+		return c.getClientProperty( FlatClientProperties.STYLE );
 	}
 
 	static Border cloneBorder( Border border ) {

@@ -193,7 +193,7 @@ public class FlatScrollBarUI
 					scrollbar.repaint();
 					break;
 
-				case FlatClientProperties.COMPONENT_STYLE:
+				case FlatClientProperties.STYLE:
 					applyStyle( e.getNewValue() );
 					scrollbar.revalidate();
 					scrollbar.repaint();

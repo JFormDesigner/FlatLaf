@@ -131,7 +131,7 @@ public class FlatRadioButtonUI
 	 */
 	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
 		switch( e.getPropertyName() ) {
-			case FlatClientProperties.COMPONENT_STYLE:
+			case FlatClientProperties.STYLE:
 				applyStyle( b, this, e.getNewValue() );
 				break;
 		}

@@ -155,7 +155,7 @@ public class FlatEditorPaneUI
 				c.revalidate();
 				break;
 
-			case FlatClientProperties.COMPONENT_STYLE:
+			case FlatClientProperties.STYLE:
 				applyStyle.accept( e.getNewValue() );
 				c.revalidate();
 				c.repaint();
