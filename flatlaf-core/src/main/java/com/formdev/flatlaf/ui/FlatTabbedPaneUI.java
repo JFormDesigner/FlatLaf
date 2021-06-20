@@ -640,21 +640,22 @@ public class FlatTabbedPaneUI
 		if ( clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder ) &&
 			 clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ))
 		{
+			int csh = scale(contentSeparatorHeight);
 			Rectangle bounds = getContentBorderBounds(tabPane.getTabPlacement());
 			Rectangle r;
 			switch (tabPane.getTabPlacement()) {
 				default:
 				case TOP:
-					r = new Rectangle( bounds.x, bounds.y, bounds.width, contentSeparatorHeight);
+					r = new Rectangle( bounds.x, bounds.y, bounds.width, csh);
 					break;
 				case BOTTOM:
-					r = new Rectangle( bounds.x, bounds.y + bounds.height - contentSeparatorHeight, bounds.width, contentSeparatorHeight);
+					r = new Rectangle( bounds.x, bounds.y + bounds.height - csh, bounds.width, csh);
 					break;
 				case LEFT:
-					r = new Rectangle( bounds.x, bounds.y, contentSeparatorHeight, bounds.height);
+					r = new Rectangle( bounds.x, bounds.y, csh, bounds.height);
 					break;
 				case RIGHT:
-					r = new Rectangle( bounds.x + bounds.width - contentSeparatorHeight, bounds.y, contentSeparatorHeight, bounds.height);
+					r = new Rectangle( bounds.x + bounds.width - csh, bounds.y, csh, bounds.height);
 					break;
 			}
 			tabPane.repaint(r);
@@ -1037,7 +1038,7 @@ public class FlatTabbedPaneUI
 	}
 
 	protected void paintActiveTabBorder( Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h) {
-		float borderWidth = UIScale.scale( 1f );
+		float borderWidth = scale(contentSeparatorHeight);
 		g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
 
 		switch( tabPlacement ) {
@@ -1052,6 +1053,25 @@ public class FlatTabbedPaneUI
 				((Graphics2D)g).fill( new Rectangle2D.Float( x, y, w, borderWidth) );
 				((Graphics2D)g).fill( new Rectangle2D.Float( x, y + h - borderWidth, w, borderWidth) );
 				break;
+		}
+
+		if (tabSelectionHeight <= 0) {
+			//If there is no tab selection indicator, paint a top border as well
+			switch( tabPlacement ) {
+				default:
+				case TOP:
+					((Graphics2D)g).fill( new Rectangle2D.Float( x, y, w, borderWidth) );
+					break;
+				case BOTTOM:
+					((Graphics2D)g).fill( new Rectangle2D.Float( x, y + h - borderWidth, w, borderWidth) );
+					break;
+				case LEFT:
+					((Graphics2D)g).fill( new Rectangle2D.Float( x, y, borderWidth, h) );
+					break;
+				case RIGHT:
+					((Graphics2D)g).fill( new Rectangle2D.Float( x + w - borderWidth, y, borderWidth, h) );
+					break;
+			}
 		}
 	}
 
@@ -1200,6 +1220,8 @@ public class FlatTabbedPaneUI
 		int w = contentBorderBounds.width;
 		int h = contentBorderBounds.height;
 
+		int csh = scale( contentSeparatorHeight );
+
 		// compute insets for separator or full border
 		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
 		int sh = scale( contentSeparatorHeight * 100 ); // multiply by 100 because rotateInsets() does not use floats
@@ -1234,28 +1256,28 @@ public class FlatTabbedPaneUI
 			switch( tabPlacement ) {
 				default:
 				case TOP:
-					gapX = x + ax + 1 + (-scrollOffsetX + tabViewportOffsetX);
+					gapX = x + ax + csh + (-scrollOffsetX + tabViewportOffsetX);
 					gapY = y;
-					gapW = aw - 2;
-					gapH = contentSeparatorHeight;
+					gapW = aw - csh*2;
+					gapH = csh;
 					break;
 				case BOTTOM:
-					gapX = x + ax + 1 + (-scrollOffsetX + tabViewportOffsetX);
-					gapY = h - contentSeparatorHeight;
-					gapW = aw - 2;
-					gapH = contentSeparatorHeight;
+					gapX = x + ax + csh + (-scrollOffsetX + tabViewportOffsetX);
+					gapY = h - csh;
+					gapW = aw - csh*2;
+					gapH = csh;
 					break;
 				case LEFT:
 					gapX = x;
-					gapY = y + ay + 1 + (-scrollOffsetY + tabViewportOffsetY);
-					gapW = contentSeparatorHeight;
-					gapH = ah - 2;
+					gapY = y + ay + csh + (-scrollOffsetY + tabViewportOffsetY);
+					gapW = csh;
+					gapH = ah - csh*2;
 					break;
 				case RIGHT:
-					gapX = w - contentSeparatorHeight;
-					gapY = y + ay + 1 + (-scrollOffsetY + tabViewportOffsetY);
-					gapW = contentSeparatorHeight;
-					gapH = ah - 2;
+					gapX = w - csh;
+					gapY = y + ay + csh + (-scrollOffsetY + tabViewportOffsetY);
+					gapW = csh;
+					gapH = ah - csh*2;
 					break;
 			}
 
@@ -1283,9 +1305,6 @@ public class FlatTabbedPaneUI
 						break;
 				}
 			}
-
-//			((Graphics2D)g).fill( new Rectangle2D.Float( x, y, tabViewport.getX() - x, contentSeparatorHeight) );
-
 		} else {
 			area.add( new Area( new Rectangle2D.Float(x, y, w, h) ) );
 		}
