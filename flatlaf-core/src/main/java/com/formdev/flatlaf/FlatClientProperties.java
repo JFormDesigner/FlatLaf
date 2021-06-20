@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf;
 
+package com.formdev.flatlaf;
 import java.awt.Color;
 import java.util.Objects;
 import javax.swing.JComponent;
@@ -331,6 +331,15 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String TABBED_PANE_SHOW_TAB_SEPARATORS = "JTabbedPane.showTabSeparators";
+
+	/**
+	 * Specifies whether a border is painted around the active tab.
+	 * This also changes position of the active tab indicator.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 */
+	String TABBED_PANE_ACTIVE_TAB_BORDER = "JTabbedPane.activeTabBorder";
 
 	/**
 	 * Specifies whether the separator between tabs area and content area should be shown.
