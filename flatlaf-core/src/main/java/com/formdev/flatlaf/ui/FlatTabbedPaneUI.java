@@ -98,6 +98,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @clientProperty JTabbedPane.showTabSeparators		boolean
  * @clientProperty JTabbedPane.hasFullBorder			boolean
+ * @clientProperty JTabbedPane.activeTabBorder			boolean
  *
  * <!-- BasicTabbedPaneUI -->
  *
@@ -135,6 +136,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
+ * @uiDefault TabbedPane.activeTabBorder				boolean
  *
  * @uiDefault TabbedPane.tabLayoutPolicy				String	wrap (default) or scroll
  * @uiDefault TabbedPane.tabsPopupPolicy				String	never or asNeeded (default)
@@ -1014,10 +1016,19 @@ public class FlatTabbedPaneUI
 	{
 		// paint tab separators
 		if( clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
-			!isLastInRun( tabIndex ) )
-			paintTabSeparator( g, tabPlacement, x, y, w, h );
+			!isLastInRun( tabIndex ) ) {
+			if( clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder ) ) {
+				// Some separators need to be omitted when activeTabBorder is enabled
+				int selectedIndex = tabPane.getSelectedIndex();
+				if (tabIndex != selectedIndex - 1 && tabIndex != selectedIndex) {
+					paintTabSeparator( g, tabPlacement, x, y, w, h );
+				}
+			} else {
+				paintTabSeparator( g, tabPlacement, x, y, w, h );
+			}
+		}
 
-		// paint tab border
+		// paint active tab border
 		if ( clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder ) && isSelected) {
 			paintActiveTabBorder(g, tabPlacement, tabIndex, x, y, w, h);
 		}
@@ -1101,7 +1112,7 @@ public class FlatTabbedPaneUI
 
 			case BOTTOM:
 				if ( clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder )) {
-					g.fillRect( x, y + h + contentInsets.top - tabSelectionHeight, w, tabSelectionHeight );
+					g.fillRect( x, y + h - tabSelectionHeight, w, tabSelectionHeight );
 				} else {
 					g.fillRect( x, y - contentInsets.bottom, w, tabSelectionHeight );
 				}
@@ -1119,7 +1130,7 @@ public class FlatTabbedPaneUI
 
 			case RIGHT:
 				if ( clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder )) {
-					g.fillRect( x + w + contentInsets.left - tabSelectionHeight, y, tabSelectionHeight, h );
+					g.fillRect( x + w - tabSelectionHeight, y, tabSelectionHeight, h );
 				} else {
 					g.fillRect( x - contentInsets.right, y, tabSelectionHeight, h );
 				}
