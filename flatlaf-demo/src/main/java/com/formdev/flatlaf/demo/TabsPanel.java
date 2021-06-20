@@ -983,7 +983,7 @@ class TabsPanel
 			panel4.add(showTabSeparatorsCheckBox, "cell 2 1");
 
 			//---- activeTabBorderCheckBox ----
-			activeTabBorderCheckBox.setText("Active tab border");
+			activeTabBorderCheckBox.setText("Paint border around active tab");
 			activeTabBorderCheckBox.setName("activeTabBorderCheckBox");
 			activeTabBorderCheckBox.addActionListener(e -> activeTabBorderChanged());
 			panel4.add(activeTabBorderCheckBox, "cell 3 1");

@@ -489,7 +489,9 @@ public class FlatTabbedPaneUI
 		contentBorderFocusListener = new FocusListener()
 		{
 			@Override
-			public void focusGained( FocusEvent e ) {}
+			public void focusGained( FocusEvent e ) {
+				repaintContentBorder();
+			}
 
 			@Override
 			public void focusLost( FocusEvent e ) {
