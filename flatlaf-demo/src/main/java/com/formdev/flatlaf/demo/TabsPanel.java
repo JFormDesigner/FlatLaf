@@ -308,6 +308,12 @@ class TabsPanel
 		putTabbedPanesClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
 	}
 
+	private void activeTabBorderChanged() {
+		Boolean activeBorderTab = activeTabBorderCheckBox.isSelected() ? true : false;
+		System.out.println(TABBED_PANE_ACTIVE_TAB_BORDER + ": " + activeBorderTab);
+		putTabbedPanesClientProperty( TABBED_PANE_ACTIVE_TAB_BORDER, activeBorderTab );
+	}
+
 	private void putTabbedPanesClientProperty( String key, Object value ) {
 		updateTabbedPanesRecur( this, tabbedPane -> tabbedPane.putClientProperty( key, value ) );
 	}
@@ -401,6 +407,7 @@ class TabsPanel
 		popupAsNeededButton = new JToggleButton();
 		popupNeverButton = new JToggleButton();
 		showTabSeparatorsCheckBox = new JCheckBox();
+		activeTabBorderCheckBox = new JCheckBox();
 
 		//======== this ========
 		setName("this");
@@ -495,7 +502,7 @@ class TabsPanel
 			{
 				tabPlacementTabbedPane.setName("tabPlacementTabbedPane");
 			}
-			panel1.add(tabPlacementTabbedPane, "cell 0 1,width 300:300,height 100:100");
+			panel1.add(tabPlacementTabbedPane, "cell 0 1, width 300:300, height 100:100");
 
 			//---- tabLayoutLabel ----
 			tabLayoutLabel.setText("Tab layout");
@@ -973,7 +980,13 @@ class TabsPanel
 			showTabSeparatorsCheckBox.setText("Show tab separators");
 			showTabSeparatorsCheckBox.setName("showTabSeparatorsCheckBox");
 			showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
-			panel4.add(showTabSeparatorsCheckBox, "cell 2 1 2 1");
+			panel4.add(showTabSeparatorsCheckBox, "cell 2 1");
+
+			//---- activeTabBorderCheckBox ----
+			activeTabBorderCheckBox.setText("Active tab border");
+			activeTabBorderCheckBox.setName("activeTabBorderCheckBox");
+			activeTabBorderCheckBox.addActionListener(e -> activeTabBorderChanged());
+			panel4.add(activeTabBorderCheckBox, "cell 3 1");
 		}
 		add(panel4, "cell 0 2 3 1");
 
@@ -1094,5 +1107,6 @@ class TabsPanel
 	private JToggleButton popupAsNeededButton;
 	private JToggleButton popupNeverButton;
 	private JCheckBox showTabSeparatorsCheckBox;
+	private JCheckBox activeTabBorderCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
