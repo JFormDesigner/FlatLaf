@@ -18,22 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import static com.formdev.flatlaf.FlatClientProperties.*;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.KeyboardFocusManager;
-import java.awt.LayoutManager;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -48,6 +33,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Path2D;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -137,6 +123,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.tabsPopupPolicy				String	never or asNeeded (default)
  * @uiDefault TabbedPane.scrollButtonsPolicy			String	never, asNeeded or asNeededSingle (default)
  * @uiDefault TabbedPane.scrollButtonsPlacement			String	both (default) or trailing
+ * @uiDefault TabbedPane.scrollEdgeFadeout				boolean
+ * @uiDefault TabbedPane.scrollEdgeFadeoutWidth			int
  *
  * @uiDefault TabbedPane.tabAreaAlignment				String	leading (default), center, trailing or fill
  * @uiDefault TabbedPane.tabAlignment					String	leading, center (default) or trailing
@@ -201,6 +189,8 @@ public class FlatTabbedPaneUI
 	private int tabsPopupPolicy;
 	private int scrollButtonsPolicy;
 	private int scrollButtonsPlacement;
+	protected boolean scrollEdgeFadeout;
+	protected int scrollEdgeFadeoutWidth;
 
 	private int tabAreaAlignment;
 	private int tabAlignment;
@@ -222,6 +212,16 @@ public class FlatTabbedPaneUI
 	private JButton moreTabsButton;
 	private Container leadingComponent;
 	private Container trailingComponent;
+
+	// Scrollable layout tab edge fade out
+	private JComponent trailingEdgeFadeoutComponent;
+	private JComponent leadingEdgeFadeoutComponent;
+
+	// Bounding box of the tab selection indicator within the selected tab.
+	// The coordinates are relative to the selected tab.
+	// Its absolute position within the tabbed pane can be derived from getTabBounds(selectedTab) for example.
+	// Updated by paintTabSelection()
+	protected Rectangle tabSelectionIndicatorRect;
 
 	private Dimension scrollBackwardButtonPrefSize;
 
@@ -308,6 +308,8 @@ public class FlatTabbedPaneUI
 		tabsPopupPolicy = parseTabsPopupPolicy( UIManager.getString( "TabbedPane.tabsPopupPolicy" ) );
 		scrollButtonsPolicy = parseScrollButtonsPolicy( UIManager.getString( "TabbedPane.scrollButtonsPolicy" ) );
 		scrollButtonsPlacement = parseScrollButtonsPlacement( UIManager.getString( "TabbedPane.scrollButtonsPlacement" ) );
+		scrollEdgeFadeout = UIManager.getBoolean( "TabbedPane.scrollEdgeFadeout" );
+		scrollEdgeFadeoutWidth = UIManager.getInt( "TabbedPane.scrollEdgeFadeoutWidth" );
 
 		tabAreaAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAreaAlignment" ), LEADING );
 		tabAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAlignment" ), CENTER );
@@ -413,6 +415,13 @@ public class FlatTabbedPaneUI
 		// create and add "more tabs" button
 		moreTabsButton = createMoreTabsButton();
 		tabPane.add( moreTabsButton );
+
+		// create fadeoff components
+		trailingEdgeFadeoutComponent = new FlatEdgeFadeOutComponent(true);
+		tabPane.add( trailingEdgeFadeoutComponent );
+
+		leadingEdgeFadeoutComponent = new FlatEdgeFadeOutComponent(false);
+		tabPane.add( leadingEdgeFadeoutComponent );
 	}
 
 	protected void uninstallHiddenTabsNavigation() {
@@ -424,6 +433,16 @@ public class FlatTabbedPaneUI
 		if( moreTabsButton != null ) {
 			tabPane.remove( moreTabsButton );
 			moreTabsButton = null;
+		}
+
+		// Uninstalling edge fadeout components
+		if( trailingEdgeFadeoutComponent != null) {
+			tabPane.remove( trailingEdgeFadeoutComponent );
+			trailingEdgeFadeoutComponent = null;
+		}
+		if( leadingEdgeFadeoutComponent != null) {
+			tabPane.remove( leadingEdgeFadeoutComponent );
+			leadingEdgeFadeoutComponent = null;
 		}
 	}
 
@@ -881,14 +900,21 @@ public class FlatTabbedPaneUI
 			title = null;
 		String clippedTitle = layoutAndClipLabel( tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected );
 
-		// special title clipping for scroll layout where title of last visible tab on right side may be truncated
-		if( tabViewport != null && (tabPlacement == TOP || tabPlacement == BOTTOM) ) {
-			Rectangle viewRect = tabViewport.getViewRect();
-			viewRect.width -= 4; // subtract width of cropped edge
-			if( !viewRect.contains( textRect ) ) {
-				Rectangle r = viewRect.intersection( textRect );
-				if( r.x > viewRect.x )
-					clippedTitle = JavaCompatibility.getClippedString( null, metrics, title, r.width );
+		if ( tabViewport != null) {
+			// If tab edge fadeouts are enabled there is no need for clipping.
+			if (scrollEdgeFadeout) {
+				clippedTitle = title;
+			} else {
+				// special title clipping for scroll layout where title of last visible tab on right side may be truncated
+				if( (tabPlacement == TOP || tabPlacement == BOTTOM) ) {
+					Rectangle viewRect = tabViewport.getViewRect();
+					viewRect.width -= 4; // subtract width of cropped edge
+					if( !viewRect.contains( textRect ) ) {
+						Rectangle r = viewRect.intersection( textRect );
+						if( r.x > viewRect.x )
+							clippedTitle = JavaCompatibility.getClippedString( null, metrics, title, r.width );
+					}
+				}
 			}
 		}
 
@@ -998,27 +1024,39 @@ public class FlatTabbedPaneUI
 	protected void paintTabSelection( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
 		g.setColor( tabPane.isEnabled() ? underlineColor : disabledUnderlineColor );
 
+		// Note that this method should update the tabSelectionIndicatorRect on each paint
+		// The rectangle is supposed to indicate where the selection indicator is located relative
+		// to this tab itself.
+		// That is currently used to clip edge fadeout components to not paint over the indicator when enabled.
+		if (tabSelectionIndicatorRect == null) {
+			tabSelectionIndicatorRect = new Rectangle();
+		}
+
 		// paint underline selection
 		Insets contentInsets = getContentBorderInsets( tabPlacement );
 		int tabSelectionHeight = scale( this.tabSelectionHeight );
 		switch( tabPlacement ) {
 			case TOP:
 			default:
-				int sy = y + h + contentInsets.top - tabSelectionHeight;
+			int sy = y + h + contentInsets.top - tabSelectionHeight;
 				g.fillRect( x, sy, w, tabSelectionHeight );
+				tabSelectionIndicatorRect.setBounds( 0, sy - y, w, tabSelectionHeight );
 				break;
 
 			case BOTTOM:
 				g.fillRect( x, y - contentInsets.bottom, w, tabSelectionHeight );
+				tabSelectionIndicatorRect.setBounds( 0, -contentInsets.bottom, w, tabSelectionHeight );
 				break;
 
 			case LEFT:
 				int sx = x + w + contentInsets.left - tabSelectionHeight;
 				g.fillRect( sx, y, tabSelectionHeight, h );
+				tabSelectionIndicatorRect.setBounds( sx - x, 0, tabSelectionHeight, h );
 				break;
 
 			case RIGHT:
 				g.fillRect( x - contentInsets.right, y, tabSelectionHeight, h );
+				tabSelectionIndicatorRect.setBounds( -contentInsets.right, 0, tabSelectionHeight, h );
 				break;
 		}
 	}
@@ -2127,6 +2165,83 @@ public class FlatTabbedPaneUI
 		}
 	}
 
+	//---- class FlatEdgeFadeOutComponent ------------------------------------------------------
+	/**
+	 * A component that is placed above scrollable tab pane tab viewport edges to obsure tabs with a transparent
+	 * gradient, making the tabs dissapear smoothly on the edges, instead of a sharp edge where the ends of the viewport
+	 * are. This is basically an alternative to the CroppedEdge in BasicTabbedPaneUI.
+	 *
+	 * Since selected tab indicators can paint outside the tabs themselves, making them half covered in some instances,
+	 * the gradients are not painted where selection indicators are.
+	 */
+	protected class FlatEdgeFadeOutComponent extends JComponent implements UIResource
+	{
+		boolean leftToRight;
+		Color transparentColor;
+		Color opaqueColor;
+
+		public FlatEdgeFadeOutComponent(boolean leftToRight) {
+			this.leftToRight = leftToRight;
+		}
+
+		public boolean isLeftToRight() {
+			return leftToRight;
+		}
+
+		public void setLeftToRight( boolean leftToRight ) {
+			this.leftToRight = leftToRight;
+		}
+
+		@Override
+		public void paint( Graphics g ) {
+			super.paint( g );
+			Graphics2D g2d = (Graphics2D) g;
+
+			opaqueColor = tabPane.getBackground();
+			if (transparentColor == null || transparentColor.getAlpha() != 0) {
+				transparentColor = new Color( opaqueColor.getRed(), opaqueColor.getGreen(), opaqueColor.getBlue(), 0 );
+			}
+
+			Color c1 = leftToRight ? transparentColor : opaqueColor;
+			Color c2 = leftToRight ? opaqueColor : transparentColor;
+			GradientPaint gradientPaint = new GradientPaint(
+				0, 0, c1,
+				this.getWidth(), 0, c2,
+				false
+			);
+
+			Area area = new Area( new Rectangle2D.Float( 0, 0, this.getWidth(), this.getHeight()) );
+
+			// Calculate a position of an existing tab selection indicator.
+			if (tabSelectionIndicatorRect != null &&
+				tabSelectionIndicatorRect.getWidth() != 0 &&
+				tabSelectionIndicatorRect.getHeight() != 0)
+			{
+				Rectangle selectedTabRect = getTabBounds( tabPane, tabPane.getSelectedIndex() );
+				Rectangle selectionIndicator = new Rectangle();
+				selectionIndicator.x = selectedTabRect.x + tabSelectionIndicatorRect.x;
+				selectionIndicator.y = selectedTabRect.y + tabSelectionIndicatorRect.y;
+				selectionIndicator.width = tabSelectionIndicatorRect.width;
+				selectionIndicator.height = tabSelectionIndicatorRect.height;
+
+				Rectangle selectionIndicatorIntersection = new Rectangle();
+				Rectangle.intersect( this.getBounds(), selectionIndicator, selectionIndicatorIntersection);
+				Rectangle selectionIndicatorMask = SwingUtilities.convertRectangle(
+					tabPane,
+					selectionIndicatorIntersection,
+					this
+				);
+
+				// "Cut out" a hole in the gradient for the selection indicator.
+				// This is an alternative to somehow making the selection indicator paint over the gradient.
+				area.subtract( new Area( selectionIndicatorMask ) );
+			}
+
+			g2d.setPaint(gradientPaint);
+			g2d.fill( area );
+		}
+	}
+
 	//---- class Handler ------------------------------------------------------
 
 	private class Handler
@@ -2684,6 +2799,7 @@ public class FlatTabbedPaneUI
 			boolean useScrollButtons = (scrollButtonsPolicy == AS_NEEDED || scrollButtonsPolicy == AS_NEEDED_SINGLE);
 			boolean hideDisabledScrollButtons = (scrollButtonsPolicy == AS_NEEDED_SINGLE && scrollButtonsPlacement == BOTH);
 			boolean trailingScrollButtons = (scrollButtonsPlacement == TRAILING);
+			boolean useFadeouts = scrollEdgeFadeout;
 
 			// for right-to-left always use "more tabs" button for horizontal scrolling
 			// because methods scrollForward() and scrollBackward() in class
@@ -2718,6 +2834,8 @@ public class FlatTabbedPaneUI
 			boolean moreTabsButtonVisible = false;
 			boolean backwardButtonVisible = false;
 			boolean forwardButtonVisible = false;
+			boolean fadeoutLeadingVisible = false;
+			boolean fadeoutTrailingVisible = false;
 
 			// TabbedPaneScrollLayout adds tabAreaInsets to tab coordinates,
 			// but we use it to position the viewport
@@ -2808,9 +2926,8 @@ public class FlatTabbedPaneUI
 					// layout viewport and buttons
 					int x = txi;
 					int w = twi;
-
 					if( w < totalTabWidth ) {
-						// available width is too small for all tabs --> need buttons
+						// available width is too small for all tabs --> need buttons (and fadeouts)
 
 						// layout more button on trailing side
 						if( useMoreTabsButton ) {
@@ -2820,6 +2937,7 @@ public class FlatTabbedPaneUI
 							w -= buttonWidth;
 							moreTabsButtonVisible = true;
 						}
+
 						if( useScrollButtons ) {
 							// layout forward button on trailing side
 							if( !hideDisabledScrollButtons || forwardButton.isEnabled() ) {
@@ -2844,6 +2962,34 @@ public class FlatTabbedPaneUI
 								}
 								w -= buttonWidth;
 								backwardButtonVisible = true;
+							}
+						}
+
+						// Layout fadeouts if applicable
+						if (useFadeouts) {
+							int fadeOutWidth = scale(scrollEdgeFadeoutWidth);
+
+							if (forwardButton.isEnabled()) {
+								trailingEdgeFadeoutComponent.setBounds(
+									x + w - fadeOutWidth,
+									0,
+									fadeOutWidth,
+									th
+								);
+								tabPane.setComponentZOrder( trailingEdgeFadeoutComponent, 0 );
+
+								fadeoutTrailingVisible = true;
+							}
+							if (backwardButton.isEnabled()) {
+								leadingEdgeFadeoutComponent.setBounds(
+									x,
+									0,
+									fadeOutWidth,
+									th
+								);
+								tabPane.setComponentZOrder( leadingEdgeFadeoutComponent, 0 );
+
+								fadeoutLeadingVisible = true;
 							}
 						}
 					}
@@ -2971,6 +3117,8 @@ public class FlatTabbedPaneUI
 			moreTabsButton.setVisible( moreTabsButtonVisible );
 			backwardButton.setVisible( backwardButtonVisible );
 			forwardButton.setVisible( forwardButtonVisible );
+			leadingEdgeFadeoutComponent.setVisible( fadeoutLeadingVisible );
+			trailingEdgeFadeoutComponent.setVisible( fadeoutTrailingVisible );
 
 			scrollBackwardButtonPrefSize = backwardButton.getPreferredSize();
 		}
