@@ -86,6 +86,7 @@ public class FlatRadioButtonMenuItemUI
 		super.uninstallDefaults();
 
 		renderer = null;
+		oldStyleValues = null;
 	}
 
 	protected FlatMenuItemRenderer createRenderer() {

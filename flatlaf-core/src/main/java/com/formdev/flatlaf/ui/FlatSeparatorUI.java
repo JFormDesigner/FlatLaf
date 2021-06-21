@@ -99,7 +99,9 @@ public class FlatSeparatorUI
 	@Override
 	protected void uninstallDefaults( JSeparator s ) {
 		super.uninstallDefaults( s );
+
 		defaults_initialized = false;
+		oldStyleValues = null;
 	}
 
 	@Override

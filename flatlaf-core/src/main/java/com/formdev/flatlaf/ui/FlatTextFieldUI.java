@@ -135,6 +135,8 @@ public class FlatTextFieldUI
 		oldDisabledBackground = null;
 		oldInactiveBackground = null;
 
+		oldStyleValues = null;
+
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
 

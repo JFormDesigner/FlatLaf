@@ -109,6 +109,7 @@ public class FlatMenuUI
 
 		hoverBackground = null;
 		renderer = null;
+		oldStyleValues = null;
 	}
 
 	protected FlatMenuItemRenderer createRenderer() {

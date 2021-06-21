@@ -91,6 +91,13 @@ public class FlatProgressBarUI
 	}
 
 	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		oldStyleValues = null;
+	}
+
+	@Override
 	protected void installListeners() {
 		super.installListeners();
 

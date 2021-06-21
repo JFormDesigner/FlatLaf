@@ -179,6 +179,8 @@ public class FlatScrollBarUI
 		buttonDisabledArrowColor = null;
 		hoverButtonBackground = null;
 		pressedButtonBackground = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override

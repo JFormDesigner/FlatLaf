@@ -140,6 +140,8 @@ public class FlatPasswordFieldUI
 		oldDisabledBackground = null;
 		oldInactiveBackground = null;
 
+		oldStyleValues = null;
+
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
 

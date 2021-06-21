@@ -118,6 +118,8 @@ public class FlatEditorPaneUI
 		oldDisabledBackground = null;
 		oldInactiveBackground = null;
 
+		oldStyleValues = null;
+
 		getComponent().putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, oldHonorDisplayProperties );
 	}
 

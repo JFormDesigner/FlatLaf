@@ -107,6 +107,8 @@ public class FlatTextAreaUI
 
 		oldDisabledBackground = null;
 		oldInactiveBackground = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override

@@ -220,6 +220,8 @@ public class FlatButtonUI
 	protected void uninstallDefaults( AbstractButton b ) {
 		super.uninstallDefaults( b );
 
+		oldStyleValues = null;
+
 		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
 	}

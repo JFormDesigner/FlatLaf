@@ -110,6 +110,8 @@ public class FlatSplitPaneUI
 		oneTouchArrowColor = null;
 		oneTouchHoverArrowColor = null;
 		oneTouchPressedArrowColor = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override

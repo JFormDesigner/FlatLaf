@@ -86,6 +86,7 @@ public class FlatMenuItemUI
 		super.uninstallDefaults();
 
 		renderer = null;
+		oldStyleValues = null;
 	}
 
 	protected FlatMenuItemRenderer createRenderer() {
