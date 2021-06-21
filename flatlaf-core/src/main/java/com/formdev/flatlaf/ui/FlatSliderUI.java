@@ -36,7 +36,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -185,18 +184,8 @@ public class FlatSliderUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener( JSlider slider ) {
-		PropertyChangeListener superListener = super.createPropertyChangeListener( slider );
-		return e -> {
-			superListener.propertyChange( e );
-
-			switch( e.getPropertyName() ) {
-				case FlatClientProperties.STYLE:
-					applyStyle( e.getNewValue() );
-					slider.revalidate();
-					slider.repaint();
-					break;
-			}
-		};
+		return FlatStyleSupport.createPropertyChangeListener( slider, this::applyStyle,
+			super.createPropertyChangeListener( slider ) );
 	}
 
 	/**
