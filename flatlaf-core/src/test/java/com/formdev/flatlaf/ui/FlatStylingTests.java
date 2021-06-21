@@ -119,6 +119,36 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void comboBox() {
+		FlatComboBoxUI ui = new FlatComboBoxUI();
+
+		// create arrow button
+		ui.installUI( new JComboBox<>() );
+
+		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "editorColumns: 10" );
+		ui.applyStyle( "buttonStyle: auto" );
+		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "borderColor: #fff" );
+		ui.applyStyle( "disabledBorderColor: #fff" );
+
+		ui.applyStyle( "editableBackground: #fff" );
+		ui.applyStyle( "focusedBackground: #fff" );
+		ui.applyStyle( "disabledBackground: #fff" );
+		ui.applyStyle( "disabledForeground: #fff" );
+
+		ui.applyStyle( "buttonBackground: #fff" );
+		ui.applyStyle( "buttonFocusedBackground: #fff" );
+		ui.applyStyle( "buttonEditableBackground: #fff" );
+		ui.applyStyle( "buttonArrowColor: #fff" );
+		ui.applyStyle( "buttonDisabledArrowColor: #fff" );
+		ui.applyStyle( "buttonHoverArrowColor: #fff" );
+		ui.applyStyle( "buttonPressedArrowColor: #fff" );
+
+		ui.applyStyle( "popupFocusedBackground: #fff" );
+	}
+
+	@Test
 	void editorPane() {
 		FlatEditorPaneUI ui = new FlatEditorPaneUI();
 
