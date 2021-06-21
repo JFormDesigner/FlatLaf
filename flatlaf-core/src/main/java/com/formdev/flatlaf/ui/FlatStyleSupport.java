@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.beans.PropertyChangeListener;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -26,6 +27,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -204,13 +207,38 @@ public class FlatStyleSupport
 				+ key.substring( dotIndex + 2 );
 		}
 
+		return applyToField( obj, fieldName, key, value, field -> {
+			Styleable styleable = field.getAnnotation( Styleable.class );
+			return styleable != null && styleable.dot() == (dotIndex >= 0);
+		} );
+	}
+
+	/**
+	 * Applies the given value to a field of the given object.
+	 *
+	 * @param obj the object
+	 * @param fieldName the name of the field
+	 * @param key the key (only used for error reporting)
+	 * @param value the new value
+	 * @return the old value of the field
+	 * @throws UnknownStyleException if object does not have a field with given name
+	 * @throws IllegalArgumentException if value type does not fit to expected type 
+	 */
+	static Object applyToField( Object obj, String fieldName, String key, Object value )
+		throws UnknownStyleException, IllegalArgumentException
+	{
+		return applyToField( obj, fieldName, key, value, null );
+	}
+
+	private static Object applyToField( Object obj, String fieldName, String key, Object value, Predicate<Field> predicate )
+		throws UnknownStyleException, IllegalArgumentException
+	{
 		Class<?> cls = obj.getClass();
 
 		for(;;) {
 			try {
 				Field f = cls.getDeclaredField( fieldName );
-				Styleable styleable = f.getAnnotation( Styleable.class );
-				if( styleable != null && styleable.dot() == (dotIndex >= 0) ) {
+				if( predicate == null || predicate.test( f ) ) {
 					if( Modifier.isFinal( f.getModifiers() ) )
 						throw new IllegalArgumentException( "field '" + cls.getName() + "." + fieldName + "' is final" );
 
@@ -234,14 +262,31 @@ public class FlatStyleSupport
 			if( cls == null )
 				throw new UnknownStyleException( key );
 
-			String superclassName = cls.getName();
-			if( superclassName.startsWith( "java." ) || superclassName.startsWith( "javax." ) )
-				throw new UnknownStyleException( key );
+			if( predicate != null ) {
+				String superclassName = cls.getName();
+				if( superclassName.startsWith( "java." ) || superclassName.startsWith( "javax." ) )
+					throw new UnknownStyleException( key );
+			}
 		}
 	}
 
 	public static Object getStyle( JComponent c ) {
 		return c.getClientProperty( FlatClientProperties.STYLE );
+	}
+
+	static PropertyChangeListener createPropertyChangeListener( JComponent c,
+		Consumer<Object> applyStyle, PropertyChangeListener superListener )
+	{
+		return e -> {
+			if( superListener != null )
+				superListener.propertyChange( e );
+
+			if( FlatClientProperties.STYLE.equals( e.getPropertyName() ) ) {
+				applyStyle.accept( e.getNewValue() );
+				c.revalidate();
+				c.repaint();
+			}
+		};
 	}
 
 	static Border cloneBorder( Border border ) {

@@ -23,7 +23,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import javax.swing.JMenu;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatStyleSupport;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 
 /**
  * "arrow" icon for {@link javax.swing.JMenu}.
@@ -39,13 +41,20 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatMenuArrowIcon
 	extends FlatAbstractIcon
 {
-	protected final boolean chevron = FlatUIUtils.isChevron( UIManager.getString( "Component.arrowType" ) );
-	protected final Color arrowColor = UIManager.getColor( "Menu.icon.arrowColor" );
-	protected final Color disabledArrowColor = UIManager.getColor( "Menu.icon.disabledArrowColor" );
-	protected final Color selectionForeground = UIManager.getColor( "Menu.selectionForeground" );
+	@Styleable protected String arrowType = UIManager.getString( "Component.arrowType" );
+	@Styleable protected Color arrowColor = UIManager.getColor( "Menu.icon.arrowColor" );
+	@Styleable protected Color disabledArrowColor = UIManager.getColor( "Menu.icon.disabledArrowColor" );
+	@Styleable protected Color selectionForeground = UIManager.getColor( "Menu.selectionForeground" );
 
 	public FlatMenuArrowIcon() {
 		super( 6, 10, null );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	@Override
@@ -54,7 +63,7 @@ public class FlatMenuArrowIcon
 			g.rotate( Math.toRadians( 180 ), width / 2., height / 2. );
 
 		g.setColor( getArrowColor( c ) );
-		if( chevron ) {
+		if( FlatUIUtils.isChevron( arrowType ) ) {
 			// chevron arrow
 			Path2D path = FlatUIUtils.createPath( false, 1,1, 5,5, 1,9 );
 			g.setStroke( new BasicStroke( 1f ) );

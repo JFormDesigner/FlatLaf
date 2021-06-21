@@ -18,11 +18,14 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenuItem}.
@@ -56,9 +59,17 @@ public class FlatMenuItemUI
 	extends BasicMenuItemUI
 {
 	private FlatMenuItemRenderer renderer;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuItemUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( menuItem ) );
 	}
 
 	@Override
@@ -79,6 +90,44 @@ public class FlatMenuItemUI
 
 	protected FlatMenuItemRenderer createRenderer() {
 		return new FlatMenuItemRenderer( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
+		return FlatStyleSupport.createPropertyChangeListener( c, this::applyStyle, super.createPropertyChangeListener( c ) );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		try {
+			return renderer.applyStyleProperty( key, value );
+		} catch ( UnknownStyleException ex ) {
+			// ignore
+		}
+
+		return applyStyleProperty( this, key, value );
+	}
+
+	static Object applyStyleProperty( BasicMenuItemUI ui, String key, Object value ) {
+		switch( key ) {
+			case "selectionBackground":
+			case "selectionForeground":
+			case "disabledForeground":
+			case "acceleratorForeground":
+			case "acceleratorSelectionForeground":
+				return FlatStyleSupport.applyToField( ui, key, key, value );
+
+			default: throw new UnknownStyleException( key );
+		}
 	}
 
 	@Override

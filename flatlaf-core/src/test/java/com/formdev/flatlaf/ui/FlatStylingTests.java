@@ -23,23 +23,9 @@ import java.awt.Insets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JEditorPane;
-import javax.swing.JFormattedTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JToggleButton;
-import javax.swing.UIManager;
+import javax.swing.*;
 import org.junit.jupiter.api.Test;
-import com.formdev.flatlaf.icons.FlatCapsLockIcon;
-import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
-import com.formdev.flatlaf.icons.FlatRadioButtonIcon;
+import com.formdev.flatlaf.icons.*;
 
 /**
  * @author Karl Tauber
@@ -155,6 +141,95 @@ public class FlatStylingTests
 
 		// FlatFormattedTextFieldUI extends FlatTextFieldUI
 		textField( ui );
+	}
+
+	@Test
+	void menu() {
+		UIManager.put( "Menu.arrowIcon", new FlatMenuArrowIcon() );
+		UIManager.put( "Menu.checkIcon", null );
+		FlatMenuUI ui = new FlatMenuUI();
+		ui.installUI( new JMenu() );
+
+		Consumer<String> applyStyle = style -> ui.applyStyle( style );
+		menuItem( applyStyle );
+		menuItem_arrowIcon( applyStyle );
+	}
+
+	@Test
+	void menuItem() {
+		UIManager.put( "MenuItem.arrowIcon", new FlatMenuItemArrowIcon() );
+		UIManager.put( "MenuItem.checkIcon", null );
+		FlatMenuItemUI ui = new FlatMenuItemUI();
+		ui.installUI( new JMenuItem() );
+
+		Consumer<String> applyStyle = style -> ui.applyStyle( style );
+		menuItem( applyStyle );
+		menuItem_arrowIcon( applyStyle );
+	}
+
+	@Test
+	void checkBoxMenuItem() {
+		UIManager.put( "CheckBoxMenuItem.arrowIcon", new FlatMenuItemArrowIcon() );
+		UIManager.put( "CheckBoxMenuItem.checkIcon", new FlatCheckBoxMenuItemIcon() );
+		FlatCheckBoxMenuItemUI ui = new FlatCheckBoxMenuItemUI();
+		ui.installUI( new JCheckBoxMenuItem() );
+
+		Consumer<String> applyStyle = style -> ui.applyStyle( style );
+		menuItem( applyStyle );
+		menuItem_arrowIcon( applyStyle );
+		menuItem_checkIcon( applyStyle );
+	}
+
+	@Test
+	void radioButtonMenuItem() {
+		UIManager.put( "RadioButtonMenuItem.arrowIcon", new FlatMenuItemArrowIcon() );
+		UIManager.put( "RadioButtonMenuItem.checkIcon", new FlatRadioButtonMenuItemIcon() );
+		FlatRadioButtonMenuItemUI ui = new FlatRadioButtonMenuItemUI();
+		ui.installUI( new JRadioButtonMenuItem() );
+
+		Consumer<String> applyStyle = style -> ui.applyStyle( style );
+		menuItem( applyStyle );
+		menuItem_arrowIcon( applyStyle );
+		menuItem_checkIcon( applyStyle );
+	}
+
+	private void menuItem( Consumer<String> applyStyle ) {
+		applyStyle.accept( "selectionBackground: #fff" );
+		applyStyle.accept( "selectionForeground: #fff" );
+		applyStyle.accept( "disabledForeground: #fff" );
+		applyStyle.accept( "acceleratorForeground: #fff" );
+		applyStyle.accept( "acceleratorSelectionForeground: #fff" );
+
+		menuItemRenderer( applyStyle );
+	}
+
+	private void menuItemRenderer( Consumer<String> applyStyle ) {
+		applyStyle.accept( "minimumWidth: 10" );
+		applyStyle.accept( "minimumIconSize: 16,16" );
+		applyStyle.accept( "textAcceleratorGap: 28" );
+		applyStyle.accept( "textNoAcceleratorGap: 6" );
+		applyStyle.accept( "acceleratorArrowGap: 2" );
+
+		applyStyle.accept( "checkBackground: #fff" );
+		applyStyle.accept( "checkMargins: 1,2,3,4" );
+
+		applyStyle.accept( "underlineSelectionBackground: #fff" );
+		applyStyle.accept( "underlineSelectionCheckBackground: #fff" );
+		applyStyle.accept( "underlineSelectionColor: #fff" );
+		applyStyle.accept( "underlineSelectionHeight: 3" );
+	}
+
+	private void menuItem_checkIcon( Consumer<String> applyStyle ) {
+		applyStyle.accept( "icon.checkmarkColor: #fff" );
+		applyStyle.accept( "icon.disabledCheckmarkColor: #fff" );
+		applyStyle.accept( "icon.selectionForeground: #fff" );
+	}
+
+	private void menuItem_arrowIcon( Consumer<String> applyStyle ) {
+		applyStyle.accept( "icon.arrowType: chevron" );
+		applyStyle.accept( "icon.arrowColor: #fff" );
+		applyStyle.accept( "icon.disabledArrowColor: #fff" );
+		applyStyle.accept( "selectionForeground: #fff" );
 	}
 
 	@Test
@@ -555,5 +630,48 @@ public class FlatStylingTests
 		// pressed
 		icon.applyStyleProperty( "pressedBackground", Color.WHITE );
 		icon.applyStyleProperty( "selectedPressedBackground", Color.WHITE );
+	}
+
+	@Test
+	void flatCheckBoxMenuItemIcon() {
+		FlatCheckBoxMenuItemIcon icon = new FlatCheckBoxMenuItemIcon();
+
+		flatCheckBoxMenuItemIcon( icon );
+	}
+
+	@Test
+	void flatRadioButtonMenuItemIcon() {
+		FlatRadioButtonMenuItemIcon icon = new FlatRadioButtonMenuItemIcon();
+
+		// FlatRadioButtonMenuItemIcon extends FlatCheckBoxMenuItemIcon
+		flatCheckBoxMenuItemIcon( icon );
+	}
+
+	private void flatCheckBoxMenuItemIcon( FlatCheckBoxMenuItemIcon icon ) {
+		icon.applyStyleProperty( "checkmarkColor", Color.WHITE );
+		icon.applyStyleProperty( "disabledCheckmarkColor", Color.WHITE );
+		icon.applyStyleProperty( "selectionForeground", Color.WHITE );
+	}
+
+	@Test
+	void flatMenuArrowIcon() {
+		FlatMenuArrowIcon icon = new FlatMenuArrowIcon();
+
+		flatMenuArrowIcon( icon );
+	}
+
+	@Test
+	void flatMenuItemArrowIcon() {
+		FlatMenuItemArrowIcon icon = new FlatMenuItemArrowIcon();
+
+		// FlatMenuItemArrowIcon extends FlatMenuArrowIcon
+		flatMenuArrowIcon( icon );
+	}
+
+	private void flatMenuArrowIcon( FlatMenuArrowIcon icon ) {
+		icon.applyStyleProperty( "arrowType", "chevron" );
+		icon.applyStyleProperty( "arrowColor", Color.WHITE );
+		icon.applyStyleProperty( "disabledArrowColor", Color.WHITE );
+		icon.applyStyleProperty( "selectionForeground", Color.WHITE );
 	}
 }
