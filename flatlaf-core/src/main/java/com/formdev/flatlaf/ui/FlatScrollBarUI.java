@@ -222,9 +222,9 @@ public class FlatScrollBarUI
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		if( incrButton instanceof FlatScrollBarButton )
-			((FlatScrollBarButton)incrButton).update();
+			((FlatScrollBarButton)incrButton).updateStyle();
 		if( decrButton instanceof FlatScrollBarButton )
-			((FlatScrollBarButton)decrButton).update();
+			((FlatScrollBarButton)decrButton).updateStyle();
 	}
 
 	/**
@@ -424,8 +424,8 @@ public class FlatScrollBarUI
 			setRequestFocusEnabled( false );
 		}
 
-		protected void update() {
-			update( arrowType, buttonArrowColor, buttonDisabledArrowColor,
+		protected void updateStyle() {
+			updateStyle( arrowType, buttonArrowColor, buttonDisabledArrowColor,
 				null, hoverButtonBackground, null, pressedButtonBackground );
 		}
 

@@ -140,7 +140,7 @@ public class FlatSplitPaneUI
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		if( divider instanceof FlatSplitPaneDivider )
-			((FlatSplitPaneDivider)divider).updateButtons();
+			((FlatSplitPaneDivider)divider).updateStyle();
 	}
 
 	/**
@@ -180,11 +180,11 @@ public class FlatSplitPaneUI
 			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 		}
 
-		void updateButtons() {
+		void updateStyle() {
 			if( leftButton instanceof FlatOneTouchButton )
-				((FlatOneTouchButton)leftButton).update();
+				((FlatOneTouchButton)leftButton).updateStyle();
 			if( rightButton instanceof FlatOneTouchButton )
-				((FlatOneTouchButton)rightButton).update();
+				((FlatOneTouchButton)rightButton).updateStyle();
 		}
 
 		@Override
@@ -267,8 +267,8 @@ public class FlatSplitPaneUI
 				this.left = left;
 			}
 
-			protected void update() {
-				update( arrowType, oneTouchArrowColor, null,
+			protected void updateStyle() {
+				updateStyle( arrowType, oneTouchArrowColor, null,
 					oneTouchHoverArrowColor, null, oneTouchPressedArrowColor, null );
 			}
 

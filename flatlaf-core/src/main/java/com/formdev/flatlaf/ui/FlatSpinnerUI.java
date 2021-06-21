@@ -189,7 +189,7 @@ public class FlatSpinnerUI
 	 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
-		updateArrowButtons();
+		updateArrowButtonsStyle();
 	}
 
 	/**
@@ -309,10 +309,10 @@ public class FlatSpinnerUI
 		return button;
 	}
 
-	private void updateArrowButtons() {
+	private void updateArrowButtonsStyle() {
 		for( Component c : spinner.getComponents() ) {
 			if( c instanceof FlatArrowButton ) {
-				((FlatArrowButton)c).update( arrowType, buttonArrowColor,
+				((FlatArrowButton)c).updateStyle( arrowType, buttonArrowColor,
 					buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
 			}
 		}

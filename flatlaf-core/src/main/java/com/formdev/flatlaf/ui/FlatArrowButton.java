@@ -58,7 +58,7 @@ public class FlatArrowButton
 		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
-		update( type, foreground, disabledForeground, hoverForeground, hoverBackground,
+		updateStyle( type, foreground, disabledForeground, hoverForeground, hoverBackground,
 			pressedForeground, pressedBackground );
 
 		setOpaque( false );
@@ -98,7 +98,7 @@ public class FlatArrowButton
 	/**
 	 * @since TODO
 	 */
-	public void update( String type, Color foreground, Color disabledForeground,
+	public void updateStyle( String type, Color foreground, Color disabledForeground,
 		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 	{
 		this.chevron = FlatUIUtils.isChevron( type );
