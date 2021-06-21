@@ -351,14 +351,15 @@ class UIDefaultsLoader
 				valueType = ValueType.STRING;
 			else if( key.endsWith( "Color" ) ||
 				(key.endsWith( "ground" ) &&
-				 (key.endsWith( ".background" ) || key.endsWith( "Background" ) ||
-				  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ))) )
+				 (key.endsWith( ".background" ) || key.endsWith( "Background" ) || key.equals( "background" ) ||
+				  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ) || key.equals( "foreground" ))) )
 				valueType = ValueType.COLOR;
 			else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
 				valueType = ValueType.BORDER;
 			else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
 				valueType = ValueType.ICON;
-			else if( key.endsWith( ".margin" ) || key.endsWith( ".padding" ) ||
+			else if( key.endsWith( ".margin" ) || key.equals( "margin" ) ||
+					 key.endsWith( ".padding" ) || key.equals( "padding" ) ||
 					 key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
 				valueType = ValueType.INSETS;
 			else if( key.endsWith( "Size" ) )

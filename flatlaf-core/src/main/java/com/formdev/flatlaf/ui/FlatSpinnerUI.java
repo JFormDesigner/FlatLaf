@@ -32,6 +32,7 @@ import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -42,6 +43,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
@@ -81,24 +83,33 @@ public class FlatSpinnerUI
 {
 	private Handler handler;
 
-	protected int minimumWidth;
-	protected String buttonStyle;
-	protected String arrowType;
+	@Styleable protected int minimumWidth;
+	@Styleable protected String buttonStyle;
+	@Styleable protected String arrowType;
 	protected boolean isIntelliJTheme;
-	protected Color borderColor;
-	protected Color disabledBorderColor;
-	protected Color disabledBackground;
-	protected Color disabledForeground;
-	protected Color focusedBackground;
-	protected Color buttonBackground;
-	protected Color buttonArrowColor;
-	protected Color buttonDisabledArrowColor;
-	protected Color buttonHoverArrowColor;
-	protected Color buttonPressedArrowColor;
-	protected Insets padding;
+	@Styleable protected Color borderColor;
+	@Styleable protected Color disabledBorderColor;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color disabledForeground;
+	@Styleable protected Color focusedBackground;
+	@Styleable protected Color buttonBackground;
+	@Styleable protected Color buttonArrowColor;
+	@Styleable protected Color buttonDisabledArrowColor;
+	@Styleable protected Color buttonHoverArrowColor;
+	@Styleable protected Color buttonPressedArrowColor;
+	@Styleable protected Insets padding;
+
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSpinnerUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( spinner ) );
 	}
 
 	@Override
@@ -123,9 +134,6 @@ public class FlatSpinnerUI
 		buttonPressedArrowColor = UIManager.getColor( "Spinner.buttonPressedArrowColor" );
 		padding = UIManager.getInsets( "Spinner.padding" );
 
-		// scale
-		padding = scale( padding );
-
 		MigLayoutVisualPadding.install( spinner );
 	}
 
@@ -144,6 +152,8 @@ public class FlatSpinnerUI
 		buttonHoverArrowColor = null;
 		buttonPressedArrowColor = null;
 		padding = null;
+
+		oldStyleValues = null;
 
 		MigLayoutVisualPadding.uninstall( spinner );
 	}
@@ -172,6 +182,21 @@ public class FlatSpinnerUI
 		if( handler == null )
 			handler = new Handler();
 		return handler;
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		updateArrowButtons();
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	@Override
@@ -284,6 +309,15 @@ public class FlatSpinnerUI
 		return button;
 	}
 
+	private void updateArrowButtons() {
+		for( Component c : spinner.getComponents() ) {
+			if( c instanceof FlatArrowButton ) {
+				((FlatArrowButton)c).update( arrowType, buttonArrowColor,
+					buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
+			}
+		}
+	}
+
 	@Override
 	public void update( Graphics g, JComponent c ) {
 		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
@@ -370,6 +404,7 @@ public class FlatSpinnerUI
 		@Override
 		public Dimension preferredLayoutSize( Container parent ) {
 			Insets insets = parent.getInsets();
+			Insets padding = scale( FlatSpinnerUI.this.padding );
 			Dimension editorSize = (editor != null) ? editor.getPreferredSize() : new Dimension( 0, 0 );
 
 			// the arrows width is the same as the inner height so that the arrows area is square
@@ -390,6 +425,7 @@ public class FlatSpinnerUI
 		public void layoutContainer( Container parent ) {
 			Dimension size = parent.getSize();
 			Insets insets = parent.getInsets();
+			Insets padding = scale( FlatSpinnerUI.this.padding );
 			Rectangle r = FlatUIUtils.subtractInsets( new Rectangle( size ), insets );
 
 			if( nextButton == null && previousButton == null ) {
@@ -464,6 +500,12 @@ public class FlatSpinnerUI
 
 				case FlatClientProperties.MINIMUM_WIDTH:
 					spinner.revalidate();
+					break;
+
+				case FlatClientProperties.STYLE:
+					applyStyle( e.getNewValue() );
+					spinner.revalidate();
+					spinner.repaint();
 					break;
 			}
 		}

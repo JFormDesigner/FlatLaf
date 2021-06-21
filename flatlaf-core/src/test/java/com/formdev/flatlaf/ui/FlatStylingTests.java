@@ -390,6 +390,29 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void spinner() {
+		FlatSpinnerUI ui = new FlatSpinnerUI();
+
+		// create arrow buttons
+		ui.installUI( new JSpinner() );
+
+		ui.applyStyle( "minimumWidth: 100" );
+		ui.applyStyle( "buttonStyle: button" );
+		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "borderColor: #fff" );
+		ui.applyStyle( "disabledBorderColor: #fff" );
+		ui.applyStyle( "disabledBackground: #fff" );
+		ui.applyStyle( "disabledForeground: #fff" );
+		ui.applyStyle( "focusedBackground: #fff" );
+		ui.applyStyle( "buttonBackground: #fff" );
+		ui.applyStyle( "buttonArrowColor: #fff" );
+		ui.applyStyle( "buttonDisabledArrowColor: #fff" );
+		ui.applyStyle( "buttonHoverArrowColor: #fff" );
+		ui.applyStyle( "buttonPressedArrowColor: #fff" );
+		ui.applyStyle( "padding: 1,2,3,4" );
+	}
+
+	@Test
 	void splitPane() {
 		FlatSplitPaneUI ui = new FlatSplitPaneUI();
 
