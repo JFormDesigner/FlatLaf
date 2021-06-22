@@ -103,7 +103,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ComboBox.buttonDisabledArrowColor	Color
  * @uiDefault ComboBox.buttonHoverArrowColor	Color
  * @uiDefault ComboBox.buttonPressedArrowColor	Color
- * @uiDefault ComboBox.popupFocusedBackground	Color	optional
+ * @uiDefault ComboBox.popupBackground			Color	optional
  *
  * @author Karl Tauber
  */
@@ -131,7 +131,7 @@ public class FlatComboBoxUI
 	protected Color buttonHoverArrowColor;
 	protected Color buttonPressedArrowColor;
 
-	protected Color popupFocusedBackground;
+	protected Color popupBackground;
 
 	private MouseListener hoverListener;
 	protected boolean hover;
@@ -215,7 +215,7 @@ public class FlatComboBoxUI
 		buttonHoverArrowColor = UIManager.getColor( "ComboBox.buttonHoverArrowColor" );
 		buttonPressedArrowColor = UIManager.getColor( "ComboBox.buttonPressedArrowColor" );
 
-		popupFocusedBackground = UIManager.getColor( "ComboBox.popupFocusedBackground" );
+		popupBackground = UIManager.getColor( "ComboBox.popupBackground" );
 
 		// set maximumRowCount
 		int maximumRowCount = UIManager.getInt( "ComboBox.maximumRowCount" );
@@ -248,7 +248,7 @@ public class FlatComboBoxUI
 		buttonHoverArrowColor = null;
 		buttonPressedArrowColor = null;
 
-		popupFocusedBackground = null;
+		popupBackground = null;
 
 		MigLayoutVisualPadding.uninstall( comboBox );
 	}
@@ -727,8 +727,8 @@ public class FlatComboBoxUI
 			super.configureList();
 
 			list.setCellRenderer( new PopupListCellRenderer() );
-			if( popupFocusedBackground != null )
-		        list.setBackground( popupFocusedBackground );
+			if( popupBackground != null )
+		        list.setBackground( popupBackground );
 		}
 
 		@Override
