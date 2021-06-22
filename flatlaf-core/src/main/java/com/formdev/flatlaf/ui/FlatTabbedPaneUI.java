@@ -44,22 +44,7 @@ import java.util.function.BiConsumer;
 import java.util.function.IntConsumer;
 import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.ButtonModel;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JTabbedPane;
-import javax.swing.JViewport;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.PopupMenuEvent;
@@ -214,8 +199,8 @@ public class FlatTabbedPaneUI
 	private Container trailingComponent;
 
 	// Scrollable layout tab edge fade out
-	private JComponent trailingEdgeFadeoutComponent;
-	private JComponent leadingEdgeFadeoutComponent;
+	private FlatEdgeFadeOutComponent trailingEdgeFadeoutComponent;
+	private FlatEdgeFadeOutComponent leadingEdgeFadeoutComponent;
 
 	// Bounding box of the tab selection indicator within the selected tab.
 	// The coordinates are relative to the selected tab.
@@ -417,10 +402,10 @@ public class FlatTabbedPaneUI
 		tabPane.add( moreTabsButton );
 
 		// create fadeoff components
-		trailingEdgeFadeoutComponent = new FlatEdgeFadeOutComponent(true);
+		trailingEdgeFadeoutComponent = new FlatEdgeFadeOutComponent(SwingConstants.EAST);
 		tabPane.add( trailingEdgeFadeoutComponent );
 
-		leadingEdgeFadeoutComponent = new FlatEdgeFadeOutComponent(false);
+		leadingEdgeFadeoutComponent = new FlatEdgeFadeOutComponent(SwingConstants.WEST);
 		tabPane.add( leadingEdgeFadeoutComponent );
 	}
 
@@ -2176,20 +2161,21 @@ public class FlatTabbedPaneUI
 	 */
 	protected class FlatEdgeFadeOutComponent extends JComponent implements UIResource
 	{
-		boolean leftToRight;
+		/** SwingConstants NORTH SOUTH EAST WEST */
+		int direction;
 		Color transparentColor;
 		Color opaqueColor;
 
-		public FlatEdgeFadeOutComponent(boolean leftToRight) {
-			this.leftToRight = leftToRight;
+		public FlatEdgeFadeOutComponent(int direction) {
+			this.direction = direction;
 		}
 
-		public boolean isLeftToRight() {
-			return leftToRight;
+		public int getDirection() {
+			return direction;
 		}
 
-		public void setLeftToRight( boolean leftToRight ) {
-			this.leftToRight = leftToRight;
+		public void setDirection( int direction ) {
+			this.direction = direction;
 		}
 
 		@Override
@@ -2202,13 +2188,24 @@ public class FlatTabbedPaneUI
 				transparentColor = new Color( opaqueColor.getRed(), opaqueColor.getGreen(), opaqueColor.getBlue(), 0 );
 			}
 
-			Color c1 = leftToRight ? transparentColor : opaqueColor;
-			Color c2 = leftToRight ? opaqueColor : transparentColor;
-			GradientPaint gradientPaint = new GradientPaint(
-				0, 0, c1,
-				this.getWidth(), 0, c2,
-				false
-			);
+			GradientPaint gradientPaint;
+			if (direction == EAST || direction == WEST) {
+				Color c1 = direction == EAST ? transparentColor : opaqueColor;
+				Color c2 = direction == EAST ? opaqueColor : transparentColor;
+				gradientPaint = new GradientPaint(
+					0, 0, c1,
+					this.getWidth(), 0, c2,
+					false
+				);
+			} else {
+				Color c1 = direction == SOUTH ? transparentColor : opaqueColor;
+				Color c2 = direction == SOUTH ? opaqueColor : transparentColor;
+				gradientPaint = new GradientPaint(
+					0, 0, c1,
+					0, this.getHeight(), c2,
+					false
+				);
+			}
 
 			Area area = new Area( new Rectangle2D.Float( 0, 0, this.getWidth(), this.getHeight()) );
 
@@ -2239,6 +2236,9 @@ public class FlatTabbedPaneUI
 
 			g2d.setPaint(gradientPaint);
 			g2d.fill( area );
+
+//			g2d.setColor( Color.GREEN );
+//			g2d.fillRect( 0, 0, this.getWidth(), this.getHeight() );
 		}
 	}
 
@@ -2937,7 +2937,6 @@ public class FlatTabbedPaneUI
 							w -= buttonWidth;
 							moreTabsButtonVisible = true;
 						}
-
 						if( useScrollButtons ) {
 							// layout forward button on trailing side
 							if( !hideDisabledScrollButtons || forwardButton.isEnabled() ) {
@@ -2964,7 +2963,6 @@ public class FlatTabbedPaneUI
 								backwardButtonVisible = true;
 							}
 						}
-
 						// Layout fadeouts if applicable
 						if (useFadeouts) {
 							int fadeOutWidth = scale(scrollEdgeFadeoutWidth);
@@ -2972,23 +2970,23 @@ public class FlatTabbedPaneUI
 							if (forwardButton.isEnabled()) {
 								trailingEdgeFadeoutComponent.setBounds(
 									x + w - fadeOutWidth,
-									0,
+									ty,
 									fadeOutWidth,
 									th
 								);
+								trailingEdgeFadeoutComponent.setDirection(SwingConstants.EAST);
 								tabPane.setComponentZOrder( trailingEdgeFadeoutComponent, 0 );
-
 								fadeoutTrailingVisible = true;
 							}
 							if (backwardButton.isEnabled()) {
 								leadingEdgeFadeoutComponent.setBounds(
 									x,
-									0,
+									ty,
 									fadeOutWidth,
 									th
 								);
+								leadingEdgeFadeoutComponent.setDirection(SwingConstants.WEST);
 								tabPane.setComponentZOrder( leadingEdgeFadeoutComponent, 0 );
-
 								fadeoutLeadingVisible = true;
 							}
 						}
@@ -3104,6 +3102,33 @@ public class FlatTabbedPaneUI
 								}
 								h -= buttonHeight;
 								backwardButtonVisible = true;
+							}
+						}
+						// Layout fadeouts if applicable
+						if (useFadeouts) {
+							int fadeOutWidth = scale(scrollEdgeFadeoutWidth);
+
+							if (forwardButton.isEnabled()) {
+								trailingEdgeFadeoutComponent.setBounds(
+									tx,
+									y + h - fadeOutWidth,
+									tw,
+									fadeOutWidth
+								);
+								trailingEdgeFadeoutComponent.setDirection(SwingConstants.SOUTH);
+								tabPane.setComponentZOrder( trailingEdgeFadeoutComponent, 0 );
+								fadeoutTrailingVisible = true;
+							}
+							if (backwardButton.isEnabled()) {
+								leadingEdgeFadeoutComponent.setBounds(
+									tx,
+									y,
+									tw,
+									fadeOutWidth
+								);
+								leadingEdgeFadeoutComponent.setDirection(SwingConstants.NORTH);
+								tabPane.setComponentZOrder( leadingEdgeFadeoutComponent, 0 );
+								fadeoutLeadingVisible = true;
 							}
 						}
 					}
