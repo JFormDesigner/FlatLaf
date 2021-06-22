@@ -174,6 +174,17 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void list() {
+		FlatListUI ui = new FlatListUI();
+		ui.installUI( new JList<>() );
+
+		ui.applyStyle( "selectionBackground: #fff" );
+		ui.applyStyle( "selectionForeground: #fff" );
+		ui.applyStyle( "selectionInactiveBackground: #fff" );
+		ui.applyStyle( "selectionInactiveForeground: #fff" );
+	}
+
+	@Test
 	void menu() {
 		UIManager.put( "Menu.arrowIcon", new FlatMenuArrowIcon() );
 		UIManager.put( "Menu.checkIcon", null );
@@ -462,6 +473,17 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void table() {
+		FlatTableUI ui = new FlatTableUI();
+		ui.installUI( new JTable() );
+
+		ui.applyStyle( "selectionBackground: #fff" );
+		ui.applyStyle( "selectionForeground: #fff" );
+		ui.applyStyle( "selectionInactiveBackground: #fff" );
+		ui.applyStyle( "selectionInactiveForeground: #fff" );
+	}
+
+	@Test
 	void textArea() {
 		FlatTextAreaUI ui = new FlatTextAreaUI();
 
@@ -527,6 +549,20 @@ public class FlatStylingTests
 		ui.applyStyle( b, "tab.selectedBackground: #fff" );
 		ui.applyStyle( b, "tab.hoverBackground: #fff" );
 		ui.applyStyle( b, "tab.focusBackground: #fff" );
+	}
+
+	@Test
+	void tree() {
+		FlatTreeUI ui = new FlatTreeUI();
+		ui.installUI( new JTree() );
+
+		ui.applyStyle( "selectionBackground: #fff" );
+		ui.applyStyle( "selectionForeground: #fff" );
+		ui.applyStyle( "selectionInactiveBackground: #fff" );
+		ui.applyStyle( "selectionInactiveForeground: #fff" );
+		ui.applyStyle( "selectionBorderColor: #fff" );
+		ui.applyStyle( "wideSelection: true" );
+		ui.applyStyle( "showCellFocusIndicator: true" );
 	}
 
 	//---- component borders --------------------------------------------------

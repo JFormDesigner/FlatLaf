@@ -25,6 +25,8 @@ import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -34,6 +36,8 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.JTableHeader;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -92,17 +96,27 @@ public class FlatTableUI
 	protected boolean showVerticalLines;
 	protected Dimension intercellSpacing;
 
-	protected Color selectionBackground;
-	protected Color selectionForeground;
-	protected Color selectionInactiveBackground;
-	protected Color selectionInactiveForeground;
+	@Styleable protected Color selectionBackground;
+	@Styleable protected Color selectionForeground;
+	@Styleable protected Color selectionInactiveBackground;
+	@Styleable protected Color selectionInactiveForeground;
 
 	private boolean oldShowHorizontalLines;
 	private boolean oldShowVerticalLines;
 	private Dimension oldIntercellSpacing;
 
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -148,6 +162,8 @@ public class FlatTableUI
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
 
+		oldStyleValues = null;
+
 		// restore old show horizontal/vertical lines (if not modified)
 		if( !showHorizontalLines && oldShowHorizontalLines && !table.getShowHorizontalLines() )
 			table.setShowHorizontalLines( true );
@@ -157,6 +173,22 @@ public class FlatTableUI
 		// restore old intercell spacing (if not modified)
 		if( intercellSpacing != null && table.getIntercellSpacing().equals( intercellSpacing ) )
 			table.setIntercellSpacing( oldIntercellSpacing );
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener( table, this::applyStyle, null );
+		table.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		table.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = null;
 	}
 
 	@Override
@@ -178,6 +210,43 @@ public class FlatTableUI
 				} );
 			}
 		};
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		Color oldSelectionBackground = selectionBackground;
+		Color oldSelectionForeground = selectionForeground;
+		Color oldSelectionInactiveBackground = selectionInactiveBackground;
+		Color oldSelectionInactiveForeground = selectionInactiveForeground;
+
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		// update selection background
+		if( selectionBackground != oldSelectionBackground ) {
+			Color selBg = table.getSelectionBackground();
+			if( selBg == oldSelectionBackground )
+				table.setSelectionBackground( selectionBackground );
+			else if( selBg == oldSelectionInactiveBackground )
+				table.setSelectionBackground( selectionInactiveBackground );
+		}
+
+		// update selection foreground
+		if( selectionForeground != oldSelectionForeground ) {
+			Color selFg = table.getSelectionForeground();
+			if( selFg == oldSelectionForeground )
+				table.setSelectionForeground( selectionForeground );
+			else if( selFg == oldSelectionInactiveForeground )
+				table.setSelectionForeground( selectionInactiveForeground );
+		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**

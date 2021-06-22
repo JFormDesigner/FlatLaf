@@ -20,10 +20,13 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicListUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JList}.
@@ -64,13 +67,22 @@ import javax.swing.plaf.basic.BasicListUI;
 public class FlatListUI
 	extends BasicListUI
 {
-	protected Color selectionBackground;
-	protected Color selectionForeground;
-	protected Color selectionInactiveBackground;
-	protected Color selectionInactiveForeground;
+	@Styleable protected Color selectionBackground;
+	@Styleable protected Color selectionForeground;
+	@Styleable protected Color selectionInactiveBackground;
+	@Styleable protected Color selectionInactiveForeground;
+
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatListUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -93,6 +105,8 @@ public class FlatListUI
 		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override
@@ -114,6 +128,49 @@ public class FlatListUI
 				} );
 			}
 		};
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener() {
+		return FlatStyleSupport.createPropertyChangeListener( list, this::applyStyle,
+			super.createPropertyChangeListener() );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		Color oldSelectionBackground = selectionBackground;
+		Color oldSelectionForeground = selectionForeground;
+		Color oldSelectionInactiveBackground = selectionInactiveBackground;
+		Color oldSelectionInactiveForeground = selectionInactiveForeground;
+
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		// update selection background
+		if( selectionBackground != oldSelectionBackground ) {
+			Color selBg = list.getSelectionBackground();
+			if( selBg == oldSelectionBackground )
+				list.setSelectionBackground( selectionBackground );
+			else if( selBg == oldSelectionInactiveBackground )
+				list.setSelectionBackground( selectionInactiveBackground );
+		}
+
+		// update selection foreground
+		if( selectionForeground != oldSelectionForeground ) {
+			Color selFg = list.getSelectionForeground();
+			if( selFg == oldSelectionForeground )
+				list.setSelectionForeground( selectionForeground );
+			else if( selFg == oldSelectionInactiveForeground )
+				list.setSelectionForeground( selectionInactiveForeground );
+		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
