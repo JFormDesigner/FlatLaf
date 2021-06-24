@@ -16,7 +16,6 @@
 
 package com.formdev.flatlaf.ui;
 
-import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -48,15 +47,10 @@ public class FlatTableCellBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		Insets margins = getStyleFromTableUI( c, ui -> ui.cellMargins );
-		if( margins != null ) {
-			boolean leftToRight = margins.left == margins.right || c.getComponentOrientation().isLeftToRight();
-			insets.left = scale( leftToRight ? margins.left : margins.right );
-			insets.top = scale( margins.top );
-			insets.right = scale( leftToRight ? margins.right : margins.left );
-			insets.bottom = scale( margins.bottom );
-			return insets;
-		}
+		Insets m = getStyleFromTableUI( c, ui -> ui.cellMargins );
+		if( m != null )
+			return scaleInsets( c, insets, m.top, m.left, m.bottom, m.right );
+
 		return super.getBorderInsets( c, insets );
 	}
 
