@@ -16,15 +16,19 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar}.
@@ -41,13 +45,38 @@ import javax.swing.plaf.basic.BasicToolBarUI;
  * @uiDefault ToolBar.floatingForeground				Color
  * @uiDefault ToolBar.isRollover						boolean
  *
+ * <!-- FlatToolBarBorder -->
+ *
+ * @uiDefault ToolBar.borderMargins				Insets
+ * @uiDefault ToolBar.gripColor					Color
+ *
  * @author Karl Tauber
  */
 public class FlatToolBarUI
 	extends BasicToolBarUI
 {
+	// for FlatToolBarBorder
+	@Styleable protected Insets borderMargins;
+	@Styleable protected Color gripColor;
+
+	private Map<String, Object> oldStyleValues;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatToolBarUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		oldStyleValues = null;
 	}
 
 	@Override
@@ -71,6 +100,25 @@ public class FlatToolBarUI
 					c.setFocusable( true );
 			}
 		};
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyListener() {
+		return FlatStyleSupport.createPropertyChangeListener( toolBar, this::applyStyle, super.createPropertyListener() );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	// disable rollover border

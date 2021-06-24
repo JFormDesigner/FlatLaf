@@ -586,6 +586,22 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void toolBar() {
+		FlatToolBarUI ui = new FlatToolBarUI();
+
+		ui.applyStyle( "borderMargins: 1,2,3,4" );
+		ui.applyStyle( "gripColor: #fff" );
+	}
+
+	@Test
+	void toolBarSeparator() {
+		FlatToolBarSeparatorUI ui = new FlatToolBarSeparatorUI( false );
+
+		ui.applyStyle( "separatorWidth: 6" );
+		ui.applyStyle( "separatorColor: #fff" );
+	}
+
+	@Test
 	void tree() {
 		FlatTreeUI ui = new FlatTreeUI();
 		ui.installUI( new JTree() );
