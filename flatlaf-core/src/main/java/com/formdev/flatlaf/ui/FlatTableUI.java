@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
@@ -100,6 +101,11 @@ public class FlatTableUI
 	@Styleable protected Color selectionForeground;
 	@Styleable protected Color selectionInactiveBackground;
 	@Styleable protected Color selectionInactiveForeground;
+
+	// for FlatTableCellBorder
+	@Styleable protected Insets cellMargins;
+	@Styleable protected Color cellFocusColor;
+	@Styleable protected boolean showCellFocusIndicator;
 
 	private boolean oldShowHorizontalLines;
 	private boolean oldShowVerticalLines;

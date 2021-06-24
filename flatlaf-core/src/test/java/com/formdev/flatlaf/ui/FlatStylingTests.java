@@ -182,6 +182,11 @@ public class FlatStylingTests
 		ui.applyStyle( "selectionForeground: #fff" );
 		ui.applyStyle( "selectionInactiveBackground: #fff" );
 		ui.applyStyle( "selectionInactiveForeground: #fff" );
+
+		// FlatListCellBorder
+		ui.applyStyle( "cellMargins: 1,2,3,4" );
+		ui.applyStyle( "cellFocusColor: #fff" );
+		ui.applyStyle( "showCellFocusIndicator: true" );
 	}
 
 	@Test
@@ -481,6 +486,11 @@ public class FlatStylingTests
 		ui.applyStyle( "selectionForeground: #fff" );
 		ui.applyStyle( "selectionInactiveBackground: #fff" );
 		ui.applyStyle( "selectionInactiveForeground: #fff" );
+
+		// FlatTableCellBorder
+		ui.applyStyle( "cellMargins: 1,2,3,4" );
+		ui.applyStyle( "cellFocusColor: #fff" );
+		ui.applyStyle( "showCellFocusIndicator: true" );
 	}
 
 	@Test

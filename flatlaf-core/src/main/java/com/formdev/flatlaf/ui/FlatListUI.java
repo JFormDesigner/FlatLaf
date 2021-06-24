@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
@@ -71,6 +72,11 @@ public class FlatListUI
 	@Styleable protected Color selectionForeground;
 	@Styleable protected Color selectionInactiveBackground;
 	@Styleable protected Color selectionInactiveForeground;
+
+	// for FlatListCellBorder
+	@Styleable protected Insets cellMargins;
+	@Styleable protected Color cellFocusColor;
+	@Styleable protected boolean showCellFocusIndicator;
 
 	private Map<String, Object> oldStyleValues;
 

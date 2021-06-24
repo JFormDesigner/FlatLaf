@@ -61,8 +61,8 @@ public class FlatLineBorder
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
-			g2.setColor( lineColor );
-			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, 0f, scale( lineThickness ), 0f );
+			g2.setColor( getLineColor() );
+			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, 0f, scale( getLineThickness() ), 0f );
 		} finally {
 			g2.dispose();
 		}
