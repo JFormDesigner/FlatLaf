@@ -174,6 +174,13 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void label() {
+		FlatLabelUI ui = new FlatLabelUI( false );
+
+		ui.applyStyle( "disabledForeground: #fff" );
+	}
+
+	@Test
 	void list() {
 		FlatListUI ui = new FlatListUI();
 		ui.installUI( new JList<>() );

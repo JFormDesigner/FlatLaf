@@ -877,6 +877,10 @@ debug*/
 	protected class FlatTitleLabelUI
 		extends FlatLabelUI
 	{
+		protected FlatTitleLabelUI() {
+			super( false );
+		}
+
 		@Override
 		protected void paintEnabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
 			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() );
