@@ -96,6 +96,28 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.wideSelection					boolean
  * @uiDefault Tree.showCellFocusIndicator			boolean
  *
+ * <!-- FlatTreeExpandedIcon -->
+ *
+ * @uiDefault Component.arrowType					String	chevron (default) or triangle
+ * @uiDefault Tree.icon.expandedColor				Color
+ *
+ * <!-- FlatTreeCollapsedIcon -->
+ *
+ * @uiDefault Component.arrowType					String	chevron (default) or triangle
+ * @uiDefault Tree.icon.collapsedColor				Color
+ *
+ * <!-- FlatTreeLeafIcon -->
+ *
+ * @uiDefault Tree.icon.leafColor					Color
+ *
+ * <!-- FlatTreeClosedIcon -->
+ *
+ * @uiDefault Tree.icon.closedColor					Color
+ *
+ * <!-- FlatTreeOpenIcon -->
+ *
+ * @uiDefault Tree.icon.openColor					Color
+ *
  * @author Karl Tauber
  */
 public class FlatTreeUI
@@ -108,6 +130,15 @@ public class FlatTreeUI
 	@Styleable protected Color selectionBorderColor;
 	@Styleable protected boolean wideSelection;
 	@Styleable protected boolean showCellFocusIndicator;
+
+	// for icons
+	// (needs to be public because icon classes are in another package)
+	@Styleable(dot=true) public String iconArrowType;
+	@Styleable(dot=true) public Color iconExpandedColor;
+	@Styleable(dot=true) public Color iconCollapsedColor;
+	@Styleable(dot=true) public Color iconLeafColor;
+	@Styleable(dot=true) public Color iconClosedColor;
+	@Styleable(dot=true) public Color iconOpenColor;
 
 	private Color defaultCellNonSelectionBackground;
 	private Color defaultSelectionBackground;

@@ -573,6 +573,14 @@ public class FlatStylingTests
 		ui.applyStyle( "selectionBorderColor: #fff" );
 		ui.applyStyle( "wideSelection: true" );
 		ui.applyStyle( "showCellFocusIndicator: true" );
+
+		// icons
+		ui.applyStyle( "icon.arrowType: chevron" );
+		ui.applyStyle( "icon.expandedColor: #fff" );
+		ui.applyStyle( "icon.collapsedColor: #fff" );
+		ui.applyStyle( "icon.leafColor: #fff" );
+		ui.applyStyle( "icon.closedColor: #fff" );
+		ui.applyStyle( "icon.openColor: #fff" );
 	}
 
 	//---- component borders --------------------------------------------------

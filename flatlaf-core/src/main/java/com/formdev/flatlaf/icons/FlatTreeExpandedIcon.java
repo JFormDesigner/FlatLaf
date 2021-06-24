@@ -35,6 +35,11 @@ public class FlatTreeExpandedIcon
 	}
 
 	@Override
+	void setStyleColorFromTreeUI( Component c, Graphics2D g ) {
+		setStyleColorFromTreeUI( c, g, ui -> ui.iconExpandedColor );
+	}
+
+	@Override
 	void rotate( Component c, Graphics2D g ) {
 		g.rotate( Math.toRadians( 90 ), width / 2., height / 2. );
 	}
