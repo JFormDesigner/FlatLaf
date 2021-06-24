@@ -28,6 +28,7 @@ import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSeparatorUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 
 /**
@@ -110,14 +111,14 @@ public class FlatSeparatorUI
 
 		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener(
 			s, style -> applyStyle( s, this, style ), null );
-		s.addPropertyChangeListener( propertyChangeListener );
+		s.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 	}
 
 	@Override
 	protected void uninstallListeners( JSeparator s ) {
 		super.uninstallListeners( s );
 
-		s.removePropertyChangeListener( propertyChangeListener );
+		s.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 		propertyChangeListener = null;
 	}
 

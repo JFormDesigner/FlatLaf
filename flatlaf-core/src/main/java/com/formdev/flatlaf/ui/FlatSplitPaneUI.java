@@ -34,6 +34,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
@@ -119,14 +120,14 @@ public class FlatSplitPaneUI
 		super.installListeners();
 
 		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener( splitPane, this::applyStyle, null );
-		splitPane.addPropertyChangeListener( propertyChangeListener );
+		splitPane.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 	}
 
 	@Override
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		splitPane.removePropertyChangeListener( propertyChangeListener );
+		splitPane.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 		propertyChangeListener = null;
 	}
 
