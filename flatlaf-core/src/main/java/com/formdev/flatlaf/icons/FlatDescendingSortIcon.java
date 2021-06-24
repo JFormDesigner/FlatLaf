@@ -17,11 +17,9 @@
 package com.formdev.flatlaf.icons;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -33,18 +31,14 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @author Karl Tauber
  */
 public class FlatDescendingSortIcon
-	extends FlatAbstractIcon
+	extends FlatAscendingSortIcon
 {
-	protected final boolean chevron = FlatUIUtils.isChevron( UIManager.getString( "Component.arrowType" ) );
-	protected final Color sortIconColor = UIManager.getColor( "Table.sortIconColor" );
-
 	public FlatDescendingSortIcon() {
-		super( 10, 5, null );
+		super();
 	}
 
 	@Override
-	protected void paintIcon( Component c, Graphics2D g ) {
-		g.setColor( sortIconColor );
+	protected void paintArrow( Component c, Graphics2D g, boolean chevron ) {
 		if( chevron ) {
 			// chevron arrow
 			Path2D path = FlatUIUtils.createPath( false, 1,0, 5,4, 9,0 );

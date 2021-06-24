@@ -501,6 +501,23 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void tableHeader() {
+		FlatTableHeaderUI ui = new FlatTableHeaderUI();
+
+		ui.applyStyle( "bottomSeparatorColor: #fff" );
+		ui.applyStyle( "height: 20" );
+		ui.applyStyle( "sortIconPosition: top" );
+
+		// FlatTableHeaderBorder
+		ui.applyStyle( "cellMargins: 1,2,3,4" );
+		ui.applyStyle( "separatorColor: #fff" );
+
+		// FlatAscendingSortIcon and FlatDescendingSortIcon
+		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "sortIconColor: #fff" );
+	}
+
+	@Test
 	void textArea() {
 		FlatTextAreaUI ui = new FlatTextAreaUI();
 
