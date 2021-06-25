@@ -21,6 +21,7 @@ import java.awt.Insets;
 import java.beans.PropertyChangeListener;
 import java.util.function.Function;
 import javax.swing.JComponent;
+import com.formdev.flatlaf.FlatClientProperties;
 
 /**
  * Support for MigLayout visual paddings.
@@ -80,7 +81,7 @@ public class MigLayoutVisualPadding
 				return new Insets( focusWidth, focusWidth, focusWidth, focusWidth );
 			} else
 				return null;
-		}, "border" );
+		}, "border", FlatClientProperties.STYLE );
 	}
 
 	/**
