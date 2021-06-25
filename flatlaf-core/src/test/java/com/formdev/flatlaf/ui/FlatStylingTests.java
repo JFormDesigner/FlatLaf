@@ -431,6 +431,18 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void scrollPane() {
+		FlatScrollPaneUI ui = new FlatScrollPaneUI();
+
+		// create border
+		UIManager.put( "ScrollPane.border", new FlatBorder() );
+		ui.installUI( new JScrollPane() );
+
+		// border
+		flatBorder( style -> ui.applyStyle( style ) );
+	}
+
+	@Test
 	void separator() {
 		FlatSeparatorUI ui = new FlatSeparatorUI( false );
 

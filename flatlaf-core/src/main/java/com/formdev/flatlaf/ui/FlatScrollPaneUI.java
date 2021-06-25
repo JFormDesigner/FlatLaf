@@ -29,6 +29,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -69,6 +71,9 @@ public class FlatScrollPaneUI
 {
 	private Handler handler;
 
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatScrollPaneUI();
 	}
@@ -80,6 +85,8 @@ public class FlatScrollPaneUI
 		int focusWidth = UIManager.getInt( "Component.focusWidth" );
 		LookAndFeel.installProperty( c, "opaque", focusWidth == 0 );
 
+		applyStyle( FlatStyleSupport.getStyle( c ) );
+
 		MigLayoutVisualPadding.install( scrollpane );
 	}
 
@@ -88,6 +95,9 @@ public class FlatScrollPaneUI
 		MigLayoutVisualPadding.uninstall( scrollpane );
 
 		super.uninstallUI( c );
+
+		oldStyleValues = null;
+		borderShared = null;
 	}
 
 	@Override
@@ -272,7 +282,13 @@ public class FlatScrollPaneUI
 						((JButton)corner).setBorder( BorderFactory.createEmptyBorder() );
 						((JButton)corner).setFocusable( false );
 					}
-				break;
+					break;
+
+				case FlatClientProperties.STYLE:
+					applyStyle( e.getNewValue() );
+					scrollpane.revalidate();
+					scrollpane.repaint();
+					break;
 			}
 		};
 	}
@@ -281,6 +297,27 @@ public class FlatScrollPaneUI
 		if( handler == null )
 			handler = new Handler();
 		return handler;
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( key.equals( "focusWidth" ) ) {
+			int focusWidth = (value instanceof Integer) ? (int) value : UIManager.getInt( "Component.focusWidth" );
+			LookAndFeel.installProperty( scrollpane, "opaque", focusWidth == 0 );
+		}
+
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, scrollpane, borderShared );
 	}
 
 	@Override
