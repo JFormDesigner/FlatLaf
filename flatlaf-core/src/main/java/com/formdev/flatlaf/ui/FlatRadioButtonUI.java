@@ -37,6 +37,7 @@ import javax.swing.plaf.basic.BasicRadioButtonUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -164,16 +165,15 @@ public class FlatRadioButtonUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		// style icon
 		if( key.startsWith( "icon." ) ) {
-			key = key.substring( "icon.".length() );
-
 			if( !(icon instanceof FlatCheckBoxIcon) )
-				return null;
+				return new UnknownStyleException( key );
 
 			if( iconShared ) {
 				icon = FlatStyleSupport.cloneIcon( icon );
 				iconShared = false;
 			}
 
+			key = key.substring( "icon.".length() );
 			return ((FlatCheckBoxIcon)icon).applyStyleProperty( key, value );
 		}
 

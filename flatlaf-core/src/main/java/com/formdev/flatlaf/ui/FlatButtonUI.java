@@ -46,6 +46,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
@@ -137,6 +138,7 @@ public class FlatButtonUI
 
 	private final boolean shared;
 	private boolean borderShared = true;
+	private boolean helpButtonIconShared = true;
 	private boolean defaults_initialized = false;
 	private Map<String, Object> oldStyleValues;
 
@@ -274,6 +276,19 @@ public class FlatButtonUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
+		if( key.startsWith( "help." ) ) {
+			if( !(helpButtonIcon instanceof FlatHelpButtonIcon) )
+				return new UnknownStyleException( key );
+
+			if( helpButtonIconShared ) {
+				helpButtonIcon = FlatStyleSupport.cloneIcon( helpButtonIcon );
+				helpButtonIconShared = false;
+			}
+
+			key = key.substring( "help.".length() );
+			return ((FlatHelpButtonIcon)helpButtonIcon).applyStyleProperty( key, value );
+		}
+
 		try {
 			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 		} catch( UnknownStyleException ex ) {

@@ -70,6 +70,25 @@ public class FlatStylingTests
 		ui.installUI( b );
 
 		button( b, ui );
+
+		//---- FlatHelpButtonIcon ----
+
+		ui.applyStyle( b, "help.focusWidth: 2" );
+		ui.applyStyle( b, "help.focusColor: #fff" );
+		ui.applyStyle( b, "help.innerFocusWidth: {float}0.5" );
+		ui.applyStyle( b, "help.borderWidth: 1" );
+
+		ui.applyStyle( b, "help.borderColor: #fff" );
+		ui.applyStyle( b, "help.disabledBorderColor: #fff" );
+		ui.applyStyle( b, "help.focusedBorderColor: #fff" );
+		ui.applyStyle( b, "help.hoverBorderColor: #fff" );
+		ui.applyStyle( b, "help.background: #fff" );
+		ui.applyStyle( b, "help.disabledBackground: #fff" );
+		ui.applyStyle( b, "help.focusedBackground: #fff" );
+		ui.applyStyle( b, "help.hoverBackground: #fff" );
+		ui.applyStyle( b, "help.pressedBackground: #fff" );
+		ui.applyStyle( b, "help.questionMarkColor: #fff" );
+		ui.applyStyle( b, "help.disabledQuestionMarkColor: #fff" );
 	}
 
 	private void button( AbstractButton b, FlatButtonUI ui ) {
@@ -820,5 +839,26 @@ public class FlatStylingTests
 		icon.applyStyleProperty( "arrowColor", Color.WHITE );
 		icon.applyStyleProperty( "disabledArrowColor", Color.WHITE );
 		icon.applyStyleProperty( "selectionForeground", Color.WHITE );
+	}
+	@Test
+	void flatHelpButtonIcon() {
+		FlatHelpButtonIcon icon = new FlatHelpButtonIcon();
+
+		icon.applyStyleProperty( "focusWidth", 2 );
+		icon.applyStyleProperty( "focusColor", Color.WHITE );
+		icon.applyStyleProperty( "innerFocusWidth", 0.5f );
+		icon.applyStyleProperty( "borderWidth", 1 );
+
+		icon.applyStyleProperty( "borderColor", Color.WHITE );
+		icon.applyStyleProperty( "disabledBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "focusedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "hoverBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "background", Color.WHITE );
+		icon.applyStyleProperty( "disabledBackground", Color.WHITE );
+		icon.applyStyleProperty( "focusedBackground", Color.WHITE );
+		icon.applyStyleProperty( "hoverBackground", Color.WHITE );
+		icon.applyStyleProperty( "pressedBackground", Color.WHITE );
+		icon.applyStyleProperty( "questionMarkColor", Color.WHITE );
+		icon.applyStyleProperty( "disabledQuestionMarkColor", Color.WHITE );
 	}
 }
