@@ -147,7 +147,7 @@ public class FlatAnimatedIconTest
 
 		@Override
 		public void paintIconAnimated( Component c, Graphics g, int x, int y, float animatedValue ) {
-			Color color = ColorFunctions.mix( onColor, offColor, animatedValue );;
+			Color color = ColorFunctions.mix( onColor, offColor, animatedValue );
 
 			// border
 			g.setColor( color );
@@ -190,7 +190,7 @@ public class FlatAnimatedIconTest
 
 		@Override
 		public void paintIconAnimated( Component c, Graphics g, int x, int y, float animatedValue ) {
-			Color color = ColorFunctions.mix( onColor, offColor, animatedValue );;
+			Color color = ColorFunctions.mix( onColor, offColor, animatedValue );
 
 			g.setColor( color );
 			g.fillRoundRect( x, y, width, height, height, height );
