@@ -31,6 +31,7 @@ import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
@@ -40,7 +41,6 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonListener;
@@ -137,10 +137,10 @@ public class FlatButtonUI
 	private Icon helpButtonIcon;
 
 	private final boolean shared;
-	private boolean borderShared = true;
 	private boolean helpButtonIconShared = true;
 	private boolean defaults_initialized = false;
 	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return FlatUIUtils.canUseSharedUI( c )
@@ -223,6 +223,7 @@ public class FlatButtonUI
 		super.uninstallDefaults( b );
 
 		oldStyleValues = null;
+		borderShared = null;
 
 		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
@@ -289,25 +290,9 @@ public class FlatButtonUI
 			return ((FlatHelpButtonIcon)helpButtonIcon).applyStyleProperty( key, value );
 		}
 
-		try {
-			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
-		} catch( UnknownStyleException ex ) {
-			Border border = b.getBorder();
-			if( border instanceof FlatBorder ) {
-				if( borderShared ) {
-					border = FlatStyleSupport.cloneBorder( border );
-					b.setBorder( border );
-					borderShared = false;
-				}
-
-				try {
-					return ((FlatBorder)border).applyStyleProperty( key, value );
-				} catch( UnknownStyleException ex2 ) {
-					// ignore
-				}
-			}
-			throw ex;
-		}
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, b, borderShared );
 	}
 
 	static boolean isContentAreaFilled( Component c ) {

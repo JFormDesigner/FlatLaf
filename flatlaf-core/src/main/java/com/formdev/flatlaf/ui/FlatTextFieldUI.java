@@ -27,6 +27,7 @@ import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -34,7 +35,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
@@ -42,7 +42,6 @@ import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
 
@@ -91,7 +90,7 @@ public class FlatTextFieldUI
 
 	private FocusListener focusListener;
 	private Map<String, Object> oldStyleValues;
-	private boolean borderShared = true;
+	private AtomicBoolean borderShared;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextFieldUI();
@@ -136,6 +135,7 @@ public class FlatTextFieldUI
 		oldInactiveBackground = null;
 
 		oldStyleValues = null;
+		borderShared = null;
 
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
@@ -208,25 +208,9 @@ public class FlatTextFieldUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		try {
-			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
-		} catch( UnknownStyleException ex ) {
-			Border border = getComponent().getBorder();
-			if( border instanceof FlatBorder ) {
-				if( borderShared ) {
-					border = FlatStyleSupport.cloneBorder( border );
-					getComponent().setBorder( border );
-					borderShared = false;
-				}
-
-				try {
-					return ((FlatBorder)border).applyStyleProperty( key, value );
-				} catch( UnknownStyleException ex2 ) {
-					// ignore
-				}
-			}
-			throw ex;
-		}
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, getComponent(), borderShared );
 	}
 
 	private void updateBackground() {

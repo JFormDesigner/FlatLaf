@@ -33,6 +33,7 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -100,6 +101,7 @@ public class FlatSpinnerUI
 	@Styleable protected Insets padding;
 
 	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSpinnerUI();
@@ -154,6 +156,7 @@ public class FlatSpinnerUI
 		padding = null;
 
 		oldStyleValues = null;
+		borderShared = null;
 
 		MigLayoutVisualPadding.uninstall( spinner );
 	}
@@ -196,7 +199,9 @@ public class FlatSpinnerUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, spinner, borderShared );
 	}
 
 	@Override

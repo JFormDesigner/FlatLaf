@@ -141,7 +141,8 @@ public class FlatStylingTests
 	void comboBox() {
 		FlatComboBoxUI ui = new FlatComboBoxUI();
 
-		// create arrow button
+		// create border and arrow button
+		UIManager.put( "ComboBox.border", new FlatRoundBorder() );
 		ui.installUI( new JComboBox<>() );
 
 		ui.applyStyle( "minimumWidth: 100" );
@@ -165,6 +166,9 @@ public class FlatStylingTests
 		ui.applyStyle( "buttonPressedArrowColor: #fff" );
 
 		ui.applyStyle( "popupFocusedBackground: #fff" );
+
+		// border
+		flatRoundBorder( style -> ui.applyStyle( style ) );
 	}
 
 	@Test
@@ -465,7 +469,8 @@ public class FlatStylingTests
 	void spinner() {
 		FlatSpinnerUI ui = new FlatSpinnerUI();
 
-		// create arrow buttons
+		// create border and arrow buttons
+		UIManager.put( "Spinner.border", new FlatRoundBorder() );
 		ui.installUI( new JSpinner() );
 
 		ui.applyStyle( "minimumWidth: 100" );
@@ -482,6 +487,9 @@ public class FlatStylingTests
 		ui.applyStyle( "buttonHoverArrowColor: #fff" );
 		ui.applyStyle( "buttonPressedArrowColor: #fff" );
 		ui.applyStyle( "padding: 1,2,3,4" );
+
+		// border
+		flatRoundBorder( style -> ui.applyStyle( style ) );
 	}
 
 	@Test
@@ -661,6 +669,12 @@ public class FlatStylingTests
 		applyStyle.accept( "default.borderWidth: 2" );
 		applyStyle.accept( "toolbar.margin: 1,2,3,4" );
 		applyStyle.accept( "toolbar.spacingInsets: 1,2,3,4" );
+		applyStyle.accept( "arc: 6" );
+	}
+
+	private void flatRoundBorder( Consumer<String> applyStyle ) {
+		flatBorder( applyStyle );
+
 		applyStyle.accept( "arc: 6" );
 	}
 

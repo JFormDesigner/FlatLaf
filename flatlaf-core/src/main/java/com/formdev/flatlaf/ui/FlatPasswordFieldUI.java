@@ -27,18 +27,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPasswordFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.icons.FlatCapsLockIcon;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
@@ -92,7 +91,7 @@ public class FlatPasswordFieldUI
 	private FocusListener focusListener;
 	private KeyListener capsLockListener;
 	private Map<String, Object> oldStyleValues;
-	private boolean borderShared = true;
+	private AtomicBoolean borderShared;
 	private boolean capsLockIconShared = true;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -141,6 +140,7 @@ public class FlatPasswordFieldUI
 		oldInactiveBackground = null;
 
 		oldStyleValues = null;
+		borderShared = null;
 
 		MigLayoutVisualPadding.uninstall( getComponent() );
 	}
@@ -222,25 +222,9 @@ public class FlatPasswordFieldUI
 			return ((FlatCapsLockIcon)capsLockIcon).applyStyleProperty( key, value );
 		}
 
-		try {
-			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
-		} catch( UnknownStyleException ex ) {
-			Border border = getComponent().getBorder();
-			if( border instanceof FlatBorder ) {
-				if( borderShared ) {
-					border = FlatStyleSupport.cloneBorder( border );
-					getComponent().setBorder( border );
-					borderShared = false;
-				}
-
-				try {
-					return ((FlatBorder)border).applyStyleProperty( key, value );
-				} catch( UnknownStyleException ex2 ) {
-					// ignore
-				}
-			}
-			throw ex;
-		}
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, getComponent(), borderShared );
 	}
 
 	private void updateBackground() {

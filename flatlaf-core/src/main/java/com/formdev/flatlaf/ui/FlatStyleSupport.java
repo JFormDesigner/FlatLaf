@@ -26,6 +26,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -267,6 +268,30 @@ public class FlatStyleSupport
 				if( superclassName.startsWith( "java." ) || superclassName.startsWith( "javax." ) )
 					throw new UnknownStyleException( key );
 			}
+		}
+	}
+
+	static Object applyToAnnotatedObjectOrBorder( Object obj, String key, Object value,
+		JComponent c, AtomicBoolean borderShared )
+	{
+		try {
+			return applyToAnnotatedObject( obj, key, value );
+		} catch( UnknownStyleException ex ) {
+			Border border = c.getBorder();
+			if( border instanceof FlatBorder ) {
+				if( borderShared.get() ) {
+					border = cloneBorder( border );
+					c.setBorder( border );
+					borderShared.set( false );
+				}
+
+				try {
+					return ((FlatBorder)border).applyStyleProperty( key, value );
+				} catch( UnknownStyleException ex2 ) {
+					// ignore
+				}
+			}
+			throw ex;
 		}
 	}
 

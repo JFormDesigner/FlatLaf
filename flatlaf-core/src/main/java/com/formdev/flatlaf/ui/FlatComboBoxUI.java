@@ -41,6 +41,7 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.CellRendererPane;
@@ -141,6 +142,7 @@ public class FlatComboBoxUI
 
 	private WeakReference<Component> lastRendererComponent;
 	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatComboBoxUI();
@@ -261,6 +263,7 @@ public class FlatComboBoxUI
 		popupFocusedBackground = null;
 
 		oldStyleValues = null;
+		borderShared = null;
 
 		MigLayoutVisualPadding.uninstall( comboBox );
 	}
@@ -440,7 +443,9 @@ public class FlatComboBoxUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, comboBox, borderShared );
 	}
 
 	@Override
