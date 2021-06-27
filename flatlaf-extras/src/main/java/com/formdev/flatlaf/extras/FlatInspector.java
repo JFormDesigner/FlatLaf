@@ -44,6 +44,7 @@ import java.awt.event.WindowListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
@@ -64,6 +65,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -478,9 +480,17 @@ public class FlatInspector
 
 		if( c instanceof JComponent ) {
 			try {
-				Field f = JComponent.class.getDeclaredField( "ui" );
-				f.setAccessible( true );
-				Object ui = f.get( c );
+				Object ui;
+				if( SystemInfo.isJava_9_orLater ) {
+					// Java 9+: use public method JComponent.getUI()
+					Method m = JComponent.class.getMethod( "getUI" );
+					ui = m.invoke( c );
+				} else {
+					// Java 8: read protected field 'ui'
+					Field f = JComponent.class.getDeclaredField( "ui" );
+					f.setAccessible( true );
+					ui = f.get( c );
+				}
 				appendRow( buf, "UI", (ui != null ? toString( ui.getClass(), classHierarchy ) : "null") );
 			} catch( Exception ex ) {
 				// ignore
