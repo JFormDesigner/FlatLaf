@@ -53,6 +53,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.IntConsumer;
@@ -84,6 +85,9 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.JavaCompatibility;
@@ -101,7 +105,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.font							Font
  * @uiDefault TabbedPane.background						Color
  * @uiDefault TabbedPane.foreground						Color
- * @uiDefault TabbedPane.shadow							Color	used for scroll arrows and cropped line
+ * @uiDefault TabbedPane.shadow							Color	used for cropped line
  * @uiDefault TabbedPane.textIconGap					int
  * @uiDefault TabbedPane.tabInsets						Insets
  * @uiDefault TabbedPane.selectedTabPadInsets			Insets	unused
@@ -177,43 +181,43 @@ public class FlatTabbedPaneUI
 	private static Set<KeyStroke> focusBackwardTraversalKeys;
 
 	protected Color foreground;
-	protected Color disabledForeground;
-	protected Color selectedBackground;
-	protected Color selectedForeground;
-	protected Color underlineColor;
-	protected Color disabledUnderlineColor;
-	protected Color hoverColor;
-	protected Color focusColor;
-	protected Color tabSeparatorColor;
-	protected Color contentAreaColor;
+	@Styleable protected Color disabledForeground;
+	@Styleable protected Color selectedBackground;
+	@Styleable protected Color selectedForeground;
+	@Styleable protected Color underlineColor;
+	@Styleable protected Color disabledUnderlineColor;
+	@Styleable protected Color hoverColor;
+	@Styleable protected Color focusColor;
+	@Styleable protected Color tabSeparatorColor;
+	@Styleable protected Color contentAreaColor;
 
 	private int textIconGapUnscaled;
-	protected int minimumTabWidth;
-	protected int maximumTabWidth;
-	protected int tabHeight;
-	protected int tabSelectionHeight;
-	protected int contentSeparatorHeight;
-	protected boolean showTabSeparators;
-	protected boolean tabSeparatorsFullHeight;
-	protected boolean hasFullBorder;
-	protected boolean tabsOpaque = true;
+	@Styleable protected int minimumTabWidth;
+	@Styleable protected int maximumTabWidth;
+	@Styleable protected int tabHeight;
+	@Styleable protected int tabSelectionHeight;
+	@Styleable protected int contentSeparatorHeight;
+	@Styleable protected boolean showTabSeparators;
+	@Styleable protected boolean tabSeparatorsFullHeight;
+	@Styleable protected boolean hasFullBorder;
+	@Styleable protected boolean tabsOpaque = true;
 
-	private int tabsPopupPolicy;
-	private int scrollButtonsPolicy;
-	private int scrollButtonsPlacement;
+	@Styleable private int tabsPopupPolicy;
+	@Styleable private int scrollButtonsPolicy;
+	@Styleable private int scrollButtonsPlacement;
 
-	private int tabAreaAlignment;
-	private int tabAlignment;
-	private int tabWidthMode;
+	@Styleable private int tabAreaAlignment;
+	@Styleable private int tabAlignment;
+	@Styleable private int tabWidthMode;
 	protected Icon closeIcon;
 
-	protected String arrowType;
-	protected Insets buttonInsets;
-	protected int buttonArc;
-	protected Color buttonHoverBackground;
-	protected Color buttonPressedBackground;
+	@Styleable protected String arrowType;
+	@Styleable protected Insets buttonInsets;
+	@Styleable protected int buttonArc;
+	@Styleable protected Color buttonHoverBackground;
+	@Styleable protected Color buttonPressedBackground;
 
-	protected String moreTabsButtonToolTipText;
+	@Styleable protected String moreTabsButtonToolTipText;
 
 	protected JViewport tabViewport;
 	protected FlatWheelTabScroller wheelTabScroller;
@@ -231,6 +235,8 @@ public class FlatTabbedPaneUI
 	private boolean pressedTabClose;
 
 	private Object[] oldRenderingHints;
+	private Map<String, Object> oldStyleValues;
+	private boolean closeIconShared = true;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
@@ -259,6 +265,8 @@ public class FlatTabbedPaneUI
 		buttonPressedBackground = UIManager.getColor( "TabbedPane.buttonPressedBackground" );
 
 		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -313,6 +321,7 @@ public class FlatTabbedPaneUI
 		tabAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAlignment" ), CENTER );
 		tabWidthMode = parseTabWidthMode( UIManager.getString( "TabbedPane.tabWidthMode" ) );
 		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
+		closeIconShared = true;
 
 		buttonInsets = UIManager.getInsets( "TabbedPane.buttonInsets" );
 		buttonArc = UIManager.getInt( "TabbedPane.buttonArc" );
@@ -360,6 +369,8 @@ public class FlatTabbedPaneUI
 
 		buttonHoverBackground = null;
 		buttonPressedBackground = null;
+
+		oldStyleValues = null;
 
 		MigLayoutVisualPadding.uninstall( tabPane );
 	}
@@ -556,6 +567,63 @@ public class FlatTabbedPaneUI
 	@Override
 	protected JButton createScrollButton( int direction ) {
 		return new FlatScrollableTabButton( direction );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		// update buttons
+		for( Component c : tabPane.getComponents() ) {
+			if( c instanceof FlatTabAreaButton )
+				((FlatTabAreaButton)c).updateStyle();
+		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		// close icon
+		if( key.startsWith( "close" ) ) {
+			if( !(closeIcon instanceof FlatTabbedPaneCloseIcon) )
+				return new UnknownStyleException( key );
+
+			if( closeIconShared ) {
+				closeIcon = FlatStyleSupport.cloneIcon( closeIcon );
+				closeIconShared = false;
+			}
+
+			return ((FlatTabbedPaneCloseIcon)closeIcon).applyStyleProperty( key, value );
+		}
+
+		if( value instanceof String ) {
+			switch( key ) {
+				case "tabsPopupPolicy": value = parseTabsPopupPolicy( (String) value ); break;
+				case "scrollButtonsPolicy": value = parseScrollButtonsPolicy( (String) value ); break;
+				case "scrollButtonsPlacement": value = parseScrollButtonsPlacement( (String) value ); break;
+
+				case "tabAreaAlignment": value = parseAlignment( (String) value, LEADING ); break;
+				case "tabAlignment": value = parseAlignment( (String) value, CENTER ); break;
+				case "tabWidthMode": value = parseTabWidthMode( (String) value ); break;
+			}
+		} else {
+			Object oldValue = null;
+			switch( key ) {
+				// BasicTabbedPaneUI
+				case "tabInsets": oldValue = tabInsets; tabInsets = (Insets) value; return oldValue;
+				case "tabAreaInsets": oldValue = tabAreaInsets; tabAreaInsets = (Insets) value; return oldValue;
+				case "textIconGap":
+					oldValue = textIconGapUnscaled;
+					textIconGapUnscaled = (int) value;
+					textIconGap = scale( textIconGapUnscaled );
+					return oldValue;
+			}
+		}
+
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	protected void setRolloverTab( int x, int y ) {
@@ -1556,6 +1624,12 @@ public class FlatTabbedPaneUI
 			setArrowWidth( 10 );
 		}
 
+		protected void updateStyle() {
+			updateStyle( arrowType,
+				FlatTabbedPaneUI.this.foreground, FlatTabbedPaneUI.this.disabledForeground,
+				null, buttonHoverBackground, null, buttonPressedBackground );
+		}
+
 		@Override
 		protected Color deriveBackground( Color background ) {
 			return FlatUIUtils.deriveColor( background, tabPane.getBackground() );
@@ -2339,6 +2413,12 @@ public class FlatTabbedPaneUI
 					tabPane.revalidate();
 					tabPane.repaint();
 					ensureSelectedTabIsVisibleLater();
+					break;
+
+				case STYLE:
+					applyStyle( e.getNewValue() );
+					tabPane.revalidate();
+					tabPane.repaint();
 					break;
 			}
 		}

@@ -524,6 +524,68 @@ public class FlatStylingTests
 	}
 
 	@Test
+	void tabbedPane() {
+		FlatTabbedPaneUI ui = new FlatTabbedPaneUI();
+
+		UIManager.put( "TabbedPane.closeIcon", new FlatTabbedPaneCloseIcon() );
+		ui.installUI( new JTabbedPane() );
+
+		ui.applyStyle( "tabInsets: 1,2,3,4" );
+		ui.applyStyle( "tabAreaInsets: 1,2,3,4" );
+
+		ui.applyStyle( "disabledForeground: #fff" );
+
+		ui.applyStyle( "selectedBackground: #fff" );
+		ui.applyStyle( "selectedForeground: #fff" );
+		ui.applyStyle( "underlineColor: #fff" );
+		ui.applyStyle( "disabledUnderlineColor: #fff" );
+		ui.applyStyle( "hoverColor: #fff" );
+		ui.applyStyle( "focusColor: #fff" );
+		ui.applyStyle( "tabSeparatorColor: #fff" );
+		ui.applyStyle( "contentAreaColor: #fff" );
+
+		ui.applyStyle( "textIconGap: 4" );
+		ui.applyStyle( "minimumTabWidth: 50" );
+		ui.applyStyle( "maximumTabWidth: 100" );
+		ui.applyStyle( "tabHeight: 30" );
+		ui.applyStyle( "tabSelectionHeight: 3" );
+		ui.applyStyle( "contentSeparatorHeight: 1" );
+		ui.applyStyle( "showTabSeparators: false" );
+		ui.applyStyle( "tabSeparatorsFullHeight: false" );
+		ui.applyStyle( "hasFullBorder: false" );
+		ui.applyStyle( "tabsOpaque: false" );
+
+		ui.applyStyle( "tabsPopupPolicy: asNeeded" );
+		ui.applyStyle( "scrollButtonsPolicy: asNeeded" );
+		ui.applyStyle( "scrollButtonsPlacement: both" );
+
+		ui.applyStyle( "tabAreaAlignment: leading" );
+		ui.applyStyle( "tabAlignment: center" );
+		ui.applyStyle( "tabWidthMode: preferred" );
+
+		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "buttonInsets: 1,2,3,4" );
+		ui.applyStyle( "buttonArc: 3" );
+		ui.applyStyle( "buttonHoverBackground: #fff" );
+		ui.applyStyle( "buttonPressedBackground: #fff" );
+
+		ui.applyStyle( "moreTabsButtonToolTipText: Gimme more" );
+
+		// FlatTabbedPaneCloseIcon
+		ui.applyStyle( "closeSize: 16,16" );
+		ui.applyStyle( "closeArc: 4" );
+		ui.applyStyle( "closeCrossPlainSize: {float}7.5" );
+		ui.applyStyle( "closeCrossFilledSize: {float}7.5" );
+		ui.applyStyle( "closeCrossLineWidth: {float}1" );
+		ui.applyStyle( "closeBackground: #fff" );
+		ui.applyStyle( "closeForeground: #fff" );
+		ui.applyStyle( "closeHoverBackground: #fff" );
+		ui.applyStyle( "closeHoverForeground: #fff" );
+		ui.applyStyle( "closePressedBackground: #fff" );
+		ui.applyStyle( "closePressedForeground: #fff" );
+	}
+
+	@Test
 	void table() {
 		FlatTableUI ui = new FlatTableUI();
 		ui.installUI( new JTable() );
