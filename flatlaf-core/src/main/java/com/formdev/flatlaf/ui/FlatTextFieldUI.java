@@ -199,13 +199,13 @@ public class FlatTextFieldUI
 		if( !(background instanceof UIResource) )
 			return background;
 
+		// focused
+		if( focusedBackground != null && FlatUIUtils.isPermanentFocusOwner( c ) )
+			return focusedBackground;
+
 		// for compatibility with IntelliJ themes
 		if( isIntelliJTheme && (!c.isEnabled() || !c.isEditable()) )
 			return FlatUIUtils.getParentBackground( c );
-
-		// focused and editable
-		if( focusedBackground != null && c.isEditable() && FlatUIUtils.isPermanentFocusOwner( c ) )
-			return focusedBackground;
 
 		return background;
 	}
