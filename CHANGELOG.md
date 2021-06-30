@@ -18,6 +18,7 @@ FlatLaf Change Log
 - Fixed white lines at bottom and right side of window (in dark themes on HiDPI
   screens with scaling enabled).
 - ScrollBar: Fixed left/top arrow icon location (if visible). (issue #329)
+- Spinner: Fixed up/down arrow icon location.
 - ToolTip: Fixed positioning of huge tooltips. (issue #333)
 
 

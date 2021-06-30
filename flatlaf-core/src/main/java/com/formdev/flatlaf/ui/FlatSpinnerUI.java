@@ -276,7 +276,7 @@ public class FlatSpinnerUI
 		FlatArrowButton button = new FlatArrowButton( direction, arrowType, buttonArrowColor,
 			buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
 		button.setName( name );
-		button.setYOffset( (direction == SwingConstants.NORTH) ? 1 : -1 );
+		button.setYOffset( (direction == SwingConstants.NORTH) ? 1.25f : -1.25f );
 		if( direction == SwingConstants.NORTH )
 			installNextButtonListeners( button );
 		else
