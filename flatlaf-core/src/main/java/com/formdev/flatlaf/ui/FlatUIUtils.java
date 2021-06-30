@@ -679,8 +679,10 @@ public class FlatUIUtils
 		int extra = chevron ? 1 : 0;
 
 		// compute arrow location
-		int ax = x + Math.round( ((width - (aw + extra)) / 2f) + UIScale.scale( (float) xOffset ) );
-		int ay = y + Math.round( ((height - (ah + extra)) / 2f) + UIScale.scale( (float) yOffset ) );
+		float ox = ((width - (aw + extra)) / 2f) + UIScale.scale( (float) xOffset );
+		float oy = ((height - (ah + extra)) / 2f) + UIScale.scale( (float) yOffset );
+		int ax = x + ((direction == SwingConstants.WEST) ? -Math.round( -ox ) : Math.round( ox ));
+		int ay = y + ((direction == SwingConstants.NORTH) ? -Math.round( -oy ) : Math.round( oy ));
 
 		// paint arrow
 		g.translate( ax, ay );
