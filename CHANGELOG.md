@@ -1,6 +1,19 @@
 FlatLaf Change Log
 ==================
 
+## 1.4-SNAPSHOT
+
+#### New features and improvements
+
+- PasswordField: UI delegate `FlatPasswordFieldUI` now extends `FlatTextFieldUI`
+  (instead of `BasicPasswordFieldUI`) to avoid duplicate code and for easier
+  extensibility.
+
+#### Fixed bugs
+
+- TBD
+
+
 ## 1.3
 
 #### New features and improvements
