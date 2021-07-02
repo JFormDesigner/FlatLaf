@@ -226,6 +226,9 @@ public class FlatSpinnerUI
 			: null;
 	}
 
+	/**
+	 * @since 1.3
+	 */
 	public static boolean isPermanentFocusOwner( JSpinner spinner ) {
 		if( FlatUIUtils.isPermanentFocusOwner( spinner ) )
 			return true;

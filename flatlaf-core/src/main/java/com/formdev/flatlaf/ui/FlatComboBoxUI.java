@@ -607,6 +607,9 @@ public class FlatComboBoxUI
 		return parentParent != null && !comboBox.getBackground().equals( parentParent.getBackground() );
 	}
 
+	/**
+	 * @since 1.3
+	 */
 	public static boolean isPermanentFocusOwner( JComboBox<?> comboBox ) {
 		if( comboBox.isEditable() ) {
 			Component editorComponent = comboBox.getEditor().getEditorComponent();
