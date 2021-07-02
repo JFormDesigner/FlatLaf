@@ -133,6 +133,8 @@ public class FlatComboBoxUI
 
 	protected Color popupBackground;
 
+	protected Insets paddingUnscaled;
+
 	private MouseListener hoverListener;
 	protected boolean hover;
 	protected boolean pressed;
@@ -223,7 +225,8 @@ public class FlatComboBoxUI
 			comboBox.setMaximumRowCount( maximumRowCount );
 
 		// scale
-		padding = UIScale.scale( padding );
+		paddingUnscaled = padding;
+		padding = UIScale.scale( paddingUnscaled );
 
 		MigLayoutVisualPadding.install( comboBox );
 	}
@@ -275,11 +278,6 @@ public class FlatComboBoxUI
 						if( editor != null )
 							editor.setBounds( rectangleForCurrentValue() );
 					}
-				}
-
-				if( editor != null && padding != null ) {
-					// fix editor bounds by subtracting padding
-					editor.setBounds( FlatUIUtils.subtractInsets( editor.getBounds(), padding ) );
 				}
 			}
 		};
@@ -361,9 +359,16 @@ public class FlatComboBoxUI
 	protected void configureEditor() {
 		super.configureEditor();
 
-		// remove default text field border from editor
-		if( editor instanceof JTextField && ((JTextField)editor).getBorder() instanceof FlatTextBorder )
-			((JTextField)editor).setBorder( BorderFactory.createEmptyBorder() );
+		if( editor instanceof JTextField ) {
+			JTextField textField = (JTextField) editor;
+
+			// remove default text field border from editor
+			if( textField.getBorder() instanceof FlatTextBorder )
+				textField.setBorder( BorderFactory.createEmptyBorder() );
+
+			// editor padding
+			textField.putClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, paddingUnscaled );
+		}
 
 		// explicitly make non-opaque
 		if( editor instanceof JComponent )
@@ -547,6 +552,9 @@ public class FlatComboBoxUI
 		@SuppressWarnings( "unchecked" )
 		ListCellRenderer<Object> renderer = comboBox.getRenderer();
 		uninstallCellPaddingBorder( renderer );
+
+		// update padding
+		padding = UIScale.scale( paddingUnscaled );
 
 		Dimension displaySize = super.getDisplaySize();
 

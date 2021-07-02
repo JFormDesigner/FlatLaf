@@ -13,7 +13,11 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
-- TBD
+- ComboBox (editable) and Spinner: Increased size of internal text field to the
+  component border so that it behaves like plain text field (mouse click to left
+  of text now positions caret to first character instead of opening ComboBox
+  popup; mouse cursor is now of type "text" within the whole component, except
+  for arrow buttons). (issue #330)
 
 
 ## 1.3

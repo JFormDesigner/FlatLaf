@@ -123,9 +123,6 @@ public class FlatSpinnerUI
 		buttonPressedArrowColor = UIManager.getColor( "Spinner.buttonPressedArrowColor" );
 		padding = UIManager.getInsets( "Spinner.padding" );
 
-		// scale
-		padding = scale( padding );
-
 		MigLayoutVisualPadding.install( spinner );
 	}
 
@@ -184,6 +181,7 @@ public class FlatSpinnerUI
 		if( textField != null )
 			textField.setOpaque( false );
 
+		updateEditorPadding();
 		updateEditorColors();
 		return editor;
 	}
@@ -194,6 +192,8 @@ public class FlatSpinnerUI
 
 		removeEditorFocusListener( oldEditor );
 		addEditorFocusListener( newEditor );
+
+		updateEditorPadding();
 		updateEditorColors();
 	}
 
@@ -207,6 +207,12 @@ public class FlatSpinnerUI
 		JTextField textField = getEditorTextField( editor );
 		if( textField != null )
 			textField.removeFocusListener( getHandler() );
+	}
+
+	private void updateEditorPadding() {
+		JTextField textField = getEditorTextField( spinner.getEditor() );
+		if( textField != null )
+			textField.putClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, padding );
 	}
 
 	private void updateEditorColors() {
@@ -373,6 +379,7 @@ public class FlatSpinnerUI
 		@Override
 		public Dimension preferredLayoutSize( Container parent ) {
 			Insets insets = parent.getInsets();
+			Insets padding = scale( FlatSpinnerUI.this.padding );
 			Dimension editorSize = (editor != null) ? editor.getPreferredSize() : new Dimension( 0, 0 );
 
 			// the arrows width is the same as the inner height so that the arrows area is square
@@ -397,7 +404,7 @@ public class FlatSpinnerUI
 
 			if( nextButton == null && previousButton == null ) {
 				if( editor != null )
-					editor.setBounds( FlatUIUtils.subtractInsets( r, padding ) );
+					editor.setBounds( r );
 				return;
 			}
 
@@ -417,7 +424,7 @@ public class FlatSpinnerUI
 			}
 
 			if( editor != null )
-				editor.setBounds( FlatUIUtils.subtractInsets( editorRect, padding ) );
+				editor.setBounds( editorRect );
 
 			int nextHeight = (buttonsRect.height / 2) + (buttonsRect.height % 2); // round up
 			if( nextButton != null )
