@@ -10,7 +10,7 @@ FlatLaf Change Log
   `PasswordField.focusedBackground`, `FormattedTextField.focusedBackground`,
   `TextArea.focusedBackground`, `TextPane.focusedBackground`,
   `EditorPane.focusedBackground`, `ComboBox.focusedBackground`,
-  `ComboBox.buttonFocusedBackground`, `ComboBox.popupFocusedBackground` and
+  `ComboBox.buttonFocusedBackground`, `ComboBox.popupBackground` and
   `Spinner.focusedBackground`). (issue #335)
 
 #### Fixed bugs
