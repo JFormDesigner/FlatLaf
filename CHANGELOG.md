@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- TextField, FormattedTextField and PasswordField: Support adding extra padding.
+  (set client property `JTextField.padding` to `Insets`).
 - PasswordField: UI delegate `FlatPasswordFieldUI` now extends `FlatTextFieldUI`
   (instead of `BasicPasswordFieldUI`) to avoid duplicate code and for easier
   extensibility.

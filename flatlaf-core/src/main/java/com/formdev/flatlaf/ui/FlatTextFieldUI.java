@@ -24,6 +24,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JComboBox;
@@ -40,6 +41,7 @@ import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
@@ -142,6 +144,7 @@ public class FlatTextFieldUI
 		switch( e.getPropertyName() ) {
 			case FlatClientProperties.PLACEHOLDER_TEXT:
 			case FlatClientProperties.COMPONENT_ROUND_RECT:
+			case FlatClientProperties.TEXT_FIELD_PADDING:
 				c.repaint();
 				break;
 
@@ -263,5 +266,28 @@ public class FlatTextFieldUI
 		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
 		size.width = Math.max( size.width, scale( minimumWidth ) + Math.round( focusWidth * 2 ) );
 		return size;
+	}
+
+	@Override
+	protected Rectangle getVisibleEditorRect() {
+		Rectangle r = super.getVisibleEditorRect();
+		if( r != null ) {
+			// remove padding
+			Insets padding = getPadding();
+			if( padding != null ) {
+				r = FlatUIUtils.subtractInsets( r, padding );
+				r.width = Math.max( r.width, 0 );
+				r.height = Math.max( r.height, 0 );
+			}
+		}
+		return r;
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	protected Insets getPadding() {
+		Object padding = getComponent().getClientProperty( FlatClientProperties.TEXT_FIELD_PADDING );
+		return (padding instanceof Insets) ? UIScale.scale( (Insets) padding ) : null;
 	}
 }

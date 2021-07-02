@@ -16,8 +16,12 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.Component;
+import java.awt.Insets;
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.text.DefaultEditorKit;
+import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
 
 /**
@@ -41,16 +45,40 @@ public class FlatTextComponentsTest
 		textField1.setText( "new text" );
 	}
 
+	private void paddingChanged() {
+		Insets padding = new Insets(
+			(int) topPaddingField.getValue(),
+			(int) leftPaddingField.getValue(),
+			(int) bottomPaddingField.getValue(),
+			(int) rightPaddingField.getValue() );
+		if( padding.equals( new Insets( 0, 0, 0, 0 ) ) )
+			padding = null;
+
+		for( Component c : getComponents() ) {
+			if( c instanceof JTextField )
+				((JTextField)c).putClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, padding );
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel textFieldLabel = new JLabel();
 		textField1 = new JTextField();
 		JTextField textField3 = new JTextField();
 		JTextField textField2 = new JTextField();
-		JButton button1 = new JButton();
 		JLabel formattedTextFieldLabel = new JLabel();
 		JFormattedTextField formattedTextField1 = new JFormattedTextField();
 		JFormattedTextField formattedTextField3 = new JFormattedTextField();
+		JPanel panel1 = new JPanel();
+		JButton button1 = new JButton();
+		JLabel leftPaddingLabel = new JLabel();
+		leftPaddingField = new JSpinner();
+		JLabel rightPaddingLabel = new JLabel();
+		rightPaddingField = new JSpinner();
+		JLabel topPaddingLabel = new JLabel();
+		topPaddingField = new JSpinner();
+		JLabel bottomPaddingLabel = new JLabel();
+		bottomPaddingField = new JSpinner();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
@@ -134,12 +162,6 @@ public class FlatTextComponentsTest
 		textField2.setName("textField2");
 		add(textField2, "cell 3 0");
 
-		//---- button1 ----
-		button1.setText("change text");
-		button1.setName("button1");
-		button1.addActionListener(e -> changeText());
-		add(button1, "cell 4 0");
-
 		//---- formattedTextFieldLabel ----
 		formattedTextFieldLabel.setText("JFormattedTextField:");
 		formattedTextFieldLabel.setDisplayedMnemonic('F');
@@ -158,6 +180,70 @@ public class FlatTextComponentsTest
 		formattedTextField3.setComponentPopupMenu(popupMenu1);
 		formattedTextField3.setName("formattedTextField3");
 		add(formattedTextField3, "cell 2 1,growx");
+
+		//======== panel1 ========
+		{
+			panel1.setBorder(new TitledBorder("Control"));
+			panel1.setName("panel1");
+			panel1.setLayout(new MigLayout(
+				"hidemode 3",
+				// columns
+				"[fill]" +
+				"[fill]",
+				// rows
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]" +
+				"[]"));
+
+			//---- button1 ----
+			button1.setText("change text");
+			button1.setName("button1");
+			button1.addActionListener(e -> changeText());
+			panel1.add(button1, "cell 0 0 2 1,alignx left,growx 0");
+
+			//---- leftPaddingLabel ----
+			leftPaddingLabel.setText("Left padding:");
+			leftPaddingLabel.setName("leftPaddingLabel");
+			panel1.add(leftPaddingLabel, "cell 0 1");
+
+			//---- leftPaddingField ----
+			leftPaddingField.setName("leftPaddingField");
+			leftPaddingField.addChangeListener(e -> paddingChanged());
+			panel1.add(leftPaddingField, "cell 1 1");
+
+			//---- rightPaddingLabel ----
+			rightPaddingLabel.setText("Right padding:");
+			rightPaddingLabel.setName("rightPaddingLabel");
+			panel1.add(rightPaddingLabel, "cell 0 2");
+
+			//---- rightPaddingField ----
+			rightPaddingField.setName("rightPaddingField");
+			rightPaddingField.addChangeListener(e -> paddingChanged());
+			panel1.add(rightPaddingField, "cell 1 2");
+
+			//---- topPaddingLabel ----
+			topPaddingLabel.setText("Top padding:");
+			topPaddingLabel.setName("topPaddingLabel");
+			panel1.add(topPaddingLabel, "cell 0 3");
+
+			//---- topPaddingField ----
+			topPaddingField.setName("topPaddingField");
+			topPaddingField.addChangeListener(e -> paddingChanged());
+			panel1.add(topPaddingField, "cell 1 3");
+
+			//---- bottomPaddingLabel ----
+			bottomPaddingLabel.setText("Bottom padding:");
+			bottomPaddingLabel.setName("bottomPaddingLabel");
+			panel1.add(bottomPaddingLabel, "cell 0 4");
+
+			//---- bottomPaddingField ----
+			bottomPaddingField.setName("bottomPaddingField");
+			bottomPaddingField.addChangeListener(e -> paddingChanged());
+			panel1.add(bottomPaddingField, "cell 1 4");
+		}
+		add(panel1, "cell 4 0 1 6,aligny top,growy 0");
 
 		//---- passwordFieldLabel ----
 		passwordFieldLabel.setText("JPasswordField:");
@@ -301,7 +387,7 @@ public class FlatTextComponentsTest
 		comboBox3.setPrototypeDisplayValue("12345");
 		comboBox3.setComponentPopupMenu(popupMenu1);
 		comboBox3.setName("comboBox3");
-		add(comboBox3, "cell 2 6,growx");
+		add(comboBox3, "cell 2 6,growx,wmin 50");
 
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");
@@ -361,5 +447,9 @@ public class FlatTextComponentsTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JTextField textField1;
+	private JSpinner leftPaddingField;
+	private JSpinner rightPaddingField;
+	private JSpinner topPaddingField;
+	private JSpinner bottomPaddingField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }
