@@ -563,6 +563,9 @@ public class FlatInspector
 			String simpleName = (dot >= 0) ? name.substring( dot + 1 ) : name;
 			buf.append( simpleName ).append( ' ' ).append( toDimmedText( "(" + pkg + ")" ) );
 
+			if( UIResource.class.isAssignableFrom( cls ) )
+				buf.append( " UI" );
+
 			if( !classHierarchy )
 				break;
 
@@ -623,11 +626,14 @@ public class FlatInspector
 
 		String s = toString( b.getClass(), classHierarchy );
 
-		if( b instanceof EmptyBorder )
-			s += '(' + toString( ((EmptyBorder)b).getBorderInsets() ) + ')';
-
-		if( b instanceof UIResource )
-			s += " UI";
+		if( b instanceof EmptyBorder ) {
+			String borderInsets = " (" + toString( ((EmptyBorder)b).getBorderInsets() ) + ')';
+			int brIndex = s.indexOf( "<br>" );
+			if( brIndex >= 0 )
+				s = s.substring( 0, brIndex ) + borderInsets + s.substring( brIndex );
+			else
+				s += borderInsets;
+		}
 
 		return s;
 	}
