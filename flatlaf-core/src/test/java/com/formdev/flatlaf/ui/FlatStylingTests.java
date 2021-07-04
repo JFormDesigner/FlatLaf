@@ -24,7 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.icons.*;
 
 /**
@@ -32,6 +35,11 @@ import com.formdev.flatlaf.icons.*;
  */
 public class FlatStylingTests
 {
+	@BeforeAll
+	static void setup() {
+		FlatLightLaf.setup();
+	}
+
 	@Test
 	void parse() {
 		assertEquals( null, FlatStyleSupport.parse( null ) );
@@ -62,12 +70,8 @@ public class FlatStylingTests
 
 	@Test
 	void button() {
-		FlatButtonUI ui = new FlatButtonUI( false );
-
-		// create border
-		UIManager.put( "Button.border", new FlatButtonBorder() );
 		JButton b = new JButton();
-		ui.installUI( b );
+		FlatButtonUI ui = (FlatButtonUI) b.getUI();
 
 		button( b, ui );
 
@@ -126,11 +130,9 @@ public class FlatStylingTests
 
 	@Test
 	void checkBox() {
-		FlatCheckBoxUI ui = new FlatCheckBoxUI( false );
+		JCheckBox c = new JCheckBox();
+		FlatCheckBoxUI ui = (FlatCheckBoxUI) c.getUI();
 
-		// assign icon
-		UIManager.put( "CheckBox.icon", new FlatCheckBoxIcon() );
-		ui.installDefaults( new JCheckBox() );
 		assertTrue( ui.getDefaultIcon() instanceof FlatCheckBoxIcon );
 
 		// FlatCheckBoxUI extends FlatRadioButtonUI
@@ -139,11 +141,8 @@ public class FlatStylingTests
 
 	@Test
 	void comboBox() {
-		FlatComboBoxUI ui = new FlatComboBoxUI();
-
-		// create border and arrow button
-		UIManager.put( "ComboBox.border", new FlatRoundBorder() );
-		ui.installUI( new JComboBox<>() );
+		JComboBox<Object> c = new JComboBox<>();
+		FlatComboBoxUI ui = (FlatComboBoxUI) c.getUI();
 
 		ui.applyStyle( "minimumWidth: 100" );
 		ui.applyStyle( "editorColumns: 10" );
@@ -173,10 +172,8 @@ public class FlatStylingTests
 
 	@Test
 	void editorPane() {
-		FlatEditorPaneUI ui = new FlatEditorPaneUI();
-
-		// for FlatEditorPaneUI.updateBackground()
-		ui.installUI( new JEditorPane() );
+		JEditorPane c = new JEditorPane();
+		FlatEditorPaneUI ui = (FlatEditorPaneUI) c.getUI();
 
 		ui.applyStyle( "minimumWidth: 100" );
 		ui.applyStyle( "disabledBackground: #fff" );
@@ -186,11 +183,8 @@ public class FlatStylingTests
 
 	@Test
 	void formattedTextField() {
-		FlatFormattedTextFieldUI ui = new FlatFormattedTextFieldUI();
-
-		// create border
-		UIManager.put( "FormattedTextField.border", new FlatTextBorder() );
-		ui.installUI( new JFormattedTextField() );
+		JFormattedTextField c = new JFormattedTextField();
+		FlatFormattedTextFieldUI ui = (FlatFormattedTextFieldUI) c.getUI();
 
 		// FlatFormattedTextFieldUI extends FlatTextFieldUI
 		textField( ui );
@@ -198,15 +192,16 @@ public class FlatStylingTests
 
 	@Test
 	void label() {
-		FlatLabelUI ui = new FlatLabelUI( false );
+		JLabel c = new JLabel();
+		FlatLabelUI ui = (FlatLabelUI) c.getUI();
 
 		ui.applyStyle( "disabledForeground: #fff" );
 	}
 
 	@Test
 	void list() {
-		FlatListUI ui = new FlatListUI();
-		ui.installUI( new JList<>() );
+		JList<Object> c = new JList<>();
+		FlatListUI ui = (FlatListUI) c.getUI();
 
 		ui.applyStyle( "selectionBackground: #fff" );
 		ui.applyStyle( "selectionForeground: #fff" );
@@ -221,10 +216,8 @@ public class FlatStylingTests
 
 	@Test
 	void menu() {
-		UIManager.put( "Menu.arrowIcon", new FlatMenuArrowIcon() );
-		UIManager.put( "Menu.checkIcon", null );
-		FlatMenuUI ui = new FlatMenuUI();
-		ui.installUI( new JMenu() );
+		JMenu c = new JMenu();
+		FlatMenuUI ui = (FlatMenuUI) c.getUI();
 
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
@@ -233,10 +226,8 @@ public class FlatStylingTests
 
 	@Test
 	void menuItem() {
-		UIManager.put( "MenuItem.arrowIcon", new FlatMenuItemArrowIcon() );
-		UIManager.put( "MenuItem.checkIcon", null );
-		FlatMenuItemUI ui = new FlatMenuItemUI();
-		ui.installUI( new JMenuItem() );
+		JMenuItem c = new JMenuItem();
+		FlatMenuItemUI ui = (FlatMenuItemUI) c.getUI();
 
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
@@ -245,10 +236,8 @@ public class FlatStylingTests
 
 	@Test
 	void checkBoxMenuItem() {
-		UIManager.put( "CheckBoxMenuItem.arrowIcon", new FlatMenuItemArrowIcon() );
-		UIManager.put( "CheckBoxMenuItem.checkIcon", new FlatCheckBoxMenuItemIcon() );
-		FlatCheckBoxMenuItemUI ui = new FlatCheckBoxMenuItemUI();
-		ui.installUI( new JCheckBoxMenuItem() );
+		JCheckBoxMenuItem c = new JCheckBoxMenuItem();
+		FlatCheckBoxMenuItemUI ui = (FlatCheckBoxMenuItemUI) c.getUI();
 
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
@@ -258,10 +247,8 @@ public class FlatStylingTests
 
 	@Test
 	void radioButtonMenuItem() {
-		UIManager.put( "RadioButtonMenuItem.arrowIcon", new FlatMenuItemArrowIcon() );
-		UIManager.put( "RadioButtonMenuItem.checkIcon", new FlatRadioButtonMenuItemIcon() );
-		FlatRadioButtonMenuItemUI ui = new FlatRadioButtonMenuItemUI();
-		ui.installUI( new JRadioButtonMenuItem() );
+		JRadioButtonMenuItem c = new JRadioButtonMenuItem();
+		FlatRadioButtonMenuItemUI ui = (FlatRadioButtonMenuItemUI) c.getUI();
 
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
@@ -310,12 +297,8 @@ public class FlatStylingTests
 
 	@Test
 	void passwordField() {
-		FlatPasswordFieldUI ui = new FlatPasswordFieldUI();
-
-		// create border and capsLockIcon
-		UIManager.put( "PasswordField.border", new FlatTextBorder() );
-		UIManager.put( "PasswordField.capsLockIcon", new FlatCapsLockIcon() );
-		ui.installUI( new JPasswordField() );
+		JPasswordField c = new JPasswordField();
+		FlatPasswordFieldUI ui = (FlatPasswordFieldUI) c.getUI();
 
 		ui.applyStyle( "minimumWidth: 100" );
 		ui.applyStyle( "disabledBackground: #fff" );
@@ -333,7 +316,8 @@ public class FlatStylingTests
 
 	@Test
 	void popupMenuSeparator() {
-		FlatPopupMenuSeparatorUI ui = new FlatPopupMenuSeparatorUI( false );
+		JPopupMenu.Separator c = new JPopupMenu.Separator();
+		FlatPopupMenuSeparatorUI ui = (FlatPopupMenuSeparatorUI) c.getUI();
 
 		// FlatPopupMenuSeparatorUI extends FlatSeparatorUI
 		separator( ui );
@@ -341,7 +325,8 @@ public class FlatStylingTests
 
 	@Test
 	void progressBar() {
-		FlatProgressBarUI ui = new FlatProgressBarUI();
+		JProgressBar c = new JProgressBar();
+		FlatProgressBarUI ui = (FlatProgressBarUI) c.getUI();
 
 		ui.applyStyle( "arc: 5" );
 		ui.applyStyle( "horizontalSize: 100,12" );
@@ -350,11 +335,9 @@ public class FlatStylingTests
 
 	@Test
 	void radioButton() {
-		FlatRadioButtonUI ui = new FlatRadioButtonUI( false );
+		JRadioButton c = new JRadioButton();
+		FlatRadioButtonUI ui = (FlatRadioButtonUI) c.getUI();
 
-		// assign icon
-		UIManager.put( "RadioButton.icon", new FlatRadioButtonIcon() );
-		ui.installDefaults( new JRadioButton() ); // assign icon
 		assertTrue( ui.getDefaultIcon() instanceof FlatRadioButtonIcon );
 
 		radioButton( ui );
@@ -402,7 +385,8 @@ public class FlatStylingTests
 
 	@Test
 	void scrollBar() {
-		FlatScrollBarUI ui = new FlatScrollBarUI();
+		JScrollBar c = new JScrollBar();
+		FlatScrollBarUI ui = (FlatScrollBarUI) c.getUI();
 
 		ui.applyStyle( "track: #fff" );
 		ui.applyStyle( "thumb: #fff" );
@@ -432,11 +416,8 @@ public class FlatStylingTests
 
 	@Test
 	void scrollPane() {
-		FlatScrollPaneUI ui = new FlatScrollPaneUI();
-
-		// create border
-		UIManager.put( "ScrollPane.border", new FlatBorder() );
-		ui.installUI( new JScrollPane() );
+		JScrollPane c = new JScrollPane();
+		FlatScrollPaneUI ui = (FlatScrollPaneUI) c.getUI();
 
 		// border
 		flatBorder( style -> ui.applyStyle( style ) );
@@ -444,7 +425,8 @@ public class FlatStylingTests
 
 	@Test
 	void separator() {
-		FlatSeparatorUI ui = new FlatSeparatorUI( false );
+		JSeparator c = new JSeparator();
+		FlatSeparatorUI ui = (FlatSeparatorUI) c.getUI();
 
 		separator( ui );
 	}
@@ -457,7 +439,8 @@ public class FlatStylingTests
 
 	@Test
 	void slider() {
-		FlatSliderUI ui = new FlatSliderUI();
+		JSlider c = new JSlider();
+		FlatSliderUI ui = (FlatSliderUI) c.getUI();
 
 		ui.applyStyle( "trackWidth: 2" );
 		ui.applyStyle( "thumbSize: 12,12" );
@@ -479,11 +462,8 @@ public class FlatStylingTests
 
 	@Test
 	void spinner() {
-		FlatSpinnerUI ui = new FlatSpinnerUI();
-
-		// create border and arrow buttons
-		UIManager.put( "Spinner.border", new FlatRoundBorder() );
-		ui.installUI( new JSpinner() );
+		JSpinner c = new JSpinner();
+		FlatSpinnerUI ui = (FlatSpinnerUI) c.getUI();
 
 		ui.applyStyle( "minimumWidth: 100" );
 		ui.applyStyle( "buttonStyle: button" );
@@ -506,10 +486,8 @@ public class FlatStylingTests
 
 	@Test
 	void splitPane() {
-		FlatSplitPaneUI ui = new FlatSplitPaneUI();
-
-		// create divider and one-touch buttons
-		ui.installUI( new JSplitPane() );
+		JSplitPane c = new JSplitPane();
+		FlatSplitPaneUI ui = (FlatSplitPaneUI) c.getUI();
 
 		ui.applyStyle( "arrowType: chevron" );
 		ui.applyStyle( "oneTouchArrowColor: #fff" );
@@ -525,10 +503,8 @@ public class FlatStylingTests
 
 	@Test
 	void tabbedPane() {
-		FlatTabbedPaneUI ui = new FlatTabbedPaneUI();
-
-		UIManager.put( "TabbedPane.closeIcon", new FlatTabbedPaneCloseIcon() );
-		ui.installUI( new JTabbedPane() );
+		JTabbedPane c = new JTabbedPane();
+		FlatTabbedPaneUI ui = (FlatTabbedPaneUI) c.getUI();
 
 		ui.applyStyle( "tabInsets: 1,2,3,4" );
 		ui.applyStyle( "tabAreaInsets: 1,2,3,4" );
@@ -587,8 +563,8 @@ public class FlatStylingTests
 
 	@Test
 	void table() {
-		FlatTableUI ui = new FlatTableUI();
-		ui.installUI( new JTable() );
+		JTable c = new JTable();
+		FlatTableUI ui = (FlatTableUI) c.getUI();
 
 		ui.applyStyle( "selectionBackground: #fff" );
 		ui.applyStyle( "selectionForeground: #fff" );
@@ -603,7 +579,8 @@ public class FlatStylingTests
 
 	@Test
 	void tableHeader() {
-		FlatTableHeaderUI ui = new FlatTableHeaderUI();
+		JTableHeader c = new JTableHeader();
+		FlatTableHeaderUI ui = (FlatTableHeaderUI) c.getUI();
 
 		ui.applyStyle( "bottomSeparatorColor: #fff" );
 		ui.applyStyle( "height: 20" );
@@ -620,10 +597,8 @@ public class FlatStylingTests
 
 	@Test
 	void textArea() {
-		FlatTextAreaUI ui = new FlatTextAreaUI();
-
-		// for FlatEditorPaneUI.updateBackground()
-		ui.installUI( new JTextArea() );
+		JTextArea c = new JTextArea();
+		FlatTextAreaUI ui = (FlatTextAreaUI) c.getUI();
 
 		ui.applyStyle( "minimumWidth: 100" );
 		ui.applyStyle( "disabledBackground: #fff" );
@@ -633,11 +608,8 @@ public class FlatStylingTests
 
 	@Test
 	void textField() {
-		FlatTextFieldUI ui = new FlatTextFieldUI();
-
-		// create border
-		UIManager.put( "TextField.border", new FlatTextBorder() );
-		ui.installUI( new JTextField() );
+		JTextField c = new JTextField();
+		FlatTextFieldUI ui = (FlatTextFieldUI) c.getUI();
 
 		textField( ui );
 	}
@@ -655,10 +627,8 @@ public class FlatStylingTests
 
 	@Test
 	void textPane() {
-		FlatTextPaneUI ui = new FlatTextPaneUI();
-
-		// for FlatEditorPaneUI.updateBackground()
-		ui.installUI( new JTextPane() );
+		JTextPane c = new JTextPane();
+		FlatTextPaneUI ui = (FlatTextPaneUI) c.getUI();
 
 		ui.applyStyle( "minimumWidth: 100" );
 		ui.applyStyle( "disabledBackground: #fff" );
@@ -668,12 +638,8 @@ public class FlatStylingTests
 
 	@Test
 	void toggleButton() {
-		FlatToggleButtonUI ui = new FlatToggleButtonUI( false );
-
-		// create border
-		UIManager.put( "ToggleButton.border", new FlatButtonBorder() );
 		JToggleButton b = new JToggleButton();
-		ui.installUI( b );
+		FlatToggleButtonUI ui = (FlatToggleButtonUI) b.getUI();
 
 		// FlatToggleButtonUI extends FlatButtonUI
 		button( b, ui );
@@ -688,7 +654,8 @@ public class FlatStylingTests
 
 	@Test
 	void toolBar() {
-		FlatToolBarUI ui = new FlatToolBarUI();
+		JToolBar c = new JToolBar();
+		FlatToolBarUI ui = (FlatToolBarUI) c.getUI();
 
 		ui.applyStyle( "borderMargins: 1,2,3,4" );
 		ui.applyStyle( "gripColor: #fff" );
@@ -696,7 +663,8 @@ public class FlatStylingTests
 
 	@Test
 	void toolBarSeparator() {
-		FlatToolBarSeparatorUI ui = new FlatToolBarSeparatorUI( false );
+		JToolBar.Separator c = new JToolBar.Separator();
+		FlatToolBarSeparatorUI ui = (FlatToolBarSeparatorUI) c.getUI();
 
 		ui.applyStyle( "separatorWidth: 6" );
 		ui.applyStyle( "separatorColor: #fff" );
@@ -704,8 +672,8 @@ public class FlatStylingTests
 
 	@Test
 	void tree() {
-		FlatTreeUI ui = new FlatTreeUI();
-		ui.installUI( new JTree() );
+		JTree c = new JTree();
+		FlatTreeUI ui = (FlatTreeUI) c.getUI();
 
 		ui.applyStyle( "selectionBackground: #fff" );
 		ui.applyStyle( "selectionForeground: #fff" );
