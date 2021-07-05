@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Karl Tauber
  */
-public class FlatTextComponentTests
+public class TestFlatTextComponents
 {
 	@Test
 	void editorPane_updateBackground() {

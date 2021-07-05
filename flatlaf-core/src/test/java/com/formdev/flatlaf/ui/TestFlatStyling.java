@@ -33,7 +33,7 @@ import com.formdev.flatlaf.icons.*;
 /**
  * @author Karl Tauber
  */
-public class FlatStylingTests
+public class TestFlatStyling
 {
 	@BeforeAll
 	static void setup() {
