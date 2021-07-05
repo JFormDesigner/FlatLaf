@@ -369,6 +369,9 @@ public class FlatScrollPaneUI
 		paint( g, c );
 	}
 
+	/**
+	 * @since 1.3
+	 */
 	public static boolean isPermanentFocusOwner( JScrollPane scrollPane ) {
 		JViewport viewport = scrollPane.getViewport();
 		Component view = (viewport != null) ? viewport.getView() : null;

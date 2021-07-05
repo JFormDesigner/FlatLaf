@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -284,6 +285,8 @@ public class FlatTestFrame
 		Properties properties = new Properties();
 		try( InputStream in = new FileInputStream( "lafs.properties" ) ) {
 			properties.load( in );
+		} catch( FileNotFoundException ex ) {
+			// ignore
 		} catch( IOException ex ) {
 			ex.printStackTrace();
 		}

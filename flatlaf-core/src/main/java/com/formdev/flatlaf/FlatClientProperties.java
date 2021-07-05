@@ -743,6 +743,18 @@ public interface FlatClientProperties
 	 */
 	String PLACEHOLDER_TEXT = "JTextField.placeholderText";
 
+	/**
+	 * Specifies the padding of the text.
+	 * This changes the location and size of the text view within the component bounds,
+	 * but does not affect the size of the component.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link java.awt.Insets}
+	 *
+	 * @since 1.4
+	 */
+	String TEXT_FIELD_PADDING = "JTextField.padding";
+
 	//---- JToggleButton ------------------------------------------------------
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 FormDev Software GmbH
+ * Copyright 2021 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-plugins {
-	`java-library`
-	`flatlaf-publish`
-}
+package com.formdev.flatlaf.ui;
 
-dependencies {
-	implementation( project( ":flatlaf-core" ) )
+import org.junit.jupiter.api.BeforeAll;
 
-	// use compileOnly() because there are various JIDE libraries available on Maven Central
-	compileOnly( "com.formdev:jide-oss:3.7.12" )
-}
-
-java {
-	withSourcesJar()
-	withJavadocJar()
-}
-
-flatlafPublish {
-	artifactId = "flatlaf-jide-oss"
-	name = "FlatLaf addon for JIDE Common Layer"
-	description = "Flat Look and Feel addon for JIDE Common Layer"
+/**
+ * @author Karl Tauber
+ */
+public class TestFlatComponentSizesWithFocus
+	extends TestFlatComponentSizes
+{
+	@BeforeAll
+	static void setup() {
+		TestUtils.setup( true );
+	}
 }

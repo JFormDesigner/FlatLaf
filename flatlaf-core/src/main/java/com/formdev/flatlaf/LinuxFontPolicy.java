@@ -128,7 +128,7 @@ class LinuxFontPolicy
 			// find last word in family
 			int index = family.lastIndexOf( ' ' );
 			if( index < 0 )
-				return createFont( "Dialog", style, size, dsize );;
+				return createFont( "Dialog", style, size, dsize );
 
 			// check whether last work contains some font weight (e.g. Ultra-Bold or Heavy)
 			String lastWord = family.substring( index + 1 ).toLowerCase();

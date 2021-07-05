@@ -164,7 +164,7 @@ public class FlatStylingTests
 		ui.applyStyle( "buttonHoverArrowColor: #fff" );
 		ui.applyStyle( "buttonPressedArrowColor: #fff" );
 
-		ui.applyStyle( "popupFocusedBackground: #fff" );
+		ui.applyStyle( "popupBackground: #fff" );
 
 		// border
 		flatRoundBorder( style -> ui.applyStyle( style ) );

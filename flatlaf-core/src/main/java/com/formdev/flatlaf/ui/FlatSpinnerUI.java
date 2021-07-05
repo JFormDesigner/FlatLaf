@@ -214,6 +214,7 @@ public class FlatSpinnerUI
 		if( textField != null )
 			textField.setOpaque( false );
 
+		updateEditorPadding();
 		updateEditorColors();
 		return editor;
 	}
@@ -224,6 +225,8 @@ public class FlatSpinnerUI
 
 		removeEditorFocusListener( oldEditor );
 		addEditorFocusListener( newEditor );
+
+		updateEditorPadding();
 		updateEditorColors();
 	}
 
@@ -237,6 +240,12 @@ public class FlatSpinnerUI
 		JTextField textField = getEditorTextField( editor );
 		if( textField != null )
 			textField.removeFocusListener( getHandler() );
+	}
+
+	private void updateEditorPadding() {
+		JTextField textField = getEditorTextField( spinner.getEditor() );
+		if( textField != null )
+			textField.putClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, padding );
 	}
 
 	private void updateEditorColors() {
@@ -256,6 +265,9 @@ public class FlatSpinnerUI
 			: null;
 	}
 
+	/**
+	 * @since 1.3
+	 */
 	public static boolean isPermanentFocusOwner( JSpinner spinner ) {
 		if( FlatUIUtils.isPermanentFocusOwner( spinner ) )
 			return true;
@@ -306,7 +318,7 @@ public class FlatSpinnerUI
 		FlatArrowButton button = new FlatArrowButton( direction, arrowType, buttonArrowColor,
 			buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
 		button.setName( name );
-		button.setYOffset( (direction == SwingConstants.NORTH) ? 1 : -1 );
+		button.setYOffset( (direction == SwingConstants.NORTH) ? 1.25f : -1.25f );
 		if( direction == SwingConstants.NORTH )
 			installNextButtonListeners( button );
 		else
@@ -435,7 +447,7 @@ public class FlatSpinnerUI
 
 			if( nextButton == null && previousButton == null ) {
 				if( editor != null )
-					editor.setBounds( FlatUIUtils.subtractInsets( r, padding ) );
+					editor.setBounds( r );
 				return;
 			}
 
@@ -455,7 +467,7 @@ public class FlatSpinnerUI
 			}
 
 			if( editor != null )
-				editor.setBounds( FlatUIUtils.subtractInsets( editorRect, padding ) );
+				editor.setBounds( editorRect );
 
 			int nextHeight = (buttonsRect.height / 2) + (buttonsRect.height % 2); // round up
 			if( nextButton != null )

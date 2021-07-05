@@ -569,9 +569,9 @@ public class FlatButtonUI
 			prefSize.width = Math.max( prefSize.width, prefSize.height );
 		} else if( !isIconOnlyOrSingleCharacter && !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
 			// apply minimum width/height
-			float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
-			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + Math.round( focusWidth * 2 ) );
-			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) ) + Math.round( focusWidth * 2 ) );
+			int fw = Math.round( FlatUIUtils.getBorderFocusWidth( c ) * 2 );
+			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + fw );
+			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) ) + fw );
 		}
 
 		return prefSize;

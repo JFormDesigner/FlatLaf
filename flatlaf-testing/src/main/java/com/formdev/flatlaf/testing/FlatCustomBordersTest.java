@@ -20,6 +20,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -42,9 +43,23 @@ public class FlatCustomBordersTest
 		} );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	FlatCustomBordersTest() {
 		initComponents();
 		applyCustomBorders();
+
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {
+			"text",
+			"123",
+			"4567",
+			"abc",
+			"def"
+		} );
+
+		for( Component c : getComponents() ) {
+			if( c instanceof JComboBox )
+				((JComboBox<String>)c).setModel( model );
+		}
 	}
 
 	@Override
@@ -99,6 +114,13 @@ public class FlatCustomBordersTest
 		applyCustomComboBoxEditorBorderWithIcon( comboBox20 );
 		applyCustomComboBoxEditorBorder( comboBox21, null );
 		applyCustomComboBoxEditorBorder( comboBox22, null );
+
+		applyCustomComboBoxRendererBorder( comboBox23 );
+		applyCustomComboBoxRendererBorder( comboBox24 );
+		applyCustomComboBoxRendererBorderWithIcon( comboBox25 );
+		applyCustomComboBoxRendererBorderWithIcon( comboBox26 );
+		applyCustomComboBoxRendererBorder( comboBox27, null );
+		applyCustomComboBoxRendererBorder( comboBox28, null );
 	}
 
 	private void applyCustomInsideBorder( JComponent c, String uiKey ) {
@@ -110,7 +132,7 @@ public class FlatCustomBordersTest
 	}
 
 	private void applyCustomComboBoxEditorBorder( JComboBox<String> comboBox ) {
-		applyCustomComboBoxEditorBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 3 ) ) );
+		applyCustomComboBoxEditorBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 6 ) ) );
 	}
 
 	private void applyCustomComboBoxEditorBorderWithIcon( JComboBox<String> comboBox ) {
@@ -127,6 +149,21 @@ public class FlatCustomBordersTest
 				return customTextField;
 			}
 		} );
+	}
+
+	private void applyCustomComboBoxRendererBorder( JComboBox<String> comboBox ) {
+		applyCustomComboBoxRendererBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 6 ) ) );
+	}
+
+	private void applyCustomComboBoxRendererBorderWithIcon( JComboBox<String> comboBox ) {
+		applyCustomComboBoxRendererBorder( comboBox, new BorderWithIcon() );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	private void applyCustomComboBoxRendererBorder( JComboBox<String> comboBox, Border border ) {
+		BasicComboBoxRenderer customRenderer = new BasicComboBoxRenderer();
+		customRenderer.setBorder( border );
+		comboBox.setRenderer( customRenderer );
 	}
 
 	private void initComponents() {
@@ -152,10 +189,16 @@ public class FlatCustomBordersTest
 		comboBox2 = new JComboBox<>();
 		comboBox3 = new JComboBox<>();
 		comboBox4 = new JComboBox<>();
+		comboBox23 = new JComboBox<>();
+		comboBox25 = new JComboBox<>();
+		comboBox27 = new JComboBox<>();
 		comboBox5 = new JComboBox<>();
 		comboBox6 = new JComboBox<>();
 		comboBox7 = new JComboBox<>();
 		comboBox8 = new JComboBox<>();
+		comboBox24 = new JComboBox<>();
+		comboBox26 = new JComboBox<>();
+		comboBox28 = new JComboBox<>();
 		comboBox9 = new JComboBox<>();
 		comboBox10 = new JComboBox<>();
 		comboBox11 = new JComboBox<>();
@@ -289,6 +332,9 @@ public class FlatCustomBordersTest
 		add(comboBox2, "cell 2 3");
 		add(comboBox3, "cell 3 3");
 		add(comboBox4, "cell 4 3");
+		add(comboBox23, "cell 5 3");
+		add(comboBox25, "cell 6 3");
+		add(comboBox27, "cell 7 3");
 
 		//---- comboBox5 ----
 		comboBox5.putClientProperty("JComponent.roundRect", true);
@@ -305,6 +351,18 @@ public class FlatCustomBordersTest
 		//---- comboBox8 ----
 		comboBox8.putClientProperty("JComponent.roundRect", true);
 		add(comboBox8, "cell 4 4");
+
+		//---- comboBox24 ----
+		comboBox24.putClientProperty("JComponent.roundRect", true);
+		add(comboBox24, "cell 5 4");
+
+		//---- comboBox26 ----
+		comboBox26.putClientProperty("JComponent.roundRect", true);
+		add(comboBox26, "cell 6 4");
+
+		//---- comboBox28 ----
+		comboBox28.putClientProperty("JComponent.roundRect", true);
+		add(comboBox28, "cell 7 4");
 
 		//---- comboBox9 ----
 		comboBox9.setEditable(true);
@@ -460,10 +518,16 @@ public class FlatCustomBordersTest
 	private JComboBox<String> comboBox2;
 	private JComboBox<String> comboBox3;
 	private JComboBox<String> comboBox4;
+	private JComboBox<String> comboBox23;
+	private JComboBox<String> comboBox25;
+	private JComboBox<String> comboBox27;
 	private JComboBox<String> comboBox5;
 	private JComboBox<String> comboBox6;
 	private JComboBox<String> comboBox7;
 	private JComboBox<String> comboBox8;
+	private JComboBox<String> comboBox24;
+	private JComboBox<String> comboBox26;
+	private JComboBox<String> comboBox28;
 	private JComboBox<String> comboBox9;
 	private JComboBox<String> comboBox10;
 	private JComboBox<String> comboBox11;
@@ -508,6 +572,9 @@ public class FlatCustomBordersTest
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 			icon.paintIcon( c, g, x + width - icon.getIconWidth() - 2, y + ((height - icon.getIconHeight()) / 2) );
+
+			g.setColor( RED );
+			g.drawRect( x, y, width - 1, height - 1 );
 		}
 
 		@Override

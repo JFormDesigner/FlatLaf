@@ -1,7 +1,36 @@
 FlatLaf Change Log
 ==================
 
-## 1.3-SNAPSHOT
+## 1.4-SNAPSHOT
+
+#### New features and improvements
+
+- TextField, FormattedTextField and PasswordField: Support adding extra padding.
+  (set client property `JTextField.padding` to `Insets`).
+- PasswordField: UI delegate `FlatPasswordFieldUI` now extends `FlatTextFieldUI`
+  (instead of `BasicPasswordFieldUI`) to avoid duplicate code and for easier
+  extensibility.
+
+#### Fixed bugs
+
+- ComboBox (editable) and Spinner: Increased size of internal text field to the
+  component border so that it behaves like plain text field (mouse click to left
+  of text now positions caret to first character instead of opening ComboBox
+  popup; mouse cursor is now of type "text" within the whole component, except
+  for arrow buttons). (issue #330)
+- ComboBox (not editable): Increased size of internal renderer pane to the
+  component border so that it can paint within the whole component. Also
+  increase combo box size if a custom renderer uses a border with insets that
+  are larger than the default combo box padding (`2,6,2,6`).
+- Fixed component heights at `1.25x`, `1.75x` and `2.25x` scaling factors (Java
+  8 only) so that Button, ComboBox, Spinner and TextField components (including
+  subclasses) have same heights. This increases heights of Button and TextField
+  components by:
+  - `2px` at `1.75x` in **Light** and **Dark** themes
+  - `2px` at `1.25x` and `2.25x` in **IntelliJ** and **Darcula** themes
+
+
+## 1.3
 
 #### New features and improvements
 
@@ -10,13 +39,15 @@ FlatLaf Change Log
   `PasswordField.focusedBackground`, `FormattedTextField.focusedBackground`,
   `TextArea.focusedBackground`, `TextPane.focusedBackground`,
   `EditorPane.focusedBackground`, `ComboBox.focusedBackground`,
-  `ComboBox.buttonFocusedBackground`, `ComboBox.popupFocusedBackground` and
+  `ComboBox.buttonFocusedBackground`, `ComboBox.popupBackground` and
   `Spinner.focusedBackground`). (issue #335)
 
 #### Fixed bugs
 
 - Fixed white lines at bottom and right side of window (in dark themes on HiDPI
   screens with scaling enabled).
+- ScrollBar: Fixed left/top arrow icon location (if visible). (issue #329)
+- Spinner: Fixed up/down arrow icon location.
 - ToolTip: Fixed positioning of huge tooltips. (issue #333)
 
 

@@ -73,6 +73,25 @@ public class FlatPaintingTest
 		repaint();
 	}
 
+	private void offsetChanged() {
+		float offset = (float) offsetSpinner.getValue();
+		System.out.println( offset );
+
+		arrowPainter5.setYOffset( offset );
+		arrowPainter6.setYOffset( -offset );
+
+		arrowPainter7.setXOffset( offset );
+		arrowPainter8.setXOffset( -offset );
+
+		arrowPainter13.setYOffset( offset );
+		arrowPainter14.setYOffset( -offset );
+
+		arrowPainter15.setXOffset( offset );
+		arrowPainter16.setXOffset( -offset );
+
+		repaint();
+	}
+
 	private void vectorChanged() {
 		boolean vector = vectorCheckBox.isSelected();
 
@@ -84,7 +103,7 @@ public class FlatPaintingTest
 		repaint();
 	}
 
-	private void checkBox1ActionPerformed() {
+	private void arrowButtonChanged() {
 		boolean button = buttonCheckBox.isSelected();
 
 		FlatTestFrame.updateComponentsRecur( (Container) getViewport().getView(), (c, type) -> {
@@ -143,11 +162,11 @@ public class FlatPaintingTest
 		FlatPaintingTest.ArrowPainter arrowPainter3 = new FlatPaintingTest.ArrowPainter();
 		FlatPaintingTest.ArrowPainter arrowPainter4 = new FlatPaintingTest.ArrowPainter();
 		JPanel panel1 = new JPanel();
-		FlatPaintingTest.ArrowPainter arrowPainter5 = new FlatPaintingTest.ArrowPainter();
-		FlatPaintingTest.ArrowPainter arrowPainter6 = new FlatPaintingTest.ArrowPainter();
+		arrowPainter5 = new FlatPaintingTest.ArrowPainter();
+		arrowPainter6 = new FlatPaintingTest.ArrowPainter();
 		JPanel panel2 = new JPanel();
-		FlatPaintingTest.ArrowPainter arrowPainter7 = new FlatPaintingTest.ArrowPainter();
-		FlatPaintingTest.ArrowPainter arrowPainter8 = new FlatPaintingTest.ArrowPainter();
+		arrowPainter7 = new FlatPaintingTest.ArrowPainter();
+		arrowPainter8 = new FlatPaintingTest.ArrowPainter();
 		JPanel panel5 = new JPanel();
 		JLabel arrowWidthLabel = new JLabel();
 		arrowWidthSpinner = new JSpinner();
@@ -155,6 +174,8 @@ public class FlatPaintingTest
 		arrowHeightSpinner = new JSpinner();
 		JLabel arrowSizeLabel = new JLabel();
 		arrowSizeSpinner = new JSpinner();
+		JLabel offsetLabel = new JLabel();
+		offsetSpinner = new JSpinner();
 		vectorCheckBox = new JCheckBox();
 		buttonCheckBox = new JCheckBox();
 		FlatPaintingTest.ArrowPainter arrowPainter9 = new FlatPaintingTest.ArrowPainter();
@@ -162,11 +183,11 @@ public class FlatPaintingTest
 		FlatPaintingTest.ArrowPainter arrowPainter11 = new FlatPaintingTest.ArrowPainter();
 		FlatPaintingTest.ArrowPainter arrowPainter12 = new FlatPaintingTest.ArrowPainter();
 		JPanel panel3 = new JPanel();
-		FlatPaintingTest.ArrowPainter arrowPainter13 = new FlatPaintingTest.ArrowPainter();
-		FlatPaintingTest.ArrowPainter arrowPainter14 = new FlatPaintingTest.ArrowPainter();
+		arrowPainter13 = new FlatPaintingTest.ArrowPainter();
+		arrowPainter14 = new FlatPaintingTest.ArrowPainter();
 		JPanel panel4 = new JPanel();
-		FlatPaintingTest.ArrowPainter arrowPainter15 = new FlatPaintingTest.ArrowPainter();
-		FlatPaintingTest.ArrowPainter arrowPainter16 = new FlatPaintingTest.ArrowPainter();
+		arrowPainter15 = new FlatPaintingTest.ArrowPainter();
+		arrowPainter16 = new FlatPaintingTest.ArrowPainter();
 
 		//======== this ========
 		setBorder(null);
@@ -519,6 +540,7 @@ public class FlatPaintingTest
 					"[]" +
 					"[]" +
 					"[]" +
+					"[]" +
 					"[]"));
 
 				//---- arrowWidthLabel ----
@@ -548,17 +570,26 @@ public class FlatPaintingTest
 				arrowSizeSpinner.addChangeListener(e -> arrowSizeChanged());
 				panel5.add(arrowSizeSpinner, "cell 1 2");
 
+				//---- offsetLabel ----
+				offsetLabel.setText("Offset:");
+				panel5.add(offsetLabel, "cell 0 3");
+
+				//---- offsetSpinner ----
+				offsetSpinner.setModel(new SpinnerNumberModel(1.0F, null, null, 0.05F));
+				offsetSpinner.addChangeListener(e -> offsetChanged());
+				panel5.add(offsetSpinner, "cell 1 3");
+
 				//---- vectorCheckBox ----
 				vectorCheckBox.setText("vector");
 				vectorCheckBox.addActionListener(e -> vectorChanged());
-				panel5.add(vectorCheckBox, "cell 0 3 2 1,alignx left,growx 0");
+				panel5.add(vectorCheckBox, "cell 0 4 2 1,alignx left,growx 0");
 
 				//---- buttonCheckBox ----
 				buttonCheckBox.setText("FlatArrowButton");
-				buttonCheckBox.addActionListener(e -> checkBox1ActionPerformed());
-				panel5.add(buttonCheckBox, "cell 0 4 2 1,alignx left,growx 0");
+				buttonCheckBox.addActionListener(e -> arrowButtonChanged());
+				panel5.add(buttonCheckBox, "cell 0 5 2 1,alignx left,growx 0");
 			}
-			flatTestPanel1.add(panel5, "cell 6 5,aligny top,growy 0");
+			flatTestPanel1.add(panel5, "cell 6 5 1 2,aligny top,growy 0");
 
 			//---- arrowPainter9 ----
 			arrowPainter9.setScale(8.0F);
@@ -635,11 +666,20 @@ public class FlatPaintingTest
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private FlatPaintingTest.ArrowPainter arrowPainter5;
+	private FlatPaintingTest.ArrowPainter arrowPainter6;
+	private FlatPaintingTest.ArrowPainter arrowPainter7;
+	private FlatPaintingTest.ArrowPainter arrowPainter8;
 	private JSpinner arrowWidthSpinner;
 	private JSpinner arrowHeightSpinner;
 	private JSpinner arrowSizeSpinner;
+	private JSpinner offsetSpinner;
 	private JCheckBox vectorCheckBox;
 	private JCheckBox buttonCheckBox;
+	private FlatPaintingTest.ArrowPainter arrowPainter13;
+	private FlatPaintingTest.ArrowPainter arrowPainter14;
+	private FlatPaintingTest.ArrowPainter arrowPainter15;
+	private FlatPaintingTest.ArrowPainter arrowPainter16;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class BorderPainter ------------------------------------------------
@@ -792,8 +832,8 @@ public class FlatPaintingTest
 		private int direction = SwingConstants.SOUTH;
 		private boolean chevron = true;
 		private int arrowSize = FlatArrowButton.DEFAULT_ARROW_WIDTH;
-		private int xOffset = 0;
-		private int yOffset = 0;
+		private float xOffset = 0;
+		private float yOffset = 0;
 		private float scale = 1;
 		private boolean halfWidth;
 		private boolean halfHeight;
@@ -845,19 +885,19 @@ public class FlatPaintingTest
 			this.arrowSize = arrowSize;
 		}
 
-		public int getXOffset() {
+		public float getXOffset() {
 			return xOffset;
 		}
 
-		public void setXOffset( int xOffset ) {
+		public void setXOffset( float xOffset ) {
 			this.xOffset = xOffset;
 		}
 
-		public int getYOffset() {
+		public float getYOffset() {
 			return yOffset;
 		}
 
-		public void setYOffset( int yOffset ) {
+		public void setYOffset( float yOffset ) {
 			this.yOffset = yOffset;
 		}
 
