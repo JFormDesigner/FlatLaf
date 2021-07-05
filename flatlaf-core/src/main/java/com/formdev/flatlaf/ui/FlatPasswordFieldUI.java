@@ -102,6 +102,7 @@ public class FlatPasswordFieldUI
 
 		showCapsLock = UIManager.getBoolean( "PasswordField.showCapsLock" );
 		capsLockIcon = UIManager.getIcon( "PasswordField.capsLockIcon" );
+		capsLockIconShared = true;
 	}
 
 	@Override

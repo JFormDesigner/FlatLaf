@@ -202,6 +202,7 @@ public class FlatButtonUI
 			toolbarSelectedBackground = UIManager.getColor( prefix + "toolbar.selectedBackground" );
 
 			helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
+			helpButtonIconShared = true;
 
 			defaults_initialized = true;
 		}

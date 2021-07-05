@@ -105,6 +105,7 @@ public class FlatRadioButtonUI
 
 			defaultBackground = UIManager.getColor( prefix + "background" );
 
+			iconShared = true;
 			defaults_initialized = true;
 		}
 
