@@ -114,6 +114,7 @@ public class FlatStyleSupport
 			String key = e.getKey();
 			Object newValue = e.getValue();
 
+			// handle key prefix
 			if( key.startsWith( "[" ) ) {
 				if( (SystemInfo.isWindows && key.startsWith( "[win]" )) ||
 					(SystemInfo.isMacOS && key.startsWith( "[mac]" )) ||
@@ -181,6 +182,11 @@ public class FlatStyleSupport
 	private static Object parseValue( String key, String value ) {
 		if( value.startsWith( "$" ) )
 			return UIManager.get( value.substring( 1 ) );
+
+		// remove key prefix for correct value type detection
+		// (e.g. "[light]padding" would not parse to Insets)
+		if( key.startsWith( "[" ) )
+			key = key.substring( key.indexOf( ']' ) + 1 );
 
 		return FlatLaf.parseDefaultsValue( key, value );
 	}
