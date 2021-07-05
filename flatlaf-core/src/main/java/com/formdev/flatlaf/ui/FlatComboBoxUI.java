@@ -447,10 +447,15 @@ public class FlatComboBoxUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
+		Insets oldPadding = padding;
 		int oldEditorColumns = editorColumns;
 
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
+		if( !padding.equals( oldPadding ) ) {
+			paddingBorder.padding = padding;
+			updateEditorPadding();
+		}
 		if( arrowButton instanceof FlatComboBoxButton )
 			((FlatComboBoxButton)arrowButton).updateStyle();
 		if( popup instanceof FlatComboPopup )
@@ -463,6 +468,13 @@ public class FlatComboBoxUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
+		// BasicComboBoxUI
+		if( key.equals( "padding" ) ) {
+			Object oldValue = padding;
+			padding = (Insets) value;
+			return oldValue;
+		}
+
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, comboBox, borderShared );
@@ -834,7 +846,7 @@ public class FlatComboBoxUI
 	private static class CellPaddingBorder
 		extends AbstractBorder
 	{
-		private final Insets padding;
+		private Insets padding;
 		private JComponent rendererComponent;
 		private Border rendererBorder;
 

@@ -149,6 +149,8 @@ public class TestFlatStyling
 		JComboBox<Object> c = new JComboBox<>();
 		FlatComboBoxUI ui = (FlatComboBoxUI) c.getUI();
 
+		ui.applyStyle( "padding: 1,2,3,4" );
+
 		ui.applyStyle( "minimumWidth: 100" );
 		ui.applyStyle( "editorColumns: 10" );
 		ui.applyStyle( "buttonStyle: auto" );

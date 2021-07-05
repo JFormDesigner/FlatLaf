@@ -192,6 +192,7 @@ public class FlatSpinnerUI
 	 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		updateEditorPadding();
 		updateArrowButtonsStyle();
 	}
 
@@ -442,7 +443,6 @@ public class FlatSpinnerUI
 		public void layoutContainer( Container parent ) {
 			Dimension size = parent.getSize();
 			Insets insets = parent.getInsets();
-			Insets padding = scale( FlatSpinnerUI.this.padding );
 			Rectangle r = FlatUIUtils.subtractInsets( new Rectangle( size ), insets );
 
 			if( nextButton == null && previousButton == null ) {
