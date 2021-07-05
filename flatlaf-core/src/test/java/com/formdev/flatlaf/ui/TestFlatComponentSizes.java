@@ -114,7 +114,7 @@ public class TestFlatComponentSizes
 	void comboBox( float factor ) {
 		TestUtils.scaleFont( factor );
 
-		String[] items = { "text" };
+		String[] items = { "t" };
 		JComboBox<String> comboBox = new JComboBox<>( items );
 		JComboBox<String> comboBox2 = new JComboBox<>( items );
 		JComboBox<String> comboBox3 = new JComboBox<>( items );
@@ -145,7 +145,7 @@ public class TestFlatComponentSizes
 	void comboBoxEditable( float factor ) {
 		TestUtils.scaleFont( factor );
 
-		String[] items = { "text" };
+		String[] items = { "t" };
 		JComboBox<String> comboBox = new JComboBox<>( items );
 		JComboBox<String> comboBox2 = new JComboBox<>( items );
 		JComboBox<String> comboBox3 = new JComboBox<>( items );
