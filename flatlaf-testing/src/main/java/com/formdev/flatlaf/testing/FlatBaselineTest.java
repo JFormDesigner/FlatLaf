@@ -51,6 +51,7 @@ public class FlatBaselineTest
 		JFormattedTextField formattedTextField1 = new JFormattedTextField();
 		JPasswordField passwordField1 = new JPasswordField();
 		JComboBox<String> comboBox1 = new JComboBox<>();
+		JComboBox<String> comboBox2 = new JComboBox<>();
 		JSpinner spinner1 = new JSpinner();
 		JLabel label6 = new JLabel();
 		JScrollPane scrollPane1 = new JScrollPane();
@@ -88,8 +89,9 @@ public class FlatBaselineTest
 
 		//======== this ========
 		setLayout(new MigLayout(
-			"insets dialog,hidemode 3,debug",
+			"insets dialog,hidemode 3",
 			// columns
+			"[fill]" +
 			"[fill]" +
 			"[fill]" +
 			"[fill]" +
@@ -130,7 +132,7 @@ public class FlatBaselineTest
 
 		//---- textField4 ----
 		textField4.setText("Dext field");
-		add(textField4, "cell 6 0");
+		add(textField4, "cell 7 0");
 
 		//---- label2 ----
 		label2.setText("Dext");
@@ -147,8 +149,20 @@ public class FlatBaselineTest
 		//---- passwordField1 ----
 		passwordField1.setText("Dext");
 		add(passwordField1, "cell 3 1");
+
+		//---- comboBox1 ----
+		comboBox1.setModel(new DefaultComboBoxModel<>(new String[] {
+			"Dext"
+		}));
 		add(comboBox1, "cell 4 1");
-		add(spinner1, "cell 5 1");
+
+		//---- comboBox2 ----
+		comboBox2.setModel(new DefaultComboBoxModel<>(new String[] {
+			"Dext"
+		}));
+		comboBox2.setEditable(true);
+		add(comboBox2, "cell 5 1");
+		add(spinner1, "cell 6 1");
 
 		//---- label6 ----
 		label6.setText("Dext");
@@ -171,7 +185,7 @@ public class FlatBaselineTest
 
 		//---- textField2 ----
 		textField2.setText("Dext field");
-		add(textField2, "cell 6 2");
+		add(textField2, "cell 7 2");
 
 		//---- label7 ----
 		label7.setText("Dext");
@@ -230,18 +244,18 @@ public class FlatBaselineTest
 
 		//---- textField3 ----
 		textField3.setText("Dext field");
-		add(textField3, "cell 6 3");
+		add(textField3, "cell 7 3");
 
 		//---- label3 ----
 		label3.setText("Dext");
 		add(label3, "cell 0 4");
-		add(slider1, "cell 1 4 6 1");
+		add(slider1, "cell 1 4 7 1");
 
 		//---- slider6 ----
 		slider6.setPaintTicks(true);
 		slider6.setMajorTickSpacing(25);
 		slider6.setMinorTickSpacing(5);
-		add(slider6, "cell 1 4 6 1");
+		add(slider6, "cell 1 4 7 1");
 
 		//---- label8 ----
 		label8.setText("Dext");
@@ -251,14 +265,14 @@ public class FlatBaselineTest
 		slider7.setPaintLabels(true);
 		slider7.setMajorTickSpacing(25);
 		slider7.setMinorTickSpacing(5);
-		add(slider7, "cell 1 5 6 1");
+		add(slider7, "cell 1 5 7 1");
 
 		//---- slider8 ----
 		slider8.setPaintLabels(true);
 		slider8.setPaintTicks(true);
 		slider8.setMajorTickSpacing(25);
 		slider8.setMinorTickSpacing(5);
-		add(slider8, "cell 1 5 6 1");
+		add(slider8, "cell 1 5 7 1");
 
 		//---- label4 ----
 		label4.setText("Dext");
@@ -266,13 +280,13 @@ public class FlatBaselineTest
 
 		//---- progressBar1 ----
 		progressBar1.setValue(30);
-		add(progressBar1, "cell 1 6 6 1");
+		add(progressBar1, "cell 1 6 7 1");
 
 		//---- progressBar3 ----
 		progressBar3.setStringPainted(true);
 		progressBar3.setValue(30);
-		add(progressBar3, "cell 1 6 6 1");
-		add(separator1, "cell 1 6 6 1");
+		add(progressBar3, "cell 1 6 7 1");
+		add(separator1, "cell 1 6 7 1");
 
 		//---- label5 ----
 		label5.setText("Dext");
@@ -280,26 +294,26 @@ public class FlatBaselineTest
 
 		//---- slider2 ----
 		slider2.setOrientation(SwingConstants.VERTICAL);
-		add(slider2, "cell 1 7 6 1");
+		add(slider2, "cell 1 7 7 1");
 
 		//---- slider3 ----
 		slider3.setOrientation(SwingConstants.VERTICAL);
 		slider3.setPaintTicks(true);
 		slider3.setMajorTickSpacing(25);
 		slider3.setMinorTickSpacing(5);
-		add(slider3, "cell 1 7 6 1");
+		add(slider3, "cell 1 7 7 1");
 
 		//---- progressBar2 ----
 		progressBar2.setOrientation(SwingConstants.VERTICAL);
 		progressBar2.setValue(30);
-		add(progressBar2, "cell 1 7 6 1");
+		add(progressBar2, "cell 1 7 7 1");
 
 		//---- progressBar4 ----
 		progressBar4.setOrientation(SwingConstants.VERTICAL);
 		progressBar4.setStringPainted(true);
 		progressBar4.setValue(30);
-		add(progressBar4, "cell 1 7 6 1");
-		add(hSpacer1, "cell 1 7 6 1,growx");
+		add(progressBar4, "cell 1 7 7 1");
+		add(hSpacer1, "cell 1 7 7 1,growx");
 
 		//---- label9 ----
 		label9.setText("Dext");
@@ -310,7 +324,7 @@ public class FlatBaselineTest
 		slider4.setPaintLabels(true);
 		slider4.setMajorTickSpacing(25);
 		slider4.setMinorTickSpacing(5);
-		add(slider4, "cell 1 8 6 1");
+		add(slider4, "cell 1 8 7 1");
 
 		//---- slider5 ----
 		slider5.setOrientation(SwingConstants.VERTICAL);
@@ -318,8 +332,8 @@ public class FlatBaselineTest
 		slider5.setPaintTicks(true);
 		slider5.setMajorTickSpacing(25);
 		slider5.setMinorTickSpacing(5);
-		add(slider5, "cell 1 8 6 1");
-		add(hSpacer2, "cell 1 8 6 1,growx");
+		add(slider5, "cell 1 8 7 1");
+		add(hSpacer2, "cell 1 8 7 1,growx");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

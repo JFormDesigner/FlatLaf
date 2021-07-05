@@ -18,6 +18,12 @@ FlatLaf Change Log
   of text now positions caret to first character instead of opening ComboBox
   popup; mouse cursor is now of type "text" within the whole component, except
   for arrow buttons). (issue #330)
+- Fixed component heights at `1.25x`, `1.75x` and `2.25x` scaling factors (Java
+  8 only) so that Button, ComboBox, Spinner and TextField components (including
+  subclasses) have same heights. This increases heights of Button and TextField
+  components by:
+  - `2px` at `1.75x` in **Light** and **Dark** themes
+  - `2px` at `1.25x` and `2.25x` in **IntelliJ** and **Darcula** themes
 
 
 ## 1.3

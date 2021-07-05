@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -7,8 +7,8 @@ new FormModel {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-			"$layoutConstraints": "insets dialog,hidemode 3,debug"
-			"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill]"
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[fill][fill][fill][fill][fill][fill][fill][fill]"
 			"$rowConstraints": "[][][50][::80][][][][][]"
 		} ) {
 			name: "this"
@@ -46,7 +46,7 @@ new FormModel {
 				name: "textField4"
 				"text": "Dext field"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 0"
+				"value": "cell 7 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
@@ -74,16 +74,33 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox1"
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "Dext"
+					addElement( "Dext" )
+				}
 				auxiliary() {
 					"JavaCodeGenerator.typeParameters": "String"
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 1"
 			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox2"
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "Dext"
+					addElement( "Dext" )
+				}
+				"editable": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 1"
+			} )
 			add( new FormComponent( "javax.swing.JSpinner" ) {
 				name: "spinner1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 1"
+				"value": "cell 6 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
@@ -112,7 +129,7 @@ new FormModel {
 				name: "textField2"
 				"text": "Dext field"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 2"
+				"value": "cell 7 2"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label7"
@@ -184,7 +201,7 @@ new FormModel {
 				name: "textField3"
 				"text": "Dext field"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 3"
+				"value": "cell 7 3"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label3"
@@ -195,7 +212,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4 6 1"
+				"value": "cell 1 4 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider6"
@@ -203,7 +220,7 @@ new FormModel {
 				"majorTickSpacing": 25
 				"minorTickSpacing": 5
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4 6 1"
+				"value": "cell 1 4 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label8"
@@ -217,7 +234,7 @@ new FormModel {
 				"majorTickSpacing": 25
 				"minorTickSpacing": 5
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5 6 1"
+				"value": "cell 1 5 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider8"
@@ -226,7 +243,7 @@ new FormModel {
 				"majorTickSpacing": 25
 				"minorTickSpacing": 5
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5 6 1"
+				"value": "cell 1 5 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label4"
@@ -238,19 +255,19 @@ new FormModel {
 				name: "progressBar1"
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 6 6 1"
+				"value": "cell 1 6 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar3"
 				"stringPainted": true
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 6 6 1"
+				"value": "cell 1 6 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JSeparator" ) {
 				name: "separator1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 6 6 1"
+				"value": "cell 1 6 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
@@ -262,7 +279,7 @@ new FormModel {
 				name: "slider2"
 				"orientation": 1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 7 6 1"
+				"value": "cell 1 7 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider3"
@@ -271,14 +288,14 @@ new FormModel {
 				"majorTickSpacing": 25
 				"minorTickSpacing": 5
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 7 6 1"
+				"value": "cell 1 7 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar2"
 				"orientation": 1
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 7 6 1"
+				"value": "cell 1 7 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JProgressBar" ) {
 				name: "progressBar4"
@@ -286,12 +303,12 @@ new FormModel {
 				"stringPainted": true
 				"value": 30
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 7 6 1"
+				"value": "cell 1 7 7 1"
 			} )
 			add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 				name: "hSpacer1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 7 6 1,growx"
+				"value": "cell 1 7 7 1,growx"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label9"
@@ -306,7 +323,7 @@ new FormModel {
 				"majorTickSpacing": 25
 				"minorTickSpacing": 5
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 8 6 1"
+				"value": "cell 1 8 7 1"
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider5"
@@ -316,12 +333,12 @@ new FormModel {
 				"majorTickSpacing": 25
 				"minorTickSpacing": 5
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 8 6 1"
+				"value": "cell 1 8 7 1"
 			} )
 			add( new FormComponent( "com.jformdesigner.designer.wrapper.HSpacer" ) {
 				name: "hSpacer2"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 8 6 1,growx"
+				"value": "cell 1 8 7 1,growx"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

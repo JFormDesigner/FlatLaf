@@ -49,19 +49,13 @@ public class TestFlatComponentSizes
 	}
 
 	static float[] factors() {
-		return new float[] { 1f, 1.25f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 3f, 4f };
+		return TestUtils.FACTORS;
 	}
 
 	@ParameterizedTest
 	@MethodSource( "factors" )
 	void sizes( float factor ) {
 		TestUtils.scaleFont( factor );
-
-		// TODO on some scale factors the combobox/spinner sizes are slightly different
-		//      because different size calculation methods and rounding
-		boolean testComboBoxAndSpinner = (UIManager.getInt( "Component.focusWidth" ) > 0)
-			? (factor != 1.25 && factor != 2.25)
-			: (factor != 1.75);
 
 
 		// should have same default size (minimumWidth is 64)
@@ -73,8 +67,7 @@ public class TestFlatComponentSizes
 		Dimension textFieldSize = textField.getPreferredSize();
 		assertEquals( textFieldSize, formattedTextField.getPreferredSize() );
 		assertEquals( textFieldSize, passwordField.getPreferredSize() );
-		if( testComboBoxAndSpinner )
-			assertEquals( textFieldSize, spinner.getPreferredSize() );
+		assertEquals( textFieldSize, spinner.getPreferredSize() );
 
 
 		// should have same default size (minimumWidth is 72)
@@ -84,10 +77,8 @@ public class TestFlatComponentSizes
 		comboBoxEditable.setEditable( true );
 
 		Dimension buttonSize = button.getPreferredSize();
-		if( testComboBoxAndSpinner ) {
-			assertEquals( buttonSize, comboBox.getPreferredSize() );
-			assertEquals( buttonSize, comboBoxEditable.getPreferredSize() );
-		}
+		assertEquals( buttonSize, comboBox.getPreferredSize() );
+		assertEquals( buttonSize, comboBoxEditable.getPreferredSize() );
 
 
 		// should have same height

@@ -176,13 +176,14 @@ public class FlatBorder
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
 		float focusWidth = scale( (float) getFocusWidth( c ) );
-		float ow = focusWidth + scale( (float) getLineWidth( c ) );
+		int ow = Math.round( focusWidth + scale( (float) getLineWidth( c ) ) );
 
 		insets = super.getBorderInsets( c, insets );
-		insets.top = Math.round( scale( (float) insets.top ) + ow );
-		insets.left = Math.round( scale( (float) insets.left ) + ow );
-		insets.bottom = Math.round( scale( (float) insets.bottom ) + ow );
-		insets.right = Math.round( scale( (float) insets.right ) + ow );
+
+		insets.top = scale( insets.top ) + ow;
+		insets.left = scale( insets.left ) + ow;
+		insets.bottom = scale( insets.bottom ) + ow;
+		insets.right = scale( insets.right ) + ow;
 
 		if( isCellEditor( c ) ) {
 			// remove top and bottom insets if used as cell editor
