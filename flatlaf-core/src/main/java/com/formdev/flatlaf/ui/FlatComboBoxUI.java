@@ -356,13 +356,9 @@ public class FlatComboBoxUI
 	protected void configureEditor() {
 		super.configureEditor();
 
-		if( editor instanceof JTextField ) {
-			JTextField textField = (JTextField) editor;
-
-			// remove default text field border from editor
-			if( textField.getBorder() instanceof FlatTextBorder )
-				textField.setBorder( BorderFactory.createEmptyBorder() );
-		}
+		// remove default text field border from editor
+		if( editor instanceof JTextField && ((JTextField)editor).getBorder() instanceof FlatTextBorder )
+			((JTextField)editor).setBorder( BorderFactory.createEmptyBorder() );
 
 		// explicitly make non-opaque
 		if( editor instanceof JComponent )
@@ -554,7 +550,6 @@ public class FlatComboBoxUI
 
 	@Override
 	protected Dimension getDisplaySize() {
-
 		paddingBorder.uninstall();
 		Dimension displaySize = super.getDisplaySize();
 		paddingBorder.uninstall();
