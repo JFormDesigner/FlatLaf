@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
+import static com.formdev.flatlaf.util.UIScale.unscale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -67,7 +68,6 @@ import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.SystemInfo;
-import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JComboBox}.
@@ -131,8 +131,6 @@ public class FlatComboBoxUI
 	protected Color buttonPressedArrowColor;
 
 	protected Color popupBackground;
-
-	protected Insets paddingUnscaled;
 
 	private MouseListener hoverListener;
 	protected boolean hover;
@@ -222,10 +220,6 @@ public class FlatComboBoxUI
 		int maximumRowCount = UIManager.getInt( "ComboBox.maximumRowCount" );
 		if( maximumRowCount > 0 && maximumRowCount != 8 && comboBox.getMaximumRowCount() == 8 )
 			comboBox.setMaximumRowCount( maximumRowCount );
-
-		// scale
-		paddingUnscaled = padding;
-		padding = UIScale.scale( paddingUnscaled );
 
 		paddingBorder = new CellPaddingBorder( padding );
 
@@ -368,9 +362,6 @@ public class FlatComboBoxUI
 			// remove default text field border from editor
 			if( textField.getBorder() instanceof FlatTextBorder )
 				textField.setBorder( BorderFactory.createEmptyBorder() );
-
-			// editor padding
-			textField.putClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, paddingUnscaled );
 		}
 
 		// explicitly make non-opaque
@@ -379,6 +370,7 @@ public class FlatComboBoxUI
 
 		editor.applyComponentOrientation( comboBox.getComponentOrientation() );
 
+		updateEditorPadding();
 		updateEditorColors();
 
 		// macOS
@@ -393,6 +385,25 @@ public class FlatComboBoxUI
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "HOME" ) );
 			new EditorDelegateAction( inputMap, KeyStroke.getKeyStroke( "END" ) );
 		}
+	}
+
+	private void updateEditorPadding() {
+		if( !(editor instanceof JTextField) )
+			return;
+
+		JTextField textField = (JTextField) editor;
+		Insets insets = textField.getInsets();
+		Insets pad = padding;
+		if( insets.top != 0 || insets.left != 0 || insets.bottom != 0 || insets.right != 0 ) {
+			// if text field has custom border, subtract text field insets from padding
+			pad = new Insets(
+				unscale( Math.max( scale( padding.top ) - insets.top, 0 ) ),
+				unscale( Math.max( scale( padding.left ) - insets.left, 0 ) ),
+				unscale( Math.max( scale( padding.bottom ) - insets.bottom, 0 ) ),
+				unscale( Math.max( scale( padding.right ) - insets.right, 0 ) )
+			);
+		}
+		textField.putClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, pad );
 	}
 
 	private void updateEditorColors() {
@@ -493,16 +504,10 @@ public class FlatComboBoxUI
 		c.setForeground( getForeground( enabled ) );
 
 		boolean shouldValidate = (c instanceof JPanel);
-		if( padding != null )
-			bounds = FlatUIUtils.subtractInsets( bounds, padding );
 
-		// increase the size of the rendering area to make sure that the text
-		// is vertically aligned with other component types (e.g. JTextField)
-		Insets rendererInsets = getRendererComponentInsets( c );
-		if( rendererInsets != null )
-			bounds = FlatUIUtils.addInsets( bounds, rendererInsets );
-
+		paddingBorder.install( c );
 		currentValuePane.paintComponent( g, c, comboBox, bounds.x, bounds.y, bounds.width, bounds.height, shouldValidate );
+		paddingBorder.uninstall();
 	}
 
 	@Override
@@ -549,49 +554,33 @@ public class FlatComboBoxUI
 
 	@Override
 	protected Dimension getDisplaySize() {
-		// update padding
-		padding = UIScale.scale( paddingUnscaled );
 
 		paddingBorder.uninstall();
 		Dimension displaySize = super.getDisplaySize();
 		paddingBorder.uninstall();
 
+		// remove padding added in super.getDisplaySize()
+		int displayWidth = displaySize.width - padding.left - padding.right;
+		int displayHeight = displaySize.height - padding.top - padding.bottom;
+
 		// recalculate width without hardcoded 100 under special conditions
-		if( displaySize.width == 100 + padding.left + padding.right &&
+		if( displayWidth == 100 &&
 			comboBox.isEditable() &&
 			comboBox.getItemCount() == 0 &&
 			comboBox.getPrototypeDisplayValue() == null )
 		{
-			int width = getDefaultSize().width;
-			width = Math.max( width, editor.getPreferredSize().width );
-			width += padding.left + padding.right;
-			displaySize = new Dimension( width, displaySize.height );
+			displayWidth = Math.max( getDefaultSize().width, editor.getPreferredSize().width );
 		}
 
-		return displaySize;
+		return new Dimension( displayWidth, displayHeight );
 	}
 
 	@Override
 	protected Dimension getSizeForComponent( Component comp ) {
+		paddingBorder.install( comp );
 		Dimension size = super.getSizeForComponent( comp );
-
-		// remove the renderer border top/bottom insets from the size to make sure that
-		// the combobox gets the same height as other component types (e.g. JTextField)
-		Insets rendererInsets = getRendererComponentInsets( comp );
-		if( rendererInsets != null )
-			size = new Dimension( size.width, size.height - rendererInsets.top - rendererInsets.bottom );
-
+		paddingBorder.uninstall();
 		return size;
-	}
-
-	private Insets getRendererComponentInsets( Component rendererComponent ) {
-		if( rendererComponent instanceof JComponent ) {
-			Border rendererBorder = ((JComponent)rendererComponent).getBorder();
-			if( rendererBorder != null )
-				return rendererBorder.getBorderInsets( rendererComponent );
-		}
-
-		return null;
 	}
 
 	private boolean isCellRenderer() {
@@ -661,7 +650,7 @@ public class FlatComboBoxUI
 			super( combo );
 
 			// BasicComboPopup listens to JComboBox.componentOrientation and updates
-			// the component orientation of the list, scroller and popup, but when
+			// the component orientation of the list, scroll pane and popup, but when
 			// switching the LaF and a new combo popup is created, the component
 			// orientation is not applied.
 			ComponentOrientation o = comboBox.getComponentOrientation();
@@ -780,7 +769,7 @@ public class FlatComboBoxUI
 	//---- class CellPaddingBorder --------------------------------------------
 
 	/**
-	 * Cell padding border used only in popup list.
+	 * Cell padding border used in popup list and for current value if not editable.
 	 * <p>
 	 * The insets are the union of the cell padding and the renderer border insets,
 	 * which vertically aligns text in popup list with text in combobox.
@@ -836,6 +825,7 @@ public class FlatComboBoxUI
 
 		@Override
 		public Insets getBorderInsets( Component c, Insets insets ) {
+			Insets padding = scale( this.padding );
 			if( rendererBorder != null ) {
 				Insets insideInsets = rendererBorder.getBorderInsets( c );
 				insets.top = Math.max( padding.top, insideInsets.top );

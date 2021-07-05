@@ -132,7 +132,7 @@ public class FlatCustomBordersTest
 	}
 
 	private void applyCustomComboBoxEditorBorder( JComboBox<String> comboBox ) {
-		applyCustomComboBoxEditorBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 3 ) ) );
+		applyCustomComboBoxEditorBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 6 ) ) );
 	}
 
 	private void applyCustomComboBoxEditorBorderWithIcon( JComboBox<String> comboBox ) {
@@ -152,7 +152,7 @@ public class FlatCustomBordersTest
 	}
 
 	private void applyCustomComboBoxRendererBorder( JComboBox<String> comboBox ) {
-		applyCustomComboBoxRendererBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 3 ) ) );
+		applyCustomComboBoxRendererBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 6 ) ) );
 	}
 
 	private void applyCustomComboBoxRendererBorderWithIcon( JComboBox<String> comboBox ) {

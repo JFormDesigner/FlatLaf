@@ -114,17 +114,19 @@ public class TestFlatComponentSizes
 	void comboBox( float factor ) {
 		TestUtils.scaleFont( factor );
 
-		JComboBox<String> comboBox = new JComboBox<>();
-		JComboBox<String> comboBox2 = new JComboBox<>();
-		JComboBox<String> comboBox3 = new JComboBox<>();
-		JComboBox<String> comboBox4 = new JComboBox<>();
+		String[] items = { "text" };
+		JComboBox<String> comboBox = new JComboBox<>( items );
+		JComboBox<String> comboBox2 = new JComboBox<>( items );
+		JComboBox<String> comboBox3 = new JComboBox<>( items );
+		JComboBox<String> comboBox4 = new JComboBox<>( items );
 
-		applyCustomComboBoxRendererBorder( comboBox2, new LineBorder( Color.orange, UIScale.scale( 3 ) ) );
+		applyCustomComboBoxRendererBorder( comboBox2, new LineBorder( Color.orange, UIScale.scale( 6 ) ) );
 		applyCustomComboBoxRendererBorder( comboBox3, new BorderWithIcon() );
 		applyCustomComboBoxRendererBorder( comboBox4, null );
 
 		Dimension size = comboBox.getPreferredSize();
-		assertEquals( size, comboBox2.getPreferredSize() );
+		assertEquals( size.width, comboBox2.getPreferredSize().width );
+		assertEquals( size.height - (2 * UIScale.scale( 2 )) + (2 * UIScale.scale( 6 )), comboBox2.getPreferredSize().height );
 		assertEquals( size, comboBox3.getPreferredSize() );
 		assertEquals( size, comboBox4.getPreferredSize() );
 
@@ -143,23 +145,24 @@ public class TestFlatComponentSizes
 	void comboBoxEditable( float factor ) {
 		TestUtils.scaleFont( factor );
 
-		JComboBox<String> comboBox = new JComboBox<>();
-		JComboBox<String> comboBox2 = new JComboBox<>();
-		JComboBox<String> comboBox3 = new JComboBox<>();
-		JComboBox<String> comboBox4 = new JComboBox<>();
+		String[] items = { "text" };
+		JComboBox<String> comboBox = new JComboBox<>( items );
+		JComboBox<String> comboBox2 = new JComboBox<>( items );
+		JComboBox<String> comboBox3 = new JComboBox<>( items );
+		JComboBox<String> comboBox4 = new JComboBox<>( items );
 
 		comboBox.setEditable( true );
 		comboBox2.setEditable( true );
 		comboBox3.setEditable( true );
 		comboBox4.setEditable( true );
 
-		applyCustomComboBoxEditorBorder( comboBox2, new LineBorder( Color.orange, UIScale.scale( 3 ) ) );
+		applyCustomComboBoxEditorBorder( comboBox2, new LineBorder( Color.orange, UIScale.scale( 6 ) ) );
 		applyCustomComboBoxEditorBorder( comboBox3, new BorderWithIcon() );
 		applyCustomComboBoxEditorBorder( comboBox4, null );
 
 		Dimension size = comboBox.getPreferredSize();
 		assertEquals( size.width, comboBox2.getPreferredSize().width );
-		assertEquals( size.height + (2 * UIScale.scale( 3 )), comboBox2.getPreferredSize().height );
+		assertEquals( size.height - (2 * UIScale.scale( 2 )) + (2 * UIScale.scale( 6 )), comboBox2.getPreferredSize().height );
 		assertEquals( size, comboBox3.getPreferredSize() );
 		assertEquals( size, comboBox4.getPreferredSize() );
 

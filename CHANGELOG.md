@@ -18,6 +18,10 @@ FlatLaf Change Log
   of text now positions caret to first character instead of opening ComboBox
   popup; mouse cursor is now of type "text" within the whole component, except
   for arrow buttons). (issue #330)
+- ComboBox (not editable): Increased size of internal renderer pane to the
+  component border so that it can paint within the whole component. Also
+  increase combo box size if a custom renderer uses a border with insets that
+  are larger than the default combo box padding (`2,6,2,6`).
 - Fixed component heights at `1.25x`, `1.75x` and `2.25x` scaling factors (Java
   8 only) so that Button, ComboBox, Spinner and TextField components (including
   subclasses) have same heights. This increases heights of Button and TextField
