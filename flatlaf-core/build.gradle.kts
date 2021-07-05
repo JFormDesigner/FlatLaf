@@ -21,6 +21,12 @@ plugins {
 	`flatlaf-publish`
 }
 
+dependencies {
+	testImplementation( "org.junit.jupiter:junit-jupiter-api:5.7.2" )
+	testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine" )
+	testRuntimeOnly( "org.junit.jupiter:junit-jupiter-params" )
+}
+
 java {
 	withSourcesJar()
 	withJavadocJar()
@@ -51,6 +57,11 @@ tasks {
 
 	named<Jar>( "javadocJar" ) {
 		archiveBaseName.set( "flatlaf" )
+	}
+
+	test {
+		useJUnitPlatform()
+		testLogging.exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 	}
 }
 

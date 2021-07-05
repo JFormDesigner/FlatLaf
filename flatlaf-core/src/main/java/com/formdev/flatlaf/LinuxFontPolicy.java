@@ -309,6 +309,9 @@ class LinuxFontPolicy
 	 *   - running on JetBrains Runtime 11 or later and scaling is enabled in system Settings
 	 */
 	private static boolean isSystemScaling() {
+		if( GraphicsEnvironment.isHeadless() )
+			return true;
+
 		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment()
 			.getDefaultScreenDevice().getDefaultConfiguration();
 		return UIScale.getSystemScaleFactor( gc ) > 1;

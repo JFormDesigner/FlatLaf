@@ -534,7 +534,8 @@ public class FlatComboBoxUI
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
 		Dimension minimumSize = super.getMinimumSize( c );
-		minimumSize.width = Math.max( minimumSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) );
+		int fw = Math.round( FlatUIUtils.getBorderFocusWidth( c ) * 2 );
+		minimumSize.width = Math.max( minimumSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + fw );
 		return minimumSize;
 	}
 
