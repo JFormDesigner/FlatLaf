@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.icons.*;
 
 /**
@@ -37,7 +37,12 @@ public class TestFlatStyling
 {
 	@BeforeAll
 	static void setup() {
-		FlatLightLaf.setup();
+		TestUtils.setup( false );
+	}
+
+	@AfterAll
+	static void cleanup() {
+		TestUtils.cleanup();
 	}
 
 	@Test

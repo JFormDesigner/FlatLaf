@@ -29,6 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -36,58 +38,44 @@ import org.junit.jupiter.api.Test;
  */
 public class TestFlatTextComponents
 {
+	@BeforeAll
+	static void setup() {
+		TestUtils.setup( false );
+	}
+
+	@AfterAll
+	static void cleanup() {
+		TestUtils.cleanup();
+	}
+
 	@Test
 	void editorPane_updateBackground() {
-		textComponent_updateBackground( "EditorPane", () -> {
-			JEditorPane c = new JEditorPane();
-			c.setUI( new FlatEditorPaneUI() );
-			return c;
-		} );
+		textComponent_updateBackground( "EditorPane", JEditorPane::new );
 	}
 
 	@Test
 	void formattedTextField_updateBackground() {
-		textComponent_updateBackground( "FormattedTextField", () -> {
-			JFormattedTextField c = new JFormattedTextField();
-			c.setUI( new FlatFormattedTextFieldUI() );
-			return c;
-		} );
+		textComponent_updateBackground( "FormattedTextField", JFormattedTextField::new );
 	}
 
 	@Test
 	void passwordField_updateBackground() {
-		textComponent_updateBackground( "PasswordField", () -> {
-			JPasswordField c = new JPasswordField();
-			c.setUI( new FlatPasswordFieldUI() );
-			return c;
-		} );
+		textComponent_updateBackground( "PasswordField", JPasswordField::new );
 	}
 
 	@Test
 	void textArea_updateBackground() {
-		textComponent_updateBackground( "TextArea", () -> {
-			JTextArea c = new JTextArea();
-			c.setUI( new FlatTextAreaUI() );
-			return c;
-		} );
+		textComponent_updateBackground( "TextArea", JTextArea::new );
 	}
 
 	@Test
 	void textField_updateBackground() {
-		textComponent_updateBackground( "TextField", () -> {
-			JTextField c = new JTextField();
-			c.setUI( new FlatTextFieldUI() );
-			return c;
-		} );
+		textComponent_updateBackground( "TextField", JTextField::new );
 	}
 
 	@Test
 	void textPane_updateBackground() {
-		textComponent_updateBackground( "TextPane", () -> {
-			JTextPane c = new JTextPane();
-			c.setUI( new FlatTextPaneUI() );
-			return c;
-		} );
+		textComponent_updateBackground( "TextPane", JTextPane::new );
 	}
 
 	@Test
