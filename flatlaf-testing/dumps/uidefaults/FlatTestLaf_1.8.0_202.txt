@@ -194,6 +194,7 @@ ComboBox.buttonBackground      #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonDarkShadow      #696969    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonDisabledArrowColor #ababab    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonEditableBackground #cccccc    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonFocusedBackground #ffff00    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHighlight       #ffffff    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHoverArrowColor #ff0000    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonPressedArrowColor #0000ff    javax.swing.plaf.ColorUIResource [UI]
@@ -202,6 +203,7 @@ ComboBox.buttonStyle           auto
 ComboBox.disabledBackground    #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.disabledForeground    #000088    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.editorColumns         0
+ComboBox.focusedBackground     #ffff88    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.font                  [active] $defaultFont [UI]
 ComboBox.foreground            #ff0000    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.isEnterSelectablePopup false
@@ -209,6 +211,7 @@ ComboBox.maximumRowCount       15
 ComboBox.minimumWidth          72
 ComboBox.noActionOnKeyNavigation false
 ComboBox.padding               2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox.popupBackground       #ffffcc    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.selectionBackground   #00aa00    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.selectionForeground   #ffff00    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.timeFactor            1000
@@ -265,6 +268,7 @@ EditorPane.border              [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 EditorPane.caretBlinkRate      500
 EditorPane.caretForeground     #0000ff    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.disabledBackground  #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
+EditorPane.focusedBackground   #ffff88    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.font                [active] $defaultFont [UI]
 EditorPane.foreground          #ff0000    javax.swing.plaf.ColorUIResource [UI]
 EditorPane.inactiveBackground  #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
@@ -304,6 +308,7 @@ FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 FormattedTextField.caretBlinkRate 500
 FormattedTextField.caretForeground #0000ff    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.disabledBackground #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.focusedBackground #ffff88    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.font        [active] $defaultFont [UI]
 FormattedTextField.foreground  #ff0000    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.inactiveBackground #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
@@ -700,6 +705,7 @@ PasswordField.caretBlinkRate   500
 PasswordField.caretForeground  #0000ff    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.disabledBackground #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.echoChar         '\u2022'
+PasswordField.focusedBackground #ffff88    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.font             [active] $defaultFont [UI]
 PasswordField.foreground       #ff0000    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.inactiveBackground #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
@@ -935,6 +941,7 @@ Spinner.disabledBackground     #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
 Spinner.disabledForeground     #000088    javax.swing.plaf.ColorUIResource [UI]
 Spinner.editorAlignment        11
 Spinner.editorBorderPainted    false
+Spinner.focusedBackground      #ffff88    javax.swing.plaf.ColorUIResource [UI]
 Spinner.font                   [active] $defaultFont [UI]
 Spinner.foreground             #ff0000    javax.swing.plaf.ColorUIResource [UI]
 Spinner.padding                2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
@@ -1111,6 +1118,7 @@ TextArea.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 TextArea.caretBlinkRate        500
 TextArea.caretForeground       #0000ff    javax.swing.plaf.ColorUIResource [UI]
 TextArea.disabledBackground    #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
+TextArea.focusedBackground     #ffff88    javax.swing.plaf.ColorUIResource [UI]
 TextArea.font                  [active] $defaultFont [UI]
 TextArea.foreground            #ff0000    javax.swing.plaf.ColorUIResource [UI]
 TextArea.inactiveBackground    #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
@@ -1136,6 +1144,7 @@ TextField.caretBlinkRate       500
 TextField.caretForeground      #0000ff    javax.swing.plaf.ColorUIResource [UI]
 TextField.darkShadow           #696969    javax.swing.plaf.ColorUIResource [UI]
 TextField.disabledBackground   #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
+TextField.focusedBackground    #ffff88    javax.swing.plaf.ColorUIResource [UI]
 TextField.font                 [active] $defaultFont [UI]
 TextField.foreground           #ff0000    javax.swing.plaf.ColorUIResource [UI]
 TextField.highlight            #ffffff    javax.swing.plaf.ColorUIResource [UI]
@@ -1157,6 +1166,7 @@ TextPane.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.F
 TextPane.caretBlinkRate        500
 TextPane.caretForeground       #0000ff    javax.swing.plaf.ColorUIResource [UI]
 TextPane.disabledBackground    #e0e0e0    javax.swing.plaf.ColorUIResource [UI]
+TextPane.focusedBackground     #ffff88    javax.swing.plaf.ColorUIResource [UI]
 TextPane.font                  [active] $defaultFont [UI]
 TextPane.foreground            #ff0000    javax.swing.plaf.ColorUIResource [UI]
 TextPane.inactiveBackground    #f0f0f0    javax.swing.plaf.ColorUIResource [UI]
