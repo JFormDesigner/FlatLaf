@@ -165,7 +165,7 @@ public class FlatOptionPaneUI
 
 	private void updateChildPanels( Container c ) {
 		for( Component child : c.getComponents() ) {
-			if( child instanceof JPanel ) {
+			if( child.getClass() == JPanel.class ) {
 				JPanel panel = (JPanel)child;
 
 				// make sub-panel non-opaque for OptionPane.background
@@ -177,9 +177,8 @@ public class FlatOptionPaneUI
 					panel.setBorder( new NonUIResourceBorder( border ) );
 			}
 
-			if( child instanceof Container ) {
+			if( child instanceof Container )
 				updateChildPanels( (Container) child );
-			}
 		}
 	}
 

@@ -28,6 +28,8 @@ FlatLaf Change Log
   components by:
   - `2px` at `1.75x` in **Light** and **Dark** themes
   - `2px` at `1.25x` and `2.25x` in **IntelliJ** and **Darcula** themes
+- OptionPane: Do not make child components, which are derived from `JPanel`,
+  non-opaque. (issue #349)
 
 
 ## 1.3
