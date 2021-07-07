@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Paint;
 import javax.swing.AbstractButton;
@@ -42,11 +43,13 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.default.hoverBorderColor	Color	optional
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
+ * @uiDefault Button.toolbar.focusColor			Color	optional; defaults to Component.focusColor
  * @uiDefault Button.borderWidth				int
  * @uiDefault Button.default.borderWidth		int
  * @uiDefault Button.innerFocusWidth			int or float	optional; defaults to Component.innerFocusWidth
  * @uiDefault Button.toolbar.margin				Insets
  * @uiDefault Button.toolbar.spacingInsets		Insets
+ * @uiDefault Button.toolbar.focusWidth			int or float		optional; default is 1
  * @uiDefault Button.arc						int
  *
  * @author Karl Tauber
@@ -64,11 +67,15 @@ public class FlatButtonBorder
 	protected final Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
 	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
 	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
+	/** @since 1.4 */
+	protected final Color toolbarFocusColor = UIManager.getColor( "Button.toolbar.focusColor" );
 	protected final int borderWidth = UIManager.getInt( "Button.borderWidth" );
 	protected final int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
 	protected final float buttonInnerFocusWidth = FlatUIUtils.getUIFloat( "Button.innerFocusWidth", innerFocusWidth );
 	protected final Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
 	protected final Insets toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
+	/** @since 1.4 */
+	protected final float toolbarFocusWidth = FlatUIUtils.getUIFloat( "Button.toolbar.focusWidth", 1.5f );
 	protected final int arc = UIManager.getInt( "Button.arc" );
 
 	@Override
@@ -79,11 +86,41 @@ public class FlatButtonBorder
 			!FlatButtonUI.isHelpButton( c ) &&
 			!FlatToggleButtonUI.isTabButton( c ) )
 		  super.paintBorder( c, g, x, y, width, height );
+		else if( FlatButtonUI.isToolBarButton( c ) && isFocused( c ) )
+			paintToolBarFocus( c, g, x, y, width, height );
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	protected void paintToolBarFocus( Component c, Graphics g, int x, int y, int width, int height ) {
+		Graphics2D g2 = (Graphics2D) g.create();
+		try {
+			FlatUIUtils.setRenderingHints( g2 );
+
+			float focusWidth = UIScale.scale( toolbarFocusWidth );
+			float arc = UIScale.scale( (float) getArc( c ) );
+			Color outlineColor = getOutlineColor( c );
+
+			Insets spacing = UIScale.scale( toolbarSpacingInsets );
+			x += spacing.left;
+			y += spacing.top;
+			width -= spacing.left + spacing.right;
+			height -= spacing.top + spacing.bottom;
+
+			g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
+			// not using paintComponentOuterBorder() here because its round edges look too "thick"
+			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, 0, focusWidth, arc );
+		} finally {
+			g2.dispose();
+		}
 	}
 
 	@Override
 	protected Color getFocusColor( Component c ) {
-		return FlatButtonUI.isDefaultButton( c ) ? defaultFocusColor : super.getFocusColor( c );
+		return (toolbarFocusColor != null && FlatButtonUI.isToolBarButton( c ))
+			? toolbarFocusColor
+			: (FlatButtonUI.isDefaultButton( c ) ? defaultFocusColor : super.getFocusColor( c ));
 	}
 
 	@Override

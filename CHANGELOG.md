@@ -10,6 +10,7 @@ FlatLaf Change Log
 - PasswordField: UI delegate `FlatPasswordFieldUI` now extends `FlatTextFieldUI`
   (instead of `BasicPasswordFieldUI`) to avoid duplicate code and for easier
   extensibility.
+- ToolBar: Paint focus indicator for focused button in toolbar. (issue #346)
 
 #### Fixed bugs
 
