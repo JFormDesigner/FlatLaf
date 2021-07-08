@@ -342,7 +342,7 @@ public class FlatRootPaneUI
 				? getSizeFunc.apply( rootPane.getContentPane() )
 				: rootPane.getSize();
 
-			int width = Math.max( titlePaneSize.width, contentSize.width );
+			int width = contentSize.width; // title pane width is not considered here
 			int height = titlePaneSize.height + contentSize.height;
 			if( titlePane == null || !titlePane.isMenuBarEmbedded() ) {
 				JMenuBar menuBar = rootPane.getJMenuBar();
