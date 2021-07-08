@@ -240,7 +240,7 @@ public class FlatTableUI
 					if( isDragging &&
 						SystemInfo.isJava_9_orLater &&
 						((horizontalLines && y1 == y2) || (verticalLines && x1 == x2)) &&
-						wasInvokedFromPaintDraggedArea() )
+						wasInvokedFromMethod( "paintDraggedArea" ) )
 					{
 						if( y1 == y2 ) {
 							// horizontal grid line
@@ -282,22 +282,8 @@ public class FlatTableUI
 					return wasInvokedFromMethod( "paintGrid" );
 				}
 
-				private boolean wasInvokedFromPaintDraggedArea() {
-					return wasInvokedFromMethod( "paintDraggedArea" );
-				}
-
 				private boolean wasInvokedFromMethod( String methodName ) {
-					StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-					for( int i = 0; i < 10 || i < stackTrace.length; i++ ) {
-						if( "javax.swing.plaf.basic.BasicTableUI".equals( stackTrace[i].getClassName() ) ) {
-							String methodName2 = stackTrace[i].getMethodName();
-							if( "paintCell".equals( methodName2 ) )
-								return false;
-							if( methodName.equals( methodName2 ) )
-								return true;
-						}
-					}
-					return false;
+					return StackUtils.wasInvokedFrom( BasicTableUI.class.getName(), methodName, 8 );
 				}
 			};
 		}

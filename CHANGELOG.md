@@ -10,6 +10,8 @@ FlatLaf Change Log
 - PasswordField: UI delegate `FlatPasswordFieldUI` now extends `FlatTextFieldUI`
   (instead of `BasicPasswordFieldUI`) to avoid duplicate code and for easier
   extensibility.
+- Table and PopupFactory: Use `StackWalker` in Java 9+ for better performance.
+  (issue #334)
 - ToolBar: Paint focus indicator for focused button in toolbar. (issue #346)
 
 #### Fixed bugs

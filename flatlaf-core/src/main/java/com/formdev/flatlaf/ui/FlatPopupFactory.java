@@ -44,6 +44,7 @@ import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -260,13 +261,7 @@ public class FlatPopupFactory
 	}
 
 	private boolean wasInvokedFromToolTipManager() {
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-		for( StackTraceElement stackTraceElement : stackTrace ) {
-			if( "javax.swing.ToolTipManager".equals( stackTraceElement.getClassName() ) &&
-				"showTipWindow".equals( stackTraceElement.getMethodName() ) )
-			  return true;
-		}
-		return false;
+		return StackUtils.wasInvokedFrom( ToolTipManager.class.getName(), "showTipWindow", 8 );
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
