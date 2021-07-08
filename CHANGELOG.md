@@ -33,6 +33,8 @@ FlatLaf Change Log
   - `2px` at `1.25x` and `2.25x` in **IntelliJ** and **Darcula** themes
 - OptionPane: Do not make child components, which are derived from `JPanel`,
   non-opaque. (issue #349)
+- OptionPane: Align wrapped lines to the right if component orientation is
+  right-to-left. (issue #350)
 - Window decorations: Window title bar width is no longer considered when
   calculating preferred/minimum width of window. (issue #351)
 

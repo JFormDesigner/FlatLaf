@@ -89,6 +89,10 @@ public class FlatOptionPaneTest
 		JPanel panel6 = new JPanel();
 		customOptionPane = new JOptionPane();
 		FlatOptionPaneTest.ShowDialogLinkLabel customShowDialogLabel = new FlatOptionPaneTest.ShowDialogLinkLabel();
+		JLabel rightToLeftLabel = new JLabel();
+		JPanel panel10 = new JPanel();
+		JOptionPane rightToLeftOptionPane = new JOptionPane();
+		rightToLeftShowDialogLabel = new FlatOptionPaneTest.ShowDialogLinkLabel();
 
 		//======== this ========
 		setBorder(BorderFactory.createEmptyBorder());
@@ -102,6 +106,7 @@ public class FlatOptionPaneTest
 				"[]" +
 				"[fill]",
 				// rows
+				"[top]" +
 				"[top]" +
 				"[top]" +
 				"[top]" +
@@ -283,6 +288,28 @@ public class FlatOptionPaneTest
 			customShowDialogLabel.setOptionPane(customOptionPane);
 			customShowDialogLabel.setTitleLabel(customLabel);
 			panel9.add(customShowDialogLabel, "cell 2 7");
+
+			//---- rightToLeftLabel ----
+			rightToLeftLabel.setText("Right-to-left:");
+			panel9.add(rightToLeftLabel, "cell 0 8");
+
+			//======== panel10 ========
+			{
+				panel10.setBorder(LineBorder.createGrayLineBorder());
+				panel10.setLayout(new BorderLayout());
+
+				//---- rightToLeftOptionPane ----
+				rightToLeftOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+				rightToLeftOptionPane.setMessage("\u0627\u0644\u0645\u0627\u062f\u0629 1 \u064a\u0648\u0644\u062f \u062c\u0645\u064a\u0639 \u0627\u0644\u0646\u0627\u0633 \u0623\u062d\u0631\u0627\u0631\u064b\u0627 \u0645\u062a\u0633\u0627\u0648\u064a\u0646 \u0641\u064a \u0627\u0644\u0643\u0631\u0627\u0645\u0629 \u0648\u0627\u0644\u062d\u0642\u0648\u0642. \u0648\u0642\u062f \u0648\u0647\u0628\u0648\u0627 \u0639\u0642\u0644\u0627\u064b \u0648\u0636\u0645\u064a\u0631\u064b\u0627 \u0648\u0639\u0644\u064a\u0647\u0645 \u0623\u0646 \u064a\u0639\u0627\u0645\u0644 \u0628\u0639\u0636\u0647\u0645 \u0628\u0639\u0636\u064b\u0627 \u0628\u0631\u0648\u062d \u0627\u0644\u0625\u062e\u0627\u0621.\n\u0627\u0644\u0645\u0627\u062f\u0629 1 \u064a\u0648\u0644\u062f \u062c\u0645\u064a\u0639 \u0627\u0644\u0646\u0627\u0633 \u0623\u062d\u0631\u0627\u0631\u064b\u0627 \u0645\u062a\u0633\u0627\u0648\u064a\u0646 \u0641\u064a \u0627\u0644\u0643\u0631\u0627\u0645\u0629 \u0648\u0627\u0644\u062d\u0642\u0648\u0642. \u0648\u0642\u062f \u0648\u0647\u0628\u0648\u0627 \u0639\u0642\u0644\u0627\u064b \u0648\u0636\u0645\u064a\u0631\u064b\u0627 \u0648\u0639\u0644\u064a\u0647\u0645 \u0623\u0646 \u064a\u0639\u0627\u0645\u0644 \u0628\u0639\u0636\u0647\u0645 \u0628\u0639\u0636\u064b\u0627 \u0628\u0631\u0648\u062d \u0627\u0644\u0625\u062e\u0627\u0621.\n\n\u0627\u0644\u0645\u0627\u062f\u0629 1 \u064a\u0648\u0644\u062f \u062c\u0645\u064a\u0639 \u0627\u0644\u0646\u0627\u0633 \u0623\u062d\u0631\u0627\u0631\u064b\u0627 \u0645\u062a\u0633\u0627\u0648\u064a\u0646 \u0641\u064a \u0627\u0644\u0643\u0631\u0627\u0645\u0629 \n\u0648\u0627\u0644\u062d\u0642\u0648\u0642. \u0648\u0642\u062f \u0648\u0647\u0628\u0648\u0627 \u0639\u0642\u0644\u0627\u064b \u0648\u0636\u0645\u064a\u0631\u064b\u0627 \u0648\u0639\u0644\u064a\u0647\u0645 \u0623\u0646 \u064a\u0639\u0627\u0645\u0644 \u0628\u0639\u0636\u0647\u0645 \u0628\u0639\u0636\u064b\u0627 \u0628\u0631\u0648\u062d \u0627\u0644\u0625\u062e\u0627\u0621.");
+				rightToLeftOptionPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+				panel10.add(rightToLeftOptionPane, BorderLayout.CENTER);
+			}
+			panel9.add(panel10, "cell 1 8");
+
+			//---- rightToLeftShowDialogLabel ----
+			rightToLeftShowDialogLabel.setOptionPane(rightToLeftOptionPane);
+			rightToLeftShowDialogLabel.setTitleLabel(rightToLeftLabel);
+			panel9.add(rightToLeftShowDialogLabel, "cell 2 8");
 		}
 		setViewportView(panel9);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -293,6 +320,7 @@ public class FlatOptionPaneTest
 	private FlatOptionPaneTest.ShowDialogLinkLabel errorShowDialogLabel;
 	private FlatOptionPaneTest.ShowDialogLinkLabel informationShowDialogLabel;
 	private JOptionPane customOptionPane;
+	private FlatOptionPaneTest.ShowDialogLinkLabel rightToLeftShowDialogLabel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class ShowDialogLinkLabel ------------------------------------------
@@ -315,9 +343,15 @@ public class FlatOptionPaneTest
 		}
 
 		private void showDialog() {
+			Component parent = SwingUtilities.windowForComponent( this );
+
+			// use optionPane as parent if component orientation is different
+			if( parent.getComponentOrientation().isLeftToRight() != optionPane.getComponentOrientation().isLeftToRight() )
+				parent = optionPane;
+
 			if( optionPane.getWantsInput() ) {
 				JOptionPane.showInputDialog(
-					getParent(),
+					parent,
 					optionPane.getMessage(),
 					titleLabel.getText() + " Title",
 					optionPane.getMessageType(),
@@ -326,7 +360,7 @@ public class FlatOptionPaneTest
 					null );
 			} else {
 				JOptionPane.showOptionDialog(
-					getParent(),
+					parent,
 					optionPane.getMessage(),
 					titleLabel.getText() + " Title",
 					optionPane.getOptionType(),
