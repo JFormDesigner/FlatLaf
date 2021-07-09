@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
@@ -123,8 +124,10 @@ public class FlatPasswordFieldUI
 				repaint( e );
 			}
 			private void repaint( KeyEvent e ) {
-				if( e.getKeyCode() == KeyEvent.VK_CAPS_LOCK )
+				if( e.getKeyCode() == KeyEvent.VK_CAPS_LOCK ) {
 					e.getComponent().repaint();
+					scrollCaretToVisible();
+				}
 			}
 		};
 
@@ -169,16 +172,36 @@ public class FlatPasswordFieldUI
 	}
 
 	protected void paintCapsLock( Graphics g ) {
-		if( !showCapsLock )
+		if( !isCapsLockVisible() )
 			return;
 
 		JTextComponent c = getComponent();
-		if( !FlatUIUtils.isPermanentFocusOwner( c ) ||
-			!Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK ) )
-		  return;
-
 		int y = (c.getHeight() - capsLockIcon.getIconHeight()) / 2;
 		int x = c.getWidth() - capsLockIcon.getIconWidth() - y;
 		capsLockIcon.paintIcon( c, g, x, y );
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	protected boolean isCapsLockVisible() {
+		if( !showCapsLock )
+			return false;
+
+		JTextComponent c = getComponent();
+		return FlatUIUtils.isPermanentFocusOwner( c ) &&
+			Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK );
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	@Override
+	protected Insets getPadding() {
+		Insets padding = super.getPadding();
+		if( !isCapsLockVisible() )
+			return padding;
+
+		return FlatUIUtils.addInsets( padding, new Insets( 0, 0, 0, capsLockIcon.getIconWidth() ) );
 	}
 }

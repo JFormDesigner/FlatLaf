@@ -290,4 +290,13 @@ public class FlatTextFieldUI
 		Object padding = getComponent().getClientProperty( FlatClientProperties.TEXT_FIELD_PADDING );
 		return (padding instanceof Insets) ? UIScale.scale( (Insets) padding ) : null;
 	}
+
+	/**
+	 * @since 1.4
+	 */
+	protected void scrollCaretToVisible() {
+		Caret caret = getComponent().getCaret();
+		if( caret instanceof FlatCaret )
+			((FlatCaret)caret).scrollCaretToVisible();
+	}
 }
