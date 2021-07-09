@@ -177,7 +177,9 @@ public class FlatPasswordFieldUI
 
 		JTextComponent c = getComponent();
 		int y = (c.getHeight() - capsLockIcon.getIconHeight()) / 2;
-		int x = c.getWidth() - capsLockIcon.getIconWidth() - y;
+		int x = c.getComponentOrientation().isLeftToRight()
+			? c.getWidth() - capsLockIcon.getIconWidth() - y
+			: y;
 		capsLockIcon.paintIcon( c, g, x, y );
 	}
 
@@ -202,6 +204,8 @@ public class FlatPasswordFieldUI
 		if( !isCapsLockVisible() )
 			return padding;
 
-		return FlatUIUtils.addInsets( padding, new Insets( 0, 0, 0, capsLockIcon.getIconWidth() ) );
+		boolean ltr = getComponent().getComponentOrientation().isLeftToRight();
+		int iconWidth = capsLockIcon.getIconWidth();
+		return FlatUIUtils.addInsets( padding, new Insets( 0, ltr ? 0 : iconWidth, 0, ltr ? iconWidth : 0 ) );
 	}
 }

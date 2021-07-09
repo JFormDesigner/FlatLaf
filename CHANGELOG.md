@@ -36,6 +36,8 @@ FlatLaf Change Log
 - OptionPane: Align wrapped lines to the right if component orientation is
   right-to-left. (issue #350)
 - PasswordField: Caps lock icon no longer painted over long text. (issue #172)
+- PasswordField: Paint caps lock icon on left side in right-to-left component
+  orientation.
 - Window decorations: Window title bar width is no longer considered when
   calculating preferred/minimum width of window. (issue #351)
 
