@@ -52,6 +52,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -377,11 +378,12 @@ public class FlatUIDefaultsInspector
 	}
 
 	private Properties loadDerivedColorKeys() {
+		String name = "/com/formdev/flatlaf/extras/resources/DerivedColorKeys.properties";
 		Properties properties = new Properties();
-		try( InputStream in = getClass().getResourceAsStream( "/com/formdev/flatlaf/extras/resources/DerivedColorKeys.properties" ) ) {
+		try( InputStream in = getClass().getResourceAsStream( name ) ) {
 			properties.load( in );
 		} catch( IOException ex ) {
-			ex.printStackTrace();
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load '" + name + "'.", ex );
 		}
 		return properties;
 	}

@@ -23,6 +23,7 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * This tool updates all IntelliJ themes listed in themes.json by downloading
@@ -61,7 +62,7 @@ public class IJThemesUpdater
 			URLConnection con = url.openConnection();
 			Files.copy( con.getInputStream(), out, StandardCopyOption.REPLACE_EXISTING );
 		} catch( IOException ex ) {
-			ex.printStackTrace();
+			LoggingFacade.INSTANCE.logSevere( null, ex );
 		}
 	}
 }

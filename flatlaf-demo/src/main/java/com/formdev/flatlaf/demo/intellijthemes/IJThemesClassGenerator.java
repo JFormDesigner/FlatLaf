@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * This tool creates look and feel classes for all themes listed in themes.json.
@@ -120,7 +121,7 @@ public class IJThemesClassGenerator
 			Files.write( out, content.getBytes( StandardCharsets.ISO_8859_1 ),
 				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING );
 		} catch( IOException ex ) {
-			ex.printStackTrace();
+			LoggingFacade.INSTANCE.logSevere( null, ex );
 		}
 	}
 

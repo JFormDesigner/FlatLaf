@@ -52,6 +52,7 @@ import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import net.miginfocom.swing.*;
 
@@ -259,7 +260,7 @@ public class IJThemesPanel
 			try {
 				UIManager.setLookAndFeel( themeInfo.lafClassName );
 			} catch( Exception ex ) {
-				ex.printStackTrace();
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 				showInformationDialog( "Failed to create '" + themeInfo.lafClassName + "'.", ex );
 			}
 		} else if( themeInfo.themeFile != null ) {
@@ -273,7 +274,7 @@ public class IJThemesPanel
 
 				DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.FILE_PREFIX + themeInfo.themeFile );
 			} catch( Exception ex ) {
-				ex.printStackTrace();
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 				showInformationDialog( "Failed to load '" + themeInfo.themeFile + "'.", ex );
 			}
 		} else {
