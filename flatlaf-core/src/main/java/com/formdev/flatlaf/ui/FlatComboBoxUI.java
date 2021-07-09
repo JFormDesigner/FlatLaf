@@ -791,14 +791,20 @@ public class FlatComboBoxUI
 			if( oldBorder == this )
 				return; // already installed
 
+			// component already has a padding border --> uninstall it
+			// (may happen if single renderer instance is used in multiple comboboxes)
+			if( oldBorder instanceof CellPaddingBorder )
+				((CellPaddingBorder)oldBorder).uninstall();
+
 			// this border can be installed only at one component
+			// (may happen if a renderer returns varying components)
 			uninstall();
 
 			// remember component where this border was installed for uninstall
 			rendererComponent = jc;
 
 			// remember old border and replace it
-			rendererBorder = oldBorder;
+			rendererBorder = jc.getBorder();
 			rendererComponent.setBorder( this );
 		}
 
