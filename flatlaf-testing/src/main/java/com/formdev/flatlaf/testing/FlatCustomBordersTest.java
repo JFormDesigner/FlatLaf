@@ -47,6 +47,7 @@ public class FlatCustomBordersTest
 	FlatCustomBordersTest() {
 		initComponents();
 		applyCustomBorders();
+		applySpecialComboBoxRenderers();
 
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {
 			"text",
@@ -121,6 +122,33 @@ public class FlatCustomBordersTest
 		applyCustomComboBoxRendererBorderWithIcon( comboBox26 );
 		applyCustomComboBoxRendererBorder( comboBox27, null );
 		applyCustomComboBoxRendererBorder( comboBox28, null );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	private void applySpecialComboBoxRenderers() {
+		BasicComboBoxRenderer sharedRenderer = new BasicComboBoxRenderer();
+		sharedRenderer.setBorder( new LineBorder( ORANGE, UIScale.scale( 2 ) ) );
+		comboBox29.setRenderer( sharedRenderer );
+		comboBox30.setRenderer( sharedRenderer );
+
+		comboBox31.setRenderer( new ListCellRenderer<String>() {
+			JLabel l1 = new JLabel();
+			JLabel l2 = new JLabel();
+
+			@Override
+			public Component getListCellRendererComponent( JList<? extends String> list,
+				String value, int index, boolean isSelected, boolean cellHasFocus )
+			{
+				JLabel l = (index % 2 == 0) ? l1 : l2;
+				l.setText( (value != null) ? value.toString() : "" );
+				l.setBorder( new LineBorder( (index % 2 == 0) ? GREEN : RED, UIScale.scale( 2 ) ) );
+				l.setBackground( isSelected ? list.getSelectionBackground() : list.getBackground() );
+				l.setForeground( isSelected ? list.getSelectionForeground() : list.getForeground() );
+				l.setFont( list.getFont() );
+				l.setOpaque( true );
+				return l;
+			}
+		} );
 	}
 
 	private void applyCustomInsideBorder( JComponent c, String uiKey ) {
@@ -231,6 +259,11 @@ public class FlatCustomBordersTest
 		textField6 = new JTextField();
 		textField7 = new JTextField();
 		textField8 = new JTextField();
+		label11 = new JLabel();
+		label12 = new JLabel();
+		comboBox29 = new JComboBox<>();
+		comboBox30 = new JComboBox<>();
+		comboBox31 = new JComboBox<>();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -254,6 +287,8 @@ public class FlatCustomBordersTest
 			"[]" +
 			"[]" +
 			"[]" +
+			"[]" +
+			"[]para" +
 			"[]" +
 			"[]"));
 
@@ -493,6 +528,17 @@ public class FlatCustomBordersTest
 		textField8.putClientProperty("JComponent.roundRect", true);
 		textField8.setText("text");
 		add(textField8, "cell 4 10");
+
+		//---- label11 ----
+		label11.setText("JComboBox with shared renderer:");
+		add(label11, "cell 1 11 2 1");
+
+		//---- label12 ----
+		label12.setText("JComboBox with renderer that uses varying components:");
+		add(label12, "cell 3 11 3 1");
+		add(comboBox29, "cell 1 12");
+		add(comboBox30, "cell 2 12");
+		add(comboBox31, "cell 3 12");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -560,6 +606,11 @@ public class FlatCustomBordersTest
 	private JTextField textField6;
 	private JTextField textField7;
 	private JTextField textField8;
+	private JLabel label11;
+	private JLabel label12;
+	private JComboBox<String> comboBox29;
+	private JComboBox<String> comboBox30;
+	private JComboBox<String> comboBox31;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class BorderWithIcon -----------------------------------------------

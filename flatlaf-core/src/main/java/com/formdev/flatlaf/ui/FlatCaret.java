@@ -24,6 +24,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.JFormattedTextField;
 import javax.swing.plaf.UIResource;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -140,6 +141,25 @@ public class FlatCaret
 		} else {
 			setDot( 0 );
 			moveDot( doc.getLength() );
+		}
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	public void scrollCaretToVisible() {
+		JTextComponent c = getComponent();
+		if( c == null || c.getUI() == null )
+			return;
+
+		try {
+			Rectangle loc = c.getUI().modelToView( c, getDot(), getDotBias() );
+			if( loc != null ) {
+				adjustVisibility( loc );
+				damage( loc );
+			}
+		} catch( BadLocationException ex ) {
+			// ignore
 		}
 	}
 }

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.1.0.272" Java: "13.0.2" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -12,7 +12,7 @@ new FormModel {
 			add( new FormContainer( "com.formdev.flatlaf.demo.ScrollablePanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "flowy,ltr,insets dialog,hidemode 3"
 				"$columnConstraints": "[][][fill]"
-				"$rowConstraints": "[top][top][top][top][top][top][top][top]"
+				"$rowConstraints": "[top][top][top][top][top][top][top][top][top]"
 			} ) {
 				name: "panel9"
 				add( new FormComponent( "javax.swing.JLabel" ) {
@@ -240,10 +240,40 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 2 7"
 				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "rightToLeftLabel"
+					"text": "Right-to-left:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 8"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "panel10"
+					"border": #LineBorder0
+					add( new FormComponent( "javax.swing.JOptionPane" ) {
+						name: "rightToLeftOptionPane"
+						"messageType": 1
+						"message": "المادة 1 يولد جميع الناس أحرارًا متساوين في الكرامة والحقوق. وقد وهبوا عقلاً وضميرًا وعليهم أن يعامل بعضهم بعضًا بروح الإخاء.\nالمادة 1 يولد جميع الناس أحرارًا متساوين في الكرامة والحقوق. وقد وهبوا عقلاً وضميرًا وعليهم أن يعامل بعضهم بعضًا بروح الإخاء.\n\nالمادة 1 يولد جميع الناس أحرارًا متساوين في الكرامة \nوالحقوق. وقد وهبوا عقلاً وضميرًا وعليهم أن يعامل بعضهم بعضًا بروح الإخاء."
+						"componentOrientation": sfield java.awt.ComponentOrientation RIGHT_TO_LEFT
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 8"
+				} )
+				add( new FormComponent( "com.formdev.flatlaf.testing.FlatOptionPaneTest$ShowDialogLinkLabel" ) {
+					name: "rightToLeftShowDialogLabel"
+					"optionPane": new FormReference( "rightToLeftOptionPane" )
+					"titleLabel": new FormReference( "rightToLeftLabel" )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 8"
+				} )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 840, 900 )
+			"size": new java.awt.Dimension( 895, 1080 )
 		} )
 	}
 }

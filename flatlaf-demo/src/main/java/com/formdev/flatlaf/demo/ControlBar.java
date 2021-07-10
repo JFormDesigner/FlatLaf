@@ -28,6 +28,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.layout.ConstraintParser;
@@ -240,7 +241,7 @@ class ControlBar
 					frame.setSize( Math.max( prefSize.width, width ), Math.max( prefSize.height, height ) );
 
 			} catch( Exception ex ) {
-				ex.printStackTrace();
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 			}
 		} );
 	}

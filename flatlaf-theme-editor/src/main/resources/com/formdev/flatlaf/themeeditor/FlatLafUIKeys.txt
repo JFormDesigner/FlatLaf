@@ -18,6 +18,8 @@ Button.default.background
 Button.default.boldText
 Button.default.borderColor
 Button.default.borderWidth
+Button.default.endBackground
+Button.default.endBorderColor
 Button.default.focusColor
 Button.default.focusedBackground
 Button.default.focusedBorderColor
@@ -25,12 +27,16 @@ Button.default.foreground
 Button.default.hoverBackground
 Button.default.hoverBorderColor
 Button.default.pressedBackground
+Button.default.startBackground
+Button.default.startBorderColor
 Button.defaultButtonFollowsFocus
 Button.disabledBackground
 Button.disabledBorderColor
 Button.disabledForeground
 Button.disabledSelectedBackground
 Button.disabledText
+Button.endBackground
+Button.endBorderColor
 Button.focusInputMap
 Button.focusedBackground
 Button.focusedBorderColor
@@ -49,6 +55,8 @@ Button.rollover
 Button.selectedBackground
 Button.selectedForeground
 Button.shadow
+Button.startBackground
+Button.startBorderColor
 Button.textIconGap
 Button.textShiftOffset
 Button.toolbar.hoverBackground
@@ -142,6 +150,7 @@ ComboBox.buttonBackground
 ComboBox.buttonDarkShadow
 ComboBox.buttonDisabledArrowColor
 ComboBox.buttonEditableBackground
+ComboBox.buttonFocusedBackground
 ComboBox.buttonHighlight
 ComboBox.buttonHoverArrowColor
 ComboBox.buttonPressedArrowColor
@@ -150,6 +159,7 @@ ComboBox.buttonStyle
 ComboBox.disabledBackground
 ComboBox.disabledForeground
 ComboBox.editorColumns
+ComboBox.focusedBackground
 ComboBox.font
 ComboBox.foreground
 ComboBox.isEnterSelectablePopup
@@ -157,6 +167,7 @@ ComboBox.maximumRowCount
 ComboBox.minimumWidth
 ComboBox.noActionOnKeyNavigation
 ComboBox.padding
+ComboBox.popupBackground
 ComboBox.selectionBackground
 ComboBox.selectionForeground
 ComboBox.timeFactor
@@ -197,6 +208,7 @@ EditorPane.caretBlinkRate
 EditorPane.caretForeground
 EditorPane.disabledBackground
 EditorPane.focusInputMap
+EditorPane.focusedBackground
 EditorPane.font
 EditorPane.foreground
 EditorPane.inactiveBackground
@@ -226,6 +238,7 @@ FormattedTextField.caretBlinkRate
 FormattedTextField.caretForeground
 FormattedTextField.disabledBackground
 FormattedTextField.focusInputMap
+FormattedTextField.focusedBackground
 FormattedTextField.font
 FormattedTextField.foreground
 FormattedTextField.inactiveBackground
@@ -295,7 +308,9 @@ JXBusyLabel.baseColor
 JXBusyLabel.highlightColor
 JXDatePicker.border
 JXHeader.background
+JXHeader.descriptionForeground
 JXHeader.startBackground
+JXHeader.titleForeground
 JXMonthView.arrowColor
 JXMonthView.background
 JXMonthView.daysOfTheWeekForeground
@@ -475,6 +490,11 @@ OptionPane.buttonPadding
 OptionPane.errorIcon
 OptionPane.font
 OptionPane.foreground
+OptionPane.icon.errorColor
+OptionPane.icon.foreground
+OptionPane.icon.informationColor
+OptionPane.icon.questionColor
+OptionPane.icon.warningColor
 OptionPane.iconMessageGap
 OptionPane.informationIcon
 OptionPane.maxCharactersPerLine
@@ -500,6 +520,7 @@ PasswordField.caretForeground
 PasswordField.disabledBackground
 PasswordField.echoChar
 PasswordField.focusInputMap
+PasswordField.focusedBackground
 PasswordField.font
 PasswordField.foreground
 PasswordField.inactiveBackground
@@ -651,11 +672,14 @@ Slider.foreground
 Slider.highlight
 Slider.horizontalSize
 Slider.hoverThumbColor
+Slider.hoverTrackColor
 Slider.minimumHorizontalSize
 Slider.minimumVerticalSize
 Slider.onlyLeftMouseButtonDrag
 Slider.pressedThumbColor
+Slider.pressedTrackColor
 Slider.shadow
+Slider.thumbBorderColor
 Slider.thumbColor
 Slider.thumbSize
 Slider.tickColor
@@ -678,6 +702,7 @@ Spinner.disabledBackground
 Spinner.disabledForeground
 Spinner.editorAlignment
 Spinner.editorBorderPainted
+Spinner.focusedBackground
 Spinner.font
 Spinner.foreground
 Spinner.padding
@@ -753,6 +778,7 @@ TabbedPane.tabHeight
 TabbedPane.tabInsets
 TabbedPane.tabRunOverlay
 TabbedPane.tabSelectionHeight
+TabbedPane.tabSeparatorColor
 TabbedPane.tabSeparatorsFullHeight
 TabbedPane.tabWidthMode
 TabbedPane.tabsOpaque
@@ -820,6 +846,7 @@ TextArea.caretBlinkRate
 TextArea.caretForeground
 TextArea.disabledBackground
 TextArea.focusInputMap
+TextArea.focusedBackground
 TextArea.font
 TextArea.foreground
 TextArea.inactiveBackground
@@ -838,6 +865,7 @@ TextField.caretForeground
 TextField.darkShadow
 TextField.disabledBackground
 TextField.focusInputMap
+TextField.focusedBackground
 TextField.font
 TextField.foreground
 TextField.highlight
@@ -856,6 +884,7 @@ TextPane.caretBlinkRate
 TextPane.caretForeground
 TextPane.disabledBackground
 TextPane.focusInputMap
+TextPane.focusedBackground
 TextPane.font
 TextPane.foreground
 TextPane.inactiveBackground
@@ -865,6 +894,7 @@ TextPane.selectionBackground
 TextPane.selectionForeground
 TextPaneUI
 TitlePane.background
+TitlePane.borderColor
 TitlePane.buttonHoverBackground
 TitlePane.buttonMaximizedHeight
 TitlePane.buttonPressedBackground
@@ -902,9 +932,11 @@ ToggleButton.disabledBackground
 ToggleButton.disabledSelectedBackground
 ToggleButton.disabledText
 ToggleButton.focusInputMap
+ToggleButton.focusedBackground
 ToggleButton.font
 ToggleButton.foreground
 ToggleButton.highlight
+ToggleButton.hoverBackground
 ToggleButton.iconTextGap
 ToggleButton.light
 ToggleButton.margin
@@ -916,6 +948,7 @@ ToggleButton.shadow
 ToggleButton.tab.disabledUnderlineColor
 ToggleButton.tab.focusBackground
 ToggleButton.tab.hoverBackground
+ToggleButton.tab.selectedBackground
 ToggleButton.tab.underlineColor
 ToggleButton.tab.underlineHeight
 ToggleButton.textIconGap
@@ -933,6 +966,7 @@ ToolBar.dockingBackground
 ToolBar.dockingForeground
 ToolBar.floatingBackground
 ToolBar.floatingForeground
+ToolBar.focusableButtons
 ToolBar.font
 ToolBar.foreground
 ToolBar.gripColor
@@ -962,6 +996,7 @@ Tree.dropCellBackground
 Tree.dropCellForeground
 Tree.dropLineColor
 Tree.editorBorder
+Tree.editorBorderSelectionColor
 Tree.expandedIcon
 Tree.focusInputMap
 Tree.focusInputMap.RightToLeft

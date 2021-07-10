@@ -42,6 +42,7 @@ import com.formdev.flatlaf.FlatLaf.DisabledIconProvider;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.GrayFilter;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.UIScale;
 import com.kitfox.svg.SVGDiagram;
@@ -335,7 +336,7 @@ public class FlatSVGIcon
 		try {
 			diagram = svgUniverse.getDiagram( url.toURI() );
 		} catch( URISyntaxException ex ) {
-			ex.printStackTrace();
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load SVG icon '" + url + "'.", ex );
 		}
 	}
 

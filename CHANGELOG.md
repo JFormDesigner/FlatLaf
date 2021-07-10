@@ -10,6 +10,11 @@ FlatLaf Change Log
 - PasswordField: UI delegate `FlatPasswordFieldUI` now extends `FlatTextFieldUI`
   (instead of `BasicPasswordFieldUI`) to avoid duplicate code and for easier
   extensibility.
+- Table and PopupFactory: Use `StackWalker` in Java 9+ for better performance.
+  (issue #334)
+- ToolBar: Paint focus indicator for focused button in toolbar. (issue #346)
+- ToolBar: Support focusable buttons in toolbar (set UI values
+  `ToolBar.focusableButtons` to `true`). (issue #346)
 
 #### Fixed bugs
 
@@ -28,6 +33,15 @@ FlatLaf Change Log
   components by:
   - `2px` at `1.75x` in **Light** and **Dark** themes
   - `2px` at `1.25x` and `2.25x` in **IntelliJ** and **Darcula** themes
+- OptionPane: Do not make child components, which are derived from `JPanel`,
+  non-opaque. (issue #349)
+- OptionPane: Align wrapped lines to the right if component orientation is
+  right-to-left. (issue #350)
+- PasswordField: Caps lock icon no longer painted over long text. (issue #172)
+- PasswordField: Paint caps lock icon on left side in right-to-left component
+  orientation.
+- Window decorations: Window title bar width is no longer considered when
+  calculating preferred/minimum width of window. (issue #351)
 
 
 ## 1.3

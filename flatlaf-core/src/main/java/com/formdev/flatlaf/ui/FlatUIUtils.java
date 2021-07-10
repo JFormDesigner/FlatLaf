@@ -94,6 +94,11 @@ public class FlatUIUtils
 	}
 
 	public static Insets addInsets( Insets insets1, Insets insets2 ) {
+		if( insets1 == null )
+			return insets2;
+		if( insets2 == null )
+			return insets1;
+
 		return new Insets(
 			insets1.top + insets2.top,
 			insets1.left + insets2.left,

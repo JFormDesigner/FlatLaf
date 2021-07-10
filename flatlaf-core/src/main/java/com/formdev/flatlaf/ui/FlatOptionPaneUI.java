@@ -22,7 +22,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -160,12 +163,30 @@ public class FlatOptionPaneUI
 		if( msg instanceof String && BasicHTML.isHTMLString( (String) msg ) )
 			maxll = Integer.MAX_VALUE;
 
+		// fix right-to-left alignment if super.addMessageComponents() breaks longer lines
+		// into multiple labels and puts them into a box that aligns them to the left
+		if( msg instanceof Box ) {
+			Box box = (Box) msg;
+			if( "OptionPane.verticalBox".equals( box.getName() ) &&
+				box.getLayout() instanceof BoxLayout &&
+				((BoxLayout)box.getLayout()).getAxis() == BoxLayout.Y_AXIS )
+			{
+				box.addPropertyChangeListener( "componentOrientation", e -> {
+					float alignX = box.getComponentOrientation().isLeftToRight() ? 0 : 1;
+					for( Component c : box.getComponents() ) {
+						if( c instanceof JLabel && "OptionPane.label".equals( c.getName() ) )
+							((JLabel)c).setAlignmentX( alignX );
+					}
+				} );
+			}
+		}
+
 		super.addMessageComponents( container, cons, msg, maxll, internallyCreated );
 	}
 
 	private void updateChildPanels( Container c ) {
 		for( Component child : c.getComponents() ) {
-			if( child instanceof JPanel ) {
+			if( child.getClass() == JPanel.class ) {
 				JPanel panel = (JPanel)child;
 
 				// make sub-panel non-opaque for OptionPane.background
@@ -177,9 +198,8 @@ public class FlatOptionPaneUI
 					panel.setBorder( new NonUIResourceBorder( border ) );
 			}
 
-			if( child instanceof Container ) {
+			if( child instanceof Container )
 				updateChildPanels( (Container) child );
-			}
 		}
 	}
 
