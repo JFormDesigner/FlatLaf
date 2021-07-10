@@ -1249,6 +1249,7 @@ ToolBar.dockingBackground      #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingForeground      #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.floatingBackground     #3c3f41    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.floatingForeground     #888888    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.focusableButtons       false
 ToolBar.font                   [active] $defaultFont [UI]
 ToolBar.foreground             #bbbbbb    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.gripColor              #adadad    javax.swing.plaf.ColorUIResource [UI]

@@ -13,6 +13,8 @@ FlatLaf Change Log
 - Table and PopupFactory: Use `StackWalker` in Java 9+ for better performance.
   (issue #334)
 - ToolBar: Paint focus indicator for focused button in toolbar. (issue #346)
+- ToolBar: Support focusable buttons in toolbar (set UI values
+  `ToolBar.focusableButtons` to `true`). (issue #346)
 
 #### Fixed bugs
 

@@ -966,6 +966,7 @@ ToolBar.dockingBackground
 ToolBar.dockingForeground
 ToolBar.floatingBackground
 ToolBar.floatingForeground
+ToolBar.focusableButtons
 ToolBar.font
 ToolBar.foreground
 ToolBar.gripColor

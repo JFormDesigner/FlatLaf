@@ -22,6 +22,7 @@ import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
@@ -41,13 +42,45 @@ import javax.swing.plaf.basic.BasicToolBarUI;
  * @uiDefault ToolBar.floatingForeground				Color
  * @uiDefault ToolBar.isRollover						boolean
  *
+ * <!-- FlatToolBarUI -->
+ *
+ * @uiDefault ToolBar.focusableButtons					boolean
+ *
  * @author Karl Tauber
  */
 public class FlatToolBarUI
 	extends BasicToolBarUI
 {
+	/** @since 1.4 */
+	protected boolean focusableButtons;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatToolBarUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		// disable focusable state of buttons (when switching from another Laf)
+		if( !focusableButtons )
+			setButtonsFocusable( false );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		// re-enable focusable state of buttons (when switching to another Laf)
+		if( !focusableButtons )
+			setButtonsFocusable( true );
+	}
+
+	@Override
+	protected void installDefaults() {
+		super.installDefaults();
+
+		focusableButtons = UIManager.getBoolean( "ToolBar.focusableButtons" );
 	}
 
 	@Override
@@ -57,20 +90,34 @@ public class FlatToolBarUI
 			public void componentAdded( ContainerEvent e ) {
 				super.componentAdded( e );
 
-				Component c = e.getChild();
-				if( c instanceof AbstractButton )
-					c.setFocusable( false );
+				if( !focusableButtons ) {
+					Component c = e.getChild();
+					if( c instanceof AbstractButton )
+						c.setFocusable( false );
+				}
 			}
 
 			@Override
 			public void componentRemoved( ContainerEvent e ) {
 				super.componentRemoved( e );
 
-				Component c = e.getChild();
-				if( c instanceof AbstractButton )
-					c.setFocusable( true );
+				if( !focusableButtons ) {
+					Component c = e.getChild();
+					if( c instanceof AbstractButton )
+						c.setFocusable( true );
+				}
 			}
 		};
+	}
+
+	/**
+	 * @since 1.4
+	 */
+	protected void setButtonsFocusable( boolean focusable ) {
+		for( Component c : toolBar.getComponents() ) {
+			if( c instanceof AbstractButton )
+				c.setFocusable( focusable );
+		}
 	}
 
 	// disable rollover border
