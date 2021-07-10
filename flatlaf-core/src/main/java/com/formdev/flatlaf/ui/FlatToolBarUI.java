@@ -61,7 +61,7 @@ public class FlatToolBarUI
 	extends BasicToolBarUI
 {
 	/** @since 1.4 */
-	protected boolean focusableButtons;
+	@Styleable protected boolean focusableButtons;
 
 	// for FlatToolBarBorder
 	@Styleable protected Insets borderMargins;
@@ -138,7 +138,12 @@ public class FlatToolBarUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
+		boolean oldFocusableButtons = focusableButtons;
+
 		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		if( focusableButtons != oldFocusableButtons )
+			setButtonsFocusable( focusableButtons );
 	}
 
 	/**

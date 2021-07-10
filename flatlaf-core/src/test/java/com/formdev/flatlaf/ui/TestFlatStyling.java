@@ -664,6 +664,8 @@ public class TestFlatStyling
 		JToolBar c = new JToolBar();
 		FlatToolBarUI ui = (FlatToolBarUI) c.getUI();
 
+		ui.applyStyle( "focusableButtons: true" );
+
 		ui.applyStyle( "borderMargins: 1,2,3,4" );
 		ui.applyStyle( "gripColor: #fff" );
 	}
@@ -713,11 +715,13 @@ public class TestFlatStyling
 		applyStyle.accept( "default.focusedBorderColor: #fff" );
 		applyStyle.accept( "default.focusColor: #fff" );
 		applyStyle.accept( "default.hoverBorderColor: #fff" );
+		applyStyle.accept( "toolbar.focusColor: #fff" );
 
 		applyStyle.accept( "borderWidth: 1" );
 		applyStyle.accept( "default.borderWidth: 2" );
 		applyStyle.accept( "toolbar.margin: 1,2,3,4" );
 		applyStyle.accept( "toolbar.spacingInsets: 1,2,3,4" );
+		applyStyle.accept( "toolbar.focusWidth: {float}1.5" );
 		applyStyle.accept( "arc: 6" );
 	}
 
@@ -767,11 +771,13 @@ public class TestFlatStyling
 		border.applyStyleProperty( "default.focusedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "default.focusColor", Color.WHITE );
 		border.applyStyleProperty( "default.hoverBorderColor", Color.WHITE );
+		border.applyStyleProperty( "toolbar.focusColor", Color.WHITE );
 
 		border.applyStyleProperty( "borderWidth", 1 );
 		border.applyStyleProperty( "default.borderWidth", 2 );
 		border.applyStyleProperty( "toolbar.margin", new Insets( 1, 2, 3, 4 ) );
 		border.applyStyleProperty( "toolbar.spacingInsets", new Insets( 1, 2, 3, 4 ) );
+		border.applyStyleProperty( "toolbar.focusWidth", 1.5f );
 		border.applyStyleProperty( "arc", 6 );
 	}
 

@@ -70,14 +70,14 @@ public class FlatButtonBorder
 	@Styleable(dot=true) protected Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
 	@Styleable(dot=true) protected Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
 	/** @since 1.4 */
-	protected final Color toolbarFocusColor = UIManager.getColor( "Button.toolbar.focusColor" );
+	@Styleable(dot=true) protected Color toolbarFocusColor = UIManager.getColor( "Button.toolbar.focusColor" );
 
 	@Styleable protected int borderWidth = UIManager.getInt( "Button.borderWidth" );
 	@Styleable(dot=true) protected int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
 	@Styleable(dot=true) protected Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
 	@Styleable(dot=true) protected Insets toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
 	/** @since 1.4 */
-	protected final float toolbarFocusWidth = FlatUIUtils.getUIFloat( "Button.toolbar.focusWidth", 1.5f );
+	@Styleable(dot=true) protected float toolbarFocusWidth = FlatUIUtils.getUIFloat( "Button.toolbar.focusWidth", 1.5f );
 	@Styleable protected int arc = UIManager.getInt( "Button.arc" );
 
 	public FlatButtonBorder() {
