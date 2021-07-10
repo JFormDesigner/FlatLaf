@@ -157,7 +157,7 @@ public class FlatTextFieldUI
 	@Override
 	protected void paintSafely( Graphics g ) {
 		paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
-		paintPlaceholder( g, getComponent(), placeholderForeground );
+		paintPlaceholder( g );
 
 		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
@@ -213,7 +213,9 @@ public class FlatTextFieldUI
 		return background;
 	}
 
-	static void paintPlaceholder( Graphics g, JTextComponent c, Color placeholderForeground ) {
+	protected void paintPlaceholder( Graphics g ) {
+		JTextComponent c = getComponent();
+
 		// check whether text component is empty
 		if( c.getDocument().getLength() > 0 )
 			return;
@@ -228,16 +230,14 @@ public class FlatTextFieldUI
 			return;
 
 		// compute placeholder location
-		Insets insets = c.getInsets();
+		Rectangle r = getVisibleEditorRect();
 		FontMetrics fm = c.getFontMetrics( c.getFont() );
-		int x = insets.left;
-		int y = insets.top + fm.getAscent() + ((c.getHeight() - insets.top - insets.bottom - fm.getHeight()) / 2);
+		int y = r.y + fm.getAscent() + ((r.height - fm.getHeight()) / 2);
 
 		// paint placeholder
 		g.setColor( placeholderForeground );
-		String clippedPlaceholder = JavaCompatibility.getClippedString( jc, fm,
-				(String) placeholder, c.getWidth() - insets.left - insets.right );
-		FlatUIUtils.drawString( c, g, clippedPlaceholder, x, y );
+		String clippedPlaceholder = JavaCompatibility.getClippedString( c, fm, (String) placeholder, r.width );
+		FlatUIUtils.drawString( c, g, clippedPlaceholder, r.x, y );
 	}
 
 	@Override
