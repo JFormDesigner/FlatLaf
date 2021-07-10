@@ -18,6 +18,7 @@ package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
+import java.awt.Insets;
 import javax.swing.JFormattedTextField;
 import com.formdev.flatlaf.extras.components.FlatTextField.SelectAllOnFocusPolicy;
 
@@ -58,6 +59,27 @@ public class FlatFormattedTextField
 	 */
 	public void setSelectAllOnFocusPolicy( SelectAllOnFocusPolicy selectAllOnFocusPolicy ) {
 		putClientPropertyEnumString( SELECT_ALL_ON_FOCUS_POLICY, selectAllOnFocusPolicy );
+	}
+
+
+	/**
+	 * Returns the padding of the text.
+	 *
+	 * @since 1.4
+	 */
+	public Insets getPadding() {
+		return (Insets) getClientProperty( TEXT_FIELD_PADDING );
+	}
+
+	/**
+	 * Specifies the padding of the text.
+	 * This changes the location and size of the text view within the component bounds,
+	 * but does not affect the size of the component.
+	 *
+	 * @since 1.4
+	 */
+	public void setPadding( Insets padding ) {
+		putClientProperty( TEXT_FIELD_PADDING, padding );
 	}
 
 
