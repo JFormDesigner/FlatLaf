@@ -17,13 +17,11 @@
 package com.formdev.flatlaf.demo;
 
 import java.awt.Dimension;
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.util.SystemInfo;
-import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_ACTIVE_TAB_BORDER;
-import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_HAS_FULL_BORDER;
 
 /**
  * @author Karl Tauber
