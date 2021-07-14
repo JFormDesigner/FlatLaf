@@ -65,6 +65,7 @@ import com.formdev.flatlaf.util.Animator.Interpolator;
  * A client property is set on the component to store the animation state.
  *
  * @author Karl Tauber
+ * @since 1.5
  */
 public interface AnimatedBorder
 	extends Border
@@ -88,6 +89,20 @@ public interface AnimatedBorder
 	 *     that {@link #getValue(Component)} returned
 	 */
 	void paintBorderAnimated( Component c, Graphics g, int x, int y, int width, int height, float animatedValue );
+
+	/**
+	 * Repaint the animated part of the border.
+	 * <p>
+	 * Useful to limit the repaint region. E.g. if only the bottom border is animated.
+	 * If more than one border side is animated (e.g. bottom and right side), then it
+	 * makes no sense to do separate repaints because the Swing repaint manager unions
+	 * the regions and the whole component is repainted.
+	 * <p>
+	 * The default implementation repaints the whole component.
+	 */
+	default void repaintBorder( Component c, int x, int y, int width, int height ) {
+		c.repaint( x, y, width, height );
+	}
 
 	/**
 	 * Gets the value of the component.
@@ -197,7 +212,7 @@ public interface AnimatedBorder
 							as2.fraction = fraction;
 
 							// repaint border
-							c.repaint( as2.x, as2.y, as2.width, as2.height );
+							border.repaintBorder( c, as2.x, as2.y, as2.width, as2.height );
 						}, () -> {
 							as2.startValue = as2.animatedValue = as2.targetValue;
 							as2.animator = null;

@@ -23,7 +23,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.Rectangle2D;
 import javax.swing.*;
-import com.formdev.flatlaf.ui.FlatMarginBorder;
+import javax.swing.border.AbstractBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.AnimatedBorder;
 import com.formdev.flatlaf.util.ColorFunctions;
@@ -133,7 +133,7 @@ public class FlatAnimatedBorderTest
 	 * - animates focus indicator color and border width
 	 */
 	private class AnimatedFocusFadeBorder
-		extends FlatMarginBorder
+		extends AbstractBorder
 		implements AnimatedBorder
 	{
 		// needed because otherwise the empty paint method in superclass
@@ -156,6 +156,13 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
+		public Insets getBorderInsets( Component c, Insets insets ) {
+			insets.top = insets.bottom = UIScale.scale( 3 );
+			insets.left = insets.right = UIScale.scale( 7 );
+			return insets;
+		}
+
+		@Override
 		public float getValue( Component c ) {
 			return FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0;
 		}
@@ -174,7 +181,7 @@ public class FlatAnimatedBorderTest
 	 * - animates focus indicator at bottom
 	 */
 	private class AnimatedMaterialBorder
-		extends FlatMarginBorder
+		extends AbstractBorder
 		implements AnimatedBorder
 	{
 		// needed because otherwise the empty paint method in superclass
@@ -204,6 +211,20 @@ public class FlatAnimatedBorderTest
 						g2d.fill( new Rectangle2D.Float( x2 + (width2 - lw) / 2, y2 + height2 - lh, lw, lh ) );
 					}
 				} );
+		}
+
+		@Override
+		public void repaintBorder( Component c, int x, int y, int width, int height ) {
+			// limit repaint to bottom border
+			int lh = UIScale.scale( 2 );
+			c.repaint( x, y + height - lh, width, lh );
+		}
+
+		@Override
+		public Insets getBorderInsets( Component c, Insets insets ) {
+			insets.top = insets.bottom = UIScale.scale( 3 );
+			insets.left = insets.right = UIScale.scale( 7 );
+			return insets;
 		}
 
 		@Override
@@ -245,7 +266,7 @@ public class FlatAnimatedBorderTest
 
 		@Override
 		public Insets getBorderInsets( Component c ) {
-			return UIScale.scale( new Insets( 4, 4, 4, 4 ) );
+			return UIScale.scale( new Insets( 3, 7, 3, 7 ) );
 		}
 
 		@Override
