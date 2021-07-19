@@ -58,6 +58,10 @@ public class FlatStyleSupport
 		boolean dot() default false;
 	}
 
+	public interface StyleableBorder {
+		Object applyStyleProperty( String key, Object value );
+	}
+
 	/**
 	 * Parses styles in CSS syntax ("key1: value1; key2: value2; ..."),
 	 * converts the value strings into binary and invokes the given function
@@ -284,7 +288,7 @@ public class FlatStyleSupport
 			return applyToAnnotatedObject( obj, key, value );
 		} catch( UnknownStyleException ex ) {
 			Border border = c.getBorder();
-			if( border instanceof FlatBorder ) {
+			if( border instanceof StyleableBorder ) {
 				if( borderShared.get() ) {
 					border = cloneBorder( border );
 					c.setBorder( border );
@@ -292,7 +296,7 @@ public class FlatStyleSupport
 				}
 
 				try {
-					return ((FlatBorder)border).applyStyleProperty( key, value );
+					return ((StyleableBorder)border).applyStyleProperty( key, value );
 				} catch( UnknownStyleException ex2 ) {
 					// ignore
 				}

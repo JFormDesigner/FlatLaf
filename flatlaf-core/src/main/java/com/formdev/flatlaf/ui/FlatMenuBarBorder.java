@@ -23,6 +23,8 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import javax.swing.JMenuBar;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableBorder;
 
 /**
  * Border for {@link javax.swing.JMenuBar}.
@@ -33,8 +35,17 @@ import javax.swing.UIManager;
  */
 public class FlatMenuBarBorder
 	extends FlatMarginBorder
+	implements StyleableBorder
 {
-	private final Color borderColor = UIManager.getColor( "MenuBar.borderColor" );
+	@Styleable protected Color borderColor = UIManager.getColor( "MenuBar.borderColor" );
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {

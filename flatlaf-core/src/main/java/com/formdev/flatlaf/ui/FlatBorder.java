@@ -32,6 +32,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableBorder;
 import com.formdev.flatlaf.util.DerivedColor;
 
 /**
@@ -61,6 +62,7 @@ import com.formdev.flatlaf.util.DerivedColor;
  */
 public class FlatBorder
 	extends BasicBorders.MarginBorder
+	implements StyleableBorder
 {
 	@Styleable protected int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	@Styleable protected float innerFocusWidth = FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 );
@@ -79,6 +81,7 @@ public class FlatBorder
 	/**
 	 * @since TODO
 	 */
+	@Override
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}

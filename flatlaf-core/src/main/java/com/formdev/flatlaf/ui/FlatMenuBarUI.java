@@ -20,6 +20,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
@@ -35,6 +38,7 @@ import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -47,6 +51,9 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuBar.background						Color
  * @uiDefault MenuBar.foreground						Color
  * @uiDefault MenuBar.border							Border
+ *
+ * <!-- FlatMenuBarUI -->
+ *
  * @uiDefault TitlePane.unifiedBackground				boolean
  *
  * @author Karl Tauber
@@ -54,6 +61,10 @@ import com.formdev.flatlaf.util.SystemInfo;
 public class FlatMenuBarUI
 	extends BasicMenuBarUI
 {
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuBarUI();
 	}
@@ -64,10 +75,42 @@ public class FlatMenuBarUI
 	 */
 
 	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
+	}
+
+	@Override
 	protected void installDefaults() {
 		super.installDefaults();
 
 		LookAndFeel.installProperty( menuBar, "opaque", false );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		oldStyleValues = null;
+		borderShared = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener(
+			menuBar, this::applyStyle, null );
+		menuBar.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		menuBar.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = null;
 	}
 
 	@Override
@@ -80,6 +123,22 @@ public class FlatMenuBarUI
 			SwingUtilities.replaceUIActionMap( menuBar, map );
 		}
 		map.put( "takeFocus", new TakeFocus() );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, menuBar, borderShared );
 	}
 
 	@Override

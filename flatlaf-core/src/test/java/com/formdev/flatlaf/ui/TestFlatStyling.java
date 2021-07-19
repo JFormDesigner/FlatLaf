@@ -222,6 +222,15 @@ public class TestFlatStyling
 	}
 
 	@Test
+	void menuBar() {
+		JMenuBar c = new JMenuBar();
+		FlatMenuBarUI ui = (FlatMenuBarUI) c.getUI();
+
+		// FlatMenuBarBorder
+		ui.applyStyle( "borderColor: #fff" );
+	}
+
+	@Test
 	void menu() {
 		JMenu c = new JMenu();
 		FlatMenuUI ui = (FlatMenuUI) c.getUI();
