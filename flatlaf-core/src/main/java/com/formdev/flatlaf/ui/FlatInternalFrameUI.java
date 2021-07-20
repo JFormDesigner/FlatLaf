@@ -22,12 +22,17 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableBorder;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JInternalFrame}.
@@ -86,6 +91,9 @@ public class FlatInternalFrameUI
 {
 	protected FlatWindowResizer windowResizer;
 
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatInternalFrameUI( (JInternalFrame) c );
 	}
@@ -101,6 +109,8 @@ public class FlatInternalFrameUI
 		LookAndFeel.installProperty( frame, "opaque", false );
 
 		windowResizer = createWindowResizer();
+
+		applyStyle( FlatStyleSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -111,6 +121,9 @@ public class FlatInternalFrameUI
 			windowResizer.uninstall();
 			windowResizer = null;
 		}
+
+		oldStyleValues = null;
+		borderShared = null;
 	}
 
 	@Override
@@ -122,15 +135,38 @@ public class FlatInternalFrameUI
 		return new FlatWindowResizer.InternalFrameResizer( frame, this::getDesktopManager );
 	}
 
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener() {
+		return FlatStyleSupport.createPropertyChangeListener( frame, this::applyStyle,
+			super.createPropertyChangeListener() );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, frame, borderShared );
+	}
+
 	//---- class FlatInternalFrameBorder --------------------------------------
 
 	public static class FlatInternalFrameBorder
 		extends FlatEmptyBorder
+		implements StyleableBorder
 	{
-		private final Color activeBorderColor = UIManager.getColor( "InternalFrame.activeBorderColor" );
-		private final Color inactiveBorderColor = UIManager.getColor( "InternalFrame.inactiveBorderColor" );
-		private final int borderLineWidth = FlatUIUtils.getUIInt( "InternalFrame.borderLineWidth", 1 );
-		private final boolean dropShadowPainted = UIManager.getBoolean( "InternalFrame.dropShadowPainted" );
+		@Styleable protected Color activeBorderColor = UIManager.getColor( "InternalFrame.activeBorderColor" );
+		@Styleable protected Color inactiveBorderColor = UIManager.getColor( "InternalFrame.inactiveBorderColor" );
+		@Styleable protected int borderLineWidth = FlatUIUtils.getUIInt( "InternalFrame.borderLineWidth", 1 );
+		@Styleable protected boolean dropShadowPainted = UIManager.getBoolean( "InternalFrame.dropShadowPainted" );
 
 		private final FlatDropShadowBorder activeDropShadowBorder = new FlatDropShadowBorder(
 			UIManager.getColor( "InternalFrame.activeDropShadowColor" ),
@@ -143,6 +179,22 @@ public class FlatInternalFrameUI
 
 		public FlatInternalFrameBorder() {
 			super( UIManager.getInsets( "InternalFrame.borderMargins" ) );
+		}
+
+		@Override
+		public Object applyStyleProperty( String key, Object value ) {
+			switch( key ) {
+				case "borderMargins": return applyStyleProperty( (Insets) value );
+
+				case "activeDropShadowColor": return activeDropShadowBorder.applyStyleProperty( "shadowColor", value );
+				case "activeDropShadowInsets": return activeDropShadowBorder.applyStyleProperty( "shadowInsets", value );
+				case "activeDropShadowOpacity": return activeDropShadowBorder.applyStyleProperty( "shadowOpacity", value );
+				case "inactiveDropShadowColor": return inactiveDropShadowBorder.applyStyleProperty( "shadowColor", value );
+				case "inactiveDropShadowInsets": return inactiveDropShadowBorder.applyStyleProperty( "shadowInsets", value );
+				case "inactiveDropShadowOpacity": return inactiveDropShadowBorder.applyStyleProperty( "shadowOpacity", value );
+			}
+
+			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 		}
 
 		@Override

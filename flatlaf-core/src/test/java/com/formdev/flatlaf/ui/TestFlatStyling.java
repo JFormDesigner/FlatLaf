@@ -198,6 +198,25 @@ public class TestFlatStyling
 	}
 
 	@Test
+	void internalFrame() {
+		JInternalFrame c = new JInternalFrame();
+		FlatInternalFrameUI ui = (FlatInternalFrameUI) c.getUI();
+
+		ui.applyStyle( "activeBorderColor: #fff" );
+		ui.applyStyle( "inactiveBorderColor: #fff" );
+		ui.applyStyle( "borderLineWidth: 123" );
+		ui.applyStyle( "dropShadowPainted: false" );
+		ui.applyStyle( "borderMargins: 1,2,3,4" );
+
+		ui.applyStyle( "activeDropShadowColor: #fff" );
+		ui.applyStyle( "activeDropShadowInsets: 1,2,3,4" );
+		ui.applyStyle( "activeDropShadowOpacity: 0.5" );
+		ui.applyStyle( "inactiveDropShadowColor: #fff" );
+		ui.applyStyle( "inactiveDropShadowInsets: 1,2,3,4" );
+		ui.applyStyle( "inactiveDropShadowOpacity: 0.5" );
+	}
+
+	@Test
 	void label() {
 		JLabel c = new JLabel();
 		FlatLabelUI ui = (FlatLabelUI) c.getUI();

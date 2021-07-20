@@ -67,4 +67,13 @@ public class FlatEmptyBorder
 	public Insets getUnscaledBorderInsets() {
 		return super.getBorderInsets();
 	}
+
+	public Object applyStyleProperty( Insets insets ) {
+		Insets oldInsets = getUnscaledBorderInsets();
+		top = insets.top;
+		left = insets.left;
+		bottom = insets.bottom;
+		right = insets.right;
+		return oldInsets;
+	}
 }
