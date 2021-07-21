@@ -40,6 +40,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
@@ -70,6 +71,7 @@ import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -111,6 +113,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatComboBoxUI
 	extends BasicComboBoxUI
+	implements StyleableUI
 {
 	@Styleable protected int minimumWidth;
 	@Styleable protected int editorColumns;
@@ -474,6 +477,18 @@ public class FlatComboBoxUI
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, comboBox, borderShared );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		infos.put( "padding", Insets.class );
+		FlatStyleSupport.collectAnnotatedStyleableInfos( this, infos );
+		FlatStyleSupport.collectStyleableInfos( comboBox.getBorder(), infos );
+		return infos;
 	}
 
 	@Override

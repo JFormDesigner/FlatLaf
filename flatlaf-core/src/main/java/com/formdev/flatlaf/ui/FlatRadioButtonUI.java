@@ -37,6 +37,7 @@ import javax.swing.plaf.basic.BasicRadioButtonUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -62,6 +63,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatRadioButtonUI
 	extends BasicRadioButtonUI
+	implements StyleableUI
 {
 	protected int iconTextGap;
 	@Styleable protected Color disabledText;
@@ -179,6 +181,19 @@ public class FlatRadioButtonUI
 		}
 
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		if( icon instanceof FlatCheckBoxIcon ) {
+			for( Map.Entry<String, Class<?>> e : ((FlatCheckBoxIcon)icon).getStyleableInfos().entrySet() )
+				infos.put( "icon.".concat( e.getKey() ), e.getValue() );
+		}
+		return infos;
 	}
 
 	private static Insets tempInsets = new Insets( 0, 0, 0, 0 );

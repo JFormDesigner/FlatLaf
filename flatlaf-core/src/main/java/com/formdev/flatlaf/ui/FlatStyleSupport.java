@@ -56,10 +56,16 @@ public class FlatStyleSupport
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Styleable {
 		boolean dot() default false;
+		Class<?> type() default Void.class;
+	}
+
+	public interface StyleableUI {
+		Map<String, Class<?>> getStyleableInfos( JComponent c );
 	}
 
 	public interface StyleableBorder {
 		Object applyStyleProperty( String key, Object value );
+		Map<String, Class<?>> getStyleableInfos();
 	}
 
 	/**
@@ -250,8 +256,8 @@ public class FlatStyleSupport
 			try {
 				Field f = cls.getDeclaredField( fieldName );
 				if( predicate == null || predicate.test( f ) ) {
-					if( Modifier.isFinal( f.getModifiers() ) )
-						throw new IllegalArgumentException( "field '" + cls.getName() + "." + fieldName + "' is final" );
+					if( !isValidField( f ) )
+						throw new IllegalArgumentException( "field '" + cls.getName() + "." + fieldName + "' is final or static" );
 
 					try {
 						// necessary to access protected fields in other packages
@@ -279,6 +285,11 @@ public class FlatStyleSupport
 					throw new UnknownStyleException( key );
 			}
 		}
+	}
+
+	private static boolean isValidField( Field f ) {
+		int modifiers = f.getModifiers();
+		return (modifiers & (Modifier.FINAL|Modifier.STATIC)) == 0 && !f.isSynthetic();
 	}
 
 	static Object applyToAnnotatedObjectOrBorder( Object obj, String key, Object value,
@@ -340,6 +351,80 @@ public class FlatStyleSupport
 		} catch( Exception ex ) {
 			throw new IllegalArgumentException( "failed to clone icon '" + iconClass.getName() + "'" );
 		}
+	}
+
+	/**
+	 * Returns a map of all fields annotated with {@link Styleable}.
+	 * The key is the name of the field and the value the type of the field.
+	 */
+	public static Map<String, Class<?>> getAnnotatedStyleableInfos( Object obj ) {
+		return getAnnotatedStyleableInfos( obj, null );
+	}
+
+	public static Map<String, Class<?>> getAnnotatedStyleableInfos( Object obj, Border border ) {
+		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		collectAnnotatedStyleableInfos( obj, infos );
+		collectStyleableInfos( border, infos );
+		return infos;
+	}
+
+	/**
+	 * Search for all fields annotated with {@link Styleable} and add them to the given map.
+	 * The key is the name of the field and the value the type of the field.
+	 */
+	public static void collectAnnotatedStyleableInfos( Object obj, Map<String, Class<?>> infos ) {
+		Class<?> cls = obj.getClass();
+
+		for(;;) {
+			for( Field f : cls.getDeclaredFields() ) {
+				if( !isValidField( f ) )
+					continue;
+
+				Styleable styleable = f.getAnnotation( Styleable.class );
+				if( styleable == null )
+					continue;
+
+				String name = f.getName();
+				Class<?> type = f.getType();
+
+				// handle "dot" keys (e.g. change field name "iconArrowType" to style key "icon.arrowType")
+				if( styleable.dot() ) {
+					int len = name.length();
+					for( int i = 0; i < len; i++ ) {
+						if( Character.isUpperCase( name.charAt( i ) ) ) {
+							name = name.substring( 0, i ) + '.'
+								+ Character.toLowerCase( name.charAt( i ) )
+								+ name.substring( i + 1 );
+							break;
+						}
+					}
+				}
+
+				// field has a different type
+				if( styleable.type() != Void.class )
+					type = styleable.type();
+
+				infos.put( name, type );
+			}
+
+			cls = cls.getSuperclass();
+			if( cls == null )
+				return;
+
+			String superclassName = cls.getName();
+			if( superclassName.startsWith( "java." ) || superclassName.startsWith( "javax." ) )
+				return;
+		}
+	}
+
+	public static void collectStyleableInfos( Border border, Map<String, Class<?>> infos ) {
+		if( border instanceof StyleableBorder )
+			infos.putAll( ((StyleableBorder)border).getStyleableInfos() );
+	}
+
+	public static void putAllPrefixKey( Map<String, Class<?>> infos, String keyPrefix, Map<String, Class<?>> infos2 ) {
+		for( Map.Entry<String, Class<?>> e : infos2.entrySet() )
+			infos.put( keyPrefix.concat( e.getKey() ), e.getValue() );
 	}
 
 	//---- class UnknownStyleException ----------------------------------------

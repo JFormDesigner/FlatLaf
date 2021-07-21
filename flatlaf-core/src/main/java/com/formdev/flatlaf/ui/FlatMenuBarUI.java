@@ -40,6 +40,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -60,6 +61,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatMenuBarUI
 	extends BasicMenuBarUI
+	implements StyleableUI
 {
 	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;
@@ -139,6 +141,14 @@ public class FlatMenuBarUI
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, menuBar, borderShared );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this, menuBar.getBorder() );
 	}
 
 	@Override

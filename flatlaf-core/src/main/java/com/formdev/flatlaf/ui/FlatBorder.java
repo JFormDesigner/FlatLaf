@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Paint;
+import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -84,6 +85,14 @@ public class FlatBorder
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

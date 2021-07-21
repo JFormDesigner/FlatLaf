@@ -16,15 +16,18 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.beans.PropertyChangeListener;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 
 /**
@@ -57,6 +60,7 @@ import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
  */
 public class FlatMenuItemUI
 	extends BasicMenuItemUI
+	implements StyleableUI
 {
 	private FlatMenuItemRenderer renderer;
 	private Map<String, Object> oldStyleValues;
@@ -120,6 +124,7 @@ public class FlatMenuItemUI
 
 	static Object applyStyleProperty( BasicMenuItemUI ui, String key, Object value ) {
 		switch( key ) {
+			// BasicMenuItemUI
 			case "selectionBackground":
 			case "selectionForeground":
 			case "disabledForeground":
@@ -129,6 +134,25 @@ public class FlatMenuItemUI
 
 			default: throw new UnknownStyleException( key );
 		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return getStyleableInfos( renderer );
+	}
+
+	static Map<String, Class<?>> getStyleableInfos( FlatMenuItemRenderer renderer ) {
+		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		infos.put( "selectionBackground", Color.class );
+		infos.put( "selectionForeground", Color.class );
+		infos.put( "disabledForeground", Color.class );
+		infos.put( "acceleratorForeground", Color.class );
+		infos.put( "acceleratorSelectionForeground", Color.class );
+		infos.putAll( renderer.getStyleableInfos() );
+		return infos;
 	}
 
 	@Override

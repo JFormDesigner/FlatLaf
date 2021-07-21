@@ -30,6 +30,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSeparatorUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSeparator}.
@@ -49,6 +50,7 @@ import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
  */
 public class FlatSeparatorUI
 	extends BasicSeparatorUI
+	implements StyleableUI
 {
 	@Styleable protected int height;
 	@Styleable protected int stripeWidth;
@@ -146,6 +148,14 @@ public class FlatSeparatorUI
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

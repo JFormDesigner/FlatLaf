@@ -45,6 +45,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
@@ -81,6 +82,7 @@ import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
  */
 public class FlatSpinnerUI
 	extends BasicSpinnerUI
+	implements StyleableUI
 {
 	private Handler handler;
 
@@ -203,6 +205,14 @@ public class FlatSpinnerUI
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, spinner, borderShared );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this, spinner.getBorder() );
 	}
 
 	@Override

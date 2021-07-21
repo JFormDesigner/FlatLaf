@@ -21,12 +21,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
+import java.util.Iterator;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -141,6 +144,31 @@ public class FlatToggleButtonUI
 				b.repaint();
 				break;
 		}
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
+		if( key.startsWith( "help." ) )
+			throw new UnknownStyleException( key );
+
+		return super.applyStyleProperty( b, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = super.getStyleableInfos( c );
+		Iterator<String> it = infos.keySet().iterator();
+		while( it.hasNext() ) {
+			if( it.next().startsWith( "help." ) )
+				it.remove();
+		}
+		return infos;
 	}
 
 	static boolean isTabButton( Component c ) {

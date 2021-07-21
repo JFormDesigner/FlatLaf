@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.swing.InputMap;
@@ -37,6 +38,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -76,6 +78,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatScrollBarUI
 	extends BasicScrollBarUI
+	implements StyleableUI
 {
 	// overrides BasicScrollBarUI.supportsAbsolutePositioning (which is private)
 	@Styleable protected boolean allowsAbsolutePositioning;
@@ -244,6 +247,21 @@ public class FlatScrollBarUI
 		}
 
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		infos.put( "track", Color.class );
+		infos.put( "thumb", Color.class );
+		infos.put( "width", int.class );
+		infos.put( "minimumThumbSize", Dimension.class );
+		infos.put( "maximumThumbSize", Dimension.class );
+		FlatStyleSupport.collectAnnotatedStyleableInfos( this, infos );
+		return infos;
 	}
 
 	@Override

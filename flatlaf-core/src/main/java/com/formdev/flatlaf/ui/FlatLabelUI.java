@@ -37,6 +37,7 @@ import javax.swing.plaf.basic.BasicLabelUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -57,6 +58,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatLabelUI
 	extends BasicLabelUI
+	implements StyleableUI
 {
 	@Styleable protected Color disabledForeground;
 
@@ -147,6 +149,14 @@ public class FlatLabelUI
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

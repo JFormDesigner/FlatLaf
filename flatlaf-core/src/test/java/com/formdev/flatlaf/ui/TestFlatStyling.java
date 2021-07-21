@@ -276,8 +276,8 @@ public class TestFlatStyling
 
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
-		menuItem_arrowIcon( applyStyle );
 		menuItem_checkIcon( applyStyle );
+		menuItem_arrowIcon( applyStyle );
 	}
 
 	@Test
@@ -287,8 +287,8 @@ public class TestFlatStyling
 
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
-		menuItem_arrowIcon( applyStyle );
 		menuItem_checkIcon( applyStyle );
+		menuItem_arrowIcon( applyStyle );
 	}
 
 	private void menuItem( Consumer<String> applyStyle ) {
@@ -320,7 +320,7 @@ public class TestFlatStyling
 	private void menuItem_checkIcon( Consumer<String> applyStyle ) {
 		applyStyle.accept( "icon.checkmarkColor: #fff" );
 		applyStyle.accept( "icon.disabledCheckmarkColor: #fff" );
-		applyStyle.accept( "icon.selectionForeground: #fff" );
+		applyStyle.accept( "selectionForeground: #fff" );
 	}
 
 	private void menuItem_arrowIcon( Consumer<String> applyStyle ) {
@@ -335,11 +335,9 @@ public class TestFlatStyling
 		JPasswordField c = new JPasswordField();
 		FlatPasswordFieldUI ui = (FlatPasswordFieldUI) c.getUI();
 
-		ui.applyStyle( "minimumWidth: 100" );
-		ui.applyStyle( "disabledBackground: #fff" );
-		ui.applyStyle( "inactiveBackground: #fff" );
-		ui.applyStyle( "placeholderForeground: #fff" );
-		ui.applyStyle( "focusedBackground: #fff" );
+		// FlatPasswordFieldUI extends FlatTextFieldUI
+		textField( ui );
+
 		ui.applyStyle( "showCapsLock: true" );
 
 		// capsLockIcon
@@ -543,6 +541,7 @@ public class TestFlatStyling
 
 		ui.applyStyle( "tabInsets: 1,2,3,4" );
 		ui.applyStyle( "tabAreaInsets: 1,2,3,4" );
+		ui.applyStyle( "textIconGap: 4" );
 
 		ui.applyStyle( "disabledForeground: #fff" );
 
@@ -555,7 +554,6 @@ public class TestFlatStyling
 		ui.applyStyle( "tabSeparatorColor: #fff" );
 		ui.applyStyle( "contentAreaColor: #fff" );
 
-		ui.applyStyle( "textIconGap: 4" );
 		ui.applyStyle( "minimumTabWidth: 50" );
 		ui.applyStyle( "maximumTabWidth: 100" );
 		ui.applyStyle( "tabHeight: 30" );
@@ -810,6 +808,16 @@ public class TestFlatStyling
 	}
 
 	@Test
+	void flatRoundBorder() {
+		FlatRoundBorder border = new FlatRoundBorder();
+
+		// FlatRoundBorder extends FlatBorder
+		flatBorder( border );
+
+		border.applyStyleProperty( "arc", 6 );
+	}
+
+	@Test
 	void flatTextBorder() {
 		FlatTextBorder border = new FlatTextBorder();
 
@@ -937,6 +945,7 @@ public class TestFlatStyling
 		icon.applyStyleProperty( "disabledArrowColor", Color.WHITE );
 		icon.applyStyleProperty( "selectionForeground", Color.WHITE );
 	}
+
 	@Test
 	void flatHelpButtonIcon() {
 		FlatHelpButtonIcon icon = new FlatHelpButtonIcon();

@@ -52,6 +52,7 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -87,6 +88,7 @@ import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
@@ -160,6 +162,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTabbedPaneUI
 	extends BasicTabbedPaneUI
+	implements StyleableUI
 {
 	// tabs popup policy / scroll arrows policy
 	protected static final int NEVER = 0;
@@ -202,13 +205,13 @@ public class FlatTabbedPaneUI
 	@Styleable protected boolean hasFullBorder;
 	@Styleable protected boolean tabsOpaque = true;
 
-	@Styleable private int tabsPopupPolicy;
-	@Styleable private int scrollButtonsPolicy;
-	@Styleable private int scrollButtonsPlacement;
+	@Styleable(type=String.class) private int tabsPopupPolicy;
+	@Styleable(type=String.class) private int scrollButtonsPolicy;
+	@Styleable(type=String.class) private int scrollButtonsPlacement;
 
-	@Styleable private int tabAreaAlignment;
-	@Styleable private int tabAlignment;
-	@Styleable private int tabWidthMode;
+	@Styleable(type=String.class) private int tabAreaAlignment;
+	@Styleable(type=String.class) private int tabAlignment;
+	@Styleable(type=String.class) private int tabWidthMode;
 	protected Icon closeIcon;
 
 	@Styleable protected String arrowType;
@@ -624,6 +627,21 @@ public class FlatTabbedPaneUI
 		}
 
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		infos.put( "tabInsets", Insets.class );
+		infos.put( "tabAreaInsets", Insets.class );
+		infos.put( "textIconGap", int.class );
+		FlatStyleSupport.collectAnnotatedStyleableInfos( this, infos );
+		if( closeIcon instanceof FlatTabbedPaneCloseIcon )
+			infos.putAll( ((FlatTabbedPaneCloseIcon)closeIcon).getStyleableInfos() );
+		return infos;
 	}
 
 	protected void setRolloverTab( int x, int y ) {

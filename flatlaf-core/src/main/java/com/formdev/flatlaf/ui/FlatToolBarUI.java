@@ -30,6 +30,7 @@ import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar}.
@@ -59,6 +60,7 @@ import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
  */
 public class FlatToolBarUI
 	extends BasicToolBarUI
+	implements StyleableUI
 {
 	/** @since 1.4 */
 	@Styleable protected boolean focusableButtons;
@@ -151,6 +153,14 @@ public class FlatToolBarUI
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

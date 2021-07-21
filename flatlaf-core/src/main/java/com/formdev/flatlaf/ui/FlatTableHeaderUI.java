@@ -39,6 +39,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -71,10 +72,11 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTableHeaderUI
 	extends BasicTableHeaderUI
+	implements StyleableUI
 {
 	@Styleable protected Color bottomSeparatorColor;
 	@Styleable protected int height;
-	@Styleable protected int sortIconPosition;
+	@Styleable(type=String.class) protected int sortIconPosition;
 
 	// for FlatTableHeaderBorder
 	@Styleable protected Insets cellMargins;
@@ -148,6 +150,14 @@ public class FlatTableHeaderUI
 			value = parseSortIconPosition( (String) value );
 
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	private static int parseSortIconPosition( String str ) {

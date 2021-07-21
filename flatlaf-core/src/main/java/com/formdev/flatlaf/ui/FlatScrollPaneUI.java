@@ -48,6 +48,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollPane}.
@@ -68,6 +69,7 @@ import com.formdev.flatlaf.FlatClientProperties;
  */
 public class FlatScrollPaneUI
 	extends BasicScrollPaneUI
+	implements StyleableUI
 {
 	private Handler handler;
 
@@ -318,6 +320,14 @@ public class FlatScrollPaneUI
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, scrollpane, borderShared );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this, scrollpane.getBorder() );
 	}
 
 	@Override

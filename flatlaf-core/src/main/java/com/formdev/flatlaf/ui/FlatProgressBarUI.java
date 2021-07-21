@@ -33,6 +33,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -60,6 +61,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatProgressBarUI
 	extends BasicProgressBarUI
+	implements StyleableUI
 {
 	@Styleable protected int arc;
 	@Styleable protected Dimension horizontalSize;
@@ -139,6 +141,14 @@ public class FlatProgressBarUI
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

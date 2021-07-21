@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
+import java.util.Map;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport;
@@ -78,6 +79,13 @@ public class FlatHelpButtonIcon
 	 */
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

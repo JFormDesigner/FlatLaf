@@ -30,6 +30,7 @@ import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.text.AttributedCharacterIterator;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -147,6 +148,19 @@ public class FlatMenuItemRenderer
 		}
 
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		Map<String, Class<?>> infos = FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		if( checkIcon instanceof FlatCheckBoxMenuItemIcon )
+			FlatStyleSupport.putAllPrefixKey( infos, "icon.", ((FlatCheckBoxMenuItemIcon)checkIcon).getStyleableInfos() );
+		if( arrowIcon instanceof FlatMenuArrowIcon )
+			FlatStyleSupport.putAllPrefixKey( infos, "icon.", ((FlatMenuArrowIcon)arrowIcon).getStyleableInfos() );
+		infos.remove( "icon.selectionForeground" );
+		return infos;
 	}
 
 	protected Dimension getPreferredMenuItemSize() {

@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Shape;
@@ -23,6 +24,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Map;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.Icon;
@@ -159,6 +161,9 @@ public class FlatPasswordFieldUI
 		}
 	}
 
+	/**
+	 * @since TODO
+	 */
 	@Override
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof FlatCapsLockIcon ) {
@@ -170,6 +175,16 @@ public class FlatPasswordFieldUI
 		}
 
 		return super.applyStyleProperty( key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = super.getStyleableInfos( c );
+		infos.put( "capsLockIconColor", Color.class );
+		return infos;
 	}
 
 	@Override

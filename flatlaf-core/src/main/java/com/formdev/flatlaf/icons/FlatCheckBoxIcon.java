@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -136,6 +137,13 @@ public class FlatCheckBoxIcon
 	 */
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

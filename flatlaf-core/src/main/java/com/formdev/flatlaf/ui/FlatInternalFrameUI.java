@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.beans.PropertyChangeListener;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
@@ -33,6 +34,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableBorder;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JInternalFrame}.
@@ -88,6 +90,7 @@ import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableBorder;
  */
 public class FlatInternalFrameUI
 	extends BasicInternalFrameUI
+	implements StyleableUI
 {
 	protected FlatWindowResizer windowResizer;
 
@@ -157,6 +160,14 @@ public class FlatInternalFrameUI
 		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, frame, borderShared );
 	}
 
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this, frame.getBorder() );
+	}
+
 	//---- class FlatInternalFrameBorder --------------------------------------
 
 	public static class FlatInternalFrameBorder
@@ -195,6 +206,20 @@ public class FlatInternalFrameUI
 			}
 
 			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		}
+
+		@Override
+		public Map<String, Class<?>> getStyleableInfos() {
+			Map<String, Class<?>> infos = new LinkedHashMap<>();
+			FlatStyleSupport.collectAnnotatedStyleableInfos( this, infos );
+			infos.put( "borderMargins", Insets.class );
+			infos.put( "activeDropShadowColor", Color.class );
+			infos.put( "activeDropShadowInsets", Insets.class );
+			infos.put( "activeDropShadowOpacity", float.class );
+			infos.put( "inactiveDropShadowColor", Color.class );
+			infos.put( "inactiveDropShadowInsets", Insets.class );
+			infos.put( "inactiveDropShadowOpacity", float.class );
+			return infos;
 		}
 
 		@Override

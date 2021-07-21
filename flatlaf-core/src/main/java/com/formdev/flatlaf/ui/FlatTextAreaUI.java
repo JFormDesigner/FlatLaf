@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextAreaUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
@@ -59,6 +60,7 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  */
 public class FlatTextAreaUI
 	extends BasicTextAreaUI
+	implements StyleableUI
 {
 	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
@@ -156,6 +158,14 @@ public class FlatTextAreaUI
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	private void updateBackground() {

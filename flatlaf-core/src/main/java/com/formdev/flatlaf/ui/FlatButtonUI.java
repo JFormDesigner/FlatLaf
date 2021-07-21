@@ -48,6 +48,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -98,6 +99,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatButtonUI
 	extends BasicButtonUI
+	implements StyleableUI
 {
 	@Styleable protected int minimumWidth;
 	protected int iconTextGap;
@@ -294,6 +296,17 @@ public class FlatButtonUI
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, b, borderShared );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = FlatStyleSupport.getAnnotatedStyleableInfos( this, c.getBorder() );
+		if( helpButtonIcon instanceof FlatHelpButtonIcon )
+			FlatStyleSupport.putAllPrefixKey( infos, "help.", ((FlatHelpButtonIcon)helpButtonIcon).getStyleableInfos() );
+		return infos;
 	}
 
 	static boolean isContentAreaFilled( Component c ) {

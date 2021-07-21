@@ -36,6 +36,7 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -71,6 +72,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatSplitPaneUI
 	extends BasicSplitPaneUI
+	implements StyleableUI
 {
 	@Styleable protected String arrowType;
 	@Styleable protected Color oneTouchArrowColor;
@@ -159,6 +161,17 @@ public class FlatSplitPaneUI
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
 	}
 
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		if( divider instanceof FlatSplitPaneDivider )
+			infos.putAll( ((FlatSplitPaneDivider)divider).getStyleableInfos() );
+		return infos;
+	}
+
 	//---- class FlatSplitPaneDivider -----------------------------------------
 
 	protected class FlatSplitPaneDivider
@@ -181,6 +194,13 @@ public class FlatSplitPaneUI
 		 */
 		protected Object applyStyleProperty( String key, Object value ) {
 			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		}
+
+		/**
+		 * @since TODO
+		 */
+		public Map<String, Class<?>> getStyleableInfos() {
+			return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 		}
 
 		void updateStyle() {

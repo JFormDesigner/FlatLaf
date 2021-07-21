@@ -33,6 +33,7 @@ import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
 
 /**
@@ -75,6 +76,7 @@ import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
  */
 public class FlatMenuUI
 	extends BasicMenuUI
+	implements StyleableUI
 {
 	private Color hoverBackground;
 	private FlatMenuItemRenderer renderer;
@@ -164,6 +166,14 @@ public class FlatMenuUI
 		}
 
 		return FlatMenuItemUI.applyStyleProperty( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatMenuItemUI.getStyleableInfos( renderer );
 	}
 
 	@Override

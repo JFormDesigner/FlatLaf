@@ -41,6 +41,7 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -122,6 +123,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTreeUI
 	extends BasicTreeUI
+	implements StyleableUI
 {
 	@Styleable protected Color selectionBackground;
 	@Styleable protected Color selectionForeground;
@@ -299,6 +301,14 @@ public class FlatTreeUI
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

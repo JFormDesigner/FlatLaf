@@ -39,6 +39,7 @@ import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.JTableHeader;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -92,6 +93,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTableUI
 	extends BasicTableUI
+	implements StyleableUI
 {
 	protected boolean showHorizontalLines;
 	protected boolean showVerticalLines;
@@ -253,6 +255,14 @@ public class FlatTableUI
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**
