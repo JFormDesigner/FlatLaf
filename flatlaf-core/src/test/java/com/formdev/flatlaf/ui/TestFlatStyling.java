@@ -348,6 +348,15 @@ public class TestFlatStyling
 	}
 
 	@Test
+	void popupMenu() {
+		JPopupMenu c = new JPopupMenu();
+		FlatPopupMenuUI ui = (FlatPopupMenuUI) c.getUI();
+
+		ui.applyStyle( "borderInsets: 1,2,3,4" );
+		ui.applyStyle( "borderColor: #fff" );
+	}
+
+	@Test
 	void popupMenuSeparator() {
 		JPopupMenu.Separator c = new JPopupMenu.Separator();
 		FlatPopupMenuSeparatorUI ui = (FlatPopupMenuSeparatorUI) c.getUI();

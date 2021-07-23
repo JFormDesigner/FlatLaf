@@ -393,6 +393,19 @@ public class TestFlatStyleableInfo
 	}
 
 	@Test
+	void popupMenu() {
+		JPopupMenu c = new JPopupMenu();
+		FlatPopupMenuUI ui = (FlatPopupMenuUI) c.getUI();
+
+		Map<String, Class<?>> expected = expectedMap(
+			"borderInsets", Insets.class,
+			"borderColor", Color.class
+		);
+
+		assertMapEquals( expected, ui.getStyleableInfos( c ) );
+	}
+
+	@Test
 	void popupMenuSeparator() {
 		JPopupMenu.Separator c = new JPopupMenu.Separator();
 		FlatPopupMenuSeparatorUI ui = (FlatPopupMenuSeparatorUI) c.getUI();
