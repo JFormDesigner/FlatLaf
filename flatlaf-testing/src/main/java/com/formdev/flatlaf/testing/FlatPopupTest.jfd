@@ -1,0 +1,206 @@
+JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[fill][fill][fill][fill]"
+			"$rowConstraints": "[][][][][][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Label with light-weight tooltip"
+				"toolTipText": "some tip"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "Label with heavy-weight tooltip"
+				"toolTipText": "some tip\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showPopupMenuButton"
+				"text": "show light-weight JPopupMenu"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showPopupMenu", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showLargePopupMenuButton"
+				"text": "show heavy-weight JPopupMenu"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showLargePopupMenu", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showPopupButton"
+				"text": "show medium-weight popup"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showPopup", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "hidePopupButton"
+				"text": "hide"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "hidePopup", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "movePopupDownButton"
+				"text": "move down"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "movePopupDown", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 4"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "movePopuprightButton"
+				"text": "move right"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "movePopupRight", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 4"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "(switches to heavy-weight when moving outside of window)"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5 4 1,alignx right,growx 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 490, 350 )
+		} )
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "popupMenu1"
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem1"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem2"
+				"text": "text"
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "menu1"
+				"text": "text"
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem3"
+					"text": "text"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem4"
+					"text": "text"
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 5, 395 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
+			"$columnConstraints": "[fill]"
+			"$rowConstraints": "[]"
+		} ) {
+			name: "popupPanel"
+			"background": new java.awt.Color( 153, 255, 153, 255 )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "popup"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 225, 395 )
+			"size": new java.awt.Dimension( 200, 200 )
+		} )
+		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
+			name: "popupMenu2"
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem5"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem6"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem7"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem8"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem9"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem10"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem11"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem12"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem13"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem14"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem15"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem16"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem17"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem18"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem19"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem20"
+				"text": "text"
+			} )
+			add( new FormComponent( "javax.swing.JMenuItem" ) {
+				name: "menuItem21"
+				"text": "text"
+			} )
+			add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+				name: "menu2"
+				"text": "text"
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem22"
+					"text": "text"
+				} )
+				add( new FormComponent( "javax.swing.JMenuItem" ) {
+					name: "menuItem23"
+					"text": "text"
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 5, 505 )
+		} )
+	}
+}

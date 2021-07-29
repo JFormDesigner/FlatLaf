@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## 1.5-SNAPSHOT
+
+- Popup: Fixed incorrectly placed drop shadow for medium-weight popups in
+  maximized windows. (issue #358)
+
+
 ## 1.4
 
 #### New features and improvements
