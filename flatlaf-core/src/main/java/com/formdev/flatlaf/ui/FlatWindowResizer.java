@@ -181,8 +181,12 @@ public abstract class FlatWindowResizer
 	protected abstract boolean isWindowResizable();
 	protected abstract Rectangle getWindowBounds();
 	protected abstract void setWindowBounds( Rectangle r );
+	protected abstract boolean limitToParentBounds();
+	protected abstract Rectangle getParentBounds();
 	protected abstract boolean honorMinimumSizeOnResize();
+	protected abstract boolean honorMaximumSizeOnResize();
 	protected abstract Dimension getWindowMinimumSize();
+	protected abstract Dimension getWindowMaximumSize();
 
 	protected void beginResizing( int direction ) {}
 	protected void endResizing() {}
@@ -284,6 +288,16 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
+		protected boolean limitToParentBounds() {
+			return false;
+		}
+
+		@Override
+		protected Rectangle getParentBounds() {
+			return null;
+		}
+
+		@Override
 		protected boolean honorMinimumSizeOnResize() {
 			return
 				(honorFrameMinimumSizeOnResize && window instanceof Frame) ||
@@ -291,8 +305,18 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
+		protected boolean honorMaximumSizeOnResize() {
+			return false;
+		}
+
+		@Override
 		protected Dimension getWindowMinimumSize() {
 			return window.getMinimumSize();
+		}
+
+		@Override
+		protected Dimension getWindowMaximumSize() {
+			return window.getMaximumSize();
 		}
 
 		@Override
@@ -355,13 +379,33 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
+		protected boolean limitToParentBounds() {
+			return true;
+		}
+
+		@Override
+		protected Rectangle getParentBounds() {
+			return getFrame().getParent().getBounds();
+		}
+
+		@Override
 		protected boolean honorMinimumSizeOnResize() {
+			return true;
+		}
+
+		@Override
+		protected boolean honorMaximumSizeOnResize() {
 			return true;
 		}
 
 		@Override
 		protected Dimension getWindowMinimumSize() {
 			return getFrame().getMinimumSize();
+		}
+
+		@Override
+		protected Dimension getWindowMaximumSize() {
+			return getFrame().getMaximumSize();
 		}
 
 		@Override
@@ -521,7 +565,7 @@ debug*/
 			int xOnScreen = e.getXOnScreen();
 			int yOnScreen = e.getYOnScreen();
 
-			// Get current window bounds and compute new bounds based them.
+			// Get current window bounds and compute new bounds based on them.
 			// This is necessary because window manager may alter window bounds while resizing.
 			// E.g. when having two monitors with different scale factors and resizing
 			// a window on first screen to the second screen, then the window manager may
@@ -535,41 +579,72 @@ debug*/
 			// top
 			if( resizeDir == N_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR ) {
 				newBounds.y = yOnScreen - dragTopOffset;
+				if( limitToParentBounds() && newBounds.y < 0 )
+					newBounds.y = 0;
 				newBounds.height += (oldBounds.y - newBounds.y);
 			}
 
 			// bottom
-			if( resizeDir == S_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR )
+			if( resizeDir == S_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR ) {
 				newBounds.height = (yOnScreen + dragBottomOffset) - newBounds.y;
+				if( limitToParentBounds() ) {
+					int parentHeight = getParentBounds().height;
+					if( newBounds.y + newBounds.height > parentHeight )
+						newBounds.height = parentHeight - newBounds.y;
+				}
+			}
 
 			// left
 			if( resizeDir == W_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR ) {
 				newBounds.x = xOnScreen - dragLeftOffset;
+				if( limitToParentBounds() && newBounds.x < 0 )
+					newBounds.x = 0;
 				newBounds.width += (oldBounds.x - newBounds.x);
 			}
 
 			// right
-			if( resizeDir == E_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR )
+			if( resizeDir == E_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR ) {
 				newBounds.width = (xOnScreen + dragRightOffset) - newBounds.x;
+				if( limitToParentBounds() ) {
+					int parentWidth = getParentBounds().width;
+					if( newBounds.x + newBounds.width > parentWidth )
+						newBounds.width = parentWidth - newBounds.x;
+				}
+			}
 
 			// apply minimum window size
 			Dimension minimumSize = honorMinimumSizeOnResize() ? getWindowMinimumSize() : null;
 			if( minimumSize == null )
 				minimumSize = UIScale.scale( new Dimension( 150, 50 ) );
-			if( newBounds.width < minimumSize.width ) {
-				if( newBounds.x != oldBounds.x )
-					newBounds.x -= (minimumSize.width - newBounds.width);
-				newBounds.width = minimumSize.width;
-			}
-			if( newBounds.height < minimumSize.height ) {
-				if( newBounds.y != oldBounds.y )
-					newBounds.y -= (minimumSize.height - newBounds.height);
-				newBounds.height = minimumSize.height;
+			if( newBounds.width < minimumSize.width )
+				changeWidth( oldBounds, newBounds, minimumSize.width );
+			if( newBounds.height < minimumSize.height )
+				changeHeight( oldBounds, newBounds, minimumSize.height );
+
+			// apply maximum window size
+			if( honorMaximumSizeOnResize() ) {
+				Dimension maximumSize = getWindowMaximumSize();
+				if( newBounds.width > maximumSize.width )
+					changeWidth( oldBounds, newBounds, maximumSize.width );
+				if( newBounds.height > maximumSize.height )
+					changeHeight( oldBounds, newBounds, maximumSize.height );
 			}
 
 			// set window bounds
 			if( !newBounds.equals( oldBounds ) )
 				setWindowBounds( newBounds );
+		}
+
+		private void changeWidth( Rectangle oldBounds, Rectangle newBounds, int width ) {
+			if( newBounds.x != oldBounds.x )
+				newBounds.x -= (width - newBounds.width);
+			newBounds.width = width;
+		}
+
+		private void changeHeight( Rectangle oldBounds, Rectangle newBounds, int height ) {
+			if( newBounds.y != oldBounds.y )
+				newBounds.y -= (height - newBounds.height);
+			newBounds.height = height;
 		}
 	}
 }

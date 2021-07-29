@@ -89,6 +89,15 @@ public class FlatInternalFrameTest
 		};
 		internalFrame.setContentPane( panel );
 
+		if( minSizeCheckBox.isSelected() ) {
+			internalFrame.setMinimumSize( new Dimension( 300, 150 ) );
+			panel.add( new JLabel( "min 300,150" ) );
+		}
+		if( maxSizeCheckBox.isSelected() ) {
+			internalFrame.setMaximumSize( new Dimension( 400, 200 ) );
+			panel.add( new JLabel( "max 400,200" ) );
+		}
+
 		if( !palette.getComponentOrientation().isLeftToRight() )
 			internalFrame.setComponentOrientation( ComponentOrientation.RIGHT_TO_LEFT );
 
@@ -123,6 +132,8 @@ public class FlatInternalFrameTest
 		maximizableCheckBox = new JCheckBox();
 		iconCheckBox = new FlatTriStateCheckBox();
 		menuBarCheckBox = new JCheckBox();
+		minSizeCheckBox = new JCheckBox();
+		maxSizeCheckBox = new JCheckBox();
 		titleLabel = new JLabel();
 		titleField = new JTextField();
 		createFrameButton = new JButton();
@@ -158,6 +169,8 @@ public class FlatInternalFrameTest
 					"[fill]0" +
 					"[]0" +
 					"[]0" +
+					"[]0" +
+					"[]0" +
 					"[]unrel" +
 					"[]unrel"));
 
@@ -189,18 +202,26 @@ public class FlatInternalFrameTest
 				menuBarCheckBox.setText("Menu Bar");
 				paletteContentPane.add(menuBarCheckBox, "cell 1 2");
 
+				//---- minSizeCheckBox ----
+				minSizeCheckBox.setText("Minimum size 300,150");
+				paletteContentPane.add(minSizeCheckBox, "cell 0 3 2 1,alignx left,growx 0");
+
+				//---- maxSizeCheckBox ----
+				maxSizeCheckBox.setText("Maximum size 400,200");
+				paletteContentPane.add(maxSizeCheckBox, "cell 0 4 2 1,alignx left,growx 0");
+
 				//---- titleLabel ----
 				titleLabel.setText("Frame title:");
-				paletteContentPane.add(titleLabel, "cell 0 3");
-				paletteContentPane.add(titleField, "cell 1 3");
+				paletteContentPane.add(titleLabel, "cell 0 5");
+				paletteContentPane.add(titleField, "cell 1 5");
 
 				//---- createFrameButton ----
 				createFrameButton.setText("Create Frame");
 				createFrameButton.addActionListener(e -> createInternalFrame());
-				paletteContentPane.add(createFrameButton, "cell 1 4,alignx right,growx 0");
+				paletteContentPane.add(createFrameButton, "cell 1 6,alignx right,growx 0");
 			}
 			desktopPane.add(palette, JLayeredPane.PALETTE_LAYER);
-			palette.setBounds(15, 25, 275, 185);
+			palette.setBounds(15, 25, 275, 275);
 		}
 		add(desktopPane, "cell 0 0,width 600,height 600");
 
@@ -234,6 +255,8 @@ public class FlatInternalFrameTest
 	private JCheckBox maximizableCheckBox;
 	private FlatTriStateCheckBox iconCheckBox;
 	private JCheckBox menuBarCheckBox;
+	private JCheckBox minSizeCheckBox;
+	private JCheckBox maxSizeCheckBox;
 	private JLabel titleLabel;
 	private JTextField titleField;
 	private JButton createFrameButton;

@@ -3,6 +3,8 @@ FlatLaf Change Log
 
 ## 1.5-SNAPSHOT
 
+- InternalFrame: Limit internal frame bounds to parent bounds on resize. Also
+  honor maximum size of internal frame. (issue #362)
 - Popup: Fixed incorrectly placed drop shadow for medium-weight popups in
   maximized windows. (issue #358)
 
