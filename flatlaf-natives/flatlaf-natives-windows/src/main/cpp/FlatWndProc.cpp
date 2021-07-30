@@ -176,6 +176,8 @@ void FlatWndProc::updateFrame( HWND hwnd, int state ) {
 
 LRESULT CALLBACK FlatWndProc::StaticWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 	FlatWndProc* fwp = (FlatWndProc*) hwndMap->get( hwnd );
+	if( fwp == NULL )
+		return 0;
 	return fwp->WindowProc( hwnd, uMsg, wParam, lParam );
 }
 
