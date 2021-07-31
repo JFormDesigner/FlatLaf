@@ -26,6 +26,7 @@ public:
 	static HWND install( JNIEnv *env, jobject obj, jobject window );
 	static void uninstall( JNIEnv *env, jobject obj, HWND hwnd );
 	static void updateFrame( HWND hwnd, int state );
+	static void setWindowBackground( HWND hwnd, int r, int g, int b );
 
 private:
 	static int initialized;

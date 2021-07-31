@@ -9,8 +9,11 @@ FlatLaf Change Log
   honor maximum size of internal frame. (issue #362)
 - Popup: Fixed incorrectly placed drop shadow for medium-weight popups in
   maximized windows. (issue #358)
-- Native window decorations: Fixed occasional application crash on Windows 10 in
-  `flatlaf-windows.dll`. (issue #357)
+- Native window decorations (Windows 10 only):
+  - Fixed occasional application crash in `flatlaf-windows.dll`. (issue #357)
+  - When resizing a window to the right or to the bottom, then first fill the
+    new space with the window background color (instead of black) before the
+    layout is updated.
 
 
 ## 1.4
@@ -25,7 +28,7 @@ FlatLaf Change Log
 - Table and PopupFactory: Use `StackWalker` in Java 9+ for better performance.
   (issue #334)
 - ToolBar: Paint focus indicator for focused button in toolbar. (issue #346)
-- ToolBar: Support focusable buttons in toolbar (set UI values
+- ToolBar: Support focusable buttons in toolbar (set UI value
   `ToolBar.focusableButtons` to `true`). (issue #346)
 
 #### Fixed bugs

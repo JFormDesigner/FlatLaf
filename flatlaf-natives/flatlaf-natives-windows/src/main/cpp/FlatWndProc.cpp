@@ -53,6 +53,13 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
 }
 
 extern "C"
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_setWindowBackground
+	( JNIEnv* env, jobject obj, jlong hwnd, jint r, jint g, jint b )
+{
+	FlatWndProc::setWindowBackground( reinterpret_cast<HWND>( hwnd ), r, g, b );
+}
+
+extern "C"
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_showWindow
 	( JNIEnv* env, jobject obj, jlong hwnd, jint cmd )
 {
@@ -172,6 +179,17 @@ void FlatWndProc::updateFrame( HWND hwnd, int state ) {
 
 	if( fwp != NULL )
 		fwp->wmSizeWParam = -1;
+}
+
+void FlatWndProc::setWindowBackground( HWND hwnd, int r, int g, int b ) {
+	// delete old background brush
+	HBRUSH oldBrush = (HBRUSH) ::GetClassLongPtr( hwnd, GCLP_HBRBACKGROUND );
+	if( oldBrush != NULL )
+		::DeleteObject( oldBrush );
+
+	// create new background brush
+	HBRUSH brush = ::CreateSolidBrush( RGB( r, g, b ) );
+	::SetClassLongPtr( hwnd, GCLP_HBRBACKGROUND, (LONG_PTR) brush );
 }
 
 LRESULT CALLBACK FlatWndProc::StaticWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {

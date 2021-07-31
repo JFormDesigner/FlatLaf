@@ -73,8 +73,8 @@ library {
 
 				linkerArgs.addAll( toolChain.map {
 					when( it ) {
-						is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lshell32", "-lAdvAPI32", "-lKernel32" )
-						is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "/NODEFAULTLIB" )
+						is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32" )
+						is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "/NODEFAULTLIB" )
 						else -> emptyList()
 					}
 				} )
