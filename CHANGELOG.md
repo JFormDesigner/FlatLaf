@@ -11,9 +11,14 @@ FlatLaf Change Log
   maximized windows. (issue #358)
 - Native window decorations (Windows 10 only):
   - Fixed occasional application crash in `flatlaf-windows.dll`. (issue #357)
-  - When resizing a window to the right or to the bottom, then first fill the
-    new space with the window background color (instead of black) before the
-    layout is updated.
+  - When window is initially shown, fill background with window background color
+    (instead of white), which avoids flickering in dark themes. (issue 339)
+  - When resizing a window at the right/bottom edge, then first fill the new
+    space with the window background color (instead of black) before the layout
+    is updated.
+  - When resizing a window at the left/top edge, then first fill the new space
+    with the window background color (instead of garbage) before the layout is
+    updated.
 
 
 ## 1.4

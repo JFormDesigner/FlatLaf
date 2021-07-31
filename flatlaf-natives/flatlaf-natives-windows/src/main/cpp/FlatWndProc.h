@@ -42,6 +42,7 @@ private:
 	HWND hwnd;
 	WNDPROC defaultWndProc;
 	int wmSizeWParam;
+	HBRUSH background;
 
 	FlatWndProc();
 	static void initIDs( JNIEnv *env, jobject obj );
@@ -49,6 +50,7 @@ private:
 	static LRESULT CALLBACK StaticWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 	LRESULT CALLBACK WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 	LRESULT WmDestroy( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam );
+	LRESULT WmEraseBkgnd( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam );
 	LRESULT WmNcCalcSize( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam );
 	LRESULT WmNcHitTest( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam );
 

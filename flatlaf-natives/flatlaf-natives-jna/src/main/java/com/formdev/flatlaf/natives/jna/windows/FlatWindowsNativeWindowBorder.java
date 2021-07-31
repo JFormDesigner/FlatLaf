@@ -60,7 +60,6 @@ import com.sun.jna.platform.win32.WinDef.LRESULT;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import com.sun.jna.platform.win32.WinDef.UINT_PTR;
 import com.sun.jna.platform.win32.WinDef.WPARAM;
-import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.platform.win32.WinUser.HMONITOR;
 import com.sun.jna.platform.win32.WinUser.WindowProc;
 import com.sun.jna.win32.W32APIOptions;
@@ -291,6 +290,7 @@ public class FlatWindowsNativeWindowBorder
 		private static final int GWLP_WNDPROC = -4;
 
 		private static final int
+			WM_ERASEBKGND = 0x0014,
 			WM_NCCALCSIZE = 0x0083,
 			WM_NCHITTEST = 0x0084,
 			WM_NCRBUTTONUP = 0x00A5,
@@ -330,6 +330,7 @@ public class FlatWindowsNativeWindowBorder
 		private final HWND hwnd;
 		private final BaseTSD.LONG_PTR defaultWndProc;
 		private int wmSizeWParam = -1;
+		private HBRUSH background;
 
 		private int titleBarHeight;
 		private Rectangle[] hitTestSpots;
@@ -368,6 +369,8 @@ public class FlatWindowsNativeWindowBorder
 			updateFrame( 0 );
 
 			// cleanup
+			if( background != null )
+				GDI32.INSTANCE.DeleteObject( background );
 			window = null;
 		}
 
@@ -405,13 +408,11 @@ public class FlatWindowsNativeWindowBorder
 
 		private void setWindowBackground( int r, int g, int b ) {
 			// delete old background brush
-			ULONG_PTR oldBrush = User32.INSTANCE.GetClassLongPtr( hwnd, GCLP_HBRBACKGROUND );
-			if( oldBrush != null && oldBrush.longValue() != 0 )
-				GDI32.INSTANCE.DeleteObject( new HANDLE( oldBrush.toPointer() ) );
+			if( background != null )
+				GDI32.INSTANCE.DeleteObject( background );
 
 			// create new background brush
-			HBRUSH brush = GDI32Ex.INSTANCE.CreateSolidBrush( RGB( r, g, b ) );
-			User32Ex.INSTANCE.SetClassLongPtr( hwnd, GCLP_HBRBACKGROUND, brush );
+			background = GDI32Ex.INSTANCE.CreateSolidBrush( RGB( r, g, b ) );
 		}
 
 		/**
@@ -440,6 +441,9 @@ public class FlatWindowsNativeWindowBorder
 						wParam = new WPARAM( wmSizeWParam );
 					break;
 
+				case WM_ERASEBKGND:
+					return WmEraseBkgnd( hwnd, uMsg, wParam, lParam );
+
 				case WM_DESTROY:
 					return WmDestroy( hwnd, uMsg, wParam, lParam );
 			}
@@ -464,9 +468,28 @@ public class FlatWindowsNativeWindowBorder
 
 			// cleanup
 			windowsMap.remove( window );
+			if( background != null )
+				GDI32.INSTANCE.DeleteObject( background );
 			window = null;
 
 			return lResult;
+		}
+
+		/**
+		 * Handle WM_ERASEBKGND
+		 *
+		 * https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
+		 */
+		LRESULT WmEraseBkgnd( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam ) {
+			if( background == null )
+				return new LRESULT( 0 );
+
+			// fill background
+			HDC hdc = new HDC( wParam.toPointer() );
+		    RECT rect = new RECT();
+		    User32.INSTANCE.GetClientRect( hwnd, rect );
+		    User32Ex.INSTANCE.FillRect( hdc, rect, background );
+		    return new LRESULT( 1 );
 		}
 
 		/**
@@ -729,7 +752,7 @@ public class FlatWindowsNativeWindowBorder
 		LONG_PTR SetWindowLong( HWND hWnd, int nIndex, LONG_PTR wndProc );
 		LRESULT CallWindowProc( LONG_PTR lpPrevWndFunc, HWND hWnd, int uMsg, WPARAM wParam, LPARAM lParam );
 
-		LONG_PTR SetClassLongPtr( HWND hWnd, int nIndex, HANDLE wndProc );
+		int FillRect( HDC hDC, RECT lprc, HBRUSH hbr );
 
 		int GetDpiForWindow( HWND hwnd );
 		int GetSystemMetricsForDpi( int nIndex, int dpi );
