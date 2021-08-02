@@ -34,6 +34,7 @@ import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.layout.ConstraintParser;
@@ -185,6 +186,8 @@ class DemoFrame
 
 		Font font = UIManager.getFont( "defaultFont" );
 		Font newFont = StyleContext.getDefaultStyleContext().getFont( fontFamily, font.getStyle(), font.getSize() );
+		// StyleContext.getFont() may return a UIResource, which would cause loosing user scale factor on Windows
+		newFont = FlatUIUtils.nonUIResource( newFont );
 		UIManager.put( "defaultFont", newFont );
 
 		FlatLaf.updateUI();
