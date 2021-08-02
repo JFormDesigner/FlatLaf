@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Button and TextComponent: Do not apply minimum width/height if margins are
+  set. (issue #364)
 - ComboBox and Spinner: Limit arrow button width if component has large
   preferred height. (issue #361)
 - InternalFrame: Limit internal frame bounds to parent bounds on resize. Also
