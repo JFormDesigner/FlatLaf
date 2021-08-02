@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.testing;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Insets;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -102,10 +103,18 @@ public class FlatTextComponentsTest
 		JComboBox<String> comboBox3 = new JComboBox<>();
 		JLabel spinnerLabel = new JLabel();
 		JSpinner spinner1 = new JSpinner();
-		JSpinner spinner2 = new JSpinner();
-		JSpinner spinner3 = new JSpinner();
+		JLabel label2 = new JLabel();
 		JComboBox<String> comboBox2 = new JComboBox<>();
+		JSpinner spinner2 = new JSpinner();
+		JLabel label1 = new JLabel();
+		JComboBox<String> comboBox5 = new JComboBox<>();
+		JSpinner spinner4 = new JSpinner();
+		JLabel label3 = new JLabel();
 		JComboBox<String> comboBox4 = new JComboBox<>();
+		JSpinner spinner3 = new JSpinner();
+		JLabel label4 = new JLabel();
+		JComboBox<String> comboBox6 = new JComboBox<>();
+		JSpinner spinner5 = new JSpinner();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -130,8 +139,12 @@ public class FlatTextComponentsTest
 			"[50,fill]" +
 			"[]" +
 			"[]para" +
+			"[40]" +
+			"[40]" +
 			"[]" +
 			"[]" +
+			"[::14]" +
+			"[::14]" +
 			"[]" +
 			"[]"));
 
@@ -401,23 +414,67 @@ public class FlatTextComponentsTest
 		spinner1.setName("spinner1");
 		add(spinner1, "cell 1 7,growx");
 
-		//---- spinner2 ----
-		spinner2.setName("spinner2");
-		add(spinner2, "cell 1 8,growx,height 40");
-
-		//---- spinner3 ----
-		spinner3.setName("spinner3");
-		add(spinner3, "cell 1 9,growx,hmax 14");
+		//---- label2 ----
+		label2.setText("<html>Large row height:<br>(default pref height)</html>");
+		label2.setName("label2");
+		add(label2, "cell 0 8,aligny top,growy 0");
 
 		//---- comboBox2 ----
 		comboBox2.setEditable(true);
 		comboBox2.setName("comboBox2");
-		add(comboBox2, "cell 1 10,growx,height 40");
+		add(comboBox2, "cell 1 8,grow");
+
+		//---- spinner2 ----
+		spinner2.setName("spinner2");
+		add(spinner2, "cell 1 9,grow");
+
+		//---- label1 ----
+		label1.setText("Large pref height:");
+		label1.setName("label1");
+		add(label1, "cell 0 10,aligny top,growy 0");
+
+		//---- comboBox5 ----
+		comboBox5.setPreferredSize(new Dimension(60, 40));
+		comboBox5.setEditable(true);
+		comboBox5.setName("comboBox5");
+		add(comboBox5, "cell 1 10,growx");
+
+		//---- spinner4 ----
+		spinner4.setPreferredSize(new Dimension(60, 40));
+		spinner4.setName("spinner4");
+		add(spinner4, "cell 1 11,growx");
+
+		//---- label3 ----
+		label3.setText("<html>Small row height:<br>(default pref height)</html>");
+		label3.setName("label3");
+		add(label3, "cell 0 12 1 2,aligny top,growy 0");
 
 		//---- comboBox4 ----
 		comboBox4.setEditable(true);
 		comboBox4.setName("comboBox4");
-		add(comboBox4, "cell 1 11,growx,hmax 14");
+		add(comboBox4, "cell 1 12,growx");
+
+		//---- spinner3 ----
+		spinner3.setName("spinner3");
+		add(spinner3, "cell 1 13,growx");
+
+		//---- label4 ----
+		label4.setText("Small pref height:");
+		label4.setName("label4");
+		add(label4, "cell 0 14 1 2,aligny top,growy 0");
+
+		//---- comboBox6 ----
+		comboBox6.setEditable(true);
+		comboBox6.setPreferredSize(new Dimension(60, 14));
+		comboBox6.setMinimumSize(new Dimension(60, 14));
+		comboBox6.setName("comboBox6");
+		add(comboBox6, "cell 1 14,growx");
+
+		//---- spinner5 ----
+		spinner5.setMinimumSize(new Dimension(60, 14));
+		spinner5.setPreferredSize(new Dimension(60, 14));
+		spinner5.setName("spinner5");
+		add(spinner5, "cell 1 15,growx,hmax 14");
 
 		//======== popupMenu1 ========
 		{

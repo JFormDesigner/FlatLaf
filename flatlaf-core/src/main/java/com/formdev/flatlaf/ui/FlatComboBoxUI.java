@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -261,8 +262,12 @@ public class FlatComboBoxUI
 				super.layoutContainer( parent );
 
 				if( arrowButton != null ) {
+					// limit button width to height of a raw combobox (without insets)
+					FontMetrics fm = comboBox.getFontMetrics( comboBox.getFont() );
+					int maxButtonWidth = fm.getHeight() + scale( padding.top ) + scale( padding.bottom );
+
 					Insets insets = getInsets();
-					int buttonWidth = parent.getPreferredSize().height - insets.top - insets.bottom;
+					int buttonWidth = Math.min( parent.getPreferredSize().height - insets.top - insets.bottom, maxButtonWidth );
 					if( buttonWidth != arrowButton.getWidth() ) {
 						// set width of arrow button to preferred height of combobox
 						int xOffset = comboBox.getComponentOrientation().isLeftToRight()

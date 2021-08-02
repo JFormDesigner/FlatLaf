@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- ComboBox and Spinner: Limit arrow button width if component has large
+  preferred height. (issue #361)
 - InternalFrame: Limit internal frame bounds to parent bounds on resize. Also
   honor maximum size of internal frame. (issue #362)
 - Popup: Fixed incorrectly placed drop shadow for medium-weight popups in
