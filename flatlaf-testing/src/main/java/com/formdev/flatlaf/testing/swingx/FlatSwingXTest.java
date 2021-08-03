@@ -124,6 +124,11 @@ public class FlatSwingXTest
 		JTextField textField3 = new JTextField();
 		JLabel label10 = new JLabel();
 		JTextField textField4 = new JTextField();
+		JLabel label11 = new JLabel();
+		JXSearchField xSearchField1 = new JXSearchField();
+		JXSearchField xSearchField2 = new JXSearchField();
+		JXSearchField xSearchField3 = new JXSearchField();
+		JXSearchField xSearchField4 = new JXSearchField();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
 
@@ -141,6 +146,8 @@ public class FlatSwingXTest
 			"[]" +
 			"[]0" +
 			"[top]" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -424,6 +431,30 @@ public class FlatSwingXTest
 			xTitledPanel2ContentContainer.add(textField4, "cell 1 1");
 		}
 		add(xTitledPanel2, "cell 3 8,grow");
+
+		//---- label11 ----
+		label11.setText("JXSearchField:");
+		add(label11, "cell 0 9");
+
+		//---- xSearchField1 ----
+		xSearchField1.setText("abc");
+		add(xSearchField1, "cell 1 9,growx");
+
+		//---- xSearchField2 ----
+		xSearchField2.setEnabled(false);
+		xSearchField2.setText("abc");
+		add(xSearchField2, "cell 2 9,growx");
+
+		//---- xSearchField3 ----
+		xSearchField3.setRecentSearchesSaveKey("flatlaf.swingx.search.recent");
+		xSearchField3.setText("abc");
+		add(xSearchField3, "cell 1 10,growx");
+
+		//---- xSearchField4 ----
+		xSearchField4.setRecentSearchesSaveKey("flatlaf.swingx.search.recent");
+		xSearchField4.setEnabled(false);
+		xSearchField4.setText("abc");
+		add(xSearchField4, "cell 2 10,growx");
 
 		//---- button1 ----
 		button1.setText("<");

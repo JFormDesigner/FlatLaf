@@ -3,6 +3,11 @@ FlatLaf Change Log
 
 ## 1.5-SNAPSHOT
 
+#### New features and improvements
+
+- SwingX: Added search and clear icons to `JXSearchField`. (issue #359)
+
+
 #### Fixed bugs
 
 - Button and TextComponent: Do not apply minimum width/height if margins are

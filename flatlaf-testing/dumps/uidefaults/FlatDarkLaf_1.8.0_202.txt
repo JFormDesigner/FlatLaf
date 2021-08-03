@@ -879,6 +879,25 @@ ScrollPane.smoothScrolling     true
 ScrollPaneUI                   com.formdev.flatlaf.ui.FlatScrollPaneUI
 
 
+#---- SearchField ----
+
+SearchField.clearIcon          [lazy] 16,16    com.formdev.flatlaf.icons.FlatClearIcon [UI]
+SearchField.clearIconColor     [lazy] #7f8b9180  50%    javax.swing.plaf.ColorUIResource [UI]
+SearchField.clearIconHoverColor [lazy] #7f8b9180  50%    javax.swing.plaf.ColorUIResource [UI]
+SearchField.clearIconPressedColor [lazy] #7f8b91cc  80%    javax.swing.plaf.ColorUIResource [UI]
+SearchField.clearPressedIcon   [lazy] 16,16    com.formdev.flatlaf.icons.FlatClearIcon [UI]
+SearchField.clearRolloverIcon  [lazy] 16,16    com.formdev.flatlaf.icons.FlatClearIcon [UI]
+SearchField.icon               [lazy] 16,16    com.formdev.flatlaf.icons.FlatSearchIcon [UI]
+SearchField.popupIcon          [lazy] 16,16    com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon [UI]
+SearchField.popupPressedIcon   [lazy] 16,16    com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon [UI]
+SearchField.popupRolloverIcon  [lazy] 16,16    com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon [UI]
+SearchField.pressedIcon        [lazy] 16,16    com.formdev.flatlaf.icons.FlatSearchIcon [UI]
+SearchField.rolloverIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatSearchIcon [UI]
+SearchField.searchIconColor    [lazy] #7f8b91e6  90%    javax.swing.plaf.ColorUIResource [UI]
+SearchField.searchIconHoverColor [lazy] #7f8b91b3  70%    javax.swing.plaf.ColorUIResource [UI]
+SearchField.searchIconPressedColor [lazy] #7f8b9180  50%    javax.swing.plaf.ColorUIResource [UI]
+
+
 #---- Separator ----
 
 Separator.background           #3c3f41    javax.swing.plaf.ColorUIResource [UI]
