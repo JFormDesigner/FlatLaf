@@ -14,6 +14,8 @@ FlatLaf Change Log
   set. (issue #364)
 - ComboBox and Spinner: Limit arrow button width if component has large
   preferred height. (issue #361)
+- FileChooser: Fixed missing (localized) texts when FlatLaf is loaded in special
+  classloader (e.g. plugin system in Apache NetBeans).
 - InternalFrame: Limit internal frame bounds to parent bounds on resize. Also
   honor maximum size of internal frame. (issue #362)
 - Popup: Fixed incorrectly placed drop shadow for medium-weight popups in

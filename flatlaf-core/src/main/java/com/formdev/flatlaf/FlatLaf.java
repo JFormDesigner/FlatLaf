@@ -32,10 +32,13 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -66,6 +69,7 @@ import com.formdev.flatlaf.ui.FlatRootPaneUI;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -356,8 +360,8 @@ public abstract class FlatLaf
 		// (can be queried without using FlatLaf API)
 		defaults.put( "laf.dark", isDark() );
 
-		// add resource bundle for localized texts
-		defaults.addResourceBundle( "com.formdev.flatlaf.resources.Bundle" );
+		// init resource bundle for localized texts
+		initResourceBundle( defaults, "com.formdev.flatlaf.resources.Bundle" );
 
 		// initialize some defaults (for overriding) that are used in UI delegates,
 		// but are not set in BasicLookAndFeel
@@ -451,6 +455,45 @@ public abstract class FlatLaf
 
 	protected Properties getAdditionalDefaults() {
 		return null;
+	}
+
+	private void initResourceBundle( UIDefaults defaults, String bundleName ) {
+		// add resource bundle for localized texts
+		defaults.addResourceBundle( bundleName );
+
+		// Check whether Swing can not load the FlatLaf resource bundle,
+		// which can happen in applications that use some plugin system
+		// and load FlatLaf in a plugin that uses its own classloader.
+		// (e.g. Apache NetBeans)
+		if( defaults.get( "FileChooser.fileNameHeaderText" ) != null )
+			return;
+
+		// load FlatLaf resource bundle and add content to defaults
+		try {
+			ResourceBundle bundle = ResourceBundle.getBundle( bundleName, defaults.getDefaultLocale() );
+
+			Enumeration<String> keys = bundle.getKeys();
+			while( keys.hasMoreElements() ) {
+				String key = keys.nextElement();
+				String value = bundle.getString( key );
+
+				String baseKey = StringUtils.removeTrailing( key, ".textAndMnemonic" );
+				if( baseKey != key ) {
+					String text = value.replace( "&", "" );
+					String mnemonic = null;
+					int index = value.indexOf( '&' );
+					if( index >= 0 )
+						mnemonic = Integer.toString( Character.toUpperCase( value.charAt( index + 1 ) ) );
+
+					defaults.put( baseKey + "Text", text );
+					if( mnemonic != null )
+						defaults.put( baseKey + "Mnemonic", mnemonic );
+				} else
+					defaults.put( key, value );
+			}
+		} catch( MissingResourceException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	private void initFonts( UIDefaults defaults ) {
