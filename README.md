@@ -67,10 +67,13 @@ docs).
 Addons
 ------
 
-- [IntelliJ Themes Pack](flatlaf-intellij-themes)
-- [Extras](flatlaf-extras)
-- [SwingX](flatlaf-swingx)
-- [JIDE Common Layer](flatlaf-jide-oss)
+- [IntelliJ Themes Pack](flatlaf-intellij-themes) - bundles many popular
+  open-source 3rd party themes
+- [Extras](flatlaf-extras) - SVG icon, tri-state check box, UI inspectors, and
+  more
+- [SwingX](flatlaf-swingx) - support for SwingX components
+- [JIDE Common Layer](flatlaf-jide-oss) - support for JIDE Common Layer
+  components
 
 
 Getting started
