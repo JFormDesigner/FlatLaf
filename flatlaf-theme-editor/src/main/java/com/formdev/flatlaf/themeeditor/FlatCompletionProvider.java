@@ -371,10 +371,17 @@ class FlatCompletionProvider
 			addFunction( "changeLightness", hslChangeParams );
 			addFunction( "changeAlpha", hslChangeParams );
 
+			String weightParamDesc = "(optional) 0-100%, default is 50%";
 			addFunction( "mix",
 				"color1", colorParamDesc,
 				"color2", colorParamDesc,
-				"weight", "(optional) 0-100%, default is 50%" );
+				"weight", weightParamDesc );
+			addFunction( "tint",
+				"color", colorParamDesc,
+				"weight", weightParamDesc );
+			addFunction( "shade",
+				"color", colorParamDesc,
+				"weight", weightParamDesc );
 		}
 
 		private void addFunction( String name, String... paramNamesAndDescs ) {

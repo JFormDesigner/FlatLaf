@@ -608,7 +608,9 @@ class UIDefaultsLoader
 				case "changeSaturation":return parseColorChange( 1, params, resolver, reportError );
 				case "changeLightness":	return parseColorChange( 2, params, resolver, reportError );
 				case "changeAlpha":		return parseColorChange( 3, params, resolver, reportError );
-				case "mix":				return parseColorMix( params, resolver, reportError );
+				case "mix":				return parseColorMix( null, params, resolver, reportError );
+				case "tint":			return parseColorMix( "#fff", params, resolver, reportError );
+				case "shade":			return parseColorMix( "#000", params, resolver, reportError );
 			}
 		} finally {
 			parseColorDepth--;
@@ -789,19 +791,23 @@ class UIDefaultsLoader
 	}
 
 	/**
-	 * Syntax: mix(color1,color2[,weight])
+	 * Syntax: mix(color1,color2[,weight]) or
+	 *         tint(color[,weight]) or
+	 *         shade(color[,weight])
 	 *   - color1: a color (e.g. #f00) or a color function
 	 *   - color2: a color (e.g. #f00) or a color function
 	 *   - weight: the weight (in range 0-100%) to mix the two colors
 	 *             larger weight uses more of first color, smaller weight more of second color
 	 */
-	private static Object parseColorMix( List<String> params, Function<String, String> resolver, boolean reportError ) {
-		String color1Str = params.get( 0 );
-		String color2Str = params.get( 1 );
+	private static Object parseColorMix( String color1Str, List<String> params, Function<String, String> resolver, boolean reportError ) {
+		int i = 0;
+		if( color1Str == null )
+			color1Str = params.get( i++ );
+		String color2Str = params.get( i++ );
 		int weight = 50;
 
-		if( params.size() > 2 )
-			weight = parsePercentage( params.get( 2 ) );
+		if( params.size() > i )
+			weight = parsePercentage( params.get( i++ ) );
 
 		// parse second color
 		String resolvedColor2Str = resolver.apply( color2Str );

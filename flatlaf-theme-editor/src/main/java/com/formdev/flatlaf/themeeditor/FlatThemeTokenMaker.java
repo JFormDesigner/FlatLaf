@@ -69,6 +69,8 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "changeLightness", TOKEN_FUNCTION );
 		tokenMap.put( "changeAlpha", TOKEN_FUNCTION );
 		tokenMap.put( "mix", TOKEN_FUNCTION );
+		tokenMap.put( "tint", TOKEN_FUNCTION );
+		tokenMap.put( "shade", TOKEN_FUNCTION );
 		tokenMap.put( "lazy", TOKEN_FUNCTION );
 
 		// function options
