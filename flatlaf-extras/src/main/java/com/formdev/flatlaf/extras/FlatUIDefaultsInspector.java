@@ -700,16 +700,16 @@ public class FlatUIDefaultsInspector
 			if( value instanceof Color ) {
 				Color color = (info instanceof Color[]) ? ((Color[])info)[0] : (Color) value;
 				HSLColor hslColor = new HSLColor( color );
+				int hue = Math.round( hslColor.getHue() );
+				int saturation = Math.round( hslColor.getSaturation() );
+				int luminance = Math.round( hslColor.getLuminance() );
 				if( color.getAlpha() == 255 ) {
 					return String.format( "%-9s HSL %3d %3d %3d",
-						color2hex( color ),
-						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
-						(int) hslColor.getLuminance() );
+						color2hex( color ), hue, saturation, luminance );
 				} else {
+					int alpha = Math.round( hslColor.getAlpha() * 100 );
 					return String.format( "%-9s HSL %3d %3d %3d %2d",
-						color2hex( color ),
-						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
-						(int) hslColor.getLuminance(), (int) (hslColor.getAlpha() * 100) );
+						color2hex( color ), hue, saturation, luminance, alpha );
 				}
 			} else if( value instanceof Insets ) {
 				Insets insets = (Insets) value;
