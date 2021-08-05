@@ -355,8 +355,21 @@ class FlatCompletionProvider
 				"options", "(optional) [derived]" );
 			addFunction( "spin",
 				"color", colorParamDesc,
-				"angle", "number of degrees to rotate",
+				"angle", "number of degrees to rotate (0-360)",
 				"options", "(optional) [derived]" );
+
+			addFunction( "changeHue",
+				"color", colorParamDesc,
+				"angle", "number of degrees (0-360)",
+				"options", "(optional) [derived]" );
+			String[] hslChangeParams = {
+				"color", colorParamDesc,
+				"value", "0-100%",
+				"options", "(optional) [derived]"
+			};
+			addFunction( "changeSaturation", hslChangeParams );
+			addFunction( "changeLightness", hslChangeParams );
+			addFunction( "changeAlpha", hslChangeParams );
 		}
 
 		private void addFunction( String name, String... paramNamesAndDescs ) {

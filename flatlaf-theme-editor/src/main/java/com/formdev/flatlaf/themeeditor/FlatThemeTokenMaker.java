@@ -60,6 +60,14 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "darken", TOKEN_FUNCTION );
 		tokenMap.put( "saturate", TOKEN_FUNCTION );
 		tokenMap.put( "desaturate", TOKEN_FUNCTION );
+		tokenMap.put( "fadein", TOKEN_FUNCTION );
+		tokenMap.put( "fadeout", TOKEN_FUNCTION );
+		tokenMap.put( "fade", TOKEN_FUNCTION );
+		tokenMap.put( "spin", TOKEN_FUNCTION );
+		tokenMap.put( "changeHue", TOKEN_FUNCTION );
+		tokenMap.put( "changeSaturation", TOKEN_FUNCTION );
+		tokenMap.put( "changeLightness", TOKEN_FUNCTION );
+		tokenMap.put( "changeAlpha", TOKEN_FUNCTION );
 		tokenMap.put( "lazy", TOKEN_FUNCTION );
 
 		// function options

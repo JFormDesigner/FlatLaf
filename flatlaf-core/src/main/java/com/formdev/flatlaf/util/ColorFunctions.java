@@ -145,7 +145,46 @@ public class ColorFunctions
 		}
 	}
 
-	//---- class HSLIncreaseDecrease ------------------------------------------
+	//---- class HSLChange ----------------------------------------------------
+
+	/**
+	 * Set the hue, saturation, luminance or alpha of a color.
+	 *
+	 * @since 1.6
+	 */
+	public static class HSLChange
+		implements ColorFunction
+	{
+		public final int hslIndex;
+		public final float value;
+
+		public HSLChange( int hslIndex, float value ) {
+			this.hslIndex = hslIndex;
+			this.value = value;
+		}
+
+		@Override
+		public void apply( float[] hsla ) {
+			hsla[hslIndex] = (hslIndex == 0)
+				? value % 360
+				: clamp( value );
+		}
+
+		@Override
+		public String toString() {
+			String name;
+			switch( hslIndex ) {
+				case 0: name = "changeHue"; break;
+				case 1: name = "changeSaturation"; break;
+				case 2: name = "changeLightness"; break;
+				case 3: name = "changeAlpha"; break;
+				default: throw new IllegalArgumentException();
+			}
+			return String.format( "%s(%.0f%s)", name, value, (hslIndex == 0 ? "" : "%") );
+		}
+	}
+
+	//---- class Fade ---------------------------------------------------------
 
 	/**
 	 * Set the alpha of a color.
