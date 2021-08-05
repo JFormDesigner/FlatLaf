@@ -608,6 +608,7 @@ class UIDefaultsLoader
 				case "changeSaturation":return parseColorChange( 1, params, resolver, reportError );
 				case "changeLightness":	return parseColorChange( 2, params, resolver, reportError );
 				case "changeAlpha":		return parseColorChange( 3, params, resolver, reportError );
+				case "mix":				return parseColorMix( params, resolver, reportError );
 			}
 		} finally {
 			parseColorDepth--;
@@ -785,6 +786,34 @@ class UIDefaultsLoader
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: mix(color1,color2[,weight])
+	 *   - color1: a color (e.g. #f00) or a color function
+	 *   - color2: a color (e.g. #f00) or a color function
+	 *   - weight: the weight (in range 0-100%) to mix the two colors
+	 *             larger weight uses more of first color, smaller weight more of second color
+	 */
+	private static Object parseColorMix( List<String> params, Function<String, String> resolver, boolean reportError ) {
+		String color1Str = params.get( 0 );
+		String color2Str = params.get( 1 );
+		int weight = 50;
+
+		if( params.size() > 2 )
+			weight = parsePercentage( params.get( 2 ) );
+
+		// parse second color
+		String resolvedColor2Str = resolver.apply( color2Str );
+		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolvedColor2Str, resolver, reportError );
+		if( color2 == null )
+			return null;
+
+		// create function
+		ColorFunction function = new ColorFunctions.Mix( color2, weight );
+
+		// parse first color, apply function and create mixed color
+		return parseFunctionBaseColor( color1Str, function, false, resolver, reportError );
 	}
 
 	private static Object parseFunctionBaseColor( String colorStr, ColorFunction function,
