@@ -18,7 +18,7 @@
 
 #---- CheckBox ----
 
-- CheckBox.icon.focusedBackground #466d944d  30%  HSLA 210  36  43 30    javax.swing.plaf.ColorUIResource [UI]
+- CheckBox.icon.focusedBackground #456e964d  30%  HSLA 210  37  43 30    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- ComboBox ----
