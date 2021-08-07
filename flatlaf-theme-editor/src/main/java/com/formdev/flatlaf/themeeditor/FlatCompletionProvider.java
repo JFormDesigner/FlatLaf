@@ -110,14 +110,13 @@ class FlatCompletionProvider
 				switch( lineBeforeCaret.charAt( i ) ) {
 					case '=':
 					case '(':
+					case ',':
 						return getValueProvider();
 
 					case '$':
 					case '@':
 						return getReferenceProvider();
 
-					case ' ':
-					case '\t':
 					case '#': // colors
 						return null;
 				}
