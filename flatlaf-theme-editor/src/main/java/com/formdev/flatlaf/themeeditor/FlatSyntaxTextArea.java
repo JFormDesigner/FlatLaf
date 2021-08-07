@@ -18,13 +18,20 @@ package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Color;
 import java.awt.KeyboardFocusManager;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rtextarea.RTextArea;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
+import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.DuplicateLinesAction;
 
 /**
  * A text area that supports editing FlatLaf themes.
@@ -43,6 +50,16 @@ class FlatSyntaxTextArea
 		// remove Ctrl+Tab and Ctrl+Shift+Tab focus traversal keys to allow tabbed pane to process them
 		setFocusTraversalKeys( KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet() );
 		setFocusTraversalKeys( KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, Collections.emptySet() );
+
+		ActionMap actionMap = getActionMap();
+		actionMap.put( FlatSyntaxTextAreaActions.duplicateLinesUpAction, new DuplicateLinesAction( FlatSyntaxTextAreaActions.duplicateLinesUpAction, true ) );
+		actionMap.put( FlatSyntaxTextAreaActions.duplicateLinesDownAction, new DuplicateLinesAction( FlatSyntaxTextAreaActions.duplicateLinesDownAction, false ) );
+
+		InputMap inputMap = getInputMap();
+		int defaultModifier = RTextArea.getDefaultModifier();
+		int alt = InputEvent.ALT_DOWN_MASK;
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP,   defaultModifier|alt), FlatSyntaxTextAreaActions.duplicateLinesUpAction );
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, defaultModifier|alt), FlatSyntaxTextAreaActions.duplicateLinesDownAction );
 	}
 
 	boolean isUseColorOfColorTokens() {
