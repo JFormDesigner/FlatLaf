@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import com.formdev.flatlaf.extras.components.*;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.SearchContext;
@@ -204,7 +205,7 @@ class FlatFindReplaceBar
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		findLabel = new JLabel();
-		findField = new JTextField();
+		findField = new FlatTextField();
 		findToolBar = new JToolBar();
 		findPreviousButton = new JButton();
 		findNextButton = new JButton();
@@ -215,7 +216,7 @@ class FlatFindReplaceBar
 		closeToolBar = new JToolBar();
 		closeButton = new JButton();
 		replaceLabel = new JLabel();
-		replaceField = new JTextField();
+		replaceField = new FlatTextField();
 		toolBar1 = new JToolBar();
 		replaceButton = new JButton();
 		replaceAllButton = new JButton();
@@ -243,6 +244,7 @@ class FlatFindReplaceBar
 
 		//---- findField ----
 		findField.setColumns(16);
+		findField.setSelectAllOnFocusPolicy(FlatTextField.SelectAllOnFocusPolicy.always);
 		findField.addActionListener(e -> find());
 		add(findField, "cell 1 0");
 
@@ -303,6 +305,7 @@ class FlatFindReplaceBar
 
 		//---- replaceField ----
 		replaceField.setColumns(16);
+		replaceField.setSelectAllOnFocusPolicy(FlatTextField.SelectAllOnFocusPolicy.always);
 		add(replaceField, "cell 1 1");
 
 		//======== toolBar1 ========
@@ -332,7 +335,7 @@ class FlatFindReplaceBar
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JLabel findLabel;
-	private JTextField findField;
+	private FlatTextField findField;
 	private JToolBar findToolBar;
 	private JButton findPreviousButton;
 	private JButton findNextButton;
@@ -343,7 +346,7 @@ class FlatFindReplaceBar
 	private JToolBar closeToolBar;
 	private JButton closeButton;
 	private JLabel replaceLabel;
-	private JTextField replaceField;
+	private FlatTextField replaceField;
 	private JToolBar toolBar1;
 	private JButton replaceButton;
 	private JButton replaceAllButton;
