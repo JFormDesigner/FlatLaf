@@ -37,6 +37,8 @@ import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import net.miginfocom.swing.*;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -59,6 +61,7 @@ public class FlatThemeFileEditor
 	private static final String KEY_RECENT_DIRECTORY = "recentDirectory";
 	private static final String KEY_RECENT_FILE = "recentFile";
 	private static final String KEY_WINDOW_BOUNDS = "windowBounds";
+	private static final String KEY_LAF = "laf";
 
 	private File dir;
 	private Preferences state;
@@ -70,7 +73,15 @@ public class FlatThemeFileEditor
 			: null;
 
 		SwingUtilities.invokeLater( () -> {
-			FlatLightLaf.setup();
+			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.themeeditor" );
+
+			try {
+				String laf = Preferences.userRoot().node( PREFS_ROOT_PATH ).get( KEY_LAF, FlatLightLaf.class.getName() );
+				UIManager.setLookAndFeel( laf );
+			} catch( Exception ex ) {
+				FlatLightLaf.setup();
+			}
+
 			FlatInspector.install( "ctrl alt shift X" );
 			FlatUIDefaultsInspector.install( "ctrl shift alt Y" );
 
@@ -83,6 +94,8 @@ public class FlatThemeFileEditor
 		initComponents();
 
 		openDirectoryButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/menu-open.svg" ) );
+		if( UIManager.getLookAndFeel() instanceof FlatDarkLaf )
+			darkLafMenuItem.setSelected( true );
 
 		restoreState();
 		restoreWindowBounds();
@@ -338,6 +351,29 @@ public class FlatThemeFileEditor
 			themeEditorPane.showFindReplaceBar();
 	}
 
+	private void lightLaf() {
+		applyLookAndFeel( FlatLightLaf.class.getName() );
+	}
+
+	private void darkLaf() {
+		applyLookAndFeel( FlatDarkLaf.class.getName() );
+	}
+
+	private void applyLookAndFeel( String lafClassName ) {
+		if( UIManager.getLookAndFeel().getClass().getName().equals( lafClassName ) )
+			return;
+
+		try {
+			UIManager.setLookAndFeel( lafClassName );
+			FlatLaf.updateUI();
+			for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
+				themeEditorPane.updateTheme();
+			state.put( KEY_LAF, lafClassName );
+		} catch( Exception ex ) {
+			ex.printStackTrace();
+		}
+	}
+
 	private void restoreState() {
 		state = Preferences.userRoot().node( PREFS_ROOT_PATH );
 
@@ -438,6 +474,9 @@ public class FlatThemeFileEditor
 		exitMenuItem = new JMenuItem();
 		editMenu = new JMenu();
 		findMenuItem = new JMenuItem();
+		viewMenu = new JMenu();
+		lightLafMenuItem = new JRadioButtonMenuItem();
+		darkLafMenuItem = new JRadioButtonMenuItem();
 		windowMenu = new JMenu();
 		nextEditorMenuItem = new JMenuItem();
 		previousEditorMenuItem = new JMenuItem();
@@ -512,6 +551,28 @@ public class FlatThemeFileEditor
 			}
 			menuBar.add(editMenu);
 
+			//======== viewMenu ========
+			{
+				viewMenu.setText("View");
+				viewMenu.setMnemonic('V');
+
+				//---- lightLafMenuItem ----
+				lightLafMenuItem.setText("Light Laf");
+				lightLafMenuItem.setMnemonic('L');
+				lightLafMenuItem.setSelected(true);
+				lightLafMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
+				lightLafMenuItem.addActionListener(e -> lightLaf());
+				viewMenu.add(lightLafMenuItem);
+
+				//---- darkLafMenuItem ----
+				darkLafMenuItem.setText("Dark Laf");
+				darkLafMenuItem.setMnemonic('D');
+				darkLafMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+				darkLafMenuItem.addActionListener(e -> darkLaf());
+				viewMenu.add(darkLafMenuItem);
+			}
+			menuBar.add(viewMenu);
+
 			//======== windowMenu ========
 			{
 				windowMenu.setText("Window");
@@ -570,6 +631,11 @@ public class FlatThemeFileEditor
 			tabbedPane.addChangeListener(e -> selectedTabChanged());
 		}
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
+
+		//---- buttonGroup1 ----
+		ButtonGroup buttonGroup1 = new ButtonGroup();
+		buttonGroup1.add(lightLafMenuItem);
+		buttonGroup1.add(darkLafMenuItem);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -581,6 +647,9 @@ public class FlatThemeFileEditor
 	private JMenuItem exitMenuItem;
 	private JMenu editMenu;
 	private JMenuItem findMenuItem;
+	private JMenu viewMenu;
+	private JRadioButtonMenuItem lightLafMenuItem;
+	private JRadioButtonMenuItem darkLafMenuItem;
 	private JMenu windowMenu;
 	private JMenuItem nextEditorMenuItem;
 	private JMenuItem previousEditorMenuItem;

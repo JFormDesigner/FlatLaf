@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -96,6 +96,28 @@ new FormModel {
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "viewMenu"
+					"text": "View"
+					"mnemonic": 86
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "lightLafMenuItem"
+						"text": "Light Laf"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"mnemonic": 76
+						"selected": true
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 122, 0, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "lightLaf", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "darkLafMenuItem"
+						"text": "Dark Laf"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"mnemonic": 68
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 123, 0, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "darkLaf", false ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "windowMenu"
 					"text": "Window"
 					"mnemonic": 87
@@ -118,6 +140,11 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 535, 300 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 310 )
 		} )
 	}
 }

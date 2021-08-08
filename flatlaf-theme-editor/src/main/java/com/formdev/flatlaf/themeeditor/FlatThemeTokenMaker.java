@@ -127,8 +127,10 @@ public class FlatThemeTokenMaker
 				newTokenType = TOKEN_VARIABLE;
 			else if( currentTokenType != TOKEN_STRING && (RSyntaxUtilities.isDigit( ch ) || (currentTokenType == TOKEN_NUMBER && ch == '.')) )
 				newTokenType = TOKEN_NUMBER;
-			else if( ch == ',' || ch == '(' || ch == ')' || ch == '"' || ch == '%' )
+			else if( ch == ',' || ch == '"' || ch == '%' )
 				newTokenType = TokenTypes.OPERATOR;
+			else if( ch == '(' || ch == ')' )
+				newTokenType = TokenTypes.SEPARATOR; // necessary for bracket matching
 			else
 				newTokenType = TOKEN_STRING;
 
