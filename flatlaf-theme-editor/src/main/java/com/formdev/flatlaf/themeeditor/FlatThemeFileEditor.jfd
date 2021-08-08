@@ -116,6 +116,27 @@ new FormModel {
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 123, 0, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "darkLaf", false ) )
 					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator2"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "incrFontSizeMenuItem"
+						"text": "Increase Font Size"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 521, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "incrFontSize", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "decrFontSizeMenuItem"
+						"text": "Decrease Font Size"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 45, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decrFontSize", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "resetFontSizeMenuItem"
+						"text": "Reset Font Size"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 48, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "resetFontSize", false ) )
+					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "windowMenu"

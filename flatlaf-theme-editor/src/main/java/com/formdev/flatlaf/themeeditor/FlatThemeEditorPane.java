@@ -146,6 +146,15 @@ class FlatThemeEditorPane
 		errorStrip.setCaretMarkerColor( UIManager.getColor( "FlatThemeEditorPane.errorstrip.caretMarkerColor" ) );
 	}
 
+	void updateFontSize( int sizeIncr ) {
+		Font defaultFont = RTextArea.getDefaultFont();
+		Font font = defaultFont.deriveFont( (float) UIManager.getFont( "defaultFont" ).getSize() + sizeIncr );
+
+		textArea.setFont( font );
+		textArea.setSyntaxScheme( new FlatSyntaxScheme( font ) );
+		scrollPane.getGutter().setLineNumberFont( font );
+	}
+
 	@Override
 	public boolean requestFocusInWindow() {
 		return textArea.requestFocusInWindow();

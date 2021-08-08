@@ -62,6 +62,7 @@ public class FlatThemeFileEditor
 	private static final String KEY_RECENT_FILE = "recentFile";
 	private static final String KEY_WINDOW_BOUNDS = "windowBounds";
 	private static final String KEY_LAF = "laf";
+	private static final String KEY_FONT_SIZE_INCR = "fontSizeIncr";
 
 	private File dir;
 	private Preferences state;
@@ -374,6 +375,33 @@ public class FlatThemeFileEditor
 		}
 	}
 
+	private void incrFontSize() {
+		applyFontSizeIncr( getFontSizeIncr() + 1 );
+	}
+
+	private void decrFontSize() {
+		applyFontSizeIncr( getFontSizeIncr() - 1 );
+	}
+
+	private void resetFontSize() {
+		applyFontSizeIncr( 0 );
+	}
+
+	private void applyFontSizeIncr( int sizeIncr ) {
+		if( sizeIncr < -5 )
+			sizeIncr = -5;
+		if( sizeIncr == getFontSizeIncr() )
+			return;
+
+		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
+			themeEditorPane.updateFontSize( sizeIncr );
+		state.putInt( KEY_FONT_SIZE_INCR, sizeIncr );
+	}
+
+	private int getFontSizeIncr() {
+		return state.getInt( KEY_FONT_SIZE_INCR, 0 );
+	}
+
 	private void restoreState() {
 		state = Preferences.userRoot().node( PREFS_ROOT_PATH );
 
@@ -477,6 +505,9 @@ public class FlatThemeFileEditor
 		viewMenu = new JMenu();
 		lightLafMenuItem = new JRadioButtonMenuItem();
 		darkLafMenuItem = new JRadioButtonMenuItem();
+		incrFontSizeMenuItem = new JMenuItem();
+		decrFontSizeMenuItem = new JMenuItem();
+		resetFontSizeMenuItem = new JMenuItem();
 		windowMenu = new JMenu();
 		nextEditorMenuItem = new JMenuItem();
 		previousEditorMenuItem = new JMenuItem();
@@ -570,6 +601,25 @@ public class FlatThemeFileEditor
 				darkLafMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 				darkLafMenuItem.addActionListener(e -> darkLaf());
 				viewMenu.add(darkLafMenuItem);
+				viewMenu.addSeparator();
+
+				//---- incrFontSizeMenuItem ----
+				incrFontSizeMenuItem.setText("Increase Font Size");
+				incrFontSizeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				incrFontSizeMenuItem.addActionListener(e -> incrFontSize());
+				viewMenu.add(incrFontSizeMenuItem);
+
+				//---- decrFontSizeMenuItem ----
+				decrFontSizeMenuItem.setText("Decrease Font Size");
+				decrFontSizeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				decrFontSizeMenuItem.addActionListener(e -> decrFontSize());
+				viewMenu.add(decrFontSizeMenuItem);
+
+				//---- resetFontSizeMenuItem ----
+				resetFontSizeMenuItem.setText("Reset Font Size");
+				resetFontSizeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				resetFontSizeMenuItem.addActionListener(e -> resetFontSize());
+				viewMenu.add(resetFontSizeMenuItem);
 			}
 			menuBar.add(viewMenu);
 
@@ -650,6 +700,9 @@ public class FlatThemeFileEditor
 	private JMenu viewMenu;
 	private JRadioButtonMenuItem lightLafMenuItem;
 	private JRadioButtonMenuItem darkLafMenuItem;
+	private JMenuItem incrFontSizeMenuItem;
+	private JMenuItem decrFontSizeMenuItem;
+	private JMenuItem resetFontSizeMenuItem;
 	private JMenu windowMenu;
 	private JMenuItem nextEditorMenuItem;
 	private JMenuItem previousEditorMenuItem;
