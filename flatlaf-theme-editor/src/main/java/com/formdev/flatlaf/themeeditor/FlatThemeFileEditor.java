@@ -429,10 +429,10 @@ public class FlatThemeFileEditor
 			List<String> list = StringUtils.split( windowBoundsStr, ',' );
 			if( list.size() >= 4 ) {
 				try {
-					int x = Integer.parseInt( list.get( 0 ) );
-					int y = Integer.parseInt( list.get( 1 ) );
-					int w = Integer.parseInt( list.get( 2 ) );
-					int h = Integer.parseInt( list.get( 3 ) );
+					int x = UIScale.scale( Integer.parseInt( list.get( 0 ) ) );
+					int y = UIScale.scale( Integer.parseInt( list.get( 1 ) ) );
+					int w = UIScale.scale( Integer.parseInt( list.get( 2 ) ) );
+					int h = UIScale.scale( Integer.parseInt( list.get( 3 ) ) );
 
 					// limit to screen size
 					GraphicsConfiguration gc = getGraphicsConfiguration();
@@ -464,7 +464,11 @@ public class FlatThemeFileEditor
 
 	private void saveWindowBounds() {
 		Rectangle r = getBounds();
-		state.put( KEY_WINDOW_BOUNDS, r.x + "," + r.y + ',' + r.width + ',' + r.height );
+		int x = UIScale.unscale( r.x );
+		int y = UIScale.unscale( r.y );
+		int width = UIScale.unscale( r.width );
+		int height = UIScale.unscale( r.height );
+		state.put( KEY_WINDOW_BOUNDS, x + "," + y + ',' + width + ',' + height );
 	}
 
 	private static void putPrefsString( Preferences prefs, String key, String value ) {
