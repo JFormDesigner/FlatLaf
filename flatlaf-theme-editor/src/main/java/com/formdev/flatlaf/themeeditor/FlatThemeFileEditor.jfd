@@ -145,7 +145,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "nextEditorMenuItem"
 						"text": "Next Editor"
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 9, 4226, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 34, 4226, false )
 						"mnemonic": 78
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nextEditor", false ) )
 					} )
@@ -153,7 +153,7 @@ new FormModel {
 						name: "previousEditorMenuItem"
 						"text": "Previous Editor"
 						"mnemonic": 80
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 9, 4291, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 33, 4226, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "previousEditor", false ) )
 					} )
 				} )

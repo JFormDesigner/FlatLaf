@@ -327,23 +327,16 @@ public class FlatThemeFileEditor
 	}
 
 	private void nextEditor() {
-		if( tabbedPane.getTabCount() == 0 )
-			return;
-
-		int index = tabbedPane.getSelectedIndex() + 1;
-		if( index >= tabbedPane.getTabCount() )
-			index = 0;
-		tabbedPane.setSelectedIndex( index );
+		notifyTabbedPaneAction( tabbedPane.getActionMap().get( "navigatePageDown" ) );
 	}
 
 	private void previousEditor() {
-		if( tabbedPane.getTabCount() == 0 )
-			return;
+		notifyTabbedPaneAction( tabbedPane.getActionMap().get( "navigatePageUp" ) );
+	}
 
-		int index = tabbedPane.getSelectedIndex() - 1;
-		if( index < 0 )
-			index = tabbedPane.getTabCount() - 1;
-		tabbedPane.setSelectedIndex( index );
+	private void notifyTabbedPaneAction( Action action ) {
+		if( action != null && action.isEnabled() )
+			action.actionPerformed( new ActionEvent( tabbedPane, ActionEvent.ACTION_PERFORMED, null ) );
 	}
 
 	private void find() {
@@ -634,7 +627,7 @@ public class FlatThemeFileEditor
 
 				//---- nextEditorMenuItem ----
 				nextEditorMenuItem.setText("Next Editor");
-				nextEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				nextEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				nextEditorMenuItem.setMnemonic('N');
 				nextEditorMenuItem.addActionListener(e -> nextEditor());
 				windowMenu.add(nextEditorMenuItem);
@@ -642,7 +635,7 @@ public class FlatThemeFileEditor
 				//---- previousEditorMenuItem ----
 				previousEditorMenuItem.setText("Previous Editor");
 				previousEditorMenuItem.setMnemonic('P');
-				previousEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_DOWN_MASK));
+				previousEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				previousEditorMenuItem.addActionListener(e -> previousEditor());
 				windowMenu.add(previousEditorMenuItem);
 			}

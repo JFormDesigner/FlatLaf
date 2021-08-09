@@ -25,10 +25,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayer;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
@@ -103,6 +106,11 @@ class FlatThemeEditorPane
 		scrollPane = new RTextScrollPane( overlay );
 		scrollPane.setBorder( BorderFactory.createEmptyBorder() );
 		scrollPane.setLineNumbersEnabled( true );
+
+		// map Ctrl+PageUp/Down to a not-existing action to avoid that the scrollpane catches them
+		InputMap inputMap = scrollPane.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		inputMap.put( KeyStroke.getKeyStroke( "ctrl PAGE_UP" ), "__dummy__" );
+		inputMap.put( KeyStroke.getKeyStroke( "ctrl PAGE_DOWN" ), "__dummy__" );
 
 		// create error strip
 		errorStrip = new ErrorStrip( textArea );
