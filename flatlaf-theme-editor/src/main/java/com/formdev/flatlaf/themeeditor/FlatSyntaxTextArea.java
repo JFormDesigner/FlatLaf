@@ -31,6 +31,7 @@ import javax.swing.text.BadLocationException;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextarea.RTextAreaUI;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.DuplicateLinesAction;
 
@@ -66,6 +67,11 @@ class FlatSyntaxTextArea
 		int alt = InputEvent.ALT_DOWN_MASK;
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP,   defaultModifier|alt), FlatSyntaxTextAreaActions.duplicateLinesUpAction );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, defaultModifier|alt), FlatSyntaxTextAreaActions.duplicateLinesDownAction );
+	}
+
+	@Override
+	protected RTextAreaUI createRTextAreaUI() {
+		return new FlatRSyntaxTextAreaUI( this );
 	}
 
 	boolean isUseColorOfColorTokens() {
