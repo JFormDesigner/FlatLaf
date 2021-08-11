@@ -16,28 +16,68 @@
 
 package com.formdev.flatlaf.themeeditor;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.util.StringUtils;
 
 /**
  * @author Karl Tauber
  */
 class FlatThemePropertiesBaseManager
 {
-	private final Map<String, MyBasePropertyProvider> providers = new HashMap<>();
+	private static Class<?>[] CORE_THEMES = {
+		FlatLaf.class,
+		FlatLightLaf.class,
+		FlatDarkLaf.class,
+		FlatIntelliJLaf.class,
+		FlatDarculaLaf.class,
+	};
 
-	FlatThemePropertiesSupport.BasePropertyProvider create( String name, FlatThemePropertiesSupport propertiesSupport ) {
-		MyBasePropertyProvider provider = new MyBasePropertyProvider( name, propertiesSupport );
+	private final Map<String, MyBasePropertyProvider> providers = new HashMap<>();
+	private Map<String, Properties> coreThemes;
+
+	FlatThemePropertiesSupport.BasePropertyProvider create( File file, FlatThemePropertiesSupport propertiesSupport ) {
+		String name = StringUtils.removeTrailing( file.getName(), ".properties" );
+		boolean isCoreTheme = file.getParent().replace( '\\', '/' ).endsWith( "/com/formdev/flatlaf" );
+		MyBasePropertyProvider provider = new MyBasePropertyProvider( name, propertiesSupport, isCoreTheme );
 		providers.put( name, provider );
 		return provider;
 	}
 
 	void clear() {
 		providers.clear();
+	}
+
+	private void loadCoreThemes() {
+		if( coreThemes != null )
+			return;
+
+		coreThemes = new HashMap<>();
+
+		for( Class<?> lafClass : CORE_THEMES ) {
+			String propertiesName = '/' + lafClass.getName().replace( '.', '/' ) + ".properties";
+			try( InputStream in = lafClass.getResourceAsStream( propertiesName ) ) {
+				Properties properties = new Properties();
+				if( in != null )
+					properties.load( in );
+				coreThemes.put( lafClass.getSimpleName(), properties );
+			} catch( IOException ex ) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	private static List<String> baseFiles( String name, String baseTheme ) {
@@ -106,23 +146,41 @@ class FlatThemePropertiesBaseManager
 	{
 		private final String name;
 		private final FlatThemePropertiesSupport propertiesSupport;
+		private final boolean isCoreTheme;
 
 		private List<String> baseFiles;
 		private String lastBaseTheme;
 
-		MyBasePropertyProvider( String name, FlatThemePropertiesSupport propertiesSupport ) {
+		MyBasePropertyProvider( String name, FlatThemePropertiesSupport propertiesSupport, boolean isCoreTheme ) {
 			this.name = name;
 			this.propertiesSupport = propertiesSupport;
+			this.isCoreTheme = isCoreTheme;
 		}
 
 		@Override
 		public String getProperty( String key, String baseTheme ) {
 			updateBaseFiles( baseTheme );
 
+			// search in opened editors
 			for( String baseFile : baseFiles ) {
 				String value = getPropertyFromBase( baseFile, key );
 				if( value != null )
 					return value;
+			}
+
+			// search in core themes
+			if( !isCoreTheme ) {
+				loadCoreThemes();
+
+				String value = getPropertyFromCore( name, key );
+				if( value != null )
+					return value;
+
+				for( String baseFile : baseFiles ) {
+					value = getPropertyFromCore( baseFile, key );
+					if( value != null )
+						return value;
+				}
 			}
 
 			return null;
@@ -132,6 +190,13 @@ class FlatThemePropertiesBaseManager
 			MyBasePropertyProvider provider = providers.get( baseFile );
 			return (provider != null)
 				? provider.propertiesSupport.getProperties().getProperty( key )
+				: null;
+		}
+
+		private String getPropertyFromCore( String baseFile, String key ) {
+			Properties properties = coreThemes.get( baseFile );
+			return (properties != null)
+				? properties.getProperty( key )
 				: null;
 		}
 
@@ -147,6 +212,7 @@ class FlatThemePropertiesBaseManager
 		public void addAllKeys( Set<String> allKeys, String baseTheme ) {
 			updateBaseFiles( baseTheme );
 
+			// search in opened editors
 			for( String baseFile : baseFiles ) {
 				MyBasePropertyProvider provider = providers.get( baseFile );
 				if( provider == null )
@@ -155,6 +221,24 @@ class FlatThemePropertiesBaseManager
 				for( Object key : provider.propertiesSupport.getProperties().keySet() )
 					allKeys.add( (String) key );
 			}
+
+			// search in core themes
+			if( !isCoreTheme ) {
+				loadCoreThemes();
+
+				copyKeys( coreThemes.get( name ), allKeys );
+
+				for( String baseFile : baseFiles )
+					copyKeys( coreThemes.get( baseFile ), allKeys );
+			}
+		}
+
+		private void copyKeys( Properties properties, Set<String> allKeys ) {
+			if( properties == null )
+				return;
+
+			for( Object key : properties.keySet() )
+				allKeys.add( (String) key );
 		}
 	}
 }

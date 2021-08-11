@@ -48,7 +48,6 @@ import org.fife.ui.rsyntaxtextarea.TokenTypes;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
-import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -169,8 +168,7 @@ class FlatThemeEditorPane
 	}
 
 	void initBasePropertyProvider( FlatThemePropertiesBaseManager propertiesBaseManager ) {
-		String name = StringUtils.removeTrailing( file.getName(), ".properties" );
-		textArea.propertiesSupport.setBasePropertyProvider( propertiesBaseManager.create( name, textArea.propertiesSupport ) );
+		textArea.propertiesSupport.setBasePropertyProvider( propertiesBaseManager.create( file, textArea.propertiesSupport ) );
 	}
 
 	File getFile() {
