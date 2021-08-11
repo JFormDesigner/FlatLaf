@@ -17,14 +17,10 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -45,14 +41,16 @@ class FlatThemePropertiesSupport
 	private final FlatSyntaxTextArea textArea;
 	private final Function<String, String> propertiesGetter;
 	private final Function<String, String> resolver;
+	private BasePropertyProvider basePropertyProvider;
+
+	// caches
 	private Properties propertiesCache;
 	private final Map<Integer, Object> parsedValueCache = new HashMap<>();
-
-	private File[] baseFiles;
-	private long[] baseFilesLastModified;
-	private Properties[] basePropertiesCache;
-
 	private Set<String> allKeysCache;
+	private String baseTheme;
+
+	private static long globalCacheInvalidationCounter;
+	private long cacheInvalidationCounter;
 
 	FlatThemePropertiesSupport( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
@@ -67,12 +65,8 @@ class FlatThemePropertiesSupport
 		textArea.getDocument().addDocumentListener( this );
 	}
 
-	void setBaseFiles( List<File> baseFiles ) {
-		int size = baseFiles.size();
-		this.baseFiles = baseFiles.toArray( new File[size] );
-
-		baseFilesLastModified = new long[size];
-		basePropertiesCache = new Properties[size];
+	void setBasePropertyProvider( BasePropertyProvider basePropertyProvider ) {
+		this.basePropertyProvider = basePropertyProvider;
 	}
 
 	private String resolveValue( String value ) {
@@ -80,6 +74,8 @@ class FlatThemePropertiesSupport
 	}
 
 	Object getParsedValueAtLine( int line ) {
+		autoClearCache();
+
 		Integer lineKey = line;
 		Object parsedValue = parsedValueCache.get( lineKey );
 		if( parsedValue != null )
@@ -96,7 +92,7 @@ class FlatThemePropertiesSupport
 			parsedValueCache.put( lineKey, parsedValue );
 			return parsedValue;
 		} catch( Exception ex ) {
-			System.out.println( ex.getMessage() ); //TODO
+			System.out.println( textArea.getFileName() + ": " + ex.getMessage() ); //TODO
 			parsedValueCache.put( lineKey, ex );
 			return null;
 		}
@@ -128,20 +124,14 @@ class FlatThemePropertiesSupport
 		if( value != null )
 			return value;
 
-		if( baseFiles == null )
+		if( basePropertyProvider == null )
 			return null;
 
 		// look in base properties files
-		for( int i = 0; i < baseFiles.length; i++ ) {
-			value = getBaseProperties( i ).getProperty( key );
-			if( value != null )
-				return value;
-		}
-
-		return null;
+		return basePropertyProvider.getProperty( key, getBaseTheme() );
 	}
 
-	private Properties getProperties() {
+	Properties getProperties() {
 		if( propertiesCache != null )
 			return propertiesCache;
 
@@ -154,23 +144,9 @@ class FlatThemePropertiesSupport
 		return propertiesCache;
 	}
 
-	private Properties getBaseProperties( int index ) {
-		long lastModified = baseFiles[index].lastModified();
-		if( baseFilesLastModified[index] != lastModified || basePropertiesCache[index] == null ) {
-			// (re)load base properties file
-			baseFilesLastModified[index] = lastModified;
-			basePropertiesCache[index] = new Properties();
-			try( InputStream in = new FileInputStream( baseFiles[index] ) ) {
-				basePropertiesCache[index].load( in );
-			} catch( IOException ex ) {
-				ex.printStackTrace(); //TODO
-			}
-		}
-
-		return basePropertiesCache[index];
-	}
-
 	Set<String> getAllKeys() {
+		autoClearCache();
+
 		if( allKeysCache != null )
 			return allKeysCache;
 
@@ -179,19 +155,37 @@ class FlatThemePropertiesSupport
 		for( Object key : getProperties().keySet() )
 			allKeysCache.add( (String) key );
 
-		if( baseFiles == null )
-			return allKeysCache;
-
-		for( int i = 0; i < baseFiles.length; i++ ) {
-			for( Object key : getBaseProperties( i ).keySet() )
-				allKeysCache.add( (String) key );
-		}
+		// look in base properties files
+		if( basePropertyProvider != null )
+			basePropertyProvider.addAllKeys( allKeysCache, getBaseTheme() );
 
 		return allKeysCache;
 	}
 
+	private String getBaseTheme() {
+		if( baseTheme == null )
+			baseTheme = getProperties().getProperty( "@baseTheme", "light" );
+		return baseTheme;
+	}
+
 	private void clearCache() {
 		propertiesCache = null;
+		parsedValueCache.clear();
+		allKeysCache = null;
+		baseTheme = null;
+
+		// increase global cache invalidation counter to allow auto-clear caches
+		globalCacheInvalidationCounter++;
+		cacheInvalidationCounter = globalCacheInvalidationCounter;
+	}
+
+	/**
+	 * Clear caches that may depend on other editors if cache of another editor was invalidated.
+	 */
+	private void autoClearCache() {
+		if( cacheInvalidationCounter == globalCacheInvalidationCounter )
+			return;
+
 		parsedValueCache.clear();
 		allKeysCache = null;
 	}
@@ -232,5 +226,12 @@ class FlatThemePropertiesSupport
 			this.key = key;
 			this.value = value;
 		}
+	}
+
+	//---- interface BasePropertyProvider -------------------------------------
+
+	interface BasePropertyProvider {
+		String getProperty( String key, String baseTheme );
+		void addAllKeys( Set<String> allKeys, String baseTheme );
 	}
 }

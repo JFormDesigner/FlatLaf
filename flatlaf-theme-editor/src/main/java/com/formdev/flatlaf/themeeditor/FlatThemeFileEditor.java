@@ -68,6 +68,8 @@ public class FlatThemeFileEditor
 	private Preferences state;
 	private boolean inLoadDirectory;
 
+	private final FlatThemePropertiesBaseManager propertiesBaseManager = new FlatThemePropertiesBaseManager();
+
 	public static void main( String[] args ) {
 		File dir = (args.length > 0)
 			? new File( args[0] )
@@ -187,6 +189,7 @@ public class FlatThemeFileEditor
 			return;
 
 		this.dir = dir;
+		propertiesBaseManager.clear();
 
 		inLoadDirectory = true;
 
@@ -265,6 +268,8 @@ public class FlatThemeFileEditor
 		} catch( IOException ex ) {
 			ex.printStackTrace(); // TODO
 		}
+
+		themeEditorPane.initBasePropertyProvider( propertiesBaseManager );
 
 		Supplier<String> titleFun = () -> {
 			return (themeEditorPane.isDirty() ? "* " : "")

@@ -23,7 +23,6 @@ import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -49,6 +48,7 @@ import org.fife.ui.rsyntaxtextarea.TokenTypes;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -168,8 +168,9 @@ class FlatThemeEditorPane
 		return textArea.requestFocusInWindow();
 	}
 
-	void setBaseFiles( List<File> baseFiles ) {
-		textArea.propertiesSupport.setBaseFiles( baseFiles );
+	void initBasePropertyProvider( FlatThemePropertiesBaseManager propertiesBaseManager ) {
+		String name = StringUtils.removeTrailing( file.getName(), ".properties" );
+		textArea.propertiesSupport.setBasePropertyProvider( propertiesBaseManager.create( name, textArea.propertiesSupport ) );
 	}
 
 	File getFile() {
