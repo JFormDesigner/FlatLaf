@@ -19,14 +19,17 @@ package com.formdev.flatlaf.themeeditor;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
+import javax.swing.UIDefaults;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.BadLocationException;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 
@@ -52,11 +55,13 @@ class FlatThemePropertiesSupport
 	private static long globalCacheInvalidationCounter;
 	private long cacheInvalidationCounter;
 
+	private static Set<String> wildcardKeys;
+
 	FlatThemePropertiesSupport( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
 
 		propertiesGetter = key -> {
-			return getProperty( key );
+			return getPropertyOrWildcard( key );
 		};
 		resolver = v -> {
 			return resolveValue( v );
@@ -116,6 +121,22 @@ class FlatThemePropertiesSupport
 			// ignore
 			return null;
 		}
+	}
+
+	private String getPropertyOrWildcard( String key ) {
+		String value = getProperty( key );
+		if( value != null )
+			return value;
+
+		if( !isKeyAllowedForWildcard( key ) )
+			return null;
+
+		int lastDotIndex = key.lastIndexOf( '.' );
+		if( lastDotIndex < 0 )
+			return null;
+
+		String wildcardKey = "*.".concat( key.substring( lastDotIndex + 1 ) );
+		return getProperty( wildcardKey );
 	}
 
 	private String getProperty( String key ) {
@@ -188,6 +209,58 @@ class FlatThemePropertiesSupport
 
 		parsedValueCache.clear();
 		allKeysCache = null;
+	}
+
+	private static boolean isKeyAllowedForWildcard( String key ) {
+		loadKeysAllowedForWildcard();
+		return wildcardKeys.contains( key );
+	}
+
+	private static void loadKeysAllowedForWildcard() {
+		if( wildcardKeys != null )
+			return;
+		wildcardKeys = new HashSet<>();
+
+		UIDefaults basicDefaults = new BasicLookAndFeel() {
+			@Override public String getName() { return "Basic"; }
+			@Override public String getID() { return "Basic"; }
+			@Override public String getDescription() { return "Basic"; }
+			@Override public boolean isNativeLookAndFeel() { return false; }
+			@Override public boolean isSupportedLookAndFeel() { return true; }
+		}.getDefaults();
+
+		for( Object key : basicDefaults.keySet() ) {
+			if( key instanceof String )
+				wildcardKeys.add( (String) key );
+		}
+
+		// same as added in FlatLaf.getDefaults()
+		wildcardKeys.addAll( Arrays.asList(
+			"Button.disabledBackground",
+			"EditorPane.disabledBackground",
+			"EditorPane.inactiveBackground",
+			"FormattedTextField.disabledBackground",
+			"PasswordField.disabledBackground",
+			"Spinner.disabledBackground",
+			"TextArea.disabledBackground",
+			"TextArea.inactiveBackground",
+			"TextField.disabledBackground",
+			"TextPane.disabledBackground",
+			"TextPane.inactiveBackground",
+			"ToggleButton.disabledBackground",
+
+			"Button.disabledText",
+			"CheckBox.disabledText",
+			"CheckBoxMenuItem.disabledForeground",
+			"Menu.disabledForeground",
+			"MenuItem.disabledForeground",
+			"RadioButton.disabledText",
+			"RadioButtonMenuItem.disabledForeground",
+			"Spinner.disabledForeground",
+			"ToggleButton.disabledText",
+
+			"DesktopIcon.foreground"
+		) );
 	}
 
 	//---- interface DocumentListener ----
