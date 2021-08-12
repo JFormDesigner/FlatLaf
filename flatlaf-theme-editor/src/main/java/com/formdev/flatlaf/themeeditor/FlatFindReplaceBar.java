@@ -19,13 +19,17 @@ package com.formdev.flatlaf.themeeditor;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import com.formdev.flatlaf.extras.components.*;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
+import org.fife.ui.rsyntaxtextarea.DocumentRange;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
+import org.fife.ui.rtextarea.RTextAreaHighlighter;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
@@ -54,10 +58,14 @@ class FlatFindReplaceBar
 		InputMap inputMap = getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP, 0 ), "findPrevious" );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, 0 ), "findNext" );
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_PAGE_UP, 0 ), "editorPageUp" );
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_PAGE_DOWN, 0 ), "editorPageDown" );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_F12, 0 ), "focusEditor" );
 		ActionMap actionMap = getActionMap();
 		actionMap.put( "findPrevious", new ConsumerAction( e -> findPrevious() ) );
 		actionMap.put( "findNext", new ConsumerAction( e -> findNext() ) );
+		actionMap.put( "editorPageUp", new ConsumerAction( e -> notifyEditorAction( "page-up" ) ) );
+		actionMap.put( "editorPageDown", new ConsumerAction( e -> notifyEditorAction( "page-down" ) ) );
 		actionMap.put( "focusEditor", new ConsumerAction( e -> textArea.requestFocusInWindow() ) );
 
 		findPreviousButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowPrevMatches.svg" ) );
@@ -141,6 +149,10 @@ class FlatFindReplaceBar
 			? SearchEngine.find( textArea, context )
 			: SearchEngine.markAll( textArea, context );
 
+		// select (and scroll to) match near caret
+		if( !find && result.getMarkedCount() > 0 )
+			selectMatchNearCaret();
+
 		// update matches info label
 		updateMatchesLabel( result, false );
 
@@ -189,9 +201,40 @@ class FlatFindReplaceBar
 		updateMatchesLabel( result, true );
 	}
 
+	private void selectMatchNearCaret() {
+		RTextAreaHighlighter highlighter = (RTextAreaHighlighter) textArea.getHighlighter();
+		if( highlighter == null )
+			return;
+
+		List<DocumentRange> ranges = highlighter.getMarkAllHighlightRanges();
+		if( ranges.isEmpty() )
+			return;
+
+		DocumentRange selectRange = null;
+		if( ranges.size() > 1 ) {
+			int selStart = textArea.getSelectionStart();
+			for( DocumentRange range : ranges ) {
+				if( range.getEndOffset() >= selStart ) {
+					selectRange = range;
+					break;
+				}
+			}
+		}
+		if( selectRange == null )
+			selectRange = ranges.get( 0 );
+
+		RSyntaxUtilities.selectAndPossiblyCenter( textArea, selectRange, true );
+	}
+
 	private void updateMatchesLabel( SearchResult result, boolean replace ) {
 		matchesLabel.setText( result.getMarkedCount() + " matches" );
 		replaceMatchesLabel.setText( replace ? result.getCount() + " matches replaced" : null );
+	}
+
+	private void notifyEditorAction( String actionKey ) {
+		Action action = textArea.getActionMap().get( actionKey );
+		if( action != null )
+			action.actionPerformed( new ActionEvent( textArea, ActionEvent.ACTION_PERFORMED, null ) );
 	}
 
 	private void close() {
