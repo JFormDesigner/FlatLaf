@@ -354,7 +354,14 @@ public abstract class FlatLaf
 
 	@Override
 	public UIDefaults getDefaults() {
-		UIDefaults defaults = super.getDefaults();
+		// use larger initial capacity to avoid resizing UI defaults hash table
+		// (from 610 to 1221 to 2443 entries) and to save some memory
+		UIDefaults defaults = new UIDefaults( 1500, 0.75f );
+
+		// initialize basic defaults (see super.getDefaults())
+		initClassDefaults( defaults );
+		initSystemColorDefaults( defaults );
+		initComponentDefaults( defaults );
 
 		// add flag that indicates whether the LaF is light or dark
 		// (can be queried without using FlatLaf API)
