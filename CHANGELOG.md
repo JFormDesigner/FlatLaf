@@ -1,12 +1,19 @@
 FlatLaf Change Log
 ==================
 
+## 1.6-SNAPSHOT
+
+#### New features and improvements
+
+- InternalFrame: Double-click on icon in internal frame title bar now closes the
+  internal frame. (issue #374)
+
+
 ## 1.5
 
 #### New features and improvements
 
 - SwingX: Added search and clear icons to `JXSearchField`. (issue #359)
-
 
 #### Fixed bugs
 

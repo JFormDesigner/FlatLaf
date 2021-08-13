@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
@@ -144,6 +145,19 @@ public class FlatInternalFrameTitlePane
 		iconButton.setVisible( frame.isIconifiable() );
 		maxButton.setVisible( frame.isMaximizable() );
 		closeButton.setVisible( frame.isClosable() );
+	}
+
+	Rectangle getFrameIconBounds() {
+		Icon icon = titleLabel.getIcon();
+		if( icon == null )
+			return null;
+
+		int iconWidth = icon.getIconWidth();
+		int iconHeight = icon.getIconHeight();
+		boolean leftToRight = titleLabel.getComponentOrientation().isLeftToRight();
+		int x = titleLabel.getX() + (leftToRight ? 0 : (titleLabel.getWidth() - iconWidth));
+		int y = titleLabel.getY() + ((titleLabel.getHeight() - iconHeight) / 2);
+		return new Rectangle( x, y, iconWidth, iconHeight );
 	}
 
 	/**
