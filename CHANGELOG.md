@@ -8,6 +8,13 @@ FlatLaf Change Log
 - InternalFrame: Double-click on icon in internal frame title bar now closes the
   internal frame. (issue #374)
 
+#### Fixed bugs
+
+- Menus: Fixed missing modifiers flags in `ActionEvent` (e.g. `Ctrl` key
+  pressed) when running in Java 9+ on Linux, macOS. Occurs also on Windows in
+  large popup menus that do not fit into the window. (issue #371; regression
+  since FlatLaf 1.3)
+
 
 ## 1.5
 
