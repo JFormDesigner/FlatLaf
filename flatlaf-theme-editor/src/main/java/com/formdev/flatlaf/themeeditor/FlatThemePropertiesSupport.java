@@ -49,6 +49,7 @@ class FlatThemePropertiesSupport
 	// caches
 	private Properties propertiesCache;
 	private final Map<Integer, Object> parsedValueCache = new HashMap<>();
+	private final Map<String, Object> parsedValueCache2 = new HashMap<>();
 	private Set<String> allKeysCache;
 	private String baseTheme;
 
@@ -123,6 +124,28 @@ class FlatThemePropertiesSupport
 		}
 	}
 
+	Object getParsedProperty( String key ) {
+		Object parsedValue = parsedValueCache2.get( key );
+		if( parsedValue != null )
+			return !(parsedValue instanceof Exception) ? parsedValue : null;
+
+		String str = getPropertyOrWildcard( key );
+		if( str == null )
+			return null;
+
+		try {
+			Object[] resultValueType = new Object[1];
+			String value = resolveValue( str );
+			parsedValue = UIDefaultsLoaderAccessor.parseValue( key, value, resultValueType, resolver );
+			parsedValueCache2.put( key, parsedValue );
+			return parsedValue;
+		} catch( Exception ex ) {
+			System.out.println( textArea.getFileName() + ": " + ex.getMessage() ); //TODO
+			parsedValueCache2.put( key, ex );
+			return null;
+		}
+	}
+
 	private String getPropertyOrWildcard( String key ) {
 		String value = getProperty( key );
 		if( value != null )
@@ -192,6 +215,7 @@ class FlatThemePropertiesSupport
 	private void clearCache() {
 		propertiesCache = null;
 		parsedValueCache.clear();
+		parsedValueCache2.clear();
 		allKeysCache = null;
 		baseTheme = null;
 
@@ -208,6 +232,7 @@ class FlatThemePropertiesSupport
 			return;
 
 		parsedValueCache.clear();
+		parsedValueCache2.clear();
 		allKeysCache = null;
 	}
 

@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -66,6 +67,7 @@ import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
 import com.formdev.flatlaf.ui.FlatRootPaneUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
@@ -96,6 +98,7 @@ public abstract class FlatLaf
 	private MnemonicHandler mnemonicHandler;
 
 	private Consumer<UIDefaults> postInitialization;
+	private List<Function<Object, Object>> uiDefaultsGetters;
 
 	/**
 	 * Sets the application look and feel to the given LaF
@@ -356,7 +359,7 @@ public abstract class FlatLaf
 	public UIDefaults getDefaults() {
 		// use larger initial capacity to avoid resizing UI defaults hash table
 		// (from 610 to 1221 to 2443 entries) and to save some memory
-		UIDefaults defaults = new UIDefaults( 1500, 0.75f );
+		UIDefaults defaults = new FlatUIDefaults( 1500, 0.75f );
 
 		// initialize basic defaults (see super.getDefaults())
 		initClassDefaults( defaults );
@@ -919,6 +922,104 @@ public abstract class FlatLaf
 	@Override
 	public final int hashCode() {
 		return super.hashCode();
+	}
+
+	/**
+	 * Registers a UI defaults getter function that is invoked before the standard getter.
+	 * This allows using different UI defaults for special purposes
+	 * (e.g. using multiple themes at the same time).
+	 *
+	 * @see #unregisterUIDefaultsGetter(Function)
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @since 1.6
+	 */
+	public void registerUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter ) {
+		if( uiDefaultsGetters == null )
+			uiDefaultsGetters = new ArrayList<>();
+
+		uiDefaultsGetters.remove( uiDefaultsGetter );
+		uiDefaultsGetters.add( uiDefaultsGetter );
+
+		// disable shared UIs
+		FlatUIUtils.setUseSharedUIs( false );
+	}
+
+	/**
+	 * Unregisters a UI defaults getter function that was invoked before the standard getter.
+	 *
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @since 1.6
+	 */
+	public void unregisterUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter ) {
+		if( uiDefaultsGetters == null )
+			return;
+
+		uiDefaultsGetters.remove( uiDefaultsGetter );
+
+		// enable shared UIs
+		if( uiDefaultsGetters.isEmpty() )
+			FlatUIUtils.setUseSharedUIs( true );
+	}
+
+	/**
+	 * Registers a UI defaults getter function that is invoked before the standard getter,
+	 * runs the given runnable and unregisters the UI defaults getter function again.
+	 * This allows using different UI defaults for special purposes
+	 * (e.g. using multiple themes at the same time).
+	 * If the current look and feel is not FlatLaf, then the getter is ignored and
+	 * the given runnable invoked.
+	 *
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @see #unregisterUIDefaultsGetter(Function)
+	 * @since 1.6
+	 */
+	public static void runWithUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter, Runnable runnable ) {
+		LookAndFeel laf = UIManager.getLookAndFeel();
+		if( laf instanceof FlatLaf ) {
+			((FlatLaf)laf).registerUIDefaultsGetter( uiDefaultsGetter );
+			try {
+				runnable.run();
+			} finally {
+				((FlatLaf)laf).unregisterUIDefaultsGetter( uiDefaultsGetter );
+			}
+		} else
+			runnable.run();
+	}
+
+	//---- class FlatUIDefaults -----------------------------------------------
+
+	private class FlatUIDefaults
+		extends UIDefaults
+	{
+		FlatUIDefaults( int initialCapacity, float loadFactor ) {
+			super( initialCapacity, loadFactor );
+		}
+
+		@Override
+		public Object get( Object key ) {
+			Object value = getValue( key );
+			return (value != null) ? value : super.get( key );
+		}
+
+		@Override
+		public Object get( Object key, Locale l ) {
+			Object value = getValue( key );
+			return (value != null) ? value : super.get( key, l );
+		}
+
+		private Object getValue( Object key ) {
+			if( uiDefaultsGetters == null )
+				return null;
+
+			for( int i = uiDefaultsGetters.size() - 1; i >= 0; i-- ) {
+				Object value = uiDefaultsGetters.get( i ).apply( key );
+				if( value != null )
+					return value;
+			}
+
+			return null;
+		}
 	}
 
 	//---- class ActiveFont ---------------------------------------------------

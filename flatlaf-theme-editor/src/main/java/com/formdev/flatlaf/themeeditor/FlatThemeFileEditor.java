@@ -61,6 +61,7 @@ public class FlatThemeFileEditor
 	private static final String KEY_RECENT_DIRECTORY = "recentDirectory";
 	private static final String KEY_RECENT_FILE = "recentFile";
 	private static final String KEY_WINDOW_BOUNDS = "windowBounds";
+	private static final String KEY_PREVIEW = "preview";
 	private static final String KEY_LAF = "laf";
 	private static final String KEY_FONT_SIZE_INCR = "fontSizeIncr";
 
@@ -281,6 +282,9 @@ public class FlatThemeFileEditor
 				tabbedPane.setTitleAt( index, titleFun.get() );
 		} );
 
+		if( state.getBoolean( KEY_PREVIEW, true ) )
+			themeEditorPane.showPreview( true );
+
 		tabbedPane.addTab( titleFun.get(), null, themeEditorPane, file.getAbsolutePath() );
 
 		if( select )
@@ -350,6 +354,13 @@ public class FlatThemeFileEditor
 			themeEditorPane.showFindReplaceBar();
 	}
 
+	private void showHidePreview() {
+		boolean show = previewMenuItem.isSelected();
+		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
+			themeEditorPane.showPreview( show );
+		state.putBoolean( KEY_PREVIEW, show );
+	}
+
 	private void lightLaf() {
 		applyLookAndFeel( FlatLightLaf.class.getName() );
 	}
@@ -407,6 +418,8 @@ public class FlatThemeFileEditor
 		String[] directories = getPrefsStrings( state, KEY_DIRECTORIES );
 		SortedComboBoxModel<String> model = new SortedComboBoxModel<>( directories );
 		directoryField.setModel( model );
+
+		previewMenuItem.setSelected( state.getBoolean( KEY_PREVIEW, true ) );
 	}
 
 	private void saveState() {
@@ -505,6 +518,7 @@ public class FlatThemeFileEditor
 		editMenu = new JMenu();
 		findMenuItem = new JMenuItem();
 		viewMenu = new JMenu();
+		previewMenuItem = new JCheckBoxMenuItem();
 		lightLafMenuItem = new JRadioButtonMenuItem();
 		darkLafMenuItem = new JRadioButtonMenuItem();
 		incrFontSizeMenuItem = new JMenuItem();
@@ -588,6 +602,13 @@ public class FlatThemeFileEditor
 			{
 				viewMenu.setText("View");
 				viewMenu.setMnemonic('V');
+
+				//---- previewMenuItem ----
+				previewMenuItem.setText("Preview");
+				previewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+				previewMenuItem.addActionListener(e -> showHidePreview());
+				viewMenu.add(previewMenuItem);
+				viewMenu.addSeparator();
 
 				//---- lightLafMenuItem ----
 				lightLafMenuItem.setText("Light Laf");
@@ -684,10 +705,10 @@ public class FlatThemeFileEditor
 		}
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 
-		//---- buttonGroup1 ----
-		ButtonGroup buttonGroup1 = new ButtonGroup();
-		buttonGroup1.add(lightLafMenuItem);
-		buttonGroup1.add(darkLafMenuItem);
+		//---- lafButtonGroup ----
+		ButtonGroup lafButtonGroup = new ButtonGroup();
+		lafButtonGroup.add(lightLafMenuItem);
+		lafButtonGroup.add(darkLafMenuItem);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -700,6 +721,7 @@ public class FlatThemeFileEditor
 	private JMenu editMenu;
 	private JMenuItem findMenuItem;
 	private JMenu viewMenu;
+	private JCheckBoxMenuItem previewMenuItem;
 	private JRadioButtonMenuItem lightLafMenuItem;
 	private JRadioButtonMenuItem darkLafMenuItem;
 	private JMenuItem incrFontSizeMenuItem;

@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayer;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -67,6 +68,8 @@ class FlatThemeEditorPane
 	private final FlatSyntaxTextArea textArea;
 	private final ErrorStrip errorStrip;
 	private FlatFindReplaceBar findReplaceBar;
+	private JScrollPane previewScrollPane;
+	private FlatThemePreview preview;
 
 	private File file;
 
@@ -258,6 +261,30 @@ class FlatThemeEditorPane
 		}
 
 		collapsiblePanel.showBottomComponent( findReplaceBar );
+	}
+
+	void showPreview( boolean show ) {
+		if( show ) {
+			if( preview != null )
+				return;
+
+			preview = new FlatThemePreview( textArea );
+			previewScrollPane = new JScrollPane( preview );
+			previewScrollPane.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
+			previewScrollPane.setBorder( null );
+			previewScrollPane.getVerticalScrollBar().setUnitIncrement( 20 );
+			previewScrollPane.getHorizontalScrollBar().setUnitIncrement( 20 );
+			add( previewScrollPane, BorderLayout.LINE_END );
+		} else {
+			if( preview == null )
+				return;
+
+			remove( previewScrollPane );
+			previewScrollPane = null;
+			preview = null;
+		}
+
+		revalidate();
 	}
 
 	//---- class FlatSyntaxScheme ---------------------------------------------
