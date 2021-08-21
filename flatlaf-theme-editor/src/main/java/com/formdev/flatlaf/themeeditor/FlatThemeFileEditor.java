@@ -212,9 +212,7 @@ public class FlatThemeFileEditor
 		for( File file : getPropertiesFiles( dir ) )
 			openFile( file, file.getName().equals( recentFile ) );
 
-		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
-		if( themeEditorPane != null )
-			themeEditorPane.requestFocusInWindow();
+		activateEditor();
 
 		saveState();
 
@@ -348,6 +346,12 @@ public class FlatThemeFileEditor
 		for( int i = 0; i < result.length; i++ )
 			result[i] = (FlatThemeEditorPane) tabbedPane.getComponentAt( i );
 		return result;
+	}
+
+	private void activateEditor() {
+		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
+		if( themeEditorPane != null )
+			themeEditorPane.requestFocusInWindow();
 	}
 
 	private void nextEditor() {
@@ -540,6 +544,7 @@ public class FlatThemeFileEditor
 		decrFontSizeMenuItem = new JMenuItem();
 		resetFontSizeMenuItem = new JMenuItem();
 		windowMenu = new JMenu();
+		activateEditorMenuItem = new JMenuItem();
 		nextEditorMenuItem = new JMenuItem();
 		previousEditorMenuItem = new JMenuItem();
 		controlPanel = new JPanel();
@@ -629,14 +634,14 @@ public class FlatThemeFileEditor
 				lightLafMenuItem.setText("Light Laf");
 				lightLafMenuItem.setMnemonic('L');
 				lightLafMenuItem.setSelected(true);
-				lightLafMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
+				lightLafMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, KeyEvent.ALT_DOWN_MASK));
 				lightLafMenuItem.addActionListener(e -> lightLaf());
 				viewMenu.add(lightLafMenuItem);
 
 				//---- darkLafMenuItem ----
 				darkLafMenuItem.setText("Dark Laf");
 				darkLafMenuItem.setMnemonic('D');
-				darkLafMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+				darkLafMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, KeyEvent.ALT_DOWN_MASK));
 				darkLafMenuItem.addActionListener(e -> darkLaf());
 				viewMenu.add(darkLafMenuItem);
 				viewMenu.addSeparator();
@@ -665,6 +670,13 @@ public class FlatThemeFileEditor
 			{
 				windowMenu.setText("Window");
 				windowMenu.setMnemonic('W');
+
+				//---- activateEditorMenuItem ----
+				activateEditorMenuItem.setText("Activate Editor");
+				activateEditorMenuItem.setMnemonic('A');
+				activateEditorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
+				activateEditorMenuItem.addActionListener(e -> activateEditor());
+				windowMenu.add(activateEditorMenuItem);
 
 				//---- nextEditorMenuItem ----
 				nextEditorMenuItem.setText("Next Editor");
@@ -743,6 +755,7 @@ public class FlatThemeFileEditor
 	private JMenuItem decrFontSizeMenuItem;
 	private JMenuItem resetFontSizeMenuItem;
 	private JMenu windowMenu;
+	private JMenuItem activateEditorMenuItem;
 	private JMenuItem nextEditorMenuItem;
 	private JMenuItem previousEditorMenuItem;
 	private JPanel controlPanel;

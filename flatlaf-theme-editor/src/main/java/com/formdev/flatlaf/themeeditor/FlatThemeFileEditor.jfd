@@ -114,7 +114,7 @@ new FormModel {
 						"$buttonGroup": new FormReference( "lafButtonGroup" )
 						"mnemonic": 76
 						"selected": true
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 122, 0, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 112, 520, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "lightLaf", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
@@ -122,7 +122,7 @@ new FormModel {
 						"text": "Dark Laf"
 						"$buttonGroup": new FormReference( "lafButtonGroup" )
 						"mnemonic": 68
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 123, 0, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 113, 520, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "darkLaf", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
@@ -151,6 +151,13 @@ new FormModel {
 					name: "windowMenu"
 					"text": "Window"
 					"mnemonic": 87
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "activateEditorMenuItem"
+						"text": "Activate Editor"
+						"mnemonic": 65
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 123, 0, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "activateEditor", false ) )
+					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "nextEditorMenuItem"
 						"text": "Next Editor"

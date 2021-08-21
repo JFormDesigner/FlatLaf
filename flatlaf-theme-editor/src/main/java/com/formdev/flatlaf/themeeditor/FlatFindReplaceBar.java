@@ -60,13 +60,11 @@ class FlatFindReplaceBar
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, 0 ), "findNext" );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_PAGE_UP, 0 ), "editorPageUp" );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_PAGE_DOWN, 0 ), "editorPageDown" );
-		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_F12, 0 ), "focusEditor" );
 		ActionMap actionMap = getActionMap();
 		actionMap.put( "findPrevious", new ConsumerAction( e -> findPrevious() ) );
 		actionMap.put( "findNext", new ConsumerAction( e -> findNext() ) );
 		actionMap.put( "editorPageUp", new ConsumerAction( e -> notifyEditorAction( "page-up" ) ) );
 		actionMap.put( "editorPageDown", new ConsumerAction( e -> notifyEditorAction( "page-down" ) ) );
-		actionMap.put( "focusEditor", new ConsumerAction( e -> textArea.requestFocusInWindow() ) );
 
 		findPreviousButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowPrevMatches.svg" ) );
 		findNextButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/findAndShowNextMatches.svg" ) );
