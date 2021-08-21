@@ -258,8 +258,23 @@ public class FlatThemeFileEditor
 		File[] propertiesFiles = dir.listFiles( (d, name) -> {
 			return name.endsWith( ".properties" );
 		} );
-		Arrays.sort( propertiesFiles );
+		Arrays.sort( propertiesFiles, (f1, f2) -> {
+			String n1 = toSortName( f1.getName() );
+			String n2 = toSortName( f2.getName() );
+			return n1.compareToIgnoreCase( n2 );
+		} );
 		return propertiesFiles;
+	}
+
+	private String toSortName( String name ) {
+		switch( name ) {
+			case "FlatLaf.properties":			return "\0\0";
+			case "FlatLightLaf.properties":		return "\0\1";
+			case "FlatDarkLaf.properties":		return "\0\2";
+			case "FlatIntelliJLaf.properties":	return "\0\3";
+			case "FlatDarculaLaf.properties":	return "\0\4";
+			default:							return name;
+		}
 	}
 
 	private void openFile( File file, boolean select ) {
@@ -790,9 +805,11 @@ public class FlatThemeFileEditor
 				else if( cmp > 0 )
 					high = mid - 1;
 				else
-					return mid; // key found
+					return mid; // found
 			}
-			return -(low + 1); // key not found.
+
+			// not found
+			return -(low + 1);
 	    }
 	}
 }
