@@ -62,7 +62,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 3,alignx left,growx 0"
 			} )
-			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreview$TestDefaultButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreview$PreviewDefaultButton" ) {
 				name: "testDefaultButton1"
 				"text": "OK"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -404,7 +404,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 22"
 			} )
-			add( new FormContainer( "javax.swing.JTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+			add( new FormContainer( "com.formdev.flatlaf.themeeditor.FlatThemePreview$PreviewTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 22"

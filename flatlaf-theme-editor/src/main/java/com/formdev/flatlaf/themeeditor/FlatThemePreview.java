@@ -18,7 +18,9 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
+import java.util.function.Function;
 import javax.swing.*;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
@@ -26,6 +28,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.*;
+import com.formdev.flatlaf.ui.FlatTabbedPaneUI;
 import net.miginfocom.swing.*;
 
 /**
@@ -43,6 +46,7 @@ class FlatThemePreview
 
 		initComponents();
 
+		tabbedPane1.uiDefaultsGetter = this::getUIDefaultProperty;
 		tabbedPane1.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
 		tabbedPane1.addTab( "Tab 1", null );
 		tabbedPane1.addTab( "Tab 2", null );
@@ -224,7 +228,7 @@ class FlatThemePreview
 		flatButton1 = new FlatButton();
 		buttonLabel = new JLabel();
 		button1 = new JButton();
-		testDefaultButton1 = new FlatThemePreview.TestDefaultButton();
+		testDefaultButton1 = new FlatThemePreview.PreviewDefaultButton();
 		helpButton = new FlatButton();
 		hSpacer2 = new JPanel(null);
 		toggleButtonLabel = new JLabel();
@@ -272,7 +276,7 @@ class FlatThemePreview
 		toolTipLabel = new JLabel();
 		toolTip1 = new JToolTip();
 		tabbedPaneLabel = new JLabel();
-		tabbedPane1 = new JTabbedPane();
+		tabbedPane1 = new FlatThemePreview.PreviewTabbedPane();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -585,7 +589,7 @@ class FlatThemePreview
 	private FlatButton flatButton1;
 	private JLabel buttonLabel;
 	private JButton button1;
-	private FlatThemePreview.TestDefaultButton testDefaultButton1;
+	private FlatThemePreview.PreviewDefaultButton testDefaultButton1;
 	private FlatButton helpButton;
 	private JPanel hSpacer2;
 	private JLabel toggleButtonLabel;
@@ -633,17 +637,60 @@ class FlatThemePreview
 	private JLabel toolTipLabel;
 	private JToolTip toolTip1;
 	private JLabel tabbedPaneLabel;
-	private JTabbedPane tabbedPane1;
+	private FlatThemePreview.PreviewTabbedPane tabbedPane1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
-	//---- class TestDefaultButton --------------------------------------------
+	//---- class PreviewDefaultButton -----------------------------------------
 
-	private static class TestDefaultButton
+	private static class PreviewDefaultButton
 		extends JButton
 	{
 		@Override
 		public boolean isDefaultButton() {
 			return true;
+		}
+	}
+
+	//---- class PreviewTabbedPane --------------------------------------------
+
+	private static class PreviewTabbedPane
+		extends JTabbedPane
+	{
+		Function<Object, Object> uiDefaultsGetter;
+
+		@Override
+		public void updateUI() {
+			setUI( new PreviewFlatTabbedPaneUI( uiDefaultsGetter ) );
+		}
+	}
+
+	//---- class PreviewFlatTabbedPaneUI --------------------------------------
+
+	private static class PreviewFlatTabbedPaneUI
+		extends FlatTabbedPaneUI
+	{
+		private final Function<Object, Object> uiDefaultsGetter;
+
+		PreviewFlatTabbedPaneUI( Function<Object, Object> uiDefaultsGetter ) {
+			this.uiDefaultsGetter = uiDefaultsGetter;
+		}
+
+		@Override
+		protected JButton createMoreTabsButton() {
+			return new PreviewFlatMoreTabsButton();
+		}
+
+		//---- class PreviewFlatMoreTabsButton --------------------------------
+
+		protected class PreviewFlatMoreTabsButton
+			extends FlatMoreTabsButton
+		{
+			@Override
+			public void actionPerformed( ActionEvent e ) {
+				FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
+					super.actionPerformed( e );
+				} );
+			}
 		}
 	}
 }
