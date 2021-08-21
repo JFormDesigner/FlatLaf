@@ -154,6 +154,9 @@ class FlatThemeEditorPane
 
 		// error strip
 		errorStrip.setCaretMarkerColor( UIManager.getColor( "FlatThemeEditorPane.errorstrip.caretMarkerColor" ) );
+
+		if( preview != null )
+			preview.updateLater();
 	}
 
 	void updateFontSize( int sizeIncr ) {
@@ -271,7 +274,7 @@ class FlatThemeEditorPane
 			preview = new FlatThemePreview( textArea );
 			previewScrollPane = new JScrollPane( preview );
 			previewScrollPane.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
-			previewScrollPane.setBorder( null );
+			previewScrollPane.setBorder( BorderFactory.createEmptyBorder() );
 			previewScrollPane.getVerticalScrollBar().setUnitIncrement( 20 );
 			previewScrollPane.getHorizontalScrollBar().setUnitIncrement( 20 );
 			add( previewScrollPane, BorderLayout.LINE_END );

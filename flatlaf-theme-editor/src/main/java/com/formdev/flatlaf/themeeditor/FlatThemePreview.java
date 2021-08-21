@@ -67,7 +67,7 @@ class FlatThemePreview
 		// update when showing preview (e.g. activating tab)
 		addHierarchyListener( e -> {
 			if( (e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && isShowing() )
-				EventQueue.invokeLater( this::update );
+				updateLater();
 		} );
 	}
 
@@ -83,6 +83,10 @@ class FlatThemePreview
 
 	@Override
 	public void changedUpdate( DocumentEvent e ) {
+	}
+
+	void updateLater() {
+		EventQueue.invokeLater( this::update );
 	}
 
 	private void update() {
