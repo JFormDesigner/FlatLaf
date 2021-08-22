@@ -28,6 +28,10 @@ class FlatSyntaxTextAreaActions
 {
 	static final String duplicateLinesUpAction = "FlatLaf.DuplicateLinesUpAction";
 	static final String duplicateLinesDownAction = "FlatLaf.DuplicateLinesDownAction";
+	static final String incrementNumberAction = "FlatLaf.IncrementNumberAction";
+	static final String decrementNumberAction = "FlatLaf.DecrementNumberAction";
+
+	//---- class DuplicateLinesAction -----------------------------------------
 
 	static class DuplicateLinesAction
 		extends RecordableTextAction
@@ -64,6 +68,61 @@ class FlatSyntaxTextAreaActions
 					textArea.select( newSelStart, newSelEnd );
 				}
 			} catch( BadLocationException ex ) {
+				ex.printStackTrace();
+			}
+		}
+
+		@Override
+		public String getMacroID() {
+			return getName();
+		}
+	}
+
+	//---- class IncrementNumberAction ----------------------------------------
+
+	static class IncrementNumberAction
+		extends RecordableTextAction
+	{
+		private final boolean increment;
+
+		IncrementNumberAction( String name, boolean increment ) {
+			super( name );
+			this.increment = increment;
+		}
+
+		@Override
+		public void actionPerformedImpl( ActionEvent e, RTextArea textArea ) {
+			try {
+				int caretPosition = textArea.getCaretPosition();
+				int start = caretPosition;
+				int end = caretPosition;
+				for( int i = caretPosition - 1; i >= 0; i-- ) {
+					if( !Character.isDigit( textArea.getText( i, 1 ).charAt( 0 ) ) )
+						break;
+					start = i;
+				}
+				int length = textArea.getDocument().getLength();
+				for( int i = caretPosition; i < length; i++ ) {
+					if( !Character.isDigit( textArea.getText( i, 1 ).charAt( 0 ) ) )
+						break;
+					end = i + 1;
+				}
+
+				if( start == end )
+					return;
+
+				String str = textArea.getText( start, end - start );
+				long number = Long.parseLong( str );
+				if( increment )
+					number++;
+				else
+					number--;
+
+				if( number < 0 )
+					return;
+
+				textArea.replaceRange( Long.toString( number ), start, end );
+			} catch( BadLocationException | IndexOutOfBoundsException | NumberFormatException ex ) {
 				ex.printStackTrace();
 			}
 		}

@@ -34,6 +34,7 @@ import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaUI;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.DuplicateLinesAction;
+import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.IncrementNumberAction;
 
 /**
  * A text area that supports editing FlatLaf themes.
@@ -60,6 +61,8 @@ class FlatSyntaxTextArea
 		ActionMap actionMap = getActionMap();
 		actionMap.put( FlatSyntaxTextAreaActions.duplicateLinesUpAction, new DuplicateLinesAction( FlatSyntaxTextAreaActions.duplicateLinesUpAction, true ) );
 		actionMap.put( FlatSyntaxTextAreaActions.duplicateLinesDownAction, new DuplicateLinesAction( FlatSyntaxTextAreaActions.duplicateLinesDownAction, false ) );
+		actionMap.put( FlatSyntaxTextAreaActions.incrementNumberAction, new IncrementNumberAction( FlatSyntaxTextAreaActions.incrementNumberAction, true ) );
+		actionMap.put( FlatSyntaxTextAreaActions.decrementNumberAction, new IncrementNumberAction( FlatSyntaxTextAreaActions.decrementNumberAction, false ) );
 
 		// add editor key strokes
 		InputMap inputMap = getInputMap();
@@ -67,6 +70,8 @@ class FlatSyntaxTextArea
 		int alt = InputEvent.ALT_DOWN_MASK;
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP,   defaultModifier|alt), FlatSyntaxTextAreaActions.duplicateLinesUpAction );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, defaultModifier|alt), FlatSyntaxTextAreaActions.duplicateLinesDownAction );
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP,   defaultModifier), FlatSyntaxTextAreaActions.incrementNumberAction );
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, defaultModifier), FlatSyntaxTextAreaActions.decrementNumberAction );
 	}
 
 	@Override
