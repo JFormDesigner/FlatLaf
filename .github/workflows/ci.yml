@@ -97,10 +97,21 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Publish snapshot to oss.sonatype.org
-        run: ./gradlew publish -Dorg.gradle.internal.publish.checksums.insecure=true
+        run: ./gradlew publish :flatlaf-theme-editor:build -Dorg.gradle.internal.publish.checksums.insecure=true
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+
+      - name: Upload theme editor
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          forceSsl: true
+          localDir: "flatlaf-theme-editor/build/libs"
+          remoteDir: "."
+          options: "--only-newer --no-recursion --verbose=1"
 
 
   release:
@@ -133,7 +144,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Release a new stable version to Maven Central
-        run: ./gradlew publish :flatlaf-demo:build -Drelease=true
+        run: ./gradlew publish :flatlaf-demo:build :flatlaf-theme-editor:build -Drelease=true
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -148,5 +159,16 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           forceSsl: true
           localDir: "flatlaf-demo/build/libs"
+          remoteDir: "."
+          options: "--only-newer --no-recursion --verbose=1"
+
+      - name: Upload theme editor
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          forceSsl: true
+          localDir: "flatlaf-theme-editor/build/libs"
           remoteDir: "."
           options: "--only-newer --no-recursion --verbose=1"
