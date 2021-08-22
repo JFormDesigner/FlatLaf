@@ -9,6 +9,12 @@ new FormModel {
 			"$rowConstraints": "[]0[]unrel[][][][][][][][][][][][][][][][][][][][][][][grow]"
 		} ) {
 			name: "this"
+			add( new FormComponent( "javax.swing.JSeparator" ) {
+				name: "previewSeparator"
+				"orientation": 1
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "west"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "previewLabel"
 				"text": "Preview"

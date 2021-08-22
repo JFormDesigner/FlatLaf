@@ -58,7 +58,7 @@ class FlatThemePreview
 		tabbedPane1.addTab( "Tab 8", null );
 
 		// timer used for delayed preview updates
-		timer = new Timer( 500, e -> update() );
+		timer = new Timer( 300, e -> update() );
 		timer.setRepeats( false );
 
 		// listen to changes in text area to automatically update preview
@@ -201,15 +201,13 @@ class FlatThemePreview
 	}
 
 	private void enableDisable( Component comp, boolean enabled ) {
-		comp.setEnabled( enabled );
+		if( comp != previewLabel && comp != enabledCheckBox )
+			comp.setEnabled( enabled );
 
 		if( !(comp instanceof Container) )
 			return;
 
 		for( Component c : ((Container)comp).getComponents() ) {
-			if( c == enabledCheckBox || c == previewLabel )
-				continue;
-
 			if( c instanceof JScrollPane )
 				c = ((JScrollPane)c).getViewport().getView();
 
@@ -224,6 +222,7 @@ class FlatThemePreview
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		previewSeparator = new JSeparator();
 		previewLabel = new JLabel();
 		enabledCheckBox = new JCheckBox();
 		separator2 = new JSeparator();
@@ -331,6 +330,10 @@ class FlatThemePreview
 			"[]" +
 			"[]" +
 			"[grow]"));
+
+		//---- previewSeparator ----
+		previewSeparator.setOrientation(SwingConstants.VERTICAL);
+		add(previewSeparator, "west");
 
 		//---- previewLabel ----
 		previewLabel.setText("Preview");
@@ -690,6 +693,7 @@ class FlatThemePreview
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JSeparator previewSeparator;
 	private JLabel previewLabel;
 	private JCheckBox enabledCheckBox;
 	private JSeparator separator2;
