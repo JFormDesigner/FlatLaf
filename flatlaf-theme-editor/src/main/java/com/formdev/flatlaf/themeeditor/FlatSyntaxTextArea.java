@@ -28,6 +28,7 @@ import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.RTextArea;
@@ -72,6 +73,8 @@ class FlatSyntaxTextArea
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, defaultModifier|alt), FlatSyntaxTextAreaActions.duplicateLinesDownAction );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP,   defaultModifier), FlatSyntaxTextAreaActions.incrementNumberAction );
 		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, defaultModifier), FlatSyntaxTextAreaActions.decrementNumberAction );
+		// add Ctrl+7 for German keyboards where Ctrl+/ does not work
+		inputMap.put( KeyStroke.getKeyStroke( KeyEvent.VK_7,    defaultModifier), RSyntaxTextAreaEditorKit.rstaToggleCommentAction );
 	}
 
 	@Override
