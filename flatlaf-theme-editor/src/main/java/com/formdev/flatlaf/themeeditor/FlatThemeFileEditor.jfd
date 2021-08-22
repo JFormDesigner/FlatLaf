@@ -146,6 +146,19 @@ new FormModel {
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 48, 4226, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "resetFontSize", false ) )
 					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator4"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showHSLColorsMenuItem"
+						"text": "Show HSL colors"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorModelChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showRGBColorsMenuItem"
+						"text": "Show RGB colors (hex)"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorModelChanged", false ) )
+					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "windowMenu"

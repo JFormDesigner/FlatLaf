@@ -42,6 +42,9 @@ class FlatThemeEditorOverlay
 {
 	private static final int COLOR_PREVIEW_WIDTH = 100;
 
+	static boolean showHSL = true;
+	static boolean showRGB;
+
 	private Font font;
 	private Font baseFont;
 
@@ -75,15 +78,22 @@ class FlatThemeEditorOverlay
 		}
 
 		FontMetrics fm = c.getFontMetrics( font );
-		int maxTextWidth = fm.stringWidth( "HSL 360 100 100" );
+		int maxTextWidth = 0;
+		if( showHSL )
+			maxTextWidth += fm.stringWidth( "HSL 360 100 100" );
+		if( showRGB )
+			maxTextWidth += fm.stringWidth( "#ffffff" );
+		if( showHSL && showRGB )
+			maxTextWidth += fm.stringWidth( "  " );
 		int textHeight = fm.getAscent() - fm.getLeading();
 
 		int width = c.getWidth();
 		int previewWidth = UIScale.scale( COLOR_PREVIEW_WIDTH );
 		int gap = UIScale.scale( 4 );
+		int textGap = (showHSL || showRGB) ? UIScale.scale( 6 ) : 0;
 
 		// check whether preview is outside of clip bounds
-		if( clipBounds.x + clipBounds.width < width - previewWidth - maxTextWidth - gap )
+		if( clipBounds.x + clipBounds.width < width - previewWidth - maxTextWidth - gap - textGap )
 			return;
 
 		g.setFont( font );
@@ -111,14 +121,33 @@ class FlatThemeEditorOverlay
 				}
 
 				// paint text
-				int textX = px - maxTextWidth;
-				if( textX > r.x + gap) {
-					float[] hsl = HSLColor.fromRGB( color );
-					String hslStr = String.format( "HSL %3d %2d %2d",
-						Math.round( hsl[0] ), Math.round( hsl[1] ), Math.round( hsl[2] ) );
-					g.setColor( textArea.getForeground() );
-					FlatUIUtils.drawString( textArea, g, hslStr, textX,
-						r.y + ((r.height - textHeight) / 2) + textHeight );
+				if( showHSL || showRGB ) {
+					int textX = px - textGap - maxTextWidth;
+					if( textX > r.x + gap) {
+						String colorStr = null;
+						if( showHSL ) {
+							float[] hsl = HSLColor.fromRGB( color );
+							colorStr = String.format( (alpha != 255) ? "HSLA %3d %3d %3d %3d" : "HSL %3d %3d %3d",
+								Math.round( hsl[0] ), Math.round( hsl[1] ), Math.round( hsl[2] ),
+								Math.round( alpha / 255f * 100 ) );
+						}
+						if( showRGB ) {
+							String rgbStr = String.format( (alpha != 255) ? "#%06x%02x" : "#%06x",
+								color.getRGB() & 0xffffff, alpha );
+							if( colorStr != null )
+								colorStr += "  " + rgbStr;
+							else
+								colorStr = rgbStr;
+						}
+
+						int textWidth = fm.stringWidth( colorStr );
+						if( textWidth > maxTextWidth )
+							textX -= (textWidth - maxTextWidth);
+
+						g.setColor( textArea.getForeground() );
+						FlatUIUtils.drawString( textArea, g, colorStr, textX,
+							r.y + ((r.height - textHeight) / 2) + textHeight );
+					}
 				}
 			} catch( BadLocationException ex ) {
 				// ignore

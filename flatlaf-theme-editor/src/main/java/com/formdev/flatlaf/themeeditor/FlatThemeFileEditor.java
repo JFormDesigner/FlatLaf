@@ -64,6 +64,8 @@ public class FlatThemeFileEditor
 	private static final String KEY_PREVIEW = "preview";
 	private static final String KEY_LAF = "laf";
 	private static final String KEY_FONT_SIZE_INCR = "fontSizeIncr";
+	private static final String KEY_HSL_COLORS = "hslColors";
+	private static final String KEY_RGB_COLORS = "rgbColors";
 
 	private File dir;
 	private Preferences state;
@@ -377,7 +379,7 @@ public class FlatThemeFileEditor
 		boolean show = previewMenuItem.isSelected();
 		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
 			themeEditorPane.showPreview( show );
-		state.putBoolean( KEY_PREVIEW, show );
+		putPrefsBoolean( state, KEY_PREVIEW, show, true );
 	}
 
 	private void lightLaf() {
@@ -430,6 +432,16 @@ public class FlatThemeFileEditor
 		return state.getInt( KEY_FONT_SIZE_INCR, 0 );
 	}
 
+	private void colorModelChanged() {
+		FlatThemeEditorOverlay.showHSL = showHSLColorsMenuItem.isSelected();
+		FlatThemeEditorOverlay.showRGB = showRGBColorsMenuItem.isSelected();
+
+		putPrefsBoolean( state, KEY_HSL_COLORS, FlatThemeEditorOverlay.showHSL, true );
+		putPrefsBoolean( state, KEY_RGB_COLORS, FlatThemeEditorOverlay.showRGB, false );
+
+		repaint();
+	}
+
 	private void restoreState() {
 		state = Preferences.userRoot().node( PREFS_ROOT_PATH );
 
@@ -438,7 +450,14 @@ public class FlatThemeFileEditor
 		SortedComboBoxModel<String> model = new SortedComboBoxModel<>( directories );
 		directoryField.setModel( model );
 
+		// restore overlay color models
+		FlatThemeEditorOverlay.showHSL = state.getBoolean( KEY_HSL_COLORS, true );
+		FlatThemeEditorOverlay.showRGB = state.getBoolean( KEY_RGB_COLORS, false );
+
+		// restore menu item selection
 		previewMenuItem.setSelected( state.getBoolean( KEY_PREVIEW, true ) );
+		showHSLColorsMenuItem.setSelected( FlatThemeEditorOverlay.showHSL );
+		showRGBColorsMenuItem.setSelected( FlatThemeEditorOverlay.showRGB );
 	}
 
 	private void saveState() {
@@ -501,6 +520,13 @@ public class FlatThemeFileEditor
 		state.put( KEY_WINDOW_BOUNDS, x + "," + y + ',' + width + ',' + height );
 	}
 
+	private static void putPrefsBoolean( Preferences prefs, String key, boolean value, boolean defaultValue ) {
+		if( value != defaultValue )
+			prefs.putBoolean( key, value );
+		else
+			prefs.remove( key );
+	}
+
 	private static void putPrefsString( Preferences prefs, String key, String value ) {
 		if( !StringUtils.isEmpty( value ) )
 			prefs.put( key, value );
@@ -543,6 +569,8 @@ public class FlatThemeFileEditor
 		incrFontSizeMenuItem = new JMenuItem();
 		decrFontSizeMenuItem = new JMenuItem();
 		resetFontSizeMenuItem = new JMenuItem();
+		showHSLColorsMenuItem = new JCheckBoxMenuItem();
+		showRGBColorsMenuItem = new JCheckBoxMenuItem();
 		windowMenu = new JMenu();
 		activateEditorMenuItem = new JMenuItem();
 		nextEditorMenuItem = new JMenuItem();
@@ -663,6 +691,17 @@ public class FlatThemeFileEditor
 				resetFontSizeMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				resetFontSizeMenuItem.addActionListener(e -> resetFontSize());
 				viewMenu.add(resetFontSizeMenuItem);
+				viewMenu.addSeparator();
+
+				//---- showHSLColorsMenuItem ----
+				showHSLColorsMenuItem.setText("Show HSL colors");
+				showHSLColorsMenuItem.addActionListener(e -> colorModelChanged());
+				viewMenu.add(showHSLColorsMenuItem);
+
+				//---- showRGBColorsMenuItem ----
+				showRGBColorsMenuItem.setText("Show RGB colors (hex)");
+				showRGBColorsMenuItem.addActionListener(e -> colorModelChanged());
+				viewMenu.add(showRGBColorsMenuItem);
 			}
 			menuBar.add(viewMenu);
 
@@ -754,6 +793,8 @@ public class FlatThemeFileEditor
 	private JMenuItem incrFontSizeMenuItem;
 	private JMenuItem decrFontSizeMenuItem;
 	private JMenuItem resetFontSizeMenuItem;
+	private JCheckBoxMenuItem showHSLColorsMenuItem;
+	private JCheckBoxMenuItem showRGBColorsMenuItem;
 	private JMenu windowMenu;
 	private JMenuItem activateEditorMenuItem;
 	private JMenuItem nextEditorMenuItem;
