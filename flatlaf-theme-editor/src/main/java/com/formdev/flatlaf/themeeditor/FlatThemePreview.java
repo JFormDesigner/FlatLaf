@@ -267,6 +267,23 @@ class FlatThemePreview
 		textPaneLabel = new JLabel();
 		scrollPane9 = new JScrollPane();
 		textPane1 = new JTextPane();
+		menuBarLabel = new JLabel();
+		menuBar1 = new JMenuBar();
+		menu2 = new JMenu();
+		menuItem3 = new JMenuItem();
+		menuItem4 = new JMenuItem();
+		checkBoxMenuItem2 = new JCheckBoxMenuItem();
+		checkBoxMenuItem3 = new JCheckBoxMenuItem();
+		radioButtonMenuItem4 = new JRadioButtonMenuItem();
+		radioButtonMenuItem5 = new JRadioButtonMenuItem();
+		menu4 = new JMenu();
+		menuItem6 = new JMenuItem();
+		menu5 = new JMenu();
+		menuItem7 = new JMenuItem();
+		menu3 = new JMenu();
+		menuItem5 = new JMenuItem();
+		menuItem8 = new JMenuItem();
+		menuItem9 = new JMenuItem();
 		scrollBarLabel = new JLabel();
 		scrollBar1 = new JScrollBar();
 		scrollBar5 = new FlatScrollBar();
@@ -291,6 +308,7 @@ class FlatThemePreview
 			// rows
 			"[]0" +
 			"[]unrel" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -521,31 +539,113 @@ class FlatThemePreview
 		}
 		add(scrollPane9, "cell 1 14");
 
+		//---- menuBarLabel ----
+		menuBarLabel.setText("JMenuBar:");
+		add(menuBarLabel, "cell 0 15");
+
+		//======== menuBar1 ========
+		{
+
+			//======== menu2 ========
+			{
+				menu2.setText("JMenu");
+
+				//---- menuItem3 ----
+				menuItem3.setText("JMenuItem");
+				menu2.add(menuItem3);
+
+				//---- menuItem4 ----
+				menuItem4.setText("JMenuItem");
+				menu2.add(menuItem4);
+				menu2.addSeparator();
+
+				//---- checkBoxMenuItem2 ----
+				checkBoxMenuItem2.setText("JCheckBoxMenuItem");
+				checkBoxMenuItem2.setSelected(true);
+				menu2.add(checkBoxMenuItem2);
+
+				//---- checkBoxMenuItem3 ----
+				checkBoxMenuItem3.setText("JCheckBoxMenuItem");
+				menu2.add(checkBoxMenuItem3);
+				menu2.addSeparator();
+
+				//---- radioButtonMenuItem4 ----
+				radioButtonMenuItem4.setText("JRadioButtonMenuItem");
+				radioButtonMenuItem4.setSelected(true);
+				menu2.add(radioButtonMenuItem4);
+
+				//---- radioButtonMenuItem5 ----
+				radioButtonMenuItem5.setText("JRadioButtonMenuItem");
+				menu2.add(radioButtonMenuItem5);
+				menu2.addSeparator();
+
+				//======== menu4 ========
+				{
+					menu4.setText("JMenu");
+
+					//---- menuItem6 ----
+					menuItem6.setText("JMenuItem");
+					menu4.add(menuItem6);
+				}
+				menu2.add(menu4);
+
+				//======== menu5 ========
+				{
+					menu5.setText("JMenu");
+
+					//---- menuItem7 ----
+					menuItem7.setText("JMenuItem");
+					menu5.add(menuItem7);
+				}
+				menu2.add(menu5);
+			}
+			menuBar1.add(menu2);
+
+			//======== menu3 ========
+			{
+				menu3.setText("JMenu");
+
+				//---- menuItem5 ----
+				menuItem5.setText("JMenuItem");
+				menu3.add(menuItem5);
+
+				//---- menuItem8 ----
+				menuItem8.setText("JMenuItem");
+				menu3.add(menuItem8);
+
+				//---- menuItem9 ----
+				menuItem9.setText("JMenuItem");
+				menu3.add(menuItem9);
+			}
+			menuBar1.add(menu3);
+		}
+		add(menuBar1, "cell 1 15");
+
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
-		add(scrollBarLabel, "cell 0 15");
+		add(scrollBarLabel, "cell 0 16");
 
 		//---- scrollBar1 ----
 		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
-		add(scrollBar1, "cell 1 15");
+		add(scrollBar1, "cell 1 16");
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar5.setShowButtons(true);
-		add(scrollBar5, "cell 1 16");
+		add(scrollBar5, "cell 1 17");
 
 		//---- separatorLabel ----
 		separatorLabel.setText("JSeparator:");
-		add(separatorLabel, "cell 0 17");
-		add(separator1, "cell 1 17");
+		add(separatorLabel, "cell 0 18");
+		add(separator1, "cell 1 18");
 
 		//---- sliderLabel ----
 		sliderLabel.setText("JSlider:");
-		add(sliderLabel, "cell 0 18");
+		add(sliderLabel, "cell 0 19");
 
 		//---- slider1 ----
 		slider1.setValue(30);
-		add(slider1, "cell 1 18");
+		add(slider1, "cell 1 19");
 
 		//---- slider3 ----
 		slider3.setMinorTickSpacing(10);
@@ -554,33 +654,38 @@ class FlatThemePreview
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
 		slider3.addChangeListener(e -> changeProgress());
-		add(slider3, "cell 1 19");
+		add(slider3, "cell 1 20");
 
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
-		add(progressBarLabel, "cell 0 20");
+		add(progressBarLabel, "cell 0 21");
 
 		//---- progressBar1 ----
 		progressBar1.setValue(60);
-		add(progressBar1, "cell 1 20");
+		add(progressBar1, "cell 1 21");
 
 		//---- toolTipLabel ----
 		toolTipLabel.setText("JToolTip:");
-		add(toolTipLabel, "cell 0 21");
+		add(toolTipLabel, "cell 0 22");
 
 		//---- toolTip1 ----
 		toolTip1.setTipText("Some text in tool tip.");
-		add(toolTip1, "cell 1 21,alignx left,growx 0");
+		add(toolTip1, "cell 1 22,alignx left,growx 0");
 
 		//---- tabbedPaneLabel ----
 		tabbedPaneLabel.setText("JTabbedPane:");
-		add(tabbedPaneLabel, "cell 0 22");
-		add(tabbedPane1, "cell 1 22");
+		add(tabbedPaneLabel, "cell 0 23");
+		add(tabbedPane1, "cell 1 23");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
 		buttonGroup1.add(radioButton1);
 		buttonGroup1.add(radioButton3);
+
+		//---- buttonGroup2 ----
+		ButtonGroup buttonGroup2 = new ButtonGroup();
+		buttonGroup2.add(radioButtonMenuItem4);
+		buttonGroup2.add(radioButtonMenuItem5);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -628,6 +733,23 @@ class FlatThemePreview
 	private JLabel textPaneLabel;
 	private JScrollPane scrollPane9;
 	private JTextPane textPane1;
+	private JLabel menuBarLabel;
+	private JMenuBar menuBar1;
+	private JMenu menu2;
+	private JMenuItem menuItem3;
+	private JMenuItem menuItem4;
+	private JCheckBoxMenuItem checkBoxMenuItem2;
+	private JCheckBoxMenuItem checkBoxMenuItem3;
+	private JRadioButtonMenuItem radioButtonMenuItem4;
+	private JRadioButtonMenuItem radioButtonMenuItem5;
+	private JMenu menu4;
+	private JMenuItem menuItem6;
+	private JMenu menu5;
+	private JMenuItem menuItem7;
+	private JMenu menu3;
+	private JMenuItem menuItem5;
+	private JMenuItem menuItem8;
+	private JMenuItem menuItem9;
 	private JLabel scrollBarLabel;
 	private JScrollBar scrollBar1;
 	private FlatScrollBar scrollBar5;
