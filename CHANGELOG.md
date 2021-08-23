@@ -14,6 +14,8 @@ FlatLaf Change Log
   pressed) when running in Java 9+ on Linux, macOS. Occurs also on Windows in
   large popup menus that do not fit into the window. (issue #371; regression
   since FlatLaf 1.3)
+- OptionPane: Fixed `OptionPane.sameSizeButtons`, which did not work as expected
+  when setting to `false`.
 
 
 ## 1.5
