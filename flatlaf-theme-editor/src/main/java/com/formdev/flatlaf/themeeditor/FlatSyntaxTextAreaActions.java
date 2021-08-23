@@ -345,7 +345,13 @@ class FlatSyntaxTextAreaActions
 						restore.run();
 
 						// update editor
-						textArea.replaceRange( colorToString( chooser.getColor() ), start, start + length.get() );
+						String newStr = colorToString( chooser.getColor() );
+						try {
+							if( !newStr.equals( textArea.getText( start, length.get() ) ) )
+								textArea.replaceRange( newStr, start, start + length.get() );
+						} catch( BadLocationException ex ) {
+							ex.printStackTrace();
+						}
 
 						// remember selected tab
 						if( tabbedPane instanceof JTabbedPane )
