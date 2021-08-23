@@ -16,10 +16,19 @@
 
 package com.formdev.flatlaf.themeeditor;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.util.prefs.Preferences;
+import javax.swing.JColorChooser;
+import javax.swing.JDialog;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RecordableTextAction;
+import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 
 /**
  * @author Karl Tauber
@@ -30,6 +39,70 @@ class FlatSyntaxTextAreaActions
 	static final String duplicateLinesDownAction = "FlatLaf.DuplicateLinesDownAction";
 	static final String incrementNumberAction = "FlatLaf.IncrementNumberAction";
 	static final String decrementNumberAction = "FlatLaf.DecrementNumberAction";
+	static final String insertColorAction = "FlatLaf.InsertColorAction";
+
+	static int[] findColorAt( RTextArea textArea, int position ) {
+		try {
+			int start = position;
+			int end = position;
+
+			// find first '#' or hex digit
+			for( int i = position - 1; i >= 0; i-- ) {
+				char ch = textArea.getText( i, 1 ).charAt( 0 );
+				if( ch != '#' && !isHexDigit( ch ) )
+					break;
+				start = i;
+			}
+
+			// find last hex digit
+			int length = textArea.getDocument().getLength();
+			for( int i = position; i < length; i++ ) {
+				if( !isHexDigit( textArea.getText( i, 1 ).charAt( 0 ) ) )
+					break;
+				end = i + 1;
+			}
+
+			// check for valid length (#RGB, #RGBA, #RRGGBB or #RRGGBBAA)
+			int len = end - start;
+			if( len != 4 && len != 5 && len != 7 && len != 9 )
+				return null;
+
+			// check whether starts with '#'
+			if( textArea.getText( start, 1 ).charAt( 0 ) != '#' )
+				return null;
+
+			return new int[] { start, end - start };
+		} catch( BadLocationException | IndexOutOfBoundsException | NumberFormatException ex ) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	static boolean isHexDigit( char ch ) {
+		return Character.isDigit( ch ) || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+	}
+
+	static String colorToString( Color color ) {
+		int rgb = color.getRGB();
+		int alpha = color.getAlpha();
+		String format;
+		if( (rgb & 0xf) == ((rgb >> 4) & 0xf) &&
+			((rgb >> 8) & 0xf) == ((rgb >> 12) & 0xf) &&
+			((rgb >> 16) & 0xf) == ((rgb >> 20) & 0xf) &&
+			((rgb >> 24) & 0xf) == ((rgb >> 28) & 0xf) )
+		{
+			// short format (#RGB or #RGBA)
+			format = (alpha != 255) ? "#%03x%01x" : "#%03x";
+			rgb = (rgb & 0xf) | ((rgb >> 4) & 0xf0) | ((rgb >> 8) & 0xf00);
+			alpha &= 0xf;
+		} else {
+			// long format (#RRGGBB or #RRGGBBAA)
+			format = (alpha != 255) ? "#%06x%02x" : "#%06x";
+			rgb &= 0xffffff;
+		}
+
+		return String.format( format, rgb, alpha );
+	}
 
 	//---- class DuplicateLinesAction -----------------------------------------
 
@@ -143,33 +216,12 @@ class FlatSyntaxTextAreaActions
 		private boolean incrementRGBColor( RTextArea textArea ) {
 			try {
 				int caretPosition = textArea.getCaretPosition();
-				int start = caretPosition;
-				int end = caretPosition;
-
-				// find first '#' or hex digit
-				for( int i = caretPosition - 1; i >= 0; i-- ) {
-					char ch = textArea.getText( i, 1 ).charAt( 0 );
-					if( ch != '#' && !isHexDigit( ch ) )
-						break;
-					start = i;
-				}
-
-				// find last hex digit
-				int length = textArea.getDocument().getLength();
-				for( int i = caretPosition; i < length; i++ ) {
-					if( !isHexDigit( textArea.getText( i, 1 ).charAt( 0 ) ) )
-						break;
-					end = i + 1;
-				}
-
-				// check for valid length (#RGB, #RGBA, #RRGGBB or #RRGGBBAA)
-				int len = end - start;
-				if( len != 4 && len != 5 && len != 7 && len != 9 )
+				int[] result = findColorAt( textArea, caretPosition );
+				if( result == null )
 					return false;
 
-				// check whether starts with '#'
-				if( textArea.getText( start, 1 ).charAt( 0 ) != '#' )
-					return false;
+				int start = result[0];
+				int len = result[1];
 
 				// find start of color part that should be changed (red, green, blue or alpha)
 				int start2;
@@ -212,8 +264,66 @@ class FlatSyntaxTextAreaActions
 			}
 		}
 
-		private boolean isHexDigit( char ch ) {
-			return Character.isDigit( ch ) || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+		@Override
+		public String getMacroID() {
+			return getName();
+		}
+	}
+
+	//---- class InsertColorAction --------------------------------------------
+
+	static class InsertColorAction
+		extends RecordableTextAction
+	{
+		private static final String KEY_SELECTED_TAB = "colorchooser.selectedTab";
+
+		InsertColorAction( String name ) {
+			super( name );
+		}
+
+		@Override
+		public void actionPerformedImpl( ActionEvent e, RTextArea textArea ) {
+			try {
+				// find current color at caret
+				Color currentColor = Color.white;
+				int caretPosition = textArea.getCaretPosition();
+				int start;
+				int len;
+				int[] result = findColorAt( textArea, caretPosition );
+				if( result != null ) {
+					start = result[0];
+					len = result[1];
+
+					String str = textArea.getText( start, len );
+					int rgb = UIDefaultsLoaderAccessor.parseColorRGBA( str );
+					currentColor = new Color( rgb, true );
+				} else {
+					start = caretPosition;
+					len = 0;
+				}
+
+				// create color chooser
+				JColorChooser chooser = new JColorChooser( currentColor );
+				Component tabbedPane = chooser.getComponent( 0 );
+				Preferences state = Preferences.userRoot().node( FlatThemeFileEditor.PREFS_ROOT_PATH );
+				int selectedTab = state.getInt( KEY_SELECTED_TAB, -1 );
+				if( tabbedPane instanceof JTabbedPane && selectedTab >= 0 && selectedTab < ((JTabbedPane)tabbedPane).getTabCount() )
+					((JTabbedPane)tabbedPane).setSelectedIndex( selectedTab );
+
+				// show color chooser dialog
+				Window window = SwingUtilities.windowForComponent( textArea );
+				JDialog dialog = JColorChooser.createDialog( window, "Insert Color", true, chooser, e2 -> {
+					// update editor
+					textArea.replaceRange( colorToString( chooser.getColor() ), start, start + len );
+
+					// remember selected tab
+					if( tabbedPane instanceof JTabbedPane )
+						state.putInt( KEY_SELECTED_TAB, ((JTabbedPane)tabbedPane).getSelectedIndex() );
+				}, null );
+				dialog.setVisible( true );
+			} catch( BadLocationException | IndexOutOfBoundsException | NumberFormatException ex ) {
+				ex.printStackTrace();
+			}
 		}
 
 		@Override

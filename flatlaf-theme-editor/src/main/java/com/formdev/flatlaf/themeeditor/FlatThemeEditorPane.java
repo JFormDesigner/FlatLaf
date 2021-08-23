@@ -20,9 +20,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -288,6 +290,12 @@ class FlatThemeEditorPane
 		}
 
 		revalidate();
+	}
+
+	void notifyTextAreaAction( String actionKey ) {
+		Action action = textArea.getActionMap().get( actionKey );
+		if( action != null && action.isEnabled() )
+			action.actionPerformed( new ActionEvent( textArea, ActionEvent.ACTION_PERFORMED, null ) );
 	}
 
 	//---- class FlatSyntaxScheme ---------------------------------------------

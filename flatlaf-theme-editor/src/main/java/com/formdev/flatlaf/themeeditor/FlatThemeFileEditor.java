@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
@@ -56,7 +57,7 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatThemeFileEditor
 	extends JFrame
 {
-	private static final String PREFS_ROOT_PATH = "/flatlaf-theme-editor";
+	static final String PREFS_ROOT_PATH = "/flatlaf-theme-editor";
 	private static final String KEY_DIRECTORIES = "directories";
 	private static final String KEY_RECENT_DIRECTORY = "recentDirectory";
 	private static final String KEY_RECENT_FILE = "recentFile";
@@ -77,6 +78,9 @@ public class FlatThemeFileEditor
 		File dir = (args.length > 0)
 			? new File( args[0] )
 			: null;
+
+		Locale.setDefault( Locale.ENGLISH );
+		System.setProperty( "user.language", "en" );
 
 		SwingUtilities.invokeLater( () -> {
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.themeeditor" );
@@ -375,6 +379,12 @@ public class FlatThemeFileEditor
 			themeEditorPane.showFindReplaceBar();
 	}
 
+	private void insertColor() {
+		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
+		if( themeEditorPane != null )
+			themeEditorPane.notifyTextAreaAction( FlatSyntaxTextAreaActions.insertColorAction );
+	}
+
 	private void showHidePreview() {
 		boolean show = previewMenuItem.isSelected();
 		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
@@ -562,6 +572,7 @@ public class FlatThemeFileEditor
 		exitMenuItem = new JMenuItem();
 		editMenu = new JMenu();
 		findMenuItem = new JMenuItem();
+		insertColorMenuItem = new JMenuItem();
 		viewMenu = new JMenu();
 		previewMenuItem = new JCheckBoxMenuItem();
 		lightLafMenuItem = new JRadioButtonMenuItem();
@@ -643,6 +654,13 @@ public class FlatThemeFileEditor
 				findMenuItem.setMnemonic('F');
 				findMenuItem.addActionListener(e -> find());
 				editMenu.add(findMenuItem);
+				editMenu.addSeparator();
+
+				//---- insertColorMenuItem ----
+				insertColorMenuItem.setText("Insert Color");
+				insertColorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
+				insertColorMenuItem.addActionListener(e -> insertColor());
+				editMenu.add(insertColorMenuItem);
 			}
 			menuBar.add(editMenu);
 
@@ -786,6 +804,7 @@ public class FlatThemeFileEditor
 	private JMenuItem exitMenuItem;
 	private JMenu editMenu;
 	private JMenuItem findMenuItem;
+	private JMenuItem insertColorMenuItem;
 	private JMenu viewMenu;
 	private JCheckBoxMenuItem previewMenuItem;
 	private JRadioButtonMenuItem lightLafMenuItem;

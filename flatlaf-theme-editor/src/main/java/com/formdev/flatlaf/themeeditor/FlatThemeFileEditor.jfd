@@ -94,6 +94,15 @@ new FormModel {
 						"mnemonic": 70
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "find", false ) )
 					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator5"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "insertColorMenuItem"
+						"text": "Insert Color"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 71, 130, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "insertColor", false ) )
+					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "viewMenu"

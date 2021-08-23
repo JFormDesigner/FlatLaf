@@ -34,6 +34,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaUI;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
+import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.InsertColorAction;
 import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.DuplicateLinesAction;
 import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.IncrementNumberAction;
 
@@ -64,6 +65,7 @@ class FlatSyntaxTextArea
 		actionMap.put( FlatSyntaxTextAreaActions.duplicateLinesDownAction, new DuplicateLinesAction( FlatSyntaxTextAreaActions.duplicateLinesDownAction, false ) );
 		actionMap.put( FlatSyntaxTextAreaActions.incrementNumberAction, new IncrementNumberAction( FlatSyntaxTextAreaActions.incrementNumberAction, true ) );
 		actionMap.put( FlatSyntaxTextAreaActions.decrementNumberAction, new IncrementNumberAction( FlatSyntaxTextAreaActions.decrementNumberAction, false ) );
+		actionMap.put( FlatSyntaxTextAreaActions.insertColorAction, new InsertColorAction( FlatSyntaxTextAreaActions.insertColorAction ) );
 
 		// add editor key strokes
 		InputMap inputMap = getInputMap();
