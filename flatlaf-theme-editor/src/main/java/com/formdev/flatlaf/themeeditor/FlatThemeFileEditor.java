@@ -402,7 +402,9 @@ public class FlatThemeFileEditor
 					}
 
 					try {
-						createTheme( file, (String) baseThemeField.getSelectedItem() );
+						String baseTheme = (String) baseThemeField.getSelectedItem();
+						createTheme( file, baseTheme );
+						createThemeClass( dir, themeName, baseTheme );
 						openFile( file, true );
 					} catch( IOException ex ) {
 						ex.printStackTrace();
@@ -427,7 +429,7 @@ public class FlatThemeFileEditor
 		throws IOException
 	{
 		StringBuilder buf = new StringBuilder();
-		buf.append( "# base theme (light, dark, intellij or darcula)\n" );
+		buf.append( "# base theme (light, dark, intellij or darcula); only used by theme editor\n" );
 		switch( baseTheme ) {
 			case FlatLightLaf.NAME:		buf.append( "@baseTheme = light\n" ); break;
 			case FlatDarkLaf.NAME:		buf.append( "@baseTheme = dark\n" ); break;
@@ -437,6 +439,84 @@ public class FlatThemeFileEditor
 
 		writeFile( file, buf.toString() );
 	}
+
+	private void createThemeClass( File dir, String themeName, String baseTheme )
+		throws IOException
+	{
+		// search for "resources" parent directory that has "java" directory at same level
+		File classDir = dir;
+		String subPath = null;
+		String pkg = null;
+		for( File d = dir; d != null; d = d.getParentFile() ) {
+			String name = d.getName();
+			if( name.equals( "resources" ) ) {
+				File javaDir = new File( d.getParentFile(), "java" );
+				if( javaDir.isDirectory() ) {
+					classDir = new File( javaDir, subPath );
+					classDir.mkdirs();
+					pkg = subPath.replace( '/', '.' );
+				}
+				break;
+			}
+			subPath = (subPath != null) ? (name + '/' + subPath) : name;
+		}
+
+		// search for "java" or "src" parent directories for package statement
+		if( pkg == null ) {
+			String pkg2 = null;
+			for( File d = dir; d != null; d = d.getParentFile() ) {
+				String name = d.getName();
+				if( name.equals( "java" ) || name.equals( "src" )) {
+					pkg = pkg2;
+					break;
+				}
+				pkg2 = (pkg2 != null) ? (name + '.' + pkg2) : name;
+			}
+		}
+
+		// do not overwrite exiting class
+		File file = new File( classDir, themeName + ".java" );
+		if( file.exists() )
+			return;
+
+		String themeBaseClass;
+		switch( baseTheme ) {
+			default:
+			case FlatLightLaf.NAME:		themeBaseClass = "FlatLightLaf"; break;
+			case FlatDarkLaf.NAME:		themeBaseClass = "FlatDarkLaf"; break;
+			case FlatIntelliJLaf.NAME:	themeBaseClass = "FlatIntelliJLaf"; break;
+			case FlatDarculaLaf.NAME:	themeBaseClass = "FlatDarculaLaf"; break;
+		}
+
+		String pkgStmt = (pkg != null) ? "package " + pkg + ";\n\n" : "";
+		String classBody = CLASS_TEMPLATE
+			.replace( "${themeClass}", themeName )
+			.replace( "${themeBaseClass}", themeBaseClass );
+
+		writeFile( file, pkgStmt + classBody );
+	}
+
+	private static final String CLASS_TEMPLATE =
+		"import com.formdev.flatlaf.${themeBaseClass};\n" +
+		"\n" +
+		"public class ${themeClass}\n" +
+		"	extends ${themeBaseClass}\n" +
+		"{\n" +
+		"	public static final String NAME = \"${themeClass}\";\n" +
+		"\n" +
+		"	public static boolean setup() {\n" +
+		"		return setup( new ${themeClass}() );\n" +
+		"	}\n" +
+		"\n" +
+		"	public static void installLafInfo() {\n" +
+		"		installLafInfo( NAME, ${themeClass}.class );\n" +
+		"	}\n" +
+		"\n" +
+		"	@Override\n" +
+		"	public String getName() {\n" +
+		"		return NAME;\n" +
+		"	}\n" +
+		"}\n";
 
 	private static void writeFile( File file, String content )
 		throws IOException
