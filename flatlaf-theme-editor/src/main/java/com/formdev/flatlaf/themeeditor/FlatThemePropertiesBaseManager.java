@@ -130,7 +130,7 @@ class FlatThemePropertiesBaseManager
 
 				case "darcula":
 					result.add( "FlatDarculaLaf" );
-					result.add( "FlatLightLaf" );
+					result.add( "FlatDarkLaf" );
 					result.add( "FlatLaf" );
 					break;
 			}

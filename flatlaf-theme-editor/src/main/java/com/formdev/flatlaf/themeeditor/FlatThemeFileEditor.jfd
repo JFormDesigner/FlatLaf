@@ -66,6 +66,13 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDirectory", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "newPropertiesFileMenuItem"
+						"text": "New Properties File"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 78, 130, false )
+						"mnemonic": 78
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "newPropertiesFile", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "saveAllMenuItem"
 						"text": "Save All"
 						"mnemonic": 83

@@ -26,7 +26,10 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -36,9 +39,12 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
+import javax.lang.model.SourceVersion;
 import javax.swing.*;
 import net.miginfocom.swing.*;
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
@@ -107,6 +113,15 @@ public class FlatThemeFileEditor
 		if( UIManager.getLookAndFeel() instanceof FlatDarkLaf )
 			darkLafMenuItem.setSelected( true );
 
+		// add "+" button to tabbed pane
+		JButton newButton = new JButton( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/add.svg" ) );
+		newButton.setToolTipText( "New Properties File" );
+		newButton.addActionListener( e -> newPropertiesFile() );
+		JToolBar trailingToolBar = new JToolBar();
+		trailingToolBar.setFloatable( false );
+		trailingToolBar.add( newButton );
+		tabbedPane.setTrailingComponent( trailingToolBar );
+
 		restoreState();
 		restoreWindowBounds();
 
@@ -158,9 +173,30 @@ public class FlatThemeFileEditor
 		}
 
 		if( getPropertiesFiles( dir ).length == 0 ) {
-			JOptionPane.showMessageDialog( parentComponent,
-				"Directory '" + dir + "' does not contain properties files.",
-				getTitle(), JOptionPane.INFORMATION_MESSAGE );
+			UIManager.put( "OptionPane.sameSizeButtons", false );
+			int result = JOptionPane.showOptionDialog( parentComponent,
+				"Directory '" + dir + "' does not contain properties files.\n\n"
+				+ "Do you want create a new theme in this directory?\n\n"
+				+ "Or do you want modify/extend core themes and create empty"
+				+ " 'FlatLightLaf.properties' and 'FlatDarkLaf.properties' files in this directory?",
+				getTitle(), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+				new Object[] { "New Theme", "Modify Core Themes", "Cancel" }, null );
+			UIManager.put( "OptionPane.sameSizeButtons", null );
+
+			if( result == 0 )
+				return newPropertiesFile( dir );
+			else if( result == 1 ) {
+				try {
+					new File( dir, "FlatLightLaf.properties" ).createNewFile();
+					new File( dir, "FlatDarkLaf.properties" ).createNewFile();
+					return true;
+				} catch( IOException ex ) {
+					ex.printStackTrace();
+
+					JOptionPane.showMessageDialog( parentComponent,
+						"Failed to create 'FlatLightLaf.properties' or 'FlatDarkLaf.properties'." );
+				}
+			}
 			return false;
 		}
 
@@ -317,6 +353,100 @@ public class FlatThemeFileEditor
 		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
 		String filename = (themeEditorPane != null) ? themeEditorPane.getFile().getName() : null;
 		putPrefsString( state, KEY_RECENT_FILE, filename );
+	}
+
+	private boolean newPropertiesFile() {
+		return newPropertiesFile( dir );
+	}
+
+	private boolean newPropertiesFile( File dir ) {
+		String title = "New Properties File";
+		JTextField themeNameField = new JTextField();
+		JComboBox<String> baseThemeField = new JComboBox<>( new String[] {
+			FlatLightLaf.NAME,
+			FlatDarkLaf.NAME,
+			FlatIntelliJLaf.NAME,
+			FlatDarculaLaf.NAME,
+		} );
+
+		JOptionPane optionPane = new JOptionPane( new Object[] {
+			new JLabel( "Theme name:" ),
+			themeNameField,
+			new JLabel( "Base Theme:" ),
+			baseThemeField,
+		}, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION ) {
+			@Override
+			public void selectInitialValue() {
+				super.selectInitialValue();
+				themeNameField.requestFocusInWindow();
+			}
+
+			@Override
+			public void setValue( Object newValue ) {
+				if( Objects.equals( newValue, JOptionPane.OK_OPTION ) ) {
+					String themeName = themeNameField.getText().trim();
+					if( themeName.isEmpty() )
+						return;
+
+					if( !SourceVersion.isIdentifier( themeName ) ) {
+						JOptionPane.showMessageDialog( this,
+							"'" + themeName + "' is not a valid Java identifier.",
+							title, JOptionPane.INFORMATION_MESSAGE );
+						return;
+					}
+
+					File file = new File( dir, themeName + ".properties" );
+					if( file.exists() ) {
+						JOptionPane.showMessageDialog( this, "Theme '" + themeName + "' already exists.", title, JOptionPane.INFORMATION_MESSAGE );
+						return;
+					}
+
+					try {
+						createTheme( file, (String) baseThemeField.getSelectedItem() );
+						openFile( file, true );
+					} catch( IOException ex ) {
+						ex.printStackTrace();
+
+						JOptionPane.showMessageDialog( this,
+							"Failed to create '" + file + "'." );
+						return;
+					}
+				}
+
+				super.setValue( newValue );
+			}
+		};
+
+		JDialog dialog = optionPane.createDialog( this, title );
+		dialog.setVisible( true );
+
+		return Objects.equals( optionPane.getValue(), JOptionPane.OK_OPTION );
+	}
+
+	private void createTheme( File file, String baseTheme )
+		throws IOException
+	{
+		StringBuilder buf = new StringBuilder();
+		buf.append( "# base theme (light, dark, intellij or darcula)\n" );
+		switch( baseTheme ) {
+			case FlatLightLaf.NAME:		buf.append( "@baseTheme = light\n" ); break;
+			case FlatDarkLaf.NAME:		buf.append( "@baseTheme = dark\n" ); break;
+			case FlatIntelliJLaf.NAME:	buf.append( "@baseTheme = intellij\n" ); break;
+			case FlatDarculaLaf.NAME:	buf.append( "@baseTheme = darcula\n" ); break;
+		}
+
+		writeFile( file, buf.toString() );
+	}
+
+	private static void writeFile( File file, String content )
+		throws IOException
+	{
+		try(
+			FileOutputStream out = new FileOutputStream( file );
+			Writer writer = new OutputStreamWriter( out, "UTF-8" );
+		) {
+			writer.write( content );
+		}
 	}
 
 	private boolean saveAll() {
@@ -568,6 +698,7 @@ public class FlatThemeFileEditor
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu();
 		openDirectoryMenuItem = new JMenuItem();
+		newPropertiesFileMenuItem = new JMenuItem();
 		saveAllMenuItem = new JMenuItem();
 		exitMenuItem = new JMenuItem();
 		editMenu = new JMenu();
@@ -625,6 +756,13 @@ public class FlatThemeFileEditor
 				openDirectoryMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				openDirectoryMenuItem.addActionListener(e -> openDirectory());
 				fileMenu.add(openDirectoryMenuItem);
+
+				//---- newPropertiesFileMenuItem ----
+				newPropertiesFileMenuItem.setText("New Properties File");
+				newPropertiesFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+				newPropertiesFileMenuItem.setMnemonic('N');
+				newPropertiesFileMenuItem.addActionListener(e -> newPropertiesFile());
+				fileMenu.add(newPropertiesFileMenuItem);
 
 				//---- saveAllMenuItem ----
 				saveAllMenuItem.setText("Save All");
@@ -800,6 +938,7 @@ public class FlatThemeFileEditor
 	private JMenuBar menuBar;
 	private JMenu fileMenu;
 	private JMenuItem openDirectoryMenuItem;
+	private JMenuItem newPropertiesFileMenuItem;
 	private JMenuItem saveAllMenuItem;
 	private JMenuItem exitMenuItem;
 	private JMenu editMenu;
