@@ -108,6 +108,11 @@ class FlatThemePreview
 		if( !(key instanceof String) )
 			return null;
 
+		// ignore custom UI delegates for preview because those classes
+		// are not available in theme editor
+		if( ((String)key).endsWith( "UI" ) )
+			return null;
+
 		Object value = textArea.propertiesSupport.getParsedProperty( (String) key );
 		if( value instanceof LazyValue )
 			value = ((LazyValue)value).createValue( null );
