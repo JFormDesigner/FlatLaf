@@ -33,6 +33,7 @@ import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaUI;
+import org.fife.ui.rtextarea.RUndoManager;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.InsertColorAction;
 import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.DuplicateLinesAction;
@@ -46,6 +47,7 @@ import com.formdev.flatlaf.themeeditor.FlatSyntaxTextAreaActions.IncrementNumber
 class FlatSyntaxTextArea
 	extends TextEditorPane
 {
+	private RUndoManager undoManager;
 	private boolean useColorOfColorTokens;
 
 	final FlatThemePropertiesSupport propertiesSupport = new FlatThemePropertiesSupport( this );
@@ -82,6 +84,21 @@ class FlatSyntaxTextArea
 	@Override
 	protected RTextAreaUI createRTextAreaUI() {
 		return new FlatRSyntaxTextAreaUI( this );
+	}
+
+	@Override
+	protected RUndoManager createUndoManager() {
+		undoManager = super.createUndoManager();
+		return undoManager;
+	}
+
+	void runWithoutUndo( Runnable runnable ) {
+		getDocument().removeUndoableEditListener( undoManager );
+		try {
+			runnable.run();
+		} finally {
+			getDocument().addUndoableEditListener( undoManager );
+		}
 	}
 
 	boolean isUseColorOfColorTokens() {

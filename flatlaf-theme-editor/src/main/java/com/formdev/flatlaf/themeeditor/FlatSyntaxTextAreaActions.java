@@ -18,8 +18,11 @@ package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.prefs.Preferences;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
@@ -277,6 +280,8 @@ class FlatSyntaxTextAreaActions
 	{
 		private static final String KEY_SELECTED_TAB = "colorchooser.selectedTab";
 
+		private static Point lastLocation;
+
 		InsertColorAction( String name ) {
 			super( name );
 		}
@@ -288,18 +293,19 @@ class FlatSyntaxTextAreaActions
 				Color currentColor = Color.white;
 				int caretPosition = textArea.getCaretPosition();
 				int start;
-				int len;
+				int len = 0;
+				String oldStr;
 				int[] result = findColorAt( textArea, caretPosition );
 				if( result != null ) {
 					start = result[0];
 					len = result[1];
 
-					String str = textArea.getText( start, len );
-					int rgb = UIDefaultsLoaderAccessor.parseColorRGBA( str );
+					oldStr = textArea.getText( start, len );
+					int rgb = UIDefaultsLoaderAccessor.parseColorRGBA( oldStr );
 					currentColor = new Color( rgb, true );
 				} else {
 					start = caretPosition;
-					len = 0;
+					oldStr = "";
 				}
 
 				// create color chooser
@@ -310,17 +316,51 @@ class FlatSyntaxTextAreaActions
 				if( tabbedPane instanceof JTabbedPane && selectedTab >= 0 && selectedTab < ((JTabbedPane)tabbedPane).getTabCount() )
 					((JTabbedPane)tabbedPane).setSelectedIndex( selectedTab );
 
+				// update editor immediately for live preview
+				AtomicInteger length = new AtomicInteger( len );
+				AtomicBoolean changed = new AtomicBoolean();
+				chooser.getSelectionModel().addChangeListener( e2 -> {
+					String str = colorToString( chooser.getColor() );
+					((FlatSyntaxTextArea)textArea).runWithoutUndo( () -> {
+						textArea.replaceRange( str, start, start + length.get() );
+					} );
+					length.set( str.length() );
+					changed.set( true );
+				} );
+				Runnable restore = () -> {
+					if( changed.get() ) {
+						((FlatSyntaxTextArea)textArea).runWithoutUndo( () -> {
+							textArea.replaceRange( oldStr, start, start + length.get() );
+						} );
+						length.set( oldStr.length() );
+					}
+				};
+
 				// show color chooser dialog
 				Window window = SwingUtilities.windowForComponent( textArea );
-				JDialog dialog = JColorChooser.createDialog( window, "Insert Color", true, chooser, e2 -> {
-					// update editor
-					textArea.replaceRange( colorToString( chooser.getColor() ), start, start + len );
+				JDialog dialog = JColorChooser.createDialog( window, "Insert Color", true, chooser,
+					// okListener
+					e2 -> {
+						// restore original string
+						restore.run();
 
-					// remember selected tab
-					if( tabbedPane instanceof JTabbedPane )
-						state.putInt( KEY_SELECTED_TAB, ((JTabbedPane)tabbedPane).getSelectedIndex() );
-				}, null );
+						// update editor
+						textArea.replaceRange( colorToString( chooser.getColor() ), start, start + length.get() );
+
+						// remember selected tab
+						if( tabbedPane instanceof JTabbedPane )
+							state.putInt( KEY_SELECTED_TAB, ((JTabbedPane)tabbedPane).getSelectedIndex() );
+					},
+					// cancelListener
+					e2 -> {
+						// restore original string
+						restore.run();
+					} );
+				if( lastLocation != null )
+					dialog.setLocation( lastLocation );
 				dialog.setVisible( true );
+
+				lastLocation = dialog.getLocation();
 			} catch( BadLocationException | IndexOutOfBoundsException | NumberFormatException ex ) {
 				ex.printStackTrace();
 			}
