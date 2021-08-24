@@ -187,8 +187,15 @@ public class FlatThemeFileEditor
 				return newPropertiesFile( dir );
 			else if( result == 1 ) {
 				try {
-					new File( dir, "FlatLightLaf.properties" ).createNewFile();
-					new File( dir, "FlatDarkLaf.properties" ).createNewFile();
+					String content =
+						"# To use this in your application, make sure that this properties file\n" +
+						"# is included in your application JAR (e.g. in package `com.myapp.themes`)\n" +
+						"# and invoke `FlatLaf.registerCustomDefaultsSource( \"com.myapp.themes\" );`\n" +
+						"# before setting the look and feel.\n" +
+						"# https://www.formdev.com/flatlaf/how-to-customize/#application_properties\n" +
+						"\n";
+					writeFile( new File( dir, "FlatLightLaf.properties" ), content );
+					writeFile( new File( dir, "FlatDarkLaf.properties" ), content );
 					return true;
 				} catch( IOException ex ) {
 					ex.printStackTrace();
