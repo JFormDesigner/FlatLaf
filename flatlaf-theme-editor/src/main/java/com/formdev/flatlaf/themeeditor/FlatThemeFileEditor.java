@@ -889,7 +889,7 @@ public class FlatThemeFileEditor
 				fileMenu.add(openDirectoryMenuItem);
 
 				//---- newPropertiesFileMenuItem ----
-				newPropertiesFileMenuItem.setText("New Properties File");
+				newPropertiesFileMenuItem.setText("New Properties File...");
 				newPropertiesFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
 				newPropertiesFileMenuItem.setMnemonic('N');
 				newPropertiesFileMenuItem.addActionListener(e -> newPropertiesFile());
@@ -918,7 +918,7 @@ public class FlatThemeFileEditor
 				editMenu.setMnemonic('E');
 
 				//---- findMenuItem ----
-				findMenuItem.setText("Find/Replace...");
+				findMenuItem.setText("Find/Replace");
 				findMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				findMenuItem.setMnemonic('F');
 				findMenuItem.addActionListener(e -> find());
