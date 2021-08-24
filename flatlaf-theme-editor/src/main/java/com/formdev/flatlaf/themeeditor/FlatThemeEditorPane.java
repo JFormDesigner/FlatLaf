@@ -23,7 +23,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
@@ -186,7 +185,7 @@ class FlatThemeEditorPane
 	void load( File file ) throws IOException {
 		this.file = file;
 
-		textArea.load( FileLocation.create( file ), StandardCharsets.ISO_8859_1 );
+		textArea.load( FileLocation.create( file ), "UTF-8" );
 	}
 
 	boolean reloadIfNecessary() {
