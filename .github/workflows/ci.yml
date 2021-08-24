@@ -110,7 +110,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           forceSsl: true
           localDir: "flatlaf-theme-editor/build/libs"
-          remoteDir: "."
+          remoteDir: "snapshots"
           options: "--only-newer --no-recursion --verbose=1"
 
 
