@@ -169,14 +169,6 @@ public class IJThemesClassGenerator
 		"		}\n" +
 		"	}\n" +
 		"\n" +
-		"	/**\n" +
-		"	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version\n" +
-		"	 */\n" +
-		"	@Deprecated\n" +
-		"	public static boolean install() {\n" +
-		"		return setup();\n" +
-		"	}\n" +
-		"\n" +
 		"	public static void installLafInfo() {\n" +
 		"		installLafInfo( NAME, ${themeClass}.class );\n" +
 		"	}\n" +

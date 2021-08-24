@@ -7,6 +7,7 @@ FlatLaf Change Log
 
 - InternalFrame: Double-click on icon in internal frame title bar now closes the
   internal frame. (issue #374)
+- IntelliJ Themes: Removed deprecated `install()` methods.
 
 #### Fixed bugs
 
