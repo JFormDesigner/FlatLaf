@@ -55,6 +55,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -113,6 +114,8 @@ public class FlatThemeFileEditor
 	}
 
 	private FlatThemeFileEditor( File dir ) {
+		setIconImages( FlatSVGUtils.createWindowIconImages( "/com/formdev/flatlaf/themeeditor/FlatLaf.svg" ) );
+
 		initComponents();
 
 		openDirectoryButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/menu-open.svg" ) );
