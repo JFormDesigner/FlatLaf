@@ -20,6 +20,8 @@ package com.formdev.flatlaf.themeeditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.function.Function;
 import javax.swing.*;
 import javax.swing.UIDefaults.ActiveValue;
@@ -43,6 +45,9 @@ class FlatThemePreview
 {
 	private final FlatSyntaxTextArea textArea;
 	private final Timer timer;
+
+	private final Map<LazyValue, Object> lazyValueCache = new WeakHashMap<>();
+	private int runWithUIDefaultsGetterLevel;
 
 	FlatThemePreview( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
@@ -100,7 +105,7 @@ class FlatThemePreview
 		if( !isShowing() )
 			return;
 
-		FlatLaf.runWithUIDefaultsGetter( this::getUIDefaultProperty, this::updateComponentTreeUI );
+		runWithUIDefaultsGetter( this::updateComponentTreeUI );
 	}
 
 	private void updateComponentTreeUI() {
@@ -108,6 +113,18 @@ class FlatThemePreview
 			SwingUtilities.updateComponentTreeUI( this );
 		} catch( Exception ex ) {
 			ex.printStackTrace();
+		}
+	}
+
+	private void runWithUIDefaultsGetter( Runnable runnable ) {
+		try {
+			runWithUIDefaultsGetterLevel++;
+			if( runWithUIDefaultsGetterLevel == 1 )
+				FlatLaf.runWithUIDefaultsGetter( this::getUIDefaultProperty, runnable );
+			else
+				runnable.run();
+		} finally {
+			runWithUIDefaultsGetterLevel--;
 		}
 	}
 
@@ -121,9 +138,11 @@ class FlatThemePreview
 			return null;
 
 		Object value = textArea.propertiesSupport.getParsedProperty( (String) key );
-		if( value instanceof LazyValue )
-			value = ((LazyValue)value).createValue( null );
-		else if( value instanceof ActiveValue )
+		if( value instanceof LazyValue ) {
+			value = lazyValueCache.computeIfAbsent( (LazyValue) value, k -> {
+				return k.createValue( null );
+			} );
+		} else if( value instanceof ActiveValue )
 			value = ((ActiveValue)value).createValue( null );
 
 //		System.out.println( key + " = " + value );
@@ -134,7 +153,9 @@ class FlatThemePreview
 	@Override
 	public void layout() {
 		try {
-			super.layout();
+			runWithUIDefaultsGetter( () -> {
+				super.layout();
+			} );
 		} catch( Exception ex ) {
 			ex.printStackTrace();
 		}
@@ -143,7 +164,9 @@ class FlatThemePreview
 	@Override
 	protected void validateTree() {
 		try {
-			super.validateTree();
+			runWithUIDefaultsGetter( () -> {
+				super.validateTree();
+			} );
 		} catch( Exception ex ) {
 			ex.printStackTrace();
 		}
@@ -182,7 +205,9 @@ class FlatThemePreview
 	@Override
 	public void paint( Graphics g ) {
 		try {
-			super.paint( g );
+			runWithUIDefaultsGetter( () -> {
+				super.paint( g );
+			} );
 		} catch( Exception ex ) {
 			ex.printStackTrace();
 		}
@@ -191,7 +216,9 @@ class FlatThemePreview
 	@Override
 	protected void paintComponent( Graphics g ) {
 		try {
-			super.paintComponent( g );
+			runWithUIDefaultsGetter( () -> {
+				super.paintComponent( g );
+			} );
 		} catch( Exception ex ) {
 			ex.printStackTrace();
 		}
@@ -200,14 +227,16 @@ class FlatThemePreview
 	@Override
 	protected void paintChildren( Graphics g ) {
 		try {
-			super.paintChildren( g );
+			runWithUIDefaultsGetter( () -> {
+				super.paintChildren( g );
+			} );
 		} catch( Exception ex ) {
 			ex.printStackTrace();
 		}
 	}
 
 	private void enabledChanged() {
-		FlatLaf.runWithUIDefaultsGetter( this::getUIDefaultProperty, () -> {
+		runWithUIDefaultsGetter( () -> {
 			enableDisable( this, enabledCheckBox.isSelected() );
 		} );
 	}
