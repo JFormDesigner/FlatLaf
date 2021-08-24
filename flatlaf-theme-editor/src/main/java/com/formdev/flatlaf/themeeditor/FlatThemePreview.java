@@ -26,6 +26,9 @@ import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.ui.FlatTabbedPaneUI;
@@ -56,6 +59,10 @@ class FlatThemePreview
 		tabbedPane1.addTab( "Tab 6", null );
 		tabbedPane1.addTab( "Tab 7", null );
 		tabbedPane1.addTab( "Tab 8", null );
+
+		list1.setSelectedIndex( 1 );
+		tree1.setSelectionRow( 1 );
+		table1.setRowSelectionInterval( 1, 1 );
 
 		// timer used for delayed preview updates
 		timer = new Timer( 300, e -> update() );
@@ -302,6 +309,14 @@ class FlatThemePreview
 		toolTip1 = new JToolTip();
 		tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new FlatThemePreview.PreviewTabbedPane();
+		listTreeLabel = new JLabel();
+		scrollPane2 = new JScrollPane();
+		list1 = new JList<>();
+		scrollPane3 = new JScrollPane();
+		tree1 = new JTree();
+		tableLabel = new JLabel();
+		scrollPane4 = new JScrollPane();
+		table1 = new JTable();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -312,6 +327,8 @@ class FlatThemePreview
 			// rows
 			"[]0" +
 			"[]unrel" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -685,6 +702,66 @@ class FlatThemePreview
 		add(tabbedPaneLabel, "cell 0 23");
 		add(tabbedPane1, "cell 1 23");
 
+		//---- listTreeLabel ----
+		listTreeLabel.setText("JList / JTree:");
+		add(listTreeLabel, "cell 0 24");
+
+		//======== scrollPane2 ========
+		{
+
+			//---- list1 ----
+			list1.setModel(new AbstractListModel<String>() {
+				String[] values = {
+					"Item 1",
+					"Item 2",
+					"Item 3"
+				};
+				@Override
+				public int getSize() { return values.length; }
+				@Override
+				public String getElementAt(int i) { return values[i]; }
+			});
+			scrollPane2.setViewportView(list1);
+		}
+		add(scrollPane2, "cell 1 24,width 50,height 50");
+
+		//======== scrollPane3 ========
+		{
+			scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+			//---- tree1 ----
+			tree1.setModel(new DefaultTreeModel(
+				new DefaultMutableTreeNode("Item 1") {
+					{
+						add(new DefaultMutableTreeNode("Item 2"));
+						add(new DefaultMutableTreeNode("Item 3"));
+					}
+				}));
+			scrollPane3.setViewportView(tree1);
+		}
+		add(scrollPane3, "cell 1 24,width 50,height 50");
+
+		//---- tableLabel ----
+		tableLabel.setText("JTable:");
+		add(tableLabel, "cell 0 25");
+
+		//======== scrollPane4 ========
+		{
+
+			//---- table1 ----
+			table1.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"Item 1a", "Item 1b"},
+					{"Item 2a", "Item 2b"},
+				},
+				new String[] {
+					"Column 1", "Column 2"
+				}
+			));
+			scrollPane4.setViewportView(table1);
+		}
+		add(scrollPane4, "cell 1 25,height 70");
+
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
 		buttonGroup1.add(radioButton1);
@@ -773,6 +850,14 @@ class FlatThemePreview
 	private JToolTip toolTip1;
 	private JLabel tabbedPaneLabel;
 	private FlatThemePreview.PreviewTabbedPane tabbedPane1;
+	private JLabel listTreeLabel;
+	private JScrollPane scrollPane2;
+	private JList<String> list1;
+	private JScrollPane scrollPane3;
+	private JTree tree1;
+	private JLabel tableLabel;
+	private JScrollPane scrollPane4;
+	private JTable table1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class PreviewDefaultButton -----------------------------------------
