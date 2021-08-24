@@ -19,7 +19,10 @@ package com.formdev.flatlaf.themeeditor;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.Rectangle;
@@ -30,6 +33,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -669,6 +675,39 @@ public class FlatThemeFileEditor
 		repaint();
 	}
 
+	private void about() {
+		JLabel titleLabel = new JLabel( "FlatLaf Theme Editor" );
+		Font titleFont = titleLabel.getFont();
+		titleLabel.setFont( titleFont.deriveFont( (float) titleFont.getSize() + UIScale.scale( 6 ) ) );
+
+		String link = "https://www.formdev.com/flatlaf/";
+		JLabel linkLabel = new JLabel( "<html><a href=\"#\">" + link + "</a></html>" );
+		linkLabel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
+		linkLabel.addMouseListener( new MouseAdapter() {
+			@Override
+			public void mouseClicked( MouseEvent e ) {
+				try {
+					Desktop.getDesktop().browse( new URI( link ) );
+				} catch( IOException | URISyntaxException ex ) {
+					JOptionPane.showMessageDialog( linkLabel,
+						"Failed to open '" + link + "' in browser.",
+						"About", JOptionPane.PLAIN_MESSAGE );
+				}
+			}
+		} );
+
+
+		JOptionPane.showMessageDialog( this,
+			new Object[] {
+				titleLabel,
+				"Edits FlatLaf Swing look and feel theme files",
+				" ",
+				"Copyright 2019-" + Year.now() + " FormDev Software GmbH",
+				linkLabel,
+			},
+			"About", JOptionPane.PLAIN_MESSAGE );
+	}
+
 	private void restoreState() {
 		state = Preferences.userRoot().node( PREFS_ROOT_PATH );
 
@@ -804,6 +843,8 @@ public class FlatThemeFileEditor
 		activateEditorMenuItem = new JMenuItem();
 		nextEditorMenuItem = new JMenuItem();
 		previousEditorMenuItem = new JMenuItem();
+		helpMenu = new JMenu();
+		aboutMenuItem = new JMenuItem();
 		controlPanel = new JPanel();
 		directoryLabel = new JLabel();
 		directoryField = new JComboBox<>();
@@ -975,6 +1016,19 @@ public class FlatThemeFileEditor
 				windowMenu.add(previousEditorMenuItem);
 			}
 			menuBar.add(windowMenu);
+
+			//======== helpMenu ========
+			{
+				helpMenu.setText("Help");
+				helpMenu.setMnemonic('H');
+
+				//---- aboutMenuItem ----
+				aboutMenuItem.setText("About");
+				aboutMenuItem.setMnemonic('A');
+				aboutMenuItem.addActionListener(e -> about());
+				helpMenu.add(aboutMenuItem);
+			}
+			menuBar.add(helpMenu);
 		}
 		setJMenuBar(menuBar);
 
@@ -1044,6 +1098,8 @@ public class FlatThemeFileEditor
 	private JMenuItem activateEditorMenuItem;
 	private JMenuItem nextEditorMenuItem;
 	private JMenuItem previousEditorMenuItem;
+	private JMenu helpMenu;
+	private JMenuItem aboutMenuItem;
 	private JPanel controlPanel;
 	private JLabel directoryLabel;
 	private JComboBox<String> directoryField;
