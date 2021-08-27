@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -234,6 +235,21 @@ class FlatThemePropertiesSupport
 		parsedValueCache.clear();
 		parsedValueCache2.clear();
 		allKeysCache = null;
+	}
+
+	static Set<String> getKeysForWildcard( String key ) {
+		if( !key.startsWith( "*." ) )
+			return Collections.emptySet();
+
+		loadKeysAllowedForWildcard();
+
+		String suffix = key.substring( 1 );
+		Set<String> result = new HashSet<>();
+		for( String k : wildcardKeys ) {
+			if( k.endsWith( suffix ) )
+				result.add( k );
+		}
+		return result;
 	}
 
 	private static boolean isKeyAllowedForWildcard( String key ) {

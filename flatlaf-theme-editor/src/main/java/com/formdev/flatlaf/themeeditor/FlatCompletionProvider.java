@@ -361,8 +361,20 @@ class FlatCompletionProvider
 
 			completions.clear();
 			for( String key : keys ) {
-				if( key.startsWith( "*." ) || key.startsWith( "[" ) )
+				if( key.startsWith( "[" ) ) {
+					// remove prefix
+					int closeIndex = key.indexOf( ']' );
+					if( closeIndex < 0 )
+						continue;
+					key = key.substring( closeIndex + 1 );
+				}
+
+				if( key.startsWith( "*." ) ) {
+					// resolve wildcard
+					for( String k : FlatThemePropertiesSupport.getKeysForWildcard( key ) )
+						completions.add( new BasicCompletion( this, "$".concat( k ) ) );
 					continue;
+				}
 
 				if( !key.startsWith( "@" ) )
 					key = "$".concat( key );
