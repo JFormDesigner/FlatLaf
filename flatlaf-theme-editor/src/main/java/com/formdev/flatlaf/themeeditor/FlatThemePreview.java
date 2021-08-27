@@ -20,6 +20,7 @@ package com.formdev.flatlaf.themeeditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.HierarchyEvent;
+import java.beans.PropertyVetoException;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.function.Function;
@@ -68,6 +69,20 @@ class FlatThemePreview
 		list1.setSelectedIndex( 1 );
 		tree1.setSelectionRow( 1 );
 		table1.setRowSelectionInterval( 1, 1 );
+		table1.uiDefaultsGetter = this::getUIDefaultProperty;
+
+		EventQueue.invokeLater( () -> {
+			int width = desktopPane1.getWidth();
+			int height = desktopPane1.getHeight() / 2;
+			internalFrame1.setBounds( 0, 0, width, height );
+			internalFrame2.setBounds( 0, height, width, height );
+
+			try {
+				internalFrame1.setSelected( true );
+			} catch( PropertyVetoException ex ) {
+				// ignore
+			}
+		} );
 
 		// timer used for delayed preview updates
 		timer = new Timer( 300, e -> update() );
@@ -259,6 +274,22 @@ class FlatThemePreview
 	private void changeProgress() {
 		int value = slider3.getValue();
 		progressBar1.setValue( value );
+		progressBar2.setValue( value );
+	}
+
+	private Object toolbarCons;
+
+	@Override
+	protected void addImpl( Component comp, Object constraints, int index ) {
+		// if floating toolbar window is closed, then place toolbar at original location
+		if( comp == toolBar1 ) {
+			if( toolbarCons == null )
+				toolbarCons = constraints;
+			else if( comp.getParent() == null && toolbarCons != null )
+				constraints = toolbarCons;
+		}
+
+		super.addImpl( comp, constraints, index );
 	}
 
 	private void initComponents() {
@@ -294,17 +325,13 @@ class FlatThemePreview
 		spinner1 = new JSpinner();
 		textFieldLabel = new JLabel();
 		textField1 = new FlatTextField();
-		formattedTextFieldLabel = new JLabel();
 		formattedTextField1 = new FlatFormattedTextField();
-		passwordFieldLabel = new JLabel();
 		passwordField1 = new FlatPasswordField();
 		textAreaLabel = new JLabel();
 		scrollPane1 = new JScrollPane();
 		textArea1 = new JTextArea();
-		editorPaneLabel = new JLabel();
 		scrollPane5 = new JScrollPane();
 		editorPane1 = new JEditorPane();
-		textPaneLabel = new JLabel();
 		scrollPane9 = new JScrollPane();
 		textPane1 = new JTextPane();
 		menuBarLabel = new JLabel();
@@ -334,8 +361,15 @@ class FlatThemePreview
 		slider3 = new JSlider();
 		progressBarLabel = new JLabel();
 		progressBar1 = new FlatProgressBar();
+		progressBar2 = new FlatProgressBar();
 		toolTipLabel = new JLabel();
 		toolTip1 = new JToolTip();
+		toolBarLabel = new JLabel();
+		toolBar1 = new JToolBar();
+		button4 = new JButton();
+		button6 = new JButton();
+		button7 = new JToggleButton();
+		button8 = new JToggleButton();
 		tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new FlatThemePreview.PreviewTabbedPane();
 		listTreeLabel = new JLabel();
@@ -345,7 +379,11 @@ class FlatThemePreview
 		tree1 = new JTree();
 		tableLabel = new JLabel();
 		scrollPane4 = new JScrollPane();
-		table1 = new JTable();
+		table1 = new FlatThemePreview.PreviewTable();
+		internalFrameLabel = new JLabel();
+		desktopPane1 = new JDesktopPane();
+		internalFrame1 = new JInternalFrame();
+		internalFrame2 = new JInternalFrame();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -380,6 +418,7 @@ class FlatThemePreview
 			"[]" +
 			"[]" +
 			"[]" +
+			"[100,fill]" +
 			"[grow]"));
 
 		//---- previewSeparator ----
@@ -417,12 +456,11 @@ class FlatThemePreview
 		add(buttonLabel, "cell 0 3");
 
 		//---- button1 ----
-		button1.setText("Apply");
-		button1.setToolTipText("This button is enabled.");
+		button1.setText("OK");
 		add(button1, "cell 1 3,alignx left,growx 0");
 
 		//---- testDefaultButton1 ----
-		testDefaultButton1.setText("OK");
+		testDefaultButton1.setText("Default");
 		add(testDefaultButton1, "cell 1 3");
 
 		//---- helpButton ----
@@ -436,7 +474,6 @@ class FlatThemePreview
 
 		//---- toggleButton1 ----
 		toggleButton1.setText("Unselected");
-		toggleButton1.setToolTipText("LOOOOOOOOOOOOOONG TEXT");
 		add(toggleButton1, "cell 1 4,alignx left,growx 0");
 
 		//---- toggleButton3 ----
@@ -495,7 +532,7 @@ class FlatThemePreview
 		}));
 		comboBox1.setMaximumRowCount(6);
 		comboBox1.setPlaceholderText("placeholder text");
-		add(comboBox1, "cell 1 7");
+		add(comboBox1, "cell 1 7,width 50");
 
 		//---- comboBox3 ----
 		comboBox3.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -513,7 +550,7 @@ class FlatThemePreview
 			"kkk"
 		}));
 		comboBox3.setMaximumRowCount(6);
-		add(comboBox3, "cell 1 7");
+		add(comboBox3, "cell 1 7,width 50");
 
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");
@@ -521,35 +558,27 @@ class FlatThemePreview
 		add(spinner1, "cell 1 8");
 
 		//---- textFieldLabel ----
-		textFieldLabel.setText("JTextField:");
-		add(textFieldLabel, "cell 0 9");
+		textFieldLabel.setText("<html>JTextField:<br>JFormattedTextF.:<br>JPasswordField:</html>");
+		add(textFieldLabel, "cell 0 9 1 2");
 
 		//---- textField1 ----
 		textField1.setText("Some Text");
 		textField1.setPlaceholderText("placeholder text");
 		add(textField1, "cell 1 9");
 
-		//---- formattedTextFieldLabel ----
-		formattedTextFieldLabel.setText("JFormattedTextF.:");
-		add(formattedTextFieldLabel, "cell 0 10");
-
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("Some Text");
 		formattedTextField1.setPlaceholderText("placeholder text");
-		add(formattedTextField1, "cell 1 10");
-
-		//---- passwordFieldLabel ----
-		passwordFieldLabel.setText("JPasswordField:");
-		add(passwordFieldLabel, "cell 0 11");
+		add(formattedTextField1, "cell 1 10,width 50");
 
 		//---- passwordField1 ----
 		passwordField1.setText("Some Text");
 		passwordField1.setPlaceholderText("placeholder text");
-		add(passwordField1, "cell 1 11");
+		add(passwordField1, "cell 1 10,width 50");
 
 		//---- textAreaLabel ----
-		textAreaLabel.setText("JTextArea:");
-		add(textAreaLabel, "cell 0 12");
+		textAreaLabel.setText("<html>JTextArea:<br><br>JEditorPane:<br>JTextPane:</html>");
+		add(textAreaLabel, "cell 0 11 1 2");
 
 		//======== scrollPane1 ========
 		{
@@ -561,11 +590,7 @@ class FlatThemePreview
 			textArea1.setRows(2);
 			scrollPane1.setViewportView(textArea1);
 		}
-		add(scrollPane1, "cell 1 12");
-
-		//---- editorPaneLabel ----
-		editorPaneLabel.setText("JEditorPane");
-		add(editorPaneLabel, "cell 0 13");
+		add(scrollPane1, "cell 1 11");
 
 		//======== scrollPane5 ========
 		{
@@ -576,11 +601,7 @@ class FlatThemePreview
 			editorPane1.setText("Some Text");
 			scrollPane5.setViewportView(editorPane1);
 		}
-		add(scrollPane5, "cell 1 13");
-
-		//---- textPaneLabel ----
-		textPaneLabel.setText("JTextPane:");
-		add(textPaneLabel, "cell 0 14");
+		add(scrollPane5, "cell 1 12,width 50");
 
 		//======== scrollPane9 ========
 		{
@@ -591,11 +612,11 @@ class FlatThemePreview
 			textPane1.setText("Some Text");
 			scrollPane9.setViewportView(textPane1);
 		}
-		add(scrollPane9, "cell 1 14");
+		add(scrollPane9, "cell 1 12,width 50");
 
 		//---- menuBarLabel ----
 		menuBarLabel.setText("JMenuBar:");
-		add(menuBarLabel, "cell 0 15");
+		add(menuBarLabel, "cell 0 13");
 
 		//======== menuBar1 ========
 		{
@@ -673,33 +694,33 @@ class FlatThemePreview
 			}
 			menuBar1.add(menu3);
 		}
-		add(menuBar1, "cell 1 15");
+		add(menuBar1, "cell 1 13");
 
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
-		add(scrollBarLabel, "cell 0 16");
+		add(scrollBarLabel, "cell 0 14");
 
 		//---- scrollBar1 ----
 		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
-		add(scrollBar1, "cell 1 16");
+		add(scrollBar1, "cell 1 14");
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar5.setShowButtons(true);
-		add(scrollBar5, "cell 1 17");
+		add(scrollBar5, "cell 1 15");
 
 		//---- separatorLabel ----
 		separatorLabel.setText("JSeparator:");
-		add(separatorLabel, "cell 0 18");
-		add(separator1, "cell 1 18");
+		add(separatorLabel, "cell 0 16");
+		add(separator1, "cell 1 16");
 
 		//---- sliderLabel ----
 		sliderLabel.setText("JSlider:");
-		add(sliderLabel, "cell 0 19");
+		add(sliderLabel, "cell 0 17");
 
 		//---- slider1 ----
 		slider1.setValue(30);
-		add(slider1, "cell 1 19");
+		add(slider1, "cell 1 17");
 
 		//---- slider3 ----
 		slider3.setMinorTickSpacing(10);
@@ -708,23 +729,55 @@ class FlatThemePreview
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
 		slider3.addChangeListener(e -> changeProgress());
-		add(slider3, "cell 1 20");
+		add(slider3, "cell 1 18");
 
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
-		add(progressBarLabel, "cell 0 21");
+		add(progressBarLabel, "cell 0 19");
 
 		//---- progressBar1 ----
 		progressBar1.setValue(60);
-		add(progressBar1, "cell 1 21");
+		add(progressBar1, "cell 1 19");
+
+		//---- progressBar2 ----
+		progressBar2.setValue(50);
+		progressBar2.setStringPainted(true);
+		add(progressBar2, "cell 1 20");
 
 		//---- toolTipLabel ----
 		toolTipLabel.setText("JToolTip:");
-		add(toolTipLabel, "cell 0 22");
+		add(toolTipLabel, "cell 0 21");
 
 		//---- toolTip1 ----
 		toolTip1.setTipText("Some text in tool tip.");
-		add(toolTip1, "cell 1 22,alignx left,growx 0");
+		add(toolTip1, "cell 1 21,alignx left,growx 0");
+
+		//---- toolBarLabel ----
+		toolBarLabel.setText("JToolBar:");
+		add(toolBarLabel, "cell 0 22");
+
+		//======== toolBar1 ========
+		{
+
+			//---- button4 ----
+			button4.setIcon(UIManager.getIcon("Tree.closedIcon"));
+			toolBar1.add(button4);
+
+			//---- button6 ----
+			button6.setIcon(UIManager.getIcon("Tree.openIcon"));
+			toolBar1.add(button6);
+			toolBar1.addSeparator();
+
+			//---- button7 ----
+			button7.setIcon(UIManager.getIcon("Tree.leafIcon"));
+			toolBar1.add(button7);
+
+			//---- button8 ----
+			button8.setIcon(UIManager.getIcon("Tree.leafIcon"));
+			button8.setSelected(true);
+			toolBar1.add(button8);
+		}
+		add(toolBar1, "cell 1 22");
 
 		//---- tabbedPaneLabel ----
 		tabbedPaneLabel.setText("JTabbedPane:");
@@ -791,6 +844,43 @@ class FlatThemePreview
 		}
 		add(scrollPane4, "cell 1 25,height 70");
 
+		//---- internalFrameLabel ----
+		internalFrameLabel.setText("<html>JDesktopPane:<br>JInternalFrame:</html>");
+		add(internalFrameLabel, "cell 0 26,aligny top,growy 0");
+
+		//======== desktopPane1 ========
+		{
+
+			//======== internalFrame1 ========
+			{
+				internalFrame1.setVisible(true);
+				internalFrame1.setTitle("Active");
+				internalFrame1.setClosable(true);
+				internalFrame1.setMaximizable(true);
+				internalFrame1.setIconifiable(true);
+				internalFrame1.setResizable(true);
+				Container internalFrame1ContentPane = internalFrame1.getContentPane();
+				internalFrame1ContentPane.setLayout(new BorderLayout());
+			}
+			desktopPane1.add(internalFrame1, JLayeredPane.DEFAULT_LAYER);
+			internalFrame1.setBounds(new Rectangle(new Point(5, 5), internalFrame1.getPreferredSize()));
+
+			//======== internalFrame2 ========
+			{
+				internalFrame2.setVisible(true);
+				internalFrame2.setClosable(true);
+				internalFrame2.setIconifiable(true);
+				internalFrame2.setMaximizable(true);
+				internalFrame2.setResizable(true);
+				internalFrame2.setTitle("Inactive");
+				Container internalFrame2ContentPane = internalFrame2.getContentPane();
+				internalFrame2ContentPane.setLayout(new BorderLayout());
+			}
+			desktopPane1.add(internalFrame2, JLayeredPane.DEFAULT_LAYER);
+			internalFrame2.setBounds(new Rectangle(new Point(5, 50), internalFrame2.getPreferredSize()));
+		}
+		add(desktopPane1, "cell 1 26");
+
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
 		buttonGroup1.add(radioButton1);
@@ -835,17 +925,13 @@ class FlatThemePreview
 	private JSpinner spinner1;
 	private JLabel textFieldLabel;
 	private FlatTextField textField1;
-	private JLabel formattedTextFieldLabel;
 	private FlatFormattedTextField formattedTextField1;
-	private JLabel passwordFieldLabel;
 	private FlatPasswordField passwordField1;
 	private JLabel textAreaLabel;
 	private JScrollPane scrollPane1;
 	private JTextArea textArea1;
-	private JLabel editorPaneLabel;
 	private JScrollPane scrollPane5;
 	private JEditorPane editorPane1;
-	private JLabel textPaneLabel;
 	private JScrollPane scrollPane9;
 	private JTextPane textPane1;
 	private JLabel menuBarLabel;
@@ -875,8 +961,15 @@ class FlatThemePreview
 	private JSlider slider3;
 	private JLabel progressBarLabel;
 	private FlatProgressBar progressBar1;
+	private FlatProgressBar progressBar2;
 	private JLabel toolTipLabel;
 	private JToolTip toolTip1;
+	private JLabel toolBarLabel;
+	private JToolBar toolBar1;
+	private JButton button4;
+	private JButton button6;
+	private JToggleButton button7;
+	private JToggleButton button8;
 	private JLabel tabbedPaneLabel;
 	private FlatThemePreview.PreviewTabbedPane tabbedPane1;
 	private JLabel listTreeLabel;
@@ -886,7 +979,11 @@ class FlatThemePreview
 	private JTree tree1;
 	private JLabel tableLabel;
 	private JScrollPane scrollPane4;
-	private JTable table1;
+	private FlatThemePreview.PreviewTable table1;
+	private JLabel internalFrameLabel;
+	private JDesktopPane desktopPane1;
+	private JInternalFrame internalFrame1;
+	private JInternalFrame internalFrame2;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class PreviewDefaultButton -----------------------------------------
@@ -936,10 +1033,27 @@ class FlatThemePreview
 		{
 			@Override
 			public void actionPerformed( ActionEvent e ) {
+				// needed for "more tabs" popup creation
 				FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
 					super.actionPerformed( e );
 				} );
 			}
+		}
+	}
+
+	//---- class PreviewTable -------------------------------------------------
+
+	private static class PreviewTable
+		extends JTable
+	{
+		Function<Object, Object> uiDefaultsGetter;
+
+		@Override
+		public void paint( Graphics g ) {
+			// needed for DefaultTableCellRenderer
+			FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
+				super.paint( g );
+			} );
 		}
 	}
 }
