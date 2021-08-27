@@ -133,7 +133,7 @@ class FlatFindReplaceBar
 		findOrMarkAll( true );
 	}
 
-	private void markAll() {
+	void markAll() {
 		findOrMarkAll( false );
 	}
 
@@ -227,6 +227,8 @@ class FlatFindReplaceBar
 	private void updateMatchesLabel( SearchResult result, boolean replace ) {
 		matchesLabel.setText( result.getMarkedCount() + " matches" );
 		replaceMatchesLabel.setText( replace ? result.getCount() + " matches replaced" : null );
+
+		findField.setOutline( result.getMarkedCount() > 0 ? null : "error" );
 	}
 
 	private void notifyEditorAction( String actionKey ) {

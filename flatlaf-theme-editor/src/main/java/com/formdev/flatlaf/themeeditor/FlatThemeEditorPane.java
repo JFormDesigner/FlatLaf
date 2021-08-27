@@ -224,6 +224,9 @@ class FlatThemeEditorPane
 				textArea.reload();
 
 				textArea.select( selectionStart, selectionEnd );
+
+				if( findReplaceBar != null && findReplaceBar.isShowing() )
+					findReplaceBar.markAll();
 			} catch( IOException ex ) {
 				JOptionPane.showMessageDialog( this,
 					"Failed to reload '" + textArea.getFileName() + "'\n\nReason: " + ex.getMessage(),
