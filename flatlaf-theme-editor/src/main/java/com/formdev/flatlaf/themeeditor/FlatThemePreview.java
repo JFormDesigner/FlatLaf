@@ -161,6 +161,17 @@ class FlatThemePreview
 			value = ((ActiveValue)value).createValue( null );
 
 //		System.out.println( key + " = " + value );
+
+		// If value is null and is a property that is defined in a core theme,
+		// then force the value to null.
+		// This is necessary for cases where the current application Laf defines a property
+		// but the edited theme does not (or has set the value explicitly to null).
+		// E.g. FlatLightLaf defines Button.focusedBackground, but in FlatDarkLaf
+		// it is not defined. Without this code, the preview for FlatDarkLaf would use
+		// Button.focusedBackground from FlatLightLaf if FlatLightLaf is the current application Laf.
+		if( value == null && FlatThemePropertiesBaseManager.getDefindedCoreKeys().contains( key ) )
+			return FlatLaf.NULL_VALUE;
+
 		return value;
 	}
 

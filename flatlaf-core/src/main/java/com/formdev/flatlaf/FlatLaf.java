@@ -928,6 +928,11 @@ public abstract class FlatLaf
 	 * Registers a UI defaults getter function that is invoked before the standard getter.
 	 * This allows using different UI defaults for special purposes
 	 * (e.g. using multiple themes at the same time).
+	 * <p>
+	 * The key is passed as parameter to the function.
+	 * If the function returns {@code null}, then the next registered function is invoked.
+	 * If all registered functions return {@code null}, then the current look and feel is asked.
+	 * If the function returns {@link #NULL_VALUE}, then the UI value becomes {@code null}.
 	 *
 	 * @see #unregisterUIDefaultsGetter(Function)
 	 * @see #runWithUIDefaultsGetter(Function, Runnable)
@@ -969,6 +974,25 @@ public abstract class FlatLaf
 	 * (e.g. using multiple themes at the same time).
 	 * If the current look and feel is not FlatLaf, then the getter is ignored and
 	 * the given runnable invoked.
+	 * <p>
+	 * The key is passed as parameter to the function.
+	 * If the function returns {@code null}, then the next registered function is invoked.
+	 * If all registered functions return {@code null}, then the current look and feel is asked.
+	 * If the function returns {@link #NULL_VALUE}, then the UI value becomes {@code null}.
+	 * <p>
+	 * Example:
+	 * <pre>{@code
+	 * // create secondary theme
+	 * UIDefaults darkDefaults = new FlatDarkLaf().getDefaults();
+	 *
+	 * // create panel using secondary theme
+	 * FlatLaf.runWithUIDefaultsGetter( key -> {
+	 *     Object value = darkDefaults.get( key );
+	 *     return (value != null) ? value : FlatLaf.NULL_VALUE;
+	 * }, () -> {
+	 *     // TODO create components that should use secondary theme here
+	 * } );
+	 * }</pre>
 	 *
 	 * @see #registerUIDefaultsGetter(Function)
 	 * @see #unregisterUIDefaultsGetter(Function)
@@ -987,6 +1011,17 @@ public abstract class FlatLaf
 			runnable.run();
 	}
 
+	/**
+	 * Special value returned by functions used in {@link #runWithUIDefaultsGetter(Function, Runnable)}
+	 * or {@link #registerUIDefaultsGetter(Function)} to indicate that the UI value should
+	 * become {@code null}.
+	 *
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @since 1.6
+	 */
+	public static final Object NULL_VALUE = new Object();
+
 	//---- class FlatUIDefaults -----------------------------------------------
 
 	private class FlatUIDefaults
@@ -999,13 +1034,13 @@ public abstract class FlatLaf
 		@Override
 		public Object get( Object key ) {
 			Object value = getValue( key );
-			return (value != null) ? value : super.get( key );
+			return (value != null) ? (value != NULL_VALUE ? value : null) : super.get( key );
 		}
 
 		@Override
 		public Object get( Object key, Locale l ) {
 			Object value = getValue( key );
-			return (value != null) ? value : super.get( key, l );
+			return (value != null) ? (value != NULL_VALUE ? value : null) : super.get( key, l );
 		}
 
 		private Object getValue( Object key ) {

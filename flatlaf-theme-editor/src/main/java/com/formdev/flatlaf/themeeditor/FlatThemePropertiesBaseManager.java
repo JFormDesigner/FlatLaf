@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -47,7 +48,8 @@ class FlatThemePropertiesBaseManager
 	};
 
 	private final Map<String, MyBasePropertyProvider> providers = new HashMap<>();
-	private Map<String, Properties> coreThemes;
+	private static Map<String, Properties> coreThemes;
+	private static Set<String> definedCoreKeys;
 
 	FlatThemePropertiesSupport.BasePropertyProvider create( File file, FlatThemePropertiesSupport propertiesSupport ) {
 		String name = StringUtils.removeTrailing( file.getName(), ".properties" );
@@ -61,7 +63,31 @@ class FlatThemePropertiesBaseManager
 		providers.clear();
 	}
 
-	private void loadCoreThemes() {
+	static Set<String> getDefindedCoreKeys() {
+		if( definedCoreKeys != null )
+			return definedCoreKeys;
+
+		loadCoreThemes();
+
+		definedCoreKeys = new HashSet<>();
+		for( Properties properties : coreThemes.values() ) {
+			for( Object k : properties.keySet() ) {
+				String key = (String) k;
+				if( key.startsWith( "*." ) || key.startsWith( "@" ) )
+					continue;
+				if( key.startsWith( "[" ) ) {
+					int closeIndex = key.indexOf( ']' );
+					if( closeIndex < 0 )
+						continue;
+					key = key.substring( closeIndex + 1 );
+				}
+				definedCoreKeys.add( key );
+			}
+		}
+		return definedCoreKeys;
+	}
+
+	private static void loadCoreThemes() {
 		if( coreThemes != null )
 			return;
 
