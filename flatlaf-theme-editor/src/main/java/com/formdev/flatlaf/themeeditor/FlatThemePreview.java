@@ -271,7 +271,7 @@ class FlatThemePreview
 		if( comp != previewLabel && comp != enabledCheckBox )
 			comp.setEnabled( enabled );
 
-		if( !(comp instanceof Container) )
+		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
 			return;
 
 		for( Component c : ((Container)comp).getComponents() ) {

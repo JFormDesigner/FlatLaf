@@ -122,8 +122,15 @@ class FlatSyntaxTextAreaActions
 		@Override
 		public void actionPerformedImpl( ActionEvent e, RTextArea textArea ) {
 			try {
-				int selStartLine = textArea.getLineOfOffset( textArea.getSelectionStart() );
-				int selEndLine = textArea.getLineOfOffset( textArea.getSelectionEnd() );
+				int selStart = textArea.getSelectionStart();
+				int selEnd = textArea.getSelectionEnd();
+
+				int selStartLine = textArea.getLineOfOffset( selStart );
+				int selEndLine = textArea.getLineOfOffset( selEnd );
+
+				// check whether selection end is at the beginning of the next line
+				if( selEnd > selStart && textArea.getLineOfOffset( selEnd - 1 ) < selEndLine )
+					selEndLine--;
 
 				int linesStart = textArea.getLineStartOffset( selStartLine );
 				int linesEnd = textArea.getLineEndOffset( selEndLine );
