@@ -192,8 +192,16 @@ class FlatFindReplaceBar
 		context.setSearchFor( findField.getText() );
 		context.setReplaceWith( replaceField.getText() );
 
+		// make sure that search wrap is disabled because otherwise it is easy
+		// to have endeless loop when replacing e.g. "a" with "aa"
+		boolean oldSearchWrap = context.getSearchWrap();
+		context.setSearchWrap( false );
+
 		// replace all
 		SearchResult result = SearchEngine.replaceAll( textArea, context );
+
+		// restore search wrap
+		context.setSearchWrap( oldSearchWrap );
 
 		// update matches info labels
 		updateMatchesLabel( result, true );
