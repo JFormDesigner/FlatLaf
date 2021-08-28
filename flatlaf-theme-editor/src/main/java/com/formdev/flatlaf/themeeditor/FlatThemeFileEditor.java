@@ -67,7 +67,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @author Karl Tauber
  */
-public class FlatThemeFileEditor
+class FlatThemeFileEditor
 	extends JFrame
 {
 	static final String PREFS_ROOT_PATH = "/flatlaf-theme-editor";
@@ -87,7 +87,7 @@ public class FlatThemeFileEditor
 
 	private final FlatThemePropertiesBaseManager propertiesBaseManager = new FlatThemePropertiesBaseManager();
 
-	public static void main( String[] args ) {
+	static void main( String[] args ) {
 		File dir = (args.length > 0)
 			? new File( args[0] )
 			: null;

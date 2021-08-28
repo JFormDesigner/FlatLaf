@@ -34,7 +34,7 @@ tasks {
 		dependsOn( ":flatlaf-extras:jar" )
 
 		manifest {
-			attributes( "Main-Class" to "com.formdev.flatlaf.themeeditor.FlatThemeFileEditor" )
+			attributes( "Main-Class" to "com.formdev.flatlaf.themeeditor.FlatThemeEditor" )
 
 			if( JavaVersion.current() >= JavaVersion.VERSION_1_9 )
 				attributes( "Multi-Release" to "true" )
