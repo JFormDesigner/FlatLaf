@@ -207,6 +207,10 @@ class FlatThemePropertiesSupport
 		return allKeysCache;
 	}
 
+	static boolean isDark( String baseTheme ) {
+		return "dark".equals( baseTheme ) || "darcula".equals( baseTheme );
+	}
+
 	private String getBaseTheme() {
 		if( baseTheme == null )
 			baseTheme = getProperties().getProperty( "@baseTheme", "light" );

@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.Set;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIconColors;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -111,10 +112,6 @@ class FlatThemePropertiesBaseManager
 
 		// core themes
 		switch( name ) {
-			case "FlatLaf":
-				result.add( "FlatLightLaf" );
-				break;
-
 			case "FlatLightLaf":
 			case "FlatDarkLaf":
 				result.add( "FlatLaf" );
@@ -160,6 +157,10 @@ class FlatThemePropertiesBaseManager
 					result.add( "FlatLaf" );
 					break;
 			}
+
+			// exclude base properties if editing base properties
+			if( name.equals( "FlatLaf" ) )
+				result.remove( "FlatLaf" );
 		}
 
 		return result;
@@ -173,6 +174,7 @@ class FlatThemePropertiesBaseManager
 		private final String name;
 		private final FlatThemePropertiesSupport propertiesSupport;
 		private final boolean isCoreTheme;
+		private final String coreBaseTheme;
 
 		private List<String> baseFiles;
 		private String lastBaseTheme;
@@ -181,10 +183,22 @@ class FlatThemePropertiesBaseManager
 			this.name = name;
 			this.propertiesSupport = propertiesSupport;
 			this.isCoreTheme = isCoreTheme;
+
+			switch( name ) {
+				case "FlatLightLaf":	coreBaseTheme = "light"; break;
+				case "FlatDarkLaf":		coreBaseTheme = "dark"; break;
+				case "FlatIntelliJLaf":	coreBaseTheme = "intellij"; break;
+				case "FlatDarculaLaf":	coreBaseTheme = "darcula"; break;
+				default:				coreBaseTheme = null; break;
+			}
 		}
 
 		@Override
 		public String getProperty( String key, String baseTheme ) {
+			// override base theme for core themes
+			if( coreBaseTheme != null )
+				baseTheme = coreBaseTheme;
+
 			updateBaseFiles( baseTheme );
 
 			// search in opened editors
@@ -206,6 +220,15 @@ class FlatThemePropertiesBaseManager
 					value = getPropertyFromCore( baseFile, key );
 					if( value != null )
 						return value;
+				}
+			}
+
+			// search in icon colors
+			if( key.startsWith( "Actions." ) || key.startsWith( "Objects." ) ) {
+				boolean dark = FlatThemePropertiesSupport.isDark( baseTheme );
+				for( FlatIconColors c : FlatIconColors.values() ) {
+					if( c.key.equals( key ) && (c.light == !dark || c.dark == dark) )
+						return String.format( "#%06x", c.rgb );
 				}
 			}
 
@@ -236,6 +259,10 @@ class FlatThemePropertiesBaseManager
 
 		@Override
 		public void addAllKeys( Set<String> allKeys, String baseTheme ) {
+			// override base theme for core themes
+			if( coreBaseTheme != null )
+				baseTheme = coreBaseTheme;
+
 			updateBaseFiles( baseTheme );
 
 			// search in opened editors
@@ -257,6 +284,10 @@ class FlatThemePropertiesBaseManager
 				for( String baseFile : baseFiles )
 					copyKeys( coreThemes.get( baseFile ), allKeys );
 			}
+
+			// icon colors
+			for( FlatIconColors c : FlatIconColors.values() )
+				allKeys.add( c.key );
 		}
 
 		private void copyKeys( Properties properties, Set<String> allKeys ) {

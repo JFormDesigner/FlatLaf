@@ -24,9 +24,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.JLayer;
+import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.LayerUI;
 import javax.swing.text.BadLocationException;
 import org.fife.ui.rsyntaxtextarea.Token;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.HSLColor;
@@ -157,6 +159,20 @@ class FlatThemeEditorOverlay
 
 	private Color getColorInLine( FlatSyntaxTextArea textArea, int line ) {
 		Object value = textArea.propertiesSupport.getParsedValueAtLine( line );
+
+		// resolve lazy value
+		if( value instanceof LazyValue ) {
+			Object[] pValue = new Object[] { value };
+			FlatLaf.runWithUIDefaultsGetter( key -> {
+				return (key instanceof String)
+					? textArea.propertiesSupport.getParsedProperty( (String) key )
+					: null;
+			}, () -> {
+				pValue[0] = ((LazyValue)pValue[0]).createValue( null );
+			} );
+			value = pValue[0];
+		}
+
 		if( value instanceof Color )
 			return (Color) value;
 
