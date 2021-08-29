@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.themeeditor;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -23,7 +24,9 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.Rectangle;
@@ -59,6 +62,7 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.*;
+import com.formdev.flatlaf.icons.FlatClearIcon;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
@@ -120,7 +124,7 @@ class FlatThemeFileEditor
 
 		initComponents();
 
-		directoryField.setRenderer( new DirectoryRenderer() );
+		directoryField.setRenderer( new DirectoryRenderer( directoryField ) );
 
 		openDirectoryButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/menu-open.svg" ) );
 		if( UIManager.getLookAndFeel() instanceof FlatDarkLaf )
@@ -881,7 +885,7 @@ class FlatThemeFileEditor
 		aboutMenuItem = new JMenuItem();
 		controlPanel = new JPanel();
 		directoryLabel = new JLabel();
-		directoryField = new JComboBox<>();
+		directoryField = new FlatThemeFileEditor.DirectoryComboBox();
 		openDirectoryButton = new JButton();
 		tabbedPane = new FlatTabbedPane();
 
@@ -1203,11 +1207,66 @@ class FlatThemeFileEditor
 	    }
 	}
 
+	//---- class DirectoryComboBox --------------------------------------------
+
+	private class DirectoryComboBox
+		extends JComboBox<File>
+	{
+		static final int CLEAR_WIDTH = 24;
+
+		@Override
+		public void setSelectedIndex( int index ) {
+			if( isClearHit() ) {
+				removeItemAt( index );
+				saveState();
+				return;
+			}
+
+			super.setSelectedIndex( index );
+		}
+
+		@Override
+		public void setPopupVisible( boolean v ) {
+			if( isClearHit() )
+				return;
+
+			super.setPopupVisible( v );
+		}
+
+		private boolean isClearHit() {
+			AWTEvent currentEvent = EventQueue.getCurrentEvent();
+			if( currentEvent instanceof MouseEvent && currentEvent.getSource() instanceof JList ) {
+				MouseEvent e = (MouseEvent) currentEvent;
+				JList<?> list = (JList<?>) currentEvent.getSource();
+				if( e.getX() >= list.getWidth() - UIScale.scale( CLEAR_WIDTH ) )
+					return true;
+			}
+			return false;
+		}
+	}
+
 	//---- class DirectoryRenderer --------------------------------------------
 
 	private static class DirectoryRenderer
 		extends DefaultListCellRenderer
 	{
+		private static class MyClearIcon
+			extends FlatClearIcon
+		{
+			void setClearIconColor( Color color ) {
+				clearIconColor = color;
+			}
+		}
+
+		private final JComboBox<File> comboBox;
+		private final MyClearIcon clearIcon = new MyClearIcon();
+		private boolean paintClearIcon;
+		private Color highlightColor;
+
+		DirectoryRenderer( JComboBox<File> comboBox ) {
+			this.comboBox = comboBox;
+		}
+
 		@Override
 		public Component getListCellRendererComponent( JList<?> list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus )
@@ -1226,7 +1285,17 @@ class FlatThemeFileEditor
 				}
 			}
 
-			return super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+			super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+
+			highlightColor =(index >= 0 && index == comboBox.getSelectedIndex())
+				? list.getSelectionBackground()
+				: null;
+
+			paintClearIcon = isSelected;
+			if( paintClearIcon )
+				clearIcon.setClearIconColor( getForeground() );
+
+			return this;
 		}
 
 		private static String toDimmedText( String text ) {
@@ -1237,6 +1306,32 @@ class FlatThemeFileEditor
 				color = Color.GRAY;
 			return String.format( "<span color=\"#%06x\">%s</span>",
 				color.getRGB() & 0xffffff, text );
+		}
+
+		@Override
+		protected void paintComponent( Graphics g ) {
+			super.paintComponent( g );
+
+			if( highlightColor != null ) {
+				g.setColor( new Color( 0x33000000 | (highlightColor.getRGB() & 0xffffff), true ) );
+				g.fillRect( 0, 0, getWidth(), getHeight() );
+			}
+
+			if( paintClearIcon ) {
+				int width = UIScale.scale( DirectoryComboBox.CLEAR_WIDTH );
+				int height = getHeight();
+				int x = getWidth() - width;
+				int y = 0;
+
+				// make clear button area brighter
+				g.setColor( new Color( 0x33ffffff, true ) );
+				g.fillRect( x, y, width, height );
+
+				// paint clear icon
+				int ix = x + ((width - clearIcon.getIconWidth()) / 2);
+				int iy = y + ((height - clearIcon.getIconHeight()) / 2);
+				clearIcon.paintIcon( this, g, ix, iy );
+			}
 		}
 	}
 }

@@ -31,6 +31,7 @@ new FormModel {
 					"maximumRowCount": 30
 					auxiliary() {
 						"JavaCodeGenerator.typeParameters": "File"
+						"JavaCodeGenerator.customCreateCode": "new FlatThemeFileEditor.DirectoryComboBox();"
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "directoryChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
