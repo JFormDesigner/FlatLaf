@@ -28,8 +28,9 @@ new FormModel {
 					name: "directoryField"
 					"editable": false
 					"focusable": false
+					"maximumRowCount": 30
 					auxiliary() {
-						"JavaCodeGenerator.typeParameters": "String"
+						"JavaCodeGenerator.typeParameters": "File"
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "directoryChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

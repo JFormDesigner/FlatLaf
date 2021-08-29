@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -86,6 +87,7 @@ class FlatThemeFileEditor
 	private boolean inLoadDirectory;
 
 	private final FlatThemePropertiesBaseManager propertiesBaseManager = new FlatThemePropertiesBaseManager();
+	private final JButton newButton;
 
 	static void main( String[] args ) {
 		File dir = (args.length > 0)
@@ -118,12 +120,14 @@ class FlatThemeFileEditor
 
 		initComponents();
 
+		directoryField.setRenderer( new DirectoryRenderer() );
+
 		openDirectoryButton.setIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/menu-open.svg" ) );
 		if( UIManager.getLookAndFeel() instanceof FlatDarkLaf )
 			darkLafMenuItem.setSelected( true );
 
 		// add "+" button to tabbed pane
-		JButton newButton = new JButton( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/add.svg" ) );
+		newButton = new JButton( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/add.svg" ) );
 		newButton.setToolTipText( "New Properties File" );
 		newButton.addActionListener( e -> newPropertiesFile() );
 		JToolBar trailingToolBar = new JToolBar();
@@ -144,6 +148,10 @@ class FlatThemeFileEditor
 			dir = null;
 		if( dir != null )
 			loadDirectory( dir );
+		else if( directoryField.getSelectedItem() != null )
+			loadDirectory( (File) directoryField.getSelectedItem() );
+
+		enableDisableActions();
 	}
 
 	private void openDirectory() {
@@ -223,16 +231,15 @@ class FlatThemeFileEditor
 		if( inLoadDirectory )
 			return;
 
-		Object selectedItem = directoryField.getSelectedItem();
-		if( selectedItem == null )
+		File dir = (File) directoryField.getSelectedItem();
+		if( dir == null )
 			return;
 
-		File dir = new File( (String) selectedItem );
 		if( checkDirectory( this, dir ) )
 			loadDirectory( dir );
 		else {
 			// remove from directories history
-			directoryField.removeItem( selectedItem );
+			directoryField.removeItem( dir );
 			directoryField.setSelectedItem( this.dir.getAbsolutePath() );
 			saveState();
 		}
@@ -258,12 +265,11 @@ class FlatThemeFileEditor
 			tabbedPane.removeTabAt( i );
 
 		// update directory field
-		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) directoryField.getModel();
-		String dirStr = dir.getAbsolutePath();
-		int indexOf = model.getIndexOf( dirStr );
+		DefaultComboBoxModel<File> model = (DefaultComboBoxModel<File>) directoryField.getModel();
+		int indexOf = model.getIndexOf( dir );
 		if( indexOf < 0 )
-			model.addElement( dirStr );
-		directoryField.setSelectedItem( dirStr );
+			model.addElement( dir );
+		directoryField.setSelectedItem( dir );
 
 		// open all properties files in directory
 		String recentFile = state.get( KEY_RECENT_FILE, null );
@@ -271,8 +277,8 @@ class FlatThemeFileEditor
 			openFile( file, file.getName().equals( recentFile ) );
 
 		activateEditor();
-
 		saveState();
+		enableDisableActions();
 
 		inLoadDirectory = false;
 	}
@@ -335,6 +341,7 @@ class FlatThemeFileEditor
 
 	private void openFile( File file, boolean select ) {
 		FlatThemeEditorPane themeEditorPane = new FlatThemeEditorPane();
+		themeEditorPane.updateFontSize( getFontSizeIncr() );
 		try {
 			themeEditorPane.load( file );
 		} catch( IOException ex ) {
@@ -366,9 +373,28 @@ class FlatThemeFileEditor
 		if( inLoadDirectory )
 			return;
 
+		enableDisableActions();
+
 		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
 		String filename = (themeEditorPane != null) ? themeEditorPane.getFile().getName() : null;
 		putPrefsString( state, KEY_RECENT_FILE, filename );
+	}
+
+	private void enableDisableActions() {
+		boolean dirOpen = (directoryField.getSelectedItem() != null);
+		boolean editorOpen = (dirOpen &&tabbedPane.getSelectedIndex() >= 0);
+
+		// enable/disable buttons
+		newButton.setEnabled( dirOpen );
+
+		// enable/disable menu items
+		newPropertiesFileMenuItem.setEnabled( dirOpen );
+		saveAllMenuItem.setEnabled( editorOpen );
+		findMenuItem.setEnabled( editorOpen );
+		insertColorMenuItem.setEnabled( editorOpen );
+		activateEditorMenuItem.setEnabled( editorOpen );
+		nextEditorMenuItem.setEnabled( editorOpen );
+		previousEditorMenuItem.setEnabled( editorOpen );
 	}
 
 	private boolean newPropertiesFile() {
@@ -716,7 +742,12 @@ class FlatThemeFileEditor
 
 		// restore directories history
 		String[] directories = getPrefsStrings( state, KEY_DIRECTORIES );
-		SortedComboBoxModel<String> model = new SortedComboBoxModel<>( directories );
+		SortedComboBoxModel<File> model = new SortedComboBoxModel<>( new File[0] );
+		for( String dirStr : directories ) {
+			File dir = new File( dirStr );
+			if( dir.isDirectory() )
+				model.addElement( dir );
+		}
 		directoryField.setModel( model );
 
 		// restore overlay color models
@@ -731,10 +762,10 @@ class FlatThemeFileEditor
 
 	private void saveState() {
 		// save directories history
-		ComboBoxModel<String> model = directoryField.getModel();
+		ComboBoxModel<File> model = directoryField.getModel();
 		String[] directories = new String[model.getSize()];
 		for( int i = 0; i < directories.length; i++ )
-			directories[i] = model.getElementAt( i );
+			directories[i] = model.getElementAt( i ).getAbsolutePath();
 		putPrefsStrings( state, KEY_DIRECTORIES, directories );
 
 		// save recent directory
@@ -1053,6 +1084,7 @@ class FlatThemeFileEditor
 			//---- directoryField ----
 			directoryField.setEditable(false);
 			directoryField.setFocusable(false);
+			directoryField.setMaximumRowCount(30);
 			directoryField.addActionListener(e -> directoryChanged());
 			controlPanel.add(directoryField, "cell 1 0");
 
@@ -1105,7 +1137,7 @@ class FlatThemeFileEditor
 	private JMenuItem aboutMenuItem;
 	private JPanel controlPanel;
 	private JLabel directoryLabel;
-	private JComboBox<String> directoryField;
+	private JComboBox<File> directoryField;
 	private JButton openDirectoryButton;
 	private FlatTabbedPane tabbedPane;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
@@ -1169,5 +1201,42 @@ class FlatThemeFileEditor
 			// not found
 			return -(low + 1);
 	    }
+	}
+
+	//---- class DirectoryRenderer --------------------------------------------
+
+	private static class DirectoryRenderer
+		extends DefaultListCellRenderer
+	{
+		@Override
+		public Component getListCellRendererComponent( JList<?> list, Object value,
+			int index, boolean isSelected, boolean cellHasFocus )
+		{
+			if( index > 0 && !isSelected ) {
+				File dir = (File) value;
+				File previousDir = (File) list.getModel().getElementAt( index - 1 );
+				String path = dir.getAbsolutePath();
+				String previousPath = previousDir.getAbsolutePath();
+				for( File d = dir.getParentFile(); d != null; d = d.getParentFile() ) {
+					String p = d.getAbsolutePath();
+					if( previousPath.startsWith( p ) && d.getParent() != null ) {
+						value = "<html>" + toDimmedText( p ) + path.substring( p.length() ) + "</html>";
+						break;
+					}
+				}
+			}
+
+			return super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
+		}
+
+		private static String toDimmedText( String text ) {
+			Color color = UIManager.getColor( "Label.disabledForeground" );
+			if( color == null )
+				color = UIManager.getColor( "Label.disabledText" );
+			if( color == null )
+				color = Color.GRAY;
+			return String.format( "<span color=\"#%06x\">%s</span>",
+				color.getRGB() & 0xffffff, text );
+		}
 	}
 }
