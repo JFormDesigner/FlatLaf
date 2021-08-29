@@ -22,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import com.formdev.flatlaf.extras.components.*;
@@ -76,6 +77,13 @@ class FlatFindReplaceBar
 		SearchContext context = new SearchContext();
 		context.setSearchWrap( true );
 		setSearchContext( context );
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+
+		setBorder( new MatteBorder( 1, 0, 0, 0, UIManager.getColor( "Component.borderColor" ) ) );
 	}
 
 	SearchContext getSearchContext() {
@@ -302,7 +310,7 @@ class FlatFindReplaceBar
 		//======== findToolBar ========
 		{
 			findToolBar.setFloatable(false);
-			findToolBar.setBorder(null);
+			findToolBar.setBorder(BorderFactory.createEmptyBorder());
 
 			//---- findPreviousButton ----
 			findPreviousButton.setToolTipText("Previous Occurrence");
@@ -339,7 +347,7 @@ class FlatFindReplaceBar
 		//======== closeToolBar ========
 		{
 			closeToolBar.setFloatable(false);
-			closeToolBar.setBorder(null);
+			closeToolBar.setBorder(BorderFactory.createEmptyBorder());
 
 			//---- closeButton ----
 			closeButton.setToolTipText("Close");
@@ -362,7 +370,7 @@ class FlatFindReplaceBar
 		//======== toolBar1 ========
 		{
 			toolBar1.setFloatable(false);
-			toolBar1.setBorder(null);
+			toolBar1.setBorder(BorderFactory.createEmptyBorder());
 
 			//---- replaceButton ----
 			replaceButton.setText("Replace");

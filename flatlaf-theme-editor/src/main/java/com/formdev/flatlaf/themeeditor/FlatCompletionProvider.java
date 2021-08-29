@@ -371,8 +371,10 @@ class FlatCompletionProvider
 
 				if( key.startsWith( "*." ) ) {
 					// resolve wildcard
-					for( String k : FlatThemePropertiesSupport.getKeysForWildcard( key ) )
-						completions.add( new BasicCompletion( this, "$".concat( k ) ) );
+					for( String k : FlatThemePropertiesSupport.getKeysForWildcard( key ) ) {
+						if( !keys.contains( k ) )
+							completions.add( new BasicCompletion( this, "$".concat( k ) ) );
+					}
 					continue;
 				}
 

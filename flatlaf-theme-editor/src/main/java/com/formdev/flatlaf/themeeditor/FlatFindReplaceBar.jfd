@@ -29,7 +29,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "findToolBar"
 				"floatable": false
-				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "findPreviousButton"
 					"toolTipText": "Previous Occurrence"
@@ -70,7 +70,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "closeToolBar"
 				"floatable": false
-				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "closeButton"
 					"toolTipText": "Close"
@@ -97,7 +97,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar1"
 				"floatable": false
-				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "replaceButton"
 					"text": "Replace"

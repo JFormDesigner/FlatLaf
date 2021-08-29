@@ -35,7 +35,6 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.MatteBorder;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
@@ -262,8 +261,6 @@ class FlatThemeEditorPane
 	void showFindReplaceBar() {
 		if( findReplaceBar == null ) {
 			findReplaceBar = new FlatFindReplaceBar( textArea );
-			findReplaceBar.setBorder( new MatteBorder( 1, 0, 0, 0,
-				UIManager.getColor( "Component.borderColor" ) ) );
 			collapsiblePanel.addBottomComponent( findReplaceBar );
 		}
 
