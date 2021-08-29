@@ -30,6 +30,7 @@ import javax.swing.UIDefaults.LazyValue;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import com.formdev.flatlaf.FlatLaf;
@@ -69,6 +70,8 @@ class FlatThemePreview
 		list1.setSelectedIndex( 1 );
 		tree1.setSelectionRow( 1 );
 		table1.setRowSelectionInterval( 1, 1 );
+		table1.setRowSorter( new TableRowSorter<>( table1.getModel() ) );
+		table1.getRowSorter().toggleSortOrder( 0 );
 		table1.uiDefaultsGetter = this::getUIDefaultProperty;
 
 		EventQueue.invokeLater( () -> {
@@ -268,7 +271,7 @@ class FlatThemePreview
 	}
 
 	private void enableDisable( Component comp, boolean enabled ) {
-		if( comp != previewLabel && comp != enabledCheckBox )
+		if( comp != previewLabel && comp != enabledCheckBox && comp != menu2 )
 			comp.setEnabled( enabled );
 
 		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
@@ -278,7 +281,20 @@ class FlatThemePreview
 			if( c instanceof JScrollPane )
 				c = ((JScrollPane)c).getViewport().getView();
 
+			// make sure that background is updated correctly in BasicTextUI.updateBackground()
+			if( c instanceof JTextPane )
+				c.setBackground( UIManager.getColor( "TextPane.background" ) );
+			else if( c instanceof JEditorPane )
+				c.setBackground( UIManager.getColor( "EditorPane.background" ) );
+
 			enableDisable( c, enabled );
+		}
+
+		if( comp instanceof JMenu ) {
+			JMenu menu = (JMenu) comp;
+			int count = menu.getMenuComponentCount();
+			for( int i = 0; i < count; i++ )
+				enableDisable( menu.getMenuComponent( i ), enabled );
 		}
 	}
 
@@ -384,6 +400,7 @@ class FlatThemePreview
 		tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new FlatThemePreview.PreviewTabbedPane();
 		listTreeLabel = new JLabel();
+		splitPane1 = new JSplitPane();
 		scrollPane2 = new JScrollPane();
 		list1 = new JList<>();
 		scrollPane3 = new JScrollPane();
@@ -796,43 +813,51 @@ class FlatThemePreview
 		add(tabbedPane1, "cell 1 23");
 
 		//---- listTreeLabel ----
-		listTreeLabel.setText("JList / JTree:");
-		add(listTreeLabel, "cell 0 24");
+		listTreeLabel.setText("<html>JList / JTree:<br>JSplitPane:</html>");
+		add(listTreeLabel, "cell 0 24,aligny top,growy 0");
 
-		//======== scrollPane2 ========
+		//======== splitPane1 ========
 		{
+			splitPane1.setResizeWeight(0.5);
 
-			//---- list1 ----
-			list1.setModel(new AbstractListModel<String>() {
-				String[] values = {
-					"Item 1",
-					"Item 2",
-					"Item 3"
-				};
-				@Override
-				public int getSize() { return values.length; }
-				@Override
-				public String getElementAt(int i) { return values[i]; }
-			});
-			scrollPane2.setViewportView(list1);
+			//======== scrollPane2 ========
+			{
+				scrollPane2.setPreferredSize(new Dimension(50, 50));
+
+				//---- list1 ----
+				list1.setModel(new AbstractListModel<String>() {
+					String[] values = {
+						"Item 1",
+						"Item 2",
+						"Item 3"
+					};
+					@Override
+					public int getSize() { return values.length; }
+					@Override
+					public String getElementAt(int i) { return values[i]; }
+				});
+				scrollPane2.setViewportView(list1);
+			}
+			splitPane1.setLeftComponent(scrollPane2);
+
+			//======== scrollPane3 ========
+			{
+				scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+				scrollPane3.setPreferredSize(new Dimension(50, 50));
+
+				//---- tree1 ----
+				tree1.setModel(new DefaultTreeModel(
+					new DefaultMutableTreeNode("Item 1") {
+						{
+							add(new DefaultMutableTreeNode("Item 2"));
+							add(new DefaultMutableTreeNode("Item 3"));
+						}
+					}));
+				scrollPane3.setViewportView(tree1);
+			}
+			splitPane1.setRightComponent(scrollPane3);
 		}
-		add(scrollPane2, "cell 1 24,width 50,height 50");
-
-		//======== scrollPane3 ========
-		{
-			scrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-			//---- tree1 ----
-			tree1.setModel(new DefaultTreeModel(
-				new DefaultMutableTreeNode("Item 1") {
-					{
-						add(new DefaultMutableTreeNode("Item 2"));
-						add(new DefaultMutableTreeNode("Item 3"));
-					}
-				}));
-			scrollPane3.setViewportView(tree1);
-		}
-		add(scrollPane3, "cell 1 24,width 50,height 50");
+		add(splitPane1, "cell 1 24,height 50");
 
 		//---- tableLabel ----
 		tableLabel.setText("JTable:");
@@ -984,6 +1009,7 @@ class FlatThemePreview
 	private JLabel tabbedPaneLabel;
 	private FlatThemePreview.PreviewTabbedPane tabbedPane1;
 	private JLabel listTreeLabel;
+	private JSplitPane splitPane1;
 	private JScrollPane scrollPane2;
 	private JList<String> list1;
 	private JScrollPane scrollPane3;

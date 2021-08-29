@@ -510,40 +510,48 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "listTreeLabel"
-				"text": "JList / JTree:"
+				"text": "<html>JList / JTree:<br>JSplitPane:</html>"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 24"
+				"value": "cell 0 24,aligny top,growy 0"
 			} )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "scrollPane2"
-				add( new FormComponent( "javax.swing.JList" ) {
-					name: "list1"
-					"model": new javax.swing.DefaultListModel {
-						addElement( "Item 1" )
-						addElement( "Item 2" )
-						addElement( "Item 3" )
-					}
+			add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
+				name: "splitPane1"
+				"resizeWeight": 0.5
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane2"
+					"preferredSize": new java.awt.Dimension( 50, 50 )
+					add( new FormComponent( "javax.swing.JList" ) {
+						name: "list1"
+						"model": new javax.swing.DefaultListModel {
+							addElement( "Item 1" )
+							addElement( "Item 2" )
+							addElement( "Item 3" )
+						}
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "left"
 				} )
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 24,width 50,height 50"
-			} )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "scrollPane3"
-				"horizontalScrollBarPolicy": 31
-				add( new FormComponent( "javax.swing.JTree" ) {
-					name: "tree1"
-					"model": new javax.swing.tree.DefaultTreeModel( new javax.swing.tree.DefaultMutableTreeNode {
-						userObject: "Item 1"
-						add( new javax.swing.tree.DefaultMutableTreeNode {
-							userObject: "Item 2"
-						} )
-						add( new javax.swing.tree.DefaultMutableTreeNode {
-							userObject: "Item 3"
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane3"
+					"horizontalScrollBarPolicy": 31
+					"preferredSize": new java.awt.Dimension( 50, 50 )
+					add( new FormComponent( "javax.swing.JTree" ) {
+						name: "tree1"
+						"model": new javax.swing.tree.DefaultTreeModel( new javax.swing.tree.DefaultMutableTreeNode {
+							userObject: "Item 1"
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "Item 2"
+							} )
+							add( new javax.swing.tree.DefaultMutableTreeNode {
+								userObject: "Item 3"
+							} )
 						} )
 					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "right"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 24,width 50,height 50"
+				"value": "cell 1 24,height 50"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "tableLabel"
