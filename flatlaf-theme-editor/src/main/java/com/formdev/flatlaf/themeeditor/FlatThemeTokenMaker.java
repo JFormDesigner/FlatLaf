@@ -71,6 +71,7 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "mix", TOKEN_FUNCTION );
 		tokenMap.put( "tint", TOKEN_FUNCTION );
 		tokenMap.put( "shade", TOKEN_FUNCTION );
+		tokenMap.put( "contrast", TOKEN_FUNCTION );
 		tokenMap.put( "lazy", TOKEN_FUNCTION );
 
 		// function options

@@ -611,6 +611,7 @@ class UIDefaultsLoader
 				case "mix":				return parseColorMix( null, params, resolver, reportError );
 				case "tint":			return parseColorMix( "#fff", params, resolver, reportError );
 				case "shade":			return parseColorMix( "#000", params, resolver, reportError );
+				case "contrast":		return parseColorContrast( params, resolver, reportError );
 			}
 		} finally {
 			parseColorDepth--;
@@ -804,14 +805,10 @@ class UIDefaultsLoader
 		if( color1Str == null )
 			color1Str = params.get( i++ );
 		String color2Str = params.get( i++ );
-		int weight = 50;
-
-		if( params.size() > i )
-			weight = parsePercentage( params.get( i++ ) );
+		int weight = (params.size() > i) ? parsePercentage( params.get( i ) ) : 50;
 
 		// parse second color
-		String resolvedColor2Str = resolver.apply( color2Str );
-		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolvedColor2Str, resolver, reportError );
+		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolver.apply( color2Str ), resolver, reportError );
 		if( color2 == null )
 			return null;
 
@@ -820,6 +817,34 @@ class UIDefaultsLoader
 
 		// parse first color, apply function and create mixed color
 		return parseFunctionBaseColor( color1Str, function, false, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: contrast(color,dark,light[,threshold])
+	 *   - color: a color to compare against
+	 *   - dark: a designated dark color (e.g. #000) or a color function
+	 *   - light: a designated light color (e.g. #fff) or a color function
+	 *   - threshold: the threshold (in range 0-100%) to specify where the transition
+	 *                from "dark" to "light" is (default is 43%)
+	 */
+	private static Object parseColorContrast( List<String> params, Function<String, String> resolver, boolean reportError ) {
+		String colorStr = params.get( 0 );
+		String darkStr = params.get( 1 );
+		String lightStr = params.get( 2 );
+		int threshold = (params.size() > 3) ? parsePercentage( params.get( 3 ) ) : 43;
+
+		// parse color to compare against
+		ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+		if( color == null )
+			return null;
+
+		// check luma and determine whether to use dark or light color
+		String darkOrLightColor = (ColorFunctions.luma( color ) * 100 < threshold)
+			? lightStr
+			: darkStr;
+
+		// parse dark or light color
+		return parseColorOrFunction( resolver.apply( darkOrLightColor ), resolver, reportError );
 	}
 
 	private static Object parseFunctionBaseColor( String colorStr, ColorFunction function,

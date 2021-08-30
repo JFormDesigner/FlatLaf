@@ -79,6 +79,34 @@ public class ColorFunctions
 			Math.round( a2 + ((a1 - a2) * weight) ) );
 	}
 
+	/**
+	 * Calculates the luma (perceptual brightness) of the given color.
+	 * <p>
+	 * Uses SMPTE C / Rec. 709 coefficients, as recommended in
+	 * <a href="https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef">WCAG 2.0</a>.
+	 *
+	 * @param color a color
+	 * @return the luma (in range 0-1)
+	 *
+	 * @see <a href="https://en.wikipedia.org/wiki/Luma_(video)">https://en.wikipedia.org/wiki/Luma_(video)</a>
+	 * @since 1.6
+	 */
+	public static float luma( Color color ) {
+		// see https://en.wikipedia.org/wiki/Luma_(video)
+		// see https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+		// see https://github.com/less/less.js/blob/master/packages/less/src/less/tree/color.js
+		float r = gammaCorrection( color.getRed() / 255f );
+		float g = gammaCorrection( color.getGreen() / 255f );
+		float b = gammaCorrection( color.getBlue() / 255f );
+		return (0.2126f * r) + (0.7152f * g) + (0.0722f * b);
+	}
+
+	private static float gammaCorrection( float value ) {
+		return (value <= 0.03928f)
+			? value / 12.92f
+			: (float) Math.pow( (value + 0.055) / 1.055, 2.4 );
+	}
+
 	//---- interface ColorFunction --------------------------------------------
 
 	public interface ColorFunction {

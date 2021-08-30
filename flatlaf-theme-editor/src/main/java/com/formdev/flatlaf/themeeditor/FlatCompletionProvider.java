@@ -471,6 +471,12 @@ class FlatCompletionProvider
 			addFunction( "shade",
 				"color", colorParamDesc,
 				"weight", weightParamDesc );
+
+			addFunction( "contrast",
+				"color", colorParamDesc,
+				"dark", colorParamDesc,
+				"light", colorParamDesc,
+				"threshold", "(optional) 0-100%, default is 43%" );
 		}
 
 		private void addFunction( String name, String... paramNamesAndDescs ) {

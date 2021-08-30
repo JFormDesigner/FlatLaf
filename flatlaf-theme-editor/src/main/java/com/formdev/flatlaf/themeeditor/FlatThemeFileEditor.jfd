@@ -177,6 +177,11 @@ new FormModel {
 						"text": "Show RGB colors (hex)"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorModelChanged", false ) )
 					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showColorLumaMenuItem"
+						"text": "Show color luma"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorModelChanged", false ) )
+					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "windowMenu"
