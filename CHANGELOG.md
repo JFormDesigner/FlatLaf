@@ -1,7 +1,55 @@
 FlatLaf Change Log
 ==================
 
-## 1.4-SNAPSHOT
+## 1.6-SNAPSHOT
+
+#### New features and improvements
+
+- InternalFrame: Double-click on icon in internal frame title bar now closes the
+  internal frame. (issue #374)
+- IntelliJ Themes: Removed deprecated `install()` methods.
+
+#### Fixed bugs
+
+- Menus: Fixed missing modifiers flags in `ActionEvent` (e.g. `Ctrl` key
+  pressed) when running in Java 9+ on Linux, macOS. Occurs also on Windows in
+  large popup menus that do not fit into the window. (issue #371; regression
+  since FlatLaf 1.3)
+- OptionPane: Fixed `OptionPane.sameSizeButtons`, which did not work as expected
+  when setting to `false`.
+
+
+## 1.5
+
+#### New features and improvements
+
+- SwingX: Added search and clear icons to `JXSearchField`. (issue #359)
+
+#### Fixed bugs
+
+- Button and TextComponent: Do not apply minimum width/height if margins are
+  set. (issue #364)
+- ComboBox and Spinner: Limit arrow button width if component has large
+  preferred height. (issue #361)
+- FileChooser: Fixed missing (localized) texts when FlatLaf is loaded in special
+  classloader (e.g. plugin system in Apache NetBeans).
+- InternalFrame: Limit internal frame bounds to parent bounds on resize. Also
+  honor maximum size of internal frame. (issue #362)
+- Popup: Fixed incorrectly placed drop shadow for medium-weight popups in
+  maximized windows. (issue #358)
+- Native window decorations (Windows 10 only):
+  - Fixed occasional application crash in `flatlaf-windows.dll`. (issue #357)
+  - When window is initially shown, fill background with window background color
+    (instead of white), which avoids flickering in dark themes. (issue 339)
+  - When resizing a window at the right/bottom edge, then first fill the new
+    space with the window background color (instead of black) before the layout
+    is updated.
+  - When resizing a window at the left/top edge, then first fill the new space
+    with the window background color (instead of garbage) before the layout is
+    updated.
+
+
+## 1.4
 
 #### New features and improvements
 
@@ -13,7 +61,7 @@ FlatLaf Change Log
 - Table and PopupFactory: Use `StackWalker` in Java 9+ for better performance.
   (issue #334)
 - ToolBar: Paint focus indicator for focused button in toolbar. (issue #346)
-- ToolBar: Support focusable buttons in toolbar (set UI values
+- ToolBar: Support focusable buttons in toolbar (set UI value
   `ToolBar.focusableButtons` to `true`). (issue #346)
 
 #### Fixed bugs

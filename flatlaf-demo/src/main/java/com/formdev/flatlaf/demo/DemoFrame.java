@@ -18,6 +18,10 @@ package com.formdev.flatlaf.demo;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.prefs.Preferences;
@@ -34,8 +38,10 @@ import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
 import net.miginfocom.layout.UnitValue;
@@ -127,7 +133,36 @@ class DemoFrame
 	}
 
 	private void aboutActionPerformed() {
-		JOptionPane.showMessageDialog( this, "FlatLaf Demo", "About", JOptionPane.PLAIN_MESSAGE );
+		JLabel titleLabel = new JLabel( "FlatLaf Demo" );
+		Font titleFont = titleLabel.getFont();
+		titleLabel.setFont( titleFont.deriveFont( (float) titleFont.getSize() + UIScale.scale( 6 ) ) );
+
+		String link = "https://www.formdev.com/flatlaf/";
+		JLabel linkLabel = new JLabel( "<html><a href=\"#\">" + link + "</a></html>" );
+		linkLabel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
+		linkLabel.addMouseListener( new MouseAdapter() {
+			@Override
+			public void mouseClicked( MouseEvent e ) {
+				try {
+					Desktop.getDesktop().browse( new URI( link ) );
+				} catch( IOException | URISyntaxException ex ) {
+					JOptionPane.showMessageDialog( linkLabel,
+						"Failed to open '" + link + "' in browser.",
+						"About", JOptionPane.PLAIN_MESSAGE );
+				}
+			}
+		} );
+
+
+		JOptionPane.showMessageDialog( this,
+			new Object[] {
+				titleLabel,
+				"Demonstrates FlatLaf Swing look and feel",
+				" ",
+				"Copyright 2019-" + Year.now() + " FormDev Software GmbH",
+				linkLabel,
+			},
+			"About", JOptionPane.PLAIN_MESSAGE );
 	}
 
 	private void selectedTabChanged() {
@@ -185,6 +220,8 @@ class DemoFrame
 
 		Font font = UIManager.getFont( "defaultFont" );
 		Font newFont = StyleContext.getDefaultStyleContext().getFont( fontFamily, font.getStyle(), font.getSize() );
+		// StyleContext.getFont() may return a UIResource, which would cause loosing user scale factor on Windows
+		newFont = FlatUIUtils.nonUIResource( newFont );
 		UIManager.put( "defaultFont", newFont );
 
 		FlatLaf.updateUI();

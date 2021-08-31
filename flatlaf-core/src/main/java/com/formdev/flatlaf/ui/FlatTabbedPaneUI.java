@@ -929,6 +929,17 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected void paintTabArea( Graphics g, int tabPlacement, int selectedIndex ) {
+		// need to set rendering hints here too because this method is also invoked
+		// from BasicTabbedPaneUI.ScrollableTabPanel.paintComponent()
+		Object[] oldHints = FlatUIUtils.setRenderingHints( g );
+
+		super.paintTabArea( g, tabPlacement, selectedIndex );
+
+		FlatUIUtils.resetRenderingHints( g, oldHints );
+	}
+
+	@Override
 	protected void paintTab( Graphics g, int tabPlacement, Rectangle[] rects,
 		int tabIndex, Rectangle iconRect, Rectangle textRect )
 	{

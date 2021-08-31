@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -464,8 +465,12 @@ public class FlatSpinnerUI
 			Rectangle editorRect = new Rectangle( r );
 			Rectangle buttonsRect = new Rectangle( r );
 
+			// limit buttons width to height of a raw spinner (without insets)
+			FontMetrics fm = spinner.getFontMetrics( spinner.getFont() );
+			int maxButtonWidth = fm.getHeight() + scale( padding.top ) + scale( padding.bottom );
+
 			// make button area square (if spinner has preferred height)
-			int buttonsWidth = parent.getPreferredSize().height - insets.top - insets.bottom;
+			int buttonsWidth = Math.min( parent.getPreferredSize().height - insets.top - insets.bottom, maxButtonWidth );
 			buttonsRect.width = buttonsWidth;
 
 			if( parent.getComponentOrientation().isLeftToRight() ) {

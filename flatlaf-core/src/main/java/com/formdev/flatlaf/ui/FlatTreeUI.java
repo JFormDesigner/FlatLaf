@@ -289,6 +289,26 @@ public class FlatTreeUI
 			tree.repaint( 0, r.y, tree.getWidth(), r.height );
 	}
 
+	@Override
+	public Rectangle getPathBounds( JTree tree, TreePath path ) {
+		Rectangle bounds = super.getPathBounds( tree, path );
+
+		// If this method was invoked from JTree.getPathForLocation(int x, int y) to check whether
+		// the location is within tree node bounds, then return the bounds of a wide node.
+		// This changes the behavior of JTree.getPathForLocation(int x, int y) and
+		// JTree.getRowForLocation(int x, int y), which now return the path/row even
+		// if [x,y] is in the wide row area outside of the actual tree node.
+		if( bounds != null &&
+			isWideSelection() &&
+			UIManager.getBoolean( "FlatLaf.experimental.tree.widePathForLocation" ) &&
+			StackUtils.wasInvokedFrom( JTree.class.getName(), "getPathForLocation", 5 ) )
+		{
+			bounds.x = 0;
+			bounds.width = tree.getWidth();
+		}
+		return bounds;
+	}
+
 	/**
 	 * @since TODO
 	 */

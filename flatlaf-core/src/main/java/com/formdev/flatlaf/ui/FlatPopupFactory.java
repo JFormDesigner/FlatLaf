@@ -489,6 +489,9 @@ public class FlatPopupFactory
 			JLayeredPane layeredPane = ((RootPaneContainer)window).getLayeredPane();
 			layeredPane.add( dropShadowPanel, JLayeredPane.POPUP_LAYER, 0 );
 
+			moveMediumWeightDropShadow();
+			resizeMediumWeightDropShadow();
+
 			mediumPanelListener = new ComponentListener() {
 				@Override
 				public void componentShown( ComponentEvent e ) {
@@ -504,17 +507,12 @@ public class FlatPopupFactory
 
 				@Override
 				public void componentMoved( ComponentEvent e ) {
-					if( dropShadowPanel != null && mediumWeightPanel != null ) {
-						Point location = mediumWeightPanel.getLocation();
-						Insets insets = dropShadowPanel.getInsets();
-						dropShadowPanel.setLocation( location.x - insets.left, location.y - insets.top );
-					}
+					moveMediumWeightDropShadow();
 				}
 
 				@Override
 				public void componentResized( ComponentEvent e ) {
-					if( dropShadowPanel != null )
-						dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
+					resizeMediumWeightDropShadow();
 				}
 			};
 			mediumWeightPanel.addComponentListener( mediumPanelListener );
@@ -529,6 +527,19 @@ public class FlatPopupFactory
 				parent.remove( dropShadowPanel );
 				parent.repaint( bounds.x, bounds.y, bounds.width, bounds.height );
 			}
+		}
+
+		private void moveMediumWeightDropShadow() {
+			if( dropShadowPanel != null && mediumWeightPanel != null ) {
+				Point location = mediumWeightPanel.getLocation();
+				Insets insets = dropShadowPanel.getInsets();
+				dropShadowPanel.setLocation( location.x - insets.left, location.y - insets.top );
+			}
+		}
+
+		private void resizeMediumWeightDropShadow() {
+			if( dropShadowPanel != null && mediumWeightPanel != null )
+				dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
 		}
 	}
 }

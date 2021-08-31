@@ -41,6 +41,14 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc
+ * Method:    setWindowBackground
+ * Signature: (JIII)V
+ */
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_setWindowBackground
+  (JNIEnv *, jobject, jlong, jint, jint, jint);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc
  * Method:    showWindow
  * Signature: (JI)V
  */

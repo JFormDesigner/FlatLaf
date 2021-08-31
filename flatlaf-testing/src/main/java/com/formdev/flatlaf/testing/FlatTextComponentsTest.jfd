@@ -10,7 +10,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[][][::100][100,fill][fill]"
-			"$rowConstraints": "[][][][50,fill][50,fill][50,fill][][]para[][][][]"
+			"$rowConstraints": "[][][][50,fill][50,fill][50,fill][][]para[40][40][][][::14][::14][][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -303,15 +303,11 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7,growx"
 			} )
-			add( new FormComponent( "javax.swing.JSpinner" ) {
-				name: "spinner2"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "<html>Large row height:<br>(default pref height)</html>"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 8,growx,height 40"
-			} )
-			add( new FormComponent( "javax.swing.JSpinner" ) {
-				name: "spinner3"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 9,growx,hmax 14"
+				"value": "cell 0 8,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox2"
@@ -320,7 +316,40 @@ new FormModel {
 					"JavaCodeGenerator.typeParameters": "String"
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 10,growx,height 40"
+				"value": "cell 1 8,grow"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner2"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 9,grow"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Large pref height:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 10,aligny top,growy 0"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox5"
+				"preferredSize": new java.awt.Dimension( 60, 40 )
+				"editable": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 10,growx"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner4"
+				"preferredSize": new java.awt.Dimension( 60, 40 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 11,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "<html>Small row height:<br>(default pref height)</html>"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 12 1 2,aligny top,growy 0"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox4"
@@ -329,11 +358,40 @@ new FormModel {
 					"JavaCodeGenerator.typeParameters": "String"
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 11,growx,hmax 14"
+				"value": "cell 1 12,growx"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner3"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 13,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "Small pref height:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 14 1 2,aligny top,growy 0"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox6"
+				"editable": true
+				"preferredSize": new java.awt.Dimension( 60, 14 )
+				"minimumSize": new java.awt.Dimension( 60, 14 )
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 14,growx"
+			} )
+			add( new FormComponent( "javax.swing.JSpinner" ) {
+				name: "spinner5"
+				"minimumSize": new java.awt.Dimension( 60, 14 )
+				"preferredSize": new java.awt.Dimension( 60, 14 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 15,growx,hmax 14"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 530, 580 )
+			"size": new java.awt.Dimension( 530, 660 )
 		} )
 		add( new FormContainer( "javax.swing.JPopupMenu", new FormLayoutManager( class javax.swing.JPopupMenu ) ) {
 			name: "popupMenu1"
@@ -350,7 +408,7 @@ new FormModel {
 				"text": "Paste"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 680 )
+			"location": new java.awt.Point( 0, 705 )
 			"size": new java.awt.Dimension( 91, 87 )
 		} )
 	}

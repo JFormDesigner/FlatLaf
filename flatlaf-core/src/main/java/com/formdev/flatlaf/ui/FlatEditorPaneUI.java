@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
@@ -76,6 +77,8 @@ public class FlatEditorPaneUI
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;
 
+	private Insets defaultMargin;
+
 	private Object oldHonorDisplayProperties;
 	private FocusListener focusListener;
 	private Map<String, Object> oldStyleValues;
@@ -102,6 +105,8 @@ public class FlatEditorPaneUI
 		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
 		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
 		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
+
+		defaultMargin = UIManager.getInsets( prefix + ".margin" );
 
 		// use component font and foreground for HTML text
 		oldHonorDisplayProperties = getComponent().getClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES );
@@ -202,15 +207,19 @@ public class FlatEditorPaneUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
+		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth, defaultMargin );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
+		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth, defaultMargin );
 	}
 
-	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
+	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth, Insets defaultMargin ) {
+		// do not apply minimum width if JTextComponent.margin is set
+		if( !FlatTextFieldUI.hasDefaultMargins( c, defaultMargin ) )
+			return size;
+
 		// Assume that text area is in a scroll pane (that displays the border)
 		// and subtract 1px border line width.
 		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding

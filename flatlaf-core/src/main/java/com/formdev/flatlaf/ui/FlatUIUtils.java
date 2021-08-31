@@ -69,6 +69,7 @@ public class FlatUIUtils
 {
 	public static final boolean MAC_USE_QUARTZ = Boolean.getBoolean( "apple.awt.graphics.UseQuartz" );
 
+	private static boolean useSharedUIs = true;
 	private static WeakHashMap<LookAndFeel, IdentityHashMap<Object, ComponentUI>> sharedUIinstances = new WeakHashMap<>();
 
 	public static Rectangle addInsets( Rectangle r, Insets insets ) {
@@ -826,6 +827,27 @@ debug*/
 	}
 
 	/**
+	 * Returns whether shared UI delegates are used.
+	 *
+	 * @since 1.6
+	 */
+	public static boolean isUseSharedUIs() {
+		return useSharedUIs;
+	}
+
+	/**
+	 * Specifies whether shared UI delegates are used.
+	 * This does not change already existing UI delegates.
+	 *
+	 * @since 1.6
+	 */
+	public static boolean setUseSharedUIs( boolean useSharedUIs ) {
+		boolean old = FlatUIUtils.useSharedUIs;
+		FlatUIUtils.useSharedUIs = useSharedUIs;
+		return old;
+	}
+
+	/**
 	 * Creates a shared component UI for the given key and the current Laf.
 	 * Each Laf instance has its own shared component UI instance.
 	 * <p>
@@ -833,6 +855,9 @@ debug*/
 	 * may use multiple Laf instances at the same time.
 	 */
 	public static ComponentUI createSharedUI( Object key, Supplier<ComponentUI> newInstanceSupplier ) {
+		if( !useSharedUIs )
+			return newInstanceSupplier.get();
+
 		return sharedUIinstances
 			.computeIfAbsent( UIManager.getLookAndFeel(), k -> new IdentityHashMap<>() )
 			.computeIfAbsent( key, k -> newInstanceSupplier.get() );

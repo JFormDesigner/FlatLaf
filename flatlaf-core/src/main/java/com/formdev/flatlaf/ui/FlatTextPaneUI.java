@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
@@ -72,6 +73,8 @@ public class FlatTextPaneUI
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;
 
+	private Insets defaultMargin;
+
 	private Object oldHonorDisplayProperties;
 	private FocusListener focusListener;
 	private Map<String, Object> oldStyleValues;
@@ -98,6 +101,8 @@ public class FlatTextPaneUI
 		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
 		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
 		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
+
+		defaultMargin = UIManager.getInsets( prefix + ".margin" );
 
 		// use component font and foreground for HTML text
 		oldHonorDisplayProperties = getComponent().getClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES );
@@ -184,12 +189,12 @@ public class FlatTextPaneUI
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return FlatEditorPaneUI.applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
+		return FlatEditorPaneUI.applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth, defaultMargin );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return FlatEditorPaneUI.applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
+		return FlatEditorPaneUI.applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth, defaultMargin );
 	}
 
 	@Override

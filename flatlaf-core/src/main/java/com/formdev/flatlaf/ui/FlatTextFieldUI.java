@@ -28,6 +28,7 @@ import java.awt.Rectangle;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import javax.swing.JComboBox;
@@ -92,6 +93,8 @@ public class FlatTextFieldUI
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;
 
+	private Insets defaultMargin;
+
 	private FocusListener focusListener;
 	private Map<String, Object> oldStyleValues;
 	private AtomicBoolean borderShared;
@@ -119,6 +122,8 @@ public class FlatTextFieldUI
 		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
+
+		defaultMargin = UIManager.getInsets( prefix + ".margin" );
 
 		LookAndFeel.installProperty( getComponent(), "opaque", false );
 
@@ -355,9 +360,13 @@ public class FlatTextFieldUI
 		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
 	}
 
-	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
+	private Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
 		// do not apply minimum width if JTextField.columns is set
 		if( c instanceof JTextField && ((JTextField)c).getColumns() > 0 )
+			return size;
+
+		// do not apply minimum width if JTextComponent.margin is set
+		if( !hasDefaultMargins( c, defaultMargin ) )
 			return size;
 
 		// do not apply minimum width if used in combobox or spinner
@@ -371,6 +380,11 @@ public class FlatTextFieldUI
 		float focusWidth = FlatUIUtils.getBorderFocusWidth( c );
 		size.width = Math.max( size.width, scale( minimumWidth ) + Math.round( focusWidth * 2 ) );
 		return size;
+	}
+
+	static boolean hasDefaultMargins( JComponent c, Insets defaultMargin ) {
+		Insets margin = ((JTextComponent)c).getMargin();
+		return margin instanceof UIResource && Objects.equals( margin, defaultMargin );
 	}
 
 	@Override

@@ -22,6 +22,8 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,6 +32,7 @@ import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
@@ -136,6 +139,11 @@ public class FlatInternalFrameUI
 
 	protected FlatWindowResizer createWindowResizer() {
 		return new FlatWindowResizer.InternalFrameResizer( frame, this::getDesktopManager );
+	}
+
+	@Override
+	protected MouseInputAdapter createBorderListener( JInternalFrame w ) {
+		return new FlatBorderListener();
 	}
 
 	@Override
@@ -270,6 +278,28 @@ public class FlatInternalFrameUI
 			} finally {
 				g2.dispose();
 			}
+		}
+	}
+
+	//---- class FlatBorderListener -------------------------------------------
+
+	protected class FlatBorderListener
+		extends BorderListener
+	{
+		@Override
+		public void mouseClicked( MouseEvent e ) {
+			if( e.getClickCount() == 2 && !frame.isIcon() &&
+				e.getSource() instanceof FlatInternalFrameTitlePane )
+			{
+				Rectangle iconBounds = ((FlatInternalFrameTitlePane)e.getSource()).getFrameIconBounds();
+				if( iconBounds != null && iconBounds.contains( e.getX(), e.getY() ) ) {
+					if( frame.isClosable() )
+						frame.doDefaultCloseAction();
+					return;
+				}
+			}
+
+			super.mouseClicked( e );
 		}
 	}
 }

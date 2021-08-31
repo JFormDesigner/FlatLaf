@@ -31,6 +31,7 @@ import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
@@ -137,6 +138,7 @@ public class FlatButtonUI
 	@Styleable(dot=true) protected Color toolbarSelectedBackground;
 
 	private Icon helpButtonIcon;
+	private Insets defaultMargin;
 
 	private final boolean shared;
 	private boolean helpButtonIconShared = true;
@@ -204,8 +206,9 @@ public class FlatButtonUI
 			toolbarSelectedBackground = UIManager.getColor( prefix + "toolbar.selectedBackground" );
 
 			helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
-			helpButtonIconShared = true;
+			defaultMargin = UIManager.getInsets( prefix + "margin" );
 
+			helpButtonIconShared = true;
 			defaults_initialized = true;
 		}
 
@@ -581,7 +584,9 @@ public class FlatButtonUI
 		} else if( isIconOnlyOrSingleCharacter && ((AbstractButton)c).getIcon() == null ) {
 			// make single-character-no-icon button square (increase width)
 			prefSize.width = Math.max( prefSize.width, prefSize.height );
-		} else if( !isIconOnlyOrSingleCharacter && !isToolBarButton( c ) && c.getBorder() instanceof FlatButtonBorder ) {
+		} else if( !isIconOnlyOrSingleCharacter && !isToolBarButton( c ) &&
+			c.getBorder() instanceof FlatButtonBorder && hasDefaultMargins( c ) )
+		{
 			// apply minimum width/height
 			int fw = Math.round( FlatUIUtils.getBorderFocusWidth( c ) * 2 );
 			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + fw );
@@ -589,6 +594,11 @@ public class FlatButtonUI
 		}
 
 		return prefSize;
+	}
+
+	private boolean hasDefaultMargins( JComponent c ) {
+		Insets margin = ((AbstractButton)c).getMargin();
+		return margin instanceof UIResource && Objects.equals( margin, defaultMargin );
 	}
 
 	//---- class FlatButtonListener -------------------------------------------

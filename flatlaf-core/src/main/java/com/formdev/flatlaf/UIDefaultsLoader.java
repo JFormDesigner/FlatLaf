@@ -605,6 +605,13 @@ class UIDefaultsLoader
 				case "fadeout":		return parseColorHSLIncreaseDecrease( 3, false, params, resolver, reportError );
 				case "fade":		return parseColorFade( params, resolver, reportError );
 				case "spin":		return parseColorSpin( params, resolver, reportError );
+				case "changeHue":		return parseColorChange( 0, params, resolver, reportError );
+				case "changeSaturation":return parseColorChange( 1, params, resolver, reportError );
+				case "changeLightness":	return parseColorChange( 2, params, resolver, reportError );
+				case "changeAlpha":		return parseColorChange( 3, params, resolver, reportError );
+				case "mix":				return parseColorMix( null, params, resolver, reportError );
+				case "tint":			return parseColorMix( "#fff", params, resolver, reportError );
+				case "shade":			return parseColorMix( "#000", params, resolver, reportError );
 			}
 		} finally {
 			parseColorDepth--;
@@ -752,6 +759,68 @@ class UIDefaultsLoader
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: changeHue(color,value[,options]) or
+	 *         changeSaturation(color,value[,options]) or
+	 *         changeLightness(color,value[,options]) or
+	 *         changeAlpha(color,value[,options])
+	 *   - color: a color (e.g. #f00) or a color function
+	 *   - value: for hue: number of degrees; otherwise: percentage 0-100%
+	 *   - options: [derived]
+	 */
+	private static Object parseColorChange( int hslIndex,
+		List<String> params, Function<String, String> resolver, boolean reportError )
+	{
+		String colorStr = params.get( 0 );
+		int value = (hslIndex == 0)
+			? parseInteger( params.get( 1 ), true )
+			: parsePercentage( params.get( 1 ) );
+		boolean derived = false;
+
+		if( params.size() > 2 ) {
+			String options = params.get( 2 );
+			derived = options.contains( "derived" );
+		}
+
+		// create function
+		ColorFunction function = new ColorFunctions.HSLChange( hslIndex, value );
+
+		// parse base color, apply function and create derived color
+		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: mix(color1,color2[,weight]) or
+	 *         tint(color[,weight]) or
+	 *         shade(color[,weight])
+	 *   - color1: a color (e.g. #f00) or a color function
+	 *   - color2: a color (e.g. #f00) or a color function
+	 *   - weight: the weight (in range 0-100%) to mix the two colors
+	 *             larger weight uses more of first color, smaller weight more of second color
+	 */
+	private static Object parseColorMix( String color1Str, List<String> params, Function<String, String> resolver, boolean reportError ) {
+		int i = 0;
+		if( color1Str == null )
+			color1Str = params.get( i++ );
+		String color2Str = params.get( i++ );
+		int weight = 50;
+
+		if( params.size() > i )
+			weight = parsePercentage( params.get( i++ ) );
+
+		// parse second color
+		String resolvedColor2Str = resolver.apply( color2Str );
+		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolvedColor2Str, resolver, reportError );
+		if( color2 == null )
+			return null;
+
+		// create function
+		ColorFunction function = new ColorFunctions.Mix( color2, weight );
+
+		// parse first color, apply function and create mixed color
+		return parseFunctionBaseColor( color1Str, function, false, resolver, reportError );
 	}
 
 	private static Object parseFunctionBaseColor( String colorStr, ColorFunction function,

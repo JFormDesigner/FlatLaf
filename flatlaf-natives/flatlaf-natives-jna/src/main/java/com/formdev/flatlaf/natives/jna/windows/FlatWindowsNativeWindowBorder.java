@@ -28,6 +28,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -47,6 +49,7 @@ import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.BaseTSD;
 import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
+import com.sun.jna.platform.win32.GDI32;
 import com.sun.jna.platform.win32.Shell32;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WTypes.LPWSTR;
@@ -282,11 +285,12 @@ public class FlatWindowsNativeWindowBorder
 	//---- class WndProc ------------------------------------------------------
 
 	private class WndProc
-		implements WindowProc
+		implements WindowProc, PropertyChangeListener
 	{
 		private static final int GWLP_WNDPROC = -4;
 
 		private static final int
+			WM_ERASEBKGND = 0x0014,
 			WM_NCCALCSIZE = 0x0083,
 			WM_NCHITTEST = 0x0084,
 			WM_NCRBUTTONUP = 0x00A5,
@@ -326,6 +330,7 @@ public class FlatWindowsNativeWindowBorder
 		private final HWND hwnd;
 		private final BaseTSD.LONG_PTR defaultWndProc;
 		private int wmSizeWParam = -1;
+		private HBRUSH background;
 
 		private int titleBarHeight;
 		private Rectangle[] hitTestSpots;
@@ -345,9 +350,15 @@ public class FlatWindowsNativeWindowBorder
 
 			// remove the OS window title bar
 			updateFrame( (window instanceof JFrame) ? ((JFrame)window).getExtendedState() : 0 );
+
+			// set window background (used when resizing window)
+			updateWindowBackground();
+			window.addPropertyChangeListener( "background", this );
 		}
 
 		void uninstall() {
+			window.removePropertyChangeListener( "background", this );
+
 			// restore original window procedure
 			if( SystemInfo.isX86_64 )
 				User32Ex.INSTANCE.SetWindowLongPtr( hwnd, GWLP_WNDPROC, defaultWndProc );
@@ -358,6 +369,8 @@ public class FlatWindowsNativeWindowBorder
 			updateFrame( 0 );
 
 			// cleanup
+			if( background != null )
+				GDI32.INSTANCE.DeleteObject( background );
 			window = null;
 		}
 
@@ -380,6 +393,26 @@ public class FlatWindowsNativeWindowBorder
 				SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
 
 			wmSizeWParam = -1;
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent evt ) {
+			updateWindowBackground();
+		}
+
+		private void updateWindowBackground() {
+			Color bg = window.getBackground();
+			if( bg != null )
+				setWindowBackground( bg.getRed(), bg.getGreen(), bg.getBlue() );
+		}
+
+		private void setWindowBackground( int r, int g, int b ) {
+			// delete old background brush
+			if( background != null )
+				GDI32.INSTANCE.DeleteObject( background );
+
+			// create new background brush
+			background = GDI32Ex.INSTANCE.CreateSolidBrush( RGB( r, g, b ) );
 		}
 
 		/**
@@ -408,6 +441,9 @@ public class FlatWindowsNativeWindowBorder
 						wParam = new WPARAM( wmSizeWParam );
 					break;
 
+				case WM_ERASEBKGND:
+					return WmEraseBkgnd( hwnd, uMsg, wParam, lParam );
+
 				case WM_DESTROY:
 					return WmDestroy( hwnd, uMsg, wParam, lParam );
 			}
@@ -432,9 +468,28 @@ public class FlatWindowsNativeWindowBorder
 
 			// cleanup
 			windowsMap.remove( window );
+			if( background != null )
+				GDI32.INSTANCE.DeleteObject( background );
 			window = null;
 
 			return lResult;
+		}
+
+		/**
+		 * Handle WM_ERASEBKGND
+		 *
+		 * https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
+		 */
+		LRESULT WmEraseBkgnd( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam ) {
+			if( background == null )
+				return new LRESULT( 0 );
+
+			// fill background
+			HDC hdc = new HDC( wParam.toPointer() );
+		    RECT rect = new RECT();
+		    User32.INSTANCE.GetClientRect( hwnd, rect );
+		    User32Ex.INSTANCE.FillRect( hdc, rect, background );
+		    return new LRESULT( 1 );
 		}
 
 		/**
@@ -638,6 +693,13 @@ public class FlatWindowsNativeWindowBorder
 		}
 
 		/**
+		 * Same implementation as RGB(r,g,b) macro in wingdi.h.
+		 */
+		private DWORD RGB( int r, int g, int b ) {
+			return new DWORD( (r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16) );
+		}
+
+		/**
 		 * Opens the window's system menu.
 		 * The system menu is the menu that opens when the user presses Alt+Space or
 		 * right clicks on the title bar
@@ -690,6 +752,8 @@ public class FlatWindowsNativeWindowBorder
 		LONG_PTR SetWindowLong( HWND hWnd, int nIndex, LONG_PTR wndProc );
 		LRESULT CallWindowProc( LONG_PTR lpPrevWndFunc, HWND hWnd, int uMsg, WPARAM wParam, LPARAM lParam );
 
+		int FillRect( HDC hDC, RECT lprc, HBRUSH hbr );
+
 		int GetDpiForWindow( HWND hwnd );
 		int GetSystemMetricsForDpi( int nIndex, int dpi );
 
@@ -700,6 +764,16 @@ public class FlatWindowsNativeWindowBorder
 		boolean SetMenuItemInfo( HMENU hmenu, int item, boolean fByPositon, MENUITEMINFO lpmii );
 		boolean SetMenuDefaultItem( HMENU hMenu, int uItem, int fByPos );
 		BOOL TrackPopupMenu( HMENU hMenu, int uFlags, int x, int y, int nReserved, HWND hWnd, RECT prcRect );
+	}
+
+	//---- interface GDI32Ex --------------------------------------------------
+
+	private interface GDI32Ex
+		extends GDI32
+	{
+		GDI32Ex INSTANCE = Native.load( "gdi32", GDI32Ex.class, W32APIOptions.DEFAULT_OPTIONS );
+
+		HBRUSH CreateSolidBrush( DWORD color );
 	}
 
 	//---- class NCCALCSIZE_PARAMS --------------------------------------------

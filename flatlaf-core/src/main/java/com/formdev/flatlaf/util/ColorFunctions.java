@@ -26,13 +26,16 @@ import java.awt.Color;
 public class ColorFunctions
 {
 	public static Color applyFunctions( Color color, ColorFunction... functions ) {
+		// convert RGB to HSL
 		float[] hsl = HSLColor.fromRGB( color );
 		float alpha = color.getAlpha() / 255f;
 		float[] hsla = { hsl[0], hsl[1], hsl[2], alpha * 100 };
 
+		// apply color functions
 		for( ColorFunction function : functions )
 			function.apply( hsla );
 
+		// convert HSL to RGB
 		return HSLColor.toRGB( hsla[0], hsla[1], hsla[2], hsla[3] / 100 );
 	}
 
@@ -145,7 +148,46 @@ public class ColorFunctions
 		}
 	}
 
-	//---- class HSLIncreaseDecrease ------------------------------------------
+	//---- class HSLChange ----------------------------------------------------
+
+	/**
+	 * Set the hue, saturation, luminance or alpha of a color.
+	 *
+	 * @since 1.6
+	 */
+	public static class HSLChange
+		implements ColorFunction
+	{
+		public final int hslIndex;
+		public final float value;
+
+		public HSLChange( int hslIndex, float value ) {
+			this.hslIndex = hslIndex;
+			this.value = value;
+		}
+
+		@Override
+		public void apply( float[] hsla ) {
+			hsla[hslIndex] = (hslIndex == 0)
+				? value % 360
+				: clamp( value );
+		}
+
+		@Override
+		public String toString() {
+			String name;
+			switch( hslIndex ) {
+				case 0: name = "changeHue"; break;
+				case 1: name = "changeSaturation"; break;
+				case 2: name = "changeLightness"; break;
+				case 3: name = "changeAlpha"; break;
+				default: throw new IllegalArgumentException();
+			}
+			return String.format( "%s(%.0f%s)", name, value, (hslIndex == 0 ? "" : "%") );
+		}
+	}
+
+	//---- class Fade ---------------------------------------------------------
 
 	/**
 	 * Set the alpha of a color.
@@ -167,6 +209,44 @@ public class ColorFunctions
 		@Override
 		public String toString() {
 			return String.format( "fade(%.0f%%)", amount );
+		}
+	}
+
+	//---- class Mix ----------------------------------------------------------
+
+	/**
+	 * Mix two colors.
+	 *
+	 * @since 1.6
+	 */
+	public static class Mix
+		implements ColorFunction
+	{
+		public final Color color2;
+		public final float weight;
+
+		public Mix( Color color2, float weight ) {
+			this.color2 = color2;
+			this.weight = weight;
+		}
+
+		@Override
+		public void apply( float[] hsla ) {
+			// convert from HSL to RGB because color mixing is done on RGB values
+			Color color1 = HSLColor.toRGB( hsla[0], hsla[1], hsla[2], hsla[3] / 100 );
+
+			// mix
+			Color color = mix( color1, color2, weight / 100 );
+
+			// convert RGB to HSL
+			float[] hsl = HSLColor.fromRGB( color );
+			System.arraycopy( hsl, 0, hsla, 0, hsl.length );
+			hsla[3] = (color.getAlpha() / 255f) * 100;
+		}
+
+		@Override
+		public String toString() {
+			return String.format( "mix(#%08x,%.0f%%)", color2.getRGB(), weight );
 		}
 	}
 }

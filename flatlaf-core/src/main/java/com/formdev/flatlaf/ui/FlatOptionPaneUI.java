@@ -91,6 +91,7 @@ public class FlatOptionPaneUI
 	protected int messagePadding;
 	protected int maxCharactersPerLine;
 	private int focusWidth;
+	private boolean sameSizeButtons;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatOptionPaneUI();
@@ -104,6 +105,7 @@ public class FlatOptionPaneUI
 		messagePadding = UIManager.getInt( "OptionPane.messagePadding" );
 		maxCharactersPerLine = UIManager.getInt( "OptionPane.maxCharactersPerLine" );
 		focusWidth = UIManager.getInt( "Component.focusWidth" );
+		sameSizeButtons = FlatUIUtils.getUIBoolean( "OptionPane.sameSizeButtons", true );
 	}
 
 	@Override
@@ -215,6 +217,11 @@ public class FlatOptionPaneUI
 			}
 		}
 		return null;
+	}
+
+	@Override
+	protected boolean getSizeButtonsToSameWidth() {
+		return sameSizeButtons;
 	}
 
 	//---- class NonUIResourceBorder ------------------------------------------

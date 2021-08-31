@@ -21,10 +21,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -110,14 +113,13 @@ class FlatCompletionProvider
 				switch( lineBeforeCaret.charAt( i ) ) {
 					case '=':
 					case '(':
+					case ',':
 						return getValueProvider();
 
 					case '$':
 					case '@':
 						return getReferenceProvider();
 
-					case ' ':
-					case '\t':
 					case '#': // colors
 						return null;
 				}
@@ -158,6 +160,9 @@ class FlatCompletionProvider
 	{
 		private static KeyCompletionProvider instance;
 
+		private final Set<String> knownKeys;
+		private Set<String> lastKeys;
+
 		static KeyCompletionProvider getInstance() {
 			if( instance == null )
 				instance = new KeyCompletionProvider();
@@ -165,17 +170,17 @@ class FlatCompletionProvider
 		}
 
 		KeyCompletionProvider() {
-			setAutoActivationRules( true, "." );
+			setAutoActivationRules( true, "@." );
 
-			// load all keys
-			HashSet<String> keys = new HashSet<>();
+			knownKeys = new HashSet<>();
 			try {
 				try( InputStream in = getClass().getResourceAsStream( "/com/formdev/flatlaf/themeeditor/FlatLafUIKeys.txt" ) ) {
 					if( in != null ) {
 						try( BufferedReader reader = new BufferedReader( new InputStreamReader( in, "UTF-8" ) ) ) {
 							String key;
 							while( (key = reader.readLine()) != null ) {
-								keys.add( key );
+								if( !isIgnored( key ) )
+									knownKeys.add( key );
 							}
 						}
 					}
@@ -184,27 +189,96 @@ class FlatCompletionProvider
 				ex.printStackTrace(); // TODO
 			}
 
-			// collect key parts
+			setCompletions( knownKeys );
+		}
+
+		private boolean isIgnored( String key ) {
+			return key.endsWith( ".font" ) ||
+				key.endsWith( "Font" ) ||
+				key.endsWith( "InputMap" );
+		}
+
+		private void setCompletions( Set<String> keys ) {
 			HashSet<String> keyParts = new HashSet<>();
 			for( String key : keys ) {
 				int delimIndex = key.length() + 1;
-				while( (delimIndex = key.lastIndexOf( '.', delimIndex - 1 )) >= 0 ) {
-					String part = key.substring( 0, delimIndex );
-					if( !keys.contains( part ) )
-						keyParts.add( part );
-				}
+				while( (delimIndex = key.lastIndexOf( '.', delimIndex - 1 )) >= 0 )
+					keyParts.add( key.substring( 0, delimIndex ) );
 			}
 
+			completions.clear();
+
 			// add key parts
-			addWordCompletions( keyParts.toArray( new String[keyParts.size()] ) );
+			for( String key : keyParts )
+				completions.add( new BasicCompletion( this, key ) );
 
 			// add all keys
-			addWordCompletions( keys.toArray( new String[keys.size()] ) );
+			for( String key : keys ) {
+				if( !keyParts.contains( key ) )
+					completions.add( new BasicCompletion( this, key.concat( " = " ) ) );
+			}
+
+			Collections.sort( completions );
 		}
 
 		@Override
 		protected boolean isValidChar( char ch ) {
-			return super.isValidChar( ch ) || ch == '.';
+			return super.isValidChar( ch ) || ch == '.' || ch == '@';
+		}
+
+		@Override
+		protected List<Completion> getCompletionsImpl( JTextComponent comp ) {
+			updateCompletions( comp );
+			return super.getCompletionsImpl( comp );
+		}
+
+		@Override
+		public List<Completion> getCompletionsAt( JTextComponent comp, Point pt ) {
+			updateCompletions( comp );
+			return super.getCompletionsAt( comp, pt );
+		}
+
+		@Override
+		public List<ParameterizedCompletion> getParameterizedCompletions( JTextComponent comp ) {
+			updateCompletions( comp );
+			return super.getParameterizedCompletions( comp );
+		}
+
+		private void updateCompletions( JTextComponent comp ) {
+			FlatSyntaxTextArea fsta = (FlatSyntaxTextArea) comp;
+			Set<String> keys = fsta.propertiesSupport.getAllKeys();
+			if( Objects.equals( keys, lastKeys ) )
+				return;
+			lastKeys = keys;
+
+			// get key at current line
+			String keyAtCurrentLine = null;
+			try {
+				int caretPosition = fsta.getCaretPosition();
+				int currentLine = fsta.getLineOfOffset( caretPosition );
+				int lineStart = fsta.getLineStartOffset( currentLine );
+				int lineEnd = fsta.getLineEndOffset( currentLine );
+				String line = fsta.getText( lineStart, lineEnd - lineStart );
+				Properties properties = new Properties();
+				properties.load( new StringReader( line ) );
+				if( !properties.isEmpty() )
+					keyAtCurrentLine = (String) properties.keys().nextElement();
+			} catch( BadLocationException | IOException ex ) {
+				ex.printStackTrace();
+			}
+
+			Set<String> completionKeys = new HashSet<>( knownKeys );
+			for( String key : keys ) {
+				if( key.startsWith( "*." ) || key.startsWith( "[" ) )
+					continue;
+
+				// ignore key at current line
+				if( key.equals( keyAtCurrentLine ) )
+					continue;
+
+				completionKeys.add( key );
+			}
+			setCompletions( completionKeys );
 		}
 	}
 
@@ -281,13 +355,28 @@ class FlatCompletionProvider
 		private void updateCompletions( JTextComponent comp ) {
 			FlatSyntaxTextArea fsta = (FlatSyntaxTextArea) comp;
 			Set<String> keys = fsta.propertiesSupport.getAllKeys();
-			if( keys == lastKeys )
+			if( Objects.equals( keys, lastKeys ) )
 				return;
+			lastKeys = keys;
 
 			completions.clear();
 			for( String key : keys ) {
-				if( key.startsWith( "*." ) || key.startsWith( "[" ) )
+				if( key.startsWith( "[" ) ) {
+					// remove prefix
+					int closeIndex = key.indexOf( ']' );
+					if( closeIndex < 0 )
+						continue;
+					key = key.substring( closeIndex + 1 );
+				}
+
+				if( key.startsWith( "*." ) ) {
+					// resolve wildcard
+					for( String k : FlatThemePropertiesSupport.getKeysForWildcard( key ) ) {
+						if( !keys.contains( k ) )
+							completions.add( new BasicCompletion( this, "$".concat( k ) ) );
+					}
 					continue;
+				}
 
 				if( !key.startsWith( "@" ) )
 					key = "$".concat( key );
@@ -297,7 +386,7 @@ class FlatCompletionProvider
 					completion.setRelevance( 1 );
 				completions.add( completion );
 			}
-			Collections.sort(completions);
+			Collections.sort( completions );
 		}
 	}
 
@@ -355,8 +444,33 @@ class FlatCompletionProvider
 				"options", "(optional) [derived]" );
 			addFunction( "spin",
 				"color", colorParamDesc,
-				"angle", "number of degrees to rotate",
+				"angle", "number of degrees to rotate (0-360)",
 				"options", "(optional) [derived]" );
+
+			addFunction( "changeHue",
+				"color", colorParamDesc,
+				"angle", "number of degrees (0-360)",
+				"options", "(optional) [derived]" );
+			String[] hslChangeParams = {
+				"color", colorParamDesc,
+				"value", "0-100%",
+				"options", "(optional) [derived]"
+			};
+			addFunction( "changeSaturation", hslChangeParams );
+			addFunction( "changeLightness", hslChangeParams );
+			addFunction( "changeAlpha", hslChangeParams );
+
+			String weightParamDesc = "(optional) 0-100%, default is 50%";
+			addFunction( "mix",
+				"color1", colorParamDesc,
+				"color2", colorParamDesc,
+				"weight", weightParamDesc );
+			addFunction( "tint",
+				"color", colorParamDesc,
+				"weight", weightParamDesc );
+			addFunction( "shade",
+				"color", colorParamDesc,
+				"weight", weightParamDesc );
 		}
 
 		private void addFunction( String name, String... paramNamesAndDescs ) {

@@ -53,6 +53,13 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
 }
 
 extern "C"
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_setWindowBackground
+	( JNIEnv* env, jobject obj, jlong hwnd, jint r, jint g, jint b )
+{
+	FlatWndProc::setWindowBackground( reinterpret_cast<HWND>( hwnd ), r, g, b );
+}
+
+extern "C"
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_showWindow
 	( JNIEnv* env, jobject obj, jlong hwnd, jint cmd )
 {
@@ -80,6 +87,7 @@ FlatWndProc::FlatWndProc() {
 	hwnd = NULL;
 	defaultWndProc = NULL;
 	wmSizeWParam = -1;
+	background = NULL;
 }
 
 HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
@@ -128,6 +136,8 @@ void FlatWndProc::uninstall( JNIEnv *env, jobject obj, HWND hwnd ) {
 
 	// cleanup
 	env->DeleteGlobalRef( fwp->obj );
+	if( fwp->background != NULL )
+		::DeleteObject( fwp->background );
 	delete fwp;
 }
 
@@ -174,8 +184,23 @@ void FlatWndProc::updateFrame( HWND hwnd, int state ) {
 		fwp->wmSizeWParam = -1;
 }
 
+void FlatWndProc::setWindowBackground( HWND hwnd, int r, int g, int b ) {
+	FlatWndProc* fwp = (FlatWndProc*) hwndMap->get( hwnd );
+	if( fwp == NULL )
+		return;
+
+	// delete old background brush
+	if( fwp->background != NULL )
+		::DeleteObject( fwp->background );
+
+	// create new background brush
+	fwp->background = ::CreateSolidBrush( RGB( r, g, b ) );
+}
+
 LRESULT CALLBACK FlatWndProc::StaticWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 	FlatWndProc* fwp = (FlatWndProc*) hwndMap->get( hwnd );
+	if( fwp == NULL )
+		return 0;
 	return fwp->WindowProc( hwnd, uMsg, wParam, lParam );
 }
 
@@ -204,12 +229,16 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 				wParam = wmSizeWParam;
 			break;
 
+		case WM_ERASEBKGND:
+			return WmEraseBkgnd( hwnd, uMsg, wParam, lParam );
+
 		case WM_DESTROY:
 			return WmDestroy( hwnd, uMsg, wParam, lParam );
 	}
 
 	return ::CallWindowProc( defaultWndProc, hwnd, uMsg, wParam, lParam );
 }
+
 /**
  * Handle WM_DESTROY
  *
@@ -223,11 +252,30 @@ LRESULT FlatWndProc::WmDestroy( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lPara
 
 	// cleanup
 	getEnv()->DeleteGlobalRef( obj );
+	if( background != NULL )
+		::DeleteObject( background );
 	hwndMap->remove( hwnd );
 	delete this;
 
 	// call original AWT window procedure because it may fire window closed event in AwtWindow::WmDestroy()
 	return ::CallWindowProc( defaultWndProc2, hwnd, uMsg, wParam, lParam );
+}
+
+/**
+ * Handle WM_ERASEBKGND
+ *
+ * https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
+ */
+LRESULT FlatWndProc::WmEraseBkgnd( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam ) {
+	if( background == NULL )
+		return FALSE;
+
+	// fill background
+	HDC hdc = (HDC) wParam;
+	RECT rect;
+	::GetClientRect( hwnd, &rect );
+	::FillRect( hdc, &rect, background );
+	return TRUE;
 }
 
 /**

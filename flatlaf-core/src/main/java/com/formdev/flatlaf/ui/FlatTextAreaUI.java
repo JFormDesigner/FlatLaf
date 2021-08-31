@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
@@ -72,6 +73,8 @@ public class FlatTextAreaUI
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;
 
+	private Insets defaultMargin;
+
 	private FocusListener focusListener;
 	private Map<String, Object> oldStyleValues;
 
@@ -96,6 +99,8 @@ public class FlatTextAreaUI
 		disabledBackground = UIManager.getColor( "TextArea.disabledBackground" );
 		inactiveBackground = UIManager.getColor( "TextArea.inactiveBackground" );
 		focusedBackground = UIManager.getColor( "TextArea.focusedBackground" );
+
+		defaultMargin = UIManager.getInsets( "TextArea.margin" );
 	}
 
 	@Override
@@ -189,7 +194,7 @@ public class FlatTextAreaUI
 		if( c instanceof JTextArea && ((JTextArea)c).getColumns() > 0 )
 			return size;
 
-		return FlatEditorPaneUI.applyMinimumWidth( c, size, minimumWidth );
+		return FlatEditorPaneUI.applyMinimumWidth( c, size, minimumWidth, defaultMargin );
 	}
 
 	@Override

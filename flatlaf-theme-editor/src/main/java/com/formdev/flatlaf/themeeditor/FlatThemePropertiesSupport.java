@@ -17,20 +17,20 @@
 package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
+import javax.swing.UIDefaults;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.BadLocationException;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 
@@ -45,20 +45,25 @@ class FlatThemePropertiesSupport
 	private final FlatSyntaxTextArea textArea;
 	private final Function<String, String> propertiesGetter;
 	private final Function<String, String> resolver;
+	private BasePropertyProvider basePropertyProvider;
+
+	// caches
 	private Properties propertiesCache;
 	private final Map<Integer, Object> parsedValueCache = new HashMap<>();
-
-	private File[] baseFiles;
-	private long[] baseFilesLastModified;
-	private Properties[] basePropertiesCache;
-
+	private final Map<String, Object> parsedValueCache2 = new HashMap<>();
 	private Set<String> allKeysCache;
+	private String baseTheme;
+
+	private static long globalCacheInvalidationCounter;
+	private long cacheInvalidationCounter;
+
+	private static Set<String> wildcardKeys;
 
 	FlatThemePropertiesSupport( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
 
 		propertiesGetter = key -> {
-			return getProperty( key );
+			return getPropertyOrWildcard( key );
 		};
 		resolver = v -> {
 			return resolveValue( v );
@@ -67,12 +72,8 @@ class FlatThemePropertiesSupport
 		textArea.getDocument().addDocumentListener( this );
 	}
 
-	void setBaseFiles( List<File> baseFiles ) {
-		int size = baseFiles.size();
-		this.baseFiles = baseFiles.toArray( new File[size] );
-
-		baseFilesLastModified = new long[size];
-		basePropertiesCache = new Properties[size];
+	void setBasePropertyProvider( BasePropertyProvider basePropertyProvider ) {
+		this.basePropertyProvider = basePropertyProvider;
 	}
 
 	private String resolveValue( String value ) {
@@ -80,6 +81,8 @@ class FlatThemePropertiesSupport
 	}
 
 	Object getParsedValueAtLine( int line ) {
+		autoClearCache();
+
 		Integer lineKey = line;
 		Object parsedValue = parsedValueCache.get( lineKey );
 		if( parsedValue != null )
@@ -96,7 +99,7 @@ class FlatThemePropertiesSupport
 			parsedValueCache.put( lineKey, parsedValue );
 			return parsedValue;
 		} catch( Exception ex ) {
-			System.out.println( ex.getMessage() ); //TODO
+			System.out.println( textArea.getFileName() + ": " + ex.getMessage() ); //TODO
 			parsedValueCache.put( lineKey, ex );
 			return null;
 		}
@@ -122,26 +125,58 @@ class FlatThemePropertiesSupport
 		}
 	}
 
+	Object getParsedProperty( String key ) {
+		Object parsedValue = parsedValueCache2.get( key );
+		if( parsedValue != null )
+			return !(parsedValue instanceof Exception) ? parsedValue : null;
+
+		String str = getPropertyOrWildcard( key );
+		if( str == null )
+			return null;
+
+		try {
+			Object[] resultValueType = new Object[1];
+			String value = resolveValue( str );
+			parsedValue = UIDefaultsLoaderAccessor.parseValue( key, value, resultValueType, resolver );
+			parsedValueCache2.put( key, parsedValue );
+			return parsedValue;
+		} catch( Exception ex ) {
+			System.out.println( textArea.getFileName() + ": " + ex.getMessage() ); //TODO
+			parsedValueCache2.put( key, ex );
+			return null;
+		}
+	}
+
+	private String getPropertyOrWildcard( String key ) {
+		String value = getProperty( key );
+		if( value != null )
+			return value;
+
+		if( !isKeyAllowedForWildcard( key ) )
+			return null;
+
+		int lastDotIndex = key.lastIndexOf( '.' );
+		if( lastDotIndex < 0 )
+			return null;
+
+		String wildcardKey = "*.".concat( key.substring( lastDotIndex + 1 ) );
+		return getProperty( wildcardKey );
+	}
+
 	private String getProperty( String key ) {
 		// look in current text area
 		String value = getProperties().getProperty( key );
 		if( value != null )
 			return value;
 
-		if( baseFiles == null )
+		if( basePropertyProvider == null )
 			return null;
 
 		// look in base properties files
-		for( int i = 0; i < baseFiles.length; i++ ) {
-			value = getBaseProperties( i ).getProperty( key );
-			if( value != null )
-				return value;
-		}
-
-		return null;
+		return basePropertyProvider.getProperty( key, getBaseTheme() );
 	}
 
-	private Properties getProperties() {
+	Properties getProperties() {
 		if( propertiesCache != null )
 			return propertiesCache;
 
@@ -154,23 +189,9 @@ class FlatThemePropertiesSupport
 		return propertiesCache;
 	}
 
-	private Properties getBaseProperties( int index ) {
-		long lastModified = baseFiles[index].lastModified();
-		if( baseFilesLastModified[index] != lastModified || basePropertiesCache[index] == null ) {
-			// (re)load base properties file
-			baseFilesLastModified[index] = lastModified;
-			basePropertiesCache[index] = new Properties();
-			try( InputStream in = new FileInputStream( baseFiles[index] ) ) {
-				basePropertiesCache[index].load( in );
-			} catch( IOException ex ) {
-				ex.printStackTrace(); //TODO
-			}
-		}
-
-		return basePropertiesCache[index];
-	}
-
 	Set<String> getAllKeys() {
+		autoClearCache();
+
 		if( allKeysCache != null )
 			return allKeysCache;
 
@@ -179,21 +200,112 @@ class FlatThemePropertiesSupport
 		for( Object key : getProperties().keySet() )
 			allKeysCache.add( (String) key );
 
-		if( baseFiles == null )
-			return allKeysCache;
-
-		for( int i = 0; i < baseFiles.length; i++ ) {
-			for( Object key : getBaseProperties( i ).keySet() )
-				allKeysCache.add( (String) key );
-		}
+		// look in base properties files
+		if( basePropertyProvider != null )
+			basePropertyProvider.addAllKeys( allKeysCache, getBaseTheme() );
 
 		return allKeysCache;
+	}
+
+	static boolean isDark( String baseTheme ) {
+		return "dark".equals( baseTheme ) || "darcula".equals( baseTheme );
+	}
+
+	private String getBaseTheme() {
+		if( baseTheme == null )
+			baseTheme = getProperties().getProperty( "@baseTheme", "light" );
+		return baseTheme;
 	}
 
 	private void clearCache() {
 		propertiesCache = null;
 		parsedValueCache.clear();
+		parsedValueCache2.clear();
 		allKeysCache = null;
+		baseTheme = null;
+
+		// increase global cache invalidation counter to allow auto-clear caches
+		globalCacheInvalidationCounter++;
+		cacheInvalidationCounter = globalCacheInvalidationCounter;
+	}
+
+	/**
+	 * Clear caches that may depend on other editors if cache of another editor was invalidated.
+	 */
+	private void autoClearCache() {
+		if( cacheInvalidationCounter == globalCacheInvalidationCounter )
+			return;
+
+		parsedValueCache.clear();
+		parsedValueCache2.clear();
+		allKeysCache = null;
+	}
+
+	static Set<String> getKeysForWildcard( String key ) {
+		if( !key.startsWith( "*." ) )
+			return Collections.emptySet();
+
+		loadKeysAllowedForWildcard();
+
+		String suffix = key.substring( 1 );
+		Set<String> result = new HashSet<>();
+		for( String k : wildcardKeys ) {
+			if( k.endsWith( suffix ) )
+				result.add( k );
+		}
+		return result;
+	}
+
+	private static boolean isKeyAllowedForWildcard( String key ) {
+		loadKeysAllowedForWildcard();
+		return wildcardKeys.contains( key );
+	}
+
+	private static void loadKeysAllowedForWildcard() {
+		if( wildcardKeys != null )
+			return;
+		wildcardKeys = new HashSet<>();
+
+		UIDefaults basicDefaults = new BasicLookAndFeel() {
+			@Override public String getName() { return "Basic"; }
+			@Override public String getID() { return "Basic"; }
+			@Override public String getDescription() { return "Basic"; }
+			@Override public boolean isNativeLookAndFeel() { return false; }
+			@Override public boolean isSupportedLookAndFeel() { return true; }
+		}.getDefaults();
+
+		for( Object key : basicDefaults.keySet() ) {
+			if( key instanceof String )
+				wildcardKeys.add( (String) key );
+		}
+
+		// same as added in FlatLaf.getDefaults()
+		wildcardKeys.addAll( Arrays.asList(
+			"Button.disabledBackground",
+			"EditorPane.disabledBackground",
+			"EditorPane.inactiveBackground",
+			"FormattedTextField.disabledBackground",
+			"PasswordField.disabledBackground",
+			"Spinner.disabledBackground",
+			"TextArea.disabledBackground",
+			"TextArea.inactiveBackground",
+			"TextField.disabledBackground",
+			"TextPane.disabledBackground",
+			"TextPane.inactiveBackground",
+			"ToggleButton.disabledBackground",
+
+			"Button.disabledText",
+			"CheckBox.disabledText",
+			"CheckBoxMenuItem.disabledForeground",
+			"Menu.disabledForeground",
+			"MenuItem.disabledForeground",
+			"RadioButton.disabledText",
+			"RadioButtonMenuItem.disabledForeground",
+			"Spinner.disabledForeground",
+			"ToggleButton.disabledText",
+
+			"DesktopIcon.foreground"
+		) );
 	}
 
 	//---- interface DocumentListener ----
@@ -232,5 +344,12 @@ class FlatThemePropertiesSupport
 			this.key = key;
 			this.value = value;
 		}
+	}
+
+	//---- interface BasePropertyProvider -------------------------------------
+
+	interface BasePropertyProvider {
+		String getProperty( String key, String baseTheme );
+		void addAllKeys( Set<String> allKeys, String baseTheme );
 	}
 }

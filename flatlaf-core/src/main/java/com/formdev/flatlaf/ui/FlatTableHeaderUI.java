@@ -173,6 +173,12 @@ public class FlatTableHeaderUI
 		}
 	}
 
+	// overridden and made public to allow usage in custom renderers
+	@Override
+	public int getRolloverColumn() {
+		return super.getRolloverColumn();
+	}
+
 	@Override
 	public void paint( Graphics g, JComponent c ) {
 		TableColumnModel columnModel = header.getColumnModel();

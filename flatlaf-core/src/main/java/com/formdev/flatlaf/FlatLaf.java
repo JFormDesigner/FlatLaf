@@ -32,10 +32,14 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -63,9 +67,11 @@ import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
 import com.formdev.flatlaf.ui.FlatRootPaneUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -92,6 +98,7 @@ public abstract class FlatLaf
 	private MnemonicHandler mnemonicHandler;
 
 	private Consumer<UIDefaults> postInitialization;
+	private List<Function<Object, Object>> uiDefaultsGetters;
 
 	/**
 	 * Sets the application look and feel to the given LaF
@@ -350,14 +357,21 @@ public abstract class FlatLaf
 
 	@Override
 	public UIDefaults getDefaults() {
-		UIDefaults defaults = super.getDefaults();
+		// use larger initial capacity to avoid resizing UI defaults hash table
+		// (from 610 to 1221 to 2443 entries) and to save some memory
+		UIDefaults defaults = new FlatUIDefaults( 1500, 0.75f );
+
+		// initialize basic defaults (see super.getDefaults())
+		initClassDefaults( defaults );
+		initSystemColorDefaults( defaults );
+		initComponentDefaults( defaults );
 
 		// add flag that indicates whether the LaF is light or dark
 		// (can be queried without using FlatLaf API)
 		defaults.put( "laf.dark", isDark() );
 
-		// add resource bundle for localized texts
-		defaults.addResourceBundle( "com.formdev.flatlaf.resources.Bundle" );
+		// init resource bundle for localized texts
+		initResourceBundle( defaults, "com.formdev.flatlaf.resources.Bundle" );
 
 		// initialize some defaults (for overriding) that are used in UI delegates,
 		// but are not set in BasicLookAndFeel
@@ -451,6 +465,45 @@ public abstract class FlatLaf
 
 	protected Properties getAdditionalDefaults() {
 		return null;
+	}
+
+	private void initResourceBundle( UIDefaults defaults, String bundleName ) {
+		// add resource bundle for localized texts
+		defaults.addResourceBundle( bundleName );
+
+		// Check whether Swing can not load the FlatLaf resource bundle,
+		// which can happen in applications that use some plugin system
+		// and load FlatLaf in a plugin that uses its own classloader.
+		// (e.g. Apache NetBeans)
+		if( defaults.get( "FileChooser.fileNameHeaderText" ) != null )
+			return;
+
+		// load FlatLaf resource bundle and add content to defaults
+		try {
+			ResourceBundle bundle = ResourceBundle.getBundle( bundleName, defaults.getDefaultLocale() );
+
+			Enumeration<String> keys = bundle.getKeys();
+			while( keys.hasMoreElements() ) {
+				String key = keys.nextElement();
+				String value = bundle.getString( key );
+
+				String baseKey = StringUtils.removeTrailing( key, ".textAndMnemonic" );
+				if( baseKey != key ) {
+					String text = value.replace( "&", "" );
+					String mnemonic = null;
+					int index = value.indexOf( '&' );
+					if( index >= 0 )
+						mnemonic = Integer.toString( Character.toUpperCase( value.charAt( index + 1 ) ) );
+
+					defaults.put( baseKey + "Text", text );
+					if( mnemonic != null )
+						defaults.put( baseKey + "Mnemonic", mnemonic );
+				} else
+					defaults.put( key, value );
+			}
+		} catch( MissingResourceException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	private void initFonts( UIDefaults defaults ) {
@@ -884,6 +937,139 @@ public abstract class FlatLaf
 	@Override
 	public final int hashCode() {
 		return super.hashCode();
+	}
+
+	/**
+	 * Registers a UI defaults getter function that is invoked before the standard getter.
+	 * This allows using different UI defaults for special purposes
+	 * (e.g. using multiple themes at the same time).
+	 * <p>
+	 * The key is passed as parameter to the function.
+	 * If the function returns {@code null}, then the next registered function is invoked.
+	 * If all registered functions return {@code null}, then the current look and feel is asked.
+	 * If the function returns {@link #NULL_VALUE}, then the UI value becomes {@code null}.
+	 *
+	 * @see #unregisterUIDefaultsGetter(Function)
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @since 1.6
+	 */
+	public void registerUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter ) {
+		if( uiDefaultsGetters == null )
+			uiDefaultsGetters = new ArrayList<>();
+
+		uiDefaultsGetters.remove( uiDefaultsGetter );
+		uiDefaultsGetters.add( uiDefaultsGetter );
+
+		// disable shared UIs
+		FlatUIUtils.setUseSharedUIs( false );
+	}
+
+	/**
+	 * Unregisters a UI defaults getter function that was invoked before the standard getter.
+	 *
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @since 1.6
+	 */
+	public void unregisterUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter ) {
+		if( uiDefaultsGetters == null )
+			return;
+
+		uiDefaultsGetters.remove( uiDefaultsGetter );
+
+		// enable shared UIs
+		if( uiDefaultsGetters.isEmpty() )
+			FlatUIUtils.setUseSharedUIs( true );
+	}
+
+	/**
+	 * Registers a UI defaults getter function that is invoked before the standard getter,
+	 * runs the given runnable and unregisters the UI defaults getter function again.
+	 * This allows using different UI defaults for special purposes
+	 * (e.g. using multiple themes at the same time).
+	 * If the current look and feel is not FlatLaf, then the getter is ignored and
+	 * the given runnable invoked.
+	 * <p>
+	 * The key is passed as parameter to the function.
+	 * If the function returns {@code null}, then the next registered function is invoked.
+	 * If all registered functions return {@code null}, then the current look and feel is asked.
+	 * If the function returns {@link #NULL_VALUE}, then the UI value becomes {@code null}.
+	 * <p>
+	 * Example:
+	 * <pre>{@code
+	 * // create secondary theme
+	 * UIDefaults darkDefaults = new FlatDarkLaf().getDefaults();
+	 *
+	 * // create panel using secondary theme
+	 * FlatLaf.runWithUIDefaultsGetter( key -> {
+	 *     Object value = darkDefaults.get( key );
+	 *     return (value != null) ? value : FlatLaf.NULL_VALUE;
+	 * }, () -> {
+	 *     // TODO create components that should use secondary theme here
+	 * } );
+	 * }</pre>
+	 *
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @see #unregisterUIDefaultsGetter(Function)
+	 * @since 1.6
+	 */
+	public static void runWithUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter, Runnable runnable ) {
+		LookAndFeel laf = UIManager.getLookAndFeel();
+		if( laf instanceof FlatLaf ) {
+			((FlatLaf)laf).registerUIDefaultsGetter( uiDefaultsGetter );
+			try {
+				runnable.run();
+			} finally {
+				((FlatLaf)laf).unregisterUIDefaultsGetter( uiDefaultsGetter );
+			}
+		} else
+			runnable.run();
+	}
+
+	/**
+	 * Special value returned by functions used in {@link #runWithUIDefaultsGetter(Function, Runnable)}
+	 * or {@link #registerUIDefaultsGetter(Function)} to indicate that the UI value should
+	 * become {@code null}.
+	 *
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @since 1.6
+	 */
+	public static final Object NULL_VALUE = new Object();
+
+	//---- class FlatUIDefaults -----------------------------------------------
+
+	private class FlatUIDefaults
+		extends UIDefaults
+	{
+		FlatUIDefaults( int initialCapacity, float loadFactor ) {
+			super( initialCapacity, loadFactor );
+		}
+
+		@Override
+		public Object get( Object key ) {
+			Object value = getValue( key );
+			return (value != null) ? (value != NULL_VALUE ? value : null) : super.get( key );
+		}
+
+		@Override
+		public Object get( Object key, Locale l ) {
+			Object value = getValue( key );
+			return (value != null) ? (value != NULL_VALUE ? value : null) : super.get( key, l );
+		}
+
+		private Object getValue( Object key ) {
+			if( uiDefaultsGetters == null )
+				return null;
+
+			for( int i = uiDefaultsGetters.size() - 1; i >= 0; i-- ) {
+				Object value = uiDefaultsGetters.get( i ).apply( key );
+				if( value != null )
+					return value;
+			}
+
+			return null;
+		}
 	}
 
 	//---- class ActiveFont ---------------------------------------------------

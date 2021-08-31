@@ -39,14 +39,6 @@ public class FlatMonokaiProIJTheme
 		}
 	}
 
-	/**
-	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
-	 */
-	@Deprecated
-	public static boolean install() {
-		return setup();
-	}
-
 	public static void installLafInfo() {
 		installLafInfo( NAME, FlatMonokaiProIJTheme.class );
 	}
