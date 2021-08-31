@@ -21,9 +21,12 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.util.Map;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
+import com.formdev.flatlaf.ui.FlatStyleSupport;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 
 /**
  * "search" icon for search fields.
@@ -38,12 +41,26 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatSearchIcon
 	extends FlatAbstractIcon
 {
-	protected Color searchIconColor = UIManager.getColor( "SearchField.searchIconColor" );
-	protected Color searchIconHoverColor = UIManager.getColor( "SearchField.searchIconHoverColor" );
-	protected Color searchIconPressedColor = UIManager.getColor( "SearchField.searchIconPressedColor" );
+	@Styleable protected Color searchIconColor = UIManager.getColor( "SearchField.searchIconColor" );
+	@Styleable protected Color searchIconHoverColor = UIManager.getColor( "SearchField.searchIconHoverColor" );
+	@Styleable protected Color searchIconPressedColor = UIManager.getColor( "SearchField.searchIconPressedColor" );
 
 	public FlatSearchIcon() {
 		super( 16, 16, null );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since TODO
+	 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

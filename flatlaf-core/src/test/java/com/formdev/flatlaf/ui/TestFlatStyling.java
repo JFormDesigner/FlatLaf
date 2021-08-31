@@ -976,4 +976,33 @@ public class TestFlatStyling
 		icon.applyStyleProperty( "questionMarkColor", Color.WHITE );
 		icon.applyStyleProperty( "disabledQuestionMarkColor", Color.WHITE );
 	}
+
+	@Test
+	void flatClearIcon() {
+		FlatClearIcon icon = new FlatClearIcon();
+
+		icon.applyStyleProperty( "clearIconColor", Color.WHITE );
+		icon.applyStyleProperty( "clearIconHoverColor", Color.WHITE );
+		icon.applyStyleProperty( "clearIconPressedColor", Color.WHITE );
+	}
+
+	@Test
+	void flatSearchIcon() {
+		FlatSearchIcon icon = new FlatSearchIcon();
+
+		flatSearchIcon( icon );
+	}
+
+	@Test
+	void flatSearchWithHistoryIcon() {
+		FlatSearchWithHistoryIcon icon = new FlatSearchWithHistoryIcon();
+
+		flatSearchIcon( icon );
+	}
+
+	private void flatSearchIcon( FlatSearchIcon icon ) {
+		icon.applyStyleProperty( "searchIconColor", Color.WHITE );
+		icon.applyStyleProperty( "searchIconHoverColor", Color.WHITE );
+		icon.applyStyleProperty( "searchIconPressedColor", Color.WHITE );
+	}
 }
