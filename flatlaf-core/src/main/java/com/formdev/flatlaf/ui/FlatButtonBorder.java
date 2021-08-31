@@ -26,7 +26,7 @@ import java.awt.Paint;
 import javax.swing.AbstractButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.util.UIScale;
 
 /**

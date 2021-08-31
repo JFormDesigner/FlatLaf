@@ -868,7 +868,7 @@ debug*/
 	 * with other components. This is only possible if it does not have styles.
 	 */
 	public static boolean canUseSharedUI( JComponent c ) {
-		return FlatStyleSupport.getStyle( c ) == null;
+		return FlatStylingSupport.getStyle( c ) == null;
 	}
 
 	//---- class RepaintFocusListener -----------------------------------------

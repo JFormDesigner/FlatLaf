@@ -39,7 +39,7 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.PasswordView;
 import javax.swing.text.View;
 import com.formdev.flatlaf.icons.FlatCapsLockIcon;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
@@ -168,7 +168,7 @@ public class FlatPasswordFieldUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof FlatCapsLockIcon ) {
 			if( capsLockIconShared ) {
-				capsLockIcon = FlatStyleSupport.cloneIcon( capsLockIcon );
+				capsLockIcon = FlatStylingSupport.cloneIcon( capsLockIcon );
 				capsLockIconShared = false;
 			}
 			return ((FlatCapsLockIcon)capsLockIcon).applyStyleProperty( key, value );

@@ -45,8 +45,8 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
@@ -114,7 +114,7 @@ public class FlatSpinnerUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( spinner ) );
+		applyStyle( FlatStylingSupport.getStyle( spinner ) );
 	}
 
 	@Override
@@ -194,7 +194,7 @@ public class FlatSpinnerUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 		updateEditorPadding();
 		updateArrowButtonsStyle();
 	}
@@ -205,7 +205,7 @@ public class FlatSpinnerUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
-		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, spinner, borderShared );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, spinner, borderShared );
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class FlatSpinnerUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this, spinner.getBorder() );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, spinner.getBorder() );
 	}
 
 	@Override

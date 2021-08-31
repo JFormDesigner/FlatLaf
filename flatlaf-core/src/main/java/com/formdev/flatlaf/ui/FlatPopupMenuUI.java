@@ -23,7 +23,7 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPopupMenuUI;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPopupMenu}.
@@ -53,7 +53,7 @@ public class FlatPopupMenuUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class FlatPopupMenuUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener( popupMenu, this::applyStyle, null );
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( popupMenu, this::applyStyle, null );
 		popupMenu.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 	}
 
@@ -84,7 +84,7 @@ public class FlatPopupMenuUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class FlatPopupMenuUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
-		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, popupMenu, borderShared );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, popupMenu, borderShared );
 	}
 
 	/**
@@ -101,6 +101,6 @@ public class FlatPopupMenuUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this, popupMenu.getBorder() );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, popupMenu.getBorder() );
 	}
 }

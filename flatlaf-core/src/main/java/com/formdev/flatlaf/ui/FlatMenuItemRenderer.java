@@ -42,8 +42,8 @@ import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatCheckBoxMenuItemIcon;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -110,9 +110,9 @@ public class FlatMenuItemRenderer
 		if( key.startsWith( "icon." ) || key.equals( "selectionForeground" ) ) {
 			if( iconsShared ) {
 				if( checkIcon instanceof FlatCheckBoxMenuItemIcon )
-					checkIcon = FlatStyleSupport.cloneIcon( checkIcon );
+					checkIcon = FlatStylingSupport.cloneIcon( checkIcon );
 				if( arrowIcon instanceof FlatMenuArrowIcon )
-					arrowIcon = FlatStyleSupport.cloneIcon( arrowIcon );
+					arrowIcon = FlatStylingSupport.cloneIcon( arrowIcon );
 				iconsShared = false;
 			}
 
@@ -147,18 +147,18 @@ public class FlatMenuItemRenderer
 			}
 		}
 
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
 	 * @since TODO
 	 */
 	public Map<String, Class<?>> getStyleableInfos() {
-		Map<String, Class<?>> infos = FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
 		if( checkIcon instanceof FlatCheckBoxMenuItemIcon )
-			FlatStyleSupport.putAllPrefixKey( infos, "icon.", ((FlatCheckBoxMenuItemIcon)checkIcon).getStyleableInfos() );
+			FlatStylingSupport.putAllPrefixKey( infos, "icon.", ((FlatCheckBoxMenuItemIcon)checkIcon).getStyleableInfos() );
 		if( arrowIcon instanceof FlatMenuArrowIcon )
-			FlatStyleSupport.putAllPrefixKey( infos, "icon.", ((FlatMenuArrowIcon)arrowIcon).getStyleableInfos() );
+			FlatStylingSupport.putAllPrefixKey( infos, "icon.", ((FlatMenuArrowIcon)arrowIcon).getStyleableInfos() );
 		infos.remove( "icon.selectionForeground" );
 		return infos;
 	}

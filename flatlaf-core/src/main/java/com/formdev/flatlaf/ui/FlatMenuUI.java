@@ -33,8 +33,8 @@ import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenu}.
@@ -90,7 +90,7 @@ public class FlatMenuUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( menuItem ) );
+		applyStyle( FlatStylingSupport.getStyle( menuItem ) );
 	}
 
 	@Override
@@ -145,14 +145,14 @@ public class FlatMenuUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
-		return FlatStyleSupport.createPropertyChangeListener( c, this::applyStyle, super.createPropertyChangeListener( c ) );
+		return FlatStylingSupport.createPropertyChangeListener( c, this::applyStyle, super.createPropertyChangeListener( c ) );
 	}
 
 	/**
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**

@@ -29,8 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar}.
@@ -83,7 +83,7 @@ public class FlatToolBarUI
 		if( !focusableButtons )
 			setButtonsFocusable( false );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class FlatToolBarUI
 
 	@Override
 	protected PropertyChangeListener createPropertyListener() {
-		return FlatStyleSupport.createPropertyChangeListener( toolBar, this::applyStyle, super.createPropertyListener() );
+		return FlatStylingSupport.createPropertyChangeListener( toolBar, this::applyStyle, super.createPropertyListener() );
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class FlatToolBarUI
 	protected void applyStyle( Object style ) {
 		boolean oldFocusableButtons = focusableButtons;
 
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		if( focusableButtons != oldFocusableButtons )
 			setButtonsFocusable( focusableButtons );
@@ -152,7 +152,7 @@ public class FlatToolBarUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class FlatToolBarUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

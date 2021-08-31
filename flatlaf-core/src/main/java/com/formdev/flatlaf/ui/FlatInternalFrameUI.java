@@ -35,9 +35,9 @@ import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableBorder;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JInternalFrame}.
@@ -116,7 +116,7 @@ public class FlatInternalFrameUI
 
 		windowResizer = createWindowResizer();
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class FlatInternalFrameUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return FlatStyleSupport.createPropertyChangeListener( frame, this::applyStyle,
+		return FlatStylingSupport.createPropertyChangeListener( frame, this::applyStyle,
 			super.createPropertyChangeListener() );
 	}
 
@@ -156,7 +156,7 @@ public class FlatInternalFrameUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class FlatInternalFrameUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
-		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, frame, borderShared );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, frame, borderShared );
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class FlatInternalFrameUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this, frame.getBorder() );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, frame.getBorder() );
 	}
 
 	//---- class FlatInternalFrameBorder --------------------------------------
@@ -213,13 +213,13 @@ public class FlatInternalFrameUI
 				case "inactiveDropShadowOpacity": return inactiveDropShadowBorder.applyStyleProperty( "shadowOpacity", value );
 			}
 
-			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+			return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 		}
 
 		@Override
 		public Map<String, Class<?>> getStyleableInfos() {
 			Map<String, Class<?>> infos = new LinkedHashMap<>();
-			FlatStyleSupport.collectAnnotatedStyleableInfos( this, infos );
+			FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
 			infos.put( "borderMargins", Insets.class );
 			infos.put( "activeDropShadowColor", Color.class );
 			infos.put( "activeDropShadowInsets", Insets.class );

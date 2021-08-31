@@ -26,8 +26,8 @@ import java.awt.geom.Path2D;
 import java.util.Map;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -70,14 +70,14 @@ public class FlatTabbedPaneCloseIcon
 	 * @since TODO
 	 */
 	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
 	 * @since TODO
 	 */
 	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

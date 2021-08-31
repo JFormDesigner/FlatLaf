@@ -18,7 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 
 /**
  * Border for various text components (e.g. {@link javax.swing.JTextField}).

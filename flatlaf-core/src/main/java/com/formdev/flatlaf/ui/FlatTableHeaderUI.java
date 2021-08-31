@@ -38,8 +38,8 @@ import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -98,7 +98,7 @@ public class FlatTableHeaderUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class FlatTableHeaderUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener( header, this::applyStyle, null );
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( header, this::applyStyle, null );
 		header.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 	}
 
@@ -139,7 +139,7 @@ public class FlatTableHeaderUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class FlatTableHeaderUI
 		if( key.equals( "sortIconPosition" ) && value instanceof String )
 			value = parseSortIconPosition( (String) value );
 
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class FlatTableHeaderUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	private static int parseSortIconPosition( String str ) {

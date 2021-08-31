@@ -35,9 +35,9 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -90,7 +90,7 @@ public class FlatSplitPaneUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( splitPane ) );
+		applyStyle( FlatStylingSupport.getStyle( splitPane ) );
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class FlatSplitPaneUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener( splitPane, this::applyStyle, null );
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( splitPane, this::applyStyle, null );
 		splitPane.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 	}
 
@@ -142,7 +142,7 @@ public class FlatSplitPaneUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		if( divider instanceof FlatSplitPaneDivider )
 			((FlatSplitPaneDivider)divider).updateStyle();
@@ -158,7 +158,7 @@ public class FlatSplitPaneUI
 		} catch( UnknownStyleException ex ) {
 			// ignore
 		}
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class FlatSplitPaneUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		Map<String, Class<?>> infos = FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
 		if( divider instanceof FlatSplitPaneDivider )
 			infos.putAll( ((FlatSplitPaneDivider)divider).getStyleableInfos() );
 		return infos;
@@ -193,14 +193,14 @@ public class FlatSplitPaneUI
 		 * @since TODO
 		 */
 		protected Object applyStyleProperty( String key, Object value ) {
-			return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+			return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 		}
 
 		/**
 		 * @since TODO
 		 */
 		public Map<String, Class<?>> getStyleableInfos() {
-			return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+			return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 		}
 
 		void updateStyle() {

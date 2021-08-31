@@ -40,7 +40,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -80,7 +80,7 @@ public class FlatMenuBarUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class FlatMenuBarUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener(
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
 			menuBar, this::applyStyle, null );
 		menuBar.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 	}
@@ -131,7 +131,7 @@ public class FlatMenuBarUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class FlatMenuBarUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
-		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, menuBar, borderShared );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, menuBar, borderShared );
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class FlatMenuBarUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this, menuBar.getBorder() );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, menuBar.getBorder() );
 	}
 
 	@Override

@@ -29,8 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSeparatorUI;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSeparator}.
@@ -82,7 +82,7 @@ public class FlatSeparatorUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class FlatSeparatorUI
 	protected void installListeners( JSeparator s ) {
 		super.installListeners( s );
 
-		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener(
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
 			s, style -> applyStyle( s, this, style ), null );
 		s.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 	}
@@ -140,14 +140,14 @@ public class FlatSeparatorUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class FlatSeparatorUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

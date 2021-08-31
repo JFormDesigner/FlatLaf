@@ -36,9 +36,9 @@ import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -92,7 +92,7 @@ public class FlatRadioButtonUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -159,7 +159,7 @@ public class FlatRadioButtonUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class FlatRadioButtonUI
 				return new UnknownStyleException( key );
 
 			if( iconShared ) {
-				icon = FlatStyleSupport.cloneIcon( icon );
+				icon = FlatStylingSupport.cloneIcon( icon );
 				iconShared = false;
 			}
 
@@ -180,7 +180,7 @@ public class FlatRadioButtonUI
 			return ((FlatCheckBoxIcon)icon).applyStyleProperty( key, value );
 		}
 
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class FlatRadioButtonUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		Map<String, Class<?>> infos = FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
 		if( icon instanceof FlatCheckBoxIcon ) {
 			for( Map.Entry<String, Class<?>> e : ((FlatCheckBoxIcon)icon).getStyleableInfos().entrySet() )
 				infos.put( "icon.".concat( e.getKey() ), e.getValue() );

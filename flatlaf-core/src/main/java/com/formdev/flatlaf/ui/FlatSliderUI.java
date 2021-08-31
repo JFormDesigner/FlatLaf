@@ -36,8 +36,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
@@ -119,7 +119,7 @@ public class FlatSliderUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( slider ) );
+		applyStyle( FlatStylingSupport.getStyle( slider ) );
 	}
 
 	@Override
@@ -186,7 +186,7 @@ public class FlatSliderUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener( JSlider slider ) {
-		return FlatStyleSupport.createPropertyChangeListener( slider, this::applyStyle,
+		return FlatStylingSupport.createPropertyChangeListener( slider, this::applyStyle,
 			super.createPropertyChangeListener( slider ) );
 	}
 
@@ -194,14 +194,14 @@ public class FlatSliderUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class FlatSliderUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

@@ -24,8 +24,8 @@ import java.awt.Insets;
 import java.util.Map;
 import javax.swing.JMenuBar;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
 
 /**
  * Border for {@link javax.swing.JMenuBar}.
@@ -45,12 +45,12 @@ public class FlatMenuBarBorder
 	 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	@Override
 	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

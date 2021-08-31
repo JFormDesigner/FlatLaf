@@ -25,8 +25,8 @@ import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.ui.FlatStyleSupport;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 
 /**
  * Icon for {@link javax.swing.JCheckBoxMenuItem}.
@@ -53,14 +53,14 @@ public class FlatCheckBoxMenuItemIcon
 	 * @since TODO
 	 */
 	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
 	 * @since TODO
 	 */
 	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

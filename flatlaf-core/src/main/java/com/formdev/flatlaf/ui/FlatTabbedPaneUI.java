@@ -87,9 +87,9 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.JavaCompatibility;
@@ -269,7 +269,7 @@ public class FlatTabbedPaneUI
 
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -576,7 +576,7 @@ public class FlatTabbedPaneUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		// update buttons
 		for( Component c : tabPane.getComponents() ) {
@@ -595,7 +595,7 @@ public class FlatTabbedPaneUI
 				return new UnknownStyleException( key );
 
 			if( closeIconShared ) {
-				closeIcon = FlatStyleSupport.cloneIcon( closeIcon );
+				closeIcon = FlatStylingSupport.cloneIcon( closeIcon );
 				closeIconShared = false;
 			}
 
@@ -626,7 +626,7 @@ public class FlatTabbedPaneUI
 			}
 		}
 
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -638,7 +638,7 @@ public class FlatTabbedPaneUI
 		infos.put( "tabInsets", Insets.class );
 		infos.put( "tabAreaInsets", Insets.class );
 		infos.put( "textIconGap", int.class );
-		FlatStyleSupport.collectAnnotatedStyleableInfos( this, infos );
+		FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
 		if( closeIcon instanceof FlatTabbedPaneCloseIcon )
 			infos.putAll( ((FlatTabbedPaneCloseIcon)closeIcon).getStyleableInfos() );
 		return infos;

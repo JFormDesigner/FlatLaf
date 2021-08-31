@@ -28,8 +28,8 @@ import javax.swing.JComponent;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
 /**

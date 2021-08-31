@@ -48,9 +48,9 @@ import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.UnknownStyleException;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -160,7 +160,7 @@ public class FlatButtonUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( (AbstractButton) c, FlatStyleSupport.getStyle( c ) );
+		applyStyle( (AbstractButton) c, FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -275,7 +275,7 @@ public class FlatButtonUI
 	 * @since TODO
 	 */
 	protected void applyStyle( AbstractButton b, Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style,
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
 			(key, value) -> applyStyleProperty( b, key, value ) );
 	}
 
@@ -288,7 +288,7 @@ public class FlatButtonUI
 				return new UnknownStyleException( key );
 
 			if( helpButtonIconShared ) {
-				helpButtonIcon = FlatStyleSupport.cloneIcon( helpButtonIcon );
+				helpButtonIcon = FlatStylingSupport.cloneIcon( helpButtonIcon );
 				helpButtonIconShared = false;
 			}
 
@@ -298,7 +298,7 @@ public class FlatButtonUI
 
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
-		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, b, borderShared );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, b, borderShared );
 	}
 
 	/**
@@ -306,9 +306,9 @@ public class FlatButtonUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		Map<String, Class<?>> infos = FlatStyleSupport.getAnnotatedStyleableInfos( this, c.getBorder() );
+		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this, c.getBorder() );
 		if( helpButtonIcon instanceof FlatHelpButtonIcon )
-			FlatStyleSupport.putAllPrefixKey( infos, "help.", ((FlatHelpButtonIcon)helpButtonIcon).getStyleableInfos() );
+			FlatStylingSupport.putAllPrefixKey( infos, "help.", ((FlatHelpButtonIcon)helpButtonIcon).getStyleableInfos() );
 		return infos;
 	}
 

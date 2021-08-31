@@ -43,8 +43,8 @@ import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
 import com.formdev.flatlaf.util.UIScale;
@@ -107,7 +107,7 @@ public class FlatTextFieldUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -209,7 +209,7 @@ public class FlatTextFieldUI
 		oldDisabledBackground = disabledBackground;
 		oldInactiveBackground = inactiveBackground;
 
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		updateBackground();
 	}
@@ -220,7 +220,7 @@ public class FlatTextFieldUI
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
-		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, getComponent(), borderShared );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, getComponent(), borderShared );
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class FlatTextFieldUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this, getComponent().getBorder() );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, getComponent().getBorder() );
 	}
 
 	private void updateBackground() {

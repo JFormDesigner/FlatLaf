@@ -47,21 +47,21 @@ public class TestFlatStyling
 
 	@Test
 	void parse() {
-		assertEquals( null, FlatStyleSupport.parse( null ) );
-		assertEquals( null, FlatStyleSupport.parse( "" ) );
-		assertEquals( null, FlatStyleSupport.parse( "  " ) );
-		assertEquals( null, FlatStyleSupport.parse( ";" ) );
-		assertEquals( null, FlatStyleSupport.parse( " ; ; " ) );
+		assertEquals( null, FlatStylingSupport.parse( null ) );
+		assertEquals( null, FlatStylingSupport.parse( "" ) );
+		assertEquals( null, FlatStylingSupport.parse( "  " ) );
+		assertEquals( null, FlatStylingSupport.parse( ";" ) );
+		assertEquals( null, FlatStylingSupport.parse( " ; ; " ) );
 
 		assertEquals(
 			expectedMap( "background", Color.WHITE ),
-			FlatStyleSupport.parse( "background: #fff" ) );
+			FlatStylingSupport.parse( "background: #fff" ) );
 		assertEquals(
 			expectedMap( "background", Color.WHITE, "foreground", Color.BLACK ),
-			FlatStyleSupport.parse( "background: #fff; foreground: #000" ) );
+			FlatStylingSupport.parse( "background: #fff; foreground: #000" ) );
 		assertEquals(
 			expectedMap( "background", Color.WHITE, "foreground", Color.BLACK, "someWidth", 20 ),
-			FlatStyleSupport.parse( "background: #fff; foreground: #000; someWidth: 20" ) );
+			FlatStylingSupport.parse( "background: #fff; foreground: #000; someWidth: 20" ) );
 	}
 
 	private Map<Object, Object> expectedMap( Object... keyValuePairs ) {

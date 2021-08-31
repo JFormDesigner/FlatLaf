@@ -25,8 +25,8 @@ import java.awt.Insets;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
 import java.util.Map;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableBorder;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -95,7 +95,7 @@ public class FlatDropShadowBorder
 	 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
-		Object oldValue = FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		Object oldValue = FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 		if( key.equals( "shadowInsets" ) ) {
 			applyStyleProperty( nonNegativeInsets( shadowInsets ) );
 			shadowSize = maxInset( shadowInsets );
@@ -108,7 +108,7 @@ public class FlatDropShadowBorder
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

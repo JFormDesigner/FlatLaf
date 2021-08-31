@@ -38,8 +38,8 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.JTableHeader;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -124,7 +124,7 @@ public class FlatTableUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -187,7 +187,7 @@ public class FlatTableUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStyleSupport.createPropertyChangeListener( table, this::applyStyle, null );
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( table, this::applyStyle, null );
 		table.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
 	}
 
@@ -229,7 +229,7 @@ public class FlatTableUI
 		Color oldSelectionInactiveBackground = selectionInactiveBackground;
 		Color oldSelectionInactiveForeground = selectionInactiveForeground;
 
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		// update selection background
 		if( selectionBackground != oldSelectionBackground ) {
@@ -254,7 +254,7 @@ public class FlatTableUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class FlatTableUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

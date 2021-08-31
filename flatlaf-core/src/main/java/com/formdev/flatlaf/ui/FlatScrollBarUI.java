@@ -37,8 +37,8 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -115,7 +115,7 @@ public class FlatScrollBarUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -224,7 +224,7 @@ public class FlatScrollBarUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		if( incrButton instanceof FlatScrollBarButton )
 			((FlatScrollBarButton)incrButton).updateStyle();
@@ -246,7 +246,7 @@ public class FlatScrollBarUI
 			case "maximumThumbSize": oldValue = maximumThumbSize; maximumThumbSize = (Dimension) value; return oldValue;
 		}
 
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class FlatScrollBarUI
 		infos.put( "width", int.class );
 		infos.put( "minimumThumbSize", Dimension.class );
 		infos.put( "maximumThumbSize", Dimension.class );
-		FlatStyleSupport.collectAnnotatedStyleableInfos( this, infos );
+		FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
 		return infos;
 	}
 

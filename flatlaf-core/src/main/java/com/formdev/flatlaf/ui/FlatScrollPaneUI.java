@@ -48,7 +48,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollPane}.
@@ -87,7 +87,7 @@ public class FlatScrollPaneUI
 		int focusWidth = UIManager.getInt( "Component.focusWidth" );
 		LookAndFeel.installProperty( c, "opaque", focusWidth == 0 );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 
 		MigLayoutVisualPadding.install( scrollpane );
 	}
@@ -305,7 +305,7 @@ public class FlatScrollPaneUI
 	 * @since TODO
 	 */
 	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class FlatScrollPaneUI
 
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
-		return FlatStyleSupport.applyToAnnotatedObjectOrBorder( this, key, value, scrollpane, borderShared );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, scrollpane, borderShared );
 	}
 
 	/**
@@ -327,7 +327,7 @@ public class FlatScrollPaneUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this, scrollpane.getBorder() );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, scrollpane.getBorder() );
 	}
 
 	@Override

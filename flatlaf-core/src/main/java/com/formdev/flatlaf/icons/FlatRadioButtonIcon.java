@@ -19,7 +19,7 @@ package com.formdev.flatlaf.icons;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 
 /**
  * Icon for {@link javax.swing.JRadioButton}.

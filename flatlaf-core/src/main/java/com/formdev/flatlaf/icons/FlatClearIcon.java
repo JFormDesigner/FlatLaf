@@ -26,9 +26,9 @@ import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.ui.FlatStyleSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatUIUtils;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
 
 /**
  * "clear" icon for search fields.
@@ -55,14 +55,14 @@ public class FlatClearIcon
 	 * @since TODO
 	 */
 	public Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
 	 * @since TODO
 	 */
 	public Map<String, Class<?>> getStyleableInfos() {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

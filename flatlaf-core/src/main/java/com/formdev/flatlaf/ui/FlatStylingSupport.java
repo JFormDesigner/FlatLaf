@@ -45,7 +45,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @author Karl Tauber
  * @since TODO
  */
-public class FlatStyleSupport
+public class FlatStylingSupport
 {
 	/**
 	 * Indicates that a field is intended to be used by FlatLaf styling support.

@@ -27,8 +27,8 @@ import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicListUI;
-import com.formdev.flatlaf.ui.FlatStyleSupport.Styleable;
-import com.formdev.flatlaf.ui.FlatStyleSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JList}.
@@ -90,7 +90,7 @@ public class FlatListUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStyleSupport.getStyle( c ) );
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class FlatListUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return FlatStyleSupport.createPropertyChangeListener( list, this::applyStyle,
+		return FlatStylingSupport.createPropertyChangeListener( list, this::applyStyle,
 			super.createPropertyChangeListener() );
 	}
 
@@ -153,7 +153,7 @@ public class FlatListUI
 		Color oldSelectionInactiveBackground = selectionInactiveBackground;
 		Color oldSelectionInactiveForeground = selectionInactiveForeground;
 
-		oldStyleValues = FlatStyleSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		// update selection background
 		if( selectionBackground != oldSelectionBackground ) {
@@ -178,7 +178,7 @@ public class FlatListUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStyleSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class FlatListUI
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		return FlatStyleSupport.getAnnotatedStyleableInfos( this );
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**
