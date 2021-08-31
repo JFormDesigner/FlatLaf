@@ -198,7 +198,7 @@ public class FlatStyleSupport
 		if( key.startsWith( "[" ) )
 			key = key.substring( key.indexOf( ']' ) + 1 );
 
-		return FlatLaf.parseDefaultsValue( key, value );
+		return FlatLaf.parseDefaultsValue( key, value, null );
 	}
 
 	/**

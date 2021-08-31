@@ -784,14 +784,17 @@ public abstract class FlatLaf
 	 * <p>
 	 * See: <a href="https://www.formdev.com/flatlaf/properties-files/">https://www.formdev.com/flatlaf/properties-files/</a>
 	 *
-	 * @param key the key, which is used to determine the value type
+	 * @param key the key, which is used to determine the value type if parameter {@code valueType} is {@code null}
 	 * @param value the value string
+	 * @param valueType the expected value type, or {@code null}
 	 * @return the binary value
 	 * @throws IllegalArgumentException on syntax errors
 	 * @since TODO
 	 */
-	public static Object parseDefaultsValue( String key, String value ) throws IllegalArgumentException {
-		return UIDefaultsLoader.parseValue( key, value );
+	public static Object parseDefaultsValue( String key, String value, Class<?> valueType )
+		throws IllegalArgumentException
+	{
+		return UIDefaultsLoader.parseValue( key, value, valueType );
 	}
 
 	private static void reSetLookAndFeel() {

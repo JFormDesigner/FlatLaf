@@ -33,8 +33,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.function.Function;
+import javax.swing.Icon;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
@@ -241,7 +243,7 @@ class UIDefaultsLoader
 
 				String value = resolveValue( (String) e.getValue(), propertiesGetter );
 				try {
-					defaults.put( key, parseValue( key, value, null, resolver, addonClassLoaders ) );
+					defaults.put( key, parseValue( key, value, null, null, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( key, value, ex, true );
 				}
@@ -292,12 +294,13 @@ class UIDefaultsLoader
 		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
 
 	private static ValueType[] tempResultValueType = new ValueType[1];
+	private static Map<Class<?>, ValueType> javaValueTypes;
 
-	static Object parseValue( String key, String value ) {
-		return parseValue( key, value, null, v -> v, Collections.emptyList() );
+	static Object parseValue( String key, String value, Class<?> valueType ) {
+		return parseValue( key, value, valueType, null, v -> v, Collections.emptyList() );
 	}
 
-	static Object parseValue( String key, String value, ValueType[] resultValueType,
+	static Object parseValue( String key, String value, Class<?> javaValueType, ValueType[] resultValueType,
 		Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
 	{
 		if( resultValueType == null )
@@ -305,71 +308,106 @@ class UIDefaultsLoader
 
 		value = value.trim();
 
-		// null, false, true
-		switch( value ) {
-			case "null":	resultValueType[0] = ValueType.NULL; return null;
-			case "false":	resultValueType[0] = ValueType.BOOLEAN; return false;
-			case "true":	resultValueType[0] = ValueType.BOOLEAN; return true;
-		}
-
-		// check for function "lazy"
-		//     Syntax: lazy(uiKey)
-		if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
-			resultValueType[0] = ValueType.LAZY;
-			String uiKey = value.substring( 5, value.length() - 1 ).trim();
-			return (LazyValue) t -> {
-				return lazyUIManagerGet( uiKey );
-			};
+		// null
+		if( value.equals( "null" ) ) {
+			resultValueType[0] = ValueType.NULL;
+			return null;
 		}
 
 		ValueType valueType = ValueType.UNKNOWN;
 
-		// check whether value type is specified in the value
-		if( value.startsWith( "#" ) )
-			valueType = ValueType.COLOR;
-		else if( value.startsWith( "\"" ) && value.endsWith( "\"" ) ) {
-			valueType = ValueType.STRING;
-			value = value.substring( 1, value.length() - 1 );
-		} else if( value.startsWith( TYPE_PREFIX ) ) {
-			int end = value.indexOf( TYPE_PREFIX_END );
-			if( end != -1 ) {
-				try {
-					String typeStr = value.substring( TYPE_PREFIX.length(), end );
-					valueType = ValueType.valueOf( typeStr.toUpperCase( Locale.ENGLISH ) );
+		if( javaValueType != null ) {
+			if( javaValueTypes == null ) {
+				// create lazy
+				javaValueTypes = new HashMap<>();
+				javaValueTypes.put( String.class, ValueType.STRING );
+				javaValueTypes.put( boolean.class, ValueType.BOOLEAN );
+				javaValueTypes.put( Boolean.class, ValueType.BOOLEAN );
+				javaValueTypes.put( char.class, ValueType.CHARACTER );
+				javaValueTypes.put( Character.class, ValueType.CHARACTER );
+				javaValueTypes.put( int.class, ValueType.INTEGER );
+				javaValueTypes.put( Integer.class, ValueType.INTEGER );
+				javaValueTypes.put( float.class, ValueType.FLOAT );
+				javaValueTypes.put( Float.class, ValueType.FLOAT );
+				javaValueTypes.put( Border.class, ValueType.BORDER );
+				javaValueTypes.put( Icon.class, ValueType.ICON );
+				javaValueTypes.put( Insets.class, ValueType.INSETS );
+				javaValueTypes.put( Dimension.class, ValueType.DIMENSION );
+				javaValueTypes.put( Color.class, ValueType.COLOR );
+			}
 
-					// remove type from value
-					value = value.substring( end + TYPE_PREFIX_END.length() );
-				} catch( IllegalArgumentException ex ) {
-					// ignore
+			// map java value type to parser value type
+			valueType = javaValueTypes.get( javaValueType );
+			if( valueType == null )
+				throw new IllegalArgumentException( "unsupported value type '" + javaValueType.getName() + "'" );
+
+			// remove '"' from strings
+			if( valueType == ValueType.STRING && value.startsWith( "\"" ) && value.endsWith( "\"" ) )
+				value = value.substring( 1, value.length() - 1 );
+		} else {
+			// false, true
+			switch( value ) {
+				case "false":	resultValueType[0] = ValueType.BOOLEAN; return false;
+				case "true":	resultValueType[0] = ValueType.BOOLEAN; return true;
+			}
+
+			// check for function "lazy"
+			//     Syntax: lazy(uiKey)
+			if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
+				resultValueType[0] = ValueType.LAZY;
+				String uiKey = value.substring( 5, value.length() - 1 ).trim();
+				return (LazyValue) t -> {
+					return lazyUIManagerGet( uiKey );
+				};
+			}
+
+			// check whether value type is specified in the value
+			if( value.startsWith( "#" ) )
+				valueType = ValueType.COLOR;
+			else if( value.startsWith( "\"" ) && value.endsWith( "\"" ) ) {
+				valueType = ValueType.STRING;
+				value = value.substring( 1, value.length() - 1 );
+			} else if( value.startsWith( TYPE_PREFIX ) ) {
+				int end = value.indexOf( TYPE_PREFIX_END );
+				if( end != -1 ) {
+					try {
+						String typeStr = value.substring( TYPE_PREFIX.length(), end );
+						valueType = ValueType.valueOf( typeStr.toUpperCase( Locale.ENGLISH ) );
+
+						// remove type from value
+						value = value.substring( end + TYPE_PREFIX_END.length() );
+					} catch( IllegalArgumentException ex ) {
+						// ignore
+					}
 				}
 			}
-		}
 
-		// determine value type from key
-		if( valueType == ValueType.UNKNOWN ) {
-			if( key.endsWith( "UI" ) )
-				valueType = ValueType.STRING;
-			else if( key.endsWith( "Color" ) ||
-				(key.endsWith( "ground" ) &&
-				 (key.endsWith( ".background" ) || key.endsWith( "Background" ) || key.equals( "background" ) ||
-				  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ) || key.equals( "foreground" ))) )
-				valueType = ValueType.COLOR;
-			else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
-				valueType = ValueType.BORDER;
-			else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
-				valueType = ValueType.ICON;
-			else if( key.endsWith( ".margin" ) || key.equals( "margin" ) ||
-					 key.endsWith( ".padding" ) || key.equals( "padding" ) ||
-					 key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
-				valueType = ValueType.INSETS;
-			else if( key.endsWith( "Size" ) )
-				valueType = ValueType.DIMENSION;
-			else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
-				valueType = ValueType.INTEGER;
-			else if( key.endsWith( "Char" ) )
-				valueType = ValueType.CHARACTER;
-			else if( key.endsWith( "grayFilter" ) )
-				valueType = ValueType.GRAYFILTER;
+			// determine value type from key
+			if( valueType == ValueType.UNKNOWN ) {
+				if( key.endsWith( "UI" ) )
+					valueType = ValueType.STRING;
+				else if( key.endsWith( "Color" ) ||
+					(key.endsWith( "ground" ) &&
+					 (key.endsWith( ".background" ) || key.endsWith( "Background" ) || key.equals( "background" ) ||
+					  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ) || key.equals( "foreground" ))) )
+					valueType = ValueType.COLOR;
+				else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
+					valueType = ValueType.BORDER;
+				else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
+					valueType = ValueType.ICON;
+				else if( key.endsWith( ".margin" ) || key.equals( "margin" ) ||
+						 key.endsWith( ".padding" ) || key.equals( "padding" ) ||
+						 key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
+					valueType = ValueType.INSETS;
+				else if( key.endsWith( "Size" ) )
+					valueType = ValueType.DIMENSION;
+				else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
+					valueType = ValueType.INTEGER;
+				else if( key.endsWith( "Char" ) )
+					valueType = ValueType.CHARACTER;
+				else if( key.endsWith( "grayFilter" ) )
+					valueType = ValueType.GRAYFILTER;
+			}
 		}
 
 		resultValueType[0] = valueType;
@@ -377,6 +415,7 @@ class UIDefaultsLoader
 		// parse value
 		switch( valueType ) {
 			case STRING:		return value;
+			case BOOLEAN:		return parseBoolean( value );
 			case CHARACTER:		return parseCharacter( value );
 			case INTEGER:		return parseInteger( value, true );
 			case FLOAT:			return parseFloat( value, true );
@@ -867,6 +906,14 @@ class UIDefaultsLoader
 		if( val < 0 || val > 100 )
 			throw new IllegalArgumentException( "percentage out of range (0-100%) '" + value + "'" );
 		return val;
+	}
+
+	private static Boolean parseBoolean( String value ) {
+		switch( value ) {
+			case "false":	return false;
+			case "true":	return true;
+		}
+		throw new IllegalArgumentException( "invalid boolean '" + value + "'" );
 	}
 
 	private static Character parseCharacter( String value ) {

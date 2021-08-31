@@ -56,7 +56,8 @@ public class UIDefaultsLoaderAccessor
 		Function<String, String> resolver )
 	{
 		ValueType[] resultValueType2 = new ValueType[1];
-		Object result = UIDefaultsLoader.parseValue( key, value, resultValueType2, resolver, Collections.emptyList() );
+		Object result = UIDefaultsLoader.parseValue( key, value, null,
+			resultValueType2, resolver, Collections.emptyList() );
 		resultValueType[0] = resultValueType2[0];
 		return result;
 	}
