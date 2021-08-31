@@ -49,6 +49,9 @@ public class ColorFunctions
 
 	/**
 	 * Returns a color that is a mixture of two colors.
+	 * <p>
+	 * This can be used to animate a color change from {@code color1} to {@code color2}
+	 * by invoking this method multiple times with growing {@code weight} (from 0 to 1).
 	 *
 	 * @param color1 first color
 	 * @param color2 second color
@@ -77,6 +80,34 @@ public class ColorFunctions
 			Math.round( g2 + ((g1 - g2) * weight) ),
 			Math.round( b2 + ((b1 - b2) * weight) ),
 			Math.round( a2 + ((a1 - a2) * weight) ) );
+	}
+
+	/**
+	 * Mix color with white, which makes the color brighter.
+	 * This is the same as {@link #mix}{@code (Color.white, color, weight)}.
+	 *
+	 * @param color second color
+	 * @param weight the weight (in range 0-1) to mix the two colors.
+	 *               Larger weight uses more of first color, smaller weight more of second color.
+	 * @return mixture of colors
+	 * @since 1.6
+	 */
+	public static Color tint( Color color, float weight ) {
+		return mix( Color.white, color, weight );
+	}
+
+	/**
+	 * Mix color with black, which makes the color darker.
+	 * This is the same as {@link #mix}{@code (Color.black, color, weight)}.
+	 *
+	 * @param color second color
+	 * @param weight the weight (in range 0-1) to mix the two colors.
+	 *               Larger weight uses more of first color, smaller weight more of second color.
+	 * @return mixture of colors
+	 * @since 1.6
+	 */
+	public static Color shade( Color color, float weight ) {
+		return mix( Color.black, color, weight );
 	}
 
 	/**
