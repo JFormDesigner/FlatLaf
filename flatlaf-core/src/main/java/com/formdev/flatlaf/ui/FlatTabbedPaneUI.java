@@ -626,7 +626,7 @@ public class FlatTabbedPaneUI
 			}
 		}
 
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, tabPane, key, value );
 	}
 
 	/**

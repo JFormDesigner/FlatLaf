@@ -82,7 +82,7 @@ public class FlatSeparatorUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		applyStyle( (JSeparator) c, FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class FlatSeparatorUI
 			ui = (FlatSeparatorUI) s.getUI();
 		}
 
-		ui.applyStyle( style );
+		ui.applyStyle( s, style );
 		s.revalidate();
 		s.repaint();
 	}
@@ -139,15 +139,16 @@ public class FlatSeparatorUI
 	/**
 	 * @since TODO
 	 */
-	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	protected void applyStyle( JSeparator s, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( s, key, value ) );
 	}
 
 	/**
 	 * @since TODO
 	 */
-	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	protected Object applyStyleProperty( JSeparator s, String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, s, key, value );
 	}
 
 	/**

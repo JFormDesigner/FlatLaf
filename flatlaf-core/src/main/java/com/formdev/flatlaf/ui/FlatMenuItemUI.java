@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
@@ -119,10 +120,10 @@ public class FlatMenuItemUI
 			// ignore
 		}
 
-		return applyStyleProperty( this, key, value );
+		return applyStyleProperty( this, menuItem, key, value );
 	}
 
-	static Object applyStyleProperty( BasicMenuItemUI ui, String key, Object value ) {
+	static Object applyStyleProperty( BasicMenuItemUI ui, JMenuItem menuItem, String key, Object value ) {
 		switch( key ) {
 			// BasicMenuItemUI
 			case "selectionBackground":
@@ -132,7 +133,8 @@ public class FlatMenuItemUI
 			case "acceleratorSelectionForeground":
 				return FlatStylingSupport.applyToField( ui, key, key, value );
 
-			default: throw new UnknownStyleException( key );
+			default:
+				return FlatStylingSupport.applyToAnnotatedObjectOrComponent( ui, menuItem, key, value );
 		}
 	}
 

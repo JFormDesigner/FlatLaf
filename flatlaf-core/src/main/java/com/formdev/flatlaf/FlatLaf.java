@@ -55,6 +55,7 @@ import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.ActiveValue;
+import javax.swing.UIDefaults.LazyValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
@@ -794,7 +795,16 @@ public abstract class FlatLaf
 	public static Object parseDefaultsValue( String key, String value, Class<?> valueType )
 		throws IllegalArgumentException
 	{
-		return UIDefaultsLoader.parseValue( key, value, valueType );
+		// parse value
+		Object val = UIDefaultsLoader.parseValue( key, value, valueType );
+
+		// create actual value if lazy or active
+		if( val instanceof LazyValue )
+			val = ((LazyValue)val).createValue( null );
+		else if( val instanceof ActiveValue )
+			val = ((ActiveValue)val).createValue( null );
+
+		return val;
 	}
 
 	private static void reSetLookAndFeel() {

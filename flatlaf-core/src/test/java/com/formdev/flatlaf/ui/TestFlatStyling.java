@@ -131,6 +131,14 @@ public class TestFlatStyling
 
 		// border
 		flatButtonBorder( style -> ui.applyStyle( b, style ) );
+
+		// JComponent properties
+		ui.applyStyle( b, "background: #fff" );
+		ui.applyStyle( b, "foreground: #fff" );
+		ui.applyStyle( b, "border: 2,2,2,2,#f00" );
+
+		// AbstractButton properties
+		ui.applyStyle( b, "margin: 2,2,2,2" );
 	}
 
 	@Test
@@ -141,7 +149,7 @@ public class TestFlatStyling
 		assertTrue( ui.getDefaultIcon() instanceof FlatCheckBoxIcon );
 
 		// FlatCheckBoxUI extends FlatRadioButtonUI
-		radioButton( ui );
+		radioButton( ui, c );
 	}
 
 	@Test
@@ -175,6 +183,11 @@ public class TestFlatStyling
 
 		// border
 		flatRoundBorder( style -> ui.applyStyle( style ) );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -186,6 +199,17 @@ public class TestFlatStyling
 		ui.applyStyle( "disabledBackground: #fff" );
 		ui.applyStyle( "inactiveBackground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JTextComponent properties
+		ui.applyStyle( "caretColor: #fff" );
+		ui.applyStyle( "selectionColor: #fff" );
+		ui.applyStyle( "selectedTextColor: #fff" );
+		ui.applyStyle( "disabledTextColor: #fff" );
 	}
 
 	@Test
@@ -214,6 +238,11 @@ public class TestFlatStyling
 		ui.applyStyle( "inactiveDropShadowColor: #fff" );
 		ui.applyStyle( "inactiveDropShadowInsets: 1,2,3,4" );
 		ui.applyStyle( "inactiveDropShadowOpacity: 0.5" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -221,7 +250,15 @@ public class TestFlatStyling
 		JLabel c = new JLabel();
 		FlatLabelUI ui = (FlatLabelUI) c.getUI();
 
-		ui.applyStyle( "disabledForeground: #fff" );
+		ui.applyStyle( c, "disabledForeground: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( c, "background: #fff" );
+		ui.applyStyle( c, "foreground: #fff" );
+		ui.applyStyle( c, "border: 2,2,2,2,#f00" );
+
+		// JLabel properties
+		ui.applyStyle( c, "icon: com.formdev.flatlaf.icons.FlatTreeExpandedIcon" );
 	}
 
 	@Test
@@ -238,6 +275,14 @@ public class TestFlatStyling
 		ui.applyStyle( "cellMargins: 1,2,3,4" );
 		ui.applyStyle( "cellFocusColor: #fff" );
 		ui.applyStyle( "showCellFocusIndicator: true" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JList properties
+		ui.applyStyle( "visibleRowCount: 20" );
 	}
 
 	@Test
@@ -247,6 +292,11 @@ public class TestFlatStyling
 
 		// FlatMenuBarBorder
 		ui.applyStyle( "borderColor: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -299,6 +349,14 @@ public class TestFlatStyling
 		applyStyle.accept( "acceleratorSelectionForeground: #fff" );
 
 		menuItemRenderer( applyStyle );
+
+		// JComponent properties
+		applyStyle.accept( "background: #fff" );
+		applyStyle.accept( "foreground: #fff" );
+		applyStyle.accept( "border: 2,2,2,2,#f00" );
+
+		// AbstractButton properties
+		applyStyle.accept( "margin: 2,2,2,2" );
 	}
 
 	private void menuItemRenderer( Consumer<String> applyStyle ) {
@@ -354,6 +412,11 @@ public class TestFlatStyling
 
 		ui.applyStyle( "borderInsets: 1,2,3,4" );
 		ui.applyStyle( "borderColor: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -362,7 +425,7 @@ public class TestFlatStyling
 		FlatPopupMenuSeparatorUI ui = (FlatPopupMenuSeparatorUI) c.getUI();
 
 		// FlatPopupMenuSeparatorUI extends FlatSeparatorUI
-		separator( ui );
+		separator( ui, c );
 	}
 
 	@Test
@@ -373,6 +436,11 @@ public class TestFlatStyling
 		ui.applyStyle( "arc: 5" );
 		ui.applyStyle( "horizontalSize: 100,12" );
 		ui.applyStyle( "verticalSize: 12,100" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -382,47 +450,55 @@ public class TestFlatStyling
 
 		assertTrue( ui.getDefaultIcon() instanceof FlatRadioButtonIcon );
 
-		radioButton( ui );
+		radioButton( ui, c );
 
-		ui.applyStyle( "icon.centerDiameter: 8" );
+		ui.applyStyle( c, "icon.centerDiameter: 8" );
 	}
 
-	private void radioButton( FlatRadioButtonUI ui ) {
-		ui.applyStyle( "disabledText: #fff" );
+	private void radioButton( FlatRadioButtonUI ui, AbstractButton b ) {
+		ui.applyStyle( b, "disabledText: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( b, "background: #fff" );
+		ui.applyStyle( b, "foreground: #fff" );
+		ui.applyStyle( b, "border: 2,2,2,2,#f00" );
+
+		// AbstractButton properties
+		ui.applyStyle( b, "margin: 2,2,2,2" );
 
 		//---- icon ----
 
-		ui.applyStyle( "icon.focusWidth: 2" );
-		ui.applyStyle( "icon.focusColor: #fff" );
-		ui.applyStyle( "icon.arc: 5" );
+		ui.applyStyle( b, "icon.focusWidth: 2" );
+		ui.applyStyle( b, "icon.focusColor: #fff" );
+		ui.applyStyle( b, "icon.arc: 5" );
 
 		// enabled
-		ui.applyStyle( "icon.borderColor: #fff" );
-		ui.applyStyle( "icon.background: #fff" );
-		ui.applyStyle( "icon.selectedBorderColor: #fff" );
-		ui.applyStyle( "icon.selectedBackground: #fff" );
-		ui.applyStyle( "icon.checkmarkColor: #fff" );
+		ui.applyStyle( b, "icon.borderColor: #fff" );
+		ui.applyStyle( b, "icon.background: #fff" );
+		ui.applyStyle( b, "icon.selectedBorderColor: #fff" );
+		ui.applyStyle( b, "icon.selectedBackground: #fff" );
+		ui.applyStyle( b, "icon.checkmarkColor: #fff" );
 
 		// disabled
-		ui.applyStyle( "icon.disabledBorderColor: #fff" );
-		ui.applyStyle( "icon.disabledBackground: #fff" );
-		ui.applyStyle( "icon.disabledCheckmarkColor: #fff" );
+		ui.applyStyle( b, "icon.disabledBorderColor: #fff" );
+		ui.applyStyle( b, "icon.disabledBackground: #fff" );
+		ui.applyStyle( b, "icon.disabledCheckmarkColor: #fff" );
 
 		// focused
-		ui.applyStyle( "icon.focusedBorderColor: #fff" );
-		ui.applyStyle( "icon.focusedBackground: #fff" );
-		ui.applyStyle( "icon.selectedFocusedBorderColor: #fff" );
-		ui.applyStyle( "icon.selectedFocusedBackground: #fff" );
-		ui.applyStyle( "icon.selectedFocusedCheckmarkColor: #fff" );
+		ui.applyStyle( b, "icon.focusedBorderColor: #fff" );
+		ui.applyStyle( b, "icon.focusedBackground: #fff" );
+		ui.applyStyle( b, "icon.selectedFocusedBorderColor: #fff" );
+		ui.applyStyle( b, "icon.selectedFocusedBackground: #fff" );
+		ui.applyStyle( b, "icon.selectedFocusedCheckmarkColor: #fff" );
 
 		// hover
-		ui.applyStyle( "icon.hoverBorderColor: #fff" );
-		ui.applyStyle( "icon.hoverBackground: #fff" );
-		ui.applyStyle( "icon.selectedHoverBackground: #fff" );
+		ui.applyStyle( b, "icon.hoverBorderColor: #fff" );
+		ui.applyStyle( b, "icon.hoverBackground: #fff" );
+		ui.applyStyle( b, "icon.selectedHoverBackground: #fff" );
 
 		// pressed
-		ui.applyStyle( "icon.pressedBackground: #fff" );
-		ui.applyStyle( "icon.selectedPressedBackground: #fff" );
+		ui.applyStyle( b, "icon.pressedBackground: #fff" );
+		ui.applyStyle( b, "icon.selectedPressedBackground: #fff" );
 	}
 
 	@Test
@@ -454,6 +530,11 @@ public class TestFlatStyling
 		ui.applyStyle( "buttonDisabledArrowColor: #fff" );
 		ui.applyStyle( "hoverButtonBackground: #fff" );
 		ui.applyStyle( "pressedButtonBackground: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -463,6 +544,11 @@ public class TestFlatStyling
 
 		// border
 		flatBorder( style -> ui.applyStyle( style ) );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -470,13 +556,18 @@ public class TestFlatStyling
 		JSeparator c = new JSeparator();
 		FlatSeparatorUI ui = (FlatSeparatorUI) c.getUI();
 
-		separator( ui );
+		separator( ui, c );
 	}
 
-	private void separator( FlatSeparatorUI ui ) {
-		ui.applyStyle( "height: 6" );
-		ui.applyStyle( "stripeWidth: 2" );
-		ui.applyStyle( "stripeIndent: 10" );
+	private void separator( FlatSeparatorUI ui, JSeparator c ) {
+		ui.applyStyle( c, "height: 6" );
+		ui.applyStyle( c, "stripeWidth: 2" );
+		ui.applyStyle( c, "stripeIndent: 10" );
+
+		// JComponent properties
+		ui.applyStyle( c, "background: #fff" );
+		ui.applyStyle( c, "foreground: #fff" );
+		ui.applyStyle( c, "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -500,6 +591,17 @@ public class TestFlatStyling
 		ui.applyStyle( "disabledThumbColor: #fff" );
 		ui.applyStyle( "disabledThumbBorderColor: #fff" );
 		ui.applyStyle( "tickColor: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JSlider properties
+		ui.applyStyle( "paintLabels: true" );
+		ui.applyStyle( "paintTicks: true" );
+		ui.applyStyle( "paintTrack: true" );
+		ui.applyStyle( "snapToTicks: true" );
 	}
 
 	@Test
@@ -524,6 +626,11 @@ public class TestFlatStyling
 
 		// border
 		flatRoundBorder( style -> ui.applyStyle( style ) );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -541,6 +648,14 @@ public class TestFlatStyling
 		ui.applyStyle( "gripDotCount: 3" );
 		ui.applyStyle( "gripDotSize: {integer}3" );
 		ui.applyStyle( "gripGap: 2" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JSplitPane properties
+		ui.applyStyle( "dividerSize: {integer}20" );
 	}
 
 	@Test
@@ -601,6 +716,11 @@ public class TestFlatStyling
 		ui.applyStyle( "closeHoverForeground: #fff" );
 		ui.applyStyle( "closePressedBackground: #fff" );
 		ui.applyStyle( "closePressedForeground: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -617,6 +737,18 @@ public class TestFlatStyling
 		ui.applyStyle( "cellMargins: 1,2,3,4" );
 		ui.applyStyle( "cellFocusColor: #fff" );
 		ui.applyStyle( "showCellFocusIndicator: true" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JTable properties
+		ui.applyStyle( "fillsViewportHeight: true" );
+		ui.applyStyle( "rowHeight: 30" );
+		ui.applyStyle( "showHorizontalLines: true" );
+		ui.applyStyle( "showVerticalLines: true" );
+		ui.applyStyle( "intercellSpacing: {dimension}1,1" );
 	}
 
 	@Test
@@ -635,6 +767,11 @@ public class TestFlatStyling
 		// FlatAscendingSortIcon and FlatDescendingSortIcon
 		ui.applyStyle( "arrowType: chevron" );
 		ui.applyStyle( "sortIconColor: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -646,6 +783,17 @@ public class TestFlatStyling
 		ui.applyStyle( "disabledBackground: #fff" );
 		ui.applyStyle( "inactiveBackground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JTextComponent properties
+		ui.applyStyle( "caretColor: #fff" );
+		ui.applyStyle( "selectionColor: #fff" );
+		ui.applyStyle( "selectedTextColor: #fff" );
+		ui.applyStyle( "disabledTextColor: #fff" );
 	}
 
 	@Test
@@ -665,6 +813,17 @@ public class TestFlatStyling
 
 		// border
 		flatTextBorder( style -> ui.applyStyle( style ) );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JTextComponent properties
+		ui.applyStyle( "caretColor: #fff" );
+		ui.applyStyle( "selectionColor: #fff" );
+		ui.applyStyle( "selectedTextColor: #fff" );
+		ui.applyStyle( "disabledTextColor: #fff" );
 	}
 
 	@Test
@@ -676,6 +835,17 @@ public class TestFlatStyling
 		ui.applyStyle( "disabledBackground: #fff" );
 		ui.applyStyle( "inactiveBackground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JTextComponent properties
+		ui.applyStyle( "caretColor: #fff" );
+		ui.applyStyle( "selectionColor: #fff" );
+		ui.applyStyle( "selectedTextColor: #fff" );
+		ui.applyStyle( "disabledTextColor: #fff" );
 	}
 
 	@Test
@@ -703,6 +873,17 @@ public class TestFlatStyling
 
 		ui.applyStyle( "borderMargins: 1,2,3,4" );
 		ui.applyStyle( "gripColor: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JToolBar properties
+		ui.applyStyle( "borderPainted: true" );
+		ui.applyStyle( "floatable: true" );
+		ui.applyStyle( "margin: 2,2,2,2" );
+		ui.applyStyle( "rollover: true" );
 	}
 
 	@Test
@@ -734,6 +915,18 @@ public class TestFlatStyling
 		ui.applyStyle( "icon.leafColor: #fff" );
 		ui.applyStyle( "icon.closedColor: #fff" );
 		ui.applyStyle( "icon.openColor: #fff" );
+
+		// JComponent properties
+		ui.applyStyle( "background: #fff" );
+		ui.applyStyle( "foreground: #fff" );
+		ui.applyStyle( "border: 2,2,2,2,#f00" );
+
+		// JTree properties
+		ui.applyStyle( "rootVisible: true" );
+		ui.applyStyle( "rowHeight: 30" );
+		ui.applyStyle( "scrollsOnExpand: true" );
+		ui.applyStyle( "showsRootHandles: true" );
+		ui.applyStyle( "visibleRowCount: 20" );
 	}
 
 	//---- component borders --------------------------------------------------

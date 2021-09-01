@@ -152,7 +152,7 @@ public class FlatToolBarUI
 	 * @since TODO
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, toolBar, key, value );
 	}
 
 	/**

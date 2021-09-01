@@ -391,9 +391,9 @@ class UIDefaultsLoader
 					 (key.endsWith( ".background" ) || key.endsWith( "Background" ) || key.equals( "background" ) ||
 					  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ) || key.equals( "foreground" ))) )
 					valueType = ValueType.COLOR;
-				else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
+				else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) || key.equals( "border" ) )
 					valueType = ValueType.BORDER;
-				else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
+				else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) || key.equals( "icon" ) )
 					valueType = ValueType.ICON;
 				else if( key.endsWith( ".margin" ) || key.equals( "margin" ) ||
 						 key.endsWith( ".padding" ) || key.equals( "padding" ) ||

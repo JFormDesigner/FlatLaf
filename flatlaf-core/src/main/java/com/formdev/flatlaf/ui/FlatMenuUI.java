@@ -165,7 +165,7 @@ public class FlatMenuUI
 			// ignore
 		}
 
-		return FlatMenuItemUI.applyStyleProperty( this, key, value );
+		return FlatMenuItemUI.applyStyleProperty( this, menuItem, key, value );
 	}
 
 	/**

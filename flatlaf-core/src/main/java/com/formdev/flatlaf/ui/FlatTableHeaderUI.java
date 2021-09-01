@@ -149,7 +149,7 @@ public class FlatTableHeaderUI
 		if( key.equals( "sortIconPosition" ) && value instanceof String )
 			value = parseSortIconPosition( (String) value );
 
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, header, key, value );
 	}
 
 	/**

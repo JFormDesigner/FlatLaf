@@ -22,6 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -81,7 +82,7 @@ public class FlatStylingSupport
 	 * @return map of old values modified by the given style, or {@code null}
 	 * @throws UnknownStyleException on unknown style keys
 	 * @throws IllegalArgumentException on syntax errors
-	 * @throws ClassCastException if value type does not fit to expected type 
+	 * @throws ClassCastException if value type does not fit to expected type
 	 */
 	public static Map<String, Object> parseAndApply( Map<String, Object> oldStyleValues,
 		Object style, BiFunction<String, Object, Object> applyProperty )
@@ -210,7 +211,7 @@ public class FlatStylingSupport
 	 * @param value the new value
 	 * @return the old value of the field
 	 * @throws UnknownStyleException if object does not have a annotated field with given name
-	 * @throws IllegalArgumentException if value type does not fit to expected type 
+	 * @throws IllegalArgumentException if value type does not fit to expected type
 	 */
 	public static Object applyToAnnotatedObject( Object obj, String key, Object value )
 		throws UnknownStyleException, IllegalArgumentException
@@ -239,7 +240,7 @@ public class FlatStylingSupport
 	 * @param value the new value
 	 * @return the old value of the field
 	 * @throws UnknownStyleException if object does not have a field with given name
-	 * @throws IllegalArgumentException if value type does not fit to expected type 
+	 * @throws IllegalArgumentException if value type does not fit to expected type
 	 */
 	static Object applyToField( Object obj, String fieldName, String key, Object value )
 		throws UnknownStyleException, IllegalArgumentException
@@ -292,12 +293,90 @@ public class FlatStylingSupport
 		return (modifiers & (Modifier.FINAL|Modifier.STATIC)) == 0 && !f.isSynthetic();
 	}
 
+	/**
+	 * Applies the given value to a property of the given object.
+	 * Works only for properties that have public getter and setter methods.
+	 * First the property getter is invoked to get the old value,
+	 * then the property setter is invoked to set the new value.
+	 *
+	 * @param obj the object
+	 * @param name the name of the property
+	 * @param value the new value
+	 * @return the old value of the property
+	 * @throws UnknownStyleException if object does not have a property with given name
+	 * @throws IllegalArgumentException if value type does not fit to expected type
+	 */
+	private static Object applyToProperty( Object obj, String name, Object value )
+		throws UnknownStyleException, IllegalArgumentException
+	{
+		Class<?> cls = obj.getClass();
+		String getterName = buildMethodName( "get", name );
+		String setterName = buildMethodName( "set", name );
+
+		try {
+			Method getter;
+			try {
+				getter = cls.getMethod( getterName );
+			} catch( NoSuchMethodException ex ) {
+				getter = cls.getMethod( buildMethodName( "is", name ) );
+			}
+			Method setter = cls.getMethod( setterName, getter.getReturnType() );
+			Object oldValue = getter.invoke( obj );
+			setter.invoke( obj, value );
+			return oldValue;
+		} catch( NoSuchMethodException ex ) {
+			throw new UnknownStyleException( name );
+		} catch( Exception ex ) {
+			throw new IllegalArgumentException( "failed to invoke property methods '" + cls.getName() + "."
+				+ getterName + "()' or '" + setterName + "(...)'", ex );
+		}
+	}
+
+	private static String buildMethodName( String prefix, String name ) {
+		int prefixLength = prefix.length();
+		int nameLength = name.length();
+		char[] chars = new char[prefixLength + nameLength];
+		prefix.getChars( 0, prefixLength, chars, 0 );
+		name.getChars( 0, nameLength, chars, prefixLength );
+		chars[prefixLength] = Character.toUpperCase( chars[prefixLength] );
+		return new String( chars );
+	}
+
+	/**
+	 * Applies the given value to an annotated field of the given object
+	 * or to a property of the given component.
+	 * The field must be annotated with {@link Styleable}.
+	 * The component property must have public getter and setter methods.
+	 *
+	 * @param obj the object
+	 * @param comp the component, or {@code null}
+	 * @param key the name of the field
+	 * @param value the new value
+	 * @return the old value of the field
+	 * @throws UnknownStyleException if object does not have a annotated field with given name
+	 * @throws IllegalArgumentException if value type does not fit to expected type
+	 */
+	public static Object applyToAnnotatedObjectOrComponent( Object obj, Object comp, String key, Object value ) {
+		try {
+			return applyToAnnotatedObject( obj, key, value );
+		} catch( UnknownStyleException ex ) {
+			try {
+				if( comp != null )
+					return applyToProperty( comp, key, value );
+			} catch( UnknownStyleException ex2 ) {
+				// ignore
+			}
+			throw ex;
+		}
+	}
+
 	static Object applyToAnnotatedObjectOrBorder( Object obj, String key, Object value,
 		JComponent c, AtomicBoolean borderShared )
 	{
 		try {
 			return applyToAnnotatedObject( obj, key, value );
 		} catch( UnknownStyleException ex ) {
+			// apply to border
 			Border border = c.getBorder();
 			if( border instanceof StyleableBorder ) {
 				if( borderShared.get() ) {
@@ -311,6 +390,13 @@ public class FlatStylingSupport
 				} catch( UnknownStyleException ex2 ) {
 					// ignore
 				}
+			}
+
+			// apply to component property
+			try {
+				return applyToProperty( c, key, value );
+			} catch( UnknownStyleException ex2 ) {
+				// ignore
 			}
 			throw ex;
 		}

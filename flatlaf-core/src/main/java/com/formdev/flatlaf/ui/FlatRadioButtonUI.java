@@ -92,7 +92,7 @@ public class FlatRadioButtonUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		applyStyle( (AbstractButton) c, FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class FlatRadioButtonUI
 			ui = (FlatRadioButtonUI) b.getUI();
 		}
 
-		ui.applyStyle( style );
+		ui.applyStyle( b, style );
 		b.revalidate();
 		b.repaint();
 	}
@@ -158,14 +158,15 @@ public class FlatRadioButtonUI
 	/**
 	 * @since TODO
 	 */
-	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	protected void applyStyle( AbstractButton b, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( b, key, value ) );
 	}
 
 	/**
 	 * @since TODO
 	 */
-	protected Object applyStyleProperty( String key, Object value ) {
+	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
 		// style icon
 		if( key.startsWith( "icon." ) ) {
 			if( !(icon instanceof FlatCheckBoxIcon) )
@@ -180,7 +181,7 @@ public class FlatRadioButtonUI
 			return ((FlatCheckBoxIcon)icon).applyStyleProperty( key, value );
 		}
 
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, b, key, value );
 	}
 
 	/**

@@ -158,7 +158,7 @@ public class FlatSplitPaneUI
 		} catch( UnknownStyleException ex ) {
 			// ignore
 		}
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, splitPane, key, value );
 	}
 
 	/**

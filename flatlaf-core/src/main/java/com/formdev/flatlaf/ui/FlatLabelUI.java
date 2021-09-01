@@ -83,7 +83,7 @@ public class FlatLabelUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		applyStyle( (JLabel) c, FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class FlatLabelUI
 			ui = (FlatLabelUI) c.getUI();
 		}
 
-		ui.applyStyle( style );
+		ui.applyStyle( c, style );
 		c.revalidate();
 		c.repaint();
 	}
@@ -140,15 +140,16 @@ public class FlatLabelUI
 	/**
 	 * @since TODO
 	 */
-	protected void applyStyle( Object style ) {
-		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	protected void applyStyle( JLabel c, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( c, key, value ) );
 	}
 
 	/**
 	 * @since TODO
 	 */
-	protected Object applyStyleProperty( String key, Object value ) {
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	protected Object applyStyleProperty( JLabel c, String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, c, key, value );
 	}
 
 	/**

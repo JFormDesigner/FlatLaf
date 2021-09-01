@@ -246,7 +246,7 @@ public class FlatScrollBarUI
 			case "maximumThumbSize": oldValue = maximumThumbSize; maximumThumbSize = (Dimension) value; return oldValue;
 		}
 
-		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, scrollbar, key, value );
 	}
 
 	/**
