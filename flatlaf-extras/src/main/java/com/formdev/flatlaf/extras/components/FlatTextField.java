@@ -19,6 +19,7 @@ package com.formdev.flatlaf.extras.components;
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
 import java.awt.Insets;
+import javax.swing.Icon;
 import javax.swing.JTextField;
 
 /**
@@ -42,6 +43,44 @@ public class FlatTextField
 	 */
 	public void setPlaceholderText( String placeholderText ) {
 		putClientProperty( PLACEHOLDER_TEXT, placeholderText );
+	}
+
+
+	/**
+	 * Returns the leading icon that will be placed at the leading edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public Icon getLeadingIcon() {
+		return (Icon) getClientProperty( TEXT_FIELD_LEADING_ICON );
+	}
+
+	/**
+	 * Specifies the leading icon that will be placed at the leading edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public void setLeadingIcon( Icon leadingIcon ) {
+		putClientProperty( TEXT_FIELD_LEADING_ICON, leadingIcon );
+	}
+
+
+	/**
+	 * Returns the trailing icon that will be placed at the trailing edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public Icon getTrailingIcon() {
+		return (Icon) getClientProperty( TEXT_FIELD_TRAILING_ICON );
+	}
+
+	/**
+	 * Specifies the trailing icon that will be placed at the trailing edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public void setTrailingIcon( Icon trailingIcon ) {
+		putClientProperty( TEXT_FIELD_TRAILING_ICON, trailingIcon );
 	}
 
 

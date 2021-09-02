@@ -19,6 +19,9 @@ package com.formdev.flatlaf.demo;
 import java.awt.Component;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.icons.FlatSearchIcon;
 import net.miginfocom.swing.*;
 
 /**
@@ -123,6 +126,10 @@ class BasicComponentsPanel
 		JTextField warningHintsTextField = new JTextField();
 		JComboBox<String> warningHintsComboBox = new JComboBox<>();
 		JSpinner warningHintsSpinner = new JSpinner();
+		JLabel iconsLabel = new JLabel();
+		JTextField leadingIconTextField = new JTextField();
+		JTextField trailingIconTextField = new JTextField();
+		JTextField iconsTextField = new JTextField();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -132,7 +139,7 @@ class BasicComponentsPanel
 		setLayout(new MigLayout(
 			"insets dialog,hidemode 3",
 			// columns
-			"[sizegroup 1]" +
+			"[]" +
 			"[sizegroup 1]" +
 			"[sizegroup 1]" +
 			"[sizegroup 1]" +
@@ -151,6 +158,7 @@ class BasicComponentsPanel
 			"[]" +
 			"[]" +
 			"[]para" +
+			"[]" +
 			"[]" +
 			"[]"));
 
@@ -646,6 +654,19 @@ class BasicComponentsPanel
 		warningHintsSpinner.putClientProperty("JComponent.outline", "warning");
 		add(warningHintsSpinner, "cell 3 13,growx");
 
+		//---- iconsLabel ----
+		iconsLabel.setText("Leading/trailing icons:");
+		add(iconsLabel, "cell 0 14");
+		add(leadingIconTextField, "cell 1 14,growx");
+
+		//---- trailingIconTextField ----
+		trailingIconTextField.setText("text");
+		add(trailingIconTextField, "cell 2 14,growx");
+
+		//---- iconsTextField ----
+		iconsTextField.setText("text");
+		add(iconsTextField, "cell 3 14,growx");
+
 		//======== popupMenu1 ========
 		{
 
@@ -670,8 +691,20 @@ class BasicComponentsPanel
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
+		// add leading/trailing icons to text fields
+		leadingIconTextField.putClientProperty( FlatClientProperties.PLACEHOLDER_TEXT, "Search" );
+		leadingIconTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+			new FlatSearchIcon() );
+		trailingIconTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_ICON,
+			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/DataTables.svg" ) );
+		iconsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/user.svg" ) );
+		iconsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_ICON,
+			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/bookmarkGroup.svg" ) );
+
 		if( FlatLafDemo.screenshotsMode ) {
-			Component[] components = {
+			// hide some components
+			Component[] hiddenComponents = {
 				button13, button14, button15, button16, comboBox5, comboBox6,
 				textField6, passwordField5,
 
@@ -683,18 +716,26 @@ class BasicComponentsPanel
 				errorHintsLabel, errorHintsTextField, errorHintsComboBox, errorHintsSpinner,
 				warningHintsLabel, warningHintsTextField, warningHintsComboBox, warningHintsSpinner,
 			};
-
-			for( Component c : components )
+			for( Component c : hiddenComponents )
 				c.setVisible( false );
 
-			// move password fields one row up
+			// move leading/trailing icon fields and password fields some rows up
 			Component[] formattedTextFields = { formattedTextFieldLabel, formattedTextField1, formattedTextField2, formattedTextField3, formattedTextField4 };
 			Component[] passwordFields = { passwordFieldLabel, passwordField1, passwordField2, passwordField3, passwordField4 };
+			Component[] iconsFields = { iconsLabel, leadingIconTextField, trailingIconTextField, iconsTextField };
 			MigLayout layout = (MigLayout) getLayout();
+			for( int i = 0; i < iconsFields.length; i++ ) {
+				Object cons = layout.getComponentConstraints( passwordFields[i] );
+				layout.setComponentConstraints( iconsFields[i], cons );
+			}
 			for( int i = 0; i < passwordFields.length; i++ ) {
 				Object cons = layout.getComponentConstraints( formattedTextFields[i] );
 				layout.setComponentConstraints( passwordFields[i], cons );
 			}
+
+			// make "Not editable disabled" combobox smaller
+			Object cons = layout.getComponentConstraints( comboBox4 );
+			layout.setComponentConstraints( comboBox4, cons + ",width 50:50" );
 		}
 	}
 

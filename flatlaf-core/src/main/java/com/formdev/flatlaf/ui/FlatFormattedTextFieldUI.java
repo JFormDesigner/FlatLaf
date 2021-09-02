@@ -43,6 +43,7 @@ import javax.swing.plaf.ComponentUI;
  * @uiDefault Component.isIntelliJTheme					boolean
  * @uiDefault FormattedTextField.placeholderForeground	Color
  * @uiDefault FormattedTextField.focusedBackground		Color	optional
+ * @uiDefault FormattedTextField.iconTextGap			int		optional, default is 4
  * @uiDefault TextComponent.selectAllOnFocusPolicy		String	never, once (default) or always
  * @uiDefault TextComponent.selectAllOnMouseClick		boolean
  *

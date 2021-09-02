@@ -16,13 +16,16 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Insets;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.text.DefaultEditorKit;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
 /**
@@ -61,6 +64,23 @@ public class FlatTextComponentsTest
 		}
 	}
 
+	private void leadingIcon() {
+		applyIcon( FlatClientProperties.TEXT_FIELD_LEADING_ICON, leadingIconCheckBox.isSelected()
+			? new TestIcon( 8, 16, Color.blue ) : null );
+	}
+
+	private void trailingIcon() {
+		applyIcon( FlatClientProperties.TEXT_FIELD_TRAILING_ICON, trailingIconCheckBox.isSelected()
+			? new TestIcon( 24, 12, Color.magenta ) : null );
+	}
+
+	private void applyIcon( String key, Icon icon ) {
+		for( Component c : getComponents() ) {
+			if( c instanceof JTextField )
+				((JTextField)c).putClientProperty( key, icon );
+		}
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel textFieldLabel = new JLabel();
@@ -80,6 +100,8 @@ public class FlatTextComponentsTest
 		topPaddingField = new JSpinner();
 		JLabel bottomPaddingLabel = new JLabel();
 		bottomPaddingField = new JSpinner();
+		leadingIconCheckBox = new JCheckBox();
+		trailingIconCheckBox = new JCheckBox();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
@@ -158,12 +180,14 @@ public class FlatTextComponentsTest
 		//---- textField1 ----
 		textField1.setText("editable");
 		textField1.setComponentPopupMenu(popupMenu1);
+		textField1.putClientProperty("JTextField.placeholderText", "place");
 		textField1.setName("textField1");
 		add(textField1, "cell 1 0,growx");
 
 		//---- textField3 ----
 		textField3.setText("longer text for testing horizontal scrolling");
 		textField3.setComponentPopupMenu(popupMenu1);
+		textField3.putClientProperty("JTextField.placeholderText", "place");
 		textField3.setName("textField3");
 		add(textField3, "cell 2 0,growx");
 
@@ -172,6 +196,7 @@ public class FlatTextComponentsTest
 		textField2.setSelectionStart(1);
 		textField2.setSelectionEnd(4);
 		textField2.setComponentPopupMenu(popupMenu1);
+		textField2.putClientProperty("JTextField.placeholderText", "place");
 		textField2.setName("textField2");
 		add(textField2, "cell 3 0");
 
@@ -185,12 +210,14 @@ public class FlatTextComponentsTest
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("editable");
 		formattedTextField1.setComponentPopupMenu(popupMenu1);
+		formattedTextField1.putClientProperty("JTextField.placeholderText", "place");
 		formattedTextField1.setName("formattedTextField1");
 		add(formattedTextField1, "cell 1 1,growx");
 
 		//---- formattedTextField3 ----
 		formattedTextField3.setText("longer text for testing horizontal scrolling");
 		formattedTextField3.setComponentPopupMenu(popupMenu1);
+		formattedTextField3.putClientProperty("JTextField.placeholderText", "place");
 		formattedTextField3.setName("formattedTextField3");
 		add(formattedTextField3, "cell 2 1,growx");
 
@@ -204,6 +231,8 @@ public class FlatTextComponentsTest
 				"[fill]" +
 				"[fill]",
 				// rows
+				"[]" +
+				"[]" +
 				"[]" +
 				"[]" +
 				"[]" +
@@ -255,6 +284,18 @@ public class FlatTextComponentsTest
 			bottomPaddingField.setName("bottomPaddingField");
 			bottomPaddingField.addChangeListener(e -> paddingChanged());
 			panel1.add(bottomPaddingField, "cell 1 4");
+
+			//---- leadingIconCheckBox ----
+			leadingIconCheckBox.setText("leading icon");
+			leadingIconCheckBox.setName("leadingIconCheckBox");
+			leadingIconCheckBox.addActionListener(e -> leadingIcon());
+			panel1.add(leadingIconCheckBox, "cell 0 5 2 1,alignx left,growx 0");
+
+			//---- trailingIconCheckBox ----
+			trailingIconCheckBox.setText("trailing icon");
+			trailingIconCheckBox.setName("trailingIconCheckBox");
+			trailingIconCheckBox.addActionListener(e -> trailingIcon());
+			panel1.add(trailingIconCheckBox, "cell 0 6 2 1,alignx left,growx 0");
 		}
 		add(panel1, "cell 4 0 1 6,aligny top,growy 0");
 
@@ -268,12 +309,14 @@ public class FlatTextComponentsTest
 		//---- passwordField1 ----
 		passwordField1.setText("editable");
 		passwordField1.setComponentPopupMenu(popupMenu1);
+		passwordField1.putClientProperty("JTextField.placeholderText", "place");
 		passwordField1.setName("passwordField1");
 		add(passwordField1, "cell 1 2,growx");
 
 		//---- passwordField3 ----
 		passwordField3.setText("longer text for testing horizontal scrolling");
 		passwordField3.setComponentPopupMenu(popupMenu1);
+		passwordField3.putClientProperty("JTextField.placeholderText", "place");
 		passwordField3.setName("passwordField3");
 		add(passwordField3, "cell 2 2,growx");
 
@@ -508,5 +551,39 @@ public class FlatTextComponentsTest
 	private JSpinner rightPaddingField;
 	private JSpinner topPaddingField;
 	private JSpinner bottomPaddingField;
+	private JCheckBox leadingIconCheckBox;
+	private JCheckBox trailingIconCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- TestIcon -----------------------------------------------------------
+
+	private static class TestIcon
+		implements Icon
+	{
+		private final int width;
+		private final int height;
+		private final Color color;
+
+		TestIcon( int width, int height, Color color ) {
+			this.width = width;
+			this.height = height;
+			this.color = color;
+		}
+
+		@Override
+		public void paintIcon( Component c, Graphics g, int x, int y ) {
+			g.setColor( color );
+			g.drawRect( x, y, getIconWidth() - 1, getIconHeight() - 1 );
+		}
+
+		@Override
+		public int getIconWidth() {
+			return UIScale.scale( width );
+		}
+
+		@Override
+		public int getIconHeight() {
+			return UIScale.scale( height );
+		}
+	}
 }

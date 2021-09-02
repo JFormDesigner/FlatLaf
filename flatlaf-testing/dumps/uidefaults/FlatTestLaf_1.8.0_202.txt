@@ -311,6 +311,7 @@ FormattedTextField.disabledBackground #e0e0e0  HSL   0   0  88    javax.swing.pl
 FormattedTextField.focusedBackground #ffff88  HSL  60 100  77    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.font        [active] $defaultFont [UI]
 FormattedTextField.foreground  #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+FormattedTextField.iconTextGap 4
 FormattedTextField.inactiveBackground #f0f0f0  HSL   0   0  94    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.inactiveForeground #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
 FormattedTextField.margin      2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
@@ -708,6 +709,7 @@ PasswordField.echoChar         '\u2022'
 PasswordField.focusedBackground #ffff88  HSL  60 100  77    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.font             [active] $defaultFont [UI]
 PasswordField.foreground       #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.iconTextGap      4
 PasswordField.inactiveBackground #f0f0f0  HSL   0   0  94    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.inactiveForeground #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.margin           2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
@@ -1167,6 +1169,7 @@ TextField.focusedBackground    #ffff88  HSL  60 100  77    javax.swing.plaf.Colo
 TextField.font                 [active] $defaultFont [UI]
 TextField.foreground           #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 TextField.highlight            #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+TextField.iconTextGap          4
 TextField.inactiveBackground   #f0f0f0  HSL   0   0  94    javax.swing.plaf.ColorUIResource [UI]
 TextField.inactiveForeground   #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
 TextField.light                #e3e3e3  HSL   0   0  89    javax.swing.plaf.ColorUIResource [UI]

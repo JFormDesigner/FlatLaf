@@ -25,6 +25,7 @@ new FormModel {
 				name: "textField1"
 				"text": "editable"
 				"componentPopupMenu": &FormReference0 new FormReference( "popupMenu1" )
+				"$client.JTextField.placeholderText": "place"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}
@@ -35,6 +36,7 @@ new FormModel {
 				name: "textField3"
 				"text": "longer text for testing horizontal scrolling"
 				"componentPopupMenu": #FormReference0
+				"$client.JTextField.placeholderText": "place"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 0,growx"
 			} )
@@ -44,6 +46,7 @@ new FormModel {
 				"selectionStart": 1
 				"selectionEnd": 4
 				"componentPopupMenu": #FormReference0
+				"$client.JTextField.placeholderText": "place"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 0"
 			} )
@@ -59,6 +62,7 @@ new FormModel {
 				name: "formattedTextField1"
 				"text": "editable"
 				"componentPopupMenu": #FormReference0
+				"$client.JTextField.placeholderText": "place"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1,growx"
 			} )
@@ -66,13 +70,14 @@ new FormModel {
 				name: "formattedTextField3"
 				"text": "longer text for testing horizontal scrolling"
 				"componentPopupMenu": #FormReference0
+				"$client.JTextField.placeholderText": "place"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 1,growx"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
 				"$columnConstraints": "[fill][fill]"
-				"$rowConstraints": "[][][][][]"
+				"$rowConstraints": "[][][][][][][]"
 			} ) {
 				name: "panel1"
 				"border": new javax.swing.border.TitledBorder( "Control" )
@@ -143,6 +148,26 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 4"
 				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "leadingIconCheckBox"
+					"text": "leading icon"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "leadingIcon", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 5 2 1,alignx left,growx 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "trailingIconCheckBox"
+					"text": "trailing icon"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "trailingIcon", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 6 2 1,alignx left,growx 0"
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 0 1 6,aligny top,growy 0"
 			} )
@@ -158,6 +183,7 @@ new FormModel {
 				name: "passwordField1"
 				"text": "editable"
 				"componentPopupMenu": #FormReference0
+				"$client.JTextField.placeholderText": "place"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2,growx"
 			} )
@@ -165,6 +191,7 @@ new FormModel {
 				name: "passwordField3"
 				"text": "longer text for testing horizontal scrolling"
 				"componentPopupMenu": #FormReference0
+				"$client.JTextField.placeholderText": "place"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2,growx"
 			} )

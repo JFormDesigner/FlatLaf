@@ -745,6 +745,26 @@ public interface FlatClientProperties
 	 */
 	String TEXT_FIELD_PADDING = "JTextField.padding";
 
+	/**
+	 * Specifies an icon that will be placed at the leading edge of the text field.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link javax.swing.Icon}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_LEADING_ICON = "JTextField.leadingIcon";
+
+	/**
+	 * Specifies an icon that will be placed at the trailing edge of the text field.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link javax.swing.Icon}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_TRAILING_ICON = "JTextField.trailingIcon";
+
 	//---- JToggleButton ------------------------------------------------------
 
 	/**
@@ -813,8 +833,7 @@ public interface FlatClientProperties
 	 * If the client property is not set, or not a {@link Boolean}, defaultValue is returned.
 	 */
 	static Boolean clientPropertyBooleanStrict( JComponent c, String key, Boolean defaultValue ) {
-		Object value = c.getClientProperty( key );
-		return (value instanceof Boolean) ? (Boolean) value : defaultValue;
+		return clientProperty( c, key, defaultValue, Boolean.class );
 	}
 
 	/**
@@ -831,7 +850,18 @@ public interface FlatClientProperties
 	 * If the client property is not set, or not a color, defaultValue is returned.
 	 */
 	static Color clientPropertyColor( JComponent c, String key, Color defaultValue ) {
+		return clientProperty( c, key, defaultValue, Color.class );
+	}
+
+	/**
+	 * Returns the value of the specified client property if it is an instance of
+	 * the specified type. Otherwise, defaultValue is returned.
+	 *
+	 * @since 2
+	 */
+	@SuppressWarnings( "unchecked" )
+	static <T> T clientProperty( JComponent c, String key, T defaultValue, Class<T> type ) {
 		Object value = c.getClientProperty( key );
-		return (value instanceof Color) ? (Color) value : defaultValue;
+		return type.isInstance( value ) ? (T) value : defaultValue;
 	}
 }
