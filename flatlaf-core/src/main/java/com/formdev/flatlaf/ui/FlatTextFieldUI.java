@@ -81,9 +81,12 @@ public class FlatTextFieldUI
 	protected boolean isIntelliJTheme;
 	protected Color placeholderForeground;
 	protected Color focusedBackground;
+	/** @since 2 */
 	protected int iconTextGap;
 
+	/** @since 2 */
 	protected Icon leadingIcon;
+	/** @since 2 */
 	protected Icon trailingIcon;
 
 	private Insets defaultMargin;
@@ -323,12 +326,19 @@ debug*/
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
+		return applyMinimumWidth( c, applyExtraSize( super.getPreferredSize( c ) ), minimumWidth );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
+		return applyMinimumWidth( c, applyExtraSize( super.getMinimumSize( c ) ), minimumWidth );
+	}
+
+	private Dimension applyExtraSize( Dimension size ) {
+		// add width of leading and trailing icons
+		size.width += getLeadingIconWidth() + getTrailingIconWidth();
+
+		return size;
 	}
 
 	private Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
