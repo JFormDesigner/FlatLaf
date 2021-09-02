@@ -237,12 +237,13 @@ public class FlatTextFieldUI
 		// compute placeholder location
 		Rectangle r = getVisibleEditorRect();
 		FontMetrics fm = c.getFontMetrics( c.getFont() );
+		String clippedPlaceholder = JavaCompatibility.getClippedString( c, fm, (String) placeholder, r.width );
+		int x = r.x + (c.getComponentOrientation().isLeftToRight() ? 0 : r.width - fm.stringWidth( clippedPlaceholder ));
 		int y = r.y + fm.getAscent() + ((r.height - fm.getHeight()) / 2);
 
 		// paint placeholder
 		g.setColor( placeholderForeground );
-		String clippedPlaceholder = JavaCompatibility.getClippedString( c, fm, (String) placeholder, r.width );
-		FlatUIUtils.drawString( c, g, clippedPlaceholder, r.x, y );
+		FlatUIUtils.drawString( c, g, clippedPlaceholder, x, y );
 	}
 
 	@Override

@@ -17,6 +17,8 @@ FlatLaf Change Log
   since FlatLaf 1.3)
 - OptionPane: Fixed `OptionPane.sameSizeButtons`, which did not work as expected
   when setting to `false`.
+- TextField, FormattedTextField, PasswordField and ComboBox: Fixed alignment of
+  placeholder text in right-to-left component orientation.
 
 
 ## 1.5
