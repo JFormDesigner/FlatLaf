@@ -280,7 +280,9 @@ class FlatThemeFileEditor
 		for( File file : getPropertiesFiles( dir ) )
 			openFile( file, file.getName().equals( recentFile ) );
 
-		activateEditor();
+		SwingUtilities.invokeLater( () -> {
+			activateEditor();
+		} );
 		saveState();
 		enableDisableActions();
 
