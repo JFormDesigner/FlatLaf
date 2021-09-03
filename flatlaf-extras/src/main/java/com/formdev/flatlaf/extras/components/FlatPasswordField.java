@@ -18,6 +18,7 @@ package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Insets;
 import javax.swing.Icon;
 import javax.swing.JPasswordField;
@@ -82,6 +83,64 @@ public class FlatPasswordField
 	 */
 	public void setTrailingIcon( Icon trailingIcon ) {
 		putClientProperty( TEXT_FIELD_TRAILING_ICON, trailingIcon );
+	}
+
+
+	/**
+	 * Returns a component that will be placed at the leading edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public Component getLeadingComponent() {
+		return (Component) getClientProperty( TEXT_FIELD_LEADING_COMPONENT );
+	}
+
+	/**
+	 * Specifies a component that will be placed at the leading edge of the text field.
+	 * <p>
+	 * The component will be positioned inside and aligned to the visible text field border.
+	 * There is no gap between the visible border and the component.
+	 * The laid out component size will be the preferred component width
+	 * and the inner text field height.
+	 * <p>
+	 * The component should be not opaque because the text field border is painted
+	 * slightly inside the usually visible border in some cases.
+	 * E.g. when focused (in some themes) or when an outline color is specified
+	 * (see {@link #setOutline(Object)}.
+	 *
+	 * @since 2
+	 */
+	public void setLeadingComponent( Component leadingComponent ) {
+		putClientProperty( TEXT_FIELD_LEADING_COMPONENT, leadingComponent );
+	}
+
+
+	/**
+	 * Returns a component that will be placed at the trailing edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public Component getTrailingComponent() {
+		return (Component) getClientProperty( TEXT_FIELD_TRAILING_COMPONENT );
+	}
+
+	/**
+	 * Specifies a component that will be placed at the trailing edge of the text field.
+	 * <p>
+	 * The component will be positioned inside and aligned to the visible text field border.
+	 * There is no gap between the visible border and the component.
+	 * The laid out component size will be the preferred component width
+	 * and the inner text field height.
+	 * <p>
+	 * The component should be not opaque because the text field border is painted
+	 * slightly inside the usually visible border in some cases.
+	 * E.g. when focused (in some themes) or when an outline color is specified
+	 * (see {@link #setOutline(Object)}.
+	 *
+	 * @since 2
+	 */
+	public void setTrailingComponent( Component trailingComponent ) {
+		putClientProperty( TEXT_FIELD_TRAILING_COMPONENT, trailingComponent );
 	}
 
 

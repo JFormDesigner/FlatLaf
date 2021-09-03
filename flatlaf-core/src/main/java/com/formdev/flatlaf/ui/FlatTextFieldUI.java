@@ -19,12 +19,15 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.LayoutManager2;
 import java.awt.Rectangle;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
@@ -94,6 +97,8 @@ public class FlatTextFieldUI
 
 	/** @since 2 */ @Styleable protected Icon leadingIcon;
 	/** @since 2 */ @Styleable protected Icon trailingIcon;
+	/** @since 2 */ protected Component leadingComponent;
+	/** @since 2 */ protected Component trailingComponent;
 
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;
@@ -115,11 +120,17 @@ public class FlatTextFieldUI
 		leadingIcon = clientProperty( c, TEXT_FIELD_LEADING_ICON, null, Icon.class );
 		trailingIcon = clientProperty( c, TEXT_FIELD_TRAILING_ICON, null, Icon.class );
 
+		installLeadingComponent();
+		installTrailingComponent();
+
 		installStyle();
 	}
 
 	@Override
 	public void uninstallUI( JComponent c ) {
+		uninstallLeadingComponent();
+		uninstallTrailingComponent();
+
 		super.uninstallUI( c );
 
 		leadingIcon = null;
@@ -223,6 +234,20 @@ public class FlatTextFieldUI
 
 			case TEXT_FIELD_TRAILING_ICON:
 				trailingIcon = (e.getNewValue() instanceof Icon) ? (Icon) e.getNewValue() : null;
+				c.repaint();
+				break;
+
+			case TEXT_FIELD_LEADING_COMPONENT:
+				uninstallLeadingComponent();
+				installLeadingComponent();
+				c.revalidate();
+				c.repaint();
+				break;
+
+			case TEXT_FIELD_TRAILING_COMPONENT:
+				uninstallTrailingComponent();
+				installTrailingComponent();
+				c.revalidate();
 				c.repaint();
 				break;
 		}
@@ -444,6 +469,12 @@ debug*/
 		// add width of leading and trailing icons
 		size.width += getLeadingIconWidth() + getTrailingIconWidth();
 
+		// add width of leading and trailing components
+		if( leadingComponent != null && leadingComponent.isVisible() )
+			size.width += leadingComponent.getPreferredSize().width;
+		if( trailingComponent != null && trailingComponent.isVisible() )
+			size.width += trailingComponent.getPreferredSize().width;
+
 		return size;
 	}
 
@@ -510,7 +541,8 @@ debug*/
 	/**
 	 * Returns the rectangle used to paint leading and trailing icons.
 	 * It invokes {@code super.getVisibleEditorRect()} and reduces left and/or
-	 * right margin if the text field has leading or trailing icons.
+	 * right margin if the text field has leading or trailing icons or components.
+	 * Also the preferred widths of leading and trailing components are removed.
 	 *
 	 * @since 2
 	 */
@@ -519,10 +551,24 @@ debug*/
 		if( r == null )
 			return null;
 
-		// if a leading/trailing icon is shown, then the left/right margin is reduced
-		// to the top margin, which places the icon nicely centered on left/right side
 		boolean ltr = isLeftToRight();
-		if( ltr ? hasLeadingIcon() : hasTrailingIcon() ) {
+
+		// remove width of leading/trailing components
+		Component leftComponent = ltr ? leadingComponent : trailingComponent;
+		Component rightComponent = ltr ? trailingComponent : leadingComponent;
+		if( leftComponent != null ) {
+			int w = leftComponent.getPreferredSize().width;
+			r.x += w;
+			r.width -= w;
+		}
+		if( rightComponent != null )
+			r.width -= rightComponent.getPreferredSize().width;
+
+		// if a leading/trailing icons (or components) are shown, then the left/right margins are reduced
+		// to the top margin, which places the icon nicely centered on left/right side
+		if( (ltr ? hasLeadingIcon() : hasTrailingIcon()) ||
+			(leftComponent != null && leftComponent.isVisible()) )
+		{
 			// reduce left margin
 			Insets margin = getComponent().getMargin();
 			int newLeftMargin = Math.min( margin.left, margin.top );
@@ -532,13 +578,19 @@ debug*/
 				r.width += diff;
 			}
 		}
-		if( ltr ? hasTrailingIcon() : hasLeadingIcon() ) {
+		if( (ltr ? hasTrailingIcon() : hasLeadingIcon()) ||
+			(rightComponent != null && rightComponent.isVisible()) )
+		{
 			// reduce right margin
 			Insets margin = getComponent().getMargin();
 			int newRightMargin = Math.min( margin.right, margin.top );
 			if( newRightMargin < margin.left )
 				r.width += scale( margin.right - newRightMargin );
 		}
+
+		// make sure that width and height are not negative
+		r.width = Math.max( r.width, 0 );
+		r.height = Math.max( r.height, 0 );
 
 		return r;
 	}
@@ -577,5 +629,136 @@ debug*/
 		Caret caret = getComponent().getCaret();
 		if( caret instanceof FlatCaret )
 			((FlatCaret)caret).scrollCaretToVisible();
+	}
+
+	/** @since 2 */
+	protected void installLeadingComponent() {
+		JTextComponent c = getComponent();
+		leadingComponent = clientProperty( c, TEXT_FIELD_LEADING_COMPONENT, null, Component.class );
+		if( leadingComponent != null ) {
+			installLayout();
+			c.add( leadingComponent );
+		}
+	}
+
+	/** @since 2 */
+	protected void installTrailingComponent() {
+		JTextComponent c = getComponent();
+		trailingComponent = clientProperty( c, TEXT_FIELD_TRAILING_COMPONENT, null, Component.class );
+		if( trailingComponent != null ) {
+			installLayout();
+			c.add( trailingComponent );
+		}
+	}
+
+	/** @since 2 */
+	protected void uninstallLeadingComponent() {
+		if( leadingComponent != null ) {
+			getComponent().remove( leadingComponent );
+			leadingComponent = null;
+		}
+	}
+
+	/** @since 2 */
+	protected void uninstallTrailingComponent() {
+		if( trailingComponent != null ) {
+			getComponent().remove( trailingComponent );
+			trailingComponent = null;
+		}
+	}
+
+	private void installLayout() {
+		JTextComponent c = getComponent();
+		LayoutManager oldLayout = c.getLayout();
+		if( !(oldLayout instanceof FlatTextFieldLayout) )
+			c.setLayout( new FlatTextFieldLayout( oldLayout ) );
+	}
+
+	//---- class FlatTextFieldLayout ------------------------------------------
+
+	private class FlatTextFieldLayout
+		implements LayoutManager2, UIResource
+	{
+		private final LayoutManager delegate;
+
+		FlatTextFieldLayout( LayoutManager delegate ) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public void addLayoutComponent( String name, Component comp ) {
+			if( delegate != null )
+				delegate.addLayoutComponent( name, comp );
+		}
+
+		@Override
+		public void removeLayoutComponent( Component comp ) {
+			if( delegate != null )
+				delegate.removeLayoutComponent( comp );
+		}
+
+		@Override
+		public Dimension preferredLayoutSize( Container parent ) {
+			return (delegate != null) ? delegate.preferredLayoutSize( parent ) : null;
+		}
+
+		@Override
+		public Dimension minimumLayoutSize( Container parent ) {
+			return (delegate != null) ? delegate.minimumLayoutSize( parent ) : null;
+		}
+
+		@Override
+		public void layoutContainer( Container parent ) {
+			if( delegate != null )
+				delegate.layoutContainer( parent );
+
+			if( leadingComponent == null && trailingComponent == null )
+				return;
+
+			int ow = FlatUIUtils.getBorderFocusAndLineWidth( getComponent() );
+			int h = parent.getHeight() - ow - ow;
+			boolean ltr = isLeftToRight();
+			Component leftComponent = ltr ? leadingComponent : trailingComponent;
+			Component rightComponent = ltr ? trailingComponent : leadingComponent;
+
+			// layout left component
+			if( leftComponent != null && leftComponent.isVisible() ) {
+				int w = leftComponent.getPreferredSize().width;
+				leftComponent.setBounds( ow, ow, w, h );
+			}
+
+			// layout right component
+			if( rightComponent != null && rightComponent.isVisible() ) {
+				int w = rightComponent.getPreferredSize().width;
+				rightComponent.setBounds( parent.getWidth() - ow - w, ow, w, h );
+			}
+		}
+
+		@Override
+		public void addLayoutComponent( Component comp, Object constraints ) {
+			if( delegate instanceof LayoutManager2 )
+				((LayoutManager2)delegate).addLayoutComponent( comp, constraints );
+		}
+
+		@Override
+		public Dimension maximumLayoutSize( Container target ) {
+			return (delegate instanceof LayoutManager2) ? ((LayoutManager2)delegate).maximumLayoutSize( target ) : null;
+		}
+
+		@Override
+		public float getLayoutAlignmentX( Container target ) {
+			return (delegate instanceof LayoutManager2) ? ((LayoutManager2)delegate).getLayoutAlignmentX( target ) : 0.5f;
+		}
+
+		@Override
+		public float getLayoutAlignmentY( Container target ) {
+			return (delegate instanceof LayoutManager2) ? ((LayoutManager2)delegate).getLayoutAlignmentY( target ) : 0.5f;
+		}
+
+		@Override
+		public void invalidateLayout( Container target ) {
+			if( delegate instanceof LayoutManager2 )
+				((LayoutManager2)delegate).invalidateLayout( target );
+		}
 	}
 }

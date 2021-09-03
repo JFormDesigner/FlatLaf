@@ -30,7 +30,10 @@ FlatLaf Change Log
     (issue #416)
 - TextField, FormattedTextField and PasswordField: Support leading and trailing
   icons (set client property `JTextField.leadingIcon` or
-  `JTextField.trailingIcon` to an `Icon`). (PR #378; issue #368)
+  `JTextField.trailingIcon` to a `javax.swing.Icon`). (PR #378; issue #368)
+- TextField, FormattedTextField and PasswordField: Support leading and trailing
+  components (set client property `JTextField.leadingComponent` or
+  `JTextField.trailingComponent` to a `java.awt.Component`). (PR #386)
 - TextComponents: Double/triple-click-and-drag now extends selection by whole
   words/lines.
 - Theming improvements: Reworks core themes to make it easier to create new
