@@ -17,6 +17,9 @@ FlatLaf Change Log
   since FlatLaf 1.3)
 - OptionPane: Fixed `OptionPane.sameSizeButtons`, which did not work as expected
   when setting to `false`.
+- OptionPane: Fixed rendering of longer HTML text if it is passed as
+  `StringBuilder`, `StringBuffer`, or any other object that returns HTML text in
+  method `toString()`. (similar to issue #12)
 - TextField, FormattedTextField, PasswordField and ComboBox: Fixed alignment of
   placeholder text in right-to-left component orientation.
 
