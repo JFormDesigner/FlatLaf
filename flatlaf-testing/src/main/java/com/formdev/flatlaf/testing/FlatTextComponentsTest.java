@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.text.DefaultEditorKit;
@@ -58,26 +59,54 @@ public class FlatTextComponentsTest
 		if( padding.equals( new Insets( 0, 0, 0, 0 ) ) )
 			padding = null;
 
-		for( Component c : getComponents() ) {
-			if( c instanceof JTextField )
-				((JTextField)c).putClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, padding );
-		}
+		putTextFieldClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, padding );
 	}
 
 	private void leadingIcon() {
-		applyIcon( FlatClientProperties.TEXT_FIELD_LEADING_ICON, leadingIconCheckBox.isSelected()
+		putTextFieldClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_ICON, leadingIconCheckBox.isSelected()
 			? new TestIcon( 8, 16, Color.blue ) : null );
 	}
 
 	private void trailingIcon() {
-		applyIcon( FlatClientProperties.TEXT_FIELD_TRAILING_ICON, trailingIconCheckBox.isSelected()
+		putTextFieldClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_ICON, trailingIconCheckBox.isSelected()
 			? new TestIcon( 24, 12, Color.magenta ) : null );
 	}
 
-	private void applyIcon( String key, Icon icon ) {
+	private void leadingComponent() {
+		putTextFieldClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_COMPONENT, () -> {
+			if( !leadingComponentCheckBox.isSelected() )
+				return null;
+
+			JLabel l = new JLabel( "lead" );
+			l.setOpaque( true );
+			l.setBackground( Color.green );
+			return l;
+		} );
+	}
+
+	private void trailingComponent() {
+		putTextFieldClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_COMPONENT, () -> {
+			if( !trailingComponentCheckBox.isSelected() )
+				return null;
+
+			JLabel l = new JLabel( "tr" );
+			l.setOpaque( true );
+			l.setBackground( Color.magenta );
+			return l;
+		} );
+	}
+
+	private void putTextFieldClientProperty( String key, Object value ) {
 		for( Component c : getComponents() ) {
 			if( c instanceof JTextField )
-				((JTextField)c).putClientProperty( key, icon );
+				((JTextField)c).putClientProperty( key, value );
+		}
+	}
+
+	private void putTextFieldClientProperty( String key, Supplier<Component> value ) {
+		for( Component c : getComponents() ) {
+			if( c instanceof JTextField )
+				((JTextField)c).putClientProperty( key, value.get() );
 		}
 	}
 
@@ -102,6 +131,8 @@ public class FlatTextComponentsTest
 		bottomPaddingField = new JSpinner();
 		leadingIconCheckBox = new JCheckBox();
 		trailingIconCheckBox = new JCheckBox();
+		leadingComponentCheckBox = new JCheckBox();
+		trailingComponentCheckBox = new JCheckBox();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
@@ -236,7 +267,9 @@ public class FlatTextComponentsTest
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]0" +
 				"[]" +
+				"[]0" +
 				"[]"));
 
 			//---- button1 ----
@@ -296,6 +329,18 @@ public class FlatTextComponentsTest
 			trailingIconCheckBox.setName("trailingIconCheckBox");
 			trailingIconCheckBox.addActionListener(e -> trailingIcon());
 			panel1.add(trailingIconCheckBox, "cell 0 6 2 1,alignx left,growx 0");
+
+			//---- leadingComponentCheckBox ----
+			leadingComponentCheckBox.setText("leading component");
+			leadingComponentCheckBox.setName("leadingComponentCheckBox");
+			leadingComponentCheckBox.addActionListener(e -> leadingComponent());
+			panel1.add(leadingComponentCheckBox, "cell 0 7 2 1,alignx left,growx 0");
+
+			//---- trailingComponentCheckBox ----
+			trailingComponentCheckBox.setText("trailing component");
+			trailingComponentCheckBox.setName("trailingComponentCheckBox");
+			trailingComponentCheckBox.addActionListener(e -> trailingComponent());
+			panel1.add(trailingComponentCheckBox, "cell 0 8 2 1,alignx left,growx 0");
 		}
 		add(panel1, "cell 4 0 1 6,aligny top,growy 0");
 
@@ -553,6 +598,8 @@ public class FlatTextComponentsTest
 	private JSpinner bottomPaddingField;
 	private JCheckBox leadingIconCheckBox;
 	private JCheckBox trailingIconCheckBox;
+	private JCheckBox leadingComponentCheckBox;
+	private JCheckBox trailingComponentCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- TestIcon -----------------------------------------------------------

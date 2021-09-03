@@ -264,6 +264,32 @@ public class FlatUIUtils
 	}
 
 	/**
+	 * Returns the scaled line thickness used to compute the border insets.
+	 *
+	 * @since 2
+	 */
+	public static float getBorderLineWidth( JComponent c ) {
+		FlatBorder border = getOutsideFlatBorder( c );
+		return (border != null)
+			? UIScale.scale( (float) border.getLineWidth( c ) )
+			: 0;
+	}
+
+	/**
+	 * Returns the scaled thickness of the border.
+	 * This includes the outer focus border and the actual component border.
+	 *
+	 * @since 2
+	 */
+	public static int getBorderFocusAndLineWidth( JComponent c ) {
+		FlatBorder border = getOutsideFlatBorder( c );
+		return (border != null)
+			? Math.round( UIScale.scale( (float) border.getFocusWidth( c ) )
+				+ UIScale.scale( (float) border.getLineWidth( c ) ) )
+			: 0;
+	}
+
+	/**
 	 * Returns the scaled arc diameter of the border for the given component.
 	 */
 	public static float getBorderArc( JComponent c ) {
