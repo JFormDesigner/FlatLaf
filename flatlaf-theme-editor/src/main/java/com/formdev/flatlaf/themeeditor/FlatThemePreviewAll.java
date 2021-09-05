@@ -21,11 +21,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyVetoException;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.ui.FlatTabbedPaneUI;
@@ -77,13 +79,20 @@ class FlatThemePreviewAll
 	}
 
 	private void enabledChanged() {
+		boolean enabled = enabledCheckBox.isSelected();
+
+		// disable "focused" checkbox because disabled components are not focusable
+		focusedCheckBox.setEnabled( enabled );
+		if( focusedCheckBox.isSelected() )
+			focusedChanged();
+
 		preview.runWithUIDefaultsGetter( () -> {
-			enableDisable( this, enabledCheckBox.isSelected() );
+			enableDisable( this, enabled );
 		} );
 	}
 
 	private void enableDisable( Component comp, boolean enabled ) {
-		if( comp != enabledCheckBox && comp != menu2 )
+		if( comp != enabledCheckBox && comp != focusedCheckBox && comp != menu2 )
 			comp.setEnabled( enabled );
 
 		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
@@ -107,6 +116,29 @@ class FlatThemePreviewAll
 			int count = menu.getMenuComponentCount();
 			for( int i = 0; i < count; i++ )
 				enableDisable( menu.getMenuComponent( i ), enabled );
+		}
+	}
+
+	private void focusedChanged() {
+		Predicate<JComponent> value = focusedCheckBox.isSelected() && enabledCheckBox.isSelected()
+			? value = c -> true
+			: null;
+		focusComponent( this, value );
+		repaint();
+	}
+
+	private void focusComponent( Component comp, Object value ) {
+		if( comp != enabledCheckBox && comp != focusedCheckBox && comp != menu2 && comp instanceof JComponent )
+			((JComponent)comp).putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, value );
+
+		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
+			return;
+
+		for( Component c : ((Container)comp).getComponents() ) {
+			if( c instanceof JScrollPane )
+				c = ((JScrollPane)c).getViewport().getView();
+
+			focusComponent( c, value );
 		}
 	}
 
@@ -134,90 +166,91 @@ class FlatThemePreviewAll
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		enabledCheckBox = new JCheckBox();
-		labelLabel = new JLabel();
-		label1 = new JLabel();
-		flatButton1 = new FlatButton();
-		buttonLabel = new JLabel();
-		button1 = new JButton();
-		testDefaultButton1 = new FlatThemePreviewAll.PreviewDefaultButton();
-		helpButton = new FlatButton();
-		hSpacer2 = new JPanel(null);
-		toggleButtonLabel = new JLabel();
-		toggleButton1 = new JToggleButton();
-		toggleButton3 = new JToggleButton();
-		hSpacer1 = new JPanel(null);
-		checkBoxLabel = new JLabel();
-		checkBox1 = new JCheckBox();
-		checkBox3 = new JCheckBox();
-		hSpacer3 = new JPanel(null);
-		radioButtonLabel = new JLabel();
-		radioButton1 = new JRadioButton();
-		radioButton3 = new JRadioButton();
-		hSpacer4 = new JPanel(null);
-		comboBoxLabel = new JLabel();
-		comboBox1 = new FlatComboBox<>();
-		comboBox3 = new JComboBox<>();
-		spinnerLabel = new JLabel();
-		spinner1 = new JSpinner();
-		textFieldLabel = new JLabel();
+		focusedCheckBox = new JCheckBox();
+		JLabel labelLabel = new JLabel();
+		JLabel label1 = new JLabel();
+		FlatButton flatButton1 = new FlatButton();
+		JLabel buttonLabel = new JLabel();
+		JButton button1 = new JButton();
+		FlatThemePreviewAll.PreviewDefaultButton testDefaultButton1 = new FlatThemePreviewAll.PreviewDefaultButton();
+		FlatButton helpButton = new FlatButton();
+		JPanel hSpacer2 = new JPanel(null);
+		JLabel toggleButtonLabel = new JLabel();
+		JToggleButton toggleButton1 = new JToggleButton();
+		JToggleButton toggleButton3 = new JToggleButton();
+		JPanel hSpacer1 = new JPanel(null);
+		JLabel checkBoxLabel = new JLabel();
+		JCheckBox checkBox1 = new JCheckBox();
+		JCheckBox checkBox3 = new JCheckBox();
+		JPanel hSpacer3 = new JPanel(null);
+		JLabel radioButtonLabel = new JLabel();
+		JRadioButton radioButton1 = new JRadioButton();
+		JRadioButton radioButton3 = new JRadioButton();
+		JPanel hSpacer4 = new JPanel(null);
+		JLabel comboBoxLabel = new JLabel();
+		FlatComboBox<String> comboBox1 = new FlatComboBox<>();
+		JComboBox<String> comboBox3 = new JComboBox<>();
+		JLabel spinnerLabel = new JLabel();
+		JSpinner spinner1 = new JSpinner();
+		JLabel textFieldLabel = new JLabel();
 		textField1 = new FlatTextField();
-		formattedTextField1 = new FlatFormattedTextField();
-		passwordField1 = new FlatPasswordField();
-		textAreaLabel = new JLabel();
-		scrollPane1 = new JScrollPane();
-		textArea1 = new JTextArea();
-		scrollPane5 = new JScrollPane();
-		editorPane1 = new JEditorPane();
-		scrollPane9 = new JScrollPane();
-		textPane1 = new JTextPane();
-		menuBarLabel = new JLabel();
-		menuBar1 = new JMenuBar();
+		FlatFormattedTextField formattedTextField1 = new FlatFormattedTextField();
+		FlatPasswordField passwordField1 = new FlatPasswordField();
+		JLabel textAreaLabel = new JLabel();
+		JScrollPane scrollPane1 = new JScrollPane();
+		JTextArea textArea1 = new JTextArea();
+		JScrollPane scrollPane5 = new JScrollPane();
+		JEditorPane editorPane1 = new JEditorPane();
+		JScrollPane scrollPane9 = new JScrollPane();
+		JTextPane textPane1 = new JTextPane();
+		JLabel menuBarLabel = new JLabel();
+		JMenuBar menuBar1 = new JMenuBar();
 		menu2 = new JMenu();
-		menuItem3 = new JMenuItem();
-		menuItem4 = new JMenuItem();
-		checkBoxMenuItem2 = new JCheckBoxMenuItem();
-		checkBoxMenuItem3 = new JCheckBoxMenuItem();
-		radioButtonMenuItem4 = new JRadioButtonMenuItem();
-		radioButtonMenuItem5 = new JRadioButtonMenuItem();
-		menu4 = new JMenu();
-		menuItem6 = new JMenuItem();
-		menu5 = new JMenu();
-		menuItem7 = new JMenuItem();
-		menu3 = new JMenu();
-		menuItem5 = new JMenuItem();
-		menuItem8 = new JMenuItem();
-		menuItem9 = new JMenuItem();
-		scrollBarLabel = new JLabel();
-		scrollBar1 = new JScrollBar();
-		scrollBar5 = new FlatScrollBar();
-		separatorLabel = new JLabel();
-		separator1 = new JSeparator();
-		sliderLabel = new JLabel();
+		JMenuItem menuItem3 = new JMenuItem();
+		JMenuItem menuItem4 = new JMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem2 = new JCheckBoxMenuItem();
+		JCheckBoxMenuItem checkBoxMenuItem3 = new JCheckBoxMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem4 = new JRadioButtonMenuItem();
+		JRadioButtonMenuItem radioButtonMenuItem5 = new JRadioButtonMenuItem();
+		JMenu menu4 = new JMenu();
+		JMenuItem menuItem6 = new JMenuItem();
+		JMenu menu5 = new JMenu();
+		JMenuItem menuItem7 = new JMenuItem();
+		JMenu menu3 = new JMenu();
+		JMenuItem menuItem5 = new JMenuItem();
+		JMenuItem menuItem8 = new JMenuItem();
+		JMenuItem menuItem9 = new JMenuItem();
+		JLabel scrollBarLabel = new JLabel();
+		JScrollBar scrollBar1 = new JScrollBar();
+		FlatScrollBar scrollBar5 = new FlatScrollBar();
+		JLabel separatorLabel = new JLabel();
+		JSeparator separator1 = new JSeparator();
+		JLabel sliderLabel = new JLabel();
 		slider1 = new JSlider();
 		slider3 = new JSlider();
-		progressBarLabel = new JLabel();
+		JLabel progressBarLabel = new JLabel();
 		progressBar1 = new FlatProgressBar();
 		progressBar2 = new FlatProgressBar();
-		toolTipLabel = new JLabel();
-		toolTip1 = new JToolTip();
-		toolBarLabel = new JLabel();
+		JLabel toolTipLabel = new JLabel();
+		JToolTip toolTip1 = new JToolTip();
+		JLabel toolBarLabel = new JLabel();
 		toolBar1 = new JToolBar();
-		button4 = new JButton();
-		button6 = new JButton();
-		button7 = new JToggleButton();
-		button8 = new JToggleButton();
-		tabbedPaneLabel = new JLabel();
+		JButton button4 = new JButton();
+		JButton button6 = new JButton();
+		JToggleButton button7 = new JToggleButton();
+		JToggleButton button8 = new JToggleButton();
+		JLabel tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new FlatThemePreviewAll.PreviewTabbedPane();
-		listTreeLabel = new JLabel();
-		splitPane1 = new JSplitPane();
-		scrollPane2 = new JScrollPane();
+		JLabel listTreeLabel = new JLabel();
+		JSplitPane splitPane1 = new JSplitPane();
+		JScrollPane scrollPane2 = new JScrollPane();
 		list1 = new JList<>();
-		scrollPane3 = new JScrollPane();
+		JScrollPane scrollPane3 = new JScrollPane();
 		tree1 = new JTree();
-		tableLabel = new JLabel();
-		scrollPane4 = new JScrollPane();
+		JLabel tableLabel = new JLabel();
+		JScrollPane scrollPane4 = new JScrollPane();
 		table1 = new FlatThemePreviewAll.PreviewTable();
-		internalFrameLabel = new JLabel();
+		JLabel internalFrameLabel = new JLabel();
 		desktopPane1 = new JDesktopPane();
 		internalFrame1 = new JInternalFrame();
 		internalFrame2 = new JInternalFrame();
@@ -262,6 +295,11 @@ class FlatThemePreviewAll
 		enabledCheckBox.setSelected(true);
 		enabledCheckBox.addActionListener(e -> enabledChanged());
 		add(enabledCheckBox, "cell 0 0 2 1,alignx left,growx 0");
+
+		//---- focusedCheckBox ----
+		focusedCheckBox.setText("Focused");
+		focusedCheckBox.addActionListener(e -> focusedChanged());
+		add(focusedCheckBox, "cell 0 0 2 1");
 
 		//---- labelLabel ----
 		labelLabel.setText("JLabel:");
@@ -729,90 +767,18 @@ class FlatThemePreviewAll
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox enabledCheckBox;
-	private JLabel labelLabel;
-	private JLabel label1;
-	private FlatButton flatButton1;
-	private JLabel buttonLabel;
-	private JButton button1;
-	private FlatThemePreviewAll.PreviewDefaultButton testDefaultButton1;
-	private FlatButton helpButton;
-	private JPanel hSpacer2;
-	private JLabel toggleButtonLabel;
-	private JToggleButton toggleButton1;
-	private JToggleButton toggleButton3;
-	private JPanel hSpacer1;
-	private JLabel checkBoxLabel;
-	private JCheckBox checkBox1;
-	private JCheckBox checkBox3;
-	private JPanel hSpacer3;
-	private JLabel radioButtonLabel;
-	private JRadioButton radioButton1;
-	private JRadioButton radioButton3;
-	private JPanel hSpacer4;
-	private JLabel comboBoxLabel;
-	private FlatComboBox<String> comboBox1;
-	private JComboBox<String> comboBox3;
-	private JLabel spinnerLabel;
-	private JSpinner spinner1;
-	private JLabel textFieldLabel;
+	private JCheckBox focusedCheckBox;
 	private FlatTextField textField1;
-	private FlatFormattedTextField formattedTextField1;
-	private FlatPasswordField passwordField1;
-	private JLabel textAreaLabel;
-	private JScrollPane scrollPane1;
-	private JTextArea textArea1;
-	private JScrollPane scrollPane5;
-	private JEditorPane editorPane1;
-	private JScrollPane scrollPane9;
-	private JTextPane textPane1;
-	private JLabel menuBarLabel;
-	private JMenuBar menuBar1;
 	private JMenu menu2;
-	private JMenuItem menuItem3;
-	private JMenuItem menuItem4;
-	private JCheckBoxMenuItem checkBoxMenuItem2;
-	private JCheckBoxMenuItem checkBoxMenuItem3;
-	private JRadioButtonMenuItem radioButtonMenuItem4;
-	private JRadioButtonMenuItem radioButtonMenuItem5;
-	private JMenu menu4;
-	private JMenuItem menuItem6;
-	private JMenu menu5;
-	private JMenuItem menuItem7;
-	private JMenu menu3;
-	private JMenuItem menuItem5;
-	private JMenuItem menuItem8;
-	private JMenuItem menuItem9;
-	private JLabel scrollBarLabel;
-	private JScrollBar scrollBar1;
-	private FlatScrollBar scrollBar5;
-	private JLabel separatorLabel;
-	private JSeparator separator1;
-	private JLabel sliderLabel;
 	private JSlider slider1;
 	private JSlider slider3;
-	private JLabel progressBarLabel;
 	private FlatProgressBar progressBar1;
 	private FlatProgressBar progressBar2;
-	private JLabel toolTipLabel;
-	private JToolTip toolTip1;
-	private JLabel toolBarLabel;
 	private JToolBar toolBar1;
-	private JButton button4;
-	private JButton button6;
-	private JToggleButton button7;
-	private JToggleButton button8;
-	private JLabel tabbedPaneLabel;
 	private FlatThemePreviewAll.PreviewTabbedPane tabbedPane1;
-	private JLabel listTreeLabel;
-	private JSplitPane splitPane1;
-	private JScrollPane scrollPane2;
 	private JList<String> list1;
-	private JScrollPane scrollPane3;
 	private JTree tree1;
-	private JLabel tableLabel;
-	private JScrollPane scrollPane4;
 	private FlatThemePreviewAll.PreviewTable table1;
-	private JLabel internalFrameLabel;
 	private JDesktopPane desktopPane1;
 	private JInternalFrame internalFrame1;
 	private JInternalFrame internalFrame2;

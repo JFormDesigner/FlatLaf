@@ -3,55 +3,164 @@ JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[fill][fill][fill]para[fill][fill]para"
-			"$rowConstraints": "[][][][][][]unrel[]para[][][][][][]unrel[]para[][][][][][]unrel[]"
+			"$rowConstraints": "[]para[][]0[][][][][]unrel[]para[][]0[][][][][]unrel[]para[][][][][][]unrel[]"
 		} ) {
 			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[fill][fill]"
+				"$rowConstraints": "[]0[]"
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "buttonTypeLabel"
+					"text": "Button type:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "buttonTypeToolBar1"
+					"floatable": false
+					"border": &EmptyBorder0 new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "noneButton"
+						"text": "none"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"selected": true
+						"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "squareButton"
+						"text": "square"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"font": #SwingDerivedFont0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "roundRectButton"
+						"text": "roundRect"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"font": #SwingDerivedFont0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "tabButton"
+						"text": "tab"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"font": #SwingDerivedFont0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "buttonTypeToolBar2"
+					"floatable": false
+					"border": #EmptyBorder0
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "toolBarButtonButton"
+						"text": "toolBarButton"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"font": #SwingDerivedFont0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "borderlessButton"
+						"text": "borderless"
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						"font": #SwingDerivedFont0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonTypeChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 1"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 5 1"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label11"
 				"text": "JButton"
-				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+				"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0 3 1"
+				"value": "cell 0 1 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label27"
+				"text": "unfocused"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2 2 1,alignx center,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label28"
+				"text": "focused"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 2 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
 				"text": "regular"
+				"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1"
+				"value": "cell 1 3"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label7"
 				"text": "default"
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 1"
+				"value": "cell 2 3"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
-				"text": "focused"
+				"text": "regular"
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 1"
+				"value": "cell 3 3"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label8"
 				"text": "default"
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 1"
+				"value": "cell 4 3"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
 				"text": "none"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 2"
+				"value": "cell 0 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton1"
 				"text": "OK"
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2"
+				"value": "cell 1 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton7"
@@ -59,7 +168,7 @@ new FormModel {
 				"stateDefault": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 2"
+				"value": "cell 2 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton4"
@@ -67,7 +176,7 @@ new FormModel {
 				"stateFocused": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 2"
+				"value": "cell 3 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton10"
@@ -76,13 +185,13 @@ new FormModel {
 				"stateDefault": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 2"
+				"value": "cell 4 4"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
 				"text": "hover"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 3"
+				"value": "cell 0 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton2"
@@ -90,7 +199,7 @@ new FormModel {
 				"stateHover": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3"
+				"value": "cell 1 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton8"
@@ -99,7 +208,7 @@ new FormModel {
 				"stateDefault": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 3"
+				"value": "cell 2 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton5"
@@ -108,7 +217,7 @@ new FormModel {
 				"stateFocused": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 3"
+				"value": "cell 3 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton11"
@@ -118,13 +227,13 @@ new FormModel {
 				"stateDefault": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 3"
+				"value": "cell 4 5"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label3"
 				"text": "pressed"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 4"
+				"value": "cell 0 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton3"
@@ -132,7 +241,7 @@ new FormModel {
 				"statePressed": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4"
+				"value": "cell 1 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton9"
@@ -141,7 +250,7 @@ new FormModel {
 				"stateDefault": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 4"
+				"value": "cell 2 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton6"
@@ -150,7 +259,7 @@ new FormModel {
 				"stateFocused": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 4"
+				"value": "cell 3 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton12"
@@ -160,13 +269,13 @@ new FormModel {
 				"stateDefault": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 4"
+				"value": "cell 4 6"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label4"
 				"text": "disabled"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 5"
+				"value": "cell 0 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton13"
@@ -174,7 +283,7 @@ new FormModel {
 				"enabled": false
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5"
+				"value": "cell 1 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton14"
@@ -183,84 +292,100 @@ new FormModel {
 				"stateDefault": true
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 5"
+				"value": "cell 2 7"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label10"
 				"text": "try me"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 6"
+				"value": "cell 0 8"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
 				"text": "OK"
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 6"
+				"value": "cell 1 8"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestDefaultButton" ) {
 				name: "testDefaultButton1"
 				"text": "OK"
 				"$client.JComponent.minimumWidth": 0
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 6"
+				"value": "cell 2 8"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label12"
 				"text": "JToggleButton"
-				"font": #SwingDerivedFont0
+				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 7 3 1"
+				"value": "cell 0 9 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label29"
+				"text": "unfocused"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 10 2 1,alignx center,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label30"
+				"text": "focused"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 10 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label13"
 				"text": "unsel."
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 8"
+				"value": "cell 1 11"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label14"
 				"text": "selected"
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 8"
+				"value": "cell 2 11"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label15"
-				"text": "focused"
+				"text": "unsel."
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 8"
+				"value": "cell 3 11"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label16"
 				"text": "selected"
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 8"
+				"value": "cell 4 11"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label17"
 				"text": "none"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 9"
+				"value": "cell 0 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton1"
 				"text": "OK"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 9"
+				"value": "cell 1 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton5"
 				"text": "OK"
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 9"
+				"value": "cell 2 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton9"
 				"text": "OK"
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 9"
+				"value": "cell 3 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton12"
@@ -268,20 +393,20 @@ new FormModel {
 				"stateSelected": true
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 9"
+				"value": "cell 4 12"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label18"
 				"text": "hover"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 10"
+				"value": "cell 0 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton2"
 				"text": "OK"
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 10"
+				"value": "cell 1 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton6"
@@ -289,7 +414,7 @@ new FormModel {
 				"stateHover": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 10"
+				"value": "cell 2 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton10"
@@ -297,7 +422,7 @@ new FormModel {
 				"stateHover": true
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 10"
+				"value": "cell 3 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton13"
@@ -306,20 +431,20 @@ new FormModel {
 				"stateSelected": true
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 10"
+				"value": "cell 4 13"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label19"
 				"text": "pressed"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 11"
+				"value": "cell 0 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton3"
 				"text": "OK"
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 11"
+				"value": "cell 1 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton7"
@@ -327,7 +452,7 @@ new FormModel {
 				"statePressed": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 11"
+				"value": "cell 2 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton11"
@@ -335,7 +460,7 @@ new FormModel {
 				"statePressed": true
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 11"
+				"value": "cell 3 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton14"
@@ -344,20 +469,20 @@ new FormModel {
 				"stateSelected": true
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 11"
+				"value": "cell 4 14"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label20"
 				"text": "disabled"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 12"
+				"value": "cell 0 15"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton4"
 				"text": "OK"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 12"
+				"value": "cell 1 15"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateToggleButton" ) {
 				name: "testStateToggleButton8"
@@ -365,58 +490,58 @@ new FormModel {
 				"enabled": false
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 12"
+				"value": "cell 2 15"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label21"
 				"text": "try me"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 13"
+				"value": "cell 0 16"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton1"
 				"text": "OK"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 13"
+				"value": "cell 1 16"
 			} )
 			add( new FormComponent( "javax.swing.JToggleButton" ) {
 				name: "toggleButton2"
 				"text": "OK"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 13"
+				"value": "cell 2 16"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label32"
 				"text": "Help Button"
-				"font": #SwingDerivedFont0
+				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 14 2 1"
+				"value": "cell 0 17 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label9"
-				"text": "regular"
+				"text": "unfocused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15"
+				"value": "cell 1 18 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label33"
 				"text": "focused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 15"
+				"value": "cell 3 18 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label22"
 				"text": "none"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 16"
+				"value": "cell 0 19"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton15"
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 16"
+				"value": "cell 1 19"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton19"
@@ -424,13 +549,13 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 16"
+				"value": "cell 3 19"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label23"
 				"text": "hover"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 17"
+				"value": "cell 0 20"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton16"
@@ -438,7 +563,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 17"
+				"value": "cell 1 20"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton20"
@@ -447,13 +572,13 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 17"
+				"value": "cell 3 20"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label24"
 				"text": "pressed"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 18"
+				"value": "cell 0 21"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton17"
@@ -461,7 +586,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 18"
+				"value": "cell 1 21"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton21"
@@ -470,13 +595,13 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 18"
+				"value": "cell 3 21"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label25"
 				"text": "disabled"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 19"
+				"value": "cell 0 22"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton18"
@@ -484,24 +609,29 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 19"
+				"value": "cell 1 22"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label26"
 				"text": "try me"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 20"
+				"value": "cell 0 23"
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button2"
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 20"
+				"value": "cell 1 23"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 0 )
+			"location": new java.awt.Point( 5, 0 )
 			"size": new java.awt.Dimension( 335, 685 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 5, 765 )
 		} )
 	}
 }

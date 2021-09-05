@@ -3,6 +3,9 @@ JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[fill][130,fill]"
@@ -13,9 +16,22 @@ new FormModel {
 				name: "enabledCheckBox"
 				"text": "Enabled"
 				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "enabledChanged", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0 2 1,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "focusedCheckBox"
+				"text": "Focused"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "focusedChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "labelLabel"
@@ -285,6 +301,9 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
 					name: "menu2"
 					"text": "JMenu"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "menuItem3"
 						"text": "JMenuItem"
@@ -426,6 +445,9 @@ new FormModel {
 			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar1"
 				"value": 60
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 18"
 			} )
@@ -433,6 +455,9 @@ new FormModel {
 				name: "progressBar2"
 				"value": 50
 				"stringPainted": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 19"
 			} )
@@ -456,6 +481,9 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button4"
 					"icon": new com.jformdesigner.model.SwingIcon( 2, "Tree.closedIcon" )
@@ -487,6 +515,9 @@ new FormModel {
 			} )
 			add( new FormContainer( "com.formdev.flatlaf.themeeditor.FlatThemePreviewAll$PreviewTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
 				name: "tabbedPane1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 22"
 			} )
@@ -509,6 +540,9 @@ new FormModel {
 							addElement( "Item 2" )
 							addElement( "Item 3" )
 						}
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
 					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "left"
@@ -528,6 +562,9 @@ new FormModel {
 								userObject: "Item 3"
 							} )
 						} )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
 					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "right"
@@ -567,6 +604,9 @@ new FormModel {
 						add( null )
 						add( null )
 					} )
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 24,height 70"
@@ -579,6 +619,9 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JDesktopPane", new FormLayoutManager( class javax.swing.JDesktopPane ) ) {
 				name: "desktopPane1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				add( new FormContainer( "javax.swing.JInternalFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 					name: "internalFrame1"
 					"visible": true
@@ -587,6 +630,9 @@ new FormModel {
 					"maximizable": true
 					"iconifiable": true
 					"resizable": true
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( null ) {
 					"x": 5
 					"y": 5
@@ -599,6 +645,9 @@ new FormModel {
 					"maximizable": true
 					"resizable": true
 					"title": "Inactive"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				}, new FormLayoutConstraints( null ) {
 					"x": 5
 					"y": 50
