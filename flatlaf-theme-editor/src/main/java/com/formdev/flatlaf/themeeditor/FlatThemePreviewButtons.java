@@ -260,22 +260,22 @@ class FlatThemePreviewButtons
 		//---- label5 ----
 		label5.setText("regular");
 		label5.setFont(label5.getFont().deriveFont(label5.getFont().getSize() - 2f));
-		add(label5, "cell 1 3");
+		add(label5, "cell 1 3,alignx center,growx 0");
 
 		//---- label7 ----
 		label7.setText("default");
 		label7.setFont(label7.getFont().deriveFont(label7.getFont().getSize() - 2f));
-		add(label7, "cell 2 3");
+		add(label7, "cell 2 3,alignx center,growx 0");
 
 		//---- label6 ----
 		label6.setText("regular");
 		label6.setFont(label6.getFont().deriveFont(label6.getFont().getSize() - 2f));
-		add(label6, "cell 3 3");
+		add(label6, "cell 3 3,alignx center,growx 0");
 
 		//---- label8 ----
 		label8.setText("default");
 		label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() - 2f));
-		add(label8, "cell 4 3");
+		add(label8, "cell 4 3,alignx center,growx 0");
 
 		//---- label1 ----
 		label1.setText("none");
@@ -416,22 +416,22 @@ class FlatThemePreviewButtons
 		//---- label13 ----
 		label13.setText("unsel.");
 		label13.setFont(label13.getFont().deriveFont(label13.getFont().getSize() - 2f));
-		add(label13, "cell 1 11");
+		add(label13, "cell 1 11,alignx center,growx 0");
 
 		//---- label14 ----
 		label14.setText("selected");
 		label14.setFont(label14.getFont().deriveFont(label14.getFont().getSize() - 2f));
-		add(label14, "cell 2 11");
+		add(label14, "cell 2 11,alignx center,growx 0");
 
 		//---- label15 ----
 		label15.setText("unsel.");
 		label15.setFont(label15.getFont().deriveFont(label15.getFont().getSize() - 2f));
-		add(label15, "cell 3 11");
+		add(label15, "cell 3 11,alignx center,growx 0");
 
 		//---- label16 ----
 		label16.setText("selected");
 		label16.setFont(label16.getFont().deriveFont(label16.getFont().getSize() - 2f));
-		add(label16, "cell 4 11");
+		add(label16, "cell 4 11,alignx center,growx 0");
 
 		//---- label17 ----
 		label17.setText("none");
@@ -561,13 +561,13 @@ class FlatThemePreviewButtons
 		//---- testStateButton15 ----
 		testStateButton15.putClientProperty("JComponent.minimumWidth", 0);
 		testStateButton15.putClientProperty("JButton.buttonType", "help");
-		add(testStateButton15, "cell 1 19");
+		add(testStateButton15, "cell 1 19 2 1,alignx center,growx 0");
 
 		//---- testStateButton19 ----
 		testStateButton19.setStateFocused(true);
 		testStateButton19.putClientProperty("JComponent.minimumWidth", 0);
 		testStateButton19.putClientProperty("JButton.buttonType", "help");
-		add(testStateButton19, "cell 3 19");
+		add(testStateButton19, "cell 3 19 2 1,alignx center,growx 0");
 
 		//---- label23 ----
 		label23.setText("hover");
@@ -577,14 +577,14 @@ class FlatThemePreviewButtons
 		testStateButton16.setStateHover(true);
 		testStateButton16.putClientProperty("JComponent.minimumWidth", 0);
 		testStateButton16.putClientProperty("JButton.buttonType", "help");
-		add(testStateButton16, "cell 1 20");
+		add(testStateButton16, "cell 1 20 2 1,alignx center,growx 0");
 
 		//---- testStateButton20 ----
 		testStateButton20.setStateHover(true);
 		testStateButton20.setStateFocused(true);
 		testStateButton20.putClientProperty("JComponent.minimumWidth", 0);
 		testStateButton20.putClientProperty("JButton.buttonType", "help");
-		add(testStateButton20, "cell 3 20");
+		add(testStateButton20, "cell 3 20 2 1,alignx center,growx 0");
 
 		//---- label24 ----
 		label24.setText("pressed");
@@ -594,14 +594,14 @@ class FlatThemePreviewButtons
 		testStateButton17.setStatePressed(true);
 		testStateButton17.putClientProperty("JComponent.minimumWidth", 0);
 		testStateButton17.putClientProperty("JButton.buttonType", "help");
-		add(testStateButton17, "cell 1 21");
+		add(testStateButton17, "cell 1 21 2 1,alignx center,growx 0");
 
 		//---- testStateButton21 ----
 		testStateButton21.setStatePressed(true);
 		testStateButton21.setStateFocused(true);
 		testStateButton21.putClientProperty("JComponent.minimumWidth", 0);
 		testStateButton21.putClientProperty("JButton.buttonType", "help");
-		add(testStateButton21, "cell 3 21");
+		add(testStateButton21, "cell 3 21 2 1,alignx center,growx 0");
 
 		//---- label25 ----
 		label25.setText("disabled");
@@ -611,7 +611,7 @@ class FlatThemePreviewButtons
 		testStateButton18.setEnabled(false);
 		testStateButton18.putClientProperty("JComponent.minimumWidth", 0);
 		testStateButton18.putClientProperty("JButton.buttonType", "help");
-		add(testStateButton18, "cell 1 22");
+		add(testStateButton18, "cell 1 22 2 1,alignx center,growx 0");
 
 		//---- label26 ----
 		label26.setText("try me");
@@ -620,7 +620,7 @@ class FlatThemePreviewButtons
 		//---- button2 ----
 		button2.putClientProperty("JComponent.minimumWidth", 0);
 		button2.putClientProperty("JButton.buttonType", "help");
-		add(button2, "cell 1 23");
+		add(button2, "cell 1 23 2 1,alignx center,growx 0");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();

@@ -126,28 +126,28 @@ new FormModel {
 				"text": "regular"
 				"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3"
+				"value": "cell 1 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label7"
 				"text": "default"
 				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 3"
+				"value": "cell 2 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
 				"text": "regular"
 				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 3"
+				"value": "cell 3 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label8"
 				"text": "default"
 				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 3"
+				"value": "cell 4 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
@@ -338,28 +338,28 @@ new FormModel {
 				"text": "unsel."
 				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 11"
+				"value": "cell 1 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label14"
 				"text": "selected"
 				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 11"
+				"value": "cell 2 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label15"
 				"text": "unsel."
 				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 11"
+				"value": "cell 3 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label16"
 				"text": "selected"
 				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 11"
+				"value": "cell 4 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label17"
@@ -541,7 +541,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 19"
+				"value": "cell 1 19 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton19"
@@ -549,7 +549,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 19"
+				"value": "cell 3 19 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label23"
@@ -563,7 +563,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 20"
+				"value": "cell 1 20 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton20"
@@ -572,7 +572,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 20"
+				"value": "cell 3 20 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label24"
@@ -586,7 +586,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 21"
+				"value": "cell 1 21 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewButtons$TestStateButton" ) {
 				name: "testStateButton21"
@@ -595,7 +595,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 21"
+				"value": "cell 3 21 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label25"
@@ -609,7 +609,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 22"
+				"value": "cell 1 22 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label26"
@@ -622,7 +622,7 @@ new FormModel {
 				"$client.JComponent.minimumWidth": 0
 				"$client.JButton.buttonType": "help"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 23"
+				"value": "cell 1 23 2 1,alignx center,growx 0"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 0 )

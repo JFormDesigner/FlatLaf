@@ -36,28 +36,28 @@ new FormModel {
 				"text": "unsel."
 				"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2"
+				"value": "cell 1 2,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label28"
 				"text": "selected"
 				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 2"
+				"value": "cell 2 2,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label24"
 				"text": "unsel."
 				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 2"
+				"value": "cell 3 2,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label29"
 				"text": "selected"
 				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 2"
+				"value": "cell 4 2,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label17"
@@ -233,28 +233,28 @@ new FormModel {
 				"text": "unsel."
 				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 10"
+				"value": "cell 1 10,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label30"
 				"text": "selected"
 				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 10"
+				"value": "cell 2 10,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label26"
 				"text": "unsel."
 				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 10"
+				"value": "cell 3 10,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label31"
 				"text": "selected"
 				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 10"
+				"value": "cell 4 10,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label36"
