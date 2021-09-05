@@ -830,6 +830,7 @@ Table.selectionForeground
 Table.selectionInactiveBackground
 Table.selectionInactiveForeground
 Table.showHorizontalLines
+Table.showLastVerticalLine
 Table.showVerticalLines
 Table.sortIconColor
 TableHeader.ancestorInputMap
@@ -842,6 +843,7 @@ TableHeader.font
 TableHeader.foreground
 TableHeader.height
 TableHeader.separatorColor
+TableHeader.showLastVerticalLine
 TableHeaderUI
 TableUI
 TaskPane.background

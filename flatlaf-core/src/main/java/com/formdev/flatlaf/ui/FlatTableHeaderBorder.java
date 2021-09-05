@@ -44,6 +44,7 @@ public class FlatTableHeaderBorder
 {
 	protected Color separatorColor = UIManager.getColor( "TableHeader.separatorColor" );
 	protected Color bottomSeparatorColor = UIManager.getColor( "TableHeader.bottomSeparatorColor" );
+	protected boolean showLastVerticalLine = UIManager.getBoolean( "TableHeader.showLastVerticalLine" );
 
 	public FlatTableHeaderBorder() {
 		super( UIManager.getInsets( "TableHeader.cellMargins" ) );
@@ -108,6 +109,9 @@ public class FlatTableHeaderBorder
 	}
 
 	protected boolean hideTrailingVerticalLine( JTableHeader header ) {
+		if( showLastVerticalLine )
+			return false;
+
 		Container viewport = header.getParent();
 		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
 		if( !(viewportParent instanceof JScrollPane) )
