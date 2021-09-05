@@ -21,6 +21,7 @@ import java.awt.*;
 import java.awt.event.HierarchyEvent;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
@@ -36,20 +37,27 @@ class FlatThemePreview
 	extends JPanel
 	implements DocumentListener
 {
+	private static final String KEY_SELECTED_TAB = "preview.selectedTab";
+
 	private final FlatSyntaxTextArea textArea;
 	private final Timer timer;
+	private final Preferences state;
 
 	private final Map<LazyValue, Object> lazyValueCache = new WeakHashMap<>();
 	private int runWithUIDefaultsGetterLevel;
 
 	FlatThemePreview( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
+		state = Preferences.userRoot().node( FlatThemeFileEditor.PREFS_ROOT_PATH );
 
 		initComponents();
 
+		// add tabs
 		tabbedPane.addTab( "All", createPreviewTab( new FlatThemePreviewAll( this ) ) );
 		tabbedPane.addTab( "Buttons", createPreviewTab( new FlatThemePreviewButtons() ) );
 		tabbedPane.addTab( "Switches", createPreviewTab( new FlatThemePreviewSwitches() ) );
+		selectRecentTab();
+		tabbedPane.addChangeListener( e -> selectedTabChanged() );
 
 		// timer used for delayed preview updates
 		timer = new Timer( 300, e -> update() );
@@ -61,6 +69,7 @@ class FlatThemePreview
 		// update when showing preview (e.g. activating tab)
 		addHierarchyListener( e -> {
 			if( (e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && isShowing() )
+				selectRecentTab();
 				updateLater();
 		} );
 	}
@@ -72,6 +81,17 @@ class FlatThemePreview
 		scrollPane.getVerticalScrollBar().setUnitIncrement( 20 );
 		scrollPane.getHorizontalScrollBar().setUnitIncrement( 20 );
 		return scrollPane;
+	}
+
+	private void selectRecentTab() {
+		int selectedTab = state.getInt( KEY_SELECTED_TAB, -1 );
+		if( selectedTab >= 0 && selectedTab < tabbedPane.getTabCount() )
+			tabbedPane.setSelectedIndex( selectedTab );
+	}
+
+	private void selectedTabChanged() {
+		update();
+		state.putInt( KEY_SELECTED_TAB, tabbedPane.getSelectedIndex() );
 	}
 
 	@Override
@@ -169,7 +189,6 @@ class FlatThemePreview
 		{
 			tabbedPane.setLeadingComponent(previewLabel);
 			tabbedPane.setTabAreaAlignment(FlatTabbedPane.TabAreaAlignment.trailing);
-			tabbedPane.addChangeListener(e -> update());
 		}
 		add(tabbedPane, BorderLayout.CENTER);
 
