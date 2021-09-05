@@ -20,10 +20,12 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicListUI;
+import com.formdev.flatlaf.FlatClientProperties;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JList}.
@@ -93,6 +95,17 @@ public class FlatListUI
 		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener() {
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
+
+			if( FlatClientProperties.COMPONENT_FOCUS_OWNER.equals( e.getPropertyName() ) )
+				toggleSelectionColors();
+		};
 	}
 
 	@Override

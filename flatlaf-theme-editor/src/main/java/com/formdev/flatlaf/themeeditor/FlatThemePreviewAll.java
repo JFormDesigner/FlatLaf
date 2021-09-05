@@ -59,9 +59,9 @@ class FlatThemePreviewAll
 
 		list1.setSelectedIndex( 1 );
 		tree1.setSelectionRow( 1 );
-		table1.setRowSelectionInterval( 1, 1 );
 		table1.setRowSorter( new TableRowSorter<>( table1.getModel() ) );
 		table1.getRowSorter().toggleSortOrder( 0 );
+		table1.setRowSelectionInterval( 1, 1 );
 		table1.uiDefaultsGetter = preview::getUIDefaultProperty;
 
 		EventQueue.invokeLater( () -> {

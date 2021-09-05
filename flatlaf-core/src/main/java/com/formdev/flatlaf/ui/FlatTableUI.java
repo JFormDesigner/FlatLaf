@@ -25,6 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -34,6 +35,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.JTableHeader;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -103,6 +105,8 @@ public class FlatTableUI
 	private boolean oldShowVerticalLines;
 	private Dimension oldIntercellSpacing;
 
+	private PropertyChangeListener propertyChangeListener;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableUI();
 	}
@@ -160,6 +164,25 @@ public class FlatTableUI
 		// restore old intercell spacing (if not modified)
 		if( intercellSpacing != null && table.getIntercellSpacing().equals( intercellSpacing ) )
 			table.setIntercellSpacing( oldIntercellSpacing );
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = e -> {
+			if( FlatClientProperties.COMPONENT_FOCUS_OWNER.equals( e.getPropertyName() ) )
+				toggleSelectionColors();
+		};
+		table.addPropertyChangeListener( propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		table.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
 	}
 
 	@Override
