@@ -1076,7 +1076,7 @@ public class FlatComponentStateTest
 		}
 	}
 
-	//---- class TestStateCheckBox --------------------------------------------
+	//---- class TestStateRadioButton -----------------------------------------
 
 	private static class TestStateRadioButton
 		extends JRadioButton
