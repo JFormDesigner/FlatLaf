@@ -48,6 +48,7 @@ import com.formdev.flatlaf.util.DerivedColor;
  *
  * @uiDefault Component.focusWidth						int
  * @uiDefault Component.innerFocusWidth					int or float
+ * @uiDefault Component.innerOutlineWidth				int or float
  * @uiDefault Component.focusColor						Color
  * @uiDefault Component.borderColor						Color
  * @uiDefault Component.disabledBorderColor				Color

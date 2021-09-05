@@ -24,6 +24,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -162,8 +163,15 @@ public class FlatOptionPaneUI
 			cons.insets.bottom = UIScale.scale( messagePadding );
 
 		// disable line wrapping for HTML
-		if( msg instanceof String && BasicHTML.isHTMLString( (String) msg ) )
-			maxll = Integer.MAX_VALUE;
+		if( msg != null &&
+			!(msg instanceof Component) &&
+			!(msg instanceof Object[]) &&
+			!(msg instanceof Icon) )
+		{
+			msg = msg.toString();
+			if( BasicHTML.isHTMLString( (String) msg ) )
+				maxll = Integer.MAX_VALUE;
+		}
 
 		// fix right-to-left alignment if super.addMessageComponents() breaks longer lines
 		// into multiple labels and puts them into a box that aligns them to the left

@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -131,6 +132,16 @@ public class FlatSingleComponentTest
 		registerScaleFactor( "alt F10", "5" );
 		registerScaleFactor( "alt F11", "6" );
 		registerScaleFactor( "alt F12", null );
+
+		// register Alt+R key to toggle component orientation
+		((JComponent)getContentPane()).registerKeyboardAction(
+			e -> {
+				applyComponentOrientation( getComponentOrientation().isLeftToRight()
+					? ComponentOrientation.RIGHT_TO_LEFT
+					: ComponentOrientation.LEFT_TO_RIGHT );
+			},
+			KeyStroke.getKeyStroke( "alt R" ),
+			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
 
 		// register ESC key to close frame
 		((JComponent)getContentPane()).registerKeyboardAction(

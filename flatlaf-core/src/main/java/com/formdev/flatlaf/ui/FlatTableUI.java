@@ -75,6 +75,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.rowHeight							int
  * @uiDefault Table.showHorizontalLines					boolean
  * @uiDefault Table.showVerticalLines					boolean
+ * @uiDefault Table.showLastVerticalLine				boolean
  * @uiDefault Table.intercellSpacing					Dimension
  * @uiDefault Table.selectionInactiveBackground			Color
  * @uiDefault Table.selectionInactiveForeground			Color
@@ -97,6 +98,7 @@ public class FlatTableUI
 {
 	protected boolean showHorizontalLines;
 	protected boolean showVerticalLines;
+	protected boolean showLastVerticalLine;
 	protected Dimension intercellSpacing;
 
 	@Styleable protected Color selectionBackground;
@@ -133,6 +135,7 @@ public class FlatTableUI
 
 		showHorizontalLines = UIManager.getBoolean( "Table.showHorizontalLines" );
 		showVerticalLines = UIManager.getBoolean( "Table.showVerticalLines" );
+		showLastVerticalLine = UIManager.getBoolean( "Table.showLastVerticalLine" );
 		intercellSpacing = UIManager.getDimension( "Table.intercellSpacing" );
 
 		selectionBackground = UIManager.getColor( "Table.selectionBackground" );
@@ -187,15 +190,27 @@ public class FlatTableUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( table, this::applyStyle, null );
-		table.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = e -> {
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.COMPONENT_FOCUS_OWNER:
+					toggleSelectionColors();
+					break;
+
+				case FlatClientProperties.STYLE:
+					applyStyle( e.getNewValue() );
+					table.revalidate();
+					table.repaint();
+					break;
+			}
+		};
+		table.addPropertyChangeListener( propertyChangeListener );
 	}
 
 	@Override
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		table.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		table.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
 	}
 
@@ -377,6 +392,9 @@ public class FlatTableUI
 	}
 
 	protected boolean hideLastVerticalLine() {
+		if( showLastVerticalLine )
+			return false;
+
 		Container viewport = SwingUtilities.getUnwrappedParent( table );
 		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
 		if( !(viewportParent instanceof JScrollPane) )

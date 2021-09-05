@@ -17,6 +17,13 @@ FlatLaf Change Log
   since FlatLaf 1.3)
 - OptionPane: Fixed `OptionPane.sameSizeButtons`, which did not work as expected
   when setting to `false`.
+- OptionPane: Fixed rendering of longer HTML text if it is passed as
+  `StringBuilder`, `StringBuffer`, or any other object that returns HTML text in
+  method `toString()`. (similar to issue #12)
+- TableHeader: Do not show resize cursor for last column if resizing last column
+  is not possible because auto resize mode of table is not off. (issue #332)
+- TextField, FormattedTextField, PasswordField and ComboBox: Fixed alignment of
+  placeholder text in right-to-left component orientation.
 
 
 ## 1.5

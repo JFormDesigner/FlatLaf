@@ -18,10 +18,13 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
@@ -32,6 +35,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
@@ -62,6 +66,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TableHeader.cellMargins			Insets
  * @uiDefault TableHeader.separatorColor		Color
  * @uiDefault TableHeader.bottomSeparatorColor	Color
+ * @uiDefault TableHeader.showLastVerticalLine	boolean
  *
  * <!-- FlatAscendingSortIcon and FlatDescendingSortIcon -->
  *
@@ -171,6 +176,11 @@ public class FlatTableHeaderUI
 			case "top":		return SwingConstants.TOP;
 			case "bottom":	return SwingConstants.BOTTOM;
 		}
+	}
+
+	@Override
+	protected MouseInputListener createMouseInputListener() {
+		return new FlatMouseInputHandler();
 	}
 
 	// overridden and made public to allow usage in custom renderers
@@ -329,6 +339,56 @@ public class FlatTableHeaderUI
 		@Override
 		public boolean isBorderOpaque() {
 			return (origBorder != null) ? origBorder.isBorderOpaque() : false;
+		}
+	}
+
+	//---- class FlatMouseInputHandler ----------------------------------------
+
+	/**
+	 * @since 1.6
+	 */
+	protected class FlatMouseInputHandler
+		extends MouseInputHandler
+	{
+		Cursor oldCursor;
+
+		@Override
+		public void mouseMoved( MouseEvent e ) {
+			// restore old cursor, which is necessary because super.mouseMoved() swaps cursors
+			if( oldCursor != null ) {
+				header.setCursor( oldCursor );
+				oldCursor = null;
+			}
+
+			super.mouseMoved( e );
+
+			// if resizing last column is not possible, then Swing still shows a resize cursor,
+			// which can be confusing for the user --> change cursor to standard cursor
+			JTable table;
+			int column;
+			if( header.isEnabled() &&
+				(table = header.getTable()) != null &&
+				table.getAutoResizeMode() != JTable.AUTO_RESIZE_OFF &&
+				header.getCursor() == Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR ) &&
+				(column = header.columnAtPoint( e.getPoint() )) >= 0 &&
+				column == header.getColumnModel().getColumnCount() - 1 )
+			{
+				// mouse is in last column
+				Rectangle r = header.getHeaderRect( column );
+				r.grow( -3, 0 );
+				if( !r.contains( e.getX(), e.getY() ) ) {
+					// mouse is in left or right resize area of last column
+					boolean isResizeLastColumn = (e.getX() >= r.x + (r.width / 2));
+					if( !header.getComponentOrientation().isLeftToRight() )
+						isResizeLastColumn = !isResizeLastColumn;
+
+					if( isResizeLastColumn ) {
+						// resize is not possible --> change cursor to standard cursor
+						oldCursor = header.getCursor();
+						header.setCursor( Cursor.getDefaultCursor() );
+					}
+				}
+			}
 		}
 	}
 }

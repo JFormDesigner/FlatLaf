@@ -24,8 +24,8 @@ import javax.swing.plaf.ComponentUI;
  *
  * <!-- BasicSeparatorUI -->
  *
- * @uiDefault PopupMenuSeparator.background		Color	unused
- * @uiDefault PopupMenuSeparator.foreground		Color
+ * @uiDefault Separator.background				Color	unused
+ * @uiDefault Separator.foreground				Color
  *
  * <!-- FlatSeparatorUI -->
  *

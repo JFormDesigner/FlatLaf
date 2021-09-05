@@ -27,6 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicListUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
@@ -140,8 +141,22 @@ public class FlatListUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return FlatStylingSupport.createPropertyChangeListener( list, this::applyStyle,
-			super.createPropertyChangeListener() );
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
+
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.COMPONENT_FOCUS_OWNER:
+					toggleSelectionColors();
+					break;
+
+				case FlatClientProperties.STYLE:
+					applyStyle( e.getNewValue() );
+					list.revalidate();
+					list.repaint();
+					break;
+			}
+		};
 	}
 
 	/**
