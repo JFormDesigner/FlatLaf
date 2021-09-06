@@ -448,7 +448,7 @@ public class FlatComboBoxUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected void applyStyle( Object style ) {
 		Insets oldPadding = padding;
@@ -469,7 +469,7 @@ public class FlatComboBoxUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		// BasicComboBoxUI
@@ -485,7 +485,7 @@ public class FlatComboBoxUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {

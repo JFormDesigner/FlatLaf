@@ -75,14 +75,14 @@ public class FlatHelpButtonIcon
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	public Map<String, Class<?>> getStyleableInfos() {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );

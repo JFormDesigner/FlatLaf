@@ -272,7 +272,7 @@ public class FlatButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected void applyStyle( AbstractButton b, Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
@@ -280,7 +280,7 @@ public class FlatButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
 		if( key.startsWith( "help." ) ) {
@@ -302,7 +302,7 @@ public class FlatButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {

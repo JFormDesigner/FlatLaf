@@ -73,7 +73,7 @@ public class FlatLabelUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected FlatLabelUI( boolean shared ) {
 		this.shared = shared;
@@ -138,7 +138,7 @@ public class FlatLabelUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected void applyStyle( JLabel c, Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
@@ -146,14 +146,14 @@ public class FlatLabelUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected Object applyStyleProperty( JLabel c, String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, c, key, value );
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {

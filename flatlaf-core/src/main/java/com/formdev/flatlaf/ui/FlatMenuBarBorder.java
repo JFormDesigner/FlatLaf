@@ -41,7 +41,7 @@ public class FlatMenuBarBorder
 	@Styleable protected Color borderColor = UIManager.getColor( "MenuBar.borderColor" );
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {

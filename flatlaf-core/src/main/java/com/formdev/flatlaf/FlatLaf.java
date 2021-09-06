@@ -790,7 +790,7 @@ public abstract class FlatLaf
 	 * @param valueType the expected value type, or {@code null}
 	 * @return the binary value
 	 * @throws IllegalArgumentException on syntax errors
-	 * @since TODO
+	 * @since 2
 	 */
 	public static Object parseDefaultsValue( String key, String value, Class<?> valueType )
 		throws IllegalArgumentException

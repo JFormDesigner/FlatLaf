@@ -49,7 +49,7 @@ public class FlatCheckBoxUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected FlatCheckBoxUI( boolean shared ) {
 		super( shared );

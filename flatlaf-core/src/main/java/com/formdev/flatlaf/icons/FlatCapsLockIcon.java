@@ -41,7 +41,7 @@ public class FlatCapsLockIcon
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	public Object applyStyleProperty( String key, Object value ) {
 		Object oldValue;

@@ -82,7 +82,7 @@ public class FlatRadioButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected FlatRadioButtonUI( boolean shared ) {
 		this.shared = shared;
@@ -133,7 +133,7 @@ public class FlatRadioButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
 		switch( e.getPropertyName() ) {
@@ -156,7 +156,7 @@ public class FlatRadioButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected void applyStyle( AbstractButton b, Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
@@ -164,7 +164,7 @@ public class FlatRadioButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
 		// style icon
@@ -185,7 +185,7 @@ public class FlatRadioButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
@@ -286,7 +286,7 @@ public class FlatRadioButtonUI
 	//---- class FlatRadioButtonListener --------------------------------------
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected class FlatRadioButtonListener
 		extends BasicButtonListener

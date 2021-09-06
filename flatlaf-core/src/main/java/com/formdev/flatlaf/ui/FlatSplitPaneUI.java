@@ -139,7 +139,7 @@ public class FlatSplitPaneUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
@@ -149,7 +149,7 @@ public class FlatSplitPaneUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		try {
@@ -162,7 +162,7 @@ public class FlatSplitPaneUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
@@ -190,14 +190,14 @@ public class FlatSplitPaneUI
 		}
 
 		/**
-		 * @since TODO
+		 * @since 2
 		 */
 		protected Object applyStyleProperty( String key, Object value ) {
 			return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 		}
 
 		/**
-		 * @since TODO
+		 * @since 2
 		 */
 		public Map<String, Class<?>> getStyleableInfos() {
 			return FlatStylingSupport.getAnnotatedStyleableInfos( this );

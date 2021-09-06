@@ -45,7 +45,7 @@ public class FlatPopupMenuSeparatorUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected FlatPopupMenuSeparatorUI( boolean shared ) {
 		super( shared );

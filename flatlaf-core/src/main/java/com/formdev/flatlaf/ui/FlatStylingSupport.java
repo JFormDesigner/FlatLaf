@@ -44,7 +44,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * Support for styling components in CSS syntax.
  *
  * @author Karl Tauber
- * @since TODO
+ * @since 2
  */
 public class FlatStylingSupport
 {

@@ -173,7 +173,7 @@ public class FlatEditorPaneUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected void applyStyle( Object style ) {
 		oldDisabledBackground = disabledBackground;
@@ -185,14 +185,14 @@ public class FlatEditorPaneUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, getComponent(), key, value );
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {

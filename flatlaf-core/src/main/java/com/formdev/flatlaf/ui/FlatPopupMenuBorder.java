@@ -48,7 +48,7 @@ public class FlatPopupMenuBorder
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
@@ -61,7 +61,7 @@ public class FlatPopupMenuBorder
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos() {

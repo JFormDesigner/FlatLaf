@@ -162,7 +162,7 @@ public class FlatPasswordFieldUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	protected Object applyStyleProperty( String key, Object value ) {
@@ -178,7 +178,7 @@ public class FlatPasswordFieldUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {

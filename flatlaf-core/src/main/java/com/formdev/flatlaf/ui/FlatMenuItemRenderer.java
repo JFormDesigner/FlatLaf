@@ -103,7 +103,7 @@ public class FlatMenuItemRenderer
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		// style icon
@@ -151,7 +151,7 @@ public class FlatMenuItemRenderer
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	public Map<String, Class<?>> getStyleableInfos() {
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );

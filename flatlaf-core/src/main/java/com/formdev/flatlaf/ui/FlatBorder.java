@@ -81,7 +81,7 @@ public class FlatBorder
 	@Styleable(dot=true) protected Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
@@ -89,7 +89,7 @@ public class FlatBorder
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos() {

@@ -203,7 +203,7 @@ public class FlatTextFieldUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected void applyStyle( Object style ) {
 		oldDisabledBackground = disabledBackground;
@@ -215,7 +215,7 @@ public class FlatTextFieldUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
@@ -224,7 +224,7 @@ public class FlatTextFieldUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {

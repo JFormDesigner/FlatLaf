@@ -147,7 +147,7 @@ public class FlatToggleButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
@@ -158,7 +158,7 @@ public class FlatToggleButtonUI
 	}
 
 	/**
-	 * @since TODO
+	 * @since 2
 	 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
