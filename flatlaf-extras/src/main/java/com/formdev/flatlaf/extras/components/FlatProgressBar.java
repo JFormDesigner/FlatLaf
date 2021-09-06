@@ -26,7 +26,7 @@ import javax.swing.JProgressBar;
  */
 public class FlatProgressBar
 	extends JProgressBar
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns whether the progress bar has always the larger height even if no string is painted.

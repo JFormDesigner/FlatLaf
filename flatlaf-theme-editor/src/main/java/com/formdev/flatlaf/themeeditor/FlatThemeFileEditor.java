@@ -52,7 +52,6 @@ import java.util.prefs.Preferences;
 import javax.lang.model.SourceVersion;
 import javax.swing.*;
 import net.miginfocom.swing.*;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -132,8 +131,7 @@ class FlatThemeFileEditor
 			darkLafMenuItem.setSelected( true );
 
 		// highlight selected tab
-		tabbedPane.putClientProperty( FlatClientProperties.STYLE,
-			"[light]selectedBackground: #fff; [dark]selectedBackground: #303234" );
+		tabbedPane.setStyle( "[light]selectedBackground: #fff; [dark]selectedBackground: #303234" );
 
 		// add "+" button to tabbed pane
 		newButton = new JButton( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/add.svg" ) );

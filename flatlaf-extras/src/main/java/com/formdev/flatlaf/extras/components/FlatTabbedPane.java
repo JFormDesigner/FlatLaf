@@ -31,7 +31,7 @@ import javax.swing.SwingConstants;
  */
 public class FlatTabbedPane
 	extends JTabbedPane
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns whether separators are shown between tabs.

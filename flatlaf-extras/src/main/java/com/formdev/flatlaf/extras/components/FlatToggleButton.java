@@ -28,7 +28,7 @@ import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
  */
 public class FlatToggleButton
 	extends JToggleButton
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns type of a button.

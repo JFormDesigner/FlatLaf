@@ -28,7 +28,7 @@ import javax.swing.JTextField;
  */
 public class FlatTextField
 	extends JTextField
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns the placeholder text that is only painted if the text field is empty.
