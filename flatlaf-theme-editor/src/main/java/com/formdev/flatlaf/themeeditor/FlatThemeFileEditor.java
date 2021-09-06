@@ -131,7 +131,9 @@ class FlatThemeFileEditor
 			darkLafMenuItem.setSelected( true );
 
 		// highlight selected tab
-		tabbedPane.setStyle( "[light]selectedBackground: #fff; [dark]selectedBackground: #303234" );
+		tabbedPane.setStyle(
+			"[light]selectedBackground: lighten($TabbedPane.background,5%);" +
+			" [dark]selectedBackground: darken($TabbedPane.background,5%)" );
 
 		// add "+" button to tabbed pane
 		newButton = new JButton( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/add.svg" ) );

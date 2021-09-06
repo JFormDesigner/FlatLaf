@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +63,77 @@ public class TestFlatStyling
 		assertEquals(
 			expectedMap( "background", Color.WHITE, "foreground", Color.BLACK, "someWidth", 20 ),
 			FlatStylingSupport.parse( "background: #fff; foreground: #000; someWidth: 20" ) );
+	}
+
+	@Test
+	void parseColorFunctions() {
+		testColorStyle( 0x0c2238, "rgb(12,34,56)" );
+		testColorStyle( 0x4e0c2238, "rgba(12,34,56,78)" );
+		testColorStyle( 0xb57869, "hsl(12,34%,56%)" );
+		testColorStyle( 0xc7b57869, "hsla(12,34%,56%,78%)" );
+
+		testColorStyle( 0xff6666, "lighten(#f00,20%)" );
+		testColorStyle( 0x990000, "darken(#f00,20%)" );
+
+		testColorStyle( 0x9c3030, "saturate(#844,20%)" );
+		testColorStyle( 0x745858, "desaturate(#844,20%)" );
+
+		testColorStyle( 0x4dff0000, "fadein(#ff000000,30%)" );
+		testColorStyle( 0x99ff0000, "fadeout(#ff0000,40%)" );
+		testColorStyle( 0x80ff0000, "fade(#ff0000,50%)" );
+
+		testColorStyle( 0xffaa00, "spin(#f00,40)" );
+		testColorStyle( 0xff00aa, "spin(#f00,-40)" );
+
+		testColorStyle( 0x00ffff, "changeHue(#f00,180)" );
+		testColorStyle( 0xbf4040, "changeSaturation(#f00,50%)" );
+		testColorStyle( 0xff9999, "changeLightness(#f00,80%)" );
+		testColorStyle( 0x80ff0000, "changeAlpha(#f00,50%)" );
+
+		testColorStyle( 0x1ae600, "mix(#f00,#0f0,10%)" );
+		testColorStyle( 0x40bf00, "mix(#f00,#0f0,25%)" );
+		testColorStyle( 0x808000, "mix(#f00,#0f0)" );
+		testColorStyle( 0xbf4000, "mix(#f00,#0f0,75%)" );
+		testColorStyle( 0xe61a00, "mix(#f00,#0f0,90%)" );
+
+		testColorStyle( 0xff40ff, "tint(#f0f,25%)" );
+		testColorStyle( 0xff80ff, "tint(#f0f)" );
+		testColorStyle( 0xffbfff, "tint(#f0f,75%)" );
+
+		testColorStyle( 0xbf00bf, "shade(#f0f,25%)" );
+		testColorStyle( 0x800080, "shade(#f0f)" );
+		testColorStyle( 0x400040, "shade(#f0f,75%)" );
+
+		// nested
+		testColorStyle( 0xd1c7c7, "saturate(darken(#fff,20%),10%)" );
+		testColorStyle( 0xcf00cf, "shade(shade(#f0f,10%),10%)" );
+		testColorStyle( 0xba00ba, "shade(shade(shade(#f0f,10%),10%),10%)" );
+	}
+
+	@Test
+	void parseReferences() {
+		assertEquals( Color.white, UIManager.getColor( "TextField.background" ) );
+
+		testColorStyle( 0xffffff, "$TextField.background" );
+		testColorStyle( 0xcccccc, "darken($TextField.background,20%)" );
+		testColorStyle( 0xd1c7c7, "saturate(darken($TextField.background,20%),10%)" );
+
+		testStyle( "hideMnemonics", true, "$Component.hideMnemonics" );
+		testStyle( "arc", 6, "$Button.arc" );
+		testStyle( "dropShadowOpacity", 0.15f, "$Popup.dropShadowOpacity" );
+		testStyle( "margin", new Insets( 2, 14, 2, 14 ) , "$Button.margin" );
+		testStyle( "iconSize", new Dimension( 64, 64 ), "$DesktopIcon.iconSize" );
+		testStyle( "arrowType", "chevron", "$Component.arrowType" );
+	}
+
+	private void testColorStyle( int expectedRGB, String style ) {
+		testStyle( "background", new Color( expectedRGB, (expectedRGB & 0xff000000) != 0 ), style );
+	}
+
+	private void testStyle( String key, Object expected, String style ) {
+		assertEquals(
+			expectedMap( key, expected ),
+			FlatStylingSupport.parse( key + ": " + style ) );
 	}
 
 	private Map<Object, Object> expectedMap( Object... keyValuePairs ) {

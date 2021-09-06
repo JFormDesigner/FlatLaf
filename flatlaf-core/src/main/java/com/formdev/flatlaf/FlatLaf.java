@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -796,7 +797,8 @@ public abstract class FlatLaf
 		throws IllegalArgumentException
 	{
 		// parse value
-		Object val = UIDefaultsLoader.parseValue( key, value, valueType );
+		Object val = UIDefaultsLoader.parseValue( key, value, valueType, null,
+			v -> UIDefaultsLoader.resolveValueFromUIManager( v ), Collections.emptyList() );
 
 		// create actual value if lazy or active
 		if( val instanceof LazyValue )

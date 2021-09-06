@@ -290,6 +290,25 @@ class UIDefaultsLoader
 		return resolveValue( newValue, propertiesGetter );
 	}
 
+	static String resolveValueFromUIManager( String value ) {
+		if( !value.startsWith( PROPERTY_PREFIX ) )
+			return value;
+
+		String key = value.substring( PROPERTY_PREFIX.length() );
+		Object newValue = UIManager.get( key );
+		if( newValue == null )
+			throw new IllegalArgumentException( "property '" + key + "' not found" );
+
+		// convert binary color to string
+		if( newValue instanceof Color ) {
+			Color color = (Color) newValue;
+			int alpha = color.getAlpha();
+			return String.format( (alpha != 255) ? "#%06x%02x" : "#%06x", color.getRGB() & 0xffffff, alpha );
+		}
+
+		throw new IllegalArgumentException( "property value type '" + newValue.getClass().getName() + "' not supported in references" );
+	}
+
 	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
 		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
 

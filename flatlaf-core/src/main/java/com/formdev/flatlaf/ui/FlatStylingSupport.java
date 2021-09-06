@@ -191,6 +191,7 @@ public class FlatStylingSupport
 	}
 
 	private static Object parseValue( String key, String value ) {
+		// simple reference
 		if( value.startsWith( "$" ) )
 			return UIManager.get( value.substring( 1 ) );
 
@@ -199,6 +200,7 @@ public class FlatStylingSupport
 		if( key.startsWith( "[" ) )
 			key = key.substring( key.indexOf( ']' ) + 1 );
 
+		// parse string
 		return FlatLaf.parseDefaultsValue( key, value, null );
 	}
 
