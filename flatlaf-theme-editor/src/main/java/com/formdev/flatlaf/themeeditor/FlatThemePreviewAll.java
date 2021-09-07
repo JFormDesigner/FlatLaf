@@ -19,6 +19,7 @@ package com.formdev.flatlaf.themeeditor;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.beans.Beans;
 import java.beans.PropertyVetoException;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -40,6 +41,7 @@ class FlatThemePreviewAll
 	extends JPanel
 {
 	private static final String KEY_ENABLED = "preview.enabled";
+	private static final String KEY_EDITABLE = "preview.editable";
 	private static final String KEY_FOCUSED = "preview.focused";
 	private static final String KEY_MENU_UNDERLINE_SELECTION = "preview.menuUnderlineSelection";
 
@@ -84,12 +86,18 @@ class FlatThemePreviewAll
 
 	void activated() {
 		boolean enabled = preview.state.getBoolean( KEY_ENABLED, true );
+		boolean editable = preview.state.getBoolean( KEY_EDITABLE, true );
 		boolean focused = preview.state.getBoolean( KEY_FOCUSED, false );
 		boolean menuUnderlineSelection = preview.state.getBoolean( KEY_MENU_UNDERLINE_SELECTION, false );
 
 		if( enabled != enabledCheckBox.isSelected() ) {
 			enabledCheckBox.setSelected( enabled );
 			enabledChanged();
+		}
+
+		if( editable != editableCheckBox.isSelected() ) {
+			editableCheckBox.setSelected( editable );
+			editableChanged();
 		}
 
 		if( focused != focusedCheckBox.isSelected() ) {
@@ -146,6 +154,24 @@ class FlatThemePreviewAll
 		}
 	}
 
+	private void editableChanged() {
+		boolean editable = editableCheckBox.isSelected();
+
+		preview.runWithUIDefaultsGetter( () -> {
+			textField1.setEditable( editable );
+			formattedTextField1.setEditable( editable );
+			passwordField1.setEditable( editable );
+			textArea1.setEditable( editable );
+			editorPane1.setEditable( editable );
+			textPane1.setEditable( editable );
+
+			editorPane1.updateUI();
+			textPane1.updateUI();
+		} );
+
+		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_EDITABLE, editable, true );
+	}
+
 	private void focusedChanged() {
 		boolean focused = focusedCheckBox.isSelected();
 
@@ -175,6 +201,7 @@ class FlatThemePreviewAll
 
 	private boolean isControlComponent( Component c ) {
 		return c == enabledCheckBox ||
+			c == editableCheckBox ||
 			c == focusedCheckBox ||
 			c == menuUnderlineSelectionButton ||
 			c == menu2;
@@ -212,6 +239,7 @@ class FlatThemePreviewAll
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JPanel hSpacer1 = new JPanel(null);
 		enabledCheckBox = new JCheckBox();
+		editableCheckBox = new JCheckBox();
 		focusedCheckBox = new JCheckBox();
 		JLabel labelLabel = new JLabel();
 		JLabel label1 = new JLabel();
@@ -235,15 +263,15 @@ class FlatThemePreviewAll
 		JSpinner spinner1 = new JSpinner();
 		JLabel textFieldLabel = new JLabel();
 		textField1 = new FlatTextField();
-		FlatFormattedTextField formattedTextField1 = new FlatFormattedTextField();
-		FlatPasswordField passwordField1 = new FlatPasswordField();
+		formattedTextField1 = new FlatFormattedTextField();
+		passwordField1 = new FlatPasswordField();
 		JLabel textAreaLabel = new JLabel();
 		JScrollPane scrollPane1 = new JScrollPane();
-		JTextArea textArea1 = new JTextArea();
+		textArea1 = new JTextArea();
 		JScrollPane scrollPane5 = new JScrollPane();
-		JEditorPane editorPane1 = new JEditorPane();
+		editorPane1 = new JEditorPane();
 		JScrollPane scrollPane9 = new JScrollPane();
-		JTextPane textPane1 = new JTextPane();
+		textPane1 = new JTextPane();
 		JLabel menuBarLabel = new JLabel();
 		menuUnderlineSelectionButton = new FlatToggleButton();
 		JMenuBar menuBar1 = new JMenuBar();
@@ -339,6 +367,12 @@ class FlatThemePreviewAll
 		enabledCheckBox.setSelected(true);
 		enabledCheckBox.addActionListener(e -> enabledChanged());
 		add(enabledCheckBox, "cell 0 0 3 1");
+
+		//---- editableCheckBox ----
+		editableCheckBox.setText("Editable");
+		editableCheckBox.setSelected(true);
+		editableCheckBox.addActionListener(e -> editableChanged());
+		add(editableCheckBox, "cell 0 0 3 1");
 
 		//---- focusedCheckBox ----
 		focusedCheckBox.setText("Focused");
@@ -817,8 +851,14 @@ class FlatThemePreviewAll
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox enabledCheckBox;
+	private JCheckBox editableCheckBox;
 	private JCheckBox focusedCheckBox;
 	private FlatTextField textField1;
+	private FlatFormattedTextField formattedTextField1;
+	private FlatPasswordField passwordField1;
+	private JTextArea textArea1;
+	private JEditorPane editorPane1;
+	private JTextPane textPane1;
 	private FlatToggleButton menuUnderlineSelectionButton;
 	private JMenu menu2;
 	private JSlider slider1;
@@ -855,7 +895,10 @@ class FlatThemePreviewAll
 
 		@Override
 		public void updateUI() {
-			setUI( new PreviewFlatTabbedPaneUI( uiDefaultsGetter ) );
+			if( !Beans.isDesignTime() )
+				setUI( new PreviewFlatTabbedPaneUI( uiDefaultsGetter ) );
+			else
+				super.updateUI();
 		}
 	}
 
@@ -899,10 +942,13 @@ class FlatThemePreviewAll
 
 		@Override
 		public void paint( Graphics g ) {
-			// needed for DefaultTableCellRenderer
-			FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
+			if( !Beans.isDesignTime() ) {
+				// needed for DefaultTableCellRenderer
+				FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
+					super.paint( g );
+				} );
+			} else
 				super.paint( g );
-			} );
 		}
 	}
 }

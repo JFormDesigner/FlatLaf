@@ -29,6 +29,17 @@ new FormModel {
 				"value": "cell 0 0 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "editableCheckBox"
+				"text": "Editable"
+				"selected": true
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "editableChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "focusedCheckBox"
 				"text": "Focused"
 				auxiliary() {
@@ -219,6 +230,9 @@ new FormModel {
 				name: "formattedTextField1"
 				"text": "Some Text"
 				"placeholderText": "placeholder text"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 9"
 			} )
@@ -226,6 +240,9 @@ new FormModel {
 				name: "passwordField1"
 				"text": "Some Text"
 				"placeholderText": "placeholder text"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 9"
 			} )
@@ -243,6 +260,9 @@ new FormModel {
 					name: "textArea1"
 					"text": "Text"
 					"rows": 2
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10 2 1,width 40"
@@ -254,6 +274,9 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JEditorPane" ) {
 					name: "editorPane1"
 					"text": "Text"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10 2 1,width 40"
@@ -265,6 +288,9 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JTextPane" ) {
 					name: "textPane1"
 					"text": "Text"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10 2 1,width 40"
