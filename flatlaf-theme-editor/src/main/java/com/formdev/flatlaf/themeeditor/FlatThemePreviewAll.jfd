@@ -296,6 +296,20 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 12"
 			} )
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatToggleButton" ) {
+				name: "menuUnderlineSelectionButton"
+				"text": "_"
+				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType toolBarButton
+				"toolTipText": "menu underline selection"
+				"focusable": false
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuUnderlineSelectionChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 12"
+			} )
 			add( new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 				name: "menuBar1"
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {

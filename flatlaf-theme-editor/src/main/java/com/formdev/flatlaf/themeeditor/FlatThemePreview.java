@@ -41,7 +41,11 @@ class FlatThemePreview
 
 	private final FlatSyntaxTextArea textArea;
 	private final Timer timer;
-	private final Preferences state;
+	final Preferences state;
+
+	private final FlatThemePreviewAll allTab;
+	private final FlatThemePreviewButtons buttonsTab;
+	private final FlatThemePreviewSwitches switchesTab;
 
 	private final Map<LazyValue, Object> lazyValueCache = new WeakHashMap<>();
 	private int runWithUIDefaultsGetterLevel;
@@ -53,9 +57,12 @@ class FlatThemePreview
 		initComponents();
 
 		// add tabs
-		tabbedPane.addTab( "All", createPreviewTab( new FlatThemePreviewAll( this ) ) );
-		tabbedPane.addTab( "Buttons", createPreviewTab( new FlatThemePreviewButtons() ) );
-		tabbedPane.addTab( "Switches", createPreviewTab( new FlatThemePreviewSwitches() ) );
+		allTab = new FlatThemePreviewAll( this );
+		buttonsTab = new FlatThemePreviewButtons( this );
+		switchesTab = new FlatThemePreviewSwitches();
+		tabbedPane.addTab( "All", createPreviewTab( allTab ) );
+		tabbedPane.addTab( "Buttons", createPreviewTab( buttonsTab ) );
+		tabbedPane.addTab( "Switches", createPreviewTab( switchesTab ) );
 		selectRecentTab();
 		tabbedPane.addChangeListener( e -> selectedTabChanged() );
 
@@ -85,8 +92,14 @@ class FlatThemePreview
 
 	private void selectRecentTab() {
 		int selectedTab = state.getInt( KEY_SELECTED_TAB, -1 );
-		if( selectedTab >= 0 && selectedTab < tabbedPane.getTabCount() )
+		if( selectedTab >= 0 && selectedTab < tabbedPane.getTabCount() ) {
 			tabbedPane.setSelectedIndex( selectedTab );
+
+			switch( selectedTab ) {
+				case 0: allTab.activated(); break;
+				case 1: buttonsTab.activated(); break;
+			}
+		}
 	}
 
 	private void selectedTabChanged() {

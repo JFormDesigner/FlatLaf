@@ -39,6 +39,10 @@ import net.miginfocom.swing.*;
 class FlatThemePreviewAll
 	extends JPanel
 {
+	private static final String KEY_ENABLED = "preview.enabled";
+	private static final String KEY_FOCUSED = "preview.focused";
+	private static final String KEY_MENU_UNDERLINE_SELECTION = "preview.menuUnderlineSelection";
+
 	private final FlatThemePreview preview;
 
 	FlatThemePreviewAll( FlatThemePreview preview ) {
@@ -78,6 +82,27 @@ class FlatThemePreviewAll
 		} );
 	}
 
+	void activated() {
+		boolean enabled = preview.state.getBoolean( KEY_ENABLED, true );
+		boolean focused = preview.state.getBoolean( KEY_FOCUSED, false );
+		boolean menuUnderlineSelection = preview.state.getBoolean( KEY_MENU_UNDERLINE_SELECTION, false );
+
+		if( enabled != enabledCheckBox.isSelected() ) {
+			enabledCheckBox.setSelected( enabled );
+			enabledChanged();
+		}
+
+		if( focused != focusedCheckBox.isSelected() ) {
+			focusedCheckBox.setSelected( focused );
+			focusedChanged();
+		}
+
+		if( menuUnderlineSelection != menuUnderlineSelectionButton.isSelected() ) {
+			menuUnderlineSelectionButton.setSelected( menuUnderlineSelection );
+			menuUnderlineSelectionChanged();
+		}
+	}
+
 	private void enabledChanged() {
 		boolean enabled = enabledCheckBox.isSelected();
 
@@ -89,10 +114,12 @@ class FlatThemePreviewAll
 		preview.runWithUIDefaultsGetter( () -> {
 			enableDisable( this, enabled );
 		} );
+
+		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_ENABLED, enabled, true );
 	}
 
 	private void enableDisable( Component comp, boolean enabled ) {
-		if( comp != enabledCheckBox && comp != focusedCheckBox && comp != menu2 )
+		if( !isControlComponent( comp ) )
 			comp.setEnabled( enabled );
 
 		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
@@ -120,15 +147,19 @@ class FlatThemePreviewAll
 	}
 
 	private void focusedChanged() {
-		Predicate<JComponent> value = focusedCheckBox.isSelected() && enabledCheckBox.isSelected()
+		boolean focused = focusedCheckBox.isSelected();
+
+		Predicate<JComponent> value = focused && enabledCheckBox.isSelected()
 			? value = c -> true
 			: null;
 		focusComponent( this, value );
 		repaint();
+
+		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_FOCUSED, focused,false );
 	}
 
 	private void focusComponent( Component comp, Object value ) {
-		if( comp != enabledCheckBox && comp != focusedCheckBox && comp != menu2 && comp instanceof JComponent )
+		if( !isControlComponent( comp ) && comp instanceof JComponent )
 			((JComponent)comp).putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, value );
 
 		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
@@ -140,6 +171,20 @@ class FlatThemePreviewAll
 
 			focusComponent( c, value );
 		}
+	}
+
+	private boolean isControlComponent( Component c ) {
+		return c == enabledCheckBox ||
+			c == focusedCheckBox ||
+			c == menuUnderlineSelectionButton ||
+			c == menu2;
+	}
+
+	private void menuUnderlineSelectionChanged() {
+		boolean menuUnderlineSelection = menuUnderlineSelectionButton.isSelected();
+		UIManager.put( "MenuItem.selectionType", menuUnderlineSelection ? "underline" : null );
+
+		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_MENU_UNDERLINE_SELECTION, menuUnderlineSelection, false );
 	}
 
 	private void changeProgress() {
@@ -204,6 +249,7 @@ class FlatThemePreviewAll
 		JScrollPane scrollPane9 = new JScrollPane();
 		JTextPane textPane1 = new JTextPane();
 		JLabel menuBarLabel = new JLabel();
+		menuUnderlineSelectionButton = new FlatToggleButton();
 		JMenuBar menuBar1 = new JMenuBar();
 		menu2 = new JMenu();
 		JMenuItem menuItem3 = new JMenuItem();
@@ -481,6 +527,15 @@ class FlatThemePreviewAll
 		//---- menuBarLabel ----
 		menuBarLabel.setText("JMenuBar:");
 		add(menuBarLabel, "cell 0 12");
+
+		//---- menuUnderlineSelectionButton ----
+		menuUnderlineSelectionButton.setText("_");
+		menuUnderlineSelectionButton.setButtonType(FlatButton.ButtonType.toolBarButton);
+		menuUnderlineSelectionButton.setToolTipText("menu underline selection");
+		menuUnderlineSelectionButton.setFocusable(false);
+		menuUnderlineSelectionButton.setFont(menuUnderlineSelectionButton.getFont().deriveFont(menuUnderlineSelectionButton.getFont().getSize() - 2f));
+		menuUnderlineSelectionButton.addActionListener(e -> menuUnderlineSelectionChanged());
+		add(menuUnderlineSelectionButton, "cell 0 12");
 
 		//======== menuBar1 ========
 		{
@@ -769,6 +824,7 @@ class FlatThemePreviewAll
 	private JCheckBox enabledCheckBox;
 	private JCheckBox focusedCheckBox;
 	private FlatTextField textField1;
+	private FlatToggleButton menuUnderlineSelectionButton;
 	private JMenu menu2;
 	private JSlider slider1;
 	private JSlider slider3;
