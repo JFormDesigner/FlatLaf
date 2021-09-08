@@ -362,6 +362,12 @@ public class TestFlatStyling
 		JMenuBar c = new JMenuBar();
 		FlatMenuBarUI ui = (FlatMenuBarUI) c.getUI();
 
+		ui.applyStyle( "itemMargins: 1,2,3,4" );
+		ui.applyStyle( "hoverBackground: #fff" );
+		ui.applyStyle( "underlineSelectionBackground: #fff" );
+		ui.applyStyle( "underlineSelectionColor: #fff" );
+		ui.applyStyle( "underlineSelectionHeight: 3" );
+
 		// FlatMenuBarBorder
 		ui.applyStyle( "borderColor: #fff" );
 

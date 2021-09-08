@@ -264,6 +264,12 @@ public class TestFlatStyleableInfo
 		FlatMenuBarUI ui = (FlatMenuBarUI) c.getUI();
 
 		Map<String, Class<?>> expected = expectedMap(
+			"itemMargins", Insets.class,
+			"hoverBackground", Color.class,
+			"underlineSelectionBackground", Color.class,
+			"underlineSelectionColor", Color.class,
+			"underlineSelectionHeight", int.class,
+
 			// FlatMenuBarBorder
 			"borderColor", Color.class
 		);

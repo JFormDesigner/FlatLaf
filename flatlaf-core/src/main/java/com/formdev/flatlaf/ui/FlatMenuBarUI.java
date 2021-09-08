@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -40,6 +41,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -63,6 +65,15 @@ public class FlatMenuBarUI
 	extends BasicMenuBarUI
 	implements StyleableUI
 {
+	// used in FlatMenuItemBorder
+	/** @since 2 */ @Styleable protected Insets itemMargins;
+
+	// used in FlatMenuUI
+	/** @since 2 */ @Styleable protected Color hoverBackground;
+	/** @since 2 */ @Styleable protected Color underlineSelectionBackground;
+	/** @since 2 */ @Styleable protected Color underlineSelectionColor;
+	/** @since 2 */ @Styleable protected int underlineSelectionHeight = -1;
+
 	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;
 	private AtomicBoolean borderShared;
