@@ -44,7 +44,6 @@ import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.CellRendererPane;
-import javax.swing.ComboBoxEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.InputMap;
 import javax.swing.JButton;
@@ -338,32 +337,24 @@ public class FlatComboBoxUI
 	}
 
 	@Override
-	protected ComboBoxEditor createEditor() {
-		ComboBoxEditor comboBoxEditor = super.createEditor();
+	protected void configureEditor() {
+		super.configureEditor();
 
-		Component editor = comboBoxEditor.getEditorComponent();
 		if( editor instanceof JTextField ) {
 			JTextField textField = (JTextField) editor;
 			textField.setColumns( editorColumns );
 
-			// assign a non-null and non-javax.swing.plaf.UIResource border to the text field,
-			// otherwise it is replaced with default text field border when switching LaF
-			// because javax.swing.plaf.basic.BasicComboBoxEditor.BorderlessTextField.setBorder()
-			// uses "border instanceof javax.swing.plaf.basic.BasicComboBoxEditor.UIResource"
-			// instead of "border instanceof javax.swing.plaf.UIResource"
-			textField.setBorder( BorderFactory.createEmptyBorder() );
+			// remove default text field border from editor
+			Border border = textField.getBorder();
+			if( border == null || border instanceof UIResource ) {
+				// assign a non-null and non-javax.swing.plaf.UIResource border to the text field,
+				// otherwise it is replaced with default text field border when switching LaF
+				// because javax.swing.plaf.basic.BasicComboBoxEditor.BorderlessTextField.setBorder()
+				// uses "border instanceof javax.swing.plaf.basic.BasicComboBoxEditor.UIResource"
+				// instead of "border instanceof javax.swing.plaf.UIResource"
+				textField.setBorder( BorderFactory.createEmptyBorder() );
+			}
 		}
-
-		return comboBoxEditor;
-	}
-
-	@Override
-	protected void configureEditor() {
-		super.configureEditor();
-
-		// remove default text field border from editor
-		if( editor instanceof JTextField && ((JTextField)editor).getBorder() instanceof FlatTextBorder )
-			((JTextField)editor).setBorder( BorderFactory.createEmptyBorder() );
 
 		// explicitly make non-opaque
 		if( editor instanceof JComponent )

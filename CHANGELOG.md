@@ -20,6 +20,10 @@ FlatLaf Change Log
 - OptionPane: Fixed rendering of longer HTML text if it is passed as
   `StringBuilder`, `StringBuffer`, or any other object that returns HTML text in
   method `toString()`. (similar to issue #12)
+- ComboBox (editable): Fixed wrong border of internal text field under special
+  circumstances.
+- Spinner: Fixed painting of border corners on left side. (issue #382;
+  regression since FlatLaf 1.4)
 - TableHeader: Do not show resize cursor for last column if resizing last column
   is not possible because auto resize mode of table is not off. (issue #332)
 - TextField, FormattedTextField, PasswordField and ComboBox: Fixed alignment of
