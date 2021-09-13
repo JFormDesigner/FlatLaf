@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
@@ -112,12 +113,20 @@ public class FlatTableHeaderBorder
 		if( showLastVerticalLine )
 			return false;
 
+		// do not hide if table header is not a child of a scroll pane
 		Container viewport = header.getParent();
 		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
 		if( !(viewportParent instanceof JScrollPane) )
-			return true;
+			return false;
 
-		JScrollBar vsb = ((JScrollPane)viewportParent).getVerticalScrollBar();
+		// do not hide if table header is not the column header of the scroll pane
+		JScrollPane scrollPane = (JScrollPane) viewportParent;
+		JViewport columnHeader = scrollPane.getColumnHeader();
+		if( viewport != columnHeader )
+			return false;
+
+		// hide if vertical scroll bar is not shown
+		JScrollBar vsb = scrollPane.getVerticalScrollBar();
 		if( vsb == null || !vsb.isVisible() )
 			return true;
 

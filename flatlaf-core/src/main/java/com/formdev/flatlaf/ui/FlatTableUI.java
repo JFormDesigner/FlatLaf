@@ -321,6 +321,7 @@ public class FlatTableUI
 		if( showLastVerticalLine )
 			return false;
 
+		// do not hide if table is not a child of a scroll pane
 		Container viewport = SwingUtilities.getUnwrappedParent( table );
 		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
 		if( !(viewportParent instanceof JScrollPane) )

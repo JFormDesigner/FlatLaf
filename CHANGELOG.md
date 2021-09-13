@@ -26,6 +26,8 @@ FlatLaf Change Log
   regression since FlatLaf 1.4)
 - TableHeader: Do not show resize cursor for last column if resizing last column
   is not possible because auto resize mode of table is not off. (issue #332)
+- TableHeader: Fixed missing trailing vertical separator line if used in upper
+  left corner of scroll pane. (issue #332)
 - TextField, FormattedTextField, PasswordField and ComboBox: Fixed alignment of
   placeholder text in right-to-left component orientation.
 - Slider: Fixed calculation of baseline, which was wrong under some
