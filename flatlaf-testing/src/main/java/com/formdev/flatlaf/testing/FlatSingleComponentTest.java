@@ -139,6 +139,8 @@ public class FlatSingleComponentTest
 				applyComponentOrientation( getComponentOrientation().isLeftToRight()
 					? ComponentOrientation.RIGHT_TO_LEFT
 					: ComponentOrientation.LEFT_TO_RIGHT );
+				revalidate();
+				repaint();
 			},
 			KeyStroke.getKeyStroke( "alt R" ),
 			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
