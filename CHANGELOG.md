@@ -28,6 +28,8 @@ FlatLaf Change Log
   is not possible because auto resize mode of table is not off. (issue #332)
 - TextField, FormattedTextField, PasswordField and ComboBox: Fixed alignment of
   placeholder text in right-to-left component orientation.
+- Slider: Fixed calculation of baseline, which was wrong under some
+  circumstances.
 
 
 ## 1.5
