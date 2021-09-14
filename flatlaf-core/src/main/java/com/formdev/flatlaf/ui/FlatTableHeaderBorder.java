@@ -45,7 +45,7 @@ public class FlatTableHeaderBorder
 {
 	protected Color separatorColor = UIManager.getColor( "TableHeader.separatorColor" );
 	protected Color bottomSeparatorColor = UIManager.getColor( "TableHeader.bottomSeparatorColor" );
-	protected boolean showLastVerticalLine = UIManager.getBoolean( "TableHeader.showLastVerticalLine" );
+	/** @since 1.6 */ protected boolean showTrailingVerticalLine = UIManager.getBoolean( "TableHeader.showTrailingVerticalLine" );
 
 	public FlatTableHeaderBorder() {
 		super( UIManager.getInsets( "TableHeader.cellMargins" ) );
@@ -110,7 +110,7 @@ public class FlatTableHeaderBorder
 	}
 
 	protected boolean hideTrailingVerticalLine( JTableHeader header ) {
-		if( showLastVerticalLine )
+		if( showTrailingVerticalLine )
 			return false;
 
 		// do not hide if table header is not a child of a scroll pane

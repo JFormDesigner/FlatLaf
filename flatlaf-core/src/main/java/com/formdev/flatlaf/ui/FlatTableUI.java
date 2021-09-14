@@ -71,7 +71,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.rowHeight							int
  * @uiDefault Table.showHorizontalLines					boolean
  * @uiDefault Table.showVerticalLines					boolean
- * @uiDefault Table.showLastVerticalLine				boolean
+ * @uiDefault Table.showTrailingVerticalLine			boolean
  * @uiDefault Table.intercellSpacing					Dimension
  * @uiDefault Table.selectionInactiveBackground			Color
  * @uiDefault Table.selectionInactiveForeground			Color
@@ -93,7 +93,7 @@ public class FlatTableUI
 {
 	protected boolean showHorizontalLines;
 	protected boolean showVerticalLines;
-	protected boolean showLastVerticalLine;
+	/** @since 1.6 */ protected boolean showTrailingVerticalLine;
 	protected Dimension intercellSpacing;
 
 	protected Color selectionBackground;
@@ -117,7 +117,7 @@ public class FlatTableUI
 
 		showHorizontalLines = UIManager.getBoolean( "Table.showHorizontalLines" );
 		showVerticalLines = UIManager.getBoolean( "Table.showVerticalLines" );
-		showLastVerticalLine = UIManager.getBoolean( "Table.showLastVerticalLine" );
+		showTrailingVerticalLine = UIManager.getBoolean( "Table.showTrailingVerticalLine" );
 		intercellSpacing = UIManager.getDimension( "Table.intercellSpacing" );
 
 		selectionBackground = UIManager.getColor( "Table.selectionBackground" );
@@ -318,7 +318,7 @@ public class FlatTableUI
 	}
 
 	protected boolean hideLastVerticalLine() {
-		if( showLastVerticalLine )
+		if( showTrailingVerticalLine )
 			return false;
 
 		// do not hide if table is not a child of a scroll pane
