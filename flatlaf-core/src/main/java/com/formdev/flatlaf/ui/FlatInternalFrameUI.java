@@ -206,6 +206,9 @@ public class FlatInternalFrameUI
 
 	//---- class FlatBorderListener -------------------------------------------
 
+	/**
+	 * @since 1.6
+	 */
 	protected class FlatBorderListener
 		extends BorderListener
 	{
