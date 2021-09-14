@@ -66,7 +66,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TableHeader.cellMargins			Insets
  * @uiDefault TableHeader.separatorColor		Color
  * @uiDefault TableHeader.bottomSeparatorColor	Color
- * @uiDefault TableHeader.showLastVerticalLine	boolean
+ * @uiDefault TableHeader.showTrailingVerticalLine	boolean
  *
  * <!-- FlatAscendingSortIcon and FlatDescendingSortIcon -->
  *

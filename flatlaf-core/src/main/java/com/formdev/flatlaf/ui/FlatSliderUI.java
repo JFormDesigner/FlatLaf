@@ -18,9 +18,11 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.MouseEvent;
@@ -223,9 +225,27 @@ public class FlatSliderUI
 		if( slider.getOrientation() == JSlider.VERTICAL )
 			return -1;
 
+		// use default font (instead of slider font) because the slider font size
+		// may be different to label font size, but we want align the track/thumb with labels
+		Font font = UIManager.getFont( "defaultFont" );
+		if( font == null )
+			font = slider.getFont();
+		FontMetrics fm = slider.getFontMetrics( font );
+
+		// calculate track y coordinate and height
+		// (not using field trackRect here because slider size may be [0,0]
+		// and field trackRect may have invalid values in this case)
+		Insets insets = slider.getInsets();
+		int thumbHeight = getThumbSize().height;
+		int contentHeight = height - insets.top - insets.bottom - focusInsets.top - focusInsets.bottom;
+		int centerSpacing = thumbHeight
+			+ (slider.getPaintTicks() ? getTickLength() : 0)
+			+ (slider.getPaintLabels() ? getHeightOfTallestLabel() : 0);
+		int trackY = insets.top + focusInsets.top + (contentHeight - centerSpacing - 1) / 2;
+		int trackHeight = thumbHeight;
+
 		// compute a baseline so that the track is vertically centered
-		FontMetrics fm = slider.getFontMetrics( slider.getFont() );
-		return trackRect.y + Math.round( (trackRect.height - fm.getHeight()) / 2f ) + fm.getAscent() - 1;
+		return trackY + Math.round( (trackHeight - fm.getHeight()) / 2f ) + fm.getAscent() - 1;
 	}
 
 	@Override

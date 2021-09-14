@@ -219,15 +219,7 @@ public class FlatSpinnerUI
 	@Override
 	protected JComponent createEditor() {
 		JComponent editor = super.createEditor();
-
-		// explicitly make non-opaque
-		editor.setOpaque( false );
-		JTextField textField = getEditorTextField( editor );
-		if( textField != null )
-			textField.setOpaque( false );
-
-		updateEditorPadding();
-		updateEditorColors();
+		configureEditor( editor );
 		return editor;
 	}
 
@@ -235,8 +227,19 @@ public class FlatSpinnerUI
 	protected void replaceEditor( JComponent oldEditor, JComponent newEditor ) {
 		super.replaceEditor( oldEditor, newEditor );
 
+		configureEditor( newEditor );
+
 		removeEditorFocusListener( oldEditor );
 		addEditorFocusListener( newEditor );
+	}
+
+	/** @since 1.6 */
+	protected void configureEditor( JComponent editor ) {
+		// explicitly make non-opaque
+		editor.setOpaque( false );
+		JTextField textField = getEditorTextField( editor );
+		if( textField != null )
+			textField.setOpaque( false );
 
 		updateEditorPadding();
 		updateEditorColors();

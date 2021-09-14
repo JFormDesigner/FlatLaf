@@ -1088,7 +1088,7 @@ Table.selectionForeground      #ffff00  HSL  60 100  50    javax.swing.plaf.Colo
 Table.selectionInactiveBackground #888888  HSL   0   0  53    javax.swing.plaf.ColorUIResource [UI]
 Table.selectionInactiveForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Table.showHorizontalLines      false
-Table.showLastVerticalLine     false
+Table.showTrailingVerticalLine false
 Table.showVerticalLines        false
 Table.sortIconColor            #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 
@@ -1104,7 +1104,7 @@ TableHeader.font               [active] $defaultFont [UI]
 TableHeader.foreground         #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 TableHeader.height             25
 TableHeader.separatorColor     #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
-TableHeader.showLastVerticalLine false
+TableHeader.showTrailingVerticalLine false
 TableHeaderUI                  com.formdev.flatlaf.ui.FlatTableHeaderUI
 
 

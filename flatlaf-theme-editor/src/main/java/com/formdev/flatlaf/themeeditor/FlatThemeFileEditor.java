@@ -831,14 +831,14 @@ class FlatThemeFileEditor
 		state.put( KEY_WINDOW_BOUNDS, x + "," + y + ',' + width + ',' + height );
 	}
 
-	private static void putPrefsBoolean( Preferences prefs, String key, boolean value, boolean defaultValue ) {
+	static void putPrefsBoolean( Preferences prefs, String key, boolean value, boolean defaultValue ) {
 		if( value != defaultValue )
 			prefs.putBoolean( key, value );
 		else
 			prefs.remove( key );
 	}
 
-	private static void putPrefsString( Preferences prefs, String key, String value ) {
+	static void putPrefsString( Preferences prefs, String key, String value ) {
 		if( !StringUtils.isEmpty( value ) )
 			prefs.put( key, value );
 		else

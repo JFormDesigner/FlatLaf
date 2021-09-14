@@ -1621,6 +1621,10 @@ public class FlatComponentsTest
 //		customRenderer.setBorder( new LineBorder( Color.red ) );
 //		comboBox1.setRenderer( customRenderer );
 //		comboBox3.setRenderer( customRenderer );
+
+		// for testing issue #382
+//		spinner1.setModel( new SpinnerNumberModel( 0, null, 100, 1 ) );
+//		comboBox1.setEditor( new BasicComboBoxEditor() );
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 1.6-SNAPSHOT
+## 1.6
 
 #### New features and improvements
 
@@ -20,10 +20,20 @@ FlatLaf Change Log
 - OptionPane: Fixed rendering of longer HTML text if it is passed as
   `StringBuilder`, `StringBuffer`, or any other object that returns HTML text in
   method `toString()`. (similar to issue #12)
+- ComboBox: Fixed popup border painting on HiDPI screens (e.g. at 150% scaling).
+- ComboBox: Fixed popup location if shown above of combo box (Java 8 only).
+- ComboBox (editable): Fixed wrong border of internal text field under special
+  circumstances.
+- Spinner: Fixed painting of border corners on left side. (issue #382;
+  regression since FlatLaf 1.4)
 - TableHeader: Do not show resize cursor for last column if resizing last column
   is not possible because auto resize mode of table is not off. (issue #332)
+- TableHeader: Fixed missing trailing vertical separator line if used in upper
+  left corner of scroll pane. (issue #332)
 - TextField, FormattedTextField, PasswordField and ComboBox: Fixed alignment of
   placeholder text in right-to-left component orientation.
+- Slider: Fixed calculation of baseline, which was wrong under some
+  circumstances.
 
 
 ## 1.5

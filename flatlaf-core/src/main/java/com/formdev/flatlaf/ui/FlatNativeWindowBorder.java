@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
@@ -24,7 +25,6 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -76,6 +76,11 @@ public class FlatNativeWindowBorder
 		if( !isSupported() )
 			return null;
 
+		// do nothing if root pane has a parent that is not a window (e.g. a JInternalFrame)
+		Container parent = rootPane.getParent();
+		if( parent != null && !(parent instanceof Window) )
+			return null;
+
 		// Check whether root pane already has a window, which is the case when
 		// switching from another LaF to FlatLaf.
 		// Also check whether the window is displayable, which is required to install
@@ -83,9 +88,8 @@ public class FlatNativeWindowBorder
 		// If the window is not displayable, then it was probably closed/disposed but not yet removed
 		// from the list of windows that AWT maintains and returns with Window.getWindows().
 		// It could be also be a window that is currently hidden, but may be shown later.
-		Window window = SwingUtilities.windowForComponent( rootPane );
-		if( window != null && window.isDisplayable() )
-			install( window );
+		if( parent instanceof Window && parent.isDisplayable() )
+			install( (Window) parent );
 
 		// Install FlatLaf native window border, which must be done late,
 		// when the native window is already created, because it needs access to the window.
@@ -174,9 +178,9 @@ public class FlatNativeWindowBorder
 			return;
 
 		// uninstall native window border
-		Window window = SwingUtilities.windowForComponent( rootPane );
-		if( window != null )
-			uninstall( window );
+		Container parent = rootPane.getParent();
+		if( parent instanceof Window )
+			uninstall( (Window) parent );
 	}
 
 	private static void uninstall( Window window ) {

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-val releaseVersion = "1.5"
-val developmentVersion = "1.6-SNAPSHOT"
+val releaseVersion = "1.6"
+val developmentVersion = "2.0-SNAPSHOT"
 
 version = if( java.lang.Boolean.getBoolean( "release" ) ) releaseVersion else developmentVersion
 

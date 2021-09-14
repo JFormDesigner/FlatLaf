@@ -19,6 +19,7 @@ package com.formdev.flatlaf.themeeditor;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.beans.Beans;
 import java.beans.PropertyVetoException;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -39,6 +40,11 @@ import net.miginfocom.swing.*;
 class FlatThemePreviewAll
 	extends JPanel
 {
+	private static final String KEY_ENABLED = "preview.enabled";
+	private static final String KEY_EDITABLE = "preview.editable";
+	private static final String KEY_FOCUSED = "preview.focused";
+	private static final String KEY_MENU_UNDERLINE_SELECTION = "preview.menuUnderlineSelection";
+
 	private final FlatThemePreview preview;
 
 	FlatThemePreviewAll( FlatThemePreview preview ) {
@@ -78,6 +84,33 @@ class FlatThemePreviewAll
 		} );
 	}
 
+	void activated() {
+		boolean enabled = preview.state.getBoolean( KEY_ENABLED, true );
+		boolean editable = preview.state.getBoolean( KEY_EDITABLE, true );
+		boolean focused = preview.state.getBoolean( KEY_FOCUSED, false );
+		boolean menuUnderlineSelection = preview.state.getBoolean( KEY_MENU_UNDERLINE_SELECTION, false );
+
+		if( enabled != enabledCheckBox.isSelected() ) {
+			enabledCheckBox.setSelected( enabled );
+			enabledChanged();
+		}
+
+		if( editable != editableCheckBox.isSelected() ) {
+			editableCheckBox.setSelected( editable );
+			editableChanged();
+		}
+
+		if( focused != focusedCheckBox.isSelected() ) {
+			focusedCheckBox.setSelected( focused );
+			focusedChanged();
+		}
+
+		if( menuUnderlineSelection != menuUnderlineSelectionButton.isSelected() ) {
+			menuUnderlineSelectionButton.setSelected( menuUnderlineSelection );
+			menuUnderlineSelectionChanged();
+		}
+	}
+
 	private void enabledChanged() {
 		boolean enabled = enabledCheckBox.isSelected();
 
@@ -89,10 +122,12 @@ class FlatThemePreviewAll
 		preview.runWithUIDefaultsGetter( () -> {
 			enableDisable( this, enabled );
 		} );
+
+		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_ENABLED, enabled, true );
 	}
 
 	private void enableDisable( Component comp, boolean enabled ) {
-		if( comp != enabledCheckBox && comp != focusedCheckBox && comp != menu2 )
+		if( !isControlComponent( comp ) )
 			comp.setEnabled( enabled );
 
 		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
@@ -119,16 +154,38 @@ class FlatThemePreviewAll
 		}
 	}
 
+	private void editableChanged() {
+		boolean editable = editableCheckBox.isSelected();
+
+		preview.runWithUIDefaultsGetter( () -> {
+			textField1.setEditable( editable );
+			formattedTextField1.setEditable( editable );
+			passwordField1.setEditable( editable );
+			textArea1.setEditable( editable );
+			editorPane1.setEditable( editable );
+			textPane1.setEditable( editable );
+
+			editorPane1.updateUI();
+			textPane1.updateUI();
+		} );
+
+		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_EDITABLE, editable, true );
+	}
+
 	private void focusedChanged() {
-		Predicate<JComponent> value = focusedCheckBox.isSelected() && enabledCheckBox.isSelected()
+		boolean focused = focusedCheckBox.isSelected();
+
+		Predicate<JComponent> value = focused && enabledCheckBox.isSelected()
 			? value = c -> true
 			: null;
 		focusComponent( this, value );
 		repaint();
+
+		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_FOCUSED, focused,false );
 	}
 
 	private void focusComponent( Component comp, Object value ) {
-		if( comp != enabledCheckBox && comp != focusedCheckBox && comp != menu2 && comp instanceof JComponent )
+		if( !isControlComponent( comp ) && comp instanceof JComponent )
 			((JComponent)comp).putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, value );
 
 		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
@@ -140,6 +197,21 @@ class FlatThemePreviewAll
 
 			focusComponent( c, value );
 		}
+	}
+
+	private boolean isControlComponent( Component c ) {
+		return c == enabledCheckBox ||
+			c == editableCheckBox ||
+			c == focusedCheckBox ||
+			c == menuUnderlineSelectionButton ||
+			c == menu2;
+	}
+
+	private void menuUnderlineSelectionChanged() {
+		boolean menuUnderlineSelection = menuUnderlineSelectionButton.isSelected();
+		UIManager.put( "MenuItem.selectionType", menuUnderlineSelection ? "underline" : null );
+
+		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_MENU_UNDERLINE_SELECTION, menuUnderlineSelection, false );
 	}
 
 	private void changeProgress() {
@@ -165,7 +237,9 @@ class FlatThemePreviewAll
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+		JPanel hSpacer1 = new JPanel(null);
 		enabledCheckBox = new JCheckBox();
+		editableCheckBox = new JCheckBox();
 		focusedCheckBox = new JCheckBox();
 		JLabel labelLabel = new JLabel();
 		JLabel label1 = new JLabel();
@@ -173,20 +247,15 @@ class FlatThemePreviewAll
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
 		FlatThemePreviewAll.PreviewDefaultButton testDefaultButton1 = new FlatThemePreviewAll.PreviewDefaultButton();
-		FlatButton helpButton = new FlatButton();
-		JPanel hSpacer2 = new JPanel(null);
 		JLabel toggleButtonLabel = new JLabel();
 		JToggleButton toggleButton1 = new JToggleButton();
 		JToggleButton toggleButton3 = new JToggleButton();
-		JPanel hSpacer1 = new JPanel(null);
 		JLabel checkBoxLabel = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox3 = new JCheckBox();
-		JPanel hSpacer3 = new JPanel(null);
 		JLabel radioButtonLabel = new JLabel();
 		JRadioButton radioButton1 = new JRadioButton();
 		JRadioButton radioButton3 = new JRadioButton();
-		JPanel hSpacer4 = new JPanel(null);
 		JLabel comboBoxLabel = new JLabel();
 		FlatComboBox<String> comboBox1 = new FlatComboBox<>();
 		JComboBox<String> comboBox3 = new JComboBox<>();
@@ -194,16 +263,17 @@ class FlatThemePreviewAll
 		JSpinner spinner1 = new JSpinner();
 		JLabel textFieldLabel = new JLabel();
 		textField1 = new FlatTextField();
-		FlatFormattedTextField formattedTextField1 = new FlatFormattedTextField();
-		FlatPasswordField passwordField1 = new FlatPasswordField();
+		formattedTextField1 = new FlatFormattedTextField();
+		passwordField1 = new FlatPasswordField();
 		JLabel textAreaLabel = new JLabel();
 		JScrollPane scrollPane1 = new JScrollPane();
-		JTextArea textArea1 = new JTextArea();
+		textArea1 = new JTextArea();
 		JScrollPane scrollPane5 = new JScrollPane();
-		JEditorPane editorPane1 = new JEditorPane();
+		editorPane1 = new JEditorPane();
 		JScrollPane scrollPane9 = new JScrollPane();
-		JTextPane textPane1 = new JTextPane();
+		textPane1 = new JTextPane();
 		JLabel menuBarLabel = new JLabel();
+		menuUnderlineSelectionButton = new FlatToggleButton();
 		JMenuBar menuBar1 = new JMenuBar();
 		menu2 = new JMenu();
 		JMenuItem menuItem3 = new JMenuItem();
@@ -239,6 +309,7 @@ class FlatThemePreviewAll
 		JButton button6 = new JButton();
 		JToggleButton button7 = new JToggleButton();
 		JToggleButton button8 = new JToggleButton();
+		JToggleButton button9 = new JToggleButton();
 		JLabel tabbedPaneLabel = new JLabel();
 		tabbedPane1 = new FlatThemePreviewAll.PreviewTabbedPane();
 		JLabel listTreeLabel = new JLabel();
@@ -260,9 +331,10 @@ class FlatThemePreviewAll
 			"insets dialog,hidemode 3",
 			// columns
 			"[fill]" +
-			"[130,fill]",
+			"[60,sizegroup 1,fill]" +
+			"[60,sizegroup 1,fill]",
 			// rows
-			"[]unrel" +
+			"[]para" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -272,15 +344,14 @@ class FlatThemePreviewAll
 			"[]" +
 			"[]" +
 			"[]" +
+			"[fill]" +
+			"[]" +
+			"[]4" +
 			"[]" +
 			"[]" +
+			"[]0" +
 			"[]" +
-			"[]" +
-			"[]" +
-			"[]" +
-			"[]" +
-			"[]" +
-			"[]" +
+			"[]0" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -289,17 +360,24 @@ class FlatThemePreviewAll
 			"[]" +
 			"[100,fill]" +
 			"[grow]"));
+		add(hSpacer1, "cell 0 0 3 1,growx");
 
 		//---- enabledCheckBox ----
 		enabledCheckBox.setText("Enabled");
 		enabledCheckBox.setSelected(true);
 		enabledCheckBox.addActionListener(e -> enabledChanged());
-		add(enabledCheckBox, "cell 0 0 2 1,alignx left,growx 0");
+		add(enabledCheckBox, "cell 0 0 3 1");
+
+		//---- editableCheckBox ----
+		editableCheckBox.setText("Editable");
+		editableCheckBox.setSelected(true);
+		editableCheckBox.addActionListener(e -> editableChanged());
+		add(editableCheckBox, "cell 0 0 3 1");
 
 		//---- focusedCheckBox ----
 		focusedCheckBox.setText("Focused");
 		focusedCheckBox.addActionListener(e -> focusedChanged());
-		add(focusedCheckBox, "cell 0 0 2 1");
+		add(focusedCheckBox, "cell 0 0 3 1");
 
 		//---- labelLabel ----
 		labelLabel.setText("JLabel:");
@@ -307,7 +385,7 @@ class FlatThemePreviewAll
 
 		//---- label1 ----
 		label1.setText("Some Text");
-		add(label1, "cell 1 1");
+		add(label1, "cell 1 1 2 1");
 
 		//---- flatButton1 ----
 		flatButton1.setText("Help");
@@ -321,16 +399,11 @@ class FlatThemePreviewAll
 
 		//---- button1 ----
 		button1.setText("OK");
-		add(button1, "cell 1 2,alignx left,growx 0");
+		add(button1, "cell 1 2");
 
 		//---- testDefaultButton1 ----
 		testDefaultButton1.setText("Default");
-		add(testDefaultButton1, "cell 1 2");
-
-		//---- helpButton ----
-		helpButton.setButtonType(FlatButton.ButtonType.help);
-		add(helpButton, "cell 1 2");
-		add(hSpacer2, "cell 1 2");
+		add(testDefaultButton1, "cell 2 2");
 
 		//---- toggleButtonLabel ----
 		toggleButtonLabel.setText("JToggleButton:");
@@ -338,13 +411,12 @@ class FlatThemePreviewAll
 
 		//---- toggleButton1 ----
 		toggleButton1.setText("Unselected");
-		add(toggleButton1, "cell 1 3,alignx left,growx 0");
+		add(toggleButton1, "cell 1 3");
 
 		//---- toggleButton3 ----
 		toggleButton3.setText("Selected");
 		toggleButton3.setSelected(true);
-		add(toggleButton3, "cell 1 3");
-		add(hSpacer1, "cell 1 3");
+		add(toggleButton3, "cell 2 3");
 
 		//---- checkBoxLabel ----
 		checkBoxLabel.setText("JCheckBox");
@@ -357,8 +429,7 @@ class FlatThemePreviewAll
 		//---- checkBox3 ----
 		checkBox3.setText("Selected");
 		checkBox3.setSelected(true);
-		add(checkBox3, "cell 1 4,alignx left,growx 0");
-		add(hSpacer3, "cell 1 4");
+		add(checkBox3, "cell 2 4,alignx left,growx 0");
 
 		//---- radioButtonLabel ----
 		radioButtonLabel.setText("JRadioButton:");
@@ -371,8 +442,7 @@ class FlatThemePreviewAll
 		//---- radioButton3 ----
 		radioButton3.setText("Selected");
 		radioButton3.setSelected(true);
-		add(radioButton3, "cell 1 5,alignx left,growx 0");
-		add(hSpacer4, "cell 1 5");
+		add(radioButton3, "cell 2 5,alignx left,growx 0");
 
 		//---- comboBoxLabel ----
 		comboBoxLabel.setText("JComboBox:");
@@ -396,7 +466,7 @@ class FlatThemePreviewAll
 		}));
 		comboBox1.setMaximumRowCount(6);
 		comboBox1.setPlaceholderText("placeholder text");
-		add(comboBox1, "cell 1 6,width 50");
+		add(comboBox1, "cell 1 6");
 
 		//---- comboBox3 ----
 		comboBox3.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -414,12 +484,12 @@ class FlatThemePreviewAll
 			"kkk"
 		}));
 		comboBox3.setMaximumRowCount(6);
-		add(comboBox3, "cell 1 6,width 50");
+		add(comboBox3, "cell 2 6");
 
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");
 		add(spinnerLabel, "cell 0 7");
-		add(spinner1, "cell 1 7");
+		add(spinner1, "cell 1 7 2 1");
 
 		//---- textFieldLabel ----
 		textFieldLabel.setText("<html>JTextField:<br>JFormattedTextF.:<br>JPasswordField:</html>");
@@ -428,21 +498,21 @@ class FlatThemePreviewAll
 		//---- textField1 ----
 		textField1.setText("Some Text");
 		textField1.setPlaceholderText("placeholder text");
-		add(textField1, "cell 1 8");
+		add(textField1, "cell 1 8 2 1");
 
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("Some Text");
 		formattedTextField1.setPlaceholderText("placeholder text");
-		add(formattedTextField1, "cell 1 9,width 50");
+		add(formattedTextField1, "cell 1 9");
 
 		//---- passwordField1 ----
 		passwordField1.setText("Some Text");
 		passwordField1.setPlaceholderText("placeholder text");
-		add(passwordField1, "cell 1 9,width 50");
+		add(passwordField1, "cell 2 9");
 
 		//---- textAreaLabel ----
-		textAreaLabel.setText("<html>JTextArea:<br><br>JEditorPane:<br>JTextPane:</html>");
-		add(textAreaLabel, "cell 0 10 1 2");
+		textAreaLabel.setText("<html>JTextArea:<br>JEditorPane:<br>JTextPane:</html>");
+		add(textAreaLabel, "cell 0 10");
 
 		//======== scrollPane1 ========
 		{
@@ -450,11 +520,11 @@ class FlatThemePreviewAll
 			scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textArea1 ----
-			textArea1.setText("Some Text");
+			textArea1.setText("Text");
 			textArea1.setRows(2);
 			scrollPane1.setViewportView(textArea1);
 		}
-		add(scrollPane1, "cell 1 10");
+		add(scrollPane1, "cell 1 10 2 1,width 40");
 
 		//======== scrollPane5 ========
 		{
@@ -462,10 +532,10 @@ class FlatThemePreviewAll
 			scrollPane5.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- editorPane1 ----
-			editorPane1.setText("Some Text");
+			editorPane1.setText("Text");
 			scrollPane5.setViewportView(editorPane1);
 		}
-		add(scrollPane5, "cell 1 11,width 50");
+		add(scrollPane5, "cell 1 10 2 1,width 40");
 
 		//======== scrollPane9 ========
 		{
@@ -473,14 +543,23 @@ class FlatThemePreviewAll
 			scrollPane9.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			//---- textPane1 ----
-			textPane1.setText("Some Text");
+			textPane1.setText("Text");
 			scrollPane9.setViewportView(textPane1);
 		}
-		add(scrollPane9, "cell 1 11,width 50");
+		add(scrollPane9, "cell 1 10 2 1,width 40");
 
 		//---- menuBarLabel ----
 		menuBarLabel.setText("JMenuBar:");
-		add(menuBarLabel, "cell 0 12");
+		add(menuBarLabel, "cell 0 11");
+
+		//---- menuUnderlineSelectionButton ----
+		menuUnderlineSelectionButton.setText("_");
+		menuUnderlineSelectionButton.setButtonType(FlatButton.ButtonType.toolBarButton);
+		menuUnderlineSelectionButton.setToolTipText("menu underline selection");
+		menuUnderlineSelectionButton.setFocusable(false);
+		menuUnderlineSelectionButton.setFont(menuUnderlineSelectionButton.getFont().deriveFont(menuUnderlineSelectionButton.getFont().getSize() - 2f));
+		menuUnderlineSelectionButton.addActionListener(e -> menuUnderlineSelectionChanged());
+		add(menuUnderlineSelectionButton, "cell 0 11");
 
 		//======== menuBar1 ========
 		{
@@ -558,33 +637,33 @@ class FlatThemePreviewAll
 			}
 			menuBar1.add(menu3);
 		}
-		add(menuBar1, "cell 1 12");
+		add(menuBar1, "cell 1 11 2 1");
 
 		//---- scrollBarLabel ----
 		scrollBarLabel.setText("JScrollBar:");
-		add(scrollBarLabel, "cell 0 13");
+		add(scrollBarLabel, "cell 0 12 1 2,aligny top,growy 0");
 
 		//---- scrollBar1 ----
 		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
-		add(scrollBar1, "cell 1 13");
+		add(scrollBar1, "cell 1 12 2 1");
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar5.setShowButtons(true);
-		add(scrollBar5, "cell 1 14");
+		add(scrollBar5, "cell 1 13 2 1");
 
 		//---- separatorLabel ----
 		separatorLabel.setText("JSeparator:");
-		add(separatorLabel, "cell 0 15");
-		add(separator1, "cell 1 15");
+		add(separatorLabel, "cell 0 14");
+		add(separator1, "cell 1 14 2 1");
 
 		//---- sliderLabel ----
 		sliderLabel.setText("JSlider:");
-		add(sliderLabel, "cell 0 16");
+		add(sliderLabel, "cell 0 15");
 
 		//---- slider1 ----
 		slider1.setValue(30);
-		add(slider1, "cell 1 16");
+		add(slider1, "cell 1 15 2 1,width 100");
 
 		//---- slider3 ----
 		slider3.setMinorTickSpacing(10);
@@ -593,32 +672,32 @@ class FlatThemePreviewAll
 		slider3.setPaintLabels(true);
 		slider3.setValue(30);
 		slider3.addChangeListener(e -> changeProgress());
-		add(slider3, "cell 1 17");
+		add(slider3, "cell 1 16 2 1,width 100");
 
 		//---- progressBarLabel ----
 		progressBarLabel.setText("JProgressBar:");
-		add(progressBarLabel, "cell 0 18");
+		add(progressBarLabel, "cell 0 17");
 
 		//---- progressBar1 ----
 		progressBar1.setValue(60);
-		add(progressBar1, "cell 1 18");
+		add(progressBar1, "cell 1 17 2 1");
 
 		//---- progressBar2 ----
 		progressBar2.setValue(50);
 		progressBar2.setStringPainted(true);
-		add(progressBar2, "cell 1 19");
+		add(progressBar2, "cell 1 18 2 1");
 
 		//---- toolTipLabel ----
 		toolTipLabel.setText("JToolTip:");
-		add(toolTipLabel, "cell 0 20");
+		add(toolTipLabel, "cell 0 19");
 
 		//---- toolTip1 ----
 		toolTip1.setTipText("Some text in tool tip.");
-		add(toolTip1, "cell 1 20,alignx left,growx 0");
+		add(toolTip1, "cell 1 19 2 1,alignx left,growx 0");
 
 		//---- toolBarLabel ----
 		toolBarLabel.setText("JToolBar:");
-		add(toolBarLabel, "cell 0 21");
+		add(toolBarLabel, "cell 0 20");
 
 		//======== toolBar1 ========
 		{
@@ -640,17 +719,22 @@ class FlatThemePreviewAll
 			button8.setIcon(UIManager.getIcon("Tree.leafIcon"));
 			button8.setSelected(true);
 			toolBar1.add(button8);
+
+			//---- button9 ----
+			button9.setIcon(UIManager.getIcon("Tree.leafIcon"));
+			button9.setSelected(true);
+			toolBar1.add(button9);
 		}
-		add(toolBar1, "cell 1 21");
+		add(toolBar1, "cell 1 20 2 1");
 
 		//---- tabbedPaneLabel ----
 		tabbedPaneLabel.setText("JTabbedPane:");
-		add(tabbedPaneLabel, "cell 0 22");
-		add(tabbedPane1, "cell 1 22");
+		add(tabbedPaneLabel, "cell 0 21");
+		add(tabbedPane1, "cell 1 21 2 1");
 
 		//---- listTreeLabel ----
 		listTreeLabel.setText("<html>JList / JTree:<br>JSplitPane:</html>");
-		add(listTreeLabel, "cell 0 23,aligny top,growy 0");
+		add(listTreeLabel, "cell 0 22,aligny top,growy 0");
 
 		//======== splitPane1 ========
 		{
@@ -693,11 +777,11 @@ class FlatThemePreviewAll
 			}
 			splitPane1.setRightComponent(scrollPane3);
 		}
-		add(splitPane1, "cell 1 23,height 50");
+		add(splitPane1, "cell 1 22 2 1,height 50");
 
 		//---- tableLabel ----
 		tableLabel.setText("JTable:");
-		add(tableLabel, "cell 0 24");
+		add(tableLabel, "cell 0 23");
 
 		//======== scrollPane4 ========
 		{
@@ -714,11 +798,11 @@ class FlatThemePreviewAll
 			));
 			scrollPane4.setViewportView(table1);
 		}
-		add(scrollPane4, "cell 1 24,height 70");
+		add(scrollPane4, "cell 1 23 2 1,width 100,height 70");
 
 		//---- internalFrameLabel ----
 		internalFrameLabel.setText("<html>JDesktopPane:<br>JInternalFrame:</html>");
-		add(internalFrameLabel, "cell 0 25,aligny top,growy 0");
+		add(internalFrameLabel, "cell 0 24,aligny top,growy 0");
 
 		//======== desktopPane1 ========
 		{
@@ -751,7 +835,7 @@ class FlatThemePreviewAll
 			desktopPane1.add(internalFrame2, JLayeredPane.DEFAULT_LAYER);
 			internalFrame2.setBounds(new Rectangle(new Point(5, 50), internalFrame2.getPreferredSize()));
 		}
-		add(desktopPane1, "cell 1 25");
+		add(desktopPane1, "cell 1 24 2 1");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
@@ -767,8 +851,15 @@ class FlatThemePreviewAll
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JCheckBox enabledCheckBox;
+	private JCheckBox editableCheckBox;
 	private JCheckBox focusedCheckBox;
 	private FlatTextField textField1;
+	private FlatFormattedTextField formattedTextField1;
+	private FlatPasswordField passwordField1;
+	private JTextArea textArea1;
+	private JEditorPane editorPane1;
+	private JTextPane textPane1;
+	private FlatToggleButton menuUnderlineSelectionButton;
 	private JMenu menu2;
 	private JSlider slider1;
 	private JSlider slider3;
@@ -804,7 +895,10 @@ class FlatThemePreviewAll
 
 		@Override
 		public void updateUI() {
-			setUI( new PreviewFlatTabbedPaneUI( uiDefaultsGetter ) );
+			if( !Beans.isDesignTime() )
+				setUI( new PreviewFlatTabbedPaneUI( uiDefaultsGetter ) );
+			else
+				super.updateUI();
 		}
 	}
 
@@ -848,10 +942,13 @@ class FlatThemePreviewAll
 
 		@Override
 		public void paint( Graphics g ) {
-			// needed for DefaultTableCellRenderer
-			FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
+			if( !Beans.isDesignTime() ) {
+				// needed for DefaultTableCellRenderer
+				FlatLaf.runWithUIDefaultsGetter( uiDefaultsGetter, () -> {
+					super.paint( g );
+				} );
+			} else
 				super.paint( g );
-			} );
 		}
 	}
 }

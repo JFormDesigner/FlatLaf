@@ -16,11 +16,11 @@
 
 package com.formdev.flatlaf.themeeditor;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Component;
 import java.util.Objects;
 import java.util.function.Predicate;
 import javax.swing.*;
-import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.*;
 
 /**
@@ -29,31 +29,64 @@ import net.miginfocom.swing.*;
 class FlatThemePreviewButtons
 	extends JPanel
 {
-	FlatThemePreviewButtons() {
+	private static final String KEY_BUTTON_TYPE = "preview.buttonType";
+
+	private final FlatThemePreview preview;
+
+	FlatThemePreviewButtons( FlatThemePreview preview ) {
+		this.preview = preview;
+
 		initComponents();
 	}
 
-	private void buttonTypeChanged() {
-		Object buttonType = null;
+	void activated() {
+		String buttonType = preview.state.get( KEY_BUTTON_TYPE, null );
+
+		if( !Objects.equals( buttonType, getButtonType() ) ) {
+			setButtonType( buttonType );
+			buttonTypeChanged();
+		}
+	}
+
+	private String getButtonType() {
+		String buttonType = null;
 		if( squareButton.isSelected() )
-			buttonType = FlatClientProperties.BUTTON_TYPE_SQUARE;
+			buttonType = BUTTON_TYPE_SQUARE;
 		else if( roundRectButton.isSelected() )
-			buttonType = FlatClientProperties.BUTTON_TYPE_ROUND_RECT;
+			buttonType = BUTTON_TYPE_ROUND_RECT;
 		else if( tabButton.isSelected() )
-			buttonType = FlatClientProperties.BUTTON_TYPE_TAB;
+			buttonType = BUTTON_TYPE_TAB;
 		else if( toolBarButtonButton.isSelected() )
-			buttonType = FlatClientProperties.BUTTON_TYPE_TOOLBAR_BUTTON;
+			buttonType = BUTTON_TYPE_TOOLBAR_BUTTON;
 		else if( borderlessButton.isSelected() )
-			buttonType = FlatClientProperties.BUTTON_TYPE_BORDERLESS;
+			buttonType = BUTTON_TYPE_BORDERLESS;
+		return buttonType;
+	}
+
+	private void setButtonType( String buttonType ) {
+		switch( String.valueOf( buttonType ) ) {
+			case BUTTON_TYPE_SQUARE:			squareButton.setSelected( true ); break;
+			case BUTTON_TYPE_ROUND_RECT:		roundRectButton.setSelected( true ); break;
+			case BUTTON_TYPE_TAB:				tabButton.setSelected( true ); break;
+			case BUTTON_TYPE_TOOLBAR_BUTTON:	toolBarButtonButton.setSelected( true ); break;
+			case BUTTON_TYPE_BORDERLESS:		borderlessButton.setSelected( true ); break;
+			default:							noneButton.setSelected( true ); break;
+		}
+	}
+
+	private void buttonTypeChanged() {
+		String buttonType = getButtonType();
 
 		for( Component c : getComponents() ) {
 			if( !(c instanceof AbstractButton) )
 				continue;
 
 			AbstractButton b = (AbstractButton) c;
-			if( !Objects.equals( b.getClientProperty( FlatClientProperties.BUTTON_TYPE ), FlatClientProperties.BUTTON_TYPE_HELP ) )
-				b.putClientProperty( FlatClientProperties.BUTTON_TYPE, buttonType );
+			if( !Objects.equals( b.getClientProperty( BUTTON_TYPE ), BUTTON_TYPE_HELP ) )
+				b.putClientProperty( BUTTON_TYPE, buttonType );
 		}
+
+		FlatThemeFileEditor.putPrefsString( preview.state, KEY_BUTTON_TYPE, buttonType );
 	}
 
 	private void initComponents() {
@@ -664,7 +697,7 @@ class FlatThemePreviewButtons
 				}
 			} );
 
-			putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER,
+			putClientProperty( COMPONENT_FOCUS_OWNER,
 				(Predicate<JComponent>) c -> {
 					return ((TestStateButton)c).isStateFocused();
 				} );
@@ -734,7 +767,7 @@ class FlatThemePreviewButtons
 				}
 			} );
 
-			putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER,
+			putClientProperty( COMPONENT_FOCUS_OWNER,
 				(Predicate<JComponent>) c -> {
 					return ((TestStateToggleButton)c).isStateFocused();
 				} );
