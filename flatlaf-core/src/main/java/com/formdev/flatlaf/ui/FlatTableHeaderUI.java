@@ -86,6 +86,7 @@ public class FlatTableHeaderUI
 	// for FlatTableHeaderBorder
 	@Styleable protected Insets cellMargins;
 	@Styleable protected Color separatorColor;
+	/** @since 2 */ @Styleable protected boolean showTrailingVerticalLine;
 
 	// for FlatAscendingSortIcon and FlatDescendingSortIcon
 	// (needs to be public because icon classes are in another package)

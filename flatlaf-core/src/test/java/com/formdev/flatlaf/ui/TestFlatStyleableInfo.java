@@ -708,6 +708,7 @@ public class TestFlatStyleableInfo
 		FlatTableUI ui = (FlatTableUI) c.getUI();
 
 		Map<String, Class<?>> expected = expectedMap(
+			"showTrailingVerticalLine", boolean.class,
 			"selectionBackground", Color.class,
 			"selectionForeground", Color.class,
 			"selectionInactiveBackground", Color.class,
@@ -735,6 +736,7 @@ public class TestFlatStyleableInfo
 			// FlatTableHeaderBorder
 			"cellMargins", Insets.class,
 			"separatorColor", Color.class,
+			"showTrailingVerticalLine", boolean.class,
 
 			// FlatAscendingSortIcon and FlatDescendingSortIcon
 			"arrowType", String.class,

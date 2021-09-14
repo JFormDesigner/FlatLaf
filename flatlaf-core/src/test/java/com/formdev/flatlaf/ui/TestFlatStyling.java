@@ -806,6 +806,7 @@ public class TestFlatStyling
 		JTable c = new JTable();
 		FlatTableUI ui = (FlatTableUI) c.getUI();
 
+		ui.applyStyle( "showTrailingVerticalLine: true" );
 		ui.applyStyle( "selectionBackground: #fff" );
 		ui.applyStyle( "selectionForeground: #fff" );
 		ui.applyStyle( "selectionInactiveBackground: #fff" );
@@ -841,6 +842,7 @@ public class TestFlatStyling
 		// FlatTableHeaderBorder
 		ui.applyStyle( "cellMargins: 1,2,3,4" );
 		ui.applyStyle( "separatorColor: #fff" );
+		ui.applyStyle( "showTrailingVerticalLine: true" );
 
 		// FlatAscendingSortIcon and FlatDescendingSortIcon
 		ui.applyStyle( "arrowType: chevron" );

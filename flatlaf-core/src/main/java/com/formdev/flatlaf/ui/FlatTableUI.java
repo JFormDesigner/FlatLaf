@@ -98,7 +98,7 @@ public class FlatTableUI
 {
 	protected boolean showHorizontalLines;
 	protected boolean showVerticalLines;
-	/** @since 1.6 */ protected boolean showTrailingVerticalLine;
+	/** @since 1.6 */ @Styleable protected boolean showTrailingVerticalLine;
 	protected Dimension intercellSpacing;
 
 	@Styleable protected Color selectionBackground;
