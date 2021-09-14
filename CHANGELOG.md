@@ -20,6 +20,7 @@ FlatLaf Change Log
 - OptionPane: Fixed rendering of longer HTML text if it is passed as
   `StringBuilder`, `StringBuffer`, or any other object that returns HTML text in
   method `toString()`. (similar to issue #12)
+- ComboBox: Fixed popup border painting on HiDPI screens (e.g. at 150% scaling).
 - ComboBox (editable): Fixed wrong border of internal text field under special
   circumstances.
 - Spinner: Fixed painting of border corners on left side. (issue #382;

@@ -695,6 +695,9 @@ public class FlatComboBoxUI
 		protected void configurePopup() {
 			super.configurePopup();
 
+			// make opaque to avoid that background shines thru border (e.g. at 150% scaling)
+			setOpaque( true );
+
 			Border border = UIManager.getBorder( "PopupMenu.border" );
 			if( border != null )
 				setBorder( border );
