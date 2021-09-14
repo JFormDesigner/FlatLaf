@@ -731,6 +731,21 @@ public class FlatComboBoxUI
 		}
 
 		@Override
+		public void show( Component invoker, int x, int y ) {
+			// Java 8: fix y coordinate if popup is shown above the combobox
+			// (already fixed in Java 9+ https://bugs.openjdk.java.net/browse/JDK-7072653)
+			if( y < 0 && !SystemInfo.isJava_9_orLater ) {
+				Border popupBorder = getBorder();
+				if( popupBorder != null ) {
+					Insets insets = popupBorder.getBorderInsets( this );
+					y -= insets.top + insets.bottom;
+				}
+			}
+
+			super.show( invoker, x, y );
+		}
+
+		@Override
 		protected void paintChildren( Graphics g ) {
 			super.paintChildren( g );
 			paddingBorder.uninstall();
