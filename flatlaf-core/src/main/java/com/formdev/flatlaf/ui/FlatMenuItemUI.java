@@ -16,13 +16,20 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.beans.PropertyChangeListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenuItem}.
@@ -54,11 +61,20 @@ import javax.swing.plaf.basic.BasicMenuItemUI;
  */
 public class FlatMenuItemUI
 	extends BasicMenuItemUI
+	implements StyleableUI
 {
 	private FlatMenuItemRenderer renderer;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuItemUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( menuItem ) );
 	}
 
 	@Override
@@ -75,10 +91,70 @@ public class FlatMenuItemUI
 		super.uninstallDefaults();
 
 		renderer = null;
+		oldStyleValues = null;
 	}
 
 	protected FlatMenuItemRenderer createRenderer() {
 		return new FlatMenuItemRenderer( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
+		return FlatStylingSupport.createPropertyChangeListener( c, this::applyStyle, super.createPropertyChangeListener( c ) );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		try {
+			return renderer.applyStyleProperty( key, value );
+		} catch ( UnknownStyleException ex ) {
+			// ignore
+		}
+
+		return applyStyleProperty( this, menuItem, key, value );
+	}
+
+	static Object applyStyleProperty( BasicMenuItemUI ui, JMenuItem menuItem, String key, Object value ) {
+		switch( key ) {
+			// BasicMenuItemUI
+			case "selectionBackground":
+			case "selectionForeground":
+			case "disabledForeground":
+			case "acceleratorForeground":
+			case "acceleratorSelectionForeground":
+				return FlatStylingSupport.applyToField( ui, key, key, value );
+
+			default:
+				return FlatStylingSupport.applyToAnnotatedObjectOrComponent( ui, menuItem, key, value );
+		}
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return getStyleableInfos( renderer );
+	}
+
+	static Map<String, Class<?>> getStyleableInfos( FlatMenuItemRenderer renderer ) {
+		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		infos.put( "selectionBackground", Color.class );
+		infos.put( "selectionForeground", Color.class );
+		infos.put( "disabledForeground", Color.class );
+		infos.put( "acceleratorForeground", Color.class );
+		infos.put( "acceleratorSelectionForeground", Color.class );
+		infos.putAll( renderer.getStyleableInfos() );
+		return infos;
 	}
 
 	@Override

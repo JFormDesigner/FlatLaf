@@ -19,7 +19,12 @@ package com.formdev.flatlaf.icons;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.util.function.Function;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.TreeUI;
+import com.formdev.flatlaf.ui.FlatTreeUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -46,7 +51,11 @@ public class FlatTreeCollapsedIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
+		setStyleColorFromTreeUI( c, g );
 		rotate( c, g );
+
+		String arrowType = getStyleFromTreeUI( c, ui -> ui.iconArrowType );
+		boolean chevron = (arrowType != null) ? FlatUIUtils.isChevron( arrowType ) : this.chevron;
 
 		if( chevron ) {
 			// chevron arrow
@@ -57,8 +66,34 @@ public class FlatTreeCollapsedIcon
 		}
 	}
 
+	void setStyleColorFromTreeUI( Component c, Graphics2D g ) {
+		setStyleColorFromTreeUI( c, g, ui -> ui.iconCollapsedColor );
+	}
+
 	void rotate( Component c, Graphics2D g ) {
 		if( !c.getComponentOrientation().isLeftToRight() )
 			g.rotate( Math.toRadians( 180 ), width / 2., height / 2. );
+	}
+
+	/**
+	 * Because this icons are always shared for all trees,
+	 * get icon specific style from FlatTreeUI.
+	 */
+	static <T> T getStyleFromTreeUI( Component c, Function<FlatTreeUI, T> f ) {
+		JTree tree = (c instanceof JTree)
+			? (JTree) c
+			: (JTree) SwingUtilities.getAncestorOfClass( JTree.class, c );
+		if( tree != null ) {
+			TreeUI ui = tree.getUI();
+			if( ui instanceof FlatTreeUI )
+				return f.apply( (FlatTreeUI) ui );
+		}
+		return null;
+	}
+
+	static void setStyleColorFromTreeUI( Component c, Graphics2D g, Function<FlatTreeUI, Color> f ) {
+		Color color = getStyleFromTreeUI( c, f );
+		if( color != null )
+			g.setColor( color );
 	}
 }

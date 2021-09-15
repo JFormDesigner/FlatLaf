@@ -127,6 +127,25 @@ public interface FlatClientProperties
 	//---- JComponent ---------------------------------------------------------
 
 	/**
+	 * Specifies the style of a component as String in CSS syntax ("key1: value1; key2: value2; ...")
+	 * or as {@link java.util.Map}&lt;String, Object&gt; with binary values.
+	 * <p>
+	 * The keys are the same as used in UI defaults, but without component type prefix.
+	 * E.g. for UI default {@code Slider.thumbSize} use key {@code thumbSize}.
+	 * <p>
+	 * The syntax of the CSS values is the same as used in FlatLaf properties files
+	 * (<a href="https://www.formdev.com/flatlaf/properties-files/">https://www.formdev.com/flatlaf/properties-files/</a>),
+	 * but some features are not supported (e.g. variables).
+	 * When using a map, the values are not parsed from a string. They must be binary.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.String} or {@link java.util.Map}&lt;String, Object&gt;<br>
+	 *
+	 * @since 2
+	 */
+	String STYLE = "FlatLaf.style";
+
+	/**
 	 * Specifies minimum width of a component.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton},

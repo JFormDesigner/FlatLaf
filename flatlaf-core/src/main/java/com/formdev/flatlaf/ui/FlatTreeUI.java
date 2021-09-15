@@ -26,6 +26,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.CellRendererPane;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -39,6 +40,8 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -94,23 +97,66 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.wideSelection					boolean
  * @uiDefault Tree.showCellFocusIndicator			boolean
  *
+ * <!-- FlatTreeExpandedIcon -->
+ *
+ * @uiDefault Component.arrowType					String	chevron (default) or triangle
+ * @uiDefault Tree.icon.expandedColor				Color
+ *
+ * <!-- FlatTreeCollapsedIcon -->
+ *
+ * @uiDefault Component.arrowType					String	chevron (default) or triangle
+ * @uiDefault Tree.icon.collapsedColor				Color
+ *
+ * <!-- FlatTreeLeafIcon -->
+ *
+ * @uiDefault Tree.icon.leafColor					Color
+ *
+ * <!-- FlatTreeClosedIcon -->
+ *
+ * @uiDefault Tree.icon.closedColor					Color
+ *
+ * <!-- FlatTreeOpenIcon -->
+ *
+ * @uiDefault Tree.icon.openColor					Color
+ *
  * @author Karl Tauber
  */
 public class FlatTreeUI
 	extends BasicTreeUI
+	implements StyleableUI
 {
-	protected Color selectionBackground;
-	protected Color selectionForeground;
-	protected Color selectionInactiveBackground;
-	protected Color selectionInactiveForeground;
-	protected Color selectionBorderColor;
-	protected boolean wideSelection;
-	protected boolean showCellFocusIndicator;
+	@Styleable protected Color selectionBackground;
+	@Styleable protected Color selectionForeground;
+	@Styleable protected Color selectionInactiveBackground;
+	@Styleable protected Color selectionInactiveForeground;
+	@Styleable protected Color selectionBorderColor;
+	@Styleable protected boolean wideSelection;
+	@Styleable protected boolean showCellFocusIndicator;
+
+	// for icons
+	// (needs to be public because icon classes are in another package)
+	@Styleable(dot=true) public String iconArrowType;
+	@Styleable(dot=true) public Color iconExpandedColor;
+	@Styleable(dot=true) public Color iconCollapsedColor;
+	@Styleable(dot=true) public Color iconLeafColor;
+	@Styleable(dot=true) public Color iconClosedColor;
+	@Styleable(dot=true) public Color iconOpenColor;
 
 	private Color defaultCellNonSelectionBackground;
+	private Color defaultSelectionBackground;
+	private Color defaultSelectionForeground;
+	private Color defaultSelectionBorderColor;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTreeUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -128,6 +174,9 @@ public class FlatTreeUI
 		showCellFocusIndicator = UIManager.getBoolean( "Tree.showCellFocusIndicator" );
 
 		defaultCellNonSelectionBackground = UIManager.getColor( "Tree.textBackground" );
+		defaultSelectionBackground = selectionBackground;
+		defaultSelectionForeground = selectionForeground;
+		defaultSelectionBorderColor = selectionBorderColor;
 
 		// scale
 		int rowHeight = FlatUIUtils.getUIInt( "Tree.rowHeight", 16 );
@@ -150,6 +199,10 @@ public class FlatTreeUI
 		selectionBorderColor = null;
 
 		defaultCellNonSelectionBackground = null;
+		defaultSelectionBackground = null;
+		defaultSelectionForeground = null;
+		defaultSelectionBorderColor = null;
+		oldStyleValues = null;
 	}
 
 	@Override
@@ -216,6 +269,12 @@ public class FlatTreeUI
 							repaintWideDropLocation( tree.getDropLocation() );
 						}
 						break;
+
+					case STYLE:
+						applyStyle( e.getNewValue() );
+						tree.revalidate();
+						tree.repaint();
+						break;
 				}
 			}
 		};
@@ -248,6 +307,28 @@ public class FlatTreeUI
 			bounds.width = tree.getWidth();
 		}
 		return bounds;
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, tree, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**
@@ -289,35 +370,32 @@ public class FlatTreeUI
 		Component rendererComponent = currentCellRenderer.getTreeCellRendererComponent( tree,
 			path.getLastPathComponent(), isSelected, isExpanded, isLeaf, row, cellHasFocus );
 
-		// apply inactive selection background/foreground if tree is not focused
+		// renderer background/foreground
 		Color oldBackgroundSelectionColor = null;
 		if( isSelected && !hasFocus && !isDropRow ) {
-			if( rendererComponent instanceof DefaultTreeCellRenderer ) {
-				DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) rendererComponent;
-				if( renderer.getBackgroundSelectionColor() == selectionBackground ) {
-					oldBackgroundSelectionColor = renderer.getBackgroundSelectionColor();
-					renderer.setBackgroundSelectionColor( selectionInactiveBackground );
-				}
-			} else {
-				if( rendererComponent.getBackground() == selectionBackground )
-					rendererComponent.setBackground( selectionInactiveBackground );
-			}
+			// apply inactive selection background/foreground if tree is not focused
+			oldBackgroundSelectionColor = setRendererBackgroundSelectionColor( rendererComponent, selectionInactiveBackground );
+			setRendererForeground( rendererComponent, selectionInactiveForeground );
 
-			if( rendererComponent.getForeground() == selectionForeground )
-				rendererComponent.setForeground( selectionInactiveForeground );
+		} else if( isSelected ) {
+			// update background/foreground if set via style
+			if( selectionBackground != defaultSelectionBackground )
+				oldBackgroundSelectionColor = setRendererBackgroundSelectionColor( rendererComponent, selectionBackground );
+			if( selectionForeground != defaultSelectionForeground )
+				setRendererForeground( rendererComponent, selectionForeground );
 		}
 
-		// remove focus selection border if exactly one item is selected
+		// update focus selection border
 		Color oldBorderSelectionColor = null;
 		if( isSelected && hasFocus &&
-			(!showCellFocusIndicator || tree.getMinSelectionRow() == tree.getMaxSelectionRow()) &&
-			rendererComponent instanceof DefaultTreeCellRenderer )
+			(!showCellFocusIndicator || tree.getMinSelectionRow() == tree.getMaxSelectionRow()) )
 		{
-			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) rendererComponent;
-			if( renderer.getBorderSelectionColor() == selectionBorderColor ) {
-				oldBorderSelectionColor = renderer.getBorderSelectionColor();
-				renderer.setBorderSelectionColor( null );
-			}
+			// remove focus selection border if exactly one item is selected or if showCellFocusIndicator is false
+			oldBorderSelectionColor = setRendererBorderSelectionColor( rendererComponent, null );
+
+		} else if( hasFocus && selectionBorderColor != defaultSelectionBorderColor ) {
+			// update focus selection border if set via style
+			oldBorderSelectionColor = setRendererBorderSelectionColor( rendererComponent, selectionBorderColor );
 		}
 
 		// paint selection background
@@ -363,6 +441,42 @@ public class FlatTreeUI
 			((DefaultTreeCellRenderer)rendererComponent).setBackgroundSelectionColor( oldBackgroundSelectionColor );
 		if( oldBorderSelectionColor != null )
 			((DefaultTreeCellRenderer)rendererComponent).setBorderSelectionColor( oldBorderSelectionColor );
+	}
+
+	private Color setRendererBackgroundSelectionColor( Component rendererComponent, Color color ) {
+		Color oldColor = null;
+
+		if( rendererComponent instanceof DefaultTreeCellRenderer ) {
+			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) rendererComponent;
+			if( renderer.getBackgroundSelectionColor() == defaultSelectionBackground ) {
+				oldColor = renderer.getBackgroundSelectionColor();
+				renderer.setBackgroundSelectionColor( color );
+			}
+		} else {
+			if( rendererComponent.getBackground() == defaultSelectionBackground )
+				rendererComponent.setBackground( color );
+		}
+
+		return oldColor;
+	}
+
+	private void setRendererForeground( Component rendererComponent, Color color ) {
+		if( rendererComponent.getForeground() == defaultSelectionForeground )
+			rendererComponent.setForeground( color );
+	}
+
+	private Color setRendererBorderSelectionColor( Component rendererComponent, Color color ) {
+		Color oldColor = null;
+
+		if( rendererComponent instanceof DefaultTreeCellRenderer ) {
+			DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) rendererComponent;
+			if( renderer.getBorderSelectionColor() == defaultSelectionBorderColor ) {
+				oldColor = renderer.getBorderSelectionColor();
+				renderer.setBorderSelectionColor( color );
+			}
+		}
+
+		return oldColor;
 	}
 
 	private void paintWideSelection( Graphics g, Rectangle clipBounds, Insets insets, Rectangle bounds,

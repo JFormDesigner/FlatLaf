@@ -17,7 +17,10 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Font;
+import java.util.Map;
+import java.util.Objects;
 import javax.swing.UIManager;
+import org.opentest4j.AssertionFailedError;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.FlatSystemProperties;
@@ -49,5 +52,16 @@ public class TestUtils
 
 	public static void resetFont() {
 		UIManager.put( "defaultFont", null );
+	}
+
+	public static void assertMapEquals( Map<?, ?> expected, Map<?, ?> actual ) {
+		if( !Objects.equals( expected, actual ) ) {
+			String expectedStr = String.valueOf( expected ).replace( ", ", ",\n" );
+			String actualStr = String.valueOf( actual ).replace( ", ", ",\n" );
+			String msg = String.format( "expected: <%s> but was: <%s>", expectedStr, actualStr );
+
+			// pass expected/actual strings to exception for nice diff in IDE
+			throw new AssertionFailedError( msg, expectedStr, actualStr );
+		}
 	}
 }

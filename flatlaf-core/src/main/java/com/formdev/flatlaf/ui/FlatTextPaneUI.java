@@ -23,11 +23,14 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextPaneUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
 
 /**
@@ -58,18 +61,33 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  */
 public class FlatTextPaneUI
 	extends BasicTextPaneUI
+	implements StyleableUI
 {
-	protected int minimumWidth;
+	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
-	protected Color focusedBackground;
+	private Color background;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color inactiveBackground;
+	@Styleable protected Color focusedBackground;
+
+	private Color oldDisabledBackground;
+	private Color oldInactiveBackground;
 
 	private Insets defaultMargin;
 
 	private Object oldHonorDisplayProperties;
 	private FocusListener focusListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTextPaneUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -79,6 +97,9 @@ public class FlatTextPaneUI
 		String prefix = getPropertyPrefix();
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
+		background = UIManager.getColor( prefix + ".background" );
+		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
+		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
 		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
 
 		defaultMargin = UIManager.getInsets( prefix + ".margin" );
@@ -92,7 +113,15 @@ public class FlatTextPaneUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		background = null;
+		disabledBackground = null;
+		inactiveBackground = null;
 		focusedBackground = null;
+
+		oldDisabledBackground = null;
+		oldInactiveBackground = null;
+
+		oldStyleValues = null;
 
 		getComponent().putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, oldHonorDisplayProperties );
 	}
@@ -116,8 +145,46 @@ public class FlatTextPaneUI
 
 	@Override
 	protected void propertyChange( PropertyChangeEvent e ) {
+		// invoke updateBackground() before super.propertyChange()
+		String propertyName = e.getPropertyName();
+		if( "editable".equals( propertyName ) || "enabled".equals( propertyName ) )
+			updateBackground();
+
 		super.propertyChange( e );
-		FlatEditorPaneUI.propertyChange( getComponent(), e );
+		FlatEditorPaneUI.propertyChange( getComponent(), e, this::applyStyle );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldDisabledBackground = disabledBackground;
+		oldInactiveBackground = inactiveBackground;
+
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		updateBackground();
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, getComponent(), key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	private void updateBackground() {
+		FlatTextFieldUI.updateBackground( getComponent(), background,
+			disabledBackground, inactiveBackground,
+			oldDisabledBackground, oldInactiveBackground );
 	}
 
 	@Override

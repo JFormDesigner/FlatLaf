@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -52,11 +53,29 @@ public class FlatTableHeaderBorder
 	}
 
 	@Override
+	public Insets getBorderInsets( Component c, Insets insets ) {
+		JTableHeader header = (JTableHeader) SwingUtilities.getAncestorOfClass( JTableHeader.class, c );
+		if( header != null ) {
+			if( header.getUI() instanceof FlatTableHeaderUI ) {
+				FlatTableHeaderUI ui = (FlatTableHeaderUI) header.getUI();
+				if( ui.cellMargins != null ) {
+					Insets m = ui.cellMargins;
+					return scaleInsets( c, insets, m.top, m.left, m.bottom, m.right );
+				}
+			}
+		}
+
+		return super.getBorderInsets( c, insets );
+	}
+
+	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 		JTableHeader header = (JTableHeader) SwingUtilities.getAncestorOfClass( JTableHeader.class, c );
 		boolean leftToRight = (header != null ? header : c).getComponentOrientation().isLeftToRight();
 		boolean paintLeft = !leftToRight;
 		boolean paintRight = leftToRight;
+		Color separatorColor = this.separatorColor;
+		Color bottomSeparatorColor = this.bottomSeparatorColor;
 
 		if( header != null ) {
 			int hx = SwingUtilities.convertPoint( c, x, y, header ).x;
@@ -67,6 +86,16 @@ public class FlatTableHeaderBorder
 					paintLeft = false;
 				if( hx + width >= header.getWidth() && leftToRight && hideTrailingVerticalLine( header ) )
 					paintRight = false;
+			}
+
+			// Because this border is always shared for all table headers,
+			// get border specific style from FlatTableHeaderUI.
+			if( header.getUI() instanceof FlatTableHeaderUI ) {
+				FlatTableHeaderUI ui = (FlatTableHeaderUI) header.getUI();
+				if( ui.separatorColor != null )
+					separatorColor = ui.separatorColor;
+				if( ui.bottomSeparatorColor != null )
+					bottomSeparatorColor = ui.bottomSeparatorColor;
 			}
 		}
 
@@ -110,6 +139,12 @@ public class FlatTableHeaderBorder
 	}
 
 	protected boolean hideTrailingVerticalLine( JTableHeader header ) {
+		if( header.getUI() instanceof FlatTableHeaderUI ) {
+			FlatTableHeaderUI ui = (FlatTableHeaderUI) header.getUI();
+			if( ui.showTrailingVerticalLine )
+				return false;
+		}
+
 		if( showTrailingVerticalLine )
 			return false;
 

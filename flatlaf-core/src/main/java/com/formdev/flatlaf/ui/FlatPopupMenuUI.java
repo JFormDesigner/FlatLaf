@@ -16,9 +16,14 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPopupMenuUI;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPopupMenu}.
@@ -34,8 +39,68 @@ import javax.swing.plaf.basic.BasicPopupMenuUI;
  */
 public class FlatPopupMenuUI
 	extends BasicPopupMenuUI
+	implements StyleableUI
 {
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatPopupMenuUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		oldStyleValues = null;
+		borderShared = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( popupMenu, this::applyStyle, null );
+		popupMenu.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		popupMenu.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = null;
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, popupMenu, borderShared );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, popupMenu.getBorder() );
 	}
 }

@@ -41,6 +41,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.CellRendererPane;
@@ -67,6 +70,8 @@ import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -108,29 +113,30 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatComboBoxUI
 	extends BasicComboBoxUI
+	implements StyleableUI
 {
-	protected int minimumWidth;
-	protected int editorColumns;
-	protected String buttonStyle;
-	protected String arrowType;
+	@Styleable protected int minimumWidth;
+	@Styleable protected int editorColumns;
+	@Styleable protected String buttonStyle;
+	@Styleable protected String arrowType;
 	protected boolean isIntelliJTheme;
-	protected Color borderColor;
-	protected Color disabledBorderColor;
+	@Styleable protected Color borderColor;
+	@Styleable protected Color disabledBorderColor;
 
-	protected Color editableBackground;
-	protected Color focusedBackground;
-	protected Color disabledBackground;
-	protected Color disabledForeground;
+	@Styleable protected Color editableBackground;
+	@Styleable protected Color focusedBackground;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color disabledForeground;
 
-	protected Color buttonBackground;
-	protected Color buttonEditableBackground;
-	protected Color buttonFocusedBackground;
-	protected Color buttonArrowColor;
-	protected Color buttonDisabledArrowColor;
-	protected Color buttonHoverArrowColor;
-	protected Color buttonPressedArrowColor;
+	@Styleable protected Color buttonBackground;
+	@Styleable protected Color buttonEditableBackground;
+	@Styleable protected Color buttonFocusedBackground;
+	@Styleable protected Color buttonArrowColor;
+	@Styleable protected Color buttonDisabledArrowColor;
+	@Styleable protected Color buttonHoverArrowColor;
+	@Styleable protected Color buttonPressedArrowColor;
 
-	protected Color popupBackground;
+	@Styleable protected Color popupBackground;
 
 	private MouseListener hoverListener;
 	protected boolean hover;
@@ -138,8 +144,18 @@ public class FlatComboBoxUI
 
 	private CellPaddingBorder paddingBorder;
 
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatComboBoxUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( comboBox ) );
 	}
 
 	@Override
@@ -250,6 +266,9 @@ public class FlatComboBoxUI
 
 		paddingBorder.uninstall();
 
+		oldStyleValues = null;
+		borderShared = null;
+
 		MigLayoutVisualPadding.uninstall( comboBox );
 	}
 
@@ -328,6 +347,11 @@ public class FlatComboBoxUI
 				comboBox.repaint();
 			else if( FlatClientProperties.MINIMUM_WIDTH.equals( propertyName ) )
 				comboBox.revalidate();
+			else if( FlatClientProperties.STYLE.equals( propertyName ) ) {
+				applyStyle( e.getNewValue() );
+				comboBox.revalidate();
+				comboBox.repaint();
+			}
 		};
 	}
 
@@ -412,6 +436,55 @@ public class FlatComboBoxUI
 	@Override
 	protected JButton createArrowButton() {
 		return new FlatComboBoxButton();
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		Insets oldPadding = padding;
+		int oldEditorColumns = editorColumns;
+
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		if( !padding.equals( oldPadding ) ) {
+			paddingBorder.padding = padding;
+			updateEditorPadding();
+		}
+		if( arrowButton instanceof FlatComboBoxButton )
+			((FlatComboBoxButton)arrowButton).updateStyle();
+		if( popup instanceof FlatComboPopup )
+			((FlatComboPopup)popup).updateStyle();
+		if( editorColumns != oldEditorColumns && editor instanceof JTextField )
+			((JTextField)editor).setColumns( editorColumns );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		// BasicComboBoxUI
+		if( key.equals( "padding" ) ) {
+			Object oldValue = padding;
+			padding = (Insets) value;
+			return oldValue;
+		}
+
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, comboBox, borderShared );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		infos.put( "padding", Insets.class );
+		FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
+		FlatStylingSupport.collectStyleableInfos( comboBox.getBorder(), infos );
+		return infos;
 	}
 
 	@Override
@@ -612,6 +685,11 @@ public class FlatComboBoxUI
 				hoverForeground, hoverBackground, pressedForeground, pressedBackground );
 		}
 
+		protected void updateStyle() {
+			updateStyle( arrowType, buttonArrowColor, buttonDisabledArrowColor,
+				buttonHoverArrowColor, null, buttonPressedArrowColor, null );
+		}
+
 		@Override
 		protected boolean isHover() {
 			return super.isHover() || (!comboBox.isEditable() ? hover : false);
@@ -708,6 +786,10 @@ public class FlatComboBoxUI
 			super.configureList();
 
 			list.setCellRenderer( new PopupListCellRenderer() );
+			updateStyle();
+		}
+
+		void updateStyle() {
 			if( popupBackground != null )
 		        list.setBackground( popupBackground );
 		}
@@ -788,7 +870,7 @@ public class FlatComboBoxUI
 	private static class CellPaddingBorder
 		extends AbstractBorder
 	{
-		private final Insets padding;
+		private Insets padding;
 		private JComponent rendererComponent;
 		private Border rendererBorder;
 

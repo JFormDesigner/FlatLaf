@@ -16,11 +16,15 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Insets;
+import java.util.function.Function;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.ListUI;
 
 /**
  * Cell border for {@link javax.swing.DefaultListCellRenderer}
@@ -33,10 +37,52 @@ import javax.swing.UIManager;
 public class FlatListCellBorder
 	extends FlatLineBorder
 {
-	final boolean showCellFocusIndicator = UIManager.getBoolean( "List.showCellFocusIndicator" );
+	protected boolean showCellFocusIndicator = UIManager.getBoolean( "List.showCellFocusIndicator" );
+
+	private Component c;
 
 	protected FlatListCellBorder() {
 		super( UIManager.getInsets( "List.cellMargins" ), UIManager.getColor( "List.cellFocusColor" ) );
+	}
+
+	@Override
+	public Insets getBorderInsets( Component c, Insets insets ) {
+		Insets m = getStyleFromListUI( c, ui -> ui.cellMargins );
+		if( m != null )
+			return scaleInsets( c, insets, m.top, m.left, m.bottom, m.right );
+
+		return super.getBorderInsets( c, insets );
+	}
+
+	@Override
+	public Color getLineColor() {
+		if( c != null ) {
+			Color color = getStyleFromListUI( c, ui -> ui.cellFocusColor );
+			if( color != null )
+				return color;
+		}
+		return super.getLineColor();
+	}
+
+	@Override
+	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		this.c = c;
+		super.paintBorder( c, g, x, y, width, height );
+		this.c = null;
+	}
+
+	/**
+	 * Because this borders are always shared for all lists,
+	 * get border specific style from FlatListUI.
+	 */
+	static <T> T getStyleFromListUI( Component c, Function<FlatListUI, T> f ) {
+		JList<?> list = (JList<?>) SwingUtilities.getAncestorOfClass( JList.class, c );
+		if( list != null ) {
+			ListUI ui = list.getUI();
+			if( ui instanceof FlatListUI )
+				return f.apply( (FlatListUI) ui );
+		}
+		return null;
 	}
 
 	//---- class Default ------------------------------------------------------
@@ -74,6 +120,8 @@ public class FlatListCellBorder
 	{
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			Boolean b = getStyleFromListUI( c, ui -> ui.showCellFocusIndicator );
+			boolean showCellFocusIndicator = (b != null) ? b : this.showCellFocusIndicator;
 			if( !showCellFocusIndicator )
 				return;
 

@@ -18,14 +18,18 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicListUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JList}.
@@ -65,14 +69,29 @@ import com.formdev.flatlaf.FlatClientProperties;
  */
 public class FlatListUI
 	extends BasicListUI
+	implements StyleableUI
 {
-	protected Color selectionBackground;
-	protected Color selectionForeground;
-	protected Color selectionInactiveBackground;
-	protected Color selectionInactiveForeground;
+	@Styleable protected Color selectionBackground;
+	@Styleable protected Color selectionForeground;
+	@Styleable protected Color selectionInactiveBackground;
+	@Styleable protected Color selectionInactiveForeground;
+
+	// for FlatListCellBorder
+	@Styleable protected Insets cellMargins;
+	@Styleable protected Color cellFocusColor;
+	@Styleable protected boolean showCellFocusIndicator;
+
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatListUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -95,17 +114,8 @@ public class FlatListUI
 		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
-	}
 
-	@Override
-	protected PropertyChangeListener createPropertyChangeListener() {
-		PropertyChangeListener superListener = super.createPropertyChangeListener();
-		return e -> {
-			superListener.propertyChange( e );
-
-			if( FlatClientProperties.COMPONENT_FOCUS_OWNER.equals( e.getPropertyName() ) )
-				toggleSelectionColors();
-		};
+		oldStyleValues = null;
 	}
 
 	@Override
@@ -127,6 +137,71 @@ public class FlatListUI
 				} );
 			}
 		};
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener() {
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
+
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.COMPONENT_FOCUS_OWNER:
+					toggleSelectionColors();
+					break;
+
+				case FlatClientProperties.STYLE:
+					applyStyle( e.getNewValue() );
+					list.revalidate();
+					list.repaint();
+					break;
+			}
+		};
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		Color oldSelectionBackground = selectionBackground;
+		Color oldSelectionForeground = selectionForeground;
+		Color oldSelectionInactiveBackground = selectionInactiveBackground;
+		Color oldSelectionInactiveForeground = selectionInactiveForeground;
+
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		// update selection background
+		if( selectionBackground != oldSelectionBackground ) {
+			Color selBg = list.getSelectionBackground();
+			if( selBg == oldSelectionBackground )
+				list.setSelectionBackground( selectionBackground );
+			else if( selBg == oldSelectionInactiveBackground )
+				list.setSelectionBackground( selectionInactiveBackground );
+		}
+
+		// update selection foreground
+		if( selectionForeground != oldSelectionForeground ) {
+			Color selFg = list.getSelectionForeground();
+			if( selFg == oldSelectionForeground )
+				list.setSelectionForeground( selectionForeground );
+			else if( selFg == oldSelectionInactiveForeground )
+				list.setSelectionForeground( selectionInactiveForeground );
+		}
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, list, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

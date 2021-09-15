@@ -18,8 +18,12 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
@@ -35,7 +39,10 @@ import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -47,13 +54,30 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuBar.background						Color
  * @uiDefault MenuBar.foreground						Color
  * @uiDefault MenuBar.border							Border
+ *
+ * <!-- FlatMenuBarUI -->
+ *
  * @uiDefault TitlePane.unifiedBackground				boolean
  *
  * @author Karl Tauber
  */
 public class FlatMenuBarUI
 	extends BasicMenuBarUI
+	implements StyleableUI
 {
+	// used in FlatMenuItemBorder
+	/** @since 2 */ @Styleable protected Insets itemMargins;
+
+	// used in FlatMenuUI
+	/** @since 2 */ @Styleable protected Color hoverBackground;
+	/** @since 2 */ @Styleable protected Color underlineSelectionBackground;
+	/** @since 2 */ @Styleable protected Color underlineSelectionColor;
+	/** @since 2 */ @Styleable protected int underlineSelectionHeight = -1;
+
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuBarUI();
 	}
@@ -64,10 +88,42 @@ public class FlatMenuBarUI
 	 */
 
 	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
+	}
+
+	@Override
 	protected void installDefaults() {
 		super.installDefaults();
 
 		LookAndFeel.installProperty( menuBar, "opaque", false );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		oldStyleValues = null;
+		borderShared = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
+			menuBar, this::applyStyle, null );
+		menuBar.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		menuBar.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = null;
 	}
 
 	@Override
@@ -80,6 +136,30 @@ public class FlatMenuBarUI
 			SwingUtilities.replaceUIActionMap( menuBar, map );
 		}
 		map.put( "takeFocus", new TakeFocus() );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, menuBar, borderShared );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, menuBar.getBorder() );
 	}
 
 	@Override

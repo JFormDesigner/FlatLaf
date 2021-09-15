@@ -22,8 +22,11 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
+import java.util.Map;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -50,27 +53,39 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatHelpButtonIcon
 	extends FlatAbstractIcon
 {
-	protected final int focusWidth = UIManager.getInt( "Component.focusWidth" );
-	protected final Color focusColor = UIManager.getColor( "Component.focusColor" );
-	protected final float innerFocusWidth = FlatUIUtils.getUIFloat( "HelpButton.innerFocusWidth", FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 ) );
-	protected final int borderWidth = FlatUIUtils.getUIInt( "HelpButton.borderWidth", 1 );
+	@Styleable protected int focusWidth = UIManager.getInt( "Component.focusWidth" );
+	@Styleable protected Color focusColor = UIManager.getColor( "Component.focusColor" );
+	@Styleable protected float innerFocusWidth = FlatUIUtils.getUIFloat( "HelpButton.innerFocusWidth", FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 ) );
+	@Styleable protected int borderWidth = FlatUIUtils.getUIInt( "HelpButton.borderWidth", 1 );
 
-	protected final Color borderColor = UIManager.getColor( "HelpButton.borderColor" );
-	protected final Color disabledBorderColor = UIManager.getColor( "HelpButton.disabledBorderColor" );
-	protected final Color focusedBorderColor = UIManager.getColor( "HelpButton.focusedBorderColor" );
-	protected final Color hoverBorderColor = UIManager.getColor( "HelpButton.hoverBorderColor" );
-	protected final Color background = UIManager.getColor( "HelpButton.background" );
-	protected final Color disabledBackground = UIManager.getColor( "HelpButton.disabledBackground" );
-	protected final Color focusedBackground = UIManager.getColor( "HelpButton.focusedBackground" );
-	protected final Color hoverBackground = UIManager.getColor( "HelpButton.hoverBackground" );
-	protected final Color pressedBackground = UIManager.getColor( "HelpButton.pressedBackground" );
-	protected final Color questionMarkColor = UIManager.getColor( "HelpButton.questionMarkColor" );
-	protected final Color disabledQuestionMarkColor = UIManager.getColor( "HelpButton.disabledQuestionMarkColor" );
-
-	protected final int iconSize = 22 + (focusWidth * 2);
+	@Styleable protected Color borderColor = UIManager.getColor( "HelpButton.borderColor" );
+	@Styleable protected Color disabledBorderColor = UIManager.getColor( "HelpButton.disabledBorderColor" );
+	@Styleable protected Color focusedBorderColor = UIManager.getColor( "HelpButton.focusedBorderColor" );
+	@Styleable protected Color hoverBorderColor = UIManager.getColor( "HelpButton.hoverBorderColor" );
+	@Styleable protected Color background = UIManager.getColor( "HelpButton.background" );
+	@Styleable protected Color disabledBackground = UIManager.getColor( "HelpButton.disabledBackground" );
+	@Styleable protected Color focusedBackground = UIManager.getColor( "HelpButton.focusedBackground" );
+	@Styleable protected Color hoverBackground = UIManager.getColor( "HelpButton.hoverBackground" );
+	@Styleable protected Color pressedBackground = UIManager.getColor( "HelpButton.pressedBackground" );
+	@Styleable protected Color questionMarkColor = UIManager.getColor( "HelpButton.questionMarkColor" );
+	@Styleable protected Color disabledQuestionMarkColor = UIManager.getColor( "HelpButton.disabledQuestionMarkColor" );
 
 	public FlatHelpButtonIcon() {
 		super( 0, 0, null );
+	}
+
+	/**
+	 * @since 2
+	 */
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override
@@ -89,7 +104,7 @@ public class FlatHelpButtonIcon
 		boolean focused = FlatUIUtils.isPermanentFocusOwner( c );
 
 		float xy = 0.5f;
-		float wh = iconSize - 1;
+		float wh = iconSize() - 1;
 
 		// paint outer focus border
 		if( focused && FlatButtonUI.isFocusPainted( c ) ) {
@@ -151,11 +166,15 @@ public class FlatHelpButtonIcon
 
 	@Override
 	public int getIconWidth() {
-		return scale( iconSize );
+		return scale( iconSize() );
 	}
 
 	@Override
 	public int getIconHeight() {
-		return scale( iconSize );
+		return scale( iconSize() );
+	}
+
+	private int iconSize() {
+		return 22 + (focusWidth * 2);
 	}
 }

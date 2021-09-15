@@ -22,10 +22,11 @@ import javax.swing.JTree;
 /**
  * Subclass of {@link JTree} that provides easy access to FlatLaf specific client properties.
  *
+ * @author Karl Tauber
  */
 public class FlatTree
 	extends JTree
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns if the tree shows a wide selection

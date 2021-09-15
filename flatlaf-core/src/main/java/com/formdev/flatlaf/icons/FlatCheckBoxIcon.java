@@ -23,10 +23,13 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -67,39 +70,39 @@ public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
 {
 	protected final String style = UIManager.getString( "CheckBox.icon.style" );
-	public final int focusWidth = getUIInt( "CheckBox.icon.focusWidth",
+	@Styleable public int focusWidth = getUIInt( "CheckBox.icon.focusWidth",
 		UIManager.getInt( "Component.focusWidth" ), style );
-	protected final Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusColor",
+	@Styleable protected Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusColor",
 		UIManager.getColor( "Component.focusColor" ) );
-	protected final int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
+	@Styleable protected int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
 
 	// enabled
-	protected final Color borderColor = getUIColor( "CheckBox.icon.borderColor", style );
-	protected final Color background = getUIColor( "CheckBox.icon.background", style );
-	protected final Color selectedBorderColor = getUIColor( "CheckBox.icon.selectedBorderColor", style );
-	protected final Color selectedBackground = getUIColor( "CheckBox.icon.selectedBackground", style );
-	protected final Color checkmarkColor = getUIColor( "CheckBox.icon.checkmarkColor", style );
+	@Styleable protected Color borderColor = getUIColor( "CheckBox.icon.borderColor", style );
+	@Styleable protected Color background = getUIColor( "CheckBox.icon.background", style );
+	@Styleable protected Color selectedBorderColor = getUIColor( "CheckBox.icon.selectedBorderColor", style );
+	@Styleable protected Color selectedBackground = getUIColor( "CheckBox.icon.selectedBackground", style );
+	@Styleable protected Color checkmarkColor = getUIColor( "CheckBox.icon.checkmarkColor", style );
 
 	// disabled
-	protected final Color disabledBorderColor = getUIColor( "CheckBox.icon.disabledBorderColor", style );
-	protected final Color disabledBackground = getUIColor( "CheckBox.icon.disabledBackground", style );
-	protected final Color disabledCheckmarkColor = getUIColor( "CheckBox.icon.disabledCheckmarkColor", style );
+	@Styleable protected Color disabledBorderColor = getUIColor( "CheckBox.icon.disabledBorderColor", style );
+	@Styleable protected Color disabledBackground = getUIColor( "CheckBox.icon.disabledBackground", style );
+	@Styleable protected Color disabledCheckmarkColor = getUIColor( "CheckBox.icon.disabledCheckmarkColor", style );
 
 	// focused
-	protected final Color focusedBorderColor = getUIColor( "CheckBox.icon.focusedBorderColor", style );
-	protected final Color focusedBackground = getUIColor( "CheckBox.icon.focusedBackground", style );
-	protected final Color selectedFocusedBorderColor = getUIColor( "CheckBox.icon.selectedFocusedBorderColor", style );
-	protected final Color selectedFocusedBackground = getUIColor( "CheckBox.icon.selectedFocusedBackground", style );
-	protected final Color selectedFocusedCheckmarkColor = getUIColor( "CheckBox.icon.selectedFocusedCheckmarkColor", style );
+	@Styleable protected Color focusedBorderColor = getUIColor( "CheckBox.icon.focusedBorderColor", style );
+	@Styleable protected Color focusedBackground = getUIColor( "CheckBox.icon.focusedBackground", style );
+	@Styleable protected Color selectedFocusedBorderColor = getUIColor( "CheckBox.icon.selectedFocusedBorderColor", style );
+	@Styleable protected Color selectedFocusedBackground = getUIColor( "CheckBox.icon.selectedFocusedBackground", style );
+	@Styleable protected Color selectedFocusedCheckmarkColor = getUIColor( "CheckBox.icon.selectedFocusedCheckmarkColor", style );
 
 	// hover
-	protected final Color hoverBorderColor = getUIColor( "CheckBox.icon.hoverBorderColor", style );
-	protected final Color hoverBackground = getUIColor( "CheckBox.icon.hoverBackground", style );
-	protected final Color selectedHoverBackground = getUIColor( "CheckBox.icon.selectedHoverBackground", style );
+	@Styleable protected Color hoverBorderColor = getUIColor( "CheckBox.icon.hoverBorderColor", style );
+	@Styleable protected Color hoverBackground = getUIColor( "CheckBox.icon.hoverBackground", style );
+	@Styleable protected Color selectedHoverBackground = getUIColor( "CheckBox.icon.selectedHoverBackground", style );
 
 	// pressed
-	protected final Color pressedBackground = getUIColor( "CheckBox.icon.pressedBackground", style );
-	protected final Color selectedPressedBackground = getUIColor( "CheckBox.icon.selectedPressedBackground", style );
+	@Styleable protected Color pressedBackground = getUIColor( "CheckBox.icon.pressedBackground", style );
+	@Styleable protected Color selectedPressedBackground = getUIColor( "CheckBox.icon.selectedPressedBackground", style );
 
 	protected static Color getUIColor( String key, String style ) {
 		if( style != null ) {
@@ -127,6 +130,20 @@ public class FlatCheckBoxIcon
 
 	public FlatCheckBoxIcon() {
 		super( ICON_SIZE, ICON_SIZE, null );
+	}
+
+	/**
+	 * @since 2
+	 */
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

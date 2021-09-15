@@ -26,7 +26,8 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
-import java.util.Objects;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -40,6 +41,9 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -64,17 +68,43 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TableHeader.bottomSeparatorColor	Color
  * @uiDefault TableHeader.showTrailingVerticalLine	boolean
  *
+ * <!-- FlatAscendingSortIcon and FlatDescendingSortIcon -->
+ *
+ * @uiDefault Component.arrowType				String	chevron (default) or triangle
+ * @uiDefault Table.sortIconColor				Color
+ *
  * @author Karl Tauber
  */
 public class FlatTableHeaderUI
 	extends BasicTableHeaderUI
+	implements StyleableUI
 {
-	protected Color bottomSeparatorColor;
-	protected int height;
-	protected int sortIconPosition;
+	@Styleable protected Color bottomSeparatorColor;
+	@Styleable protected int height;
+	@Styleable(type=String.class) protected int sortIconPosition;
+
+	// for FlatTableHeaderBorder
+	@Styleable protected Insets cellMargins;
+	@Styleable protected Color separatorColor;
+	/** @since 2 */ @Styleable protected boolean showTrailingVerticalLine;
+
+	// for FlatAscendingSortIcon and FlatDescendingSortIcon
+	// (needs to be public because icon classes are in another package)
+	@Styleable public String arrowType;
+	@Styleable public Color sortIconColor;
+
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableHeaderUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -83,13 +113,7 @@ public class FlatTableHeaderUI
 
 		bottomSeparatorColor = UIManager.getColor( "TableHeader.bottomSeparatorColor" );
 		height = UIManager.getInt( "TableHeader.height" );
-		switch( Objects.toString( UIManager.getString( "TableHeader.sortIconPosition" ), "right" ) ) {
-			default:
-			case "right":	sortIconPosition = SwingConstants.RIGHT; break;
-			case "left":	sortIconPosition = SwingConstants.LEFT; break;
-			case "top":		sortIconPosition = SwingConstants.TOP; break;
-			case "bottom":	sortIconPosition = SwingConstants.BOTTOM; break;
-		}
+		sortIconPosition = parseSortIconPosition( UIManager.getString( "TableHeader.sortIconPosition" ) );
 	}
 
 	@Override
@@ -97,6 +121,62 @@ public class FlatTableHeaderUI
 		super.uninstallDefaults();
 
 		bottomSeparatorColor = null;
+
+		oldStyleValues = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( header, this::applyStyle, null );
+		header.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		header.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = null;
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( key.equals( "sortIconPosition" ) && value instanceof String )
+			value = parseSortIconPosition( (String) value );
+
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, header, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	private static int parseSortIconPosition( String str ) {
+		if( str == null )
+			str = "";
+
+		switch( str ) {
+			default:
+			case "right":	return SwingConstants.RIGHT;
+			case "left":	return SwingConstants.LEFT;
+			case "top":		return SwingConstants.TOP;
+			case "bottom":	return SwingConstants.BOTTOM;
+		}
 	}
 
 	@Override

@@ -25,12 +25,15 @@ import java.awt.Insets;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicProgressBarUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -58,15 +61,24 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatProgressBarUI
 	extends BasicProgressBarUI
+	implements StyleableUI
 {
-	protected int arc;
-	protected Dimension horizontalSize;
-	protected Dimension verticalSize;
+	@Styleable protected int arc;
+	@Styleable protected Dimension horizontalSize;
+	@Styleable protected Dimension verticalSize;
 
 	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatProgressBarUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( progressBar ) );
 	}
 
 	@Override
@@ -81,6 +93,13 @@ public class FlatProgressBarUI
 	}
 
 	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		oldStyleValues = null;
+	}
+
+	@Override
 	protected void installListeners() {
 		super.installListeners();
 
@@ -88,6 +107,12 @@ public class FlatProgressBarUI
 			switch( e.getPropertyName() ) {
 				case PROGRESS_BAR_LARGE_HEIGHT:
 				case PROGRESS_BAR_SQUARE:
+					progressBar.revalidate();
+					progressBar.repaint();
+					break;
+
+				case STYLE:
+					applyStyle( e.getNewValue() );
 					progressBar.revalidate();
 					progressBar.repaint();
 					break;
@@ -102,6 +127,28 @@ public class FlatProgressBarUI
 
 		progressBar.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, progressBar, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

@@ -29,6 +29,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.LookAndFeel;
@@ -36,6 +38,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -75,23 +80,25 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatSliderUI
 	extends BasicSliderUI
+	implements StyleableUI
 {
-	protected int trackWidth;
-	protected Dimension thumbSize;
-	protected int focusWidth;
+	@Styleable protected int trackWidth;
+	@Styleable protected Dimension thumbSize;
+	@Styleable protected int focusWidth;
 
-	protected Color trackValueColor;
-	protected Color trackColor;
-	protected Color thumbColor;
-	protected Color thumbBorderColor;
+	@Styleable protected Color trackValueColor;
+	@Styleable protected Color trackColor;
+	@Styleable protected Color thumbColor;
+	@Styleable protected Color thumbBorderColor;
 	protected Color focusBaseColor;
-	protected Color focusedColor;
-	protected Color focusedThumbBorderColor;
-	protected Color hoverThumbColor;
-	protected Color pressedThumbColor;
-	protected Color disabledTrackColor;
-	protected Color disabledThumbColor;
-	protected Color disabledThumbBorderColor;
+	@Styleable protected Color focusedColor;
+	@Styleable protected Color focusedThumbBorderColor;
+	@Styleable protected Color hoverThumbColor;
+	@Styleable protected Color pressedThumbColor;
+	@Styleable protected Color disabledTrackColor;
+	@Styleable protected Color disabledThumbColor;
+	@Styleable protected Color disabledThumbBorderColor;
+	@Styleable protected Color tickColor;
 
 	private Color defaultBackground;
 	private Color defaultForeground;
@@ -100,6 +107,7 @@ public class FlatSliderUI
 	protected boolean thumbPressed;
 
 	private Object[] oldRenderingHints;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSliderUI();
@@ -107,6 +115,13 @@ public class FlatSliderUI
 
 	public FlatSliderUI() {
 		super( null );
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( slider ) );
 	}
 
 	@Override
@@ -136,6 +151,7 @@ public class FlatSliderUI
 		disabledTrackColor = UIManager.getColor( "Slider.disabledTrackColor" );
 		disabledThumbColor = UIManager.getColor( "Slider.disabledThumbColor" );
 		disabledThumbBorderColor = FlatUIUtils.getUIColor( "Slider.disabledThumbBorderColor", "Component.disabledBorderColor" );
+		tickColor = FlatUIUtils.getUIColor( "Slider.tickColor", Color.BLACK ); // see BasicSliderUI.paintTicks()
 
 		defaultBackground = UIManager.getColor( "Slider.background" );
 		defaultForeground = UIManager.getColor( "Slider.foreground" );
@@ -157,14 +173,45 @@ public class FlatSliderUI
 		disabledTrackColor = null;
 		disabledThumbColor = null;
 		disabledThumbBorderColor = null;
+		tickColor = null;
 
 		defaultBackground = null;
 		defaultForeground = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override
 	protected TrackListener createTrackListener( JSlider slider ) {
 		return new FlatTrackListener();
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener( JSlider slider ) {
+		return FlatStylingSupport.createPropertyChangeListener( slider, this::applyStyle,
+			super.createPropertyChangeListener( slider ) );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, slider, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override
@@ -324,6 +371,19 @@ debug*/
 
 		g.setColor( enabled ? getTrackColor() : disabledTrackColor );
 		((Graphics2D)g).fill( track );
+	}
+
+	@Override
+	public void paintTicks( Graphics g ) {
+		// because BasicSliderUI.paintTicks() always uses
+		//   g.setColor( UIManager.getColor("Slider.tickColor") )
+		// we override this method and use our tickColor field to allow styling
+		super.paintTicks( new Graphics2DProxy( (Graphics2D) g ) {
+			@Override
+			public void setColor( Color c ) {
+				super.setColor( tickColor );
+			}
+		} );
 	}
 
 	@Override

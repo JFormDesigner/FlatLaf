@@ -21,9 +21,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 
 /**
  * Icon for {@link javax.swing.JCheckBoxMenuItem}.
@@ -38,12 +41,26 @@ import javax.swing.UIManager;
 public class FlatCheckBoxMenuItemIcon
 	extends FlatAbstractIcon
 {
-	protected final Color checkmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.checkmarkColor" );
-	protected final Color disabledCheckmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.disabledCheckmarkColor" );
-	protected final Color selectionForeground = UIManager.getColor( "MenuItem.selectionForeground" );
+	@Styleable protected Color checkmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.checkmarkColor" );
+	@Styleable protected Color disabledCheckmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.disabledCheckmarkColor" );
+	@Styleable protected Color selectionForeground = UIManager.getColor( "MenuItem.selectionForeground" );
 
 	public FlatCheckBoxMenuItemIcon() {
 		super( 15, 15, null );
+	}
+
+	/**
+	 * @since 2
+	 */
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

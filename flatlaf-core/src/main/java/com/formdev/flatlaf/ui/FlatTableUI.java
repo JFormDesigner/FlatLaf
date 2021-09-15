@@ -22,10 +22,12 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -36,6 +38,8 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.JTableHeader;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -90,25 +94,39 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTableUI
 	extends BasicTableUI
+	implements StyleableUI
 {
 	protected boolean showHorizontalLines;
 	protected boolean showVerticalLines;
-	/** @since 1.6 */ protected boolean showTrailingVerticalLine;
+	/** @since 1.6 */ @Styleable protected boolean showTrailingVerticalLine;
 	protected Dimension intercellSpacing;
 
-	protected Color selectionBackground;
-	protected Color selectionForeground;
-	protected Color selectionInactiveBackground;
-	protected Color selectionInactiveForeground;
+	@Styleable protected Color selectionBackground;
+	@Styleable protected Color selectionForeground;
+	@Styleable protected Color selectionInactiveBackground;
+	@Styleable protected Color selectionInactiveForeground;
+
+	// for FlatTableCellBorder
+	@Styleable protected Insets cellMargins;
+	@Styleable protected Color cellFocusColor;
+	@Styleable protected boolean showCellFocusIndicator;
 
 	private boolean oldShowHorizontalLines;
 	private boolean oldShowVerticalLines;
 	private Dimension oldIntercellSpacing;
 
 	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -155,6 +173,8 @@ public class FlatTableUI
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
 
+		oldStyleValues = null;
+
 		// restore old show horizontal/vertical lines (if not modified)
 		if( !showHorizontalLines && oldShowHorizontalLines && !table.getShowHorizontalLines() )
 			table.setShowHorizontalLines( true );
@@ -171,8 +191,17 @@ public class FlatTableUI
 		super.installListeners();
 
 		propertyChangeListener = e -> {
-			if( FlatClientProperties.COMPONENT_FOCUS_OWNER.equals( e.getPropertyName() ) )
-				toggleSelectionColors();
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.COMPONENT_FOCUS_OWNER:
+					toggleSelectionColors();
+					break;
+
+				case FlatClientProperties.STYLE:
+					applyStyle( e.getNewValue() );
+					table.revalidate();
+					table.repaint();
+					break;
+			}
 		};
 		table.addPropertyChangeListener( propertyChangeListener );
 	}
@@ -204,6 +233,51 @@ public class FlatTableUI
 				} );
 			}
 		};
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		Color oldSelectionBackground = selectionBackground;
+		Color oldSelectionForeground = selectionForeground;
+		Color oldSelectionInactiveBackground = selectionInactiveBackground;
+		Color oldSelectionInactiveForeground = selectionInactiveForeground;
+
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		// update selection background
+		if( selectionBackground != oldSelectionBackground ) {
+			Color selBg = table.getSelectionBackground();
+			if( selBg == oldSelectionBackground )
+				table.setSelectionBackground( selectionBackground );
+			else if( selBg == oldSelectionInactiveBackground )
+				table.setSelectionBackground( selectionInactiveBackground );
+		}
+
+		// update selection foreground
+		if( selectionForeground != oldSelectionForeground ) {
+			Color selFg = table.getSelectionForeground();
+			if( selFg == oldSelectionForeground )
+				table.setSelectionForeground( selectionForeground );
+			else if( selFg == oldSelectionInactiveForeground )
+				table.setSelectionForeground( selectionInactiveForeground );
+		}
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, table, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

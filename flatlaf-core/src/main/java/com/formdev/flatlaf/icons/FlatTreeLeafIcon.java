@@ -37,6 +37,8 @@ public class FlatTreeLeafIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
+		FlatTreeCollapsedIcon.setStyleColorFromTreeUI( c, g, ui -> ui.iconLeafColor );
+
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
 			  <g fill="none" fill-rule="evenodd">

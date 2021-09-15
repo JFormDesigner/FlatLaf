@@ -30,7 +30,9 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
@@ -45,6 +47,10 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -94,8 +100,9 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatButtonUI
 	extends BasicButtonUI
+	implements StyleableUI
 {
-	protected int minimumWidth;
+	@Styleable protected int minimumWidth;
 	protected int iconTextGap;
 
 	protected Color background;
@@ -103,39 +110,57 @@ public class FlatButtonUI
 
 	protected Color startBackground;
 	protected Color endBackground;
-	protected Color focusedBackground;
-	protected Color hoverBackground;
-	protected Color pressedBackground;
-	protected Color selectedBackground;
-	protected Color selectedForeground;
-	protected Color disabledBackground;
-	protected Color disabledText;
-	protected Color disabledSelectedBackground;
+	@Styleable protected Color focusedBackground;
+	@Styleable protected Color hoverBackground;
+	@Styleable protected Color pressedBackground;
+	@Styleable protected Color selectedBackground;
+	@Styleable protected Color selectedForeground;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color disabledText;
+	@Styleable protected Color disabledSelectedBackground;
 
-	protected Color defaultBackground;
+	@Styleable(dot=true) protected Color defaultBackground;
 	protected Color defaultEndBackground;
-	protected Color defaultForeground;
-	protected Color defaultFocusedBackground;
-	protected Color defaultHoverBackground;
-	protected Color defaultPressedBackground;
-	protected boolean defaultBoldText;
+	@Styleable(dot=true) protected Color defaultForeground;
+	@Styleable(dot=true) protected Color defaultFocusedBackground;
+	@Styleable(dot=true) protected Color defaultHoverBackground;
+	@Styleable(dot=true) protected Color defaultPressedBackground;
+	@Styleable(dot=true) protected boolean defaultBoldText;
 
-	protected int shadowWidth;
-	protected Color shadowColor;
-	protected Color defaultShadowColor;
+	@Styleable protected boolean paintShadow;
+	@Styleable protected int shadowWidth;
+	@Styleable protected Color shadowColor;
+	@Styleable(dot=true) protected Color defaultShadowColor;
 
-	protected Insets toolbarSpacingInsets;
-	protected Color toolbarHoverBackground;
-	protected Color toolbarPressedBackground;
-	protected Color toolbarSelectedBackground;
+	@Styleable(dot=true) protected Insets toolbarSpacingInsets;
+	@Styleable(dot=true) protected Color toolbarHoverBackground;
+	@Styleable(dot=true) protected Color toolbarPressedBackground;
+	@Styleable(dot=true) protected Color toolbarSelectedBackground;
 
 	private Icon helpButtonIcon;
 	private Insets defaultMargin;
 
+	private final boolean shared;
+	private boolean helpButtonIconShared = true;
 	private boolean defaults_initialized = false;
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
 
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatButtonUI.class, FlatButtonUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatButtonUI.class, () -> new FlatButtonUI( true ) )
+			: new FlatButtonUI( false );
+	}
+
+	protected FlatButtonUI( boolean shared ) {
+		this.shared = shared;
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( (AbstractButton) c, FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -162,16 +187,6 @@ public class FlatButtonUI
 			disabledText = UIManager.getColor( prefix + "disabledText" );
 			disabledSelectedBackground = UIManager.getColor( prefix + "disabledSelectedBackground" );
 
-			if( UIManager.getBoolean( "Button.paintShadow" ) ) {
-				shadowWidth = FlatUIUtils.getUIInt( "Button.shadowWidth", 2 );
-				shadowColor = UIManager.getColor( "Button.shadowColor" );
-				defaultShadowColor = UIManager.getColor( "Button.default.shadowColor" );
-			} else {
-				shadowWidth = 0;
-				shadowColor = null;
-				defaultShadowColor = null;
-			}
-
 			defaultBackground = FlatUIUtils.getUIColor( "Button.default.startBackground", "Button.default.background" );
 			defaultEndBackground = UIManager.getColor( "Button.default.endBackground" );
 			defaultForeground = UIManager.getColor( "Button.default.foreground" );
@@ -179,6 +194,11 @@ public class FlatButtonUI
 			defaultHoverBackground = UIManager.getColor( "Button.default.hoverBackground" );
 			defaultPressedBackground = UIManager.getColor( "Button.default.pressedBackground" );
 			defaultBoldText = UIManager.getBoolean( "Button.default.boldText" );
+
+			paintShadow = UIManager.getBoolean( "Button.paintShadow" );
+			shadowWidth = FlatUIUtils.getUIInt( "Button.shadowWidth", 2 );
+			shadowColor = UIManager.getColor( "Button.shadowColor" );
+			defaultShadowColor = UIManager.getColor( "Button.default.shadowColor" );
 
 			toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
 			toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
@@ -188,6 +208,7 @@ public class FlatButtonUI
 			helpButtonIcon = UIManager.getIcon( "HelpButton.icon" );
 			defaultMargin = UIManager.getInsets( prefix + "margin" );
 
+			helpButtonIconShared = true;
 			defaults_initialized = true;
 		}
 
@@ -206,6 +227,9 @@ public class FlatButtonUI
 	@Override
 	protected void uninstallDefaults( AbstractButton b ) {
 		super.uninstallDefaults( b );
+
+		oldStyleValues = null;
+		borderShared = null;
 
 		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
@@ -228,7 +252,60 @@ public class FlatButtonUI
 				b.revalidate();
 				b.repaint();
 				break;
+
+			case STYLE:
+				Object style = e.getNewValue();
+				if( style != null && shared ) {
+					// unshare component UI if necessary
+					// updateUI() invokes applyStyle() from installUI()
+					b.updateUI();
+				} else
+					applyStyle( b, style );
+				b.revalidate();
+				b.repaint();
+				break;
 		}
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( AbstractButton b, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( b, key, value ) );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
+		if( key.startsWith( "help." ) ) {
+			if( !(helpButtonIcon instanceof FlatHelpButtonIcon) )
+				return new UnknownStyleException( key );
+
+			if( helpButtonIconShared ) {
+				helpButtonIcon = FlatStylingSupport.cloneIcon( helpButtonIcon );
+				helpButtonIconShared = false;
+			}
+
+			key = key.substring( "help.".length() );
+			return ((FlatHelpButtonIcon)helpButtonIcon).applyStyleProperty( key, value );
+		}
+
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, b, borderShared );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this, c.getBorder() );
+		if( helpButtonIcon instanceof FlatHelpButtonIcon )
+			FlatStylingSupport.putAllPrefixKey( infos, "help.", ((FlatHelpButtonIcon)helpButtonIcon).getStyleableInfos() );
+		return infos;
 	}
 
 	static boolean isContentAreaFilled( Component c ) {
@@ -339,7 +416,8 @@ public class FlatButtonUI
 
 			// paint shadow
 			Color shadowColor = def ? defaultShadowColor : this.shadowColor;
-			if( shadowColor != null && shadowWidth > 0 && focusWidth > 0 && c.isEnabled() &&
+			if( paintShadow &&
+				shadowColor != null && shadowWidth > 0 && focusWidth > 0 && c.isEnabled() &&
 				!isToolBarButton && !isBorderlessButton( c ) &&
 				!(isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c )) )
 			{

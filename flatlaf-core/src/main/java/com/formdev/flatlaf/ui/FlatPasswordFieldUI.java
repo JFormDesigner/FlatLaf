@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Shape;
@@ -23,6 +24,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Map;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.Icon;
@@ -36,6 +38,8 @@ import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.PasswordView;
 import javax.swing.text.View;
+import com.formdev.flatlaf.icons.FlatCapsLockIcon;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
@@ -75,10 +79,11 @@ import javax.swing.text.View;
 public class FlatPasswordFieldUI
 	extends FlatTextFieldUI
 {
-	protected boolean showCapsLock;
+	@Styleable protected boolean showCapsLock;
 	protected Icon capsLockIcon;
 
 	private KeyListener capsLockListener;
+	private boolean capsLockIconShared = true;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatPasswordFieldUI();
@@ -100,6 +105,7 @@ public class FlatPasswordFieldUI
 
 		showCapsLock = UIManager.getBoolean( "PasswordField.showCapsLock" );
 		capsLockIcon = UIManager.getIcon( "PasswordField.capsLockIcon" );
+		capsLockIconShared = true;
 	}
 
 	@Override
@@ -153,6 +159,32 @@ public class FlatPasswordFieldUI
 			if( selectLineAction != null )
 				map.put( DefaultEditorKit.selectWordAction, selectLineAction );
 		}
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof FlatCapsLockIcon ) {
+			if( capsLockIconShared ) {
+				capsLockIcon = FlatStylingSupport.cloneIcon( capsLockIcon );
+				capsLockIconShared = false;
+			}
+			return ((FlatCapsLockIcon)capsLockIcon).applyStyleProperty( key, value );
+		}
+
+		return super.applyStyleProperty( key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = super.getStyleableInfos( c );
+		infos.put( "capsLockIconColor", Color.class );
+		return infos;
 	}
 
 	@Override

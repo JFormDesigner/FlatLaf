@@ -22,9 +22,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.util.function.Function;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.plaf.ToolBarUI;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -42,7 +44,7 @@ public class FlatToolBarBorder
 	private static final int DOT_SIZE = 2;
 	private static final int GRIP_SIZE = DOT_SIZE * 3;
 
-	protected final Color gripColor = UIManager.getColor( "ToolBar.gripColor" );
+	protected Color gripColor = UIManager.getColor( "ToolBar.gripColor" );
 
 	public FlatToolBarBorder() {
 		super( UIManager.getInsets( "ToolBar.borderMargins" ) );
@@ -56,7 +58,8 @@ public class FlatToolBarBorder
 			try {
 				FlatUIUtils.setRenderingHints( g2 );
 
-				g2.setColor( gripColor );
+				Color color = getStyleFromToolBarUI( c, ui -> ui.gripColor );
+				g2.setColor( (color != null) ? color : gripColor );
 				paintGrip( c, g2, x, y, width, height );
 			} finally {
 				g2.dispose();
@@ -90,7 +93,14 @@ public class FlatToolBarBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		insets = super.getBorderInsets( c, insets );
+		Insets m = getStyleFromToolBarUI( c, ui -> ui.borderMargins );
+		if( m != null ) {
+			int t = top, l = left, b = bottom, r = right;
+			top = m.top; left = m.left; bottom = m.bottom; right = m.right;
+			insets = super.getBorderInsets( c, insets );
+			top = t; left = l; bottom = b; right = r;
+		} else
+			insets = super.getBorderInsets( c, insets );
 
 		// add grip inset if floatable
 		if( c instanceof JToolBar && ((JToolBar)c).isFloatable() ) {
@@ -105,5 +115,18 @@ public class FlatToolBarBorder
 		}
 
 		return insets;
+	}
+
+	/**
+	 * Because this border is shared for all toolbars,
+	 * get border specific style from FlatToolBarUI.
+	 */
+	static <T> T getStyleFromToolBarUI( Component c, Function<FlatToolBarUI, T> f ) {
+		if( c instanceof JToolBar ) {
+			ToolBarUI ui = ((JToolBar)c).getUI();
+			if( ui instanceof FlatToolBarUI )
+				return f.apply( (FlatToolBarUI) ui );
+		}
+		return null;
 	}
 }

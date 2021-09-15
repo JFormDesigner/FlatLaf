@@ -18,11 +18,15 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JCheckBoxMenuItem}.
@@ -54,11 +58,20 @@ import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
  */
 public class FlatCheckBoxMenuItemUI
 	extends BasicCheckBoxMenuItemUI
+	implements StyleableUI
 {
 	private FlatMenuItemRenderer renderer;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatCheckBoxMenuItemUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( menuItem ) );
 	}
 
 	@Override
@@ -75,10 +88,44 @@ public class FlatCheckBoxMenuItemUI
 		super.uninstallDefaults();
 
 		renderer = null;
+		oldStyleValues = null;
 	}
 
 	protected FlatMenuItemRenderer createRenderer() {
 		return new FlatMenuItemRenderer( menuItem, checkIcon, arrowIcon, acceleratorFont, acceleratorDelimiter );
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
+		return FlatStylingSupport.createPropertyChangeListener( c, this::applyStyle, super.createPropertyChangeListener( c ) );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		try {
+			return renderer.applyStyleProperty( key, value );
+		} catch ( UnknownStyleException ex ) {
+			// ignore
+		}
+
+		return FlatMenuItemUI.applyStyleProperty( this, menuItem, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatMenuItemUI.getStyleableInfos( renderer );
 	}
 
 	@Override

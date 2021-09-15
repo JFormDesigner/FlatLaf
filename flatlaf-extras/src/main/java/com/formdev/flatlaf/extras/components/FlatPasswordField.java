@@ -29,7 +29,7 @@ import com.formdev.flatlaf.extras.components.FlatTextField.SelectAllOnFocusPolic
  */
 public class FlatPasswordField
 	extends JPasswordField
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns the placeholder text that is only painted if the text field is empty.

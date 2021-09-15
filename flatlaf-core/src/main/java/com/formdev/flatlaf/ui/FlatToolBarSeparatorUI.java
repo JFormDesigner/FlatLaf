@@ -22,6 +22,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
@@ -29,6 +31,9 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarSeparatorUI;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar.Separator}.
@@ -42,16 +47,36 @@ import javax.swing.plaf.basic.BasicToolBarSeparatorUI;
  */
 public class FlatToolBarSeparatorUI
 	extends BasicToolBarSeparatorUI
+	implements StyleableUI
 {
 	private static final int LINE_WIDTH = 1;
 
-	protected int separatorWidth;
-	protected Color separatorColor;
+	@Styleable protected int separatorWidth;
+	@Styleable protected Color separatorColor;
 
+	private final boolean shared;
 	private boolean defaults_initialized = false;
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatToolBarSeparatorUI.class, FlatToolBarSeparatorUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatToolBarSeparatorUI.class, () -> new FlatToolBarSeparatorUI( true ) )
+			: new FlatToolBarSeparatorUI( false );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected FlatToolBarSeparatorUI( boolean shared ) {
+		this.shared = shared;
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -73,7 +98,59 @@ public class FlatToolBarSeparatorUI
 	@Override
 	protected void uninstallDefaults( JSeparator s ) {
 		super.uninstallDefaults( s );
+
 		defaults_initialized = false;
+		oldStyleValues = null;
+	}
+
+	@Override
+	protected void installListeners( JSeparator s ) {
+		super.installListeners( s );
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
+			s, style -> applyStyle( s, this, style ), null );
+		s.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners( JSeparator s ) {
+		super.uninstallListeners( s );
+
+		s.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = null;
+	}
+
+	private static void applyStyle( JSeparator s, FlatToolBarSeparatorUI ui, Object style ) {
+		if( style != null && ui.shared ) {
+			// unshare component UI if necessary
+			// updateUI() invokes applyStyle() from installUI()
+			s.updateUI();
+		} else
+			ui.applyStyle( style );
+		s.revalidate();
+		s.repaint();
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

@@ -16,11 +16,15 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Insets;
+import java.util.function.Function;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.TableUI;
 
 /**
  * Cell border for {@link javax.swing.table.DefaultTableCellRenderer}
@@ -33,10 +37,52 @@ import javax.swing.UIManager;
 public class FlatTableCellBorder
 	extends FlatLineBorder
 {
-	final boolean showCellFocusIndicator = UIManager.getBoolean( "Table.showCellFocusIndicator" );
+	protected boolean showCellFocusIndicator = UIManager.getBoolean( "Table.showCellFocusIndicator" );
+
+	private Component c;
 
 	protected FlatTableCellBorder() {
 		super( UIManager.getInsets( "Table.cellMargins" ), UIManager.getColor( "Table.cellFocusColor" ) );
+	}
+
+	@Override
+	public Insets getBorderInsets( Component c, Insets insets ) {
+		Insets m = getStyleFromTableUI( c, ui -> ui.cellMargins );
+		if( m != null )
+			return scaleInsets( c, insets, m.top, m.left, m.bottom, m.right );
+
+		return super.getBorderInsets( c, insets );
+	}
+
+	@Override
+	public Color getLineColor() {
+		if( c != null ) {
+			Color color = getStyleFromTableUI( c, ui -> ui.cellFocusColor );
+			if( color != null )
+				return color;
+		}
+		return super.getLineColor();
+	}
+
+	@Override
+	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		this.c = c;
+		super.paintBorder( c, g, x, y, width, height );
+		this.c = null;
+	}
+
+	/**
+	 * Because this borders are always shared for all tables,
+	 * get border specific style from FlatTableUI.
+	 */
+	static <T> T getStyleFromTableUI( Component c, Function<FlatTableUI, T> f ) {
+		JTable table = (JTable) SwingUtilities.getAncestorOfClass( JTable.class, c );
+		if( table != null ) {
+			TableUI ui = table.getUI();
+			if( ui instanceof FlatTableUI )
+				return f.apply( (FlatTableUI) ui );
+		}
+		return null;
 	}
 
 	//---- class Default ------------------------------------------------------
@@ -74,6 +120,9 @@ public class FlatTableCellBorder
 	{
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			Boolean b = getStyleFromTableUI( c, ui -> ui.showCellFocusIndicator );
+			boolean showCellFocusIndicator = (b != null) ? b : this.showCellFocusIndicator;
+
 			if( !showCellFocusIndicator ) {
 				JTable table = (JTable) SwingUtilities.getAncestorOfClass( JTable.class, c );
 				if( table != null && !isSelectionEditable( table ) )

@@ -26,7 +26,7 @@ import javax.swing.JTextArea;
  */
 public class FlatTextArea
 	extends JTextArea
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns minimum width of a component.

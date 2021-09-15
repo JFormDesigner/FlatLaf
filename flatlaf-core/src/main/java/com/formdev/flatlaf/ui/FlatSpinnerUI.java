@@ -33,6 +33,8 @@ import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -43,6 +45,8 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
@@ -79,27 +83,38 @@ import com.formdev.flatlaf.FlatClientProperties;
  */
 public class FlatSpinnerUI
 	extends BasicSpinnerUI
+	implements StyleableUI
 {
 	private Handler handler;
 
-	protected int minimumWidth;
-	protected String buttonStyle;
-	protected String arrowType;
+	@Styleable protected int minimumWidth;
+	@Styleable protected String buttonStyle;
+	@Styleable protected String arrowType;
 	protected boolean isIntelliJTheme;
-	protected Color borderColor;
-	protected Color disabledBorderColor;
-	protected Color disabledBackground;
-	protected Color disabledForeground;
-	protected Color focusedBackground;
-	protected Color buttonBackground;
-	protected Color buttonArrowColor;
-	protected Color buttonDisabledArrowColor;
-	protected Color buttonHoverArrowColor;
-	protected Color buttonPressedArrowColor;
-	protected Insets padding;
+	@Styleable protected Color borderColor;
+	@Styleable protected Color disabledBorderColor;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color disabledForeground;
+	@Styleable protected Color focusedBackground;
+	@Styleable protected Color buttonBackground;
+	@Styleable protected Color buttonArrowColor;
+	@Styleable protected Color buttonDisabledArrowColor;
+	@Styleable protected Color buttonHoverArrowColor;
+	@Styleable protected Color buttonPressedArrowColor;
+	@Styleable protected Insets padding;
+
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSpinnerUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		applyStyle( FlatStylingSupport.getStyle( spinner ) );
 	}
 
 	@Override
@@ -143,6 +158,9 @@ public class FlatSpinnerUI
 		buttonPressedArrowColor = null;
 		padding = null;
 
+		oldStyleValues = null;
+		borderShared = null;
+
 		MigLayoutVisualPadding.uninstall( spinner );
 	}
 
@@ -170,6 +188,32 @@ public class FlatSpinnerUI
 		if( handler == null )
 			handler = new Handler();
 		return handler;
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+		updateEditorPadding();
+		updateArrowButtonsStyle();
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, spinner, borderShared );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, spinner.getBorder() );
 	}
 
 	@Override
@@ -295,6 +339,15 @@ public class FlatSpinnerUI
 		else
 			installPreviousButtonListeners( button );
 		return button;
+	}
+
+	private void updateArrowButtonsStyle() {
+		for( Component c : spinner.getComponents() ) {
+			if( c instanceof FlatArrowButton ) {
+				((FlatArrowButton)c).updateStyle( arrowType, buttonArrowColor,
+					buttonDisabledArrowColor, buttonHoverArrowColor, null, buttonPressedArrowColor, null );
+			}
+		}
 	}
 
 	@Override
@@ -482,6 +535,12 @@ public class FlatSpinnerUI
 
 				case FlatClientProperties.MINIMUM_WIDTH:
 					spinner.revalidate();
+					break;
+
+				case FlatClientProperties.STYLE:
+					applyStyle( e.getNewValue() );
+					spinner.revalidate();
+					spinner.repaint();
 					break;
 			}
 		}

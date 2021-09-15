@@ -3,6 +3,11 @@ FlatLaf Change Log
 
 ## 2.0-SNAPSHOT
 
+#### New features and improvements
+
+- Styling components using string in CSS syntax or `java.util.Map`. (PR #341)\
+  For example: `mySlider.putClientProperty( "FlatLaf.style", "trackWidth: 2" );`
+
 #### Fixed bugs
 
 - Tree: Fixed editing cell issue with custom cell renderer and cell editor that

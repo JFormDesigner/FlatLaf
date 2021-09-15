@@ -27,7 +27,7 @@ import javax.swing.JButton;
  */
 public class FlatButton
 	extends JButton
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	// NOTE: enum names must be equal to allowed strings
 	public enum ButtonType { none, square, roundRect, tab, help, toolBarButton, borderless }

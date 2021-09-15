@@ -27,7 +27,7 @@ import javax.swing.JScrollPane;
  */
 public class FlatScrollPane
 	extends JScrollPane
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns whether the decrease/increase arrow buttons of a scrollbar are shown.

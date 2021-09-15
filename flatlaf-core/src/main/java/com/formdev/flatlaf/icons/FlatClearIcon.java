@@ -22,9 +22,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -40,12 +43,26 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatClearIcon
 	extends FlatAbstractIcon
 {
-	protected Color clearIconColor = UIManager.getColor( "SearchField.clearIconColor" );
-	protected Color clearIconHoverColor = UIManager.getColor( "SearchField.clearIconHoverColor" );
-	protected Color clearIconPressedColor = UIManager.getColor( "SearchField.clearIconPressedColor" );
+	@Styleable protected Color clearIconColor = UIManager.getColor( "SearchField.clearIconColor" );
+	@Styleable protected Color clearIconHoverColor = UIManager.getColor( "SearchField.clearIconHoverColor" );
+	@Styleable protected Color clearIconPressedColor = UIManager.getColor( "SearchField.clearIconPressedColor" );
 
 	public FlatClearIcon() {
 		super( 16, 16, null );
+	}
+
+	/**
+	 * @since 2
+	 */
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override

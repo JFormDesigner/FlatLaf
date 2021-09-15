@@ -26,7 +26,7 @@ import javax.swing.JEditorPane;
  */
 public class FlatEditorPane
 	extends JEditorPane
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns minimum width of a component.

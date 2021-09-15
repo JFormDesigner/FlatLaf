@@ -16,16 +16,21 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar}.
@@ -46,13 +51,25 @@ import javax.swing.plaf.basic.BasicToolBarUI;
  *
  * @uiDefault ToolBar.focusableButtons					boolean
  *
+ * <!-- FlatToolBarBorder -->
+ *
+ * @uiDefault ToolBar.borderMargins				Insets
+ * @uiDefault ToolBar.gripColor					Color
+ *
  * @author Karl Tauber
  */
 public class FlatToolBarUI
 	extends BasicToolBarUI
+	implements StyleableUI
 {
 	/** @since 1.4 */
-	protected boolean focusableButtons;
+	@Styleable protected boolean focusableButtons;
+
+	// for FlatToolBarBorder
+	@Styleable protected Insets borderMargins;
+	@Styleable protected Color gripColor;
+
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatToolBarUI();
@@ -65,6 +82,8 @@ public class FlatToolBarUI
 		// disable focusable state of buttons (when switching from another Laf)
 		if( !focusableButtons )
 			setButtonsFocusable( false );
+
+		applyStyle( FlatStylingSupport.getStyle( c ) );
 	}
 
 	@Override
@@ -74,6 +93,8 @@ public class FlatToolBarUI
 		// re-enable focusable state of buttons (when switching to another Laf)
 		if( !focusableButtons )
 			setButtonsFocusable( true );
+
+		oldStyleValues = null;
 	}
 
 	@Override
@@ -108,6 +129,38 @@ public class FlatToolBarUI
 				}
 			}
 		};
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyListener() {
+		return FlatStylingSupport.createPropertyChangeListener( toolBar, this::applyStyle, super.createPropertyListener() );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected void applyStyle( Object style ) {
+		boolean oldFocusableButtons = focusableButtons;
+
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		if( focusableButtons != oldFocusableButtons )
+			setButtonsFocusable( focusableButtons );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, toolBar, key, value );
+	}
+
+	/**
+	 * @since 2
+	 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

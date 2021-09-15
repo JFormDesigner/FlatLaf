@@ -338,7 +338,7 @@ public class IntelliJTheme
 
 				// parse value
 				try {
-					uiValue = UIDefaultsLoader.parseValue( key, valueStr );
+					uiValue = UIDefaultsLoader.parseValue( key, valueStr, null );
 				} catch( RuntimeException ex ) {
 					UIDefaultsLoader.logParseError( key, valueStr, ex, false );
 					return; // ignore invalid value

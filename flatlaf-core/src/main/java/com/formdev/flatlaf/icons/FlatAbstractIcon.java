@@ -39,7 +39,7 @@ public abstract class FlatAbstractIcon
 {
 	protected final int width;
 	protected final int height;
-	protected final Color color;
+	protected Color color;
 
 	public FlatAbstractIcon( int width, int height, Color color ) {
 		this.width = width;

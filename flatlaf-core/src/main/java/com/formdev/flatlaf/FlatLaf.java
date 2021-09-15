@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +56,7 @@ import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.ActiveValue;
+import javax.swing.UIDefaults.LazyValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
@@ -777,6 +779,34 @@ public abstract class FlatLaf
 			return;
 
 		customDefaultsSources.remove( folder );
+	}
+
+	/**
+	 * Parses a UI defaults value string and converts it into a binary object.
+	 * <p>
+	 * See: <a href="https://www.formdev.com/flatlaf/properties-files/">https://www.formdev.com/flatlaf/properties-files/</a>
+	 *
+	 * @param key the key, which is used to determine the value type if parameter {@code valueType} is {@code null}
+	 * @param value the value string
+	 * @param valueType the expected value type, or {@code null}
+	 * @return the binary value
+	 * @throws IllegalArgumentException on syntax errors
+	 * @since 2
+	 */
+	public static Object parseDefaultsValue( String key, String value, Class<?> valueType )
+		throws IllegalArgumentException
+	{
+		// parse value
+		Object val = UIDefaultsLoader.parseValue( key, value, valueType, null,
+			v -> UIDefaultsLoader.resolveValueFromUIManager( v ), Collections.emptyList() );
+
+		// create actual value if lazy or active
+		if( val instanceof LazyValue )
+			val = ((LazyValue)val).createValue( null );
+		else if( val instanceof ActiveValue )
+			val = ((ActiveValue)val).createValue( null );
+
+		return val;
 	}
 
 	private static void reSetLookAndFeel() {

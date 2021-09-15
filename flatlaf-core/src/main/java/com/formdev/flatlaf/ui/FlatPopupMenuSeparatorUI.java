@@ -39,7 +39,16 @@ public class FlatPopupMenuSeparatorUI
 	extends FlatSeparatorUI
 {
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatPopupMenuSeparatorUI.class, FlatPopupMenuSeparatorUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatPopupMenuSeparatorUI.class, () -> new FlatPopupMenuSeparatorUI( true ) )
+			: new FlatPopupMenuSeparatorUI( false );
+	}
+
+	/**
+	 * @since 2
+	 */
+	protected FlatPopupMenuSeparatorUI( boolean shared ) {
+		super( shared );
 	}
 
 	@Override
