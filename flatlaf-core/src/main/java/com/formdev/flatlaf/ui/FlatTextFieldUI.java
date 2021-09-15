@@ -89,10 +89,10 @@ public class FlatTextFieldUI
 	@Styleable protected Color inactiveBackground;
 	@Styleable protected Color placeholderForeground;
 	@Styleable protected Color focusedBackground;
-	/** @since 2 */ protected int iconTextGap;
+	/** @since 2 */ @Styleable protected int iconTextGap;
 
-	/** @since 2 */ protected Icon leadingIcon;
-	/** @since 2 */ protected Icon trailingIcon;
+	/** @since 2 */ @Styleable protected Icon leadingIcon;
+	/** @since 2 */ @Styleable protected Icon trailingIcon;
 
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;

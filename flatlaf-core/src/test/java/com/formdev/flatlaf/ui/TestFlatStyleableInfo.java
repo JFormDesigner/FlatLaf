@@ -778,7 +778,10 @@ public class TestFlatStyleableInfo
 			"disabledBackground", Color.class,
 			"inactiveBackground", Color.class,
 			"placeholderForeground", Color.class,
-			"focusedBackground", Color.class
+			"focusedBackground", Color.class,
+			"iconTextGap", int.class,
+			"leadingIcon", Icon.class,
+			"trailingIcon", Icon.class
 		);
 
 		// border

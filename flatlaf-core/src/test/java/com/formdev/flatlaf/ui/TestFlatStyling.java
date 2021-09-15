@@ -890,6 +890,9 @@ public class TestFlatStyling
 		ui.applyStyle( "inactiveBackground: #fff" );
 		ui.applyStyle( "placeholderForeground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
+		ui.applyStyle( "iconTextGap: 4" );
+		ui.applyStyle( "leadingIcon: com.formdev.flatlaf.icons.FlatSearchIcon" );
+		ui.applyStyle( "trailingIcon: com.formdev.flatlaf.icons.FlatClearIcon" );
 
 		// border
 		flatTextBorder( style -> ui.applyStyle( style ) );
