@@ -119,22 +119,19 @@ public class FlatLabelUI
 		if( name == "text" || name == "font" || name == "foreground" ) {
 			JLabel label = (JLabel) e.getSource();
 			updateHTMLRenderer( label, label.getText(), true );
-		} else if( name.equals( FlatClientProperties.STYLE ) )
-			applyStyle( (JLabel) e.getSource(), this, e.getNewValue() );
-		else
+		} else if( name.equals( FlatClientProperties.STYLE ) ) {
+			JLabel label = (JLabel) e.getSource();
+			Object style = e.getNewValue();
+			if( style != null && shared ) {
+				// unshare component UI if necessary
+				// updateUI() invokes applyStyle() from installUI()
+				label.updateUI();
+			} else
+				applyStyle( label, style );
+			label.revalidate();
+			label.repaint();
+		} else
 			super.propertyChange( e );
-	}
-
-	private static void applyStyle( JLabel c, FlatLabelUI ui, Object style ) {
-		// unshare component UI if necessary
-		if( style != null && ui.shared ) {
-			c.updateUI();
-			ui = (FlatLabelUI) c.getUI();
-		}
-
-		ui.applyStyle( c, style );
-		c.revalidate();
-		c.repaint();
 	}
 
 	/**

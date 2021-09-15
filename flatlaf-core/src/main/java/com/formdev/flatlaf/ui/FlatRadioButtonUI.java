@@ -138,21 +138,17 @@ public class FlatRadioButtonUI
 	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
 		switch( e.getPropertyName() ) {
 			case FlatClientProperties.STYLE:
-				applyStyle( b, this, e.getNewValue() );
+				Object style = e.getNewValue();
+				if( style != null && shared ) {
+					// unshare component UI if necessary
+					// updateUI() invokes applyStyle() from installUI()
+					b.updateUI();
+				} else
+					applyStyle( b, style );
+				b.revalidate();
+				b.repaint();
 				break;
 		}
-	}
-
-	private static void applyStyle( AbstractButton b, FlatRadioButtonUI ui, Object style ) {
-		// unshare component UI if necessary
-		if( style != null && ui.shared ) {
-			b.updateUI();
-			ui = (FlatRadioButtonUI) b.getUI();
-		}
-
-		ui.applyStyle( b, style );
-		b.revalidate();
-		b.repaint();
 	}
 
 	/**

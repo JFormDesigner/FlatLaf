@@ -121,13 +121,12 @@ public class FlatToolBarSeparatorUI
 	}
 
 	private static void applyStyle( JSeparator s, FlatToolBarSeparatorUI ui, Object style ) {
-		// unshare component UI if necessary
 		if( style != null && ui.shared ) {
+			// unshare component UI if necessary
+			// updateUI() invokes applyStyle() from installUI()
 			s.updateUI();
-			ui = (FlatToolBarSeparatorUI) s.getUI();
-		}
-
-		ui.applyStyle( style );
+		} else
+			ui.applyStyle( style );
 		s.revalidate();
 		s.repaint();
 	}

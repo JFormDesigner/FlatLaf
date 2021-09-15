@@ -125,13 +125,12 @@ public class FlatSeparatorUI
 	}
 
 	private static void applyStyle( JSeparator s, FlatSeparatorUI ui, Object style ) {
-		// unshare component UI if necessary
 		if( style != null && ui.shared ) {
+			// unshare component UI if necessary
+			// updateUI() invokes applyStyle() from installUI()
 			s.updateUI();
-			ui = (FlatSeparatorUI) s.getUI();
-		}
-
-		ui.applyStyle( s, style );
+		} else
+			ui.applyStyle( s, style );
 		s.revalidate();
 		s.repaint();
 	}
