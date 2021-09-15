@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 2.0-SNAPSHOT
+
+#### Fixed bugs
+
+- Tree: Fixed editing cell issue with custom cell renderer and cell editor that
+  use same component for rendering and editing. (issue #385)
+
+
 ## 1.6
 
 #### New features and improvements
