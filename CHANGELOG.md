@@ -7,6 +7,9 @@ FlatLaf Change Log
 
 - Styling components using string in CSS syntax or `java.util.Map`. (PR #341)\
   For example: `mySlider.putClientProperty( "FlatLaf.style", "trackWidth: 2" );`
+- TextField, FormattedTextField and PasswordField: Support leading and trailing
+  icons (set client property `JTextField.leadingIcon` or
+  `JTextField.trailingIcon` to an `Icon`). (PR #378; issue #368)
 
 #### Fixed bugs
 
@@ -83,8 +86,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- TextField, FormattedTextField and PasswordField: Support adding extra padding.
-  (set client property `JTextField.padding` to `Insets`).
+- TextField, FormattedTextField and PasswordField: Support adding extra padding
+  (set client property `JTextField.padding` to an `Insets`).
 - PasswordField: UI delegate `FlatPasswordFieldUI` now extends `FlatTextFieldUI`
   (instead of `BasicPasswordFieldUI`) to avoid duplicate code and for easier
   extensibility.

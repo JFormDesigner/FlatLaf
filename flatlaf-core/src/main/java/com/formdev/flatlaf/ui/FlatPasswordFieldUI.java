@@ -18,8 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Shape;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -40,6 +39,7 @@ import javax.swing.text.PasswordView;
 import javax.swing.text.View;
 import com.formdev.flatlaf.icons.FlatCapsLockIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
@@ -65,6 +65,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
  * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
  * @uiDefault PasswordField.focusedBackground		Color	optional
+ * @uiDefault PasswordField.iconTextGap				int		optional, default is 4
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  * @uiDefault TextComponent.selectAllOnMouseClick	boolean
  *
@@ -192,27 +193,36 @@ public class FlatPasswordFieldUI
 		return new PasswordView( elem );
 	}
 
+	/** @since 2 */
 	@Override
-	protected void paintSafely( Graphics g ) {
-		// safe and restore clipping area because super.paintSafely() modifies it
-		// and the caps lock icon would be truncated
-		Shape oldClip = g.getClip();
-		super.paintSafely( g );
-		g.setClip( oldClip );
+	protected void paintIcons( Graphics g, Rectangle r ) {
+		super.paintIcons( g, r );
 
-		paintCapsLock( g );
+		if( isCapsLockVisible() )
+			paintCapsLock( g, r );
 	}
 
-	protected void paintCapsLock( Graphics g ) {
-		if( !isCapsLockVisible() )
-			return;
-
+	/** @since 2 */
+	protected void paintCapsLock( Graphics g, Rectangle r ) {
 		JTextComponent c = getComponent();
-		int y = (c.getHeight() - capsLockIcon.getIconHeight()) / 2;
 		int x = c.getComponentOrientation().isLeftToRight()
-			? c.getWidth() - capsLockIcon.getIconWidth() - y
-			: y;
+			? r.x + r.width - capsLockIcon.getIconWidth()
+			: r.x;
+		int y = r.y + Math.round( (r.height - capsLockIcon.getIconHeight()) / 2f );
 		capsLockIcon.paintIcon( c, g, x, y );
+	}
+
+	/** @since 2 */
+	@Override
+	protected boolean hasTrailingIcon() {
+		return super.hasTrailingIcon() || isCapsLockVisible();
+	}
+
+	/** @since 2 */
+	@Override
+	protected int getTrailingIconWidth() {
+		return super.getTrailingIconWidth()
+			+ (isCapsLockVisible() ? capsLockIcon.getIconWidth() + UIScale.scale( iconTextGap ) : 0);
 	}
 
 	/**
@@ -225,19 +235,5 @@ public class FlatPasswordFieldUI
 		JTextComponent c = getComponent();
 		return FlatUIUtils.isPermanentFocusOwner( c ) &&
 			Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK );
-	}
-
-	/**
-	 * @since 1.4
-	 */
-	@Override
-	protected Insets getPadding() {
-		Insets padding = super.getPadding();
-		if( !isCapsLockVisible() )
-			return padding;
-
-		boolean ltr = getComponent().getComponentOrientation().isLeftToRight();
-		int iconWidth = capsLockIcon.getIconWidth();
-		return FlatUIUtils.addInsets( padding, new Insets( 0, ltr ? 0 : iconWidth, 0, ltr ? iconWidth : 0 ) );
 	}
 }

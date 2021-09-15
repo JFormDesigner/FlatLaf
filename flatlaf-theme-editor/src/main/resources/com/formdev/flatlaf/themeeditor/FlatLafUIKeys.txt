@@ -241,6 +241,7 @@ FormattedTextField.focusInputMap
 FormattedTextField.focusedBackground
 FormattedTextField.font
 FormattedTextField.foreground
+FormattedTextField.iconTextGap
 FormattedTextField.inactiveBackground
 FormattedTextField.inactiveForeground
 FormattedTextField.margin
@@ -523,6 +524,7 @@ PasswordField.focusInputMap
 PasswordField.focusedBackground
 PasswordField.font
 PasswordField.foreground
+PasswordField.iconTextGap
 PasswordField.inactiveBackground
 PasswordField.inactiveForeground
 PasswordField.margin
@@ -886,6 +888,7 @@ TextField.focusedBackground
 TextField.font
 TextField.foreground
 TextField.highlight
+TextField.iconTextGap
 TextField.inactiveBackground
 TextField.inactiveForeground
 TextField.light

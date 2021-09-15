@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Container;
@@ -30,7 +31,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
+import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
@@ -42,12 +43,10 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
-import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
@@ -73,6 +72,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault TextField.placeholderForeground	Color
  * @uiDefault TextField.focusedBackground		Color	optional
+ * @uiDefault TextField.iconTextGap				int		optional, default is 4
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  * @uiDefault TextComponent.selectAllOnMouseClick	boolean
  *
@@ -89,6 +89,10 @@ public class FlatTextFieldUI
 	@Styleable protected Color inactiveBackground;
 	@Styleable protected Color placeholderForeground;
 	@Styleable protected Color focusedBackground;
+	/** @since 2 */ protected int iconTextGap;
+
+	/** @since 2 */ protected Icon leadingIcon;
+	/** @since 2 */ protected Icon trailingIcon;
 
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;
@@ -107,7 +111,18 @@ public class FlatTextFieldUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
+		leadingIcon = clientProperty( c, TEXT_FIELD_LEADING_ICON, null, Icon.class );
+		trailingIcon = clientProperty( c, TEXT_FIELD_TRAILING_ICON, null, Icon.class );
+
 		applyStyle( FlatStylingSupport.getStyle( c ) );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		leadingIcon = null;
+		trailingIcon = null;
 	}
 
 	@Override
@@ -122,6 +137,7 @@ public class FlatTextFieldUI
 		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
 		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
 		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
+		iconTextGap = FlatUIUtils.getUIInt( prefix + ".iconTextGap", 4 );
 
 		defaultMargin = UIManager.getInsets( prefix + ".margin" );
 
@@ -179,24 +195,32 @@ public class FlatTextFieldUI
 			updateBackground();
 		else
 			super.propertyChange( e );
-		propertyChange( getComponent(), e, this::applyStyle );
-	}
 
-	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Consumer<Object> applyStyle ) {
+		JTextComponent c = getComponent();
 		switch( e.getPropertyName() ) {
-			case FlatClientProperties.PLACEHOLDER_TEXT:
-			case FlatClientProperties.COMPONENT_ROUND_RECT:
-			case FlatClientProperties.TEXT_FIELD_PADDING:
+			case PLACEHOLDER_TEXT:
+			case COMPONENT_ROUND_RECT:
+			case TEXT_FIELD_PADDING:
 				c.repaint();
 				break;
 
-			case FlatClientProperties.MINIMUM_WIDTH:
+			case MINIMUM_WIDTH:
 				c.revalidate();
 				break;
 
-			case FlatClientProperties.STYLE:
-				applyStyle.accept( e.getNewValue() );
+			case STYLE:
+				applyStyle( e.getNewValue() );
 				c.revalidate();
+				c.repaint();
+				break;
+
+			case TEXT_FIELD_LEADING_ICON:
+				leadingIcon = (e.getNewValue() instanceof Icon) ? (Icon) e.getNewValue() : null;
+				c.repaint();
+				break;
+
+			case TEXT_FIELD_TRAILING_ICON:
+				trailingIcon = (e.getNewValue() instanceof Icon) ? (Icon) e.getNewValue() : null;
 				c.repaint();
 				break;
 		}
@@ -269,6 +293,15 @@ public class FlatTextFieldUI
 		paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
 		paintPlaceholder( g );
 
+		if( hasLeadingIcon() || hasTrailingIcon() )
+			paintIcons( g, new Rectangle( getIconsRect() ) );
+
+/*debug
+		Rectangle r = getVisibleEditorRect();
+		g.setColor( Color.red );
+		g.drawRect( r.x, r.y, r.width - 1, r.height - 1 );
+debug*/
+
 		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
 	}
 
@@ -335,15 +368,15 @@ public class FlatTextFieldUI
 		JComponent jc = (parent instanceof JComboBox) ? (JComboBox<?>) parent : c;
 
 		// get placeholder text
-		Object placeholder = jc.getClientProperty( FlatClientProperties.PLACEHOLDER_TEXT );
-		if( !(placeholder instanceof String) )
+		String placeholder = clientProperty( jc, PLACEHOLDER_TEXT, null, String.class );
+		if( placeholder == null )
 			return;
 
 		// compute placeholder location
 		Rectangle r = getVisibleEditorRect();
 		FontMetrics fm = c.getFontMetrics( c.getFont() );
-		String clippedPlaceholder = JavaCompatibility.getClippedString( c, fm, (String) placeholder, r.width );
-		int x = r.x + (c.getComponentOrientation().isLeftToRight() ? 0 : r.width - fm.stringWidth( clippedPlaceholder ));
+		String clippedPlaceholder = JavaCompatibility.getClippedString( c, fm, placeholder, r.width );
+		int x = r.x + (isLeftToRight() ? 0 : r.width - fm.stringWidth( clippedPlaceholder ));
 		int y = r.y + fm.getAscent() + ((r.height - fm.getHeight()) / 2);
 
 		// paint placeholder
@@ -351,14 +384,57 @@ public class FlatTextFieldUI
 		FlatUIUtils.drawString( c, g, clippedPlaceholder, x, y );
 	}
 
+	/**
+	 * Paints the leading and trailing icons in the given rectangle.
+	 * The rectangle is updated by this method so that subclasses can use it
+	 * without painting over leading or trailing icons.
+	 *
+	 * @since 2
+	 */
+	protected void paintIcons( Graphics g, Rectangle r ) {
+		boolean ltr = isLeftToRight();
+		Icon leftIcon = ltr ? leadingIcon : trailingIcon;
+		Icon rightIcon = ltr ? trailingIcon : leadingIcon;
+
+		// paint left icon
+		if( leftIcon != null ) {
+			int x = r.x;
+			int y = r.y + Math.round( (r.height - leftIcon.getIconHeight()) / 2f );
+			leftIcon.paintIcon( getComponent(), g, x, y );
+
+			// update rectangle so that subclasses can use it
+			int w = leftIcon.getIconWidth() + scale( iconTextGap );
+			r.x += w;
+			r.width -= w;
+		}
+
+		// paint right icon
+		if( rightIcon != null ) {
+			int iconWidth = rightIcon.getIconWidth();
+			int x = r.x + r.width - iconWidth;
+			int y = r.y + Math.round( (r.height - rightIcon.getIconHeight()) / 2f );
+			rightIcon.paintIcon( getComponent(), g, x, y );
+
+			// update rectangle so that subclasses can use it
+			r.width -= iconWidth + scale( iconTextGap );
+		}
+	}
+
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
+		return applyMinimumWidth( c, applyExtraSize( super.getPreferredSize( c ) ), minimumWidth );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
+		return applyMinimumWidth( c, applyExtraSize( super.getMinimumSize( c ) ), minimumWidth );
+	}
+
+	private Dimension applyExtraSize( Dimension size ) {
+		// add width of leading and trailing icons
+		size.width += getLeadingIconWidth() + getTrailingIconWidth();
+
+		return size;
 	}
 
 	private Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
@@ -388,27 +464,104 @@ public class FlatTextFieldUI
 		return margin instanceof UIResource && Objects.equals( margin, defaultMargin );
 	}
 
+	/**
+	 * Returns the rectangle used for the root view of the text.
+	 * This method is used to place the text.
+	 */
 	@Override
 	protected Rectangle getVisibleEditorRect() {
+		Rectangle r = getIconsRect();
+		if( r == null )
+			return null;
+
+		// remove space needed for leading and trailing icons
+		int leading = getLeadingIconWidth();
+		int trailing = getTrailingIconWidth();
+		if( leading != 0 || trailing != 0 ) {
+			boolean ltr = isLeftToRight();
+			int left = ltr ? leading : trailing;
+			int right = ltr ? trailing : leading;
+			r.x += left;
+			r.width -= left + right;
+		}
+
+		// remove padding
+		Insets padding = getPadding();
+		if( padding != null )
+			r = FlatUIUtils.subtractInsets( r, padding );
+
+		// make sure that width and height are not negative
+		r.width = Math.max( r.width, 0 );
+		r.height = Math.max( r.height, 0 );
+
+		return r;
+	}
+
+	/**
+	 * Returns the rectangle used to paint leading and trailing icons.
+	 * It invokes {@code super.getVisibleEditorRect()} and reduces left and/or
+	 * right margin if the text field has leading or trailing icons.
+	 *
+	 * @since 2
+	 */
+	protected Rectangle getIconsRect() {
 		Rectangle r = super.getVisibleEditorRect();
-		if( r != null ) {
-			// remove padding
-			Insets padding = getPadding();
-			if( padding != null ) {
-				r = FlatUIUtils.subtractInsets( r, padding );
-				r.width = Math.max( r.width, 0 );
-				r.height = Math.max( r.height, 0 );
+		if( r == null )
+			return null;
+
+		// if a leading/trailing icon is shown, then the left/right margin is reduced
+		// to the top margin, which places the icon nicely centered on left/right side
+		boolean ltr = isLeftToRight();
+		if( ltr ? hasLeadingIcon() : hasTrailingIcon() ) {
+			// reduce left margin
+			Insets margin = getComponent().getMargin();
+			int newLeftMargin = Math.min( margin.left, margin.top );
+			if( newLeftMargin < margin.left ) {
+				int diff = scale( margin.left - newLeftMargin );
+				r.x -= diff;
+				r.width += diff;
 			}
 		}
+		if( ltr ? hasTrailingIcon() : hasLeadingIcon() ) {
+			// reduce right margin
+			Insets margin = getComponent().getMargin();
+			int newRightMargin = Math.min( margin.right, margin.top );
+			if( newRightMargin < margin.left )
+				r.width += scale( margin.right - newRightMargin );
+		}
+
 		return r;
+	}
+
+	/** @since 2 */
+	protected boolean hasLeadingIcon() {
+		return leadingIcon != null;
+	}
+
+	/** @since 2 */
+	protected boolean hasTrailingIcon() {
+		return trailingIcon != null;
+	}
+
+	/** @since 2 */
+	protected int getLeadingIconWidth() {
+		return (leadingIcon != null) ? leadingIcon.getIconWidth() + scale( iconTextGap ) : 0;
+	}
+
+	/** @since 2 */
+	protected int getTrailingIconWidth() {
+		return (trailingIcon != null) ? trailingIcon.getIconWidth() + scale( iconTextGap ) : 0;
+	}
+
+	boolean isLeftToRight() {
+		return getComponent().getComponentOrientation().isLeftToRight();
 	}
 
 	/**
 	 * @since 1.4
 	 */
 	protected Insets getPadding() {
-		Object padding = getComponent().getClientProperty( FlatClientProperties.TEXT_FIELD_PADDING );
-		return (padding instanceof Insets) ? UIScale.scale( (Insets) padding ) : null;
+		return scale( clientProperty( getComponent(), TEXT_FIELD_PADDING, null, Insets.class ) );
 	}
 
 	/**

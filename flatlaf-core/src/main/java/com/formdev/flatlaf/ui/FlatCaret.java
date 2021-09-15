@@ -18,7 +18,6 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.EventQueue;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
@@ -68,11 +67,12 @@ public class FlatCaret
 	protected void adjustVisibility( Rectangle nloc ) {
 		JTextComponent c = getComponent();
 		if( c != null && c.getUI() instanceof FlatTextFieldUI ) {
-			Insets padding = ((FlatTextFieldUI)c.getUI()).getPadding();
-			if( padding != null ) {
-				nloc.x -= padding.left;
-				nloc.y -= padding.top;
-			}
+			// need to fix x location because JTextField.scrollRectToVisible() uses insets.left
+			// (as BasicTextUI.getVisibleEditorRect() does),
+			// but FlatTextFieldUI.getVisibleEditorRect() may add some padding
+			Rectangle r = ((FlatTextFieldUI)c.getUI()).getVisibleEditorRect();
+			if( r != null )
+				nloc.x -= r.x - c.getInsets().left;
 		}
 		super.adjustVisibility( nloc );
 	}
