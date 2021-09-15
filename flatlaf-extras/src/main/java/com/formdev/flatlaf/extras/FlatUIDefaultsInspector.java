@@ -381,7 +381,8 @@ public class FlatUIDefaultsInspector
 		String name = "/com/formdev/flatlaf/extras/resources/DerivedColorKeys.properties";
 		Properties properties = new Properties();
 		try( InputStream in = getClass().getResourceAsStream( name ) ) {
-			properties.load( in );
+			if( in != null )
+				properties.load( in );
 		} catch( IOException ex ) {
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load '" + name + "'.", ex );
 		}
