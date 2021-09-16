@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Hashtable;
 import javax.swing.*;
 import javax.swing.border.*;
 import com.formdev.flatlaf.ui.FlatArrowButton;
@@ -45,6 +46,11 @@ public class FlatPaintingTest
 
 	FlatPaintingTest() {
 		initComponents();
+
+		Hashtable<Integer, JLabel> labels = new Hashtable<>();
+		for( int i = 0; i <= 5; i++ )
+			labels.put( i * 10, new JLabel( Integer.toString( i ) ) );
+		focusInnerWidthSlider.setLabelTable( labels );
 	}
 
 	@Override
@@ -53,6 +59,39 @@ public class FlatPaintingTest
 
 		getHorizontalScrollBar().setUnitIncrement( UIScale.scale( 25 ) );
 		getVerticalScrollBar().setUnitIncrement( UIScale.scale( 25 ) );
+	}
+
+	private void focusWidthFractionChanged() {
+		float focusWidthFraction = focusWidthFractionSlider.getValue() / 100f;
+
+		FlatTestFrame.updateComponentsRecur( (Container) getViewport().getView(), (c, type) -> {
+			if( c instanceof BorderPainter )
+				((BorderPainter)c).focusWidthFraction = focusWidthFraction;
+		} );
+
+		repaint();
+	}
+
+	private void focusInnerWidthChanged() {
+		float focusInnerWidth = focusInnerWidthSlider.getValue() / 10f;
+
+		FlatTestFrame.updateComponentsRecur( (Container) getViewport().getView(), (c, type) -> {
+			if( c instanceof BorderPainter )
+				((BorderPainter)c).focusInnerWidth = focusInnerWidth;
+		} );
+
+		repaint();
+	}
+
+	private void translucentChanged() {
+		boolean translucent = translucentCheckBox.isSelected();
+
+		FlatTestFrame.updateComponentsRecur( (Container) getViewport().getView(), (c, type) -> {
+			if( c instanceof BorderPainter )
+				((BorderPainter)c).translucent = translucent;
+		} );
+
+		repaint();
 	}
 
 	private void arrowSizeChanged() {
@@ -167,17 +206,24 @@ public class FlatPaintingTest
 		JPanel panel2 = new JPanel();
 		arrowPainter7 = new FlatPaintingTest.ArrowPainter();
 		arrowPainter8 = new FlatPaintingTest.ArrowPainter();
+		JPanel panel6 = new JPanel();
+		JPanel panel7 = new JPanel();
+		JLabel focusWidthFractionLabel = new JLabel();
+		focusWidthFractionSlider = new JSlider();
+		JLabel focusInnerWidthLabel = new JLabel();
+		focusInnerWidthSlider = new JSlider();
+		translucentCheckBox = new JCheckBox();
 		JPanel panel5 = new JPanel();
 		JLabel arrowWidthLabel = new JLabel();
 		arrowWidthSpinner = new JSpinner();
+		vectorCheckBox = new JCheckBox();
 		JLabel arrowHeightLabel = new JLabel();
 		arrowHeightSpinner = new JSpinner();
+		buttonCheckBox = new JCheckBox();
 		JLabel arrowSizeLabel = new JLabel();
 		arrowSizeSpinner = new JSpinner();
 		JLabel offsetLabel = new JLabel();
 		offsetSpinner = new JSpinner();
-		vectorCheckBox = new JCheckBox();
-		buttonCheckBox = new JCheckBox();
 		FlatPaintingTest.ArrowPainter arrowPainter9 = new FlatPaintingTest.ArrowPainter();
 		FlatPaintingTest.ArrowPainter arrowPainter10 = new FlatPaintingTest.ArrowPainter();
 		FlatPaintingTest.ArrowPainter arrowPainter11 = new FlatPaintingTest.ArrowPainter();
@@ -527,69 +573,122 @@ public class FlatPaintingTest
 			}
 			flatTestPanel1.add(panel2, "cell 5 5,align left top,grow 0 0");
 
-			//======== panel5 ========
+			//======== panel6 ========
 			{
-				panel5.setBorder(new TitledBorder("Arrow Control"));
-				panel5.setLayout(new MigLayout(
-					"hidemode 3",
+				panel6.setLayout(new MigLayout(
+					"insets 0,hidemode 3",
 					// columns
-					"[fill]" +
-					"[fill]",
+					"[grow,fill]",
 					// rows
-					"[]" +
-					"[]" +
-					"[]" +
-					"[]" +
-					"[]" +
+					"[]unrel" +
 					"[]"));
 
-				//---- arrowWidthLabel ----
-				arrowWidthLabel.setText("Width:");
-				panel5.add(arrowWidthLabel, "cell 0 0");
+				//======== panel7 ========
+				{
+					panel7.setBorder(new TitledBorder("Outlined Component Control"));
+					panel7.setLayout(new MigLayout(
+						"hidemode 3",
+						// columns
+						"[fill]" +
+						"[fill]",
+						// rows
+						"[]" +
+						"[]" +
+						"[]"));
 
-				//---- arrowWidthSpinner ----
-				arrowWidthSpinner.setModel(new SpinnerNumberModel(20, 0, null, 1));
-				arrowWidthSpinner.addChangeListener(e -> arrowSizeChanged());
-				panel5.add(arrowWidthSpinner, "cell 1 0");
+					//---- focusWidthFractionLabel ----
+					focusWidthFractionLabel.setText("Focus width fraction:");
+					panel7.add(focusWidthFractionLabel, "cell 0 0");
 
-				//---- arrowHeightLabel ----
-				arrowHeightLabel.setText("Height:");
-				panel5.add(arrowHeightLabel, "cell 0 1");
+					//---- focusWidthFractionSlider ----
+					focusWidthFractionSlider.setValue(100);
+					focusWidthFractionSlider.setMajorTickSpacing(25);
+					focusWidthFractionSlider.setPaintLabels(true);
+					focusWidthFractionSlider.addChangeListener(e -> focusWidthFractionChanged());
+					panel7.add(focusWidthFractionSlider, "cell 1 0");
 
-				//---- arrowHeightSpinner ----
-				arrowHeightSpinner.setModel(new SpinnerNumberModel(20, 0, null, 1));
-				arrowHeightSpinner.addChangeListener(e -> arrowSizeChanged());
-				panel5.add(arrowHeightSpinner, "cell 1 1");
+					//---- focusInnerWidthLabel ----
+					focusInnerWidthLabel.setText("Focus inner width:");
+					panel7.add(focusInnerWidthLabel, "cell 0 1");
 
-				//---- arrowSizeLabel ----
-				arrowSizeLabel.setText("Arrow Size:");
-				panel5.add(arrowSizeLabel, "cell 0 2");
+					//---- focusInnerWidthSlider ----
+					focusInnerWidthSlider.setPaintLabels(true);
+					focusInnerWidthSlider.setValue(10);
+					focusInnerWidthSlider.setMaximum(50);
+					focusInnerWidthSlider.addChangeListener(e -> focusInnerWidthChanged());
+					panel7.add(focusInnerWidthSlider, "cell 1 1");
 
-				//---- arrowSizeSpinner ----
-				arrowSizeSpinner.setModel(new SpinnerNumberModel(8, 2, null, 1));
-				arrowSizeSpinner.addChangeListener(e -> arrowSizeChanged());
-				panel5.add(arrowSizeSpinner, "cell 1 2");
+					//---- translucentCheckBox ----
+					translucentCheckBox.setText("translucent");
+					translucentCheckBox.addActionListener(e -> translucentChanged());
+					panel7.add(translucentCheckBox, "cell 0 2 2 1,alignx left,growx 0");
+				}
+				panel6.add(panel7, "cell 0 0");
 
-				//---- offsetLabel ----
-				offsetLabel.setText("Offset:");
-				panel5.add(offsetLabel, "cell 0 3");
+				//======== panel5 ========
+				{
+					panel5.setBorder(new TitledBorder("Arrow Control"));
+					panel5.setLayout(new MigLayout(
+						"hidemode 3",
+						// columns
+						"[fill]" +
+						"[fill]" +
+						"[fill]",
+						// rows
+						"[]" +
+						"[]" +
+						"[]" +
+						"[]"));
 
-				//---- offsetSpinner ----
-				offsetSpinner.setModel(new SpinnerNumberModel(1.0F, null, null, 0.05F));
-				offsetSpinner.addChangeListener(e -> offsetChanged());
-				panel5.add(offsetSpinner, "cell 1 3");
+					//---- arrowWidthLabel ----
+					arrowWidthLabel.setText("Width:");
+					panel5.add(arrowWidthLabel, "cell 0 0");
 
-				//---- vectorCheckBox ----
-				vectorCheckBox.setText("vector");
-				vectorCheckBox.addActionListener(e -> vectorChanged());
-				panel5.add(vectorCheckBox, "cell 0 4 2 1,alignx left,growx 0");
+					//---- arrowWidthSpinner ----
+					arrowWidthSpinner.setModel(new SpinnerNumberModel(20, 0, null, 1));
+					arrowWidthSpinner.addChangeListener(e -> arrowSizeChanged());
+					panel5.add(arrowWidthSpinner, "cell 1 0");
 
-				//---- buttonCheckBox ----
-				buttonCheckBox.setText("FlatArrowButton");
-				buttonCheckBox.addActionListener(e -> arrowButtonChanged());
-				panel5.add(buttonCheckBox, "cell 0 5 2 1,alignx left,growx 0");
+					//---- vectorCheckBox ----
+					vectorCheckBox.setText("vector");
+					vectorCheckBox.addActionListener(e -> vectorChanged());
+					panel5.add(vectorCheckBox, "cell 2 0,alignx left,growx 0");
+
+					//---- arrowHeightLabel ----
+					arrowHeightLabel.setText("Height:");
+					panel5.add(arrowHeightLabel, "cell 0 1");
+
+					//---- arrowHeightSpinner ----
+					arrowHeightSpinner.setModel(new SpinnerNumberModel(20, 0, null, 1));
+					arrowHeightSpinner.addChangeListener(e -> arrowSizeChanged());
+					panel5.add(arrowHeightSpinner, "cell 1 1");
+
+					//---- buttonCheckBox ----
+					buttonCheckBox.setText("FlatArrowButton");
+					buttonCheckBox.addActionListener(e -> arrowButtonChanged());
+					panel5.add(buttonCheckBox, "cell 2 1,alignx left,growx 0");
+
+					//---- arrowSizeLabel ----
+					arrowSizeLabel.setText("Arrow Size:");
+					panel5.add(arrowSizeLabel, "cell 0 2");
+
+					//---- arrowSizeSpinner ----
+					arrowSizeSpinner.setModel(new SpinnerNumberModel(8, 2, null, 1));
+					arrowSizeSpinner.addChangeListener(e -> arrowSizeChanged());
+					panel5.add(arrowSizeSpinner, "cell 1 2");
+
+					//---- offsetLabel ----
+					offsetLabel.setText("Offset:");
+					panel5.add(offsetLabel, "cell 0 3");
+
+					//---- offsetSpinner ----
+					offsetSpinner.setModel(new SpinnerNumberModel(1.0F, null, null, 0.05F));
+					offsetSpinner.addChangeListener(e -> offsetChanged());
+					panel5.add(offsetSpinner, "cell 1 3");
+				}
+				panel6.add(panel5, "cell 0 1");
 			}
-			flatTestPanel1.add(panel5, "cell 6 5 1 2,aligny top,growy 0");
+			flatTestPanel1.add(panel6, "cell 6 5 3 2,aligny top,growy 0");
 
 			//---- arrowPainter9 ----
 			arrowPainter9.setScale(8.0F);
@@ -670,12 +769,15 @@ public class FlatPaintingTest
 	private FlatPaintingTest.ArrowPainter arrowPainter6;
 	private FlatPaintingTest.ArrowPainter arrowPainter7;
 	private FlatPaintingTest.ArrowPainter arrowPainter8;
+	private JSlider focusWidthFractionSlider;
+	private JSlider focusInnerWidthSlider;
+	private JCheckBox translucentCheckBox;
 	private JSpinner arrowWidthSpinner;
+	private JCheckBox vectorCheckBox;
 	private JSpinner arrowHeightSpinner;
+	private JCheckBox buttonCheckBox;
 	private JSpinner arrowSizeSpinner;
 	private JSpinner offsetSpinner;
-	private JCheckBox vectorCheckBox;
-	private JCheckBox buttonCheckBox;
 	private FlatPaintingTest.ArrowPainter arrowPainter13;
 	private FlatPaintingTest.ArrowPainter arrowPainter14;
 	private FlatPaintingTest.ArrowPainter arrowPainter15;
@@ -687,6 +789,9 @@ public class FlatPaintingTest
 	public static class BorderPainter
 		extends JComponent
 	{
+		private static final Color TRANSLUCENT_BLUE = new Color( 0x880000ff, true );
+		private static final Color TRANSLUCENT_RED = new Color( 0x88ff0000, true );
+
 		private int w = 20;
 		private int h = 20;
 		private int focusWidth = 2;
@@ -696,6 +801,10 @@ public class FlatPaintingTest
 		private boolean paintBackground = true;
 		private boolean paintBorder = true;
 		private boolean paintFocus = true;
+
+		float focusWidthFraction = 1;
+		float focusInnerWidth = 1;
+		boolean translucent;
 
 		public BorderPainter() {
 		}
@@ -793,23 +902,17 @@ public class FlatPaintingTest
 			int width = UIScale.scale( w );
 			int height = UIScale.scale( h );
 			float focusWidth = UIScale.scale( (float) this.focusWidth );
+			float focusInnerWidth = UIScale.scale( this.focusInnerWidth );
 			float lineWidth = UIScale.scale( (float) this.lineWidth );
 			float arc = UIScale.scale( (float) this.arc );
 
-			if( paintBackground ) {
-				g.setColor( Color.green );
-				FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
-			}
+			Color background = paintBackground ? Color.green : null;
+			Color focusColor = paintFocus ? (translucent ? TRANSLUCENT_BLUE : Color.blue) : null;
+			Color borderColor = paintBorder ? (translucent ? TRANSLUCENT_RED : Color.red) : null;
 
-			if( paintFocus ) {
-				g.setColor( Color.blue );
-				FlatUIUtils.paintComponentOuterBorder( g2, 0, 0, width, height, focusWidth, lineWidth, arc );
-			}
-
-			if( paintBorder ) {
-				g.setColor( Color.red );
-				FlatUIUtils.paintComponentBorder( g2, 0, 0, width, height, focusWidth, lineWidth, arc );
-			}
+			FlatUIUtils.paintOutlinedComponent( g2, 0, 0, width, height,
+				focusWidth, focusWidthFraction, focusInnerWidth, lineWidth, arc,
+				focusColor, borderColor, background );
 
 			HiDPIUtils.paintAtScale1x( g2, 0, 0, width, height,
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {

@@ -103,9 +103,11 @@ public class FlatBorder
 			FlatUIUtils.setRenderingHints( g2 );
 
 			float focusWidth = scale( (float) getFocusWidth( c ) );
+			float focusInnerWidth = 0;
 			float borderWidth = scale( (float) getBorderWidth( c ) );
 			float arc = scale( (float) getArc( c ) );
 			Color outlineColor = getOutlineColor( c );
+			Color focusColor = null;
 
 			// paint outer border
 			if( outlineColor != null || isFocused( c ) ) {
@@ -114,15 +116,16 @@ public class FlatBorder
 					: 0;
 
 				if( focusWidth > 0 || innerWidth > 0 ) {
-					g2.setColor( (outlineColor != null) ? outlineColor : getFocusColor( c ) );
-					FlatUIUtils.paintComponentOuterBorder( g2, x, y, width, height,
-						focusWidth, borderWidth + scale( innerWidth ), arc );
+					focusColor = (outlineColor != null) ? outlineColor : getFocusColor( c );
+					focusInnerWidth = borderWidth + scale( innerWidth );
 				}
 			}
 
 			// paint border
-			g2.setPaint( (outlineColor != null) ? outlineColor : getBorderColor( c ) );
-			FlatUIUtils.paintComponentBorder( g2, x, y, width, height, focusWidth, borderWidth, arc );
+			Paint borderColor = (outlineColor != null) ? outlineColor : getBorderColor( c );
+			FlatUIUtils.paintOutlinedComponent( g2, x, y, width, height,
+				focusWidth, 1, focusInnerWidth, borderWidth, arc,
+				focusColor, borderColor, null );
 		} finally {
 			g2.dispose();
 		}
