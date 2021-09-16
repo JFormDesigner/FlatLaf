@@ -555,6 +555,22 @@ public class FlatComboBoxUI
 	@Override
 	@SuppressWarnings( "unchecked" )
 	public void paintCurrentValue( Graphics g, Rectangle bounds, boolean hasFocus ) {
+		// apply clipping using rounded rectangle to avoid that renderer paints
+		// outside of border if combobox uses larger arc for edges
+		// (e.g. FlatClientProperties.COMPONENT_ROUND_RECT is true)
+		FlatBorder border = FlatUIUtils.getOutsideFlatBorder( comboBox );
+		if( border != null ) {
+			int clipArc = border.getArc( comboBox ) - (border.getLineWidth( comboBox ) * 2);
+			if( clipArc > 0 ) {
+				int x = bounds.x;
+				int width = bounds.width + bounds.height;
+				if( !comboBox.getComponentOrientation().isLeftToRight() )
+					x -= bounds.height;
+				((Graphics2D)g).clip( FlatUIUtils.createComponentRectangle(
+					x, bounds.y, width, bounds.height, scale( (float) clipArc ) ) );
+			}
+		}
+
 		paddingBorder.uninstall();
 
 		ListCellRenderer<Object> renderer = comboBox.getRenderer();
