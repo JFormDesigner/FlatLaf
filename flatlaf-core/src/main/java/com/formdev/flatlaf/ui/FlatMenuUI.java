@@ -165,7 +165,17 @@ public class FlatMenuUI
 			// ignore
 		}
 
-		return FlatMenuItemUI.applyStyleProperty( this, menuItem, key, value );
+		Object oldValue;
+		switch( key ) {
+			// BasicMenuItemUI
+			case "selectionBackground": oldValue = selectionBackground; selectionBackground = (Color) value; return oldValue;
+			case "selectionForeground": oldValue = selectionForeground; selectionForeground = (Color) value; return oldValue;
+			case "disabledForeground": oldValue = disabledForeground; disabledForeground = (Color) value; return oldValue;
+			case "acceleratorForeground": oldValue = acceleratorForeground; acceleratorForeground = (Color) value; return oldValue;
+			case "acceleratorSelectionForeground": oldValue = acceleratorSelectionForeground; acceleratorSelectionForeground = (Color) value; return oldValue;
+		}
+
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, menuItem, key, value );
 	}
 
 	/**

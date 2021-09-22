@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.JMenuItem;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuItemUI;
@@ -120,22 +119,17 @@ public class FlatMenuItemUI
 			// ignore
 		}
 
-		return applyStyleProperty( this, menuItem, key, value );
-	}
-
-	static Object applyStyleProperty( BasicMenuItemUI ui, JMenuItem menuItem, String key, Object value ) {
+		Object oldValue;
 		switch( key ) {
 			// BasicMenuItemUI
-			case "selectionBackground":
-			case "selectionForeground":
-			case "disabledForeground":
-			case "acceleratorForeground":
-			case "acceleratorSelectionForeground":
-				return FlatStylingSupport.applyToField( ui, key, key, value );
-
-			default:
-				return FlatStylingSupport.applyToAnnotatedObjectOrComponent( ui, menuItem, key, value );
+			case "selectionBackground": oldValue = selectionBackground; selectionBackground = (Color) value; return oldValue;
+			case "selectionForeground": oldValue = selectionForeground; selectionForeground = (Color) value; return oldValue;
+			case "disabledForeground": oldValue = disabledForeground; disabledForeground = (Color) value; return oldValue;
+			case "acceleratorForeground": oldValue = acceleratorForeground; acceleratorForeground = (Color) value; return oldValue;
+			case "acceleratorSelectionForeground": oldValue = acceleratorSelectionForeground; acceleratorSelectionForeground = (Color) value; return oldValue;
 		}
+
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, menuItem, key, value );
 	}
 
 	/**
