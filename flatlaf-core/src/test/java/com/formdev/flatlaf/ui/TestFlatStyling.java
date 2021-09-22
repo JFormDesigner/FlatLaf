@@ -112,11 +112,12 @@ public class TestFlatStyling
 
 	@Test
 	void parseReferences() {
-		assertEquals( Color.white, UIManager.getColor( "TextField.background" ) );
+		UIManager.put( "Test.background", Color.white );
+		assertEquals( Color.white, UIManager.getColor( "Test.background" ) );
 
-		testColorStyle( 0xffffff, "$TextField.background" );
-		testColorStyle( 0xcccccc, "darken($TextField.background,20%)" );
-		testColorStyle( 0xd1c7c7, "saturate(darken($TextField.background,20%),10%)" );
+		testColorStyle( 0xffffff, "$Test.background" );
+		testColorStyle( 0xcccccc, "darken($Test.background,20%)" );
+		testColorStyle( 0xd1c7c7, "saturate(darken($Test.background,20%),10%)" );
 
 		testStyle( "hideMnemonics", true, "$Component.hideMnemonics" );
 		testStyle( "arc", 6, "$Button.arc" );
