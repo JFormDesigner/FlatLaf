@@ -220,9 +220,7 @@ public class FlatScrollBarUI
 		};
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
@@ -232,9 +230,7 @@ public class FlatScrollBarUI
 			((FlatScrollBarButton)decrButton).updateStyle();
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		Object oldValue;
 		switch( key ) {
@@ -249,9 +245,7 @@ public class FlatScrollBarUI
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, scrollbar, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = new LinkedHashMap<>();

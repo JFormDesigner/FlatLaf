@@ -192,23 +192,17 @@ public class FlatSliderUI
 			super.createPropertyChangeListener( slider ) );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, slider, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );

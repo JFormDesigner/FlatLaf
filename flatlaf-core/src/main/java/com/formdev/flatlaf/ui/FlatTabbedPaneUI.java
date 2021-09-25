@@ -572,9 +572,7 @@ public class FlatTabbedPaneUI
 		return new FlatScrollableTabButton( direction );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
@@ -585,9 +583,7 @@ public class FlatTabbedPaneUI
 		}
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		// close icon
 		if( key.startsWith( "close" ) ) {
@@ -629,9 +625,7 @@ public class FlatTabbedPaneUI
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, tabPane, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = new LinkedHashMap<>();

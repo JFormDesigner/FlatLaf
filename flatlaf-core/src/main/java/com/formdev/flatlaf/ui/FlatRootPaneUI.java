@@ -198,24 +198,18 @@ public class FlatRootPaneUI
 		}
 	}
 
-	/**
-	 * @since 1.1.2
-	 */
+	/** @since 1.1.2 */
 	protected void installNativeWindowBorder() {
 		nativeWindowBorderData = FlatNativeWindowBorder.install( rootPane );
 	}
 
-	/**
-	 * @since 1.1.2
-	 */
+	/** @since 1.1.2 */
 	protected void uninstallNativeWindowBorder() {
 		FlatNativeWindowBorder.uninstall( rootPane, nativeWindowBorderData );
 		nativeWindowBorderData = null;
 	}
 
-	/**
-	 * @since 1.1.2
-	 */
+	/** @since 1.1.2 */
 	public static void updateNativeWindowBorder( JRootPane rootPane ) {
 		RootPaneUI rui = rootPane.getUI();
 		if( !(rui instanceof FlatRootPaneUI) )

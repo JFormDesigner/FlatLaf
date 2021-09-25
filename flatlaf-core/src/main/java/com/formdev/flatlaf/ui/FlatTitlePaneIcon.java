@@ -31,9 +31,7 @@ public class FlatTitlePaneIcon
 {
 	private final List<Image> images;
 
-	/**
-	 * @since 1.2
-	 */
+	/** @since 1.2 */
 	public FlatTitlePaneIcon( List<Image> images, Dimension size ) {
 		super( null, size.width, size.height );
 		this.images = images;

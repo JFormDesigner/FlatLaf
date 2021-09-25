@@ -267,17 +267,13 @@ public class FlatButtonUI
 		}
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( AbstractButton b, Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
 			(key, value) -> applyStyleProperty( b, key, value ) );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
 		if( key.startsWith( "help." ) ) {
 			if( !(helpButtonIcon instanceof FlatHelpButtonIcon) )
@@ -297,9 +293,7 @@ public class FlatButtonUI
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, b, borderShared );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this, c.getBorder() );

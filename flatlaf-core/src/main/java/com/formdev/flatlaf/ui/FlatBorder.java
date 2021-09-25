@@ -80,17 +80,13 @@ public class FlatBorder
 	@Styleable(dot=true) protected Color warningFocusedBorderColor = UIManager.getColor( "Component.warning.focusedBorderColor" );
 	@Styleable(dot=true) protected Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos() {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );

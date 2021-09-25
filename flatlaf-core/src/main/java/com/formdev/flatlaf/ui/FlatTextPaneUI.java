@@ -154,9 +154,7 @@ public class FlatTextPaneUI
 		FlatEditorPaneUI.propertyChange( getComponent(), e, this::applyStyle );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldDisabledBackground = disabledBackground;
 		oldInactiveBackground = inactiveBackground;
@@ -166,16 +164,12 @@ public class FlatTextPaneUI
 		updateBackground();
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, getComponent(), key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );

@@ -48,9 +48,7 @@ public class FlatCheckBoxUI
 			: new FlatCheckBoxUI( false );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected FlatCheckBoxUI( boolean shared ) {
 		super( shared );
 	}

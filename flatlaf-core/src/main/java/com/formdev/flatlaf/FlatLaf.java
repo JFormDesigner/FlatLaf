@@ -582,9 +582,7 @@ public abstract class FlatLaf
 		return (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 	}
 
-	/**
-	 * @since 1.1
-	 */
+	/** @since 1.1 */
 	public static ActiveValue createActiveFontValue( float scaleFactor ) {
 		return new ActiveFont( scaleFactor );
 	}

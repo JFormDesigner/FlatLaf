@@ -51,16 +51,12 @@ public class FlatMenuArrowIcon
 		super( 6, 10, null );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	public Map<String, Class<?>> getStyleableInfos() {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}

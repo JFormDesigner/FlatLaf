@@ -438,9 +438,7 @@ public class FlatComboBoxUI
 		return new FlatComboBoxButton();
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		Insets oldPadding = padding;
 		int oldEditorColumns = editorColumns;
@@ -459,9 +457,7 @@ public class FlatComboBoxUI
 			((JTextField)editor).setColumns( editorColumns );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		// BasicComboBoxUI
 		if( key.equals( "padding" ) ) {
@@ -475,9 +471,7 @@ public class FlatComboBoxUI
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, comboBox, borderShared );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = new LinkedHashMap<>();
@@ -673,9 +667,7 @@ public class FlatComboBoxUI
 		return parentParent != null && !comboBox.getBackground().equals( parentParent.getBackground() );
 	}
 
-	/**
-	 * @since 1.3
-	 */
+	/** @since 1.3 */
 	public static boolean isPermanentFocusOwner( JComboBox<?> comboBox ) {
 		if( comboBox.isEditable() ) {
 			Component editorComponent = comboBox.getEditor().getEditorComponent();

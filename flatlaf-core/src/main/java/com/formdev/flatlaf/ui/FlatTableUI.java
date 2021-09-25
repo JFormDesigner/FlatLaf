@@ -235,9 +235,7 @@ public class FlatTableUI
 		};
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		Color oldSelectionBackground = selectionBackground;
 		Color oldSelectionForeground = selectionForeground;
@@ -265,16 +263,12 @@ public class FlatTableUI
 		}
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, table, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );

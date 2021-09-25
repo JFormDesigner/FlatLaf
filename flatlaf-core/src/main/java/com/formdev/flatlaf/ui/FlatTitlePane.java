@@ -871,9 +871,7 @@ debug*/
 
 	//---- class FlatTitleLabelUI ---------------------------------------------
 
-	/**
-	 * @since 1.1
-	 */
+	/** @since 1.1 */
 	protected class FlatTitleLabelUI
 		extends FlatLabelUI
 	{

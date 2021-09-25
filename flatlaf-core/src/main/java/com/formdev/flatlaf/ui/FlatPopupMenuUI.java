@@ -80,25 +80,19 @@ public class FlatPopupMenuUI
 		propertyChangeListener = null;
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, popupMenu, borderShared );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, popupMenu.getBorder() );

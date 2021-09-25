@@ -95,9 +95,7 @@ public class FlatArrowButton
 		}
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	public void updateStyle( String type, Color foreground, Color disabledForeground,
 		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 	{

@@ -144,9 +144,7 @@ public class FlatCaret
 		}
 	}
 
-	/**
-	 * @since 1.4
-	 */
+	/** @since 1.4 */
 	public void scrollCaretToVisible() {
 		JTextComponent c = getComponent();
 		if( c == null || c.getUI() == null )

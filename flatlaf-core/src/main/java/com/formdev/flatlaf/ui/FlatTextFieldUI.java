@@ -226,9 +226,7 @@ public class FlatTextFieldUI
 		}
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldDisabledBackground = disabledBackground;
 		oldInactiveBackground = inactiveBackground;
@@ -238,18 +236,14 @@ public class FlatTextFieldUI
 		updateBackground();
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, getComponent(), borderShared );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, getComponent().getBorder() );
@@ -557,16 +551,12 @@ debug*/
 		return getComponent().getComponentOrientation().isLeftToRight();
 	}
 
-	/**
-	 * @since 1.4
-	 */
+	/** @since 1.4 */
 	protected Insets getPadding() {
 		return scale( clientProperty( getComponent(), TEXT_FIELD_PADDING, null, Insets.class ) );
 	}
 
-	/**
-	 * @since 1.4
-	 */
+	/** @since 1.4 */
 	protected void scrollCaretToVisible() {
 		Caret caret = getComponent().getCaret();
 		if( caret instanceof FlatCaret )

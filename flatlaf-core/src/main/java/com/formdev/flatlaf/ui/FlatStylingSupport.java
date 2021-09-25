@@ -52,6 +52,8 @@ public class FlatStylingSupport
 	 * Indicates that a field is intended to be used by FlatLaf styling support.
 	 * <p>
 	 * <strong>Do not rename fields annotated with this annotation.</strong>
+	 *
+	 * @since 2
 	 */
 	@Target(ElementType.FIELD)
 	@Retention(RetentionPolicy.RUNTIME)
@@ -60,10 +62,12 @@ public class FlatStylingSupport
 		Class<?> type() default Void.class;
 	}
 
+	/** @since 2 */
 	public interface StyleableUI {
 		Map<String, Class<?>> getStyleableInfos( JComponent c );
 	}
 
+	/** @since 2 */
 	public interface StyleableBorder {
 		Object applyStyleProperty( String key, Object value );
 		Map<String, Class<?>> getStyleableInfos();

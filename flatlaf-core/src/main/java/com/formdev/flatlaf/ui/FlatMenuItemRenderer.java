@@ -102,9 +102,7 @@ public class FlatMenuItemRenderer
 		this.minimumIconSize = (minimumIconSize != null) ? minimumIconSize : new Dimension( 16, 16 );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		// style icon
 		if( key.startsWith( "icon." ) || key.equals( "selectionForeground" ) ) {
@@ -150,9 +148,7 @@ public class FlatMenuItemRenderer
 		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	public Map<String, Class<?>> getStyleableInfos() {
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
 		if( checkIcon instanceof FlatCheckBoxMenuItemIcon )

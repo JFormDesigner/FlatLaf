@@ -90,9 +90,7 @@ public class FlatDropShadowBorder
 			Math.max( shadowInsets.top, shadowInsets.bottom ) );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
 		Object oldValue = FlatStylingSupport.applyToAnnotatedObject( this, key, value );
@@ -103,9 +101,7 @@ public class FlatDropShadowBorder
 		return oldValue;
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos() {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );

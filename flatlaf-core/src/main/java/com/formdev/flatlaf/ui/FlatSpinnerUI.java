@@ -190,27 +190,21 @@ public class FlatSpinnerUI
 		return handler;
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 		updateEditorPadding();
 		updateArrowButtonsStyle();
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, spinner, borderShared );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, spinner.getBorder() );
@@ -280,9 +274,7 @@ public class FlatSpinnerUI
 			: null;
 	}
 
-	/**
-	 * @since 1.3
-	 */
+	/** @since 1.3 */
 	public static boolean isPermanentFocusOwner( JSpinner spinner ) {
 		if( FlatUIUtils.isPermanentFocusOwner( spinner ) )
 			return true;

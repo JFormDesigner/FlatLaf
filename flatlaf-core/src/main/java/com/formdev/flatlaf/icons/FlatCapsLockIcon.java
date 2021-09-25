@@ -40,9 +40,7 @@ public class FlatCapsLockIcon
 		super( 16, 16, UIManager.getColor( "PasswordField.capsLockIconColor" ) );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	public Object applyStyleProperty( String key, Object value ) {
 		Object oldValue;
 		switch( key ) {

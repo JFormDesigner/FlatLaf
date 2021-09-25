@@ -130,9 +130,7 @@ public class FlatUIUtils
 		return (color != null) ? color : UIManager.getColor( defaultKey );
 	}
 
-	/**
-	 * @since 1.1
-	 */
+	/** @since 1.1 */
 	public static boolean getUIBoolean( String key, boolean defaultValue ) {
 		Object value = UIManager.get( key );
 		return (value instanceof Boolean) ? (Boolean) value : defaultValue;
@@ -148,9 +146,7 @@ public class FlatUIUtils
 		return (value instanceof Number) ? ((Number)value).floatValue() : defaultValue;
 	}
 
-	/**
-	 * @since 1.1.2
-	 */
+	/** @since 1.1.2 */
 	public static boolean getBoolean( JComponent c, String systemPropertyKey,
 		String clientPropertyKey, String uiKey, boolean defaultValue )
 	{

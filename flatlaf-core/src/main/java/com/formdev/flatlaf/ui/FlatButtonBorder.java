@@ -96,9 +96,7 @@ public class FlatButtonBorder
 			paintToolBarFocus( c, g, x, y, width, height );
 	}
 
-	/**
-	 * @since 1.4
-	 */
+	/** @since 1.4 */
 	protected void paintToolBarFocus( Component c, Graphics g, int x, int y, int width, int height ) {
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {

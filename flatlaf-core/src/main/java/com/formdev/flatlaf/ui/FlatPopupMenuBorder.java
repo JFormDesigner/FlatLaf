@@ -47,9 +47,7 @@ public class FlatPopupMenuBorder
 			UIManager.getColor( "PopupMenu.borderColor" ) );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
 		Object oldValue;
@@ -60,9 +58,7 @@ public class FlatPopupMenuBorder
 		throw new UnknownStyleException( key );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos() {
 		Map<String, Class<?>> infos = new LinkedHashMap<>();

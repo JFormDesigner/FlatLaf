@@ -141,16 +141,12 @@ public class FlatTableHeaderUI
 		propertyChangeListener = null;
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( key.equals( "sortIconPosition" ) && value instanceof String )
 			value = parseSortIconPosition( (String) value );
@@ -158,9 +154,7 @@ public class FlatTableHeaderUI
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, header, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
@@ -345,9 +339,7 @@ public class FlatTableHeaderUI
 
 	//---- class FlatMouseInputHandler ----------------------------------------
 
-	/**
-	 * @since 1.6
-	 */
+	/** @since 1.6 */
 	protected class FlatMouseInputHandler
 		extends MouseInputHandler
 	{

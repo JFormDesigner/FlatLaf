@@ -277,9 +277,7 @@ public class FlatNativeWindowBorder
 		}
 	}
 
-	/**
-	 * @since 1.1.1
-	 */
+	/** @since 1.1.1 */
 	public static void setNativeProvider( Provider provider ) {
 		if( nativeProvider != null )
 			throw new IllegalStateException();

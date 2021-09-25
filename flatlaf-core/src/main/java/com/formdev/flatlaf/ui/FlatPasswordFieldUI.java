@@ -162,9 +162,7 @@ public class FlatPasswordFieldUI
 		}
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof FlatCapsLockIcon ) {
@@ -178,9 +176,7 @@ public class FlatPasswordFieldUI
 		return super.applyStyleProperty( key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = super.getStyleableInfos( c );
@@ -225,9 +221,7 @@ public class FlatPasswordFieldUI
 			+ (isCapsLockVisible() ? capsLockIcon.getIconWidth() + UIScale.scale( iconTextGap ) : 0);
 	}
 
-	/**
-	 * @since 1.4
-	 */
+	/** @since 1.4 */
 	protected boolean isCapsLockVisible() {
 		if( !showCapsLock )
 			return false;

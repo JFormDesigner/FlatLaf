@@ -152,25 +152,19 @@ public class FlatInternalFrameUI
 			super.createPropertyChangeListener() );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( borderShared == null )
 			borderShared = new AtomicBoolean( true );
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, frame, borderShared );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, frame.getBorder() );
@@ -283,9 +277,7 @@ public class FlatInternalFrameUI
 
 	//---- class FlatBorderListener -------------------------------------------
 
-	/**
-	 * @since 1.6
-	 */
+	/** @since 1.6 */
 	protected class FlatBorderListener
 		extends BorderListener
 	{

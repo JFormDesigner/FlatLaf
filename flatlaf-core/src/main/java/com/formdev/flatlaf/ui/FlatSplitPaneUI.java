@@ -138,9 +138,7 @@ public class FlatSplitPaneUI
 		return new FlatSplitPaneDivider( this );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
@@ -148,9 +146,7 @@ public class FlatSplitPaneUI
 			((FlatSplitPaneDivider)divider).updateStyle();
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		try {
 			if( divider instanceof FlatSplitPaneDivider )
@@ -161,9 +157,7 @@ public class FlatSplitPaneUI
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, splitPane, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );

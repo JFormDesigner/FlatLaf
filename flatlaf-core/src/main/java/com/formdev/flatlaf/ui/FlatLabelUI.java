@@ -72,9 +72,7 @@ public class FlatLabelUI
 			: new FlatLabelUI( false );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected FlatLabelUI( boolean shared ) {
 		this.shared = shared;
 	}
@@ -134,24 +132,18 @@ public class FlatLabelUI
 			super.propertyChange( e );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( JLabel c, Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
 			(key, value) -> applyStyleProperty( c, key, value ) );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( JLabel c, String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, c, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );

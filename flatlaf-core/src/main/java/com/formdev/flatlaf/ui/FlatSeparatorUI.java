@@ -67,9 +67,7 @@ public class FlatSeparatorUI
 			: new FlatSeparatorUI( false );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected FlatSeparatorUI( boolean shared ) {
 		this.shared = shared;
 	}
@@ -135,24 +133,18 @@ public class FlatSeparatorUI
 		s.repaint();
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( JSeparator s, Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
 			(key, value) -> applyStyleProperty( s, key, value ) );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( JSeparator s, String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, s, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );

@@ -301,16 +301,12 @@ public class FlatScrollPaneUI
 		return handler;
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( key.equals( "focusWidth" ) ) {
 			int focusWidth = (value instanceof Integer) ? (int) value : UIManager.getInt( "Component.focusWidth" );
@@ -322,9 +318,7 @@ public class FlatScrollPaneUI
 		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, scrollpane, borderShared );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, scrollpane.getBorder() );
@@ -379,9 +373,7 @@ public class FlatScrollPaneUI
 		paint( g, c );
 	}
 
-	/**
-	 * @since 1.3
-	 */
+	/** @since 1.3 */
 	public static boolean isPermanentFocusOwner( JScrollPane scrollPane ) {
 		JViewport viewport = scrollPane.getViewport();
 		Component view = (viewport != null) ? viewport.getView() : null;

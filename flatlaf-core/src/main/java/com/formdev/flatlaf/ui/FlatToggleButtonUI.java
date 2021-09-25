@@ -146,9 +146,7 @@ public class FlatToggleButtonUI
 		}
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
 		if( key.startsWith( "help." ) )
@@ -157,9 +155,7 @@ public class FlatToggleButtonUI
 		return super.applyStyleProperty( b, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = super.getStyleableInfos( c );

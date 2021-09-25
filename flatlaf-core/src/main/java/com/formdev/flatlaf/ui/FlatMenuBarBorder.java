@@ -40,9 +40,7 @@ public class FlatMenuBarBorder
 {
 	@Styleable protected Color borderColor = UIManager.getColor( "MenuBar.borderColor" );
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );

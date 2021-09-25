@@ -66,16 +66,12 @@ public class FlatTabbedPaneCloseIcon
 		super( 16, 16, null );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	public Object applyStyleProperty( String key, Object value ) {
 		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
 	}
 
-	/**
-	 * @since 2
-	 */
+	/** @since 2 */
 	public Map<String, Class<?>> getStyleableInfos() {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
