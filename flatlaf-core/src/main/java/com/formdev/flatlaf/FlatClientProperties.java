@@ -165,7 +165,7 @@ public interface FlatClientProperties
 	 * The rule "Button.primary" can be applied to buttons only.
 	 * The rule ".secondary" can be applied to any component.
 	 * <p>
-	 * To have similar behaviour as in CSS, first the rule without type is applied,
+	 * To have similar behavior as in CSS, first the rule without type is applied,
 	 * then the rule with type.
 	 * E.g. setting style class to "foo" on a {@code JButton} uses rules
 	 * from UI default keys "[style].foo" and "[style]Button.foo".

@@ -320,7 +320,7 @@ debug*/
 		//   - not opaque and
 		//   - border is not a flat border and
 		//   - opaque was explicitly set (to false)
-		// (same behaviour as in AquaTextFieldUI)
+		// (same behavior as in AquaTextFieldUI)
 		if( !c.isOpaque() && FlatUIUtils.getOutsideFlatBorder( c ) == null && FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) )
 			return;
 

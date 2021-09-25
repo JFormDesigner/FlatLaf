@@ -118,7 +118,7 @@ public class FlatStylingSupport
 	 * The rule "Button.primary" can be applied to buttons only.
 	 * The rule ".secondary" can be applied to any component.
 	 * <p>
-	 * To have similar behaviour as in CSS, this method first gets the rule without type,
+	 * To have similar behavior as in CSS, this method first gets the rule without type,
 	 * then the rule with type and concatenates both rules.
 	 * E.g. invoking this method with parameters styleClass="foo" and type="Button" does following:
 	 * <pre>{@code
