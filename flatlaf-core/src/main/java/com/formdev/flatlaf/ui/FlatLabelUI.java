@@ -81,7 +81,7 @@ public class FlatLabelUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( (JLabel) c, FlatStylingSupport.getStyle( c ) );
+		installStyle( (JLabel) c );
 	}
 
 	@Override
@@ -117,19 +117,23 @@ public class FlatLabelUI
 		if( name == "text" || name == "font" || name == "foreground" ) {
 			JLabel label = (JLabel) e.getSource();
 			updateHTMLRenderer( label, label.getText(), true );
-		} else if( name.equals( FlatClientProperties.STYLE ) ) {
+		} else if( name.equals( FlatClientProperties.STYLE ) || name.equals( FlatClientProperties.STYLE_CLASS ) ) {
 			JLabel label = (JLabel) e.getSource();
-			Object style = e.getNewValue();
-			if( style != null && shared ) {
+			if( shared && FlatStylingSupport.hasStyleProperty( label ) ) {
 				// unshare component UI if necessary
 				// updateUI() invokes applyStyle() from installUI()
 				label.updateUI();
 			} else
-				applyStyle( label, style );
+				installStyle( label );
 			label.revalidate();
 			label.repaint();
 		} else
 			super.propertyChange( e );
+	}
+
+	/** @since 2 */
+	protected void installStyle( JLabel c ) {
+		applyStyle( c, FlatStylingSupport.getResolvedStyle( c, "Label" ) );
 	}
 
 	/** @since 2 */

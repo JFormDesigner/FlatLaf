@@ -126,7 +126,7 @@ public class FlatTableUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -197,7 +197,8 @@ public class FlatTableUI
 					break;
 
 				case FlatClientProperties.STYLE:
-					applyStyle( e.getNewValue() );
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle();
 					table.revalidate();
 					table.repaint();
 					break;
@@ -233,6 +234,11 @@ public class FlatTableUI
 				} );
 			}
 		};
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( table, "Table" ) );
 	}
 
 	/** @since 2 */

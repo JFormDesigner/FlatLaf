@@ -53,4 +53,10 @@ public class FlatPopupMenuSeparatorUI
 	protected String getPropertyPrefix() {
 		return "PopupMenuSeparator";
 	}
+
+	/** @since 2 */
+	@Override
+	String getStyleType() {
+		return "PopupMenuSeparator";
+	}
 }

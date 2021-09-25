@@ -91,7 +91,7 @@ public class FlatListUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -151,12 +151,18 @@ public class FlatListUI
 					break;
 
 				case FlatClientProperties.STYLE:
-					applyStyle( e.getNewValue() );
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle();
 					list.revalidate();
 					list.repaint();
 					break;
 			}
 		};
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( list, "List" ) );
 	}
 
 	/** @since 2 */

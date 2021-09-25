@@ -156,7 +156,7 @@ public class FlatTreeUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -271,7 +271,8 @@ public class FlatTreeUI
 						break;
 
 					case STYLE:
-						applyStyle( e.getNewValue() );
+					case STYLE_CLASS:
+						installStyle();
 						tree.revalidate();
 						tree.repaint();
 						break;
@@ -307,6 +308,11 @@ public class FlatTreeUI
 			bounds.width = tree.getWidth();
 		}
 		return bounds;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( tree, "Tree" ) );
 	}
 
 	/** @since 2 */

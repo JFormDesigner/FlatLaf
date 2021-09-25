@@ -26,10 +26,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -71,6 +71,150 @@ public class FlatStylingSupport
 	public interface StyleableBorder {
 		Object applyStyleProperty( String key, Object value );
 		Map<String, Class<?>> getStyleableInfos();
+	}
+
+
+	/**
+	 * Returns the style specified in client property {@link FlatClientProperties#STYLE}.
+	 */
+	public static Object getStyle( JComponent c ) {
+		return c.getClientProperty( FlatClientProperties.STYLE );
+	}
+
+	/**
+	 * Returns the style class(es) specified in client property {@link FlatClientProperties#STYLE_CLASS}.
+	 */
+	public static Object getStyleClass( JComponent c ) {
+		return c.getClientProperty( FlatClientProperties.STYLE_CLASS );
+	}
+
+	static boolean hasStyleProperty( JComponent c ) {
+		return getStyle( c ) != null || getStyleClass( c ) != null;
+	}
+
+	public static Object getResolvedStyle( JComponent c, String type ) {
+		Object style = getStyle( c );
+		Object styleClass = getStyleClass( c );
+		Object styleForClasses = getStyleForClasses( styleClass, type );
+		return joinStyles( styleForClasses, style );
+	}
+
+	/**
+	 * Returns the styles for the given style class(es) and the given type.
+	 * <p>
+	 * The style rules must be defined in UI defaults either as strings (in CSS syntax)
+	 * or as {@link java.util.Map}&lt;String, Object&gt; (with binary values).
+	 * The key must be in syntax: {@code [style]type.styleClass}, where the type is optional.
+	 * E.g. in FlatLaf properties file:
+	 * <pre>{@code
+	 * [style]Button.primary = borderColor: #08f; background: #08f; foreground: #fff
+	 * [style].secondary = borderColor: #0f8; background: #0f8
+	 * }</pre>
+	 * or in Java code:
+	 * <pre>{@code
+	 * UIManager.put( "[style]Button.primary", "borderColor: #08f; background: #08f; foreground: #fff" );
+	 * UIManager.put( "[style].secondary", "borderColor: #0f8; background: #0f8" );
+	 * }</pre>
+	 * The rule "Button.primary" can be applied to buttons only.
+	 * The rule ".secondary" can be applied to any component.
+	 * <p>
+	 * To have similar behaviour as in CSS, this method first gets the rule without type,
+	 * then the rule with type and concatenates both rules.
+	 * E.g. invoking this method with parameters styleClass="foo" and type="Button" does following:
+	 * <pre>{@code
+	 * return joinStyles(
+	 *     UIManager.get( "[style].foo" ),
+	 *     UIManager.get( "[style]Button.foo" ) );
+	 * }</pre>
+	 *
+	 * @param styleClass the style class(es) either as string (single class)
+	 *                   or as {@code String[]} or {@link java.util.List}&lt;String&gt; (multiple classes)
+	 * @param type the type of the component
+	 * @return the styles
+	 */
+	public static Object getStyleForClasses( Object styleClass, String type ) {
+		if( styleClass == null )
+			return null;
+
+		if( styleClass instanceof String )
+			return getStyleForClass( (String) styleClass, type );
+		else if( styleClass instanceof String[] ) {
+			Object style = null;
+			for( String cls : (String[]) styleClass )
+				style = joinStyles( style, getStyleForClass( cls, type ) );
+			return style;
+		} else if( styleClass instanceof List<?> ) {
+			Object style = null;
+			for( Object cls : (List<?>) styleClass )
+				style = joinStyles( style, getStyleForClass( (String) cls, type ) );
+			return style;
+		} else
+			return null;
+	}
+
+	private static Object getStyleForClass( String styleClass, String type ) {
+		return joinStyles(
+			UIManager.get( "[style]." + styleClass ),
+			UIManager.get( "[style]" + type + '.' + styleClass ) );
+	}
+
+	/**
+	 * Joins two styles. They can be either strings (in CSS syntax)
+	 * or {@link java.util.Map}&lt;String, Object&gt; (with binary values).
+	 * <p>
+	 * If both styles are strings, then a joined string is returned.
+	 * If both styles are maps, then a joined map is returned.
+	 * If one style is a map and the other style a string, then the string
+	 * is parsed (using {@link #parse(String)}) to a map and a joined map is returned.
+	 *
+	 * @param style1 first style as string or map, or {@code null}
+	 * @param style2 second style as string or map, or {@code null}
+	 * @return new joined style
+	 */
+	@SuppressWarnings( "unchecked" )
+	public static Object joinStyles( Object style1, Object style2 ) {
+		if( style1 == null )
+			return style2;
+		if( style2 == null )
+			return style1;
+
+		// join two strings
+		if( style1 instanceof String && style2 instanceof String )
+			return style1 + "; " + style2;
+
+		// convert first style to map
+		Map<String, Object> map1 = (style1 instanceof String)
+			? parse( (String) style1 )
+			: (Map<String, Object>) style1;
+		if( map1 == null )
+			return style2;
+
+		// convert second style to map
+		Map<String, Object> map2 = (style2 instanceof String)
+			? parse( (String) style2 )
+			: (Map<String, Object>) style2;
+		if( map2 == null )
+			return style1;
+
+		// join two maps
+		Map<String, Object> map = new HashMap<>( map1 );
+		map.putAll( map2 );
+		return map;
+	}
+
+	/**
+	 * Concatenates two styles in CSS syntax.
+	 *
+	 * @param style1 first style, or {@code null}
+	 * @param style2 second style, or {@code null}
+	 * @return concatenation of the two styles separated by a semicolon
+	 */
+	public static String concatStyles( String style1, String style2 ) {
+		if( style1 == null )
+			return style2;
+		if( style2 == null )
+			return style1;
+		return style1 + "; " + style2;
 	}
 
 	/**
@@ -408,21 +552,20 @@ public class FlatStylingSupport
 		}
 	}
 
-	public static Object getStyle( JComponent c ) {
-		return c.getClientProperty( FlatClientProperties.STYLE );
-	}
-
 	static PropertyChangeListener createPropertyChangeListener( JComponent c,
-		Consumer<Object> applyStyle, PropertyChangeListener superListener )
+		Runnable installStyle, PropertyChangeListener superListener )
 	{
 		return e -> {
 			if( superListener != null )
 				superListener.propertyChange( e );
 
-			if( FlatClientProperties.STYLE.equals( e.getPropertyName() ) ) {
-				applyStyle.accept( e.getNewValue() );
-				c.revalidate();
-				c.repaint();
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.STYLE:
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle.run();
+					c.revalidate();
+					c.repaint();
+					break;
 			}
 		};
 	}

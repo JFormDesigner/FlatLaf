@@ -60,4 +60,10 @@ public class FlatFormattedTextFieldUI
 	protected String getPropertyPrefix() {
 		return "FormattedTextField";
 	}
+
+	/** @since 2 */
+	@Override
+	String getStyleType() {
+		return "FormattedTextField";
+	}
 }

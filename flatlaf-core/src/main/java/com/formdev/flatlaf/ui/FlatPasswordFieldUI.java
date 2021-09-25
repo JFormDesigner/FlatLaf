@@ -164,6 +164,12 @@ public class FlatPasswordFieldUI
 
 	/** @since 2 */
 	@Override
+	String getStyleType() {
+		return "PasswordField";
+	}
+
+	/** @since 2 */
+	@Override
 	protected Object applyStyleProperty( String key, Object value ) {
 		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof FlatCapsLockIcon ) {
 			if( capsLockIconShared ) {

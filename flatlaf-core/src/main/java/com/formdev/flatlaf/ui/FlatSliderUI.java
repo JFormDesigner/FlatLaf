@@ -121,7 +121,7 @@ public class FlatSliderUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( slider ) );
+		installStyle();
 	}
 
 	@Override
@@ -188,8 +188,13 @@ public class FlatSliderUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener( JSlider slider ) {
-		return FlatStylingSupport.createPropertyChangeListener( slider, this::applyStyle,
+		return FlatStylingSupport.createPropertyChangeListener( slider, this::installStyle,
 			super.createPropertyChangeListener( slider ) );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( slider, "Slider" ) );
 	}
 
 	/** @since 2 */

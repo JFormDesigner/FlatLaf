@@ -114,7 +114,7 @@ public class FlatSpinnerUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( spinner ) );
+		installStyle();
 	}
 
 	@Override
@@ -188,6 +188,11 @@ public class FlatSpinnerUI
 		if( handler == null )
 			handler = new Handler();
 		return handler;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( spinner, "Spinner" ) );
 	}
 
 	/** @since 2 */
@@ -530,7 +535,8 @@ public class FlatSpinnerUI
 					break;
 
 				case FlatClientProperties.STYLE:
-					applyStyle( e.getNewValue() );
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle();
 					spinner.revalidate();
 					spinner.repaint();
 					break;

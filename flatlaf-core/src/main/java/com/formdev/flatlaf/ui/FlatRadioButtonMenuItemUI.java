@@ -72,7 +72,7 @@ public class FlatRadioButtonMenuItemUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( menuItem ) );
+		installStyle();
 	}
 
 	@Override
@@ -98,7 +98,12 @@ public class FlatRadioButtonMenuItemUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
-		return FlatStylingSupport.createPropertyChangeListener( c, this::applyStyle, super.createPropertyChangeListener( c ) );
+		return FlatStylingSupport.createPropertyChangeListener( c, this::installStyle, super.createPropertyChangeListener( c ) );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( menuItem, "RadioButtonMenuItem" ) );
 	}
 
 	/** @since 2 */

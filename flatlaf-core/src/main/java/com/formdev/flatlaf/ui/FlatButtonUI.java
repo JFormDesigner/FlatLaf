@@ -152,6 +152,7 @@ public class FlatButtonUI
 			: new FlatButtonUI( false );
 	}
 
+	/** @since 2 */
 	protected FlatButtonUI( boolean shared ) {
 		this.shared = shared;
 	}
@@ -160,7 +161,7 @@ public class FlatButtonUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( (AbstractButton) c, FlatStylingSupport.getStyle( c ) );
+		installStyle( (AbstractButton) c );
 	}
 
 	@Override
@@ -254,17 +255,27 @@ public class FlatButtonUI
 				break;
 
 			case STYLE:
-				Object style = e.getNewValue();
-				if( style != null && shared ) {
+			case STYLE_CLASS:
+				if( shared && FlatStylingSupport.hasStyleProperty( b ) ) {
 					// unshare component UI if necessary
 					// updateUI() invokes applyStyle() from installUI()
 					b.updateUI();
 				} else
-					applyStyle( b, style );
+					installStyle( b );
 				b.revalidate();
 				b.repaint();
 				break;
 		}
+	}
+
+	/** @since 2 */
+	protected void installStyle( AbstractButton b ) {
+		applyStyle( b, FlatStylingSupport.getResolvedStyle( b, getStyleType() ) );
+	}
+
+	/** @since 2 */
+	String getStyleType() {
+		return "Button";
 	}
 
 	/** @since 2 */

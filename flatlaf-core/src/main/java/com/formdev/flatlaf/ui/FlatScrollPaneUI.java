@@ -87,7 +87,7 @@ public class FlatScrollPaneUI
 		int focusWidth = UIManager.getInt( "Component.focusWidth" );
 		LookAndFeel.installProperty( c, "opaque", focusWidth == 0 );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 
 		MigLayoutVisualPadding.install( scrollpane );
 	}
@@ -287,7 +287,8 @@ public class FlatScrollPaneUI
 					break;
 
 				case FlatClientProperties.STYLE:
-					applyStyle( e.getNewValue() );
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle();
 					scrollpane.revalidate();
 					scrollpane.repaint();
 					break;
@@ -299,6 +300,11 @@ public class FlatScrollPaneUI
 		if( handler == null )
 			handler = new Handler();
 		return handler;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( scrollpane, "ScrollPane" ) );
 	}
 
 	/** @since 2 */

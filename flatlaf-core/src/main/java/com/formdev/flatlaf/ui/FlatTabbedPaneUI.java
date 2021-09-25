@@ -269,7 +269,7 @@ public class FlatTabbedPaneUI
 
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -570,6 +570,11 @@ public class FlatTabbedPaneUI
 	@Override
 	protected JButton createScrollButton( int direction ) {
 		return new FlatScrollableTabButton( direction );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( tabPane, "TabbedPane" ) );
 	}
 
 	/** @since 2 */
@@ -2439,7 +2444,8 @@ public class FlatTabbedPaneUI
 					break;
 
 				case STYLE:
-					applyStyle( e.getNewValue() );
+				case STYLE_CLASS:
+					installStyle();
 					tabPane.revalidate();
 					tabPane.repaint();
 					break;

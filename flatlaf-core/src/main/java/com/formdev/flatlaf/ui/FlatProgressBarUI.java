@@ -78,7 +78,7 @@ public class FlatProgressBarUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( progressBar ) );
+		installStyle();
 	}
 
 	@Override
@@ -112,7 +112,8 @@ public class FlatProgressBarUI
 					break;
 
 				case STYLE:
-					applyStyle( e.getNewValue() );
+				case STYLE_CLASS:
+					installStyle();
 					progressBar.revalidate();
 					progressBar.repaint();
 					break;
@@ -127,6 +128,11 @@ public class FlatProgressBarUI
 
 		progressBar.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( progressBar, "ProgressBar" ) );
 	}
 
 	/** @since 2 */

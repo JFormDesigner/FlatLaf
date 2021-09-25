@@ -83,7 +83,7 @@ public class FlatToolBarUI
 		if( !focusableButtons )
 			setButtonsFocusable( false );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -133,7 +133,12 @@ public class FlatToolBarUI
 
 	@Override
 	protected PropertyChangeListener createPropertyListener() {
-		return FlatStylingSupport.createPropertyChangeListener( toolBar, this::applyStyle, super.createPropertyListener() );
+		return FlatStylingSupport.createPropertyChangeListener( toolBar, this::installStyle, super.createPropertyListener() );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( toolBar, "ToolBar" ) );
 	}
 
 	/** @since 2 */

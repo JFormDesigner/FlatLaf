@@ -114,7 +114,7 @@ public class FlatTextFieldUI
 		leadingIcon = clientProperty( c, TEXT_FIELD_LEADING_ICON, null, Icon.class );
 		trailingIcon = clientProperty( c, TEXT_FIELD_TRAILING_ICON, null, Icon.class );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -209,7 +209,8 @@ public class FlatTextFieldUI
 				break;
 
 			case STYLE:
-				applyStyle( e.getNewValue() );
+			case STYLE_CLASS:
+				installStyle();
 				c.revalidate();
 				c.repaint();
 				break;
@@ -224,6 +225,16 @@ public class FlatTextFieldUI
 				c.repaint();
 				break;
 		}
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( getComponent(), getStyleType() ) );
+	}
+
+	/** @since 2 */
+	String getStyleType() {
+		return "TextField";
 	}
 
 	/** @since 2 */

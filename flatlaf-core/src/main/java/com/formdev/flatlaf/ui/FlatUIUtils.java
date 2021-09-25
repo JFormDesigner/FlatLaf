@@ -370,14 +370,16 @@ public class FlatUIUtils
 	 * <li>an (optional) component border
 	 * <li>the (optional) component background
 	 * </ul>
+	 * <p>
+	 *
 	 * Each part is painted only if the corresponding part color is not {@code null}.
 	 * The parts are painted in this order:
-	 * <p>
 	 * <ol>
 	 * <li>background
 	 * <li>focus border
 	 * <li>border
 	 * </ol>
+	 * <p>
 	 *
 	 * <strong>Background</strong>:
 	 * The bounds of the filled round rectangle are
@@ -939,7 +941,7 @@ debug*/
 	 * with other components. This is only possible if it does not have styles.
 	 */
 	public static boolean canUseSharedUI( JComponent c ) {
-		return FlatStylingSupport.getStyle( c ) == null;
+		return !FlatStylingSupport.hasStyleProperty( c );
 	}
 
 	//---- class RepaintFocusListener -----------------------------------------

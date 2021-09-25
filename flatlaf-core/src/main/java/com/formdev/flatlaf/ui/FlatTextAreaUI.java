@@ -86,7 +86,7 @@ public class FlatTextAreaUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -143,7 +143,12 @@ public class FlatTextAreaUI
 			updateBackground();
 
 		super.propertyChange( e );
-		FlatEditorPaneUI.propertyChange( getComponent(), e, this::applyStyle );
+		FlatEditorPaneUI.propertyChange( getComponent(), e, this::installStyle );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( getComponent(), "TextArea" ) );
 	}
 
 	/** @since 2 */

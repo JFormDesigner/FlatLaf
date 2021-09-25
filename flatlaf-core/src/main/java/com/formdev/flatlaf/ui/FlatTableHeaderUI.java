@@ -41,7 +41,6 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.UIScale;
@@ -104,7 +103,7 @@ public class FlatTableHeaderUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -129,16 +128,21 @@ public class FlatTableHeaderUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( header, this::applyStyle, null );
-		header.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( header, this::installStyle, null );
+		header.addPropertyChangeListener( propertyChangeListener );
 	}
 
 	@Override
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		header.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		header.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( header, "TableHeader" ) );
 	}
 
 	/** @since 2 */

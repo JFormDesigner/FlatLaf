@@ -25,7 +25,6 @@ import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
-import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
@@ -91,7 +90,7 @@ public class FlatEditorPaneUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -155,21 +154,27 @@ public class FlatEditorPaneUI
 			updateBackground();
 
 		super.propertyChange( e );
-		propertyChange( getComponent(), e, this::applyStyle );
+		propertyChange( getComponent(), e, this::installStyle );
 	}
 
-	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Consumer<Object> applyStyle ) {
+	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Runnable installStyle ) {
 		switch( e.getPropertyName() ) {
 			case FlatClientProperties.MINIMUM_WIDTH:
 				c.revalidate();
 				break;
 
 			case FlatClientProperties.STYLE:
-				applyStyle.accept( e.getNewValue() );
+			case FlatClientProperties.STYLE_CLASS:
+				installStyle.run();
 				c.revalidate();
 				c.repaint();
 				break;
 		}
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( getComponent(), "EditorPane" ) );
 	}
 
 	/** @since 2 */

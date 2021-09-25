@@ -146,6 +146,38 @@ public interface FlatClientProperties
 	String STYLE = "FlatLaf.style";
 
 	/**
+	 * Specifies the style class(es) of a component as String
+	 * or as {@link java.util.List}&lt;String&gt;.
+	 * <p>
+	 * The style rules must be defined in UI defaults either as strings (in CSS syntax)
+	 * or as {@link java.util.Map}&lt;String, Object&gt; (with binary values).
+	 * The key must be in syntax: {@code [style]type.styleClass}, where the type is optional.
+	 * E.g. in FlatLaf properties file:
+	 * <pre>{@code
+	 * [style]Button.primary = borderColor: #08f; background: #08f; foreground: #fff
+	 * [style].secondary = borderColor: #0f8; background: #0f8
+	 * }</pre>
+	 * or in Java code:
+	 * <pre>{@code
+	 * UIManager.put( "[style]Button.primary", "borderColor: #08f; background: #08f; foreground: #fff" );
+	 * UIManager.put( "[style].secondary", "borderColor: #0f8; background: #0f8" );
+	 * }</pre>
+	 * The rule "Button.primary" can be applied to buttons only.
+	 * The rule ".secondary" can be applied to any component.
+	 * <p>
+	 * To have similar behaviour as in CSS, first the rule without type is applied,
+	 * then the rule with type.
+	 * E.g. setting style class to "foo" on a {@code JButton} uses rules
+	 * from UI default keys "[style].foo" and "[style]Button.foo".
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}, {@code String[]} or {@link java.util.List}&lt;String&gt;<br>
+	 *
+	 * @since 2
+	 */
+	String STYLE_CLASS = "FlatLaf.styleClass";
+
+	/**
 	 * Specifies minimum width of a component.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton},

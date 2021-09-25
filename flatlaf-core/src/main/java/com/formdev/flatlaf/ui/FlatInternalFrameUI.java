@@ -116,7 +116,7 @@ public class FlatInternalFrameUI
 
 		windowResizer = createWindowResizer();
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -148,8 +148,13 @@ public class FlatInternalFrameUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return FlatStylingSupport.createPropertyChangeListener( frame, this::applyStyle,
+		return FlatStylingSupport.createPropertyChangeListener( frame, this::installStyle,
 			super.createPropertyChangeListener() );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( frame, "InternalFrame" ) );
 	}
 
 	/** @since 2 */

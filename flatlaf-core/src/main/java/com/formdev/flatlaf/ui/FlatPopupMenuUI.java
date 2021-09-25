@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPopupMenuUI;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 
 /**
@@ -53,7 +52,7 @@ public class FlatPopupMenuUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -68,16 +67,21 @@ public class FlatPopupMenuUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( popupMenu, this::applyStyle, null );
-		popupMenu.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( popupMenu, this::installStyle, null );
+		popupMenu.addPropertyChangeListener( propertyChangeListener );
 	}
 
 	@Override
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		popupMenu.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		popupMenu.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		applyStyle( FlatStylingSupport.getResolvedStyle( popupMenu, "PopupMenu" ) );
 	}
 
 	/** @since 2 */

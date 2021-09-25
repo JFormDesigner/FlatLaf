@@ -90,7 +90,7 @@ public class FlatRadioButtonUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( (AbstractButton) c, FlatStylingSupport.getStyle( c ) );
+		installStyle( (AbstractButton) c );
 	}
 
 	@Override
@@ -134,17 +134,27 @@ public class FlatRadioButtonUI
 	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
 		switch( e.getPropertyName() ) {
 			case FlatClientProperties.STYLE:
-				Object style = e.getNewValue();
-				if( style != null && shared ) {
+			case FlatClientProperties.STYLE_CLASS:
+				if( shared && FlatStylingSupport.hasStyleProperty( b ) ) {
 					// unshare component UI if necessary
 					// updateUI() invokes applyStyle() from installUI()
 					b.updateUI();
 				} else
-					applyStyle( b, style );
+					installStyle( b );
 				b.revalidate();
 				b.repaint();
 				break;
 		}
+	}
+
+	/** @since 2 */
+	protected void installStyle( AbstractButton b ) {
+		applyStyle( b, FlatStylingSupport.getResolvedStyle( b, getStyleType() ) );
+	}
+
+	/** @since 2 */
+	String getStyleType() {
+		return "RadioButton";
 	}
 
 	/** @since 2 */
