@@ -28,6 +28,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JCheckBoxMenuItem}.
@@ -103,7 +104,11 @@ public class FlatCheckBoxMenuItemUI
 
 	/** @since 2 */
 	protected void installStyle() {
-		applyStyle( FlatStylingSupport.getResolvedStyle( menuItem, "CheckBoxMenuItem" ) );
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( menuItem, "CheckBoxMenuItem" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

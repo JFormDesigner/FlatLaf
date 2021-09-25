@@ -51,6 +51,7 @@ import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -270,7 +271,11 @@ public class FlatButtonUI
 
 	/** @since 2 */
 	protected void installStyle( AbstractButton b ) {
-		applyStyle( b, FlatStylingSupport.getResolvedStyle( b, getStyleType() ) );
+		try {
+			applyStyle( b, FlatStylingSupport.getResolvedStyle( b, getStyleType() ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

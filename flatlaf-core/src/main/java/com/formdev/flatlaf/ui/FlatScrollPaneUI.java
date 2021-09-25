@@ -49,6 +49,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollPane}.
@@ -304,7 +305,11 @@ public class FlatScrollPaneUI
 
 	/** @since 2 */
 	protected void installStyle() {
-		applyStyle( FlatStylingSupport.getResolvedStyle( scrollpane, "ScrollPane" ) );
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( scrollpane, "ScrollPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

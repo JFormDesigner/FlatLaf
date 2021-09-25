@@ -42,6 +42,7 @@ import javax.swing.plaf.basic.BasicMenuBarUI;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -138,7 +139,11 @@ public class FlatMenuBarUI
 
 	/** @since 2 */
 	protected void installStyle() {
-		applyStyle( FlatStylingSupport.getResolvedStyle( menuBar, "MenuBar" ) );
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( menuBar, "MenuBar" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

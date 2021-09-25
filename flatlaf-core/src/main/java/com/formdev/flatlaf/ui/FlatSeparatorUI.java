@@ -30,6 +30,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSeparatorUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSeparator}.
@@ -134,7 +135,11 @@ public class FlatSeparatorUI
 
 	/** @since 2 */
 	protected void installStyle( JSeparator s ) {
-		applyStyle( s, FlatStylingSupport.getResolvedStyle( s, getStyleType() ) );
+		try {
+			applyStyle( s, FlatStylingSupport.getResolvedStyle( s, getStyleType() ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

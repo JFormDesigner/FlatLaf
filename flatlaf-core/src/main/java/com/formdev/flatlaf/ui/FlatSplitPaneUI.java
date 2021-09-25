@@ -37,6 +37,7 @@ import javax.swing.plaf.basic.BasicSplitPaneUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -139,7 +140,11 @@ public class FlatSplitPaneUI
 
 	/** @since 2 */
 	protected void installStyle() {
-		applyStyle( FlatStylingSupport.getResolvedStyle( splitPane, "SplitPane" ) );
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( splitPane, "SplitPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

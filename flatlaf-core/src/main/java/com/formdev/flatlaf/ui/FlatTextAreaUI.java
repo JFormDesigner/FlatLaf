@@ -32,6 +32,7 @@ import javax.swing.plaf.basic.BasicTextAreaUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextArea}.
@@ -148,7 +149,11 @@ public class FlatTextAreaUI
 
 	/** @since 2 */
 	protected void installStyle() {
-		applyStyle( FlatStylingSupport.getResolvedStyle( getComponent(), "TextArea" ) );
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( getComponent(), "TextArea" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

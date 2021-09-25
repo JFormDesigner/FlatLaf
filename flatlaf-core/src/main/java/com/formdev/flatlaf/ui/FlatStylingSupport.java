@@ -506,7 +506,9 @@ public class FlatStylingSupport
 	 * @throws UnknownStyleException if object does not have a annotated field with given name
 	 * @throws IllegalArgumentException if value type does not fit to expected type
 	 */
-	public static Object applyToAnnotatedObjectOrComponent( Object obj, Object comp, String key, Object value ) {
+	public static Object applyToAnnotatedObjectOrComponent( Object obj, Object comp, String key, Object value )
+		throws UnknownStyleException, IllegalArgumentException
+	{
 		try {
 			return applyToAnnotatedObject( obj, key, value );
 		} catch( UnknownStyleException ex ) {

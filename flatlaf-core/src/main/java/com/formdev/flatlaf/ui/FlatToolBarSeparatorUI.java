@@ -33,6 +33,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarSeparatorUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar.Separator}.
@@ -130,7 +131,11 @@ public class FlatToolBarSeparatorUI
 
 	/** @since 2 */
 	protected void installStyle( JSeparator s ) {
-		applyStyle( FlatStylingSupport.getResolvedStyle( s, "ToolBarSeparator" ) );
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( s, "ToolBarSeparator" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

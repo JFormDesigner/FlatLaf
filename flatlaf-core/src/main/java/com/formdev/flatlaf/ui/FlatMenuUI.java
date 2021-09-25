@@ -38,6 +38,7 @@ import javax.swing.plaf.MenuBarUI;
 import javax.swing.plaf.basic.BasicMenuUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenu}.
@@ -150,7 +151,11 @@ public class FlatMenuUI
 
 	/** @since 2 */
 	protected void installStyle() {
-		applyStyle( FlatStylingSupport.getResolvedStyle( menuItem, "Menu" ) );
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( menuItem, "Menu" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */
