@@ -792,7 +792,7 @@ public abstract class FlatLaf
 	/**
 	 * Gets global extra UI defaults; or {@code null}.
 	 *
-	 * @since 1.6
+	 * @since 2
 	 */
 	public static Map<String, String> getGlobalExtraDefaults() {
 		return globalExtraDefaults;
@@ -815,7 +815,7 @@ public abstract class FlatLaf
 	 * }</pre>
 	 *
 	 * @see #setExtraDefaults(Map)
-	 * @since 1.6
+	 * @since 2
 	 */
 	public static void setGlobalExtraDefaults( Map<String, String> globalExtraDefaults ) {
 		FlatLaf.globalExtraDefaults = globalExtraDefaults;
@@ -824,7 +824,7 @@ public abstract class FlatLaf
 	/**
 	 * Gets extra UI defaults; or {@code null}.
 	 *
-	 * @since 1.6
+	 * @since 2
 	 */
 	public Map<String, String> getExtraDefaults() {
 		return extraDefaults;
@@ -848,7 +848,7 @@ public abstract class FlatLaf
 	 * }</pre>
 	 *
 	 * @see #setGlobalExtraDefaults(Map)
-	 * @since 1.6
+	 * @since 2
 	 */
 	public void setExtraDefaults( Map<String, String> extraDefaults ) {
 		this.extraDefaults = extraDefaults;

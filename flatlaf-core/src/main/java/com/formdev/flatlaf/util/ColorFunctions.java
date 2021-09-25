@@ -90,7 +90,7 @@ public class ColorFunctions
 	 * @param weight the weight (in range 0-1) to mix the two colors.
 	 *               Larger weight uses more of first color, smaller weight more of second color.
 	 * @return mixture of colors
-	 * @since 1.6
+	 * @since 2
 	 */
 	public static Color tint( Color color, float weight ) {
 		return mix( Color.white, color, weight );
@@ -104,7 +104,7 @@ public class ColorFunctions
 	 * @param weight the weight (in range 0-1) to mix the two colors.
 	 *               Larger weight uses more of first color, smaller weight more of second color.
 	 * @return mixture of colors
-	 * @since 1.6
+	 * @since 2
 	 */
 	public static Color shade( Color color, float weight ) {
 		return mix( Color.black, color, weight );
@@ -120,7 +120,7 @@ public class ColorFunctions
 	 * @return the luma (in range 0-1)
 	 *
 	 * @see <a href="https://en.wikipedia.org/wiki/Luma_(video)">https://en.wikipedia.org/wiki/Luma_(video)</a>
-	 * @since 1.6
+	 * @since 2
 	 */
 	public static float luma( Color color ) {
 		// see https://en.wikipedia.org/wiki/Luma_(video)
