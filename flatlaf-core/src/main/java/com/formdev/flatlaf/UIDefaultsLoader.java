@@ -312,6 +312,24 @@ class UIDefaultsLoader
 			case "true":	resultValueType[0] = ValueType.BOOLEAN; return true;
 		}
 
+		// check for function "if"
+		//     Syntax: if(condition,trueValue,falseValue)
+		//       - condition: evaluates to true if:
+		//           - is not "null"
+		//           - is not "false"
+		//           - is not an integer with zero value
+		//       - trueValue: used if condition is true
+		//       - falseValue: used if condition is false
+		if( value.startsWith( "if(" ) && value.endsWith( ")" ) ) {
+			List<String> params = splitFunctionParams( value.substring( 3, value.length() - 1 ), ',' );
+			if( params.size() != 3 )
+				throwMissingParametersException( value );
+
+			boolean ifCondition = parseCondition( params.get( 0 ), resolver, addonClassLoaders );
+			String ifValue = params.get( ifCondition ? 1 : 2 );
+			return parseValue( key, resolver.apply( ifValue ), resultValueType, resolver, addonClassLoaders );
+		}
+
 		// check for function "lazy"
 		//     Syntax: lazy(uiKey)
 		if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
@@ -417,6 +435,20 @@ class UIDefaultsLoader
 				// string
 				resultValueType[0] = ValueType.STRING;
 				return value;
+		}
+	}
+
+	private static boolean parseCondition( String condition,
+		Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
+	{
+		try {
+			Object conditionValue = parseValue( "", resolver.apply( condition ), null, resolver, addonClassLoaders );
+			return (conditionValue != null &&
+				!conditionValue.equals( false ) &&
+				!conditionValue.equals( 0 ) );
+		} catch( IllegalArgumentException ex ) {
+			// ignore errors (e.g. variable or property not found) and evaluate to false
+			return false;
 		}
 	}
 
@@ -584,7 +616,7 @@ class UIDefaultsLoader
 		String function = value.substring( 0, paramsStart ).trim();
 		List<String> params = splitFunctionParams( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
 		if( params.isEmpty() )
-			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
+			throwMissingParametersException( value );
 
 		if( parseColorDepth > 100 )
 			throw new IllegalArgumentException( "endless recursion in color function '" + value + "'" );
@@ -592,6 +624,7 @@ class UIDefaultsLoader
 		parseColorDepth++;
 		try {
 			switch( function ) {
+				case "if":			return parseColorIf( value, params, resolver, reportError );
 				case "rgb":			return parseColorRgbOrRgba( false, params, resolver, reportError );
 				case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
 				case "hsl":			return parseColorHslOrHsla( false, params );
@@ -618,6 +651,21 @@ class UIDefaultsLoader
 		}
 
 		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
+	}
+
+	/**
+	 * Syntax: if(condition,trueValue,falseValue)
+	 * <p>
+	 * This "if" function is only used if the "if" is passed as parameter to another
+	 * color function. Otherwise the general "if" function is used.
+	 */
+	private static Object parseColorIf( String value, List<String> params, Function<String, String> resolver, boolean reportError ) {
+		if( params.size() != 3 )
+			throwMissingParametersException( value );
+
+		boolean ifCondition = parseCondition( params.get( 0 ), resolver, Collections.emptyList() );
+		String ifValue = params.get( ifCondition ? 1 : 2 );
+		return parseColorOrFunction( resolver.apply( ifValue ), resolver, reportError );
 	}
 
 	/**
@@ -1028,5 +1076,9 @@ class UIDefaultsLoader
 		if( value == null && !optional )
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: '" + uiKey + "' not found in UI defaults.", null );
 		return value;
+	}
+
+	private static void throwMissingParametersException( String value ) {
+		throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 	}
 }

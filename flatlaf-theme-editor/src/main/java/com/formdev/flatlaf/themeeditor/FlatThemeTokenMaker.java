@@ -51,7 +51,11 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "false", Token.LITERAL_BOOLEAN );
 		tokenMap.put( "true", Token.LITERAL_BOOLEAN );
 
-		// functions
+		// general functions
+		tokenMap.put( "if", TOKEN_FUNCTION );
+		tokenMap.put( "lazy", TOKEN_FUNCTION );
+
+		// color functions
 		tokenMap.put( "rgb", TOKEN_FUNCTION );
 		tokenMap.put( "rgba", TOKEN_FUNCTION );
 		tokenMap.put( "hsl", TOKEN_FUNCTION );
@@ -72,7 +76,6 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "tint", TOKEN_FUNCTION );
 		tokenMap.put( "shade", TOKEN_FUNCTION );
 		tokenMap.put( "contrast", TOKEN_FUNCTION );
-		tokenMap.put( "lazy", TOKEN_FUNCTION );
 
 		// function options
 		tokenMap.put( "relative", Token.RESERVED_WORD );
