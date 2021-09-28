@@ -405,6 +405,13 @@ class FlatCompletionProvider
 			setParameterizedCompletionParams( '(', ",", ')' );
 			setParameterChoicesProvider( this );
 
+			addFunction( "if",
+				"condition", "evaluates to true if: is not \"null\" and is not \"false\" and is not an integer with zero value",
+				"trueValue", "used if condition is true",
+				"falseValue", "used if condition is false" );
+			addFunction( "lazy",
+				"uiKey", "UI key (without leading '$')" );
+
 			addFunction( "rgb",
 				"red", "0-255 or 0-100%",
 				"green", "0-255 or 0-100%",
@@ -471,6 +478,12 @@ class FlatCompletionProvider
 			addFunction( "shade",
 				"color", colorParamDesc,
 				"weight", weightParamDesc );
+
+			addFunction( "contrast",
+				"color", colorParamDesc,
+				"dark", colorParamDesc,
+				"light", colorParamDesc,
+				"threshold", "(optional) 0-100%, default is 43%" );
 		}
 
 		private void addFunction( String name, String... paramNamesAndDescs ) {

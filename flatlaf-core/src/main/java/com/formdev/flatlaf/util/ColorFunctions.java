@@ -49,6 +49,9 @@ public class ColorFunctions
 
 	/**
 	 * Returns a color that is a mixture of two colors.
+	 * <p>
+	 * This can be used to animate a color change from {@code color1} to {@code color2}
+	 * by invoking this method multiple times with growing {@code weight} (from 0 to 1).
 	 *
 	 * @param color1 first color
 	 * @param color2 second color
@@ -77,6 +80,62 @@ public class ColorFunctions
 			Math.round( g2 + ((g1 - g2) * weight) ),
 			Math.round( b2 + ((b1 - b2) * weight) ),
 			Math.round( a2 + ((a1 - a2) * weight) ) );
+	}
+
+	/**
+	 * Mix color with white, which makes the color brighter.
+	 * This is the same as {@link #mix}{@code (Color.white, color, weight)}.
+	 *
+	 * @param color second color
+	 * @param weight the weight (in range 0-1) to mix the two colors.
+	 *               Larger weight uses more of first color, smaller weight more of second color.
+	 * @return mixture of colors
+	 * @since 2
+	 */
+	public static Color tint( Color color, float weight ) {
+		return mix( Color.white, color, weight );
+	}
+
+	/**
+	 * Mix color with black, which makes the color darker.
+	 * This is the same as {@link #mix}{@code (Color.black, color, weight)}.
+	 *
+	 * @param color second color
+	 * @param weight the weight (in range 0-1) to mix the two colors.
+	 *               Larger weight uses more of first color, smaller weight more of second color.
+	 * @return mixture of colors
+	 * @since 2
+	 */
+	public static Color shade( Color color, float weight ) {
+		return mix( Color.black, color, weight );
+	}
+
+	/**
+	 * Calculates the luma (perceptual brightness) of the given color.
+	 * <p>
+	 * Uses SMPTE C / Rec. 709 coefficients, as recommended in
+	 * <a href="https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef">WCAG 2.0</a>.
+	 *
+	 * @param color a color
+	 * @return the luma (in range 0-1)
+	 *
+	 * @see <a href="https://en.wikipedia.org/wiki/Luma_(video)">https://en.wikipedia.org/wiki/Luma_(video)</a>
+	 * @since 2
+	 */
+	public static float luma( Color color ) {
+		// see https://en.wikipedia.org/wiki/Luma_(video)
+		// see https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+		// see https://github.com/less/less.js/blob/master/packages/less/src/less/tree/color.js
+		float r = gammaCorrection( color.getRed() / 255f );
+		float g = gammaCorrection( color.getGreen() / 255f );
+		float b = gammaCorrection( color.getBlue() / 255f );
+		return (0.2126f * r) + (0.7152f * g) + (0.0722f * b);
+	}
+
+	private static float gammaCorrection( float value ) {
+		return (value <= 0.03928f)
+			? value / 12.92f
+			: (float) Math.pow( (value + 0.055) / 1.055, 2.4 );
 	}
 
 	//---- interface ColorFunction --------------------------------------------

@@ -333,6 +333,24 @@ class UIDefaultsLoader
 			return null;
 		}
 
+		// check for function "if"
+		//     Syntax: if(condition,trueValue,falseValue)
+		//       - condition: evaluates to true if:
+		//           - is not "null"
+		//           - is not "false"
+		//           - is not an integer with zero value
+		//       - trueValue: used if condition is true
+		//       - falseValue: used if condition is false
+		if( value.startsWith( "if(" ) && value.endsWith( ")" ) ) {
+			List<String> params = splitFunctionParams( value.substring( 3, value.length() - 1 ), ',' );
+			if( params.size() != 3 )
+				throwMissingParametersException( value );
+
+			boolean ifCondition = parseCondition( params.get( 0 ), resolver, addonClassLoaders );
+			String ifValue = params.get( ifCondition ? 1 : 2 );
+			return parseValue( key, resolver.apply( ifValue ), javaValueType, resultValueType, resolver, addonClassLoaders );
+		}
+
 		ValueType valueType = ValueType.UNKNOWN;
 
 		if( javaValueType != null ) {
@@ -476,6 +494,20 @@ class UIDefaultsLoader
 				// string
 				resultValueType[0] = ValueType.STRING;
 				return value;
+		}
+	}
+
+	private static boolean parseCondition( String condition,
+		Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
+	{
+		try {
+			Object conditionValue = parseValue( "", resolver.apply( condition ), null, null, resolver, addonClassLoaders );
+			return (conditionValue != null &&
+				!conditionValue.equals( false ) &&
+				!conditionValue.equals( 0 ) );
+		} catch( IllegalArgumentException ex ) {
+			// ignore errors (e.g. variable or property not found) and evaluate to false
+			return false;
 		}
 	}
 
@@ -643,7 +675,7 @@ class UIDefaultsLoader
 		String function = value.substring( 0, paramsStart ).trim();
 		List<String> params = splitFunctionParams( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
 		if( params.isEmpty() )
-			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
+			throwMissingParametersException( value );
 
 		if( parseColorDepth > 100 )
 			throw new IllegalArgumentException( "endless recursion in color function '" + value + "'" );
@@ -651,6 +683,7 @@ class UIDefaultsLoader
 		parseColorDepth++;
 		try {
 			switch( function ) {
+				case "if":			return parseColorIf( value, params, resolver, reportError );
 				case "rgb":			return parseColorRgbOrRgba( false, params, resolver, reportError );
 				case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
 				case "hsl":			return parseColorHslOrHsla( false, params );
@@ -670,12 +703,28 @@ class UIDefaultsLoader
 				case "mix":				return parseColorMix( null, params, resolver, reportError );
 				case "tint":			return parseColorMix( "#fff", params, resolver, reportError );
 				case "shade":			return parseColorMix( "#000", params, resolver, reportError );
+				case "contrast":		return parseColorContrast( params, resolver, reportError );
 			}
 		} finally {
 			parseColorDepth--;
 		}
 
 		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
+	}
+
+	/**
+	 * Syntax: if(condition,trueValue,falseValue)
+	 * <p>
+	 * This "if" function is only used if the "if" is passed as parameter to another
+	 * color function. Otherwise the general "if" function is used.
+	 */
+	private static Object parseColorIf( String value, List<String> params, Function<String, String> resolver, boolean reportError ) {
+		if( params.size() != 3 )
+			throwMissingParametersException( value );
+
+		boolean ifCondition = parseCondition( params.get( 0 ), resolver, Collections.emptyList() );
+		String ifValue = params.get( ifCondition ? 1 : 2 );
+		return parseColorOrFunction( resolver.apply( ifValue ), resolver, reportError );
 	}
 
 	/**
@@ -863,14 +912,10 @@ class UIDefaultsLoader
 		if( color1Str == null )
 			color1Str = params.get( i++ );
 		String color2Str = params.get( i++ );
-		int weight = 50;
-
-		if( params.size() > i )
-			weight = parsePercentage( params.get( i++ ) );
+		int weight = (params.size() > i) ? parsePercentage( params.get( i ) ) : 50;
 
 		// parse second color
-		String resolvedColor2Str = resolver.apply( color2Str );
-		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolvedColor2Str, resolver, reportError );
+		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolver.apply( color2Str ), resolver, reportError );
 		if( color2 == null )
 			return null;
 
@@ -879,6 +924,34 @@ class UIDefaultsLoader
 
 		// parse first color, apply function and create mixed color
 		return parseFunctionBaseColor( color1Str, function, false, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: contrast(color,dark,light[,threshold])
+	 *   - color: a color to compare against
+	 *   - dark: a designated dark color (e.g. #000) or a color function
+	 *   - light: a designated light color (e.g. #fff) or a color function
+	 *   - threshold: the threshold (in range 0-100%) to specify where the transition
+	 *                from "dark" to "light" is (default is 43%)
+	 */
+	private static Object parseColorContrast( List<String> params, Function<String, String> resolver, boolean reportError ) {
+		String colorStr = params.get( 0 );
+		String darkStr = params.get( 1 );
+		String lightStr = params.get( 2 );
+		int threshold = (params.size() > 3) ? parsePercentage( params.get( 3 ) ) : 43;
+
+		// parse color to compare against
+		ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+		if( color == null )
+			return null;
+
+		// check luma and determine whether to use dark or light color
+		String darkOrLightColor = (ColorFunctions.luma( color ) * 100 < threshold)
+			? lightStr
+			: darkStr;
+
+		// parse dark or light color
+		return parseColorOrFunction( resolver.apply( darkOrLightColor ), resolver, reportError );
 	}
 
 	private static Object parseFunctionBaseColor( String colorStr, ColorFunction function,
@@ -1070,5 +1143,9 @@ class UIDefaultsLoader
 		if( value == null && !optional )
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: '" + uiKey + "' not found in UI defaults.", null );
 		return value;
+	}
+
+	private static void throwMissingParametersException( String value ) {
+		throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 	}
 }

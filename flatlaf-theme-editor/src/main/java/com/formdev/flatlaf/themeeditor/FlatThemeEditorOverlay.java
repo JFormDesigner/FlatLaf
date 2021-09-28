@@ -31,6 +31,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -46,6 +47,7 @@ class FlatThemeEditorOverlay
 
 	static boolean showHSL = true;
 	static boolean showRGB;
+	static boolean showLuma;
 
 	private Font font;
 	private Font baseFont;
@@ -80,19 +82,21 @@ class FlatThemeEditorOverlay
 		}
 
 		FontMetrics fm = c.getFontMetrics( font );
+		int space = fm.stringWidth( "  " );
 		int maxTextWidth = 0;
 		if( showHSL )
-			maxTextWidth += fm.stringWidth( "HSL 360 100 100" );
+			maxTextWidth += fm.stringWidth( "HSL 360 100 100" ) + space;
 		if( showRGB )
-			maxTextWidth += fm.stringWidth( "#ffffff" );
-		if( showHSL && showRGB )
-			maxTextWidth += fm.stringWidth( "  " );
+			maxTextWidth += fm.stringWidth( "#ffffff" ) + space;
+		if( showLuma )
+			maxTextWidth += fm.stringWidth( "100" ) + space;
+		maxTextWidth = Math.max( maxTextWidth - space, 0 );
 		int textHeight = fm.getAscent() - fm.getLeading();
 
 		int width = c.getWidth();
 		int previewWidth = UIScale.scale( COLOR_PREVIEW_WIDTH );
 		int gap = UIScale.scale( 4 );
-		int textGap = (showHSL || showRGB) ? UIScale.scale( 6 ) : 0;
+		int textGap = (showHSL || showRGB || showLuma) ? UIScale.scale( 6 ) : 0;
 
 		// check whether preview is outside of clip bounds
 		if( clipBounds.x + clipBounds.width < width - previewWidth - maxTextWidth - gap - textGap )
@@ -123,7 +127,7 @@ class FlatThemeEditorOverlay
 				}
 
 				// paint text
-				if( showHSL || showRGB ) {
+				if( showHSL || showRGB || showLuma ) {
 					int textX = px - textGap - maxTextWidth;
 					if( textX > r.x + gap) {
 						String colorStr = null;
@@ -140,6 +144,14 @@ class FlatThemeEditorOverlay
 								colorStr += "  " + rgbStr;
 							else
 								colorStr = rgbStr;
+						}
+						if( showLuma ) {
+							String lumaStr = String.format( "%3d",
+								Math.round( ColorFunctions.luma( color ) * 100 ) );
+							if( colorStr != null )
+								colorStr += "  " + lumaStr;
+							else
+								colorStr = lumaStr;
 						}
 
 						int textWidth = fm.stringWidth( colorStr );

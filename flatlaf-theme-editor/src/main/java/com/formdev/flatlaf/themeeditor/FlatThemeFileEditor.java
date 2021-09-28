@@ -83,8 +83,9 @@ class FlatThemeFileEditor
 	private static final String KEY_PREVIEW = "preview";
 	private static final String KEY_LAF = "laf";
 	private static final String KEY_FONT_SIZE_INCR = "fontSizeIncr";
-	private static final String KEY_HSL_COLORS = "hslColors";
-	private static final String KEY_RGB_COLORS = "rgbColors";
+	private static final String KEY_SHOW_HSL_COLORS = "showHslColors";
+	private static final String KEY_SHOW_RGB_COLORS = "showRgbColors";
+	private static final String KEY_SHOW_COLOR_LUMA = "showColorLuma";
 
 	private File dir;
 	private Preferences state;
@@ -708,9 +709,11 @@ class FlatThemeFileEditor
 	private void colorModelChanged() {
 		FlatThemeEditorOverlay.showHSL = showHSLColorsMenuItem.isSelected();
 		FlatThemeEditorOverlay.showRGB = showRGBColorsMenuItem.isSelected();
+		FlatThemeEditorOverlay.showLuma = showColorLumaMenuItem.isSelected();
 
-		putPrefsBoolean( state, KEY_HSL_COLORS, FlatThemeEditorOverlay.showHSL, true );
-		putPrefsBoolean( state, KEY_RGB_COLORS, FlatThemeEditorOverlay.showRGB, false );
+		putPrefsBoolean( state, KEY_SHOW_HSL_COLORS, FlatThemeEditorOverlay.showHSL, true );
+		putPrefsBoolean( state, KEY_SHOW_RGB_COLORS, FlatThemeEditorOverlay.showRGB, false );
+		putPrefsBoolean( state, KEY_SHOW_COLOR_LUMA, FlatThemeEditorOverlay.showLuma, false );
 
 		repaint();
 	}
@@ -762,13 +765,15 @@ class FlatThemeFileEditor
 		directoryField.setModel( model );
 
 		// restore overlay color models
-		FlatThemeEditorOverlay.showHSL = state.getBoolean( KEY_HSL_COLORS, true );
-		FlatThemeEditorOverlay.showRGB = state.getBoolean( KEY_RGB_COLORS, false );
+		FlatThemeEditorOverlay.showHSL = state.getBoolean( KEY_SHOW_HSL_COLORS, true );
+		FlatThemeEditorOverlay.showRGB = state.getBoolean( KEY_SHOW_RGB_COLORS, false );
+		FlatThemeEditorOverlay.showLuma = state.getBoolean( KEY_SHOW_COLOR_LUMA, false );
 
 		// restore menu item selection
 		previewMenuItem.setSelected( state.getBoolean( KEY_PREVIEW, true ) );
 		showHSLColorsMenuItem.setSelected( FlatThemeEditorOverlay.showHSL );
 		showRGBColorsMenuItem.setSelected( FlatThemeEditorOverlay.showRGB );
+		showColorLumaMenuItem.setSelected( FlatThemeEditorOverlay.showLuma );
 	}
 
 	private void saveState() {
@@ -884,6 +889,7 @@ class FlatThemeFileEditor
 		resetFontSizeMenuItem = new JMenuItem();
 		showHSLColorsMenuItem = new JCheckBoxMenuItem();
 		showRGBColorsMenuItem = new JCheckBoxMenuItem();
+		showColorLumaMenuItem = new JCheckBoxMenuItem();
 		windowMenu = new JMenu();
 		activateEditorMenuItem = new JMenuItem();
 		nextEditorMenuItem = new JMenuItem();
@@ -1031,6 +1037,11 @@ class FlatThemeFileEditor
 				showRGBColorsMenuItem.setText("Show RGB colors (hex)");
 				showRGBColorsMenuItem.addActionListener(e -> colorModelChanged());
 				viewMenu.add(showRGBColorsMenuItem);
+
+				//---- showColorLumaMenuItem ----
+				showColorLumaMenuItem.setText("Show color luma");
+				showColorLumaMenuItem.addActionListener(e -> colorModelChanged());
+				viewMenu.add(showColorLumaMenuItem);
 			}
 			menuBar.add(viewMenu);
 
@@ -1140,6 +1151,7 @@ class FlatThemeFileEditor
 	private JMenuItem resetFontSizeMenuItem;
 	private JCheckBoxMenuItem showHSLColorsMenuItem;
 	private JCheckBoxMenuItem showRGBColorsMenuItem;
+	private JCheckBoxMenuItem showColorLumaMenuItem;
 	private JMenu windowMenu;
 	private JMenuItem activateEditorMenuItem;
 	private JMenuItem nextEditorMenuItem;

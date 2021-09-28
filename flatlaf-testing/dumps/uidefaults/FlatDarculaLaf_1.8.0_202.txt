@@ -18,7 +18,7 @@
 
 #---- CheckBox ----
 
-- CheckBox.icon.focusedBackground #466d944d  30%  HSLA 210  36  43 30    javax.swing.plaf.ColorUIResource [UI]
+- CheckBox.icon.focusedBackground #446e9e4d  30%  HSLA 212  40  44 30    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- ComboBox ----
@@ -71,7 +71,7 @@
 
 #---- ProgressBar ----
 
-- ProgressBar.foreground         #4a88c7  HSL 210  53  54    javax.swing.plaf.ColorUIResource [UI]
+- ProgressBar.foreground         #4c87c8  HSL 211  53  54    javax.swing.plaf.ColorUIResource [UI]
 + ProgressBar.foreground         #a0a0a0  HSL   0   0  63    javax.swing.plaf.ColorUIResource [UI]
 
 - ProgressBar.selectionForeground #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]

@@ -88,6 +88,8 @@ public abstract class FlatLaf
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
 	private static List<Object> customDefaultsSources;
+	private static Map<String, String> globalExtraDefaults;
+	private Map<String, String> extraDefaults;
 
 	private String desktopPropertyName;
 	private String desktopPropertyName2;
@@ -466,7 +468,15 @@ public abstract class FlatLaf
 	}
 
 	protected Properties getAdditionalDefaults() {
-		return null;
+		if( globalExtraDefaults == null && extraDefaults == null )
+			return null;
+
+		Properties properties = new Properties();
+		if( globalExtraDefaults != null )
+			properties.putAll( globalExtraDefaults );
+		if( extraDefaults != null )
+			properties.putAll( extraDefaults );
+		return properties;
 	}
 
 	private void initResourceBundle( UIDefaults defaults, String bundleName ) {
@@ -777,6 +787,71 @@ public abstract class FlatLaf
 			return;
 
 		customDefaultsSources.remove( folder );
+	}
+
+	/**
+	 * Gets global extra UI defaults; or {@code null}.
+	 *
+	 * @since 2
+	 */
+	public static Map<String, String> getGlobalExtraDefaults() {
+		return globalExtraDefaults;
+	}
+
+	/**
+	 * Sets global extra UI defaults, which are only used when setting up the application look and feel.
+	 * E.g. using {@link UIManager#setLookAndFeel(LookAndFeel)} or {@link #setup(LookAndFeel)}.
+	 * <p>
+	 * The global extra defaults are useful for smaller additional defaults that may change.
+	 * E.g. accent color. Otherwise FlatLaf properties files should be used.
+	 * See {@link #registerCustomDefaultsSource(String)}.
+	 * <p>
+	 * The keys and values are strings in same format as in FlatLaf properties files.
+	 * <p>
+	 * Sample that setups "FlatLaf Light" theme with red accent color:
+	 * <pre>{@code
+	 * FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#f00" ) );
+	 * FlatLightLaf.setup();
+	 * }</pre>
+	 *
+	 * @see #setExtraDefaults(Map)
+	 * @since 2
+	 */
+	public static void setGlobalExtraDefaults( Map<String, String> globalExtraDefaults ) {
+		FlatLaf.globalExtraDefaults = globalExtraDefaults;
+	}
+
+	/**
+	 * Gets extra UI defaults; or {@code null}.
+	 *
+	 * @since 2
+	 */
+	public Map<String, String> getExtraDefaults() {
+		return extraDefaults;
+	}
+
+	/**
+	 * Sets extra UI defaults, which are only used when setting up the application look and feel.
+	 * E.g. using {@link UIManager#setLookAndFeel(LookAndFeel)} or {@link #setup(LookAndFeel)}.
+	 * <p>
+	 * The extra defaults are useful for smaller additional defaults that may change.
+	 * E.g. accent color. Otherwise FlatLaf properties files should be used.
+	 * See {@link #registerCustomDefaultsSource(String)}.
+	 * <p>
+	 * The keys and values are strings in same format as in FlatLaf properties files.
+	 * <p>
+	 * Sample that setups "FlatLaf Light" theme with red accent color:
+	 * <pre>{@code
+	 * FlatLaf laf = new FlatLightLaf();
+	 * laf.setExtraDefaults( Collections.singletonMap( "@accentColor", "#f00" ) );
+	 * FlatLaf.setup( laf );
+	 * }</pre>
+	 *
+	 * @see #setGlobalExtraDefaults(Map)
+	 * @since 2
+	 */
+	public void setExtraDefaults( Map<String, String> extraDefaults ) {
+		this.extraDefaults = extraDefaults;
 	}
 
 	/**

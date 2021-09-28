@@ -24,11 +24,16 @@ import java.net.URISyntaxException;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.StyleContext;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.demo.HintManager.Hint;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
@@ -37,9 +42,12 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
+import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
+import com.formdev.flatlaf.util.ColorFunctions;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.layout.ConstraintParser;
@@ -65,6 +73,7 @@ class DemoFrame
 
 		initComponents();
 		updateFontMenuItems();
+		initAccentColors();
 		controlBar.initialize( this, tabbedPane );
 
 		setIconImages( FlatSVGUtils.createWindowIconImages( "/com/formdev/flatlaf/demo/FlatLaf.svg" ) );
@@ -323,6 +332,78 @@ class DemoFrame
 			item.setEnabled( enabled );
 	}
 
+	// the real colors are defined in
+	// flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLightLaf.properties and
+	// flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatDarkLaf.properties
+	private static String[] accentColorKeys = {
+		"Demo.accent.default", "Demo.accent.blue", "Demo.accent.purple", "Demo.accent.red",
+		"Demo.accent.orange", "Demo.accent.yellow", "Demo.accent.green",
+	};
+	private static String[] accentColorNames = {
+		"Default", "Blue", "Purple", "Red", "Orange", "Yellow", "Green",
+	};
+	private final JToggleButton[] accentColorButtons = new JToggleButton[accentColorKeys.length];
+	private JLabel accentColorLabel;
+
+	private void initAccentColors() {
+		accentColorLabel = new JLabel( "Accent color:" );
+
+		toolBar.add( Box.createHorizontalGlue() );
+		toolBar.add( accentColorLabel );
+
+		ButtonGroup group = new ButtonGroup();
+		for( int i = 0; i < accentColorButtons.length; i++ ) {
+			accentColorButtons[i] = new JToggleButton( new AccentColorIcon( accentColorKeys[i] ) );
+			accentColorButtons[i].setToolTipText( accentColorNames[i] );
+			accentColorButtons[i].addActionListener( this::accentColorChanged );
+			toolBar.add( accentColorButtons[i] );
+			group.add( accentColorButtons[i] );
+		}
+
+		accentColorButtons[0].setSelected( true );
+
+		UIManager.addPropertyChangeListener( e -> {
+			if( "lookAndFeel".equals( e.getPropertyName() ) )
+				updateAccentColorButtons();
+		} );
+		updateAccentColorButtons();
+	}
+
+	private void accentColorChanged( ActionEvent e ) {
+		String accentColor = accentColorKeys[0];
+		for( int i = 0; i < accentColorButtons.length; i++ ) {
+			if( accentColorButtons[i].isSelected() ) {
+				accentColor = accentColorKeys[i];
+				break;
+			}
+		}
+
+		FlatLaf.setGlobalExtraDefaults( (accentColor != accentColorKeys[0])
+			? Collections.singletonMap( "@accentColor", "$" + accentColor )
+			: null );
+
+		Class<? extends LookAndFeel> lafClass = UIManager.getLookAndFeel().getClass();
+		try {
+			FlatLaf.setup( lafClass.newInstance() );
+			FlatLaf.updateUI();
+		} catch( InstantiationException | IllegalAccessException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	private void updateAccentColorButtons() {
+		Class<? extends LookAndFeel> lafClass = UIManager.getLookAndFeel().getClass();
+		boolean isAccentColorSupported =
+			lafClass == FlatLightLaf.class ||
+			lafClass == FlatDarkLaf.class ||
+			lafClass == FlatIntelliJLaf.class ||
+			lafClass == FlatDarculaLaf.class;
+
+		accentColorLabel.setEnabled( isAccentColorSupported );
+		for( int i = 0; i < accentColorButtons.length; i++ )
+			accentColorButtons[i].setEnabled( isAccentColorSupported );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JMenuBar menuBar1 = new JMenuBar();
@@ -369,7 +450,7 @@ class DemoFrame
 		JMenuItem showUIDefaultsInspectorMenuItem = new JMenuItem();
 		JMenu helpMenu = new JMenu();
 		JMenuItem aboutMenuItem = new JMenuItem();
-		JToolBar toolBar1 = new JToolBar();
+		toolBar = new JToolBar();
 		JButton backButton = new JButton();
 		JButton forwardButton = new JButton();
 		JButton cutButton = new JButton();
@@ -671,43 +752,43 @@ class DemoFrame
 		}
 		setJMenuBar(menuBar1);
 
-		//======== toolBar1 ========
+		//======== toolBar ========
 		{
-			toolBar1.setMargin(new Insets(3, 3, 3, 3));
+			toolBar.setMargin(new Insets(3, 3, 3, 3));
 
 			//---- backButton ----
 			backButton.setToolTipText("Back");
-			toolBar1.add(backButton);
+			toolBar.add(backButton);
 
 			//---- forwardButton ----
 			forwardButton.setToolTipText("Forward");
-			toolBar1.add(forwardButton);
-			toolBar1.addSeparator();
+			toolBar.add(forwardButton);
+			toolBar.addSeparator();
 
 			//---- cutButton ----
 			cutButton.setToolTipText("Cut");
-			toolBar1.add(cutButton);
+			toolBar.add(cutButton);
 
 			//---- copyButton ----
 			copyButton.setToolTipText("Copy");
-			toolBar1.add(copyButton);
+			toolBar.add(copyButton);
 
 			//---- pasteButton ----
 			pasteButton.setToolTipText("Paste");
-			toolBar1.add(pasteButton);
-			toolBar1.addSeparator();
+			toolBar.add(pasteButton);
+			toolBar.addSeparator();
 
 			//---- refreshButton ----
 			refreshButton.setToolTipText("Refresh");
-			toolBar1.add(refreshButton);
-			toolBar1.addSeparator();
+			toolBar.add(refreshButton);
+			toolBar.addSeparator();
 
 			//---- showToggleButton ----
 			showToggleButton.setSelected(true);
 			showToggleButton.setToolTipText("Show Details");
-			toolBar1.add(showToggleButton);
+			toolBar.add(showToggleButton);
 		}
-		contentPane.add(toolBar1, BorderLayout.NORTH);
+		contentPane.add(toolBar, BorderLayout.NORTH);
 
 		//======== contentPanel ========
 		{
@@ -813,8 +894,37 @@ class DemoFrame
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;
+	private JToolBar toolBar;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
 	IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class AccentColorIcon ----------------------------------------------
+
+	private static class AccentColorIcon
+		extends FlatAbstractIcon
+	{
+		private final String colorKey;
+
+		AccentColorIcon( String colorKey ) {
+			super( 16, 16, null );
+			this.colorKey = colorKey;
+		}
+
+		@Override
+		protected void paintIcon( Component c, Graphics2D g ) {
+			Color color = UIManager.getColor( colorKey );
+			if( color == null )
+				color = Color.lightGray;
+			else if( !c.isEnabled() ) {
+				color = FlatLaf.isLafDark()
+					? ColorFunctions.shade( color, 0.5f )
+					: ColorFunctions.tint( color, 0.6f );
+			}
+
+			g.setColor( color );
+			g.fillRoundRect( 1, 1, width - 2, height - 2, 5, 5 );
+		}
+	}
 }
