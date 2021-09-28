@@ -216,6 +216,7 @@ ComboBoxUI                     com.formdev.flatlaf.ui.FlatComboBoxUI
 
 #---- Component ----
 
+Component.accentColor          #4b6eaf  HSL 219  40  49    javax.swing.plaf.ColorUIResource [UI]
 Component.arc                  5
 Component.arrowType            chevron
 Component.borderColor          #646464  HSL   0   0  39    javax.swing.plaf.ColorUIResource [UI]

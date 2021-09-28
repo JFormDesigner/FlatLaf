@@ -172,6 +172,7 @@ ComboBox.selectionBackground
 ComboBox.selectionForeground
 ComboBox.timeFactor
 ComboBoxUI
+Component.accentColor
 Component.arc
 Component.arrowType
 Component.borderColor

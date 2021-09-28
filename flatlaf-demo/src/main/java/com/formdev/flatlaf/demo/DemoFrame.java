@@ -336,8 +336,11 @@ class DemoFrame
 	// flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLightLaf.properties and
 	// flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatDarkLaf.properties
 	private static String[] accentColorKeys = {
-		"Demo.accent.blue", "Demo.accent.purple", "Demo.accent.red",
+		"Demo.accent.default", "Demo.accent.blue", "Demo.accent.purple", "Demo.accent.red",
 		"Demo.accent.orange", "Demo.accent.yellow", "Demo.accent.green",
+	};
+	private static String[] accentColorNames = {
+		"Default", "Blue", "Purple", "Red", "Orange", "Yellow", "Green",
 	};
 	private final JToggleButton[] accentColorButtons = new JToggleButton[accentColorKeys.length];
 	private JLabel accentColorLabel;
@@ -351,6 +354,7 @@ class DemoFrame
 		ButtonGroup group = new ButtonGroup();
 		for( int i = 0; i < accentColorButtons.length; i++ ) {
 			accentColorButtons[i] = new JToggleButton( new AccentColorIcon( accentColorKeys[i] ) );
+			accentColorButtons[i].setToolTipText( accentColorNames[i] );
 			accentColorButtons[i].addActionListener( this::accentColorChanged );
 			toolBar.add( accentColorButtons[i] );
 			group.add( accentColorButtons[i] );
