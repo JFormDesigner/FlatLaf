@@ -148,6 +148,14 @@ class FlatThemeFileEditor
 		restoreState();
 		restoreWindowBounds();
 
+		addWindowListener( new WindowAdapter() {
+			@Override
+			public void windowActivated( WindowEvent e ) {
+				for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
+					themeEditorPane.windowActivated();
+			}
+		} );
+
 		// load directory
 		if( dir == null ) {
 			String recentDirectory = state.get( KEY_RECENT_DIRECTORY, null );

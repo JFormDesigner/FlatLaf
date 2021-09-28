@@ -670,6 +670,9 @@ public class FlatComboBoxUI
 	/** @since 1.3 */
 	public static boolean isPermanentFocusOwner( JComboBox<?> comboBox ) {
 		if( comboBox.isEditable() ) {
+			if( FlatUIUtils.isPermanentFocusOwner( comboBox ) )
+				return true;
+
 			Component editorComponent = comboBox.getEditor().getEditorComponent();
 			return (editorComponent != null) ? FlatUIUtils.isPermanentFocusOwner( editorComponent ) : false;
 		} else

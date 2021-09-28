@@ -188,8 +188,11 @@ class FlatThemePreviewAll
 		if( !isControlComponent( comp ) && comp instanceof JComponent )
 			((JComponent)comp).putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, value );
 
-		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
-			return;
+		if( !(comp instanceof Container) ||
+			comp instanceof JComboBox ||
+			comp instanceof JSpinner ||
+			comp instanceof JInternalFrame )
+		  return;
 
 		for( Component c : ((Container)comp).getComponents() ) {
 			if( c instanceof JScrollPane )

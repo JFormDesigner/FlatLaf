@@ -166,6 +166,11 @@ class FlatThemeEditorPane
 		scrollPane.getGutter().setLineNumberFont( font );
 	}
 
+	void windowActivated() {
+		if( preview != null )
+			preview.repaint();
+	}
+
 	@Override
 	public boolean requestFocusInWindow() {
 		return textArea.requestFocusInWindow();
