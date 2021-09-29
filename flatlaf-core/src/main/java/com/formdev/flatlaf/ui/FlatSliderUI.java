@@ -42,6 +42,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -121,7 +122,7 @@ public class FlatSliderUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( slider ) );
+		installStyle();
 	}
 
 	@Override
@@ -188,8 +189,17 @@ public class FlatSliderUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener( JSlider slider ) {
-		return FlatStylingSupport.createPropertyChangeListener( slider, this::applyStyle,
+		return FlatStylingSupport.createPropertyChangeListener( slider, this::installStyle,
 			super.createPropertyChangeListener( slider ) );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( slider, "Slider" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

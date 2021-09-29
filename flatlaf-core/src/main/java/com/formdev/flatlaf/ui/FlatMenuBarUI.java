@@ -39,10 +39,10 @@ import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -91,7 +91,7 @@ public class FlatMenuBarUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -113,16 +113,15 @@ public class FlatMenuBarUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
-			menuBar, this::applyStyle, null );
-		menuBar.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( menuBar, this::installStyle, null );
+		menuBar.addPropertyChangeListener( propertyChangeListener );
 	}
 
 	@Override
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		menuBar.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		menuBar.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
 	}
 
@@ -136,6 +135,15 @@ public class FlatMenuBarUI
 			SwingUtilities.replaceUIActionMap( menuBar, map );
 		}
 		map.put( "takeFocus", new TakeFocus() );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( menuBar, "MenuBar" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

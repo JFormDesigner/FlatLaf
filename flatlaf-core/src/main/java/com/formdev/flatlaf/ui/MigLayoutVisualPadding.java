@@ -81,7 +81,7 @@ public class MigLayoutVisualPadding
 				return new Insets( focusWidth, focusWidth, focusWidth, focusWidth );
 			} else
 				return null;
-		}, "border", FlatClientProperties.STYLE );
+		}, "border", FlatClientProperties.STYLE, FlatClientProperties.STYLE_CLASS );
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class MigLayoutVisualPadding
 		c.addPropertyChangeListener( (FlatMigListener) e -> {
 			String propertyName = e.getPropertyName();
 			for( String name : propertyNames ) {
-				if( name == propertyName ) {
+				if( name.equals( propertyName ) ) {
 					setVisualPadding( c, getPaddingFunction.apply( c ) );
 					break;
 				}

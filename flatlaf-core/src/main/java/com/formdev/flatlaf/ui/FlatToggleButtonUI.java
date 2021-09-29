@@ -97,6 +97,11 @@ public class FlatToggleButtonUI
 	}
 
 	@Override
+	String getStyleType() {
+		return "ToggleButton";
+	}
+
+	@Override
 	protected String getPropertyPrefix() {
 		return "ToggleButton.";
 	}

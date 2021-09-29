@@ -38,6 +38,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JInternalFrame}.
@@ -116,7 +117,7 @@ public class FlatInternalFrameUI
 
 		windowResizer = createWindowResizer();
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -148,8 +149,17 @@ public class FlatInternalFrameUI
 
 	@Override
 	protected PropertyChangeListener createPropertyChangeListener() {
-		return FlatStylingSupport.createPropertyChangeListener( frame, this::applyStyle,
+		return FlatStylingSupport.createPropertyChangeListener( frame, this::installStyle,
 			super.createPropertyChangeListener() );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( frame, "InternalFrame" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

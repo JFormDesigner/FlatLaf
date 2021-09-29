@@ -34,6 +34,8 @@ public interface FlatStyleableComponent
 	/**
 	 * Returns the style of a component as String in CSS syntax ("key1: value1; key2: value2; ...")
 	 * or {@code null} if no style has been assigned.
+	 *
+	 * @see FlatClientProperties#STYLE
 	 */
 	default String getStyle() {
 		return (String) getClientProperty( FlatClientProperties.STYLE );
@@ -48,6 +50,8 @@ public interface FlatStyleableComponent
 	 * The syntax of the CSS values is the same as used in FlatLaf properties files
 	 * (<a href="https://www.formdev.com/flatlaf/properties-files/">https://www.formdev.com/flatlaf/properties-files/</a>),
 	 * but some features are not supported (e.g. variables).
+	 *
+	 * @see FlatClientProperties#STYLE
 	 */
 	default void setStyle( String style ) {
 		putClientProperty( FlatClientProperties.STYLE, style );
@@ -57,6 +61,8 @@ public interface FlatStyleableComponent
 	/**
 	 * Returns the style of a component as {@link java.util.Map}&lt;String, Object&gt;
 	 * or {@code null} if no style has been assigned.
+	 *
+	 * @see FlatClientProperties#STYLE
 	 */
 	@SuppressWarnings( "unchecked" )
 	default Map<String, Object> getStyleMap() {
@@ -70,9 +76,31 @@ public interface FlatStyleableComponent
 	 * E.g. for UI default {@code Slider.thumbSize} use key {@code thumbSize}.
 	 * <p>
 	 * The values are not parsed from a string. They must be binary.
+	 *
+	 * @see FlatClientProperties#STYLE
 	 */
 	default void setStyleMap( Map<String, Object> styleMap ) {
 		putClientProperty( FlatClientProperties.STYLE, styleMap );
+	}
+
+
+	/**
+	 * Returns the style class(es) of a component (separated by space characters)
+	 * or {@code null} if no style class has been assigned.
+	 *
+	 * @see FlatClientProperties#STYLE_CLASS
+	 */
+	default String getStyleClass() {
+		return (String) getClientProperty( FlatClientProperties.STYLE_CLASS );
+	}
+
+	/**
+	 * Specifies the style class(es) of a component (separated by space characters).
+	 *
+	 * @see FlatClientProperties#STYLE_CLASS
+	 */
+	default void setStyleClass( String styleClass ) {
+		putClientProperty( FlatClientProperties.STYLE_CLASS, styleClass );
 	}
 
 

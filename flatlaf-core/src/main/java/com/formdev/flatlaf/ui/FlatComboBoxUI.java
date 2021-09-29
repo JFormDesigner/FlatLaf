@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.ui;
 
+import static com.formdev.flatlaf.FlatClientProperties.*;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import static com.formdev.flatlaf.util.UIScale.unscale;
 import java.awt.Color;
@@ -69,9 +70,9 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -155,7 +156,7 @@ public class FlatComboBoxUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( comboBox ) );
+		installStyle();
 	}
 
 	@Override
@@ -341,16 +342,28 @@ public class FlatComboBoxUI
 			} else if( editor != null && source == comboBox && propertyName == "componentOrientation" ) {
 				ComponentOrientation o = (ComponentOrientation) e.getNewValue();
 				editor.applyComponentOrientation( o );
-			} else if( editor != null && FlatClientProperties.PLACEHOLDER_TEXT.equals( propertyName ) )
-				editor.repaint();
-			else if( FlatClientProperties.COMPONENT_ROUND_RECT.equals( propertyName ) )
-				comboBox.repaint();
-			else if( FlatClientProperties.MINIMUM_WIDTH.equals( propertyName ) )
-				comboBox.revalidate();
-			else if( FlatClientProperties.STYLE.equals( propertyName ) ) {
-				applyStyle( e.getNewValue() );
-				comboBox.revalidate();
-				comboBox.repaint();
+			} else {
+				switch( propertyName ) {
+					case PLACEHOLDER_TEXT:
+						if( editor != null )
+							editor.repaint();
+						break;
+
+					case COMPONENT_ROUND_RECT:
+						comboBox.repaint();
+						break;
+
+					case MINIMUM_WIDTH:
+						comboBox.revalidate();
+						break;
+
+					case STYLE:
+					case STYLE_CLASS:
+						installStyle();
+						comboBox.revalidate();
+						comboBox.repaint();
+						break;
+				}
 			}
 		};
 	}
@@ -419,7 +432,7 @@ public class FlatComboBoxUI
 				unscale( Math.max( scale( padding.right ) - insets.right, 0 ) )
 			);
 		}
-		textField.putClientProperty( FlatClientProperties.TEXT_FIELD_PADDING, pad );
+		textField.putClientProperty( TEXT_FIELD_PADDING, pad );
 	}
 
 	private void updateEditorColors() {
@@ -436,6 +449,15 @@ public class FlatComboBoxUI
 	@Override
 	protected JButton createArrowButton() {
 		return new FlatComboBoxButton();
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( comboBox, "ComboBox" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

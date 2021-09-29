@@ -42,6 +42,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -156,7 +157,7 @@ public class FlatTreeUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -271,7 +272,8 @@ public class FlatTreeUI
 						break;
 
 					case STYLE:
-						applyStyle( e.getNewValue() );
+					case STYLE_CLASS:
+						installStyle();
 						tree.revalidate();
 						tree.repaint();
 						break;
@@ -307,6 +309,15 @@ public class FlatTreeUI
 			bounds.width = tree.getWidth();
 		}
 		return bounds;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( tree, "Tree" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

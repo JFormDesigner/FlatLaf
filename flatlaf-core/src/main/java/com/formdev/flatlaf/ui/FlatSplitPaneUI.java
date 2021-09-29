@@ -34,10 +34,10 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -90,7 +90,7 @@ public class FlatSplitPaneUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( splitPane ) );
+		installStyle();
 	}
 
 	@Override
@@ -121,21 +121,30 @@ public class FlatSplitPaneUI
 	protected void installListeners() {
 		super.installListeners();
 
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( splitPane, this::applyStyle, null );
-		splitPane.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( splitPane, this::installStyle, null );
+		splitPane.addPropertyChangeListener( propertyChangeListener );
 	}
 
 	@Override
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		splitPane.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		splitPane.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
 	}
 
 	@Override
 	public BasicSplitPaneDivider createDefaultDivider() {
 		return new FlatSplitPaneDivider( this );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( splitPane, "SplitPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

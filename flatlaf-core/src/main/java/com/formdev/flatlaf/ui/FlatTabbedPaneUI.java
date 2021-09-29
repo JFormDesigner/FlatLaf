@@ -93,6 +93,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.JavaCompatibility;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -269,7 +270,7 @@ public class FlatTabbedPaneUI
 
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -570,6 +571,15 @@ public class FlatTabbedPaneUI
 	@Override
 	protected JButton createScrollButton( int direction ) {
 		return new FlatScrollableTabButton( direction );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( tabPane, "TabbedPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */
@@ -2439,7 +2449,8 @@ public class FlatTabbedPaneUI
 					break;
 
 				case STYLE:
-					applyStyle( e.getNewValue() );
+				case STYLE_CLASS:
+					installStyle();
 					tabPane.revalidate();
 					tabPane.repaint();
 					break;

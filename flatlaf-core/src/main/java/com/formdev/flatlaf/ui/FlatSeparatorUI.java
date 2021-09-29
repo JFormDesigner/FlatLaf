@@ -28,9 +28,9 @@ import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSeparatorUI;
-import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSeparator}.
@@ -80,7 +80,7 @@ public class FlatSeparatorUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( (JSeparator) c, FlatStylingSupport.getStyle( c ) );
+		installStyle( (JSeparator) c );
 	}
 
 	@Override
@@ -110,27 +110,41 @@ public class FlatSeparatorUI
 		super.installListeners( s );
 
 		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
-			s, style -> applyStyle( s, this, style ), null );
-		s.addPropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+			s, () -> stylePropertyChange( s ), null );
+		s.addPropertyChangeListener( propertyChangeListener );
 	}
 
 	@Override
 	protected void uninstallListeners( JSeparator s ) {
 		super.uninstallListeners( s );
 
-		s.removePropertyChangeListener( FlatClientProperties.STYLE, propertyChangeListener );
+		s.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
 	}
 
-	private static void applyStyle( JSeparator s, FlatSeparatorUI ui, Object style ) {
-		if( style != null && ui.shared ) {
+	private void stylePropertyChange( JSeparator s ) {
+		if( shared && FlatStylingSupport.hasStyleProperty( s ) ) {
 			// unshare component UI if necessary
 			// updateUI() invokes applyStyle() from installUI()
 			s.updateUI();
 		} else
-			ui.applyStyle( s, style );
+			installStyle( s );
 		s.revalidate();
 		s.repaint();
+	}
+
+	/** @since 2 */
+	protected void installStyle( JSeparator s ) {
+		try {
+			applyStyle( s, FlatStylingSupport.getResolvedStyle( s, getStyleType() ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	String getStyleType() {
+		return "Separator";
 	}
 
 	/** @since 2 */

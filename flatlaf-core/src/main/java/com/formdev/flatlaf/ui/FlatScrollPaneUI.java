@@ -49,6 +49,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JScrollPane}.
@@ -87,7 +88,7 @@ public class FlatScrollPaneUI
 		int focusWidth = UIManager.getInt( "Component.focusWidth" );
 		LookAndFeel.installProperty( c, "opaque", focusWidth == 0 );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 
 		MigLayoutVisualPadding.install( scrollpane );
 	}
@@ -287,7 +288,8 @@ public class FlatScrollPaneUI
 					break;
 
 				case FlatClientProperties.STYLE:
-					applyStyle( e.getNewValue() );
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle();
 					scrollpane.revalidate();
 					scrollpane.repaint();
 					break;
@@ -299,6 +301,15 @@ public class FlatScrollPaneUI
 		if( handler == null )
 			handler = new Handler();
 		return handler;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( scrollpane, "ScrollPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

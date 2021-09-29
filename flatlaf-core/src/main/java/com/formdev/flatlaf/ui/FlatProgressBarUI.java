@@ -35,6 +35,7 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -78,7 +79,7 @@ public class FlatProgressBarUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( progressBar ) );
+		installStyle();
 	}
 
 	@Override
@@ -112,7 +113,8 @@ public class FlatProgressBarUI
 					break;
 
 				case STYLE:
-					applyStyle( e.getNewValue() );
+				case STYLE_CLASS:
+					installStyle();
 					progressBar.revalidate();
 					progressBar.repaint();
 					break;
@@ -127,6 +129,15 @@ public class FlatProgressBarUI
 
 		progressBar.removePropertyChangeListener( propertyChangeListener );
 		propertyChangeListener = null;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( progressBar, "ProgressBar" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

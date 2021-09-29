@@ -31,6 +31,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JToolBar}.
@@ -83,7 +84,7 @@ public class FlatToolBarUI
 		if( !focusableButtons )
 			setButtonsFocusable( false );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -133,7 +134,16 @@ public class FlatToolBarUI
 
 	@Override
 	protected PropertyChangeListener createPropertyListener() {
-		return FlatStylingSupport.createPropertyChangeListener( toolBar, this::applyStyle, super.createPropertyListener() );
+		return FlatStylingSupport.createPropertyChangeListener( toolBar, this::installStyle, super.createPropertyListener() );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( toolBar, "ToolBar" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

@@ -39,6 +39,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -115,7 +116,7 @@ public class FlatScrollBarUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -199,7 +200,8 @@ public class FlatScrollBarUI
 					break;
 
 				case FlatClientProperties.STYLE:
-					applyStyle( e.getNewValue() );
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle();
 					scrollbar.revalidate();
 					scrollbar.repaint();
 					break;
@@ -218,6 +220,15 @@ public class FlatScrollBarUI
 					break;
 			}
 		};
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( scrollbar, "ScrollBar" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */

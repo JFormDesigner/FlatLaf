@@ -47,6 +47,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.JavaCompatibility;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JTextField}.
@@ -114,7 +115,7 @@ public class FlatTextFieldUI
 		leadingIcon = clientProperty( c, TEXT_FIELD_LEADING_ICON, null, Icon.class );
 		trailingIcon = clientProperty( c, TEXT_FIELD_TRAILING_ICON, null, Icon.class );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -209,7 +210,8 @@ public class FlatTextFieldUI
 				break;
 
 			case STYLE:
-				applyStyle( e.getNewValue() );
+			case STYLE_CLASS:
+				installStyle();
 				c.revalidate();
 				c.repaint();
 				break;
@@ -224,6 +226,20 @@ public class FlatTextFieldUI
 				c.repaint();
 				break;
 		}
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( getComponent(), getStyleType() ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	String getStyleType() {
+		return "TextField";
 	}
 
 	/** @since 2 */
@@ -309,7 +325,7 @@ debug*/
 		//   - not opaque and
 		//   - border is not a flat border and
 		//   - opaque was explicitly set (to false)
-		// (same behaviour as in AquaTextFieldUI)
+		// (same behavior as in AquaTextFieldUI)
 		if( !c.isOpaque() && FlatUIUtils.getOutsideFlatBorder( c ) == null && FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) )
 			return;
 

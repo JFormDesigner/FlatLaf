@@ -25,7 +25,6 @@ import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
-import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
@@ -36,6 +35,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JEditorPane}.
@@ -91,7 +91,7 @@ public class FlatEditorPaneUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( c ) );
+		installStyle();
 	}
 
 	@Override
@@ -155,20 +155,30 @@ public class FlatEditorPaneUI
 			updateBackground();
 
 		super.propertyChange( e );
-		propertyChange( getComponent(), e, this::applyStyle );
+		propertyChange( getComponent(), e, this::installStyle );
 	}
 
-	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Consumer<Object> applyStyle ) {
+	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Runnable installStyle ) {
 		switch( e.getPropertyName() ) {
 			case FlatClientProperties.MINIMUM_WIDTH:
 				c.revalidate();
 				break;
 
 			case FlatClientProperties.STYLE:
-				applyStyle.accept( e.getNewValue() );
+			case FlatClientProperties.STYLE_CLASS:
+				installStyle.run();
 				c.revalidate();
 				c.repaint();
 				break;
+		}
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( getComponent(), "EditorPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
 		}
 	}
 

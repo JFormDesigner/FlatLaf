@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,16 +47,50 @@ public class StringUtils
 	}
 
 	public static List<String> split( String str, char delim ) {
-		ArrayList<String> strs = new ArrayList<>();
+		return split( str, delim, false, false );
+	}
+
+	/**
+	 * Splits a string at the specified delimiter.
+	 * If trimming is enabled, then leading and trailing whitespace characters are removed.
+	 * If excludeEmpty is {@code true}, then only non-empty strings are returned.
+	 *
+	 * @since 2
+	 */
+	public static List<String> split( String str, char delim, boolean trim, boolean excludeEmpty ) {
 		int delimIndex = str.indexOf( delim );
+		if( delimIndex < 0 ) {
+			if( trim )
+				str = str.trim();
+			return !excludeEmpty || !str.isEmpty()
+				? Collections.singletonList( str )
+				: Collections.emptyList();
+		}
+
+		ArrayList<String> strs = new ArrayList<>();
 		int index = 0;
 		while( delimIndex >= 0 ) {
-			strs.add( str.substring( index, delimIndex ) );
+			add( strs, str, index, delimIndex, trim, excludeEmpty );
 			index = delimIndex + 1;
 			delimIndex = str.indexOf( delim, index );
 		}
-		strs.add( str.substring( index ) );
+		add( strs, str, index, str.length(), trim, excludeEmpty );
 
 		return strs;
+	}
+
+	private static void add( List<String> strs, String str, int begin, int end, boolean trim, boolean excludeEmpty ) {
+		if( trim ) {
+			// skip leading whitespace
+			while( begin < end && str.charAt( begin ) <= ' ' )
+				begin++;
+
+			// skip trailing whitespace
+			while( begin < end && str.charAt( end - 1 ) <= ' ' )
+				end--;
+		}
+
+		if( !excludeEmpty || end > begin )
+			strs.add( str.substring( begin, end ) );
 	}
 }

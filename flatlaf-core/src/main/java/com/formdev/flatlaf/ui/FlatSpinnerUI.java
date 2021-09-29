@@ -47,6 +47,7 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JSpinner}.
@@ -114,7 +115,7 @@ public class FlatSpinnerUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		applyStyle( FlatStylingSupport.getStyle( spinner ) );
+		installStyle();
 	}
 
 	@Override
@@ -188,6 +189,15 @@ public class FlatSpinnerUI
 		if( handler == null )
 			handler = new Handler();
 		return handler;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( spinner, "Spinner" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	/** @since 2 */
@@ -530,7 +540,8 @@ public class FlatSpinnerUI
 					break;
 
 				case FlatClientProperties.STYLE:
-					applyStyle( e.getNewValue() );
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle();
 					spinner.revalidate();
 					spinner.repaint();
 					break;

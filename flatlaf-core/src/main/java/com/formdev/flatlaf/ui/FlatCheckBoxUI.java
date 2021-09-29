@@ -57,4 +57,10 @@ public class FlatCheckBoxUI
 	public String getPropertyPrefix() {
 		return "CheckBox.";
 	}
+
+	/** @since 2 */
+	@Override
+	String getStyleType() {
+		return "CheckBox";
+	}
 }
