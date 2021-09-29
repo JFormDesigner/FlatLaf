@@ -146,8 +146,8 @@ public interface FlatClientProperties
 	String STYLE = "FlatLaf.style";
 
 	/**
-	 * Specifies the style class(es) of a component as String
-	 * or as {@link java.util.List}&lt;String&gt;.
+	 * Specifies the style class(es) of a component as String (single class or multiple classes separated by space characters)
+	 * or as {@code String[]} or {@link java.util.List}&lt;String&gt; (multiple classes).
 	 * <p>
 	 * The style rules must be defined in UI defaults either as strings (in CSS syntax)
 	 * or as {@link java.util.Map}&lt;String, Object&gt; (with binary values).

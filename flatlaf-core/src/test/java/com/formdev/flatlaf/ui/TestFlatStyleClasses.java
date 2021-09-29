@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 import org.junit.jupiter.api.AfterAll;
@@ -114,10 +115,25 @@ public class TestFlatStyleClasses
 
 		assertEquals(
 			FlatStylingSupport.concatStyles( BUTTON_PRIMARY, SECONDARY ),
-			FlatStylingSupport.getStyleForClasses( new String[] { "primary", "secondary" }, "Button" ) );
+			FlatStylingSupport.getStyleForClasses( "primary secondary", "Button" ) );
+		assertEquals(
+			FlatStylingSupport.concatStyles( SECONDARY, BUTTON_PRIMARY ),
+			FlatStylingSupport.getStyleForClasses( "secondary primary", "Button" ) );
+
+		// String
+		assertEquals(
+			FlatStylingSupport.concatStyles( SECONDARY, BUTTON_PRIMARY ),
+			FlatStylingSupport.getStyleForClasses( "  secondary    primary  bla blu  ", "Button" ) );
+
+		// String[]
 		assertEquals(
 			FlatStylingSupport.concatStyles( SECONDARY, BUTTON_PRIMARY ),
 			FlatStylingSupport.getStyleForClasses( new String[] { "secondary", "primary" }, "Button" ) );
+
+		// List<String>
+		assertEquals(
+			FlatStylingSupport.concatStyles( SECONDARY, BUTTON_PRIMARY ),
+			FlatStylingSupport.getStyleForClasses( Arrays.asList( "secondary", "primary" ), "Button" ) );
 	}
 
 	@Test
@@ -132,7 +148,7 @@ public class TestFlatStyleClasses
 	@Test
 	void apply2() {
 		JButton c = new JButton();
-		c.putClientProperty( FlatClientProperties.STYLE_CLASS, new String[] { "primary", "secondary" } );
+		c.putClientProperty( FlatClientProperties.STYLE_CLASS, "primary secondary" );
 
 		assertEquals( new Color( 0x00ff88 ), c.getBackground() );
 		assertEquals( Color.white, c.getForeground() );
@@ -141,7 +157,7 @@ public class TestFlatStyleClasses
 	@Test
 	void apply3() {
 		JButton c = new JButton();
-		c.putClientProperty( FlatClientProperties.STYLE_CLASS, new String[] { "secondary", "primary" } );
+		c.putClientProperty( FlatClientProperties.STYLE_CLASS, "secondary primary" );
 
 		assertEquals( new Color( 0x0088ff ), c.getBackground() );
 		assertEquals( Color.white, c.getForeground() );

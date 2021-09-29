@@ -127,7 +127,7 @@ public class FlatStylingSupport
 	 *     UIManager.get( "[style]Button.foo" ) );
 	 * }</pre>
 	 *
-	 * @param styleClass the style class(es) either as string (single class)
+	 * @param styleClass the style class(es) either as string (single class or multiple classes separated by space characters)
 	 *                   or as {@code String[]} or {@link java.util.List}&lt;String&gt; (multiple classes)
 	 * @param type the type of the component
 	 * @return the styles
@@ -136,8 +136,11 @@ public class FlatStylingSupport
 		if( styleClass == null )
 			return null;
 
+		if( styleClass instanceof String && ((String)styleClass).indexOf( ' ' ) >= 0 )
+			styleClass = StringUtils.split( (String) styleClass, ' ', true, true );
+
 		if( styleClass instanceof String )
-			return getStyleForClass( (String) styleClass, type );
+			return getStyleForClass( ((String)styleClass).trim(), type );
 		else if( styleClass instanceof String[] ) {
 			Object style = null;
 			for( String cls : (String[]) styleClass )
