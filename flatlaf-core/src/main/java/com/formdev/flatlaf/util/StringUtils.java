@@ -79,18 +79,66 @@ public class StringUtils
 		return strs;
 	}
 
-	private static void add( List<String> strs, String str, int begin, int end, boolean trim, boolean excludeEmpty ) {
+	private static void add( List<String> strs, String str, int beginIndex, int endIndex,
+		boolean trim, boolean excludeEmpty )
+	{
 		if( trim ) {
-			// skip leading whitespace
-			while( begin < end && str.charAt( begin ) <= ' ' )
-				begin++;
-
-			// skip trailing whitespace
-			while( begin < end && str.charAt( end - 1 ) <= ' ' )
-				end--;
+			beginIndex = trimBegin( str, beginIndex, endIndex );
+			endIndex = trimEnd( str, beginIndex, endIndex );
 		}
 
-		if( !excludeEmpty || end > begin )
-			strs.add( str.substring( begin, end ) );
+		if( !excludeEmpty || endIndex > beginIndex )
+			strs.add( str.substring( beginIndex, endIndex ) );
+	}
+
+	/**
+	 * This is equal to {@code str.substring( beginIndex, endIndex ).trim()},
+	 * but avoids temporary untrimmed substring allocation.
+	 * If the trimmed string is empty, a shared empty string is returned.
+	 *
+	 * @since 2
+	 */
+	public static String substringTrimmed( String str, int beginIndex ) {
+		return substringTrimmed( str, beginIndex, str.length() );
+	}
+
+	/**
+	 * This is equal to {@code str.substring( beginIndex ).trim()},
+	 * but avoids temporary untrimmed substring allocation.
+	 * If the trimmed string is empty, a shared empty string is returned.
+	 *
+	 * @since 2
+	 */
+	public static String substringTrimmed( String str, int beginIndex, int endIndex ) {
+		beginIndex = trimBegin( str, beginIndex, endIndex );
+		endIndex = trimEnd( str, beginIndex, endIndex );
+		return (endIndex > beginIndex) ? str.substring( beginIndex, endIndex ) : "";
+	}
+
+	/**
+	 * This is equal to {@code str.trim().isEmpty()},
+	 * but avoids temporary trimmed substring allocation.
+	 *
+	 * @since 2
+	 */
+	public static boolean isTrimmedEmpty( String str ) {
+		int length = str.length();
+		int beginIndex = trimBegin( str, 0, length );
+		int endIndex = trimEnd( str, beginIndex, length );
+		return beginIndex >= endIndex;
+	}
+
+	private static int trimBegin( String str, int beginIndex, int endIndex ) {
+		// skip leading whitespace
+		while( beginIndex < endIndex && str.charAt( beginIndex ) <= ' ' )
+			beginIndex++;
+		return beginIndex;
+	}
+
+	private static int trimEnd( String str, int beginIndex, int endIndex ) {
+		// skip trailing whitespace
+		while( beginIndex < endIndex && str.charAt( endIndex - 1 ) <= ' ' )
+			endIndex--;
+		return endIndex;
 	}
 }

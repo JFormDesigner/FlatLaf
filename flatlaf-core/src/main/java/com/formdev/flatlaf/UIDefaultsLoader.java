@@ -392,7 +392,7 @@ class UIDefaultsLoader
 			//     Syntax: lazy(uiKey)
 			if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
 				resultValueType[0] = ValueType.LAZY;
-				String uiKey = value.substring( 5, value.length() - 1 ).trim();
+				String uiKey = StringUtils.substringTrimmed( value, 5, value.length() - 1 );
 				return (LazyValue) t -> {
 					return lazyUIManagerGet( uiKey );
 				};
@@ -514,7 +514,7 @@ class UIDefaultsLoader
 	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		if( value.indexOf( ',' ) >= 0 ) {
 			// top,left,bottom,right[,lineColor[,lineThickness]]
-			List<String> parts = split( value, ',' );
+			List<String> parts = StringUtils.split( value, ',', true, false );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() >= 5)
 				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
@@ -571,7 +571,7 @@ class UIDefaultsLoader
 	}
 
 	private static Insets parseInsets( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',', true, false );
 		try {
 			return new InsetsUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -584,7 +584,7 @@ class UIDefaultsLoader
 	}
 
 	private static Dimension parseDimension( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',', true, false );
 		try {
 			return new DimensionUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -672,7 +672,7 @@ class UIDefaultsLoader
 			return null;
 		}
 
-		String function = value.substring( 0, paramsStart ).trim();
+		String function = StringUtils.substringTrimmed( value, 0, paramsStart );
 		List<String> params = splitFunctionParams( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
 		if( params.isEmpty() )
 			throwMissingParametersException( value );
@@ -1075,7 +1075,7 @@ class UIDefaultsLoader
 	}
 
 	private static Object parseGrayFilter( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',', true, false );
 		try {
 			int brightness = Integer.parseInt( numbers.get( 0 ) );
 			int contrast = Integer.parseInt( numbers.get( 1 ) );
@@ -1087,20 +1087,6 @@ class UIDefaultsLoader
 		} catch( NumberFormatException ex ) {
 			throw new IllegalArgumentException( "invalid gray filter '" + value + "'" );
 		}
-	}
-
-	/**
-	 * Split string and trim parts.
-	 */
-	private static List<String> split( String str, char delim ) {
-		List<String> result = StringUtils.split( str, delim );
-
-		// trim strings
-		int size = result.size();
-		for( int i = 0; i < size; i++ )
-			result.set( i, result.get( i ).trim() );
-
-		return result;
 	}
 
 	/**
@@ -1119,11 +1105,11 @@ class UIDefaultsLoader
 			else if( ch == ')' )
 				nestLevel--;
 			else if( nestLevel == 0 && ch == delim ) {
-				strs.add( str.substring( start, i ).trim() );
+				strs.add( StringUtils.substringTrimmed( str, start, i ) );
 				start = i + 1;
 			}
 		}
-		strs.add( str.substring( start ).trim() );
+		strs.add( StringUtils.substringTrimmed( str, start ) );
 
 		return strs;
 	}

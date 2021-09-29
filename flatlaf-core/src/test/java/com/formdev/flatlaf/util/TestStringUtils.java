@@ -195,4 +195,46 @@ public class TestStringUtils
 			Arrays.asList( "a", "b", "c" ),
 			StringUtils.split( "a\n\n\nb\n\nc", '\n', true, true ) );
 	}
+
+	@Test
+	void substringTrimmed() {
+		testSubstringTrimmed( "", 0 );
+
+		testSubstringTrimmed( "a", 0 );
+		testSubstringTrimmed( "a", 1 );
+
+		testSubstringTrimmed( "a  ", 0 );
+		testSubstringTrimmed( "  a", 0 );
+		testSubstringTrimmed( "  a  ", 0 );
+
+		testSubstringTrimmed( "  a  ", 1 );
+
+		testSubstringTrimmed( "  a  ", 0, 3 );
+		testSubstringTrimmed( "  a  ", 1, 4 );
+	}
+
+	private void testSubstringTrimmed( String str, int beginIndex ) {
+		assertEquals(
+			str.substring( beginIndex ).trim(),
+			StringUtils.substringTrimmed( str, beginIndex ) );
+	}
+
+	private void testSubstringTrimmed( String str, int beginIndex, int endIndex ) {
+		assertEquals(
+			str.substring( beginIndex, endIndex ).trim(),
+			StringUtils.substringTrimmed( str, beginIndex, endIndex ) );
+	}
+
+	@Test
+	void trimmedEmpty() {
+		testTrimmedEmpty( "" );
+		testTrimmedEmpty( "a" );
+		testTrimmedEmpty( " a " );
+		testTrimmedEmpty( " " );
+		testTrimmedEmpty( "  " );
+	}
+
+	private void testTrimmedEmpty( String str ) {
+		assertEquals( str.trim().isEmpty(), StringUtils.isTrimmedEmpty( str ) );
+	}
 }

@@ -252,7 +252,7 @@ public class FlatStylingSupport
 		if( style instanceof String ) {
 			// handle style in CSS syntax
 			String str = (String) style;
-			if( str.trim().isEmpty() )
+			if( StringUtils.isTrimmedEmpty( str ) )
 				return null;
 
 			return applyStyle( parse( str ), applyProperty );
@@ -307,26 +307,21 @@ public class FlatStylingSupport
 	public static Map<String, Object> parse( String style )
 		throws IllegalArgumentException
 	{
-		if( style == null || style.trim().isEmpty() )
+		if( style == null || StringUtils.isTrimmedEmpty( style ) )
 			return null;
 
 		Map<String, Object> map = null;
 
 		// split style into parts and process them
-		for( String part : StringUtils.split( style, ';' ) ) {
-			// ignore empty parts
-			part = part.trim();
-			if( part.isEmpty() )
-				continue;
-
+		for( String part : StringUtils.split( style, ';', true, true ) ) {
 			// find separator colon
 			int sepIndex = part.indexOf( ':' );
 			if( sepIndex < 0 )
 				throw new IllegalArgumentException( "missing colon in '" + part + "'" );
 
 			// split into key and value
-			String key = part.substring( 0, sepIndex ).trim();
-			String value = part.substring( sepIndex + 1 ).trim();
+			String key = StringUtils.substringTrimmed( part, 0, sepIndex );
+			String value = StringUtils.substringTrimmed( part, sepIndex + 1 );
 			if( key.isEmpty() )
 				throw new IllegalArgumentException( "missing key in '" + part + "'" );
 			if( value.isEmpty() )
