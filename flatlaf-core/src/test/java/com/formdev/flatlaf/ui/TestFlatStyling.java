@@ -675,6 +675,17 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "minimum: 0" );
+		ui.applyStyle( "maximum: 50" );
+		ui.applyStyle( "value: 20" );
+		ui.applyStyle( "extent: 5" );
+		ui.applyStyle( "majorTickSpacing: 10" );
+		ui.applyStyle( "minorTickSpacing: 10" );
+		ui.applyStyle( "inverted: true" );
+		ui.applyStyle( "paintLabels: true" );
+		ui.applyStyle( "paintTicks: true" );
+		ui.applyStyle( "paintTrack: true" );
+		ui.applyStyle( "snapToTicks: true" );
 
 		// JSlider properties
 		ui.applyStyle( "paintLabels: true" );
