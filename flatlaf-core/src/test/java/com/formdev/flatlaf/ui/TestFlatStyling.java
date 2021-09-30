@@ -1282,4 +1282,38 @@ public class TestFlatStyling
 		icon.applyStyleProperty( "searchIconHoverColor", Color.WHITE );
 		icon.applyStyleProperty( "searchIconPressedColor", Color.WHITE );
 	}
+
+	//---- enums --------------------------------------------------------------
+
+	enum SomeEnum { enumValue1, enumValue2 }
+
+	static class ClassWithEnum {
+		SomeEnum enum1;
+	}
+
+	@Test
+	void enumField() {
+		ClassWithEnum c = new ClassWithEnum();
+		FlatStylingSupport.applyToField( c, "enum1", "enum1", "enumValue1" );
+		FlatStylingSupport.applyToField( c, "enum1", "enum1", "enumValue2" );
+	}
+
+	@Test
+	void enumProperty() {
+		JList<Object> c = new JList<>();
+		FlatListUI ui = (FlatListUI) c.getUI();
+		ui.applyStyle( "dropMode: INSERT" );
+	}
+
+	@Test
+	void enumUIDefaults() {
+		UIManager.put( "test.enum", SomeEnum.enumValue1.toString() );
+		assertEquals( SomeEnum.enumValue1, FlatUIUtils.getUIEnum( "test.enum", SomeEnum.class, null ) );
+
+		UIManager.put( "test.enum", "unknown" );
+		assertEquals( null, FlatUIUtils.getUIEnum( "test.enum", SomeEnum.class, null ) );
+
+		UIManager.put( "test.enum", null );
+		assertEquals( SomeEnum.enumValue1, FlatUIUtils.getUIEnum( "test.enum", SomeEnum.class, SomeEnum.enumValue1 ) );
+	}
 }

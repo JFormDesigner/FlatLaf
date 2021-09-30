@@ -146,6 +146,19 @@ public class FlatUIUtils
 		return (value instanceof Number) ? ((Number)value).floatValue() : defaultValue;
 	}
 
+	/** @since 2 */
+	public static <T extends Enum<T>> T getUIEnum( String key, Class<T> enumType, T defaultValue ) {
+		Object value = UIManager.get( key );
+		if( value instanceof String ) {
+			try {
+				return Enum.valueOf( enumType, (String) value );
+			} catch( IllegalArgumentException ex ) {
+				// ignore
+			}
+		}
+		return defaultValue;
+	}
+
 	/** @since 1.1.2 */
 	public static boolean getBoolean( JComponent c, String systemPropertyKey,
 		String clientPropertyKey, String uiKey, boolean defaultValue )

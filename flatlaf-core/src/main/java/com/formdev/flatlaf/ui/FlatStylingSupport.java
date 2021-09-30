@@ -414,10 +414,10 @@ public class FlatStylingSupport
 
 						// get old value and set new value
 						Object oldValue = f.get( obj );
-						f.set( obj, value );
+						f.set( obj, convertToEnum( value, f.getType() ) );
 						return oldValue;
 					} catch( IllegalAccessException ex ) {
-						throw new IllegalArgumentException( "failed to access field '" + cls.getName() + "." + fieldName + "'" );
+						throw new IllegalArgumentException( "failed to access field '" + cls.getName() + "." + fieldName + "'", ex );
 					}
 				}
 			} catch( NoSuchFieldException ex ) {
@@ -470,7 +470,7 @@ public class FlatStylingSupport
 			}
 			Method setter = cls.getMethod( setterName, getter.getReturnType() );
 			Object oldValue = getter.invoke( obj );
-			setter.invoke( obj, value );
+			setter.invoke( obj, convertToEnum( value, getter.getReturnType() ) );
 			return oldValue;
 		} catch( NoSuchMethodException ex ) {
 			throw new UnknownStyleException( name );
@@ -488,6 +488,21 @@ public class FlatStylingSupport
 		name.getChars( 0, nameLength, chars, prefixLength );
 		chars[prefixLength] = Character.toUpperCase( chars[prefixLength] );
 		return new String( chars );
+	}
+
+	@SuppressWarnings( { "unchecked", "rawtypes" } )
+	private static Object convertToEnum( Object value, Class<?> type )
+		throws IllegalArgumentException
+	{
+		// if type is an enum, convert string to enum value
+		if( Enum.class.isAssignableFrom( type ) && value instanceof String ) {
+			try {
+				value = Enum.valueOf( (Class<? extends Enum>) type, (String) value );
+			} catch( IllegalArgumentException ex ) {
+				throw new IllegalArgumentException( "unknown enum value '" + value + "' in enum '" + type.getName() + "'", ex );
+			}
+		}
+		return value;
 	}
 
 	/**
@@ -575,7 +590,7 @@ public class FlatStylingSupport
 		try {
 			return borderClass.getDeclaredConstructor().newInstance();
 		} catch( Exception ex ) {
-			throw new IllegalArgumentException( "failed to clone border '" + borderClass.getName() + "'" );
+			throw new IllegalArgumentException( "failed to clone border '" + borderClass.getName() + "'", ex );
 		}
 	}
 
@@ -584,7 +599,7 @@ public class FlatStylingSupport
 		try {
 			return iconClass.getDeclaredConstructor().newInstance();
 		} catch( Exception ex ) {
-			throw new IllegalArgumentException( "failed to clone icon '" + iconClass.getName() + "'" );
+			throw new IllegalArgumentException( "failed to clone icon '" + iconClass.getName() + "'", ex );
 		}
 	}
 
