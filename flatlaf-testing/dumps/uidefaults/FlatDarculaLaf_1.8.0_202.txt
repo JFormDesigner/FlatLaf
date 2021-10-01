@@ -72,7 +72,7 @@
 #---- ProgressBar ----
 
 - ProgressBar.foreground         #4c87c8  HSL 211  53  54    javax.swing.plaf.ColorUIResource [UI]
-+ ProgressBar.foreground         #a0a0a0  HSL   0   0  63    javax.swing.plaf.ColorUIResource [UI]
++ ProgressBar.foreground         #a2a2a2  HSL   0   0  64    javax.swing.plaf.ColorUIResource [UI]
 
 - ProgressBar.selectionForeground #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 + ProgressBar.selectionForeground #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
