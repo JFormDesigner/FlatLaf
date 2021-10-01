@@ -42,7 +42,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
@@ -495,7 +494,7 @@ public class FlatComboBoxUI
 	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
 		infos.put( "padding", Insets.class );
 		FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
 		FlatStylingSupport.collectStyleableInfos( comboBox.getBorder(), infos );

@@ -133,7 +133,6 @@ public class FlatButtonUI
 	@Styleable protected Color shadowColor;
 	@Styleable(dot=true) protected Color defaultShadowColor;
 
-	@Styleable(dot=true) protected Insets toolbarSpacingInsets;
 	@Styleable(dot=true) protected Color toolbarHoverBackground;
 	@Styleable(dot=true) protected Color toolbarPressedBackground;
 	@Styleable(dot=true) protected Color toolbarSelectedBackground;
@@ -202,7 +201,6 @@ public class FlatButtonUI
 			shadowColor = UIManager.getColor( "Button.shadowColor" );
 			defaultShadowColor = UIManager.getColor( "Button.default.shadowColor" );
 
-			toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
 			toolbarHoverBackground = UIManager.getColor( prefix + "toolbar.hoverBackground" );
 			toolbarPressedBackground = UIManager.getColor( prefix + "toolbar.pressedBackground" );
 			toolbarSelectedBackground = UIManager.getColor( prefix + "toolbar.selectedBackground" );
@@ -416,8 +414,8 @@ public class FlatButtonUI
 			int width = c.getWidth();
 			int height = c.getHeight();
 
-			if( isToolBarButton ) {
-				Insets spacing = UIScale.scale( toolbarSpacingInsets );
+			if( isToolBarButton && c.getBorder() instanceof FlatButtonBorder ) {
+				Insets spacing = UIScale.scale( ((FlatButtonBorder)c.getBorder()).toolbarSpacingInsets );
 				x += spacing.left;
 				y += spacing.top;
 				width -= spacing.left + spacing.right;

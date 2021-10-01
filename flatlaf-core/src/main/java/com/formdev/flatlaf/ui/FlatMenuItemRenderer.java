@@ -153,6 +153,7 @@ public class FlatMenuItemRenderer
 		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
 		if( checkIcon instanceof FlatCheckBoxMenuItemIcon )
 			FlatStylingSupport.putAllPrefixKey( infos, "icon.", ((FlatCheckBoxMenuItemIcon)checkIcon).getStyleableInfos() );
+		infos.remove( "icon.selectionForeground" );
 		if( arrowIcon instanceof FlatMenuArrowIcon )
 			FlatStylingSupport.putAllPrefixKey( infos, "icon.", ((FlatMenuArrowIcon)arrowIcon).getStyleableInfos() );
 		infos.remove( "icon.selectionForeground" );

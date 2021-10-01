@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -612,7 +613,7 @@ public class FlatStylingSupport
 	}
 
 	public static Map<String, Class<?>> getAnnotatedStyleableInfos( Object obj, Border border ) {
-		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		Map<String, Class<?>> infos = new StyleableInfosMap<>();
 		collectAnnotatedStyleableInfos( obj, infos );
 		collectStyleableInfos( border, infos );
 		return infos;
@@ -623,6 +624,7 @@ public class FlatStylingSupport
 	 * The key is the name of the field and the value the type of the field.
 	 */
 	public static void collectAnnotatedStyleableInfos( Object obj, Map<String, Class<?>> infos ) {
+		HashSet<String> processedFields = new HashSet<>();
 		Class<?> cls = obj.getClass();
 
 		for(;;) {
@@ -636,6 +638,13 @@ public class FlatStylingSupport
 
 				String name = f.getName();
 				Class<?> type = f.getType();
+
+				// for the case that the same field name is used in a class and in
+				// one of its superclasses (e.g. field 'borderColor' in FlatButtonBorder
+				// and in FlatBorder), do not process field in superclass
+				if( processedFields.contains( name ) )
+					continue;
+				processedFields.add( name );
 
 				// handle "dot" keys (e.g. change field name "iconArrowType" to style key "icon.arrowType")
 				if( styleable.dot() ) {
@@ -689,6 +698,26 @@ public class FlatStylingSupport
 		@Override
 		public String getMessage() {
 			return "unknown style '" + super.getMessage() + "'";
+		}
+	}
+
+	//---- class StyleableInfosMap --------------------------------------------
+
+	static class StyleableInfosMap<K,V>
+		extends LinkedHashMap<K,V>
+	{
+		@Override
+		public V put( K key, V value ) {
+			V oldValue = super.put( key, value );
+			if( oldValue != null )
+				throw new IllegalArgumentException( "duplicate key '" + key + "'" );
+			return oldValue;
+		}
+
+		@Override
+		public void putAll( Map<? extends K, ? extends V> m ) {
+			for( Map.Entry<? extends K, ? extends V> e : m.entrySet() )
+				put( e.getKey(), e.getValue() );
 		}
 	}
 }

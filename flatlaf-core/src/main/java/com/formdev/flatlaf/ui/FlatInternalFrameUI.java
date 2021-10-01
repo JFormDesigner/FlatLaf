@@ -25,7 +25,6 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
@@ -222,7 +221,7 @@ public class FlatInternalFrameUI
 
 		@Override
 		public Map<String, Class<?>> getStyleableInfos() {
-			Map<String, Class<?>> infos = new LinkedHashMap<>();
+			Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
 			FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
 			infos.put( "borderMargins", Insets.class );
 			infos.put( "activeDropShadowColor", Color.class );

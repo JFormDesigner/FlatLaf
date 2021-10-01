@@ -24,7 +24,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.swing.InputMap;
@@ -259,7 +258,7 @@ public class FlatScrollBarUI
 	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
 		infos.put( "track", Color.class );
 		infos.put( "thumb", Color.class );
 		infos.put( "width", int.class );

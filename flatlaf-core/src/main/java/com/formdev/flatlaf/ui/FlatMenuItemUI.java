@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.beans.PropertyChangeListener;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -145,7 +144,7 @@ public class FlatMenuItemUI
 	}
 
 	static Map<String, Class<?>> getStyleableInfos( FlatMenuItemRenderer renderer ) {
-		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
 		infos.put( "selectionBackground", Color.class );
 		infos.put( "selectionForeground", Color.class );
 		infos.put( "disabledForeground", Color.class );

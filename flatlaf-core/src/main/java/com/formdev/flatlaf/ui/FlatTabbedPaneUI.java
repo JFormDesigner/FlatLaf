@@ -52,7 +52,6 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -638,7 +637,7 @@ public class FlatTabbedPaneUI
 	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
-		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
 		infos.put( "tabInsets", Insets.class );
 		infos.put( "tabAreaInsets", Insets.class );
 		infos.put( "textIconGap", int.class );

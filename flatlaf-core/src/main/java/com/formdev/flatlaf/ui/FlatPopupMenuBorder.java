@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Insets;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
@@ -61,7 +60,7 @@ public class FlatPopupMenuBorder
 	/** @since 2 */
 	@Override
 	public Map<String, Class<?>> getStyleableInfos() {
-		Map<String, Class<?>> infos = new LinkedHashMap<>();
+		Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
 		infos.put( "borderInsets", Insets.class );
 		infos.put( "borderColor", Color.class );
 		return infos;
