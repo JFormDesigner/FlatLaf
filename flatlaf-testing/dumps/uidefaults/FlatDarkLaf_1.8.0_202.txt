@@ -192,10 +192,12 @@ ComboBox.buttonArrowColor      #9a9da1  HSL 214   4  62    javax.swing.plaf.Colo
 ComboBox.buttonBackground      #45494a  HSL 192   3  28    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonDarkShadow      #7e7e7e  HSL   0   0  49    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonDisabledArrowColor #5a5d61  HSL 214   4  37    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.buttonDisabledSeparatorColor #646464  HSL   0   0  39    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonEditableBackground #404445  HSL 192   4  26    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHighlight       #242424  HSL   0   0  14    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonHoverArrowColor #b4b7ba  HSL 210   4  72    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
 ComboBox.buttonPressedArrowColor #cfd0d2  HSL 220   3  82    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
+ComboBox.buttonSeparatorColor  #646464  HSL   0   0  39    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonShadow          #646464  HSL   0   0  39    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.buttonStyle           auto
 ComboBox.disabledBackground    #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
@@ -950,8 +952,10 @@ Spinner.border                 [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.F
 Spinner.buttonArrowColor       #9a9da1  HSL 214   4  62    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonBackground       #404445  HSL 192   4  26    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonDisabledArrowColor #5a5d61  HSL 214   4  37    javax.swing.plaf.ColorUIResource [UI]
+Spinner.buttonDisabledSeparatorColor #646464  HSL   0   0  39    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonHoverArrowColor  #b4b7ba  HSL 210   4  72    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
 Spinner.buttonPressedArrowColor #cfd0d2  HSL 220   3  82    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(20%)
+Spinner.buttonSeparatorColor   #646464  HSL   0   0  39    javax.swing.plaf.ColorUIResource [UI]
 Spinner.buttonStyle            button
 Spinner.disabledBackground     #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
 Spinner.disabledForeground     #888888  HSL   0   0  53    javax.swing.plaf.ColorUIResource [UI]

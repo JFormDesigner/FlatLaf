@@ -236,8 +236,6 @@ public class TestFlatStyling
 		ui.applyStyle( "editorColumns: 10" );
 		ui.applyStyle( "buttonStyle: auto" );
 		ui.applyStyle( "arrowType: chevron" );
-		ui.applyStyle( "borderColor: #fff" );
-		ui.applyStyle( "disabledBorderColor: #fff" );
 
 		ui.applyStyle( "editableBackground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
@@ -247,6 +245,8 @@ public class TestFlatStyling
 		ui.applyStyle( "buttonBackground: #fff" );
 		ui.applyStyle( "buttonFocusedBackground: #fff" );
 		ui.applyStyle( "buttonEditableBackground: #fff" );
+		ui.applyStyle( "buttonSeparatorColor: #fff" );
+		ui.applyStyle( "buttonDisabledSeparatorColor: #fff" );
 		ui.applyStyle( "buttonArrowColor: #fff" );
 		ui.applyStyle( "buttonDisabledArrowColor: #fff" );
 		ui.applyStyle( "buttonHoverArrowColor: #fff" );
@@ -702,12 +702,12 @@ public class TestFlatStyling
 		ui.applyStyle( "minimumWidth: 100" );
 		ui.applyStyle( "buttonStyle: button" );
 		ui.applyStyle( "arrowType: chevron" );
-		ui.applyStyle( "borderColor: #fff" );
-		ui.applyStyle( "disabledBorderColor: #fff" );
 		ui.applyStyle( "disabledBackground: #fff" );
 		ui.applyStyle( "disabledForeground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
 		ui.applyStyle( "buttonBackground: #fff" );
+		ui.applyStyle( "buttonSeparatorColor: #fff" );
+		ui.applyStyle( "buttonDisabledSeparatorColor: #fff" );
 		ui.applyStyle( "buttonArrowColor: #fff" );
 		ui.applyStyle( "buttonDisabledArrowColor: #fff" );
 		ui.applyStyle( "buttonHoverArrowColor: #fff" );

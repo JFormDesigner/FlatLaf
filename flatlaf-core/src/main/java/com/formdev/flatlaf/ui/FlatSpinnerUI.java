@@ -68,12 +68,12 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * @uiDefault Spinner.buttonStyle				String	button (default) or none
  * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault Component.isIntelliJTheme			boolean
- * @uiDefault Component.borderColor				Color
- * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault Spinner.disabledBackground		Color
  * @uiDefault Spinner.disabledForeground		Color
  * @uiDefault Spinner.focusedBackground			Color	optional
  * @uiDefault Spinner.buttonBackground			Color
+ * @uiDefault Spinner.buttonSeparatorColor		Color	optional
+ * @uiDefault Spinner.buttonDisabledSeparatorColor Color	optional
  * @uiDefault Spinner.buttonArrowColor			Color
  * @uiDefault Spinner.buttonDisabledArrowColor	Color
  * @uiDefault Spinner.buttonHoverArrowColor		Color
@@ -92,12 +92,12 @@ public class FlatSpinnerUI
 	@Styleable protected String buttonStyle;
 	@Styleable protected String arrowType;
 	protected boolean isIntelliJTheme;
-	@Styleable protected Color borderColor;
-	@Styleable protected Color disabledBorderColor;
 	@Styleable protected Color disabledBackground;
 	@Styleable protected Color disabledForeground;
 	@Styleable protected Color focusedBackground;
 	@Styleable protected Color buttonBackground;
+	/** @since 2 */ @Styleable protected Color buttonSeparatorColor;
+	/** @since 2 */ @Styleable protected Color buttonDisabledSeparatorColor;
 	@Styleable protected Color buttonArrowColor;
 	@Styleable protected Color buttonDisabledArrowColor;
 	@Styleable protected Color buttonHoverArrowColor;
@@ -128,12 +128,12 @@ public class FlatSpinnerUI
 		buttonStyle = UIManager.getString( "Spinner.buttonStyle" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
-		borderColor = UIManager.getColor( "Component.borderColor" );
-		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 		disabledBackground = UIManager.getColor( "Spinner.disabledBackground" );
 		disabledForeground = UIManager.getColor( "Spinner.disabledForeground" );
 		focusedBackground = UIManager.getColor( "Spinner.focusedBackground" );
 		buttonBackground = UIManager.getColor( "Spinner.buttonBackground" );
+		buttonSeparatorColor = UIManager.getColor( "Spinner.buttonSeparatorColor" );
+		buttonDisabledSeparatorColor = UIManager.getColor( "Spinner.buttonDisabledSeparatorColor" );
 		buttonArrowColor = UIManager.getColor( "Spinner.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "Spinner.buttonDisabledArrowColor" );
 		buttonHoverArrowColor = UIManager.getColor( "Spinner.buttonHoverArrowColor" );
@@ -147,12 +147,12 @@ public class FlatSpinnerUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
-		borderColor = null;
-		disabledBorderColor = null;
 		disabledBackground = null;
 		disabledForeground = null;
 		focusedBackground = null;
 		buttonBackground = null;
+		buttonSeparatorColor = null;
+		buttonDisabledSeparatorColor = null;
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
@@ -394,10 +394,13 @@ public class FlatSpinnerUI
 			}
 
 			// paint vertical line between value and arrow buttons
-			g2.setColor( enabled ? borderColor : disabledBorderColor );
-			float lw = scale( 1f );
-			float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-			g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
+			Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
+			if( separatorColor != null ) {
+				g2.setColor( separatorColor );
+				float lw = scale( 1f );
+				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
+			}
 		}
 
 		paint( g, c );

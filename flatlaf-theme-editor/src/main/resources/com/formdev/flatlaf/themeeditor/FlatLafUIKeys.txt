@@ -149,11 +149,13 @@ ComboBox.buttonArrowColor
 ComboBox.buttonBackground
 ComboBox.buttonDarkShadow
 ComboBox.buttonDisabledArrowColor
+ComboBox.buttonDisabledSeparatorColor
 ComboBox.buttonEditableBackground
 ComboBox.buttonFocusedBackground
 ComboBox.buttonHighlight
 ComboBox.buttonHoverArrowColor
 ComboBox.buttonPressedArrowColor
+ComboBox.buttonSeparatorColor
 ComboBox.buttonShadow
 ComboBox.buttonStyle
 ComboBox.disabledBackground
@@ -713,8 +715,10 @@ Spinner.border
 Spinner.buttonArrowColor
 Spinner.buttonBackground
 Spinner.buttonDisabledArrowColor
+Spinner.buttonDisabledSeparatorColor
 Spinner.buttonHoverArrowColor
 Spinner.buttonPressedArrowColor
+Spinner.buttonSeparatorColor
 Spinner.buttonStyle
 Spinner.disabledBackground
 Spinner.disabledForeground

@@ -95,8 +95,6 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.buttonStyle				String	auto (default), button or none
  * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault Component.isIntelliJTheme			boolean
- * @uiDefault Component.borderColor				Color
- * @uiDefault Component.disabledBorderColor		Color
  * @uiDefault ComboBox.editableBackground		Color	optional; defaults to ComboBox.background
  * @uiDefault ComboBox.focusedBackground		Color	optional
  * @uiDefault ComboBox.disabledBackground		Color
@@ -104,6 +102,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.buttonBackground			Color
  * @uiDefault ComboBox.buttonEditableBackground	Color
  * @uiDefault ComboBox.buttonFocusedBackground	Color	optional; defaults to ComboBox.focusedBackground
+ * @uiDefault ComboBox.buttonSeparatorColor		Color	optional
+ * @uiDefault ComboBox.buttonDisabledSeparatorColor Color	optional
  * @uiDefault ComboBox.buttonArrowColor			Color
  * @uiDefault ComboBox.buttonDisabledArrowColor	Color
  * @uiDefault ComboBox.buttonHoverArrowColor	Color
@@ -121,8 +121,6 @@ public class FlatComboBoxUI
 	@Styleable protected String buttonStyle;
 	@Styleable protected String arrowType;
 	protected boolean isIntelliJTheme;
-	@Styleable protected Color borderColor;
-	@Styleable protected Color disabledBorderColor;
 
 	@Styleable protected Color editableBackground;
 	@Styleable protected Color focusedBackground;
@@ -132,6 +130,8 @@ public class FlatComboBoxUI
 	@Styleable protected Color buttonBackground;
 	@Styleable protected Color buttonEditableBackground;
 	@Styleable protected Color buttonFocusedBackground;
+	/** @since 2 */ @Styleable protected Color buttonSeparatorColor;
+	/** @since 2 */ @Styleable protected Color buttonDisabledSeparatorColor;
 	@Styleable protected Color buttonArrowColor;
 	@Styleable protected Color buttonDisabledArrowColor;
 	@Styleable protected Color buttonHoverArrowColor;
@@ -215,8 +215,6 @@ public class FlatComboBoxUI
 		buttonStyle = UIManager.getString( "ComboBox.buttonStyle" );
 		arrowType = UIManager.getString( "Component.arrowType" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
-		borderColor = UIManager.getColor( "Component.borderColor" );
-		disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
 
 		editableBackground = UIManager.getColor( "ComboBox.editableBackground" );
 		focusedBackground = UIManager.getColor( "ComboBox.focusedBackground" );
@@ -226,6 +224,8 @@ public class FlatComboBoxUI
 		buttonBackground = UIManager.getColor( "ComboBox.buttonBackground" );
 		buttonFocusedBackground = UIManager.getColor( "ComboBox.buttonFocusedBackground" );
 		buttonEditableBackground = UIManager.getColor( "ComboBox.buttonEditableBackground" );
+		buttonSeparatorColor = UIManager.getColor( "ComboBox.buttonSeparatorColor" );
+		buttonDisabledSeparatorColor = UIManager.getColor( "ComboBox.buttonDisabledSeparatorColor" );
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
 		buttonDisabledArrowColor = UIManager.getColor( "ComboBox.buttonDisabledArrowColor" );
 		buttonHoverArrowColor = UIManager.getColor( "ComboBox.buttonHoverArrowColor" );
@@ -247,9 +247,6 @@ public class FlatComboBoxUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
-		borderColor = null;
-		disabledBorderColor = null;
-
 		editableBackground = null;
 		focusedBackground = null;
 		disabledBackground = null;
@@ -258,6 +255,8 @@ public class FlatComboBoxUI
 		buttonBackground = null;
 		buttonEditableBackground = null;
 		buttonFocusedBackground = null;
+		buttonSeparatorColor = null;
+		buttonDisabledSeparatorColor = null;
 		buttonArrowColor = null;
 		buttonDisabledArrowColor = null;
 		buttonHoverArrowColor = null;
@@ -555,10 +554,13 @@ public class FlatComboBoxUI
 
 			// paint vertical line between value and arrow button
 			if( paintButton ) {
-				g2.setColor( enabled ? borderColor : disabledBorderColor );
-				float lw = scale( 1f );
-				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
-				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2)) );
+				Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
+				if( separatorColor != null ) {
+					g2.setColor( separatorColor );
+					float lw = scale( 1f );
+					float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
+					g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2)) );
+				}
 			}
 		}
 

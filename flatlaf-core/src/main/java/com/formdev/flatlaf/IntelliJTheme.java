@@ -549,6 +549,8 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ComboBox.ArrowButton.disabledIconColor",     "ComboBox.buttonDisabledArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.iconColor",             "ComboBox.buttonArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.nonEditableBackground", "ComboBox.buttonBackground" );
+		uiKeyCopying.put( "ComboBox.buttonSeparatorColor",              "Component.borderColor" );
+		uiKeyCopying.put( "ComboBox.buttonDisabledSeparatorColor",      "Component.disabledBorderColor" );
 
 		// Component
 		uiKeyMapping.put( "Component.inactiveErrorFocusColor",   "Component.error.borderColor" );
@@ -593,6 +595,10 @@ public class IntelliJTheme
 		uiKeyCopying.put( "Slider.trackValueColor", "ProgressBar.foreground" );
 		uiKeyCopying.put( "Slider.thumbColor", "ProgressBar.foreground" );
 		uiKeyCopying.put( "Slider.trackColor", "ProgressBar.background" );
+
+		// Spinner
+		uiKeyCopying.put( "Spinner.buttonSeparatorColor",         "Component.borderColor" );
+		uiKeyCopying.put( "Spinner.buttonDisabledSeparatorColor", "Component.disabledBorderColor" );
 
 		// TitlePane
 		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );
