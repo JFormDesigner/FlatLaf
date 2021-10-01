@@ -66,48 +66,78 @@ public class TestFlatStyling
 	}
 
 	@Test
+	void parseIfFunction() {
+		testColorStyle( 0x00ff00, "if(#000,#0f0,#dfd)" );
+		testColorStyle( 0xddffdd, "if(null,#0f0,#dfd)" );
+		testColorStyle( 0x00ff00, "if(true,#0f0,#dfd)" );
+		testColorStyle( 0xddffdd, "if(false,#0f0,#dfd)" );
+		testColorStyle( 0x00ff00, "if(1,#0f0,#dfd)" );
+		testColorStyle( 0xddffdd, "if(0,#0f0,#dfd)" );
+
+		// nested
+		testColorStyle( 0xff6666, "if(true,lighten(#f00,20%),darken(#f00,20%))" );
+		testColorStyle( 0x990000, "if(false,lighten(#f00,20%),darken(#f00,20%))" );
+		testColorStyle( 0xddffdd, "if($undefinedProp,#0f0,#dfd)" );
+		testColorStyle( 0x33ff33, "lighten(if(#000,#0f0,#dfd), 10%)" );
+	}
+
+	@Test
 	void parseColorFunctions() {
+		// rgb, rgba, hsl, hsla
 		testColorStyle( 0x0c2238, "rgb(12,34,56)" );
 		testColorStyle( 0x4e0c2238, "rgba(12,34,56,78)" );
 		testColorStyle( 0xb57869, "hsl(12,34%,56%)" );
 		testColorStyle( 0xc7b57869, "hsla(12,34%,56%,78%)" );
 
+		// lighten, darken
 		testColorStyle( 0xff6666, "lighten(#f00,20%)" );
 		testColorStyle( 0x990000, "darken(#f00,20%)" );
 
+		// saturate, desaturate
 		testColorStyle( 0x9c3030, "saturate(#844,20%)" );
 		testColorStyle( 0x745858, "desaturate(#844,20%)" );
 
+		// fadein, fadeout, fade
 		testColorStyle( 0x4dff0000, "fadein(#ff000000,30%)" );
 		testColorStyle( 0x99ff0000, "fadeout(#ff0000,40%)" );
 		testColorStyle( 0x80ff0000, "fade(#ff0000,50%)" );
 
+		// spin
 		testColorStyle( 0xffaa00, "spin(#f00,40)" );
 		testColorStyle( 0xff00aa, "spin(#f00,-40)" );
 
+		// changeHue, changeSaturation, changeLightness, changeAlpha
 		testColorStyle( 0x00ffff, "changeHue(#f00,180)" );
 		testColorStyle( 0xbf4040, "changeSaturation(#f00,50%)" );
 		testColorStyle( 0xff9999, "changeLightness(#f00,80%)" );
 		testColorStyle( 0x80ff0000, "changeAlpha(#f00,50%)" );
 
+		// mix
 		testColorStyle( 0x1ae600, "mix(#f00,#0f0,10%)" );
 		testColorStyle( 0x40bf00, "mix(#f00,#0f0,25%)" );
 		testColorStyle( 0x808000, "mix(#f00,#0f0)" );
 		testColorStyle( 0xbf4000, "mix(#f00,#0f0,75%)" );
 		testColorStyle( 0xe61a00, "mix(#f00,#0f0,90%)" );
 
+		// tint
 		testColorStyle( 0xff40ff, "tint(#f0f,25%)" );
 		testColorStyle( 0xff80ff, "tint(#f0f)" );
 		testColorStyle( 0xffbfff, "tint(#f0f,75%)" );
 
+		// shade
 		testColorStyle( 0xbf00bf, "shade(#f0f,25%)" );
 		testColorStyle( 0x800080, "shade(#f0f)" );
 		testColorStyle( 0x400040, "shade(#f0f,75%)" );
+
+		// contrast
+		testColorStyle( 0xffffff, "contrast(#111,#000,#fff)" );
+		testColorStyle( 0x000000, "contrast(#eee,#000,#fff)" );
 
 		// nested
 		testColorStyle( 0xd1c7c7, "saturate(darken(#fff,20%),10%)" );
 		testColorStyle( 0xcf00cf, "shade(shade(#f0f,10%),10%)" );
 		testColorStyle( 0xba00ba, "shade(shade(shade(#f0f,10%),10%),10%)" );
+		testColorStyle( 0x000000, "contrast(contrast(#222,#111,#eee),contrast(#eee,#000,#fff),contrast(#111,#000,#fff))" );
 	}
 
 	@Test
