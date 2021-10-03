@@ -31,8 +31,8 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 /**
  * Icon for {@link javax.swing.JCheckBoxMenuItem}.
  *
- * @uiDefault MenuItemCheckBox.icon.checkmarkColor				Color
- * @uiDefault MenuItemCheckBox.icon.disabledCheckmarkColor		Color
+ * @uiDefault CheckBoxMenuItem.icon.checkmarkColor				Color
+ * @uiDefault CheckBoxMenuItem.icon.disabledCheckmarkColor		Color
  * @uiDefault MenuItem.selectionForeground						Color
  * @uiDefault MenuItem.selectionType							String
  *
@@ -41,8 +41,8 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 public class FlatCheckBoxMenuItemIcon
 	extends FlatAbstractIcon
 {
-	@Styleable protected Color checkmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.checkmarkColor" );
-	@Styleable protected Color disabledCheckmarkColor = UIManager.getColor( "MenuItemCheckBox.icon.disabledCheckmarkColor" );
+	@Styleable protected Color checkmarkColor = UIManager.getColor( "CheckBoxMenuItem.icon.checkmarkColor" );
+	@Styleable protected Color disabledCheckmarkColor = UIManager.getColor( "CheckBoxMenuItem.icon.disabledCheckmarkColor" );
 	@Styleable protected Color selectionForeground = UIManager.getColor( "MenuItem.selectionForeground" );
 
 	public FlatCheckBoxMenuItemIcon() {

@@ -129,6 +129,8 @@ CheckBoxMenuItem.checkIcon
 CheckBoxMenuItem.disabledForeground
 CheckBoxMenuItem.font
 CheckBoxMenuItem.foreground
+CheckBoxMenuItem.icon.checkmarkColor
+CheckBoxMenuItem.icon.disabledCheckmarkColor
 CheckBoxMenuItem.margin
 CheckBoxMenuItem.opaque
 CheckBoxMenuItem.selectionBackground
@@ -468,8 +470,6 @@ MenuItem.underlineSelectionBackground
 MenuItem.underlineSelectionCheckBackground
 MenuItem.underlineSelectionColor
 MenuItem.underlineSelectionHeight
-MenuItemCheckBox.icon.checkmarkColor
-MenuItemCheckBox.icon.disabledCheckmarkColor
 MenuItemUI
 MenuUI
 MonthViewUI

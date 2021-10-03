@@ -162,6 +162,8 @@ CheckBoxMenuItem.checkIcon     [lazy] 15,15    com.formdev.flatlaf.icons.FlatChe
 CheckBoxMenuItem.disabledForeground #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.font          [active] $defaultFont [UI]
 CheckBoxMenuItem.foreground    #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.icon.checkmarkColor #4d89c9  HSL 211  53  55    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.icon.disabledCheckmarkColor #ababab  HSL   0   0  67    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.margin        3,6,3,6    javax.swing.plaf.InsetsUIResource [UI]
 CheckBoxMenuItem.opaque        false
 CheckBoxMenuItem.selectionBackground #00aa00  HSL 120 100  33    javax.swing.plaf.ColorUIResource [UI]
@@ -620,16 +622,6 @@ MenuItem.underlineSelectionBackground #e6e6e6  HSL   0   0  90    javax.swing.pl
 MenuItem.underlineSelectionCheckBackground #ccccff  HSL 240 100  90    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionColor #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
-
-
-#---- MenuItemCheckBox ----
-
-MenuItemCheckBox.icon.checkmarkColor #4d89c9  HSL 211  53  55    javax.swing.plaf.ColorUIResource [UI]
-MenuItemCheckBox.icon.disabledCheckmarkColor #ababab  HSL   0   0  67    javax.swing.plaf.ColorUIResource [UI]
-
-
-#---- MenuItem ----
-
 MenuItemUI                     com.formdev.flatlaf.ui.FlatMenuItemUI
 
 
