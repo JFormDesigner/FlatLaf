@@ -657,6 +657,12 @@ class FlatThemeFileEditor
 			themeEditorPane.notifyTextAreaAction( FlatSyntaxTextAreaActions.insertColorAction );
 	}
 
+	private void pickColor() {
+		FlatThemeEditorPane themeEditorPane = (FlatThemeEditorPane) tabbedPane.getSelectedComponent();
+		if( themeEditorPane != null )
+			themeEditorPane.notifyTextAreaAction( FlatSyntaxTextAreaActions.pickColorAction );
+	}
+
 	private void showHidePreview() {
 		boolean show = previewMenuItem.isSelected();
 		for( FlatThemeEditorPane themeEditorPane : getThemeEditorPanes() )
@@ -888,6 +894,7 @@ class FlatThemeFileEditor
 		editMenu = new JMenu();
 		findMenuItem = new JMenuItem();
 		insertColorMenuItem = new JMenuItem();
+		pickColorMenuItem = new JMenuItem();
 		viewMenu = new JMenu();
 		previewMenuItem = new JCheckBoxMenuItem();
 		lightLafMenuItem = new JRadioButtonMenuItem();
@@ -986,6 +993,12 @@ class FlatThemeFileEditor
 				insertColorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
 				insertColorMenuItem.addActionListener(e -> insertColor());
 				editMenu.add(insertColorMenuItem);
+
+				//---- pickColorMenuItem ----
+				pickColorMenuItem.setText("Pick Color from Screen");
+				pickColorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK|KeyEvent.SHIFT_DOWN_MASK));
+				pickColorMenuItem.addActionListener(e -> pickColor());
+				editMenu.add(pickColorMenuItem);
 			}
 			menuBar.add(editMenu);
 
@@ -1150,6 +1163,7 @@ class FlatThemeFileEditor
 	private JMenu editMenu;
 	private JMenuItem findMenuItem;
 	private JMenuItem insertColorMenuItem;
+	private JMenuItem pickColorMenuItem;
 	private JMenu viewMenu;
 	private JCheckBoxMenuItem previewMenuItem;
 	private JRadioButtonMenuItem lightLafMenuItem;

@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.themeeditor;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
@@ -43,6 +44,7 @@ class FlatSyntaxTextAreaActions
 	static final String incrementNumberAction = "FlatLaf.IncrementNumberAction";
 	static final String decrementNumberAction = "FlatLaf.DecrementNumberAction";
 	static final String insertColorAction = "FlatLaf.InsertColorAction";
+	static final String pickColorAction = "FlatLaf.PickColorAction";
 
 	static int[] findColorAt( RTextArea textArea, int position ) {
 		try {
@@ -375,6 +377,78 @@ class FlatSyntaxTextAreaActions
 
 				lastLocation = dialog.getLocation();
 			} catch( BadLocationException | IndexOutOfBoundsException | NumberFormatException ex ) {
+				ex.printStackTrace();
+			}
+		}
+
+		@Override
+		public String getMacroID() {
+			return getName();
+		}
+	}
+
+	//---- class PickColorAction ----------------------------------------------
+
+	static class PickColorAction
+		extends RecordableTextAction
+	{
+		PickColorAction( String name ) {
+			super( name );
+		}
+
+		@Override
+		public void actionPerformedImpl( ActionEvent e, RTextArea textArea ) {
+			try {
+				// find current color at caret
+				int caretPosition = textArea.getCaretPosition();
+				int start;
+				int len = 0;
+				String oldStr;
+				int[] result = findColorAt( textArea, caretPosition );
+				if( result != null ) {
+					start = result[0];
+					len = result[1];
+
+					oldStr = textArea.getText( start, len );
+				} else {
+					start = caretPosition;
+					oldStr = "";
+				}
+
+				AtomicInteger length = new AtomicInteger( len );
+				AtomicBoolean changed = new AtomicBoolean();
+
+				// show pipette color picker
+				Window window = SwingUtilities.windowForComponent( textArea );
+				FlatColorPipette.pick( window, true,
+					color -> {
+						// update editor immediately for live preview
+						String str = colorToString( color );
+						((FlatSyntaxTextArea)textArea).runWithoutUndo( () -> {
+							textArea.replaceRange( str, start, start + length.get() );
+						} );
+						length.set( str.length() );
+						changed.set( true );
+					},
+					color -> {
+						// restore original string
+						((FlatSyntaxTextArea)textArea).runWithoutUndo( () -> {
+							textArea.replaceRange( oldStr, start, start + length.get() );
+						} );
+						length.set( oldStr.length() );
+
+						// update editor
+						if( color != null ) {
+							String newStr = colorToString( color );
+							try {
+								if( !newStr.equals( textArea.getText( start, length.get() ) ) )
+									textArea.replaceRange( newStr, start, start + length.get() );
+							} catch( BadLocationException ex ) {
+								ex.printStackTrace();
+							}
+						}
+					} );
+			} catch( BadLocationException | IndexOutOfBoundsException | NumberFormatException | UnsupportedOperationException | AWTException ex ) {
 				ex.printStackTrace();
 			}
 		}
