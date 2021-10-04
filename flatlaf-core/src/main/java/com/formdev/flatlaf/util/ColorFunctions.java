@@ -26,6 +26,86 @@ import java.awt.Color;
 public class ColorFunctions
 {
 	/**
+	 * Increase the lightness of a color in HSL color space by an absolute amount.
+	 * <p>
+	 * Consider using {@link #tint(Color, float)} as alternative.
+	 *
+	 * @param color base color
+	 * @param amount the amount (in range 0-1) that is added to the lightness
+	 * @return new color
+	 * @since 2
+	 */
+	public static Color lighten( Color color, float amount ) {
+		return hslIncreaseDecrease( color, amount, 2, true );
+	}
+
+	/**
+	 * Decrease the lightness of a color in HSL color space by an absolute amount.
+	 * <p>
+	 * Consider using {@link #shade(Color, float)} as alternative.
+	 *
+	 * @param color base color
+	 * @param amount the amount (in range 0-1) that is subtracted from the lightness
+	 * @return new color
+	 * @since 2
+	 */
+	public static Color darken( Color color, float amount ) {
+		return hslIncreaseDecrease( color, amount, 2, false );
+	}
+
+	/**
+	 * Increase the saturation of a color in HSL color space by an absolute amount.
+	 *
+	 * @param color base color
+	 * @param amount the amount (in range 0-1) that is added to the saturation
+	 * @return new color
+	 * @since 2
+	 */
+	public static Color saturate( Color color, float amount ) {
+		return hslIncreaseDecrease( color, amount, 1, true );
+	}
+
+	/**
+	 * Decrease the saturation of a color in HSL color space by an absolute amount.
+	 *
+	 * @param color base color
+	 * @param amount the amount (in range 0-1) that is subtracted from the saturation
+	 * @return new color
+	 * @since 2
+	 */
+	public static Color desaturate( Color color, float amount ) {
+		return hslIncreaseDecrease( color, amount, 1, false );
+	}
+
+	/**
+	 * Rotate the hue angle (0-360) of a color in HSL color space in either direction.
+	 *
+	 * @param color base color
+	 * @param angle the number of degrees to rotate (in range -360 - 360)
+	 * @return new color
+	 * @since 2
+	 */
+	public static Color spin( Color color, float angle ) {
+		return hslIncreaseDecrease( color, angle, 0, true );
+	}
+
+	private static Color hslIncreaseDecrease( Color color, float amount, int hslIndex, boolean increase ) {
+		// convert RGB to HSL
+		float[] hsl = HSLColor.fromRGB( color );
+		float alpha = color.getAlpha() / 255f;
+
+		// apply HSL color change
+		float amount2 = increase ? amount : -amount;
+		if( hslIndex == 0 )
+			hsl[0] = (hsl[0] + amount2) % 360;
+		else
+			hsl[hslIndex] = clamp( hsl[hslIndex] + (amount2 * 100) );
+
+		// convert HSL to RGB
+		return HSLColor.toRGB( hsl[0], hsl[1], hsl[2], alpha );
+	}
+
+	/**
 	 * Returns a color that is a mixture of two colors.
 	 * <p>
 	 * This can be used to animate a color change from {@code color1} to {@code color2}

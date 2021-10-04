@@ -16,6 +16,9 @@ FlatLaf Change Log
 - ToolBar: Toolbars are no longer floatable by default (dots on left side of
   toolbar that allows dragging toolbar). Use `UIManager.put(
   "ToolBar.floatable", true )` if you want the old behavior.
+- Added more color functions to class `ColorFunctions` for easy use in
+  applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
+  `tint()`, `shade()` and `luma()`.
 
 #### Fixed bugs
 

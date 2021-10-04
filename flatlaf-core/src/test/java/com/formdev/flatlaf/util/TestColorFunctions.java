@@ -26,6 +26,37 @@ import org.junit.jupiter.api.Test;
 public class TestColorFunctions
 {
 	@Test
+	void colorFunctions() {
+		assertEquals( new Color( 0xff6666 ), ColorFunctions.lighten( Color.red, 0.2f ) );
+		assertEquals( new Color( 0x990000 ), ColorFunctions.darken( Color.red, 0.2f ) );
+
+		// saturate, desaturate
+		assertEquals( new Color( 0x9c3030 ), ColorFunctions.saturate( new Color( 0x884444 ), 0.2f ) );
+		assertEquals( new Color( 0x745858 ), ColorFunctions.desaturate( new Color( 0x884444 ), 0.2f ) );
+
+		// spin
+		assertEquals( new Color( 0xffaa00 ), ColorFunctions.spin( Color.red,40 ) );
+		assertEquals( new Color( 0xff00aa ), ColorFunctions.spin( Color.red,-40 ) );
+
+		// mix
+		assertEquals( new Color( 0x1ae600 ), ColorFunctions.mix( Color.red, Color.green, 0.1f ) );
+		assertEquals( new Color( 0x40bf00 ), ColorFunctions.mix( Color.red, Color.green, 0.25f ) );
+		assertEquals( new Color( 0x808000 ), ColorFunctions.mix( Color.red, Color.green, 0.5f ) );
+		assertEquals( new Color( 0xbf4000 ), ColorFunctions.mix( Color.red, Color.green, 0.75f ) );
+		assertEquals( new Color( 0xe61a00 ), ColorFunctions.mix( Color.red, Color.green, 0.9f ) );
+
+		// tint
+		assertEquals( new Color( 0xff40ff ), ColorFunctions.tint( Color.magenta, 0.25f ) );
+		assertEquals( new Color( 0xff80ff ), ColorFunctions.tint( Color.magenta, 0.5f ) );
+		assertEquals( new Color( 0xffbfff ), ColorFunctions.tint( Color.magenta, 0.75f ) );
+
+		// shade
+		assertEquals( new Color( 0xbf00bf ), ColorFunctions.shade( Color.magenta, 0.25f ) );
+		assertEquals( new Color( 0x800080 ), ColorFunctions.shade( Color.magenta, 0.5f ) );
+		assertEquals( new Color( 0x400040 ), ColorFunctions.shade( Color.magenta, 0.75f ) );
+	}
+
+	@Test
 	void luma() {
 		assertEquals( 0, ColorFunctions.luma( Color.black ) );
 		assertEquals( 1, ColorFunctions.luma( Color.white ) );
