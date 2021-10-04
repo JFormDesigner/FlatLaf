@@ -25,39 +25,6 @@ import java.awt.Color;
  */
 public class ColorFunctions
 {
-	public static Color applyFunctions( Color color, ColorFunction... functions ) {
-		// if having only a single function of type Mix, then avoid four unnecessary conversions:
-		//     1. RGB to HSL in this method
-		//     2. HSL to RGB in Mix.apply()
-		//        mix
-		//     3. RGB to HSL in Mix.apply()
-		//     4. HSL to RGB in this method
-		if( functions.length == 1 && functions[0] instanceof Mix ) {
-			Mix mixFunction = (Mix) functions[0];
-			return mix( color, mixFunction.color2, mixFunction.weight / 100 );
-		}
-
-		// convert RGB to HSL
-		float[] hsl = HSLColor.fromRGB( color );
-		float alpha = color.getAlpha() / 255f;
-		float[] hsla = { hsl[0], hsl[1], hsl[2], alpha * 100 };
-
-		// apply color functions
-		for( ColorFunction function : functions )
-			function.apply( hsla );
-
-		// convert HSL to RGB
-		return HSLColor.toRGB( hsla[0], hsla[1], hsla[2], hsla[3] / 100 );
-	}
-
-	public static float clamp( float value ) {
-		return (value < 0)
-			? 0
-			: ((value > 100)
-				? 100
-				: value);
-	}
-
 	/**
 	 * Returns a color that is a mixture of two colors.
 	 * <p>
@@ -147,6 +114,39 @@ public class ColorFunctions
 		return (value <= 0.03928f)
 			? value / 12.92f
 			: (float) Math.pow( (value + 0.055) / 1.055, 2.4 );
+	}
+
+	public static Color applyFunctions( Color color, ColorFunction... functions ) {
+		// if having only a single function of type Mix, then avoid four unnecessary conversions:
+		//     1. RGB to HSL in this method
+		//     2. HSL to RGB in Mix.apply()
+		//        mix
+		//     3. RGB to HSL in Mix.apply()
+		//     4. HSL to RGB in this method
+		if( functions.length == 1 && functions[0] instanceof Mix ) {
+			Mix mixFunction = (Mix) functions[0];
+			return mix( color, mixFunction.color2, mixFunction.weight / 100 );
+		}
+
+		// convert RGB to HSL
+		float[] hsl = HSLColor.fromRGB( color );
+		float alpha = color.getAlpha() / 255f;
+		float[] hsla = { hsl[0], hsl[1], hsl[2], alpha * 100 };
+
+		// apply color functions
+		for( ColorFunction function : functions )
+			function.apply( hsla );
+
+		// convert HSL to RGB
+		return HSLColor.toRGB( hsla[0], hsla[1], hsla[2], hsla[3] / 100 );
+	}
+
+	public static float clamp( float value ) {
+		return (value < 0)
+			? 0
+			: ((value > 100)
+				? 100
+				: value);
 	}
 
 	//---- interface ColorFunction --------------------------------------------
