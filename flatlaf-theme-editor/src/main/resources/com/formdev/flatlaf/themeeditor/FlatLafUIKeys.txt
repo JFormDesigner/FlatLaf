@@ -989,6 +989,7 @@ ToolBar.borderMargins
 ToolBar.darkShadow
 ToolBar.dockingBackground
 ToolBar.dockingForeground
+ToolBar.floatable
 ToolBar.floatingBackground
 ToolBar.floatingForeground
 ToolBar.focusableButtons

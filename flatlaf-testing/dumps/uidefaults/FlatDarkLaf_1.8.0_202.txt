@@ -1268,6 +1268,7 @@ ToolBar.borderMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 ToolBar.darkShadow             #7a7d7f  HSL 204   2  49    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingBackground      #303234  HSL 210   4  20    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingForeground      #616365  HSL 210   2  39    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.floatable              false
 ToolBar.floatingBackground     #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.floatingForeground     #616365  HSL 210   2  39    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.focusableButtons       false

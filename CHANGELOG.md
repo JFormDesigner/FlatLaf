@@ -13,6 +13,9 @@ FlatLaf Change Log
 - Theming improvements: Reworks core themes to make it easier to create new
   themes (e.g. reduced explicit colors by using color functions). **Note**:
   There are minor incompatible changes in FlatLaf properties files. (PR #390)
+- ToolBar: Toolbars are no longer floatable by default (dots on left side of
+  toolbar that allows dragging toolbar). Use `UIManager.put(
+  "ToolBar.floatable", true )` if you want the old behavior.
 
 #### Fixed bugs
 

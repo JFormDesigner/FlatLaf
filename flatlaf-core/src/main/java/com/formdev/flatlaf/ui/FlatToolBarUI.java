@@ -51,6 +51,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * <!-- FlatToolBarUI -->
  *
  * @uiDefault ToolBar.focusableButtons					boolean
+ * @uiDefault ToolBar.floatable							boolean
  *
  * <!-- FlatToolBarBorder -->
  *
@@ -70,6 +71,7 @@ public class FlatToolBarUI
 	@Styleable protected Insets borderMargins;
 	@Styleable protected Color gripColor;
 
+	private Boolean oldFloatable;
 	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -103,6 +105,23 @@ public class FlatToolBarUI
 		super.installDefaults();
 
 		focusableButtons = UIManager.getBoolean( "ToolBar.focusableButtons" );
+
+		// floatable
+		if( !UIManager.getBoolean( "ToolBar.floatable" ) ) {
+			oldFloatable = toolBar.isFloatable();
+			toolBar.setFloatable( false );
+		} else
+			oldFloatable = null;
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		if( oldFloatable != null ) {
+			toolBar.setFloatable( oldFloatable );
+			oldFloatable = null;
+		}
 	}
 
 	@Override
