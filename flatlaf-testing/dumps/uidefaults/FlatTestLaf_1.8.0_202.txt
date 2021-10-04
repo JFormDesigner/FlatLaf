@@ -162,6 +162,8 @@ CheckBoxMenuItem.checkIcon     [lazy] 15,15    com.formdev.flatlaf.icons.FlatChe
 CheckBoxMenuItem.disabledForeground #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.font          [active] $defaultFont [UI]
 CheckBoxMenuItem.foreground    #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.icon.checkmarkColor #4d89c9  HSL 211  53  55    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.icon.disabledCheckmarkColor #ababab  HSL   0   0  67    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.margin        3,6,3,6    javax.swing.plaf.InsetsUIResource [UI]
 CheckBoxMenuItem.opaque        false
 CheckBoxMenuItem.selectionBackground #00aa00  HSL 120 100  33    javax.swing.plaf.ColorUIResource [UI]
@@ -330,14 +332,14 @@ HeaderUI                       com.formdev.flatlaf.swingx.ui.FlatHeaderUI
 
 #---- HelpButton ----
 
-HelpButton.background          #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
-HelpButton.borderColor         #878787  HSL   0   0  53    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.background          #ccffcc  HSL 120 100  90    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.borderColor         #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.borderWidth         1
-HelpButton.disabledBackground  #f2f2f2  HSL   0   0  95    javax.swing.plaf.ColorUIResource [UI]
-HelpButton.disabledBorderColor #bdbdbd  HSL   0   0  74    javax.swing.plaf.ColorUIResource [UI]
-HelpButton.disabledQuestionMarkColor #ababab  HSL   0   0  67    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.disabledBackground  #e0e0e0  HSL   0   0  88    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.disabledBorderColor #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.disabledQuestionMarkColor #8888ff  HSL 240 100  77    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.focusedBackground   #00ffff  HSL 180 100  50    javax.swing.plaf.ColorUIResource [UI]
-HelpButton.focusedBorderColor  #7b9fc7  HSL 212  40  63    javax.swing.plaf.ColorUIResource [UI]
+HelpButton.focusedBorderColor  #466d94  HSL 210  36  43    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.hoverBackground     #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.hoverBorderColor    #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
@@ -583,7 +585,7 @@ MenuBar.hoverBackground        #ffdddd  HSL   0 100  93    javax.swing.plaf.Colo
 MenuBar.itemMargins            3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
 MenuBar.shadow                 #a0a0a0  HSL   0   0  63    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.underlineSelectionBackground #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
-MenuBar.underlineSelectionColor #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.underlineSelectionColor #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.underlineSelectionHeight 5
 MenuBar.windowBindings         length=2    [Ljava.lang.Object;
     [0] F10
@@ -618,18 +620,8 @@ MenuItem.textAcceleratorGap    24
 MenuItem.textNoAcceleratorGap  6
 MenuItem.underlineSelectionBackground #e6e6e6  HSL   0   0  90    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionCheckBackground #ccccff  HSL 240 100  90    javax.swing.plaf.ColorUIResource [UI]
-MenuItem.underlineSelectionColor #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.underlineSelectionColor #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
-
-
-#---- MenuItemCheckBox ----
-
-MenuItemCheckBox.icon.checkmarkColor #4d89c9  HSL 211  53  55    javax.swing.plaf.ColorUIResource [UI]
-MenuItemCheckBox.icon.disabledCheckmarkColor #ababab  HSL   0   0  67    javax.swing.plaf.ColorUIResource [UI]
-
-
-#---- MenuItem ----
-
 MenuItemUI                     com.formdev.flatlaf.ui.FlatMenuItemUI
 
 
@@ -1079,7 +1071,7 @@ Table.dropCellBackground       #ff0000  HSL   0 100  50    javax.swing.plaf.Colo
 Table.dropCellForeground       #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
 Table.dropLineColor            #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
 Table.dropLineShortColor       #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
-Table.focusCellBackground      #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+Table.focusCellBackground      #fffff0  HSL  60 100  97    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellForeground      #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Focused [UI]    lineColor=#ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
@@ -1287,10 +1279,10 @@ ToolBar.background             #ccffcc  HSL 120 100  90    javax.swing.plaf.Colo
 ToolBar.border                 [lazy] 2,2,2,2  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
 ToolBar.borderMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 ToolBar.darkShadow             #696969  HSL   0   0  41    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.dockingBackground      #ccffcc  HSL 120 100  90    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.dockingBackground      #b3ffb3  HSL 120 100  85    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.dockingForeground      #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.floatingBackground     #ccffcc  HSL 120 100  90    javax.swing.plaf.ColorUIResource [UI]
-ToolBar.floatingForeground     #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.floatingForeground     #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.focusableButtons       true
 ToolBar.font                   [active] $defaultFont [UI]
 ToolBar.foreground             #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
