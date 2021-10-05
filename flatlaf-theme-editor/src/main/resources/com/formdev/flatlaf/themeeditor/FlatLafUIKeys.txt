@@ -983,6 +983,7 @@ ToggleButton.toolbar.pressedBackground
 ToggleButton.toolbar.selectedBackground
 ToggleButtonUI
 ToolBar.ancestorInputMap
+ToolBar.arrowKeysOnlyNavigation
 ToolBar.background
 ToolBar.border
 ToolBar.borderMargins

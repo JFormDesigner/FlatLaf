@@ -20,6 +20,11 @@ FlatLaf Change Log
   - Skip components with empty input map (e.g. `JLabel`) when using arrow keys
     to navigate in focusable buttons (if UI value `ToolBar.focusableButtons` is
     `true`).
+  - Support arrow-keys-only navigation within focusable buttons of toolbar (if
+    UI value `ToolBar.focusableButtons` is `true`):
+    - arrow keys move focus within toolbar
+    - tab-key moves focus out of toolbar
+    - if moving focus into the toolbar, focus recently focused toolbar button
 - Added more color functions to class `ColorFunctions` for easy use in
   applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
   `tint()`, `shade()` and `luma()`.

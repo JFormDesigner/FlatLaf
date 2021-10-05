@@ -18,6 +18,8 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.FocusTraversalPolicy;
 import java.awt.Insets;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
@@ -26,6 +28,7 @@ import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.LayoutFocusTraversalPolicy;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
@@ -52,6 +55,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * <!-- FlatToolBarUI -->
  *
  * @uiDefault ToolBar.focusableButtons					boolean
+ * @uiDefault ToolBar.arrowKeysOnlyNavigation			boolean
  * @uiDefault ToolBar.floatable							boolean
  *
  * <!-- FlatToolBarBorder -->
@@ -65,13 +69,14 @@ public class FlatToolBarUI
 	extends BasicToolBarUI
 	implements StyleableUI
 {
-	/** @since 1.4 */
-	@Styleable protected boolean focusableButtons;
+	/** @since 1.4 */ @Styleable protected boolean focusableButtons;
+	/** @since 2 */ @Styleable protected boolean arrowKeysOnlyNavigation;
 
 	// for FlatToolBarBorder
 	@Styleable protected Insets borderMargins;
 	@Styleable protected Color gripColor;
 
+	private FocusTraversalPolicy focusTraversalPolicy;
 	private Boolean oldFloatable;
 	private Map<String, Object> oldStyleValues;
 
@@ -82,6 +87,8 @@ public class FlatToolBarUI
 	@Override
 	public void installUI( JComponent c ) {
 		super.installUI( c );
+
+		installFocusTraversalPolicy();
 
 		installStyle();
 
@@ -100,6 +107,8 @@ public class FlatToolBarUI
 		if( !focusableButtons )
 			setButtonsFocusable( true );
 
+		uninstallFocusTraversalPolicy();
+
 		oldStyleValues = null;
 	}
 
@@ -108,6 +117,7 @@ public class FlatToolBarUI
 		super.installDefaults();
 
 		focusableButtons = UIManager.getBoolean( "ToolBar.focusableButtons" );
+		arrowKeysOnlyNavigation = UIManager.getBoolean( "ToolBar.arrowKeysOnlyNavigation" );
 
 		// floatable
 		if( !UIManager.getBoolean( "ToolBar.floatable" ) ) {
@@ -165,11 +175,18 @@ public class FlatToolBarUI
 	/** @since 2 */
 	protected void applyStyle( Object style ) {
 		boolean oldFocusableButtons = focusableButtons;
+		boolean oldArrowKeysOnlyNavigation = arrowKeysOnlyNavigation;
 
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		if( focusableButtons != oldFocusableButtons )
 			setButtonsFocusable( focusableButtons );
+		if( arrowKeysOnlyNavigation != oldArrowKeysOnlyNavigation || focusableButtons != oldFocusableButtons ) {
+			if( arrowKeysOnlyNavigation )
+				installFocusTraversalPolicy();
+			else
+				uninstallFocusTraversalPolicy();
+		}
 	}
 
 	/** @since 2 */
@@ -192,6 +209,32 @@ public class FlatToolBarUI
 	private void setButtonFocusable( Component c, boolean focusable ) {
 		if( c instanceof AbstractButton && focusable != c.isFocusable() )
 			c.setFocusable( focusable );
+	}
+
+	/** @since 2 */
+	protected void installFocusTraversalPolicy() {
+		if( !arrowKeysOnlyNavigation || !focusableButtons || toolBar.getFocusTraversalPolicy() != null )
+			return;
+
+		focusTraversalPolicy = createFocusTraversalPolicy();
+		if( focusTraversalPolicy != null ) {
+			toolBar.setFocusTraversalPolicy( focusTraversalPolicy );
+			toolBar.setFocusTraversalPolicyProvider( true );
+		}
+	}
+
+	/** @since 2 */
+	protected void uninstallFocusTraversalPolicy() {
+		if( focusTraversalPolicy != null && toolBar.getFocusTraversalPolicy() == focusTraversalPolicy ) {
+			toolBar.setFocusTraversalPolicy( null );
+			toolBar.setFocusTraversalPolicyProvider( false );
+		}
+		focusTraversalPolicy = null;
+	}
+
+	/** @since 2 */
+	protected FocusTraversalPolicy createFocusTraversalPolicy() {
+		return new FlatToolBarFocusTraversalPolicy();
 	}
 
 	/**
@@ -261,5 +304,52 @@ public class FlatToolBarUI
 		}
 
 		super.setOrientation( orientation );
+	}
+
+	//---- class FlatToolBarFocusTraversalPolicy ------------------------------
+
+	/**
+	 * Focus traversal policy used for toolbar to modify traversal behaviour:
+	 * <ul>
+	 * <li>Tab-key moves focus out of toolbar.</li>
+	 * <li>If moving focus into the toolbar, focus recently focused toolbar button.</li>
+	 * </ul>
+	 *
+	 * @since 2
+	 */
+	protected class FlatToolBarFocusTraversalPolicy
+		extends LayoutFocusTraversalPolicy
+	{
+		@Override
+		public Component getComponentAfter( Container aContainer, Component aComponent ) {
+			// move focus out of toolbar
+			return null;
+		}
+
+		@Override
+		public Component getComponentBefore( Container aContainer, Component aComponent ) {
+			// move focus out of toolbar
+			return null;
+		}
+
+		@Override
+		public Component getFirstComponent( Container aContainer ) {
+			return getRecentComponent( aContainer, true );
+		}
+
+		@Override
+		public Component getLastComponent( Container aContainer ) {
+			return getRecentComponent( aContainer, false );
+		}
+
+		private Component getRecentComponent( Container aContainer, boolean first ) {
+			// if moving focus into the toolbar, focus recently focused toolbar button
+			if( focusedCompIndex >= 0 && focusedCompIndex < toolBar.getComponentCount() )
+				return toolBar.getComponent( focusedCompIndex );
+
+			return first
+				? super.getFirstComponent( aContainer )
+				: super.getLastComponent( aContainer );
+		}
 	}
 }

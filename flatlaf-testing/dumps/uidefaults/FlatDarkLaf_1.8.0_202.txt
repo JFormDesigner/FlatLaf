@@ -1262,6 +1262,7 @@ ToggleButtonUI                 com.formdev.flatlaf.ui.FlatToggleButtonUI
 
 #---- ToolBar ----
 
+ToolBar.arrowKeysOnlyNavigation true
 ToolBar.background             #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.border                 [lazy] 2,2,2,2  false    com.formdev.flatlaf.ui.FlatToolBarBorder [UI]
 ToolBar.borderMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
