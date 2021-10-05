@@ -1,0 +1,466 @@
+JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[fill][fill]para[fill][fill]"
+			"$rowConstraints": "[]para[][][][][][][][]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label9"
+				"text": "Use to test focus traversal. Tab key skips buttons within one toolbar. Arrow keys focus next/previous button."
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 4 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label7"
+				"text": "Text field:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField1"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Only buttons / not focusable:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button1"
+					"text": "A"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button2"
+					"text": "B"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label11"
+					"text": "label"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button3"
+					"text": "C"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button4"
+					"text": "D"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "2nd:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar2"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button5"
+					"text": "A"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button6"
+					"text": "B"
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator2"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button7"
+					"text": "C"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button8"
+					"text": "D"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 2,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "Only buttons / focusable:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar3"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button9"
+					"text": "A"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button10"
+					"text": "B"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label10"
+					"text": "label"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button11"
+					"text": "C"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button12"
+					"text": "D"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "2nd:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 3"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar4"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button13"
+					"text": "A"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button14"
+					"text": "B"
+				} )
+				add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+					name: "separator1"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button15"
+					"text": "C"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button16"
+					"text": "D"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 3,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label8"
+				"text": "Text field:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField2"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label5"
+				"text": "Combo boxes / not focusable:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar5"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button17"
+					"text": "A"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button18"
+					"text": "B"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button19"
+					"text": "C"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox1"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "read-only"
+						addElement( "read-only" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button20"
+					"text": "D"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button33"
+					"text": "E"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button34"
+					"text": "F"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox8"
+					"editable": true
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "editable"
+						addElement( "editable" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button41"
+					"text": "G"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button42"
+					"text": "H"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button43"
+					"text": "I"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 5 3 1,alignx left,growx 0"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar6"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button21"
+					"text": "A"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button22"
+					"text": "B"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button23"
+					"text": "C"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox2"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "read-only"
+						addElement( "read-only" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox3"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "read-only"
+						addElement( "read-only" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox7"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "read-only"
+						addElement( "read-only" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button24"
+					"text": "D"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox10"
+					"editable": true
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "editable"
+						addElement( "editable" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "textField3"
+					"text": "text field"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button37"
+					"text": "E"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button38"
+					"text": "F"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button44"
+					"text": "G"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button45"
+					"text": "H"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button46"
+					"text": "I"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 6 3 1,alignx left,growx 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label6"
+				"text": "Combo boxes / focusable:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 7"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar7"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button25"
+					"text": "A"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button26"
+					"text": "B"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button27"
+					"text": "C"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox4"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "read-only"
+						addElement( "read-only" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button28"
+					"text": "D"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button35"
+					"text": "E"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button36"
+					"text": "F"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox9"
+					"editable": true
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "editable"
+						addElement( "editable" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button47"
+					"text": "G"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button48"
+					"text": "H"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button49"
+					"text": "I"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 7 3 1,alignx left,growx 0"
+			} )
+			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+				name: "toolBar8"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button29"
+					"text": "A"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button30"
+					"text": "B"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button31"
+					"text": "C"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox5"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "read-only"
+						addElement( "read-only" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox6"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "read-only"
+						addElement( "read-only" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox13"
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "read-only"
+						addElement( "read-only" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button32"
+					"text": "D"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button39"
+					"text": "E"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button40"
+					"text": "F"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBox12"
+					"editable": true
+					"model": new javax.swing.DefaultComboBoxModel {
+						selectedItem: "editable"
+						addElement( "editable" )
+					}
+				} )
+				add( new FormComponent( "javax.swing.JTextField" ) {
+					name: "textField4"
+					"text": "text field"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button50"
+					"text": "G"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button51"
+					"text": "H"
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "button52"
+					"text": "I"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 8 3 1,alignx left,growx 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 780, 350 )
+		} )
+	}
+}

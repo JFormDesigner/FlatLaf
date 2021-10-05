@@ -27,6 +27,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.InputMap;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.LayoutFocusTraversalPolicy;
 import javax.swing.UIManager;
@@ -262,25 +263,37 @@ public class FlatToolBarUI
 				i = 0;
 
 			Component c = toolBar.getComponentAtIndex( i );
-
-			// see Component.canBeFocusOwner()
-			if( c == null || !c.isEnabled() || !c.isVisible() || !c.isDisplayable() || !c.isFocusable() )
-				continue; // skip
-
-			// check whether component has a empty input map to skip components that
-			// are focusable, but do nothing when focused (e.g. JLabel)
-			if( c instanceof JComponent ) {
-				// see LayoutFocusTraversalPolicy.accept()
-				InputMap inputMap = ((JComponent)c).getInputMap( JComponent.WHEN_FOCUSED );
-				while( inputMap != null && inputMap.size() == 0 )
-					inputMap = inputMap.getParent();
-				if( inputMap == null )
-					continue; // skip
+			if( canBeFocusOwner( c ) ) {
+				c.requestFocus();
+				return;
 			}
-
-			c.requestFocus();
-			return;
 		}
+	}
+
+	private static boolean canBeFocusOwner( Component c ) {
+		// see Component.canBeFocusOwner()
+		if( c == null || !c.isEnabled() || !c.isVisible() || !c.isDisplayable() || !c.isFocusable() )
+			return false;
+
+		// special handling for combo box
+		// see LayoutFocusTraversalPolicy.accept()
+		if( c instanceof JComboBox ) {
+			JComboBox<?> comboBox = (JComboBox<?>) c;
+			return comboBox.getUI().isFocusTraversable( comboBox );
+		}
+
+		// check whether component has a empty input map to skip components that
+		// are focusable, but do nothing when focused (e.g. JLabel)
+		// see LayoutFocusTraversalPolicy.accept()
+		if( c instanceof JComponent ) {
+			InputMap inputMap = ((JComponent)c).getInputMap( JComponent.WHEN_FOCUSED );
+			while( inputMap != null && inputMap.size() == 0 )
+				inputMap = inputMap.getParent();
+			if( inputMap == null )
+				return false;
+		}
+
+		return true;
 	}
 
 	// disable rollover border
@@ -314,6 +327,8 @@ public class FlatToolBarUI
 	 * <li>Tab-key moves focus out of toolbar.</li>
 	 * <li>If moving focus into the toolbar, focus recently focused toolbar button.</li>
 	 * </ul>
+	 * If the toolbar contains non-button components (e.g. combobox), then the behavior
+	 * is slightly different. Non-button component are always included in Tab-key traversal.
 	 *
 	 * @since 2
 	 */
@@ -322,12 +337,40 @@ public class FlatToolBarUI
 	{
 		@Override
 		public Component getComponentAfter( Container aContainer, Component aComponent ) {
+			// if currently focused component is not a button,
+			// then move focus to next component/button in toolbar
+			if( !(aComponent instanceof AbstractButton) )
+				return super.getComponentAfter( aContainer, aComponent );
+
+			// if currently focused component is a button,
+			// then either move focus to next non-button component in toolbar (and skip buttons)
+			// or move it out of toolbar
+			Component c = aComponent;
+			while( (c = super.getComponentAfter( aContainer, c )) != null ) {
+				if( !(c instanceof AbstractButton) )
+					return c;
+			}
+
 			// move focus out of toolbar
 			return null;
 		}
 
 		@Override
 		public Component getComponentBefore( Container aContainer, Component aComponent ) {
+			// if currently focused component is not a button,
+			// then move focus to previous component/button in toolbar
+			if( !(aComponent instanceof AbstractButton) )
+				return super.getComponentBefore( aContainer, aComponent );
+
+			// if currently focused component is a button,
+			// then either move focus to previous non-button component in toolbar (and skip buttons)
+			// or move it out of toolbar
+			Component c = aComponent;
+			while( (c = super.getComponentBefore( aContainer, c )) != null ) {
+				if( !(c instanceof AbstractButton) )
+					return c;
+			}
+
 			// move focus out of toolbar
 			return null;
 		}
