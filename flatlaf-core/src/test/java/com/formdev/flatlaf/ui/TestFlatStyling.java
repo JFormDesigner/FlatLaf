@@ -995,6 +995,7 @@ public class TestFlatStyling
 		FlatToolBarUI ui = (FlatToolBarUI) c.getUI();
 
 		ui.applyStyle( "focusableButtons: true" );
+		ui.applyStyle( "arrowKeysOnlyNavigation: true" );
 
 		ui.applyStyle( "borderMargins: 1,2,3,4" );
 		ui.applyStyle( "gripColor: #fff" );

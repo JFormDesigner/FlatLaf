@@ -830,6 +830,7 @@ public class TestFlatStyleableInfo
 
 		Map<String, Class<?>> expected = expectedMap(
 			"focusableButtons", boolean.class,
+			"arrowKeysOnlyNavigation", boolean.class,
 
 			"borderMargins", Insets.class,
 			"gripColor", Color.class
