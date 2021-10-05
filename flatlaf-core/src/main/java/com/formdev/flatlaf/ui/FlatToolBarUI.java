@@ -83,11 +83,13 @@ public class FlatToolBarUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
+		installStyle();
+
 		// disable focusable state of buttons (when switching from another Laf)
+		//   do this after applying style to avoid disabling (here) and re-enabling
+		//   (in applyStyle()), which would transfer focus to next button
 		if( !focusableButtons )
 			setButtonsFocusable( false );
-
-		installStyle();
 	}
 
 	@Override
@@ -132,22 +134,16 @@ public class FlatToolBarUI
 			public void componentAdded( ContainerEvent e ) {
 				super.componentAdded( e );
 
-				if( !focusableButtons ) {
-					Component c = e.getChild();
-					if( c instanceof AbstractButton )
-						c.setFocusable( false );
-				}
+				if( !focusableButtons )
+					setButtonFocusable( e.getChild(), false );
 			}
 
 			@Override
 			public void componentRemoved( ContainerEvent e ) {
 				super.componentRemoved( e );
 
-				if( !focusableButtons ) {
-					Component c = e.getChild();
-					if( c instanceof AbstractButton )
-						c.setFocusable( true );
-				}
+				if( !focusableButtons )
+					setButtonFocusable( e.getChild(), true );
 			}
 		};
 	}
@@ -189,10 +185,13 @@ public class FlatToolBarUI
 
 	/** @since 1.4 */
 	protected void setButtonsFocusable( boolean focusable ) {
-		for( Component c : toolBar.getComponents() ) {
-			if( c instanceof AbstractButton )
-				c.setFocusable( focusable );
-		}
+		for( Component c : toolBar.getComponents() )
+			setButtonFocusable( c, focusable );
+	}
+
+	private void setButtonFocusable( Component c, boolean focusable ) {
+		if( c instanceof AbstractButton && focusable != c.isFocusable() )
+			c.setFocusable( focusable );
 	}
 
 	/**
