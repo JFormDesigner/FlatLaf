@@ -24,6 +24,7 @@ import java.awt.event.ContainerListener;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.AbstractButton;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -191,6 +192,52 @@ public class FlatToolBarUI
 		for( Component c : toolBar.getComponents() ) {
 			if( c instanceof AbstractButton )
 				c.setFocusable( focusable );
+		}
+	}
+
+	/**
+	 * Does the same as super.navigateFocusedComp() with the exception that components
+	 * with empty input map (e.g. JLabel) are skipped.
+	 */
+	@Override
+	protected void navigateFocusedComp( int direction ) {
+		int count = toolBar.getComponentCount();
+
+		if( focusedCompIndex < 0 || focusedCompIndex >= count )
+			return;
+
+		int add;
+		switch( direction ) {
+			case EAST: case SOUTH: add = 1; break;
+			case WEST: case NORTH: add = -1; break;
+			default: return;
+		}
+
+		for( int i = focusedCompIndex + add; i != focusedCompIndex; i += add ) {
+			if( i < 0 )
+				i = count - 1;
+			else if( i >= count )
+				i = 0;
+
+			Component c = toolBar.getComponentAtIndex( i );
+
+			// see Component.canBeFocusOwner()
+			if( c == null || !c.isEnabled() || !c.isVisible() || !c.isDisplayable() || !c.isFocusable() )
+				continue; // skip
+
+			// check whether component has a empty input map to skip components that
+			// are focusable, but do nothing when focused (e.g. JLabel)
+			if( c instanceof JComponent ) {
+				// see LayoutFocusTraversalPolicy.accept()
+				InputMap inputMap = ((JComponent)c).getInputMap( JComponent.WHEN_FOCUSED );
+				while( inputMap != null && inputMap.size() == 0 )
+					inputMap = inputMap.getParent();
+				if( inputMap == null )
+					continue; // skip
+			}
+
+			c.requestFocus();
+			return;
 		}
 	}
 

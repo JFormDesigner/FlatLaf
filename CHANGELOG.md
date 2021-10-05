@@ -13,9 +13,13 @@ FlatLaf Change Log
 - Theming improvements: Reworks core themes to make it easier to create new
   themes (e.g. reduced explicit colors by using color functions). **Note**:
   There are minor incompatible changes in FlatLaf properties files. (PR #390)
-- ToolBar: Toolbars are no longer floatable by default (dots on left side of
-  toolbar that allows dragging toolbar). Use `UIManager.put(
-  "ToolBar.floatable", true )` if you want the old behavior.
+- ToolBar:
+  - Toolbars are no longer floatable by default (dots on left side of toolbar
+    that allows dragging toolbar). Use `UIManager.put( "ToolBar.floatable", true
+    )` if you want the old behavior.
+  - Skip components with empty input map (e.g. `JLabel`) when using arrow keys
+    to navigate in focusable buttons (if UI value `ToolBar.focusableButtons` is
+    `true`).
 - Added more color functions to class `ColorFunctions` for easy use in
   applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
   `tint()`, `shade()` and `luma()`.
