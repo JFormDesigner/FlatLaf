@@ -5,8 +5,13 @@ FlatLaf Change Log
 
 #### New features and improvements
 
-- Styling components using string in CSS syntax or `java.util.Map`. (PR #341)\
-  For example: `mySlider.putClientProperty( "FlatLaf.style", "trackWidth: 2" );`
+- Styling:
+  - Styling individual components using string in CSS syntax or `java.util.Map`.
+    (PR #341)\
+    E.g.: `mySlider.putClientProperty( "FlatLaf.style", "trackWidth: 2" );`
+  - Style classes allow defining style rules at a single place (in UI defaults)
+    and use them in any component. (PR #388)\
+    E.g.: `mySlider.putClientProperty( "FlatLaf.styleClass", "myclass" );`
 - TextField, FormattedTextField and PasswordField: Support leading and trailing
   icons (set client property `JTextField.leadingIcon` or
   `JTextField.trailingIcon` to an `Icon`). (PR #378; issue #368)
