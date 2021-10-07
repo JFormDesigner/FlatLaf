@@ -32,12 +32,17 @@ public class FlatRoundBorder
 {
 	@Styleable protected int arc = UIManager.getInt( "Component.arc" );
 
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected Boolean roundRect;
+
 	@Override
 	protected int getArc( Component c ) {
 		if( isCellEditor( c ) )
 			return 0;
 
 		Boolean roundRect = FlatUIUtils.isRoundRect( c );
+		if( roundRect == null )
+			roundRect = this.roundRect;
 		return roundRect != null ? (roundRect ? Short.MAX_VALUE : 0) : arc;
 	}
 }

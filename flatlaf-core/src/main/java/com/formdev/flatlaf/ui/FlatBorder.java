@@ -80,6 +80,11 @@ public class FlatBorder
 	@Styleable(dot=true) protected Color warningFocusedBorderColor = UIManager.getColor( "Component.warning.focusedBorderColor" );
 	@Styleable(dot=true) protected Color customBorderColor = UIManager.getColor( "Component.custom.borderColor" );
 
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected String outline;
+	/** @since 2 */ @Styleable protected Color outlineColor;
+	/** @since 2 */ @Styleable protected Color outlineFocusedColor;
+
 	/** @since 2 */
 	@Override
 	public Object applyStyleProperty( String key, Object value ) {
@@ -136,6 +141,17 @@ public class FlatBorder
 			return null;
 
 		Object outline = ((JComponent)c).getClientProperty( FlatClientProperties.OUTLINE );
+		if( outline == null )
+			outline = this.outline;
+		if( outline == null ) {
+			if( outlineColor != null && outlineFocusedColor != null )
+				outline = new Color[] { outlineFocusedColor, outlineColor };
+			else if( outlineColor != null )
+				outline = outlineColor;
+			else if( outlineFocusedColor != null )
+				outline = outlineFocusedColor;
+		}
+
 		if( outline instanceof String ) {
 			switch( (String) outline ) {
 				case FlatClientProperties.OUTLINE_ERROR:

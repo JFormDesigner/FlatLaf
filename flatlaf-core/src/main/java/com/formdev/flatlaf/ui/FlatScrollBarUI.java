@@ -284,9 +284,17 @@ public class FlatScrollBarUI
 	}
 
 	protected boolean isShowButtons() {
+		// check client property on scroll bar
 		Object showButtons = scrollbar.getClientProperty( FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS );
-		if( showButtons == null && scrollbar.getParent() instanceof JScrollPane )
-			showButtons = ((JScrollPane)scrollbar.getParent()).getClientProperty( FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS );
+		if( showButtons == null && scrollbar.getParent() instanceof JScrollPane ) {
+			JScrollPane scrollPane = (JScrollPane) scrollbar.getParent();
+			// check client property on scroll pane
+			showButtons = scrollPane.getClientProperty( FlatClientProperties.SCROLL_BAR_SHOW_BUTTONS );
+			if( showButtons == null && scrollPane.getUI() instanceof FlatScrollPaneUI ) {
+				// check styling property on scroll pane
+				showButtons = ((FlatScrollPaneUI)scrollPane.getUI()).showButtons;
+			}
+		}
 		return (showButtons != null) ? Objects.equals( showButtons, true ) : this.showButtons;
 	}
 

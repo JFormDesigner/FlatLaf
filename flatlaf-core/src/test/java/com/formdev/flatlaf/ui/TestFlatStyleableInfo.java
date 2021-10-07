@@ -118,7 +118,11 @@ public class TestFlatStyleableInfo
 			"toolbar.spacingInsets", Insets.class,
 			"toolbar.hoverBackground", Color.class,
 			"toolbar.pressedBackground", Color.class,
-			"toolbar.selectedBackground", Color.class
+			"toolbar.selectedBackground", Color.class,
+
+			"buttonType", String.class,
+			"squareSize", boolean.class,
+			"minimumHeight", int.class
 		);
 
 		// border
@@ -432,7 +436,10 @@ public class TestFlatStyleableInfo
 		Map<String, Class<?>> expected = expectedMap(
 			"arc", int.class,
 			"horizontalSize", Dimension.class,
-			"verticalSize", Dimension.class
+			"verticalSize", Dimension.class,
+
+			"largeHeight", boolean.class,
+			"square", boolean.class
 		);
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
@@ -535,7 +542,9 @@ public class TestFlatStyleableInfo
 		JScrollPane c = new JScrollPane();
 		FlatScrollPaneUI ui = (FlatScrollPaneUI) c.getUI();
 
-		Map<String, Class<?>> expected = new LinkedHashMap<>();
+		Map<String, Class<?>> expected = expectedMap(
+			"showButtons", Boolean.class
+		);
 
 		// border
 		flatBorder( expected );
@@ -684,6 +693,12 @@ public class TestFlatStyleableInfo
 			"buttonPressedBackground", Color.class,
 
 			"moreTabsButtonToolTipText", String.class,
+			"tabCloseToolTipText", String.class,
+
+			"showContentSeparator", boolean.class,
+			"hideTabAreaWithOneTab", boolean.class,
+			"tabClosable", boolean.class,
+			"tabIconPlacement", int.class,
 
 			// FlatTabbedPaneCloseIcon
 			"closeSize", Dimension.class,
@@ -866,6 +881,8 @@ public class TestFlatStyleableInfo
 			"wideSelection", boolean.class,
 			"showCellFocusIndicator", boolean.class,
 
+			"paintSelection", boolean.class,
+
 			// icons
 			"icon.arrowType", String.class,
 			"icon.expandedColor", Color.class,
@@ -908,7 +925,9 @@ public class TestFlatStyleableInfo
 		flatBorder( expected );
 
 		expectedMap( expected,
-			"arc", int.class
+			"arc", int.class,
+
+			"roundRect", Boolean.class
 		);
 	}
 
@@ -916,7 +935,9 @@ public class TestFlatStyleableInfo
 		flatBorder( expected );
 
 		expectedMap( expected,
-			"arc", int.class
+			"arc", int.class,
+
+			"roundRect", Boolean.class
 		);
 	}
 
@@ -934,7 +955,11 @@ public class TestFlatStyleableInfo
 			"error.focusedBorderColor", Color.class,
 			"warning.borderColor", Color.class,
 			"warning.focusedBorderColor", Color.class,
-			"custom.borderColor", Color.class
+			"custom.borderColor", Color.class,
+
+			"outline", String.class,
+			"outlineColor", Color.class,
+			"outlineFocusedColor", Color.class
 		);
 	}
 

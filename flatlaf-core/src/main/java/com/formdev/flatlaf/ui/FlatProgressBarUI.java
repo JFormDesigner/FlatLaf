@@ -68,6 +68,10 @@ public class FlatProgressBarUI
 	@Styleable protected Dimension horizontalSize;
 	@Styleable protected Dimension verticalSize;
 
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected boolean largeHeight;
+	/** @since 2 */ @Styleable protected boolean square;
+
 	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;
 
@@ -160,7 +164,7 @@ public class FlatProgressBarUI
 	public Dimension getPreferredSize( JComponent c ) {
 		Dimension size = super.getPreferredSize( c );
 
-		if( progressBar.isStringPainted() || clientPropertyBoolean( c, PROGRESS_BAR_LARGE_HEIGHT, false ) ) {
+		if( progressBar.isStringPainted() || clientPropertyBoolean( c, PROGRESS_BAR_LARGE_HEIGHT, largeHeight ) ) {
 			// recalculate progress height/width to make it smaller
 			Insets insets = progressBar.getInsets();
 			FontMetrics fm = progressBar.getFontMetrics( progressBar.getFont() );
@@ -203,7 +207,7 @@ public class FlatProgressBarUI
 			return;
 
 		boolean horizontal = (progressBar.getOrientation() == JProgressBar.HORIZONTAL);
-		int arc = clientPropertyBoolean( c, PROGRESS_BAR_SQUARE, false )
+		int arc = clientPropertyBoolean( c, PROGRESS_BAR_SQUARE, square )
 			? 0
 			: Math.min( UIScale.scale( this.arc ), horizontal ? height : width );
 

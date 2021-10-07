@@ -143,6 +143,9 @@ public class FlatTreeUI
 	@Styleable(dot=true) public Color iconClosedColor;
 	@Styleable(dot=true) public Color iconOpenColor;
 
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected boolean paintSelection = true;
+
 	private Color defaultCellNonSelectionBackground;
 	private Color defaultSelectionBackground;
 	private Color defaultSelectionForeground;
@@ -535,6 +538,6 @@ public class FlatTreeUI
 	}
 
 	protected boolean isPaintSelection() {
-		return clientPropertyBoolean( tree, TREE_PAINT_SELECTION, true );
+		return clientPropertyBoolean( tree, TREE_PAINT_SELECTION, paintSelection );
 	}
 }

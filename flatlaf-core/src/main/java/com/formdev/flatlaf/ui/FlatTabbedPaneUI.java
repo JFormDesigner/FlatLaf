@@ -157,6 +157,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.buttonPressedBackground		Color
  *
  * @uiDefault TabbedPane.moreTabsButtonToolTipText		String
+ * @uiDefault TabbedPane.tabCloseToolTipText			String
  *
  * @author Karl Tauber
  */
@@ -221,6 +222,13 @@ public class FlatTabbedPaneUI
 	@Styleable protected Color buttonPressedBackground;
 
 	@Styleable protected String moreTabsButtonToolTipText;
+	/** @since 2 */ @Styleable protected String tabCloseToolTipText;
+
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected boolean showContentSeparator = true;
+	/** @since 2 */ @Styleable protected boolean hideTabAreaWithOneTab;
+	/** @since 2 */ @Styleable protected boolean tabClosable;
+	/** @since 2 */ @Styleable protected int tabIconPlacement = LEADING;
 
 	protected JViewport tabViewport;
 	protected FlatWheelTabScroller wheelTabScroller;
@@ -331,6 +339,7 @@ public class FlatTabbedPaneUI
 
 		Locale l = tabPane.getLocale();
 		moreTabsButtonToolTipText = UIManager.getString( "TabbedPane.moreTabsButtonToolTipText", l );
+		tabCloseToolTipText = UIManager.getString( "TabbedPane.tabCloseToolTipText", l );
 
 		// scale
 		textIconGap = scale( textIconGapUnscaled );
@@ -616,6 +625,8 @@ public class FlatTabbedPaneUI
 				case "tabAreaAlignment": value = parseAlignment( (String) value, LEADING ); break;
 				case "tabAlignment": value = parseAlignment( (String) value, CENTER ); break;
 				case "tabWidthMode": value = parseTabWidthMode( (String) value ); break;
+
+				case "tabIconPlacement": value = parseTabIconPlacement( (String) value ); break;
 			}
 		} else {
 			Object oldValue = null;
@@ -728,7 +739,7 @@ public class FlatTabbedPaneUI
 			Insets tabInsets = getTabInsets( tabPlacement, tabIndex );
 			tabWidth = icon.getIconWidth() + tabInsets.left + tabInsets.right;
 		} else {
-			int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING );
+			int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, tabIconPlacement );
 			if( (iconPlacement == TOP || iconPlacement == BOTTOM) &&
 				tabPane.getTabComponentAt( tabIndex ) == null &&
 				(icon = getIconForTab( tabIndex )) != null )
@@ -771,7 +782,7 @@ public class FlatTabbedPaneUI
 		int tabHeight;
 
 		Icon icon;
-		int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING );
+		int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, tabIconPlacement );
 		if( (iconPlacement == TOP || iconPlacement == BOTTOM) &&
 			tabPane.getTabComponentAt( tabIndex ) == null &&
 			(icon = getIconForTab( tabIndex )) != null )
@@ -879,7 +890,7 @@ public class FlatTabbedPaneUI
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
-		if( hideTabArea() || contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+		if( hideTabArea() || contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, showContentSeparator ) )
 			return new Insets( 0, 0, 0, 0 );
 
 		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
@@ -1135,7 +1146,7 @@ public class FlatTabbedPaneUI
 	protected void paintContentBorder( Graphics g, int tabPlacement, int selectedIndex ) {
 		if( tabPane.getTabCount() <= 0 ||
 			contentSeparatorHeight == 0 ||
-			!clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+			!clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, showContentSeparator ) )
 		  return;
 
 		Insets insets = tabPane.getInsets();
@@ -1226,7 +1237,7 @@ public class FlatTabbedPaneUI
 		// icon placement
 		int verticalTextPosition;
 		int horizontalTextPosition;
-		switch( clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING ) ) {
+		switch( clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, tabIconPlacement ) ) {
 			default:
 			case LEADING:  verticalTextPosition = CENTER; horizontalTextPosition = TRAILING; break;
 			case TRAILING: verticalTextPosition = CENTER; horizontalTextPosition = LEADING; break;
@@ -1307,8 +1318,11 @@ public class FlatTabbedPaneUI
 	}
 
 	protected boolean isTabClosable( int tabIndex ) {
+		if( tabIndex < 0 )
+			return false;
+
 		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_CLOSABLE );
-		return (value instanceof Boolean) ? (boolean) value : false;
+		return (value instanceof Boolean) ? (boolean) value : tabClosable;
 	}
 
 	@SuppressWarnings( { "unchecked" } )
@@ -1382,7 +1396,7 @@ public class FlatTabbedPaneUI
 		return tabPane.getTabCount() == 1 &&
 			leadingComponent == null &&
 			trailingComponent == null &&
-			clientPropertyBoolean( tabPane, TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, false );
+			clientPropertyBoolean( tabPane, TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, hideTabAreaWithOneTab );
 	}
 
 	protected int getTabsPopupPolicy() {
@@ -1493,6 +1507,19 @@ public class FlatTabbedPaneUI
 			case TABBED_PANE_TAB_WIDTH_MODE_PREFERRED:	return WIDTH_MODE_PREFERRED;
 			case TABBED_PANE_TAB_WIDTH_MODE_EQUAL:		return WIDTH_MODE_EQUAL;
 			case TABBED_PANE_TAB_WIDTH_MODE_COMPACT:	return WIDTH_MODE_COMPACT;
+		}
+	}
+
+	protected static int parseTabIconPlacement( String str ) {
+		if( str == null )
+			return LEADING;
+
+		switch( str ) {
+			default:
+			case "leading":		return LEADING;
+			case "trailing":	return TRAILING;
+			case "top":			return TOP;
+			case "bottom":		return BOTTOM;
 		}
 	}
 
@@ -2347,6 +2374,8 @@ public class FlatTabbedPaneUI
 			// update tooltip
 			if( tabIndex >= 0 && hitClose ) {
 				Object closeTip = getTabClientProperty( tabIndex, TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT );
+				if( closeTip == null )
+					closeTip = tabCloseToolTipText;
 				if( closeTip instanceof String )
 					setCloseToolTip( tabIndex, (String) closeTip );
 				else

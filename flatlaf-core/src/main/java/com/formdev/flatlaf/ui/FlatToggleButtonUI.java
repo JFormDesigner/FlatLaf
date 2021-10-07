@@ -173,7 +173,7 @@ public class FlatToggleButtonUI
 	}
 
 	static boolean isTabButton( Component c ) {
-		return c instanceof JToggleButton && clientPropertyEquals( (JToggleButton) c, BUTTON_TYPE, BUTTON_TYPE_TAB );
+		return c instanceof JToggleButton && BUTTON_TYPE_TAB.equals( getButtonTypeStr( (JToggleButton) c ) );
 	}
 
 	@Override

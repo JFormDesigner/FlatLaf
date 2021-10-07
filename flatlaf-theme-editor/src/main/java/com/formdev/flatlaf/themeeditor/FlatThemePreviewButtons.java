@@ -82,7 +82,7 @@ class FlatThemePreviewButtons
 				continue;
 
 			AbstractButton b = (AbstractButton) c;
-			if( !Objects.equals( b.getClientProperty( BUTTON_TYPE ), BUTTON_TYPE_HELP ) )
+			if( !BUTTON_TYPE_HELP.equals( b.getClientProperty( BUTTON_TYPE ) ) )
 				b.putClientProperty( BUTTON_TYPE, buttonType );
 		}
 

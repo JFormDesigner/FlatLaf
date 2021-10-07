@@ -48,6 +48,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 
@@ -72,6 +73,9 @@ public class FlatScrollPaneUI
 	extends BasicScrollPaneUI
 	implements StyleableUI
 {
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected Boolean showButtons;
+
 	private Handler handler;
 
 	private Map<String, Object> oldStyleValues;

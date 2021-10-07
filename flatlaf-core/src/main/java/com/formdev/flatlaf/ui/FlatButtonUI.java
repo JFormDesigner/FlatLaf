@@ -42,6 +42,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonListener;
@@ -136,6 +137,11 @@ public class FlatButtonUI
 	@Styleable(dot=true) protected Color toolbarHoverBackground;
 	@Styleable(dot=true) protected Color toolbarPressedBackground;
 	@Styleable(dot=true) protected Color toolbarSelectedBackground;
+
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected String buttonType;
+	/** @since 2 */ @Styleable protected boolean squareSize;
+	/** @since 2 */ @Styleable protected int minimumHeight;
 
 	private Icon helpButtonIcon;
 	private Insets defaultMargin;
@@ -353,11 +359,11 @@ public class FlatButtonUI
 		if( !(c instanceof AbstractButton) )
 			return TYPE_OTHER;
 
-		Object value = ((AbstractButton)c).getClientProperty( BUTTON_TYPE );
-		if( !(value instanceof String) )
+		String value = getButtonTypeStr( (AbstractButton) c );
+		if( value == null )
 			return TYPE_OTHER;
 
-		switch( (String) value ) {
+		switch( value ) {
 			case BUTTON_TYPE_SQUARE:		return TYPE_SQUARE;
 			case BUTTON_TYPE_ROUND_RECT:	return TYPE_ROUND_RECT;
 			default:						return TYPE_OTHER;
@@ -365,16 +371,27 @@ public class FlatButtonUI
 	}
 
 	static boolean isHelpButton( Component c ) {
-		return c instanceof JButton && clientPropertyEquals( (JButton) c, BUTTON_TYPE, BUTTON_TYPE_HELP );
+		return c instanceof JButton && BUTTON_TYPE_HELP.equals( getButtonTypeStr( (JButton) c ) );
 	}
 
 	static boolean isToolBarButton( Component c ) {
 		return c.getParent() instanceof JToolBar ||
-			(c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON ));
+			(c instanceof AbstractButton && BUTTON_TYPE_TOOLBAR_BUTTON.equals( getButtonTypeStr( (AbstractButton) c ) ));
 	}
 
 	static boolean isBorderlessButton( Component c ) {
-		return c instanceof AbstractButton && clientPropertyEquals( (AbstractButton) c, BUTTON_TYPE, BUTTON_TYPE_BORDERLESS );
+		return c instanceof AbstractButton && BUTTON_TYPE_BORDERLESS.equals( getButtonTypeStr( (AbstractButton) c ) );
+	}
+
+	static String getButtonTypeStr( AbstractButton c ) {
+		// get from client property
+		Object value = c.getClientProperty( BUTTON_TYPE );
+		if( value instanceof String )
+			return (String) value;
+
+		// get from styling property
+		ButtonUI ui = c.getUI();
+		return (ui instanceof FlatButtonUI) ? ((FlatButtonUI)ui).buttonType : null;
 	}
 
 	@Override
@@ -582,7 +599,7 @@ public class FlatButtonUI
 
 		// make square or apply minimum width/height
 		boolean isIconOnlyOrSingleCharacter = isIconOnlyOrSingleCharacterButton( c );
-		if( clientPropertyBoolean( c, SQUARE_SIZE, false ) ) {
+		if( clientPropertyBoolean( c, SQUARE_SIZE, squareSize ) ) {
 			// make button square (increase width or height so that they are equal)
 			prefSize.width = prefSize.height = Math.max( prefSize.width, prefSize.height );
 		} else if( isIconOnlyOrSingleCharacter && ((AbstractButton)c).getIcon() == null ) {
@@ -594,7 +611,7 @@ public class FlatButtonUI
 			// apply minimum width/height
 			int fw = Math.round( FlatUIUtils.getBorderFocusWidth( c ) * 2 );
 			prefSize.width = Math.max( prefSize.width, scale( FlatUIUtils.minimumWidth( c, minimumWidth ) ) + fw );
-			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, 0 ) ) + fw );
+			prefSize.height = Math.max( prefSize.height, scale( FlatUIUtils.minimumHeight( c, minimumHeight ) ) + fw );
 		}
 
 		return prefSize;

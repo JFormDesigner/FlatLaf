@@ -232,6 +232,10 @@ public class TestFlatStyling
 		ui.applyStyle( b, "toolbar.pressedBackground: #fff" );
 		ui.applyStyle( b, "toolbar.selectedBackground: #fff" );
 
+		ui.applyStyle( b, "buttonType: help" );
+		ui.applyStyle( b, "squareSize: true" );
+		ui.applyStyle( b, "minimumHeight: 100" );
+
 		// border
 		flatButtonBorder( style -> ui.applyStyle( b, style ) );
 
@@ -546,6 +550,9 @@ public class TestFlatStyling
 		ui.applyStyle( "horizontalSize: 100,12" );
 		ui.applyStyle( "verticalSize: 12,100" );
 
+		ui.applyStyle( "largeHeight: true" );
+		ui.applyStyle( "square: true" );
+
 		// JComponent properties
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
@@ -653,6 +660,8 @@ public class TestFlatStyling
 
 		// border
 		flatBorder( style -> ui.applyStyle( style ) );
+
+		ui.applyStyle( "showButtons: true" );
 
 		// JComponent properties
 		ui.applyStyle( "background: #fff" );
@@ -823,6 +832,12 @@ public class TestFlatStyling
 		ui.applyStyle( "buttonPressedBackground: #fff" );
 
 		ui.applyStyle( "moreTabsButtonToolTipText: Gimme more" );
+		ui.applyStyle( "tabCloseToolTipText: Close me" );
+
+		ui.applyStyle( "showContentSeparator: true" );
+		ui.applyStyle( "hideTabAreaWithOneTab: true" );
+		ui.applyStyle( "tabClosable: true" );
+		ui.applyStyle( "tabIconPlacement: top" );
 
 		// FlatTabbedPaneCloseIcon
 		ui.applyStyle( "closeSize: 16,16" );
@@ -1034,6 +1049,8 @@ public class TestFlatStyling
 		ui.applyStyle( "wideSelection: true" );
 		ui.applyStyle( "showCellFocusIndicator: true" );
 
+		ui.applyStyle( "paintSelection: false" );
+
 		// icons
 		ui.applyStyle( "icon.arrowType: chevron" );
 		ui.applyStyle( "icon.expandedColor: #fff" );
@@ -1083,12 +1100,16 @@ public class TestFlatStyling
 		flatBorder( applyStyle );
 
 		applyStyle.accept( "arc: 6" );
+
+		applyStyle.accept( "roundRect: true" );
 	}
 
 	private void flatTextBorder( Consumer<String> applyStyle ) {
 		flatBorder( applyStyle );
 
 		applyStyle.accept( "arc: 6" );
+
+		applyStyle.accept( "roundRect: true" );
 	}
 
 	private void flatBorder( Consumer<String> applyStyle ) {
@@ -1105,6 +1126,10 @@ public class TestFlatStyling
 		applyStyle.accept( "warning.borderColor: #fff" );
 		applyStyle.accept( "warning.focusedBorderColor: #fff" );
 		applyStyle.accept( "custom.borderColor: desaturate(#f00,50%,relative derived noAutoInverse)" );
+
+		applyStyle.accept( "outline: error" );
+		applyStyle.accept( "outlineColor: #fff" );
+		applyStyle.accept( "outlineFocusedColor: #fff" );
 	}
 
 	//---- borders ------------------------------------------------------------
