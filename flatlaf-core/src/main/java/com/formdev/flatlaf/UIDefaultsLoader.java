@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,6 +81,8 @@ class UIDefaultsLoader
 	private static final String WILDCARD_PREFIX = "*.";
 
 	private static int parseColorDepth;
+
+	private static final Cache<String, Object> fontCache = new Cache<>();
 
 	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
 		Properties additionalDefaults, boolean dark, UIDefaults defaults )
@@ -995,6 +1000,10 @@ class UIDefaultsLoader
 	 * Syntax: [normal] [bold|+bold|-bold] [italic|+italic|-italic] [<size>|+<incr>|-<decr>|<percent>%] [family[, family]]
 	 */
 	private static Object parseFont( String value ) {
+		Object font = fontCache.get( value );
+		if( font != null )
+			return font;
+
 		int style = -1;
 		int styleChange = 0;
 		int absoluteSize = 0;
@@ -1076,7 +1085,9 @@ class UIDefaultsLoader
 				throw new IllegalArgumentException( "can not use '+italic' and '-italic' in '" + value + "'" );
 		}
 
-		return new FlatLaf.ActiveFont( families, style, styleChange, absoluteSize, relativeSize, scaleSize );
+		font = new FlatLaf.ActiveFont( families, style, styleChange, absoluteSize, relativeSize, scaleSize );
+		fontCache.put( value, font );
+		return font;
 	}
 
 	private static int parsePercentage( String value ) {
@@ -1228,5 +1239,44 @@ class UIDefaultsLoader
 
 	private static void throwMissingParametersException( String value ) {
 		throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
+	}
+
+	//---- class Cache --------------------------------------------------------
+
+	private static class Cache<K,V>
+	{
+		private final Map<K, CacheReference<K,V>> map = new HashMap<>();
+		private final ReferenceQueue<V> queue = new ReferenceQueue<>();
+
+		V get( K key ) {
+			expungeStaleEntries();
+			CacheReference<K,V> ref = map.get( key );
+			return (ref != null) ? ref.get() : null;
+		}
+
+		void put( K key, V value ) {
+			expungeStaleEntries();
+			map.put( key, new CacheReference<>( key, value, queue ) );
+		}
+
+		@SuppressWarnings( "unchecked" )
+		void expungeStaleEntries() {
+			Reference<? extends V> reference;
+			while( (reference = queue.poll()) != null )
+				map.remove( ((CacheReference<K,V>)reference).key );
+		}
+
+		//---- class CacheReference ----
+
+		private static class CacheReference<K,V>
+			extends SoftReference<V>
+		{
+			final K key;
+
+			public CacheReference( K key, V value, ReferenceQueue<? super V> queue ) {
+				super( value, queue );
+				this.key = key;
+			}
+		}
 	}
 }
