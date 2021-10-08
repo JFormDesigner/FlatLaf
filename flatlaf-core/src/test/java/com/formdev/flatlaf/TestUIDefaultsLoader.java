@@ -19,7 +19,12 @@ package com.formdev.flatlaf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
+import javax.swing.UIManager;
+import javax.swing.UIDefaults.ActiveValue;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -27,6 +32,16 @@ import org.junit.jupiter.api.Test;
  */
 public class TestUIDefaultsLoader
 {
+	@BeforeAll
+	static void setup() {
+		System.setProperty( FlatSystemProperties.UI_SCALE_ENABLED, "false" );
+	}
+
+	@AfterAll
+	static void cleanup() {
+		System.clearProperty( FlatSystemProperties.UI_SCALE_ENABLED );
+	}
+
 	@Test
 	void parseValue() {
 		assertEquals( null, UIDefaultsLoader.parseValue( "dummy", "null", null ) );
@@ -70,5 +85,57 @@ public class TestUIDefaultsLoader
 		assertEquals( new Insets( 2,2,2,2 ), UIDefaultsLoader.parseValue( "dummy", "2,2,2,2", Insets.class ) );
 		assertEquals( new Dimension( 2,2 ), UIDefaultsLoader.parseValue( "dummy", "2,2", Dimension.class ) );
 		assertEquals( new Color( 0xff0000 ), UIDefaultsLoader.parseValue( "dummy", "#f00", Color.class ) );
+	}
+
+	@Test
+	void parseFonts() {
+		// style
+		UIManager.put( "defaultFont", new Font( Font.DIALOG, Font.PLAIN, 10 ) );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 10, "" );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 10, "normal" );
+		assertFontEquals( Font.DIALOG, Font.BOLD, 10, "bold" );
+		assertFontEquals( Font.DIALOG, Font.ITALIC, 10, "italic" );
+		assertFontEquals( Font.DIALOG, Font.BOLD|Font.ITALIC, 10, "bold italic" );
+
+		// derived style
+		assertFontEquals( Font.DIALOG, Font.BOLD, 10, "+bold" );
+		assertFontEquals( Font.DIALOG, Font.ITALIC, 10, "+italic" );
+		assertFontEquals( Font.DIALOG, Font.BOLD|Font.ITALIC, 10, "+bold +italic" );
+		UIManager.put( "defaultFont", new Font( Font.DIALOG, Font.BOLD|Font.ITALIC, 10 ) );
+		assertFontEquals( Font.DIALOG, Font.ITALIC, 10, "-bold" );
+		assertFontEquals( Font.DIALOG, Font.BOLD, 10, "-italic" );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 10, "-bold -italic" );
+		UIManager.put( "defaultFont", new Font( Font.DIALOG, Font.BOLD, 10 ) );
+		assertFontEquals( Font.DIALOG, Font.ITALIC, 10, "-bold +italic" );
+
+		// size
+		UIManager.put( "defaultFont", new Font( Font.DIALOG, Font.PLAIN, 10 ) );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 12, "12" );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 13, "+3" );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 6, "-4" );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 15, "150%" );
+
+		// family
+		assertFontEquals( Font.MONOSPACED, Font.PLAIN, 10, "Monospaced" );
+		assertFontEquals( Font.MONOSPACED, Font.PLAIN, 10, "Monospaced, Dialog" );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 10, "Dialog, Monospaced" );
+
+		// unknown family
+		assertFontEquals( Font.MONOSPACED, Font.PLAIN, 12, "normal 12 UnknownFamily, Monospaced" );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 12, "normal 12 UnknownFamily, Dialog" );
+		assertFontEquals( Font.DIALOG, Font.PLAIN, 12, "normal 12 UnknownFamily, 'Another unknown family'" );
+
+		// all
+		assertFontEquals( Font.MONOSPACED, Font.BOLD, 13, "bold 13 Monospaced" );
+		assertFontEquals( Font.DIALOG, Font.ITALIC, 14, "italic 14 Dialog" );
+		assertFontEquals( Font.DIALOG, Font.BOLD|Font.ITALIC, 15, "bold italic 15 Dialog" );
+
+		UIManager.put( "defaultFont", null );
+	}
+
+	private void assertFontEquals( String name, int style, int size, String actualStyle ) {
+		assertEquals(
+			new Font( name, style, size ),
+			((ActiveValue)UIDefaultsLoader.parseValue( "dummyFont", actualStyle, null )).createValue( null ) );
 	}
 }

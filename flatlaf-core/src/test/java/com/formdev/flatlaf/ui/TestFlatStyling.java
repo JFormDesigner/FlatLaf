@@ -243,6 +243,7 @@ public class TestFlatStyling
 		ui.applyStyle( b, "background: #fff" );
 		ui.applyStyle( b, "foreground: #fff" );
 		ui.applyStyle( b, "border: 2,2,2,2,#f00" );
+		ui.applyStyle( b, "font: italic 12 monospaced" );
 
 		// AbstractButton properties
 		ui.applyStyle( b, "margin: 2,2,2,2" );
@@ -295,6 +296,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 	}
 
 	@Test
@@ -311,6 +313,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 
 		// JTextComponent properties
 		ui.applyStyle( "caretColor: #fff" );
@@ -363,6 +366,7 @@ public class TestFlatStyling
 		ui.applyStyle( c, "background: #fff" );
 		ui.applyStyle( c, "foreground: #fff" );
 		ui.applyStyle( c, "border: 2,2,2,2,#f00" );
+		ui.applyStyle( c, "font: italic 12 monospaced" );
 
 		// JLabel properties
 		ui.applyStyle( c, "icon: com.formdev.flatlaf.icons.FlatTreeExpandedIcon" );
@@ -387,6 +391,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 
 		// JList properties
 		ui.applyStyle( "visibleRowCount: 20" );
@@ -410,6 +415,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 	}
 
 	@Test
@@ -467,6 +473,7 @@ public class TestFlatStyling
 		applyStyle.accept( "background: #fff" );
 		applyStyle.accept( "foreground: #fff" );
 		applyStyle.accept( "border: 2,2,2,2,#f00" );
+		applyStyle.accept( "font: italic 12 monospaced" );
 
 		// AbstractButton properties
 		applyStyle.accept( "margin: 2,2,2,2" );
@@ -557,6 +564,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 	}
 
 	@Test
@@ -578,6 +586,7 @@ public class TestFlatStyling
 		ui.applyStyle( b, "background: #fff" );
 		ui.applyStyle( b, "foreground: #fff" );
 		ui.applyStyle( b, "border: 2,2,2,2,#f00" );
+		ui.applyStyle( b, "font: italic 12 monospaced" );
 
 		// AbstractButton properties
 		ui.applyStyle( b, "margin: 2,2,2,2" );
@@ -714,6 +723,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 		ui.applyStyle( "minimum: 0" );
 		ui.applyStyle( "maximum: 50" );
 		ui.applyStyle( "value: 20" );
@@ -760,6 +770,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 	}
 
 	@Test
@@ -856,6 +867,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 	}
 
 	@Test
@@ -878,6 +890,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 
 		// JTable properties
 		ui.applyStyle( "fillsViewportHeight: true" );
@@ -909,6 +922,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 	}
 
 	@Test
@@ -925,6 +939,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 
 		// JTextComponent properties
 		ui.applyStyle( "caretColor: #fff" );
@@ -958,6 +973,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 
 		// JTextComponent properties
 		ui.applyStyle( "caretColor: #fff" );
@@ -980,6 +996,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 
 		// JTextComponent properties
 		ui.applyStyle( "caretColor: #fff" );
@@ -1063,6 +1080,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "font: italic 12 monospaced" );
 
 		// JTree properties
 		ui.applyStyle( "rootVisible: true" );

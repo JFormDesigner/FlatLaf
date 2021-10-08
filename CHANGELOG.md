@@ -33,6 +33,7 @@ FlatLaf Change Log
 - Added more color functions to class `ColorFunctions` for easy use in
   applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
   `tint()`, `shade()` and `luma()`.
+- Support defining fonts in FlatLaf properties files. (issue #384)
 
 #### Fixed bugs
 

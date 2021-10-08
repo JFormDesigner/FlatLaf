@@ -18,11 +18,14 @@ package com.formdev.flatlaf;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -309,7 +312,7 @@ class UIDefaultsLoader
 		throw new IllegalArgumentException( "property value type '" + newValue.getClass().getName() + "' not supported in references" );
 	}
 
-	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
+	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR, FONT,
 		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
 
 	private static ValueType[] tempResultValueType = new ValueType[1];
@@ -371,6 +374,7 @@ class UIDefaultsLoader
 				javaValueTypes.put( Insets.class, ValueType.INSETS );
 				javaValueTypes.put( Dimension.class, ValueType.DIMENSION );
 				javaValueTypes.put( Color.class, ValueType.COLOR );
+				javaValueTypes.put( Font.class, ValueType.FONT );
 			}
 
 			// map java value type to parser value type
@@ -428,6 +432,8 @@ class UIDefaultsLoader
 					 (key.endsWith( ".background" ) || key.endsWith( "Background" ) || key.equals( "background" ) ||
 					  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ) || key.equals( "foreground" ))) )
 					valueType = ValueType.COLOR;
+				else if( key.endsWith( ".font" ) || key.endsWith( "Font" ) || key.equals( "font" ) )
+					valueType = ValueType.FONT;
 				else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) || key.equals( "border" ) )
 					valueType = ValueType.BORDER;
 				else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) || key.equals( "icon" ) )
@@ -461,6 +467,7 @@ class UIDefaultsLoader
 			case INSETS:		return parseInsets( value );
 			case DIMENSION:		return parseDimension( value );
 			case COLOR:			return parseColorOrFunction( value, resolver, true );
+			case FONT:			return parseFont( value );
 			case SCALEDINTEGER:	return parseScaledInteger( value );
 			case SCALEDFLOAT:	return parseScaledFloat( value );
 			case SCALEDINSETS:	return parseScaledInsets( value );
@@ -982,6 +989,94 @@ class UIDefaultsLoader
 		}
 
 		return new ColorUIResource( newColor );
+	}
+
+	/**
+	 * Syntax: [normal] [bold|+bold|-bold] [italic|+italic|-italic] [<size>|+<incr>|-<decr>|<percent>%] [family[, family]]
+	 */
+	private static Object parseFont( String value ) {
+		int style = -1;
+		int styleChange = 0;
+		int absoluteSize = 0;
+		int relativeSize = 0;
+		float scaleSize = 0;
+		List<String> families = null;
+
+		// use StreamTokenizer to split string because it supports quoted strings
+		StreamTokenizer st = new StreamTokenizer( new StringReader( value ) );
+		st.resetSyntax();
+		st.wordChars( ' ' + 1, 255 );
+		st.whitespaceChars( 0, ' ' );
+		st.whitespaceChars( ',', ',' ); // ignore ','
+		st.quoteChar( '"' );
+		st.quoteChar( '\'' );
+
+		try {
+			while( st.nextToken() != StreamTokenizer.TT_EOF ) {
+				String param = st.sval;
+				switch( param ) {
+					// font style
+					case "normal":
+						style = 0;
+						break;
+
+					case "bold":
+						if( style == -1 )
+							style = 0;
+						style |= Font.BOLD;
+						break;
+
+					case "italic":
+						if( style == -1 )
+							style = 0;
+						style |= Font.ITALIC;
+						break;
+
+					case "+bold":   styleChange |= Font.BOLD; break;
+					case "-bold":   styleChange |= Font.BOLD << 16; break;
+					case "+italic": styleChange |= Font.ITALIC; break;
+					case "-italic": styleChange |= Font.ITALIC << 16; break;
+
+					default:
+						char firstChar = param.charAt( 0 );
+						if( Character.isDigit( firstChar ) || firstChar == '+' || firstChar == '-' ) {
+							// font size
+							if( absoluteSize != 0 || relativeSize != 0 || scaleSize != 0 )
+								throw new IllegalArgumentException( "size specified more than once in '" + value + "'" );
+
+							if( firstChar == '+' || firstChar == '-' )
+								relativeSize = parseInteger( param, true );
+							else if( param.endsWith( "%" ) )
+								scaleSize = parseInteger( param.substring( 0, param.length() - 1 ), true ) / 100f;
+							else
+								absoluteSize = parseInteger( param, true );
+						} else {
+							// font family
+							if( families == null )
+								families = Collections.singletonList( param );
+							else {
+								if( families.size() == 1 )
+									families = new ArrayList<>( families );
+								families.add( param );
+							}
+						}
+						break;
+				}
+			}
+		} catch( IOException ex ) {
+			throw new IllegalArgumentException( ex );
+		}
+
+		if( style != -1 && styleChange != 0 )
+			throw new IllegalArgumentException( "can not mix absolute style (e.g. 'bold') with derived style (e.g. '+italic') in '" + value + "'" );
+		if( styleChange != 0 ) {
+			if( (styleChange & Font.BOLD) != 0 && (styleChange & (Font.BOLD << 16)) != 0 )
+				throw new IllegalArgumentException( "can not use '+bold' and '-bold' in '" + value + "'" );
+			if( (styleChange & Font.ITALIC) != 0 && (styleChange & (Font.ITALIC << 16)) != 0 )
+				throw new IllegalArgumentException( "can not use '+italic' and '-italic' in '" + value + "'" );
+		}
+
+		return new FlatLaf.ActiveFont( families, style, styleChange, absoluteSize, relativeSize, scaleSize );
 	}
 
 	private static int parsePercentage( String value ) {

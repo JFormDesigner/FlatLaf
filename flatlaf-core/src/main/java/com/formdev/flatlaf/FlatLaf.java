@@ -569,16 +569,13 @@ public abstract class FlatLaf
 		// use active value for all fonts to allow changing fonts in all components
 		// (similar as in Nimbus L&F) with:
 		//     UIManager.put( "defaultFont", myFont );
-		Object activeFont = new ActiveFont( 1 );
+		Object activeFont = new ActiveFont( null, -1, 0, 0, 0, 0 );
 
 		// override fonts
 		for( Object key : defaults.keySet() ) {
 			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
 				defaults.put( key, activeFont );
 		}
-
-		// use smaller font for progress bar
-		defaults.put( "ProgressBar.font", new ActiveFont( 0.85f ) );
 
 		// set default font
 		defaults.put( "defaultFont", uiFont );
@@ -594,7 +591,7 @@ public abstract class FlatLaf
 
 	/** @since 1.1 */
 	public static ActiveValue createActiveFontValue( float scaleFactor ) {
-		return new ActiveFont( scaleFactor );
+		return new ActiveFont( null, -1, 0, 0, 0, scaleFactor );
 	}
 
 	/**
@@ -1162,17 +1159,38 @@ public abstract class FlatLaf
 
 	//---- class ActiveFont ---------------------------------------------------
 
-	private static class ActiveFont
+	static class ActiveFont
 		implements ActiveValue
 	{
-		private final float scaleFactor;
+		private final List<String> families;
+		private final int style;
+		private final int styleChange;
+		private final int absoluteSize;
+		private final int relativeSize;
+		private final float scaleSize;
 
-		// cache (scaled) font
+		// cache (scaled/derived) font
 		private Font font;
 		private Font lastDefaultFont;
 
-		ActiveFont( float scaleFactor ) {
-			this.scaleFactor = scaleFactor;
+		/**
+		 * @param families list of font families, or {@code null}
+		 * @param style new style of font, or {@code -1}
+		 * @param styleChange derive style of base font; or {@code 0}
+		 *                    (the lower 16 bits are added; the upper 16 bits are removed)
+		 * @param absoluteSize new size of font, or {@code 0}
+		 * @param relativeSize added to size of base font, or {@code 0}
+		 * @param scaleSize multiply size of base font, or {@code 0}
+		 */
+		ActiveFont( List<String> families, int style, int styleChange,
+			int absoluteSize, int relativeSize, float scaleSize )
+		{
+			this.families = families;
+			this.style = style;
+			this.styleChange = styleChange;
+			this.absoluteSize = absoluteSize;
+			this.relativeSize = relativeSize;
+			this.scaleSize = scaleSize;
 		}
 
 		@Override
@@ -1186,19 +1204,56 @@ public abstract class FlatLaf
 			if( lastDefaultFont != defaultFont ) {
 				lastDefaultFont = defaultFont;
 
-				if( scaleFactor != 1 ) {
-					// scale font
-					int newFontSize = Math.round( defaultFont.getSize() * scaleFactor );
-					font = new FontUIResource( defaultFont.deriveFont( (float) newFontSize ) );
-				} else {
-					// make sure that font is a UIResource for LaF switching
-					font = (defaultFont instanceof UIResource)
-						? defaultFont
-						: new FontUIResource( defaultFont );
-				}
+				font = derive( defaultFont );
+
+				// make sure that font is a UIResource for LaF switching
+				if( !(font instanceof UIResource) )
+					font = new FontUIResource( font );
 			}
 
 			return font;
+		}
+
+		private Font derive( Font baseFont ) {
+			int baseStyle = baseFont.getStyle();
+			int baseSize = baseFont.getSize();
+
+			// new style
+			int newStyle = (style != -1)
+				? style
+				: (styleChange != 0)
+					? baseStyle & ~((styleChange >> 16) & 0xffff) | (styleChange & 0xffff)
+					: baseStyle;
+
+			// new size
+			int newSize = (absoluteSize > 0)
+				? UIScale.scale( absoluteSize )
+				: (relativeSize != 0)
+					? (baseSize + UIScale.scale( relativeSize ))
+					: (scaleSize > 0)
+						? Math.round( baseSize * scaleSize )
+						: baseSize;
+			if( newSize <= 0 )
+				newSize = 1;
+
+			// create font for family
+			if( families != null && !families.isEmpty() ) {
+				for( String family : families ) {
+					Font font = createCompositeFont( family, newStyle, newSize );
+					if( !isFallbackFont( font ) || family.equalsIgnoreCase( Font.DIALOG ) )
+						return font;
+				}
+			}
+
+			// derive font
+			if( newStyle != baseStyle || newSize != baseSize )
+				return baseFont.deriveFont( newStyle, newSize );
+			else
+				return baseFont;
+		}
+
+		private boolean isFallbackFont( Font font ) {
+			return Font.DIALOG.equalsIgnoreCase( font.getFamily() );
 		}
 	}
 
