@@ -410,7 +410,7 @@ class UIDefaultsLoader
 			// check whether value type is specified in the value
 			if( value.startsWith( "#" ) )
 				valueType = ValueType.COLOR;
-			else if( value.startsWith( "\"" ) && value.endsWith( "\"" ) ) {
+			else if( value.startsWith( "\"" ) && value.indexOf( '"', 1 ) == value.length() - 1 ) {
 				valueType = ValueType.STRING;
 				value = value.substring( 1, value.length() - 1 );
 			} else if( value.startsWith( TYPE_PREFIX ) ) {
