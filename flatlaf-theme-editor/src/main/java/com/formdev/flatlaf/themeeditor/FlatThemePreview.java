@@ -49,6 +49,7 @@ class FlatThemePreview
 
 	private final Map<LazyValue, Object> lazyValueCache = new WeakHashMap<>();
 	private int runWithUIDefaultsGetterLevel;
+	private boolean inGetDefaultFont;
 
 	FlatThemePreview( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
@@ -158,6 +159,11 @@ class FlatThemePreview
 	}
 
 	Object getUIDefaultProperty( Object key ) {
+		// avoid StackOverflowError because "defaultFont" value is an active value
+		// that itself uses UIManager.getFont( "defaultFont" ) to get base font
+		if( inGetDefaultFont )
+			return null;
+
 		if( !(key instanceof String) )
 			return null;
 
@@ -167,12 +173,18 @@ class FlatThemePreview
 			return null;
 
 		Object value = textArea.propertiesSupport.getParsedProperty( (String) key );
-		if( value instanceof LazyValue ) {
-			value = lazyValueCache.computeIfAbsent( (LazyValue) value, k -> {
-				return k.createValue( null );
-			} );
-		} else if( value instanceof ActiveValue )
-			value = ((ActiveValue)value).createValue( null );
+
+		inGetDefaultFont = "defaultFont".equals( key );
+		try {
+			if( value instanceof LazyValue ) {
+				value = lazyValueCache.computeIfAbsent( (LazyValue) value, k -> {
+					return k.createValue( null );
+				} );
+			} else if( value instanceof ActiveValue )
+				value = ((ActiveValue)value).createValue( null );
+		} finally {
+			inGetDefaultFont = false;
+		}
 
 //		System.out.println( key + " = " + value );
 
@@ -183,7 +195,7 @@ class FlatThemePreview
 		// E.g. FlatLightLaf defines Button.focusedBackground, but in FlatDarkLaf
 		// it is not defined. Without this code, the preview for FlatDarkLaf would use
 		// Button.focusedBackground from FlatLightLaf if FlatLightLaf is the current application Laf.
-		if( value == null && FlatThemePropertiesBaseManager.getDefindedCoreKeys().contains( key ) )
+		if( value == null && FlatThemePropertiesBaseManager.getDefindedCoreKeys().contains( key ) && !"defaultFont".equals( key ) )
 			return FlatLaf.NULL_VALUE;
 
 		return value;
