@@ -249,7 +249,7 @@ public class IntelliJTheme
 		// search for theme specific UI defaults keys
 		ArrayList<String> themeSpecificKeys = new ArrayList<>();
 		for( Object key : defaults.keySet() ) {
-			if( key instanceof String && ((String)key).startsWith( "[" ) )
+			if( key instanceof String && ((String)key).startsWith( "[" ) && !((String)key).startsWith( "[style]" ) )
 				themeSpecificKeys.add( (String) key );
 		}
 
