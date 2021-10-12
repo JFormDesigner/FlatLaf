@@ -44,6 +44,7 @@ import java.util.ResourceBundle;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -429,6 +430,10 @@ public abstract class FlatLaf
 		else
 			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), isDark(), defaults );
 
+		// setup default font after loading defaults from properties
+		// to allow defining "defaultFont" in properties
+		initDefaultFont( defaults );
+
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
 		if( SystemInfo.isMacOS && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) ) {
 			defaults.put( "MenuBarUI", "com.apple.laf.AquaMenuBarUI" );
@@ -519,8 +524,22 @@ public abstract class FlatLaf
 	}
 
 	private void initFonts( UIDefaults defaults ) {
+		// use active value for all fonts to allow changing fonts in all components with:
+		//     UIManager.put( "defaultFont", myFont );
+		// (this is similar as in Nimbus L&F)
+		Object activeFont = new ActiveFont( null, -1, 0, 0, 0, 0 );
+
+		// override fonts
+		for( Object key : defaults.keySet() ) {
+			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
+				defaults.put( key, activeFont );
+		}
+	}
+
+	private void initDefaultFont( UIDefaults defaults ) {
 		FontUIResource uiFont = null;
 
+		// determine UI font based on operating system
 		if( SystemInfo.isWindows ) {
 			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
 			if( winFont != null ) {
@@ -563,19 +582,20 @@ public abstract class FlatLaf
 		if( uiFont == null )
 			uiFont = createCompositeFont( Font.SANS_SERIF, Font.PLAIN, 12 );
 
+		// get/remove "defaultFont" from defaults if set in properties files
+		// (use remove() to avoid that ActiveFont.createValue() gets invoked)
+		Object defaultFont = defaults.remove( "defaultFont" );
+
+		// use font from OS as base font and derive the UI font from it
+		if( defaultFont instanceof ActiveFont ) {
+			Font baseFont = uiFont;
+			uiFont = ((ActiveFont)defaultFont).derive( baseFont, fontSize -> {
+				return Math.round( fontSize * UIScale.computeFontScaleFactor( baseFont ) );
+			} );
+		};
+
 		// increase font size if system property "flatlaf.uiScale" is set
 		uiFont = UIScale.applyCustomScaleFactor( uiFont );
-
-		// use active value for all fonts to allow changing fonts in all components
-		// (similar as in Nimbus L&F) with:
-		//     UIManager.put( "defaultFont", myFont );
-		Object activeFont = new ActiveFont( null, -1, 0, 0, 0, 0 );
-
-		// override fonts
-		for( Object key : defaults.keySet() ) {
-			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
-				defaults.put( key, activeFont );
-		}
 
 		// set default font
 		defaults.put( "defaultFont", uiFont );
@@ -1170,7 +1190,7 @@ public abstract class FlatLaf
 		private final float scaleSize;
 
 		// cache (scaled/derived) font
-		private Font font;
+		private FontUIResource font;
 		private Font lastDefaultFont;
 
 		/**
@@ -1204,17 +1224,13 @@ public abstract class FlatLaf
 			if( lastDefaultFont != defaultFont ) {
 				lastDefaultFont = defaultFont;
 
-				font = derive( defaultFont );
-
-				// make sure that font is a UIResource for LaF switching
-				if( !(font instanceof UIResource) )
-					font = new FontUIResource( font );
+				font = derive( defaultFont, fontSize -> UIScale.scale( fontSize ) );
 			}
 
 			return font;
 		}
 
-		private Font derive( Font baseFont ) {
+		FontUIResource derive( Font baseFont, IntUnaryOperator scale ) {
 			int baseStyle = baseFont.getStyle();
 			int baseSize = baseFont.getSize();
 
@@ -1227,9 +1243,9 @@ public abstract class FlatLaf
 
 			// new size
 			int newSize = (absoluteSize > 0)
-				? UIScale.scale( absoluteSize )
+				? scale.applyAsInt( absoluteSize )
 				: (relativeSize != 0)
-					? (baseSize + UIScale.scale( relativeSize ))
+					? (baseSize + scale.applyAsInt( relativeSize ))
 					: (scaleSize > 0)
 						? Math.round( baseSize * scaleSize )
 						: baseSize;
@@ -1241,15 +1257,22 @@ public abstract class FlatLaf
 				for( String family : families ) {
 					Font font = createCompositeFont( family, newStyle, newSize );
 					if( !isFallbackFont( font ) || family.equalsIgnoreCase( Font.DIALOG ) )
-						return font;
+						return toUIResource( font );
 				}
 			}
 
 			// derive font
 			if( newStyle != baseStyle || newSize != baseSize )
-				return baseFont.deriveFont( newStyle, newSize );
+				return toUIResource( baseFont.deriveFont( newStyle, newSize ) );
 			else
-				return baseFont;
+				return toUIResource( baseFont );
+		}
+
+		private FontUIResource toUIResource( Font font ) {
+			// make sure that font is a UIResource for LaF switching
+			return (font instanceof FontUIResource)
+				? (FontUIResource) font
+				: new FontUIResource( font );
 		}
 
 		private boolean isFallbackFont( Font font ) {

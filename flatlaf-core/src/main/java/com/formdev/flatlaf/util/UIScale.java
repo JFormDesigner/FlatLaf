@@ -192,7 +192,15 @@ public class UIScale
 		if( font == null )
 			font = UIManager.getFont( "Label.font" );
 
-		float newScaleFactor;
+		setUserScaleFactor( computeFontScaleFactor( font ), true );
+	}
+
+	/**
+	 * For internal use only.
+	 *
+	 * @since 2
+	 */
+	public static float computeFontScaleFactor( Font font ) {
 		if( SystemInfo.isWindows ) {
 			// Special handling for Windows to be compatible with OS scaling,
 			// which distinguish between "screen scaling" and "text scaling".
@@ -204,33 +212,35 @@ public class UIScale
 			//  - Settings > Display > Scale and layout
 			//  - Settings > Ease of Access > Display > Make text bigger (100% - 225%)
 			if( font instanceof UIResource ) {
-				if( isSystemScalingEnabled() ) {
-					// Do not apply own scaling if the JRE scales using Windows screen scale factor.
-					// If user increases font size in Windows 10 settings, desktop property
-					// "win.messagebox.font" is changed and FlatLaf uses the larger font.
-					newScaleFactor = 1;
-				} else {
-					// If the JRE does not scale (Java 8), the size of the UI font
-					// (usually from desktop property "win.messagebox.font")
-					// combines the Windows screen and text scale factors.
-					// But the font in desktop property "win.defaultGUI.font" is only
-					// scaled with the Windows screen scale factor. So use it to compute
-					// our scale factor that is equal to Windows screen scale factor.
-					Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.defaultGUI.font" );
-					newScaleFactor = computeScaleFactor( (winFont != null) ? winFont : font );
+				Font uiFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
+				if( uiFont == null || uiFont.getSize() == font.getSize() ) {
+					if( isSystemScalingEnabled() ) {
+						// Do not apply own scaling if the JRE scales using Windows screen scale factor.
+						// If user increases font size in Windows 10 settings, desktop property
+						// "win.messagebox.font" is changed and FlatLaf uses the larger font.
+						return 1;
+					} else {
+						// If the JRE does not scale (Java 8), the size of the UI font
+						// (usually from desktop property "win.messagebox.font")
+						// combines the Windows screen and text scale factors.
+						// But the font in desktop property "win.defaultGUI.font" is only
+						// scaled with the Windows screen scale factor. So use it to compute
+						// our scale factor that is equal to Windows screen scale factor.
+						Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.defaultGUI.font" );
+						return computeScaleFactor( (winFont != null) ? winFont : font );
+					}
 				}
-			} else {
-				// If font was explicitly set from outside (is not a UIResource)
-				// use it to compute scale factor. This allows applications to
-				// use custom fonts (e.g. that the user can change in UI) and
-				// get scaling if a larger font size is used.
-				// E.g. FlatLaf Demo supports increasing font size in "Font" menu and UI scales.
-				newScaleFactor = computeScaleFactor( font );
 			}
-		} else
-			newScaleFactor = computeScaleFactor( font );
 
-		setUserScaleFactor( newScaleFactor, true );
+			// If font was explicitly set from outside (is not a UIResource),
+			// or was set in FlatLaf properties files (is a UIResource),
+			// use it to compute scale factor. This allows applications to
+			// use custom fonts (e.g. that the user can change in UI) and
+			// get scaling if a larger font size is used.
+			// E.g. FlatLaf Demo supports increasing font size in "Font" menu and UI scales.
+		}
+
+		return computeScaleFactor( font );
 	}
 
 	private static float computeScaleFactor( Font font ) {
