@@ -46,6 +46,7 @@ class FlatThemePreview
 	private final FlatThemePreviewAll allTab;
 	private final FlatThemePreviewButtons buttonsTab;
 	private final FlatThemePreviewSwitches switchesTab;
+	private final FlatThemePreviewFonts fontsTab;
 
 	private final Map<LazyValue, Object> lazyValueCache = new WeakHashMap<>();
 	private int runWithUIDefaultsGetterLevel;
@@ -61,9 +62,11 @@ class FlatThemePreview
 		allTab = new FlatThemePreviewAll( this );
 		buttonsTab = new FlatThemePreviewButtons( this );
 		switchesTab = new FlatThemePreviewSwitches();
+		fontsTab = new FlatThemePreviewFonts();
 		tabbedPane.addTab( "All", createPreviewTab( allTab ) );
 		tabbedPane.addTab( "Buttons", createPreviewTab( buttonsTab ) );
 		tabbedPane.addTab( "Switches", createPreviewTab( switchesTab ) );
+		tabbedPane.addTab( "Fonts", createPreviewTab( fontsTab ) );
 		selectRecentTab();
 		tabbedPane.addChangeListener( e -> selectedTabChanged() );
 
@@ -214,6 +217,7 @@ class FlatThemePreview
 		{
 			tabbedPane.setLeadingComponent(previewLabel);
 			tabbedPane.setTabAreaAlignment(FlatTabbedPane.TabAreaAlignment.trailing);
+			tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		}
 		add(tabbedPane, BorderLayout.CENTER);
 

@@ -9,6 +9,7 @@ new FormModel {
 				name: "tabbedPane"
 				"leadingComponent": new FormReference( "previewLabel" )
 				"tabAreaAlignment": enum com.formdev.flatlaf.extras.components.FlatTabbedPane$TabAreaAlignment trailing
+				"tabLayoutPolicy": 1
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )
