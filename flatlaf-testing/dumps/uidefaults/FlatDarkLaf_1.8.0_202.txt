@@ -1392,6 +1392,7 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 [style].large                  font: $large.font
 [style].medium                 font: $medium.font
 [style].mini                   font: $mini.font
+[style].monospaced             font: $monospaced.font
 [style].small                  font: $small.font
 
 
@@ -1480,6 +1481,11 @@ menuText                       #bbbbbb  HSL   0   0  73    javax.swing.plaf.Colo
 #---- mini ----
 
 mini.font                      [active] Segoe UI plain 9    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- monospaced ----
+
+monospaced.font                [active] Consolas plain 12    javax.swing.plaf.FontUIResource [UI]
 
 
 #----  ----

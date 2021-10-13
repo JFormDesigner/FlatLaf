@@ -1073,6 +1073,7 @@ ViewportUI
 [style].large
 [style].medium
 [style].mini
+[style].monospaced
 [style].small
 activeCaption
 activeCaptionBorder
@@ -1105,6 +1106,7 @@ medium.font
 menu
 menuText
 mini.font
+monospaced.font
 scrollbar
 small.font
 swingx/TaskPaneUI
