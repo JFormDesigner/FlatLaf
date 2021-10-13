@@ -130,6 +130,19 @@ class BasicComponentsPanel
 		JTextField leadingIconTextField = new JTextField();
 		JTextField trailingIconTextField = new JTextField();
 		JTextField iconsTextField = new JTextField();
+		JLabel fontsLabel = new JLabel();
+		JLabel h00Label = new JLabel();
+		JLabel h0Label = new JLabel();
+		JLabel h1Label = new JLabel();
+		JLabel h2Label = new JLabel();
+		JLabel h3Label = new JLabel();
+		JLabel h4Label = new JLabel();
+		JLabel largeLabel = new JLabel();
+		JLabel defaultLabel = new JLabel();
+		JLabel mediumLabel = new JLabel();
+		JLabel smallLabel = new JLabel();
+		JLabel miniLabel = new JLabel();
+		JLabel monospacedLabel = new JLabel();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -158,6 +171,7 @@ class BasicComponentsPanel
 			"[]" +
 			"[]" +
 			"[]para" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]"));
@@ -666,6 +680,69 @@ class BasicComponentsPanel
 		//---- iconsTextField ----
 		iconsTextField.setText("text");
 		add(iconsTextField, "cell 3 14,growx");
+
+		//---- fontsLabel ----
+		fontsLabel.setText("Typography / Fonts:");
+		add(fontsLabel, "cell 0 15");
+
+		//---- h00Label ----
+		h00Label.setText("H00");
+		h00Label.putClientProperty("FlatLaf.styleClass", "h00");
+		add(h00Label, "cell 1 15 5 1");
+
+		//---- h0Label ----
+		h0Label.setText("H0");
+		h0Label.putClientProperty("FlatLaf.styleClass", "h0");
+		add(h0Label, "cell 1 15 5 1");
+
+		//---- h1Label ----
+		h1Label.setText("H1");
+		h1Label.putClientProperty("FlatLaf.styleClass", "h1");
+		add(h1Label, "cell 1 15 5 1");
+
+		//---- h2Label ----
+		h2Label.setText("H2");
+		h2Label.putClientProperty("FlatLaf.styleClass", "h2");
+		add(h2Label, "cell 1 15 5 1");
+
+		//---- h3Label ----
+		h3Label.setText("H3");
+		h3Label.putClientProperty("FlatLaf.styleClass", "h3");
+		add(h3Label, "cell 1 15 5 1");
+
+		//---- h4Label ----
+		h4Label.setText("H4");
+		h4Label.putClientProperty("FlatLaf.styleClass", "h4");
+		add(h4Label, "cell 1 15 5 1");
+
+		//---- largeLabel ----
+		largeLabel.setText("large");
+		largeLabel.putClientProperty("FlatLaf.styleClass", "large");
+		add(largeLabel, "cell 1 15 5 1,gapx 30");
+
+		//---- defaultLabel ----
+		defaultLabel.setText("default/regular");
+		add(defaultLabel, "cell 1 15 5 1");
+
+		//---- mediumLabel ----
+		mediumLabel.setText("medium");
+		mediumLabel.putClientProperty("FlatLaf.styleClass", "medium");
+		add(mediumLabel, "cell 1 15 5 1");
+
+		//---- smallLabel ----
+		smallLabel.setText("small");
+		smallLabel.putClientProperty("FlatLaf.styleClass", "small");
+		add(smallLabel, "cell 1 15 5 1");
+
+		//---- miniLabel ----
+		miniLabel.setText("mini");
+		miniLabel.putClientProperty("FlatLaf.styleClass", "mini");
+		add(miniLabel, "cell 1 15 5 1");
+
+		//---- monospacedLabel ----
+		monospacedLabel.setText("monospaced");
+		monospacedLabel.putClientProperty("FlatLaf.styleClass", "monospaced");
+		add(monospacedLabel, "cell 1 15 5 1,gapx 30");
 
 		//======== popupMenu1 ========
 		{
