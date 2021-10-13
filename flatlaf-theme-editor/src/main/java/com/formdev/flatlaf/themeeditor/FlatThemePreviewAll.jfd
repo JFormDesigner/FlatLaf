@@ -307,7 +307,7 @@ new FormModel {
 				"buttonType": enum com.formdev.flatlaf.extras.components.FlatButton$ButtonType toolBarButton
 				"toolTipText": "menu underline selection"
 				"focusable": false
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+				"$client.FlatLaf.styleClass": "small"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}

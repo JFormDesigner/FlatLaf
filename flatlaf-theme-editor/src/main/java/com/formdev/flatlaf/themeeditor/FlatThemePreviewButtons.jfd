@@ -33,7 +33,7 @@ new FormModel {
 						"text": "none"
 						"$buttonGroup": new FormReference( "buttonGroup1" )
 						"selected": true
-						"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"$client.FlatLaf.styleClass": "small"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -43,7 +43,7 @@ new FormModel {
 						name: "squareButton"
 						"text": "square"
 						"$buttonGroup": new FormReference( "buttonGroup1" )
-						"font": #SwingDerivedFont0
+						"$client.FlatLaf.styleClass": "small"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -53,7 +53,7 @@ new FormModel {
 						name: "roundRectButton"
 						"text": "roundRect"
 						"$buttonGroup": new FormReference( "buttonGroup1" )
-						"font": #SwingDerivedFont0
+						"$client.FlatLaf.styleClass": "small"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -63,7 +63,7 @@ new FormModel {
 						name: "tabButton"
 						"text": "tab"
 						"$buttonGroup": new FormReference( "buttonGroup1" )
-						"font": #SwingDerivedFont0
+						"$client.FlatLaf.styleClass": "small"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -80,7 +80,7 @@ new FormModel {
 						name: "toolBarButtonButton"
 						"text": "toolBarButton"
 						"$buttonGroup": new FormReference( "buttonGroup1" )
-						"font": #SwingDerivedFont0
+						"$client.FlatLaf.styleClass": "small"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -90,7 +90,7 @@ new FormModel {
 						name: "borderlessButton"
 						"text": "borderless"
 						"$buttonGroup": new FormReference( "buttonGroup1" )
-						"font": #SwingDerivedFont0
+						"$client.FlatLaf.styleClass": "small"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -105,7 +105,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label11"
 				"text": "JButton"
-				"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1 3 1"
 			} )
@@ -124,28 +124,28 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
 				"text": "regular"
-				"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label7"
 				"text": "default"
-				"font": #SwingDerivedFont2
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
 				"text": "regular"
-				"font": #SwingDerivedFont2
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label8"
 				"text": "default"
-				"font": #SwingDerivedFont2
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 3,alignx center,growx 0"
 			} )
@@ -317,7 +317,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label12"
 				"text": "JToggleButton"
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 9 3 1"
 			} )
@@ -336,28 +336,28 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label13"
 				"text": "unsel."
-				"font": #SwingDerivedFont2
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label14"
 				"text": "selected"
-				"font": #SwingDerivedFont2
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label15"
 				"text": "unsel."
-				"font": #SwingDerivedFont2
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label16"
 				"text": "selected"
-				"font": #SwingDerivedFont2
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 11,alignx center,growx 0"
 			} )
@@ -514,7 +514,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label32"
 				"text": "Help Button"
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 17 2 1"
 			} )

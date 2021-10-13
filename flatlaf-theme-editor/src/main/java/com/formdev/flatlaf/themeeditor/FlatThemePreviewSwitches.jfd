@@ -15,7 +15,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label22"
 				"text": "JCheckBox"
-				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0 3 1"
 			} )
@@ -34,28 +34,28 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label23"
 				"text": "unsel."
-				"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label28"
 				"text": "selected"
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label24"
 				"text": "unsel."
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 2,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label29"
 				"text": "selected"
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 2,alignx center,growx 0"
 			} )
@@ -212,7 +212,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label27"
 				"text": "JRadioButton"
-				"font": #SwingDerivedFont0
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 8 3 1"
 			} )
@@ -231,28 +231,28 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label25"
 				"text": "unsel."
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 10,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label30"
 				"text": "selected"
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 10,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label26"
 				"text": "unsel."
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 10,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label31"
 				"text": "selected"
-				"font": #SwingDerivedFont1
+				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 10,alignx center,growx 0"
 			} )

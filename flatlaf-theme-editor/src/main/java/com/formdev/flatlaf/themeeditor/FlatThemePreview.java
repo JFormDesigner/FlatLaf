@@ -222,8 +222,8 @@ class FlatThemePreview
 		add(previewSeparator, BorderLayout.LINE_START);
 
 		//---- previewLabel ----
-		previewLabel.setText("  Preview    ");
-		previewLabel.setFont(previewLabel.getFont().deriveFont(previewLabel.getFont().getSize() + 6f));
+		previewLabel.setText(" Preview ");
+		previewLabel.putClientProperty("FlatLaf.styleClass", "h2");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

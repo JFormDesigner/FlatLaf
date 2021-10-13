@@ -435,7 +435,7 @@ class TabsPanel
 
 			//---- tabPlacementLabel ----
 			tabPlacementLabel.setText("Tab placement");
-			tabPlacementLabel.setFont(tabPlacementLabel.getFont().deriveFont(tabPlacementLabel.getFont().getSize() + 4f));
+			tabPlacementLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			tabPlacementLabel.setName("tabPlacementLabel");
 			panel1.add(tabPlacementLabel, "cell 0 0");
 
@@ -448,28 +448,28 @@ class TabsPanel
 				//---- topPlacementButton ----
 				topPlacementButton.setText("top");
 				topPlacementButton.setSelected(true);
-				topPlacementButton.setFont(topPlacementButton.getFont().deriveFont(topPlacementButton.getFont().getSize() - 2f));
+				topPlacementButton.putClientProperty("FlatLaf.styleClass", "small");
 				topPlacementButton.setName("topPlacementButton");
 				topPlacementButton.addActionListener(e -> tabPlacementChanged());
 				tabPlacementToolBar.add(topPlacementButton);
 
 				//---- bottomPlacementButton ----
 				bottomPlacementButton.setText("bottom");
-				bottomPlacementButton.setFont(bottomPlacementButton.getFont().deriveFont(bottomPlacementButton.getFont().getSize() - 2f));
+				bottomPlacementButton.putClientProperty("FlatLaf.styleClass", "small");
 				bottomPlacementButton.setName("bottomPlacementButton");
 				bottomPlacementButton.addActionListener(e -> tabPlacementChanged());
 				tabPlacementToolBar.add(bottomPlacementButton);
 
 				//---- leftPlacementButton ----
 				leftPlacementButton.setText("left");
-				leftPlacementButton.setFont(leftPlacementButton.getFont().deriveFont(leftPlacementButton.getFont().getSize() - 2f));
+				leftPlacementButton.putClientProperty("FlatLaf.styleClass", "small");
 				leftPlacementButton.setName("leftPlacementButton");
 				leftPlacementButton.addActionListener(e -> tabPlacementChanged());
 				tabPlacementToolBar.add(leftPlacementButton);
 
 				//---- rightPlacementButton ----
 				rightPlacementButton.setText("right");
-				rightPlacementButton.setFont(rightPlacementButton.getFont().deriveFont(rightPlacementButton.getFont().getSize() - 2f));
+				rightPlacementButton.putClientProperty("FlatLaf.styleClass", "small");
 				rightPlacementButton.setName("rightPlacementButton");
 				rightPlacementButton.addActionListener(e -> tabPlacementChanged());
 				tabPlacementToolBar.add(rightPlacementButton);
@@ -477,14 +477,14 @@ class TabsPanel
 
 				//---- scrollButton ----
 				scrollButton.setText("scroll");
-				scrollButton.setFont(scrollButton.getFont().deriveFont(scrollButton.getFont().getSize() - 2f));
+				scrollButton.putClientProperty("FlatLaf.styleClass", "small");
 				scrollButton.setName("scrollButton");
 				scrollButton.addActionListener(e -> scrollChanged());
 				tabPlacementToolBar.add(scrollButton);
 
 				//---- borderButton ----
 				borderButton.setText("border");
-				borderButton.setFont(borderButton.getFont().deriveFont(borderButton.getFont().getSize() - 2f));
+				borderButton.putClientProperty("FlatLaf.styleClass", "small");
 				borderButton.setName("borderButton");
 				borderButton.addActionListener(e -> borderChanged());
 				tabPlacementToolBar.add(borderButton);
@@ -499,7 +499,7 @@ class TabsPanel
 
 			//---- tabLayoutLabel ----
 			tabLayoutLabel.setText("Tab layout");
-			tabLayoutLabel.setFont(tabLayoutLabel.getFont().deriveFont(tabLayoutLabel.getFont().getSize() + 4f));
+			tabLayoutLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			tabLayoutLabel.setName("tabLayoutLabel");
 			panel1.add(tabLayoutLabel, "cell 0 2");
 
@@ -511,15 +511,15 @@ class TabsPanel
 
 				//---- scrollTabLayoutButton ----
 				scrollTabLayoutButton.setText("scroll");
-				scrollTabLayoutButton.setFont(scrollTabLayoutButton.getFont().deriveFont(scrollTabLayoutButton.getFont().getSize() - 2f));
 				scrollTabLayoutButton.setSelected(true);
+				scrollTabLayoutButton.putClientProperty("FlatLaf.styleClass", "small");
 				scrollTabLayoutButton.setName("scrollTabLayoutButton");
 				scrollTabLayoutButton.addActionListener(e -> tabLayoutChanged());
 				tabLayoutToolBar.add(scrollTabLayoutButton);
 
 				//---- wrapTabLayoutButton ----
 				wrapTabLayoutButton.setText("wrap");
-				wrapTabLayoutButton.setFont(wrapTabLayoutButton.getFont().deriveFont(wrapTabLayoutButton.getFont().getSize() - 2f));
+				wrapTabLayoutButton.putClientProperty("FlatLaf.styleClass", "small");
 				wrapTabLayoutButton.setName("wrapTabLayoutButton");
 				wrapTabLayoutButton.addActionListener(e -> tabLayoutChanged());
 				tabLayoutToolBar.add(wrapTabLayoutButton);
@@ -529,14 +529,14 @@ class TabsPanel
 			//---- scrollLayoutNoteLabel ----
 			scrollLayoutNoteLabel.setText("(use mouse wheel to scroll; arrow button shows hidden tabs)");
 			scrollLayoutNoteLabel.setEnabled(false);
-			scrollLayoutNoteLabel.setFont(scrollLayoutNoteLabel.getFont().deriveFont(scrollLayoutNoteLabel.getFont().getSize() - 2f));
+			scrollLayoutNoteLabel.putClientProperty("FlatLaf.styleClass", "small");
 			scrollLayoutNoteLabel.setName("scrollLayoutNoteLabel");
 			panel1.add(scrollLayoutNoteLabel, "cell 0 3");
 
 			//---- wrapLayoutNoteLabel ----
 			wrapLayoutNoteLabel.setText("(probably better to use scroll layout?)");
 			wrapLayoutNoteLabel.setEnabled(false);
-			wrapLayoutNoteLabel.setFont(wrapLayoutNoteLabel.getFont().deriveFont(wrapLayoutNoteLabel.getFont().getSize() - 2f));
+			wrapLayoutNoteLabel.putClientProperty("FlatLaf.styleClass", "small");
 			wrapLayoutNoteLabel.setName("wrapLayoutNoteLabel");
 			panel1.add(wrapLayoutNoteLabel, "cell 0 3");
 
@@ -554,7 +554,7 @@ class TabsPanel
 
 			//---- closableTabsLabel ----
 			closableTabsLabel.setText("Closable tabs");
-			closableTabsLabel.setFont(closableTabsLabel.getFont().deriveFont(closableTabsLabel.getFont().getSize() + 4f));
+			closableTabsLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			closableTabsLabel.setName("closableTabsLabel");
 			panel1.add(closableTabsLabel, "cell 0 5");
 
@@ -566,22 +566,22 @@ class TabsPanel
 
 				//---- squareCloseButton ----
 				squareCloseButton.setText("square");
-				squareCloseButton.setFont(squareCloseButton.getFont().deriveFont(squareCloseButton.getFont().getSize() - 2f));
 				squareCloseButton.setSelected(true);
+				squareCloseButton.putClientProperty("FlatLaf.styleClass", "small");
 				squareCloseButton.setName("squareCloseButton");
 				squareCloseButton.addActionListener(e -> closeButtonStyleChanged());
 				closableTabsToolBar.add(squareCloseButton);
 
 				//---- circleCloseButton ----
 				circleCloseButton.setText("circle");
-				circleCloseButton.setFont(circleCloseButton.getFont().deriveFont(circleCloseButton.getFont().getSize() - 2f));
+				circleCloseButton.putClientProperty("FlatLaf.styleClass", "small");
 				circleCloseButton.setName("circleCloseButton");
 				circleCloseButton.addActionListener(e -> closeButtonStyleChanged());
 				closableTabsToolBar.add(circleCloseButton);
 
 				//---- redCrossCloseButton ----
 				redCrossCloseButton.setText("red cross");
-				redCrossCloseButton.setFont(redCrossCloseButton.getFont().deriveFont(redCrossCloseButton.getFont().getSize() - 2f));
+				redCrossCloseButton.putClientProperty("FlatLaf.styleClass", "small");
 				redCrossCloseButton.setName("redCrossCloseButton");
 				redCrossCloseButton.addActionListener(e -> closeButtonStyleChanged());
 				closableTabsToolBar.add(redCrossCloseButton);
@@ -596,7 +596,7 @@ class TabsPanel
 
 			//---- tabAreaComponentsLabel ----
 			tabAreaComponentsLabel.setText("Custom tab area components");
-			tabAreaComponentsLabel.setFont(tabAreaComponentsLabel.getFont().deriveFont(tabAreaComponentsLabel.getFont().getSize() + 4f));
+			tabAreaComponentsLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			tabAreaComponentsLabel.setName("tabAreaComponentsLabel");
 			panel1.add(tabAreaComponentsLabel, "cell 0 7");
 
@@ -608,16 +608,16 @@ class TabsPanel
 
 				//---- leadingComponentButton ----
 				leadingComponentButton.setText("leading");
-				leadingComponentButton.setFont(leadingComponentButton.getFont().deriveFont(leadingComponentButton.getFont().getSize() - 2f));
 				leadingComponentButton.setSelected(true);
+				leadingComponentButton.putClientProperty("FlatLaf.styleClass", "small");
 				leadingComponentButton.setName("leadingComponentButton");
 				leadingComponentButton.addActionListener(e -> customComponentsChanged());
 				tabAreaComponentsToolBar.add(leadingComponentButton);
 
 				//---- trailingComponentButton ----
 				trailingComponentButton.setText("trailing");
-				trailingComponentButton.setFont(trailingComponentButton.getFont().deriveFont(trailingComponentButton.getFont().getSize() - 2f));
 				trailingComponentButton.setSelected(true);
+				trailingComponentButton.putClientProperty("FlatLaf.styleClass", "small");
 				trailingComponentButton.setName("trailingComponentButton");
 				trailingComponentButton.addActionListener(e -> customComponentsChanged());
 				tabAreaComponentsToolBar.add(trailingComponentButton);
@@ -655,14 +655,14 @@ class TabsPanel
 
 			//---- tabIconPlacementLabel ----
 			tabIconPlacementLabel.setText("Tab icon placement");
-			tabIconPlacementLabel.setFont(tabIconPlacementLabel.getFont().deriveFont(tabIconPlacementLabel.getFont().getSize() + 4f));
+			tabIconPlacementLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			tabIconPlacementLabel.setName("tabIconPlacementLabel");
 			panel2.add(tabIconPlacementLabel, "cell 0 0");
 
 			//---- tabIconPlacementNodeLabel ----
 			tabIconPlacementNodeLabel.setText("(top/bottom/leading/trailing)");
 			tabIconPlacementNodeLabel.setEnabled(false);
-			tabIconPlacementNodeLabel.setFont(tabIconPlacementNodeLabel.getFont().deriveFont(tabIconPlacementNodeLabel.getFont().getSize() - 2f));
+			tabIconPlacementNodeLabel.putClientProperty("FlatLaf.styleClass", "small");
 			tabIconPlacementNodeLabel.setName("tabIconPlacementNodeLabel");
 			panel2.add(tabIconPlacementNodeLabel, "cell 0 1");
 
@@ -692,14 +692,14 @@ class TabsPanel
 
 			//---- tabAreaAlignmentLabel ----
 			tabAreaAlignmentLabel.setText("Tab area alignment");
-			tabAreaAlignmentLabel.setFont(tabAreaAlignmentLabel.getFont().deriveFont(tabAreaAlignmentLabel.getFont().getSize() + 4f));
+			tabAreaAlignmentLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			tabAreaAlignmentLabel.setName("tabAreaAlignmentLabel");
 			panel2.add(tabAreaAlignmentLabel, "cell 0 6");
 
 			//---- tabAreaAlignmentNoteLabel ----
 			tabAreaAlignmentNoteLabel.setText("(leading/center/trailing/fill)");
 			tabAreaAlignmentNoteLabel.setEnabled(false);
-			tabAreaAlignmentNoteLabel.setFont(tabAreaAlignmentNoteLabel.getFont().deriveFont(tabAreaAlignmentNoteLabel.getFont().getSize() - 2f));
+			tabAreaAlignmentNoteLabel.putClientProperty("FlatLaf.styleClass", "small");
 			tabAreaAlignmentNoteLabel.setName("tabAreaAlignmentNoteLabel");
 			panel2.add(tabAreaAlignmentNoteLabel, "cell 0 7");
 
@@ -750,14 +750,14 @@ class TabsPanel
 
 			//---- tabWidthModeLabel ----
 			tabWidthModeLabel.setText("Tab width mode");
-			tabWidthModeLabel.setFont(tabWidthModeLabel.getFont().deriveFont(tabWidthModeLabel.getFont().getSize() + 4f));
+			tabWidthModeLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			tabWidthModeLabel.setName("tabWidthModeLabel");
 			panel3.add(tabWidthModeLabel, "cell 0 0");
 
 			//---- tabWidthModeNoteLabel ----
 			tabWidthModeNoteLabel.setText("(preferred/equal/compact)");
-			tabWidthModeNoteLabel.setFont(tabWidthModeNoteLabel.getFont().deriveFont(tabWidthModeNoteLabel.getFont().getSize() - 2f));
 			tabWidthModeNoteLabel.setEnabled(false);
+			tabWidthModeNoteLabel.putClientProperty("FlatLaf.styleClass", "small");
 			tabWidthModeNoteLabel.setName("tabWidthModeNoteLabel");
 			panel3.add(tabWidthModeNoteLabel, "cell 0 1");
 
@@ -781,7 +781,7 @@ class TabsPanel
 
 			//---- minMaxTabWidthLabel ----
 			minMaxTabWidthLabel.setText("Minimum/maximum tab width");
-			minMaxTabWidthLabel.setFont(minMaxTabWidthLabel.getFont().deriveFont(minMaxTabWidthLabel.getFont().getSize() + 4f));
+			minMaxTabWidthLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			minMaxTabWidthLabel.setName("minMaxTabWidthLabel");
 			panel3.add(minMaxTabWidthLabel, "cell 0 5");
 
@@ -799,7 +799,7 @@ class TabsPanel
 
 			//---- tabAlignmentLabel ----
 			tabAlignmentLabel.setText("Tab title alignment");
-			tabAlignmentLabel.setFont(tabAlignmentLabel.getFont().deriveFont(tabAlignmentLabel.getFont().getSize() + 4f));
+			tabAlignmentLabel.putClientProperty("FlatLaf.styleClass", "h3");
 			tabAlignmentLabel.setName("tabAlignmentLabel");
 			panel3.add(tabAlignmentLabel, "cell 0 8");
 
@@ -820,14 +820,14 @@ class TabsPanel
 				//---- tabAlignmentNoteLabel ----
 				tabAlignmentNoteLabel.setText("(leading/center/trailing)");
 				tabAlignmentNoteLabel.setEnabled(false);
-				tabAlignmentNoteLabel.setFont(tabAlignmentNoteLabel.getFont().deriveFont(tabAlignmentNoteLabel.getFont().getSize() - 2f));
+				tabAlignmentNoteLabel.putClientProperty("FlatLaf.styleClass", "small");
 				tabAlignmentNoteLabel.setName("tabAlignmentNoteLabel");
 				panel5.add(tabAlignmentNoteLabel, "cell 0 0");
 
 				//---- tabAlignmentNoteLabel2 ----
 				tabAlignmentNoteLabel2.setText("(trailing)");
 				tabAlignmentNoteLabel2.setEnabled(false);
-				tabAlignmentNoteLabel2.setFont(tabAlignmentNoteLabel2.getFont().deriveFont(tabAlignmentNoteLabel2.getFont().getSize() - 2f));
+				tabAlignmentNoteLabel2.putClientProperty("FlatLaf.styleClass", "small");
 				tabAlignmentNoteLabel2.setName("tabAlignmentNoteLabel2");
 				panel5.add(tabAlignmentNoteLabel2, "cell 1 0,alignx right,growx 0");
 
@@ -891,22 +891,22 @@ class TabsPanel
 
 				//---- scrollAsNeededSingleButton ----
 				scrollAsNeededSingleButton.setText("asNeededSingle");
-				scrollAsNeededSingleButton.setFont(scrollAsNeededSingleButton.getFont().deriveFont(scrollAsNeededSingleButton.getFont().getSize() - 2f));
 				scrollAsNeededSingleButton.setSelected(true);
+				scrollAsNeededSingleButton.putClientProperty("FlatLaf.styleClass", "small");
 				scrollAsNeededSingleButton.setName("scrollAsNeededSingleButton");
 				scrollAsNeededSingleButton.addActionListener(e -> scrollButtonsPolicyChanged());
 				scrollButtonsPolicyToolBar.add(scrollAsNeededSingleButton);
 
 				//---- scrollAsNeededButton ----
 				scrollAsNeededButton.setText("asNeeded");
-				scrollAsNeededButton.setFont(scrollAsNeededButton.getFont().deriveFont(scrollAsNeededButton.getFont().getSize() - 2f));
+				scrollAsNeededButton.putClientProperty("FlatLaf.styleClass", "small");
 				scrollAsNeededButton.setName("scrollAsNeededButton");
 				scrollAsNeededButton.addActionListener(e -> scrollButtonsPolicyChanged());
 				scrollButtonsPolicyToolBar.add(scrollAsNeededButton);
 
 				//---- scrollNeverButton ----
 				scrollNeverButton.setText("never");
-				scrollNeverButton.setFont(scrollNeverButton.getFont().deriveFont(scrollNeverButton.getFont().getSize() - 2f));
+				scrollNeverButton.putClientProperty("FlatLaf.styleClass", "small");
 				scrollNeverButton.setName("scrollNeverButton");
 				scrollNeverButton.addActionListener(e -> scrollButtonsPolicyChanged());
 				scrollButtonsPolicyToolBar.add(scrollNeverButton);
@@ -926,15 +926,15 @@ class TabsPanel
 
 				//---- scrollBothButton ----
 				scrollBothButton.setText("both");
-				scrollBothButton.setFont(scrollBothButton.getFont().deriveFont(scrollBothButton.getFont().getSize() - 2f));
 				scrollBothButton.setSelected(true);
+				scrollBothButton.putClientProperty("FlatLaf.styleClass", "small");
 				scrollBothButton.setName("scrollBothButton");
 				scrollBothButton.addActionListener(e -> scrollButtonsPlacementChanged());
 				scrollButtonsPlacementToolBar.add(scrollBothButton);
 
 				//---- scrollTrailingButton ----
 				scrollTrailingButton.setText("trailing");
-				scrollTrailingButton.setFont(scrollTrailingButton.getFont().deriveFont(scrollTrailingButton.getFont().getSize() - 2f));
+				scrollTrailingButton.putClientProperty("FlatLaf.styleClass", "small");
 				scrollTrailingButton.setName("scrollTrailingButton");
 				scrollTrailingButton.addActionListener(e -> scrollButtonsPlacementChanged());
 				scrollButtonsPlacementToolBar.add(scrollTrailingButton);
@@ -954,15 +954,15 @@ class TabsPanel
 
 				//---- popupAsNeededButton ----
 				popupAsNeededButton.setText("asNeeded");
-				popupAsNeededButton.setFont(popupAsNeededButton.getFont().deriveFont(popupAsNeededButton.getFont().getSize() - 2f));
 				popupAsNeededButton.setSelected(true);
+				popupAsNeededButton.putClientProperty("FlatLaf.styleClass", "small");
 				popupAsNeededButton.setName("popupAsNeededButton");
 				popupAsNeededButton.addActionListener(e -> tabsPopupPolicyChanged());
 				tabsPopupPolicyToolBar.add(popupAsNeededButton);
 
 				//---- popupNeverButton ----
 				popupNeverButton.setText("never");
-				popupNeverButton.setFont(popupNeverButton.getFont().deriveFont(popupNeverButton.getFont().getSize() - 2f));
+				popupNeverButton.putClientProperty("FlatLaf.styleClass", "small");
 				popupNeverButton.setName("popupNeverButton");
 				popupNeverButton.addActionListener(e -> tabsPopupPolicyChanged());
 				tabsPopupPolicyToolBar.add(popupNeverButton);

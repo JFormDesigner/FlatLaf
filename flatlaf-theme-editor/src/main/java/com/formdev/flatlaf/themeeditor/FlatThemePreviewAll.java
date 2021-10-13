@@ -560,7 +560,7 @@ class FlatThemePreviewAll
 		menuUnderlineSelectionButton.setButtonType(FlatButton.ButtonType.toolBarButton);
 		menuUnderlineSelectionButton.setToolTipText("menu underline selection");
 		menuUnderlineSelectionButton.setFocusable(false);
-		menuUnderlineSelectionButton.setFont(menuUnderlineSelectionButton.getFont().deriveFont(menuUnderlineSelectionButton.getFont().getSize() - 2f));
+		menuUnderlineSelectionButton.putClientProperty("FlatLaf.styleClass", "small");
 		menuUnderlineSelectionButton.addActionListener(e -> menuUnderlineSelectionChanged());
 		add(menuUnderlineSelectionButton, "cell 0 11");
 

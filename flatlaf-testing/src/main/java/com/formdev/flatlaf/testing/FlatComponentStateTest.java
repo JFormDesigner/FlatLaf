@@ -198,17 +198,17 @@ public class FlatComponentStateTest
 
 		//---- label11 ----
 		label11.setText("JButton");
-		label11.setFont(label11.getFont().deriveFont(label11.getFont().getSize() + 4f));
+		label11.putClientProperty("FlatLaf.styleClass", "h3");
 		add(label11, "cell 1 0 2 1");
 
 		//---- label12 ----
 		label12.setText("JToggleButton");
-		label12.setFont(label12.getFont().deriveFont(label12.getFont().getSize() + 4f));
+		label12.putClientProperty("FlatLaf.styleClass", "h3");
 		add(label12, "cell 5 0 3 1");
 
 		//---- label32 ----
 		label32.setText("Help Button");
-		label32.setFont(label32.getFont().deriveFont(label32.getFont().getSize() + 4f));
+		label32.putClientProperty("FlatLaf.styleClass", "h3");
 		add(label32, "cell 9 0 2 1");
 
 		//---- label5 ----
@@ -513,12 +513,12 @@ public class FlatComponentStateTest
 
 		//---- label22 ----
 		label22.setText("JCheckBox");
-		label22.setFont(label22.getFont().deriveFont(label22.getFont().getSize() + 4f));
+		label22.putClientProperty("FlatLaf.styleClass", "h3");
 		add(label22, "cell 1 8 2 1");
 
 		//---- label27 ----
 		label27.setText("JRadioButton");
-		label27.setFont(label27.getFont().deriveFont(label27.getFont().getSize() + 4f));
+		label27.putClientProperty("FlatLaf.styleClass", "h3");
 		add(label27, "cell 5 8 2 1");
 
 		//---- label23 ----
