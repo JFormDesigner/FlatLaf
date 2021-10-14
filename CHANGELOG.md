@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.6.1-SNAPSHOT
+
+#### Fixed bugs
+
+- Native window decorations: Catch `UnsatisfiedLinkError` when trying to load
+  `jawt.dll` to avoid an application crash (Java 8 on Windows 10 only).
+
+
 ## 1.6
 
 #### New features and improvements

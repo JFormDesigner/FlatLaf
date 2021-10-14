@@ -96,6 +96,11 @@ class FlatWindowsNativeWindowBorder
 				// Java 9 and later does not have this problem.
 				try {
 					System.loadLibrary( "jawt" );
+				} catch( UnsatisfiedLinkError ex ) {
+					// log error only if native library jawt.dll not already loaded
+					String message = ex.getMessage();
+					if( message == null || !message.contains( "already loaded in another classloader" ) )
+						LoggingFacade.INSTANCE.logSevere( null, ex );
 				} catch( Exception ex ) {
 					LoggingFacade.INSTANCE.logSevere( null, ex );
 				}
