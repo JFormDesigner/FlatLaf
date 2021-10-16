@@ -1,0 +1,103 @@
+JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets dialog,hidemode 3"
+			"$columnConstraints": "[230:230,fill]para[grow,fill]"
+			"$rowConstraints": "[top][][][800,grow,fill]"
+		} ) {
+			name: "this"
+			"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "familiesLabel"
+				"text": "Families:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "previewFamilyNameLabel"
+				"text": "name"
+				"$client.FlatLaf.styleClass": "h1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "familiesScrollPane"
+				add( new FormComponent( "javax.swing.JList" ) {
+					name: "familiesList"
+					"selectionMode": 0
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.typeParameters": "FontFamilyInfo"
+					}
+					addEvent( new FormEvent( "javax.swing.event.ListSelectionListener", "valueChanged", "familyChanged", false ) )
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1 1 3,growy"
+			} )
+			add( new FormComponent( "javax.swing.JSeparator" ) {
+				name: "separator1"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+					"$layoutConstraints": "insets dialog,hidemode 3"
+					"$columnConstraints": "[fill]"
+					"$rowConstraints": "[]"
+				} ) {
+					name: "previewPanel"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 450, 300 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets 2 6 2 6,hidemode 3"
+			"$columnConstraints": "[fill]"
+			"$rowConstraints": "[]0[]"
+		} ) {
+			name: "panel1"
+			auxiliary() {
+				"JavaCodeGenerator.className": "FontFamilyRenderer"
+			}
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "familyNameLabel"
+				"text": "text"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "familyDescriptionLabel"
+				"text": "text"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 330 )
+			"size": new java.awt.Dimension( 255, 105 )
+		} )
+	}
+}
