@@ -42,6 +42,10 @@ FlatLaf Change Log
   to issue #382; regression since fixing #330 in FlatLaf 1.4)
 - Tree: Fixed editing cell issue with custom cell renderer and cell editor that
   use same component for rendering and editing. (issue #385)
+- Table: Do not select text in cell editor when it gets focus (when
+  `JTable.surrendersFocusOnKeystroke` is `true`) and
+  `TextComponent.selectAllOnFocusPolicy` is `once` (the default) or `always`.
+  (issue #395)
 
 
 ## 1.6.1

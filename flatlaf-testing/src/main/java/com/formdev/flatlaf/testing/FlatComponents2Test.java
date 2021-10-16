@@ -330,6 +330,11 @@ public class FlatComponents2Test
 		}
 	}
 
+	private void focusCellEditorChanged() {
+		for( JTable table : allTables )
+			table.setSurrendersFocusOnKeystroke( focusCellEditorCheckBox.isSelected() );
+	}
+
 	private void treeRendererChanged() {
 		Object sel = treeRendererComboBox.getSelectedItem();
 		if( !(sel instanceof String) )
@@ -477,6 +482,7 @@ public class FlatComponents2Test
 		sortIconPositionComboBox = new JComboBox<>();
 		showHorizontalLinesCheckBox = new JCheckBox();
 		rowSelectionCheckBox = new JCheckBox();
+		focusCellEditorCheckBox = new JCheckBox();
 		showVerticalLinesCheckBox = new JCheckBox();
 		columnSelectionCheckBox = new JCheckBox();
 		intercellSpacingCheckBox = new JCheckBox();
@@ -490,7 +496,7 @@ public class FlatComponents2Test
 			// columns
 			"[]" +
 			"[200,grow,sizegroup 1,fill]" +
-			"[200,grow,sizegroup 1,fill]" +
+			"[200,grow,sizegroup 1,fill]para" +
 			"[fill]" +
 			"[200,grow,sizegroup 1,fill]" +
 			"[200,grow,sizegroup 1,fill]",
@@ -790,6 +796,7 @@ public class FlatComponents2Test
 				"hidemode 3",
 				// columns
 				"[]" +
+				"[fill]" +
 				"[fill]",
 				// rows
 				"[]" +
@@ -800,7 +807,7 @@ public class FlatComponents2Test
 
 			//---- autoResizeModeLabel ----
 			autoResizeModeLabel.setText("Auto resize mode:");
-			tableOptionsPanel.add(autoResizeModeLabel, "cell 0 0 2 1");
+			tableOptionsPanel.add(autoResizeModeLabel, "cell 0 0 3 1");
 
 			//---- autoResizeModeField ----
 			autoResizeModeField.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -812,11 +819,11 @@ public class FlatComponents2Test
 			}));
 			autoResizeModeField.setSelectedIndex(2);
 			autoResizeModeField.addActionListener(e -> autoResizeModeChanged());
-			tableOptionsPanel.add(autoResizeModeField, "cell 0 0 2 1");
+			tableOptionsPanel.add(autoResizeModeField, "cell 0 0 3 1");
 
 			//---- sortIconPositionLabel ----
 			sortIconPositionLabel.setText("Sort icon:");
-			tableOptionsPanel.add(sortIconPositionLabel, "cell 0 0 2 1");
+			tableOptionsPanel.add(sortIconPositionLabel, "cell 0 0 3 1");
 
 			//---- sortIconPositionComboBox ----
 			sortIconPositionComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -826,7 +833,7 @@ public class FlatComponents2Test
 				"bottom"
 			}));
 			sortIconPositionComboBox.addActionListener(e -> sortIconPositionChanged());
-			tableOptionsPanel.add(sortIconPositionComboBox, "cell 0 0 2 1");
+			tableOptionsPanel.add(sortIconPositionComboBox, "cell 0 0 3 1");
 
 			//---- showHorizontalLinesCheckBox ----
 			showHorizontalLinesCheckBox.setText("show horizontal lines");
@@ -838,6 +845,11 @@ public class FlatComponents2Test
 			rowSelectionCheckBox.setSelected(true);
 			rowSelectionCheckBox.addActionListener(e -> rowSelectionChanged());
 			tableOptionsPanel.add(rowSelectionCheckBox, "cell 1 1");
+
+			//---- focusCellEditorCheckBox ----
+			focusCellEditorCheckBox.setText("focus cell editor");
+			focusCellEditorCheckBox.addActionListener(e -> focusCellEditorChanged());
+			tableOptionsPanel.add(focusCellEditorCheckBox, "cell 2 1");
 
 			//---- showVerticalLinesCheckBox ----
 			showVerticalLinesCheckBox.setText("show vertical lines");
@@ -867,7 +879,7 @@ public class FlatComponents2Test
 			//---- tableHeaderButtonCheckBox ----
 			tableHeaderButtonCheckBox.setText("show button in table header");
 			tableHeaderButtonCheckBox.addActionListener(e -> tableHeaderButtonChanged());
-			tableOptionsPanel.add(tableHeaderButtonCheckBox, "cell 1 4");
+			tableOptionsPanel.add(tableHeaderButtonCheckBox, "cell 1 4 2 1");
 		}
 		add(tableOptionsPanel, "cell 4 4 2 1");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -897,6 +909,7 @@ public class FlatComponents2Test
 	private JComboBox<String> sortIconPositionComboBox;
 	private JCheckBox showHorizontalLinesCheckBox;
 	private JCheckBox rowSelectionCheckBox;
+	private JCheckBox focusCellEditorCheckBox;
 	private JCheckBox showVerticalLinesCheckBox;
 	private JCheckBox columnSelectionCheckBox;
 	private JCheckBox intercellSpacingCheckBox;
