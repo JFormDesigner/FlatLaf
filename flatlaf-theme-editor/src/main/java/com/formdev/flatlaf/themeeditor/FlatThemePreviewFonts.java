@@ -177,7 +177,7 @@ public class FlatThemePreviewFonts
 
 			updateDescription( previewLabel.getFont() );
 			previewLabel.addPropertyChangeListener( "font", e -> {
-				updateDescription( (Font) e.getNewValue() );
+				updateDescription( previewLabel.getFont() );
 			} );
 		}
 

@@ -177,7 +177,8 @@ class FlatThemePreview
 
 		Object value = textArea.propertiesSupport.getParsedProperty( (String) key );
 
-		inGetDefaultFont = "defaultFont".equals( key );
+		boolean isDefaultFont = "defaultFont".equals( key );
+		inGetDefaultFont = isDefaultFont;
 		try {
 			if( value instanceof LazyValue ) {
 				value = lazyValueCache.computeIfAbsent( (LazyValue) value, k -> {
@@ -191,6 +192,12 @@ class FlatThemePreview
 
 //		System.out.println( key + " = " + value );
 
+		// for "defaultFont" never return a value that is not a font
+		// (e.g. a color for "defaultFont = #fff") to avoid StackOverflowError
+		// in Active.createValue()
+		if( isDefaultFont && !(value instanceof Font) )
+			return null;
+
 		// If value is null and is a property that is defined in a core theme,
 		// then force the value to null.
 		// This is necessary for cases where the current application Laf defines a property
@@ -198,7 +205,7 @@ class FlatThemePreview
 		// E.g. FlatLightLaf defines Button.focusedBackground, but in FlatDarkLaf
 		// it is not defined. Without this code, the preview for FlatDarkLaf would use
 		// Button.focusedBackground from FlatLightLaf if FlatLightLaf is the current application Laf.
-		if( value == null && FlatThemePropertiesBaseManager.getDefindedCoreKeys().contains( key ) && !"defaultFont".equals( key ) )
+		if( value == null && FlatThemePropertiesBaseManager.getDefindedCoreKeys().contains( key ) && !isDefaultFont )
 			return FlatLaf.NULL_VALUE;
 
 		return value;
