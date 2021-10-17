@@ -410,10 +410,7 @@ class UIDefaultsLoader
 			// check whether value type is specified in the value
 			if( value.startsWith( "#" ) )
 				valueType = ValueType.COLOR;
-			else if( value.startsWith( "\"" ) && value.indexOf( '"', 1 ) == value.length() - 1 ) {
-				valueType = ValueType.STRING;
-				value = value.substring( 1, value.length() - 1 );
-			} else if( value.startsWith( TYPE_PREFIX ) ) {
+			else if( value.startsWith( TYPE_PREFIX ) ) {
 				int end = value.indexOf( TYPE_PREFIX_END );
 				if( end != -1 ) {
 					try {
@@ -482,6 +479,12 @@ class UIDefaultsLoader
 			case GRAYFILTER:	return parseGrayFilter( value );
 			case UNKNOWN:
 			default:
+				// string
+				if( value.startsWith( "\"" ) && value.endsWith( "\"" ) ) {
+					resultValueType[0] = ValueType.STRING;
+					return value.substring( 1, value.length() - 1 );
+				}
+
 				// colors
 				Object color = parseColorOrFunction( value, resolver, false );
 				if( color != null ) {
