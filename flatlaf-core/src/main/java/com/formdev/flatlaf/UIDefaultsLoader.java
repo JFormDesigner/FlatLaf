@@ -1000,7 +1000,7 @@ class UIDefaultsLoader
 	}
 
 	/**
-	 * Syntax: [normal] [bold|+bold|-bold] [italic|+italic|-italic] [<size>|+<incr>|-<decr>|<percent>%] [family[, family]]
+	 * Syntax: [normal] [bold|+bold|-bold] [italic|+italic|-italic] [<size>|+<incr>|-<decr>|<percent>%] [family[, family]] [$baseFontKey]
 	 */
 	private static Object parseFont( String value ) {
 		Object font = fontCache.get( value );
@@ -1013,6 +1013,7 @@ class UIDefaultsLoader
 		int relativeSize = 0;
 		float scaleSize = 0;
 		List<String> families = null;
+		String baseFontKey = null;
 
 		// use StreamTokenizer to split string because it supports quoted strings
 		StreamTokenizer st = new StreamTokenizer( new StringReader( value ) );
@@ -1062,6 +1063,12 @@ class UIDefaultsLoader
 								scaleSize = parseInteger( param.substring( 0, param.length() - 1 ), true ) / 100f;
 							else
 								absoluteSize = parseInteger( param, true );
+						} else if( firstChar == '$' ) {
+							// reference to base font
+							if( baseFontKey != null )
+								throw new IllegalArgumentException( "baseFontKey specified more than once in '" + value + "'" );
+
+							baseFontKey = param.substring( 1 );
 						} else {
 							// font family
 							if( families == null )
@@ -1088,7 +1095,7 @@ class UIDefaultsLoader
 				throw new IllegalArgumentException( "can not use '+italic' and '-italic' in '" + value + "'" );
 		}
 
-		font = new FlatLaf.ActiveFont( families, style, styleChange, absoluteSize, relativeSize, scaleSize );
+		font = new FlatLaf.ActiveFont( baseFontKey, families, style, styleChange, absoluteSize, relativeSize, scaleSize );
 		fontCache.put( value, font );
 		return font;
 	}
@@ -1227,7 +1234,7 @@ class UIDefaultsLoader
 	 * For use in LazyValue to get value for given key from UIManager and report error
 	 * if not found. If key is prefixed by '?', then no error is reported.
 	 */
-	private static Object lazyUIManagerGet( String uiKey ) {
+	static Object lazyUIManagerGet( String uiKey ) {
 		boolean optional = false;
 		if( uiKey.startsWith( OPTIONAL_PREFIX ) ) {
 			uiKey = uiKey.substring( OPTIONAL_PREFIX.length() );
