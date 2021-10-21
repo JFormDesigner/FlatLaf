@@ -42,9 +42,12 @@ public class FlatCaret
 	extends DefaultCaret
 	implements UIResource
 {
+	private static final String KEY_CARET_INFO = "FlatLaf.internal.caretInfo";
+
 	private final String selectAllOnFocusPolicy;
 	private final boolean selectAllOnMouseClick;
 
+	private boolean inInstall;
 	private boolean wasFocused;
 	private boolean wasTemporaryLost;
 	private boolean isMousePressed;
@@ -59,16 +62,60 @@ public class FlatCaret
 
 	@Override
 	public void install( JTextComponent c ) {
-		super.install( c );
+		// get caret info if switched theme
+		long[] ci = (long[]) c.getClientProperty( KEY_CARET_INFO );
+		if( ci != null ) {
+			c.putClientProperty( KEY_CARET_INFO, null );
 
-		// the dot and mark are lost when switching LaF
-		// --> move dot to end of text so that all text may be selected when it gains focus
-		Document doc = c.getDocument();
-		if( doc != null && getDot() == 0 && getMark() == 0 ) {
-			int length = doc.getLength();
-			if( length > 0 )
-				setDot( length );
+			// if caret info is too old assume that switched from FlatLaf
+			// to another Laf and back to FlatLaf
+			if( System.currentTimeMillis() - 500 > ci[3] )
+				ci = null;
 		}
+		if( ci != null ) {
+			// when switching theme, it is necessary to set blink rate before
+			// invoking super.install() otherwise the caret does not blink
+			setBlinkRate( (int) ci[2] );
+		}
+
+		inInstall = true;
+		try {
+			super.install( c );
+		} finally {
+			inInstall = false;
+		}
+
+		if( ci != null ) {
+			// restore selection
+			select( (int) ci[1], (int) ci[0] );
+
+			// if text component is focused, then caret and selection are visible,
+			// but when switching theme, the component does not yet have
+			// an highlighter and the selection is not painted
+			// --> make selection temporary invisible later, then the caret
+			//     adds selection highlights to the text component highlighter
+			if( isSelectionVisible() ) {
+				EventQueue.invokeLater( () -> {
+					if( isSelectionVisible() ) {
+						setSelectionVisible( false );
+						setSelectionVisible( true );
+					}
+				} );
+			}
+		}
+	}
+
+	@Override
+	public void deinstall( JTextComponent c ) {
+		// remember dot and mark (the selection) when switching theme
+		c.putClientProperty( KEY_CARET_INFO, new long[] {
+			getDot(),
+			getMark(),
+			getBlinkRate(),
+			System.currentTimeMillis(),
+		} );
+
+		super.deinstall( c );
 	}
 
 	@Override
@@ -87,7 +134,7 @@ public class FlatCaret
 
 	@Override
 	public void focusGained( FocusEvent e ) {
-		if( !wasTemporaryLost && (!isMousePressed || selectAllOnMouseClick) )
+		if( !inInstall && !wasTemporaryLost && (!isMousePressed || selectAllOnMouseClick) )
 			selectAllOnFocusGained();
 		wasTemporaryLost = false;
 		wasFocused = true;
@@ -144,10 +191,7 @@ public class FlatCaret
 					mark = beginInitialWord;
 					dot = endInitialWord;
 				}
-				if( mark != getMark() )
-					setDot( mark );
-				if( dot != getDot() )
-					moveDot( dot );
+				select( mark, dot );
 			} catch( BadLocationException ex ) {
 				UIManager.getLookAndFeel().provideErrorFeedback( c );
 			}
@@ -185,13 +229,18 @@ public class FlatCaret
 		// select all
 		if( c instanceof JFormattedTextField ) {
 			EventQueue.invokeLater( () -> {
-				setDot( 0 );
-				moveDot( doc.getLength() );
+				select( 0, doc.getLength() );
 			} );
 		} else {
-			setDot( 0 );
-			moveDot( doc.getLength() );
+			select( 0, doc.getLength() );
 		}
+	}
+
+	private void select( int mark, int dot ) {
+		if( mark != getMark() )
+			setDot( mark );
+		if( dot != getDot() )
+			moveDot( dot );
 	}
 
 	/** @since 1.4 */
