@@ -137,6 +137,15 @@ public class FlatTextComponentsTest
 		JLabel label4 = new JLabel();
 		JComboBox<String> comboBox6 = new JComboBox<>();
 		JSpinner spinner5 = new JSpinner();
+		JLabel label5 = new JLabel();
+		JTextField textField4 = new JTextField();
+		JLabel label6 = new JLabel();
+		JScrollPane scrollPane2 = new JScrollPane();
+		JTextArea textArea2 = new JTextArea();
+		JScrollPane scrollPane4 = new JScrollPane();
+		JTextPane textPane4 = new JTextPane();
+		JScrollPane scrollPane6 = new JScrollPane();
+		JEditorPane editorPane5 = new JEditorPane();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -168,7 +177,9 @@ public class FlatTextComponentsTest
 			"[::14]" +
 			"[::14]" +
 			"[]" +
-			"[]"));
+			"[]para" +
+			"[]" +
+			"[90,fill]"));
 
 		//---- textFieldLabel ----
 		textFieldLabel.setText("JTextField:");
@@ -518,6 +529,54 @@ public class FlatTextComponentsTest
 		spinner5.setPreferredSize(new Dimension(60, 14));
 		spinner5.setName("spinner5");
 		add(spinner5, "cell 1 15,growx,hmax 14");
+
+		//---- label5 ----
+		label5.setText("Double-click-and-drag:");
+		label5.setName("label5");
+		add(label5, "cell 0 16");
+
+		//---- textField4 ----
+		textField4.setText("123 456 789 abc def");
+		textField4.setName("textField4");
+		add(textField4, "cell 1 16 2 1,growx");
+
+		//---- label6 ----
+		label6.setText("<html>JTextArea<br>JTextPane<br>JEditorPane</html>");
+		label6.setName("label6");
+		add(label6, "cell 0 17,align right top,grow 0 0");
+
+		//======== scrollPane2 ========
+		{
+			scrollPane2.setName("scrollPane2");
+
+			//---- textArea2 ----
+			textArea2.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			textArea2.setName("textArea2");
+			scrollPane2.setViewportView(textArea2);
+		}
+		add(scrollPane2, "cell 1 17 4 1,growx");
+
+		//======== scrollPane4 ========
+		{
+			scrollPane4.setName("scrollPane4");
+
+			//---- textPane4 ----
+			textPane4.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			textPane4.setName("textPane4");
+			scrollPane4.setViewportView(textPane4);
+		}
+		add(scrollPane4, "cell 1 17 4 1,growx");
+
+		//======== scrollPane6 ========
+		{
+			scrollPane6.setName("scrollPane6");
+
+			//---- editorPane5 ----
+			editorPane5.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			editorPane5.setName("editorPane5");
+			scrollPane6.setViewportView(editorPane5);
+		}
+		add(scrollPane6, "cell 1 17 4 1,growx");
 
 		//======== popupMenu1 ========
 		{

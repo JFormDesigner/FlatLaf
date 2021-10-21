@@ -22,14 +22,19 @@ import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.JFormattedTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.Utilities;
 
 /**
  * Caret that can select all text on focus gained.
+ * Also fixes Swing's double-click-and-drag behavior so that dragging after
+ * a double-click extends selection by whole words.
  *
  * @author Karl Tauber
  */
@@ -43,6 +48,9 @@ public class FlatCaret
 	private boolean wasFocused;
 	private boolean wasTemporaryLost;
 	private boolean isMousePressed;
+	private boolean isWordSelection;
+	private int beginInitialWord;
+	private int endInitialWord;
 
 	public FlatCaret( String selectAllOnFocusPolicy, boolean selectAllOnMouseClick ) {
 		this.selectAllOnFocusPolicy = selectAllOnFocusPolicy;
@@ -97,12 +105,54 @@ public class FlatCaret
 	public void mousePressed( MouseEvent e ) {
 		isMousePressed = true;
 		super.mousePressed( e );
+
+		// left double-click starts word selection
+		isWordSelection = e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton( e ) && !e.isConsumed();
+		if( isWordSelection ) {
+			beginInitialWord = getMark();
+			endInitialWord = getDot();
+		}
 	}
 
 	@Override
 	public void mouseReleased( MouseEvent e ) {
 		isMousePressed = false;
+		isWordSelection = false;
 		super.mouseReleased( e );
+	}
+
+	@Override
+	public void mouseDragged( MouseEvent e ) {
+		if( isWordSelection && !e.isConsumed() && SwingUtilities.isLeftMouseButton( e ) ) {
+			// fix Swing's double-click-and-drag behavior so that dragging after
+			// a double-click extends selection by whole words
+			JTextComponent c = getComponent();
+			int pos = c.viewToModel( e.getPoint() );
+			if( pos < 0 )
+				return;
+
+			try {
+				int mark;
+				int dot;
+				if( pos > endInitialWord ) {
+					mark = beginInitialWord;
+					dot = Utilities.getWordEnd( c, pos );
+				} else if( pos < beginInitialWord ) {
+					mark = endInitialWord;
+					dot = Utilities.getWordStart( c, pos );
+				} else {
+					mark = beginInitialWord;
+					dot = endInitialWord;
+				}
+				if( mark != getMark() )
+					setDot( mark );
+				if( dot != getDot() )
+					moveDot( dot );
+			} catch( BadLocationException ex ) {
+				UIManager.getLookAndFeel().provideErrorFeedback( c );
+			}
+		} else
+			super.mouseDragged( e );
 	}
 
 	protected void selectAllOnFocusGained() {

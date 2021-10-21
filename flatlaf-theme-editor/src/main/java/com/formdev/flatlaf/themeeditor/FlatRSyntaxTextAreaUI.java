@@ -18,9 +18,16 @@ package com.formdev.flatlaf.themeeditor;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.Utilities;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaUI;
+import org.fife.ui.rtextarea.ConfigurableCaret;
 
 /**
  * @author Karl Tauber
@@ -30,6 +37,13 @@ class FlatRSyntaxTextAreaUI
 {
 	FlatRSyntaxTextAreaUI( JComponent rSyntaxTextArea ) {
 		super( rSyntaxTextArea );
+	}
+
+	@Override
+	protected Caret createCaret() {
+		Caret caret = new FlatConfigurableCaret();
+		caret.setBlinkRate( 500 );
+		return caret;
 	}
 
 	@Override
@@ -47,6 +61,68 @@ class FlatRSyntaxTextAreaUI
 			g.fillRect( visibleRect.x, dotRect.y, visibleRect.width, height );
 		} catch( BadLocationException ex ) {
 			super.paintCurrentLineHighlight( g, visibleRect );
+		}
+	}
+
+	//---- class FlatConfigurableCaret ----------------------------------------
+
+	private static class FlatConfigurableCaret
+		extends ConfigurableCaret
+	{
+		private boolean isWordSelection;
+		private int beginInitialWord;
+		private int endInitialWord;
+
+		@Override
+		public void mousePressed( MouseEvent e ) {
+			super.mousePressed( e );
+
+			// left double-click starts word selection
+			isWordSelection = e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton( e ) && !e.isConsumed();
+			if( isWordSelection ) {
+				beginInitialWord = getMark();
+				endInitialWord = getDot();
+			}
+		}
+
+		@Override
+		public void mouseReleased( MouseEvent e ) {
+			isWordSelection = false;
+			super.mouseReleased( e );
+		}
+
+		@Override
+		public void mouseDragged( MouseEvent e ) {
+			if( isWordSelection && !e.isConsumed() && SwingUtilities.isLeftMouseButton( e ) ) {
+				// fix Swing's double-click-and-drag behavior so that dragging after
+				// a double-click extends selection by whole words
+				JTextComponent c = getComponent();
+				int pos = c.viewToModel( e.getPoint() );
+				if( pos < 0 )
+					return;
+
+				try {
+					int mark;
+					int dot;
+					if( pos > endInitialWord ) {
+						mark = beginInitialWord;
+						dot = Utilities.getWordEnd( c, pos );
+					} else if( pos < beginInitialWord ) {
+						mark = endInitialWord;
+						dot = Utilities.getWordStart( c, pos );
+					} else {
+						mark = beginInitialWord;
+						dot = endInitialWord;
+					}
+					if( mark != getMark() )
+						setDot( mark );
+					if( dot != getDot() )
+						moveDot( dot );
+				} catch( BadLocationException ex ) {
+					UIManager.getLookAndFeel().provideErrorFeedback( c );
+				}
+			} else
+				super.mouseDragged( e );
 		}
 	}
 }

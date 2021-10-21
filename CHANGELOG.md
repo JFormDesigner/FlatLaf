@@ -15,6 +15,7 @@ FlatLaf Change Log
 - TextField, FormattedTextField and PasswordField: Support leading and trailing
   icons (set client property `JTextField.leadingIcon` or
   `JTextField.trailingIcon` to an `Icon`). (PR #378; issue #368)
+- TextComponents: Double-click-and-drag now extends selection by whole words.
 - Theming improvements: Reworks core themes to make it easier to create new
   themes (e.g. reduced explicit colors by using color functions). **Note**:
   There are minor incompatible changes in FlatLaf properties files. (PR #390)
