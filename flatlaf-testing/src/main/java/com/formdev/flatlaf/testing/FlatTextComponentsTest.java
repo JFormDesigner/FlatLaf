@@ -81,6 +81,14 @@ public class FlatTextComponentsTest
 		}
 	}
 
+	private void dragEnabledChanged() {
+		boolean dragEnabled = dragEnabledCheckBox.isSelected();
+		textField.setDragEnabled( dragEnabled );
+		textArea.setDragEnabled( dragEnabled );
+		textPane.setDragEnabled( dragEnabled );
+		editorPane.setDragEnabled( dragEnabled );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel textFieldLabel = new JLabel();
@@ -138,14 +146,15 @@ public class FlatTextComponentsTest
 		JComboBox<String> comboBox6 = new JComboBox<>();
 		JSpinner spinner5 = new JSpinner();
 		JLabel label5 = new JLabel();
-		JTextField textField4 = new JTextField();
+		textField = new JTextField();
+		dragEnabledCheckBox = new JCheckBox();
 		JLabel label6 = new JLabel();
 		JScrollPane scrollPane2 = new JScrollPane();
-		JTextArea textArea2 = new JTextArea();
+		textArea = new JTextArea();
 		JScrollPane scrollPane4 = new JScrollPane();
-		JTextPane textPane4 = new JTextPane();
+		textPane = new JTextPane();
 		JScrollPane scrollPane6 = new JScrollPane();
-		JEditorPane editorPane5 = new JEditorPane();
+		editorPane = new JEditorPane();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -535,10 +544,16 @@ public class FlatTextComponentsTest
 		label5.setName("label5");
 		add(label5, "cell 0 16");
 
-		//---- textField4 ----
-		textField4.setText("123 456 789 abc def");
-		textField4.setName("textField4");
-		add(textField4, "cell 1 16 2 1,growx");
+		//---- textField ----
+		textField.setText("123 456 789 abc def");
+		textField.setName("textField");
+		add(textField, "cell 1 16 2 1,growx");
+
+		//---- dragEnabledCheckBox ----
+		dragEnabledCheckBox.setText("Drag enabled");
+		dragEnabledCheckBox.setName("dragEnabledCheckBox");
+		dragEnabledCheckBox.addActionListener(e -> dragEnabledChanged());
+		add(dragEnabledCheckBox, "cell 3 16 2 1,alignx left,growx 0");
 
 		//---- label6 ----
 		label6.setText("<html>JTextArea<br>JTextPane<br>JEditorPane</html>");
@@ -549,10 +564,10 @@ public class FlatTextComponentsTest
 		{
 			scrollPane2.setName("scrollPane2");
 
-			//---- textArea2 ----
-			textArea2.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
-			textArea2.setName("textArea2");
-			scrollPane2.setViewportView(textArea2);
+			//---- textArea ----
+			textArea.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			textArea.setName("textArea");
+			scrollPane2.setViewportView(textArea);
 		}
 		add(scrollPane2, "cell 1 17 4 1,growx");
 
@@ -560,10 +575,10 @@ public class FlatTextComponentsTest
 		{
 			scrollPane4.setName("scrollPane4");
 
-			//---- textPane4 ----
-			textPane4.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
-			textPane4.setName("textPane4");
-			scrollPane4.setViewportView(textPane4);
+			//---- textPane ----
+			textPane.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			textPane.setName("textPane");
+			scrollPane4.setViewportView(textPane);
 		}
 		add(scrollPane4, "cell 1 17 4 1,growx");
 
@@ -571,10 +586,10 @@ public class FlatTextComponentsTest
 		{
 			scrollPane6.setName("scrollPane6");
 
-			//---- editorPane5 ----
-			editorPane5.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
-			editorPane5.setName("editorPane5");
-			scrollPane6.setViewportView(editorPane5);
+			//---- editorPane ----
+			editorPane.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			editorPane.setName("editorPane");
+			scrollPane6.setViewportView(editorPane);
 		}
 		add(scrollPane6, "cell 1 17 4 1,growx");
 
@@ -612,6 +627,11 @@ public class FlatTextComponentsTest
 	private JSpinner bottomPaddingField;
 	private JCheckBox leadingIconCheckBox;
 	private JCheckBox trailingIconCheckBox;
+	private JTextField textField;
+	private JCheckBox dragEnabledCheckBox;
+	private JTextArea textArea;
+	private JTextPane textPane;
+	private JEditorPane editorPane;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- TestIcon -----------------------------------------------------------

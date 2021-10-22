@@ -423,10 +423,23 @@ new FormModel {
 				"value": "cell 0 16"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "textField4"
+				name: "textField"
 				"text": "123 456 789 abc def"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 16 2 1,growx"
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "dragEnabledCheckBox"
+				"text": "Drag enabled"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dragEnabledChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 16 2 1,alignx left,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
@@ -437,8 +450,11 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane2"
 				add( new FormComponent( "javax.swing.JTextArea" ) {
-					name: "textArea2"
+					name: "textArea"
 					"text": "1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 17 4 1,growx"
@@ -446,8 +462,11 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane4"
 				add( new FormComponent( "javax.swing.JTextPane" ) {
-					name: "textPane4"
+					name: "textPane"
 					"text": "1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 17 4 1,growx"
@@ -455,8 +474,11 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane6"
 				add( new FormComponent( "javax.swing.JEditorPane" ) {
-					name: "editorPane5"
+					name: "editorPane"
 					"text": "1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 17 4 1,growx"
