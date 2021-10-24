@@ -37,6 +37,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.demo.HintManager.Hint;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
+import com.formdev.flatlaf.extras.FlatDesktop;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
@@ -80,6 +81,22 @@ class DemoFrame
 
 		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
 			tabbedPane.setSelectedIndex( tabIndex );
+
+		// hide some menu items on macOS
+		if( SystemInfo.isMacOS ) {
+			exitMenuItem.setVisible( false );
+			aboutMenuItem.setVisible( false );
+
+			// do not use HTML text on macOS
+			htmlMenuItem.setText( "some text" );
+		}
+
+		// integrate into macOS screen menu
+		FlatDesktop.setAboutHandler( this::aboutActionPerformed );
+		FlatDesktop.setPreferencesHandler( this::showPreferences );
+		FlatDesktop.setQuitHandler( response -> {
+			response.performQuit();
+		} );
 
 		SwingUtilities.invokeLater( () -> {
 			showHints();
@@ -172,6 +189,13 @@ class DemoFrame
 				linkLabel,
 			},
 			"About", JOptionPane.PLAIN_MESSAGE );
+	}
+
+	private void showPreferences() {
+		JOptionPane.showMessageDialog( this,
+			"Sorry, but FlatLaf Demo does not have preferences. :(\n"
+				+ "This dialog is here to demonstrate usage of class 'FlatDesktop' on macOS.",
+			"Preferences", JOptionPane.PLAIN_MESSAGE );
 	}
 
 	private void selectedTabChanged() {
@@ -346,7 +370,7 @@ class DemoFrame
 	private JLabel accentColorLabel;
 
 	private void initAccentColors() {
-		accentColorLabel = new JLabel( "Accent color:" );
+		accentColorLabel = new JLabel( "Accent color: " );
 
 		toolBar.add( Box.createHorizontalGlue() );
 		toolBar.add( accentColorLabel );
@@ -412,7 +436,7 @@ class DemoFrame
 		JMenuItem openMenuItem = new JMenuItem();
 		JMenuItem saveAsMenuItem = new JMenuItem();
 		JMenuItem closeMenuItem = new JMenuItem();
-		JMenuItem exitMenuItem = new JMenuItem();
+		exitMenuItem = new JMenuItem();
 		JMenu editMenu = new JMenu();
 		JMenuItem undoMenuItem = new JMenuItem();
 		JMenuItem redoMenuItem = new JMenuItem();
@@ -431,7 +455,7 @@ class DemoFrame
 		JMenuItem structureViewMenuItem = new JMenuItem();
 		JMenuItem propertiesViewMenuItem = new JMenuItem();
 		JMenuItem menuItem2 = new JMenuItem();
-		JMenuItem menuItem1 = new JMenuItem();
+		htmlMenuItem = new JMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
@@ -449,7 +473,7 @@ class DemoFrame
 		JMenuItem showHintsMenuItem = new JMenuItem();
 		JMenuItem showUIDefaultsInspectorMenuItem = new JMenuItem();
 		JMenu helpMenu = new JMenu();
-		JMenuItem aboutMenuItem = new JMenuItem();
+		aboutMenuItem = new JMenuItem();
 		toolBar = new JToolBar();
 		JButton backButton = new JButton();
 		JButton forwardButton = new JButton();
@@ -638,9 +662,9 @@ class DemoFrame
 				menuItem2.setEnabled(false);
 				viewMenu.add(menuItem2);
 
-				//---- menuItem1 ----
-				menuItem1.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
-				viewMenu.add(menuItem1);
+				//---- htmlMenuItem ----
+				htmlMenuItem.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
+				viewMenu.add(htmlMenuItem);
 				viewMenu.addSeparator();
 
 				//---- radioButtonMenuItem1 ----
@@ -886,6 +910,8 @@ class DemoFrame
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JMenuItem exitMenuItem;
+	private JMenuItem htmlMenuItem;
 	private JMenu fontMenu;
 	private JMenu optionsMenu;
 	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
@@ -894,6 +920,7 @@ class DemoFrame
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;
+	private JMenuItem aboutMenuItem;
 	private JToolBar toolBar;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
