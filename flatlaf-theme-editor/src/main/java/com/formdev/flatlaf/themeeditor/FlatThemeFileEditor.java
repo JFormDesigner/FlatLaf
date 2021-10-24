@@ -104,10 +104,6 @@ class FlatThemeFileEditor
 		Locale.setDefault( Locale.ENGLISH );
 		System.setProperty( "user.language", "en" );
 
-		// on macOS enable screen menu bar
-		if( SystemInfo.isMacOS )
-			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
-
 		SwingUtilities.invokeLater( () -> {
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.themeeditor" );
 
