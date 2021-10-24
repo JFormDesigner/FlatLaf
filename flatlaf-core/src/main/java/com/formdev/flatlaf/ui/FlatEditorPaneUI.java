@@ -30,6 +30,7 @@ import javax.swing.JEditorPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
+import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
@@ -145,6 +146,11 @@ public class FlatEditorPaneUI
 
 		getComponent().removeFocusListener( focusListener );
 		focusListener = null;
+	}
+
+	@Override
+	protected Caret createCaret() {
+		return new FlatCaret( null, false );
 	}
 
 	@Override

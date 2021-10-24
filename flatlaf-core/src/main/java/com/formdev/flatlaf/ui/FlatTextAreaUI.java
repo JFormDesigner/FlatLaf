@@ -29,6 +29,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTextAreaUI;
+import javax.swing.text.Caret;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
@@ -134,6 +135,11 @@ public class FlatTextAreaUI
 
 		getComponent().removeFocusListener( focusListener );
 		focusListener = null;
+	}
+
+	@Override
+	protected Caret createCaret() {
+		return new FlatCaret( null, false );
 	}
 
 	@Override

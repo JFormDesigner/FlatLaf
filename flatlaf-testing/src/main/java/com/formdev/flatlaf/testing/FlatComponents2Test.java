@@ -386,6 +386,12 @@ public class FlatComponents2Test
 			tree.putClientProperty( FlatClientProperties.TREE_PAINT_SELECTION, paintSelection );
 	}
 
+	private void treeEditableChanged() {
+		boolean editable = treeEditableCheckBox.isSelected();
+		for( JTree tree : allTrees )
+			tree.setEditable( editable );
+	}
+
 	private void treeMouseClicked( MouseEvent e ) {
 		JTree tree = (JTree) e.getSource();
 		int x = e.getX();
@@ -475,6 +481,7 @@ public class FlatComponents2Test
 		treeRendererComboBox = new JComboBox<>();
 		treeWideSelectionCheckBox = new JCheckBox();
 		treePaintSelectionCheckBox = new JCheckBox();
+		treeEditableCheckBox = new JCheckBox();
 		JPanel tableOptionsPanel = new JPanel();
 		JLabel autoResizeModeLabel = new JLabel();
 		autoResizeModeField = new JComboBox<>();
@@ -754,9 +761,10 @@ public class FlatComponents2Test
 			treeOptionsPanel.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns
-				"[fill]",
+				"[left]",
 				// rows
 				"[]" +
+				"[]0" +
 				"[]0" +
 				"[]"));
 
@@ -786,6 +794,11 @@ public class FlatComponents2Test
 			treePaintSelectionCheckBox.setSelected(true);
 			treePaintSelectionCheckBox.addActionListener(e -> treePaintSelectionChanged());
 			treeOptionsPanel.add(treePaintSelectionCheckBox, "cell 0 2");
+
+			//---- treeEditableCheckBox ----
+			treeEditableCheckBox.setText("editable");
+			treeEditableCheckBox.addActionListener(e -> treeEditableChanged());
+			treeOptionsPanel.add(treeEditableCheckBox, "cell 0 3");
 		}
 		add(treeOptionsPanel, "cell 2 4");
 
@@ -905,6 +918,7 @@ public class FlatComponents2Test
 	private JComboBox<String> treeRendererComboBox;
 	private JCheckBox treeWideSelectionCheckBox;
 	private JCheckBox treePaintSelectionCheckBox;
+	private JCheckBox treeEditableCheckBox;
 	private JComboBox<String> autoResizeModeField;
 	private JComboBox<String> sortIconPositionComboBox;
 	private JCheckBox showHorizontalLinesCheckBox;

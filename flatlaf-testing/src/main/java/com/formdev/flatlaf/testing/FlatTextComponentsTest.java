@@ -81,6 +81,14 @@ public class FlatTextComponentsTest
 		}
 	}
 
+	private void dragEnabledChanged() {
+		boolean dragEnabled = dragEnabledCheckBox.isSelected();
+		textField.setDragEnabled( dragEnabled );
+		textArea.setDragEnabled( dragEnabled );
+		textPane.setDragEnabled( dragEnabled );
+		editorPane.setDragEnabled( dragEnabled );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JLabel textFieldLabel = new JLabel();
@@ -137,6 +145,16 @@ public class FlatTextComponentsTest
 		JLabel label4 = new JLabel();
 		JComboBox<String> comboBox6 = new JComboBox<>();
 		JSpinner spinner5 = new JSpinner();
+		JLabel label5 = new JLabel();
+		textField = new JTextField();
+		dragEnabledCheckBox = new JCheckBox();
+		JLabel label6 = new JLabel();
+		JScrollPane scrollPane2 = new JScrollPane();
+		textArea = new JTextArea();
+		JScrollPane scrollPane4 = new JScrollPane();
+		textPane = new JTextPane();
+		JScrollPane scrollPane6 = new JScrollPane();
+		editorPane = new JEditorPane();
 		JPopupMenu popupMenu1 = new JPopupMenu();
 		JMenuItem cutMenuItem = new JMenuItem();
 		JMenuItem copyMenuItem = new JMenuItem();
@@ -168,7 +186,9 @@ public class FlatTextComponentsTest
 			"[::14]" +
 			"[::14]" +
 			"[]" +
-			"[]"));
+			"[]para" +
+			"[]" +
+			"[90,fill]"));
 
 		//---- textFieldLabel ----
 		textFieldLabel.setText("JTextField:");
@@ -519,6 +539,60 @@ public class FlatTextComponentsTest
 		spinner5.setName("spinner5");
 		add(spinner5, "cell 1 15,growx,hmax 14");
 
+		//---- label5 ----
+		label5.setText("Double-click-and-drag:");
+		label5.setName("label5");
+		add(label5, "cell 0 16");
+
+		//---- textField ----
+		textField.setText("123 456 789 abc def");
+		textField.setName("textField");
+		add(textField, "cell 1 16 2 1,growx");
+
+		//---- dragEnabledCheckBox ----
+		dragEnabledCheckBox.setText("Drag enabled");
+		dragEnabledCheckBox.setName("dragEnabledCheckBox");
+		dragEnabledCheckBox.addActionListener(e -> dragEnabledChanged());
+		add(dragEnabledCheckBox, "cell 3 16 2 1,alignx left,growx 0");
+
+		//---- label6 ----
+		label6.setText("<html>JTextArea<br>JTextPane<br>JEditorPane</html>");
+		label6.setName("label6");
+		add(label6, "cell 0 17,align right top,grow 0 0");
+
+		//======== scrollPane2 ========
+		{
+			scrollPane2.setName("scrollPane2");
+
+			//---- textArea ----
+			textArea.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			textArea.setName("textArea");
+			scrollPane2.setViewportView(textArea);
+		}
+		add(scrollPane2, "cell 1 17 4 1,growx");
+
+		//======== scrollPane4 ========
+		{
+			scrollPane4.setName("scrollPane4");
+
+			//---- textPane ----
+			textPane.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			textPane.setName("textPane");
+			scrollPane4.setViewportView(textPane);
+		}
+		add(scrollPane4, "cell 1 17 4 1,growx");
+
+		//======== scrollPane6 ========
+		{
+			scrollPane6.setName("scrollPane6");
+
+			//---- editorPane ----
+			editorPane.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
+			editorPane.setName("editorPane");
+			scrollPane6.setViewportView(editorPane);
+		}
+		add(scrollPane6, "cell 1 17 4 1,growx");
+
 		//======== popupMenu1 ========
 		{
 			popupMenu1.setName("popupMenu1");
@@ -553,6 +627,11 @@ public class FlatTextComponentsTest
 	private JSpinner bottomPaddingField;
 	private JCheckBox leadingIconCheckBox;
 	private JCheckBox trailingIconCheckBox;
+	private JTextField textField;
+	private JCheckBox dragEnabledCheckBox;
+	private JTextArea textArea;
+	private JTextPane textPane;
+	private JEditorPane editorPane;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- TestIcon -----------------------------------------------------------
