@@ -21,7 +21,7 @@ package com.formdev.flatlaf.themeeditor;
  *
  * @author Karl Tauber
  */
-public class FlatThemeEditor
+public class FlatLafThemeEditor
 {
 	public static void main( String[] args ) {
 		FlatThemeFileEditor.main( args );
