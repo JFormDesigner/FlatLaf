@@ -57,6 +57,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.extras.FlatDesktop;
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
@@ -65,6 +66,7 @@ import com.formdev.flatlaf.extras.components.*;
 import com.formdev.flatlaf.icons.FlatClearIcon;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.StringUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -101,6 +103,10 @@ class FlatThemeFileEditor
 
 		Locale.setDefault( Locale.ENGLISH );
 		System.setProperty( "user.language", "en" );
+
+		// on macOS enable screen menu bar
+		if( SystemInfo.isMacOS )
+			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
 
 		SwingUtilities.invokeLater( () -> {
 			FlatLaf.registerCustomDefaultsSource( "com.formdev.flatlaf.themeeditor" );
@@ -170,6 +176,24 @@ class FlatThemeFileEditor
 			loadDirectory( (File) directoryField.getSelectedItem() );
 
 		enableDisableActions();
+
+		// hide some menu items on macOS
+		if( SystemInfo.isMacOS ) {
+			exitMenuItem.setVisible( false );
+			aboutMenuItem.setVisible( false );
+		}
+
+		// integrate into macOS screen menu
+		FlatDesktop.setAboutHandler( this::about );
+		FlatDesktop.setQuitHandler( response -> {
+			if( !saveAll() ) {
+				response.cancelQuit();
+				return;
+			}
+
+			saveWindowBounds();
+			response.performQuit();
+		} );
 	}
 
 	private void openDirectory() {
@@ -953,7 +977,7 @@ class FlatThemeFileEditor
 
 				//---- newPropertiesFileMenuItem ----
 				newPropertiesFileMenuItem.setText("New Properties File...");
-				newPropertiesFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+				newPropertiesFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				newPropertiesFileMenuItem.setMnemonic('N');
 				newPropertiesFileMenuItem.addActionListener(e -> newPropertiesFile());
 				fileMenu.add(newPropertiesFileMenuItem);
@@ -990,13 +1014,13 @@ class FlatThemeFileEditor
 
 				//---- insertColorMenuItem ----
 				insertColorMenuItem.setText("Insert Color");
-				insertColorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
+				insertColorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				insertColorMenuItem.addActionListener(e -> insertColor());
 				editMenu.add(insertColorMenuItem);
 
 				//---- pickColorMenuItem ----
 				pickColorMenuItem.setText("Pick Color from Screen");
-				pickColorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK|KeyEvent.SHIFT_DOWN_MASK));
+				pickColorMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()|KeyEvent.SHIFT_DOWN_MASK));
 				pickColorMenuItem.addActionListener(e -> pickColor());
 				editMenu.add(pickColorMenuItem);
 			}
@@ -1009,7 +1033,7 @@ class FlatThemeFileEditor
 
 				//---- previewMenuItem ----
 				previewMenuItem.setText("Preview");
-				previewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK));
+				previewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 				previewMenuItem.addActionListener(e -> showHidePreview());
 				viewMenu.add(previewMenuItem);
 				viewMenu.addSeparator();
