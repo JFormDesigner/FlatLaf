@@ -1395,9 +1395,11 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 [style].h3                     font: $h3.font
 [style].h4                     font: $h4.font
 [style].large                  font: $large.font
+[style].light                  font: $light.font
 [style].medium                 font: $medium.font
 [style].mini                   font: $mini.font
 [style].monospaced             font: $monospaced.font
+[style].semibold               font: $semibold.font
 [style].small                  font: $small.font
 
 
@@ -1472,6 +1474,11 @@ laf.scaleFactor                [active] 1.0
 large.font                     [active] Segoe UI plain 14    javax.swing.plaf.FontUIResource [UI]
 
 
+#---- light ----
+
+light.font                     [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
 #---- medium ----
 
 medium.font                    [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
@@ -1496,6 +1503,11 @@ monospaced.font                [active] Consolas plain 12    javax.swing.plaf.Fo
 #----  ----
 
 scrollbar                      #f5f5f5  HSL   0   0  96    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(1%)
+
+
+#---- semibold ----
+
+semibold.font                  [active] Segoe UI Semibold plain 12    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- small ----

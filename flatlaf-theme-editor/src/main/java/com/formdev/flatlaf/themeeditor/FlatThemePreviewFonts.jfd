@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[left]unrel"
-			"$rowConstraints": "[][bottom][bottom][bottom][bottom][bottom][bottom]para[][bottom][bottom][bottom][bottom][bottom]para[]para[]"
+			"$rowConstraints": "[][bottom][bottom][bottom][bottom][bottom][bottom]para[][bottom][bottom][bottom][bottom][bottom]para[][]para[]para[]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -106,17 +106,31 @@ new FormModel {
 				"value": "cell 0 12,gapx 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "lightPreview"
+				"fontType": "Light"
+				"fontStyle": "light"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 13,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "semiboldPreview"
+				"fontType": "Semibold"
+				"fontStyle": "semibold"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 14,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
 				name: "monospacedPreview"
 				"fontType": "Monospaced"
 				"fontStyle": "monospaced"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 13,gapx 12"
+				"value": "cell 0 15,gapx 12"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "scaleLabel"
 				"text": "Fonts are scaled by:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 14,gapx 12"
+				"value": "cell 0 16,gapx 12"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "scaleValueLabel"
@@ -126,11 +140,11 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 14"
+				"value": "cell 0 16"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 0 )
-			"size": new java.awt.Dimension( 335, 405 )
+			"size": new java.awt.Dimension( 335, 495 )
 		} )
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3"
@@ -162,7 +176,7 @@ new FormModel {
 				"value": "cell 1 0"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 5, 435 )
+			"location": new java.awt.Point( 5, 545 )
 			"size": new java.awt.Dimension( 235, 65 )
 		} )
 	}

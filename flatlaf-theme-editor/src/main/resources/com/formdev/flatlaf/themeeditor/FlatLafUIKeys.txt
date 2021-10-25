@@ -1071,9 +1071,11 @@ ViewportUI
 [style].h3
 [style].h4
 [style].large
+[style].light
 [style].medium
 [style].mini
 [style].monospaced
+[style].semibold
 [style].small
 activeCaption
 activeCaptionBorder
@@ -1102,12 +1104,14 @@ infoText
 laf.dark
 laf.scaleFactor
 large.font
+light.font
 medium.font
 menu
 menuText
 mini.font
 monospaced.font
 scrollbar
+semibold.font
 small.font
 swingx/TaskPaneUI
 text
