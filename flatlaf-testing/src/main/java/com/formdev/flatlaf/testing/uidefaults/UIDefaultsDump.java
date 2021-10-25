@@ -199,6 +199,8 @@ public class UIDefaultsDump
 				? "-linux"
 				: "");
 		String javaVersion = System.getProperty( "java.version" );
+		if( javaVersion.startsWith( "1.8.0_" ) )
+			javaVersion = "1.8.0_202";
 		File file = new File( dir, name + nameSuffix + "_"
 			+ javaVersion + osSuffix + ".txt" );
 
