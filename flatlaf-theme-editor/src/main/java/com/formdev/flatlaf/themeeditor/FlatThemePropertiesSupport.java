@@ -33,6 +33,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicLookAndFeel;
 import javax.swing.text.BadLocationException;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * Supports parsing content of text area in FlatLaf properties syntax.
@@ -58,6 +59,11 @@ class FlatThemePropertiesSupport
 	private long cacheInvalidationCounter;
 
 	private static Set<String> wildcardKeys;
+
+	private static final String platformPrefix =
+		SystemInfo.isWindows ? "[win]" :
+		SystemInfo.isMacOS ? "[mac]" :
+		SystemInfo.isLinux ? "[linux]" : "[unknown]";
 
 	FlatThemePropertiesSupport( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
@@ -148,7 +154,17 @@ class FlatThemePropertiesSupport
 	}
 
 	private String getPropertyOrWildcard( String key ) {
-		String value = getProperty( key );
+		// get platform specific properties
+		String value = getProperty( platformPrefix + key );
+		if( value != null )
+			return value;
+
+		// get light/dark specific properties
+		value = getProperty( (isDark( getBaseTheme() ) ? "[dark]" : "[light]") + key );
+		if( value != null )
+			return value;
+
+		value = getProperty( key );
 		if( value != null )
 			return value;
 
