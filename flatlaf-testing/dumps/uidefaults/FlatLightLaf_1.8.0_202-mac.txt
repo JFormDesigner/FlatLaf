@@ -134,3 +134,9 @@
 
 - small.font                     [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
 + small.font                     [active] Helvetica Neue plain 11    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- thin ----
+
+- thin.font                      [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
++ thin.font                      [active] HelveticaNeue-Thin plain 13    javax.swing.plaf.FontUIResource [UI]
