@@ -30,6 +30,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import com.formdev.flatlaf.icons.*;
+import com.formdev.flatlaf.util.ColorFunctions;
 
 /**
  * @author Karl Tauber
@@ -155,6 +156,19 @@ public class TestFlatStyling
 		testStyle( "margin", new Insets( 2, 14, 2, 14 ) , "$Button.margin" );
 		testStyle( "iconSize", new Dimension( 64, 64 ), "$DesktopIcon.iconSize" );
 		testStyle( "arrowType", "chevron", "$Component.arrowType" );
+	}
+
+	@Test
+	void parseVariables() {
+		Color background = UIManager.getColor( "Panel.background" );
+
+		testColorStyle( background.getRGB(), "@background" );
+		testColorStyle(
+			ColorFunctions.darken( background, 0.2f ).getRGB(),
+			"darken(@background,20%)" );
+		testColorStyle(
+			ColorFunctions.saturate( ColorFunctions.darken( background, 0.2f ), 0.1f ).getRGB(),
+			"saturate(darken(@background,20%),10%)" );
 	}
 
 	private void testColorStyle( int expectedRGB, String style ) {

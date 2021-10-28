@@ -886,6 +886,9 @@ public abstract class FlatLaf
 	public static Object parseDefaultsValue( String key, String value, Class<?> valueType )
 		throws IllegalArgumentException
 	{
+		// resolve variables
+		value = UIDefaultsLoader.resolveValueFromUIManager( value );
+
 		// parse value
 		Object val = UIDefaultsLoader.parseValue( key, value, valueType, null,
 			v -> UIDefaultsLoader.resolveValueFromUIManager( v ), Collections.emptyList() );
