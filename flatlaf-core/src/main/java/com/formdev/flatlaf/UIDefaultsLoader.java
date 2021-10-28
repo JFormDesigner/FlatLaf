@@ -80,7 +80,7 @@ class UIDefaultsLoader
 	private static final String OPTIONAL_PREFIX = "?";
 	private static final String WILDCARD_PREFIX = "*.";
 
-	private static final String FLATLAF_VARIABLES = "FlatLaf.variables";
+	private static final String KEY_VARIABLES = "FlatLaf.internal.variables";
 
 	private static int parseColorDepth;
 
@@ -263,7 +263,7 @@ class UIDefaultsLoader
 			}
 
 			// remember variables in defaults to allow using them in styles
-			defaults.put( FLATLAF_VARIABLES, variables );
+			defaults.put( KEY_VARIABLES, variables );
 		} catch( IOException ex ) {
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load properties files.", ex );
 		}
@@ -309,7 +309,7 @@ class UIDefaultsLoader
 	static String resolveValueFromUIManager( String value ) {
 		if( value.startsWith( VARIABLE_PREFIX ) ) {
 			@SuppressWarnings( "unchecked" )
-			Map<String, String> variables = (Map<String, String>) UIManager.get( FLATLAF_VARIABLES );
+			Map<String, String> variables = (Map<String, String>) UIManager.get( KEY_VARIABLES );
 			String newValue = (variables != null) ? variables.get( value ) : null;
 			if( newValue == null )
 				throw new IllegalArgumentException( "variable '" + value + "' not found" );

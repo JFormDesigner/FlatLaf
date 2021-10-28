@@ -373,7 +373,7 @@ public class UIDefaultsDump
 				Object value = entry.getValue();
 
 				String strKey = String.valueOf( key );
-				if( !keyFilter.test( strKey ) )
+				if( !keyFilter.test( strKey ) || strKey.startsWith( "FlatLaf.internal." ) )
 					return;
 
 				String prefix = keyPrefix( strKey );

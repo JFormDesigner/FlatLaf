@@ -87,7 +87,7 @@ public class UIDefaultsKeysDump
 		UIDefaults defaults = UIManager.getLookAndFeel().getDefaults();
 
 		for( Object key : defaults.keySet() ) {
-			if( key instanceof String )
+			if( key instanceof String && !((String)key).startsWith( "FlatLaf.internal." ) )
 				keys.add( (String) key );
 		}
 	}

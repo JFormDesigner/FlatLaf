@@ -313,6 +313,10 @@ public class FlatUIDefaultsInspector
 			if( !(key instanceof String) )
 				continue;
 
+			// ignore internal keys
+			if( ((String)key).startsWith( "FlatLaf.internal." ) )
+				continue;
+
 			// ignore values of type Class
 			Object value = defaults.get( key );
 			if( value instanceof Class )
