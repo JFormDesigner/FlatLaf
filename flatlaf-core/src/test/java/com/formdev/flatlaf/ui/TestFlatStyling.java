@@ -800,7 +800,7 @@ public class TestFlatStyling
 		ui.applyStyle( "style: grip" );
 		ui.applyStyle( "gripColor: #fff" );
 		ui.applyStyle( "gripDotCount: 3" );
-		ui.applyStyle( "gripDotSize: {integer}3" );
+		ui.applyStyle( "gripDotSize: 3" );
 		ui.applyStyle( "gripGap: 2" );
 
 		// JComponent properties
@@ -809,7 +809,7 @@ public class TestFlatStyling
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
 
 		// JSplitPane properties
-		ui.applyStyle( "dividerSize: {integer}20" );
+		ui.applyStyle( "dividerSize: 20" );
 	}
 
 	@Test
@@ -867,8 +867,8 @@ public class TestFlatStyling
 		// FlatTabbedPaneCloseIcon
 		ui.applyStyle( "closeSize: 16,16" );
 		ui.applyStyle( "closeArc: 4" );
-		ui.applyStyle( "closeCrossPlainSize: {float}7.5" );
-		ui.applyStyle( "closeCrossFilledSize: {float}7.5" );
+		ui.applyStyle( "closeCrossPlainSize: 7.5" );
+		ui.applyStyle( "closeCrossFilledSize: 7.5" );
 		ui.applyStyle( "closeCrossLineWidth: 1" );
 		ui.applyStyle( "closeBackground: #fff" );
 		ui.applyStyle( "closeForeground: #fff" );
@@ -911,7 +911,7 @@ public class TestFlatStyling
 		ui.applyStyle( "rowHeight: 30" );
 		ui.applyStyle( "showHorizontalLines: true" );
 		ui.applyStyle( "showVerticalLines: true" );
-		ui.applyStyle( "intercellSpacing: {dimension}1,1" );
+		ui.applyStyle( "intercellSpacing: 1,1" );
 	}
 
 	@Test

@@ -340,6 +340,7 @@ class UIDefaultsLoader
 
 	private static ValueType[] tempResultValueType = new ValueType[1];
 	private static Map<Class<?>, ValueType> javaValueTypes;
+	private static Map<String, ValueType> knownValueTypes;
 
 	static Object parseValue( String key, String value, Class<?> valueType ) {
 		return parseValue( key, value, valueType, null, v -> v, Collections.emptyList() );
@@ -444,6 +445,28 @@ class UIDefaultsLoader
 						// ignore
 					}
 				}
+			}
+
+			if( valueType == ValueType.UNKNOWN ) {
+				if( knownValueTypes == null ) {
+					// create lazy
+					knownValueTypes = new HashMap<>();
+					// SplitPane
+					knownValueTypes.put( "SplitPane.dividerSize", ValueType.INTEGER );
+					knownValueTypes.put( "SplitPaneDivider.gripDotSize", ValueType.INTEGER );
+					knownValueTypes.put( "dividerSize", ValueType.INTEGER );
+					knownValueTypes.put( "gripDotSize", ValueType.INTEGER );
+					// TabbedPane
+					knownValueTypes.put( "TabbedPane.closeCrossPlainSize", ValueType.FLOAT );
+					knownValueTypes.put( "TabbedPane.closeCrossFilledSize", ValueType.FLOAT );
+					knownValueTypes.put( "closeCrossPlainSize", ValueType.FLOAT );
+					knownValueTypes.put( "closeCrossFilledSize", ValueType.FLOAT );
+					// Table
+					knownValueTypes.put( "Table.intercellSpacing", ValueType.DIMENSION );
+					knownValueTypes.put( "intercellSpacing", ValueType.DIMENSION );
+				}
+
+				valueType = knownValueTypes.getOrDefault( key, ValueType.UNKNOWN );
 			}
 
 			// determine value type from key
