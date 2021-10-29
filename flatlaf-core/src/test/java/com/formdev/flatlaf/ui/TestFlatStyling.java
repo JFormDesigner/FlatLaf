@@ -201,7 +201,7 @@ public class TestFlatStyling
 
 		ui.applyStyle( b, "help.focusWidth: 2" );
 		ui.applyStyle( b, "help.focusColor: #fff" );
-		ui.applyStyle( b, "help.innerFocusWidth: {float}0.5" );
+		ui.applyStyle( b, "help.innerFocusWidth: 0.5" );
 		ui.applyStyle( b, "help.borderWidth: 1" );
 
 		ui.applyStyle( b, "help.borderColor: #fff" );
@@ -869,7 +869,7 @@ public class TestFlatStyling
 		ui.applyStyle( "closeArc: 4" );
 		ui.applyStyle( "closeCrossPlainSize: {float}7.5" );
 		ui.applyStyle( "closeCrossFilledSize: {float}7.5" );
-		ui.applyStyle( "closeCrossLineWidth: {float}1" );
+		ui.applyStyle( "closeCrossLineWidth: 1" );
 		ui.applyStyle( "closeBackground: #fff" );
 		ui.applyStyle( "closeForeground: #fff" );
 		ui.applyStyle( "closeHoverBackground: #fff" );
@@ -1124,7 +1124,7 @@ public class TestFlatStyling
 		applyStyle.accept( "default.borderWidth: 2" );
 		applyStyle.accept( "toolbar.margin: 1,2,3,4" );
 		applyStyle.accept( "toolbar.spacingInsets: 1,2,3,4" );
-		applyStyle.accept( "toolbar.focusWidth: {float}1.5" );
+		applyStyle.accept( "toolbar.focusWidth: 1.5" );
 		applyStyle.accept( "arc: 6" );
 	}
 
@@ -1146,8 +1146,8 @@ public class TestFlatStyling
 
 	private void flatBorder( Consumer<String> applyStyle ) {
 		applyStyle.accept( "focusWidth: 2" );
-		applyStyle.accept( "innerFocusWidth: {float}0.5" );
-		applyStyle.accept( "innerOutlineWidth: {float}1.5" );
+		applyStyle.accept( "innerFocusWidth: 0.5" );
+		applyStyle.accept( "innerOutlineWidth: 1.5" );
 		applyStyle.accept( "focusColor: #fff" );
 		applyStyle.accept( "borderColor: #fff" );
 		applyStyle.accept( "disabledBorderColor: #fff" );

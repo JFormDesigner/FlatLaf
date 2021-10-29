@@ -335,7 +335,7 @@ class UIDefaultsLoader
 		throw new IllegalArgumentException( "property value type '" + newValue.getClass().getName() + "' not supported in references" );
 	}
 
-	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR, FONT,
+	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, INTEGERORFLOAT, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR, FONT,
 		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
 
 	private static ValueType[] tempResultValueType = new ValueType[1];
@@ -468,7 +468,7 @@ class UIDefaultsLoader
 				else if( key.endsWith( "Size" ) )
 					valueType = ValueType.DIMENSION;
 				else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
-					valueType = ValueType.INTEGER;
+					valueType = ValueType.INTEGERORFLOAT;
 				else if( key.endsWith( "Char" ) )
 					valueType = ValueType.CHARACTER;
 				else if( key.endsWith( "grayFilter" ) )
@@ -484,6 +484,7 @@ class UIDefaultsLoader
 			case BOOLEAN:		return parseBoolean( value );
 			case CHARACTER:		return parseCharacter( value );
 			case INTEGER:		return parseInteger( value, true );
+			case INTEGERORFLOAT:return parseIntegerOrFloat( value, true );
 			case FLOAT:			return parseFloat( value, true );
 			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
 			case ICON:			return parseInstance( value, addonClassLoaders );
@@ -1156,6 +1157,20 @@ class UIDefaultsLoader
 		} catch( NumberFormatException ex ) {
 			if( reportError )
 				throw new NumberFormatException( "invalid integer '" + value + "'" );
+		}
+		return null;
+	}
+
+	private static Number parseIntegerOrFloat( String value, boolean reportError ) {
+		try {
+			return Integer.parseInt( value );
+		} catch( NumberFormatException ex ) {
+			try {
+				return Float.parseFloat( value );
+			} catch( NumberFormatException ex2 ) {
+				if( reportError )
+					throw new NumberFormatException( "invalid integer or float '" + value + "'" );
+			}
 		}
 		return null;
 	}

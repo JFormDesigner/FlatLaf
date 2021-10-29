@@ -38,7 +38,7 @@
 - Component.innerFocusWidth      0.5
 + Component.innerFocusWidth      0
 
-- Component.innerOutlineWidth    1.0
+- Component.innerOutlineWidth    1
 + Component.innerOutlineWidth    0
 
 

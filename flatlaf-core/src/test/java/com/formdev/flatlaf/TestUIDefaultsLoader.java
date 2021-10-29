@@ -56,7 +56,7 @@ public class TestUIDefaultsLoader
 		assertEquals( 123, UIDefaultsLoader.parseValue( "dummy", "123", null ) );
 		assertEquals( 123, UIDefaultsLoader.parseValue( "dummyWidth", "123", null ) );
 		assertEquals( 1.23f, UIDefaultsLoader.parseValue( "dummy", "1.23", null ) );
-		assertEquals( 1.23f, UIDefaultsLoader.parseValue( "dummyWidth", "{float}1.23", null ) );
+		assertEquals( 1.23f, UIDefaultsLoader.parseValue( "dummyWidth", "1.23", null ) );
 
 		assertEquals( new Insets( 2,2,2,2 ), UIDefaultsLoader.parseValue( "dummyInsets", "2,2,2,2", null ) );
 		assertEquals( new Dimension( 2,2 ), UIDefaultsLoader.parseValue( "dummySize", "2,2", null ) );

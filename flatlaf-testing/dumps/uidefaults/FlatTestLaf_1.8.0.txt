@@ -234,7 +234,7 @@ Component.focusedBorderColor   #466d94  HSL 210  36  43    javax.swing.plaf.Colo
 Component.grayFilter           [lazy] [unknown type] com.formdev.flatlaf.util.GrayFilter
 Component.hideMnemonics        true
 Component.innerFocusWidth      0.5
-Component.innerOutlineWidth    1.0
+Component.innerOutlineWidth    1
 Component.minimumWidth         64
 
 
@@ -1006,7 +1006,7 @@ TabbedPane.buttonInsets        2,1,2,1    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.buttonPressedBackground #ffc800  HSL  47 100  50    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.closeArc            999
 TabbedPane.closeCrossFilledSize 6.5
-TabbedPane.closeCrossLineWidth 2.0
+TabbedPane.closeCrossLineWidth 2
 TabbedPane.closeCrossPlainSize 12.0
 TabbedPane.closeForeground     #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.closeHoverBackground #aa0000  HSL   0 100  33    javax.swing.plaf.ColorUIResource [UI]
