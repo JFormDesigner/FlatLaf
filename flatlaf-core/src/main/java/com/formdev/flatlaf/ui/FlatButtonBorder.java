@@ -58,10 +58,7 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatButtonBorder
 	extends FlatBorder
 {
-	@Styleable protected Color borderColor = FlatUIUtils.getUIColor( "Button.startBorderColor", "Button.borderColor" );
 	protected Color endBorderColor = UIManager.getColor( "Button.endBorderColor" );
-	@Styleable protected Color disabledBorderColor = UIManager.getColor( "Button.disabledBorderColor" );
-	@Styleable protected Color focusedBorderColor = UIManager.getColor( "Button.focusedBorderColor" );
 	@Styleable protected Color hoverBorderColor = UIManager.getColor( "Button.hoverBorderColor" );
 
 	@Styleable(dot=true) protected Color defaultBorderColor = FlatUIUtils.getUIColor( "Button.default.startBorderColor", "Button.default.borderColor" );
@@ -82,6 +79,10 @@ public class FlatButtonBorder
 
 	public FlatButtonBorder() {
 		innerFocusWidth = FlatUIUtils.getUIFloat( "Button.innerFocusWidth", innerFocusWidth );
+
+		borderColor = FlatUIUtils.getUIColor( "Button.startBorderColor", "Button.borderColor" );
+		disabledBorderColor = UIManager.getColor( "Button.disabledBorderColor" );
+		focusedBorderColor = UIManager.getColor( "Button.focusedBorderColor" );
 	}
 
 	@Override
