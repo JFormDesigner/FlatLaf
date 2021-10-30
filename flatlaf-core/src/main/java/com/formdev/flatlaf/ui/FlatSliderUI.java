@@ -65,6 +65,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Slider.trackWidth				int
  * @uiDefault Slider.thumbSize				Dimension
  * @uiDefault Slider.focusWidth				int
+ * @uiDefault Slider.thumbBorderWidth		int or float
+ *
  * @uiDefault Slider.trackValueColor		Color	optional; defaults to Slider.thumbColor
  * @uiDefault Slider.trackColor				Color
  * @uiDefault Slider.thumbColor				Color
@@ -86,6 +88,7 @@ public class FlatSliderUI
 	@Styleable protected int trackWidth;
 	@Styleable protected Dimension thumbSize;
 	@Styleable protected int focusWidth;
+	/** @since 2 */ @Styleable protected float thumbBorderWidth;
 
 	@Styleable protected Color trackValueColor;
 	@Styleable protected Color trackColor;
@@ -139,6 +142,7 @@ public class FlatSliderUI
 			thumbSize = new Dimension( thumbWidth, thumbWidth );
 		}
 		focusWidth = FlatUIUtils.getUIInt( "Slider.focusWidth", 4 );
+		thumbBorderWidth = FlatUIUtils.getUIFloat( "Slider.thumbBorderWidth", 1 );
 
 		trackValueColor = FlatUIUtils.getUIColor( "Slider.trackValueColor", "Slider.thumbColor" );
 		trackColor = UIManager.getColor( "Slider.trackColor" );
@@ -405,11 +409,11 @@ debug*/
 		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor,
 			(foreground != defaultForeground) ? foreground : focusBaseColor );
 
-		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, focusWidth );
+		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, thumbBorderWidth, focusWidth );
 	}
 
 	public static void paintThumb( Graphics g, JSlider slider, Rectangle thumbRect, boolean roundThumb,
-		Color thumbColor, Color thumbBorderColor, Color focusedColor, int focusWidth )
+		Color thumbColor, Color thumbBorderColor, Color focusedColor, float thumbBorderWidth, int focusWidth )
 	{
 		double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
@@ -418,18 +422,20 @@ debug*/
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {
 					paintThumbImpl( g, slider, x2, y2, width2, height2,
 						roundThumb, thumbColor, thumbBorderColor, focusedColor,
+						(float) (thumbBorderWidth * scaleFactor),
 						(float) (focusWidth * scaleFactor) );
 				} );
 			return;
 		}
 
 		paintThumbImpl( g, slider, thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height,
-			roundThumb, thumbColor, thumbBorderColor, focusedColor, focusWidth );
+			roundThumb, thumbColor, thumbBorderColor, focusedColor, thumbBorderWidth, focusWidth );
 
 	}
 
 	private static void paintThumbImpl( Graphics g, JSlider slider, int x, int y, int width, int height,
-		boolean roundThumb, Color thumbColor, Color thumbBorderColor, Color focusedColor, float focusWidth )
+		boolean roundThumb, Color thumbColor, Color thumbBorderColor, Color focusedColor,
+		float thumbBorderWidth, float focusWidth )
 	{
 		int fw = Math.round( UIScale.scale( focusWidth ) );
 		int tx = x + fw;
@@ -451,7 +457,7 @@ debug*/
 				((Graphics2D)g).fill( createRoundThumbShape( tx, ty, tw, th ) );
 
 				// paint thumb background
-				float lw = UIScale.scale( 1f );
+				float lw = UIScale.scale( thumbBorderWidth );
 				g.setColor( thumbColor );
 				((Graphics2D)g).fill( createRoundThumbShape( tx + lw, ty + lw,
 					tw - lw - lw, th - lw - lw ) );
@@ -492,7 +498,7 @@ debug*/
 					g2.fill( createDirectionalThumbShape( fw, fw, tw, th, 0 ) );
 
 					// paint thumb background
-					float lw = UIScale.scale( 1f );
+					float lw = UIScale.scale( thumbBorderWidth );
 					g2.setColor( thumbColor );
 					g2.fill( createDirectionalThumbShape( fw + lw, fw + lw,
 						tw - lw - lw, th - lw - lw - (lw * 0.4142f), 0 ) );

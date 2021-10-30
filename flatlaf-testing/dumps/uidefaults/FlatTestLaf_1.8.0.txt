@@ -227,6 +227,7 @@ ComboBoxUI                     com.formdev.flatlaf.ui.FlatComboBoxUI
 Component.arc                  5
 Component.arrowType            chevron
 Component.borderColor          #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+Component.borderWidth          1
 Component.disabledBorderColor  #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
 Component.focusColor           #97c3f3  HSL 211  79  77    javax.swing.plaf.ColorUIResource [UI]
 Component.focusWidth           0
@@ -919,6 +920,7 @@ Slider.focus                   #696969  HSL   0   0  41    javax.swing.plaf.Colo
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Slider.focusWidth              4
 Slider.focusedColor            #97c3f3  HSL 211  79  77    javax.swing.plaf.ColorUIResource [UI]
+Slider.focusedThumbBorderColor #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
 Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
@@ -932,6 +934,7 @@ Slider.pressedThumbColor       #00ff00  HSL 120 100  50    javax.swing.plaf.Colo
 Slider.pressedTrackColor       #88ff88  HSL 120 100  77    javax.swing.plaf.ColorUIResource [UI]
 Slider.shadow                  #a0a0a0  HSL   0   0  63    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbBorderColor        #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+Slider.thumbBorderWidth        1.5
 Slider.thumbColor              #ffaaaa  HSL   0 100  83    javax.swing.plaf.ColorUIResource [UI]
 Slider.thumbSize               12,12    javax.swing.plaf.DimensionUIResource [UI]
 Slider.tickColor               #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]

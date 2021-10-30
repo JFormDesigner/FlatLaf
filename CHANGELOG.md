@@ -32,6 +32,12 @@ FlatLaf Change Log
     - arrow keys move focus within toolbar
     - tab-key moves focus out of toolbar
     - if moving focus into the toolbar, focus recently focused toolbar button
+- ComboBox, Spinner, TextField and subclasses: Support specifying width of
+  border (see UI value `Component.borderWidth`).
+- CheckBox and RadioButton: Support specifying width of icon border (see UI
+  value `CheckBox.icon.borderWidth`).
+- Slider: Support specifying width of thumb border (see UI value
+  `Slider.thumbBorderWidth`).
 - Added more color functions to class `ColorFunctions` for easy use in
   applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
   `tint()`, `shade()` and `luma()`.

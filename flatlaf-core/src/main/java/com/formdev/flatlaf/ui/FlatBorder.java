@@ -38,17 +38,19 @@ import com.formdev.flatlaf.util.DerivedColor;
 
 /**
  * Border for various components (e.g. {@link javax.swing.JTextField}).
- *
+ * <p>
  * There is empty space around the component border, if Component.focusWidth is greater than zero,
  * which is used to paint outer focus border.
- *
+ * <p>
  * Because there is empty space (if outer focus border is not painted),
  * UI delegates that use this border (or subclasses) must invoke
- * {@link FlatUIUtils#paintParentBackground} to paint the empty space correctly.
+ * {@link FlatUIUtils#paintParentBackground} to fill the empty space correctly.
  *
  * @uiDefault Component.focusWidth						int
  * @uiDefault Component.innerFocusWidth					int or float
  * @uiDefault Component.innerOutlineWidth				int or float
+ * @uiDefault Component.borderWidth						int or float
+ *
  * @uiDefault Component.focusColor						Color
  * @uiDefault Component.borderColor						Color
  * @uiDefault Component.disabledBorderColor				Color
@@ -69,6 +71,8 @@ public class FlatBorder
 	@Styleable protected int focusWidth = UIManager.getInt( "Component.focusWidth" );
 	@Styleable protected float innerFocusWidth = FlatUIUtils.getUIFloat( "Component.innerFocusWidth", 0 );
 	@Styleable protected float innerOutlineWidth = FlatUIUtils.getUIFloat( "Component.innerOutlineWidth", 0 );
+	/** @since 2 */ @Styleable protected float borderWidth = FlatUIUtils.getUIFloat( "Component.borderWidth", 1 );
+
 	@Styleable protected Color focusColor = UIManager.getColor( "Component.focusColor" );
 	@Styleable protected Color borderColor = UIManager.getColor( "Component.borderColor" );
 	@Styleable protected Color disabledBorderColor = UIManager.getColor( "Component.disabledBorderColor" );
@@ -105,7 +109,7 @@ public class FlatBorder
 
 			float focusWidth = scale( (float) getFocusWidth( c ) );
 			float focusInnerWidth = 0;
-			float borderWidth = scale( (float) getBorderWidth( c ) );
+			float borderWidth = scale( getBorderWidth( c ) );
 			float arc = scale( (float) getArc( c ) );
 			Color outlineColor = getOutlineColor( c );
 			Color focusColor = null;
@@ -264,8 +268,8 @@ public class FlatBorder
 	 * Returns the (unscaled) line thickness used to paint the border.
 	 * This may be different to {@link #getLineWidth}.
 	 */
-	protected int getBorderWidth( Component c ) {
-		return getLineWidth( c );
+	protected float getBorderWidth( Component c ) {
+		return borderWidth;
 	}
 
 	/**

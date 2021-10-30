@@ -76,6 +76,7 @@ CheckBox.foreground
 CheckBox.icon
 CheckBox.icon.background
 CheckBox.icon.borderColor
+CheckBox.icon.borderWidth
 CheckBox.icon.checkmarkColor
 CheckBox.icon.disabledBackground
 CheckBox.icon.disabledBorderColor
@@ -158,6 +159,7 @@ ComboBox.buttonHighlight
 ComboBox.buttonHoverArrowColor
 ComboBox.buttonPressedArrowColor
 ComboBox.buttonSeparatorColor
+ComboBox.buttonSeparatorWidth
 ComboBox.buttonShadow
 ComboBox.buttonStyle
 ComboBox.disabledBackground
@@ -180,6 +182,7 @@ Component.accentColor
 Component.arc
 Component.arrowType
 Component.borderColor
+Component.borderWidth
 Component.custom.borderColor
 Component.disabledBorderColor
 Component.error.borderColor
@@ -687,6 +690,7 @@ Slider.focusInputMap.RightToLeft
 Slider.focusInsets
 Slider.focusWidth
 Slider.focusedColor
+Slider.focusedThumbBorderColor
 Slider.font
 Slider.foreground
 Slider.highlight
@@ -700,6 +704,7 @@ Slider.pressedThumbColor
 Slider.pressedTrackColor
 Slider.shadow
 Slider.thumbBorderColor
+Slider.thumbBorderWidth
 Slider.thumbColor
 Slider.thumbSize
 Slider.tickColor
@@ -719,6 +724,7 @@ Spinner.buttonDisabledSeparatorColor
 Spinner.buttonHoverArrowColor
 Spinner.buttonPressedArrowColor
 Spinner.buttonSeparatorColor
+Spinner.buttonSeparatorWidth
 Spinner.buttonStyle
 Spinner.disabledBackground
 Spinner.disabledForeground

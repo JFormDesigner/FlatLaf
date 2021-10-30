@@ -409,7 +409,7 @@ public class FlatUIUtils
 	 * <strong>Border</strong>:
 	 * The outside bounds of the painted border are
 	 * {@code [x + focusWidth, y + focusWidth, width - (focusWidth * 2), height - (focusWidth * 2)]}.
-	 * The thickness of the painted border is {@code lineWidth}.
+	 * The thickness of the painted border is {@code borderWidth}.
 	 *
 	 * @param g the graphics context used for painting
 	 * @param x the x coordinate of the component
@@ -422,7 +422,7 @@ public class FlatUIUtils
 	 *                           the painted thickness of the focus border is {@code (focusWidth * focusWidthFraction) + focusInnerWidth}
 	 * @param focusInnerWidth the inner width of the focus border, or {@code 0};
 	 *                        if a border is painted then {@code focusInnerWidth} needs to be larger
-	 *                        than {@code lineWidth} to be not hidden by the border
+	 *                        than {@code borderWidth} to be not hidden by the border
 	 * @param borderWidth the width of the border, or {@code 0}
 	 * @param arc the arc diameter used for the outside shape of the component border;
 	 *            the other needed arc diameters are computed from this arc diameter

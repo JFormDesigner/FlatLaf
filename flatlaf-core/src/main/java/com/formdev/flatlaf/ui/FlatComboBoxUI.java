@@ -101,6 +101,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.buttonBackground			Color
  * @uiDefault ComboBox.buttonEditableBackground	Color
  * @uiDefault ComboBox.buttonFocusedBackground	Color	optional; defaults to ComboBox.focusedBackground
+ * @uiDefault ComboBox.buttonSeparatorWidth		int or float	optional; defaults to Component.borderWidth
  * @uiDefault ComboBox.buttonSeparatorColor		Color	optional
  * @uiDefault ComboBox.buttonDisabledSeparatorColor Color	optional
  * @uiDefault ComboBox.buttonArrowColor			Color
@@ -129,6 +130,7 @@ public class FlatComboBoxUI
 	@Styleable protected Color buttonBackground;
 	@Styleable protected Color buttonEditableBackground;
 	@Styleable protected Color buttonFocusedBackground;
+	/** @since 2 */ @Styleable protected float buttonSeparatorWidth;
 	/** @since 2 */ @Styleable protected Color buttonSeparatorColor;
 	/** @since 2 */ @Styleable protected Color buttonDisabledSeparatorColor;
 	@Styleable protected Color buttonArrowColor;
@@ -223,6 +225,7 @@ public class FlatComboBoxUI
 		buttonBackground = UIManager.getColor( "ComboBox.buttonBackground" );
 		buttonFocusedBackground = UIManager.getColor( "ComboBox.buttonFocusedBackground" );
 		buttonEditableBackground = UIManager.getColor( "ComboBox.buttonEditableBackground" );
+		buttonSeparatorWidth = FlatUIUtils.getUIFloat( "ComboBox.buttonSeparatorWidth", FlatUIUtils.getUIFloat( "Component.borderWidth", 1 ) );
 		buttonSeparatorColor = UIManager.getColor( "ComboBox.buttonSeparatorColor" );
 		buttonDisabledSeparatorColor = UIManager.getColor( "ComboBox.buttonDisabledSeparatorColor" );
 		buttonArrowColor = UIManager.getColor( "ComboBox.buttonArrowColor" );
@@ -556,7 +559,7 @@ public class FlatComboBoxUI
 				Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
 				if( separatorColor != null ) {
 					g2.setColor( separatorColor );
-					float lw = scale( 1f );
+					float lw = scale( buttonSeparatorWidth );
 					float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
 					g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2)) );
 				}

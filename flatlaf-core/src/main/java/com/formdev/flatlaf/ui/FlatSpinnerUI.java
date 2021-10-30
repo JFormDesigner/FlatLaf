@@ -72,6 +72,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * @uiDefault Spinner.disabledForeground		Color
  * @uiDefault Spinner.focusedBackground			Color	optional
  * @uiDefault Spinner.buttonBackground			Color
+ * @uiDefault Spinner.buttonSeparatorWidth		int or float	optional; defaults to Component.borderWidth
  * @uiDefault Spinner.buttonSeparatorColor		Color	optional
  * @uiDefault Spinner.buttonDisabledSeparatorColor Color	optional
  * @uiDefault Spinner.buttonArrowColor			Color
@@ -96,6 +97,7 @@ public class FlatSpinnerUI
 	@Styleable protected Color disabledForeground;
 	@Styleable protected Color focusedBackground;
 	@Styleable protected Color buttonBackground;
+	/** @since 2 */ @Styleable protected float buttonSeparatorWidth;
 	/** @since 2 */ @Styleable protected Color buttonSeparatorColor;
 	/** @since 2 */ @Styleable protected Color buttonDisabledSeparatorColor;
 	@Styleable protected Color buttonArrowColor;
@@ -132,6 +134,7 @@ public class FlatSpinnerUI
 		disabledForeground = UIManager.getColor( "Spinner.disabledForeground" );
 		focusedBackground = UIManager.getColor( "Spinner.focusedBackground" );
 		buttonBackground = UIManager.getColor( "Spinner.buttonBackground" );
+		buttonSeparatorWidth = FlatUIUtils.getUIFloat( "Spinner.buttonSeparatorWidth", FlatUIUtils.getUIFloat( "Component.borderWidth", 1 ) );
 		buttonSeparatorColor = UIManager.getColor( "Spinner.buttonSeparatorColor" );
 		buttonDisabledSeparatorColor = UIManager.getColor( "Spinner.buttonDisabledSeparatorColor" );
 		buttonArrowColor = UIManager.getColor( "Spinner.buttonArrowColor" );
@@ -397,7 +400,7 @@ public class FlatSpinnerUI
 			Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
 			if( separatorColor != null ) {
 				g2.setColor( separatorColor );
-				float lw = scale( 1f );
+				float lw = scale( buttonSeparatorWidth );
 				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
 				g2.fill( new Rectangle2D.Float( lx, focusWidth, lw, height - 1 - (focusWidth * 2) ) );
 			}

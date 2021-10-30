@@ -228,6 +228,7 @@ Component.accentColor          #2675bf  HSL 209  67  45    javax.swing.plaf.Colo
 Component.arc                  5
 Component.arrowType            chevron
 Component.borderColor          #c2c2c2  HSL   0   0  76    javax.swing.plaf.ColorUIResource [UI]
+Component.borderWidth          1
 Component.custom.borderColor   #f38d8d  HSL   0  81  75    com.formdev.flatlaf.util.DerivedColor [UI]    desaturate(20%) lighten(25%)
 Component.disabledBorderColor  #cecece  HSL   0   0  81    javax.swing.plaf.ColorUIResource [UI]
 Component.error.borderColor    #ebb8bc  HSL 355  56  82    javax.swing.plaf.ColorUIResource [UI]

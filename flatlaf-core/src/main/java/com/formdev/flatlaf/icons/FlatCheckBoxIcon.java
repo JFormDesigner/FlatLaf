@@ -34,15 +34,19 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
  * Icon for {@link javax.swing.JCheckBox}.
- *
- * Note: If Component.focusWidth is greater than zero, then the outline focus border
+ * <p>
+ * <strong>Note</strong>:
+ *       If Component.focusWidth is greater than zero, then the outer focus border
  *       is painted outside of the icon bounds. Make sure that the checkbox
  *       has margins, which are equal or greater than focusWidth.
  *
- * @uiDefault CheckBox.icon.style						String	optional; "outline"/null (default) or "filled"
+ * @uiDefault CheckBox.icon.style						String	optional; "outlined"/null (default) or "filled"
  * @uiDefault Component.focusWidth						int
+ * @uiDefault Component.borderWidth						int
  * @uiDefault Component.focusColor						Color
  * @uiDefault CheckBox.icon.focusWidth					int		optional; defaults to Component.focusWidth
+ * @uiDefault CheckBox.icon.borderWidth					int or float	optional; defaults to Component.borderWidth
+ *
  * @uiDefault CheckBox.icon.focusColor					Color	optional; defaults to Component.focusColor
  * @uiDefault CheckBox.icon.borderColor					Color
  * @uiDefault CheckBox.icon.background					Color
@@ -74,6 +78,8 @@ public class FlatCheckBoxIcon
 		UIManager.getInt( "Component.focusWidth" ), style );
 	@Styleable protected Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusColor",
 		UIManager.getColor( "Component.focusColor" ) );
+	/** @since 2 */ @Styleable protected float borderWidth = getUIFloat( "CheckBox.icon.borderWidth",
+		FlatUIUtils.getUIFloat( "Component.borderWidth", 1 ), style );
 	@Styleable protected int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
 
 	// enabled
@@ -115,11 +121,21 @@ public class FlatCheckBoxIcon
 
 	protected static int getUIInt( String key, int defaultValue, String style ) {
 		if( style != null ) {
-			Object value = UIManager.get( styleKey( key, style ) );
-			if( value instanceof Integer )
-				return (Integer) value;
+			int value = FlatUIUtils.getUIInt( styleKey( key, style ), Integer.MIN_VALUE );
+			if( value != Integer.MIN_VALUE )
+				return value;
 		}
 		return FlatUIUtils.getUIInt( key, defaultValue );
+	}
+
+	/** @since 2 */
+	protected static float getUIFloat( String key, float defaultValue, String style ) {
+		if( style != null ) {
+			float value = FlatUIUtils.getUIFloat( styleKey( key, style ), Float.MIN_VALUE );
+			if( value != Float.MIN_VALUE )
+				return value;
+		}
+		return FlatUIUtils.getUIFloat( key, defaultValue );
 	}
 
 	private static String styleKey( String key, String style ) {
@@ -180,7 +196,7 @@ public class FlatCheckBoxIcon
 	}
 
 	protected void paintFocusBorder( Component c, Graphics2D g ) {
-		// the outline focus border is painted outside of the icon
+		// the outer focus border is painted outside of the icon
 		int wh = ICON_SIZE - 1 + (focusWidth * 2);
 		int arcwh = arc + (focusWidth * 2);
 		g.fillRoundRect( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh );
@@ -192,8 +208,10 @@ public class FlatCheckBoxIcon
 	}
 
 	protected void paintBackground( Component c, Graphics2D g ) {
+		float xy = borderWidth;
+		float wh = 14 - (borderWidth * 2);
 		int arcwh = arc - 1;
-		g.fillRoundRect( 2, 1, 12, 12, arcwh, arcwh );
+		g.fill( new RoundRectangle2D.Float( 1 + xy, xy, wh, wh, arcwh, arcwh ) );
 	}
 
 	protected void paintCheckmark( Component c, Graphics2D g ) {

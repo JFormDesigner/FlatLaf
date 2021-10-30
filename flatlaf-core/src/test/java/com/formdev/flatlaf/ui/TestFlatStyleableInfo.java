@@ -164,6 +164,7 @@ public class TestFlatStyleableInfo
 			"buttonBackground", Color.class,
 			"buttonFocusedBackground", Color.class,
 			"buttonEditableBackground", Color.class,
+			"buttonSeparatorWidth", float.class,
 			"buttonSeparatorColor", Color.class,
 			"buttonDisabledSeparatorColor", Color.class,
 			"buttonArrowColor", Color.class,
@@ -456,7 +457,7 @@ public class TestFlatStyleableInfo
 		radioButton( expected );
 
 		expectedMap( expected,
-			"icon.centerDiameter", int.class
+			"icon.centerDiameter", float.class
 		);
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
@@ -470,6 +471,7 @@ public class TestFlatStyleableInfo
 
 			"icon.focusWidth", int.class,
 			"icon.focusColor", Color.class,
+			"icon.borderWidth", float.class,
 			"icon.arc", int.class,
 
 			// enabled
@@ -580,6 +582,7 @@ public class TestFlatStyleableInfo
 			"trackWidth", int.class,
 			"thumbSize", Dimension.class,
 			"focusWidth", int.class,
+			"thumbBorderWidth", float.class,
 
 			"trackValueColor", Color.class,
 			"trackColor", Color.class,
@@ -611,6 +614,7 @@ public class TestFlatStyleableInfo
 			"disabledForeground", Color.class,
 			"focusedBackground", Color.class,
 			"buttonBackground", Color.class,
+			"buttonSeparatorWidth", float.class,
 			"buttonSeparatorColor", Color.class,
 			"buttonDisabledSeparatorColor", Color.class,
 			"buttonArrowColor", Color.class,
@@ -901,23 +905,23 @@ public class TestFlatStyleableInfo
 		flatBorder( expected );
 
 		expectedMap( expected,
+			"arc", int.class,
+
 			"borderColor", Color.class,
 			"disabledBorderColor", Color.class,
 			"focusedBorderColor", Color.class,
 			"hoverBorderColor", Color.class,
 
+			"default.borderWidth", float.class,
 			"default.borderColor", Color.class,
 			"default.focusedBorderColor", Color.class,
 			"default.focusColor", Color.class,
 			"default.hoverBorderColor", Color.class,
-			"toolbar.focusColor", Color.class,
 
-			"borderWidth", int.class,
-			"default.borderWidth", int.class,
-			"toolbar.margin", Insets.class,
-			"toolbar.spacingInsets", Insets.class,
 			"toolbar.focusWidth", float.class,
-			"arc", int.class
+			"toolbar.focusColor", Color.class,
+			"toolbar.margin", Insets.class,
+			"toolbar.spacingInsets", Insets.class
 		);
 	}
 
@@ -946,6 +950,8 @@ public class TestFlatStyleableInfo
 			"focusWidth", int.class,
 			"innerFocusWidth", float.class,
 			"innerOutlineWidth", float.class,
+			"borderWidth", float.class,
+
 			"focusColor", Color.class,
 			"borderColor", Color.class,
 			"disabledBorderColor", Color.class,
@@ -1026,7 +1032,7 @@ public class TestFlatStyleableInfo
 		flatCheckBoxIcon( expected );
 
 		expectedMap( expected,
-			"centerDiameter", int.class
+			"centerDiameter", float.class
 		);
 
 		assertMapEquals( expected, icon.getStyleableInfos() );
@@ -1036,6 +1042,7 @@ public class TestFlatStyleableInfo
 		expectedMap( expected,
 			"focusWidth", int.class,
 			"focusColor", Color.class,
+			"borderWidth", float.class,
 			"arc", int.class,
 
 			// enabled

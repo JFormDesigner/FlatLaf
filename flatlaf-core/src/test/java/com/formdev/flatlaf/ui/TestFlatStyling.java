@@ -294,6 +294,7 @@ public class TestFlatStyling
 		ui.applyStyle( "buttonBackground: #fff" );
 		ui.applyStyle( "buttonFocusedBackground: #fff" );
 		ui.applyStyle( "buttonEditableBackground: #fff" );
+		ui.applyStyle( "buttonSeparatorWidth: 1.5" );
 		ui.applyStyle( "buttonSeparatorColor: #fff" );
 		ui.applyStyle( "buttonDisabledSeparatorColor: #fff" );
 		ui.applyStyle( "buttonArrowColor: #fff" );
@@ -609,6 +610,7 @@ public class TestFlatStyling
 
 		ui.applyStyle( b, "icon.focusWidth: 2" );
 		ui.applyStyle( b, "icon.focusColor: #fff" );
+		ui.applyStyle( b, "icon.borderWidth: 1" );
 		ui.applyStyle( b, "icon.arc: 5" );
 
 		// enabled
@@ -719,6 +721,7 @@ public class TestFlatStyling
 		ui.applyStyle( "trackWidth: 2" );
 		ui.applyStyle( "thumbSize: 12,12" );
 		ui.applyStyle( "focusWidth: 4" );
+		ui.applyStyle( "thumbBorderWidth: 1.5" );
 
 		ui.applyStyle( "trackValueColor: #fff" );
 		ui.applyStyle( "trackColor: #fff" );
@@ -769,6 +772,7 @@ public class TestFlatStyling
 		ui.applyStyle( "disabledForeground: #fff" );
 		ui.applyStyle( "focusedBackground: #fff" );
 		ui.applyStyle( "buttonBackground: #fff" );
+		ui.applyStyle( "buttonSeparatorWidth: 1.5" );
 		ui.applyStyle( "buttonSeparatorColor: #fff" );
 		ui.applyStyle( "buttonDisabledSeparatorColor: #fff" );
 		ui.applyStyle( "buttonArrowColor: #fff" );
@@ -1109,23 +1113,23 @@ public class TestFlatStyling
 	private void flatButtonBorder( Consumer<String> applyStyle ) {
 		flatBorder( applyStyle );
 
+		applyStyle.accept( "arc: 6" );
+
 		applyStyle.accept( "borderColor: #fff" );
 		applyStyle.accept( "disabledBorderColor: #fff" );
 		applyStyle.accept( "focusedBorderColor: #fff" );
 		applyStyle.accept( "hoverBorderColor: #fff" );
 
+		applyStyle.accept( "default.borderWidth: 2" );
 		applyStyle.accept( "default.borderColor: #fff" );
 		applyStyle.accept( "default.focusedBorderColor: #fff" );
 		applyStyle.accept( "default.focusColor: #fff" );
 		applyStyle.accept( "default.hoverBorderColor: #fff" );
-		applyStyle.accept( "toolbar.focusColor: #fff" );
 
-		applyStyle.accept( "borderWidth: 1" );
-		applyStyle.accept( "default.borderWidth: 2" );
+		applyStyle.accept( "toolbar.focusWidth: 1.5" );
+		applyStyle.accept( "toolbar.focusColor: #fff" );
 		applyStyle.accept( "toolbar.margin: 1,2,3,4" );
 		applyStyle.accept( "toolbar.spacingInsets: 1,2,3,4" );
-		applyStyle.accept( "toolbar.focusWidth: 1.5" );
-		applyStyle.accept( "arc: 6" );
 	}
 
 	private void flatRoundBorder( Consumer<String> applyStyle ) {
@@ -1148,6 +1152,8 @@ public class TestFlatStyling
 		applyStyle.accept( "focusWidth: 2" );
 		applyStyle.accept( "innerFocusWidth: 0.5" );
 		applyStyle.accept( "innerOutlineWidth: 1.5" );
+		applyStyle.accept( "borderWidth: 1" );
+
 		applyStyle.accept( "focusColor: #fff" );
 		applyStyle.accept( "borderColor: #fff" );
 		applyStyle.accept( "disabledBorderColor: #fff" );
@@ -1173,23 +1179,23 @@ public class TestFlatStyling
 		// FlatButtonBorder extends FlatBorder
 		flatBorder( border );
 
+		border.applyStyleProperty( "arc", 6 );
+
 		border.applyStyleProperty( "borderColor", Color.WHITE );
 		border.applyStyleProperty( "disabledBorderColor", Color.WHITE );
 		border.applyStyleProperty( "focusedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "hoverBorderColor", Color.WHITE );
 
+		border.applyStyleProperty( "default.borderWidth", 2 );
 		border.applyStyleProperty( "default.borderColor", Color.WHITE );
 		border.applyStyleProperty( "default.focusedBorderColor", Color.WHITE );
 		border.applyStyleProperty( "default.focusColor", Color.WHITE );
 		border.applyStyleProperty( "default.hoverBorderColor", Color.WHITE );
-		border.applyStyleProperty( "toolbar.focusColor", Color.WHITE );
 
-		border.applyStyleProperty( "borderWidth", 1 );
-		border.applyStyleProperty( "default.borderWidth", 2 );
+		border.applyStyleProperty( "toolbar.focusWidth", 1.5f );
+		border.applyStyleProperty( "toolbar.focusColor", Color.WHITE );
 		border.applyStyleProperty( "toolbar.margin", new Insets( 1, 2, 3, 4 ) );
 		border.applyStyleProperty( "toolbar.spacingInsets", new Insets( 1, 2, 3, 4 ) );
-		border.applyStyleProperty( "toolbar.focusWidth", 1.5f );
-		border.applyStyleProperty( "arc", 6 );
 	}
 
 	@Test
@@ -1223,6 +1229,8 @@ public class TestFlatStyling
 		border.applyStyleProperty( "focusWidth", 2 );
 		border.applyStyleProperty( "innerFocusWidth", 0.5f );
 		border.applyStyleProperty( "innerOutlineWidth", 1.5f );
+		border.applyStyleProperty( "borderWidth", 1 );
+
 		border.applyStyleProperty( "focusColor", Color.WHITE );
 		border.applyStyleProperty( "borderColor", Color.WHITE );
 		border.applyStyleProperty( "disabledBorderColor", Color.WHITE );
@@ -1251,12 +1259,13 @@ public class TestFlatStyling
 		// FlatRadioButtonIcon extends FlatCheckBoxIcon
 		flatCheckBoxIcon( icon );
 
-		icon.applyStyleProperty( "centerDiameter", 8 );
+		icon.applyStyleProperty( "centerDiameter", 8f );
 	}
 
 	private void flatCheckBoxIcon( FlatCheckBoxIcon icon ) {
 		icon.applyStyleProperty( "focusWidth", 2 );
 		icon.applyStyleProperty( "focusColor", Color.WHITE );
+		icon.applyStyleProperty( "borderWidth", 1.5f );
 		icon.applyStyleProperty( "arc", 5 );
 
 		// enabled
