@@ -19,6 +19,7 @@ package com.formdev.flatlaf.themeeditor;
 import java.util.function.Predicate;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import net.miginfocom.swing.*;
 
 /**
@@ -38,29 +39,39 @@ class FlatThemePreviewSwitches
 		JLabel label2 = new JLabel();
 		JLabel label23 = new JLabel();
 		JLabel label28 = new JLabel();
+		JLabel label37 = new JLabel();
 		JLabel label24 = new JLabel();
 		JLabel label29 = new JLabel();
+		JLabel label38 = new JLabel();
 		JLabel label17 = new JLabel();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox1 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox8 = new FlatThemePreviewSwitches.TestStateCheckBox();
+		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox15 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox5 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox12 = new FlatThemePreviewSwitches.TestStateCheckBox();
+		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox20 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		JLabel label18 = new JLabel();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox2 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox9 = new FlatThemePreviewSwitches.TestStateCheckBox();
+		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox16 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox6 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox13 = new FlatThemePreviewSwitches.TestStateCheckBox();
+		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox21 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		JLabel label19 = new JLabel();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox3 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox10 = new FlatThemePreviewSwitches.TestStateCheckBox();
+		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox17 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox7 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox14 = new FlatThemePreviewSwitches.TestStateCheckBox();
+		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox22 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		JLabel label20 = new JLabel();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox4 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox11 = new FlatThemePreviewSwitches.TestStateCheckBox();
+		FlatThemePreviewSwitches.TestStateCheckBox testStateCheckBox18 = new FlatThemePreviewSwitches.TestStateCheckBox();
 		JLabel label21 = new JLabel();
 		JCheckBox checkBox1 = new JCheckBox();
 		JCheckBox checkBox2 = new JCheckBox();
+		FlatTriStateCheckBox triStateCheckBox1 = new FlatTriStateCheckBox();
 		JLabel label27 = new JLabel();
 		JLabel label3 = new JLabel();
 		JLabel label4 = new JLabel();
@@ -95,13 +106,15 @@ class FlatThemePreviewSwitches
 			"insets dialog,hidemode 3",
 			// columns
 			"[fill]" +
-			"[fill]" +
-			"[fill]para" +
-			"[fill]" +
-			"[fill]para",
+			"[sizegroup 1,center]" +
+			"[sizegroup 1,center]" +
+			"[sizegroup 1,center]para" +
+			"[sizegroup 2,center]" +
+			"[sizegroup 2,center]" +
+			"[sizegroup 2,center]",
 			// rows
 			"[]" +
-			"[]0" +
+			"[]3" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -109,7 +122,7 @@ class FlatThemePreviewSwitches
 			"[]unrel" +
 			"[]para" +
 			"[]" +
-			"[]0" +
+			"[]3" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -124,11 +137,11 @@ class FlatThemePreviewSwitches
 
 		//---- label1 ----
 		label1.setText("unfocused");
-		add(label1, "cell 1 1 2 1,alignx center,growx 0");
+		add(label1, "cell 1 1 3 1,alignx center,growx 0");
 
 		//---- label2 ----
 		label2.setText("focused");
-		add(label2, "cell 3 1 2 1,alignx center,growx 0");
+		add(label2, "cell 4 1 3 1,alignx center,growx 0");
 
 		//---- label23 ----
 		label23.setText("unsel.");
@@ -136,127 +149,154 @@ class FlatThemePreviewSwitches
 		add(label23, "cell 1 2,alignx center,growx 0");
 
 		//---- label28 ----
-		label28.setText("selected");
+		label28.setText("sel.");
 		label28.setFont(label28.getFont().deriveFont(label28.getFont().getSize() - 2f));
 		add(label28, "cell 2 2,alignx center,growx 0");
+
+		//---- label37 ----
+		label37.setText("ind.");
+		label37.setFont(label37.getFont().deriveFont(label37.getFont().getSize() - 2f));
+		add(label37, "cell 3 2,alignx center,growx 0");
 
 		//---- label24 ----
 		label24.setText("unsel.");
 		label24.setFont(label24.getFont().deriveFont(label24.getFont().getSize() - 2f));
-		add(label24, "cell 3 2,alignx center,growx 0");
+		add(label24, "cell 4 2,alignx center,growx 0");
 
 		//---- label29 ----
-		label29.setText("selected");
+		label29.setText("sel.");
 		label29.setFont(label29.getFont().deriveFont(label29.getFont().getSize() - 2f));
-		add(label29, "cell 4 2,alignx center,growx 0");
+		add(label29, "cell 5 2,alignx center,growx 0");
+
+		//---- label38 ----
+		label38.setText("ind.");
+		label38.setFont(label38.getFont().deriveFont(label38.getFont().getSize() - 2f));
+		add(label38, "cell 6 2,alignx center,growx 0");
 
 		//---- label17 ----
 		label17.setText("none");
 		add(label17, "cell 0 3");
-
-		//---- testStateCheckBox1 ----
-		testStateCheckBox1.setText("text");
 		add(testStateCheckBox1, "cell 1 3");
 
 		//---- testStateCheckBox8 ----
-		testStateCheckBox8.setText("text");
 		testStateCheckBox8.setStateSelected(true);
 		add(testStateCheckBox8, "cell 2 3");
 
+		//---- testStateCheckBox15 ----
+		testStateCheckBox15.setStateIndeterminate(true);
+		add(testStateCheckBox15, "cell 3 3");
+
 		//---- testStateCheckBox5 ----
-		testStateCheckBox5.setText("text");
 		testStateCheckBox5.setStateFocused(true);
-		add(testStateCheckBox5, "cell 3 3");
+		add(testStateCheckBox5, "cell 4 3");
 
 		//---- testStateCheckBox12 ----
-		testStateCheckBox12.setText("text");
 		testStateCheckBox12.setStateFocused(true);
 		testStateCheckBox12.setStateSelected(true);
-		add(testStateCheckBox12, "cell 4 3");
+		add(testStateCheckBox12, "cell 5 3");
+
+		//---- testStateCheckBox20 ----
+		testStateCheckBox20.setStateIndeterminate(true);
+		testStateCheckBox20.setStateFocused(true);
+		add(testStateCheckBox20, "cell 6 3");
 
 		//---- label18 ----
 		label18.setText("hover");
 		add(label18, "cell 0 4");
 
 		//---- testStateCheckBox2 ----
-		testStateCheckBox2.setText("text");
 		testStateCheckBox2.setStateHover(true);
 		add(testStateCheckBox2, "cell 1 4");
 
 		//---- testStateCheckBox9 ----
-		testStateCheckBox9.setText("text");
 		testStateCheckBox9.setStateHover(true);
 		testStateCheckBox9.setStateSelected(true);
 		add(testStateCheckBox9, "cell 2 4");
 
+		//---- testStateCheckBox16 ----
+		testStateCheckBox16.setStateIndeterminate(true);
+		testStateCheckBox16.setStateHover(true);
+		add(testStateCheckBox16, "cell 3 4");
+
 		//---- testStateCheckBox6 ----
-		testStateCheckBox6.setText("text");
 		testStateCheckBox6.setStateFocused(true);
 		testStateCheckBox6.setStateHover(true);
-		add(testStateCheckBox6, "cell 3 4");
+		add(testStateCheckBox6, "cell 4 4");
 
 		//---- testStateCheckBox13 ----
-		testStateCheckBox13.setText("text");
 		testStateCheckBox13.setStateFocused(true);
 		testStateCheckBox13.setStateHover(true);
 		testStateCheckBox13.setStateSelected(true);
-		add(testStateCheckBox13, "cell 4 4");
+		add(testStateCheckBox13, "cell 5 4");
+
+		//---- testStateCheckBox21 ----
+		testStateCheckBox21.setStateIndeterminate(true);
+		testStateCheckBox21.setStateHover(true);
+		testStateCheckBox21.setStateFocused(true);
+		add(testStateCheckBox21, "cell 6 4");
 
 		//---- label19 ----
 		label19.setText("pressed");
 		add(label19, "cell 0 5");
 
 		//---- testStateCheckBox3 ----
-		testStateCheckBox3.setText("text");
 		testStateCheckBox3.setStatePressed(true);
 		add(testStateCheckBox3, "cell 1 5");
 
 		//---- testStateCheckBox10 ----
-		testStateCheckBox10.setText("text");
 		testStateCheckBox10.setStatePressed(true);
 		testStateCheckBox10.setStateSelected(true);
 		add(testStateCheckBox10, "cell 2 5");
 
+		//---- testStateCheckBox17 ----
+		testStateCheckBox17.setStateIndeterminate(true);
+		testStateCheckBox17.setStatePressed(true);
+		add(testStateCheckBox17, "cell 3 5");
+
 		//---- testStateCheckBox7 ----
-		testStateCheckBox7.setText("text");
 		testStateCheckBox7.setStateFocused(true);
 		testStateCheckBox7.setStatePressed(true);
-		add(testStateCheckBox7, "cell 3 5");
+		add(testStateCheckBox7, "cell 4 5");
 
 		//---- testStateCheckBox14 ----
-		testStateCheckBox14.setText("text");
 		testStateCheckBox14.setStateFocused(true);
 		testStateCheckBox14.setStatePressed(true);
 		testStateCheckBox14.setStateSelected(true);
-		add(testStateCheckBox14, "cell 4 5");
+		add(testStateCheckBox14, "cell 5 5");
+
+		//---- testStateCheckBox22 ----
+		testStateCheckBox22.setStateIndeterminate(true);
+		testStateCheckBox22.setStatePressed(true);
+		testStateCheckBox22.setStateFocused(true);
+		add(testStateCheckBox22, "cell 6 5");
 
 		//---- label20 ----
 		label20.setText("disabled");
 		add(label20, "cell 0 6");
 
 		//---- testStateCheckBox4 ----
-		testStateCheckBox4.setText("text");
 		testStateCheckBox4.setEnabled(false);
 		add(testStateCheckBox4, "cell 1 6");
 
 		//---- testStateCheckBox11 ----
-		testStateCheckBox11.setText("text");
 		testStateCheckBox11.setEnabled(false);
 		testStateCheckBox11.setStateSelected(true);
 		add(testStateCheckBox11, "cell 2 6");
 
+		//---- testStateCheckBox18 ----
+		testStateCheckBox18.setStateIndeterminate(true);
+		testStateCheckBox18.setEnabled(false);
+		add(testStateCheckBox18, "cell 3 6");
+
 		//---- label21 ----
 		label21.setText("try me");
 		add(label21, "cell 0 7");
-
-		//---- checkBox1 ----
-		checkBox1.setText("text");
 		add(checkBox1, "cell 1 7");
 
 		//---- checkBox2 ----
-		checkBox2.setText("text");
 		checkBox2.setSelected(true);
 		add(checkBox2, "cell 2 7");
+		add(triStateCheckBox1, "cell 3 7");
 
 		//---- label27 ----
 		label27.setText("JRadioButton");
@@ -269,7 +309,7 @@ class FlatThemePreviewSwitches
 
 		//---- label4 ----
 		label4.setText("focused");
-		add(label4, "cell 3 9 2 1,alignx center,growx 0");
+		add(label4, "cell 4 9 2 1,alignx center,growx 0");
 
 		//---- label25 ----
 		label25.setText("unsel.");
@@ -277,111 +317,95 @@ class FlatThemePreviewSwitches
 		add(label25, "cell 1 10,alignx center,growx 0");
 
 		//---- label30 ----
-		label30.setText("selected");
+		label30.setText("sel.");
 		label30.setFont(label30.getFont().deriveFont(label30.getFont().getSize() - 2f));
 		add(label30, "cell 2 10,alignx center,growx 0");
 
 		//---- label26 ----
 		label26.setText("unsel.");
 		label26.setFont(label26.getFont().deriveFont(label26.getFont().getSize() - 2f));
-		add(label26, "cell 3 10,alignx center,growx 0");
+		add(label26, "cell 4 10,alignx center,growx 0");
 
 		//---- label31 ----
-		label31.setText("selected");
+		label31.setText("sel.");
 		label31.setFont(label31.getFont().deriveFont(label31.getFont().getSize() - 2f));
-		add(label31, "cell 4 10,alignx center,growx 0");
+		add(label31, "cell 5 10,alignx center,growx 0");
 
 		//---- label36 ----
 		label36.setText("none");
 		add(label36, "cell 0 11");
-
-		//---- testStateRadioButton1 ----
-		testStateRadioButton1.setText("text");
 		add(testStateRadioButton1, "cell 1 11");
 
 		//---- testStateRadioButton8 ----
-		testStateRadioButton8.setText("text");
 		testStateRadioButton8.setStateSelected(true);
 		add(testStateRadioButton8, "cell 2 11");
 
 		//---- testStateRadioButton5 ----
-		testStateRadioButton5.setText("text");
 		testStateRadioButton5.setStateFocused(true);
-		add(testStateRadioButton5, "cell 3 11");
+		add(testStateRadioButton5, "cell 4 11");
 
 		//---- testStateRadioButton9 ----
-		testStateRadioButton9.setText("text");
 		testStateRadioButton9.setStateFocused(true);
 		testStateRadioButton9.setStateSelected(true);
-		add(testStateRadioButton9, "cell 4 11");
+		add(testStateRadioButton9, "cell 5 11");
 
 		//---- label35 ----
 		label35.setText("hover");
 		add(label35, "cell 0 12");
 
 		//---- testStateRadioButton2 ----
-		testStateRadioButton2.setText("text");
 		testStateRadioButton2.setStateHover(true);
 		add(testStateRadioButton2, "cell 1 12");
 
 		//---- testStateRadioButton10 ----
-		testStateRadioButton10.setText("text");
 		testStateRadioButton10.setStateHover(true);
 		testStateRadioButton10.setStateSelected(true);
 		add(testStateRadioButton10, "cell 2 12");
 
 		//---- testStateRadioButton6 ----
-		testStateRadioButton6.setText("text");
 		testStateRadioButton6.setStateFocused(true);
 		testStateRadioButton6.setStateHover(true);
-		add(testStateRadioButton6, "cell 3 12");
+		add(testStateRadioButton6, "cell 4 12");
 
 		//---- testStateRadioButton11 ----
-		testStateRadioButton11.setText("text");
 		testStateRadioButton11.setStateFocused(true);
 		testStateRadioButton11.setStateHover(true);
 		testStateRadioButton11.setStateSelected(true);
-		add(testStateRadioButton11, "cell 4 12");
+		add(testStateRadioButton11, "cell 5 12");
 
 		//---- label34 ----
 		label34.setText("pressed");
 		add(label34, "cell 0 13");
 
 		//---- testStateRadioButton3 ----
-		testStateRadioButton3.setText("text");
 		testStateRadioButton3.setStatePressed(true);
 		add(testStateRadioButton3, "cell 1 13");
 
 		//---- testStateRadioButton12 ----
-		testStateRadioButton12.setText("text");
 		testStateRadioButton12.setStatePressed(true);
 		testStateRadioButton12.setStateSelected(true);
 		add(testStateRadioButton12, "cell 2 13");
 
 		//---- testStateRadioButton7 ----
-		testStateRadioButton7.setText("text");
 		testStateRadioButton7.setStateFocused(true);
 		testStateRadioButton7.setStatePressed(true);
-		add(testStateRadioButton7, "cell 3 13");
+		add(testStateRadioButton7, "cell 4 13");
 
 		//---- testStateRadioButton13 ----
-		testStateRadioButton13.setText("text");
 		testStateRadioButton13.setStateFocused(true);
 		testStateRadioButton13.setStatePressed(true);
 		testStateRadioButton13.setStateSelected(true);
-		add(testStateRadioButton13, "cell 4 13");
+		add(testStateRadioButton13, "cell 5 13");
 
 		//---- label33 ----
 		label33.setText("disabled");
 		add(label33, "cell 0 14");
 
 		//---- testStateRadioButton4 ----
-		testStateRadioButton4.setText("text");
 		testStateRadioButton4.setEnabled(false);
 		add(testStateRadioButton4, "cell 1 14");
 
 		//---- testStateRadioButton14 ----
-		testStateRadioButton14.setText("text");
 		testStateRadioButton14.setEnabled(false);
 		testStateRadioButton14.setStateSelected(true);
 		add(testStateRadioButton14, "cell 2 14");
@@ -389,13 +413,9 @@ class FlatThemePreviewSwitches
 		//---- label32 ----
 		label32.setText("try me");
 		add(label32, "cell 0 15");
-
-		//---- radioButton1 ----
-		radioButton1.setText("text");
 		add(radioButton1, "cell 1 15");
 
 		//---- radioButton2 ----
-		radioButton2.setText("text");
 		radioButton2.setSelected(true);
 		add(radioButton2, "cell 2 15");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -413,6 +433,7 @@ class FlatThemePreviewSwitches
 		private boolean statePressed;
 		private boolean stateFocused;
 		private boolean stateSelected;
+		private boolean stateIndeterminate;
 
 		public TestStateCheckBox() {
 			setModel( new DefaultButtonModel() {
@@ -466,6 +487,18 @@ class FlatThemePreviewSwitches
 
 		public void setStateSelected( boolean stateSelected ) {
 			this.stateSelected = stateSelected;
+		}
+
+		@SuppressWarnings( "unused" )
+		public boolean isStateIndeterminate() {
+			return stateIndeterminate;
+		}
+
+		public void setStateIndeterminate( boolean stateIndeterminate ) {
+			this.stateIndeterminate = stateIndeterminate;
+
+			putClientProperty( FlatClientProperties.SELECTED_STATE,
+				stateIndeterminate ? FlatClientProperties.SELECTED_STATE_INDETERMINATE : null );
 		}
 	}
 
