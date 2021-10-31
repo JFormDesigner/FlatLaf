@@ -46,6 +46,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault Component.focusColor						Color
  * @uiDefault CheckBox.icon.focusWidth					int		optional; defaults to Component.focusWidth
  * @uiDefault CheckBox.icon.borderWidth					int or float	optional; defaults to Component.borderWidth
+ * @uiDefault CheckBox.arc								int
  *
  * @uiDefault CheckBox.icon.focusColor					Color	optional; defaults to Component.focusColor
  * @uiDefault CheckBox.icon.borderColor					Color
@@ -53,20 +54,28 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault CheckBox.icon.selectedBorderColor			Color
  * @uiDefault CheckBox.icon.selectedBackground			Color
  * @uiDefault CheckBox.icon.checkmarkColor				Color
+ *
  * @uiDefault CheckBox.icon.disabledBorderColor			Color
  * @uiDefault CheckBox.icon.disabledBackground			Color
  * @uiDefault CheckBox.icon.disabledCheckmarkColor		Color
+ *
  * @uiDefault CheckBox.icon.focusedBorderColor			Color	optional
  * @uiDefault CheckBox.icon.focusedBackground			Color	optional
- * @uiDefault CheckBox.icon.selectedFocusedBorderColor	Color	optional; CheckBox.icon.focusedBorderColor is used if not specified
- * @uiDefault CheckBox.icon.selectedFocusedBackground	Color	optional; CheckBox.icon.focusedBackground is used if not specified
- * @uiDefault CheckBox.icon.selectedFocusedCheckmarkColor	Color	optional; CheckBox.icon.checkmarkColor is used if not specified
+ * @uiDefault CheckBox.icon.focusedSelectedBorderColor	Color	optional; CheckBox.icon.focusedBorderColor is used if not specified
+ * @uiDefault CheckBox.icon.focusedSelectedBackground	Color	optional; CheckBox.icon.focusedBackground is used if not specified
+ * @uiDefault CheckBox.icon.focusedCheckmarkColor		Color	optional; CheckBox.icon.checkmarkColor is used if not specified
+ *
  * @uiDefault CheckBox.icon.hoverBorderColor			Color	optional
  * @uiDefault CheckBox.icon.hoverBackground				Color	optional
- * @uiDefault CheckBox.icon.selectedHoverBackground		Color	optional; CheckBox.icon.hoverBackground is used if not specified
+ * @uiDefault CheckBox.icon.hoverSelectedBorderColor	Color	optional; CheckBox.icon.hoverBorderColor is used if not specified
+ * @uiDefault CheckBox.icon.hoverSelectedBackground		Color	optional; CheckBox.icon.hoverBackground is used if not specified
+ * @uiDefault CheckBox.icon.hoverCheckmarkColor			Color	optional; CheckBox.icon.checkmarkColor is used if not specified
+ *
+ * @uiDefault CheckBox.icon.pressedBorderColor			Color	optional
  * @uiDefault CheckBox.icon.pressedBackground			Color	optional
- * @uiDefault CheckBox.icon.selectedPressedBackground	Color	optional; CheckBox.icon.pressedBackground is used if not specified
- * @uiDefault CheckBox.arc								int
+ * @uiDefault CheckBox.icon.pressedSelectedBorderColor	Color	optional; CheckBox.icon.pressedBorderColor is used if not specified
+ * @uiDefault CheckBox.icon.pressedSelectedBackground	Color	optional; CheckBox.icon.pressedBackground is used if not specified
+ * @uiDefault CheckBox.icon.pressedCheckmarkColor		Color	optional; CheckBox.icon.checkmarkColor is used if not specified
  *
  * @author Karl Tauber
  */
@@ -97,18 +106,23 @@ public class FlatCheckBoxIcon
 	// focused
 	@Styleable protected Color focusedBorderColor = getUIColor( "CheckBox.icon.focusedBorderColor", style );
 	@Styleable protected Color focusedBackground = getUIColor( "CheckBox.icon.focusedBackground", style );
-	@Styleable protected Color selectedFocusedBorderColor = getUIColor( "CheckBox.icon.selectedFocusedBorderColor", style );
-	@Styleable protected Color selectedFocusedBackground = getUIColor( "CheckBox.icon.selectedFocusedBackground", style );
-	@Styleable protected Color selectedFocusedCheckmarkColor = getUIColor( "CheckBox.icon.selectedFocusedCheckmarkColor", style );
+	/** @since 2 */ @Styleable protected Color focusedSelectedBorderColor = getUIColor( "CheckBox.icon.focusedSelectedBorderColor", style );
+	/** @since 2 */ @Styleable protected Color focusedSelectedBackground = getUIColor( "CheckBox.icon.focusedSelectedBackground", style );
+	/** @since 2 */ @Styleable protected Color focusedCheckmarkColor = getUIColor( "CheckBox.icon.focusedCheckmarkColor", style );
 
 	// hover
 	@Styleable protected Color hoverBorderColor = getUIColor( "CheckBox.icon.hoverBorderColor", style );
 	@Styleable protected Color hoverBackground = getUIColor( "CheckBox.icon.hoverBackground", style );
-	@Styleable protected Color selectedHoverBackground = getUIColor( "CheckBox.icon.selectedHoverBackground", style );
+	/** @since 2 */ @Styleable protected Color hoverSelectedBorderColor = getUIColor( "CheckBox.icon.hoverSelectedBorderColor", style );
+	/** @since 2 */ @Styleable protected Color hoverSelectedBackground = getUIColor( "CheckBox.icon.hoverSelectedBackground", style );
+	/** @since 2 */ @Styleable protected Color hoverCheckmarkColor = getUIColor( "CheckBox.icon.hoverCheckmarkColor", style );
 
 	// pressed
+	/** @since 2 */ @Styleable protected Color pressedBorderColor = getUIColor( "CheckBox.icon.pressedBorderColor", style );
 	@Styleable protected Color pressedBackground = getUIColor( "CheckBox.icon.pressedBackground", style );
-	@Styleable protected Color selectedPressedBackground = getUIColor( "CheckBox.icon.selectedPressedBackground", style );
+	/** @since 2 */ @Styleable protected Color pressedSelectedBorderColor = getUIColor( "CheckBox.icon.pressedSelectedBorderColor", style );
+	/** @since 2 */ @Styleable protected Color pressedSelectedBackground = getUIColor( "CheckBox.icon.pressedSelectedBackground", style );
+	/** @since 2 */ @Styleable protected Color pressedCheckmarkColor = getUIColor( "CheckBox.icon.pressedCheckmarkColor", style );
 
 	protected static Color getUIColor( String key, String style ) {
 		if( style != null ) {
@@ -186,8 +200,8 @@ public class FlatCheckBoxIcon
 		paintBackground( c, g );
 
 		// paint checkmark
-		if( selected || indeterminate ) {
-			g.setColor( getCheckmarkColor( c, selected, isFocused ) );
+		if( selected ) {
+			g.setColor( getCheckmarkColor( c ) );
 			if( indeterminate )
 				paintIndeterminate( c, g );
 			else
@@ -244,25 +258,26 @@ public class FlatCheckBoxIcon
 		return FlatButtonUI.buttonStateColor( c,
 			selected ? selectedBorderColor : borderColor,
 			disabledBorderColor,
-			selected && selectedFocusedBorderColor != null ? selectedFocusedBorderColor : focusedBorderColor,
-			hoverBorderColor,
-			null );
+			(selected && focusedSelectedBorderColor != null) ? focusedSelectedBorderColor : focusedBorderColor,
+			(selected && hoverSelectedBorderColor != null) ? hoverSelectedBorderColor : hoverBorderColor,
+			(selected && pressedSelectedBorderColor != null) ? pressedSelectedBorderColor : pressedBorderColor );
 	}
 
 	protected Color getBackground( Component c, boolean selected ) {
 		return FlatButtonUI.buttonStateColor( c,
 			selected ? selectedBackground : background,
 			disabledBackground,
-			(selected && selectedFocusedBackground != null) ? selectedFocusedBackground : focusedBackground,
-			(selected && selectedHoverBackground != null) ? selectedHoverBackground : hoverBackground,
-			(selected && selectedPressedBackground != null) ? selectedPressedBackground : pressedBackground );
+			(selected && focusedSelectedBackground != null) ? focusedSelectedBackground : focusedBackground,
+			(selected && hoverSelectedBackground != null) ? hoverSelectedBackground : hoverBackground,
+			(selected && pressedSelectedBackground != null) ? pressedSelectedBackground : pressedBackground );
 	}
 
-	protected Color getCheckmarkColor( Component c, boolean selected, boolean isFocused ) {
-		return c.isEnabled()
-			? ((selected && isFocused && selectedFocusedCheckmarkColor != null)
-				? selectedFocusedCheckmarkColor
-				: checkmarkColor)
-			: disabledCheckmarkColor;
+	protected Color getCheckmarkColor( Component c ) {
+		return FlatButtonUI.buttonStateColor( c,
+			checkmarkColor,
+			disabledCheckmarkColor,
+			focusedCheckmarkColor,
+			hoverCheckmarkColor,
+			pressedCheckmarkColor );
 	}
 }

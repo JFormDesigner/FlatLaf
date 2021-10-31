@@ -139,13 +139,13 @@ CheckBox.icon.selectedBorderColor #afafaf  HSL   0   0  69    javax.swing.plaf.C
 CheckBox.icon                  [lazy] 15,15    com.formdev.flatlaf.icons.FlatCheckBoxIcon [UI]
 CheckBox.iconTextGap           4
 CheckBox.icon[filled].checkmarkColor #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].focusedCheckmarkColor #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].focusedSelectedBackground #4e9de7  HSL 209  76  61    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].focusedSelectedBorderColor #a7cef3  HSL 209  76  80    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon[filled].hoverSelectedBackground #3891e4  HSL 209  76  56    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5% autoInverse)
+CheckBox.icon[filled].pressedSelectedBackground #2184e1  HSL 209  76  51    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 CheckBox.icon[filled].selectedBackground #4e9de7  HSL 209  76  61    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon[filled].selectedBorderColor #4a95db  HSL 209  67  57    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon[filled].selectedFocusedBackground #4e9de7  HSL 209  76  61    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon[filled].selectedFocusedBorderColor #a7cef3  HSL 209  76  80    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon[filled].selectedFocusedCheckmarkColor #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon[filled].selectedHoverBackground #3891e4  HSL 209  76  56    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5% autoInverse)
-CheckBox.icon[filled].selectedPressedBackground #2184e1  HSL 209  76  51    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 CheckBox.margin                2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 CheckBox.rollover              true
 CheckBox.textIconGap           4

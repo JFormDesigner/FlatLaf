@@ -489,18 +489,23 @@ public class TestFlatStyleableInfo
 			// focused
 			"icon.focusedBorderColor", Color.class,
 			"icon.focusedBackground", Color.class,
-			"icon.selectedFocusedBorderColor", Color.class,
-			"icon.selectedFocusedBackground", Color.class,
-			"icon.selectedFocusedCheckmarkColor", Color.class,
+			"icon.focusedSelectedBorderColor", Color.class,
+			"icon.focusedSelectedBackground", Color.class,
+			"icon.focusedCheckmarkColor", Color.class,
 
 			// hover
 			"icon.hoverBorderColor", Color.class,
 			"icon.hoverBackground", Color.class,
-			"icon.selectedHoverBackground", Color.class,
+			"icon.hoverSelectedBorderColor", Color.class,
+			"icon.hoverSelectedBackground", Color.class,
+			"icon.hoverCheckmarkColor", Color.class,
 
 			// pressed
+			"icon.pressedBorderColor", Color.class,
 			"icon.pressedBackground", Color.class,
-			"icon.selectedPressedBackground", Color.class
+			"icon.pressedSelectedBorderColor", Color.class,
+			"icon.pressedSelectedBackground", Color.class,
+			"icon.pressedCheckmarkColor", Color.class
 		);
 	}
 
@@ -1060,18 +1065,23 @@ public class TestFlatStyleableInfo
 			// focused
 			"focusedBorderColor", Color.class,
 			"focusedBackground", Color.class,
-			"selectedFocusedBorderColor", Color.class,
-			"selectedFocusedBackground", Color.class,
-			"selectedFocusedCheckmarkColor", Color.class,
+			"focusedSelectedBorderColor", Color.class,
+			"focusedSelectedBackground", Color.class,
+			"focusedCheckmarkColor", Color.class,
 
 			// hover
 			"hoverBorderColor", Color.class,
 			"hoverBackground", Color.class,
-			"selectedHoverBackground", Color.class,
+			"hoverSelectedBorderColor", Color.class,
+			"hoverSelectedBackground", Color.class,
+			"hoverCheckmarkColor", Color.class,
 
 			// pressed
+			"pressedBorderColor", Color.class,
 			"pressedBackground", Color.class,
-			"selectedPressedBackground", Color.class
+			"pressedSelectedBorderColor", Color.class,
+			"pressedSelectedBackground", Color.class,
+			"pressedCheckmarkColor", Color.class
 		);
 	}
 
