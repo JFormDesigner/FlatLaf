@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Objects;
 import javax.swing.AbstractButton;
 import javax.swing.CellRendererPane;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -279,8 +280,12 @@ public class FlatRadioButtonUI
 
 	private int getIconFocusWidth( JComponent c ) {
 		AbstractButton b = (AbstractButton) c;
-		return (b.getIcon() == null && getDefaultIcon() instanceof FlatCheckBoxIcon)
-			? UIScale.scale( ((FlatCheckBoxIcon)getDefaultIcon()).focusWidth )
+		Icon icon = b.getIcon();
+		if( icon == null )
+			icon = getDefaultIcon();
+
+		return (icon instanceof FlatCheckBoxIcon)
+			? Math.round( UIScale.scale( ((FlatCheckBoxIcon)icon).getFocusWidth() ) )
 			: 0;
 	}
 

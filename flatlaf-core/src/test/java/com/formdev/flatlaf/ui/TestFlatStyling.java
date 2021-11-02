@@ -608,9 +608,11 @@ public class TestFlatStyling
 
 		//---- icon ----
 
-		ui.applyStyle( b, "icon.focusWidth: 2" );
+		ui.applyStyle( b, "icon.focusWidth: 1.5" );
 		ui.applyStyle( b, "icon.focusColor: #fff" );
-		ui.applyStyle( b, "icon.borderWidth: 1" );
+		ui.applyStyle( b, "icon.borderWidth: 1.5" );
+		ui.applyStyle( b, "icon.selectedBorderWidth: 1.5" );
+		ui.applyStyle( b, "icon.disabledSelectedBorderWidth: 1.5" );
 		ui.applyStyle( b, "icon.arc: 5" );
 
 		// enabled
@@ -623,6 +625,8 @@ public class TestFlatStyling
 		// disabled
 		ui.applyStyle( b, "icon.disabledBorderColor: #fff" );
 		ui.applyStyle( b, "icon.disabledBackground: #fff" );
+		ui.applyStyle( b, "icon.disabledSelectedBorderColor: #fff" );
+		ui.applyStyle( b, "icon.disabledSelectedBackground: #fff" );
 		ui.applyStyle( b, "icon.disabledCheckmarkColor: #fff" );
 
 		// focused
@@ -1268,9 +1272,11 @@ public class TestFlatStyling
 	}
 
 	private void flatCheckBoxIcon( FlatCheckBoxIcon icon ) {
-		icon.applyStyleProperty( "focusWidth", 2 );
+		icon.applyStyleProperty( "focusWidth", 1.5f );
 		icon.applyStyleProperty( "focusColor", Color.WHITE );
 		icon.applyStyleProperty( "borderWidth", 1.5f );
+		icon.applyStyleProperty( "selectedBorderWidth", 1.5f );
+		icon.applyStyleProperty( "disabledSelectedBorderWidth", 1.5f );
 		icon.applyStyleProperty( "arc", 5 );
 
 		// enabled
@@ -1283,6 +1289,8 @@ public class TestFlatStyling
 		// disabled
 		icon.applyStyleProperty( "disabledBorderColor", Color.WHITE );
 		icon.applyStyleProperty( "disabledBackground", Color.WHITE );
+		icon.applyStyleProperty( "disabledSelectedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "disabledSelectedBackground", Color.WHITE );
 		icon.applyStyleProperty( "disabledCheckmarkColor", Color.WHITE );
 
 		// focused

@@ -469,9 +469,11 @@ public class TestFlatStyleableInfo
 
 			//---- icon ----
 
-			"icon.focusWidth", int.class,
+			"icon.focusWidth", float.class,
 			"icon.focusColor", Color.class,
 			"icon.borderWidth", float.class,
+			"icon.selectedBorderWidth", float.class,
+			"icon.disabledSelectedBorderWidth", float.class,
 			"icon.arc", int.class,
 
 			// enabled
@@ -484,6 +486,8 @@ public class TestFlatStyleableInfo
 			// disabled
 			"icon.disabledBorderColor", Color.class,
 			"icon.disabledBackground", Color.class,
+			"icon.disabledSelectedBorderColor", Color.class,
+			"icon.disabledSelectedBackground", Color.class,
 			"icon.disabledCheckmarkColor", Color.class,
 
 			// focused
@@ -1045,9 +1049,11 @@ public class TestFlatStyleableInfo
 
 	private void flatCheckBoxIcon( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
-			"focusWidth", int.class,
+			"focusWidth", float.class,
 			"focusColor", Color.class,
 			"borderWidth", float.class,
+			"selectedBorderWidth", float.class,
+			"disabledSelectedBorderWidth", float.class,
 			"arc", int.class,
 
 			// enabled
@@ -1060,6 +1066,8 @@ public class TestFlatStyleableInfo
 			// disabled
 			"disabledBorderColor", Color.class,
 			"disabledBackground", Color.class,
+			"disabledSelectedBorderColor", Color.class,
+			"disabledSelectedBackground", Color.class,
 			"disabledCheckmarkColor", Color.class,
 
 			// focused

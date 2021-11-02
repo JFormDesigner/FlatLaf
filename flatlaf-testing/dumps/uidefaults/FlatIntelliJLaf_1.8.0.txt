@@ -49,7 +49,7 @@
 
 + CheckBox.icon.style            filled
 
-- CheckBox.icon[filled].selectedFocusedCheckmarkColor #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
+- CheckBox.icon[filled].focusedCheckmarkColor #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- ComboBox ----

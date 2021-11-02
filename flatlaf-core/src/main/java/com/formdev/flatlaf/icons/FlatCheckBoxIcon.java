@@ -44,8 +44,10 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  * @uiDefault Component.focusWidth						int
  * @uiDefault Component.borderWidth						int
  * @uiDefault Component.focusColor						Color
- * @uiDefault CheckBox.icon.focusWidth					int		optional; defaults to Component.focusWidth
+ * @uiDefault CheckBox.icon.focusWidth					int or float	optional; defaults to Component.focusWidth
  * @uiDefault CheckBox.icon.borderWidth					int or float	optional; defaults to Component.borderWidth
+ * @uiDefault CheckBox.icon.selectedBorderWidth			int or float	optional; defaults to CheckBox.icon.borderWidth
+ * @uiDefault CheckBox.icon.disabledSelectedBorderWidth	int or float	optional; defaults to CheckBox.icon.selectedBorderWidth
  * @uiDefault CheckBox.arc								int
  *
  * @uiDefault CheckBox.icon.focusColor					Color	optional; defaults to Component.focusColor
@@ -57,6 +59,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
  *
  * @uiDefault CheckBox.icon.disabledBorderColor			Color
  * @uiDefault CheckBox.icon.disabledBackground			Color
+ * @uiDefault CheckBox.icon.disabledSelectedBorderColor	Color	optional; CheckBox.icon.disabledBorderColor is used if not specified
+ * @uiDefault CheckBox.icon.disabledSelectedBackground	Color	optional; CheckBox.icon.disabledBackground is used if not specified
  * @uiDefault CheckBox.icon.disabledCheckmarkColor		Color
  *
  * @uiDefault CheckBox.icon.focusedBorderColor			Color	optional
@@ -83,12 +87,11 @@ public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
 {
 	protected final String style = UIManager.getString( "CheckBox.icon.style" );
-	@Styleable public int focusWidth = getUIInt( "CheckBox.icon.focusWidth",
-		UIManager.getInt( "Component.focusWidth" ), style );
-	@Styleable protected Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusColor",
-		UIManager.getColor( "Component.focusColor" ) );
-	/** @since 2 */ @Styleable protected float borderWidth = getUIFloat( "CheckBox.icon.borderWidth",
-		FlatUIUtils.getUIFloat( "Component.borderWidth", 1 ), style );
+	@Styleable protected float focusWidth = getUIFloat( "CheckBox.icon.focusWidth", UIManager.getInt( "Component.focusWidth" ), style );
+	@Styleable protected Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusColor", UIManager.getColor( "Component.focusColor" ) );
+	/** @since 2 */ @Styleable protected float borderWidth = getUIFloat( "CheckBox.icon.borderWidth", FlatUIUtils.getUIFloat( "Component.borderWidth", 1 ), style );
+	/** @since 2 */ @Styleable protected float selectedBorderWidth = getUIFloat( "CheckBox.icon.selectedBorderWidth", Float.MIN_VALUE, style );
+	/** @since 2 */ @Styleable protected float disabledSelectedBorderWidth = getUIFloat( "CheckBox.icon.disabledSelectedBorderWidth", Float.MIN_VALUE, style );
 	@Styleable protected int arc = FlatUIUtils.getUIInt( "CheckBox.arc", 2 );
 
 	// enabled
@@ -101,6 +104,8 @@ public class FlatCheckBoxIcon
 	// disabled
 	@Styleable protected Color disabledBorderColor = getUIColor( "CheckBox.icon.disabledBorderColor", style );
 	@Styleable protected Color disabledBackground = getUIColor( "CheckBox.icon.disabledBackground", style );
+	/** @since 2 */ @Styleable protected Color disabledSelectedBorderColor = getUIColor( "CheckBox.icon.disabledSelectedBorderColor", style );
+	/** @since 2 */ @Styleable protected Color disabledSelectedBackground = getUIColor( "CheckBox.icon.disabledSelectedBackground", style );
 	@Styleable protected Color disabledCheckmarkColor = getUIColor( "CheckBox.icon.disabledCheckmarkColor", style );
 
 	// focused
@@ -131,15 +136,6 @@ public class FlatCheckBoxIcon
 				return color;
 		}
 		return UIManager.getColor( key );
-	}
-
-	protected static int getUIInt( String key, int defaultValue, String style ) {
-		if( style != null ) {
-			int value = FlatUIUtils.getUIInt( styleKey( key, style ), Integer.MIN_VALUE );
-			if( value != Integer.MIN_VALUE )
-				return value;
-		}
-		return FlatUIUtils.getUIInt( key, defaultValue );
 	}
 
 	/** @since 2 */
@@ -177,6 +173,11 @@ public class FlatCheckBoxIcon
 		boolean indeterminate = isIndeterminate( c );
 		boolean selected = indeterminate || isSelected( c );
 		boolean isFocused = FlatUIUtils.isPermanentFocusOwner( c );
+		float bw = selected
+			? (disabledSelectedBorderWidth != Float.MIN_VALUE && !c.isEnabled()
+				? disabledSelectedBorderWidth
+				: (selectedBorderWidth != Float.MIN_VALUE ? selectedBorderWidth : borderWidth))
+			: borderWidth;
 
 		// paint focused border
 		if( isFocused && focusWidth > 0 && FlatButtonUI.isFocusPainted( c ) ) {
@@ -186,7 +187,7 @@ public class FlatCheckBoxIcon
 
 		// paint border
 		g.setColor( getBorderColor( c, selected ) );
-		paintBorder( c, g );
+		paintBorder( c, g, bw );
 
 		// paint background
 		Color bg = FlatUIUtils.deriveColor( getBackground( c, selected ),
@@ -194,10 +195,10 @@ public class FlatCheckBoxIcon
 		if( bg.getAlpha() < 255 ) {
 			// fill background with default color before filling with non-opaque background
 			g.setColor( selected ? selectedBackground : background );
-			paintBackground( c, g );
+			paintBackground( c, g, bw );
 		}
 		g.setColor( bg );
-		paintBackground( c, g );
+		paintBackground( c, g, bw );
 
 		// paint checkmark
 		if( selected ) {
@@ -211,20 +212,23 @@ public class FlatCheckBoxIcon
 
 	protected void paintFocusBorder( Component c, Graphics2D g ) {
 		// the outer focus border is painted outside of the icon
-		int wh = ICON_SIZE - 1 + (focusWidth * 2);
-		int arcwh = arc + (focusWidth * 2);
-		g.fillRoundRect( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh );
+		float wh = ICON_SIZE - 1 + (focusWidth * 2);
+		float arcwh = arc + (focusWidth * 2);
+		g.fill( new RoundRectangle2D.Float( -focusWidth + 1, -focusWidth, wh, wh, arcwh, arcwh ) );
 	}
 
-	protected void paintBorder( Component c, Graphics2D g ) {
+	protected void paintBorder( Component c, Graphics2D g, float borderWidth ) {
+		if( borderWidth == 0 )
+			return;
+
 		int arcwh = arc;
 		g.fillRoundRect( 1, 0, 14, 14, arcwh, arcwh );
 	}
 
-	protected void paintBackground( Component c, Graphics2D g ) {
+	protected void paintBackground( Component c, Graphics2D g, float borderWidth ) {
 		float xy = borderWidth;
 		float wh = 14 - (borderWidth * 2);
-		int arcwh = arc - 1;
+		float arcwh = arc - borderWidth;
 		g.fill( new RoundRectangle2D.Float( 1 + xy, xy, wh, wh, arcwh, arcwh ) );
 	}
 
@@ -250,6 +254,11 @@ public class FlatCheckBoxIcon
 		return c instanceof AbstractButton && ((AbstractButton)c).isSelected();
 	}
 
+	/** @since 2 */
+	public float getFocusWidth() {
+		return focusWidth;
+	}
+
 	protected Color getFocusColor( Component c ) {
 		return focusColor;
 	}
@@ -257,7 +266,7 @@ public class FlatCheckBoxIcon
 	protected Color getBorderColor( Component c, boolean selected ) {
 		return FlatButtonUI.buttonStateColor( c,
 			selected ? selectedBorderColor : borderColor,
-			disabledBorderColor,
+			(selected && disabledSelectedBorderColor != null) ? disabledSelectedBorderColor : disabledBorderColor,
 			(selected && focusedSelectedBorderColor != null) ? focusedSelectedBorderColor : focusedBorderColor,
 			(selected && hoverSelectedBorderColor != null) ? hoverSelectedBorderColor : hoverBorderColor,
 			(selected && pressedSelectedBorderColor != null) ? pressedSelectedBorderColor : pressedBorderColor );
@@ -266,7 +275,7 @@ public class FlatCheckBoxIcon
 	protected Color getBackground( Component c, boolean selected ) {
 		return FlatButtonUI.buttonStateColor( c,
 			selected ? selectedBackground : background,
-			disabledBackground,
+			(selected && disabledSelectedBackground != null) ? disabledSelectedBackground : disabledBackground,
 			(selected && focusedSelectedBackground != null) ? focusedSelectedBackground : focusedBackground,
 			(selected && hoverSelectedBackground != null) ? hoverSelectedBackground : hoverBackground,
 			(selected && pressedSelectedBackground != null) ? pressedSelectedBackground : pressedBackground );
