@@ -35,6 +35,8 @@ import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.MenuElement;
+import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicHTML;
@@ -467,6 +469,17 @@ debug*/
 
 		if( !menuItem.isEnabled() )
 			return menuItem.getDisabledIcon();
+
+		MenuSelectionManager msm = MenuSelectionManager.defaultManager();
+		if( msm != null ) {
+			MenuElement[] path = msm.getSelectedPath();
+			MenuElement selectedElement = path.length > 0 ? path[path.length - 1] : null;
+			if( menuItem == selectedElement ) {
+				Icon selectedIcon = menuItem.getSelectedIcon();
+				if( selectedIcon != null )
+					return selectedIcon;
+			}
+		}
 
 		if( menuItem.getModel().isPressed() && menuItem.isArmed() ) {
 			Icon pressedIcon = menuItem.getPressedIcon();
