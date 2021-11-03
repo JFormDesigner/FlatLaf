@@ -57,7 +57,7 @@ public class FlatDesktop
 	/**
 	 * Sets a handler to show a custom About dialog.
 	 * <p>
-	 * Useful for macOS to enable menu item "MyApp > About".
+	 * Useful for macOS to enable menu item "MyApp &gt; About".
 	 * <p>
 	 * Uses:
 	 * <ul>
@@ -83,7 +83,7 @@ public class FlatDesktop
 	/**
 	 * Sets a handler to show a custom Preferences dialog.
 	 * <p>
-	 * Useful for macOS to enable menu item "MyApp > Preferences".
+	 * Useful for macOS to enable menu item "MyApp &gt; Preferences".
 	 * <p>
 	 * Uses:
 	 * <ul>
@@ -135,7 +135,7 @@ public class FlatDesktop
 	 * The handler must invoke either {@link QuitResponse#performQuit} or
 	 * {@link QuitResponse#cancelQuit}.
 	 * <p>
-	 * Useful for macOS to get notified when user clicks menu item "MyApp > Quit".
+	 * Useful for macOS to get notified when user clicks menu item "MyApp &gt; Quit".
 	 * <p>
 	 * Uses:
 	 * <ul>
