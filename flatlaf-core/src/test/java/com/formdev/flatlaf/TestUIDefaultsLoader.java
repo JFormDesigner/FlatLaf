@@ -23,8 +23,6 @@ import java.awt.Font;
 import java.awt.Insets;
 import javax.swing.UIManager;
 import javax.swing.UIDefaults.ActiveValue;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -32,16 +30,6 @@ import org.junit.jupiter.api.Test;
  */
 public class TestUIDefaultsLoader
 {
-	@BeforeAll
-	static void setup() {
-		System.setProperty( FlatSystemProperties.UI_SCALE_ENABLED, "false" );
-	}
-
-	@AfterAll
-	static void cleanup() {
-		System.clearProperty( FlatSystemProperties.UI_SCALE_ENABLED );
-	}
-
 	@Test
 	void parseValue() {
 		assertEquals( null, UIDefaultsLoader.parseValue( "dummy", "null", null ) );
