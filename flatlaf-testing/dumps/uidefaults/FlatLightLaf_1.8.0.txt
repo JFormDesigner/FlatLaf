@@ -128,7 +128,7 @@ CheckBox.icon.borderColor      #afafaf  HSL   0   0  69    javax.swing.plaf.Colo
 CheckBox.icon.checkmarkColor   #4e9de7  HSL 209  76  61    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledBackground #f2f2f2  HSL   0   0  95    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.disabledBorderColor #bfbfbf  HSL   0   0  75    javax.swing.plaf.ColorUIResource [UI]
-CheckBox.icon.disabledCheckmarkColor #a9a9a9  HSL   0   0  66    javax.swing.plaf.ColorUIResource [UI]
+CheckBox.icon.disabledCheckmarkColor #a8a8a8  HSL   0   0  66    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.focusWidth       1
 CheckBox.icon.focusedBackground #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
 CheckBox.icon.focusedBorderColor #7b9ebf  HSL 209  35  62    javax.swing.plaf.ColorUIResource [UI]
