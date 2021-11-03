@@ -601,6 +601,7 @@ RadioButton.foreground
 RadioButton.highlight
 RadioButton.icon
 RadioButton.icon.centerDiameter
+RadioButton.icon.style
 RadioButton.iconTextGap
 RadioButton.icon[filled].centerDiameter
 RadioButton.light

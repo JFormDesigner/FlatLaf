@@ -100,6 +100,11 @@
 + PasswordField.border           [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 
 
+#---- RadioButton ----
+
++ RadioButton.icon.style         filled
+
+
 #---- ScrollPane ----
 
 - ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]

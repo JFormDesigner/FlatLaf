@@ -29,6 +29,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
  *       is painted outside of the icon bounds. Make sure that the radiobutton
  *       has margins, which are equal or greater than focusWidth.
  *
+ * @uiDefault RadioButton.icon.style					String	optional; "outlined"/null (default) or "filled"
  * @uiDefault RadioButton.icon.centerDiameter			int or float
  *
  * @author Karl Tauber
@@ -37,6 +38,11 @@ public class FlatRadioButtonIcon
 	extends FlatCheckBoxIcon
 {
 	@Styleable protected float centerDiameter = getUIFloat( "RadioButton.icon.centerDiameter", 8, style );
+
+	@Override
+	protected String getPropertyPrefix() {
+		return "RadioButton.";
+	}
 
 	@Override
 	protected void paintFocusBorder( Component c, Graphics2D g ) {

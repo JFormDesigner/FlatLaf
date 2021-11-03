@@ -86,7 +86,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatCheckBoxIcon
 	extends FlatAbstractIcon
 {
-	protected final String style = UIManager.getString( "CheckBox.icon.style" );
+	protected final String style = UIManager.getString( getPropertyPrefix() + "icon.style" );
 	@Styleable protected float focusWidth = getUIFloat( "CheckBox.icon.focusWidth", UIManager.getInt( "Component.focusWidth" ), style );
 	@Styleable protected Color focusColor = FlatUIUtils.getUIColor( "CheckBox.icon.focusColor", UIManager.getColor( "Component.focusColor" ) );
 	/** @since 2 */ @Styleable protected float borderWidth = getUIFloat( "CheckBox.icon.borderWidth", FlatUIUtils.getUIFloat( "Component.borderWidth", 1 ), style );
@@ -128,6 +128,10 @@ public class FlatCheckBoxIcon
 	/** @since 2 */ @Styleable protected Color pressedSelectedBorderColor = getUIColor( "CheckBox.icon.pressedSelectedBorderColor", style );
 	/** @since 2 */ @Styleable protected Color pressedSelectedBackground = getUIColor( "CheckBox.icon.pressedSelectedBackground", style );
 	/** @since 2 */ @Styleable protected Color pressedCheckmarkColor = getUIColor( "CheckBox.icon.pressedCheckmarkColor", style );
+
+	protected String getPropertyPrefix() {
+		return "CheckBox.";
+	}
 
 	protected static Color getUIColor( String key, String style ) {
 		if( style != null ) {
