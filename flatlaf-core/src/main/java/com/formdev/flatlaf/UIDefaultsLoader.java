@@ -355,7 +355,7 @@ class UIDefaultsLoader
 		value = value.trim();
 
 		// null
-		if( value.equals( "null" ) ) {
+		if( value.equals( "null" ) || value.isEmpty() ) {
 			resultValueType[0] = ValueType.NULL;
 			return null;
 		}

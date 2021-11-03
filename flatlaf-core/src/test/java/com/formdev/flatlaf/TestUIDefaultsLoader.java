@@ -79,7 +79,6 @@ public class TestUIDefaultsLoader
 	void parseFonts() {
 		// style
 		UIManager.put( "defaultFont", new Font( Font.DIALOG, Font.PLAIN, 10 ) );
-		assertFontEquals( Font.DIALOG, Font.PLAIN, 10, "" );
 		assertFontEquals( Font.DIALOG, Font.PLAIN, 10, "normal" );
 		assertFontEquals( Font.DIALOG, Font.BOLD, 10, "bold" );
 		assertFontEquals( Font.DIALOG, Font.ITALIC, 10, "italic" );
