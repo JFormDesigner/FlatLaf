@@ -8,146 +8,221 @@ new FormModel {
 		}
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
-			"$columnConstraints": "[fill][sizegroup 1,center][sizegroup 1,center][sizegroup 1,center]para[sizegroup 2,center][sizegroup 2,center][sizegroup 2,center]"
-			"$rowConstraints": "[][]3[][][][][]unrel[]para[][]3[][][][][]unrel[]"
+			"$columnConstraints": "[fill][sizegroup 1,center][sizegroup 1,center][sizegroup 1,center]para[sizegroup 2,center][sizegroup 2,center][sizegroup 2,center]0[grow,fill]"
+			"$rowConstraints": "[]para[][]3[][][][][]unrel[]para[][]3[][][][][]unrel[]"
 		} ) {
 			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "insets 0,hidemode 3"
+				"$columnConstraints": "[fill][fill]"
+				"$rowConstraints": "[]0"
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "zoomLabel"
+					"text": "Zoom:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "zoomToolBar"
+					"floatable": false
+					"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "zoom1xButton"
+						"text": "1x"
+						"selected": true
+						"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"$buttonGroup": new FormReference( "buttonGroup1" )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "zoomChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "zoom2xButton"
+						"text": "2x"
+						"font": #SwingDerivedFont0
+						"$buttonGroup": &FormReference0 new FormReference( "buttonGroup1" )
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "zoomChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "zoom3xButton"
+						"text": "3x"
+						"font": #SwingDerivedFont0
+						"$buttonGroup": #FormReference0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "zoomChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "zoom4xButton"
+						"text": "4x"
+						"font": #SwingDerivedFont0
+						"$buttonGroup": #FormReference0
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "zoomChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
+						name: "separator1"
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "indeterminateButton"
+						"text": "indeterminate"
+						"selected": true
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "indeterminateChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0 8 1,alignx right,growx 0"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label22"
 				"text": "JCheckBox"
-				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+				"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 0 3 1"
+				"value": "cell 0 1 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
 				"text": "unfocused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 1 3 1,alignx center,growx 0"
+				"value": "cell 1 2 3 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
 				"text": "focused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 1 3 1,alignx center,growx 0"
+				"value": "cell 4 2 3 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label23"
 				"text": "unsel."
-				"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+				"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 2,alignx center,growx 0"
+				"value": "cell 1 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label28"
 				"text": "sel."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 2,alignx center,growx 0"
+				"value": "cell 2 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label37"
 				"text": "ind."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 2,alignx center,growx 0"
+				"value": "cell 3 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label24"
 				"text": "unsel."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 2,alignx center,growx 0"
+				"value": "cell 4 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label29"
 				"text": "sel."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 2,alignx center,growx 0"
+				"value": "cell 5 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label38"
 				"text": "ind."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 2,alignx center,growx 0"
+				"value": "cell 6 3,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label17"
 				"text": "none"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 3"
+				"value": "cell 0 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 3"
+				"value": "cell 1 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox8"
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 3"
+				"value": "cell 2 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox15"
 				"stateIndeterminate": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 3"
+				"value": "cell 3 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox5"
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 3"
+				"value": "cell 4 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox12"
 				"stateFocused": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 3"
+				"value": "cell 5 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox20"
 				"stateIndeterminate": true
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 3"
+				"value": "cell 6 4"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label18"
 				"text": "hover"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 4"
+				"value": "cell 0 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox2"
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 4"
+				"value": "cell 1 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox9"
 				"stateHover": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 4"
+				"value": "cell 2 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox16"
 				"stateIndeterminate": true
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 4"
+				"value": "cell 3 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox6"
 				"stateFocused": true
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 4"
+				"value": "cell 4 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox13"
@@ -155,7 +230,7 @@ new FormModel {
 				"stateHover": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 4"
+				"value": "cell 5 5"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox21"
@@ -163,40 +238,40 @@ new FormModel {
 				"stateHover": true
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 4"
+				"value": "cell 6 5"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label19"
 				"text": "pressed"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 5"
+				"value": "cell 0 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox3"
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 5"
+				"value": "cell 1 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox10"
 				"statePressed": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 5"
+				"value": "cell 2 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox17"
 				"stateIndeterminate": true
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 5"
+				"value": "cell 3 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox7"
 				"stateFocused": true
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 5"
+				"value": "cell 4 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox14"
@@ -204,7 +279,7 @@ new FormModel {
 				"statePressed": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 5"
+				"value": "cell 5 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox22"
@@ -212,158 +287,158 @@ new FormModel {
 				"statePressed": true
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 6 5"
+				"value": "cell 6 6"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label20"
 				"text": "disabled"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 6"
+				"value": "cell 0 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox4"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 6"
+				"value": "cell 1 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox11"
 				"enabled": false
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 6"
+				"value": "cell 2 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateCheckBox" ) {
 				name: "testStateCheckBox18"
 				"stateIndeterminate": true
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 6"
+				"value": "cell 3 7"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label21"
 				"text": "try me"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 7"
+				"value": "cell 0 8"
 			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$ZoomCheckBox" ) {
 				name: "checkBox1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 7"
+				"value": "cell 1 8"
 			} )
-			add( new FormComponent( "javax.swing.JCheckBox" ) {
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$ZoomCheckBox" ) {
 				name: "checkBox2"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 7"
+				"value": "cell 2 8"
 			} )
-			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTriStateCheckBox" ) {
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$ZoomTriStateCheckBox" ) {
 				name: "triStateCheckBox1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 3 7"
+				"value": "cell 3 8"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label27"
 				"text": "JRadioButton"
-				"font": #SwingDerivedFont0
+				"font": #SwingDerivedFont1
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 8 3 1"
+				"value": "cell 0 9 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label3"
 				"text": "unfocused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 9 2 1,alignx center,growx 0"
+				"value": "cell 1 10 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label4"
 				"text": "focused"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 9 2 1,alignx center,growx 0"
+				"value": "cell 4 10 2 1,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label25"
 				"text": "unsel."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 10,alignx center,growx 0"
+				"value": "cell 1 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label30"
 				"text": "sel."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 10,alignx center,growx 0"
+				"value": "cell 2 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label26"
 				"text": "unsel."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 10,alignx center,growx 0"
+				"value": "cell 4 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label31"
 				"text": "sel."
-				"font": #SwingDerivedFont1
+				"font": #SwingDerivedFont2
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 10,alignx center,growx 0"
+				"value": "cell 5 11,alignx center,growx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label36"
 				"text": "none"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 11"
+				"value": "cell 0 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 11"
+				"value": "cell 1 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton8"
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 11"
+				"value": "cell 2 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton5"
 				"stateFocused": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 11"
+				"value": "cell 4 12"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton9"
 				"stateFocused": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 11"
+				"value": "cell 5 12"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label35"
 				"text": "hover"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 12"
+				"value": "cell 0 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton2"
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 12"
+				"value": "cell 1 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton10"
 				"stateHover": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 12"
+				"value": "cell 2 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton6"
 				"stateFocused": true
 				"stateHover": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 12"
+				"value": "cell 4 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton11"
@@ -371,33 +446,33 @@ new FormModel {
 				"stateHover": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 12"
+				"value": "cell 5 13"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label34"
 				"text": "pressed"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 13"
+				"value": "cell 0 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton3"
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 13"
+				"value": "cell 1 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton12"
 				"statePressed": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 13"
+				"value": "cell 2 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton7"
 				"stateFocused": true
 				"statePressed": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 4 13"
+				"value": "cell 4 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton13"
@@ -405,47 +480,52 @@ new FormModel {
 				"statePressed": true
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 5 13"
+				"value": "cell 5 14"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label33"
 				"text": "disabled"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 14"
+				"value": "cell 0 15"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton4"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 14"
+				"value": "cell 1 15"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$TestStateRadioButton" ) {
 				name: "testStateRadioButton14"
 				"enabled": false
 				"stateSelected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 14"
+				"value": "cell 2 15"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label32"
 				"text": "try me"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 15"
+				"value": "cell 0 16"
 			} )
-			add( new FormComponent( "javax.swing.JRadioButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$ZoomRadioButton" ) {
 				name: "radioButton1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15"
+				"value": "cell 1 16"
 			} )
-			add( new FormComponent( "javax.swing.JRadioButton" ) {
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$ZoomRadioButton" ) {
 				name: "radioButton2"
 				"selected": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 15"
+				"value": "cell 2 16"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 385, 685 )
+			"size": new java.awt.Dimension( 325, 515 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup1"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 580 )
 		} )
 	}
 }

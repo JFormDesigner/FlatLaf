@@ -60,7 +60,7 @@ class FlatThemePreview
 		// add tabs
 		allTab = new FlatThemePreviewAll( this );
 		buttonsTab = new FlatThemePreviewButtons( this );
-		switchesTab = new FlatThemePreviewSwitches();
+		switchesTab = new FlatThemePreviewSwitches( this );
 		tabbedPane.addTab( "All", createPreviewTab( allTab ) );
 		tabbedPane.addTab( "Buttons", createPreviewTab( buttonsTab ) );
 		tabbedPane.addTab( "Switches", createPreviewTab( switchesTab ) );
@@ -99,6 +99,7 @@ class FlatThemePreview
 			switch( selectedTab ) {
 				case 0: allTab.activated(); break;
 				case 1: buttonsTab.activated(); break;
+				case 2: switchesTab.activated(); break;
 			}
 		}
 	}
