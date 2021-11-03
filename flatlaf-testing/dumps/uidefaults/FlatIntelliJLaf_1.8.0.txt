@@ -45,6 +45,7 @@
 
 #---- CheckBox ----
 
+- CheckBox.icon.focusWidth       1
 - CheckBox.icon.focusedBackground #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
 
 + CheckBox.icon.style            filled
