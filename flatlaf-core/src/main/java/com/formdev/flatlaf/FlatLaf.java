@@ -269,6 +269,12 @@ public abstract class FlatLaf
 				}
 			};
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+			// make sure that AWT desktop properties are initialized (on Linux)
+			// before invoking toolkit.addPropertyChangeListener()
+			// https://github.com/JFormDesigner/FlatLaf/issues/405#issuecomment-960242342
+			toolkit.getDesktopProperty( "dummy" );
+
 			toolkit.addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
 			if( desktopPropertyName2 != null )
 				toolkit.addPropertyChangeListener( desktopPropertyName2, desktopPropertyListener );
