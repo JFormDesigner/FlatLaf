@@ -45,11 +45,12 @@
 
 #---- CheckBox ----
 
+- CheckBox.icon.focusWidth       1
 - CheckBox.icon.focusedBackground #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
 
 + CheckBox.icon.style            filled
 
-- CheckBox.icon[filled].selectedFocusedCheckmarkColor #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
+- CheckBox.icon[filled].focusedCheckmarkColor #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- ComboBox ----
@@ -97,6 +98,11 @@
 
 - PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
 + PasswordField.border           [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+
+
+#---- RadioButton ----
+
++ RadioButton.icon.style         filled
 
 
 #---- ScrollPane ----

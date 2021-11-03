@@ -18,6 +18,7 @@
 
 #---- CheckBox ----
 
+- CheckBox.icon.focusWidth       1
 - CheckBox.icon.focusedBackground #446e9e4d  30%  HSLA 212  40  44 30    javax.swing.plaf.ColorUIResource [UI]
 
 

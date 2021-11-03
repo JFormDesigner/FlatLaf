@@ -29,6 +29,7 @@ import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
  *       is painted outside of the icon bounds. Make sure that the radiobutton
  *       has margins, which are equal or greater than focusWidth.
  *
+ * @uiDefault RadioButton.icon.style					String	optional; "outlined"/null (default) or "filled"
  * @uiDefault RadioButton.icon.centerDiameter			int or float
  *
  * @author Karl Tauber
@@ -39,19 +40,27 @@ public class FlatRadioButtonIcon
 	@Styleable protected float centerDiameter = getUIFloat( "RadioButton.icon.centerDiameter", 8, style );
 
 	@Override
-	protected void paintFocusBorder( Component c, Graphics2D g ) {
-		// the outer focus border is painted outside of the icon
-		int wh = ICON_SIZE + (focusWidth * 2);
-		g.fillOval( -focusWidth, -focusWidth, wh, wh );
+	protected String getPropertyPrefix() {
+		return "RadioButton.";
 	}
 
 	@Override
-	protected void paintBorder( Component c, Graphics2D g ) {
+	protected void paintFocusBorder( Component c, Graphics2D g ) {
+		// the outer focus border is painted outside of the icon
+		float wh = ICON_SIZE + (focusWidth * 2);
+		g.fill( new Ellipse2D.Float( -focusWidth, -focusWidth, wh, wh ) );
+	}
+
+	@Override
+	protected void paintBorder( Component c, Graphics2D g, float borderWidth ) {
+		if( borderWidth == 0 )
+			return;
+
 		g.fillOval( 0, 0, 15, 15 );
 	}
 
 	@Override
-	protected void paintBackground( Component c, Graphics2D g ) {
+	protected void paintBackground( Component c, Graphics2D g, float borderWidth ) {
 		float xy = borderWidth;
 		float wh = 15 - (borderWidth * 2);
 		g.fill( new Ellipse2D.Float( xy, xy, wh, wh ) );

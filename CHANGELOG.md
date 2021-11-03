@@ -34,8 +34,14 @@ FlatLaf Change Log
     - if moving focus into the toolbar, focus recently focused toolbar button
 - ComboBox, Spinner, TextField and subclasses: Support specifying width of
   border (see UI value `Component.borderWidth`).
-- CheckBox and RadioButton: Support specifying width of icon border (see UI
-  value `CheckBox.icon.borderWidth`).
+- CheckBox and RadioButton:
+  - Made selected icon better recognizable in **FlatLaf Light** (use blue
+    border), **Dark** and **Darcula** (use lighter border) themes. **IntelliJ**
+    theme is not changed.
+  - Support specifying width of icon border (see UI value
+    `CheckBox.icon.borderWidth`).
+  - Reworked icon UI defaults and added missing ones. **Note**: There are minor
+    incompatible changes in FlatLaf properties files.
 - Slider: Support specifying width of thumb border (see UI value
   `Slider.thumbBorderWidth`).
 - Added more color functions to class `ColorFunctions` for easy use in

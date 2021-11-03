@@ -608,9 +608,11 @@ public class TestFlatStyling
 
 		//---- icon ----
 
-		ui.applyStyle( b, "icon.focusWidth: 2" );
+		ui.applyStyle( b, "icon.focusWidth: 1.5" );
 		ui.applyStyle( b, "icon.focusColor: #fff" );
-		ui.applyStyle( b, "icon.borderWidth: 1" );
+		ui.applyStyle( b, "icon.borderWidth: 1.5" );
+		ui.applyStyle( b, "icon.selectedBorderWidth: 1.5" );
+		ui.applyStyle( b, "icon.disabledSelectedBorderWidth: 1.5" );
 		ui.applyStyle( b, "icon.arc: 5" );
 
 		// enabled
@@ -623,23 +625,30 @@ public class TestFlatStyling
 		// disabled
 		ui.applyStyle( b, "icon.disabledBorderColor: #fff" );
 		ui.applyStyle( b, "icon.disabledBackground: #fff" );
+		ui.applyStyle( b, "icon.disabledSelectedBorderColor: #fff" );
+		ui.applyStyle( b, "icon.disabledSelectedBackground: #fff" );
 		ui.applyStyle( b, "icon.disabledCheckmarkColor: #fff" );
 
 		// focused
 		ui.applyStyle( b, "icon.focusedBorderColor: #fff" );
 		ui.applyStyle( b, "icon.focusedBackground: #fff" );
-		ui.applyStyle( b, "icon.selectedFocusedBorderColor: #fff" );
-		ui.applyStyle( b, "icon.selectedFocusedBackground: #fff" );
-		ui.applyStyle( b, "icon.selectedFocusedCheckmarkColor: #fff" );
+		ui.applyStyle( b, "icon.focusedSelectedBorderColor: #fff" );
+		ui.applyStyle( b, "icon.focusedSelectedBackground: #fff" );
+		ui.applyStyle( b, "icon.focusedCheckmarkColor: #fff" );
 
 		// hover
 		ui.applyStyle( b, "icon.hoverBorderColor: #fff" );
 		ui.applyStyle( b, "icon.hoverBackground: #fff" );
-		ui.applyStyle( b, "icon.selectedHoverBackground: #fff" );
+		ui.applyStyle( b, "icon.hoverSelectedBorderColor: #fff" );
+		ui.applyStyle( b, "icon.hoverSelectedBackground: #fff" );
+		ui.applyStyle( b, "icon.hoverCheckmarkColor: #fff" );
 
 		// pressed
+		ui.applyStyle( b, "icon.pressedBorderColor: #fff" );
 		ui.applyStyle( b, "icon.pressedBackground: #fff" );
-		ui.applyStyle( b, "icon.selectedPressedBackground: #fff" );
+		ui.applyStyle( b, "icon.pressedSelectedBorderColor: #fff" );
+		ui.applyStyle( b, "icon.pressedSelectedBackground: #fff" );
+		ui.applyStyle( b, "icon.pressedCheckmarkColor: #fff" );
 	}
 
 	@Test
@@ -1263,9 +1272,11 @@ public class TestFlatStyling
 	}
 
 	private void flatCheckBoxIcon( FlatCheckBoxIcon icon ) {
-		icon.applyStyleProperty( "focusWidth", 2 );
+		icon.applyStyleProperty( "focusWidth", 1.5f );
 		icon.applyStyleProperty( "focusColor", Color.WHITE );
 		icon.applyStyleProperty( "borderWidth", 1.5f );
+		icon.applyStyleProperty( "selectedBorderWidth", 1.5f );
+		icon.applyStyleProperty( "disabledSelectedBorderWidth", 1.5f );
 		icon.applyStyleProperty( "arc", 5 );
 
 		// enabled
@@ -1278,23 +1289,30 @@ public class TestFlatStyling
 		// disabled
 		icon.applyStyleProperty( "disabledBorderColor", Color.WHITE );
 		icon.applyStyleProperty( "disabledBackground", Color.WHITE );
+		icon.applyStyleProperty( "disabledSelectedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "disabledSelectedBackground", Color.WHITE );
 		icon.applyStyleProperty( "disabledCheckmarkColor", Color.WHITE );
 
 		// focused
 		icon.applyStyleProperty( "focusedBorderColor", Color.WHITE );
 		icon.applyStyleProperty( "focusedBackground", Color.WHITE );
-		icon.applyStyleProperty( "selectedFocusedBorderColor", Color.WHITE );
-		icon.applyStyleProperty( "selectedFocusedBackground", Color.WHITE );
-		icon.applyStyleProperty( "selectedFocusedCheckmarkColor", Color.WHITE );
+		icon.applyStyleProperty( "focusedSelectedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "focusedSelectedBackground", Color.WHITE );
+		icon.applyStyleProperty( "focusedCheckmarkColor", Color.WHITE );
 
 		// hover
 		icon.applyStyleProperty( "hoverBorderColor", Color.WHITE );
 		icon.applyStyleProperty( "hoverBackground", Color.WHITE );
-		icon.applyStyleProperty( "selectedHoverBackground", Color.WHITE );
+		icon.applyStyleProperty( "hoverSelectedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "hoverSelectedBackground", Color.WHITE );
+		icon.applyStyleProperty( "hoverCheckmarkColor", Color.WHITE );
 
 		// pressed
+		icon.applyStyleProperty( "pressedBorderColor", Color.WHITE );
 		icon.applyStyleProperty( "pressedBackground", Color.WHITE );
-		icon.applyStyleProperty( "selectedPressedBackground", Color.WHITE );
+		icon.applyStyleProperty( "pressedSelectedBorderColor", Color.WHITE );
+		icon.applyStyleProperty( "pressedSelectedBackground", Color.WHITE );
+		icon.applyStyleProperty( "pressedCheckmarkColor", Color.WHITE );
 	}
 
 	@Test

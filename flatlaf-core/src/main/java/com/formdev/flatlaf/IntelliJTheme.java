@@ -504,7 +504,7 @@ public class IntelliJTheme
 			// for filled checkbox/radiobutton used in light themes
 			defaults.remove( "CheckBox.icon[filled].focusWidth" );
 			defaults.put( "CheckBox.icon[filled].hoverBorderColor", defaults.get( "CheckBox.icon[filled].focusedBorderColor" ) );
-			defaults.put( "CheckBox.icon[filled].selectedFocusedBackground", defaults.get( "CheckBox.icon[filled].selectedBackground" ) );
+			defaults.put( "CheckBox.icon[filled].focusedSelectedBackground", defaults.get( "CheckBox.icon[filled].selectedBackground" ) );
 
 			if( dark ) {
 				// IDEA Darcula checkBoxFocused.svg, checkBoxSelectedFocused.svg,
@@ -513,9 +513,9 @@ public class IntelliJTheme
 				// --> add alpha to focused border colors
 				String[] focusedBorderColorKeys = new String[] {
 					"CheckBox.icon.focusedBorderColor",
-					"CheckBox.icon.selectedFocusedBorderColor",
+					"CheckBox.icon.focusedSelectedBorderColor",
 					"CheckBox.icon[filled].focusedBorderColor",
-					"CheckBox.icon[filled].selectedFocusedBorderColor",
+					"CheckBox.icon[filled].focusedSelectedBorderColor",
 				};
 				for( String key : focusedBorderColorKeys ) {
 					Color color = defaults.getColor( key );
@@ -624,7 +624,7 @@ public class IntelliJTheme
 		checkboxKeyMapping.put( "Checkbox.Background.Selected", "CheckBox.icon.selectedBackground" );
 		checkboxKeyMapping.put( "Checkbox.Border.Selected",     "CheckBox.icon.selectedBorderColor" );
 		checkboxKeyMapping.put( "Checkbox.Foreground.Selected", "CheckBox.icon.checkmarkColor" );
-		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.selectedFocusedBorderColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.focusedSelectedBorderColor" );
 
 		checkboxDuplicateColors.put( "Checkbox.Background.Default.Dark", "Checkbox.Background.Selected.Dark" );
 		checkboxDuplicateColors.put( "Checkbox.Border.Default.Dark",     "Checkbox.Border.Selected.Dark" );
