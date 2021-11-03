@@ -55,6 +55,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.foreground							Color
  * @uiDefault Table.selectionBackground					Color
  * @uiDefault Table.selectionForeground					Color
+ * @uiDefault Table.disabledForeground					Color
  * @uiDefault Table.gridColor							Color
  * @uiDefault Table.scrollPaneBorder					Border
  * @uiDefault Table.dropLineColor						Color
@@ -202,6 +203,11 @@ public class FlatTableUI
 					installStyle();
 					table.revalidate();
 					table.repaint();
+					break;
+
+				case "enabled":
+					boolean enabled = Boolean.TRUE.equals( e.getNewValue() );
+					table.setForeground( UIManager.getColor( enabled ? "Table.foreground" : "Table.disabledForeground" ) );
 					break;
 			}
 		};
