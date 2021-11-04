@@ -1477,7 +1477,7 @@ large.font                     [active] Segoe UI plain 14    javax.swing.plaf.Fo
 
 #---- light ----
 
-light.font                     [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
+light.font                     [active] Segoe UI Semilight plain 12    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- medium ----

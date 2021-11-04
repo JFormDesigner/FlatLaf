@@ -102,7 +102,7 @@
 
 #---- light ----
 
-- light.font                     [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
+- light.font                     [active] Segoe UI Semilight plain 12    javax.swing.plaf.FontUIResource [UI]
 + light.font                     [active] HelveticaNeue-Light plain 13    javax.swing.plaf.FontUIResource [UI]
 
 
