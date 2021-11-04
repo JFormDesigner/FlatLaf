@@ -22,6 +22,10 @@ import javax.swing.text.DefaultEditorKit;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
+import net.miginfocom.layout.AC;
+import net.miginfocom.layout.BoundSize;
+import net.miginfocom.layout.ConstraintParser;
+import net.miginfocom.layout.DimConstraint;
 import net.miginfocom.swing.*;
 
 /**
@@ -140,7 +144,7 @@ class BasicComponentsPanel
 		JLabel thinLabel = new JLabel();
 		JLabel lightLabel = new JLabel();
 		JLabel semiboldLabel = new JLabel();
-		JLabel label3 = new JLabel();
+		JLabel fontZoomLabel = new JLabel();
 		JLabel largeLabel = new JLabel();
 		JLabel defaultLabel = new JLabel();
 		JLabel mediumLabel = new JLabel();
@@ -735,11 +739,11 @@ class BasicComponentsPanel
 		semiboldLabel.putClientProperty("FlatLaf.style", "font: 200% $semibold.font");
 		add(semiboldLabel, "cell 1 15 5 1");
 
-		//---- label3 ----
-		label3.setText("(200%)");
-		label3.putClientProperty("FlatLaf.styleClass", "small");
-		label3.setEnabled(false);
-		add(label3, "cell 1 15 5 1");
+		//---- fontZoomLabel ----
+		fontZoomLabel.setText("(200%)");
+		fontZoomLabel.putClientProperty("FlatLaf.styleClass", "small");
+		fontZoomLabel.setEnabled(false);
+		add(fontZoomLabel, "cell 1 15 5 1");
 
 		//---- largeLabel ----
 		largeLabel.setText("large");
@@ -808,37 +812,55 @@ class BasicComponentsPanel
 		if( FlatLafDemo.screenshotsMode ) {
 			// hide some components
 			Component[] hiddenComponents = {
+				labelLabel, label1, label2,
 				button13, button14, button15, button16, comboBox5, comboBox6,
-				textField6, passwordField5,
 
+				textFieldLabel, textField2, textField4, textField6,
 				formattedTextFieldLabel, formattedTextField1, formattedTextField2, formattedTextField3, formattedTextField4, formattedTextField5,
+				passwordFieldLabel, passwordField1, passwordField2, passwordField3, passwordField4, passwordField5,
 				textAreaLabel, scrollPane1, scrollPane2, scrollPane3, scrollPane4, textArea5,
 				editorPaneLabel, scrollPane5, scrollPane6, scrollPane7, scrollPane8, editorPane5,
 				textPaneLabel, scrollPane9, scrollPane10, scrollPane11, scrollPane12, textPane5,
 
 				errorHintsLabel, errorHintsTextField, errorHintsComboBox, errorHintsSpinner,
 				warningHintsLabel, warningHintsTextField, warningHintsComboBox, warningHintsSpinner,
+
+				fontZoomLabel,
 			};
 			for( Component c : hiddenComponents )
 				c.setVisible( false );
 
-			// move leading/trailing icon fields and password fields some rows up
-			Component[] formattedTextFields = { formattedTextFieldLabel, formattedTextField1, formattedTextField2, formattedTextField3, formattedTextField4 };
-			Component[] passwordFields = { passwordFieldLabel, passwordField1, passwordField2, passwordField3, passwordField4 };
-			Component[] iconsFields = { iconsLabel, leadingIconTextField, trailingIconTextField, iconsTextField };
+			// update layout (change row gaps to zero)
 			MigLayout layout = (MigLayout) getLayout();
-			for( int i = 0; i < iconsFields.length; i++ ) {
-				Object cons = layout.getComponentConstraints( passwordFields[i] );
-				layout.setComponentConstraints( iconsFields[i], cons );
-			}
-			for( int i = 0; i < passwordFields.length; i++ ) {
-				Object cons = layout.getComponentConstraints( formattedTextFields[i] );
-				layout.setComponentConstraints( passwordFields[i], cons );
-			}
+			Object rowCons = layout.getRowConstraints();
+			AC ac = (rowCons instanceof String)
+				? ConstraintParser.parseColumnConstraints( (String) rowCons )
+				: (AC) rowCons;
+			BoundSize zeroGap = ConstraintParser.parseBoundSize( "0", true, true );
+			DimConstraint[] rows = ac.getConstaints();
+			rows[6].setGapBefore( zeroGap );
+			rows[7].setGapBefore( zeroGap );
+			rows[8].setGapBefore( zeroGap );
+			rows[9].setGapBefore( zeroGap );
+			rows[10].setGapBefore( zeroGap );
+			rows[11].setGapBefore( zeroGap );
+			rows[11].setGapAfter( zeroGap );
+			rows[12].setGapBefore( zeroGap );
+			rows[13].setGapBefore( zeroGap );
+			rows[15].setGapBefore( zeroGap );
+			layout.setRowConstraints( ac );
+
+			// move two text field into same row as spinners
+			spinnerLabel.setText( "JSpinner / JTextField:" );
+			layout.setComponentConstraints( textField1, "cell 3 5,growx" );
+			layout.setComponentConstraints( textField3, "cell 4 5,growx" );
 
 			// make "Not editable disabled" combobox smaller
 			Object cons = layout.getComponentConstraints( comboBox4 );
 			layout.setComponentConstraints( comboBox4, cons + ",width 50:50" );
+
+			revalidate();
+			repaint();
 		}
 	}
 

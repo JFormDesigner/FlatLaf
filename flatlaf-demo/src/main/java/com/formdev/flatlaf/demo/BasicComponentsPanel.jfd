@@ -741,7 +741,7 @@ new FormModel {
 				"value": "cell 1 15 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label3"
+				name: "fontZoomLabel"
 				"text": "(200%)"
 				"$client.FlatLaf.styleClass": "small"
 				"enabled": false
