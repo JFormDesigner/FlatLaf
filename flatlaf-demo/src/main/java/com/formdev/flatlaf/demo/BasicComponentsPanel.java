@@ -137,6 +137,10 @@ class BasicComponentsPanel
 		JLabel h2Label = new JLabel();
 		JLabel h3Label = new JLabel();
 		JLabel h4Label = new JLabel();
+		JLabel thinLabel = new JLabel();
+		JLabel lightLabel = new JLabel();
+		JLabel semiboldLabel = new JLabel();
+		JLabel label3 = new JLabel();
 		JLabel largeLabel = new JLabel();
 		JLabel defaultLabel = new JLabel();
 		JLabel mediumLabel = new JLabel();
@@ -174,6 +178,7 @@ class BasicComponentsPanel
 			"[]" +
 			"[]" +
 			"[]" +
+			"[]0" +
 			"[]"));
 
 		//---- labelLabel ----
@@ -715,34 +720,55 @@ class BasicComponentsPanel
 		h4Label.putClientProperty("FlatLaf.styleClass", "h4");
 		add(h4Label, "cell 1 15 5 1");
 
+		//---- thinLabel ----
+		thinLabel.setText("thin");
+		thinLabel.putClientProperty("FlatLaf.style", "font: 200% $thin.font");
+		add(thinLabel, "cell 1 15 5 1,gapx 30");
+
+		//---- lightLabel ----
+		lightLabel.setText("light");
+		lightLabel.putClientProperty("FlatLaf.style", "font: 200% $light.font");
+		add(lightLabel, "cell 1 15 5 1");
+
+		//---- semiboldLabel ----
+		semiboldLabel.setText("semibold");
+		semiboldLabel.putClientProperty("FlatLaf.style", "font: 200% $semibold.font");
+		add(semiboldLabel, "cell 1 15 5 1");
+
+		//---- label3 ----
+		label3.setText("(200%)");
+		label3.putClientProperty("FlatLaf.styleClass", "small");
+		label3.setEnabled(false);
+		add(label3, "cell 1 15 5 1");
+
 		//---- largeLabel ----
 		largeLabel.setText("large");
 		largeLabel.putClientProperty("FlatLaf.styleClass", "large");
-		add(largeLabel, "cell 1 15 5 1,gapx 30");
+		add(largeLabel, "cell 1 16 5 1");
 
 		//---- defaultLabel ----
 		defaultLabel.setText("default/regular");
-		add(defaultLabel, "cell 1 15 5 1");
+		add(defaultLabel, "cell 1 16 5 1");
 
 		//---- mediumLabel ----
 		mediumLabel.setText("medium");
 		mediumLabel.putClientProperty("FlatLaf.styleClass", "medium");
-		add(mediumLabel, "cell 1 15 5 1");
+		add(mediumLabel, "cell 1 16 5 1");
 
 		//---- smallLabel ----
 		smallLabel.setText("small");
 		smallLabel.putClientProperty("FlatLaf.styleClass", "small");
-		add(smallLabel, "cell 1 15 5 1");
+		add(smallLabel, "cell 1 16 5 1");
 
 		//---- miniLabel ----
 		miniLabel.setText("mini");
 		miniLabel.putClientProperty("FlatLaf.styleClass", "mini");
-		add(miniLabel, "cell 1 15 5 1");
+		add(miniLabel, "cell 1 16 5 1");
 
 		//---- monospacedLabel ----
 		monospacedLabel.setText("monospaced");
 		monospacedLabel.putClientProperty("FlatLaf.styleClass", "monospaced");
-		add(monospacedLabel, "cell 1 15 5 1,gapx 30");
+		add(monospacedLabel, "cell 1 16 5 1,gapx 30");
 
 		//======== popupMenu1 ========
 		{
