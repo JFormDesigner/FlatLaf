@@ -220,6 +220,19 @@ public class TestFlatStyleType
 	}
 
 	@Test
+	void slider2() {
+		JSlider c = new JSlider();
+
+		// when slider labels are painted, then a Java private subclass of JLabel
+		// is used that overrides getForeground(), which is not accessible via reflection
+		// see class JSlider.SmartHashtable.LabelUIResource
+		c.setPaintLabels( true );
+		c.setMajorTickSpacing( 50 );
+
+		assertEquals( new Color( 0x000022 ), c.getForeground() );
+	}
+
+	@Test
 	void spinner() {
 		JSpinner c = new JSpinner();
 		assertEquals( new Color( 0x000023 ), c.getForeground() );
