@@ -97,7 +97,8 @@ public class FlatStylingSupport
 		Object style = getStyle( c );
 		Object styleClass = getStyleClass( c );
 		Object styleForClasses = getStyleForClasses( styleClass, type );
-		return joinStyles( styleForClasses, style );
+		Object styleForType = getStyleForType( type );
+		return joinStyles( joinStyles( styleForType, styleForClasses ), style );
 	}
 
 	/**
@@ -160,6 +161,28 @@ public class FlatStylingSupport
 		return joinStyles(
 			UIManager.get( "[style]." + styleClass ),
 			UIManager.get( "[style]" + type + '.' + styleClass ) );
+	}
+
+	/**
+	 * Returns the styles for the given type.
+	 * <p>
+	 * The style rules must be defined in UI defaults either as strings (in CSS syntax)
+	 * or as {@link java.util.Map}&lt;String, Object&gt; (with binary values).
+	 * The key must be in syntax: {@code [style]type}.
+	 * E.g. in FlatLaf properties file:
+	 * <pre>{@code
+	 * [style]Button = borderColor: #08f; background: #08f; foreground: #fff
+	 * }</pre>
+	 * or in Java code:
+	 * <pre>{@code
+	 * UIManager.put( "[style]Button", "borderColor: #08f; background: #08f; foreground: #fff" );
+	 * }</pre>
+	 *
+	 * @param type the type of the component
+	 * @return the styles
+	 */
+	public static Object getStyleForType( String type ) {
+		return UIManager.get( "[style]" + type );
 	}
 
 	/**
