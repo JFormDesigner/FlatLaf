@@ -46,6 +46,7 @@ public class SystemInfo
 	public static final boolean isJava_9_orLater;
 	public static final boolean isJava_11_orLater;
 	public static final boolean isJava_15_orLater;
+	public static final boolean isJava_17_orLater;
 
 	// Java VMs
 	public static final boolean isJetBrainsJVM;
@@ -82,6 +83,7 @@ public class SystemInfo
 		isJava_9_orLater = (javaVersion >= toVersion( 9, 0, 0, 0 ));
 		isJava_11_orLater = (javaVersion >= toVersion( 11, 0, 0, 0 ));
 		isJava_15_orLater = (javaVersion >= toVersion( 15, 0, 0, 0 ));
+		isJava_17_orLater = (javaVersion >= toVersion( 17, 0, 0, 0 ));
 
 		// Java VMs
 		isJetBrainsJVM = System.getProperty( "java.vm.vendor", "Unknown" )
