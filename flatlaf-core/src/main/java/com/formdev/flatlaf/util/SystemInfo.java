@@ -46,7 +46,7 @@ public class SystemInfo
 	public static final boolean isJava_9_orLater;
 	public static final boolean isJava_11_orLater;
 	public static final boolean isJava_15_orLater;
-	public static final boolean isJava_17_orLater;
+	/** @since 2 */ public static final boolean isJava_17_orLater;
 
 	// Java VMs
 	public static final boolean isJetBrainsJVM;
