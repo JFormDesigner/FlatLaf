@@ -47,7 +47,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.platform.win32.Advapi32Util;
-import com.sun.jna.platform.win32.BaseTSD;
+import com.sun.jna.platform.win32.BaseTSD.LONG_PTR;
 import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
 import com.sun.jna.platform.win32.GDI32;
 import com.sun.jna.platform.win32.Shell32;
@@ -76,6 +76,10 @@ import com.sun.jna.win32.W32APIOptions;
 //     https://github.com/Guerra24/NanoUI-win32
 //     https://github.com/oberth/custom-chrome
 //     https://github.com/rossy/borderless-window
+//
+//   Windows 11
+//     https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-snap-layout-menu
+//     https://github.com/dotnet/wpf/issues/4825#issuecomment-930442736
 //
 
 /**
@@ -160,30 +164,17 @@ public class FlatWindowsNativeWindowBorder
 	}
 
 	@Override
-	public void setTitleBarHeight( Window window, int titleBarHeight ) {
+	public void updateTitleBarInfo( Window window, int titleBarHeight, List<Rectangle> hitTestSpots,
+		Rectangle appIconBounds, Rectangle maximizeButtonBounds )
+	{
 		WndProc wndProc = windowsMap.get( window );
 		if( wndProc == null )
 			return;
 
 		wndProc.titleBarHeight = titleBarHeight;
-	}
-
-	@Override
-	public void setTitleBarHitTestSpots( Window window, List<Rectangle> hitTestSpots ) {
-		WndProc wndProc = windowsMap.get( window );
-		if( wndProc == null )
-			return;
-
 		wndProc.hitTestSpots = hitTestSpots.toArray( new Rectangle[hitTestSpots.size()] );
-	}
-
-	@Override
-	public void setTitleBarAppIconBounds( Window window, Rectangle appIconBounds ) {
-		WndProc wndProc = windowsMap.get( window );
-		if( wndProc == null )
-			return;
-
 		wndProc.appIconBounds = (appIconBounds != null) ? new Rectangle( appIconBounds ) : null;
+		wndProc.maximizeButtonBounds = (maximizeButtonBounds != null) ? new Rectangle( maximizeButtonBounds ) : null;
 	}
 
 	@Override
@@ -293,7 +284,16 @@ public class FlatWindowsNativeWindowBorder
 			WM_ERASEBKGND = 0x0014,
 			WM_NCCALCSIZE = 0x0083,
 			WM_NCHITTEST = 0x0084,
+
+			WM_NCMOUSEMOVE = 0x00A0,
+			WM_NCLBUTTONDOWN = 0x00A1,
+			WM_NCLBUTTONUP = 0x00A2,
 			WM_NCRBUTTONUP = 0x00A5,
+
+			WM_MOUSEMOVE= 0x0200,
+			WM_LBUTTONDOWN = 0x0201,
+			WM_LBUTTONUP = 0x0202,
+
 			WM_DWMCOLORIZATIONCOLORCHANGED = 0x0320;
 
 		// WM_SIZE wParam
@@ -306,6 +306,7 @@ public class FlatWindowsNativeWindowBorder
 			HTCLIENT = 1,
 			HTCAPTION = 2,
 			HTSYSMENU = 3,
+			HTMAXBUTTON = 9,
 			HTTOP = 12;
 
 		private static final int ABS_AUTOHIDE = 0x0000001;
@@ -328,13 +329,15 @@ public class FlatWindowsNativeWindowBorder
 
 		private Window window;
 		private final HWND hwnd;
-		private final BaseTSD.LONG_PTR defaultWndProc;
+		private final LONG_PTR defaultWndProc;
 		private int wmSizeWParam = -1;
 		private HBRUSH background;
 
+		// Swing coordinates/values may be scaled on a HiDPI screen
 		private int titleBarHeight;
 		private Rectangle[] hitTestSpots;
 		private Rectangle appIconBounds;
+		private Rectangle maximizeButtonBounds;
 
 		WndProc( Window window ) {
 			this.window = window;
@@ -426,6 +429,26 @@ public class FlatWindowsNativeWindowBorder
 
 				case WM_NCHITTEST:
 					return WmNcHitTest( hwnd, uMsg, wParam, lParam );
+
+				case WM_NCMOUSEMOVE:
+					// if mouse is moved over some non-client areas,
+					// send it also to the client area to allow Swing to process it
+					// (required for Windows 11 maximize button)
+					if( wParam.longValue() == HTMAXBUTTON || wParam.longValue() == HTCAPTION || wParam.longValue() == HTSYSMENU )
+						sendMessageToClientArea( hwnd, WM_MOUSEMOVE, lParam );
+					break;
+
+				case WM_NCLBUTTONDOWN:
+				case WM_NCLBUTTONUP:
+					// if left mouse was pressed/released over maximize button,
+					// send it also to the client area to allow Swing to process it
+					// (required for Windows 11 maximize button)
+					if( wParam.shortValue() == HTMAXBUTTON ) {
+						int uClientMsg = (uMsg == WM_NCLBUTTONDOWN) ? WM_LBUTTONDOWN : WM_LBUTTONUP;
+						sendMessageToClientArea( hwnd, uClientMsg, lParam );
+						return new LRESULT( 0 );
+					}
+					break;
 
 				case WM_NCRBUTTONUP:
 					if( wParam.longValue() == HTCAPTION || wParam.longValue() == HTSYSMENU )
@@ -522,7 +545,7 @@ public class FlatWindowsNativeWindowBorder
 
 			boolean isMaximized = User32Ex.INSTANCE.IsZoomed( hwnd );
 			if( isMaximized && !isFullscreen() ) {
-				// When a window is maximized, its size is actually a little bit more
+				// When a window is maximized, its size is actually a little bit larger
 				// than the monitor's work area. The window is positioned and sized in
 				// such a way that the resize handles are outside of the monitor and
 				// then the window is clipped to the monitor so that the resize handle
@@ -574,15 +597,12 @@ public class FlatWindowsNativeWindowBorder
 			if( lResult.longValue() != HTCLIENT )
 				return lResult;
 
-			// get window rectangle needed to convert mouse x/y from screen to window coordinates
-			RECT rcWindow = new RECT();
-			User32.INSTANCE.GetWindowRect( hwnd, rcWindow );
-
 			// get mouse x/y in window coordinates
-			int x = GET_X_LPARAM( lParam ) - rcWindow.left;
-			int y = GET_Y_LPARAM( lParam ) - rcWindow.top;
+			LRESULT xy = screen2windowCoordinates( hwnd, lParam );
+			int x = GET_X_LPARAM( xy );
+			int y = GET_Y_LPARAM( xy );
 
-			// scale-down mouse x/y
+			// scale-down mouse x/y because Swing coordinates/values may be scaled on a HiDPI screen
 			Point pt = scaleDown( x, y );
 			int sx = pt.x;
 			int sy = pt.y;
@@ -592,6 +612,12 @@ public class FlatWindowsNativeWindowBorder
 			//   - double-left-click sends WM_CLOSE
 			if( appIconBounds != null && appIconBounds.contains( sx, sy ) )
 				return new LRESULT( HTSYSMENU );
+
+			// return HTMAXBUTTON if mouse is over maximize/restore button
+			//   - hovering mouse over HTMAXBUTTON area shows snap layouts menu on Windows 11
+			//     https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-snap-layout-menu
+			if( maximizeButtonBounds != null && maximizeButtonBounds.contains( sx, sy ) )
+				return new LRESULT( HTMAXBUTTON );
 
 			int resizeBorderHeight = getResizeHandleHeight();
 			boolean isOnResizeBorder = (y < resizeBorderHeight) &&
@@ -610,6 +636,21 @@ public class FlatWindowsNativeWindowBorder
 			}
 
 			return new LRESULT( isOnResizeBorder ? HTTOP : HTCLIENT );
+		}
+
+		/**
+		 * Converts screen coordinates to window coordinates.
+		 */
+		private LRESULT screen2windowCoordinates( HWND hwnd, LPARAM lParam ) {
+			// get window rectangle needed to convert mouse x/y from screen to window coordinates
+			RECT rcWindow = new RECT();
+			User32.INSTANCE.GetWindowRect( hwnd, rcWindow );
+
+			// get mouse x/y in window coordinates
+			int x = GET_X_LPARAM( lParam ) - rcWindow.left;
+			int y = GET_Y_LPARAM( lParam ) - rcWindow.top;
+
+			return new LRESULT( MAKELONG( x, y ) );
 		}
 
 		/**
@@ -678,7 +719,7 @@ public class FlatWindowsNativeWindowBorder
 		 *
 		 * https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-nchittest#remarks
 		 */
-		private int GET_X_LPARAM( LPARAM lParam ) {
+		private int GET_X_LPARAM( LONG_PTR lParam ) {
 			return (short) (lParam.longValue() & 0xffff);
 		}
 
@@ -688,8 +729,15 @@ public class FlatWindowsNativeWindowBorder
 		 *
 		 * https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-nchittest#remarks
 		 */
-		private int GET_Y_LPARAM( LPARAM lParam ) {
+		private int GET_Y_LPARAM( LONG_PTR lParam ) {
 			return (short) ((lParam.longValue() >> 16) & 0xffff);
+		}
+
+		/**
+		 * Same implementation as MAKELONG(wLow, wHigh) macro in windef.h.
+		 */
+		private long MAKELONG( int low, int high ) {
+			return (low & 0xffff) | ((high & 0xffff) << 16);
 		}
 
 		/**
@@ -697,6 +745,14 @@ public class FlatWindowsNativeWindowBorder
 		 */
 		private DWORD RGB( int r, int g, int b ) {
 			return new DWORD( (r & 0xff) | ((g & 0xff) << 8) | ((b & 0xff) << 16) );
+		}
+
+		private void sendMessageToClientArea( HWND hwnd, int uMsg, LPARAM lParam ) {
+			// get mouse x/y in window coordinates
+			LRESULT xy = screen2windowCoordinates( hwnd, lParam );
+
+			// send message
+			User32.INSTANCE.SendMessage( hwnd, uMsg, new WPARAM(), new LPARAM( xy.longValue() ) );
 		}
 
 		/**

@@ -54,6 +54,10 @@ import com.formdev.flatlaf.util.SystemInfo;
 //     https://github.com/oberth/custom-chrome
 //     https://github.com/rossy/borderless-window
 //
+//   Windows 11
+//     https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-snap-layout-menu
+//     https://github.com/dotnet/wpf/issues/4825#issuecomment-930442736
+//
 
 /**
  * Native window border support for Windows 10 when using custom decorations.
@@ -177,30 +181,17 @@ class FlatWindowsNativeWindowBorder
 	}
 
 	@Override
-	public void setTitleBarHeight( Window window, int titleBarHeight ) {
+	public void updateTitleBarInfo( Window window, int titleBarHeight, List<Rectangle> hitTestSpots,
+		Rectangle appIconBounds, Rectangle maximizeButtonBounds )
+	{
 		WndProc wndProc = windowsMap.get( window );
 		if( wndProc == null )
 			return;
 
 		wndProc.titleBarHeight = titleBarHeight;
-	}
-
-	@Override
-	public void setTitleBarHitTestSpots( Window window, List<Rectangle> hitTestSpots ) {
-		WndProc wndProc = windowsMap.get( window );
-		if( wndProc == null )
-			return;
-
 		wndProc.hitTestSpots = hitTestSpots.toArray( new Rectangle[hitTestSpots.size()] );
-	}
-
-	@Override
-	public void setTitleBarAppIconBounds( Window window, Rectangle appIconBounds ) {
-		WndProc wndProc = windowsMap.get( window );
-		if( wndProc == null )
-			return;
-
 		wndProc.appIconBounds = (appIconBounds != null) ? new Rectangle( appIconBounds ) : null;
+		wndProc.maximizeButtonBounds = (maximizeButtonBounds != null) ? new Rectangle( maximizeButtonBounds ) : null;
 	}
 
 	@Override
@@ -303,14 +294,17 @@ class FlatWindowsNativeWindowBorder
 			HTCLIENT = 1,
 			HTCAPTION = 2,
 			HTSYSMENU = 3,
+			HTMAXBUTTON = 9,
 			HTTOP = 12;
 
 		private Window window;
 		private final long hwnd;
 
+		// Swing coordinates/values may be scaled on a HiDPI screen
 		private int titleBarHeight;
 		private Rectangle[] hitTestSpots;
 		private Rectangle appIconBounds;
+		private Rectangle maximizeButtonBounds;
 
 		WndProc( Window window ) {
 			this.window = window;
@@ -355,7 +349,7 @@ class FlatWindowsNativeWindowBorder
 
 		// invoked from native code
 		private int onNcHitTest( int x, int y, boolean isOnResizeBorder ) {
-			// scale-down mouse x/y
+			// scale-down mouse x/y because Swing coordinates/values may be scaled on a HiDPI screen
 			Point pt = scaleDown( x, y );
 			int sx = pt.x;
 			int sy = pt.y;
@@ -365,6 +359,12 @@ class FlatWindowsNativeWindowBorder
 			//   - double-left-click sends WM_CLOSE
 			if( appIconBounds != null && appIconBounds.contains( sx, sy ) )
 				return HTSYSMENU;
+
+			// return HTMAXBUTTON if mouse is over maximize/restore button
+			//   - hovering mouse over HTMAXBUTTON area shows snap layouts menu on Windows 11
+			//     https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-snap-layout-menu
+			if( maximizeButtonBounds != null && maximizeButtonBounds.contains( sx, sy ) )
+				return HTMAXBUTTON;
 
 			boolean isOnTitleBar = (sy < titleBarHeight);
 

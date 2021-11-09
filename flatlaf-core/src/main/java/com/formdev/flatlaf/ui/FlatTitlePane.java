@@ -527,9 +527,15 @@ public class FlatTitlePane
 				g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 		}
 		if( debugAppIconBounds != null ) {
-			g.setColor( Color.blue);
+			g.setColor( Color.blue );
 			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
 			Rectangle r = debugAppIconBounds;
+			g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
+		}
+		if( debugMaximizeButtonBounds != null ) {
+			g.setColor( Color.blue );
+			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
+			Rectangle r = debugMaximizeButtonBounds;
 			g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 		}
 	}
@@ -722,6 +728,7 @@ debug*/
 
 		List<Rectangle> hitTestSpots = new ArrayList<>();
 		Rectangle appIconBounds = null;
+
 		if( iconLabel.isVisible() ) {
 			// compute real icon size (without insets; 1px wider for easier hitting)
 			Point location = SwingUtilities.convertPoint( iconLabel, 0, 0, window );
@@ -752,6 +759,13 @@ debug*/
 			else
 				appIconBounds = iconBounds;
 		}
+
+		JButton maxButton = maximizeButton.isVisible()
+			? maximizeButton
+			: (restoreButton.isVisible() ? restoreButton : null);
+		Rectangle maximizeButtonBounds = (maxButton != null)
+			? SwingUtilities.convertRectangle( maxButton.getParent(), maxButton.getBounds(), window )
+			: null;
 
 		Rectangle r = getNativeHitTestSpot( buttonPanel );
 		if( r != null )
@@ -787,12 +801,14 @@ debug*/
 			}
 		}
 
-		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots, appIconBounds );
+		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight,
+			hitTestSpots, appIconBounds, maximizeButtonBounds );
 
 /*debug
 		debugTitleBarHeight = titleBarHeight;
 		debugHitTestSpots = hitTestSpots;
 		debugAppIconBounds = appIconBounds;
+		debugMaximizeButtonBounds = maximizeButtonBounds;
 		repaint();
 debug*/
 	}
@@ -815,6 +831,7 @@ debug*/
 	private int debugTitleBarHeight;
 	private List<Rectangle> debugHitTestSpots;
 	private Rectangle debugAppIconBounds;
+	private Rectangle debugMaximizeButtonBounds;
 debug*/
 
 	//---- class FlatTitlePaneBorder ------------------------------------------

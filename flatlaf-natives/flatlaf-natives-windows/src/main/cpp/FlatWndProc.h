@@ -54,6 +54,7 @@ private:
 	LRESULT WmNcCalcSize( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam );
 	LRESULT WmNcHitTest( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam );
 
+	LRESULT screen2windowCoordinates( HWND hwnd, LPARAM lParam );
 	int getResizeHandleHeight();
 	bool hasAutohideTaskbar( UINT edge, RECT rcMonitor );
 	BOOL isFullscreen();
@@ -61,6 +62,7 @@ private:
 	void fireStateChangedLaterOnce();
 	JNIEnv* getEnv();
 
+	void sendMessageToClientArea( HWND hwnd, int uMsg, LPARAM lParam );
 	void openSystemMenu( HWND hwnd, int x, int y );
 	void setMenuItemState( HMENU systemMenu, int item, bool enabled );
 

@@ -215,6 +215,26 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 		case WM_NCHITTEST:
 			return WmNcHitTest( hwnd, uMsg, wParam, lParam );
 
+		case WM_NCMOUSEMOVE:
+			// if mouse is moved over some non-client areas,
+			// send it also to the client area to allow Swing to process it
+			// (required for Windows 11 maximize button)
+			if( wParam == HTMAXBUTTON || wParam == HTCAPTION || wParam == HTSYSMENU )
+				sendMessageToClientArea( hwnd, WM_MOUSEMOVE, lParam );
+			break;
+
+		case WM_NCLBUTTONDOWN:
+		case WM_NCLBUTTONUP:
+			// if left mouse was pressed/released over maximize button,
+			// send it also to the client area to allow Swing to process it
+			// (required for Windows 11 maximize button)
+			if( wParam == HTMAXBUTTON ) {
+				int uClientMsg = (uMsg == WM_NCLBUTTONDOWN) ? WM_LBUTTONDOWN : WM_LBUTTONUP;
+				sendMessageToClientArea( hwnd, uClientMsg, lParam );
+				return 0;
+			}
+			break;
+
 		case WM_NCRBUTTONUP:
 			if( wParam == HTCAPTION || wParam == HTSYSMENU )
 				openSystemMenu( hwnd, GET_X_LPARAM( lParam ), GET_Y_LPARAM( lParam ) );
@@ -305,7 +325,7 @@ LRESULT FlatWndProc::WmNcCalcSize( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lP
 
 	bool isMaximized = ::IsZoomed( hwnd );
 	if( isMaximized && !isFullscreen() ) {
-		// When a window is maximized, its size is actually a little bit more
+		// When a window is maximized, its size is actually a little bit larger
 		// than the monitor's work area. The window is positioned and sized in
 		// such a way that the resize handles are outside of the monitor and
 		// then the window is clipped to the monitor so that the resize handle
@@ -354,6 +374,22 @@ LRESULT FlatWndProc::WmNcHitTest( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lPa
 	if( lResult != HTCLIENT )
 		return lResult;
 
+	// get mouse x/y in window coordinates
+	LRESULT xy = screen2windowCoordinates( hwnd, lParam );
+	int x = GET_X_LPARAM( xy );
+	int y = GET_Y_LPARAM( xy );
+
+	int resizeBorderHeight = getResizeHandleHeight();
+	bool isOnResizeBorder = (y < resizeBorderHeight) &&
+		(::GetWindowLong( hwnd, GWL_STYLE ) & WS_THICKFRAME) != 0;
+
+	return onNcHitTest( x, y, isOnResizeBorder );
+}
+
+/**
+ * Converts screen coordinates to window coordinates.
+ */
+LRESULT FlatWndProc::screen2windowCoordinates( HWND hwnd, LPARAM lParam ) {
 	// get window rectangle needed to convert mouse x/y from screen to window coordinates
 	RECT rcWindow;
 	::GetWindowRect( hwnd, &rcWindow );
@@ -362,11 +398,7 @@ LRESULT FlatWndProc::WmNcHitTest( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lPa
 	int x = GET_X_LPARAM( lParam ) - rcWindow.left;
 	int y = GET_Y_LPARAM( lParam ) - rcWindow.top;
 
-	int resizeBorderHeight = getResizeHandleHeight();
-	bool isOnResizeBorder = (y < resizeBorderHeight) &&
-		(::GetWindowLong( hwnd, GWL_STYLE ) & WS_THICKFRAME) != 0;
-
-	return onNcHitTest( x, y, isOnResizeBorder );
+	return MAKELONG( x, y );
 }
 
 /**
@@ -427,6 +459,14 @@ JNIEnv* FlatWndProc::getEnv() {
 
 	jvm->GetEnv( (void **) &env, JNI_VERSION_1_2 );
 	return env;
+}
+
+void FlatWndProc::sendMessageToClientArea( HWND hwnd, int uMsg, LPARAM lParam ) {
+	// get mouse x/y in window coordinates
+	LRESULT xy = screen2windowCoordinates( hwnd, lParam );
+
+	// send message
+	::SendMessage( hwnd, uMsg, 0, xy );
 }
 
 /**
