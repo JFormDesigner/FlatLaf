@@ -182,7 +182,8 @@ class FlatWindowsNativeWindowBorder
 
 	@Override
 	public void updateTitleBarInfo( Window window, int titleBarHeight, List<Rectangle> hitTestSpots,
-		Rectangle appIconBounds, Rectangle maximizeButtonBounds )
+		Rectangle appIconBounds, Rectangle minimizeButtonBounds, Rectangle maximizeButtonBounds,
+		Rectangle closeButtonBounds )
 	{
 		WndProc wndProc = windowsMap.get( window );
 		if( wndProc == null )
@@ -190,8 +191,14 @@ class FlatWindowsNativeWindowBorder
 
 		wndProc.titleBarHeight = titleBarHeight;
 		wndProc.hitTestSpots = hitTestSpots.toArray( new Rectangle[hitTestSpots.size()] );
-		wndProc.appIconBounds = (appIconBounds != null) ? new Rectangle( appIconBounds ) : null;
-		wndProc.maximizeButtonBounds = (maximizeButtonBounds != null) ? new Rectangle( maximizeButtonBounds ) : null;
+		wndProc.appIconBounds = cloneRectange( appIconBounds );
+		wndProc.minimizeButtonBounds = cloneRectange( minimizeButtonBounds );
+		wndProc.maximizeButtonBounds = cloneRectange( maximizeButtonBounds );
+		wndProc.closeButtonBounds = cloneRectange( closeButtonBounds );
+	}
+
+	private static Rectangle cloneRectange( Rectangle rect ) {
+		return (rect != null) ? new Rectangle( rect ) : null;
 	}
 
 	@Override
@@ -294,8 +301,10 @@ class FlatWindowsNativeWindowBorder
 			HTCLIENT = 1,
 			HTCAPTION = 2,
 			HTSYSMENU = 3,
+			HTMINBUTTON = 8,
 			HTMAXBUTTON = 9,
-			HTTOP = 12;
+			HTTOP = 12,
+			HTCLOSE = 20;
 
 		private Window window;
 		private final long hwnd;
@@ -304,7 +313,9 @@ class FlatWindowsNativeWindowBorder
 		private int titleBarHeight;
 		private Rectangle[] hitTestSpots;
 		private Rectangle appIconBounds;
+		private Rectangle minimizeButtonBounds;
 		private Rectangle maximizeButtonBounds;
+		private Rectangle closeButtonBounds;
 
 		WndProc( Window window ) {
 			this.window = window;
@@ -357,14 +368,25 @@ class FlatWindowsNativeWindowBorder
 			// return HTSYSMENU if mouse is over application icon
 			//   - left-click on HTSYSMENU area shows system menu
 			//   - double-left-click sends WM_CLOSE
-			if( appIconBounds != null && appIconBounds.contains( sx, sy ) )
+			if( contains( appIconBounds, sx, sy ) )
 				return HTSYSMENU;
 
+			// return HTMINBUTTON if mouse is over minimize button
+			//   - hovering mouse over HTMINBUTTON area shows tooltip on Windows 10/11
+			if( contains( minimizeButtonBounds, sx, sy ) )
+				return HTMINBUTTON;
+
 			// return HTMAXBUTTON if mouse is over maximize/restore button
+			//   - hovering mouse over HTMAXBUTTON area shows tooltip on Windows 10
 			//   - hovering mouse over HTMAXBUTTON area shows snap layouts menu on Windows 11
 			//     https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-snap-layout-menu
-			if( maximizeButtonBounds != null && maximizeButtonBounds.contains( sx, sy ) )
+			if( contains( maximizeButtonBounds, sx, sy ) )
 				return HTMAXBUTTON;
+
+			// return HTCLOSE if mouse is over close button
+			//   - hovering mouse over HTCLOSE area shows tooltip on Windows 10/11
+			if( contains( closeButtonBounds, sx, sy ) )
+				return HTCLOSE;
 
 			boolean isOnTitleBar = (sy < titleBarHeight);
 
@@ -380,6 +402,10 @@ class FlatWindowsNativeWindowBorder
 			}
 
 			return isOnResizeBorder ? HTTOP : HTCLIENT;
+		}
+
+		private boolean contains( Rectangle rect, int x, int y ) {
+			return (rect != null && rect.contains( x, y ) );
 		}
 
 		/**

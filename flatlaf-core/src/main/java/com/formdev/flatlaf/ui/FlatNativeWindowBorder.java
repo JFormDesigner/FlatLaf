@@ -235,7 +235,8 @@ public class FlatNativeWindowBorder
 	}
 
 	static void setTitleBarHeightAndHitTestSpots( Window window, int titleBarHeight,
-		List<Rectangle> hitTestSpots, Rectangle appIconBounds, Rectangle maximizeButtonBounds )
+		List<Rectangle> hitTestSpots, Rectangle appIconBounds, Rectangle minimizeButtonBounds,
+		Rectangle maximizeButtonBounds, Rectangle closeButtonBounds )
 	{
 		if( canUseJBRCustomDecorations ) {
 			JBRCustomDecorations.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots );
@@ -245,7 +246,8 @@ public class FlatNativeWindowBorder
 		if( !isSupported() )
 			return;
 
-		nativeProvider.updateTitleBarInfo( window, titleBarHeight, hitTestSpots, appIconBounds, maximizeButtonBounds );
+		nativeProvider.updateTitleBarInfo( window, titleBarHeight, hitTestSpots,
+			appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 	}
 
 	static boolean showWindow( Window window, int cmd ) {
@@ -266,7 +268,7 @@ public class FlatNativeWindowBorder
 		try {
 /*
 			Class<?> cls = Class.forName( "com.formdev.flatlaf.natives.jna.windows.FlatWindowsNativeWindowBorder" );
-			Method m = cls.getMethod( "getInstance" );
+			java.lang.reflect.Method m = cls.getMethod( "getInstance" );
 			setNativeProvider( (Provider) m.invoke( null ) );
 */
 			setNativeProvider( FlatWindowsNativeWindowBorder.getInstance() );
@@ -291,7 +293,8 @@ public class FlatNativeWindowBorder
 		boolean hasCustomDecoration( Window window );
 		void setHasCustomDecoration( Window window, boolean hasCustomDecoration );
 		void updateTitleBarInfo( Window window, int titleBarHeight, List<Rectangle> hitTestSpots,
-			Rectangle appIconBounds, Rectangle maximizeButtonBounds );
+			Rectangle appIconBounds, Rectangle minimizeButtonBounds, Rectangle maximizeButtonBounds,
+			Rectangle closeButtonBounds );
 
 		// commands for showWindow(); values must match Win32 API
 		// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow

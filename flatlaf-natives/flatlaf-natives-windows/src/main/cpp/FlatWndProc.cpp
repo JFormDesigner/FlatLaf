@@ -219,16 +219,17 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 			// if mouse is moved over some non-client areas,
 			// send it also to the client area to allow Swing to process it
 			// (required for Windows 11 maximize button)
-			if( wParam == HTMAXBUTTON || wParam == HTCAPTION || wParam == HTSYSMENU )
-				sendMessageToClientArea( hwnd, WM_MOUSEMOVE, lParam );
+			if( wParam == HTMINBUTTON || wParam == HTMAXBUTTON || wParam == HTCLOSE ||
+				wParam == HTCAPTION || wParam == HTSYSMENU )
+			  sendMessageToClientArea( hwnd, WM_MOUSEMOVE, lParam );
 			break;
 
 		case WM_NCLBUTTONDOWN:
 		case WM_NCLBUTTONUP:
-			// if left mouse was pressed/released over maximize button,
+			// if left mouse was pressed/released over minimize/maximize/close button,
 			// send it also to the client area to allow Swing to process it
 			// (required for Windows 11 maximize button)
-			if( wParam == HTMAXBUTTON ) {
+			if( wParam == HTMINBUTTON || wParam == HTMAXBUTTON || wParam == HTCLOSE ) {
 				int uClientMsg = (uMsg == WM_NCLBUTTONDOWN) ? WM_LBUTTONDOWN : WM_LBUTTONUP;
 				sendMessageToClientArea( hwnd, uClientMsg, lParam );
 				return 0;

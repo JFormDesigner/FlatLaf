@@ -521,23 +521,23 @@ public class FlatTitlePane
 			g.drawLine( 0, debugTitleBarHeight, getWidth(), debugTitleBarHeight );
 		}
 		if( debugHitTestSpots != null ) {
-			g.setColor( Color.red );
-			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
 			for( Rectangle r : debugHitTestSpots )
-				g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
+				paintRect( g, Color.red, r );
 		}
-		if( debugAppIconBounds != null ) {
-			g.setColor( Color.blue );
-			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
-			Rectangle r = debugAppIconBounds;
-			g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
-		}
-		if( debugMaximizeButtonBounds != null ) {
-			g.setColor( Color.blue );
-			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
-			Rectangle r = debugMaximizeButtonBounds;
-			g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
-		}
+		paintRect( g, Color.cyan, debugCloseButtonBounds );
+		paintRect( g, Color.blue, debugAppIconBounds );
+		paintRect( g, Color.magenta, debugMinimizeButtonBounds );
+		paintRect( g, Color.blue, debugMaximizeButtonBounds );
+		paintRect( g, Color.cyan, debugCloseButtonBounds );
+	}
+
+	private void paintRect( Graphics g, Color color, Rectangle r ) {
+		if( r == null )
+			return;
+
+		g.setColor( color );
+		Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
+		g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 	}
 debug*/
 
@@ -760,13 +760,6 @@ debug*/
 				appIconBounds = iconBounds;
 		}
 
-		JButton maxButton = maximizeButton.isVisible()
-			? maximizeButton
-			: (restoreButton.isVisible() ? restoreButton : null);
-		Rectangle maximizeButtonBounds = (maxButton != null)
-			? SwingUtilities.convertRectangle( maxButton.getParent(), maxButton.getBounds(), window )
-			: null;
-
 		Rectangle r = getNativeHitTestSpot( buttonPanel );
 		if( r != null )
 			hitTestSpots.add( r );
@@ -801,16 +794,28 @@ debug*/
 			}
 		}
 
+		Rectangle minimizeButtonBounds = boundsInWindow( iconifyButton );
+		Rectangle maximizeButtonBounds = boundsInWindow( maximizeButton.isVisible() ? maximizeButton : restoreButton );
+		Rectangle closeButtonBounds = boundsInWindow( closeButton );
+
 		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight,
-			hitTestSpots, appIconBounds, maximizeButtonBounds );
+			hitTestSpots, appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 
 /*debug
 		debugTitleBarHeight = titleBarHeight;
 		debugHitTestSpots = hitTestSpots;
 		debugAppIconBounds = appIconBounds;
+		debugMinimizeButtonBounds = minimizeButtonBounds;
 		debugMaximizeButtonBounds = maximizeButtonBounds;
+		debugCloseButtonBounds = closeButtonBounds;
 		repaint();
 debug*/
+	}
+
+	private Rectangle boundsInWindow( JComponent c ) {
+		return c.isVisible()
+			? SwingUtilities.convertRectangle( c.getParent(), c.getBounds(), window )
+			: null;
 	}
 
 	protected Rectangle getNativeHitTestSpot( JComponent c ) {
@@ -831,7 +836,9 @@ debug*/
 	private int debugTitleBarHeight;
 	private List<Rectangle> debugHitTestSpots;
 	private Rectangle debugAppIconBounds;
+	private Rectangle debugMinimizeButtonBounds;
 	private Rectangle debugMaximizeButtonBounds;
+	private Rectangle debugCloseButtonBounds;
 debug*/
 
 	//---- class FlatTitlePaneBorder ------------------------------------------
