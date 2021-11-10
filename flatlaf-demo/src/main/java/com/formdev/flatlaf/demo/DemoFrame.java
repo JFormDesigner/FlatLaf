@@ -718,13 +718,11 @@ class DemoFrame
 
 				//---- windowDecorationsCheckBoxMenuItem ----
 				windowDecorationsCheckBoxMenuItem.setText("Window decorations");
-				windowDecorationsCheckBoxMenuItem.setSelected(true);
 				windowDecorationsCheckBoxMenuItem.addActionListener(e -> windowDecorationsChanged());
 				optionsMenu.add(windowDecorationsCheckBoxMenuItem);
 
 				//---- menuBarEmbeddedCheckBoxMenuItem ----
 				menuBarEmbeddedCheckBoxMenuItem.setText("Embedded menu bar");
-				menuBarEmbeddedCheckBoxMenuItem.setSelected(true);
 				menuBarEmbeddedCheckBoxMenuItem.addActionListener(e -> menuBarEmbeddedChanged());
 				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
 
@@ -876,6 +874,10 @@ class DemoFrame
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
 		if( FlatLaf.supportsNativeWindowDecorations() ) {
+			windowDecorationsCheckBoxMenuItem.setSelected( FlatLaf.isUseNativeWindowDecorations() );
+			menuBarEmbeddedCheckBoxMenuItem.setSelected( UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) );
+			unifiedTitleBarMenuItem.setSelected( UIManager.getBoolean( "TitlePane.unifiedBackground" ) );
+
 			if( JBRCustomDecorations.isSupported() ) {
 				// If the JetBrains Runtime is used, it forces the use of it's own custom
 				// window decoration, which can not disabled.

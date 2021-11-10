@@ -13,6 +13,9 @@ FlatLaf Change Log
     and use them in any component. (PR #388)\
     E.g.: `mySlider.putClientProperty( "FlatLaf.styleClass", "myclass" );`
 - Native window decorations (Windows 10/11 only):
+  - Unified backgrounds for window title bar is now enabled by default (window
+    title bar has now same background color as window content). Bottom separator
+    for menu bars is no longer painted (if unified background is enabled).
   - Show Windows 11 snap layouts menu when hovering the mouse over the maximize
     button. (issues #397 and #407)
   - Option to hide window icon (for single window set client property

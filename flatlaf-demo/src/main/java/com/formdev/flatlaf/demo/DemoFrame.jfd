@@ -354,7 +354,6 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "windowDecorationsCheckBoxMenuItem"
 						"text": "Window decorations"
-						"selected": true
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -363,7 +362,6 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "menuBarEmbeddedCheckBoxMenuItem"
 						"text": "Embedded menu bar"
-						"selected": true
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}

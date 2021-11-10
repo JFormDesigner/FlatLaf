@@ -1217,7 +1217,7 @@ TitlePane.noIconLeftGap        8
 TitlePane.restoreIcon          [lazy] 44,30    com.formdev.flatlaf.icons.FlatWindowRestoreIcon [UI]
 TitlePane.showIcon             true
 TitlePane.titleMargins         3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
-TitlePane.unifiedBackground    false
+TitlePane.unifiedBackground    true
 TitlePane.useWindowDecorations true
 
 
