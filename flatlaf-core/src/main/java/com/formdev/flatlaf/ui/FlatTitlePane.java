@@ -50,8 +50,6 @@ import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -66,7 +64,6 @@ import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder.WindowTopBorder;
-import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -80,6 +77,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.embeddedForeground					Color
  * @uiDefault TitlePane.borderColor							Color	optional
  * @uiDefault TitlePane.unifiedBackground					boolean
+ * @uiDefault TitlePane.showIcon							boolean
+ * @uiDefault TitlePane.noIconLeftGap						int
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
@@ -88,7 +87,6 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.centerTitle							boolean
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
  * @uiDefault TitlePane.menuBarTitleGap						int
- * @uiDefault TitlePane.icon								Icon
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -106,6 +104,8 @@ public class FlatTitlePane
 	protected final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
 	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
+	/** @since 2 */ protected final boolean showIcon = FlatUIUtils.getUIBoolean( "TitlePane.showIcon", true );
+	/** @since 2 */ protected final int noIconLeftGap = FlatUIUtils.getUIInt( "TitlePane.noIconLeftGap", 8 );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
@@ -340,36 +340,27 @@ public class FlatTitlePane
 
 	protected void updateIcon() {
 		// get window images
-		List<Image> images = window.getIconImages();
-		if( images.isEmpty() ) {
-			// search in owners
-			for( Window owner = window.getOwner(); owner != null; owner = owner.getOwner() ) {
-				images = owner.getIconImages();
-				if( !images.isEmpty() )
-					break;
+		List<Image> images = null;
+		if( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_ICON, showIcon ) ) {
+			images = window.getIconImages();
+			if( images.isEmpty() ) {
+				// search in owners
+				for( Window owner = window.getOwner(); owner != null; owner = owner.getOwner() ) {
+					images = owner.getIconImages();
+					if( !images.isEmpty() )
+						break;
+				}
 			}
 		}
 
-		boolean hasIcon = true;
+		boolean hasIcon = (images != null && !images.isEmpty());
 
 		// set icon
-		if( !images.isEmpty() )
-			iconLabel.setIcon( new FlatTitlePaneIcon( images, iconSize ) );
-		else {
-			// no icon set on window --> use default icon
-			Icon defaultIcon = UIManager.getIcon( "TitlePane.icon" );
-			if( defaultIcon != null && (defaultIcon.getIconWidth() == 0 || defaultIcon.getIconHeight() == 0) )
-				defaultIcon = null;
-			if( defaultIcon != null ) {
-				if( defaultIcon instanceof ImageIcon )
-					defaultIcon = new ScaledImageIcon( (ImageIcon) defaultIcon, iconSize.width, iconSize.height );
-				iconLabel.setIcon( defaultIcon );
-			} else
-				hasIcon = false;
-		}
+		iconLabel.setIcon( hasIcon ? new FlatTitlePaneIcon( images, iconSize ) : null );
 
 		// show/hide icon
 		iconLabel.setVisible( hasIcon );
+		leftPanel.setBorder( hasIcon ? null : new FlatEmptyBorder( 0, noIconLeftGap, 0, 0 ) );
 
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
 	}
@@ -739,7 +730,7 @@ debug*/
 		Rectangle appIconBounds = null;
 
 		if( iconLabel.isVisible() ) {
-			// compute real icon size (without insets; 1px wider for easier hitting)
+			// compute real icon size (without insets; 1px larger for easier hitting)
 			Point location = SwingUtilities.convertPoint( iconLabel, 0, 0, window );
 			Insets iconInsets = iconLabel.getInsets();
 			Rectangle iconBounds = new Rectangle(

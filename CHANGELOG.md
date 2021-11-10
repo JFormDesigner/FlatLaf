@@ -12,8 +12,14 @@ FlatLaf Change Log
   - Style classes allow defining style rules at a single place (in UI defaults)
     and use them in any component. (PR #388)\
     E.g.: `mySlider.putClientProperty( "FlatLaf.styleClass", "myclass" );`
-- Native window decorations: Show Windows 11 snap layouts menu when hovering the
-  mouse over the maximize button. (issues #397 and #407)
+- Native window decorations (Windows 10/11 only):
+  - Show Windows 11 snap layouts menu when hovering the mouse over the maximize
+    button. (issues #397 and #407)
+  - Option to hide window icon (for single window set client property
+    `JRootPane.titleBarShowIcon` to `false`; for all windows set UI value
+    `TitlePane.showIcon` to `false`).
+  - No longer show the Java "duke/cup" icon if no window icon image is set.
+    (issue #416)
 - TextField, FormattedTextField and PasswordField: Support leading and trailing
   icons (set client property `JTextField.leadingIcon` or
   `JTextField.trailingIcon` to an `Icon`). (PR #378; issue #368)

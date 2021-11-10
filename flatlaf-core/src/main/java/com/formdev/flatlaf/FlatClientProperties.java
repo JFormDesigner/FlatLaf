@@ -332,6 +332,24 @@ public interface FlatClientProperties
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
 
 	/**
+	 * Specifies whether the window icon should be shown in the window title bar
+	 * (requires enabled window decorations).
+	 * <p>
+	 * Setting this shows/hides the windows icon
+	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
+	 * <p>
+	 * This client property has higher priority than UI default {@code TitlePane.showIcon}.
+	 * <p>
+	 * (requires Window 10)
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 2
+	 */
+	String TITLE_BAR_SHOW_ICON = "JRootPane.titleBarShowIcon";
+
+	/**
 	 * Background color of window title bar (requires enabled window decorations).
 	 * <p>
 	 * (requires Window 10)

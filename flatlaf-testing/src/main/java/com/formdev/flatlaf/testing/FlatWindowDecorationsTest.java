@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Random;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.components.FlatTriStateCheckBox;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import net.miginfocom.swing.*;
@@ -72,6 +73,9 @@ public class FlatWindowDecorationsTest
 		Window window = SwingUtilities.windowForComponent( this );
 		menuBarCheckBox.setSelected( window instanceof JFrame );
 		maximizedBoundsCheckBox.setEnabled( window instanceof Frame );
+
+		menuBarEmbeddedCheckBox.setSelected( UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) );
+		unifiedBackgroundCheckBox.setSelected( UIManager.getBoolean( "TitlePane.unifiedBackground" ) );
 
 		addMenuButton.setEnabled( menuBarCheckBox.isEnabled() );
 		addGlueButton.setEnabled( menuBarCheckBox.isEnabled() );
@@ -402,6 +406,12 @@ public class FlatWindowDecorationsTest
 		}
 	}
 
+	private void showIconChanged() {
+		JRootPane rootPane = getWindowRootPane();
+		if( rootPane != null )
+			rootPane.putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_ICON, showIconCheckBox.getChecked() );
+	}
+
 	private JRootPane getWindowRootPane() {
 		Window window = SwingUtilities.windowForComponent( this );
 		if( window instanceof JFrame )
@@ -450,6 +460,7 @@ public class FlatWindowDecorationsTest
 		iconTestRandomRadioButton = new JRadioButton();
 		iconTestMRIRadioButton = new JRadioButton();
 		iconTestDynMRIRadioButton = new JRadioButton();
+		showIconCheckBox = new FlatTriStateCheckBox();
 		JButton openDialogButton = new JButton();
 		JButton openFrameButton = new JButton();
 		menuBar = new JMenuBar();
@@ -685,12 +696,13 @@ public class FlatWindowDecorationsTest
 			panel2.setLayout(new MigLayout(
 				"ltr,insets 0,hidemode 3,gap 0 0",
 				// columns
-				"[fill]",
+				"[left]",
 				// rows
 				"[]" +
 				"[]" +
 				"[]" +
 				"[]" +
+				"[]rel" +
 				"[]"));
 
 			//---- iconNoneRadioButton ----
@@ -718,6 +730,11 @@ public class FlatWindowDecorationsTest
 			iconTestDynMRIRadioButton.setText("test dynamic multi-resolution (Java 9+)");
 			iconTestDynMRIRadioButton.addActionListener(e -> iconChanged());
 			panel2.add(iconTestDynMRIRadioButton, "cell 0 4");
+
+			//---- showIconCheckBox ----
+			showIconCheckBox.setText("show icon");
+			showIconCheckBox.addActionListener(e -> showIconChanged());
+			panel2.add(showIconCheckBox, "cell 0 5");
 		}
 		add(panel2, "cell 1 8");
 
@@ -955,6 +972,7 @@ public class FlatWindowDecorationsTest
 	private JRadioButton iconTestRandomRadioButton;
 	private JRadioButton iconTestMRIRadioButton;
 	private JRadioButton iconTestDynMRIRadioButton;
+	private FlatTriStateCheckBox showIconCheckBox;
 	private JMenuBar menuBar;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

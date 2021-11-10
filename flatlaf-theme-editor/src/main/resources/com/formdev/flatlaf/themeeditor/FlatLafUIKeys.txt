@@ -969,7 +969,9 @@ TitlePane.inactiveForeground
 TitlePane.maximizeIcon
 TitlePane.menuBarEmbedded
 TitlePane.menuBarTitleGap
+TitlePane.noIconLeftGap
 TitlePane.restoreIcon
+TitlePane.showIcon
 TitlePane.titleMargins
 TitlePane.unifiedBackground
 TitlePane.useWindowDecorations

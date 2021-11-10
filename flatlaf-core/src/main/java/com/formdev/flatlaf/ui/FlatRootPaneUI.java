@@ -313,6 +313,11 @@ public class FlatRootPaneUI
 				}
 				break;
 
+			case FlatClientProperties.TITLE_BAR_SHOW_ICON:
+				if( titlePane != null )
+					titlePane.updateIcon();
+				break;
+
 			case FlatClientProperties.TITLE_BAR_BACKGROUND:
 			case FlatClientProperties.TITLE_BAR_FOREGROUND:
 				if( titlePane != null )
