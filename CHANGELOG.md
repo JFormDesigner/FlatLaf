@@ -17,6 +17,8 @@ FlatLaf Change Log
 - Linux: Fixed NPE when using `java.awt.TrayIcon`. (issue #405)
 - FileChooser: Workaround for crash on Windows with Java 17 32-bit (disabled
   Windows icons). Java 17 64-bit is not affected. (issue #403)
+- Native window decorations: Fixed layout loop, which may occur under special
+  circumstances and slows down the application. (issue #420)
 
 
 ## 1.6.1
