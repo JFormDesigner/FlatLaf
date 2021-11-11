@@ -508,7 +508,7 @@ public class FlatTitlePane
 
 	protected void menuBarLayouted() {
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
-		revalidate();
+		doLayout();
 	}
 
 /*debug
