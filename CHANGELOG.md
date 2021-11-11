@@ -1,6 +1,16 @@
 FlatLaf Change Log
 ==================
 
+## 1.6.2
+
+#### Fixed bugs
+
+- Table: Do not select text in cell editor when it gets focus (when
+  `JTable.surrendersFocusOnKeystroke` is `true`) and
+  `TextComponent.selectAllOnFocusPolicy` is `once` (the default) or `always`.
+  (issue #395)
+
+
 ## 1.6.1
 
 #### Fixed bugs

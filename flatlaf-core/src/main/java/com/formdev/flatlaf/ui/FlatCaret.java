@@ -108,7 +108,7 @@ public class FlatCaret
 	protected void selectAllOnFocusGained() {
 		JTextComponent c = getComponent();
 		Document doc = c.getDocument();
-		if( doc == null || !c.isEnabled() || !c.isEditable() )
+		if( doc == null || !c.isEnabled() || !c.isEditable() || FlatUIUtils.isCellEditor( c ) )
 			return;
 
 		Object selectAllOnFocusPolicy = c.getClientProperty( SELECT_ALL_ON_FOCUS_POLICY );
