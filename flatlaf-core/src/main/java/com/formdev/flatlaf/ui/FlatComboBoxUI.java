@@ -835,7 +835,7 @@ public class FlatComboBoxUI
 
 			// remember old border and replace it
 			rendererBorder = jc.getBorder();
-			rendererComponent.setBorder( this );
+			jc.setBorder( this );
 		}
 
 		/**

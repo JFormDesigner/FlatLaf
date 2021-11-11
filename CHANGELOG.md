@@ -8,6 +8,8 @@ FlatLaf Change Log
 - ComboBox (not editable): Fixed background painted outside of border if round
   edges are enabled (client property `JComponent.roundRect` is `true`). (similar
   to issue #382; regression since fixing #330 in FlatLaf 1.4)
+- ComboBox: Fixed `NullPointerException`, which may occur under special
+  circumstances. (issue #408)
 - Table: Do not select text in cell editor when it gets focus (when
   `JTable.surrendersFocusOnKeystroke` is `true`) and
   `TextComponent.selectAllOnFocusPolicy` is `once` (the default) or `always`.
