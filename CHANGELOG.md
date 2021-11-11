@@ -14,6 +14,7 @@ FlatLaf Change Log
   `JTable.surrendersFocusOnKeystroke` is `true`) and
   `TextComponent.selectAllOnFocusPolicy` is `once` (the default) or `always`.
   (issue #395)
+- Linux: Fixed NPE when using `java.awt.TrayIcon`. (issue #405)
 
 
 ## 1.6.1
