@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- ComboBox (not editable): Fixed background painted outside of border if round
+  edges are enabled (client property `JComponent.roundRect` is `true`). (similar
+  to issue #382; regression since fixing #330 in FlatLaf 1.4)
 - Table: Do not select text in cell editor when it gets focus (when
   `JTable.surrendersFocusOnKeystroke` is `true`) and
   `TextComponent.selectAllOnFocusPolicy` is `once` (the default) or `always`.
@@ -43,7 +46,7 @@ FlatLaf Change Log
 - ComboBox (editable): Fixed wrong border of internal text field under special
   circumstances.
 - Spinner: Fixed painting of border corners on left side. (issue #382;
-  regression since FlatLaf 1.4)
+  regression since fixing #330 in FlatLaf 1.4)
 - TableHeader: Do not show resize cursor for last column if resizing last column
   is not possible because auto resize mode of table is not off. (issue #332)
 - TableHeader: Fixed missing trailing vertical separator line if used in upper
