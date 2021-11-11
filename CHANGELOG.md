@@ -50,8 +50,11 @@ FlatLaf Change Log
   applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
   `tint()`, `shade()` and `luma()`.
 - Support defining fonts in FlatLaf properties files. (issue #384)
-- Extras: Added class `FlatDesktop` for easy integration into macOS screen menu
-  (About, Preferences and Quit) when using Java 8.
+- Extras:
+  - Added class `FlatDesktop` for easy integration into macOS screen menu
+    (About, Preferences and Quit) when using Java 8.
+  - `FlatSVGIcon`: Support loading SVG from `URL` (for JPMS), `URI`, `File` or
+    `InputStream`. (issues #419 and #325)
 
 #### Fixed bugs
 
