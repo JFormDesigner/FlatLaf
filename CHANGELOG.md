@@ -55,11 +55,19 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Tree: Fixed editing cell issue with custom cell renderer and cell editor that
+  use same component for rendering and editing. (issue #385)
+
+
+## 1.6.2
+
+#### Fixed bugs
+
 - ComboBox (not editable): Fixed background painted outside of border if round
   edges are enabled (client property `JComponent.roundRect` is `true`). (similar
   to issue #382; regression since fixing #330 in FlatLaf 1.4)
-- Tree: Fixed editing cell issue with custom cell renderer and cell editor that
-  use same component for rendering and editing. (issue #385)
+- ComboBox: Fixed `NullPointerException`, which may occur under special
+  circumstances. (issue #408)
 - Table: Do not select text in cell editor when it gets focus (when
   `JTable.surrendersFocusOnKeystroke` is `true`) and
   `TextComponent.selectAllOnFocusPolicy` is `once` (the default) or `always`.
