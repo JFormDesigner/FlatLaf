@@ -751,6 +751,8 @@ public abstract class FlatLaf
 	 * and can therefore override all UI defaults.
 	 * <p>
 	 * Invoke this method before setting the look and feel.
+	 * <p>
+	 * If using Java modules, the package must be opened in {@code module-info.java}.
 	 *
 	 * @param packageName a package name (e.g. "com.myapp.resources")
 	 */
