@@ -21,7 +21,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +28,6 @@ import java.util.List;
 import javax.swing.JWindow;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
 import com.formdev.flatlaf.util.SystemInfo;
-import com.kitfox.svg.SVGCache;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGException;
 
@@ -228,18 +226,7 @@ public class FlatSVGUtils
 		return FlatSVGUtils.class.getResource( svgName );
 	}
 
-	/**
-	 * Loads a SVG file.
-	 *
-	 * @param url the URL of the SVG resource
-	 * @return the SVG diagram
-	 * @throws RuntimeException if failed to load SVG file
-	 */
 	private static SVGDiagram loadSVG( URL url ) {
-		try {
-			return SVGCache.getSVGUniverse().getDiagram( url.toURI() );
-		} catch( URISyntaxException ex ) {
-			throw new RuntimeException( ex );
-		}
+		return FlatSVGIcon.loadSVG( FlatSVGIcon.url2uri( url ) );
 	}
 }

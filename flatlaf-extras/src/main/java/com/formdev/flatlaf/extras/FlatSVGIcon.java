@@ -48,6 +48,7 @@ import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
+import com.formdev.flatlaf.util.SoftCache;
 import com.formdev.flatlaf.util.UIScale;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGException;
@@ -62,6 +63,9 @@ public class FlatSVGIcon
 	extends ImageIcon
 	implements DisabledIconProvider
 {
+	// cache that uses soft references for values, which allows freeing SVG diagrams if no longer used
+	private static final SoftCache<URI, SVGDiagram> svgCache = new SoftCache<>();
+
 	// use own SVG universe so that it can not be cleared from anywhere
 	private static final SVGUniverse svgUniverse = new SVGUniverse();
 	private static int streamNumber;
@@ -267,9 +271,9 @@ public class FlatSVGIcon
 		this( null, -1, -1, 1, false, null, loadFromStream( in ) );
 
 		// since the input stream is already loaded and parsed,
-		// get diagram here and remove it from SVGUniverse cache
+		// get diagram here and remove it from cache
 		update();
-		svgUniverse.removeDocument( uri );
+		svgCache.remove( uri );
 	}
 
 	private static URI loadFromStream( InputStream in ) throws IOException {
@@ -467,13 +471,29 @@ public class FlatSVGIcon
 			uri = url2uri( url );
 		}
 
-		// load/get image
+		diagram = loadSVG( uri );
+		loadFailed = (diagram == null);
+	}
+
+	static SVGDiagram loadSVG( URI uri ) {
+		// get from our cache
+		SVGDiagram diagram = svgCache.get( uri );
+		if( diagram != null )
+			return diagram;
+
+		// load/get SVG diagram
 		diagram = svgUniverse.getDiagram( uri );
 
 		if( diagram == null ) {
-			loadFailed = true;
 			LoggingFacade.INSTANCE.logSevere( "FlatSVGIcon: failed to load '" + uri + "'", null );
+			return null;
 		}
+
+		// add to our (soft) cache and remove from SVGUniverse (hard) cache
+		svgCache.put( uri, diagram );
+		svgUniverse.removeDocument( uri );
+
+		return diagram;
 	}
 
 	private URL getIconURL( String name, boolean dark ) {
@@ -623,7 +643,7 @@ public class FlatSVGIcon
 		return MultiResolutionImageSupport.create( 0, dimensions, producer );
 	}
 
-	private static URI url2uri( URL url ) {
+	static URI url2uri( URL url ) {
 		try {
 			return url.toURI();
 		} catch( URISyntaxException ex ) {
