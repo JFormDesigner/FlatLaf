@@ -26,9 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
-import java.lang.ref.Reference;
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,6 +53,7 @@ import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.SoftCache;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -84,7 +82,7 @@ class UIDefaultsLoader
 
 	private static int parseColorDepth;
 
-	private static final Cache<String, Object> fontCache = new Cache<>();
+	private static final SoftCache<String, Object> fontCache = new SoftCache<>();
 
 	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
 		Properties additionalDefaults, boolean dark, UIDefaults defaults )
@@ -1295,44 +1293,5 @@ class UIDefaultsLoader
 
 	private static void throwMissingParametersException( String value ) {
 		throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
-	}
-
-	//---- class Cache --------------------------------------------------------
-
-	private static class Cache<K,V>
-	{
-		private final Map<K, CacheReference<K,V>> map = new HashMap<>();
-		private final ReferenceQueue<V> queue = new ReferenceQueue<>();
-
-		V get( K key ) {
-			expungeStaleEntries();
-			CacheReference<K,V> ref = map.get( key );
-			return (ref != null) ? ref.get() : null;
-		}
-
-		void put( K key, V value ) {
-			expungeStaleEntries();
-			map.put( key, new CacheReference<>( key, value, queue ) );
-		}
-
-		@SuppressWarnings( "unchecked" )
-		void expungeStaleEntries() {
-			Reference<? extends V> reference;
-			while( (reference = queue.poll()) != null )
-				map.remove( ((CacheReference<K,V>)reference).key );
-		}
-
-		//---- class CacheReference ----
-
-		private static class CacheReference<K,V>
-			extends SoftReference<V>
-		{
-			final K key;
-
-			public CacheReference( K key, V value, ReferenceQueue<? super V> queue ) {
-				super( value, queue );
-				this.key = key;
-			}
-		}
 	}
 }
