@@ -21,6 +21,8 @@ import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatDropShadowBorder;
 import com.formdev.flatlaf.ui.FlatPopupMenuBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -98,8 +100,14 @@ class HintManager
 		public void updateUI() {
 			super.updateUI();
 
-			setBackground( UIManager.getColor( "HintPanel.backgroundColor" ) );
-			setBorder( new FlatPopupMenuBorder() );
+			if( UIManager.getLookAndFeel() instanceof FlatLaf ) {
+				setBackground( UIManager.getColor( "HintPanel.backgroundColor" ) );
+				setBorder( new FlatPopupMenuBorder() );
+			} else {
+				// using nonUIResource() because otherwise Nimbus does not fill the background
+				setBackground( FlatUIUtils.nonUIResource( UIManager.getColor( "info" ) ) );
+				setBorder( new LineBorder( Color.gray ) );
+			}
 		}
 
 		void showHint() {
@@ -115,10 +123,12 @@ class HintManager
 				public void updateUI() {
 					super.updateUI();
 
-					setBorder( new FlatDropShadowBorder(
-						UIManager.getColor( "Popup.dropShadowColor" ),
-						UIManager.getInsets( "Popup.dropShadowInsets" ),
-						FlatUIUtils.getUIFloat( "Popup.dropShadowOpacity", 0.5f ) ) );
+					if( UIManager.getLookAndFeel() instanceof FlatLaf ) {
+						setBorder( new FlatDropShadowBorder(
+							UIManager.getColor( "Popup.dropShadowColor" ),
+							UIManager.getInsets( "Popup.dropShadowInsets" ),
+							FlatUIUtils.getUIFloat( "Popup.dropShadowOpacity", 0.5f ) ) );
+					}
 
 					// use invokeLater because at this time the UI delegates
 					// of child components are not yet updated
