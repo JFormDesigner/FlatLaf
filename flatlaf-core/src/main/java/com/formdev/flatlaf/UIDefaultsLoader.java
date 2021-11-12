@@ -22,10 +22,12 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -154,6 +156,18 @@ class UIDefaultsLoader
 						try( InputStream in = classLoader.getResourceAsStream( propertiesName ) ) {
 							if( in != null )
 								properties.load( in );
+						}
+					}
+				} else if( source instanceof URL ) {
+					// load from package URL
+					URL packageUrl = (URL) source;
+					for( Class<?> lafClass : lafClasses ) {
+						URL propertiesUrl = new URL( packageUrl + lafClass.getSimpleName() + ".properties" );
+
+						try( InputStream in = propertiesUrl.openStream() ) {
+							properties.load( in );
+						} catch( FileNotFoundException ex ) {
+							// ignore
 						}
 					}
 				} else if( source instanceof File ) {

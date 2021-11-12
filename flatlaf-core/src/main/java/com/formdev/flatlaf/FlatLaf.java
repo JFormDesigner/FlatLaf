@@ -31,6 +31,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -753,6 +754,7 @@ public abstract class FlatLaf
 	 * Invoke this method before setting the look and feel.
 	 * <p>
 	 * If using Java modules, the package must be opened in {@code module-info.java}.
+	 * Otherwise use {@link #registerCustomDefaultsSource(URL)}.
 	 *
 	 * @param packageName a package name (e.g. "com.myapp.resources")
 	 */
@@ -792,6 +794,32 @@ public abstract class FlatLaf
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Registers a package where FlatLaf searches for properties files with custom UI defaults.
+	 * <p>
+	 * See {@link #registerCustomDefaultsSource(String)} for details.
+	 * <p>
+	 * This method is useful if using Java modules and the package containing the properties files
+	 * is not opened in {@code module-info.java}.
+	 * E.g. {@code FlatLaf.registerCustomDefaultsSource( MyApp.class.getResource( "/com/myapp/themes/" ) )}.
+	 *
+	 * @param packageUrl a package URL
+	 * @since 2
+	 */
+	public static void registerCustomDefaultsSource( URL packageUrl ) {
+		if( customDefaultsSources == null )
+			customDefaultsSources = new ArrayList<>();
+		customDefaultsSources.add( packageUrl );
+	}
+
+	/** @since 2 */
+	public static void unregisterCustomDefaultsSource( URL packageUrl ) {
+		if( customDefaultsSources == null )
+			return;
+
+		customDefaultsSources.remove( packageUrl );
 	}
 
 	/**
