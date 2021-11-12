@@ -55,6 +55,7 @@ FlatLaf Change Log
     (About, Preferences and Quit) when using Java 8.
   - `FlatSVGIcon`: Support loading SVG from `URL` (for JPMS), `URI`, `File` or
     `InputStream`. (issues #419 and #325)
+  - `FlatSVGUtils`: Support loading SVG from `URL` (for JPMS). (issue #325)
 
 #### Fixed bugs
 
