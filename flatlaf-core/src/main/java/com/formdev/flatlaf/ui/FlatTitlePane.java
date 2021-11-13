@@ -870,7 +870,7 @@ debug*/
 			Border menuBarBorder = getMenuBarBorder();
 			if( menuBarBorder != null ) {
 				// if menu bar is embedded, paint menu bar border
-				menuBarBorder.paintBorder( c, g, x, y, width, height );
+				menuBarBorder.paintBorder( rootPane.getJMenuBar(), g, x, y, width, height );
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) ) {
 				// paint border between title pane and content if border color is specified
 				float lineHeight = UIScale.scale( (float) 1 );

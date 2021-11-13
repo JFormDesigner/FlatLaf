@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Window;
@@ -189,10 +190,8 @@ public class FlatMenuBarUI
 			return background;
 
 		// use parent background for unified title pane
-		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
-		if( UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
-			FlatNativeWindowBorder.hasCustomDecoration( (Window) rootPane.getParent() ) )
-		  background = FlatUIUtils.getParentBackground( c );
+		if( useUnifiedBackground( c ) )
+			background = FlatUIUtils.getParentBackground( c );
 
 		// paint background in full screen mode
 		if( FlatUIUtils.isFullScreen( rootPane ) )
@@ -200,6 +199,22 @@ public class FlatMenuBarUI
 
 		// do not paint background if menu bar is embedded into title pane
 		return FlatRootPaneUI.isMenuBarEmbedded( rootPane ) ? null : background;
+	}
+
+	/**@since 2 */
+	static boolean useUnifiedBackground( Component c ) {
+		// check whether:
+		// - TitlePane.unifiedBackground is true and
+		// - menu bar is the "main" menu bar and
+		// - window has custom decorations enabled
+
+		JRootPane rootPane;
+		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
+		return UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
+			(rootPane = SwingUtilities.getRootPane( c )) != null &&
+			rootPane.getParent() instanceof Window &&
+			rootPane.getJMenuBar() == c &&
+			FlatNativeWindowBorder.hasCustomDecoration( (Window) rootPane.getParent() );
 	}
 
 	//---- class TakeFocus ----------------------------------------------------

@@ -53,7 +53,7 @@ public class FlatMenuBarBorder
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-		if( !showBottomSeparator() )
+		if( !showBottomSeparator( c ) )
 			return;
 
 		float lineHeight = scale( (float) 1 );
@@ -73,7 +73,7 @@ public class FlatMenuBarBorder
 	}
 
 	/** @since 2 */
-	protected boolean showBottomSeparator() {
-		return !UIManager.getBoolean( "TitlePane.unifiedBackground" );
+	protected boolean showBottomSeparator( Component c ) {
+		return !FlatMenuBarUI.useUnifiedBackground( c );
 	}
 }
