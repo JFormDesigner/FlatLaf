@@ -711,9 +711,15 @@ debug*/
 		return window != null && FlatNativeWindowBorder.hasCustomDecoration( window );
 	}
 
+	// used to invoke updateNativeTitleBarHeightAndHitTestSpots() only once from latest invokeLater()
+	private int laterCounter;
+
 	protected void updateNativeTitleBarHeightAndHitTestSpotsLater() {
+		laterCounter++;
 		EventQueue.invokeLater( () -> {
-			updateNativeTitleBarHeightAndHitTestSpots();
+			laterCounter--;
+			if( laterCounter == 0 )
+				updateNativeTitleBarHeightAndHitTestSpots();
 		} );
 	}
 
