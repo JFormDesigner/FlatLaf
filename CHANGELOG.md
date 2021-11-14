@@ -7,6 +7,8 @@ FlatLaf Change Log
 
 - ComboBox (not editable): Fixed regression in FlatLaf 1.6.2 that may display
   text in non-editable combo boxes in bold. (issue #423)
+- Tree: Fixed editing cell issue with custom cell renderer and cell editor that
+  use same component for rendering and editing. (issue #385)
 
 
 ## 1.6.2

@@ -263,9 +263,19 @@ public class FlatTreeUI
 		boolean isDropRow = isDropRow( row );
 		boolean needsSelectionPainting = (isSelected || isDropRow) && isPaintSelection();
 
-		// do not paint row if editing, except if selection needs painted
-		if( isEditing && !needsSelectionPainting )
+		// do not paint row if editing
+		if( isEditing ) {
+			// paint wide selection
+			// (do not access cell renderer here to avoid side effect
+			// if renderer component is also used as editor component)
+			if( isSelected && isWideSelection() ) {
+				Color oldColor = g.getColor();
+				g.setColor( selectionInactiveBackground );
+				paintWideSelection( g, clipBounds, insets, bounds, path, row, isExpanded, hasBeenExpanded, isLeaf );
+				g.setColor( oldColor );
+			}
 			return;
+		}
 
 		boolean hasFocus = FlatUIUtils.isPermanentFocusOwner( tree );
 		boolean cellHasFocus = hasFocus && (row == getLeadSelectionRow());
@@ -322,14 +332,7 @@ public class FlatTreeUI
 
 			if( isWideSelection() ) {
 				// wide selection
-				g.fillRect( 0, bounds.y, tree.getWidth(), bounds.height );
-
-				// paint expand/collapse icon
-				// (was already painted before, but painted over with wide selection)
-				if( shouldPaintExpandControl( path, row, isExpanded, hasBeenExpanded, isLeaf ) ) {
-					paintExpandControl( g, clipBounds, insets, bounds,
-						path, row, isExpanded, hasBeenExpanded, isLeaf );
-				}
+				paintWideSelection( g, clipBounds, insets, bounds, path, row, isExpanded, hasBeenExpanded, isLeaf );
 			} else {
 				// non-wide selection
 				paintCellBackground( g, rendererComponent, bounds );
@@ -353,14 +356,26 @@ public class FlatTreeUI
 		}
 
 		// paint renderer
-		if( !isEditing )
-			rendererPane.paintComponent( g, rendererComponent, tree, bounds.x, bounds.y, bounds.width, bounds.height, true );
+		rendererPane.paintComponent( g, rendererComponent, tree, bounds.x, bounds.y, bounds.width, bounds.height, true );
 
 		// restore background selection color and border selection color
 		if( oldBackgroundSelectionColor != null )
 			((DefaultTreeCellRenderer)rendererComponent).setBackgroundSelectionColor( oldBackgroundSelectionColor );
 		if( oldBorderSelectionColor != null )
 			((DefaultTreeCellRenderer)rendererComponent).setBorderSelectionColor( oldBorderSelectionColor );
+	}
+
+	private void paintWideSelection( Graphics g, Rectangle clipBounds, Insets insets, Rectangle bounds,
+		TreePath path, int row, boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
+	{
+		g.fillRect( 0, bounds.y, tree.getWidth(), bounds.height );
+
+		// paint expand/collapse icon
+		// (was already painted before, but painted over with wide selection)
+		if( shouldPaintExpandControl( path, row, isExpanded, hasBeenExpanded, isLeaf ) ) {
+			paintExpandControl( g, clipBounds, insets, bounds,
+				path, row, isExpanded, hasBeenExpanded, isLeaf );
+		}
 	}
 
 	private void paintCellBackground( Graphics g, Component rendererComponent, Rectangle bounds ) {
