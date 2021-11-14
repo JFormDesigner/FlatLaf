@@ -91,18 +91,33 @@ public class FlatWindowDecorationsTest
 
 		JRootPane rootPane = getWindowRootPane();
 		if( rootPane != null ) {
-			int style = rootPane.getWindowDecorationStyle();
-			if( style == JRootPane.NONE )
-				styleNoneRadioButton.setSelected( true );
-			else if( style == JRootPane.FRAME )
-				styleFrameRadioButton.setSelected( true );
-			else if( style == JRootPane.PLAIN_DIALOG )
-				stylePlainRadioButton.setSelected( true );
-			else if( style == JRootPane.INFORMATION_DIALOG )
-				styleInfoRadioButton.setSelected( true );
-			else
-				throw new RuntimeException(); // not used
+			updateDecorationStyleRadioButtons( rootPane );
+			rootPane.addPropertyChangeListener( "windowDecorationStyle", e -> {
+				updateDecorationStyleRadioButtons( rootPane );
+			} );
 		}
+	}
+
+	private void updateDecorationStyleRadioButtons( JRootPane rootPane ) {
+		int style = rootPane.getWindowDecorationStyle();
+		if( style == JRootPane.NONE )
+			styleNoneRadioButton.setSelected( true );
+		else if( style == JRootPane.FRAME )
+			styleFrameRadioButton.setSelected( true );
+		else if( style == JRootPane.PLAIN_DIALOG )
+			stylePlainRadioButton.setSelected( true );
+		else if( style == JRootPane.INFORMATION_DIALOG )
+			styleInfoRadioButton.setSelected( true );
+		else if( style == JRootPane.ERROR_DIALOG )
+			styleErrorRadioButton.setSelected( true );
+		else if( style == JRootPane.QUESTION_DIALOG )
+			styleQuestionRadioButton.setSelected( true );
+		else if( style == JRootPane.WARNING_DIALOG )
+			styleWarningRadioButton.setSelected( true );
+		else if( style == JRootPane.COLOR_CHOOSER_DIALOG )
+			styleColorChooserRadioButton.setSelected( true );
+		else if( style == JRootPane.FILE_CHOOSER_DIALOG )
+			styleFileChooserRadioButton.setSelected( true );
 	}
 
 	private void unifiedBackgroundChanged() {
