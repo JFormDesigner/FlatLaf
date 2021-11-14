@@ -224,6 +224,11 @@ public class FlatTitlePane
 		restoreButton = createButton( "TitlePane.restoreIcon", "Restore", e -> restore() );
 		closeButton = createButton( "TitlePane.closeIcon", "Close", e -> close() );
 
+		// initially hide buttons that are only supported in frames
+		iconifyButton.setVisible( false );
+		maximizeButton.setVisible( false );
+		restoreButton.setVisible( false );
+
 		buttonPanel = new JPanel() {
 			@Override
 			public Dimension getPreferredSize() {
@@ -243,10 +248,8 @@ public class FlatTitlePane
 		if( rootPane.getWindowDecorationStyle() == JRootPane.FRAME ) {
 			// JRootPane.FRAME works only for frames (and not for dialogs)
 			// but at this time the owner window type is unknown (not yet added)
-			// so we add the iconify/maximize/restore buttons and they are hidden
+			// so we add the iconify/maximize/restore buttons and they are shown
 			// later in frameStateChanged(), which is invoked from addNotify()
-
-			restoreButton.setVisible( false );
 
 			buttonPanel.add( iconifyButton );
 			buttonPanel.add( maximizeButton );
@@ -813,7 +816,7 @@ debug*/
 	}
 
 	private Rectangle boundsInWindow( JComponent c ) {
-		return c.isVisible()
+		return c.isShowing()
 			? SwingUtilities.convertRectangle( c.getParent(), c.getBounds(), window )
 			: null;
 	}
