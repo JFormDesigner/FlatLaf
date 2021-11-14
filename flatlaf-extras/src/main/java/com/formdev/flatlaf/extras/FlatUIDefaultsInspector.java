@@ -1000,6 +1000,9 @@ public class FlatUIDefaultsInspector
 	{
 		private Item item;
 
+		// used instead of getBackground() because this did not work in some 3rd party Lafs
+		private Color valueColor;
+
 		@Override
 		public Component getTableCellRendererComponent( JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column )
@@ -1023,7 +1026,7 @@ public class FlatUIDefaultsInspector
 			if( item.value instanceof Color ) {
 				Color color = (item.info instanceof Color[]) ? ((Color[])item.info)[0] : (Color) item.value;
 				boolean isDark = new HSLColor( color ).getLuminance() < 70 && color.getAlpha() >= 128;
-				setBackground( color );
+				valueColor = color;
 				setForeground( isDark ? Color.white : Color.black );
 			} else if( item.value instanceof Icon ) {
 				Icon icon = (Icon) item.value;
@@ -1048,7 +1051,7 @@ public class FlatUIDefaultsInspector
 			if( item.value instanceof Color ) {
 				int width = getWidth();
 				int height = getHeight();
-				Color background = getBackground();
+				Color background = valueColor;
 
 				// paint color
 				fillRect( g, background, 0, 0, width, height );
