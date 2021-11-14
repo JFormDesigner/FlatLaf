@@ -34,7 +34,7 @@ public class FlatCustomBordersTest
 	private static final Color RED = new Color( 0x60ff0000, true );
 	private static final Color GREEN = new Color( 0x6000ff00, true );
 	private static final Color MAGENTA = new Color( 0x60ff00ff, true );
-	private static final Color ORANGE = new Color( 0x60ffc800, true );
+	private static final Color BLUE = new Color( 0x300000ff, true );
 
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
@@ -127,7 +127,7 @@ public class FlatCustomBordersTest
 	@SuppressWarnings( "unchecked" )
 	private void applySpecialComboBoxRenderers() {
 		BasicComboBoxRenderer sharedRenderer = new BasicComboBoxRenderer();
-		sharedRenderer.setBorder( new LineBorder( ORANGE, UIScale.scale( 2 ) ) );
+		sharedRenderer.setBorder( new LineBorder( BLUE, UIScale.scale( 2 ) ) );
 		comboBox29.setRenderer( sharedRenderer );
 		comboBox30.setRenderer( sharedRenderer );
 
@@ -160,7 +160,7 @@ public class FlatCustomBordersTest
 	}
 
 	private void applyCustomComboBoxEditorBorder( JComboBox<String> comboBox ) {
-		applyCustomComboBoxEditorBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 6 ) ) );
+		applyCustomComboBoxEditorBorder( comboBox, new LineBorder( BLUE, UIScale.scale( 6 ) ) );
 	}
 
 	private void applyCustomComboBoxEditorBorderWithIcon( JComboBox<String> comboBox ) {
@@ -180,7 +180,7 @@ public class FlatCustomBordersTest
 	}
 
 	private void applyCustomComboBoxRendererBorder( JComboBox<String> comboBox ) {
-		applyCustomComboBoxRendererBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 6 ) ) );
+		applyCustomComboBoxRendererBorder( comboBox, new LineBorder( BLUE, UIScale.scale( 6 ) ) );
 	}
 
 	private void applyCustomComboBoxRendererBorderWithIcon( JComboBox<String> comboBox ) {

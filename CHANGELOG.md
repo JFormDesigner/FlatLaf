@@ -59,8 +59,13 @@ FlatLaf Change Log
     `InputStream`. (issues #419 and #325)
   - `FlatSVGUtils`: Support loading SVG from `URL` (for JPMS). (issue #325)
 
+
+## 1.6.3
+
 #### Fixed bugs
 
+- ComboBox (not editable): Fixed regression in FlatLaf 1.6.2 that may display
+  text in non-editable combo boxes in bold. (issue #423)
 - Tree: Fixed editing cell issue with custom cell renderer and cell editor that
   use same component for rendering and editing. (issue #385)
 
