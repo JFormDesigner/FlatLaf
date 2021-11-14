@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.6.3
+
+#### Fixed bugs
+
+- ComboBox (not editable): Fixed regression in FlatLaf 1.6.2 that may display
+  text in non-editable combo boxes in bold. (issue #423)
+
+
 ## 1.6.2
 
 #### Fixed bugs
