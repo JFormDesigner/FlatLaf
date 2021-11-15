@@ -520,8 +520,8 @@ public class FlatTitlePane
 		}
 		paintRect( g, Color.cyan, debugCloseButtonBounds );
 		paintRect( g, Color.blue, debugAppIconBounds );
-		paintRect( g, Color.magenta, debugMinimizeButtonBounds );
-		paintRect( g, Color.blue, debugMaximizeButtonBounds );
+		paintRect( g, Color.blue, debugMinimizeButtonBounds );
+		paintRect( g, Color.magenta, debugMaximizeButtonBounds );
 		paintRect( g, Color.cyan, debugCloseButtonBounds );
 	}
 
@@ -766,7 +766,7 @@ debug*/
 
 		JMenuBar menuBar = rootPane.getJMenuBar();
 		if( hasVisibleEmbeddedMenuBar( menuBar ) ) {
-			r = getNativeHitTestSpot( menuBarPlaceholder );
+			r = getNativeHitTestSpot( menuBar );
 			if( r != null ) {
 				Component horizontalGlue = findHorizontalGlue( menuBar );
 				if( horizontalGlue != null ) {
@@ -775,18 +775,18 @@ debug*/
 					// the glue component area can used to move the window.
 
 					Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, window );
+					int x2 = glueLocation.x + horizontalGlue.getWidth();
 					Rectangle r2;
 					if( getComponentOrientation().isLeftToRight() ) {
-						int trailingWidth = (r.x + r.width - HIT_TEST_SPOT_GROW) - glueLocation.x;
-						r.width -= trailingWidth;
-						r2 = new Rectangle( glueLocation.x + horizontalGlue.getWidth(), r.y, trailingWidth, r.height );
+						r2 = new Rectangle( x2, r.y, (r.x + r.width) - x2, r.height );
+
+						r.width = glueLocation.x - r.x;
 					} else {
-						int leadingWidth = (glueLocation.x + horizontalGlue.getWidth()) - (r.x + HIT_TEST_SPOT_GROW);
-						r.x += leadingWidth;
-						r.width -= leadingWidth;
-						r2 = new Rectangle( glueLocation.x -leadingWidth, r.y, leadingWidth, r.height );
+						r2 = new Rectangle( r.x, r.y, glueLocation.x - r.x, r.height );
+
+						r.width = (r.x + r.width) - x2;
+						r.x = x2;
 					}
-					r2.grow( HIT_TEST_SPOT_GROW, HIT_TEST_SPOT_GROW );
 					hitTestSpots.add( r2 );
 				}
 
@@ -825,12 +825,8 @@ debug*/
 
 		Point location = SwingUtilities.convertPoint( c, 0, 0, window );
 		Rectangle r = new Rectangle( location, size );
-		// slightly increase rectangle so that component receives mouseExit events
-		r.grow( HIT_TEST_SPOT_GROW, HIT_TEST_SPOT_GROW );
 		return r;
 	}
-
-	private static final int HIT_TEST_SPOT_GROW = 2;
 
 /*debug
 	private int debugTitleBarHeight;
