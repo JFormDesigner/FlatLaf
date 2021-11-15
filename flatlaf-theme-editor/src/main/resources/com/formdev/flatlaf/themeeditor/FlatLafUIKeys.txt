@@ -631,10 +631,13 @@ RangeSliderUI
 Resizable.resizeBorder
 RootPane.activeBorderColor
 RootPane.ancestorInputMap
+RootPane.background
 RootPane.border
 RootPane.borderDragThickness
 RootPane.cornerDragWidth
 RootPane.defaultButtonWindowKeyBindings
+RootPane.font
+RootPane.foreground
 RootPane.honorDialogMinimumSizeOnResize
 RootPane.honorFrameMinimumSizeOnResize
 RootPane.inactiveBorderColor

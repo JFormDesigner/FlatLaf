@@ -393,6 +393,7 @@ public abstract class FlatLaf
 			"EditorPane.inactiveBackground",
 			"FormattedTextField.disabledBackground",
 			"PasswordField.disabledBackground",
+			"RootPane.background",
 			"Spinner.disabledBackground",
 			"TextArea.disabledBackground",
 			"TextArea.inactiveBackground",
@@ -411,7 +412,8 @@ public abstract class FlatLaf
 			"Spinner.disabledForeground",
 			"ToggleButton.disabledText" );
 		putDefaults( defaults, defaults.getColor( "textText" ),
-			"DesktopIcon.foreground" );
+			"DesktopIcon.foreground",
+			"RootPane.foreground" );
 
 		initFonts( defaults );
 		initIconColors( defaults, isDark() );
@@ -541,6 +543,9 @@ public abstract class FlatLaf
 			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
 				defaults.put( key, activeFont );
 		}
+
+		// add fonts that are not set in BasicLookAndFeel
+		defaults.put( "RootPane.font", activeFont );
 	}
 
 	private void initDefaultFont( UIDefaults defaults ) {

@@ -66,6 +66,9 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatWindowResizer -->
  *
+ * @uiDefault RootPane.font									Font	unused
+ * @uiDefault RootPane.background							Color
+ * @uiDefault RootPane.foreground							Color	unused
  * @uiDefault RootPane.borderDragThickness					int
  * @uiDefault RootPane.cornerDragWidth						int
  * @uiDefault RootPane.honorFrameMinimumSizeOnResize		boolean
@@ -126,8 +129,23 @@ public class FlatRootPaneUI
 	protected void installDefaults( JRootPane c ) {
 		super.installDefaults( c );
 
+		// Give the root pane useful background, foreground and font.
+		// Background is used for title bar and menu bar if native window decorations
+		// and unified background are enabled.
+		// Foreground and font are usually not used, but set for completeness.
+		// Not using LookAndFeel.installColorsAndFont() here because it will not work
+		// because the properties are null by default but inherit non-null values from parent.
+		if( !c.isBackgroundSet() || c.getBackground() instanceof UIResource )
+			c.setBackground( UIManager.getColor( "RootPane.background" ) );
+		if( !c.isForegroundSet() || c.getForeground() instanceof UIResource )
+			c.setForeground( UIManager.getColor( "RootPane.foreground" ) );
+		if( !c.isFontSet() || c.getFont() instanceof UIResource )
+			c.setFont( UIManager.getFont( "RootPane.font" ) );
+
 		// Update background color of JFrame or JDialog parent to avoid bad border
 		// on HiDPI screens when switching from light to dark Laf.
+		// Window background color is also used in native window decorations
+		// to fill background when window is initially shown or when resizing window.
 		// The background of JFrame is initialized in JFrame.frameInit() and
 		// the background of JDialog in JDialog.dialogInit(),
 		// but it was not updated when switching Laf.
