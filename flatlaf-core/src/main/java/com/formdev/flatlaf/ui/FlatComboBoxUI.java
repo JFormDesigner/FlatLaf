@@ -591,11 +591,8 @@ public class FlatComboBoxUI
 		// make renderer component temporary non-opaque to avoid that renderer paints
 		// background outside of border if combobox uses larger arc for edges
 		// (e.g. FlatClientProperties.COMPONENT_ROUND_RECT is true)
-		boolean oldOpaque = true;
-		if( c instanceof JComponent ) {
-			oldOpaque = ((JComponent)c).isOpaque();
+		if( c instanceof JComponent )
 			((JComponent)c).setOpaque( false );
-		}
 
 		boolean shouldValidate = (c instanceof JPanel);
 
@@ -604,7 +601,7 @@ public class FlatComboBoxUI
 		paddingBorder.uninstall();
 
 		if( c instanceof JComponent )
-			((JComponent)c).setOpaque( oldOpaque );
+			((JComponent)c).setOpaque( true );
 	}
 
 	@Override

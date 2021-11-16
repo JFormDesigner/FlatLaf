@@ -60,6 +60,15 @@ FlatLaf Change Log
   - `FlatSVGUtils`: Support loading SVG from `URL` (for JPMS). (issue #325)
 
 
+## 1.6.4
+
+#### Fixed bugs
+
+- ComboBox: Fixed regression in FlatLaf 1.6.3 that makes selected item invisible
+  in popup list if `DefaultListCellRenderer` is used as renderer. If using
+  default renderer, it works. (issue #426)
+
+
 ## 1.6.3
 
 #### Fixed bugs
