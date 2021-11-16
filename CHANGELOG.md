@@ -18,9 +18,11 @@ FlatLaf Change Log
     for menu bars is no longer painted (if unified background is enabled).
   - Show Windows 11 snap layouts menu when hovering the mouse over the maximize
     button. (issues #397 and #407)
-  - Option to hide window icon (for single window set client property
-    `JRootPane.titleBarShowIcon` to `false`; for all windows set UI value
-    `TitlePane.showIcon` to `false`).
+  - Possibility to hide window title bar icon (for single window set client
+    property `JRootPane.titleBarShowIcon` to `false`; for all windows set UI
+    value `TitlePane.showIcon` to `false`).
+  - OptionPane: Hide window title bar icon by default. Can be be made visibly by
+    setting UI default `OptionPane.showIcon` to `true`. (issue #416)
   - No longer show the Java "duke/cup" icon if no window icon image is set.
     (issue #416)
 - TextField, FormattedTextField and PasswordField: Support leading and trailing

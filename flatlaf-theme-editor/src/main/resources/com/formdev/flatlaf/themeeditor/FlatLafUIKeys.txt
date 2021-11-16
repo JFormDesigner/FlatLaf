@@ -531,6 +531,7 @@ OptionPane.minimumSize
 OptionPane.questionIcon
 OptionPane.sameSizeButtons
 OptionPane.setButtonMargin
+OptionPane.showIcon
 OptionPane.warningIcon
 OptionPane.windowBindings
 OptionPaneUI

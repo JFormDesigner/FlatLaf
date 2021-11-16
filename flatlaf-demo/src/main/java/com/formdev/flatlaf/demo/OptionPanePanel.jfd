@@ -12,7 +12,7 @@ new FormModel {
 				name: "scrollPane1"
 				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 				add( new FormContainer( "com.formdev.flatlaf.demo.ScrollablePanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
-					"$layoutConstraints": "flowy,insets dialog,hidemode 3"
+					"$layoutConstraints": "insets dialog,hidemode 3"
 					"$columnConstraints": "[][][fill]"
 					"$rowConstraints": "[top][top][top][top][top][top][top][top]"
 				} ) {
@@ -42,6 +42,16 @@ new FormModel {
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 1 0"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBox" ) {
+						name: "showTitleBarIconCheckBox"
+						"text": "Show window title bar icon"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTitleBarIcon", false ) )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 0"
 					} )
@@ -73,7 +83,7 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 1"
+						"value": "cell 1 1"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "informationLabel"
@@ -103,7 +113,7 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 2"
+						"value": "cell 1 2"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "questionLabel"
@@ -157,7 +167,7 @@ new FormModel {
 						"optionPane": new FormReference( "warningOptionPane" )
 						"titleLabel": new FormReference( "warningLabel" )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 4"
+						"value": "cell 1 4"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "inputLabel"
@@ -184,7 +194,7 @@ new FormModel {
 						"optionPane": new FormReference( "inputOptionPane" )
 						"titleLabel": new FormReference( "inputLabel" )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 5"
+						"value": "cell 1 5"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "inputIconLabel"
@@ -212,7 +222,7 @@ new FormModel {
 						"titleLabel": new FormReference( "inputIconLabel" )
 						"optionPane": new FormReference( "inputIconOptionPane" )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 6"
+						"value": "cell 1 6"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "customLabel"
@@ -240,7 +250,7 @@ new FormModel {
 						"optionPane": new FormReference( "customOptionPane" )
 						"titleLabel": new FormReference( "customLabel" )
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-						"value": "cell 2 7"
+						"value": "cell 1 7"
 					} )
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
@@ -248,7 +258,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 840, 900 )
+			"size": new java.awt.Dimension( 955, 900 )
 		} )
 	}
 }

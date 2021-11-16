@@ -687,6 +687,7 @@ OptionPane.minimumSize         262,90    javax.swing.plaf.DimensionUIResource [U
 OptionPane.questionIcon        [lazy] 32,32    com.formdev.flatlaf.icons.FlatOptionPaneQuestionIcon [UI]
 OptionPane.sameSizeButtons     true
 OptionPane.setButtonMargin     false
+OptionPane.showIcon            false
 OptionPane.warningIcon         [lazy] 32,32    com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon [UI]
 OptionPane.windowBindings      length=2    [Ljava.lang.Object;
     [0] ESCAPE
