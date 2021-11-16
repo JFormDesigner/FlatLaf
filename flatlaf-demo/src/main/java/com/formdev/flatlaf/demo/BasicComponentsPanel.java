@@ -141,7 +141,6 @@ class BasicComponentsPanel
 		JLabel h2Label = new JLabel();
 		JLabel h3Label = new JLabel();
 		JLabel h4Label = new JLabel();
-		JLabel thinLabel = new JLabel();
 		JLabel lightLabel = new JLabel();
 		JLabel semiboldLabel = new JLabel();
 		JLabel fontZoomLabel = new JLabel();
@@ -724,15 +723,10 @@ class BasicComponentsPanel
 		h4Label.putClientProperty("FlatLaf.styleClass", "h4");
 		add(h4Label, "cell 1 15 5 1");
 
-		//---- thinLabel ----
-		thinLabel.setText("thin");
-		thinLabel.putClientProperty("FlatLaf.style", "font: 200% $thin.font");
-		add(thinLabel, "cell 1 15 5 1,gapx 30");
-
 		//---- lightLabel ----
 		lightLabel.setText("light");
 		lightLabel.putClientProperty("FlatLaf.style", "font: 200% $light.font");
-		add(lightLabel, "cell 1 15 5 1");
+		add(lightLabel, "cell 1 15 5 1,gapx 30");
 
 		//---- semiboldLabel ----
 		semiboldLabel.setText("semibold");

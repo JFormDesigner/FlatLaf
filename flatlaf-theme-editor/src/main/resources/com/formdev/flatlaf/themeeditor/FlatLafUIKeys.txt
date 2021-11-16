@@ -1077,7 +1077,6 @@ ViewportUI
 [style].monospaced
 [style].semibold
 [style].small
-[style].thin
 activeCaption
 activeCaptionBorder
 activeCaptionText
@@ -1120,7 +1119,6 @@ textHighlight
 textHighlightText
 textInactiveText
 textText
-thin.font
 window
 windowBorder
 windowText

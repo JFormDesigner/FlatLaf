@@ -1405,7 +1405,6 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 [style].monospaced             font: $monospaced.font
 [style].semibold               font: $semibold.font
 [style].small                  font: $small.font
-[style].thin                   font: $thin.font
 
 
 #----  ----
@@ -1481,7 +1480,7 @@ large.font                     [active] Segoe UI plain 14    javax.swing.plaf.Fo
 
 #---- light ----
 
-light.font                     [active] Segoe UI Semilight plain 12    javax.swing.plaf.FontUIResource [UI]
+light.font                     [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- medium ----
@@ -1532,15 +1531,6 @@ textHighlight                  #00aa00  HSL 120 100  33    javax.swing.plaf.Colo
 textHighlightText              #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 textInactiveText               #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
 textText                       #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
-
-
-#---- thin ----
-
-thin.font                      [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
-
-
-#----  ----
-
 window                         #ccffcc  HSL 120 100  90    javax.swing.plaf.ColorUIResource [UI]
 windowBorder                   #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
 windowText                     #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]

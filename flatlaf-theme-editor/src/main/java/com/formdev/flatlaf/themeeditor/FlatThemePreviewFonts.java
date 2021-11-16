@@ -53,7 +53,6 @@ public class FlatThemePreviewFonts
 		FlatThemePreviewFonts.FontPreview mediumPreview = new FlatThemePreviewFonts.FontPreview();
 		FlatThemePreviewFonts.FontPreview smallPreview = new FlatThemePreviewFonts.FontPreview();
 		FlatThemePreviewFonts.FontPreview miniPreview = new FlatThemePreviewFonts.FontPreview();
-		FlatThemePreviewFonts.FontPreview thinPreview = new FlatThemePreviewFonts.FontPreview();
 		FlatThemePreviewFonts.FontPreview lightPreview = new FlatThemePreviewFonts.FontPreview();
 		FlatThemePreviewFonts.FontPreview semiboldPreview = new FlatThemePreviewFonts.FontPreview();
 		FlatThemePreviewFonts.FontPreview monospacedPreview = new FlatThemePreviewFonts.FontPreview();
@@ -79,7 +78,6 @@ public class FlatThemePreviewFonts
 			"[bottom]" +
 			"[bottom]" +
 			"[bottom]para" +
-			"[]" +
 			"[]" +
 			"[]para" +
 			"[]para" +
@@ -149,34 +147,29 @@ public class FlatThemePreviewFonts
 		miniPreview.setFontStyle("mini");
 		add(miniPreview, "cell 0 12,gapx 12");
 
-		//---- thinPreview ----
-		thinPreview.setFontType("Thin");
-		thinPreview.setFontStyle("thin");
-		add(thinPreview, "cell 0 13,gapx 12");
-
 		//---- lightPreview ----
 		lightPreview.setFontType("Light");
 		lightPreview.setFontStyle("light");
-		add(lightPreview, "cell 0 14,gapx 12");
+		add(lightPreview, "cell 0 13,gapx 12");
 
 		//---- semiboldPreview ----
 		semiboldPreview.setFontType("Semibold");
 		semiboldPreview.setFontStyle("semibold");
-		add(semiboldPreview, "cell 0 15,gapx 12");
+		add(semiboldPreview, "cell 0 14,gapx 12");
 
 		//---- monospacedPreview ----
 		monospacedPreview.setFontType("Monospaced");
 		monospacedPreview.setFontStyle("monospaced");
-		add(monospacedPreview, "cell 0 16,gapx 12");
+		add(monospacedPreview, "cell 0 15,gapx 12");
 
 		//---- scaleLabel ----
 		scaleLabel.setText("Fonts are scaled by:");
-		add(scaleLabel, "cell 0 17,gapx 12");
+		add(scaleLabel, "cell 0 16,gapx 12");
 
 		//---- scaleValueLabel ----
 		scaleValueLabel.setText("1x");
 		scaleValueLabel.putClientProperty("FlatLaf.styleClass", "h2");
-		add(scaleValueLabel, "cell 0 17");
+		add(scaleValueLabel, "cell 0 16");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

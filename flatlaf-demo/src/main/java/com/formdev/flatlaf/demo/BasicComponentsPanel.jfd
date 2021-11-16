@@ -720,18 +720,11 @@ new FormModel {
 				"value": "cell 1 15 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "thinLabel"
-				"text": "thin"
-				"$client.FlatLaf.style": "font: 200% $thin.font"
-			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1,gapx 30"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "lightLabel"
 				"text": "light"
 				"$client.FlatLaf.style": "font: 200% $light.font"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 15 5 1,gapx 30"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "semiboldLabel"
