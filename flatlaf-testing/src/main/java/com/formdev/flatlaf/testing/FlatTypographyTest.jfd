@@ -8,7 +8,7 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel"
+			"$columnConstraints": "[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel[left]unrel[fill]unrel[left]unrel[left]unrel[left]unrel"
 			"$rowConstraints": "[top][bottom][bottom][bottom][bottom][][bottom][bottom][bottom][bottom][][bottom][][bottom][bottom][bottom]"
 		} ) {
 			name: "this"
@@ -62,25 +62,32 @@ new FormModel {
 				"value": "cell 6 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label29"
+				"text": "Material 3"
+				"$client.FlatLaf.styleClass": "h1"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
 				"text": "SAP Fiori"
 				"$client.FlatLaf.styleClass": "h1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 0"
+				"value": "cell 8 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label37"
 				"text": "Atlassian"
 				"$client.FlatLaf.styleClass": "h1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 0"
+				"value": "cell 9 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label46"
 				"text": "Iris"
 				"$client.FlatLaf.styleClass": "h1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 0"
+				"value": "cell 10 0"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$LinkLabel" ) {
 				name: "linkLabel9"
@@ -131,22 +138,28 @@ new FormModel {
 				"value": "cell 6 1"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$LinkLabel" ) {
+				name: "linkLabel11"
+				"link": "https://m3.material.io/styles/typography/tokens"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 1"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$LinkLabel" ) {
 				name: "linkLabel5"
 				"link": "https://experience.sap.com/fiori-design-web/typography/#headlines-and-font-styles-for-ui-controls"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 1"
+				"value": "cell 8 1"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$LinkLabel" ) {
 				name: "linkLabel6"
 				"link": "https://atlassian.design/foundations/typography"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 1"
+				"value": "cell 9 1"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$LinkLabel" ) {
 				name: "linkLabel7"
 				"link": "https://iris.alkamitech.com/foundations/typography.html"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 1"
+				"value": "cell 10 1"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview69"
@@ -167,10 +180,18 @@ new FormModel {
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview40"
 				"fontSize": 68
-				"fontType": "Display"
+				"fontType": "Disp"
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 2 1 2"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview35"
+				"fontType": "Disp L"
+				"fontSize": 57
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 2"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview85"
@@ -189,12 +210,20 @@ new FormModel {
 				"value": "cell 6 3"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview36"
+				"fontSize": 45
+				"fontType": "Disp M"
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 3"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview51"
 				"fontType": "h900"
 				"fontSize": 35
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 3"
+				"value": "cell 9 3"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview1"
@@ -234,7 +263,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview41"
-				"fontType": "Title Large"
+				"fontType": "Title L"
 				"fontSize": 40
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -257,12 +286,20 @@ new FormModel {
 				"value": "cell 6 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview37"
+				"fontSize": 36
+				"fontType": "Display S"
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 4"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview47"
 				"fontType": "Header 1"
 				"fontSize": 36
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 4"
+				"value": "cell 8 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview54"
@@ -270,7 +307,7 @@ new FormModel {
 				"fontType": "h800"
 				"fontSize": 29
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 4"
+				"value": "cell 9 4"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview62"
@@ -278,12 +315,12 @@ new FormModel {
 				"fontSize": 44
 				"fontType": "Hero"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 4"
+				"value": "cell 10 4"
 			} )
 			add( new FormComponent( "javax.swing.JSeparator" ) {
 				name: "separator3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 5 10 1,growx"
+				"value": "cell 0 5 11 1,growx"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview2"
@@ -346,12 +383,20 @@ new FormModel {
 				"value": "cell 6 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview38"
+				"fontSize": 32
+				"fontType": "Headline L"
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 6"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview48"
 				"fontType": "Header 2"
 				"fontSize": 24
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 6"
+				"value": "cell 8 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview55"
@@ -359,7 +404,7 @@ new FormModel {
 				"fontType": "h700"
 				"fontSize": 24
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 6"
+				"value": "cell 9 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview63"
@@ -367,7 +412,7 @@ new FormModel {
 				"fontSize": 32
 				"fontType": "H1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 6"
+				"value": "cell 10 6"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview3"
@@ -430,12 +475,20 @@ new FormModel {
 				"value": "cell 6 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview79"
+				"fontType": "Headline M"
+				"fontSize": 28
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 7"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview49"
 				"fontType": "Header 3"
 				"fontSize": 20
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 7"
+				"value": "cell 8 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview57"
@@ -443,7 +496,7 @@ new FormModel {
 				"fontType": "h600"
 				"fontSize": 20
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 7"
+				"value": "cell 9 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview64"
@@ -451,7 +504,7 @@ new FormModel {
 				"fontType": "H2"
 				"fontSize": 24
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 7"
+				"value": "cell 10 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview4"
@@ -506,12 +559,20 @@ new FormModel {
 				"value": "cell 6 8"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview80"
+				"fontType": "Headline S"
+				"fontSize": 24
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 8"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview50"
 				"fontType": "Header 4"
 				"fontSize": 18
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 8"
+				"value": "cell 8 8"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview58"
@@ -519,7 +580,7 @@ new FormModel {
 				"fontType": "h500"
 				"fontSize": 16
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 8"
+				"value": "cell 9 8"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview65"
@@ -527,7 +588,7 @@ new FormModel {
 				"fontSize": 20
 				"fontType": "H3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 8"
+				"value": "cell 10 8"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview5"
@@ -573,12 +634,20 @@ new FormModel {
 				"value": "cell 4 9"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview81"
+				"fontType": "Title L"
+				"fontSize": 22
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 9"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview56"
 				"fontType": "Large Text / Header 5"
 				"fontSize": 16
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 9"
+				"value": "cell 8 9"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview66"
@@ -586,12 +655,12 @@ new FormModel {
 				"fontType": "H4"
 				"fontSize": 18
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 9"
+				"value": "cell 10 9"
 			} )
 			add( new FormComponent( "javax.swing.JSeparator" ) {
 				name: "separator1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 10 10 1,growx"
+				"value": "cell 0 10 11 1,growx"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview7"
@@ -659,12 +728,20 @@ new FormModel {
 				"value": "cell 6 11"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview82"
+				"fontSize": 16
+				"fontType": "Body L / Title M"
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 11"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview52"
 				"fontType": "Medium Text / Header 6"
 				"fontSize": 14
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 11"
+				"value": "cell 8 11"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview59"
@@ -672,7 +749,7 @@ new FormModel {
 				"fontSize": 14
 				"fontType": "h400"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 11"
+				"value": "cell 9 11"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview67"
@@ -680,12 +757,12 @@ new FormModel {
 				"fontSize": 16
 				"fontType": "Body"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 11"
+				"value": "cell 10 11"
 			} )
 			add( new FormComponent( "javax.swing.JSeparator" ) {
 				name: "separator2"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 12 10 1,growx"
+				"value": "cell 0 12 11 1,growx"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview8"
@@ -734,6 +811,14 @@ new FormModel {
 				"baseSize": 16
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 13"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview83"
+				"fontType": "Body M / Title S / Label L"
+				"fontSize": 14
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 13"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview9"
@@ -792,12 +877,20 @@ new FormModel {
 				"value": "cell 6 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview84"
+				"fontType": "Body S / Label M"
+				"fontSize": 12
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 14"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview53"
 				"fontType": "Small Text"
 				"fontSize": 12
 				"baseSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 7 14"
+				"value": "cell 8 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview60"
@@ -805,7 +898,7 @@ new FormModel {
 				"fontType": "h300 / h200"
 				"fontSize": 12
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 14"
+				"value": "cell 9 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview68"
@@ -813,7 +906,7 @@ new FormModel {
 				"fontType": "Small"
 				"fontSize": 14
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 9 14"
+				"value": "cell 10 14"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview10"
@@ -840,16 +933,24 @@ new FormModel {
 				"value": "cell 6 15"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview94"
+				"fontSize": 11
+				"fontType": "Label S"
+				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 15"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview61"
 				"baseSize": 14
 				"fontSize": 11
 				"fontType": "h100"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 8 15"
+				"value": "cell 9 15"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 0 )
-			"size": new java.awt.Dimension( 1430, 855 )
+			"size": new java.awt.Dimension( 1500, 855 )
 		} )
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets 0,hidemode 3"

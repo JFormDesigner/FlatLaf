@@ -52,6 +52,7 @@ public class FlatTypographyTest
 		JLabel label11 = new JLabel();
 		JLabel label72 = new JLabel();
 		JLabel label28 = new JLabel();
+		JLabel label29 = new JLabel();
 		JLabel label1 = new JLabel();
 		JLabel label37 = new JLabel();
 		JLabel label46 = new JLabel();
@@ -63,14 +64,17 @@ public class FlatTypographyTest
 		FlatTypographyTest.LinkLabel linkLabel4 = new FlatTypographyTest.LinkLabel();
 		FlatTypographyTest.LinkLabel linkLabel10 = new FlatTypographyTest.LinkLabel();
 		FlatTypographyTest.LinkLabel linkLabel8 = new FlatTypographyTest.LinkLabel();
+		FlatTypographyTest.LinkLabel linkLabel11 = new FlatTypographyTest.LinkLabel();
 		FlatTypographyTest.LinkLabel linkLabel5 = new FlatTypographyTest.LinkLabel();
 		FlatTypographyTest.LinkLabel linkLabel6 = new FlatTypographyTest.LinkLabel();
 		FlatTypographyTest.LinkLabel linkLabel7 = new FlatTypographyTest.LinkLabel();
 		FlatTypographyTest.FontPreview fontPreview69 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview93 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview40 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview35 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview85 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview70 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview36 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview51 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview1 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview11 = new FlatTypographyTest.FontPreview();
@@ -79,6 +83,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview41 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview86 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview71 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview37 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview47 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview54 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview62 = new FlatTypographyTest.FontPreview();
@@ -90,6 +95,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview42 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview87 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview72 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview38 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview48 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview55 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview63 = new FlatTypographyTest.FontPreview();
@@ -100,6 +106,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview43 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview88 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview73 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview79 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview49 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview57 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview64 = new FlatTypographyTest.FontPreview();
@@ -109,6 +116,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview30 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview89 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview74 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview80 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview50 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview58 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview65 = new FlatTypographyTest.FontPreview();
@@ -117,6 +125,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview23 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview31 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview44 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview81 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview56 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview66 = new FlatTypographyTest.FontPreview();
 		JSeparator separator1 = new JSeparator();
@@ -128,6 +137,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview45 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview90 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview75 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview82 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview52 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview59 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview67 = new FlatTypographyTest.FontPreview();
@@ -138,6 +148,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview39 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview91 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview76 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview83 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview9 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview18 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview26 = new FlatTypographyTest.FontPreview();
@@ -145,12 +156,14 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview46 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview92 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview77 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview84 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview53 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview60 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview68 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview10 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview34 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview78 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview94 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview61 = new FlatTypographyTest.FontPreview();
 
 		//======== this ========
@@ -164,6 +177,7 @@ public class FlatTypographyTest
 			"[left]unrel" +
 			"[left]unrel" +
 			"[left]unrel" +
+			"[fill]unrel" +
 			"[left]unrel" +
 			"[left]unrel" +
 			"[left]unrel",
@@ -220,20 +234,25 @@ public class FlatTypographyTest
 		label28.putClientProperty("FlatLaf.styleClass", "h1");
 		add(label28, "cell 6 0");
 
+		//---- label29 ----
+		label29.setText("Material 3");
+		label29.putClientProperty("FlatLaf.styleClass", "h1");
+		add(label29, "cell 7 0");
+
 		//---- label1 ----
 		label1.setText("SAP Fiori");
 		label1.putClientProperty("FlatLaf.styleClass", "h1");
-		add(label1, "cell 7 0");
+		add(label1, "cell 8 0");
 
 		//---- label37 ----
 		label37.setText("Atlassian");
 		label37.putClientProperty("FlatLaf.styleClass", "h1");
-		add(label37, "cell 8 0");
+		add(label37, "cell 9 0");
 
 		//---- label46 ----
 		label46.setText("Iris");
 		label46.putClientProperty("FlatLaf.styleClass", "h1");
-		add(label46, "cell 9 0");
+		add(label46, "cell 10 0");
 
 		//---- linkLabel9 ----
 		linkLabel9.setLink("https://www.formdev.com/flatlaf/typography/");
@@ -267,17 +286,21 @@ public class FlatTypographyTest
 		linkLabel8.setLink("https://material.io/design/typography/the-type-system.html#type-scale");
 		add(linkLabel8, "cell 6 1");
 
+		//---- linkLabel11 ----
+		linkLabel11.setLink("https://m3.material.io/styles/typography/tokens");
+		add(linkLabel11, "cell 7 1");
+
 		//---- linkLabel5 ----
 		linkLabel5.setLink("https://experience.sap.com/fiori-design-web/typography/#headlines-and-font-styles-for-ui-controls");
-		add(linkLabel5, "cell 7 1");
+		add(linkLabel5, "cell 8 1");
 
 		//---- linkLabel6 ----
 		linkLabel6.setLink("https://atlassian.design/foundations/typography");
-		add(linkLabel6, "cell 8 1");
+		add(linkLabel6, "cell 9 1");
 
 		//---- linkLabel7 ----
 		linkLabel7.setLink("https://iris.alkamitech.com/foundations/typography.html");
-		add(linkLabel7, "cell 9 1");
+		add(linkLabel7, "cell 10 1");
 
 		//---- fontPreview69 ----
 		fontPreview69.setFontType("H1");
@@ -293,9 +316,15 @@ public class FlatTypographyTest
 
 		//---- fontPreview40 ----
 		fontPreview40.setFontSize(68);
-		fontPreview40.setFontType("Display");
+		fontPreview40.setFontType("Disp");
 		fontPreview40.setBaseSize(14);
 		add(fontPreview40, "cell 4 2 1 2");
+
+		//---- fontPreview35 ----
+		fontPreview35.setFontType("Disp L");
+		fontPreview35.setFontSize(57);
+		fontPreview35.setBaseSize(16);
+		add(fontPreview35, "cell 7 2");
 
 		//---- fontPreview85 ----
 		fontPreview85.setFontSize(48);
@@ -309,11 +338,17 @@ public class FlatTypographyTest
 		fontPreview70.setBaseSize(16);
 		add(fontPreview70, "cell 6 3");
 
+		//---- fontPreview36 ----
+		fontPreview36.setFontSize(45);
+		fontPreview36.setFontType("Disp M");
+		fontPreview36.setBaseSize(16);
+		add(fontPreview36, "cell 7 3");
+
 		//---- fontPreview51 ----
 		fontPreview51.setFontType("h900");
 		fontPreview51.setFontSize(35);
 		fontPreview51.setBaseSize(14);
-		add(fontPreview51, "cell 8 3");
+		add(fontPreview51, "cell 9 3");
 
 		//---- fontPreview1 ----
 		fontPreview1.setBaseSize(12);
@@ -344,7 +379,7 @@ public class FlatTypographyTest
 		add(fontPreview27, "cell 3 4");
 
 		//---- fontPreview41 ----
-		fontPreview41.setFontType("Title Large");
+		fontPreview41.setFontType("Title L");
 		fontPreview41.setFontSize(40);
 		fontPreview41.setBaseSize(14);
 		add(fontPreview41, "cell 4 4");
@@ -361,24 +396,30 @@ public class FlatTypographyTest
 		fontPreview71.setBaseSize(16);
 		add(fontPreview71, "cell 6 4");
 
+		//---- fontPreview37 ----
+		fontPreview37.setFontSize(36);
+		fontPreview37.setFontType("Display S");
+		fontPreview37.setBaseSize(16);
+		add(fontPreview37, "cell 7 4");
+
 		//---- fontPreview47 ----
 		fontPreview47.setFontType("Header 1");
 		fontPreview47.setFontSize(36);
 		fontPreview47.setBaseSize(14);
-		add(fontPreview47, "cell 7 4");
+		add(fontPreview47, "cell 8 4");
 
 		//---- fontPreview54 ----
 		fontPreview54.setBaseSize(14);
 		fontPreview54.setFontType("h800");
 		fontPreview54.setFontSize(29);
-		add(fontPreview54, "cell 8 4");
+		add(fontPreview54, "cell 9 4");
 
 		//---- fontPreview62 ----
 		fontPreview62.setBaseSize(16);
 		fontPreview62.setFontSize(44);
 		fontPreview62.setFontType("Hero");
-		add(fontPreview62, "cell 9 4");
-		add(separator3, "cell 0 5 10 1,growx");
+		add(fontPreview62, "cell 10 4");
+		add(separator3, "cell 0 5 11 1,growx");
 
 		//---- fontPreview2 ----
 		fontPreview2.setBaseSize(12);
@@ -426,23 +467,29 @@ public class FlatTypographyTest
 		fontPreview72.setBaseSize(16);
 		add(fontPreview72, "cell 6 6");
 
+		//---- fontPreview38 ----
+		fontPreview38.setFontSize(32);
+		fontPreview38.setFontType("Headline L");
+		fontPreview38.setBaseSize(16);
+		add(fontPreview38, "cell 7 6");
+
 		//---- fontPreview48 ----
 		fontPreview48.setFontType("Header 2");
 		fontPreview48.setFontSize(24);
 		fontPreview48.setBaseSize(14);
-		add(fontPreview48, "cell 7 6");
+		add(fontPreview48, "cell 8 6");
 
 		//---- fontPreview55 ----
 		fontPreview55.setBaseSize(14);
 		fontPreview55.setFontType("h700");
 		fontPreview55.setFontSize(24);
-		add(fontPreview55, "cell 8 6");
+		add(fontPreview55, "cell 9 6");
 
 		//---- fontPreview63 ----
 		fontPreview63.setBaseSize(16);
 		fontPreview63.setFontSize(32);
 		fontPreview63.setFontType("H1");
-		add(fontPreview63, "cell 9 6");
+		add(fontPreview63, "cell 10 6");
 
 		//---- fontPreview3 ----
 		fontPreview3.setBaseSize(12);
@@ -490,23 +537,29 @@ public class FlatTypographyTest
 		fontPreview73.setBaseSize(16);
 		add(fontPreview73, "cell 6 7");
 
+		//---- fontPreview79 ----
+		fontPreview79.setFontType("Headline M");
+		fontPreview79.setFontSize(28);
+		fontPreview79.setBaseSize(16);
+		add(fontPreview79, "cell 7 7");
+
 		//---- fontPreview49 ----
 		fontPreview49.setFontType("Header 3");
 		fontPreview49.setFontSize(20);
 		fontPreview49.setBaseSize(14);
-		add(fontPreview49, "cell 7 7");
+		add(fontPreview49, "cell 8 7");
 
 		//---- fontPreview57 ----
 		fontPreview57.setBaseSize(14);
 		fontPreview57.setFontType("h600");
 		fontPreview57.setFontSize(20);
-		add(fontPreview57, "cell 8 7");
+		add(fontPreview57, "cell 9 7");
 
 		//---- fontPreview64 ----
 		fontPreview64.setBaseSize(16);
 		fontPreview64.setFontType("H2");
 		fontPreview64.setFontSize(24);
-		add(fontPreview64, "cell 9 7");
+		add(fontPreview64, "cell 10 7");
 
 		//---- fontPreview4 ----
 		fontPreview4.setBaseSize(12);
@@ -548,23 +601,29 @@ public class FlatTypographyTest
 		fontPreview74.setBaseSize(16);
 		add(fontPreview74, "cell 6 8");
 
+		//---- fontPreview80 ----
+		fontPreview80.setFontType("Headline S");
+		fontPreview80.setFontSize(24);
+		fontPreview80.setBaseSize(16);
+		add(fontPreview80, "cell 7 8");
+
 		//---- fontPreview50 ----
 		fontPreview50.setFontType("Header 4");
 		fontPreview50.setFontSize(18);
 		fontPreview50.setBaseSize(14);
-		add(fontPreview50, "cell 7 8");
+		add(fontPreview50, "cell 8 8");
 
 		//---- fontPreview58 ----
 		fontPreview58.setBaseSize(14);
 		fontPreview58.setFontType("h500");
 		fontPreview58.setFontSize(16);
-		add(fontPreview58, "cell 8 8");
+		add(fontPreview58, "cell 9 8");
 
 		//---- fontPreview65 ----
 		fontPreview65.setBaseSize(16);
 		fontPreview65.setFontSize(20);
 		fontPreview65.setFontType("H3");
-		add(fontPreview65, "cell 9 8");
+		add(fontPreview65, "cell 10 8");
 
 		//---- fontPreview5 ----
 		fontPreview5.setBaseSize(12);
@@ -599,18 +658,24 @@ public class FlatTypographyTest
 		fontPreview44.setBaseSize(14);
 		add(fontPreview44, "cell 4 9");
 
+		//---- fontPreview81 ----
+		fontPreview81.setFontType("Title L");
+		fontPreview81.setFontSize(22);
+		fontPreview81.setBaseSize(16);
+		add(fontPreview81, "cell 7 9");
+
 		//---- fontPreview56 ----
 		fontPreview56.setFontType("Large Text / Header 5");
 		fontPreview56.setFontSize(16);
 		fontPreview56.setBaseSize(14);
-		add(fontPreview56, "cell 7 9");
+		add(fontPreview56, "cell 8 9");
 
 		//---- fontPreview66 ----
 		fontPreview66.setBaseSize(16);
 		fontPreview66.setFontType("H4");
 		fontPreview66.setFontSize(18);
-		add(fontPreview66, "cell 9 9");
-		add(separator1, "cell 0 10 10 1,growx");
+		add(fontPreview66, "cell 10 9");
+		add(separator1, "cell 0 10 11 1,growx");
 
 		//---- fontPreview7 ----
 		fontPreview7.setFontType("Default");
@@ -661,24 +726,30 @@ public class FlatTypographyTest
 		fontPreview75.setBaseSize(16);
 		add(fontPreview75, "cell 6 11");
 
+		//---- fontPreview82 ----
+		fontPreview82.setFontSize(16);
+		fontPreview82.setFontType("Body L / Title M");
+		fontPreview82.setBaseSize(16);
+		add(fontPreview82, "cell 7 11");
+
 		//---- fontPreview52 ----
 		fontPreview52.setFontType("Medium Text / Header 6");
 		fontPreview52.setFontSize(14);
 		fontPreview52.setBaseSize(14);
-		add(fontPreview52, "cell 7 11");
+		add(fontPreview52, "cell 8 11");
 
 		//---- fontPreview59 ----
 		fontPreview59.setBaseSize(14);
 		fontPreview59.setFontSize(14);
 		fontPreview59.setFontType("h400");
-		add(fontPreview59, "cell 8 11");
+		add(fontPreview59, "cell 9 11");
 
 		//---- fontPreview67 ----
 		fontPreview67.setBaseSize(16);
 		fontPreview67.setFontSize(16);
 		fontPreview67.setFontType("Body");
-		add(fontPreview67, "cell 9 11");
-		add(separator2, "cell 0 12 10 1,growx");
+		add(fontPreview67, "cell 10 11");
+		add(separator2, "cell 0 12 11 1,growx");
 
 		//---- fontPreview8 ----
 		fontPreview8.setFontType("Medium");
@@ -715,6 +786,12 @@ public class FlatTypographyTest
 		fontPreview76.setFontSize(14);
 		fontPreview76.setBaseSize(16);
 		add(fontPreview76, "cell 6 13");
+
+		//---- fontPreview83 ----
+		fontPreview83.setFontType("Body M / Title S / Label L");
+		fontPreview83.setFontSize(14);
+		fontPreview83.setBaseSize(16);
+		add(fontPreview83, "cell 7 13");
 
 		//---- fontPreview9 ----
 		fontPreview9.setFontType("Small");
@@ -758,23 +835,29 @@ public class FlatTypographyTest
 		fontPreview77.setBaseSize(16);
 		add(fontPreview77, "cell 6 14");
 
+		//---- fontPreview84 ----
+		fontPreview84.setFontType("Body S / Label M");
+		fontPreview84.setFontSize(12);
+		fontPreview84.setBaseSize(16);
+		add(fontPreview84, "cell 7 14");
+
 		//---- fontPreview53 ----
 		fontPreview53.setFontType("Small Text");
 		fontPreview53.setFontSize(12);
 		fontPreview53.setBaseSize(14);
-		add(fontPreview53, "cell 7 14");
+		add(fontPreview53, "cell 8 14");
 
 		//---- fontPreview60 ----
 		fontPreview60.setBaseSize(14);
 		fontPreview60.setFontType("h300 / h200");
 		fontPreview60.setFontSize(12);
-		add(fontPreview60, "cell 8 14");
+		add(fontPreview60, "cell 9 14");
 
 		//---- fontPreview68 ----
 		fontPreview68.setBaseSize(16);
 		fontPreview68.setFontType("Small");
 		fontPreview68.setFontSize(14);
-		add(fontPreview68, "cell 9 14");
+		add(fontPreview68, "cell 10 14");
 
 		//---- fontPreview10 ----
 		fontPreview10.setFontType("Mini");
@@ -794,11 +877,17 @@ public class FlatTypographyTest
 		fontPreview78.setBaseSize(16);
 		add(fontPreview78, "cell 6 15");
 
+		//---- fontPreview94 ----
+		fontPreview94.setFontSize(11);
+		fontPreview94.setFontType("Label S");
+		fontPreview94.setBaseSize(16);
+		add(fontPreview94, "cell 7 15");
+
 		//---- fontPreview61 ----
 		fontPreview61.setBaseSize(14);
 		fontPreview61.setFontSize(11);
 		fontPreview61.setFontType("h100");
-		add(fontPreview61, "cell 8 15");
+		add(fontPreview61, "cell 9 15");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
