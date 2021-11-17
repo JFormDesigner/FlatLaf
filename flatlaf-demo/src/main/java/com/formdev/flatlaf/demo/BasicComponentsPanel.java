@@ -745,7 +745,7 @@ class BasicComponentsPanel
 		add(largeLabel, "cell 1 16 5 1");
 
 		//---- defaultLabel ----
-		defaultLabel.setText("default/regular");
+		defaultLabel.setText("default");
 		add(defaultLabel, "cell 1 16 5 1");
 
 		//---- mediumLabel ----

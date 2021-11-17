@@ -166,6 +166,7 @@ new FormModel {
 				"fontType": "H1"
 				"fontSize": 96
 				"baseSize": 16
+				"light": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 2"
 			} )
@@ -182,6 +183,7 @@ new FormModel {
 				"fontSize": 68
 				"fontType": "Disp"
 				"baseSize": 14
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 2 1 2"
 			} )
@@ -198,6 +200,7 @@ new FormModel {
 				"fontSize": 48
 				"fontType": "H00"
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 3"
 			} )
@@ -206,6 +209,7 @@ new FormModel {
 				"fontSize": 60
 				"fontType": "H2"
 				"baseSize": 16
+				"light": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 3"
 			} )
@@ -222,6 +226,7 @@ new FormModel {
 				"fontType": "h900"
 				"fontSize": 35
 				"baseSize": 14
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 3"
 			} )
@@ -266,6 +271,7 @@ new FormModel {
 				"fontType": "Title L"
 				"fontSize": 40
 				"baseSize": 14
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 4"
 			} )
@@ -274,6 +280,7 @@ new FormModel {
 				"fontSize": 40
 				"fontType": "H0"
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 4"
 			} )
@@ -306,6 +313,7 @@ new FormModel {
 				"baseSize": 14
 				"fontType": "h800"
 				"fontSize": 29
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 4"
 			} )
@@ -363,6 +371,7 @@ new FormModel {
 				"fontType": "Title"
 				"fontSize": 28
 				"baseSize": 14
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 6"
 			} )
@@ -371,6 +380,7 @@ new FormModel {
 				"fontType": "H1"
 				"fontSize": 32
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 6"
 			} )
@@ -403,6 +413,7 @@ new FormModel {
 				"baseSize": 14
 				"fontType": "h700"
 				"fontSize": 24
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 6"
 			} )
@@ -455,6 +466,7 @@ new FormModel {
 				"fontType": "Subtitle"
 				"fontSize": 20
 				"baseSize": 14
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 7"
 			} )
@@ -463,6 +475,7 @@ new FormModel {
 				"fontSize": 24
 				"fontType": "H2"
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 7"
 			} )
@@ -495,6 +508,7 @@ new FormModel {
 				"baseSize": 14
 				"fontType": "h600"
 				"fontSize": 20
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 7"
 			} )
@@ -547,6 +561,7 @@ new FormModel {
 				"fontType": "H3"
 				"fontSize": 20
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 8"
 			} )
@@ -555,6 +570,7 @@ new FormModel {
 				"fontType": "H6"
 				"fontSize": 20
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 8"
 			} )
@@ -579,6 +595,7 @@ new FormModel {
 				"baseSize": 14
 				"fontType": "h500"
 				"fontSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 8"
 			} )
@@ -638,6 +655,7 @@ new FormModel {
 				"fontType": "Title L"
 				"fontSize": 22
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 7 9"
 			} )
@@ -714,8 +732,17 @@ new FormModel {
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview90"
 				"fontSize": 16
-				"fontType": "Body / H4"
+				"fontType": "Body /"
 				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 11,alignx left,growx 0"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview98"
+				"fontSize": 16
+				"fontType": "H4"
+				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 11"
 			} )
@@ -730,8 +757,17 @@ new FormModel {
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview82"
 				"fontSize": 16
-				"fontType": "Body L / Title M"
+				"fontType": "Body L /"
 				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 11,alignx left,growx 0"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview95"
+				"fontSize": 16
+				"fontType": "Title M"
+				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 7 11"
 			} )
@@ -748,6 +784,7 @@ new FormModel {
 				"baseSize": 14
 				"fontSize": 14
 				"fontType": "h400"
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 11"
 			} )
@@ -801,6 +838,7 @@ new FormModel {
 				"fontType": "H5"
 				"fontSize": 14
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 13"
 			} )
@@ -814,9 +852,18 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview83"
-				"fontType": "Body M / Title S / Label L"
+				"fontType": "Body M /"
 				"fontSize": 14
 				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 13,alignx left,growx 0"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview96"
+				"fontType": "Title S / Label L"
+				"fontSize": 14
+				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 7 13"
 			} )
@@ -865,6 +912,7 @@ new FormModel {
 				"fontSize": 12
 				"fontType": "H6"
 				"baseSize": 12
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 14"
 			} )
@@ -878,9 +926,18 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
 				name: "fontPreview84"
-				"fontType": "Body S / Label M"
+				"fontType": "Body S /"
 				"fontSize": 12
 				"baseSize": 16
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 14,alignx left,growx 0"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatTypographyTest$FontPreview" ) {
+				name: "fontPreview97"
+				"fontType": "Label M"
+				"fontSize": 12
+				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 7 14"
 			} )
@@ -897,6 +954,7 @@ new FormModel {
 				"baseSize": 14
 				"fontType": "h300 / h200"
 				"fontSize": 12
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 14"
 			} )
@@ -937,6 +995,7 @@ new FormModel {
 				"fontSize": 11
 				"fontType": "Label S"
 				"baseSize": 16
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 7 15"
 			} )
@@ -945,6 +1004,7 @@ new FormModel {
 				"baseSize": 14
 				"fontSize": 11
 				"fontType": "h100"
+				"semibold": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 15"
 			} )

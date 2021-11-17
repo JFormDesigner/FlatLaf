@@ -136,8 +136,10 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview32 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview45 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview90 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview98 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview75 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview82 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview95 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview52 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview59 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview67 = new FlatTypographyTest.FontPreview();
@@ -149,6 +151,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview91 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview76 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview83 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview96 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview9 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview18 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview26 = new FlatTypographyTest.FontPreview();
@@ -157,6 +160,7 @@ public class FlatTypographyTest
 		FlatTypographyTest.FontPreview fontPreview92 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview77 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview84 = new FlatTypographyTest.FontPreview();
+		FlatTypographyTest.FontPreview fontPreview97 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview53 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview60 = new FlatTypographyTest.FontPreview();
 		FlatTypographyTest.FontPreview fontPreview68 = new FlatTypographyTest.FontPreview();
@@ -306,6 +310,7 @@ public class FlatTypographyTest
 		fontPreview69.setFontType("H1");
 		fontPreview69.setFontSize(96);
 		fontPreview69.setBaseSize(16);
+		fontPreview69.setLight(true);
 		add(fontPreview69, "cell 6 2");
 
 		//---- fontPreview93 ----
@@ -318,6 +323,7 @@ public class FlatTypographyTest
 		fontPreview40.setFontSize(68);
 		fontPreview40.setFontType("Disp");
 		fontPreview40.setBaseSize(14);
+		fontPreview40.setSemibold(true);
 		add(fontPreview40, "cell 4 2 1 2");
 
 		//---- fontPreview35 ----
@@ -330,12 +336,14 @@ public class FlatTypographyTest
 		fontPreview85.setFontSize(48);
 		fontPreview85.setFontType("H00");
 		fontPreview85.setBaseSize(16);
+		fontPreview85.setSemibold(true);
 		add(fontPreview85, "cell 5 3");
 
 		//---- fontPreview70 ----
 		fontPreview70.setFontSize(60);
 		fontPreview70.setFontType("H2");
 		fontPreview70.setBaseSize(16);
+		fontPreview70.setLight(true);
 		add(fontPreview70, "cell 6 3");
 
 		//---- fontPreview36 ----
@@ -348,6 +356,7 @@ public class FlatTypographyTest
 		fontPreview51.setFontType("h900");
 		fontPreview51.setFontSize(35);
 		fontPreview51.setBaseSize(14);
+		fontPreview51.setSemibold(true);
 		add(fontPreview51, "cell 9 3");
 
 		//---- fontPreview1 ----
@@ -382,12 +391,14 @@ public class FlatTypographyTest
 		fontPreview41.setFontType("Title L");
 		fontPreview41.setFontSize(40);
 		fontPreview41.setBaseSize(14);
+		fontPreview41.setSemibold(true);
 		add(fontPreview41, "cell 4 4");
 
 		//---- fontPreview86 ----
 		fontPreview86.setFontSize(40);
 		fontPreview86.setFontType("H0");
 		fontPreview86.setBaseSize(16);
+		fontPreview86.setSemibold(true);
 		add(fontPreview86, "cell 5 4");
 
 		//---- fontPreview71 ----
@@ -412,6 +423,7 @@ public class FlatTypographyTest
 		fontPreview54.setBaseSize(14);
 		fontPreview54.setFontType("h800");
 		fontPreview54.setFontSize(29);
+		fontPreview54.setSemibold(true);
 		add(fontPreview54, "cell 9 4");
 
 		//---- fontPreview62 ----
@@ -453,12 +465,14 @@ public class FlatTypographyTest
 		fontPreview42.setFontType("Title");
 		fontPreview42.setFontSize(28);
 		fontPreview42.setBaseSize(14);
+		fontPreview42.setSemibold(true);
 		add(fontPreview42, "cell 4 6");
 
 		//---- fontPreview87 ----
 		fontPreview87.setFontType("H1");
 		fontPreview87.setFontSize(32);
 		fontPreview87.setBaseSize(16);
+		fontPreview87.setSemibold(true);
 		add(fontPreview87, "cell 5 6");
 
 		//---- fontPreview72 ----
@@ -483,6 +497,7 @@ public class FlatTypographyTest
 		fontPreview55.setBaseSize(14);
 		fontPreview55.setFontType("h700");
 		fontPreview55.setFontSize(24);
+		fontPreview55.setSemibold(true);
 		add(fontPreview55, "cell 9 6");
 
 		//---- fontPreview63 ----
@@ -523,12 +538,14 @@ public class FlatTypographyTest
 		fontPreview43.setFontType("Subtitle");
 		fontPreview43.setFontSize(20);
 		fontPreview43.setBaseSize(14);
+		fontPreview43.setSemibold(true);
 		add(fontPreview43, "cell 4 7");
 
 		//---- fontPreview88 ----
 		fontPreview88.setFontSize(24);
 		fontPreview88.setFontType("H2");
 		fontPreview88.setBaseSize(16);
+		fontPreview88.setSemibold(true);
 		add(fontPreview88, "cell 5 7");
 
 		//---- fontPreview73 ----
@@ -553,6 +570,7 @@ public class FlatTypographyTest
 		fontPreview57.setBaseSize(14);
 		fontPreview57.setFontType("h600");
 		fontPreview57.setFontSize(20);
+		fontPreview57.setSemibold(true);
 		add(fontPreview57, "cell 9 7");
 
 		//---- fontPreview64 ----
@@ -593,12 +611,14 @@ public class FlatTypographyTest
 		fontPreview89.setFontType("H3");
 		fontPreview89.setFontSize(20);
 		fontPreview89.setBaseSize(16);
+		fontPreview89.setSemibold(true);
 		add(fontPreview89, "cell 5 8");
 
 		//---- fontPreview74 ----
 		fontPreview74.setFontType("H6");
 		fontPreview74.setFontSize(20);
 		fontPreview74.setBaseSize(16);
+		fontPreview74.setSemibold(true);
 		add(fontPreview74, "cell 6 8");
 
 		//---- fontPreview80 ----
@@ -617,6 +637,7 @@ public class FlatTypographyTest
 		fontPreview58.setBaseSize(14);
 		fontPreview58.setFontType("h500");
 		fontPreview58.setFontSize(16);
+		fontPreview58.setSemibold(true);
 		add(fontPreview58, "cell 9 8");
 
 		//---- fontPreview65 ----
@@ -662,6 +683,7 @@ public class FlatTypographyTest
 		fontPreview81.setFontType("Title L");
 		fontPreview81.setFontSize(22);
 		fontPreview81.setBaseSize(16);
+		fontPreview81.setSemibold(true);
 		add(fontPreview81, "cell 7 9");
 
 		//---- fontPreview56 ----
@@ -716,9 +738,16 @@ public class FlatTypographyTest
 
 		//---- fontPreview90 ----
 		fontPreview90.setFontSize(16);
-		fontPreview90.setFontType("Body / H4");
+		fontPreview90.setFontType("Body /");
 		fontPreview90.setBaseSize(16);
-		add(fontPreview90, "cell 5 11");
+		add(fontPreview90, "cell 5 11,alignx left,growx 0");
+
+		//---- fontPreview98 ----
+		fontPreview98.setFontSize(16);
+		fontPreview98.setFontType("H4");
+		fontPreview98.setBaseSize(16);
+		fontPreview98.setSemibold(true);
+		add(fontPreview98, "cell 5 11");
 
 		//---- fontPreview75 ----
 		fontPreview75.setFontSize(16);
@@ -728,9 +757,16 @@ public class FlatTypographyTest
 
 		//---- fontPreview82 ----
 		fontPreview82.setFontSize(16);
-		fontPreview82.setFontType("Body L / Title M");
+		fontPreview82.setFontType("Body L /");
 		fontPreview82.setBaseSize(16);
-		add(fontPreview82, "cell 7 11");
+		add(fontPreview82, "cell 7 11,alignx left,growx 0");
+
+		//---- fontPreview95 ----
+		fontPreview95.setFontSize(16);
+		fontPreview95.setFontType("Title M");
+		fontPreview95.setBaseSize(16);
+		fontPreview95.setSemibold(true);
+		add(fontPreview95, "cell 7 11");
 
 		//---- fontPreview52 ----
 		fontPreview52.setFontType("Medium Text / Header 6");
@@ -742,6 +778,7 @@ public class FlatTypographyTest
 		fontPreview59.setBaseSize(14);
 		fontPreview59.setFontSize(14);
 		fontPreview59.setFontType("h400");
+		fontPreview59.setSemibold(true);
 		add(fontPreview59, "cell 9 11");
 
 		//---- fontPreview67 ----
@@ -779,6 +816,7 @@ public class FlatTypographyTest
 		fontPreview91.setFontType("H5");
 		fontPreview91.setFontSize(14);
 		fontPreview91.setBaseSize(16);
+		fontPreview91.setSemibold(true);
 		add(fontPreview91, "cell 5 13");
 
 		//---- fontPreview76 ----
@@ -788,10 +826,17 @@ public class FlatTypographyTest
 		add(fontPreview76, "cell 6 13");
 
 		//---- fontPreview83 ----
-		fontPreview83.setFontType("Body M / Title S / Label L");
+		fontPreview83.setFontType("Body M /");
 		fontPreview83.setFontSize(14);
 		fontPreview83.setBaseSize(16);
-		add(fontPreview83, "cell 7 13");
+		add(fontPreview83, "cell 7 13,alignx left,growx 0");
+
+		//---- fontPreview96 ----
+		fontPreview96.setFontType("Title S / Label L");
+		fontPreview96.setFontSize(14);
+		fontPreview96.setBaseSize(16);
+		fontPreview96.setSemibold(true);
+		add(fontPreview96, "cell 7 13");
 
 		//---- fontPreview9 ----
 		fontPreview9.setFontType("Small");
@@ -827,6 +872,7 @@ public class FlatTypographyTest
 		fontPreview92.setFontSize(12);
 		fontPreview92.setFontType("H6");
 		fontPreview92.setBaseSize(12);
+		fontPreview92.setSemibold(true);
 		add(fontPreview92, "cell 5 14");
 
 		//---- fontPreview77 ----
@@ -836,10 +882,17 @@ public class FlatTypographyTest
 		add(fontPreview77, "cell 6 14");
 
 		//---- fontPreview84 ----
-		fontPreview84.setFontType("Body S / Label M");
+		fontPreview84.setFontType("Body S /");
 		fontPreview84.setFontSize(12);
 		fontPreview84.setBaseSize(16);
-		add(fontPreview84, "cell 7 14");
+		add(fontPreview84, "cell 7 14,alignx left,growx 0");
+
+		//---- fontPreview97 ----
+		fontPreview97.setFontType("Label M");
+		fontPreview97.setFontSize(12);
+		fontPreview97.setBaseSize(16);
+		fontPreview97.setSemibold(true);
+		add(fontPreview97, "cell 7 14");
 
 		//---- fontPreview53 ----
 		fontPreview53.setFontType("Small Text");
@@ -851,6 +904,7 @@ public class FlatTypographyTest
 		fontPreview60.setBaseSize(14);
 		fontPreview60.setFontType("h300 / h200");
 		fontPreview60.setFontSize(12);
+		fontPreview60.setSemibold(true);
 		add(fontPreview60, "cell 9 14");
 
 		//---- fontPreview68 ----
@@ -881,12 +935,14 @@ public class FlatTypographyTest
 		fontPreview94.setFontSize(11);
 		fontPreview94.setFontType("Label S");
 		fontPreview94.setBaseSize(16);
+		fontPreview94.setSemibold(true);
 		add(fontPreview94, "cell 7 15");
 
 		//---- fontPreview61 ----
 		fontPreview61.setBaseSize(14);
 		fontPreview61.setFontSize(11);
 		fontPreview61.setFontType("h100");
+		fontPreview61.setSemibold(true);
 		add(fontPreview61, "cell 9 15");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
@@ -945,6 +1001,8 @@ public class FlatTypographyTest
 		private String fontType;
 		private int fontSize;
 		private int baseSize;
+		private boolean light;
+		private boolean semibold;
 		private boolean bold;
 		private boolean showPlain;
 
@@ -982,6 +1040,26 @@ public class FlatTypographyTest
 			updateDescription();
 		}
 
+		public boolean isLight() {
+			return light;
+		}
+
+		public void setLight( boolean light ) {
+			this.light = light;
+			updateFont();
+			updateDescription();
+		}
+
+		public boolean isSemibold() {
+			return semibold;
+		}
+
+		public void setSemibold( boolean semibold ) {
+			this.semibold = semibold;
+			updateFont();
+			updateDescription();
+		}
+
 		public boolean isBold() {
 			return bold;
 		}
@@ -1002,7 +1080,7 @@ public class FlatTypographyTest
 		}
 
 		private void updateFont() {
-			Font defaultFont = getDefaultFont();
+			Font defaultFont = getBaseFont();
 			previewLabel.setFont( defaultFont.deriveFont( bold ? Font.BOLD : Font.PLAIN, fontSize ) );
 			preview2Label.setFont( defaultFont.deriveFont( Font.PLAIN, fontSize ) );
 		}
@@ -1014,13 +1092,24 @@ public class FlatTypographyTest
 				buf.append( "  " ).append( fontSize > baseSize ? "+" : "" ).append( fontSize - baseSize );
 				buf.append( String.format( "  %.2fx", (float) fontSize / baseSize ) );
 			}
+			if( light )
+				buf.append( "  light" );
+			if( semibold )
+				buf.append( "  semibold" );
 			if( bold )
 				buf.append( "  bold" );
 			descLabel.setText( buf.toString() );
 		}
 
-		private Font getDefaultFont() {
-			Font font = UIManager.getFont( "defaultFont" );
+		private Font getBaseFont() {
+			Font font = null;
+			if( light )
+				font = UIManager.getFont( "light.font" );
+			else if( semibold )
+				font = UIManager.getFont( "semibold.font" );
+
+			if( font == null )
+				font = UIManager.getFont( "defaultFont" );
 			if( font == null )
 				font = UIManager.getFont( "Label.font" );
 			return font;

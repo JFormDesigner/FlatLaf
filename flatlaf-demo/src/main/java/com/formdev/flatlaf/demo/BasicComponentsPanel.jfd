@@ -750,7 +750,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "defaultLabel"
-				"text": "default/regular"
+				"text": "default"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 16 5 1"
 			} )
