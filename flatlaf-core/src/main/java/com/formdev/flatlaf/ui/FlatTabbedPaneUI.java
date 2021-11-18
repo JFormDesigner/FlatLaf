@@ -40,6 +40,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -134,12 +136,15 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.maximumTabWidth				int		optional
  * @uiDefault TabbedPane.tabHeight						int
  * @uiDefault TabbedPane.tabSelectionHeight				int
+ * @uiDefault TabbedPane.cardTabSelectionHeight			int
  * @uiDefault TabbedPane.contentSeparatorHeight			int
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
+ * @uiDefault TabbedPane.activeTabBorder				boolean
  *
  * @uiDefault TabbedPane.tabLayoutPolicy				String	wrap (default) or scroll
+ * @uiDefault TabbedPane.tabType						String	underlined (default) or card
  * @uiDefault TabbedPane.tabsPopupPolicy				String	never or asNeeded (default)
  * @uiDefault TabbedPane.scrollButtonsPolicy			String	never, asNeeded or asNeededSingle (default)
  * @uiDefault TabbedPane.scrollButtonsPlacement			String	both (default) or trailing
@@ -165,6 +170,10 @@ public class FlatTabbedPaneUI
 	extends BasicTabbedPaneUI
 	implements StyleableUI
 {
+	// tab type
+	/** @since 2 */ protected static final int TAB_TYPE_UNDERLINED = 0;
+	/** @since 2 */ protected static final int TAB_TYPE_CARD = 1;
+
 	// tabs popup policy / scroll arrows policy
 	protected static final int NEVER = 0;
 //	protected static final int ALWAYS = 1;
@@ -200,12 +209,14 @@ public class FlatTabbedPaneUI
 	@Styleable protected int maximumTabWidth;
 	@Styleable protected int tabHeight;
 	@Styleable protected int tabSelectionHeight;
+	/** @since 2 */ protected int cardTabSelectionHeight;
 	@Styleable protected int contentSeparatorHeight;
 	@Styleable protected boolean showTabSeparators;
 	@Styleable protected boolean tabSeparatorsFullHeight;
 	@Styleable protected boolean hasFullBorder;
 	@Styleable protected boolean tabsOpaque = true;
 
+	private int tabType;
 	@Styleable(type=String.class) private int tabsPopupPolicy;
 	@Styleable(type=String.class) private int scrollButtonsPolicy;
 	@Styleable(type=String.class) private int scrollButtonsPlacement;
@@ -318,12 +329,14 @@ public class FlatTabbedPaneUI
 		maximumTabWidth = UIManager.getInt( "TabbedPane.maximumTabWidth" );
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
+		cardTabSelectionHeight = UIManager.getInt( "TabbedPane.cardTabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
 		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
 		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOpaque = UIManager.getBoolean( "TabbedPane.tabsOpaque" );
 
+		tabType = parseTabType( UIManager.getString( "TabbedPane.tabType" ) );
 		tabsPopupPolicy = parseTabsPopupPolicy( UIManager.getString( "TabbedPane.tabsPopupPolicy" ) );
 		scrollButtonsPolicy = parseScrollButtonsPolicy( UIManager.getString( "TabbedPane.scrollButtonsPolicy" ) );
 		scrollButtonsPlacement = parseScrollButtonsPlacement( UIManager.getString( "TabbedPane.scrollButtonsPlacement" ) );
@@ -561,6 +574,13 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected FocusListener createFocusListener() {
+		Handler handler = getHandler();
+		handler.focusDelegate = super.createFocusListener();
+		return handler;
+	}
+
+	@Override
 	protected LayoutManager createLayoutManager() {
 		if( tabPane.getTabLayoutPolicy() == JTabbedPane.WRAP_TAB_LAYOUT )
 			return new FlatTabbedPaneLayout();
@@ -707,8 +727,25 @@ public class FlatTabbedPaneUI
 			return;
 
 		Rectangle r = getTabBounds( tabPane, tabIndex );
-		if( r != null )
-			tabPane.repaint( r );
+		if( r == null )
+			return;
+
+		// increase size of repaint region to include part of content border
+		if( contentSeparatorHeight > 0 &&
+			getTabType() == TAB_TYPE_CARD &&
+			clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+		{
+			int sh = scale( contentSeparatorHeight );
+			switch( tabPane.getTabPlacement() ) {
+				default:
+				case TOP:    r.height += sh; break;
+				case BOTTOM: r.height += sh; r.y -= sh; break;
+				case LEFT:   r.width  += sh; break;
+				case RIGHT:  r.width  += sh; r.x -= sh; break;
+			}
+		}
+
+		tabPane.repaint( r );
 	}
 
 	private boolean inCalculateEqual;
@@ -1045,16 +1082,21 @@ public class FlatTabbedPaneUI
 		int x, int y, int w, int h, boolean isSelected )
 	{
 		// paint tab background
+		Color background = getTabBackground( tabPlacement, tabIndex, isSelected );
+		g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
+		g.fillRect( x, y, w, h );
+	}
+
+	/** @since 2 */
+	protected Color getTabBackground( int tabPlacement, int tabIndex, boolean isSelected ) {
 		boolean enabled = tabPane.isEnabled();
-		Color background = enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
+		return enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
 			? hoverColor
 			: (enabled && isSelected && FlatUIUtils.isPermanentFocusOwner( tabPane )
 				? focusColor
 				: (selectedBackground != null && enabled && isSelected
 					? selectedBackground
 					: tabPane.getBackgroundAt( tabIndex )));
-		g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
-		g.fillRect( x, y, w, h );
 	}
 
 	@Override
@@ -1064,7 +1106,62 @@ public class FlatTabbedPaneUI
 		// paint tab separators
 		if( clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
 			!isLastInRun( tabIndex ) )
-		  paintTabSeparator( g, tabPlacement, x, y, w, h );
+		{
+			if( getTabType() == TAB_TYPE_CARD ) {
+				// some separators need to be omitted if selected tab is painted as card
+				int selectedIndex = tabPane.getSelectedIndex();
+				if( tabIndex != selectedIndex - 1 && tabIndex != selectedIndex )
+					paintTabSeparator( g, tabPlacement, x, y, w, h );
+			} else
+				paintTabSeparator( g, tabPlacement, x, y, w, h );
+		}
+
+		// paint active tab border
+		if( isSelected && getTabType() == TAB_TYPE_CARD )
+			paintCardTabBorder( g, tabPlacement, tabIndex, x, y, w, h );
+	}
+
+	/** @since 2 */
+	protected void paintCardTabBorder( Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h ) {
+		Graphics2D g2 = (Graphics2D) g;
+
+		float borderWidth = scale( (float) contentSeparatorHeight );
+		g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
+
+		switch( tabPlacement ) {
+			default:
+			case TOP:
+			case BOTTOM:
+				// paint left and right tab border
+				g2.fill( new Rectangle2D.Float( x, y, borderWidth, h ) );
+				g2.fill( new Rectangle2D.Float( x + w - borderWidth, y, borderWidth, h ) );
+				break;
+			case LEFT:
+			case RIGHT:
+				// paint top and bottom tab border
+				g2.fill( new Rectangle2D.Float( x, y, w, borderWidth ) );
+				g2.fill( new Rectangle2D.Float( x, y + h - borderWidth, w, borderWidth ) );
+				break;
+		}
+
+		if( cardTabSelectionHeight <= 0 ) {
+			// if there is no tab selection indicator, paint a top border as well
+			switch( tabPlacement ) {
+				default:
+				case TOP:
+					g2.fill( new Rectangle2D.Float( x, y, w, borderWidth ) );
+					break;
+				case BOTTOM:
+					g2.fill( new Rectangle2D.Float( x, y + h - borderWidth, w, borderWidth ) );
+					break;
+				case LEFT:
+					g2.fill( new Rectangle2D.Float( x, y, borderWidth, h ) );
+					break;
+				case RIGHT:
+					g2.fill( new Rectangle2D.Float( x + w - borderWidth, y, borderWidth, h ) );
+					break;
+			}
+		}
 	}
 
 	protected void paintTabCloseButton( Graphics g, int tabIndex, int x, int y, int w, int h ) {
@@ -1110,26 +1207,30 @@ public class FlatTabbedPaneUI
 		g.setColor( tabPane.isEnabled() ? underlineColor : disabledUnderlineColor );
 
 		// paint underline selection
+		boolean atBottom = (getTabType() != TAB_TYPE_CARD);
 		Insets contentInsets = getContentBorderInsets( tabPlacement );
-		int tabSelectionHeight = scale( this.tabSelectionHeight );
+		int tabSelectionHeight = scale( atBottom ? this.tabSelectionHeight : cardTabSelectionHeight );
+		int sx, sy;
 		switch( tabPlacement ) {
 			case TOP:
 			default:
-				int sy = y + h + contentInsets.top - tabSelectionHeight;
+				sy = atBottom ? (y + h + contentInsets.top - tabSelectionHeight) : y;
 				g.fillRect( x, sy, w, tabSelectionHeight );
 				break;
 
 			case BOTTOM:
-				g.fillRect( x, y - contentInsets.bottom, w, tabSelectionHeight );
+				sy = atBottom ? (y - contentInsets.bottom) : (y + h - tabSelectionHeight);
+				g.fillRect( x, sy, w, tabSelectionHeight );
 				break;
 
 			case LEFT:
-				int sx = x + w + contentInsets.left - tabSelectionHeight;
+				sx = atBottom ? (x + w + contentInsets.left - tabSelectionHeight) : x;
 				g.fillRect( sx, y, tabSelectionHeight, h );
 				break;
 
 			case RIGHT:
-				g.fillRect( x - contentInsets.right, y, tabSelectionHeight, h );
+				sx = atBottom ? (x - contentInsets.right) : (x + w - tabSelectionHeight);
+				g.fillRect( sx, y, tabSelectionHeight, h );
 				break;
 		}
 	}
@@ -1141,6 +1242,7 @@ public class FlatTabbedPaneUI
 	 *   - paint full border (if enabled)
 	 *   - not invoking paintContentBorder*Edge() methods
 	 *   - repaint selection
+	 *   - painting active tab border style
 	 */
 	@Override
 	protected void paintContentBorder( Graphics g, int tabPlacement, int selectedIndex ) {
@@ -1189,12 +1291,49 @@ public class FlatTabbedPaneUI
 		Insets ci = new Insets( 0, 0, 0, 0 );
 		rotateInsets( hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 ), ci, tabPlacement );
 
-		// paint content separator or full border
-		g.setColor( contentAreaColor );
+		// create path for content separator or full border
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
 		path.append( new Rectangle2D.Float( x, y, w, h ), false );
 		path.append( new Rectangle2D.Float( x + (ci.left / 100f), y + (ci.top / 100f),
 			w - (ci.left / 100f) - (ci.right / 100f), h - (ci.top / 100f) - (ci.bottom / 100f) ), false );
+
+		// add gap for selected tab to path
+		if( getTabType() == TAB_TYPE_CARD ) {
+			float csh = scale( (float) contentSeparatorHeight );
+
+			Rectangle tabRect = getTabBounds( tabPane, selectedIndex );
+			Rectangle2D.Float innerTabRect = new Rectangle2D.Float( tabRect.x + csh, tabRect.y + csh,
+				tabRect.width - (csh * 2), tabRect.height - (csh * 2) );
+
+			// Ensure that the separator outside the tabViewport is present (doesn't get cutoff by the active tab)
+			// If left unsolved the active tab is "visible" in the separator (the gap) even when outside the viewport
+			if( tabViewport != null )
+				Rectangle2D.intersect( tabViewport.getBounds(), innerTabRect, innerTabRect );
+
+			Rectangle2D.Float gap = null;
+			if( isHorizontalTabPlacement() ) {
+				if( innerTabRect.width > 0 ) {
+					float y2 = (tabPlacement == TOP) ? y : y + h - csh;
+					gap = new Rectangle2D.Float( innerTabRect.x, y2, innerTabRect.width, csh );
+				}
+			} else {
+				if( innerTabRect.height > 0 ) {
+					float x2 = (tabPlacement == LEFT) ? x : x + w - csh;
+					gap = new Rectangle2D.Float( x2, innerTabRect.y, csh, innerTabRect.height );
+				}
+			}
+
+			if( gap != null ) {
+				path.append( gap, false );
+
+				// fill gap in case that the tab is colored (e.g. focused or hover)
+				g.setColor( getTabBackground( tabPlacement, selectedIndex, true ) );
+				((Graphics2D)g).fill( gap );
+			}
+		}
+
+		// paint content separator or full border
+		g.setColor( contentAreaColor );
 		((Graphics2D)g).fill( path );
 
 		// repaint selection in scroll-tab-layout because it may be painted before
@@ -1399,6 +1538,15 @@ public class FlatTabbedPaneUI
 			clientPropertyBoolean( tabPane, TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, hideTabAreaWithOneTab );
 	}
 
+	/** @since 2 */
+	protected int getTabType() {
+		Object value = tabPane.getClientProperty( TABBED_PANE_TAB_TYPE );
+
+		return (value instanceof String)
+			? parseTabType( (String) value )
+			: tabType;
+	}
+
 	protected int getTabsPopupPolicy() {
 		Object value = tabPane.getClientProperty( TABBED_PANE_TABS_POPUP_POLICY );
 
@@ -1449,6 +1597,18 @@ public class FlatTabbedPaneUI
 		return (value instanceof String)
 			? parseTabWidthMode( (String) value )
 			: tabWidthMode;
+	}
+
+	/** @since 2 */
+	protected static int parseTabType( String str ) {
+		if( str == null )
+			return TAB_TYPE_UNDERLINED;
+
+		switch( str ) {
+			default:
+			case TABBED_PANE_TAB_TYPE_UNDERLINED:		return TAB_TYPE_UNDERLINED;
+			case TABBED_PANE_TAB_TYPE_CARD:				return TAB_TYPE_CARD;
+		}
 	}
 
 	protected static int parseTabsPopupPolicy( String str ) {
@@ -2264,11 +2424,12 @@ public class FlatTabbedPaneUI
 
 	private class Handler
 		implements MouseListener, MouseMotionListener, PropertyChangeListener,
-			ChangeListener, ComponentListener, ContainerListener
+			ChangeListener, ComponentListener, ContainerListener, FocusListener
 	{
 		MouseListener mouseDelegate;
 		PropertyChangeListener propertyChangeDelegate;
 		ChangeListener changeDelegate;
+		FocusListener focusDelegate;
 
 		private final PropertyChangeListener contentListener = this::contentPropertyChange;
 
@@ -2438,6 +2599,10 @@ public class FlatTabbedPaneUI
 					break;
 
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
+				case TABBED_PANE_TAB_TYPE:
+					tabPane.repaint();
+					break;
+
 				case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
 				case TABBED_PANE_HAS_FULL_BORDER:
 				case TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB:
@@ -2535,6 +2700,20 @@ public class FlatTabbedPaneUI
 			Component c = e.getChild();
 			if( !(c instanceof UIResource) )
 				c.removePropertyChangeListener( contentListener );
+		}
+
+		//---- interface FocusListener ----
+
+		@Override
+		public void focusGained( FocusEvent e ) {
+			focusDelegate.focusGained( e );
+			repaintTab( tabPane.getSelectedIndex() );
+		}
+
+		@Override
+		public void focusLost( FocusEvent e ) {
+			focusDelegate.focusLost( e );
+			repaintTab( tabPane.getSelectedIndex() );
 		}
 	}
 

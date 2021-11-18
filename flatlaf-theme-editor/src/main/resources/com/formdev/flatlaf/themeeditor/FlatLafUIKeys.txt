@@ -783,6 +783,7 @@ TabbedPane.buttonArc
 TabbedPane.buttonHoverBackground
 TabbedPane.buttonInsets
 TabbedPane.buttonPressedBackground
+TabbedPane.cardTabSelectionHeight
 TabbedPane.closeArc
 TabbedPane.closeCrossFilledSize
 TabbedPane.closeCrossLineWidth
@@ -829,6 +830,7 @@ TabbedPane.tabRunOverlay
 TabbedPane.tabSelectionHeight
 TabbedPane.tabSeparatorColor
 TabbedPane.tabSeparatorsFullHeight
+TabbedPane.tabType
 TabbedPane.tabWidthMode
 TabbedPane.tabsOpaque
 TabbedPane.tabsOverlapBorder

@@ -1006,6 +1006,7 @@ TabbedPane.buttonArc           6
 TabbedPane.buttonHoverBackground #e0e0e0  HSL   0   0  88    com.formdev.flatlaf.util.DerivedColor [UI]    darken(7% autoInverse)
 TabbedPane.buttonInsets        2,1,2,1    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.buttonPressedBackground #d9d9d9  HSL   0   0  85    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
+TabbedPane.cardTabSelectionHeight 2
 TabbedPane.closeArc            4
 TabbedPane.closeCrossFilledSize 7.5
 TabbedPane.closeCrossLineWidth 1
@@ -1048,6 +1049,7 @@ TabbedPane.tabInsets           4,12,4,12    javax.swing.plaf.InsetsUIResource [U
 TabbedPane.tabRunOverlay       0
 TabbedPane.tabSelectionHeight  3
 TabbedPane.tabSeparatorsFullHeight false
+TabbedPane.tabType             underlined
 TabbedPane.tabWidthMode        preferred
 TabbedPane.tabsOpaque          true
 TabbedPane.tabsOverlapBorder   false
