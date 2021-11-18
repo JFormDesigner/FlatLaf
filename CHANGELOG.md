@@ -46,6 +46,7 @@ FlatLaf Change Log
     incompatible changes in FlatLaf properties files.
 - Slider: Support specifying width of thumb border (see UI value
   `Slider.thumbBorderWidth`).
+- TabbedPane: Optionally paint selected tab as card. (PR #343)
 - Added more color functions to class `ColorFunctions` for easy use in
   applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
   `tint()`, `shade()` and `luma()`.

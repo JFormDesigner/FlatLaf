@@ -209,14 +209,14 @@ public class FlatTabbedPaneUI
 	@Styleable protected int maximumTabWidth;
 	@Styleable protected int tabHeight;
 	@Styleable protected int tabSelectionHeight;
-	/** @since 2 */ protected int cardTabSelectionHeight;
+	/** @since 2 */ @Styleable protected int cardTabSelectionHeight;
 	@Styleable protected int contentSeparatorHeight;
 	@Styleable protected boolean showTabSeparators;
 	@Styleable protected boolean tabSeparatorsFullHeight;
 	@Styleable protected boolean hasFullBorder;
 	@Styleable protected boolean tabsOpaque = true;
 
-	private int tabType;
+	@Styleable(type=String.class) private int tabType;
 	@Styleable(type=String.class) private int tabsPopupPolicy;
 	@Styleable(type=String.class) private int scrollButtonsPolicy;
 	@Styleable(type=String.class) private int scrollButtonsPlacement;
@@ -638,6 +638,7 @@ public class FlatTabbedPaneUI
 
 		if( value instanceof String ) {
 			switch( key ) {
+				case "tabType": value = parseTabType( (String) value ); break;
 				case "tabsPopupPolicy": value = parseTabsPopupPolicy( (String) value ); break;
 				case "scrollButtonsPolicy": value = parseScrollButtonsPolicy( (String) value ); break;
 				case "scrollButtonsPlacement": value = parseScrollButtonsPlacement( (String) value ); break;

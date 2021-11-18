@@ -849,12 +849,14 @@ public class TestFlatStyling
 		ui.applyStyle( "maximumTabWidth: 100" );
 		ui.applyStyle( "tabHeight: 30" );
 		ui.applyStyle( "tabSelectionHeight: 3" );
+		ui.applyStyle( "cardTabSelectionHeight: 2" );
 		ui.applyStyle( "contentSeparatorHeight: 1" );
 		ui.applyStyle( "showTabSeparators: false" );
 		ui.applyStyle( "tabSeparatorsFullHeight: false" );
 		ui.applyStyle( "hasFullBorder: false" );
 		ui.applyStyle( "tabsOpaque: false" );
 
+		ui.applyStyle( "tabType: card" );
 		ui.applyStyle( "tabsPopupPolicy: asNeeded" );
 		ui.applyStyle( "scrollButtonsPolicy: asNeeded" );
 		ui.applyStyle( "scrollButtonsPlacement: both" );
