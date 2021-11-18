@@ -35,6 +35,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.JTableHeader;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -55,7 +56,6 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.foreground							Color
  * @uiDefault Table.selectionBackground					Color
  * @uiDefault Table.selectionForeground					Color
- * @uiDefault Table.disabledForeground					Color
  * @uiDefault Table.gridColor							Color
  * @uiDefault Table.scrollPaneBorder					Border
  * @uiDefault Table.dropLineColor						Color
@@ -79,6 +79,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.showVerticalLines					boolean
  * @uiDefault Table.showTrailingVerticalLine			boolean
  * @uiDefault Table.intercellSpacing					Dimension
+ * @uiDefault Table.disabledForeground					Color
  * @uiDefault Table.selectionInactiveBackground			Color
  * @uiDefault Table.selectionInactiveForeground			Color
  *
@@ -103,6 +104,8 @@ public class FlatTableUI
 	/** @since 1.6 */ @Styleable protected boolean showTrailingVerticalLine;
 	protected Dimension intercellSpacing;
 
+	private Color foreground;
+	/** @since 2 */ @Styleable protected Color disabledForeground;
 	@Styleable protected Color selectionBackground;
 	@Styleable protected Color selectionForeground;
 	@Styleable protected Color selectionInactiveBackground;
@@ -113,6 +116,7 @@ public class FlatTableUI
 	@Styleable protected Color cellFocusColor;
 	@Styleable protected boolean showCellFocusIndicator;
 
+	private Color oldDisabledForeground;
 	private boolean oldShowHorizontalLines;
 	private boolean oldShowVerticalLines;
 	private Dimension oldIntercellSpacing;
@@ -128,6 +132,7 @@ public class FlatTableUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
+		updateForeground();
 		installStyle();
 	}
 
@@ -140,6 +145,8 @@ public class FlatTableUI
 		showTrailingVerticalLine = UIManager.getBoolean( "Table.showTrailingVerticalLine" );
 		intercellSpacing = UIManager.getDimension( "Table.intercellSpacing" );
 
+		foreground = UIManager.getColor( "Table.foreground" );
+		disabledForeground = UIManager.getColor( "Table.disabledForeground" );
 		selectionBackground = UIManager.getColor( "Table.selectionBackground" );
 		selectionForeground = UIManager.getColor( "Table.selectionForeground" );
 		selectionInactiveBackground = UIManager.getColor( "Table.selectionInactiveBackground" );
@@ -170,10 +177,14 @@ public class FlatTableUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		foreground = null;
+		disabledForeground = null;
 		selectionBackground = null;
 		selectionForeground = null;
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
+
+		oldDisabledForeground = null;
 
 		oldStyleValues = null;
 
@@ -206,8 +217,7 @@ public class FlatTableUI
 					break;
 
 				case "enabled":
-					boolean enabled = Boolean.TRUE.equals( e.getNewValue() );
-					table.setForeground( UIManager.getColor( enabled ? "Table.foreground" : "Table.disabledForeground" ) );
+					updateForeground();
 					break;
 			}
 		};
@@ -254,12 +264,16 @@ public class FlatTableUI
 
 	/** @since 2 */
 	protected void applyStyle( Object style ) {
+		oldDisabledForeground = disabledForeground;
+
 		Color oldSelectionBackground = selectionBackground;
 		Color oldSelectionForeground = selectionForeground;
 		Color oldSelectionInactiveBackground = selectionInactiveBackground;
 		Color oldSelectionInactiveForeground = selectionInactiveForeground;
 
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		updateForeground();
 
 		// update selection background
 		if( selectionBackground != oldSelectionBackground ) {
@@ -289,6 +303,23 @@ public class FlatTableUI
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	// similar to FlatTextFieldUI.updateBackground()
+	private void updateForeground() {
+		Color oldForeground = table.getForeground();
+		if( !(oldForeground instanceof UIResource) )
+			return;
+
+		// do not update foreground if it currently has a unknown color (assigned from outside)
+		if( oldForeground != foreground &&
+			oldForeground != disabledForeground &&
+			oldForeground != oldDisabledForeground )
+		  return;
+
+		Color newForeground = table.isEnabled() ? foreground : disabledForeground;
+		if( newForeground != oldForeground )
+			table.setForeground( newForeground );
 	}
 
 	/**

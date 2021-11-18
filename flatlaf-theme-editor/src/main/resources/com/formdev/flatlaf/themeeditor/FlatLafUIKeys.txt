@@ -824,6 +824,7 @@ Table.cellMargins
 Table.cellNoFocusBorder
 Table.consistentHomeEndKeyBehavior
 Table.descendingSortIcon
+Table.disabledForeground
 Table.dropCellBackground
 Table.dropCellForeground
 Table.dropLineColor
