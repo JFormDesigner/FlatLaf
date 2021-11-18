@@ -303,15 +303,14 @@ class TabsPanel
 		putTabbedPanesClientProperty( TABBED_PANE_SCROLL_BUTTONS_PLACEMENT, scrollButtonsPlacement );
 	}
 
+	private void tabTypeChanged() {
+		String tabType = cardTabTypeButton.isSelected() ? TABBED_PANE_TAB_TYPE_CARD : null;
+		putTabbedPanesClientProperty( TABBED_PANE_TAB_TYPE, tabType );
+	}
+
 	private void showTabSeparatorsChanged() {
 		Boolean showTabSeparators = showTabSeparatorsCheckBox.isSelected() ? true : null;
 		putTabbedPanesClientProperty( TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators );
-	}
-
-	private void activeTabBorderChanged() {
-		Boolean activeBorderTab = activeTabBorderCheckBox.isSelected() ? true : false;
-		System.out.println(TABBED_PANE_ACTIVE_TAB_BORDER + ": " + activeBorderTab);
-		putTabbedPanesClientProperty( TABBED_PANE_ACTIVE_TAB_BORDER, activeBorderTab );
 	}
 
 	private void putTabbedPanesClientProperty( String key, Object value ) {
@@ -402,12 +401,15 @@ class TabsPanel
 		scrollButtonsPlacementToolBar = new JToolBar();
 		scrollBothButton = new JToggleButton();
 		scrollTrailingButton = new JToggleButton();
+		showTabSeparatorsCheckBox = new JCheckBox();
 		tabsPopupPolicyLabel = new JLabel();
 		tabsPopupPolicyToolBar = new JToolBar();
 		popupAsNeededButton = new JToggleButton();
 		popupNeverButton = new JToggleButton();
-		showTabSeparatorsCheckBox = new JCheckBox();
-		activeTabBorderCheckBox = new JCheckBox();
+		tabTypeLabel = new JLabel();
+		tabTypeToolBar = new JToolBar();
+		underlinedTabTypeButton = new JToggleButton();
+		cardTabTypeButton = new JToggleButton();
 
 		//======== this ========
 		setName("this");
@@ -502,7 +504,7 @@ class TabsPanel
 			{
 				tabPlacementTabbedPane.setName("tabPlacementTabbedPane");
 			}
-			panel1.add(tabPlacementTabbedPane, "cell 0 1, width 300:300, height 100:100");
+			panel1.add(tabPlacementTabbedPane, "cell 0 1,width 300:300,height 100:100");
 
 			//---- tabLayoutLabel ----
 			tabLayoutLabel.setText("Tab layout");
@@ -880,7 +882,8 @@ class TabsPanel
 				"[]" +
 				"[fill]para" +
 				"[fill]" +
-				"[fill]para",
+				"[fill]para" +
+				"[fill]",
 				// rows
 				"[]" +
 				"[center]"));
@@ -948,6 +951,12 @@ class TabsPanel
 			}
 			panel4.add(scrollButtonsPlacementToolBar, "cell 3 0");
 
+			//---- showTabSeparatorsCheckBox ----
+			showTabSeparatorsCheckBox.setText("Show tab separators");
+			showTabSeparatorsCheckBox.setName("showTabSeparatorsCheckBox");
+			showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
+			panel4.add(showTabSeparatorsCheckBox, "cell 4 0");
+
 			//---- tabsPopupPolicyLabel ----
 			tabsPopupPolicyLabel.setText("Tabs popup policy:");
 			tabsPopupPolicyLabel.setName("tabsPopupPolicyLabel");
@@ -976,17 +985,32 @@ class TabsPanel
 			}
 			panel4.add(tabsPopupPolicyToolBar, "cell 1 1");
 
-			//---- showTabSeparatorsCheckBox ----
-			showTabSeparatorsCheckBox.setText("Show tab separators");
-			showTabSeparatorsCheckBox.setName("showTabSeparatorsCheckBox");
-			showTabSeparatorsCheckBox.addActionListener(e -> showTabSeparatorsChanged());
-			panel4.add(showTabSeparatorsCheckBox, "cell 2 1");
+			//---- tabTypeLabel ----
+			tabTypeLabel.setText("Tab type:");
+			tabTypeLabel.setName("tabTypeLabel");
+			panel4.add(tabTypeLabel, "cell 2 1");
 
-			//---- activeTabBorderCheckBox ----
-			activeTabBorderCheckBox.setText("Paint border around active tab");
-			activeTabBorderCheckBox.setName("activeTabBorderCheckBox");
-			activeTabBorderCheckBox.addActionListener(e -> activeTabBorderChanged());
-			panel4.add(activeTabBorderCheckBox, "cell 3 1");
+			//======== tabTypeToolBar ========
+			{
+				tabTypeToolBar.setFloatable(false);
+				tabTypeToolBar.setName("tabTypeToolBar");
+
+				//---- underlinedTabTypeButton ----
+				underlinedTabTypeButton.setText("underlined");
+				underlinedTabTypeButton.setFont(underlinedTabTypeButton.getFont().deriveFont(underlinedTabTypeButton.getFont().getSize() - 2f));
+				underlinedTabTypeButton.setSelected(true);
+				underlinedTabTypeButton.setName("underlinedTabTypeButton");
+				underlinedTabTypeButton.addActionListener(e -> tabTypeChanged());
+				tabTypeToolBar.add(underlinedTabTypeButton);
+
+				//---- cardTabTypeButton ----
+				cardTabTypeButton.setText("card");
+				cardTabTypeButton.setFont(cardTabTypeButton.getFont().deriveFont(cardTabTypeButton.getFont().getSize() - 2f));
+				cardTabTypeButton.setName("cardTabTypeButton");
+				cardTabTypeButton.addActionListener(e -> tabTypeChanged());
+				tabTypeToolBar.add(cardTabTypeButton);
+			}
+			panel4.add(tabTypeToolBar, "cell 3 1");
 		}
 		add(panel4, "cell 0 2 3 1");
 
@@ -1023,6 +1047,11 @@ class TabsPanel
 		ButtonGroup tabsPopupPolicyButtonGroup = new ButtonGroup();
 		tabsPopupPolicyButtonGroup.add(popupAsNeededButton);
 		tabsPopupPolicyButtonGroup.add(popupNeverButton);
+
+		//---- tabTypeButtonGroup ----
+		ButtonGroup tabTypeButtonGroup = new ButtonGroup();
+		tabTypeButtonGroup.add(underlinedTabTypeButton);
+		tabTypeButtonGroup.add(cardTabTypeButton);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 		if( FlatLafDemo.screenshotsMode ) {
@@ -1102,11 +1131,14 @@ class TabsPanel
 	private JToolBar scrollButtonsPlacementToolBar;
 	private JToggleButton scrollBothButton;
 	private JToggleButton scrollTrailingButton;
+	private JCheckBox showTabSeparatorsCheckBox;
 	private JLabel tabsPopupPolicyLabel;
 	private JToolBar tabsPopupPolicyToolBar;
 	private JToggleButton popupAsNeededButton;
 	private JToggleButton popupNeverButton;
-	private JCheckBox showTabSeparatorsCheckBox;
-	private JCheckBox activeTabBorderCheckBox;
+	private JLabel tabTypeLabel;
+	private JToolBar tabTypeToolBar;
+	private JToggleButton underlinedTabTypeButton;
+	private JToggleButton cardTabTypeButton;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

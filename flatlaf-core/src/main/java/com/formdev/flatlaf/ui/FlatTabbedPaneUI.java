@@ -97,7 +97,6 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @clientProperty JTabbedPane.showTabSeparators		boolean
  * @clientProperty JTabbedPane.hasFullBorder			boolean
- * @clientProperty JTabbedPane.activeTabBorder			boolean
  *
  * <!-- BasicTabbedPaneUI -->
  *
@@ -131,6 +130,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.maximumTabWidth				int		optional
  * @uiDefault TabbedPane.tabHeight						int
  * @uiDefault TabbedPane.tabSelectionHeight				int
+ * @uiDefault TabbedPane.cardTabSelectionHeight			int
  * @uiDefault TabbedPane.contentSeparatorHeight			int
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
@@ -138,6 +138,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.activeTabBorder				boolean
  *
  * @uiDefault TabbedPane.tabLayoutPolicy				String	wrap (default) or scroll
+ * @uiDefault TabbedPane.tabType						String	underlined (default) or card
  * @uiDefault TabbedPane.tabsPopupPolicy				String	never or asNeeded (default)
  * @uiDefault TabbedPane.scrollButtonsPolicy			String	never, asNeeded or asNeededSingle (default)
  * @uiDefault TabbedPane.scrollButtonsPlacement			String	both (default) or trailing
@@ -161,6 +162,10 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatTabbedPaneUI
 	extends BasicTabbedPaneUI
 {
+	// tab type
+	/** @since 2 */ protected static final int TAB_TYPE_UNDERLINED = 0;
+	/** @since 2 */ protected static final int TAB_TYPE_CARD = 1;
+
 	// tabs popup policy / scroll arrows policy
 	protected static final int NEVER = 0;
 //	protected static final int ALWAYS = 1;
@@ -196,13 +201,14 @@ public class FlatTabbedPaneUI
 	protected int maximumTabWidth;
 	protected int tabHeight;
 	protected int tabSelectionHeight;
+	/** @since 2 */ protected int cardTabSelectionHeight;
 	protected int contentSeparatorHeight;
 	protected boolean showTabSeparators;
 	protected boolean tabSeparatorsFullHeight;
 	protected boolean hasFullBorder;
 	protected boolean tabsOpaque = true;
-	protected boolean activeTabBorder;
 
+	private int tabType;
 	private int tabsPopupPolicy;
 	private int scrollButtonsPolicy;
 	private int scrollButtonsPlacement;
@@ -304,13 +310,14 @@ public class FlatTabbedPaneUI
 		maximumTabWidth = UIManager.getInt( "TabbedPane.maximumTabWidth" );
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
+		cardTabSelectionHeight = UIManager.getInt( "TabbedPane.cardTabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
 		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
 		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOpaque = UIManager.getBoolean( "TabbedPane.tabsOpaque" );
-		activeTabBorder = UIManager.getBoolean( "TabbedPane.activeTabBorder" );
 
+		tabType = parseTabType( UIManager.getString( "TabbedPane.tabType" ) );
 		tabsPopupPolicy = parseTabsPopupPolicy( UIManager.getString( "TabbedPane.tabsPopupPolicy" ) );
 		scrollButtonsPolicy = parseScrollButtonsPolicy( UIManager.getString( "TabbedPane.scrollButtonsPolicy" ) );
 		scrollButtonsPlacement = parseScrollButtonsPlacement( UIManager.getString( "TabbedPane.scrollButtonsPlacement" ) );
@@ -625,7 +632,7 @@ public class FlatTabbedPaneUI
 
 		// increase size of repaint region to include part of content border
 		if( contentSeparatorHeight > 0 &&
-			clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder ) &&
+			getTabType() == TAB_TYPE_CARD &&
 			clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
 		{
 			int sh = scale( contentSeparatorHeight );
@@ -980,6 +987,7 @@ public class FlatTabbedPaneUI
 		g.fillRect( x, y, w, h );
 	}
 
+	/** @since 2 */
 	protected Color getTabBackground( int tabPlacement, int tabIndex, boolean isSelected ) {
 		boolean enabled = tabPane.isEnabled();
 		return enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
@@ -999,8 +1007,8 @@ public class FlatTabbedPaneUI
 		if( clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
 			!isLastInRun( tabIndex ) )
 		{
-			if( clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder ) ) {
-				// Some separators need to be omitted when activeTabBorder is enabled
+			if( getTabType() == TAB_TYPE_CARD ) {
+				// some separators need to be omitted if selected tab is painted as card
 				int selectedIndex = tabPane.getSelectedIndex();
 				if( tabIndex != selectedIndex - 1 && tabIndex != selectedIndex )
 					paintTabSeparator( g, tabPlacement, x, y, w, h );
@@ -1009,11 +1017,12 @@ public class FlatTabbedPaneUI
 		}
 
 		// paint active tab border
-		if( isSelected && clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder ) )
-			paintSelectedTabBorder( g, tabPlacement, tabIndex, x, y, w, h );
+		if( isSelected && getTabType() == TAB_TYPE_CARD )
+			paintCardTabBorder( g, tabPlacement, tabIndex, x, y, w, h );
 	}
 
-	protected void paintSelectedTabBorder( Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h ) {
+	/** @since 2 */
+	protected void paintCardTabBorder( Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h ) {
 		Graphics2D g2 = (Graphics2D) g;
 
 		float borderWidth = scale( (float) contentSeparatorHeight );
@@ -1035,8 +1044,8 @@ public class FlatTabbedPaneUI
 				break;
 		}
 
-		if( tabSelectionHeight <= 0 ) {
-			//If there is no tab selection indicator, paint a top border as well
+		if( cardTabSelectionHeight <= 0 ) {
+			// if there is no tab selection indicator, paint a top border as well
 			switch( tabPlacement ) {
 				default:
 				case TOP:
@@ -1098,9 +1107,9 @@ public class FlatTabbedPaneUI
 		g.setColor( tabPane.isEnabled() ? underlineColor : disabledUnderlineColor );
 
 		// paint underline selection
-		boolean atBottom = !clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder );
+		boolean atBottom = (getTabType() != TAB_TYPE_CARD);
 		Insets contentInsets = getContentBorderInsets( tabPlacement );
-		int tabSelectionHeight = scale( this.tabSelectionHeight );
+		int tabSelectionHeight = scale( atBottom ? this.tabSelectionHeight : cardTabSelectionHeight );
 		int sx, sy;
 		switch( tabPlacement ) {
 			case TOP:
@@ -1189,7 +1198,7 @@ public class FlatTabbedPaneUI
 			w - (ci.left / 100f) - (ci.right / 100f), h - (ci.top / 100f) - (ci.bottom / 100f) ), false );
 
 		// add gap for selected tab to path
-		if( clientPropertyBoolean( tabPane, TABBED_PANE_ACTIVE_TAB_BORDER, activeTabBorder ) ) {
+		if( getTabType() == TAB_TYPE_CARD ) {
 			float csh = scale( (float) contentSeparatorHeight );
 
 			Rectangle tabRect = getTabBounds( tabPane, selectedIndex );
@@ -1426,6 +1435,15 @@ public class FlatTabbedPaneUI
 			clientPropertyBoolean( tabPane, TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, false );
 	}
 
+	/** @since 2 */
+	protected int getTabType() {
+		Object value = tabPane.getClientProperty( TABBED_PANE_TAB_TYPE );
+
+		return (value instanceof String)
+			? parseTabType( (String) value )
+			: tabType;
+	}
+
 	protected int getTabsPopupPolicy() {
 		Object value = tabPane.getClientProperty( TABBED_PANE_TABS_POPUP_POLICY );
 
@@ -1476,6 +1494,18 @@ public class FlatTabbedPaneUI
 		return (value instanceof String)
 			? parseTabWidthMode( (String) value )
 			: tabWidthMode;
+	}
+
+	/** @since 2 */
+	protected static int parseTabType( String str ) {
+		if( str == null )
+			return TAB_TYPE_UNDERLINED;
+
+		switch( str ) {
+			default:
+			case TABBED_PANE_TAB_TYPE_UNDERLINED:		return TAB_TYPE_UNDERLINED;
+			case TABBED_PANE_TAB_TYPE_CARD:				return TAB_TYPE_CARD;
+		}
 	}
 
 	protected static int parseTabsPopupPolicy( String str ) {
@@ -2445,7 +2475,7 @@ public class FlatTabbedPaneUI
 					break;
 
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
-				case TABBED_PANE_ACTIVE_TAB_BORDER:
+				case TABBED_PANE_TAB_TYPE:
 					tabPane.repaint();
 					break;
 

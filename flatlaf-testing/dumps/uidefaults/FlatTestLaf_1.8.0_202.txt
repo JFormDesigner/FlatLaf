@@ -980,6 +980,7 @@ TabbedPane.buttonArc           6
 TabbedPane.buttonHoverBackground #ffff00    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.buttonInsets        2,1,2,1    javax.swing.plaf.InsetsUIResource [UI]
 TabbedPane.buttonPressedBackground #ffc800    javax.swing.plaf.ColorUIResource [UI]
+TabbedPane.cardTabSelectionHeight 2
 TabbedPane.closeArc            999
 TabbedPane.closeCrossFilledSize 6.5
 TabbedPane.closeCrossLineWidth 2.0
@@ -1025,6 +1026,7 @@ TabbedPane.tabRunOverlay       0
 TabbedPane.tabSelectionHeight  3
 TabbedPane.tabSeparatorColor   #0000ff    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.tabSeparatorsFullHeight false
+TabbedPane.tabType             underlined
 TabbedPane.tabWidthMode        preferred
 TabbedPane.tabsOpaque          true
 TabbedPane.tabsOverlapBorder   false

@@ -457,7 +457,7 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "insets 0,hidemode 3"
-				"$columnConstraints": "[][fill]para[fill][fill]para"
+				"$columnConstraints": "[][fill]para[fill][fill]para[fill]"
 				"$rowConstraints": "[][center]"
 			} ) {
 				name: "panel4"
@@ -527,6 +527,16 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 3 0"
 				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "showTabSeparatorsCheckBox"
+					"text": "Show tab separators"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTabSeparatorsChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 4 0"
+				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabsPopupPolicyLabel"
 					"text": "Tabs popup policy:"
@@ -555,15 +565,32 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
 				} )
-				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "showTabSeparatorsCheckBox"
-					"text": "Show tab separators"
-					auxiliary() {
-						"JavaCodeGenerator.variableLocal": false
-					}
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTabSeparatorsChanged", false ) )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "tabTypeLabel"
+					"text": "Tab type:"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 2 1 2 1"
+					"value": "cell 2 1"
+				} )
+				add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
+					name: "tabTypeToolBar"
+					"floatable": false
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "underlinedTabTypeButton"
+						"text": "underlined"
+						"font": &SwingDerivedFont8 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"selected": true
+						"$buttonGroup": new FormReference( "tabTypeButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabTypeChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JToggleButton" ) {
+						name: "cardTabTypeButton"
+						"text": "card"
+						"font": #SwingDerivedFont8
+						"$buttonGroup": new FormReference( "tabTypeButtonGroup" )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabTypeChanged", false ) )
+					} )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 3 1"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 2 3 1"
@@ -601,6 +628,11 @@ new FormModel {
 			name: "scrollButtonsPlacementButtonGroup"
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 200, 1020 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "tabTypeButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 1072 )
 		} )
 	}
 }

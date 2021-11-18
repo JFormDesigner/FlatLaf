@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-
 package com.formdev.flatlaf;
+
 import java.awt.Color;
 import java.util.Objects;
 import javax.swing.JComponent;
@@ -325,21 +325,41 @@ public interface FlatClientProperties
 	//---- JTabbedPane --------------------------------------------------------
 
 	/**
+	 * Specifies type of the selected tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_TAB_TYPE_UNDERLINED} or
+	 *     {@link #TABBED_PANE_TAB_TYPE_CARD}
+	 *
+	 * @since 2
+	 */
+	String TABBED_PANE_TAB_TYPE = "JTabbedPane.tabType";
+
+	/**
+	 * Paint the selected tab underlined.
+	 *
+	 * @see #TABBED_PANE_TAB_TYPE
+	 * @since 2
+	 */
+	String TABBED_PANE_TAB_TYPE_UNDERLINED = "underlined";
+
+	/**
+	 * Paint the selected tab as card.
+	 *
+	 * @see #TABBED_PANE_TAB_TYPE
+	 * @since 2
+	 */
+	String TABBED_PANE_TAB_TYPE_CARD = "card";
+
+	/**
 	 * Specifies whether separators are shown between tabs.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
 	 * <strong>Value type</strong> {@link java.lang.Boolean}
 	 */
 	String TABBED_PANE_SHOW_TAB_SEPARATORS = "JTabbedPane.showTabSeparators";
-
-	/**
-	 * Specifies whether a border is painted around the active tab.
-	 * This also changes position of the active tab indicator.
-	 * <p>
-	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
-	 * <strong>Value type</strong> {@link java.lang.Boolean}
-	 */
-	String TABBED_PANE_ACTIVE_TAB_BORDER = "JTabbedPane.activeTabBorder";
 
 	/**
 	 * Specifies whether the separator between tabs area and content area should be shown.
