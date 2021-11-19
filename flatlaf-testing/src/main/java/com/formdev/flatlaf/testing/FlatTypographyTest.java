@@ -437,6 +437,8 @@ public class FlatTypographyTest
 		fontPreview2.setBaseSize(12);
 		fontPreview2.setFontSize(24);
 		fontPreview2.setFontType("H1");
+		fontPreview2.setSemibold(true);
+		fontPreview2.setShowPlain(true);
 		add(fontPreview2, "cell 0 6");
 
 		//---- fontPreview12 ----
@@ -510,6 +512,8 @@ public class FlatTypographyTest
 		fontPreview3.setBaseSize(12);
 		fontPreview3.setFontSize(18);
 		fontPreview3.setFontType("H2");
+		fontPreview3.setSemibold(true);
+		fontPreview3.setShowPlain(true);
 		add(fontPreview3, "cell 0 7");
 
 		//---- fontPreview13 ----
@@ -583,6 +587,8 @@ public class FlatTypographyTest
 		fontPreview4.setBaseSize(12);
 		fontPreview4.setFontSize(15);
 		fontPreview4.setFontType("H3");
+		fontPreview4.setSemibold(true);
+		fontPreview4.setShowPlain(true);
 		add(fontPreview4, "cell 0 8");
 
 		//---- fontPreview14 ----
@@ -1080,9 +1086,8 @@ public class FlatTypographyTest
 		}
 
 		private void updateFont() {
-			Font defaultFont = getBaseFont();
-			previewLabel.setFont( defaultFont.deriveFont( bold ? Font.BOLD : Font.PLAIN, fontSize ) );
-			preview2Label.setFont( defaultFont.deriveFont( Font.PLAIN, fontSize ) );
+			previewLabel.setFont( getBaseFont().deriveFont( bold ? Font.BOLD : Font.PLAIN, fontSize ) );
+			preview2Label.setFont( getDefaultFont().deriveFont( (float) fontSize ) );
 		}
 
 		private void updateDescription() {
@@ -1109,7 +1114,12 @@ public class FlatTypographyTest
 				font = UIManager.getFont( "semibold.font" );
 
 			if( font == null )
-				font = UIManager.getFont( "defaultFont" );
+				font = getDefaultFont();
+			return font;
+		}
+
+		private Font getDefaultFont() {
+			Font font = UIManager.getFont( "defaultFont" );
 			if( font == null )
 				font = UIManager.getFont( "Label.font" );
 			return font;

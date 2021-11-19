@@ -1067,8 +1067,11 @@ ViewportUI
 [style].h0
 [style].h00
 [style].h1
+[style].h1.regular
 [style].h2
+[style].h2.regular
 [style].h3
+[style].h3.regular
 [style].h4
 [style].large
 [style].light
@@ -1091,8 +1094,11 @@ desktop
 h0.font
 h00.font
 h1.font
+h1.regular.font
 h2.font
+h2.regular.font
 h3.font
+h3.regular.font
 h4.font
 html.missingImage
 html.pendingImage

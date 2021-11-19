@@ -335,6 +335,8 @@ new FormModel {
 				"baseSize": 12
 				"fontSize": 24
 				"fontType": "H1"
+				"semibold": true
+				"showPlain": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 6"
 			} )
@@ -430,6 +432,8 @@ new FormModel {
 				"baseSize": 12
 				"fontSize": 18
 				"fontType": "H2"
+				"semibold": true
+				"showPlain": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 7"
 			} )
@@ -525,6 +529,8 @@ new FormModel {
 				"baseSize": 12
 				"fontSize": 15
 				"fontType": "H3"
+				"semibold": true
+				"showPlain": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 8"
 			} )

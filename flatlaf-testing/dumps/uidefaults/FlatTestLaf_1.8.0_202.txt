@@ -1394,8 +1394,11 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 
 [style].h00                    font: $h00.font
 [style].h0                     font: $h0.font
+[style].h1.regular             font: $h1.regular.font
 [style].h1                     font: $h1.font
+[style].h2.regular             font: $h2.regular.font
 [style].h2                     font: $h2.font
+[style].h3.regular             font: $h3.regular.font
 [style].h3                     font: $h3.font
 [style].h4                     font: $h4.font
 [style].large                  font: $large.font
@@ -1434,17 +1437,20 @@ h00.font                       [active] Segoe UI plain 36    javax.swing.plaf.Fo
 
 #---- h1 ----
 
-h1.font                        [active] Segoe UI plain 24    javax.swing.plaf.FontUIResource [UI]
+h1.font                        [active] Segoe UI Semibold plain 24    javax.swing.plaf.FontUIResource [UI]
+h1.regular.font                [active] Segoe UI plain 24    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- h2 ----
 
-h2.font                        [active] Segoe UI plain 18    javax.swing.plaf.FontUIResource [UI]
+h2.font                        [active] Segoe UI Semibold plain 18    javax.swing.plaf.FontUIResource [UI]
+h2.regular.font                [active] Segoe UI plain 18    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- h3 ----
 
-h3.font                        [active] Segoe UI plain 15    javax.swing.plaf.FontUIResource [UI]
+h3.font                        [active] Segoe UI Semibold plain 15    javax.swing.plaf.FontUIResource [UI]
+h3.regular.font                [active] Segoe UI plain 15    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- h4 ----
