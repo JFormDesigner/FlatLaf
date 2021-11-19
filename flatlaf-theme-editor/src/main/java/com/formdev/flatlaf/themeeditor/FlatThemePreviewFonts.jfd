@@ -37,6 +37,7 @@ new FormModel {
 				name: "h1Preview"
 				"fontType": "H1"
 				"fontStyle": "h1"
+				"fontStyleRegular": "h1.regular"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 3,gapx 12"
 			} )
@@ -44,6 +45,7 @@ new FormModel {
 				name: "h2Preview"
 				"fontType": "H2"
 				"fontStyle": "h2"
+				"fontStyleRegular": "h2.regular"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 4,gapx 12"
 			} )
@@ -51,6 +53,7 @@ new FormModel {
 				name: "h3Preview"
 				"fontType": "H3"
 				"fontStyle": "h3"
+				"fontStyleRegular": "h3.regular"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 5,gapx 12"
 			} )
@@ -128,7 +131,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "scaleLabel"
-				"text": "Fonts are scaled by:"
+				"text": "Fonts in preview are scaled by:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 16,gapx 12"
 			} )
@@ -164,6 +167,15 @@ new FormModel {
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "preview2Label"
+				"text": "preview"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0,gapx 0"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "descLabel"

@@ -101,16 +101,19 @@ public class FlatThemePreviewFonts
 		//---- h1Preview ----
 		h1Preview.setFontType("H1");
 		h1Preview.setFontStyle("h1");
+		h1Preview.setFontStyleRegular("h1.regular");
 		add(h1Preview, "cell 0 3,gapx 12");
 
 		//---- h2Preview ----
 		h2Preview.setFontType("H2");
 		h2Preview.setFontStyle("h2");
+		h2Preview.setFontStyleRegular("h2.regular");
 		add(h2Preview, "cell 0 4,gapx 12");
 
 		//---- h3Preview ----
 		h3Preview.setFontType("H3");
 		h3Preview.setFontStyle("h3");
+		h3Preview.setFontStyleRegular("h3.regular");
 		add(h3Preview, "cell 0 5,gapx 12");
 
 		//---- h4Preview ----
@@ -163,7 +166,7 @@ public class FlatThemePreviewFonts
 		add(monospacedPreview, "cell 0 15,gapx 12");
 
 		//---- scaleLabel ----
-		scaleLabel.setText("Fonts are scaled by:");
+		scaleLabel.setText("Fonts in preview are scaled by:");
 		add(scaleLabel, "cell 0 16,gapx 12");
 
 		//---- scaleValueLabel ----
@@ -185,6 +188,7 @@ public class FlatThemePreviewFonts
 	{
 		private String fontType;
 		private String fontStyle;
+		private String fontStyleRegular;
 
 		private FontPreview() {
 			initComponents();
@@ -193,6 +197,8 @@ public class FlatThemePreviewFonts
 			previewLabel.addPropertyChangeListener( "font", e -> {
 				updateDescription( previewLabel.getFont() );
 			} );
+
+			preview2Label.setVisible( false );
 		}
 
 		public String getFontType() {
@@ -202,6 +208,7 @@ public class FlatThemePreviewFonts
 		public void setFontType( String fontType ) {
 			this.fontType = fontType;
 			previewLabel.setText( fontType );
+			preview2Label.setText( " / " + fontType );
 		}
 
 		public String getFontStyle() {
@@ -211,6 +218,16 @@ public class FlatThemePreviewFonts
 		public void setFontStyle( String fontStyle ) {
 			this.fontStyle = fontStyle;
 			previewLabel.putClientProperty( FlatClientProperties.STYLE_CLASS, fontStyle );
+		}
+
+		public String getFontStyleRegular() {
+			return fontStyleRegular;
+		}
+
+		public void setFontStyleRegular( String fontStyleRegular ) {
+			this.fontStyleRegular = fontStyleRegular;
+			preview2Label.putClientProperty( FlatClientProperties.STYLE_CLASS, fontStyleRegular );
+			preview2Label.setVisible( fontStyleRegular != null );
 		}
 
 		private void updateDescription( Font font ) {
@@ -236,6 +253,7 @@ public class FlatThemePreviewFonts
 		private void initComponents() {
 			// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 			previewLabel = new JLabel();
+			preview2Label = new JLabel();
 			descLabel = new JLabel();
 
 			//======== this ========
@@ -251,6 +269,10 @@ public class FlatThemePreviewFonts
 			previewLabel.setText("preview");
 			add(previewLabel, "cell 0 0");
 
+			//---- preview2Label ----
+			preview2Label.setText("preview");
+			add(preview2Label, "cell 0 0,gapx 0");
+
 			//---- descLabel ----
 			descLabel.setText("description");
 			descLabel.putClientProperty("FlatLaf.styleClass", "medium");
@@ -260,6 +282,7 @@ public class FlatThemePreviewFonts
 
 		// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 		private JLabel previewLabel;
+		private JLabel preview2Label;
 		private JLabel descLabel;
 		// JFormDesigner - End of variables declaration  //GEN-END:variables
 	}
