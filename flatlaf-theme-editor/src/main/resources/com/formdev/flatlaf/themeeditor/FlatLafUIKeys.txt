@@ -531,6 +531,7 @@ OptionPane.minimumSize
 OptionPane.questionIcon
 OptionPane.sameSizeButtons
 OptionPane.setButtonMargin
+OptionPane.showIcon
 OptionPane.warningIcon
 OptionPane.windowBindings
 OptionPaneUI
@@ -631,10 +632,13 @@ RangeSliderUI
 Resizable.resizeBorder
 RootPane.activeBorderColor
 RootPane.ancestorInputMap
+RootPane.background
 RootPane.border
 RootPane.borderDragThickness
 RootPane.cornerDragWidth
 RootPane.defaultButtonWindowKeyBindings
+RootPane.font
+RootPane.foreground
 RootPane.honorDialogMinimumSizeOnResize
 RootPane.honorFrameMinimumSizeOnResize
 RootPane.inactiveBorderColor
@@ -971,7 +975,9 @@ TitlePane.inactiveForeground
 TitlePane.maximizeIcon
 TitlePane.menuBarEmbedded
 TitlePane.menuBarTitleGap
+TitlePane.noIconLeftGap
 TitlePane.restoreIcon
+TitlePane.showIcon
 TitlePane.titleMargins
 TitlePane.unifiedBackground
 TitlePane.useWindowDecorations

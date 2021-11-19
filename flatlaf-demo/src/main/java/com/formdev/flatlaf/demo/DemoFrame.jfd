@@ -354,7 +354,6 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "windowDecorationsCheckBoxMenuItem"
 						"text": "Window decorations"
-						"selected": true
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -363,7 +362,6 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "menuBarEmbeddedCheckBoxMenuItem"
 						"text": "Embedded menu bar"
-						"selected": true
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -376,6 +374,14 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "unifiedTitleBar", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showTitleBarIconMenuItem"
+						"text": "Show window title bar icon"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTitleBarIcon", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "underlineMenuSelectionMenuItem"

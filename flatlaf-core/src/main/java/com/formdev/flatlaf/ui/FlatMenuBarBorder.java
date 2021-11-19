@@ -53,6 +53,9 @@ public class FlatMenuBarBorder
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		if( !showBottomSeparator( c ) )
+			return;
+
 		float lineHeight = scale( (float) 1 );
 		FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 	}
@@ -67,5 +70,10 @@ public class FlatMenuBarBorder
 		insets.bottom = scale( margin.bottom + 1 );
 		insets.right = scale( margin.right );
 		return insets;
+	}
+
+	/** @since 2 */
+	protected boolean showBottomSeparator( Component c ) {
+		return !FlatMenuBarUI.useUnifiedBackground( c );
 	}
 }

@@ -474,9 +474,9 @@ public class FlatInspector
 		if( c instanceof JComponent )
 			appendRow( buf, "Border", toString( ((JComponent)c).getBorder(), classHierarchy ) );
 
-		appendRow( buf, "Background", toString( c.getBackground() ) );
-		appendRow( buf, "Foreground", toString( c.getForeground() ) );
-		appendRow( buf, "Font", toString( c.getFont() ) );
+		appendRow( buf, "Background", toString( c.getBackground() ) + (c.isBackgroundSet() ? "" : "  NOT SET") );
+		appendRow( buf, "Foreground", toString( c.getForeground() ) + (c.isBackgroundSet() ? "" : "  NOT SET") );
+		appendRow( buf, "Font", toString( c.getFont() ) + (c.isFontSet() ? "" : "  NOT SET") );
 
 		if( c instanceof JComponent ) {
 			try {

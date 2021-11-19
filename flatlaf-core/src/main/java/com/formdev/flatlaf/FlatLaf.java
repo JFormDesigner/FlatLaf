@@ -393,6 +393,7 @@ public abstract class FlatLaf
 			"EditorPane.inactiveBackground",
 			"FormattedTextField.disabledBackground",
 			"PasswordField.disabledBackground",
+			"RootPane.background",
 			"Spinner.disabledBackground",
 			"TextArea.disabledBackground",
 			"TextArea.inactiveBackground",
@@ -411,7 +412,8 @@ public abstract class FlatLaf
 			"Spinner.disabledForeground",
 			"ToggleButton.disabledText" );
 		putDefaults( defaults, defaults.getColor( "textText" ),
-			"DesktopIcon.foreground" );
+			"DesktopIcon.foreground",
+			"RootPane.foreground" );
 
 		initFonts( defaults );
 		initIconColors( defaults, isDark() );
@@ -421,7 +423,7 @@ public abstract class FlatLaf
 		// (using defaults.remove() to avoid that lazy value is resolved and icon loaded here)
 		Object icon = defaults.remove( "InternalFrame.icon" );
 		defaults.put( "InternalFrame.icon", icon );
-		defaults.put( "TitlePane.icon", icon );
+		defaults.put( "TitlePane.icon", icon ); // no longer used, but keep for compatibility
 
 		// get addons and sort them by priority
 		ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
@@ -541,6 +543,9 @@ public abstract class FlatLaf
 			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
 				defaults.put( key, activeFont );
 		}
+
+		// add fonts that are not set in BasicLookAndFeel
+		defaults.put( "RootPane.font", activeFont );
 	}
 
 	private void initDefaultFont( UIDefaults defaults ) {

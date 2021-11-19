@@ -15,8 +15,19 @@ FlatLaf Change Log
 - Typography defines several font styles for headers and various text sizes,
   which makes it easy to use consistent font styles across the application. (PR
   #396)
-- Native window decorations: Show Windows 11 snap layouts menu when hovering the
-  mouse over the maximize button. (issues #397 and #407)
+- Native window decorations (Windows 10/11 only):
+  - Unified backgrounds for window title bar is now enabled by default (window
+    title bar has now same background color as window content). Bottom separator
+    for menu bars is no longer painted (if unified background is enabled).
+  - Show Windows 11 snap layouts menu when hovering the mouse over the maximize
+    button. (issues #397 and #407)
+  - Possibility to hide window title bar icon (for single window set client
+    property `JRootPane.titleBarShowIcon` to `false`; for all windows set UI
+    value `TitlePane.showIcon` to `false`).
+  - OptionPane: Hide window title bar icon by default. Can be be made visibly by
+    setting UI default `OptionPane.showIcon` to `true`. (issue #416)
+  - No longer show the Java "duke/cup" icon if no window icon image is set.
+    (issue #416)
 - TextField, FormattedTextField and PasswordField: Support leading and trailing
   icons (set client property `JTextField.leadingIcon` or
   `JTextField.trailingIcon` to an `Icon`). (PR #378; issue #368)

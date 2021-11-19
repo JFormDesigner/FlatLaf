@@ -215,6 +215,7 @@ class DemoFrame
 
 		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
 		unifiedTitleBarMenuItem.setEnabled( windowDecorations );
+		showTitleBarIconMenuItem.setEnabled( windowDecorations );
 	}
 
 	private void menuBarEmbeddedChanged() {
@@ -225,6 +226,16 @@ class DemoFrame
 	private void unifiedTitleBar() {
 		UIManager.put( "TitlePane.unifiedBackground", unifiedTitleBarMenuItem.isSelected() );
 		FlatLaf.repaintAllFramesAndDialogs();
+	}
+
+	private void showTitleBarIcon() {
+		boolean showIcon = showTitleBarIconMenuItem.isSelected();
+
+		// for main frame (because already created)
+		getRootPane().putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_ICON, showIcon );
+
+		// for other not yet created frames/dialogs
+		UIManager.put( "TitlePane.showIcon", showIcon );
 	}
 
 	private void underlineMenuSelection() {
@@ -466,6 +477,7 @@ class DemoFrame
 		windowDecorationsCheckBoxMenuItem = new JCheckBoxMenuItem();
 		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
 		unifiedTitleBarMenuItem = new JCheckBoxMenuItem();
+		showTitleBarIconMenuItem = new JCheckBoxMenuItem();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
@@ -717,13 +729,11 @@ class DemoFrame
 
 				//---- windowDecorationsCheckBoxMenuItem ----
 				windowDecorationsCheckBoxMenuItem.setText("Window decorations");
-				windowDecorationsCheckBoxMenuItem.setSelected(true);
 				windowDecorationsCheckBoxMenuItem.addActionListener(e -> windowDecorationsChanged());
 				optionsMenu.add(windowDecorationsCheckBoxMenuItem);
 
 				//---- menuBarEmbeddedCheckBoxMenuItem ----
 				menuBarEmbeddedCheckBoxMenuItem.setText("Embedded menu bar");
-				menuBarEmbeddedCheckBoxMenuItem.setSelected(true);
 				menuBarEmbeddedCheckBoxMenuItem.addActionListener(e -> menuBarEmbeddedChanged());
 				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
 
@@ -731,6 +741,11 @@ class DemoFrame
 				unifiedTitleBarMenuItem.setText("Unified window title bar");
 				unifiedTitleBarMenuItem.addActionListener(e -> unifiedTitleBar());
 				optionsMenu.add(unifiedTitleBarMenuItem);
+
+				//---- showTitleBarIconMenuItem ----
+				showTitleBarIconMenuItem.setText("Show window title bar icon");
+				showTitleBarIconMenuItem.addActionListener(e -> showTitleBarIcon());
+				optionsMenu.add(showTitleBarIconMenuItem);
 
 				//---- underlineMenuSelectionMenuItem ----
 				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
@@ -875,6 +890,11 @@ class DemoFrame
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
 		if( FlatLaf.supportsNativeWindowDecorations() ) {
+			windowDecorationsCheckBoxMenuItem.setSelected( FlatLaf.isUseNativeWindowDecorations() );
+			menuBarEmbeddedCheckBoxMenuItem.setSelected( UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) );
+			unifiedTitleBarMenuItem.setSelected( UIManager.getBoolean( "TitlePane.unifiedBackground" ) );
+			showTitleBarIconMenuItem.setSelected( UIManager.getBoolean( "TitlePane.showIcon" ) );
+
 			if( JBRCustomDecorations.isSupported() ) {
 				// If the JetBrains Runtime is used, it forces the use of it's own custom
 				// window decoration, which can not disabled.
@@ -884,6 +904,7 @@ class DemoFrame
 			unsupported( windowDecorationsCheckBoxMenuItem );
 			unsupported( menuBarEmbeddedCheckBoxMenuItem );
 			unsupported( unifiedTitleBarMenuItem );
+			unsupported( showTitleBarIconMenuItem );
 		}
 
 		if( SystemInfo.isMacOS )
@@ -916,6 +937,7 @@ class DemoFrame
 	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
 	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
 	private JCheckBoxMenuItem unifiedTitleBarMenuItem;
+	private JCheckBoxMenuItem showTitleBarIconMenuItem;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;

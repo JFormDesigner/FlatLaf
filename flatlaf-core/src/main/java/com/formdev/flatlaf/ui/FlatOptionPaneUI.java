@@ -22,18 +22,22 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.beans.PropertyChangeListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -79,6 +83,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatOptionPaneUI -->
  *
+ * @uiDefault OptionPane.showIcon					boolean
  * @uiDefault OptionPane.iconMessageGap				int
  * @uiDefault OptionPane.messagePadding				int
  * @uiDefault OptionPane.maxCharactersPerLine		int
@@ -88,6 +93,7 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatOptionPaneUI
 	extends BasicOptionPaneUI
 {
+	/** @since 2 */ protected boolean showIcon;
 	protected int iconMessageGap;
 	protected int messagePadding;
 	protected int maxCharactersPerLine;
@@ -102,6 +108,7 @@ public class FlatOptionPaneUI
 	protected void installDefaults() {
 		super.installDefaults();
 
+		showIcon = UIManager.getBoolean( "OptionPane.showIcon" );
 		iconMessageGap = UIManager.getInt( "OptionPane.iconMessageGap" );
 		messagePadding = UIManager.getInt( "OptionPane.messagePadding" );
 		maxCharactersPerLine = UIManager.getInt( "OptionPane.maxCharactersPerLine" );
@@ -114,6 +121,24 @@ public class FlatOptionPaneUI
 		super.installComponents();
 
 		updateChildPanels( optionPane );
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener() {
+		PropertyChangeListener superListener = super.createPropertyChangeListener();
+		return e -> {
+			superListener.propertyChange( e );
+
+			// hide window title bar icon
+			// (only if showIcon is false, otherwise the default behavior is used)
+			if( !showIcon && "ancestor".equals( e.getPropertyName() ) && e.getNewValue() != null ) {
+				JRootPane rootPane = SwingUtilities.getRootPane( optionPane );
+				if( rootPane != null &&
+					rootPane.getContentPane().getComponentCount() > 0 &&
+					rootPane.getContentPane().getComponent( 0 ) == optionPane )
+				  rootPane.putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_ICON, false );
+			}
+		};
 	}
 
 	@Override
