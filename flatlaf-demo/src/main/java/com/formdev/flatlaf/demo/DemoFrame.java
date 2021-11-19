@@ -29,6 +29,7 @@ import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.StyleContext;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -50,7 +51,6 @@ import com.formdev.flatlaf.ui.JBRCustomDecorations;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
-import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
 import net.miginfocom.layout.UnitValue;
@@ -160,8 +160,7 @@ class DemoFrame
 
 	private void aboutActionPerformed() {
 		JLabel titleLabel = new JLabel( "FlatLaf Demo" );
-		Font titleFont = titleLabel.getFont();
-		titleLabel.setFont( titleFont.deriveFont( (float) titleFont.getSize() + UIScale.scale( 6 ) ) );
+		titleLabel.putClientProperty( FlatClientProperties.STYLE_CLASS, "h1" );
 
 		String link = "https://www.formdev.com/flatlaf/";
 		JLabel linkLabel = new JLabel( "<html><a href=\"#\">" + link + "</a></html>" );

@@ -12,6 +12,9 @@ FlatLaf Change Log
   - Style classes allow defining style rules at a single place (in UI defaults)
     and use them in any component. (PR #388)\
     E.g.: `mySlider.putClientProperty( "FlatLaf.styleClass", "myclass" );`
+- Typography defines several font styles for headers and various text sizes,
+  which makes it easy to use consistent font styles across the application. (PR
+  #396)
 - Native window decorations: Show Windows 11 snap layouts menu when hovering the
   mouse over the maximize button. (issues #397 and #407)
 - TextField, FormattedTextField and PasswordField: Support leading and trailing

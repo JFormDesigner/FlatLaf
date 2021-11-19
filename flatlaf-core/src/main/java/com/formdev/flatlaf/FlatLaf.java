@@ -534,7 +534,7 @@ public abstract class FlatLaf
 		// use active value for all fonts to allow changing fonts in all components with:
 		//     UIManager.put( "defaultFont", myFont );
 		// (this is similar as in Nimbus L&F)
-		Object activeFont = new ActiveFont( null, -1, 0, 0, 0, 0 );
+		Object activeFont = new ActiveFont( null, null, -1, 0, 0, 0, 0 );
 
 		// override fonts
 		for( Object key : defaults.keySet() ) {
@@ -618,7 +618,7 @@ public abstract class FlatLaf
 
 	/** @since 1.1 */
 	public static ActiveValue createActiveFontValue( float scaleFactor ) {
-		return new ActiveFont( null, -1, 0, 0, 0, scaleFactor );
+		return new ActiveFont( null, null, -1, 0, 0, 0, scaleFactor );
 	}
 
 	/**
@@ -1221,6 +1221,7 @@ public abstract class FlatLaf
 	static class ActiveFont
 		implements ActiveValue
 	{
+		private final String baseFontKey;
 		private final List<String> families;
 		private final int style;
 		private final int styleChange;
@@ -1230,7 +1231,9 @@ public abstract class FlatLaf
 
 		// cache (scaled/derived) font
 		private FontUIResource font;
-		private Font lastDefaultFont;
+		private Font lastBaseFont;
+
+		private boolean inCreateValue;
 
 		/**
 		 * @param families list of font families, or {@code null}
@@ -1241,9 +1244,10 @@ public abstract class FlatLaf
 		 * @param relativeSize added to size of base font, or {@code 0}
 		 * @param scaleSize multiply size of base font, or {@code 0}
 		 */
-		ActiveFont( List<String> families, int style, int styleChange,
+		ActiveFont( String baseFontKey, List<String> families, int style, int styleChange,
 			int absoluteSize, int relativeSize, float scaleSize )
 		{
+			this.baseFontKey = baseFontKey;
 			this.families = families;
 			this.style = style;
 			this.styleChange = styleChange;
@@ -1254,16 +1258,30 @@ public abstract class FlatLaf
 
 		@Override
 		public Object createValue( UIDefaults table ) {
-			Font defaultFont = UIManager.getFont( "defaultFont" );
+			if( inCreateValue )
+				throw new IllegalStateException( "FlatLaf: endless recursion in font" );
 
-			// fallback (to avoid NPE in case that this is used in another Laf)
-			if( defaultFont == null )
-				defaultFont = UIManager.getFont( "Label.font" );
+			Font baseFont = null;
 
-			if( lastDefaultFont != defaultFont ) {
-				lastDefaultFont = defaultFont;
+			inCreateValue = true;
+			try {
+				if( baseFontKey != null )
+					baseFont = (Font) UIDefaultsLoader.lazyUIManagerGet( baseFontKey );
 
-				font = derive( defaultFont, fontSize -> UIScale.scale( fontSize ) );
+				if( baseFont == null )
+					baseFont = UIManager.getFont( "defaultFont" );
+
+				// fallback (to avoid NPE in case that this is used in another Laf)
+				if( baseFont == null )
+					baseFont = UIManager.getFont( "Label.font" );
+			} finally {
+				inCreateValue = false;
+			}
+
+			if( lastBaseFont != baseFont ) {
+				lastBaseFont = baseFont;
+
+				font = derive( baseFont, fontSize -> UIScale.scale( fontSize ) );
 			}
 
 			return font;

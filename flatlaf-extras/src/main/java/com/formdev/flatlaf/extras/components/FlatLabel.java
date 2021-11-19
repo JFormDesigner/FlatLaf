@@ -16,6 +16,7 @@
 
 package com.formdev.flatlaf.extras.components;
 
+import static com.formdev.flatlaf.FlatClientProperties.STYLE_CLASS;
 import javax.swing.JLabel;
 
 /**
@@ -26,6 +27,24 @@ import javax.swing.JLabel;
  */
 public class FlatLabel
 	extends JLabel
-	implements FlatStyleableComponent
+	implements FlatComponentExtension, FlatStyleableComponent
 {
+	// NOTE: enum names must be equal to typography/font styles
+	public enum LabelType { h00, h0, h1, h2, h3, h4, large, regular, medium, small, mini, monospaced }
+
+	/**
+	 * Returns type of the label.
+	 */
+	public LabelType getLabelType() {
+		return getClientPropertyEnumString( STYLE_CLASS, LabelType.class, null, LabelType.regular );
+	}
+
+	/**
+	 * Specifies type of the label.
+	 */
+	public void setLabelType( LabelType labelType ) {
+		if( labelType == LabelType.regular )
+			labelType = null;
+		putClientPropertyEnumString( STYLE_CLASS, labelType );
+	}
 }

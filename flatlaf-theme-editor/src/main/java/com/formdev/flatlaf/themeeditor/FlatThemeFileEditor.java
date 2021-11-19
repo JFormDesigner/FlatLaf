@@ -25,7 +25,6 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
@@ -52,6 +51,7 @@ import java.util.prefs.Preferences;
 import javax.lang.model.SourceVersion;
 import javax.swing.*;
 import net.miginfocom.swing.*;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -754,8 +754,7 @@ class FlatThemeFileEditor
 
 	private void about() {
 		JLabel titleLabel = new JLabel( "FlatLaf Theme Editor" );
-		Font titleFont = titleLabel.getFont();
-		titleLabel.setFont( titleFont.deriveFont( (float) titleFont.getSize() + UIScale.scale( 6 ) ) );
+		titleLabel.putClientProperty( FlatClientProperties.STYLE_CLASS, "h1" );
 
 		String link = "https://www.formdev.com/flatlaf/";
 		JLabel linkLabel = new JLabel( "<html><a href=\"#\">" + link + "</a></html>" );

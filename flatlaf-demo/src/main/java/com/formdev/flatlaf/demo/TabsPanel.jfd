@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -22,7 +22,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabPlacementLabel"
 					"text": "Tab placement"
-					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -38,28 +38,28 @@ new FormModel {
 						"text": "top"
 						"selected": true
 						"$buttonGroup": new FormReference( "tabPlacementButtonGroup" )
-						"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "bottomPlacementButton"
 						"text": "bottom"
 						"$buttonGroup": new FormReference( "tabPlacementButtonGroup" )
-						"font": #SwingDerivedFont0
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "leftPlacementButton"
 						"text": "left"
 						"$buttonGroup": new FormReference( "tabPlacementButtonGroup" )
-						"font": #SwingDerivedFont0
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "rightPlacementButton"
 						"text": "right"
 						"$buttonGroup": new FormReference( "tabPlacementButtonGroup" )
-						"font": #SwingDerivedFont0
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabPlacementChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToolBar$Separator" ) {
@@ -68,13 +68,13 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "scrollButton"
 						"text": "scroll"
-						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "borderButton"
 						"text": "border"
-						"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "borderChanged", false ) )
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -88,7 +88,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabLayoutLabel"
 					"text": "Tab layout"
-					"font": &SwingDerivedFont1 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -103,15 +103,15 @@ new FormModel {
 						name: "scrollTabLayoutButton"
 						"text": "scroll"
 						"$buttonGroup": new FormReference( "tabLayoutButtonGroup" )
-						"font": &SwingDerivedFont2 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 						"selected": true
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabLayoutChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "wrapTabLayoutButton"
 						"text": "wrap"
 						"$buttonGroup": new FormReference( "tabLayoutButtonGroup" )
-						"font": #SwingDerivedFont2
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabLayoutChanged", false ) )
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -121,7 +121,7 @@ new FormModel {
 					name: "scrollLayoutNoteLabel"
 					"text": "(use mouse wheel to scroll; arrow button shows hidden tabs)"
 					"enabled": false
-					"font": &SwingDerivedFont3 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+					"$client.FlatLaf.styleClass": "small"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
 				} )
@@ -129,7 +129,7 @@ new FormModel {
 					name: "wrapLayoutNoteLabel"
 					"text": "(probably better to use scroll layout?)"
 					"enabled": false
-					"font": #SwingDerivedFont3
+					"$client.FlatLaf.styleClass": "small"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 3"
 				} )
@@ -146,7 +146,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "closableTabsLabel"
 					"text": "Closable tabs"
-					"font": #SwingDerivedFont1
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -160,23 +160,23 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "squareCloseButton"
 						"text": "square"
-						"font": &SwingDerivedFont4 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 						"$buttonGroup": new FormReference( "closableTabsButtonGroup" )
 						"selected": true
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "closeButtonStyleChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "circleCloseButton"
 						"text": "circle"
-						"font": #SwingDerivedFont4
 						"$buttonGroup": new FormReference( "closableTabsButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "closeButtonStyleChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "redCrossCloseButton"
 						"text": "red cross"
-						"font": #SwingDerivedFont4
 						"$buttonGroup": new FormReference( "closableTabsButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "closeButtonStyleChanged", false ) )
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -190,7 +190,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabAreaComponentsLabel"
 					"text": "Custom tab area components"
-					"font": #SwingDerivedFont1
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -204,15 +204,15 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "leadingComponentButton"
 						"text": "leading"
-						"font": &SwingDerivedFont5 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 						"selected": true
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customComponentsChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "trailingComponentButton"
 						"text": "trailing"
-						"font": #SwingDerivedFont5
 						"selected": true
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "customComponentsChanged", false ) )
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -238,7 +238,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabIconPlacementLabel"
 					"text": "Tab icon placement"
-					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -249,7 +249,7 @@ new FormModel {
 					name: "tabIconPlacementNodeLabel"
 					"text": "(top/bottom/leading/trailing)"
 					"enabled": false
-					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+					"$client.FlatLaf.styleClass": "small"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -279,7 +279,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabAreaAlignmentLabel"
 					"text": "Tab area alignment"
-					"font": &SwingDerivedFont6 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -290,7 +290,7 @@ new FormModel {
 					name: "tabAreaAlignmentNoteLabel"
 					"text": "(leading/center/trailing/fill)"
 					"enabled": false
-					"font": &SwingDerivedFont7 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+					"$client.FlatLaf.styleClass": "small"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -332,7 +332,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabWidthModeLabel"
 					"text": "Tab width mode"
-					"font": #SwingDerivedFont6
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -342,8 +342,8 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabWidthModeNoteLabel"
 					"text": "(preferred/equal/compact)"
-					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 					"enabled": false
+					"$client.FlatLaf.styleClass": "small"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -368,7 +368,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "minMaxTabWidthLabel"
 					"text": "Minimum/maximum tab width"
-					"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -388,7 +388,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "tabAlignmentLabel"
 					"text": "Tab title alignment"
-					"font": #SwingDerivedFont6
+					"$client.FlatLaf.styleClass": "h3"
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": true
 					}
@@ -405,7 +405,7 @@ new FormModel {
 						name: "tabAlignmentNoteLabel"
 						"text": "(leading/center/trailing)"
 						"enabled": false
-						"font": #SwingDerivedFont7
+						"$client.FlatLaf.styleClass": "small"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
@@ -416,7 +416,7 @@ new FormModel {
 						name: "tabAlignmentNoteLabel2"
 						"text": "(trailing)"
 						"enabled": false
-						"font": #SwingDerivedFont7
+						"$client.FlatLaf.styleClass": "small"
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": true
 						}
@@ -477,23 +477,23 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "scrollAsNeededSingleButton"
 						"text": "asNeededSingle"
-						"font": #SwingDerivedFont2
 						"selected": true
 						"$buttonGroup": new FormReference( "scrollButtonsPolicyButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPolicyChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "scrollAsNeededButton"
 						"text": "asNeeded"
-						"font": #SwingDerivedFont2
 						"$buttonGroup": new FormReference( "scrollButtonsPolicyButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPolicyChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "scrollNeverButton"
 						"text": "never"
-						"font": #SwingDerivedFont2
 						"$buttonGroup": new FormReference( "scrollButtonsPolicyButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPolicyChanged", false ) )
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -512,16 +512,16 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "scrollBothButton"
 						"text": "both"
-						"font": #SwingDerivedFont2
 						"selected": true
 						"$buttonGroup": new FormReference( "scrollButtonsPlacementButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPlacementChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "scrollTrailingButton"
 						"text": "trailing"
-						"font": #SwingDerivedFont2
 						"$buttonGroup": new FormReference( "scrollButtonsPlacementButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "scrollButtonsPlacementChanged", false ) )
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -550,16 +550,16 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "popupAsNeededButton"
 						"text": "asNeeded"
-						"font": #SwingDerivedFont2
 						"selected": true
 						"$buttonGroup": new FormReference( "tabsPopupPolicyButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsPopupPolicyChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "popupNeverButton"
 						"text": "never"
-						"font": #SwingDerivedFont2
 						"$buttonGroup": new FormReference( "tabsPopupPolicyButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabsPopupPolicyChanged", false ) )
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -577,16 +577,16 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "underlinedTabTypeButton"
 						"text": "underlined"
-						"font": &SwingDerivedFont8 new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
 						"selected": true
 						"$buttonGroup": new FormReference( "tabTypeButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabTypeChanged", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JToggleButton" ) {
 						name: "cardTabTypeButton"
 						"text": "card"
-						"font": #SwingDerivedFont8
 						"$buttonGroup": new FormReference( "tabTypeButtonGroup" )
+						"$client.FlatLaf.styleClass": "small"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tabTypeChanged", false ) )
 					} )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -597,7 +597,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 1075, 895 )
+			"size": new java.awt.Dimension( 1145, 895 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "tabPlacementButtonGroup"

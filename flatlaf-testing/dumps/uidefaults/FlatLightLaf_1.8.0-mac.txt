@@ -1,20 +1,46 @@
+- Java   1.8.0_202
++ Java   1.8.0_292
+
 - OS     Windows 10
 + OS     Mac OS X
 
+#---- ComboBox ----
+
 + ComboBox.showPopupOnNavigation true
+
+
+#---- FileChooser ----
+
+- FileChooser.useSystemExtensionHiding true
++ FileChooser.useSystemExtensionHiding false
+
+
+#---- Menu ----
 
 - Menu.shortcutKeys              length=1    [I
     [0] 8
 + Menu.shortcutKeys              length=1    [I
     [0] 10
 
+
+#---- MenuItem ----
+
 - MenuItem.acceleratorDelimiter  -
 + MenuItem.acceleratorDelimiter  
 
+
+#---- OptionPane ----
+
 + OptionPane.isYesLast           true
 
+
+#---- ProgressBar ----
+
 - ProgressBar.font               [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
-+ ProgressBar.font               [active] .SF NS Text plain 11    javax.swing.plaf.FontUIResource [UI]
++ ProgressBar.font               [active] Helvetica Neue plain 11    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- ScrollBar ----
 
 - ScrollBar.hoverThumbWithTrack  false
 + ScrollBar.hoverThumbWithTrack  true
@@ -27,7 +53,93 @@
 
 - ScrollBar.thumbInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 + ScrollBar.thumbInsets          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
-
 - defaultFont                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
-+ defaultFont                    .SF NS Text plain 13    javax.swing.plaf.FontUIResource [UI]
++ defaultFont                    Helvetica Neue plain 13    javax.swing.plaf.FontUIResource [UI]
 
+
+
+#---- h0 ----
+
+- h0.font                        [active] Segoe UI plain 30    javax.swing.plaf.FontUIResource [UI]
++ h0.font                        [active] Helvetica Neue plain 31    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h00 ----
+
+- h00.font                       [active] Segoe UI plain 36    javax.swing.plaf.FontUIResource [UI]
++ h00.font                       [active] Helvetica Neue plain 37    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h1 ----
+
+- h1.font                        [active] Segoe UI Semibold plain 24    javax.swing.plaf.FontUIResource [UI]
++ h1.font                        [active] HelveticaNeue-Medium plain 25    javax.swing.plaf.FontUIResource [UI]
+
+- h1.regular.font                [active] Segoe UI plain 24    javax.swing.plaf.FontUIResource [UI]
++ h1.regular.font                [active] Helvetica Neue plain 25    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h2 ----
+
+- h2.font                        [active] Segoe UI Semibold plain 18    javax.swing.plaf.FontUIResource [UI]
++ h2.font                        [active] HelveticaNeue-Medium plain 19    javax.swing.plaf.FontUIResource [UI]
+
+- h2.regular.font                [active] Segoe UI plain 18    javax.swing.plaf.FontUIResource [UI]
++ h2.regular.font                [active] Helvetica Neue plain 19    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h3 ----
+
+- h3.font                        [active] Segoe UI Semibold plain 15    javax.swing.plaf.FontUIResource [UI]
++ h3.font                        [active] HelveticaNeue-Medium plain 16    javax.swing.plaf.FontUIResource [UI]
+
+- h3.regular.font                [active] Segoe UI plain 15    javax.swing.plaf.FontUIResource [UI]
++ h3.regular.font                [active] Helvetica Neue plain 16    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h4 ----
+
+- h4.font                        [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
++ h4.font                        [active] Helvetica Neue bold 13    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- large ----
+
+- large.font                     [active] Segoe UI plain 14    javax.swing.plaf.FontUIResource [UI]
++ large.font                     [active] Helvetica Neue plain 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- light ----
+
+- light.font                     [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
++ light.font                     [active] HelveticaNeue-Thin plain 13    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- medium ----
+
+- medium.font                    [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
++ medium.font                    [active] Helvetica Neue plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- mini ----
+
+- mini.font                      [active] Segoe UI plain 9    javax.swing.plaf.FontUIResource [UI]
++ mini.font                      [active] Helvetica Neue plain 10    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- monospaced ----
+
+- monospaced.font                [active] Consolas plain 12    javax.swing.plaf.FontUIResource [UI]
++ monospaced.font                [active] Menlo plain 13    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- semibold ----
+
+- semibold.font                  [active] Segoe UI Semibold plain 12    javax.swing.plaf.FontUIResource [UI]
++ semibold.font                  [active] HelveticaNeue-Medium plain 13    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- small ----
+
+- small.font                     [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
++ small.font                     [active] Helvetica Neue plain 11    javax.swing.plaf.FontUIResource [UI]

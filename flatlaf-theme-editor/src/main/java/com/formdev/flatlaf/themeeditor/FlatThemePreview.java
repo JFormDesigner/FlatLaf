@@ -46,6 +46,7 @@ class FlatThemePreview
 	private final FlatThemePreviewAll allTab;
 	private final FlatThemePreviewButtons buttonsTab;
 	private final FlatThemePreviewSwitches switchesTab;
+	private final FlatThemePreviewFonts fontsTab;
 
 	private final Map<LazyValue, Object> lazyValueCache = new WeakHashMap<>();
 	private int runWithUIDefaultsGetterLevel;
@@ -61,9 +62,11 @@ class FlatThemePreview
 		allTab = new FlatThemePreviewAll( this );
 		buttonsTab = new FlatThemePreviewButtons( this );
 		switchesTab = new FlatThemePreviewSwitches( this );
+		fontsTab = new FlatThemePreviewFonts();
 		tabbedPane.addTab( "All", createPreviewTab( allTab ) );
 		tabbedPane.addTab( "Buttons", createPreviewTab( buttonsTab ) );
 		tabbedPane.addTab( "Switches", createPreviewTab( switchesTab ) );
+		tabbedPane.addTab( "Fonts", createPreviewTab( fontsTab ) );
 		selectRecentTab();
 		tabbedPane.addChangeListener( e -> selectedTabChanged() );
 
@@ -175,7 +178,8 @@ class FlatThemePreview
 
 		Object value = textArea.propertiesSupport.getParsedProperty( (String) key );
 
-		inGetDefaultFont = "defaultFont".equals( key );
+		boolean isDefaultFont = "defaultFont".equals( key );
+		inGetDefaultFont = isDefaultFont;
 		try {
 			if( value instanceof LazyValue ) {
 				value = lazyValueCache.computeIfAbsent( (LazyValue) value, k -> {
@@ -189,6 +193,12 @@ class FlatThemePreview
 
 //		System.out.println( key + " = " + value );
 
+		// for "defaultFont" never return a value that is not a font
+		// (e.g. a color for "defaultFont = #fff") to avoid StackOverflowError
+		// in Active.createValue()
+		if( isDefaultFont && !(value instanceof Font) )
+			return null;
+
 		// If value is null and is a property that is defined in a core theme,
 		// then force the value to null.
 		// This is necessary for cases where the current application Laf defines a property
@@ -196,7 +206,7 @@ class FlatThemePreview
 		// E.g. FlatLightLaf defines Button.focusedBackground, but in FlatDarkLaf
 		// it is not defined. Without this code, the preview for FlatDarkLaf would use
 		// Button.focusedBackground from FlatLightLaf if FlatLightLaf is the current application Laf.
-		if( value == null && FlatThemePropertiesBaseManager.getDefindedCoreKeys().contains( key ) && !"defaultFont".equals( key ) )
+		if( value == null && FlatThemePropertiesBaseManager.getDefindedCoreKeys().contains( key ) && !isDefaultFont )
 			return FlatLaf.NULL_VALUE;
 
 		return value;
@@ -215,6 +225,7 @@ class FlatThemePreview
 		{
 			tabbedPane.setLeadingComponent(previewLabel);
 			tabbedPane.setTabAreaAlignment(FlatTabbedPane.TabAreaAlignment.trailing);
+			tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		}
 		add(tabbedPane, BorderLayout.CENTER);
 
@@ -223,8 +234,8 @@ class FlatThemePreview
 		add(previewSeparator, BorderLayout.LINE_START);
 
 		//---- previewLabel ----
-		previewLabel.setText("  Preview    ");
-		previewLabel.setFont(previewLabel.getFont().deriveFont(previewLabel.getFont().getSize() + 6f));
+		previewLabel.setText(" Preview ");
+		previewLabel.putClientProperty("FlatLaf.styleClass", "h2");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 

@@ -1386,6 +1386,26 @@ Viewport.foreground            #bbbbbb  HSL   0   0  73    javax.swing.plaf.Colo
 ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 
 
+#---- [style] ----
+
+[style].h00                    font: $h00.font
+[style].h0                     font: $h0.font
+[style].h1.regular             font: $h1.regular.font
+[style].h1                     font: $h1.font
+[style].h2.regular             font: $h2.regular.font
+[style].h2                     font: $h2.font
+[style].h3.regular             font: $h3.regular.font
+[style].h3                     font: $h3.font
+[style].h4                     font: $h4.font
+[style].large                  font: $large.font
+[style].light                  font: $light.font
+[style].medium                 font: $medium.font
+[style].mini                   font: $mini.font
+[style].monospaced             font: $monospaced.font
+[style].semibold               font: $semibold.font
+[style].small                  font: $small.font
+
+
 #----  ----
 
 activeCaption                  #434e60  HSL 217  18  32    javax.swing.plaf.ColorUIResource [UI]
@@ -1399,6 +1419,39 @@ controlShadow                  #616365  HSL 210   2  39    javax.swing.plaf.Colo
 controlText                    #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 defaultFont                    Segoe UI plain 12    javax.swing.plaf.FontUIResource [UI]
 desktop                        #46494b  HSL 204   3  28    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- h0 ----
+
+h0.font                        [active] Segoe UI plain 30    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h00 ----
+
+h00.font                       [active] Segoe UI plain 36    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h1 ----
+
+h1.font                        [active] Segoe UI Semibold plain 24    javax.swing.plaf.FontUIResource [UI]
+h1.regular.font                [active] Segoe UI plain 24    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h2 ----
+
+h2.font                        [active] Segoe UI Semibold plain 18    javax.swing.plaf.FontUIResource [UI]
+h2.regular.font                [active] Segoe UI plain 18    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h3 ----
+
+h3.font                        [active] Segoe UI Semibold plain 15    javax.swing.plaf.FontUIResource [UI]
+h3.regular.font                [active] Segoe UI plain 15    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- h4 ----
+
+h4.font                        [active] Segoe UI bold 12    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- html ----
@@ -1422,11 +1475,50 @@ laf.dark                       true
 laf.scaleFactor                [active] 1.0
 
 
+#---- large ----
+
+large.font                     [active] Segoe UI plain 14    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- light ----
+
+light.font                     [active] Segoe UI Light plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- medium ----
+
+medium.font                    [active] Segoe UI plain 11    javax.swing.plaf.FontUIResource [UI]
+
+
 #----  ----
 
 menu                           #3c3f41  HSL 204   4  25    javax.swing.plaf.ColorUIResource [UI]
 menuText                       #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- mini ----
+
+mini.font                      [active] Segoe UI plain 9    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- monospaced ----
+
+monospaced.font                [active] Consolas plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#----  ----
+
 scrollbar                      #3e4244  HSL 200   5  25    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(1%)
+
+
+#---- semibold ----
+
+semibold.font                  [active] Segoe UI Semibold plain 12    javax.swing.plaf.FontUIResource [UI]
+
+
+#---- small ----
+
+small.font                     [active] Segoe UI plain 10    javax.swing.plaf.FontUIResource [UI]
 
 
 #---- swingx/TaskPane ----

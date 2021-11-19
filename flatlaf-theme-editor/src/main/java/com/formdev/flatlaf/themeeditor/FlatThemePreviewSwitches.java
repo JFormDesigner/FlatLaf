@@ -262,25 +262,25 @@ class FlatThemePreviewSwitches
 				//---- zoom1xButton ----
 				zoom1xButton.setText("1x");
 				zoom1xButton.setSelected(true);
-				zoom1xButton.setFont(zoom1xButton.getFont().deriveFont(zoom1xButton.getFont().getSize() - 2f));
+				zoom1xButton.putClientProperty("FlatLaf.styleClass", "small");
 				zoom1xButton.addActionListener(e -> zoomChanged());
 				zoomToolBar.add(zoom1xButton);
 
 				//---- zoom2xButton ----
 				zoom2xButton.setText("2x");
-				zoom2xButton.setFont(zoom2xButton.getFont().deriveFont(zoom2xButton.getFont().getSize() - 2f));
+				zoom2xButton.putClientProperty("FlatLaf.styleClass", "small");
 				zoom2xButton.addActionListener(e -> zoomChanged());
 				zoomToolBar.add(zoom2xButton);
 
 				//---- zoom3xButton ----
 				zoom3xButton.setText("3x");
-				zoom3xButton.setFont(zoom3xButton.getFont().deriveFont(zoom3xButton.getFont().getSize() - 2f));
+				zoom3xButton.putClientProperty("FlatLaf.styleClass", "small");
 				zoom3xButton.addActionListener(e -> zoomChanged());
 				zoomToolBar.add(zoom3xButton);
 
 				//---- zoom4xButton ----
 				zoom4xButton.setText("4x");
-				zoom4xButton.setFont(zoom4xButton.getFont().deriveFont(zoom4xButton.getFont().getSize() - 2f));
+				zoom4xButton.putClientProperty("FlatLaf.styleClass", "small");
 				zoom4xButton.addActionListener(e -> zoomChanged());
 				zoomToolBar.add(zoom4xButton);
 				zoomToolBar.addSeparator();
@@ -288,6 +288,7 @@ class FlatThemePreviewSwitches
 				//---- indeterminateButton ----
 				indeterminateButton.setText("indeterminate");
 				indeterminateButton.setSelected(true);
+				indeterminateButton.putClientProperty("FlatLaf.styleClass", "small");
 				indeterminateButton.addActionListener(e -> indeterminateChanged());
 				zoomToolBar.add(indeterminateButton);
 			}
@@ -297,7 +298,7 @@ class FlatThemePreviewSwitches
 
 		//---- label22 ----
 		label22.setText("JCheckBox");
-		label22.setFont(label22.getFont().deriveFont(label22.getFont().getSize() + 4f));
+		label22.putClientProperty("FlatLaf.styleClass", "h3");
 		add(label22, "cell 0 1 3 1");
 
 		//---- label1 ----
@@ -310,32 +311,32 @@ class FlatThemePreviewSwitches
 
 		//---- label23 ----
 		label23.setText("unsel.");
-		label23.setFont(label23.getFont().deriveFont(label23.getFont().getSize() - 2f));
+		label23.putClientProperty("FlatLaf.styleClass", "small");
 		add(label23, "cell 1 3,alignx center,growx 0");
 
 		//---- label28 ----
 		label28.setText("sel.");
-		label28.setFont(label28.getFont().deriveFont(label28.getFont().getSize() - 2f));
+		label28.putClientProperty("FlatLaf.styleClass", "small");
 		add(label28, "cell 2 3,alignx center,growx 0");
 
 		//---- label37 ----
 		label37.setText("ind.");
-		label37.setFont(label37.getFont().deriveFont(label37.getFont().getSize() - 2f));
+		label37.putClientProperty("FlatLaf.styleClass", "small");
 		add(label37, "cell 3 3,alignx center,growx 0");
 
 		//---- label24 ----
 		label24.setText("unsel.");
-		label24.setFont(label24.getFont().deriveFont(label24.getFont().getSize() - 2f));
+		label24.putClientProperty("FlatLaf.styleClass", "small");
 		add(label24, "cell 4 3,alignx center,growx 0");
 
 		//---- label29 ----
 		label29.setText("sel.");
-		label29.setFont(label29.getFont().deriveFont(label29.getFont().getSize() - 2f));
+		label29.putClientProperty("FlatLaf.styleClass", "small");
 		add(label29, "cell 5 3,alignx center,growx 0");
 
 		//---- label38 ----
 		label38.setText("ind.");
-		label38.setFont(label38.getFont().deriveFont(label38.getFont().getSize() - 2f));
+		label38.putClientProperty("FlatLaf.styleClass", "small");
 		add(label38, "cell 6 3,alignx center,growx 0");
 
 		//---- label17 ----
@@ -465,7 +466,7 @@ class FlatThemePreviewSwitches
 
 		//---- label27 ----
 		label27.setText("JRadioButton");
-		label27.setFont(label27.getFont().deriveFont(label27.getFont().getSize() + 4f));
+		label27.putClientProperty("FlatLaf.styleClass", "h3");
 		add(label27, "cell 0 9 3 1");
 
 		//---- label3 ----
@@ -478,22 +479,22 @@ class FlatThemePreviewSwitches
 
 		//---- label25 ----
 		label25.setText("unsel.");
-		label25.setFont(label25.getFont().deriveFont(label25.getFont().getSize() - 2f));
+		label25.putClientProperty("FlatLaf.styleClass", "small");
 		add(label25, "cell 1 11,alignx center,growx 0");
 
 		//---- label30 ----
 		label30.setText("sel.");
-		label30.setFont(label30.getFont().deriveFont(label30.getFont().getSize() - 2f));
+		label30.putClientProperty("FlatLaf.styleClass", "small");
 		add(label30, "cell 2 11,alignx center,growx 0");
 
 		//---- label26 ----
 		label26.setText("unsel.");
-		label26.setFont(label26.getFont().deriveFont(label26.getFont().getSize() - 2f));
+		label26.putClientProperty("FlatLaf.styleClass", "small");
 		add(label26, "cell 4 11,alignx center,growx 0");
 
 		//---- label31 ----
 		label31.setText("sel.");
-		label31.setFont(label31.getFont().deriveFont(label31.getFont().getSize() - 2f));
+		label31.putClientProperty("FlatLaf.styleClass", "small");
 		add(label31, "cell 5 11,alignx center,growx 0");
 
 		//---- label36 ----
