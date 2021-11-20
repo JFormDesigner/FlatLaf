@@ -140,19 +140,20 @@ public class FlatAnimatedBorderTest
 		// javax.swing.border.AbstractBorder would be used
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			AnimationSupport.paintBorder( this, c, g, x, y, width, height );
+			paintWithAnimation( c, g, x, y, width, height );
 		}
 
 		@Override
-		public void paintBorderAnimated( Component c, Graphics g, int x, int y, int width, int height, float animatedValue ) {
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
 			FlatUIUtils.setRenderingHints( g );
 
 			// border width is 1 if not focused and 2 if focused
 			float lw = UIScale.scale( 1 + animatedValue );
 
 			// paint border
-			g.setColor( ColorFunctions.mix( Color.red, Color.lightGray, animatedValue ) );
-			FlatUIUtils.paintComponentBorder( (Graphics2D) g, x, y, width, height, 0, lw, 0 );
+			Color color = ColorFunctions.mix( Color.red, Color.lightGray, animatedValue );
+			FlatUIUtils.paintOutlinedComponent( g, x, y, width, height, 0, 0, 0, lw, 0,
+				null, color, null );
 		}
 
 		@Override
@@ -188,15 +189,15 @@ public class FlatAnimatedBorderTest
 		// javax.swing.border.AbstractBorder would be used
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			AnimationSupport.paintBorder( this, c, g, x, y, width, height );
+			paintWithAnimation( c, g, x, y, width, height );
 		}
 
 		@Override
-		public void paintBorderAnimated( Component c, Graphics g, int x, int y, int width, int height, float animatedValue ) {
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
 			FlatUIUtils.setRenderingHints( g );
 
 			// use paintAtScale1x() for consistent line thickness when scaled
-			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height,
+			HiDPIUtils.paintAtScale1x( g, x, y, width, height,
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {
 					float lh = (float) (UIScale.scale( 1f ) * scaleFactor);
 
@@ -214,7 +215,7 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public void repaintBorder( Component c, int x, int y, int width, int height ) {
+		public void repaintDuringAnimation( Component c, int x, int y, int width, int height ) {
 			// limit repaint to bottom border
 			int lh = UIScale.scale( 2 );
 			c.repaint( x, y + height - lh, width, lh );
@@ -247,7 +248,7 @@ public class FlatAnimatedBorderTest
 		implements AnimatedBorder
 	{
 		@Override
-		public void paintBorderAnimated( Component c, Graphics g, int x, int y, int width, int height, float animatedValue ) {
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
 			int lh = UIScale.scale( 2 );
 
 			g.setColor( Color.blue );
