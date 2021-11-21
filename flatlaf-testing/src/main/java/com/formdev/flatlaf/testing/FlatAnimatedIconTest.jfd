@@ -1,11 +1,11 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
-			"$columnConstraints": "[]para[fill]"
+			"$columnConstraints": "[][fill]para[grow,fill]"
 			"$rowConstraints": "[][][]para[][][grow][]"
 		} ) {
 			name: "this"
@@ -17,12 +17,27 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
 			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$JChartColor" ) {
+				name: "radioButton1ChartColor"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$LineChartPanel" ) {
+				name: "lineChartPanel"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 0 1 6"
+			} )
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton2"
 				"text": "radio 2"
 				"$buttonGroup": new FormReference( "buttonGroup1" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$JChartColor" ) {
+				name: "radioButton2ChartColor"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 1"
 			} )
 			add( new FormComponent( "javax.swing.JRadioButton" ) {
 				name: "radioButton3"
@@ -31,11 +46,21 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 2"
 			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$JChartColor" ) {
+				name: "radioButton3ChartColor"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 2"
+			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "checkBox1"
 				"text": "switch"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 3"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$JChartColor" ) {
+				name: "checkBox1ChartColor"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 3"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "checkBox2"
@@ -43,11 +68,16 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 4"
 			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$JChartColor" ) {
+				name: "checkBox2ChartColor"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 4"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "durationLabel"
 				"text": "Duration:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 6 2 1"
+				"value": "cell 0 6 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JSpinner" ) {
 				name: "durationField"
@@ -57,11 +87,11 @@ new FormModel {
 					value: 200
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 6 2 1"
+				"value": "cell 0 6 3 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 415, 350 )
+			"size": new java.awt.Dimension( 810, 350 )
 		} )
 		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
 			name: "buttonGroup1"

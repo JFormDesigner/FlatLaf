@@ -143,6 +143,17 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1 2 1"
 			} )
+			add( new FormComponent( "javax.swing.JSlider" ) {
+				name: "secondsWidthSlider"
+				"minimum": 100
+				"maximum": 2000
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "secondsWidthChanged", false ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1 2 1"
+			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "updateChartDelayedCheckBox"
 				"text": "Update chart delayed"

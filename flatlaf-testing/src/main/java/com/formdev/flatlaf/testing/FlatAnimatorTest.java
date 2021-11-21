@@ -170,8 +170,17 @@ public class FlatAnimatorTest
 		LineChartPanel() {
 			initComponents();
 
+			secondsWidthSlider.setValue( lineChart.getSecondsWidth() );
 			updateChartDelayedChanged();
-			lineChart.setSecondWidth( 500 );
+		}
+
+		void setSecondsWidth( int secondsWidth ) {
+			lineChart.setSecondsWidth( secondsWidth );
+			secondsWidthSlider.setValue( secondsWidth );
+		}
+
+		private void secondsWidthChanged() {
+			lineChart.setSecondsWidth( secondsWidthSlider.getValue() );
 		}
 
 		private void updateChartDelayedChanged() {
@@ -187,6 +196,7 @@ public class FlatAnimatorTest
 			JScrollPane lineChartScrollPane = new JScrollPane();
 			lineChart = new FlatAnimatorTest.LineChart();
 			JLabel lineChartInfoLabel = new JLabel();
+			secondsWidthSlider = new JSlider();
 			updateChartDelayedCheckBox = new JCheckBox();
 			JButton clearChartButton = new JButton();
 
@@ -211,6 +221,12 @@ public class FlatAnimatorTest
 			lineChartInfoLabel.setText("X: time (500ms per line) / Y: value (10% per line)");
 			add(lineChartInfoLabel, "cell 0 1 2 1");
 
+			//---- secondsWidthSlider ----
+			secondsWidthSlider.setMinimum(100);
+			secondsWidthSlider.setMaximum(2000);
+			secondsWidthSlider.addChangeListener(e -> secondsWidthChanged());
+			add(secondsWidthSlider, "cell 0 1 2 1");
+
 			//---- updateChartDelayedCheckBox ----
 			updateChartDelayedCheckBox.setText("Update chart delayed");
 			updateChartDelayedCheckBox.setMnemonic('U');
@@ -227,6 +243,7 @@ public class FlatAnimatorTest
 
 		// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 		FlatAnimatorTest.LineChart lineChart;
+		private JSlider secondsWidthSlider;
 		private JCheckBox updateChartDelayedCheckBox;
 		// JFormDesigner - End of variables declaration  //GEN-END:variables
 	}
@@ -238,18 +255,21 @@ public class FlatAnimatorTest
 		implements Scrollable
 	{
 		private static final int NEW_SEQUENCE_TIME_LAG = 500;
-		private static final int NEW_SEQUENCE_GAP = 50;
+		private static final int NEW_SEQUENCE_GAP = 100;
 
-		private int secondWidth = 1000;
+		private boolean asynchron;
+		private int secondsWidth = 500;
 
 		private static class Data {
 			final double value;
 			final boolean dot;
+			final Color chartColor;
 			final long time; // in milliseconds
 
-			Data( double value, boolean dot, long time ) {
+			Data( double value, boolean dot, Color chartColor, long time ) {
 				this.value = value;
 				this.dot = dot;
+				this.chartColor = chartColor;
 				this.time = time;
 			}
 
@@ -260,7 +280,8 @@ public class FlatAnimatorTest
 			}
 		}
 
-		private final Map<Color, List<Data>> color2dataMap = new HashMap<>();
+		private final List<Data> syncChartData = new ArrayList<>();
+		private final Map<Color, List<Data>> asyncColor2dataMap = new HashMap<>();
 		private final Timer repaintTime;
 		private Color lastUsedChartColor;
 		private boolean updateDelayed;
@@ -270,13 +291,24 @@ public class FlatAnimatorTest
 			repaintTime.setRepeats( false );
 		}
 
+		void enableAsynchron() {
+			if( !syncChartData.isEmpty() )
+				throw new IllegalStateException();
+
+			asynchron = true;
+		}
+
 		void addValue( double value, Color chartColor ) {
 			addValue( value, false, chartColor );
 		}
 
 		void addValue( double value, boolean dot, Color chartColor ) {
-			List<Data> chartData = color2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
-			chartData.add( new Data( value, dot, System.nanoTime() / 1000000) );
+			List<Data> chartData = asyncColor2dataMap.computeIfAbsent( chartColor, k -> new ArrayList<>() );
+			Data data = new Data( value, dot, chartColor, System.nanoTime() / 1000000 );
+			if( asynchron )
+				chartData.add( data );
+			else
+				syncChartData.add( data );
 
 			lastUsedChartColor = chartColor;
 
@@ -288,7 +320,8 @@ public class FlatAnimatorTest
 		}
 
 		void clear() {
-			color2dataMap.clear();
+			syncChartData.clear();
+			asyncColor2dataMap.clear();
 			lastUsedChartColor = null;
 
 			repaint();
@@ -299,8 +332,14 @@ public class FlatAnimatorTest
 			this.updateDelayed = updateDelayed;
 		}
 
-		void setSecondWidth( int secondWidth ) {
-			this.secondWidth = secondWidth;
+		int getSecondsWidth() {
+			return secondsWidth;
+		}
+
+		void setSecondsWidth( int secondsWidth ) {
+			this.secondsWidth = secondsWidth;
+			repaint();
+			revalidate();
 		}
 
 		private void repaintAndRevalidate() {
@@ -311,7 +350,7 @@ public class FlatAnimatorTest
 			if( lastUsedChartColor != null ) {
 				// compute chart width of last used color and start of last sequence
 				int[] lastSeqX = new int[1];
-				int cw = chartWidth( color2dataMap.get( lastUsedChartColor ), lastSeqX );
+				int cw = chartWidth( asynchron ? asyncColor2dataMap.get( lastUsedChartColor ) : syncChartData, lastSeqX );
 
 				// scroll to end of last sequence (of last used color)
 				int lastSeqWidth = cw - lastSeqX[0];
@@ -334,8 +373,7 @@ public class FlatAnimatorTest
 		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
 			FlatUIUtils.setRenderingHints( g );
 
-			int secondWidth = (int) (this.secondWidth * scaleFactor);
-			int seqGapWidth = (int) (NEW_SEQUENCE_GAP * scaleFactor);
+			int secondsWidth = (int) (this.secondsWidth * scaleFactor);
 
 			Color lineColor = FlatUIUtils.getUIColor( "Component.borderColor", Color.lightGray );
 			Color lineColor2 = FlatLaf.isLafDark()
@@ -356,72 +394,86 @@ public class FlatAnimatorTest
 			}
 
 			// paint vertical lines
-			int twoHundredMillisWidth = secondWidth / 5;
+			int twoHundredMillisWidth = secondsWidth / 5;
 			for( int i = twoHundredMillisWidth; i < width; i += twoHundredMillisWidth ) {
-				g.setColor( (i % secondWidth != 0) ? lineColor : lineColor2 );
+				g.setColor( (i % secondsWidth != 0) ? lineColor : lineColor2 );
 				g.drawLine( i, 0, i, height );
 			}
 
 			// paint lines
-			for( Map.Entry<Color, List<Data>> e : color2dataMap.entrySet() ) {
-				List<Data> chartData = e.getValue();
+			for( Map.Entry<Color, List<Data>> e : asyncColor2dataMap.entrySet() ) {
+				List<Data> chartData = asynchron ? e.getValue() : syncChartData;
 				Color chartColor = e.getKey();
-				if( FlatLaf.isLafDark() )
-					chartColor = new HSLColor( chartColor ).adjustTone( 50 );
-				Color temporaryValueColor = new Color( (chartColor.getRGB() & 0xffffff) | 0x40000000, true );
+				paintChartData( g, chartData, chartColor, height, scaleFactor );
+			}
+		}
 
-				long seqTime = 0;
-				int seqX = 0;
-				long ptime = 0;
-				int px = 0;
-				int py = 0;
-				int pcount = 0;
+		private void paintChartData( Graphics2D g, List<Data> chartData, Color chartColor, int height, double scaleFactor ) {
+			if( FlatLaf.isLafDark() )
+				chartColor = new HSLColor( chartColor ).adjustTone( 50 );
+			Color temporaryValueColor = new Color( (chartColor.getRGB() & 0xffffff) | 0x40000000, true );
 
-				g.setColor( chartColor );
+			int seqGapWidth = (int) (NEW_SEQUENCE_GAP * scaleFactor);
+			long seqTime = 0;
+			int seqX = 0;
+			long ptime = 0;
+			int px = 0;
+			int py = height - 1;
+			int cx = px;
+			int cy = py;
+			int pcount = 0;
 
-				boolean first = true;
-				int size = chartData.size();
-				for( int i = 0; i < size; i++ ) {
-					Data data = chartData.get( i );
-					int dy = (int) ((height - 1) * data.value);
+			g.setColor( chartColor );
 
-					if( data.dot ) {
-						int dotx = px;
-						if( i > 0 && data.time > ptime + NEW_SEQUENCE_TIME_LAG )
-							dotx += seqGapWidth;
-						int o = UIScale.scale( 1 );
-						int s = UIScale.scale( 3 );
-						g.fillRect( dotx - o, dy - o, s, s );
-						continue;
-					}
+			boolean first = true;
+			int size = chartData.size();
+			for( int i = 0; i < size; i++ ) {
+				Data data = chartData.get( i );
+				boolean useData = (data.chartColor == chartColor);
+				int dy = height - 1 - (int) ((height - 1) * data.value);
 
-					if( data.time > ptime + NEW_SEQUENCE_TIME_LAG ) {
-						if( !first && pcount == 0 )
-							g.drawLine( px, py, px + (int) (4 * scaleFactor), py );
+				if( data.dot ) {
+					int dotx = px;
+					if( i > 0 && data.time > ptime + NEW_SEQUENCE_TIME_LAG )
+						dotx += seqGapWidth;
+					int o = UIScale.scale( 1 );
+					int s = UIScale.scale( 3 );
+					g.fillRect( dotx - o, dy - o, s, s );
+					continue;
+				}
 
-						// start new sequence
-						seqTime = data.time;
-						seqX = !first ? px + seqGapWidth : 0;
-						px = seqX;
-						pcount = 0;
-						first = false;
-					} else {
-						boolean isTemporaryValue = isTemporaryValue( chartData, i ) || isTemporaryValue( chartData, i - 1 );
-						if( isTemporaryValue )
-							g.setColor( temporaryValueColor );
+				if( data.time > ptime + NEW_SEQUENCE_TIME_LAG ) {
+					if( !first && pcount == 0 )
+						g.drawLine( px, py, px + (int) (4 * scaleFactor), py );
 
-						// line in sequence
-						int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * secondWidth));
-						g.drawLine( px, py, dx, dy );
-						px = dx;
-						pcount++;
+					// start new sequence
+					seqTime = data.time;
+					seqX = !first ? px + seqGapWidth : 0;
+					px = seqX;
+					pcount = 0;
+					first = false;
+				} else {
+					boolean isTemporaryValue = isTemporaryValue( chartData, i ) || isTemporaryValue( chartData, i - 1 );
+					if( isTemporaryValue )
+						g.setColor( temporaryValueColor );
 
-						if( isTemporaryValue )
-							g.setColor( chartColor );
-					}
+					// line in sequence
+					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * secondsWidth));
+					if( useData )
+						g.drawLine( cx, cy, dx, dy );
+					px = dx;
+					pcount++;
 
-					py = dy;
-					ptime = data.time;
+					if( isTemporaryValue )
+						g.setColor( chartColor );
+				}
+
+				py = dy;
+				ptime = data.time;
+
+				if( useData ) {
+					cx = px;
+					cy = py;
 				}
 			}
 		}
@@ -450,8 +502,11 @@ public class FlatAnimatorTest
 
 		private int chartWidth() {
 			int width = 0;
-			for( List<Data> chartData : color2dataMap.values() )
-				width = Math.max( width, chartWidth( chartData, null ) );
+			if( asynchron ) {
+				for( List<Data> chartData : asyncColor2dataMap.values() )
+					width = Math.max( width, chartWidth( chartData, null ) );
+			} else
+				width = Math.max( width, chartWidth( syncChartData, null ) );
 			return width;
 		}
 
@@ -472,7 +527,7 @@ public class FlatAnimatorTest
 					px = seqX;
 				} else {
 					// line in sequence
-					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * secondWidth));
+					int dx = (int) (seqX + (((data.time - seqTime) / 1000.) * secondsWidth));
 					px = dx;
 				}
 
@@ -497,7 +552,7 @@ public class FlatAnimatorTest
 
 		@Override
 		public int getScrollableUnitIncrement( Rectangle visibleRect, int orientation, int direction ) {
-			return secondWidth;
+			return secondsWidth;
 		}
 
 		@Override
@@ -526,6 +581,11 @@ public class FlatAnimatorTest
 		@Override
 		public Dimension getPreferredSize() {
 			return new Dimension( UIScale.scale( 24 ), UIScale.scale( 12 ) );
+		}
+
+		@Override
+		public Dimension getMinimumSize() {
+			return getPreferredSize();
 		}
 
 		@Override
