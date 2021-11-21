@@ -6,7 +6,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[fill][fill]para[fill]"
-			"$rowConstraints": "[][][]para[][][]para[][][grow][]"
+			"$rowConstraints": "[][][]para[][][][][]para[][][grow][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -18,7 +18,7 @@ new FormModel {
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$LineChartPanel" ) {
 				name: "lineChartPanel"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 2 0 1 10"
+				"value": "cell 2 0 1 12"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "fade1TextField"
@@ -66,27 +66,49 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 5"
 			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label1"
-				"text": "Minimal:"
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "material3TextField"
+				"$client.FlatLaf.styleClass": "large"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 6"
 			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$JChartColor" ) {
+				name: "material3ChartColor"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 6"
+			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "minimalTextField"
+				name: "material4TextField"
+				"$client.FlatLaf.styleClass": "large"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 7"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$JChartColor" ) {
-				name: "minimalChartColor"
+				name: "material4ChartColor"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 7"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "Minimal:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 8"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "minimalTextField"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 9"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.testing.FlatAnimatorTest$JChartColor" ) {
+				name: "minimalChartColor"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 9"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "durationLabel"
 				"text": "Duration:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 9"
+				"value": "cell 0 11"
 			} )
 			add( new FormComponent( "javax.swing.JSpinner" ) {
 				name: "durationField"
@@ -96,7 +118,7 @@ new FormModel {
 					value: 200
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 9"
+				"value": "cell 0 11"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

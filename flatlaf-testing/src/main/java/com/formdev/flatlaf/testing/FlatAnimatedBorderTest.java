@@ -18,6 +18,7 @@ package com.formdev.flatlaf.testing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -41,6 +42,8 @@ public class FlatAnimatedBorderTest
 	private static final Color CHART_FADE_2 = Color.red;
 	private static final Color CHART_MATERIAL_1 = Color.green;
 	private static final Color CHART_MATERIAL_2 = Color.magenta;
+	private static final Color CHART_MATERIAL_3 = Color.pink;
+	private static final Color CHART_MATERIAL_4 = Color.cyan;
 	private static final Color CHART_MINIMAL = Color.orange;
 
 	private static final String CHART_COLOR_KEY = "chartColor";
@@ -60,6 +63,8 @@ public class FlatAnimatedBorderTest
 
 		material1TextField.setBorder( new AnimatedMaterialBorder() );
 		material2TextField.setBorder( new AnimatedMaterialBorder() );
+		material3TextField.setBorder( new AnimatedMaterialLabeledBorder() );
+		material4TextField.setBorder( new AnimatedMaterialLabeledBorder() );
 
 		minimalTextField.setBorder( new AnimatedMinimalTestBorder() );
 
@@ -67,13 +72,21 @@ public class FlatAnimatedBorderTest
 		fade2TextField.putClientProperty( CHART_COLOR_KEY, CHART_FADE_2 );
 		material1TextField.putClientProperty( CHART_COLOR_KEY, CHART_MATERIAL_1 );
 		material2TextField.putClientProperty( CHART_COLOR_KEY, CHART_MATERIAL_2 );
+		material3TextField.putClientProperty( CHART_COLOR_KEY, CHART_MATERIAL_3 );
+		material4TextField.putClientProperty( CHART_COLOR_KEY, CHART_MATERIAL_4 );
 		minimalTextField.putClientProperty( CHART_COLOR_KEY, CHART_MINIMAL );
 
 		fade1ChartColor.setForeground( CHART_FADE_1 );
 		fade2ChartColor.setForeground( CHART_FADE_2 );
 		material1ChartColor.setForeground( CHART_MATERIAL_1 );
 		material2ChartColor.setForeground( CHART_MATERIAL_2 );
+		material3ChartColor.setForeground( CHART_MATERIAL_3 );
+		material4ChartColor.setForeground( CHART_MATERIAL_4 );
 		minimalChartColor.setForeground( CHART_MINIMAL );
+
+		material3TextField.putClientProperty( AnimatedMaterialLabeledBorder.LABEL_TEXT_KEY, "Label" );
+		material4TextField.putClientProperty( AnimatedMaterialLabeledBorder.LABEL_TEXT_KEY, "Label" );
+		material4TextField.setText( "Text" );
 	}
 
 	private void initComponents() {
@@ -89,6 +102,10 @@ public class FlatAnimatedBorderTest
 		material1ChartColor = new FlatAnimatorTest.JChartColor();
 		material2TextField = new JTextField();
 		material2ChartColor = new FlatAnimatorTest.JChartColor();
+		material3TextField = new JTextField();
+		material3ChartColor = new FlatAnimatorTest.JChartColor();
+		material4TextField = new JTextField();
+		material4ChartColor = new FlatAnimatorTest.JChartColor();
 		label1 = new JLabel();
 		minimalTextField = new JTextField();
 		minimalChartColor = new FlatAnimatorTest.JChartColor();
@@ -108,6 +125,8 @@ public class FlatAnimatedBorderTest
 			"[]para" +
 			"[]" +
 			"[]" +
+			"[]" +
+			"[]" +
 			"[]para" +
 			"[]" +
 			"[]" +
@@ -117,7 +136,7 @@ public class FlatAnimatedBorderTest
 		//---- label3 ----
 		label3.setText("Fade:");
 		add(label3, "cell 0 0");
-		add(lineChartPanel, "cell 2 0 1 10");
+		add(lineChartPanel, "cell 2 0 1 12");
 		add(fade1TextField, "cell 0 1");
 		add(fade1ChartColor, "cell 1 1");
 		add(fade2TextField, "cell 0 2");
@@ -131,19 +150,29 @@ public class FlatAnimatedBorderTest
 		add(material2TextField, "cell 0 5");
 		add(material2ChartColor, "cell 1 5");
 
+		//---- material3TextField ----
+		material3TextField.putClientProperty("FlatLaf.styleClass", "large");
+		add(material3TextField, "cell 0 6");
+		add(material3ChartColor, "cell 1 6");
+
+		//---- material4TextField ----
+		material4TextField.putClientProperty("FlatLaf.styleClass", "large");
+		add(material4TextField, "cell 0 7");
+		add(material4ChartColor, "cell 1 7");
+
 		//---- label1 ----
 		label1.setText("Minimal:");
-		add(label1, "cell 0 6");
-		add(minimalTextField, "cell 0 7");
-		add(minimalChartColor, "cell 1 7");
+		add(label1, "cell 0 8");
+		add(minimalTextField, "cell 0 9");
+		add(minimalChartColor, "cell 1 9");
 
 		//---- durationLabel ----
 		durationLabel.setText("Duration:");
-		add(durationLabel, "cell 0 9");
+		add(durationLabel, "cell 0 11");
 
 		//---- durationField ----
 		durationField.setModel(new SpinnerNumberModel(200, 100, null, 50));
-		add(durationField, "cell 0 9");
+		add(durationField, "cell 0 11");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -159,6 +188,10 @@ public class FlatAnimatedBorderTest
 	private FlatAnimatorTest.JChartColor material1ChartColor;
 	private JTextField material2TextField;
 	private FlatAnimatorTest.JChartColor material2ChartColor;
+	private JTextField material3TextField;
+	private FlatAnimatorTest.JChartColor material3ChartColor;
+	private JTextField material4TextField;
+	private FlatAnimatorTest.JChartColor material4ChartColor;
 	private JLabel label1;
 	private JTextField minimalTextField;
 	private FlatAnimatorTest.JChartColor minimalChartColor;
@@ -286,6 +319,73 @@ public class FlatAnimatedBorderTest
 		@Override
 		public int getAnimationDuration() {
 			return (Integer) durationField.getValue();
+		}
+	}
+
+	//---- class AnimatedMaterialLabeledBorder --------------------------------
+
+	/**
+	 * Experimental text field border that:
+	 * - paints a label above the text, or in center if text field is empty
+	 * - paint border only at bottom
+	 * - animates focus indicator at bottom
+	 */
+	private class AnimatedMaterialLabeledBorder
+		extends AnimatedMaterialBorder
+	{
+		static final String LABEL_TEXT_KEY = "JTextField.labelText";
+
+		private static final float LABEL_FONT_SCALE = 0.75f;
+
+		@Override
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
+			super.paintAnimated( c, g, x, y, width, height, animatedValue );
+
+			JComponent jc = (JComponent) c;
+			String label = (String) jc.getClientProperty( LABEL_TEXT_KEY );
+			if( label == null )
+				return;
+
+			FontMetrics fm = c.getFontMetrics( c.getFont() );
+			int labelFontHeight = Math.round( fm.getHeight() * LABEL_FONT_SCALE );
+
+			int tx = UIScale.scale( 7 );
+			int ty = y + labelFontHeight - UIScale.scale( 2 );
+			float sf = LABEL_FONT_SCALE;
+
+			if( ((JTextField)c).getDocument().getLength() == 0 ) {
+				// paint label in center of text field if it is empty
+				int ty2 = ((height - fm.getHeight()) / 2) + labelFontHeight;
+				ty += (ty2 - ty) * (1 - animatedValue);
+				sf += (1 - LABEL_FONT_SCALE) * (1 - animatedValue);
+			}
+
+			Graphics2D g2 = (Graphics2D) g.create();
+			try {
+				g2.translate( tx, ty );
+				g2.scale( sf, sf );
+				g2.setColor( ColorFunctions.mix( Color.red, Color.gray, animatedValue ) );
+
+				FlatUIUtils.drawString( jc, g2, label, 0, 0 );
+			} finally {
+				g2.dispose();
+			}
+		}
+
+		@Override
+		public void repaintDuringAnimation( Component c, int x, int y, int width, int height ) {
+			c.repaint( x, y, width, height );
+		}
+
+		@Override
+		public Insets getBorderInsets( Component c, Insets insets ) {
+			super.getBorderInsets( c, insets );
+
+			FontMetrics fm = c.getFontMetrics( c.getFont() );
+			int labelFontHeight = Math.round( fm.getHeight() * LABEL_FONT_SCALE );
+			insets.top = labelFontHeight;
+			insets.bottom = UIScale.scale( 5 );
+			return insets;
 		}
 	}
 
