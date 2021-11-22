@@ -49,23 +49,45 @@ class AnimatedPainterSupport
 			// paint without animation if animation is disabled or
 			// component is not a JComponent and therefore does not support
 			// client properties, which are required to keep animation state
-			paintImpl( painter, c, g, x, y, width, height, null );
+			painter.paintAnimated( c, (Graphics2D) g, x, y, width, height, painter.getValues( c ) );
 			return;
 		}
 
+		// get component values
+		float values[] = painter.getValues( c );
+
 		JComponent jc = (JComponent) c;
 		Object key = painter.getClientPropertyKey();
-		AnimatedPainterSupport as = (AnimatedPainterSupport) jc.getClientProperty( key );
-		if( as == null ) {
-			// painted first time --> do not animate, but remember current component value
-			as = new AnimatedPainterSupport();
-			as.startValue = as.targetValue = as.animatedValue = painter.getValue( c );
-			jc.putClientProperty( key, as );
-		} else {
-			// get component value
-			float value = painter.getValue( c );
+		AnimatedPainterSupport[] ass = (AnimatedPainterSupport[]) jc.getClientProperty( key );
 
-			if( value != as.targetValue ) {
+		// check whether length of values array has changed
+		if( ass != null && ass.length != values.length ) {
+			// cancel all running animations
+			for( int i = 0; i < ass.length; i++ ) {
+				AnimatedPainterSupport as = ass[i];
+				if( as.animator != null )
+					as.animator.cancel();
+			}
+			ass = null;
+		}
+
+		if( ass == null ) {
+			ass = new AnimatedPainterSupport[values.length];
+			jc.putClientProperty( key, ass );
+		}
+
+		float[] animatedValues = new float[ass.length];
+
+		for( int i = 0; i < ass.length; i++ ) {
+			AnimatedPainterSupport as = ass[i];
+			float value = values[i];
+
+			if( as == null ) {
+				// painted first time --> do not animate, but remember current component value
+				as = new AnimatedPainterSupport();
+				as.startValue = as.targetValue = as.animatedValue = value;
+				ass[i] = as;
+			} else if( value != as.targetValue ) {
 				// value changed --> (re)start animation
 
 				if( as.animator == null ) {
@@ -110,35 +132,33 @@ class AnimatedPainterSupport
 				as.targetValue = value;
 				as.animator.start();
 			}
+
+			as.x = x;
+			as.y = y;
+			as.width = width;
+			as.height = height;
+
+			animatedValues[i] = as.animatedValue;
 		}
 
-		as.x = x;
-		as.y = y;
-		as.width = width;
-		as.height = height;
-
-		paintImpl( painter, c, g, x, y, width, height, as );
-	}
-
-	private static void paintImpl( AnimatedPainter painter, Component c, Graphics g,
-		int x, int y, int width, int height, AnimatedPainterSupport as )
-	{
-		float value = (as != null) ? as.animatedValue : painter.getValue( c );
-		painter.paintAnimated( c, (Graphics2D) g, x, y, width, height, value );
+		painter.paintAnimated( c, (Graphics2D) g, x, y, width, height, animatedValues );
 	}
 
 	private static boolean isAnimationEnabled( AnimatedPainter painter, Component c ) {
 		return Animator.useAnimation() && painter.isAnimationEnabled() && c instanceof JComponent;
 	}
 
-	static void saveLocation( AnimatedPainter painter, Component c, int x, int y ) {
+	static void saveRepaintLocation( AnimatedPainter painter, Component c, int x, int y ) {
 		if( !isAnimationEnabled( painter, c ) )
 			return;
 
-		AnimatedPainterSupport as = (AnimatedPainterSupport) ((JComponent)c).getClientProperty( painter.getClientPropertyKey() );
-		if( as != null ) {
-			as.x = x;
-			as.y = y;
+		AnimatedPainterSupport[] ass = (AnimatedPainterSupport[]) ((JComponent)c).getClientProperty( painter.getClientPropertyKey() );
+		if( ass != null ) {
+			for( int i = 0; i < ass.length; i++ ) {
+				AnimatedPainterSupport as = ass[i];
+				as.x = x;
+				as.y = y;
+			}
 		}
 	}
 }

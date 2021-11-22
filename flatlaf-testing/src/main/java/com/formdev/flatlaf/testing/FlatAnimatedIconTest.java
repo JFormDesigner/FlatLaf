@@ -18,13 +18,14 @@ package com.formdev.flatlaf.testing;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
 import javax.swing.*;
 import com.formdev.flatlaf.icons.FlatAnimatedIcon;
 import com.formdev.flatlaf.util.AnimatedIcon;
 import com.formdev.flatlaf.util.ColorFunctions;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
 
 /**
@@ -38,6 +39,7 @@ public class FlatAnimatedIconTest
 	private static final Color CHART_RADIO_BUTTON_3 = Color.green;
 	private static final Color CHART_CHECK_BOX_1 = Color.magenta;
 	private static final Color CHART_CHECK_BOX_2 = Color.orange;
+	private static final Color[] CHART_SWITCH_EX = new Color[] { Color.red, Color.green, Color.blue };
 
 	private static final String CHART_COLOR_KEY = "chartColor";
 
@@ -57,6 +59,7 @@ public class FlatAnimatedIconTest
 		radioButton3.setIcon( radioIcon );
 
 		checkBox1.setIcon( new AnimatedSwitchIcon() );
+		checkBox3.setIcon( new AnimatedSwitchIconEx() );
 		checkBox2.setIcon( new AnimatedMinimalTestIcon() );
 
 		radioButton1.putClientProperty( CHART_COLOR_KEY, CHART_RADIO_BUTTON_1 );
@@ -83,6 +86,7 @@ public class FlatAnimatedIconTest
 		radioButton3ChartColor = new FlatAnimatorTest.JChartColor();
 		checkBox1 = new JCheckBox();
 		checkBox1ChartColor = new FlatAnimatorTest.JChartColor();
+		checkBox3 = new JCheckBox();
 		checkBox2 = new JCheckBox();
 		checkBox2ChartColor = new FlatAnimatorTest.JChartColor();
 		durationLabel = new JLabel();
@@ -101,6 +105,7 @@ public class FlatAnimatedIconTest
 			"[]para" +
 			"[]" +
 			"[]" +
+			"[]" +
 			"[grow]" +
 			"[]"));
 
@@ -109,7 +114,7 @@ public class FlatAnimatedIconTest
 		radioButton1.setSelected(true);
 		add(radioButton1, "cell 0 0");
 		add(radioButton1ChartColor, "cell 1 0");
-		add(lineChartPanel, "cell 2 0 1 6");
+		add(lineChartPanel, "cell 2 0 1 7");
 
 		//---- radioButton2 ----
 		radioButton2.setText("radio 2");
@@ -126,18 +131,22 @@ public class FlatAnimatedIconTest
 		add(checkBox1, "cell 0 3");
 		add(checkBox1ChartColor, "cell 1 3");
 
+		//---- checkBox3 ----
+		checkBox3.setText("switch ex");
+		add(checkBox3, "cell 0 4");
+
 		//---- checkBox2 ----
 		checkBox2.setText("minimal");
-		add(checkBox2, "cell 0 4");
-		add(checkBox2ChartColor, "cell 1 4");
+		add(checkBox2, "cell 0 5");
+		add(checkBox2ChartColor, "cell 1 5");
 
 		//---- durationLabel ----
 		durationLabel.setText("Duration:");
-		add(durationLabel, "cell 0 6 3 1");
+		add(durationLabel, "cell 0 7 3 1");
 
 		//---- durationField ----
 		durationField.setModel(new SpinnerNumberModel(200, 100, null, 50));
-		add(durationField, "cell 0 6 3 1");
+		add(durationField, "cell 0 7 3 1");
 
 		//---- buttonGroup1 ----
 		ButtonGroup buttonGroup1 = new ButtonGroup();
@@ -157,6 +166,7 @@ public class FlatAnimatedIconTest
 	private FlatAnimatorTest.JChartColor radioButton3ChartColor;
 	private JCheckBox checkBox1;
 	private FlatAnimatorTest.JChartColor checkBox1ChartColor;
+	private JCheckBox checkBox3;
 	private JCheckBox checkBox2;
 	private FlatAnimatorTest.JChartColor checkBox2ChartColor;
 	private JLabel durationLabel;
@@ -185,7 +195,8 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public void paintIconAnimated( Component c, Graphics g, int x, int y, float animatedValue ) {
+		public void paintIconAnimated( Component c, Graphics2D g, float[] animatedValues ) {
+			float animatedValue = animatedValues[0];
 			Color color = ColorFunctions.mix( onColor, offColor, animatedValue );
 
 			// border
@@ -201,7 +212,7 @@ public class FlatAnimatedIconTest
 			float dotDiameter = DOT_SIZE * animatedValue;
 			float xy = (SIZE - dotDiameter) / 2f;
 			g.setColor( color );
-			((Graphics2D)g).fill( new Ellipse2D.Float( xy, xy, dotDiameter, dotDiameter ) );
+			g.fill( new Ellipse2D.Float( xy, xy, dotDiameter, dotDiameter ) );
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
@@ -210,8 +221,8 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public float getValue( Component c ) {
-			return ((JRadioButton)c).isSelected() ? 1 : 0;
+		public float[] getValues( Component c ) {
+			return new float[] { ((JRadioButton)c).isSelected() ? 1 : 0 };
 		}
 
 		@Override
@@ -222,7 +233,7 @@ public class FlatAnimatedIconTest
 
 	//---- class AnimatedSwitchIcon -------------------------------------------
 
-	public class AnimatedSwitchIcon
+	private class AnimatedSwitchIcon
 		extends FlatAnimatedIcon
 	{
 		private final Color offColor = Color.lightGray;
@@ -233,17 +244,20 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public void paintIconAnimated( Component c, Graphics g, int x, int y, float animatedValue ) {
+		public void paintIconAnimated( Component c, Graphics2D g, float[] animatedValues ) {
+			float animatedValue = animatedValues[0];
 			Color color = ColorFunctions.mix( onColor, offColor, animatedValue );
 
+			// paint track
 			g.setColor( color );
-			g.fillRoundRect( x, y, width, height, height, height );
+			g.fillRoundRect( 0, 0, width, height, height, height );
 
+			// paint thumb
 			int thumbSize = height - 4;
-			float thumbX = x + 2 + ((width - 4 - thumbSize) * animatedValue);
-			int thumbY = y + 2;
+			float thumbX = 2 + ((width - 4 - thumbSize) * animatedValue);
+			int thumbY = 2;
 			g.setColor( Color.white );
-			((Graphics2D)g).fill( new Ellipse2D.Float( thumbX, thumbY, thumbSize, thumbSize ) );
+			g.fill( new Ellipse2D.Float( thumbX, thumbY, thumbSize, thumbSize ) );
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
@@ -252,8 +266,91 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public float getValue( Component c ) {
-			return ((AbstractButton)c).isSelected() ? 1 : 0;
+		public float[] getValues( Component c ) {
+			return new float[] { ((AbstractButton)c).isSelected() ? 1 : 0 };
+		}
+
+		@Override
+		public int getAnimationDuration() {
+			return (Integer) durationField.getValue();
+		}
+	}
+
+	//---- class AnimatedSwitchIconEx -----------------------------------------
+
+	private static final int HW = 8;
+
+	private class AnimatedSwitchIconEx
+		extends FlatAnimatedIcon
+	{
+		private final Color offColor = Color.lightGray;
+		private final Color onColor = Color.red;
+		private final Color hoverColor = new Color( 0x4400cc00, true );
+		private final Color pressedColor = new Color( 0x440000cc, true );
+
+		public AnimatedSwitchIconEx() {
+			super( 28 + HW, 16 + HW, null );
+		}
+
+		@Override
+		public void paintIconAnimated( Component c, Graphics2D g, float[] animatedValues ) {
+			Color color = ColorFunctions.mix( onColor, offColor, animatedValues[0] );
+
+			int hw2 = HW / 2;
+			int x = hw2;
+			int y = hw2;
+			int width = this.width - HW;
+			int height = this.height - HW;
+
+			// paint track
+			g.setColor( color );
+			g.fillRoundRect( x, y, width, height, height, height );
+
+			// paint thumb
+			int thumbSize = height - 4;
+			float thumbX = x + 2 + ((width - 4 - thumbSize) * animatedValues[0]);
+			int thumbY = y + 2;
+			g.setColor( Color.white );
+			g.fill( new Ellipse2D.Float( thumbX, thumbY, thumbSize, thumbSize ) );
+
+			// paint hover
+			if( animatedValues[1] > 0 ) {
+				g.setColor( hoverColor );
+				paintHoverOrPressed( g, thumbX, thumbY, thumbSize, animatedValues[1] );
+			}
+
+			// paint pressed
+			if( animatedValues[2] > 0 ) {
+				g.setColor( pressedColor );
+				paintHoverOrPressed( g, thumbX, thumbY, thumbSize, animatedValues[2] );
+			}
+
+			for( int i = 0; i < animatedValues.length; i++ ) {
+				float animatedValue = animatedValues[i];
+				if( animatedValue != 0 && animatedValue != 1 )
+					lineChartPanel.lineChart.addValue( animatedValue, CHART_SWITCH_EX[i] );
+			}
+		}
+
+		private void paintHoverOrPressed( Graphics2D g, float thumbX, int thumbY, int thumbSize, float animatedValue ) {
+			float hw = (HW + 4) * animatedValue;
+			Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
+			path.append( new Ellipse2D.Float( thumbX - (hw / 2), thumbY - (hw / 2),
+				thumbSize + hw, thumbSize + hw ), false );
+			path.append( new Ellipse2D.Float( thumbX, thumbY, thumbSize, thumbSize ), false );
+			g.fill( path );
+		}
+
+		@Override
+		public float[] getValues( Component c ) {
+			AbstractButton b = (AbstractButton) c;
+			ButtonModel bm = b.getModel();
+
+			return new float[] {
+				b.isSelected() ? 1 : 0,
+				bm.isRollover() ? 1 : 0,
+				bm.isPressed() ? 1 : 0,
+			};
 		}
 
 		@Override
@@ -272,22 +369,21 @@ public class FlatAnimatedIconTest
 	{
 		@Override
 		public int getIconWidth() {
-			return 100;
+			return UIScale.scale( 50 );
 		}
 
 		@Override
 		public int getIconHeight() {
-			return 20;
+			return UIScale.scale( 16 );
 		}
 
 		@Override
-		public void paintIconAnimated( Component c, Graphics g, int x, int y, float animatedValue ) {
-			int w = getIconWidth();
-			int h = getIconHeight();
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
+			float animatedValue = animatedValues[0];
 
 			g.setColor( Color.red );
-			g.drawRect( x, y, w - 1, h - 1 );
-			g.fillRect( x, y, Math.round( w * animatedValue ), h );
+			g.drawRect( x, y, width - 1, height - 1 );
+			g.fillRect( x, y, Math.round( width * animatedValue ), height );
 
 			if( animatedValue != 0 && animatedValue != 1 ) {
 				Color chartColor = (Color) ((JComponent)c).getClientProperty( CHART_COLOR_KEY );
@@ -296,8 +392,8 @@ public class FlatAnimatedIconTest
 		}
 
 		@Override
-		public float getValue( Component c ) {
-			return ((AbstractButton)c).isSelected() ? 1 : 0;
+		public float[] getValues( Component c ) {
+			return new float[] { ((AbstractButton)c).isSelected() ? 1 : 0 };
 		}
 
 		@Override

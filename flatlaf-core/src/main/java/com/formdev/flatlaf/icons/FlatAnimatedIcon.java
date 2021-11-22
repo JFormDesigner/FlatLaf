@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import com.formdev.flatlaf.util.AnimatedIcon;
+import com.formdev.flatlaf.util.AnimatedPainter;
 
 /**
  * Base class for animated icons that scales width and height, creates and initializes
@@ -30,7 +31,7 @@ import com.formdev.flatlaf.util.AnimatedIcon;
  * <p>
  * This class does not store any state information (needed for animation) in its instance.
  * Instead a client property is set on the painted component.
- * This makes it possible to use a share icon instance for multiple components.
+ * This makes it possible to use a shared icon instance for multiple components.
  *
  * @author Karl Tauber
  */
@@ -45,11 +46,34 @@ public abstract class FlatAnimatedIcon
 	@Override
 	public void paintIcon( Component c, Graphics g, int x, int y ) {
 		super.paintIcon( c, g, x, y );
-		AnimatedIcon.AnimationSupport.saveIconLocation( this, c, x, y );
+		AnimatedPainter.saveRepaintLocation( this, c, x, y );
 	}
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		AnimatedIcon.AnimationSupport.paintIcon( this, c, g, 0, 0 );
+		paintWithAnimation( c, g, 0, 0, getIconWidth(), getIconHeight() );
 	}
+
+	/**
+	 * Delegates painting to {@link #paintIconAnimated(Component, Graphics2D, float[])}.
+	 * Ignores the given bounds because {@code [x,y]} are always {@code [0,0]} and
+	 * {@code [width,height]} are scaled, but painting code should use unscaled width
+	 * and height because given graphics context is scaled.
+	 *
+	 * @since 2
+	 */
+	@Override
+	public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
+		paintIconAnimated( c, g, animatedValues );
+	}
+
+	/**
+	 * Paint the icon at {@code 0,0} location.
+	 * <p>
+	 * The given graphics context is scaled.
+	 * Use unscaled coordinates, width and height for painting.
+	 *
+	 * @since 2
+	 */
+	protected abstract void paintIconAnimated( Component c, Graphics2D g, float[] animatedValues );
 }

@@ -25,37 +25,35 @@ import javax.swing.JComponent;
 /**
  * Icon that automatically animates painting on component value changes.
  * <p>
- * {@link #getValue(Component)} returns the value of the component.
- * If the value changes, then {@link #paintIconAnimated(Component, Graphics, int, int, float)}
- * is invoked multiple times with animated value (from old value to new value).
+ * {@link #getValues(Component)} returns the value(s) of the component.
+ * If the value(s) have changed, then {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
+ * is invoked multiple times with animated value(s) (from old value(s) to new value(s)).
+ * If {@link #getValues(Component)} returns multiple values, then each value gets its own independent animation.
  * <p>
  * Example for an animated icon:
  * <pre>
- * private class AnimatedMinimalTestIcon
+ * private class MyAnimatedIcon
  *     implements AnimatedIcon
  * {
  *     &#64;Override public int getIconWidth() { return 100; }
  *     &#64;Override public int getIconHeight() { return 20; }
  *
  *     &#64;Override
- *     public void paintIconAnimated( Component c, Graphics g, int x, int y, float animatedValue ) {
- *         int w = getIconWidth();
- *         int h = getIconHeight();
- *
+ *     public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
  *         g.setColor( Color.red );
- *         g.drawRect( x, y, w - 1, h - 1 );
- *         g.fillRect( x, y, Math.round( w * animatedValue ), h );
+ *         g.drawRect( x, y, width - 1, height - 1 );
+ *         g.fillRect( x, y, Math.round( width * animatedValues[0] ), height );
  *     }
  *
  *     &#64;Override
- *     public float getValue( Component c ) {
- *         return ((AbstractButton)c).isSelected() ? 1 : 0;
+ *     public float[] getValues( Component c ) {
+ *         return new float[] { ((AbstractButton)c).isSelected() ? 1 : 0 };
  *     }
  * }
  *
  * // sample usage
  * JCheckBox checkBox = new JCheckBox( "test" );
- * checkBox.setIcon( new AnimatedMinimalTestIcon() );
+ * checkBox.setIcon( new MyAnimatedIcon() );
  * </pre>
  *
  * Animation works only if the component passed to {@link #paintIcon(Component, Graphics, int, int)}
@@ -76,15 +74,13 @@ public interface AnimatedIcon
 	}
 
 	/**
-	 * Bridge method that is called from (new) superclass and delegates to
-	 * {@link #paintIconAnimated(Component, Graphics, int, int, float)}.
-	 * Necessary for API compatibility.
+	 * {@inheritDoc}
 	 *
 	 * @since 2
 	 */
 	@Override
-	default void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
-		paintIconAnimated( c, g, x, y, animatedValue );
+	default void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
+		paintIconAnimated( c, g, x, y, animatedValues[0] );
 	}
 
 	/**
@@ -97,22 +93,60 @@ public interface AnimatedIcon
 	 * @param animatedValue the animated value, which is either equal to what {@link #getValue(Component)}
 	 *     returned, or somewhere between the previous value and the latest value
 	 *     that {@link #getValue(Component)} returned
+	 *
+	 * @deprecated override {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])} instead
 	 */
-	void paintIconAnimated( Component c, Graphics g, int x, int y, float animatedValue );
+	@Deprecated
+	default void paintIconAnimated( Component c, Graphics g, int x, int y, float animatedValue ) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 2
+	 */
+	@Override
+	default float[] getValues( Component c ) {
+		return new float[] { getValue( c ) };
+	}
+
+	/**
+	 * Gets the value of the component.
+	 * <p>
+	 * This can be any value and depends on the component.
+	 * If the value changes, then this class animates from the old value to the new one.
+	 * <p>
+	 * For a toggle button this could be {@code 0} for off and {@code 1} for on.
+	 *
+	 * @deprecated override {@link #getValues(Component)} instead
+	 */
+	@Deprecated
+	default float getValue( Component c ) {
+		return 0;
+	}
 
 	//---- class AnimationSupport ---------------------------------------------
 
 	/**
 	 * Animation support.
 	 */
+	@Deprecated
 	class AnimationSupport
 	{
+		/**
+		 * @deprecated use {@link AnimatedPainter#paintWithAnimation(Component, Graphics, int, int, int, int)} instead
+		 */
+		@Deprecated
 		public static void paintIcon( AnimatedIcon icon, Component c, Graphics g, int x, int y ) {
 			AnimatedPainterSupport.paint( icon, c, g, x, y, icon.getIconWidth(), icon.getIconHeight() );
 		}
 
+		/**
+		 * @deprecated use {@link AnimatedPainter#saveRepaintLocation(AnimatedPainter, Component, int, int)} instead
+		 */
+		@Deprecated
 		public static void saveIconLocation( AnimatedIcon icon, Component c, int x, int y ) {
-			AnimatedPainterSupport.saveLocation( icon, c, x, y );
+			AnimatedPainterSupport.saveRepaintLocation( icon, c, x, y );
 		}
 	}
 }

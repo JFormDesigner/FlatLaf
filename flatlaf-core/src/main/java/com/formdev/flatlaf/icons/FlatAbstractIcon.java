@@ -69,7 +69,13 @@ public abstract class FlatAbstractIcon
 		}
 	}
 
-	protected abstract void paintIcon( Component c, Graphics2D g2 );
+	/**
+	 * Paint the icon at {@code [0,0]} location.
+	 * <p>
+	 * The given graphics context is scaled.
+	 * Use unscaled coordinates, width and height for painting.
+	 */
+	protected abstract void paintIcon( Component c, Graphics2D g );
 
 	@Override
 	public int getIconWidth() {

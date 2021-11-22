@@ -25,26 +25,27 @@ import javax.swing.border.Border;
 /**
  * Border that automatically animates painting on component value changes.
  * <p>
- * {@link #getValue(Component)} returns the value of the component.
- * If the value changes, then {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float)}
- * is invoked multiple times with animated value (from old value to new value).
+ * {@link #getValues(Component)} returns the value(s) of the component.
+ * If the value(s) have changed, then {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
+ * is invoked multiple times with animated value(s) (from old value(s) to new value(s)).
+ * If {@link #getValues(Component)} returns multiple values, then each value gets its own independent animation.
  * <p>
  * Example for an animated border:
  * <pre>
- * private class AnimatedMinimalTestBorder
+ * private class MyAnimatedBorder
  *     implements AnimatedBorder
  * {
  *     &#64;Override
- *     public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
+ *     public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
  *         int lh = UIScale.scale( 2 );
  *
  *         g.setColor( Color.blue );
- *         g.fillRect( x, y + height - lh, Math.round( width * animatedValue ), lh );
+ *         g.fillRect( x, y + height - lh, Math.round( width * animatedValues[0] ), lh );
  *     }
  *
  *     &#64;Override
- *     public float getValue( Component c ) {
- *         return c.isFocusOwner() ? 1 : 0;
+ *     public float[] getValues( Component c ) {
+ *         return new float[] { c.isFocusOwner() ? 1 : 0 };
  *     }
  *
  *     &#64;Override
@@ -57,7 +58,7 @@ import javax.swing.border.Border;
  *
  * // sample usage
  * JTextField textField = new JTextField();
- * textField.setBorder( new AnimatedMinimalTestBorder() );
+ * textField.setBorder( new MyAnimatedBorder() );
  * </pre>
  *
  * Animation works only if the component passed to {@link #paintBorder(Component, Graphics, int, int, int, int)}

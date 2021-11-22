@@ -217,7 +217,8 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
+			float animatedValue = animatedValues[0];
 			FlatUIUtils.setRenderingHints( g );
 
 			// border width is 1 if not focused and 2 if focused
@@ -242,8 +243,8 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public float getValue( Component c ) {
-			return FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0;
+		public float[] getValues( Component c ) {
+			return new float[] { FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0 };
 		}
 
 		@Override
@@ -271,7 +272,8 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
+			float animatedValue = animatedValues[0];
 			FlatUIUtils.setRenderingHints( g );
 
 			// use paintAtScale1x() for consistent line thickness when scaled
@@ -312,8 +314,8 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public float getValue( Component c ) {
-			return FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0;
+		public float[] getValues( Component c ) {
+			return new float[] { FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0 };
 		}
 
 		@Override
@@ -338,9 +340,10 @@ public class FlatAnimatedBorderTest
 		private static final float LABEL_FONT_SCALE = 0.75f;
 
 		@Override
-		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
-			super.paintAnimated( c, g, x, y, width, height, animatedValue );
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
+			super.paintAnimated( c, g, x, y, width, height, animatedValues );
 
+			float animatedValue = animatedValues[0];
 			JComponent jc = (JComponent) c;
 			String label = (String) jc.getClientProperty( LABEL_TEXT_KEY );
 			if( label == null )
@@ -398,7 +401,8 @@ public class FlatAnimatedBorderTest
 		implements AnimatedBorder
 	{
 		@Override
-		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue ) {
+		public void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues ) {
+			float animatedValue = animatedValues[0];
 			int lh = UIScale.scale( 2 );
 
 			g.setColor( Color.blue );
@@ -411,8 +415,8 @@ public class FlatAnimatedBorderTest
 		}
 
 		@Override
-		public float getValue( Component c ) {
-			return FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0;
+		public float[] getValues( Component c ) {
+			return new float[] { FlatUIUtils.isPermanentFocusOwner( c ) ? 1 : 0 };
 		}
 
 		@Override

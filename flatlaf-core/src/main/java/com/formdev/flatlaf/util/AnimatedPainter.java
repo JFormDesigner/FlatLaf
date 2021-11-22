@@ -23,11 +23,12 @@ import javax.swing.JComponent;
 import com.formdev.flatlaf.util.Animator.Interpolator;
 
 /**
- * Painter that automatically animates painting on component value changes.
+ * Painter that automatically animates painting on component value(s) changes.
  * <p>
- * {@link #getValue(Component)} returns the value of the component.
- * If the value changes, then {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float)}
- * is invoked multiple times with animated value (from old value to new value).
+ * {@link #getValues(Component)} returns the value(s) of the component.
+ * If the value(s) have changed, then {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
+ * is invoked multiple times with animated value(s) (from old value(s) to new value(s)).
+ * If {@link #getValues(Component)} returns multiple values, then each value gets its own independent animation.
  * <p>
  * See {@link AnimatedBorder} or {@link AnimatedIcon} for examples.
  * <p>
@@ -42,11 +43,11 @@ public interface AnimatedPainter
 {
 	/**
 	 * Starts painting.
-	 * Either invokes {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float)}
-	 * once to paint current value (see {@link #getValue(Component)}. Or if value has
+	 * Either invokes {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
+	 * once to paint current value(s) (see {@link #getValues(Component)}. Or if value(s) has
 	 * changed, compared to last painting, then it starts an animation and invokes
-	 * {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float)}
-	 * multiple times with animated value (from old value to new value).
+	 * {@link #paintAnimated(Component, Graphics2D, int, int, int, int, float[])}
+	 * multiple times with animated value(s) (from old value(s) to new value(s)).
 	 *
 	 * @param c the component that this painter belongs to
 	 * @param g the graphics context
@@ -60,7 +61,7 @@ public interface AnimatedPainter
 	}
 
 	/**
-	 * Paints the given (animated) value.
+	 * Paints the given (animated) value(s).
 	 * <p>
 	 * Invoked from {@link #paintWithAnimation(Component, Graphics, int, int, int, int)}.
 	 *
@@ -70,11 +71,11 @@ public interface AnimatedPainter
 	 * @param y the y coordinate of the paint area
 	 * @param width the width of the paint area
 	 * @param height the height of the paint area
-	 * @param animatedValue the animated value, which is either equal to what {@link #getValue(Component)}
-	 *     returned, or somewhere between the previous value and the latest value
-	 *     that {@link #getValue(Component)} returned
+	 * @param animatedValues the animated values, which are either equal to what {@link #getValues(Component)}
+	 *     returned, or somewhere between the previous values and the latest values
+	 *     that {@link #getValues(Component)} returned
 	 */
-	void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float animatedValue );
+	void paintAnimated( Component c, Graphics2D g, int x, int y, int width, int height, float[] animatedValues );
 
 	/**
 	 * Invoked from animator to repaint an area.
@@ -91,14 +92,15 @@ public interface AnimatedPainter
 	}
 
 	/**
-	 * Gets the value of the component.
+	 * Gets the value(s) of the component.
 	 * <p>
 	 * This can be any value and depends on the component.
-	 * If the value changes, then this class animates from the old value to the new one.
+	 * If the value(s) changes, then this class animates from the old value(s) to the new ones.
+	 * If multiple values are returned, then each value gets its own independent animation.
 	 * <p>
 	 * For a toggle button this could be {@code 0} for off and {@code 1} for on.
 	 */
-	float getValue( Component c );
+	float[] getValues( Component c );
 
 	/**
 	 * Returns whether animation is enabled for this painter (default is {@code true}).
@@ -135,5 +137,15 @@ public interface AnimatedPainter
 	 */
 	default Object getClientPropertyKey() {
 		return getClass();
+	}
+
+	/**
+	 * Saves location for repainting animated area with
+	 * {@link AnimatedPainter#repaintDuringAnimation(Component, int, int, int, int)}.
+	 * Only needed when graphics context passed to {@link #paintWithAnimation(Component, Graphics, int, int, int, int)}
+	 * uses transformed location.
+	 */
+	static void saveRepaintLocation( AnimatedPainter painter, Component c, int x, int y ) {
+		AnimatedPainterSupport.saveRepaintLocation( painter, c, x, y );
 	}
 }
