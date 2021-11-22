@@ -133,6 +133,32 @@ public interface AnimatedPainter
 	}
 
 	/**
+	 * Returns the duration of the animation in milliseconds (default is 150)
+	 * for the given value index and value.
+	 */
+	default int getAnimationDuration( int valueIndex, float value ) {
+		return getAnimationDuration();
+	}
+
+	/**
+	 * Returns the resolution of the animation in milliseconds (default is 10)
+	 * for the given value index and value.
+	 * Resolution is the amount of time between timing events.
+	 */
+	default int getAnimationResolution( int valueIndex, float value ) {
+		return getAnimationResolution();
+	}
+
+	/**
+	 * Returns the interpolator for the animation
+	 * for the given value index and value.
+	 * Default is {@link CubicBezierEasing#STANDARD_EASING}.
+	 */
+	default Interpolator getAnimationInterpolator( int valueIndex, float value ) {
+		return getAnimationInterpolator();
+	}
+
+	/**
 	 * Returns the client property key used to store the animation support.
 	 */
 	default Object getClientPropertyKey() {

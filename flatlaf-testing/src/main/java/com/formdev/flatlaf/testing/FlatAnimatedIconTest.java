@@ -145,7 +145,7 @@ public class FlatAnimatedIconTest
 		add(durationLabel, "cell 0 7 3 1");
 
 		//---- durationField ----
-		durationField.setModel(new SpinnerNumberModel(200, 100, null, 50));
+		durationField.setModel(new SpinnerNumberModel(200, 0, null, 50));
 		add(durationField, "cell 0 7 3 1");
 
 		//---- buttonGroup1 ----

@@ -29,6 +29,7 @@ import javax.swing.JComponent;
  */
 class AnimatedPainterSupport
 {
+	private int valueIndex;
 	private float startValue;
 	private float targetValue;
 	private float animatedValue;
@@ -76,8 +77,6 @@ class AnimatedPainterSupport
 			jc.putClientProperty( key, ass );
 		}
 
-		float[] animatedValues = new float[ass.length];
-
 		for( int i = 0; i < ass.length; i++ ) {
 			AnimatedPainterSupport as = ass[i];
 			float value = values[i];
@@ -85,15 +84,29 @@ class AnimatedPainterSupport
 			if( as == null ) {
 				// painted first time --> do not animate, but remember current component value
 				as = new AnimatedPainterSupport();
+				as.valueIndex = i;
 				as.startValue = as.targetValue = as.animatedValue = value;
 				ass[i] = as;
 			} else if( value != as.targetValue ) {
 				// value changed --> (re)start animation
 
+				int animationDuration = painter.getAnimationDuration( as.valueIndex, value );
+
+				// do not animate if animation duration (for current value) is zero
+				if( animationDuration <= 0 ) {
+					if( as.animator != null ) {
+						as.animator.cancel();
+						as.animator = null;
+					}
+					as.startValue = as.targetValue = as.animatedValue = value;
+					as.fraction = 0;
+					continue;
+				}
+
 				if( as.animator == null ) {
 					// create animator
 					AnimatedPainterSupport as2 = as;
-					as.animator = new Animator( painter.getAnimationDuration(), fraction -> {
+					as.animator = new Animator( 1, fraction -> {
 						// check whether component was removed while animation is running
 						if( !c.isDisplayable() ) {
 							as2.animator.stop();
@@ -116,19 +129,22 @@ class AnimatedPainterSupport
 					// if animation is still running, restart it from the current
 					// animated value to the new target value with reduced duration
 					as.animator.cancel();
-					int duration2 = (int) (painter.getAnimationDuration() * as.fraction);
+					int duration2 = (int) (animationDuration * as.fraction);
 					if( duration2 > 0 )
 						as.animator.setDuration( duration2 );
 					as.startValue = as.animatedValue;
 				} else {
 					// new animation
-					as.animator.setDuration( painter.getAnimationDuration() );
-					as.animator.setResolution( painter.getAnimationResolution() );
-					as.animator.setInterpolator( painter.getAnimationInterpolator() );
+					as.animator.setDuration( animationDuration );
 
 					as.animatedValue = as.startValue;
 				}
 
+				// update animator for new value
+				as.animator.setResolution( painter.getAnimationResolution( as.valueIndex, value ) );
+				as.animator.setInterpolator( painter.getAnimationInterpolator( as.valueIndex, value ) );
+
+				// start animation
 				as.targetValue = value;
 				as.animator.start();
 			}
@@ -137,9 +153,11 @@ class AnimatedPainterSupport
 			as.y = y;
 			as.width = width;
 			as.height = height;
-
-			animatedValues[i] = as.animatedValue;
 		}
+
+		float[] animatedValues = new float[ass.length];
+		for( int i = 0; i < ass.length; i++ )
+			animatedValues[i] = ass[i].animatedValue;
 
 		painter.paintAnimated( c, (Graphics2D) g, x, y, width, height, animatedValues );
 	}

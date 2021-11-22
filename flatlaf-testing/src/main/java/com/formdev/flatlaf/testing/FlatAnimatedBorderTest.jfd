@@ -113,7 +113,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JSpinner" ) {
 				name: "durationField"
 				"model": new javax.swing.SpinnerNumberModel {
-					minimum: 100
+					minimum: 0
 					stepSize: 50
 					value: 200
 				}
