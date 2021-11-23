@@ -141,6 +141,9 @@ Applications using FlatLaf
   [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf JOSM plugin)
 - [jAlbum](https://jalbum.net/) 21 (**commercial**) - creates photo album
   websites
+- ![New](images/new.svg)
+  [PDF Studio](https://www.qoppa.com/pdfstudio/) 2021 (**commercial**) - create,
+  review and edit PDF documents
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (**commercial**)
 - [Total Validator](https://www.totalvalidator.com/) 15 (**commercial**) -
   checks your website
@@ -173,7 +176,7 @@ Applications using FlatLaf
   systems development platform
 - [JPass](https://github.com/gaborbata/jpass) - password manager with strong
   encryption
-- [Jes - Die Java-EÜR](https://www.jes-eur.de)
+- [Jes - Die Java-EÃœR](https://www.jes-eur.de)
 - [Mapton](https://mapton.org/) 2.0
   ([source code](https://github.com/trixon/mapton)) - some kind of map
   application (based on NetBeans platform)
