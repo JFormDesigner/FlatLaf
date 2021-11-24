@@ -1324,9 +1324,19 @@ public abstract class FlatLaf
 			}
 
 			// derive font
-			if( newStyle != baseStyle || newSize != baseSize )
+			if( newStyle != baseStyle || newSize != baseSize ) {
+				// hack for font "Ubuntu Medium" on Linux, which curiously belongs
+				// to family "Ubuntu Light" and using deriveFont() would create a light font
+				if( "Ubuntu Medium".equalsIgnoreCase( baseFont.getName() ) &&
+					"Ubuntu Light".equalsIgnoreCase( baseFont.getFamily() ) )
+				{
+					Font font = createCompositeFont( "Ubuntu Medium", newStyle, newSize );
+					if( !isFallbackFont( font ) )
+						return toUIResource( font );
+				}
+
 				return toUIResource( baseFont.deriveFont( newStyle, newSize ) );
-			else
+			} else
 				return toUIResource( baseFont );
 		}
 

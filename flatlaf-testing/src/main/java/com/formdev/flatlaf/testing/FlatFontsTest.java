@@ -86,6 +86,7 @@ public class FlatFontsTest
 		for( Map.Entry<String, Font> e : info.fonts.entrySet() ) {
 			JLabel label = new JLabel( e.getKey() );
 			label.setFont( e.getValue().deriveFont( (float) UIScale.scale( 36 ) ) );
+			label.setToolTipText( e.getValue().toString() );
 			previewPanel.add( label, "wrap" );
 		}
 
