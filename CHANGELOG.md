@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 1.6.5-SNAPSHOT
+
+- Linux: Fixed font problems when running on Oracle Java 8 (OpenJDK 8 is not
+  affected):
+  - oversized text if system font is "Inter" (issue #427)
+  - missing text if system font is "Cantarell" (on Fedora)
+
+
 ## 1.6.4
 
 #### Fixed bugs
