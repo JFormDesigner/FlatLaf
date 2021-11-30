@@ -121,7 +121,7 @@ public class FlatToolBarSeparatorUI
 	private void stylePropertyChange( JSeparator s ) {
 		if( shared && FlatStylingSupport.hasStyleProperty( s ) ) {
 			// unshare component UI if necessary
-			// updateUI() invokes applyStyle() from installUI()
+			// updateUI() invokes installStyle() from installUI()
 			s.updateUI();
 		} else
 			installStyle( s );

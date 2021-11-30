@@ -122,7 +122,7 @@ public class FlatLabelUI
 			JLabel label = (JLabel) e.getSource();
 			if( shared && FlatStylingSupport.hasStyleProperty( label ) ) {
 				// unshare component UI if necessary
-				// updateUI() invokes applyStyle() from installUI()
+				// updateUI() invokes installStyle() from installUI()
 				label.updateUI();
 			} else
 				installStyle( label );

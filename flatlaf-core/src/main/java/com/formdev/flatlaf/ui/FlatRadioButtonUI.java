@@ -139,7 +139,7 @@ public class FlatRadioButtonUI
 			case FlatClientProperties.STYLE_CLASS:
 				if( shared && FlatStylingSupport.hasStyleProperty( b ) ) {
 					// unshare component UI if necessary
-					// updateUI() invokes applyStyle() from installUI()
+					// updateUI() invokes installStyle() from installUI()
 					b.updateUI();
 				} else
 					installStyle( b );
