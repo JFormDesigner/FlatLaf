@@ -16,9 +16,14 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPanelUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPanel}.
@@ -34,8 +39,78 @@ import javax.swing.plaf.basic.BasicPanelUI;
  */
 public class FlatPanelUI
 	extends BasicPanelUI
+	implements StyleableUI
 {
+	private final boolean shared;
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
+
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatPanelUI.class, FlatPanelUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatPanelUI.class, () -> new FlatPanelUI( true ) )
+			: new FlatPanelUI( false );
+	}
+
+	/** @since 2 */
+	protected FlatPanelUI( boolean shared ) {
+		this.shared = shared;
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
+			c, () -> stylePropertyChange( (JPanel) c ), null );
+		c.addPropertyChangeListener( propertyChangeListener );
+
+		installStyle( (JPanel) c );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		c.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
+
+		oldStyleValues = null;
+	}
+
+	private void stylePropertyChange( JPanel c ) {
+		if( shared && FlatStylingSupport.hasStyleProperty( c ) ) {
+			// unshare component UI if necessary
+			// updateUI() invokes installStyle() from installUI()
+			c.updateUI();
+		} else
+			installStyle( c );
+		c.revalidate();
+		c.repaint();
+	}
+
+	/** @since 2 */
+	protected void installStyle( JPanel c ) {
+		try {
+			applyStyle( c, FlatStylingSupport.getResolvedStyle( c, "Panel" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( JPanel c, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( c, key, value ) );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( JPanel c, String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, c, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 }

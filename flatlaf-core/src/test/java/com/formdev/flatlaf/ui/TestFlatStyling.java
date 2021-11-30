@@ -524,6 +524,18 @@ public class TestFlatStyling
 	}
 
 	@Test
+	void panel() {
+		JPanel c = new JPanel();
+		FlatPanelUI ui = (FlatPanelUI) c.getUI();
+
+		// JComponent properties
+		ui.applyStyle( c, "background: #fff" );
+		ui.applyStyle( c, "foreground: #fff" );
+		ui.applyStyle( c, "border: 2,2,2,2,#f00" );
+		ui.applyStyle( c, "font: italic 12 monospaced" );
+	}
+
+	@Test
 	void passwordField() {
 		JPasswordField c = new JPasswordField();
 		FlatPasswordFieldUI ui = (FlatPasswordFieldUI) c.getUI();

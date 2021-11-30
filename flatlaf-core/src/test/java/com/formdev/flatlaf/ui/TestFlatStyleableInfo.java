@@ -380,6 +380,17 @@ public class TestFlatStyleableInfo
 	}
 
 	@Test
+	void panel() {
+		JPanel c = new JPanel();
+		FlatPanelUI ui = (FlatPanelUI) c.getUI();
+
+		Map<String, Class<?>> expected = expectedMap(
+		);
+
+		assertMapEquals( expected, ui.getStyleableInfos( c ) );
+	}
+
+	@Test
 	void passwordField() {
 		JPasswordField c = new JPasswordField();
 		FlatPasswordFieldUI ui = (FlatPasswordFieldUI) c.getUI();

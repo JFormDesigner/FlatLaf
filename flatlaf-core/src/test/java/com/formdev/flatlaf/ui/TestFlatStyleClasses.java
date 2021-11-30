@@ -61,6 +61,7 @@ public class TestFlatStyleClasses
 		UIManager.put( "[style]MenuItem.test", "foreground: #000011" );
 		UIManager.put( "[style]CheckBoxMenuItem.test", "foreground: #000012" );
 		UIManager.put( "[style]RadioButtonMenuItem.test", "foreground: #000013" );
+		UIManager.put( "[style]Panel.test", "foreground: #000034" );
 		UIManager.put( "[style]PasswordField.test", "foreground: #000014" );
 		UIManager.put( "[style]PopupMenu.test", "foreground: #000015" );
 		UIManager.put( "[style]PopupMenuSeparator.test", "foreground: #000016" );
@@ -276,6 +277,14 @@ public class TestFlatStyleClasses
 		c.putClientProperty( FlatClientProperties.STYLE_CLASS, "test" );
 		assertEquals( Color.magenta, c.getBackground() );
 		assertEquals( new Color( 0x000013 ), c.getForeground() );
+	}
+
+	@Test
+	void panel() {
+		JPanel c = new JPanel();
+		c.putClientProperty( FlatClientProperties.STYLE_CLASS, "test" );
+		assertEquals( Color.magenta, c.getBackground() );
+		assertEquals( new Color( 0x000034 ), c.getForeground() );
 	}
 
 	@Test
