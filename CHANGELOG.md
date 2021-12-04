@@ -7,6 +7,7 @@ FlatLaf Change Log
   affected):
   - oversized text if system font is "Inter" (issue #427)
   - missing text if system font is "Cantarell" (on Fedora)
+- MenuItem: Changed accelerator delimiter from `-` to `+`. (Windows and Linux).
 
 
 ## 1.6.4
