@@ -12,6 +12,8 @@ FlatLaf Change Log
 - MenuItem: Changed accelerator delimiter from `-` to `+`. (Windows and Linux).
 - ComboBox: Fixed occasional `StackOverflowError` when modifying combo box not
   on AWT thread. (issue #432)
+- macOS: Fixed `NullPointerException` when using AWT component
+  `java.awt.Choice`. (issue #439)
 
 ## 1.6.4
 

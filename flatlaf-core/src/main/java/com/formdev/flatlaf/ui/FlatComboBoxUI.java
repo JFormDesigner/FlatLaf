@@ -260,7 +260,10 @@ public class FlatComboBoxUI
 			public void layoutContainer( Container parent ) {
 				super.layoutContainer( parent );
 
-				if( arrowButton != null ) {
+				// on macOS, a Swing combo box is used for AWT component java.awt.Choice
+				// and the font may be (temporary) null
+
+				if( arrowButton != null && comboBox.getFont() != null ) {
 					// limit button width to height of a raw combobox (without insets)
 					FontMetrics fm = comboBox.getFontMetrics( comboBox.getFont() );
 					int maxButtonWidth = fm.getHeight() + scale( padding.top ) + scale( padding.bottom );
