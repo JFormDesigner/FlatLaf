@@ -3,12 +3,15 @@ FlatLaf Change Log
 
 ## 1.6.5-SNAPSHOT
 
+#### Fixed bugs
+
 - Linux: Fixed font problems when running on Oracle Java 8 (OpenJDK 8 is not
   affected):
   - oversized text if system font is "Inter" (issue #427)
   - missing text if system font is "Cantarell" (on Fedora)
 - MenuItem: Changed accelerator delimiter from `-` to `+`. (Windows and Linux).
-
+- ComboBox: Fixed occasional `StackOverflowError` when modifying combo box not
+  on AWT thread. (issue #432)
 
 ## 1.6.4
 

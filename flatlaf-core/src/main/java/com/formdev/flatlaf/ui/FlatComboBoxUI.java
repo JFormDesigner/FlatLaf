@@ -805,7 +805,9 @@ public class FlatComboBoxUI
 			this.padding = padding;
 		}
 
-		void install( Component c ) {
+		// using synchronized to avoid problems with code that modifies combo box
+		// (model, selection, etc) not on AWT thread (which should be not done)
+		synchronized void install( Component c ) {
 			if( !(c instanceof JComponent) )
 				return;
 
@@ -837,7 +839,7 @@ public class FlatComboBoxUI
 		 * there is no single place to uninstall it.
 		 * This is the reason why this method is called from various places.
 		 */
-		void uninstall() {
+		synchronized void uninstall() {
 			if( rendererComponent == null )
 				return;
 
@@ -848,9 +850,9 @@ public class FlatComboBoxUI
 		}
 
 		@Override
-		public Insets getBorderInsets( Component c, Insets insets ) {
+		synchronized public Insets getBorderInsets( Component c, Insets insets ) {
 			Insets padding = scale( this.padding );
-			if( rendererBorder != null ) {
+			if( rendererBorder != null && !(rendererBorder instanceof CellPaddingBorder) ) {
 				Insets insideInsets = rendererBorder.getBorderInsets( c );
 				insets.top = Math.max( padding.top, insideInsets.top );
 				insets.left = Math.max( padding.left, insideInsets.left );
