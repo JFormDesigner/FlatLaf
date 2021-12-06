@@ -163,11 +163,18 @@ class FlatWindowsNativeWindowBorder
 			return;
 
 		// install
-		WndProc wndProc = new WndProc( window );
-		if( wndProc.hwnd == 0 )
-			return;
+		try {
+			WndProc wndProc = new WndProc( window );
+			if( wndProc.hwnd == 0 )
+				return;
 
-		windowsMap.put( window, wndProc );
+			windowsMap.put( window, wndProc );
+		} catch( UnsatisfiedLinkError ex ) {
+			// catch for the case that the operating system prevents execution of DLL
+			// (e.g. if DLLs in temp folder are restricted)
+			// --> continue application without custom decorations
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	private void uninstall( Window window ) {

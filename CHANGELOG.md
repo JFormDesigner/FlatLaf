@@ -5,7 +5,7 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
-- Linux: Fixed font problems when running on Oracle Java 8 (OpenJDK 8 is not
+- Linux: Fixed font problems when running on Oracle Java (OpenJDK is not
   affected):
   - oversized text if system font is "Inter" (issue #427)
   - missing text if system font is "Cantarell" (on Fedora)
@@ -14,6 +14,10 @@ FlatLaf Change Log
   on AWT thread. (issue #432)
 - macOS: Fixed `NullPointerException` when using AWT component
   `java.awt.Choice`. (issue #439)
+- Native window decorations: Do not exit application with `UnsatisfiedLinkError`
+  in case that FlatLaf DLL cannot be executed because of restrictions on
+  temporary directory. Instead, continue with default window decorations. (issue
+  #436)
 
 ## 1.6.4
 
