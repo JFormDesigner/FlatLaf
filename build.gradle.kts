@@ -15,7 +15,7 @@
  */
 
 val releaseVersion = "1.6.4"
-val developmentVersion = "2.0-SNAPSHOT"
+val developmentVersion = "1.6.5-SNAPSHOT"
 
 version = if( java.lang.Boolean.getBoolean( "release" ) ) releaseVersion else developmentVersion
 
