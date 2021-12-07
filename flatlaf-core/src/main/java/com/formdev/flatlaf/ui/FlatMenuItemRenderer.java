@@ -35,8 +35,6 @@ import javax.swing.Icon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.MenuElement;
-import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicHTML;
@@ -446,6 +444,10 @@ debug*/
 		htmlView.paint( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ), textRect );
 	}
 
+	/**
+	 * Returns {@code true} if either the menu item is armed (mouse over item)
+	 * or it is a {@code JMenu} and selected (shows submenu).
+	 */
 	protected static boolean isArmedOrSelected( JMenuItem menuItem ) {
 		return menuItem.isArmed() || (menuItem instanceof JMenu && menuItem.isSelected());
 	}
@@ -470,21 +472,16 @@ debug*/
 		if( !menuItem.isEnabled() )
 			return menuItem.getDisabledIcon();
 
-		MenuSelectionManager msm = MenuSelectionManager.defaultManager();
-		if( msm != null ) {
-			MenuElement[] path = msm.getSelectedPath();
-			MenuElement selectedElement = path.length > 0 ? path[path.length - 1] : null;
-			if( menuItem == selectedElement ) {
-				Icon selectedIcon = menuItem.getSelectedIcon();
-				if( selectedIcon != null )
-					return selectedIcon;
-			}
-		}
-
 		if( menuItem.getModel().isPressed() && menuItem.isArmed() ) {
 			Icon pressedIcon = menuItem.getPressedIcon();
 			if( pressedIcon != null )
 				return pressedIcon;
+		}
+
+		if( isArmedOrSelected( menuItem ) ) {
+			Icon selectedIcon = menuItem.getSelectedIcon();
+			if( selectedIcon != null )
+				return selectedIcon;
 		}
 
 		return icon;

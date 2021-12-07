@@ -162,6 +162,9 @@ public class FlatMenusTest
 		FlatMenusTest.MenuWithAccelerator menuWithAccelerator2 = new FlatMenusTest.MenuWithAccelerator();
 		JMenuItem menuItem40 = new JMenuItem();
 		JMenuItem menuItem39 = new JMenuItem();
+		JMenu menu12 = new JMenu();
+		JMenuItem menuItem41 = new JMenuItem();
+		JMenuItem menuItem42 = new JMenuItem();
 		menuBar2 = new JMenuBar();
 		JMenu menu8 = new JMenu();
 		FlatMenusTest.LargerMenuItem menuItem13 = new FlatMenusTest.LargerMenuItem();
@@ -377,6 +380,25 @@ public class FlatMenusTest
 				menuWithAccelerator1.add(menuItem39);
 			}
 			menuBar1.add(menuWithAccelerator1);
+
+			//======== menu12 ========
+			{
+				menu12.setText("icons");
+
+				//---- menuItem41 ----
+				menuItem41.setText("selected icon");
+				menuItem41.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png")));
+				menuItem41.setSelectedIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show_dark.png")));
+				menu12.add(menuItem41);
+
+				//---- menuItem42 ----
+				menuItem42.setText("disabled icon");
+				menuItem42.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png")));
+				menuItem42.setDisabledIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste.png")));
+				menuItem42.setEnabled(false);
+				menu12.add(menuItem42);
+			}
+			menuBar1.add(menu12);
 		}
 		add(menuBar1, "cell 1 0 2 1,growx");
 
