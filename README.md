@@ -116,6 +116,8 @@ Applications using FlatLaf
 
 - ![New](images/new.svg)
   [Jailer](https://github.com/Wisser/Jailer) - database subsetting and relational data browsing tool
+- [Apache NetBeans](https://netbeans.apache.org/) 11.3 - IDE for Java, PHP, HTML
+  and much more
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
 - [KeyStore Explorer](https://keystore-explorer.org/) 5.4.3
 - ![New](images/new.svg)
