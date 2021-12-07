@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 1.6.5-SNAPSHOT
+## 1.6.5
 
 #### Fixed bugs
 
@@ -18,6 +18,7 @@ FlatLaf Change Log
   in case that FlatLaf DLL cannot be executed because of restrictions on
   temporary directory. Instead, continue with default window decorations. (issue
   #436)
+
 
 ## 1.6.4
 
