@@ -121,6 +121,10 @@ public class FlatPopupFactory
 				popupWindow.getGraphicsConfiguration() == owner.getGraphicsConfiguration() )
 			  return popup;
 
+			// avoid endless loop (should newer happen; PopupFactory cache size is 5)
+			if( ++count > 10 )
+				return popup;
+
 			// remove contents component from popup window
 			if( popupWindow instanceof JWindow )
 				((JWindow)popupWindow).getContentPane().removeAll();
@@ -128,10 +132,6 @@ public class FlatPopupFactory
 			// dispose unused popup
 			// (do not invoke popup.hide() because this would cache the popup window)
 			popupWindow.dispose();
-
-			// avoid endless loop (should newer happen; PopupFactory cache size is 5)
-			if( ++count > 10 )
-				return popup;
 		}
 	}
 

@@ -75,6 +75,25 @@ FlatLaf Change Log
   - `FlatSVGUtils`: Support loading SVG from `URL` (for JPMS). (issue #325)
 
 
+## 1.6.5
+
+#### Fixed bugs
+
+- Linux: Fixed font problems when running on Oracle Java (OpenJDK is not
+  affected):
+  - oversized text if system font is "Inter" (issue #427)
+  - missing text if system font is "Cantarell" (on Fedora)
+- MenuItem: Changed accelerator delimiter from `-` to `+`. (Windows and Linux).
+- ComboBox: Fixed occasional `StackOverflowError` when modifying combo box not
+  on AWT thread. (issue #432)
+- macOS: Fixed `NullPointerException` when using AWT component
+  `java.awt.Choice`. (issue #439)
+- Native window decorations: Do not exit application with `UnsatisfiedLinkError`
+  in case that FlatLaf DLL cannot be executed because of restrictions on
+  temporary directory. Instead, continue with default window decorations. (issue
+  #436)
+
+
 ## 1.6.4
 
 #### Fixed bugs

@@ -17,6 +17,7 @@
 package com.formdev.flatlaf;
 
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-
+import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -121,14 +122,25 @@ class LinuxFontPolicy
 		for(;;) {
 			Font font = createFont( family, style, size, dsize );
 
-			// if the font family does not match any font on the system, "Dialog" family is returned
-			if( !"Dialog".equals( font.getFamily() ) || "Dialog".equals( family ) )
+			if( Font.DIALOG.equals( family ) )
 				return font;
+
+			// if the font family does not match any font on the system, "Dialog" family is returned
+			if( !Font.DIALOG.equals( font.getFamily() ) ) {
+				// check for font problems
+				// - font height much larger than expected (e.g. font Inter; Oracle Java 8)
+				// - character width is zero (e.g. font Cantarell; Fedora; Oracle Java 8)
+				FontMetrics fm = StyleContext.getDefaultStyleContext().getFontMetrics( font );
+				if( fm.getHeight() > size * 2 || fm.stringWidth( "a" ) == 0 )
+					return createFont( Font.DIALOG, style, size, dsize );
+
+				return font;
+			}
 
 			// find last word in family
 			int index = family.lastIndexOf( ' ' );
 			if( index < 0 )
-				return createFont( "Dialog", style, size, dsize );
+				return createFont( Font.DIALOG, style, size, dsize );
 
 			// check whether last work contains some font weight (e.g. Ultra-Bold or Heavy)
 			String lastWord = family.substring( index + 1 ).toLowerCase();
