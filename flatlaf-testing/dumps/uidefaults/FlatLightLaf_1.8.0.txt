@@ -192,6 +192,12 @@ ColorChooser.swatchesSwatchSize [active] 16,16    javax.swing.plaf.DimensionUIRe
 ColorChooserUI                 com.formdev.flatlaf.ui.FlatColorChooserUI
 
 
+#---- ColumnControlButton ----
+
+ColumnControlButton.actionIcon [lazy] 10,10    com.formdev.flatlaf.swingx.icons.FlatColumnControlIcon [UI]
+ColumnControlButton.iconColor  #737373  HSL   0   0  45    javax.swing.plaf.ColorUIResource [UI]
+
+
 #---- ComboBox ----
 
 ComboBox.background            #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
@@ -601,7 +607,7 @@ MenuBarUI                      com.formdev.flatlaf.ui.FlatMenuBarUI
 #---- MenuItem ----
 
 MenuItem.acceleratorArrowGap   2
-MenuItem.acceleratorDelimiter  -
+MenuItem.acceleratorDelimiter  +
 MenuItem.acceleratorFont       [active] $defaultFont [UI]
 MenuItem.acceleratorForeground #4d4d4d  HSL   0   0  30    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.acceleratorSelectionForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]

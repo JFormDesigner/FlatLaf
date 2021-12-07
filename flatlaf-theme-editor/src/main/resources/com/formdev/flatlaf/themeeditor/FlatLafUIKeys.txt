@@ -165,6 +165,8 @@ ColorChooser.swatchesDefaultRecentColor
 ColorChooser.swatchesRecentSwatchSize
 ColorChooser.swatchesSwatchSize
 ColorChooserUI
+ColumnControlButton.actionIcon
+ColumnControlButton.iconColor
 ComboBox.ancestorInputMap
 ComboBox.background
 ComboBox.border
