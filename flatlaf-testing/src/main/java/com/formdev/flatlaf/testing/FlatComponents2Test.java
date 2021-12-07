@@ -117,6 +117,7 @@ public class FlatComponents2Test
 		ColorHighlighter rollover = new ColorHighlighter( HighlightPredicate.ROLLOVER_ROW, Color.cyan, null );
 		Highlighter shading = new ShadingColorHighlighter( new HighlightPredicate.ColumnHighlightPredicate( 1 ) );
 		xTable1.setHighlighters( simpleStriping, magenta, rollover, shading );
+		xTable1.setColumnControlVisible( true );
 
 		// JXTreeTable
 		xTreeTable1.setTreeTableModel( new FileSystemModel( new File( "." ) ) );

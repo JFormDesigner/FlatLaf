@@ -73,7 +73,9 @@ FlatLaf Change Log
   - `FlatSVGIcon`: Support loading SVG from `URL` (for JPMS), `URI`, `File` or
     `InputStream`. (issues #419 and #325)
   - `FlatSVGUtils`: Support loading SVG from `URL` (for JPMS). (issue #325)
-
+- SwingX:
+  - New "column control" icon for `JXTable` that scales and uses antialiasing.
+    (issue #434)
 
 ## 1.6.5
 

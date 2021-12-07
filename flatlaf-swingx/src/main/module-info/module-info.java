@@ -23,6 +23,7 @@ module com.formdev.flatlaf.swingx {
 	requires com.formdev.flatlaf;
 
 	exports com.formdev.flatlaf.swingx;
+	exports com.formdev.flatlaf.swingx.icons;
 	exports com.formdev.flatlaf.swingx.ui;
 
 	// this allows com.formdev.flatlaf.FlatDefaultsAddon to read .properties files
