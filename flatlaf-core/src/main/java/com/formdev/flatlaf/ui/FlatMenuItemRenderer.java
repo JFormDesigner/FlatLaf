@@ -444,6 +444,10 @@ debug*/
 		htmlView.paint( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ), textRect );
 	}
 
+	/**
+	 * Returns {@code true} if either the menu item is armed (mouse over item)
+	 * or it is a {@code JMenu} and selected (shows submenu).
+	 */
 	protected static boolean isArmedOrSelected( JMenuItem menuItem ) {
 		return menuItem.isArmed() || (menuItem instanceof JMenu && menuItem.isSelected());
 	}
@@ -472,6 +476,12 @@ debug*/
 			Icon pressedIcon = menuItem.getPressedIcon();
 			if( pressedIcon != null )
 				return pressedIcon;
+		}
+
+		if( isArmedOrSelected( menuItem ) ) {
+			Icon selectedIcon = menuItem.getSelectedIcon();
+			if( selectedIcon != null )
+				return selectedIcon;
 		}
 
 		return icon;
