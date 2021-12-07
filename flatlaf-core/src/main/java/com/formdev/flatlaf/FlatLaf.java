@@ -49,6 +49,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.RootPaneContainer;
@@ -878,12 +879,23 @@ public abstract class FlatLaf
 
 	/**
 	 * Revalidate and repaint all displayable frames and dialogs.
+	 * <p>
+	 * Useful to update UI after changing {@code TitlePane.menuBarEmbedded}.
 	 *
 	 * @since 1.1.2
 	 */
 	public static void revalidateAndRepaintAllFramesAndDialogs() {
 		for( Window w : Window.getWindows() ) {
 			if( isDisplayableFrameOrDialog( w ) ) {
+				// revalidate menu bar
+				JMenuBar menuBar = (w instanceof JFrame)
+					? ((JFrame)w).getJMenuBar()
+					: (w instanceof JDialog
+						? ((JDialog)w).getJMenuBar()
+						: null);
+				if( menuBar != null )
+					menuBar.revalidate();
+
 				w.revalidate();
 				w.repaint();
 			}
@@ -892,6 +904,9 @@ public abstract class FlatLaf
 
 	/**
 	 * Repaint all displayable frames and dialogs.
+	 * <p>
+	 * Useful to update UI after changing {@code TitlePane.unifiedBackground},
+	 * {@code MenuItem.selectionType} or {@code Component.hideMnemonics}.
 	 *
 	 * @since 1.1.2
 	 */
