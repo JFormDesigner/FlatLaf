@@ -188,6 +188,11 @@ public class FlatUIUtils
 		return (font instanceof UIResource) ? font.deriveFont( font.getStyle() ) : font;
 	}
 
+	/** @since 2 */
+	public static Border nonUIResource( Border border ) {
+		return (border instanceof UIResource) ? new NonUIResourceBorder( border ) : border;
+	}
+
 	public static int minimumWidth( JComponent c, int minimumWidth ) {
 		return FlatClientProperties.clientPropertyInt( c, FlatClientProperties.MINIMUM_WIDTH, minimumWidth );
 	}
@@ -980,6 +985,33 @@ debug*/
 		public void focusLost( FocusEvent e ) {
 			if( repaintCondition == null || repaintCondition.test( repaintComponent ) )
 				repaintComponent.repaint();
+		}
+	}
+
+	//---- class NonUIResourceBorder ------------------------------------------
+
+	private static class NonUIResourceBorder
+		implements Border
+	{
+		private final Border delegate;
+
+		NonUIResourceBorder( Border delegate ) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			delegate.paintBorder( c, g, x, y, width, height );
+		}
+
+		@Override
+		public Insets getBorderInsets( Component c ) {
+			return delegate.getBorderInsets( c );
+		}
+
+		@Override
+		public boolean isBorderOpaque() {
+			return delegate.isBorderOpaque();
 		}
 	}
 }

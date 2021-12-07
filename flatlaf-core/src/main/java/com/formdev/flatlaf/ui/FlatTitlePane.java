@@ -360,7 +360,7 @@ public class FlatTitlePane
 
 		// show/hide icon
 		iconLabel.setVisible( hasIcon );
-		leftPanel.setBorder( hasIcon ? null : new FlatEmptyBorder( 0, noIconLeftGap, 0, 0 ) );
+		leftPanel.setBorder( hasIcon ? null : FlatUIUtils.nonUIResource( new FlatEmptyBorder( 0, noIconLeftGap, 0, 0 ) ) );
 
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
 	}

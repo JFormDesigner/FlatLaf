@@ -19,9 +19,7 @@ package com.formdev.flatlaf.ui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.beans.PropertyChangeListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -230,7 +228,7 @@ public class FlatOptionPaneUI
 				// use non-UIResource borders to avoid that they are replaced when switching LaF
 				Border border = panel.getBorder();
 				if( border instanceof UIResource )
-					panel.setBorder( new NonUIResourceBorder( border ) );
+					panel.setBorder( FlatUIUtils.nonUIResource( border ) );
 			}
 
 			if( child instanceof Container )
@@ -255,32 +253,5 @@ public class FlatOptionPaneUI
 	@Override
 	protected boolean getSizeButtonsToSameWidth() {
 		return sameSizeButtons;
-	}
-
-	//---- class NonUIResourceBorder ------------------------------------------
-
-	private static class NonUIResourceBorder
-		implements Border
-	{
-		private final Border delegate;
-
-		NonUIResourceBorder( Border delegate ) {
-			this.delegate = delegate;
-		}
-
-		@Override
-		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
-			delegate.paintBorder( c, g, x, y, width, height );
-		}
-
-		@Override
-		public Insets getBorderInsets( Component c ) {
-			return delegate.getBorderInsets( c );
-		}
-
-		@Override
-		public boolean isBorderOpaque() {
-			return delegate.isBorderOpaque();
-		}
 	}
 }
