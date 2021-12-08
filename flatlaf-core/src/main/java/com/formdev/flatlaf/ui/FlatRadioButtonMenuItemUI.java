@@ -89,6 +89,7 @@ public class FlatRadioButtonMenuItemUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		FlatMenuItemRenderer.clearClientProperties( menuItem.getParent() );
 		renderer = null;
 		oldStyleValues = null;
 	}

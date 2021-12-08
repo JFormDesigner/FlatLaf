@@ -495,6 +495,7 @@ MenuItem.underlineSelectionBackground
 MenuItem.underlineSelectionCheckBackground
 MenuItem.underlineSelectionColor
 MenuItem.underlineSelectionHeight
+MenuItem.verticallyAlignText
 MenuItemUI
 MenuUI
 MonthViewUI

@@ -346,6 +346,7 @@ public class TestFlatStyleableInfo
 
 	private void menuItemRenderer( Map<String, Class<?>> expected ) {
 		expectedMap( expected,
+			"verticallyAlignText", boolean.class,
 			"minimumWidth", int.class,
 			"minimumIconSize", Dimension.class,
 			"textAcceleratorGap", int.class,

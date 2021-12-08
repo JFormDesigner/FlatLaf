@@ -19,6 +19,7 @@ package com.formdev.flatlaf.ui;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -32,6 +33,7 @@ import java.awt.event.KeyEvent;
 import java.text.AttributedCharacterIterator;
 import java.util.Map;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
@@ -39,6 +41,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.text.View;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatCheckBoxMenuItemIcon;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
@@ -52,6 +55,7 @@ import com.formdev.flatlaf.util.SystemInfo;
 /**
  * Renderer for menu items.
  *
+ * @uiDefault MenuItem.verticallyAlignText							boolean
  * @uiDefault MenuItem.minimumWidth									int
  * @uiDefault MenuItem.minimumIconSize								Dimension
  * @uiDefault MenuItem.textAcceleratorGap							int
@@ -67,12 +71,15 @@ import com.formdev.flatlaf.util.SystemInfo;
  */
 public class FlatMenuItemRenderer
 {
+	private static final String KEY_MAX_ICONS_WIDTH = "FlatLaf.internal.FlatMenuItemRenderer.maxIconWidth";
+
 	protected final JMenuItem menuItem;
 	protected Icon checkIcon;
 	protected Icon arrowIcon;
 	protected final Font acceleratorFont;
 	protected final String acceleratorDelimiter;
 
+	/** @since 2 */ @Styleable protected boolean verticallyAlignText = FlatUIUtils.getUIBoolean( "MenuItem.verticallyAlignText", true );
 	@Styleable protected int minimumWidth = UIManager.getInt( "MenuItem.minimumWidth" );
 	@Styleable protected Dimension minimumIconSize;
 	@Styleable protected int textAcceleratorGap = FlatUIUtils.getUIInt( "MenuItem.textAcceleratorGap", 28 );
@@ -405,11 +412,10 @@ debug*/
 			return;
 
 		// center because the real icon may be smaller than dimension in iconRect
-		int x = iconRect.x + centerOffset( iconRect.width, icon.getIconWidth() );
 		int y = iconRect.y + centerOffset( iconRect.height, icon.getIconHeight() );
 
 		// paint
-		icon.paintIcon( menuItem, g, x, y );
+		icon.paintIcon( menuItem, g, iconRect.x, y );
 	}
 
 	protected static void paintText( Graphics g, JMenuItem menuItem,
@@ -570,6 +576,44 @@ debug*/
 		shiftGlyph = 0x21E7,
 		commandGlyph = 0x2318;
 
+	/**
+	 * Calculates the maximum width of all menu item icons in the popup.
+	 */
+	private int getMaxIconsWidth() {
+		if( !verticallyAlignText )
+			return 0;
+
+		Container parent = menuItem.getParent();
+		if( !(parent instanceof JComponent) )
+			return 0;
+
+		int maxWidth = FlatClientProperties.clientPropertyInt( (JComponent) parent, KEY_MAX_ICONS_WIDTH, -1 );
+		if( maxWidth >= 0 )
+			return maxWidth;
+
+		maxWidth = 0;
+
+		for( Component c : parent.getComponents() ) {
+			if( !(c instanceof JMenuItem) )
+				continue;
+
+			Icon icon = ((JMenuItem)c).getIcon();
+			if( icon != null )
+				maxWidth = Math.max( maxWidth, icon.getIconWidth() );
+		}
+
+		((JComponent)parent).putClientProperty( KEY_MAX_ICONS_WIDTH, maxWidth );
+		return maxWidth;
+	}
+
+	static void clearClientProperties( Component c ) {
+		if( !(c instanceof JComponent) )
+			return;
+
+		JComponent jc = (JComponent) c;
+		jc.putClientProperty( FlatMenuItemRenderer.KEY_MAX_ICONS_WIDTH, null );
+	}
+
 	//---- class MinSizeIcon --------------------------------------------------
 
 	private class MinSizeIcon
@@ -584,6 +628,7 @@ debug*/
 		@Override
 		public int getIconWidth() {
 			int iconWidth = (delegate != null) ? delegate.getIconWidth() : 0;
+			iconWidth = Math.max( iconWidth, getMaxIconsWidth() );
 			return Math.max( iconWidth, scale( minimumIconSize.width ) );
 		}
 

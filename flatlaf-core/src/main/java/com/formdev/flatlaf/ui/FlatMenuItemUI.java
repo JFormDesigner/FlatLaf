@@ -89,6 +89,7 @@ public class FlatMenuItemUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		FlatMenuItemRenderer.clearClientProperties( menuItem.getParent() );
 		renderer = null;
 		oldStyleValues = null;
 	}

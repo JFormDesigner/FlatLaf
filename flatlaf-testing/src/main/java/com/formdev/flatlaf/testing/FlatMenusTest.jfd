@@ -165,6 +165,34 @@ new FormModel {
 						"disabledIcon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste.png" )
 						"enabled": false
 					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator6"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem43"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test16.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem44"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test24.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem45"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test32.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem46"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test48.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem47"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test64.png" )
+					} )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0 2 1,growx"

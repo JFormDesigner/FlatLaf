@@ -61,7 +61,9 @@ FlatLaf Change Log
 - Slider: Support specifying width of thumb border (see UI value
   `Slider.thumbBorderWidth`).
 - TabbedPane: Optionally paint selected tab as card. (PR #343)
-- MenuItem: Paint the selected icon when the item is selected. (PR #415)
+- MenuItem:
+  - Paint the selected icon when the item is selected. (PR #415)
+  - Vertically align text if icons have different widths. (issue #437)
 - Added more color functions to class `ColorFunctions` for easy use in
   applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
   `tint()`, `shade()` and `luma()`.

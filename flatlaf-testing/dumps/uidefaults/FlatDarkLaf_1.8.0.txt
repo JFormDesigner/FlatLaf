@@ -628,6 +628,7 @@ MenuItem.underlineSelectionBackground #484c4f  HSL 206   5  30    com.formdev.fl
 MenuItem.underlineSelectionCheckBackground #3c588b  HSL 219  40  39    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
 MenuItem.underlineSelectionColor #4c87c8  HSL 211  53  54    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
+MenuItem.verticallyAlignText   true
 MenuItemUI                     com.formdev.flatlaf.ui.FlatMenuItemUI
 
 

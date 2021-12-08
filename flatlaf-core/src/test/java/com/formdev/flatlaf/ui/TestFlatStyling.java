@@ -495,6 +495,7 @@ public class TestFlatStyling
 	}
 
 	private void menuItemRenderer( Consumer<String> applyStyle ) {
+		applyStyle.accept( "verticallyAlignText: false" );
 		applyStyle.accept( "minimumWidth: 10" );
 		applyStyle.accept( "minimumIconSize: 16,16" );
 		applyStyle.accept( "textAcceleratorGap: 28" );

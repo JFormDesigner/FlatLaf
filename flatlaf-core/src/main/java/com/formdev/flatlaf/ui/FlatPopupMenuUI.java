@@ -16,12 +16,18 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicPopupMenuUI;
+import javax.swing.plaf.basic.DefaultMenuLayout;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 
@@ -65,6 +71,15 @@ public class FlatPopupMenuUI
 	}
 
 	@Override
+	public void installDefaults() {
+		super.installDefaults();
+
+		LayoutManager layout = popupMenu.getLayout();
+		if( layout == null || layout instanceof UIResource )
+			popupMenu.setLayout( new FlatMenuLayout( popupMenu, BoxLayout.Y_AXIS ) );
+	}
+
+	@Override
 	protected void installListeners() {
 		super.installListeners();
 
@@ -105,5 +120,22 @@ public class FlatPopupMenuUI
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, popupMenu.getBorder() );
+	}
+
+	//---- class FlatMenuLayout -----------------------------------------------
+
+	protected static class FlatMenuLayout
+		extends DefaultMenuLayout
+	{
+		public FlatMenuLayout( Container target, int axis ) {
+			super( target, axis );
+		}
+
+		@Override
+		public Dimension preferredLayoutSize( Container target ) {
+			FlatMenuItemRenderer.clearClientProperties( target );
+
+			return super.preferredLayoutSize( target );
+		}
 	}
 }
