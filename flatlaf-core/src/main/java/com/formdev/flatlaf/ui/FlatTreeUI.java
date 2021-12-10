@@ -52,6 +52,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @uiDefault Tree.font								Font
  * @uiDefault Tree.background						Color
+ * @uiDefault Tree.foreground						Color	unused
  * @uiDefault Tree.hash								Color
  * @uiDefault Tree.dropLineColor					Color
  * @uiDefault Tree.expandedIcon						Icon
@@ -136,12 +137,12 @@ public class FlatTreeUI
 
 	// for icons
 	// (needs to be public because icon classes are in another package)
-	@Styleable(dot=true) public String iconArrowType;
-	@Styleable(dot=true) public Color iconExpandedColor;
-	@Styleable(dot=true) public Color iconCollapsedColor;
-	@Styleable(dot=true) public Color iconLeafColor;
-	@Styleable(dot=true) public Color iconClosedColor;
-	@Styleable(dot=true) public Color iconOpenColor;
+	/** @since 2 */ @Styleable(dot=true) public String iconArrowType;
+	/** @since 2 */ @Styleable(dot=true) public Color iconExpandedColor;
+	/** @since 2 */ @Styleable(dot=true) public Color iconCollapsedColor;
+	/** @since 2 */ @Styleable(dot=true) public Color iconLeafColor;
+	/** @since 2 */ @Styleable(dot=true) public Color iconClosedColor;
+	/** @since 2 */ @Styleable(dot=true) public Color iconOpenColor;
 
 	// only used via styling (not in UI defaults, but has likewise client properties)
 	/** @since 2 */ @Styleable protected boolean paintSelection = true;

@@ -84,14 +84,14 @@ public class FlatTableHeaderUI
 	@Styleable(type=String.class) protected int sortIconPosition;
 
 	// for FlatTableHeaderBorder
-	@Styleable protected Insets cellMargins;
-	@Styleable protected Color separatorColor;
-	/** @since 2 */ @Styleable protected boolean showTrailingVerticalLine;
+	/** @since 2 */ @Styleable protected Insets cellMargins;
+	/** @since 2 */ @Styleable protected Color separatorColor;
+	/** @since 2 */ @Styleable protected Boolean showTrailingVerticalLine;
 
 	// for FlatAscendingSortIcon and FlatDescendingSortIcon
 	// (needs to be public because icon classes are in another package)
-	@Styleable public String arrowType;
-	@Styleable public Color sortIconColor;
+	/** @since 2 */ @Styleable public String arrowType;
+	/** @since 2 */ @Styleable public Color sortIconColor;
 
 	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;

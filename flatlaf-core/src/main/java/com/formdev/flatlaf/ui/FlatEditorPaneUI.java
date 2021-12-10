@@ -44,8 +44,8 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * <!-- BasicEditorPaneUI -->
  *
  * @uiDefault EditorPane.font					Font
- * @uiDefault EditorPane.background				Color	also used if not editable
- * @uiDefault EditorPane.foreground				Color
+ * @uiDefault EditorPane.background				Color
+ * @uiDefault EditorPane.foreground				Color	also used if not editable
  * @uiDefault EditorPane.caretForeground		Color
  * @uiDefault EditorPane.selectionBackground	Color
  * @uiDefault EditorPane.selectionForeground	Color

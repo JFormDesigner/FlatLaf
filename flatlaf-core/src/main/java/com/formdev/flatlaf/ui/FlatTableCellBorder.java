@@ -37,7 +37,7 @@ import javax.swing.plaf.TableUI;
 public class FlatTableCellBorder
 	extends FlatLineBorder
 {
-	protected boolean showCellFocusIndicator = UIManager.getBoolean( "Table.showCellFocusIndicator" );
+	/** @since 2 */ protected boolean showCellFocusIndicator = UIManager.getBoolean( "Table.showCellFocusIndicator" );
 
 	private Component c;
 

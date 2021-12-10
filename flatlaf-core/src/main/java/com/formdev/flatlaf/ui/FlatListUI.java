@@ -78,9 +78,9 @@ public class FlatListUI
 	@Styleable protected Color selectionInactiveForeground;
 
 	// for FlatListCellBorder
-	@Styleable protected Insets cellMargins;
-	@Styleable protected Color cellFocusColor;
-	@Styleable protected boolean showCellFocusIndicator;
+	/** @since 2 */ @Styleable protected Insets cellMargins;
+	/** @since 2 */ @Styleable protected Color cellFocusColor;
+	/** @since 2 */ @Styleable protected Boolean showCellFocusIndicator;
 
 	private Map<String, Object> oldStyleValues;
 

@@ -141,8 +141,8 @@ public class FlatTableHeaderBorder
 	protected boolean hideTrailingVerticalLine( JTableHeader header ) {
 		if( header.getUI() instanceof FlatTableHeaderUI ) {
 			FlatTableHeaderUI ui = (FlatTableHeaderUI) header.getUI();
-			if( ui.showTrailingVerticalLine )
-				return false;
+			if( ui.showTrailingVerticalLine != null )
+				return !ui.showTrailingVerticalLine;
 		}
 
 		if( showTrailingVerticalLine )

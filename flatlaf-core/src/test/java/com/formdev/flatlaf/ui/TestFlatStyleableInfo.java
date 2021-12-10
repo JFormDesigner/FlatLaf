@@ -257,7 +257,7 @@ public class TestFlatStyleableInfo
 			// FlatListCellBorder
 			"cellMargins", Insets.class,
 			"cellFocusColor", Color.class,
-			"showCellFocusIndicator", boolean.class
+			"showCellFocusIndicator", Boolean.class
 		);
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
@@ -760,7 +760,7 @@ public class TestFlatStyleableInfo
 			// FlatTableCellBorder
 			"cellMargins", Insets.class,
 			"cellFocusColor", Color.class,
-			"showCellFocusIndicator", boolean.class
+			"showCellFocusIndicator", Boolean.class
 		);
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
@@ -779,7 +779,7 @@ public class TestFlatStyleableInfo
 			// FlatTableHeaderBorder
 			"cellMargins", Insets.class,
 			"separatorColor", Color.class,
-			"showTrailingVerticalLine", boolean.class,
+			"showTrailingVerticalLine", Boolean.class,
 
 			// FlatAscendingSortIcon and FlatDescendingSortIcon
 			"arrowType", String.class,

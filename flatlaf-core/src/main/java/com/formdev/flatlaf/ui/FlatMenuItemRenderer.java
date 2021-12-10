@@ -62,6 +62,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuItem.textNoAcceleratorGap							int
  * @uiDefault MenuItem.acceleratorArrowGap							int
  * @uiDefault MenuItem.checkBackground								Color
+ * @uiDefault MenuItem.checkMargins									Insets
+ * @uiDefault MenuItem.selectionType								String	null (default) or underline
  * @uiDefault MenuItem.underlineSelectionBackground					Color
  * @uiDefault MenuItem.underlineSelectionCheckBackground			Color
  * @uiDefault MenuItem.underlineSelectionColor						Color

@@ -37,7 +37,7 @@ import javax.swing.plaf.ListUI;
 public class FlatListCellBorder
 	extends FlatLineBorder
 {
-	protected boolean showCellFocusIndicator = UIManager.getBoolean( "List.showCellFocusIndicator" );
+	/** @since 2 */ protected boolean showCellFocusIndicator = UIManager.getBoolean( "List.showCellFocusIndicator" );
 
 	private Component c;
 
@@ -113,7 +113,7 @@ public class FlatListCellBorder
 
 	/**
 	 * Border for selected cell that uses margins and paints focus indicator border
-	 * if enabled (List.showCellFocusIndicator=true) and exactly one item is selected.
+	 * if enabled (List.showCellFocusIndicator=true) and multiple items are selected.
 	 */
 	public static class Selected
 		extends FlatListCellBorder
@@ -125,7 +125,7 @@ public class FlatListCellBorder
 			if( !showCellFocusIndicator )
 				return;
 
-			// paint focus indicator border only if exactly one item is selected
+			// paint focus indicator border only if multiple items are selected
 			JList<?> list = (JList<?>) SwingUtilities.getAncestorOfClass( JList.class, c );
 			if( list != null && list.getMinSelectionIndex() == list.getMaxSelectionIndex() )
 				return;

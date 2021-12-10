@@ -47,7 +47,7 @@ import com.formdev.flatlaf.util.UIScale;
  * <!-- BasicScrollBarUI -->
  *
  * @uiDefault ScrollBar.background			Color
- * @uiDefault ScrollBar.foreground			Color
+ * @uiDefault ScrollBar.foreground			Color	unused
  * @uiDefault ScrollBar.track				Color
  * @uiDefault ScrollBar.thumb				Color
  * @uiDefault ScrollBar.width				int

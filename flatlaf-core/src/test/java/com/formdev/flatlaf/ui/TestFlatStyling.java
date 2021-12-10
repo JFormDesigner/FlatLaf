@@ -261,6 +261,7 @@ public class TestFlatStyling
 
 		// AbstractButton properties
 		ui.applyStyle( b, "margin: 2,2,2,2" );
+		ui.applyStyle( b, "iconTextGap: 4" );
 	}
 
 	@Test
@@ -312,6 +313,9 @@ public class TestFlatStyling
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
 		ui.applyStyle( "font: italic 12 monospaced" );
+
+		// JComboBox properties
+		ui.applyStyle( "maximumRowCount: 20" );
 	}
 
 	@Test
@@ -335,6 +339,7 @@ public class TestFlatStyling
 		ui.applyStyle( "selectionColor: #fff" );
 		ui.applyStyle( "selectedTextColor: #fff" );
 		ui.applyStyle( "disabledTextColor: #fff" );
+		ui.applyStyle( "margin: 2,2,2,2" );
 	}
 
 	@Test
@@ -492,6 +497,7 @@ public class TestFlatStyling
 
 		// AbstractButton properties
 		applyStyle.accept( "margin: 2,2,2,2" );
+		applyStyle.accept( "iconTextGap: 4" );
 	}
 
 	private void menuItemRenderer( Consumer<String> applyStyle ) {
@@ -620,6 +626,7 @@ public class TestFlatStyling
 
 		// AbstractButton properties
 		ui.applyStyle( b, "margin: 2,2,2,2" );
+		ui.applyStyle( b, "iconTextGap: 4" );
 
 		//---- icon ----
 
@@ -716,6 +723,7 @@ public class TestFlatStyling
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
 		ui.applyStyle( "border: 2,2,2,2,#f00" );
+		ui.applyStyle( "viewportBorder: 2,2,2,2,#f00" );
 	}
 
 	@Test
@@ -933,7 +941,6 @@ public class TestFlatStyling
 		// JComponent properties
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
-		ui.applyStyle( "border: 2,2,2,2,#f00" );
 		ui.applyStyle( "font: italic 12 monospaced" );
 
 		// JTable properties
@@ -965,7 +972,6 @@ public class TestFlatStyling
 		// JComponent properties
 		ui.applyStyle( "background: #fff" );
 		ui.applyStyle( "foreground: #fff" );
-		ui.applyStyle( "border: 2,2,2,2,#f00" );
 		ui.applyStyle( "font: italic 12 monospaced" );
 	}
 
@@ -990,6 +996,7 @@ public class TestFlatStyling
 		ui.applyStyle( "selectionColor: #fff" );
 		ui.applyStyle( "selectedTextColor: #fff" );
 		ui.applyStyle( "disabledTextColor: #fff" );
+		ui.applyStyle( "margin: 2,2,2,2" );
 	}
 
 	@Test
@@ -1024,6 +1031,7 @@ public class TestFlatStyling
 		ui.applyStyle( "selectionColor: #fff" );
 		ui.applyStyle( "selectedTextColor: #fff" );
 		ui.applyStyle( "disabledTextColor: #fff" );
+		ui.applyStyle( "margin: 2,2,2,2" );
 	}
 
 	@Test
@@ -1047,6 +1055,7 @@ public class TestFlatStyling
 		ui.applyStyle( "selectionColor: #fff" );
 		ui.applyStyle( "selectedTextColor: #fff" );
 		ui.applyStyle( "disabledTextColor: #fff" );
+		ui.applyStyle( "margin: 2,2,2,2" );
 	}
 
 	@Test
