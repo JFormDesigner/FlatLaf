@@ -27,6 +27,8 @@ import com.formdev.flatlaf.UIDefaultsLoader.ValueType;
  */
 public class UIDefaultsLoaderAccessor
 {
+	public static final String KEY_VARIABLES = UIDefaultsLoader.KEY_VARIABLES;
+
 	public static Object UNKNOWN = ValueType.UNKNOWN;
 	public static Object STRING = ValueType.STRING;
 	public static Object BOOLEAN = ValueType.BOOLEAN;

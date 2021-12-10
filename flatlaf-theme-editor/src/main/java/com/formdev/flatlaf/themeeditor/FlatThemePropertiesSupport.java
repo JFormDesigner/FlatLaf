@@ -179,7 +179,7 @@ class FlatThemePropertiesSupport
 		return getProperty( wildcardKey );
 	}
 
-	private String getProperty( String key ) {
+	String getProperty( String key ) {
 		// look in current text area
 		String value = getProperties().getProperty( key );
 		if( value != null )

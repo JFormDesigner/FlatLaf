@@ -19,6 +19,7 @@ package com.formdev.flatlaf.themeeditor;
 
 import java.awt.*;
 import java.awt.event.HierarchyEvent;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.prefs.Preferences;
@@ -28,6 +29,7 @@ import javax.swing.UIDefaults.LazyValue;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 import com.formdev.flatlaf.extras.components.*;
 
 /**
@@ -51,6 +53,7 @@ class FlatThemePreview
 	private final Map<LazyValue, Object> lazyValueCache = new WeakHashMap<>();
 	private int runWithUIDefaultsGetterLevel;
 	private boolean inGetDefaultFont;
+	private boolean inGetVariables;
 
 	FlatThemePreview( FlatSyntaxTextArea textArea ) {
 		this.textArea = textArea;
@@ -162,6 +165,7 @@ class FlatThemePreview
 		}
 	}
 
+	@SuppressWarnings( "unchecked" )
 	Object getUIDefaultProperty( Object key ) {
 		// avoid StackOverflowError because "defaultFont" value is an active value
 		// that itself uses UIManager.getFont( "defaultFont" ) to get base font
@@ -175,6 +179,19 @@ class FlatThemePreview
 		// are not available in theme editor
 		if( ((String)key).endsWith( "UI" ) )
 			return null;
+
+		// handle access to variables map, which is used in styles
+		if( UIDefaultsLoaderAccessor.KEY_VARIABLES.equals( key ) ) {
+			if( inGetVariables )
+				return null;
+
+			inGetVariables = true;
+			try {
+				return new VariablesDelegateMap( (Map<String, String>) UIManager.get( UIDefaultsLoaderAccessor.KEY_VARIABLES ) );
+			} finally {
+				inGetVariables = false;
+			}
+		}
 
 		Object value = textArea.propertiesSupport.getParsedProperty( (String) key );
 
@@ -339,6 +356,33 @@ class FlatThemePreview
 			} catch( Exception ex ) {
 				ex.printStackTrace();
 			}
+		}
+	}
+
+	//---- class VariablesDelegateMap -----------------------------------------
+
+	private class VariablesDelegateMap
+		extends HashMap<String, String>
+	{
+		private final Map<String, String> variables;
+
+		public VariablesDelegateMap( Map<String, String> variables ) {
+			this.variables = variables;
+		}
+
+		@Override
+		public String get( Object key ) {
+			String value = textArea.propertiesSupport.getProperty( (String) key );
+			if( value != null )
+				return value;
+
+			if( variables != null ) {
+				value = variables.get( key );
+				if( value != null )
+					return value;
+			}
+
+			return super.get( key );
 		}
 	}
 }

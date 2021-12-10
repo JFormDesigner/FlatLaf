@@ -80,7 +80,7 @@ class UIDefaultsLoader
 	private static final String OPTIONAL_PREFIX = "?";
 	private static final String WILDCARD_PREFIX = "*.";
 
-	private static final String KEY_VARIABLES = "FlatLaf.internal.variables";
+	static final String KEY_VARIABLES = "FlatLaf.internal.variables";
 
 	private static int parseColorDepth;
 
