@@ -529,6 +529,8 @@ public class TestFlatStyling
 		JPanel c = new JPanel();
 		FlatPanelUI ui = (FlatPanelUI) c.getUI();
 
+		ui.applyStyle( c, "arc: 8" );
+
 		// JComponent properties
 		ui.applyStyle( c, "background: #fff" );
 		ui.applyStyle( c, "foreground: #fff" );

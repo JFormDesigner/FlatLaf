@@ -16,14 +16,18 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPanelUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPanel}.
@@ -32,7 +36,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
  *
  * @uiDefault Panel.font				Font	unused
  * @uiDefault Panel.background			Color	only used if opaque
- * @uiDefault Panel.foreground			Color
+ * @uiDefault Panel.foreground			Color	unused
  * @uiDefault Panel.border				Border
  *
  * @author Karl Tauber
@@ -41,6 +45,9 @@ public class FlatPanelUI
 	extends BasicPanelUI
 	implements StyleableUI
 {
+	// only used via styling (not in UI defaults)
+	/** @since 2 */ @Styleable protected int arc = -1;
+
 	private final boolean shared;
 	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;
@@ -112,5 +119,35 @@ public class FlatPanelUI
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		// fill background
+		if( c.isOpaque() ) {
+			int width = c.getWidth();
+			int height = c.getHeight();
+			int arc = (this.arc >= 0)
+				? this.arc
+				: ((c.getBorder() instanceof FlatLineBorder)
+					? ((FlatLineBorder)c.getBorder()).getArc()
+					: 0);
+
+			// fill background with parent color to avoid garbage in rounded corners
+			if( arc > 0 )
+				FlatUIUtils.paintParentBackground( g, c );
+
+			g.setColor( c.getBackground() );
+			if( arc > 0 ) {
+				// fill rounded rectangle if having rounded corners
+				Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+				FlatUIUtils.paintComponentBackground( (Graphics2D) g, 0, 0, width, height,
+					0, UIScale.scale( arc ) );
+				FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+			} else
+				g.fillRect( 0, 0, width, height );
+		}
+
+		paint( g, c );
 	}
 }

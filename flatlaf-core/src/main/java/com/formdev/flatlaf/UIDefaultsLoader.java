@@ -582,17 +582,18 @@ class UIDefaultsLoader
 
 	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		if( value.indexOf( ',' ) >= 0 ) {
-			// top,left,bottom,right[,lineColor[,lineThickness]]
+			// top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
 			List<String> parts = splitFunctionParams( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() >= 5)
 				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
 				: null;
-			float lineThickness = (parts.size() >= 6) ? parseFloat( parts.get( 5 ), true ) : 1f;
+			float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty()) ? parseFloat( parts.get( 5 ), true ) : 1f;
+			int arc = (parts.size() >= 7) ? parseInteger( parts.get( 6 ), true ) : 0;
 
 			return (LazyValue) t -> {
 				return (lineColor != null)
-					? new FlatLineBorder( insets, lineColor, lineThickness )
+					? new FlatLineBorder( insets, lineColor, lineThickness, arc )
 					: new FlatEmptyBorder( insets );
 			};
 		} else

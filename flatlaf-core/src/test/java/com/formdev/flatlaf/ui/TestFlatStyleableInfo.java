@@ -386,6 +386,7 @@ public class TestFlatStyleableInfo
 		FlatPanelUI ui = (FlatPanelUI) c.getUI();
 
 		Map<String, Class<?>> expected = expectedMap(
+			"arc", int.class
 		);
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );

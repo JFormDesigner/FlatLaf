@@ -64,6 +64,7 @@ FlatLaf Change Log
 - MenuItem:
   - Paint the selected icon when the item is selected. (PR #415)
   - Vertically align text if icons have different widths. (issue #437)
+- Panel: Support painting background with rounded corners. (issue #367)
 - Added more color functions to class `ColorFunctions` for easy use in
   applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
   `tint()`, `shade()` and `luma()`.

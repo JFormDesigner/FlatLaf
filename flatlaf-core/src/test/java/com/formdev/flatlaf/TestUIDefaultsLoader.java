@@ -22,8 +22,12 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.UIDefaults.ActiveValue;
+import javax.swing.UIDefaults.LazyValue;
 import org.junit.jupiter.api.Test;
+import com.formdev.flatlaf.ui.FlatEmptyBorder;
+import com.formdev.flatlaf.ui.FlatLineBorder;
 
 /**
  * @author Karl Tauber
@@ -46,8 +50,8 @@ public class TestUIDefaultsLoader
 		assertEquals( 1.23f, UIDefaultsLoader.parseValue( "dummy", "1.23", null ) );
 		assertEquals( 1.23f, UIDefaultsLoader.parseValue( "dummyWidth", "1.23", null ) );
 
-		assertEquals( new Insets( 2,2,2,2 ), UIDefaultsLoader.parseValue( "dummyInsets", "2,2,2,2", null ) );
-		assertEquals( new Dimension( 2,2 ), UIDefaultsLoader.parseValue( "dummySize", "2,2", null ) );
+		assertEquals( new Insets( 1,2,3,4 ), UIDefaultsLoader.parseValue( "dummyInsets", "1,2,3,4", null ) );
+		assertEquals( new Dimension( 1,2 ), UIDefaultsLoader.parseValue( "dummySize", "1,2", null ) );
 		assertEquals( new Color( 0xff0000 ), UIDefaultsLoader.parseValue( "dummy", "#f00", null ) );
 		assertEquals( new Color( 0xff0000 ), UIDefaultsLoader.parseValue( "dummyColor", "#f00", null ) );
 	}
@@ -70,9 +74,33 @@ public class TestUIDefaultsLoader
 		assertEquals( 1.23f, UIDefaultsLoader.parseValue( "dummy", "1.23", float.class ) );
 		assertEquals( 1.23f, UIDefaultsLoader.parseValue( "dummy", "1.23", Float.class ) );
 
-		assertEquals( new Insets( 2,2,2,2 ), UIDefaultsLoader.parseValue( "dummy", "2,2,2,2", Insets.class ) );
-		assertEquals( new Dimension( 2,2 ), UIDefaultsLoader.parseValue( "dummy", "2,2", Dimension.class ) );
+		assertEquals( new Insets( 1,2,3,4 ), UIDefaultsLoader.parseValue( "dummy", "1,2,3,4", Insets.class ) );
+		assertEquals( new Dimension( 1,2 ), UIDefaultsLoader.parseValue( "dummy", "1,2", Dimension.class ) );
 		assertEquals( new Color( 0xff0000 ), UIDefaultsLoader.parseValue( "dummy", "#f00", Color.class ) );
+	}
+
+	@Test
+	void parseBorders() {
+		Insets insets = new Insets( 1,2,3,4 );
+		assertBorderEquals( new FlatEmptyBorder( insets ), "1,2,3,4" );
+		assertBorderEquals( new FlatLineBorder( insets, Color.red ), "1,2,3,4,#f00" );
+		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, 0 ), "1,2,3,4,#f00,2.5" );
+		assertBorderEquals( new FlatLineBorder( insets, Color.red, 2.5f, 6 ), "1,2,3,4,#f00,2.5,6" );
+		assertBorderEquals( new FlatLineBorder( insets, Color.red, 1, 6 ), "1,2,3,4,#f00,,6" );
+	}
+
+	private void assertBorderEquals( Border expected, String actualStyle ) {
+		Border actual = (Border) ((LazyValue)UIDefaultsLoader.parseValue( "dummyBorder", actualStyle, null )).createValue( null );
+		assertEquals( expected.getClass(), actual.getClass() );
+		if( expected instanceof FlatEmptyBorder )
+			assertEquals( ((FlatEmptyBorder)actual).getBorderInsets(), ((FlatEmptyBorder)expected).getBorderInsets() );
+		if( expected instanceof FlatLineBorder ) {
+			FlatLineBorder a = (FlatLineBorder) actual;
+			FlatLineBorder e = (FlatLineBorder) expected;
+			assertEquals( a.getLineColor(), e.getLineColor() );
+			assertEquals( a.getLineThickness(), e.getLineThickness() );
+			assertEquals( a.getArc(), e.getArc() );
+		}
 	}
 
 	@Test

@@ -194,7 +194,7 @@ class FlatColorPipette
 
 			zoom = UIScale.scale( 16 );
 
-			getRootPane().setBorder( new FlatLineBorder( new Insets( 2, 2, 2, 2 ), Color.red, 2 ) );
+			getRootPane().setBorder( new FlatLineBorder( new Insets( 2, 2, 2, 2 ), Color.red, 2, 0 ) );
 
 			view = new MagnifierView();
 			view.setPreferredSize( new Dimension( pixels * zoom, pixels * zoom ) );

@@ -37,15 +37,18 @@ public class FlatLineBorder
 {
 	private final Color lineColor;
 	private final float lineThickness;
+	/** @since 2 */ private final int arc;
 
 	public FlatLineBorder( Insets insets, Color lineColor ) {
-		this( insets, lineColor, 1f );
+		this( insets, lineColor, 1f, 0 );
 	}
 
-	public FlatLineBorder( Insets insets, Color lineColor, float lineThickness ) {
+	/** @since 2 */
+	public FlatLineBorder( Insets insets, Color lineColor, float lineThickness, int arc ) {
 		super( insets );
 		this.lineColor = lineColor;
 		this.lineThickness = lineThickness;
+		this.arc = arc;
 	}
 
 	public Color getLineColor() {
@@ -56,13 +59,18 @@ public class FlatLineBorder
 		return lineThickness;
 	}
 
+	/** @since 2 */
+	public int getArc() {
+		return arc;
+	}
+
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 		Graphics2D g2 = (Graphics2D) g.create();
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 			FlatUIUtils.paintOutlinedComponent( g2, x, y, width, height,
-				0, 0, 0, scale( getLineThickness() ), 0, null, getLineColor(), null );
+				0, 0, 0, scale( getLineThickness() ), scale( getArc() ), null, getLineColor(), null );
 		} finally {
 			g2.dispose();
 		}
