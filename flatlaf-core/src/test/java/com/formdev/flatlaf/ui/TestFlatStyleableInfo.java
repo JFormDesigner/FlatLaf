@@ -301,7 +301,6 @@ public class TestFlatStyleableInfo
 
 		Map<String, Class<?>> expected = new LinkedHashMap<>();
 		menuItem( expected );
-		menuItem_arrowIcon( expected );
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
 	}
@@ -314,7 +313,6 @@ public class TestFlatStyleableInfo
 		Map<String, Class<?>> expected = new LinkedHashMap<>();
 		menuItem( expected );
 		menuItem_checkIcon( expected );
-		menuItem_arrowIcon( expected );
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
 	}
@@ -327,7 +325,6 @@ public class TestFlatStyleableInfo
 		Map<String, Class<?>> expected = new LinkedHashMap<>();
 		menuItem( expected );
 		menuItem_checkIcon( expected );
-		menuItem_arrowIcon( expected );
 
 		assertMapEquals( expected, ui.getStyleableInfos( c ) );
 	}
@@ -1141,17 +1138,6 @@ public class TestFlatStyleableInfo
 	void flatMenuArrowIcon() {
 		FlatMenuArrowIcon icon = new FlatMenuArrowIcon();
 
-		Map<String, Class<?>> expected = new LinkedHashMap<>();
-		flatMenuArrowIcon( expected );
-
-		assertMapEquals( expected, icon.getStyleableInfos() );
-	}
-
-	@Test
-	void flatMenuItemArrowIcon() {
-		FlatMenuItemArrowIcon icon = new FlatMenuItemArrowIcon();
-
-		// FlatMenuItemArrowIcon extends FlatMenuArrowIcon
 		Map<String, Class<?>> expected = new LinkedHashMap<>();
 		flatMenuArrowIcon( expected );
 

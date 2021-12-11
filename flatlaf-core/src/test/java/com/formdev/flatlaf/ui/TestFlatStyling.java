@@ -455,7 +455,6 @@ public class TestFlatStyling
 
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
-		menuItem_arrowIcon( applyStyle );
 	}
 
 	@Test
@@ -466,7 +465,6 @@ public class TestFlatStyling
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
 		menuItem_checkIcon( applyStyle );
-		menuItem_arrowIcon( applyStyle );
 	}
 
 	@Test
@@ -477,7 +475,6 @@ public class TestFlatStyling
 		Consumer<String> applyStyle = style -> ui.applyStyle( style );
 		menuItem( applyStyle );
 		menuItem_checkIcon( applyStyle );
-		menuItem_arrowIcon( applyStyle );
 	}
 
 	private void menuItem( Consumer<String> applyStyle ) {
@@ -1366,18 +1363,6 @@ public class TestFlatStyling
 	void flatMenuArrowIcon() {
 		FlatMenuArrowIcon icon = new FlatMenuArrowIcon();
 
-		flatMenuArrowIcon( icon );
-	}
-
-	@Test
-	void flatMenuItemArrowIcon() {
-		FlatMenuItemArrowIcon icon = new FlatMenuItemArrowIcon();
-
-		// FlatMenuItemArrowIcon extends FlatMenuArrowIcon
-		flatMenuArrowIcon( icon );
-	}
-
-	private void flatMenuArrowIcon( FlatMenuArrowIcon icon ) {
 		icon.applyStyleProperty( "arrowType", "chevron" );
 		icon.applyStyleProperty( "arrowColor", Color.WHITE );
 		icon.applyStyleProperty( "disabledArrowColor", Color.WHITE );

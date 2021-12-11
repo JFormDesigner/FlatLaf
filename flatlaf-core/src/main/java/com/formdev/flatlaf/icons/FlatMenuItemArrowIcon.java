@@ -21,14 +21,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 /**
- * "arrow" icon for {@link javax.swing.JMenuItem}.
+ * "arrow" icon for {@link javax.swing.JMenuItem}, {@link javax.swing.JCheckBoxMenuItem}
+ * and {@link javax.swing.JRadioButtonMenuItem}.
  *
  * @author Karl Tauber
  */
 public class FlatMenuItemArrowIcon
-	extends FlatMenuArrowIcon
+	extends FlatAbstractIcon
 {
 	public FlatMenuItemArrowIcon() {
+		super( 6, 10, null );
 	}
 
 	@Override
