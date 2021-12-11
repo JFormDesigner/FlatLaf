@@ -877,7 +877,7 @@ public interface FlatClientProperties
 	 * (see {@link #OUTLINE}.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
-	 * <strong>Value type</strong> {@link java.awt.Component}
+	 * <strong>Value type</strong> {@link javax.swing.JComponent}
 	 *
 	 * @since 2
 	 */
@@ -897,7 +897,7 @@ public interface FlatClientProperties
 	 * (see {@link #OUTLINE}.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
-	 * <strong>Value type</strong> {@link java.awt.Component}
+	 * <strong>Value type</strong> {@link javax.swing.JComponent}
 	 *
 	 * @since 2
 	 */

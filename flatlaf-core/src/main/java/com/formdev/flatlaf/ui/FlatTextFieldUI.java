@@ -97,8 +97,8 @@ public class FlatTextFieldUI
 
 	/** @since 2 */ @Styleable protected Icon leadingIcon;
 	/** @since 2 */ @Styleable protected Icon trailingIcon;
-	/** @since 2 */ protected Component leadingComponent;
-	/** @since 2 */ protected Component trailingComponent;
+	/** @since 2 */ protected JComponent leadingComponent;
+	/** @since 2 */ protected JComponent trailingComponent;
 
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;
@@ -554,8 +554,8 @@ debug*/
 		boolean ltr = isLeftToRight();
 
 		// remove width of leading/trailing components
-		Component leftComponent = ltr ? leadingComponent : trailingComponent;
-		Component rightComponent = ltr ? trailingComponent : leadingComponent;
+		JComponent leftComponent = ltr ? leadingComponent : trailingComponent;
+		JComponent rightComponent = ltr ? trailingComponent : leadingComponent;
 		if( leftComponent != null ) {
 			int w = leftComponent.getPreferredSize().width;
 			r.x += w;
@@ -634,7 +634,7 @@ debug*/
 	/** @since 2 */
 	protected void installLeadingComponent() {
 		JTextComponent c = getComponent();
-		leadingComponent = clientProperty( c, TEXT_FIELD_LEADING_COMPONENT, null, Component.class );
+		leadingComponent = clientProperty( c, TEXT_FIELD_LEADING_COMPONENT, null, JComponent.class );
 		if( leadingComponent != null ) {
 			installLayout();
 			c.add( leadingComponent );
@@ -644,7 +644,7 @@ debug*/
 	/** @since 2 */
 	protected void installTrailingComponent() {
 		JTextComponent c = getComponent();
-		trailingComponent = clientProperty( c, TEXT_FIELD_TRAILING_COMPONENT, null, Component.class );
+		trailingComponent = clientProperty( c, TEXT_FIELD_TRAILING_COMPONENT, null, JComponent.class );
 		if( trailingComponent != null ) {
 			installLayout();
 			c.add( trailingComponent );
@@ -718,8 +718,8 @@ debug*/
 			int ow = FlatUIUtils.getBorderFocusAndLineWidth( getComponent() );
 			int h = parent.getHeight() - ow - ow;
 			boolean ltr = isLeftToRight();
-			Component leftComponent = ltr ? leadingComponent : trailingComponent;
-			Component rightComponent = ltr ? trailingComponent : leadingComponent;
+			JComponent leftComponent = ltr ? leadingComponent : trailingComponent;
+			JComponent rightComponent = ltr ? trailingComponent : leadingComponent;
 
 			// layout left component
 			if( leftComponent != null && leftComponent.isVisible() ) {

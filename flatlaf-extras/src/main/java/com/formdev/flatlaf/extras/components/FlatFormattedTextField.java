@@ -18,9 +18,9 @@ package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Insets;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import com.formdev.flatlaf.extras.components.FlatTextField.SelectAllOnFocusPolicy;
 
@@ -91,8 +91,8 @@ public class FlatFormattedTextField
 	 *
 	 * @since 2
 	 */
-	public Component getLeadingComponent() {
-		return (Component) getClientProperty( TEXT_FIELD_LEADING_COMPONENT );
+	public JComponent getLeadingComponent() {
+		return (JComponent) getClientProperty( TEXT_FIELD_LEADING_COMPONENT );
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class FlatFormattedTextField
 	 *
 	 * @since 2
 	 */
-	public void setLeadingComponent( Component leadingComponent ) {
+	public void setLeadingComponent( JComponent leadingComponent ) {
 		putClientProperty( TEXT_FIELD_LEADING_COMPONENT, leadingComponent );
 	}
 
@@ -120,8 +120,8 @@ public class FlatFormattedTextField
 	 *
 	 * @since 2
 	 */
-	public Component getTrailingComponent() {
-		return (Component) getClientProperty( TEXT_FIELD_TRAILING_COMPONENT );
+	public JComponent getTrailingComponent() {
+		return (JComponent) getClientProperty( TEXT_FIELD_TRAILING_COMPONENT );
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class FlatFormattedTextField
 	 *
 	 * @since 2
 	 */
-	public void setTrailingComponent( Component trailingComponent ) {
+	public void setTrailingComponent( JComponent trailingComponent ) {
 		putClientProperty( TEXT_FIELD_TRAILING_COMPONENT, trailingComponent );
 	}
 
