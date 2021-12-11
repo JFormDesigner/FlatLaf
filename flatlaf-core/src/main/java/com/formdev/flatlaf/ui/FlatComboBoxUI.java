@@ -98,8 +98,8 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.focusedBackground		Color	optional
  * @uiDefault ComboBox.disabledBackground		Color
  * @uiDefault ComboBox.disabledForeground		Color
- * @uiDefault ComboBox.buttonBackground			Color
- * @uiDefault ComboBox.buttonEditableBackground	Color
+ * @uiDefault ComboBox.buttonBackground			Color	optional
+ * @uiDefault ComboBox.buttonEditableBackground	Color	optional
  * @uiDefault ComboBox.buttonFocusedBackground	Color	optional; defaults to ComboBox.focusedBackground
  * @uiDefault ComboBox.buttonSeparatorWidth		int or float	optional; defaults to Component.borderWidth
  * @uiDefault ComboBox.buttonSeparatorColor		Color	optional
@@ -543,24 +543,27 @@ public class FlatComboBoxUI
 
 			// paint arrow button background
 			if( enabled && !isCellRenderer ) {
-				g2.setColor( paintButton
+				Color buttonColor = paintButton
 					? buttonEditableBackground
 					: (buttonFocusedBackground != null || focusedBackground != null) && isPermanentFocusOwner( comboBox )
 						? (buttonFocusedBackground != null ? buttonFocusedBackground : focusedBackground)
-						: buttonBackground );
-				Shape oldClip = g2.getClip();
-				if( isLeftToRight )
-					g2.clipRect( arrowX, 0, width - arrowX, height );
-				else
-					g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-				FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
-				g2.setClip( oldClip );
+						: buttonBackground;
+				if( buttonColor != null ) {
+					g2.setColor( buttonColor );
+					Shape oldClip = g2.getClip();
+					if( isLeftToRight )
+						g2.clipRect( arrowX, 0, width - arrowX, height );
+					else
+						g2.clipRect( 0, 0, arrowX + arrowWidth, height );
+					FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
+					g2.setClip( oldClip );
+				}
 			}
 
 			// paint vertical line between value and arrow button
 			if( paintButton ) {
 				Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
-				if( separatorColor != null ) {
+				if( separatorColor != null && buttonSeparatorWidth > 0 ) {
 					g2.setColor( separatorColor );
 					float lw = scale( buttonSeparatorWidth );
 					float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;

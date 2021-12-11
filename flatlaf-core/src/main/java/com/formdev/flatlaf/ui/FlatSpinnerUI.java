@@ -71,7 +71,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
  * @uiDefault Spinner.disabledBackground		Color
  * @uiDefault Spinner.disabledForeground		Color
  * @uiDefault Spinner.focusedBackground			Color	optional
- * @uiDefault Spinner.buttonBackground			Color
+ * @uiDefault Spinner.buttonBackground			Color	optional
  * @uiDefault Spinner.buttonSeparatorWidth		int or float	optional; defaults to Component.borderWidth
  * @uiDefault Spinner.buttonSeparatorColor		Color	optional
  * @uiDefault Spinner.buttonDisabledSeparatorColor Color	optional
@@ -385,7 +385,7 @@ public class FlatSpinnerUI
 			boolean isLeftToRight = spinner.getComponentOrientation().isLeftToRight();
 
 			// paint arrow buttons background
-			if( enabled ) {
+			if( enabled && buttonBackground != null ) {
 				g2.setColor( buttonBackground );
 				Shape oldClip = g2.getClip();
 				if( isLeftToRight )
@@ -398,7 +398,7 @@ public class FlatSpinnerUI
 
 			// paint vertical line between value and arrow buttons
 			Color separatorColor = enabled ? buttonSeparatorColor : buttonDisabledSeparatorColor;
-			if( separatorColor != null ) {
+			if( separatorColor != null && buttonSeparatorWidth > 0 ) {
 				g2.setColor( separatorColor );
 				float lw = scale( buttonSeparatorWidth );
 				float lx = isLeftToRight ? arrowX : arrowX + arrowWidth - lw;
