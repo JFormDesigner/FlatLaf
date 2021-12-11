@@ -139,7 +139,6 @@ CheckBox.margin
 CheckBox.rollover
 CheckBox.textIconGap
 CheckBox.textShiftOffset
-CheckBoxMenuItem.acceleratorFont
 CheckBoxMenuItem.acceleratorForeground
 CheckBoxMenuItem.acceleratorSelectionForeground
 CheckBoxMenuItem.arrowIcon
@@ -430,7 +429,6 @@ List.selectionInactiveForeground
 List.showCellFocusIndicator
 List.timeFactor
 ListUI
-Menu.acceleratorFont
 Menu.acceleratorForeground
 Menu.acceleratorSelectionForeground
 Menu.arrowIcon
@@ -614,7 +612,6 @@ RadioButton.rollover
 RadioButton.shadow
 RadioButton.textIconGap
 RadioButton.textShiftOffset
-RadioButtonMenuItem.acceleratorFont
 RadioButtonMenuItem.acceleratorForeground
 RadioButtonMenuItem.acceleratorSelectionForeground
 RadioButtonMenuItem.arrowIcon

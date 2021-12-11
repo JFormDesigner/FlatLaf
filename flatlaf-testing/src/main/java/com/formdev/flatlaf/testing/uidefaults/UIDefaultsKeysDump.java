@@ -87,8 +87,15 @@ public class UIDefaultsKeysDump
 		UIDefaults defaults = UIManager.getLookAndFeel().getDefaults();
 
 		for( Object key : defaults.keySet() ) {
-			if( key instanceof String && !((String)key).startsWith( "FlatLaf.internal." ) )
+			if( key instanceof String && !ignoreKey( (String) key ) )
 				keys.add( (String) key );
 		}
+	}
+
+	private static boolean ignoreKey( String key ) {
+		return key.startsWith( "FlatLaf.internal." ) ||
+			key.equals( "Menu.acceleratorFont" ) ||
+			key.equals( "CheckBoxMenuItem.acceleratorFont" ) ||
+			key.equals( "RadioButtonMenuItem.acceleratorFont" );
 	}
 }

@@ -78,7 +78,7 @@ public class FlatMenuItemRenderer
 	protected final JMenuItem menuItem;
 	protected Icon checkIcon;
 	protected Icon arrowIcon;
-	protected final Font acceleratorFont;
+	@Styleable protected Font acceleratorFont;
 	protected final String acceleratorDelimiter;
 
 	/** @since 2 */ @Styleable protected boolean verticallyAlignText = FlatUIUtils.getUIBoolean( "MenuItem.verticallyAlignText", true );

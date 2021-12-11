@@ -193,9 +193,7 @@ class FlatCompletionProvider
 		}
 
 		private boolean isIgnored( String key ) {
-			return key.endsWith( ".font" ) ||
-				key.endsWith( "Font" ) ||
-				key.endsWith( "InputMap" );
+			return key.endsWith( "InputMap" );
 		}
 
 		private void setCompletions( Set<String> keys ) {

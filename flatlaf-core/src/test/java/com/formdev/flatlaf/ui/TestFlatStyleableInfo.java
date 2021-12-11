@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static com.formdev.flatlaf.ui.TestUtils.assertMapEquals;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -335,7 +336,8 @@ public class TestFlatStyleableInfo
 			"selectionForeground", Color.class,
 			"disabledForeground", Color.class,
 			"acceleratorForeground", Color.class,
-			"acceleratorSelectionForeground", Color.class
+			"acceleratorSelectionForeground", Color.class,
+			"acceleratorFont", Font.class
 		);
 
 		menuItemRenderer( expected );
