@@ -19,6 +19,7 @@ package com.formdev.flatlaf.themeeditor;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.beans.Beans;
 import java.beans.PropertyVetoException;
 import java.util.function.Function;
@@ -628,6 +629,7 @@ class FlatThemePreviewAll
 
 				//---- menuItem5 ----
 				menuItem5.setText("JMenuItem");
+				menuItem5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK|KeyEvent.ALT_DOWN_MASK|KeyEvent.SHIFT_DOWN_MASK));
 				menu3.add(menuItem5);
 
 				//---- menuItem8 ----
@@ -773,7 +775,10 @@ class FlatThemePreviewAll
 					new DefaultMutableTreeNode("Item 1") {
 						{
 							add(new DefaultMutableTreeNode("Item 2"));
-							add(new DefaultMutableTreeNode("Item 3"));
+							DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("Item 3");
+								node1.add(new DefaultMutableTreeNode("Item 4"));
+								node1.add(new DefaultMutableTreeNode("Item 5"));
+							add(node1);
 						}
 					}));
 				scrollPane3.setViewportView(tree1);
@@ -792,8 +797,8 @@ class FlatThemePreviewAll
 			//---- table1 ----
 			table1.setModel(new DefaultTableModel(
 				new Object[][] {
-					{"Item 1a", "Item 1b"},
-					{"Item 2a", "Item 2b"},
+					{"Item 1a", "Item 2a"},
+					{"Item 1b", "Item 2b"},
 				},
 				new String[] {
 					"Column 1", "Column 2"

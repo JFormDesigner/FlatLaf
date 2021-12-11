@@ -383,6 +383,7 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "menuItem5"
 						"text": "JMenuItem"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 80, 715, false )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "menuItem8"
@@ -584,6 +585,12 @@ new FormModel {
 							} )
 							add( new javax.swing.tree.DefaultMutableTreeNode {
 								userObject: "Item 3"
+								add( new javax.swing.tree.DefaultMutableTreeNode {
+									userObject: "Item 4"
+								} )
+								add( new javax.swing.tree.DefaultMutableTreeNode {
+									userObject: "Item 5"
+								} )
 							} )
 						} )
 						auxiliary() {
@@ -609,10 +616,10 @@ new FormModel {
 					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
 						add( new java.util.Vector {
 							add( "Item 1a" )
-							add( "Item 1b" )
+							add( "Item 2a" )
 						} )
 						add( new java.util.Vector {
-							add( "Item 2a" )
+							add( "Item 1b" )
 							add( "Item 2b" )
 						} )
 					}, new java.util.Vector {
