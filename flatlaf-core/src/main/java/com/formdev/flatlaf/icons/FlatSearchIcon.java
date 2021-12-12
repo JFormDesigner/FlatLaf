@@ -45,8 +45,16 @@ public class FlatSearchIcon
 	@Styleable protected Color searchIconHoverColor = UIManager.getColor( "SearchField.searchIconHoverColor" );
 	@Styleable protected Color searchIconPressedColor = UIManager.getColor( "SearchField.searchIconPressedColor" );
 
+	private final boolean ignoreButtonState;
+
 	public FlatSearchIcon() {
+		this( false );
+	}
+
+	/** @since 2 */
+	public FlatSearchIcon( boolean ignoreButtonState ) {
 		super( 16, 16, null );
+		this.ignoreButtonState = ignoreButtonState;
 	}
 
 	/** @since 2 */
@@ -70,8 +78,10 @@ public class FlatSearchIcon
 			</svg>
 		*/
 
-		g.setColor( FlatButtonUI.buttonStateColor( c, searchIconColor, searchIconColor,
-			null, searchIconHoverColor, searchIconPressedColor ) );
+		g.setColor( ignoreButtonState
+			? searchIconColor
+			: FlatButtonUI.buttonStateColor( c, searchIconColor, searchIconColor,
+				null, searchIconHoverColor, searchIconPressedColor ) );
 
 		// paint magnifier
 		Area area = new Area( new Ellipse2D.Float( 2, 2, 10, 10 ) );
