@@ -1115,6 +1115,10 @@ ViewportUI
 [style].monospaced
 [style].semibold
 [style].small
+[style]Button.inTextField
+[style]ToggleButton.inTextField
+[style]ToolBar.inTextField
+[style]ToolBarSeparator.inTextField
 activeCaption
 activeCaptionBorder
 activeCaptionText

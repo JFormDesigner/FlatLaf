@@ -21,6 +21,7 @@ import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -35,10 +36,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -556,19 +560,19 @@ debug*/
 		// remove width of leading/trailing components
 		JComponent leftComponent = ltr ? leadingComponent : trailingComponent;
 		JComponent rightComponent = ltr ? trailingComponent : leadingComponent;
-		if( leftComponent != null ) {
+		boolean leftVisible = leftComponent != null && leftComponent.isVisible();
+		boolean rightVisible = rightComponent != null && rightComponent.isVisible();
+		if( leftVisible ) {
 			int w = leftComponent.getPreferredSize().width;
 			r.x += w;
 			r.width -= w;
 		}
-		if( rightComponent != null )
+		if( rightVisible )
 			r.width -= rightComponent.getPreferredSize().width;
 
 		// if a leading/trailing icons (or components) are shown, then the left/right margins are reduced
 		// to the top margin, which places the icon nicely centered on left/right side
-		if( (ltr ? hasLeadingIcon() : hasTrailingIcon()) ||
-			(leftComponent != null && leftComponent.isVisible()) )
-		{
+		if( leftVisible || (ltr ? hasLeadingIcon() : hasTrailingIcon()) ) {
 			// reduce left margin
 			Insets margin = getComponent().getMargin();
 			int newLeftMargin = Math.min( margin.left, margin.top );
@@ -578,9 +582,7 @@ debug*/
 				r.width += diff;
 			}
 		}
-		if( (ltr ? hasTrailingIcon() : hasLeadingIcon()) ||
-			(rightComponent != null && rightComponent.isVisible()) )
-		{
+		if( rightVisible || (ltr ? hasTrailingIcon() : hasLeadingIcon()) ) {
 			// reduce right margin
 			Insets margin = getComponent().getMargin();
 			int newRightMargin = Math.min( margin.right, margin.top );
@@ -636,6 +638,7 @@ debug*/
 		JTextComponent c = getComponent();
 		leadingComponent = clientProperty( c, TEXT_FIELD_LEADING_COMPONENT, null, JComponent.class );
 		if( leadingComponent != null ) {
+			prepareLeadingOrTrailingComponent( leadingComponent );
 			installLayout();
 			c.add( leadingComponent );
 		}
@@ -646,6 +649,7 @@ debug*/
 		JTextComponent c = getComponent();
 		trailingComponent = clientProperty( c, TEXT_FIELD_TRAILING_COMPONENT, null, JComponent.class );
 		if( trailingComponent != null ) {
+			prepareLeadingOrTrailingComponent( trailingComponent );
 			installLayout();
 			c.add( trailingComponent );
 		}
@@ -664,6 +668,21 @@ debug*/
 		if( trailingComponent != null ) {
 			getComponent().remove( trailingComponent );
 			trailingComponent = null;
+		}
+	}
+
+	/** @since 2 */
+	protected void prepareLeadingOrTrailingComponent( JComponent c ) {
+		c.putClientProperty( STYLE_CLASS, "inTextField" );
+		c.setCursor( Cursor.getDefaultCursor() );
+
+		if( c instanceof JButton || c instanceof JToggleButton )
+			c.putClientProperty( BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON );
+		else if( c instanceof JToolBar ) {
+			for( Component child : c.getComponents() ) {
+				if( child instanceof JComponent )
+					((JComponent)child).putClientProperty( STYLE_CLASS, "inTextField" );
+			}
 		}
 	}
 

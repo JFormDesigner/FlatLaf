@@ -364,6 +364,12 @@ class UIDefaultsLoader
 		if( resultValueType == null )
 			resultValueType = tempResultValueType;
 
+		// do not parse styles here
+		if( key.startsWith( "[style]" ) ) {
+			resultValueType[0] = ValueType.STRING;
+			return value;
+		}
+
 		value = value.trim();
 
 		// null
