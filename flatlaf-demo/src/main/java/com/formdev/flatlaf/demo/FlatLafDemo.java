@@ -72,7 +72,7 @@ public class FlatLafDemo
 			DemoFrame frame = new DemoFrame();
 
 			if( FlatLafDemo.screenshotsMode )
-				frame.setPreferredSize( new Dimension( 1660, 840 ) );
+				frame.setPreferredSize( new Dimension( 1660, 880 ) );
 
 			// show frame
 			frame.pack();

@@ -80,6 +80,7 @@ public class FlatTextComponentsTest
 			JLabel l = new JLabel( "lead" );
 			l.setOpaque( true );
 			l.setBackground( Color.green );
+			l.setVisible( leadingComponentVisibleCheckBox.isSelected() );
 			return l;
 		} );
 	}
@@ -92,8 +93,32 @@ public class FlatTextComponentsTest
 			JLabel l = new JLabel( "tr" );
 			l.setOpaque( true );
 			l.setBackground( Color.magenta );
+			l.setVisible( trailingComponentVisibleCheckBox.isSelected() );
 			return l;
 		} );
+	}
+
+	private void leadingComponentVisible() {
+		setLeadingTrailingComponentVisible( FlatClientProperties.TEXT_FIELD_LEADING_COMPONENT,
+			leadingComponentVisibleCheckBox.isSelected() );
+	}
+
+	private void trailingComponentVisible() {
+		setLeadingTrailingComponentVisible( FlatClientProperties.TEXT_FIELD_TRAILING_COMPONENT,
+			trailingComponentVisibleCheckBox.isSelected() );
+	}
+
+	private void setLeadingTrailingComponentVisible( String key, boolean visible ) {
+		for( Component c : getComponents() ) {
+			if( c instanceof JTextField ) {
+				Object value = ((JTextField)c).getClientProperty( key );
+				if( value instanceof JComponent ) {
+					((JComponent)value).setVisible( visible );
+					c.revalidate();
+					c.repaint();
+				}
+			}
+		}
 	}
 
 	private void putTextFieldClientProperty( String key, Object value ) {
@@ -141,6 +166,8 @@ public class FlatTextComponentsTest
 		trailingIconCheckBox = new JCheckBox();
 		leadingComponentCheckBox = new JCheckBox();
 		trailingComponentCheckBox = new JCheckBox();
+		leadingComponentVisibleCheckBox = new JCheckBox();
+		trailingComponentVisibleCheckBox = new JCheckBox();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
@@ -290,6 +317,8 @@ public class FlatTextComponentsTest
 				"[]0" +
 				"[]" +
 				"[]0" +
+				"[]" +
+				"[]0" +
 				"[]"));
 
 			//---- button1 ----
@@ -361,8 +390,22 @@ public class FlatTextComponentsTest
 			trailingComponentCheckBox.setName("trailingComponentCheckBox");
 			trailingComponentCheckBox.addActionListener(e -> trailingComponent());
 			panel1.add(trailingComponentCheckBox, "cell 0 8 2 1,alignx left,growx 0");
+
+			//---- leadingComponentVisibleCheckBox ----
+			leadingComponentVisibleCheckBox.setText("leading component visible");
+			leadingComponentVisibleCheckBox.setSelected(true);
+			leadingComponentVisibleCheckBox.setName("leadingComponentVisibleCheckBox");
+			leadingComponentVisibleCheckBox.addActionListener(e -> leadingComponentVisible());
+			panel1.add(leadingComponentVisibleCheckBox, "cell 0 9 2 1,alignx left,growx 0");
+
+			//---- trailingComponentVisibleCheckBox ----
+			trailingComponentVisibleCheckBox.setText("trailing component visible");
+			trailingComponentVisibleCheckBox.setSelected(true);
+			trailingComponentVisibleCheckBox.setName("trailingComponentVisibleCheckBox");
+			trailingComponentVisibleCheckBox.addActionListener(e -> trailingComponentVisible());
+			panel1.add(trailingComponentVisibleCheckBox, "cell 0 10 2 1,alignx left,growx 0");
 		}
-		add(panel1, "cell 4 0 1 6,aligny top,growy 0");
+		add(panel1, "cell 4 0 1 10,aligny top,growy 0");
 
 		//---- passwordFieldLabel ----
 		passwordFieldLabel.setText("JPasswordField:");
@@ -674,6 +717,8 @@ public class FlatTextComponentsTest
 	private JCheckBox trailingIconCheckBox;
 	private JCheckBox leadingComponentCheckBox;
 	private JCheckBox trailingComponentCheckBox;
+	private JCheckBox leadingComponentVisibleCheckBox;
+	private JCheckBox trailingComponentVisibleCheckBox;
 	private JTextField textField;
 	private JCheckBox dragEnabledCheckBox;
 	private JTextArea textArea;

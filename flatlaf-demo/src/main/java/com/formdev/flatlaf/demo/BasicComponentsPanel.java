@@ -22,6 +22,7 @@ import javax.swing.text.DefaultEditorKit;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.icons.FlatSearchIcon;
+import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
 import net.miginfocom.layout.AC;
 import net.miginfocom.layout.BoundSize;
 import net.miginfocom.layout.ConstraintParser;
@@ -36,6 +37,42 @@ class BasicComponentsPanel
 {
 	BasicComponentsPanel() {
 		initComponents();
+
+		// search history button
+		JButton searchHistoryButton = new JButton( new FlatSearchWithHistoryIcon( true ) );
+		searchHistoryButton.setToolTipText( "Search History" );
+		searchHistoryButton.addActionListener( e -> {
+			JPopupMenu popupMenu = new JPopupMenu();
+			popupMenu.add( "(empty)" );
+			popupMenu.show( searchHistoryButton, 0, searchHistoryButton.getHeight() );
+		} );
+		compsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_COMPONENT, searchHistoryButton );
+
+		// match case button
+		JToggleButton matchCaseButton = new JToggleButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/matchCase.svg" ) );
+		matchCaseButton.setRolloverIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/matchCaseHovered.svg" ) );
+		matchCaseButton.setSelectedIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/matchCaseSelected.svg" ) );
+		matchCaseButton.setToolTipText( "Match Case" );
+
+		// whole words button
+		JToggleButton wordsButton = new JToggleButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/words.svg" ) );
+		wordsButton.setRolloverIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/wordsHovered.svg" ) );
+		wordsButton.setSelectedIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/wordsSelected.svg" ) );
+		wordsButton.setToolTipText( "Whole Words" );
+
+		// regex button
+		JToggleButton regexButton = new JToggleButton( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/regex.svg" ) );
+		regexButton.setRolloverIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/regexHovered.svg" ) );
+		regexButton.setSelectedIcon( new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/regexSelected.svg" ) );
+		regexButton.setToolTipText( "Regular Expression" );
+
+		// search toolbar
+		JToolBar searchToolbar = new JToolBar();
+		searchToolbar.add( matchCaseButton );
+		searchToolbar.add( wordsButton );
+		searchToolbar.addSeparator();
+		searchToolbar.add( regexButton );
+		compsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_COMPONENT, searchToolbar );
 	}
 
 	private void initComponents() {
@@ -134,6 +171,8 @@ class BasicComponentsPanel
 		JTextField leadingIconTextField = new JTextField();
 		JTextField trailingIconTextField = new JTextField();
 		JTextField iconsTextField = new JTextField();
+		JLabel compsLabel = new JLabel();
+		compsTextField = new JTextField();
 		JLabel fontsLabel = new JLabel();
 		JLabel h00Label = new JLabel();
 		JLabel h0Label = new JLabel();
@@ -178,6 +217,7 @@ class BasicComponentsPanel
 			"[]" +
 			"[]" +
 			"[]para" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -689,84 +729,89 @@ class BasicComponentsPanel
 		iconsTextField.setText("text");
 		add(iconsTextField, "cell 3 14,growx");
 
+		//---- compsLabel ----
+		compsLabel.setText("Leading/trailing comp.:");
+		add(compsLabel, "cell 0 15");
+		add(compsTextField, "cell 1 15 2 1,growx");
+
 		//---- fontsLabel ----
 		fontsLabel.setText("Typography / Fonts:");
-		add(fontsLabel, "cell 0 15");
+		add(fontsLabel, "cell 0 16");
 
 		//---- h00Label ----
 		h00Label.setText("H00");
 		h00Label.putClientProperty("FlatLaf.styleClass", "h00");
-		add(h00Label, "cell 1 15 5 1");
+		add(h00Label, "cell 1 16 5 1");
 
 		//---- h0Label ----
 		h0Label.setText("H0");
 		h0Label.putClientProperty("FlatLaf.styleClass", "h0");
-		add(h0Label, "cell 1 15 5 1");
+		add(h0Label, "cell 1 16 5 1");
 
 		//---- h1Label ----
 		h1Label.setText("H1");
 		h1Label.putClientProperty("FlatLaf.styleClass", "h1");
-		add(h1Label, "cell 1 15 5 1");
+		add(h1Label, "cell 1 16 5 1");
 
 		//---- h2Label ----
 		h2Label.setText("H2");
 		h2Label.putClientProperty("FlatLaf.styleClass", "h2");
-		add(h2Label, "cell 1 15 5 1");
+		add(h2Label, "cell 1 16 5 1");
 
 		//---- h3Label ----
 		h3Label.setText("H3");
 		h3Label.putClientProperty("FlatLaf.styleClass", "h3");
-		add(h3Label, "cell 1 15 5 1");
+		add(h3Label, "cell 1 16 5 1");
 
 		//---- h4Label ----
 		h4Label.setText("H4");
 		h4Label.putClientProperty("FlatLaf.styleClass", "h4");
-		add(h4Label, "cell 1 15 5 1");
+		add(h4Label, "cell 1 16 5 1");
 
 		//---- lightLabel ----
 		lightLabel.setText("light");
 		lightLabel.putClientProperty("FlatLaf.style", "font: 200% $light.font");
-		add(lightLabel, "cell 1 15 5 1,gapx 30");
+		add(lightLabel, "cell 1 16 5 1,gapx 30");
 
 		//---- semiboldLabel ----
 		semiboldLabel.setText("semibold");
 		semiboldLabel.putClientProperty("FlatLaf.style", "font: 200% $semibold.font");
-		add(semiboldLabel, "cell 1 15 5 1");
+		add(semiboldLabel, "cell 1 16 5 1");
 
 		//---- fontZoomLabel ----
 		fontZoomLabel.setText("(200%)");
 		fontZoomLabel.putClientProperty("FlatLaf.styleClass", "small");
 		fontZoomLabel.setEnabled(false);
-		add(fontZoomLabel, "cell 1 15 5 1");
+		add(fontZoomLabel, "cell 1 16 5 1");
 
 		//---- largeLabel ----
 		largeLabel.setText("large");
 		largeLabel.putClientProperty("FlatLaf.styleClass", "large");
-		add(largeLabel, "cell 1 16 5 1");
+		add(largeLabel, "cell 1 17 5 1");
 
 		//---- defaultLabel ----
 		defaultLabel.setText("default");
-		add(defaultLabel, "cell 1 16 5 1");
+		add(defaultLabel, "cell 1 17 5 1");
 
 		//---- mediumLabel ----
 		mediumLabel.setText("medium");
 		mediumLabel.putClientProperty("FlatLaf.styleClass", "medium");
-		add(mediumLabel, "cell 1 16 5 1");
+		add(mediumLabel, "cell 1 17 5 1");
 
 		//---- smallLabel ----
 		smallLabel.setText("small");
 		smallLabel.putClientProperty("FlatLaf.styleClass", "small");
-		add(smallLabel, "cell 1 16 5 1");
+		add(smallLabel, "cell 1 17 5 1");
 
 		//---- miniLabel ----
 		miniLabel.setText("mini");
 		miniLabel.putClientProperty("FlatLaf.styleClass", "mini");
-		add(miniLabel, "cell 1 16 5 1");
+		add(miniLabel, "cell 1 17 5 1");
 
 		//---- monospacedLabel ----
 		monospacedLabel.setText("monospaced");
 		monospacedLabel.putClientProperty("FlatLaf.styleClass", "monospaced");
-		add(monospacedLabel, "cell 1 16 5 1,gapx 30");
+		add(monospacedLabel, "cell 1 17 5 1,gapx 30");
 
 		//======== popupMenu1 ========
 		{
@@ -841,7 +886,7 @@ class BasicComponentsPanel
 			rows[11].setGapAfter( zeroGap );
 			rows[12].setGapBefore( zeroGap );
 			rows[13].setGapBefore( zeroGap );
-			rows[15].setGapBefore( zeroGap );
+			rows[16].setGapBefore( zeroGap );
 			layout.setRowConstraints( ac );
 
 			// move two text field into same row as spinners
@@ -859,5 +904,6 @@ class BasicComponentsPanel
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JTextField compsTextField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

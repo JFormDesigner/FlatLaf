@@ -30,6 +30,12 @@ public class FlatSearchWithHistoryIcon
 	extends FlatSearchIcon
 {
 	public FlatSearchWithHistoryIcon() {
+		this( false );
+	}
+
+	/** @since 2 */
+	public FlatSearchWithHistoryIcon( boolean ignoreButtonState ) {
+		super( ignoreButtonState );
 	}
 
 	@Override
