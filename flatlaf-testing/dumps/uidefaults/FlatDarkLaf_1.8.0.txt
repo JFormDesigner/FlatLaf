@@ -711,9 +711,12 @@ PasswordField.inactiveBackground #3c3f41  HSL 204   4  25    javax.swing.plaf.Co
 PasswordField.inactiveForeground #8c8c8c  HSL   0   0  55    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.margin           2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 PasswordField.placeholderForeground #8c8c8c  HSL   0   0  55    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.revealIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatRevealIcon [UI]
+PasswordField.revealIconColor  [lazy] #afb1b3  HSL 210   3  69    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionBackground #4b6eaf  HSL 219  40  49    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionForeground #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.showCapsLock     true
+PasswordField.showRevealButton false
 PasswordFieldUI                com.formdev.flatlaf.ui.FlatPasswordFieldUI
 
 

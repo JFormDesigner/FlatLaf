@@ -28,6 +28,7 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JToggleButton;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -73,18 +74,25 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * @uiDefault PasswordField.echoChar				character
  * @uiDefault PasswordField.showCapsLock			boolean
+ * @uiDefault PasswordField.showRevealButton		boolean
  * @uiDefault PasswordField.capsLockIcon			Icon
+ * @uiDefault PasswordField.revealIcon				Icon
  *
  * @author Karl Tauber
  */
 public class FlatPasswordFieldUI
 	extends FlatTextFieldUI
 {
+	private Character echoChar;
+
 	@Styleable protected boolean showCapsLock;
+	/** @since 2 */ @Styleable protected boolean showRevealButton;
 	protected Icon capsLockIcon;
+	/** @since 2 */ protected Icon revealIcon;
 
 	private KeyListener capsLockListener;
 	private boolean capsLockIconShared = true;
+	private JToggleButton revealButton;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatPasswordFieldUI();
@@ -96,16 +104,32 @@ public class FlatPasswordFieldUI
 	}
 
 	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installRevealButton();
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		uninstallRevealButton();
+
+		super.uninstallUI( c );
+	}
+
+	@Override
 	protected void installDefaults() {
 		super.installDefaults();
 
 		String prefix = getPropertyPrefix();
-		Character echoChar = (Character) UIManager.get( prefix + ".echoChar" );
+		echoChar = (Character) UIManager.get( prefix + ".echoChar" );
 		if( echoChar != null )
 			LookAndFeel.installProperty( getComponent(), "echoChar", echoChar );
 
 		showCapsLock = UIManager.getBoolean( "PasswordField.showCapsLock" );
+		showRevealButton = UIManager.getBoolean( "PasswordField.showRevealButton" );
 		capsLockIcon = UIManager.getIcon( "PasswordField.capsLockIcon" );
+		revealIcon = UIManager.getIcon( "PasswordField.revealIcon" );
 		capsLockIconShared = true;
 	}
 
@@ -114,6 +138,7 @@ public class FlatPasswordFieldUI
 		super.uninstallDefaults();
 
 		capsLockIcon = null;
+		revealIcon = null;
 	}
 
 	@Override
@@ -166,6 +191,18 @@ public class FlatPasswordFieldUI
 	@Override
 	String getStyleType() {
 		return "PasswordField";
+	}
+
+	@Override
+	protected void applyStyle( Object style ) {
+		boolean oldShowRevealButton = showRevealButton;
+
+		super.applyStyle( style );
+
+		if( showRevealButton != oldShowRevealButton ) {
+			uninstallRevealButton();
+			installRevealButton();
+		}
 	}
 
 	/** @since 2 */
@@ -235,5 +272,40 @@ public class FlatPasswordFieldUI
 		JTextComponent c = getComponent();
 		return FlatUIUtils.isPermanentFocusOwner( c ) &&
 			Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK );
+	}
+
+	/** @since 2 */
+	protected void installRevealButton() {
+		JTextComponent c = getComponent();
+		if( showRevealButton ) {
+			revealButton = createRevealButton();
+			installLayout();
+			c.add( revealButton );
+		}
+	}
+
+	/** @since 2 */
+	protected JToggleButton createRevealButton() {
+		JToggleButton button = new JToggleButton( revealIcon );
+		prepareLeadingOrTrailingComponent( button );
+		button.addActionListener( e -> {
+			LookAndFeel.installProperty( getComponent(), "echoChar", button.isSelected()
+				? '\0'
+				: (echoChar != null ? echoChar : '*'));
+		} );
+		return button;
+	}
+
+	/** @since 2 */
+	protected void uninstallRevealButton() {
+		if( revealButton != null ) {
+			getComponent().remove( revealButton );
+			revealButton = null;
+		}
+	}
+
+	@Override
+	protected JComponent[] getTrailingComponents() {
+		return new JComponent[] { trailingComponent, revealButton, clearButton };
 	}
 }

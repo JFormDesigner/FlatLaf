@@ -37,7 +37,9 @@ FlatLaf Change Log
     `java.awt.Component`). (PR #386)
   - Support "clear" (or "cancel") button to empty text field. Only shown if text
     field is not empty, editable and enabled. (set client property
-    `JTextField.showClearButton` to `true`). (PR #TODO)
+    `JTextField.showClearButton` to `true`). (PR #442)
+- PasswordField: Support reveal (or "eye") button to show password. (see UI
+  value `PasswordField.showRevealButton`) (PR #442; issue #173)
 - TextComponents: Double/triple-click-and-drag now extends selection by whole
   words/lines.
 - Theming improvements: Reworks core themes to make it easier to create new

@@ -551,6 +551,7 @@ public class TestFlatStyling
 		textField( ui );
 
 		ui.applyStyle( "showCapsLock: true" );
+		ui.applyStyle( "showRevealButton: true" );
 
 		// capsLockIcon
 		ui.applyStyle( "capsLockIconColor: #fff" );

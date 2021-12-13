@@ -38,6 +38,11 @@ class BasicComponentsPanel
 	BasicComponentsPanel() {
 		initComponents();
 
+		// show reveal button for password field
+		//   to enable this for all password fields use:
+		//   UIManager.put( "PasswordField.showRevealButton", true );
+		passwordField1.putClientProperty( FlatClientProperties.STYLE, "showRevealButton: true" );
+
 		// search history button
 		JButton searchHistoryButton = new JButton( new FlatSearchWithHistoryIcon( true ) );
 		searchHistoryButton.setToolTipText( "Search History" );
@@ -128,7 +133,7 @@ class BasicComponentsPanel
 		JFormattedTextField formattedTextField4 = new JFormattedTextField();
 		JFormattedTextField formattedTextField5 = new JFormattedTextField();
 		JLabel passwordFieldLabel = new JLabel();
-		JPasswordField passwordField1 = new JPasswordField();
+		passwordField1 = new JPasswordField();
 		JPasswordField passwordField2 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
 		JPasswordField passwordField4 = new JPasswordField();
@@ -913,6 +918,7 @@ class BasicComponentsPanel
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JPasswordField passwordField1;
 	private JTextField compsTextField;
 	private JTextField clearTextField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
