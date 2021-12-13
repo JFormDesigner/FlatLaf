@@ -903,6 +903,17 @@ public interface FlatClientProperties
 	 */
 	String TEXT_FIELD_TRAILING_COMPONENT = "JTextField.trailingComponent";
 
+	/**
+	 * Specifies whether a "clear" (or "cancel") button is shown on the trailing side
+	 * if the text field is not empty, editable and enabled. Default is {@code false}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_SHOW_CLEAR_BUTTON = "JTextField.showClearButton";
+
 	//---- JToggleButton ------------------------------------------------------
 
 	/**

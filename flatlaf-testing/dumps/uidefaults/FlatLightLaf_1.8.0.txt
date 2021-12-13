@@ -1426,6 +1426,7 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 
 #---- [style]Button ----
 
+[style]Button.clearButton      icon: com.formdev.flatlaf.icons.FlatClearIcon; focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; background: $TextField.background; toolbar.hoverBackground: $TextField.background; toolbar.pressedBackground: $TextField.background
 [style]Button.inTextField      focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; background: $TextField.background; toolbar.hoverBackground: darken($TextField.background,4%,derived); toolbar.pressedBackground: darken($TextField.background,8%,derived); toolbar.selectedBackground: darken($TextField.background,12%,derived)
 
 

@@ -73,6 +73,10 @@ class BasicComponentsPanel
 		searchToolbar.addSeparator();
 		searchToolbar.add( regexButton );
 		compsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_COMPONENT, searchToolbar );
+
+		// show clear button (if text field is not empty)
+		compsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true );
+		clearTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true );
 	}
 
 	private void initComponents() {
@@ -173,6 +177,7 @@ class BasicComponentsPanel
 		JTextField iconsTextField = new JTextField();
 		JLabel compsLabel = new JLabel();
 		compsTextField = new JTextField();
+		clearTextField = new JTextField();
 		JLabel fontsLabel = new JLabel();
 		JLabel h00Label = new JLabel();
 		JLabel h0Label = new JLabel();
@@ -734,6 +739,10 @@ class BasicComponentsPanel
 		add(compsLabel, "cell 0 15");
 		add(compsTextField, "cell 1 15 2 1,growx");
 
+		//---- clearTextField ----
+		clearTextField.setText("clear me");
+		add(clearTextField, "cell 3 15,growx");
+
 		//---- fontsLabel ----
 		fontsLabel.setText("Typography / Fonts:");
 		add(fontsLabel, "cell 0 16");
@@ -905,5 +914,6 @@ class BasicComponentsPanel
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JTextField compsTextField;
+	private JTextField clearTextField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

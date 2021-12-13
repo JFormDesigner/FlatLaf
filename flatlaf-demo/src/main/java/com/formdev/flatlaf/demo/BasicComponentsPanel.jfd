@@ -685,6 +685,15 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 15 2 1,growx"
 			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "clearTextField"
+				"text": "clear me"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 15,growx"
+			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "fontsLabel"
 				"text": "Typography / Fonts:"

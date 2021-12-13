@@ -823,7 +823,8 @@ public class TestFlatStyleableInfo
 			"focusedBackground", Color.class,
 			"iconTextGap", int.class,
 			"leadingIcon", Icon.class,
-			"trailingIcon", Icon.class
+			"trailingIcon", Icon.class,
+			"showClearButton", boolean.class
 		);
 
 		// border

@@ -77,7 +77,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
 				"$columnConstraints": "[fill][fill]"
-				"$rowConstraints": "[][][][][][]0[][]0[][]0[]"
+				"$rowConstraints": "[][][][][][]0[][]0[][]0[][]"
 			} ) {
 				name: "panel1"
 				"border": new javax.swing.border.TitledBorder( "Control" )
@@ -209,6 +209,16 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "trailingComponentVisible", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 10 2 1,alignx left,growx 0"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "showClearButtonCheckBox"
+					"text": "clear button"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showClearButton", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 11 2 1,alignx left,growx 0"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 0 1 10,aligny top,growy 0"

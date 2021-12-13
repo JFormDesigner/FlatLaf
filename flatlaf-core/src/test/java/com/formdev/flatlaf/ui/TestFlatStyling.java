@@ -1011,6 +1011,8 @@ public class TestFlatStyling
 		ui.applyStyle( "leadingIcon: com.formdev.flatlaf.icons.FlatSearchIcon" );
 		ui.applyStyle( "trailingIcon: com.formdev.flatlaf.icons.FlatClearIcon" );
 
+		ui.applyStyle( "showClearButton: true" );
+
 		// border
 		flatTextBorder( style -> ui.applyStyle( style ) );
 

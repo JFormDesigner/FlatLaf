@@ -1115,6 +1115,7 @@ ViewportUI
 [style].monospaced
 [style].semibold
 [style].small
+[style]Button.clearButton
 [style]Button.inTextField
 [style]ToggleButton.inTextField
 [style]ToolBar.inTextField
