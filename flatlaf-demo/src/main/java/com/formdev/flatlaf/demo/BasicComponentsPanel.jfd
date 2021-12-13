@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "17" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[][sizegroup 1][sizegroup 1][sizegroup 1][][]"
-			"$rowConstraints": "[][][][][][][][][][][][]para[][][][]0[]"
+			"$rowConstraints": "[][][][][][][][][][][][]para[][][][][]0[]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -672,66 +672,80 @@ new FormModel {
 				"value": "cell 3 14,growx"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "compsLabel"
+				"text": "Leading/trailing comp.:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 15"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "compsTextField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 15 2 1,growx"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "fontsLabel"
 				"text": "Typography / Fonts:"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 0 15"
+				"value": "cell 0 16"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "h00Label"
 				"text": "H00"
 				"$client.FlatLaf.styleClass": "h00"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 16 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "h0Label"
 				"text": "H0"
 				"$client.FlatLaf.styleClass": "h0"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 16 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "h1Label"
 				"text": "H1"
 				"$client.FlatLaf.styleClass": "h1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 16 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "h2Label"
 				"text": "H2"
 				"$client.FlatLaf.styleClass": "h2"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 16 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "h3Label"
 				"text": "H3"
 				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 16 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "h4Label"
 				"text": "H4"
 				"$client.FlatLaf.styleClass": "h4"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 16 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "lightLabel"
 				"text": "light"
 				"$client.FlatLaf.style": "font: 200% $light.font"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1,gapx 30"
+				"value": "cell 1 16 5 1,gapx 30"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "semiboldLabel"
 				"text": "semibold"
 				"$client.FlatLaf.style": "font: 200% $semibold.font"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 16 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "fontZoomLabel"
@@ -739,48 +753,48 @@ new FormModel {
 				"$client.FlatLaf.styleClass": "small"
 				"enabled": false
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 15 5 1"
+				"value": "cell 1 16 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "largeLabel"
 				"text": "large"
 				"$client.FlatLaf.styleClass": "large"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 16 5 1"
+				"value": "cell 1 17 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "defaultLabel"
 				"text": "default"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 16 5 1"
+				"value": "cell 1 17 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "mediumLabel"
 				"text": "medium"
 				"$client.FlatLaf.styleClass": "medium"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 16 5 1"
+				"value": "cell 1 17 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "smallLabel"
 				"text": "small"
 				"$client.FlatLaf.styleClass": "small"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 16 5 1"
+				"value": "cell 1 17 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "miniLabel"
 				"text": "mini"
 				"$client.FlatLaf.styleClass": "mini"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 16 5 1"
+				"value": "cell 1 17 5 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "monospacedLabel"
 				"text": "monospaced"
 				"$client.FlatLaf.styleClass": "monospaced"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 16 5 1,gapx 30"
+				"value": "cell 1 17 5 1,gapx 30"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

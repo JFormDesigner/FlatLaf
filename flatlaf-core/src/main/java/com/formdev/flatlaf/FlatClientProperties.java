@@ -763,9 +763,9 @@ public interface FlatClientProperties
 	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
 	 * <p>
-	 * For top and bottom tab placement, the layed out component size will be
+	 * For top and bottom tab placement, the laid out component size will be
 	 * the preferred component width and the tab area height.<br>
-	 * For left and right tab placement, the layed out component size will be
+	 * For left and right tab placement, the laid out component size will be
 	 * the tab area width and the preferred component height.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
@@ -776,9 +776,9 @@ public interface FlatClientProperties
 	/**
 	 * Specifies a component that will be placed at the trailing edge of the tabs area.
 	 * <p>
-	 * For top and bottom tab placement, the layed out component size will be
+	 * For top and bottom tab placement, the laid out component size will be
 	 * the available horizontal space (minimum is preferred component width) and the tab area height.<br>
-	 * For left and right tab placement, the layed out component size will be
+	 * For left and right tab placement, the laid out component size will be
 	 * the tab area width and the available vertical space (minimum is preferred component height).
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
@@ -862,6 +862,46 @@ public interface FlatClientProperties
 	 * @since 2
 	 */
 	String TEXT_FIELD_TRAILING_ICON = "JTextField.trailingIcon";
+
+	/**
+	 * Specifies a component that will be placed at the leading edge of the text field.
+	 * <p>
+	 * The component will be positioned inside and aligned to the visible text field border.
+	 * There is no gap between the visible border and the component.
+	 * The laid out component size will be the preferred component width
+	 * and the inner text field height.
+	 * <p>
+	 * The component should be not opaque because the text field border is painted
+	 * slightly inside the usually visible border in some cases.
+	 * E.g. when focused (in some themes) or when an outline color is specified
+	 * (see {@link #OUTLINE}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link javax.swing.JComponent}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_LEADING_COMPONENT = "JTextField.leadingComponent";
+
+	/**
+	 * Specifies a component that will be placed at the trailing edge of the text field.
+	 * <p>
+	 * The component will be positioned inside and aligned to the visible text field border.
+	 * There is no gap between the visible border and the component.
+	 * The laid out component size will be the preferred component width
+	 * and the inner text field height.
+	 * <p>
+	 * The component should be not opaque because the text field border is painted
+	 * slightly inside the usually visible border in some cases.
+	 * E.g. when focused (in some themes) or when an outline color is specified
+	 * (see {@link #OUTLINE}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link javax.swing.JComponent}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_TRAILING_COMPONENT = "JTextField.trailingComponent";
 
 	//---- JToggleButton ------------------------------------------------------
 

@@ -1437,6 +1437,26 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 [style].small                  font: $small.font
 
 
+#---- [style]Button ----
+
+[style]Button.inTextField      focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1
+
+
+#---- [style]ToggleButton ----
+
+[style]ToggleButton.inTextField focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1
+
+
+#---- [style]ToolBar ----
+
+[style]ToolBar.inTextField     floatable: false; opaque: false; borderMargins: 0,0,0,0
+
+
+#---- [style]ToolBarSeparator ----
+
+[style]ToolBarSeparator.inTextField separatorWidth: 3
+
+
 #----  ----
 
 activeCaption                  #99b4d1  HSL 211  38  71    javax.swing.plaf.ColorUIResource [UI]

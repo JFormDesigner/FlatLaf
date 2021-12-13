@@ -47,8 +47,16 @@ public class FlatClearIcon
 	@Styleable protected Color clearIconHoverColor = UIManager.getColor( "SearchField.clearIconHoverColor" );
 	@Styleable protected Color clearIconPressedColor = UIManager.getColor( "SearchField.clearIconPressedColor" );
 
+	private final boolean ignoreButtonState;
+
 	public FlatClearIcon() {
+		this( false );
+	}
+
+	/** @since 2 */
+	public FlatClearIcon( boolean ignoreButtonState ) {
 		super( 16, 16, null );
+		this.ignoreButtonState = ignoreButtonState;
 	}
 
 	/** @since 2 */
@@ -63,7 +71,7 @@ public class FlatClearIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		if( c instanceof AbstractButton ) {
+		if( !ignoreButtonState && c instanceof AbstractButton ) {
 			ButtonModel model = ((AbstractButton)c).getModel();
 			if( model.isPressed() || model.isRollover() ) {
 				/*
