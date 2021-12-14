@@ -903,6 +903,47 @@ public interface FlatClientProperties
 	 */
 	String TEXT_FIELD_TRAILING_COMPONENT = "JTextField.trailingComponent";
 
+	/**
+	 * Specifies whether a "clear" (or "cancel") button is shown on the trailing side
+	 * if the text field is not empty, editable and enabled. Default is {@code false}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_SHOW_CLEAR_BUTTON = "JTextField.showClearButton";
+
+	/**
+	 * Specifies the callback that is invoked when a "clear" (or "cancel") button is clicked.
+	 * If a callback is specified than it is responsible for clearing the text field.
+	 * Without callback, the text field clears itself.
+	 * <p>
+	 * Either use a {@link java.lang.Runnable}:
+	 * <pre>{@code
+	 * myTextField.putClientProperty( "JTextField.clearCallback",
+	 *     (Runnable) () -> {
+	 *         // clear field here or cancel search
+	 *     } );
+	 * }</pre>
+	 * Or use a {@link java.util.function.Consumer}&lt;javax.swing.text.JTextComponent&gt;
+	 * that receives the text field as parameter:
+	 * <pre>{@code
+	 * myTextField.putClientProperty( "JTextField.clearCallback",
+	 *     (Consumer<JTextComponent>) textField -> {
+	 *         // clear field here or cancel search
+	 *     } );
+	 * }</pre>
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link java.lang.Runnable}
+	 * or {@link java.util.function.Consumer}&lt;javax.swing.text.JTextComponent&gt;
+	 *
+	 * @see #TEXT_FIELD_SHOW_CLEAR_BUTTON
+	 * @since 2
+	 */
+	String TEXT_FIELD_CLEAR_CALLBACK = "JTextField.clearCallback";
+
 	//---- JToggleButton ------------------------------------------------------
 
 	/**

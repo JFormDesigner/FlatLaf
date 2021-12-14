@@ -20,9 +20,10 @@ new FormModel {
 					"labelFor": new FormReference( "filterField" )
 					"displayedMnemonic": 70
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
-				add( new FormComponent( "javax.swing.JTextField" ) {
+				add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
 					name: "filterField"
-					"$client.JTextField.placeholderText": "enter one or more filter strings, separated by space characters"
+					"placeholderText": "enter one or more filter strings, separated by space characters"
+					"showClearButton": true
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )

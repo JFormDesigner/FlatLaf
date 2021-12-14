@@ -121,6 +121,19 @@ public class FlatTextComponentsTest
 		}
 	}
 
+	private void showClearButton() {
+		putTextFieldClientProperty( FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON,
+			showClearButtonCheckBox.isSelected() );
+	}
+
+	private void showRevealButton() {
+		for( Component c : getComponents() ) {
+			if( c instanceof JPasswordField )
+				((JPasswordField)c).putClientProperty(FlatClientProperties.STYLE,
+					showRevealButtonCheckBox.isSelected() ? "showRevealButton: true" : null );
+		}
+	}
+
 	private void putTextFieldClientProperty( String key, Object value ) {
 		for( Component c : getComponents() ) {
 			if( c instanceof JTextField )
@@ -168,6 +181,8 @@ public class FlatTextComponentsTest
 		trailingComponentCheckBox = new JCheckBox();
 		leadingComponentVisibleCheckBox = new JCheckBox();
 		trailingComponentVisibleCheckBox = new JCheckBox();
+		showClearButtonCheckBox = new JCheckBox();
+		showRevealButtonCheckBox = new JCheckBox();
 		JLabel passwordFieldLabel = new JLabel();
 		JPasswordField passwordField1 = new JPasswordField();
 		JPasswordField passwordField3 = new JPasswordField();
@@ -319,6 +334,8 @@ public class FlatTextComponentsTest
 				"[]0" +
 				"[]" +
 				"[]0" +
+				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- button1 ----
@@ -404,6 +421,18 @@ public class FlatTextComponentsTest
 			trailingComponentVisibleCheckBox.setName("trailingComponentVisibleCheckBox");
 			trailingComponentVisibleCheckBox.addActionListener(e -> trailingComponentVisible());
 			panel1.add(trailingComponentVisibleCheckBox, "cell 0 10 2 1,alignx left,growx 0");
+
+			//---- showClearButtonCheckBox ----
+			showClearButtonCheckBox.setText("clear button");
+			showClearButtonCheckBox.setName("showClearButtonCheckBox");
+			showClearButtonCheckBox.addActionListener(e -> showClearButton());
+			panel1.add(showClearButtonCheckBox, "cell 0 11 2 1,alignx left,growx 0");
+
+			//---- showRevealButtonCheckBox ----
+			showRevealButtonCheckBox.setText("password reveal button");
+			showRevealButtonCheckBox.setName("showRevealButtonCheckBox");
+			showRevealButtonCheckBox.addActionListener(e -> showRevealButton());
+			panel1.add(showRevealButtonCheckBox, "cell 0 12 2 1,alignx left,growx 0");
 		}
 		add(panel1, "cell 4 0 1 10,aligny top,growy 0");
 
@@ -719,6 +748,8 @@ public class FlatTextComponentsTest
 	private JCheckBox trailingComponentCheckBox;
 	private JCheckBox leadingComponentVisibleCheckBox;
 	private JCheckBox trailingComponentVisibleCheckBox;
+	private JCheckBox showClearButtonCheckBox;
+	private JCheckBox showRevealButtonCheckBox;
 	private JTextField textField;
 	private JCheckBox dragEnabledCheckBox;
 	private JTextArea textArea;

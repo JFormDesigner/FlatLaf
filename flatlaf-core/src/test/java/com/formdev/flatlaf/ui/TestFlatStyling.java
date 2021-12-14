@@ -551,6 +551,7 @@ public class TestFlatStyling
 		textField( ui );
 
 		ui.applyStyle( "showCapsLock: true" );
+		ui.applyStyle( "showRevealButton: true" );
 
 		// capsLockIcon
 		ui.applyStyle( "capsLockIconColor: #fff" );
@@ -1010,6 +1011,8 @@ public class TestFlatStyling
 		ui.applyStyle( "iconTextGap: 4" );
 		ui.applyStyle( "leadingIcon: com.formdev.flatlaf.icons.FlatSearchIcon" );
 		ui.applyStyle( "trailingIcon: com.formdev.flatlaf.icons.FlatClearIcon" );
+
+		ui.applyStyle( "showClearButton: true" );
 
 		// border
 		flatTextBorder( style -> ui.applyStyle( style ) );

@@ -398,7 +398,8 @@ public class TestFlatStyleableInfo
 
 		Map<String, Class<?>> expected = new LinkedHashMap<>();
 		expectedMap( expected,
-			"showCapsLock", boolean.class
+			"showCapsLock", boolean.class,
+			"showRevealButton", boolean.class
 		);
 
 		// FlatPasswordFieldUI extends FlatTextFieldUI
@@ -823,7 +824,8 @@ public class TestFlatStyleableInfo
 			"focusedBackground", Color.class,
 			"iconTextGap", int.class,
 			"leadingIcon", Icon.class,
-			"trailingIcon", Icon.class
+			"trailingIcon", Icon.class,
+			"showClearButton", boolean.class
 		);
 
 		// border

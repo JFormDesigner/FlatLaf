@@ -557,9 +557,12 @@ PasswordField.inactiveBackground
 PasswordField.inactiveForeground
 PasswordField.margin
 PasswordField.placeholderForeground
+PasswordField.revealIcon
+PasswordField.revealIconColor
 PasswordField.selectionBackground
 PasswordField.selectionForeground
 PasswordField.showCapsLock
+PasswordField.showRevealButton
 PasswordFieldUI
 Popup.dropShadowColor
 Popup.dropShadowInsets
@@ -1115,6 +1118,7 @@ ViewportUI
 [style].monospaced
 [style].semibold
 [style].small
+[style]Button.clearButton
 [style]Button.inTextField
 [style]ToggleButton.inTextField
 [style]ToolBar.inTextField

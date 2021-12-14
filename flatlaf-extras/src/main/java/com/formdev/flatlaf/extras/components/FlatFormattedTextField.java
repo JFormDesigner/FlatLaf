@@ -145,6 +145,26 @@ public class FlatFormattedTextField
 
 
 	/**
+	 * Returns whether a "clear" (or "cancel") button is shown.
+	 *
+	 * @since 2
+	 */
+	public boolean isShowClearButton() {
+		return getClientPropertyBoolean( TEXT_FIELD_SHOW_CLEAR_BUTTON, false );
+	}
+
+	/**
+	 * Specifies whether a "clear" (or "cancel") button is shown on the trailing side
+	 * if the text field is not empty, editable and enabled.
+	 *
+	 * @since 2
+	 */
+	public void setShowClearButton( boolean showClearButton ) {
+		putClientPropertyBoolean( TEXT_FIELD_SHOW_CLEAR_BUTTON, showClearButton, false );
+	}
+
+
+	/**
 	 * Returns whether all text is selected when the text component gains focus.
 	 */
 	public SelectAllOnFocusPolicy getSelectAllOnFocusPolicy() {

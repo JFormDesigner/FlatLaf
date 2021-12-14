@@ -43,6 +43,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.ui.FlatBorder;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
@@ -557,7 +558,7 @@ public class FlatUIDefaultsInspector
 		panel = new JPanel();
 		filterPanel = new JPanel();
 		flterLabel = new JLabel();
-		filterField = new JTextField();
+		filterField = new FlatTextField();
 		valueTypeLabel = new JLabel();
 		valueTypeField = new JComboBox<>();
 		scrollPane = new JScrollPane();
@@ -588,7 +589,8 @@ public class FlatUIDefaultsInspector
 					new Insets(0, 0, 0, 10), 0, 0));
 
 				//---- filterField ----
-				filterField.putClientProperty("JTextField.placeholderText", "enter one or more filter strings, separated by space characters");
+				filterField.setPlaceholderText("enter one or more filter strings, separated by space characters");
+				filterField.setShowClearButton(true);
 				filterPanel.add(filterField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 10), 0, 0));
@@ -667,7 +669,7 @@ public class FlatUIDefaultsInspector
 	private JPanel panel;
 	private JPanel filterPanel;
 	private JLabel flterLabel;
-	private JTextField filterField;
+	private FlatTextField filterField;
 	private JLabel valueTypeLabel;
 	private JComboBox<String> valueTypeField;
 	private JScrollPane scrollPane;

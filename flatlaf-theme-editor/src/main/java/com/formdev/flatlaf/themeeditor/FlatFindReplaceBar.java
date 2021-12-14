@@ -304,6 +304,7 @@ class FlatFindReplaceBar
 		//---- findField ----
 		findField.setColumns(16);
 		findField.setSelectAllOnFocusPolicy(FlatTextField.SelectAllOnFocusPolicy.always);
+		findField.setShowClearButton(true);
 		findField.addActionListener(e -> find());
 		add(findField, "cell 1 0");
 
@@ -365,6 +366,7 @@ class FlatFindReplaceBar
 		//---- replaceField ----
 		replaceField.setColumns(16);
 		replaceField.setSelectAllOnFocusPolicy(FlatTextField.SelectAllOnFocusPolicy.always);
+		replaceField.setShowClearButton(true);
 		add(replaceField, "cell 1 1");
 
 		//======== toolBar1 ========

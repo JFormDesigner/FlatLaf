@@ -35,6 +35,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -45,10 +46,13 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.Caret;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
@@ -103,6 +107,10 @@ public class FlatTextFieldUI
 	/** @since 2 */ @Styleable protected Icon trailingIcon;
 	/** @since 2 */ protected JComponent leadingComponent;
 	/** @since 2 */ protected JComponent trailingComponent;
+	/** @since 2 */ protected JComponent clearButton;
+
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected boolean showClearButton;
 
 	private Color oldDisabledBackground;
 	private Color oldInactiveBackground;
@@ -110,6 +118,7 @@ public class FlatTextFieldUI
 	private Insets defaultMargin;
 
 	private FocusListener focusListener;
+	private DocumentListener documentListener;
 	private Map<String, Object> oldStyleValues;
 	private AtomicBoolean borderShared;
 
@@ -126,6 +135,7 @@ public class FlatTextFieldUI
 
 		installLeadingComponent();
 		installTrailingComponent();
+		installClearButton();
 
 		installStyle();
 	}
@@ -134,6 +144,7 @@ public class FlatTextFieldUI
 	public void uninstallUI( JComponent c ) {
 		uninstallLeadingComponent();
 		uninstallTrailingComponent();
+		uninstallClearButton();
 
 		super.uninstallUI( c );
 
@@ -196,6 +207,11 @@ public class FlatTextFieldUI
 
 		getComponent().removeFocusListener( focusListener );
 		focusListener = null;
+
+		if( documentListener != null ) {
+			getComponent().getDocument().removeDocumentListener( documentListener );
+			documentListener = null;
+		}
 	}
 
 	@Override
@@ -254,7 +270,45 @@ public class FlatTextFieldUI
 				c.revalidate();
 				c.repaint();
 				break;
+
+			case TEXT_FIELD_SHOW_CLEAR_BUTTON:
+				uninstallClearButton();
+				installClearButton();
+				c.revalidate();
+				c.repaint();
+				break;
+
+			case "enabled":
+			case "editable":
+				updateClearButton();
+				break;
+
+			case "document":
+				if( documentListener != null ) {
+					if( e.getOldValue() instanceof Document )
+						((Document)e.getOldValue()).removeDocumentListener( documentListener );
+					if( e.getNewValue() instanceof Document )
+						((Document)e.getNewValue()).addDocumentListener( documentListener );
+
+					updateClearButton();
+				}
+				break;
 		}
+	}
+
+	/** @since 2 */
+	protected void installDocumentListener() {
+		if( documentListener != null )
+			return;
+
+		documentListener = new FlatDocumentListener();
+		getComponent().getDocument().addDocumentListener( documentListener );
+	}
+
+	/** @since 2 */
+	protected void documentChanged( DocumentEvent e ) {
+		if( clearButton != null )
+			updateClearButton();
 	}
 
 	/** @since 2 */
@@ -275,10 +329,15 @@ public class FlatTextFieldUI
 	protected void applyStyle( Object style ) {
 		oldDisabledBackground = disabledBackground;
 		oldInactiveBackground = inactiveBackground;
+		boolean oldShowClearButton = showClearButton;
 
 		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
 
 		updateBackground();
+		if( showClearButton != oldShowClearButton ) {
+			uninstallClearButton();
+			installClearButton();
+		}
 	}
 
 	/** @since 2 */
@@ -474,10 +533,14 @@ debug*/
 		size.width += getLeadingIconWidth() + getTrailingIconWidth();
 
 		// add width of leading and trailing components
-		if( leadingComponent != null && leadingComponent.isVisible() )
-			size.width += leadingComponent.getPreferredSize().width;
-		if( trailingComponent != null && trailingComponent.isVisible() )
-			size.width += trailingComponent.getPreferredSize().width;
+		for( JComponent comp : getLeadingComponents() ) {
+			if( comp != null && comp.isVisible() )
+				size.width += comp.getPreferredSize().width;
+		}
+		for( JComponent comp : getTrailingComponents() ) {
+			if( comp != null && comp.isVisible() )
+				size.width += comp.getPreferredSize().width;
+		}
 
 		return size;
 	}
@@ -558,17 +621,24 @@ debug*/
 		boolean ltr = isLeftToRight();
 
 		// remove width of leading/trailing components
-		JComponent leftComponent = ltr ? leadingComponent : trailingComponent;
-		JComponent rightComponent = ltr ? trailingComponent : leadingComponent;
-		boolean leftVisible = leftComponent != null && leftComponent.isVisible();
-		boolean rightVisible = rightComponent != null && rightComponent.isVisible();
-		if( leftVisible ) {
-			int w = leftComponent.getPreferredSize().width;
-			r.x += w;
-			r.width -= w;
+		JComponent[] leftComponents = ltr ? getLeadingComponents() : getTrailingComponents();
+		JComponent[] rightComponents = ltr ? getTrailingComponents() : getLeadingComponents();
+		boolean leftVisible = false;
+		boolean rightVisible = false;
+		for( JComponent leftComponent : leftComponents ) {
+			if( leftComponent != null && leftComponent.isVisible() ) {
+				int w = leftComponent.getPreferredSize().width;
+				r.x += w;
+				r.width -= w;
+				leftVisible = true;
+			}
 		}
-		if( rightVisible )
-			r.width -= rightComponent.getPreferredSize().width;
+		for( JComponent rightComponent : rightComponents ) {
+			if( rightComponent != null && rightComponent.isVisible() ) {
+				r.width -= rightComponent.getPreferredSize().width;
+				rightVisible = true;
+			}
+		}
 
 		// if a leading/trailing icons (or components) are shown, then the left/right margins are reduced
 		// to the top margin, which places the icon nicely centered on left/right side
@@ -672,6 +742,87 @@ debug*/
 	}
 
 	/** @since 2 */
+	protected void installClearButton() {
+		JTextComponent c = getComponent();
+		if( clientPropertyBoolean( c, TEXT_FIELD_SHOW_CLEAR_BUTTON, showClearButton ) ) {
+			clearButton = createClearButton();
+			updateClearButton();
+			installDocumentListener();
+			installLayout();
+			c.add( clearButton );
+		}
+	}
+
+	/** @since 2 */
+	protected void uninstallClearButton() {
+		if( clearButton != null ) {
+			getComponent().remove( clearButton );
+			clearButton = null;
+		}
+	}
+
+	/** @since 2 */
+	protected JComponent createClearButton() {
+		JButton button = new JButton();
+		button.putClientProperty( STYLE_CLASS, "clearButton" );
+		button.putClientProperty( BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON );
+		button.setCursor( Cursor.getDefaultCursor() );
+		button.addActionListener( e -> clearButtonClicked() );
+		return button;
+	}
+
+	/** @since 2 */
+	@SuppressWarnings( "unchecked" )
+	protected void clearButtonClicked() {
+		JTextComponent c = getComponent();
+		Object callback = c.getClientProperty( TEXT_FIELD_CLEAR_CALLBACK );
+		if( callback instanceof Runnable )
+			((Runnable)callback).run();
+		else if( callback instanceof Consumer )
+			((Consumer<JTextComponent>)callback).accept( c );
+		else
+			c.setText( "" );
+	}
+
+	/** @since 2 */
+	protected void updateClearButton() {
+		if( clearButton == null )
+			return;
+
+		JTextComponent c = getComponent();
+		boolean visible = c.isEnabled() && c.isEditable() && c.getDocument().getLength() > 0;
+		if( visible != clearButton.isVisible() ) {
+			clearButton.setVisible( visible );
+			c.revalidate();
+			c.repaint();
+		}
+	}
+
+	/**
+	 * Returns components placed at the leading side of the text field.
+	 * The returned array may contain {@code null}.
+	 * The default implementation returns {@link #leadingComponent}.
+	 *
+	 * @since 2
+	 */
+	protected JComponent[] getLeadingComponents() {
+		return new JComponent[] { leadingComponent };
+	}
+
+	/**
+	 * Returns components placed at the trailing side of the text field.
+	 * The returned array may contain {@code null}.
+	 * The default implementation returns {@link #trailingComponent} and {@link #clearButton}.
+	 * <p>
+	 * <strong>Note</strong>: The components in the array must be in reverse (visual) order.
+	 *
+	 * @since 2
+	 */
+	protected JComponent[] getTrailingComponents() {
+		return new JComponent[] { trailingComponent, clearButton };
+	}
+
+	/** @since 2 */
 	protected void prepareLeadingOrTrailingComponent( JComponent c ) {
 		c.putClientProperty( STYLE_CLASS, "inTextField" );
 		c.setCursor( Cursor.getDefaultCursor() );
@@ -686,7 +837,8 @@ debug*/
 		}
 	}
 
-	private void installLayout() {
+	/** @since 2 */
+	protected void installLayout() {
 		JTextComponent c = getComponent();
 		LayoutManager oldLayout = c.getLayout();
 		if( !(oldLayout instanceof FlatTextFieldLayout) )
@@ -731,25 +883,30 @@ debug*/
 			if( delegate != null )
 				delegate.layoutContainer( parent );
 
-			if( leadingComponent == null && trailingComponent == null )
-				return;
-
 			int ow = FlatUIUtils.getBorderFocusAndLineWidth( getComponent() );
 			int h = parent.getHeight() - ow - ow;
 			boolean ltr = isLeftToRight();
-			JComponent leftComponent = ltr ? leadingComponent : trailingComponent;
-			JComponent rightComponent = ltr ? trailingComponent : leadingComponent;
+			JComponent[] leftComponents = ltr ? getLeadingComponents() : getTrailingComponents();
+			JComponent[] rightComponents = ltr ? getTrailingComponents() : getLeadingComponents();
 
-			// layout left component
-			if( leftComponent != null && leftComponent.isVisible() ) {
-				int w = leftComponent.getPreferredSize().width;
-				leftComponent.setBounds( ow, ow, w, h );
+			// layout left components
+			int x = ow;
+			for( JComponent leftComponent : leftComponents ) {
+				if( leftComponent != null && leftComponent.isVisible() ) {
+					int cw = leftComponent.getPreferredSize().width;
+					leftComponent.setBounds( x, ow, cw, h );
+					x += cw;
+				}
 			}
 
-			// layout right component
-			if( rightComponent != null && rightComponent.isVisible() ) {
-				int w = rightComponent.getPreferredSize().width;
-				rightComponent.setBounds( parent.getWidth() - ow - w, ow, w, h );
+			// layout right components
+			x = parent.getWidth() - ow;
+			for( JComponent rightComponent : rightComponents ) {
+				if( rightComponent != null && rightComponent.isVisible() ) {
+					int cw = rightComponent.getPreferredSize().width;
+					x -= cw;
+					rightComponent.setBounds( x, ow, cw, h );
+				}
 			}
 		}
 
@@ -778,6 +935,26 @@ debug*/
 		public void invalidateLayout( Container target ) {
 			if( delegate instanceof LayoutManager2 )
 				((LayoutManager2)delegate).invalidateLayout( target );
+		}
+	}
+	//---- class FlatDocumentListener -----------------------------------------
+
+	private class FlatDocumentListener
+		implements DocumentListener
+	{
+		@Override
+		public void insertUpdate( DocumentEvent e ) {
+			documentChanged( e );
+		}
+
+		@Override
+		public void removeUpdate( DocumentEvent e ) {
+			documentChanged( e );
+		}
+
+		@Override
+		public void changedUpdate( DocumentEvent e ) {
+			documentChanged( e );
 		}
 	}
 }

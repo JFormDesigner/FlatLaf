@@ -28,12 +28,18 @@ FlatLaf Change Log
     setting UI default `OptionPane.showIcon` to `true`. (issue #416)
   - No longer show the Java "duke/cup" icon if no window icon image is set.
     (issue #416)
-- TextField, FormattedTextField and PasswordField: Support leading and trailing
-  icons (set client property `JTextField.leadingIcon` or
-  `JTextField.trailingIcon` to a `javax.swing.Icon`). (PR #378; issue #368)
-- TextField, FormattedTextField and PasswordField: Support leading and trailing
-  components (set client property `JTextField.leadingComponent` or
-  `JTextField.trailingComponent` to a `java.awt.Component`). (PR #386)
+- TextField, FormattedTextField and PasswordField:
+  - Support leading and trailing icons (set client property
+    `JTextField.leadingIcon` or `JTextField.trailingIcon` to a
+    `javax.swing.Icon`). (PR #378; issue #368)
+  - Support leading and trailing components (set client property
+    `JTextField.leadingComponent` or `JTextField.trailingComponent` to a
+    `java.awt.Component`). (PR #386)
+  - Support "clear" (or "cancel") button to empty text field. Only shown if text
+    field is not empty, editable and enabled. (set client property
+    `JTextField.showClearButton` to `true`). (PR #442)
+- PasswordField: Support reveal (or "eye") button to show password. (see UI
+  value `PasswordField.showRevealButton`) (PR #442; issue #173)
 - TextComponents: Double/triple-click-and-drag now extends selection by whole
   words/lines.
 - Theming improvements: Reworks core themes to make it easier to create new

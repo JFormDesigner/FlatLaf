@@ -726,9 +726,12 @@ PasswordField.inactiveBackground #f0f0f0  HSL   0   0  94    javax.swing.plaf.Co
 PasswordField.inactiveForeground #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.margin           2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 PasswordField.placeholderForeground #000088  HSL 240 100  27    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.revealIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatRevealIcon [UI]
+PasswordField.revealIconColor  [lazy] #6e6e6e  HSL   0   0  43    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionBackground #00aa00  HSL 120 100  33    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionForeground #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.showCapsLock     true
+PasswordField.showRevealButton false
 PasswordFieldUI                com.formdev.flatlaf.ui.FlatPasswordFieldUI
 
 
@@ -1439,6 +1442,7 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 
 #---- [style]Button ----
 
+[style]Button.clearButton      icon: com.formdev.flatlaf.icons.FlatClearIcon; focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; background: $TextField.background; toolbar.hoverBackground: $TextField.background; toolbar.pressedBackground: $TextField.background
 [style]Button.inTextField      focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1
 
 
