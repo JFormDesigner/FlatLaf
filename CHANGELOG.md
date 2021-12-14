@@ -90,6 +90,12 @@ FlatLaf Change Log
   - New "column control" icon for `JXTable` that scales and uses antialiasing.
     (issue #434)
 
+#### Fixed bugs
+
+- InternalFrame: Fill background to avoid that parent may shine through internal
+  frame if it contains non-opaque components. (better fix for issue #274)
+
+
 ## 1.6.5
 
 #### Fixed bugs

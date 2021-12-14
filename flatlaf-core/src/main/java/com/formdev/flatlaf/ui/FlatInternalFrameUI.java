@@ -179,6 +179,26 @@ public class FlatInternalFrameUI
 		return FlatStylingSupport.getAnnotatedStyleableInfos( this, frame.getBorder() );
 	}
 
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		// The internal frame actually should be opaque and fill its background,
+		// but it must be non-opaque to allow translucent resize handles (outside of visual bounds).
+		// To avoid that parent may shine through internal frame (e.g. if menu bar is non-opaque),
+		// fill background excluding insets (translucent resize handles),
+		// but only if opaque was not set explicitly by application to false.
+		// If applications has set internal frame opacity to false, do not fill background (for compatibility).
+		if( !c.isOpaque() && !FlatUIUtils.hasOpaqueBeenExplicitlySet( c ) ) {
+			Insets insets = c.getInsets();
+
+			g.setColor( c.getBackground() );
+			g.fillRect( insets.left, insets.top,
+				c.getWidth() - insets.left - insets.right,
+				c.getHeight() - insets.top - insets.bottom );
+		}
+
+		super.update( g, c );
+	}
+
 	//---- class FlatInternalFrameBorder --------------------------------------
 
 	public static class FlatInternalFrameBorder

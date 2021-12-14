@@ -213,6 +213,13 @@ public class FlatInternalFrameTitlePane
 				case "componentOrientation":
 					applyComponentOrientation( frame.getComponentOrientation() );
 					break;
+
+				case "opaque":
+					// Do not invoke super.propertyChange() here because it always
+					// invokes repaint(), which would cause endless repainting.
+					// The opaque flag is temporary changed in FlatUIUtils.hasOpaqueBeenExplicitlySet(),
+					// invoked from FlatInternalFrameUI.update().
+					return;
 			}
 
 			super.propertyChange( e );
