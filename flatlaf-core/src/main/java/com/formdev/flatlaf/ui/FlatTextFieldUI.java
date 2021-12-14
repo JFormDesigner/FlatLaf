@@ -35,6 +35,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -753,23 +754,34 @@ debug*/
 	}
 
 	/** @since 2 */
-	protected JComponent createClearButton() {
-		JButton button = new JButton();
-		button.putClientProperty( STYLE_CLASS, "clearButton" );
-		button.putClientProperty( BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON );
-		button.setCursor( Cursor.getDefaultCursor() );
-		button.addActionListener( e -> {
-			getComponent().setText( "" );
-		} );
-		return button;
-	}
-
-	/** @since 2 */
 	protected void uninstallClearButton() {
 		if( clearButton != null ) {
 			getComponent().remove( clearButton );
 			clearButton = null;
 		}
+	}
+
+	/** @since 2 */
+	protected JComponent createClearButton() {
+		JButton button = new JButton();
+		button.putClientProperty( STYLE_CLASS, "clearButton" );
+		button.putClientProperty( BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON );
+		button.setCursor( Cursor.getDefaultCursor() );
+		button.addActionListener( e -> clearButtonClicked() );
+		return button;
+	}
+
+	/** @since 2 */
+	@SuppressWarnings( "unchecked" )
+	protected void clearButtonClicked() {
+		JTextComponent c = getComponent();
+		Object callback = c.getClientProperty( TEXT_FIELD_CLEAR_CALLBACK );
+		if( callback instanceof Runnable )
+			((Runnable)callback).run();
+		else if( callback instanceof Consumer )
+			((Consumer<JTextComponent>)callback).accept( c );
+		else
+			c.setText( "" );
 	}
 
 	/** @since 2 */
