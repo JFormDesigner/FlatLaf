@@ -92,6 +92,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- Native window decorations: Fixed `UnsatisfiedLinkError` on Windows 11 for ARM
+  processors. (issue #443)
 - MenuBar: Do not fill background if non-opaque and having custom background
   color. (issue #409)
 - InternalFrame: Fill background to avoid that parent may shine through internal
