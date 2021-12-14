@@ -180,11 +180,15 @@ public class FlatMenuBarUI
 	protected Color getBackground( JComponent c ) {
 		Color background = c.getBackground();
 
-		// paint background if opaque or if having custom background color
-		if( c.isOpaque() || !(background instanceof UIResource) )
+		// paint background if opaque
+		if( c.isOpaque() )
 			return background;
 
-		// paint background if menu bar is not the "main" menu bar
+		// do not paint background if non-opaque and having custom background color
+		if( !(background instanceof UIResource) )
+			return null;
+
+		// paint background if menu bar is not the "main" menu bar (e.g. in internal frame)
 		JRootPane rootPane = SwingUtilities.getRootPane( c );
 		if( rootPane == null || !(rootPane.getParent() instanceof Window) || rootPane.getJMenuBar() != c )
 			return background;

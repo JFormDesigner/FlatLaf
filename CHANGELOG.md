@@ -92,6 +92,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- MenuBar: Do not fill background if non-opaque and having custom background
+  color. (issue #409)
 - InternalFrame: Fill background to avoid that parent may shine through internal
   frame if it contains non-opaque components. (better fix for issue #274)
 
