@@ -812,9 +812,12 @@ public class FlatComboBoxUI
 			// make opaque to avoid that background shines thru border (e.g. at 150% scaling)
 			setOpaque( true );
 
+	        // set popup border
+	        // use non-UIResource to avoid that it is overwritten when making
+	        // popup visible (see JPopupMenu.setInvoker()) in theme editor preview
 			Border border = UIManager.getBorder( "PopupMenu.border" );
 			if( border != null )
-				setBorder( border );
+				setBorder( FlatUIUtils.nonUIResource( border ) );
 		}
 
 		@Override
@@ -828,6 +831,11 @@ public class FlatComboBoxUI
 		void updateStyle() {
 			if( popupBackground != null )
 		        list.setBackground( popupBackground );
+
+	        // set popup background because it may shine thru when scaled (e.g. at 150%)
+	        // use non-UIResource to avoid that it is overwritten when making
+	        // popup visible (see JPopupMenu.setInvoker()) in theme editor preview
+	        setBackground( FlatUIUtils.nonUIResource( list.getBackground() ) );
 		}
 
 		@Override
