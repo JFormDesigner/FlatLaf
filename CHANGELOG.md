@@ -98,6 +98,9 @@ FlatLaf Change Log
   color. (issue #409)
 - InternalFrame: Fill background to avoid that parent may shine through internal
   frame if it contains non-opaque components. (better fix for issue #274)
+- SwingX: Fixed `NullPointerException` in `FlatCaret` when using
+  `org.jdesktop.swingx.prompt.PromptSupport.setPrompt()` on a text field and
+  then switching theme.
 
 
 ## 1.6.5

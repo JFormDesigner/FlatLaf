@@ -101,6 +101,9 @@ public class FlatCaret
 			//     adds selection highlights to the text component highlighter
 			if( isSelectionVisible() ) {
 				EventQueue.invokeLater( () -> {
+					if( getComponent() == null )
+						return; // was deinstalled
+
 					if( isSelectionVisible() ) {
 						setSelectionVisible( false );
 						setSelectionVisible( true );
@@ -253,6 +256,9 @@ public class FlatCaret
 		// select all
 		if( c instanceof JFormattedTextField ) {
 			EventQueue.invokeLater( () -> {
+				if( getComponent() == null )
+					return; // was deinstalled
+
 				select( 0, doc.getLength() );
 			} );
 		} else {
