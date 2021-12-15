@@ -107,6 +107,13 @@
       "selectedBackground": "#3b4252",
       "underlinedTabBackground": "#3b4252"
     },
+    "DefaultTabs": {
+      "background": "#2e3440",
+      "borderColor": "#3b4252",
+      "hoverBackground": "#3b4252",
+      "inactiveUnderlineColor": "#616e88",
+      "underlineColor": "#88c0d0"
+    },
     "DragAndDrop": {
       "areaBackground": "#2e3440",
       "areaBorderColor": "#4c566a",
@@ -120,13 +127,8 @@
     },
     "EditorTabs": {
       "borderColor": "#2e3440",
-      "hoverMaskColor": "#4c566a",
+      "hoverBackground": "#4c566a",
       "inactiveColoredFileBackground": "#2e3440",
-      "inactiveMaskColor": "#3b4252",
-      "inactiveUnderlineColor": "#616e88",
-      "selectedBackground": "#4c566a",
-      "selectedForeground": "#d8dee9",
-      "underlineColor": "#88c0d0",
       "underlinedTabBackground": "#4c566a"
     },
     "FileColor": {
@@ -364,16 +366,14 @@
         "selectedForeground": "#eceff4"
       },
       "Header": {
-        "background": "#4c566a"
+        "background": "#4c566a",
+        "inactiveBackground": "#434c5e"
       },
       "HeaderCloseButton": {
         "background": "#4c566a"
       },
       "HeaderTab": {
-        "hoverBackground": "#81a1c1",
-        "hoverInactiveBackground": "#4c566a",
-        "selectedBackground": "#81a1c1",
-        "selectedInactiveBackground": "#4c566a"
+        "hoverBackground": "#616e88"
       }
     },
     "Tree": {

@@ -127,6 +127,36 @@
       "hoverForeground": "blue1",
       "pressedForeground": "blue1",
       "visitedForeground": "blue1"
+    },
+    "ScrollBar" : {
+      "hoverThumbBorderColor" : "bg1",
+      "background" : "bg0",
+      "hoverThumbColor": "bg1",
+      "hoverTrackColor": "bg0",
+      "thumb": "bg2",
+      "thumbBorderColor": "bg2",
+      "thumbColor": "bg2",
+      "Transparent": {
+        "thumbColor": "bg2",
+        "hoverThumbBorderColor" : "bg1",
+        "hoverThumbColor": "bg1",
+        "hoverTrackColor": "bg0",
+        "thumbBorderColor": "bg2"
+      },
+      "Mac" : {
+        "Transparent": {
+          "thumbColor": "bg2",
+          "hoverThumbBorderColor" : "bg1",
+          "hoverThumbColor": "bg1",
+          "hoverTrackColor": "bg0",
+          "thumbBorderColor": "bg2"
+        },
+        "hoverThumbBorderColor" : "bg1",
+        "hoverThumbColor": "bg1",
+        "hoverTrackColor": "bg0",
+        "thumbBorderColor": "bg2",
+        "thumbColor": "bg2"
+      }
     }
   },
   "icons": {

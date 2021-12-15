@@ -145,7 +145,7 @@
 		"license": "MIT",
 		"licenseFile": "Hiberbee.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/Hiberbee/code-highlight-themes",
-		"sourceCodePath": "blob/master/src/main/resources/HiberbeeDark.theme.json"
+		"sourceCodePath": "blob/latest/src/main/resources/HiberbeeDark.theme.json"
 	},
 	"HighContrast.theme.json": {
 		"name": "High contrast",
@@ -184,7 +184,7 @@
 		"license": "MIT",
 		"licenseFile": "nord.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/arcticicestudio/nord-jetbrains",
-		"sourceCodePath": "blob/develop/src/nord.theme.json"
+		"sourceCodePath": "blob/main/src/nord.theme.json"
 	},
 	"one_dark.theme.json": {
 		"name": "One Dark",
