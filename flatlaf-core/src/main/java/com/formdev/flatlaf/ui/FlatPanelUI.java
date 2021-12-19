@@ -58,6 +58,10 @@ public class FlatPanelUI
 			: new FlatPanelUI( false );
 	}
 
+	public FlatPanelUI() {
+		this( false );
+	}
+
 	/** @since 2 */
 	protected FlatPanelUI( boolean shared ) {
 		this.shared = shared;

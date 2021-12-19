@@ -65,6 +65,10 @@ public class FlatToolBarSeparatorUI
 			: new FlatToolBarSeparatorUI( false );
 	}
 
+	public FlatToolBarSeparatorUI() {
+		this( false );
+	}
+
 	/** @since 2 */
 	protected FlatToolBarSeparatorUI( boolean shared ) {
 		this.shared = shared;

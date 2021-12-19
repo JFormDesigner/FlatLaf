@@ -158,6 +158,10 @@ public class FlatButtonUI
 			: new FlatButtonUI( false );
 	}
 
+	public FlatButtonUI() {
+		this( false );
+	}
+
 	/** @since 2 */
 	protected FlatButtonUI( boolean shared ) {
 		this.shared = shared;

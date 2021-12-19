@@ -48,6 +48,10 @@ public class FlatCheckBoxUI
 			: new FlatCheckBoxUI( false );
 	}
 
+	public FlatCheckBoxUI() {
+		this( false );
+	}
+
 	/** @since 2 */
 	protected FlatCheckBoxUI( boolean shared ) {
 		super( shared );

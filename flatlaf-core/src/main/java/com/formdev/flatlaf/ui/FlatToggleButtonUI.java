@@ -92,6 +92,10 @@ public class FlatToggleButtonUI
 			: new FlatToggleButtonUI( false );
 	}
 
+	public FlatToggleButtonUI() {
+		this( false );
+	}
+
 	protected FlatToggleButtonUI( boolean shared ) {
 		super( shared );
 	}

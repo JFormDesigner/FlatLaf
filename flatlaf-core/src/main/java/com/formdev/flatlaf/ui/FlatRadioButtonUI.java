@@ -83,6 +83,10 @@ public class FlatRadioButtonUI
 			: new FlatRadioButtonUI( false );
 	}
 
+	public FlatRadioButtonUI() {
+		this( false );
+	}
+
 	/** @since 2 */
 	protected FlatRadioButtonUI( boolean shared ) {
 		this.shared = shared;

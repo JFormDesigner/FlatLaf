@@ -67,6 +67,10 @@ public class FlatSeparatorUI
 			: new FlatSeparatorUI( false );
 	}
 
+	public FlatSeparatorUI() {
+		this( false );
+	}
+
 	/** @since 2 */
 	protected FlatSeparatorUI( boolean shared ) {
 		this.shared = shared;

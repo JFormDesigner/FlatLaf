@@ -73,6 +73,10 @@ public class FlatLabelUI
 			: new FlatLabelUI( false );
 	}
 
+	public FlatLabelUI() {
+		this( false );
+	}
+
 	/** @since 2 */
 	protected FlatLabelUI( boolean shared ) {
 		this.shared = shared;

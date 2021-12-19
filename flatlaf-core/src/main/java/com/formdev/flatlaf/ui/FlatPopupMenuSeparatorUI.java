@@ -44,6 +44,10 @@ public class FlatPopupMenuSeparatorUI
 			: new FlatPopupMenuSeparatorUI( false );
 	}
 
+	public FlatPopupMenuSeparatorUI() {
+		this( false );
+	}
+
 	/** @since 2 */
 	protected FlatPopupMenuSeparatorUI( boolean shared ) {
 		super( shared );
