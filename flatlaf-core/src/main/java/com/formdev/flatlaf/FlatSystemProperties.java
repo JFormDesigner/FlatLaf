@@ -140,6 +140,12 @@ public interface FlatSystemProperties
 	String USE_TEXT_Y_CORRECTION = "flatlaf.useTextYCorrection";
 
 	/**
+	 * Specifies a directory in which the native FlatLaf library have been extracted.
+	 * This can be used to avoid extraction of the native libraries to the temporary directory at runtime.
+	 */
+	String NATIVE_LIBRARY_PATH = "flatlaf.nativeLibraryPath";
+
+	/**
 	 * Checks whether a system property is set and returns {@code true} if its value
 	 * is {@code "true"} (case-insensitive), otherwise it returns {@code false}.
 	 * If the system property is not set, {@code defaultValue} is returned.
