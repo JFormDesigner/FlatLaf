@@ -1223,6 +1223,9 @@ public abstract class FlatLaf
 		}
 
 		private Object getValue( Object key ) {
+			// use local variable for getters to avoid potential multi-threading issues
+			List<Function<Object, Object>> uiDefaultsGetters = FlatLaf.this.uiDefaultsGetters;
+
 			if( uiDefaultsGetters == null )
 				return null;
 
@@ -1276,8 +1279,9 @@ public abstract class FlatLaf
 			this.scaleSize = scaleSize;
 		}
 
+		// using synchronized to avoid exception if invoked at the same time on multiple threads
 		@Override
-		public Object createValue( UIDefaults table ) {
+		public synchronized Object createValue( UIDefaults table ) {
 			if( inCreateValue )
 				throw new IllegalStateException( "FlatLaf: endless recursion in font" );
 

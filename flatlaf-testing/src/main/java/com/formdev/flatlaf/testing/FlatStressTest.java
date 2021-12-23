@@ -22,7 +22,9 @@ import java.util.Random;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -54,6 +56,7 @@ public class FlatStressTest
 
 	private JComponent createStressTest() {
 		return createComboBoxStressTest();
+//		return createGetFontStressTest();
 	}
 
 	// for https://github.com/JFormDesigner/FlatLaf/issues/432
@@ -79,5 +82,31 @@ public class FlatStressTest
 		thread.start();
 
 		return comboBox;
+	}
+
+	// for https://github.com/JFormDesigner/FlatLaf/issues/456
+	@SuppressWarnings( "unused" )
+	private JComponent createGetFontStressTest() {
+		JLabel label = new JLabel( "test" );
+
+		Runnable runnable = () -> {
+			for(;;) {
+				UIManager.getFont( "Label.font" );
+			}
+		};
+
+		Thread thread1 = new Thread( runnable);
+		thread1.setDaemon( true );
+		thread1.start();
+
+		Thread thread2 = new Thread( runnable);
+		thread2.setDaemon( true );
+		thread2.start();
+
+		Thread thread3 = new Thread( runnable);
+		thread3.setDaemon( true );
+		thread3.start();
+
+		return label;
 	}
 }
