@@ -135,7 +135,7 @@ public class NativeLibrary
 
 	private boolean loadLibraryFromFile( File libraryFile ) {
 		try {
-			System.load( libraryFile.getPath() );
+			System.load( libraryFile.getAbsolutePath() );
 			return true;
 		} catch( Throwable ex ) {
 			log( null, ex );

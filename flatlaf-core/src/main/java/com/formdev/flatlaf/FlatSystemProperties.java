@@ -141,6 +141,7 @@ public interface FlatSystemProperties
 
 	/**
 	 * Specifies a directory in which the native FlatLaf library have been extracted.
+	 * The path can be absolute or relative to current application working directory.
 	 * This can be used to avoid extraction of the native libraries to the temporary directory at runtime.
 	 *
 	 * @since 2
