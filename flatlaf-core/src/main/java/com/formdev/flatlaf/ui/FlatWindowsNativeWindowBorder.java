@@ -27,6 +27,7 @@ import java.awt.Window;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -37,6 +38,7 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.NativeLibrary;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -114,11 +116,7 @@ class FlatWindowsNativeWindowBorder
 				}
 			}
 
-			String libraryName = "com/formdev/flatlaf/natives/flatlaf-windows-x86";
-			if( SystemInfo.isX86_64 )
-				libraryName += "_64";
-
-			nativeLibrary = new NativeLibrary( libraryName, null, true );
+			nativeLibrary = createNativeLibrary();
 		}
 
 		// check whether native library was successfully loaded
@@ -129,6 +127,23 @@ class FlatWindowsNativeWindowBorder
 		if( instance == null )
 			instance = new FlatWindowsNativeWindowBorder();
 		return instance;
+	}
+
+	private static NativeLibrary createNativeLibrary() {
+		String libraryName = "flatlaf-windows-x86";
+		if( SystemInfo.isX86_64 )
+			libraryName += "_64";
+
+		String libraryPath = System.getProperty( FlatSystemProperties.NATIVE_LIBRARY_PATH );
+		if( libraryPath != null ) {
+			File libraryFile = new File( libraryPath, libraryName + ".dll" );
+			if( libraryFile.exists() )
+				return new NativeLibrary( libraryFile, true );
+			else
+				LoggingFacade.INSTANCE.logSevere( "Did not find external library " + libraryFile + ", using extracted library instead", null );
+		}
+
+		return new NativeLibrary( "com/formdev/flatlaf/natives/" + libraryName, null, true );
 	}
 
 	private FlatWindowsNativeWindowBorder() {

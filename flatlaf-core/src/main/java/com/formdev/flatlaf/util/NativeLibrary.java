@@ -61,6 +61,19 @@ public class NativeLibrary
 	}
 
 	/**
+	 * Load native library from given file.
+	 *
+	 * @param libraryFile the file of the native library
+	 * @param supported whether the native library is supported on the current platform
+	 * @since 2
+	 */
+	public NativeLibrary( File libraryFile, boolean supported ) {
+		this.loaded = supported
+			? loadLibraryFromFile( libraryFile )
+			: false;
+	}
+
+	/**
 	 * Returns whether the native library is loaded.
 	 * <p>
 	 * Returns {@code false} if not supported on current platform as specified in constructor
@@ -116,6 +129,16 @@ public class NativeLibrary
 
 			if( tempFile != null )
 				deleteOrMarkForDeletion( tempFile );
+			return false;
+		}
+	}
+
+	private boolean loadLibraryFromFile( File libraryFile ) {
+		try {
+			System.load( libraryFile.getPath() );
+			return true;
+		} catch( Throwable ex ) {
+			log( null, ex );
 			return false;
 		}
 	}
