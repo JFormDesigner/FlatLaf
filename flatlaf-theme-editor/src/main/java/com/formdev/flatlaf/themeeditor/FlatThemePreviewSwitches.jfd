@@ -510,12 +510,14 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$ZoomRadioButton" ) {
 				name: "radioButton1"
+				"$buttonGroup": new FormReference( "buttonGroup2" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 16"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewSwitches$ZoomRadioButton" ) {
 				name: "radioButton2"
 				"selected": true
+				"$buttonGroup": new FormReference( "buttonGroup2" )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 16"
 			} )
@@ -527,6 +529,11 @@ new FormModel {
 			name: "buttonGroup1"
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 580 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup2"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 634 )
 		} )
 	}
 }

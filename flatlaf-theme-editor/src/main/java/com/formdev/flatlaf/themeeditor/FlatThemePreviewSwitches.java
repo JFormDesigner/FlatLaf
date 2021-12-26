@@ -591,6 +591,11 @@ class FlatThemePreviewSwitches
 		buttonGroup1.add(zoom2xButton);
 		buttonGroup1.add(zoom3xButton);
 		buttonGroup1.add(zoom4xButton);
+
+		//---- buttonGroup2 ----
+		ButtonGroup buttonGroup2 = new ButtonGroup();
+		buttonGroup2.add(radioButton1);
+		buttonGroup2.add(radioButton2);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
