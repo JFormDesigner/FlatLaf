@@ -1,6 +1,15 @@
 FlatLaf Change Log
 ==================
 
+## 2.0-SNAPSHOT
+
+- Added system property `flatlaf.nativeLibraryPath` to load native libraries
+  from a directory. (PR #453)
+- Fixed "endless recursion in font" exception in
+  `FlatLaf$ActiveFont.createValue()` if `UIManager.getFont()` is invoked from
+  multiple threads. (issue #456)
+
+
 ## 2.0-rc1
 
 #### New features and improvements
