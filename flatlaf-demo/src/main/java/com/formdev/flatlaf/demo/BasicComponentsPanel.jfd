@@ -659,18 +659,27 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "leadingIconTextField"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 14,growx"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "trailingIconTextField"
 				"text": "text"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 14,growx"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "iconsTextField"
 				"text": "text"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 3 14,growx"
 			} )

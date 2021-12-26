@@ -43,6 +43,17 @@ class BasicComponentsPanel
 		//   UIManager.put( "PasswordField.showRevealButton", true );
 		passwordField1.putClientProperty( FlatClientProperties.STYLE, "showRevealButton: true" );
 
+		// add leading/trailing icons to text fields
+		leadingIconTextField.putClientProperty( FlatClientProperties.PLACEHOLDER_TEXT, "Search" );
+		leadingIconTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+			new FlatSearchIcon() );
+		trailingIconTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_ICON,
+			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/DataTables.svg" ) );
+		iconsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/user.svg" ) );
+		iconsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_ICON,
+			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/bookmarkGroup.svg" ) );
+
 		// search history button
 		JButton searchHistoryButton = new JButton( new FlatSearchWithHistoryIcon( true ) );
 		searchHistoryButton.setToolTipText( "Search History" );
@@ -177,9 +188,9 @@ class BasicComponentsPanel
 		JComboBox<String> warningHintsComboBox = new JComboBox<>();
 		JSpinner warningHintsSpinner = new JSpinner();
 		JLabel iconsLabel = new JLabel();
-		JTextField leadingIconTextField = new JTextField();
-		JTextField trailingIconTextField = new JTextField();
-		JTextField iconsTextField = new JTextField();
+		leadingIconTextField = new JTextField();
+		trailingIconTextField = new JTextField();
+		iconsTextField = new JTextField();
 		JLabel compsLabel = new JLabel();
 		compsTextField = new JTextField();
 		clearTextField = new JTextField();
@@ -851,17 +862,6 @@ class BasicComponentsPanel
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
-		// add leading/trailing icons to text fields
-		leadingIconTextField.putClientProperty( FlatClientProperties.PLACEHOLDER_TEXT, "Search" );
-		leadingIconTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_ICON,
-			new FlatSearchIcon() );
-		trailingIconTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_ICON,
-			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/DataTables.svg" ) );
-		iconsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_LEADING_ICON,
-			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/user.svg" ) );
-		iconsTextField.putClientProperty( FlatClientProperties.TEXT_FIELD_TRAILING_ICON,
-			new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/bookmarkGroup.svg" ) );
-
 		if( FlatLafDemo.screenshotsMode ) {
 			// hide some components
 			Component[] hiddenComponents = {
@@ -919,6 +919,9 @@ class BasicComponentsPanel
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JPasswordField passwordField1;
+	private JTextField leadingIconTextField;
+	private JTextField trailingIconTextField;
+	private JTextField iconsTextField;
 	private JTextField compsTextField;
 	private JTextField clearTextField;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
