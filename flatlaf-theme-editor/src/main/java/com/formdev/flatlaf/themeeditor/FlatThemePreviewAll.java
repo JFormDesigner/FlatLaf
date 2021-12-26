@@ -128,26 +128,25 @@ class FlatThemePreviewAll
 	}
 
 	private void enableDisable( Component comp, boolean enabled ) {
-		if( !isControlComponent( comp ) )
-			comp.setEnabled( enabled );
+		if( comp instanceof JScrollPane )
+			comp = ((JScrollPane)comp).getViewport().getView();
 
-		if( !(comp instanceof Container) || comp instanceof JInternalFrame )
+		if( comp == null || (comp instanceof JLabel && comp != label1) )
 			return;
 
-		for( Component c : ((Container)comp).getComponents() ) {
-			if( c instanceof JScrollPane )
-				c = ((JScrollPane)c).getViewport().getView();
+		// enable/disable component
+		if( !isControlComponent( comp ) && comp != menu2 )
+			comp.setEnabled( enabled );
 
-			// make sure that background is updated correctly in BasicTextUI.updateBackground()
-			if( c instanceof JTextPane )
-				c.setBackground( UIManager.getColor( "TextPane.background" ) );
-			else if( c instanceof JEditorPane )
-				c.setBackground( UIManager.getColor( "EditorPane.background" ) );
-
-			enableDisable( c, enabled );
-		}
-
-		if( comp instanceof JMenu ) {
+		// enable/disable children
+		if( comp instanceof JPanel || comp instanceof JToolBar || comp instanceof JMenuBar ) {
+			for( Component c : ((Container)comp).getComponents() )
+				enableDisable( c, enabled );
+		} else if( comp instanceof JSplitPane ) {
+			JSplitPane splitPane = (JSplitPane) comp;
+			enableDisable( splitPane.getLeftComponent(), enabled );
+			enableDisable( splitPane.getRightComponent(), enabled );
+		} else if( comp instanceof JMenu ) {
 			JMenu menu = (JMenu) comp;
 			int count = menu.getMenuComponentCount();
 			for( int i = 0; i < count; i++ )
@@ -165,9 +164,6 @@ class FlatThemePreviewAll
 			textArea1.setEditable( editable );
 			editorPane1.setEditable( editable );
 			textPane1.setEditable( editable );
-
-			editorPane1.updateUI();
-			textPane1.updateUI();
 		} );
 
 		FlatThemeFileEditor.putPrefsBoolean( preview.state, KEY_EDITABLE, editable, true );
@@ -186,20 +182,24 @@ class FlatThemePreviewAll
 	}
 
 	private void focusComponent( Component comp, Object value ) {
+		if( comp instanceof JScrollPane )
+			comp = ((JScrollPane)comp).getViewport().getView();
+
+		if( comp == null )
+			return;
+
+		// focus component
 		if( !isControlComponent( comp ) && comp instanceof JComponent )
 			((JComponent)comp).putClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER, value );
 
-		if( !(comp instanceof Container) ||
-			comp instanceof JComboBox ||
-			comp instanceof JSpinner ||
-			comp instanceof JInternalFrame )
-		  return;
-
-		for( Component c : ((Container)comp).getComponents() ) {
-			if( c instanceof JScrollPane )
-				c = ((JScrollPane)c).getViewport().getView();
-
-			focusComponent( c, value );
+		// focus children
+		if( comp instanceof JPanel || comp instanceof JToolBar ) {
+			for( Component c : ((Container)comp).getComponents() )
+				focusComponent( c, value );
+		} else if( comp instanceof JSplitPane ) {
+			JSplitPane splitPane = (JSplitPane) comp;
+			focusComponent( splitPane.getLeftComponent(), value );
+			focusComponent( splitPane.getRightComponent(), value );
 		}
 	}
 
@@ -207,8 +207,7 @@ class FlatThemePreviewAll
 		return c == enabledCheckBox ||
 			c == editableCheckBox ||
 			c == focusedCheckBox ||
-			c == menuUnderlineSelectionButton ||
-			c == menu2;
+			c == menuUnderlineSelectionButton;
 	}
 
 	private void menuUnderlineSelectionChanged() {
@@ -246,7 +245,7 @@ class FlatThemePreviewAll
 		editableCheckBox = new JCheckBox();
 		focusedCheckBox = new JCheckBox();
 		JLabel labelLabel = new JLabel();
-		JLabel label1 = new JLabel();
+		label1 = new JLabel();
 		FlatButton flatButton1 = new FlatButton();
 		JLabel buttonLabel = new JLabel();
 		JButton button1 = new JButton();
@@ -861,6 +860,7 @@ class FlatThemePreviewAll
 	private JCheckBox enabledCheckBox;
 	private JCheckBox editableCheckBox;
 	private JCheckBox focusedCheckBox;
+	private JLabel label1;
 	private FlatTextField textField1;
 	private FlatFormattedTextField formattedTextField1;
 	private FlatPasswordField passwordField1;
