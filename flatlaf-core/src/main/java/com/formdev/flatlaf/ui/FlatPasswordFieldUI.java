@@ -38,6 +38,7 @@ import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.PasswordView;
 import javax.swing.text.View;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCapsLockIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.util.UIScale;
@@ -83,6 +84,9 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatPasswordFieldUI
 	extends FlatTextFieldUI
 {
+	// used to preserve reveal button state when switching theme
+	private static final String KEY_REVEAL_SELECTED = "FlatLaf.internal.FlatPasswordFieldUI.revealSelected";
+
 	private Character echoChar;
 
 	@Styleable protected boolean showCapsLock;
@@ -269,18 +273,16 @@ public class FlatPasswordFieldUI
 		if( !showCapsLock )
 			return false;
 
-		JTextComponent c = getComponent();
-		return FlatUIUtils.isPermanentFocusOwner( c ) &&
+		return FlatUIUtils.isPermanentFocusOwner( getComponent() ) &&
 			Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK );
 	}
 
 	/** @since 2 */
 	protected void installRevealButton() {
-		JTextComponent c = getComponent();
 		if( showRevealButton ) {
 			revealButton = createRevealButton();
 			installLayout();
-			c.add( revealButton );
+			getComponent().add( revealButton );
 		}
 	}
 
@@ -288,12 +290,22 @@ public class FlatPasswordFieldUI
 	protected JToggleButton createRevealButton() {
 		JToggleButton button = new JToggleButton( revealIcon );
 		prepareLeadingOrTrailingComponent( button );
+		if( FlatClientProperties.clientPropertyBoolean( getComponent(), KEY_REVEAL_SELECTED, false ) ) {
+			button.setSelected( true );
+			updateEchoChar( true );
+		}
 		button.addActionListener( e -> {
-			LookAndFeel.installProperty( getComponent(), "echoChar", button.isSelected()
-				? '\0'
-				: (echoChar != null ? echoChar : '*'));
+			boolean selected = button.isSelected();
+			updateEchoChar( selected );
+			getComponent().putClientProperty( KEY_REVEAL_SELECTED, selected );
 		} );
 		return button;
+	}
+
+	private void updateEchoChar( boolean selected ) {
+		LookAndFeel.installProperty( getComponent(), "echoChar", selected
+			? '\0'
+			: (echoChar != null ? echoChar : '*'));
 	}
 
 	/** @since 2 */
