@@ -902,20 +902,31 @@ class UIDefaultsLoader
 	 * Syntax: fade(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
-	 *   - options: [derived]
+	 *   - options: [derived] [lazy]
 	 */
 	private static Object parseColorFade( List<String> params, Function<String, String> resolver, boolean reportError ) {
 		String colorStr = params.get( 0 );
 		int amount = parsePercentage( params.get( 1 ) );
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > 2 ) {
 			String options = params.get( 2 );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 		}
 
 		// create function
 		ColorFunction function = new ColorFunctions.Fade( amount );
+
+		if( lazy ) {
+			return (LazyValue) t -> {
+				Object color = lazyUIManagerGet( colorStr );
+				return (color instanceof Color)
+					? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
+					: null;
+			};
+		}
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
