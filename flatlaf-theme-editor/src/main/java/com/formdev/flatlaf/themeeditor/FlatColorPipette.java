@@ -44,6 +44,7 @@ import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.util.HSLColor;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -93,7 +94,9 @@ class FlatColorPipette
 
 			setAlwaysOnTop( true );
 			setUndecorated( true );
-			setOpacity( 0.005f );
+			// macOS: windows with opacity smaller than 0.05 does not receive
+			//        mouse clicked/pressed/released events (but mouse moved events)
+			setOpacity( SystemInfo.isMacOS ? 0.05f : 0.005f );
 			setBounds( owner.getGraphicsConfiguration().getBounds() );
 
 			robot = new Robot( owner.getGraphicsConfiguration().getDevice() );
@@ -109,6 +112,8 @@ class FlatColorPipette
 					// (temporary change opacity to zero to get correct color from robot)
 					float oldOpacity = getOpacity();
 					setOpacity( 0 );
+					if( SystemInfo.isMacOS )
+						robot.delay( 20 ); // give macOS some time to update the opacity
 					Color color = robot.getPixelColor( lastX, lastY );
 					setOpacity( oldOpacity );
 
@@ -120,10 +125,17 @@ class FlatColorPipette
 				public void mouseClicked( MouseEvent e ) {
 					dispose();
 
-					if( SwingUtilities.isLeftMouseButton( e ) )
-						pick( robot.getPixelColor( e.getX(), e.getY() ) );
-					else
-						pick( null );
+					Color color = null;
+					if( SwingUtilities.isLeftMouseButton( e ) ) {
+						// on macOS, robot not always returns correct color
+						// in mouse clicked event (sometimes black; sometimes
+						// includes opacity of disposed window)
+						// --> use last hover color on macOS
+						color = SystemInfo.isMacOS
+							? lastHoverColor
+							: robot.getPixelColor( e.getX(), e.getY() );
+					}
+					pick( color );
 				}
 			};
 
