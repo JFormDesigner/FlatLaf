@@ -28,6 +28,7 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JPasswordField;
 import javax.swing.JToggleButton;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
@@ -97,6 +98,7 @@ public class FlatPasswordFieldUI
 	private KeyListener capsLockListener;
 	private boolean capsLockIconShared = true;
 	private JToggleButton revealButton;
+	private boolean uninstallEchoChar;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatPasswordFieldUI();
@@ -303,14 +305,33 @@ public class FlatPasswordFieldUI
 	}
 
 	private void updateEchoChar( boolean selected ) {
-		LookAndFeel.installProperty( getComponent(), "echoChar", selected
-			? '\0'
-			: (echoChar != null ? echoChar : '*'));
+		char newEchoChar = selected
+			? 0
+			: (echoChar != null ? echoChar : '*');
+
+		JPasswordField c = (JPasswordField) getComponent();
+		LookAndFeel.installProperty( c, "echoChar", newEchoChar );
+
+		// check whether was able to set echo char via LookAndFeel.installProperty()
+		// if not, then echo char was explicitly changed via JPasswordField.setEchoChar()
+		char actualEchoChar = c.getEchoChar();
+		if( actualEchoChar != newEchoChar ) {
+			if( selected && actualEchoChar != 0 ) {
+				// use explicitly set echo char
+				echoChar = actualEchoChar;
+				uninstallEchoChar = true;
+			}
+
+			c.setEchoChar( newEchoChar );
+		}
 	}
 
 	/** @since 2 */
 	protected void uninstallRevealButton() {
 		if( revealButton != null ) {
+			if( uninstallEchoChar && revealButton.isSelected() )
+				((JPasswordField)getComponent()).setEchoChar( echoChar );
+
 			getComponent().remove( revealButton );
 			revealButton = null;
 		}

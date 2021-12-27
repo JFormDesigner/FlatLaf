@@ -8,6 +8,11 @@ FlatLaf Change Log
 - Fixed "endless recursion in font" exception in
   `FlatLaf$ActiveFont.createValue()` if `UIManager.getFont()` is invoked from
   multiple threads. (issue #456)
+- PasswordField: Preserve reveal button state when switching theme. (PR #442;
+  issue #173)
+- PasswordField: Reveal button did not show password if
+  `JPasswordField.setEchoChar()` was invoked from application. (PR #442; issue
+  #173)
 
 
 ## 2.0-rc1
