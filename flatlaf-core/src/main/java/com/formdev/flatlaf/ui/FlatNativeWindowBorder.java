@@ -56,7 +56,7 @@ public class FlatNativeWindowBorder
 	private static final boolean canUseJBRCustomDecorations =
 		canUseWindowDecorations &&
 		SystemInfo.isJetBrainsJVM_11_orLater &&
-		FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, true );
+		FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, false );
 
 	private static Boolean supported;
 	private static Provider nativeProvider;

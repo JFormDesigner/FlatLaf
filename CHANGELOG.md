@@ -19,7 +19,11 @@ FlatLaf Change Log
   - Clear button no longer paints over round border. (issue #451)
 - Extras: Fixed concurrent loading of SVG icons on multiple threads. (issue
   #459)
-
+- Use FlatLaf native window decorations by default when running in
+  [JetBrains Runtime](https://github.com/JetBrains/JetBrainsRuntime/wiki)
+  (instead of using JetBrains custom decorations). System variable
+  `flatlaf.useJetBrainsCustomDecorations` is now `false` by default (was `true`
+  in FlatLaf 1.x). (issue #454)
 
 ## 2.0-rc1
 

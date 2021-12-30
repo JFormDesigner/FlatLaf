@@ -81,7 +81,7 @@ public interface FlatSystemProperties
 	 * {@link FlatClientProperties#USE_WINDOW_DECORATIONS} and
 	 * UI default {@code TitlePane.useWindowDecorations}.
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Window 10/11)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none
@@ -92,16 +92,16 @@ public interface FlatSystemProperties
 	 * Specifies whether JetBrains Runtime custom window decorations should be used
 	 * when creating {@code JFrame} or {@code JDialog}.
 	 * Requires that the application runs in a
-	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime</a>
+	 * <a href="https://github.com/JetBrains/JetBrainsRuntime/wiki">JetBrains Runtime</a>
 	 * (based on OpenJDK).
 	 * <p>
 	 * Setting this to {@code false} disables using JetBrains Runtime custom window decorations.
 	 * Then FlatLaf native window decorations are used.
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Window 10/11)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
-	 * <strong>Default</strong> {@code true}
+	 * <strong>Default</strong> {@code false} (since v2; was {@code true} in v1)
 	 */
 	String USE_JETBRAINS_CUSTOM_DECORATIONS = "flatlaf.useJetBrainsCustomDecorations";
 
@@ -116,7 +116,7 @@ public interface FlatSystemProperties
 	 * {@link FlatClientProperties#MENU_BAR_EMBEDDED} and
 	 * UI default {@code TitlePane.menuBarEmbedded}.
 	 * <p>
-	 * (requires Window 10)
+	 * (requires Window 10/11)
 	 * <p>
 	 * <strong>Allowed Values</strong> {@code false} and {@code true}<br>
 	 * <strong>Default</strong> none
