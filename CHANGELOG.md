@@ -17,6 +17,8 @@ FlatLaf Change Log
   - Improved hover/pressed/selected colors of leading/trailing buttons (e.g.
     "reveal" button in password field). (issue #452)
   - Clear button no longer paints over round border. (issue #451)
+- Extras: Fixed concurrent loading of SVG icons on multiple threads. (issue
+  #459)
 
 
 ## 2.0-rc1

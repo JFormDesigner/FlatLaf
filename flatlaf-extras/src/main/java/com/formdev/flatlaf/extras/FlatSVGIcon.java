@@ -273,10 +273,12 @@ public class FlatSVGIcon
 		// since the input stream is already loaded and parsed,
 		// get diagram here and remove it from cache
 		update();
-		svgCache.remove( uri );
+		synchronized( FlatSVGIcon.class ) {
+			svgCache.remove( uri );
+		}
 	}
 
-	private static URI loadFromStream( InputStream in ) throws IOException {
+	private static synchronized URI loadFromStream( InputStream in ) throws IOException {
 		try( InputStream in2 = in ) {
 			return svgUniverse.loadSVG( in2, "/flatlaf-stream-" + (streamNumber++) );
 		}
@@ -475,7 +477,7 @@ public class FlatSVGIcon
 		loadFailed = (diagram == null);
 	}
 
-	static SVGDiagram loadSVG( URI uri ) {
+	static synchronized SVGDiagram loadSVG( URI uri ) {
 		// get from our cache
 		SVGDiagram diagram = svgCache.get( uri );
 		if( diagram != null )

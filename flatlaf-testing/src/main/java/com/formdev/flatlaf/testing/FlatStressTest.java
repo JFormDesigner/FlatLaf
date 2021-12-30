@@ -27,6 +27,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 /**
  * @author Karl Tauber
@@ -57,6 +58,7 @@ public class FlatStressTest
 	private JComponent createStressTest() {
 		return createComboBoxStressTest();
 //		return createGetFontStressTest();
+//		return createSVGIconTest();
 	}
 
 	// for https://github.com/JFormDesigner/FlatLaf/issues/432
@@ -92,6 +94,33 @@ public class FlatStressTest
 		Runnable runnable = () -> {
 			for(;;) {
 				UIManager.getFont( "Label.font" );
+			}
+		};
+
+		Thread thread1 = new Thread( runnable);
+		thread1.setDaemon( true );
+		thread1.start();
+
+		Thread thread2 = new Thread( runnable);
+		thread2.setDaemon( true );
+		thread2.start();
+
+		Thread thread3 = new Thread( runnable);
+		thread3.setDaemon( true );
+		thread3.start();
+
+		return label;
+	}
+
+	// for https://github.com/JFormDesigner/FlatLaf/issues/459
+	@SuppressWarnings( "unused" )
+	private JComponent createSVGIconTest() {
+		JLabel label = new JLabel( "test" );
+
+		Runnable runnable = () -> {
+			for(;;) {
+				FlatSVGIcon icon = new FlatSVGIcon( "com/formdev/flatlaf/demo/icons/back.svg" );
+				icon.getIconHeight();
 			}
 		};
 
