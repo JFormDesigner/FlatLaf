@@ -13,6 +13,8 @@ FlatLaf Change Log
 - PasswordField: Reveal button did not show password if
   `JPasswordField.setEchoChar()` was invoked from application. (PR #442; issue
   #173)
+- Slider: Fixed/improved focused indicator color when changing accent color. (PR
+  #375)
 - TextField:
   - Improved hover/pressed/selected colors of leading/trailing buttons (e.g.
     "reveal" button in password field). (issue #452)

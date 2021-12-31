@@ -932,7 +932,7 @@ Slider.disabledTrackColor      #54595c  HSL 203   5  35    javax.swing.plaf.Colo
 Slider.focus                   #7a7d7f  HSL 204   2  49    javax.swing.plaf.ColorUIResource [UI]
 Slider.focusInsets             0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Slider.focusWidth              4
-Slider.focusedColor            #3c628cb3  70%  HSLA 212  40  39 70    com.formdev.flatlaf.util.DerivedColor [UI]    fade(70%)
+Slider.focusedColor            #7097c24d  30%  HSLA 211  40  60 30    com.formdev.flatlaf.util.DerivedColor [UI]    changeLightness(60%) fade(30%)
 Slider.font                    [active] $defaultFont [UI]
 Slider.foreground              #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 Slider.highlight               #232324  HSL 240   1  14    javax.swing.plaf.ColorUIResource [UI]
