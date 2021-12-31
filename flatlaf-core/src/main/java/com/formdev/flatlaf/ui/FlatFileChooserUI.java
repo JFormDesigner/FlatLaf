@@ -275,7 +275,10 @@ public class FlatFileChooserUI
 
 	private boolean doNotUseSystemIcons() {
 		// Java 17 32bit craches on Windows when using system icons
-		return SystemInfo.isWindows && SystemInfo.isJava_17_orLater && !SystemInfo.isX86_64;
+		// fixed in Java 18+ (see https://bugs.openjdk.java.net/browse/JDK-8277299)
+		return SystemInfo.isWindows &&
+			SystemInfo.isX86 &&
+			(SystemInfo.isJava_17_orLater && !SystemInfo.isJava_18_orLater);
 	}
 
 	//---- class FlatFileView -------------------------------------------------
