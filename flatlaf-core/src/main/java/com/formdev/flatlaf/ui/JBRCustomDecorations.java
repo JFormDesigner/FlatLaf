@@ -298,7 +298,7 @@ public class JBRCustomDecorations
 		}
 
 		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-			g.drawRect( x, y, width - 1, 0 );
+			g.fillRect( x, y, width, 1 );
 		}
 
 		void repaintBorder( Component c ) {

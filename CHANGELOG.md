@@ -24,6 +24,9 @@ FlatLaf Change Log
   (instead of using JetBrains custom decorations). System variable
   `flatlaf.useJetBrainsCustomDecorations` is now `false` by default (was `true`
   in FlatLaf 1.x). (issue #454)
+- Native window decorations: Fixed blurry iconify/maximize/close button hover
+  rectangles at 125%, 150% or 175% scaling. (issue #431)
+
 
 ## 2.0-rc1
 
