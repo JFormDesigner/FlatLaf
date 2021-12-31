@@ -313,6 +313,10 @@ public class FlatNativeWindowBorder
 
 	//---- class WindowTopBorder -------------------------------------------
 
+	/**
+	 * Window top border used on Windows 10.
+	 * No longer needed since Windows 11.
+	 */
 	static class WindowTopBorder
 		extends JBRCustomDecorations.JBRWindowTopBorder
 	{

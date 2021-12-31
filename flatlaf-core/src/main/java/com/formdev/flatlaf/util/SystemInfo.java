@@ -34,6 +34,9 @@ public class SystemInfo
 	// OS versions
 	public static final long osVersion;
 	public static final boolean isWindows_10_orLater;
+	/** <strong>Note</strong>: This requires Java 8u321, 11.0.14, 17.0.2 or 18 (or later).
+	 * (see https://bugs.openjdk.java.net/browse/JDK-8274840)
+	 * @since 2 */ public static final boolean isWindows_11_orLater;
 	public static final boolean isMacOS_10_11_ElCapitan_orLater;
 	public static final boolean isMacOS_10_14_Mojave_orLater;
 	public static final boolean isMacOS_10_15_Catalina_orLater;
@@ -72,6 +75,8 @@ public class SystemInfo
 		// OS versions
 		osVersion = scanVersion( System.getProperty( "os.version" ) );
 		isWindows_10_orLater = (isWindows && osVersion >= toVersion( 10, 0, 0, 0 ));
+		isWindows_11_orLater = (isWindows_10_orLater && osName.length() > "windows ".length() &&
+			scanVersion( osName.substring( "windows ".length() ) ) >= toVersion( 11, 0, 0, 0 ));
 		isMacOS_10_11_ElCapitan_orLater = (isMacOS && osVersion >= toVersion( 10, 11, 0, 0 ));
 		isMacOS_10_14_Mojave_orLater = (isMacOS && osVersion >= toVersion( 10, 14, 0, 0 ));
 		isMacOS_10_15_Catalina_orLater = (isMacOS && osVersion >= toVersion( 10, 15, 0, 0 ));

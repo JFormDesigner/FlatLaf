@@ -854,7 +854,7 @@ debug*/
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) )
 				insets.bottom += UIScale.scale( 1 );
 
-			if( hasNativeCustomDecoration() && !isWindowMaximized( c ) )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized( c ) )
 				insets = FlatUIUtils.addInsets( insets, WindowTopBorder.getInstance().getBorderInsets() );
 
 			return insets;
@@ -873,7 +873,7 @@ debug*/
 				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 			}
 
-			if( hasNativeCustomDecoration() && !isWindowMaximized( c ) )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized( c ) )
 				WindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
@@ -966,7 +966,7 @@ debug*/
 			activeChanged( true );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( hasNativeCustomDecoration() )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() )
 				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
 			repaintWindowBorder();
@@ -977,7 +977,7 @@ debug*/
 			activeChanged( false );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( hasNativeCustomDecoration() )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() )
 				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
 			repaintWindowBorder();
