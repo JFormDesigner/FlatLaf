@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "999.9.9.9.9999" Java: "1.8.0_202" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "17" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -444,6 +444,7 @@ new FormModel {
 				name: "scrollBar1"
 				"orientation": 0
 				"$client.FlatLaf.styleClass": "flatlaf-preview-scrollbar"
+				"visibleAmount": 50
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 12 2 1"
 			} )
@@ -452,6 +453,7 @@ new FormModel {
 				"orientation": 0
 				"showButtons": true
 				"$client.FlatLaf.styleClass": "flatlaf-preview-scrollbar"
+				"visibleAmount": 50
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 13 2 1"
 			} )
@@ -475,7 +477,6 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JSlider" ) {
 				name: "slider1"
-				"value": 30
 				"$client.FlatLaf.styleClass": "flatlaf-preview-slider"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
@@ -489,7 +490,6 @@ new FormModel {
 				"paintTicks": true
 				"majorTickSpacing": 50
 				"paintLabels": true
-				"value": 30
 				"$client.FlatLaf.styleClass": "flatlaf-preview-slider"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
@@ -506,7 +506,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatProgressBar" ) {
 				name: "progressBar1"
-				"value": 60
+				"value": 50
 				"$client.FlatLaf.styleClass": "flatlaf-preview-progressbar"
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false

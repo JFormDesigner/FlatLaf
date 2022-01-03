@@ -686,12 +686,14 @@ class FlatThemePreviewAll
 		//---- scrollBar1 ----
 		scrollBar1.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-scrollbar");
+		scrollBar1.setVisibleAmount(50);
 		add(scrollBar1, "cell 1 12 2 1");
 
 		//---- scrollBar5 ----
 		scrollBar5.setOrientation(Adjustable.HORIZONTAL);
 		scrollBar5.setShowButtons(true);
 		scrollBar5.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-scrollbar");
+		scrollBar5.setVisibleAmount(50);
 		add(scrollBar5, "cell 1 13 2 1");
 
 		//---- separatorLabel ----
@@ -707,7 +709,6 @@ class FlatThemePreviewAll
 		add(sliderLabel, "cell 0 15");
 
 		//---- slider1 ----
-		slider1.setValue(30);
 		slider1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-slider");
 		add(slider1, "cell 1 15 2 1,width 100");
 
@@ -716,7 +717,6 @@ class FlatThemePreviewAll
 		slider3.setPaintTicks(true);
 		slider3.setMajorTickSpacing(50);
 		slider3.setPaintLabels(true);
-		slider3.setValue(30);
 		slider3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-slider");
 		slider3.addChangeListener(e -> changeProgress());
 		add(slider3, "cell 1 16 2 1,width 100");
@@ -726,7 +726,7 @@ class FlatThemePreviewAll
 		add(progressBarLabel, "cell 0 17");
 
 		//---- progressBar1 ----
-		progressBar1.setValue(60);
+		progressBar1.setValue(50);
 		progressBar1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-progressbar");
 		add(progressBar1, "cell 1 17 2 1");
 

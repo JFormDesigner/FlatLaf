@@ -117,6 +117,21 @@ class FlatThemePropertiesSupport
 			int endOffset = textArea.getLineEndOffset( line );
 			String text = textArea.getText( startOffset, endOffset - startOffset );
 
+			// remove trailing backslash from multi-line properties usually used for styles
+			if( text.endsWith( "\\\n" ) )
+				text = text.substring( 0, text.length() - 2 ).trim();
+			// remove trailing semicolon from styles
+			if( text.endsWith( ";" ) )
+				text = text.substring( 0, text.length() - 1 ).trim();
+
+			// remove key starting with "[style]" so that first property name
+			// in CSS styled value is used as key to detect value type
+			if( text.startsWith( "[style]" ) ) {
+				int sepIndex = text.indexOf( '=' );
+				if( sepIndex >= 0 )
+					text = text.substring( sepIndex + 1 );
+			}
+
 			Properties properties = new Properties();
 			properties.load( new StringReader( text ) );
 			if( properties.isEmpty() )
