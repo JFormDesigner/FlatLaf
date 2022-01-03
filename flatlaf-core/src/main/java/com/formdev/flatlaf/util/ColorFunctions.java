@@ -122,6 +122,8 @@ public class ColorFunctions
 			return color1;
 		if( weight <= 0 )
 			return color2;
+		if( color1.equals( color2 ) )
+			return color1;
 
 		int r1 = color1.getRed();
 		int g1 = color1.getGreen();
@@ -196,6 +198,9 @@ public class ColorFunctions
 			: (float) Math.pow( (value + 0.055) / 1.055, 2.4 );
 	}
 
+	/**
+	 * Applies the given color functions to the given color and returns the new color.
+	 */
 	public static Color applyFunctions( Color color, ColorFunction... functions ) {
 		// if having only a single function of type Mix, then avoid four unnecessary conversions:
 		//     1. RGB to HSL in this method
@@ -221,6 +226,9 @@ public class ColorFunctions
 		return HSLColor.toRGB( hsla[0], hsla[1], hsla[2], hsla[3] / 100 );
 	}
 
+	/**
+	 * Clamps the given value between 0 and 100.
+	 */
 	public static float clamp( float value ) {
 		return (value < 0)
 			? 0
