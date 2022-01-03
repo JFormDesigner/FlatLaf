@@ -1,9 +1,8 @@
-JFDML JFormDesigner: "7.0.4.0.360" Java: "17" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "17" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
-		"$setComponentNames": true
 		auxiliary() {
 			"JavaCodeGenerator.defaultVariableLocal": true
 		}

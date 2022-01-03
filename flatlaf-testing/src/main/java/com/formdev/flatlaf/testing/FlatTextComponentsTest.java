@@ -234,7 +234,6 @@ public class FlatTextComponentsTest
 		JMenuItem pasteMenuItem = new JMenuItem();
 
 		//======== this ========
-		setName("this");
 		setLayout(new MigLayout(
 			"ltr,insets dialog,hidemode 3",
 			// columns
@@ -267,21 +266,18 @@ public class FlatTextComponentsTest
 		textFieldLabel.setText("JTextField:");
 		textFieldLabel.setDisplayedMnemonic('T');
 		textFieldLabel.setLabelFor(textField1);
-		textFieldLabel.setName("textFieldLabel");
 		add(textFieldLabel, "cell 0 0");
 
 		//---- textField1 ----
 		textField1.setText("editable");
 		textField1.setComponentPopupMenu(popupMenu1);
 		textField1.putClientProperty("JTextField.placeholderText", "place");
-		textField1.setName("textField1");
 		add(textField1, "cell 1 0,growx");
 
 		//---- textField3 ----
 		textField3.setText("longer text for testing horizontal scrolling");
 		textField3.setComponentPopupMenu(popupMenu1);
 		textField3.putClientProperty("JTextField.placeholderText", "place");
-		textField3.setName("textField3");
 		add(textField3, "cell 2 0,growx");
 
 		//---- textField2 ----
@@ -290,34 +286,29 @@ public class FlatTextComponentsTest
 		textField2.setSelectionEnd(4);
 		textField2.setComponentPopupMenu(popupMenu1);
 		textField2.putClientProperty("JTextField.placeholderText", "place");
-		textField2.setName("textField2");
 		add(textField2, "cell 3 0");
 
 		//---- formattedTextFieldLabel ----
 		formattedTextFieldLabel.setText("JFormattedTextField:");
 		formattedTextFieldLabel.setDisplayedMnemonic('F');
 		formattedTextFieldLabel.setLabelFor(formattedTextField1);
-		formattedTextFieldLabel.setName("formattedTextFieldLabel");
 		add(formattedTextFieldLabel, "cell 0 1");
 
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("editable");
 		formattedTextField1.setComponentPopupMenu(popupMenu1);
 		formattedTextField1.putClientProperty("JTextField.placeholderText", "place");
-		formattedTextField1.setName("formattedTextField1");
 		add(formattedTextField1, "cell 1 1,growx");
 
 		//---- formattedTextField3 ----
 		formattedTextField3.setText("longer text for testing horizontal scrolling");
 		formattedTextField3.setComponentPopupMenu(popupMenu1);
 		formattedTextField3.putClientProperty("JTextField.placeholderText", "place");
-		formattedTextField3.setName("formattedTextField3");
 		add(formattedTextField3, "cell 2 1,growx");
 
 		//======== panel1 ========
 		{
 			panel1.setBorder(new TitledBorder("Control"));
-			panel1.setName("panel1");
 			panel1.setLayout(new MigLayout(
 				"hidemode 3",
 				// columns
@@ -340,97 +331,80 @@ public class FlatTextComponentsTest
 
 			//---- button1 ----
 			button1.setText("change text");
-			button1.setName("button1");
 			button1.addActionListener(e -> changeText());
 			panel1.add(button1, "cell 0 0 2 1,alignx left,growx 0");
 
 			//---- leftPaddingLabel ----
 			leftPaddingLabel.setText("Left padding:");
-			leftPaddingLabel.setName("leftPaddingLabel");
 			panel1.add(leftPaddingLabel, "cell 0 1");
 
 			//---- leftPaddingField ----
-			leftPaddingField.setName("leftPaddingField");
 			leftPaddingField.addChangeListener(e -> paddingChanged());
 			panel1.add(leftPaddingField, "cell 1 1");
 
 			//---- rightPaddingLabel ----
 			rightPaddingLabel.setText("Right padding:");
-			rightPaddingLabel.setName("rightPaddingLabel");
 			panel1.add(rightPaddingLabel, "cell 0 2");
 
 			//---- rightPaddingField ----
-			rightPaddingField.setName("rightPaddingField");
 			rightPaddingField.addChangeListener(e -> paddingChanged());
 			panel1.add(rightPaddingField, "cell 1 2");
 
 			//---- topPaddingLabel ----
 			topPaddingLabel.setText("Top padding:");
-			topPaddingLabel.setName("topPaddingLabel");
 			panel1.add(topPaddingLabel, "cell 0 3");
 
 			//---- topPaddingField ----
-			topPaddingField.setName("topPaddingField");
 			topPaddingField.addChangeListener(e -> paddingChanged());
 			panel1.add(topPaddingField, "cell 1 3");
 
 			//---- bottomPaddingLabel ----
 			bottomPaddingLabel.setText("Bottom padding:");
-			bottomPaddingLabel.setName("bottomPaddingLabel");
 			panel1.add(bottomPaddingLabel, "cell 0 4");
 
 			//---- bottomPaddingField ----
-			bottomPaddingField.setName("bottomPaddingField");
 			bottomPaddingField.addChangeListener(e -> paddingChanged());
 			panel1.add(bottomPaddingField, "cell 1 4");
 
 			//---- leadingIconCheckBox ----
 			leadingIconCheckBox.setText("leading icon");
-			leadingIconCheckBox.setName("leadingIconCheckBox");
 			leadingIconCheckBox.addActionListener(e -> leadingIcon());
 			panel1.add(leadingIconCheckBox, "cell 0 5 2 1,alignx left,growx 0");
 
 			//---- trailingIconCheckBox ----
 			trailingIconCheckBox.setText("trailing icon");
-			trailingIconCheckBox.setName("trailingIconCheckBox");
 			trailingIconCheckBox.addActionListener(e -> trailingIcon());
 			panel1.add(trailingIconCheckBox, "cell 0 6 2 1,alignx left,growx 0");
 
 			//---- leadingComponentCheckBox ----
 			leadingComponentCheckBox.setText("leading component");
-			leadingComponentCheckBox.setName("leadingComponentCheckBox");
 			leadingComponentCheckBox.addActionListener(e -> leadingComponent());
 			panel1.add(leadingComponentCheckBox, "cell 0 7 2 1,alignx left,growx 0");
 
 			//---- trailingComponentCheckBox ----
 			trailingComponentCheckBox.setText("trailing component");
-			trailingComponentCheckBox.setName("trailingComponentCheckBox");
 			trailingComponentCheckBox.addActionListener(e -> trailingComponent());
 			panel1.add(trailingComponentCheckBox, "cell 0 8 2 1,alignx left,growx 0");
 
 			//---- leadingComponentVisibleCheckBox ----
 			leadingComponentVisibleCheckBox.setText("leading component visible");
 			leadingComponentVisibleCheckBox.setSelected(true);
-			leadingComponentVisibleCheckBox.setName("leadingComponentVisibleCheckBox");
 			leadingComponentVisibleCheckBox.addActionListener(e -> leadingComponentVisible());
 			panel1.add(leadingComponentVisibleCheckBox, "cell 0 9 2 1,alignx left,growx 0");
 
 			//---- trailingComponentVisibleCheckBox ----
 			trailingComponentVisibleCheckBox.setText("trailing component visible");
 			trailingComponentVisibleCheckBox.setSelected(true);
-			trailingComponentVisibleCheckBox.setName("trailingComponentVisibleCheckBox");
 			trailingComponentVisibleCheckBox.addActionListener(e -> trailingComponentVisible());
 			panel1.add(trailingComponentVisibleCheckBox, "cell 0 10 2 1,alignx left,growx 0");
 
 			//---- showClearButtonCheckBox ----
 			showClearButtonCheckBox.setText("clear button");
-			showClearButtonCheckBox.setName("showClearButtonCheckBox");
 			showClearButtonCheckBox.addActionListener(e -> showClearButton());
 			panel1.add(showClearButtonCheckBox, "cell 0 11 2 1,alignx left,growx 0");
 
 			//---- showRevealButtonCheckBox ----
 			showRevealButtonCheckBox.setText("password reveal button");
-			showRevealButtonCheckBox.setName("showRevealButtonCheckBox");
 			showRevealButtonCheckBox.addActionListener(e -> showRevealButton());
 			panel1.add(showRevealButtonCheckBox, "cell 0 12 2 1,alignx left,growx 0");
 		}
@@ -440,50 +414,42 @@ public class FlatTextComponentsTest
 		passwordFieldLabel.setText("JPasswordField:");
 		passwordFieldLabel.setDisplayedMnemonic('P');
 		passwordFieldLabel.setLabelFor(passwordField1);
-		passwordFieldLabel.setName("passwordFieldLabel");
 		add(passwordFieldLabel, "cell 0 2");
 
 		//---- passwordField1 ----
 		passwordField1.setText("editable");
 		passwordField1.setComponentPopupMenu(popupMenu1);
 		passwordField1.putClientProperty("JTextField.placeholderText", "place");
-		passwordField1.setName("passwordField1");
 		add(passwordField1, "cell 1 2,growx");
 
 		//---- passwordField3 ----
 		passwordField3.setText("longer text for testing horizontal scrolling");
 		passwordField3.setComponentPopupMenu(popupMenu1);
 		passwordField3.putClientProperty("JTextField.placeholderText", "place");
-		passwordField3.setName("passwordField3");
 		add(passwordField3, "cell 2 2,growx");
 
 		//---- textAreaLabel ----
 		textAreaLabel.setText("JTextArea:");
 		textAreaLabel.setDisplayedMnemonic('A');
 		textAreaLabel.setLabelFor(textArea1);
-		textAreaLabel.setName("textAreaLabel");
 		add(textAreaLabel, "cell 0 3");
 
 		//======== scrollPane1 ========
 		{
-			scrollPane1.setName("scrollPane1");
 
 			//---- textArea1 ----
 			textArea1.setText("editable");
 			textArea1.setComponentPopupMenu(popupMenu1);
-			textArea1.setName("textArea1");
 			scrollPane1.setViewportView(textArea1);
 		}
 		add(scrollPane1, "cell 1 3,growx");
 
 		//======== scrollPane3 ========
 		{
-			scrollPane3.setName("scrollPane3");
 
 			//---- textArea3 ----
 			textArea3.setText("longer text for testing horizontal scrolling");
 			textArea3.setComponentPopupMenu(popupMenu1);
-			textArea3.setName("textArea3");
 			scrollPane3.setViewportView(textArea3);
 		}
 		add(scrollPane3, "cell 2 3,growx");
@@ -492,29 +458,24 @@ public class FlatTextComponentsTest
 		editorPaneLabel.setText("JEditorPane");
 		editorPaneLabel.setDisplayedMnemonic('J');
 		editorPaneLabel.setLabelFor(editorPane1);
-		editorPaneLabel.setName("editorPaneLabel");
 		add(editorPaneLabel, "cell 0 4");
 
 		//======== scrollPane5 ========
 		{
-			scrollPane5.setName("scrollPane5");
 
 			//---- editorPane1 ----
 			editorPane1.setText("editable");
 			editorPane1.setComponentPopupMenu(popupMenu1);
-			editorPane1.setName("editorPane1");
 			scrollPane5.setViewportView(editorPane1);
 		}
 		add(scrollPane5, "cell 1 4,growx");
 
 		//======== scrollPane7 ========
 		{
-			scrollPane7.setName("scrollPane7");
 
 			//---- editorPane3 ----
 			editorPane3.setText("longer text for testing horizontal scrolling");
 			editorPane3.setComponentPopupMenu(popupMenu1);
-			editorPane3.setName("editorPane3");
 			scrollPane7.setViewportView(editorPane3);
 		}
 		add(scrollPane7, "cell 2 4,growx");
@@ -523,29 +484,24 @@ public class FlatTextComponentsTest
 		textPaneLabel.setText("JTextPane:");
 		textPaneLabel.setDisplayedMnemonic('N');
 		textPaneLabel.setLabelFor(textPane1);
-		textPaneLabel.setName("textPaneLabel");
 		add(textPaneLabel, "cell 0 5");
 
 		//======== scrollPane9 ========
 		{
-			scrollPane9.setName("scrollPane9");
 
 			//---- textPane1 ----
 			textPane1.setText("editable");
 			textPane1.setComponentPopupMenu(popupMenu1);
-			textPane1.setName("textPane1");
 			scrollPane9.setViewportView(textPane1);
 		}
 		add(scrollPane9, "cell 1 5,growx");
 
 		//======== scrollPane11 ========
 		{
-			scrollPane11.setName("scrollPane11");
 
 			//---- textPane3 ----
 			textPane3.setText("longer text for testing horizontal scrolling");
 			textPane3.setComponentPopupMenu(popupMenu1);
-			textPane3.setName("textPane3");
 			scrollPane11.setViewportView(textPane3);
 		}
 		add(scrollPane11, "cell 2 5,growx");
@@ -554,7 +510,6 @@ public class FlatTextComponentsTest
 		comboBoxLabel.setText("JComboBox:");
 		comboBoxLabel.setDisplayedMnemonic('C');
 		comboBoxLabel.setLabelFor(comboBox1);
-		comboBoxLabel.setName("comboBoxLabel");
 		add(comboBoxLabel, "cell 0 6");
 
 		//---- comboBox1 ----
@@ -566,7 +521,6 @@ public class FlatTextComponentsTest
 			"ccc"
 		}));
 		comboBox1.setComponentPopupMenu(popupMenu1);
-		comboBox1.setName("comboBox1");
 		add(comboBox1, "cell 1 6,growx");
 
 		//---- comboBox3 ----
@@ -579,154 +533,121 @@ public class FlatTextComponentsTest
 		comboBox3.setEditable(true);
 		comboBox3.setPrototypeDisplayValue("12345");
 		comboBox3.setComponentPopupMenu(popupMenu1);
-		comboBox3.setName("comboBox3");
 		add(comboBox3, "cell 2 6,growx,wmin 50");
 
 		//---- spinnerLabel ----
 		spinnerLabel.setText("JSpinner:");
 		spinnerLabel.setDisplayedMnemonic('S');
 		spinnerLabel.setLabelFor(spinner1);
-		spinnerLabel.setName("spinnerLabel");
 		add(spinnerLabel, "cell 0 7");
 
 		//---- spinner1 ----
 		spinner1.setComponentPopupMenu(popupMenu1);
-		spinner1.setName("spinner1");
 		add(spinner1, "cell 1 7,growx");
 
 		//---- label2 ----
 		label2.setText("<html>Large row height:<br>(default pref height)</html>");
-		label2.setName("label2");
 		add(label2, "cell 0 8,aligny top,growy 0");
 
 		//---- comboBox2 ----
 		comboBox2.setEditable(true);
-		comboBox2.setName("comboBox2");
 		add(comboBox2, "cell 1 8,grow");
-
-		//---- spinner2 ----
-		spinner2.setName("spinner2");
 		add(spinner2, "cell 1 9,grow");
 
 		//---- label1 ----
 		label1.setText("Large pref height:");
-		label1.setName("label1");
 		add(label1, "cell 0 10,aligny top,growy 0");
 
 		//---- comboBox5 ----
 		comboBox5.setPreferredSize(new Dimension(60, 40));
 		comboBox5.setEditable(true);
-		comboBox5.setName("comboBox5");
 		add(comboBox5, "cell 1 10,growx");
 
 		//---- spinner4 ----
 		spinner4.setPreferredSize(new Dimension(60, 40));
-		spinner4.setName("spinner4");
 		add(spinner4, "cell 1 11,growx");
 
 		//---- label3 ----
 		label3.setText("<html>Small row height:<br>(default pref height)</html>");
-		label3.setName("label3");
 		add(label3, "cell 0 12 1 2,aligny top,growy 0");
 
 		//---- comboBox4 ----
 		comboBox4.setEditable(true);
-		comboBox4.setName("comboBox4");
 		add(comboBox4, "cell 1 12,growx");
-
-		//---- spinner3 ----
-		spinner3.setName("spinner3");
 		add(spinner3, "cell 1 13,growx");
 
 		//---- label4 ----
 		label4.setText("Small pref height:");
-		label4.setName("label4");
 		add(label4, "cell 0 14 1 2,aligny top,growy 0");
 
 		//---- comboBox6 ----
 		comboBox6.setEditable(true);
 		comboBox6.setPreferredSize(new Dimension(60, 14));
 		comboBox6.setMinimumSize(new Dimension(60, 14));
-		comboBox6.setName("comboBox6");
 		add(comboBox6, "cell 1 14,growx");
 
 		//---- spinner5 ----
 		spinner5.setMinimumSize(new Dimension(60, 14));
 		spinner5.setPreferredSize(new Dimension(60, 14));
-		spinner5.setName("spinner5");
 		add(spinner5, "cell 1 15,growx,hmax 14");
 
 		//---- label5 ----
 		label5.setText("Double-click-and-drag:");
-		label5.setName("label5");
 		add(label5, "cell 0 16");
 
 		//---- textField ----
 		textField.setText("123 456 789 abc def");
-		textField.setName("textField");
 		add(textField, "cell 1 16 2 1,growx");
 
 		//---- dragEnabledCheckBox ----
 		dragEnabledCheckBox.setText("Drag enabled");
-		dragEnabledCheckBox.setName("dragEnabledCheckBox");
 		dragEnabledCheckBox.addActionListener(e -> dragEnabledChanged());
 		add(dragEnabledCheckBox, "cell 3 16 2 1,alignx left,growx 0");
 
 		//---- label6 ----
 		label6.setText("<html>JTextArea<br>JTextPane<br>JEditorPane</html>");
-		label6.setName("label6");
 		add(label6, "cell 0 17,align right top,grow 0 0");
 
 		//======== scrollPane2 ========
 		{
-			scrollPane2.setName("scrollPane2");
 
 			//---- textArea ----
 			textArea.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
-			textArea.setName("textArea");
 			scrollPane2.setViewportView(textArea);
 		}
 		add(scrollPane2, "cell 1 17 4 1,growx");
 
 		//======== scrollPane4 ========
 		{
-			scrollPane4.setName("scrollPane4");
 
 			//---- textPane ----
 			textPane.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
-			textPane.setName("textPane");
 			scrollPane4.setViewportView(textPane);
 		}
 		add(scrollPane4, "cell 1 17 4 1,growx");
 
 		//======== scrollPane6 ========
 		{
-			scrollPane6.setName("scrollPane6");
 
 			//---- editorPane ----
 			editorPane.setText("1 123 456 789 abc def\n2 123 456 789 abc def\n3 123 456 789 abc def\n4 123 456 789 abc def\n5 123 456 789 abc def\n6 123 456 789 abc def\n7 123 456 789 abc def\n8 123 456 789 abc def");
-			editorPane.setName("editorPane");
 			scrollPane6.setViewportView(editorPane);
 		}
 		add(scrollPane6, "cell 1 17 4 1,growx");
 
 		//======== popupMenu1 ========
 		{
-			popupMenu1.setName("popupMenu1");
 
 			//---- cutMenuItem ----
 			cutMenuItem.setText("Cut");
-			cutMenuItem.setName("cutMenuItem");
 			popupMenu1.add(cutMenuItem);
 
 			//---- copyMenuItem ----
 			copyMenuItem.setText("Copy");
-			copyMenuItem.setName("copyMenuItem");
 			popupMenu1.add(copyMenuItem);
 
 			//---- pasteMenuItem ----
 			pasteMenuItem.setText("Paste");
-			pasteMenuItem.setName("pasteMenuItem");
 			popupMenu1.add(pasteMenuItem);
 		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
