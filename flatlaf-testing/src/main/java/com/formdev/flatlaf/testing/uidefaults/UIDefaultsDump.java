@@ -458,12 +458,14 @@ public class UIDefaultsDump
 	}
 
 	private void dumpColor( PrintWriter out, String key, Color color ) {
-		Color resolvedColor = resolveDerivedColor( key, color );
+		Color[] retBaseColor = new Color[1];
+		Color resolvedColor = resolveDerivedColor( key, color, retBaseColor );
 		if( resolvedColor != color && resolvedColor.getRGB() != color.getRGB() ) {
 			if( !isIntelliJTheme ) {
 				System.err.println( "Key '" + key + "': derived colors not equal" );
-				System.err.println( "  Default color:  " + dumpColorHexAndHSL( color ) );
-				System.err.println( "  Resolved color: " + dumpColorHexAndHSL( resolvedColor ) );
+				System.err.println( "  Default color:          " + dumpColorHexAndHSL( color ) );
+				System.err.println( "  Resolved color:         " + dumpColorHexAndHSL( resolvedColor ) );
+				System.err.println( "  Base of resolved color: " + dumpColorHexAndHSL( retBaseColor[0] ) );
 			}
 
 			out.printf( "%s / ",
@@ -672,7 +674,7 @@ public class UIDefaultsDump
 		return properties;
 	}
 
-	private Color resolveDerivedColor( String key, Color color ) {
+	private Color resolveDerivedColor( String key, Color color, Color[] retBaseColor ) {
 		if( !(color instanceof DerivedColor) )
 			return color;
 
@@ -693,7 +695,9 @@ public class UIDefaultsDump
 			throw new IllegalStateException( "Missing base color '" + baseKey + "' for key '" + key + "'." );
 
 		if( baseColor instanceof DerivedColor )
-			baseColor = resolveDerivedColor( (String) baseKey, baseColor );
+			baseColor = resolveDerivedColor( (String) baseKey, baseColor, retBaseColor );
+
+		retBaseColor[0] = baseColor;
 
 		Color newColor = FlatUIUtils.deriveColor( color, baseColor );
 
