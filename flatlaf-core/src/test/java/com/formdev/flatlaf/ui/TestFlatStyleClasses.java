@@ -40,7 +40,7 @@ public class TestFlatStyleClasses
 
 	@BeforeAll
 	static void setup() {
-		System.setProperty( FlatSystemProperties.UI_SCALE_ENABLED, "false" );
+		System.setProperty( FlatSystemProperties.UI_SCALE, "1x" );
 		TestUtils.setup( false );
 
 		UIManager.put( "[style]Button.primary", BUTTON_PRIMARY );
@@ -100,7 +100,7 @@ public class TestFlatStyleClasses
 	@AfterAll
 	static void cleanup() {
 		TestUtils.cleanup();
-		System.clearProperty( FlatSystemProperties.UI_SCALE_ENABLED );
+		System.clearProperty( FlatSystemProperties.UI_SCALE );
 	}
 
 	@Test
