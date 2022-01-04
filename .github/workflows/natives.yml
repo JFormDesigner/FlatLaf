@@ -27,28 +27,17 @@ jobs:
 
             - uses: gradle/wrapper-validation-action@v1
 
-            - name: Setup Java 1.8
-              uses: actions/setup-java@v1
+            - name: Setup Java 11
+              uses: actions/setup-java@v2
               with:
-                  java-version: 1.8
-
-            - name: Cache Gradle wrapper
-              uses: actions/cache@v1
-              with:
-                  path: ~/.gradle/wrapper
-                  key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-            - name: Cache Gradle cache
-              uses: actions/cache@v2
-              with:
-                  path: |
-                    ~/.gradle/caches
-                    !~/.gradle/caches/modules-2/modules-2.lock
-                  key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-                  restore-keys: ${{ runner.os }}-gradle
+                  java-version: 11
+                  distribution: adopt
+                  cache: gradle
 
             - name: Build with Gradle
-              run: ./gradlew :flatlaf-natives-windows:build
+              # --no-daemon is necessary on Windows otherwise caching Gradle would fail with: 
+              #   tar.exe: Couldn't open ~/.gradle/caches/modules-2/modules-2.lock: Permission denied
+              run: ./gradlew :flatlaf-natives-windows:build --no-daemon
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v2

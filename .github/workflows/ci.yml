@@ -19,40 +19,26 @@ jobs:
     strategy:
       matrix:
         # test against
-        # - Java 1.8 (minimum requirement)
-        # - Java 9 (first version with JPMS)
+        # - Java 8 (minimum requirement)
         # - Java LTS versions (11, 17, ...)
         # - lastest Java version(s)
         java:
-          - 1.8
-          - 9
+          - 8
           - 11  # LTS
-          - 14
           - 15
 
     steps:
       - uses: actions/checkout@v2
 
       - uses: gradle/wrapper-validation-action@v1
-        if: matrix.java == '1.8'
+        if: matrix.java == '8'
 
       - name: Setup Java ${{ matrix.java }}
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java }}
-
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Cache Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
+          distribution: adopt  # Java 8 and 11 are pre-installed on ubuntu-latest
+          cache: gradle
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -80,22 +66,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Java 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: 11
-
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Cache Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
+          distribution: adopt  # pre-installed on ubuntu-latest
+          cache: gradle
 
       - name: Publish snapshot to oss.sonatype.org
         run: ./gradlew publish :flatlaf-theme-editor:build -Dorg.gradle.internal.publish.checksums.insecure=true
@@ -127,22 +102,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Java 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: 11
-
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Cache Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
+          distribution: adopt  # pre-installed on ubuntu-latest
+          cache: gradle
 
       - name: Release a new stable version to Maven Central
         run: ./gradlew publish :flatlaf-demo:build :flatlaf-theme-editor:build -Drelease=true
