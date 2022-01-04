@@ -28,7 +28,7 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 	}
 
 	dependencies {
-		add( "java9Compile", sourceSets.main.get().output )
+		add( "java9Implementation", sourceSets.main.get().output )
 	}
 
 	tasks {
