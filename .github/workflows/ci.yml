@@ -25,7 +25,7 @@ jobs:
         java:
           - 8
           - 11  # LTS
-          - 15
+          - 17  # LTS
 
     steps:
       - uses: actions/checkout@v2

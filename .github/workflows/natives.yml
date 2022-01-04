@@ -11,12 +11,14 @@ on:
         paths:
             - 'flatlaf-natives/flatlaf-natives-windows/**'
             - '.github/workflows/natives.yml'
+            - 'gradle/wrapper/gradle-wrapper.properties'
     pull_request:
         branches:
             - '*'
         paths:
             - 'flatlaf-natives/flatlaf-natives-windows/**'
             - '.github/workflows/natives.yml'
+            - 'gradle/wrapper/gradle-wrapper.properties'
 
 jobs:
     Windows:
