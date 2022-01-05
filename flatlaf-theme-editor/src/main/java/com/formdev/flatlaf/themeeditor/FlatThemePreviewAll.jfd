@@ -240,7 +240,17 @@ new FormModel {
 					"JavaCodeGenerator.variableLocal": false
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-				"value": "cell 1 8 2 1"
+				"value": "cell 1 8"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
+				name: "textField2"
+				"text": "Txt"
+				"$client.FlatLaf.styleClass": "flatlaf-preview-textfield"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 8"
 			} )
 			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatFormattedTextField" ) {
 				name: "formattedTextField1"
@@ -258,6 +268,7 @@ new FormModel {
 				"text": "Some Text"
 				"placeholderText": "placeholder text"
 				"$client.FlatLaf.styleClass": "flatlaf-preview-passwordfield"
+				"showClearButton": true
 				auxiliary() {
 					"JavaCodeGenerator.variableLocal": false
 				}

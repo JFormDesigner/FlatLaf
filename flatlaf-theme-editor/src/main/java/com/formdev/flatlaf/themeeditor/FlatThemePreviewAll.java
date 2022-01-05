@@ -31,7 +31,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.components.*;
+import com.formdev.flatlaf.icons.FlatSearchWithHistoryIcon;
 import com.formdev.flatlaf.ui.FlatTabbedPaneUI;
 import net.miginfocom.swing.*;
 
@@ -52,6 +54,28 @@ class FlatThemePreviewAll
 		this.preview = preview;
 
 		initComponents();
+
+		textField2.setLeadingComponent( new JButton( new FlatSearchWithHistoryIcon( true ) ) );
+
+		// whole words button
+		JToggleButton wordsButton = new JToggleButton( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/preview/words.svg" ) );
+		wordsButton.setRolloverIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/preview/wordsHovered.svg" ) );
+		wordsButton.setSelectedIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/preview/wordsSelected.svg" ) );
+		wordsButton.setToolTipText( "Whole Words" );
+
+		// regex button
+		JToggleButton regexButton = new JToggleButton( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/preview/regex.svg" ) );
+		regexButton.setRolloverIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/preview/regexHovered.svg" ) );
+		regexButton.setSelectedIcon( new FlatSVGIcon( "com/formdev/flatlaf/themeeditor/icons/preview/regexSelected.svg" ) );
+		regexButton.setSelected( true );
+		regexButton.setToolTipText( "Regular Expression" );
+
+		// search toolbar
+		JToolBar searchToolbar = new JToolBar();
+		searchToolbar.add( wordsButton );
+		searchToolbar.addSeparator();
+		searchToolbar.add( regexButton );
+		textField2.setTrailingComponent( searchToolbar );
 
 		tabbedPane1.uiDefaultsGetter = preview::getUIDefaultProperty;
 		tabbedPane1.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
@@ -159,6 +183,7 @@ class FlatThemePreviewAll
 
 		preview.runWithUIDefaultsGetter( () -> {
 			textField1.setEditable( editable );
+			textField2.setEditable( editable );
 			formattedTextField1.setEditable( editable );
 			passwordField1.setEditable( editable );
 			textArea1.setEditable( editable );
@@ -266,6 +291,7 @@ class FlatThemePreviewAll
 		JSpinner spinner1 = new JSpinner();
 		JLabel textFieldLabel = new JLabel();
 		textField1 = new FlatTextField();
+		textField2 = new FlatTextField();
 		formattedTextField1 = new FlatFormattedTextField();
 		passwordField1 = new FlatPasswordField();
 		JLabel textAreaLabel = new JLabel();
@@ -516,7 +542,12 @@ class FlatThemePreviewAll
 		textField1.setText("Some Text");
 		textField1.setPlaceholderText("placeholder text");
 		textField1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-textfield");
-		add(textField1, "cell 1 8 2 1");
+		add(textField1, "cell 1 8");
+
+		//---- textField2 ----
+		textField2.setText("Txt");
+		textField2.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-textfield");
+		add(textField2, "cell 2 8");
 
 		//---- formattedTextField1 ----
 		formattedTextField1.setText("Some Text");
@@ -528,6 +559,7 @@ class FlatThemePreviewAll
 		passwordField1.setText("Some Text");
 		passwordField1.setPlaceholderText("placeholder text");
 		passwordField1.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-passwordfield");
+		passwordField1.setShowClearButton(true);
 		add(passwordField1, "cell 2 9");
 
 		//---- textAreaLabel ----
@@ -926,6 +958,7 @@ class FlatThemePreviewAll
 	private JCheckBox focusedCheckBox;
 	private JLabel label1;
 	private FlatTextField textField1;
+	private FlatTextField textField2;
 	private FlatFormattedTextField formattedTextField1;
 	private FlatPasswordField passwordField1;
 	private JTextArea textArea1;
