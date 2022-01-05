@@ -764,6 +764,7 @@ debug*/
 	/** @since 2 */
 	protected JComponent createClearButton() {
 		JButton button = new JButton();
+		button.setName( "TextField.clearButton" );
 		button.putClientProperty( STYLE_CLASS, "clearButton" );
 		button.putClientProperty( BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON );
 		button.setCursor( Cursor.getDefaultCursor() );
@@ -937,6 +938,7 @@ debug*/
 				((LayoutManager2)delegate).invalidateLayout( target );
 		}
 	}
+
 	//---- class FlatDocumentListener -----------------------------------------
 
 	private class FlatDocumentListener

@@ -291,7 +291,9 @@ public class FlatPasswordFieldUI
 	/** @since 2 */
 	protected JToggleButton createRevealButton() {
 		JToggleButton button = new JToggleButton( revealIcon );
+		button.setName( "PasswordField.revealButton" );
 		prepareLeadingOrTrailingComponent( button );
+		button.putClientProperty( FlatClientProperties.STYLE_CLASS, "inTextField revealButton" );
 		if( FlatClientProperties.clientPropertyBoolean( getComponent(), KEY_REVEAL_SELECTED, false ) ) {
 			button.setSelected( true );
 			updateEchoChar( true );

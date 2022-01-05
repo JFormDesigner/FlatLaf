@@ -36,6 +36,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.SwingUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -156,7 +157,7 @@ public class FlatOptionPaneUI
 
 		// set icon-message gap
 		if( iconMessageGap > 0 ) {
-			Component iconMessageSeparator = findByName( messageArea, "OptionPane.separator" );
+			Component iconMessageSeparator = SwingUtils.getComponentByName( messageArea, "OptionPane.separator" );
 			if( iconMessageSeparator != null )
 				iconMessageSeparator.setPreferredSize( new Dimension( UIScale.scale( iconMessageGap ), 1 ) );
 		}
@@ -234,20 +235,6 @@ public class FlatOptionPaneUI
 			if( child instanceof Container )
 				updateChildPanels( (Container) child );
 		}
-	}
-
-	private Component findByName( Container c, String name ) {
-		for( Component child : c.getComponents() ) {
-			if( name.equals( child.getName() ) )
-				return child;
-
-			if( child instanceof Container ) {
-				Component c2 = findByName( (Container) child, name );
-				if( c2 != null )
-					return c2;
-			}
-		}
-		return null;
 	}
 
 	@Override
