@@ -38,15 +38,18 @@ import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
@@ -420,11 +423,21 @@ public class FlatButtonUI
 		try {
 			FlatUIUtils.setRenderingHints( g2 );
 
+			boolean def = isDefaultButton( c );
 			boolean isToolBarButton = isToolBarButton( c );
 			float focusWidth = isToolBarButton ? 0 : FlatUIUtils.getBorderFocusWidth( c );
 			float arc = FlatUIUtils.getBorderArc( c );
+			float textFieldArc = 0;
 
-			boolean def = isDefaultButton( c );
+			// if toolbar button is in leading/trailing component of a text field,
+			// increase toolbar button arc to match text field arc (if necessary)
+			if( isToolBarButton &&
+				FlatClientProperties.clientProperty( c, STYLE_CLASS, "", String.class ).contains( "inTextField" ) )
+			{
+				JTextField textField = (JTextField) SwingUtilities.getAncestorOfClass( JTextField.class, c );
+				if( textField != null )
+					textFieldArc = FlatUIUtils.getBorderArc( textField );
+			}
 
 			int x = 0;
 			int y = 0;
@@ -437,7 +450,14 @@ public class FlatButtonUI
 				y += spacing.top;
 				width -= spacing.left + spacing.right;
 				height -= spacing.top + spacing.bottom;
+
+				// reduce text field arc
+				textFieldArc -= spacing.top + spacing.bottom;
 			}
+
+			// increase toolbar button arc to match text field arc (if necessary)
+			if( arc < textFieldArc )
+				arc = textFieldArc;
 
 			// paint shadow
 			Color shadowColor = def ? defaultShadowColor : this.shadowColor;
