@@ -874,7 +874,26 @@ public interface FlatClientProperties
 	 * The component should be not opaque because the text field border is painted
 	 * slightly inside the usually visible border in some cases.
 	 * E.g. when focused (in some themes) or when an outline color is specified
-	 * (see {@link #OUTLINE}.
+	 * (see {@link #OUTLINE}).
+	 * <p>
+	 * The component is prepared in the following way:
+	 * <ul>
+	 * <li>Component client property {@link #STYLE_CLASS} is set to {@code inTextField}.
+	 * <li>If component is a button or toggle button, client property {@link #BUTTON_TYPE}
+	 *     is set to {@link #BUTTON_TYPE_TOOLBAR_BUTTON}
+	 *     and button cursor is set to default cursor (if not set).
+	 * <li>If component is a toolbar, client property {@link #STYLE_CLASS}
+	 *     is set to {@code inTextField} on all toolbar children
+	 *     and toolbar cursor is set to default cursor (if not set).
+	 * </ul>
+	 * Because text fields use the text cursor by default and the cursor is inherited by child components,
+	 * it may be necessary to explicitly set component cursor if you e.g. need the default arrow cursor.
+	 * E.g. {@code comp.setCursor( Cursor.getDefaultCursor() )}.
+	 * <p>
+	 * Styling is used to modify insets/margins and appearance of buttons and toolbars
+	 * so that they fit nicely into the text field and do not increase text field height.
+	 * See styles {@code [style]Button.inTextField} and {@code [style]ToolBar.inTextField}
+	 * in {@code Flat[Light|Dark]Laf.properties}.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
 	 * <strong>Value type</strong> {@link javax.swing.JComponent}
@@ -886,15 +905,7 @@ public interface FlatClientProperties
 	/**
 	 * Specifies a component that will be placed at the trailing edge of the text field.
 	 * <p>
-	 * The component will be positioned inside and aligned to the visible text field border.
-	 * There is no gap between the visible border and the component.
-	 * The laid out component size will be the preferred component width
-	 * and the inner text field height.
-	 * <p>
-	 * The component should be not opaque because the text field border is painted
-	 * slightly inside the usually visible border in some cases.
-	 * E.g. when focused (in some themes) or when an outline color is specified
-	 * (see {@link #OUTLINE}.
+	 * See {@link #TEXT_FIELD_LEADING_COMPONENT} for details.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
 	 * <strong>Value type</strong> {@link javax.swing.JComponent}

@@ -826,15 +826,20 @@ debug*/
 	/** @since 2 */
 	protected void prepareLeadingOrTrailingComponent( JComponent c ) {
 		c.putClientProperty( STYLE_CLASS, "inTextField" );
-		c.setCursor( Cursor.getDefaultCursor() );
 
-		if( c instanceof JButton || c instanceof JToggleButton )
+		if( c instanceof JButton || c instanceof JToggleButton ) {
 			c.putClientProperty( BUTTON_TYPE, BUTTON_TYPE_TOOLBAR_BUTTON );
-		else if( c instanceof JToolBar ) {
+
+			if( !c.isCursorSet() )
+				c.setCursor( Cursor.getDefaultCursor() );
+		} else if( c instanceof JToolBar ) {
 			for( Component child : c.getComponents() ) {
 				if( child instanceof JComponent )
 					((JComponent)child).putClientProperty( STYLE_CLASS, "inTextField" );
 			}
+
+			if( !c.isCursorSet() )
+				c.setCursor( Cursor.getDefaultCursor() );
 		}
 	}
 
