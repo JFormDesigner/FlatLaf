@@ -114,6 +114,9 @@ Buzz
 Applications using FlatLaf
 --------------------------
 
+- ![New](images/new.svg) [MooInfo](https://github.com/rememberber/MooInfo) -
+  visual implementation of OSHI, to view information about the system and
+  hardware
 - ![New](images/new.svg) [Jailer](https://github.com/Wisser/Jailer) 11.2 -
   database subsetting and relational data browsing tool
 - [Apache NetBeans](https://netbeans.apache.org/) 11.3 - IDE for Java, PHP, HTML
