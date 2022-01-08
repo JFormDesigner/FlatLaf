@@ -1,6 +1,6 @@
 Class  com.formdev.flatlaf.testing.FlatTestLaf
-ID     FlatLaf - Flat Test
-Name   Flat Test
+ID     FlatLaf - FlatLaf Test
+Name   FlatLaf Test
 Java   1.8.0_202
 OS     Windows 10
 

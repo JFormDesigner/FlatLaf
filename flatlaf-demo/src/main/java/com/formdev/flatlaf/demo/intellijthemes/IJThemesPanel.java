@@ -144,13 +144,13 @@ public class IJThemesPanel
 		// add core themes at beginning
 		categories.put( themes.size(), "Core Themes" );
 		if( showLight )
-			themes.add( new IJThemeInfo( "Flat Light", null, false, null, null, null, null, null, FlatLightLaf.class.getName() ) );
+			themes.add( new IJThemeInfo( "FlatLaf Light", null, false, null, null, null, null, null, FlatLightLaf.class.getName() ) );
 		if( showDark )
-			themes.add( new IJThemeInfo( "Flat Dark", null, true, null, null, null, null, null, FlatDarkLaf.class.getName() ) );
+			themes.add( new IJThemeInfo( "FlatLaf Dark", null, true, null, null, null, null, null, FlatDarkLaf.class.getName() ) );
 		if( showLight )
-			themes.add( new IJThemeInfo( "Flat IntelliJ", null, false, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
+			themes.add( new IJThemeInfo( "FlatLaf IntelliJ", null, false, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
 		if( showDark )
-			themes.add( new IJThemeInfo( "Flat Darcula", null, true, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
+			themes.add( new IJThemeInfo( "FlatLaf Darcula", null, true, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
 
 		// add themes from directory
 		categories.put( themes.size(), "Current Directory" );

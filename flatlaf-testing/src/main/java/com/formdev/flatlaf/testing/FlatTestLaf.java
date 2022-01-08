@@ -32,12 +32,12 @@ public class FlatTestLaf
 {
 	@Override
 	public String getName() {
-		return "Flat Test";
+		return "FlatLaf Test";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Flat Test Look and Feel";
+		return "FlatLaf Test Look and Feel";
 	}
 
 	@Override
