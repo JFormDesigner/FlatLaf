@@ -28,8 +28,12 @@ FlatLaf Change Log
   in FlatLaf 1.x). (issue #454)
 - Native window decorations: Fixed blurry iconify/maximize/close button hover
   rectangles at 125%, 150% or 175% scaling. (issue #431)
-- Native window decorations: Updated maximize and restore icons for Windows 11
-  style. (requires Java 8u321, 11.0.14, 17.0.2 or 18+)
+- Native window decorations:
+  - Updated maximize and restore icons for Windows 11 style. (requires Java
+    8u321, 11.0.14, 17.0.2 or 18+)
+  - Updated hover and pressed colors of iconify/maximize/close buttons for
+    Windows 11 style.
+
 
 ## 2.0-rc1
 
