@@ -99,6 +99,8 @@ For more information and documentation visit
 - [Customizing](https://www.formdev.com/flatlaf/customizing/)
 - [How to Customize](https://www.formdev.com/flatlaf/how-to-customize/)
 - [Properties Files](https://www.formdev.com/flatlaf/properties-files/)
+- [Components UI Properties](https://www.formdev.com/flatlaf/components/)
+- [Typography](https://www.formdev.com/flatlaf/typography/)
 - [Client Properties](https://www.formdev.com/flatlaf/client-properties/)
 - [System Properties](https://www.formdev.com/flatlaf/system-properties/)
 
