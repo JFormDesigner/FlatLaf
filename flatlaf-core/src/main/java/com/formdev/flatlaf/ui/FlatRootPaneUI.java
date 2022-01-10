@@ -162,6 +162,19 @@ public class FlatRootPaneUI
 	}
 
 	@Override
+	protected void uninstallDefaults( JRootPane c ) {
+		super.uninstallDefaults( c );
+
+		// uninstall background, foreground and font because not all Lafs set them
+		if( c.isBackgroundSet() && c.getBackground() instanceof UIResource )
+			c.setBackground( null );
+		if( c.isForegroundSet() && c.getForeground() instanceof UIResource )
+			c.setForeground( null );
+		if( c.isFontSet() && c.getFont() instanceof UIResource )
+			c.setFont( null );
+	}
+
+	@Override
 	protected void installListeners( JRootPane root ) {
 		super.installListeners( root );
 
