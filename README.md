@@ -11,9 +11,9 @@ scales on **HiDPI** displays and runs on Java 8 or newer.
 The look is heavily inspired by **Darcula** and **IntelliJ** themes from
 IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
 
-![Flat Light](images/flat_light.png)
+![FlatLaf Light](images/flat_light.png)
 
-![Flat Dark](images/flat_dark.png)
+![FlatLaf Dark](images/flat_dark.png)
 
 
 IntelliJ Platform Themes
@@ -103,6 +103,16 @@ For more information and documentation visit
 - [Typography](https://www.formdev.com/flatlaf/typography/)
 - [Client Properties](https://www.formdev.com/flatlaf/client-properties/)
 - [System Properties](https://www.formdev.com/flatlaf/system-properties/)
+
+
+Theme Editor
+------------
+
+The Theme Editor that supports editing FlatLaf theme properties files. See
+[Theme Editor documentation](https://www.formdev.com/flatlaf/theme-editor/) for
+details and downloads.
+
+![Theme Editor](images/theme-editor@1.5x.png)
 
 
 Buzz
