@@ -164,9 +164,10 @@ Applications using FlatLaf
 - [Total Validator](https://www.totalvalidator.com/) 15 (**commercial**) -
   checks your website
 - [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
-- [MegaMek](https://github.com/MegaMek/megamek) v0.47.4 and
-  [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5 - a turn-based sci-fi board
-  game
+- [MegaMek](https://github.com/MegaMek/megamek),
+  [MegaMekLab](https://github.com/MegaMek/megameklab) and
+  [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5+ - a sci-fi tabletop
+  BattleTech simulator suite handling battles, unit building, and campaigns
 - [GUIslice Builder](https://github.com/ImpulseAdventure/GUIslice-Builder)
   0.13.b024 - GUI builder for
   [GUIslice](https://github.com/ImpulseAdventure/GUIslice), a lightweight GUI
