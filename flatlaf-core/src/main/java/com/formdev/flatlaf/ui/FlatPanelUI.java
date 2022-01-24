@@ -18,12 +18,14 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPanelUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -43,13 +45,12 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatPanelUI
 	extends BasicPanelUI
-	implements StyleableUI
+	implements StyleableUI, PropertyChangeListener
 {
 	// only used via styling (not in UI defaults)
 	/** @since 2 */ @Styleable protected int arc = -1;
 
 	private final boolean shared;
-	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -67,9 +68,7 @@ public class FlatPanelUI
 	public void installUI( JComponent c ) {
 		super.installUI( c );
 
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
-			c, () -> stylePropertyChange( (JPanel) c ), null );
-		c.addPropertyChangeListener( propertyChangeListener );
+		c.addPropertyChangeListener( this );
 
 		installStyle( (JPanel) c );
 	}
@@ -78,21 +77,28 @@ public class FlatPanelUI
 	public void uninstallUI( JComponent c ) {
 		super.uninstallUI( c );
 
-		c.removePropertyChangeListener( propertyChangeListener );
-		propertyChangeListener = null;
+		c.removePropertyChangeListener( this );
 
 		oldStyleValues = null;
 	}
 
-	private void stylePropertyChange( JPanel c ) {
-		if( shared && FlatStylingSupport.hasStyleProperty( c ) ) {
-			// unshare component UI if necessary
-			// updateUI() invokes installStyle() from installUI()
-			c.updateUI();
-		} else
-			installStyle( c );
-		c.revalidate();
-		c.repaint();
+	/** @since 2.0.1 */
+	@Override
+	public void propertyChange( PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case FlatClientProperties.STYLE:
+			case FlatClientProperties.STYLE_CLASS:
+				JPanel c = (JPanel) e.getSource();
+				if( shared && FlatStylingSupport.hasStyleProperty( c ) ) {
+					// unshare component UI if necessary
+					// updateUI() invokes installStyle() from installUI()
+					c.updateUI();
+				} else
+					installStyle( c );
+				c.revalidate();
+				c.repaint();
+				break;
+		}
 	}
 
 	/** @since 2 */

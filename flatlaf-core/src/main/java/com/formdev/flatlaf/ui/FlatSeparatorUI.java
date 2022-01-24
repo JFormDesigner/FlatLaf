@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 import javax.swing.JComponent;
@@ -28,6 +29,7 @@ import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSeparatorUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.LoggingFacade;
@@ -50,7 +52,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
  */
 public class FlatSeparatorUI
 	extends BasicSeparatorUI
-	implements StyleableUI
+	implements StyleableUI, PropertyChangeListener
 {
 	@Styleable protected int height;
 	@Styleable protected int stripeWidth;
@@ -58,7 +60,6 @@ public class FlatSeparatorUI
 
 	private final boolean shared;
 	private boolean defaults_initialized = false;
-	private PropertyChangeListener propertyChangeListener;
 	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
@@ -109,28 +110,33 @@ public class FlatSeparatorUI
 	protected void installListeners( JSeparator s ) {
 		super.installListeners( s );
 
-		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener(
-			s, () -> stylePropertyChange( s ), null );
-		s.addPropertyChangeListener( propertyChangeListener );
+		s.addPropertyChangeListener( this );
 	}
 
 	@Override
 	protected void uninstallListeners( JSeparator s ) {
 		super.uninstallListeners( s );
 
-		s.removePropertyChangeListener( propertyChangeListener );
-		propertyChangeListener = null;
+		s.removePropertyChangeListener( this );
 	}
 
-	private void stylePropertyChange( JSeparator s ) {
-		if( shared && FlatStylingSupport.hasStyleProperty( s ) ) {
-			// unshare component UI if necessary
-			// updateUI() invokes installStyle() from installUI()
-			s.updateUI();
-		} else
-			installStyle( s );
-		s.revalidate();
-		s.repaint();
+	/** @since 2.0.1 */
+	@Override
+	public void propertyChange( PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case FlatClientProperties.STYLE:
+			case FlatClientProperties.STYLE_CLASS:
+				JSeparator s = (JSeparator) e.getSource();
+				if( shared && FlatStylingSupport.hasStyleProperty( s ) ) {
+					// unshare component UI if necessary
+					// updateUI() invokes installStyle() from installUI()
+					s.updateUI();
+				} else
+					installStyle( s );
+				s.revalidate();
+				s.repaint();
+				break;
+		}
 	}
 
 	/** @since 2 */

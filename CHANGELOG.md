@@ -1,6 +1,11 @@
 FlatLaf Change Log
 ==================
 
+## 2.0.1-SNAPSHOT
+
+- Fixed memory leak in Panel, Separator and ToolBarSeparator. (issue #471)
+
+
 ## 2.0
 
 - Added system property `flatlaf.nativeLibraryPath` to load native libraries
