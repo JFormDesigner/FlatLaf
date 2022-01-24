@@ -284,6 +284,20 @@ public class FlatSVGIcon
 		}
 	}
 
+	/**
+	 * Creates a copy of the given icon.
+	 * <p>
+	 * If the icon has a color filter, then it is shared with the new icon.
+	 *
+	 * @since 2.0.1
+	 */
+	public FlatSVGIcon( FlatSVGIcon icon ) {
+		this( icon.name, icon.width, icon.height, icon.scale, icon.disabled, icon.classLoader, icon.uri );
+		colorFilter = icon.colorFilter;
+		diagram = icon.diagram;
+		dark = icon.dark;
+	}
+
 	protected FlatSVGIcon( String name, int width, int height, float scale, boolean disabled, ClassLoader classLoader, URI uri ) {
 		this.name = name;
 		this.width = width;

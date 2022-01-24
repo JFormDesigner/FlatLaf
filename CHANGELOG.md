@@ -8,6 +8,7 @@ FlatLaf Change Log
 - ToolTip: Fixed wrong tooltip location if component overrides
   `JComponent.getToolTipLocation()` and wants place tooltip under mouse
   location. (issue #468)
+- Extras: Added copy constructor to `FlatSVGIcon`. (issue #465)
 
 
 ## 2.0
