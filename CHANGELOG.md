@@ -3,7 +3,11 @@ FlatLaf Change Log
 
 ## 2.0.1-SNAPSHOT
 
-- Fixed memory leak in Panel, Separator and ToolBarSeparator. (issue #471)
+- Fixed memory leak in Panel, Separator and ToolBarSeparator. (issue #471;
+  regression in FlatLaf 2.0)
+- ToolTip: Fixed wrong tooltip location if component overrides
+  `JComponent.getToolTipLocation()` and wants place tooltip under mouse
+  location. (issue #468)
 
 
 ## 2.0

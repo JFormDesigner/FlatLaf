@@ -16,10 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -33,6 +35,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.swing.JComponent;
@@ -219,7 +222,7 @@ public class FlatPopupFactory
 	 * and corrects the y-location so that the tooltip is placed above the mouse location.
 	 */
 	private Point fixToolTipLocation( Component owner, Component contents, int x, int y ) {
-		if( !(contents instanceof JToolTip) || !wasInvokedFromToolTipManager() )
+		if( !(contents instanceof JToolTip) || !wasInvokedFromToolTipManager() || hasTipLocation( owner ) )
 			return null;
 
 		PointerInfo pointerInfo = MouseInfo.getPointerInfo();
@@ -262,6 +265,35 @@ public class FlatPopupFactory
 
 	private boolean wasInvokedFromToolTipManager() {
 		return StackUtils.wasInvokedFrom( ToolTipManager.class.getName(), "showTipWindow", 8 );
+	}
+
+	/**
+	 * Checks whether the owner component returns a tooltip location in
+	 * JComponent.getToolTipLocation(MouseEvent).
+	 */
+	private boolean hasTipLocation( Component owner ) {
+		if( !(owner instanceof JComponent) )
+			return false;
+
+		AWTEvent e = EventQueue.getCurrentEvent();
+		MouseEvent me;
+		if( e instanceof MouseEvent )
+			me = (MouseEvent) e;
+		else {
+			// no mouse event available because a timer is used to show the tooltip
+			// --> create mouse event from current mouse location
+			PointerInfo pointerInfo = MouseInfo.getPointerInfo();
+			if( pointerInfo == null )
+				return false;
+
+			Point location = new Point( pointerInfo.getLocation());
+			SwingUtilities.convertPointFromScreen( location, owner );
+			me = new MouseEvent( owner, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(),
+				0, location.x, location.y, 0, false );
+		}
+
+		return me.getSource() == owner &&
+			((JComponent)owner).getToolTipLocation( me ) != null;
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
