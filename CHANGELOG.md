@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 2.0.1-SNAPSHOT
+## 2.0.1
 
 - Fixed memory leak in Panel, Separator and ToolBarSeparator. (issue #471;
   regression in FlatLaf 2.0)
