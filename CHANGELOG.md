@@ -9,6 +9,8 @@ FlatLaf Change Log
   `JComponent.getToolTipLocation()` and wants place tooltip under mouse
   location. (issue #468)
 - Extras: Added copy constructor to `FlatSVGIcon`. (issue #465)
+- Moved `module-info.class` from `META-INF\versions\9\` to root folder of JARs.
+  (issue #466)
 
 
 ## 2.0
