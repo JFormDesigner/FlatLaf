@@ -232,6 +232,7 @@ public class FlatTextFieldUI
 		switch( e.getPropertyName() ) {
 			case PLACEHOLDER_TEXT:
 			case COMPONENT_ROUND_RECT:
+			case OUTLINE:
 			case TEXT_FIELD_PADDING:
 				c.repaint();
 				break;

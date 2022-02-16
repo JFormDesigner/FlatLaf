@@ -538,6 +538,7 @@ public class FlatSpinnerUI
 					break;
 
 				case FlatClientProperties.COMPONENT_ROUND_RECT:
+				case FlatClientProperties.OUTLINE:
 					spinner.repaint();
 					break;
 

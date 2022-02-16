@@ -162,7 +162,6 @@ public class FlatComponentsTest
 				((JComponent)c).putClientProperty( FlatClientProperties.OUTLINE, outline );
 		} );
 
-		repaint();
 		textField1.requestFocusInWindow();
 	}
 

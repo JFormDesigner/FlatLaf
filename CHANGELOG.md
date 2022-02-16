@@ -1,6 +1,12 @@
 FlatLaf Change Log
 ==================
 
+## 2.1-SNAPSHOT
+
+- Repaint component when setting client property `JComponent.outline` (issue
+  #480).
+
+
 ## 2.0.1
 
 - Fixed memory leak in Panel, Separator and ToolBarSeparator. (issue #471;

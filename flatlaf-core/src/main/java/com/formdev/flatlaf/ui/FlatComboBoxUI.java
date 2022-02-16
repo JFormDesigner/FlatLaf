@@ -354,6 +354,7 @@ public class FlatComboBoxUI
 						break;
 
 					case COMPONENT_ROUND_RECT:
+					case OUTLINE:
 						comboBox.repaint();
 						break;
 

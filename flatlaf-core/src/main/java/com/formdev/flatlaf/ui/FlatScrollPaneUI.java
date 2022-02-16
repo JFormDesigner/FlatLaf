@@ -291,6 +291,10 @@ public class FlatScrollPaneUI
 					}
 					break;
 
+				case FlatClientProperties.OUTLINE:
+					scrollpane.repaint();
+					break;
+
 				case FlatClientProperties.STYLE:
 				case FlatClientProperties.STYLE_CLASS:
 					installStyle();

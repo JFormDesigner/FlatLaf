@@ -262,6 +262,10 @@ public class FlatButtonUI
 				b.repaint();
 				break;
 
+			case OUTLINE:
+				b.repaint();
+				break;
+
 			case STYLE:
 			case STYLE_CLASS:
 				if( shared && FlatStylingSupport.hasStyleProperty( b ) ) {
