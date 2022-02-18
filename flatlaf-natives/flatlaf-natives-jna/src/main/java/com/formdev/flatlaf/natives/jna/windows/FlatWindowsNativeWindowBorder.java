@@ -288,6 +288,7 @@ public class FlatWindowsNativeWindowBorder
 		private static final int GWLP_WNDPROC = -4;
 
 		private static final int
+			WM_MOVE = 0x0003,
 			WM_ERASEBKGND = 0x0014,
 			WM_NCCALCSIZE = 0x0083,
 			WM_NCHITTEST = 0x0084,
@@ -300,6 +301,10 @@ public class FlatWindowsNativeWindowBorder
 			WM_MOUSEMOVE= 0x0200,
 			WM_LBUTTONDOWN = 0x0201,
 			WM_LBUTTONUP = 0x0202,
+
+			WM_MOVING = 0x0216,
+			WM_ENTERSIZEMOVE = 0x0231,
+			WM_EXITSIZEMOVE = 0x0232,
 
 			WM_DWMCOLORIZATIONCOLORCHANGED = 0x0320;
 
@@ -341,6 +346,8 @@ public class FlatWindowsNativeWindowBorder
 		private final LONG_PTR defaultWndProc;
 		private int wmSizeWParam = -1;
 		private HBRUSH background;
+		private boolean isMovingOrSizing;
+		private boolean isMoving;
 
 		// Swing coordinates/values may be scaled on a HiDPI screen
 		private int titleBarHeight;
@@ -477,7 +484,27 @@ public class FlatWindowsNativeWindowBorder
 						wParam = new WPARAM( wmSizeWParam );
 					break;
 
+				case WM_ENTERSIZEMOVE:
+					isMovingOrSizing = true;
+					break;
+
+				case WM_EXITSIZEMOVE:
+					isMovingOrSizing = isMoving = false;
+					break;
+
+				case WM_MOVE:
+				case WM_MOVING:
+					if( isMovingOrSizing )
+						isMoving = true;
+					break;
+
 				case WM_ERASEBKGND:
+					// do not erase background while the user is moving the window,
+					// otherwise there may be rendering artifacts on HiDPI screens with Java 9+
+					// when dragging the window partly offscreen and back into the screen bounds
+					if( isMoving )
+						return new LRESULT( 0 );
+
 					return WmEraseBkgnd( hwnd, uMsg, wParam, lParam );
 
 				case WM_DESTROY:

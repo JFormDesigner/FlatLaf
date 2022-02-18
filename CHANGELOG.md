@@ -3,6 +3,9 @@ FlatLaf Change Log
 
 ## 2.1-SNAPSHOT
 
+- Native window decorations (Windows 10/11 only): Fixed rendering artifacts on
+  HiDPI screens when dragging window partly offscreen and back into screen
+  bounds. (issue #477)
 - Repaint component when setting client property `JComponent.outline` (issue
   #480).
 

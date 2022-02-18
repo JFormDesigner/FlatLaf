@@ -43,6 +43,8 @@ private:
 	WNDPROC defaultWndProc;
 	int wmSizeWParam;
 	HBRUSH background;
+	bool isMovingOrSizing;
+	bool isMoving;
 
 	FlatWndProc();
 	static void initIDs( JNIEnv *env, jobject obj );

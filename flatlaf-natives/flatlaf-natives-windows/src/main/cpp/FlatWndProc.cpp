@@ -88,6 +88,8 @@ FlatWndProc::FlatWndProc() {
 	defaultWndProc = NULL;
 	wmSizeWParam = -1;
 	background = NULL;
+	isMovingOrSizing = false;
+	isMoving = false;
 }
 
 HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
@@ -250,7 +252,27 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 				wParam = wmSizeWParam;
 			break;
 
+		case WM_ENTERSIZEMOVE:
+			isMovingOrSizing = true;
+			break;
+
+		case WM_EXITSIZEMOVE:
+			isMovingOrSizing = isMoving = false;
+			break;
+
+		case WM_MOVE:
+		case WM_MOVING:
+			if( isMovingOrSizing )
+				isMoving = true;
+			break;
+
 		case WM_ERASEBKGND:
+			// do not erase background while the user is moving the window,
+			// otherwise there may be rendering artifacts on HiDPI screens with Java 9+
+			// when dragging the window partly offscreen and back into the screen bounds
+			if( isMoving )
+				return FALSE;
+
 			return WmEraseBkgnd( hwnd, uMsg, wParam, lParam );
 
 		case WM_DESTROY:
