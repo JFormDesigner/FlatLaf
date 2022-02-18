@@ -573,7 +573,7 @@ public class FlatButtonUI
 	public static Color buttonStateColor( Component c, Color enabledColor, Color disabledColor,
 		Color focusedColor, Color hoverColor, Color pressedColor )
 	{
-		if( !c.isEnabled() )
+		if(c != null && !c.isEnabled() )
 			return disabledColor;
 
 		if( c instanceof AbstractButton ) {
@@ -586,7 +586,7 @@ public class FlatButtonUI
 				return hoverColor;
 		}
 
-		if( focusedColor != null && isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c ) )
+		if( c != null && focusedColor != null && isFocusPainted( c ) && FlatUIUtils.isPermanentFocusOwner( c ) )
 			return focusedColor;
 
 		return enabledColor;
