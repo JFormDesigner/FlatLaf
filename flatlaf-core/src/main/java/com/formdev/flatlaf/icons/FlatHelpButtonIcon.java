@@ -100,7 +100,7 @@ public class FlatHelpButtonIcon
 		boolean focused = c != null && FlatUIUtils.isPermanentFocusOwner( c );
 
 		float xy = 0.5f;
-		float wh = iconSize() - 1;
+		float wh = iconSize() - 1f;
 
 		// paint outer focus border
 		if( focused && FlatButtonUI.isFocusPainted( c ) ) {

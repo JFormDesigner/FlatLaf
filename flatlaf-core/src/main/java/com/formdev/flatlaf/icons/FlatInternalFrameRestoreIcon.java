@@ -42,11 +42,11 @@ public class FlatInternalFrameRestoreIcon
 
 		int x = (width / 2) - 4;
 		int y = (height / 2) - 4;
-		Path2D r1 = FlatUIUtils.createRectangle( x + 1, y - 1, 8, 8, 1 );
-		Path2D r2 = FlatUIUtils.createRectangle( x - 1, y + 1, 8, 8, 1 );
+		Path2D r1 = FlatUIUtils.createRectangle( x + 1f, y - 1f, 8, 8, 1 );
+		Path2D r2 = FlatUIUtils.createRectangle( x - 1f, y + 1f, 8, 8, 1 );
 
 		Area area = new Area( r1 );
-		area.subtract( new Area( new Rectangle2D.Float( x - 1, y + 1, 8, 8 ) ) );
+		area.subtract( new Area( new Rectangle2D.Float( x - 1f, y + 1f, 8, 8 ) ) );
 		g.fill( area );
 
 		g.fill( r2 );
