@@ -480,7 +480,7 @@ public class FlatSVGIcon
 
 			if( url == null ) {
 				loadFailed = true;
-				LoggingFacade.INSTANCE.logSevere( "FlatSVGIcon: resource '" + name + "' not found (if using Java modules, check whether icon package is opened in module-info.java)", null );
+				LoggingFacade.INSTANCE.logConfig( "FlatSVGIcon: resource '" + name + "' not found (if using Java modules, check whether icon package is opened in module-info.java)", null );
 				return;
 			}
 
