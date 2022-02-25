@@ -650,7 +650,7 @@ public class FlatTabbedPaneUI
 				case "tabIconPlacement": value = parseTabIconPlacement( (String) value ); break;
 			}
 		} else {
-			Object oldValue = null;
+			Object oldValue;
 			switch( key ) {
 				// BasicTabbedPaneUI
 				case "tabInsets": oldValue = tabInsets; tabInsets = (Insets) value; return oldValue;
@@ -2412,7 +2412,7 @@ public class FlatTabbedPaneUI
 			if( tabPane == null || tabViewport == null )
 				return;
 
-			if( !scrolled || tabViewport == null )
+			if( !scrolled )
 				return;
 			scrolled = false;
 
@@ -2525,9 +2525,7 @@ public class FlatTabbedPaneUI
 			setRolloverTab( tabIndex );
 
 			// check whether mouse hit tab close area
-			boolean hitClose = isTabClosable( tabIndex )
-				? getTabCloseHitArea( tabIndex ).contains( x, y )
-				: false;
+			boolean hitClose = isTabClosable( tabIndex ) && getTabCloseHitArea( tabIndex ).contains( x, y );
 			if( e.getID() == MouseEvent.MOUSE_PRESSED )
 				pressedTabIndex = hitClose ? tabIndex : -1;
 			setRolloverTabClose( hitClose );
@@ -2550,8 +2548,7 @@ public class FlatTabbedPaneUI
 			if( tabIndex == lastTipTabIndex )
 				return; // closeTip already set
 
-			if( tabIndex != lastTipTabIndex )
-				restoreTabToolTip();
+			restoreTabToolTip();
 
 			lastTipTabIndex = tabIndex;
 			lastTip = tabPane.getToolTipTextAt( lastTipTabIndex );

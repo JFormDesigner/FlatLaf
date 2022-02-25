@@ -164,11 +164,7 @@ public class FlatToggleButtonUI
 	@Override
 	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
 		Map<String, Class<?>> infos = super.getStyleableInfos( c );
-		Iterator<String> it = infos.keySet().iterator();
-		while( it.hasNext() ) {
-			if( it.next().startsWith( "help." ) )
-				it.remove();
-		}
+		infos.keySet().removeIf( s -> s.startsWith( "help." ) );
 		return infos;
 	}
 

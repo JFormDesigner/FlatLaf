@@ -89,7 +89,7 @@ public class JavaCompatibility
 					getClippedStringMethod = cls.getMethod( SystemInfo.isJava_9_orLater
 							? "getClippedString"
 							: "clipStringIfNecessary",
-						new Class[] { JComponent.class, FontMetrics.class, String.class, int.class } );
+						JComponent.class, FontMetrics.class, String.class, int.class );
 				} catch( Exception ex ) {
 					LoggingFacade.INSTANCE.logSevere( null, ex );
 					throw new RuntimeException( ex );

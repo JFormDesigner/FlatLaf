@@ -291,7 +291,7 @@ public class HSLColor
 
 		//  Calculate the Saturation
 
-		float s = 0;
+		float s;
 
 		if (max == min)
 			s = 0;
@@ -386,7 +386,7 @@ public class HSLColor
 		s /= 100f;
 		l /= 100f;
 
-		float q = 0;
+		float q;
 
 		if (l < 0.5)
 			q = l * (1 + s);

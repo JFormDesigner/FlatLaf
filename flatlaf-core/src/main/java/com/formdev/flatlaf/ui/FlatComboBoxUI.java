@@ -700,7 +700,7 @@ public class FlatComboBoxUI
 				return true;
 
 			Component editorComponent = comboBox.getEditor().getEditorComponent();
-			return (editorComponent != null) ? FlatUIUtils.isPermanentFocusOwner( editorComponent ) : false;
+			return editorComponent != null && FlatUIUtils.isPermanentFocusOwner( editorComponent );
 		} else
 			return FlatUIUtils.isPermanentFocusOwner( comboBox );
 	}

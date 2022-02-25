@@ -605,7 +605,7 @@ public abstract class FlatLaf
 			uiFont = ((ActiveFont)defaultFont).derive( baseFont, fontSize -> {
 				return Math.round( fontSize * UIScale.computeFontScaleFactor( baseFont ) );
 			} );
-		};
+		}
 
 		// increase font size if system property "flatlaf.uiScale" is set
 		uiFont = UIScale.applyCustomScaleFactor( uiFont );

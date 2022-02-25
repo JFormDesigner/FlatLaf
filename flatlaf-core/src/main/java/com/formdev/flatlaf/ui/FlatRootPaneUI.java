@@ -510,7 +510,7 @@ public class FlatRootPaneUI
 				return;
 
 			Container parent = c.getParent();
-			boolean active = parent instanceof Window ? ((Window)parent).isActive() : false;
+			boolean active = parent instanceof Window && ((Window)parent).isActive();
 
 			g.setColor( FlatUIUtils.deriveColor( active ? activeBorderColor : inactiveBorderColor, baseBorderColor ) );
 			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height, this::paintImpl );
@@ -522,9 +522,7 @@ public class FlatRootPaneUI
 
 		protected boolean isWindowMaximized( Component c ) {
 			Container parent = c.getParent();
-			return parent instanceof Frame
-				? (((Frame)parent).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0
-				: false;
+			return parent instanceof Frame && (((Frame)parent).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
 		}
 	}
 

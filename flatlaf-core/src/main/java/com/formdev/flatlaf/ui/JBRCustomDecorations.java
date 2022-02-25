@@ -284,7 +284,7 @@ public class JBRCustomDecorations
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 			Window window = SwingUtilities.windowForComponent( c );
-			boolean active = (window != null) ? window.isActive() : false;
+			boolean active = window != null && window.isActive();
 
 			// paint top border
 			//  - in light themes

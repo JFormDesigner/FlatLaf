@@ -68,7 +68,7 @@ public interface AnimatedIcon
 	extends Icon
 {
 	@Override
-	public default void paintIcon( Component c, Graphics g, int x, int y ) {
+	default void paintIcon( Component c, Graphics g, int x, int y ) {
 		AnimationSupport.paintIcon( this, c, g, x, y );
 	}
 

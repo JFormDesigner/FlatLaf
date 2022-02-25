@@ -293,9 +293,7 @@ public class FlatSpinnerUI
 			return true;
 
 		JTextField textField = getEditorTextField( spinner.getEditor() );
-		return (textField != null)
-			? FlatUIUtils.isPermanentFocusOwner( textField )
-			: false;
+		return textField != null && FlatUIUtils.isPermanentFocusOwner( textField );
 	}
 
 	protected Color getBackground( boolean enabled ) {

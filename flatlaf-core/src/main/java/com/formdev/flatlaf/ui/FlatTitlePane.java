@@ -883,9 +883,7 @@ debug*/
 		}
 
 		protected boolean isWindowMaximized( Component c ) {
-			return window instanceof Frame
-				? (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0
-				: false;
+			return window instanceof Frame && (((Frame) window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
 		}
 	}
 

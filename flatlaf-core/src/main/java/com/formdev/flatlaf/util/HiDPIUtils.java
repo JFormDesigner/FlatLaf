@@ -31,7 +31,7 @@ import com.formdev.flatlaf.FlatSystemProperties;
 public class HiDPIUtils
 {
 	public interface Painter {
-		public void paint( Graphics2D g, int x, int y, int width, int height, double scaleFactor );
+		void paint( Graphics2D g, int x, int y, int width, int height, double scaleFactor );
 	}
 
 	public static void paintAtScale1x( Graphics2D g, JComponent c, Painter painter ) {

@@ -534,12 +534,12 @@ public class IntelliJTheme
 	}
 
 	/** Rename UI default keys (key --> value). */
-	private static Map<String, String> uiKeyMapping = new HashMap<>();
+	private static final Map<String, String> uiKeyMapping = new HashMap<>();
 	/** Copy UI default keys (value --> key). */
-	private static Map<String, String> uiKeyCopying = new HashMap<>();
-	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
-	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
-	private static Map<String, String> checkboxDuplicateColors = new HashMap<>();
+	private static final Map<String, String> uiKeyCopying = new HashMap<>();
+	private static final Map<String, String> uiKeyInverseMapping = new HashMap<>();
+	private static final Map<String, String> checkboxKeyMapping = new HashMap<>();
+	private static final Map<String, String> checkboxDuplicateColors = new HashMap<>();
 
 	static {
 		// ComboBox

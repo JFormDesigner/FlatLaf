@@ -170,7 +170,7 @@ class LinuxFontPolicy
 
 		Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "gnome.Xft/DPI" );
 		if( value instanceof Integer ) {
-			int dpi = ((Integer)value).intValue() / 1024;
+			int dpi = (Integer) value / 1024;
 			if( dpi == -1 )
 				dpi = 96;
 			if( dpi < 50 )
@@ -278,7 +278,7 @@ class LinuxFontPolicy
 		// read config file
 		ArrayList<String> lines = new ArrayList<>( 200 );
 		try( BufferedReader reader = new BufferedReader( new FileReader( file ) ) ) {
-			String line = null;
+			String line;
 			while( (line = reader.readLine()) != null )
 				lines.add( line );
 		} catch( IOException ex ) {
