@@ -1,7 +1,7 @@
 FlatLaf Change Log
 ==================
 
-## 2.1-SNAPSHOT
+## 2.0.2
 
 - Native window decorations (Windows 10/11 only): Fixed rendering artifacts on
   HiDPI screens when dragging window partly offscreen and back into screen
