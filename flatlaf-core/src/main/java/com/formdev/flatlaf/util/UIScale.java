@@ -103,7 +103,7 @@ public class UIScale
 			// Java 9 and later supports per-monitor scaling
 			jreHiDPI = true;
 		} else if( SystemInfo.isJetBrainsJVM ) {
-			// IntelliJ IDEA ships its own JetBrains Java 8 JRE that may supports per-monitor scaling
+			// IntelliJ IDEA ships its own JetBrains Java 8 JRE that may support per-monitor scaling
 			// see com.intellij.ui.JreHiDpiUtil.isJreHiDPIEnabled()
 			try {
 				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -411,7 +411,7 @@ public class UIScale
 	 * Scales the given dimension with the user scale factor.
 	 * <p>
 	 * If user scale factor is 1, then the given dimension is simply returned.
-	 * Otherwise a new instance of {@link Dimension} or {@link DimensionUIResource}
+	 * Otherwise, a new instance of {@link Dimension} or {@link DimensionUIResource}
 	 * is returned, depending on whether the passed dimension implements {@link UIResource}.
 	 */
 	public static Dimension scale( Dimension dimension ) {
@@ -427,7 +427,7 @@ public class UIScale
 	 * Scales the given insets with the user scale factor.
 	 * <p>
 	 * If user scale factor is 1, then the given insets is simply returned.
-	 * Otherwise a new instance of {@link Insets} or {@link InsetsUIResource}
+	 * Otherwise, a new instance of {@link Insets} or {@link InsetsUIResource}
 	 * is returned, depending on whether the passed dimension implements {@link UIResource}.
 	 */
 	public static Insets scale( Insets insets ) {

@@ -195,7 +195,7 @@ public class NativeLibrary
 			// for loaded native libraries, they will be deleted on next application startup.
 			// The default temporary directory may contain hundreds or thousands of files.
 			// To make searching for "marked for deletion" files as fast as possible,
-			// use a sub directory that contains only our temporary native libraries.
+			// use a subdirectory that contains only our temporary native libraries.
 			tmpdir += "\\flatlaf.temp";
 		}
 

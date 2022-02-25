@@ -359,7 +359,7 @@ public class FlatStylingSupport
 	 * @param key the name of the field
 	 * @param value the new value
 	 * @return the old value of the field
-	 * @throws UnknownStyleException if object does not have a annotated field with given name
+	 * @throws UnknownStyleException if object does not have an annotated field with given name
 	 * @throws IllegalArgumentException if value type does not fit to expected type
 	 */
 	public static Object applyToAnnotatedObject( Object obj, String key, Object value )
@@ -517,7 +517,7 @@ public class FlatStylingSupport
 	 * @param key the name of the field
 	 * @param value the new value
 	 * @return the old value of the field
-	 * @throws UnknownStyleException if object does not have a annotated field with given name
+	 * @throws UnknownStyleException if object does not have an annotated field with given name
 	 * @throws IllegalArgumentException if value type does not fit to expected type
 	 */
 	public static Object applyToAnnotatedObjectOrComponent( Object obj, Object comp, String key, Object value )

@@ -179,8 +179,8 @@ public class FlatRootPaneUI
 		super.installListeners( root );
 
 		if( SystemInfo.isJava_9_orLater ) {
-			// On HiDPI screens, where scaling is used, there may be white lines at the
-			// bottom and at the right side of the window when it is initially shown.
+			// On HiDPI screens, where scaling is used, there may be white lines on the
+			// bottom and on the right side of the window when it is initially shown.
 			// This is very disturbing in dark themes, but hard to notice in light themes.
 			// Seems to be a rounding issue when Swing adds dirty region of window
 			// using RepaintManager.nativeAddDirtyRegion().

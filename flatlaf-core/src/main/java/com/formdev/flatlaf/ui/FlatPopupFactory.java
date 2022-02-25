@@ -143,7 +143,7 @@ public class FlatPopupFactory
 	 * <p>
 	 * On a dual screen setup, where screens use different scale factors, it may happen
 	 * that the window location changes when showing a heavy weight popup window.
-	 * E.g. when opening an dialog on the secondary screen and making combobox popup visible.
+	 * E.g. when opening a dialog on the secondary screen and making combobox popup visible.
 	 * <p>
 	 * This is a workaround for https://bugs.openjdk.java.net/browse/JDK-8224608
 	 */

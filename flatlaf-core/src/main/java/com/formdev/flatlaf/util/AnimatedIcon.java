@@ -59,7 +59,7 @@ import com.formdev.flatlaf.util.Animator.Interpolator;
  * </pre>
  *
  * Animation works only if the component passed to {@link #paintIcon(Component, Graphics, int, int)}
- * is a instance of {@link JComponent}.
+ * is an instance of {@link JComponent}.
  * A client property is set on the component to store the animation state.
  *
  * @author Karl Tauber

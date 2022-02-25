@@ -23,13 +23,13 @@ import java.awt.Graphics2D;
 import com.formdev.flatlaf.util.AnimatedIcon;
 
 /**
- * Base class for animated icons that scales width and height, creates and initializes
+ * Base class for animated icons that scale width and height, creates and initializes
  * a scaled graphics context for icon painting.
  * <p>
  * Subclasses do not need to scale icon painting.
  * <p>
  * This class does not store any state information (needed for animation) in its instance.
- * Instead a client property is set on the painted component.
+ * Instead, a client property is set on the painted component.
  * This makes it possible to use a share icon instance for multiple components.
  *
  * @author Karl Tauber

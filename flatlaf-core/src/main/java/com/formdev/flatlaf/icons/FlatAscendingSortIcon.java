@@ -51,7 +51,7 @@ public class FlatAscendingSortIcon
 		boolean chevron = this.chevron;
 		Color sortIconColor = this.sortIconColor;
 
-		// Because this icons are always shared for all table headers,
+		// Because this icon is always shared for all table headers,
 		// get icon specific style from FlatTableHeaderUI.
 		JTableHeader tableHeader = (JTableHeader) SwingUtilities.getAncestorOfClass( JTableHeader.class, c );
 		if( tableHeader != null ) {

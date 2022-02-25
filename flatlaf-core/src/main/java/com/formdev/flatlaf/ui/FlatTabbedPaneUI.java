@@ -1983,7 +1983,7 @@ public class FlatTabbedPaneUI
 		}
 
 		protected JMenuItem createTabMenuItem( int tabIndex ) {
-			// search for tab name in this places
+			// search for tab name in these places
 			//   1. tab title
 			//   2. text of label or text component in custom tab component (including children)
 			//   3. accessible name of tab

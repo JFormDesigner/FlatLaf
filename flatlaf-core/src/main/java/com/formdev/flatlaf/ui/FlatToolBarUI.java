@@ -282,7 +282,7 @@ public class FlatToolBarUI
 			return comboBox.getUI().isFocusTraversable( comboBox );
 		}
 
-		// check whether component has a empty input map to skip components that
+		// check whether component has an empty input map to skip components that
 		// are focusable, but do nothing when focused (e.g. JLabel)
 		// see LayoutFocusTraversalPolicy.accept()
 		if( c instanceof JComponent ) {

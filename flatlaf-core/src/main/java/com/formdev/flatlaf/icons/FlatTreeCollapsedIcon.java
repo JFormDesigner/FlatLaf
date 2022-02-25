@@ -76,7 +76,7 @@ public class FlatTreeCollapsedIcon
 	}
 
 	/**
-	 * Because this icons are always shared for all trees,
+	 * Because this icon is always shared for all trees,
 	 * get icon specific style from FlatTreeUI.
 	 */
 	static <T> T getStyleFromTreeUI( Component c, Function<FlatTreeUI, T> f ) {

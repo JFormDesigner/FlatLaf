@@ -777,8 +777,8 @@ public class FlatUIUtils
 	 *        {@link SwingConstants#WEST} or {@link SwingConstants#EAST})
 	 * @param chevron {@code true} for chevron arrow, {@code false} for triangle arrow
 	 * @param arrowSize the width of the painted arrow (for vertical direction) (will be scaled)
-	 * @param xOffset a offset added to the x coordinate of the arrow to paint it out-of-center. Usually zero. (will be scaled)
-	 * @param yOffset a offset added to the y coordinate of the arrow to paint it out-of-center. Usually zero. (will be scaled)
+	 * @param xOffset an offset added to the x coordinate of the arrow to paint it out-of-center. Usually zero. (will be scaled)
+	 * @param yOffset an offset added to the y coordinate of the arrow to paint it out-of-center. Usually zero. (will be scaled)
 	 *
 	 * @since 1.1
 	 */
@@ -828,7 +828,7 @@ debug*/
 	/**
 	 * Creates a chevron or triangle arrow shape for the given direction and size.
 	 * <p>
-	 * The chevron shape is a open path that can be painted with {@link Graphics2D#draw(Shape)}.
+	 * The chevron shape is an open path that can be painted with {@link Graphics2D#draw(Shape)}.
 	 * The triangle shape is a close path that can be painted with {@link Graphics2D#fill(Shape)}.
 	 *
 	 * @param direction the arrow direction ({@link SwingConstants#NORTH}, {@link SwingConstants#SOUTH}
@@ -880,7 +880,7 @@ debug*/
 	}
 
 	/**
-	 * Creates a open or closed path for the given points.
+	 * Creates an open or closed path for the given points.
 	 */
 	public static Path2D createPath( boolean close, double... points ) {
 		Path2D path = new Path2D.Float();

@@ -35,7 +35,7 @@ import javax.swing.plaf.MenuBarUI;
 public class FlatMenuItemBorder
 	extends FlatMarginBorder
 {
-	// only used if parent menubar is not a instance of FlatMenuBarUI
+	// only used if parent menubar is not an instance of FlatMenuBarUI
 	private final Insets menuBarItemMargins = UIManager.getInsets( "MenuBar.itemMargins" );
 
 	@Override

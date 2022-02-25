@@ -792,7 +792,7 @@ class UIDefaultsLoader
 	 * Syntax: if(condition,trueValue,falseValue)
 	 * <p>
 	 * This "if" function is only used if the "if" is passed as parameter to another
-	 * color function. Otherwise the general "if" function is used.
+	 * color function. Otherwise, the general "if" function is used.
 	 */
 	private static Object parseColorIf( String value, List<String> params, Function<String, String> resolver, boolean reportError ) {
 		if( params.size() != 3 )

@@ -175,7 +175,7 @@ public class IntelliJTheme
 		defaults.put( "Button.hoverBorderColor", defaults.get( "Button.focusedBorderColor" ) );
 		defaults.put( "HelpButton.hoverBorderColor", defaults.get( "Button.focusedBorderColor" ) );
 
-		// IDEA uses a SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
+		// IDEA uses an SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
 		Object helpButtonBackground = defaults.get( "Button.startBackground" );
 		Object helpButtonBorderColor = defaults.get( "Button.startBorderColor" );
 		if( helpButtonBackground == null )

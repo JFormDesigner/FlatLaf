@@ -76,7 +76,7 @@ public class HSLColor
 	}
 
 	/**
-	 *  Create a HSLColor object using an an array containing the
+	 *  Create a HSLColor object using an array containing the
 	 *  individual HSL values and with a default alpha value of 1.
 	 *
 	 *  @param hsl  array containing HSL values
@@ -87,7 +87,7 @@ public class HSLColor
 	}
 
 	/**
-	 *  Create a HSLColor object using an an array containing the
+	 *  Create a HSLColor object using an array containing the
 	 *  individual HSL values.
 	 *
 	 *  @param hsl  array containing HSL values

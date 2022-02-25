@@ -26,7 +26,7 @@ import javax.swing.UIDefaults;
  * Allows loading of additional .properties files from addon JARs.
  * {@link java.util.ServiceLoader} is used to load extensions of this class from addon JARs.
  * <p>
- * If you extend this class in a addon JAR, you also have to add a text file named
+ * If you extend this class in an addon JAR, you also have to add a text file named
  * {@code META-INF/services/com.formdev.flatlaf.FlatDefaultsAddon}
  * to the addon JAR. The file must contain a single line with the class name.
  * <p>
@@ -61,7 +61,7 @@ public abstract class FlatDefaultsAddon
 
 	/**
 	 * Returns the priority used to sort addon loading.
-	 * The order is only important if you want overwrite UI defaults of other addons.
+	 * The order is only important if you want to overwrite UI defaults of other addons.
 	 * Lower numbers mean higher priority.
 	 * Returns 10000 by default.
 	 */

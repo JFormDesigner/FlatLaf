@@ -369,7 +369,7 @@ public class FlatTextFieldUI
 		if( !(oldBackground instanceof UIResource) )
 			return;
 
-		// do not update background if it currently has a unknown color (assigned from outside)
+		// do not update background if it currently has an unknown color (assigned from outside)
 		if( oldBackground != background &&
 			oldBackground != disabledBackground &&
 			oldBackground != inactiveBackground &&
@@ -610,7 +610,7 @@ debug*/
 	 * Returns the rectangle used to paint leading and trailing icons.
 	 * It invokes {@code super.getVisibleEditorRect()} and reduces left and/or
 	 * right margin if the text field has leading or trailing icons or components.
-	 * Also the preferred widths of leading and trailing components are removed.
+	 * Also, the preferred widths of leading and trailing components are removed.
 	 *
 	 * @since 2
 	 */

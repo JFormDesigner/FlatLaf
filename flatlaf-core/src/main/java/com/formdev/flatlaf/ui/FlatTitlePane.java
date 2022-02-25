@@ -248,7 +248,7 @@ public class FlatTitlePane
 		if( rootPane.getWindowDecorationStyle() == JRootPane.FRAME ) {
 			// JRootPane.FRAME works only for frames (and not for dialogs)
 			// but at this time the owner window type is unknown (not yet added)
-			// so we add the iconify/maximize/restore buttons and they are shown
+			// so we add the iconify/maximize/restore buttons, and they are shown
 			// later in frameStateChanged(), which is invoked from addNotify()
 
 			buttonPanel.add( iconifyButton );
@@ -420,7 +420,7 @@ public class FlatTitlePane
 	}
 
 	/**
-	 * Returns whether this title pane currently has an visible and embedded menubar.
+	 * Returns whether this title pane currently has a visible and embedded menubar.
 	 */
 	protected boolean hasVisibleEmbeddedMenuBar( JMenuBar menuBar ) {
 		return menuBar != null && menuBar.isVisible() && isMenuBarEmbedded();
@@ -772,7 +772,7 @@ debug*/
 				if( horizontalGlue != null ) {
 					// If menu bar is embedded and contains a horizontal glue component,
 					// then split the hit test spot into two spots so that
-					// the glue component area can used to move the window.
+					// the glue component area can be used to move the window.
 
 					Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, window );
 					int x2 = glueLocation.x + horizontalGlue.getWidth();
@@ -911,7 +911,7 @@ debug*/
 			boolean center = hasEmbeddedMenuBar ? centerTitleIfMenuBarEmbedded : centerTitle;
 			if( center ) {
 				// If window is wide enough, center title within window bounds.
-				// Otherwise leave it centered within free space (label bounds).
+				// Otherwise, leave it centered within free space (label bounds).
 				int centeredTextX = ((l.getParent().getWidth() - textWidth) / 2) - l.getX();
 				if( centeredTextX >= gap && centeredTextX + textWidth <= labelWidth - gap )
 					textX = centeredTextX;

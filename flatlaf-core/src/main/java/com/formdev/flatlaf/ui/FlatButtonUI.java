@@ -343,7 +343,7 @@ public class FlatButtonUI
 
 	/**
 	 * Returns true if the button has an icon but no text,
-	 * or it it does not have an icon and the text is either "..." or one character.
+	 * or it does not have an icon and the text is either "..." or one character.
 	 */
 	static boolean isIconOnlyOrSingleCharacterButton( Component c ) {
 		if( !(c instanceof JButton) && !(c instanceof JToggleButton) )

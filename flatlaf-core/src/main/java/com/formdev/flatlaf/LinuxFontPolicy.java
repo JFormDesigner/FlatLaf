@@ -197,7 +197,7 @@ class LinuxFontPolicy
 	}
 
 	/**
-	 * Gets the default font for KDE for KDE configuration files.
+	 * Gets the default font for KDE from KDE configuration files.
 	 *
 	 * The Swing fonts are not updated when the user changes system font size
 	 * (System Settings > Fonts > Force Font DPI). A application restart is necessary.

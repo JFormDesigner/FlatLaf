@@ -47,7 +47,7 @@ public class DerivedColor
 		Color result = ColorFunctions.applyFunctions( baseColor, functions );
 
 		// if the result is equal to the default color, then the original base color
-		// was passed and we can cache this to avoid color calculations
+		// was passed, and we can cache this to avoid color calculations
 		if( !hasBaseOfDefaultColor && result.getRGB() == this.getRGB() ) {
 			hasBaseOfDefaultColor = true;
 			baseOfDefaultColorRGB = baseColor.getRGB();

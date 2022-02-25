@@ -96,7 +96,7 @@ public class FlatCaret
 
 			// if text component is focused, then caret and selection are visible,
 			// but when switching theme, the component does not yet have
-			// an highlighter and the selection is not painted
+			// a highlighter and the selection is not painted
 			// --> make selection temporary invisible later, then the caret
 			//     adds selection highlights to the text component highlighter
 			if( isSelectionVisible() ) {

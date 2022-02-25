@@ -177,7 +177,7 @@ public abstract class FlatLaf
 	 * and JBR supports custom window decorations
 	 * </li>
 	 * </ul>
-	 * In this cases, custom decorations are enabled by the root pane.
+	 * In these cases, custom decorations are enabled by the root pane.
 	 * Usage of {@link JFrame#setDefaultLookAndFeelDecorated(boolean)} or
 	 * {@link JDialog#setDefaultLookAndFeelDecorated(boolean)} is not necessary.
 	 */
@@ -760,7 +760,7 @@ public abstract class FlatLaf
 	 * Invoke this method before setting the look and feel.
 	 * <p>
 	 * If using Java modules, the package must be opened in {@code module-info.java}.
-	 * Otherwise use {@link #registerCustomDefaultsSource(URL)}.
+	 * Otherwise, use {@link #registerCustomDefaultsSource(URL)}.
 	 *
 	 * @param packageName a package name (e.g. "com.myapp.resources")
 	 */
@@ -862,7 +862,7 @@ public abstract class FlatLaf
 	 * E.g. using {@link UIManager#setLookAndFeel(LookAndFeel)} or {@link #setup(LookAndFeel)}.
 	 * <p>
 	 * The global extra defaults are useful for smaller additional defaults that may change.
-	 * E.g. accent color. Otherwise FlatLaf properties files should be used.
+	 * E.g. accent color. Otherwise, FlatLaf properties files should be used.
 	 * See {@link #registerCustomDefaultsSource(String)}.
 	 * <p>
 	 * The keys and values are strings in same format as in FlatLaf properties files.
@@ -894,7 +894,7 @@ public abstract class FlatLaf
 	 * E.g. using {@link UIManager#setLookAndFeel(LookAndFeel)} or {@link #setup(LookAndFeel)}.
 	 * <p>
 	 * The extra defaults are useful for smaller additional defaults that may change.
-	 * E.g. accent color. Otherwise FlatLaf properties files should be used.
+	 * E.g. accent color. Otherwise, FlatLaf properties files should be used.
 	 * See {@link #registerCustomDefaultsSource(String)}.
 	 * <p>
 	 * The keys and values are strings in same format as in FlatLaf properties files.
@@ -951,7 +951,7 @@ public abstract class FlatLaf
 				// re-set current LaF
 				UIManager.setLookAndFeel( lookAndFeel );
 
-				// must fire property change events ourself because old and new LaF are the same
+				// must fire property change events ourselves because old and new LaF are the same
 				PropertyChangeEvent e = new PropertyChangeEvent( UIManager.class, "lookAndFeel", lookAndFeel, lookAndFeel );
 				for( PropertyChangeListener l : UIManager.getPropertyChangeListeners() )
 					l.propertyChange( e );

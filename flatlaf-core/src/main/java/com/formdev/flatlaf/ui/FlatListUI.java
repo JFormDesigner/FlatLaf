@@ -212,7 +212,7 @@ public class FlatListUI
 	/**
 	 * Toggle selection colors from focused to inactive and vice versa.
 	 *
-	 * This is not a optimal solution but much easier than rewriting the whole paint methods.
+	 * This is not an optimal solution but much easier than rewriting the whole paint methods.
 	 *
 	 * Using a LaF specific renderer was avoided because often a custom renderer is
 	 * already used in applications. Then either the inactive colors are not used,

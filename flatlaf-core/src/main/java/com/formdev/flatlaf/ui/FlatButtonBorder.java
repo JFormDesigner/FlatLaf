@@ -159,7 +159,7 @@ public class FlatButtonBorder
 	public Insets getBorderInsets( Component c, Insets insets ) {
 		if( FlatButtonUI.isToolBarButton( c ) ) {
 			// In toolbars, use button margin only if explicitly set.
-			// Otherwise use toolbar margin specified in UI defaults.
+			// Otherwise, use toolbar margin specified in UI defaults.
 			Insets margin = (c instanceof AbstractButton)
 				? ((AbstractButton)c).getMargin()
 				: null;

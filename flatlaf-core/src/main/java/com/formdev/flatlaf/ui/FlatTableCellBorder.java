@@ -72,7 +72,7 @@ public class FlatTableCellBorder
 	}
 
 	/**
-	 * Because this borders are always shared for all tables,
+	 * Because this border is always shared for all tables,
 	 * get border specific style from FlatTableUI.
 	 */
 	static <T> T getStyleFromTableUI( Component c, Function<FlatTableUI, T> f ) {

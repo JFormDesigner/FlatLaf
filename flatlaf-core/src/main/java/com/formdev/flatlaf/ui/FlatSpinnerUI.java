@@ -447,7 +447,7 @@ public class FlatSpinnerUI
 			Insets padding = scale( FlatSpinnerUI.this.padding );
 			Dimension editorSize = (editor != null) ? editor.getPreferredSize() : new Dimension( 0, 0 );
 
-			// the arrows width is the same as the inner height so that the arrows area is square
+			// the arrow buttons width is the same as the inner height so that the arrow buttons area is square
 			int minimumWidth = FlatUIUtils.minimumWidth( spinner, FlatSpinnerUI.this.minimumWidth );
 			int innerHeight = editorSize.height + padding.top + padding.bottom;
 			float focusWidth = FlatUIUtils.getBorderFocusWidth( spinner );

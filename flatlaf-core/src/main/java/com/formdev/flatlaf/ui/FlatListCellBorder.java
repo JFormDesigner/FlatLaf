@@ -72,7 +72,7 @@ public class FlatListCellBorder
 	}
 
 	/**
-	 * Because this borders are always shared for all lists,
+	 * Because this border is always shared for all lists,
 	 * get border specific style from FlatListUI.
 	 */
 	static <T> T getStyleFromListUI( Component c, Function<FlatListUI, T> f ) {

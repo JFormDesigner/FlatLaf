@@ -114,7 +114,7 @@ public class HiDPIUtils
 	 * painted too far down on some operating systems.
 	 * The higher the system scale factor is, the more.
 	 * <p>
-	 * This methods computes a correction value for the Y position.
+	 * This method computes a correction value for the Y position.
 	 */
 	public static float computeTextYCorrection( Graphics2D g ) {
 		if( !useTextYCorrection() || !SystemInfo.isWindows )

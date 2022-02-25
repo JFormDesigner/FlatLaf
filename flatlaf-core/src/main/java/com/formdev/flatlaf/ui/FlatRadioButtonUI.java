@@ -212,7 +212,7 @@ public class FlatRadioButtonUI
 		if( focusWidth > 0 ) {
 			// Increase preferred width and height if insets were explicitly reduced (e.g. with
 			// an EmptyBorder) and icon has a focus width, which is not included in icon size.
-			// Otherwise the component may be too small and outer focus border may be cut off.
+			// Otherwise, the component may be too small and outer focus border may be cut off.
 			Insets insets = c.getInsets( tempInsets );
 			size.width += Math.max( focusWidth - insets.left, 0 ) + Math.max( focusWidth - insets.right, 0 );
 			size.height += Math.max( focusWidth - insets.top, 0 ) + Math.max( focusWidth - insets.bottom, 0 );

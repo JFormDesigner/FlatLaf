@@ -234,7 +234,7 @@ public class FlatSliderUI
 			return -1;
 
 		// use default font (instead of slider font) because the slider font size
-		// may be different to label font size, but we want align the track/thumb with labels
+		// may be different to label font size, but we want to align the track/thumb with labels
 		Font font = UIManager.getFont( "defaultFont" );
 		if( font == null )
 			font = slider.getFont();
