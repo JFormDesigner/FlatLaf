@@ -126,6 +126,8 @@ Buzz
 Applications using FlatLaf
 --------------------------
 
+- ![New](images/new.svg) [Ultorg](https://www.ultorg.com/) (**commercial**) - a
+  visual query system for relational databases
 - ![New](images/new.svg) [MooInfo](https://github.com/rememberber/MooInfo) -
   visual implementation of OSHI, to view information about the system and
   hardware
