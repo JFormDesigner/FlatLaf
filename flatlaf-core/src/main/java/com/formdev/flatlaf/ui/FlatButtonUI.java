@@ -573,6 +573,9 @@ public class FlatButtonUI
 	public static Color buttonStateColor( Component c, Color enabledColor, Color disabledColor,
 		Color focusedColor, Color hoverColor, Color pressedColor )
 	{
+		if( c == null )
+			return enabledColor;
+
 		if( !c.isEnabled() )
 			return disabledColor;
 

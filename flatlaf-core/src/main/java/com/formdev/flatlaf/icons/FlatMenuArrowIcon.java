@@ -63,7 +63,7 @@ public class FlatMenuArrowIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
-		if( !c.getComponentOrientation().isLeftToRight() )
+		if( c != null && !c.getComponentOrientation().isLeftToRight() )
 			g.rotate( Math.toRadians( 180 ), width / 2., height / 2. );
 
 		g.setColor( getArrowColor( c ) );
@@ -82,7 +82,7 @@ public class FlatMenuArrowIcon
 		if( c instanceof JMenu && ((JMenu)c).isSelected() && !isUnderlineSelection() )
 			return selectionForeground;
 
-		return c.isEnabled() ? arrowColor : disabledArrowColor;
+		return c == null || c.isEnabled() ? arrowColor : disabledArrowColor;
 	}
 
 	protected boolean isUnderlineSelection() {

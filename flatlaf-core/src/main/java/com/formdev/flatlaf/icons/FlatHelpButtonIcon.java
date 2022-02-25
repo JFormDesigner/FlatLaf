@@ -96,8 +96,8 @@ public class FlatHelpButtonIcon
 			</svg>
 		*/
 
-		boolean enabled = c.isEnabled();
-		boolean focused = FlatUIUtils.isPermanentFocusOwner( c );
+		boolean enabled = c == null || c.isEnabled();
+		boolean focused = c != null && FlatUIUtils.isPermanentFocusOwner( c );
 
 		float xy = 0.5f;
 		float wh = iconSize() - 1;
