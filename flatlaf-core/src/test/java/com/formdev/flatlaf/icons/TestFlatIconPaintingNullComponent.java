@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 FormDev Software GmbH
+ * Copyright 2022 FormDev Software GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package com.formdev.flatlaf.ui;
+package com.formdev.flatlaf.icons;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.Icon;
-import com.formdev.flatlaf.icons.FlatHelpButtonIcon;
-import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
-import com.formdev.flatlaf.icons.FlatSearchIcon;
+import com.formdev.flatlaf.ui.TestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -52,16 +50,16 @@ class TestFlatIconPaintingNullComponent
 
 	@Test
 	void flatMenuArrowIcon() {
-		paintWithoutException(new FlatMenuArrowIcon());
+		paintWithoutException( new FlatMenuArrowIcon() );
 	}
 
 	@Test
 	void flatSearchIcon() {
-		paintWithoutException(new FlatSearchIcon());
+		paintWithoutException( new FlatSearchIcon() );
 	}
 
-	private void paintWithoutException(Icon icon) {
-		graphics.clearRect( 0, 0, 32,32 );
-		assertDoesNotThrow(() -> icon.paintIcon( null, graphics, 0, 0 ));
+	private void paintWithoutException( Icon icon ) {
+		graphics.clearRect( 0, 0, 32, 32 );
+		assertDoesNotThrow( () -> icon.paintIcon( null, graphics, 0, 0 ) );
 	}
 }

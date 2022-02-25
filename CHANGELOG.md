@@ -8,6 +8,7 @@ FlatLaf Change Log
   bounds. (issue #477)
 - Repaint component when setting client property `JComponent.outline` (issue
   #480).
+- macOS: Fixed NPE when using some icons in main menu items. (issue #483)
 
 
 ## 2.0.1
