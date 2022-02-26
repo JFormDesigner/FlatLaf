@@ -1,6 +1,16 @@
 FlatLaf Change Log
 ==================
 
+## 2.1-SNAPSHOT
+
+#### New features and improvements
+
+- Linux: Support using custom window decorations. Enable with
+  `JFrame.setDefaultLookAndFeelDecorated(true)` and
+  `JDialog.setDefaultLookAndFeelDecorated(true)` before creating a window.
+  (issue #482)
+
+
 ## 2.0.2
 
 - Native window decorations (Windows 10/11 only): Fixed rendering artifacts on

@@ -17,6 +17,8 @@
 package com.formdev.flatlaf.demo;
 
 import java.awt.Dimension;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
@@ -50,6 +52,13 @@ public class FlatLafDemo
 			//   - "NSAppearanceNameAqua": use light appearance
 			//   - "NSAppearanceNameDarkAqua": use dark appearance
 			System.setProperty( "apple.awt.application.appearance", "system" );
+		}
+
+		// Linux
+		if( SystemInfo.isLinux ) {
+			// enable custom window decorations
+			JFrame.setDefaultLookAndFeelDecorated( true );
+			JDialog.setDefaultLookAndFeelDecorated( true );
 		}
 
 		if( FlatLafDemo.screenshotsMode && !SystemInfo.isJava_9_orLater && System.getProperty( "flatlaf.uiScale" ) == null )

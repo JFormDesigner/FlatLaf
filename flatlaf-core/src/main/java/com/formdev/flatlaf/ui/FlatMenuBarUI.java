@@ -210,7 +210,7 @@ public class FlatMenuBarUI
 		// check whether:
 		// - TitlePane.unifiedBackground is true and
 		// - menu bar is the "main" menu bar and
-		// - window has custom decorations enabled
+		// - window root pane has custom decoration style
 
 		JRootPane rootPane;
 		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
@@ -218,7 +218,7 @@ public class FlatMenuBarUI
 			(rootPane = SwingUtilities.getRootPane( c )) != null &&
 			rootPane.getParent() instanceof Window &&
 			rootPane.getJMenuBar() == c &&
-			FlatNativeWindowBorder.hasCustomDecoration( (Window) rootPane.getParent() );
+			rootPane.getWindowDecorationStyle() != JRootPane.NONE;
 	}
 
 	//---- class TakeFocus ----------------------------------------------------

@@ -166,11 +166,12 @@ public abstract class FlatLaf
 	 * Returns whether FlatLaf supports custom window decorations.
 	 * This depends on the operating system and on the used Java runtime.
 	 * <p>
-	 * This method returns {@code true} on Windows 10 (see exception below), {@code false} otherwise.
+	 * This method returns {@code true} on Windows 10/11 (see exception below)
+	 * and on Linux, {@code false} otherwise.
 	 * <p>
-	 * Returns also {@code false} on Windows 10 if:
+	 * Returns also {@code false} on Windows 10/11 if:
 	 * <ul>
-	 * <li>FlatLaf native window border support is available (requires Windows 10)</li>
+	 * <li>FlatLaf native window border support is available (requires Windows 10/11)</li>
 	 * <li>running in
 	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
 	 * (<a href="https://github.com/JetBrains/JetBrainsRuntime">source code on github</a>)
@@ -190,7 +191,7 @@ public abstract class FlatLaf
 			FlatNativeWindowBorder.isSupported() )
 		  return false;
 
-		return SystemInfo.isWindows_10_orLater;
+		return SystemInfo.isWindows_10_orLater || SystemInfo.isLinux;
 	}
 
 	@Override
@@ -995,7 +996,7 @@ public abstract class FlatLaf
 	/**
 	 * Returns whether native window decorations are supported on current platform.
 	 * <p>
-	 * This requires Windows 10, but may be disabled if running in special environments
+	 * This requires Windows 10/11, but may be disabled if running in special environments
 	 * (JetBrains Projector, Webswing or WinPE) or if loading native library fails.
 	 * If system property {@link FlatSystemProperties#USE_WINDOW_DECORATIONS} is set to
 	 * {@code false}, then this method also returns {@code false}.

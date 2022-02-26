@@ -889,8 +889,11 @@ class DemoFrame
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
-		if( FlatLaf.supportsNativeWindowDecorations() ) {
-			windowDecorationsCheckBoxMenuItem.setSelected( FlatLaf.isUseNativeWindowDecorations() );
+		if( FlatLaf.supportsNativeWindowDecorations() || (SystemInfo.isLinux && JFrame.isDefaultLookAndFeelDecorated()) ) {
+			if( SystemInfo.isLinux )
+				unsupported( windowDecorationsCheckBoxMenuItem );
+			else
+				windowDecorationsCheckBoxMenuItem.setSelected( FlatLaf.isUseNativeWindowDecorations() );
 			menuBarEmbeddedCheckBoxMenuItem.setSelected( UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) );
 			unifiedTitleBarMenuItem.setSelected( UIManager.getBoolean( "TitlePane.unifiedBackground" ) );
 			showTitleBarIconMenuItem.setSelected( UIManager.getBoolean( "TitlePane.showIcon" ) );
