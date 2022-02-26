@@ -23,6 +23,7 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -43,6 +44,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JRootPane;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -231,8 +233,15 @@ public abstract class FlatWindowResizer
 	{
 		protected Window window;
 
+		private final boolean limitResizeToScreenBounds;
+
 		public WindowResizer( JRootPane rootPane ) {
 			super( rootPane );
+
+			// On Linux, limit window resizing to screen bounds because otherwise
+			// there would be a strange effect when the mouse is moved over a sidebar
+			// while resizing and the opposite window side is also resized.
+			limitResizeToScreenBounds = SystemInfo.isLinux;
 		}
 
 		@Override
@@ -289,11 +298,19 @@ public abstract class FlatWindowResizer
 
 		@Override
 		protected boolean limitToParentBounds() {
-			return false;
+			return limitResizeToScreenBounds && window != null;
 		}
 
 		@Override
 		protected Rectangle getParentBounds() {
+			if( limitResizeToScreenBounds && window != null ) {
+				GraphicsConfiguration gc = window.getGraphicsConfiguration();
+				Rectangle bounds = gc.getBounds();
+				Insets insets = window.getToolkit().getScreenInsets( gc );
+				return new Rectangle( bounds.x + insets.left, bounds.y + insets.top,
+					bounds.width - insets.left - insets.right,
+					bounds.height - insets.top - insets.bottom );
+			}
 			return null;
 		}
 
@@ -385,7 +402,7 @@ public abstract class FlatWindowResizer
 
 		@Override
 		protected Rectangle getParentBounds() {
-			return getFrame().getParent().getBounds();
+			return new Rectangle( getFrame().getParent().getSize() );
 		}
 
 		@Override
@@ -579,8 +596,8 @@ debug*/
 			// top
 			if( resizeDir == N_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR ) {
 				newBounds.y = yOnScreen - dragTopOffset;
-				if( limitToParentBounds() && newBounds.y < 0 )
-					newBounds.y = 0;
+				if( limitToParentBounds() )
+					newBounds.y = Math.max( newBounds.y, getParentBounds().y );
 				newBounds.height += (oldBounds.y - newBounds.y);
 			}
 
@@ -597,8 +614,8 @@ debug*/
 			// left
 			if( resizeDir == W_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR ) {
 				newBounds.x = xOnScreen - dragLeftOffset;
-				if( limitToParentBounds() && newBounds.x < 0 )
-					newBounds.x = 0;
+				if( limitToParentBounds() )
+					newBounds.x = Math.max( newBounds.x, getParentBounds().x );
 				newBounds.width += (oldBounds.x - newBounds.x);
 			}
 
