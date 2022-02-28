@@ -9,6 +9,7 @@ FlatLaf Change Log
   `JFrame.setDefaultLookAndFeelDecorated(true)` and
   `JDialog.setDefaultLookAndFeelDecorated(true)` before creating a window.
   (issue #482)
+- Menus: Improved usability of submenus. (issue #247)
 
 
 ## 2.0.2

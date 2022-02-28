@@ -103,6 +103,7 @@ public abstract class FlatLaf
 
 	private PopupFactory oldPopupFactory;
 	private MnemonicHandler mnemonicHandler;
+	private SubMenuUsabilityHelper subMenuUsabilityHelper;
 
 	private Consumer<UIDefaults> postInitialization;
 	private List<Function<Object, Object>> uiDefaultsGetters;
@@ -244,6 +245,10 @@ public abstract class FlatLaf
 		mnemonicHandler = new MnemonicHandler();
 		mnemonicHandler.install();
 
+		// install submenu usability helper
+		subMenuUsabilityHelper = new SubMenuUsabilityHelper();
+		subMenuUsabilityHelper.install();
+
 		// listen to desktop property changes to update UI if system font or scaling changes
 		if( SystemInfo.isWindows ) {
 			// Windows 10 allows increasing font size independent of scaling:
@@ -321,6 +326,12 @@ public abstract class FlatLaf
 		if( mnemonicHandler != null ) {
 			mnemonicHandler.uninstall();
 			mnemonicHandler = null;
+		}
+
+		// uninstall submenu usability helper
+		if( subMenuUsabilityHelper != null ) {
+			subMenuUsabilityHelper.uninstall();
+			subMenuUsabilityHelper = null;
 		}
 
 		// restore default link color
