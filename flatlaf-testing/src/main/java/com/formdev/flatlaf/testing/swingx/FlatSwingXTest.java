@@ -62,6 +62,13 @@ public class FlatSwingXTest
 		monthView1.setUnselectableDates( calendar.getTime() );
 
 		table.setDefaultEditor( Date.class, new DatePickerCellEditor() );
+
+		// status bar
+		statusBar1.add( new JLabel( "Ready" ), new JXStatusBar.Constraint( 100 ) );
+		statusBar1.add( new JLabel( "0 files loaded" ), new JXStatusBar.Constraint( 100 ) );
+		JProgressBar statusProgressBar = new JProgressBar();
+		statusProgressBar.setValue( 50 );
+		statusBar1.add( statusProgressBar, new JXStatusBar.Constraint( JXStatusBar.Constraint.ResizeBehavior.FILL ) );
 	}
 
 	private void busyChanged() {
@@ -129,6 +136,8 @@ public class FlatSwingXTest
 		JXSearchField xSearchField2 = new JXSearchField();
 		JXSearchField xSearchField3 = new JXSearchField();
 		JXSearchField xSearchField4 = new JXSearchField();
+		JLabel label12 = new JLabel();
+		statusBar1 = new JXStatusBar();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
 
@@ -146,6 +155,7 @@ public class FlatSwingXTest
 			"[]" +
 			"[]0" +
 			"[top]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -456,6 +466,11 @@ public class FlatSwingXTest
 		xSearchField4.setText("abc");
 		add(xSearchField4, "cell 2 10,growx");
 
+		//---- label12 ----
+		label12.setText("JXStatusBar:");
+		add(label12, "cell 0 11");
+		add(statusBar1, "cell 1 11 3 1,grow");
+
 		//---- button1 ----
 		button1.setText("<");
 
@@ -476,5 +491,6 @@ public class FlatSwingXTest
 	private JXBusyLabel xBusyLabel2;
 	private JCheckBox busyCheckBox;
 	private JTable table;
+	private JXStatusBar statusBar1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "17" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -9,7 +9,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[left][][][][fill]"
-			"$rowConstraints": "[]0[][]0[top][][][][][][][][37]"
+			"$rowConstraints": "[]0[][]0[top][][][][][][][][][37]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -388,9 +388,23 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 10,growx"
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label12"
+				"text": "JXStatusBar:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 11"
+			} )
+			add( new FormComponent( "org.jdesktop.swingx.JXStatusBar" ) {
+				name: "statusBar1"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 11 3 1,grow"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 700, 600 )
+			"size": new java.awt.Dimension( 795, 600 )
 		} )
 		add( new FormComponent( "javax.swing.JButton" ) {
 			name: "button1"
