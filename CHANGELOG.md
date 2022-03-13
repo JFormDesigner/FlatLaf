@@ -14,6 +14,7 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- PasswordField: Fixed reveal button appearance in IntelliJ themes. (issue #494)
 - ScrollBar: Center and scale arrows in scroll up/down buttons (if shown).
   (issue #493)
 

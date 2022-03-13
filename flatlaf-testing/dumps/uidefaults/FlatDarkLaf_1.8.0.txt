@@ -712,7 +712,7 @@ PasswordField.inactiveForeground #8c8c8c  HSL   0   0  55    javax.swing.plaf.Co
 PasswordField.margin           2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 PasswordField.placeholderForeground #8c8c8c  HSL   0   0  55    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.revealIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatRevealIcon [UI]
-PasswordField.revealIconColor  [lazy] #afb1b3  HSL 210   3  69    javax.swing.plaf.ColorUIResource [UI]
+PasswordField.revealIconColor  #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionBackground #4b6eaf  HSL 219  40  49    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.selectionForeground #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 PasswordField.showCapsLock     true
@@ -1426,12 +1426,12 @@ ViewportUI                     com.formdev.flatlaf.ui.FlatViewportUI
 #---- [style]Button ----
 
 [style]Button.clearButton      icon: com.formdev.flatlaf.icons.FlatClearIcon; focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; toolbar.hoverBackground: null; toolbar.pressedBackground: null
-[style]Button.inTextField      focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; toolbar.hoverBackground: fade(Actions.GreyInline,30%,lazy); toolbar.pressedBackground: fade(Actions.GreyInline,40%,lazy); toolbar.selectedBackground: fade(Actions.GreyInline,50%,lazy)
+[style]Button.inTextField      focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; toolbar.hoverBackground: lighten($TextField.background,5%); toolbar.pressedBackground: lighten($TextField.background,10%); toolbar.selectedBackground: lighten($TextField.background,15%)
 
 
 #---- [style]ToggleButton ----
 
-[style]ToggleButton.inTextField focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; toolbar.hoverBackground: fade(Actions.GreyInline,30%,lazy); toolbar.pressedBackground: fade(Actions.GreyInline,40%,lazy); toolbar.selectedBackground: fade(Actions.GreyInline,50%,lazy)
+[style]ToggleButton.inTextField focusable: false; toolbar.margin: 1,1,1,1; toolbar.spacingInsets: 1,1,1,1; toolbar.hoverBackground: lighten($TextField.background,5%); toolbar.pressedBackground: lighten($TextField.background,10%); toolbar.selectedBackground: lighten($TextField.background,15%)
 
 
 #---- [style]ToolBar ----

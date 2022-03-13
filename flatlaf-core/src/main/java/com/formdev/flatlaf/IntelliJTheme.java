@@ -242,7 +242,19 @@ public class IntelliJTheme
 			defaults.put( "Tree.rowHeight", 22 );
 
 		// apply theme specific UI defaults at the end to allow overwriting
-		defaults.putAll( themeSpecificDefaults );
+		for( Map.Entry<Object, Object> e : themeSpecificDefaults.entrySet() ) {
+			Object key = e.getKey();
+			Object value = e.getValue();
+
+			// append styles to existing styles
+			if( key instanceof String && ((String)key).startsWith( "[style]" ) ) {
+				Object oldValue = defaults.get( key );
+				if( oldValue != null )
+					value = oldValue + "; " + value;
+			}
+
+			defaults.put( key, value );
+		}
 	}
 
 	private Map<Object, Object> removeThemeSpecificDefaults( UIDefaults defaults ) {
