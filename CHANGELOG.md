@@ -5,6 +5,7 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Menus: Improved usability of submenus. (PR #490; issue #247)
 - Linux: Support using custom window decorations. Enable with
   `JFrame.setDefaultLookAndFeelDecorated(true)` and
   `JDialog.setDefaultLookAndFeelDecorated(true)` before creating a window.
