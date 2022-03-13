@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
-import java.util.Iterator;
 import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
