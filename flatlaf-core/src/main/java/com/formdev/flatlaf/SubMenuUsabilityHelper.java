@@ -130,8 +130,14 @@ debug*/
 		mouseX = mouseLocation.x;
 		mouseY = mouseLocation.y;
 
-		// get invoker screen bounds
+		// check whether popup is showing, which is e.g. not the case if it is empty
 		JPopupMenu popup = (JPopupMenu) path[subMenuIndex];
+		if( !popup.isShowing() ) {
+			uninstallEventQueue();
+			return;
+		}
+
+		// get invoker screen bounds
 		Component invoker = popup.getInvoker();
 		invokerBounds = (invoker != null)
 			? new Rectangle( invoker.getLocationOnScreen(), invoker.getSize() )
