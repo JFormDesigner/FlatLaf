@@ -673,7 +673,7 @@ public class FlatPaintingTest
 					panel5.add(arrowSizeLabel, "cell 0 2");
 
 					//---- arrowSizeSpinner ----
-					arrowSizeSpinner.setModel(new SpinnerNumberModel(8, 2, null, 1));
+					arrowSizeSpinner.setModel(new SpinnerNumberModel(9, 2, null, 1));
 					arrowSizeSpinner.addChangeListener(e -> arrowSizeChanged());
 					panel5.add(arrowSizeSpinner, "cell 1 2");
 

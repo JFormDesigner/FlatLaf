@@ -786,13 +786,15 @@ public class FlatUIUtils
 		int direction, boolean chevron, int arrowSize, float xOffset, float yOffset )
 	{
 		// compute arrow width/height
-		int aw = UIScale.scale( arrowSize + (chevron ? 0 : 1) );
-		int ah = UIScale.scale( (arrowSize / 2) + (chevron ? 0 : 1) );
+		// - make chevron arrows one pixel smaller because coordinates are based on center of pixels (0.5/0.5)
+		// - make triangle arrows one pixel taller (and round height up) to make them look stronger
+		float aw = UIScale.scale( arrowSize + (chevron ? -1 : 0) );
+		float ah = chevron ? (aw / 2) : UIScale.scale( (arrowSize / 2) + 1 );
 
 		// rotate arrow width/height for horizontal directions
 		boolean vert = (direction == SwingConstants.NORTH || direction == SwingConstants.SOUTH);
 		if( !vert ) {
-			int temp = aw;
+			float temp = aw;
 			aw = ah;
 			ah = temp;
 		}
@@ -804,19 +806,19 @@ public class FlatUIUtils
 		// compute arrow location
 		float ox = ((width - (aw + extra)) / 2f) + UIScale.scale( xOffset );
 		float oy = ((height - (ah + extra)) / 2f) + UIScale.scale( yOffset );
-		int ax = x + ((direction == SwingConstants.WEST) ? -Math.round( -ox ) : Math.round( ox ));
-		int ay = y + ((direction == SwingConstants.NORTH) ? -Math.round( -oy ) : Math.round( oy ));
+		float ax = x + ((direction == SwingConstants.WEST) ? -Math.round( -(ox + aw) ) - aw : Math.round( ox ));
+		float ay = y + ((direction == SwingConstants.NORTH) ? -Math.round( -(oy + ah) ) - ah : Math.round( oy ));
 
 		// paint arrow
 		g.translate( ax, ay );
 /*debug
-		debugPaintArrow( g, Color.red, vert, aw + extra, ah + extra );
+		debugPaintArrow( g, Color.red, vert, Math.round( aw + extra ), Math.round( ah + extra ) );
 debug*/
 		Shape arrowShape = createArrowShape( direction, chevron, aw, ah );
 		if( chevron ) {
 			Stroke oldStroke = g.getStroke();
 			g.setStroke( new BasicStroke( UIScale.scale( 1f ) ) );
-			g.draw( arrowShape );
+			drawShapePure( g, arrowShape );
 			g.setStroke( oldStroke );
 		} else {
 			// triangle
@@ -890,6 +892,23 @@ debug*/
 		if( close )
 			path.closePath();
 		return path;
+	}
+
+	/**
+	 * Draws the given shape with disabled stroke normalization.
+	 * The x/y coordinates of the shape are translated by a half pixel.
+	 *
+	 * @since 2.1
+	 */
+	public static void drawShapePure( Graphics2D g, Shape shape ) {
+		Object oldStrokeControl = g.getRenderingHint( RenderingHints.KEY_STROKE_CONTROL );
+		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE );
+
+		g.translate( 0.5, 0.5 );
+		g.draw( shape );
+		g.translate( -0.5, -0.5 );
+
+		g.setRenderingHint( RenderingHints.KEY_STROKE_CONTROL, oldStrokeControl );
 	}
 
 	/**

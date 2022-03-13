@@ -874,6 +874,7 @@ ScrollBar.hoverThumbColor      #ff0000  HSL   0 100  50    javax.swing.plaf.Colo
 ScrollBar.hoverThumbWithTrack  false
 ScrollBar.hoverTrackColor      #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.maximumThumbSize     100000,100000    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.minimumButtonSize    12,12    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumThumbSize     10,10    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.pressedThumbWithTrack false
 ScrollBar.showButtons          false

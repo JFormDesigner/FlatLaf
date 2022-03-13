@@ -862,6 +862,7 @@ ScrollBar.hoverThumbColor      #6e767a  HSL 200   5  45    com.formdev.flatlaf.u
 ScrollBar.hoverThumbWithTrack  false
 ScrollBar.hoverTrackColor      #484c4f  HSL 206   5  30    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(4%)
 ScrollBar.maximumThumbSize     100000,100000    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.minimumButtonSize    12,12    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumThumbSize     10,10    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.pressedButtonBackground #54595c  HSL 203   5  35    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
 ScrollBar.pressedThumbColor    #7a8387  HSL 198   5  50    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(15%)

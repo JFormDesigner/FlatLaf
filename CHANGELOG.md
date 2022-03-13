@@ -9,6 +9,19 @@ FlatLaf Change Log
   `JFrame.setDefaultLookAndFeelDecorated(true)` and
   `JDialog.setDefaultLookAndFeelDecorated(true)` before creating a window.
   (issue #482)
+- ScrollBar: Added UI value `ScrollBar.minimumButtonSize` to specify minimum
+  scroll arrow button size (if shown). (issue #493)
+
+#### Fixed bugs
+
+- ScrollBar: Center and scale arrows in scroll up/down buttons (if shown).
+  (issue #493)
+
+#### Incompatibilities
+
+- Method `FlatUIUtils.paintArrow()` (and class `FlatArrowButton`) now paints
+  arrows one pixel smaller than before. To fix this, increase parameter
+  `arrowSize` by one.
 
 
 ## 2.0.2

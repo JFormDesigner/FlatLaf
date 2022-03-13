@@ -684,6 +684,7 @@ public class TestFlatStyling
 		ui.applyStyle( "maximumThumbSize: 1,2" );
 		ui.applyStyle( "allowsAbsolutePositioning: true" );
 
+		ui.applyStyle( "minimumButtonSize: 1,2" );
 		ui.applyStyle( "trackInsets: 1,2,3,4" );
 		ui.applyStyle( "thumbInsets: 1,2,3,4" );
 		ui.applyStyle( "trackArc: 5" );

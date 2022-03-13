@@ -564,7 +564,7 @@ new FormModel {
 							name: "arrowSizeSpinner"
 							"model": new javax.swing.SpinnerNumberModel {
 								minimum: 2
-								value: 8
+								value: 9
 							}
 							auxiliary() {
 								"JavaCodeGenerator.variableLocal": false

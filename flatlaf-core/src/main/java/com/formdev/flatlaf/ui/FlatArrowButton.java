@@ -37,7 +37,7 @@ public class FlatArrowButton
 	extends BasicArrowButton
 	implements UIResource
 {
-	public static final int DEFAULT_ARROW_WIDTH = 8;
+	public static final int DEFAULT_ARROW_WIDTH = 9;
 
 	protected boolean chevron;
 	protected Color foreground;
@@ -211,6 +211,6 @@ public class FlatArrowButton
 		if( vert && parent instanceof JComponent && FlatUIUtils.hasRoundBorder( (JComponent) parent ) )
 			x -= scale( parent.getComponentOrientation().isLeftToRight() ? 1 : -1 );
 
-		FlatUIUtils.paintArrow( g, x, 0, getWidth(), getHeight(), getDirection(), chevron, arrowWidth, xOffset, yOffset );
+		FlatUIUtils.paintArrow( g, x, 0, getWidth(), getHeight(), getDirection(), chevron, getArrowWidth(), getXOffset(), getYOffset() );
 	}
 }

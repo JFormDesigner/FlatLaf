@@ -57,6 +57,7 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatScrollBarUI -->
  *
+ * @uiDefault ScrollBar.minimumButtonSize			Dimension
  * @uiDefault ScrollBar.trackInsets					Insets
  * @uiDefault ScrollBar.thumbInsets					Insets
  * @uiDefault ScrollBar.trackArc					int
@@ -83,6 +84,7 @@ public class FlatScrollBarUI
 	// overrides BasicScrollBarUI.supportsAbsolutePositioning (which is private)
 	@Styleable protected boolean allowsAbsolutePositioning;
 
+	/** @since 2.1 */ @Styleable protected Dimension minimumButtonSize;
 	@Styleable protected Insets trackInsets;
 	@Styleable protected Insets thumbInsets;
 	@Styleable protected int trackArc;
@@ -142,6 +144,7 @@ public class FlatScrollBarUI
 
 		allowsAbsolutePositioning = super.getSupportsAbsolutePositioning();
 
+		minimumButtonSize = UIManager.getDimension( "ScrollBar.minimumButtonSize" );
 		trackInsets = UIManager.getInsets( "ScrollBar.trackInsets" );
 		thumbInsets = UIManager.getInsets( "ScrollBar.thumbInsets" );
 		trackArc = UIManager.getInt( "ScrollBar.trackArc" );
@@ -171,6 +174,7 @@ public class FlatScrollBarUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		minimumButtonSize = null;
 		trackInsets = null;
 		thumbInsets = null;
 		hoverTrackColor = null;
@@ -451,7 +455,6 @@ public class FlatScrollBarUI
 			super( direction, type, foreground, disabledForeground,
 				hoverForeground, hoverBackground, pressedForeground, pressedBackground );
 
-			setArrowWidth( FlatArrowButton.DEFAULT_ARROW_WIDTH - 2 );
 			setFocusable( false );
 			setRequestFocusEnabled( false );
 		}
@@ -462,6 +465,18 @@ public class FlatScrollBarUI
 		}
 
 		@Override
+		public int getArrowWidth() {
+			// scale arrow size depending on scroll bar width
+			// (6 is default arrow width; 10 is base scroll bar width)
+			int arrowWidth = Math.round( 6 * (scrollBarWidth / 10f) );
+
+			// compute arrow size that leaves equal space on both sides (arrow is centered)
+			arrowWidth = scrollBarWidth - (((scrollBarWidth - arrowWidth) / 2) * 2);
+
+			return arrowWidth;
+		}
+
+		@Override
 		protected Color deriveBackground( Color background ) {
 			return FlatUIUtils.deriveColor( background, scrollbar.getBackground() );
 		}
@@ -469,8 +484,9 @@ public class FlatScrollBarUI
 		@Override
 		public Dimension getPreferredSize() {
 			if( isShowButtons() ) {
-				int w = UIScale.scale( scrollBarWidth );
-				return new Dimension( w, w );
+				int w = UIScale.scale( Math.max( scrollBarWidth, (minimumButtonSize != null) ? minimumButtonSize.width : 0 ) );
+				int h = UIScale.scale( Math.max( scrollBarWidth, (minimumButtonSize != null) ? minimumButtonSize.height : 0 ) );
+				return new Dimension( w, h );
 			} else
 				return new Dimension();
 		}

@@ -539,6 +539,7 @@ public class TestFlatStyleableInfo
 			"maximumThumbSize", Dimension.class,
 			"allowsAbsolutePositioning", boolean.class,
 
+			"minimumButtonSize", Dimension.class,
 			"trackInsets", Insets.class,
 			"thumbInsets", Insets.class,
 			"trackArc", int.class,

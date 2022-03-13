@@ -658,6 +658,7 @@ ScrollBar.hoverThumbColor
 ScrollBar.hoverThumbWithTrack
 ScrollBar.hoverTrackColor
 ScrollBar.maximumThumbSize
+ScrollBar.minimumButtonSize
 ScrollBar.minimumThumbSize
 ScrollBar.pressedButtonBackground
 ScrollBar.pressedThumbColor

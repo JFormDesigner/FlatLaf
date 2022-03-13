@@ -1841,7 +1841,7 @@ public class FlatTabbedPaneUI
 			super( direction, arrowType,
 				FlatTabbedPaneUI.this.foreground, FlatTabbedPaneUI.this.disabledForeground,
 				null, buttonHoverBackground, null, buttonPressedBackground );
-			setArrowWidth( 10 );
+			setArrowWidth( 11 );
 		}
 
 		protected void updateStyle() {
