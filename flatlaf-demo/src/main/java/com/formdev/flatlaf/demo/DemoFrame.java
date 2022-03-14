@@ -464,6 +464,7 @@ class DemoFrame
 		JMenuItem projectViewMenuItem = new JMenuItem();
 		JMenuItem structureViewMenuItem = new JMenuItem();
 		JMenuItem propertiesViewMenuItem = new JMenuItem();
+		scrollingPopupMenu = new JMenu();
 		JMenuItem menuItem2 = new JMenuItem();
 		htmlMenuItem = new JMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
@@ -667,6 +668,12 @@ class DemoFrame
 					menu1.add(propertiesViewMenuItem);
 				}
 				viewMenu.add(menu1);
+
+				//======== scrollingPopupMenu ========
+				{
+					scrollingPopupMenu.setText("Scrolling Popup Menu");
+				}
+				viewMenu.add(scrollingPopupMenu);
 
 				//---- menuItem2 ----
 				menuItem2.setText("Disabled Item");
@@ -889,6 +896,12 @@ class DemoFrame
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
+		scrollingPopupMenu.add( "Large menus are scrollable" );
+		scrollingPopupMenu.add( "Use mouse wheel to scroll" );
+		scrollingPopupMenu.add( "Or use up/down arrows at top/bottom" );
+		for( int i = 1; i <= 100; i++ )
+			scrollingPopupMenu.add( "Item " + i );
+
 		if( FlatLaf.supportsNativeWindowDecorations() || (SystemInfo.isLinux && JFrame.isDefaultLookAndFeelDecorated()) ) {
 			if( SystemInfo.isLinux )
 				unsupported( windowDecorationsCheckBoxMenuItem );
@@ -934,6 +947,7 @@ class DemoFrame
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JMenuItem exitMenuItem;
+	private JMenu scrollingPopupMenu;
 	private JMenuItem htmlMenuItem;
 	private JMenu fontMenu;
 	private JMenu optionsMenu;

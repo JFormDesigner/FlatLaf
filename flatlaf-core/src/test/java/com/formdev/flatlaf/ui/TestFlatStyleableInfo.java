@@ -422,6 +422,10 @@ public class TestFlatStyleableInfo
 		FlatPopupMenuUI ui = (FlatPopupMenuUI) c.getUI();
 
 		Map<String, Class<?>> expected = expectedMap(
+			"arrowType", String.class,
+			"scrollArrowColor", Color.class,
+			"hoverScrollArrowBackground", Color.class,
+
 			"borderInsets", Insets.class,
 			"borderColor", Color.class
 		);

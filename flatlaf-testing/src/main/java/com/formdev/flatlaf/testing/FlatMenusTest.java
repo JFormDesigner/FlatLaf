@@ -80,9 +80,20 @@ public class FlatMenusTest
 		FlatLaf.updateUI();
 	}
 
-	private void showPopupMenuButtonActionPerformed(ActionEvent e) {
+	private void showPopupMenuButton(ActionEvent e) {
 		Component invoker = (Component) e.getSource();
 		PopupMenu popupMenu = new PopupMenu();
+		popupMenu.applyComponentOrientation( getComponentOrientation() );
+		popupMenu.show( invoker, 0, invoker.getHeight() );
+	}
+
+	private void showScrollingPopupMenu(ActionEvent e) {
+		Component invoker = (Component) e.getSource();
+		JPopupMenu popupMenu = new JPopupMenu();
+		for( int i = 1; i <= 100; i++ ) {
+			popupMenu.add( "menu item " + i + (i % 5 == 0 ? " test" : "") )
+				.addActionListener( e2 -> System.out.println( ((JMenuItem)e2.getSource()).getText() ) );
+		}
 		popupMenu.applyComponentOrientation( getComponentOrientation() );
 		popupMenu.show( invoker, 0, invoker.getHeight() );
 	}
@@ -230,6 +241,7 @@ public class FlatMenusTest
 		JRadioButtonMenuItem radioButtonMenuItem11 = new JRadioButtonMenuItem();
 		JLabel popupMenuLabel = new JLabel();
 		JButton showPopupMenuButton = new JButton();
+		showScrollingPopupMenuButton = new JButton();
 		armedCheckBox = new JCheckBox();
 		underlineCheckBox = new JCheckBox();
 		popupMenubackgroundCheckBox = new JCheckBox();
@@ -839,8 +851,13 @@ public class FlatMenusTest
 
 		//---- showPopupMenuButton ----
 		showPopupMenuButton.setText("show JPopupMenu");
-		showPopupMenuButton.addActionListener(e -> showPopupMenuButtonActionPerformed(e));
+		showPopupMenuButton.addActionListener(e -> showPopupMenuButton(e));
 		add(showPopupMenuButton, "cell 1 2");
+
+		//---- showScrollingPopupMenuButton ----
+		showScrollingPopupMenuButton.setText("show scrolling JPopupMenu");
+		showScrollingPopupMenuButton.addActionListener(e -> showScrollingPopupMenu(e));
+		add(showScrollingPopupMenuButton, "cell 2 2");
 
 		//---- armedCheckBox ----
 		armedCheckBox.setText("armed");
@@ -884,6 +901,7 @@ public class FlatMenusTest
 	private JMenuBar menuBar2;
 	private JCheckBox largerCheckBox;
 	private JCheckBox accelCheckBox;
+	private JButton showScrollingPopupMenuButton;
 	private JCheckBox armedCheckBox;
 	private JCheckBox underlineCheckBox;
 	private JCheckBox popupMenubackgroundCheckBox;

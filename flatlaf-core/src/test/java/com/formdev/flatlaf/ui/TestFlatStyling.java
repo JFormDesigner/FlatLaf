@@ -565,6 +565,10 @@ public class TestFlatStyling
 		JPopupMenu c = new JPopupMenu();
 		FlatPopupMenuUI ui = (FlatPopupMenuUI) c.getUI();
 
+		ui.applyStyle( "arrowType: chevron" );
+		ui.applyStyle( "scrollArrowColor: #fff" );
+		ui.applyStyle( "hoverScrollArrowBackground: #fff" );
+
 		ui.applyStyle( "borderInsets: 1,2,3,4" );
 		ui.applyStyle( "borderColor: #fff" );
 

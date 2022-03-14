@@ -575,6 +575,8 @@ PopupMenu.borderInsets
 PopupMenu.consumeEventOnClose
 PopupMenu.font
 PopupMenu.foreground
+PopupMenu.hoverScrollArrowBackground
+PopupMenu.scrollArrowColor
 PopupMenu.selectedWindowInputMapBindings
 PopupMenu.selectedWindowInputMapBindings.RightToLeft
 PopupMenuSeparator.height

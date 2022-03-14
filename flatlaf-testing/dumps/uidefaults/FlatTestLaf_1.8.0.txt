@@ -752,6 +752,8 @@ PopupMenu.borderInsets         4,1,4,1    javax.swing.plaf.InsetsUIResource [UI]
 PopupMenu.consumeEventOnClose  false
 PopupMenu.font                 [active] $defaultFont [UI]
 PopupMenu.foreground           #ff0000  HSL   0 100  50    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.hoverScrollArrowBackground #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
+PopupMenu.scrollArrowColor     #0000ff  HSL 240 100  50    javax.swing.plaf.ColorUIResource [UI]
 
 
 #---- PopupMenuSeparator ----
