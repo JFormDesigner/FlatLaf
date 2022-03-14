@@ -24,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -56,20 +57,22 @@ public class FlatScreenshotsBackground
 			black.setOpaque( false );
 			black.setVerticalAlignment( SwingConstants.TOP );
 			black.addActionListener( e -> {
-				if( black.isSelected() ) {
+				if( black.isSelected() )
 					FlatDarkLaf.setup();
-					FlatLaf.updateUI();
-					frame.getContentPane().setBackground( Color.black );
-				} else {
+				else
 					FlatLightLaf.setup();
-					FlatLaf.updateUI();
-					frame.getContentPane().setBackground( Color.white );
-				}
+				FlatLaf.updateUI();
+
+				Color color = black.isSelected() ? Color.black : Color.white;
+				frame.getContentPane().setBackground( color );
+				frame.getRootPane().putClientProperty( FlatClientProperties.TITLE_BAR_BACKGROUND, color );
 				frame.repaint();
 			} );
 			frame.getContentPane().add( black );
 
 			frame.getContentPane().setBackground( Color.white );
+			frame.getRootPane().putClientProperty( FlatClientProperties.TITLE_BAR_BACKGROUND, Color.white );
+
 			frame.setExtendedState( JFrame.MAXIMIZED_BOTH );
 			frame.setVisible( true );
 		} );
