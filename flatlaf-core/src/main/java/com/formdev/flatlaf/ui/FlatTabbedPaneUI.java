@@ -2016,7 +2016,7 @@ public class FlatTabbedPaneUI
 				menuItem.setOpaque( true );
 			}
 
-			if( !tabPane.isEnabledAt( tabIndex ) )
+			if( !tabPane.isEnabled() || !tabPane.isEnabledAt( tabIndex ) )
 				menuItem.setEnabled( false );
 
 			menuItem.addActionListener( e -> selectTab( tabIndex ) );

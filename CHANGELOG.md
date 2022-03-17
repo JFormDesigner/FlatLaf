@@ -21,6 +21,8 @@ FlatLaf Change Log
   (issue #493)
 - TextArea, TextPane and EditorPane: No longer select all text when component is
   focused for the first time. (issue #498; regression in FlatLaf 2.0)
+- TabbedPane: Disable all items in "Show Hidden Tabs" popup menu if tabbed pane
+  is disabled.
 
 #### Incompatibilities
 
