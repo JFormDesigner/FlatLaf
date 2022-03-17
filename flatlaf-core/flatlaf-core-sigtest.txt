@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 2.0
+#Version 2.1
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -216,7 +216,7 @@ meth public void setExtraDefaults(java.util.Map<java.lang.String,java.lang.Strin
 meth public void uninitialize()
 meth public void unregisterUIDefaultsGetter(java.util.function.Function<java.lang.Object,java.lang.Object>)
 supr javax.swing.plaf.basic.BasicLookAndFeel
-hfds DESKTOPFONTHINTS,aquaLoaded,customDefaultsSources,desktopPropertyListener,desktopPropertyName,desktopPropertyName2,extraDefaults,globalExtraDefaults,mnemonicHandler,oldPopupFactory,postInitialization,uiDefaultsGetters,updateUIPending
+hfds DESKTOPFONTHINTS,aquaLoaded,customDefaultsSources,desktopPropertyListener,desktopPropertyName,desktopPropertyName2,extraDefaults,globalExtraDefaults,mnemonicHandler,oldPopupFactory,postInitialization,subMenuUsabilityHelper,uiDefaultsGetters,updateUIPending
 hcls ActiveFont,FlatUIDefaults,ImageIconUIResource
 
 CLSS public abstract interface static com.formdev.flatlaf.FlatLaf$DisabledIconProvider
