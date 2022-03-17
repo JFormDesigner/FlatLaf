@@ -43,6 +43,7 @@ import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -521,7 +522,7 @@ debug*/
 
 		@Override
 		public void mousePressed( MouseEvent e ) {
-			if( !isWindowResizable() )
+			if( !SwingUtilities.isLeftMouseButton( e ) || !isWindowResizable() )
 				return;
 
 			int xOnScreen = e.getXOnScreen();
@@ -550,7 +551,7 @@ debug*/
 
 		@Override
 		public void mouseReleased( MouseEvent e ) {
-			if( !isWindowResizable() )
+			if( !SwingUtilities.isLeftMouseButton( e ) || !isWindowResizable() )
 				return;
 
 			dragLeftOffset = dragRightOffset = dragTopOffset = dragBottomOffset = 0;
@@ -576,7 +577,7 @@ debug*/
 
 		@Override
 		public void mouseDragged( MouseEvent e ) {
-			if( !isWindowResizable() )
+			if( !SwingUtilities.isLeftMouseButton( e ) || !isWindowResizable() )
 				return;
 
 			int xOnScreen = e.getXOnScreen();

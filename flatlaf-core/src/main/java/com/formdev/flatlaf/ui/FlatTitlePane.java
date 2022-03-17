@@ -1016,6 +1016,9 @@ debug*/
 			if( window == null )
 				return; // should newer occur
 
+			if( !SwingUtilities.isLeftMouseButton( e ) )
+				return;
+
 			dragOffset = SwingUtilities.convertPoint( FlatTitlePane.this, e.getPoint(), window );
 		}
 
@@ -1029,6 +1032,9 @@ debug*/
 		public void mouseDragged( MouseEvent e ) {
 			if( window == null )
 				return; // should newer occur
+
+			if( !SwingUtilities.isLeftMouseButton( e ) )
+				return;
 
 			if( hasNativeCustomDecoration() )
 				return; // do nothing if having native window border
