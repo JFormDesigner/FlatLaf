@@ -19,6 +19,8 @@ FlatLaf Change Log
 - PasswordField: Fixed reveal button appearance in IntelliJ themes. (issue #494)
 - ScrollBar: Center and scale arrows in scroll up/down buttons (if shown).
   (issue #493)
+- TextArea, TextPane and EditorPane: No longer select all text when component is
+  focused for the first time. (issue #498; regression in FlatLaf 2.0)
 
 #### Incompatibilities
 

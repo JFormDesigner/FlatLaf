@@ -236,7 +236,7 @@ public class FlatCaret
 		if( selectAllOnFocusPolicy == null )
 			selectAllOnFocusPolicy = this.selectAllOnFocusPolicy;
 
-		if( SELECT_ALL_ON_FOCUS_POLICY_NEVER.equals( selectAllOnFocusPolicy ) )
+		if( selectAllOnFocusPolicy == null || SELECT_ALL_ON_FOCUS_POLICY_NEVER.equals( selectAllOnFocusPolicy ) )
 			return;
 
 		if( !SELECT_ALL_ON_FOCUS_POLICY_ALWAYS.equals( selectAllOnFocusPolicy ) ) {
