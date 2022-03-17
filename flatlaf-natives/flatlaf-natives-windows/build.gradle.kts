@@ -54,8 +54,8 @@ library {
 
 				compilerArgs.addAll( toolChain.map {
 					when( it ) {
-						is Gcc, is Clang -> listOf( "-O2" )
-						is VisualCpp -> listOf( "/O2", "/Zl", "/GS-" )
+						is Gcc, is Clang -> listOf( "-O2", "-DUNICODE" )
+						is VisualCpp -> listOf( "/O2", "/Zl", "/GS-", "/DUNICODE" )
 						else -> emptyList()
 					}
 				} )

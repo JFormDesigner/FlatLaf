@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 2.2-SNAPSHOT
+
+#### Fixed bugs
+
+- Native window decorations (Windows 10/11 only): Fixed wrong window title
+  character encoding used in Windows taskbar. (issue #502)
+
+
 ## 2.1
 
 #### New features and improvements
