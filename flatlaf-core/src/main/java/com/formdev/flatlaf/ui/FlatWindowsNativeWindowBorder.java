@@ -136,7 +136,7 @@ class FlatWindowsNativeWindowBorder
 
 		String libraryPath = System.getProperty( FlatSystemProperties.NATIVE_LIBRARY_PATH );
 		if( libraryPath != null ) {
-			File libraryFile = new File( libraryPath, libraryName + ".dll" );
+			File libraryFile = new File( libraryPath, System.mapLibraryName( libraryName ) );
 			if( libraryFile.exists() )
 				return new NativeLibrary( libraryFile, true );
 			else

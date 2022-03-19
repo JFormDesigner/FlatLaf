@@ -143,16 +143,19 @@ public class NativeLibrary
 		}
 	}
 
+	/**
+	 * Add prefix and suffix to library name.
+	 * <ul>
+	 * <li>Windows: libraryName + ".dll"
+	 * <li>macOS: "lib" + libraryName + ".dylib"
+	 * <li>Linux: "lib" + libraryName + ".so"
+	 * </ul>
+	 */
 	private static String decorateLibraryName( String libraryName ) {
-		if( SystemInfo.isWindows )
-			return libraryName.concat( ".dll" );
-
-		String suffix = SystemInfo.isMacOS ? ".dylib" : ".so";
-
 		int sep = libraryName.lastIndexOf( '/' );
 		return (sep >= 0)
-			? libraryName.substring( 0, sep + 1 ) + "lib" + libraryName.substring( sep + 1 ) + suffix
-			: "lib" + libraryName + suffix;
+			? libraryName.substring( 0, sep + 1 ) + System.mapLibraryName( libraryName.substring( sep + 1 ) )
+			: System.mapLibraryName( libraryName );
 	}
 
 	private static void log( String msg, Throwable thrown ) {
