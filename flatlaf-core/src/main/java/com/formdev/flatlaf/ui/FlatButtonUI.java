@@ -42,6 +42,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ButtonUI;
@@ -495,6 +496,23 @@ public class FlatButtonUI
 	}
 
 	@Override
+	protected void paintIcon( Graphics g, JComponent c, Rectangle iconRect ) {
+		// correct icon location when using bold font for default button
+		int xOffset = defaultBoldPlainWidthDiff( c ) / 2;
+		if( xOffset > 0 ) {
+			boolean ltr = c.getComponentOrientation().isLeftToRight();
+			switch( ((AbstractButton)c).getHorizontalTextPosition() ) {
+				case SwingConstants.RIGHT:    iconRect.x -= xOffset; break;
+				case SwingConstants.LEFT:     iconRect.x += xOffset; break;
+				case SwingConstants.TRAILING: iconRect.x -= ltr ? xOffset : -xOffset; break;
+				case SwingConstants.LEADING:  iconRect.x += ltr ? xOffset : -xOffset; break;
+			}
+		}
+
+		super.paintIcon( g, c, iconRect );
+	}
+
+	@Override
 	protected void paintText( Graphics g, AbstractButton b, Rectangle textRect, String text ) {
 		if( isHelpButton( b ) )
 			return;
@@ -624,6 +642,9 @@ public class FlatButtonUI
 		if( prefSize == null )
 			return null;
 
+		// increase width when using bold font for default button
+		prefSize.width += defaultBoldPlainWidthDiff( c );
+
 		// make square or apply minimum width/height
 		boolean isIconOnlyOrSingleCharacter = isIconOnlyOrSingleCharacterButton( c );
 		if( clientPropertyBoolean( c, SQUARE_SIZE, squareSize ) ) {
@@ -642,6 +663,23 @@ public class FlatButtonUI
 		}
 
 		return prefSize;
+	}
+
+	private int defaultBoldPlainWidthDiff( JComponent c ) {
+		if( defaultBoldText && isDefaultButton( c ) && c.getFont() instanceof UIResource ) {
+			String text = ((AbstractButton)c).getText();
+			if( text == null || text.isEmpty() )
+				return 0;
+
+			Font font = c.getFont();
+			Font boldFont = font.deriveFont( Font.BOLD );
+			int boldWidth = c.getFontMetrics( boldFont ).stringWidth( text );
+			int plainWidth = c.getFontMetrics( font ).stringWidth( text );
+			if( boldWidth > plainWidth )
+				return boldWidth - plainWidth;
+		}
+
+		return 0;
 	}
 
 	private boolean hasDefaultMargins( JComponent c ) {

@@ -7,6 +7,8 @@ FlatLaf Change Log
 
 - Native window decorations (Windows 10/11 only): Fixed wrong window title
   character encoding used in Windows taskbar. (issue #502)
+- Button: Fixed icon layout and preferred width of default buttons that use bold
+  font. (issue #506)
 - ToolBar: Fixed endless loop in focus navigation that may occur under special
   circumstances. (issue #505)
 
