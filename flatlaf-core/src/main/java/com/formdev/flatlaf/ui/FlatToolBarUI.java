@@ -256,11 +256,15 @@ public class FlatToolBarUI
 			default: return;
 		}
 
-		for( int i = focusedCompIndex + add; i != focusedCompIndex; i += add ) {
+		int i = focusedCompIndex;
+		for(;;) {
+			i += add;
 			if( i < 0 )
 				i = count - 1;
 			else if( i >= count )
 				i = 0;
+			if( i == focusedCompIndex )
+				break;
 
 			Component c = toolBar.getComponentAtIndex( i );
 			if( canBeFocusOwner( c ) ) {
