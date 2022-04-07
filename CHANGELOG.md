@@ -11,6 +11,8 @@ FlatLaf Change Log
   font. (issue #506)
 - ToolBar: Fixed endless loop in focus navigation that may occur under special
   circumstances. (issue #505)
+- IntelliJ Themes: `Component.accentColor` UI property now has useful theme
+  specific values. (issue #507)
 
 
 ## 2.1
