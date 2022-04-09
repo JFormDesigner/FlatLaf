@@ -45,7 +45,8 @@ tasks {
 
 	processResources {
 		// build native libraries
-		dependsOn( ":flatlaf-natives-windows:assemble" )
+		if( org.gradle.internal.os.OperatingSystem.current().isWindows )
+			dependsOn( ":flatlaf-natives-windows:assemble" )
 	}
 
 	jar {
