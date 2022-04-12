@@ -39,14 +39,6 @@ public class FlatSolarizedDarkIJTheme
 		}
 	}
 
-	/**
-	 * @deprecated use {@link #setup()} instead; this method will be removed in a future version
-	 */
-	@Deprecated
-	public static boolean install() {
-		return setup();
-	}
-
 	public static void installLafInfo() {
 		installLafInfo( NAME, FlatSolarizedDarkIJTheme.class );
 	}

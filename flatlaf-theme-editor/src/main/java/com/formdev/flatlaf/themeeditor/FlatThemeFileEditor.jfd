@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -28,8 +28,10 @@ new FormModel {
 					name: "directoryField"
 					"editable": false
 					"focusable": false
+					"maximumRowCount": 30
 					auxiliary() {
-						"JavaCodeGenerator.typeParameters": "String"
+						"JavaCodeGenerator.typeParameters": "File"
+						"JavaCodeGenerator.customCreateCode": "new FlatThemeFileEditor.DirectoryComboBox();"
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "directoryChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -66,6 +68,13 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "openDirectory", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "newPropertiesFileMenuItem"
+						"text": "New Properties File..."
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 78, 4356, false )
+						"mnemonic": 78
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "newPropertiesFile", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "saveAllMenuItem"
 						"text": "Save All"
 						"mnemonic": 83
@@ -89,10 +98,95 @@ new FormModel {
 					"mnemonic": 69
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "findMenuItem"
-						"text": "Find/Replace..."
+						"text": "Find/Replace"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 70, 4226, false )
 						"mnemonic": 70
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "find", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator5"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "insertColorMenuItem"
+						"text": "Insert Color"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 71, 4356, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "insertColor", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "pickColorMenuItem"
+						"text": "Pick Color from Screen"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 71, 4421, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "pickColor", false ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "viewMenu"
+					"text": "View"
+					"mnemonic": 86
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "previewMenuItem"
+						"text": "Preview"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 80, 4356, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHidePreview", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator3"
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "lightLafMenuItem"
+						"text": "Light Laf"
+						"$buttonGroup": new FormReference( "lafButtonGroup" )
+						"mnemonic": 76
+						"selected": true
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 112, 520, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "lightLaf", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JRadioButtonMenuItem" ) {
+						name: "darkLafMenuItem"
+						"text": "Dark Laf"
+						"$buttonGroup": new FormReference( "lafButtonGroup" )
+						"mnemonic": 68
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 113, 520, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "darkLaf", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator2"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "incrFontSizeMenuItem"
+						"text": "Increase Font Size"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 521, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "incrFontSize", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "decrFontSizeMenuItem"
+						"text": "Decrease Font Size"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 45, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "decrFontSize", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "resetFontSizeMenuItem"
+						"text": "Reset Font Size"
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 48, 4226, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "resetFontSize", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator4"
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showHSLColorsMenuItem"
+						"text": "Show HSL colors"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorModelChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showRGBColorsMenuItem"
+						"text": "Show RGB colors (hex)"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorModelChanged", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showColorLumaMenuItem"
+						"text": "Show color luma"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "colorModelChanged", false ) )
 					} )
 				} )
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
@@ -100,9 +194,16 @@ new FormModel {
 					"text": "Window"
 					"mnemonic": 87
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "activateEditorMenuItem"
+						"text": "Activate Editor"
+						"mnemonic": 65
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 123, 0, false )
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "activateEditor", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "nextEditorMenuItem"
 						"text": "Next Editor"
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 9, 4226, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 34, 4226, false )
 						"mnemonic": 78
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "nextEditor", false ) )
 					} )
@@ -110,14 +211,30 @@ new FormModel {
 						name: "previousEditorMenuItem"
 						"text": "Previous Editor"
 						"mnemonic": 80
-						"accelerator": static javax.swing.KeyStroke getKeyStroke( 9, 4291, false )
+						"accelerator": static javax.swing.KeyStroke getKeyStroke( 33, 4226, false )
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "previousEditor", false ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "helpMenu"
+					"text": "Help"
+					"mnemonic": 72
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "aboutMenuItem"
+						"text": "About"
+						"mnemonic": 65
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "about", false ) )
 					} )
 				} )
 			}
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 535, 300 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "lafButtonGroup"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 310 )
 		} )
 	}
 }

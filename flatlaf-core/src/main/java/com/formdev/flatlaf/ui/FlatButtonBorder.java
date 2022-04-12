@@ -20,15 +20,21 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Paint;
 import javax.swing.AbstractButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Border for {@link javax.swing.JButton}.
+ *
+ * @uiDefault Button.arc						int
+ * @uiDefault Button.innerFocusWidth			int or float	optional; defaults to Component.innerFocusWidth
+ * @uiDefault Button.borderWidth				int or float	optional; defaults to Component.borderWidth
  *
  * @uiDefault Button.borderColor				Color
  * @uiDefault Button.startBorderColor			Color	optional; if set, a gradient paint is used and Button.borderColor is ignored
@@ -36,40 +42,50 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Button.disabledBorderColor		Color
  * @uiDefault Button.focusedBorderColor			Color
  * @uiDefault Button.hoverBorderColor			Color	optional
+ *
+ * @uiDefault Button.default.borderWidth		int or float
  * @uiDefault Button.default.borderColor		Color
  * @uiDefault Button.default.startBorderColor	Color	optional; if set, a gradient paint is used and Button.default.borderColor is ignored
  * @uiDefault Button.default.endBorderColor		Color	optional; if set, a gradient paint is used
- * @uiDefault Button.default.hoverBorderColor	Color	optional
  * @uiDefault Button.default.focusedBorderColor	Color
  * @uiDefault Button.default.focusColor			Color
- * @uiDefault Button.borderWidth				int
- * @uiDefault Button.default.borderWidth		int
- * @uiDefault Button.innerFocusWidth			int or float	optional; defaults to Component.innerFocusWidth
+ * @uiDefault Button.default.hoverBorderColor	Color	optional
+ *
+ * @uiDefault Button.toolbar.focusWidth			int or float		optional; default is 1.5
+ * @uiDefault Button.toolbar.focusColor			Color	optional; defaults to Component.focusColor
  * @uiDefault Button.toolbar.margin				Insets
  * @uiDefault Button.toolbar.spacingInsets		Insets
- * @uiDefault Button.arc						int
  *
  * @author Karl Tauber
  */
 public class FlatButtonBorder
 	extends FlatBorder
 {
-	protected final Color borderColor = FlatUIUtils.getUIColor( "Button.startBorderColor", "Button.borderColor" );
-	protected final Color endBorderColor = UIManager.getColor( "Button.endBorderColor" );
-	protected final Color disabledBorderColor = UIManager.getColor( "Button.disabledBorderColor" );
-	protected final Color focusedBorderColor = UIManager.getColor( "Button.focusedBorderColor" );
-	protected final Color hoverBorderColor = UIManager.getColor( "Button.hoverBorderColor" );
-	protected final Color defaultBorderColor = FlatUIUtils.getUIColor( "Button.default.startBorderColor", "Button.default.borderColor" );
-	protected final Color defaultEndBorderColor = UIManager.getColor( "Button.default.endBorderColor" );
-	protected final Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
-	protected final Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
-	protected final Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
-	protected final int borderWidth = UIManager.getInt( "Button.borderWidth" );
-	protected final int defaultBorderWidth = UIManager.getInt( "Button.default.borderWidth" );
-	protected final float buttonInnerFocusWidth = FlatUIUtils.getUIFloat( "Button.innerFocusWidth", innerFocusWidth );
-	protected final Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
-	protected final Insets toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
-	protected final int arc = UIManager.getInt( "Button.arc" );
+	@Styleable protected int arc = UIManager.getInt( "Button.arc" );
+
+	protected Color endBorderColor = UIManager.getColor( "Button.endBorderColor" );
+	@Styleable protected Color hoverBorderColor = UIManager.getColor( "Button.hoverBorderColor" );
+
+	@Styleable(dot=true) protected float defaultBorderWidth = FlatUIUtils.getUIFloat( "Button.default.borderWidth", 1 );
+	@Styleable(dot=true) protected Color defaultBorderColor = FlatUIUtils.getUIColor( "Button.default.startBorderColor", "Button.default.borderColor" );
+	protected Color defaultEndBorderColor = UIManager.getColor( "Button.default.endBorderColor" );
+	@Styleable(dot=true) protected Color defaultFocusedBorderColor = UIManager.getColor( "Button.default.focusedBorderColor" );
+	@Styleable(dot=true) protected Color defaultFocusColor = UIManager.getColor( "Button.default.focusColor" );
+	@Styleable(dot=true) protected Color defaultHoverBorderColor = UIManager.getColor( "Button.default.hoverBorderColor" );
+
+	/** @since 1.4 */ @Styleable(dot=true) protected float toolbarFocusWidth = FlatUIUtils.getUIFloat( "Button.toolbar.focusWidth", 1.5f );
+	/** @since 1.4 */ @Styleable(dot=true) protected Color toolbarFocusColor = UIManager.getColor( "Button.toolbar.focusColor" );
+	@Styleable(dot=true) protected Insets toolbarMargin = UIManager.getInsets( "Button.toolbar.margin" );
+	@Styleable(dot=true) protected Insets toolbarSpacingInsets = UIManager.getInsets( "Button.toolbar.spacingInsets" );
+
+	public FlatButtonBorder() {
+		innerFocusWidth = FlatUIUtils.getUIFloat( "Button.innerFocusWidth", innerFocusWidth );
+		borderWidth = FlatUIUtils.getUIFloat( "Button.borderWidth", borderWidth );
+
+		borderColor = FlatUIUtils.getUIColor( "Button.startBorderColor", "Button.borderColor" );
+		disabledBorderColor = UIManager.getColor( "Button.disabledBorderColor" );
+		focusedBorderColor = UIManager.getColor( "Button.focusedBorderColor" );
+	}
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
@@ -79,11 +95,40 @@ public class FlatButtonBorder
 			!FlatButtonUI.isHelpButton( c ) &&
 			!FlatToggleButtonUI.isTabButton( c ) )
 		  super.paintBorder( c, g, x, y, width, height );
+		else if( FlatButtonUI.isToolBarButton( c ) && isFocused( c ) )
+			paintToolBarFocus( c, g, x, y, width, height );
+	}
+
+	/** @since 1.4 */
+	protected void paintToolBarFocus( Component c, Graphics g, int x, int y, int width, int height ) {
+		Graphics2D g2 = (Graphics2D) g.create();
+		try {
+			FlatUIUtils.setRenderingHints( g2 );
+
+			float focusWidth = UIScale.scale( toolbarFocusWidth );
+			float arc = UIScale.scale( (float) getArc( c ) );
+			Color outlineColor = getOutlineColor( c );
+
+			Insets spacing = UIScale.scale( toolbarSpacingInsets );
+			x += spacing.left;
+			y += spacing.top;
+			width -= spacing.left + spacing.right;
+			height -= spacing.top + spacing.bottom;
+
+			Color color = (outlineColor != null) ? outlineColor : getFocusColor( c );
+			// not using focus border painting of paintOutlinedComponent() here
+			// because its round edges look too "thick"
+			FlatUIUtils.paintOutlinedComponent( g2, x, y, width, height, 0, 0, 0, focusWidth, arc, null, color, null );
+		} finally {
+			g2.dispose();
+		}
 	}
 
 	@Override
 	protected Color getFocusColor( Component c ) {
-		return FlatButtonUI.isDefaultButton( c ) ? defaultFocusColor : super.getFocusColor( c );
+		return (toolbarFocusColor != null && FlatButtonUI.isToolBarButton( c ))
+			? toolbarFocusColor
+			: (FlatButtonUI.isDefaultButton( c ) ? defaultFocusColor : super.getFocusColor( c ));
 	}
 
 	@Override
@@ -114,7 +159,7 @@ public class FlatButtonBorder
 	public Insets getBorderInsets( Component c, Insets insets ) {
 		if( FlatButtonUI.isToolBarButton( c ) ) {
 			// In toolbars, use button margin only if explicitly set.
-			// Otherwise use toolbar margin specified in UI defaults.
+			// Otherwise, use toolbar margin specified in UI defaults.
 			Insets margin = (c instanceof AbstractButton)
 				? ((AbstractButton)c).getMargin()
 				: null;
@@ -138,12 +183,7 @@ public class FlatButtonBorder
 	}
 
 	@Override
-	protected float getInnerFocusWidth( Component c ) {
-		return buttonInnerFocusWidth;
-	}
-
-	@Override
-	protected int getBorderWidth( Component c ) {
+	protected float getBorderWidth( Component c ) {
 		return FlatButtonUI.isDefaultButton( c ) ? defaultBorderWidth : borderWidth;
 	}
 

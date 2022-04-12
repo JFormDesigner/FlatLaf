@@ -25,13 +25,17 @@ import java.awt.Insets;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicProgressBarUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -58,15 +62,28 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatProgressBarUI
 	extends BasicProgressBarUI
+	implements StyleableUI
 {
-	protected int arc;
-	protected Dimension horizontalSize;
-	protected Dimension verticalSize;
+	@Styleable protected int arc;
+	@Styleable protected Dimension horizontalSize;
+	@Styleable protected Dimension verticalSize;
+
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected boolean largeHeight;
+	/** @since 2 */ @Styleable protected boolean square;
 
 	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatProgressBarUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -81,6 +98,13 @@ public class FlatProgressBarUI
 	}
 
 	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		oldStyleValues = null;
+	}
+
+	@Override
 	protected void installListeners() {
 		super.installListeners();
 
@@ -88,6 +112,13 @@ public class FlatProgressBarUI
 			switch( e.getPropertyName() ) {
 				case PROGRESS_BAR_LARGE_HEIGHT:
 				case PROGRESS_BAR_SQUARE:
+					progressBar.revalidate();
+					progressBar.repaint();
+					break;
+
+				case STYLE:
+				case STYLE_CLASS:
+					installStyle();
 					progressBar.revalidate();
 					progressBar.repaint();
 					break;
@@ -104,11 +135,36 @@ public class FlatProgressBarUI
 		propertyChangeListener = null;
 	}
 
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( progressBar, "ProgressBar" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, progressBar, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
 		Dimension size = super.getPreferredSize( c );
 
-		if( progressBar.isStringPainted() || clientPropertyBoolean( c, PROGRESS_BAR_LARGE_HEIGHT, false ) ) {
+		if( progressBar.isStringPainted() || clientPropertyBoolean( c, PROGRESS_BAR_LARGE_HEIGHT, largeHeight ) ) {
 			// recalculate progress height/width to make it smaller
 			Insets insets = progressBar.getInsets();
 			FontMetrics fm = progressBar.getFontMetrics( progressBar.getFont() );
@@ -151,7 +207,7 @@ public class FlatProgressBarUI
 			return;
 
 		boolean horizontal = (progressBar.getOrientation() == JProgressBar.HORIZONTAL);
-		int arc = clientPropertyBoolean( c, PROGRESS_BAR_SQUARE, false )
+		int arc = clientPropertyBoolean( c, PROGRESS_BAR_SQUARE, square )
 			? 0
 			: Math.min( UIScale.scale( this.arc ), horizontal ? height : width );
 

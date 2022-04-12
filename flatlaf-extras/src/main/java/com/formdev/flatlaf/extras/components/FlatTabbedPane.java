@@ -31,7 +31,7 @@ import javax.swing.SwingConstants;
  */
 public class FlatTabbedPane
 	extends JTabbedPane
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns whether separators are shown between tabs.
@@ -360,6 +360,29 @@ public class FlatTabbedPane
 	public void setTabCloseCallback( int tabIndex, BiConsumer<JTabbedPane, Integer> tabCloseCallback ) {
 		JComponent c = (JComponent) getComponentAt( tabIndex );
 		c.putClientProperty( TABBED_PANE_TAB_CLOSE_CALLBACK, tabCloseCallback );
+	}
+
+
+	// NOTE: enum names must be equal to allowed strings
+	/** @since 2 */ public enum TabType { underlined, card };
+
+	/**
+	 * Returns type of selected tab.
+	 *
+	 * @since 2
+	 */
+	public TabType getTabType() {
+		return getClientPropertyEnumString( TABBED_PANE_TAB_TYPE, TabType.class,
+			"TabbedPane.tabType", TabType.underlined );
+	}
+
+	/**
+	 * Specifies type of selected tab.
+	 *
+	 * @since 2
+	 */
+	public void setTabType( TabType tabType ) {
+		putClientPropertyEnumString( TABBED_PANE_TAB_TYPE, tabType );
 	}
 
 

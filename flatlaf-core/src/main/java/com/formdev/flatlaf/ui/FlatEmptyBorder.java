@@ -50,6 +50,12 @@ public class FlatEmptyBorder
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
+		return scaleInsets( c, insets, top, left, bottom, right );
+	}
+
+	protected static Insets scaleInsets( Component c, Insets insets,
+		int top, int left, int bottom, int right )
+	{
 		boolean leftToRight = left == right || c.getComponentOrientation().isLeftToRight();
 		insets.left = scale( leftToRight ? left : right );
 		insets.top = scale( top );
@@ -60,5 +66,14 @@ public class FlatEmptyBorder
 
 	public Insets getUnscaledBorderInsets() {
 		return super.getBorderInsets();
+	}
+
+	public Object applyStyleProperty( Insets insets ) {
+		Insets oldInsets = getUnscaledBorderInsets();
+		top = insets.top;
+		left = insets.left;
+		bottom = insets.bottom;
+		right = insets.right;
+		return oldInsets;
 	}
 }

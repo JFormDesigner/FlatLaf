@@ -62,6 +62,13 @@ public class FlatSwingXTest
 		monthView1.setUnselectableDates( calendar.getTime() );
 
 		table.setDefaultEditor( Date.class, new DatePickerCellEditor() );
+
+		// status bar
+		statusBar1.add( new JLabel( "Ready" ), new JXStatusBar.Constraint( 100 ) );
+		statusBar1.add( new JLabel( "0 files loaded" ), new JXStatusBar.Constraint( 100 ) );
+		JProgressBar statusProgressBar = new JProgressBar();
+		statusProgressBar.setValue( 50 );
+		statusBar1.add( statusProgressBar, new JXStatusBar.Constraint( JXStatusBar.Constraint.ResizeBehavior.FILL ) );
 	}
 
 	private void busyChanged() {
@@ -124,6 +131,13 @@ public class FlatSwingXTest
 		JTextField textField3 = new JTextField();
 		JLabel label10 = new JLabel();
 		JTextField textField4 = new JTextField();
+		JLabel label11 = new JLabel();
+		JXSearchField xSearchField1 = new JXSearchField();
+		JXSearchField xSearchField2 = new JXSearchField();
+		JXSearchField xSearchField3 = new JXSearchField();
+		JXSearchField xSearchField4 = new JXSearchField();
+		JLabel label12 = new JLabel();
+		statusBar1 = new JXStatusBar();
 		JButton button1 = new JButton();
 		JButton button2 = new JButton();
 
@@ -141,6 +155,9 @@ public class FlatSwingXTest
 			"[]" +
 			"[]0" +
 			"[top]" +
+			"[]" +
+			"[]" +
+			"[]" +
 			"[]" +
 			"[]" +
 			"[]" +
@@ -425,6 +442,35 @@ public class FlatSwingXTest
 		}
 		add(xTitledPanel2, "cell 3 8,grow");
 
+		//---- label11 ----
+		label11.setText("JXSearchField:");
+		add(label11, "cell 0 9");
+
+		//---- xSearchField1 ----
+		xSearchField1.setText("abc");
+		add(xSearchField1, "cell 1 9,growx");
+
+		//---- xSearchField2 ----
+		xSearchField2.setEnabled(false);
+		xSearchField2.setText("abc");
+		add(xSearchField2, "cell 2 9,growx");
+
+		//---- xSearchField3 ----
+		xSearchField3.setRecentSearchesSaveKey("flatlaf.swingx.search.recent");
+		xSearchField3.setText("abc");
+		add(xSearchField3, "cell 1 10,growx");
+
+		//---- xSearchField4 ----
+		xSearchField4.setRecentSearchesSaveKey("flatlaf.swingx.search.recent");
+		xSearchField4.setEnabled(false);
+		xSearchField4.setText("abc");
+		add(xSearchField4, "cell 2 10,growx");
+
+		//---- label12 ----
+		label12.setText("JXStatusBar:");
+		add(label12, "cell 0 11");
+		add(statusBar1, "cell 1 11 3 1,grow");
+
 		//---- button1 ----
 		button1.setText("<");
 
@@ -445,5 +491,6 @@ public class FlatSwingXTest
 	private JXBusyLabel xBusyLabel2;
 	private JCheckBox busyCheckBox;
 	private JTable table;
+	private JXStatusBar statusBar1;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

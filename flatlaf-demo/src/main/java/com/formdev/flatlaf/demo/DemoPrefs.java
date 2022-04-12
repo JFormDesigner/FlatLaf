@@ -25,6 +25,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.FlatPropertiesLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.intellijthemes.IJThemesPanel;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
@@ -83,7 +84,7 @@ public class DemoPrefs
 					UIManager.setLookAndFeel( lafClassName );
 			}
 		} catch( Throwable ex ) {
-			ex.printStackTrace();
+			LoggingFacade.INSTANCE.logSevere( null, ex );
 
 			// fallback
 			FlatLightLaf.setup();

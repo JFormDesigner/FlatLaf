@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
@@ -146,6 +147,19 @@ public class FlatInternalFrameTitlePane
 		closeButton.setVisible( frame.isClosable() );
 	}
 
+	Rectangle getFrameIconBounds() {
+		Icon icon = titleLabel.getIcon();
+		if( icon == null )
+			return null;
+
+		int iconWidth = icon.getIconWidth();
+		int iconHeight = icon.getIconHeight();
+		boolean leftToRight = titleLabel.getComponentOrientation().isLeftToRight();
+		int x = titleLabel.getX() + (leftToRight ? 0 : (titleLabel.getWidth() - iconWidth));
+		int y = titleLabel.getY() + ((titleLabel.getHeight() - iconHeight) / 2);
+		return new Rectangle( x, y, iconWidth, iconHeight );
+	}
+
 	/**
 	 * Does nothing because FlatLaf internal frames do not have system menus.
 	 */
@@ -199,6 +213,13 @@ public class FlatInternalFrameTitlePane
 				case "componentOrientation":
 					applyComponentOrientation( frame.getComponentOrientation() );
 					break;
+
+				case "opaque":
+					// Do not invoke super.propertyChange() here because it always
+					// invokes repaint(), which would cause endless repainting.
+					// The opaque flag is temporary changed in FlatUIUtils.hasOpaqueBeenExplicitlySet(),
+					// invoked from FlatInternalFrameUI.update().
+					return;
 			}
 
 			super.propertyChange( e );

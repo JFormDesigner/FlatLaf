@@ -52,6 +52,7 @@ import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import net.miginfocom.swing.*;
 
@@ -143,13 +144,13 @@ public class IJThemesPanel
 		// add core themes at beginning
 		categories.put( themes.size(), "Core Themes" );
 		if( showLight )
-			themes.add( new IJThemeInfo( "Flat Light", null, false, null, null, null, null, null, FlatLightLaf.class.getName() ) );
+			themes.add( new IJThemeInfo( "FlatLaf Light", null, false, null, null, null, null, null, FlatLightLaf.class.getName() ) );
 		if( showDark )
-			themes.add( new IJThemeInfo( "Flat Dark", null, true, null, null, null, null, null, FlatDarkLaf.class.getName() ) );
+			themes.add( new IJThemeInfo( "FlatLaf Dark", null, true, null, null, null, null, null, FlatDarkLaf.class.getName() ) );
 		if( showLight )
-			themes.add( new IJThemeInfo( "Flat IntelliJ", null, false, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
+			themes.add( new IJThemeInfo( "FlatLaf IntelliJ", null, false, null, null, null, null, null, FlatIntelliJLaf.class.getName() ) );
 		if( showDark )
-			themes.add( new IJThemeInfo( "Flat Darcula", null, true, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
+			themes.add( new IJThemeInfo( "FlatLaf Darcula", null, true, null, null, null, null, null, FlatDarculaLaf.class.getName() ) );
 
 		// add themes from directory
 		categories.put( themes.size(), "Current Directory" );
@@ -259,7 +260,7 @@ public class IJThemesPanel
 			try {
 				UIManager.setLookAndFeel( themeInfo.lafClassName );
 			} catch( Exception ex ) {
-				ex.printStackTrace();
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 				showInformationDialog( "Failed to create '" + themeInfo.lafClassName + "'.", ex );
 			}
 		} else if( themeInfo.themeFile != null ) {
@@ -273,7 +274,7 @@ public class IJThemesPanel
 
 				DemoPrefs.getState().put( DemoPrefs.KEY_LAF_THEME, DemoPrefs.FILE_PREFIX + themeInfo.themeFile );
 			} catch( Exception ex ) {
-				ex.printStackTrace();
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 				showInformationDialog( "Failed to load '" + themeInfo.themeFile + "'.", ex );
 			}
 		} else {

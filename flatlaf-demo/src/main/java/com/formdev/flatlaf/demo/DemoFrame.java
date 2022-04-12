@@ -18,23 +18,38 @@ package com.formdev.flatlaf.demo;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.StyleContext;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.demo.HintManager.Hint;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
+import com.formdev.flatlaf.extras.FlatDesktop;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
+import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.extras.FlatSVGUtils;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.ui.JBRCustomDecorations;
+import com.formdev.flatlaf.util.ColorFunctions;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import net.miginfocom.layout.ConstraintParser;
 import net.miginfocom.layout.LC;
@@ -59,12 +74,29 @@ class DemoFrame
 
 		initComponents();
 		updateFontMenuItems();
+		initAccentColors();
 		controlBar.initialize( this, tabbedPane );
 
 		setIconImages( FlatSVGUtils.createWindowIconImages( "/com/formdev/flatlaf/demo/FlatLaf.svg" ) );
 
 		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
 			tabbedPane.setSelectedIndex( tabIndex );
+
+		// hide some menu items on macOS
+		if( SystemInfo.isMacOS ) {
+			exitMenuItem.setVisible( false );
+			aboutMenuItem.setVisible( false );
+
+			// do not use HTML text on macOS
+			htmlMenuItem.setText( "some text" );
+		}
+
+		// integrate into macOS screen menu
+		FlatDesktop.setAboutHandler( this::aboutActionPerformed );
+		FlatDesktop.setPreferencesHandler( this::showPreferences );
+		FlatDesktop.setQuitHandler( response -> {
+			response.performQuit();
+		} );
 
 		SwingUtilities.invokeLater( () -> {
 			showHints();
@@ -127,7 +159,42 @@ class DemoFrame
 	}
 
 	private void aboutActionPerformed() {
-		JOptionPane.showMessageDialog( this, "FlatLaf Demo", "About", JOptionPane.PLAIN_MESSAGE );
+		JLabel titleLabel = new JLabel( "FlatLaf Demo" );
+		titleLabel.putClientProperty( FlatClientProperties.STYLE_CLASS, "h1" );
+
+		String link = "https://www.formdev.com/flatlaf/";
+		JLabel linkLabel = new JLabel( "<html><a href=\"#\">" + link + "</a></html>" );
+		linkLabel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
+		linkLabel.addMouseListener( new MouseAdapter() {
+			@Override
+			public void mouseClicked( MouseEvent e ) {
+				try {
+					Desktop.getDesktop().browse( new URI( link ) );
+				} catch( IOException | URISyntaxException ex ) {
+					JOptionPane.showMessageDialog( linkLabel,
+						"Failed to open '" + link + "' in browser.",
+						"About", JOptionPane.PLAIN_MESSAGE );
+				}
+			}
+		} );
+
+
+		JOptionPane.showMessageDialog( this,
+			new Object[] {
+				titleLabel,
+				"Demonstrates FlatLaf Swing look and feel",
+				" ",
+				"Copyright 2019-" + Year.now() + " FormDev Software GmbH",
+				linkLabel,
+			},
+			"About", JOptionPane.PLAIN_MESSAGE );
+	}
+
+	private void showPreferences() {
+		JOptionPane.showMessageDialog( this,
+			"Sorry, but FlatLaf Demo does not have preferences. :(\n"
+				+ "This dialog is here to demonstrate usage of class 'FlatDesktop' on macOS.",
+			"Preferences", JOptionPane.PLAIN_MESSAGE );
 	}
 
 	private void selectedTabChanged() {
@@ -148,6 +215,7 @@ class DemoFrame
 
 		menuBarEmbeddedCheckBoxMenuItem.setEnabled( windowDecorations );
 		unifiedTitleBarMenuItem.setEnabled( windowDecorations );
+		showTitleBarIconMenuItem.setEnabled( windowDecorations );
 	}
 
 	private void menuBarEmbeddedChanged() {
@@ -158,6 +226,16 @@ class DemoFrame
 	private void unifiedTitleBar() {
 		UIManager.put( "TitlePane.unifiedBackground", unifiedTitleBarMenuItem.isSelected() );
 		FlatLaf.repaintAllFramesAndDialogs();
+	}
+
+	private void showTitleBarIcon() {
+		boolean showIcon = showTitleBarIconMenuItem.isSelected();
+
+		// for main frame (because already created)
+		getRootPane().putClientProperty( FlatClientProperties.TITLE_BAR_SHOW_ICON, showIcon );
+
+		// for other not yet created frames/dialogs
+		UIManager.put( "TitlePane.showIcon", showIcon );
 	}
 
 	private void underlineMenuSelection() {
@@ -185,6 +263,8 @@ class DemoFrame
 
 		Font font = UIManager.getFont( "defaultFont" );
 		Font newFont = StyleContext.getDefaultStyleContext().getFont( fontFamily, font.getStyle(), font.getSize() );
+		// StyleContext.getFont() may return a UIResource, which would cause loosing user scale factor on Windows
+		newFont = FlatUIUtils.nonUIResource( newFont );
 		UIManager.put( "defaultFont", newFont );
 
 		FlatLaf.updateUI();
@@ -286,6 +366,78 @@ class DemoFrame
 			item.setEnabled( enabled );
 	}
 
+	// the real colors are defined in
+	// flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLightLaf.properties and
+	// flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatDarkLaf.properties
+	private static String[] accentColorKeys = {
+		"Demo.accent.default", "Demo.accent.blue", "Demo.accent.purple", "Demo.accent.red",
+		"Demo.accent.orange", "Demo.accent.yellow", "Demo.accent.green",
+	};
+	private static String[] accentColorNames = {
+		"Default", "Blue", "Purple", "Red", "Orange", "Yellow", "Green",
+	};
+	private final JToggleButton[] accentColorButtons = new JToggleButton[accentColorKeys.length];
+	private JLabel accentColorLabel;
+
+	private void initAccentColors() {
+		accentColorLabel = new JLabel( "Accent color: " );
+
+		toolBar.add( Box.createHorizontalGlue() );
+		toolBar.add( accentColorLabel );
+
+		ButtonGroup group = new ButtonGroup();
+		for( int i = 0; i < accentColorButtons.length; i++ ) {
+			accentColorButtons[i] = new JToggleButton( new AccentColorIcon( accentColorKeys[i] ) );
+			accentColorButtons[i].setToolTipText( accentColorNames[i] );
+			accentColorButtons[i].addActionListener( this::accentColorChanged );
+			toolBar.add( accentColorButtons[i] );
+			group.add( accentColorButtons[i] );
+		}
+
+		accentColorButtons[0].setSelected( true );
+
+		UIManager.addPropertyChangeListener( e -> {
+			if( "lookAndFeel".equals( e.getPropertyName() ) )
+				updateAccentColorButtons();
+		} );
+		updateAccentColorButtons();
+	}
+
+	private void accentColorChanged( ActionEvent e ) {
+		String accentColor = accentColorKeys[0];
+		for( int i = 0; i < accentColorButtons.length; i++ ) {
+			if( accentColorButtons[i].isSelected() ) {
+				accentColor = accentColorKeys[i];
+				break;
+			}
+		}
+
+		FlatLaf.setGlobalExtraDefaults( (accentColor != accentColorKeys[0])
+			? Collections.singletonMap( "@accentColor", "$" + accentColor )
+			: null );
+
+		Class<? extends LookAndFeel> lafClass = UIManager.getLookAndFeel().getClass();
+		try {
+			FlatLaf.setup( lafClass.newInstance() );
+			FlatLaf.updateUI();
+		} catch( InstantiationException | IllegalAccessException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	private void updateAccentColorButtons() {
+		Class<? extends LookAndFeel> lafClass = UIManager.getLookAndFeel().getClass();
+		boolean isAccentColorSupported =
+			lafClass == FlatLightLaf.class ||
+			lafClass == FlatDarkLaf.class ||
+			lafClass == FlatIntelliJLaf.class ||
+			lafClass == FlatDarculaLaf.class;
+
+		accentColorLabel.setEnabled( isAccentColorSupported );
+		for( int i = 0; i < accentColorButtons.length; i++ )
+			accentColorButtons[i].setEnabled( isAccentColorSupported );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		JMenuBar menuBar1 = new JMenuBar();
@@ -294,7 +446,7 @@ class DemoFrame
 		JMenuItem openMenuItem = new JMenuItem();
 		JMenuItem saveAsMenuItem = new JMenuItem();
 		JMenuItem closeMenuItem = new JMenuItem();
-		JMenuItem exitMenuItem = new JMenuItem();
+		exitMenuItem = new JMenuItem();
 		JMenu editMenu = new JMenu();
 		JMenuItem undoMenuItem = new JMenuItem();
 		JMenuItem redoMenuItem = new JMenuItem();
@@ -312,8 +464,9 @@ class DemoFrame
 		JMenuItem projectViewMenuItem = new JMenuItem();
 		JMenuItem structureViewMenuItem = new JMenuItem();
 		JMenuItem propertiesViewMenuItem = new JMenuItem();
+		scrollingPopupMenu = new JMenu();
 		JMenuItem menuItem2 = new JMenuItem();
-		JMenuItem menuItem1 = new JMenuItem();
+		htmlMenuItem = new JMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem1 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem2 = new JRadioButtonMenuItem();
 		JRadioButtonMenuItem radioButtonMenuItem3 = new JRadioButtonMenuItem();
@@ -325,14 +478,15 @@ class DemoFrame
 		windowDecorationsCheckBoxMenuItem = new JCheckBoxMenuItem();
 		menuBarEmbeddedCheckBoxMenuItem = new JCheckBoxMenuItem();
 		unifiedTitleBarMenuItem = new JCheckBoxMenuItem();
+		showTitleBarIconMenuItem = new JCheckBoxMenuItem();
 		underlineMenuSelectionMenuItem = new JCheckBoxMenuItem();
 		alwaysShowMnemonicsMenuItem = new JCheckBoxMenuItem();
 		animatedLafChangeMenuItem = new JCheckBoxMenuItem();
 		JMenuItem showHintsMenuItem = new JMenuItem();
 		JMenuItem showUIDefaultsInspectorMenuItem = new JMenuItem();
 		JMenu helpMenu = new JMenu();
-		JMenuItem aboutMenuItem = new JMenuItem();
-		JToolBar toolBar1 = new JToolBar();
+		aboutMenuItem = new JMenuItem();
+		toolBar = new JToolBar();
 		JButton backButton = new JButton();
 		JButton forwardButton = new JButton();
 		JButton cutButton = new JButton();
@@ -515,14 +669,20 @@ class DemoFrame
 				}
 				viewMenu.add(menu1);
 
+				//======== scrollingPopupMenu ========
+				{
+					scrollingPopupMenu.setText("Scrolling Popup Menu");
+				}
+				viewMenu.add(scrollingPopupMenu);
+
 				//---- menuItem2 ----
 				menuItem2.setText("Disabled Item");
 				menuItem2.setEnabled(false);
 				viewMenu.add(menuItem2);
 
-				//---- menuItem1 ----
-				menuItem1.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
-				viewMenu.add(menuItem1);
+				//---- htmlMenuItem ----
+				htmlMenuItem.setText("<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>");
+				viewMenu.add(htmlMenuItem);
 				viewMenu.addSeparator();
 
 				//---- radioButtonMenuItem1 ----
@@ -576,13 +736,11 @@ class DemoFrame
 
 				//---- windowDecorationsCheckBoxMenuItem ----
 				windowDecorationsCheckBoxMenuItem.setText("Window decorations");
-				windowDecorationsCheckBoxMenuItem.setSelected(true);
 				windowDecorationsCheckBoxMenuItem.addActionListener(e -> windowDecorationsChanged());
 				optionsMenu.add(windowDecorationsCheckBoxMenuItem);
 
 				//---- menuBarEmbeddedCheckBoxMenuItem ----
 				menuBarEmbeddedCheckBoxMenuItem.setText("Embedded menu bar");
-				menuBarEmbeddedCheckBoxMenuItem.setSelected(true);
 				menuBarEmbeddedCheckBoxMenuItem.addActionListener(e -> menuBarEmbeddedChanged());
 				optionsMenu.add(menuBarEmbeddedCheckBoxMenuItem);
 
@@ -590,6 +748,11 @@ class DemoFrame
 				unifiedTitleBarMenuItem.setText("Unified window title bar");
 				unifiedTitleBarMenuItem.addActionListener(e -> unifiedTitleBar());
 				optionsMenu.add(unifiedTitleBarMenuItem);
+
+				//---- showTitleBarIconMenuItem ----
+				showTitleBarIconMenuItem.setText("Show window title bar icon");
+				showTitleBarIconMenuItem.addActionListener(e -> showTitleBarIcon());
+				optionsMenu.add(showTitleBarIconMenuItem);
 
 				//---- underlineMenuSelectionMenuItem ----
 				underlineMenuSelectionMenuItem.setText("Use underline menu selection");
@@ -634,43 +797,43 @@ class DemoFrame
 		}
 		setJMenuBar(menuBar1);
 
-		//======== toolBar1 ========
+		//======== toolBar ========
 		{
-			toolBar1.setMargin(new Insets(3, 3, 3, 3));
+			toolBar.setMargin(new Insets(3, 3, 3, 3));
 
 			//---- backButton ----
 			backButton.setToolTipText("Back");
-			toolBar1.add(backButton);
+			toolBar.add(backButton);
 
 			//---- forwardButton ----
 			forwardButton.setToolTipText("Forward");
-			toolBar1.add(forwardButton);
-			toolBar1.addSeparator();
+			toolBar.add(forwardButton);
+			toolBar.addSeparator();
 
 			//---- cutButton ----
 			cutButton.setToolTipText("Cut");
-			toolBar1.add(cutButton);
+			toolBar.add(cutButton);
 
 			//---- copyButton ----
 			copyButton.setToolTipText("Copy");
-			toolBar1.add(copyButton);
+			toolBar.add(copyButton);
 
 			//---- pasteButton ----
 			pasteButton.setToolTipText("Paste");
-			toolBar1.add(pasteButton);
-			toolBar1.addSeparator();
+			toolBar.add(pasteButton);
+			toolBar.addSeparator();
 
 			//---- refreshButton ----
 			refreshButton.setToolTipText("Refresh");
-			toolBar1.add(refreshButton);
-			toolBar1.addSeparator();
+			toolBar.add(refreshButton);
+			toolBar.addSeparator();
 
 			//---- showToggleButton ----
 			showToggleButton.setSelected(true);
 			showToggleButton.setToolTipText("Show Details");
-			toolBar1.add(showToggleButton);
+			toolBar.add(showToggleButton);
 		}
-		contentPane.add(toolBar1, BorderLayout.NORTH);
+		contentPane.add(toolBar, BorderLayout.NORTH);
 
 		//======== contentPanel ========
 		{
@@ -733,7 +896,21 @@ class DemoFrame
 		copyMenuItem.addActionListener( new DefaultEditorKit.CopyAction() );
 		pasteMenuItem.addActionListener( new DefaultEditorKit.PasteAction() );
 
-		if( FlatLaf.supportsNativeWindowDecorations() ) {
+		scrollingPopupMenu.add( "Large menus are scrollable" );
+		scrollingPopupMenu.add( "Use mouse wheel to scroll" );
+		scrollingPopupMenu.add( "Or use up/down arrows at top/bottom" );
+		for( int i = 1; i <= 100; i++ )
+			scrollingPopupMenu.add( "Item " + i );
+
+		if( FlatLaf.supportsNativeWindowDecorations() || (SystemInfo.isLinux && JFrame.isDefaultLookAndFeelDecorated()) ) {
+			if( SystemInfo.isLinux )
+				unsupported( windowDecorationsCheckBoxMenuItem );
+			else
+				windowDecorationsCheckBoxMenuItem.setSelected( FlatLaf.isUseNativeWindowDecorations() );
+			menuBarEmbeddedCheckBoxMenuItem.setSelected( UIManager.getBoolean( "TitlePane.menuBarEmbedded" ) );
+			unifiedTitleBarMenuItem.setSelected( UIManager.getBoolean( "TitlePane.unifiedBackground" ) );
+			showTitleBarIconMenuItem.setSelected( UIManager.getBoolean( "TitlePane.showIcon" ) );
+
 			if( JBRCustomDecorations.isSupported() ) {
 				// If the JetBrains Runtime is used, it forces the use of it's own custom
 				// window decoration, which can not disabled.
@@ -743,6 +920,7 @@ class DemoFrame
 			unsupported( windowDecorationsCheckBoxMenuItem );
 			unsupported( menuBarEmbeddedCheckBoxMenuItem );
 			unsupported( unifiedTitleBarMenuItem );
+			unsupported( showTitleBarIconMenuItem );
 		}
 
 		if( SystemInfo.isMacOS )
@@ -768,16 +946,50 @@ class DemoFrame
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+	private JMenuItem exitMenuItem;
+	private JMenu scrollingPopupMenu;
+	private JMenuItem htmlMenuItem;
 	private JMenu fontMenu;
 	private JMenu optionsMenu;
 	private JCheckBoxMenuItem windowDecorationsCheckBoxMenuItem;
 	private JCheckBoxMenuItem menuBarEmbeddedCheckBoxMenuItem;
 	private JCheckBoxMenuItem unifiedTitleBarMenuItem;
+	private JCheckBoxMenuItem showTitleBarIconMenuItem;
 	private JCheckBoxMenuItem underlineMenuSelectionMenuItem;
 	private JCheckBoxMenuItem alwaysShowMnemonicsMenuItem;
 	private JCheckBoxMenuItem animatedLafChangeMenuItem;
+	private JMenuItem aboutMenuItem;
+	private JToolBar toolBar;
 	private JTabbedPane tabbedPane;
 	private ControlBar controlBar;
 	IJThemesPanel themesPanel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
+
+	//---- class AccentColorIcon ----------------------------------------------
+
+	private static class AccentColorIcon
+		extends FlatAbstractIcon
+	{
+		private final String colorKey;
+
+		AccentColorIcon( String colorKey ) {
+			super( 16, 16, null );
+			this.colorKey = colorKey;
+		}
+
+		@Override
+		protected void paintIcon( Component c, Graphics2D g ) {
+			Color color = UIManager.getColor( colorKey );
+			if( color == null )
+				color = Color.lightGray;
+			else if( !c.isEnabled() ) {
+				color = FlatLaf.isLafDark()
+					? ColorFunctions.shade( color, 0.5f )
+					: ColorFunctions.tint( color, 0.6f );
+			}
+
+			g.setColor( color );
+			g.fillRoundRect( 1, 1, width - 2, height - 2, 5, 5 );
+		}
+	}
 }

@@ -127,6 +127,57 @@ public interface FlatClientProperties
 	//---- JComponent ---------------------------------------------------------
 
 	/**
+	 * Specifies the style of a component as String in CSS syntax ("key1: value1; key2: value2; ...")
+	 * or as {@link java.util.Map}&lt;String, Object&gt; with binary values.
+	 * <p>
+	 * The keys are the same as used in UI defaults, but without component type prefix.
+	 * E.g. for UI default {@code Slider.thumbSize} use key {@code thumbSize}.
+	 * <p>
+	 * The syntax of the CSS values is the same as used in FlatLaf properties files
+	 * (<a href="https://www.formdev.com/flatlaf/properties-files/">https://www.formdev.com/flatlaf/properties-files/</a>),
+	 * but some features are not supported (e.g. variables).
+	 * When using a map, the values are not parsed from a string. They must be binary.
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.String} or {@link java.util.Map}&lt;String, Object&gt;<br>
+	 *
+	 * @since 2
+	 */
+	String STYLE = "FlatLaf.style";
+
+	/**
+	 * Specifies the style class(es) of a component as String (single class or multiple classes separated by space characters)
+	 * or as {@code String[]} or {@link java.util.List}&lt;String&gt; (multiple classes).
+	 * <p>
+	 * The style rules must be defined in UI defaults either as strings (in CSS syntax)
+	 * or as {@link java.util.Map}&lt;String, Object&gt; (with binary values).
+	 * The key must be in syntax: {@code [style]type.styleClass}, where the type is optional.
+	 * E.g. in FlatLaf properties file:
+	 * <pre>{@code
+	 * [style]Button.primary = borderColor: #08f; background: #08f; foreground: #fff
+	 * [style].secondary = borderColor: #0f8; background: #0f8
+	 * }</pre>
+	 * or in Java code:
+	 * <pre>{@code
+	 * UIManager.put( "[style]Button.primary", "borderColor: #08f; background: #08f; foreground: #fff" );
+	 * UIManager.put( "[style].secondary", "borderColor: #0f8; background: #0f8" );
+	 * }</pre>
+	 * The rule "Button.primary" can be applied to buttons only.
+	 * The rule ".secondary" can be applied to any component.
+	 * <p>
+	 * To have similar behavior as in CSS, first the rule without type is applied,
+	 * then the rule with type.
+	 * E.g. setting style class to "foo" on a {@code JButton} uses rules
+	 * from UI default keys "[style].foo" and "[style]Button.foo".
+	 * <p>
+	 * <strong>Components</strong> {@link javax.swing.JComponent}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}, {@code String[]} or {@link java.util.List}&lt;String&gt;<br>
+	 *
+	 * @since 2
+	 */
+	String STYLE_CLASS = "FlatLaf.styleClass";
+
+	/**
 	 * Specifies minimum width of a component.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JButton}, {@link javax.swing.JToggleButton},
@@ -281,6 +332,24 @@ public interface FlatClientProperties
 	String MENU_BAR_EMBEDDED = "JRootPane.menuBarEmbedded";
 
 	/**
+	 * Specifies whether the window icon should be shown in the window title bar
+	 * (requires enabled window decorations).
+	 * <p>
+	 * Setting this shows/hides the windows icon
+	 * for the {@code JFrame} or {@code JDialog} that contains the root pane.
+	 * <p>
+	 * This client property has higher priority than UI default {@code TitlePane.showIcon}.
+	 * <p>
+	 * (requires Window 10)
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JRootPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 2
+	 */
+	String TITLE_BAR_SHOW_ICON = "JRootPane.titleBarShowIcon";
+
+	/**
 	 * Background color of window title bar (requires enabled window decorations).
 	 * <p>
 	 * (requires Window 10)
@@ -323,6 +392,35 @@ public interface FlatClientProperties
 	String SCROLL_PANE_SMOOTH_SCROLLING = "JScrollPane.smoothScrolling";
 
 	//---- JTabbedPane --------------------------------------------------------
+
+	/**
+	 * Specifies type of the selected tab.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #TABBED_PANE_TAB_TYPE_UNDERLINED} or
+	 *     {@link #TABBED_PANE_TAB_TYPE_CARD}
+	 *
+	 * @since 2
+	 */
+	String TABBED_PANE_TAB_TYPE = "JTabbedPane.tabType";
+
+	/**
+	 * Paint the selected tab underlined.
+	 *
+	 * @see #TABBED_PANE_TAB_TYPE
+	 * @since 2
+	 */
+	String TABBED_PANE_TAB_TYPE_UNDERLINED = "underlined";
+
+	/**
+	 * Paint the selected tab as card.
+	 *
+	 * @see #TABBED_PANE_TAB_TYPE
+	 * @since 2
+	 */
+	String TABBED_PANE_TAB_TYPE_CARD = "card";
 
 	/**
 	 * Specifies whether separators are shown between tabs.
@@ -665,9 +763,9 @@ public interface FlatClientProperties
 	/**
 	 * Specifies a component that will be placed at the leading edge of the tabs area.
 	 * <p>
-	 * For top and bottom tab placement, the layed out component size will be
+	 * For top and bottom tab placement, the laid out component size will be
 	 * the preferred component width and the tab area height.<br>
-	 * For left and right tab placement, the layed out component size will be
+	 * For left and right tab placement, the laid out component size will be
 	 * the tab area width and the preferred component height.
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
@@ -678,9 +776,9 @@ public interface FlatClientProperties
 	/**
 	 * Specifies a component that will be placed at the trailing edge of the tabs area.
 	 * <p>
-	 * For top and bottom tab placement, the layed out component size will be
+	 * For top and bottom tab placement, the laid out component size will be
 	 * the available horizontal space (minimum is preferred component width) and the tab area height.<br>
-	 * For left and right tab placement, the layed out component size will be
+	 * For left and right tab placement, the laid out component size will be
 	 * the tab area width and the available vertical space (minimum is preferred component height).
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JTabbedPane}<br>
@@ -732,6 +830,130 @@ public interface FlatClientProperties
 	 * <strong>Value type</strong> {@link java.lang.String}
 	 */
 	String PLACEHOLDER_TEXT = "JTextField.placeholderText";
+
+	/**
+	 * Specifies the padding of the text.
+	 * This changes the location and size of the text view within the component bounds,
+	 * but does not affect the size of the component.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link java.awt.Insets}
+	 *
+	 * @since 1.4
+	 */
+	String TEXT_FIELD_PADDING = "JTextField.padding";
+
+	/**
+	 * Specifies an icon that will be placed at the leading edge of the text field.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link javax.swing.Icon}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_LEADING_ICON = "JTextField.leadingIcon";
+
+	/**
+	 * Specifies an icon that will be placed at the trailing edge of the text field.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link javax.swing.Icon}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_TRAILING_ICON = "JTextField.trailingIcon";
+
+	/**
+	 * Specifies a component that will be placed at the leading edge of the text field.
+	 * <p>
+	 * The component will be positioned inside and aligned to the visible text field border.
+	 * There is no gap between the visible border and the component.
+	 * The laid out component size will be the preferred component width
+	 * and the inner text field height.
+	 * <p>
+	 * The component should be not opaque because the text field border is painted
+	 * slightly inside the usually visible border in some cases.
+	 * E.g. when focused (in some themes) or when an outline color is specified
+	 * (see {@link #OUTLINE}).
+	 * <p>
+	 * The component is prepared in the following way:
+	 * <ul>
+	 * <li>Component client property {@link #STYLE_CLASS} is set to {@code inTextField}.
+	 * <li>If component is a button or toggle button, client property {@link #BUTTON_TYPE}
+	 *     is set to {@link #BUTTON_TYPE_TOOLBAR_BUTTON}
+	 *     and button cursor is set to default cursor (if not set).
+	 * <li>If component is a toolbar, client property {@link #STYLE_CLASS}
+	 *     is set to {@code inTextField} on all toolbar children
+	 *     and toolbar cursor is set to default cursor (if not set).
+	 * </ul>
+	 * Because text fields use the text cursor by default and the cursor is inherited by child components,
+	 * it may be necessary to explicitly set component cursor if you e.g. need the default arrow cursor.
+	 * E.g. {@code comp.setCursor( Cursor.getDefaultCursor() )}.
+	 * <p>
+	 * Styling is used to modify insets/margins and appearance of buttons and toolbars
+	 * so that they fit nicely into the text field and do not increase text field height.
+	 * See styles {@code [style]Button.inTextField} and {@code [style]ToolBar.inTextField}
+	 * in {@code Flat[Light|Dark]Laf.properties}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link javax.swing.JComponent}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_LEADING_COMPONENT = "JTextField.leadingComponent";
+
+	/**
+	 * Specifies a component that will be placed at the trailing edge of the text field.
+	 * <p>
+	 * See {@link #TEXT_FIELD_LEADING_COMPONENT} for details.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link javax.swing.JComponent}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_TRAILING_COMPONENT = "JTextField.trailingComponent";
+
+	/**
+	 * Specifies whether a "clear" (or "cancel") button is shown on the trailing side
+	 * if the text field is not empty, editable and enabled. Default is {@code false}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link java.lang.Boolean}
+	 *
+	 * @since 2
+	 */
+	String TEXT_FIELD_SHOW_CLEAR_BUTTON = "JTextField.showClearButton";
+
+	/**
+	 * Specifies the callback that is invoked when a "clear" (or "cancel") button is clicked.
+	 * If a callback is specified than it is responsible for clearing the text field.
+	 * Without callback, the text field clears itself.
+	 * <p>
+	 * Either use a {@link java.lang.Runnable}:
+	 * <pre>{@code
+	 * myTextField.putClientProperty( "JTextField.clearCallback",
+	 *     (Runnable) () -> {
+	 *         // clear field here or cancel search
+	 *     } );
+	 * }</pre>
+	 * Or use a {@link java.util.function.Consumer}&lt;javax.swing.text.JTextComponent&gt;
+	 * that receives the text field as parameter:
+	 * <pre>{@code
+	 * myTextField.putClientProperty( "JTextField.clearCallback",
+	 *     (Consumer<JTextComponent>) textField -> {
+	 *         // clear field here or cancel search
+	 *     } );
+	 * }</pre>
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JTextField} (and subclasses)<br>
+	 * <strong>Value type</strong> {@link java.lang.Runnable}
+	 * or {@link java.util.function.Consumer}&lt;javax.swing.text.JTextComponent&gt;
+	 *
+	 * @see #TEXT_FIELD_SHOW_CLEAR_BUTTON
+	 * @since 2
+	 */
+	String TEXT_FIELD_CLEAR_CALLBACK = "JTextField.clearCallback";
 
 	//---- JToggleButton ------------------------------------------------------
 
@@ -801,8 +1023,7 @@ public interface FlatClientProperties
 	 * If the client property is not set, or not a {@link Boolean}, defaultValue is returned.
 	 */
 	static Boolean clientPropertyBooleanStrict( JComponent c, String key, Boolean defaultValue ) {
-		Object value = c.getClientProperty( key );
-		return (value instanceof Boolean) ? (Boolean) value : defaultValue;
+		return clientProperty( c, key, defaultValue, Boolean.class );
 	}
 
 	/**
@@ -819,7 +1040,18 @@ public interface FlatClientProperties
 	 * If the client property is not set, or not a color, defaultValue is returned.
 	 */
 	static Color clientPropertyColor( JComponent c, String key, Color defaultValue ) {
+		return clientProperty( c, key, defaultValue, Color.class );
+	}
+
+	/**
+	 * Returns the value of the specified client property if it is an instance of
+	 * the specified type. Otherwise, defaultValue is returned.
+	 *
+	 * @since 2
+	 */
+	@SuppressWarnings( "unchecked" )
+	static <T> T clientProperty( JComponent c, String key, T defaultValue, Class<T> type ) {
 		Object value = c.getClientProperty( key );
-		return (value instanceof Color) ? (Color) value : defaultValue;
+		return type.isInstance( value ) ? (T) value : defaultValue;
 	}
 }

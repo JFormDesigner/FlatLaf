@@ -18,9 +18,11 @@ package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Insets;
 import javax.swing.JMenuBar;
 import javax.swing.UIManager;
+import javax.swing.plaf.MenuBarUI;
 
 /**
  * Border for {@link javax.swing.JMenu}, {@link javax.swing.JMenuItem},
@@ -33,15 +35,22 @@ import javax.swing.UIManager;
 public class FlatMenuItemBorder
 	extends FlatMarginBorder
 {
+	// only used if parent menubar is not an instance of FlatMenuBarUI
 	private final Insets menuBarItemMargins = UIManager.getInsets( "MenuBar.itemMargins" );
 
 	@Override
 	public Insets getBorderInsets( Component c, Insets insets ) {
-		if( c.getParent() instanceof JMenuBar ) {
-			insets.top = scale( menuBarItemMargins.top );
-			insets.left = scale( menuBarItemMargins.left );
-			insets.bottom = scale( menuBarItemMargins.bottom );
-			insets.right = scale( menuBarItemMargins.right );
+		Container parent = c.getParent();
+		if( parent instanceof JMenuBar ) {
+			// get margins from FlatMenuBarUI to allow styling
+			MenuBarUI ui = ((JMenuBar)parent).getUI();
+			Insets margins = (ui instanceof FlatMenuBarUI && ((FlatMenuBarUI)ui).itemMargins != null)
+				? ((FlatMenuBarUI)ui).itemMargins
+				: this.menuBarItemMargins;
+			insets.top = scale( margins.top );
+			insets.left = scale( margins.left );
+			insets.bottom = scale( margins.bottom );
+			insets.right = scale( margins.right );
 			return insets;
 		} else
 			return super.getBorderInsets( c, insets );

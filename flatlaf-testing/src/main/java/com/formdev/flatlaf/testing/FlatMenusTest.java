@@ -80,9 +80,20 @@ public class FlatMenusTest
 		FlatLaf.updateUI();
 	}
 
-	private void showPopupMenuButtonActionPerformed(ActionEvent e) {
+	private void showPopupMenuButton(ActionEvent e) {
 		Component invoker = (Component) e.getSource();
 		PopupMenu popupMenu = new PopupMenu();
+		popupMenu.applyComponentOrientation( getComponentOrientation() );
+		popupMenu.show( invoker, 0, invoker.getHeight() );
+	}
+
+	private void showScrollingPopupMenu(ActionEvent e) {
+		Component invoker = (Component) e.getSource();
+		JPopupMenu popupMenu = new JPopupMenu();
+		for( int i = 1; i <= 100; i++ ) {
+			popupMenu.add( "menu item " + i + (i % 5 == 0 ? " test" : "") )
+				.addActionListener( e2 -> System.out.println( ((JMenuItem)e2.getSource()).getText() ) );
+		}
 		popupMenu.applyComponentOrientation( getComponentOrientation() );
 		popupMenu.show( invoker, 0, invoker.getHeight() );
 	}
@@ -162,6 +173,14 @@ public class FlatMenusTest
 		FlatMenusTest.MenuWithAccelerator menuWithAccelerator2 = new FlatMenusTest.MenuWithAccelerator();
 		JMenuItem menuItem40 = new JMenuItem();
 		JMenuItem menuItem39 = new JMenuItem();
+		JMenu menu12 = new JMenu();
+		JMenuItem menuItem41 = new JMenuItem();
+		JMenuItem menuItem42 = new JMenuItem();
+		JMenuItem menuItem43 = new JMenuItem();
+		JMenuItem menuItem44 = new JMenuItem();
+		JMenuItem menuItem45 = new JMenuItem();
+		JMenuItem menuItem46 = new JMenuItem();
+		JMenuItem menuItem47 = new JMenuItem();
 		menuBar2 = new JMenuBar();
 		JMenu menu8 = new JMenu();
 		FlatMenusTest.LargerMenuItem menuItem13 = new FlatMenusTest.LargerMenuItem();
@@ -222,6 +241,7 @@ public class FlatMenusTest
 		JRadioButtonMenuItem radioButtonMenuItem11 = new JRadioButtonMenuItem();
 		JLabel popupMenuLabel = new JLabel();
 		JButton showPopupMenuButton = new JButton();
+		showScrollingPopupMenuButton = new JButton();
 		armedCheckBox = new JCheckBox();
 		underlineCheckBox = new JCheckBox();
 		popupMenubackgroundCheckBox = new JCheckBox();
@@ -377,6 +397,51 @@ public class FlatMenusTest
 				menuWithAccelerator1.add(menuItem39);
 			}
 			menuBar1.add(menuWithAccelerator1);
+
+			//======== menu12 ========
+			{
+				menu12.setText("icons");
+
+				//---- menuItem41 ----
+				menuItem41.setText("selected icon");
+				menuItem41.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png")));
+				menuItem41.setSelectedIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show_dark.png")));
+				menu12.add(menuItem41);
+
+				//---- menuItem42 ----
+				menuItem42.setText("disabled icon");
+				menuItem42.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png")));
+				menuItem42.setDisabledIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste.png")));
+				menuItem42.setEnabled(false);
+				menu12.add(menuItem42);
+				menu12.addSeparator();
+
+				//---- menuItem43 ----
+				menuItem43.setText("text");
+				menuItem43.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/test16.png")));
+				menu12.add(menuItem43);
+
+				//---- menuItem44 ----
+				menuItem44.setText("text");
+				menuItem44.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/test24.png")));
+				menu12.add(menuItem44);
+
+				//---- menuItem45 ----
+				menuItem45.setText("text");
+				menuItem45.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/test32.png")));
+				menu12.add(menuItem45);
+
+				//---- menuItem46 ----
+				menuItem46.setText("text");
+				menuItem46.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/test48.png")));
+				menu12.add(menuItem46);
+
+				//---- menuItem47 ----
+				menuItem47.setText("text");
+				menuItem47.setIcon(new ImageIcon(getClass().getResource("/com/formdev/flatlaf/testing/test64.png")));
+				menu12.add(menuItem47);
+			}
+			menuBar1.add(menu12);
 		}
 		add(menuBar1, "cell 1 0 2 1,growx");
 
@@ -786,8 +851,13 @@ public class FlatMenusTest
 
 		//---- showPopupMenuButton ----
 		showPopupMenuButton.setText("show JPopupMenu");
-		showPopupMenuButton.addActionListener(e -> showPopupMenuButtonActionPerformed(e));
+		showPopupMenuButton.addActionListener(e -> showPopupMenuButton(e));
 		add(showPopupMenuButton, "cell 1 2");
+
+		//---- showScrollingPopupMenuButton ----
+		showScrollingPopupMenuButton.setText("show scrolling JPopupMenu");
+		showScrollingPopupMenuButton.addActionListener(e -> showScrollingPopupMenu(e));
+		add(showScrollingPopupMenuButton, "cell 2 2");
 
 		//---- armedCheckBox ----
 		armedCheckBox.setText("armed");
@@ -831,6 +901,7 @@ public class FlatMenusTest
 	private JMenuBar menuBar2;
 	private JCheckBox largerCheckBox;
 	private JCheckBox accelCheckBox;
+	private JButton showScrollingPopupMenuButton;
 	private JCheckBox armedCheckBox;
 	private JCheckBox underlineCheckBox;
 	private JCheckBox popupMenubackgroundCheckBox;

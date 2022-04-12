@@ -1,0 +1,195 @@
+JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		auxiliary() {
+			"JavaCodeGenerator.defaultVariableLocal": true
+		}
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
+			"$columnConstraints": "[left]unrel"
+			"$rowConstraints": "[][bottom][bottom][bottom][bottom][bottom][bottom]para[][bottom][bottom][bottom][bottom][bottom]para[][]para[]para[]"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "headingsLabel"
+				"text": "Headings"
+				"$client.FlatLaf.styleClass": "h3"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "h00Preview"
+				"fontType": "H00"
+				"fontStyle": "h00"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 1,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "h0Preview"
+				"fontType": "H0"
+				"fontStyle": "h0"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 2,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "h1Preview"
+				"fontType": "H1"
+				"fontStyle": "h1"
+				"fontStyleRegular": "h1.regular"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 3,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "h2Preview"
+				"fontType": "H2"
+				"fontStyle": "h2"
+				"fontStyleRegular": "h2.regular"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 4,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "h3Preview"
+				"fontType": "H3"
+				"fontStyle": "h3"
+				"fontStyleRegular": "h3.regular"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 5,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "h4Preview"
+				"fontType": "H4"
+				"fontStyle": "h4"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 6,gapx 12"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "textLabel"
+				"text": "Text"
+				"$client.FlatLaf.styleClass": "h3"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 7"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "largePreview"
+				"fontType": "Large"
+				"fontStyle": "large"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 8,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "defaultPreview"
+				"fontType": "Default"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 9,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "mediumPreview"
+				"fontType": "Medium"
+				"fontStyle": "medium"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 10,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "smallPreview"
+				"fontType": "Small"
+				"fontStyle": "small"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 11,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "miniPreview"
+				"fontType": "Mini"
+				"fontStyle": "mini"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 12,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "lightPreview"
+				"fontType": "Light"
+				"fontStyle": "light"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 13,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "semiboldPreview"
+				"fontType": "Semibold"
+				"fontStyle": "semibold"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 14,gapx 12"
+			} )
+			add( new FormComponent( "com.formdev.flatlaf.themeeditor.FlatThemePreviewFonts$FontPreview" ) {
+				name: "monospacedPreview"
+				"fontType": "Monospaced"
+				"fontStyle": "monospaced"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 15,gapx 12"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "scaleLabel"
+				"text": "Fonts in preview are scaled by:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 16,gapx 12"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "scaleValueLabel"
+				"text": "1x"
+				"$client.FlatLaf.styleClass": "h2"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 16"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 5, 0 )
+			"size": new java.awt.Dimension( 335, 495 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "insets 0,hidemode 3"
+			"$columnConstraints": "[90,left][fill]"
+			"$rowConstraints": "[]0"
+		} ) {
+			name: "panel1"
+			auxiliary() {
+				"JavaCodeGenerator.className": "FontPreview"
+				"JavaCodeGenerator.variableName": "fontPreview"
+			}
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "previewLabel"
+				"text": "preview"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "preview2Label"
+				"text": "preview"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0,gapx 0"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "descLabel"
+				"text": "description"
+				"$client.FlatLaf.styleClass": "medium"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 5, 545 )
+			"size": new java.awt.Dimension( 235, 65 )
+		} )
+	}
+}

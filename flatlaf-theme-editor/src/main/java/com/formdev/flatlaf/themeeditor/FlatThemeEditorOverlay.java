@@ -24,11 +24,14 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.JLayer;
+import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.LayerUI;
 import javax.swing.text.BadLocationException;
 import org.fife.ui.rsyntaxtextarea.Token;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.UIDefaultsLoaderAccessor;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -41,6 +44,10 @@ class FlatThemeEditorOverlay
 	extends LayerUI<FlatSyntaxTextArea>
 {
 	private static final int COLOR_PREVIEW_WIDTH = 100;
+
+	static boolean showHSL = true;
+	static boolean showRGB;
+	static boolean showLuma;
 
 	private Font font;
 	private Font baseFont;
@@ -75,15 +82,24 @@ class FlatThemeEditorOverlay
 		}
 
 		FontMetrics fm = c.getFontMetrics( font );
-		int maxTextWidth = fm.stringWidth( "HSL 360 100 100" );
+		int space = fm.stringWidth( "  " );
+		int maxTextWidth = 0;
+		if( showHSL )
+			maxTextWidth += fm.stringWidth( "HSL 360 100 100" ) + space;
+		if( showRGB )
+			maxTextWidth += fm.stringWidth( "#ffffff" ) + space;
+		if( showLuma )
+			maxTextWidth += fm.stringWidth( "100" ) + space;
+		maxTextWidth = Math.max( maxTextWidth - space, 0 );
 		int textHeight = fm.getAscent() - fm.getLeading();
 
 		int width = c.getWidth();
 		int previewWidth = UIScale.scale( COLOR_PREVIEW_WIDTH );
 		int gap = UIScale.scale( 4 );
+		int textGap = (showHSL || showRGB || showLuma) ? UIScale.scale( 6 ) : 0;
 
 		// check whether preview is outside of clip bounds
-		if( clipBounds.x + clipBounds.width < width - previewWidth - maxTextWidth - gap )
+		if( clipBounds.x + clipBounds.width < width - previewWidth - maxTextWidth - gap - textGap )
 			return;
 
 		g.setFont( font );
@@ -111,14 +127,41 @@ class FlatThemeEditorOverlay
 				}
 
 				// paint text
-				int textX = px - maxTextWidth;
-				if( textX > r.x + gap) {
-					float[] hsl = HSLColor.fromRGB( color );
-					String hslStr = String.format( "HSL %3d %2d %2d",
-						Math.round( hsl[0] ), Math.round( hsl[1] ), Math.round( hsl[2] ) );
-					g.setColor( textArea.getForeground() );
-					FlatUIUtils.drawString( textArea, g, hslStr, textX,
-						r.y + ((r.height - textHeight) / 2) + textHeight );
+				if( showHSL || showRGB || showLuma ) {
+					int textX = px - textGap - maxTextWidth;
+					if( textX > r.x + gap) {
+						String colorStr = null;
+						if( showHSL ) {
+							float[] hsl = HSLColor.fromRGB( color );
+							colorStr = String.format( (alpha != 255) ? "HSLA %3d %3d %3d %3d" : "HSL %3d %3d %3d",
+								Math.round( hsl[0] ), Math.round( hsl[1] ), Math.round( hsl[2] ),
+								Math.round( alpha / 255f * 100 ) );
+						}
+						if( showRGB ) {
+							String rgbStr = String.format( (alpha != 255) ? "#%06x%02x" : "#%06x",
+								color.getRGB() & 0xffffff, alpha );
+							if( colorStr != null )
+								colorStr += "  " + rgbStr;
+							else
+								colorStr = rgbStr;
+						}
+						if( showLuma ) {
+							String lumaStr = String.format( "%3d",
+								Math.round( ColorFunctions.luma( color ) * 100 ) );
+							if( colorStr != null )
+								colorStr += "  " + lumaStr;
+							else
+								colorStr = lumaStr;
+						}
+
+						int textWidth = fm.stringWidth( colorStr );
+						if( textWidth > maxTextWidth )
+							textX -= (textWidth - maxTextWidth);
+
+						g.setColor( textArea.getForeground() );
+						FlatUIUtils.drawString( textArea, g, colorStr, textX,
+							r.y + ((r.height - textHeight) / 2) + textHeight );
+					}
 				}
 			} catch( BadLocationException ex ) {
 				// ignore
@@ -128,6 +171,20 @@ class FlatThemeEditorOverlay
 
 	private Color getColorInLine( FlatSyntaxTextArea textArea, int line ) {
 		Object value = textArea.propertiesSupport.getParsedValueAtLine( line );
+
+		// resolve lazy value
+		if( value instanceof LazyValue ) {
+			Object[] pValue = new Object[] { value };
+			FlatLaf.runWithUIDefaultsGetter( key -> {
+				return (key instanceof String)
+					? textArea.propertiesSupport.getParsedProperty( (String) key )
+					: null;
+			}, () -> {
+				pValue[0] = ((LazyValue)pValue[0]).createValue( null );
+			} );
+			value = pValue[0];
+		}
+
 		if( value instanceof Color )
 			return (Color) value;
 

@@ -21,9 +21,11 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
@@ -44,9 +46,26 @@ public class FlatTableHeaderBorder
 {
 	protected Color separatorColor = UIManager.getColor( "TableHeader.separatorColor" );
 	protected Color bottomSeparatorColor = UIManager.getColor( "TableHeader.bottomSeparatorColor" );
+	/** @since 1.6 */ protected boolean showTrailingVerticalLine = UIManager.getBoolean( "TableHeader.showTrailingVerticalLine" );
 
 	public FlatTableHeaderBorder() {
 		super( UIManager.getInsets( "TableHeader.cellMargins" ) );
+	}
+
+	@Override
+	public Insets getBorderInsets( Component c, Insets insets ) {
+		JTableHeader header = (JTableHeader) SwingUtilities.getAncestorOfClass( JTableHeader.class, c );
+		if( header != null ) {
+			if( header.getUI() instanceof FlatTableHeaderUI ) {
+				FlatTableHeaderUI ui = (FlatTableHeaderUI) header.getUI();
+				if( ui.cellMargins != null ) {
+					Insets m = ui.cellMargins;
+					return scaleInsets( c, insets, m.top, m.left, m.bottom, m.right );
+				}
+			}
+		}
+
+		return super.getBorderInsets( c, insets );
 	}
 
 	@Override
@@ -55,6 +74,8 @@ public class FlatTableHeaderBorder
 		boolean leftToRight = (header != null ? header : c).getComponentOrientation().isLeftToRight();
 		boolean paintLeft = !leftToRight;
 		boolean paintRight = leftToRight;
+		Color separatorColor = this.separatorColor;
+		Color bottomSeparatorColor = this.bottomSeparatorColor;
 
 		if( header != null ) {
 			int hx = SwingUtilities.convertPoint( c, x, y, header ).x;
@@ -65,6 +86,16 @@ public class FlatTableHeaderBorder
 					paintLeft = false;
 				if( hx + width >= header.getWidth() && leftToRight && hideTrailingVerticalLine( header ) )
 					paintRight = false;
+			}
+
+			// Because this border is always shared for all table headers,
+			// get border specific style from FlatTableHeaderUI.
+			if( header.getUI() instanceof FlatTableHeaderUI ) {
+				FlatTableHeaderUI ui = (FlatTableHeaderUI) header.getUI();
+				if( ui.separatorColor != null )
+					separatorColor = ui.separatorColor;
+				if( ui.bottomSeparatorColor != null )
+					bottomSeparatorColor = ui.bottomSeparatorColor;
 			}
 		}
 
@@ -108,12 +139,29 @@ public class FlatTableHeaderBorder
 	}
 
 	protected boolean hideTrailingVerticalLine( JTableHeader header ) {
+		if( header.getUI() instanceof FlatTableHeaderUI ) {
+			FlatTableHeaderUI ui = (FlatTableHeaderUI) header.getUI();
+			if( ui.showTrailingVerticalLine != null )
+				return !ui.showTrailingVerticalLine;
+		}
+
+		if( showTrailingVerticalLine )
+			return false;
+
+		// do not hide if table header is not a child of a scroll pane
 		Container viewport = header.getParent();
 		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
 		if( !(viewportParent instanceof JScrollPane) )
-			return true;
+			return false;
 
-		JScrollBar vsb = ((JScrollPane)viewportParent).getVerticalScrollBar();
+		// do not hide if table header is not the column header of the scroll pane
+		JScrollPane scrollPane = (JScrollPane) viewportParent;
+		JViewport columnHeader = scrollPane.getColumnHeader();
+		if( viewport != columnHeader )
+			return false;
+
+		// hide if vertical scroll bar is not shown
+		JScrollBar vsb = scrollPane.getVerticalScrollBar();
 		if( vsb == null || !vsb.isVisible() )
 			return true;
 

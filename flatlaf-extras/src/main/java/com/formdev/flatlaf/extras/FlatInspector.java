@@ -44,6 +44,7 @@ import java.awt.event.WindowListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
@@ -64,6 +65,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -472,15 +474,23 @@ public class FlatInspector
 		if( c instanceof JComponent )
 			appendRow( buf, "Border", toString( ((JComponent)c).getBorder(), classHierarchy ) );
 
-		appendRow( buf, "Background", toString( c.getBackground() ) );
-		appendRow( buf, "Foreground", toString( c.getForeground() ) );
-		appendRow( buf, "Font", toString( c.getFont() ) );
+		appendRow( buf, "Background", toString( c.getBackground() ) + (c.isBackgroundSet() ? "" : "  NOT SET") );
+		appendRow( buf, "Foreground", toString( c.getForeground() ) + (c.isForegroundSet() ? "" : "  NOT SET") );
+		appendRow( buf, "Font", toString( c.getFont() ) + (c.isFontSet() ? "" : "  NOT SET") );
 
 		if( c instanceof JComponent ) {
 			try {
-				Field f = JComponent.class.getDeclaredField( "ui" );
-				f.setAccessible( true );
-				Object ui = f.get( c );
+				Object ui;
+				if( SystemInfo.isJava_9_orLater ) {
+					// Java 9+: use public method JComponent.getUI()
+					Method m = JComponent.class.getMethod( "getUI" );
+					ui = m.invoke( c );
+				} else {
+					// Java 8: read protected field 'ui'
+					Field f = JComponent.class.getDeclaredField( "ui" );
+					f.setAccessible( true );
+					ui = f.get( c );
+				}
 				appendRow( buf, "UI", (ui != null ? toString( ui.getClass(), classHierarchy ) : "null") );
 			} catch( Exception ex ) {
 				// ignore
@@ -553,6 +563,9 @@ public class FlatInspector
 			String simpleName = (dot >= 0) ? name.substring( dot + 1 ) : name;
 			buf.append( simpleName ).append( ' ' ).append( toDimmedText( "(" + pkg + ")" ) );
 
+			if( UIResource.class.isAssignableFrom( cls ) )
+				buf.append( " UI" );
+
 			if( !classHierarchy )
 				break;
 
@@ -613,11 +626,14 @@ public class FlatInspector
 
 		String s = toString( b.getClass(), classHierarchy );
 
-		if( b instanceof EmptyBorder )
-			s += '(' + toString( ((EmptyBorder)b).getBorderInsets() ) + ')';
-
-		if( b instanceof UIResource )
-			s += " UI";
+		if( b instanceof EmptyBorder ) {
+			String borderInsets = " (" + toString( ((EmptyBorder)b).getBorderInsets() ) + ')';
+			int brIndex = s.indexOf( "<br>" );
+			if( brIndex >= 0 )
+				s = s.substring( 0, brIndex ) + borderInsets + s.substring( brIndex );
+			else
+				s += borderInsets;
+		}
 
 		return s;
 	}

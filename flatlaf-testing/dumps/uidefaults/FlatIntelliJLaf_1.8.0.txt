@@ -1,0 +1,135 @@
+- Class  com.formdev.flatlaf.FlatLightLaf
++ Class  com.formdev.flatlaf.FlatIntelliJLaf
+
+- ID     FlatLaf - FlatLaf Light
++ ID     FlatLaf - FlatLaf IntelliJ
+
+- Name   FlatLaf Light
++ Name   FlatLaf IntelliJ
+
+#---- Button ----
+
+- Button.border                  [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
++ Button.border                  [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
+
+- Button.default.background      #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.background      #478ac9  HSL 209  55  53    javax.swing.plaf.ColorUIResource [UI]
+
++ Button.default.boldText        true
+
+- Button.default.borderColor     #4e9de7  HSL 209  76  61    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.borderColor     #3c75ab  HSL 209  48  45    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.borderWidth     2
++ Button.default.borderWidth     1
+
+- Button.default.focusedBackground #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.focusedBorderColor #89b0d4  HSL 209  47  68    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.focusedBorderColor #a3c5e4  HSL 209  55  77    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.foreground      #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.foreground      #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.hoverBackground #f7f7f7  HSL   0   0  97    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
++ Button.default.hoverBackground #3b82c6  HSL 209  55  50    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
+
+- Button.default.hoverBorderColor #89b0d4  HSL 209  47  68    javax.swing.plaf.ColorUIResource [UI]
++ Button.default.hoverBorderColor #a3c5e4  HSL 209  55  77    javax.swing.plaf.ColorUIResource [UI]
+
+- Button.default.pressedBackground #e6e6e6  HSL   0   0  90    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
++ Button.default.pressedBackground #3270ab  HSL 209  55  43    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
+
+- Button.focusedBackground       #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- CheckBox ----
+
+- CheckBox.icon.focusWidth       1
+- CheckBox.icon.focusedBackground #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
+
++ CheckBox.icon.style            filled
+
+- CheckBox.icon[filled].focusedCheckmarkColor #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
+
+
+#---- ComboBox ----
+
+- ComboBox.border                [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
++ ComboBox.border                [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
+
+
+#---- Component ----
+
+- Component.arrowType            chevron
++ Component.arrowType            triangle
+
+- Component.focusWidth           0
++ Component.focusWidth           2
+
+- Component.innerFocusWidth      0.5
++ Component.innerFocusWidth      0
+
+- Component.innerOutlineWidth    1
++ Component.innerOutlineWidth    0
+
+
+#---- FormattedTextField ----
+
+- FormattedTextField.border      [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
++ FormattedTextField.border      [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+
+
+#---- HelpButton ----
+
+- HelpButton.focusedBackground   #eaf3fb  HSL 208  68  95    javax.swing.plaf.ColorUIResource [UI]
+
+- HelpButton.icon                [lazy] 22,22    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
++ HelpButton.icon                [lazy] 26,26    com.formdev.flatlaf.icons.FlatHelpButtonIcon [UI]
+
+
+#---- JXDatePicker ----
+
+- JXDatePicker.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
++ JXDatePicker.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.swingx.ui.FlatDatePickerBorder [UI]
+
+
+#---- PasswordField ----
+
+- PasswordField.border           [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
++ PasswordField.border           [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+
+
+#---- RadioButton ----
+
++ RadioButton.icon.style         filled
+
+
+#---- ScrollPane ----
+
+- ScrollPane.border              [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
++ ScrollPane.border              [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+
+
+#---- Spinner ----
+
+- Spinner.border                 [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
++ Spinner.border                 [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatRoundBorder [UI]
+
+
+#---- Table ----
+
+- Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
++ Table.scrollPaneBorder         [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatBorder [UI]
+
+
+#---- TextField ----
+
+- TextField.border               [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
++ TextField.border               [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatTextBorder [UI]
+
+
+#---- ToggleButton ----
+
+- ToggleButton.border            [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]
++ ToggleButton.border            [lazy] 3,3,3,3  false    com.formdev.flatlaf.ui.FlatButtonBorder [UI]

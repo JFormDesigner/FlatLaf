@@ -27,7 +27,7 @@ import javax.swing.JComboBox;
  */
 public class FlatComboBox<E>
 	extends JComboBox<E>
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns the placeholder text that is only painted if the editable combo box is empty.

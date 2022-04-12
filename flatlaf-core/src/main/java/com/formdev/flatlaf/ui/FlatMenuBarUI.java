@@ -17,9 +17,14 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JComponent;
@@ -36,6 +41,9 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicMenuBarUI;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 
 /**
@@ -47,13 +55,30 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault MenuBar.background						Color
  * @uiDefault MenuBar.foreground						Color
  * @uiDefault MenuBar.border							Border
+ *
+ * <!-- FlatMenuBarUI -->
+ *
  * @uiDefault TitlePane.unifiedBackground				boolean
  *
  * @author Karl Tauber
  */
 public class FlatMenuBarUI
 	extends BasicMenuBarUI
+	implements StyleableUI
 {
+	// used in FlatMenuItemBorder
+	/** @since 2 */ @Styleable protected Insets itemMargins;
+
+	// used in FlatMenuUI
+	/** @since 2 */ @Styleable protected Color hoverBackground;
+	/** @since 2 */ @Styleable protected Color underlineSelectionBackground;
+	/** @since 2 */ @Styleable protected Color underlineSelectionColor;
+	/** @since 2 */ @Styleable protected int underlineSelectionHeight = -1;
+
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
+	private AtomicBoolean borderShared;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuBarUI();
 	}
@@ -64,10 +89,41 @@ public class FlatMenuBarUI
 	 */
 
 	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
+	}
+
+	@Override
 	protected void installDefaults() {
 		super.installDefaults();
 
 		LookAndFeel.installProperty( menuBar, "opaque", false );
+	}
+
+	@Override
+	protected void uninstallDefaults() {
+		super.uninstallDefaults();
+
+		oldStyleValues = null;
+		borderShared = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( menuBar, this::installStyle, null );
+		menuBar.addPropertyChangeListener( propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		menuBar.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
 	}
 
 	@Override
@@ -80,6 +136,33 @@ public class FlatMenuBarUI
 			SwingUtilities.replaceUIActionMap( menuBar, map );
 		}
 		map.put( "takeFocus", new TakeFocus() );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( menuBar, "MenuBar" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( borderShared == null )
+			borderShared = new AtomicBoolean( true );
+		return FlatStylingSupport.applyToAnnotatedObjectOrBorder( this, key, value, menuBar, borderShared );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this, menuBar.getBorder() );
 	}
 
 	@Override
@@ -97,20 +180,22 @@ public class FlatMenuBarUI
 	protected Color getBackground( JComponent c ) {
 		Color background = c.getBackground();
 
-		// paint background if opaque or if having custom background color
-		if( c.isOpaque() || !(background instanceof UIResource) )
+		// paint background if opaque
+		if( c.isOpaque() )
 			return background;
 
-		// paint background if menu bar is not the "main" menu bar
+		// do not paint background if non-opaque and having custom background color
+		if( !(background instanceof UIResource) )
+			return null;
+
+		// paint background if menu bar is not the "main" menu bar (e.g. in internal frame)
 		JRootPane rootPane = SwingUtilities.getRootPane( c );
 		if( rootPane == null || !(rootPane.getParent() instanceof Window) || rootPane.getJMenuBar() != c )
 			return background;
 
 		// use parent background for unified title pane
-		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
-		if( UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
-			FlatNativeWindowBorder.hasCustomDecoration( (Window) rootPane.getParent() ) )
-		  background = FlatUIUtils.getParentBackground( c );
+		if( useUnifiedBackground( c ) )
+			background = FlatUIUtils.getParentBackground( c );
 
 		// paint background in full screen mode
 		if( FlatUIUtils.isFullScreen( rootPane ) )
@@ -118,6 +203,22 @@ public class FlatMenuBarUI
 
 		// do not paint background if menu bar is embedded into title pane
 		return FlatRootPaneUI.isMenuBarEmbedded( rootPane ) ? null : background;
+	}
+
+	/**@since 2 */
+	static boolean useUnifiedBackground( Component c ) {
+		// check whether:
+		// - TitlePane.unifiedBackground is true and
+		// - menu bar is the "main" menu bar and
+		// - window root pane has custom decoration style
+
+		JRootPane rootPane;
+		// (not storing value of "TitlePane.unifiedBackground" in class to allow changing at runtime)
+		return UIManager.getBoolean( "TitlePane.unifiedBackground" ) &&
+			(rootPane = SwingUtilities.getRootPane( c )) != null &&
+			rootPane.getParent() instanceof Window &&
+			rootPane.getJMenuBar() == c &&
+			rootPane.getWindowDecorationStyle() != JRootPane.NONE;
 	}
 
 	//---- class TakeFocus ----------------------------------------------------

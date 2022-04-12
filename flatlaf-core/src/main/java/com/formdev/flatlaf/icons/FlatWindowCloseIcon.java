@@ -24,6 +24,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * "close" icon for windows (frames and dialogs).
@@ -54,7 +55,7 @@ public class FlatWindowCloseIcon
 		int iy = y + ((height - iwh) / 2);
 		int ix2 = ix + iwh - 1;
 		int iy2 = iy + iwh - 1;
-		int thickness = (int) scaleFactor;
+		float thickness = SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor;
 
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
 		path.append( new Line2D.Float( ix, iy, ix2, iy2 ), false );

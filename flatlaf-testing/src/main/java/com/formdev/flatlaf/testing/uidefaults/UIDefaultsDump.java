@@ -70,6 +70,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
 import com.jidesoft.plaf.LookAndFeelFactory;
 import com.formdev.flatlaf.util.DerivedColor;
+import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 
@@ -84,6 +85,7 @@ public class UIDefaultsDump
 	private final UIDefaults defaults;
 	private final Properties derivedColorKeys;
 	private final boolean isIntelliJTheme;
+	private final boolean dumpHSL;
 
 	private String lastPrefix;
 	private JComponent dummyComponent;
@@ -197,6 +199,8 @@ public class UIDefaultsDump
 				? "-linux"
 				: "");
 		String javaVersion = System.getProperty( "java.version" );
+		if( javaVersion.startsWith( "1.8.0_" ) && lookAndFeel instanceof FlatLaf )
+			javaVersion = "1.8.0";
 		File file = new File( dir, name + nameSuffix + "_"
 			+ javaVersion + osSuffix + ".txt" );
 
@@ -349,6 +353,7 @@ public class UIDefaultsDump
 
 		derivedColorKeys = loadDerivedColorKeys();
 		isIntelliJTheme = (lookAndFeel instanceof IntelliJTheme.ThemeLaf);
+		dumpHSL = lookAndFeel instanceof FlatLaf;
 	}
 
 	private void dump( PrintWriter out, Predicate<String> keyFilter ) {
@@ -370,7 +375,7 @@ public class UIDefaultsDump
 				Object value = entry.getValue();
 
 				String strKey = String.valueOf( key );
-				if( !keyFilter.test( strKey ) )
+				if( !keyFilter.test( strKey ) || strKey.startsWith( "FlatLaf.internal." ) )
 					return;
 
 				String prefix = keyPrefix( strKey );
@@ -453,20 +458,22 @@ public class UIDefaultsDump
 	}
 
 	private void dumpColor( PrintWriter out, String key, Color color ) {
-		Color resolvedColor = resolveDerivedColor( key, color );
+		Color[] retBaseColor = new Color[1];
+		Color resolvedColor = resolveDerivedColor( key, color, retBaseColor );
 		if( resolvedColor != color && resolvedColor.getRGB() != color.getRGB() ) {
 			if( !isIntelliJTheme ) {
 				System.err.println( "Key '" + key + "': derived colors not equal" );
-				System.err.println( "  Default color:  " + dumpColorHex( color ) );
-				System.err.println( "  Resolved color: " + dumpColorHex( resolvedColor ) );
+				System.err.println( "  Default color:          " + dumpColorHexAndHSL( color ) );
+				System.err.println( "  Resolved color:         " + dumpColorHexAndHSL( resolvedColor ) );
+				System.err.println( "  Base of resolved color: " + dumpColorHexAndHSL( retBaseColor[0] ) );
 			}
 
 			out.printf( "%s / ",
-				dumpColorHex( resolvedColor ) );
+				dumpColorHexAndHSL( resolvedColor ) );
 		}
 
 		out.printf( "%s    %s",
-			dumpColorHex( color ),
+			dumpColorHexAndHSL( color ),
 			dumpClass( color ) );
 
 		if( color instanceof DerivedColor ) {
@@ -479,11 +486,33 @@ public class UIDefaultsDump
 		}
 	}
 
+	private String dumpColorHexAndHSL( Color color ) {
+		String hex = dumpColorHex( color );
+		return dumpHSL
+			? hex + "  " + dumpColorHSL( color )
+			: hex;
+	}
+
 	private String dumpColorHex( Color color ) {
 		boolean hasAlpha = (color.getAlpha() != 255);
 		return hasAlpha
 			? String.format( "#%06x%02x  %d%%", color.getRGB() & 0xffffff, (color.getRGB() >> 24) & 0xff, Math.round( color.getAlpha() / 2.55f ) )
 			: String.format( "#%06x", color.getRGB() & 0xffffff );
+	}
+
+	private String dumpColorHSL( Color color ) {
+		HSLColor hslColor = new HSLColor( color );
+		int hue = Math.round( hslColor.getHue() );
+		int saturation = Math.round( hslColor.getSaturation() );
+		int luminance = Math.round( hslColor.getLuminance() );
+		if( color.getAlpha() == 255 ) {
+			return String.format( "HSL %3d %3d %3d",
+				hue, saturation, luminance );
+		} else {
+			int alpha = Math.round( hslColor.getAlpha() * 100 );
+			return String.format( "HSLA %3d %3d %3d %2d",
+				hue, saturation, luminance, alpha );
+		}
 	}
 
 	private void dumpFont( PrintWriter out, Font font ) {
@@ -645,7 +674,7 @@ public class UIDefaultsDump
 		return properties;
 	}
 
-	private Color resolveDerivedColor( String key, Color color ) {
+	private Color resolveDerivedColor( String key, Color color, Color[] retBaseColor ) {
 		if( !(color instanceof DerivedColor) )
 			return color;
 
@@ -666,7 +695,9 @@ public class UIDefaultsDump
 			throw new IllegalStateException( "Missing base color '" + baseKey + "' for key '" + key + "'." );
 
 		if( baseColor instanceof DerivedColor )
-			baseColor = resolveDerivedColor( (String) baseKey, baseColor );
+			baseColor = resolveDerivedColor( (String) baseKey, baseColor, retBaseColor );
+
+		retBaseColor[0] = baseColor;
 
 		Color newColor = FlatUIUtils.deriveColor( color, baseColor );
 

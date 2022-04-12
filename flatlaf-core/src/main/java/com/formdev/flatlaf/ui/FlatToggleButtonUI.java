@@ -21,11 +21,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -73,17 +76,28 @@ import com.formdev.flatlaf.util.UIScale;
 public class FlatToggleButtonUI
 	extends FlatButtonUI
 {
-	protected int tabUnderlineHeight;
-	protected Color tabUnderlineColor;
-	protected Color tabDisabledUnderlineColor;
-	protected Color tabSelectedBackground;
-	protected Color tabHoverBackground;
-	protected Color tabFocusBackground;
+	@Styleable(dot=true) protected int tabUnderlineHeight;
+	@Styleable(dot=true) protected Color tabUnderlineColor;
+	@Styleable(dot=true) protected Color tabDisabledUnderlineColor;
+	@Styleable(dot=true) protected Color tabSelectedBackground;
+	@Styleable(dot=true) protected Color tabHoverBackground;
+	@Styleable(dot=true) protected Color tabFocusBackground;
 
 	private boolean defaults_initialized = false;
 
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatToggleButtonUI.class, FlatToggleButtonUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatToggleButtonUI.class, () -> new FlatToggleButtonUI( true ) )
+			: new FlatToggleButtonUI( false );
+	}
+
+	protected FlatToggleButtonUI( boolean shared ) {
+		super( shared );
+	}
+
+	@Override
+	String getStyleType() {
+		return "ToggleButton";
 	}
 
 	@Override
@@ -136,8 +150,25 @@ public class FlatToggleButtonUI
 		}
 	}
 
+	/** @since 2 */
+	@Override
+	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
+		if( key.startsWith( "help." ) )
+			throw new UnknownStyleException( key );
+
+		return super.applyStyleProperty( b, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = super.getStyleableInfos( c );
+		infos.keySet().removeIf( s -> s.startsWith( "help." ) );
+		return infos;
+	}
+
 	static boolean isTabButton( Component c ) {
-		return c instanceof JToggleButton && clientPropertyEquals( (JToggleButton) c, BUTTON_TYPE, BUTTON_TYPE_TAB );
+		return c instanceof JToggleButton && BUTTON_TYPE_TAB.equals( getButtonTypeStr( (JToggleButton) c ) );
 	}
 
 	@Override

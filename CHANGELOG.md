@@ -1,7 +1,387 @@
 FlatLaf Change Log
 ==================
 
-## 1.3-SNAPSHOT
+## 2.2-SNAPSHOT
+
+#### Fixed bugs
+
+- Native window decorations (Windows 10/11 only): Fixed wrong window title
+  character encoding used in Windows taskbar. (issue #502)
+- Button: Fixed icon layout and preferred width of default buttons that use bold
+  font. (issue #506)
+- FileChooser: Enabled full row selection for details view to fix alternate row
+  coloring. (issue #512)
+- SplitPane: Fixed `StackOverflowError` caused by layout loop that may occur
+  under special circumstances. (issue #513)
+- ToolBar: Fixed endless loop in focus navigation that may occur under special
+  circumstances. (issue #505)
+- IntelliJ Themes: `Component.accentColor` UI property now has useful theme
+  specific values. (issue #507)
+
+
+## 2.1
+
+#### New features and improvements
+
+- Menus: Improved usability of submenus. (PR #490; issue #247)
+- Menus: Scroll large menus using mouse wheel or up/down arrows. (issue #225)
+- Linux: Support using custom window decorations. Enable with
+  `JFrame.setDefaultLookAndFeelDecorated(true)` and
+  `JDialog.setDefaultLookAndFeelDecorated(true)` before creating a window.
+  (issue #482)
+- ScrollBar: Added UI value `ScrollBar.minimumButtonSize` to specify minimum
+  scroll arrow button size (if shown). (issue #493)
+
+#### Fixed bugs
+
+- PasswordField: Fixed reveal button appearance in IntelliJ themes. (issue #494)
+- ScrollBar: Center and scale arrows in scroll up/down buttons (if shown).
+  (issue #493)
+- TextArea, TextPane and EditorPane: No longer select all text when component is
+  focused for the first time. (issue #498; regression in FlatLaf 2.0)
+- TabbedPane: Disable all items in "Show Hidden Tabs" popup menu if tabbed pane
+  is disabled.
+
+#### Incompatibilities
+
+- Method `FlatUIUtils.paintArrow()` (and class `FlatArrowButton`) now paints
+  arrows one pixel smaller than before. To fix this, increase parameter
+  `arrowSize` by one.
+
+
+## 2.0.2
+
+- Native window decorations (Windows 10/11 only): Fixed rendering artifacts on
+  HiDPI screens when dragging window partly offscreen and back into screen
+  bounds. (issue #477)
+- Repaint component when setting client property `JComponent.outline` (issue
+  #480).
+- macOS: Fixed NPE when using some icons in main menu items. (issue #483)
+
+
+## 2.0.1
+
+- Fixed memory leak in Panel, Separator and ToolBarSeparator. (issue #471;
+  regression in FlatLaf 2.0)
+- ToolTip: Fixed wrong tooltip location if component overrides
+  `JComponent.getToolTipLocation()` and wants place tooltip under mouse
+  location. (issue #468)
+- Extras: Added copy constructor to `FlatSVGIcon`. (issue #465)
+- Moved `module-info.class` from `META-INF\versions\9\` to root folder of JARs.
+  (issue #466)
+
+
+## 2.0
+
+- Added system property `flatlaf.nativeLibraryPath` to load native libraries
+  from a directory. (PR #453)
+- Fixed "endless recursion in font" exception in
+  `FlatLaf$ActiveFont.createValue()` if `UIManager.getFont()` is invoked from
+  multiple threads. (issue #456)
+- PasswordField: Preserve reveal button state when switching theme. (PR #442;
+  issue #173)
+- PasswordField: Reveal button did not show password if
+  `JPasswordField.setEchoChar()` was invoked from application. (PR #442; issue
+  #173)
+- Slider: Fixed/improved focused indicator color when changing accent color. (PR
+  #375)
+- TextField:
+  - Improved hover/pressed/selected colors of leading/trailing buttons (e.g.
+    "reveal" button in password field). (issue #452)
+  - Clear button no longer paints over round border. (issue #451)
+- Extras: Fixed concurrent loading of SVG icons on multiple threads. (issue
+  #459)
+- Use FlatLaf native window decorations by default when running in
+  [JetBrains Runtime](https://github.com/JetBrains/JetBrainsRuntime/wiki)
+  (instead of using JetBrains custom decorations). System variable
+  `flatlaf.useJetBrainsCustomDecorations` is now `false` by default (was `true`
+  in FlatLaf 1.x). (issue #454)
+- Native window decorations:
+  - Fixed blurry iconify/maximize/close button hover rectangles at 125%, 150% or
+    175% scaling. (issue #431)
+  - Updated maximize and restore icons for Windows 11 style. (requires Java
+    8u321, 11.0.14, 17.0.2 or 18+)
+  - Updated hover and pressed colors of iconify/maximize/close buttons for
+    Windows 11 style.
+
+
+## 2.0-rc1
+
+#### New features and improvements
+
+- Styling:
+  - Styling individual components using string in CSS syntax or `java.util.Map`.
+    (PR #341)\
+    E.g.: `mySlider.putClientProperty( "FlatLaf.style", "trackWidth: 2" );`
+  - Style classes allow defining style rules at a single place (in UI defaults)
+    and use them in any component. (PR #388)\
+    E.g.: `mySlider.putClientProperty( "FlatLaf.styleClass", "myclass" );`
+- Typography defines several font styles for headers and various text sizes,
+  which makes it easy to use consistent font styles across the application. (PR
+  #396)
+- Native window decorations (Windows 10/11 only):
+  - Unified backgrounds for window title bar is now enabled by default (window
+    title bar has now same background color as window content). Bottom separator
+    for menu bars is no longer painted (if unified background is enabled).
+  - Show Windows 11 snap layouts menu when hovering the mouse over the maximize
+    button. (issues #397 and #407)
+  - Possibility to hide window title bar icon (for single window set client
+    property `JRootPane.titleBarShowIcon` to `false`; for all windows set UI
+    value `TitlePane.showIcon` to `false`).
+  - OptionPane: Hide window title bar icon by default. Can be be made visibly by
+    setting UI default `OptionPane.showIcon` to `true`. (issue #416)
+  - No longer show the Java "duke/cup" icon if no window icon image is set.
+    (issue #416)
+- TextField, FormattedTextField and PasswordField:
+  - Support leading and trailing icons (set client property
+    `JTextField.leadingIcon` or `JTextField.trailingIcon` to a
+    `javax.swing.Icon`). (PR #378; issue #368)
+  - Support leading and trailing components (set client property
+    `JTextField.leadingComponent` or `JTextField.trailingComponent` to a
+    `java.awt.Component`). (PR #386)
+  - Support "clear" (or "cancel") button to empty text field. Only shown if text
+    field is not empty, editable and enabled. (set client property
+    `JTextField.showClearButton` to `true`). (PR #442)
+- PasswordField: Support reveal (or "eye") button to show password. (see UI
+  value `PasswordField.showRevealButton`) (PR #442; issue #173)
+- TextComponents: Double/triple-click-and-drag now extends selection by whole
+  words/lines.
+- Theming improvements: Reworks core themes to make it easier to create new
+  themes (e.g. reduced explicit colors by using color functions). **Note**:
+  There are minor incompatible changes in FlatLaf properties files. (PR #390)
+- ToolBar:
+  - Toolbars are no longer floatable by default (dots on left side of toolbar
+    that allows dragging toolbar). Use `UIManager.put( "ToolBar.floatable", true
+    )` if you want the old behavior.
+  - Skip components with empty input map (e.g. `JLabel`) when using arrow keys
+    to navigate in focusable buttons (if UI value `ToolBar.focusableButtons` is
+    `true`).
+  - Support arrow-keys-only navigation within focusable buttons of toolbar (if
+    UI value `ToolBar.focusableButtons` is `true`):
+    - arrow keys move focus within toolbar
+    - tab-key moves focus out of toolbar
+    - if moving focus into the toolbar, focus recently focused toolbar button
+- ComboBox, Spinner, TextField and subclasses: Support specifying width of
+  border (see UI value `Component.borderWidth`).
+- CheckBox and RadioButton:
+  - Made selected icon better recognizable in **FlatLaf Light** (use blue
+    border), **Dark** and **Darcula** (use lighter border) themes. **IntelliJ**
+    theme is not changed.
+  - Support specifying width of icon border (see UI value
+    `CheckBox.icon.borderWidth`).
+  - Reworked icon UI defaults and added missing ones. **Note**: There are minor
+    incompatible changes in FlatLaf properties files.
+- Slider: Support specifying width of thumb border (see UI value
+  `Slider.thumbBorderWidth`).
+- TabbedPane: Optionally paint selected tab as card. (PR #343)
+- MenuItem:
+  - Paint the selected icon when the item is selected. (PR #415)
+  - Vertically align text if icons have different widths. (issue #437)
+- Panel: Support painting background with rounded corners. (issue #367)
+- Added more color functions to class `ColorFunctions` for easy use in
+  applications: `lighten()`, `darken()`, `saturate()`, `desaturate()`, `spin()`,
+  `tint()`, `shade()` and `luma()`.
+- Support defining fonts in FlatLaf properties files. (issue #384)
+- Added method `FlatLaf.registerCustomDefaultsSource(URL packageUrl)` for JPMS.
+  (issue #325)
+- Extras:
+  - Added class `FlatDesktop` for easy integration into macOS screen menu
+    (About, Preferences and Quit) when using Java 8.
+  - `FlatSVGIcon`: Support loading SVG from `URL` (for JPMS), `URI`, `File` or
+    `InputStream`. (issues #419 and #325)
+  - `FlatSVGUtils`: Support loading SVG from `URL` (for JPMS). (issue #325)
+- SwingX:
+  - New "column control" icon for `JXTable` that scales and uses antialiasing.
+    (issue #434)
+
+#### Fixed bugs
+
+- Native window decorations: Fixed `UnsatisfiedLinkError` on Windows 11 for ARM
+  processors. (issue #443)
+- MenuBar: Do not fill background if non-opaque and having custom background
+  color. (issue #409)
+- InternalFrame: Fill background to avoid that parent may shine through internal
+  frame if it contains non-opaque components. (better fix for issue #274)
+- SwingX: Fixed `NullPointerException` in `FlatCaret` when using
+  `org.jdesktop.swingx.prompt.PromptSupport.setPrompt()` on a text field and
+  then switching theme.
+
+
+## 1.6.5
+
+#### Fixed bugs
+
+- Linux: Fixed font problems when running on Oracle Java (OpenJDK is not
+  affected):
+  - oversized text if system font is "Inter" (issue #427)
+  - missing text if system font is "Cantarell" (on Fedora)
+- MenuItem: Changed accelerator delimiter from `-` to `+`. (Windows and Linux).
+- ComboBox: Fixed occasional `StackOverflowError` when modifying combo box not
+  on AWT thread. (issue #432)
+- macOS: Fixed `NullPointerException` when using AWT component
+  `java.awt.Choice`. (issue #439)
+- Native window decorations: Do not exit application with `UnsatisfiedLinkError`
+  in case that FlatLaf DLL cannot be executed because of restrictions on
+  temporary directory. Instead, continue with default window decorations. (issue
+  #436)
+
+
+## 1.6.4
+
+#### Fixed bugs
+
+- ComboBox: Fixed regression in FlatLaf 1.6.3 that makes selected item invisible
+  in popup list if `DefaultListCellRenderer` is used as renderer. If using
+  default renderer, it works. (issue #426)
+
+
+## 1.6.3
+
+#### Fixed bugs
+
+- ComboBox (not editable): Fixed regression in FlatLaf 1.6.2 that may display
+  text in non-editable combo boxes in bold. (issue #423)
+- Tree: Fixed editing cell issue with custom cell renderer and cell editor that
+  use same component for rendering and editing. (issue #385)
+
+
+## 1.6.2
+
+#### Fixed bugs
+
+- ComboBox (not editable): Fixed background painted outside of border if round
+  edges are enabled (client property `JComponent.roundRect` is `true`). (similar
+  to issue #382; regression since fixing #330 in FlatLaf 1.4)
+- ComboBox: Fixed `NullPointerException`, which may occur under special
+  circumstances. (issue #408)
+- Table: Do not select text in cell editor when it gets focus (when
+  `JTable.surrendersFocusOnKeystroke` is `true`) and
+  `TextComponent.selectAllOnFocusPolicy` is `once` (the default) or `always`.
+  (issue #395)
+- Linux: Fixed NPE when using `java.awt.TrayIcon`. (issue #405)
+- FileChooser: Workaround for crash on Windows with Java 17 32-bit (disabled
+  Windows icons). Java 17 64-bit is not affected. (issue #403)
+- Native window decorations: Fixed layout loop, which may occur under special
+  circumstances and slows down the application. (issue #420)
+
+
+## 1.6.1
+
+#### Fixed bugs
+
+- Native window decorations: Catch `UnsatisfiedLinkError` when trying to load
+  `jawt.dll` to avoid an application crash (Java 8 on Windows 10 only).
+
+
+## 1.6
+
+#### New features and improvements
+
+- InternalFrame: Double-click on icon in internal frame title bar now closes the
+  internal frame. (issue #374)
+- IntelliJ Themes: Removed deprecated `install()` methods.
+
+#### Fixed bugs
+
+- Menus: Fixed missing modifiers flags in `ActionEvent` (e.g. `Ctrl` key
+  pressed) when running in Java 9+ on Linux, macOS. Occurs also on Windows in
+  large popup menus that do not fit into the window. (issue #371; regression
+  since FlatLaf 1.3)
+- OptionPane: Fixed `OptionPane.sameSizeButtons`, which did not work as expected
+  when setting to `false`.
+- OptionPane: Fixed rendering of longer HTML text if it is passed as
+  `StringBuilder`, `StringBuffer`, or any other object that returns HTML text in
+  method `toString()`. (similar to issue #12)
+- ComboBox: Fixed popup border painting on HiDPI screens (e.g. at 150% scaling).
+- ComboBox: Fixed popup location if shown above of combo box (Java 8 only).
+- ComboBox (editable): Fixed wrong border of internal text field under special
+  circumstances.
+- Spinner: Fixed painting of border corners on left side. (issue #382;
+  regression since fixing #330 in FlatLaf 1.4)
+- TableHeader: Do not show resize cursor for last column if resizing last column
+  is not possible because auto resize mode of table is not off. (issue #332)
+- TableHeader: Fixed missing trailing vertical separator line if used in upper
+  left corner of scroll pane. (issue #332)
+- TextField, FormattedTextField, PasswordField and ComboBox: Fixed alignment of
+  placeholder text in right-to-left component orientation.
+- Slider: Fixed calculation of baseline, which was wrong under some
+  circumstances.
+
+
+## 1.5
+
+#### New features and improvements
+
+- SwingX: Added search and clear icons to `JXSearchField`. (issue #359)
+
+#### Fixed bugs
+
+- Button and TextComponent: Do not apply minimum width/height if margins are
+  set. (issue #364)
+- ComboBox and Spinner: Limit arrow button width if component has large
+  preferred height. (issue #361)
+- FileChooser: Fixed missing (localized) texts when FlatLaf is loaded in special
+  classloader (e.g. plugin system in Apache NetBeans).
+- InternalFrame: Limit internal frame bounds to parent bounds on resize. Also
+  honor maximum size of internal frame. (issue #362)
+- Popup: Fixed incorrectly placed drop shadow for medium-weight popups in
+  maximized windows. (issue #358)
+- Native window decorations (Windows 10 only):
+  - Fixed occasional application crash in `flatlaf-windows.dll`. (issue #357)
+  - When window is initially shown, fill background with window background color
+    (instead of white), which avoids flickering in dark themes. (issue 339)
+  - When resizing a window at the right/bottom edge, then first fill the new
+    space with the window background color (instead of black) before the layout
+    is updated.
+  - When resizing a window at the left/top edge, then first fill the new space
+    with the window background color (instead of garbage) before the layout is
+    updated.
+
+
+## 1.4
+
+#### New features and improvements
+
+- TextField, FormattedTextField and PasswordField: Support adding extra padding
+  (set client property `JTextField.padding` to an `Insets`).
+- PasswordField: UI delegate `FlatPasswordFieldUI` now extends `FlatTextFieldUI`
+  (instead of `BasicPasswordFieldUI`) to avoid duplicate code and for easier
+  extensibility.
+- Table and PopupFactory: Use `StackWalker` in Java 9+ for better performance.
+  (issue #334)
+- ToolBar: Paint focus indicator for focused button in toolbar. (issue #346)
+- ToolBar: Support focusable buttons in toolbar (set UI value
+  `ToolBar.focusableButtons` to `true`). (issue #346)
+
+#### Fixed bugs
+
+- ComboBox (editable) and Spinner: Increased size of internal text field to the
+  component border so that it behaves like plain text field (mouse click to left
+  of text now positions caret to first character instead of opening ComboBox
+  popup; mouse cursor is now of type "text" within the whole component, except
+  for arrow buttons). (issue #330)
+- ComboBox (not editable): Increased size of internal renderer pane to the
+  component border so that it can paint within the whole component. Also
+  increase combo box size if a custom renderer uses a border with insets that
+  are larger than the default combo box padding (`2,6,2,6`).
+- Fixed component heights at `1.25x`, `1.75x` and `2.25x` scaling factors (Java
+  8 only) so that Button, ComboBox, Spinner and TextField components (including
+  subclasses) have same heights. This increases heights of Button and TextField
+  components by:
+  - `2px` at `1.75x` in **Light** and **Dark** themes
+  - `2px` at `1.25x` and `2.25x` in **IntelliJ** and **Darcula** themes
+- OptionPane: Do not make child components, which are derived from `JPanel`,
+  non-opaque. (issue #349)
+- OptionPane: Align wrapped lines to the right if component orientation is
+  right-to-left. (issue #350)
+- PasswordField: Caps lock icon no longer painted over long text. (issue #172)
+- PasswordField: Paint caps lock icon on left side in right-to-left component
+  orientation.
+- Window decorations: Window title bar width is no longer considered when
+  calculating preferred/minimum width of window. (issue #351)
+
+
+## 1.3
 
 #### New features and improvements
 
@@ -10,13 +390,15 @@ FlatLaf Change Log
   `PasswordField.focusedBackground`, `FormattedTextField.focusedBackground`,
   `TextArea.focusedBackground`, `TextPane.focusedBackground`,
   `EditorPane.focusedBackground`, `ComboBox.focusedBackground`,
-  `ComboBox.buttonFocusedBackground`, `ComboBox.popupFocusedBackground` and
+  `ComboBox.buttonFocusedBackground`, `ComboBox.popupBackground` and
   `Spinner.focusedBackground`). (issue #335)
 
 #### Fixed bugs
 
 - Fixed white lines at bottom and right side of window (in dark themes on HiDPI
   screens with scaling enabled).
+- ScrollBar: Fixed left/top arrow icon location (if visible). (issue #329)
+- Spinner: Fixed up/down arrow icon location.
 - ToolTip: Fixed positioning of huge tooltips. (issue #333)
 
 

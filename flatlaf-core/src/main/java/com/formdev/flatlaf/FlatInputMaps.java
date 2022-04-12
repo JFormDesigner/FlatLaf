@@ -596,7 +596,7 @@ class FlatInputMaps
 	//---- class LazyInputMapEx -----------------------------------------------
 
 	/**
-	 * Lazily creates a input map.
+	 * Lazily creates an input map.
 	 * Similar to {@link UIDefaults.LazyInputMap}, but can use multiple bindings arrays.
 	 */
 	private static class LazyInputMapEx

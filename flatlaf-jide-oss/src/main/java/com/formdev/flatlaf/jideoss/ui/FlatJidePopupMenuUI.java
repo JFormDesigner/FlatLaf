@@ -20,7 +20,6 @@ import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.ui.FlatPopupMenuUI;
 import com.jidesoft.plaf.LookAndFeelFactory;
-import com.jidesoft.plaf.basic.BasicJidePopupMenuUI;
 
 /**
  * Provides the Flat LaF UI delegate for {@link com.jidesoft.swing.JidePopupMenu}.
@@ -38,7 +37,9 @@ public class FlatJidePopupMenuUI
 
 	@Override
 	public Popup getPopup( JPopupMenu popupMenu, int x, int y ) {
-		Popup popup = BasicJidePopupMenuUI.addScrollPaneIfNecessary( popupMenu, x, y );
-		return popup == null ? super.getPopup( popupMenu, x, y ) : popup;
+		// not using BasicJidePopupMenuUI.addScrollPaneIfNecessary() anymore because
+		// FlatLaf supports menu scrolling that works better than JIDE menu scrolling
+		// (support mouse wheel scrolling, scales arrows)
+		return super.getPopup( popupMenu, x, y );
 	}
 }

@@ -25,6 +25,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -35,6 +38,7 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
+import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.NativeLibrary;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -51,6 +55,10 @@ import com.formdev.flatlaf.util.SystemInfo;
 //     https://github.com/Guerra24/NanoUI-win32
 //     https://github.com/oberth/custom-chrome
 //     https://github.com/rossy/borderless-window
+//
+//   Windows 11
+//     https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-snap-layout-menu
+//     https://github.com/dotnet/wpf/issues/4825#issuecomment-930442736
 //
 
 /**
@@ -84,6 +92,10 @@ class FlatWindowsNativeWindowBorder
 		if( !SystemInfo.isWindows_10_orLater )
 			return null;
 
+		// requires x86 architecture
+		if( !SystemInfo.isX86 && !SystemInfo.isX86_64 )
+			return null;
+
 		// load native library
 		if( nativeLibrary == null ) {
 			if( !SystemInfo.isJava_9_orLater ) {
@@ -94,16 +106,17 @@ class FlatWindowsNativeWindowBorder
 				// Java 9 and later does not have this problem.
 				try {
 					System.loadLibrary( "jawt" );
+				} catch( UnsatisfiedLinkError ex ) {
+					// log error only if native library jawt.dll not already loaded
+					String message = ex.getMessage();
+					if( message == null || !message.contains( "already loaded in another classloader" ) )
+						LoggingFacade.INSTANCE.logSevere( null, ex );
 				} catch( Exception ex ) {
 					LoggingFacade.INSTANCE.logSevere( null, ex );
 				}
 			}
 
-			String libraryName = "com/formdev/flatlaf/natives/flatlaf-windows-x86";
-			if( SystemInfo.isX86_64 )
-				libraryName += "_64";
-
-			nativeLibrary = new NativeLibrary( libraryName, null, true );
+			nativeLibrary = createNativeLibrary();
 		}
 
 		// check whether native library was successfully loaded
@@ -116,6 +129,23 @@ class FlatWindowsNativeWindowBorder
 		return instance;
 	}
 
+	private static NativeLibrary createNativeLibrary() {
+		String libraryName = "flatlaf-windows-x86";
+		if( SystemInfo.isX86_64 )
+			libraryName += "_64";
+
+		String libraryPath = System.getProperty( FlatSystemProperties.NATIVE_LIBRARY_PATH );
+		if( libraryPath != null ) {
+			File libraryFile = new File( libraryPath, System.mapLibraryName( libraryName ) );
+			if( libraryFile.exists() )
+				return new NativeLibrary( libraryFile, true );
+			else
+				LoggingFacade.INSTANCE.logSevere( "Did not find external library " + libraryFile + ", using extracted library instead", null );
+		}
+
+		return new NativeLibrary( "com/formdev/flatlaf/natives/" + libraryName, null, true );
+	}
+
 	private FlatWindowsNativeWindowBorder() {
 	}
 
@@ -125,7 +155,7 @@ class FlatWindowsNativeWindowBorder
 	}
 
 	/**
-	 * Tell the window whether the application wants use custom decorations.
+	 * Tell the window whether the application wants to use custom decorations.
 	 * If {@code true}, the Windows 10 title bar is hidden (including minimize,
 	 * maximize and close buttons), but not the resize borders (including drop shadow).
 	 */
@@ -156,11 +186,18 @@ class FlatWindowsNativeWindowBorder
 			return;
 
 		// install
-		WndProc wndProc = new WndProc( window );
-		if( wndProc.hwnd == 0 )
-			return;
+		try {
+			WndProc wndProc = new WndProc( window );
+			if( wndProc.hwnd == 0 )
+				return;
 
-		windowsMap.put( window, wndProc );
+			windowsMap.put( window, wndProc );
+		} catch( UnsatisfiedLinkError ex ) {
+			// catch for the case that the operating system prevents execution of DLL
+			// (e.g. if DLLs in temp folder are restricted)
+			// --> continue application without custom decorations
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	private void uninstall( Window window ) {
@@ -170,30 +207,24 @@ class FlatWindowsNativeWindowBorder
 	}
 
 	@Override
-	public void setTitleBarHeight( Window window, int titleBarHeight ) {
+	public void updateTitleBarInfo( Window window, int titleBarHeight, List<Rectangle> hitTestSpots,
+		Rectangle appIconBounds, Rectangle minimizeButtonBounds, Rectangle maximizeButtonBounds,
+		Rectangle closeButtonBounds )
+	{
 		WndProc wndProc = windowsMap.get( window );
 		if( wndProc == null )
 			return;
 
 		wndProc.titleBarHeight = titleBarHeight;
-	}
-
-	@Override
-	public void setTitleBarHitTestSpots( Window window, List<Rectangle> hitTestSpots ) {
-		WndProc wndProc = windowsMap.get( window );
-		if( wndProc == null )
-			return;
-
 		wndProc.hitTestSpots = hitTestSpots.toArray( new Rectangle[hitTestSpots.size()] );
+		wndProc.appIconBounds = cloneRectange( appIconBounds );
+		wndProc.minimizeButtonBounds = cloneRectange( minimizeButtonBounds );
+		wndProc.maximizeButtonBounds = cloneRectange( maximizeButtonBounds );
+		wndProc.closeButtonBounds = cloneRectange( closeButtonBounds );
 	}
 
-	@Override
-	public void setTitleBarAppIconBounds( Window window, Rectangle appIconBounds ) {
-		WndProc wndProc = windowsMap.get( window );
-		if( wndProc == null )
-			return;
-
-		wndProc.appIconBounds = (appIconBounds != null) ? new Rectangle( appIconBounds ) : null;
+	private static Rectangle cloneRectange( Rectangle rect ) {
+		return (rect != null) ? new Rectangle( rect ) : null;
 	}
 
 	@Override
@@ -289,20 +320,28 @@ class FlatWindowsNativeWindowBorder
 	//---- class WndProc ------------------------------------------------------
 
 	private class WndProc
+		implements PropertyChangeListener
 	{
 		// WM_NCHITTEST mouse position codes
 		private static final int
 			HTCLIENT = 1,
 			HTCAPTION = 2,
 			HTSYSMENU = 3,
-			HTTOP = 12;
+			HTMINBUTTON = 8,
+			HTMAXBUTTON = 9,
+			HTTOP = 12,
+			HTCLOSE = 20;
 
 		private Window window;
 		private final long hwnd;
 
+		// Swing coordinates/values may be scaled on a HiDPI screen
 		private int titleBarHeight;
 		private Rectangle[] hitTestSpots;
 		private Rectangle appIconBounds;
+		private Rectangle minimizeButtonBounds;
+		private Rectangle maximizeButtonBounds;
+		private Rectangle closeButtonBounds;
 
 		WndProc( Window window ) {
 			this.window = window;
@@ -313,23 +352,41 @@ class FlatWindowsNativeWindowBorder
 
 			// remove the OS window title bar
 			updateFrame( hwnd, (window instanceof JFrame) ? ((JFrame)window).getExtendedState() : 0 );
+
+			// set window background (used when resizing window)
+			updateWindowBackground();
+			window.addPropertyChangeListener( "background", this );
 		}
 
 		void uninstall() {
+			window.removePropertyChangeListener( "background", this );
+
 			uninstallImpl( hwnd );
 
 			// cleanup
 			window = null;
 		}
 
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			updateWindowBackground();
+		}
+
+		private void updateWindowBackground() {
+			Color bg = window.getBackground();
+			if( bg != null )
+				setWindowBackground( hwnd, bg.getRed(), bg.getGreen(), bg.getBlue() );
+		}
+
 		private native long installImpl( Window window );
 		private native void uninstallImpl( long hwnd );
 		private native void updateFrame( long hwnd, int state );
+		private native void setWindowBackground( long hwnd, int r, int g, int b );
 		private native void showWindow( long hwnd, int cmd );
 
 		// invoked from native code
 		private int onNcHitTest( int x, int y, boolean isOnResizeBorder ) {
-			// scale-down mouse x/y
+			// scale-down mouse x/y because Swing coordinates/values may be scaled on a HiDPI screen
 			Point pt = scaleDown( x, y );
 			int sx = pt.x;
 			int sy = pt.y;
@@ -337,8 +394,25 @@ class FlatWindowsNativeWindowBorder
 			// return HTSYSMENU if mouse is over application icon
 			//   - left-click on HTSYSMENU area shows system menu
 			//   - double-left-click sends WM_CLOSE
-			if( appIconBounds != null && appIconBounds.contains( sx, sy ) )
+			if( contains( appIconBounds, sx, sy ) )
 				return HTSYSMENU;
+
+			// return HTMINBUTTON if mouse is over minimize button
+			//   - hovering mouse over HTMINBUTTON area shows tooltip on Windows 10/11
+			if( contains( minimizeButtonBounds, sx, sy ) )
+				return HTMINBUTTON;
+
+			// return HTMAXBUTTON if mouse is over maximize/restore button
+			//   - hovering mouse over HTMAXBUTTON area shows tooltip on Windows 10
+			//   - hovering mouse over HTMAXBUTTON area shows snap layouts menu on Windows 11
+			//     https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/apply-snap-layout-menu
+			if( contains( maximizeButtonBounds, sx, sy ) )
+				return HTMAXBUTTON;
+
+			// return HTCLOSE if mouse is over close button
+			//   - hovering mouse over HTCLOSE area shows tooltip on Windows 10/11
+			if( contains( closeButtonBounds, sx, sy ) )
+				return HTCLOSE;
 
 			boolean isOnTitleBar = (sy < titleBarHeight);
 
@@ -354,6 +428,10 @@ class FlatWindowsNativeWindowBorder
 			}
 
 			return isOnResizeBorder ? HTTOP : HTCLIENT;
+		}
+
+		private boolean contains( Rectangle rect, int x, int y ) {
+			return (rect != null && rect.contains( x, y ) );
 		}
 
 		/**

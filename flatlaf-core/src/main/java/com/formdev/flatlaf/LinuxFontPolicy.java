@@ -17,6 +17,7 @@
 package com.formdev.flatlaf;
 
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-
+import javax.swing.text.StyleContext;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
@@ -121,14 +122,25 @@ class LinuxFontPolicy
 		for(;;) {
 			Font font = createFont( family, style, size, dsize );
 
-			// if the font family does not match any font on the system, "Dialog" family is returned
-			if( !"Dialog".equals( font.getFamily() ) || "Dialog".equals( family ) )
+			if( Font.DIALOG.equals( family ) )
 				return font;
+
+			// if the font family does not match any font on the system, "Dialog" family is returned
+			if( !Font.DIALOG.equals( font.getFamily() ) ) {
+				// check for font problems
+				// - font height much larger than expected (e.g. font Inter; Oracle Java 8)
+				// - character width is zero (e.g. font Cantarell; Fedora; Oracle Java 8)
+				FontMetrics fm = StyleContext.getDefaultStyleContext().getFontMetrics( font );
+				if( fm.getHeight() > size * 2 || fm.stringWidth( "a" ) == 0 )
+					return createFont( Font.DIALOG, style, size, dsize );
+
+				return font;
+			}
 
 			// find last word in family
 			int index = family.lastIndexOf( ' ' );
 			if( index < 0 )
-				return createFont( "Dialog", style, size, dsize );;
+				return createFont( Font.DIALOG, style, size, dsize );
 
 			// check whether last work contains some font weight (e.g. Ultra-Bold or Heavy)
 			String lastWord = family.substring( index + 1 ).toLowerCase();
@@ -158,7 +170,7 @@ class LinuxFontPolicy
 
 		Object value = Toolkit.getDefaultToolkit().getDesktopProperty( "gnome.Xft/DPI" );
 		if( value instanceof Integer ) {
-			int dpi = ((Integer)value).intValue() / 1024;
+			int dpi = (Integer) value / 1024;
 			if( dpi == -1 )
 				dpi = 96;
 			if( dpi < 50 )
@@ -185,7 +197,7 @@ class LinuxFontPolicy
 	}
 
 	/**
-	 * Gets the default font for KDE for KDE configuration files.
+	 * Gets the default font for KDE from KDE configuration files.
 	 *
 	 * The Swing fonts are not updated when the user changes system font size
 	 * (System Settings > Fonts > Force Font DPI). A application restart is necessary.
@@ -266,7 +278,7 @@ class LinuxFontPolicy
 		// read config file
 		ArrayList<String> lines = new ArrayList<>( 200 );
 		try( BufferedReader reader = new BufferedReader( new FileReader( file ) ) ) {
-			String line = null;
+			String line;
 			while( (line = reader.readLine()) != null )
 				lines.add( line );
 		} catch( IOException ex ) {
@@ -309,6 +321,9 @@ class LinuxFontPolicy
 	 *   - running on JetBrains Runtime 11 or later and scaling is enabled in system Settings
 	 */
 	private static boolean isSystemScaling() {
+		if( GraphicsEnvironment.isHeadless() )
+			return true;
+
 		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment()
 			.getDefaultScreenDevice().getDefaultConfiguration();
 		return UIScale.getSystemScaleFactor( gc ) > 1;

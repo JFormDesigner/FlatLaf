@@ -23,6 +23,7 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -42,7 +43,9 @@ import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -181,8 +184,12 @@ public abstract class FlatWindowResizer
 	protected abstract boolean isWindowResizable();
 	protected abstract Rectangle getWindowBounds();
 	protected abstract void setWindowBounds( Rectangle r );
+	protected abstract boolean limitToParentBounds();
+	protected abstract Rectangle getParentBounds();
 	protected abstract boolean honorMinimumSizeOnResize();
+	protected abstract boolean honorMaximumSizeOnResize();
 	protected abstract Dimension getWindowMinimumSize();
+	protected abstract Dimension getWindowMaximumSize();
 
 	protected void beginResizing( int direction ) {}
 	protected void endResizing() {}
@@ -227,8 +234,15 @@ public abstract class FlatWindowResizer
 	{
 		protected Window window;
 
+		private final boolean limitResizeToScreenBounds;
+
 		public WindowResizer( JRootPane rootPane ) {
 			super( rootPane );
+
+			// On Linux, limit window resizing to screen bounds because otherwise
+			// there would be a strange effect when the mouse is moved over a sidebar
+			// while resizing and the opposite window side is also resized.
+			limitResizeToScreenBounds = SystemInfo.isLinux;
 		}
 
 		@Override
@@ -284,6 +298,24 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
+		protected boolean limitToParentBounds() {
+			return limitResizeToScreenBounds && window != null;
+		}
+
+		@Override
+		protected Rectangle getParentBounds() {
+			if( limitResizeToScreenBounds && window != null ) {
+				GraphicsConfiguration gc = window.getGraphicsConfiguration();
+				Rectangle bounds = gc.getBounds();
+				Insets insets = window.getToolkit().getScreenInsets( gc );
+				return new Rectangle( bounds.x + insets.left, bounds.y + insets.top,
+					bounds.width - insets.left - insets.right,
+					bounds.height - insets.top - insets.bottom );
+			}
+			return null;
+		}
+
+		@Override
 		protected boolean honorMinimumSizeOnResize() {
 			return
 				(honorFrameMinimumSizeOnResize && window instanceof Frame) ||
@@ -291,8 +323,18 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
+		protected boolean honorMaximumSizeOnResize() {
+			return false;
+		}
+
+		@Override
 		protected Dimension getWindowMinimumSize() {
 			return window.getMinimumSize();
+		}
+
+		@Override
+		protected Dimension getWindowMaximumSize() {
+			return window.getMaximumSize();
 		}
 
 		@Override
@@ -355,13 +397,33 @@ public abstract class FlatWindowResizer
 		}
 
 		@Override
+		protected boolean limitToParentBounds() {
+			return true;
+		}
+
+		@Override
+		protected Rectangle getParentBounds() {
+			return new Rectangle( getFrame().getParent().getSize() );
+		}
+
+		@Override
 		protected boolean honorMinimumSizeOnResize() {
+			return true;
+		}
+
+		@Override
+		protected boolean honorMaximumSizeOnResize() {
 			return true;
 		}
 
 		@Override
 		protected Dimension getWindowMinimumSize() {
 			return getFrame().getMinimumSize();
+		}
+
+		@Override
+		protected Dimension getWindowMaximumSize() {
+			return getFrame().getMaximumSize();
 		}
 
 		@Override
@@ -460,7 +522,7 @@ debug*/
 
 		@Override
 		public void mousePressed( MouseEvent e ) {
-			if( !isWindowResizable() )
+			if( !SwingUtilities.isLeftMouseButton( e ) || !isWindowResizable() )
 				return;
 
 			int xOnScreen = e.getXOnScreen();
@@ -489,7 +551,7 @@ debug*/
 
 		@Override
 		public void mouseReleased( MouseEvent e ) {
-			if( !isWindowResizable() )
+			if( !SwingUtilities.isLeftMouseButton( e ) || !isWindowResizable() )
 				return;
 
 			dragLeftOffset = dragRightOffset = dragTopOffset = dragBottomOffset = 0;
@@ -515,13 +577,13 @@ debug*/
 
 		@Override
 		public void mouseDragged( MouseEvent e ) {
-			if( !isWindowResizable() )
+			if( !SwingUtilities.isLeftMouseButton( e ) || !isWindowResizable() )
 				return;
 
 			int xOnScreen = e.getXOnScreen();
 			int yOnScreen = e.getYOnScreen();
 
-			// Get current window bounds and compute new bounds based them.
+			// Get current window bounds and compute new bounds based on them.
 			// This is necessary because window manager may alter window bounds while resizing.
 			// E.g. when having two monitors with different scale factors and resizing
 			// a window on first screen to the second screen, then the window manager may
@@ -535,41 +597,72 @@ debug*/
 			// top
 			if( resizeDir == N_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR ) {
 				newBounds.y = yOnScreen - dragTopOffset;
+				if( limitToParentBounds() )
+					newBounds.y = Math.max( newBounds.y, getParentBounds().y );
 				newBounds.height += (oldBounds.y - newBounds.y);
 			}
 
 			// bottom
-			if( resizeDir == S_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR )
+			if( resizeDir == S_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR ) {
 				newBounds.height = (yOnScreen + dragBottomOffset) - newBounds.y;
+				if( limitToParentBounds() ) {
+					int parentHeight = getParentBounds().height;
+					if( newBounds.y + newBounds.height > parentHeight )
+						newBounds.height = parentHeight - newBounds.y;
+				}
+			}
 
 			// left
 			if( resizeDir == W_RESIZE_CURSOR || resizeDir == NW_RESIZE_CURSOR || resizeDir == SW_RESIZE_CURSOR ) {
 				newBounds.x = xOnScreen - dragLeftOffset;
+				if( limitToParentBounds() )
+					newBounds.x = Math.max( newBounds.x, getParentBounds().x );
 				newBounds.width += (oldBounds.x - newBounds.x);
 			}
 
 			// right
-			if( resizeDir == E_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR )
+			if( resizeDir == E_RESIZE_CURSOR || resizeDir == NE_RESIZE_CURSOR || resizeDir == SE_RESIZE_CURSOR ) {
 				newBounds.width = (xOnScreen + dragRightOffset) - newBounds.x;
+				if( limitToParentBounds() ) {
+					int parentWidth = getParentBounds().width;
+					if( newBounds.x + newBounds.width > parentWidth )
+						newBounds.width = parentWidth - newBounds.x;
+				}
+			}
 
 			// apply minimum window size
 			Dimension minimumSize = honorMinimumSizeOnResize() ? getWindowMinimumSize() : null;
 			if( minimumSize == null )
 				minimumSize = UIScale.scale( new Dimension( 150, 50 ) );
-			if( newBounds.width < minimumSize.width ) {
-				if( newBounds.x != oldBounds.x )
-					newBounds.x -= (minimumSize.width - newBounds.width);
-				newBounds.width = minimumSize.width;
-			}
-			if( newBounds.height < minimumSize.height ) {
-				if( newBounds.y != oldBounds.y )
-					newBounds.y -= (minimumSize.height - newBounds.height);
-				newBounds.height = minimumSize.height;
+			if( newBounds.width < minimumSize.width )
+				changeWidth( oldBounds, newBounds, minimumSize.width );
+			if( newBounds.height < minimumSize.height )
+				changeHeight( oldBounds, newBounds, minimumSize.height );
+
+			// apply maximum window size
+			if( honorMaximumSizeOnResize() ) {
+				Dimension maximumSize = getWindowMaximumSize();
+				if( newBounds.width > maximumSize.width )
+					changeWidth( oldBounds, newBounds, maximumSize.width );
+				if( newBounds.height > maximumSize.height )
+					changeHeight( oldBounds, newBounds, maximumSize.height );
 			}
 
 			// set window bounds
 			if( !newBounds.equals( oldBounds ) )
 				setWindowBounds( newBounds );
+		}
+
+		private void changeWidth( Rectangle oldBounds, Rectangle newBounds, int width ) {
+			if( newBounds.x != oldBounds.x )
+				newBounds.x -= (width - newBounds.width);
+			newBounds.width = width;
+		}
+
+		private void changeHeight( Rectangle oldBounds, Rectangle newBounds, int height ) {
+			if( newBounds.y != oldBounds.y )
+				newBounds.y -= (height - newBounds.height);
+			newBounds.height = height;
 		}
 	}
 }

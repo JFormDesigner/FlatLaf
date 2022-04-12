@@ -37,19 +37,19 @@ public class FlatArrowButton
 	extends BasicArrowButton
 	implements UIResource
 {
-	public static final int DEFAULT_ARROW_WIDTH = 8;
+	public static final int DEFAULT_ARROW_WIDTH = 9;
 
-	protected final boolean chevron;
-	protected final Color foreground;
-	protected final Color disabledForeground;
-	protected final Color hoverForeground;
-	protected final Color hoverBackground;
-	protected final Color pressedForeground;
-	protected final Color pressedBackground;
+	protected boolean chevron;
+	protected Color foreground;
+	protected Color disabledForeground;
+	protected Color hoverForeground;
+	protected Color hoverBackground;
+	protected Color pressedForeground;
+	protected Color pressedBackground;
 
 	private int arrowWidth = DEFAULT_ARROW_WIDTH;
-	private int xOffset = 0;
-	private int yOffset = 0;
+	private float xOffset = 0;
+	private float yOffset = 0;
 
 	private boolean hover;
 	private boolean pressed;
@@ -58,14 +58,8 @@ public class FlatArrowButton
 		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
 	{
 		super( direction, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE );
-
-		this.chevron = FlatUIUtils.isChevron( type );
-		this.foreground = foreground;
-		this.disabledForeground = disabledForeground;
-		this.hoverForeground = hoverForeground;
-		this.hoverBackground = hoverBackground;
-		this.pressedForeground = pressedForeground;
-		this.pressedBackground = pressedBackground;
+		updateStyle( type, foreground, disabledForeground, hoverForeground, hoverBackground,
+			pressedForeground, pressedBackground );
 
 		setOpaque( false );
 		setBorder( null );
@@ -101,6 +95,19 @@ public class FlatArrowButton
 		}
 	}
 
+	/** @since 2 */
+	public void updateStyle( String type, Color foreground, Color disabledForeground,
+		Color hoverForeground, Color hoverBackground, Color pressedForeground, Color pressedBackground )
+	{
+		this.chevron = FlatUIUtils.isChevron( type );
+		this.foreground = foreground;
+		this.disabledForeground = disabledForeground;
+		this.hoverForeground = hoverForeground;
+		this.hoverBackground = hoverBackground;
+		this.pressedForeground = pressedForeground;
+		this.pressedBackground = pressedBackground;
+	}
+
 	public int getArrowWidth() {
 		return arrowWidth;
 	}
@@ -117,19 +124,19 @@ public class FlatArrowButton
 		return pressed;
 	}
 
-	public int getXOffset() {
+	public float getXOffset() {
 		return xOffset;
 	}
 
-	public void setXOffset( int xOffset ) {
+	public void setXOffset( float xOffset ) {
 		this.xOffset = xOffset;
 	}
 
-	public int getYOffset() {
+	public float getYOffset() {
 		return yOffset;
 	}
 
-	public void setYOffset( int yOffset ) {
+	public void setYOffset( float yOffset ) {
 		this.yOffset = yOffset;
 	}
 
@@ -204,6 +211,6 @@ public class FlatArrowButton
 		if( vert && parent instanceof JComponent && FlatUIUtils.hasRoundBorder( (JComponent) parent ) )
 			x -= scale( parent.getComponentOrientation().isLeftToRight() ? 1 : -1 );
 
-		FlatUIUtils.paintArrow( g, x, 0, getWidth(), getHeight(), getDirection(), chevron, arrowWidth, xOffset, yOffset );
+		FlatUIUtils.paintArrow( g, x, 0, getWidth(), getHeight(), getDirection(), chevron, getArrowWidth(), getXOffset(), getYOffset() );
 	}
 }

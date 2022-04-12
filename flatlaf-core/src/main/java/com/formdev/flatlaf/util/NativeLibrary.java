@@ -61,6 +61,19 @@ public class NativeLibrary
 	}
 
 	/**
+	 * Load native library from given file.
+	 *
+	 * @param libraryFile the file of the native library
+	 * @param supported whether the native library is supported on the current platform
+	 * @since 2
+	 */
+	public NativeLibrary( File libraryFile, boolean supported ) {
+		this.loaded = supported
+			? loadLibraryFromFile( libraryFile )
+			: false;
+	}
+
+	/**
 	 * Returns whether the native library is loaded.
 	 * <p>
 	 * Returns {@code false} if not supported on current platform as specified in constructor
@@ -120,16 +133,29 @@ public class NativeLibrary
 		}
 	}
 
+	private boolean loadLibraryFromFile( File libraryFile ) {
+		try {
+			System.load( libraryFile.getAbsolutePath() );
+			return true;
+		} catch( Throwable ex ) {
+			log( null, ex );
+			return false;
+		}
+	}
+
+	/**
+	 * Add prefix and suffix to library name.
+	 * <ul>
+	 * <li>Windows: libraryName + ".dll"
+	 * <li>macOS: "lib" + libraryName + ".dylib"
+	 * <li>Linux: "lib" + libraryName + ".so"
+	 * </ul>
+	 */
 	private static String decorateLibraryName( String libraryName ) {
-		if( SystemInfo.isWindows )
-			return libraryName.concat( ".dll" );
-
-		String suffix = SystemInfo.isMacOS ? ".dylib" : ".so";
-
 		int sep = libraryName.lastIndexOf( '/' );
 		return (sep >= 0)
-			? libraryName.substring( 0, sep + 1 ) + "lib" + libraryName.substring( sep + 1 ) + suffix
-			: "lib" + libraryName + suffix;
+			? libraryName.substring( 0, sep + 1 ) + System.mapLibraryName( libraryName.substring( sep + 1 ) )
+			: System.mapLibraryName( libraryName );
 	}
 
 	private static void log( String msg, Throwable thrown ) {
@@ -172,7 +198,7 @@ public class NativeLibrary
 			// for loaded native libraries, they will be deleted on next application startup.
 			// The default temporary directory may contain hundreds or thousands of files.
 			// To make searching for "marked for deletion" files as fast as possible,
-			// use a sub directory that contains only our temporary native libraries.
+			// use a subdirectory that contains only our temporary native libraries.
 			tmpdir += "\\flatlaf.temp";
 		}
 

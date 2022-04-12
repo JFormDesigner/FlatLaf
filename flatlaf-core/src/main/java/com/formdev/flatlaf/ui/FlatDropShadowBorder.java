@@ -24,6 +24,9 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
+import java.util.Map;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
 import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -40,14 +43,17 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatDropShadowBorder
 	extends FlatEmptyBorder
+	implements StyleableBorder
 {
-	private final Color shadowColor;
-	private final Insets shadowInsets;
-	private final float shadowOpacity;
+	@Styleable protected Color shadowColor;
+	@Styleable protected Insets shadowInsets;
+	@Styleable protected float shadowOpacity;
 
-	private final int shadowSize;
+	private int shadowSize;
 	private Image shadowImage;
 	private Color lastShadowColor;
+	private float lastShadowOpacity;
+	private int lastShadowSize;
 	private double lastSystemScaleFactor;
 	private float lastUserScaleFactor;
 
@@ -64,15 +70,41 @@ public class FlatDropShadowBorder
 	}
 
 	public FlatDropShadowBorder( Color shadowColor, Insets shadowInsets, float shadowOpacity ) {
-		super( Math.max( shadowInsets.top, 0 ), Math.max( shadowInsets.left, 0 ),
-			Math.max( shadowInsets.bottom, 0 ), Math.max( shadowInsets.right, 0 ) );
+		super( nonNegativeInsets( shadowInsets ) );
+
 		this.shadowColor = shadowColor;
 		this.shadowInsets = shadowInsets;
 		this.shadowOpacity = shadowOpacity;
 
-		shadowSize = Math.max(
+		shadowSize = maxInset( shadowInsets );
+	}
+
+	private static Insets nonNegativeInsets( Insets shadowInsets ) {
+		return new Insets( Math.max( shadowInsets.top, 0 ), Math.max( shadowInsets.left, 0 ),
+			Math.max( shadowInsets.bottom, 0 ), Math.max( shadowInsets.right, 0 ) );
+	}
+
+	private int maxInset( Insets shadowInsets ) {
+		return Math.max(
 			Math.max( shadowInsets.left, shadowInsets.right ),
 			Math.max( shadowInsets.top, shadowInsets.bottom ) );
+	}
+
+	/** @since 2 */
+	@Override
+	public Object applyStyleProperty( String key, Object value ) {
+		Object oldValue = FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+		if( key.equals( "shadowInsets" ) ) {
+			applyStyleProperty( nonNegativeInsets( shadowInsets ) );
+			shadowSize = maxInset( shadowInsets );
+		}
+		return oldValue;
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override
@@ -91,12 +123,16 @@ public class FlatDropShadowBorder
 		float userScaleFactor = UIScale.getUserScaleFactor();
 		if( shadowImage == null ||
 			!shadowColor.equals( lastShadowColor ) ||
+			lastShadowOpacity != shadowOpacity ||
+			lastShadowSize != shadowSize ||
 			lastSystemScaleFactor != scaleFactor ||
 			lastUserScaleFactor != userScaleFactor )
 		{
 			shadowImage = createShadowImage( shadowColor, shadowSize, shadowOpacity,
 				(float) (scaleFactor * userScaleFactor) );
 			lastShadowColor = shadowColor;
+			lastShadowOpacity = shadowOpacity;
+			lastShadowSize = shadowSize;
 			lastSystemScaleFactor = scaleFactor;
 			lastUserScaleFactor = userScaleFactor;
 		}

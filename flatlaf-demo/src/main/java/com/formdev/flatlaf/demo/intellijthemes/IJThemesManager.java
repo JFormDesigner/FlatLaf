@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.formdev.flatlaf.json.Json;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 
 /**
@@ -46,7 +47,7 @@ class IJThemesManager
 	    try( Reader reader = new InputStreamReader( getClass().getResourceAsStream( "themes.json" ), StandardCharsets.UTF_8 ) ) {
 	    		json = (Map<String, Object>) Json.parse( reader );
 		} catch( IOException ex ) {
-			ex.printStackTrace();
+			LoggingFacade.INSTANCE.logSevere( null, ex );
 			return;
 		}
 

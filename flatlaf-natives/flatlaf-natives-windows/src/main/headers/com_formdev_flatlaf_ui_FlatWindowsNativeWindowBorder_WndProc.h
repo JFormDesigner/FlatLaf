@@ -13,8 +13,14 @@ extern "C" {
 #define com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTCAPTION 2L
 #undef com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTSYSMENU
 #define com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTSYSMENU 3L
+#undef com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTMINBUTTON
+#define com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTMINBUTTON 8L
+#undef com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTMAXBUTTON
+#define com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTMAXBUTTON 9L
 #undef com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTTOP
 #define com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTTOP 12L
+#undef com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTCLOSE
+#define com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc_HTCLOSE 20L
 /*
  * Class:     com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc
  * Method:    installImpl
@@ -38,6 +44,14 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
  */
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_updateFrame
   (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:     com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc
+ * Method:    setWindowBackground
+ * Signature: (JIII)V
+ */
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_setWindowBackground
+  (JNIEnv *, jobject, jlong, jint, jint, jint);
 
 /*
  * Class:     com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc

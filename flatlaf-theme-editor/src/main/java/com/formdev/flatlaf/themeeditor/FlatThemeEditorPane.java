@@ -20,28 +20,33 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayer;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.MatteBorder;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
+import org.fife.ui.rsyntaxtextarea.Style;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
-import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.TokenTypes;
+import org.fife.ui.rtextarea.Gutter;
+import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -60,7 +65,9 @@ class FlatThemeEditorPane
 	private final CollapsibleSectionPanel collapsiblePanel;
 	private final RTextScrollPane scrollPane;
 	private final FlatSyntaxTextArea textArea;
+	private final ErrorStrip errorStrip;
 	private FlatFindReplaceBar findReplaceBar;
+	private FlatThemePreview preview;
 
 	private File file;
 
@@ -82,20 +89,6 @@ class FlatThemeEditorPane
 			firePropertyChange( DIRTY_PROPERTY, e.getOldValue(), e.getNewValue() );
 		} );
 
-		// theme
-		try( InputStream in = getClass().getResourceAsStream( "light.xml" ) ) {
-			Theme theme = Theme.load( in );
-			theme.apply( textArea );
-		} catch( IOException ex ) {
-			ex.printStackTrace();
-		}
-
-		// use semitransparent token background because token background
-		// is painted over mark occurrences background
-		SyntaxScheme scheme = textArea.getSyntaxScheme();
-		scheme.getStyle( FlatThemeTokenMaker.TOKEN_COLOR ).background = new Color( 0x0a000000, true );
-		scheme.getStyle( FlatThemeTokenMaker.TOKEN_VARIABLE ).background = new Color( 0x1800cc00, true );
-
 		// autocomplete
 		CompletionProvider provider = new FlatCompletionProvider();
 		AutoCompletion ac = new AutoCompletion( provider );
@@ -111,29 +104,71 @@ class FlatThemeEditorPane
 
 		// create scroll pane
 		scrollPane = new RTextScrollPane( overlay );
-		scrollPane.setBorder( null );
+		scrollPane.setBorder( BorderFactory.createEmptyBorder() );
 		scrollPane.setLineNumbersEnabled( true );
 
-		// scale fonts
-		if( UIScale.getUserScaleFactor() != 1 )
-			textArea.setFont( scaleFont( textArea.getFont() ) );
-
-		// use same font for line numbers as in editor
-		scrollPane.getGutter().setLineNumberFont( textArea.getFont() );
+		// map Ctrl+PageUp/Down to a not-existing action to avoid that the scrollpane catches them
+		InputMap inputMap = scrollPane.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+		inputMap.put( KeyStroke.getKeyStroke( "ctrl PAGE_UP" ), "__dummy__" );
+		inputMap.put( KeyStroke.getKeyStroke( "ctrl PAGE_DOWN" ), "__dummy__" );
 
 		// create error strip
-		ErrorStrip errorStrip = new ErrorStrip( textArea );
+		errorStrip = new ErrorStrip( textArea );
 
 		// create collapsible panel
 		collapsiblePanel = new CollapsibleSectionPanel();
 		collapsiblePanel.add( scrollPane );
 		collapsiblePanel.add( errorStrip, BorderLayout.LINE_END );
 		add( collapsiblePanel, BorderLayout.CENTER );
+
+		updateTheme();
 	}
 
-	private static Font scaleFont( Font font ) {
-		int newFontSize = UIScale.scale( font.getSize() );
-		return font.deriveFont( (float) newFontSize );
+	void updateTheme() {
+		Font defaultFont = RTextArea.getDefaultFont();
+		Font font = defaultFont.deriveFont( (float) UIManager.getFont( "defaultFont" ).getSize() );
+
+		textArea.setFont( font );
+		textArea.setBackground( UIManager.getColor( "FlatThemeEditorPane.background" ) );
+		textArea.setCaretColor( UIManager.getColor( "FlatThemeEditorPane.caretColor" ) );
+		textArea.setSelectionColor( UIManager.getColor( "FlatThemeEditorPane.selectionBackground" ) );
+		textArea.setCurrentLineHighlightColor( UIManager.getColor( "FlatThemeEditorPane.currentLineHighlight" ) );
+		textArea.setMarkAllHighlightColor( UIManager.getColor( "FlatThemeEditorPane.markAllHighlightColor" ) );
+		textArea.setMarkOccurrencesColor( UIManager.getColor( "FlatThemeEditorPane.markOccurrencesColor" ) );
+		textArea.setMatchedBracketBGColor( UIManager.getColor( "FlatThemeEditorPane.matchedBracketBackground" ) );
+		textArea.setMatchedBracketBorderColor( UIManager.getColor( "FlatThemeEditorPane.matchedBracketBorderColor" ) );
+		textArea.setPaintMatchedBracketPair( true );
+		textArea.setAnimateBracketMatching( false );
+
+		// syntax
+		textArea.setSyntaxScheme( new FlatSyntaxScheme( font ) );
+
+		// gutter
+		Gutter gutter = scrollPane.getGutter();
+		gutter.setBackground( UIManager.getColor( "FlatThemeEditorPane.gutter.background" ) );
+		gutter.setBorderColor( UIManager.getColor( "FlatThemeEditorPane.gutter.borderColor" ) );
+		gutter.setLineNumberColor( UIManager.getColor( "FlatThemeEditorPane.gutter.lineNumberColor" ) );
+		gutter.setLineNumberFont( font );
+
+		// error strip
+		errorStrip.setCaretMarkerColor( UIManager.getColor( "FlatThemeEditorPane.errorstrip.caretMarkerColor" ) );
+
+		if( preview != null )
+			preview.updateLater();
+	}
+
+	void updateFontSize( int sizeIncr ) {
+		Font defaultFont = RTextArea.getDefaultFont();
+		Font font = defaultFont.deriveFont( (float) UIManager.getFont( "defaultFont" ).getSize() + sizeIncr );
+
+		textArea.setFont( font );
+		textArea.setSyntaxScheme( new FlatSyntaxScheme( font ) );
+		scrollPane.getGutter().setLineNumberFont( font );
+	}
+
+	void windowActivated() {
+		if( preview != null )
+			preview.repaint();
 	}
 
 	@Override
@@ -141,8 +176,8 @@ class FlatThemeEditorPane
 		return textArea.requestFocusInWindow();
 	}
 
-	void setBaseFiles( List<File> baseFiles ) {
-		textArea.propertiesSupport.setBaseFiles( baseFiles );
+	void initBasePropertyProvider( FlatThemePropertiesBaseManager propertiesBaseManager ) {
+		textArea.propertiesSupport.setBasePropertyProvider( propertiesBaseManager.create( file, textArea.propertiesSupport ) );
 	}
 
 	File getFile() {
@@ -152,7 +187,7 @@ class FlatThemeEditorPane
 	void load( File file ) throws IOException {
 		this.file = file;
 
-		textArea.load( FileLocation.create( file ), StandardCharsets.ISO_8859_1 );
+		textArea.load( FileLocation.create( file ), "UTF-8" );
 	}
 
 	boolean reloadIfNecessary() {
@@ -191,6 +226,9 @@ class FlatThemeEditorPane
 				textArea.reload();
 
 				textArea.select( selectionStart, selectionEnd );
+
+				if( findReplaceBar != null && findReplaceBar.isShowing() )
+					findReplaceBar.markAll();
 			} catch( IOException ex ) {
 				JOptionPane.showMessageDialog( this,
 					"Failed to reload '" + textArea.getFileName() + "'\n\nReason: " + ex.getMessage(),
@@ -226,11 +264,72 @@ class FlatThemeEditorPane
 	void showFindReplaceBar() {
 		if( findReplaceBar == null ) {
 			findReplaceBar = new FlatFindReplaceBar( textArea );
-			findReplaceBar.setBorder( new MatteBorder( 1, 0, 0, 0,
-				UIManager.getColor( "Component.borderColor" ) ) );
 			collapsiblePanel.addBottomComponent( findReplaceBar );
 		}
 
 		collapsiblePanel.showBottomComponent( findReplaceBar );
+	}
+
+	void showPreview( boolean show ) {
+		if( show ) {
+			if( preview != null )
+				return;
+
+			preview = new FlatThemePreview( textArea );
+			add( preview, BorderLayout.LINE_END );
+		} else {
+			if( preview == null )
+				return;
+
+			remove( preview );
+			preview = null;
+		}
+
+		revalidate();
+	}
+
+	void notifyTextAreaAction( String actionKey ) {
+		Action action = textArea.getActionMap().get( actionKey );
+		if( action != null && action.isEnabled() )
+			action.actionPerformed( new ActionEvent( textArea, ActionEvent.ACTION_PERFORMED, null ) );
+	}
+
+	//---- class FlatSyntaxScheme ---------------------------------------------
+
+	private static class FlatSyntaxScheme
+		extends SyntaxScheme
+	{
+		FlatSyntaxScheme( Font baseFont ) {
+			super( false );
+
+			Style[] styles = getStyles();
+			for( int i = 0; i < styles.length; i++ )
+				styles[i] = new Style( Color.red );
+
+			init( "property", FlatThemeTokenMaker.TOKEN_PROPERTY, baseFont );
+			init( "variable", FlatThemeTokenMaker.TOKEN_VARIABLE, baseFont );
+			init( "number", FlatThemeTokenMaker.TOKEN_NUMBER, baseFont );
+			init( "color", FlatThemeTokenMaker.TOKEN_COLOR, baseFont );
+			init( "string", FlatThemeTokenMaker.TOKEN_STRING, baseFont );
+			init( "function", FlatThemeTokenMaker.TOKEN_FUNCTION, baseFont );
+			init( "type", FlatThemeTokenMaker.TOKEN_TYPE, baseFont );
+			init( "reservedWord", TokenTypes.RESERVED_WORD, baseFont );
+			init( "literalBoolean", TokenTypes.LITERAL_BOOLEAN, baseFont );
+			init( "operator", TokenTypes.OPERATOR, baseFont );
+			init( "separator", TokenTypes.SEPARATOR, baseFont );
+			init( "whitespace", TokenTypes.WHITESPACE, baseFont );
+			init( "comment", TokenTypes.COMMENT_EOL, baseFont );
+		}
+
+		private void init( String key, int token, Font baseFont ) {
+			String prefix = "FlatThemeEditorPane.style.";
+			Color fg = UIManager.getColor( prefix + key );
+			Color bg = UIManager.getColor( prefix + key + ".background" );
+			boolean italic = UIManager.getBoolean( prefix + key + ".italic" );
+			Font font = Style.DEFAULT_FONT;
+			if( italic )
+				font = baseFont.deriveFont( Font.ITALIC );
+			getStyles()[token] = new Style( fg, bg, font );
+		}
 	}
 }

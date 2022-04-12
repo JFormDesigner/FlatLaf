@@ -23,6 +23,8 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
@@ -32,6 +34,10 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -66,14 +72,25 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatSplitPaneUI
 	extends BasicSplitPaneUI
+	implements StyleableUI
 {
-	protected String arrowType;
-	protected Color oneTouchArrowColor;
-	protected Color oneTouchHoverArrowColor;
-	protected Color oneTouchPressedArrowColor;
+	@Styleable protected String arrowType;
+	@Styleable protected Color oneTouchArrowColor;
+	@Styleable protected Color oneTouchHoverArrowColor;
+	@Styleable protected Color oneTouchPressedArrowColor;
+
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSplitPaneUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -96,6 +113,24 @@ public class FlatSplitPaneUI
 		oneTouchArrowColor = null;
 		oneTouchHoverArrowColor = null;
 		oneTouchPressedArrowColor = null;
+
+		oldStyleValues = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( splitPane, this::installStyle, null );
+		splitPane.addPropertyChangeListener( propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		splitPane.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
 	}
 
 	@Override
@@ -103,21 +138,79 @@ public class FlatSplitPaneUI
 		return new FlatSplitPaneDivider( this );
 	}
 
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( splitPane, "SplitPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		if( divider instanceof FlatSplitPaneDivider )
+			((FlatSplitPaneDivider)divider).updateStyle();
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		try {
+			if( divider instanceof FlatSplitPaneDivider )
+				return ((FlatSplitPaneDivider)divider).applyStyleProperty( key, value );
+		} catch( UnknownStyleException ex ) {
+			// ignore
+		}
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, splitPane, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
+		if( divider instanceof FlatSplitPaneDivider )
+			infos.putAll( ((FlatSplitPaneDivider)divider).getStyleableInfos() );
+		return infos;
+	}
+
 	//---- class FlatSplitPaneDivider -----------------------------------------
 
 	protected class FlatSplitPaneDivider
 		extends BasicSplitPaneDivider
 	{
-		protected final String style = UIManager.getString( "SplitPaneDivider.style" );
-		protected final Color gripColor = UIManager.getColor( "SplitPaneDivider.gripColor" );
-		protected final int gripDotCount = FlatUIUtils.getUIInt( "SplitPaneDivider.gripDotCount", 3 );
-		protected final int gripDotSize = FlatUIUtils.getUIInt( "SplitPaneDivider.gripDotSize", 3 );
-		protected final int gripGap = FlatUIUtils.getUIInt( "SplitPaneDivider.gripGap", 2 );
+		@Styleable protected String style = UIManager.getString( "SplitPaneDivider.style" );
+		@Styleable protected Color gripColor = UIManager.getColor( "SplitPaneDivider.gripColor" );
+		@Styleable protected int gripDotCount = FlatUIUtils.getUIInt( "SplitPaneDivider.gripDotCount", 3 );
+		@Styleable protected int gripDotSize = FlatUIUtils.getUIInt( "SplitPaneDivider.gripDotSize", 3 );
+		@Styleable protected int gripGap = FlatUIUtils.getUIInt( "SplitPaneDivider.gripGap", 2 );
 
 		protected FlatSplitPaneDivider( BasicSplitPaneUI ui ) {
 			super( ui );
 
 			setLayout( new FlatDividerLayout() );
+		}
+
+		/**
+		 * @since 2
+		 */
+		protected Object applyStyleProperty( String key, Object value ) {
+			return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+		}
+
+		/**
+		 * @since 2
+		 */
+		public Map<String, Class<?>> getStyleableInfos() {
+			return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+		}
+
+		void updateStyle() {
+			if( leftButton instanceof FlatOneTouchButton )
+				((FlatOneTouchButton)leftButton).updateStyle();
+			if( rightButton instanceof FlatOneTouchButton )
+				((FlatOneTouchButton)rightButton).updateStyle();
 		}
 
 		@Override
@@ -142,7 +235,7 @@ public class FlatSplitPaneUI
 			switch( e.getPropertyName() ) {
 				case JSplitPane.DIVIDER_LOCATION_PROPERTY:
 					// necessary to show/hide one-touch buttons on expand/collapse
-					revalidate();
+					doLayout();
 					break;
 			}
 		}
@@ -198,6 +291,11 @@ public class FlatSplitPaneUI
 				ToolTipManager.sharedInstance().registerComponent( this );
 
 				this.left = left;
+			}
+
+			protected void updateStyle() {
+				updateStyle( arrowType, oneTouchArrowColor, null,
+					oneTouchHoverArrowColor, null, oneTouchPressedArrowColor, null );
 			}
 
 			@Override

@@ -27,9 +27,11 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
 import java.awt.Window;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.function.Function;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -38,6 +40,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.BorderUIResource;
@@ -63,6 +66,9 @@ import com.formdev.flatlaf.util.UIScale;
  *
  * <!-- FlatWindowResizer -->
  *
+ * @uiDefault RootPane.font									Font	unused
+ * @uiDefault RootPane.background							Color
+ * @uiDefault RootPane.foreground							Color	unused
  * @uiDefault RootPane.borderDragThickness					int
  * @uiDefault RootPane.cornerDragWidth						int
  * @uiDefault RootPane.honorFrameMinimumSizeOnResize		boolean
@@ -81,7 +87,8 @@ public class FlatRootPaneUI
 
 	private Object nativeWindowBorderData;
 	private LayoutManager oldLayout;
-	private HierarchyListener hierarchyListener;
+	private PropertyChangeListener ancestorListener;
+	private ComponentListener componentListener;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatRootPaneUI();
@@ -122,8 +129,23 @@ public class FlatRootPaneUI
 	protected void installDefaults( JRootPane c ) {
 		super.installDefaults( c );
 
+		// Give the root pane useful background, foreground and font.
+		// Background is used for title bar and menu bar if native window decorations
+		// and unified background are enabled.
+		// Foreground and font are usually not used, but set for completeness.
+		// Not using LookAndFeel.installColorsAndFont() here because it will not work
+		// because the properties are null by default but inherit non-null values from parent.
+		if( !c.isBackgroundSet() || c.getBackground() instanceof UIResource )
+			c.setBackground( UIManager.getColor( "RootPane.background" ) );
+		if( !c.isForegroundSet() || c.getForeground() instanceof UIResource )
+			c.setForeground( UIManager.getColor( "RootPane.foreground" ) );
+		if( !c.isFontSet() || c.getFont() instanceof UIResource )
+			c.setFont( UIManager.getFont( "RootPane.font" ) );
+
 		// Update background color of JFrame or JDialog parent to avoid bad border
 		// on HiDPI screens when switching from light to dark Laf.
+		// Window background color is also used in native window decorations
+		// to fill background when window is initially shown or when resizing window.
 		// The background of JFrame is initialized in JFrame.frameInit() and
 		// the background of JDialog in JDialog.dialogInit(),
 		// but it was not updated when switching Laf.
@@ -140,25 +162,54 @@ public class FlatRootPaneUI
 	}
 
 	@Override
+	protected void uninstallDefaults( JRootPane c ) {
+		super.uninstallDefaults( c );
+
+		// uninstall background, foreground and font because not all Lafs set them
+		if( c.isBackgroundSet() && c.getBackground() instanceof UIResource )
+			c.setBackground( null );
+		if( c.isForegroundSet() && c.getForeground() instanceof UIResource )
+			c.setForeground( null );
+		if( c.isFontSet() && c.getFont() instanceof UIResource )
+			c.setFont( null );
+	}
+
+	@Override
 	protected void installListeners( JRootPane root ) {
 		super.installListeners( root );
 
 		if( SystemInfo.isJava_9_orLater ) {
-			// On HiDPI screens, where scaling is used, there may be white lines at the
-			// bottom and at the right side of the window when it is initially shown.
+			// On HiDPI screens, where scaling is used, there may be white lines on the
+			// bottom and on the right side of the window when it is initially shown.
 			// This is very disturbing in dark themes, but hard to notice in light themes.
 			// Seems to be a rounding issue when Swing adds dirty region of window
 			// using RepaintManager.nativeAddDirtyRegion().
-			hierarchyListener = e -> {
-				if( (e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 &&
-					rootPane.getParent() instanceof Window )
-				{
-					// add whole root pane to dirty regions when window is initially shown
-					rootPane.getParent().repaint( rootPane.getX(), rootPane.getY(),
-						rootPane.getWidth(), rootPane.getHeight() );
+			//
+			// Note: Not using a HierarchyListener here, which would be much easier,
+			// because this causes problems with mouse clicks in heavy-weight popups.
+			// Instead, add a listener to the root pane that waits until it is added
+			// to a window, then add a component listener to the window.
+			// See: https://github.com/JFormDesigner/FlatLaf/issues/371
+			ancestorListener = e -> {
+				Object oldValue = e.getOldValue();
+				Object newValue = e.getNewValue();
+				if( newValue instanceof Window ) {
+					if( componentListener == null ) {
+						componentListener = new ComponentAdapter() {
+							@Override
+							public void componentShown( ComponentEvent e ) {
+								// add whole root pane to dirty regions when window is initially shown
+								root.getParent().repaint( root.getX(), root.getY(), root.getWidth(), root.getHeight() );
+							}
+						};
+					}
+					((Window)newValue).addComponentListener( componentListener );
+				} else if( newValue == null && oldValue instanceof Window ) {
+					if( componentListener != null )
+						((Window)oldValue).removeComponentListener( componentListener );
 				}
 			};
-			root.addHierarchyListener( hierarchyListener );
+			root.addPropertyChangeListener( "ancestor", ancestorListener );
 		}
 	}
 
@@ -167,29 +218,29 @@ public class FlatRootPaneUI
 		super.uninstallListeners( root );
 
 		if( SystemInfo.isJava_9_orLater ) {
-			root.removeHierarchyListener( hierarchyListener );
-			hierarchyListener = null;
+			if( componentListener != null ) {
+				Window window = SwingUtilities.windowForComponent( root );
+				if( window != null )
+					window.removeComponentListener( componentListener );
+				componentListener = null;
+			}
+			root.removePropertyChangeListener( "ancestor", ancestorListener );
+			ancestorListener = null;
 		}
 	}
 
-	/**
-	 * @since 1.1.2
-	 */
+	/** @since 1.1.2 */
 	protected void installNativeWindowBorder() {
 		nativeWindowBorderData = FlatNativeWindowBorder.install( rootPane );
 	}
 
-	/**
-	 * @since 1.1.2
-	 */
+	/** @since 1.1.2 */
 	protected void uninstallNativeWindowBorder() {
 		FlatNativeWindowBorder.uninstall( rootPane, nativeWindowBorderData );
 		nativeWindowBorderData = null;
 	}
 
-	/**
-	 * @since 1.1.2
-	 */
+	/** @since 1.1.2 */
 	public static void updateNativeWindowBorder( JRootPane rootPane ) {
 		RootPaneUI rui = rootPane.getUI();
 		if( !(rui instanceof FlatRootPaneUI) )
@@ -293,6 +344,11 @@ public class FlatRootPaneUI
 				}
 				break;
 
+			case FlatClientProperties.TITLE_BAR_SHOW_ICON:
+				if( titlePane != null )
+					titlePane.updateIcon();
+				break;
+
 			case FlatClientProperties.TITLE_BAR_BACKGROUND:
 			case FlatClientProperties.TITLE_BAR_FOREGROUND:
 				if( titlePane != null )
@@ -342,7 +398,7 @@ public class FlatRootPaneUI
 				? getSizeFunc.apply( rootPane.getContentPane() )
 				: rootPane.getSize();
 
-			int width = Math.max( titlePaneSize.width, contentSize.width );
+			int width = contentSize.width; // title pane width is not considered here
 			int height = titlePaneSize.height + contentSize.height;
 			if( titlePane == null || !titlePane.isMenuBarEmbedded() ) {
 				JMenuBar menuBar = rootPane.getJMenuBar();
@@ -454,7 +510,7 @@ public class FlatRootPaneUI
 				return;
 
 			Container parent = c.getParent();
-			boolean active = parent instanceof Window ? ((Window)parent).isActive() : false;
+			boolean active = parent instanceof Window && ((Window)parent).isActive();
 
 			g.setColor( FlatUIUtils.deriveColor( active ? activeBorderColor : inactiveBorderColor, baseBorderColor ) );
 			HiDPIUtils.paintAtScale1x( (Graphics2D) g, x, y, width, height, this::paintImpl );
@@ -466,9 +522,7 @@ public class FlatRootPaneUI
 
 		protected boolean isWindowMaximized( Component c ) {
 			Container parent = c.getParent();
-			return parent instanceof Frame
-				? (((Frame)parent).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0
-				: false;
+			return parent instanceof Frame && (((Frame)parent).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
 		}
 	}
 

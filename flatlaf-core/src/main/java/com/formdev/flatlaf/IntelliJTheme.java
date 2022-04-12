@@ -175,7 +175,7 @@ public class IntelliJTheme
 		defaults.put( "Button.hoverBorderColor", defaults.get( "Button.focusedBorderColor" ) );
 		defaults.put( "HelpButton.hoverBorderColor", defaults.get( "Button.focusedBorderColor" ) );
 
-		// IDEA uses a SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
+		// IDEA uses an SVG icon for the help button, but paints the background with Button.startBackground and Button.endBackground
 		Object helpButtonBackground = defaults.get( "Button.startBackground" );
 		Object helpButtonBorderColor = defaults.get( "Button.startBorderColor" );
 		if( helpButtonBackground == null )
@@ -242,14 +242,26 @@ public class IntelliJTheme
 			defaults.put( "Tree.rowHeight", 22 );
 
 		// apply theme specific UI defaults at the end to allow overwriting
-		defaults.putAll( themeSpecificDefaults );
+		for( Map.Entry<Object, Object> e : themeSpecificDefaults.entrySet() ) {
+			Object key = e.getKey();
+			Object value = e.getValue();
+
+			// append styles to existing styles
+			if( key instanceof String && ((String)key).startsWith( "[style]" ) ) {
+				Object oldValue = defaults.get( key );
+				if( oldValue != null )
+					value = oldValue + "; " + value;
+			}
+
+			defaults.put( key, value );
+		}
 	}
 
 	private Map<Object, Object> removeThemeSpecificDefaults( UIDefaults defaults ) {
 		// search for theme specific UI defaults keys
 		ArrayList<String> themeSpecificKeys = new ArrayList<>();
 		for( Object key : defaults.keySet() ) {
-			if( key instanceof String && ((String)key).startsWith( "[" ) )
+			if( key instanceof String && ((String)key).startsWith( "[" ) && !((String)key).startsWith( "[style]" ) )
 				themeSpecificKeys.add( (String) key );
 		}
 
@@ -338,7 +350,7 @@ public class IntelliJTheme
 
 				// parse value
 				try {
-					uiValue = UIDefaultsLoader.parseValue( key, valueStr );
+					uiValue = UIDefaultsLoader.parseValue( key, valueStr, null );
 				} catch( RuntimeException ex ) {
 					UIDefaultsLoader.logParseError( key, valueStr, ex, false );
 					return; // ignore invalid value
@@ -504,7 +516,7 @@ public class IntelliJTheme
 			// for filled checkbox/radiobutton used in light themes
 			defaults.remove( "CheckBox.icon[filled].focusWidth" );
 			defaults.put( "CheckBox.icon[filled].hoverBorderColor", defaults.get( "CheckBox.icon[filled].focusedBorderColor" ) );
-			defaults.put( "CheckBox.icon[filled].selectedFocusedBackground", defaults.get( "CheckBox.icon[filled].selectedBackground" ) );
+			defaults.put( "CheckBox.icon[filled].focusedSelectedBackground", defaults.get( "CheckBox.icon[filled].selectedBackground" ) );
 
 			if( dark ) {
 				// IDEA Darcula checkBoxFocused.svg, checkBoxSelectedFocused.svg,
@@ -513,9 +525,9 @@ public class IntelliJTheme
 				// --> add alpha to focused border colors
 				String[] focusedBorderColorKeys = new String[] {
 					"CheckBox.icon.focusedBorderColor",
-					"CheckBox.icon.selectedFocusedBorderColor",
+					"CheckBox.icon.focusedSelectedBorderColor",
 					"CheckBox.icon[filled].focusedBorderColor",
-					"CheckBox.icon[filled].selectedFocusedBorderColor",
+					"CheckBox.icon[filled].focusedSelectedBorderColor",
 				};
 				for( String key : focusedBorderColorKeys ) {
 					Color color = defaults.getColor( key );
@@ -534,12 +546,12 @@ public class IntelliJTheme
 	}
 
 	/** Rename UI default keys (key --> value). */
-	private static Map<String, String> uiKeyMapping = new HashMap<>();
+	private static final Map<String, String> uiKeyMapping = new HashMap<>();
 	/** Copy UI default keys (value --> key). */
-	private static Map<String, String> uiKeyCopying = new HashMap<>();
-	private static Map<String, String> uiKeyInverseMapping = new HashMap<>();
-	private static Map<String, String> checkboxKeyMapping = new HashMap<>();
-	private static Map<String, String> checkboxDuplicateColors = new HashMap<>();
+	private static final Map<String, String> uiKeyCopying = new HashMap<>();
+	private static final Map<String, String> uiKeyInverseMapping = new HashMap<>();
+	private static final Map<String, String> checkboxKeyMapping = new HashMap<>();
+	private static final Map<String, String> checkboxDuplicateColors = new HashMap<>();
 
 	static {
 		// ComboBox
@@ -549,6 +561,8 @@ public class IntelliJTheme
 		uiKeyMapping.put( "ComboBox.ArrowButton.disabledIconColor",     "ComboBox.buttonDisabledArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.iconColor",             "ComboBox.buttonArrowColor" );
 		uiKeyMapping.put( "ComboBox.ArrowButton.nonEditableBackground", "ComboBox.buttonBackground" );
+		uiKeyCopying.put( "ComboBox.buttonSeparatorColor",              "Component.borderColor" );
+		uiKeyCopying.put( "ComboBox.buttonDisabledSeparatorColor",      "Component.disabledBorderColor" );
 
 		// Component
 		uiKeyMapping.put( "Component.inactiveErrorFocusColor",   "Component.error.borderColor" );
@@ -594,6 +608,10 @@ public class IntelliJTheme
 		uiKeyCopying.put( "Slider.thumbColor", "ProgressBar.foreground" );
 		uiKeyCopying.put( "Slider.trackColor", "ProgressBar.background" );
 
+		// Spinner
+		uiKeyCopying.put( "Spinner.buttonSeparatorColor",         "Component.borderColor" );
+		uiKeyCopying.put( "Spinner.buttonDisabledSeparatorColor", "Component.disabledBorderColor" );
+
 		// TitlePane
 		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );
 		uiKeyMapping.put( "TitlePane.infoForeground",         "TitlePane.foreground" );
@@ -618,7 +636,7 @@ public class IntelliJTheme
 		checkboxKeyMapping.put( "Checkbox.Background.Selected", "CheckBox.icon.selectedBackground" );
 		checkboxKeyMapping.put( "Checkbox.Border.Selected",     "CheckBox.icon.selectedBorderColor" );
 		checkboxKeyMapping.put( "Checkbox.Foreground.Selected", "CheckBox.icon.checkmarkColor" );
-		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.selectedFocusedBorderColor" );
+		checkboxKeyMapping.put( "Checkbox.Focus.Thin.Selected", "CheckBox.icon.focusedSelectedBorderColor" );
 
 		checkboxDuplicateColors.put( "Checkbox.Background.Default.Dark", "Checkbox.Background.Selected.Dark" );
 		checkboxDuplicateColors.put( "Checkbox.Border.Default.Dark",     "Checkbox.Border.Selected.Dark" );

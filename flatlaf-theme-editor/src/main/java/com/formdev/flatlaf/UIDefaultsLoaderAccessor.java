@@ -27,6 +27,8 @@ import com.formdev.flatlaf.UIDefaultsLoader.ValueType;
  */
 public class UIDefaultsLoaderAccessor
 {
+	public static final String KEY_VARIABLES = UIDefaultsLoader.KEY_VARIABLES;
+
 	public static Object UNKNOWN = ValueType.UNKNOWN;
 	public static Object STRING = ValueType.STRING;
 	public static Object BOOLEAN = ValueType.BOOLEAN;
@@ -56,7 +58,8 @@ public class UIDefaultsLoaderAccessor
 		Function<String, String> resolver )
 	{
 		ValueType[] resultValueType2 = new ValueType[1];
-		Object result = UIDefaultsLoader.parseValue( key, value, resultValueType2, resolver, Collections.emptyList() );
+		Object result = UIDefaultsLoader.parseValue( key, value, null,
+			resultValueType2, resolver, Collections.emptyList() );
 		resultValueType[0] = resultValueType2[0];
 		return result;
 	}

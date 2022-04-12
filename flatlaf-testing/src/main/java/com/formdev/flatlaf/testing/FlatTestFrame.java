@@ -23,6 +23,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -110,11 +111,11 @@ public class FlatTestFrame
 
 		// initialize look and feels combo box
 		DefaultComboBoxModel<LookAndFeelInfo> lafModel = new DefaultComboBoxModel<>();
-		lafModel.addElement( new LookAndFeelInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
-		lafModel.addElement( new LookAndFeelInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
-		lafModel.addElement( new LookAndFeelInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
-		lafModel.addElement( new LookAndFeelInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
-		lafModel.addElement( new LookAndFeelInfo( "Flat Test (F8)", FlatTestLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Light (F1)", FlatLightLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Dark (F2)", FlatDarkLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Darcula (F4)", FlatDarculaLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Test (F8)", FlatTestLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -284,6 +285,8 @@ public class FlatTestFrame
 		Properties properties = new Properties();
 		try( InputStream in = new FileInputStream( "lafs.properties" ) ) {
 			properties.load( in );
+		} catch( FileNotFoundException ex ) {
+			// ignore
 		} catch( IOException ex ) {
 			ex.printStackTrace();
 		}

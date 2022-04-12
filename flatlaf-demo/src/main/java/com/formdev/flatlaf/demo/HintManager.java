@@ -18,11 +18,15 @@ package com.formdev.flatlaf.demo;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
+import java.awt.geom.Area;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.Border;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatDropShadowBorder;
-import com.formdev.flatlaf.ui.FlatPopupMenuBorder;
+import com.formdev.flatlaf.ui.FlatEmptyBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -87,6 +91,9 @@ class HintManager
 
 			initComponents();
 
+			setOpaque( false );
+			updateBalloonBorder();
+
 			hintLabel.setText( "<html>" + hint.message + "</html>" );
 
 			// grab all mouse events to avoid that components overlapped
@@ -98,8 +105,28 @@ class HintManager
 		public void updateUI() {
 			super.updateUI();
 
-			setBackground( UIManager.getColor( "HintPanel.backgroundColor" ) );
-			setBorder( new FlatPopupMenuBorder() );
+			if( UIManager.getLookAndFeel() instanceof FlatLaf )
+				setBackground( UIManager.getColor( "HintPanel.backgroundColor" ) );
+			else {
+				// using nonUIResource() because otherwise Nimbus does not fill the background
+				setBackground( FlatUIUtils.nonUIResource( UIManager.getColor( "info" ) ) );
+			}
+
+			if( hint != null )
+				updateBalloonBorder();
+		}
+
+		private void updateBalloonBorder() {
+			int direction;
+			switch( hint.position ) {
+				case SwingConstants.LEFT:	direction = SwingConstants.RIGHT; break;
+				case SwingConstants.TOP:	direction = SwingConstants.BOTTOM; break;
+				case SwingConstants.RIGHT:	direction = SwingConstants.LEFT; break;
+				case SwingConstants.BOTTOM:	direction = SwingConstants.TOP; break;
+				default: throw new IllegalArgumentException();
+			}
+
+			setBorder( new BalloonBorder( direction, FlatUIUtils.getUIColor( "PopupMenu.borderColor", Color.gray ) ) );
 		}
 
 		void showHint() {
@@ -114,11 +141,6 @@ class HintManager
 				@Override
 				public void updateUI() {
 					super.updateUI();
-
-					setBorder( new FlatDropShadowBorder(
-						UIManager.getColor( "Popup.dropShadowColor" ),
-						UIManager.getInsets( "Popup.dropShadowInsets" ),
-						FlatUIUtils.getUIFloat( "Popup.dropShadowOpacity", 0.5f ) ) );
 
 					// use invokeLater because at this time the UI delegates
 					// of child components are not yet updated
@@ -215,5 +237,128 @@ class HintManager
 		private JLabel hintLabel;
 		private JButton gotItButton;
 		// JFormDesigner - End of variables declaration  //GEN-END:variables
+	}
+
+	//---- class BalloonBorder ------------------------------------------------
+
+	private static class BalloonBorder
+		extends FlatEmptyBorder
+	{
+		private static int ARC = 8;
+		private static int ARROW_XY = 16;
+		private static int ARROW_SIZE = 8;
+		private static int SHADOW_SIZE = 6;
+		private static int SHADOW_TOP_SIZE = 3;
+		private static int SHADOW_SIZE2 = SHADOW_SIZE + 2;
+
+		private final int direction;
+		private final Color borderColor;
+
+		private final Border shadowBorder;
+
+		public BalloonBorder( int direction, Color borderColor ) {
+			super( 1 + SHADOW_TOP_SIZE, 1 + SHADOW_SIZE, 1 + SHADOW_SIZE, 1 + SHADOW_SIZE );
+
+			this.direction = direction;
+			this.borderColor = borderColor;
+
+			switch( direction ) {
+				case SwingConstants.LEFT:	left += ARROW_SIZE; break;
+				case SwingConstants.TOP:	top += ARROW_SIZE; break;
+				case SwingConstants.RIGHT:	right += ARROW_SIZE; break;
+				case SwingConstants.BOTTOM:	bottom += ARROW_SIZE; break;
+			}
+
+			shadowBorder = UIManager.getLookAndFeel() instanceof FlatLaf
+				? new FlatDropShadowBorder(
+					UIManager.getColor( "Popup.dropShadowColor" ),
+					new Insets( SHADOW_SIZE2, SHADOW_SIZE2, SHADOW_SIZE2, SHADOW_SIZE2 ),
+					FlatUIUtils.getUIFloat( "Popup.dropShadowOpacity", 0.5f ) )
+				: null;
+		}
+
+		@Override
+		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+			Graphics2D g2 = (Graphics2D) g.create();
+			try {
+				FlatUIUtils.setRenderingHints( g2 );
+				g2.translate( x, y );
+
+				// shadow coordinates
+				int sx = 0;
+				int sy = 0;
+				int sw = width;
+				int sh = height;
+				int arrowSize = UIScale.scale( ARROW_SIZE );
+				switch( direction ) {
+					case SwingConstants.LEFT:	sx += arrowSize; sw -= arrowSize; break;
+					case SwingConstants.TOP:	sy += arrowSize; sh -= arrowSize; break;
+					case SwingConstants.RIGHT:	sw -= arrowSize; break;
+					case SwingConstants.BOTTOM:	sh -= arrowSize; break;
+				}
+
+				// paint shadow
+				if( shadowBorder != null )
+					shadowBorder.paintBorder( c, g2, sx, sy, sw, sh );
+
+				// create balloon shape
+				int bx = UIScale.scale( SHADOW_SIZE );
+				int by = UIScale.scale( SHADOW_TOP_SIZE );
+				int bw = width - UIScale.scale( SHADOW_SIZE + SHADOW_SIZE );
+				int bh = height - UIScale.scale( SHADOW_TOP_SIZE + SHADOW_SIZE );
+				g2.translate( bx, by );
+				Shape shape = createBalloonShape( bw, bh );
+
+				// fill balloon background
+				g2.setColor( c.getBackground() );
+				g2.fill( shape );
+
+				// paint balloon border
+				g2.setColor( borderColor );
+				g2.setStroke( new BasicStroke( UIScale.scale( 1f ) ) );
+				g2.draw( shape );
+			} finally {
+				g2.dispose();
+			}
+		}
+
+		private Shape createBalloonShape( int width, int height ) {
+			int arc = UIScale.scale( ARC );
+			int xy = UIScale.scale( ARROW_XY );
+			int awh = UIScale.scale( ARROW_SIZE );
+
+			Shape rect;
+			Shape arrow;
+			switch( direction ) {
+				case SwingConstants.LEFT:
+					rect = new RoundRectangle2D.Float( awh, 0, width - 1 - awh, height - 1, arc, arc );
+					arrow = FlatUIUtils.createPath( awh,xy, 0,xy+awh, awh,xy+awh+awh );
+					break;
+
+				case SwingConstants.TOP:
+					rect = new RoundRectangle2D.Float( 0, awh, width - 1, height - 1 - awh, arc, arc );
+					arrow = FlatUIUtils.createPath( xy,awh, xy+awh,0, xy+awh+awh,awh );
+					break;
+
+				case SwingConstants.RIGHT:
+					rect = new RoundRectangle2D.Float( 0, 0, width - 1 - awh, height - 1, arc, arc );
+					int x = width - 1 - awh;
+					arrow = FlatUIUtils.createPath( x,xy, x+awh,xy+awh, x,xy+awh+awh );
+					break;
+
+				case SwingConstants.BOTTOM:
+					rect = new RoundRectangle2D.Float( 0, 0, width - 1, height - 1 - awh, arc, arc );
+					int y = height - 1 - awh;
+					arrow = FlatUIUtils.createPath( xy,y, xy+awh,y+awh, xy+awh+awh,y );
+					break;
+
+				default:
+					throw new RuntimeException();
+			}
+
+			Area area = new Area( rect );
+			area.add( new Area( arrow ) );
+			return area;
+		}
 	}
 }

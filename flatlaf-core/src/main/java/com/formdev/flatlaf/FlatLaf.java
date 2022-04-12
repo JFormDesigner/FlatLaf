@@ -31,26 +31,35 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.LookAndFeel;
 import javax.swing.PopupFactory;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.UIDefaults.ActiveValue;
+import javax.swing.UIDefaults.LazyValue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
@@ -63,9 +72,11 @@ import javax.swing.text.html.HTMLEditorKit;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder;
 import com.formdev.flatlaf.ui.FlatPopupFactory;
 import com.formdev.flatlaf.ui.FlatRootPaneUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
+import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -80,6 +91,8 @@ public abstract class FlatLaf
 	private static final String DESKTOPFONTHINTS = "awt.font.desktophints";
 
 	private static List<Object> customDefaultsSources;
+	private static Map<String, String> globalExtraDefaults;
+	private Map<String, String> extraDefaults;
 
 	private String desktopPropertyName;
 	private String desktopPropertyName2;
@@ -90,8 +103,10 @@ public abstract class FlatLaf
 
 	private PopupFactory oldPopupFactory;
 	private MnemonicHandler mnemonicHandler;
+	private SubMenuUsabilityHelper subMenuUsabilityHelper;
 
 	private Consumer<UIDefaults> postInitialization;
+	private List<Function<Object, Object>> uiDefaultsGetters;
 
 	/**
 	 * Sets the application look and feel to the given LaF
@@ -152,18 +167,19 @@ public abstract class FlatLaf
 	 * Returns whether FlatLaf supports custom window decorations.
 	 * This depends on the operating system and on the used Java runtime.
 	 * <p>
-	 * This method returns {@code true} on Windows 10 (see exception below), {@code false} otherwise.
+	 * This method returns {@code true} on Windows 10/11 (see exception below)
+	 * and on Linux, {@code false} otherwise.
 	 * <p>
-	 * Returns also {@code false} on Windows 10 if:
+	 * Returns also {@code false} on Windows 10/11 if:
 	 * <ul>
-	 * <li>FlatLaf native window border support is available (requires Windows 10)</li>
+	 * <li>FlatLaf native window border support is available (requires Windows 10/11)</li>
 	 * <li>running in
 	 * <a href="https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime">JetBrains Runtime 11 (or later)</a>
 	 * (<a href="https://github.com/JetBrains/JetBrainsRuntime">source code on github</a>)
 	 * and JBR supports custom window decorations
 	 * </li>
 	 * </ul>
-	 * In this cases, custom decorations are enabled by the root pane.
+	 * In these cases, custom decorations are enabled by the root pane.
 	 * Usage of {@link JFrame#setDefaultLookAndFeelDecorated(boolean)} or
 	 * {@link JDialog#setDefaultLookAndFeelDecorated(boolean)} is not necessary.
 	 */
@@ -176,7 +192,7 @@ public abstract class FlatLaf
 			FlatNativeWindowBorder.isSupported() )
 		  return false;
 
-		return SystemInfo.isWindows_10_orLater;
+		return SystemInfo.isWindows_10_orLater || SystemInfo.isLinux;
 	}
 
 	@Override
@@ -229,6 +245,10 @@ public abstract class FlatLaf
 		mnemonicHandler = new MnemonicHandler();
 		mnemonicHandler.install();
 
+		// install submenu usability helper
+		subMenuUsabilityHelper = new SubMenuUsabilityHelper();
+		subMenuUsabilityHelper.install();
+
 		// listen to desktop property changes to update UI if system font or scaling changes
 		if( SystemInfo.isWindows ) {
 			// Windows 10 allows increasing font size independent of scaling:
@@ -257,6 +277,12 @@ public abstract class FlatLaf
 				}
 			};
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
+
+			// make sure that AWT desktop properties are initialized (on Linux)
+			// before invoking toolkit.addPropertyChangeListener()
+			// https://github.com/JFormDesigner/FlatLaf/issues/405#issuecomment-960242342
+			toolkit.getDesktopProperty( "dummy" );
+
 			toolkit.addPropertyChangeListener( desktopPropertyName, desktopPropertyListener );
 			if( desktopPropertyName2 != null )
 				toolkit.addPropertyChangeListener( desktopPropertyName2, desktopPropertyListener );
@@ -300,6 +326,12 @@ public abstract class FlatLaf
 		if( mnemonicHandler != null ) {
 			mnemonicHandler.uninstall();
 			mnemonicHandler = null;
+		}
+
+		// uninstall submenu usability helper
+		if( subMenuUsabilityHelper != null ) {
+			subMenuUsabilityHelper.uninstall();
+			subMenuUsabilityHelper = null;
 		}
 
 		// restore default link color
@@ -350,14 +382,21 @@ public abstract class FlatLaf
 
 	@Override
 	public UIDefaults getDefaults() {
-		UIDefaults defaults = super.getDefaults();
+		// use larger initial capacity to avoid resizing UI defaults hash table
+		// (from 610 to 1221 to 2443 entries) and to save some memory
+		UIDefaults defaults = new FlatUIDefaults( 1500, 0.75f );
+
+		// initialize basic defaults (see super.getDefaults())
+		initClassDefaults( defaults );
+		initSystemColorDefaults( defaults );
+		initComponentDefaults( defaults );
 
 		// add flag that indicates whether the LaF is light or dark
 		// (can be queried without using FlatLaf API)
 		defaults.put( "laf.dark", isDark() );
 
-		// add resource bundle for localized texts
-		defaults.addResourceBundle( "com.formdev.flatlaf.resources.Bundle" );
+		// init resource bundle for localized texts
+		initResourceBundle( defaults, "com.formdev.flatlaf.resources.Bundle" );
 
 		// initialize some defaults (for overriding) that are used in UI delegates,
 		// but are not set in BasicLookAndFeel
@@ -367,6 +406,7 @@ public abstract class FlatLaf
 			"EditorPane.inactiveBackground",
 			"FormattedTextField.disabledBackground",
 			"PasswordField.disabledBackground",
+			"RootPane.background",
 			"Spinner.disabledBackground",
 			"TextArea.disabledBackground",
 			"TextArea.inactiveBackground",
@@ -385,7 +425,8 @@ public abstract class FlatLaf
 			"Spinner.disabledForeground",
 			"ToggleButton.disabledText" );
 		putDefaults( defaults, defaults.getColor( "textText" ),
-			"DesktopIcon.foreground" );
+			"DesktopIcon.foreground",
+			"RootPane.foreground" );
 
 		initFonts( defaults );
 		initIconColors( defaults, isDark() );
@@ -395,7 +436,7 @@ public abstract class FlatLaf
 		// (using defaults.remove() to avoid that lazy value is resolved and icon loaded here)
 		Object icon = defaults.remove( "InternalFrame.icon" );
 		defaults.put( "InternalFrame.icon", icon );
-		defaults.put( "TitlePane.icon", icon );
+		defaults.put( "TitlePane.icon", icon ); // no longer used, but keep for compatibility
 
 		// get addons and sort them by priority
 		ServiceLoader<FlatDefaultsAddon> addonLoader = ServiceLoader.load( FlatDefaultsAddon.class );
@@ -410,6 +451,10 @@ public abstract class FlatLaf
 			UIDefaultsLoader.loadDefaultsFromProperties( lafClassesForDefaultsLoading, addons, getAdditionalDefaults(), isDark(), defaults );
 		else
 			UIDefaultsLoader.loadDefaultsFromProperties( getClass(), addons, getAdditionalDefaults(), isDark(), defaults );
+
+		// setup default font after loading defaults from properties
+		// to allow defining "defaultFont" in properties
+		initDefaultFont( defaults );
 
 		// use Aqua MenuBarUI if Mac screen menubar is enabled
 		if( SystemInfo.isMacOS && Boolean.getBoolean( "apple.laf.useScreenMenuBar" ) ) {
@@ -450,12 +495,76 @@ public abstract class FlatLaf
 	}
 
 	protected Properties getAdditionalDefaults() {
-		return null;
+		if( globalExtraDefaults == null && extraDefaults == null )
+			return null;
+
+		Properties properties = new Properties();
+		if( globalExtraDefaults != null )
+			properties.putAll( globalExtraDefaults );
+		if( extraDefaults != null )
+			properties.putAll( extraDefaults );
+		return properties;
+	}
+
+	private void initResourceBundle( UIDefaults defaults, String bundleName ) {
+		// add resource bundle for localized texts
+		defaults.addResourceBundle( bundleName );
+
+		// Check whether Swing can not load the FlatLaf resource bundle,
+		// which can happen in applications that use some plugin system
+		// and load FlatLaf in a plugin that uses its own classloader.
+		// (e.g. Apache NetBeans)
+		if( defaults.get( "FileChooser.fileNameHeaderText" ) != null )
+			return;
+
+		// load FlatLaf resource bundle and add content to defaults
+		try {
+			ResourceBundle bundle = ResourceBundle.getBundle( bundleName, defaults.getDefaultLocale() );
+
+			Enumeration<String> keys = bundle.getKeys();
+			while( keys.hasMoreElements() ) {
+				String key = keys.nextElement();
+				String value = bundle.getString( key );
+
+				String baseKey = StringUtils.removeTrailing( key, ".textAndMnemonic" );
+				if( baseKey != key ) {
+					String text = value.replace( "&", "" );
+					String mnemonic = null;
+					int index = value.indexOf( '&' );
+					if( index >= 0 )
+						mnemonic = Integer.toString( Character.toUpperCase( value.charAt( index + 1 ) ) );
+
+					defaults.put( baseKey + "Text", text );
+					if( mnemonic != null )
+						defaults.put( baseKey + "Mnemonic", mnemonic );
+				} else
+					defaults.put( key, value );
+			}
+		} catch( MissingResourceException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
 	}
 
 	private void initFonts( UIDefaults defaults ) {
+		// use active value for all fonts to allow changing fonts in all components with:
+		//     UIManager.put( "defaultFont", myFont );
+		// (this is similar as in Nimbus L&F)
+		Object activeFont = new ActiveFont( null, null, -1, 0, 0, 0, 0 );
+
+		// override fonts
+		for( Object key : defaults.keySet() ) {
+			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
+				defaults.put( key, activeFont );
+		}
+
+		// add fonts that are not set in BasicLookAndFeel
+		defaults.put( "RootPane.font", activeFont );
+	}
+
+	private void initDefaultFont( UIDefaults defaults ) {
 		FontUIResource uiFont = null;
 
+		// determine UI font based on operating system
 		if( SystemInfo.isWindows ) {
 			Font winFont = (Font) Toolkit.getDefaultToolkit().getDesktopProperty( "win.messagebox.font" );
 			if( winFont != null ) {
@@ -498,22 +607,20 @@ public abstract class FlatLaf
 		if( uiFont == null )
 			uiFont = createCompositeFont( Font.SANS_SERIF, Font.PLAIN, 12 );
 
-		// increase font size if system property "flatlaf.uiScale" is set
-		uiFont = UIScale.applyCustomScaleFactor( uiFont );
+		// get/remove "defaultFont" from defaults if set in properties files
+		// (use remove() to avoid that ActiveFont.createValue() gets invoked)
+		Object defaultFont = defaults.remove( "defaultFont" );
 
-		// use active value for all fonts to allow changing fonts in all components
-		// (similar as in Nimbus L&F) with:
-		//     UIManager.put( "defaultFont", myFont );
-		Object activeFont = new ActiveFont( 1 );
-
-		// override fonts
-		for( Object key : defaults.keySet() ) {
-			if( key instanceof String && (((String)key).endsWith( ".font" ) || ((String)key).endsWith( "Font" )) )
-				defaults.put( key, activeFont );
+		// use font from OS as base font and derive the UI font from it
+		if( defaultFont instanceof ActiveFont ) {
+			Font baseFont = uiFont;
+			uiFont = ((ActiveFont)defaultFont).derive( baseFont, fontSize -> {
+				return Math.round( fontSize * UIScale.computeFontScaleFactor( baseFont ) );
+			} );
 		}
 
-		// use smaller font for progress bar
-		defaults.put( "ProgressBar.font", new ActiveFont( 0.85f ) );
+		// increase font size if system property "flatlaf.uiScale" is set
+		uiFont = UIScale.applyCustomScaleFactor( uiFont );
 
 		// set default font
 		defaults.put( "defaultFont", uiFont );
@@ -527,11 +634,9 @@ public abstract class FlatLaf
 		return (font instanceof FontUIResource) ? (FontUIResource) font : new FontUIResource( font );
 	}
 
-	/**
-	 * @since 1.1
-	 */
+	/** @since 1.1 */
 	public static ActiveValue createActiveFontValue( float scaleFactor ) {
-		return new ActiveFont( scaleFactor );
+		return new ActiveFont( null, null, -1, 0, 0, 0, scaleFactor );
 	}
 
 	/**
@@ -665,6 +770,9 @@ public abstract class FlatLaf
 	 * and can therefore override all UI defaults.
 	 * <p>
 	 * Invoke this method before setting the look and feel.
+	 * <p>
+	 * If using Java modules, the package must be opened in {@code module-info.java}.
+	 * Otherwise, use {@link #registerCustomDefaultsSource(URL)}.
 	 *
 	 * @param packageName a package name (e.g. "com.myapp.resources")
 	 */
@@ -707,6 +815,32 @@ public abstract class FlatLaf
 	}
 
 	/**
+	 * Registers a package where FlatLaf searches for properties files with custom UI defaults.
+	 * <p>
+	 * See {@link #registerCustomDefaultsSource(String)} for details.
+	 * <p>
+	 * This method is useful if using Java modules and the package containing the properties files
+	 * is not opened in {@code module-info.java}.
+	 * E.g. {@code FlatLaf.registerCustomDefaultsSource( MyApp.class.getResource( "/com/myapp/themes/" ) )}.
+	 *
+	 * @param packageUrl a package URL
+	 * @since 2
+	 */
+	public static void registerCustomDefaultsSource( URL packageUrl ) {
+		if( customDefaultsSources == null )
+			customDefaultsSources = new ArrayList<>();
+		customDefaultsSources.add( packageUrl );
+	}
+
+	/** @since 2 */
+	public static void unregisterCustomDefaultsSource( URL packageUrl ) {
+		if( customDefaultsSources == null )
+			return;
+
+		customDefaultsSources.remove( packageUrl );
+	}
+
+	/**
 	 * Registers a folder where FlatLaf searches for properties files with custom UI defaults.
 	 * <p>
 	 * See {@link #registerCustomDefaultsSource(String)} for details.
@@ -726,6 +860,102 @@ public abstract class FlatLaf
 		customDefaultsSources.remove( folder );
 	}
 
+	/**
+	 * Gets global extra UI defaults; or {@code null}.
+	 *
+	 * @since 2
+	 */
+	public static Map<String, String> getGlobalExtraDefaults() {
+		return globalExtraDefaults;
+	}
+
+	/**
+	 * Sets global extra UI defaults, which are only used when setting up the application look and feel.
+	 * E.g. using {@link UIManager#setLookAndFeel(LookAndFeel)} or {@link #setup(LookAndFeel)}.
+	 * <p>
+	 * The global extra defaults are useful for smaller additional defaults that may change.
+	 * E.g. accent color. Otherwise, FlatLaf properties files should be used.
+	 * See {@link #registerCustomDefaultsSource(String)}.
+	 * <p>
+	 * The keys and values are strings in same format as in FlatLaf properties files.
+	 * <p>
+	 * Sample that setups "FlatLaf Light" theme with red accent color:
+	 * <pre>{@code
+	 * FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#f00" ) );
+	 * FlatLightLaf.setup();
+	 * }</pre>
+	 *
+	 * @see #setExtraDefaults(Map)
+	 * @since 2
+	 */
+	public static void setGlobalExtraDefaults( Map<String, String> globalExtraDefaults ) {
+		FlatLaf.globalExtraDefaults = globalExtraDefaults;
+	}
+
+	/**
+	 * Gets extra UI defaults; or {@code null}.
+	 *
+	 * @since 2
+	 */
+	public Map<String, String> getExtraDefaults() {
+		return extraDefaults;
+	}
+
+	/**
+	 * Sets extra UI defaults, which are only used when setting up the application look and feel.
+	 * E.g. using {@link UIManager#setLookAndFeel(LookAndFeel)} or {@link #setup(LookAndFeel)}.
+	 * <p>
+	 * The extra defaults are useful for smaller additional defaults that may change.
+	 * E.g. accent color. Otherwise, FlatLaf properties files should be used.
+	 * See {@link #registerCustomDefaultsSource(String)}.
+	 * <p>
+	 * The keys and values are strings in same format as in FlatLaf properties files.
+	 * <p>
+	 * Sample that setups "FlatLaf Light" theme with red accent color:
+	 * <pre>{@code
+	 * FlatLaf laf = new FlatLightLaf();
+	 * laf.setExtraDefaults( Collections.singletonMap( "@accentColor", "#f00" ) );
+	 * FlatLaf.setup( laf );
+	 * }</pre>
+	 *
+	 * @see #setGlobalExtraDefaults(Map)
+	 * @since 2
+	 */
+	public void setExtraDefaults( Map<String, String> extraDefaults ) {
+		this.extraDefaults = extraDefaults;
+	}
+
+	/**
+	 * Parses a UI defaults value string and converts it into a binary object.
+	 * <p>
+	 * See: <a href="https://www.formdev.com/flatlaf/properties-files/">https://www.formdev.com/flatlaf/properties-files/</a>
+	 *
+	 * @param key the key, which is used to determine the value type if parameter {@code valueType} is {@code null}
+	 * @param value the value string
+	 * @param valueType the expected value type, or {@code null}
+	 * @return the binary value
+	 * @throws IllegalArgumentException on syntax errors
+	 * @since 2
+	 */
+	public static Object parseDefaultsValue( String key, String value, Class<?> valueType )
+		throws IllegalArgumentException
+	{
+		// resolve variables
+		value = UIDefaultsLoader.resolveValueFromUIManager( value );
+
+		// parse value
+		Object val = UIDefaultsLoader.parseValue( key, value, valueType, null,
+			v -> UIDefaultsLoader.resolveValueFromUIManager( v ), Collections.emptyList() );
+
+		// create actual value if lazy or active
+		if( val instanceof LazyValue )
+			val = ((LazyValue)val).createValue( null );
+		else if( val instanceof ActiveValue )
+			val = ((ActiveValue)val).createValue( null );
+
+		return val;
+	}
+
 	private static void reSetLookAndFeel() {
 		EventQueue.invokeLater( () -> {
 			LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
@@ -733,7 +963,7 @@ public abstract class FlatLaf
 				// re-set current LaF
 				UIManager.setLookAndFeel( lookAndFeel );
 
-				// must fire property change events ourself because old and new LaF are the same
+				// must fire property change events ourselves because old and new LaF are the same
 				PropertyChangeEvent e = new PropertyChangeEvent( UIManager.class, "lookAndFeel", lookAndFeel, lookAndFeel );
 				for( PropertyChangeListener l : UIManager.getPropertyChangeListeners() )
 					l.propertyChange( e );
@@ -777,7 +1007,7 @@ public abstract class FlatLaf
 	/**
 	 * Returns whether native window decorations are supported on current platform.
 	 * <p>
-	 * This requires Windows 10, but may be disabled if running in special environments
+	 * This requires Windows 10/11, but may be disabled if running in special environments
 	 * (JetBrains Projector, Webswing or WinPE) or if loading native library fails.
 	 * If system property {@link FlatSystemProperties#USE_WINDOW_DECORATIONS} is set to
 	 * {@code false}, then this method also returns {@code false}.
@@ -819,12 +1049,23 @@ public abstract class FlatLaf
 
 	/**
 	 * Revalidate and repaint all displayable frames and dialogs.
+	 * <p>
+	 * Useful to update UI after changing {@code TitlePane.menuBarEmbedded}.
 	 *
 	 * @since 1.1.2
 	 */
 	public static void revalidateAndRepaintAllFramesAndDialogs() {
 		for( Window w : Window.getWindows() ) {
 			if( isDisplayableFrameOrDialog( w ) ) {
+				// revalidate menu bar
+				JMenuBar menuBar = (w instanceof JFrame)
+					? ((JFrame)w).getJMenuBar()
+					: (w instanceof JDialog
+						? ((JDialog)w).getJMenuBar()
+						: null);
+				if( menuBar != null )
+					menuBar.revalidate();
+
 				w.revalidate();
 				w.repaint();
 			}
@@ -833,6 +1074,9 @@ public abstract class FlatLaf
 
 	/**
 	 * Repaint all displayable frames and dialogs.
+	 * <p>
+	 * Useful to update UI after changing {@code TitlePane.unifiedBackground},
+	 * {@code MenuItem.selectionType} or {@code Component.hideMnemonics}.
 	 *
 	 * @since 1.1.2
 	 */
@@ -871,45 +1115,271 @@ public abstract class FlatLaf
 		return super.hashCode();
 	}
 
-	//---- class ActiveFont ---------------------------------------------------
+	/**
+	 * Registers a UI defaults getter function that is invoked before the standard getter.
+	 * This allows using different UI defaults for special purposes
+	 * (e.g. using multiple themes at the same time).
+	 * <p>
+	 * The key is passed as parameter to the function.
+	 * If the function returns {@code null}, then the next registered function is invoked.
+	 * If all registered functions return {@code null}, then the current look and feel is asked.
+	 * If the function returns {@link #NULL_VALUE}, then the UI value becomes {@code null}.
+	 *
+	 * @see #unregisterUIDefaultsGetter(Function)
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @since 1.6
+	 */
+	public void registerUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter ) {
+		if( uiDefaultsGetters == null )
+			uiDefaultsGetters = new ArrayList<>();
 
-	private static class ActiveFont
-		implements ActiveValue
+		uiDefaultsGetters.remove( uiDefaultsGetter );
+		uiDefaultsGetters.add( uiDefaultsGetter );
+
+		// disable shared UIs
+		FlatUIUtils.setUseSharedUIs( false );
+	}
+
+	/**
+	 * Unregisters a UI defaults getter function that was invoked before the standard getter.
+	 *
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @since 1.6
+	 */
+	public void unregisterUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter ) {
+		if( uiDefaultsGetters == null )
+			return;
+
+		uiDefaultsGetters.remove( uiDefaultsGetter );
+
+		// enable shared UIs
+		if( uiDefaultsGetters.isEmpty() )
+			FlatUIUtils.setUseSharedUIs( true );
+	}
+
+	/**
+	 * Registers a UI defaults getter function that is invoked before the standard getter,
+	 * runs the given runnable and unregisters the UI defaults getter function again.
+	 * This allows using different UI defaults for special purposes
+	 * (e.g. using multiple themes at the same time).
+	 * If the current look and feel is not FlatLaf, then the getter is ignored and
+	 * the given runnable invoked.
+	 * <p>
+	 * The key is passed as parameter to the function.
+	 * If the function returns {@code null}, then the next registered function is invoked.
+	 * If all registered functions return {@code null}, then the current look and feel is asked.
+	 * If the function returns {@link #NULL_VALUE}, then the UI value becomes {@code null}.
+	 * <p>
+	 * Example:
+	 * <pre>{@code
+	 * // create secondary theme
+	 * UIDefaults darkDefaults = new FlatDarkLaf().getDefaults();
+	 *
+	 * // create panel using secondary theme
+	 * FlatLaf.runWithUIDefaultsGetter( key -> {
+	 *     Object value = darkDefaults.get( key );
+	 *     return (value != null) ? value : FlatLaf.NULL_VALUE;
+	 * }, () -> {
+	 *     // TODO create components that should use secondary theme here
+	 * } );
+	 * }</pre>
+	 *
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @see #unregisterUIDefaultsGetter(Function)
+	 * @since 1.6
+	 */
+	public static void runWithUIDefaultsGetter( Function<Object, Object> uiDefaultsGetter, Runnable runnable ) {
+		LookAndFeel laf = UIManager.getLookAndFeel();
+		if( laf instanceof FlatLaf ) {
+			((FlatLaf)laf).registerUIDefaultsGetter( uiDefaultsGetter );
+			try {
+				runnable.run();
+			} finally {
+				((FlatLaf)laf).unregisterUIDefaultsGetter( uiDefaultsGetter );
+			}
+		} else
+			runnable.run();
+	}
+
+	/**
+	 * Special value returned by functions used in {@link #runWithUIDefaultsGetter(Function, Runnable)}
+	 * or {@link #registerUIDefaultsGetter(Function)} to indicate that the UI value should
+	 * become {@code null}.
+	 *
+	 * @see #runWithUIDefaultsGetter(Function, Runnable)
+	 * @see #registerUIDefaultsGetter(Function)
+	 * @since 1.6
+	 */
+	public static final Object NULL_VALUE = new Object();
+
+	//---- class FlatUIDefaults -----------------------------------------------
+
+	private class FlatUIDefaults
+		extends UIDefaults
 	{
-		private final float scaleFactor;
-
-		// cache (scaled) font
-		private Font font;
-		private Font lastDefaultFont;
-
-		ActiveFont( float scaleFactor ) {
-			this.scaleFactor = scaleFactor;
+		FlatUIDefaults( int initialCapacity, float loadFactor ) {
+			super( initialCapacity, loadFactor );
 		}
 
 		@Override
-		public Object createValue( UIDefaults table ) {
-			Font defaultFont = UIManager.getFont( "defaultFont" );
+		public Object get( Object key ) {
+			Object value = getValue( key );
+			return (value != null) ? (value != NULL_VALUE ? value : null) : super.get( key );
+		}
 
-			// fallback (to avoid NPE in case that this is used in another Laf)
-			if( defaultFont == null )
-				defaultFont = UIManager.getFont( "Label.font" );
+		@Override
+		public Object get( Object key, Locale l ) {
+			Object value = getValue( key );
+			return (value != null) ? (value != NULL_VALUE ? value : null) : super.get( key, l );
+		}
 
-			if( lastDefaultFont != defaultFont ) {
-				lastDefaultFont = defaultFont;
+		private Object getValue( Object key ) {
+			// use local variable for getters to avoid potential multi-threading issues
+			List<Function<Object, Object>> uiDefaultsGetters = FlatLaf.this.uiDefaultsGetters;
 
-				if( scaleFactor != 1 ) {
-					// scale font
-					int newFontSize = Math.round( defaultFont.getSize() * scaleFactor );
-					font = new FontUIResource( defaultFont.deriveFont( (float) newFontSize ) );
-				} else {
-					// make sure that font is a UIResource for LaF switching
-					font = (defaultFont instanceof UIResource)
-						? defaultFont
-						: new FontUIResource( defaultFont );
-				}
+			if( uiDefaultsGetters == null )
+				return null;
+
+			for( int i = uiDefaultsGetters.size() - 1; i >= 0; i-- ) {
+				Object value = uiDefaultsGetters.get( i ).apply( key );
+				if( value != null )
+					return value;
+			}
+
+			return null;
+		}
+	}
+
+	//---- class ActiveFont ---------------------------------------------------
+
+	static class ActiveFont
+		implements ActiveValue
+	{
+		private final String baseFontKey;
+		private final List<String> families;
+		private final int style;
+		private final int styleChange;
+		private final int absoluteSize;
+		private final int relativeSize;
+		private final float scaleSize;
+
+		// cache (scaled/derived) font
+		private FontUIResource font;
+		private Font lastBaseFont;
+
+		private boolean inCreateValue;
+
+		/**
+		 * @param families list of font families, or {@code null}
+		 * @param style new style of font, or {@code -1}
+		 * @param styleChange derive style of base font; or {@code 0}
+		 *                    (the lower 16 bits are added; the upper 16 bits are removed)
+		 * @param absoluteSize new size of font, or {@code 0}
+		 * @param relativeSize added to size of base font, or {@code 0}
+		 * @param scaleSize multiply size of base font, or {@code 0}
+		 */
+		ActiveFont( String baseFontKey, List<String> families, int style, int styleChange,
+			int absoluteSize, int relativeSize, float scaleSize )
+		{
+			this.baseFontKey = baseFontKey;
+			this.families = families;
+			this.style = style;
+			this.styleChange = styleChange;
+			this.absoluteSize = absoluteSize;
+			this.relativeSize = relativeSize;
+			this.scaleSize = scaleSize;
+		}
+
+		// using synchronized to avoid exception if invoked at the same time on multiple threads
+		@Override
+		public synchronized Object createValue( UIDefaults table ) {
+			if( inCreateValue )
+				throw new IllegalStateException( "FlatLaf: endless recursion in font" );
+
+			Font baseFont = null;
+
+			inCreateValue = true;
+			try {
+				if( baseFontKey != null )
+					baseFont = (Font) UIDefaultsLoader.lazyUIManagerGet( baseFontKey );
+
+				if( baseFont == null )
+					baseFont = UIManager.getFont( "defaultFont" );
+
+				// fallback (to avoid NPE in case that this is used in another Laf)
+				if( baseFont == null )
+					baseFont = UIManager.getFont( "Label.font" );
+			} finally {
+				inCreateValue = false;
+			}
+
+			if( lastBaseFont != baseFont ) {
+				lastBaseFont = baseFont;
+
+				font = derive( baseFont, fontSize -> UIScale.scale( fontSize ) );
 			}
 
 			return font;
+		}
+
+		FontUIResource derive( Font baseFont, IntUnaryOperator scale ) {
+			int baseStyle = baseFont.getStyle();
+			int baseSize = baseFont.getSize();
+
+			// new style
+			int newStyle = (style != -1)
+				? style
+				: (styleChange != 0)
+					? baseStyle & ~((styleChange >> 16) & 0xffff) | (styleChange & 0xffff)
+					: baseStyle;
+
+			// new size
+			int newSize = (absoluteSize > 0)
+				? scale.applyAsInt( absoluteSize )
+				: (relativeSize != 0)
+					? (baseSize + scale.applyAsInt( relativeSize ))
+					: (scaleSize > 0)
+						? Math.round( baseSize * scaleSize )
+						: baseSize;
+			if( newSize <= 0 )
+				newSize = 1;
+
+			// create font for family
+			if( families != null && !families.isEmpty() ) {
+				for( String family : families ) {
+					Font font = createCompositeFont( family, newStyle, newSize );
+					if( !isFallbackFont( font ) || family.equalsIgnoreCase( Font.DIALOG ) )
+						return toUIResource( font );
+				}
+			}
+
+			// derive font
+			if( newStyle != baseStyle || newSize != baseSize ) {
+				// hack for font "Ubuntu Medium" on Linux, which curiously belongs
+				// to family "Ubuntu Light" and using deriveFont() would create a light font
+				if( "Ubuntu Medium".equalsIgnoreCase( baseFont.getName() ) &&
+					"Ubuntu Light".equalsIgnoreCase( baseFont.getFamily() ) )
+				{
+					Font font = createCompositeFont( "Ubuntu Medium", newStyle, newSize );
+					if( !isFallbackFont( font ) )
+						return toUIResource( font );
+				}
+
+				return toUIResource( baseFont.deriveFont( newStyle, newSize ) );
+			} else
+				return toUIResource( baseFont );
+		}
+
+		private FontUIResource toUIResource( Font font ) {
+			// make sure that font is a UIResource for LaF switching
+			return (font instanceof FontUIResource)
+				? (FontUIResource) font
+				: new FontUIResource( font );
+		}
+
+		private boolean isFallbackFont( Font font ) {
+			return Font.DIALOG.equalsIgnoreCase( font.getFamily() );
 		}
 	}
 

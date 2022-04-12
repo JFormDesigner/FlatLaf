@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,16 +47,98 @@ public class StringUtils
 	}
 
 	public static List<String> split( String str, char delim ) {
-		ArrayList<String> strs = new ArrayList<>();
+		return split( str, delim, false, false );
+	}
+
+	/**
+	 * Splits a string at the specified delimiter.
+	 * If trimming is enabled, then leading and trailing whitespace characters are removed.
+	 * If excludeEmpty is {@code true}, then only non-empty strings are returned.
+	 *
+	 * @since 2
+	 */
+	public static List<String> split( String str, char delim, boolean trim, boolean excludeEmpty ) {
 		int delimIndex = str.indexOf( delim );
+		if( delimIndex < 0 ) {
+			if( trim )
+				str = str.trim();
+			return !excludeEmpty || !str.isEmpty()
+				? Collections.singletonList( str )
+				: Collections.emptyList();
+		}
+
+		ArrayList<String> strs = new ArrayList<>();
 		int index = 0;
 		while( delimIndex >= 0 ) {
-			strs.add( str.substring( index, delimIndex ) );
+			add( strs, str, index, delimIndex, trim, excludeEmpty );
 			index = delimIndex + 1;
 			delimIndex = str.indexOf( delim, index );
 		}
-		strs.add( str.substring( index ) );
+		add( strs, str, index, str.length(), trim, excludeEmpty );
 
 		return strs;
+	}
+
+	private static void add( List<String> strs, String str, int beginIndex, int endIndex,
+		boolean trim, boolean excludeEmpty )
+	{
+		if( trim ) {
+			beginIndex = trimBegin( str, beginIndex, endIndex );
+			endIndex = trimEnd( str, beginIndex, endIndex );
+		}
+
+		if( !excludeEmpty || endIndex > beginIndex )
+			strs.add( str.substring( beginIndex, endIndex ) );
+	}
+
+	/**
+	 * This is equal to {@code str.substring( beginIndex, endIndex ).trim()},
+	 * but avoids temporary untrimmed substring allocation.
+	 * If the trimmed string is empty, a shared empty string is returned.
+	 *
+	 * @since 2
+	 */
+	public static String substringTrimmed( String str, int beginIndex ) {
+		return substringTrimmed( str, beginIndex, str.length() );
+	}
+
+	/**
+	 * This is equal to {@code str.substring( beginIndex ).trim()},
+	 * but avoids temporary untrimmed substring allocation.
+	 * If the trimmed string is empty, a shared empty string is returned.
+	 *
+	 * @since 2
+	 */
+	public static String substringTrimmed( String str, int beginIndex, int endIndex ) {
+		beginIndex = trimBegin( str, beginIndex, endIndex );
+		endIndex = trimEnd( str, beginIndex, endIndex );
+		return (endIndex > beginIndex) ? str.substring( beginIndex, endIndex ) : "";
+	}
+
+	/**
+	 * This is equal to {@code str.trim().isEmpty()},
+	 * but avoids temporary trimmed substring allocation.
+	 *
+	 * @since 2
+	 */
+	public static boolean isTrimmedEmpty( String str ) {
+		int length = str.length();
+		int beginIndex = trimBegin( str, 0, length );
+		int endIndex = trimEnd( str, beginIndex, length );
+		return beginIndex >= endIndex;
+	}
+
+	private static int trimBegin( String str, int beginIndex, int endIndex ) {
+		// skip leading whitespace
+		while( beginIndex < endIndex && str.charAt( beginIndex ) <= ' ' )
+			beginIndex++;
+		return beginIndex;
+	}
+
+	private static int trimEnd( String str, int beginIndex, int endIndex ) {
+		// skip trailing whitespace
+		while( beginIndex < endIndex && str.charAt( endIndex - 1 ) <= ' ' )
+			endIndex--;
+		return endIndex;
 	}
 }

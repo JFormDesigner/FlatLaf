@@ -75,7 +75,7 @@
       "nonEditableBackground": "secondaryBackground"
     },
     "CompletionPopup": {
-      "selectionBackground": "selectionBackground",
+      "selectionBackground": "selectionInactiveBackground",
       "selectionInactiveBackground": "selectionInactiveBackground",
       "matchForeground": "accentColor"
     },
@@ -256,10 +256,8 @@
       "selectionInactiveBackground": "selectionInactiveBackground"
     },
     "ValidationTooltip": {
-      "errorBackground": "#ff5554",
-      "errorBorderColor": "#ff5554",
-      "warningBorderColor": "#ffb86c",
-      "warningBackground": "#ffb86c"
+      "errorBackground": "#4c273c",
+      "warningBackground": "#4f4b41"
     },
     "VersionControl": {
       "FileHistory": {

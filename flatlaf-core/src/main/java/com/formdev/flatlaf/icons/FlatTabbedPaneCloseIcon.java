@@ -23,8 +23,11 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.util.Map;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -47,39 +50,49 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatTabbedPaneCloseIcon
 	extends FlatAbstractIcon
 {
-	protected final Dimension size = UIManager.getDimension( "TabbedPane.closeSize" );
-	protected final int arc = UIManager.getInt( "TabbedPane.closeArc" );
-	protected final float crossPlainSize = FlatUIUtils.getUIFloat( "TabbedPane.closeCrossPlainSize", 7.5f );
-	protected final float crossFilledSize = FlatUIUtils.getUIFloat( "TabbedPane.closeCrossFilledSize", crossPlainSize );
-	protected final float closeCrossLineWidth = FlatUIUtils.getUIFloat( "TabbedPane.closeCrossLineWidth", 1f );
-	protected final Color background = UIManager.getColor( "TabbedPane.closeBackground" );
-	protected final Color foreground = UIManager.getColor( "TabbedPane.closeForeground" );
-	protected final Color hoverBackground = UIManager.getColor( "TabbedPane.closeHoverBackground" );
-	protected final Color hoverForeground = UIManager.getColor( "TabbedPane.closeHoverForeground" );
-	protected final Color pressedBackground = UIManager.getColor( "TabbedPane.closePressedBackground" );
-	protected final Color pressedForeground = UIManager.getColor( "TabbedPane.closePressedForeground" );
+	@Styleable protected Dimension closeSize = UIManager.getDimension( "TabbedPane.closeSize" );
+	@Styleable protected int closeArc = UIManager.getInt( "TabbedPane.closeArc" );
+	@Styleable protected float closeCrossPlainSize = FlatUIUtils.getUIFloat( "TabbedPane.closeCrossPlainSize", 7.5f );
+	@Styleable protected float closeCrossFilledSize = FlatUIUtils.getUIFloat( "TabbedPane.closeCrossFilledSize", closeCrossPlainSize );
+	@Styleable protected float closeCrossLineWidth = FlatUIUtils.getUIFloat( "TabbedPane.closeCrossLineWidth", 1f );
+	@Styleable protected Color closeBackground = UIManager.getColor( "TabbedPane.closeBackground" );
+	@Styleable protected Color closeForeground = UIManager.getColor( "TabbedPane.closeForeground" );
+	@Styleable protected Color closeHoverBackground = UIManager.getColor( "TabbedPane.closeHoverBackground" );
+	@Styleable protected Color closeHoverForeground = UIManager.getColor( "TabbedPane.closeHoverForeground" );
+	@Styleable protected Color closePressedBackground = UIManager.getColor( "TabbedPane.closePressedBackground" );
+	@Styleable protected Color closePressedForeground = UIManager.getColor( "TabbedPane.closePressedForeground" );
 
 	public FlatTabbedPaneCloseIcon() {
 		super( 16, 16, null );
 	}
 
+	/** @since 2 */
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	/** @since 2 */
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
 		// paint background
-		Color bg = FlatButtonUI.buttonStateColor( c, background, null, null, hoverBackground, pressedBackground );
+		Color bg = FlatButtonUI.buttonStateColor( c, closeBackground, null, null, closeHoverBackground, closePressedBackground );
 		if( bg != null ) {
 			g.setColor( FlatUIUtils.deriveColor( bg, c.getBackground() ) );
-			g.fillRoundRect( (width - size.width) / 2, (height - size.height) / 2,
-				size.width, size.height, arc, arc );
+			g.fillRoundRect( (width - closeSize.width) / 2, (height - closeSize.height) / 2,
+				closeSize.width, closeSize.height, closeArc, closeArc );
 		}
 
 		// set cross color
-		Color fg = FlatButtonUI.buttonStateColor( c, foreground, null, null, hoverForeground, pressedForeground );
+		Color fg = FlatButtonUI.buttonStateColor( c, closeForeground, null, null, closeHoverForeground, closePressedForeground );
 		g.setColor( FlatUIUtils.deriveColor( fg, c.getForeground() ) );
 
 		float mx = width / 2;
 		float my = height / 2;
-		float r = ((bg != null) ? crossFilledSize : crossPlainSize) / 2;
+		float r = ((bg != null) ? closeCrossFilledSize : closeCrossPlainSize) / 2;
 
 		// paint cross
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );

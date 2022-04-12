@@ -21,7 +21,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.TableHeaderUI;
+import javax.swing.table.JTableHeader;
+import com.formdev.flatlaf.ui.FlatTableHeaderUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 
 /**
@@ -35,8 +39,8 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 public class FlatAscendingSortIcon
 	extends FlatAbstractIcon
 {
-	protected final boolean chevron = FlatUIUtils.isChevron( UIManager.getString( "Component.arrowType" ) );
-	protected final Color sortIconColor = UIManager.getColor( "Table.sortIconColor" );
+	protected boolean chevron = FlatUIUtils.isChevron( UIManager.getString( "Component.arrowType" ) );
+	protected Color sortIconColor = UIManager.getColor( "Table.sortIconColor" );
 
 	public FlatAscendingSortIcon() {
 		super( 10, 5, null );
@@ -44,7 +48,28 @@ public class FlatAscendingSortIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
+		boolean chevron = this.chevron;
+		Color sortIconColor = this.sortIconColor;
+
+		// Because this icon is always shared for all table headers,
+		// get icon specific style from FlatTableHeaderUI.
+		JTableHeader tableHeader = (JTableHeader) SwingUtilities.getAncestorOfClass( JTableHeader.class, c );
+		if( tableHeader != null ) {
+			TableHeaderUI ui = tableHeader.getUI();
+			if( ui instanceof FlatTableHeaderUI ) {
+				FlatTableHeaderUI fui = (FlatTableHeaderUI) ui;
+				if( fui.arrowType != null )
+					chevron = FlatUIUtils.isChevron( fui.arrowType );
+				if( fui.sortIconColor != null )
+					sortIconColor = fui.sortIconColor;
+			}
+		}
+
 		g.setColor( sortIconColor );
+		paintArrow( c, g, chevron );
+	}
+
+	protected void paintArrow( Component c, Graphics2D g, boolean chevron ) {
 		if( chevron ) {
 			// chevron arrow
 			Path2D path = FlatUIUtils.createPath( false, 1,4, 5,0, 9,4 );

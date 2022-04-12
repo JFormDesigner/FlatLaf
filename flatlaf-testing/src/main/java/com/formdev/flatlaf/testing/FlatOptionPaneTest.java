@@ -33,6 +33,7 @@ public class FlatOptionPaneTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatOptionPaneTest" );
+			frame.setIconImage( new ImageIcon( FlatOptionPaneTest.class.getResource( "/com/formdev/flatlaf/testing/test16.png" ) ).getImage() );
 			frame.showFrame( FlatOptionPaneTest::new );
 		} );
 	}
@@ -54,6 +55,10 @@ public class FlatOptionPaneTest
 		} );
 	}
 
+	private void showTitleBarIcon() {
+		UIManager.put( "OptionPane.showIcon", showTitleBarIconCheckBox.isSelected() );
+	}
+
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		ScrollablePanel panel9 = new ScrollablePanel();
@@ -61,6 +66,7 @@ public class FlatOptionPaneTest
 		JPanel panel1 = new JPanel();
 		JOptionPane plainOptionPane = new JOptionPane();
 		plainShowDialogLabel = new FlatOptionPaneTest.ShowDialogLinkLabel();
+		showTitleBarIconCheckBox = new JCheckBox();
 		JLabel errorLabel = new JLabel();
 		JPanel panel2 = new JPanel();
 		JOptionPane errorOptionPane = new JOptionPane();
@@ -89,6 +95,10 @@ public class FlatOptionPaneTest
 		JPanel panel6 = new JPanel();
 		customOptionPane = new JOptionPane();
 		FlatOptionPaneTest.ShowDialogLinkLabel customShowDialogLabel = new FlatOptionPaneTest.ShowDialogLinkLabel();
+		JLabel rightToLeftLabel = new JLabel();
+		JPanel panel10 = new JPanel();
+		JOptionPane rightToLeftOptionPane = new JOptionPane();
+		rightToLeftShowDialogLabel = new FlatOptionPaneTest.ShowDialogLinkLabel();
 
 		//======== this ========
 		setBorder(BorderFactory.createEmptyBorder());
@@ -96,12 +106,13 @@ public class FlatOptionPaneTest
 		//======== panel9 ========
 		{
 			panel9.setLayout(new MigLayout(
-				"flowy,ltr,insets dialog,hidemode 3",
+				"ltr,insets dialog,hidemode 3",
 				// columns
 				"[]" +
 				"[]" +
 				"[fill]",
 				// rows
+				"[top]" +
 				"[top]" +
 				"[top]" +
 				"[top]" +
@@ -129,7 +140,12 @@ public class FlatOptionPaneTest
 			//---- plainShowDialogLabel ----
 			plainShowDialogLabel.setOptionPane(plainOptionPane);
 			plainShowDialogLabel.setTitleLabel(plainLabel);
-			panel9.add(plainShowDialogLabel, "cell 2 0");
+			panel9.add(plainShowDialogLabel, "cell 1 0");
+
+			//---- showTitleBarIconCheckBox ----
+			showTitleBarIconCheckBox.setText("Show window title bar icon");
+			showTitleBarIconCheckBox.addActionListener(e -> showTitleBarIcon());
+			panel9.add(showTitleBarIconCheckBox, "cell 2 0");
 
 			//---- errorLabel ----
 			errorLabel.setText("Error");
@@ -151,7 +167,7 @@ public class FlatOptionPaneTest
 			//---- errorShowDialogLabel ----
 			errorShowDialogLabel.setTitleLabel(errorLabel);
 			errorShowDialogLabel.setOptionPane(errorOptionPane);
-			panel9.add(errorShowDialogLabel, "cell 2 1");
+			panel9.add(errorShowDialogLabel, "cell 1 1");
 
 			//---- informationLabel ----
 			informationLabel.setText("Information");
@@ -173,7 +189,7 @@ public class FlatOptionPaneTest
 			//---- informationShowDialogLabel ----
 			informationShowDialogLabel.setOptionPane(informationOptionPane);
 			informationShowDialogLabel.setTitleLabel(informationLabel);
-			panel9.add(informationShowDialogLabel, "cell 2 2");
+			panel9.add(informationShowDialogLabel, "cell 1 2");
 
 			//---- questionLabel ----
 			questionLabel.setText("Question");
@@ -217,7 +233,7 @@ public class FlatOptionPaneTest
 			//---- warningShowDialogLabel ----
 			warningShowDialogLabel.setOptionPane(warningOptionPane);
 			warningShowDialogLabel.setTitleLabel(warningLabel);
-			panel9.add(warningShowDialogLabel, "cell 2 4");
+			panel9.add(warningShowDialogLabel, "cell 1 4");
 
 			//---- inputLabel ----
 			inputLabel.setText("Input");
@@ -239,7 +255,7 @@ public class FlatOptionPaneTest
 			//---- inputShowDialogLabel ----
 			inputShowDialogLabel.setOptionPane(inputOptionPane);
 			inputShowDialogLabel.setTitleLabel(inputLabel);
-			panel9.add(inputShowDialogLabel, "cell 2 5");
+			panel9.add(inputShowDialogLabel, "cell 1 5");
 
 			//---- inputIconLabel ----
 			inputIconLabel.setText("Input + icon");
@@ -262,7 +278,7 @@ public class FlatOptionPaneTest
 			//---- inputIconShowDialogLabel ----
 			inputIconShowDialogLabel.setTitleLabel(inputIconLabel);
 			inputIconShowDialogLabel.setOptionPane(inputIconOptionPane);
-			panel9.add(inputIconShowDialogLabel, "cell 2 6");
+			panel9.add(inputIconShowDialogLabel, "cell 1 6");
 
 			//---- customLabel ----
 			customLabel.setText("Custom");
@@ -282,7 +298,29 @@ public class FlatOptionPaneTest
 			//---- customShowDialogLabel ----
 			customShowDialogLabel.setOptionPane(customOptionPane);
 			customShowDialogLabel.setTitleLabel(customLabel);
-			panel9.add(customShowDialogLabel, "cell 2 7");
+			panel9.add(customShowDialogLabel, "cell 1 7");
+
+			//---- rightToLeftLabel ----
+			rightToLeftLabel.setText("Right-to-left:");
+			panel9.add(rightToLeftLabel, "cell 0 8");
+
+			//======== panel10 ========
+			{
+				panel10.setBorder(LineBorder.createGrayLineBorder());
+				panel10.setLayout(new BorderLayout());
+
+				//---- rightToLeftOptionPane ----
+				rightToLeftOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+				rightToLeftOptionPane.setMessage("\u0627\u0644\u0645\u0627\u062f\u0629 1 \u064a\u0648\u0644\u062f \u062c\u0645\u064a\u0639 \u0627\u0644\u0646\u0627\u0633 \u0623\u062d\u0631\u0627\u0631\u064b\u0627 \u0645\u062a\u0633\u0627\u0648\u064a\u0646 \u0641\u064a \u0627\u0644\u0643\u0631\u0627\u0645\u0629 \u0648\u0627\u0644\u062d\u0642\u0648\u0642. \u0648\u0642\u062f \u0648\u0647\u0628\u0648\u0627 \u0639\u0642\u0644\u0627\u064b \u0648\u0636\u0645\u064a\u0631\u064b\u0627 \u0648\u0639\u0644\u064a\u0647\u0645 \u0623\u0646 \u064a\u0639\u0627\u0645\u0644 \u0628\u0639\u0636\u0647\u0645 \u0628\u0639\u0636\u064b\u0627 \u0628\u0631\u0648\u062d \u0627\u0644\u0625\u062e\u0627\u0621.\n\u0627\u0644\u0645\u0627\u062f\u0629 1 \u064a\u0648\u0644\u062f \u062c\u0645\u064a\u0639 \u0627\u0644\u0646\u0627\u0633 \u0623\u062d\u0631\u0627\u0631\u064b\u0627 \u0645\u062a\u0633\u0627\u0648\u064a\u0646 \u0641\u064a \u0627\u0644\u0643\u0631\u0627\u0645\u0629 \u0648\u0627\u0644\u062d\u0642\u0648\u0642. \u0648\u0642\u062f \u0648\u0647\u0628\u0648\u0627 \u0639\u0642\u0644\u0627\u064b \u0648\u0636\u0645\u064a\u0631\u064b\u0627 \u0648\u0639\u0644\u064a\u0647\u0645 \u0623\u0646 \u064a\u0639\u0627\u0645\u0644 \u0628\u0639\u0636\u0647\u0645 \u0628\u0639\u0636\u064b\u0627 \u0628\u0631\u0648\u062d \u0627\u0644\u0625\u062e\u0627\u0621.\n\n\u0627\u0644\u0645\u0627\u062f\u0629 1 \u064a\u0648\u0644\u062f \u062c\u0645\u064a\u0639 \u0627\u0644\u0646\u0627\u0633 \u0623\u062d\u0631\u0627\u0631\u064b\u0627 \u0645\u062a\u0633\u0627\u0648\u064a\u0646 \u0641\u064a \u0627\u0644\u0643\u0631\u0627\u0645\u0629 \n\u0648\u0627\u0644\u062d\u0642\u0648\u0642. \u0648\u0642\u062f \u0648\u0647\u0628\u0648\u0627 \u0639\u0642\u0644\u0627\u064b \u0648\u0636\u0645\u064a\u0631\u064b\u0627 \u0648\u0639\u0644\u064a\u0647\u0645 \u0623\u0646 \u064a\u0639\u0627\u0645\u0644 \u0628\u0639\u0636\u0647\u0645 \u0628\u0639\u0636\u064b\u0627 \u0628\u0631\u0648\u062d \u0627\u0644\u0625\u062e\u0627\u0621.");
+				rightToLeftOptionPane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+				panel10.add(rightToLeftOptionPane, BorderLayout.CENTER);
+			}
+			panel9.add(panel10, "cell 1 8");
+
+			//---- rightToLeftShowDialogLabel ----
+			rightToLeftShowDialogLabel.setOptionPane(rightToLeftOptionPane);
+			rightToLeftShowDialogLabel.setTitleLabel(rightToLeftLabel);
+			panel9.add(rightToLeftShowDialogLabel, "cell 2 8");
 		}
 		setViewportView(panel9);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -290,9 +328,11 @@ public class FlatOptionPaneTest
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private FlatOptionPaneTest.ShowDialogLinkLabel plainShowDialogLabel;
+	private JCheckBox showTitleBarIconCheckBox;
 	private FlatOptionPaneTest.ShowDialogLinkLabel errorShowDialogLabel;
 	private FlatOptionPaneTest.ShowDialogLinkLabel informationShowDialogLabel;
 	private JOptionPane customOptionPane;
+	private FlatOptionPaneTest.ShowDialogLinkLabel rightToLeftShowDialogLabel;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class ShowDialogLinkLabel ------------------------------------------
@@ -305,6 +345,7 @@ public class FlatOptionPaneTest
 
 		ShowDialogLinkLabel() {
 			setText( "<html><a href=\"#\">Show dialog</a></html>" );
+			setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
 
 			addMouseListener( new MouseAdapter() {
 				@Override
@@ -315,9 +356,15 @@ public class FlatOptionPaneTest
 		}
 
 		private void showDialog() {
+			Component parent = SwingUtilities.windowForComponent( this );
+
+			// use optionPane as parent if component orientation is different
+			if( parent.getComponentOrientation().isLeftToRight() != optionPane.getComponentOrientation().isLeftToRight() )
+				parent = optionPane;
+
 			if( optionPane.getWantsInput() ) {
 				JOptionPane.showInputDialog(
-					getParent(),
+					parent,
 					optionPane.getMessage(),
 					titleLabel.getText() + " Title",
 					optionPane.getMessageType(),
@@ -326,7 +373,7 @@ public class FlatOptionPaneTest
 					null );
 			} else {
 				JOptionPane.showOptionDialog(
-					getParent(),
+					parent,
 					optionPane.getMessage(),
 					titleLabel.getText() + " Title",
 					optionPane.getOptionType(),

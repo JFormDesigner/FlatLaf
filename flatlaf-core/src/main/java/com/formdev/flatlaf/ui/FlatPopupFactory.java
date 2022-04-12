@@ -16,10 +16,12 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -33,6 +35,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.swing.JComponent;
@@ -44,6 +47,7 @@ import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -120,6 +124,10 @@ public class FlatPopupFactory
 				popupWindow.getGraphicsConfiguration() == owner.getGraphicsConfiguration() )
 			  return popup;
 
+			// avoid endless loop (should newer happen; PopupFactory cache size is 5)
+			if( ++count > 10 )
+				return popup;
+
 			// remove contents component from popup window
 			if( popupWindow instanceof JWindow )
 				((JWindow)popupWindow).getContentPane().removeAll();
@@ -127,10 +135,6 @@ public class FlatPopupFactory
 			// dispose unused popup
 			// (do not invoke popup.hide() because this would cache the popup window)
 			popupWindow.dispose();
-
-			// avoid endless loop (should newer happen; PopupFactory cache size is 5)
-			if( ++count > 10 )
-				return popup;
 		}
 	}
 
@@ -139,7 +143,7 @@ public class FlatPopupFactory
 	 * <p>
 	 * On a dual screen setup, where screens use different scale factors, it may happen
 	 * that the window location changes when showing a heavy weight popup window.
-	 * E.g. when opening an dialog on the secondary screen and making combobox popup visible.
+	 * E.g. when opening a dialog on the secondary screen and making combobox popup visible.
 	 * <p>
 	 * This is a workaround for https://bugs.openjdk.java.net/browse/JDK-8224608
 	 */
@@ -218,7 +222,7 @@ public class FlatPopupFactory
 	 * and corrects the y-location so that the tooltip is placed above the mouse location.
 	 */
 	private Point fixToolTipLocation( Component owner, Component contents, int x, int y ) {
-		if( !(contents instanceof JToolTip) || !wasInvokedFromToolTipManager() )
+		if( !(contents instanceof JToolTip) || !wasInvokedFromToolTipManager() || hasTipLocation( owner ) )
 			return null;
 
 		PointerInfo pointerInfo = MouseInfo.getPointerInfo();
@@ -260,13 +264,36 @@ public class FlatPopupFactory
 	}
 
 	private boolean wasInvokedFromToolTipManager() {
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-		for( StackTraceElement stackTraceElement : stackTrace ) {
-			if( "javax.swing.ToolTipManager".equals( stackTraceElement.getClassName() ) &&
-				"showTipWindow".equals( stackTraceElement.getMethodName() ) )
-			  return true;
+		return StackUtils.wasInvokedFrom( ToolTipManager.class.getName(), "showTipWindow", 8 );
+	}
+
+	/**
+	 * Checks whether the owner component returns a tooltip location in
+	 * JComponent.getToolTipLocation(MouseEvent).
+	 */
+	private boolean hasTipLocation( Component owner ) {
+		if( !(owner instanceof JComponent) )
+			return false;
+
+		AWTEvent e = EventQueue.getCurrentEvent();
+		MouseEvent me;
+		if( e instanceof MouseEvent )
+			me = (MouseEvent) e;
+		else {
+			// no mouse event available because a timer is used to show the tooltip
+			// --> create mouse event from current mouse location
+			PointerInfo pointerInfo = MouseInfo.getPointerInfo();
+			if( pointerInfo == null )
+				return false;
+
+			Point location = new Point( pointerInfo.getLocation());
+			SwingUtilities.convertPointFromScreen( location, owner );
+			me = new MouseEvent( owner, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(),
+				0, location.x, location.y, 0, false );
 		}
-		return false;
+
+		return me.getSource() == owner &&
+			((JComponent)owner).getToolTipLocation( me ) != null;
 	}
 
 	//---- class NonFlashingPopup ---------------------------------------------
@@ -494,6 +521,9 @@ public class FlatPopupFactory
 			JLayeredPane layeredPane = ((RootPaneContainer)window).getLayeredPane();
 			layeredPane.add( dropShadowPanel, JLayeredPane.POPUP_LAYER, 0 );
 
+			moveMediumWeightDropShadow();
+			resizeMediumWeightDropShadow();
+
 			mediumPanelListener = new ComponentListener() {
 				@Override
 				public void componentShown( ComponentEvent e ) {
@@ -509,17 +539,12 @@ public class FlatPopupFactory
 
 				@Override
 				public void componentMoved( ComponentEvent e ) {
-					if( dropShadowPanel != null && mediumWeightPanel != null ) {
-						Point location = mediumWeightPanel.getLocation();
-						Insets insets = dropShadowPanel.getInsets();
-						dropShadowPanel.setLocation( location.x - insets.left, location.y - insets.top );
-					}
+					moveMediumWeightDropShadow();
 				}
 
 				@Override
 				public void componentResized( ComponentEvent e ) {
-					if( dropShadowPanel != null )
-						dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
+					resizeMediumWeightDropShadow();
 				}
 			};
 			mediumWeightPanel.addComponentListener( mediumPanelListener );
@@ -534,6 +559,19 @@ public class FlatPopupFactory
 				parent.remove( dropShadowPanel );
 				parent.repaint( bounds.x, bounds.y, bounds.width, bounds.height );
 			}
+		}
+
+		private void moveMediumWeightDropShadow() {
+			if( dropShadowPanel != null && mediumWeightPanel != null ) {
+				Point location = mediumWeightPanel.getLocation();
+				Insets insets = dropShadowPanel.getInsets();
+				dropShadowPanel.setLocation( location.x - insets.left, location.y - insets.top );
+			}
+		}
+
+		private void resizeMediumWeightDropShadow() {
+			if( dropShadowPanel != null && mediumWeightPanel != null )
+				dropShadowPanel.setSize( FlatUIUtils.addInsets( mediumWeightPanel.getSize(), dropShadowPanel.getInsets() ) );
 		}
 	}
 }

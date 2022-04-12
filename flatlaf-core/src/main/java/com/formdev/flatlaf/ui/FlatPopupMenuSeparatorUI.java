@@ -24,8 +24,8 @@ import javax.swing.plaf.ComponentUI;
  *
  * <!-- BasicSeparatorUI -->
  *
- * @uiDefault PopupMenuSeparator.background		Color	unused
- * @uiDefault PopupMenuSeparator.foreground		Color
+ * @uiDefault Separator.background				Color	unused
+ * @uiDefault Separator.foreground				Color
  *
  * <!-- FlatSeparatorUI -->
  *
@@ -39,11 +39,24 @@ public class FlatPopupMenuSeparatorUI
 	extends FlatSeparatorUI
 {
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatPopupMenuSeparatorUI.class, FlatPopupMenuSeparatorUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatPopupMenuSeparatorUI.class, () -> new FlatPopupMenuSeparatorUI( true ) )
+			: new FlatPopupMenuSeparatorUI( false );
+	}
+
+	/** @since 2 */
+	protected FlatPopupMenuSeparatorUI( boolean shared ) {
+		super( shared );
 	}
 
 	@Override
 	protected String getPropertyPrefix() {
+		return "PopupMenuSeparator";
+	}
+
+	/** @since 2 */
+	@Override
+	String getStyleType() {
 		return "PopupMenuSeparator";
 	}
 }

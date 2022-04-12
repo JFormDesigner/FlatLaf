@@ -67,7 +67,9 @@
     },
     "ComboPopup.border": "1,1,1,1,64647A",
     "CompletionPopup": {
-      "matchForeground": "#BF616A"
+      "matchForeground": "#BF616A",
+      "selectionBackground": "#5a6173",
+      "selectionInactiveBackground": "#383C4A"
     },
     "Component": {
       "errorFocusColor": "#bf4c53",
@@ -95,9 +97,9 @@
     },
     "EditorPane.inactiveBackground": "#2b303b",
     "EditorTabs": {
-      "selectedBackground": "#2b303b",
       "underlinedTabBackground": "#2b303b",
-      "underlineHeight": "0"
+      "underlineHeight": "0",
+      "borderColor": "#2b303b"
     },
     "Link": {
       "activeForeground": "#7FA1B3",
@@ -156,6 +158,14 @@
       "passedColor": "#99BD8E",
       "passedEndColor": "#62795b"
     },
+    "ScrollBar": {
+      "thumbColor": "#383C4A",
+      "hoverThumbColor": "#5a6173",
+      "Mac": {
+        "thumbColor": "#383C4A",
+        "hoverThumbColor": "#5a6173"
+      }
+    },
     "SearchEverywhere": {
       "Header.background": "#1C1F26",
       "Tab": {
@@ -202,7 +212,6 @@
         "borderColor": "#232830"
       },
       "HeaderTab": {
-        "selectedBackground": "#232830",
         "selectedInactiveBackground": "#232830",
         "hoverBackground": "#1C1F26",
         "hoverInactiveBackground": "#1C1F26"

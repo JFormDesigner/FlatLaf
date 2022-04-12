@@ -11,9 +11,9 @@ scales on **HiDPI** displays and runs on Java 8 or newer.
 The look is heavily inspired by **Darcula** and **IntelliJ** themes from
 IntelliJ IDEA 2019.2+ and uses almost the same colors and icons.
 
-![Flat Light](images/flat_light.png)
+![FlatLaf Light](images/flat_light.png)
 
-![Flat Dark](images/flat_dark.png)
+![FlatLaf Dark](images/flat_dark.png)
 
 
 IntelliJ Platform Themes
@@ -67,10 +67,13 @@ docs).
 Addons
 ------
 
-- [IntelliJ Themes Pack](flatlaf-intellij-themes)
-- [Extras](flatlaf-extras)
-- [SwingX](flatlaf-swingx)
-- [JIDE Common Layer](flatlaf-jide-oss)
+- [IntelliJ Themes Pack](flatlaf-intellij-themes) - bundles many popular
+  open-source 3rd party themes
+- [Extras](flatlaf-extras) - SVG icon, tri-state check box, UI inspectors, and
+  more
+- [SwingX](flatlaf-swingx) - support for SwingX components
+- [JIDE Common Layer](flatlaf-jide-oss) - support for JIDE Common Layer
+  components
 
 
 Getting started
@@ -96,8 +99,20 @@ For more information and documentation visit
 - [Customizing](https://www.formdev.com/flatlaf/customizing/)
 - [How to Customize](https://www.formdev.com/flatlaf/how-to-customize/)
 - [Properties Files](https://www.formdev.com/flatlaf/properties-files/)
+- [Components UI Properties](https://www.formdev.com/flatlaf/components/)
+- [Typography](https://www.formdev.com/flatlaf/typography/)
 - [Client Properties](https://www.formdev.com/flatlaf/client-properties/)
 - [System Properties](https://www.formdev.com/flatlaf/system-properties/)
+
+
+Theme Editor
+------------
+
+The Theme Editor that supports editing FlatLaf theme properties files. See
+[Theme Editor documentation](https://www.formdev.com/flatlaf/theme-editor/) for
+details and downloads.
+
+![Theme Editor](images/theme-editor@1.5x.png)
 
 
 Buzz
@@ -111,6 +126,13 @@ Buzz
 Applications using FlatLaf
 --------------------------
 
+- ![New](images/new.svg) [Ultorg](https://www.ultorg.com/) (**commercial**) - a
+  visual query system for relational databases
+- ![New](images/new.svg) [MooInfo](https://github.com/rememberber/MooInfo) -
+  visual implementation of OSHI, to view information about the system and
+  hardware
+- ![New](images/new.svg) [Jailer](https://github.com/Wisser/Jailer) 11.2 -
+  database subsetting and relational data browsing tool
 - [Apache NetBeans](https://netbeans.apache.org/) 11.3 - IDE for Java, PHP, HTML
   and much more
 - [jclasslib bytecode viewer](https://github.com/ingokegel/jclasslib) 5.5
@@ -138,13 +160,16 @@ Applications using FlatLaf
   [OpenStreetMap](https://www.openstreetmap.org/) (requires FlatLaf JOSM plugin)
 - [jAlbum](https://jalbum.net/) 21 (**commercial**) - creates photo album
   websites
+- ![New](images/new.svg) [PDF Studio](https://www.qoppa.com/pdfstudio/) 2021
+  (**commercial**) - create, review and edit PDF documents
 - [XMLmind XML Editor](https://www.xmlmind.com/xmleditor/) 9.3 (**commercial**)
 - [Total Validator](https://www.totalvalidator.com/) 15 (**commercial**) -
   checks your website
 - [j-lawyer](https://github.com/jlawyerorg/j-lawyer-org) - Kanzleisoftware
-- [MegaMek](https://github.com/MegaMek/megamek) v0.47.4 and
-  [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5 - a turn-based sci-fi board
-  game
+- [MegaMek](https://github.com/MegaMek/megamek),
+  [MegaMekLab](https://github.com/MegaMek/megameklab) and
+  [MekHQ](https://github.com/MegaMek/mekhq) v0.47.5+ - a sci-fi tabletop
+  BattleTech simulator suite handling battles, unit building, and campaigns
 - [GUIslice Builder](https://github.com/ImpulseAdventure/GUIslice-Builder)
   0.13.b024 - GUI builder for
   [GUIslice](https://github.com/ImpulseAdventure/GUIslice), a lightweight GUI
@@ -170,7 +195,7 @@ Applications using FlatLaf
   systems development platform
 - [JPass](https://github.com/gaborbata/jpass) - password manager with strong
   encryption
-- [Jes - Die Java-EÜR](https://www.jes-eur.de)
+- [Jes - Die Java-EÃœR](https://www.jes-eur.de)
 - [Mapton](https://mapton.org/) 2.0
   ([source code](https://github.com/trixon/mapton)) - some kind of map
   application (based on NetBeans platform)

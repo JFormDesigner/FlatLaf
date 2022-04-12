@@ -43,6 +43,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.components.FlatTextField;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.ui.FlatBorder;
 import com.formdev.flatlaf.ui.FlatEmptyBorder;
@@ -52,6 +53,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -312,6 +314,10 @@ public class FlatUIDefaultsInspector
 			if( !(key instanceof String) )
 				continue;
 
+			// ignore internal keys
+			if( ((String)key).startsWith( "FlatLaf.internal." ) )
+				continue;
+
 			// ignore values of type Class
 			Object value = defaults.get( key );
 			if( value instanceof Class )
@@ -377,11 +383,13 @@ public class FlatUIDefaultsInspector
 	}
 
 	private Properties loadDerivedColorKeys() {
+		String name = "/com/formdev/flatlaf/extras/resources/DerivedColorKeys.properties";
 		Properties properties = new Properties();
-		try( InputStream in = getClass().getResourceAsStream( "/com/formdev/flatlaf/extras/resources/DerivedColorKeys.properties" ) ) {
-			properties.load( in );
+		try( InputStream in = getClass().getResourceAsStream( name ) ) {
+			if( in != null )
+				properties.load( in );
 		} catch( IOException ex ) {
-			ex.printStackTrace();
+			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load '" + name + "'.", ex );
 		}
 		return properties;
 	}
@@ -550,7 +558,7 @@ public class FlatUIDefaultsInspector
 		panel = new JPanel();
 		filterPanel = new JPanel();
 		flterLabel = new JLabel();
-		filterField = new JTextField();
+		filterField = new FlatTextField();
 		valueTypeLabel = new JLabel();
 		valueTypeField = new JComboBox<>();
 		scrollPane = new JScrollPane();
@@ -581,7 +589,8 @@ public class FlatUIDefaultsInspector
 					new Insets(0, 0, 0, 10), 0, 0));
 
 				//---- filterField ----
-				filterField.putClientProperty("JTextField.placeholderText", "enter one or more filter strings, separated by space characters");
+				filterField.setPlaceholderText("enter one or more filter strings, separated by space characters");
+				filterField.setShowClearButton(true);
 				filterPanel.add(filterField, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 10), 0, 0));
@@ -660,7 +669,7 @@ public class FlatUIDefaultsInspector
 	private JPanel panel;
 	private JPanel filterPanel;
 	private JLabel flterLabel;
-	private JTextField filterField;
+	private FlatTextField filterField;
 	private JLabel valueTypeLabel;
 	private JComboBox<String> valueTypeField;
 	private JScrollPane scrollPane;
@@ -698,16 +707,16 @@ public class FlatUIDefaultsInspector
 			if( value instanceof Color ) {
 				Color color = (info instanceof Color[]) ? ((Color[])info)[0] : (Color) value;
 				HSLColor hslColor = new HSLColor( color );
+				int hue = Math.round( hslColor.getHue() );
+				int saturation = Math.round( hslColor.getSaturation() );
+				int luminance = Math.round( hslColor.getLuminance() );
 				if( color.getAlpha() == 255 ) {
 					return String.format( "%-9s HSL %3d %3d %3d",
-						color2hex( color ),
-						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
-						(int) hslColor.getLuminance() );
+						color2hex( color ), hue, saturation, luminance );
 				} else {
+					int alpha = Math.round( hslColor.getAlpha() * 100 );
 					return String.format( "%-9s HSL %3d %3d %3d %2d",
-						color2hex( color ),
-						(int) hslColor.getHue(), (int) hslColor.getSaturation(),
-						(int) hslColor.getLuminance(), (int) (hslColor.getAlpha() * 100) );
+						color2hex( color ), hue, saturation, luminance, alpha );
 				}
 			} else if( value instanceof Insets ) {
 				Insets insets = (Insets) value;
@@ -993,6 +1002,9 @@ public class FlatUIDefaultsInspector
 	{
 		private Item item;
 
+		// used instead of getBackground() because this did not work in some 3rd party Lafs
+		private Color valueColor;
+
 		@Override
 		public Component getTableCellRendererComponent( JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column )
@@ -1016,7 +1028,7 @@ public class FlatUIDefaultsInspector
 			if( item.value instanceof Color ) {
 				Color color = (item.info instanceof Color[]) ? ((Color[])item.info)[0] : (Color) item.value;
 				boolean isDark = new HSLColor( color ).getLuminance() < 70 && color.getAlpha() >= 128;
-				setBackground( color );
+				valueColor = color;
 				setForeground( isDark ? Color.white : Color.black );
 			} else if( item.value instanceof Icon ) {
 				Icon icon = (Icon) item.value;
@@ -1041,7 +1053,7 @@ public class FlatUIDefaultsInspector
 			if( item.value instanceof Color ) {
 				int width = getWidth();
 				int height = getHeight();
-				Color background = getBackground();
+				Color background = valueColor;
 
 				// paint color
 				fillRect( g, background, 0, 0, width, height );

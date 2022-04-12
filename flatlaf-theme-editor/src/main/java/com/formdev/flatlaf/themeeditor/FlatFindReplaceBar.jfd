@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -18,9 +18,11 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 0"
 			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
 				name: "findField"
 				"columns": 16
+				"selectAllOnFocusPolicy": enum com.formdev.flatlaf.extras.components.FlatTextField$SelectAllOnFocusPolicy always
+				"showClearButton": true
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "find", false ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0"
@@ -28,7 +30,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "findToolBar"
 				"floatable": false
-				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "findPreviousButton"
 					"toolTipText": "Previous Occurrence"
@@ -69,7 +71,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "closeToolBar"
 				"floatable": false
-				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "closeButton"
 					"toolTipText": "Close"
@@ -86,16 +88,18 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 0 1"
 			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
+			add( new FormComponent( "com.formdev.flatlaf.extras.components.FlatTextField" ) {
 				name: "replaceField"
 				"columns": 16
+				"selectAllOnFocusPolicy": enum com.formdev.flatlaf.extras.components.FlatTextField$SelectAllOnFocusPolicy always
+				"showClearButton": true
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 1"
 			} )
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
 				name: "toolBar1"
 				"floatable": false
-				"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "replaceButton"
 					"text": "Replace"

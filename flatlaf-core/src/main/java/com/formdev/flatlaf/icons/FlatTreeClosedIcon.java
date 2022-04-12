@@ -37,6 +37,8 @@ public class FlatTreeClosedIcon
 
 	@Override
 	protected void paintIcon( Component c, Graphics2D g ) {
+		FlatTreeCollapsedIcon.setStyleColorFromTreeUI( c, g, ui -> ui.iconClosedColor );
+
 		/*
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
 			  <polygon fill="#6E6E6E" fill-rule="evenodd" points="1 2 6 2 8 4 15 4 15 13 1 13"/>

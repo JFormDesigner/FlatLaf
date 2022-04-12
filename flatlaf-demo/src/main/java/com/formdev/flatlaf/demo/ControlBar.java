@@ -28,6 +28,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.layout.ConstraintParser;
@@ -61,10 +62,10 @@ class ControlBar
 
 		// initialize look and feels combo box
 		DefaultComboBoxModel<LookAndFeelInfo> lafModel = new DefaultComboBoxModel<>();
-		lafModel.addElement( new LookAndFeelInfo( "Flat Light (F1)", FlatLightLaf.class.getName() ) );
-		lafModel.addElement( new LookAndFeelInfo( "Flat Dark (F2)", FlatDarkLaf.class.getName() ) );
-		lafModel.addElement( new LookAndFeelInfo( "Flat IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
-		lafModel.addElement( new LookAndFeelInfo( "Flat Darcula (F4)", FlatDarculaLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Light (F1)", FlatLightLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Dark (F2)", FlatDarkLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf IntelliJ (F3)", FlatIntelliJLaf.class.getName() ) );
+		lafModel.addElement( new LookAndFeelInfo( "FlatLaf Darcula (F4)", FlatDarculaLaf.class.getName() ) );
 
 		UIManager.LookAndFeelInfo[] lookAndFeels = UIManager.getInstalledLookAndFeels();
 		for( UIManager.LookAndFeelInfo lookAndFeel : lookAndFeels ) {
@@ -240,7 +241,7 @@ class ControlBar
 					frame.setSize( Math.max( prefSize.width, width ), Math.max( prefSize.height, height ) );
 
 			} catch( Exception ex ) {
-				ex.printStackTrace();
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 			}
 		} );
 	}

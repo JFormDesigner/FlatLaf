@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -147,6 +147,51 @@ new FormModel {
 						name: "menuItem39"
 						"text": "text"
 						"accelerator": #KeyStroke0
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu12"
+					"text": "icons"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem41"
+						"text": "selected icon"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png" )
+						"selectedIcon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-show_dark.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem42"
+						"text": "disabled icon"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-cut.png" )
+						"disabledIcon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/disabled_icons_test/intellij-menu-paste.png" )
+						"enabled": false
+					} )
+					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
+						name: "separator6"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem43"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test16.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem44"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test24.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem45"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test32.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem46"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test48.png" )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem47"
+						"text": "text"
+						"icon": new com.jformdesigner.model.SwingIcon( 0, "/com/formdev/flatlaf/testing/test64.png" )
 					} )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -584,9 +629,19 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "showPopupMenuButton"
 				"text": "show JPopupMenu"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showPopupMenuButtonActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showPopupMenuButton", true ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "showScrollingPopupMenuButton"
+				"text": "show scrolling JPopupMenu"
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showScrollingPopupMenu", true ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 2"
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "armedCheckBox"

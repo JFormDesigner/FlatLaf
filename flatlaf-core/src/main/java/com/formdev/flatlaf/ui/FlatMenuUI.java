@@ -21,16 +21,24 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.function.Function;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.MenuBarUI;
 import javax.swing.plaf.basic.BasicMenuUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JMenu}.
@@ -60,10 +68,10 @@ import javax.swing.plaf.basic.BasicMenuUI;
  * <!-- FlatMenuUI -->
  *
  * @uiDefault MenuItem.iconTextGap									int
- * @uiDefault MenuBar.hoverBackground								Color
  *
  * <!-- FlatMenuRenderer -->
  *
+ * @uiDefault MenuBar.hoverBackground								Color
  * @uiDefault MenuBar.underlineSelectionBackground					Color
  * @uiDefault MenuBar.underlineSelectionColor						Color
  * @uiDefault MenuBar.underlineSelectionHeight						int
@@ -72,12 +80,20 @@ import javax.swing.plaf.basic.BasicMenuUI;
  */
 public class FlatMenuUI
 	extends BasicMenuUI
+	implements StyleableUI
 {
-	private Color hoverBackground;
 	private FlatMenuItemRenderer renderer;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatMenuUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -88,7 +104,6 @@ public class FlatMenuUI
 
 		menuItem.setRolloverEnabled( true );
 
-		hoverBackground = UIManager.getColor( "MenuBar.hoverBackground" );
 		renderer = createRenderer();
 	}
 
@@ -96,8 +111,9 @@ public class FlatMenuUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
-		hoverBackground = null;
+		FlatMenuItemRenderer.clearClientProperties( menuItem.getParent() );
 		renderer = null;
+		oldStyleValues = null;
 	}
 
 	protected FlatMenuItemRenderer createRenderer() {
@@ -130,6 +146,52 @@ public class FlatMenuUI
 	}
 
 	@Override
+	protected PropertyChangeListener createPropertyChangeListener( JComponent c ) {
+		return FlatStylingSupport.createPropertyChangeListener( c, this::installStyle, super.createPropertyChangeListener( c ) );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( menuItem, "Menu" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		try {
+			return renderer.applyStyleProperty( key, value );
+		} catch ( UnknownStyleException ex ) {
+			// ignore
+		}
+
+		Object oldValue;
+		switch( key ) {
+			// BasicMenuItemUI
+			case "selectionBackground": oldValue = selectionBackground; selectionBackground = (Color) value; return oldValue;
+			case "selectionForeground": oldValue = selectionForeground; selectionForeground = (Color) value; return oldValue;
+			case "disabledForeground": oldValue = disabledForeground; disabledForeground = (Color) value; return oldValue;
+			case "acceleratorForeground": oldValue = acceleratorForeground; acceleratorForeground = (Color) value; return oldValue;
+			case "acceleratorSelectionForeground": oldValue = acceleratorSelectionForeground; acceleratorSelectionForeground = (Color) value; return oldValue;
+		}
+
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, menuItem, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatMenuItemUI.getStyleableInfos( renderer );
+	}
+
+	@Override
 	public Dimension getMinimumSize( JComponent c ) {
 		// avoid that top-level menus (in menu bar) are made smaller if horizontal space is rare
 		// same code is in BasicMenuUI since Java 10
@@ -153,9 +215,10 @@ public class FlatMenuUI
 	protected class FlatMenuRenderer
 		extends FlatMenuItemRenderer
 	{
-		protected final Color menuBarUnderlineSelectionBackground = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionBackground", underlineSelectionBackground );
-		protected final Color menuBarUnderlineSelectionColor = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionColor", underlineSelectionColor );
-		protected final int menuBarUnderlineSelectionHeight = FlatUIUtils.getUIInt( "MenuBar.underlineSelectionHeight", underlineSelectionHeight );
+		protected Color hoverBackground = UIManager.getColor( "MenuBar.hoverBackground" );
+		protected Color menuBarUnderlineSelectionBackground = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionBackground", underlineSelectionBackground );
+		protected Color menuBarUnderlineSelectionColor = FlatUIUtils.getUIColor( "MenuBar.underlineSelectionColor", underlineSelectionColor );
+		protected int menuBarUnderlineSelectionHeight = FlatUIUtils.getUIInt( "MenuBar.underlineSelectionHeight", underlineSelectionHeight );
 
 		protected FlatMenuRenderer( JMenuItem menuItem, Icon checkIcon, Icon arrowIcon,
 			Font acceleratorFont, String acceleratorDelimiter )
@@ -165,27 +228,39 @@ public class FlatMenuUI
 
 		@Override
 		protected void paintBackground( Graphics g, Color selectionBackground ) {
-			if( isUnderlineSelection() && ((JMenu)menuItem).isTopLevelMenu() )
-				selectionBackground = menuBarUnderlineSelectionBackground;
+			if( ((JMenu)menuItem).isTopLevelMenu() ) {
+				if( isUnderlineSelection() )
+					selectionBackground = getStyleFromMenuBarUI( ui -> ui.underlineSelectionBackground, menuBarUnderlineSelectionBackground );
 
-			ButtonModel model = menuItem.getModel();
-			if( model.isRollover() && !model.isArmed() && !model.isSelected() &&
-				model.isEnabled() && ((JMenu)menuItem).isTopLevelMenu() )
-			{
-				g.setColor( deriveBackground( hoverBackground ) );
-				g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
-			} else
-				super.paintBackground( g, selectionBackground );
+				ButtonModel model = menuItem.getModel();
+				if( model.isRollover() && !model.isArmed() && !model.isSelected() && model.isEnabled() ) {
+					g.setColor( deriveBackground( getStyleFromMenuBarUI( ui -> ui.hoverBackground, hoverBackground ) ) );
+					g.fillRect( 0, 0, menuItem.getWidth(), menuItem.getHeight() );
+					return;
+				}
+			}
+
+			super.paintBackground( g, selectionBackground );
 		}
 
 		@Override
 		protected void paintUnderlineSelection( Graphics g, Color underlineSelectionColor, int underlineSelectionHeight ) {
 			if( ((JMenu)menuItem).isTopLevelMenu() ) {
-				underlineSelectionColor = menuBarUnderlineSelectionColor;
-				underlineSelectionHeight = menuBarUnderlineSelectionHeight;
+				underlineSelectionColor = getStyleFromMenuBarUI( ui -> ui.underlineSelectionColor, menuBarUnderlineSelectionColor );
+				underlineSelectionHeight = getStyleFromMenuBarUI( ui -> (ui.underlineSelectionHeight != -1)
+					? ui.underlineSelectionHeight : null, menuBarUnderlineSelectionHeight );
 			}
 
 			super.paintUnderlineSelection( g, underlineSelectionColor, underlineSelectionHeight );
+		}
+
+		private <T> T getStyleFromMenuBarUI( Function<FlatMenuBarUI, T> f, T defaultValue ) {
+			MenuBarUI ui = ((JMenuBar)menuItem.getParent()).getUI();
+			if( !(ui instanceof FlatMenuBarUI) )
+				return defaultValue;
+
+			T value = f.apply( (FlatMenuBarUI) ui );
+			return (value != null) ? value : defaultValue;
 		}
 	}
 }

@@ -25,8 +25,10 @@ include( "flatlaf-demo" )
 include( "flatlaf-testing" )
 include( "flatlaf-theme-editor" )
 
-includeProject( "flatlaf-natives-windows", "flatlaf-natives/flatlaf-natives-windows" )
-includeProject( "flatlaf-natives-jna",     "flatlaf-natives/flatlaf-natives-jna" )
+if( org.gradle.internal.os.OperatingSystem.current().isWindows )
+	includeProject( "flatlaf-natives-windows", "flatlaf-natives/flatlaf-natives-windows" )
+includeProject( "flatlaf-natives-jna", "flatlaf-natives/flatlaf-natives-jna" )
+includeProject( "flatlaf-testing-modular-app", "flatlaf-testing/flatlaf-testing-modular-app" )
 
 fun includeProject( projectPath: String, projectDir: String ) {
 	include( projectPath )

@@ -18,11 +18,16 @@ package com.formdev.flatlaf;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,8 +38,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.function.Function;
+import javax.swing.Icon;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.UIDefaults.ActiveValue;
 import javax.swing.UIDefaults.LazyValue;
 import javax.swing.plaf.ColorUIResource;
@@ -48,6 +55,7 @@ import com.formdev.flatlaf.util.DerivedColor;
 import com.formdev.flatlaf.util.GrayFilter;
 import com.formdev.flatlaf.util.HSLColor;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.SoftCache;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
@@ -72,7 +80,11 @@ class UIDefaultsLoader
 	private static final String OPTIONAL_PREFIX = "?";
 	private static final String WILDCARD_PREFIX = "*.";
 
+	static final String KEY_VARIABLES = "FlatLaf.internal.variables";
+
 	private static int parseColorDepth;
+
+	private static final SoftCache<String, Object> fontCache = new SoftCache<>();
 
 	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
 		Properties additionalDefaults, boolean dark, UIDefaults defaults )
@@ -144,6 +156,18 @@ class UIDefaultsLoader
 						try( InputStream in = classLoader.getResourceAsStream( propertiesName ) ) {
 							if( in != null )
 								properties.load( in );
+						}
+					}
+				} else if( source instanceof URL ) {
+					// load from package URL
+					URL packageUrl = (URL) source;
+					for( Class<?> lafClass : lafClasses ) {
+						URL propertiesUrl = new URL( packageUrl + lafClass.getSimpleName() + ".properties" );
+
+						try( InputStream in = propertiesUrl.openStream() ) {
+							properties.load( in );
+						} catch( FileNotFoundException ex ) {
+							// ignore
 						}
 					}
 				} else if( source instanceof File ) {
@@ -234,18 +258,24 @@ class UIDefaultsLoader
 			};
 
 			// parse and add properties to UI defaults
+			Map<String, String> variables = new HashMap<>( 50 );
 			for( Map.Entry<Object, Object> e : properties.entrySet() ) {
 				String key = (String) e.getKey();
-				if( key.startsWith( VARIABLE_PREFIX ) )
+				if( key.startsWith( VARIABLE_PREFIX ) ) {
+					variables.put( key, (String) e.getValue() );
 					continue;
+				}
 
 				String value = resolveValue( (String) e.getValue(), propertiesGetter );
 				try {
-					defaults.put( key, parseValue( key, value, null, resolver, addonClassLoaders ) );
+					defaults.put( key, parseValue( key, value, null, null, resolver, addonClassLoaders ) );
 				} catch( RuntimeException ex ) {
 					logParseError( key, value, ex, true );
 				}
 			}
+
+			// remember variables in defaults to allow using them in styles
+			defaults.put( KEY_VARIABLES, variables );
 		} catch( IOException ex ) {
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load properties files.", ex );
 		}
@@ -288,87 +318,200 @@ class UIDefaultsLoader
 		return resolveValue( newValue, propertiesGetter );
 	}
 
-	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR,
-		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
+	static String resolveValueFromUIManager( String value ) {
+		if( value.startsWith( VARIABLE_PREFIX ) ) {
+			@SuppressWarnings( "unchecked" )
+			Map<String, String> variables = (Map<String, String>) UIManager.get( KEY_VARIABLES );
+			String newValue = (variables != null) ? variables.get( value ) : null;
+			if( newValue == null )
+				throw new IllegalArgumentException( "variable '" + value + "' not found" );
 
-	private static ValueType[] tempResultValueType = new ValueType[1];
+			return newValue;
+		}
 
-	static Object parseValue( String key, String value ) {
-		return parseValue( key, value, null, v -> v, Collections.emptyList() );
+		if( !value.startsWith( PROPERTY_PREFIX ) )
+			return value;
+
+		String key = value.substring( PROPERTY_PREFIX.length() );
+		Object newValue = UIManager.get( key );
+		if( newValue == null )
+			throw new IllegalArgumentException( "property '" + key + "' not found" );
+
+		// convert binary color to string
+		if( newValue instanceof Color ) {
+			Color color = (Color) newValue;
+			int alpha = color.getAlpha();
+			return String.format( (alpha != 255) ? "#%06x%02x" : "#%06x", color.getRGB() & 0xffffff, alpha );
+		}
+
+		throw new IllegalArgumentException( "property value type '" + newValue.getClass().getName() + "' not supported in references" );
 	}
 
-	static Object parseValue( String key, String value, ValueType[] resultValueType,
+	enum ValueType { UNKNOWN, STRING, BOOLEAN, CHARACTER, INTEGER, INTEGERORFLOAT, FLOAT, BORDER, ICON, INSETS, DIMENSION, COLOR, FONT,
+		SCALEDINTEGER, SCALEDFLOAT, SCALEDINSETS, SCALEDDIMENSION, INSTANCE, CLASS, GRAYFILTER, NULL, LAZY }
+
+	private static final ValueType[] tempResultValueType = new ValueType[1];
+	private static Map<Class<?>, ValueType> javaValueTypes;
+	private static Map<String, ValueType> knownValueTypes;
+
+	static Object parseValue( String key, String value, Class<?> valueType ) {
+		return parseValue( key, value, valueType, null, v -> v, Collections.emptyList() );
+	}
+
+	static Object parseValue( String key, String value, Class<?> javaValueType, ValueType[] resultValueType,
 		Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
 	{
 		if( resultValueType == null )
 			resultValueType = tempResultValueType;
 
-		value = value.trim();
-
-		// null, false, true
-		switch( value ) {
-			case "null":	resultValueType[0] = ValueType.NULL; return null;
-			case "false":	resultValueType[0] = ValueType.BOOLEAN; return false;
-			case "true":	resultValueType[0] = ValueType.BOOLEAN; return true;
+		// do not parse styles here
+		if( key.startsWith( "[style]" ) ) {
+			resultValueType[0] = ValueType.STRING;
+			return value;
 		}
 
-		// check for function "lazy"
-		//     Syntax: lazy(uiKey)
-		if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
-			resultValueType[0] = ValueType.LAZY;
-			String uiKey = value.substring( 5, value.length() - 1 ).trim();
-			return (LazyValue) t -> {
-				return lazyUIManagerGet( uiKey );
-			};
+		value = value.trim();
+
+		// null
+		if( value.equals( "null" ) || value.isEmpty() ) {
+			resultValueType[0] = ValueType.NULL;
+			return null;
+		}
+
+		// check for function "if"
+		//     Syntax: if(condition,trueValue,falseValue)
+		//       - condition: evaluates to true if:
+		//           - is not "null"
+		//           - is not "false"
+		//           - is not an integer with zero value
+		//       - trueValue: used if condition is true
+		//       - falseValue: used if condition is false
+		if( value.startsWith( "if(" ) && value.endsWith( ")" ) ) {
+			List<String> params = splitFunctionParams( value.substring( 3, value.length() - 1 ), ',' );
+			if( params.size() != 3 )
+				throwMissingParametersException( value );
+
+			boolean ifCondition = parseCondition( params.get( 0 ), resolver, addonClassLoaders );
+			String ifValue = params.get( ifCondition ? 1 : 2 );
+			return parseValue( key, resolver.apply( ifValue ), javaValueType, resultValueType, resolver, addonClassLoaders );
 		}
 
 		ValueType valueType = ValueType.UNKNOWN;
 
-		// check whether value type is specified in the value
-		if( value.startsWith( "#" ) )
-			valueType = ValueType.COLOR;
-		else if( value.startsWith( "\"" ) && value.endsWith( "\"" ) ) {
-			valueType = ValueType.STRING;
-			value = value.substring( 1, value.length() - 1 );
-		} else if( value.startsWith( TYPE_PREFIX ) ) {
-			int end = value.indexOf( TYPE_PREFIX_END );
-			if( end != -1 ) {
-				try {
-					String typeStr = value.substring( TYPE_PREFIX.length(), end );
-					valueType = ValueType.valueOf( typeStr.toUpperCase( Locale.ENGLISH ) );
+		if( javaValueType != null ) {
+			if( javaValueTypes == null ) {
+				// create lazy
+				javaValueTypes = new HashMap<>();
+				javaValueTypes.put( String.class, ValueType.STRING );
+				javaValueTypes.put( boolean.class, ValueType.BOOLEAN );
+				javaValueTypes.put( Boolean.class, ValueType.BOOLEAN );
+				javaValueTypes.put( char.class, ValueType.CHARACTER );
+				javaValueTypes.put( Character.class, ValueType.CHARACTER );
+				javaValueTypes.put( int.class, ValueType.INTEGER );
+				javaValueTypes.put( Integer.class, ValueType.INTEGER );
+				javaValueTypes.put( float.class, ValueType.FLOAT );
+				javaValueTypes.put( Float.class, ValueType.FLOAT );
+				javaValueTypes.put( Border.class, ValueType.BORDER );
+				javaValueTypes.put( Icon.class, ValueType.ICON );
+				javaValueTypes.put( Insets.class, ValueType.INSETS );
+				javaValueTypes.put( Dimension.class, ValueType.DIMENSION );
+				javaValueTypes.put( Color.class, ValueType.COLOR );
+				javaValueTypes.put( Font.class, ValueType.FONT );
+			}
 
-					// remove type from value
-					value = value.substring( end + TYPE_PREFIX_END.length() );
-				} catch( IllegalArgumentException ex ) {
-					// ignore
+			// map java value type to parser value type
+			valueType = javaValueTypes.get( javaValueType );
+			if( valueType == null )
+				throw new IllegalArgumentException( "unsupported value type '" + javaValueType.getName() + "'" );
+
+			// remove '"' from strings
+			if( valueType == ValueType.STRING && value.startsWith( "\"" ) && value.endsWith( "\"" ) )
+				value = value.substring( 1, value.length() - 1 );
+		} else {
+			// false, true
+			switch( value ) {
+				case "false":	resultValueType[0] = ValueType.BOOLEAN; return false;
+				case "true":	resultValueType[0] = ValueType.BOOLEAN; return true;
+			}
+
+			// check for function "lazy"
+			//     Syntax: lazy(uiKey)
+			if( value.startsWith( "lazy(" ) && value.endsWith( ")" ) ) {
+				resultValueType[0] = ValueType.LAZY;
+				String uiKey = StringUtils.substringTrimmed( value, 5, value.length() - 1 );
+				return (LazyValue) t -> {
+					return lazyUIManagerGet( uiKey );
+				};
+			}
+
+			// check whether value type is specified in the value
+			if( value.startsWith( "#" ) )
+				valueType = ValueType.COLOR;
+			else if( value.startsWith( TYPE_PREFIX ) ) {
+				int end = value.indexOf( TYPE_PREFIX_END );
+				if( end != -1 ) {
+					try {
+						String typeStr = value.substring( TYPE_PREFIX.length(), end );
+						valueType = ValueType.valueOf( typeStr.toUpperCase( Locale.ENGLISH ) );
+
+						// remove type from value
+						value = value.substring( end + TYPE_PREFIX_END.length() );
+					} catch( IllegalArgumentException ex ) {
+						// ignore
+					}
 				}
 			}
-		}
 
-		// determine value type from key
-		if( valueType == ValueType.UNKNOWN ) {
-			if( key.endsWith( "UI" ) )
-				valueType = ValueType.STRING;
-			else if( key.endsWith( "Color" ) ||
-				(key.endsWith( "ground" ) &&
-				 (key.endsWith( ".background" ) || key.endsWith( "Background" ) ||
-				  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ))) )
-				valueType = ValueType.COLOR;
-			else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) )
-				valueType = ValueType.BORDER;
-			else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) )
-				valueType = ValueType.ICON;
-			else if( key.endsWith( ".margin" ) || key.endsWith( ".padding" ) ||
-					 key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
-				valueType = ValueType.INSETS;
-			else if( key.endsWith( "Size" ) )
-				valueType = ValueType.DIMENSION;
-			else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
-				valueType = ValueType.INTEGER;
-			else if( key.endsWith( "Char" ) )
-				valueType = ValueType.CHARACTER;
-			else if( key.endsWith( "grayFilter" ) )
-				valueType = ValueType.GRAYFILTER;
+			if( valueType == ValueType.UNKNOWN ) {
+				if( knownValueTypes == null ) {
+					// create lazy
+					knownValueTypes = new HashMap<>();
+					// SplitPane
+					knownValueTypes.put( "SplitPane.dividerSize", ValueType.INTEGER );
+					knownValueTypes.put( "SplitPaneDivider.gripDotSize", ValueType.INTEGER );
+					knownValueTypes.put( "dividerSize", ValueType.INTEGER );
+					knownValueTypes.put( "gripDotSize", ValueType.INTEGER );
+					// TabbedPane
+					knownValueTypes.put( "TabbedPane.closeCrossPlainSize", ValueType.FLOAT );
+					knownValueTypes.put( "TabbedPane.closeCrossFilledSize", ValueType.FLOAT );
+					knownValueTypes.put( "closeCrossPlainSize", ValueType.FLOAT );
+					knownValueTypes.put( "closeCrossFilledSize", ValueType.FLOAT );
+					// Table
+					knownValueTypes.put( "Table.intercellSpacing", ValueType.DIMENSION );
+					knownValueTypes.put( "intercellSpacing", ValueType.DIMENSION );
+				}
+
+				valueType = knownValueTypes.getOrDefault( key, ValueType.UNKNOWN );
+			}
+
+			// determine value type from key
+			if( valueType == ValueType.UNKNOWN ) {
+				if( key.endsWith( "UI" ) )
+					valueType = ValueType.STRING;
+				else if( key.endsWith( "Color" ) ||
+					(key.endsWith( "ground" ) &&
+					 (key.endsWith( ".background" ) || key.endsWith( "Background" ) || key.equals( "background" ) ||
+					  key.endsWith( ".foreground" ) || key.endsWith( "Foreground" ) || key.equals( "foreground" ))) )
+					valueType = ValueType.COLOR;
+				else if( key.endsWith( ".font" ) || key.endsWith( "Font" ) || key.equals( "font" ) )
+					valueType = ValueType.FONT;
+				else if( key.endsWith( ".border" ) || key.endsWith( "Border" ) || key.equals( "border" ) )
+					valueType = ValueType.BORDER;
+				else if( key.endsWith( ".icon" ) || key.endsWith( "Icon" ) || key.equals( "icon" ) )
+					valueType = ValueType.ICON;
+				else if( key.endsWith( ".margin" ) || key.equals( "margin" ) ||
+						 key.endsWith( ".padding" ) || key.equals( "padding" ) ||
+						 key.endsWith( "Margins" ) || key.endsWith( "Insets" ) )
+					valueType = ValueType.INSETS;
+				else if( key.endsWith( "Size" ) )
+					valueType = ValueType.DIMENSION;
+				else if( key.endsWith( "Width" ) || key.endsWith( "Height" ) )
+					valueType = ValueType.INTEGERORFLOAT;
+				else if( key.endsWith( "Char" ) )
+					valueType = ValueType.CHARACTER;
+				else if( key.endsWith( "grayFilter" ) )
+					valueType = ValueType.GRAYFILTER;
+			}
 		}
 
 		resultValueType[0] = valueType;
@@ -376,14 +519,17 @@ class UIDefaultsLoader
 		// parse value
 		switch( valueType ) {
 			case STRING:		return value;
+			case BOOLEAN:		return parseBoolean( value );
 			case CHARACTER:		return parseCharacter( value );
 			case INTEGER:		return parseInteger( value, true );
+			case INTEGERORFLOAT:return parseIntegerOrFloat( value, true );
 			case FLOAT:			return parseFloat( value, true );
 			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
 			case ICON:			return parseInstance( value, addonClassLoaders );
 			case INSETS:		return parseInsets( value );
 			case DIMENSION:		return parseDimension( value );
 			case COLOR:			return parseColorOrFunction( value, resolver, true );
+			case FONT:			return parseFont( value );
 			case SCALEDINTEGER:	return parseScaledInteger( value );
 			case SCALEDFLOAT:	return parseScaledFloat( value );
 			case SCALEDINSETS:	return parseScaledInsets( value );
@@ -393,6 +539,12 @@ class UIDefaultsLoader
 			case GRAYFILTER:	return parseGrayFilter( value );
 			case UNKNOWN:
 			default:
+				// string
+				if( value.startsWith( "\"" ) && value.endsWith( "\"" ) ) {
+					resultValueType[0] = ValueType.STRING;
+					return value.substring( 1, value.length() - 1 );
+				}
+
 				// colors
 				Object color = parseColorOrFunction( value, resolver, false );
 				if( color != null ) {
@@ -420,19 +572,34 @@ class UIDefaultsLoader
 		}
 	}
 
+	private static boolean parseCondition( String condition,
+		Function<String, String> resolver, List<ClassLoader> addonClassLoaders )
+	{
+		try {
+			Object conditionValue = parseValue( "", resolver.apply( condition ), null, null, resolver, addonClassLoaders );
+			return (conditionValue != null &&
+				!conditionValue.equals( false ) &&
+				!conditionValue.equals( 0 ) );
+		} catch( IllegalArgumentException ex ) {
+			// ignore errors (e.g. variable or property not found) and evaluate to false
+			return false;
+		}
+	}
+
 	private static Object parseBorder( String value, Function<String, String> resolver, List<ClassLoader> addonClassLoaders ) {
 		if( value.indexOf( ',' ) >= 0 ) {
-			// top,left,bottom,right[,lineColor[,lineThickness]]
-			List<String> parts = split( value, ',' );
+			// top,left,bottom,right[,lineColor[,lineThickness[,arc]]]
+			List<String> parts = splitFunctionParams( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() >= 5)
 				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
 				: null;
-			float lineThickness = (parts.size() >= 6) ? parseFloat( parts.get( 5 ), true ) : 1f;
+			float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty()) ? parseFloat( parts.get( 5 ), true ) : 1f;
+			int arc = (parts.size() >= 7) ? parseInteger( parts.get( 6 ), true ) : 0;
 
 			return (LazyValue) t -> {
 				return (lineColor != null)
-					? new FlatLineBorder( insets, lineColor, lineThickness )
+					? new FlatLineBorder( insets, lineColor, lineThickness, arc )
 					: new FlatEmptyBorder( insets );
 			};
 		} else
@@ -480,7 +647,7 @@ class UIDefaultsLoader
 	}
 
 	private static Insets parseInsets( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',', true, false );
 		try {
 			return new InsetsUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -493,7 +660,7 @@ class UIDefaultsLoader
 	}
 
 	private static Dimension parseDimension( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',', true, false );
 		try {
 			return new DimensionUIResource(
 				Integer.parseInt( numbers.get( 0 ) ),
@@ -581,10 +748,10 @@ class UIDefaultsLoader
 			return null;
 		}
 
-		String function = value.substring( 0, paramsStart ).trim();
+		String function = StringUtils.substringTrimmed( value, 0, paramsStart );
 		List<String> params = splitFunctionParams( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
 		if( params.isEmpty() )
-			throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
+			throwMissingParametersException( value );
 
 		if( parseColorDepth > 100 )
 			throw new IllegalArgumentException( "endless recursion in color function '" + value + "'" );
@@ -592,6 +759,7 @@ class UIDefaultsLoader
 		parseColorDepth++;
 		try {
 			switch( function ) {
+				case "if":			return parseColorIf( value, params, resolver, reportError );
 				case "rgb":			return parseColorRgbOrRgba( false, params, resolver, reportError );
 				case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
 				case "hsl":			return parseColorHslOrHsla( false, params );
@@ -604,12 +772,35 @@ class UIDefaultsLoader
 				case "fadeout":		return parseColorHSLIncreaseDecrease( 3, false, params, resolver, reportError );
 				case "fade":		return parseColorFade( params, resolver, reportError );
 				case "spin":		return parseColorSpin( params, resolver, reportError );
+				case "changeHue":		return parseColorChange( 0, params, resolver, reportError );
+				case "changeSaturation":return parseColorChange( 1, params, resolver, reportError );
+				case "changeLightness":	return parseColorChange( 2, params, resolver, reportError );
+				case "changeAlpha":		return parseColorChange( 3, params, resolver, reportError );
+				case "mix":				return parseColorMix( null, params, resolver, reportError );
+				case "tint":			return parseColorMix( "#fff", params, resolver, reportError );
+				case "shade":			return parseColorMix( "#000", params, resolver, reportError );
+				case "contrast":		return parseColorContrast( params, resolver, reportError );
 			}
 		} finally {
 			parseColorDepth--;
 		}
 
 		throw new IllegalArgumentException( "unknown color function '" + value + "'" );
+	}
+
+	/**
+	 * Syntax: if(condition,trueValue,falseValue)
+	 * <p>
+	 * This "if" function is only used if the "if" is passed as parameter to another
+	 * color function. Otherwise, the general "if" function is used.
+	 */
+	private static Object parseColorIf( String value, List<String> params, Function<String, String> resolver, boolean reportError ) {
+		if( params.size() != 3 )
+			throwMissingParametersException( value );
+
+		boolean ifCondition = parseCondition( params.get( 0 ), resolver, Collections.emptyList() );
+		String ifValue = params.get( ifCondition ? 1 : 2 );
+		return parseColorOrFunction( resolver.apply( ifValue ), resolver, reportError );
 	}
 
 	/**
@@ -711,20 +902,31 @@ class UIDefaultsLoader
 	 * Syntax: fade(color,amount[,options])
 	 *   - color: a color (e.g. #f00) or a color function
 	 *   - amount: percentage 0-100%
-	 *   - options: [derived]
+	 *   - options: [derived] [lazy]
 	 */
 	private static Object parseColorFade( List<String> params, Function<String, String> resolver, boolean reportError ) {
 		String colorStr = params.get( 0 );
 		int amount = parsePercentage( params.get( 1 ) );
 		boolean derived = false;
+		boolean lazy = false;
 
 		if( params.size() > 2 ) {
 			String options = params.get( 2 );
 			derived = options.contains( "derived" );
+			lazy = options.contains( "lazy" );
 		}
 
 		// create function
 		ColorFunction function = new ColorFunctions.Fade( amount );
+
+		if( lazy ) {
+			return (LazyValue) t -> {
+				Object color = lazyUIManagerGet( colorStr );
+				return (color instanceof Color)
+					? new ColorUIResource( ColorFunctions.applyFunctions( (Color) color, function ) )
+					: null;
+			};
+		}
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
@@ -751,6 +953,92 @@ class UIDefaultsLoader
 
 		// parse base color, apply function and create derived color
 		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: changeHue(color,value[,options]) or
+	 *         changeSaturation(color,value[,options]) or
+	 *         changeLightness(color,value[,options]) or
+	 *         changeAlpha(color,value[,options])
+	 *   - color: a color (e.g. #f00) or a color function
+	 *   - value: for hue: number of degrees; otherwise: percentage 0-100%
+	 *   - options: [derived]
+	 */
+	private static Object parseColorChange( int hslIndex,
+		List<String> params, Function<String, String> resolver, boolean reportError )
+	{
+		String colorStr = params.get( 0 );
+		int value = (hslIndex == 0)
+			? parseInteger( params.get( 1 ), true )
+			: parsePercentage( params.get( 1 ) );
+		boolean derived = false;
+
+		if( params.size() > 2 ) {
+			String options = params.get( 2 );
+			derived = options.contains( "derived" );
+		}
+
+		// create function
+		ColorFunction function = new ColorFunctions.HSLChange( hslIndex, value );
+
+		// parse base color, apply function and create derived color
+		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: mix(color1,color2[,weight]) or
+	 *         tint(color[,weight]) or
+	 *         shade(color[,weight])
+	 *   - color1: a color (e.g. #f00) or a color function
+	 *   - color2: a color (e.g. #f00) or a color function
+	 *   - weight: the weight (in range 0-100%) to mix the two colors
+	 *             larger weight uses more of first color, smaller weight more of second color
+	 */
+	private static Object parseColorMix( String color1Str, List<String> params, Function<String, String> resolver, boolean reportError ) {
+		int i = 0;
+		if( color1Str == null )
+			color1Str = params.get( i++ );
+		String color2Str = params.get( i++ );
+		int weight = (params.size() > i) ? parsePercentage( params.get( i ) ) : 50;
+
+		// parse second color
+		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolver.apply( color2Str ), resolver, reportError );
+		if( color2 == null )
+			return null;
+
+		// create function
+		ColorFunction function = new ColorFunctions.Mix( color2, weight );
+
+		// parse first color, apply function and create mixed color
+		return parseFunctionBaseColor( color1Str, function, false, resolver, reportError );
+	}
+
+	/**
+	 * Syntax: contrast(color,dark,light[,threshold])
+	 *   - color: a color to compare against
+	 *   - dark: a designated dark color (e.g. #000) or a color function
+	 *   - light: a designated light color (e.g. #fff) or a color function
+	 *   - threshold: the threshold (in range 0-100%) to specify where the transition
+	 *                from "dark" to "light" is (default is 43%)
+	 */
+	private static Object parseColorContrast( List<String> params, Function<String, String> resolver, boolean reportError ) {
+		String colorStr = params.get( 0 );
+		String darkStr = params.get( 1 );
+		String lightStr = params.get( 2 );
+		int threshold = (params.size() > 3) ? parsePercentage( params.get( 3 ) ) : 43;
+
+		// parse color to compare against
+		ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+		if( color == null )
+			return null;
+
+		// check luma and determine whether to use dark or light color
+		String darkOrLightColor = (ColorFunctions.luma( color ) * 100 < threshold)
+			? lightStr
+			: darkStr;
+
+		// parse dark or light color
+		return parseColorOrFunction( resolver.apply( darkOrLightColor ), resolver, reportError );
 	}
 
 	private static Object parseFunctionBaseColor( String colorStr, ColorFunction function,
@@ -783,6 +1071,107 @@ class UIDefaultsLoader
 		return new ColorUIResource( newColor );
 	}
 
+	/**
+	 * Syntax: [normal] [bold|+bold|-bold] [italic|+italic|-italic] [<size>|+<incr>|-<decr>|<percent>%] [family[, family]] [$baseFontKey]
+	 */
+	private static Object parseFont( String value ) {
+		Object font = fontCache.get( value );
+		if( font != null )
+			return font;
+
+		int style = -1;
+		int styleChange = 0;
+		int absoluteSize = 0;
+		int relativeSize = 0;
+		float scaleSize = 0;
+		List<String> families = null;
+		String baseFontKey = null;
+
+		// use StreamTokenizer to split string because it supports quoted strings
+		StreamTokenizer st = new StreamTokenizer( new StringReader( value ) );
+		st.resetSyntax();
+		st.wordChars( ' ' + 1, 255 );
+		st.whitespaceChars( 0, ' ' );
+		st.whitespaceChars( ',', ',' ); // ignore ','
+		st.quoteChar( '"' );
+		st.quoteChar( '\'' );
+
+		try {
+			while( st.nextToken() != StreamTokenizer.TT_EOF ) {
+				String param = st.sval;
+				switch( param ) {
+					// font style
+					case "normal":
+						style = 0;
+						break;
+
+					case "bold":
+						if( style == -1 )
+							style = 0;
+						style |= Font.BOLD;
+						break;
+
+					case "italic":
+						if( style == -1 )
+							style = 0;
+						style |= Font.ITALIC;
+						break;
+
+					case "+bold":   styleChange |= Font.BOLD; break;
+					case "-bold":   styleChange |= Font.BOLD << 16; break;
+					case "+italic": styleChange |= Font.ITALIC; break;
+					case "-italic": styleChange |= Font.ITALIC << 16; break;
+
+					default:
+						char firstChar = param.charAt( 0 );
+						if( Character.isDigit( firstChar ) || firstChar == '+' || firstChar == '-' ) {
+							// font size
+							if( absoluteSize != 0 || relativeSize != 0 || scaleSize != 0 )
+								throw new IllegalArgumentException( "size specified more than once in '" + value + "'" );
+
+							if( firstChar == '+' || firstChar == '-' )
+								relativeSize = parseInteger( param, true );
+							else if( param.endsWith( "%" ) )
+								scaleSize = parseInteger( param.substring( 0, param.length() - 1 ), true ) / 100f;
+							else
+								absoluteSize = parseInteger( param, true );
+						} else if( firstChar == '$' ) {
+							// reference to base font
+							if( baseFontKey != null )
+								throw new IllegalArgumentException( "baseFontKey specified more than once in '" + value + "'" );
+
+							baseFontKey = param.substring( 1 );
+						} else {
+							// font family
+							if( families == null )
+								families = Collections.singletonList( param );
+							else {
+								if( families.size() == 1 )
+									families = new ArrayList<>( families );
+								families.add( param );
+							}
+						}
+						break;
+				}
+			}
+		} catch( IOException ex ) {
+			throw new IllegalArgumentException( ex );
+		}
+
+		if( style != -1 && styleChange != 0 )
+			throw new IllegalArgumentException( "can not mix absolute style (e.g. 'bold') with derived style (e.g. '+italic') in '" + value + "'" );
+		if( styleChange != 0 ) {
+			if( (styleChange & Font.BOLD) != 0 && (styleChange & (Font.BOLD << 16)) != 0 )
+				throw new IllegalArgumentException( "can not use '+bold' and '-bold' in '" + value + "'" );
+			if( (styleChange & Font.ITALIC) != 0 && (styleChange & (Font.ITALIC << 16)) != 0 )
+				throw new IllegalArgumentException( "can not use '+italic' and '-italic' in '" + value + "'" );
+		}
+
+		font = new FlatLaf.ActiveFont( baseFontKey, families, style, styleChange, absoluteSize, relativeSize, scaleSize );
+		fontCache.put( value, font );
+		return font;
+	}
+
 	private static int parsePercentage( String value ) {
 		if( !value.endsWith( "%" ) )
 			throw new NumberFormatException( "invalid percentage '" + value + "'" );
@@ -799,6 +1188,14 @@ class UIDefaultsLoader
 		return val;
 	}
 
+	private static Boolean parseBoolean( String value ) {
+		switch( value ) {
+			case "false":	return false;
+			case "true":	return true;
+		}
+		throw new IllegalArgumentException( "invalid boolean '" + value + "'" );
+	}
+
 	private static Character parseCharacter( String value ) {
 		if( value.length() != 1 )
 			throw new IllegalArgumentException( "invalid character '" + value + "'" );
@@ -812,7 +1209,7 @@ class UIDefaultsLoader
 		}
 
 		Integer integer = parseInteger( value, true );
-		if( integer.intValue() < min || integer.intValue() > max )
+		if( integer < min || integer > max )
 			throw new NumberFormatException( "integer '" + value + "' out of range (" + min + '-' + max + ')' );
 		return integer;
 	}
@@ -823,6 +1220,20 @@ class UIDefaultsLoader
 		} catch( NumberFormatException ex ) {
 			if( reportError )
 				throw new NumberFormatException( "invalid integer '" + value + "'" );
+		}
+		return null;
+	}
+
+	private static Number parseIntegerOrFloat( String value, boolean reportError ) {
+		try {
+			return Integer.parseInt( value );
+		} catch( NumberFormatException ex ) {
+			try {
+				return Float.parseFloat( value );
+			} catch( NumberFormatException ex2 ) {
+				if( reportError )
+					throw new NumberFormatException( "invalid integer or float '" + value + "'" );
+			}
 		}
 		return null;
 	}
@@ -839,34 +1250,34 @@ class UIDefaultsLoader
 
 	private static ActiveValue parseScaledInteger( String value ) {
 		int val = parseInteger( value, true );
-		return (ActiveValue) t -> {
+		return t -> {
 			return UIScale.scale( val );
 		};
 	}
 
 	private static ActiveValue parseScaledFloat( String value ) {
 		float val = parseFloat( value, true );
-		return (ActiveValue) t -> {
+		return t -> {
 			return UIScale.scale( val );
 		};
 	}
 
 	private static ActiveValue parseScaledInsets( String value ) {
 		Insets insets = parseInsets( value );
-		return (ActiveValue) t -> {
+		return t -> {
 			return UIScale.scale( insets );
 		};
 	}
 
 	private static ActiveValue parseScaledDimension( String value ) {
 		Dimension dimension = parseDimension( value );
-		return (ActiveValue) t -> {
+		return t -> {
 			return UIScale.scale( dimension );
 		};
 	}
 
 	private static Object parseGrayFilter( String value ) {
-		List<String> numbers = split( value, ',' );
+		List<String> numbers = StringUtils.split( value, ',', true, false );
 		try {
 			int brightness = Integer.parseInt( numbers.get( 0 ) );
 			int contrast = Integer.parseInt( numbers.get( 1 ) );
@@ -878,20 +1289,6 @@ class UIDefaultsLoader
 		} catch( NumberFormatException ex ) {
 			throw new IllegalArgumentException( "invalid gray filter '" + value + "'" );
 		}
-	}
-
-	/**
-	 * Split string and trim parts.
-	 */
-	private static List<String> split( String str, char delim ) {
-		List<String> result = StringUtils.split( str, delim );
-
-		// trim strings
-		int size = result.size();
-		for( int i = 0; i < size; i++ )
-			result.set( i, result.get( i ).trim() );
-
-		return result;
 	}
 
 	/**
@@ -910,11 +1307,11 @@ class UIDefaultsLoader
 			else if( ch == ')' )
 				nestLevel--;
 			else if( nestLevel == 0 && ch == delim ) {
-				strs.add( str.substring( start, i ).trim() );
+				strs.add( StringUtils.substringTrimmed( str, start, i ) );
 				start = i + 1;
 			}
 		}
-		strs.add( str.substring( start ).trim() );
+		strs.add( StringUtils.substringTrimmed( str, start ) );
 
 		return strs;
 	}
@@ -923,7 +1320,7 @@ class UIDefaultsLoader
 	 * For use in LazyValue to get value for given key from UIManager and report error
 	 * if not found. If key is prefixed by '?', then no error is reported.
 	 */
-	private static Object lazyUIManagerGet( String uiKey ) {
+	static Object lazyUIManagerGet( String uiKey ) {
 		boolean optional = false;
 		if( uiKey.startsWith( OPTIONAL_PREFIX ) ) {
 			uiKey = uiKey.substring( OPTIONAL_PREFIX.length() );
@@ -934,5 +1331,9 @@ class UIDefaultsLoader
 		if( value == null && !optional )
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: '" + uiKey + "' not found in UI defaults.", null );
 		return value;
+	}
+
+	private static void throwMissingParametersException( String value ) {
+		throw new IllegalArgumentException( "missing parameters in function '" + value + "'" );
 	}
 }

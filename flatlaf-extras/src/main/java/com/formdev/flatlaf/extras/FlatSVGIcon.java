@@ -27,6 +27,10 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.RGBImageFilter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
@@ -42,7 +46,9 @@ import com.formdev.flatlaf.FlatLaf.DisabledIconProvider;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.GrayFilter;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.MultiResolutionImageSupport;
+import com.formdev.flatlaf.util.SoftCache;
 import com.formdev.flatlaf.util.UIScale;
 import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGException;
@@ -57,8 +63,12 @@ public class FlatSVGIcon
 	extends ImageIcon
 	implements DisabledIconProvider
 {
+	// cache that uses soft references for values, which allows freeing SVG diagrams if no longer used
+	private static final SoftCache<URI, SVGDiagram> svgCache = new SoftCache<>();
+
 	// use own SVG universe so that it can not be cleared from anywhere
 	private static final SVGUniverse svgUniverse = new SVGUniverse();
+	private static int streamNumber;
 
 	private final String name;
 	private final int width;
@@ -66,23 +76,30 @@ public class FlatSVGIcon
 	private final float scale;
 	private final boolean disabled;
 	private final ClassLoader classLoader;
+	private final URI uri;
 
 	private ColorFilter colorFilter;
 
 	private SVGDiagram diagram;
 	private boolean dark;
+	private boolean loadFailed;
 
 	/**
 	 * Creates an SVG icon from the given resource name.
 	 * <p>
 	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
 	 * in the tag {@code <svg>} are used as icon size.
+	 * <p>
+	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
+	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
 	 *
-	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param name the name of the SVG resource (a '/'-separated path; e.g. {@code "com/myapp/myicon.svg"})
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name ) {
-		this( name, -1, -1, 1, false, null );
+		this( name, -1, -1, 1, false, null, null );
 	}
 
 	/**
@@ -91,27 +108,37 @@ public class FlatSVGIcon
 	 * <p>
 	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
 	 * in the tag {@code <svg>} are used as icon size.
+	 * <p>
+	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
+	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
 	 *
-	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param name the name of the SVG resource (a '/'-separated path; e.g. {@code "com/myapp/myicon.svg"})
 	 * @param classLoader the class loader used to load the SVG resource
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, ClassLoader classLoader ) {
-		this( name, -1, -1, 1, false, classLoader );
+		this( name, -1, -1, 1, false, classLoader, null );
 	}
 
 	/**
 	 * Creates an SVG icon from the given resource name with the given width and height.
 	 * <p>
 	 * The icon is scaled if the given size is different to the size specified in the SVG file.
+	 * <p>
+	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
+	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
 	 *
-	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param name the name of the SVG resource (a '/'-separated path; e.g. {@code "com/myapp/myicon.svg"})
 	 * @param width the width of the icon
 	 * @param height the height of the icon
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, int width, int height ) {
-		this( name, width, height, 1, false, null );
+		this( name, width, height, 1, false, null, null );
 	}
 
 	/**
@@ -119,15 +146,20 @@ public class FlatSVGIcon
 	 * The SVG file is loaded from the given class loader.
 	 * <p>
 	 * The icon is scaled if the given size is different to the size specified in the SVG file.
+	 * <p>
+	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
+	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
 	 *
-	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param name the name of the SVG resource (a '/'-separated path; e.g. {@code "com/myapp/myicon.svg"})
 	 * @param width the width of the icon
 	 * @param height the height of the icon
 	 * @param classLoader the class loader used to load the SVG resource
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, int width, int height, ClassLoader classLoader ) {
-		this( name, width, height, 1, false, classLoader );
+		this( name, width, height, 1, false, classLoader, null );
 	}
 
 	/**
@@ -136,13 +168,18 @@ public class FlatSVGIcon
 	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
 	 * in the tag {@code <svg>} are used as base icon size, which is multiplied
 	 * by the given scale factor.
+	 * <p>
+	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
+	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
 	 *
-	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param name the name of the SVG resource (a '/'-separated path; e.g. {@code "com/myapp/myicon.svg"})
 	 * @param scale the amount by which the icon size is scaled
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, float scale ) {
-		this( name, -1, -1, scale, false, null );
+		this( name, -1, -1, scale, false, null, null );
 	}
 
 	/**
@@ -152,23 +189,123 @@ public class FlatSVGIcon
 	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
 	 * in the tag {@code <svg>} are used as base icon size, which is multiplied
 	 * by the given scale factor.
+	 * <p>
+	 * If using Java modules, the package containing the icon must be opened in {@code module-info.java}.
+	 * Otherwise use {@link #FlatSVGIcon(URL)}.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
 	 *
-	 * @param name the name of the SVG resource (a '/'-separated path)
+	 * @param name the name of the SVG resource (a '/'-separated path; e.g. {@code "com/myapp/myicon.svg"})
 	 * @param scale the amount by which the icon size is scaled
 	 * @param classLoader the class loader used to load the SVG resource
 	 * @see ClassLoader#getResource(String)
 	 */
 	public FlatSVGIcon( String name, float scale, ClassLoader classLoader ) {
-		this( name, -1, -1, scale, false, classLoader );
+		this( name, -1, -1, scale, false, classLoader, null );
 	}
 
-	protected FlatSVGIcon( String name, int width, int height, float scale, boolean disabled, ClassLoader classLoader ) {
+	/**
+	 * Creates an SVG icon from the given URL.
+	 * <p>
+	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
+	 * in the tag {@code <svg>} are used as icon size.
+	 * <p>
+	 * This method is useful if using Java modules and the package containing the icon
+	 * is not opened in {@code module-info.java}.
+	 * E.g. {@code new FlatSVGIcon( getClass().getResource( "/com/myapp/myicon.svg" ) )}.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
+	 *
+	 * @param url the URL of the SVG resource
+	 * @see ClassLoader#getResource(String)
+	 * @since 2
+	 */
+	public FlatSVGIcon( URL url ) {
+		this( null, -1, -1, 1, false, null, url2uri( url ) );
+	}
+
+	/**
+	 * Creates an SVG icon from the given URI.
+	 * <p>
+	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
+	 * in the tag {@code <svg>} are used as icon size.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
+	 *
+	 * @param uri the URI of the SVG resource
+	 * @see ClassLoader#getResource(String)
+	 * @since 2
+	 */
+	public FlatSVGIcon( URI uri ) {
+		this( null, -1, -1, 1, false, null, uri );
+	}
+
+	/**
+	 * Creates an SVG icon from the given file.
+	 * <p>
+	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
+	 * in the tag {@code <svg>} are used as icon size.
+	 * <p>
+	 * This is cheap operation because the icon is only loaded when used.
+	 *
+	 * @param file the SVG file
+	 * @since 2
+	 */
+	public FlatSVGIcon( File file ) {
+		this( null, -1, -1, 1, false, null, file.toURI() );
+	}
+
+	/**
+	 * Creates an SVG icon from the given input stream.
+	 * <p>
+	 * The SVG attributes {@code width} and {@code height} (or {@code viewBox})
+	 * in the tag {@code <svg>} are used as icon size.
+	 * <p>
+	 * The input stream is loaded, parsed and closed immediately.
+	 *
+	 * @param in the input stream for reading a SVG resource
+	 * @throws IOException if an I/O exception occurs
+	 * @since 2
+	 */
+	public FlatSVGIcon( InputStream in ) throws IOException {
+		this( null, -1, -1, 1, false, null, loadFromStream( in ) );
+
+		// since the input stream is already loaded and parsed,
+		// get diagram here and remove it from cache
+		update();
+		synchronized( FlatSVGIcon.class ) {
+			svgCache.remove( uri );
+		}
+	}
+
+	private static synchronized URI loadFromStream( InputStream in ) throws IOException {
+		try( InputStream in2 = in ) {
+			return svgUniverse.loadSVG( in2, "/flatlaf-stream-" + (streamNumber++) );
+		}
+	}
+
+	/**
+	 * Creates a copy of the given icon.
+	 * <p>
+	 * If the icon has a color filter, then it is shared with the new icon.
+	 *
+	 * @since 2.0.1
+	 */
+	public FlatSVGIcon( FlatSVGIcon icon ) {
+		this( icon.name, icon.width, icon.height, icon.scale, icon.disabled, icon.classLoader, icon.uri );
+		colorFilter = icon.colorFilter;
+		diagram = icon.diagram;
+		dark = icon.dark;
+	}
+
+	protected FlatSVGIcon( String name, int width, int height, float scale, boolean disabled, ClassLoader classLoader, URI uri ) {
 		this.name = name;
 		this.width = width;
 		this.height = height;
 		this.scale = scale;
 		this.disabled = disabled;
 		this.classLoader = classLoader;
+		this.uri = uri;
 	}
 
 	/**
@@ -247,7 +384,7 @@ public class FlatSVGIcon
 		if( width == this.width && height == this.height )
 			return this;
 
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader );
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader, uri );
 		icon.colorFilter = colorFilter;
 		icon.diagram = diagram;
 		icon.dark = dark;
@@ -266,7 +403,7 @@ public class FlatSVGIcon
 		if( scale == this.scale )
 			return this;
 
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader );
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, disabled, classLoader, uri );
 		icon.colorFilter = colorFilter;
 		icon.diagram = diagram;
 		icon.dark = dark;
@@ -285,7 +422,7 @@ public class FlatSVGIcon
 		if( disabled )
 			return this;
 
-		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, true, classLoader );
+		FlatSVGIcon icon = new FlatSVGIcon( name, width, height, scale, true, classLoader, uri );
 		icon.colorFilter = colorFilter;
 		icon.diagram = diagram;
 		icon.dark = dark;
@@ -323,20 +460,56 @@ public class FlatSVGIcon
 	}
 
 	private void update() {
+		if( loadFailed )
+			return;
+
 		if( dark == isDarkLaf() && diagram != null )
 			return;
 
 		dark = isDarkLaf();
-		URL url = getIconURL( name, dark );
-		if( url == null & dark )
-			url = getIconURL( name, false );
 
-		// load/get image
-		try {
-			diagram = svgUniverse.getDiagram( url.toURI() );
-		} catch( URISyntaxException ex ) {
-			ex.printStackTrace();
+		// SVGs already loaded via url or input stream can not have light/dark variants
+		if( uri != null && diagram != null )
+			return;
+
+		URI uri = this.uri;
+		if( uri == null ) {
+			URL url = getIconURL( name, dark );
+			if( url == null & dark )
+				url = getIconURL( name, false );
+
+			if( url == null ) {
+				loadFailed = true;
+				LoggingFacade.INSTANCE.logConfig( "FlatSVGIcon: resource '" + name + "' not found (if using Java modules, check whether icon package is opened in module-info.java)", null );
+				return;
+			}
+
+			uri = url2uri( url );
 		}
+
+		diagram = loadSVG( uri );
+		loadFailed = (diagram == null);
+	}
+
+	static synchronized SVGDiagram loadSVG( URI uri ) {
+		// get from our cache
+		SVGDiagram diagram = svgCache.get( uri );
+		if( diagram != null )
+			return diagram;
+
+		// load/get SVG diagram
+		diagram = svgUniverse.getDiagram( uri );
+
+		if( diagram == null ) {
+			LoggingFacade.INSTANCE.logSevere( "FlatSVGIcon: failed to load '" + uri + "'", null );
+			return null;
+		}
+
+		// add to our (soft) cache and remove from SVGUniverse (hard) cache
+		svgCache.put( uri, diagram );
+		svgUniverse.removeDocument( uri );
+
+		return diagram;
 	}
 
 	private URL getIconURL( String name, boolean dark ) {
@@ -484,6 +657,14 @@ public class FlatSVGIcon
 		};
 
 		return MultiResolutionImageSupport.create( 0, dimensions, producer );
+	}
+
+	static URI url2uri( URL url ) {
+		try {
+			return url.toURI();
+		} catch( URISyntaxException ex ) {
+			throw new IllegalArgumentException( ex );
+		}
 	}
 
 	private static Boolean darkLaf;

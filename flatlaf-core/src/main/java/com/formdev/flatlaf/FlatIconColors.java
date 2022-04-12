@@ -19,7 +19,7 @@ package com.formdev.flatlaf;
 /**
  * Default color palette for action icons and object icons.
  * <p>
- * The idea is to use only this well defined set of colors in SVG icons and
+ * The idea is to use only this well-defined set of colors in SVG icons, and
  * then they are replaced at runtime to dark variants or to other theme colors.
  * Then a single SVG icon (light variant) can be used for dark themes too.
  * IntelliJ Platform uses this mechanism to allow themes to change IntelliJ Platform icons.
@@ -35,7 +35,7 @@ package com.formdev.flatlaf;
  * <p>
  * You may use these colors also in your application (outside of SVG icons), but do
  * not use the RGB values defined in this enum.<br>
- * Instead use {@code UIManager.getColor( FlatIconColors.ACTIONS_GREY.key )}.
+ * Instead, use {@code UIManager.getColor( FlatIconColors.ACTIONS_GREY.key )}.
  *
  * @author Karl Tauber
  */

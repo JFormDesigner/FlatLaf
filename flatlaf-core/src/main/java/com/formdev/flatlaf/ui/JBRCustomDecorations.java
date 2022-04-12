@@ -70,9 +70,10 @@ public class JBRCustomDecorations
 			return null;
 
 		// check whether root pane already has a parent, which is the case when switching LaF
-		Window window = SwingUtilities.windowForComponent( rootPane );
-		if( window != null ) {
-			FlatNativeWindowBorder.install( window );
+		Container parent = rootPane.getParent();
+		if( parent != null ) {
+			if( parent instanceof Window )
+				FlatNativeWindowBorder.install( (Window) parent );
 			return null;
 		}
 
@@ -110,9 +111,9 @@ public class JBRCustomDecorations
 		// since it is actually not possible to uninstall JBR decorations,
 		// simply reduce titleBarHeight so that it is still possible to resize window
 		// and remove hitTestSpots
-		Window window = SwingUtilities.windowForComponent( rootPane );
-		if( window != null )
-			setHasCustomDecoration( window, false );
+		Container parent = rootPane.getParent();
+		if( parent instanceof Window )
+			setHasCustomDecoration( (Window) parent, false );
 	}
 
 	static boolean hasCustomDecoration( Window window ) {
@@ -283,7 +284,7 @@ public class JBRCustomDecorations
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 			Window window = SwingUtilities.windowForComponent( c );
-			boolean active = (window != null) ? window.isActive() : false;
+			boolean active = window != null && window.isActive();
 
 			// paint top border
 			//  - in light themes
@@ -297,7 +298,7 @@ public class JBRCustomDecorations
 		}
 
 		private void paintImpl( Graphics2D g, int x, int y, int width, int height, double scaleFactor ) {
-			g.drawRect( x, y, width - 1, 0 );
+			g.fillRect( x, y, width, 1 );
 		}
 
 		void repaintBorder( Component c ) {

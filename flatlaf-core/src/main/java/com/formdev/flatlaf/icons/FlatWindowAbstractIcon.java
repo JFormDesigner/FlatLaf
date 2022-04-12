@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.ui.FlatButtonUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -65,8 +66,14 @@ public abstract class FlatWindowAbstractIcon
 	protected void paintBackground( Component c, Graphics2D g ) {
 		Color background = FlatButtonUI.buttonStateColor( c, null, null, null, hoverBackground, pressedBackground );
 		if( background != null ) {
+			// disable antialiasing for background rectangle painting to avoid blury edges when scaled (e.g. at 125% or 175%)
+			Object oldHint = g.getRenderingHint( RenderingHints.KEY_ANTIALIASING );
+			g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF );
+
 			g.setColor( FlatUIUtils.deriveColor( background, c.getBackground() ) );
 			g.fillRect( 0, 0, width, height );
+
+			g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, oldHint );
 		}
 	}
 

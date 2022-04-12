@@ -21,6 +21,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * "restore" icon for windows (frames and dialogs).
@@ -38,18 +39,33 @@ public class FlatWindowRestoreIcon
 		int iwh = (int) (10 * scaleFactor);
 		int ix = x + ((width - iwh) / 2);
 		int iy = y + ((height - iwh) / 2);
-		int thickness = (int) scaleFactor;
+		float thickness = SystemInfo.isWindows_11_orLater ? (float) scaleFactor : (int) scaleFactor;
+		int arc = Math.max( (int) (1.5 * scaleFactor), 2 );
+		int arcOuter = (int) (arc + (1.5 * scaleFactor));
 
 		int rwh = (int) (8 * scaleFactor);
 		int ro2 = iwh - rwh;
 
-		Path2D r1 = FlatUIUtils.createRectangle( ix + ro2, iy, rwh, rwh, thickness );
-		Path2D r2 = FlatUIUtils.createRectangle( ix, iy + ro2, rwh, rwh, thickness );
+		// upper-right rectangle
+		Path2D r1 = SystemInfo.isWindows_11_orLater
+			? FlatUIUtils.createRoundRectangle( ix + ro2, iy, rwh, rwh, thickness, arc, arcOuter, arc, arc )
+			: FlatUIUtils.createRectangle( ix + ro2, iy, rwh, rwh, thickness );
 
+		// lower-left rectangle
+		Path2D r2 = SystemInfo.isWindows_11_orLater
+			? FlatUIUtils.createRoundRectangle( ix, iy + ro2, rwh, rwh, thickness, arc, arc, arc, arc )
+			: FlatUIUtils.createRectangle( ix, iy + ro2, rwh, rwh, thickness );
+
+		// paint upper-right rectangle
 		Area area = new Area( r1 );
-		area.subtract( new Area( new Rectangle2D.Float( ix, iy + ro2, rwh, rwh ) ) );
+		if( SystemInfo.isWindows_11_orLater ) {
+			area.subtract( new Area( new Rectangle2D.Float( ix, (float) (iy + scaleFactor), rwh, rwh ) ) );
+			area.subtract( new Area( new Rectangle2D.Float( (float) (ix + scaleFactor), iy + ro2, rwh, rwh ) ) );
+		} else
+			area.subtract( new Area( new Rectangle2D.Float( ix, iy + ro2, rwh, rwh ) ) );
 		g.fill( area );
 
+		// paint lower-left rectangle
 		g.fill( r2 );
 	}
 }

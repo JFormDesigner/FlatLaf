@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -33,8 +34,12 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicHTML;
 import javax.swing.plaf.basic.BasicLabelUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -54,13 +59,30 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatLabelUI
 	extends BasicLabelUI
+	implements StyleableUI
 {
-	private Color disabledForeground;
+	@Styleable protected Color disabledForeground;
 
+	private final boolean shared;
 	private boolean defaults_initialized = false;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatLabelUI.class, FlatLabelUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatLabelUI.class, () -> new FlatLabelUI( true ) )
+			: new FlatLabelUI( false );
+	}
+
+	/** @since 2 */
+	protected FlatLabelUI( boolean shared ) {
+		this.shared = shared;
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle( (JLabel) c );
 	}
 
 	@Override
@@ -77,7 +99,9 @@ public class FlatLabelUI
 	@Override
 	protected void uninstallDefaults( JLabel c ) {
 		super.uninstallDefaults( c );
+
 		defaults_initialized = false;
+		oldStyleValues = null;
 	}
 
 	@Override
@@ -94,8 +118,44 @@ public class FlatLabelUI
 		if( name == "text" || name == "font" || name == "foreground" ) {
 			JLabel label = (JLabel) e.getSource();
 			updateHTMLRenderer( label, label.getText(), true );
+		} else if( name.equals( FlatClientProperties.STYLE ) || name.equals( FlatClientProperties.STYLE_CLASS ) ) {
+			JLabel label = (JLabel) e.getSource();
+			if( shared && FlatStylingSupport.hasStyleProperty( label ) ) {
+				// unshare component UI if necessary
+				// updateUI() invokes installStyle() from installUI()
+				label.updateUI();
+			} else
+				installStyle( label );
+			label.revalidate();
+			label.repaint();
 		} else
 			super.propertyChange( e );
+	}
+
+	/** @since 2 */
+	protected void installStyle( JLabel c ) {
+		try {
+			applyStyle( c, FlatStylingSupport.getResolvedStyle( c, "Label" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( JLabel c, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( c, key, value ) );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( JLabel c, String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, c, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	/**

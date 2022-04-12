@@ -48,6 +48,7 @@ public class FlatRangeSliderUI
 	protected int trackWidth;
 	protected Dimension thumbSize;
 	protected int focusWidth;
+	/** @since 2 */ protected float thumbBorderWidth;
 
 	protected Color trackValueColor;
 	protected Color trackColor;
@@ -120,6 +121,7 @@ public class FlatRangeSliderUI
 		trackWidth = UIManager.getInt( "Slider.trackWidth" );
 		thumbSize = UIManager.getDimension( "Slider.thumbSize" );
 		focusWidth = FlatUIUtils.getUIInt( "Slider.focusWidth", 4 );
+		thumbBorderWidth = FlatUIUtils.getUIFloat( "Slider.thumbBorderWidth", 1 );
 
 		trackValueColor = FlatUIUtils.getUIColor( "Slider.trackValueColor", "Slider.thumbColor" );
 		trackColor = UIManager.getColor( "Slider.trackColor" );
@@ -324,7 +326,7 @@ debug*/
 		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor,
 			(foreground != defaultForeground) ? foreground : focusBaseColor );
 
-		FlatSliderUI.paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, focusWidth );
+		FlatSliderUI.paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, thumbBorderWidth, focusWidth );
 	}
 
 	protected Color getTrackValueColor() {

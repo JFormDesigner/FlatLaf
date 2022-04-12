@@ -21,6 +21,17 @@ plugins {
 	`flatlaf-publish`
 }
 
+val sigtest = configurations.create( "sigtest" )
+
+dependencies {
+	testImplementation( "org.junit.jupiter:junit-jupiter-api:5.7.2" )
+	testImplementation( "org.junit.jupiter:junit-jupiter-params" )
+	testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine" )
+
+	// https://github.com/jtulach/netbeans-apitest
+	sigtest( "org.netbeans.tools:sigtest-maven-plugin:1.4" )
+}
+
 java {
 	withSourcesJar()
 	withJavadocJar()
@@ -34,7 +45,8 @@ tasks {
 
 	processResources {
 		// build native libraries
-		dependsOn( ":flatlaf-natives-windows:assemble" )
+		if( org.gradle.internal.os.OperatingSystem.current().isWindows )
+			dependsOn( ":flatlaf-natives-windows:assemble" )
 	}
 
 	jar {
@@ -51,6 +63,61 @@ tasks {
 
 	named<Jar>( "javadocJar" ) {
 		archiveBaseName.set( "flatlaf" )
+	}
+
+	check {
+		dependsOn( "sigtestCheck" )
+	}
+
+	test {
+		useJUnitPlatform()
+		testLogging.exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+	}
+
+	register( "sigtestGenerate" ) {
+		group = "verification"
+		dependsOn( "jar" )
+
+		doLast {
+			ant.withGroovyBuilder {
+				"taskdef"(
+					"name" to "sigtest",
+					"classname" to "org.netbeans.apitest.Sigtest",
+					"classpath" to sigtest.asPath )
+
+				"sigtest"(
+					"action" to "generate",
+					"fileName" to "${project.name}-sigtest.txt",
+					"classpath" to jar.get().outputs.files.asPath,
+					"packages" to "com.formdev.flatlaf,com.formdev.flatlaf.util",
+					"version" to version,
+					"release" to "1.8", // Java version
+					"failonerror" to "true" )
+			}
+		}
+	}
+
+	register( "sigtestCheck" ) {
+		group = "verification"
+		dependsOn( "jar" )
+
+		doLast {
+			ant.withGroovyBuilder {
+				"taskdef"(
+					"name" to "sigtest",
+					"classname" to "org.netbeans.apitest.Sigtest",
+					"classpath" to sigtest.asPath )
+
+				"sigtest"(
+					"action" to "check",
+					"fileName" to "${project.name}-sigtest.txt",
+					"classpath" to jar.get().outputs.files.asPath,
+					"packages" to "com.formdev.flatlaf,com.formdev.flatlaf.util",
+					"version" to version,
+					"release" to "1.8", // Java version
+					"failonerror" to "true" )
+			}
+		}
 	}
 }
 

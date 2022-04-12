@@ -21,8 +21,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.util.Map;
 import javax.swing.JMenuBar;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableBorder;
 
 /**
  * Border for {@link javax.swing.JMenuBar}.
@@ -33,11 +36,26 @@ import javax.swing.UIManager;
  */
 public class FlatMenuBarBorder
 	extends FlatMarginBorder
+	implements StyleableBorder
 {
-	private final Color borderColor = UIManager.getColor( "MenuBar.borderColor" );
+	@Styleable protected Color borderColor = UIManager.getColor( "MenuBar.borderColor" );
+
+	/** @since 2 */
+	@Override
+	public Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObject( this, key, value );
+	}
+
+	@Override
+	public Map<String, Class<?>> getStyleableInfos() {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
 
 	@Override
 	public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
+		if( !showBottomSeparator( c ) )
+			return;
+
 		float lineHeight = scale( (float) 1 );
 		FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 	}
@@ -52,5 +70,10 @@ public class FlatMenuBarBorder
 		insets.bottom = scale( margin.bottom + 1 );
 		insets.right = scale( margin.right );
 		return insets;
+	}
+
+	/** @since 2 */
+	protected boolean showBottomSeparator( Component c ) {
+		return !FlatMenuBarUI.useUnifiedBackground( c );
 	}
 }

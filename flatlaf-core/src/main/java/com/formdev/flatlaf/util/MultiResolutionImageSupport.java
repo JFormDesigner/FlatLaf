@@ -72,7 +72,7 @@ public class MultiResolutionImageSupport
 	 * <p>
 	 * The given dimensions array is only used for {@link #getResolutionVariants(Image)}.
 	 * The producer function may be invoked with any dimension (that is not contained in 
-	 * dimensions array) and is expected to produce a image for the passed in dimension.
+	 * dimensions array) and is expected to produce an image for the passed in dimension.
 	 * 
 	 * @param baseImageIndex index of the base image in the dimensions array
 	 * @param dimensions dimensions of resolution variants (sorted by size; smallest first)
@@ -92,7 +92,7 @@ public class MultiResolutionImageSupport
 	 * for "disabled" state.  
 	 * 
 	 * @param image a multi-resolution image that is mapped using the given mapper function
-	 * @param mapper mapper function that maps a single resolution variant to a new image (e.g. applying an filter)
+	 * @param mapper mapper function that maps a single resolution variant to a new image (e.g. applying a filter)
 	 * @return a multi-resolution image on Java 9 or later; a mapped image on Java 8
 	 */
 	public static Image map( Image image, Function<Image, Image> mapper ) {
@@ -104,7 +104,7 @@ public class MultiResolutionImageSupport
 	 * <p>
 	 * If the given image is a multi-resolution image then invokes
 	 * {@code java.awt.image.MultiResolutionImage.getResolutionVariant(destImageWidth, destImageHeight)}.
-	 * Otherwise returns the given image.
+	 * Otherwise, returns the given image.
 	 */
 	public static Image getResolutionVariant( Image image, int destImageWidth, int destImageHeight ) {
 		return image;
@@ -115,7 +115,7 @@ public class MultiResolutionImageSupport
 	 * <p>
 	 * If the given image is a multi-resolution image then invokes
 	 * {@code java.awt.image.MultiResolutionImage.getResolutionVariants()}.
-	 * Otherwise returns a list containing only the given image.
+	 * Otherwise, returns a list containing only the given image.
 	 */
 	public static List<Image> getResolutionVariants( Image image ) {
 		return Collections.singletonList( image );

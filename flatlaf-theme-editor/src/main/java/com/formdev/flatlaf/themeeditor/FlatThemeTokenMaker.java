@@ -51,7 +51,11 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "false", Token.LITERAL_BOOLEAN );
 		tokenMap.put( "true", Token.LITERAL_BOOLEAN );
 
-		// functions
+		// general functions
+		tokenMap.put( "if", TOKEN_FUNCTION );
+		tokenMap.put( "lazy", TOKEN_FUNCTION );
+
+		// color functions
 		tokenMap.put( "rgb", TOKEN_FUNCTION );
 		tokenMap.put( "rgba", TOKEN_FUNCTION );
 		tokenMap.put( "hsl", TOKEN_FUNCTION );
@@ -60,7 +64,18 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "darken", TOKEN_FUNCTION );
 		tokenMap.put( "saturate", TOKEN_FUNCTION );
 		tokenMap.put( "desaturate", TOKEN_FUNCTION );
-		tokenMap.put( "lazy", TOKEN_FUNCTION );
+		tokenMap.put( "fadein", TOKEN_FUNCTION );
+		tokenMap.put( "fadeout", TOKEN_FUNCTION );
+		tokenMap.put( "fade", TOKEN_FUNCTION );
+		tokenMap.put( "spin", TOKEN_FUNCTION );
+		tokenMap.put( "changeHue", TOKEN_FUNCTION );
+		tokenMap.put( "changeSaturation", TOKEN_FUNCTION );
+		tokenMap.put( "changeLightness", TOKEN_FUNCTION );
+		tokenMap.put( "changeAlpha", TOKEN_FUNCTION );
+		tokenMap.put( "mix", TOKEN_FUNCTION );
+		tokenMap.put( "tint", TOKEN_FUNCTION );
+		tokenMap.put( "shade", TOKEN_FUNCTION );
+		tokenMap.put( "contrast", TOKEN_FUNCTION );
 
 		// function options
 		tokenMap.put( "relative", Token.RESERVED_WORD );
@@ -116,8 +131,10 @@ public class FlatThemeTokenMaker
 				newTokenType = TOKEN_VARIABLE;
 			else if( currentTokenType != TOKEN_STRING && (RSyntaxUtilities.isDigit( ch ) || (currentTokenType == TOKEN_NUMBER && ch == '.')) )
 				newTokenType = TOKEN_NUMBER;
-			else if( ch == ',' || ch == '(' || ch == ')' || ch == '"' || ch == '%' )
+			else if( ch == ',' || ch == '"' || ch == '%' )
 				newTokenType = TokenTypes.OPERATOR;
+			else if( ch == '(' || ch == ')' )
+				newTokenType = TokenTypes.SEPARATOR; // necessary for bracket matching
 			else
 				newTokenType = TOKEN_STRING;
 

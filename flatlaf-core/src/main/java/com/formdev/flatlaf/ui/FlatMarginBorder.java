@@ -29,7 +29,7 @@ import javax.swing.plaf.basic.BasicBorders;
 public class FlatMarginBorder
 	extends BasicBorders.MarginBorder
 {
-	private final int left, right, top, bottom;
+	protected int left, right, top, bottom;
 
 	public FlatMarginBorder() {
 		left = right = top = bottom = 0;

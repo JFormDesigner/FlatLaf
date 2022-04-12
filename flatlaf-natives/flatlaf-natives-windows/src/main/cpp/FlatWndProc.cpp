@@ -53,6 +53,13 @@ JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder
 }
 
 extern "C"
+JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_setWindowBackground
+	( JNIEnv* env, jobject obj, jlong hwnd, jint r, jint g, jint b )
+{
+	FlatWndProc::setWindowBackground( reinterpret_cast<HWND>( hwnd ), r, g, b );
+}
+
+extern "C"
 JNIEXPORT void JNICALL Java_com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_00024WndProc_showWindow
 	( JNIEnv* env, jobject obj, jlong hwnd, jint cmd )
 {
@@ -80,6 +87,9 @@ FlatWndProc::FlatWndProc() {
 	hwnd = NULL;
 	defaultWndProc = NULL;
 	wmSizeWParam = -1;
+	background = NULL;
+	isMovingOrSizing = false;
+	isMoving = false;
 }
 
 HWND FlatWndProc::install( JNIEnv *env, jobject obj, jobject window ) {
@@ -128,6 +138,8 @@ void FlatWndProc::uninstall( JNIEnv *env, jobject obj, HWND hwnd ) {
 
 	// cleanup
 	env->DeleteGlobalRef( fwp->obj );
+	if( fwp->background != NULL )
+		::DeleteObject( fwp->background );
 	delete fwp;
 }
 
@@ -174,8 +186,23 @@ void FlatWndProc::updateFrame( HWND hwnd, int state ) {
 		fwp->wmSizeWParam = -1;
 }
 
+void FlatWndProc::setWindowBackground( HWND hwnd, int r, int g, int b ) {
+	FlatWndProc* fwp = (FlatWndProc*) hwndMap->get( hwnd );
+	if( fwp == NULL )
+		return;
+
+	// delete old background brush
+	if( fwp->background != NULL )
+		::DeleteObject( fwp->background );
+
+	// create new background brush
+	fwp->background = ::CreateSolidBrush( RGB( r, g, b ) );
+}
+
 LRESULT CALLBACK FlatWndProc::StaticWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 	FlatWndProc* fwp = (FlatWndProc*) hwndMap->get( hwnd );
+	if( fwp == NULL )
+		return 0;
 	return fwp->WindowProc( hwnd, uMsg, wParam, lParam );
 }
 
@@ -189,6 +216,27 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 
 		case WM_NCHITTEST:
 			return WmNcHitTest( hwnd, uMsg, wParam, lParam );
+
+		case WM_NCMOUSEMOVE:
+			// if mouse is moved over some non-client areas,
+			// send it also to the client area to allow Swing to process it
+			// (required for Windows 11 maximize button)
+			if( wParam == HTMINBUTTON || wParam == HTMAXBUTTON || wParam == HTCLOSE ||
+				wParam == HTCAPTION || wParam == HTSYSMENU )
+			  sendMessageToClientArea( hwnd, WM_MOUSEMOVE, lParam );
+			break;
+
+		case WM_NCLBUTTONDOWN:
+		case WM_NCLBUTTONUP:
+			// if left mouse was pressed/released over minimize/maximize/close button,
+			// send it also to the client area to allow Swing to process it
+			// (required for Windows 11 maximize button)
+			if( wParam == HTMINBUTTON || wParam == HTMAXBUTTON || wParam == HTCLOSE ) {
+				int uClientMsg = (uMsg == WM_NCLBUTTONDOWN) ? WM_LBUTTONDOWN : WM_LBUTTONUP;
+				sendMessageToClientArea( hwnd, uClientMsg, lParam );
+				return 0;
+			}
+			break;
 
 		case WM_NCRBUTTONUP:
 			if( wParam == HTCAPTION || wParam == HTSYSMENU )
@@ -204,12 +252,36 @@ LRESULT CALLBACK FlatWndProc::WindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 				wParam = wmSizeWParam;
 			break;
 
+		case WM_ENTERSIZEMOVE:
+			isMovingOrSizing = true;
+			break;
+
+		case WM_EXITSIZEMOVE:
+			isMovingOrSizing = isMoving = false;
+			break;
+
+		case WM_MOVE:
+		case WM_MOVING:
+			if( isMovingOrSizing )
+				isMoving = true;
+			break;
+
+		case WM_ERASEBKGND:
+			// do not erase background while the user is moving the window,
+			// otherwise there may be rendering artifacts on HiDPI screens with Java 9+
+			// when dragging the window partly offscreen and back into the screen bounds
+			if( isMoving )
+				return FALSE;
+
+			return WmEraseBkgnd( hwnd, uMsg, wParam, lParam );
+
 		case WM_DESTROY:
 			return WmDestroy( hwnd, uMsg, wParam, lParam );
 	}
 
 	return ::CallWindowProc( defaultWndProc, hwnd, uMsg, wParam, lParam );
 }
+
 /**
  * Handle WM_DESTROY
  *
@@ -223,11 +295,30 @@ LRESULT FlatWndProc::WmDestroy( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lPara
 
 	// cleanup
 	getEnv()->DeleteGlobalRef( obj );
+	if( background != NULL )
+		::DeleteObject( background );
 	hwndMap->remove( hwnd );
 	delete this;
 
 	// call original AWT window procedure because it may fire window closed event in AwtWindow::WmDestroy()
 	return ::CallWindowProc( defaultWndProc2, hwnd, uMsg, wParam, lParam );
+}
+
+/**
+ * Handle WM_ERASEBKGND
+ *
+ * https://docs.microsoft.com/en-us/windows/win32/winmsg/wm-erasebkgnd
+ */
+LRESULT FlatWndProc::WmEraseBkgnd( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lParam ) {
+	if( background == NULL )
+		return FALSE;
+
+	// fill background
+	HDC hdc = (HDC) wParam;
+	RECT rect;
+	::GetClientRect( hwnd, &rect );
+	::FillRect( hdc, &rect, background );
+	return TRUE;
 }
 
 /**
@@ -257,7 +348,7 @@ LRESULT FlatWndProc::WmNcCalcSize( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lP
 
 	bool isMaximized = ::IsZoomed( hwnd );
 	if( isMaximized && !isFullscreen() ) {
-		// When a window is maximized, its size is actually a little bit more
+		// When a window is maximized, its size is actually a little bit larger
 		// than the monitor's work area. The window is positioned and sized in
 		// such a way that the resize handles are outside of the monitor and
 		// then the window is clipped to the monitor so that the resize handle
@@ -306,6 +397,22 @@ LRESULT FlatWndProc::WmNcHitTest( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lPa
 	if( lResult != HTCLIENT )
 		return lResult;
 
+	// get mouse x/y in window coordinates
+	LRESULT xy = screen2windowCoordinates( hwnd, lParam );
+	int x = GET_X_LPARAM( xy );
+	int y = GET_Y_LPARAM( xy );
+
+	int resizeBorderHeight = getResizeHandleHeight();
+	bool isOnResizeBorder = (y < resizeBorderHeight) &&
+		(::GetWindowLong( hwnd, GWL_STYLE ) & WS_THICKFRAME) != 0;
+
+	return onNcHitTest( x, y, isOnResizeBorder );
+}
+
+/**
+ * Converts screen coordinates to window coordinates.
+ */
+LRESULT FlatWndProc::screen2windowCoordinates( HWND hwnd, LPARAM lParam ) {
 	// get window rectangle needed to convert mouse x/y from screen to window coordinates
 	RECT rcWindow;
 	::GetWindowRect( hwnd, &rcWindow );
@@ -314,11 +421,7 @@ LRESULT FlatWndProc::WmNcHitTest( HWND hwnd, int uMsg, WPARAM wParam, LPARAM lPa
 	int x = GET_X_LPARAM( lParam ) - rcWindow.left;
 	int y = GET_Y_LPARAM( lParam ) - rcWindow.top;
 
-	int resizeBorderHeight = getResizeHandleHeight();
-	bool isOnResizeBorder = (y < resizeBorderHeight) &&
-		(::GetWindowLong( hwnd, GWL_STYLE ) & WS_THICKFRAME) != 0;
-
-	return onNcHitTest( x, y, isOnResizeBorder );
+	return MAKELONG( x, y );
 }
 
 /**
@@ -379,6 +482,14 @@ JNIEnv* FlatWndProc::getEnv() {
 
 	jvm->GetEnv( (void **) &env, JNI_VERSION_1_2 );
 	return env;
+}
+
+void FlatWndProc::sendMessageToClientArea( HWND hwnd, int uMsg, LPARAM lParam ) {
+	// get mouse x/y in window coordinates
+	LRESULT xy = screen2windowCoordinates( hwnd, lParam );
+
+	// send message
+	::SendMessage( hwnd, uMsg, 0, xy );
 }
 
 /**

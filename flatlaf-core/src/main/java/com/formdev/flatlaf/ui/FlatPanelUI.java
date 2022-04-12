@@ -16,9 +16,20 @@
 
 package com.formdev.flatlaf.ui;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicPanelUI;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPanel}.
@@ -27,15 +38,122 @@ import javax.swing.plaf.basic.BasicPanelUI;
  *
  * @uiDefault Panel.font				Font	unused
  * @uiDefault Panel.background			Color	only used if opaque
- * @uiDefault Panel.foreground			Color
+ * @uiDefault Panel.foreground			Color	unused
  * @uiDefault Panel.border				Border
  *
  * @author Karl Tauber
  */
 public class FlatPanelUI
 	extends BasicPanelUI
+	implements StyleableUI, PropertyChangeListener
 {
+	// only used via styling (not in UI defaults)
+	/** @since 2 */ @Styleable protected int arc = -1;
+
+	private final boolean shared;
+	private Map<String, Object> oldStyleValues;
+
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatPanelUI.class, FlatPanelUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatPanelUI.class, () -> new FlatPanelUI( true ) )
+			: new FlatPanelUI( false );
+	}
+
+	/** @since 2 */
+	protected FlatPanelUI( boolean shared ) {
+		this.shared = shared;
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		c.addPropertyChangeListener( this );
+
+		installStyle( (JPanel) c );
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		super.uninstallUI( c );
+
+		c.removePropertyChangeListener( this );
+
+		oldStyleValues = null;
+	}
+
+	/** @since 2.0.1 */
+	@Override
+	public void propertyChange( PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case FlatClientProperties.STYLE:
+			case FlatClientProperties.STYLE_CLASS:
+				JPanel c = (JPanel) e.getSource();
+				if( shared && FlatStylingSupport.hasStyleProperty( c ) ) {
+					// unshare component UI if necessary
+					// updateUI() invokes installStyle() from installUI()
+					c.updateUI();
+				} else
+					installStyle( c );
+				c.revalidate();
+				c.repaint();
+				break;
+		}
+	}
+
+	/** @since 2 */
+	protected void installStyle( JPanel c ) {
+		try {
+			applyStyle( c, FlatStylingSupport.getResolvedStyle( c, "Panel" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( JPanel c, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( c, key, value ) );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( JPanel c, String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, c, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	@Override
+	public void update( Graphics g, JComponent c ) {
+		// fill background
+		if( c.isOpaque() ) {
+			int width = c.getWidth();
+			int height = c.getHeight();
+			int arc = (this.arc >= 0)
+				? this.arc
+				: ((c.getBorder() instanceof FlatLineBorder)
+					? ((FlatLineBorder)c.getBorder()).getArc()
+					: 0);
+
+			// fill background with parent color to avoid garbage in rounded corners
+			if( arc > 0 )
+				FlatUIUtils.paintParentBackground( g, c );
+
+			g.setColor( c.getBackground() );
+			if( arc > 0 ) {
+				// fill rounded rectangle if having rounded corners
+				Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
+				FlatUIUtils.paintComponentBackground( (Graphics2D) g, 0, 0, width, height,
+					0, UIScale.scale( arc ) );
+				FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
+			} else
+				g.fillRect( 0, 0, width, height );
+		}
+
+		paint( g, c );
 	}
 }

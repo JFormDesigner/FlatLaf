@@ -17,6 +17,7 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.beans.PropertyChangeListener;
@@ -24,7 +25,6 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JRootPane;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeListener;
 import com.formdev.flatlaf.FlatClientProperties;
@@ -56,7 +56,7 @@ public class FlatNativeWindowBorder
 	private static final boolean canUseJBRCustomDecorations =
 		canUseWindowDecorations &&
 		SystemInfo.isJetBrainsJVM_11_orLater &&
-		FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, true );
+		FlatSystemProperties.getBoolean( FlatSystemProperties.USE_JETBRAINS_CUSTOM_DECORATIONS, false );
 
 	private static Boolean supported;
 	private static Provider nativeProvider;
@@ -76,6 +76,11 @@ public class FlatNativeWindowBorder
 		if( !isSupported() )
 			return null;
 
+		// do nothing if root pane has a parent that is not a window (e.g. a JInternalFrame)
+		Container parent = rootPane.getParent();
+		if( parent != null && !(parent instanceof Window) )
+			return null;
+
 		// Check whether root pane already has a window, which is the case when
 		// switching from another LaF to FlatLaf.
 		// Also check whether the window is displayable, which is required to install
@@ -83,9 +88,8 @@ public class FlatNativeWindowBorder
 		// If the window is not displayable, then it was probably closed/disposed but not yet removed
 		// from the list of windows that AWT maintains and returns with Window.getWindows().
 		// It could be also be a window that is currently hidden, but may be shown later.
-		Window window = SwingUtilities.windowForComponent( rootPane );
-		if( window != null && window.isDisplayable() )
-			install( window );
+		if( parent instanceof Window && parent.isDisplayable() )
+			install( (Window) parent );
 
 		// Install FlatLaf native window border, which must be done late,
 		// when the native window is already created, because it needs access to the window.
@@ -174,9 +178,9 @@ public class FlatNativeWindowBorder
 			return;
 
 		// uninstall native window border
-		Window window = SwingUtilities.windowForComponent( rootPane );
-		if( window != null )
-			uninstall( window );
+		Container parent = rootPane.getParent();
+		if( parent instanceof Window )
+			uninstall( (Window) parent );
 	}
 
 	private static void uninstall( Window window ) {
@@ -231,7 +235,8 @@ public class FlatNativeWindowBorder
 	}
 
 	static void setTitleBarHeightAndHitTestSpots( Window window, int titleBarHeight,
-		List<Rectangle> hitTestSpots, Rectangle appIconBounds )
+		List<Rectangle> hitTestSpots, Rectangle appIconBounds, Rectangle minimizeButtonBounds,
+		Rectangle maximizeButtonBounds, Rectangle closeButtonBounds )
 	{
 		if( canUseJBRCustomDecorations ) {
 			JBRCustomDecorations.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots );
@@ -241,9 +246,8 @@ public class FlatNativeWindowBorder
 		if( !isSupported() )
 			return;
 
-		nativeProvider.setTitleBarHeight( window, titleBarHeight );
-		nativeProvider.setTitleBarHitTestSpots( window, hitTestSpots );
-		nativeProvider.setTitleBarAppIconBounds( window, appIconBounds );
+		nativeProvider.updateTitleBarInfo( window, titleBarHeight, hitTestSpots,
+			appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 	}
 
 	static boolean showWindow( Window window, int cmd ) {
@@ -264,7 +268,7 @@ public class FlatNativeWindowBorder
 		try {
 /*
 			Class<?> cls = Class.forName( "com.formdev.flatlaf.natives.jna.windows.FlatWindowsNativeWindowBorder" );
-			Method m = cls.getMethod( "getInstance" );
+			java.lang.reflect.Method m = cls.getMethod( "getInstance" );
 			setNativeProvider( (Provider) m.invoke( null ) );
 */
 			setNativeProvider( FlatWindowsNativeWindowBorder.getInstance() );
@@ -273,9 +277,7 @@ public class FlatNativeWindowBorder
 		}
 	}
 
-	/**
-	 * @since 1.1.1
-	 */
+	/** @since 1.1.1 */
 	public static void setNativeProvider( Provider provider ) {
 		if( nativeProvider != null )
 			throw new IllegalStateException();
@@ -290,9 +292,9 @@ public class FlatNativeWindowBorder
 	{
 		boolean hasCustomDecoration( Window window );
 		void setHasCustomDecoration( Window window, boolean hasCustomDecoration );
-		void setTitleBarHeight( Window window, int titleBarHeight );
-		void setTitleBarHitTestSpots( Window window, List<Rectangle> hitTestSpots );
-		void setTitleBarAppIconBounds( Window window, Rectangle appIconBounds );
+		void updateTitleBarInfo( Window window, int titleBarHeight, List<Rectangle> hitTestSpots,
+			Rectangle appIconBounds, Rectangle minimizeButtonBounds, Rectangle maximizeButtonBounds,
+			Rectangle closeButtonBounds );
 
 		// commands for showWindow(); values must match Win32 API
 		// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
@@ -311,6 +313,10 @@ public class FlatNativeWindowBorder
 
 	//---- class WindowTopBorder -------------------------------------------
 
+	/**
+	 * Window top border used on Windows 10.
+	 * No longer needed since Windows 11.
+	 */
 	static class WindowTopBorder
 		extends JBRCustomDecorations.JBRWindowTopBorder
 	{

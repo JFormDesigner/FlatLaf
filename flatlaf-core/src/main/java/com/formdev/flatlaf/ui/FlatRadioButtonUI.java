@@ -23,15 +23,24 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import java.util.Objects;
 import javax.swing.AbstractButton;
 import javax.swing.CellRendererPane;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicRadioButtonUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.icons.FlatCheckBoxIcon;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -56,16 +65,34 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatRadioButtonUI
 	extends BasicRadioButtonUI
+	implements StyleableUI
 {
 	protected int iconTextGap;
-	protected Color disabledText;
+	@Styleable protected Color disabledText;
 
 	private Color defaultBackground;
 
+	private final boolean shared;
+	private boolean iconShared = true;
 	private boolean defaults_initialized = false;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
-		return FlatUIUtils.createSharedUI( FlatRadioButtonUI.class, FlatRadioButtonUI::new );
+		return FlatUIUtils.canUseSharedUI( c )
+			? FlatUIUtils.createSharedUI( FlatRadioButtonUI.class, () -> new FlatRadioButtonUI( true ) )
+			: new FlatRadioButtonUI( false );
+	}
+
+	/** @since 2 */
+	protected FlatRadioButtonUI( boolean shared ) {
+		this.shared = shared;
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle( (AbstractButton) c );
 	}
 
 	@Override
@@ -80,6 +107,7 @@ public class FlatRadioButtonUI
 
 			defaultBackground = UIManager.getColor( prefix + "background" );
 
+			iconShared = true;
 			defaults_initialized = true;
 		}
 
@@ -93,11 +121,85 @@ public class FlatRadioButtonUI
 	protected void uninstallDefaults( AbstractButton b ) {
 		super.uninstallDefaults( b );
 
+		oldStyleValues = null;
+
 		MigLayoutVisualPadding.uninstall( b );
 		defaults_initialized = false;
 	}
 
-	private static Insets tempInsets = new Insets( 0, 0, 0, 0 );
+	@Override
+	protected BasicButtonListener createButtonListener( AbstractButton b ) {
+		return new FlatRadioButtonListener( b );
+	}
+
+	/** @since 2 */
+	protected void propertyChange( AbstractButton b, PropertyChangeEvent e ) {
+		switch( e.getPropertyName() ) {
+			case FlatClientProperties.STYLE:
+			case FlatClientProperties.STYLE_CLASS:
+				if( shared && FlatStylingSupport.hasStyleProperty( b ) ) {
+					// unshare component UI if necessary
+					// updateUI() invokes installStyle() from installUI()
+					b.updateUI();
+				} else
+					installStyle( b );
+				b.revalidate();
+				b.repaint();
+				break;
+		}
+	}
+
+	/** @since 2 */
+	protected void installStyle( AbstractButton b ) {
+		try {
+			applyStyle( b, FlatStylingSupport.getResolvedStyle( b, getStyleType() ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	String getStyleType() {
+		return "RadioButton";
+	}
+
+	/** @since 2 */
+	protected void applyStyle( AbstractButton b, Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style,
+			(key, value) -> applyStyleProperty( b, key, value ) );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( AbstractButton b, String key, Object value ) {
+		// style icon
+		if( key.startsWith( "icon." ) ) {
+			if( !(icon instanceof FlatCheckBoxIcon) )
+				return new UnknownStyleException( key );
+
+			if( iconShared ) {
+				icon = FlatStylingSupport.cloneIcon( icon );
+				iconShared = false;
+			}
+
+			key = key.substring( "icon.".length() );
+			return ((FlatCheckBoxIcon)icon).applyStyleProperty( key, value );
+		}
+
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, b, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = FlatStylingSupport.getAnnotatedStyleableInfos( this );
+		if( icon instanceof FlatCheckBoxIcon ) {
+			for( Map.Entry<String, Class<?>> e : ((FlatCheckBoxIcon)icon).getStyleableInfos().entrySet() )
+				infos.put( "icon.".concat( e.getKey() ), e.getValue() );
+		}
+		return infos;
+	}
+
+	private static final Insets tempInsets = new Insets( 0, 0, 0, 0 );
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
@@ -110,7 +212,7 @@ public class FlatRadioButtonUI
 		if( focusWidth > 0 ) {
 			// Increase preferred width and height if insets were explicitly reduced (e.g. with
 			// an EmptyBorder) and icon has a focus width, which is not included in icon size.
-			// Otherwise the component may be too small and outer focus border may be cut off.
+			// Otherwise, the component may be too small and outer focus border may be cut off.
 			Insets insets = c.getInsets( tempInsets );
 			size.width += Math.max( focusWidth - insets.left, 0 ) + Math.max( focusWidth - insets.right, 0 );
 			size.height += Math.max( focusWidth - insets.top, 0 ) + Math.max( focusWidth - insets.bottom, 0 );
@@ -178,8 +280,32 @@ public class FlatRadioButtonUI
 
 	private int getIconFocusWidth( JComponent c ) {
 		AbstractButton b = (AbstractButton) c;
-		return (b.getIcon() == null && getDefaultIcon() instanceof FlatCheckBoxIcon)
-			? UIScale.scale( ((FlatCheckBoxIcon)getDefaultIcon()).focusWidth )
+		Icon icon = b.getIcon();
+		if( icon == null )
+			icon = getDefaultIcon();
+
+		return (icon instanceof FlatCheckBoxIcon)
+			? Math.round( UIScale.scale( ((FlatCheckBoxIcon)icon).getFocusWidth() ) )
 			: 0;
+	}
+
+	//---- class FlatRadioButtonListener --------------------------------------
+
+	/** @since 2 */
+	protected class FlatRadioButtonListener
+		extends BasicButtonListener
+	{
+		private final AbstractButton b;
+
+		protected FlatRadioButtonListener( AbstractButton b ) {
+			super( b );
+			this.b = b;
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			super.propertyChange( e );
+			FlatRadioButtonUI.this.propertyChange( b, e );
+		}
 	}
 }

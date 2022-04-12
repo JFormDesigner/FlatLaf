@@ -50,8 +50,6 @@ import javax.accessibility.AccessibleContext;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -66,7 +64,6 @@ import javax.swing.border.Border;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.ui.FlatNativeWindowBorder.WindowTopBorder;
-import com.formdev.flatlaf.util.ScaledImageIcon;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -80,6 +77,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.embeddedForeground					Color
  * @uiDefault TitlePane.borderColor							Color	optional
  * @uiDefault TitlePane.unifiedBackground					boolean
+ * @uiDefault TitlePane.showIcon							boolean
+ * @uiDefault TitlePane.noIconLeftGap						int
  * @uiDefault TitlePane.iconSize							Dimension
  * @uiDefault TitlePane.iconMargins							Insets
  * @uiDefault TitlePane.titleMargins						Insets
@@ -88,7 +87,6 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TitlePane.centerTitle							boolean
  * @uiDefault TitlePane.centerTitleIfMenuBarEmbedded		boolean
  * @uiDefault TitlePane.menuBarTitleGap						int
- * @uiDefault TitlePane.icon								Icon
  * @uiDefault TitlePane.closeIcon							Icon
  * @uiDefault TitlePane.iconifyIcon							Icon
  * @uiDefault TitlePane.maximizeIcon						Icon
@@ -106,6 +104,8 @@ public class FlatTitlePane
 	protected final Color embeddedForeground = UIManager.getColor( "TitlePane.embeddedForeground" );
 	protected final Color borderColor = UIManager.getColor( "TitlePane.borderColor" );
 
+	/** @since 2 */ protected final boolean showIcon = FlatUIUtils.getUIBoolean( "TitlePane.showIcon", true );
+	/** @since 2 */ protected final int noIconLeftGap = FlatUIUtils.getUIInt( "TitlePane.noIconLeftGap", 8 );
 	protected final Dimension iconSize = UIManager.getDimension( "TitlePane.iconSize" );
 	protected final int buttonMaximizedHeight = UIManager.getInt( "TitlePane.buttonMaximizedHeight" );
 	protected final boolean centerTitle = UIManager.getBoolean( "TitlePane.centerTitle" );
@@ -224,6 +224,11 @@ public class FlatTitlePane
 		restoreButton = createButton( "TitlePane.restoreIcon", "Restore", e -> restore() );
 		closeButton = createButton( "TitlePane.closeIcon", "Close", e -> close() );
 
+		// initially hide buttons that are only supported in frames
+		iconifyButton.setVisible( false );
+		maximizeButton.setVisible( false );
+		restoreButton.setVisible( false );
+
 		buttonPanel = new JPanel() {
 			@Override
 			public Dimension getPreferredSize() {
@@ -243,10 +248,8 @@ public class FlatTitlePane
 		if( rootPane.getWindowDecorationStyle() == JRootPane.FRAME ) {
 			// JRootPane.FRAME works only for frames (and not for dialogs)
 			// but at this time the owner window type is unknown (not yet added)
-			// so we add the iconify/maximize/restore buttons and they are hidden
+			// so we add the iconify/maximize/restore buttons, and they are shown
 			// later in frameStateChanged(), which is invoked from addNotify()
-
-			restoreButton.setVisible( false );
 
 			buttonPanel.add( iconifyButton );
 			buttonPanel.add( maximizeButton );
@@ -337,36 +340,27 @@ public class FlatTitlePane
 
 	protected void updateIcon() {
 		// get window images
-		List<Image> images = window.getIconImages();
-		if( images.isEmpty() ) {
-			// search in owners
-			for( Window owner = window.getOwner(); owner != null; owner = owner.getOwner() ) {
-				images = owner.getIconImages();
-				if( !images.isEmpty() )
-					break;
+		List<Image> images = null;
+		if( clientPropertyBoolean( rootPane, TITLE_BAR_SHOW_ICON, showIcon ) ) {
+			images = window.getIconImages();
+			if( images.isEmpty() ) {
+				// search in owners
+				for( Window owner = window.getOwner(); owner != null; owner = owner.getOwner() ) {
+					images = owner.getIconImages();
+					if( !images.isEmpty() )
+						break;
+				}
 			}
 		}
 
-		boolean hasIcon = true;
+		boolean hasIcon = (images != null && !images.isEmpty());
 
 		// set icon
-		if( !images.isEmpty() )
-			iconLabel.setIcon( new FlatTitlePaneIcon( images, iconSize ) );
-		else {
-			// no icon set on window --> use default icon
-			Icon defaultIcon = UIManager.getIcon( "TitlePane.icon" );
-			if( defaultIcon != null && (defaultIcon.getIconWidth() == 0 || defaultIcon.getIconHeight() == 0) )
-				defaultIcon = null;
-			if( defaultIcon != null ) {
-				if( defaultIcon instanceof ImageIcon )
-					defaultIcon = new ScaledImageIcon( (ImageIcon) defaultIcon, iconSize.width, iconSize.height );
-				iconLabel.setIcon( defaultIcon );
-			} else
-				hasIcon = false;
-		}
+		iconLabel.setIcon( hasIcon ? new FlatTitlePaneIcon( images, iconSize ) : null );
 
 		// show/hide icon
 		iconLabel.setVisible( hasIcon );
+		leftPanel.setBorder( hasIcon ? null : FlatUIUtils.nonUIResource( new FlatEmptyBorder( 0, noIconLeftGap, 0, 0 ) ) );
 
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
 	}
@@ -426,7 +420,7 @@ public class FlatTitlePane
 	}
 
 	/**
-	 * Returns whether this title pane currently has an visible and embedded menubar.
+	 * Returns whether this title pane currently has a visible and embedded menubar.
 	 */
 	protected boolean hasVisibleEmbeddedMenuBar( JMenuBar menuBar ) {
 		return menuBar != null && menuBar.isVisible() && isMenuBarEmbedded();
@@ -508,7 +502,7 @@ public class FlatTitlePane
 
 	protected void menuBarLayouted() {
 		updateNativeTitleBarHeightAndHitTestSpotsLater();
-		revalidate();
+		doLayout();
 	}
 
 /*debug
@@ -521,17 +515,23 @@ public class FlatTitlePane
 			g.drawLine( 0, debugTitleBarHeight, getWidth(), debugTitleBarHeight );
 		}
 		if( debugHitTestSpots != null ) {
-			g.setColor( Color.red );
-			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
 			for( Rectangle r : debugHitTestSpots )
-				g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
+				paintRect( g, Color.red, r );
 		}
-		if( debugAppIconBounds != null ) {
-			g.setColor( Color.blue);
-			Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
-			Rectangle r = debugAppIconBounds;
-			g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
-		}
+		paintRect( g, Color.cyan, debugCloseButtonBounds );
+		paintRect( g, Color.blue, debugAppIconBounds );
+		paintRect( g, Color.blue, debugMinimizeButtonBounds );
+		paintRect( g, Color.magenta, debugMaximizeButtonBounds );
+		paintRect( g, Color.cyan, debugCloseButtonBounds );
+	}
+
+	private void paintRect( Graphics g, Color color, Rectangle r ) {
+		if( r == null )
+			return;
+
+		g.setColor( color );
+		Point offset = SwingUtilities.convertPoint( this, 0, 0, window );
+		g.drawRect( r.x - offset.x, r.y - offset.y, r.width - 1, r.height - 1 );
 	}
 debug*/
 
@@ -615,7 +615,7 @@ debug*/
 			int maximizedWidth = screenBounds.width;
 			int maximizedHeight = screenBounds.height;
 
-			if( !isMaximizedBoundsFixed() ) {
+			if( SystemInfo.isWindows && !isMaximizedBoundsFixed() ) {
 				// on Java 8 to 14, maximized x,y are 0,0 based on all screens in a multi-screen environment
 				maximizedX = 0;
 				maximizedY = 0;
@@ -702,9 +702,15 @@ debug*/
 		return window != null && FlatNativeWindowBorder.hasCustomDecoration( window );
 	}
 
+	// used to invoke updateNativeTitleBarHeightAndHitTestSpots() only once from latest invokeLater()
+	private int laterCounter;
+
 	protected void updateNativeTitleBarHeightAndHitTestSpotsLater() {
+		laterCounter++;
 		EventQueue.invokeLater( () -> {
-			updateNativeTitleBarHeightAndHitTestSpots();
+			laterCounter--;
+			if( laterCounter == 0 )
+				updateNativeTitleBarHeightAndHitTestSpots();
 		} );
 	}
 
@@ -722,8 +728,9 @@ debug*/
 
 		List<Rectangle> hitTestSpots = new ArrayList<>();
 		Rectangle appIconBounds = null;
+
 		if( iconLabel.isVisible() ) {
-			// compute real icon size (without insets; 1px wider for easier hitting)
+			// compute real icon size (without insets; 1px larger for easier hitting)
 			Point location = SwingUtilities.convertPoint( iconLabel, 0, 0, window );
 			Insets iconInsets = iconLabel.getInsets();
 			Rectangle iconBounds = new Rectangle(
@@ -759,27 +766,27 @@ debug*/
 
 		JMenuBar menuBar = rootPane.getJMenuBar();
 		if( hasVisibleEmbeddedMenuBar( menuBar ) ) {
-			r = getNativeHitTestSpot( menuBarPlaceholder );
+			r = getNativeHitTestSpot( menuBar );
 			if( r != null ) {
 				Component horizontalGlue = findHorizontalGlue( menuBar );
 				if( horizontalGlue != null ) {
 					// If menu bar is embedded and contains a horizontal glue component,
 					// then split the hit test spot into two spots so that
-					// the glue component area can used to move the window.
+					// the glue component area can be used to move the window.
 
 					Point glueLocation = SwingUtilities.convertPoint( horizontalGlue, 0, 0, window );
+					int x2 = glueLocation.x + horizontalGlue.getWidth();
 					Rectangle r2;
 					if( getComponentOrientation().isLeftToRight() ) {
-						int trailingWidth = (r.x + r.width - HIT_TEST_SPOT_GROW) - glueLocation.x;
-						r.width -= trailingWidth;
-						r2 = new Rectangle( glueLocation.x + horizontalGlue.getWidth(), r.y, trailingWidth, r.height );
+						r2 = new Rectangle( x2, r.y, (r.x + r.width) - x2, r.height );
+
+						r.width = glueLocation.x - r.x;
 					} else {
-						int leadingWidth = (glueLocation.x + horizontalGlue.getWidth()) - (r.x + HIT_TEST_SPOT_GROW);
-						r.x += leadingWidth;
-						r.width -= leadingWidth;
-						r2 = new Rectangle( glueLocation.x -leadingWidth, r.y, leadingWidth, r.height );
+						r2 = new Rectangle( r.x, r.y, glueLocation.x - r.x, r.height );
+
+						r.width = (r.x + r.width) - x2;
+						r.x = x2;
 					}
-					r2.grow( HIT_TEST_SPOT_GROW, HIT_TEST_SPOT_GROW );
 					hitTestSpots.add( r2 );
 				}
 
@@ -787,14 +794,28 @@ debug*/
 			}
 		}
 
-		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight, hitTestSpots, appIconBounds );
+		Rectangle minimizeButtonBounds = boundsInWindow( iconifyButton );
+		Rectangle maximizeButtonBounds = boundsInWindow( maximizeButton.isVisible() ? maximizeButton : restoreButton );
+		Rectangle closeButtonBounds = boundsInWindow( closeButton );
+
+		FlatNativeWindowBorder.setTitleBarHeightAndHitTestSpots( window, titleBarHeight,
+			hitTestSpots, appIconBounds, minimizeButtonBounds, maximizeButtonBounds, closeButtonBounds );
 
 /*debug
 		debugTitleBarHeight = titleBarHeight;
 		debugHitTestSpots = hitTestSpots;
 		debugAppIconBounds = appIconBounds;
+		debugMinimizeButtonBounds = minimizeButtonBounds;
+		debugMaximizeButtonBounds = maximizeButtonBounds;
+		debugCloseButtonBounds = closeButtonBounds;
 		repaint();
 debug*/
+	}
+
+	private Rectangle boundsInWindow( JComponent c ) {
+		return c.isShowing()
+			? SwingUtilities.convertRectangle( c.getParent(), c.getBounds(), window )
+			: null;
 	}
 
 	protected Rectangle getNativeHitTestSpot( JComponent c ) {
@@ -804,17 +825,16 @@ debug*/
 
 		Point location = SwingUtilities.convertPoint( c, 0, 0, window );
 		Rectangle r = new Rectangle( location, size );
-		// slightly increase rectangle so that component receives mouseExit events
-		r.grow( HIT_TEST_SPOT_GROW, HIT_TEST_SPOT_GROW );
 		return r;
 	}
-
-	private static final int HIT_TEST_SPOT_GROW = 2;
 
 /*debug
 	private int debugTitleBarHeight;
 	private List<Rectangle> debugHitTestSpots;
 	private Rectangle debugAppIconBounds;
+	private Rectangle debugMinimizeButtonBounds;
+	private Rectangle debugMaximizeButtonBounds;
+	private Rectangle debugCloseButtonBounds;
 debug*/
 
 	//---- class FlatTitlePaneBorder ------------------------------------------
@@ -834,7 +854,7 @@ debug*/
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) )
 				insets.bottom += UIScale.scale( 1 );
 
-			if( hasNativeCustomDecoration() && !isWindowMaximized( c ) )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized( c ) )
 				insets = FlatUIUtils.addInsets( insets, WindowTopBorder.getInstance().getBorderInsets() );
 
 			return insets;
@@ -846,14 +866,14 @@ debug*/
 			Border menuBarBorder = getMenuBarBorder();
 			if( menuBarBorder != null ) {
 				// if menu bar is embedded, paint menu bar border
-				menuBarBorder.paintBorder( c, g, x, y, width, height );
+				menuBarBorder.paintBorder( rootPane.getJMenuBar(), g, x, y, width, height );
 			} else if( borderColor != null && (rootPane.getJMenuBar() == null || !rootPane.getJMenuBar().isVisible()) ) {
 				// paint border between title pane and content if border color is specified
 				float lineHeight = UIScale.scale( (float) 1 );
 				FlatUIUtils.paintFilledRectangle( g, borderColor, x, y + height - lineHeight, width, lineHeight );
 			}
 
-			if( hasNativeCustomDecoration() && !isWindowMaximized( c ) )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() && !isWindowMaximized( c ) )
 				WindowTopBorder.getInstance().paintBorder( c, g, x, y, width, height );
 		}
 
@@ -863,20 +883,20 @@ debug*/
 		}
 
 		protected boolean isWindowMaximized( Component c ) {
-			return window instanceof Frame
-				? (((Frame)window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0
-				: false;
+			return window instanceof Frame && (((Frame) window).getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
 		}
 	}
 
 	//---- class FlatTitleLabelUI ---------------------------------------------
 
-	/**
-	 * @since 1.1
-	 */
+	/** @since 1.1 */
 	protected class FlatTitleLabelUI
 		extends FlatLabelUI
 	{
+		protected FlatTitleLabelUI() {
+			super( false );
+		}
+
 		@Override
 		protected void paintEnabledText( JLabel l, Graphics g, String s, int textX, int textY ) {
 			boolean hasEmbeddedMenuBar = hasVisibleEmbeddedMenuBar( rootPane.getJMenuBar() );
@@ -889,7 +909,7 @@ debug*/
 			boolean center = hasEmbeddedMenuBar ? centerTitleIfMenuBarEmbedded : centerTitle;
 			if( center ) {
 				// If window is wide enough, center title within window bounds.
-				// Otherwise leave it centered within free space (label bounds).
+				// Otherwise, leave it centered within free space (label bounds).
 				int centeredTextX = ((l.getParent().getWidth() - textWidth) / 2) - l.getX();
 				if( centeredTextX >= gap && centeredTextX + textWidth <= labelWidth - gap )
 					textX = centeredTextX;
@@ -944,7 +964,7 @@ debug*/
 			activeChanged( true );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( hasNativeCustomDecoration() )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() )
 				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
 			repaintWindowBorder();
@@ -955,7 +975,7 @@ debug*/
 			activeChanged( false );
 			updateNativeTitleBarHeightAndHitTestSpots();
 
-			if( hasNativeCustomDecoration() )
+			if( !SystemInfo.isWindows_11_orLater && hasNativeCustomDecoration() )
 				WindowTopBorder.getInstance().repaintBorder( FlatTitlePane.this );
 
 			repaintWindowBorder();
@@ -996,6 +1016,9 @@ debug*/
 			if( window == null )
 				return; // should newer occur
 
+			if( !SwingUtilities.isLeftMouseButton( e ) )
+				return;
+
 			dragOffset = SwingUtilities.convertPoint( FlatTitlePane.this, e.getPoint(), window );
 		}
 
@@ -1009,6 +1032,9 @@ debug*/
 		public void mouseDragged( MouseEvent e ) {
 			if( window == null )
 				return; // should newer occur
+
+			if( !SwingUtilities.isLeftMouseButton( e ) )
+				return;
 
 			if( hasNativeCustomDecoration() )
 				return; // do nothing if having native window border

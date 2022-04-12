@@ -39,12 +39,11 @@ import javax.swing.plaf.ComponentUI;
  *
  * <!-- FlatTextFieldUI -->
  *
- * @uiDefault TextComponent.arc							int
- * @uiDefault Component.focusWidth						int
  * @uiDefault Component.minimumWidth					int
  * @uiDefault Component.isIntelliJTheme					boolean
  * @uiDefault FormattedTextField.placeholderForeground	Color
  * @uiDefault FormattedTextField.focusedBackground		Color	optional
+ * @uiDefault FormattedTextField.iconTextGap			int		optional, default is 4
  * @uiDefault TextComponent.selectAllOnFocusPolicy		String	never, once (default) or always
  * @uiDefault TextComponent.selectAllOnMouseClick		boolean
  *
@@ -59,6 +58,12 @@ public class FlatFormattedTextFieldUI
 
 	@Override
 	protected String getPropertyPrefix() {
+		return "FormattedTextField";
+	}
+
+	/** @since 2 */
+	@Override
+	String getStyleType() {
 		return "FormattedTextField";
 	}
 }

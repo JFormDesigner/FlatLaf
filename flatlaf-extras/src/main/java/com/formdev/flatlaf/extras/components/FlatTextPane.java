@@ -26,7 +26,7 @@ import javax.swing.JTextPane;
  */
 public class FlatTextPane
 	extends JTextPane
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns minimum width of a component.

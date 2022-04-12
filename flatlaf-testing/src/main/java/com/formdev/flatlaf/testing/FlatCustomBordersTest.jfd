@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "15" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -6,7 +6,7 @@ new FormModel {
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
 			"$columnConstraints": "[][fill][fill][fill][fill][fill][fill][fill]"
-			"$rowConstraints": "[][][][][][][][][][][]"
+			"$rowConstraints": "[][][][][][][][][][][]para[][]"
 		} ) {
 			name: "this"
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -148,6 +148,30 @@ new FormModel {
 				"value": "cell 4 3"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox23"
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 3"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox25"
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 3"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox27"
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 3"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox5"
 				"$client.JComponent.roundRect": true
 				auxiliary() {
@@ -182,6 +206,33 @@ new FormModel {
 				}
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 4"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox24"
+				"$client.JComponent.roundRect": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 5 4"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox26"
+				"$client.JComponent.roundRect": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 4"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox28"
+				"$client.JComponent.roundRect": true
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 7 4"
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBox9"
@@ -426,6 +477,42 @@ new FormModel {
 				"text": "text"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 10"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label11"
+				"text": "JComboBox with shared renderer:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 11 2 1"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label12"
+				"text": "JComboBox with renderer that uses varying components:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 11 3 1"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox29"
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 12"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox30"
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 12"
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBox31"
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 3 12"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.4.0.360" Java: "17" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -13,8 +13,11 @@ new FormModel {
 			"$locationPolicy": 2
 			"$sizePolicy": 2
 			add( new FormContainer( "javax.swing.JToolBar", new FormLayoutManager( class javax.swing.JToolBar ) ) {
-				name: "toolBar1"
+				name: "toolBar"
 				"margin": new java.awt.Insets( 3, 3, 3, 3 )
+				auxiliary() {
+					"JavaCodeGenerator.variableLocal": false
+				}
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "backButton"
 					"toolTipText": "Back"
@@ -167,6 +170,9 @@ new FormModel {
 						"text": "Exit"
 						"accelerator": static javax.swing.KeyStroke getKeyStroke( 81, 4226, false )
 						"mnemonic": 88
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "exitActionPerformed", false ) )
 					} )
 				} )
@@ -276,14 +282,24 @@ new FormModel {
 							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItemActionPerformed", true ) )
 						} )
 					} )
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "scrollingPopupMenu"
+						"text": "Scrolling Popup Menu"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "menuItem2"
 						"text": "Disabled Item"
 						"enabled": false
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
-						name: "menuItem1"
+						name: "htmlMenuItem"
 						"text": "<html>some <b color=\"red\">HTML</b> <i color=\"blue\">text</i></html>"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
 					} )
 					add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 						name: "separator8"
@@ -345,7 +361,6 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "windowDecorationsCheckBoxMenuItem"
 						"text": "Window decorations"
-						"selected": true
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -354,7 +369,6 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "menuBarEmbeddedCheckBoxMenuItem"
 						"text": "Embedded menu bar"
-						"selected": true
 						auxiliary() {
 							"JavaCodeGenerator.variableLocal": false
 						}
@@ -367,6 +381,14 @@ new FormModel {
 							"JavaCodeGenerator.variableLocal": false
 						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "unifiedTitleBar", false ) )
+					} )
+					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
+						name: "showTitleBarIconMenuItem"
+						"text": "Show window title bar icon"
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showTitleBarIcon", false ) )
 					} )
 					add( new FormComponent( "javax.swing.JCheckBoxMenuItem" ) {
 						name: "underlineMenuSelectionMenuItem"
@@ -412,6 +434,9 @@ new FormModel {
 						name: "aboutMenuItem"
 						"text": "About"
 						"mnemonic": 65
+						auxiliary() {
+							"JavaCodeGenerator.variableLocal": false
+						}
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "aboutActionPerformed", false ) )
 					} )
 				} )

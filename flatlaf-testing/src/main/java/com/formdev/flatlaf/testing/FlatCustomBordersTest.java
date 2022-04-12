@@ -20,6 +20,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.*;
@@ -33,7 +34,7 @@ public class FlatCustomBordersTest
 	private static final Color RED = new Color( 0x60ff0000, true );
 	private static final Color GREEN = new Color( 0x6000ff00, true );
 	private static final Color MAGENTA = new Color( 0x60ff00ff, true );
-	private static final Color ORANGE = new Color( 0x60ffc800, true );
+	private static final Color BLUE = new Color( 0x300000ff, true );
 
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
@@ -42,9 +43,24 @@ public class FlatCustomBordersTest
 		} );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	FlatCustomBordersTest() {
 		initComponents();
 		applyCustomBorders();
+		applySpecialComboBoxRenderers();
+
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {
+			"text",
+			"123",
+			"4567",
+			"abc",
+			"def"
+		} );
+
+		for( Component c : getComponents() ) {
+			if( c instanceof JComboBox )
+				((JComboBox<String>)c).setModel( model );
+		}
 	}
 
 	@Override
@@ -99,6 +115,40 @@ public class FlatCustomBordersTest
 		applyCustomComboBoxEditorBorderWithIcon( comboBox20 );
 		applyCustomComboBoxEditorBorder( comboBox21, null );
 		applyCustomComboBoxEditorBorder( comboBox22, null );
+
+		applyCustomComboBoxRendererBorder( comboBox23 );
+		applyCustomComboBoxRendererBorder( comboBox24 );
+		applyCustomComboBoxRendererBorderWithIcon( comboBox25 );
+		applyCustomComboBoxRendererBorderWithIcon( comboBox26 );
+		applyCustomComboBoxRendererBorder( comboBox27, null );
+		applyCustomComboBoxRendererBorder( comboBox28, null );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	private void applySpecialComboBoxRenderers() {
+		BasicComboBoxRenderer sharedRenderer = new BasicComboBoxRenderer();
+		sharedRenderer.setBorder( new LineBorder( BLUE, UIScale.scale( 2 ) ) );
+		comboBox29.setRenderer( sharedRenderer );
+		comboBox30.setRenderer( sharedRenderer );
+
+		comboBox31.setRenderer( new ListCellRenderer<String>() {
+			JLabel l1 = new JLabel();
+			JLabel l2 = new JLabel();
+
+			@Override
+			public Component getListCellRendererComponent( JList<? extends String> list,
+				String value, int index, boolean isSelected, boolean cellHasFocus )
+			{
+				JLabel l = (index % 2 == 0) ? l1 : l2;
+				l.setText( (value != null) ? value.toString() : "" );
+				l.setBorder( new LineBorder( (index % 2 == 0) ? GREEN : RED, UIScale.scale( 2 ) ) );
+				l.setBackground( isSelected ? list.getSelectionBackground() : list.getBackground() );
+				l.setForeground( isSelected ? list.getSelectionForeground() : list.getForeground() );
+				l.setFont( list.getFont() );
+				l.setOpaque( true );
+				return l;
+			}
+		} );
 	}
 
 	private void applyCustomInsideBorder( JComponent c, String uiKey ) {
@@ -110,7 +160,7 @@ public class FlatCustomBordersTest
 	}
 
 	private void applyCustomComboBoxEditorBorder( JComboBox<String> comboBox ) {
-		applyCustomComboBoxEditorBorder( comboBox, new LineBorder( ORANGE, UIScale.scale( 3 ) ) );
+		applyCustomComboBoxEditorBorder( comboBox, new LineBorder( BLUE, UIScale.scale( 6 ) ) );
 	}
 
 	private void applyCustomComboBoxEditorBorderWithIcon( JComboBox<String> comboBox ) {
@@ -127,6 +177,21 @@ public class FlatCustomBordersTest
 				return customTextField;
 			}
 		} );
+	}
+
+	private void applyCustomComboBoxRendererBorder( JComboBox<String> comboBox ) {
+		applyCustomComboBoxRendererBorder( comboBox, new LineBorder( BLUE, UIScale.scale( 6 ) ) );
+	}
+
+	private void applyCustomComboBoxRendererBorderWithIcon( JComboBox<String> comboBox ) {
+		applyCustomComboBoxRendererBorder( comboBox, new BorderWithIcon() );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	private void applyCustomComboBoxRendererBorder( JComboBox<String> comboBox, Border border ) {
+		BasicComboBoxRenderer customRenderer = new BasicComboBoxRenderer();
+		customRenderer.setBorder( border );
+		comboBox.setRenderer( customRenderer );
 	}
 
 	private void initComponents() {
@@ -152,10 +217,16 @@ public class FlatCustomBordersTest
 		comboBox2 = new JComboBox<>();
 		comboBox3 = new JComboBox<>();
 		comboBox4 = new JComboBox<>();
+		comboBox23 = new JComboBox<>();
+		comboBox25 = new JComboBox<>();
+		comboBox27 = new JComboBox<>();
 		comboBox5 = new JComboBox<>();
 		comboBox6 = new JComboBox<>();
 		comboBox7 = new JComboBox<>();
 		comboBox8 = new JComboBox<>();
+		comboBox24 = new JComboBox<>();
+		comboBox26 = new JComboBox<>();
+		comboBox28 = new JComboBox<>();
 		comboBox9 = new JComboBox<>();
 		comboBox10 = new JComboBox<>();
 		comboBox11 = new JComboBox<>();
@@ -188,6 +259,11 @@ public class FlatCustomBordersTest
 		textField6 = new JTextField();
 		textField7 = new JTextField();
 		textField8 = new JTextField();
+		label11 = new JLabel();
+		label12 = new JLabel();
+		comboBox29 = new JComboBox<>();
+		comboBox30 = new JComboBox<>();
+		comboBox31 = new JComboBox<>();
 
 		//======== this ========
 		setLayout(new MigLayout(
@@ -211,6 +287,8 @@ public class FlatCustomBordersTest
 			"[]" +
 			"[]" +
 			"[]" +
+			"[]" +
+			"[]para" +
 			"[]" +
 			"[]"));
 
@@ -289,6 +367,9 @@ public class FlatCustomBordersTest
 		add(comboBox2, "cell 2 3");
 		add(comboBox3, "cell 3 3");
 		add(comboBox4, "cell 4 3");
+		add(comboBox23, "cell 5 3");
+		add(comboBox25, "cell 6 3");
+		add(comboBox27, "cell 7 3");
 
 		//---- comboBox5 ----
 		comboBox5.putClientProperty("JComponent.roundRect", true);
@@ -305,6 +386,18 @@ public class FlatCustomBordersTest
 		//---- comboBox8 ----
 		comboBox8.putClientProperty("JComponent.roundRect", true);
 		add(comboBox8, "cell 4 4");
+
+		//---- comboBox24 ----
+		comboBox24.putClientProperty("JComponent.roundRect", true);
+		add(comboBox24, "cell 5 4");
+
+		//---- comboBox26 ----
+		comboBox26.putClientProperty("JComponent.roundRect", true);
+		add(comboBox26, "cell 6 4");
+
+		//---- comboBox28 ----
+		comboBox28.putClientProperty("JComponent.roundRect", true);
+		add(comboBox28, "cell 7 4");
 
 		//---- comboBox9 ----
 		comboBox9.setEditable(true);
@@ -435,6 +528,17 @@ public class FlatCustomBordersTest
 		textField8.putClientProperty("JComponent.roundRect", true);
 		textField8.setText("text");
 		add(textField8, "cell 4 10");
+
+		//---- label11 ----
+		label11.setText("JComboBox with shared renderer:");
+		add(label11, "cell 1 11 2 1");
+
+		//---- label12 ----
+		label12.setText("JComboBox with renderer that uses varying components:");
+		add(label12, "cell 3 11 3 1");
+		add(comboBox29, "cell 1 12");
+		add(comboBox30, "cell 2 12");
+		add(comboBox31, "cell 3 12");
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
@@ -460,10 +564,16 @@ public class FlatCustomBordersTest
 	private JComboBox<String> comboBox2;
 	private JComboBox<String> comboBox3;
 	private JComboBox<String> comboBox4;
+	private JComboBox<String> comboBox23;
+	private JComboBox<String> comboBox25;
+	private JComboBox<String> comboBox27;
 	private JComboBox<String> comboBox5;
 	private JComboBox<String> comboBox6;
 	private JComboBox<String> comboBox7;
 	private JComboBox<String> comboBox8;
+	private JComboBox<String> comboBox24;
+	private JComboBox<String> comboBox26;
+	private JComboBox<String> comboBox28;
 	private JComboBox<String> comboBox9;
 	private JComboBox<String> comboBox10;
 	private JComboBox<String> comboBox11;
@@ -496,6 +606,11 @@ public class FlatCustomBordersTest
 	private JTextField textField6;
 	private JTextField textField7;
 	private JTextField textField8;
+	private JLabel label11;
+	private JLabel label12;
+	private JComboBox<String> comboBox29;
+	private JComboBox<String> comboBox30;
+	private JComboBox<String> comboBox31;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	//---- class BorderWithIcon -----------------------------------------------
@@ -508,6 +623,9 @@ public class FlatCustomBordersTest
 		@Override
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 			icon.paintIcon( c, g, x + width - icon.getIconWidth() - 2, y + ((height - icon.getIconHeight()) / 2) );
+
+			g.setColor( RED );
+			g.drawRect( x, y, width - 1, height - 1 );
 		}
 
 		@Override

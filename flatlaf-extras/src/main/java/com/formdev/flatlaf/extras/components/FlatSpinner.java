@@ -27,7 +27,7 @@ import javax.swing.JSpinner;
  */
 public class FlatSpinner
 	extends JSpinner
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns minimum width of a component.

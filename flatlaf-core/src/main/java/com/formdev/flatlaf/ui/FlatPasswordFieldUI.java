@@ -17,29 +17,37 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.beans.PropertyChangeEvent;
+import java.util.Map;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JPasswordField;
+import javax.swing.JToggleButton;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.basic.BasicPasswordFieldUI;
-import javax.swing.text.Caret;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
-import com.formdev.flatlaf.util.HiDPIUtils;
+import javax.swing.text.PasswordView;
+import javax.swing.text.View;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.icons.FlatCapsLockIcon;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JPasswordField}.
  *
- * <!-- BasicPasswordFieldUI -->
+ * <!-- BasicTextFieldUI -->
  *
  * @uiDefault PasswordField.font					Font
  * @uiDefault PasswordField.background				Color
@@ -52,37 +60,67 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * @uiDefault PasswordField.inactiveForeground		Color	used if not enabled (yes, this is confusing; this should be named disabledForeground)
  * @uiDefault PasswordField.border					Border
  * @uiDefault PasswordField.margin					Insets
- * @uiDefault PasswordField.echoChar				character
  * @uiDefault PasswordField.caretBlinkRate			int		default is 500 milliseconds
  *
- * <!-- FlatPasswordFieldUI -->
+ * <!-- FlatTextFieldUI -->
  *
  * @uiDefault Component.minimumWidth				int
  * @uiDefault Component.isIntelliJTheme				boolean
  * @uiDefault PasswordField.placeholderForeground	Color
  * @uiDefault PasswordField.focusedBackground		Color	optional
- * @uiDefault PasswordField.showCapsLock			boolean
- * @uiDefault PasswordField.capsLockIcon			Icon
+ * @uiDefault PasswordField.iconTextGap				int		optional, default is 4
  * @uiDefault TextComponent.selectAllOnFocusPolicy	String	never, once (default) or always
  * @uiDefault TextComponent.selectAllOnMouseClick	boolean
+ *
+ * <!-- FlatPasswordFieldUI -->
+ *
+ * @uiDefault PasswordField.echoChar				character
+ * @uiDefault PasswordField.showCapsLock			boolean
+ * @uiDefault PasswordField.showRevealButton		boolean
+ * @uiDefault PasswordField.capsLockIcon			Icon
+ * @uiDefault PasswordField.revealIcon				Icon
  *
  * @author Karl Tauber
  */
 public class FlatPasswordFieldUI
-	extends BasicPasswordFieldUI
+	extends FlatTextFieldUI
 {
-	protected int minimumWidth;
-	protected boolean isIntelliJTheme;
-	protected Color placeholderForeground;
-	protected Color focusedBackground;
-	protected boolean showCapsLock;
-	protected Icon capsLockIcon;
+	// used to preserve reveal button state when switching theme
+	private static final String KEY_REVEAL_SELECTED = "FlatLaf.internal.FlatPasswordFieldUI.revealSelected";
 
-	private FocusListener focusListener;
+	private Character echoChar;
+
+	@Styleable protected boolean showCapsLock;
+	/** @since 2 */ @Styleable protected boolean showRevealButton;
+	protected Icon capsLockIcon;
+	/** @since 2 */ protected Icon revealIcon;
+
 	private KeyListener capsLockListener;
+	private boolean capsLockIconShared = true;
+	private JToggleButton revealButton;
+	private boolean uninstallEchoChar;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatPasswordFieldUI();
+	}
+
+	@Override
+	protected String getPropertyPrefix() {
+		return "PasswordField";
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installRevealButton();
+	}
+
+	@Override
+	public void uninstallUI( JComponent c ) {
+		uninstallRevealButton();
+
+		super.uninstallUI( c );
 	}
 
 	@Override
@@ -90,35 +128,28 @@ public class FlatPasswordFieldUI
 		super.installDefaults();
 
 		String prefix = getPropertyPrefix();
-		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
-		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
-		placeholderForeground = UIManager.getColor( prefix + ".placeholderForeground" );
-		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
+		echoChar = (Character) UIManager.get( prefix + ".echoChar" );
+		if( echoChar != null )
+			LookAndFeel.installProperty( getComponent(), "echoChar", echoChar );
+
 		showCapsLock = UIManager.getBoolean( "PasswordField.showCapsLock" );
+		showRevealButton = UIManager.getBoolean( "PasswordField.showRevealButton" );
 		capsLockIcon = UIManager.getIcon( "PasswordField.capsLockIcon" );
-
-		LookAndFeel.installProperty( getComponent(), "opaque", false );
-
-		MigLayoutVisualPadding.install( getComponent() );
+		revealIcon = UIManager.getIcon( "PasswordField.revealIcon" );
+		capsLockIconShared = true;
 	}
 
 	@Override
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
-		placeholderForeground = null;
-		focusedBackground = null;
 		capsLockIcon = null;
-
-		MigLayoutVisualPadding.uninstall( getComponent() );
+		revealIcon = null;
 	}
 
 	@Override
 	protected void installListeners() {
 		super.installListeners();
-
-		// necessary to update focus border and background
-		focusListener = new FlatUIUtils.RepaintFocusListener( getComponent(), null );
 
 		// update caps lock indicator
 		capsLockListener = new KeyAdapter() {
@@ -131,12 +162,13 @@ public class FlatPasswordFieldUI
 				repaint( e );
 			}
 			private void repaint( KeyEvent e ) {
-				if( e.getKeyCode() == KeyEvent.VK_CAPS_LOCK )
+				if( e.getKeyCode() == KeyEvent.VK_CAPS_LOCK ) {
 					e.getComponent().repaint();
+					scrollCaretToVisible();
+				}
 			}
 		};
 
-		getComponent().addFocusListener( focusListener );
 		getComponent().addKeyListener( capsLockListener );
 	}
 
@@ -144,59 +176,171 @@ public class FlatPasswordFieldUI
 	protected void uninstallListeners() {
 		super.uninstallListeners();
 
-		getComponent().removeFocusListener( focusListener );
 		getComponent().removeKeyListener( capsLockListener );
-		focusListener = null;
 		capsLockListener = null;
 	}
 
 	@Override
-	protected Caret createCaret() {
-		return new FlatCaret( UIManager.getString( "TextComponent.selectAllOnFocusPolicy" ),
-			UIManager.getBoolean( "TextComponent.selectAllOnMouseClick" ) );
+	protected void installKeyboardActions() {
+		super.installKeyboardActions();
+
+		// map "select-word" action (double-click) to "select-line" action
+		ActionMap map = SwingUtilities.getUIActionMap( getComponent() );
+		if( map != null && map.get( DefaultEditorKit.selectWordAction ) != null ) {
+			Action selectLineAction = map.get( DefaultEditorKit.selectLineAction );
+			if( selectLineAction != null )
+				map.put( DefaultEditorKit.selectWordAction, selectLineAction );
+		}
+	}
+
+	/** @since 2 */
+	@Override
+	String getStyleType() {
+		return "PasswordField";
 	}
 
 	@Override
-	protected void propertyChange( PropertyChangeEvent e ) {
-		super.propertyChange( e );
-		FlatTextFieldUI.propertyChange( getComponent(), e );
+	protected void applyStyle( Object style ) {
+		boolean oldShowRevealButton = showRevealButton;
+
+		super.applyStyle( style );
+
+		if( showRevealButton != oldShowRevealButton ) {
+			uninstallRevealButton();
+			installRevealButton();
+		}
+	}
+
+	/** @since 2 */
+	@Override
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( key.equals( "capsLockIconColor" ) && capsLockIcon instanceof FlatCapsLockIcon ) {
+			if( capsLockIconShared ) {
+				capsLockIcon = FlatStylingSupport.cloneIcon( capsLockIcon );
+				capsLockIconShared = false;
+			}
+			return ((FlatCapsLockIcon)capsLockIcon).applyStyleProperty( key, value );
+		}
+
+		return super.applyStyleProperty( key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = super.getStyleableInfos( c );
+		infos.put( "capsLockIconColor", Color.class );
+		return infos;
 	}
 
 	@Override
-	protected void paintSafely( Graphics g ) {
-		FlatTextFieldUI.paintBackground( g, getComponent(), isIntelliJTheme, focusedBackground );
-		FlatTextFieldUI.paintPlaceholder( g, getComponent(), placeholderForeground );
-		paintCapsLock( g );
-
-		super.paintSafely( HiDPIUtils.createGraphicsTextYCorrection( (Graphics2D) g ) );
+	public View create( Element elem ) {
+		return new PasswordView( elem );
 	}
 
-	protected void paintCapsLock( Graphics g ) {
-		if( !showCapsLock )
-			return;
+	/** @since 2 */
+	@Override
+	protected void paintIcons( Graphics g, Rectangle r ) {
+		super.paintIcons( g, r );
 
+		if( isCapsLockVisible() )
+			paintCapsLock( g, r );
+	}
+
+	/** @since 2 */
+	protected void paintCapsLock( Graphics g, Rectangle r ) {
 		JTextComponent c = getComponent();
-		if( !FlatUIUtils.isPermanentFocusOwner( c ) ||
-			!Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK ) )
-		  return;
-
-		int y = (c.getHeight() - capsLockIcon.getIconHeight()) / 2;
-		int x = c.getWidth() - capsLockIcon.getIconWidth() - y;
+		int x = c.getComponentOrientation().isLeftToRight()
+			? r.x + r.width - capsLockIcon.getIconWidth()
+			: r.x;
+		int y = r.y + Math.round( (r.height - capsLockIcon.getIconHeight()) / 2f );
 		capsLockIcon.paintIcon( c, g, x, y );
 	}
 
+	/** @since 2 */
 	@Override
-	protected void paintBackground( Graphics g ) {
-		// background is painted elsewhere
+	protected boolean hasTrailingIcon() {
+		return super.hasTrailingIcon() || isCapsLockVisible();
+	}
+
+	/** @since 2 */
+	@Override
+	protected int getTrailingIconWidth() {
+		return super.getTrailingIconWidth()
+			+ (isCapsLockVisible() ? capsLockIcon.getIconWidth() + UIScale.scale( iconTextGap ) : 0);
+	}
+
+	/** @since 1.4 */
+	protected boolean isCapsLockVisible() {
+		if( !showCapsLock )
+			return false;
+
+		return FlatUIUtils.isPermanentFocusOwner( getComponent() ) &&
+			Toolkit.getDefaultToolkit().getLockingKeyState( KeyEvent.VK_CAPS_LOCK );
+	}
+
+	/** @since 2 */
+	protected void installRevealButton() {
+		if( showRevealButton ) {
+			revealButton = createRevealButton();
+			installLayout();
+			getComponent().add( revealButton );
+		}
+	}
+
+	/** @since 2 */
+	protected JToggleButton createRevealButton() {
+		JToggleButton button = new JToggleButton( revealIcon );
+		button.setName( "PasswordField.revealButton" );
+		prepareLeadingOrTrailingComponent( button );
+		button.putClientProperty( FlatClientProperties.STYLE_CLASS, "inTextField revealButton" );
+		if( FlatClientProperties.clientPropertyBoolean( getComponent(), KEY_REVEAL_SELECTED, false ) ) {
+			button.setSelected( true );
+			updateEchoChar( true );
+		}
+		button.addActionListener( e -> {
+			boolean selected = button.isSelected();
+			updateEchoChar( selected );
+			getComponent().putClientProperty( KEY_REVEAL_SELECTED, selected );
+		} );
+		return button;
+	}
+
+	private void updateEchoChar( boolean selected ) {
+		char newEchoChar = selected
+			? 0
+			: (echoChar != null ? echoChar : '*');
+
+		JPasswordField c = (JPasswordField) getComponent();
+		LookAndFeel.installProperty( c, "echoChar", newEchoChar );
+
+		// check whether was able to set echo char via LookAndFeel.installProperty()
+		// if not, then echo char was explicitly changed via JPasswordField.setEchoChar()
+		char actualEchoChar = c.getEchoChar();
+		if( actualEchoChar != newEchoChar ) {
+			if( selected && actualEchoChar != 0 ) {
+				// use explicitly set echo char
+				echoChar = actualEchoChar;
+				uninstallEchoChar = true;
+			}
+
+			c.setEchoChar( newEchoChar );
+		}
+	}
+
+	/** @since 2 */
+	protected void uninstallRevealButton() {
+		if( revealButton != null ) {
+			if( uninstallEchoChar && revealButton.isSelected() )
+				((JPasswordField)getComponent()).setEchoChar( echoChar );
+
+			getComponent().remove( revealButton );
+			revealButton = null;
+		}
 	}
 
 	@Override
-	public Dimension getPreferredSize( JComponent c ) {
-		return FlatTextFieldUI.applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
-	}
-
-	@Override
-	public Dimension getMinimumSize( JComponent c ) {
-		return FlatTextFieldUI.applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
+	protected JComponent[] getTrailingComponents() {
+		return new JComponent[] { trailingComponent, revealButton, clearButton };
 	}
 }

@@ -217,8 +217,8 @@ public class FlatTaskPaneUI
 			Graphics2D g2 = (Graphics2D) g;
 
 			// scale chevron size
-			float cw = scale( 6f );
-			float ch = scale( 3f );
+			float cw = scale( 7f );
+			float ch = scale( 3.5f );
 
 			// create arrow shape
 			int direction = group.isCollapsed() ? SwingConstants.SOUTH : SwingConstants.NORTH;
@@ -237,9 +237,9 @@ public class FlatTaskPaneUI
 
 			// paint
 			g2.translate( cx, cy );
-			g2.draw( arrowShape );
+			FlatUIUtils.drawShapePure( g2, arrowShape );
 			g2.translate( 0, offset );
-			g2.draw( arrowShape );
+			FlatUIUtils.drawShapePure( g2, arrowShape );
 			g2.translate( -cx, -(cy + offset) );
 		}
 

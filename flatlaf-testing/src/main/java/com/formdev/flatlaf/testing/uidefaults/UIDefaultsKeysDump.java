@@ -29,6 +29,7 @@ import java.util.Locale;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.testing.FlatTestLaf;
 
 /**
  * Collects all FlatLaf UI defaults keys and dumps them to a file.
@@ -60,6 +61,7 @@ public class UIDefaultsKeysDump
 		collectKeys( FlatDarkLaf.class.getName(), keys );
 		collectKeys( FlatIntelliJLaf.class.getName(), keys );
 		collectKeys( FlatDarculaLaf.class.getName(), keys );
+		collectKeys( FlatTestLaf.class.getName(), keys );
 
 		// write key file
 		try( Writer fileWriter = new BufferedWriter( new FileWriter( keysFile ) ) ) {
@@ -85,8 +87,15 @@ public class UIDefaultsKeysDump
 		UIDefaults defaults = UIManager.getLookAndFeel().getDefaults();
 
 		for( Object key : defaults.keySet() ) {
-			if( key instanceof String )
+			if( key instanceof String && !ignoreKey( (String) key ) )
 				keys.add( (String) key );
 		}
+	}
+
+	private static boolean ignoreKey( String key ) {
+		return key.startsWith( "FlatLaf.internal." ) ||
+			key.equals( "Menu.acceleratorFont" ) ||
+			key.equals( "CheckBoxMenuItem.acceleratorFont" ) ||
+			key.equals( "RadioButtonMenuItem.acceleratorFont" );
 	}
 }

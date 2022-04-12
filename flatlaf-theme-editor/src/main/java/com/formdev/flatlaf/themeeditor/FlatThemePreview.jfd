@@ -1,0 +1,35 @@
+JFDML JFormDesigner: "7.0.4.0.360" Java: "16" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			add( new FormContainer( "com.formdev.flatlaf.extras.components.FlatTabbedPane", new FormLayoutManager( class javax.swing.JTabbedPane ) ) {
+				name: "tabbedPane"
+				"leadingComponent": new FormReference( "previewLabel" )
+				"tabAreaAlignment": enum com.formdev.flatlaf.extras.components.FlatTabbedPane$TabAreaAlignment trailing
+				"tabLayoutPolicy": 1
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+			add( new FormComponent( "javax.swing.JSeparator" ) {
+				name: "previewSeparator"
+				"orientation": 1
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Before"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 320, 200 )
+		} )
+		add( new FormComponent( "javax.swing.JLabel" ) {
+			name: "previewLabel"
+			"text": " Preview "
+			"$client.FlatLaf.styleClass": "h2"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 235 )
+			"size": new java.awt.Dimension( 176, 24 )
+		} )
+	}
+}

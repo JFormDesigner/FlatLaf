@@ -22,9 +22,12 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -34,7 +37,11 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.JTableHeader;
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.Graphics2DProxy;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.SystemInfo;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -69,6 +76,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.rowHeight							int
  * @uiDefault Table.showHorizontalLines					boolean
  * @uiDefault Table.showVerticalLines					boolean
+ * @uiDefault Table.showTrailingVerticalLine			boolean
  * @uiDefault Table.intercellSpacing					Dimension
  * @uiDefault Table.selectionInactiveBackground			Color
  * @uiDefault Table.selectionInactiveForeground			Color
@@ -87,22 +95,39 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTableUI
 	extends BasicTableUI
+	implements StyleableUI
 {
 	protected boolean showHorizontalLines;
 	protected boolean showVerticalLines;
+	/** @since 1.6 */ @Styleable protected boolean showTrailingVerticalLine;
 	protected Dimension intercellSpacing;
 
-	protected Color selectionBackground;
-	protected Color selectionForeground;
-	protected Color selectionInactiveBackground;
-	protected Color selectionInactiveForeground;
+	@Styleable protected Color selectionBackground;
+	@Styleable protected Color selectionForeground;
+	@Styleable protected Color selectionInactiveBackground;
+	@Styleable protected Color selectionInactiveForeground;
+
+	// for FlatTableCellBorder
+	/** @since 2 */ @Styleable protected Insets cellMargins;
+	/** @since 2 */ @Styleable protected Color cellFocusColor;
+	/** @since 2 */ @Styleable protected Boolean showCellFocusIndicator;
 
 	private boolean oldShowHorizontalLines;
 	private boolean oldShowVerticalLines;
 	private Dimension oldIntercellSpacing;
 
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
+
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -111,6 +136,7 @@ public class FlatTableUI
 
 		showHorizontalLines = UIManager.getBoolean( "Table.showHorizontalLines" );
 		showVerticalLines = UIManager.getBoolean( "Table.showVerticalLines" );
+		showTrailingVerticalLine = UIManager.getBoolean( "Table.showTrailingVerticalLine" );
 		intercellSpacing = UIManager.getDimension( "Table.intercellSpacing" );
 
 		selectionBackground = UIManager.getColor( "Table.selectionBackground" );
@@ -148,6 +174,8 @@ public class FlatTableUI
 		selectionInactiveBackground = null;
 		selectionInactiveForeground = null;
 
+		oldStyleValues = null;
+
 		// restore old show horizontal/vertical lines (if not modified)
 		if( !showHorizontalLines && oldShowHorizontalLines && !table.getShowHorizontalLines() )
 			table.setShowHorizontalLines( true );
@@ -157,6 +185,35 @@ public class FlatTableUI
 		// restore old intercell spacing (if not modified)
 		if( intercellSpacing != null && table.getIntercellSpacing().equals( intercellSpacing ) )
 			table.setIntercellSpacing( oldIntercellSpacing );
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = e -> {
+			switch( e.getPropertyName() ) {
+				case FlatClientProperties.COMPONENT_FOCUS_OWNER:
+					toggleSelectionColors();
+					break;
+
+				case FlatClientProperties.STYLE:
+				case FlatClientProperties.STYLE_CLASS:
+					installStyle();
+					table.revalidate();
+					table.repaint();
+					break;
+			}
+		};
+		table.addPropertyChangeListener( propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		table.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
 	}
 
 	@Override
@@ -180,10 +237,58 @@ public class FlatTableUI
 		};
 	}
 
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( table, "Table" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		Color oldSelectionBackground = selectionBackground;
+		Color oldSelectionForeground = selectionForeground;
+		Color oldSelectionInactiveBackground = selectionInactiveBackground;
+		Color oldSelectionInactiveForeground = selectionInactiveForeground;
+
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		// update selection background
+		if( selectionBackground != oldSelectionBackground ) {
+			Color selBg = table.getSelectionBackground();
+			if( selBg == oldSelectionBackground )
+				table.setSelectionBackground( selectionBackground );
+			else if( selBg == oldSelectionInactiveBackground )
+				table.setSelectionBackground( selectionInactiveBackground );
+		}
+
+		// update selection foreground
+		if( selectionForeground != oldSelectionForeground ) {
+			Color selFg = table.getSelectionForeground();
+			if( selFg == oldSelectionForeground )
+				table.setSelectionForeground( selectionForeground );
+			else if( selFg == oldSelectionInactiveForeground )
+				table.setSelectionForeground( selectionInactiveForeground );
+		}
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, table, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
 	/**
 	 * Toggle selection colors from focused to inactive and vice versa.
 	 *
-	 * This is not a optimal solution but much easier than rewriting the whole paint methods.
+	 * This is not an optimal solution but much easier than rewriting the whole paint methods.
 	 *
 	 * Using a LaF specific renderer was avoided because often a custom renderer is
 	 * already used in applications. Then either the inactive colors are not used,
@@ -240,7 +345,7 @@ public class FlatTableUI
 					if( isDragging &&
 						SystemInfo.isJava_9_orLater &&
 						((horizontalLines && y1 == y2) || (verticalLines && x1 == x2)) &&
-						wasInvokedFromPaintDraggedArea() )
+						wasInvokedFromMethod( "paintDraggedArea" ) )
 					{
 						if( y1 == y2 ) {
 							// horizontal grid line
@@ -282,22 +387,8 @@ public class FlatTableUI
 					return wasInvokedFromMethod( "paintGrid" );
 				}
 
-				private boolean wasInvokedFromPaintDraggedArea() {
-					return wasInvokedFromMethod( "paintDraggedArea" );
-				}
-
 				private boolean wasInvokedFromMethod( String methodName ) {
-					StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-					for( int i = 0; i < 10 || i < stackTrace.length; i++ ) {
-						if( "javax.swing.plaf.basic.BasicTableUI".equals( stackTrace[i].getClassName() ) ) {
-							String methodName2 = stackTrace[i].getMethodName();
-							if( "paintCell".equals( methodName2 ) )
-								return false;
-							if( methodName.equals( methodName2 ) )
-								return true;
-						}
-					}
-					return false;
+					return StackUtils.wasInvokedFrom( BasicTableUI.class.getName(), methodName, 8 );
 				}
 			};
 		}
@@ -306,6 +397,10 @@ public class FlatTableUI
 	}
 
 	protected boolean hideLastVerticalLine() {
+		if( showTrailingVerticalLine )
+			return false;
+
+		// do not hide if table is not a child of a scroll pane
 		Container viewport = SwingUtilities.getUnwrappedParent( table );
 		Container viewportParent = (viewport != null) ? viewport.getParent() : null;
 		if( !(viewportParent instanceof JScrollPane) )

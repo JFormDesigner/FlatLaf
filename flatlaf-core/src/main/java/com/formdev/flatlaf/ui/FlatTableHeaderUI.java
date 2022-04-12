@@ -18,12 +18,16 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
-import java.util.Objects;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -31,11 +35,15 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -58,18 +66,45 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TableHeader.cellMargins			Insets
  * @uiDefault TableHeader.separatorColor		Color
  * @uiDefault TableHeader.bottomSeparatorColor	Color
+ * @uiDefault TableHeader.showTrailingVerticalLine	boolean
+ *
+ * <!-- FlatAscendingSortIcon and FlatDescendingSortIcon -->
+ *
+ * @uiDefault Component.arrowType				String	chevron (default) or triangle
+ * @uiDefault Table.sortIconColor				Color
  *
  * @author Karl Tauber
  */
 public class FlatTableHeaderUI
 	extends BasicTableHeaderUI
+	implements StyleableUI
 {
-	protected Color bottomSeparatorColor;
-	protected int height;
-	protected int sortIconPosition;
+	@Styleable protected Color bottomSeparatorColor;
+	@Styleable protected int height;
+	@Styleable(type=String.class) protected int sortIconPosition;
+
+	// for FlatTableHeaderBorder
+	/** @since 2 */ @Styleable protected Insets cellMargins;
+	/** @since 2 */ @Styleable protected Color separatorColor;
+	/** @since 2 */ @Styleable protected Boolean showTrailingVerticalLine;
+
+	// for FlatAscendingSortIcon and FlatDescendingSortIcon
+	// (needs to be public because icon classes are in another package)
+	/** @since 2 */ @Styleable public String arrowType;
+	/** @since 2 */ @Styleable public Color sortIconColor;
+
+	private PropertyChangeListener propertyChangeListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTableHeaderUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -78,13 +113,7 @@ public class FlatTableHeaderUI
 
 		bottomSeparatorColor = UIManager.getColor( "TableHeader.bottomSeparatorColor" );
 		height = UIManager.getInt( "TableHeader.height" );
-		switch( Objects.toString( UIManager.getString( "TableHeader.sortIconPosition" ), "right" ) ) {
-			default:
-			case "right":	sortIconPosition = SwingConstants.RIGHT; break;
-			case "left":	sortIconPosition = SwingConstants.LEFT; break;
-			case "top":		sortIconPosition = SwingConstants.TOP; break;
-			case "bottom":	sortIconPosition = SwingConstants.BOTTOM; break;
-		}
+		sortIconPosition = parseSortIconPosition( UIManager.getString( "TableHeader.sortIconPosition" ) );
 	}
 
 	@Override
@@ -92,6 +121,76 @@ public class FlatTableHeaderUI
 		super.uninstallDefaults();
 
 		bottomSeparatorColor = null;
+
+		oldStyleValues = null;
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+
+		propertyChangeListener = FlatStylingSupport.createPropertyChangeListener( header, this::installStyle, null );
+		header.addPropertyChangeListener( propertyChangeListener );
+	}
+
+	@Override
+	protected void uninstallListeners() {
+		super.uninstallListeners();
+
+		header.removePropertyChangeListener( propertyChangeListener );
+		propertyChangeListener = null;
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( header, "TableHeader" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		if( key.equals( "sortIconPosition" ) && value instanceof String )
+			value = parseSortIconPosition( (String) value );
+
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, header, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	private static int parseSortIconPosition( String str ) {
+		if( str == null )
+			str = "";
+
+		switch( str ) {
+			default:
+			case "right":	return SwingConstants.RIGHT;
+			case "left":	return SwingConstants.LEFT;
+			case "top":		return SwingConstants.TOP;
+			case "bottom":	return SwingConstants.BOTTOM;
+		}
+	}
+
+	@Override
+	protected MouseInputListener createMouseInputListener() {
+		return new FlatMouseInputHandler();
+	}
+
+	// overridden and made public to allow usage in custom renderers
+	@Override
+	public int getRolloverColumn() {
+		return super.getRolloverColumn();
 	}
 
 	@Override
@@ -244,6 +343,54 @@ public class FlatTableHeaderUI
 		@Override
 		public boolean isBorderOpaque() {
 			return (origBorder != null) ? origBorder.isBorderOpaque() : false;
+		}
+	}
+
+	//---- class FlatMouseInputHandler ----------------------------------------
+
+	/** @since 1.6 */
+	protected class FlatMouseInputHandler
+		extends MouseInputHandler
+	{
+		Cursor oldCursor;
+
+		@Override
+		public void mouseMoved( MouseEvent e ) {
+			// restore old cursor, which is necessary because super.mouseMoved() swaps cursors
+			if( oldCursor != null ) {
+				header.setCursor( oldCursor );
+				oldCursor = null;
+			}
+
+			super.mouseMoved( e );
+
+			// if resizing last column is not possible, then Swing still shows a resize cursor,
+			// which can be confusing for the user --> change cursor to standard cursor
+			JTable table;
+			int column;
+			if( header.isEnabled() &&
+				(table = header.getTable()) != null &&
+				table.getAutoResizeMode() != JTable.AUTO_RESIZE_OFF &&
+				header.getCursor() == Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR ) &&
+				(column = header.columnAtPoint( e.getPoint() )) >= 0 &&
+				column == header.getColumnModel().getColumnCount() - 1 )
+			{
+				// mouse is in last column
+				Rectangle r = header.getHeaderRect( column );
+				r.grow( -3, 0 );
+				if( !r.contains( e.getX(), e.getY() ) ) {
+					// mouse is in left or right resize area of last column
+					boolean isResizeLastColumn = (e.getX() >= r.x + (r.width / 2));
+					if( !header.getComponentOrientation().isLeftToRight() )
+						isResizeLastColumn = !isResizeLastColumn;
+
+					if( isResizeLastColumn ) {
+						// resize is not possible --> change cursor to standard cursor
+						oldCursor = header.getCursor();
+						header.setCursor( Cursor.getDefaultCursor() );
+					}
+				}
+			}
 		}
 	}
 }

@@ -18,6 +18,9 @@ package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
+import java.awt.Insets;
+import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JPasswordField;
 import com.formdev.flatlaf.extras.components.FlatTextField.SelectAllOnFocusPolicy;
 
@@ -28,7 +31,7 @@ import com.formdev.flatlaf.extras.components.FlatTextField.SelectAllOnFocusPolic
  */
 public class FlatPasswordField
 	extends JPasswordField
-	implements FlatComponentExtension
+	implements FlatComponentExtension, FlatStyleableComponent
 {
 	/**
 	 * Returns the placeholder text that is only painted if the text field is empty.
@@ -46,6 +49,122 @@ public class FlatPasswordField
 
 
 	/**
+	 * Returns the leading icon that will be placed at the leading edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public Icon getLeadingIcon() {
+		return (Icon) getClientProperty( TEXT_FIELD_LEADING_ICON );
+	}
+
+	/**
+	 * Specifies the leading icon that will be placed at the leading edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public void setLeadingIcon( Icon leadingIcon ) {
+		putClientProperty( TEXT_FIELD_LEADING_ICON, leadingIcon );
+	}
+
+
+	/**
+	 * Returns the trailing icon that will be placed at the trailing edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public Icon getTrailingIcon() {
+		return (Icon) getClientProperty( TEXT_FIELD_TRAILING_ICON );
+	}
+
+	/**
+	 * Specifies the trailing icon that will be placed at the trailing edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public void setTrailingIcon( Icon trailingIcon ) {
+		putClientProperty( TEXT_FIELD_TRAILING_ICON, trailingIcon );
+	}
+
+
+	/**
+	 * Returns a component that will be placed at the leading edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public JComponent getLeadingComponent() {
+		return (JComponent) getClientProperty( TEXT_FIELD_LEADING_COMPONENT );
+	}
+
+	/**
+	 * Specifies a component that will be placed at the leading edge of the text field.
+	 * <p>
+	 * The component will be positioned inside and aligned to the visible text field border.
+	 * There is no gap between the visible border and the component.
+	 * The laid out component size will be the preferred component width
+	 * and the inner text field height.
+	 * <p>
+	 * The component should be not opaque because the text field border is painted
+	 * slightly inside the usually visible border in some cases.
+	 * E.g. when focused (in some themes) or when an outline color is specified
+	 * (see {@link #setOutline(Object)}.
+	 *
+	 * @since 2
+	 */
+	public void setLeadingComponent( JComponent leadingComponent ) {
+		putClientProperty( TEXT_FIELD_LEADING_COMPONENT, leadingComponent );
+	}
+
+
+	/**
+	 * Returns a component that will be placed at the trailing edge of the text field.
+	 *
+	 * @since 2
+	 */
+	public JComponent getTrailingComponent() {
+		return (JComponent) getClientProperty( TEXT_FIELD_TRAILING_COMPONENT );
+	}
+
+	/**
+	 * Specifies a component that will be placed at the trailing edge of the text field.
+	 * <p>
+	 * The component will be positioned inside and aligned to the visible text field border.
+	 * There is no gap between the visible border and the component.
+	 * The laid out component size will be the preferred component width
+	 * and the inner text field height.
+	 * <p>
+	 * The component should be not opaque because the text field border is painted
+	 * slightly inside the usually visible border in some cases.
+	 * E.g. when focused (in some themes) or when an outline color is specified
+	 * (see {@link #setOutline(Object)}.
+	 *
+	 * @since 2
+	 */
+	public void setTrailingComponent( JComponent trailingComponent ) {
+		putClientProperty( TEXT_FIELD_TRAILING_COMPONENT, trailingComponent );
+	}
+
+
+	/**
+	 * Returns whether a "clear" (or "cancel") button is shown.
+	 *
+	 * @since 2
+	 */
+	public boolean isShowClearButton() {
+		return getClientPropertyBoolean( TEXT_FIELD_SHOW_CLEAR_BUTTON, false );
+	}
+
+	/**
+	 * Specifies whether a "clear" (or "cancel") button is shown on the trailing side
+	 * if the text field is not empty, editable and enabled.
+	 *
+	 * @since 2
+	 */
+	public void setShowClearButton( boolean showClearButton ) {
+		putClientPropertyBoolean( TEXT_FIELD_SHOW_CLEAR_BUTTON, showClearButton, false );
+	}
+
+
+	/**
 	 * Returns whether all text is selected when the text component gains focus.
 	 */
 	public SelectAllOnFocusPolicy getSelectAllOnFocusPolicy() {
@@ -58,6 +177,27 @@ public class FlatPasswordField
 	 */
 	public void setSelectAllOnFocusPolicy( SelectAllOnFocusPolicy selectAllOnFocusPolicy ) {
 		putClientPropertyEnumString( SELECT_ALL_ON_FOCUS_POLICY, selectAllOnFocusPolicy );
+	}
+
+
+	/**
+	 * Returns the padding of the text.
+	 *
+	 * @since 1.4
+	 */
+	public Insets getPadding() {
+		return (Insets) getClientProperty( TEXT_FIELD_PADDING );
+	}
+
+	/**
+	 * Specifies the padding of the text.
+	 * This changes the location and size of the text view within the component bounds,
+	 * but does not affect the size of the component.
+	 *
+	 * @since 1.4
+	 */
+	public void setPadding( Insets padding ) {
+		putClientProperty( TEXT_FIELD_PADDING, padding );
 	}
 
 

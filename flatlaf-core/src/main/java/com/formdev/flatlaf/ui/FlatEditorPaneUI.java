@@ -21,16 +21,22 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
+import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JEditorPane}.
@@ -38,8 +44,8 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  * <!-- BasicEditorPaneUI -->
  *
  * @uiDefault EditorPane.font					Font
- * @uiDefault EditorPane.background				Color	also used if not editable
- * @uiDefault EditorPane.foreground				Color
+ * @uiDefault EditorPane.background				Color
+ * @uiDefault EditorPane.foreground				Color	also used if not editable
  * @uiDefault EditorPane.caretForeground		Color
  * @uiDefault EditorPane.selectionBackground	Color
  * @uiDefault EditorPane.selectionForeground	Color
@@ -60,16 +66,33 @@ import com.formdev.flatlaf.util.HiDPIUtils;
  */
 public class FlatEditorPaneUI
 	extends BasicEditorPaneUI
+	implements StyleableUI
 {
-	protected int minimumWidth;
+	@Styleable protected int minimumWidth;
 	protected boolean isIntelliJTheme;
-	protected Color focusedBackground;
+	private Color background;
+	@Styleable protected Color disabledBackground;
+	@Styleable protected Color inactiveBackground;
+	@Styleable protected Color focusedBackground;
+
+	private Color oldDisabledBackground;
+	private Color oldInactiveBackground;
+
+	private Insets defaultMargin;
 
 	private Object oldHonorDisplayProperties;
 	private FocusListener focusListener;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatEditorPaneUI();
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -79,7 +102,12 @@ public class FlatEditorPaneUI
 		String prefix = getPropertyPrefix();
 		minimumWidth = UIManager.getInt( "Component.minimumWidth" );
 		isIntelliJTheme = UIManager.getBoolean( "Component.isIntelliJTheme" );
+		background = UIManager.getColor( prefix + ".background" );
+		disabledBackground = UIManager.getColor( prefix + ".disabledBackground" );
+		inactiveBackground = UIManager.getColor( prefix + ".inactiveBackground" );
 		focusedBackground = UIManager.getColor( prefix + ".focusedBackground" );
+
+		defaultMargin = UIManager.getInsets( prefix + ".margin" );
 
 		// use component font and foreground for HTML text
 		oldHonorDisplayProperties = getComponent().getClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES );
@@ -90,7 +118,15 @@ public class FlatEditorPaneUI
 	protected void uninstallDefaults() {
 		super.uninstallDefaults();
 
+		background = null;
+		disabledBackground = null;
+		inactiveBackground = null;
 		focusedBackground = null;
+
+		oldDisabledBackground = null;
+		oldInactiveBackground = null;
+
+		oldStyleValues = null;
 
 		getComponent().putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, oldHonorDisplayProperties );
 	}
@@ -113,30 +149,87 @@ public class FlatEditorPaneUI
 	}
 
 	@Override
-	protected void propertyChange( PropertyChangeEvent e ) {
-		super.propertyChange( e );
-		propertyChange( getComponent(), e );
+	protected Caret createCaret() {
+		return new FlatCaret( null, false );
 	}
 
-	static void propertyChange( JTextComponent c, PropertyChangeEvent e ) {
+	@Override
+	protected void propertyChange( PropertyChangeEvent e ) {
+		// invoke updateBackground() before super.propertyChange()
+		String propertyName = e.getPropertyName();
+		if( "editable".equals( propertyName ) || "enabled".equals( propertyName ) )
+			updateBackground();
+
+		super.propertyChange( e );
+		propertyChange( getComponent(), e, this::installStyle );
+	}
+
+	static void propertyChange( JTextComponent c, PropertyChangeEvent e, Runnable installStyle ) {
 		switch( e.getPropertyName() ) {
 			case FlatClientProperties.MINIMUM_WIDTH:
 				c.revalidate();
 				break;
+
+			case FlatClientProperties.STYLE:
+			case FlatClientProperties.STYLE_CLASS:
+				installStyle.run();
+				c.revalidate();
+				c.repaint();
+				break;
 		}
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( getComponent(), "EditorPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		oldDisabledBackground = disabledBackground;
+		oldInactiveBackground = inactiveBackground;
+
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		updateBackground();
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, getComponent(), key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
+	}
+
+	private void updateBackground() {
+		FlatTextFieldUI.updateBackground( getComponent(), background,
+			disabledBackground, inactiveBackground,
+			oldDisabledBackground, oldInactiveBackground );
 	}
 
 	@Override
 	public Dimension getPreferredSize( JComponent c ) {
-		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth );
+		return applyMinimumWidth( c, super.getPreferredSize( c ), minimumWidth, defaultMargin );
 	}
 
 	@Override
 	public Dimension getMinimumSize( JComponent c ) {
-		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth );
+		return applyMinimumWidth( c, super.getMinimumSize( c ), minimumWidth, defaultMargin );
 	}
 
-	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth ) {
+	static Dimension applyMinimumWidth( JComponent c, Dimension size, int minimumWidth, Insets defaultMargin ) {
+		// do not apply minimum width if JTextComponent.margin is set
+		if( !FlatTextFieldUI.hasDefaultMargins( c, defaultMargin ) )
+			return size;
+
 		// Assume that text area is in a scroll pane (that displays the border)
 		// and subtract 1px border line width.
 		// Using "(scale( 1 ) * 2)" instead of "scale( 2 )" to deal with rounding

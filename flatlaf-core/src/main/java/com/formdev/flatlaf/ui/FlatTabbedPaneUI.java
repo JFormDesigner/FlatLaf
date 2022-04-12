@@ -40,6 +40,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -53,6 +55,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.IntConsumer;
@@ -84,9 +87,14 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.View;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
 import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.CubicBezierEasing;
 import com.formdev.flatlaf.util.JavaCompatibility;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import com.formdev.flatlaf.util.UIScale;
 
@@ -101,7 +109,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.font							Font
  * @uiDefault TabbedPane.background						Color
  * @uiDefault TabbedPane.foreground						Color
- * @uiDefault TabbedPane.shadow							Color	used for scroll arrows and cropped line
+ * @uiDefault TabbedPane.shadow							Color	used for cropped line
  * @uiDefault TabbedPane.textIconGap					int
  * @uiDefault TabbedPane.tabInsets						Insets
  * @uiDefault TabbedPane.selectedTabPadInsets			Insets	unused
@@ -128,12 +136,15 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.maximumTabWidth				int		optional
  * @uiDefault TabbedPane.tabHeight						int
  * @uiDefault TabbedPane.tabSelectionHeight				int
+ * @uiDefault TabbedPane.cardTabSelectionHeight			int
  * @uiDefault TabbedPane.contentSeparatorHeight			int
  * @uiDefault TabbedPane.showTabSeparators				boolean
  * @uiDefault TabbedPane.tabSeparatorsFullHeight		boolean
  * @uiDefault TabbedPane.hasFullBorder					boolean
+ * @uiDefault TabbedPane.activeTabBorder				boolean
  *
  * @uiDefault TabbedPane.tabLayoutPolicy				String	wrap (default) or scroll
+ * @uiDefault TabbedPane.tabType						String	underlined (default) or card
  * @uiDefault TabbedPane.tabsPopupPolicy				String	never or asNeeded (default)
  * @uiDefault TabbedPane.scrollButtonsPolicy			String	never, asNeeded or asNeededSingle (default)
  * @uiDefault TabbedPane.scrollButtonsPlacement			String	both (default) or trailing
@@ -151,12 +162,18 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.buttonPressedBackground		Color
  *
  * @uiDefault TabbedPane.moreTabsButtonToolTipText		String
+ * @uiDefault TabbedPane.tabCloseToolTipText			String
  *
  * @author Karl Tauber
  */
 public class FlatTabbedPaneUI
 	extends BasicTabbedPaneUI
+	implements StyleableUI
 {
+	// tab type
+	/** @since 2 */ protected static final int TAB_TYPE_UNDERLINED = 0;
+	/** @since 2 */ protected static final int TAB_TYPE_CARD = 1;
+
 	// tabs popup policy / scroll arrows policy
 	protected static final int NEVER = 0;
 //	protected static final int ALWAYS = 1;
@@ -177,43 +194,52 @@ public class FlatTabbedPaneUI
 	private static Set<KeyStroke> focusBackwardTraversalKeys;
 
 	protected Color foreground;
-	protected Color disabledForeground;
-	protected Color selectedBackground;
-	protected Color selectedForeground;
-	protected Color underlineColor;
-	protected Color disabledUnderlineColor;
-	protected Color hoverColor;
-	protected Color focusColor;
-	protected Color tabSeparatorColor;
-	protected Color contentAreaColor;
+	@Styleable protected Color disabledForeground;
+	@Styleable protected Color selectedBackground;
+	@Styleable protected Color selectedForeground;
+	@Styleable protected Color underlineColor;
+	@Styleable protected Color disabledUnderlineColor;
+	@Styleable protected Color hoverColor;
+	@Styleable protected Color focusColor;
+	@Styleable protected Color tabSeparatorColor;
+	@Styleable protected Color contentAreaColor;
 
 	private int textIconGapUnscaled;
-	protected int minimumTabWidth;
-	protected int maximumTabWidth;
-	protected int tabHeight;
-	protected int tabSelectionHeight;
-	protected int contentSeparatorHeight;
-	protected boolean showTabSeparators;
-	protected boolean tabSeparatorsFullHeight;
-	protected boolean hasFullBorder;
-	protected boolean tabsOpaque = true;
+	@Styleable protected int minimumTabWidth;
+	@Styleable protected int maximumTabWidth;
+	@Styleable protected int tabHeight;
+	@Styleable protected int tabSelectionHeight;
+	/** @since 2 */ @Styleable protected int cardTabSelectionHeight;
+	@Styleable protected int contentSeparatorHeight;
+	@Styleable protected boolean showTabSeparators;
+	@Styleable protected boolean tabSeparatorsFullHeight;
+	@Styleable protected boolean hasFullBorder;
+	@Styleable protected boolean tabsOpaque = true;
 
-	private int tabsPopupPolicy;
-	private int scrollButtonsPolicy;
-	private int scrollButtonsPlacement;
+	@Styleable(type=String.class) private int tabType;
+	@Styleable(type=String.class) private int tabsPopupPolicy;
+	@Styleable(type=String.class) private int scrollButtonsPolicy;
+	@Styleable(type=String.class) private int scrollButtonsPlacement;
 
-	private int tabAreaAlignment;
-	private int tabAlignment;
-	private int tabWidthMode;
+	@Styleable(type=String.class) private int tabAreaAlignment;
+	@Styleable(type=String.class) private int tabAlignment;
+	@Styleable(type=String.class) private int tabWidthMode;
 	protected Icon closeIcon;
 
-	protected String arrowType;
-	protected Insets buttonInsets;
-	protected int buttonArc;
-	protected Color buttonHoverBackground;
-	protected Color buttonPressedBackground;
+	@Styleable protected String arrowType;
+	@Styleable protected Insets buttonInsets;
+	@Styleable protected int buttonArc;
+	@Styleable protected Color buttonHoverBackground;
+	@Styleable protected Color buttonPressedBackground;
 
-	protected String moreTabsButtonToolTipText;
+	@Styleable protected String moreTabsButtonToolTipText;
+	/** @since 2 */ @Styleable protected String tabCloseToolTipText;
+
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected boolean showContentSeparator = true;
+	/** @since 2 */ @Styleable protected boolean hideTabAreaWithOneTab;
+	/** @since 2 */ @Styleable protected boolean tabClosable;
+	/** @since 2 */ @Styleable protected int tabIconPlacement = LEADING;
 
 	protected JViewport tabViewport;
 	protected FlatWheelTabScroller wheelTabScroller;
@@ -231,6 +257,8 @@ public class FlatTabbedPaneUI
 	private boolean pressedTabClose;
 
 	private Object[] oldRenderingHints;
+	private Map<String, Object> oldStyleValues;
+	private boolean closeIconShared = true;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatTabbedPaneUI();
@@ -259,6 +287,8 @@ public class FlatTabbedPaneUI
 		buttonPressedBackground = UIManager.getColor( "TabbedPane.buttonPressedBackground" );
 
 		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -299,12 +329,14 @@ public class FlatTabbedPaneUI
 		maximumTabWidth = UIManager.getInt( "TabbedPane.maximumTabWidth" );
 		tabHeight = UIManager.getInt( "TabbedPane.tabHeight" );
 		tabSelectionHeight = UIManager.getInt( "TabbedPane.tabSelectionHeight" );
+		cardTabSelectionHeight = UIManager.getInt( "TabbedPane.cardTabSelectionHeight" );
 		contentSeparatorHeight = UIManager.getInt( "TabbedPane.contentSeparatorHeight" );
 		showTabSeparators = UIManager.getBoolean( "TabbedPane.showTabSeparators" );
 		tabSeparatorsFullHeight = UIManager.getBoolean( "TabbedPane.tabSeparatorsFullHeight" );
 		hasFullBorder = UIManager.getBoolean( "TabbedPane.hasFullBorder" );
 		tabsOpaque = UIManager.getBoolean( "TabbedPane.tabsOpaque" );
 
+		tabType = parseTabType( UIManager.getString( "TabbedPane.tabType" ) );
 		tabsPopupPolicy = parseTabsPopupPolicy( UIManager.getString( "TabbedPane.tabsPopupPolicy" ) );
 		scrollButtonsPolicy = parseScrollButtonsPolicy( UIManager.getString( "TabbedPane.scrollButtonsPolicy" ) );
 		scrollButtonsPlacement = parseScrollButtonsPlacement( UIManager.getString( "TabbedPane.scrollButtonsPlacement" ) );
@@ -313,12 +345,14 @@ public class FlatTabbedPaneUI
 		tabAlignment = parseAlignment( UIManager.getString( "TabbedPane.tabAlignment" ), CENTER );
 		tabWidthMode = parseTabWidthMode( UIManager.getString( "TabbedPane.tabWidthMode" ) );
 		closeIcon = UIManager.getIcon( "TabbedPane.closeIcon" );
+		closeIconShared = true;
 
 		buttonInsets = UIManager.getInsets( "TabbedPane.buttonInsets" );
 		buttonArc = UIManager.getInt( "TabbedPane.buttonArc" );
 
 		Locale l = tabPane.getLocale();
 		moreTabsButtonToolTipText = UIManager.getString( "TabbedPane.moreTabsButtonToolTipText", l );
+		tabCloseToolTipText = UIManager.getString( "TabbedPane.tabCloseToolTipText", l );
 
 		// scale
 		textIconGap = scale( textIconGapUnscaled );
@@ -360,6 +394,8 @@ public class FlatTabbedPaneUI
 
 		buttonHoverBackground = null;
 		buttonPressedBackground = null;
+
+		oldStyleValues = null;
 
 		MigLayoutVisualPadding.uninstall( tabPane );
 	}
@@ -538,6 +574,13 @@ public class FlatTabbedPaneUI
 	}
 
 	@Override
+	protected FocusListener createFocusListener() {
+		Handler handler = getHandler();
+		handler.focusDelegate = super.createFocusListener();
+		return handler;
+	}
+
+	@Override
 	protected LayoutManager createLayoutManager() {
 		if( tabPane.getTabLayoutPolicy() == JTabbedPane.WRAP_TAB_LAYOUT )
 			return new FlatTabbedPaneLayout();
@@ -556,6 +599,84 @@ public class FlatTabbedPaneUI
 	@Override
 	protected JButton createScrollButton( int direction ) {
 		return new FlatScrollableTabButton( direction );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( tabPane, "TabbedPane" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+
+		// update buttons
+		for( Component c : tabPane.getComponents() ) {
+			if( c instanceof FlatTabAreaButton )
+				((FlatTabAreaButton)c).updateStyle();
+		}
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		// close icon
+		if( key.startsWith( "close" ) ) {
+			if( !(closeIcon instanceof FlatTabbedPaneCloseIcon) )
+				return new UnknownStyleException( key );
+
+			if( closeIconShared ) {
+				closeIcon = FlatStylingSupport.cloneIcon( closeIcon );
+				closeIconShared = false;
+			}
+
+			return ((FlatTabbedPaneCloseIcon)closeIcon).applyStyleProperty( key, value );
+		}
+
+		if( value instanceof String ) {
+			switch( key ) {
+				case "tabType": value = parseTabType( (String) value ); break;
+				case "tabsPopupPolicy": value = parseTabsPopupPolicy( (String) value ); break;
+				case "scrollButtonsPolicy": value = parseScrollButtonsPolicy( (String) value ); break;
+				case "scrollButtonsPlacement": value = parseScrollButtonsPlacement( (String) value ); break;
+
+				case "tabAreaAlignment": value = parseAlignment( (String) value, LEADING ); break;
+				case "tabAlignment": value = parseAlignment( (String) value, CENTER ); break;
+				case "tabWidthMode": value = parseTabWidthMode( (String) value ); break;
+
+				case "tabIconPlacement": value = parseTabIconPlacement( (String) value ); break;
+			}
+		} else {
+			Object oldValue;
+			switch( key ) {
+				// BasicTabbedPaneUI
+				case "tabInsets": oldValue = tabInsets; tabInsets = (Insets) value; return oldValue;
+				case "tabAreaInsets": oldValue = tabAreaInsets; tabAreaInsets = (Insets) value; return oldValue;
+				case "textIconGap":
+					oldValue = textIconGapUnscaled;
+					textIconGapUnscaled = (int) value;
+					textIconGap = scale( textIconGapUnscaled );
+					return oldValue;
+			}
+		}
+
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, tabPane, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		Map<String, Class<?>> infos = new FlatStylingSupport.StyleableInfosMap<>();
+		infos.put( "tabInsets", Insets.class );
+		infos.put( "tabAreaInsets", Insets.class );
+		infos.put( "textIconGap", int.class );
+		FlatStylingSupport.collectAnnotatedStyleableInfos( this, infos );
+		if( closeIcon instanceof FlatTabbedPaneCloseIcon )
+			infos.putAll( ((FlatTabbedPaneCloseIcon)closeIcon).getStyleableInfos() );
+		return infos;
 	}
 
 	protected void setRolloverTab( int x, int y ) {
@@ -607,8 +728,25 @@ public class FlatTabbedPaneUI
 			return;
 
 		Rectangle r = getTabBounds( tabPane, tabIndex );
-		if( r != null )
-			tabPane.repaint( r );
+		if( r == null )
+			return;
+
+		// increase size of repaint region to include part of content border
+		if( contentSeparatorHeight > 0 &&
+			getTabType() == TAB_TYPE_CARD &&
+			clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+		{
+			int sh = scale( contentSeparatorHeight );
+			switch( tabPane.getTabPlacement() ) {
+				default:
+				case TOP:    r.height += sh; break;
+				case BOTTOM: r.height += sh; r.y -= sh; break;
+				case LEFT:   r.width  += sh; break;
+				case RIGHT:  r.width  += sh; r.x -= sh; break;
+			}
+		}
+
+		tabPane.repaint( r );
 	}
 
 	private boolean inCalculateEqual;
@@ -639,7 +777,7 @@ public class FlatTabbedPaneUI
 			Insets tabInsets = getTabInsets( tabPlacement, tabIndex );
 			tabWidth = icon.getIconWidth() + tabInsets.left + tabInsets.right;
 		} else {
-			int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING );
+			int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, tabIconPlacement );
 			if( (iconPlacement == TOP || iconPlacement == BOTTOM) &&
 				tabPane.getTabComponentAt( tabIndex ) == null &&
 				(icon = getIconForTab( tabIndex )) != null )
@@ -682,7 +820,7 @@ public class FlatTabbedPaneUI
 		int tabHeight;
 
 		Icon icon;
-		int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING );
+		int iconPlacement = clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, tabIconPlacement );
 		if( (iconPlacement == TOP || iconPlacement == BOTTOM) &&
 			tabPane.getTabComponentAt( tabIndex ) == null &&
 			(icon = getIconForTab( tabIndex )) != null )
@@ -790,7 +928,7 @@ public class FlatTabbedPaneUI
 	 */
 	@Override
 	protected Insets getContentBorderInsets( int tabPlacement ) {
-		if( hideTabArea() || contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+		if( hideTabArea() || contentSeparatorHeight == 0 || !clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, showContentSeparator ) )
 			return new Insets( 0, 0, 0, 0 );
 
 		boolean hasFullBorder = clientPropertyBoolean( tabPane, TABBED_PANE_HAS_FULL_BORDER, this.hasFullBorder );
@@ -840,6 +978,17 @@ public class FlatTabbedPaneUI
 
 		if( !isScrollTabLayout() )
 			paintTabArea( g, tabPlacement, selectedIndex );
+	}
+
+	@Override
+	protected void paintTabArea( Graphics g, int tabPlacement, int selectedIndex ) {
+		// need to set rendering hints here too because this method is also invoked
+		// from BasicTabbedPaneUI.ScrollableTabPanel.paintComponent()
+		Object[] oldHints = FlatUIUtils.setRenderingHints( g );
+
+		super.paintTabArea( g, tabPlacement, selectedIndex );
+
+		FlatUIUtils.resetRenderingHints( g, oldHints );
 	}
 
 	@Override
@@ -934,16 +1083,21 @@ public class FlatTabbedPaneUI
 		int x, int y, int w, int h, boolean isSelected )
 	{
 		// paint tab background
+		Color background = getTabBackground( tabPlacement, tabIndex, isSelected );
+		g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
+		g.fillRect( x, y, w, h );
+	}
+
+	/** @since 2 */
+	protected Color getTabBackground( int tabPlacement, int tabIndex, boolean isSelected ) {
 		boolean enabled = tabPane.isEnabled();
-		Color background = enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
+		return enabled && tabPane.isEnabledAt( tabIndex ) && getRolloverTab() == tabIndex
 			? hoverColor
 			: (enabled && isSelected && FlatUIUtils.isPermanentFocusOwner( tabPane )
 				? focusColor
 				: (selectedBackground != null && enabled && isSelected
 					? selectedBackground
 					: tabPane.getBackgroundAt( tabIndex )));
-		g.setColor( FlatUIUtils.deriveColor( background, tabPane.getBackground() ) );
-		g.fillRect( x, y, w, h );
 	}
 
 	@Override
@@ -953,7 +1107,62 @@ public class FlatTabbedPaneUI
 		// paint tab separators
 		if( clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_TAB_SEPARATORS, showTabSeparators ) &&
 			!isLastInRun( tabIndex ) )
-		  paintTabSeparator( g, tabPlacement, x, y, w, h );
+		{
+			if( getTabType() == TAB_TYPE_CARD ) {
+				// some separators need to be omitted if selected tab is painted as card
+				int selectedIndex = tabPane.getSelectedIndex();
+				if( tabIndex != selectedIndex - 1 && tabIndex != selectedIndex )
+					paintTabSeparator( g, tabPlacement, x, y, w, h );
+			} else
+				paintTabSeparator( g, tabPlacement, x, y, w, h );
+		}
+
+		// paint active tab border
+		if( isSelected && getTabType() == TAB_TYPE_CARD )
+			paintCardTabBorder( g, tabPlacement, tabIndex, x, y, w, h );
+	}
+
+	/** @since 2 */
+	protected void paintCardTabBorder( Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h ) {
+		Graphics2D g2 = (Graphics2D) g;
+
+		float borderWidth = scale( (float) contentSeparatorHeight );
+		g.setColor( (tabSeparatorColor != null) ? tabSeparatorColor : contentAreaColor );
+
+		switch( tabPlacement ) {
+			default:
+			case TOP:
+			case BOTTOM:
+				// paint left and right tab border
+				g2.fill( new Rectangle2D.Float( x, y, borderWidth, h ) );
+				g2.fill( new Rectangle2D.Float( x + w - borderWidth, y, borderWidth, h ) );
+				break;
+			case LEFT:
+			case RIGHT:
+				// paint top and bottom tab border
+				g2.fill( new Rectangle2D.Float( x, y, w, borderWidth ) );
+				g2.fill( new Rectangle2D.Float( x, y + h - borderWidth, w, borderWidth ) );
+				break;
+		}
+
+		if( cardTabSelectionHeight <= 0 ) {
+			// if there is no tab selection indicator, paint a top border as well
+			switch( tabPlacement ) {
+				default:
+				case TOP:
+					g2.fill( new Rectangle2D.Float( x, y, w, borderWidth ) );
+					break;
+				case BOTTOM:
+					g2.fill( new Rectangle2D.Float( x, y + h - borderWidth, w, borderWidth ) );
+					break;
+				case LEFT:
+					g2.fill( new Rectangle2D.Float( x, y, borderWidth, h ) );
+					break;
+				case RIGHT:
+					g2.fill( new Rectangle2D.Float( x + w - borderWidth, y, borderWidth, h ) );
+					break;
+			}
+		}
 	}
 
 	protected void paintTabCloseButton( Graphics g, int tabIndex, int x, int y, int w, int h ) {
@@ -999,26 +1208,30 @@ public class FlatTabbedPaneUI
 		g.setColor( tabPane.isEnabled() ? underlineColor : disabledUnderlineColor );
 
 		// paint underline selection
+		boolean atBottom = (getTabType() != TAB_TYPE_CARD);
 		Insets contentInsets = getContentBorderInsets( tabPlacement );
-		int tabSelectionHeight = scale( this.tabSelectionHeight );
+		int tabSelectionHeight = scale( atBottom ? this.tabSelectionHeight : cardTabSelectionHeight );
+		int sx, sy;
 		switch( tabPlacement ) {
 			case TOP:
 			default:
-				int sy = y + h + contentInsets.top - tabSelectionHeight;
+				sy = atBottom ? (y + h + contentInsets.top - tabSelectionHeight) : y;
 				g.fillRect( x, sy, w, tabSelectionHeight );
 				break;
 
 			case BOTTOM:
-				g.fillRect( x, y - contentInsets.bottom, w, tabSelectionHeight );
+				sy = atBottom ? (y - contentInsets.bottom) : (y + h - tabSelectionHeight);
+				g.fillRect( x, sy, w, tabSelectionHeight );
 				break;
 
 			case LEFT:
-				int sx = x + w + contentInsets.left - tabSelectionHeight;
+				sx = atBottom ? (x + w + contentInsets.left - tabSelectionHeight) : x;
 				g.fillRect( sx, y, tabSelectionHeight, h );
 				break;
 
 			case RIGHT:
-				g.fillRect( x - contentInsets.right, y, tabSelectionHeight, h );
+				sx = atBottom ? (x - contentInsets.right) : (x + w - tabSelectionHeight);
+				g.fillRect( sx, y, tabSelectionHeight, h );
 				break;
 		}
 	}
@@ -1030,12 +1243,13 @@ public class FlatTabbedPaneUI
 	 *   - paint full border (if enabled)
 	 *   - not invoking paintContentBorder*Edge() methods
 	 *   - repaint selection
+	 *   - painting active tab border style
 	 */
 	@Override
 	protected void paintContentBorder( Graphics g, int tabPlacement, int selectedIndex ) {
 		if( tabPane.getTabCount() <= 0 ||
 			contentSeparatorHeight == 0 ||
-			!clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
+			!clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, showContentSeparator ) )
 		  return;
 
 		Insets insets = tabPane.getInsets();
@@ -1078,12 +1292,49 @@ public class FlatTabbedPaneUI
 		Insets ci = new Insets( 0, 0, 0, 0 );
 		rotateInsets( hasFullBorder ? new Insets( sh, sh, sh, sh ) : new Insets( sh, 0, 0, 0 ), ci, tabPlacement );
 
-		// paint content separator or full border
-		g.setColor( contentAreaColor );
+		// create path for content separator or full border
 		Path2D path = new Path2D.Float( Path2D.WIND_EVEN_ODD );
 		path.append( new Rectangle2D.Float( x, y, w, h ), false );
 		path.append( new Rectangle2D.Float( x + (ci.left / 100f), y + (ci.top / 100f),
 			w - (ci.left / 100f) - (ci.right / 100f), h - (ci.top / 100f) - (ci.bottom / 100f) ), false );
+
+		// add gap for selected tab to path
+		if( getTabType() == TAB_TYPE_CARD ) {
+			float csh = scale( (float) contentSeparatorHeight );
+
+			Rectangle tabRect = getTabBounds( tabPane, selectedIndex );
+			Rectangle2D.Float innerTabRect = new Rectangle2D.Float( tabRect.x + csh, tabRect.y + csh,
+				tabRect.width - (csh * 2), tabRect.height - (csh * 2) );
+
+			// Ensure that the separator outside the tabViewport is present (doesn't get cutoff by the active tab)
+			// If left unsolved the active tab is "visible" in the separator (the gap) even when outside the viewport
+			if( tabViewport != null )
+				Rectangle2D.intersect( tabViewport.getBounds(), innerTabRect, innerTabRect );
+
+			Rectangle2D.Float gap = null;
+			if( isHorizontalTabPlacement() ) {
+				if( innerTabRect.width > 0 ) {
+					float y2 = (tabPlacement == TOP) ? y : y + h - csh;
+					gap = new Rectangle2D.Float( innerTabRect.x, y2, innerTabRect.width, csh );
+				}
+			} else {
+				if( innerTabRect.height > 0 ) {
+					float x2 = (tabPlacement == LEFT) ? x : x + w - csh;
+					gap = new Rectangle2D.Float( x2, innerTabRect.y, csh, innerTabRect.height );
+				}
+			}
+
+			if( gap != null ) {
+				path.append( gap, false );
+
+				// fill gap in case that the tab is colored (e.g. focused or hover)
+				g.setColor( getTabBackground( tabPlacement, selectedIndex, true ) );
+				((Graphics2D)g).fill( gap );
+			}
+		}
+
+		// paint content separator or full border
+		g.setColor( contentAreaColor );
 		((Graphics2D)g).fill( path );
 
 		// repaint selection in scroll-tab-layout because it may be painted before
@@ -1126,7 +1377,7 @@ public class FlatTabbedPaneUI
 		// icon placement
 		int verticalTextPosition;
 		int horizontalTextPosition;
-		switch( clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, LEADING ) ) {
+		switch( clientPropertyInt( tabPane, TABBED_PANE_TAB_ICON_PLACEMENT, tabIconPlacement ) ) {
 			default:
 			case LEADING:  verticalTextPosition = CENTER; horizontalTextPosition = TRAILING; break;
 			case TRAILING: verticalTextPosition = CENTER; horizontalTextPosition = LEADING; break;
@@ -1207,8 +1458,11 @@ public class FlatTabbedPaneUI
 	}
 
 	protected boolean isTabClosable( int tabIndex ) {
+		if( tabIndex < 0 )
+			return false;
+
 		Object value = getTabClientProperty( tabIndex, TABBED_PANE_TAB_CLOSABLE );
-		return (value instanceof Boolean) ? (boolean) value : false;
+		return (value instanceof Boolean) ? (boolean) value : tabClosable;
 	}
 
 	@SuppressWarnings( { "unchecked" } )
@@ -1282,7 +1536,16 @@ public class FlatTabbedPaneUI
 		return tabPane.getTabCount() == 1 &&
 			leadingComponent == null &&
 			trailingComponent == null &&
-			clientPropertyBoolean( tabPane, TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, false );
+			clientPropertyBoolean( tabPane, TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB, hideTabAreaWithOneTab );
+	}
+
+	/** @since 2 */
+	protected int getTabType() {
+		Object value = tabPane.getClientProperty( TABBED_PANE_TAB_TYPE );
+
+		return (value instanceof String)
+			? parseTabType( (String) value )
+			: tabType;
 	}
 
 	protected int getTabsPopupPolicy() {
@@ -1335,6 +1598,18 @@ public class FlatTabbedPaneUI
 		return (value instanceof String)
 			? parseTabWidthMode( (String) value )
 			: tabWidthMode;
+	}
+
+	/** @since 2 */
+	protected static int parseTabType( String str ) {
+		if( str == null )
+			return TAB_TYPE_UNDERLINED;
+
+		switch( str ) {
+			default:
+			case TABBED_PANE_TAB_TYPE_UNDERLINED:		return TAB_TYPE_UNDERLINED;
+			case TABBED_PANE_TAB_TYPE_CARD:				return TAB_TYPE_CARD;
+		}
 	}
 
 	protected static int parseTabsPopupPolicy( String str ) {
@@ -1393,6 +1668,19 @@ public class FlatTabbedPaneUI
 			case TABBED_PANE_TAB_WIDTH_MODE_PREFERRED:	return WIDTH_MODE_PREFERRED;
 			case TABBED_PANE_TAB_WIDTH_MODE_EQUAL:		return WIDTH_MODE_EQUAL;
 			case TABBED_PANE_TAB_WIDTH_MODE_COMPACT:	return WIDTH_MODE_COMPACT;
+		}
+	}
+
+	protected static int parseTabIconPlacement( String str ) {
+		if( str == null )
+			return LEADING;
+
+		switch( str ) {
+			default:
+			case "leading":		return LEADING;
+			case "trailing":	return TRAILING;
+			case "top":			return TOP;
+			case "bottom":		return BOTTOM;
 		}
 	}
 
@@ -1553,7 +1841,13 @@ public class FlatTabbedPaneUI
 			super( direction, arrowType,
 				FlatTabbedPaneUI.this.foreground, FlatTabbedPaneUI.this.disabledForeground,
 				null, buttonHoverBackground, null, buttonPressedBackground );
-			setArrowWidth( 10 );
+			setArrowWidth( 11 );
+		}
+
+		protected void updateStyle() {
+			updateStyle( arrowType,
+				FlatTabbedPaneUI.this.foreground, FlatTabbedPaneUI.this.disabledForeground,
+				null, buttonHoverBackground, null, buttonPressedBackground );
 		}
 
 		@Override
@@ -1689,7 +1983,7 @@ public class FlatTabbedPaneUI
 		}
 
 		protected JMenuItem createTabMenuItem( int tabIndex ) {
-			// search for tab name in this places
+			// search for tab name in these places
 			//   1. tab title
 			//   2. text of label or text component in custom tab component (including children)
 			//   3. accessible name of tab
@@ -1722,7 +2016,7 @@ public class FlatTabbedPaneUI
 				menuItem.setOpaque( true );
 			}
 
-			if( !tabPane.isEnabledAt( tabIndex ) )
+			if( !tabPane.isEnabled() || !tabPane.isEnabledAt( tabIndex ) )
 				menuItem.setEnabled( false );
 
 			menuItem.addActionListener( e -> selectTab( tabIndex ) );
@@ -2118,7 +2412,7 @@ public class FlatTabbedPaneUI
 			if( tabPane == null || tabViewport == null )
 				return;
 
-			if( !scrolled || tabViewport == null )
+			if( !scrolled )
 				return;
 			scrolled = false;
 
@@ -2131,11 +2425,12 @@ public class FlatTabbedPaneUI
 
 	private class Handler
 		implements MouseListener, MouseMotionListener, PropertyChangeListener,
-			ChangeListener, ComponentListener, ContainerListener
+			ChangeListener, ComponentListener, ContainerListener, FocusListener
 	{
 		MouseListener mouseDelegate;
 		PropertyChangeListener propertyChangeDelegate;
 		ChangeListener changeDelegate;
+		FocusListener focusDelegate;
 
 		private final PropertyChangeListener contentListener = this::contentPropertyChange;
 
@@ -2230,9 +2525,7 @@ public class FlatTabbedPaneUI
 			setRolloverTab( tabIndex );
 
 			// check whether mouse hit tab close area
-			boolean hitClose = isTabClosable( tabIndex )
-				? getTabCloseHitArea( tabIndex ).contains( x, y )
-				: false;
+			boolean hitClose = isTabClosable( tabIndex ) && getTabCloseHitArea( tabIndex ).contains( x, y );
 			if( e.getID() == MouseEvent.MOUSE_PRESSED )
 				pressedTabIndex = hitClose ? tabIndex : -1;
 			setRolloverTabClose( hitClose );
@@ -2241,6 +2534,8 @@ public class FlatTabbedPaneUI
 			// update tooltip
 			if( tabIndex >= 0 && hitClose ) {
 				Object closeTip = getTabClientProperty( tabIndex, TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT );
+				if( closeTip == null )
+					closeTip = tabCloseToolTipText;
 				if( closeTip instanceof String )
 					setCloseToolTip( tabIndex, (String) closeTip );
 				else
@@ -2253,8 +2548,7 @@ public class FlatTabbedPaneUI
 			if( tabIndex == lastTipTabIndex )
 				return; // closeTip already set
 
-			if( tabIndex != lastTipTabIndex )
-				restoreTabToolTip();
+			restoreTabToolTip();
 
 			lastTipTabIndex = tabIndex;
 			lastTip = tabPane.getToolTipTextAt( lastTipTabIndex );
@@ -2303,6 +2597,10 @@ public class FlatTabbedPaneUI
 					break;
 
 				case TABBED_PANE_SHOW_TAB_SEPARATORS:
+				case TABBED_PANE_TAB_TYPE:
+					tabPane.repaint();
+					break;
+
 				case TABBED_PANE_SHOW_CONTENT_SEPARATOR:
 				case TABBED_PANE_HAS_FULL_BORDER:
 				case TABBED_PANE_HIDE_TAB_AREA_WITH_ONE_TAB:
@@ -2339,6 +2637,13 @@ public class FlatTabbedPaneUI
 					tabPane.revalidate();
 					tabPane.repaint();
 					ensureSelectedTabIsVisibleLater();
+					break;
+
+				case STYLE:
+				case STYLE_CLASS:
+					installStyle();
+					tabPane.revalidate();
+					tabPane.repaint();
 					break;
 			}
 		}
@@ -2393,6 +2698,20 @@ public class FlatTabbedPaneUI
 			Component c = e.getChild();
 			if( !(c instanceof UIResource) )
 				c.removePropertyChangeListener( contentListener );
+		}
+
+		//---- interface FocusListener ----
+
+		@Override
+		public void focusGained( FocusEvent e ) {
+			focusDelegate.focusGained( e );
+			repaintTab( tabPane.getSelectedIndex() );
+		}
+
+		@Override
+		public void focusLost( FocusEvent e ) {
+			focusDelegate.focusLost( e );
+			repaintTab( tabPane.getSelectedIndex() );
 		}
 	}
 

@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.3.1.342" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -8,7 +8,7 @@ new FormModel {
 		}
 		add( new FormContainer( "com.formdev.flatlaf.testing.FlatTestPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "ltr,insets dialog,hidemode 3"
-			"$columnConstraints": "[][200,grow,sizegroup 1,fill][200,grow,sizegroup 1,fill][fill][200,grow,sizegroup 1,fill][200,grow,sizegroup 1,fill]"
+			"$columnConstraints": "[][200,grow,sizegroup 1,fill][200,grow,sizegroup 1,fill]para[fill][200,grow,sizegroup 1,fill][200,grow,sizegroup 1,fill]"
 			"$rowConstraints": "[][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill][150,grow,sizegroup 1,fill][fill]"
 		} ) {
 			name: "this"
@@ -185,6 +185,7 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "treeMouseClicked", true ) )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 2"
@@ -197,6 +198,7 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "treeMouseClicked", true ) )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 2"
@@ -255,6 +257,7 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "treeMouseClicked", true ) )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 3"
@@ -266,6 +269,7 @@ new FormModel {
 					auxiliary() {
 						"JavaCodeGenerator.variableLocal": false
 					}
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "treeMouseClicked", true ) )
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 3"
@@ -313,8 +317,8 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[fill]"
-				"$rowConstraints": "[][]0[]"
+				"$columnConstraints": "[left]"
+				"$rowConstraints": "[][]0[]0[]"
 			} ) {
 				name: "treeOptionsPanel"
 				"border": new javax.swing.border.TitledBorder( "JTree Control" )
@@ -363,12 +367,22 @@ new FormModel {
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 0 2"
 				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "treeEditableCheckBox"
+					"text": "editable"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "treeEditableChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 3"
+				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 2 4"
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 				"$layoutConstraints": "hidemode 3"
-				"$columnConstraints": "[][fill]"
+				"$columnConstraints": "[][fill][fill]"
 				"$rowConstraints": "[][]0[]0[]0[]0"
 			} ) {
 				name: "tableOptionsPanel"
@@ -377,7 +391,7 @@ new FormModel {
 					name: "autoResizeModeLabel"
 					"text": "Auto resize mode:"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0 2 1"
+					"value": "cell 0 0 3 1"
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "autoResizeModeField"
@@ -396,13 +410,13 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "autoResizeModeChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0 2 1"
+					"value": "cell 0 0 3 1"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "sortIconPositionLabel"
 					"text": "Sort icon:"
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0 2 1"
+					"value": "cell 0 0 3 1"
 				} )
 				add( new FormComponent( "javax.swing.JComboBox" ) {
 					name: "sortIconPositionComboBox"
@@ -418,7 +432,7 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "sortIconPositionChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 0 0 2 1"
+					"value": "cell 0 0 3 1"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showHorizontalLinesCheckBox"
@@ -440,6 +454,16 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowSelectionChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 1"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "focusCellEditorCheckBox"
+					"text": "focus cell editor"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "focusCellEditorChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 1"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "showVerticalLinesCheckBox"
@@ -499,14 +523,14 @@ new FormModel {
 					}
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "tableHeaderButtonChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
-					"value": "cell 1 4"
+					"value": "cell 1 4 2 1"
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 4 2 1"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 1000, 600 )
+			"size": new java.awt.Dimension( 1095, 610 )
 		} )
 	}
 }

@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Insets;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.util.LoggingFacade;
 
 /**
  * Base interface for all FlatLaf component extensions.
@@ -87,7 +88,7 @@ public interface FlatComponentExtension
 			try {
 				return Enum.valueOf( enumType, (String) value );
 			} catch( IllegalArgumentException ex ) {
-				ex.printStackTrace();
+				LoggingFacade.INSTANCE.logSevere( "FlatLaf: Unknown enum value '" + value + "' in enum '" + enumType.getName() + "'.", ex );
 			}
 		}
 		return defaultValue;

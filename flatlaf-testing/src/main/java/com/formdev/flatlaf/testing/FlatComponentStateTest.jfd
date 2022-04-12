@@ -12,21 +12,21 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label11"
 				"text": "JButton"
-				"font": &SwingDerivedFont0 new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 0 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label12"
 				"text": "JToggleButton"
-				"font": #SwingDerivedFont0
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 0 3 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label32"
 				"text": "Help Button"
-				"font": #SwingDerivedFont0
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 9 0 2 1"
 			} )
@@ -447,14 +447,14 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label22"
 				"text": "JCheckBox"
-				"font": #SwingDerivedFont0
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 1 8 2 1"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label27"
 				"text": "JRadioButton"
-				"font": #SwingDerivedFont0
+				"$client.FlatLaf.styleClass": "h3"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 5 8 2 1"
 			} )

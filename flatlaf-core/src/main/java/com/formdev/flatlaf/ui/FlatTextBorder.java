@@ -18,6 +18,7 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
 import javax.swing.UIManager;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 
 /**
  * Border for various text components (e.g. {@link javax.swing.JTextField}).
@@ -29,7 +30,10 @@ import javax.swing.UIManager;
 public class FlatTextBorder
 	extends FlatBorder
 {
-	protected final int arc = UIManager.getInt( "TextComponent.arc" );
+	@Styleable protected int arc = UIManager.getInt( "TextComponent.arc" );
+
+	// only used via styling (not in UI defaults, but has likewise client properties)
+	/** @since 2 */ @Styleable protected Boolean roundRect;
 
 	@Override
 	protected int getArc( Component c ) {
@@ -37,6 +41,8 @@ public class FlatTextBorder
 			return 0;
 
 		Boolean roundRect = FlatUIUtils.isRoundRect( c );
+		if( roundRect == null )
+			roundRect = this.roundRect;
 		return roundRect != null ? (roundRect ? Short.MAX_VALUE : 0) : arc;
 	}
 }

@@ -18,15 +18,19 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JSlider;
 import javax.swing.LookAndFeel;
@@ -34,7 +38,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
+import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
+import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.HiDPIUtils;
+import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -57,6 +65,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Slider.trackWidth				int
  * @uiDefault Slider.thumbSize				Dimension
  * @uiDefault Slider.focusWidth				int
+ * @uiDefault Slider.thumbBorderWidth		int or float
+ *
  * @uiDefault Slider.trackValueColor		Color	optional; defaults to Slider.thumbColor
  * @uiDefault Slider.trackColor				Color
  * @uiDefault Slider.thumbColor				Color
@@ -73,23 +83,26 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatSliderUI
 	extends BasicSliderUI
+	implements StyleableUI
 {
-	protected int trackWidth;
-	protected Dimension thumbSize;
-	protected int focusWidth;
+	@Styleable protected int trackWidth;
+	@Styleable protected Dimension thumbSize;
+	@Styleable protected int focusWidth;
+	/** @since 2 */ @Styleable protected float thumbBorderWidth;
 
-	protected Color trackValueColor;
-	protected Color trackColor;
-	protected Color thumbColor;
-	protected Color thumbBorderColor;
+	@Styleable protected Color trackValueColor;
+	@Styleable protected Color trackColor;
+	@Styleable protected Color thumbColor;
+	@Styleable protected Color thumbBorderColor;
 	protected Color focusBaseColor;
-	protected Color focusedColor;
-	protected Color focusedThumbBorderColor;
-	protected Color hoverThumbColor;
-	protected Color pressedThumbColor;
-	protected Color disabledTrackColor;
-	protected Color disabledThumbColor;
-	protected Color disabledThumbBorderColor;
+	@Styleable protected Color focusedColor;
+	@Styleable protected Color focusedThumbBorderColor;
+	@Styleable protected Color hoverThumbColor;
+	@Styleable protected Color pressedThumbColor;
+	@Styleable protected Color disabledTrackColor;
+	@Styleable protected Color disabledThumbColor;
+	@Styleable protected Color disabledThumbBorderColor;
+	@Styleable protected Color tickColor;
 
 	private Color defaultBackground;
 	private Color defaultForeground;
@@ -98,6 +111,7 @@ public class FlatSliderUI
 	protected boolean thumbPressed;
 
 	private Object[] oldRenderingHints;
+	private Map<String, Object> oldStyleValues;
 
 	public static ComponentUI createUI( JComponent c ) {
 		return new FlatSliderUI();
@@ -105,6 +119,13 @@ public class FlatSliderUI
 
 	public FlatSliderUI() {
 		super( null );
+	}
+
+	@Override
+	public void installUI( JComponent c ) {
+		super.installUI( c );
+
+		installStyle();
 	}
 
 	@Override
@@ -121,6 +142,7 @@ public class FlatSliderUI
 			thumbSize = new Dimension( thumbWidth, thumbWidth );
 		}
 		focusWidth = FlatUIUtils.getUIInt( "Slider.focusWidth", 4 );
+		thumbBorderWidth = FlatUIUtils.getUIFloat( "Slider.thumbBorderWidth", 1 );
 
 		trackValueColor = FlatUIUtils.getUIColor( "Slider.trackValueColor", "Slider.thumbColor" );
 		trackColor = UIManager.getColor( "Slider.trackColor" );
@@ -134,6 +156,7 @@ public class FlatSliderUI
 		disabledTrackColor = UIManager.getColor( "Slider.disabledTrackColor" );
 		disabledThumbColor = UIManager.getColor( "Slider.disabledThumbColor" );
 		disabledThumbBorderColor = FlatUIUtils.getUIColor( "Slider.disabledThumbBorderColor", "Component.disabledBorderColor" );
+		tickColor = FlatUIUtils.getUIColor( "Slider.tickColor", Color.BLACK ); // see BasicSliderUI.paintTicks()
 
 		defaultBackground = UIManager.getColor( "Slider.background" );
 		defaultForeground = UIManager.getColor( "Slider.foreground" );
@@ -155,14 +178,48 @@ public class FlatSliderUI
 		disabledTrackColor = null;
 		disabledThumbColor = null;
 		disabledThumbBorderColor = null;
+		tickColor = null;
 
 		defaultBackground = null;
 		defaultForeground = null;
+
+		oldStyleValues = null;
 	}
 
 	@Override
 	protected TrackListener createTrackListener( JSlider slider ) {
 		return new FlatTrackListener();
+	}
+
+	@Override
+	protected PropertyChangeListener createPropertyChangeListener( JSlider slider ) {
+		return FlatStylingSupport.createPropertyChangeListener( slider, this::installStyle,
+			super.createPropertyChangeListener( slider ) );
+	}
+
+	/** @since 2 */
+	protected void installStyle() {
+		try {
+			applyStyle( FlatStylingSupport.getResolvedStyle( slider, "Slider" ) );
+		} catch( RuntimeException ex ) {
+			LoggingFacade.INSTANCE.logSevere( null, ex );
+		}
+	}
+
+	/** @since 2 */
+	protected void applyStyle( Object style ) {
+		oldStyleValues = FlatStylingSupport.parseAndApply( oldStyleValues, style, this::applyStyleProperty );
+	}
+
+	/** @since 2 */
+	protected Object applyStyleProperty( String key, Object value ) {
+		return FlatStylingSupport.applyToAnnotatedObjectOrComponent( this, slider, key, value );
+	}
+
+	/** @since 2 */
+	@Override
+	public Map<String, Class<?>> getStyleableInfos( JComponent c ) {
+		return FlatStylingSupport.getAnnotatedStyleableInfos( this );
 	}
 
 	@Override
@@ -176,9 +233,27 @@ public class FlatSliderUI
 		if( slider.getOrientation() == JSlider.VERTICAL )
 			return -1;
 
+		// use default font (instead of slider font) because the slider font size
+		// may be different to label font size, but we want to align the track/thumb with labels
+		Font font = UIManager.getFont( "defaultFont" );
+		if( font == null )
+			font = slider.getFont();
+		FontMetrics fm = slider.getFontMetrics( font );
+
+		// calculate track y coordinate and height
+		// (not using field trackRect here because slider size may be [0,0]
+		// and field trackRect may have invalid values in this case)
+		Insets insets = slider.getInsets();
+		int thumbHeight = getThumbSize().height;
+		int contentHeight = height - insets.top - insets.bottom - focusInsets.top - focusInsets.bottom;
+		int centerSpacing = thumbHeight
+			+ (slider.getPaintTicks() ? getTickLength() : 0)
+			+ (slider.getPaintLabels() ? getHeightOfTallestLabel() : 0);
+		int trackY = insets.top + focusInsets.top + (contentHeight - centerSpacing - 1) / 2;
+		int trackHeight = thumbHeight;
+
 		// compute a baseline so that the track is vertically centered
-		FontMetrics fm = slider.getFontMetrics( slider.getFont() );
-		return trackRect.y + Math.round( (trackRect.height - fm.getHeight()) / 2f ) + fm.getAscent() - 1;
+		return trackY + Math.round( (trackHeight - fm.getHeight()) / 2f ) + fm.getAscent() - 1;
 	}
 
 	@Override
@@ -307,6 +382,19 @@ debug*/
 	}
 
 	@Override
+	public void paintTicks( Graphics g ) {
+		// because BasicSliderUI.paintTicks() always uses
+		//   g.setColor( UIManager.getColor("Slider.tickColor") )
+		// we override this method and use our tickColor field to allow styling
+		super.paintTicks( new Graphics2DProxy( (Graphics2D) g ) {
+			@Override
+			public void setColor( Color c ) {
+				super.setColor( tickColor );
+			}
+		} );
+	}
+
+	@Override
 	public void paintThumb( Graphics g ) {
 		Color thumbColor = getThumbColor();
 		Color color = stateColor( slider, thumbHover, thumbPressed,
@@ -321,11 +409,11 @@ debug*/
 		Color focusedColor = FlatUIUtils.deriveColor( this.focusedColor,
 			(foreground != defaultForeground) ? foreground : focusBaseColor );
 
-		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, focusWidth );
+		paintThumb( g, slider, thumbRect, isRoundThumb(), color, borderColor, focusedColor, thumbBorderWidth, focusWidth );
 	}
 
 	public static void paintThumb( Graphics g, JSlider slider, Rectangle thumbRect, boolean roundThumb,
-		Color thumbColor, Color thumbBorderColor, Color focusedColor, int focusWidth )
+		Color thumbColor, Color thumbBorderColor, Color focusedColor, float thumbBorderWidth, int focusWidth )
 	{
 		double systemScaleFactor = UIScale.getSystemScaleFactor( (Graphics2D) g );
 		if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
@@ -334,18 +422,20 @@ debug*/
 				(g2d, x2, y2, width2, height2, scaleFactor) -> {
 					paintThumbImpl( g, slider, x2, y2, width2, height2,
 						roundThumb, thumbColor, thumbBorderColor, focusedColor,
+						(float) (thumbBorderWidth * scaleFactor),
 						(float) (focusWidth * scaleFactor) );
 				} );
 			return;
 		}
 
 		paintThumbImpl( g, slider, thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height,
-			roundThumb, thumbColor, thumbBorderColor, focusedColor, focusWidth );
+			roundThumb, thumbColor, thumbBorderColor, focusedColor, thumbBorderWidth, focusWidth );
 
 	}
 
 	private static void paintThumbImpl( Graphics g, JSlider slider, int x, int y, int width, int height,
-		boolean roundThumb, Color thumbColor, Color thumbBorderColor, Color focusedColor, float focusWidth )
+		boolean roundThumb, Color thumbColor, Color thumbBorderColor, Color focusedColor,
+		float thumbBorderWidth, float focusWidth )
 	{
 		int fw = Math.round( UIScale.scale( focusWidth ) );
 		int tx = x + fw;
@@ -367,7 +457,7 @@ debug*/
 				((Graphics2D)g).fill( createRoundThumbShape( tx, ty, tw, th ) );
 
 				// paint thumb background
-				float lw = UIScale.scale( 1f );
+				float lw = UIScale.scale( thumbBorderWidth );
 				g.setColor( thumbColor );
 				((Graphics2D)g).fill( createRoundThumbShape( tx + lw, ty + lw,
 					tw - lw - lw, th - lw - lw ) );
@@ -408,7 +498,7 @@ debug*/
 					g2.fill( createDirectionalThumbShape( fw, fw, tw, th, 0 ) );
 
 					// paint thumb background
-					float lw = UIScale.scale( 1f );
+					float lw = UIScale.scale( thumbBorderWidth );
 					g2.setColor( thumbColor );
 					g2.fill( createDirectionalThumbShape( fw + lw, fw + lw,
 						tw - lw - lw, th - lw - lw - (lw * 0.4142f), 0 ) );

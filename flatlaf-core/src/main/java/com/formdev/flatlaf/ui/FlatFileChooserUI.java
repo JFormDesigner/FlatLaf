@@ -262,12 +262,23 @@ public class FlatFileChooserUI
 
 	@Override
 	public FileView getFileView( JFileChooser fc ) {
-		return fileView;
+		return doNotUseSystemIcons() ? super.getFileView( fc ) : fileView;
 	}
 
 	@Override
 	public void clearIconCache() {
-		fileView.clearIconCache();
+		if( doNotUseSystemIcons() )
+			super.clearIconCache();
+		else
+			fileView.clearIconCache();
+	}
+
+	private boolean doNotUseSystemIcons() {
+		// Java 17 32bit craches on Windows when using system icons
+		// fixed in Java 18+ (see https://bugs.openjdk.java.net/browse/JDK-8277299)
+		return SystemInfo.isWindows &&
+			SystemInfo.isX86 &&
+			(SystemInfo.isJava_17_orLater && !SystemInfo.isJava_18_orLater);
 	}
 
 	//---- class FlatFileView -------------------------------------------------

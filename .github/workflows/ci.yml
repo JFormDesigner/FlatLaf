@@ -19,39 +19,26 @@ jobs:
     strategy:
       matrix:
         # test against
-        # - Java 1.8 (minimum requirement)
-        # - Java 9 (first version with JPMS)
+        # - Java 8 (minimum requirement)
         # - Java LTS versions (11, 17, ...)
         # - lastest Java version(s)
         java:
-          - 1.8
-          - 9
+          - 8
           - 11  # LTS
-          - 14
-          - 15
+          - 17  # LTS
 
     steps:
       - uses: actions/checkout@v2
 
       - uses: gradle/wrapper-validation-action@v1
+        if: matrix.java == '8'
 
       - name: Setup Java ${{ matrix.java }}
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java }}
-
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Cache Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
+          distribution: adopt  # Java 8 and 11 are pre-installed on ubuntu-latest
+          cache: gradle
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -72,35 +59,35 @@ jobs:
     needs: build
     if: |
       github.event_name == 'push' &&
-      github.ref == 'refs/heads/main' &&
+      (github.ref == 'refs/heads/main' || startsWith( github.ref, 'refs/heads/develop-' )) &&
       github.repository == 'JFormDesigner/FlatLaf'
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Setup Java 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: 11
-
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Cache Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
+          distribution: adopt  # pre-installed on ubuntu-latest
+          cache: gradle
 
       - name: Publish snapshot to oss.sonatype.org
-        run: ./gradlew publish -Dorg.gradle.internal.publish.checksums.insecure=true
+        run: ./gradlew publish :flatlaf-theme-editor:build -Dorg.gradle.internal.publish.checksums.insecure=true
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+
+      - name: Upload theme editor
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          forceSsl: true
+          localDir: "flatlaf-theme-editor/build/libs"
+          remoteDir: "snapshots"
+          options: "--only-newer --no-recursion --verbose=1"
 
 
   release:
@@ -115,25 +102,14 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Java 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: 11
-
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Cache Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
+          distribution: adopt  # pre-installed on ubuntu-latest
+          cache: gradle
 
       - name: Release a new stable version to Maven Central
-        run: ./gradlew publish :flatlaf-demo:build -Drelease=true
+        run: ./gradlew publish :flatlaf-demo:build :flatlaf-theme-editor:build -Drelease=true
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -148,5 +124,16 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           forceSsl: true
           localDir: "flatlaf-demo/build/libs"
+          remoteDir: "."
+          options: "--only-newer --no-recursion --verbose=1"
+
+      - name: Upload theme editor
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          forceSsl: true
+          localDir: "flatlaf-theme-editor/build/libs"
           remoteDir: "."
           options: "--only-newer --no-recursion --verbose=1"
