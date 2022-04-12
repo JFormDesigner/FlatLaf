@@ -260,6 +260,7 @@ FileView.computerIcon
 FileView.directoryIcon
 FileView.fileIcon
 FileView.floppyDriveIcon
+FileView.fullRowSelection
 FileView.hardDriveIcon
 FormattedTextField.background
 FormattedTextField.border
@@ -848,6 +849,7 @@ TabbedPane.tabsPopupPolicy
 TabbedPane.textIconGap
 TabbedPane.underlineColor
 TabbedPaneUI
+Table.alternateRowColor
 Table.ancestorInputMap
 Table.ancestorInputMap.RightToLeft
 Table.ascendingSortIcon

@@ -9,6 +9,8 @@ FlatLaf Change Log
   character encoding used in Windows taskbar. (issue #502)
 - Button: Fixed icon layout and preferred width of default buttons that use bold
   font. (issue #506)
+- FileChooser: Enabled full row selection for details view to fix alternate row
+  coloring. (issue #512)
 - ToolBar: Fixed endless loop in focus navigation that may occur under special
   circumstances. (issue #505)
 - IntelliJ Themes: `Component.accentColor` UI property now has useful theme

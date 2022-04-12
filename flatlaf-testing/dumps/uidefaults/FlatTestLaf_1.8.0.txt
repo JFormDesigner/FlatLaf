@@ -318,6 +318,7 @@ FileView.computerIcon          [lazy] 16,16    com.formdev.flatlaf.icons.FlatFil
 FileView.directoryIcon         [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewDirectoryIcon [UI]
 FileView.fileIcon              [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewFileIcon [UI]
 FileView.floppyDriveIcon       [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewFloppyDriveIcon [UI]
+FileView.fullRowSelection      true
 FileView.hardDriveIcon         [lazy] 16,16    com.formdev.flatlaf.icons.FlatFileViewHardDriveIcon [UI]
 
 
