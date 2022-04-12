@@ -11,6 +11,8 @@ FlatLaf Change Log
   font. (issue #506)
 - FileChooser: Enabled full row selection for details view to fix alternate row
   coloring. (issue #512)
+- SplitPane: Fixed `StackOverflowError` caused by layout loop that may occur
+  under special circumstances. (issue #513)
 - ToolBar: Fixed endless loop in focus navigation that may occur under special
   circumstances. (issue #505)
 - IntelliJ Themes: `Component.accentColor` UI property now has useful theme

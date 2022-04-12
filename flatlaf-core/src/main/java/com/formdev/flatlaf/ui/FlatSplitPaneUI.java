@@ -235,7 +235,7 @@ public class FlatSplitPaneUI
 			switch( e.getPropertyName() ) {
 				case JSplitPane.DIVIDER_LOCATION_PROPERTY:
 					// necessary to show/hide one-touch buttons on expand/collapse
-					revalidate();
+					doLayout();
 					break;
 			}
 		}
