@@ -3,6 +3,12 @@ FlatLaf Change Log
 
 ## 2.2-SNAPSHOT
 
+#### New features and improvements
+
+- IntelliJ Themes: TabbedPane now use different background color for selected
+  tabs in all "Arc" themes, in "Hiberbee Dark" and in all "Material UI Lite"
+  themes.
+
 #### Fixed bugs
 
 - Native window decorations (Windows 10/11 only): Fixed wrong window title

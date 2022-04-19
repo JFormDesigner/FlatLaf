@@ -162,8 +162,11 @@ public class IntelliJTheme
 		applyCheckBoxColors( defaults );
 
 		// copy values
-		for( Map.Entry<String, String> e : uiKeyCopying.entrySet() )
-			defaults.put( e.getKey(), defaults.get( e.getValue() ) );
+		for( Map.Entry<String, String> e : uiKeyCopying.entrySet() ) {
+			Object value = defaults.get( e.getValue() );
+			if( value != null )
+				defaults.put( e.getKey(), value );
+		}
 
 		// IDEA does not paint button background if disabled, but FlatLaf does
 		Object panelBackground = defaults.get( "Panel.background" );
@@ -611,6 +614,10 @@ public class IntelliJTheme
 		// Spinner
 		uiKeyCopying.put( "Spinner.buttonSeparatorColor",         "Component.borderColor" );
 		uiKeyCopying.put( "Spinner.buttonDisabledSeparatorColor", "Component.disabledBorderColor" );
+
+		// TabbedPane
+		uiKeyCopying.put( "TabbedPane.selectedBackground",     "DefaultTabs.underlinedTabBackground" );
+		uiKeyCopying.put( "TabbedPane.selectedForeground",     "DefaultTabs.underlinedTabForeground" );
 
 		// TitlePane
 		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );
