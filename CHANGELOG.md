@@ -21,6 +21,8 @@ FlatLaf Change Log
   coloring. (issue #512)
 - SplitPane: Fixed `StackOverflowError` caused by layout loop that may occur
   under special circumstances. (issue #513)
+- Table: Slightly changed grid colors to make grid better recognizable. (issue
+  #514)
 - ToolBar: Fixed endless loop in focus navigation that may occur under special
   circumstances. (issue #505)
 - IntelliJ Themes: `Component.accentColor` UI property now has useful theme

@@ -1092,7 +1092,7 @@ Table.focusCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.F
 Table.focusSelectedCellHighlightBorder [lazy] 2,3,2,3  false    com.formdev.flatlaf.ui.FlatTableCellBorder$Selected [UI]    lineColor=#000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 Table.font                     [active] $defaultFont [UI]
 Table.foreground               #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
-Table.gridColor                #525658  HSL 200   4  33    javax.swing.plaf.ColorUIResource [UI]
+Table.gridColor                #5a5e60  HSL 200   3  36    javax.swing.plaf.ColorUIResource [UI]
 Table.intercellSpacing         0,0    javax.swing.plaf.DimensionUIResource [UI]
 Table.rowHeight                20
 Table.scrollPaneBorder         [lazy] 1,1,1,1  false    com.formdev.flatlaf.ui.FlatBorder [UI]
