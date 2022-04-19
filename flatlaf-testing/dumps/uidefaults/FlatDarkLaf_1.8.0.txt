@@ -1045,6 +1045,7 @@ TabbedPane.hasFullBorder       false
 TabbedPane.hiddenTabsNavigation moreTabsButton
 TabbedPane.highlight           #232324  HSL 240   1  14    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.hoverColor          #303234  HSL 210   4  20    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5%)
+TabbedPane.inactiveUnderlineColor #466a92  HSL 212  35  42    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.labelShift          1
 TabbedPane.light               #2f3031  HSL 210   2  19    javax.swing.plaf.ColorUIResource [UI]
 TabbedPane.scrollButtonsPlacement both

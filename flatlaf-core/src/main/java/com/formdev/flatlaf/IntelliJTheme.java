@@ -618,6 +618,7 @@ public class IntelliJTheme
 		// TabbedPane
 		uiKeyCopying.put( "TabbedPane.selectedBackground",     "DefaultTabs.underlinedTabBackground" );
 		uiKeyCopying.put( "TabbedPane.selectedForeground",     "DefaultTabs.underlinedTabForeground" );
+		uiKeyCopying.put( "TabbedPane.inactiveUnderlineColor", "DefaultTabs.inactiveUnderlineColor" );
 
 		// TitlePane
 		uiKeyCopying.put( "TitlePane.inactiveBackground",     "TitlePane.background" );
