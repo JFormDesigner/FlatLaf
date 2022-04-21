@@ -15,84 +15,101 @@
  */
 
 plugins {
-	id( "dev.nokee.jni-library" ) version "0.4.0"
-	id( "dev.nokee.cpp-language" ) version "0.4.0"
+	`cpp-library`
 }
 
 library {
 	targetMachines.set( listOf( machines.windows.x86, machines.windows.x86_64 ) )
 
-	variants.configureEach {
-		sharedLibrary {
-			compileTasks.configureEach {
-				onlyIf { isBuildable }
+	// disable debuggable for release builds to make shared libraries smaller
+	binaries.configureEach( CppSharedLibrary::class ) {
+		with( compileTask.get() ) {
+			if( name.contains( "Release" ) )
+				isDebuggable = false
+		}
+		with( linkTask.get() ) {
+			if( name.contains( "Release" ) )
+				debuggable.set( false )
+		}
+	}
+}
 
-				// depend on :flatlaf-core:compileJava because it generates the JNI headers
-				dependsOn( ":flatlaf-core:compileJava" )
+var javaHome = System.getProperty( "java.home" )
+if( javaHome.endsWith( "jre" ) )
+	javaHome += "/.."
 
-				doFirst {
-					println( "Used Tool Chain:" )
-					println( "  - ${toolChain.get()}" )
-					println( "Available Tool Chains:" )
-					toolChains.forEach {
-						println( "  - $it" )
-					}
+tasks {
+	register( "build-natives" ) {
+		group = "build"
+		description = "Builds natives"
 
-					// copy needed JNI headers
-					copy {
-						from( project( ":flatlaf-core" ).buildDir.resolve( "generated/jni-headers" ) )
-						into( "src/main/headers" )
-						include(
-							"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder.h",
-							"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc.h"
-						)
-						filter<org.apache.tools.ant.filters.FixCrLfFilter>(
-							"eol" to org.apache.tools.ant.filters.FixCrLfFilter.CrLf.newInstance( "lf" )
-						)
-					}
-				}
+		dependsOn( "linkReleaseX86", "linkReleaseX86-64" )
+	}
 
-				compilerArgs.addAll( toolChain.map {
-					when( it ) {
-						is Gcc, is Clang -> listOf( "-O2", "-DUNICODE" )
-						is VisualCpp -> listOf( "/O2", "/Zl", "/GS-", "/DUNICODE" )
-						else -> emptyList()
-					}
-				} )
+	withType<CppCompile>().configureEach {
+		onlyIf { name.contains( "Release" ) }
+
+		// depend on :flatlaf-core:compileJava because it generates the JNI headers
+		dependsOn( ":flatlaf-core:compileJava" )
+
+		doFirst {
+			println( "Used Tool Chain:" )
+			println( "  - ${toolChain.get()}" )
+			println( "Available Tool Chains:" )
+			toolChains.forEach {
+				println( "  - $it" )
 			}
 
-			linkTask.configure {
-				onlyIf { isBuildable }
-
-				val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
-				val is64Bit = targetMachine.architecture.is64Bit
-				val libraryName = if( is64Bit ) "flatlaf-windows-x86_64.dll" else "flatlaf-windows-x86.dll"
-				val jawt = if( is64Bit ) "lib/jawt-x86_64" else "lib/jawt-x86"
-
-				outputs.file( "$nativesDir/$libraryName" )
-
-				linkerArgs.addAll( toolChain.map {
-					when( it ) {
-						is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32" )
-						is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "/NODEFAULTLIB" )
-						else -> emptyList()
-					}
-				} )
-
-				doLast {
-					// copy shared library to flatlaf-core resources
-					copy {
-						from( linkedFile )
-						into( nativesDir )
-						rename( "flatlaf-natives-windows.dll", libraryName )
-					}
-				}
+			// copy needed JNI headers
+			copy {
+				from( project( ":flatlaf-core" ).buildDir.resolve( "generated/jni-headers" ) )
+				into( "src/main/headers" )
+				include(
+					"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder.h",
+					"com_formdev_flatlaf_ui_FlatWindowsNativeWindowBorder_WndProc.h"
+				)
+				filter<org.apache.tools.ant.filters.FixCrLfFilter>(
+					"eol" to org.apache.tools.ant.filters.FixCrLfFilter.CrLf.newInstance( "lf" )
+				)
 			}
+		}
 
-			for( taskName in listOf( "jarX86", "jarX86-64" ) ) {
-				tasks.named( taskName ) {
-					onlyIf { false }
-				}
+		includes.from(
+			"${javaHome}/include",
+			"${javaHome}/include/win32"
+		)
+
+		compilerArgs.addAll( toolChain.map {
+			when( it ) {
+				is Gcc, is Clang -> listOf( "-O2", "-DUNICODE" )
+				is VisualCpp -> listOf( "/O2", "/Zl", "/GS-", "/DUNICODE" )
+				else -> emptyList()
+			}
+		} )
+	}
+
+	withType<LinkSharedLibrary>().configureEach {
+		onlyIf { name.contains( "Release" ) }
+
+		val nativesDir = project( ":flatlaf-core" ).projectDir.resolve( "src/main/resources/com/formdev/flatlaf/natives" )
+		val is64Bit = name.contains( "64" )
+		val libraryName = if( is64Bit ) "flatlaf-windows-x86_64.dll" else "flatlaf-windows-x86.dll"
+		val jawt = if( is64Bit ) "lib/jawt-x86_64" else "lib/jawt-x86"
+
+		linkerArgs.addAll( toolChain.map {
+			when( it ) {
+				is Gcc, is Clang -> listOf( "-l${jawt}", "-lUser32", "-lGdi32", "-lshell32", "-lAdvAPI32", "-lKernel32" )
+				is VisualCpp -> listOf( "${jawt}.lib", "User32.lib", "Gdi32.lib", "shell32.lib", "AdvAPI32.lib", "Kernel32.lib", "/NODEFAULTLIB" )
+				else -> emptyList()
+			}
+		} )
+
+		doLast {
+			// copy shared library to flatlaf-core resources
+			copy {
+				from( linkedFile )
+				into( nativesDir )
+				rename( "flatlaf-natives-windows.dll", libraryName )
 			}
 		}
 	}
