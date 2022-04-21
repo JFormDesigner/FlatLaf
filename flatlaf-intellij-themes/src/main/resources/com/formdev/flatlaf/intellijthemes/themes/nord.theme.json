@@ -164,6 +164,10 @@
       "background": "#323846",
       "selectionInactiveForeground": "#e5e9f0"
     },
+    "MemoryIndicator": {
+      "allocatedBackground": "#81a1c1",
+      "usedBackground": "#5e81ac"
+    },
     "Menu": {
       "background": "#323846",
       "borderColor": "#3b4252",
@@ -230,6 +234,9 @@
       "Header": {
         "activeBackground": "#434c5e"
       }
+    },
+    "PopupMenu": {
+      "background": "#323846"
     },
     "ProgressBar": {
       "background": "#88c0d0",

@@ -127,7 +127,11 @@
       "secondaryForeground": "#7ac2cc"
     },
 
-    "List.background": "#eef0f4",
+    "List": {
+      "background": "#eef0f4",
+      "hoverBackground": "#dae6eb",
+      "hoverInactiveBackground": "#dae6eb"
+    },
 
     "Notification": {
       "MoreButton.innerBorderColor": "#bec5cd",
@@ -143,6 +147,12 @@
       }
     },
 
+    "NotificationsToolwindow": {
+      "newNotification.background": "#dae6ebB3",
+      "newNotification.hoverBackground": "#dae6eb",
+      "Notification.hoverBackground": "#dae6eb"
+    },
+
     "PasswordField.background": "#FFFFFF",
 
     "Plugins": {
@@ -151,7 +161,8 @@
       "SectionHeader.foreground": "#808080",
       "SectionHeader.background": "#edeef2",
       "Tab.selectedBackground": "#cacccf",
-      "Tab.hoverBackground": "#cacccf"
+      "Tab.hoverBackground": "#cacccf",
+      "hoverBackground": "#e6eef2"
     },
 
     "Popup": {
@@ -249,7 +260,12 @@
       }
     },
 
-    "Tree.background": "#eef0f4",
+    "Tree": {
+      "background": "#eef0f4",
+      "hoverBackground": "#dae6eb",
+      "hoverInactiveBackground": "#dae6eb",
+      "hash": "#d0d5db"
+    },
 
     "WelcomeScreen": {
       "Details.background": "#eef0f4",

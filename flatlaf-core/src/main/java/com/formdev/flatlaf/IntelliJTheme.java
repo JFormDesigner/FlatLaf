@@ -37,6 +37,7 @@ import com.formdev.flatlaf.json.ParseException;
 import com.formdev.flatlaf.util.ColorFunctions;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
+import com.formdev.flatlaf.util.SystemInfo;
 
 /**
  * This class supports loading IntelliJ .theme.json files and using them as a Laf.
@@ -314,8 +315,19 @@ public class IntelliJTheme
 	@SuppressWarnings( "unchecked" )
 	private void apply( String key, Object value, UIDefaults defaults, ArrayList<Object> defaultsKeysCache, Set<String> uiKeys ) {
 		if( value instanceof Map ) {
-			for( Map.Entry<String, Object> e : ((Map<String, Object>)value).entrySet() )
-				apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache, uiKeys );
+			Map<String, Object> map = (Map<String, Object>)value;
+			if( map.containsKey( "os.default" ) || map.containsKey( "os.windows" ) || map.containsKey( "os.mac" ) || map.containsKey( "os.linux" ) ) {
+				String osKey = SystemInfo.isWindows ? "os.windows"
+					: SystemInfo.isMacOS ? "os.mac"
+					: SystemInfo.isLinux ? "os.linux" : null;
+				if( osKey != null && map.containsKey( osKey ) )
+					apply( key, map.get( osKey ), defaults, defaultsKeysCache, uiKeys );
+				else if( map.containsKey( "os.default" ) )
+					apply( key, map.get( "os.default" ), defaults, defaultsKeysCache, uiKeys );
+			} else {
+				for( Map.Entry<String, Object> e : map.entrySet() )
+					apply( key + '.' + e.getKey(), e.getValue(), defaults, defaultsKeysCache, uiKeys );
+			}
 		} else {
 			if( "".equals( value ) )
 				return; // ignore empty value
