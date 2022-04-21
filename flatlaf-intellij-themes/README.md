@@ -65,12 +65,14 @@ Name | Class
 [Light Flat](https://github.com/nerzhulart/LightFlatTheme) | `com.formdev.flatlaf.intellijthemes.FlatLightFlatIJTheme`
 [Material Design Dark](https://github.com/xinkunZ/NotReallyMDTheme) | `com.formdev.flatlaf.intellijthemes.FlatMaterialDesignDarkIJTheme`
 [Monocai](https://github.com/bmikaili/intellij-monocai-theme) | `com.formdev.flatlaf.intellijthemes.FlatMonocaiIJTheme`
+[Monokai Pro](https://github.com/subtheme-dev/monokai-pro) | `com.formdev.flatlaf.intellijthemes.FlatMonokaiProIJTheme`
 [Nord](https://github.com/arcticicestudio/nord-jetbrains) | `com.formdev.flatlaf.intellijthemes.FlatNordIJTheme`
 [One Dark](https://github.com/one-dark/jetbrains-one-dark-theme) | `com.formdev.flatlaf.intellijthemes.FlatOneDarkIJTheme`
 [Solarized Dark](https://github.com/4lex4/intellij-platform-solarized) | `com.formdev.flatlaf.intellijthemes.FlatSolarizedDarkIJTheme`
 [Solarized Light](https://github.com/4lex4/intellij-platform-solarized) | `com.formdev.flatlaf.intellijthemes.FlatSolarizedLightIJTheme`
 [Spacegray](https://github.com/mturlo/intellij-spacegray) | `com.formdev.flatlaf.intellijthemes.FlatSpacegrayIJTheme`
 [Vuesion](https://github.com/vuesion/intellij-theme) | `com.formdev.flatlaf.intellijthemes.FlatVuesionIJTheme`
+[Xcode-Dark](https://github.com/antelle/intellij-xcode-dark-theme) | `com.formdev.flatlaf.intellijthemes.FlatXcodeDarkIJTheme`
 
 Material Theme UI Lite:
 

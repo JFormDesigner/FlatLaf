@@ -178,6 +178,13 @@
 		"sourceCodeUrl": "https://github.com/bmikaili/intellij-monocai-theme",
 		"sourceCodePath": "blob/master/resources/Monocai.theme.json"
 	},
+	"Monokai_Pro.default.theme.json": {
+		"name": "Monokai Pro",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "Monokai_Pro.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/subtheme-dev/monokai-pro"
+	},
 	"nord.theme.json": {
 		"name": "Nord",
 		"dark": true,
@@ -224,6 +231,14 @@
 		"licenseFile": "vuesion_theme.LICENSE.txt",
 		"sourceCodeUrl": "https://github.com/vuesion/intellij-theme",
 		"sourceCodePath": "blob/master/resources/META-INF/vuesion_theme.theme.json"
+	},
+	"Xcode-Dark.theme.json": {
+		"name": "Xcode-Dark",
+		"dark": true,
+		"license": "MIT",
+		"licenseFile": "Xcode-Dark.LICENSE.txt",
+		"sourceCodeUrl": "https://github.com/antelle/intellij-xcode-dark-theme",
+		"sourceCodePath": "blob/master/resources/Xcode-Dark.theme.json"
 	},
 
 	"material-theme-ui-lite/Arc Dark.theme.json": {

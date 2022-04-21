@@ -43,7 +43,7 @@ public class IJThemesClassGenerator
 		markdownTable.append( "-----|------\n" );
 
 		for( IJThemeInfo ti : themesManager.bundledThemes ) {
-			if( ti.sourceCodeUrl == null || ti.sourceCodePath == null )
+			if( ti.sourceCodeUrl == null )
 				continue;
 
 			generateClass( ti, toPath, allInfos, markdownTable );
@@ -77,7 +77,7 @@ public class IJThemesClassGenerator
 			themeName += " (Material)";
 
 		StringBuilder buf = new StringBuilder();
-		for( String n : name.split( " " ) ) {
+		for( String n : name.split( "[ \\-]" ) ) {
 			if( n.length() == 0 || n.equals( "-" ) )
 				continue;
 
