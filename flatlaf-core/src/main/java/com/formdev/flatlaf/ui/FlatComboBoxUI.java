@@ -86,6 +86,11 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.padding					Insets
  * @uiDefault ComboBox.squareButton				boolean	default is true
  *
+ * <!-- BasicComboPopup -->
+ *
+ * @uiDefault ComboBox.selectionBackground		Color
+ * @uiDefault ComboBox.selectionForeground		Color
+ *
  * <!-- FlatComboBoxUI -->
  *
  * @uiDefault ComboBox.minimumWidth				int
