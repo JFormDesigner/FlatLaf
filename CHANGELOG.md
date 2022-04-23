@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- SplitPane: Allow limiting one-touch expanding to a single side (set client
+  property `JSplitPane.expandableSide` to `"left"` or `"right"`). (issue #355)
 - TabbedPane: Selected tab underline color now changes depending on whether the
   focus is within the tab content. (issue #398)
 - IntelliJ Themes:

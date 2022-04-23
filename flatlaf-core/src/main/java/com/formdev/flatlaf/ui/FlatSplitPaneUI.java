@@ -34,6 +34,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
@@ -352,7 +353,7 @@ public class FlatSplitPaneUI
 				if( leftButton == null || rightButton == null || !splitPane.isOneTouchExpandable() )
 					return;
 
-				// increase side of buttons, which makes them easier to hit by the user
+				// increase size of buttons, which makes them easier to hit by the user
 				// and avoids cut arrows at small divider sizes
 				int extraSize = UIScale.scale( 4 );
 				if( orientation == JSplitPane.VERTICAL_SPLIT ) {
@@ -367,10 +368,19 @@ public class FlatSplitPaneUI
 
 				// hide buttons if not applicable
 				boolean leftCollapsed = isLeftCollapsed();
-				if( leftCollapsed )
+				boolean rightCollapsed = isRightCollapsed();
+				if( leftCollapsed || rightCollapsed ) {
+					leftButton.setVisible( !leftCollapsed );
+					rightButton.setVisible( !rightCollapsed );
+				} else {
+					Object expandableSide = splitPane.getClientProperty( FlatClientProperties.SPLIT_PANE_EXPANDABLE_SIDE );
+					leftButton.setVisible( expandableSide == null || !FlatClientProperties.SPLIT_PANE_EXPANDABLE_SIDE_LEFT.equals( expandableSide ) );
+					rightButton.setVisible( expandableSide == null || !FlatClientProperties.SPLIT_PANE_EXPANDABLE_SIDE_RIGHT.equals( expandableSide ) );
+				}
+
+				// move right button if left button is hidden
+				if( !leftButton.isVisible() )
 					rightButton.setLocation( leftButton.getLocation() );
-				leftButton.setVisible( !leftCollapsed );
-				rightButton.setVisible( !isRightCollapsed() );
 			}
 		}
 	}

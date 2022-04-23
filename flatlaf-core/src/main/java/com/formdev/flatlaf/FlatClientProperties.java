@@ -391,6 +391,40 @@ public interface FlatClientProperties
 	 */
 	String SCROLL_PANE_SMOOTH_SCROLLING = "JScrollPane.smoothScrolling";
 
+	//---- JSplitPane ---------------------------------------------------------
+
+	/**
+	 * Specifies what side of the spilt pane is allowed to expand
+	 * via one-touch expanding arrow buttons.
+	 * Requires that one-touch expanding is enabled with
+	 * {@link javax.swing.JSplitPane#setOneTouchExpandable(boolean)}.
+	 * <p>
+	 * <strong>Component</strong> {@link javax.swing.JSplitPane}<br>
+	 * <strong>Value type</strong> {@link java.lang.String}<br>
+	 * <strong>Allowed Values</strong>
+	 *     {@link #SPLIT_PANE_EXPANDABLE_SIDE_LEFT} or
+	 *     {@link #SPLIT_PANE_EXPANDABLE_SIDE_RIGHT}
+	 *
+	 * @since 2.2
+	 */
+	String SPLIT_PANE_EXPANDABLE_SIDE = "JSplitPane.expandableSide";
+
+	/**
+	 * Allow expanding only left/top side of the split pane.
+	 *
+	 * @see #SPLIT_PANE_EXPANDABLE_SIDE
+	 * @since 2.2
+	 */
+	String SPLIT_PANE_EXPANDABLE_SIDE_LEFT = "left";
+
+	/**
+	 * Allow expanding only right/bottom side of the split pane.
+	 *
+	 * @see #SPLIT_PANE_EXPANDABLE_SIDE
+	 * @since 2.2
+	 */
+	String SPLIT_PANE_EXPANDABLE_SIDE_RIGHT = "right";
+
 	//---- JTabbedPane --------------------------------------------------------
 
 	/**
