@@ -52,6 +52,13 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault SplitPaneDivider.border					Border
  * @uiDefault SplitPaneDivider.draggingColor			Color	only used if continuousLayout is false
  *
+ * <!-- BasicSplitPaneDivider -->
+ *
+ * @uiDefault SplitPane.oneTouchButtonSize				int
+ * @uiDefault SplitPane.oneTouchButtonOffset			int
+ * @uiDefault SplitPane.centerOneTouchButtons			boolean
+ * @uiDefault SplitPane.supportsOneTouchButtons			boolean	optional; default is true
+ *
  * <!-- JSplitPane -->
  *
  * @uiDefault SplitPane.continuousLayout				boolean
