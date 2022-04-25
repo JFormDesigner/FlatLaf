@@ -1,6 +1,15 @@
 FlatLaf Change Log
 ==================
 
+## 2.3-SNAPSHOT
+
+#### New features and improvements
+
+- FileChooser: Added (optional) shortcuts panel. On Windows it contains "Recent
+  Items", "Desktop", "Documents", "This PC" and "Network". On macOS and Linux it
+  is empty/hidden. (issue #100)
+
+
 ## 2.2
 
 #### New features and improvements

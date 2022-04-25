@@ -16,7 +16,12 @@
 
 package com.formdev.flatlaf.testing;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Function;
 import javax.swing.*;
+import com.formdev.flatlaf.icons.FlatFileChooserHomeFolderIcon;
 import net.miginfocom.swing.*;
 
 /**
@@ -28,6 +33,24 @@ public class FlatChooserTest
 	public static void main( String[] args ) {
 		SwingUtilities.invokeLater( () -> {
 			FlatTestFrame frame = FlatTestFrame.create( args, "FlatChooserTest" );
+
+			UIManager.put( "FileChooser.shortcuts.filesFunction", (Function<File[], File[]>) files -> {
+				ArrayList<File> list = new ArrayList<>( Arrays.asList( files ) );
+				list.add( 0, new File( System.getProperty( "user.home" ) ) );
+				return list.toArray( new File[list.size()] );
+			} );
+
+			UIManager.put( "FileChooser.shortcuts.displayNameFunction", (Function<File, String>) file -> {
+				if( file.getAbsolutePath().equals( System.getProperty( "user.home" ) ) )
+					return "Home";
+				return null;
+			} );
+			UIManager.put( "FileChooser.shortcuts.iconFunction", (Function<File, Icon>) file -> {
+				if( file.getAbsolutePath().equals( System.getProperty( "user.home" ) ) )
+					return new FlatFileChooserHomeFolderIcon();
+				return null;
+			} );
+
 			frame.showFrame( FlatChooserTest::new );
 		} );
 	}

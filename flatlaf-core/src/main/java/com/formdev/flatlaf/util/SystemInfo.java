@@ -50,6 +50,7 @@ public class SystemInfo
 	public static final long javaVersion;
 	public static final boolean isJava_9_orLater;
 	public static final boolean isJava_11_orLater;
+	/** @since 2.3 */ public static final boolean isJava_12_orLater;
 	public static final boolean isJava_15_orLater;
 	/** @since 2 */ public static final boolean isJava_17_orLater;
 	/** @since 2 */ public static final boolean isJava_18_orLater;
@@ -92,6 +93,7 @@ public class SystemInfo
 		javaVersion = scanVersion( System.getProperty( "java.version" ) );
 		isJava_9_orLater = (javaVersion >= toVersion( 9, 0, 0, 0 ));
 		isJava_11_orLater = (javaVersion >= toVersion( 11, 0, 0, 0 ));
+		isJava_12_orLater = (javaVersion >= toVersion( 12, 0, 0, 0 ));
 		isJava_15_orLater = (javaVersion >= toVersion( 15, 0, 0, 0 ));
 		isJava_17_orLater = (javaVersion >= toVersion( 17, 0, 0, 0 ));
 		isJava_18_orLater = (javaVersion >= toVersion( 18, 0, 0, 0 ));
