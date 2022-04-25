@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.RenderingHints;
@@ -496,6 +497,8 @@ public class FlatFileChooserUI
 					Method m = cls.getMethod( "get", String.class );
 					return (File[]) m.invoke( null, "fileChooserShortcutPanelFolders" );
 				}
+			} catch( IllegalAccessException ex ) {
+				// do not log because access may be denied via VM option '--illegal-access=deny'
 			} catch( Exception ex ) {
 				LoggingFacade.INSTANCE.logSevere( null, ex );
 			}
@@ -522,13 +525,24 @@ public class FlatFileChooserUI
 			}
 
 			// Java 17+ supports getting larger system icons
-			if( SystemInfo.isJava_17_orLater ) {
-				try {
+			try {
+				if( SystemInfo.isJava_17_orLater ) {
 					Method m = fsv.getClass().getMethod( "getSystemIcon", File.class, int.class, int.class );
 					return (Icon) m.invoke( fsv, file, iconSize.width, iconSize.height );
-				} catch( Exception ex ) {
-					LoggingFacade.INSTANCE.logSevere( null, ex );
+				} else if( iconSize.width > 16 || iconSize.height > 16 ) {
+					Class<?> cls = Class.forName( "sun.awt.shell.ShellFolder" );
+					if( cls.isInstance( file ) ) {
+						Method m = file.getClass().getMethod( "getIcon", boolean.class );
+						m.setAccessible( true );
+						Image image = (Image) m.invoke( file, true );
+						if( image != null )
+							return new ImageIcon( image );
+					}
 				}
+			} catch( IllegalAccessException ex ) {
+				// do not log because access may be denied via VM option '--illegal-access=deny'
+			} catch( Exception ex ) {
+				LoggingFacade.INSTANCE.logSevere( null, ex );
 			}
 
 			// get system icon in default size 16x16
