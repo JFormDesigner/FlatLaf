@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.RenderingHints;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -231,6 +232,25 @@ public class FlatFileChooserUI
 			}
 		} catch( ArrayIndexOutOfBoundsException ex ) {
 			// ignore
+		}
+
+		// put north, center and south components into a new panel so that
+		// the shortcuts panel (at west) gets full height
+		LayoutManager layout = fc.getLayout();
+		if( layout instanceof BorderLayout ) {
+			BorderLayout borderLayout = (BorderLayout) layout;
+			borderLayout.setHgap( 8 );
+
+			Component north = borderLayout.getLayoutComponent( BorderLayout.NORTH );
+			Component center = borderLayout.getLayoutComponent( BorderLayout.CENTER );
+			Component south = borderLayout.getLayoutComponent( BorderLayout.SOUTH );
+			if( north != null && center != null && south != null ) {
+				JPanel p = new JPanel( new BorderLayout( 0, 11 ) );
+				p.add( north, BorderLayout.NORTH );
+				p.add( center, BorderLayout.CENTER );
+				p.add( south, BorderLayout.SOUTH );
+				fc.add( p, BorderLayout.CENTER );
+			}
 		}
 	}
 
