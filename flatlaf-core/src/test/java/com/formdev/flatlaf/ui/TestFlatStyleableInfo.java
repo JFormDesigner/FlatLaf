@@ -693,6 +693,7 @@ public class TestFlatStyleableInfo
 			"selectedBackground", Color.class,
 			"selectedForeground", Color.class,
 			"underlineColor", Color.class,
+			"inactiveUnderlineColor", Color.class,
 			"disabledUnderlineColor", Color.class,
 			"hoverColor", Color.class,
 			"focusColor", Color.class,

@@ -43,12 +43,6 @@ tasks {
 		options.headerOutputDirectory.set( buildDir.resolve( "generated/jni-headers" ) )
 	}
 
-	processResources {
-		// build native libraries
-		if( org.gradle.internal.os.OperatingSystem.current().isWindows )
-			dependsOn( ":flatlaf-natives-windows:assemble" )
-	}
-
 	jar {
 		archiveBaseName.set( "flatlaf" )
 

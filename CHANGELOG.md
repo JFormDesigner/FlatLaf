@@ -1,7 +1,18 @@
 FlatLaf Change Log
 ==================
 
-## 2.2-SNAPSHOT
+## 2.2
+
+#### New features and improvements
+
+- SplitPane: Allow limiting one-touch expanding to a single side (set client
+  property `JSplitPane.expandableSide` to `"left"` or `"right"`). (issue #355)
+- TabbedPane: Selected tab underline color now changes depending on whether the
+  focus is within the tab content. (issue #398)
+- IntelliJ Themes:
+  - Added "Monokai Pro" and "Xcode-Dark" themes.
+  - TabbedPane now use different background color for selected tabs in all "Arc"
+    themes, in "Hiberbee Dark" and in all "Material UI Lite" themes.
 
 #### Fixed bugs
 
@@ -13,6 +24,8 @@ FlatLaf Change Log
   coloring. (issue #512)
 - SplitPane: Fixed `StackOverflowError` caused by layout loop that may occur
   under special circumstances. (issue #513)
+- Table: Slightly changed grid colors to make grid better recognizable. (issue
+  #514)
 - ToolBar: Fixed endless loop in focus navigation that may occur under special
   circumstances. (issue #505)
 - IntelliJ Themes: `Component.accentColor` UI property now has useful theme

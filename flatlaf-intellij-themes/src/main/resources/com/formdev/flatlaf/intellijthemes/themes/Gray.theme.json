@@ -111,6 +111,11 @@
       "secondaryForeground": "#77a8d9"
     },
 
+    "List": {
+      "hoverBackground": "#00000010",
+      "hoverInactiveBackground": "#00000010"
+    },
+
     "Notification": {
       "background": "#f7f8fa",
       "borderColor": "#D4D6D9",
@@ -131,6 +136,12 @@
       }
     },
 
+    "NotificationsToolwindow": {
+      "newNotification.background": "#dae9f7B3",
+      "newNotification.hoverBackground": "#00000009",
+      "Notification.hoverBackground": "#00000009"
+    },
+
     "PasswordField.background": "#FFFFFF",
 
     "Plugins": {
@@ -140,7 +151,7 @@
       "Tab.selectedBackground": "#D5D6D7",
       "Tab.hoverBackground": "#D5D6D7",
       "lightSelectionBackground": "#E9EFF7",
-      "hoverBackground": "#f7faff"
+      "hoverBackground": "#F8F8F8"
     },
 
     "Popup": {
@@ -225,7 +236,11 @@
       }
     },
 
-    "Tree.rowHeight": 22,
+    "Tree": {
+      "rowHeight": 22,
+      "hoverBackground": "#00000010",
+      "hoverInactiveBackground": "#00000010"
+    },
 
     "VersionControl": {
       "Log.Commit.currentBranchBackground": "#e6f0f2",

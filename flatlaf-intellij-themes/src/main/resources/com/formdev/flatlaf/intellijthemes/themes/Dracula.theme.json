@@ -38,6 +38,26 @@
       "pressedBackground": "hoverBackground",
       "pressedBorderColor": "hoverBackground"
     },
+    "Bookmark": {
+      "iconBackground": "accentColor",
+      "Mnemonic": {
+        "iconForeground": "primaryForeground",
+        "iconBackground": "#8d6b81",
+        "iconBorderColor": "accentColor"
+      }
+    },
+    "BookmarkMnemonicAssigned": {
+      "foreground": "primaryForeground",
+      "background": "#786299",
+      "borderColor": "secondaryAccentColor"
+    },
+    "BookmarkMnemonicAvailable": {
+    },
+    "BookmarkMnemonicCurrent": {
+      "foreground": "primaryForeground",
+      "background": "#8d6b81",
+      "borderColor": "accentColor"
+    },
     "Button": {
       "foreground": "primaryForeground",
       "startBorderColor": "selectionBackground",
@@ -90,7 +110,7 @@
       "inactiveWarningFocusColor": "#f1fa8c"
     },
     "DragAndDrop": {
-      "areaBorderColor": "selectionBackground"
+      "borderColor": "selectionBackground"
     },
     "Editor": {
       "background": "secondaryBackground",

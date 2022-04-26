@@ -8,7 +8,10 @@
     "backgroundColor": "#21252b",
     "borderColor": "#333841",
     "infoForeground": "#7e8491",
-    "foregroundColor": "#abb2bf"
+    "foregroundColor": "#abb2bf",
+    "notificationBackground": "#3d424b",
+    "selectionBackground": "#323844",
+    "selectionForeground": "#d7dae0"
   },
   "ui": {
     "*": {
@@ -17,10 +20,18 @@
 
       "infoForeground": "#5c6370",
 
-      "selectionBackground": "#323844",
+      "selectionBackground": {
+        "os.default": "selectionBackground",
+        "os.windows": "selectionBackground",
+        "os.mac": "selectionBackground"
+      },
+      "selectionForeground": {
+        "os.default": "selectionForeground",
+        "os.windows": "selectionForeground",
+        "os.mac": "selectionForeground"
+      },
       "selectionInactiveBackground": "#2c313a",
       "selectionBackgroundInactive": "#2c313a",
-      "selectionForeground": "#d7dae0",
 
       "disabledBackground": "backgroundColor",
       "inactiveBackground": "backgroundColor",
@@ -142,6 +153,9 @@
     "Editor": {
       "background": "#282c34",
       "foreground": "#abb2bf",
+      "SearchField": {
+        "background": "#282c34"
+      },
       "shortcutForeground": "accentColor"
     },
 
@@ -192,7 +206,7 @@
     },
 
     "Notification": {
-      "background": "#3d424b",
+      "background": "notificationBackground",
       "borderColor": "#53565f",
 
       "errorForeground": "#abb2bf",
@@ -218,6 +232,10 @@
         "errorBorderColor": "#552029"
       }
     },
+
+    "NotificationsToolwindow.newNotification.background" : "notificationBackground",
+    "NotificationsToolwindow.newNotification.hoverBackground" : "#3d424b",
+    "NotificationsToolwindow.Notification.hoverBackground" : "#3d424b",
 
     "Panel.background": "backgroundColor",
 
@@ -314,6 +332,8 @@
 
     "Settings.Spotlight.borderColor": "accentColor",
 
+    "StatusBar.background": "baseBackground",
+
     "TabbedPane": {
       "underlineColor": "accentColor",
       "contentAreaColor": "#323844",
@@ -362,6 +382,7 @@
     },
 
     "ToolWindow": {
+      "background": "backgroundColor",
       "Button": {
         "hoverBackground": "#323844",
         "selectedBackground": "#3d424b",

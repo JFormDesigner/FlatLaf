@@ -245,7 +245,7 @@ public class FlatUIUtils
 			isInActiveWindow( c, keyboardFocusManager.getActiveWindow() );
 	}
 
-	private static boolean isInActiveWindow( Component c, Window activeWindow ) {
+	static boolean isInActiveWindow( Component c, Window activeWindow ) {
 		Window window = SwingUtilities.windowForComponent( c );
 		return window == activeWindow ||
 			(window != null && window.getType() == Window.Type.POPUP && window.getOwner() == activeWindow);

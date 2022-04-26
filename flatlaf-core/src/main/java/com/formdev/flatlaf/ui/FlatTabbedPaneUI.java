@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.IntConsumer;
+import java.util.function.Predicate;
 import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
 import javax.swing.Action;
@@ -82,10 +83,12 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.View;
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatTabbedPaneCloseIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
@@ -127,6 +130,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault TabbedPane.selectedBackground				Color	optional
  * @uiDefault TabbedPane.selectedForeground				Color
  * @uiDefault TabbedPane.underlineColor					Color
+ * @uiDefault TabbedPane.inactiveUnderlineColor			Color
  * @uiDefault TabbedPane.disabledUnderlineColor			Color
  * @uiDefault TabbedPane.hoverColor						Color
  * @uiDefault TabbedPane.focusColor						Color
@@ -198,6 +202,7 @@ public class FlatTabbedPaneUI
 	@Styleable protected Color selectedBackground;
 	@Styleable protected Color selectedForeground;
 	@Styleable protected Color underlineColor;
+	/** @since 2.2 */ @Styleable protected Color inactiveUnderlineColor;
 	@Styleable protected Color disabledUnderlineColor;
 	@Styleable protected Color hoverColor;
 	@Styleable protected Color focusColor;
@@ -288,6 +293,7 @@ public class FlatTabbedPaneUI
 
 		super.installUI( c );
 
+		FlatSelectedTabRepainter.install();
 		installStyle();
 	}
 
@@ -318,6 +324,7 @@ public class FlatTabbedPaneUI
 		selectedBackground = UIManager.getColor( "TabbedPane.selectedBackground" );
 		selectedForeground = UIManager.getColor( "TabbedPane.selectedForeground" );
 		underlineColor = UIManager.getColor( "TabbedPane.underlineColor" );
+		inactiveUnderlineColor = FlatUIUtils.getUIColor( "TabbedPane.inactiveUnderlineColor", underlineColor );
 		disabledUnderlineColor = UIManager.getColor( "TabbedPane.disabledUnderlineColor" );
 		hoverColor = UIManager.getColor( "TabbedPane.hoverColor" );
 		focusColor = UIManager.getColor( "TabbedPane.focusColor" );
@@ -385,6 +392,7 @@ public class FlatTabbedPaneUI
 		selectedBackground = null;
 		selectedForeground = null;
 		underlineColor = null;
+		inactiveUnderlineColor = null;
 		disabledUnderlineColor = null;
 		hoverColor = null;
 		focusColor = null;
@@ -733,7 +741,6 @@ public class FlatTabbedPaneUI
 
 		// increase size of repaint region to include part of content border
 		if( contentSeparatorHeight > 0 &&
-			getTabType() == TAB_TYPE_CARD &&
 			clientPropertyBoolean( tabPane, TABBED_PANE_SHOW_CONTENT_SEPARATOR, true ) )
 		{
 			int sh = scale( contentSeparatorHeight );
@@ -1205,7 +1212,9 @@ public class FlatTabbedPaneUI
 	}
 
 	protected void paintTabSelection( Graphics g, int tabPlacement, int x, int y, int w, int h ) {
-		g.setColor( tabPane.isEnabled() ? underlineColor : disabledUnderlineColor );
+		g.setColor( tabPane.isEnabled()
+			? (isTabbedPaneOrChildFocused() ? underlineColor : inactiveUnderlineColor)
+			: disabledUnderlineColor );
 
 		// paint underline selection
 		boolean atBottom = (getTabType() != TAB_TYPE_CARD);
@@ -1234,6 +1243,23 @@ public class FlatTabbedPaneUI
 				g.fillRect( sx, y, tabSelectionHeight, h );
 				break;
 		}
+	}
+
+	/** @since 2.2 */
+	@SuppressWarnings( "unchecked" )
+	protected boolean isTabbedPaneOrChildFocused() {
+		KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+
+		Object value = tabPane.getClientProperty( FlatClientProperties.COMPONENT_FOCUS_OWNER );
+		if( value instanceof Predicate ) {
+			return ((Predicate<JComponent>)value).test( tabPane ) &&
+				FlatUIUtils.isInActiveWindow( tabPane, keyboardFocusManager.getActiveWindow() );
+		}
+
+		Component focusOwner = keyboardFocusManager.getPermanentFocusOwner();
+		return focusOwner != null &&
+			SwingUtilities.isDescendingFrom( focusOwner, tabPane ) &&
+			FlatUIUtils.isInActiveWindow( focusOwner, keyboardFocusManager.getActiveWindow() );
 	}
 
 	/**
@@ -3339,6 +3365,79 @@ public class FlatTabbedPaneUI
 				} );
 			} else
 				delegate.actionPerformed( e );
+		}
+	}
+
+	//---- class FlatSelectedTabRepainter -------------------------------------
+
+	private static class FlatSelectedTabRepainter
+		implements PropertyChangeListener//, Runnable
+	{
+		private static FlatSelectedTabRepainter instance;
+
+		private KeyboardFocusManager keyboardFocusManager;
+
+		static void install() {
+			synchronized( FlatSelectedTabRepainter.class ) {
+				if( instance != null )
+					return;
+
+				instance = new FlatSelectedTabRepainter();
+			}
+		}
+
+		FlatSelectedTabRepainter() {
+			keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+			keyboardFocusManager.addPropertyChangeListener( this );
+		}
+
+		private void uninstall() {
+			synchronized( FlatSelectedTabRepainter.class ) {
+				if( instance == null )
+					return;
+
+				keyboardFocusManager.removePropertyChangeListener( this );
+				keyboardFocusManager = null;
+				instance = null;
+			}
+		}
+
+		@Override
+		public void propertyChange( PropertyChangeEvent e ) {
+			// uninstall if no longer using FlatLaf
+			if( !(UIManager.getLookAndFeel() instanceof FlatLaf) ) {
+				uninstall();
+				return;
+			}
+
+			switch( e.getPropertyName() ) {
+				case "permanentFocusOwner":
+					Object oldValue = e.getOldValue();
+					Object newValue = e.getNewValue();
+					if( oldValue instanceof Component )
+						repaintSelectedTabs( (Component) oldValue );
+					if( newValue instanceof Component )
+						repaintSelectedTabs( (Component) newValue );
+					break;
+
+				case "activeWindow":
+					repaintSelectedTabs( keyboardFocusManager.getPermanentFocusOwner() );
+					break;
+			}
+		}
+
+		private void repaintSelectedTabs( Component c ) {
+			if( c instanceof JTabbedPane )
+				repaintSelectedTab( (JTabbedPane) c );
+
+			while( (c = SwingUtilities.getAncestorOfClass( JTabbedPane.class, c )) != null )
+				repaintSelectedTab( (JTabbedPane) c );
+		}
+
+		private void repaintSelectedTab( JTabbedPane tabbedPane ) {
+			TabbedPaneUI ui = tabbedPane.getUI();
+			if( ui instanceof FlatTabbedPaneUI )
+				((FlatTabbedPaneUI) ui).repaintTab( tabbedPane.getSelectedIndex() );
 		}
 	}
 }

@@ -862,6 +862,7 @@ public class TestFlatStyling
 		ui.applyStyle( "selectedBackground: #fff" );
 		ui.applyStyle( "selectedForeground: #fff" );
 		ui.applyStyle( "underlineColor: #fff" );
+		ui.applyStyle( "inactiveUnderlineColor: #fff" );
 		ui.applyStyle( "disabledUnderlineColor: #fff" );
 		ui.applyStyle( "hoverColor: #fff" );
 		ui.applyStyle( "focusColor: #fff" );
