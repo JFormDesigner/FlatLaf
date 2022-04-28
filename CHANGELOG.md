@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 2.3-SNAPSHOT
+
+#### Fixed bugs
+
+- IntelliJ Themes: Fixed `TitledBorder` text color in "Monokai Pro" theme.
+  (issue #524)
+
+
 ## 2.2
 
 #### New features and improvements
