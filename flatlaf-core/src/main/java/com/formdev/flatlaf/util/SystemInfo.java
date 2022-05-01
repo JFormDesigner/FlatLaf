@@ -66,6 +66,9 @@ public class SystemInfo
 	/** @since 1.1.2 */ public static final boolean isWebswing;
 	/** @since 1.1.1 */ public static final boolean isWinPE;
 
+	// features
+	/** @since 2.3 */ public static final boolean isMacFullWindowContentSupported;
+
 	static {
 		// platforms
 		String osName = System.getProperty( "os.name" ).toLowerCase( Locale.ENGLISH );
@@ -108,6 +111,12 @@ public class SystemInfo
 		isProjector = Boolean.getBoolean( "org.jetbrains.projector.server.enable" );
 		isWebswing = (System.getProperty( "webswing.rootDir" ) != null);
 		isWinPE = isWindows && "X:\\Windows\\System32".equalsIgnoreCase( System.getProperty( "user.dir" ) );
+
+		// features
+		// available since Java 12; backported to Java 11.0.8 and 8u292
+		isMacFullWindowContentSupported =
+			javaVersion >= toVersion( 11, 0, 8, 0 ) ||
+			(javaVersion >= toVersion( 1, 8, 0, 292 ) && !isJava_9_orLater);
 	}
 
 	public static long scanVersion( String version ) {

@@ -89,6 +89,24 @@ class DemoFrame
 
 			// do not use HTML text on macOS
 			htmlMenuItem.setText( "some text" );
+
+			// see https://www.formdev.com/flatlaf/macos/
+			if( SystemInfo.isMacFullWindowContentSupported ) {
+				getRootPane().putClientProperty( "apple.awt.fullWindowContent", true );
+				getRootPane().putClientProperty( "apple.awt.transparentTitleBar", true );
+
+				// hide window title
+				if( SystemInfo.isJava_17_orLater )
+					getRootPane().putClientProperty( "apple.awt.windowTitleVisible", false );
+				else
+					setTitle( null );
+
+				// add gap to left side of toolbar
+				toolBar.add( Box.createHorizontalStrut( 70 ), 0 );
+			}
+
+			// enable full screen mode for this window
+			getRootPane().putClientProperty( "apple.awt.fullscreenable", true );
 		}
 
 		// integrate into macOS screen menu
