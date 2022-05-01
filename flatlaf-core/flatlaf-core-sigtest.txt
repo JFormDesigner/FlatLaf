@@ -1,5 +1,5 @@
 #Signature file v4.1
-#Version 2.1
+#Version 2.2
 
 CLSS public abstract interface com.formdev.flatlaf.FlatClientProperties
 fld public final static java.lang.String BUTTON_TYPE = "JButton.buttonType"
@@ -30,6 +30,9 @@ fld public final static java.lang.String SELECT_ALL_ON_FOCUS_POLICY = "JTextFiel
 fld public final static java.lang.String SELECT_ALL_ON_FOCUS_POLICY_ALWAYS = "always"
 fld public final static java.lang.String SELECT_ALL_ON_FOCUS_POLICY_NEVER = "never"
 fld public final static java.lang.String SELECT_ALL_ON_FOCUS_POLICY_ONCE = "once"
+fld public final static java.lang.String SPLIT_PANE_EXPANDABLE_SIDE = "JSplitPane.expandableSide"
+fld public final static java.lang.String SPLIT_PANE_EXPANDABLE_SIDE_LEFT = "left"
+fld public final static java.lang.String SPLIT_PANE_EXPANDABLE_SIDE_RIGHT = "right"
 fld public final static java.lang.String SQUARE_SIZE = "JButton.squareSize"
 fld public final static java.lang.String STYLE = "FlatLaf.style"
 fld public final static java.lang.String STYLE_CLASS = "FlatLaf.styleClass"
