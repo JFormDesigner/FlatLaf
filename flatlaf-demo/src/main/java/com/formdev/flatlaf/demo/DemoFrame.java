@@ -105,8 +105,9 @@ class DemoFrame
 				toolBar.add( Box.createHorizontalStrut( 70 ), 0 );
 			}
 
-			// enable full screen mode for this window
-			getRootPane().putClientProperty( "apple.awt.fullscreenable", true );
+			// enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
+			if( !SystemInfo.isJava_11_orLater )
+				getRootPane().putClientProperty( "apple.awt.fullscreenable", true );
 		}
 
 		// integrate into macOS screen menu

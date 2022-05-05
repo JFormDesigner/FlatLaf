@@ -177,6 +177,25 @@ class FlatThemeFileEditor
 		if( SystemInfo.isMacOS ) {
 			exitMenuItem.setVisible( false );
 			aboutMenuItem.setVisible( false );
+
+			// see https://www.formdev.com/flatlaf/macos/
+			if( SystemInfo.isMacFullWindowContentSupported ) {
+				getRootPane().putClientProperty( "apple.awt.fullWindowContent", true );
+				getRootPane().putClientProperty( "apple.awt.transparentTitleBar", true );
+
+				// hide window title
+				if( SystemInfo.isJava_17_orLater )
+					getRootPane().putClientProperty( "apple.awt.windowTitleVisible", false );
+				else
+					setTitle( null );
+
+				// add gap to left side of toolbar
+				controlPanel.add( Box.createHorizontalStrut( 70 ), 0 );
+			}
+
+			// enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
+			if( !SystemInfo.isJava_11_orLater )
+				getRootPane().putClientProperty( "apple.awt.fullscreenable", false );
 		}
 
 		// integrate into macOS screen menu
