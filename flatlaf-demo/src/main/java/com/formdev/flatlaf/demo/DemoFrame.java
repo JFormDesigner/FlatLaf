@@ -452,9 +452,9 @@ class DemoFrame
 			lafClass == FlatIntelliJLaf.class ||
 			lafClass == FlatDarculaLaf.class;
 
-		accentColorLabel.setEnabled( isAccentColorSupported );
+		accentColorLabel.setVisible( isAccentColorSupported );
 		for( int i = 0; i < accentColorButtons.length; i++ )
-			accentColorButtons[i].setEnabled( isAccentColorSupported );
+			accentColorButtons[i].setVisible( isAccentColorSupported );
 	}
 
 	private void initComponents() {
