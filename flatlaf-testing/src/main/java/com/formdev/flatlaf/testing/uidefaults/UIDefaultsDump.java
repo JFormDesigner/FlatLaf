@@ -65,6 +65,7 @@ import javax.swing.plaf.basic.BasicLookAndFeel;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
 import com.formdev.flatlaf.testing.FlatTestLaf;
+import com.formdev.flatlaf.themes.*;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.ColorFunctions.ColorFunction;
@@ -103,6 +104,9 @@ public class UIDefaultsDump
 		if( SystemInfo.isWindows ) {
 			dump( FlatIntelliJLaf.class.getName(), dir, false );
 			dump( FlatDarculaLaf.class.getName(), dir, false );
+
+			dump( FlatMacLightLaf.class.getName(), dir, false );
+			dump( FlatMacDarkLaf.class.getName(), dir, false );
 		}
 
 		dump( FlatTestLaf.class.getName(), dir, false );
@@ -463,9 +467,9 @@ public class UIDefaultsDump
 		if( resolvedColor != color && resolvedColor.getRGB() != color.getRGB() ) {
 			if( !isIntelliJTheme ) {
 				System.err.println( "Key '" + key + "': derived colors not equal" );
-				System.err.println( "  Default color:          " + dumpColorHexAndHSL( color ) );
-				System.err.println( "  Resolved color:         " + dumpColorHexAndHSL( resolvedColor ) );
-				System.err.println( "  Base of resolved color: " + dumpColorHexAndHSL( retBaseColor[0] ) );
+				System.err.println( "  Default color:  " + dumpColorHexAndHSL( color ) );
+				System.err.println( "  Resolved color: " + dumpColorHexAndHSL( resolvedColor ) );
+				System.err.println( "  Base color:     " + dumpColorHexAndHSL( retBaseColor[0] ) );
 			}
 
 			out.printf( "%s / ",

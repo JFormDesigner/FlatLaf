@@ -99,7 +99,7 @@ import com.formdev.flatlaf.util.SystemInfo;
  * @uiDefault ComboBox.minimumWidth				int
  * @uiDefault ComboBox.editorColumns			int
  * @uiDefault ComboBox.maximumRowCount			int
- * @uiDefault ComboBox.buttonStyle				String	auto (default), button or none
+ * @uiDefault ComboBox.buttonStyle				String	auto (default), button, mac or none
  * @uiDefault Component.arrowType				String	chevron (default) or triangle
  * @uiDefault Component.isIntelliJTheme			boolean
  * @uiDefault ComboBox.editableBackground		Color	optional; defaults to ComboBox.background
@@ -568,7 +568,9 @@ public class FlatComboBoxUI
 		int height = c.getHeight();
 		int arrowX = arrowButton.getX();
 		int arrowWidth = arrowButton.getWidth();
-		boolean paintButton = (comboBox.isEditable() || "button".equals( buttonStyle )) && !"none".equals( buttonStyle );
+		boolean paintButton = (comboBox.isEditable() || "button".equals( buttonStyle )) &&
+			!"none".equals( buttonStyle ) &&
+			!isMacStyle();
 		boolean enabled = comboBox.isEnabled();
 		boolean isLeftToRight = comboBox.getComponentOrientation().isLeftToRight();
 
@@ -586,13 +588,21 @@ public class FlatComboBoxUI
 						: buttonBackground;
 				if( buttonColor != null ) {
 					g2.setColor( buttonColor );
-					Shape oldClip = g2.getClip();
-					if( isLeftToRight )
-						g2.clipRect( arrowX, 0, width - arrowX, height );
-					else
-						g2.clipRect( 0, 0, arrowX + arrowWidth, height );
-					FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
-					g2.setClip( oldClip );
+					if( isMacStyle() ) {
+						Insets insets = comboBox.getInsets();
+						int gap = scale( 2 );
+						FlatUIUtils.paintComponentBackground( g2, arrowX + gap, insets.top + gap,
+							arrowWidth - (gap * 2), height - insets.top - insets.bottom - (gap * 2),
+							0, arc - focusWidth );
+					} else {
+						Shape oldClip = g2.getClip();
+						if( isLeftToRight )
+							g2.clipRect( arrowX, 0, width - arrowX, height );
+						else
+							g2.clipRect( 0, 0, arrowX + arrowWidth, height );
+						FlatUIUtils.paintComponentBackground( g2, 0, 0, width, height, focusWidth, arc );
+						g2.setClip( oldClip );
+					}
 				}
 			}
 
@@ -731,6 +741,10 @@ public class FlatComboBoxUI
 		return parentParent != null && !comboBox.getBackground().equals( parentParent.getBackground() );
 	}
 
+	private boolean isMacStyle() {
+		return "mac".equals( buttonStyle );
+	}
+
 	/** @since 1.3 */
 	public static boolean isPermanentFocusOwner( JComboBox<?> comboBox ) {
 		if( comboBox.isEditable() ) {
@@ -751,6 +765,12 @@ public class FlatComboBoxUI
 		protected FlatComboBoxButton() {
 			this( SwingConstants.SOUTH, arrowType, buttonArrowColor, buttonDisabledArrowColor,
 				buttonHoverArrowColor, null, buttonPressedArrowColor, null );
+
+			if( isMacStyle() ) {
+				setArrowWidth( 7 );
+				setArrowThickness( 1.5f );
+				setRoundBorderAutoXOffset( false );
+			}
 		}
 
 		protected FlatComboBoxButton( int direction, String type, Color foreground, Color disabledForeground,
@@ -781,6 +801,20 @@ public class FlatComboBoxUI
 				return comboBox.getForeground();
 
 			return super.getArrowColor();
+		}
+
+		@Override
+		protected void paintArrow( Graphics2D g ) {
+			if( isMacStyle() && !comboBox.isEditable() ) {
+				// for style "mac", paint up and down arrows if combobox is not editable
+				int height = getHeight();
+				int h = Math.round( height / 2f );
+				FlatUIUtils.paintArrow( g, 0, 0, getWidth(), h, SwingConstants.NORTH, chevron,
+					getArrowWidth(), getArrowThickness(), getXOffset(), getYOffset() + 1.25f );
+				FlatUIUtils.paintArrow( g, 0, height - h, getWidth(), h, SwingConstants.SOUTH, chevron,
+					getArrowWidth(), getArrowThickness(), getXOffset(), getYOffset() - 1.25f );
+			} else
+				super.paintArrow( g );
 		}
 	}
 

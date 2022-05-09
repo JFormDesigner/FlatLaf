@@ -121,7 +121,7 @@ public class FlatJideSplitButtonUI
 
 		Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
 		FlatUIUtils.paintArrow( (Graphics2D) g, r.x, r.y, r.width, r.height,
-			SwingConstants.SOUTH, FlatUIUtils.isChevron( arrowType ), 6, 0, 0 );
+			SwingConstants.SOUTH, FlatUIUtils.isChevron( arrowType ), 6, 1, 0, 0 );
 		FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 	}
 }

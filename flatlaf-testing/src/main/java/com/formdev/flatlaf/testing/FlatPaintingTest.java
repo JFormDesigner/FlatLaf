@@ -1077,7 +1077,7 @@ public class FlatPaintingTest
 
 		private void paintArrow( Graphics2D g, int width, int height ) {
 			FlatUIUtils.paintArrow( g, 0, 0, width, height,
-				direction, chevron, arrowSize, xOffset, yOffset );
+				direction, chevron, arrowSize, 1, xOffset, yOffset );
 
 			if( button ) {
 				FlatArrowButton arrowButton = new FlatArrowButton( direction,

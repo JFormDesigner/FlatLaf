@@ -891,7 +891,7 @@ public class FlatJideTabbedPaneUI
 			g.setColor( button.isEnabled() ? foreground : disabledForeground );
 			FlatUIUtils.paintArrow( (Graphics2D) g,
 				0, 0, button.getWidth(), button.getHeight(),
-				direction, FlatUIUtils.isChevron( arrowType ), 10, 0, 0 );
+				direction, FlatUIUtils.isChevron( arrowType ), 10, 1, 0, 0 );
 
 			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
 		}
