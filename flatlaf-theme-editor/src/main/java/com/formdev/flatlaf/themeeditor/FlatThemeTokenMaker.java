@@ -76,6 +76,7 @@ public class FlatThemeTokenMaker
 		tokenMap.put( "tint", TOKEN_FUNCTION );
 		tokenMap.put( "shade", TOKEN_FUNCTION );
 		tokenMap.put( "contrast", TOKEN_FUNCTION );
+		tokenMap.put( "over", TOKEN_FUNCTION );
 
 		// function options
 		tokenMap.put( "relative", Token.RESERVED_WORD );

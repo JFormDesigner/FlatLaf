@@ -466,6 +466,10 @@ class UIDefaultsLoader
 				if( knownValueTypes == null ) {
 					// create lazy
 					knownValueTypes = new HashMap<>();
+					// system colors
+					knownValueTypes.put( "activeCaptionBorder", ValueType.COLOR );
+					knownValueTypes.put( "inactiveCaptionBorder", ValueType.COLOR );
+					knownValueTypes.put( "windowBorder", ValueType.COLOR );
 					// SplitPane
 					knownValueTypes.put( "SplitPane.dividerSize", ValueType.INTEGER );
 					knownValueTypes.put( "SplitPaneDivider.gripDotSize", ValueType.INTEGER );
@@ -780,6 +784,7 @@ class UIDefaultsLoader
 				case "tint":			return parseColorMix( "#fff", params, resolver, reportError );
 				case "shade":			return parseColorMix( "#000", params, resolver, reportError );
 				case "contrast":		return parseColorContrast( params, resolver, reportError );
+				case "over":			return parseColorOver( params, resolver, reportError );
 			}
 		} finally {
 			parseColorDepth--;
@@ -847,7 +852,7 @@ class UIDefaultsLoader
 		int lightness = parsePercentage( params.get( 2 ) );
 		int alpha = hasAlpha ? parsePercentage( params.get( 3 ) ) : 100;
 
-		float[] hsl = new float[] { hue, saturation, lightness };
+		float[] hsl = { hue, saturation, lightness };
 		return new ColorUIResource( HSLColor.toRGB( hsl, alpha / 100f ) );
 	}
 
@@ -1039,6 +1044,33 @@ class UIDefaultsLoader
 
 		// parse dark or light color
 		return parseColorOrFunction( resolver.apply( darkOrLightColor ), resolver, reportError );
+	}
+
+	/**
+	 * Syntax: over(foreground,background)
+	 *   - foreground: a foreground color (e.g. #f00) or a color function;
+	 *                 the alpha of this color is used as weight to mix the two colors
+	 *   - background: a background color (e.g. #f00) or a color function
+	 */
+	private static Object parseColorOver( List<String> params, Function<String, String> resolver, boolean reportError ) {
+		String foregroundStr = params.get( 0 );
+		String backgroundStr = params.get( 1 );
+
+		// parse foreground color
+		ColorUIResource foreground = (ColorUIResource) parseColorOrFunction( resolver.apply( foregroundStr ), resolver, reportError );
+		if( foreground == null || foreground.getAlpha() == 255 )
+			return foreground;
+
+		Color foreground2 = new Color( foreground.getRGB() );
+
+		// parse background color
+		ColorUIResource background = (ColorUIResource) parseColorOrFunction( resolver.apply( backgroundStr ), resolver, reportError );
+		if( background == null )
+			return foreground2;
+
+		// create new color
+		float weight = foreground.getAlpha() / 255f;
+		return new ColorUIResource( ColorFunctions.mix( foreground2, background, weight ) );
 	}
 
 	private static Object parseFunctionBaseColor( String colorStr, ColorFunction function,

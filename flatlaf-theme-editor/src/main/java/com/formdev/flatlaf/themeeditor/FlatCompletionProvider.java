@@ -482,6 +482,10 @@ class FlatCompletionProvider
 				"dark", colorParamDesc,
 				"light", colorParamDesc,
 				"threshold", "(optional) 0-100%, default is 43%" );
+
+			addFunction( "over",
+				"foreground", colorParamDesc,
+				"background", colorParamDesc );
 		}
 
 		private void addFunction( String name, String... paramNamesAndDescs ) {
