@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- ToggleButton: Made the underline placement of tab-style toggle buttons
+  configurable. (PR #530; issue #529)
 - Added spanish translation. (PR #525)
 
 #### Fixed bugs

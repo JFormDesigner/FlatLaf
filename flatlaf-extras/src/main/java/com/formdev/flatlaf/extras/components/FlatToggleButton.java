@@ -120,6 +120,8 @@ public class FlatToggleButton
 	 * Returns placement of underline if toggle button type is {@link ButtonType#tab}.
 	 * If underline placement is not specified, returns {@link #BOTTOM} as the default
 	 * value.
+	 *
+	 * @since 2.3
 	 */
 	public int getTabUnderlinePlacement() {
 		return getClientPropertyInt( TAB_BUTTON_UNDERLINE_PLACEMENT, BOTTOM );
@@ -130,20 +132,21 @@ public class FlatToggleButton
 	 *
 	 * @param placement  One of the following constants defined in SwingConstants:
 	 *                   {@link #TOP}, {@link #LEFT}, {@link #BOTTOM}, or {@link #RIGHT}.
+	 * @since 2.3
 	 */
 	public void setTabUnderlinePlacement( int placement ) {
-		putClientProperty( TAB_BUTTON_UNDERLINE_PLACEMENT, (placement < 0 || placement >= RIGHT) ? null : placement);
+		putClientProperty( TAB_BUTTON_UNDERLINE_PLACEMENT, (placement >= 0) ? placement : null );
 	}
 
 	/**
-	 * Returns height of underline if toggle button type is {@link ButtonType#tab}.
+	 * Returns thickness of underline if toggle button type is {@link ButtonType#tab}.
 	 */
 	public int getTabUnderlineHeight() {
 		return getClientPropertyInt( TAB_BUTTON_UNDERLINE_HEIGHT, "ToggleButton.tab.underlineHeight" );
 	}
 
 	/**
-	 * Specifies height of underline if toggle button type is {@link ButtonType#tab}.
+	 * Specifies thickness of underline if toggle button type is {@link ButtonType#tab}.
 	 */
 	public void setTabUnderlineHeight( int tabUnderlineHeight ) {
 		putClientProperty( TAB_BUTTON_UNDERLINE_HEIGHT, (tabUnderlineHeight >= 0) ? tabUnderlineHeight : null );

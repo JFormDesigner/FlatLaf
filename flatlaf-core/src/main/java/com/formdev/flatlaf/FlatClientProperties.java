@@ -996,19 +996,13 @@ public interface FlatClientProperties
 	 * <p>
 	 * <strong>Component</strong> {@link javax.swing.JToggleButton}<br>
 	 * <strong>Value type</strong> {@link java.lang.Integer}<br>
-	 * <strong>Default value</strong> {@link SwingConstants#BOTTOM}<br>
 	 * <strong>SupportedValues:</strong>
-	 * <table>
-	 * <thead>
-	 *     <tr><td>Placement</td><td>Constant</td><td>Value</td></tr>
-	 * </thead>
-	 * <tbody>
-	 *     <tr><td>TOP</td><td>{@link SwingConstants#TOP}</td><td>{@value SwingConstants#TOP}</td></tr>
-	 *     <tr><td>LEFT</td><td>{@link SwingConstants#LEFT}</td><td>{@value SwingConstants#LEFT}</td></tr>
-	 *     <tr><td>BOTTOM</td><td>{@link SwingConstants#BOTTOM}</td><td>{@value SwingConstants#BOTTOM}</td></tr>
-	 *     <tr><td>RIGHT</td><td>{@link SwingConstants#RIGHT}</td><td>{@value SwingConstants#RIGHT}</td></tr>
-	 * </tbody>
-	 * </table>
+	 *     {@link SwingConstants#BOTTOM} (default)
+	 *     {@link SwingConstants#TOP},
+	 *     {@link SwingConstants#LEFT} or
+	 *     {@link SwingConstants#RIGHT}
+	 *
+	 * @since 2.3
 	 */
 	String TAB_BUTTON_UNDERLINE_PLACEMENT = "JToggleButton.tab.underlinePlacement";
 
