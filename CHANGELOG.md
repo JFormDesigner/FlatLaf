@@ -3,6 +3,10 @@ FlatLaf Change Log
 
 ## 2.3-SNAPSHOT
 
+#### New features and improvements
+
+- Added spanish translation. (PR #525)
+
 #### Fixed bugs
 
 - IntelliJ Themes: Fixed `TitledBorder` text color in "Monokai Pro" theme.
