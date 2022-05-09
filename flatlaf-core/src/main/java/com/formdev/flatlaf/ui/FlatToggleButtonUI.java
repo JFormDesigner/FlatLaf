@@ -22,10 +22,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
-import javax.swing.AbstractButton;
-import javax.swing.JComponent;
-import javax.swing.JToggleButton;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.UnknownStyleException;
@@ -142,6 +139,7 @@ public class FlatToggleButtonUI
 				b.repaint();
 				break;
 
+			case TAB_BUTTON_UNDERLINE_PLACEMENT:
 			case TAB_BUTTON_UNDERLINE_HEIGHT:
 			case TAB_BUTTON_UNDERLINE_COLOR:
 			case TAB_BUTTON_SELECTED_BACKGROUND:
@@ -196,11 +194,25 @@ public class FlatToggleButtonUI
 
 			// paint underline if selected
 			if( selected ) {
-				int underlineHeight = UIScale.scale( clientPropertyInt( c, TAB_BUTTON_UNDERLINE_HEIGHT, tabUnderlineHeight ) );
+				int underlineThickness = UIScale.scale( clientPropertyInt( c, TAB_BUTTON_UNDERLINE_HEIGHT, tabUnderlineHeight ) );
 				g.setColor( c.isEnabled()
 					? clientPropertyColor( c, TAB_BUTTON_UNDERLINE_COLOR, tabUnderlineColor )
 					: tabDisabledUnderlineColor );
-				g.fillRect( 0, height - underlineHeight, width, underlineHeight );
+				int placement = clientPropertyInt( c, TAB_BUTTON_UNDERLINE_PLACEMENT, SwingConstants.BOTTOM );
+				switch (placement) {
+					case SwingConstants.TOP:
+						g.fillRect( 0, 0, width, underlineThickness );
+						break;
+					case SwingConstants.LEFT:
+						g.fillRect( 0, 0, underlineThickness, height );
+						break;
+					case SwingConstants.RIGHT:
+						g.fillRect( width - underlineThickness, 0, underlineThickness, height );
+						break;
+					case SwingConstants.BOTTOM:
+					default:
+						g.fillRect( 0, height - underlineThickness, width, underlineThickness );
+				}
 			}
 		} else
 			super.paintBackground( g, c );

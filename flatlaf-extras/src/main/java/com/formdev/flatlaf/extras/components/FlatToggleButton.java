@@ -18,7 +18,7 @@ package com.formdev.flatlaf.extras.components;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
-import javax.swing.JToggleButton;
+import javax.swing.*;
 import com.formdev.flatlaf.extras.components.FlatButton.ButtonType;
 
 /**
@@ -116,6 +116,24 @@ public class FlatToggleButton
 		putClientProperty( OUTLINE, outline );
 	}
 
+	/**
+	 * Returns placement of underline if toggle button type is {@link ButtonType#tab}.
+	 * If underline placement is not specified, returns {@link #BOTTOM} as the default
+	 * value.
+	 */
+	public int getTabUnderlinePlacement() {
+		return getClientPropertyInt( TAB_BUTTON_UNDERLINE_PLACEMENT, BOTTOM );
+	}
+
+	/**
+	 * Specifies placement of underline if toggle button type is {@link ButtonType#tab}.
+	 *
+	 * @param placement  One of the following constants defined in SwingConstants:
+	 *                   {@link #TOP}, {@link #LEFT}, {@link #BOTTOM}, or {@link #RIGHT}.
+	 */
+	public void setTabUnderlinePlacement( int placement ) {
+		putClientProperty( TAB_BUTTON_UNDERLINE_PLACEMENT, (placement < 0 || placement >= RIGHT) ? null : placement);
+	}
 
 	/**
 	 * Returns height of underline if toggle button type is {@link ButtonType#tab}.
