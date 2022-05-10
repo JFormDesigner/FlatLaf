@@ -384,7 +384,17 @@ class FlatThemeFileEditor
 			String n2 = toSortName( f2.getName() );
 			return n1.compareToIgnoreCase( n2 );
 		} );
-		return propertiesFiles;
+
+		File themesDir = new File( dir, "themes" );
+		if( !themesDir.isDirectory() )
+			return propertiesFiles;
+
+		// get files from "themes" sub-directory
+		File[] themesFiles = getPropertiesFiles( themesDir );
+		File[] allFiles = new File[propertiesFiles.length + themesFiles.length];
+		System.arraycopy( propertiesFiles, 0, allFiles, 0, propertiesFiles.length );
+		System.arraycopy( themesFiles, 0, allFiles, propertiesFiles.length, themesFiles.length );
+		return allFiles;
 	}
 
 	private String toSortName( String name ) {
@@ -469,12 +479,21 @@ class FlatThemeFileEditor
 			FlatIntelliJLaf.NAME,
 			FlatDarculaLaf.NAME,
 		} );
+		JCheckBox genJavaClassCheckBox = new JCheckBox( "Generate Java class" );
+		genJavaClassCheckBox.setMnemonic( 'G' );
+
+		File themesDir = new File( dir, "themes" );
+		JCheckBox useThemesDirCheckBox = themesDir.isDirectory()
+			? new JCheckBox( "Create in 'themes' directory", true )
+			: null;
 
 		JOptionPane optionPane = new JOptionPane( new Object[] {
 			new JLabel( "Theme name:" ),
 			themeNameField,
 			new JLabel( "Base Theme:" ),
 			baseThemeField,
+			genJavaClassCheckBox,
+			useThemesDirCheckBox,
 		}, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION ) {
 			@Override
 			public void selectInitialValue() {
@@ -496,7 +515,8 @@ class FlatThemeFileEditor
 						return;
 					}
 
-					File file = new File( dir, themeName + ".properties" );
+					File dir2 = (useThemesDirCheckBox != null && useThemesDirCheckBox.isSelected()) ? themesDir : dir;
+					File file = new File( dir2, themeName + ".properties" );
 					if( file.exists() ) {
 						JOptionPane.showMessageDialog( this, "Theme '" + themeName + "' already exists.", title, JOptionPane.INFORMATION_MESSAGE );
 						return;
@@ -505,7 +525,8 @@ class FlatThemeFileEditor
 					try {
 						String baseTheme = (String) baseThemeField.getSelectedItem();
 						createTheme( file, baseTheme );
-						createThemeClass( dir, themeName, baseTheme );
+						if( genJavaClassCheckBox.isSelected() )
+							createThemeClass( dir2, themeName, baseTheme );
 						openFile( file, true );
 					} catch( IOException ex ) {
 						ex.printStackTrace();
