@@ -515,13 +515,7 @@ class FlatThemePreviewAll
 			"bb",
 			"ccc",
 			"dd",
-			"e",
-			"ff",
-			"ggg",
-			"hh",
-			"i",
-			"jj",
-			"kkk"
+			"e"
 		}));
 		comboBox3.setMaximumRowCount(6);
 		comboBox3.putClientProperty("FlatLaf.styleClass", "flatlaf-preview-combobox");

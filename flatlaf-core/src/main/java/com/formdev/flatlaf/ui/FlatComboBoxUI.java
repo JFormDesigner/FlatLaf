@@ -70,6 +70,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.text.JTextComponent;
+import com.formdev.flatlaf.icons.FlatCheckBoxMenuItemIcon;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableField;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableLookupProvider;
@@ -850,12 +851,19 @@ public class FlatComboBoxUI
 				}
 			}
 
+			// for style "mac", add width of "checked item" icon
+			boolean isPopupOverComboBox = isPopupOverComboBox();
+			int selectedIndex = -1;
+			if( isPopupOverComboBox && (selectedIndex = comboBox.getSelectedIndex()) >= 0 )
+				displayWidth += MacCheckedItemIcon.INSTANCE.getIconWidth() + scale( CellPaddingBorder.MAC_STYLE_GAP );
+
 			// add width of vertical scroll bar
 			JScrollBar verticalScrollBar = scroller.getVerticalScrollBar();
 			if( verticalScrollBar != null )
 				displayWidth += verticalScrollBar.getPreferredSize().width;
 
 			// make popup wider if necessary
+			int pw0 = pw;
 			if( displayWidth > pw ) {
 				// limit popup width to screen width
 				GraphicsConfiguration gc = comboBox.getGraphicsConfiguration();
@@ -873,6 +881,30 @@ public class FlatComboBoxUI
 
 				if( !comboBox.getComponentOrientation().isLeftToRight() )
 					px -= diff;
+			}
+
+			// for style "mac", place popup over combobox
+			Rectangle cellBounds;
+			if( isPopupOverComboBox && selectedIndex >= 0 &&
+				(cellBounds = list.getCellBounds( 0, 0 )) != null )
+			{
+				Insets comboBoxInsets = comboBox.getInsets();
+				Insets listInsets = list.getInsets();
+				Insets popupInsets = getInsets();
+
+				// position popup so that selected item is at same Y position as combobox
+				py -= (cellBounds.height * (selectedIndex + 1)) + comboBoxInsets.top + listInsets.top + popupInsets.top;
+
+				// position popup slightly to the left so that a small part of the right side of the combobox stays visible
+				int offset = Math.min( pw - pw0, MacCheckedItemIcon.INSTANCE.getIconWidth() ) + scale( 4 );
+				if( comboBox.getComponentOrientation().isLeftToRight() )
+					px -= offset + comboBoxInsets.right + listInsets.right;
+				else
+					px += offset + comboBoxInsets.left + listInsets.left;
+
+				// not invoking super.computePopupBounds() here to let
+				// JPopupMenu.adjustPopupLocationToFitScreen() fix the location if necessary
+				return new Rectangle( px, py, pw, ph );
 			}
 
 			return super.computePopupBounds( px, py, pw, ph );
@@ -954,6 +986,15 @@ public class FlatComboBoxUI
 			paddingBorder.uninstall();
 		}
 
+		private boolean isPopupOverComboBox() {
+			return isMacStyle() &&
+				!comboBox.isEditable() &&
+				comboBox.getItemCount() > 0 &&
+				comboBox.getItemCount() <= comboBox.getMaximumRowCount() &&
+				// for compatibility with Aqua Laf
+				!clientPropertyBoolean( comboBox, "JComboBox.isPopDown", false );
+		}
+
 		//---- class PopupListCellRenderer -----
 
 		private class PopupListCellRenderer
@@ -971,6 +1012,13 @@ public class FlatComboBoxUI
 				Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 				c.applyComponentOrientation( comboBox.getComponentOrientation() );
 
+				// style "mac"
+				if( isPopupOverComboBox() && c instanceof JComponent ) {
+					int selectedIndex = comboBox.getSelectedIndex();
+					((JComponent)c).putClientProperty( CellPaddingBorder.KEY_MAC_STYLE_HINT,
+						(selectedIndex >= 0) ? (index == selectedIndex) : null );
+				}
+
 				paddingBorder.install( c, Math.round( FlatUIUtils.getBorderFocusWidth( comboBox ) ) );
 
 				return c;
@@ -987,10 +1035,16 @@ public class FlatComboBoxUI
 	 * which vertically aligns text in popup list with text in combobox.
 	 * <p>
 	 * The renderer border is painted on the outer side of this border.
+	 * <p>
+	 * For button style "mac", also used to increase insets on left side for
+	 * "checked item" icon and to paint "checked item" icon for selected combobox item.
 	 */
 	private static class CellPaddingBorder
 		extends AbstractBorder
 	{
+		static final String KEY_MAC_STYLE_HINT = "FlatLaf.internal.FlatComboBoxUI.macStyleHint";
+		static final int MAC_STYLE_GAP = 4;
+
 		private Insets padding;
 		private JComponent rendererComponent;
 		private Border rendererBorder;
@@ -1040,6 +1094,8 @@ public class FlatComboBoxUI
 			if( rendererComponent == null )
 				return;
 
+			rendererComponent.putClientProperty( KEY_MAC_STYLE_HINT, null );
+
 			if( rendererComponent.getBorder() == this )
 				rendererComponent.setBorder( rendererBorder );
 			rendererComponent = null;
@@ -1067,6 +1123,18 @@ public class FlatComboBoxUI
 			insets.left += focusWidth;
 			insets.right += focusWidth;
 
+			// style "mac"
+			if( c instanceof JComponent ) {
+				Boolean macStyleHint = clientPropertyBooleanStrict( (JComponent) c, KEY_MAC_STYLE_HINT, null );
+				if( macStyleHint != null ) {
+					int indent = MacCheckedItemIcon.INSTANCE.getIconWidth() + scale( MAC_STYLE_GAP );
+					if( c.getComponentOrientation().isLeftToRight() )
+						insets.left += indent;
+					else
+						insets.right += indent;
+				}
+			}
+
 			return insets;
 		}
 
@@ -1074,6 +1142,35 @@ public class FlatComboBoxUI
 		public void paintBorder( Component c, Graphics g, int x, int y, int width, int height ) {
 			if( rendererBorder != null )
 				rendererBorder.paintBorder( c, g, x, y, width, height );
+
+			// style "mac"
+			if( c instanceof JComponent ) {
+				Boolean macStyleHint = clientPropertyBooleanStrict( (JComponent) c, KEY_MAC_STYLE_HINT, null );
+				if( macStyleHint == Boolean.TRUE ) {
+					// paint "checked item" icon
+					int ix = c.getComponentOrientation().isLeftToRight()
+						? x + scale( padding.left )
+						: x + width - scale( padding.right ) - MacCheckedItemIcon.INSTANCE.getIconWidth();
+					MacCheckedItemIcon.INSTANCE.paintIcon( c, g, ix, y + ((height - MacCheckedItemIcon.INSTANCE.getIconHeight()) / 2) );
+				}
+			}
+		}
+	}
+
+	//---- class MacCheckedItemIcon -------------------------------------------
+
+	/**
+	 * Use for style "mac" to mark checked item.
+	 */
+	private static class MacCheckedItemIcon
+		extends FlatCheckBoxMenuItemIcon
+	{
+		static MacCheckedItemIcon INSTANCE = new MacCheckedItemIcon();
+
+		@Override
+		protected void paintIcon( Component c, Graphics2D g2 ) {
+			g2.setColor( c.getForeground() );
+			paintCheckmark( g2 );
 		}
 	}
 
