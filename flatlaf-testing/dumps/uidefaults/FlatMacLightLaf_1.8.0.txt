@@ -873,21 +873,21 @@ ScrollBar.buttonDisabledArrowColor #bdbdbd  HSL   0   0  74    javax.swing.plaf.
 ScrollBar.foreground           #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.hoverButtonBackground #e9e9e9  HSL   0   0  91    com.formdev.flatlaf.util.DerivedColor [UI]    darken(5%)
 ScrollBar.hoverThumbColor      #a9a9a9  HSL   0   0  66    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
-ScrollBar.hoverThumbWithTrack  false
+ScrollBar.hoverThumbWithTrack  true
 ScrollBar.hoverTrackColor      #f2f2f2  HSL   0   0  95    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3%)
 ScrollBar.maximumThumbSize     100000,100000    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumButtonSize    12,12    javax.swing.plaf.DimensionUIResource [UI]
-ScrollBar.minimumThumbSize     10,10    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.minimumThumbSize     18,18    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.pressedButtonBackground #dddddd  HSL   0   0  87    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10%)
 ScrollBar.pressedThumbColor    #8f8f8f  HSL   0   0  56    com.formdev.flatlaf.util.DerivedColor [UI]    darken(20%)
 ScrollBar.pressedThumbWithTrack false
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
 ScrollBar.thumb                #c2c2c2  HSL   0   0  76    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.thumbArc             0
+ScrollBar.thumbArc             999
 ScrollBar.thumbDarkShadow      #00000026  15%  HSLA   0   0   0 15    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbHighlight       #40404026  15%  HSLA   0   0  25 15    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.thumbInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ScrollBar.thumbInsets          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 ScrollBar.thumbShadow          #00000026  15%  HSLA   0   0   0 15    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.track                #fafafa  HSL   0   0  98    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.trackArc             0

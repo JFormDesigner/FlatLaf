@@ -869,21 +869,21 @@ ScrollBar.buttonDisabledArrowColor #777777  HSL   0   0  47    javax.swing.plaf.
 ScrollBar.foreground           #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.hoverButtonBackground #2b2b2b  HSL   0   0  17    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(5%)
 ScrollBar.hoverThumbColor      #707070  HSL   0   0  44    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
-ScrollBar.hoverThumbWithTrack  false
+ScrollBar.hoverThumbWithTrack  true
 ScrollBar.hoverTrackColor      #323232  HSL   0   0  20    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(4%)
 ScrollBar.maximumThumbSize     100000,100000    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.minimumButtonSize    12,12    javax.swing.plaf.DimensionUIResource [UI]
-ScrollBar.minimumThumbSize     10,10    javax.swing.plaf.DimensionUIResource [UI]
+ScrollBar.minimumThumbSize     18,18    javax.swing.plaf.DimensionUIResource [UI]
 ScrollBar.pressedButtonBackground #383838  HSL   0   0  22    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(10%)
 ScrollBar.pressedThumbColor    #7c7c7c  HSL   0   0  49    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(15%)
 ScrollBar.pressedThumbWithTrack false
 ScrollBar.showButtons          false
 ScrollBar.squareButtons        false
 ScrollBar.thumb                #565656  HSL   0   0  34    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.thumbArc             0
+ScrollBar.thumbArc             999
 ScrollBar.thumbDarkShadow      #ffffff19  10%  HSLA   0   0 100 10    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.thumbHighlight       #bfbfbf19  10%  HSLA   0   0  75 10    javax.swing.plaf.ColorUIResource [UI]
-ScrollBar.thumbInsets          0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ScrollBar.thumbInsets          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 ScrollBar.thumbShadow          #ffffff19  10%  HSLA   0   0 100 10    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.track                #282828  HSL   0   0  16    javax.swing.plaf.ColorUIResource [UI]
 ScrollBar.trackArc             0
