@@ -38,8 +38,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.demo.HintManager.Hint;
 import com.formdev.flatlaf.demo.extras.*;
 import com.formdev.flatlaf.demo.intellijthemes.*;
-import com.formdev.flatlaf.extras.FlatDesktop;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
+import com.formdev.flatlaf.extras.FlatDesktop;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.formdev.flatlaf.extras.components.FlatButton;
@@ -82,16 +82,17 @@ class DemoFrame
 		if( tabIndex >= 0 && tabIndex < tabbedPane.getTabCount() && tabIndex != tabbedPane.getSelectedIndex() )
 			tabbedPane.setSelectedIndex( tabIndex );
 
-		// hide some menu items on macOS
+		// macOS  (see https://www.formdev.com/flatlaf/macos/)
 		if( SystemInfo.isMacOS ) {
+			// hide menu items that are in macOS application menu
 			exitMenuItem.setVisible( false );
 			aboutMenuItem.setVisible( false );
 
-			// do not use HTML text on macOS
+			// do not use HTML text in menu items because this is not supported in macOS screen menu
 			htmlMenuItem.setText( "some text" );
 
-			// see https://www.formdev.com/flatlaf/macos/
 			if( SystemInfo.isMacFullWindowContentSupported ) {
+				// expand window content into window title bar and make title bar transparent
 				getRootPane().putClientProperty( "apple.awt.fullWindowContent", true );
 				getRootPane().putClientProperty( "apple.awt.transparentTitleBar", true );
 

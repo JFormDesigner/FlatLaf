@@ -173,13 +173,14 @@ class FlatThemeFileEditor
 
 		enableDisableActions();
 
-		// hide some menu items on macOS
+		// macOS  (see https://www.formdev.com/flatlaf/macos/)
 		if( SystemInfo.isMacOS ) {
+			// hide menu items that are in macOS application menu
 			exitMenuItem.setVisible( false );
 			aboutMenuItem.setVisible( false );
 
-			// see https://www.formdev.com/flatlaf/macos/
 			if( SystemInfo.isMacFullWindowContentSupported ) {
+				// expand window content into window title bar and make title bar transparent
 				getRootPane().putClientProperty( "apple.awt.fullWindowContent", true );
 				getRootPane().putClientProperty( "apple.awt.transparentTitleBar", true );
 
@@ -195,7 +196,7 @@ class FlatThemeFileEditor
 
 			// enable full screen mode for this window (for Java 8 - 10; not necessary for Java 11+)
 			if( !SystemInfo.isJava_11_orLater )
-				getRootPane().putClientProperty( "apple.awt.fullscreenable", false );
+				getRootPane().putClientProperty( "apple.awt.fullscreenable", true );
 		}
 
 		// integrate into macOS screen menu

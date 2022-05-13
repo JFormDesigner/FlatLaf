@@ -36,10 +36,8 @@ public class FlatLafDemo
 	static boolean screenshotsMode = Boolean.parseBoolean( System.getProperty( "flatlaf.demo.screenshotsMode" ) );
 
 	public static void main( String[] args ) {
-		// macOS
+		// macOS  (see https://www.formdev.com/flatlaf/macos/)
 		if( SystemInfo.isMacOS ) {
-			// see https://www.formdev.com/flatlaf/macos/
-
 			// enable screen menu bar
 			// (moves menu bar from JFrame window to top of screen)
 			System.setProperty( "apple.laf.useScreenMenuBar", "true" );
