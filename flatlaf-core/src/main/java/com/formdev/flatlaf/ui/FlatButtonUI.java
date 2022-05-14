@@ -20,6 +20,7 @@ import static com.formdev.flatlaf.FlatClientProperties.*;
 import static com.formdev.flatlaf.util.UIScale.scale;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -45,8 +46,10 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.ToolBarUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicButtonListener;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -703,6 +706,21 @@ public class FlatButtonUI
 		public void propertyChange( PropertyChangeEvent e ) {
 			super.propertyChange( e );
 			FlatButtonUI.this.propertyChange( b, e );
+		}
+
+		@Override
+		public void stateChanged( ChangeEvent e ) {
+			super.stateChanged( e );
+
+			// if button is in toolbar, repaint button groups
+			AbstractButton b = (AbstractButton) e.getSource();
+			Container parent = b.getParent();
+			if( parent instanceof JToolBar ) {
+				JToolBar toolBar = (JToolBar) parent;
+				ToolBarUI ui = toolBar.getUI();
+				if( ui instanceof FlatToolBarUI )
+					((FlatToolBarUI)ui).repaintButtonGroup( b );
+			}
 		}
 	}
 }

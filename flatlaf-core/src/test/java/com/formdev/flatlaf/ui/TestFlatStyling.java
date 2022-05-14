@@ -1084,6 +1084,8 @@ public class TestFlatStyling
 
 		ui.applyStyle( "focusableButtons: true" );
 		ui.applyStyle( "arrowKeysOnlyNavigation: true" );
+		ui.applyStyle( "hoverButtonGroupArc: 12" );
+		ui.applyStyle( "hoverButtonGroupBackground: #fff" );
 
 		ui.applyStyle( "borderMargins: 1,2,3,4" );
 		ui.applyStyle( "gripColor: #fff" );

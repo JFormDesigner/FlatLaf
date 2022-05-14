@@ -578,15 +578,23 @@ new FormModel {
 					name: "button7"
 					"icon": &SwingIcon0 new com.jformdesigner.model.SwingIcon( 2, "Tree.leafIcon" )
 					"$client.FlatLaf.styleClass": "flatlaf-preview-toolbar-togglebutton"
+					"$buttonGroup": new FormReference( "buttonGroup3" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button8"
 					"icon": #SwingIcon0
-					"selected": true
 					"$client.FlatLaf.styleClass": "flatlaf-preview-toolbar-togglebutton"
+					"$buttonGroup": new FormReference( "buttonGroup3" )
 				} )
 				add( new FormComponent( "javax.swing.JToggleButton" ) {
 					name: "button9"
+					"icon": #SwingIcon0
+					"selected": true
+					"$client.FlatLaf.styleClass": "flatlaf-preview-toolbar-togglebutton"
+					"$buttonGroup": new FormReference( "buttonGroup3" )
+				} )
+				add( new FormComponent( "javax.swing.JToggleButton" ) {
+					name: "button10"
 					"icon": #SwingIcon0
 					"selected": true
 					"$client.FlatLaf.styleClass": "flatlaf-preview-toolbar-togglebutton"
@@ -769,6 +777,11 @@ new FormModel {
 			name: "buttonGroup2"
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 1145 )
+		} )
+		add( new FormNonVisual( "javax.swing.ButtonGroup" ) {
+			name: "buttonGroup3"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 1197 )
 		} )
 	}
 }

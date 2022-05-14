@@ -1303,6 +1303,8 @@ ToolBar.font                   [active] $defaultFont [UI]
 ToolBar.foreground             #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.gripColor              #aeaeae  HSL   0   0  68    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.highlight              #232324  HSL 240   1  14    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.hoverButtonGroupArc    8
+ToolBar.hoverButtonGroupBackground #434749  HSL 200   4  27    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(3% autoInverse)
 ToolBar.isRollover             true
 ToolBar.light                  #2f3031  HSL 210   2  19    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.separatorColor         #505254  HSL 210   2  32    javax.swing.plaf.ColorUIResource [UI]
