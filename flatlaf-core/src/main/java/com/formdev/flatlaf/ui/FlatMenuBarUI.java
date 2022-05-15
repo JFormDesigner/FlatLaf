@@ -70,6 +70,9 @@ public class FlatMenuBarUI
 	/** @since 2 */ @Styleable protected Insets itemMargins;
 
 	// used in FlatMenuUI
+	/** @since 3 */ @Styleable protected Insets selectionInsets;
+	/** @since 3 */ @Styleable protected Insets selectionEmbeddedInsets;
+	/** @since 3 */ @Styleable protected int selectionArc = -1;
 	/** @since 2 */ @Styleable protected Color hoverBackground;
 	/** @since 2 */ @Styleable protected Color underlineSelectionBackground;
 	/** @since 2 */ @Styleable protected Color underlineSelectionColor;

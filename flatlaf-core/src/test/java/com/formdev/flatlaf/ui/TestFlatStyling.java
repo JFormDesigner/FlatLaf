@@ -423,6 +423,9 @@ public class TestFlatStyling
 		FlatMenuBarUI ui = (FlatMenuBarUI) c.getUI();
 
 		ui.applyStyle( "itemMargins: 1,2,3,4" );
+		ui.applyStyle( "selectionInsets: 1,2,3,4" );
+		ui.applyStyle( "selectionEmbeddedInsets: 1,2,3,4" );
+		ui.applyStyle( "selectionArc: 8" );
 		ui.applyStyle( "hoverBackground: #fff" );
 		ui.applyStyle( "underlineSelectionBackground: #fff" );
 		ui.applyStyle( "underlineSelectionColor: #fff" );
@@ -508,6 +511,9 @@ public class TestFlatStyling
 
 		applyStyle.accept( "checkBackground: #fff" );
 		applyStyle.accept( "checkMargins: 1,2,3,4" );
+
+		applyStyle.accept( "selectionInsets: 1,2,3,4" );
+		applyStyle.accept( "selectionArc: 8" );
 
 		applyStyle.accept( "underlineSelectionBackground: #fff" );
 		applyStyle.accept( "underlineSelectionCheckBackground: #fff" );

@@ -271,6 +271,9 @@ public class TestFlatStyleableInfo
 
 		Map<String, Class<?>> expected = expectedMap(
 			"itemMargins", Insets.class,
+			"selectionInsets", Insets.class,
+			"selectionEmbeddedInsets", Insets.class,
+			"selectionArc", int.class,
 			"hoverBackground", Color.class,
 			"underlineSelectionBackground", Color.class,
 			"underlineSelectionColor", Color.class,
@@ -354,6 +357,9 @@ public class TestFlatStyleableInfo
 
 			"checkBackground", Color.class,
 			"checkMargins", Insets.class,
+
+			"selectionInsets", Insets.class,
+			"selectionArc", int.class,
 
 			"underlineSelectionBackground", Color.class,
 			"underlineSelectionCheckBackground", Color.class,
