@@ -463,7 +463,9 @@ MenuBar.highlight
 MenuBar.hoverBackground
 MenuBar.itemMargins
 MenuBar.selectionArc
+MenuBar.selectionBackground
 MenuBar.selectionEmbeddedInsets
+MenuBar.selectionForeground
 MenuBar.selectionInsets
 MenuBar.shadow
 MenuBar.underlineSelectionBackground

@@ -275,6 +275,8 @@ public class TestFlatStyleableInfo
 			"selectionEmbeddedInsets", Insets.class,
 			"selectionArc", int.class,
 			"hoverBackground", Color.class,
+			"selectionBackground", Color.class,
+			"selectionForeground", Color.class,
 			"underlineSelectionBackground", Color.class,
 			"underlineSelectionColor", Color.class,
 			"underlineSelectionHeight", int.class,

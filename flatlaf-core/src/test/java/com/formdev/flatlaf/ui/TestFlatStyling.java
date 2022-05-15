@@ -427,6 +427,8 @@ public class TestFlatStyling
 		ui.applyStyle( "selectionEmbeddedInsets: 1,2,3,4" );
 		ui.applyStyle( "selectionArc: 8" );
 		ui.applyStyle( "hoverBackground: #fff" );
+		ui.applyStyle( "selectionBackground: #fff" );
+		ui.applyStyle( "selectionForeground: #fff" );
 		ui.applyStyle( "underlineSelectionBackground: #fff" );
 		ui.applyStyle( "underlineSelectionColor: #fff" );
 		ui.applyStyle( "underlineSelectionHeight: 3" );

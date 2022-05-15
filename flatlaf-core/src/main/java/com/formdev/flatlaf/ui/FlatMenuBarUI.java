@@ -74,6 +74,8 @@ public class FlatMenuBarUI
 	/** @since 3 */ @Styleable protected Insets selectionEmbeddedInsets;
 	/** @since 3 */ @Styleable protected int selectionArc = -1;
 	/** @since 2 */ @Styleable protected Color hoverBackground;
+	/** @since 3 */ @Styleable protected Color selectionBackground;
+	/** @since 3 */ @Styleable protected Color selectionForeground;
 	/** @since 2 */ @Styleable protected Color underlineSelectionBackground;
 	/** @since 2 */ @Styleable protected Color underlineSelectionColor;
 	/** @since 2 */ @Styleable protected int underlineSelectionHeight = -1;
