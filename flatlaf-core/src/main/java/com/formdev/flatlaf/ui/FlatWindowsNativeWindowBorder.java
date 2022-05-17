@@ -27,7 +27,6 @@ import java.awt.Window;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -38,9 +37,7 @@ import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
-import com.formdev.flatlaf.FlatSystemProperties;
 import com.formdev.flatlaf.util.LoggingFacade;
-import com.formdev.flatlaf.util.NativeLibrary;
 import com.formdev.flatlaf.util.SystemInfo;
 
 //
@@ -84,7 +81,6 @@ class FlatWindowsNativeWindowBorder
 	private Color colorizationColor;
 	private int colorizationColorBalance;
 
-	private static NativeLibrary nativeLibrary;
 	private static FlatWindowsNativeWindowBorder instance;
 
 	static FlatNativeWindowBorder.Provider getInstance() {
@@ -96,54 +92,14 @@ class FlatWindowsNativeWindowBorder
 		if( !SystemInfo.isX86 && !SystemInfo.isX86_64 )
 			return null;
 
-		// load native library
-		if( nativeLibrary == null ) {
-			if( !SystemInfo.isJava_9_orLater ) {
-				// In Java 8, load jawt.dll (part of JRE) explicitly because it
-				// is not found when running application with <jdk>/bin/java.exe.
-				// When using <jdk>/jre/bin/java.exe, it is found.
-				// jawt.dll is located in <jdk>/jre/bin/.
-				// Java 9 and later does not have this problem.
-				try {
-					System.loadLibrary( "jawt" );
-				} catch( UnsatisfiedLinkError ex ) {
-					// log error only if native library jawt.dll not already loaded
-					String message = ex.getMessage();
-					if( message == null || !message.contains( "already loaded in another classloader" ) )
-						LoggingFacade.INSTANCE.logSevere( null, ex );
-				} catch( Exception ex ) {
-					LoggingFacade.INSTANCE.logSevere( null, ex );
-				}
-			}
-
-			nativeLibrary = createNativeLibrary();
-		}
-
 		// check whether native library was successfully loaded
-		if( !nativeLibrary.isLoaded() )
+		if( !FlatNativeLibrary.isLoaded() )
 			return null;
 
 		// create new instance
 		if( instance == null )
 			instance = new FlatWindowsNativeWindowBorder();
 		return instance;
-	}
-
-	private static NativeLibrary createNativeLibrary() {
-		String libraryName = "flatlaf-windows-x86";
-		if( SystemInfo.isX86_64 )
-			libraryName += "_64";
-
-		String libraryPath = System.getProperty( FlatSystemProperties.NATIVE_LIBRARY_PATH );
-		if( libraryPath != null ) {
-			File libraryFile = new File( libraryPath, System.mapLibraryName( libraryName ) );
-			if( libraryFile.exists() )
-				return new NativeLibrary( libraryFile, true );
-			else
-				LoggingFacade.INSTANCE.logSevere( "Did not find external library " + libraryFile + ", using extracted library instead", null );
-		}
-
-		return new NativeLibrary( "com/formdev/flatlaf/natives/" + libraryName, null, true );
 	}
 
 	private FlatWindowsNativeWindowBorder() {
