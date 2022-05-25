@@ -336,6 +336,16 @@ public class FlatComponents2Test
 			table.setSurrendersFocusOnKeystroke( focusCellEditorCheckBox.isSelected() );
 	}
 
+	private void alternatingRowsChanged() {
+		UIManager.put( "Table.alternateRowColor", alternatingRowsCheckBox.isSelected() ? Color.orange : null );
+		table1ScrollPane.repaint();
+	}
+
+	private void paintOutsideAlternateRowsChanged() {
+		UIManager.put( "Table.paintOutsideAlternateRows", paintOutsideAlternateRowsCheckBox.isSelected() ? true : null );
+		table1ScrollPane.repaint();
+	}
+
 	private void treeRendererChanged() {
 		Object sel = treeRendererComboBox.getSelectedItem();
 		if( !(sel instanceof String) )
@@ -493,8 +503,10 @@ public class FlatComponents2Test
 		focusCellEditorCheckBox = new JCheckBox();
 		showVerticalLinesCheckBox = new JCheckBox();
 		columnSelectionCheckBox = new JCheckBox();
+		alternatingRowsCheckBox = new JCheckBox();
 		intercellSpacingCheckBox = new JCheckBox();
 		rowHeaderCheckBox = new JCheckBox();
+		paintOutsideAlternateRowsCheckBox = new JCheckBox();
 		redGridColorCheckBox = new JCheckBox();
 		tableHeaderButtonCheckBox = new JCheckBox();
 
@@ -875,6 +887,11 @@ public class FlatComponents2Test
 			columnSelectionCheckBox.addActionListener(e -> columnSelectionChanged());
 			tableOptionsPanel.add(columnSelectionCheckBox, "cell 1 2");
 
+			//---- alternatingRowsCheckBox ----
+			alternatingRowsCheckBox.setText("alternating rows");
+			alternatingRowsCheckBox.addActionListener(e -> alternatingRowsChanged());
+			tableOptionsPanel.add(alternatingRowsCheckBox, "cell 2 2");
+
 			//---- intercellSpacingCheckBox ----
 			intercellSpacingCheckBox.setText("intercell spacing");
 			intercellSpacingCheckBox.addActionListener(e -> intercellSpacingChanged());
@@ -884,6 +901,11 @@ public class FlatComponents2Test
 			rowHeaderCheckBox.setText("row header");
 			rowHeaderCheckBox.addActionListener(e -> rowHeaderChanged());
 			tableOptionsPanel.add(rowHeaderCheckBox, "cell 1 3");
+
+			//---- paintOutsideAlternateRowsCheckBox ----
+			paintOutsideAlternateRowsCheckBox.setText("outside alternating rows");
+			paintOutsideAlternateRowsCheckBox.addActionListener(e -> paintOutsideAlternateRowsChanged());
+			tableOptionsPanel.add(paintOutsideAlternateRowsCheckBox, "cell 2 3");
 
 			//---- redGridColorCheckBox ----
 			redGridColorCheckBox.setText("red grid color");
@@ -927,8 +949,10 @@ public class FlatComponents2Test
 	private JCheckBox focusCellEditorCheckBox;
 	private JCheckBox showVerticalLinesCheckBox;
 	private JCheckBox columnSelectionCheckBox;
+	private JCheckBox alternatingRowsCheckBox;
 	private JCheckBox intercellSpacingCheckBox;
 	private JCheckBox rowHeaderCheckBox;
+	private JCheckBox paintOutsideAlternateRowsCheckBox;
 	private JCheckBox redGridColorCheckBox;
 	private JCheckBox tableHeaderButtonCheckBox;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

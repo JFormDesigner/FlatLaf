@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Table: Optionally paint alternating rows below table if table is smaller than
+  scroll pane. Set UI value `Table.paintOutsideAlternateRows` to `true`.
+  Requires that `Table.alternateRowColor` is set to a color. (issue #504)
 - ToggleButton: Made the underline placement of tab-style toggle buttons
   configurable. (PR #530; issue #529)
 - Added spanish translation. (PR #525)
@@ -155,7 +158,7 @@ FlatLaf Change Log
   - Possibility to hide window title bar icon (for single window set client
     property `JRootPane.titleBarShowIcon` to `false`; for all windows set UI
     value `TitlePane.showIcon` to `false`).
-  - OptionPane: Hide window title bar icon by default. Can be be made visibly by
+  - OptionPane: Hide window title bar icon by default. Can be made visibly by
     setting UI default `OptionPane.showIcon` to `true`. (issue #416)
   - No longer show the Java "duke/cup" icon if no window icon image is set.
     (issue #416)

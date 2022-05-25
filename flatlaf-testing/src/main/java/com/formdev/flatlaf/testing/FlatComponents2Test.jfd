@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.5.0.382" Java: "16" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "17.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -486,6 +486,16 @@ new FormModel {
 					"value": "cell 1 2"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "alternatingRowsCheckBox"
+					"text": "alternating rows"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "alternatingRowsChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 2"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "intercellSpacingCheckBox"
 					"text": "intercell spacing"
 					auxiliary() {
@@ -504,6 +514,16 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "rowHeaderChanged", false ) )
 				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 					"value": "cell 1 3"
+				} )
+				add( new FormComponent( "javax.swing.JCheckBox" ) {
+					name: "paintOutsideAlternateRowsCheckBox"
+					"text": "outside alternating rows"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "paintOutsideAlternateRowsChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 3"
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "redGridColorCheckBox"

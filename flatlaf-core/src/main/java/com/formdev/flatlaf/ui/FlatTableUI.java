@@ -80,6 +80,7 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Table.intercellSpacing					Dimension
  * @uiDefault Table.selectionInactiveBackground			Color
  * @uiDefault Table.selectionInactiveForeground			Color
+ * @uiDefault Table.paintOutsideAlternateRows			boolean
  *
  * <!-- FlatTableCellBorder -->
  *
@@ -95,7 +96,7 @@ import com.formdev.flatlaf.util.UIScale;
  */
 public class FlatTableUI
 	extends BasicTableUI
-	implements StyleableUI
+	implements StyleableUI, FlatViewportUI.ViewportPainter
 {
 	protected boolean showHorizontalLines;
 	protected boolean showVerticalLines;
@@ -420,5 +421,39 @@ public class FlatTableUI
 		return scrollPane.getComponentOrientation().isLeftToRight()
 			? (viewport != rowHeader)
 			: (viewport == rowHeader || rowHeader == null);
+	}
+
+	/** @since 2.3 */
+	@Override
+	public void paintViewport( Graphics g, JComponent c, JViewport viewport ) {
+		int viewportWidth = viewport.getWidth();
+		int viewportHeight = viewport.getHeight();
+
+		// fill viewport background in same color as table background
+		if( viewport.isOpaque() ) {
+			g.setColor( table.getBackground() );
+			g.fillRect( 0, 0, viewportWidth, viewportHeight );
+		}
+
+		// paint alternating empty rows
+		boolean paintOutside = UIManager.getBoolean( "Table.paintOutsideAlternateRows" );
+		Color alternateColor;
+		if( paintOutside && (alternateColor = UIManager.getColor( "Table.alternateRowColor" )) != null ) {
+			g.setColor( alternateColor );
+
+			int rowCount = table.getRowCount();
+
+			// paint alternating empty rows below the table
+			int tableHeight = table.getHeight();
+			if( tableHeight < viewportHeight ) {
+				int tableWidth = table.getWidth();
+				int rowHeight = table.getRowHeight();
+
+				for( int y = tableHeight, row = rowCount; y < viewportHeight; y += rowHeight, row++ ) {
+					if( row % 2 != 0 )
+						g.fillRect( 0, y, tableWidth, rowHeight );
+				}
+			}
+		}
 	}
 }

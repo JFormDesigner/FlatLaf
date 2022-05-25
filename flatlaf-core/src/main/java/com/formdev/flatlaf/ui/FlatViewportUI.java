@@ -18,8 +18,8 @@ package com.formdev.flatlaf.ui;
 
 import java.awt.Component;
 import java.awt.Graphics;
+import java.lang.reflect.Method;
 import javax.swing.JComponent;
-import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicViewportUI;
@@ -43,15 +43,28 @@ public class FlatViewportUI
 	}
 
 	@Override
-	public void update( Graphics g, JComponent c ) {
-		Component view = ((JViewport)c).getView();
-		if( c.isOpaque() && view instanceof JTable ) {
-			// paint viewport background in same color as table background
-			g.setColor( view.getBackground() );
-			g.fillRect( 0, 0, c.getWidth(), c.getHeight() );
+	public void paint( Graphics g, JComponent c ) {
+		super.paint( g, c );
 
-			paint( g, c );
-		} else
-			super.update( g, c );
+		Component view = ((JViewport)c).getView();
+		if( view instanceof JComponent ) {
+			try {
+				Method m = view.getClass().getMethod( "getUI" );
+				Object ui = m.invoke( view );
+				if( ui instanceof ViewportPainter )
+					((ViewportPainter)ui).paintViewport( g, (JComponent) view, (JViewport) c );
+			} catch( Exception ex ) {
+				// ignore
+			}
+		}
+	}
+
+	//---- interface ViewportPainter ------------------------------------------
+
+	/**
+	 * @since 2.3
+	 */
+	public interface ViewportPainter {
+		void paintViewport( Graphics g, JComponent c, JViewport viewport );
 	}
 }
