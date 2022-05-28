@@ -5,6 +5,9 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- FileChooser: Added (optional) shortcuts panel. On Windows it contains "Recent
+  Items", "Desktop", "Documents", "This PC" and "Network". On macOS and Linux it
+  is empty/hidden. (issue #100)
 - Button and ToggleButton: Added missing foreground colors for hover, pressed,
   focused and selected states. (issue #535)
 - Table: Optionally paint alternating rows below table if table is smaller than

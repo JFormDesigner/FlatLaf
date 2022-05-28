@@ -265,6 +265,8 @@ FileChooser.homeFolderIcon
 FileChooser.listViewIcon
 FileChooser.newFolderIcon
 FileChooser.readOnly
+FileChooser.shortcuts.buttonSize
+FileChooser.shortcuts.iconSize
 FileChooser.upFolderIcon
 FileChooser.useSystemExtensionHiding
 FileChooser.usesSingleFilePane
