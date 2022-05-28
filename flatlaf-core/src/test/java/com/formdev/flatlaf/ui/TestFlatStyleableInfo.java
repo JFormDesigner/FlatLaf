@@ -875,8 +875,11 @@ public class TestFlatStyleableInfo
 			"tab.underlineColor", Color.class,
 			"tab.disabledUnderlineColor", Color.class,
 			"tab.selectedBackground", Color.class,
+			"tab.selectedForeground", Color.class,
 			"tab.hoverBackground", Color.class,
-			"tab.focusBackground", Color.class
+			"tab.hoverForeground", Color.class,
+			"tab.focusBackground", Color.class,
+			"tab.focusForeground", Color.class
 		);
 
 		// FlatToggleButtonUI extends FlatButtonUI

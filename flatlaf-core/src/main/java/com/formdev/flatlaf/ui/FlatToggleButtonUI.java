@@ -78,8 +78,11 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ToggleButton.tab.underlineColor			Color
  * @uiDefault ToggleButton.tab.disabledUnderlineColor	Color
  * @uiDefault ToggleButton.tab.selectedBackground		Color	optional
+ * @uiDefault ToggleButton.tab.selectedForeground		Color	optional
  * @uiDefault ToggleButton.tab.hoverBackground			Color
+ * @uiDefault ToggleButton.tab.hoverForeground			Color	optional
  * @uiDefault ToggleButton.tab.focusBackground			Color
+ * @uiDefault ToggleButton.tab.focusForeground			Color	optional
  *
  *
  * @author Karl Tauber
@@ -91,8 +94,11 @@ public class FlatToggleButtonUI
 	@Styleable(dot=true) protected Color tabUnderlineColor;
 	@Styleable(dot=true) protected Color tabDisabledUnderlineColor;
 	@Styleable(dot=true) protected Color tabSelectedBackground;
+	/** @since 2.3 */ @Styleable(dot=true) protected Color tabSelectedForeground;
 	@Styleable(dot=true) protected Color tabHoverBackground;
+	/** @since 2.3 */ @Styleable(dot=true) protected Color tabHoverForeground;
 	@Styleable(dot=true) protected Color tabFocusBackground;
+	/** @since 2.3 */ @Styleable(dot=true) protected Color tabFocusForeground;
 
 	private boolean defaults_initialized = false;
 
@@ -125,8 +131,11 @@ public class FlatToggleButtonUI
 			tabUnderlineColor = UIManager.getColor( "ToggleButton.tab.underlineColor" );
 			tabDisabledUnderlineColor = UIManager.getColor( "ToggleButton.tab.disabledUnderlineColor" );
 			tabSelectedBackground = UIManager.getColor( "ToggleButton.tab.selectedBackground" );
+			tabSelectedForeground = UIManager.getColor( "ToggleButton.tab.selectedForeground" );
 			tabHoverBackground = UIManager.getColor( "ToggleButton.tab.hoverBackground" );
+			tabHoverForeground = UIManager.getColor( "ToggleButton.tab.hoverForeground" );
 			tabFocusBackground = UIManager.getColor( "ToggleButton.tab.focusBackground" );
+			tabFocusForeground = UIManager.getColor( "ToggleButton.tab.focusForeground" );
 
 			defaults_initialized = true;
 		}
@@ -230,5 +239,20 @@ public class FlatToggleButtonUI
 			}
 		} else
 			super.paintBackground( g, c );
+	}
+
+	@Override
+	protected Color getForeground( JComponent c ) {
+		if( isTabButton( c ) ) {
+			if( !c.isEnabled() )
+				return disabledText;
+
+			if( tabSelectedForeground != null && ((AbstractButton)c).isSelected() )
+				return tabSelectedForeground;
+
+			return buttonStateColor( c, c.getForeground(), disabledText,
+				tabFocusForeground, tabHoverForeground, null );
+		} else
+			return super.getForeground( c );
 	}
 }

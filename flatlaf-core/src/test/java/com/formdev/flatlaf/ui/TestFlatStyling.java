@@ -1085,8 +1085,11 @@ public class TestFlatStyling
 		ui.applyStyle( b, "tab.underlineColor: #fff" );
 		ui.applyStyle( b, "tab.disabledUnderlineColor: #fff" );
 		ui.applyStyle( b, "tab.selectedBackground: #fff" );
+		ui.applyStyle( b, "tab.selectedForeground: #fff" );
 		ui.applyStyle( b, "tab.hoverBackground: #fff" );
+		ui.applyStyle( b, "tab.hoverForeground: #fff" );
 		ui.applyStyle( b, "tab.focusBackground: #fff" );
+		ui.applyStyle( b, "tab.focusForeground: #fff" );
 	}
 
 	@Test

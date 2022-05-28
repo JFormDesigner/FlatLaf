@@ -1034,8 +1034,11 @@ ToggleButton.selectedForeground
 ToggleButton.shadow
 ToggleButton.tab.disabledUnderlineColor
 ToggleButton.tab.focusBackground
+ToggleButton.tab.focusForeground
 ToggleButton.tab.hoverBackground
+ToggleButton.tab.hoverForeground
 ToggleButton.tab.selectedBackground
+ToggleButton.tab.selectedForeground
 ToggleButton.tab.underlineColor
 ToggleButton.tab.underlineHeight
 ToggleButton.textIconGap

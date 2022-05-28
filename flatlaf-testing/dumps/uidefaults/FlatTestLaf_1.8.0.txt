@@ -1314,8 +1314,11 @@ ToggleButton.selectedForeground #000000  HSL   0   0   0    javax.swing.plaf.Col
 ToggleButton.shadow            #a0a0a0  HSL   0   0  63    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.disabledUnderlineColor #7a7a7a  HSL   0   0  48    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.focusBackground #dddddd  HSL   0   0  87    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.focusForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.hoverBackground #eeeeee  HSL   0   0  93    javax.swing.plaf.ColorUIResource [UI]
-ToggleButton.tab.selectedBackground #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.hoverForeground #00ff00  HSL 120 100  50    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.selectedBackground #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
+ToggleButton.tab.selectedForeground #00aaff  HSL 200 100  50    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.underlineColor #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
 ToggleButton.tab.underlineHeight 2
 ToggleButton.textIconGap       4
