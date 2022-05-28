@@ -221,19 +221,26 @@ public class TestFlatStyling
 		ui.applyStyle( b, "minimumWidth: 100" );
 
 		ui.applyStyle( b, "focusedBackground: #fff" );
+		ui.applyStyle( b, "focusedForeground: #fff" );
 		ui.applyStyle( b, "hoverBackground: #fff" );
+		ui.applyStyle( b, "hoverForeground: #fff" );
 		ui.applyStyle( b, "pressedBackground: #fff" );
+		ui.applyStyle( b, "pressedForeground: #fff" );
 		ui.applyStyle( b, "selectedBackground: #fff" );
 		ui.applyStyle( b, "selectedForeground: #fff" );
 		ui.applyStyle( b, "disabledBackground: #fff" );
 		ui.applyStyle( b, "disabledText: #fff" );
 		ui.applyStyle( b, "disabledSelectedBackground: #fff" );
+		ui.applyStyle( b, "disabledSelectedForeground: #fff" );
 
 		ui.applyStyle( b, "default.background: #fff" );
 		ui.applyStyle( b, "default.foreground: #fff" );
 		ui.applyStyle( b, "default.focusedBackground: #fff" );
+		ui.applyStyle( b, "default.focusedForeground: #fff" );
 		ui.applyStyle( b, "default.hoverBackground: #fff" );
+		ui.applyStyle( b, "default.hoverForeground: #fff" );
 		ui.applyStyle( b, "default.pressedBackground: #fff" );
+		ui.applyStyle( b, "default.pressedForeground: #fff" );
 		ui.applyStyle( b, "default.boldText: true" );
 
 		ui.applyStyle( b, "paintShadow: true" );
@@ -243,8 +250,13 @@ public class TestFlatStyling
 
 		ui.applyStyle( b, "toolbar.spacingInsets: 1,2,3,4" );
 		ui.applyStyle( b, "toolbar.hoverBackground: #fff" );
+		ui.applyStyle( b, "toolbar.hoverForeground: #fff" );
 		ui.applyStyle( b, "toolbar.pressedBackground: #fff" );
+		ui.applyStyle( b, "toolbar.pressedForeground: #fff" );
 		ui.applyStyle( b, "toolbar.selectedBackground: #fff" );
+		ui.applyStyle( b, "toolbar.selectedForeground: #fff" );
+		ui.applyStyle( b, "toolbar.disabledSelectedBackground: #fff" );
+		ui.applyStyle( b, "toolbar.disabledSelectedForeground: #fff" );
 
 		ui.applyStyle( b, "buttonType: help" );
 		ui.applyStyle( b, "squareSize: true" );

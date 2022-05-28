@@ -48,15 +48,29 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault ToggleButton.iconTextGap					int
  * @uiDefault ToggleButton.startBackground				Color	optional; if set, a gradient paint is used and ToggleButton.background is ignored
  * @uiDefault ToggleButton.endBackground				Color	optional; if set, a gradient paint is used
- * @uiDefault ToggleButton.pressedBackground			Color
+ * @uiDefault ToggleButton.focusedBackground			Color	optional
+ * @uiDefault ToggleButton.focusedForeground			Color	optional
+ * @uiDefault ToggleButton.hoverBackground				Color	optional
+ * @uiDefault ToggleButton.hoverForeground				Color	optional
+ * @uiDefault ToggleButton.pressedBackground			Color	optional
+ * @uiDefault ToggleButton.pressedForeground			Color	optional
  * @uiDefault ToggleButton.selectedBackground			Color
  * @uiDefault ToggleButton.selectedForeground			Color
  * @uiDefault ToggleButton.disabledBackground			Color	optional
  * @uiDefault ToggleButton.disabledText					Color
  * @uiDefault ToggleButton.disabledSelectedBackground	Color
+ * @uiDefault ToggleButton.disabledSelectedForeground	Color	optional
+ * @uiDefault Button.paintShadow						boolean	default is false
+ * @uiDefault Button.shadowWidth						int		default is 2
+ * @uiDefault Button.shadowColor						Color	optional
  * @uiDefault ToggleButton.toolbar.hoverBackground		Color
+ * @uiDefault ToggleButton.toolbar.hoverForeground		Color	optional
  * @uiDefault ToggleButton.toolbar.pressedBackground	Color
+ * @uiDefault ToggleButton.toolbar.pressedForeground	Color	optional
  * @uiDefault ToggleButton.toolbar.selectedBackground	Color
+ * @uiDefault ToggleButton.toolbar.selectedForeground	Color	optional
+ * @uiDefault ToggleButton.toolbar.disabledSelectedBackground	Color	optional
+ * @uiDefault ToggleButton.toolbar.disabledSelectedForeground	Color	optional
  *
  * <!-- FlatToggleButtonUI -->
  *

@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### New features and improvements
 
+- Button and ToggleButton: Added missing foreground colors for hover, pressed,
+  focused and selected states. (issue #535)
 - Table: Optionally paint alternating rows below table if table is smaller than
   scroll pane. Set UI value `Table.paintOutsideAlternateRows` to `true`.
   Requires that `Table.alternateRowColor` is set to a color. (issue #504)
