@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.text.StyleContext;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
@@ -48,6 +49,7 @@ import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.fife.ui.rtextarea.SearchContext;
+import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont;
 import com.formdev.flatlaf.util.UIScale;
 
 /**
@@ -128,8 +130,7 @@ class FlatThemeEditorPane
 	}
 
 	void updateTheme() {
-		Font defaultFont = RTextArea.getDefaultFont();
-		Font font = defaultFont.deriveFont( (float) UIManager.getFont( "defaultFont" ).getSize() );
+		Font font = createEditorFont( 0 );
 
 		textArea.setFont( font );
 		textArea.setBackground( UIManager.getColor( "FlatThemeEditorPane.background" ) );
@@ -161,12 +162,26 @@ class FlatThemeEditorPane
 	}
 
 	void updateFontSize( int sizeIncr ) {
-		Font defaultFont = RTextArea.getDefaultFont();
-		Font font = defaultFont.deriveFont( (float) UIManager.getFont( "defaultFont" ).getSize() + sizeIncr );
+		Font font = createEditorFont( sizeIncr );
 
 		textArea.setFont( font );
 		textArea.setSyntaxScheme( new FlatSyntaxScheme( font ) );
 		scrollPane.getGutter().setLineNumberFont( font );
+	}
+
+	private static Font createEditorFont( int sizeIncr ) {
+		int size = UIManager.getFont( "defaultFont" ).getSize() + sizeIncr;
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		Font font = sc.getFont( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, size );
+		if( isFallbackFont( font ) ) {
+			Font defaultFont = RTextArea.getDefaultFont();
+			font = defaultFont.deriveFont( (float) size );
+		}
+		return font;
+	}
+
+	private static boolean isFallbackFont( Font font ) {
+		return Font.DIALOG.equalsIgnoreCase( font.getFamily() );
 	}
 
 	void selected() {
