@@ -1,0 +1,47 @@
+# https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Fonts
+
+on:
+    push:
+        branches:
+            - '*'
+        tags:
+            - 'fonts/*-[0-9]*'
+        paths:
+            - 'flatlaf-fonts/**'
+            - '.github/workflows/fonts.yml'
+
+jobs:
+    Release:
+        runs-on: ubuntu-latest
+        if: |
+            github.event_name == 'push' &&
+            github.repository == 'JFormDesigner/FlatLaf'
+
+        strategy:
+            matrix:
+                font:
+                    - inter
+                    - jetbrains-mono
+
+        steps:
+            - uses: actions/checkout@v3
+              if: startsWith( github.ref, format( 'refs/tags/fonts/{0}-', matrix.font ) )
+
+            - name: Setup Java 11
+              uses: actions/setup-java@v3
+              with:
+                  java-version: 11
+                  distribution: adopt  # pre-installed on ubuntu-latest
+                  cache: gradle
+              if: startsWith( github.ref, format( 'refs/tags/fonts/{0}-', matrix.font ) )
+
+            - name: Release a new stable version to Maven Central
+              run: ./gradlew publish :flatlaf-fonts-${{ matrix.font }}:build -Drelease=true
+              env:
+                  OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+                  OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+                  SIGNING_KEY:      ${{ secrets.SIGNING_KEY }}
+                  SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+              if: startsWith( github.ref, format( 'refs/tags/fonts/{0}-', matrix.font ) )
