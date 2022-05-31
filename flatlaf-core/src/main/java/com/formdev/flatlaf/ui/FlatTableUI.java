@@ -314,6 +314,8 @@ public class FlatTableUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
+		FlatTableHeaderUI.fixDraggedAndResizingColumns( table.getTableHeader() );
+
 		boolean horizontalLines = table.getShowHorizontalLines();
 		boolean verticalLines = table.getShowVerticalLines();
 		if( horizontalLines || verticalLines ) {

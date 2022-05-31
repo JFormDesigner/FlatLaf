@@ -39,7 +39,9 @@ import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
@@ -195,6 +197,8 @@ public class FlatTableHeaderUI
 
 	@Override
 	public void paint( Graphics g, JComponent c ) {
+		fixDraggedAndResizingColumns( header );
+
 		TableColumnModel columnModel = header.getColumnModel();
 		if( columnModel.getColumnCount() <= 0 )
 			return;
@@ -267,6 +271,32 @@ public class FlatTableHeaderUI
 		if( size.height > 0 )
 			size.height = Math.max( size.height, UIScale.scale( height ) );
 		return size;
+	}
+
+	static void fixDraggedAndResizingColumns( JTableHeader header ) {
+		if( header == null )
+			return;
+
+		// Dragged column may be outdated in the case that the table structure
+		// was changed from a table header popup menu action. In this case
+		// the paint methods in BasicTableHeaderUI and BasicTableUI would throw exceptions.
+		TableColumn draggedColumn = header.getDraggedColumn();
+		if( draggedColumn != null && !isValidColumn( header.getColumnModel(), draggedColumn ) )
+			header.setDraggedColumn( null );
+
+		// also clear outdated resizing column (although this seems not cause exceptions)
+		TableColumn resizingColumn = header.getResizingColumn();
+		if( resizingColumn != null && !isValidColumn( header.getColumnModel(), resizingColumn ) )
+			header.setResizingColumn( null );
+	}
+
+	private static boolean isValidColumn( TableColumnModel cm, TableColumn column ) {
+		int count = cm.getColumnCount();
+		for( int i = 0; i < count; i++ ) {
+			if( cm.getColumn( i ) == column )
+				return true;
+		}
+		return false;
 	}
 
 	//---- class FlatTableCellHeaderRenderer ----------------------------------

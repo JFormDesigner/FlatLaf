@@ -106,6 +106,20 @@ public class FlatComponents2Test
 		table1.setModel( tableModel );
 		xTable1.setModel( tableModel );
 
+		// table header popup menu
+		JMenuItem addMenuItem = new JMenuItem( "Add column" );
+		addMenuItem.addActionListener( e -> {
+			tableModel.setColumnCount( tableModel.getColumnCount() + 1 );
+		});
+		JMenuItem removeMenuItem = new JMenuItem( "Remove last column" );
+		removeMenuItem.addActionListener( e -> {
+			tableModel.setColumnCount( tableModel.getColumnCount() - 1 );
+		});
+		JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.add( addMenuItem );
+		popupMenu.add( removeMenuItem );
+		table1.getTableHeader().setComponentPopupMenu( popupMenu );
+
 		// table column editors
 		initTableEditors( table1 );
 		initTableEditors( xTable1 );
@@ -1174,11 +1188,22 @@ public class FlatComponents2Test
 			{ "item 12", null, "December", null, null, null },
 		};
 
+		private int columnCount = columnNames.length;
 		private int rowCount = rows.length;
 		private final Map<Integer, Object[]> moreRowsMap = new HashMap<>();
 
 		TestTableModel( int rowCount ) {
 			setRowCount( rowCount );
+		}
+
+		void setColumnCount( int columnCount ) {
+			if( columnCount > columnNames.length )
+				columnCount = columnNames.length;
+
+			this.columnCount = columnCount;
+
+			// fire event
+			fireTableStructureChanged();
 		}
 
 		void setRowCount( int rowCount ) {
@@ -1199,7 +1224,7 @@ public class FlatComponents2Test
 
 		@Override
 		public int getColumnCount() {
-			return columnNames.length;
+			return columnCount;
 		}
 
 		@Override

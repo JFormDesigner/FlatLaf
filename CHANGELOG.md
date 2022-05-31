@@ -1,6 +1,14 @@
 FlatLaf Change Log
 ==================
 
+## 2.4-SNAPSHOT
+
+#### Fixed bugs
+
+- TableHeader: Fixed exception when changing table structure (e.g. removing
+  column) from a table header popup menu action. (issue #532)
+
+
 ## 2.3
 
 #### New features and improvements
