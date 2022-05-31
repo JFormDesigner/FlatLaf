@@ -15,7 +15,8 @@ License:
 How to install?
 ---------------
 
-Invoke the `install()` method once in your `main()` method (on AWT thread):
+Invoke the `install()` method once (e.g. in your `main()` method; on AWT
+thread):
 
 ~~~java
 FlatJetBrainsMonoFont.install();
@@ -24,6 +25,14 @@ FlatJetBrainsMonoFont.install();
 
 How to use?
 -----------
+
+Use as default monospaced font:
+
+~~~java
+FlatLaf.setPreferredMonospacedFontFamily( FlatJetBrainsMonoFont.FAMILY );
+~~~
+
+Create fonts:
 
 ~~~java
 // basic styles
@@ -37,6 +46,10 @@ new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD | Font.ITALIC, 12 );
 Download
 --------
 
+Not yet available.
+
+<!--
+
 FlatLaf Fonts binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
@@ -49,3 +62,5 @@ build script:
 Otherwise download `flatlaf-fonts-jetbrains-mono-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-jetbrains-mono)
+
+-->

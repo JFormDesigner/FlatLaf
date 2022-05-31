@@ -25,11 +25,35 @@ import java.io.InputStream;
 /**
  * The Inter font family.
  * <p>
- * <strong>Note:</strong> This font requires <strong>Java 10 or later</strong>.
- * It is displayed too large in Java 8 and 9.
+ * <strong>Note</strong>: This font does not work correctly in older Java 8 versions
+ * (before 8u212) and in Java 9 because it is displayed way too large.
  * <p>
  * Font home page: <a href="https://rsms.me/inter/">https://rsms.me/inter/</a><br>
  * GitHub project: <a href="https://github.com/rsms/inter">https://github.com/rsms/inter</a>
+ * <p>
+ * To install the font, invoke following once (e.g. in your {@code main()} method; on AWT thread):
+ * <pre>{@code
+ * FlatInterFont.install();
+ * }</pre>
+ * <p>
+ * Use as default font:
+ * <pre>{@code
+ * FlatLaf.setPreferredFontFamily( FlatInterFont.FAMILY );
+ * FlatLaf.setPreferredLightFontFamily( FlatInterFont.FAMILY_LIGHT );
+ * FlatLaf.setPreferredSemiboldFontFamily( FlatInterFont.FAMILY_SEMIBOLD );
+ * }</pre>
+ * <p>
+ * Create fonts:
+ * <pre>{@code
+ * new Font( FlatInterFont.FAMILY, Font.PLAIN, 12 );
+ * new Font( FlatInterFont.FAMILY, Font.ITALIC, 12 );
+ * new Font( FlatInterFont.FAMILY, Font.BOLD, 12 );
+ * new Font( FlatInterFont.FAMILY, Font.BOLD | Font.ITALIC, 12 );
+ * new Font( FlatInterFont.FAMILY_LIGHT, Font.PLAIN, 12 );
+ * new Font( FlatInterFont.FAMILY_LIGHT, Font.ITALIC, 12 );
+ * new Font( FlatInterFont.FAMILY_SEMIBOLD, Font.PLAIN, 12 );
+ * new Font( FlatInterFont.FAMILY_SEMIBOLD, Font.ITALIC, 12 );
+ * }</pre>
  *
  * @author Karl Tauber
  */

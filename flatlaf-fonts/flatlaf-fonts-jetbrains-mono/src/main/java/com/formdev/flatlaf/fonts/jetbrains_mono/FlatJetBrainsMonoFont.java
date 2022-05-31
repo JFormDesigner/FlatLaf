@@ -27,6 +27,24 @@ import java.io.InputStream;
  * <p>
  * Font home page: <a href="https://www.jetbrains.com/mono">https://www.jetbrains.com/mono</a><br>
  * GitHub project: <a href="https://github.com/JetBrains/JetBrainsMono">https://github.com/JetBrains/JetBrainsMono</a>
+ * <p>
+ * To install the font, invoke following once (e.g. in your {@code main()} method; on AWT thread):
+ * <pre>{@code
+ * FlatJetBrainsMonoFont.install();
+ * }</pre>
+ * <p>
+ * Use as default monospaced font:
+ * <pre>{@code
+ * FlatLaf.setPreferredMonospacedFontFamily( FlatJetBrainsMonoFont.FAMILY );
+ * }</pre>
+ * <p>
+ * Create fonts:
+ * <pre>{@code
+ * new Font( FlatJetBrainsMonoFont.FAMILY, Font.PLAIN, 12 );
+ * new Font( FlatJetBrainsMonoFont.FAMILY, Font.ITALIC, 12 );
+ * new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD, 12 );
+ * new Font( FlatJetBrainsMonoFont.FAMILY, Font.BOLD | Font.ITALIC, 12 );
+ * }</pre>
  *
  * @author Karl Tauber
  */

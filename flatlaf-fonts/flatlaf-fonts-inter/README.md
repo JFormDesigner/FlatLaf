@@ -4,8 +4,8 @@ Inter font
 This sub-project contains fonts from the Inter font family and bundles them into
 an easy-to-use and redistributable JAR.
 
-**Note:** This font requires **Java 10 or later**. It is displayed too large in
-Java 8 and 9.
+**Note**: This font does not work correctly in older Java 8 versions (before
+8u212) and in Java 9 because it is displayed way too large.
 
 Font home page: https://rsms.me/inter/
 
@@ -18,7 +18,8 @@ License:
 How to install?
 ---------------
 
-Invoke the `install()` method once in your `main()` method (on AWT thread):
+Invoke the `install()` method once (e.g. in your `main()` method; on AWT
+thread):
 
 ~~~java
 FlatInterFont.install();
@@ -27,6 +28,16 @@ FlatInterFont.install();
 
 How to use?
 -----------
+
+Use as default font:
+
+~~~java
+FlatLaf.setPreferredFontFamily( FlatInterFont.FAMILY );
+FlatLaf.setPreferredLightFontFamily( FlatInterFont.FAMILY_LIGHT );
+FlatLaf.setPreferredSemiboldFontFamily( FlatInterFont.FAMILY_SEMIBOLD );
+~~~
+
+Create fonts:
 
 ~~~java
 // basic styles
@@ -48,6 +59,10 @@ new Font( FlatInterFont.FAMILY_SEMIBOLD, Font.ITALIC, 12 );
 Download
 --------
 
+Not yet available.
+
+<!--
+
 FlatLaf Fonts binaries are available on **Maven Central**.
 
 If you use Maven or Gradle, add a dependency with following coordinates to your
@@ -60,3 +75,5 @@ build script:
 Otherwise download `flatlaf-fonts-inter-<version>.jar` here:
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-inter/badge.svg?style=flat-square&color=007ec6)](https://maven-badges.herokuapp.com/maven-central/com.formdev/flatlaf-fonts-inter)
+
+-->
