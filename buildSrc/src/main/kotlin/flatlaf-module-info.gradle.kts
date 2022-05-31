@@ -61,8 +61,6 @@ if( JavaVersion.current() >= JavaVersion.VERSION_1_9 ) {
 		}
 
 		jar {
-			manifest.attributes( "Multi-Release" to "true" )
-
 			from( sourceSets["module-info"].output ) {
 				include( "module-info.class" )
 			}
