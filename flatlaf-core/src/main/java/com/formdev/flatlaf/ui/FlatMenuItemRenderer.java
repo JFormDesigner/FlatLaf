@@ -353,15 +353,9 @@ debug*/
 
 	/** @since 3 */
 	protected void paintSelection( Graphics g, Color selectionBackground, Insets selectionInsets, int selectionArc ) {
-		Rectangle r = FlatUIUtils.subtractInsets( new Rectangle( menuItem.getSize() ), scale( selectionInsets ) );
-
 		g.setColor( deriveBackground( selectionBackground ) );
-		if( selectionArc > 0 ) {
-			Object[] oldRenderingHints = FlatUIUtils.setRenderingHints( g );
-			FlatUIUtils.paintComponentBackground( (Graphics2D) g, r.x, r.y, r.width, r.height, 0, scale( selectionArc ) );
-			FlatUIUtils.resetRenderingHints( g, oldRenderingHints );
-		} else
-			g.fillRect( r.x, r.y, r.width, r.height );
+		FlatUIUtils.paintSelection( (Graphics2D) g, 0, 0, menuItem.getWidth(), menuItem.getHeight(),
+			scale( selectionInsets ), scale( (float) selectionArc ), 0 );
 	}
 
 	/** @since 3 */

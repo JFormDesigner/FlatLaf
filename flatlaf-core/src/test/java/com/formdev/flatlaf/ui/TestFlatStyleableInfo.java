@@ -921,6 +921,8 @@ public class TestFlatStyleableInfo
 			"selectionInactiveBackground", Color.class,
 			"selectionInactiveForeground", Color.class,
 			"selectionBorderColor", Color.class,
+			"selectionInsets", Insets.class,
+			"selectionArc", int.class,
 			"wideSelection", boolean.class,
 			"showCellFocusIndicator", boolean.class,
 

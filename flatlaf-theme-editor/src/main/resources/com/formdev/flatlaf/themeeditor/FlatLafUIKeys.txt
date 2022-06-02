@@ -1099,11 +1099,13 @@ Tree.repaintWholeRow
 Tree.rightChildIndent
 Tree.rowHeight
 Tree.scrollsOnExpand
+Tree.selectionArc
 Tree.selectionBackground
 Tree.selectionBorderColor
 Tree.selectionForeground
 Tree.selectionInactiveBackground
 Tree.selectionInactiveForeground
+Tree.selectionInsets
 Tree.showCellFocusIndicator
 Tree.textBackground
 Tree.textForeground

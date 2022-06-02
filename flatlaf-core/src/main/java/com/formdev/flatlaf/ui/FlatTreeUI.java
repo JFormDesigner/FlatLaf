@@ -21,6 +21,7 @@ import static com.formdev.flatlaf.FlatClientProperties.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -36,6 +37,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.JTree.DropLocation;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -96,6 +98,8 @@ import com.formdev.flatlaf.util.UIScale;
  * @uiDefault Tree.selectionForeground				Color
  * @uiDefault Tree.selectionInactiveBackground		Color
  * @uiDefault Tree.selectionInactiveForeground		Color
+ * @uiDefault Tree.selectionInsets					Insets
+ * @uiDefault Tree.selectionArc						int
  * @uiDefault Tree.wideSelection					boolean
  * @uiDefault Tree.showCellFocusIndicator			boolean
  *
@@ -132,6 +136,8 @@ public class FlatTreeUI
 	@Styleable protected Color selectionInactiveBackground;
 	@Styleable protected Color selectionInactiveForeground;
 	@Styleable protected Color selectionBorderColor;
+	/** @since 3 */ @Styleable protected Insets selectionInsets;
+	/** @since 3 */ @Styleable protected int selectionArc;
 	@Styleable protected boolean wideSelection;
 	@Styleable protected boolean showCellFocusIndicator;
 
@@ -175,6 +181,8 @@ public class FlatTreeUI
 		selectionInactiveBackground = UIManager.getColor( "Tree.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "Tree.selectionInactiveForeground" );
 		selectionBorderColor = UIManager.getColor( "Tree.selectionBorderColor" );
+		selectionInsets = UIManager.getInsets( "Tree.selectionInsets" );
+		selectionArc = UIManager.getInt( "Tree.selectionArc" );
 		wideSelection = UIManager.getBoolean( "Tree.wideSelection" );
 		showCellFocusIndicator = UIManager.getBoolean( "Tree.showCellFocusIndicator" );
 
@@ -293,6 +301,34 @@ public class FlatTreeUI
 		Rectangle r = tree.getPathBounds( loc.getPath() );
 		if( r != null )
 			tree.repaint( 0, r.y, tree.getWidth(), r.height );
+	}
+
+	@Override
+	protected TreeSelectionListener createTreeSelectionListener() {
+		TreeSelectionListener superListener = super.createTreeSelectionListener();
+		return e -> {
+			superListener.valueChanged( e );
+
+			// for united rounded selection, repaint parts of the rows that adjoin to the changed rows
+			TreePath[] changedPaths;
+			if( useUnitedRoundedSelection() &&
+				tree.getSelectionCount() > 1 &&
+				(changedPaths = e.getPaths()) != null )
+			{
+				if( changedPaths.length > 4 ) {
+					// same is done in BasicTreeUI.Handler.valueChanged()
+					tree.repaint();
+				} else {
+					int arcHeight = (int) Math.ceil( UIScale.scale( (float) selectionArc ) );
+
+					for( TreePath path : changedPaths ) {
+						Rectangle r = getPathBounds( tree, path );
+						if( r != null )
+							tree.repaint( r.x, r.y - arcHeight, r.width, r.height + (arcHeight * 2) );
+					}
+				}
+			}
+		};
 	}
 
 	@Override
@@ -491,7 +527,16 @@ public class FlatTreeUI
 	private void paintWideSelection( Graphics g, Rectangle clipBounds, Insets insets, Rectangle bounds,
 		TreePath path, int row, boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
 	{
-		g.fillRect( 0, bounds.y, tree.getWidth(), bounds.height );
+		int flags = 0;
+		if( useUnitedRoundedSelection() ) {
+			if( row > 0 && tree.isRowSelected( row - 1 ) )
+				flags |= FlatUIUtils.FLAG_TOP_NOT_ROUNDED;
+			if( row < tree.getRowCount() - 1 && tree.isRowSelected( row + 1 ) )
+				flags |= FlatUIUtils.FLAG_BOTTOM_NOT_ROUNDED;
+		}
+
+		FlatUIUtils.paintSelection( (Graphics2D) g, 0, bounds.y, tree.getWidth(), bounds.height,
+			UIScale.scale( selectionInsets ), UIScale.scale( (float) selectionArc ), flags );
 
 		// paint expand/collapse icon
 		// (was already painted before, but painted over with wide selection)
@@ -499,6 +544,11 @@ public class FlatTreeUI
 			paintExpandControl( g, clipBounds, insets, bounds,
 				path, row, isExpanded, hasBeenExpanded, isLeaf );
 		}
+	}
+
+	private boolean useUnitedRoundedSelection() {
+		return selectionArc > 0 &&
+			(selectionInsets == null || (selectionInsets.top == 0 && selectionInsets.bottom == 0));
 	}
 
 	private void paintCellBackground( Graphics g, Component rendererComponent, Rectangle bounds ) {
@@ -514,7 +564,8 @@ public class FlatTreeUI
 			xOffset = label.getComponentOrientation().isLeftToRight() ? imageOffset : 0;
 		}
 
-		g.fillRect( bounds.x + xOffset, bounds.y, bounds.width - imageOffset, bounds.height );
+		FlatUIUtils.paintSelection( (Graphics2D) g, bounds.x + xOffset, bounds.y, bounds.width - imageOffset, bounds.height,
+			UIScale.scale( selectionInsets ), UIScale.scale( (float) selectionArc ), 0 );
 	}
 
 	/**
