@@ -318,12 +318,12 @@ public class FlatTreeUI
 					// same is done in BasicTreeUI.Handler.valueChanged()
 					tree.repaint();
 				} else {
-					int arcHeight = (int) Math.ceil( UIScale.scale( (float) selectionArc ) );
+					int arc = (int) Math.ceil( UIScale.scale( selectionArc / 2f ) );
 
 					for( TreePath path : changedPaths ) {
 						Rectangle r = getPathBounds( tree, path );
 						if( r != null )
-							tree.repaint( r.x, r.y - arcHeight, r.width, r.height + (arcHeight * 2) );
+							tree.repaint( r.x, r.y - arc, r.width, r.height + (arc * 2) );
 					}
 				}
 			}

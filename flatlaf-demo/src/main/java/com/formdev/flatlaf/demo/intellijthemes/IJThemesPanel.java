@@ -19,6 +19,7 @@ package com.formdev.flatlaf.demo.intellijthemes;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.*;
 import com.formdev.flatlaf.FlatDarculaLaf;
@@ -52,6 +54,7 @@ import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.demo.DemoPrefs;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.formdev.flatlaf.ui.FlatListUI;
 import com.formdev.flatlaf.util.LoggingFacade;
 import com.formdev.flatlaf.util.StringUtils;
 import net.miginfocom.swing.*;
@@ -89,10 +92,18 @@ public class IJThemesPanel
 
 		// create renderer
 		themesList.setCellRenderer( new DefaultListCellRenderer() {
+			private int index;
+			private boolean isSelected;
+			private int titleHeight;
+
 			@Override
 			public Component getListCellRendererComponent( JList<?> list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus )
 			{
+				this.index = index;
+				this.isSelected = isSelected;
+				this.titleHeight = 0;
+
 				String title = categories.get( index );
 				String name = ((IJThemeInfo)value).name;
 				int sep = name.indexOf( '/' );
@@ -101,9 +112,31 @@ public class IJThemesPanel
 
 				JComponent c = (JComponent) super.getListCellRendererComponent( list, name, index, isSelected, cellHasFocus );
 				c.setToolTipText( buildToolTip( (IJThemeInfo) value ) );
-				if( title != null )
-					c.setBorder( new CompoundBorder( new ListCellTitledBorder( themesList, title ), c.getBorder() ) );
+				if( title != null ) {
+					Border titledBorder = new ListCellTitledBorder( themesList, title );
+					c.setBorder( new CompoundBorder( titledBorder, c.getBorder() ) );
+					titleHeight = titledBorder.getBorderInsets( c ).top;
+				}
 				return c;
+			}
+
+			@Override
+			public boolean isOpaque() {
+				return !isSelectedTitle();
+			}
+
+			@Override
+			protected void paintComponent( Graphics g ) {
+				if( isSelectedTitle() ) {
+					g.setColor( getBackground() );
+					FlatListUI.paintCellSelection( themesList, g, index, 0, titleHeight, getWidth(), getHeight() - titleHeight );
+				}
+
+				super.paintComponent( g );
+			}
+
+			private boolean isSelectedTitle() {
+				return titleHeight > 0 && isSelected && UIManager.getLookAndFeel() instanceof FlatLaf;
 			}
 
 			private String buildToolTip( IJThemeInfo ti ) {

@@ -17,20 +17,32 @@
 package com.formdev.flatlaf.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicListUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
 import com.formdev.flatlaf.ui.FlatStylingSupport.StyleableUI;
+import com.formdev.flatlaf.util.Graphics2DProxy;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.UIScale;
 
 /**
  * Provides the Flat LaF UI delegate for {@link javax.swing.JList}.
@@ -59,6 +71,8 @@ import com.formdev.flatlaf.util.LoggingFacade;
  *
  * @uiDefault List.selectionInactiveBackground		Color
  * @uiDefault List.selectionInactiveForeground		Color
+ * @uiDefault List.selectionInsets					Insets
+ * @uiDefault List.selectionArc						int
  *
  * <!-- FlatListCellBorder -->
  *
@@ -76,6 +90,8 @@ public class FlatListUI
 	@Styleable protected Color selectionForeground;
 	@Styleable protected Color selectionInactiveBackground;
 	@Styleable protected Color selectionInactiveForeground;
+	/** @since 3 */ @Styleable protected Insets selectionInsets;
+	/** @since 3 */ @Styleable protected int selectionArc;
 
 	// for FlatListCellBorder
 	/** @since 2 */ @Styleable protected Insets cellMargins;
@@ -103,6 +119,8 @@ public class FlatListUI
 		selectionForeground = UIManager.getColor( "List.selectionForeground" );
 		selectionInactiveBackground = UIManager.getColor( "List.selectionInactiveBackground" );
 		selectionInactiveForeground = UIManager.getColor( "List.selectionInactiveForeground" );
+		selectionInsets = UIManager.getInsets( "List.selectionInsets" );
+		selectionArc = UIManager.getInt( "List.selectionArc" );
 
 		toggleSelectionColors();
 	}
@@ -157,6 +175,29 @@ public class FlatListUI
 					list.revalidate();
 					list.repaint();
 					break;
+			}
+		};
+	}
+
+	@Override
+	protected ListSelectionListener createListSelectionListener() {
+		ListSelectionListener superListener = super.createListSelectionListener();
+		return e -> {
+			superListener.valueChanged( e );
+
+			// for united rounded selection, repaint parts of the rows that adjoin to the changed rows
+			if( useUnitedRoundedSelection() &&
+				!list.isSelectionEmpty() &&
+				(list.getMaxSelectionIndex() - list.getMinSelectionIndex()) >= 1 )
+			{
+				int size = list.getModel().getSize();
+				int firstIndex = Math.min( Math.max( e.getFirstIndex(), 0 ), size - 1 );
+				int lastIndex = Math.min( Math.max( e.getLastIndex(), 0 ), size - 1 );
+				Rectangle r = getCellBounds( list, firstIndex, lastIndex );
+				if( r != null ) {
+					int arc = (int) Math.ceil( UIScale.scale( selectionArc / 2f ) );
+					list.repaint( r.x, r.y - arc, r.width, r.height + (arc * 2) );
+				}
 			}
 		};
 	}
@@ -233,5 +274,116 @@ public class FlatListUI
 			if( list.getSelectionForeground() == selectionForeground )
 				list.setSelectionForeground( selectionInactiveForeground );
 		}
+	}
+
+	@SuppressWarnings( "rawtypes" )
+	@Override
+	protected void paintCell( Graphics g, int row, Rectangle rowBounds, ListCellRenderer cellRenderer,
+		ListModel dataModel, ListSelectionModel selModel, int leadIndex )
+	{
+		boolean isSelected = selModel.isSelectedIndex( row );
+
+		// get renderer component
+		@SuppressWarnings( "unchecked" )
+		Component rendererComponent = cellRenderer.getListCellRendererComponent( list,
+			dataModel.getElementAt( row ), row, isSelected, list.hasFocus() && (row == leadIndex) );
+
+		//
+		boolean isFileList = Boolean.TRUE.equals( list.getClientProperty( "List.isFileList" ) );
+		int cx, cw;
+		if( isFileList ) {
+			// see BasicListUI.paintCell()
+			cw = Math.min( rowBounds.width, rendererComponent.getPreferredSize().width + 4 );
+			cx = list.getComponentOrientation().isLeftToRight()
+				? rowBounds.x
+				: rowBounds.x + (rowBounds.width - cw);
+		} else {
+			cx = rowBounds.x;
+			cw = rowBounds.width;
+		}
+
+		// rounded selection or selection insets
+		if( isSelected &&
+			!isFileList &&
+			rendererComponent instanceof DefaultListCellRenderer &&
+			(selectionArc > 0 ||
+			 (selectionInsets != null &&
+			  (selectionInsets.top != 0 || selectionInsets.left != 0 || selectionInsets.bottom != 0 || selectionInsets.right != 0))) )
+		{
+			// Because selection painting is done in the cell renderer, it would be
+			// necessary to require a FlatLaf specific renderer to implement rounded selection.
+			// Using a LaF specific renderer was avoided because often a custom renderer is
+			// already used in applications. Then either the rounded selection is not used,
+			// or the application has to be changed to extend a FlatLaf renderer.
+			//
+			// To solve this, a graphics proxy is used that paints rounded selection
+			// if row is selected and the renderer wants to fill the background.
+			class RoundedSelectionGraphics extends Graphics2DProxy {
+				RoundedSelectionGraphics( Graphics delegate ) {
+					super( (Graphics2D) delegate );
+				}
+
+				@Override
+				public Graphics create() {
+					return new RoundedSelectionGraphics( super.create() );
+				}
+
+				@Override
+				public Graphics create( int x, int y, int width, int height ) {
+					return new RoundedSelectionGraphics( super.create( x, y, width, height ) );
+				}
+
+				@Override
+				public void fillRect( int x, int y, int width, int height ) {
+					if( x == 0 && y == 0 && width == rowBounds.width && height == rowBounds.height &&
+						this.getColor() == rendererComponent.getBackground() )
+					{
+						paintCellSelection( this, row, x, y, width, height );
+					} else
+						super.fillRect( x, y, width, height );
+				}
+			}
+			g = new RoundedSelectionGraphics( g );
+		}
+
+		// paint renderer
+		rendererPane.paintComponent( g, rendererComponent, list, cx, rowBounds.y, cw, rowBounds.height, true );
+	}
+
+	/** @since 3 */
+	protected void paintCellSelection( Graphics g, int row, int x, int y, int width, int height ) {
+		float arcTop, arcBottom;
+		arcTop = arcBottom = UIScale.scale( selectionArc / 2f );
+
+		if( useUnitedRoundedSelection() ) {
+			if( row > 0 && list.isSelectedIndex( row - 1 ) )
+				arcTop = 0;
+			if( row < list.getModel().getSize() - 1 && list.isSelectedIndex( row + 1 ) )
+				arcBottom = 0;
+		}
+
+		FlatUIUtils.paintSelection( (Graphics2D) g, x, y, width, height,
+			UIScale.scale( selectionInsets ), arcTop, arcTop, arcBottom, arcBottom, 0 );
+	}
+
+	private boolean useUnitedRoundedSelection() {
+		return selectionArc > 0 &&
+			(selectionInsets == null || (selectionInsets.top == 0 && selectionInsets.bottom == 0));
+	}
+
+	/**
+	 * Paints a cell selection at the given coordinates.
+	 * The selection color must be set on the graphics context.
+	 * <p>
+	 * This method is intended for use in custom cell renderers.
+	 *
+	 * @since 3
+	 */
+	public static void paintCellSelection( JList<?> list, Graphics g, int row, int x, int y, int width, int height ) {
+		if( !(list.getUI() instanceof FlatListUI) )
+			return;
+
+		FlatListUI ui = (FlatListUI) list.getUI();
+		ui.paintCellSelection( g, row, x, y, width, height );
 	}
 }

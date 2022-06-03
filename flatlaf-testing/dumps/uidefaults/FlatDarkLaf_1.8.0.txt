@@ -545,10 +545,12 @@ List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatl
 List.font                      [active] $defaultFont [UI]
 List.foreground                #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 List.noFocusBorder             1,1,1,1  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
+List.selectionArc              0
 List.selectionBackground       #4b6eaf  HSL 219  40  49    javax.swing.plaf.ColorUIResource [UI]
 List.selectionForeground       #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
 List.selectionInactiveBackground #0f2a3d  HSL 205  61  15    javax.swing.plaf.ColorUIResource [UI]
 List.selectionInactiveForeground #bbbbbb  HSL   0   0  73    javax.swing.plaf.ColorUIResource [UI]
+List.selectionInsets           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 List.showCellFocusIndicator    false
 List.timeFactor                1000
 ListUI                         com.formdev.flatlaf.ui.FlatListUI

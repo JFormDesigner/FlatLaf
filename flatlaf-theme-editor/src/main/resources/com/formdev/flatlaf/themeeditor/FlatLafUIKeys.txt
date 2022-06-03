@@ -424,10 +424,12 @@ List.focusSelectedCellHighlightBorder
 List.font
 List.foreground
 List.noFocusBorder
+List.selectionArc
 List.selectionBackground
 List.selectionForeground
 List.selectionInactiveBackground
 List.selectionInactiveForeground
+List.selectionInsets
 List.showCellFocusIndicator
 List.timeFactor
 ListUI
