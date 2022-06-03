@@ -17,7 +17,6 @@
 package com.formdev.flatlaf.ui;
 
 import static com.formdev.flatlaf.FlatClientProperties.*;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -377,7 +376,7 @@ public class FlatTreeUI
 	}
 
 	/**
-	 * Same as super.paintRow(), but supports wide selection and uses
+	 * Similar to super.paintRow(), but supports wide selection and uses
 	 * inactive selection background/foreground if tree is not focused.
 	 */
 	@Override
@@ -458,7 +457,7 @@ public class FlatTreeUI
 				paintWideSelection( g, clipBounds, insets, bounds, path, row, isExpanded, hasBeenExpanded, isLeaf );
 			} else {
 				// non-wide selection
-				paintCellBackground( g, rendererComponent, bounds );
+				paintCellBackground( g, rendererComponent, bounds, row, true );
 			}
 
 			// this is actually not necessary because renderer should always set color
@@ -472,7 +471,7 @@ public class FlatTreeUI
 				if( bg != null && !bg.equals( defaultCellNonSelectionBackground ) ) {
 					Color oldColor = g.getColor();
 					g.setColor( bg );
-					paintCellBackground( g, rendererComponent, bounds );
+					paintCellBackground( g, rendererComponent, bounds, row, false );
 					g.setColor( oldColor );
 				}
 			}
@@ -527,16 +526,18 @@ public class FlatTreeUI
 	private void paintWideSelection( Graphics g, Rectangle clipBounds, Insets insets, Rectangle bounds,
 		TreePath path, int row, boolean isExpanded, boolean hasBeenExpanded, boolean isLeaf )
 	{
-		int flags = 0;
+		float arcTop, arcBottom;
+		arcTop = arcBottom = UIScale.scale( selectionArc / 2f );
+
 		if( useUnitedRoundedSelection() ) {
 			if( row > 0 && tree.isRowSelected( row - 1 ) )
-				flags |= FlatUIUtils.FLAG_TOP_NOT_ROUNDED;
+				arcTop = 0;
 			if( row < tree.getRowCount() - 1 && tree.isRowSelected( row + 1 ) )
-				flags |= FlatUIUtils.FLAG_BOTTOM_NOT_ROUNDED;
+				arcBottom = 0;
 		}
 
 		FlatUIUtils.paintSelection( (Graphics2D) g, 0, bounds.y, tree.getWidth(), bounds.height,
-			UIScale.scale( selectionInsets ), UIScale.scale( (float) selectionArc ), flags );
+			UIScale.scale( selectionInsets ), arcTop, arcTop, arcBottom, arcBottom, 0 );
 
 		// paint expand/collapse icon
 		// (was already painted before, but painted over with wide selection)
@@ -546,12 +547,9 @@ public class FlatTreeUI
 		}
 	}
 
-	private boolean useUnitedRoundedSelection() {
-		return selectionArc > 0 &&
-			(selectionInsets == null || (selectionInsets.top == 0 && selectionInsets.bottom == 0));
-	}
-
-	private void paintCellBackground( Graphics g, Component rendererComponent, Rectangle bounds ) {
+	private void paintCellBackground( Graphics g, Component rendererComponent, Rectangle bounds,
+		int row, boolean paintSelection )
+	{
 		int xOffset = 0;
 		int imageOffset = 0;
 
@@ -564,8 +562,32 @@ public class FlatTreeUI
 			xOffset = label.getComponentOrientation().isLeftToRight() ? imageOffset : 0;
 		}
 
-		FlatUIUtils.paintSelection( (Graphics2D) g, bounds.x + xOffset, bounds.y, bounds.width - imageOffset, bounds.height,
-			UIScale.scale( selectionInsets ), UIScale.scale( (float) selectionArc ), 0 );
+		if( paintSelection ) {
+			float arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight;
+			arcTopLeft = arcTopRight = arcBottomLeft = arcBottomRight = UIScale.scale( selectionArc / 2f );
+
+			if( useUnitedRoundedSelection() ) {
+				if( row > 0 && tree.isRowSelected( row - 1 ) ) {
+					Rectangle r = getPathBounds( tree, tree.getPathForRow( row - 1 ) );
+					arcTopLeft = Math.min( arcTopLeft, r.x - bounds.x );
+					arcTopRight = Math.min( arcTopRight, (bounds.x + bounds.width) - (r.x + r.width) );
+				}
+				if( row < tree.getRowCount() - 1 && tree.isRowSelected( row + 1 ) ) {
+					Rectangle r = getPathBounds( tree, tree.getPathForRow( row + 1 ) );
+					arcBottomLeft = Math.min( arcBottomLeft, r.x - bounds.x );
+					arcBottomRight = Math.min( arcBottomRight, (bounds.x + bounds.width) - (r.x + r.width) );
+				}
+			}
+
+			FlatUIUtils.paintSelection( (Graphics2D) g, bounds.x + xOffset, bounds.y, bounds.width - imageOffset, bounds.height,
+				UIScale.scale( selectionInsets ), arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight, 0 );
+		} else
+			g.fillRect( bounds.x + xOffset, bounds.y, bounds.width - imageOffset, bounds.height );
+	}
+
+	private boolean useUnitedRoundedSelection() {
+		return selectionArc > 0 &&
+			(selectionInsets == null || (selectionInsets.top == 0 && selectionInsets.bottom == 0));
 	}
 
 	/**

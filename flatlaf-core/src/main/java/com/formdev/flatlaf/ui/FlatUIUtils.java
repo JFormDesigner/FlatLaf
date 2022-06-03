@@ -624,26 +624,17 @@ public class FlatUIUtils
 		}
 	}
 
-	// flags for paintSelection()
-	public static final int
-		FLAG_TOP_LEFT_NOT_ROUNDED = (1 << 0),
-		FLAG_TOP_RIGHT_NOT_ROUNDED = (1 << 1),
-		FLAG_BOTTOM_LEFT_NOT_ROUNDED = (1 << 2),
-		FLAG_BOTTOM_RIGHT_NOT_ROUNDED = (1 << 3),
-		FLAG_TOP_NOT_ROUNDED = FLAG_TOP_LEFT_NOT_ROUNDED | FLAG_TOP_RIGHT_NOT_ROUNDED,
-		FLAG_BOTTOM_NOT_ROUNDED = FLAG_BOTTOM_LEFT_NOT_ROUNDED | FLAG_BOTTOM_RIGHT_NOT_ROUNDED;
-
 	/**
 	 * Paints a selection.
 	 * <p>
 	 * The bounds of the painted selection (rounded) rectangle are
 	 * {@code x + insets.left, y + insets.top, width - insets.left - insets.right, height - insets.top - insets.bottom}.
-	 * The given arc diameter refers to the painted rectangle (and not to {@code x,y,width,height}).
+	 * The given arc radius refers to the painted rectangle (and not to {@code x,y,width,height}).
 	 *
 	 * @since 3
 	 */
-	public static void paintSelection( Graphics2D g, int x, int y, int width, int height,
-		Insets insets, float arc, int flags )
+	public static void paintSelection( Graphics2D g, int x, int y, int width, int height, Insets insets,
+		float arcTopLeft, float arcTopRight, float arcBottomLeft, float arcBottomRight, int flags )
 	{
 		if( insets != null ) {
 			x += insets.left;
@@ -652,15 +643,7 @@ public class FlatUIUtils
 			height -= insets.top + insets.bottom;
 		}
 
-		if( arc > 0 ) {
-			// because createRoundRectanglePath() expects a radius
-			float arcRadius = arc / 2;
-
-			float arcTopLeft = ((flags & FLAG_TOP_LEFT_NOT_ROUNDED) != 0) ? 0 : arcRadius;
-			float arcTopRight = ((flags & FLAG_TOP_RIGHT_NOT_ROUNDED) != 0) ? 0 : arcRadius;
-			float arcBottomLeft = ((flags & FLAG_BOTTOM_LEFT_NOT_ROUNDED) != 0) ? 0 : arcRadius;
-			float arcBottomRight = ((flags & FLAG_BOTTOM_RIGHT_NOT_ROUNDED) != 0) ? 0 : arcRadius;
-
+		if( arcTopLeft > 0 || arcTopRight > 0 || arcBottomLeft > 0 || arcBottomRight > 0 ) {
 			double systemScaleFactor = UIScale.getSystemScaleFactor( g );
 			if( systemScaleFactor != 1 && systemScaleFactor != 2 ) {
 				// paint at scale 1x to avoid clipping on right and bottom edges at 125%, 150% or 175%
@@ -765,7 +748,7 @@ public class FlatUIUtils
 	}
 
 	/**
-	 * Creates a not-filled rounded rectangle shape and allows specifying the line width and the radius or each corner.
+	 * Creates a not-filled rounded rectangle shape and allows specifying the line width and the radius of each corner.
 	 */
 	public static Path2D createRoundRectangle( float x, float y, float width, float height,
 		float lineWidth, float arcTopLeft, float arcTopRight, float arcBottomLeft, float arcBottomRight )

@@ -353,9 +353,11 @@ debug*/
 
 	/** @since 3 */
 	protected void paintSelection( Graphics g, Color selectionBackground, Insets selectionInsets, int selectionArc ) {
+		float arc = scale( selectionArc / 2f );
+
 		g.setColor( deriveBackground( selectionBackground ) );
 		FlatUIUtils.paintSelection( (Graphics2D) g, 0, 0, menuItem.getWidth(), menuItem.getHeight(),
-			scale( selectionInsets ), scale( (float) selectionArc ), 0 );
+			scale( selectionInsets ), arc, arc, arc, arc, 0 );
 	}
 
 	/** @since 3 */
