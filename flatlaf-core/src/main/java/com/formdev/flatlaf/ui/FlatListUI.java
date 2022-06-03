@@ -304,7 +304,7 @@ public class FlatListUI
 
 		// rounded selection or selection insets
 		if( isSelected &&
-			!isFileList &&
+			!isFileList && // rounded selection is not supported for file list
 			rendererComponent instanceof DefaultListCellRenderer &&
 			(selectionArc > 0 ||
 			 (selectionInsets != null &&
@@ -319,6 +319,10 @@ public class FlatListUI
 			// To solve this, a graphics proxy is used that paints rounded selection
 			// if row is selected and the renderer wants to fill the background.
 			class RoundedSelectionGraphics extends Graphics2DProxy {
+				// used to avoid endless loop in case that paintCellSelection() invokes
+				// g.fillRect() with full bounds (selectionInsets is 0,0,0,0)
+				private boolean inPaintSelection;
+
 				RoundedSelectionGraphics( Graphics delegate ) {
 					super( (Graphics2D) delegate );
 				}
@@ -335,10 +339,13 @@ public class FlatListUI
 
 				@Override
 				public void fillRect( int x, int y, int width, int height ) {
-					if( x == 0 && y == 0 && width == rowBounds.width && height == rowBounds.height &&
+					if( !inPaintSelection &&
+						x == 0 && y == 0 && width == rowBounds.width && height == rowBounds.height &&
 						this.getColor() == rendererComponent.getBackground() )
 					{
+						inPaintSelection = true;
 						paintCellSelection( this, row, x, y, width, height );
+						inPaintSelection = false;
 					} else
 						super.fillRect( x, y, width, height );
 				}
