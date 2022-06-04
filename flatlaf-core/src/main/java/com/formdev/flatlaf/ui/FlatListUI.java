@@ -22,6 +22,7 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -185,8 +186,8 @@ public class FlatListUI
 		return e -> {
 			superListener.valueChanged( e );
 
-			// for united rounded selection, repaint parts of the rows that adjoin to the changed rows
-			if( useUnitedRoundedSelection() &&
+			// for united rounded selection, repaint parts of the rows/columns that adjoin to the changed rows/columns
+			if( useUnitedRoundedSelection( true, true ) &&
 				!list.isSelectionEmpty() &&
 				(list.getMaxSelectionIndex() - list.getMinSelectionIndex()) >= 1 )
 			{
@@ -196,7 +197,7 @@ public class FlatListUI
 				Rectangle r = getCellBounds( list, firstIndex, lastIndex );
 				if( r != null ) {
 					int arc = (int) Math.ceil( UIScale.scale( selectionArc / 2f ) );
-					list.repaint( r.x, r.y - arc, r.width, r.height + (arc * 2) );
+					list.repaint( r.x - arc, r.y - arc, r.width + (arc * 2), r.height + (arc * 2) );
 				}
 			}
 		};
@@ -359,23 +360,64 @@ public class FlatListUI
 
 	/** @since 3 */
 	protected void paintCellSelection( Graphics g, int row, int x, int y, int width, int height ) {
-		float arcTop, arcBottom;
-		arcTop = arcBottom = UIScale.scale( selectionArc / 2f );
+		float arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight;
+		arcTopLeft = arcTopRight = arcBottomLeft = arcBottomRight = UIScale.scale( selectionArc / 2f );
 
-		if( useUnitedRoundedSelection() ) {
-			if( row > 0 && list.isSelectedIndex( row - 1 ) )
-				arcTop = 0;
-			if( row < list.getModel().getSize() - 1 && list.isSelectedIndex( row + 1 ) )
-				arcBottom = 0;
+		if( list.getLayoutOrientation() == JList.VERTICAL ) {
+			// layout orientation: VERTICAL
+			if( useUnitedRoundedSelection( true, false ) ) {
+				if( row > 0 && list.isSelectedIndex( row - 1 ) )
+					arcTopLeft = arcTopRight = 0;
+				if( row < list.getModel().getSize() - 1 && list.isSelectedIndex( row + 1 ) )
+					arcBottomLeft = arcBottomRight = 0;
+			}
+		} else {
+			// layout orientation: VERTICAL_WRAP or HORIZONTAL_WRAP
+			Rectangle r = null;
+			if( useUnitedRoundedSelection( true, false ) ) {
+				// vertical: check whether cells above or below are selected
+				r = getCellBounds( list, row, row );
+
+				int topIndex = locationToIndex( list, new Point( r.x, r.y - 1 ) );
+				int bottomIndex = locationToIndex( list, new Point( r.x, r.y + r.height ) );
+
+				if( topIndex >= 0 && topIndex != row && list.isSelectedIndex( topIndex ) )
+					arcTopLeft = arcTopRight = 0;
+				if( bottomIndex >= 0 && bottomIndex != row && list.isSelectedIndex( bottomIndex ) )
+					arcBottomLeft = arcBottomRight = 0;
+			}
+
+			if( useUnitedRoundedSelection( false, true ) ) {
+				// horizontal: check whether cells left or right are selected
+				if( r == null )
+					r = getCellBounds( list, row, row );
+
+				int leftIndex = locationToIndex( list, new Point( r.x - 1, r.y ) );
+				int rightIndex = locationToIndex( list, new Point( r.x + r.width, r.y ) );
+
+				// special handling for the case that last column contains less cells than the other columns
+				boolean ltr = list.getComponentOrientation().isLeftToRight();
+				if( !ltr && leftIndex >= 0 && leftIndex != row && leftIndex == locationToIndex( list, new Point( r.x - 1, r.y - 1 ) ) )
+					leftIndex = -1;
+				if( ltr && rightIndex >= 0 && rightIndex != row && rightIndex == locationToIndex( list, new Point( r.x + r.width, r.y - 1 ) ) )
+					rightIndex = -1;
+
+				if( leftIndex >= 0 && leftIndex != row && list.isSelectedIndex( leftIndex ) )
+					arcTopLeft = arcBottomLeft = 0;
+				if( rightIndex >= 0 && rightIndex != row && list.isSelectedIndex( rightIndex ) )
+					arcTopRight = arcBottomRight = 0;
+			}
 		}
 
 		FlatUIUtils.paintSelection( (Graphics2D) g, x, y, width, height,
-			UIScale.scale( selectionInsets ), arcTop, arcTop, arcBottom, arcBottom, 0 );
+			UIScale.scale( selectionInsets ), arcTopLeft, arcTopRight, arcBottomLeft, arcBottomRight, 0 );
 	}
 
-	private boolean useUnitedRoundedSelection() {
+	private boolean useUnitedRoundedSelection( boolean vertical, boolean horizontal ) {
 		return selectionArc > 0 &&
-			(selectionInsets == null || (selectionInsets.top == 0 && selectionInsets.bottom == 0));
+			(selectionInsets == null ||
+			 (vertical && selectionInsets.top == 0 && selectionInsets.bottom == 0) ||
+			 (horizontal && selectionInsets.left == 0 && selectionInsets.right == 0));
 	}
 
 	/**

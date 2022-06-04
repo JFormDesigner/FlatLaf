@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -44,6 +45,8 @@ import javax.swing.tree.TreePath;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
+import com.formdev.flatlaf.ui.FlatEmptyBorder;
+import com.formdev.flatlaf.ui.FlatListUI;
 import com.formdev.flatlaf.util.UIScale;
 import com.jidesoft.swing.*;
 import com.jidesoft.swing.CheckBoxTreeCellRenderer;
@@ -361,7 +364,38 @@ public class FlatComponents2Test
 				for( JList<String> list : allLists )
 					list.setCellRenderer( new TestLabelListCellRenderer() );
 				break;
+
+			case "labelRounded":
+				for( JList<String> list : allLists )
+					list.setCellRenderer( new TestLabelRoundedListCellRenderer() );
+				break;
 		}
+
+		String style = sel.equals( "labelRounded" )
+			? "selectionArc: 6; selectionInsets: 0,1,0,1"
+			: null;
+		for( JList<String> list : allLists )
+			list.putClientProperty( FlatClientProperties.STYLE, style );
+	}
+
+	private void listLayoutOrientationChanged() {
+		int layoutOrientation = JList.VERTICAL;
+		Object sel = listLayoutOrientationField.getSelectedItem();
+		if( sel instanceof String ) {
+			switch( (String) sel ) {
+				case "vertical": layoutOrientation = JList.VERTICAL; break;
+				case "vertical wrap": layoutOrientation = JList.VERTICAL_WRAP; break;
+				case "horzontal wrap": layoutOrientation = JList.HORIZONTAL_WRAP; break;
+			}
+		}
+		for( JList<?> list : allLists )
+			list.setLayoutOrientation( layoutOrientation );
+	}
+
+	private void listVisibleRowCountChanged() {
+		int visibleRowCount = (Integer) listVisibleRowCountSpinner.getValue();
+		for( JList<?> list : allLists )
+			list.setVisibleRowCount( visibleRowCount );
 	}
 
 	private void treeRendererChanged() {
@@ -508,6 +542,10 @@ public class FlatComponents2Test
 		JPanel panel6 = new JPanel();
 		JLabel listRendererLabel = new JLabel();
 		listRendererComboBox = new JComboBox<>();
+		JLabel listLayoutOrientationLabel = new JLabel();
+		listLayoutOrientationField = new JComboBox<>();
+		JLabel listVisibleRowCountLabel = new JLabel();
+		listVisibleRowCountSpinner = new JSpinner();
 		JPanel treeOptionsPanel = new JPanel();
 		JLabel treeRendererLabel = new JLabel();
 		treeRendererComboBox = new JComboBox<>();
@@ -795,6 +833,8 @@ public class FlatComponents2Test
 				"[fill]" +
 				"[fill]",
 				// rows
+				"[]" +
+				"[]" +
 				"[]"));
 
 			//---- listRendererLabel ----
@@ -805,10 +845,33 @@ public class FlatComponents2Test
 			listRendererComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
 				"default",
 				"defaultSubclass",
-				"label"
+				"label",
+				"labelRounded"
 			}));
 			listRendererComboBox.addActionListener(e -> listRendererChanged());
 			panel6.add(listRendererComboBox, "cell 1 0");
+
+			//---- listLayoutOrientationLabel ----
+			listLayoutOrientationLabel.setText("Orientation:");
+			panel6.add(listLayoutOrientationLabel, "cell 0 1");
+
+			//---- listLayoutOrientationField ----
+			listLayoutOrientationField.setModel(new DefaultComboBoxModel<>(new String[] {
+				"vertical",
+				"vertical wrap",
+				"horzontal wrap"
+			}));
+			listLayoutOrientationField.addActionListener(e -> listLayoutOrientationChanged());
+			panel6.add(listLayoutOrientationField, "cell 1 1");
+
+			//---- listVisibleRowCountLabel ----
+			listVisibleRowCountLabel.setText("Visible row count:");
+			panel6.add(listVisibleRowCountLabel, "cell 0 2");
+
+			//---- listVisibleRowCountSpinner ----
+			listVisibleRowCountSpinner.setModel(new SpinnerNumberModel(8, 0, null, 1));
+			listVisibleRowCountSpinner.addChangeListener(e -> listVisibleRowCountChanged());
+			panel6.add(listVisibleRowCountSpinner, "cell 1 2");
 		}
 		add(panel6, "cell 0 4 4 1");
 
@@ -973,6 +1036,8 @@ public class FlatComponents2Test
 	private JXTreeTable xTreeTable1;
 	private JCheckBox dndCheckBox;
 	private JComboBox<String> listRendererComboBox;
+	private JComboBox<String> listLayoutOrientationField;
+	private JSpinner listVisibleRowCountSpinner;
 	private JComboBox<String> treeRendererComboBox;
 	private JCheckBox treeWideSelectionCheckBox;
 	private JCheckBox treePaintSelectionCheckBox;
@@ -1368,6 +1433,45 @@ public class FlatComponents2Test
 			setForeground( isSelected ? Color.blue : list.getForeground() );
 			setOpaque( true );
 			return this;
+		}
+	}
+
+	//---- class TestLabelRoundedListCellRenderer -----------------------------
+
+	private static class TestLabelRoundedListCellRenderer
+		extends JLabel
+		implements ListCellRenderer<String>
+	{
+		private JList<? extends String> list;
+		private int index;
+		private boolean isSelected;
+
+		TestLabelRoundedListCellRenderer() {
+			setBorder( new FlatEmptyBorder( 1, 6, 1, 6 ) );
+		}
+
+		@Override
+		public Component getListCellRendererComponent( JList<? extends String> list,
+			String value, int index, boolean isSelected, boolean cellHasFocus )
+		{
+			this.list = list;
+			this.index = index;
+			this.isSelected = isSelected;
+
+			setText( String.valueOf( value ) );
+			setBackground( isSelected ? Color.green : list.getBackground() );
+			setForeground( isSelected ? Color.blue : list.getForeground() );
+			return this;
+		}
+
+		@Override
+		protected void paintComponent( Graphics g ) {
+			if( isSelected ) {
+				g.setColor( getBackground() );
+				FlatListUI.paintCellSelection( list, g, index, 0, 0, getWidth(), getHeight() );
+			}
+
+			super.paintComponent( g );
 		}
 	}
 
