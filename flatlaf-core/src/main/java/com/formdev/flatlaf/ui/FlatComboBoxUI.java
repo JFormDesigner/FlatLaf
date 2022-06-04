@@ -608,7 +608,7 @@ public class FlatComboBoxUI
 
 		boolean shouldValidate = (c instanceof JPanel);
 
-		paddingBorder.install( c );
+		paddingBorder.install( c, 0 );
 		currentValuePane.paintComponent( g, c, comboBox, bounds.x, bounds.y, bounds.width, bounds.height, shouldValidate );
 		paddingBorder.uninstall();
 
@@ -682,7 +682,7 @@ public class FlatComboBoxUI
 
 	@Override
 	protected Dimension getSizeForComponent( Component comp ) {
-		paddingBorder.install( comp );
+		paddingBorder.install( comp, 0 );
 		Dimension size = super.getSizeForComponent( comp );
 		paddingBorder.uninstall();
 		return size;
@@ -900,7 +900,7 @@ public class FlatComboBoxUI
 				Component c = renderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 				c.applyComponentOrientation( comboBox.getComponentOrientation() );
 
-				paddingBorder.install( c );
+				paddingBorder.install( c, Math.round( FlatUIUtils.getBorderFocusWidth( comboBox ) ) );
 
 				return c;
 			}
@@ -923,6 +923,7 @@ public class FlatComboBoxUI
 		private Insets padding;
 		private JComponent rendererComponent;
 		private Border rendererBorder;
+		private int focusWidth;
 
 		CellPaddingBorder( Insets padding ) {
 			this.padding = padding;
@@ -930,9 +931,11 @@ public class FlatComboBoxUI
 
 		// using synchronized to avoid problems with code that modifies combo box
 		// (model, selection, etc) not on AWT thread (which should be not done)
-		synchronized void install( Component c ) {
+		synchronized void install( Component c, int focusWidth ) {
 			if( !(c instanceof JComponent) )
 				return;
+
+			this.focusWidth = focusWidth;
 
 			JComponent jc = (JComponent) c;
 			Border oldBorder = jc.getBorder();
@@ -987,6 +990,12 @@ public class FlatComboBoxUI
 				insets.bottom = padding.bottom;
 				insets.right = padding.right;
 			}
+
+			// if used in popup list, add focus width for exact vertical alignment
+			// of text in popup list with text in combobox
+			insets.left += focusWidth;
+			insets.right += focusWidth;
+
 			return insets;
 		}
 

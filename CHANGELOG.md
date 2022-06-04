@@ -5,6 +5,8 @@ FlatLaf Change Log
 
 #### Fixed bugs
 
+- ComboBox: Fixed vertical alignment of text in popup list with text in combo
+  box in IntelliJ/Darcula themes.
 - TableHeader: Fixed exception when changing table structure (e.g. removing
   column) from a table header popup menu action. (issue #532)
 
