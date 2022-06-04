@@ -56,7 +56,7 @@ public class FlatEmptyBorder
 	protected static Insets scaleInsets( Component c, Insets insets,
 		int top, int left, int bottom, int right )
 	{
-		boolean leftToRight = left == right || c.getComponentOrientation().isLeftToRight();
+		boolean leftToRight = left == right || c == null || c.getComponentOrientation().isLeftToRight();
 		insets.left = scale( leftToRight ? left : right );
 		insets.top = scale( top );
 		insets.right = scale( leftToRight ? right : left );
