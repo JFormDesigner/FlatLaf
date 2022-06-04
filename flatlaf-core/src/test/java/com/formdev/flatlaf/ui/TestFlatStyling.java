@@ -304,6 +304,9 @@ public class TestFlatStyling
 		ui.applyStyle( "buttonPressedArrowColor: #fff" );
 
 		ui.applyStyle( "popupBackground: #fff" );
+		ui.applyStyle( "popupInsets: 1,2,3,4" );
+		ui.applyStyle( "selectionInsets: 1,2,3,4" );
+		ui.applyStyle( "selectionArc: 8" );
 
 		// border
 		flatRoundBorder( style -> ui.applyStyle( style ) );

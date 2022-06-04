@@ -231,8 +231,11 @@ ComboBox.minimumWidth          72
 ComboBox.noActionOnKeyNavigation false
 ComboBox.padding               2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 ComboBox.popupBackground       #ffffcc  HSL  60 100  90    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.popupInsets           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox.selectionArc          0
 ComboBox.selectionBackground   #00aa00  HSL 120 100  33    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.selectionForeground   #ffff00  HSL  60 100  50    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.selectionInsets       0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 ComboBox.timeFactor            1000
 ComboBoxUI                     com.formdev.flatlaf.ui.FlatComboBoxUI
 

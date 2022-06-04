@@ -37,6 +37,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.plaf.basic.BasicListUI;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.ui.FlatStylingSupport.Styleable;
@@ -306,7 +307,8 @@ public class FlatListUI
 		// rounded selection or selection insets
 		if( isSelected &&
 			!isFileList && // rounded selection is not supported for file list
-			rendererComponent instanceof DefaultListCellRenderer &&
+			(rendererComponent instanceof DefaultListCellRenderer ||
+			 rendererComponent instanceof BasicComboBoxRenderer) &&
 			(selectionArc > 0 ||
 			 (selectionInsets != null &&
 			  (selectionInsets.top != 0 || selectionInsets.left != 0 || selectionInsets.bottom != 0 || selectionInsets.right != 0))) )

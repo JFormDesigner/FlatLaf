@@ -173,7 +173,10 @@ public class TestFlatStyleableInfo
 			"buttonHoverArrowColor", Color.class,
 			"buttonPressedArrowColor", Color.class,
 
-			"popupBackground", Color.class
+			"popupBackground", Color.class,
+			"popupInsets", Insets.class,
+			"selectionInsets", Insets.class,
+			"selectionArc", int.class
 		);
 
 		// border
