@@ -81,19 +81,18 @@ public class HiDPIUtils
 	 * which is used by Graphics.fillRect().
 	 */
 	private static Rectangle2D.Double scale( AffineTransform transform, int x, int y, int width, int height ) {
-		double dx1 = transform.getScaleX();
-		double dy2 = transform.getScaleY();
-		double px = x * dx1 + transform.getTranslateX();
-		double py = y * dy2 + transform.getTranslateY();
-		dx1 *= width;
-		dy2 *= height;
+		double scaleX = transform.getScaleX();
+		double scaleY = transform.getScaleY();
 
-		double newx = normalize( px );
-		double newy = normalize( py );
-		dx1 = normalize( px + dx1 ) - newx;
-		dy2 = normalize( py + dy2 ) - newy;
+		double px = (x * scaleX) + transform.getTranslateX();
+		double py = (y * scaleY) + transform.getTranslateY();
 
-		return new Rectangle2D.Double( newx, newy, dx1, dy2 );
+		double newX = normalize( px );
+		double newY = normalize( py );
+		double newWidth  = normalize( px + (width  * scaleX) ) - newX;
+		double newHeight = normalize( py + (height * scaleY) ) - newY;
+
+		return new Rectangle2D.Double( newX, newY, newWidth, newHeight );
 	}
 
 	private static double normalize( double value ) {
