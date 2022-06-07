@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "7.0.2.0.298" Java: "14" encoding: "UTF-8"
+JFDML JFormDesigner: "7.0.5.0.404" Java: "17.0.2" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -9,10 +9,45 @@ new FormModel {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
 			"$layoutConstraints": "insets dialog,hidemode 3"
 			"$columnConstraints": "[fill]"
-			"$rowConstraints": "[top]"
+			"$rowConstraints": "[top]unrel[top]"
 		} ) {
 			name: "this"
 			"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+				"$layoutConstraints": "hidemode 3"
+				"$columnConstraints": "[fill][fill][fill]"
+				"$rowConstraints": "[]"
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "fontLabel"
+					"text": "Font:"
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 0 0"
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "fontField"
+					"maximumRowCount": 20
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+						"JavaCodeGenerator.typeParameters": "String"
+					}
+					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "fontChanged", false ) )
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 1 0"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "fontMetricsLabel"
+					"text": "text"
+					auxiliary() {
+						"JavaCodeGenerator.variableLocal": false
+					}
+				}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+					"value": "cell 2 0"
+				} )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "north"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 450, 300 )
