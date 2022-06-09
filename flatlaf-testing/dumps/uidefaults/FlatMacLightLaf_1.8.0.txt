@@ -174,9 +174,9 @@ CheckBoxMenuItem.font          [active] $defaultFont [UI]
 CheckBoxMenuItem.foreground    #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.icon.checkmarkColor #007aff  HSL 211 100  50    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.icon.disabledCheckmarkColor #bdbdbd  HSL   0   0  74    javax.swing.plaf.ColorUIResource [UI]
-CheckBoxMenuItem.margin        3,6,3,6    javax.swing.plaf.InsetsUIResource [UI]
+CheckBoxMenuItem.margin        3,11,3,11    javax.swing.plaf.InsetsUIResource [UI]
 CheckBoxMenuItem.opaque        false
-CheckBoxMenuItem.selectionBackground #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
+CheckBoxMenuItem.selectionBackground #3d9aff  HSL 211 100  62    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItem.selectionForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 CheckBoxMenuItemUI             com.formdev.flatlaf.ui.FlatCheckBoxMenuItemUI
 
@@ -230,8 +230,11 @@ ComboBox.minimumWidth          72
 ComboBox.noActionOnKeyNavigation false
 ComboBox.padding               2,6,2,6    javax.swing.plaf.InsetsUIResource [UI]
 ComboBox.popupBackground       #ececec  HSL   0   0  93    javax.swing.plaf.ColorUIResource [UI]
-ComboBox.selectionBackground   #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.popupInsets           5,0,5,0    javax.swing.plaf.InsetsUIResource [UI]
+ComboBox.selectionArc          8
+ComboBox.selectionBackground   #3d9aff  HSL 211 100  62    javax.swing.plaf.ColorUIResource [UI]
 ComboBox.selectionForeground   #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+ComboBox.selectionInsets       0,5,0,5    javax.swing.plaf.InsetsUIResource [UI]
 ComboBox.timeFactor            1000
 ComboBoxUI                     com.formdev.flatlaf.ui.FlatComboBoxUI
 
@@ -555,10 +558,12 @@ List.focusSelectedCellHighlightBorder [lazy] 1,6,1,6  false    com.formdev.flatl
 List.font                      [active] $defaultFont [UI]
 List.foreground                #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 List.noFocusBorder             1,1,1,1  false    javax.swing.plaf.BorderUIResource$EmptyBorderUIResource [UI]
+List.selectionArc              0
 List.selectionBackground       #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
 List.selectionForeground       #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 List.selectionInactiveBackground #dcdcdc  HSL   0   0  86    javax.swing.plaf.ColorUIResource [UI]
 List.selectionInactiveForeground #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
+List.selectionInsets           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 List.showCellFocusIndicator    false
 List.timeFactor                1000
 ListUI                         com.formdev.flatlaf.ui.FlatListUI
@@ -580,12 +585,12 @@ Menu.font                      [active] $defaultFont [UI]
 Menu.foreground                #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 Menu.icon.arrowColor           #7d7d7d  HSL   0   0  49    javax.swing.plaf.ColorUIResource [UI]
 Menu.icon.disabledArrowColor   #bdbdbd  HSL   0   0  74    javax.swing.plaf.ColorUIResource [UI]
-Menu.margin                    3,6,3,6    javax.swing.plaf.InsetsUIResource [UI]
+Menu.margin                    3,11,3,11    javax.swing.plaf.InsetsUIResource [UI]
 Menu.menuPopupOffsetX          0
 Menu.menuPopupOffsetY          0
 Menu.opaque                    false
 Menu.preserveTopLevelSelection false
-Menu.selectionBackground       #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
+Menu.selectionBackground       #3d9aff  HSL 211 100  62    javax.swing.plaf.ColorUIResource [UI]
 Menu.selectionForeground       #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Menu.shortcutKeys              length=1    [I
     [0] 8
@@ -603,6 +608,11 @@ MenuBar.foreground             #262626  HSL   0   0  15    javax.swing.plaf.Colo
 MenuBar.highlight              #40404026  15%  HSLA   0   0  25 15    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.hoverBackground        #d3d3d3  HSL   0   0  83    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
 MenuBar.itemMargins            3,8,3,8    javax.swing.plaf.InsetsUIResource [UI]
+MenuBar.selectionArc           8
+MenuBar.selectionBackground    #c6c6c6  HSL   0   0  78    com.formdev.flatlaf.util.DerivedColor [UI]    darken(15% autoInverse)
+MenuBar.selectionEmbeddedInsets 3,0,3,0    javax.swing.plaf.InsetsUIResource [UI]
+MenuBar.selectionForeground    #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
+MenuBar.selectionInsets        0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 MenuBar.shadow                 #00000026  15%  HSLA   0   0   0 15    javax.swing.plaf.ColorUIResource [UI]
 MenuBar.windowBindings         length=2    [Ljava.lang.Object;
     [0] F10
@@ -621,22 +631,24 @@ MenuItem.arrowIcon             [lazy] 6,10    com.formdev.flatlaf.icons.FlatMenu
 MenuItem.background            #ececec  HSL   0   0  93    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.border                [lazy] 0,0,0,0  false    com.formdev.flatlaf.ui.FlatMenuItemBorder [UI]
 MenuItem.borderPainted         true
-MenuItem.checkBackground       #aed2ff  HSL 213 100  84    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(40%)
+MenuItem.checkBackground       #bddcff  HSL 212 100  87    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(25%)
 MenuItem.checkMargins          2,2,2,2    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.disabledForeground    #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.font                  [active] $defaultFont [UI]
 MenuItem.foreground            #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.iconTextGap           6
-MenuItem.margin                3,6,3,6    javax.swing.plaf.InsetsUIResource [UI]
+MenuItem.margin                3,11,3,11    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.minimumIconSize       16,16    javax.swing.plaf.DimensionUIResource [UI]
 MenuItem.minimumWidth          72
 MenuItem.opaque                false
-MenuItem.selectionBackground   #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.selectionArc          8
+MenuItem.selectionBackground   #3d9aff  HSL 211 100  62    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.selectionForeground   #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
+MenuItem.selectionInsets       0,5,0,5    javax.swing.plaf.InsetsUIResource [UI]
 MenuItem.textAcceleratorGap    24
 MenuItem.textNoAcceleratorGap  6
 MenuItem.underlineSelectionBackground #d3d3d3  HSL   0   0  83    com.formdev.flatlaf.util.DerivedColor [UI]    darken(10% autoInverse)
-MenuItem.underlineSelectionCheckBackground #aed2ff  HSL 213 100  84    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(40%)
+MenuItem.underlineSelectionCheckBackground #bddcff  HSL 212 100  87    com.formdev.flatlaf.util.DerivedColor [UI]    lighten(25%)
 MenuItem.underlineSelectionColor #007aff  HSL 211 100  50    javax.swing.plaf.ColorUIResource [UI]
 MenuItem.underlineSelectionHeight 3
 MenuItem.verticallyAlignText   true
@@ -742,9 +754,9 @@ Popup.dropShadowPainted        true
 #---- PopupMenu ----
 
 PopupMenu.background           #ececec  HSL   0   0  93    javax.swing.plaf.ColorUIResource [UI]
-PopupMenu.border               [lazy] 4,1,4,1  false    com.formdev.flatlaf.ui.FlatPopupMenuBorder [UI]    lineColor=#b1b1b1  HSL   0   0  69    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
+PopupMenu.border               [lazy] 6,1,6,1  false    com.formdev.flatlaf.ui.FlatPopupMenuBorder [UI]    lineColor=#b1b1b1  HSL   0   0  69    javax.swing.plaf.ColorUIResource [UI]    lineThickness=1.000000
 PopupMenu.borderColor          #b1b1b1  HSL   0   0  69    javax.swing.plaf.ColorUIResource [UI]
-PopupMenu.borderInsets         4,1,4,1    javax.swing.plaf.InsetsUIResource [UI]
+PopupMenu.borderInsets         6,1,6,1    javax.swing.plaf.InsetsUIResource [UI]
 PopupMenu.consumeEventOnClose  false
 PopupMenu.font                 [active] $defaultFont [UI]
 PopupMenu.foreground           #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
@@ -818,9 +830,9 @@ RadioButtonMenuItem.checkIcon  [lazy] 15,15    com.formdev.flatlaf.icons.FlatRad
 RadioButtonMenuItem.disabledForeground #b6b6b6  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.font       [active] $defaultFont [UI]
 RadioButtonMenuItem.foreground #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
-RadioButtonMenuItem.margin     3,6,3,6    javax.swing.plaf.InsetsUIResource [UI]
+RadioButtonMenuItem.margin     3,11,3,11    javax.swing.plaf.InsetsUIResource [UI]
 RadioButtonMenuItem.opaque     false
-RadioButtonMenuItem.selectionBackground #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
+RadioButtonMenuItem.selectionBackground #3d9aff  HSL 211 100  62    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItem.selectionForeground #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 RadioButtonMenuItemUI          com.formdev.flatlaf.ui.FlatRadioButtonMenuItemUI
 
@@ -1315,6 +1327,8 @@ ToolBar.font                   [active] $defaultFont [UI]
 ToolBar.foreground             #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.gripColor              #b4b4b4  HSL   0   0  71    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.highlight              #40404026  15%  HSLA   0   0  25 15    javax.swing.plaf.ColorUIResource [UI]
+ToolBar.hoverButtonGroupArc    8
+ToolBar.hoverButtonGroupBackground #eeeeee  HSL   0   0  93    com.formdev.flatlaf.util.DerivedColor [UI]    darken(3% autoInverse)
 ToolBar.isRollover             true
 ToolBar.light                  #1f1f1f26  15%  HSLA   0   0  12 15    javax.swing.plaf.ColorUIResource [UI]
 ToolBar.separatorColor         #00000019  10%  HSLA   0   0   0 10    javax.swing.plaf.ColorUIResource [UI]
@@ -1383,11 +1397,13 @@ Tree.repaintWholeRow           true
 Tree.rightChildIndent          11
 Tree.rowHeight                 0
 Tree.scrollsOnExpand           true
+Tree.selectionArc              0
 Tree.selectionBackground       #0063e1  HSL 214 100  44    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionBorderColor      #000000  HSL   0   0   0    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionForeground       #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveBackground #dcdcdc  HSL   0   0  86    javax.swing.plaf.ColorUIResource [UI]
 Tree.selectionInactiveForeground #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
+Tree.selectionInsets           0,0,0,0    javax.swing.plaf.InsetsUIResource [UI]
 Tree.showCellFocusIndicator    false
 Tree.textBackground            #ffffff  HSL   0   0 100    javax.swing.plaf.ColorUIResource [UI]
 Tree.textForeground            #262626  HSL   0   0  15    javax.swing.plaf.ColorUIResource [UI]
