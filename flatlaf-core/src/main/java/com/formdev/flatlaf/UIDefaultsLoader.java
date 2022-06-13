@@ -525,14 +525,14 @@ class UIDefaultsLoader
 			case STRING:		return value;
 			case BOOLEAN:		return parseBoolean( value );
 			case CHARACTER:		return parseCharacter( value );
-			case INTEGER:		return parseInteger( value, true );
-			case INTEGERORFLOAT:return parseIntegerOrFloat( value, true );
-			case FLOAT:			return parseFloat( value, true );
+			case INTEGER:		return parseInteger( value );
+			case INTEGERORFLOAT:return parseIntegerOrFloat( value );
+			case FLOAT:			return parseFloat( value );
 			case BORDER:		return parseBorder( value, resolver, addonClassLoaders );
 			case ICON:			return parseInstance( value, addonClassLoaders );
 			case INSETS:		return parseInsets( value );
 			case DIMENSION:		return parseDimension( value );
-			case COLOR:			return parseColorOrFunction( value, resolver, true );
+			case COLOR:			return parseColorOrFunction( value, resolver );
 			case FONT:			return parseFont( value );
 			case SCALEDINTEGER:	return parseScaledInteger( value );
 			case SCALEDFLOAT:	return parseScaledFloat( value );
@@ -550,24 +550,34 @@ class UIDefaultsLoader
 				}
 
 				// colors
-				Object color = parseColorOrFunction( value, resolver, false );
-				if( color != null ) {
-					resultValueType[0] = ValueType.COLOR;
+				if( value.startsWith( "#" ) || value.endsWith( ")" ) ) {
+					Object color = parseColorOrFunction( value, resolver );
+					resultValueType[0] = (color != null) ? ValueType.COLOR : ValueType.NULL;
 					return color;
 				}
 
-				// integer
-				Integer integer = parseInteger( value, false );
-				if( integer != null ) {
-					resultValueType[0] = ValueType.INTEGER;
-					return integer;
-				}
+				// integer or float
+				char firstChar = value.charAt( 0 );
+				if( (firstChar >= '0' && firstChar <= '9') ||
+					firstChar == '-' || firstChar == '+' || firstChar == '.' )
+				{
+					// integer
+					try {
+						Integer integer = parseInteger( value );
+						resultValueType[0] = ValueType.INTEGER;
+						return integer;
+					} catch( NumberFormatException ex ) {
+						// ignore
+					}
 
-				// float
-				Float f = parseFloat( value, false );
-				if( f != null ) {
-					resultValueType[0] = ValueType.FLOAT;
-					return f;
+					// float
+					try {
+						Float f = parseFloat( value );
+						resultValueType[0] = ValueType.FLOAT;
+						return f;
+					} catch( NumberFormatException ex ) {
+						// ignore
+					}
 				}
 
 				// string
@@ -596,10 +606,10 @@ class UIDefaultsLoader
 			List<String> parts = splitFunctionParams( value, ',' );
 			Insets insets = parseInsets( value );
 			ColorUIResource lineColor = (parts.size() >= 5)
-				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver, true )
+				? (ColorUIResource) parseColorOrFunction( resolver.apply( parts.get( 4 ) ), resolver )
 				: null;
-			float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty()) ? parseFloat( parts.get( 5 ), true ) : 1f;
-			int arc = (parts.size() >= 7) ? parseInteger( parts.get( 6 ), true ) : 0;
+			float lineThickness = (parts.size() >= 6 && !parts.get( 5 ).isEmpty()) ? parseFloat( parts.get( 5 ) ) : 1f;
+			int arc = (parts.size() >= 7) ? parseInteger( parts.get( 6 ) ) : 0;
 
 			return (LazyValue) t -> {
 				return (lineColor != null)
@@ -674,30 +684,24 @@ class UIDefaultsLoader
 		}
 	}
 
-	private static Object parseColorOrFunction( String value, Function<String, String> resolver, boolean reportError ) {
+	private static Object parseColorOrFunction( String value, Function<String, String> resolver ) {
 		if( value.endsWith( ")" ) )
-			return parseColorFunctions( value, resolver, reportError );
+			return parseColorFunctions( value, resolver );
 
-		return parseColor( value, reportError );
+		return parseColor( value );
 	}
 
+	/**
+	 * Parses a hex color in  {@code #RGB}, {@code #RGBA}, {@code #RRGGBB} or {@code #RRGGBBAA}
+	 * format and returns it as color object.
+	 *
+	 * @throws IllegalArgumentException
+	 */
 	static ColorUIResource parseColor( String value ) {
-		return parseColor( value, false );
-	}
-
-	private static ColorUIResource parseColor( String value, boolean reportError ) {
-		try {
-			int rgba = parseColorRGBA( value );
-			return ((rgba & 0xff000000) == 0xff000000)
-				? new ColorUIResource( rgba )
-				: new ColorUIResource( new Color( rgba, true ) );
-		} catch( IllegalArgumentException ex ) {
-			if( reportError )
-				throw new IllegalArgumentException( "invalid color '" + value + "'" );
-
-			// not a color --> ignore
-		}
-		return null;
+		int rgba = parseColorRGBA( value );
+		return ((rgba & 0xff000000) == 0xff000000)
+			? new ColorUIResource( rgba )
+			: new ColorUIResource( new Color( rgba, true ) );
 	}
 
 	/**
@@ -710,7 +714,7 @@ class UIDefaultsLoader
 	static int parseColorRGBA( String value ) {
 		int len = value.length();
 		if( (len != 4 && len != 5 && len != 7 && len != 9) || value.charAt( 0 ) != '#' )
-			throw new IllegalArgumentException();
+			throw newInvalidColorException( value );
 
 		// parse hex
 		int n = 0;
@@ -725,7 +729,7 @@ class UIDefaultsLoader
 			else if( ch >= 'A' && ch <= 'F' )
 				digit = ch - 'A' + 10;
 			else
-				throw new IllegalArgumentException();
+				throw newInvalidColorException( value );
 
 			n = (n << 4) | digit;
 		}
@@ -744,13 +748,14 @@ class UIDefaultsLoader
 			: (((n >> 8) & 0xffffff) | ((n & 0xff) << 24)); // move alpha from lowest to highest byte
 	}
 
-	private static Object parseColorFunctions( String value, Function<String, String> resolver, boolean reportError ) {
+	private static IllegalArgumentException newInvalidColorException( String value ) {
+		return new IllegalArgumentException( "invalid color '" + value + "'" );
+	}
+
+	private static Object parseColorFunctions( String value, Function<String, String> resolver ) {
 		int paramsStart = value.indexOf( '(' );
-		if( paramsStart < 0 ) {
-			if( reportError )
-				throw new IllegalArgumentException( "missing opening parenthesis in function '" + value + "'" );
-			return null;
-		}
+		if( paramsStart < 0 )
+			throw new IllegalArgumentException( "missing opening parenthesis in function '" + value + "'" );
 
 		String function = StringUtils.substringTrimmed( value, 0, paramsStart );
 		List<String> params = splitFunctionParams( value.substring( paramsStart + 1, value.length() - 1 ), ',' );
@@ -763,28 +768,28 @@ class UIDefaultsLoader
 		parseColorDepth++;
 		try {
 			switch( function ) {
-				case "if":			return parseColorIf( value, params, resolver, reportError );
-				case "rgb":			return parseColorRgbOrRgba( false, params, resolver, reportError );
-				case "rgba":		return parseColorRgbOrRgba( true, params, resolver, reportError );
+				case "if":			return parseColorIf( value, params, resolver );
+				case "rgb":			return parseColorRgbOrRgba( false, params, resolver );
+				case "rgba":		return parseColorRgbOrRgba( true, params, resolver );
 				case "hsl":			return parseColorHslOrHsla( false, params );
 				case "hsla":		return parseColorHslOrHsla( true, params );
-				case "lighten":		return parseColorHSLIncreaseDecrease( 2, true, params, resolver, reportError );
-				case "darken":		return parseColorHSLIncreaseDecrease( 2, false, params, resolver, reportError );
-				case "saturate":	return parseColorHSLIncreaseDecrease( 1, true, params, resolver, reportError );
-				case "desaturate":	return parseColorHSLIncreaseDecrease( 1, false, params, resolver, reportError );
-				case "fadein":		return parseColorHSLIncreaseDecrease( 3, true, params, resolver, reportError );
-				case "fadeout":		return parseColorHSLIncreaseDecrease( 3, false, params, resolver, reportError );
-				case "fade":		return parseColorFade( params, resolver, reportError );
-				case "spin":		return parseColorSpin( params, resolver, reportError );
-				case "changeHue":		return parseColorChange( 0, params, resolver, reportError );
-				case "changeSaturation":return parseColorChange( 1, params, resolver, reportError );
-				case "changeLightness":	return parseColorChange( 2, params, resolver, reportError );
-				case "changeAlpha":		return parseColorChange( 3, params, resolver, reportError );
-				case "mix":				return parseColorMix( null, params, resolver, reportError );
-				case "tint":			return parseColorMix( "#fff", params, resolver, reportError );
-				case "shade":			return parseColorMix( "#000", params, resolver, reportError );
-				case "contrast":		return parseColorContrast( params, resolver, reportError );
-				case "over":			return parseColorOver( params, resolver, reportError );
+				case "lighten":		return parseColorHSLIncreaseDecrease( 2, true, params, resolver );
+				case "darken":		return parseColorHSLIncreaseDecrease( 2, false, params, resolver );
+				case "saturate":	return parseColorHSLIncreaseDecrease( 1, true, params, resolver );
+				case "desaturate":	return parseColorHSLIncreaseDecrease( 1, false, params, resolver );
+				case "fadein":		return parseColorHSLIncreaseDecrease( 3, true, params, resolver );
+				case "fadeout":		return parseColorHSLIncreaseDecrease( 3, false, params, resolver );
+				case "fade":		return parseColorFade( params, resolver );
+				case "spin":		return parseColorSpin( params, resolver );
+				case "changeHue":		return parseColorChange( 0, params, resolver );
+				case "changeSaturation":return parseColorChange( 1, params, resolver );
+				case "changeLightness":	return parseColorChange( 2, params, resolver );
+				case "changeAlpha":		return parseColorChange( 3, params, resolver );
+				case "mix":				return parseColorMix( null, params, resolver );
+				case "tint":			return parseColorMix( "#fff", params, resolver );
+				case "shade":			return parseColorMix( "#000", params, resolver );
+				case "contrast":		return parseColorContrast( params, resolver );
+				case "over":			return parseColorOver( params, resolver );
 			}
 		} finally {
 			parseColorDepth--;
@@ -799,13 +804,13 @@ class UIDefaultsLoader
 	 * This "if" function is only used if the "if" is passed as parameter to another
 	 * color function. Otherwise, the general "if" function is used.
 	 */
-	private static Object parseColorIf( String value, List<String> params, Function<String, String> resolver, boolean reportError ) {
+	private static Object parseColorIf( String value, List<String> params, Function<String, String> resolver ) {
 		if( params.size() != 3 )
 			throwMissingParametersException( value );
 
 		boolean ifCondition = parseCondition( params.get( 0 ), resolver, Collections.emptyList() );
 		String ifValue = params.get( ifCondition ? 1 : 2 );
-		return parseColorOrFunction( resolver.apply( ifValue ), resolver, reportError );
+		return parseColorOrFunction( resolver.apply( ifValue ), resolver );
 	}
 
 	/**
@@ -816,7 +821,7 @@ class UIDefaultsLoader
 	 *   - alpha: an integer 0-255 or a percentage 0-100%
 	 */
 	private static ColorUIResource parseColorRgbOrRgba( boolean hasAlpha, List<String> params,
-		Function<String, String> resolver, boolean reportError )
+		Function<String, String> resolver )
 	{
 		if( hasAlpha && params.size() == 2 ) {
 			// syntax rgba(color,alpha), which allows adding alpha to any color
@@ -825,7 +830,7 @@ class UIDefaultsLoader
 			String colorStr = params.get( 0 );
 			int alpha = parseInteger( params.get( 1 ), 0, 255, true );
 
-			ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+			ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver );
 			return new ColorUIResource( new Color( ((alpha & 0xff) << 24) | (color.getRGB() & 0xffffff), true ) );
 		}
 
@@ -865,7 +870,7 @@ class UIDefaultsLoader
 	 *   - options: [relative] [autoInverse] [noAutoInverse] [lazy] [derived]
 	 */
 	private static Object parseColorHSLIncreaseDecrease( int hslIndex, boolean increase,
-		List<String> params, Function<String, String> resolver, boolean reportError )
+		List<String> params, Function<String, String> resolver )
 	{
 		String colorStr = params.get( 0 );
 		int amount = parsePercentage( params.get( 1 ) );
@@ -900,7 +905,7 @@ class UIDefaultsLoader
 		}
 
 		// parse base color, apply function and create derived color
-		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+		return parseFunctionBaseColor( colorStr, function, derived, resolver );
 	}
 
 	/**
@@ -909,7 +914,7 @@ class UIDefaultsLoader
 	 *   - amount: percentage 0-100%
 	 *   - options: [derived] [lazy]
 	 */
-	private static Object parseColorFade( List<String> params, Function<String, String> resolver, boolean reportError ) {
+	private static Object parseColorFade( List<String> params, Function<String, String> resolver ) {
 		String colorStr = params.get( 0 );
 		int amount = parsePercentage( params.get( 1 ) );
 		boolean derived = false;
@@ -934,7 +939,7 @@ class UIDefaultsLoader
 		}
 
 		// parse base color, apply function and create derived color
-		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+		return parseFunctionBaseColor( colorStr, function, derived, resolver );
 	}
 
 	/**
@@ -943,9 +948,9 @@ class UIDefaultsLoader
 	 *   - angle: number of degrees to rotate
 	 *   - options: [derived]
 	 */
-	private static Object parseColorSpin( List<String> params, Function<String, String> resolver, boolean reportError ) {
+	private static Object parseColorSpin( List<String> params, Function<String, String> resolver ) {
 		String colorStr = params.get( 0 );
-		int amount = parseInteger( params.get( 1 ), true );
+		int amount = parseInteger( params.get( 1 ) );
 		boolean derived = false;
 
 		if( params.size() > 2 ) {
@@ -957,7 +962,7 @@ class UIDefaultsLoader
 		ColorFunction function = new ColorFunctions.HSLIncreaseDecrease( 0, true, amount, false, false );
 
 		// parse base color, apply function and create derived color
-		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+		return parseFunctionBaseColor( colorStr, function, derived, resolver );
 	}
 
 	/**
@@ -970,11 +975,11 @@ class UIDefaultsLoader
 	 *   - options: [derived]
 	 */
 	private static Object parseColorChange( int hslIndex,
-		List<String> params, Function<String, String> resolver, boolean reportError )
+		List<String> params, Function<String, String> resolver )
 	{
 		String colorStr = params.get( 0 );
 		int value = (hslIndex == 0)
-			? parseInteger( params.get( 1 ), true )
+			? parseInteger( params.get( 1 ) )
 			: parsePercentage( params.get( 1 ) );
 		boolean derived = false;
 
@@ -987,7 +992,7 @@ class UIDefaultsLoader
 		ColorFunction function = new ColorFunctions.HSLChange( hslIndex, value );
 
 		// parse base color, apply function and create derived color
-		return parseFunctionBaseColor( colorStr, function, derived, resolver, reportError );
+		return parseFunctionBaseColor( colorStr, function, derived, resolver );
 	}
 
 	/**
@@ -999,7 +1004,7 @@ class UIDefaultsLoader
 	 *   - weight: the weight (in range 0-100%) to mix the two colors
 	 *             larger weight uses more of first color, smaller weight more of second color
 	 */
-	private static Object parseColorMix( String color1Str, List<String> params, Function<String, String> resolver, boolean reportError ) {
+	private static Object parseColorMix( String color1Str, List<String> params, Function<String, String> resolver ) {
 		int i = 0;
 		if( color1Str == null )
 			color1Str = params.get( i++ );
@@ -1007,7 +1012,7 @@ class UIDefaultsLoader
 		int weight = (params.size() > i) ? parsePercentage( params.get( i ) ) : 50;
 
 		// parse second color
-		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolver.apply( color2Str ), resolver, reportError );
+		ColorUIResource color2 = (ColorUIResource) parseColorOrFunction( resolver.apply( color2Str ), resolver );
 		if( color2 == null )
 			return null;
 
@@ -1015,7 +1020,7 @@ class UIDefaultsLoader
 		ColorFunction function = new ColorFunctions.Mix( color2, weight );
 
 		// parse first color, apply function and create mixed color
-		return parseFunctionBaseColor( color1Str, function, false, resolver, reportError );
+		return parseFunctionBaseColor( color1Str, function, false, resolver );
 	}
 
 	/**
@@ -1026,14 +1031,14 @@ class UIDefaultsLoader
 	 *   - threshold: the threshold (in range 0-100%) to specify where the transition
 	 *                from "dark" to "light" is (default is 43%)
 	 */
-	private static Object parseColorContrast( List<String> params, Function<String, String> resolver, boolean reportError ) {
+	private static Object parseColorContrast( List<String> params, Function<String, String> resolver ) {
 		String colorStr = params.get( 0 );
 		String darkStr = params.get( 1 );
 		String lightStr = params.get( 2 );
 		int threshold = (params.size() > 3) ? parsePercentage( params.get( 3 ) ) : 43;
 
 		// parse color to compare against
-		ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver, reportError );
+		ColorUIResource color = (ColorUIResource) parseColorOrFunction( resolver.apply( colorStr ), resolver );
 		if( color == null )
 			return null;
 
@@ -1043,7 +1048,7 @@ class UIDefaultsLoader
 			: darkStr;
 
 		// parse dark or light color
-		return parseColorOrFunction( resolver.apply( darkOrLightColor ), resolver, reportError );
+		return parseColorOrFunction( resolver.apply( darkOrLightColor ), resolver );
 	}
 
 	/**
@@ -1052,12 +1057,12 @@ class UIDefaultsLoader
 	 *                 the alpha of this color is used as weight to mix the two colors
 	 *   - background: a background color (e.g. #f00) or a color function
 	 */
-	private static ColorUIResource parseColorOver( List<String> params, Function<String, String> resolver, boolean reportError ) {
+	private static ColorUIResource parseColorOver( List<String> params, Function<String, String> resolver ) {
 		String foregroundStr = params.get( 0 );
 		String backgroundStr = params.get( 1 );
 
 		// parse foreground color
-		ColorUIResource foreground = (ColorUIResource) parseColorOrFunction( resolver.apply( foregroundStr ), resolver, reportError );
+		ColorUIResource foreground = (ColorUIResource) parseColorOrFunction( resolver.apply( foregroundStr ), resolver );
 		if( foreground == null || foreground.getAlpha() == 255 )
 			return foreground;
 
@@ -1065,7 +1070,7 @@ class UIDefaultsLoader
 		ColorUIResource foreground2 = new ColorUIResource( foreground.getRGB() );
 
 		// parse background color
-		ColorUIResource background = (ColorUIResource) parseColorOrFunction( resolver.apply( backgroundStr ), resolver, reportError );
+		ColorUIResource background = (ColorUIResource) parseColorOrFunction( resolver.apply( backgroundStr ), resolver );
 		if( background == null )
 			return foreground2;
 
@@ -1075,11 +1080,11 @@ class UIDefaultsLoader
 	}
 
 	private static Object parseFunctionBaseColor( String colorStr, ColorFunction function,
-		boolean derived, Function<String, String> resolver, boolean reportError )
+		boolean derived, Function<String, String> resolver )
 	{
 		// parse base color
 		String resolvedColorStr = resolver.apply( colorStr );
-		ColorUIResource baseColor = (ColorUIResource) parseColorOrFunction( resolvedColorStr, resolver, reportError );
+		ColorUIResource baseColor = (ColorUIResource) parseColorOrFunction( resolvedColorStr, resolver );
 		if( baseColor == null )
 			return null;
 
@@ -1163,11 +1168,11 @@ class UIDefaultsLoader
 								throw new IllegalArgumentException( "size specified more than once in '" + value + "'" );
 
 							if( firstChar == '+' || firstChar == '-' )
-								relativeSize = parseInteger( param, true );
+								relativeSize = parseInteger( param );
 							else if( param.endsWith( "%" ) )
-								scaleSize = parseInteger( param.substring( 0, param.length() - 1 ), true ) / 100f;
+								scaleSize = parseInteger( param.substring( 0, param.length() - 1 ) ) / 100f;
 							else
-								absoluteSize = parseInteger( param, true );
+								absoluteSize = parseInteger( param );
 						} else if( firstChar == '$' ) {
 							// reference to base font
 							if( baseFontKey != null )
@@ -1241,55 +1246,49 @@ class UIDefaultsLoader
 			return (max * percent) / 100;
 		}
 
-		Integer integer = parseInteger( value, true );
+		Integer integer = parseInteger( value );
 		if( integer < min || integer > max )
 			throw new NumberFormatException( "integer '" + value + "' out of range (" + min + '-' + max + ')' );
 		return integer;
 	}
 
-	private static Integer parseInteger( String value, boolean reportError ) {
+	private static Integer parseInteger( String value ) {
 		try {
 			return Integer.parseInt( value );
 		} catch( NumberFormatException ex ) {
-			if( reportError )
-				throw new NumberFormatException( "invalid integer '" + value + "'" );
+			throw new NumberFormatException( "invalid integer '" + value + "'" );
 		}
-		return null;
 	}
 
-	private static Number parseIntegerOrFloat( String value, boolean reportError ) {
+	private static Number parseIntegerOrFloat( String value ) {
 		try {
 			return Integer.parseInt( value );
 		} catch( NumberFormatException ex ) {
 			try {
 				return Float.parseFloat( value );
 			} catch( NumberFormatException ex2 ) {
-				if( reportError )
-					throw new NumberFormatException( "invalid integer or float '" + value + "'" );
+				throw new NumberFormatException( "invalid integer or float '" + value + "'" );
 			}
 		}
-		return null;
 	}
 
-	private static Float parseFloat( String value, boolean reportError ) {
+	private static Float parseFloat( String value ) {
 		try {
 			return Float.parseFloat( value );
 		} catch( NumberFormatException ex ) {
-			if( reportError )
-				throw new NumberFormatException( "invalid float '" + value + "'" );
+			throw new NumberFormatException( "invalid float '" + value + "'" );
 		}
-		return null;
 	}
 
 	private static ActiveValue parseScaledInteger( String value ) {
-		int val = parseInteger( value, true );
+		int val = parseInteger( value );
 		return t -> {
 			return UIScale.scale( val );
 		};
 	}
 
 	private static ActiveValue parseScaledFloat( String value ) {
-		float val = parseFloat( value, true );
+		float val = parseFloat( value );
 		return t -> {
 			return UIScale.scale( val );
 		};
@@ -1344,7 +1343,11 @@ class UIDefaultsLoader
 				start = i + 1;
 			}
 		}
-		strs.add( StringUtils.substringTrimmed( str, start ) );
+
+		// last param
+		String s = StringUtils.substringTrimmed( str, start );
+		if( !s.isEmpty() || !strs.isEmpty() )
+			strs.add( s );
 
 		return strs;
 	}

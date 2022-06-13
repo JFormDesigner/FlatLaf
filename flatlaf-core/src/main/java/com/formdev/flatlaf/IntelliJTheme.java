@@ -302,7 +302,7 @@ public class IntelliJTheme
 
 		for( Map.Entry<String, String> e : colors.entrySet() ) {
 			String value = e.getValue();
-			ColorUIResource color = UIDefaultsLoader.parseColor( value );
+			ColorUIResource color = parseColor( value );
 			if( color != null ) {
 				String key = e.getKey();
 				namedColors.put( key, color );
@@ -448,7 +448,15 @@ public class IntelliJTheme
 		ColorUIResource color = namedColors.get( value );
 
 		// parse color
-		return (color != null) ? color : UIDefaultsLoader.parseColor( value );
+		return (color != null) ? color : parseColor( value );
+	}
+
+	private ColorUIResource parseColor( String value ) {
+		try {
+			return UIDefaultsLoader.parseColor( value );
+		} catch( IllegalArgumentException ex ) {
+			return null;
+		}
 	}
 
 	/**
@@ -540,7 +548,7 @@ public class IntelliJTheme
 				// radioFocused.svg and radioSelectedFocused.svg
 				// use opacity=".65" for the border
 				// --> add alpha to focused border colors
-				String[] focusedBorderColorKeys = new String[] {
+				String[] focusedBorderColorKeys = {
 					"CheckBox.icon.focusedBorderColor",
 					"CheckBox.icon.focusedSelectedBorderColor",
 					"CheckBox.icon[filled].focusedBorderColor",
