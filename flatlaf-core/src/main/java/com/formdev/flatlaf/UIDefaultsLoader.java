@@ -84,6 +84,7 @@ class UIDefaultsLoader
 
 	private static int parseColorDepth;
 
+	private static Map<String, ColorUIResource> systemColorCache;
 	private static final SoftCache<String, Object> fontCache = new SoftCache<>();
 
 	static void loadDefaultsFromProperties( Class<?> lookAndFeelClass, List<FlatDefaultsAddon> addons,
@@ -105,6 +106,10 @@ class UIDefaultsLoader
 		Properties additionalDefaults, boolean dark, UIDefaults defaults )
 	{
 		try {
+			// temporary cache system colors while loading defaults,
+			// which avoids that system color getter is invoked multiple times
+			systemColorCache = (FlatLaf.getSystemColorGetter() != null) ? new HashMap<>() : null;
+
 			// load core properties files
 			Properties properties = new Properties();
 			for( Class<?> lafClass : lafClasses ) {
@@ -276,6 +281,9 @@ class UIDefaultsLoader
 
 			// remember variables in defaults to allow using them in styles
 			defaults.put( KEY_VARIABLES, variables );
+
+			// clear/disable system color cache
+			systemColorCache = null;
 		} catch( IOException ex ) {
 			LoggingFacade.INSTANCE.logSevere( "FlatLaf: Failed to load properties files.", ex );
 		}
@@ -769,6 +777,7 @@ class UIDefaultsLoader
 		try {
 			switch( function ) {
 				case "if":			return parseColorIf( value, params, resolver );
+				case "systemColor":	return parseColorSystemColor( value, params, resolver );
 				case "rgb":			return parseColorRgbOrRgba( false, params, resolver );
 				case "rgba":		return parseColorRgbOrRgba( true, params, resolver );
 				case "hsl":			return parseColorHslOrHsla( false, params );
@@ -811,6 +820,44 @@ class UIDefaultsLoader
 		boolean ifCondition = parseCondition( params.get( 0 ), resolver, Collections.emptyList() );
 		String ifValue = params.get( ifCondition ? 1 : 2 );
 		return parseColorOrFunction( resolver.apply( ifValue ), resolver );
+	}
+
+	/**
+	 * Syntax: systemColor(name[,defaultValue])
+	 *   - name: system color name
+	 *   - defaultValue: default color value used if system color is not available
+	 */
+	private static Object parseColorSystemColor( String value, List<String> params, Function<String, String> resolver ) {
+		if( params.size() < 1 )
+			throwMissingParametersException( value );
+
+		ColorUIResource systemColor = getSystemColor( params.get( 0 ) );
+		if( systemColor != null )
+			return systemColor;
+
+		String defaultValue = (params.size() > 1) ? params.get( 1 ) : "";
+		if( defaultValue.equals( "null" ) || defaultValue.isEmpty() )
+			return null;
+
+		return parseColorOrFunction( resolver.apply( defaultValue ), resolver );
+	}
+
+	private static ColorUIResource getSystemColor( String name ) {
+		Function<String, Color> systemColorGetter = FlatLaf.getSystemColorGetter();
+		if( systemColorGetter == null )
+			return null;
+
+		// use containsKey() because value may be null
+		if( systemColorCache != null && systemColorCache.containsKey( name ) )
+			return systemColorCache.get( name );
+
+		Color color = systemColorGetter.apply( name );
+		ColorUIResource uiColor = (color != null) ? new ColorUIResource( color ) : null;
+
+		if( systemColorCache != null )
+			systemColorCache.put( name, uiColor );
+
+		return uiColor;
 	}
 
 	/**

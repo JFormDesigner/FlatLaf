@@ -24,7 +24,6 @@ import java.net.URISyntaxException;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
@@ -398,6 +397,7 @@ class DemoFrame
 	};
 	private final JToggleButton[] accentColorButtons = new JToggleButton[accentColorKeys.length];
 	private JLabel accentColorLabel;
+	private Color accentColor;
 
 	private void initAccentColors() {
 		accentColorLabel = new JLabel( "Accent color: " );
@@ -416,6 +416,10 @@ class DemoFrame
 
 		accentColorButtons[0].setSelected( true );
 
+		FlatLaf.setSystemColorGetter( name -> {
+			return name.equals( "accent" ) ? accentColor : null;
+		} );
+
 		UIManager.addPropertyChangeListener( e -> {
 			if( "lookAndFeel".equals( e.getPropertyName() ) )
 				updateAccentColorButtons();
@@ -424,17 +428,17 @@ class DemoFrame
 	}
 
 	private void accentColorChanged( ActionEvent e ) {
-		String accentColor = accentColorKeys[0];
+		String accentColorKey = null;
 		for( int i = 0; i < accentColorButtons.length; i++ ) {
 			if( accentColorButtons[i].isSelected() ) {
-				accentColor = accentColorKeys[i];
+				accentColorKey = accentColorKeys[i];
 				break;
 			}
 		}
 
-		FlatLaf.setGlobalExtraDefaults( (accentColor != accentColorKeys[0])
-			? Collections.singletonMap( "@accentColor", "$" + accentColor )
-			: null );
+		accentColor = (accentColorKey != null && accentColorKey != accentColorKeys[0])
+			? UIManager.getColor( accentColorKey )
+			: null;
 
 		Class<? extends LookAndFeel> lafClass = UIManager.getLookAndFeel().getClass();
 		try {

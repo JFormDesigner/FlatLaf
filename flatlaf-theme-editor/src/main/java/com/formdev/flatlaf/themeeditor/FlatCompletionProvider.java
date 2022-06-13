@@ -410,6 +410,10 @@ class FlatCompletionProvider
 			addFunction( "lazy",
 				"uiKey", "UI key (without leading '$')" );
 
+			addFunction( "systemColor",
+				"name", "system color name",
+				"defaultValue", "default color value used if system color is not available" );
+
 			addFunction( "rgb",
 				"red", "0-255 or 0-100%",
 				"green", "0-255 or 0-100%",
